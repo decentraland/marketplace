@@ -78,7 +78,7 @@ const FavoritesCounter = (props: Props) => {
         onClick={onClick}
         data-testid="favorites-counter-bubble"
       >
-        <span>
+        <span className={styles.iconContainer}>
           {isLoading ? (
             <Loader active inline size="tiny" className={styles.loader} />
           ) : (
