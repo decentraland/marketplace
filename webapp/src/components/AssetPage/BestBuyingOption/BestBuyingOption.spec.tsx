@@ -41,7 +41,7 @@ describe('Best Buying Option', () => {
     rarity: Rarity.UNIQUE,
     price: '10',
     available: 2,
-    isOnSale: false,
+    isOnSale: true,
     creator: '0xcreator',
     beneficiary: null,
     createdAt: 1671033414000,

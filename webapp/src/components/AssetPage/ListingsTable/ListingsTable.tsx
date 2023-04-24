@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { ListingStatus, Network } from '@dcl/schemas'
-import { Table, Loader, Row, Pagination, Icon, Mana } from 'decentraland-ui'
+import { OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { nftAPI, orderAPI } from '../../../modules/vendor/decentraland'
-import { locations } from '../../../modules/routing/locations'
-import { formatWeiMANA } from '../../../lib/mana'
-import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
-import { LinkedProfile } from '../../LinkedProfile'
+import noListings from '../../../images/noListings.png'
+import { TableContent } from '../../Table/TableContent'
+import { DataTableType } from '../../Table/TableContent/TableContent.types'
+import { formatDataToTable } from './utils'
 import { Props } from './ListingsTable.types'
 import styles from './ListingsTable.module.css'
 
@@ -18,7 +16,7 @@ const INITIAL_PAGE = 1
 const ListingsTable = (props: Props) => {
   const { asset, sortBy = OrderSortBy.CHEAPEST } = props
 
-  const [orders, setOrders] = useState<Order[]>([])
+  const [orders, setOrders] = useState<DataTableType[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(INITIAL_PAGE)
   const [totalPages, setTotalPages] = useState<number>(0)
@@ -61,8 +59,8 @@ const ListingsTable = (props: Props) => {
       orderAPI
         .fetchOrders(params, sortBy)
         .then(response => {
-          setOrders(response.data)
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
+          setOrders(formatDataToTable(response.data))
         })
         .finally(() => setIsLoading(false))
         .catch(error => {
@@ -72,99 +70,21 @@ const ListingsTable = (props: Props) => {
   }, [asset, setIsLoading, setOrders, sortBy, page])
 
   return (
-    <div className={styles.ListingsTable}>
-      {isLoading ? (
+    <TableContent
+      data={orders}
+      isLoading={isLoading}
+      setPage={setPage}
+      totalPages={totalPages}
+      empty={() => (
         <div className={styles.emptyTable}>
-          <Loader active data-testid="loader" />
-        </div>
-      ) : orders.length === 0 ? (
-        <div className={styles.emptyTable}>
+          <img src={noListings} alt="empty" />
           <span>{t('listings_table.there_are_no_listings')}</span>
         </div>
-      ) : (
-        <>
-          <Table basic="very" data-testid="listings-table">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell className={styles.headerMargin}>
-                  {t('listings_table.owner')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('listings_table.published_date')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('listings_table.expiration_date')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('listings_table.issue_number')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>{t('listings_table.price')}</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body className={isLoading ? 'is-loading' : ''}>
-              {orders?.map(order => (
-                <Table.Row key={order.id}>
-                  <Table.Cell>
-                    <LinkedProfile
-                      className={styles.linkedProfileRow}
-                      address={order.owner}
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    {getDateAndMonthName(order.createdAt)}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {formatDistanceToNow(+order.expiresAt, {
-                      addSuffix: true
-                    })}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className={styles.issuedIdContainer}>
-                      <div className={styles.row}>
-                        <span>
-                          <span className={styles.issuedId}>
-                            {order.issuedId}
-                          </span>
-                          / {total}
-                        </span>
-                      </div>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className={styles.manaField}>
-                      <Mana className="manaField" network={asset?.network}>
-                        {formatWeiMANA(order.price)}
-                      </Mana>
-                      {asset?.contractAddress && order.tokenId && (
-                        <Link
-                          to={locations.nft(
-                            asset.contractAddress,
-                            order.tokenId
-                          )}
-                        >
-                          <Icon name="arrow right" className={styles.goToNFT} />
-                        </Link>
-                      )}
-                    </div>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-          {totalPages && totalPages > 1 ? (
-            <Row center>
-              <Pagination
-                activePage={page}
-                totalPages={totalPages}
-                onPageChange={(_event, props) => setPage(+props.activePage!)}
-                firstItem={null}
-                lastItem={null}
-              />
-            </Row>
-          ) : null}
-        </>
       )}
-    </div>
+      total={total}
+      rowsPerPage={ROWS_PER_PAGE}
+      activePage={page}
+    />
   )
 }
 
