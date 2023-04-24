@@ -1,12 +1,11 @@
 import React, { useCallback, useMemo } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
-import { Item, NFTCategory } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
-import { AssetType } from '../../modules/asset/types'
-import { NFT } from '../../modules/nft/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 import { AssetCard } from '../AssetCard'
 import { Props } from './AssetList.types'
 import './AssetList.css'
@@ -30,7 +29,12 @@ const AssetList = (props: Props) => {
     catalogItems
   } = props
 
-  const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts
+  const assets: Asset[] =
+    assetType === AssetType.ITEM
+      ? items
+      : assetType === AssetType.NFT
+      ? nfts
+      : catalogItems
 
   const handleLoadMore = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -87,13 +91,6 @@ const AssetList = (props: Props) => {
               />
             ))
           : null}
-        {catalogItems.map((catalogItem, index) => (
-          <AssetCard
-            isManager={isManager}
-            key={catalogItem.id + '-' + index}
-            asset={catalogItem}
-          />
-        ))}
       </Card.Group>
 
       {assets.length === 0 && !isLoading ? (

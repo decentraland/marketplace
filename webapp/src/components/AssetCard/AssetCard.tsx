@@ -134,7 +134,7 @@ const AssetCard = (props: Props) => {
                 </Mana>
                 &nbsp;
                 {asset.listings > 1 &&
-                  asset.minListingPrice === asset.maxListingPrice &&
+                  asset.minListingPrice !== asset.maxListingPrice &&
                   `- ${formatWeiMANA(
                     asset.maxListingPrice,
                     MAXIMUM_FRACTION_DIGITS,
@@ -159,9 +159,9 @@ const AssetCard = (props: Props) => {
                     true
                   )}
                 </Mana>
-                &nbsp;{' '}
+                &nbsp;
                 {asset.listings > 1 &&
-                  asset.minListingPrice === asset.maxListingPrice &&
+                  asset.minListingPrice !== asset.maxListingPrice &&
                   `- ${formatWeiMANA(
                     asset.maxListingPrice,
                     MAXIMUM_FRACTION_DIGITS,
