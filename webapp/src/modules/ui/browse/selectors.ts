@@ -15,6 +15,7 @@ import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
 import { getData as getRentalData } from '../../rental/selectors'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
+import { getData as getCatalogData } from '../../catalog/selectors'
 import { NFTState } from '../../nft/reducer'
 import { RootState } from '../../reducer'
 import { BrowseUIState } from './reducer'
@@ -26,7 +27,6 @@ import { getTransactionsByType } from '../../transaction/selectors'
 import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
 import { CatalogState } from '../../catalog/reducer'
-import { getData as getCatalogData } from '../../catalog/selectors'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState): View | undefined =>
