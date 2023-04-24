@@ -58,7 +58,8 @@ export function AuthorizationModal({
           action: t(`mana_authorization_modal.${action}.action`)
         }),
         action: t('mana_authorization_modal.confirm_transaction.action'),
-        onActionClicked: handleAuthorized
+        onActionClicked: handleAuthorized,
+        testId: "confirm-action-step"
       }
     ].map((step, index) => {
       if (
@@ -86,13 +87,12 @@ export function AuthorizationModal({
             revokeStatus === AuthorizationStepStatus.DONE
               ? undefined
               : t('mana_authorization_modal.revoke_cap.action'),
-          message: getStepMessage(index, grantStatus, error, currentStep),
+          message: getStepMessage(index, revokeStatus, error, currentStep),
           isLoading: LOADING_STATUS.includes(revokeStatus),
           onActionClicked: handleRevokeToken,
           status: revokeStatus
         }
       }
-
       return step as Step
     })
   }, [

@@ -94,7 +94,7 @@ const SellModal = (props: Props) => {
     )
 
   const handleSubmit = () => {
-    // TODO: Check authorization CAP in this case
+    // TODO: Add authorization modal generic case. issue #1611
     onAuthorizedAction('0', handleCreateOrder)
     setShowConfirm(false)
   }

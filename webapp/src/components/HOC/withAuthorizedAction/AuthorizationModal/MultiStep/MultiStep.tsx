@@ -14,6 +14,7 @@ export default function MultiStep({ steps, currentStep }: Props): JSX.Element {
         return (
           <div
             key={`step-${index}`}
+            data-testid={step.testId || `step-${index}`}
             className={classNames('step-container', {
               disabled: isDisabled
             })}
@@ -41,7 +42,7 @@ export default function MultiStep({ steps, currentStep }: Props): JSX.Element {
               ) : (
                 <div className="step-message">
                   {step.isLoading ? (
-                    <Loader size="small" active className="loader" />
+                    <Loader size="small" active data-testid="step-loader" />
                   ) : (
                     <Icon className="check-icon" name="check" />
                   )}

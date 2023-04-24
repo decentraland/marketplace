@@ -120,7 +120,8 @@ export function getSteps(
         description: t('mana_authorization_modal.authorize.description', {
           price: requiredAllowance
         }),
-        authorizationAction: AuthorizationAction.GRANT
+        authorizationAction: AuthorizationAction.GRANT,
+        testId: "grant-action-step"
       }
     ]
   }
@@ -131,14 +132,16 @@ export function getSteps(
       description: t('mana_authorization_modal.revoke_cap.description', {
         price: requiredAllowance
       }),
-      action: AuthorizationAction.REVOKE
+      authorizationAction: AuthorizationAction.REVOKE,
+      testId: "revoke-action-step"
     },
     {
       title: t('mana_authorization_modal.set_cap.title'),
       description: t('mana_authorization_modal.set_cap.description', {
         price: requiredAllowance
       }),
-      authorizationAction: AuthorizationAction.GRANT
+      authorizationAction: AuthorizationAction.GRANT,
+      testId: "grant-action-step"
     }
   ]
 }

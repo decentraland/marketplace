@@ -103,7 +103,7 @@ const BuyNFTModal = (props: Props) => {
       return
     }
     !!order && onAuthorizedAction(order.price, handleExecuteOrder)
-  }, [handleExecuteOrder, onAuthorizedAction, isBuyWithCardPage, order?.price])
+  }, [handleExecuteOrder, onAuthorizedAction, isBuyWithCardPage, order])
 
   const isDisabled =
     !order ||

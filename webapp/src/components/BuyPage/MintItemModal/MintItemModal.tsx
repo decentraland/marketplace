@@ -29,7 +29,6 @@ import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
 import { Props } from './MintItemModal.types'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
 import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
-import { getMintItemStatus } from '../../../modules/item/selectors'
 
 const MintItemModal = (props: Props) => {
   const {
@@ -96,7 +95,7 @@ const MintItemModal = (props: Props) => {
       return
     }
     !!item && onAuthorizedAction(item.price, handleExecuteOrder)
-  }, [item.price, isBuyWithCardPage, handleExecuteOrder, onAuthorizedAction])
+  }, [item, isBuyWithCardPage, handleExecuteOrder, onAuthorizedAction])
 
   const isDisabled =
     !item.price || isOwner || (hasInsufficientMANA && !isBuyWithCardPage)

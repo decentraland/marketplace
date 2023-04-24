@@ -5,6 +5,7 @@ export type Step = {
   message?: string | JSX.Element
   action?: string
   actionDescription?: string
+  testId?: string
   onActionClicked: () => void
 }
 
