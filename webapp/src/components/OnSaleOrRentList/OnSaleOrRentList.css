@@ -39,7 +39,7 @@
   font-stretch: normal;
 }
 
-.onSaleOrRentTable .header {
+.onSaleOrRentTable .ui.basic.table th {
   font-size: 16px;
   font-weight: 700;
   color: white;

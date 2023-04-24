@@ -31,7 +31,7 @@ const TableContent = (props: Props) => {
             <Table.Row>
               {headers.map(header => (
                 <Table.HeaderCell key={header}>
-                  <span className={'header'}>{header}</span>
+                  <span>{header}</span>
                 </Table.HeaderCell>
               ))}
             </Table.Row>

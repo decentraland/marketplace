@@ -62,3 +62,9 @@
   align-items: center;
   margin-bottom: 11px;
 }
+
+.TableContent .ui.basic.table th {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+}

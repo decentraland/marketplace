@@ -54,9 +54,9 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
   )
 
   return (
-    <div className={'onSaleOrRentTable'}>
-      <div className={'filters'}>
-        <div className={'search'}>{searchNode}</div>
+    <div className="onSaleOrRentTable">
+      <div className="filters">
+        <div className="search">{searchNode}</div>
         <Dropdown
           direction="left"
           value={sort}
@@ -76,18 +76,18 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>
-                    <span className={'header'}>{t('global.item')}</span>
+                    <span>{t('global.item')}</span>
                   </Table.HeaderCell>
                   <Table.HeaderCell>
-                    <span className={'header'}>{t('global.type')}</span>
+                    <span>{t('global.type')}</span>
                   </Table.HeaderCell>
                   <Table.HeaderCell>
-                    <span className={'header'}>
+                    <span>
                       {showRents ? t('global.status') : t('global.sale_type')}
                     </span>
                   </Table.HeaderCell>
                   <Table.HeaderCell>
-                    <span className={'header'}>
+                    <span>
                       {showRents
                         ? t('global.rent_price')
                         : t('global.sell_price')}
@@ -118,10 +118,10 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
             </Table.Body>
           </Table>
           {processedElements.total === 0 && (
-            <div className={'empty'}>{t('global.no_results')}</div>
+            <div className="empty">{t('global.no_results')}</div>
           )}
           {showPagination && (
-            <div className={'pagination'}>
+            <div className="pagination">
               <Pagination
                 totalPages={Math.ceil(
                   processedElements.total / perPage.current

@@ -27,12 +27,12 @@ export const formatDataToTable = (
           <div className={styles.row}>
             {owner.orderStatus === ListingStatus.OPEN &&
             owner.orderExpiresAt &&
-              Number(owner.orderExpiresAt) >= Date.now() ? (
+            Number(owner.orderExpiresAt) >= Date.now() ? (
               <ListedBadge className={styles.badge} />
             ) : null}
             #<span className={styles.issuedId}>{owner.issuedId}</span>
           </div>
-          {owner && (
+          {!!owner && (
             <div>
               {asset?.contractAddress && owner.tokenId && (
                 <Link to={locations.nft(asset.contractAddress, owner.tokenId)}>

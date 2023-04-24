@@ -1,3 +1,4 @@
+import { waitFor } from '@testing-library/react'
 import {
   ChainId,
   Item,
@@ -7,7 +8,6 @@ import {
   Order,
   Rarity
 } from '@dcl/schemas'
-import { waitFor } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'

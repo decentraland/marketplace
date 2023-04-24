@@ -30,6 +30,18 @@ import styles from './CollectionPage.module.css'
 
 const CollectionPage = (props: Props) => {
   const { contractAddress, currentAddress, onBack } = props
+
+  const tabList = [
+    {
+      value: 'wearable',
+      displayValue: t('home_page.recently_sold.tabs.wearable')
+    },
+    {
+      value: 'emote',
+      displayValue: t('home_page.recently_sold.tabs.emote')
+    }
+  ]
+
   const [tab, setTab] = useState<string>()
 
   const handleTabChange = useCallback(
@@ -135,14 +147,7 @@ const CollectionPage = (props: Props) => {
                   </Section>
                   <Section>
                     <TableContainer
-                      tabsList={
-                        showShowTabs
-                          ? [
-                              t('home_page.recently_sold.tabs.wearable'),
-                              t('home_page.recently_sold.tabs.emote')
-                            ]
-                          : []
-                      }
+                      tabsList={showShowTabs ? tabList : []}
                       activeTab={tab}
                       handleTabChange={(tab: string) => handleTabChange(tab)}
                       children={

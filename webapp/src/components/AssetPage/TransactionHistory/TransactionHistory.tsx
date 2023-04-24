@@ -16,6 +16,13 @@ const ROWS_PER_PAGE = 12
 const TransactionHistory = (props: Props) => {
   const { asset } = props
 
+  const tabList = [
+    {
+      value: 'transaction_history',
+      displayValue: t('transaction_history.title')
+    }
+  ]
+
   const [sales, setSales] = useState<DataTableType[]>([])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -66,7 +73,7 @@ const TransactionHistory = (props: Props) => {
 
   return sales.length > 0 ? (
     <TableContainer
-      tabsList={[t('transaction_history.title')]}
+      tabsList={tabList}
       children={
         <TableContent
           data={sales}

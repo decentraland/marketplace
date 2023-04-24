@@ -13,12 +13,18 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
     const { item } = props
 
     const BelowTabs = {
-      LISTINGS: t('listings_table.listings'),
-      OWNERS: t('owners_table.owners')
+      LISTINGS: {
+        value: 'listings',
+        displayValue: t('listings_table.listings')
+      },
+      OWNERS: {
+        value: 'owners',
+        displayValue: t('owners_table.owners')
+      }
     }
 
     const locations = useLocation()
-    const [belowTab, setBelowTab] = useState(BelowTabs.LISTINGS)
+    const [belowTab, setBelowTab] = useState(BelowTabs.LISTINGS.value)
     const [sortBy, setSortBy] = useState<SortByType>(OrderSortBy.CHEAPEST)
 
     const ownerSortByOptions = [
@@ -58,7 +64,9 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
     const handleTabChange = useCallback(
       (tab: string) => {
         const sortByTab =
-          tab === BelowTabs.LISTINGS ? OrderSortBy.CHEAPEST : OrderDirection.ASC
+          tab === BelowTabs.LISTINGS.value
+            ? OrderSortBy.CHEAPEST
+            : OrderDirection.ASC
         setBelowTab(tab)
         setSortBy(sortByTab)
       },
@@ -67,15 +75,15 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
 
     useEffect(() => {
       const params = new URLSearchParams(locations.search)
-      if (params.get('selectedTableTab') === 'owners')
-        handleTabChange(BelowTabs.OWNERS)
+      if (params.get('selectedTableTab') === BelowTabs.OWNERS.value)
+        handleTabChange(BelowTabs.OWNERS.value)
     }, [BelowTabs.OWNERS, handleTabChange, locations.search])
 
     console.log(item)
     return (
       <TableContainer
         children={
-          belowTab === BelowTabs.LISTINGS ? (
+          belowTab === BelowTabs.LISTINGS.value ? (
             <ListingsTable asset={item} sortBy={sortBy as OrderSortBy} />
           ) : (
             <OwnersTable
@@ -89,7 +97,7 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
         activeTab={belowTab}
         handleTabChange={(tab: string) => handleTabChange(tab)}
         sortbyList={
-          belowTab === BelowTabs.LISTINGS
+          belowTab === BelowTabs.LISTINGS.value
             ? listingSortByOptions
             : ownerSortByOptions
         }

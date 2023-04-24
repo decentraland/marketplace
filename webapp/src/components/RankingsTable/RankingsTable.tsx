@@ -195,39 +195,29 @@ const RankingsTable = (props: Props) => {
             <Table.Row>
               <Mobile>
                 <Table.HeaderCell>
-                  <span className={'header'}>
-                    {t(`home_page.analytics.rankings.${label}.item`)}
-                  </span>
+                  <span>{t(`home_page.analytics.rankings.${label}.item`)}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
-                    {t('home_page.analytics.rankings.total_volume')}
-                  </span>
+                  <span>{t('home_page.analytics.rankings.total_volume')}</span>
                 </Table.HeaderCell>
               </Mobile>
               <NotMobile>
                 <Table.HeaderCell>
-                  <span className={'header'}>
-                    {t(`home_page.analytics.rankings.${label}.item`)}
-                  </span>
+                  <span>{t(`home_page.analytics.rankings.${label}.item`)}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
-                    {t('home_page.analytics.rankings.category')}
-                  </span>
+                  <span>{t('home_page.analytics.rankings.category')}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
-                    {t('home_page.analytics.rankings.rarity')}
-                  </span>
+                  <span>{t('home_page.analytics.rankings.rarity')}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t(`home_page.analytics.rankings.${label}.items_sold`)}
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.total_volume')}
                     <InfoTooltip
                       content={t(
@@ -246,35 +236,33 @@ const RankingsTable = (props: Props) => {
             <Table.Row>
               <Mobile>
                 <Table.HeaderCell>
-                  <span className={'header'}>
-                    {t('home_page.analytics.rankings.items.creator')}
-                  </span>
+                  <span>{t('home_page.analytics.rankings.items.creator')}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   {' '}
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.total_volume_sales')}
                   </span>
                 </Table.HeaderCell>
               </Mobile>
               <NotMobile>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.creators.creator')}
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.creators.collections')}
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.creators.items_sold')}
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t(
                       'home_page.analytics.rankings.creators.unique_collectors'
                     )}
@@ -286,7 +274,7 @@ const RankingsTable = (props: Props) => {
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t(
                       'home_page.analytics.rankings.creators.total_volume_sales'
                     )}
@@ -307,29 +295,29 @@ const RankingsTable = (props: Props) => {
             <Table.Row>
               <Mobile>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.collectors.collector')}
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.collectors.total_spent')}
                   </span>
                 </Table.HeaderCell>
               </Mobile>
               <NotMobile>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.collectors.collector')}
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.collectors.items_bought')}
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t(
                       'home_page.analytics.rankings.collectors.creators_supported'
                     )}
@@ -341,7 +329,7 @@ const RankingsTable = (props: Props) => {
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t(
                       'home_page.analytics.rankings.collectors.unique_items_bought'
                     )}
@@ -353,7 +341,7 @@ const RankingsTable = (props: Props) => {
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span className={'header'}>
+                  <span>
                     {t('home_page.analytics.rankings.collectors.total_spent')}
                     <InfoTooltip
                       content={t(

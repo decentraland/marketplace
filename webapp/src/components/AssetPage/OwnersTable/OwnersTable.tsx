@@ -8,10 +8,10 @@ import {
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
+import { formatDataToTable } from './utils'
 import { OrderDirection, Props } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
 
-import { formatDataToTable } from './utils'
 export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
 

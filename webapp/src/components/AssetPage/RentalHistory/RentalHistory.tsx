@@ -14,6 +14,10 @@ const ROWS_PER_PAGE = 12
 const RentalHistory = (props: Props) => {
   const { asset } = props
 
+  const tabList = [
+    { value: 'rental_history', displayValue: t('rental_history.title') }
+  ]
+
   const [rentals, setRentals] = useState<DataTableType[]>([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -45,7 +49,7 @@ const RentalHistory = (props: Props) => {
 
   return rentals.length > 0 ? (
     <TableContainer
-      tabsList={[t('rental_history.title')]}
+      tabsList={tabList}
       children={
         <TableContent
           data={rentals}
