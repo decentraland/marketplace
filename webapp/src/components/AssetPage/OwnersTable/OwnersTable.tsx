@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { ListingStatus } from '@dcl/schemas'
-import { Table, Loader, Icon, Row, Pagination, Button } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Link } from 'react-router-dom'
-import { locations } from '../../../modules/routing/locations'
+import { Button } from 'decentraland-ui'
 import {
   nftAPI,
-  OwnersResponse,
   OwnersFilters,
   OwnersSortBy
 } from '../../../modules/vendor/decentraland'
-import { LinkedProfile } from '../../LinkedProfile'
-import ListedBadge from '../../ListedBadge'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { TableContent } from '../../Table/TableContent'
+import { DataTableType } from '../../Table/TableContent/TableContent.types'
+import { formatDataToTable } from './utils'
 import { OrderDirection, Props } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
 
@@ -21,7 +18,7 @@ const INITIAL_PAGE = 1
 const OwnersTable = (props: Props) => {
   const { asset, orderDirection = OrderDirection.ASC } = props
 
-  const [owners, setOwners] = useState<OwnersResponse[]>([])
+  const [owners, setOwners] = useState<DataTableType[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(INITIAL_PAGE)
   const [totalPages, setTotalPages] = useState<number>(0)
@@ -43,7 +40,7 @@ const OwnersTable = (props: Props) => {
         .getOwners(params)
         .then(response => {
           setTotal(response.total)
-          setOwners(response.data)
+          setOwners(formatDataToTable(response.data, asset))
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => setIsLoading(false))
@@ -54,12 +51,13 @@ const OwnersTable = (props: Props) => {
   }, [asset, setIsLoading, setOwners, page, orderDirection])
 
   return (
-    <div className={styles.OwnersTable}>
-      {isLoading ? (
-        <div className={styles.emptyTable}>
-          <Loader active data-testid="loader" />
-        </div>
-      ) : owners.length === 0 ? (
+    <TableContent
+      data={owners}
+      activePage={page}
+      isLoading={isLoading}
+      setPage={setPage}
+      totalPages={totalPages}
+      empty={() => (
         <div className={styles.emptyTable}>
           <span>
             {t('owners_table.there_are_no_owners')}
@@ -74,76 +72,9 @@ const OwnersTable = (props: Props) => {
             </Button>
           </span>
         </div>
-      ) : (
-        <>
-          <Table basic="very">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell className={styles.headerMargin}>
-                  {t('owners_table.owner')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('owners_table.issue_number')}
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {owners?.map(owner => (
-                <Table.Row key={owner.issuedId}>
-                  <Table.Cell>
-                    <LinkedProfile
-                      className={styles.linkedProfileRow}
-                      address={owner.ownerId}
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className={styles.issuedIdContainer}>
-                      <div className={styles.row}>
-                        <span>
-                          <span className={styles.issuedId}>
-                            {owner.issuedId}
-                          </span>
-                          /{total}
-                        </span>
-                        {owner.orderStatus === ListingStatus.OPEN &&
-                        owner.orderExpiresAt &&
-                        Number(owner.orderExpiresAt) >= Date.now() ? (
-                          <ListedBadge className={styles.badge} />
-                        ) : null}
-                      </div>
-                      {asset?.contractAddress && owner.tokenId && (
-                        <Link
-                          to={locations.nft(
-                            asset.contractAddress,
-                            owner.tokenId
-                          )}
-                        >
-                          <Icon
-                            name="arrow right"
-                            className={styles.gotToNFT}
-                          />
-                        </Link>
-                      )}
-                    </div>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-          {totalPages && totalPages > 1 ? (
-            <Row center>
-              <Pagination
-                activePage={page}
-                totalPages={totalPages}
-                onPageChange={(_event, props) => setPage(+props.activePage!)}
-                firstItem={null}
-                lastItem={null}
-              />
-            </Row>
-          ) : null}
-        </>
       )}
-    </div>
+      total={total}
+    />
   )
 }
 
