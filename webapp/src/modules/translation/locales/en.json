@@ -1,5 +1,6 @@
 {
   "global": {
+    "close": "Close",
     "day": "day",
     "assets": "Assets",
     "address": "Address",

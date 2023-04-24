@@ -1,5 +1,6 @@
 {
   "global": {
+    "close": "关闭",
     "day": "天",
     "assets": "资产",
     "address": "地址",

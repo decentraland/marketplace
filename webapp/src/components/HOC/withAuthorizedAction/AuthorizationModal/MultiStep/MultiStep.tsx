@@ -7,7 +7,7 @@ import './MultiStep.css'
 
 export default function MultiStep({ steps, currentStep }: Props): JSX.Element {
   return (
-    <div className="ui-multi-step">
+    <div className="ui-multi-step" data-testid="multi-step">
       {steps.map((step, index) => {
         const showAction = 'action' in step && currentStep <= index && !step.isLoading
         const isDisabled = index > currentStep
