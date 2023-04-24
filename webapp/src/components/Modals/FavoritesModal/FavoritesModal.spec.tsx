@@ -1,21 +1,30 @@
 import { waitForElementToBeRemoved } from '@testing-library/react'
-import { favoritesAPI } from '../../../modules/vendor/decentraland/favorites'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { FavoritesAPI } from '../../../modules/vendor/decentraland/favorites'
 import { renderWithProviders } from '../../../utils/test'
 import FavoritesModal from './FavoritesModal'
 import { Props } from './FavoritesModal.types'
 
+// Fixing warning: `NaN` is an invalid value for the `height` css style property.
+jest.mock('react-virtualized-auto-sizer', () => {
+  return {
+    __esModule: true,
+    default: ({ children }: { children: any }) => {
+      return children({ width: 100, height: 100 })
+    }
+  }
+})
 jest.mock('../../../modules/vendor/decentraland/favorites')
-const getWhoFavoritedAnItemMock = (favoritesAPI.getWhoFavoritedAnItem as unknown) as jest.MockedFunction<
-  typeof favoritesAPI.getWhoFavoritedAnItem
->
 
 const itemId = 'anItemId'
+const identity = {} as AuthIdentity
 
 function renderFavoritesModal(props: Partial<Props> = {}) {
   return renderWithProviders(
     <FavoritesModal
       name={'A name'}
       metadata={{ itemId }}
+      identity={identity}
       onClose={jest.fn()}
       {...props}
     />,
@@ -46,7 +55,10 @@ describe('when loading the component', () => {
       apiFetchPromiseResolve = resolve
       apiFetchPromiseReject = reject
     })
-    getWhoFavoritedAnItemMock.mockReturnValue(apiFetchPromise)
+
+    jest
+      .spyOn(FavoritesAPI.prototype, 'getWhoFavoritedAnItem')
+      .mockReturnValue(apiFetchPromise)
   })
 
   describe('and there are favorites for the item id', () => {
@@ -56,8 +68,14 @@ describe('when loading the component', () => {
 
     it('should fetch the first batch of favorites showing the loader in the process and not show the empty component', async () => {
       const { getByTestId, queryByText } = renderFavoritesModal()
-      expect(getWhoFavoritedAnItemMock).toHaveBeenCalledWith(itemId, 100, 0)
+
+      expect(FavoritesAPI.prototype.getWhoFavoritedAnItem).toHaveBeenCalledWith(
+        itemId,
+        100,
+        0
+      )
       apiFetchPromiseResolve(apiResponse)
+
       await waitForElementToBeRemoved(() =>
         getByTestId('favorites-modal-loader')
       )
@@ -74,7 +92,11 @@ describe('when loading the component', () => {
 
     it('should fetch the first batch of favorites showing the loader in the process and then show the empty component', async () => {
       const { getByTestId, getByText } = renderFavoritesModal()
-      expect(getWhoFavoritedAnItemMock).toHaveBeenCalledWith(itemId, 100, 0)
+      expect(FavoritesAPI.prototype.getWhoFavoritedAnItem).toHaveBeenCalledWith(
+        itemId,
+        100,
+        0
+      )
       apiFetchPromiseResolve(apiResponse)
       await waitForElementToBeRemoved(() =>
         getByTestId('favorites-modal-loader')

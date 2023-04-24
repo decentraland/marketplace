@@ -5,7 +5,11 @@ import {
   pickItemAsFavoriteRequest,
   unpickItemAsFavoriteRequest
 } from '../../modules/favorites/actions'
-import { getIsPickedByUser, getCount } from '../../modules/favorites/selectors'
+import {
+  getIsPickedByUser,
+  getCount,
+  isPickingOrUnpicking
+} from '../../modules/favorites/selectors'
 import { RootState } from '../../modules/reducer'
 import FavoritesCounter from './FavoritesCounter'
 import {
@@ -21,7 +25,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   } = ownProps
   return {
     isPickedByUser: getIsPickedByUser(state, itemId),
-    count: getCount(state, itemId)
+    count: getCount(state, itemId),
+    isLoading: isPickingOrUnpicking(state, itemId)
   }
 }
 

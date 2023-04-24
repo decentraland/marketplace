@@ -4,6 +4,7 @@ import {
   hasAuthorization,
   hasAuthorizationAndEnoughAllowance
 } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { renderWithProviders } from '../../../utils/test'
 import { AuthorizationAction } from './AuthorizationModal'
 import withAuthorizedAction from './withAuthorizedAction'
@@ -49,20 +50,49 @@ it('should render wrapped component', () => {
 })
 
 describe('when onAuthorizedAction is called', () => {
-  describe("and user doesn't have enough allowance", () => {
-    it('should show authorization modal', async () => {
+  describe("and the user doesn't have authorization", () => {
+    beforeEach(() => {
       (hasAuthorization as jest.Mock).mockReturnValue(false);
       (hasAuthorizationAndEnoughAllowance as jest.Mock).mockReturnValue(false);
+    })
+
+    it('should show authorization modal', async () => {
       const screen = renderComponentWithAuthorizedAction()
       await userEvent.click(screen.getByRole('button', { name: 'Action' }))
       expect(screen.getByTestId('authorization-modal')).toBeInTheDocument()
     })
   })
 
-  describe('and user has enought allowance', () => {
-    it('should call action callback', async () => {
+  describe("and user has authorization but doesn't have enough allowance", () => {
+    beforeEach(() => {
+      (hasAuthorization as jest.Mock).mockReturnValue(true);
+      (hasAuthorizationAndEnoughAllowance as jest.Mock).mockReturnValue(false);
+    })
+  
+    it('should show authorization modal', async () => {
+      const screen = renderComponentWithAuthorizedAction()
+      await userEvent.click(screen.getByRole('button', { name: 'Action' }))
+      expect(screen.getByTestId('authorization-modal')).toBeInTheDocument()
+    })
+
+    describe("when clicking close button", () => {
+      it("should stop showing authorization modal", async () => {
+        const screen = renderComponentWithAuthorizedAction()
+        await userEvent.click(screen.getByRole('button', { name: 'Action' }))
+        expect(screen.getByTestId('authorization-modal')).toBeInTheDocument()
+        await userEvent.click(screen.getByRole("button", { name: t('global.close')}))
+        expect(screen.queryByTestId('authorization-modal')).not.toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('and user has enough allowance', () => {
+    beforeEach(() => {
       (hasAuthorization as jest.Mock).mockReturnValue(true);
       (hasAuthorizationAndEnoughAllowance as jest.Mock).mockReturnValue(true);
+    })
+  
+    it('should call action callback', async () => {
       const actionCallbackMock = jest.fn()
       const screen = renderComponentWithAuthorizedAction(actionCallbackMock)
       await userEvent.click(screen.getByRole('button', { name: 'Action' }))

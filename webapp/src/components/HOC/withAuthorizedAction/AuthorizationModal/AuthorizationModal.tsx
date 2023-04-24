@@ -45,7 +45,12 @@ export function AuthorizationModal({
   }, [onAuthorized])
 
   const steps = useMemo(() => {
-    const authSteps = getSteps(authorizationType, authorization, action, requiredAllowance)
+    const authSteps = getSteps(
+      authorizationType,
+      authorization,
+      action,
+      requiredAllowance
+    )
     return [
       ...authSteps,
       {
