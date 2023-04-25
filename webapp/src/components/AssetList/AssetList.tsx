@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, useEffect } from 'react'
+import React, { useCallback, useMemo, useEffect } from 'react'
 import { Card, Loader } from 'decentraland-ui'
 import { Item, NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -25,13 +25,13 @@ const AssetList = (props: Props) => {
     count,
     search,
     isLoading,
+    isLoadingMore,
     hasFiltersEnabled,
     visitedLocations,
     onBrowse,
     isManager,
     onClearFilters
   } = props
-  const [hasLoadedMore, setHasLoadedMore] = useState(false)
   const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts
 
   useEffect(() => {
@@ -51,8 +51,6 @@ const AssetList = (props: Props) => {
 
   const handleLoadMore = useCallback(
     newPage => {
-      console.log('Has loaded more!')
-      setHasLoadedMore(true)
       onBrowse({ page: newPage })
       getAnalytics().track(events.LOAD_MORE, { page: newPage })
     },
@@ -93,7 +91,7 @@ const AssetList = (props: Props) => {
         </>
       ) : null}
       <Card.Group>
-        {assets.length > 0 && (!isLoading || (isLoading && hasLoadedMore))
+        {assets.length > 0 && (!isLoading || (isLoading && isLoadingMore))
           ? assets.map((assets, index) => (
               <AssetCard
                 isManager={isManager}

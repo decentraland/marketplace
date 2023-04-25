@@ -145,6 +145,8 @@ export const getIsSoldOut = createSelector<
   return isSoldOut === 'true'
 })
 
+export const isLoadingMore = (state: RootState) => getState(state).isLoadMore
+
 export const getIsMap = createSelector<RootState, string, boolean | undefined>(
   getRouterSearch,
   search => {
