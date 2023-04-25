@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
-import { Icon } from 'decentraland-ui'
+import { Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import * as events from '../../utils/events'
@@ -16,6 +16,7 @@ const FavoritesCounter = (props: Props) => {
     isPickedByUser,
     isCollapsed = false,
     item,
+    isLoading,
     onCounterClick,
     onPick,
     onUnpick
@@ -77,12 +78,16 @@ const FavoritesCounter = (props: Props) => {
         onClick={onClick}
         data-testid="favorites-counter-bubble"
       >
-        <span>
-          <Icon
-            size="large"
-            fitted={isCollapsed}
-            name={isPickedByUser ? 'bookmark' : 'bookmark outline'}
-          />
+        <span className={styles.iconContainer}>
+          {isLoading ? (
+            <Loader active inline size="tiny" className={styles.loader} />
+          ) : (
+            <Icon
+              size="large"
+              fitted={isCollapsed}
+              name={isPickedByUser ? 'bookmark' : 'bookmark outline'}
+            />
+          )}
         </span>
         {!isCollapsed ? counter : null}
       </div>

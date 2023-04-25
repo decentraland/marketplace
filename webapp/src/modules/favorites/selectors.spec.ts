@@ -1,3 +1,4 @@
+import { Item } from '@dcl/schemas'
 import { match } from 'react-router-dom'
 import { Item } from '@dcl/schemas'
 import { RootState } from '../reducer'
@@ -13,11 +14,14 @@ import {
   getIsPickedByUser,
   getListId,
   getLoading,
-  getState
+  getState,
+  isPickingOrUnpicking
 } from './selectors'
 import {
   fetchFavoritedItemsRequest,
-  pickItemAsFavoriteRequest
+  pickItemAsFavoriteRequest,
+  undoUnpickingItemAsFavoriteRequest,
+  unpickItemAsFavoriteRequest
 } from './actions'
 
 let state: RootState
@@ -151,6 +155,53 @@ describe('when getting if the favorited items are being loaded', () => {
 
     it('should return true', () => {
       expect(isLoadingFavoritedItems(state)).toBe(true)
+    })
+  })
+})
+
+describe.each([
+  ['picked', pickItemAsFavoriteRequest],
+  ['unpicked', unpickItemAsFavoriteRequest],
+  ['undone', undoUnpickingItemAsFavoriteRequest]
+])('when getting if an item is being %s', (description, action) => {
+  let itemId: string
+  let item: Item
+
+  beforeEach(() => {
+    itemId = '0xaddress-anItemId'
+    item = { id: itemId } as Item
+    state.favorites.loading = []
+  })
+
+  describe(`and no items are being ${description}`, () => {
+    beforeEach(() => {
+      state.favorites.loading = []
+    })
+
+    it('should return false', () => {
+      expect(isPickingOrUnpicking(state, itemId)).toBe(false)
+    })
+  })
+
+  describe(`and it isn't not being ${description}`, () => {
+    beforeEach(() => {
+      state.favorites.loading = [
+        action({ id: '0xaddress-anotherItemId' } as Item)
+      ]
+    })
+
+    it('should return false', () => {
+      expect(isPickingOrUnpicking(state, itemId)).toBe(false)
+    })
+  })
+
+  describe(`and it is being ${description}`, () => {
+    beforeEach(() => {
+      state.favorites.loading.push(action(item))
+    })
+
+    it('should return true', () => {
+      expect(isPickingOrUnpicking(state, itemId)).toBe(true)
     })
   })
 })
