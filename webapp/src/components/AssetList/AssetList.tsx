@@ -23,6 +23,7 @@ const AssetList = (props: Props) => {
     count,
     search,
     isLoading,
+    isLoadingMore,
     hasFiltersEnabled,
     visitedLocations,
     onBrowse,
@@ -87,7 +88,7 @@ const AssetList = (props: Props) => {
         </>
       ) : null}
       <Card.Group>
-        {assets.length > 0
+        {assets.length > 0 && (!isLoading || isLoadingMore)
           ? assets.map((assets, index) => (
               <AssetCard
                 isManager={isManager}
@@ -107,7 +108,6 @@ const AssetList = (props: Props) => {
         {assets.length === 0 && !isLoading ? (
           <div className="empty">
             <div className="watermelon" />
-
             <T
               id={emptyStateTranslationString}
               values={{
