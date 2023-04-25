@@ -1,12 +1,11 @@
 import React, { useCallback, useMemo, useEffect } from 'react'
 import { Card, Loader } from 'decentraland-ui'
-import { Item, NFTCategory } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
-import { NFT } from '../../modules/nft/types'
 import * as events from '../../utils/events'
 import { InfiniteScroll } from '../InfiniteScroll'
 import { AssetCard } from '../AssetCard'
@@ -19,8 +18,7 @@ const AssetList = (props: Props) => {
     vendor,
     section,
     assetType,
-    items,
-    nfts,
+    assets,
     page,
     count,
     search,
@@ -31,8 +29,6 @@ const AssetList = (props: Props) => {
     isManager,
     onClearFilters
   } = props
-
-  const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts
 
   useEffect(() => {
     if (visitedLocations.length > 1) {

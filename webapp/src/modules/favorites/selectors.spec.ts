@@ -1,4 +1,5 @@
 import { match } from 'react-router-dom'
+import { Item } from '@dcl/schemas'
 import { RootState } from '../reducer'
 import { INITIAL_STATE } from './reducer'
 import {
@@ -6,6 +7,7 @@ import {
   getData,
   getError,
   getFavoritedItems,
+  isLoadingFavoritedItems,
   getFavoritesDataByItemId,
   getIsPickedByUser,
   getListId,
@@ -13,6 +15,10 @@ import {
   getState
 } from './selectors'
 import { locations } from '../routing/locations'
+import {
+  fetchFavoritedItemsRequest,
+  pickItemAsFavoriteRequest
+} from './actions'
 
 let state: RootState
 
@@ -124,5 +130,27 @@ describe('when getting the listId from the pathname', () => {
 
   it('should return the listId that comes after /lists', () => {
     expect(getListId.resultFunc(listIdMatch)).toBe(listId)
+  })
+})
+
+describe('when getting if the favorited items are being loaded', () => {
+  describe("and there's no favorited items request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = [pickItemAsFavoriteRequest({} as Item)]
+    })
+
+    it('should return false', () => {
+      expect(isLoadingFavoritedItems(state)).toBe(false)
+    })
+  })
+
+  describe("and there's a favorited items request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = [fetchFavoritedItemsRequest({})]
+    })
+
+    it('should return true', () => {
+      expect(isLoadingFavoritedItems(state)).toBe(true)
+    })
   })
 })

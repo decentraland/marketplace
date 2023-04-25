@@ -1,7 +1,5 @@
 import { Dispatch } from 'redux'
 import { RouterLocation } from 'connected-react-router'
-import { Item } from '@dcl/schemas'
-import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
 import {
   browse,
@@ -10,14 +8,13 @@ import {
   ClearFiltersAction
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
-import { AssetType } from '../../modules/asset/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 
 export type Props = {
   vendor: VendorName
   assetType: AssetType
   section?: Section
-  nfts: NFT[]
-  items: Item[]
+  assets: Asset[]
   page: number
   count?: number
   isLoading: boolean
@@ -33,8 +30,7 @@ export type MapStateProps = Pick<
   Props,
   | 'vendor'
   | 'section'
-  | 'nfts'
-  | 'items'
+  | 'assets'
   | 'page'
   | 'count'
   | 'isLoading'
