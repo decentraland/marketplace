@@ -91,7 +91,7 @@ const AssetList = (props: Props) => {
         </>
       ) : null}
       <Card.Group>
-        {assets.length > 0 && (!isLoading || (isLoading && isLoadingMore))
+        {assets.length > 0 && (!isLoading || isLoadingMore)
           ? assets.map((assets, index) => (
               <AssetCard
                 isManager={isManager}
