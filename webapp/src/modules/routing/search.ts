@@ -13,6 +13,7 @@ import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
 import { NFTSortBy } from '../nft/types'
 import { isAccountView, isLandSection } from '../ui/utils'
+import { AssetStatusFilter } from '../../utils/filters'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -20,7 +21,7 @@ export function getDefaultOptionsByView(
   view?: View,
   section?: Section
 ): BrowseOptions {
-  return {
+  let defaultOptions: Partial<BrowseOptions> = {
     onlyOnSale: !view || !isAccountView(view),
     sortBy:
       view && isAccountView(view)
@@ -29,6 +30,21 @@ export function getDefaultOptionsByView(
         ? SortBy.NEWEST
         : SortBy.RECENTLY_LISTED
   }
+  if (section && view === View.MARKET) {
+    const currentCategoryBySection = getCategoryFromSection(section)
+    if (
+      currentCategoryBySection &&
+      [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(
+        currentCategoryBySection
+      )
+    ) {
+      defaultOptions = {
+        ...defaultOptions,
+        status: AssetStatusFilter.ON_SALE
+      }
+    }
+  }
+  return defaultOptions
 }
 
 export function getSearchParams(options?: BrowseOptions) {
@@ -302,6 +318,8 @@ export function getCatalogSortBy(sortBy: SortBy): CatalogSortBy {
   switch (sortBy) {
     case SortBy.CHEAPEST:
       return CatalogSortBy.CHEAPEST
+    case SortBy.MOST_EXPENSIVE:
+      return CatalogSortBy.MOST_EXPENSIVE
     case SortBy.NEWEST:
       return CatalogSortBy.NEWEST
     case SortBy.RECENTLY_LISTED:

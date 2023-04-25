@@ -29,6 +29,11 @@ export enum SortBy {
   MIN_RENTAL_PRICE = 'min_rental_price'
 }
 
+export type SortByOption = {
+  value: SortBy
+  text: string
+}
+
 export enum SortDirection {
   ASC = 'asc',
   DESC = 'desc'
