@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import classNames from 'classnames'
 import {
   Dropdown,
@@ -9,7 +9,7 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useInput } from '../../lib/input'
-import { getCountText, getOrderByOptions } from './utils'
+import { getCountText } from './utils'
 import { SortBy } from '../../modules/routing/types'
 import {
   getCategoryFromSection,
@@ -37,7 +37,8 @@ export const AssetTopbar = ({
   hasFiltersEnabled,
   onBrowse,
   onClearFilters,
-  onOpenFiltersModal
+  onOpenFiltersModal,
+  sortByOptions
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
   const category = section ? getCategoryFromSection(section) : undefined
@@ -81,16 +82,9 @@ export const AssetTopbar = ({
     [onBrowse, onlyOnSale, onlyOnRent]
   )
 
-  const orderByDropdownOptions = useMemo(
-    () => getOrderByOptions(onlyOnRent, onlyOnSale),
-    [onlyOnRent, onlyOnSale]
-  )
-
-  const sortByValue = orderByDropdownOptions.find(
-    option => option.value === sortBy
-  )
+  const sortByValue = sortByOptions.find(option => option.value === sortBy)
     ? sortBy
-    : orderByDropdownOptions[0].value
+    : sortByOptions[0].value
 
   return (
     <div className={styles.assetTopbar}>
@@ -143,7 +137,7 @@ export const AssetTopbar = ({
             <Dropdown
               direction="left"
               value={sortByValue}
-              options={orderByDropdownOptions}
+              options={sortByOptions}
               onChange={handleOrderByDropdownChange}
             />
             {isMobile ? (

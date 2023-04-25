@@ -36,7 +36,8 @@ import {
   getNetwork,
   getOnlySmart,
   getCurrentBrowseOptions,
-  getCurrentLocationAddress
+  getCurrentLocationAddress,
+  getSection
 } from '../routing/selectors'
 import {
   fetchNFTRequest,
@@ -383,6 +384,7 @@ export function* getNewBrowseOptions(
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
+  const section = yield select(getSection)
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
@@ -397,7 +399,7 @@ export function* getNewBrowseOptions(
     }
   }
 
-  const defaults = getDefaultOptionsByView(view)
+  const defaults = getDefaultOptionsByView(view, section)
   return {
     ...defaults,
     ...previous,
