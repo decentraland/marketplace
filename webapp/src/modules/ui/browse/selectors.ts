@@ -29,6 +29,7 @@ import { Section, Sections } from '../../vendor/routing/types'
 import { Asset, AssetType } from '../../asset/types'
 import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
+import { byFavoriteCreatedAtAsc } from './utils'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState): View | undefined =>
@@ -80,22 +81,13 @@ export const getBrowseAssets = (
 
 export const getItemsPickedByUser = createSelector<
   RootState,
-  Record<string, FavoritesData | undefined>,
+  Record<string, FavoritesData>,
   Item[],
   Item[]
 >(getFavoritedItemsFromState, getItems, (favoritedItems, items) =>
   items
-    .filter(item => favoritedItems[item.id]?.pickedByUser === true)
-    .sort((a, b) => {
-      const favoriteACreatedAt = favoritedItems[a.id]?.createdAt ?? 0
-      const favoriteBCreatedAt = favoritedItems[b.id]?.createdAt ?? 0
-      if (favoriteACreatedAt < favoriteBCreatedAt) {
-        return 1
-      } else if (favoriteACreatedAt > favoriteBCreatedAt) {
-        return -1
-      }
-      return 0
-    })
+    .filter(item => favoritedItems[item.id]?.pickedByUser)
+    .sort(byFavoriteCreatedAtAsc(favoritedItems))
 )
 
 export const getOnSaleNFTs = createSelector<

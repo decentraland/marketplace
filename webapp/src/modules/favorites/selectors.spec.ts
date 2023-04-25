@@ -1,6 +1,7 @@
 import { match } from 'react-router-dom'
 import { Item } from '@dcl/schemas'
 import { RootState } from '../reducer'
+import { locations } from '../routing/locations'
 import { INITIAL_STATE } from './reducer'
 import {
   getCount,
@@ -14,7 +15,6 @@ import {
   getLoading,
   getState
 } from './selectors'
-import { locations } from '../routing/locations'
 import {
   fetchFavoritedItemsRequest,
   pickItemAsFavoriteRequest

@@ -1,6 +1,6 @@
 import { createMatchSelector } from 'connected-react-router'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { createSelector } from 'reselect'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
 import { FavoritesData } from './types'

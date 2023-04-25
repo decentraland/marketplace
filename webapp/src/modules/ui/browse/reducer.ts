@@ -165,7 +165,6 @@ export function browseReducer(
       }
 
     case FETCH_FAVORITED_ITEMS_SUCCESS:
-      console.log('Total success items', action.payload.total)
       return {
         ...state,
         count: action.payload.total
@@ -199,7 +198,6 @@ export function browseReducer(
           }
         }
         case View.LOAD_MORE: {
-          console.log('Total load more', action.payload.total)
           return {
             ...state,
             itemIds: [

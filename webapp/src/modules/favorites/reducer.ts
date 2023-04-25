@@ -39,7 +39,7 @@ import {
 import { FavoritesData } from './types'
 
 export type FavoritesState = {
-  data: { items: Record<string, FavoritesData | undefined>; total: number }
+  data: { items: Record<string, FavoritesData>; total: number }
   loading: LoadingState
   error: string | null
 }
@@ -135,12 +135,14 @@ export function favoritesReducer(
           items: {
             ...state.data.items,
             ...Object.fromEntries(
-              items.map(item => [
-                item.id,
-                state.data.items[item.id] && item.picks
-                  ? { ...state.data.items[item.id], ...item.picks }
-                  : item.picks
-              ])
+              items
+                .map(item => [
+                  item.id,
+                  state.data.items[item.id] && item.picks
+                    ? { ...state.data.items[item.id], ...item.picks }
+                    : item.picks
+                ])
+                .filter(Boolean)
             )
           }
         }
@@ -149,6 +151,10 @@ export function favoritesReducer(
 
     case FETCH_ITEM_SUCCESS: {
       const { item } = action.payload
+
+      if (!item.picks) {
+        return state
+      }
 
       return {
         ...state,
