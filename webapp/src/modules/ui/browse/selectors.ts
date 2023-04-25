@@ -14,6 +14,8 @@ import { getData as getNFTData, getWalletNFTs } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
 import { getData as getRentalData } from '../../rental/selectors'
+import { getFavoritedItems as getFavoritedItemsFromState } from '../../favorites/selectors'
+import { FavoritesData } from '../../favorites/types'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { NFTState } from '../../nft/reducer'
 import { RootState } from '../../reducer'
@@ -23,15 +25,18 @@ import { ItemState } from '../../item/reducer'
 import { VendorName } from '../../vendor'
 import { getAddress, getWallet } from '../../wallet/selectors'
 import { getTransactionsByType } from '../../transaction/selectors'
+import { Section, Sections } from '../../vendor/routing/types'
+import { Asset, AssetType } from '../../asset/types'
 import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
+import { byFavoriteCreatedAtAsc } from './utils'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState): View | undefined =>
   getState(state).view
 export const getCount = (state: RootState) => getState(state).count
 
-export const getNFTs = createSelector<
+const getNFTs = createSelector<
   RootState,
   BrowseUIState,
   NFTState['data'],
@@ -40,7 +45,7 @@ export const getNFTs = createSelector<
   browse.nftIds.map(id => nftsById[id])
 )
 
-export const getItems = createSelector<
+const getItems = createSelector<
   RootState,
   BrowseUIState,
   ItemState['data'],
@@ -49,7 +54,7 @@ export const getItems = createSelector<
   browse.itemIds.map(id => itemsById[id])
 )
 
-export const getOnSaleItems = createSelector<
+const getOnSaleItems = createSelector<
   RootState,
   ReturnType<typeof getAddress>,
   ReturnType<typeof getItemData>,
@@ -58,6 +63,31 @@ export const getOnSaleItems = createSelector<
   Object.values(itemsById).filter(
     item => item.isOnSale && item.creator === address
   )
+)
+
+export const getBrowseAssets = (
+  state: RootState,
+  section: Section,
+  assetType: AssetType
+): Asset[] => {
+  if (assetType === AssetType.ITEM) {
+    return section === Sections.decentraland.LISTS
+      ? getItemsPickedByUser(state)
+      : getItems(state)
+  } else {
+    return getNFTs(state)
+  }
+}
+
+export const getItemsPickedByUser = createSelector<
+  RootState,
+  Record<string, FavoritesData>,
+  Item[],
+  Item[]
+>(getFavoritedItemsFromState, getItems, (favoritedItems, items) =>
+  items
+    .filter(item => favoritedItems[item.id]?.pickedByUser)
+    .sort(byFavoriteCreatedAtAsc(favoritedItems))
 )
 
 export const getOnSaleNFTs = createSelector<
