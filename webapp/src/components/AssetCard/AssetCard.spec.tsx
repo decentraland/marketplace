@@ -1,4 +1,11 @@
-import { BodyShape, ChainId, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import {
+  BodyShape,
+  ChainId,
+  Network,
+  NFTCategory,
+  Rarity,
+  WearableCategory
+} from '@dcl/schemas'
 import { Asset } from '../../modules/asset/types'
 import { INITIAL_STATE } from '../../modules/favorites/reducer'
 import { renderWithProviders } from '../../utils/test'
@@ -59,6 +66,7 @@ describe('AssetCard', () => {
       data: {
         wearable: {
           rarity: Rarity.UNIQUE,
+          category: WearableCategory.BODY_SHAPE,
           bodyShapes: [BodyShape.MALE]
         } as Asset['data']['wearable']
       },

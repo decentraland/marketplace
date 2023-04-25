@@ -1,6 +1,6 @@
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
-import { FavoritedItemIds } from '../../../favorites/types'
+import { FavoritedItems } from '../../../favorites/types'
 import { ItemFilters } from '../item/types'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
@@ -51,7 +51,7 @@ export class FavoritesAPI extends BaseClient {
     listId: string,
     filters: ItemFilters = {}
   ): Promise<{
-    results: FavoritedItemIds
+    results: FavoritedItems
     total: number
   }> {
     const queryParams = new URLSearchParams()

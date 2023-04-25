@@ -1,4 +1,4 @@
-import { takeEvery, put, select, take } from 'redux-saga/effects'
+import { takeEvery, put, select, take, spawn } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import { IPreviewController, PreviewEmoteEventType } from '@dcl/schemas'
 import {
@@ -12,6 +12,7 @@ import {
   SetWearablePreviewControllerAction,
   SET_WEARABLE_PREVIEW_CONTROLLER
 } from './preview/actions'
+import { browseSaga } from './browse/sagas'
 
 export function* uiSaga() {
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
@@ -19,6 +20,7 @@ export function* uiSaga() {
     SET_WEARABLE_PREVIEW_CONTROLLER,
     handleSetWearablePreviewController
   )
+  yield spawn(browseSaga)
 }
 
 function* handleConnectWalletSuccess(_action: ConnectWalletSuccessAction) {
