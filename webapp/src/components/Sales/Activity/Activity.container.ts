@@ -23,7 +23,7 @@ import { FETCH_NFT_REQUEST } from '../../../modules/nft/actions'
 import { MapStateProps, MapDispatchProps } from './Activity.types'
 import { browse } from '../../../modules/routing/actions'
 import { Dispatch } from 'redux'
-import { getPage } from '../../../modules/routing/selectors'
+import { getPageNumber } from '../../../modules/routing/selectors'
 import { Asset } from '../../../modules/asset/types'
 
 const getAssets = (
@@ -56,7 +56,7 @@ const mapState = (state: RootState): MapStateProps => {
   const count = getCount(state)
   const items = getItemsData(state)
   const nfts = getNftData(state)
-  const page = getPage(state)
+  const page = getPageNumber(state)
   const assets = getAssets(sales, items, nfts)
   const isLoading = getIsLoading(state)
 

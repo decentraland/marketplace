@@ -6,7 +6,7 @@ import {
   fetchFavoritedItemsRequest
 } from '../../favorites/actions'
 import { PAGE_SIZE } from '../../vendor/api'
-import { getPage, getSection } from '../../routing/selectors'
+import { getPageNumber, getSection } from '../../routing/selectors'
 import { View } from '../types'
 import { getCount, getItemsPickedByUser } from './selectors'
 
@@ -19,7 +19,7 @@ export function* browseSaga() {
 
 function* handleUnpickItemAsFavoriteSuccess() {
   const section: Section = yield select(getSection)
-  const page: number = yield select(getPage)
+  const page: number = yield select(getPageNumber)
   const favoritedAssets: Item[] = yield select(getItemsPickedByUser)
   const totalFavoritedAssets: number = yield select(getCount)
   if (

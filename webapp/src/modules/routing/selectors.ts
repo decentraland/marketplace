@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { matchPath } from 'react-router'
 import {
   getSearch as getRouterSearch,
   getLocation
@@ -25,7 +26,7 @@ import {
   getURLParam,
   getURLParamArray_nonStandard
 } from './search'
-import { BrowseOptions, SortBy } from './types'
+import { BrowseOptions, PageName, SortBy } from './types'
 import { locations } from './locations'
 
 export const getState = (state: RootState) => state.routing
@@ -77,7 +78,7 @@ export const getSection = createSelector<
   return section as Section
 })
 
-export const getPage = createSelector<RootState, string, number>(
+export const getPageNumber = createSelector<RootState, string, number>(
   getRouterSearch,
   search => {
     const page = getURLParam(search, 'page')
@@ -335,7 +336,7 @@ export const getCurrentLocationAddress = createSelector<
 )
 
 export const getPaginationUrlParams = createSelector(
-  getPage,
+  getPageNumber,
   getSortBy,
   getSearch,
   (page, sortBy, search) => ({ page, sortBy, search })
@@ -521,5 +522,79 @@ export const getIsBuyWithCardPage = createSelector<RootState, string, boolean>(
   search => {
     const withCard = getURLParam(search, 'withCard')
     return withCard !== null && withCard === 'true'
+  }
+)
+
+const buildExactMatchProps = (path: string) => {
+  return { path, exact: true }
+}
+
+export const getPageName = createSelector<RootState, string, PageName>(
+  getPathName,
+  pathname => {
+    if (pathname === '/') {
+      return PageName.HOME
+    } else if (
+      matchPath(
+        pathname,
+        buildExactMatchProps(locations.manage('anAddress', 'anId'))
+      )
+    ) {
+      return PageName.MANAGE_NFT
+    } else if (
+      matchPath(pathname, buildExactMatchProps(locations.buy(AssetType.NFT)))
+    ) {
+      return PageName.BUY_NFT
+    } else if (
+      matchPath(pathname, buildExactMatchProps(locations.buy(AssetType.ITEM)))
+    ) {
+      return PageName.BUY_ITEM
+    } else if (
+      matchPath(
+        pathname,
+        buildExactMatchProps(locations.buyStatusPage(AssetType.NFT))
+      )
+    ) {
+      return PageName.BUY_NFT_STATUS
+    } else if (matchPath(pathname, locations.buyStatusPage(AssetType.ITEM))) {
+      return PageName.BUY_ITEM_STATUS
+    } else if (matchPath(pathname, locations.cancel())) {
+      return PageName.CANCEL_NFT_SALE
+    } else if (matchPath(pathname, locations.transfer())) {
+      return PageName.TRANSFER_NFT
+    } else if (matchPath(pathname, locations.bid())) {
+      return PageName.BID_NFT
+    } else if (matchPath(pathname, locations.signIn())) {
+      return PageName.SIGN_IN
+    } else if (matchPath(pathname, locations.settings())) {
+      return PageName.SETTINGS
+    } else if (matchPath(pathname, locations.lands())) {
+      return PageName.LANDS
+    } else if (matchPath(pathname, locations.collection())) {
+      return PageName.COLLECTION
+    } else if (matchPath(pathname, locations.browse())) {
+      return PageName.BROWSE
+    } else if (matchPath(pathname, locations.campaign())) {
+      return PageName.CAMPAIGN
+    } else if (matchPath(pathname, locations.currentAccount())) {
+      return PageName.ACCOUNT
+    } else if (matchPath(pathname, locations.list())) {
+      return PageName.LIST
+    } else if (matchPath(pathname, locations.lists())) {
+      return PageName.LISTS
+    } else if (matchPath(pathname, locations.account())) {
+      return PageName.ACCOUNTS
+    } else if (matchPath(pathname, locations.nft())) {
+      return PageName.NFT_DETAIL
+    } else if (matchPath(pathname, locations.item())) {
+      return PageName.ITEM_DETAIL
+    } else if (matchPath(pathname, locations.parcel())) {
+      return PageName.PARCEL_DETAIL
+    } else if (matchPath(pathname, locations.estate())) {
+      return PageName.ESTATE_DETAIL
+    } else if (matchPath(pathname, locations.activity())) {
+      return PageName.ACTIVITY
+    }
+    throw new Error('Unknown page')
   }
 )

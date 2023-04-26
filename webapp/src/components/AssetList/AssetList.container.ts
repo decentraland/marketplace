@@ -8,7 +8,7 @@ import { browse, clearFilters } from '../../modules/routing/actions'
 import { getBrowseAssets, getCount } from '../../modules/ui/browse/selectors'
 import {
   getVendor,
-  getPage,
+  getPageNumber,
   getAssetType,
   getSection,
   getSearch,
@@ -26,7 +26,7 @@ import AssetList from './AssetList'
 
 const mapState = (state: RootState): MapStateProps => {
   const section = getSection(state)
-  const page = getPage(state)
+  const page = getPageNumber(state)
   const assetType = getAssetType(state)
 
   return {
