@@ -133,8 +133,9 @@ export const getOnlyOnRent = createSelector<
   }
 })
 
-const getAllSortByOptions = () => ({
+export const getAllSortByOptions = () => ({
   [SortBy.NEWEST]: { value: SortBy.NEWEST, text: t('filters.newest') },
+  [SortBy.NAME]: { value: SortBy.NAME, text: t('filters.name') },
   [SortBy.RECENTLY_SOLD]: {
     value: SortBy.RECENTLY_SOLD,
     text: t('filters.recently_sold')
@@ -147,9 +148,17 @@ const getAllSortByOptions = () => ({
     value: SortBy.MOST_EXPENSIVE,
     text: t('filters.most_expensive')
   },
+  [SortBy.MAX_RENTAL_PRICE]: {
+    value: SortBy.MAX_RENTAL_PRICE,
+    text: t('filters.cheapest')
+  },
   [SortBy.RECENTLY_LISTED]: {
     value: SortBy.RECENTLY_LISTED,
     text: t('filters.recently_listed')
+  },
+  [SortBy.RENTAL_LISTING_DATE]: {
+    value: SortBy.RENTAL_LISTING_DATE,
+    text: t('filters.recently_listed_for_rent')
   }
 })
 
