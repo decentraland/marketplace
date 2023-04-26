@@ -148,7 +148,6 @@ export function getSteps({
     ]
   }
 
-  console.log(contract?.label)
   if (authorizationType === AuthorizationType.ALLOWANCE) {
     return [
       {

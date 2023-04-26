@@ -34,7 +34,7 @@ export default function withAuthorizedAction<
     >()
     const [isLoadingAuthorization, setIsLoadingAuthorization] = useState(false)
     const { wallet } = props
-  
+
     const handleAuthorizedAction = async (
       authorizeOptions: AuthorizeActionOptions
     ) => {
@@ -43,7 +43,7 @@ export default function withAuthorizedAction<
       }
 
       setIsLoadingAuthorization(true)
-  
+
       const {
         authorizationType,
         targetContract,
@@ -64,57 +64,54 @@ export default function withAuthorizedAction<
         contractName: targetContractName
       }
 
-      if (authorizationType === AuthorizationType.ALLOWANCE) {
-        const { requiredAllowanceInWei } = authorizeOptions
-        if (BigNumber.from(requiredAllowanceInWei).isZero()) {
-          onAuthorized()
-          return
-        }
+      try {
+        if (authorizationType === AuthorizationType.ALLOWANCE) {
+          const { requiredAllowanceInWei } = authorizeOptions
+          if (BigNumber.from(requiredAllowanceInWei).isZero()) {
+            onAuthorized()
+            return
+          }
 
-        const contract = getERC20ContractInstance(
-          targetContract.address,
-          provider
-        )
-        const allowance: BigNumber = await contract.allowance(
-          wallet.address,
-          authorizedAddress
-        )
+          const contract = getERC20ContractInstance(
+            targetContract.address,
+            provider
+          )
+          const allowance: BigNumber = await contract.allowance(
+            wallet.address,
+            authorizedAddress
+          )
 
-        if (allowance.gte(BigNumber.from(requiredAllowanceInWei))) {
-          onAuthorized();
-          setIsLoadingAuthorization(false)
-          return;
-        }
+          if (allowance.gte(BigNumber.from(requiredAllowanceInWei))) {
+            onAuthorized()
+            setIsLoadingAuthorization(false)
+            return
+          }
 
-        setAuthModalData({
-          authorization,
-          currentAllowance: allowance,
-          requiredAllowance: BigNumber.from(requiredAllowanceInWei),
-          authorizationType: authorizationType,
-          action,
-          network: targetContract.network,
-          onAuthorized
-        })
-
-      } else {
-        try {
+          setAuthModalData({
+            authorization,
+            currentAllowance: allowance,
+            requiredAllowance: BigNumber.from(requiredAllowanceInWei),
+            authorizationType: authorizationType,
+            action,
+            network: targetContract.network,
+            onAuthorized
+          })
+        } else {
           const contract = getERC721ContractInstance(
             targetContract.address,
             provider
           )
           const isApprovedForAll = await contract.isApprovedForAll(
             wallet.address,
-            authorizedAddress,
+            authorizedAddress
           )
 
-          console.log({isApprovedForAll})
-  
           if (isApprovedForAll) {
             onAuthorized()
             setIsLoadingAuthorization(false)
             return
           }
-  
+
           setAuthModalData({
             authorization,
             authorizationType: authorizationType,
@@ -122,12 +119,12 @@ export default function withAuthorizedAction<
             network: targetContract.network,
             onAuthorized
           })
-        } catch (e) {
-          console.log({ error: e })
         }
-        
+        setShowAuthorizationModal(true)
+      } catch (error) {
+        // TODO: handle error scenario
+        console.error(error)
       }
-      setShowAuthorizationModal(true)
     }
 
     const handleClose = useCallback(() => {

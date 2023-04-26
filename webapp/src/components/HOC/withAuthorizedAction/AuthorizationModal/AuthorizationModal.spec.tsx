@@ -1,3 +1,4 @@
+import { Network } from '@dcl/schemas'
 import { render, RenderResult, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {
@@ -5,6 +6,7 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { BigNumber } from 'ethers'
 import { AuthorizationModal } from './AuthorizationModal'
 import {
   AuthorizationStepStatus,
@@ -20,7 +22,7 @@ function renderAuthorizationModal(props: Partial<Props>) {
   return render(
     <AuthorizationModal
       authorization={{} as Authorization}
-      requiredAllowance={'10'}
+      requiredAllowance={BigNumber.from('10')}
       authorizationType={AuthorizationType.APPROVAL}
       grantStatus={AuthorizationStepStatus.PENDING}
       revokeStatus={AuthorizationStepStatus.PENDING}
@@ -29,6 +31,8 @@ function renderAuthorizationModal(props: Partial<Props>) {
       onRevoke={jest.fn()}
       onGrant={jest.fn()}
       onAuthorized={jest.fn()}
+      network={Network.MATIC}
+      getContract={jest.fn()}
       error={''}
       {...props}
     />
