@@ -1115,7 +1115,10 @@
     "available_for_mint": "可用於鑄幣",
     "cheapest_listing": "最便宜的收藏品",
     "not_for_sale": "不可出售",
-    "owners": "{count} {count, plural, one {所有者} other {所有者}}"
+    "owners": "{count} {count, plural, one {所有者} other {所有者}}",
+    "cheapest_option": "最便宜",
+    "most_expensive": "最貴",
+    "also_minting": "也可用於鑄造"
   },
   "rentals_promotional_modal": {
     "title": "Announcing official LAND rentals",

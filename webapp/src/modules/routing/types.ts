@@ -18,6 +18,7 @@ export enum SortBy {
   NEWEST = 'newest',
   RECENTLY_LISTED = 'recently_listed',
   CHEAPEST = 'cheapest',
+  MOST_EXPENSIVE = 'most_expensive',
   RECENTLY_REVIEWED = 'recently_reviewed',
   RECENTLY_SOLD = 'recently_sold',
   SIZE = 'size',

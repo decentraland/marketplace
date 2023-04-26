@@ -1112,7 +1112,10 @@
     "available_for_mint": "Disponible para mintear",
     "cheapest_listing": "Coleccionable más barato",
     "not_for_sale": "No disponible para la venta",
-    "owners": "{count} {count, plural, one {Dueño} other {Dueños}}"
+    "owners": "{count} {count, plural, one {Dueño} other {Dueños}}",
+    "cheapest_option": "Más baratos",
+    "most_expensive": "Más Caro",
+    "also_minting": "También disponibles para mintear"
   },
   "rentals_promotional_modal": {
     "title": "¡La renta de tierras está disponible!",

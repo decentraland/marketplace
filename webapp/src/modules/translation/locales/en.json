@@ -1118,7 +1118,10 @@
     "available_for_mint": "Available for mint",
     "cheapest_listing": "Cheapest Listing",
     "not_for_sale": "Not for sale",
-    "owners": "{count} {count, plural, one {Owner} other {Owners}}"
+    "owners": "{count} {count, plural, one {Owner} other {Owners}}",
+    "cheapest_option": "Cheapest Option",
+    "most_expensive": "Most Expensive",
+    "also_minting": "Also Available for minting"
   },
   "rentals_promotional_modal": {
     "title": "Announcing LAND rentals",

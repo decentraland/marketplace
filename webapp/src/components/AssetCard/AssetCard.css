@@ -23,8 +23,8 @@ a.ui.card.AssetCard:hover,
   flex: unset;
 }
 
-.ui.card.AssetCard:hover > .content,
-.ui.cards > .card.AssetCard:hover > .content {
+.ui.card.AssetCard:hover > .content.catalog,
+.ui.cards > .card.AssetCard:hover > .content.catalog {
   position: absolute;
   margin-top: 161px;
   width: 100%;
@@ -34,8 +34,8 @@ a.ui.card.AssetCard:hover,
   border-radius: 0px 0px 10px 10px !important;
 }
 
-.ui.card.AssetCard:hover .AssetImage,
-.ui.cards > .card.AssetCard:hover .AssetImage {
+.ui.card.AssetCard:hover .AssetImage.catalog,
+.ui.cards > .card.AssetCard:hover .AssetImage.catalog {
   box-shadow: 0px 4px 34px 0px rgba(255, 255, 255, 0.37) !important;
   border-radius: 10px !important;
 }
@@ -164,6 +164,10 @@ a.ui.card.link:hover .meta {
 }
 
 .AssetCard .AssetImage {
+  height: 223px;
+}
+
+.AssetCard .AssetImage.catalog {
   height: 161px;
 }
 

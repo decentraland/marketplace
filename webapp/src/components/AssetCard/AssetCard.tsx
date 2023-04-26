@@ -31,6 +31,10 @@ import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
+import { SortBy } from '../../modules/routing/types'
+
+const MINT = 'MINT'
+const LISTING = 'LISTING'
 
 const RentalPrice = ({
   asset,
@@ -96,7 +100,8 @@ const AssetCard = (props: Props) => {
     showRentalChip: showRentalBubble,
     onClick,
     isClaimingBackLandTransactionPending,
-    rental
+    rental,
+    sortBy
   } = props
 
   const title = getAssetName(asset)
@@ -114,61 +119,16 @@ const AssetCard = (props: Props) => {
       extraInformation: React.ReactNode | null
     } | null = null
     if (isCatalogItem(asset)) {
-      if (asset.isOnSale && asset.available > 0) {
-        information = {
-          action: t('asset_card.available_for_mint'),
-          actionIcon: mintingIcon,
-          price: asset.minPrice,
-          extraInformation:
-            asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
-              <span>
-                {t('asset_card.listings', { count: asset.listings })}:&nbsp;
-                <Mana size="small" network={asset.network} className="tiniMana">
-                  {formatWeiMANA(
-                    asset.minListingPrice,
-                    MAXIMUM_FRACTION_DIGITS,
-                    true
-                  )}
-                </Mana>
-                &nbsp;
-                {asset.listings > 1 &&
-                  asset.minListingPrice !== asset.maxListingPrice &&
-                  `- ${formatWeiMANA(
-                    asset.maxListingPrice,
-                    MAXIMUM_FRACTION_DIGITS,
-                    true
-                  )}`}
-              </span>
-            ) : null
-        }
-      } else if (asset.minListingPrice) {
-        information = {
-          action: t('asset_card.cheapest_listing'),
-          actionIcon: null,
-          price: asset.minPrice,
-          extraInformation:
-            asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
-              <span>
-                {t('asset_card.listings', { count: asset.listings })}:&nbsp;
-                <Mana size="small" network={asset.network} className="tiniMana">
-                  {formatWeiMANA(
-                    asset.minListingPrice,
-                    MAXIMUM_FRACTION_DIGITS,
-                    true
-                  )}
-                </Mana>
-                &nbsp;
-                {asset.listings > 1 &&
-                  asset.minListingPrice !== asset.maxListingPrice &&
-                  `- ${formatWeiMANA(
-                    asset.maxListingPrice,
-                    MAXIMUM_FRACTION_DIGITS,
-                    true
-                  )}`}
-              </span>
-            ) : null
-        }
-      } else {
+      if (asset.id === '0x801e3ba69794b5ba6b6c0b6e8a771f99ae5f4c4a-0') {
+        console.log(
+          'asset.isOnSale && asset.available > 0',
+          asset.isOnSale && asset.available > 0
+        )
+      }
+
+      const isAvailableForMint = asset.isOnSale && asset.available > 0
+
+      if (!isAvailableForMint && !asset.minListingPrice) {
         information = {
           action: t('asset_card.not_for_sale'),
           actionIcon: null,
@@ -176,6 +136,53 @@ const AssetCard = (props: Props) => {
           extraInformation: `${asset.owners} ${t('asset_card.owners', {
             count: asset.owners
           })}`
+        }
+      } else {
+        const mostExpensive =
+          asset.maxListingPrice && asset.price > asset.maxListingPrice
+            ? MINT
+            : LISTING
+
+        information = {
+          action:
+            sortBy === SortBy.CHEAPEST
+              ? t('asset_card.cheapest_option')
+              : sortBy === SortBy.MOST_EXPENSIVE
+              ? t('asset_card.most_expensive')
+              : isAvailableForMint
+              ? t('asset_card.available_for_mint')
+              : t('asset_card.cheapest_listing'),
+          actionIcon: isAvailableForMint ? mintingIcon : null,
+          price:
+            sortBy === SortBy.MOST_EXPENSIVE
+              ? mostExpensive === MINT
+                ? asset.price
+                : asset.minListingPrice
+              : asset.minPrice,
+          extraInformation:
+            asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
+              <span>
+                {sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING
+                  ? t('asset_card.also_minting')
+                  : t('asset_card.listings', { count: asset.listings })}
+                :&nbsp;
+                <Mana size="small" network={asset.network} className="tiniMana">
+                  {formatWeiMANA(
+                    asset.minListingPrice,
+                    MAXIMUM_FRACTION_DIGITS,
+                    true
+                  )}
+                </Mana>
+                &nbsp;
+                {asset.listings > 1 &&
+                  asset.minListingPrice !== asset.maxListingPrice &&
+                  `- ${formatWeiMANA(
+                    asset.maxListingPrice,
+                    MAXIMUM_FRACTION_DIGITS,
+                    true
+                  )}`}
+              </span>
+            ) : null
         }
       }
     }
@@ -213,7 +220,7 @@ const AssetCard = (props: Props) => {
       onClick={onClick}
     >
       <AssetImage
-        className="AssetImage"
+        className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''}`}
         asset={asset}
         showOrderListedTag={showListedTag}
         showMonospace
@@ -227,7 +234,7 @@ const AssetCard = (props: Props) => {
           rental={rental}
         />
       ) : null}
-      <Card.Content>
+      <Card.Content className={isCatalogItem(asset) ? 'catalog' : ''}>
         <Card.Header>
           <div className="title">
             {title}
