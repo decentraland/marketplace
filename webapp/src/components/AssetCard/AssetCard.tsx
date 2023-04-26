@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react'
 import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { MAXIMUM_FRACTION_DIGITS } from 'decentraland-dapps/dist/lib/mana'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
-import { formatWeiMANA } from '../../lib/mana'
 import {
   getAssetName,
   getAssetUrl,
@@ -20,6 +18,7 @@ import {
   isRentalListingExecuted,
   isRentalListingOpen
 } from '../../modules/rental/utils'
+import { SortBy } from '../../modules/routing/types'
 import mintingIcon from '../../images/minting.png'
 import { Mana } from '../Mana'
 import { LinkedProfile } from '../LinkedProfile'
@@ -29,9 +28,9 @@ import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
+import { fomrmatWeiToAssetCard } from './utils'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
-import { SortBy } from '../../modules/routing/types'
 
 const MINT = 'MINT'
 const LISTING = 'LISTING'
@@ -46,7 +45,7 @@ const RentalPrice = ({
   return (
     <>
       <Mana className="rental-price" network={asset.network} inline>
-        {formatWeiMANA(rentalPricePerDay, MAXIMUM_FRACTION_DIGITS, true)}
+        {fomrmatWeiToAssetCard(rentalPricePerDay)}
       </Mana>
       <span className="card-rental-day">/{t('global.day')}</span>
     </>
@@ -142,6 +141,14 @@ const AssetCard = (props: Props) => {
           asset.maxListingPrice && asset.price > asset.maxListingPrice
             ? MINT
             : LISTING
+        const cheapest =
+          asset.minListingPrice && asset.price < asset.minListingPrice
+            ? MINT
+            : LISTING
+
+        const displayExtraInfomationToMint =
+          (sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING) ||
+          (sortBy === SortBy.CHEAPEST && cheapest === LISTING)
 
         information = {
           action:
@@ -162,25 +169,22 @@ const AssetCard = (props: Props) => {
           extraInformation:
             asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
               <span>
-                {sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING
+                {displayExtraInfomationToMint
                   ? t('asset_card.also_minting')
                   : t('asset_card.listings', { count: asset.listings })}
                 :&nbsp;
                 <Mana size="small" network={asset.network} className="tiniMana">
-                  {formatWeiMANA(
-                    asset.minListingPrice,
-                    MAXIMUM_FRACTION_DIGITS,
-                    true
+                  {fomrmatWeiToAssetCard(
+                    displayExtraInfomationToMint
+                      ? asset.price
+                      : asset.minListingPrice
                   )}
                 </Mana>
                 &nbsp;
                 {asset.listings > 1 &&
+                  !displayExtraInfomationToMint &&
                   asset.minListingPrice !== asset.maxListingPrice &&
-                  `- ${formatWeiMANA(
-                    asset.maxListingPrice,
-                    MAXIMUM_FRACTION_DIGITS,
-                    true
-                  )}`}
+                  `- ${fomrmatWeiToAssetCard(asset.maxListingPrice)}`}
               </span>
             ) : null
         }
@@ -198,7 +202,7 @@ const AssetCard = (props: Props) => {
         {information.price && (
           <div className="PriceInMana">
             <Mana size="large" network={asset.network} className="PriceInMana">
-              {formatWeiMANA(information.price, MAXIMUM_FRACTION_DIGITS, true)}
+              {fomrmatWeiToAssetCard(information.price)}
             </Mana>
           </div>
         )}
@@ -240,7 +244,7 @@ const AssetCard = (props: Props) => {
             {title}
             {isCatalogItem(asset) && (
               <LinkedProfile
-                address={asset.contractAddress}
+                address={asset.creator}
                 textOnly
                 className="creator"
               />
@@ -248,7 +252,7 @@ const AssetCard = (props: Props) => {
           </div>
           {!catalogItemInformation && price ? (
             <Mana network={asset.network} inline>
-              {formatWeiMANA(price, MAXIMUM_FRACTION_DIGITS, true)}
+              {fomrmatWeiToAssetCard(price)}
             </Mana>
           ) : rentalPricePerDay ? (
             <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
