@@ -11,9 +11,9 @@ import { getOpenRentalId } from '../../modules/rental/utils'
 import { getRentalById } from '../../modules/rental/selectors'
 import { getIsFavoritesEnabled } from '../../modules/features/selectors'
 import { getPageName } from '../../modules/routing/selectors'
+import { PageName } from '../../modules/routing/types'
 import { MapStateProps, OwnProps, MapDispatchProps } from './AssetCard.types'
 import AssetCard from './AssetCard'
-import { PageName } from '../../modules/routing/types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { order, asset } = ownProps
