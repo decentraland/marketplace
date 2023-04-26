@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { goBack } from 'connected-react-router'
 import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
 import {
+  getData as getAuthorizations,
   getLoading as getLoadingAuthorizations
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
@@ -17,6 +18,7 @@ import { MapStateProps, MapDispatchProps, MapDispatch } from './SellPage.types'
 import SellPage from './SellPage'
 
 const mapState = (state: RootState): MapStateProps => ({
+  authorizations: getAuthorizations(state),
   isLoading: isLoadingType(
     getLoadingAuthorizations(state),
     FETCH_AUTHORIZATIONS_REQUEST

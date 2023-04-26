@@ -3,13 +3,17 @@ import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
 import formatDate from 'date-fns/format'
 import isValid from 'date-fns/isValid'
-import { ContractName } from 'decentraland-transactions'
-import { NFTCategory, Network } from '@dcl/schemas'
+import { Network, NFTCategory } from '@dcl/schemas'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Header, Form, Field, Button } from 'decentraland-ui'
+import { ContractName } from 'decentraland-transactions'
 import { parseMANANumber } from '../../../lib/mana'
 import {
   INPUT_FORMAT,
@@ -17,13 +21,12 @@ import {
 } from '../../../modules/order/utils'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
-import { getContractNames } from '../../../modules/vendor'
+import { AuthorizationModal } from '../../AuthorizationModal'
 import { AssetAction } from '../../AssetAction'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
+import { getContractNames } from '../../../modules/vendor'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
-import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { Props } from './SellModal.types'
 import { showPriceBelowMarketValueWarning } from './utils'
 
@@ -32,13 +35,12 @@ const SellModal = (props: Props) => {
     nft,
     order,
     wallet,
+    authorizations,
     isLoading,
     isCreatingOrder,
-    isLoadingAuthorization,
     getContract,
     onGoBack,
-    onCreateOrder,
-    onAuthorizedAction
+    onCreateOrder
   } = props
 
   const isUpdate = order !== null
@@ -53,6 +55,12 @@ const SellModal = (props: Props) => {
   )
   const [showConfirm, setShowConfirm] = useState(false)
 
+  const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
+
+  if (!wallet) {
+    return null
+  }
+
   const contractNames = getContractNames()
 
   const marketplace = getContract({
@@ -60,8 +68,22 @@ const SellModal = (props: Props) => {
     network: nft.network
   })
 
-  if (!marketplace || !wallet) {
+  if (!marketplace) {
     return null
+  }
+
+  const authorization: Authorization = {
+    address: wallet.address,
+    authorizedAddress: marketplace.address,
+    contractAddress: nft.contractAddress,
+    contractName:
+      (nft.category === NFTCategory.WEARABLE ||
+        nft.category === NFTCategory.EMOTE) &&
+      nft.network === Network.MATIC
+        ? ContractName.ERC721CollectionV2
+        : ContractName.ERC721,
+    chainId: nft.chainId,
+    type: AuthorizationType.APPROVAL
   }
 
   const handleCreateOrder = () =>
@@ -72,28 +94,15 @@ const SellModal = (props: Props) => {
     )
 
   const handleSubmit = () => {
-    onAuthorizedAction({
-      targetContractName:
-        (nft.category === NFTCategory.WEARABLE ||
-          nft.category === NFTCategory.EMOTE) &&
-        nft.network === Network.MATIC
-          ? ContractName.ERC721CollectionV2
-          : ContractName.ERC721,
-      authorizationType: AuthorizationType.APPROVAL,
-      authorizedAddress: marketplace.address,
-      targetContract: {
-        address: nft.contractAddress,
-        category: nft.category,
-        network: nft.network,
-        chainId: nft.chainId,
-        name: nft.name,
-        vendor: nft.vendor
-      },
-      tokenId: nft.tokenId,
-      onAuthorized: handleCreateOrder
-    })
-    setShowConfirm(false)
+    if (hasAuthorization(authorizations, authorization)) {
+      handleCreateOrder()
+    } else {
+      setShowAuthorizationModal(true)
+      setShowConfirm(false)
+    }
   }
+
+  const handleClose = () => setShowAuthorizationModal(false)
 
   const { orderService } = VendorFactory.build(nft.vendor)
 
@@ -192,13 +201,18 @@ const SellModal = (props: Props) => {
         valueToConfirm={price}
         network={nft.network}
         onCancel={() => setShowConfirm(false)}
-        loading={isCreatingOrder || isLoadingAuthorization}
-        disabled={isCreatingOrder || isLoadingAuthorization}
+        loading={isCreatingOrder}
+        disabled={isCreatingOrder}
+      />
+      <AuthorizationModal
+        open={showAuthorizationModal}
+        authorization={authorization}
+        isLoading={isCreatingOrder}
+        onProceed={handleCreateOrder}
+        onCancel={handleClose}
       />
     </AssetAction>
   )
 }
 
-export default React.memo(
-  withAuthorizedAction(SellModal, AuthorizedAction.SELL)
-)
+export default React.memo(SellModal)
