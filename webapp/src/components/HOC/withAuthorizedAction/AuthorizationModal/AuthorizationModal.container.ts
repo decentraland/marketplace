@@ -19,6 +19,9 @@ import {
   OwnProps
 } from './AuthorizationModal.types'
 import { getStepStatus } from './utils'
+import { getContract } from '../../../../modules/contract/selectors'
+import { Contract } from '../../../../modules/vendor/services'
+
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { authorization, requiredAllowance } = ownProps
@@ -29,7 +32,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       REVOKE_TOKEN_REQUEST,
       authorization,
       autorizations,
-      null
+      undefined
     ),
     grantStatus: getStepStatus(
       state,
@@ -38,7 +41,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       autorizations,
       requiredAllowance
     ),
-    error: getError(state) || ''
+    error: getError(state) || '',
+    getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }
 

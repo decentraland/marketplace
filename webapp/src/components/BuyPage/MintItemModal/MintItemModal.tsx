@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import compact from 'lodash/compact'
 import classNames from 'classnames'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
-import { Contract, Item } from '@dcl/schemas'
+import { Item } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import { ContractName } from 'decentraland-transactions'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -29,20 +28,21 @@ import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
 import { Props } from './MintItemModal.types'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
 import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { Contract } from '../../../modules/vendor/services'
+import { ContractName } from 'decentraland-transactions'
 
 const MintItemModal = (props: Props) => {
   const {
     item,
-    wallet,
     isLoading,
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
     isBuyWithCardPage,
+    isLoadingAuthorization,
     getContract,
     onBuyItem,
     onBuyItemWithCard,
-    onSetAuthorization,
     onAuthorizedAction
   } = props
 
@@ -71,31 +71,20 @@ const MintItemModal = (props: Props) => {
     if (isBuyWithCardPage) analytics.track(events.CANCEL_BUY_NFT_WITH_CARD)
   }, [analytics, isBuyWithCardPage])
 
-  useEffect(() => {
-    onSetAuthorization({
-      address: wallet.address,
-      authorizedAddress: collectionStore.address,
-      contractAddress: mana.address,
-      contractName: ContractName.MANAToken,
-      chainId: item.chainId,
-      type: AuthorizationType.ALLOWANCE
-    })
-  }, [
-    collectionStore.address,
-    mana.address,
-    item.network,
-    item.chainId,
-    wallet.address,
-    onSetAuthorization
-  ])
-
   const handleSubmit = useCallback(() => {
     if (isBuyWithCardPage) {
       handleExecuteOrder()
       return
     }
-    !!item && onAuthorizedAction(item.price, handleExecuteOrder)
-  }, [item, isBuyWithCardPage, handleExecuteOrder, onAuthorizedAction])
+    !!item && onAuthorizedAction({
+      targetContractName: ContractName.MANAToken,
+      authorizationType: AuthorizationType.ALLOWANCE,
+      authorizedAddress: collectionStore.address,
+      targetContract: mana,
+      requiredAllowanceInWei: item.price,
+      onAuthorized: handleExecuteOrder
+    })
+  }, [item, isBuyWithCardPage, mana, collectionStore.address, handleExecuteOrder, onAuthorizedAction])
 
   const isDisabled =
     !item.price || isOwner || (hasInsufficientMANA && !isBuyWithCardPage)
@@ -207,9 +196,9 @@ const MintItemModal = (props: Props) => {
         {(!hasInsufficientMANA && !hasLowPrice) || isBuyWithCardPage ? (
           <ChainButton
             primary
-            disabled={isDisabled || isLoading}
+            disabled={isDisabled || isLoading || isLoadingAuthorization}
             onClick={handleSubmit}
-            loading={isLoading}
+            loading={isLoading || isLoadingAuthorization}
             chainId={item.chainId}
           >
             {isWearableOrEmote(item) ? (

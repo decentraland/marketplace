@@ -1,32 +1,36 @@
+import { BigNumber, ethers } from 'ethers'
 import {
   getError,
   getLoading
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
-import { Authorization, AuthorizationType, AuthorizationAction } from 'decentraland-dapps/dist/modules/authorization/types'
+import {
+  Authorization,
+  AuthorizationType,
+  AuthorizationAction
+} from 'decentraland-dapps/dist/modules/authorization/types'
 import {
   areEqual,
   hasAuthorization,
   hasAuthorizationAndEnoughAllowance
 } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { TransactionLink } from 'decentraland-dapps/dist/containers'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getType } from 'decentraland-dapps/dist/modules/loading/utils'
 import { getPendingTransactions } from 'decentraland-dapps/dist/modules/transaction/selectors'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Network } from '@dcl/schemas'
 import { RootState } from '../../../../modules/reducer'
-import {
-  AuthorizationStepStatus,
-  AuthorizedAction
-} from './AuthorizationModal.types'
+import { AuthorizationStepStatus } from './AuthorizationModal.types'
 import styles from './AuthorizationModal.module.css'
-import { TransactionLink } from 'decentraland-dapps/dist/containers'
+import { Contract } from '../../../../modules/vendor/services'
 
 export function getStepStatus(
   state: RootState,
   actionType: string,
   authorization: Authorization,
   authorizations: Authorization[],
-  allowance: string | null
+  allowance?: BigNumber
 ): AuthorizationStepStatus {
   if (isLoadingType(getLoading(state), actionType)) {
     return AuthorizationStepStatus.WAITING
@@ -53,16 +57,22 @@ export function getStepStatus(
     return AuthorizationStepStatus.ERROR
   }
 
-  const isStepDone =
-    allowance === null
-      ? !hasAuthorization(authorizations, authorization)
-      : hasAuthorizationAndEnoughAllowance(
-          authorizations,
-          authorization,
-          allowance
-        )
+  const isGrantDone = !allowance
+    ? hasAuthorization(authorizations, authorization)
+    : hasAuthorizationAndEnoughAllowance(
+        authorizations,
+        authorization,
+        allowance.toString()
+      )
 
-  if (isStepDone) {
+  const isRevokeDone = !hasAuthorization(authorizations, authorization)
+
+  if (
+    (authorization.type === AuthorizationType.ALLOWANCE &&
+      !allowance &&
+      isRevokeDone) ||
+    isGrantDone
+  ) {
     return AuthorizationStepStatus.DONE
   }
 
@@ -97,51 +107,86 @@ export function getStepMessage(
   }
 }
 
-export function getSteps(
-  authorizationType: AuthorizationType,
-  authorization: Authorization,
-  authorizedAction: AuthorizedAction,
-  requiredAllowance: string
-) {
-  if (authorizationType === AuthorizationType.APPROVAL) {
+export function getSteps({
+  authorizationType,
+  network,
+  requiredAllowance,
+  contract,
+  currentAllowance
+}: {
+  authorizationType: AuthorizationType
+  network: Network
+  requiredAllowance?: BigNumber
+  currentAllowance?: BigNumber
+  contract: Contract | null
+}) {
+  const requiredAllowanceAsEth = requiredAllowance
+    ? ethers.utils.formatEther(requiredAllowance)
+    : ''
+  if (
+    (!currentAllowance || !currentAllowance.isZero()) &&
+    authorizationType === AuthorizationType.ALLOWANCE &&
+    network === Network.ETHEREUM
+  ) {
     return [
       {
-        title: t('mana_authorization_modal.authorize.title', {
+        title: t('mana_authorization_modal.revoke_cap.title'),
+        description: t('mana_authorization_modal.revoke_cap.description', {
+          price: requiredAllowanceAsEth
+        }),
+        authorizationAction: AuthorizationAction.REVOKE,
+        testId: 'revoke-action-step'
+      },
+      {
+        title: t('mana_authorization_modal.set_cap.title'),
+        description: t('mana_authorization_modal.set_cap.description', {
+          price: requiredAllowanceAsEth
+        }),
+        authorizationAction: AuthorizationAction.GRANT,
+        testId: 'grant-action-step'
+      }
+    ]
+  }
+
+  console.log(contract?.label)
+  if (authorizationType === AuthorizationType.ALLOWANCE) {
+    return [
+      {
+        title: t('mana_authorization_modal.authorize_mana.title', {
           contract: () => (
             <TransactionLink
-              address={authorization.authorizedAddress}
-              chainId={authorization.chainId}
+              address={contract?.address || ''}
+              chainId={contract?.chainId}
               txHash=""
             >
-              {t(`mana_authorization_modal.${authorizedAction}.contract`)}
+              {contract?.label || contract?.name || ''}
             </TransactionLink>
           )
         }),
-        description: t('mana_authorization_modal.authorize.description', {
-          price: requiredAllowance
+        description: t('mana_authorization_modal.authorize_mana.description', {
+          price: requiredAllowanceAsEth
         }),
         authorizationAction: AuthorizationAction.GRANT,
-        testId: "grant-action-step"
+        testId: 'grant-action-step'
       }
     ]
   }
 
   return [
     {
-      title: t('mana_authorization_modal.revoke_cap.title'),
-      description: t('mana_authorization_modal.revoke_cap.description', {
-        price: requiredAllowance
-      }),
-      authorizationAction: AuthorizationAction.REVOKE,
-      testId: "revoke-action-step"
-    },
-    {
-      title: t('mana_authorization_modal.set_cap.title'),
-      description: t('mana_authorization_modal.set_cap.description', {
-        price: requiredAllowance
+      title: t('mana_authorization_modal.authorize_nft.title', {
+        contract: () => (
+          <TransactionLink
+            address={contract?.address || ''}
+            chainId={contract?.chainId}
+            txHash=""
+          >
+            {contract?.label || contract?.name || ''}
+          </TransactionLink>
+        )
       }),
       authorizationAction: AuthorizationAction.GRANT,
-      testId: "grant-action-step"
+      testId: 'grant-action-step'
     }
   ]
 }

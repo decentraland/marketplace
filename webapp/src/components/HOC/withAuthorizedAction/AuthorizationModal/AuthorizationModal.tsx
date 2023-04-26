@@ -16,16 +16,20 @@ const LOADING_STATUS = [
 export function AuthorizationModal({
   authorization,
   requiredAllowance,
+  currentAllowance,
   action,
   authorizationType,
   revokeStatus,
   grantStatus,
   error,
+  network,
+  getContract,
   onClose,
   onRevoke,
   onGrant,
   onAuthorized
 }: Props) {
+
   const [currentStep, setCurrentStep] = useState(0)
 
   const handleFinishStep = useCallback(() => {
@@ -44,13 +48,18 @@ export function AuthorizationModal({
     console.log(onAuthorized())
   }, [onAuthorized])
 
+  const authorizedContract = getContract({
+    address: authorization.authorizedAddress
+  })
+
   const steps = useMemo(() => {
-    const authSteps = getSteps(
+    const authSteps = getSteps({
       authorizationType,
-      authorization,
-      action,
-      requiredAllowance
-    )
+      network,
+      requiredAllowance,
+      currentAllowance,
+      contract: authorizedContract
+  })
     return [
       ...authSteps,
       {
@@ -96,9 +105,11 @@ export function AuthorizationModal({
       return step as Step
     })
   }, [
-    authorization,
     authorizationType,
     requiredAllowance,
+    currentAllowance,
+    authorizedContract,
+    network,
     action,
     grantStatus,
     revokeStatus,

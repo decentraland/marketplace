@@ -6,6 +6,10 @@ import {
   RevokeTokenRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { BigNumber } from 'ethers'
+import { Network } from '@dcl/schemas'
+import { Contract } from '../../../../modules/vendor/services'
+
 
 // Action to perfom after authorization step is finished
 export enum AuthorizedAction {
@@ -28,12 +32,15 @@ export enum AuthorizationStepStatus {
 
 export type Props = {
   authorization: Authorization
-  requiredAllowance: string
+  requiredAllowance?: BigNumber
+  currentAllowance?: BigNumber
   action: AuthorizedAction
   authorizationType: AuthorizationType
   revokeStatus: AuthorizationStepStatus
   grantStatus: AuthorizationStepStatus
   error: string
+  network: Network
+  getContract: (query: Partial<Contract>) => Contract | null,
   onClose: () => void
   onAuthorized: () => void
   onRevoke: typeof revokeTokenRequest
@@ -43,4 +50,4 @@ export type Props = {
 export type MapDispatchProps = Pick<Props, 'onRevoke' | 'onGrant'>
 export type MapDispatch = Dispatch<RevokeTokenRequestAction | GrantTokenRequestAction>
 export type OwnProps = Pick<Props, 'authorization' | 'requiredAllowance'>
-export type MapStateProps = Pick<Props, 'revokeStatus' | 'grantStatus' | 'error'>
+export type MapStateProps = Pick<Props, 'revokeStatus' | 'grantStatus' | 'error' | 'getContract'>

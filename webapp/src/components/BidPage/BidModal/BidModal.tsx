@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Header, Form, Field, Button } from 'decentraland-ui'
-import { ContractName } from 'decentraland-transactions'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
+import { ContractName } from 'decentraland-transactions'
 import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
@@ -37,6 +37,7 @@ const BidModal = (props: Props) => {
     onNavigate,
     onPlaceBid,
     isPlacingBid,
+    isLoadingAuthorization,
     getContract
   } = props
 
@@ -46,7 +47,6 @@ const BidModal = (props: Props) => {
   const [fingerprint, isLoading] = useFingerprint(nft)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
-  const { onSetAuthorization } = props
 
   const handlePlaceBid = useCallback(
     () =>
@@ -71,21 +71,6 @@ const BidModal = (props: Props) => {
     network: nft.network
   })
 
-  useEffect(() => {
-    if (!mana || !bids || !wallet) {
-      return;
-    }
-  
-    onSetAuthorization({
-      address: wallet.address,
-      authorizedAddress: bids.address,
-      contractAddress: mana.address,
-      contractName: ContractName.MANAToken,
-      chainId: mana.chainId,
-      type: AuthorizationType.ALLOWANCE
-    })
-  }, [bids, mana, onSetAuthorization, wallet])
-
   if (!wallet || !mana || !bids) {
     return null
   }
@@ -96,7 +81,14 @@ const BidModal = (props: Props) => {
 
   const handleConfirmBid = () => {
     const { onAuthorizedAction } = props;
-    onAuthorizedAction(ethers.utils.parseEther(price).toString(), handlePlaceBid)
+    onAuthorizedAction({
+      targetContractName: ContractName.MANAToken,
+      authorizedAddress: bids.address,
+      targetContract: mana,
+      authorizationType: AuthorizationType.ALLOWANCE,
+      requiredAllowanceInWei: ethers.utils.parseEther(price).toString(),
+      onAuthorized: handlePlaceBid
+    })
   }
 
   const isInvalidPrice = parseMANANumber(price) <= 0
@@ -214,8 +206,8 @@ const BidModal = (props: Props) => {
             valueToConfirm={price}
             network={nft.network}
             onCancel={() => setShowConfirmationModal(false)}
-            loading={isPlacingBid}
-            disabled={isPlacingBid}
+            loading={isPlacingBid || isLoadingAuthorization}
+            disabled={isPlacingBid || isLoadingAuthorization}
           />
         ) : null}
       </div>
