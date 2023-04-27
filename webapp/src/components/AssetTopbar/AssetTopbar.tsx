@@ -168,6 +168,7 @@ export const AssetTopbar = ({
       {!isMap && (
         <div className={styles.infoRow}>
           <div className={styles.countContainer}>
+            {/* TODO: it should wait for the 2 requests to finish (wishlist items & items) */}
             <p className={styles.countText}>{getCountText(count, search)}</p>
             {hasFiltersEnabled && !isMobile && (
               <button className={styles.clearFilters} onClick={onClearFilters}>
