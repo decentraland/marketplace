@@ -13,6 +13,11 @@ import {
   UnpickItemAsFavoriteSuccessAction
 } from '../../favorites/actions'
 import {
+  FetchCatalogRequestAction,
+  FetchCatalogSuccessAction,
+  FETCH_CATALOG_SUCCESS
+} from '../../catalog/actions'
+import {
   FetchItemsRequestAction,
   FetchItemsSuccessAction,
   FetchTrendingItemsSuccessAction,
@@ -37,6 +42,7 @@ export type BrowseUIState = {
   nftIds: string[]
   listIds: string[]
   itemIds: string[]
+  catalogIds: string[]
   lastTimestamp: number
   count?: number
 }
@@ -47,6 +53,7 @@ export const INITIAL_STATE: BrowseUIState = {
   nftIds: [],
   listIds: [],
   itemIds: [],
+  catalogIds: [],
   count: undefined,
   lastTimestamp: 0
 }
