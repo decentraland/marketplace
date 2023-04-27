@@ -152,6 +152,19 @@
   margin-left: unset;
 }
 
+.BestBuyingOption :global(.ui.loader.active) {
+  display: flex;
+  position: unset;
+  margin-top: 20px;
+}
+
+.BestBuyingOption .emptyContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+}
 .BestBuyingOption .buyWithCardClassName {
   background-color: white !important;
   color: black !important;
