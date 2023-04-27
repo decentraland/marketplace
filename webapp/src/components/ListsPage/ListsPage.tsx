@@ -33,13 +33,11 @@ const ListsPage = ({ wallet, isConnecting, onRedirect }: Props) => {
         {/* TODO: use the name of the selected list */}
         {t('lists_page.default_title')}
       </Header>
-      {wallet ? (
-        <AssetBrowse
-          view={View.LISTS}
-          section={Section.LISTS}
-          vendor={VendorName.DECENTRALAND}
-        />
-      ) : null}
+      <AssetBrowse
+        view={View.LISTS}
+        section={Section.LISTS}
+        vendor={VendorName.DECENTRALAND}
+      />
       <Footer />
     </>
   )
