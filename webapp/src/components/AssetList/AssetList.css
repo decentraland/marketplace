@@ -18,9 +18,17 @@
   background-size: cover;
 }
 
-.ui.massive.loader.asset-loader {
-  position: sticky;
-  top: 50vh;
-  left: 0;
-  margin: auto;
+@media (min-width: 768px) {
+  .ui.massive.loader.asset-loader {
+    position: sticky;
+    top: 50vh;
+    left: 0;
+    margin: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .ui.massive.loader.asset-loader {
+    position: fixed;
+  }
 }
