@@ -8,7 +8,11 @@ import {
 } from '../../modules/collection/selectors'
 import { RootState } from '../../modules/reducer'
 import { browse } from '../../modules/routing/actions'
-import { getPage, getSearch, getSortBy } from '../../modules/routing/selectors'
+import {
+  getPageNumber,
+  getSearch,
+  getSortBy
+} from '../../modules/routing/selectors'
 import CollectionList from './CollectionList'
 import {
   MapStateProps,
@@ -22,7 +26,7 @@ const mapState = (state: RootState): MapStateProps => ({
   isLoading: isLoadingType(getLoading(state), FETCH_COLLECTIONS_REQUEST),
   search: getSearch(state),
   sortBy: getSortBy(state),
-  page: getPage(state)
+  page: getPageNumber(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

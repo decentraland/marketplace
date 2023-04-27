@@ -2,7 +2,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import { Item } from '@dcl/schemas'
 import { Section } from '../../vendor/decentraland/routing'
-import { getPage, getSection } from '../../routing/selectors'
+import { getPageNumber, getSection } from '../../routing/selectors'
 import {
   FETCH_FAVORITED_ITEMS_REQUEST,
   fetchFavoritedItemsRequest,
@@ -25,7 +25,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
       return expectSaga(browseSaga)
         .provide([
           [select(getSection), section],
-          [select(getPage), 1],
+          [select(getPageNumber), 1],
           [select(getItemsPickedByUser), []],
           [select(getCount), 2]
         ])
@@ -51,7 +51,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
         return expectSaga(browseSaga)
           .provide([
             [select(getSection), section],
-            [select(getPage), 1],
+            [select(getPageNumber), 1],
             [select(getItemsPickedByUser), pickedItems],
             [select(getCount), 2]
           ])
@@ -76,7 +76,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
         return expectSaga(browseSaga)
           .provide([
             [select(getSection), section],
-            [select(getPage), 1],
+            [select(getPageNumber), 1],
             [select(getItemsPickedByUser), pickedItems],
             [select(getCount), 2]
           ])

@@ -9,14 +9,15 @@ import { BrowseOptions } from './types'
 export const locations = {
   root: () => '/',
   signIn: (redirectTo?: string) => {
-    return `/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`
+    return `/sign-in${
+      redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''
+    }`
   },
   settings: () => '/settings',
   lands: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/lands?${params.toString()}` : '/lands'
   },
-  collectibles: () => '/collectibles',
   collection: (contractAddress: string = ':contractAddress') =>
     `/collections/${contractAddress}`,
   browse: (options?: BrowseOptions) => {
