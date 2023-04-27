@@ -9,6 +9,7 @@ import {
   Network,
   Rarity
 } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor/types'
@@ -21,12 +22,13 @@ import {
   getURLParam,
   getURLParamArray_nonStandard
 } from './search'
-import { BrowseOptions, SortBy } from './types'
+import { BrowseOptions, SortBy, SortByOption } from './types'
 import { locations } from './locations'
 import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { isLandSection } from '../ui/utils'
+import { AssetStatusFilter } from '../../utils/filters'
 
 export const getState = (state: RootState) => state.routing
 
@@ -88,14 +90,12 @@ export const getSortBy = createSelector<
   View | undefined,
   Section,
   SortBy | undefined
->(
-  getRouterSearch,
-  getView,
-  getSection,
-  (search, view, section) =>
+>(getRouterSearch, getView, getSection, (search, view, section) => {
+  return (
     getURLParam<SortBy>(search, 'sortBy') ||
     getDefaultOptionsByView(view, section).sortBy
-)
+  )
+})
 
 export const getOnlyOnSale = createSelector<
   RootState,
@@ -131,6 +131,111 @@ export const getOnlyOnRent = createSelector<
     default:
       return undefined
   }
+})
+
+export const getAllSortByOptions = () => ({
+  [SortBy.NEWEST]: { value: SortBy.NEWEST, text: t('filters.newest') },
+  [SortBy.NAME]: { value: SortBy.NAME, text: t('filters.name') },
+  [SortBy.RECENTLY_SOLD]: {
+    value: SortBy.RECENTLY_SOLD,
+    text: t('filters.recently_sold')
+  },
+  [SortBy.CHEAPEST]: {
+    value: SortBy.CHEAPEST,
+    text: t('filters.cheapest')
+  },
+  [SortBy.MOST_EXPENSIVE]: {
+    value: SortBy.MOST_EXPENSIVE,
+    text: t('filters.most_expensive')
+  },
+  [SortBy.MAX_RENTAL_PRICE]: {
+    value: SortBy.MAX_RENTAL_PRICE,
+    text: t('filters.cheapest')
+  },
+  [SortBy.RECENTLY_LISTED]: {
+    value: SortBy.RECENTLY_LISTED,
+    text: t('filters.recently_listed')
+  },
+  [SortBy.RENTAL_LISTING_DATE]: {
+    value: SortBy.RENTAL_LISTING_DATE,
+    text: t('filters.recently_listed_for_rent')
+  }
+})
+
+export const getStatus = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => getURLParam(search, 'status') || ''
+)
+
+export const getSortByOptions = createSelector<
+  RootState,
+  boolean | undefined,
+  boolean | undefined,
+  string,
+  SortByOption[]
+>(getOnlyOnRent, getOnlyOnSale, getStatus, (onlyOnRent, onlyOnSale, status) => {
+  const SORT_BY_MAP = getAllSortByOptions()
+  let orderByDropdownOptions: SortByOption[] = []
+  if (status) {
+    const baseFilters = [
+      SORT_BY_MAP[SortBy.NEWEST],
+      SORT_BY_MAP[SortBy.RECENTLY_SOLD],
+      SORT_BY_MAP[SortBy.CHEAPEST],
+      SORT_BY_MAP[SortBy.MOST_EXPENSIVE]
+    ]
+    switch (status) {
+      case AssetStatusFilter.ON_SALE:
+      case AssetStatusFilter.ONLY_MINTING:
+        orderByDropdownOptions = baseFilters
+        break
+      case AssetStatusFilter.ONLY_LISTING:
+        orderByDropdownOptions = [
+          SORT_BY_MAP[SortBy.RECENTLY_LISTED],
+          ...baseFilters
+        ]
+        break
+      case AssetStatusFilter.NOT_FOR_SALE:
+        orderByDropdownOptions = [SORT_BY_MAP[SortBy.NEWEST]]
+        break
+    }
+    return orderByDropdownOptions
+  }
+  if (onlyOnRent) {
+    orderByDropdownOptions = [
+      {
+        value: SortBy.RENTAL_LISTING_DATE,
+        text: t('filters.recently_listed_for_rent')
+      },
+      { value: SortBy.NAME, text: t('filters.name') },
+      { value: SortBy.NEWEST, text: t('filters.newest') },
+      { value: SortBy.MAX_RENTAL_PRICE, text: t('filters.cheapest') }
+    ]
+  } else {
+    orderByDropdownOptions = [
+      { value: SortBy.NEWEST, text: t('filters.newest') },
+      { value: SortBy.NAME, text: t('filters.name') }
+    ]
+  }
+
+  if (onlyOnSale) {
+    orderByDropdownOptions = [
+      {
+        value: SortBy.RECENTLY_LISTED,
+        text: t('filters.recently_listed')
+      },
+      {
+        value: SortBy.RECENTLY_SOLD,
+        text: t('filters.recently_sold')
+      },
+      {
+        value: SortBy.CHEAPEST,
+        text: t('filters.cheapest')
+      },
+      ...orderByDropdownOptions
+    ]
+  }
+
+  return orderByDropdownOptions
 })
 
 export const getIsSoldOut = createSelector<
@@ -227,8 +332,9 @@ export const getAssetType = createSelector<
 
   if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
     if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
-      return AssetType.ITEM
+      return AssetType.CATALOG_ITEM
     }
+
     return AssetType.NFT
   }
   return assetTypeParam as AssetType

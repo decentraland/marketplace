@@ -4,6 +4,7 @@ import {
   Network,
   Rarity
 } from '@dcl/schemas'
+import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/routing/types'
@@ -11,6 +12,7 @@ import { View } from '../ui/types'
 import { Sections, SortBy } from './types'
 import { locations } from './locations'
 import {
+  getAllSortByOptions,
   getAssetType,
   getCreators,
   getIsMap,
@@ -21,6 +23,8 @@ import {
   getOnlyOnRent,
   getSection,
   getSortBy,
+  getSortByOptions,
+  getStatus,
   hasFiltersEnabled
 } from './selectors'
 
@@ -190,10 +194,10 @@ describe('when getting the section', () => {
 })
 
 describe("when there's no assetType URL param and the vendor is DECENTRALAND and the location is in browse", () => {
-  it('should return ITEM as the assetType', () => {
+  it('should return CATALOG_ITEM as the assetType', () => {
     expect(
       getAssetType.resultFunc('', locations.browse(), VendorName.DECENTRALAND)
-    ).toBe(AssetType.ITEM)
+    ).toBe(AssetType.CATALOG_ITEM)
   })
 })
 
@@ -210,14 +214,14 @@ describe("when there's assetType URL param, the assetType is not NFT or ITEM and
 })
 
 describe("when there's assetType URL param, the assetType is not NFT or ITEM and the vendor is DECENTRALAND and the location is in browse", () => {
-  it('should return ITEM as the assetType', () => {
+  it('should return CATALOG_ITEM as the assetType', () => {
     expect(
       getAssetType.resultFunc(
         'assetType=something',
         locations.browse(),
         VendorName.DECENTRALAND
       )
-    ).toBe(AssetType.ITEM)
+    ).toBe(AssetType.CATALOG_ITEM)
   })
 })
 
@@ -449,6 +453,102 @@ describe('when getting if the SortBy parameter is set', () => {
         expect(getSortBy.resultFunc(url, view, section)).toBe(
           SortBy.RECENTLY_LISTED
         )
+      })
+    })
+  })
+})
+
+describe('when there a status defined', () => {
+  let url: string
+  let status: string
+  beforeEach(() => {
+    status = 'only_minting'
+    url = `status=${status}`
+  })
+  it('should return an empty array', () => {
+    expect(getStatus.resultFunc(url)).toEqual(status)
+  })
+})
+
+describe('when getting the Sort By options', () => {
+  const baseSortByOptions = [
+    getAllSortByOptions()[SortBy.NEWEST],
+    getAllSortByOptions()[SortBy.RECENTLY_SOLD],
+    getAllSortByOptions()[SortBy.CHEAPEST],
+    getAllSortByOptions()[SortBy.MOST_EXPENSIVE]
+  ]
+  let status: AssetStatusFilter
+  describe('and the status is defined', () => {
+    describe('and the status is ON_SALE', () => {
+      beforeEach(() => {
+        status = AssetStatusFilter.ON_SALE
+      })
+      it('should return the base sort options array', () => {
+        expect(getSortByOptions.resultFunc(true, true, status)).toEqual(
+          baseSortByOptions
+        )
+      })
+    })
+    describe('and the status is ONLY_MINTING', () => {
+      beforeEach(() => {
+        status = AssetStatusFilter.ONLY_MINTING
+      })
+      it('should return the base sort options array', () => {
+        expect(getSortByOptions.resultFunc(true, true, status)).toEqual(
+          baseSortByOptions
+        )
+      })
+    })
+    describe('and the status is ONLY_LISTING', () => {
+      beforeEach(() => {
+        status = AssetStatusFilter.ONLY_LISTING
+      })
+      it('should return the base sort options array plus tghe RECENTLY_LISTED option', () => {
+        expect(getSortByOptions.resultFunc(true, true, status)).toEqual([
+          getAllSortByOptions()[SortBy.RECENTLY_LISTED],
+          ...baseSortByOptions
+        ])
+      })
+    })
+    describe('and the status is NOT_FOR_SALE', () => {
+      beforeEach(() => {
+        status = AssetStatusFilter.NOT_FOR_SALE
+      })
+      it('should return an array with just the newest option', () => {
+        expect(getSortByOptions.resultFunc(true, true, status)).toEqual([
+          getAllSortByOptions()[SortBy.NEWEST]
+        ])
+      })
+    })
+  })
+  describe('and the status is not defined', () => {
+    let status: string
+    beforeEach(() => {
+      status = ''
+    })
+    describe('and the "onlyOnRent" is true', () => {
+      describe('and the "onlyOnSale" is false', () => {
+        it('should return an array with the valid on rent sort options', () => {
+          expect(getSortByOptions.resultFunc(true, false, status)).toEqual([
+            getAllSortByOptions()[SortBy.RENTAL_LISTING_DATE],
+            getAllSortByOptions()[SortBy.NAME],
+            getAllSortByOptions()[SortBy.NEWEST],
+            getAllSortByOptions()[SortBy.MAX_RENTAL_PRICE]
+          ])
+        })
+      })
+    })
+    describe('and the "onlyOnSale" is true', () => {
+      describe('and the "onlyOnRent" is false', () => {
+        it('should return an array with just the valid on sale sort options', () => {
+          expect(getSortByOptions.resultFunc(false, true, status)).toEqual([
+            getAllSortByOptions()[SortBy.RECENTLY_LISTED],
+            getAllSortByOptions()[SortBy.RECENTLY_SOLD],
+            getAllSortByOptions()[SortBy.CHEAPEST],
+            getAllSortByOptions()[SortBy.NEWEST],
+            getAllSortByOptions()[SortBy.NAME]
+          ])
+        })
       })
     })
   })

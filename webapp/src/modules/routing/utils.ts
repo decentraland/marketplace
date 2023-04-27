@@ -20,6 +20,7 @@ export const rentalFilters = [
 export const sellFilters = [
   SortBy.NAME,
   SortBy.CHEAPEST,
+  SortBy.MOST_EXPENSIVE,
   SortBy.NEWEST,
   SortBy.RECENTLY_REVIEWED,
   SortBy.RECENTLY_SOLD,

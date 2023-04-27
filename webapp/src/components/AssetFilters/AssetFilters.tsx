@@ -7,10 +7,9 @@ import {
   WearableGender
 } from '@dcl/schemas'
 import { getSectionFromCategory } from '../../modules/routing/search'
-import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
 import { View } from '../../modules/ui/types'
-import { Sections } from '../../modules/routing/types'
+import { BrowseOptions, Sections } from '../../modules/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
@@ -25,6 +24,7 @@ import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { LocationFilter } from './LocationFilter'
+import { StatusFilter } from './StatusFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 
@@ -36,13 +36,13 @@ export const AssetFilters = ({
   collection,
   creators,
   rarities,
+  status,
   network,
   category,
   bodyShapes,
   isOnlySmart,
   isOnSale,
   emotePlayMode,
-  assetType,
   section,
   landStatus,
   defaultCollapsed,
@@ -57,8 +57,12 @@ export const AssetFilters = ({
   isCreatorFiltersEnabled,
   values
 }: Props): JSX.Element | null => {
-  const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
+
+  const handleBrowseParamChange = useCallback(
+    (options: BrowseOptions) => onBrowse(options),
+    [onBrowse]
+  )
 
   const handlePriceChange = useCallback(
     (value: [string, string]) => {
@@ -232,6 +236,13 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       ) : null}
+      {shouldRenderFilter(AssetFilter.Status) ? (
+        <StatusFilter
+          onChange={handleBrowseParamChange}
+          status={status}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Status]}
+        />
+      ) : null}
       {isPriceFilterEnabled &&
       shouldRenderFilter(AssetFilter.Price) &&
       isOnSale &&
@@ -269,7 +280,7 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
         />
       )}
-      {shouldRenderFilter(AssetFilter.Network) && !isPrimarySell && (
+      {shouldRenderFilter(AssetFilter.Network) && (
         <NetworkFilter
           onChange={handleNetworkChange}
           network={network}

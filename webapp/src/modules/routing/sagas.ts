@@ -16,6 +16,7 @@ import {
   replace
 } from 'connected-react-router'
 import {
+  CatalogFilters,
   NFTCategory,
   RentalStatus,
   Sale,
@@ -35,7 +36,8 @@ import {
   getNetwork,
   getOnlySmart,
   getCurrentBrowseOptions,
-  getCurrentLocationAddress
+  getCurrentLocationAddress,
+  getSection
 } from '../routing/selectors'
 import {
   fetchNFTRequest,
@@ -55,10 +57,11 @@ import {
   getCategoryFromSection,
   getDefaultOptionsByView,
   getSearchWearableCategory,
-  getItemSortBy,
-  getAssetOrderBy,
   getCollectionSortBy,
-  getSearchEmoteCategory
+  getSearchEmoteCategory,
+  getCatalogSortBy,
+  getItemSortBy,
+  getAssetOrderBy
 } from './search'
 import {
   getRarities,
@@ -104,6 +107,8 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
+import { AssetStatusFilter } from '../../utils/filters'
+import { fetchCatalogRequest } from '../catalog/actions'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -196,7 +201,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     tenant,
     minPrice,
     maxPrice,
-    creators
+    creators,
+    network,
+    status
   } = options
 
   const address =
@@ -259,32 +266,47 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
       const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
-      if (isItems) {
-        // TODO: clean up
-        const isWearableHead =
-          section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
-        const isWearableAccessory =
-          section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
+      const isWearableHead =
+        section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
+      const isWearableAccessory =
+        section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
 
-        const wearableCategory = !isWearableAccessory
-          ? getSearchWearableCategory(section)
+      const wearableCategory = !isWearableAccessory
+        ? getSearchWearableCategory(section)
+        : undefined
+
+      const emoteCategory =
+        category === NFTCategory.EMOTE
+          ? getSearchEmoteCategory(section)
           : undefined
 
-        const emoteCategory =
-          category === NFTCategory.EMOTE
-            ? getSearchEmoteCategory(section)
-            : undefined
+      const { rarities, wearableGenders, emotePlayMode } = options
 
-        const { rarities, wearableGenders, emotePlayMode } = options
-
+      if (
+        (view === View.MARKET || view === View.LOAD_MORE) &&
+        (section.toString().includes(Section.EMOTES) ||
+          section.toString().includes(Section.WEARABLES))
+      ) {
+        const statusParameters: Partial<CatalogFilters> = {
+          ...(status === AssetStatusFilter.ON_SALE ? { isOnSale: true } : {}),
+          ...(status === AssetStatusFilter.NOT_FOR_SALE
+            ? { isOnSale: false }
+            : {}),
+          ...(status === AssetStatusFilter.ONLY_LISTING
+            ? { onlyListing: true }
+            : {}),
+          ...(status === AssetStatusFilter.ONLY_MINTING
+            ? { onlyMinting: true }
+            : {})
+        }
         yield put(
-          fetchItemsRequest({
+          fetchCatalogRequest({
             view,
             page,
             filters: {
               first,
               skip,
-              sortBy: getItemSortBy(sortBy),
+              sortBy: getCatalogSortBy(sortBy),
               isOnSale: onlyOnSale,
               creator: address ? [address] : creators,
               wearableCategory,
@@ -295,35 +317,65 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               search,
               category,
               rarities: rarities,
-              contracts,
               wearableGenders,
               emotePlayMode,
               minPrice,
-              maxPrice
+              maxPrice,
+              network,
+              ...statusParameters
             }
           })
         )
       } else {
-        const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
+        if (isItems) {
+          yield put(
+            fetchItemsRequest({
+              view,
+              page,
+              filters: {
+                first,
+                skip,
+                sortBy: getItemSortBy(sortBy),
+                isOnSale: onlyOnSale,
+                creator: address ? [address] : creators,
+                wearableCategory,
+                emoteCategory,
+                isWearableHead,
+                isWearableAccessory,
+                isWearableSmart: onlySmart,
+                search,
+                category,
+                rarities: rarities,
+                contracts,
+                wearableGenders,
+                emotePlayMode,
+                minPrice,
+                maxPrice
+              }
+            })
+          )
+        } else {
+          const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
 
-        yield put(
-          fetchNFTsRequest({
-            vendor,
-            view,
-            params: {
-              first,
-              skip,
-              orderBy,
-              orderDirection,
-              onlyOnSale,
-              onlyOnRent,
-              address,
-              category,
-              search
-            },
-            filters: getFilters(vendor, options) // TODO: move to routing
-          })
-        )
+          yield put(
+            fetchNFTsRequest({
+              vendor,
+              view,
+              params: {
+                first,
+                skip,
+                orderBy,
+                orderDirection,
+                onlyOnSale,
+                onlyOnRent,
+                address,
+                category,
+                search
+              },
+              filters: getFilters(vendor, options) // TODO: move to routing
+            })
+          )
+        }
       }
   }
 }
@@ -334,6 +386,7 @@ export function* getNewBrowseOptions(
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
+  const section = yield select(getSection)
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
@@ -348,7 +401,7 @@ export function* getNewBrowseOptions(
     }
   }
 
-  const defaults = getDefaultOptionsByView(view)
+  const defaults = getDefaultOptionsByView(view, section)
   return {
     ...defaults,
     ...previous,

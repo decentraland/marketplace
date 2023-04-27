@@ -15,13 +15,14 @@ import {
   getSearch,
   hasFiltersEnabled
 } from '../../modules/routing/selectors'
-import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
-import { getLoading as getLoadingItems } from '../../modules/item/selectors'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
-import AssetList from './AssetList'
-import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { buildBrowseURL } from '../../modules/routing/utils'
 import { AssetType } from '../../modules/asset/types'
+import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
+import { getLoading as getLoadingCatalog } from '../../modules/catalog/selectors'
+import { FETCH_CATALOG_REQUEST } from '../../modules/catalog/actions'
+import { getCatalogItems } from '../../modules/ui/browse/selectors'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
+import AssetList from './AssetList'
 
 const mapState = (state: RootState): MapStateProps => {
   const page = getPage(state)
@@ -36,14 +37,15 @@ const mapState = (state: RootState): MapStateProps => {
     count: getCount(state),
     search: getSearch(state),
     isLoading:
-      assetType === AssetType.ITEM
-        ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST)
+      assetType === AssetType.CATALOG_ITEM
+        ? isLoadingType(getLoadingCatalog(state), FETCH_CATALOG_REQUEST)
         : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
     urlNext: buildBrowseURL(getLocation(state).pathname, {
       ...getCurrentBrowseOptions(state),
       page: page + 1
     }),
-    hasFiltersEnabled: hasFiltersEnabled(state)
+    hasFiltersEnabled: hasFiltersEnabled(state),
+    catalogItems: getCatalogItems(state)
   }
 }
 

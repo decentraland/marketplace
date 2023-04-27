@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { Item } from '@dcl/schemas'
+import { Item, CatalogItem } from '@dcl/schemas'
 
 import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
@@ -27,6 +27,7 @@ export type Props = {
   onClearFilters: typeof clearFilters
   urlNext: string
   search: string
+  catalogItems: CatalogItem[]
 }
 
 export type MapStateProps = Pick<
@@ -42,6 +43,7 @@ export type MapStateProps = Pick<
   | 'urlNext'
   | 'search'
   | 'hasFiltersEnabled'
+  | 'catalogItems'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
 export type MapDispatch = Dispatch<BrowseAction | ClearFiltersAction>

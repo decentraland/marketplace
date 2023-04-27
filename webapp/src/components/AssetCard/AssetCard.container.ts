@@ -11,6 +11,7 @@ import { locations } from '../../modules/routing/locations'
 import { View } from '../../modules/ui/types'
 import { getOpenRentalId } from '../../modules/rental/utils'
 import { getRentalById } from '../../modules/rental/selectors'
+import { getSortBy } from '../../modules/routing/selectors'
 import { MapStateProps, OwnProps, MapDispatchProps } from './AssetCard.types'
 import AssetCard from './AssetCard'
 
@@ -41,7 +42,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     showRentalChip:
       rentalOfNFT !== null &&
       view === View.CURRENT_ACCOUNT &&
-      getLocation(state).pathname !== locations.root()
+      getLocation(state).pathname !== locations.root(),
+    sortBy: getSortBy(state)
   }
 }
 
