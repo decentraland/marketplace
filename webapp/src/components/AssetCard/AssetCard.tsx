@@ -4,7 +4,12 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
-import { getAssetName, getAssetUrl, isNFT } from '../../modules/asset/utils'
+import {
+  getAssetName,
+  getAssetUrl,
+  isNFT,
+  isCatalogItem
+} from '../../modules/asset/utils'
 import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
@@ -15,7 +20,10 @@ import {
   isRentalListingExecuted,
   isRentalListingOpen
 } from '../../modules/rental/utils'
+import { SortBy } from '../../modules/routing/types'
+import mintingIcon from '../../images/minting.png'
 import { Mana } from '../Mana'
+import { LinkedProfile } from '../LinkedProfile'
 import { AssetImage } from '../AssetImage'
 import { FavoritesCounter } from '../FavoritesCounter'
 import { ParcelTags } from './ParcelTags'
@@ -23,8 +31,12 @@ import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
+import { fomrmatWeiToAssetCard } from './utils'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
+
+const MINT = 'MINT'
+const LISTING = 'LISTING'
 
 const RentalPrice = ({
   asset,
@@ -35,8 +47,8 @@ const RentalPrice = ({
 }) => {
   return (
     <>
-      <Mana showTooltip className="rental-price" network={asset.network} inline>
-        {formatWeiMANA(rentalPricePerDay)}
+      <Mana className="rental-price" network={asset.network} inline>
+        {fomrmatWeiToAssetCard(rentalPricePerDay)}
       </Mana>
       <span className="card-rental-day">/{t('global.day')}</span>
     </>
@@ -91,7 +103,8 @@ const AssetCard = (props: Props) => {
     onClick,
     isClaimingBackLandTransactionPending,
     rental,
-    isFavoritesEnabled
+    isFavoritesEnabled,
+    sortBy
   } = props
 
   const title = getAssetName(asset)
@@ -101,9 +114,118 @@ const AssetCard = (props: Props) => {
     [rental]
   )
 
+  const catalogItemInformation = () => {
+    let information: {
+      action: string
+      actionIcon: string | null
+      price: string | null
+      extraInformation: React.ReactNode | null
+    } | null = null
+    if (isCatalogItem(asset)) {
+      if (asset.id === '0x801e3ba69794b5ba6b6c0b6e8a771f99ae5f4c4a-0') {
+        console.log(
+          'asset.isOnSale && asset.available > 0',
+          asset.isOnSale && asset.available > 0
+        )
+      }
+
+      const isAvailableForMint = asset.isOnSale && asset.available > 0
+
+      if (!isAvailableForMint && !asset.minListingPrice) {
+        information = {
+          action: t('asset_card.not_for_sale'),
+          actionIcon: null,
+          price: null,
+          extraInformation: `${t('asset_card.owners', {
+            count: asset.owners
+          })}`
+        }
+      } else {
+        const mostExpensive =
+          asset.maxListingPrice && asset.price < asset.maxListingPrice
+            ? LISTING
+            : isAvailableForMint
+            ? MINT
+            : null
+        const cheapest =
+          asset.minListingPrice && asset.price > asset.minListingPrice
+            ? LISTING
+            : isAvailableForMint
+            ? MINT
+            : null
+
+        const displayExtraInfomationToMint =
+          (sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING) ||
+          (sortBy === SortBy.CHEAPEST && cheapest === LISTING)
+
+        information = {
+          action:
+            sortBy === SortBy.CHEAPEST
+              ? t('asset_card.cheapest_option')
+              : sortBy === SortBy.MOST_EXPENSIVE
+              ? t('asset_card.most_expensive')
+              : isAvailableForMint
+              ? t('asset_card.available_for_mint')
+              : t('asset_card.cheapest_listing'),
+          actionIcon: isAvailableForMint ? mintingIcon : null,
+          price:
+            sortBy === SortBy.MOST_EXPENSIVE
+              ? mostExpensive === MINT
+                ? asset.price
+                : asset.maxListingPrice
+              : asset.minPrice,
+          extraInformation:
+            asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
+              <span>
+                {displayExtraInfomationToMint
+                  ? t('asset_card.also_minting')
+                  : t('asset_card.listings', { count: asset.listings })}
+                :&nbsp;
+                <Mana size="small" network={asset.network} className="tiniMana">
+                  {fomrmatWeiToAssetCard(
+                    displayExtraInfomationToMint
+                      ? asset.price
+                      : asset.minListingPrice
+                  )}
+                </Mana>
+                &nbsp;
+                {asset.listings > 1 &&
+                  !displayExtraInfomationToMint &&
+                  asset.minListingPrice !== asset.maxListingPrice &&
+                  `- ${fomrmatWeiToAssetCard(asset.maxListingPrice)}`}
+              </span>
+            ) : null
+        }
+      }
+    }
+    return information ? (
+      <div className="CatalogItemInformation">
+        <span>
+          {information.action} &nbsp;
+          {information.actionIcon && (
+            <img src={information.actionIcon} alt="mint" className="mintIcon" />
+          )}
+        </span>
+
+        {information.price && (
+          <div className="PriceInMana">
+            <Mana size="large" network={asset.network} className="PriceInMana">
+              {fomrmatWeiToAssetCard(information.price)}
+            </Mana>
+          </div>
+        )}
+        {information.extraInformation && (
+          <span className="extraInformation">
+            {information.extraInformation}
+          </span>
+        )}
+      </div>
+    ) : null
+  }
+
   return (
     <Card
-      className="AssetCard"
+      className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
       link
       as={Link}
       to={getAssetUrl(asset, isManager && isLand(asset))}
@@ -113,6 +235,7 @@ const AssetCard = (props: Props) => {
       }`}
     >
       <AssetImage
+        className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''}`}
         asset={asset}
         showOrderListedTag={showListedTag}
         showMonospace
@@ -129,21 +252,33 @@ const AssetCard = (props: Props) => {
           rental={rental}
         />
       ) : null}
-      <Card.Content>
+      <Card.Content className={isCatalogItem(asset) ? 'catalog' : ''}>
         <Card.Header>
-          <div className="title">{title}</div>
-          {price ? (
-            <Mana showTooltip network={asset.network} inline>
-              {formatWeiMANA(price)}
+          <div className="title">
+            {title}
+            {isCatalogItem(asset) && (
+              <LinkedProfile
+                address={asset.creator}
+                textOnly
+                className="creator"
+              />
+            )}
+          </div>
+          {!catalogItemInformation && price ? (
+            <Mana network={asset.network} inline>
+              {fomrmatWeiToAssetCard(price)}
             </Mana>
           ) : rentalPricePerDay ? (
             <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
           ) : null}
         </Card.Header>
         <div className="sub-header">
-          <Card.Meta className="card-meta">
-            {t(`networks.${asset.network.toLowerCase()}`)}
-          </Card.Meta>
+          {!isCatalogItem(asset) && (
+            <Card.Meta className="card-meta">
+              {t(`networks.${asset.network.toLowerCase()}`)}
+            </Card.Meta>
+          )}
+
           {rentalPricePerDay && price ? (
             <div>
               <RentalPrice
@@ -153,6 +288,7 @@ const AssetCard = (props: Props) => {
             </div>
           ) : null}
         </div>
+        {catalogItemInformation()}
 
         {parcel ? <ParcelTags nft={asset as NFT} /> : null}
         {estate ? <EstateTags nft={asset as NFT} /> : null}

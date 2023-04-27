@@ -10,7 +10,7 @@ import { locations } from '../../modules/routing/locations'
 import { getOpenRentalId } from '../../modules/rental/utils'
 import { getRentalById } from '../../modules/rental/selectors'
 import { getIsFavoritesEnabled } from '../../modules/features/selectors'
-import { getPageName } from '../../modules/routing/selectors'
+import { getPageName, getSortBy } from '../../modules/routing/selectors'
 import { PageName } from '../../modules/routing/types'
 import { MapStateProps, OwnProps, MapDispatchProps } from './AssetCard.types'
 import AssetCard from './AssetCard'
@@ -41,7 +41,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       : false,
     rental: rentalOfNFT,
     showRentalChip: rentalOfNFT !== null && pageName === PageName.ACCOUNT,
-    isFavoritesEnabled: getIsFavoritesEnabled(state)
+    isFavoritesEnabled: getIsFavoritesEnabled(state),
+    sortBy: getSortBy(state)
   }
 }
 
