@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { Item } from '@dcl/schemas'
+import { CatalogItem, Item } from '@dcl/schemas'
 import {
   openModal,
   OpenModalAction
@@ -13,7 +13,7 @@ import {
 
 export type Props = {
   className?: string
-  item: Item
+  item: Item | CatalogItem
   isCollapsed?: boolean
   isPickedByUser: boolean
   count: number

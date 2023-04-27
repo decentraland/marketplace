@@ -161,6 +161,7 @@
     "cheapest": "最低价",
     "cheapest_sale": "最低价 (文塔)",
     "cheapest_rent": "最低价 (莲太)",
+    "most_expensive": "最贵的",
     "no_results": "未找到结果。",
     "type_to_search": "键入以搜索集合。",
     "clear": "清除过滤器",
@@ -368,6 +369,16 @@
       "female": "只有女性",
       "male": "只有男性",
       "unisex": "仅男女皆宜"
+    },
+    "status": {
+      "title": "地位",
+      "on_sale": "特价中",
+      "on_sale_tooltip": "包括可用于铸造和/或具有可用列表的项目。",
+      "only_minting": "仅可用于铸币",
+      "only_minting_tooltip": "仅包括可铸造的物品（直接从创作者处购买）。",
+      "only_listing": "仅列表",
+      "only_listing_tooltip": "仅包括正在转售的项目。",
+      "not_for_sale": "不作为产品销售"
     },
     "rarities": {
       "title": "稀有度",
@@ -1169,7 +1180,15 @@
       "rented_until": "租到 {endDate, date, medium}",
       "claiming_back": "土地正在收回",
       "rental_ended": "租赁已结束"
-    }
+    },
+    "listings": "{count} {count, plural, one {收藏品} other {收藏品}}",
+    "available_for_mint": "可用於鑄幣",
+    "cheapest_listing": "最便宜的收藏品",
+    "not_for_sale": "不可出售",
+    "owners": "{count} {count, plural, one {所有者} other {所有者}}",
+    "cheapest_option": "最便宜",
+    "most_expensive": "最貴",
+    "also_minting": "也可用於鑄造"
   },
   "rentals_promotional_modal": {
     "title": "Announcing official LAND rentals",

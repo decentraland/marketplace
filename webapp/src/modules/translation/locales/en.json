@@ -165,6 +165,7 @@
     "cheapest": "Cheapest",
     "cheapest_sale": "Cheapest (Sale)",
     "cheapest_rent": "Cheapest (Rent)",
+    "most_expensive": "Most expensive",
     "no_results": "No results were found.",
     "type_to_search": "Type to search for collections.",
     "clear": "Clear all filters",
@@ -371,6 +372,16 @@
       "all_items": "All Body Shapes",
       "available_for_female": "Available for female",
       "available_for_male": "Available for male"
+    },
+    "status": {
+      "title": "Status",
+      "on_sale": "On Sale",
+      "on_sale_tooltip": "Includes items available for minting and/or with available listings.",
+      "only_minting": "Only available for minting",
+      "only_minting_tooltip": "Only includes items that are available for minting (buying directly from the creators).",
+      "only_listing": "Only listings",
+      "only_listing_tooltip": "Only includes items that are being resold.",
+      "not_for_sale": "Not for sale"
     },
     "rarities": {
       "title": "Rarity",
@@ -1172,7 +1183,15 @@
       "rented_until": "Rented until {endDate, date, medium}",
       "claiming_back": "Claiming back {asset_type, select, parcel {parcel} estate {estate} other {LAND}}",
       "rental_ended": "Rental period over"
-    }
+    },
+    "listings": "{count} {count, plural, one {Listing} other {Listings}}",
+    "available_for_mint": "Available for mint",
+    "cheapest_listing": "Cheapest Listing",
+    "not_for_sale": "Not for sale",
+    "owners": "{count} {count, plural, one {Owner} other {Owners}}",
+    "cheapest_option": "Cheapest Option",
+    "most_expensive": "Most Expensive",
+    "also_minting": "Also Available for minting"
   },
   "rentals_promotional_modal": {
     "title": "Announcing LAND rentals",

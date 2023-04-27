@@ -12,6 +12,7 @@ import {
   getSearch,
   getSection,
   getSortBy,
+  getSortByOptions,
   hasFiltersEnabled
 } from '../../modules/routing/selectors'
 import { BrowseOptions } from '../../modules/routing/types'
@@ -37,6 +38,7 @@ const mapState = (state: RootState): MapStateProps => {
     onlyOnRent: getOnlyOnRent(state),
     onlyOnSale: getOnlyOnSale(state),
     sortBy: getSortBy(state),
+    sortByOptions: getSortByOptions(state),
     assetType: getAssetType(state),
     section: getSection(state),
     hasFiltersEnabled: hasFiltersEnabled(state),
