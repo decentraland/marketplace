@@ -3,7 +3,8 @@ import { AssetType } from '../../asset/types'
 import {
   fetchFavoritedItemsSuccess,
   unpickItemAsFavoriteSuccess,
-  undoUnpickingItemAsFavoriteSuccess
+  undoUnpickingItemAsFavoriteSuccess,
+  fetchFavoritedItemsRequest
 } from '../../favorites/actions'
 import { FavoritedItems } from '../../favorites/types'
 import {
@@ -147,6 +148,25 @@ describe.each(fetchRequestActions)(
     })
   }
 )
+
+describe('when reducing the request action of fetching favorited items', () => {
+  const initialState: BrowseUIState = {
+    ...INITIAL_STATE,
+    count: assetIds.length
+  }
+
+  it(`should clear the count`, () => {
+    expect(
+      browseReducer(
+        initialState,
+        fetchFavoritedItemsRequest({} as ItemBrowseOptions)
+      )
+    ).toEqual({
+      ...initialState,
+      count: undefined
+    })
+  })
+})
 
 describe('when reducing the fetch NFTs success action', () => {
   let initialState: BrowseUIState = { ...INITIAL_STATE }
@@ -392,18 +412,50 @@ describe('when reducing the fetch items success action', () => {
           }
         })
 
-        it('should return the state with the view, the item ids, the count and the last timestamp that comes in the action payload', () => {
-          expect(
-            browseReducer(
-              initialState,
-              fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
-            )
-          ).toEqual({
-            ...initialState,
-            view,
-            itemIds: [item.id],
-            count,
-            lastTimestamp: timestamp
+        describe('and the section is lists', () => {
+          beforeEach(() => {
+            itemsBrowserOptions = {
+              ...itemsBrowserOptions,
+              section: Section.LISTS
+            }
+          })
+
+          it('should return the state with the view, the item ids, the previous count, and the last timestamp that comes in the action payload', () => {
+            expect(
+              browseReducer(
+                initialState,
+                fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
+              )
+            ).toEqual({
+              ...initialState,
+              view,
+              itemIds: [item.id],
+              lastTimestamp: timestamp
+            })
+          })
+        })
+
+        describe('and the section is not lists', () => {
+          beforeEach(() => {
+            itemsBrowserOptions = {
+              ...itemsBrowserOptions,
+              section: Section.ALL
+            }
+          })
+
+          it('should return the state with the view, the item ids, the count and the last timestamp that comes in the action payload', () => {
+            expect(
+              browseReducer(
+                initialState,
+                fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
+              )
+            ).toEqual({
+              ...initialState,
+              view,
+              itemIds: [item.id],
+              count,
+              lastTimestamp: timestamp
+            })
           })
         })
       }

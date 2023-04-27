@@ -1,5 +1,7 @@
 import {
+  FETCH_FAVORITED_ITEMS_REQUEST,
   FETCH_FAVORITED_ITEMS_SUCCESS,
+  FetchFavoritedItemsRequestAction,
   FetchFavoritedItemsSuccessAction,
   UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS,
@@ -49,6 +51,7 @@ type UIReducerAction =
   | FetchTrendingItemsSuccessAction
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
+  | FetchFavoritedItemsRequestAction
   | FetchFavoritedItemsSuccessAction
   | UnpickItemAsFavoriteSuccessAction
   | UndoUnpickingItemAsFavoriteSuccessAction
@@ -158,6 +161,12 @@ export function browseReducer(
       }
     }
 
+    case FETCH_FAVORITED_ITEMS_REQUEST:
+      return {
+        ...state,
+        count: undefined
+      }
+
     case FETCH_TRENDING_ITEMS_SUCCESS:
       return {
         ...state,
@@ -185,7 +194,8 @@ export function browseReducer(
             ...state,
             view,
             itemIds: action.payload.items.map(item => item.id),
-            count: action.payload.total,
+            count:
+              section === Section.LISTS ? state.count : action.payload.total,
             lastTimestamp: action.payload.timestamp
           }
         }

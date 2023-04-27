@@ -47,7 +47,7 @@ export function getOrderByOptions(
     ]
   }
 
-  if (onlyOnSale && !onlyOnRent ) {
+  if (onlyOnSale && !onlyOnRent) {
     return [
       {
         value: SortBy.RECENTLY_LISTED,
@@ -70,6 +70,6 @@ export function getOrderByOptions(
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') },
     { value: SortBy.CHEAPEST_SALE, text: t('filters.cheapest_sale') },
-    { value: SortBy.CHEAPEST_RENT, text: t('filters.cheapest_rent') },
+    { value: SortBy.CHEAPEST_RENT, text: t('filters.cheapest_rent') }
   ]
 }
