@@ -187,7 +187,6 @@ function* handleGoBack(action: GoBackAction) {
 export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
-  console.log('view: ', view)
   const vendor = options.vendor!
   const page = options.page!
   const section = options.section!
@@ -220,7 +219,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const category = getCategoryFromSection(section)
 
-  console.log('section: ', section)
   switch (section) {
     case Section.BIDS:
     case Section.STORE_SETTINGS:
