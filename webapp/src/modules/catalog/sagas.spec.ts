@@ -32,8 +32,8 @@ describe('when handling the fetch catalog items request action', () => {
             Promise.reject(new Error(anError))
           ]
         ])
-        .put(fetchCatalogFailure(anError, catalogFilters))
-        .dispatch(fetchCatalogRequest(catalogFilters))
+        .put(fetchCatalogFailure(anError, { filters: catalogFilters }))
+        .dispatch(fetchCatalogRequest({ filters: catalogFilters }))
         .run()
     })
   })
@@ -45,13 +45,11 @@ describe('when handling the fetch catalog items request action', () => {
       return expectSaga(catalogSaga)
         .provide([[call([catalogAPI, 'fetch'], catalogFilters), fetchResult]])
         .put(
-          fetchCatalogSuccess(
-            fetchResult.data,
-            fetchResult.total,
-            catalogFilters
-          )
+          fetchCatalogSuccess(fetchResult.data, fetchResult.total, {
+            filters: catalogFilters
+          })
         )
-        .dispatch(fetchCatalogRequest(catalogFilters))
+        .dispatch(fetchCatalogRequest({ filters: catalogFilters }))
         .run()
     })
   })

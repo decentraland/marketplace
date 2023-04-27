@@ -3,12 +3,12 @@
   overflow: visible;
 }
 
-.ui.cards a.card.AssetCard:hover,
-.ui.link.card.AssetCard:hover,
-.ui.link.cards .card.AssetCard:hover,
-a.ui.card.AssetCard:hover,
-.ui.cards > .ui.card.AssetCard.link:hover,
-.ui.card.AssetCard.link:hover {
+.ui.cards a.card.AssetCard.catalog:hover,
+.ui.link.card.AssetCard.catalog:hover,
+.ui.link.cards .card.AssetCard.catalog:hover,
+a.ui.card.AssetCard.catalog:hover,
+.ui.cards > .ui.card.AssetCard.catalog.link:hover,
+.ui.card.AssetCard.catalog.link:hover {
   border: none !important;
 }
 
@@ -179,6 +179,12 @@ a.ui.card.link:hover .meta {
 
 .AssetCard .mintIcon {
   height: 14px;
+}
+
+.AssetCard .dcl.atlas {
+  overflow: hidden;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
 
 @media (max-width: 1199px) {
