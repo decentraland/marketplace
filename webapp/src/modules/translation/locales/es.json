@@ -159,8 +159,7 @@
     "recently_listed_for_rent": "Listados recientemente para rentar",
     "recently_sold": "Vendidos recientemente",
     "cheapest": "Más baratos",
-    "cheapest_sale": "Más baratos (Venta)",
-    "cheapest_rent": "Más baratos (Renta)",
+    "most_expensive": "Más caros",
     "no_results": "No se encontraron resultados.",
     "type_to_search": "Escriba para buscar collecciones.",
     "clear": "Borrar filtros",
@@ -367,6 +366,16 @@
       "female": "Solo femenino",
       "male": "Solo masculino",
       "unisex": "Solo unisex"
+    },
+    "status": {
+      "title": "Estado",
+      "on_sale": "En venta",
+      "on_sale_tooltip": "Incluye items disponible para mintear o publicaciones disponibles",
+      "only_minting": "Solo disponible para mintear",
+      "only_minting_tooltip": "Solo incluye items disponibles para mintear (comprando directamente al creador).",
+      "only_listing": "Solo publicaciones",
+      "only_listing_tooltip": "Solo incluye items que estan siendo re-vendidos",
+      "not_for_sale": "No a la venta"
     },
     "rarities": {
       "title": "Rareza",
@@ -1166,7 +1175,15 @@
       "rented_until": "Rentada hasta {endDate, date, medium}",
       "claiming_back": "Reclamando {asset_type, select, parcel {la parcel} estate {el estate} other {LAND}}",
       "rental_ended": "Período de renta terminado"
-    }
+    },
+    "listings": "{count} {count, plural, one {Collecionable} other {Collecionables}}",
+    "available_for_mint": "Disponible para mintear",
+    "cheapest_listing": "Coleccionable más barato",
+    "not_for_sale": "No disponible para la venta",
+    "owners": "{count} {count, plural, one {Dueño} other {Dueños}}",
+    "cheapest_option": "Más baratos",
+    "most_expensive": "Más Caro",
+    "also_minting": "También disponibles para mintear"
   },
   "rentals_promotional_modal": {
     "title": "¡La renta de tierras está disponible!",

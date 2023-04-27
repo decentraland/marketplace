@@ -4,6 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Bid,
   BidSortBy,
+  Item,
   ListingStatus,
   Network,
   Order,
@@ -24,6 +25,7 @@ import noListings from '../../../images/noListings.png'
 import { ManaToFiat } from '../../ManaToFiat'
 import { LinkedProfile } from '../../LinkedProfile'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
+import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BuyOptions, Props } from './BestBuyingOption.types'
 import styles from './BestBuyingOption.module.css'
 
@@ -62,7 +64,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
         }
         const sortBy = OrderSortBy.CHEAPEST
 
-        if (asset.network === Network.MATIC && asset.itemId) {
+        if (asset.network === Network.MATIC) {
           params.itemId = asset.itemId
         } else if (asset.network === Network.ETHEREUM) {
           params.nftName = asset.name
@@ -98,6 +100,13 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
       }
     }
   }, [asset])
+
+  const customClasses = {
+    primaryButton: styles.primaryButton,
+    secondaryButton: styles.buyWithCardClassName,
+    outlinedButton: styles.outlinedButton,
+    buyWithCardClassName: styles.buyWithCardClassName
+  }
 
   return (
     <div className={styles.BestBuyingOption}>
@@ -156,11 +165,13 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                     {formatWeiMANA(asset.price)}
                   </Mana>
                 </div>
-                <div className={styles.informationText}>
-                  {'('}
-                  <ManaToFiat mana={asset.price} />
-                  {')'}
-                </div>
+                {+asset.price > 0 && (
+                  <div className={styles.informationText}>
+                    {'('}
+                    <ManaToFiat mana={asset.price} />
+                    {')'}
+                  </div>
+                )}
               </div>
             </div>
             <div className={styles.mintingStockContainer}>
@@ -173,9 +184,9 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
               </span>
             </div>
           </div>
-          <BuyNFTButtons
-            asset={asset}
-            buyWithCardClassName={styles.buyWithCardClassName}
+          <ItemSaleActions
+            item={asset as Item}
+            customClassnames={customClasses}
           />
         </div>
       ) : buyOption === BuyOptions.BUY_LISTING && asset && listing ? (

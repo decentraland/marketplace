@@ -2,8 +2,8 @@ import {
   EmotePlayMode,
   GenderFilterOption,
   ItemSortBy,
-  Network,
   NFTCategory,
+  Network,
   Rarity
 } from '@dcl/schemas'
 import {
@@ -167,7 +167,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     return expectSaga(routingSaga)
       .provide([
         [select(getCurrentBrowseOptions), browseOptions],
-        [select(getPage), 1]
+        [select(getPage), 1],
+        [select(getSection), Section.WEARABLES]
       ])
       .put(fetchTrendingItemsRequest())
       .dispatch(fetchAssetsFromRouteAction(browseOptions))
@@ -183,31 +184,6 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       section: Section.EMOTES,
       view: View.ACCOUNT,
       page: 1
-    }
-
-    const filters: ItemBrowseOptions = {
-      view: browseOptions.view,
-      page: browseOptions.page,
-      filters: {
-        first: 24,
-        skip: 0,
-        sortBy: ItemSortBy.RECENTLY_REVIEWED,
-        creator: [address],
-        category: NFTCategory.EMOTE,
-        isWearableHead: false,
-        isWearableAccessory: false,
-        isOnSale: undefined,
-        wearableCategory: undefined,
-        emoteCategory: undefined,
-        isWearableSmart: undefined,
-        search: undefined,
-        rarities: undefined,
-        contracts: undefined,
-        wearableGenders: undefined,
-        emotePlayMode: undefined,
-        minPrice: undefined,
-        maxPrice: undefined
-      }
     }
 
     return expectSaga(routingSaga)
@@ -400,6 +376,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -427,6 +404,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -454,6 +432,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -481,6 +460,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -519,6 +499,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -546,6 +527,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -579,6 +561,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -605,6 +588,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -631,6 +615,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -658,6 +643,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -696,6 +682,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -723,6 +710,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -750,6 +738,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -777,6 +766,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -815,6 +805,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -842,6 +833,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -875,6 +867,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -901,6 +894,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -927,6 +921,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -954,6 +949,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -989,6 +985,7 @@ describe('when handling the browse action', () => {
         .provide([
           [select(getCurrentBrowseOptions), browseOptions],
           [select(getLocation), { pathname }],
+          [select(getSection), Section.WEARABLES],
           [select(getEventData), eventContracts],
           [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
         ])
@@ -1012,6 +1009,7 @@ describe('when handling the browse action', () => {
         .provide([
           [select(getCurrentBrowseOptions), browseOptions],
           [select(getLocation), { pathname }],
+          [select(getSection), Section.WEARABLES],
           [select(getEventData), eventContracts],
           [call(fetchAssetsFromRoute, browseOptions), Promise.resolve()]
         ])

@@ -1,17 +1,16 @@
 import React from 'react'
 import { Dispatch } from 'redux'
 import { Avatar, IPreviewController } from '@dcl/schemas'
-import { Item } from '@dcl/schemas'
-import { NFT } from '../../modules/nft/types'
 import {
   setIsTryingOn,
   SetIsTryingOnAction,
   setWearablePreviewController,
   SetWearablePreviewControllerAction
 } from '../../modules/ui/preview/actions'
+import { Asset } from '../../modules/asset/types'
 
 export type Props = {
-  asset: NFT | Item
+  asset: Asset
   className?: string
   isDraggable?: boolean
   withNavigation?: boolean

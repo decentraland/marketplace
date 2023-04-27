@@ -170,6 +170,14 @@
   color: black !important;
 }
 
+.BestBuyingOption .primaryButton {
+  background-color: var(--primary) !important;
+}
+
+.BestBuyingOption .outlinedButton {
+  border: 1px solid var(--secondary-text) !important;
+}
+
 .BestBuyingOption .expiresAt {
   display: flex;
   align-items: center;
