@@ -1,8 +1,8 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Container } from 'decentraland-ui'
+import { Back, Container } from 'decentraland-ui'
 import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
-import { isNFT } from '../../../modules/asset/utils'
+import { isNFT, mapAsset } from '../../../modules/asset/utils'
 import { Box } from '../../AssetBrowse/Box'
 // TODO: make it importable from the root directory as AssetDetails or AssetDetailsBox
 import { DetailsBox } from '../../DetailsBox'
@@ -11,6 +11,9 @@ import { PageHeader } from '../../PageHeader'
 import Title from '../Title'
 import { Props } from './BaseDetail.types'
 import './BaseDetail.css'
+import { locations } from '../../../modules/routing/locations'
+import { Sections } from '../../../modules/routing/types'
+import { AssetType } from '../../../modules/asset/types'
 
 const BaseDetail = ({
   asset,
@@ -23,15 +26,74 @@ const BaseDetail = ({
   className,
   actions,
   showDetails,
-  isFavoritesEnabled
+  isFavoritesEnabled,
+  onBack
 }: Props) => {
   const isMobile = useMobileMediaQuery()
+  const type: AssetType = isNFT(asset) ? AssetType.NFT : AssetType.ITEM
 
   return (
     <div className={classNames('BaseDetail', className)}>
-      {isFavoritesEnabled && isMobile && !isNFT(asset) ? (
-        <FavoritesCounter isCollapsed className="favorites" item={asset} />
-      ) : null}
+      <div className="top-header">
+        <Back
+          className="back"
+          absolute
+          onClick={() =>
+            onBack(
+              mapAsset(
+                asset,
+                {
+                  wearable: () =>
+                    locations.browse({
+                      assetType: type,
+                      section: Sections.decentraland.WEARABLES
+                    }),
+                  emote: () =>
+                    locations.browse({
+                      assetType: type,
+                      section: Sections.decentraland.EMOTES
+                    })
+                },
+                {
+                  ens: () =>
+                    locations.browse({
+                      assetType: type,
+                      section: Sections.decentraland.ENS
+                    }),
+                  estate: () =>
+                    locations.lands({
+                      assetType: type,
+                      section: Sections.decentraland.ESTATES,
+                      isMap: false,
+                      isFullscreen: false
+                    }),
+                  parcel: () =>
+                    locations.lands({
+                      assetType: type,
+                      section: Sections.decentraland.PARCELS,
+                      isMap: false,
+                      isFullscreen: false
+                    }),
+                  wearable: () =>
+                    locations.browse({
+                      assetType: type,
+                      section: Sections.decentraland.WEARABLES
+                    }),
+                  emote: () =>
+                    locations.browse({
+                      assetType: type,
+                      section: Sections.decentraland.EMOTES
+                    })
+                },
+                () => undefined
+              )
+            )
+          }
+        />
+        {isFavoritesEnabled && isMobile && !isNFT(asset) ? (
+          <FavoritesCounter isCollapsed className="favorites" item={asset} />
+        ) : null}
+      </div>
       <PageHeader>{assetImage}</PageHeader>
       <Container>
         <div className="info">

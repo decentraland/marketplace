@@ -9,9 +9,3 @@
 .AssetPage .asset-container {
   width: 100%;
 }
-
-@media (max-width: 768px) {
-  .AssetPage .ui.container .dcl.back.absolute {
-    position: absolute;
-  }
-}
