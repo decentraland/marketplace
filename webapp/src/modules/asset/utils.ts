@@ -166,8 +166,8 @@ export function mapAsset<T>(
   }
 
   if (isNFT(asset)) {
-    const nft = asset as Asset<AssetType.NFT>
-    const { parcel, estate, wearable, emote, ens } = nft.data as any
+    const nft = asset
+    const { parcel, estate, wearable, emote, ens } = nft.data
 
     if (parcel) {
       return nftMappers.parcel(nft)
@@ -189,8 +189,9 @@ export function mapAsset<T>(
       return nftMappers.emote(nft)
     }
   } else {
-    const item = asset as Asset<AssetType.ITEM>
-    const { wearable, emote } = item.data as any
+    const item = asset
+    const { wearable, emote } = item.data
+
     if (wearable) {
       return itemMappers.wearable(item)
     }
@@ -200,5 +201,5 @@ export function mapAsset<T>(
     }
   }
 
-  return fallback()
+  return fallback() // this is unreachable
 }
