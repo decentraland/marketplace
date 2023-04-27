@@ -1,6 +1,5 @@
-import { Item } from '@dcl/schemas'
-import { NFT } from '../../../modules/nft/types'
+import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
-  asset: NFT | Item
+  asset: Asset
 }

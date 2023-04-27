@@ -1,5 +1,5 @@
 import { call, put, race, take } from 'redux-saga/effects'
-import { NFTCategory, Order, RentalListing } from '@dcl/schemas'
+import { NFTCategory, Order, RentalListing, CatalogItem } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
@@ -107,6 +107,10 @@ export function isOwnedBy(
 
 export function isNFT(asset: Asset): asset is NFT {
   return 'tokenId' in asset
+}
+
+export function isCatalogItem(asset: Asset): asset is CatalogItem {
+  return 'minPrice' in asset
 }
 
 export function isWearableOrEmote(asset: Asset): boolean {
