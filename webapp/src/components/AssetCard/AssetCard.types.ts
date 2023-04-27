@@ -12,6 +12,7 @@ export type Props = {
   showRentalChip: boolean
   rental: RentalListing | null
   isFavoritesEnabled: boolean
+  sortBy: string | undefined
 }
 
 export type MapStateProps = Pick<
@@ -22,6 +23,7 @@ export type MapStateProps = Pick<
   | 'rental'
   | 'isClaimingBackLandTransactionPending'
   | 'isFavoritesEnabled'
+  | 'sortBy'
 >
 export type MapDispatchProps = {}
 export type OwnProps = Pick<Props, 'asset' | 'order' | 'isManager'>

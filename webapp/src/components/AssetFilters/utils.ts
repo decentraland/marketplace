@@ -5,6 +5,7 @@ import * as events from '../../utils/events'
 
 export const enum AssetFilter {
   Rarity,
+  Status,
   Price,
   Collection,
   Creators,
@@ -17,6 +18,7 @@ export const enum AssetFilter {
 
 const WearablesFilters = [
   AssetFilter.Rarity,
+  AssetFilter.Status,
   AssetFilter.Price,
   AssetFilter.Network,
   AssetFilter.BodyShape,
