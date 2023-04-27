@@ -9,6 +9,7 @@ import {
   Network,
   Rarity
 } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor/types'
@@ -27,7 +28,6 @@ import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { isLandSection } from '../ui/utils'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetStatusFilter } from '../../utils/filters'
 
 export const getState = (state: RootState) => state.routing

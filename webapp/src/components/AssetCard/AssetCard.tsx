@@ -132,19 +132,23 @@ const AssetCard = (props: Props) => {
           action: t('asset_card.not_for_sale'),
           actionIcon: null,
           price: null,
-          extraInformation: `${asset.owners} ${t('asset_card.owners', {
+          extraInformation: `${t('asset_card.owners', {
             count: asset.owners
           })}`
         }
       } else {
         const mostExpensive =
-          asset.maxListingPrice && asset.price > asset.maxListingPrice
+          asset.maxListingPrice && asset.price < asset.maxListingPrice
+            ? LISTING
+            : isAvailableForMint
             ? MINT
-            : LISTING
+            : null
         const cheapest =
-          asset.minListingPrice && asset.price < asset.minListingPrice
+          asset.minListingPrice && asset.price > asset.minListingPrice
+            ? LISTING
+            : isAvailableForMint
             ? MINT
-            : LISTING
+            : null
 
         const displayExtraInfomationToMint =
           (sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING) ||
@@ -164,7 +168,7 @@ const AssetCard = (props: Props) => {
             sortBy === SortBy.MOST_EXPENSIVE
               ? mostExpensive === MINT
                 ? asset.price
-                : asset.minListingPrice
+                : asset.maxListingPrice
               : asset.minPrice,
           extraInformation:
             asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
@@ -217,7 +221,7 @@ const AssetCard = (props: Props) => {
 
   return (
     <Card
-      className="AssetCard"
+      className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
       link
       as={Link}
       to={getAssetUrl(asset, isManager && isLand(asset))}

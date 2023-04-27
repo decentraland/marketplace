@@ -283,7 +283,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       const { rarities, wearableGenders, emotePlayMode } = options
 
       if (
-        view === View.MARKET &&
+        (view === View.MARKET || view === View.LOAD_MORE) &&
         (section.toString().includes(Section.EMOTES) ||
           section.toString().includes(Section.WEARABLES))
       ) {
@@ -301,25 +301,29 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         }
         yield put(
           fetchCatalogRequest({
-            first,
-            skip,
-            sortBy: getCatalogSortBy(sortBy),
-            isOnSale: onlyOnSale,
-            creator: address ? [address] : creators,
-            wearableCategory,
-            emoteCategory,
-            isWearableHead,
-            isWearableAccessory,
-            isWearableSmart: onlySmart,
-            search,
-            category,
-            rarities: rarities,
-            wearableGenders,
-            emotePlayMode,
-            minPrice,
-            maxPrice,
-            network,
-            ...statusParameters
+            view,
+            page,
+            filters: {
+              first,
+              skip,
+              sortBy: getCatalogSortBy(sortBy),
+              isOnSale: onlyOnSale,
+              creator: address ? [address] : creators,
+              wearableCategory,
+              emoteCategory,
+              isWearableHead,
+              isWearableAccessory,
+              isWearableSmart: onlySmart,
+              search,
+              category,
+              rarities: rarities,
+              wearableGenders,
+              emotePlayMode,
+              minPrice,
+              maxPrice,
+              network,
+              ...statusParameters
+            }
           })
         )
       } else {
