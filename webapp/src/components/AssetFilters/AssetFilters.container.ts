@@ -20,6 +20,7 @@ import {
   getOnlySmart,
   getRarities,
   getSection,
+  getStatus,
   getWearableGenders
 } from '../../modules/routing/selectors'
 import {
@@ -29,6 +30,7 @@ import {
   getIsPriceFilterEnabled
 } from '../../modules/features/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
+import { AssetStatusFilter } from '../../utils/filters'
 import { browse } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
 import { getView } from '../../modules/ui/browse/selectors'
@@ -67,6 +69,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
         ? values.maxEstateSize || ''
         : getMaxEstateSize(state),
     rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
+    status:
+      'status' in values
+        ? values.status
+        : (getStatus(state) as AssetStatusFilter),
     network: 'network' in values ? values.network : getNetwork(state),
     bodyShapes:
       'wearableGenders' in values
@@ -86,9 +92,18 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     isPriceFilterEnabled: getIsPriceFilterEnabled(state),
     isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),
     isLocationFilterEnabled: getIsLocationFilterEnabled(state),
-    minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
-    maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
-    adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
+    minDistanceToPlaza:
+      'minDistanceToPlaza' in values
+        ? values.minDistanceToPlaza
+        : getMinDistanceToPlaza(state),
+    maxDistanceToPlaza:
+      'maxDistanceToPlaza' in values
+        ? values.maxDistanceToPlaza
+        : getMaxDistanceToPlaza(state),
+    adjacentToRoad:
+      'adjacentToRoad' in values
+        ? values.adjacentToRoad
+        : getAdjacentToRoad(state),
     isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state)
   }
 }

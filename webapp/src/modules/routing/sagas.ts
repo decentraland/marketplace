@@ -16,6 +16,7 @@ import {
   replace
 } from 'connected-react-router'
 import {
+  CatalogFilters,
   NFTCategory,
   RentalStatus,
   Sale,
@@ -35,7 +36,8 @@ import {
   getNetwork,
   getOnlySmart,
   getCurrentBrowseOptions,
-  getCurrentLocationAddress
+  getCurrentLocationAddress,
+  getSection
 } from '../routing/selectors'
 import {
   fetchNFTRequest,
@@ -55,11 +57,11 @@ import {
   getCategoryFromSection,
   getDefaultOptionsByView,
   getSearchWearableCategory,
-  getItemSortBy,
-  getAssetOrderBy,
   getCollectionSortBy,
   getSearchEmoteCategory,
-  getCatalogSortBy
+  getCatalogSortBy,
+  getItemSortBy,
+  getAssetOrderBy
 } from './search'
 import {
   getRarities,
@@ -105,6 +107,7 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
+import { AssetStatusFilter } from '../../utils/filters'
 import { fetchCatalogRequest } from '../catalog/actions'
 import { buildBrowseURL } from './utils'
 
@@ -199,7 +202,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     minPrice,
     maxPrice,
     creators,
-    network
+    network,
+    status
   } = options
 
   const address =
@@ -283,6 +287,18 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         (section.toString().includes(Section.EMOTES) ||
           section.toString().includes(Section.WEARABLES))
       ) {
+        const statusParameters: Partial<CatalogFilters> = {
+          ...(status === AssetStatusFilter.ON_SALE ? { isOnSale: true } : {}),
+          ...(status === AssetStatusFilter.NOT_FOR_SALE
+            ? { isOnSale: false }
+            : {}),
+          ...(status === AssetStatusFilter.ONLY_LISTING
+            ? { onlyListing: true }
+            : {}),
+          ...(status === AssetStatusFilter.ONLY_MINTING
+            ? { onlyMinting: true }
+            : {})
+        }
         yield put(
           fetchCatalogRequest({
             first,
@@ -302,7 +318,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
             emotePlayMode,
             minPrice,
             maxPrice,
-            network
+            network,
+            ...statusParameters
           })
         )
       } else {
@@ -365,6 +382,7 @@ export function* getNewBrowseOptions(
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
+  const section = yield select(getSection)
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
@@ -379,7 +397,7 @@ export function* getNewBrowseOptions(
     }
   }
 
-  const defaults = getDefaultOptionsByView(view)
+  const defaults = getDefaultOptionsByView(view, section)
   return {
     ...defaults,
     ...previous,
