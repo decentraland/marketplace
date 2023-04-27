@@ -16,7 +16,7 @@ import { Button, Loader, Mana, Popup } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
 import { formatDistanceToNow } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
-import { isCatalogItem, isNFT } from '../../../modules/asset/utils'
+import { isNFT } from '../../../modules/asset/utils'
 import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
 import mintingIcon from '../../../images/minting.png'
 import infoIcon from '../../../images/infoIcon.png'
@@ -25,10 +25,10 @@ import noListings from '../../../images/noListings.png'
 import { ManaToFiat } from '../../ManaToFiat'
 import { LinkedProfile } from '../../LinkedProfile'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
+import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BelowTabs } from '../ListingsTableContainer/ListingsTableContainer.types'
 import { BuyOptions, Props } from './BestBuyingOption.types'
 import styles from './BestBuyingOption.module.css'
-import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 
 const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const [buyOption, setBuyOption] = useState<BuyOptions | null>(null)
@@ -66,11 +66,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
         const sortBy = OrderSortBy.CHEAPEST
 
         if (asset.network === Network.MATIC) {
-          if (isCatalogItem(asset)) {
-            params.itemId = asset.id
-          } else {
-            params.itemId = asset.itemId
-          }
+          params.itemId = asset.itemId
         } else if (asset.network === Network.ETHEREUM) {
           params.nftName = asset.name
         }

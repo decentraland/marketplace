@@ -5,7 +5,7 @@ import {
   fetchCatalogFailure,
   fetchCatalogSuccess
 } from './actions'
-import { INITIAL_STATE, catalogItemReducer } from './reducer'
+import { INITIAL_STATE, catalogReducer } from './reducer'
 
 const catalogFilters: CatalogFilters = {}
 
@@ -29,8 +29,6 @@ const anotherCatalogItem = {
 
 const anErrorMessage = 'An error'
 
-const trendingItemsBatchSize = 20
-
 describe(`when reducing the "${fetchCatalogRequest}" action`, () => {
   it('should return a state with the loading set', () => {
     const initialState = {
@@ -39,7 +37,7 @@ describe(`when reducing the "${fetchCatalogRequest}" action`, () => {
     }
 
     expect(
-      catalogItemReducer(initialState, fetchCatalogRequest(catalogFilters))
+      catalogReducer(initialState, fetchCatalogRequest(catalogFilters))
     ).toEqual({
       ...INITIAL_STATE,
       loading: loadingReducer(
@@ -59,7 +57,7 @@ describe(`when reducing the "${fetchCatalogFailure}" action`, () => {
     }
 
     expect(
-      catalogItemReducer(
+      catalogReducer(
         initialState,
         fetchCatalogFailure(anErrorMessage, catalogFilters)
       )
@@ -82,7 +80,7 @@ describe('when reducing the successful action of fetching catalog items', () => 
   }
 
   it('should return a state with the the loaded items and the loading state cleared', () => {
-    expect(catalogItemReducer(initialState, successAction)).toEqual({
+    expect(catalogReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
       data: { ...initialState.data, [catalogItem.id]: catalogItem }

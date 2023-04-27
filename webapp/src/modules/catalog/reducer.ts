@@ -29,7 +29,7 @@ type CatalogReducerAction =
   | FetchCatalogRequestAction
   | FetchCatalogSuccessAction
 
-export function catalogItemReducer(
+export function catalogReducer(
   state = INITIAL_STATE,
   action: CatalogReducerAction
 ): CatalogState {

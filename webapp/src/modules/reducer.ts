@@ -29,7 +29,7 @@ import { analyticsReducer as analytics } from './analytics/reducer'
 import { rentalReducer as rental } from './rental/reducer'
 import { eventReducer as event } from './event/reducer'
 import { contractReducer as contract } from './contract/reducer'
-import { catalogItemReducer as catalogItem } from './catalog/reducer'
+import { catalogReducer as catalogItem } from './catalog/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({

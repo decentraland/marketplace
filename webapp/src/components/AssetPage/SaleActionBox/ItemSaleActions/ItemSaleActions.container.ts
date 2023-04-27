@@ -7,7 +7,6 @@ import ItemSaleActions from './ItemSaleActions'
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
 
-  console.log('wallet', wallet)
   return {
     wallet
   }
