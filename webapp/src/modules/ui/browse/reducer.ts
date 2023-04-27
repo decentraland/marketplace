@@ -178,12 +178,32 @@ export function browseReducer(
     }
 
     case FETCH_CATALOG_SUCCESS: {
-      return {
-        ...state,
-        catalogIds: action.payload.catalogItems.map(
-          catalogItem => catalogItem.id
-        ),
-        count: action.payload.total
+      const view = action.payload.options.view
+      switch (view) {
+        case View.MARKET:
+        case View.CURRENT_ACCOUNT:
+        case View.ACCOUNT: {
+          return {
+            ...state,
+            view,
+            catalogIds: action.payload.catalogItems.map(
+              catalogItem => catalogItem.id
+            ),
+            count: action.payload.total
+          }
+        }
+        case View.LOAD_MORE: {
+          return {
+            ...state,
+            catalogIds: [
+              ...state.catalogIds,
+              ...action.payload.catalogItems.map(catalogItem => catalogItem.id)
+            ],
+            count: action.payload.total
+          }
+        }
+        default:
+          return state
       }
     }
 

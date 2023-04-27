@@ -22,12 +22,12 @@ function* handleFetchCatalogRequest(action: FetchCatalogRequestAction) {
       [catalogAPI, 'fetch'],
       filters
     )
-    yield put(fetchCatalogSuccess(data, total, filters))
+    yield put(fetchCatalogSuccess(data, total, action.payload))
   } catch (error) {
     yield put(
       fetchCatalogFailure(
         isErrorWithMessage(error) ? error.message : t('global.unknown_error'),
-        filters
+        action.payload
       )
     )
   }

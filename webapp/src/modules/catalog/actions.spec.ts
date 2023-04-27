@@ -14,7 +14,7 @@ const anErrorMessage = 'An error'
 
 describe('when creating the action to signal the start of the catalog request', () => {
   it('should return an object representing the action', () => {
-    expect(fetchCatalogRequest(catalogFilters)).toEqual({
+    expect(fetchCatalogRequest({ filters: catalogFilters })).toEqual({
       type: FETCH_CATALOG_REQUEST,
       meta: undefined,
       payload: { filters: catalogFilters }
@@ -27,20 +27,24 @@ describe('when creating the action to signal a success in the items request', ()
   const total = 1
 
   it('should return an object representing the action', () => {
-    expect(fetchCatalogSuccess(catalogItems, total, catalogFilters)).toEqual({
+    expect(
+      fetchCatalogSuccess(catalogItems, total, { filters: catalogFilters })
+    ).toEqual({
       type: FETCH_CATALOG_SUCCESS,
       meta: undefined,
-      payload: { catalogItems, total, options: catalogFilters }
+      payload: { catalogItems, total, options: { filters: catalogFilters } }
     })
   })
 })
 
 describe('when creating the action to signal a failure items request', () => {
   it('should return an object representing the action', () => {
-    expect(fetchCatalogFailure(anErrorMessage, catalogFilters)).toEqual({
+    expect(
+      fetchCatalogFailure(anErrorMessage, { filters: catalogFilters })
+    ).toEqual({
       type: FETCH_CATALOG_FAILURE,
       meta: undefined,
-      payload: { error: anErrorMessage, options: catalogFilters }
+      payload: { error: anErrorMessage, options: { filters: catalogFilters } }
     })
   })
 })
