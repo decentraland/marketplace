@@ -3,12 +3,15 @@ import { Profile } from 'decentraland-dapps/dist/containers'
 import { locations } from '../../modules/routing/locations'
 import { Props } from './LinkedProfile.types'
 
-export const LinkedProfile = (props: Props) => {
+export const LinkedProfile = <T extends React.ElementType>(props: Props<T>) => {
   const { address, className, browseOptions } = props
 
   return (
-    <Link className={className} to={locations.account(address, browseOptions)}>
-      <Profile {...props} />
-    </Link>
+    <Profile
+      {...props}
+      className={className}
+      as={Link}
+      to={locations.account(address, browseOptions)}
+    />
   )
 }

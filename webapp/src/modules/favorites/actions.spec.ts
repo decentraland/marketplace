@@ -29,7 +29,7 @@ import {
   UNPICK_ITEM_AS_FAVORITE_REQUEST,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS
 } from './actions'
-import { FavoritedItemIds } from './types'
+import { FavoritedItems } from './types'
 
 const itemBrowseOptions: ItemBrowseOptions = {
   view: View.LISTS,
@@ -45,8 +45,10 @@ const item = {
   network: Network.ETHEREUM
 } as Item
 
-const itemIds: FavoritedItemIds = [{ itemId: item.id }]
-const total = itemIds.length
+const favoritedItems: FavoritedItems = [
+  { itemId: item.id, createdAt: Date.now() }
+]
+const total = favoritedItems.length
 
 const anErrorMessage = 'An error'
 
@@ -168,11 +170,11 @@ describe('when creating the action to signal the start of the fetch favorited it
 
 describe('when creating the action to signal a successful fetch favorited items request', () => {
   it('should return an object representing the action', () => {
-    expect(fetchFavoritedItemsSuccess(itemIds, total)).toEqual({
+    expect(fetchFavoritedItemsSuccess(favoritedItems, total)).toEqual({
       type: FETCH_FAVORITED_ITEMS_SUCCESS,
       meta: undefined,
       payload: {
-        itemIds,
+        favoritedItems,
         total
       }
     })

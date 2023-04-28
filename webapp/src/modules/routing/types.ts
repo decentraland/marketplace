@@ -67,3 +67,30 @@ export type BrowseOptions = {
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
 }
+
+export enum PageName {
+  HOME,
+  SIGN_IN,
+  SETTINGS,
+  LANDS,
+  COLLECTION,
+  BROWSE,
+  CAMPAIGN,
+  ACCOUNT,
+  LISTS,
+  LIST,
+  ACCOUNTS,
+  NFT_DETAIL,
+  MANAGE_NFT,
+  ITEM_DETAIL,
+  PARCEL_DETAIL,
+  ESTATE_DETAIL,
+  BUY_NFT,
+  BUY_ITEM,
+  BUY_NFT_STATUS,
+  BUY_ITEM_STATUS,
+  CANCEL_NFT_SALE,
+  TRANSFER_NFT,
+  BID_NFT,
+  ACTIVITY
+}

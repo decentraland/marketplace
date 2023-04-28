@@ -143,7 +143,6 @@ export function AuthorizationModal({
     handleAuthorized
   ])
 
-  console.log({ loadingStep })
   useEffect(() => {
     const currentStepData = steps[currentStep]
     console.log({ currentStepData, loadingStep, currentStep })

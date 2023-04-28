@@ -1,6 +1,7 @@
 export type FavoritesData = {
   pickedByUser?: boolean
+  createdAt?: number
   count: number
 }
 
-export type FavoritedItemIds = { itemId: string }[]
+export type FavoritedItems = { itemId: string; createdAt: number }[]

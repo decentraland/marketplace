@@ -1,7 +1,7 @@
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ItemFilters } from '../item/types'
 import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from './api'
-import { FavoritedItemIds } from '../../../favorites/types'
+import { FavoritedItems } from '../../../favorites/types'
 
 let itemId: string
 let identity: AuthIdentity
@@ -27,7 +27,7 @@ describe('when getting the items picked in a list', () => {
   })
 
   describe('when the request does not receive query params', () => {
-    let data: { results: FavoritedItemIds; total: number }
+    let data: { results: FavoritedItems; total: number }
 
     beforeEach(() => {
       data = { results: [{ itemId: listId }], total: 1 }
@@ -42,7 +42,7 @@ describe('when getting the items picked in a list', () => {
   })
 
   describe('when the request is made with the first and skip query params', () => {
-    let data: { results: FavoritedItemIds; total: number }
+    let data: { results: FavoritedItems; total: number }
 
     beforeEach(() => {
       data = { results: [{ itemId: listId }], total: 1 }
