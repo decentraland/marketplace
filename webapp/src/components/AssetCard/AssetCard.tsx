@@ -3,7 +3,6 @@ import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
-import { formatWeiMANA } from '../../lib/mana'
 import {
   getAssetName,
   getAssetUrl,
