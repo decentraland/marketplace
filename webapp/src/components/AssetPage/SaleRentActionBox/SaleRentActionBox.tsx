@@ -26,7 +26,7 @@ import { builderUrl } from '../../../lib/environment'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizationStepStatus, AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { LinkedProfile } from '../../LinkedProfile'
@@ -408,5 +408,5 @@ const SaleRentActionBox = ({
 }
 
 export default memo(
-  withAuthorizedAction(SaleRentActionBox, AuthorizedAction.RENT, () => AuthorizationStepStatus.PENDING, () => '')
+  withAuthorizedAction(SaleRentActionBox, AuthorizedAction.RENT)
 )

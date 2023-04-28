@@ -25,8 +25,8 @@ export default function withAuthorizedAction<
 >(
   WrappedComponent: React.ComponentType<P>,
   action: AuthorizedAction,
-  getConfirmationStatus: (state: RootState) => AuthorizationStepStatus,
-  getConfirmationError: (state: RootState) => string | null
+  getConfirmationStatus?: (state: RootState) => AuthorizationStepStatus,
+  getConfirmationError?: (state: RootState) => string | null
 ): React.ComponentType<Omit<P, keyof WithAuthorizedActionProps>> {
   // TODO: Remove any type
   const WithAutorizedActionComponent = (props: MapStateProps & any) => {

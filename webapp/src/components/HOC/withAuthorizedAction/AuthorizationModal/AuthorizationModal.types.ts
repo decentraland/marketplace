@@ -48,8 +48,8 @@ export type Props = {
   error: string
   confirmationError: string | null
   network: Network
-  getConfirmationStatus: (state: RootState) => AuthorizationStepStatus
-  getConfirmationError: (state: RootState) => string | null
+  getConfirmationStatus?: (state: RootState) => AuthorizationStepStatus
+  getConfirmationError?: (state: RootState) => string | null
   getContract: (query: Partial<Contract>) => Contract | null
   onClose: () => void
   onAuthorized: () => void

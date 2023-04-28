@@ -21,7 +21,8 @@ import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
 import { AssetProviderPage } from '../../AssetProviderPage'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizationStepStatus, AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
 import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
@@ -219,5 +220,5 @@ const BuyNFTModal = (props: Props) => {
 }
 
 export default React.memo(
-  withAuthorizedAction(BuyNFTModal, AuthorizedAction.BUY, () => AuthorizationStepStatus.PENDING, () => null)
+  withAuthorizedAction(BuyNFTModal, AuthorizedAction.BUY, getBuyItemStatus, getError)
 )

@@ -15,6 +15,7 @@ import { getContract } from '../../../../modules/contract/selectors'
 import { Contract } from '../../../../modules/vendor/services'
 import { AuthorizationModal } from './AuthorizationModal'
 import {
+  AuthorizationStepStatus,
   MapDispatch,
   MapDispatchProps,
   MapStateProps,
@@ -37,8 +38,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       authorization,
       requiredAllowance
     ),
-    confirmationStatus: getConfirmationStatus(state),
-    confirmationError: getConfirmationError(state),
+    confirmationStatus: getConfirmationStatus ? getConfirmationStatus(state) : AuthorizationStepStatus.PENDING,
+    confirmationError: getConfirmationError ? getConfirmationError(state) : null,
     error: getError(state) || '',
     getContract: (query: Partial<Contract>) => getContract(state, query)
   }
