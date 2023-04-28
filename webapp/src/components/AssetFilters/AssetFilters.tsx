@@ -71,13 +71,13 @@ export const AssetFilters = ({
     [onBrowse]
   )
 
-  const handlePriceChange = useCallback(
-    (value: [string, string]) => {
-      const [minPrice, maxPrice] = value
-      onBrowse({ minPrice, maxPrice })
-    },
-    [onBrowse]
-  )
+  // const handlePriceChange = useCallback(
+  //   (value: [string, string]) => {
+  //     const [minPrice, maxPrice] = value
+  //     onBrowse({ minPrice, maxPrice })
+  //   },
+  //   [onBrowse]
+  // )
 
   const handleRangeFilterChange = useCallback(
     (

@@ -18,7 +18,7 @@ export type Props = {
   isPickedByUser: boolean
   count: number
   isLoading: boolean
-  onCounterClick: (item: Item) => ReturnType<typeof openModal>
+  onCounterClick: (item: Item | CatalogItem) => ReturnType<typeof openModal>
   onPick: typeof pickItemAsFavoriteRequest
   onUnpick: typeof unpickItemAsFavoriteRequest
 }
