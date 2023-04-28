@@ -22,6 +22,7 @@ function renderFavoritesCounter(props: Partial<FavoritesCounterProps> = {}) {
   return render(
     <FavoritesCounter
       count={0}
+      isLoading={false}
       isPickedByUser={false}
       item={{} as Item}
       onPick={jest.fn()}
@@ -173,6 +174,28 @@ describe('FavoritesCounter', () => {
         expect(onUnpick).toHaveBeenCalledWith(item)
       })
     })
+
+    describe('and the item picking or unpicking process is being loaded', () => {
+      let onUnpick: jest.Mock
+      let onPick: jest.Mock
+      beforeEach(() => {
+        onUnpick = jest.fn()
+        onPick = jest.fn()
+      })
+
+      it('should not start the unpick nor the pick mechanism', async () => {
+        const { getByTestId } = renderFavoritesCounter({
+          item,
+          isLoading: true,
+          isPickedByUser: true,
+          onUnpick,
+          onPick
+        })
+        await userEvent.click(getByTestId(FAVORITES_COUNTER_TEST_ID))
+        expect(onUnpick).not.toHaveBeenCalled()
+        expect(onPick).not.toHaveBeenCalled()
+      })
+    })
   })
 
   describe('when clicking the counter of an item', () => {
@@ -225,6 +248,31 @@ describe('FavoritesCounter', () => {
         })
         await userEvent.click(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID))
         expect(onCounterClick).toHaveBeenCalled()
+      })
+    })
+
+    describe('and the item picking or unpicking process is being loaded', () => {
+      it('should have the non clickable class', async () => {
+        const { getByTestId } = renderFavoritesCounter({
+          onCounterClick,
+          count: 0,
+          isCollapsed: true,
+          isLoading: true
+        })
+        expect(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID)).toHaveClass(
+          'nonClickable'
+        )
+      })
+
+      it('should not call the onCounterClick prop method', async () => {
+        const { getByTestId } = renderFavoritesCounter({
+          onCounterClick,
+          count: 0,
+          isCollapsed: true,
+          isLoading: true
+        })
+        await userEvent.click(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID))
+        expect(onCounterClick).not.toHaveBeenCalled()
       })
     })
   })
