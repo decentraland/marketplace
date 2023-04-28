@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import classNames from 'classnames'
 import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
@@ -20,26 +21,32 @@ const ListsPage = ({ wallet, isConnecting, onRedirect }: Props) => {
 
   useEffect(() => {
     if (!isConnecting && !wallet) {
-      onRedirect(locations.signIn(`${pathname}${search}`))
+      console.log(locations.signIn(`${pathname}${search}`))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnecting, wallet, onRedirect])
 
   return (
-    <>
+    <div className={styles.page}>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.MY_LISTS} />
       <Header className={styles.header} size="large">
         {/* TODO: use the name of the selected list */}
         {t('lists_page.default_title')}
       </Header>
-      <AssetBrowse
-        view={View.LISTS}
-        section={Section.LISTS}
-        vendor={VendorName.DECENTRALAND}
-      />
-      <Footer />
-    </>
+      <div className={classNames(wallet ? null : styles.flexContainer)}>
+        {wallet ? (
+          <AssetBrowse
+            view={View.LISTS}
+            section={Section.LISTS}
+            vendor={VendorName.DECENTRALAND}
+          />
+        ) : (
+          <div className={styles.emptyState}></div>
+        )}
+        <Footer className={styles.footer} />
+      </div>
+    </div>
   )
 }
 
