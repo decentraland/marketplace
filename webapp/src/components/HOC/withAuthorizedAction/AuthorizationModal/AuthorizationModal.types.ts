@@ -1,15 +1,19 @@
 import { Dispatch } from 'redux'
 import {
+  fetchAuthorizationsRequest,
+  FetchAuthorizationsRequestAction,
   grantTokenRequest,
   GrantTokenRequestAction,
   revokeTokenRequest,
   RevokeTokenRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
 import { BigNumber } from 'ethers'
 import { Network } from '@dcl/schemas'
 import { Contract } from '../../../../modules/vendor/services'
-
 
 // Action to perfom after authorization step is finished
 export enum AuthorizedAction {
@@ -23,6 +27,7 @@ export enum AuthorizedAction {
 }
 
 export enum AuthorizationStepStatus {
+  LOADING_INFO = 'loading_info',
   PENDING = 'pending',
   WAITING = 'waiting',
   PROCESSING = 'processing',
@@ -40,14 +45,25 @@ export type Props = {
   grantStatus: AuthorizationStepStatus
   error: string
   network: Network
-  getContract: (query: Partial<Contract>) => Contract | null,
+  getContract: (query: Partial<Contract>) => Contract | null
   onClose: () => void
   onAuthorized: () => void
   onRevoke: typeof revokeTokenRequest
   onGrant: typeof grantTokenRequest
+  onFetchAuthorizations: typeof fetchAuthorizationsRequest
 }
 
-export type MapDispatchProps = Pick<Props, 'onRevoke' | 'onGrant'>
-export type MapDispatch = Dispatch<RevokeTokenRequestAction | GrantTokenRequestAction>
+export type MapDispatchProps = Pick<
+  Props,
+  'onRevoke' | 'onGrant' | 'onFetchAuthorizations'
+>
+export type MapDispatch = Dispatch<
+  | RevokeTokenRequestAction
+  | GrantTokenRequestAction
+  | FetchAuthorizationsRequestAction
+>
 export type OwnProps = Pick<Props, 'authorization' | 'requiredAllowance'>
-export type MapStateProps = Pick<Props, 'revokeStatus' | 'grantStatus' | 'error' | 'getContract'>
+export type MapStateProps = Pick<
+  Props,
+  'revokeStatus' | 'grantStatus' | 'error' | 'getContract'
+>

@@ -9,6 +9,7 @@ import { Step } from './MultiStep/MultiStep.types'
 import { getStepMessage, getSteps } from './utils'
 
 const LOADING_STATUS = [
+  AuthorizationStepStatus.LOADING_INFO,
   AuthorizationStepStatus.PROCESSING,
   AuthorizationStepStatus.WAITING
 ]
@@ -27,22 +28,27 @@ export function AuthorizationModal({
   onClose,
   onRevoke,
   onGrant,
-  onAuthorized
+  onAuthorized,
+  onFetchAuthorizations
 }: Props) {
-
   const [currentStep, setCurrentStep] = useState(0)
+  const [loadingStep, setLoadingStep] = useState<number>()
 
-  const handleFinishStep = useCallback(() => {
-    setCurrentStep(currentStep + 1)
-  }, [currentStep, setCurrentStep])
+  console.log(loadingStep)
+
+  useEffect(() => {
+    onFetchAuthorizations([authorization])
+  }, [authorization, onFetchAuthorizations])
 
   const handleRevokeToken = useCallback(() => {
     onRevoke(authorization)
-  }, [authorization, onRevoke])
+    setLoadingStep(currentStep)
+  }, [authorization, currentStep, setLoadingStep, onRevoke])
 
   const handleGrantToken = useCallback(() => {
     onGrant(authorization)
-  }, [authorization, onGrant])
+    setLoadingStep(currentStep)
+  }, [authorization, currentStep, setLoadingStep, onGrant])
 
   const handleAuthorized = useCallback(() => {
     console.log(onAuthorized())
@@ -59,7 +65,7 @@ export function AuthorizationModal({
       requiredAllowance,
       currentAllowance,
       contract: authorizedContract
-  })
+    })
     return [
       ...authSteps,
       {
@@ -68,7 +74,8 @@ export function AuthorizationModal({
         }),
         action: t('mana_authorization_modal.confirm_transaction.action'),
         onActionClicked: handleAuthorized,
-        testId: "confirm-action-step"
+        testId: 'confirm-action-step',
+        status: AuthorizationStepStatus.PENDING
       }
     ].map((step, index) => {
       if (
@@ -82,7 +89,7 @@ export function AuthorizationModal({
               ? undefined
               : t('mana_authorization_modal.set_cap.action'),
           message: getStepMessage(index, grantStatus, error, currentStep),
-          isLoading: LOADING_STATUS.includes(grantStatus),
+          isLoading: LOADING_STATUS.includes(grantStatus) || index === loadingStep,
           onActionClicked: handleGrantToken,
           status: grantStatus
         }
@@ -97,12 +104,12 @@ export function AuthorizationModal({
               ? undefined
               : t('mana_authorization_modal.revoke_cap.action'),
           message: getStepMessage(index, revokeStatus, error, currentStep),
-          isLoading: LOADING_STATUS.includes(revokeStatus),
+          isLoading: LOADING_STATUS.includes(revokeStatus) || index === loadingStep,
           onActionClicked: handleRevokeToken,
           status: revokeStatus
         }
       }
-      return step as Step
+      return step as Step & { status: AuthorizationStepStatus }
     })
   }, [
     authorizationType,
@@ -113,8 +120,9 @@ export function AuthorizationModal({
     action,
     grantStatus,
     revokeStatus,
-    currentStep,
+    loadingStep,
     error,
+    currentStep,
     handleGrantToken,
     handleRevokeToken,
     handleAuthorized
@@ -122,13 +130,17 @@ export function AuthorizationModal({
 
   useEffect(() => {
     const currentStepData = steps[currentStep]
-    if (
-      'status' in currentStepData &&
-      currentStepData.status === AuthorizationStepStatus.DONE
-    ) {
-      handleFinishStep()
+    console.log(currentStep, loadingStep)
+    if (currentStep === loadingStep) {
+      if (currentStepData.status === AuthorizationStepStatus.DONE) {
+        setCurrentStep(currentStep + 1)
+      }
+
+      if ([AuthorizationStepStatus.DONE, AuthorizationStepStatus.ERROR].includes(currentStepData.status)) {
+        setLoadingStep(undefined)
+      }
     }
-  }, [revokeStatus, grantStatus, steps, currentStep, handleFinishStep])
+  }, [loadingStep, revokeStatus, grantStatus, steps, currentStep])
 
   return (
     <Modal

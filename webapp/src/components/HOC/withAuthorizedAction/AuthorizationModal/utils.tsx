@@ -24,14 +24,22 @@ import { RootState } from '../../../../modules/reducer'
 import { AuthorizationStepStatus } from './AuthorizationModal.types'
 import styles from './AuthorizationModal.module.css'
 import { Contract } from '../../../../modules/vendor/services'
+import {
+  getData as getAuthorizations,
+  getLoading as getLoadingAuthorizations
+} from 'decentraland-dapps/dist/modules/authorization/selectors'
+import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
 
 export function getStepStatus(
   state: RootState,
   actionType: string,
   authorization: Authorization,
-  authorizations: Authorization[],
   allowance?: BigNumber
 ): AuthorizationStepStatus {
+  if (isLoadingType(getLoadingAuthorizations(state), FETCH_AUTHORIZATIONS_REQUEST)) {
+    return AuthorizationStepStatus.LOADING_INFO
+  }
+
   if (isLoadingType(getLoading(state), actionType)) {
     return AuthorizationStepStatus.WAITING
   }
@@ -57,22 +65,26 @@ export function getStepStatus(
     return AuthorizationStepStatus.ERROR
   }
 
-  const isGrantDone = !allowance
-    ? hasAuthorization(authorizations, authorization)
-    : hasAuthorizationAndEnoughAllowance(
+  let isDone = false
+  const authorizations = getAuthorizations(state)
+
+  if (authorization.type === AuthorizationType.ALLOWANCE) {
+    // If allowance is undefined, then the action is revoke
+    if (!allowance) {
+      isDone = !hasAuthorization(authorizations, authorization)
+    } else {
+      // grant action
+      isDone = hasAuthorizationAndEnoughAllowance(
         authorizations,
         authorization,
         allowance.toString()
       )
+    }
+  } else {
+    isDone = hasAuthorization(authorizations, authorization)
+  }
 
-  const isRevokeDone = !hasAuthorization(authorizations, authorization)
-
-  if (
-    (authorization.type === AuthorizationType.ALLOWANCE &&
-      !allowance &&
-      isRevokeDone) ||
-    isGrantDone
-  ) {
+  if (isDone) {
     return AuthorizationStepStatus.DONE
   }
 
