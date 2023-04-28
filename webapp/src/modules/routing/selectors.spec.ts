@@ -8,7 +8,7 @@ import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
-import { Sections, SortBy } from './types'
+import { PageName, Sections, SortBy } from './types'
 import { locations } from './locations'
 import {
   getAssetType,
@@ -20,6 +20,7 @@ import {
   getMinPrice,
   getOnlyOnRent,
   getOnlySmart,
+  getPageName,
   getSection,
   getSortBy,
   getViewAsGuest,
@@ -530,6 +531,53 @@ describe('when getting if it should filter for guests', () => {
 
     it('should return undefined', () => {
       expect(getViewAsGuest.resultFunc(url)).toBe(undefined)
+    })
+  })
+})
+
+describe('when getting if the page name', () => {
+  describe('and the page is not one of the known ones', () => {
+    it('should throw an error', () => {
+      expect(() => getPageName.resultFunc('/unknown')).toThrowError(
+        'Unknown page'
+      )
+    })
+  })
+
+  describe.each([
+    ['/', PageName.HOME],
+    [locations.signIn(), PageName.SIGN_IN],
+    [locations.settings(), PageName.SETTINGS],
+    [locations.lands(), PageName.LANDS],
+    [locations.collection('anAddress'), PageName.COLLECTION],
+    [locations.browse(), PageName.BROWSE],
+    [locations.campaign(), PageName.CAMPAIGN],
+    [locations.currentAccount(), PageName.ACCOUNT],
+    [locations.list('aListId'), PageName.LIST],
+    [locations.lists(), PageName.LISTS],
+    [locations.account('anAddress'), PageName.ACCOUNTS],
+    [locations.nft('anAddress', 'anId'), PageName.NFT_DETAIL],
+    [locations.manage('anAddress', 'anId'), PageName.MANAGE_NFT],
+    [locations.item('anAddress', 'anId'), PageName.ITEM_DETAIL],
+    [locations.parcel('x', 'y'), PageName.PARCEL_DETAIL],
+    [locations.estate('anId'), PageName.ESTATE_DETAIL],
+    [locations.buy(AssetType.NFT, 'anAddress', 'anId'), PageName.BUY_NFT],
+    [locations.buy(AssetType.ITEM, 'anAddress', 'anId'), PageName.BUY_ITEM],
+    [
+      locations.buyStatusPage(AssetType.NFT, 'anAddress', 'anId'),
+      PageName.BUY_NFT_STATUS
+    ],
+    [
+      locations.buyStatusPage(AssetType.ITEM, 'anAddress', 'anId'),
+      PageName.BUY_ITEM_STATUS
+    ],
+    [locations.cancel('anAddress', 'anId'), PageName.CANCEL_NFT_SALE],
+    [locations.transfer('anAddress', 'anId'), PageName.TRANSFER_NFT],
+    [locations.bid('anAddress', 'anId'), PageName.BID_NFT],
+    [locations.activity(), PageName.ACTIVITY]
+  ])('and the current path is "%s"', (pathname, expectedName) => {
+    it(`should return the page name ${expectedName}`, () => {
+      expect(getPageName.resultFunc(pathname)).toBe(expectedName)
     })
   })
 })

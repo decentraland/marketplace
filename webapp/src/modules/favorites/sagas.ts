@@ -1,10 +1,10 @@
+import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   ConnectWalletSuccessAction,
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import {
@@ -39,7 +39,7 @@ import {
   UNPICK_ITEM_AS_FAVORITE_REQUEST
 } from './actions'
 import { getListId } from './selectors'
-import { FavoritedItemIds } from './types'
+import { FavoritedItems } from './types'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
@@ -141,7 +141,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       const {
         results,
         total
-      }: { results: FavoritedItemIds; total: number } = yield call(
+      }: { results: FavoritedItems; total: number } = yield call(
         [favoritesAPI, 'getPicksByList'],
         listId,
         filters

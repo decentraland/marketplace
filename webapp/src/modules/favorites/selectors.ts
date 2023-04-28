@@ -1,9 +1,11 @@
 import { createMatchSelector } from 'connected-react-router'
 import { createSelector } from 'reselect'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
 import { FavoritesData } from './types'
 import {
+  FETCH_FAVORITED_ITEMS_REQUEST,
   PICK_ITEM_AS_FAVORITE_REQUEST,
   UNPICK_ITEM_AS_FAVORITE_REQUEST,
   UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST
@@ -14,6 +16,9 @@ export const getData = (state: RootState) => getState(state).data
 export const getFavoritedItems = (state: RootState) => getData(state).items
 export const getLoading = (state: RootState) => getState(state).loading
 export const getError = (state: RootState) => getState(state).error
+
+export const isLoadingFavoritedItems = (state: RootState): boolean =>
+  isLoadingType(getLoading(state), FETCH_FAVORITED_ITEMS_REQUEST)
 
 export const getFavoritesDataByItemId = (
   state: RootState,

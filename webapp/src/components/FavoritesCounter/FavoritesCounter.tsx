@@ -34,27 +34,28 @@ const FavoritesCounter = (props: Props) => {
       <span
         role="button"
         onClick={count > 0 && isCollapsed ? handleOnCounterClick : undefined}
-        className={classNames(
-          styles.counter,
-          isCollapsed && count === 0 && styles.nonClickable
-        )}
+        className={classNames(styles.counter, {
+          [styles.nonClickable]: isCollapsed && (count === 0 || isLoading)
+        })}
         aria-label="counter"
         data-testid="favorites-counter-number"
       >
         {formatter.format(count)}
       </span>
     ),
-    [count, isCollapsed, handleOnCounterClick]
+    [isLoading, count, isCollapsed, handleOnCounterClick]
   )
 
   const onClick = useCallback(
     (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
       e.preventDefault()
       e.stopPropagation()
-      const handler = isPickedByUser ? onUnpick : onPick
-      return handler(item)
+      if (!isLoading) {
+        const handler = isPickedByUser ? onUnpick : onPick
+        return handler(item)
+      }
     },
-    [isPickedByUser, item, onPick, onUnpick]
+    [isLoading, isPickedByUser, item, onPick, onUnpick]
   )
 
   return (

@@ -1,4 +1,4 @@
-import { call, select, take } from 'redux-saga/effects'
+import { select, take } from 'redux-saga/effects'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
@@ -34,7 +34,7 @@ import {
   fetchItemsRequest,
   fetchItemsSuccess
 } from '../item/actions'
-import { FavoritedItemIds } from './types'
+import { FavoritedItems } from './types'
 
 let item: Item
 let address: string
@@ -171,7 +171,8 @@ describe('when handling the request for unpicking a favorite item', () => {
           [
             matchers.call.fn(FavoritesAPI.prototype.unpickItemAsFavorite),
             undefined
-          ]
+          ],
+          [matchers.put(unpickItemAsFavoriteSuccess(item)), undefined]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.unpickItemAsFavorite,
@@ -257,12 +258,12 @@ describe('when handling the request for fetching favorited items', () => {
   })
 
   describe('and the call to the favorites api succeeds', () => {
-    let favoritedItemIds: FavoritedItemIds
+    let favoritedItemIds: FavoritedItems
     let total: number
 
     describe("and there's more than favorited item", () => {
       beforeEach(() => {
-        favoritedItemIds = [{ itemId: item.id }]
+        favoritedItemIds = [{ itemId: item.id, createdAt: Date.now() }]
         total = 1
       })
 
