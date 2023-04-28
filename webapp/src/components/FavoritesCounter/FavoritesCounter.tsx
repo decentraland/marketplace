@@ -51,10 +51,12 @@ const FavoritesCounter = (props: Props) => {
     (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
       e.preventDefault()
       e.stopPropagation()
-      const handler = isPickedByUser ? onUnpick : onPick
-      return handler(item)
+      if (!isLoading) {
+        const handler = isPickedByUser ? onUnpick : onPick
+        return handler(item)
+      }
     },
-    [isPickedByUser, item, onPick, onUnpick]
+    [isLoading, isPickedByUser, item, onPick, onUnpick]
   )
 
   return (
@@ -75,7 +77,7 @@ const FavoritesCounter = (props: Props) => {
       {isCollapsed ? counter : null}
       <div
         className={styles.bubble}
-        onClick={!isLoading ? onClick : undefined}
+        onClick={onClick}
         data-testid="favorites-counter-bubble"
       >
         <span className={styles.iconContainer}>
