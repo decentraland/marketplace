@@ -3,6 +3,9 @@ import classNames from 'classnames'
 import { Back, Container } from 'decentraland-ui'
 import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { isNFT, mapAsset } from '../../../modules/asset/utils'
+import { AssetType } from '../../../modules/asset/types'
+import { locations } from '../../../modules/routing/locations'
+import { Sections } from '../../../modules/routing/types'
 import { Box } from '../../AssetBrowse/Box'
 // TODO: make it importable from the root directory as AssetDetails or AssetDetailsBox
 import { DetailsBox } from '../../DetailsBox'
@@ -11,9 +14,6 @@ import { PageHeader } from '../../PageHeader'
 import Title from '../Title'
 import { Props } from './BaseDetail.types'
 import './BaseDetail.css'
-import { locations } from '../../../modules/routing/locations'
-import { Sections } from '../../../modules/routing/types'
-import { AssetType } from '../../../modules/asset/types'
 
 const BaseDetail = ({
   asset,
@@ -30,7 +30,6 @@ const BaseDetail = ({
   onBack
 }: Props) => {
   const isMobile = useMobileMediaQuery()
-  const type: AssetType = isNFT(asset) ? AssetType.NFT : AssetType.ITEM
 
   return (
     <div className={classNames('BaseDetail', className)}>
@@ -45,43 +44,43 @@ const BaseDetail = ({
                 {
                   wearable: () =>
                     locations.browse({
-                      assetType: type,
+                      assetType: AssetType.ITEM,
                       section: Sections.decentraland.WEARABLES
                     }),
                   emote: () =>
                     locations.browse({
-                      assetType: type,
+                      assetType: AssetType.ITEM,
                       section: Sections.decentraland.EMOTES
                     })
                 },
                 {
                   ens: () =>
                     locations.browse({
-                      assetType: type,
+                      assetType: AssetType.NFT,
                       section: Sections.decentraland.ENS
                     }),
                   estate: () =>
                     locations.lands({
-                      assetType: type,
+                      assetType: AssetType.NFT,
                       section: Sections.decentraland.ESTATES,
                       isMap: false,
                       isFullscreen: false
                     }),
                   parcel: () =>
                     locations.lands({
-                      assetType: type,
+                      assetType: AssetType.NFT,
                       section: Sections.decentraland.PARCELS,
                       isMap: false,
                       isFullscreen: false
                     }),
                   wearable: () =>
                     locations.browse({
-                      assetType: type,
+                      assetType: AssetType.NFT,
                       section: Sections.decentraland.WEARABLES
                     }),
                   emote: () =>
                     locations.browse({
-                      assetType: type,
+                      assetType: AssetType.NFT,
                       section: Sections.decentraland.EMOTES
                     })
                 },
