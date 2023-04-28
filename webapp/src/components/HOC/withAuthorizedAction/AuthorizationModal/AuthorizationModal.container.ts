@@ -23,7 +23,7 @@ import {
 import { getStepStatus } from './utils'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const { authorization, requiredAllowance } = ownProps
+  const { authorization, requiredAllowance, getConfirmationStatus, getConfirmationError } = ownProps
   return {
     revokeStatus: getStepStatus(
       state,
@@ -37,6 +37,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       authorization,
       requiredAllowance
     ),
+    confirmationStatus: getConfirmationStatus(state),
+    confirmationError: getConfirmationError(state),
     error: getError(state) || '',
     getContract: (query: Partial<Contract>) => getContract(state, query)
   }

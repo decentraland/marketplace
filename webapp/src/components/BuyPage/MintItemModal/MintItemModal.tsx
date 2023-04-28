@@ -21,7 +21,7 @@ import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
 import { AssetProviderPage } from '../../AssetProviderPage'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { AuthorizationStepStatus, AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
@@ -222,5 +222,5 @@ const MintItemModal = (props: Props) => {
 }
 
 export default React.memo(
-  withAuthorizedAction(MintItemModal, AuthorizedAction.MINT)
+  withAuthorizedAction(MintItemModal, AuthorizedAction.MINT, () => AuthorizationStepStatus.PENDING, () => null)
 )

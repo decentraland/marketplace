@@ -94,7 +94,7 @@ export function getStepStatus(
 export function getStepMessage(
   stepIndex: number,
   stepStatus: AuthorizationStepStatus,
-  error: string,
+  error: string | null,
   currentStep: number
 ) {
   if (stepIndex > currentStep) {
