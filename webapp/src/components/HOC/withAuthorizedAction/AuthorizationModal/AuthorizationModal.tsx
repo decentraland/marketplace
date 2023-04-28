@@ -34,8 +34,6 @@ export function AuthorizationModal({
   const [currentStep, setCurrentStep] = useState(0)
   const [loadingStep, setLoadingStep] = useState<number>()
 
-  console.log(loadingStep)
-
   useEffect(() => {
     onFetchAuthorizations([authorization])
   }, [authorization, onFetchAuthorizations])
@@ -130,7 +128,6 @@ export function AuthorizationModal({
 
   useEffect(() => {
     const currentStepData = steps[currentStep]
-    console.log(currentStep, loadingStep)
     if (currentStep === loadingStep) {
       if (currentStepData.status === AuthorizationStepStatus.DONE) {
         setCurrentStep(currentStep + 1)

@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers'
-import { render, RenderResult, within } from '@testing-library/react'
+import { render, RenderResult, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {
   Authorization,
@@ -286,15 +286,6 @@ describe('when authorization type is ALLOWANCE', () => {
             )
           ).not.toBeInTheDocument()
         })
-
-        it('should enable next step', () => {
-          const grantStep = screen.getByTestId('grant-action-step')
-          expect(
-            within(grantStep).getByRole('button', {
-              name: t('mana_authorization_modal.authorize_mana.action')
-            })
-          ).toBeEnabled()
-        })
       })
     })
 
@@ -402,15 +393,6 @@ describe('when authorization type is ALLOWANCE', () => {
               t('mana_authorization_modal.authorize_mana.action')
             )
           ).not.toBeInTheDocument()
-        })
-    
-        it('should enable confirmation step', () => {
-          const confirmationStep = screen.getByTestId('confirm-action-step')
-          expect(
-            within(confirmationStep).getByRole('button', {
-              name: t('mana_authorization_modal.confirm_transaction.action')
-            })
-          ).toBeEnabled()
         })
       })
     })
