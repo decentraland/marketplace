@@ -1,5 +1,6 @@
 import React from 'react'
 import { Page, Section, Column } from 'decentraland-ui'
+import { mapAsset } from '../../modules/asset/utils'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
@@ -13,7 +14,6 @@ import { WearableDetail } from './WearableDetail'
 import { ENSDetail } from './ENSDetail'
 import { EmoteDetail } from './EmoteDetail'
 import './AssetPage.css'
-import { mapAsset } from '../../modules/asset/utils'
 
 const AssetPage = ({ type }: Props) => {
   return (

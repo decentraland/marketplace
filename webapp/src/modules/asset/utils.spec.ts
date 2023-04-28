@@ -7,8 +7,8 @@ import {
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
-import { Asset, AssetType } from './types'
 import { getAssetUrl, isOwnedBy, mapAsset } from './utils'
+import { Asset } from './types'
 
 let asset: Asset
 let wallet: Wallet
