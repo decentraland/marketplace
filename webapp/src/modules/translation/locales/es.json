@@ -1137,11 +1137,15 @@
     "waiting_confirmation": "Autorización de procesamiento",
     "done": "Hecho",
     "title": "Completa tu {action}",
-    "authorize": {
+    "authorize_mana": {
       "title": "Primero, autorice el contrato <contract></contract>  para operar MANA en su nombre en Decentraland. ",
       "description": "Tenga en cuenta que algunas billeteras requieren establecer un límite de gasto de MANA personalizado. Ingrese el precio del artículo {price} MANA o una cantidad más alta con la que se sienta cómodo para gastar ahora o más tarde. Puede cambiar el límite en cualquier momento.",
       "action": "Autorizar",
       "message": "Recuerde establecer un límite igual al precio del artículo {price} MANA o superior."
+    },
+    "authorize_nft": {
+      "title": "Primero, autorice el contrato <Cract> </Contract> para operar NFT en su nombre en Decentraland",
+      "action": "Autorizar"
     },
     "confirm_transaction": {
       "title": "Confirmar la transacción a {action} el elemento",
@@ -1159,33 +1163,31 @@
     },
     "mint": {
       "title_action": "compra",
-      "contract": "Collection Store",
       "action": "comprar"
     },
     "buy": {
       "title_action": "compra",
-      "contract": "Marketplace",
       "action": "comprar"
     },
     "bid": {
       "title_action": "oferta",
-      "contract": "Bids",
       "action": "oferta"
     },
     "rent": {
       "title_action": "alquiler",
-      "contract": "Rentals",
       "action": "alquilar"
     },
     "claim_name": {
       "title_action": "compra",
-      "contract": "DCLController",
       "action": "afirmar"
     },
     "swap_mana": {
       "title_action": "intercambio",
-      "contract": "ERC20PredicateProxy",
       "action": "intercambio"
+    },
+    "sell": {
+      "title_action": "Lista para la venta",
+      "action": "Lista para la venta"
     }
   },
   "claim_your_own_name": {

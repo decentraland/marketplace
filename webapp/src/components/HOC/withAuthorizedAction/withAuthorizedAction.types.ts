@@ -4,8 +4,8 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import { Contract } from '../../../modules/vendor/services'
 import { ContractName } from 'decentraland-transactions'
+import { Contract } from '../../../modules/vendor/services'
 
 type AuthorizeBaseOptions = {
   /** callback to run when authorization process is completed */

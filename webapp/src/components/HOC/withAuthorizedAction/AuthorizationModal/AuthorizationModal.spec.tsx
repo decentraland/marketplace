@@ -1,12 +1,12 @@
-import { Network } from '@dcl/schemas'
+import { BigNumber } from 'ethers'
 import { render, RenderResult, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
+import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { BigNumber } from 'ethers'
 import { AuthorizationModal } from './AuthorizationModal'
 import {
   AuthorizationStepStatus,
@@ -30,6 +30,7 @@ function renderAuthorizationModal(props: Partial<Props>) {
       onClose={jest.fn()}
       onRevoke={jest.fn()}
       onGrant={jest.fn()}
+      onFetchAuthorizations={jest.fn()}
       onAuthorized={jest.fn()}
       getContract={jest.fn()}
       error={''}

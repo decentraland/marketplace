@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux'
+import { BigNumber } from 'ethers'
 import {
   fetchAuthorizationsRequest,
   FetchAuthorizationsRequestAction,
@@ -11,7 +12,6 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-import { BigNumber } from 'ethers'
 import { Network } from '@dcl/schemas'
 import { Contract } from '../../../../modules/vendor/services'
 

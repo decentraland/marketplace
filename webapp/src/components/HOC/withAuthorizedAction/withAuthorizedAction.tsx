@@ -5,7 +5,9 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { RootState } from '../../../modules/reducer'
+import { getWallet } from '../../../modules/wallet/selectors'
 import { AuthorizationModal, AuthorizedAction } from './AuthorizationModal'
 import {
   WithAuthorizedActionProps,
@@ -13,8 +15,6 @@ import {
   AuthorizeActionOptions
 } from './withAuthorizedAction.types'
 import { getERC20ContractInstance, getERC721ContractInstance } from './utils'
-import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
-import { getWallet } from '../../../modules/wallet/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state)

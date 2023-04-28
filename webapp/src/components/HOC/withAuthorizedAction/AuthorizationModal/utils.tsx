@@ -19,16 +19,16 @@ import { getType } from 'decentraland-dapps/dist/modules/loading/utils'
 import { getPendingTransactions } from 'decentraland-dapps/dist/modules/transaction/selectors'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Network } from '@dcl/schemas'
-import { RootState } from '../../../../modules/reducer'
-import { AuthorizationStepStatus } from './AuthorizationModal.types'
-import styles from './AuthorizationModal.module.css'
-import { Contract } from '../../../../modules/vendor/services'
 import {
   getData as getAuthorizations,
   getLoading as getLoadingAuthorizations
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
+import { Network } from '@dcl/schemas'
+import { RootState } from '../../../../modules/reducer'
+import { Contract } from '../../../../modules/vendor/services'
+import { AuthorizationStepStatus } from './AuthorizationModal.types'
+import styles from './AuthorizationModal.module.css'
 
 export function getStepStatus(
   state: RootState,

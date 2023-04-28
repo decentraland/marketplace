@@ -1,5 +1,4 @@
 import React, { memo, useCallback, useMemo, useState } from 'react'
-import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
@@ -9,6 +8,7 @@ import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { NFTCategory } from '@dcl/schemas'
 import { formatWeiMANA } from '../../../lib/mana'
 import {
   canBeClaimed,

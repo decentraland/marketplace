@@ -1,7 +1,7 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AuthorizationAction } from 'decentraland-dapps/dist/modules/authorization/types'
 import { Button, Modal } from 'decentraland-ui'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import MultiStep from './MultiStep/MultiStep'
 import { AuthorizationStepStatus, Props } from './AuthorizationModal.types'
 import styles from './AuthorizationModal.module.css'

@@ -11,6 +11,8 @@ import {
   getError
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { RootState } from '../../../../modules/reducer'
+import { getContract } from '../../../../modules/contract/selectors'
+import { Contract } from '../../../../modules/vendor/services'
 import { AuthorizationModal } from './AuthorizationModal'
 import {
   MapDispatch,
@@ -19,8 +21,6 @@ import {
   OwnProps
 } from './AuthorizationModal.types'
 import { getStepStatus } from './utils'
-import { getContract } from '../../../../modules/contract/selectors'
-import { Contract } from '../../../../modules/vendor/services'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { authorization, requiredAllowance } = ownProps
