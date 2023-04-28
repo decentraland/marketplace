@@ -34,10 +34,9 @@ const FavoritesCounter = (props: Props) => {
       <span
         role="button"
         onClick={count > 0 && isCollapsed ? handleOnCounterClick : undefined}
-        className={classNames(
-          styles.counter,
-          isCollapsed && count === 0 && styles.nonClickable && isLoading
-        )}
+        className={classNames(styles.counter, {
+          [styles.nonClickable]: isCollapsed && (count === 0 || isLoading)
+        })}
         aria-label="counter"
         data-testid="favorites-counter-number"
       >
