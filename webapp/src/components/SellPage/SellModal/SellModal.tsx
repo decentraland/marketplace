@@ -9,6 +9,7 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Header, Form, Field, Button } from 'decentraland-ui'
@@ -21,12 +22,11 @@ import {
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { getContractNames } from '../../../modules/vendor'
+import { AuthorizationModal } from '../../AuthorizationModal'
 import { AssetAction } from '../../AssetAction'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
-import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { Props } from './SellModal.types'
 import { showPriceBelowMarketValueWarning } from './utils'
 
@@ -35,12 +35,12 @@ const SellModal = (props: Props) => {
     nft,
     order,
     wallet,
+    authorizations,
     isLoading,
     isCreatingOrder,
     getContract,
     onGoBack,
-    onCreateOrder,
-    onAuthorizedAction
+    onCreateOrder
   } = props
 
   const isUpdate = order !== null
@@ -54,6 +54,8 @@ const SellModal = (props: Props) => {
       : getDefaultExpirationDate()
   )
   const [showConfirm, setShowConfirm] = useState(false)
+
+  const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   if (!wallet) {
     return null
@@ -92,10 +94,15 @@ const SellModal = (props: Props) => {
     )
 
   const handleSubmit = () => {
-    // TODO: Check authorization CAP in this case
-    onAuthorizedAction(authorization, '0', handleCreateOrder)
-    setShowConfirm(false)
+    if (hasAuthorization(authorizations, authorization)) {
+      handleCreateOrder()
+    } else {
+      setShowAuthorizationModal(true)
+      setShowConfirm(false)
+    }
   }
+
+  const handleClose = () => setShowAuthorizationModal(false)
 
   const { orderService } = VendorFactory.build(nft.vendor)
 
@@ -197,8 +204,15 @@ const SellModal = (props: Props) => {
         loading={isCreatingOrder}
         disabled={isCreatingOrder}
       />
+      <AuthorizationModal
+        open={showAuthorizationModal}
+        authorization={authorization}
+        isLoading={isCreatingOrder}
+        onProceed={handleCreateOrder}
+        onCancel={handleClose}
+      />
     </AssetAction>
   )
 }
 
-export default React.memo(withAuthorizedAction(SellModal, AuthorizationAction.SELL))
+export default React.memo(SellModal)

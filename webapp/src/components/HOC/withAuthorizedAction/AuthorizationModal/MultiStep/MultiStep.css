@@ -62,7 +62,7 @@
   opacity: 1 !important; /** This is to override opacity: 0.45!important for buttons. The opacity will be given by upper component **/
 }
 
-.ui-multi-step .loader {
+.ui-multi-step .step-message .ui.loader {
   position: relative;
   top: 12px;
   left: 10px;
@@ -79,4 +79,5 @@
   height: 44px;
   align-items: center;
   margin-top: 10px;
+  position: relative;
 }
