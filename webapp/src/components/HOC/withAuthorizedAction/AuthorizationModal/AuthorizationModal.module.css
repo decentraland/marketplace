@@ -27,3 +27,15 @@
   width: 16px;
   height: 16px;
 }
+
+.error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.error::before {
+  content: url(../../../../images/simple_close.svg);
+  width: 16px;
+  height: 16px;
+}

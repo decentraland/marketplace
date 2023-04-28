@@ -1,71 +1,134 @@
 import { connect } from 'react-redux'
-import React, { useCallback, useState } from 'react'
-import { ethers } from 'ethers'
-import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
-import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
+import React, { ComponentProps, useCallback, useState } from 'react'
+import { BigNumber, ethers } from 'ethers'
 import {
-  hasAuthorization,
-  hasAuthorizationAndEnoughAllowance
-} from 'decentraland-dapps/dist/modules/authorization/utils'
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { RootState } from '../../../modules/reducer'
+import { getWallet } from '../../../modules/wallet/selectors'
+import { AuthorizationModal, AuthorizedAction } from './AuthorizationModal'
 import {
-  AuthorizationAction,
-  AuthorizationModal,
-  Props as AuthorizationModalProps
-} from './AuthorizationModal'
-import { WithAuthorizedActionProps, MapStateProps } from './withAuthorizedAction.types'
+  WithAuthorizedActionProps,
+  MapStateProps,
+  AuthorizeActionOptions
+} from './withAuthorizedAction.types'
+import { getERC20ContractInstance, getERC721ContractInstance } from './utils'
 
 const mapState = (state: RootState): MapStateProps => ({
-  authorizations: getAuthorizations(state)
+  wallet: getWallet(state)
 })
 
-export default function withAuthorizedAction<P extends WithAuthorizedActionProps>(
+export default function withAuthorizedAction<
+  P extends WithAuthorizedActionProps
+>(
   WrappedComponent: React.ComponentType<P>,
-  action: AuthorizationAction
+  action: AuthorizedAction
 ): React.ComponentType<Omit<P, keyof WithAuthorizedActionProps>> {
-
-
   // TODO: Remove any type
   const WithAutorizedActionComponent = (props: MapStateProps & any) => {
     const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
     const [authModalData, setAuthModalData] = useState<
-      Omit<AuthorizationModalProps, 'onClose'>
+      Omit<ComponentProps<typeof AuthorizationModal>, 'onClose'>
     >()
+    const [isLoadingAuthorization, setIsLoadingAuthorization] = useState(false)
+    const { wallet } = props
 
-    const handleAuthorizedAction = (
-      authorization: Authorization,
-      requiredAllowanceInWei: string,
-      onAuthorized: () => void
+    const handleAuthorizedAction = async (
+      authorizeOptions: AuthorizeActionOptions
     ) => {
-      const { authorizations } = props
-  
-      const hasNeededAllowance = hasAuthorizationAndEnoughAllowance(
-        authorizations,
-        authorization,
-        requiredAllowanceInWei
-      )
-    
-      if (hasNeededAllowance || !requiredAllowanceInWei) {
-        onAuthorized()
+      if (!wallet) {
         return
       }
 
-      const hasNeededAuthorization = hasAuthorization(
-        authorizations,
-        authorization
-      )
+      setIsLoadingAuthorization(true)
 
-      setAuthModalData({
-        authorization,
-        requiredAllowance: ethers.utils.formatEther(requiredAllowanceInWei),
-        action,
-        shouldAuthorize: !hasNeededAuthorization,
-        shouldUpdateAllowance: hasNeededAuthorization && !hasNeededAllowance
-      })
-      setShowAuthorizationModal(true)
+      const {
+        authorizationType,
+        targetContract,
+        authorizedAddress,
+        targetContractName,
+        onAuthorized
+      } = authorizeOptions
+
+      const networkProvider = await getNetworkProvider(targetContract.chainId)
+      const provider = new ethers.providers.Web3Provider(networkProvider)
+
+      const authorization: Authorization = {
+        type: authorizationType,
+        address: wallet.address,
+        authorizedAddress,
+        contractAddress: targetContract.address,
+        chainId: targetContract.chainId,
+        contractName: targetContractName
+      }
+
+      try {
+        if (authorizationType === AuthorizationType.ALLOWANCE) {
+          const { requiredAllowanceInWei } = authorizeOptions
+          if (BigNumber.from(requiredAllowanceInWei).isZero()) {
+            onAuthorized()
+            return
+          }
+
+          const contract = getERC20ContractInstance(
+            targetContract.address,
+            provider
+          )
+          const allowance: BigNumber = await contract.allowance(
+            wallet.address,
+            authorizedAddress
+          )
+
+          if (allowance.gte(BigNumber.from(requiredAllowanceInWei))) {
+            onAuthorized()
+            setIsLoadingAuthorization(false)
+            return
+          }
+
+          setAuthModalData({
+            authorization,
+            currentAllowance: allowance,
+            requiredAllowance: BigNumber.from(requiredAllowanceInWei),
+            authorizationType: authorizationType,
+            action,
+            network: targetContract.network,
+            onAuthorized
+          })
+        } else {
+          const contract = getERC721ContractInstance(
+            targetContract.address,
+            provider
+          )
+          const isApprovedForAll = await contract.isApprovedForAll(
+            wallet.address,
+            authorizedAddress
+          )
+
+          if (isApprovedForAll) {
+            onAuthorized()
+            setIsLoadingAuthorization(false)
+            return
+          }
+
+          setAuthModalData({
+            authorization,
+            authorizationType: authorizationType,
+            action,
+            network: targetContract.network,
+            onAuthorized
+          })
+        }
+        setShowAuthorizationModal(true)
+      } catch (error) {
+        // TODO: handle error scenario
+        console.error(error)
+      }
     }
 
     const handleClose = useCallback(() => {
+      setIsLoadingAuthorization(false)
       setShowAuthorizationModal(false)
     }, [])
 
@@ -74,6 +137,7 @@ export default function withAuthorizedAction<P extends WithAuthorizedActionProps
         <WrappedComponent
           {...props}
           onAuthorizedAction={handleAuthorizedAction}
+          isLoadingAuthorization={isLoadingAuthorization}
         />
         {showAuthorizationModal && authModalData ? (
           <AuthorizationModal onClose={handleClose} {...authModalData} />

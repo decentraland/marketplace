@@ -1,99 +1,143 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { AuthorizationAction } from 'decentraland-dapps/dist/modules/authorization/types'
 import { Button, Modal } from 'decentraland-ui'
-import { TransactionLink } from 'decentraland-dapps/dist/containers'
-import { useCallback, useMemo, useState } from 'react'
 import MultiStep from './MultiStep/MultiStep'
-import { Step } from './MultiStep/MultiStep.types'
-import { Props } from './AuthorizationModal.types'
+import { AuthorizationStepStatus, Props } from './AuthorizationModal.types'
 import styles from './AuthorizationModal.module.css'
+import { Step } from './MultiStep/MultiStep.types'
+import { getStepMessage, getSteps } from './utils'
+
+const LOADING_STATUS = [
+  AuthorizationStepStatus.LOADING_INFO,
+  AuthorizationStepStatus.PROCESSING,
+  AuthorizationStepStatus.WAITING
+]
 
 export function AuthorizationModal({
   authorization,
   requiredAllowance,
+  currentAllowance,
   action,
-  shouldAuthorize,
-  shouldUpdateAllowance,
-  onClose
+  authorizationType,
+  revokeStatus,
+  grantStatus,
+  error,
+  network,
+  getContract,
+  onClose,
+  onRevoke,
+  onGrant,
+  onAuthorized,
+  onFetchAuthorizations
 }: Props) {
   const [currentStep, setCurrentStep] = useState(0)
+  const [loadingStep, setLoadingStep] = useState<number>()
 
-  const handleFinishStep = useCallback(() => {
-    setCurrentStep(currentStep + 1)
-  }, [currentStep, setCurrentStep])
+  useEffect(() => {
+    onFetchAuthorizations([authorization])
+  }, [authorization, onFetchAuthorizations])
+
+  const handleRevokeToken = useCallback(() => {
+    onRevoke(authorization)
+    setLoadingStep(currentStep)
+  }, [authorization, currentStep, setLoadingStep, onRevoke])
+
+  const handleGrantToken = useCallback(() => {
+    onGrant(authorization)
+    setLoadingStep(currentStep)
+  }, [authorization, currentStep, setLoadingStep, onGrant])
+
+  const handleAuthorized = useCallback(() => {
+    console.log(onAuthorized())
+  }, [onAuthorized])
+
+  const authorizedContract = getContract({
+    address: authorization.authorizedAddress
+  })
 
   const steps = useMemo(() => {
-    let authorizationSteps: Step[] = []
-
-    if (shouldAuthorize) {
-      authorizationSteps = [
-        {
-          title: t('mana_authorization_modal.authorize.title', {
-            contract: () => (
-              <TransactionLink
-                address={authorization.authorizedAddress}
-                chainId={authorization.chainId}
-                txHash=""
-              >
-                {t(`mana_authorization_modal.${action}.contract`)}
-              </TransactionLink>
-            )
-          }),
-          description: t('mana_authorization_modal.authorize.description', {
-            price: requiredAllowance
-          }),
-          action: t('mana_authorization_modal.authorize.action'),
-          // TODO: Add revoke authorization action
-          onActionClicked: handleFinishStep
-        }
-      ]
-    } else if (shouldUpdateAllowance) {
-      authorizationSteps = [
-        {
-          title: t('mana_authorization_modal.revoke_cap.title'),
-          description: t('mana_authorization_modal.revoke_cap.description', {
-            price: requiredAllowance
-          }),
-          action: t('mana_authorization_modal.revoke_cap.action'),
-          // TODO: Add revoke authorization action
-          onActionClicked: handleFinishStep
-        },
-        {
-          title: t('mana_authorization_modal.set_cap.title'),
-          description: t('mana_authorization_modal.set_cap.description', {
-            price: requiredAllowance
-          }),
-          action: t('mana_authorization_modal.set_cap.action'),
-          // TODO: Add authorization action
-          onActionClicked: handleFinishStep
-        }
-      ]
-    }
-
-    authorizationSteps = [
-      ...authorizationSteps,
+    const authSteps = getSteps({
+      authorizationType,
+      network,
+      requiredAllowance,
+      currentAllowance,
+      contract: authorizedContract
+    })
+    return [
+      ...authSteps,
       {
         title: t('mana_authorization_modal.confirm_transaction.title', {
           action: t(`mana_authorization_modal.${action}.action`)
         }),
         action: t('mana_authorization_modal.confirm_transaction.action'),
-        onActionClicked: handleFinishStep
+        onActionClicked: handleAuthorized,
+        testId: 'confirm-action-step',
+        status: AuthorizationStepStatus.PENDING
       }
-    ]
-
-    return authorizationSteps.map((step, index) => ({
-      ...step,
-      message: index < currentStep ? t('mana_authorization_modal.done') : ''
-    }))
+    ].map((step, index) => {
+      if (
+        'authorizationAction' in step &&
+        step.authorizationAction === AuthorizationAction.GRANT
+      ) {
+        return {
+          ...step,
+          action:
+            grantStatus === AuthorizationStepStatus.DONE
+              ? undefined
+              : t('mana_authorization_modal.set_cap.action'),
+          message: getStepMessage(index, grantStatus, error, currentStep),
+          isLoading: LOADING_STATUS.includes(grantStatus) || index === loadingStep,
+          onActionClicked: handleGrantToken,
+          status: grantStatus
+        }
+      } else if (
+        'authorizationAction' in step &&
+        step.authorizationAction === AuthorizationAction.REVOKE
+      ) {
+        return {
+          ...step,
+          action:
+            revokeStatus === AuthorizationStepStatus.DONE
+              ? undefined
+              : t('mana_authorization_modal.revoke_cap.action'),
+          message: getStepMessage(index, revokeStatus, error, currentStep),
+          isLoading: LOADING_STATUS.includes(revokeStatus) || index === loadingStep,
+          onActionClicked: handleRevokeToken,
+          status: revokeStatus
+        }
+      }
+      return step as Step & { status: AuthorizationStepStatus }
+    })
   }, [
-    handleFinishStep,
+    authorizationType,
     requiredAllowance,
-    currentStep,
+    currentAllowance,
+    authorizedContract,
+    network,
     action,
-    shouldAuthorize,
-    shouldUpdateAllowance,
-    authorization.authorizedAddress,
-    authorization.chainId
+    grantStatus,
+    revokeStatus,
+    loadingStep,
+    error,
+    currentStep,
+    handleGrantToken,
+    handleRevokeToken,
+    handleAuthorized
   ])
+
+  useEffect(() => {
+    const currentStepData = steps[currentStep]
+    if (currentStep === loadingStep) {
+      if (currentStepData.status === AuthorizationStepStatus.DONE) {
+        setCurrentStep(currentStep + 1)
+      }
+
+      if ([AuthorizationStepStatus.DONE, AuthorizationStepStatus.ERROR].includes(currentStepData.status)) {
+        setLoadingStep(undefined)
+      }
+    }
+  }, [loadingStep, revokeStatus, grantStatus, steps, currentStep])
 
   return (
     <Modal
@@ -102,7 +146,12 @@ export function AuthorizationModal({
       onClose={onClose}
       data-testid="authorization-modal"
     >
-      <Button basic aria-label={t('global.close')} className={styles.closeButton} onClick={onClose} />
+      <Button
+        basic
+        aria-label={t('global.close')}
+        className={styles.closeButton}
+        onClick={onClose}
+      />
       <h1 className={styles.header}>
         {t('mana_authorization_modal.title', {
           action: t(`mana_authorization_modal.${action}.title_action`)

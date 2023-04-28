@@ -1,5 +1,4 @@
 import React, { memo, useCallback, useMemo, useState } from 'react'
-import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
@@ -8,6 +7,8 @@ import { Button, Popup } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { NFTCategory } from '@dcl/schemas'
 import { formatWeiMANA } from '../../../lib/mana'
 import {
   canBeClaimed,
@@ -18,21 +19,20 @@ import {
   isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
-import { getContractAuthorization } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
 import { isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { builderUrl } from '../../../lib/environment'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
+import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
+import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { LinkedProfile } from '../../LinkedProfile'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
-import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 
 enum View {
   SALE,
@@ -46,6 +46,7 @@ const SaleRentActionBox = ({
   rental,
   userHasAlreadyBidsOnNft,
   currentMana,
+  isLoadingAuthorization,
   onAuthorizedAction,
   getContract,
   onRent
@@ -79,41 +80,38 @@ const SaleRentActionBox = ({
   const isBiddable = bidService !== undefined
   const canBid = !isOwner && isBiddable && !userHasAlreadyBidsOnNft
   const isCurrentlyRented = isRentalListingExecuted(rental)
-  const authorization = useMemo(() => {
-    if (!wallet) {
-      return null
-    }
 
-    const contractNames = getContractNames()
-    const mana = getContract({
-      name: contractNames.MANA,
-      network: nft.network
-    })
-    const rentals = getContract({
-      name: getContractNames().RENTALS,
-      network: nft.network
-    })
-    return getContractAuthorization(
-      wallet.address,
-      rentals?.address,
-      mana ? { ...mana, name: ContractName.MANAToken } : undefined
-    )
-  }, [wallet, getContract, nft.network])
+  const contractNames = getContractNames()
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: nft.network
+  })
+  const rentals = getContract({
+    name: getContractNames().RENTALS,
+    network: nft.network
+  })
 
   const handleOnRent = useCallback(() => {
-    if (!rental || selectedRentalPeriodIndex === undefined || !authorization) return;
+    if (!rental || selectedRentalPeriodIndex === undefined || !rentals || !mana) return
     const bnPricePerDay = ethers.BigNumber.from(
       rental.periods[selectedRentalPeriodIndex].pricePerDay
     )
-  
+
     const bnMaxDays = ethers.BigNumber.from(
       rental.periods[selectedRentalPeriodIndex].maxDays
     )
-  
+
     const price = bnPricePerDay.mul(bnMaxDays).toString()
-  
-    onAuthorizedAction(authorization, price, () => onRent(selectedRentalPeriodIndex))
-  }, [selectedRentalPeriodIndex, authorization, rental, onRent, onAuthorizedAction])
+
+    onAuthorizedAction({
+      targetContractName: ContractName.MANAToken,
+      authorizedAddress: rentals.address,
+      targetContract: mana,
+      authorizationType: AuthorizationType.ALLOWANCE,
+      requiredAllowanceInWei: price,
+      onAuthorized: () => onRent(selectedRentalPeriodIndex)
+    })
+  }, [selectedRentalPeriodIndex, mana, rentals, rental, onRent, onAuthorizedAction])
 
   const rentalEndDate: Date | null = isCurrentlyRented
     ? getRentalEndDate(rental!)
@@ -214,8 +212,10 @@ const SaleRentActionBox = ({
                         disabled={
                           isNFTPartOfAState ||
                           !hasEnoughManaToRent ||
-                          !isPeriodSelected
+                          !isPeriodSelected ||
+                          isLoadingAuthorization
                         }
+                        loading={isLoadingAuthorization}
                         onClick={handleOnRent}
                         className={styles.rent}
                       >
@@ -407,4 +407,6 @@ const SaleRentActionBox = ({
   )
 }
 
-export default memo(withAuthorizedAction(SaleRentActionBox, AuthorizationAction.RENT))
+export default memo(
+  withAuthorizedAction(SaleRentActionBox, AuthorizedAction.RENT)
+)
