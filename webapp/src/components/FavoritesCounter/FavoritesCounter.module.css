@@ -103,6 +103,7 @@
   text-transform: uppercase;
   text-align: center;
   text-decoration-line: underline;
+  text-underline-offset: 4px;
   text-transform: uppercase;
   cursor: pointer;
 }
