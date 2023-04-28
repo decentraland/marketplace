@@ -26,6 +26,7 @@ function renderAuthorizationModal(props: Partial<Props>) {
       grantStatus={AuthorizationStepStatus.PENDING}
       revokeStatus={AuthorizationStepStatus.PENDING}
       confirmationStatus={AuthorizationStepStatus.PENDING}
+      confirmationError={null}
       network={Network.MATIC}
       action={AuthorizedAction.BUY}
       onClose={jest.fn()}
@@ -35,6 +36,7 @@ function renderAuthorizationModal(props: Partial<Props>) {
       onAuthorized={jest.fn()}
       getContract={jest.fn()}
       getConfirmationStatus={jest.fn().mockReturnValue(AuthorizationStepStatus.PENDING)}
+      getConfirmationError={jest.fn()}
       error={''}
       {...props}
     />

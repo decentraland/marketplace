@@ -51,6 +51,7 @@ export function AuthorizationModal({
   }, [authorization, currentStep, setLoadingStep, onGrant])
 
   const handleAuthorized = useCallback(() => {
+    console.log("HOLAA")
     onAuthorized()
     setLoadingStep(currentStep)
   }, [currentStep, setLoadingStep, onAuthorized])
@@ -145,7 +146,6 @@ export function AuthorizationModal({
 
   useEffect(() => {
     const currentStepData = steps[currentStep]
-    console.log({ currentStepData, loadingStep, currentStep })
     if (currentStep === loadingStep) {
       if (currentStepData.status === AuthorizationStepStatus.DONE) {
         setCurrentStep(currentStep + 1)
