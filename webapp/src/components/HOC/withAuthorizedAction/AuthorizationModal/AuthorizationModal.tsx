@@ -51,7 +51,6 @@ export function AuthorizationModal({
   }, [authorization, currentStep, setLoadingStep, onGrant])
 
   const handleAuthorized = useCallback(() => {
-    console.log("HOLAA")
     onAuthorized()
     setLoadingStep(currentStep)
   }, [currentStep, setLoadingStep, onAuthorized])

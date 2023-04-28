@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
 import { Item } from '@dcl/schemas'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { AuthorizationStepStatus } from '../../components/HOC/withAuthorizedAction/AuthorizationModal'
 import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
 import { BUY_ITEM_REQUEST, FETCH_ITEMS_REQUEST, FETCH_ITEM_REQUEST } from './actions'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { AuthorizationStepStatus } from '../../components/HOC/withAuthorizedAction/AuthorizationModal'
 
 export const getState = (state: RootState) => state.item
 export const getData = (state: RootState) => getState(state).data
