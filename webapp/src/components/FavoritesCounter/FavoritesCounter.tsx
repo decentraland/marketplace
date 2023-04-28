@@ -36,7 +36,7 @@ const FavoritesCounter = (props: Props) => {
         onClick={count > 0 && isCollapsed ? handleOnCounterClick : undefined}
         className={classNames(
           styles.counter,
-          isCollapsed && count === 0 && styles.nonClickable
+          isCollapsed && count === 0 && styles.nonClickable && isLoading
         )}
         aria-label="counter"
         data-testid="favorites-counter-number"
@@ -44,7 +44,7 @@ const FavoritesCounter = (props: Props) => {
         {formatter.format(count)}
       </span>
     ),
-    [count, isCollapsed, handleOnCounterClick]
+    [isLoading, count, isCollapsed, handleOnCounterClick]
   )
 
   const onClick = useCallback(
@@ -75,7 +75,7 @@ const FavoritesCounter = (props: Props) => {
       {isCollapsed ? counter : null}
       <div
         className={styles.bubble}
-        onClick={onClick}
+        onClick={!isLoading ? onClick : undefined}
         data-testid="favorites-counter-bubble"
       >
         <span className={styles.iconContainer}>
