@@ -1,3 +1,18 @@
+.BaseDetail .top-header {
+  display: flex;
+  align-items: center;
+}
+
+.BaseDetail .top-header .back {
+  display: unset;
+  align-self: flex-start;
+}
+
+.BaseDetail .top-header .favorites {
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+
 .BaseDetail .ui.container > .info {
   width: 100%;
   display: flex;
@@ -122,8 +137,4 @@
   .BaseDetail .action-box {
     width: 100%;
   }
-}
-
-.favorites {
-  justify-content: flex-end;
 }

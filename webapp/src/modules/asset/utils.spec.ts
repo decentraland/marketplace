@@ -7,8 +7,8 @@ import {
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
+import { getAssetUrl, isOwnedBy, mapAsset } from './utils'
 import { Asset } from './types'
-import { getAssetUrl, isOwnedBy } from './utils'
 
 let asset: Asset
 let wallet: Wallet
@@ -255,5 +255,82 @@ describe('when getting the asset owner', () => {
         })
       })
     })
+  })
+})
+
+describe('when mapping the asset', () => {
+  let asset: Asset | null
+  let itemMappers: { [key in 'wearable' | 'emote']: (...args: any[]) => void }
+  let nftMappers: {
+    [key in 'wearable' | 'emote' | 'parcel' | 'estate' | 'ens']: (
+      ...args: any[]
+    ) => void
+  }
+  let fallback: (...args: any) => void
+
+  beforeEach(() => {
+    itemMappers = {
+      wearable: jest.fn(),
+      emote: jest.fn()
+    }
+    nftMappers = {
+      wearable: jest.fn(),
+      emote: jest.fn(),
+      parcel: jest.fn(),
+      estate: jest.fn(),
+      ens: jest.fn()
+    }
+    fallback = jest.fn()
+  })
+
+  describe('and the asset is null', () => {
+    beforeEach(() => {
+      asset = null
+    })
+
+    it('should return the result of calling the fallback', () => {
+      mapAsset(asset, itemMappers, nftMappers, fallback)
+
+      expect(fallback).toHaveBeenCalled()
+    })
+  })
+
+  describe('and the asset is a NFT', () => {
+    beforeEach(() => {
+      asset = { data: {}, tokenId: 'tokenId' } as NFT
+    })
+
+    describe.each(['wearable', 'emote', 'parcel', 'estate', 'ens'] as Array<
+      keyof typeof nftMappers
+    >)('and is a %s', category => {
+      beforeEach(() => {
+        asset = { ...asset, data: { [category]: {} } } as NFT
+      })
+
+      it(`should return the result of calling the ${category} mapper`, () => {
+        mapAsset(asset, itemMappers, nftMappers, fallback)
+        expect(nftMappers[category]).toHaveBeenCalled()
+      })
+    })
+  })
+
+  describe('and the asset is an Item', () => {
+    beforeEach(() => {
+      asset = { data: {}, itemId: 'itemId' } as Item
+    })
+
+    describe.each(['wearable', 'emote'] as Array<keyof typeof itemMappers>)(
+      'and is a %s',
+      category => {
+        beforeEach(() => {
+          asset = { ...asset, data: { [category]: {} } } as Item
+        })
+
+        it(`should return the result of calling the ${category} mapper`, () => {
+          mapAsset(asset, itemMappers, nftMappers, fallback)
+          expect(itemMappers[category]).toHaveBeenCalled()
+        })
+      }
+    )
   })
 })
