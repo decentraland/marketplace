@@ -21,6 +21,7 @@ import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
 import { isLand } from '../../../modules/nft/utils'
+import { getBidStatus, getError } from '../../../modules/bid/selectors'
 import { ManaField } from '../../ManaField'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
 import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
@@ -215,4 +216,4 @@ const BidModal = (props: Props) => {
   )
 }
 
-export default React.memo(withAuthorizedAction(BidModal, AuthorizedAction.BID))
+export default React.memo(withAuthorizedAction(BidModal, AuthorizedAction.BID, getBidStatus, getError))

@@ -14,6 +14,7 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { Network } from '@dcl/schemas'
 import { Contract } from '../../../../modules/vendor/services'
+import { RootState } from '../../../../modules/reducer'
 
 // Action to perfom after authorization step is finished
 export enum AuthorizedAction {
@@ -43,8 +44,12 @@ export type Props = {
   authorizationType: AuthorizationType
   revokeStatus: AuthorizationStepStatus
   grantStatus: AuthorizationStepStatus
+  confirmationStatus: AuthorizationStepStatus
   error: string
+  confirmationError: string | null
   network: Network
+  getConfirmationStatus?: (state: RootState) => AuthorizationStepStatus
+  getConfirmationError?: (state: RootState) => string | null
   getContract: (query: Partial<Contract>) => Contract | null
   onClose: () => void
   onAuthorized: () => void
@@ -62,8 +67,19 @@ export type MapDispatch = Dispatch<
   | GrantTokenRequestAction
   | FetchAuthorizationsRequestAction
 >
-export type OwnProps = Pick<Props, 'authorization' | 'requiredAllowance'>
+export type OwnProps = Pick<
+  Props,
+  | 'authorization'
+  | 'requiredAllowance'
+  | 'getConfirmationStatus'
+  | 'getConfirmationError'
+>
 export type MapStateProps = Pick<
   Props,
-  'revokeStatus' | 'grantStatus' | 'error' | 'getContract'
+  | 'revokeStatus'
+  | 'grantStatus'
+  | 'error'
+  | 'getContract'
+  | 'confirmationStatus'
+  | 'confirmationError'
 >
