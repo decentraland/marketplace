@@ -15,6 +15,8 @@ export type Props = {
   actions?: ReactNode
   showDetails?: boolean
   isFavoritesEnabled: boolean
+  onBack: (location?: string) => void
 }
 
 export type MapStateProps = Pick<Props, 'isFavoritesEnabled'>
+export type MapDispatchProps = Pick<Props, 'onBack'>

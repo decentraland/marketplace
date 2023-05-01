@@ -13,7 +13,7 @@ import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'
 import { openTransak } from '../transak/actions'
-import { Asset } from './types'
+import { Asset, AssetType } from './types'
 
 export const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
   'buy-nfts-with-card-explanation-popup-key'
@@ -144,4 +144,62 @@ export function* buyAssetWithCard(asset: Asset) {
     BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY,
     'true'
   )
+}
+
+export function mapAsset<T>(
+  asset: Asset | null,
+  itemMappers: {
+    wearable: (asset: Asset<AssetType.ITEM>) => T
+    emote: (asset: Asset<AssetType.ITEM>) => T
+  },
+  nftMappers: {
+    wearable: (asset: Asset<AssetType.NFT>) => T
+    emote: (asset: Asset<AssetType.NFT>) => T
+    parcel: (asset: Asset<AssetType.NFT>) => T
+    estate: (asset: Asset<AssetType.NFT>) => T
+    ens: (asset: Asset<AssetType.NFT>) => T
+  },
+  fallback: () => T
+) {
+  if (!asset) {
+    return fallback()
+  }
+
+  if (isNFT(asset)) {
+    const nft = asset
+    const { parcel, estate, wearable, emote, ens } = nft.data
+
+    if (parcel) {
+      return nftMappers.parcel(nft)
+    }
+
+    if (estate) {
+      return nftMappers.estate(nft)
+    }
+
+    if (wearable) {
+      return nftMappers.wearable(nft)
+    }
+
+    if (ens) {
+      return nftMappers.ens(nft)
+    }
+
+    if (emote) {
+      return nftMappers.emote(nft)
+    }
+  } else {
+    const item = asset
+    const { wearable, emote } = item.data
+
+    if (wearable) {
+      return itemMappers.wearable(item)
+    }
+
+    if (emote) {
+      return itemMappers.emote(item)
+    }
+  }
+
+  return fallback() // this is unreachable
 }
