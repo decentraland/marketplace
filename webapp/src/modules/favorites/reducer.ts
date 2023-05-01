@@ -2,12 +2,7 @@ import {
   loadingReducer,
   LoadingState
 } from 'decentraland-dapps/dist/modules/loading/reducer'
-import {
-  FETCH_ITEM_SUCCESS,
-  FETCH_ITEMS_SUCCESS,
-  FetchItemsSuccessAction,
-  FetchItemSuccessAction
-} from '../item/actions'
+import { FETCH_ITEM_SUCCESS, FetchItemSuccessAction } from '../item/actions'
 import {
   PickItemAsFavoriteFailureAction,
   PickItemAsFavoriteRequestAction,
@@ -64,7 +59,6 @@ type FavoritesReducerAction =
   | FetchFavoritedItemsRequestAction
   | FetchFavoritedItemsSuccessAction
   | FetchFavoritedItemsFailureAction
-  | FetchItemsSuccessAction
   | FetchItemSuccessAction
 
 export function favoritesReducer(
@@ -126,29 +120,6 @@ export function favoritesReducer(
       }
     }
 
-    case FETCH_ITEMS_SUCCESS: {
-      const { items } = action.payload
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          items: {
-            ...state.data.items,
-            ...Object.fromEntries(
-              items
-                .map(item => [
-                  item.id,
-                  state.data.items[item.id] && item.picks
-                    ? { ...state.data.items[item.id], ...item.picks }
-                    : item.picks
-                ])
-                .filter(Boolean)
-            )
-          }
-        }
-      }
-    }
-
     case FETCH_ITEM_SUCCESS: {
       const { item } = action.payload
 
@@ -172,7 +143,7 @@ export function favoritesReducer(
     }
 
     case FETCH_FAVORITED_ITEMS_SUCCESS: {
-      const { total, favoritedItems } = action.payload
+      const { total, items, createdAt } = action.payload
 
       return {
         ...state,
@@ -181,13 +152,18 @@ export function favoritesReducer(
           items: {
             ...state.data.items,
             ...Object.fromEntries(
-              favoritedItems.map(favoritedItem => [
-                favoritedItem.itemId,
-                {
-                  ...(state.data.items[favoritedItem.itemId] ?? { count: 0 }),
-                  createdAt: favoritedItem.createdAt
-                }
-              ])
+              items
+                .map(item => [
+                  item.id,
+                  state.data.items[item.id] && item.picks
+                    ? {
+                        ...state.data.items[item.id],
+                        ...item.picks,
+                        createdAt: createdAt[item.id]
+                      }
+                    : { ...item.picks, createdAt: createdAt[item.id] }
+                ])
+                .filter(Boolean)
             )
           },
           total

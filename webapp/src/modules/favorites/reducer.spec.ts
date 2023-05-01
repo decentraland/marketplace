@@ -24,19 +24,14 @@ import {
   unpickItemAsFavoriteSuccess
 } from './actions'
 import { FavoritesState, INITIAL_STATE, favoritesReducer } from './reducer'
-import { FavoritedItems } from './types'
 import {
   FetchItemRequestAction,
   FetchItemSuccessAction,
-  FetchItemsRequestAction,
-  FetchItemsSuccessAction,
   fetchItemRequest,
-  fetchItemSuccess,
-  fetchItemsRequest,
-  fetchItemsSuccess
+  fetchItemSuccess
 } from '../item/actions'
 
-let favoritedItems: FavoritedItems
+let createdAt: Record<string, number>
 
 const itemBrowseOptions: ItemBrowseOptions = {
   view: View.LISTS,
@@ -66,10 +61,10 @@ const requestActions = [
 ]
 
 beforeEach(() => {
-  favoritedItems = [
-    { itemId: item.id, createdAt: Date.now() },
-    { itemId: 'some-other-id', createdAt: Date.now() }
-  ]
+  createdAt = {
+    [item.id]: Date.now(),
+    'some-other-id': Date.now()
+  }
 })
 
 describe.each(requestActions)('when reducing the "$type" action', action => {
@@ -315,38 +310,6 @@ describe('when reducing the successful action of unpicking the item as favorite'
   })
 })
 
-describe('when reducing the successful action of fetching the items', () => {
-  let initialState: FavoritesState
-
-  let requestAction: FetchItemsRequestAction
-  let successAction: FetchItemsSuccessAction
-
-  beforeEach(() => {
-    requestAction = fetchItemsRequest(itemBrowseOptions)
-    successAction = fetchItemsSuccess([item], 1, itemBrowseOptions, 223423423)
-
-    initialState = {
-      ...INITIAL_STATE,
-      loading: loadingReducer([], requestAction)
-    }
-  })
-
-  it('should return a state with favorited items and their picks stats', () => {
-    expect(favoritesReducer(initialState, successAction)).toEqual({
-      ...initialState,
-      data: {
-        ...initialState.data,
-        items: {
-          [item.id]: {
-            pickedByUser: false,
-            count: 1
-          }
-        }
-      }
-    })
-  })
-})
-
 describe('when reducing the successful action of fetching an item', () => {
   let initialState: FavoritesState
 
@@ -384,10 +347,18 @@ describe('when reducing the successful action of fetching the favorited items', 
 
   let requestAction: FetchFavoritedItemsRequestAction
   let successAction: FetchFavoritedItemsSuccessAction
+  let total: number
 
   beforeEach(() => {
+    total = 2
     requestAction = fetchFavoritedItemsRequest(itemBrowseOptions)
-    successAction = fetchFavoritedItemsSuccess(favoritedItems, 2)
+    successAction = fetchFavoritedItemsSuccess(
+      [item],
+      {},
+      total,
+      {},
+      Date.now()
+    )
 
     initialState = {
       ...INITIAL_STATE,
@@ -396,7 +367,7 @@ describe('when reducing the successful action of fetching the favorited items', 
           [item.id]: {
             pickedByUser: false,
             count: 1,
-            createdAt: favoritedItems[0].createdAt
+            createdAt: createdAt[item.id]
           },
           '0x...-itemId': {
             pickedByUser: true,
@@ -423,7 +394,7 @@ describe('when reducing the successful action of fetching the favorited items', 
       loading: [],
       data: {
         ...initialState.data,
-        total: 2
+        total
       }
     })
   })

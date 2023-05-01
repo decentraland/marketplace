@@ -45,10 +45,8 @@ const item = {
   network: Network.ETHEREUM
 } as Item
 
-const favoritedItems: FavoritedItems = [
-  { itemId: item.id, createdAt: Date.now() }
-]
-const total = favoritedItems.length
+const createdAt: Record<string, number> = { [item.id]: Date.now() }
+const total = 1
 
 const anErrorMessage = 'An error'
 
@@ -170,14 +168,19 @@ describe('when creating the action to signal the start of the fetch favorited it
 
 describe('when creating the action to signal a successful fetch favorited items request', () => {
   it('should return an object representing the action', () => {
-    expect(fetchFavoritedItemsSuccess(favoritedItems, total)).toEqual({
-      type: FETCH_FAVORITED_ITEMS_SUCCESS,
-      meta: undefined,
-      payload: {
-        favoritedItems,
-        total
+    expect(fetchFavoritedItemsSuccess([item], createdAt, total, {}, 0)).toEqual(
+      {
+        type: FETCH_FAVORITED_ITEMS_SUCCESS,
+        meta: undefined,
+        payload: {
+          items: [item],
+          options: {},
+          createdAt,
+          total,
+          timestamp: 0
+        }
       }
-    })
+    )
   })
 })
 

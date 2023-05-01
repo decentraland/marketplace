@@ -165,9 +165,28 @@ export function browseReducer(
       }
 
     case FETCH_FAVORITED_ITEMS_SUCCESS:
-      return {
-        ...state,
-        count: action.payload.total
+      if (action.payload.timestamp < state.lastTimestamp) {
+        return state
+      }
+      const view = action.payload.options.view
+
+      switch (view) {
+        case View.LOAD_MORE: {
+          return {
+            ...state,
+            itemIds: [
+              ...state.itemIds,
+              ...action.payload.items.map(item => item.id)
+            ],
+            count: action.payload.total
+          }
+        }
+        default:
+          return {
+            ...state,
+            itemIds: action.payload.items.map(item => item.id),
+            count: action.payload.total
+          }
       }
 
     case FETCH_ITEMS_SUCCESS: {
@@ -186,14 +205,6 @@ export function browseReducer(
             view,
             itemIds: action.payload.items.map(item => item.id),
             count: action.payload.total,
-            lastTimestamp: action.payload.timestamp
-          }
-        }
-        case View.LISTS: {
-          return {
-            ...state,
-            view,
-            itemIds: action.payload.items.map(item => item.id),
             lastTimestamp: action.payload.timestamp
           }
         }

@@ -320,33 +320,113 @@ describe('when reducing the success action of fetching trending items', () => {
 })
 
 describe('when reducing the success action of fetching favorited items', () => {
-  const initialState: BrowseUIState = { ...INITIAL_STATE }
-  const favoritedItemIds: FavoritedItems = assetIds.map(id => ({
-    itemId: id,
-    createdAt: Date.now()
-  }))
+  let initialState: BrowseUIState
+  let browseOptions: ItemBrowseOptions
+  let actionTimestamp: number
+  let items: Item[]
+  let total: number
 
-  it('should return a state with the count of favorited items', () => {
-    expect(
-      browseReducer(
-        initialState,
-        fetchFavoritedItemsSuccess(favoritedItemIds, favoritedItemIds.length)
-      )
-    ).toEqual({
-      ...initialState,
-      count: favoritedItemIds.length
+  beforeEach(() => {
+    total = 1
+    items = [
+      {
+        id: '0x0-assetId1',
+        itemId: 'assetId1'
+      } as Item
+    ]
+    initialState = { ...INITIAL_STATE }
+    browseOptions = {}
+  })
+
+  describe('when the timestamp of the action is lower than the last timestamp of the state', () => {
+    beforeEach(() => {
+      initialState.lastTimestamp = 2
+      actionTimestamp = 1
+    })
+
+    it('should return the state as it was before', () => {
+      expect(
+        browseReducer(
+          initialState,
+          fetchFavoritedItemsSuccess(
+            items,
+            {},
+            1,
+            browseOptions,
+            actionTimestamp
+          )
+        )
+      ).toEqual(initialState)
+    })
+  })
+
+  describe('and the timestamp of the action is greater than the last timestamp of the state', () => {
+    beforeEach(() => {
+      initialState.lastTimestamp = 2
+      actionTimestamp = 3
+      initialState.itemIds = ['anItemId']
+    })
+
+    describe('and the view is set as load more', () => {
+      beforeEach(() => {
+        browseOptions = { view: View.LOAD_MORE }
+      })
+
+      it('should return a state where the ids are appended to the new ones and the total of the favorited items updated', () => {
+        expect(
+          browseReducer(
+            initialState,
+            fetchFavoritedItemsSuccess(
+              items,
+              {},
+              total,
+              browseOptions,
+              actionTimestamp
+            )
+          )
+        ).toEqual({
+          ...initialState,
+          itemIds: [...initialState.itemIds, ...items.map(item => item.id)],
+          count: total
+        })
+      })
+    })
+
+    describe('and the view is not set as load more', () => {
+      beforeEach(() => {
+        browseOptions = { view: View.LISTS }
+      })
+
+      it('should return a state overwriting the ids and the total of the favorited items', () => {
+        expect(
+          browseReducer(
+            initialState,
+            fetchFavoritedItemsSuccess(
+              items,
+              {},
+              total,
+              browseOptions,
+              actionTimestamp
+            )
+          )
+        ).toEqual({
+          ...initialState,
+          itemIds: items.map(item => item.id),
+          count: total
+        })
+      })
     })
   })
 })
 
 describe('when reducing the fetch items success action', () => {
-  let initialState: BrowseUIState = { ...INITIAL_STATE, lastTimestamp: 2 }
-
+  let initialState: BrowseUIState
   let itemsBrowserOptions: ItemBrowseOptions
   let item: Item
   let items: Item[]
 
   beforeEach(() => {
+    initialState = { ...INITIAL_STATE, lastTimestamp: 2 }
     item = {
       id: '0x0-assetId1',
       itemId: 'assetId1'
@@ -408,32 +488,6 @@ describe('when reducing the fetch items success action', () => {
         })
       }
     )
-
-    describe('and the view is lists', () => {
-      let view: View
-
-      beforeEach(() => {
-        view = View.LISTS
-        itemsBrowserOptions = {
-          ...itemsBrowserOptions,
-          view
-        }
-      })
-
-      it('should return the state with the view, the item ids, and the last timestamp that comes in the action payload', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
-          )
-        ).toEqual({
-          ...initialState,
-          view,
-          itemIds: [item.id],
-          lastTimestamp: timestamp
-        })
-      })
-    })
 
     describe('and the view is load_more', () => {
       let view: View
