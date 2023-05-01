@@ -21,7 +21,7 @@ const ListsPage = ({ wallet, isConnecting, onRedirect }: Props) => {
 
   useEffect(() => {
     if (!isConnecting && !wallet) {
-      console.log(locations.signIn(`${pathname}${search}`))
+      onRedirect(locations.signIn(`${pathname}${search}`))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnecting, wallet, onRedirect])
