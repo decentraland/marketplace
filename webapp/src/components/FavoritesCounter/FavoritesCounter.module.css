@@ -2,10 +2,6 @@
   display: flex;
 }
 
-.FavoritesCounter:hover {
-  cursor: pointer;
-}
-
 :global(.ui.cards a.card:hover) .bubble,
 :global(.ui.link.card:hover) .bubble,
 :global(.ui.link.cards .card:hover) .bubble,
@@ -85,6 +81,7 @@
   -webkit-transition: background-color .5s;
   -moz-transition: background-color .5s;
   -o-transition: background-color .5s;
+  cursor: pointer;
 }
 
 .FavoritesCounter.Collapsed .bubble {
@@ -106,7 +103,9 @@
   text-transform: uppercase;
   text-align: center;
   text-decoration-line: underline;
+  text-underline-offset: 4px;
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 .FavoritesCounter.Collapsed .counter.nonClickable {

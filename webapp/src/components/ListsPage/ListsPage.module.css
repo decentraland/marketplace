@@ -1,3 +1,29 @@
+.page {
+  min-height: 100vh;
+}
+
 .header:global(.ui.header) {
-  margin-left: 24px
+  margin-left: 24px;
+}
+
+@media (max-width: 768px) {
+  .header:global(.ui.header) {
+    margin-left: 16px;
+  }
+}
+
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+  /* Height of the page minus the sizes of the elements before the footer */
+  /* Navbar, Navigation, Header (with paddings) */
+  min-height: calc(100vh - 64px - 65px - 42px - 28px - 28px);
+}
+
+.emptyState {
+  flex-grow: 1;
+}
+
+.footer {
+  flex: 0;
 }
