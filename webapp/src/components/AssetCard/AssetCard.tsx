@@ -151,8 +151,9 @@ const AssetCard = (props: Props) => {
             : null
 
         const displayExtraInfomationToMint =
-          (sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING) ||
-          (sortBy === SortBy.CHEAPEST && cheapest === LISTING)
+          isAvailableForMint &&
+          ((sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING) ||
+            (sortBy === SortBy.CHEAPEST && cheapest === LISTING))
 
         information = {
           action:

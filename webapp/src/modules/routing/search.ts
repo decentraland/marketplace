@@ -22,7 +22,7 @@ export function getDefaultOptionsByView(
   section?: Section
 ): BrowseOptions {
   let defaultOptions: Partial<BrowseOptions> = {
-    onlyOnSale: !view || !isAccountView(view),
+    onlyOnSale: view && isAccountView(view) ? false : undefined,
     sortBy:
       view && isAccountView(view)
         ? SortBy.NEWEST
@@ -40,6 +40,7 @@ export function getDefaultOptionsByView(
     ) {
       defaultOptions = {
         ...defaultOptions,
+        onlyOnSale: undefined,
         status: AssetStatusFilter.ON_SALE
       }
     }

@@ -46,7 +46,7 @@ const Navigation = (props: Props) => {
                 page: 1,
                 sortBy: SortBy.RECENTLY_LISTED,
                 onlyOnSale: true,
-                assetType: AssetType.ITEM
+                assetType: AssetType.CATALOG_ITEM
               })}
             >
               <Tabs.Tab active={activeTab === NavigationTab.CAMPAIGN_BROWSER}>
@@ -68,6 +68,7 @@ const Navigation = (props: Props) => {
               page: 1,
               sortBy: SortBy.NEWEST,
               status: AssetStatusFilter.ON_SALE,
+              assetType: AssetType.CATALOG_ITEM
             })}
           >
             <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>

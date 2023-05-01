@@ -282,11 +282,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
       const { rarities, wearableGenders, emotePlayMode } = options
 
-      if (
-        (view === View.MARKET || view === View.LOAD_MORE) &&
-        (section.toString().includes(Section.EMOTES) ||
-          section.toString().includes(Section.WEARABLES))
-      ) {
+      if (options.assetType === AssetType.CATALOG_ITEM) {
         const statusParameters: Partial<CatalogFilters> = {
           ...(status === AssetStatusFilter.ON_SALE ? { isOnSale: true } : {}),
           ...(status === AssetStatusFilter.NOT_FOR_SALE

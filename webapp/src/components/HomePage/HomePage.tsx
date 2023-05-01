@@ -64,7 +64,7 @@ const HomePage = (props: Props) => {
   const assetTypes: Partial<Record<View, AssetType>> = useMemo(
     () => ({
       [View.HOME_TRENDING_ITEMS]: AssetType.ITEM,
-      [View.HOME_NEW_ITEMS]: AssetType.ITEM,
+      [View.HOME_NEW_ITEMS]: AssetType.CATALOG_ITEM,
       [View.HOME_SOLD_ITEMS]: AssetType.ITEM,
       [View.HOME_WEARABLES]: AssetType.NFT,
       [View.HOME_LAND]: AssetType.NFT,
