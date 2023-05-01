@@ -1,7 +1,8 @@
+import { ItemFilters } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
 import { FavoritedItems } from '../../../favorites/types'
-import { ItemFilters } from '../item/types'
+// import { ItemFilters } from '../item/types'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
   'DEFAULT_FAVORITES_LIST_ID'

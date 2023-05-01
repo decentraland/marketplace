@@ -22,8 +22,10 @@ export const fetchItemsSuccess = (
   items: Item[],
   total: number,
   options: ItemBrowseOptions,
-  timestamp: number
-) => action(FETCH_ITEMS_SUCCESS, { items, total, options, timestamp })
+  timestamp: number,
+  isLoadMore: boolean = false
+) =>
+  action(FETCH_ITEMS_SUCCESS, { items, total, options, timestamp, isLoadMore })
 
 export const fetchItemsFailure = (error: string, options: ItemBrowseOptions) =>
   action(FETCH_ITEMS_FAILURE, { error, options })

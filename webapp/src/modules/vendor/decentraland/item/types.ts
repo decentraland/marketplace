@@ -1,4 +1,5 @@
 import {
+  CatalogSortBy,
   EmoteCategory,
   EmotePlayMode,
   GenderFilterOption,
@@ -10,11 +11,15 @@ import {
   WearableCategory,
   WearableGender
 } from '@dcl/schemas'
+import { SortBy } from '../../../routing/types'
 
 export type ItemFilters = {
   first?: number
   skip?: number
-  sortBy?: ItemSortBy
+  // sortBy?: SortBy
+  sortBy?: ItemSortBy | CatalogSortBy
+  onlyMinting?: boolean;
+  onlyListing?: boolean;
   creator?: string | string[]
   category?: NFTCategory
   isSoldOut?: boolean

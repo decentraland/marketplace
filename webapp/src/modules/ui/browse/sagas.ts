@@ -29,7 +29,8 @@ function* handleUnpickItemAsFavoriteSuccess() {
     yield put(
       fetchFavoritedItemsRequest({
         filters: { first: 1, skip: page * PAGE_SIZE - 1 },
-        view: View.LOAD_MORE,
+        // view: View.LOAD_MORE,
+        isLoadMore: true,
         section: Section.LISTS
       })
     )

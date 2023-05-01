@@ -4,7 +4,7 @@ import { retryParams } from '../utils'
 import { CatalogFilters, CatalogItem } from '@dcl/schemas'
 
 class CatalogApi extends BaseAPI {
-  fetch = async (filters: CatalogFilters = {}): Promise<CatalogItem[]> => {
+  get = async (filters: CatalogFilters = {}): Promise<CatalogItem[]> => {
     const queryParams = this.buildItemsQueryString(filters)
     return this.request('get', `/catalog?${queryParams}`)
   }
@@ -35,8 +35,8 @@ class CatalogApi extends BaseAPI {
       queryParams.append('isSoldOut', 'true')
     }
 
-    if (filters.isOnSale) {
-      queryParams.append('isOnSale', 'true')
+    if (filters.isOnSale !== undefined) {
+      queryParams.append('isOnSale', filters.isOnSale.toString())
     }
 
     if (filters.search) {

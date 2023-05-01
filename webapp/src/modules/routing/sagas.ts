@@ -17,6 +17,7 @@ import {
 } from 'connected-react-router'
 import {
   CatalogFilters,
+  EmotePlayMode,
   NFTCategory,
   RentalStatus,
   Sale,
@@ -133,10 +134,11 @@ export function* routingSaga() {
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
-  const newOptions: BrowseOptions = yield call(
+  const newOptions: BrowseOptions & { isLoadMore: boolean } = yield call(
     getNewBrowseOptions,
     action.payload.options
   )
+  console.log('isLoadMore newOptions: ', newOptions)
   yield call(fetchAssetsFromRoute, newOptions)
 }
 
@@ -149,25 +151,30 @@ function* handleClearFilters() {
 }
 
 export function* handleBrowse(action: BrowseAction) {
-  const options: BrowseOptions = yield call(
+  const options: BrowseOptions & { isLoadMore: boolean } = yield call(
     getNewBrowseOptions,
     action.payload.options
   )
+  console.log('isLoadMore handleBrowse: ', options)
 
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
   const eventsContracts: Record<string, string[]> = yield select(getData)
   const isAnEventRoute = Object.keys(eventsContracts).includes(
     pathname.slice(1)
   )
-  yield call(fetchAssetsFromRoute, {
-    ...options,
-    ...(isAnEventRoute && {
-      contracts:
-        options.contracts && options.contracts.length > 0
-          ? options.contracts
-          : eventsContracts[pathname.slice(1)]
-    })
-  })
+  yield call(
+    fetchAssetsFromRoute,
+    {
+      ...options,
+      ...(isAnEventRoute && {
+        contracts:
+          options.contracts && options.contracts.length > 0
+            ? options.contracts
+            : eventsContracts[pathname.slice(1)]
+      })
+    },
+    options.isLoadMore
+  )
   yield put(push(buildBrowseURL(pathname, options)))
 }
 
@@ -186,7 +193,10 @@ function* handleGoBack(action: GoBackAction) {
   }
 }
 
-export function* fetchAssetsFromRoute(options: BrowseOptions) {
+export function* fetchAssetsFromRoute(
+  options: BrowseOptions,
+  isLoadMore = false
+) {
   const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
   const vendor = options.vendor!
@@ -211,9 +221,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const address =
     options.address || ((yield select(getCurrentLocationAddress)) as string)
 
-  const isLoadMore = view === View.LOAD_MORE
+  // const isLoadMore =
+  // const isLoadMore = view === View.LOAD_MORE
 
-  yield put(setIsLoadMore(isLoadMore))
+  // yield put(setIsLoadMore(isLoadMore))
 
   if (isMap) {
     yield put(setView(view))
@@ -273,7 +284,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           view,
           section,
           page,
-          filters: { first, skip }
+          filters: { first, skip },
+          isLoadMore
         })
       )
       break
@@ -294,11 +306,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
       const { rarities, wearableGenders, emotePlayMode } = options
 
-      if (
-        (view === View.MARKET || view === View.LOAD_MORE) &&
-        (section.toString().includes(Section.EMOTES) ||
-          section.toString().includes(Section.WEARABLES))
-      ) {
+      console.log('view: ', view)
+      console.log('section: ', section)
+
+      if (isItems) {
         const statusParameters: Partial<CatalogFilters> = {
           ...(status === AssetStatusFilter.ON_SALE ? { isOnSale: true } : {}),
           ...(status === AssetStatusFilter.NOT_FOR_SALE
@@ -312,13 +323,15 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
             : {})
         }
         yield put(
-          fetchCatalogRequest({
+          fetchItemsRequest({
             view,
             page,
+            isLoadMore,
             filters: {
               first,
               skip,
-              sortBy: getCatalogSortBy(sortBy),
+              sortBy: getItemSortBy(sortBy),
+              // sortBy: sortBy as SortBy,
               isOnSale: onlyOnSale,
               creator: address ? [address] : creators,
               wearableCategory,
@@ -331,6 +344,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               rarities: rarities,
               wearableGenders,
               emotePlayMode,
+              // emoteGenders,
               minPrice,
               maxPrice,
               network,
@@ -339,63 +353,66 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           })
         )
       } else {
-        if (isItems) {
-          yield put(
-            fetchItemsRequest({
-              view,
-              page,
-              filters: {
-                first,
-                skip,
-                sortBy: getItemSortBy(sortBy),
-                isOnSale: onlyOnSale,
-                creator: address ? [address] : creators,
-                wearableCategory,
-                emoteCategory,
-                isWearableHead,
-                isWearableAccessory,
-                isWearableSmart: onlySmart,
-                search,
-                category,
-                rarities: rarities,
-                contracts,
-                wearableGenders,
-                emotePlayMode,
-                minPrice,
-                maxPrice
-              }
-            })
-          )
-        } else {
-          const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
+        // if (isItems) {
+        //   yield put(
+        //     fetchItemsRequest({
+        //       view,
+        //       page,
+        //       filters: {
+        //         first,
+        //         skip,
+        //         sortBy: getItemSortBy(sortBy),
+        //         isOnSale: onlyOnSale,
+        //         creator: address ? [address] : creators,
+        //         wearableCategory,
+        //         emoteCategory,
+        //         isWearableHead,
+        //         isWearableAccessory,
+        //         isWearableSmart: onlySmart,
+        //         search,
+        //         category,
+        //         rarities: rarities,
+        //         contracts,
+        //         wearableGenders,
+        //         emotePlayMode,
+        //         minPrice,
+        //         maxPrice
+        //       }
+        //     })
+        //   )
+        // } else {
+        const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
 
-          yield put(
-            fetchNFTsRequest({
-              vendor,
-              view,
-              params: {
-                first,
-                skip,
-                orderBy,
-                orderDirection,
-                onlyOnSale,
-                onlyOnRent,
-                address,
-                category,
-                search
-              },
-              filters: getFilters(vendor, options) // TODO: move to routing
-            })
-          )
-        }
+        yield put(
+          fetchNFTsRequest({
+            vendor,
+            view,
+            params: {
+              first,
+              skip,
+              orderBy,
+              orderDirection,
+              onlyOnSale,
+              onlyOnRent,
+              address,
+              category,
+              search
+            },
+            filters: getFilters(vendor, options) // TODO: move to routing
+          })
+        )
+        // }
       }
   }
 }
 
 export function* getNewBrowseOptions(
   current: BrowseOptions
-): Generator<unknown, BrowseOptions, any> {
+): Generator<unknown, BrowseOptions & { isLoadMore: boolean }, any> {
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
+  console.log('previous.page: ', previous.page)
+  console.log('current.page: ', current.page)
+
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
   const section = yield select(getSection)
@@ -419,7 +436,8 @@ export function* getNewBrowseOptions(
     ...previous,
     ...current,
     view,
-    vendor
+    vendor,
+    isLoadMore: previous.page! < current.page!
   }
 }
 
@@ -629,9 +647,10 @@ function* deriveCurrentOptions(
 }
 
 function deriveView(previous: BrowseOptions, current: BrowseOptions) {
-  return previous.page! < current.page!
-    ? View.LOAD_MORE
-    : current.view || previous.view
+  return current.view || previous.view
+  // return previous.page! < current.page!
+  //   ? View.LOAD_MORE
+  //   : current.view || previous.view
 }
 
 function deriveVendor(previous: BrowseOptions, current: BrowseOptions) {

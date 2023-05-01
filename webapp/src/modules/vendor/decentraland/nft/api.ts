@@ -9,10 +9,7 @@ import { getNFTSortBy } from '../../../routing/search'
 import { AssetType } from '../../../asset/types'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
-import {
-  OwnersFilters,
-  OwnersResponse
-} from './types'
+import { OwnersFilters, OwnersResponse } from './types'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 

@@ -19,7 +19,7 @@ function* handleFetchCatalogRequest(action: FetchCatalogRequestAction) {
   const { filters } = action.payload
   try {
     const { data, total }: { data: CatalogItem[]; total: number } = yield call(
-      [catalogAPI, 'fetch'],
+      [catalogAPI, 'get'],
       filters
     )
     yield put(fetchCatalogSuccess(data, total, action.payload))

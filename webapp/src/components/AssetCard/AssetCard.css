@@ -187,6 +187,12 @@ a.ui.card.link:hover .meta {
   border-top-left-radius: 10px;
 }
 
+.AssetCard .ens-subdomain {
+  overflow: hidden;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
 @media (max-width: 1199px) {
   .AssetCard .LandBubble {
     align-self: center;

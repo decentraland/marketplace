@@ -69,6 +69,8 @@ const Navigation = (props: Props) => {
               page: 1,
               sortBy: SortBy.NEWEST,
               status: AssetStatusFilter.ON_SALE,
+              assetType: AssetType.ITEM
+              // assetType: AssetType.CATALOG_ITEM
             })}
           >
             <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>

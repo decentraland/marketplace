@@ -117,7 +117,7 @@ export const getOnlyOnSale = createSelector<
     default:
       return isLandSection(section)
         ? undefined
-        : getDefaultOptionsByView(view, section).onlyOnSale!
+        : getDefaultOptionsByView(view).onlyOnSale
   }
 })
 
@@ -183,6 +183,7 @@ export const getSortByOptions = createSelector<
   if (status) {
     const baseFilters = [
       SORT_BY_MAP[SortBy.NEWEST],
+      SORT_BY_MAP[SortBy.RECENTLY_LISTED],
       SORT_BY_MAP[SortBy.RECENTLY_SOLD],
       SORT_BY_MAP[SortBy.CHEAPEST],
       SORT_BY_MAP[SortBy.MOST_EXPENSIVE]
@@ -338,7 +339,7 @@ export const getAssetType = createSelector<
 
   if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
     if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
-      return AssetType.CATALOG_ITEM
+      return AssetType.ITEM
     }
 
     return AssetType.NFT
@@ -455,13 +456,15 @@ export const getAssetsUrlParams = createSelector(
   getItemId,
   getContracts,
   getCreators,
-  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators) => ({
+  getStatus,
+  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators, status) => ({
     onlyOnSale,
     onlySmart,
     isSoldOut,
     itemId,
     contracts,
-    creators
+    creators,
+    status
   })
 )
 

@@ -99,12 +99,12 @@ export function browseReducer(
       switch (view) {
         case View.ATLAS:
           return state
-        case View.LOAD_MORE:
-          return {
-            ...state,
-            nftIds: [...state.nftIds],
-            count: undefined
-          }
+        // case View.LOAD_MORE:
+        //   return {
+        //     ...state,
+        //     nftIds: [...state.nftIds],
+        //     count: undefined
+        //   }
         default:
           return {
             ...state,
@@ -119,6 +119,7 @@ export function browseReducer(
         return state
       }
       const view = action.payload.options.view
+      // const isLoadMore = action.payload.isLoadMore
       switch (view) {
         case View.MARKET:
         case View.CURRENT_ACCOUNT:
@@ -131,17 +132,17 @@ export function browseReducer(
             lastTimestamp: action.payload.timestamp
           }
         }
-        case View.LOAD_MORE: {
-          return {
-            ...state,
-            nftIds: [
-              ...state.nftIds,
-              ...action.payload.nfts.map(nft => nft.id)
-            ],
-            count: action.payload.count,
-            lastTimestamp: action.payload.timestamp
-          }
-        }
+        // case View.LOAD_MORE: {
+        //   return {
+        //     ...state,
+        //     nftIds: [
+        //       ...state.nftIds,
+        //       ...action.payload.nfts.map(nft => nft.id)
+        //     ],
+        //     count: action.payload.count,
+        //     lastTimestamp: action.payload.timestamp
+        //   }
+        // }
         default:
           return state
       }
@@ -152,12 +153,12 @@ export function browseReducer(
       switch (view) {
         case View.ATLAS:
           return state
-        case View.LOAD_MORE:
-          return {
-            ...state,
-            itemIds: [...state.itemIds],
-            count: undefined
-          }
+        // case View.LOAD_MORE:
+        //   return {
+        //     ...state,
+        //     itemIds: [...state.itemIds],
+        //     count: undefined
+        //   }
         default:
           return {
             ...state,
@@ -183,6 +184,8 @@ export function browseReducer(
       if (action.payload.timestamp < state.lastTimestamp) {
         return state
       }
+      const isLoadMore = action.payload.isLoadMore
+      console.log('isLoadMore: ', isLoadMore)
       const view = action.payload.options.view
       const section = action.payload.options.section
 
@@ -193,7 +196,9 @@ export function browseReducer(
           return {
             ...state,
             view,
-            itemIds: action.payload.items.map(item => item.id),
+            itemIds: isLoadMore
+              ? [...state.itemIds, ...action.payload.items.map(item => item.id)]
+              : action.payload.items.map(item => item.id),
             count: action.payload.total,
             lastTimestamp: action.payload.timestamp
           }
@@ -206,48 +211,18 @@ export function browseReducer(
             lastTimestamp: action.payload.timestamp
           }
         }
-        case View.LOAD_MORE: {
-          return {
-            ...state,
-            itemIds: [
-              ...state.itemIds,
-              ...action.payload.items.map(item => item.id)
-            ],
-            count:
-              section === Section.LISTS ? state.count : action.payload.total,
-            lastTimestamp: action.payload.timestamp
-          }
-        }
-        default:
-          return state
-      }
-    }
-
-    case FETCH_CATALOG_SUCCESS: {
-      const view = action.payload.options.view
-      switch (view) {
-        case View.MARKET:
-        case View.CURRENT_ACCOUNT:
-        case View.ACCOUNT: {
-          return {
-            ...state,
-            view,
-            catalogIds: action.payload.catalogItems.map(
-              catalogItem => catalogItem.id
-            ),
-            count: action.payload.total
-          }
-        }
-        case View.LOAD_MORE: {
-          return {
-            ...state,
-            catalogIds: [
-              ...state.catalogIds,
-              ...action.payload.catalogItems.map(catalogItem => catalogItem.id)
-            ],
-            count: action.payload.total
-          }
-        }
+        // case View.LOAD_MORE: {
+        //   return {
+        //     ...state,
+        //     itemIds: [
+        //       ...state.itemIds,
+        //       ...action.payload.items.map(item => item.id)
+        //     ],
+        //     count:
+        //       section === Section.LISTS ? state.count : action.payload.total,
+        //     lastTimestamp: action.payload.timestamp
+        //   }
+        // }
         default:
           return state
       }

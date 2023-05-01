@@ -11,6 +11,7 @@ import { isLandSection } from '../../modules/ui/utils'
 import { View } from '../../modules/ui/types'
 import { Sections, SortBy, BrowseOptions } from '../../modules/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
+import { AssetStatusFilter } from '../../utils/filters'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
 import EstateSizeFilter from './EstateSizeFilter'
@@ -65,6 +66,7 @@ export const AssetFilters = ({
   isRentalPeriodFilterEnabled
 }: Props): JSX.Element | null => {
   const isInLandSection = isLandSection(section)
+  console.log('isOnSale: ', isOnSale)
 
   const handleBrowseParamChange = useCallback(
     (options: BrowseOptions) => onBrowse(options),
@@ -284,7 +286,7 @@ export const AssetFilters = ({
       ) : null}
       {isPriceFilterEnabled &&
       shouldRenderFilter(AssetFilter.Price) &&
-      isOnSale &&
+      (isOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
       view !== View.ACCOUNT ? (
         <PriceFilter
           onChange={(value, source) =>

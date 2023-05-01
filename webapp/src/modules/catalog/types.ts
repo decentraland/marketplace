@@ -1,8 +1,14 @@
 import {
   CatalogFilters,
   CatalogSortBy,
-  CatalogSortDirection
+  CatalogSortDirection,
+  Item
 } from '@dcl/schemas'
+
+export type CatalogData = Pick<
+  Item,
+  'minPrice' | 'maxListingPrice' | 'minListingPrice' | 'owners' | 'listings'
+>
 
 export type CatalogQueryFilters = Omit<
   CatalogFilters,

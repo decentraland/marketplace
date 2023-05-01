@@ -1,6 +1,7 @@
-import { CatalogItem } from '@dcl/schemas'
+// import { CatalogItem } from '@dcl/schemas'
 import { createSelector } from 'reselect'
 import { RootState } from '../reducer'
+import { CatalogData } from './types'
 
 export const getState = (state: RootState) => state.catalogItem
 export const getData = (state: RootState) => getState(state).data
@@ -10,5 +11,5 @@ export const getLoading = (state: RootState) => getState(state).loading
 export const getCatalogItems = createSelector<
   RootState,
   ReturnType<typeof getData>,
-  CatalogItem[]
+  CatalogData[]
 >(getData, itemsById => Object.values(itemsById))

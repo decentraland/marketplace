@@ -1,5 +1,6 @@
+import { ItemFilters } from '@dcl/schemas'
 import { View } from '../ui/types'
-import { ItemFilters } from '../vendor/decentraland/item/types'
+// import { ItemFilters } from '../vendor/decentraland/item/types'
 import { Section } from '../vendor/routing/types'
 
 export type ItemBrowseOptions = {
@@ -7,4 +8,5 @@ export type ItemBrowseOptions = {
   page?: number
   filters?: ItemFilters
   section?: Section
+  isLoadMore?: boolean
 }
