@@ -37,7 +37,7 @@ export default function withAuthorizedAction<
     const [isLoadingAuthorization, setIsLoadingAuthorization] = useState(false)
     const { wallet } = props
 
-    const handleAuthorizedAction = async (
+    const handleAuthorizedAction = useCallback(async (
       authorizeOptions: AuthorizeActionOptions
     ) => {
       if (!wallet) {
@@ -131,7 +131,7 @@ export default function withAuthorizedAction<
         // TODO: handle error scenario
         console.error(error)
       }
-    }
+    }, [wallet])
 
     const handleClose = useCallback(() => {
       setIsLoadingAuthorization(false)
