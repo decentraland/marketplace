@@ -68,6 +68,9 @@ export function AuthorizationModal({
       contract: authorizedContract
     })
     const confirmationIndex = authSteps.length
+    const isLoading =
+      LOADING_STATUS.includes(confirmationStatus) ||
+      confirmationIndex === loadingStep
     return [
       ...authSteps,
       {
@@ -78,9 +81,7 @@ export function AuthorizationModal({
         onActionClicked: handleAuthorized,
         testId: 'confirm-action-step',
         status: confirmationStatus,
-        isLoading:
-          LOADING_STATUS.includes(confirmationStatus) ||
-          confirmationIndex === loadingStep,
+        isLoading,
         message: getStepMessage(
           confirmationIndex,
           confirmationStatus,
