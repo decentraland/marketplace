@@ -260,24 +260,32 @@
   font-stretch: normal;
 }
 
+.RecentlySoldTable .ui.table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.RecentlySoldTable .ui.table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
 .RecentlySoldTable .ui.table th {
   padding: 18px !important;
-  border: 1px solid var(--divider);
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 
 .RecentlySoldTable .ui.table td:first-child,
 .RecentlySoldTable .ui.table th:first-child {
   padding: 18px !important;
-  border: 1px solid var(--divider);
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 
 .RecentlySoldTable .ui.table tr td {
-  border: 1px solid var(--divider);
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
   padding: 18px;
 }
 
 .RecentlySoldTable .ui.table tr td {
-  border-top: 1px solid var(--divider);
+  border-top: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 
 .RecentlySoldTable .ui.table td a {

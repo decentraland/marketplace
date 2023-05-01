@@ -245,7 +245,7 @@ const AssetCard = (props: Props) => {
       ) : null}
       <Card.Content className={isCatalogItem ? 'catalog' : ''}>
         <Card.Header>
-          <div className="title">
+          <div className={isCatalogItem ? 'catalogTitle' : 'title'}>
             {title}
             {isCatalogItem && (
               <Link className="creator" to={locations.account(asset.creator)}>
@@ -253,7 +253,7 @@ const AssetCard = (props: Props) => {
               </Link>
             )}
           </div>
-          {!catalogItemInformation && price ? (
+          {!isCatalogItem && price ? (
             <Mana network={asset.network} inline>
               {fomrmatWeiToAssetCard(price)}
             </Mana>

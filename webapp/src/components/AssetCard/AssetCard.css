@@ -90,6 +90,16 @@ a.ui.card.AssetCard.catalog:hover,
   flex-direction: column;
 }
 
+.AssetCard .header .catalogTitle {
+  flex: 1 2 auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
 .AssetCard .creator {
   font-size: 14px;
   font-weight: 400;

@@ -200,24 +200,32 @@
   color: white;
 }
 
+.RankingsTable .ui.table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.RankingsTable .ui.table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
 .RankingsTable .ui.table th {
   padding: 18px;
-  border: 1px solid var(--divider);
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 
 .RankingsTable .ui.table td:first-child,
 .RankingsTable .ui.table th:first-child {
   padding: 18px !important;
-  border: 1px solid var(--divider);
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 
 .RankingsTable .ui.table tr td {
-  border: 1px solid var(--divider);
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
   padding: 18px;
 }
 
 .RankingsTable .ui.table tr td {
-  border-top: 1px solid var(--divider);
+  border-top: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 
 .RankingsTable .ui.table td a {

@@ -99,6 +99,11 @@
   margin-left: auto;
 }
 
+.rightOptionsContainer :global(.ui.dropdown) {
+  display: flex;
+  align-items: center;
+}
+
 .openFiltersWrapper {
   display: flex;
   position: relative;
@@ -130,7 +135,7 @@
 
 .searchContainer.searchMap {
   align-self: flex-end;
-  background-color: #16141A;
+  background-color: #16141a;
   width: fit-content;
   display: flex;
   padding: 10px 20px;
