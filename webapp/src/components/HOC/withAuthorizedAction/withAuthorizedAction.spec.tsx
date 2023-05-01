@@ -51,7 +51,9 @@ function renderComponentWithAuthorizedAction(
   }
   const WithAuthorizedActionComponent = withAuthorizedAction(
     Component,
-    AuthorizedAction.BID
+    AuthorizedAction.BID,
+    jest.fn(),
+    jest.fn()
   )
   return renderWithProviders(<WithAuthorizedActionComponent />, {
     preloadedState: initialState

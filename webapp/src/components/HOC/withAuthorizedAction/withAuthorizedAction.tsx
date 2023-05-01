@@ -8,7 +8,7 @@ import {
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
-import { AuthorizationModal, AuthorizedAction } from './AuthorizationModal'
+import { AuthorizationModal, AuthorizationStepStatus, AuthorizedAction } from './AuthorizationModal'
 import {
   WithAuthorizedActionProps,
   MapStateProps,
@@ -24,7 +24,9 @@ export default function withAuthorizedAction<
   P extends WithAuthorizedActionProps
 >(
   WrappedComponent: React.ComponentType<P>,
-  action: AuthorizedAction
+  action: AuthorizedAction,
+  getConfirmationStatus?: (state: RootState) => AuthorizationStepStatus,
+  getConfirmationError?: (state: RootState) => string | null
 ): React.ComponentType<Omit<P, keyof WithAuthorizedActionProps>> {
   // TODO: Remove any type
   const WithAutorizedActionComponent = (props: MapStateProps & any) => {
@@ -94,7 +96,9 @@ export default function withAuthorizedAction<
             authorizationType: authorizationType,
             action,
             network: targetContract.network,
-            onAuthorized
+            onAuthorized,
+            getConfirmationStatus,
+            getConfirmationError
           })
         } else {
           const contract = getERC721ContractInstance(
@@ -117,7 +121,9 @@ export default function withAuthorizedAction<
             authorizationType: authorizationType,
             action,
             network: targetContract.network,
-            onAuthorized
+            onAuthorized,
+            getConfirmationStatus,
+            getConfirmationError
           })
         }
         setShowAuthorizationModal(true)
