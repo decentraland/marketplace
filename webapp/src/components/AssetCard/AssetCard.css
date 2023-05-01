@@ -76,7 +76,7 @@ a.ui.card.AssetCard.catalog:hover,
 }
 
 .AssetCard:hover .CatalogItemInformation {
-  margin-top: 13px;
+  margin-top: 2px;
 }
 
 .AssetCard .header .title {
