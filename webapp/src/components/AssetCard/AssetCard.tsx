@@ -20,6 +20,7 @@ import {
   isRentalListingOpen
 } from '../../modules/rental/utils'
 import { SortBy } from '../../modules/routing/types'
+import { locations } from '../../modules/routing/locations'
 import mintingIcon from '../../images/minting.png'
 import { Mana } from '../Mana'
 import { LinkedProfile } from '../LinkedProfile'
@@ -121,13 +122,6 @@ const AssetCard = (props: Props) => {
       extraInformation: React.ReactNode | null
     } | null = null
     if (isCatalogItem(asset)) {
-      if (asset.id === '0x801e3ba69794b5ba6b6c0b6e8a771f99ae5f4c4a-0') {
-        console.log(
-          'asset.isOnSale && asset.available > 0',
-          asset.isOnSale && asset.available > 0
-        )
-      }
-
       const isAvailableForMint = asset.isOnSale && asset.available > 0
 
       if (!isAvailableForMint && !asset.minListingPrice) {
@@ -256,11 +250,9 @@ const AssetCard = (props: Props) => {
           <div className="title">
             {title}
             {isCatalogItem(asset) && (
-              <LinkedProfile
-                address={asset.creator}
-                textOnly
-                className="creator"
-              />
+              <Link className="creator" to={locations.account(asset.creator)}>
+                <LinkedProfile address={asset.creator} textOnly />
+              </Link>
             )}
           </div>
           {!catalogItemInformation && price ? (
