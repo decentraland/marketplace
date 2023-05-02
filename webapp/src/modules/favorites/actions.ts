@@ -10,16 +10,14 @@ export const PICK_ITEM_AS_FAVORITE_SUCCESS =
 export const PICK_ITEM_AS_FAVORITE_FAILURE =
   '[Failure] Pick item as Favorite Request'
 
-export const pickItemAsFavoriteRequest = (item: Item | CatalogItem) =>
+export const pickItemAsFavoriteRequest = (item: Item) =>
   action(PICK_ITEM_AS_FAVORITE_REQUEST, { item })
 
-export const pickItemAsFavoriteSuccess = (item: Item | CatalogItem) =>
+export const pickItemAsFavoriteSuccess = (item: Item) =>
   action(PICK_ITEM_AS_FAVORITE_SUCCESS, { item })
 
-export const pickItemAsFavoriteFailure = (
-  item: Item | CatalogItem,
-  error: string
-) => action(PICK_ITEM_AS_FAVORITE_FAILURE, { item, error })
+export const pickItemAsFavoriteFailure = (item: Item, error: string) =>
+  action(PICK_ITEM_AS_FAVORITE_FAILURE, { item, error })
 
 export type PickItemAsFavoriteRequestAction = ReturnType<
   typeof pickItemAsFavoriteRequest
@@ -50,7 +48,7 @@ export const UNPICK_ITEM_AS_FAVORITE_SUCCESS =
 export const UNPICK_ITEM_AS_FAVORITE_FAILURE =
   '[Failure] Unpick item as Favorite Request'
 
-export const unpickItemAsFavoriteRequest = (item: Item | CatalogItem) =>
+export const unpickItemAsFavoriteRequest = (item: Item) =>
   action(UNPICK_ITEM_AS_FAVORITE_REQUEST, { item })
 
 export const unpickItemAsFavoriteSuccess = (item: Item) =>
@@ -58,10 +56,8 @@ export const unpickItemAsFavoriteSuccess = (item: Item) =>
     item
   })
 
-export const unpickItemAsFavoriteFailure = (
-  item: Item | CatalogItem,
-  error: string
-) => action(UNPICK_ITEM_AS_FAVORITE_FAILURE, { item, error })
+export const unpickItemAsFavoriteFailure = (item: Item, error: string) =>
+  action(UNPICK_ITEM_AS_FAVORITE_FAILURE, { item, error })
 
 export type UnpickItemAsFavoriteRequestAction = ReturnType<
   typeof unpickItemAsFavoriteRequest
@@ -81,16 +77,14 @@ export const UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS =
 export const UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE =
   '[Failure] Undo unpicking item as Favorite Request'
 
-export const undoUnpickingItemAsFavoriteRequest = (item: Item | CatalogItem) =>
+export const undoUnpickingItemAsFavoriteRequest = (item: Item) =>
   action(UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST, { item })
 
-export const undoUnpickingItemAsFavoriteSuccess = (item: Item | CatalogItem) =>
+export const undoUnpickingItemAsFavoriteSuccess = (item: Item) =>
   action(UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS, { item })
 
-export const undoUnpickingItemAsFavoriteFailure = (
-  item: Item | CatalogItem,
-  error: string
-) => action(UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE, { item, error })
+export const undoUnpickingItemAsFavoriteFailure = (item: Item, error: string) =>
+  action(UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE, { item, error })
 
 export type UndoUnpickingItemAsFavoriteRequestAction = ReturnType<
   typeof undoUnpickingItemAsFavoriteRequest

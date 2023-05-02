@@ -3,7 +3,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import Price from '../../Price'
 import styles from './SaleActionBox.module.css'
 import { Props } from './SaleActionBox.types'
-import { isCatalogItem, isNFT } from '../../../modules/asset/utils'
+import { isNFT } from '../../../modules/asset/utils'
 import { ItemSaleActions } from './ItemSaleActions'
 import { NFTSaleActions } from './NFTSaleActions'
 
@@ -14,7 +14,7 @@ const SaleActionBox = ({ asset }: Props) => {
       <div className={styles.container}>
         {isNFT(asset) ? (
           <NFTSaleActions nft={asset} />
-        ) : !isCatalogItem(asset) ? (
+        ) : !asset.minPrice ? ( // TODO CHECK
           <ItemSaleActions item={asset} />
         ) : null}
       </div>
