@@ -27,6 +27,7 @@ import {
   getOnRentNFTsByTenant,
   getOnSaleElements,
   getOnSaleNFTs,
+  getPage,
   getState,
   getView,
   getWalletOwnedLands,
@@ -123,6 +124,7 @@ beforeEach(() => {
           nftWithExecutedRentByTenant.id
         ],
         count: 1,
+        page: 1,
         view: View.MARKET
       } as BrowseUIState
     },
@@ -182,6 +184,12 @@ describe('when getting the view of the ui browse state', () => {
 describe('when getting the count of the ui browse state', () => {
   it('should retrieve the count of the ui browse state', () => {
     expect(getCount(rootState)).toBe(rootState.ui.browse.count)
+  })
+})
+
+describe('when getting the page of the ui browse state', () => {
+  it('should retrieve the count of the ui browse state', () => {
+    expect(getPage(rootState)).toBe(rootState.ui.browse.page)
   })
 })
 

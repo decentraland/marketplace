@@ -7,7 +7,6 @@ import {
 } from '../../favorites/actions'
 import { PAGE_SIZE } from '../../vendor/api'
 import { getPageNumber, getSection } from '../../routing/selectors'
-import { View } from '../types'
 import { getCount, getItemsPickedByUser } from './selectors'
 
 export function* browseSaga() {
@@ -29,7 +28,7 @@ function* handleUnpickItemAsFavoriteSuccess() {
     yield put(
       fetchFavoritedItemsRequest({
         filters: { first: 1, skip: page * PAGE_SIZE - 1 },
-        view: View.LOAD_MORE,
+        page,
         section: Section.LISTS
       })
     )

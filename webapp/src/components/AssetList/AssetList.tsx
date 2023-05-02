@@ -23,7 +23,6 @@ const AssetList = (props: Props) => {
     count,
     search,
     isLoading,
-    isLoadingMore,
     hasFiltersEnabled,
     visitedLocations,
     onBrowse,
@@ -79,6 +78,74 @@ const AssetList = (props: Props) => {
     return 'nft_list.simple_empty'
   }, [assets.length, search, section, isManager])
 
+  const renderEmptyState = useCallback(() => {
+    return (
+      <div className="empty">
+        <div className="watermelon" />
+        <T
+          id={emptyStateTranslationString}
+          values={{
+            search,
+            currentSection:
+              assetType === AssetType.ITEM
+                ? t('browse_page.primary_market_title').toLocaleLowerCase()
+                : t('browse_page.secondary_market_title').toLocaleLowerCase(),
+            section:
+              assetType === AssetType.ITEM
+                ? t('browse_page.secondary_market_title').toLocaleLowerCase()
+                : t('browse_page.primary_market_title').toLocaleLowerCase(),
+            searchStore: (chunks: string) => (
+              <button
+                className="empty-actions"
+                onClick={() =>
+                  onBrowse({
+                    assetType:
+                      assetType === AssetType.ITEM
+                        ? AssetType.NFT
+                        : AssetType.ITEM
+                  })
+                }
+              >
+                {chunks}
+              </button>
+            ),
+            'if-filters': (chunks: string) => (hasFiltersEnabled ? chunks : ''),
+            clearFilters: (chunks: string) => (
+              <button className="empty-actions" onClick={onClearFilters}>
+                {chunks}
+              </button>
+            ),
+            br: () => <br />
+          }}
+        />
+      </div>
+    )
+  }, [
+    assetType,
+    emptyStateTranslationString,
+    hasFiltersEnabled,
+    onBrowse,
+    onClearFilters,
+    search
+  ])
+
+  const shouldRenderEmptyState = useMemo(
+    () => assets.length === 0 && !isLoading,
+    [assets.length, isLoading]
+  )
+
+  const renderAssetCards = useCallback(
+    () =>
+      assets.map((assets, index) => (
+        <AssetCard
+          isManager={isManager}
+          key={assetType + '-' + assets.id + '-' + index}
+          asset={assets}
+        />
+      )),
+    [assetType, assets, isManager]
+  )
+
   return (
     <>
       {isLoading ? (
@@ -87,17 +154,7 @@ const AssetList = (props: Props) => {
           <Loader size="massive" active className="asset-loader" />
         </>
       ) : null}
-      <Card.Group>
-        {assets.length > 0 && (!isLoading || isLoadingMore)
-          ? assets.map((assets, index) => (
-              <AssetCard
-                isManager={isManager}
-                key={assetType + '-' + assets.id + '-' + index}
-                asset={assets}
-              />
-            ))
-          : null}
-      </Card.Group>
+      <Card.Group>{assets.length > 0 ? renderAssetCards() : null}</Card.Group>
       <InfiniteScroll
         page={page}
         hasMorePages={hasMorePages}
@@ -105,52 +162,7 @@ const AssetList = (props: Props) => {
         isLoading={isLoading}
         maxScrollPages={3}
       >
-        {assets.length === 0 && !isLoading ? (
-          <div className="empty">
-            <div className="watermelon" />
-            <T
-              id={emptyStateTranslationString}
-              values={{
-                search,
-                currentSection:
-                  assetType === AssetType.ITEM
-                    ? t('browse_page.primary_market_title').toLocaleLowerCase()
-                    : t(
-                        'browse_page.secondary_market_title'
-                      ).toLocaleLowerCase(),
-                section:
-                  assetType === AssetType.ITEM
-                    ? t(
-                        'browse_page.secondary_market_title'
-                      ).toLocaleLowerCase()
-                    : t('browse_page.primary_market_title').toLocaleLowerCase(),
-                searchStore: (chunks: string) => (
-                  <button
-                    className="empty-actions"
-                    onClick={() =>
-                      onBrowse({
-                        assetType:
-                          assetType === AssetType.ITEM
-                            ? AssetType.NFT
-                            : AssetType.ITEM
-                      })
-                    }
-                  >
-                    {chunks}
-                  </button>
-                ),
-                'if-filters': (chunks: string) =>
-                  hasFiltersEnabled ? chunks : '',
-                clearFilters: (chunks: string) => (
-                  <button className="empty-actions" onClick={onClearFilters}>
-                    {chunks}
-                  </button>
-                ),
-                br: () => <br />
-              }}
-            />
-          </div>
-        ) : null}
+        {shouldRenderEmptyState ? renderEmptyState() : null}
       </InfiniteScroll>
     </>
   )

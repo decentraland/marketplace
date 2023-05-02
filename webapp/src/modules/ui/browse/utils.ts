@@ -1,5 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { FavoritesData } from '../../favorites/types'
+import { BrowseUIState } from './reducer'
 
 export function orderById(ids: string[], items: Item[]) {
   const itemsById = Object.fromEntries(items.map(item => [item.id, item]))
@@ -17,4 +18,8 @@ export const byFavoriteCreatedAtAsc = (
     return -1
   }
   return 0
+}
+
+export const isLoadingMoreResults = (state: BrowseUIState, page?: number) => {
+  return !!state.page && !!page && page > state.page
 }
