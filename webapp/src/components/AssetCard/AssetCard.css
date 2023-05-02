@@ -3,6 +3,16 @@
   overflow: visible;
 }
 
+.AssetCard .header .catalogTitle {
+  flex: 1 2 auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
 .ui.cards a.card.AssetCard.catalog:hover,
 .ui.link.card.AssetCard.catalog:hover,
 .ui.link.cards .card.AssetCard.catalog:hover,

@@ -145,8 +145,9 @@ const AssetCard = (props: Props) => {
             : null
 
         const displayExtraInfomationToMint =
-          (sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING) ||
-          (sortBy === SortBy.CHEAPEST && cheapest === LISTING)
+          isAvailableForMint &&
+          ((sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING) ||
+            (sortBy === SortBy.CHEAPEST && cheapest === LISTING))
 
         information = {
           action:
@@ -244,7 +245,7 @@ const AssetCard = (props: Props) => {
       ) : null}
       <Card.Content className={isCatalogItem ? 'catalog' : ''}>
         <Card.Header>
-          <div className="title">
+          <div className={isCatalogItem ? 'catalogTitle' : 'title'}>
             {title}
             {!isNFT(asset) && isCatalogItem && (
               <Link className="creator" to={locations.account(asset.creator)}>
@@ -252,7 +253,7 @@ const AssetCard = (props: Props) => {
               </Link>
             )}
           </div>
-          {!catalogItemInformation && price ? (
+          {!isCatalogItem && price ? (
             <Mana network={asset.network} inline>
               {fomrmatWeiToAssetCard(price)}
             </Mana>

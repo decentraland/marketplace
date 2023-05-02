@@ -166,6 +166,7 @@ const CollectionPage = (props: Props) => {
                             </div>
                           ))}
                           total={0}
+                          hasHeaders={showShowTabs}
                         />
                       }
                     />

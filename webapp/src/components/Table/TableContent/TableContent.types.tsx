@@ -10,6 +10,7 @@ export type Props = {
   total: number
   rowsPerPage?: number
   mobileTableBody?: React.ReactNode
+  hasHeaders?: boolean
 }
 
 export type DataTableType = {
