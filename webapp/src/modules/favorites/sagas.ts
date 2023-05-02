@@ -156,7 +156,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (results.length > 0) {
-        yield put(fetchItemsRequest(options))
+        // yield put(fetchItemsRequest(options))
       } else {
         yield put(fetchItemsSuccess([], total, options, Date.now()))
       }
