@@ -184,7 +184,7 @@ export function getPickItemAsFavoriteFailureToast(
 }
 
 export function getUnpickItemAsFavoriteSuccessToast(
-  item: Item | CatalogItem
+  item: Item
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
