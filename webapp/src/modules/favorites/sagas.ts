@@ -5,7 +5,7 @@ import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
+import { fetchItemsSuccess } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import {
   closeModal,
