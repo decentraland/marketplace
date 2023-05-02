@@ -71,7 +71,6 @@ import {
   BrowseAction,
   FETCH_ASSETS_FROM_ROUTE,
   FetchAssetsFromRouteAction,
-  setIsLoadMore,
   CLEAR_FILTERS,
   GO_BACK,
   GoBackAction
@@ -204,18 +203,13 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const address =
     options.address || ((yield select(getCurrentLocationAddress)) as string)
 
-  const isLoadMore = view === View.LOAD_MORE
-
-  yield put(setIsLoadMore(isLoadMore))
-
   if (isMap) {
     yield put(setView(view))
   }
 
   const category = getCategoryFromSection(section)
 
-  const offset = isLoadMore ? page - 1 : 0
-  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
+  const skip = Math.min(page - 1, MAX_PAGE) * PAGE_SIZE
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
   switch (section) {
@@ -322,6 +316,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           fetchNFTsRequest({
             vendor,
             view,
+            page,
             params: {
               first,
               skip,
@@ -577,9 +572,7 @@ function* deriveCurrentOptions(
 }
 
 function deriveView(previous: BrowseOptions, current: BrowseOptions) {
-  return previous.page! < current.page!
-    ? View.LOAD_MORE
-    : current.view || previous.view
+  return current.view || previous.view
 }
 
 function deriveVendor(previous: BrowseOptions, current: BrowseOptions) {

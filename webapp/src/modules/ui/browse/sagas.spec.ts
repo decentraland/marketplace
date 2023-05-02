@@ -47,7 +47,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
         pickedItems = []
       })
 
-      it('should not put an action to fetch the last item of the loaded page to replace the unpicked item', () => {
+      it('should put an action to fetch the last item of the loaded page to replace the unpicked item', () => {
         return expectSaga(browseSaga)
           .provide([
             [select(getSection), section],
@@ -58,7 +58,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
           .put(
             fetchFavoritedItemsRequest({
               filters: { first: 1, skip: PAGE_SIZE - 1 },
-              view: View.LOAD_MORE,
+              page: 1,
               section: Section.LISTS
             })
           )

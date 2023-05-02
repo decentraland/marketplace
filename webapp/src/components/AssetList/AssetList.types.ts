@@ -23,7 +23,6 @@ export type Props = {
   onBrowse: typeof browse
   onClearFilters: typeof clearFilters
   search: string
-  isLoadingMore: boolean
   visitedLocations: RouterLocation<unknown>[]
 }
 
@@ -38,7 +37,6 @@ export type MapStateProps = Pick<
   | 'assetType'
   | 'search'
   | 'hasFiltersEnabled'
-  | 'isLoadingMore'
   | 'visitedLocations'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
