@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { CatalogItem, Item } from '@dcl/schemas'
+import { Item } from '@dcl/schemas'
 import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -130,7 +130,7 @@ export function getExcecuteOrderFailureToast(): Omit<Toast, 'id'> {
 }
 
 export function getPickItemAsFavoriteSuccessToast(
-  item: Item | CatalogItem
+  item: Item
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
@@ -160,7 +160,7 @@ export function getPickItemAsFavoriteSuccessToast(
 }
 
 export function getPickItemAsFavoriteFailureToast(
-  item: Item | CatalogItem
+  item: Item
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,
@@ -210,7 +210,7 @@ export function getUnpickItemAsFavoriteSuccessToast(
 }
 
 export function getUnpickItemAsFavoriteFailureToast(
-  item: Item | CatalogItem
+  item: Item
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,

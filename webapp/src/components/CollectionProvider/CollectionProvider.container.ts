@@ -49,7 +49,7 @@ const mapDispatch = (
       fetchItemsRequest({
         filters: {
           first: collection.size,
-          contracts: [collection.contractAddress]
+          contractAddresses: [collection.contractAddress]
         }
       })
     )
