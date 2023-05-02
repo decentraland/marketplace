@@ -14,13 +14,19 @@ const TableContent = (props: Props) => {
     activePage = 1,
     setPage,
     total,
-    rowsPerPage = ROWS_PER_PAGE
+    rowsPerPage = ROWS_PER_PAGE,
+    hasHeaders = false
   } = props
 
   const headers = data.length > 0 ? Object.keys(data[0]) : null
+  const hasPagination = totalPages && totalPages > 1
 
   return (
-    <div className={'TableContent'}>
+    <div
+      className={`TableContent ${!hasPagination ? 'radiusEnding' : ''} ${
+        !hasHeaders ? 'emptyHeaders' : ''
+      }`}
+    >
       {isLoading ? (
         <div className={'emptyTable'}>
           <Loader active data-testid="loader" />
@@ -47,7 +53,7 @@ const TableContent = (props: Props) => {
       ) : (
         empty()
       )}
-      {totalPages && totalPages > 1 ? (
+      {hasPagination ? (
         <div className="pagination">
           {`${t('global.showing')} ${activePage}-${activePage *
             rowsPerPage}  ${t('global.of')} ${total}`}
