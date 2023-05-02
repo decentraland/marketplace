@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { CatalogItem, Item } from '@dcl/schemas'
+import { Item } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import {
   pickItemAsFavoriteRequest,
@@ -31,11 +31,9 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onPick: (item: Item | CatalogItem) =>
-    dispatch(pickItemAsFavoriteRequest(item)),
-  onUnpick: (item: Item | CatalogItem) =>
-    dispatch(unpickItemAsFavoriteRequest(item)),
-  onCounterClick: (item: Item | CatalogItem) =>
+  onPick: (item: Item) => dispatch(pickItemAsFavoriteRequest(item)),
+  onUnpick: (item: Item) => dispatch(unpickItemAsFavoriteRequest(item)),
+  onCounterClick: (item: Item) =>
     dispatch(openModal('FavoritesModal', { itemId: item.id }))
 })
 
