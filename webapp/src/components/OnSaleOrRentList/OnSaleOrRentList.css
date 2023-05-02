@@ -13,7 +13,6 @@
 }
 
 .ui.dropdown > .icon {
-  color: white !important;
   height: 100%;
   display: flex;
   align-items: center;
@@ -47,22 +46,22 @@
 
 .onSaleOrRentTable .ui.table th {
   padding: 18px;
-  border: 1px solid var(--divider);
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 
 .onSaleOrRentTable .ui.table td:first-child,
 .onSaleOrRentTable .ui.table th:first-child {
   padding: 18px !important;
-  border: 1px solid var(--divider);
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 
 .onSaleOrRentTable .ui.table tr td {
-  border: 1px solid var(--divider);
+  border: 0.2px solid rgba(255, 255, 255, 0.2);
   padding: 18px;
 }
 
 .onSaleOrRentTable .ui.table tr td {
-  border-top: 1px solid var(--divider);
+  border-top: 0.2px solid rgba(255, 255, 255, 0.2);
 }
 
 .onSaleOrRentTable .ui.table td a {
