@@ -8,8 +8,9 @@ import { Props } from './EmoteTags.types'
 import styles from './EmoteTags.module.css'
 
 const EmoteTags = (props: Props) => {
-  const { nft } = props
-  const { rarity, loop } = nft.data.emote!
+  const { asset } = props
+  const { rarity, loop } = asset.data.emote!
+
   return (
     <div className={classNames([styles.EmoteTags, 'tags'])}>
       <RarityBadge
