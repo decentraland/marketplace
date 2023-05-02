@@ -19,8 +19,4 @@
   .AssetPage .backText {
     margin-top: -20px;
   }
-
-  .AssetPage .ui.container .dcl.back.absolute {
-    position: absolute;
-  }
 }
