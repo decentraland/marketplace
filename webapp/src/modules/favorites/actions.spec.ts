@@ -29,7 +29,6 @@ import {
   UNPICK_ITEM_AS_FAVORITE_REQUEST,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS
 } from './actions'
-import { FavoritedItems } from './types'
 
 const itemBrowseOptions: ItemBrowseOptions = {
   view: View.LISTS,
@@ -158,29 +157,30 @@ describe('when creating the action to signal a failure in the undo unpicking ite
 
 describe('when creating the action to signal the start of the fetch favorited items request', () => {
   it('should return an object representing the action', () => {
-    expect(fetchFavoritedItemsRequest(itemBrowseOptions)).toEqual({
+    expect(fetchFavoritedItemsRequest(itemBrowseOptions, true)).toEqual({
       type: FETCH_FAVORITED_ITEMS_REQUEST,
       meta: undefined,
-      payload: itemBrowseOptions
+      payload: { options: itemBrowseOptions, forceLoadMore: true }
     })
   })
 })
 
 describe('when creating the action to signal a successful fetch favorited items request', () => {
   it('should return an object representing the action', () => {
-    expect(fetchFavoritedItemsSuccess([item], createdAt, total, {}, 0)).toEqual(
-      {
-        type: FETCH_FAVORITED_ITEMS_SUCCESS,
-        meta: undefined,
-        payload: {
-          items: [item],
-          options: {},
-          createdAt,
-          total,
-          timestamp: 0
-        }
+    expect(
+      fetchFavoritedItemsSuccess([item], createdAt, total, {}, 0, true)
+    ).toEqual({
+      type: FETCH_FAVORITED_ITEMS_SUCCESS,
+      meta: undefined,
+      payload: {
+        items: [item],
+        options: {},
+        createdAt,
+        total,
+        timestamp: 0,
+        forceLoadMore: true
       }
-    )
+    })
   })
 })
 

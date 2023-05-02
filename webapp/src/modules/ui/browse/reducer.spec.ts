@@ -5,7 +5,6 @@ import {
   unpickItemAsFavoriteSuccess,
   undoUnpickingItemAsFavoriteSuccess
 } from '../../favorites/actions'
-import { FavoritedItems } from '../../favorites/types'
 import {
   fetchItemsRequest,
   fetchItemsSuccess,
@@ -24,12 +23,23 @@ import { BrowseUIState, INITIAL_STATE, browseReducer } from './reducer'
 const assetIds = ['0x0-assetId1', '0x0-assetId2', '0x0-assetId3']
 
 describe('when reducing the action of setting a view', () => {
-  const initialState: BrowseUIState = { ...INITIAL_STATE }
+  const initialState: BrowseUIState = {
+    ...INITIAL_STATE,
+    view: View.MARKET,
+    itemIds: assetIds,
+    nftIds: assetIds,
+    count: assetIds.length,
+    page: 1
+  }
 
-  it('should return a state with favorited items and their picks stats', () => {
+  it('should set the view and reset the state and empty the itemIds, nftIds, count and page', () => {
     expect(browseReducer(initialState, setView(View.LISTS))).toEqual({
       ...initialState,
-      view: View.LISTS
+      view: View.LISTS,
+      itemIds: [],
+      nftIds: [],
+      count: undefined,
+      page: undefined
     })
   })
 })
@@ -86,8 +96,9 @@ const fetchRequestActions: [
 describe.each(fetchRequestActions)(
   'when reducing the request action of %s',
   (_, { action, assetType }) => {
-    const initialState: BrowseUIState = {
+    let initialState: BrowseUIState = {
       ...INITIAL_STATE,
+      page: 1,
       [`${assetType}Ids`]: assetIds,
       count: assetIds.length
     }
@@ -104,6 +115,10 @@ describe.each(fetchRequestActions)(
           ...fetchOptions,
           view: View.ATLAS
         }
+        initialState = {
+          ...initialState,
+          view: View.ATLAS
+        }
       })
 
       it('should return the state as it was before', () => {
@@ -113,38 +128,60 @@ describe.each(fetchRequestActions)(
       })
     })
 
-    describe('when the view is load_more', () => {
-      beforeEach(() => {
-        fetchOptions = {
-          ...fetchOptions,
-          view: View.LOAD_MORE
-        }
-      })
+    const views = {
+      [AssetType.NFT]: [View.MARKET, View.ACCOUNT, View.CURRENT_ACCOUNT],
+      [AssetType.ITEM]: [
+        View.MARKET,
+        View.ACCOUNT,
+        View.CURRENT_ACCOUNT,
+        View.LISTS
+      ]
+    }
 
-      it(`should keep the ${assetType} ids and clear the count`, () => {
-        expect(browseReducer(initialState, action(fetchOptions))).toEqual({
-          ...initialState,
-          count: undefined
+    describe.each(views[assetType])(
+      'when it is loading more AND view is %s',
+      view => {
+        beforeEach(() => {
+          fetchOptions = {
+            ...fetchOptions,
+            view,
+            page: 2
+          }
         })
-      })
-    })
 
-    describe('and the view is no one of the previous ones', () => {
-      beforeEach(() => {
-        fetchOptions = {
-          ...fetchOptions,
-          view: View.CURRENT_ACCOUNT
-        }
-      })
-
-      it(`should clear the ${assetType} ids and the count`, () => {
-        expect(browseReducer(initialState, action(fetchOptions))).toEqual({
-          ...initialState,
-          nftIds: [],
-          count: undefined
+        describe('and it is the same view', () => {
+          beforeEach(() => {
+            initialState = {
+              ...initialState,
+              view
+            }
+          })
+          it(`should keep the ${assetType} ids and clear the count`, () => {
+            expect(browseReducer(initialState, action(fetchOptions))).toEqual({
+              ...initialState,
+              count: undefined
+            })
+          })
         })
-      })
-    })
+
+        describe('and it is a different view', () => {
+          beforeEach(() => {
+            fetchOptions = {
+              ...fetchOptions,
+              view: 'another view' as View
+            }
+          })
+
+          it(`should clear the ${assetType} ids and count`, () => {
+            expect(browseReducer(initialState, action(fetchOptions))).toEqual({
+              ...initialState,
+              [`${assetType}Ids`]: [],
+              count: undefined
+            })
+          })
+        })
+      }
+    )
   }
 )
 
@@ -231,23 +268,27 @@ describe('when reducing the fetch NFTs success action', () => {
       }
     )
 
-    describe('and the view is load_more', () => {
+    describe('and is loading more results', () => {
       let view: View
-
+      let initialPage: number
       beforeEach(() => {
-        view = View.LOAD_MORE
+        view = View.MARKET
+        initialPage = 1
         initialState = {
           ...initialState,
           lastTimestamp: 2,
+          view,
+          page: initialPage,
           nftIds: ['anotherAssetId']
         }
         nftsFetchOptions = {
           ...nftsFetchOptions,
+          page: initialPage + 1,
           view
         }
       })
 
-      it('should return the state with the nft ids concatenated with the previous ones, the count and the last timestamp that comes in the action payload', () => {
+      it('should return the state with the nft ids concatenated with the previous ones, the count, the last timestamp that comes in the action payload and increment the page', () => {
         expect(
           browseReducer(
             initialState,
@@ -265,6 +306,7 @@ describe('when reducing the fetch NFTs success action', () => {
           ...initialState,
           nftIds: [...initialState.nftIds, nft.id],
           count,
+          page: nftsFetchOptions.page,
           lastTimestamp: timestamp
         })
       })
@@ -367,34 +409,10 @@ describe('when reducing the success action of fetching favorited items', () => {
       initialState.itemIds = ['anItemId']
     })
 
-    describe('and the view is set as load more', () => {
+    describe('and the page being loaded is lower or equal than the one already loaded', () => {
       beforeEach(() => {
-        browseOptions = { view: View.LOAD_MORE }
-      })
-
-      it('should return a state where the ids are appended to the new ones and the total of the favorited items updated', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchFavoritedItemsSuccess(
-              items,
-              {},
-              total,
-              browseOptions,
-              actionTimestamp
-            )
-          )
-        ).toEqual({
-          ...initialState,
-          itemIds: [...initialState.itemIds, ...items.map(item => item.id)],
-          count: total
-        })
-      })
-    })
-
-    describe('and the view is not set as load more', () => {
-      beforeEach(() => {
-        browseOptions = { view: View.LISTS }
+        browseOptions = { page: 1 }
+        initialState.page = 2
       })
 
       it('should return a state overwriting the ids and the total of the favorited items', () => {
@@ -412,6 +430,90 @@ describe('when reducing the success action of fetching favorited items', () => {
         ).toEqual({
           ...initialState,
           itemIds: items.map(item => item.id),
+          page: 1,
+          count: total
+        })
+      })
+    })
+
+    describe('and the page being loaded is greater than the one already loaded', () => {
+      beforeEach(() => {
+        browseOptions = { page: 2 }
+        initialState.page = 1
+        initialState.itemIds = ['anotherId']
+      })
+
+      it('should return a state where the ids are appended to the new ones and the total of the favorited items and the page updated', () => {
+        expect(
+          browseReducer(
+            initialState,
+            fetchFavoritedItemsSuccess(
+              items,
+              {},
+              total,
+              browseOptions,
+              actionTimestamp
+            )
+          )
+        ).toEqual({
+          ...initialState,
+          itemIds: [...initialState.itemIds, ...items.map(item => item.id)],
+          page: browseOptions.page,
+          count: total
+        })
+      })
+    })
+
+    describe("and there's no loaded page in the state", () => {
+      beforeEach(() => {
+        browseOptions = { page: 1 }
+        initialState.page = undefined
+      })
+
+      it('should return a state overwriting the ids and the total of the favorited items', () => {
+        expect(
+          browseReducer(
+            initialState,
+            fetchFavoritedItemsSuccess(
+              items,
+              {},
+              total,
+              browseOptions,
+              actionTimestamp
+            )
+          )
+        ).toEqual({
+          ...initialState,
+          itemIds: items.map(item => item.id),
+          page: 1,
+          count: total
+        })
+      })
+    })
+
+    describe('and is being forced to load more items', () => {
+      beforeEach(() => {
+        browseOptions = { page: 30 }
+        initialState.page = 1
+        initialState.itemIds = ['anotherId']
+      })
+
+      it('should return a state where the ids are appended to the new ones and the total of the favorited items updated', () => {
+        expect(
+          browseReducer(
+            initialState,
+            fetchFavoritedItemsSuccess(
+              items,
+              {},
+              total,
+              browseOptions,
+              actionTimestamp,
+              true
+            )
+          )
+        ).toEqual({
+          ...initialState,
+          itemIds: [...initialState.itemIds, ...items.map(item => item.id)],
           count: total
         })
       })
@@ -489,18 +591,23 @@ describe('when reducing the fetch items success action', () => {
       }
     )
 
-    describe('and the view is load_more', () => {
+    describe('and is loading more results', () => {
       let view: View
+      let initialPage
 
       beforeEach(() => {
-        view = View.LOAD_MORE
+        view = View.MARKET
+        initialPage = 1
         initialState = {
           ...initialState,
-          itemIds: ['anotherAssetId']
+          itemIds: ['anotherAssetId'],
+          view,
+          page: initialPage
         }
         itemsBrowserOptions = {
           ...itemsBrowserOptions,
-          view
+          view,
+          page: initialPage + 1
         }
       })
 
@@ -512,7 +619,7 @@ describe('when reducing the fetch items success action', () => {
           }
         })
 
-        it('should return the state with the item ids concatenated with the previous ones, and the last timestamp that comes in the action payload', () => {
+        it('should return the state with the item ids concatenated with the previous ones, page and the last timestamp that comes in the action payload', () => {
           expect(
             browseReducer(
               initialState,
@@ -521,7 +628,9 @@ describe('when reducing the fetch items success action', () => {
           ).toEqual({
             ...initialState,
             itemIds: [...initialState.itemIds, item.id],
-            lastTimestamp: timestamp
+            lastTimestamp: timestamp,
+            count,
+            page: itemsBrowserOptions.page
           })
         })
       })
@@ -544,6 +653,7 @@ describe('when reducing the fetch items success action', () => {
             ...initialState,
             itemIds: [...initialState.itemIds, item.id],
             count,
+            page: itemsBrowserOptions.page,
             lastTimestamp: timestamp
           })
         })

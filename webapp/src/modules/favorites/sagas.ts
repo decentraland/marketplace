@@ -143,7 +143,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleFetchFavoritedItemsRequest(
     action: FetchFavoritedItemsRequestAction
   ) {
-    const { filters } = action.payload
+    const { filters } = action.payload.options
     try {
       let items: Item[] = []
       const listId: string = yield select(getListId)
@@ -162,7 +162,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         ])
       )
       const options: ItemBrowseOptions = {
-        ...action.payload,
+        ...action.payload.options,
         filters: {
           first: results.length,
           ids: results.map(({ itemId }) => itemId)
@@ -178,7 +178,14 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       yield put(
-        fetchFavoritedItemsSuccess(items, createdAt, total, options, Date.now())
+        fetchFavoritedItemsSuccess(
+          items,
+          createdAt,
+          total,
+          options,
+          Date.now(),
+          action.payload.forceLoadMore
+        )
       )
     } catch (error) {
       yield put(fetchFavoritedItemsFailure((error as Error).message))

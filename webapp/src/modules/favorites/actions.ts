@@ -52,7 +52,9 @@ export const unpickItemAsFavoriteRequest = (item: Item) =>
   action(UNPICK_ITEM_AS_FAVORITE_REQUEST, { item })
 
 export const unpickItemAsFavoriteSuccess = (item: Item) =>
-  action(UNPICK_ITEM_AS_FAVORITE_SUCCESS, { item })
+  action(UNPICK_ITEM_AS_FAVORITE_SUCCESS, {
+    item
+  })
 
 export const unpickItemAsFavoriteFailure = (item: Item, error: string) =>
   action(UNPICK_ITEM_AS_FAVORITE_FAILURE, { item, error })
@@ -100,22 +102,26 @@ export const FETCH_FAVORITED_ITEMS_REQUEST = '[Request] Fetch Favorited Items'
 export const FETCH_FAVORITED_ITEMS_SUCCESS = '[Success] Fetch Favorited Items'
 export const FETCH_FAVORITED_ITEMS_FAILURE = '[Failure] Fetch Favorited Items'
 
-export const fetchFavoritedItemsRequest = (options: ItemBrowseOptions) =>
-  action(FETCH_FAVORITED_ITEMS_REQUEST, options)
+export const fetchFavoritedItemsRequest = (
+  options: ItemBrowseOptions,
+  forceLoadMore?: boolean
+) => action(FETCH_FAVORITED_ITEMS_REQUEST, { options, forceLoadMore })
 
 export const fetchFavoritedItemsSuccess = (
   items: Item[],
   createdAt: Record<string, number>,
   total: number,
   options: ItemBrowseOptions,
-  timestamp: number
+  timestamp: number,
+  forceLoadMore?: boolean
 ) =>
   action(FETCH_FAVORITED_ITEMS_SUCCESS, {
     options,
     items,
     createdAt,
     total,
-    timestamp
+    timestamp,
+    forceLoadMore
   })
 
 export const fetchFavoritedItemsFailure = (error: string) =>

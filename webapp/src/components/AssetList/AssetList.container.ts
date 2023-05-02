@@ -17,7 +17,6 @@ import {
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import { isLoadingFavoritedItems } from '../../modules/favorites/selectors'
-import { isLoadingMore } from '../../modules/routing/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { AssetType } from '../../modules/asset/types'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
@@ -40,7 +39,6 @@ const mapState = (state: RootState): MapStateProps => {
         ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) ||
           isLoadingFavoritedItems(state)
         : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
-    isLoadingMore: isLoadingMore(state),
     hasFiltersEnabled: hasFiltersEnabled(state),
     visitedLocations: getVisitedLocations(state)
   }
