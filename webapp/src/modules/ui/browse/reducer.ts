@@ -140,7 +140,6 @@ export function browseReducer(
       }
 
       const isLoadingMore = !!page && page > (state.page || 0)
-      console.log('isLoadingMore: ', isLoadingMore)
       const elements = isLoadingMore ? [...state[key]] : []
       switch (view) {
         case View.ATLAS:
