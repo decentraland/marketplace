@@ -282,7 +282,7 @@ const AssetCard = (props: Props) => {
         {parcel ? <ParcelTags nft={asset as NFT} /> : null}
         {estate ? <EstateTags nft={asset as NFT} /> : null}
         {wearable ? <WearableTags asset={asset} /> : null}
-        {emote ? <EmoteTags nft={asset as NFT} /> : null}
+        {emote ? <EmoteTags asset={asset} /> : null}
         {ens ? <ENSTags nft={asset as NFT} /> : null}
       </Card.Content>
     </Card>
