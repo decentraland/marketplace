@@ -80,7 +80,10 @@ export const getBrowseAssets = (
   section: Section,
   assetType: AssetType
 ): Asset[] => {
+  console.log('assetType: ', assetType);
+  console.log('section: ', section);
   if (assetType === AssetType.ITEM) {
+    console.log('getItemsPickedByUser(state): ', getItemsPickedByUser(state));
     return section === Sections.decentraland.LISTS
       ? getItemsPickedByUser(state)
       : getItems(state)
