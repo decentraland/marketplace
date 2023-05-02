@@ -103,6 +103,7 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
+import { getPage } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { buildBrowseURL } from './utils'
 
@@ -209,7 +210,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const category = getCategoryFromSection(section)
 
-  const skip = Math.min(page - 1, MAX_PAGE) * PAGE_SIZE
+  const currentPageInState: number = yield select(getPage)
+  const offset = currentPageInState ? page - 1 : 0
+  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
   switch (section) {
