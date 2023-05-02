@@ -14,9 +14,9 @@ const SaleActionBox = ({ asset }: Props) => {
       <div className={styles.container}>
         {isNFT(asset) ? (
           <NFTSaleActions nft={asset} />
-        ) : !asset.minPrice ? ( // TODO CHECK
+        ) : (
           <ItemSaleActions item={asset} />
-        ) : null}
+        )}
       </div>
     </div>
   ) : null

@@ -59,9 +59,9 @@ import {
   getSearchWearableCategory,
   getCollectionSortBy,
   getSearchEmoteCategory,
-  getCatalogSortBy,
   getItemSortBy,
-  getAssetOrderBy
+  getAssetOrderBy,
+  getCatalogSortBy
 } from './search'
 import {
   getRarities,
@@ -109,7 +109,7 @@ import { getData } from '../event/selectors'
 import { getPage } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { AssetStatusFilter } from '../../utils/filters'
-import { fetchCatalogRequest } from '../catalog/actions'
+// import { fetchCatalogRequest } from '../catalog/actions'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -199,7 +199,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     onlyOnRent,
     onlySmart,
     isMap,
-    contracts,
+    // contracts,
     tenant,
     minPrice,
     maxPrice,
@@ -291,31 +291,30 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
       const { rarities, wearableGenders, emotePlayMode } = options
 
-      if (
-        view === View.MARKET &&
-        (section.toString().includes(Section.EMOTES) ||
-          section.toString().includes(Section.WEARABLES))
-      ) {
-        const statusParameters: Partial<CatalogFilters> = {
-          ...(status === AssetStatusFilter.ON_SALE ? { isOnSale: true } : {}),
-          ...(status === AssetStatusFilter.NOT_FOR_SALE
-            ? { isOnSale: false }
-            : {}),
-          ...(status === AssetStatusFilter.ONLY_LISTING
-            ? { onlyListing: true }
-            : {}),
-          ...(status === AssetStatusFilter.ONLY_MINTING
-            ? { onlyMinting: true }
-            : {})
-        }
+      const statusParameters: Partial<Omit<CatalogFilters, 'sortBy'>> = {
+        ...(status === AssetStatusFilter.ON_SALE ? { isOnSale: true } : {}),
+        ...(status === AssetStatusFilter.NOT_FOR_SALE
+          ? { isOnSale: false }
+          : {}),
+        ...(status === AssetStatusFilter.ONLY_LISTING
+          ? { onlyListing: true }
+          : {}),
+        ...(status === AssetStatusFilter.ONLY_MINTING
+          ? { onlyMinting: true }
+          : {})
+      }
+      if (isItems) {
+        const isCatalog = view === View.MARKET || view === View.LISTS
         yield put(
-          fetchCatalogRequest({
+          fetchItemsRequest({
             view,
             page,
             filters: {
               first,
               skip,
-              sortBy: getCatalogSortBy(sortBy),
+              sortBy: isCatalog
+                ? getCatalogSortBy(sortBy)
+                : getItemSortBy(sortBy),
               isOnSale: onlyOnSale,
               creator: address ? [address] : creators,
               wearableCategory,
@@ -326,6 +325,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               search,
               category,
               rarities: rarities,
+              // contracts,
               wearableGenders,
               emotePlayMode,
               minPrice,
@@ -336,56 +336,27 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           })
         )
       } else {
-        if (isItems) {
-          yield put(
-            fetchItemsRequest({
-              view,
-              page,
-              filters: {
-                first,
-                skip,
-                sortBy: getItemSortBy(sortBy),
-                isOnSale: onlyOnSale,
-                creator: address ? [address] : creators,
-                wearableCategory,
-                emoteCategory,
-                isWearableHead,
-                isWearableAccessory,
-                isWearableSmart: onlySmart,
-                search,
-                category,
-                rarities: rarities,
-                contracts,
-                wearableGenders,
-                emotePlayMode,
-                minPrice,
-                maxPrice
-              }
-            })
-          )
-        } else {
-          const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
+        const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
 
-          yield put(
-            fetchNFTsRequest({
-              vendor,
-              view,
-              page,
-              params: {
-                first,
-                skip,
-                orderBy,
-                orderDirection,
-                onlyOnSale,
-                onlyOnRent,
-                address,
-                category,
-                search
-              },
-              filters: getFilters(vendor, options) // TODO: move to routing
-            })
-          )
-        }
+        yield put(
+          fetchNFTsRequest({
+            vendor,
+            view,
+            page,
+            params: {
+              first,
+              skip,
+              orderBy,
+              orderDirection,
+              onlyOnSale,
+              onlyOnRent,
+              address,
+              category,
+              search
+            },
+            filters: getFilters(vendor, options) // TODO: move to routing
+          })
+        )
       }
   }
 }

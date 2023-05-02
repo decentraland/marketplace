@@ -25,7 +25,6 @@ import { translationSaga } from './translation/sagas'
 import { uiSaga } from './ui/sagas'
 import { walletSaga } from './wallet/sagas'
 import { itemSaga } from './item/sagas'
-import { catalogSaga } from './catalog/sagas'
 import { collectionSaga } from './collection/sagas'
 import { saleSaga } from './sale/sagas'
 import { accountSaga } from './account/sagas'
@@ -101,7 +100,6 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     gatewaySaga(),
     locationSaga(),
     transakSaga(),
-    favoritesSaga(getIdentity),
-    catalogSaga()
+    favoritesSaga(getIdentity)
   ])
 }
