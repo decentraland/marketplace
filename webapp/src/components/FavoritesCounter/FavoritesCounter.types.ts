@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { CatalogItem, Item } from '@dcl/schemas'
+import { Item } from '@dcl/schemas'
 import {
   openModal,
   OpenModalAction
@@ -13,12 +13,12 @@ import {
 
 export type Props = {
   className?: string
-  item: Item | CatalogItem
+  item: Item
   isCollapsed?: boolean
   isPickedByUser: boolean
   count: number
   isLoading: boolean
-  onCounterClick: (item: Item | CatalogItem) => ReturnType<typeof openModal>
+  onCounterClick: (item: Item) => ReturnType<typeof openModal>
   onPick: typeof pickItemAsFavoriteRequest
   onUnpick: typeof unpickItemAsFavoriteRequest
 }

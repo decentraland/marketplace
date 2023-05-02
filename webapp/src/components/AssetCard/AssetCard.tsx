@@ -3,12 +3,7 @@ import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
-import {
-  getAssetName,
-  getAssetUrl,
-  isNFT,
-  isCatalogItem
-} from '../../modules/asset/utils'
+import { getAssetName, getAssetUrl, isNFT } from '../../modules/asset/utils'
 import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
@@ -114,6 +109,8 @@ const AssetCard = (props: Props) => {
     [rental]
   )
 
+  const isCatalogItem = !isNFT(asset) && !!asset.minPrice
+
   const catalogItemInformation = () => {
     let information: {
       action: string
@@ -121,7 +118,7 @@ const AssetCard = (props: Props) => {
       price: string | null
       extraInformation: React.ReactNode | null
     } | null = null
-    if (isCatalogItem(asset)) {
+    if (!isNFT(asset) && isCatalogItem) {
       const isAvailableForMint = asset.isOnSale && asset.available > 0
 
       if (!isAvailableForMint && !asset.minListingPrice) {
@@ -165,8 +162,8 @@ const AssetCard = (props: Props) => {
             sortBy === SortBy.MOST_EXPENSIVE
               ? mostExpensive === MINT
                 ? asset.price
-                : asset.maxListingPrice
-              : asset.minPrice,
+                : asset.maxListingPrice ?? null
+              : asset.minPrice ?? null,
           extraInformation:
             asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
               <span>
@@ -218,7 +215,7 @@ const AssetCard = (props: Props) => {
 
   return (
     <Card
-      className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
+      className={`AssetCard ${isCatalogItem ? 'catalog' : ''}`}
       link
       as={Link}
       to={getAssetUrl(asset, isManager && isLand(asset))}
@@ -228,7 +225,7 @@ const AssetCard = (props: Props) => {
       }`}
     >
       <AssetImage
-        className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''}`}
+        className={`AssetImage ${isCatalogItem ? 'catalog' : ''}`}
         asset={asset}
         showOrderListedTag={showListedTag}
         showMonospace
@@ -245,11 +242,11 @@ const AssetCard = (props: Props) => {
           rental={rental}
         />
       ) : null}
-      <Card.Content className={isCatalogItem(asset) ? 'catalog' : ''}>
+      <Card.Content className={isCatalogItem ? 'catalog' : ''}>
         <Card.Header>
           <div className="title">
             {title}
-            {isCatalogItem(asset) && (
+            {!isNFT(asset) && isCatalogItem && (
               <Link className="creator" to={locations.account(asset.creator)}>
                 <LinkedProfile address={asset.creator} textOnly />
               </Link>
@@ -264,7 +261,7 @@ const AssetCard = (props: Props) => {
           ) : null}
         </Card.Header>
         <div className="sub-header">
-          {!isCatalogItem(asset) && (
+          {!isCatalogItem && (
             <Card.Meta className="card-meta">
               {t(`networks.${asset.network.toLowerCase()}`)}
             </Card.Meta>
