@@ -23,10 +23,12 @@ const WearableTags = (props: Props) => {
         category={NFTCategory.EMOTE}
         withTooltip={false}
       />
-      <div
-        className={'icon ' + category}
-        title={t(`wearable.category.${category}`)}
-      />
+      {!isCatalogItem && (
+        <div
+          className={'icon ' + category}
+          title={t(`wearable.category.${category}`)}
+        />
+      )}
       {!isCatalogItem && (
         <GenderBadge
           bodyShapes={bodyShapes}
