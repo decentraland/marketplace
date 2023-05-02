@@ -1,3 +1,3 @@
-import BaseDetail from './BaseDetail.container'
+import BaseDetail from './BaseDetail'
 
 export default BaseDetail
