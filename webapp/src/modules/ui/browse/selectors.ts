@@ -4,8 +4,7 @@ import {
   NFTCategory,
   Order,
   RentalListing,
-  RentalStatus,
-  CatalogItem
+  RentalStatus
 } from '@dcl/schemas'
 import {
   Transaction,
@@ -18,8 +17,6 @@ import { getData as getRentalData } from '../../rental/selectors'
 import { getFavoritedItems as getFavoritedItemsFromState } from '../../favorites/selectors'
 import { FavoritesData } from '../../favorites/types'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
-import { getData as getCatalogData } from '../../catalog/selectors'
-import { CatalogState } from '../../catalog/reducer'
 import { NFTState } from '../../nft/reducer'
 import { RootState } from '../../reducer'
 import { BrowseUIState } from './reducer'
@@ -58,14 +55,14 @@ const getItems = createSelector<
   browse.itemIds.map(id => itemsById[id])
 )
 
-export const getCatalogItems = createSelector<
-  RootState,
-  BrowseUIState,
-  CatalogState['data'],
-  CatalogItem[]
->(getState, getCatalogData, (browse, catalogsById) =>
-  browse.catalogIds.map(id => catalogsById[id])
-)
+// export const getCatalogItems = createSelector<
+//   RootState,
+//   BrowseUIState,
+//   CatalogState['data'],
+//   CatalogItem[]
+// >(getState, getCatalogData, (browse, catalogsById) =>
+//   browse.catalogIds.map(id => catalogsById[id])
+// )
 
 export const getOnSaleItems = createSelector<
   RootState,
@@ -83,9 +80,7 @@ export const getBrowseAssets = (
   section: Section,
   assetType: AssetType
 ): Asset[] => {
-  if (assetType === AssetType.CATALOG_ITEM) {
-    return getCatalogItems(state)
-  } else if (assetType === AssetType.ITEM) {
+  if (assetType === AssetType.ITEM) {
     return section === Sections.decentraland.LISTS
       ? getItemsPickedByUser(state)
       : getItems(state)

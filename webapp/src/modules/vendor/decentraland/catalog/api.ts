@@ -1,10 +1,10 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
-import { CatalogFilters, CatalogItem } from '@dcl/schemas'
+import { Item, CatalogFilters } from '@dcl/schemas'
 
 class CatalogApi extends BaseAPI {
-  fetch = async (filters: CatalogFilters = {}): Promise<CatalogItem[]> => {
+  get = async (filters: CatalogFilters = {}): Promise<Item[]> => {
     const queryParams = this.buildItemsQueryString(filters)
     return this.request('get', `/catalog?${queryParams}`)
   }

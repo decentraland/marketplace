@@ -11,11 +11,6 @@ import {
   UnpickItemAsFavoriteSuccessAction
 } from '../../favorites/actions'
 import {
-  FetchCatalogRequestAction,
-  FetchCatalogSuccessAction,
-  FETCH_CATALOG_SUCCESS
-} from '../../catalog/actions'
-import {
   FetchItemsRequestAction,
   FetchItemsSuccessAction,
   FetchTrendingItemsSuccessAction,
