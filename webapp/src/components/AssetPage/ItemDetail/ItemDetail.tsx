@@ -19,6 +19,7 @@ import { TransactionHistory } from '../TransactionHistory'
 import ListingsTableContainer from '../ListingsTableContainer/ListingsTableContainer'
 import { BestBuyingOption } from '../BestBuyingOption'
 import Title from '../Title'
+import OnBack from '../OnBack'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
@@ -56,6 +57,7 @@ const ItemDetail = ({ item }: Props) => {
 
   return (
     <div className={styles.ItemDetail}>
+      <OnBack asset={item} />
       <div className={styles.informationContainer}>
         <div className={styles.assetImageContainer}>
           <AssetImage asset={item} isDraggable />
