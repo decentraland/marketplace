@@ -1,5 +1,5 @@
 import { action } from 'typesafe-actions'
-import { CatalogItem, Item } from '@dcl/schemas'
+import { Item } from '@dcl/schemas'
 import { ItemBrowseOptions } from '../item/types'
 import { List } from './types'
 
