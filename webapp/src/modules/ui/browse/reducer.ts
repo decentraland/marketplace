@@ -24,6 +24,7 @@ import { BrowseAction, BROWSE } from '../../routing/actions'
 import { Section } from '../../vendor/decentraland'
 import { SetViewAction, SET_VIEW } from '../actions'
 import { View } from '../types'
+import { isLoadingMoreResults } from './utils'
 
 export type BrowseUIState = {
   view?: View
@@ -102,8 +103,9 @@ export function browseReducer(
         return state
       }
       const newNftIds = nfts.map(nft => nft.id)
-      const isLoadingMore = !!state.page && !!page && page > state.page
-      const nftIds = isLoadingMore ? [...state.nftIds, ...newNftIds] : newNftIds
+      const nftIds = isLoadingMoreResults(state, page)
+        ? [...state.nftIds, ...newNftIds]
+        : newNftIds
       switch (view) {
         case View.MARKET:
         case View.CURRENT_ACCOUNT:
@@ -139,8 +141,7 @@ export function browseReducer(
         }
       }
 
-      const isLoadingMore = !!page && page > (state.page || 0)
-      const elements = isLoadingMore ? [...state[key]] : []
+      const elements = isLoadingMoreResults(state, page) ? [...state[key]] : []
       switch (view) {
         case View.ATLAS:
           return state
@@ -182,8 +183,7 @@ export function browseReducer(
       }
 
       const newItemIds = items.map(item => item.id)
-      const isLoadingMoreResults = !!state.page && !!page && page > state.page
-      const itemIds = isLoadingMoreResults
+      const itemIds = isLoadingMoreResults(state, page)
         ? [...state.itemIds, ...newItemIds]
         : newItemIds
 
