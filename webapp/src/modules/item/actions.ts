@@ -1,4 +1,4 @@
-import { CatalogSortBy, ChainId, Item, ItemSortBy } from '@dcl/schemas'
+import { ChainId, Item } from '@dcl/schemas'
 import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   buildTransactionPayload,
