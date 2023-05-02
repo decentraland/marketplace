@@ -29,7 +29,6 @@ const AssetList = (props: Props) => {
     isManager,
     onClearFilters
   } = props
-  console.log('assets: ', assets)
 
   useEffect(() => {
     if (visitedLocations.length > 1) {
