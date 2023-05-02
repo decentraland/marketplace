@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import classNames from 'classnames'
 import {
   Dropdown,
@@ -9,7 +9,7 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useInput } from '../../lib/input'
-import { getCountText, getOrderByOptions } from './utils'
+import { getCountText } from './utils'
 import { SortBy } from '../../modules/routing/types'
 import {
   getCategoryFromSection,
@@ -42,8 +42,8 @@ export const AssetTopbar = ({
   onOpenFiltersModal,
   sortByOptions
 }: Props): JSX.Element => {
-  console.log('sortBy: ', sortBy);
-  console.log('sortByOptions: ', sortByOptions);
+  console.log('sortBy: ', sortBy)
+  console.log('sortByOptions: ', sortByOptions)
   const isMobile = useTabletAndBelowMediaQuery()
   const category = section ? getCategoryFromSection(section) : undefined
 
@@ -64,14 +64,16 @@ export const AssetTopbar = ({
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
       const sortBy: SortBy = props.value as SortBy
-      console.log('sortBy: ', sortBy)
       if (!onlyOnRent && !onlyOnSale && isLandSection(section)) {
         if (sortBy === SortBy.CHEAPEST_SALE) {
+          console.log('calling onBrowse1: ', sortBy)
           onBrowse({ onlyOnSale: true, sortBy: SortBy.CHEAPEST })
         } else if (sortBy === SortBy.CHEAPEST_RENT) {
+          console.log('calling onBrowse2: ', sortBy)
           onBrowse({ onlyOnRent: true, sortBy: SortBy.MAX_RENTAL_PRICE })
         }
       } else {
+        console.log('calling onBrowse3: ', sortBy)
         onBrowse({ sortBy })
       }
     },
@@ -96,19 +98,14 @@ export const AssetTopbar = ({
     [onBrowse, onlyOnSale, onlyOnRent]
   )
 
-  const orderByDropdownOptions = useMemo(
-    () => getOrderByOptions(onlyOnRent, onlyOnSale),
-    [onlyOnRent, onlyOnSale]
-  )
-
   useEffect(() => {
-    const option = orderByDropdownOptions.find(
-      option => option.value === sortBy
-    )
+    const option = sortByOptions.find(option => option.value === sortBy)
+    console.log('option: ', option)
     if (!option) {
-      onBrowse({ sortBy: orderByDropdownOptions[0].value })
+      console.log('calling onBrowse4:')
+      onBrowse({ sortBy: sortByOptions[0].value })
     }
-  }, [onBrowse, sortBy, orderByDropdownOptions])
+  }, [onBrowse, sortBy, sortByOptions])
 
   const sortByValue = sortByOptions.find(option => option.value === sortBy)
     ? sortBy

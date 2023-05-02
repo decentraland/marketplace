@@ -113,7 +113,7 @@ describe('when getting if the items of a collection are being fetched', () => {
     beforeEach(() => {
       state.item.loading.push(
         fetchItemsRequest({
-          filters: { contracts: ['anotherContractAddress'] }
+          filters: { contractAddresses: ['anotherContractAddress'] }
         })
       )
     })
@@ -126,7 +126,7 @@ describe('when getting if the items of a collection are being fetched', () => {
   describe("and they're being fetched", () => {
     beforeEach(() => {
       state.item.loading.push(
-        fetchItemsRequest({ filters: { contracts: [contractAddress] } })
+        fetchItemsRequest({ filters: { contractAddresses: [contractAddress] } })
       )
     })
 
