@@ -42,6 +42,8 @@ export const AssetTopbar = ({
   onOpenFiltersModal,
   sortByOptions
 }: Props): JSX.Element => {
+  console.log('sortBy: ', sortBy);
+  console.log('sortByOptions: ', sortByOptions);
   const isMobile = useTabletAndBelowMediaQuery()
   const category = section ? getCategoryFromSection(section) : undefined
 
@@ -62,7 +64,8 @@ export const AssetTopbar = ({
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
       const sortBy: SortBy = props.value as SortBy
-      if (!onlyOnRent && !onlyOnSale) {
+      console.log('sortBy: ', sortBy)
+      if (!onlyOnRent && !onlyOnSale && isLandSection(section)) {
         if (sortBy === SortBy.CHEAPEST_SALE) {
           onBrowse({ onlyOnSale: true, sortBy: SortBy.CHEAPEST })
         } else if (sortBy === SortBy.CHEAPEST_RENT) {
@@ -72,7 +75,7 @@ export const AssetTopbar = ({
         onBrowse({ sortBy })
       }
     },
-    [onBrowse, onlyOnSale, onlyOnRent]
+    [onlyOnRent, onlyOnSale, section, onBrowse]
   )
 
   const handleIsMapChange = useCallback(
