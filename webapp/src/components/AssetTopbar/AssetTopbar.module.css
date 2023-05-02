@@ -90,6 +90,11 @@
   border: none;
 }
 
+.rightOptionsContainer :global(.ui.dropdown) {
+  display: flex;
+  align-items: center;
+}
+
 .clearFilters:hover {
   opacity: 0.8;
 }
@@ -130,7 +135,7 @@
 
 .searchContainer.searchMap {
   align-self: flex-end;
-  background-color: #16141A;
+  background-color: #16141a;
   width: fit-content;
   display: flex;
   padding: 10px 20px;

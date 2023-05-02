@@ -276,6 +276,14 @@
   padding: 18px;
 }
 
+.RecentlySoldTable .ui.table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.RecentlySoldTable .ui.table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
 .RecentlySoldTable .ui.table tr td {
   border-top: 1px solid var(--divider);
 }
