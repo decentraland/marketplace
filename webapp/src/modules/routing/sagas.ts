@@ -148,6 +148,7 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
     getNewBrowseOptions,
     action.payload.options
   )
+  console.log('newOptions: ', newOptions)
   yield call(fetchAssetsFromRoute, newOptions)
 }
 
@@ -210,7 +211,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     onlyOnRent,
     onlySmart,
     isMap,
-    // contracts,
+    contracts,
     tenant,
     minPrice,
     maxPrice,
@@ -316,6 +317,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       }
       if (isItems) {
         const isCatalog = view === View.MARKET || view === View.LISTS
+        console.log('dispatching fetchItems')
         yield put(
           fetchItemsRequest({
             view,
@@ -336,7 +338,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               search,
               category,
               rarities: rarities,
-              // contracts,
+              contractAddresses: contracts,
               wearableGenders,
               emotePlayMode,
               minPrice,
