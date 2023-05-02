@@ -1,6 +1,7 @@
 import { Item } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
-import { ItemFilters, ItemResponse } from './types'
+import { ItemFilters } from './types'
+import { ItemResponse } from './types'
 
 export const DEFAULT_TRENDING_PAGE_SIZE = 20
 
