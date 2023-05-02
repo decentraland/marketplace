@@ -22,6 +22,22 @@
   border: 1px solid var(--divider);
 }
 
+.TableContent.radiusEnding .ui.table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.TableContent.radiusEnding .ui.table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+.TableContent.emptyHeaders .ui.table th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.TableContent.emptyHeaders .ui.table th:last-child {
+  border-top-right-radius: 10px;
+}
+
 .TableContent .ui.table td:first-child,
 .TableContent .ui.table th:first-child {
   padding: 18px !important;
