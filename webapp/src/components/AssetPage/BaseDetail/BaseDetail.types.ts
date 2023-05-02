@@ -14,7 +14,4 @@ export type Props = {
   className?: string
   actions?: ReactNode
   showDetails?: boolean
-  onBack: (location?: string) => void
 }
-
-export type MapDispatchProps = Pick<Props, 'onBack'>
