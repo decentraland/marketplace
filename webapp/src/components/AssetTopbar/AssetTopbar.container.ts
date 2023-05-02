@@ -30,6 +30,7 @@ import { AssetTopbar } from './AssetTopbar'
 const mapState = (state: RootState): MapStateProps => {
   const view = getView(state)
   const assetType = getAssetType(state)
+  console.log('getSortByOptions(state): ', getSortByOptions(state));
   return {
     count: getCount(state),
     search: getSearch(state),

@@ -8,6 +8,7 @@ import {
 } from '@dcl/schemas'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { isLandSection } from '../../modules/ui/utils'
+import { AssetStatusFilter } from '../../utils/filters'
 import { View } from '../../modules/ui/types'
 import { Sections, SortBy, BrowseOptions } from '../../modules/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
@@ -284,7 +285,7 @@ export const AssetFilters = ({
       ) : null}
       {isPriceFilterEnabled &&
       shouldRenderFilter(AssetFilter.Price) &&
-      isOnSale &&
+      (isOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
       view !== View.ACCOUNT ? (
         <PriceFilter
           onChange={(value, source) =>
