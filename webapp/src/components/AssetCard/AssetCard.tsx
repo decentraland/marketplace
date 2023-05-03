@@ -4,7 +4,12 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
-import { getAssetName, getAssetUrl, isNFT } from '../../modules/asset/utils'
+import {
+  getAssetName,
+  getAssetUrl,
+  isNFT,
+  isCatalogItem
+} from '../../modules/asset/utils'
 import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
@@ -107,8 +112,6 @@ const AssetCard = (props: Props) => {
     [rental]
   )
 
-  const isCatalogItem = !isNFT(asset) && !!asset.minPrice
-
   const catalogItemInformation = () => {
     let information: {
       action: string
@@ -116,7 +119,7 @@ const AssetCard = (props: Props) => {
       price: string | null
       extraInformation: React.ReactNode | null
     } | null = null
-    if (!isNFT(asset) && isCatalogItem) {
+    if (!isNFT(asset) && isCatalogItem(asset)) {
       const isAvailableForMint = asset.isOnSale && asset.available > 0
 
       if (!isAvailableForMint && !asset.minListingPrice) {
@@ -214,7 +217,7 @@ const AssetCard = (props: Props) => {
 
   return (
     <Card
-      className={`AssetCard ${isCatalogItem ? 'catalog' : ''}`}
+      className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
       link
       as={Link}
       to={getAssetUrl(asset, isManager && isLand(asset))}
@@ -224,7 +227,7 @@ const AssetCard = (props: Props) => {
       }`}
     >
       <AssetImage
-        className={`AssetImage ${isCatalogItem ? 'catalog' : ''}`}
+        className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''}`}
         asset={asset}
         showOrderListedTag={showListedTag}
         showMonospace
@@ -241,17 +244,17 @@ const AssetCard = (props: Props) => {
           rental={rental}
         />
       ) : null}
-      <Card.Content className={isCatalogItem ? 'catalog' : ''}>
+      <Card.Content className={isCatalogItem(asset) ? 'catalog' : ''}>
         <Card.Header>
-          <div className={isCatalogItem ? 'catalogTitle' : 'title'}>
+          <div className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}>
             {title}
-            {!isNFT(asset) && isCatalogItem && (
+            {!isNFT(asset) && isCatalogItem(asset) && (
               <span className="creator">
                 <Profile address={asset.creator} textOnly />
               </span>
             )}
           </div>
-          {!isCatalogItem && price ? (
+          {!isCatalogItem(asset) && price ? (
             <Mana network={asset.network} inline>
               {fomrmatWeiToAssetCard(price)}
             </Mana>
@@ -260,7 +263,7 @@ const AssetCard = (props: Props) => {
           ) : null}
         </Card.Header>
         <div className="sub-header">
-          {!isCatalogItem && (
+          {!isCatalogItem(asset) && (
             <Card.Meta className="card-meta">
               {t(`networks.${asset.network.toLowerCase()}`)}
             </Card.Meta>
