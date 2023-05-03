@@ -17,6 +17,7 @@ import {
   FavoritesAPI,
   MARKETPLACE_FAVORITES_SERVER_URL
 } from '../vendor/decentraland/favorites/api'
+import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
 import { ItemAPI } from '../vendor/decentraland/item/api'
@@ -104,7 +105,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
         if (success) yield put(closeModal('LoginModal'))
       }
-
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
       yield call([favoritesAPI, 'pickItemAsFavorite'], item.id)
       yield put(pickItemAsFavoriteSuccess(item))
     } catch (error) {
@@ -117,6 +119,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   ) {
     const { item } = action.payload
     try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
       yield call([favoritesAPI, 'unpickItemAsFavorite'], item.id)
 
       yield put(unpickItemAsFavoriteSuccess(item))
@@ -130,6 +134,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   ) {
     const { item } = action.payload
     try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
       yield call([favoritesAPI, 'pickItemAsFavorite'], item.id)
 
       yield put(undoUnpickingItemAsFavoriteSuccess(item))
@@ -145,6 +151,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   ) {
     const { filters } = action.payload.options
     try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+
       let items: Item[] = []
       const listId: string = yield select(getListId)
       const {
