@@ -5,14 +5,13 @@ import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
 import GenderBadge from '../../GenderBadge/GenderBadge'
 import { AssetType } from '../../../modules/asset/types'
-import { isNFT } from '../../../modules/asset/utils'
+import { isCatalogItem } from '../../../modules/asset/utils'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
 
 const WearableTags = (props: Props) => {
   const { asset } = props
   const { rarity, category, bodyShapes, isSmart } = asset.data.wearable!
-  const isCatalogItem = !isNFT(asset) && !!asset.minPrice
 
   return (
     <div className="WearableTags tags">
@@ -23,13 +22,13 @@ const WearableTags = (props: Props) => {
         category={NFTCategory.EMOTE}
         withTooltip={false}
       />
-      {!isCatalogItem && (
+      {!isCatalogItem(asset) && (
         <div
           className={'icon ' + category}
           title={t(`wearable.category.${category}`)}
         />
       )}
-      {!isCatalogItem && (
+      {!isCatalogItem(asset) && (
         <GenderBadge
           bodyShapes={bodyShapes}
           assetType={AssetType.NFT}
