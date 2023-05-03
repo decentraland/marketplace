@@ -21,7 +21,6 @@ import {
   FETCH_NFTS_SUCCESS
 } from '../../nft/actions'
 import { BrowseAction, BROWSE } from '../../routing/actions'
-import { Section } from '../../vendor/decentraland'
 import { SetViewAction, SET_VIEW } from '../actions'
 import { View } from '../types'
 import { isLoadingMoreResults } from './utils'
@@ -166,9 +165,28 @@ export function browseReducer(
       }
 
     case FETCH_FAVORITED_ITEMS_SUCCESS:
+      const {
+        timestamp,
+        options: { page },
+        items,
+        forceLoadMore,
+        total
+      } = action.payload
+      if (timestamp < state.lastTimestamp) {
+        return state
+      }
+
+      const newItemIds = items.map(item => item.id)
+      const itemIds =
+        isLoadingMoreResults(state, page) || forceLoadMore
+          ? [...state.itemIds, ...newItemIds]
+          : newItemIds
+
       return {
         ...state,
-        count: action.payload.total
+        itemIds,
+        page: forceLoadMore ? state.page : page,
+        count: total
       }
 
     case FETCH_ITEMS_SUCCESS: {
@@ -176,7 +194,7 @@ export function browseReducer(
         timestamp,
         items,
         total,
-        options: { page, view, section }
+        options: { page, view }
       } = action.payload
       if (timestamp < state.lastTimestamp) {
         return state
@@ -197,16 +215,6 @@ export function browseReducer(
             page,
             itemIds,
             count: total,
-            lastTimestamp: timestamp
-          }
-        }
-        case View.LISTS: {
-          return {
-            ...state,
-            view,
-            page,
-            itemIds,
-            count: section === Section.LISTS ? state.count : total,
             lastTimestamp: timestamp
           }
         }

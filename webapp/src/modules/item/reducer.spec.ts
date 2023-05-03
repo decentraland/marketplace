@@ -8,12 +8,19 @@ import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { View } from '../ui/types'
 import {
+  FETCH_FAVORITED_ITEMS_SUCCESS,
+  fetchFavoritedItemsRequest,
+  fetchFavoritedItemsSuccess
+} from '../favorites/actions'
+import {
   buyItemFailure,
   buyItemRequest,
   buyItemSuccess,
   buyItemWithCardFailure,
   buyItemWithCardRequest,
   buyItemWithCardSuccess,
+  FETCH_ITEM_SUCCESS,
+  FETCH_TRENDING_ITEMS_SUCCESS,
   fetchItemFailure,
   fetchItemRequest,
   fetchItemsFailure,
@@ -160,6 +167,44 @@ describe('when reducing the successful action of fetching items', () => {
   })
 })
 
+describe.each([
+  [
+    FETCH_ITEM_SUCCESS,
+    fetchItemRequest(item.contractAddress, item.itemId),
+    fetchItemSuccess(item)
+  ],
+  [
+    FETCH_TRENDING_ITEMS_SUCCESS,
+    fetchTrendingItemsRequest(trendingItemsBatchSize),
+    fetchTrendingItemsSuccess([item])
+  ],
+  [
+    FETCH_FAVORITED_ITEMS_SUCCESS,
+    fetchFavoritedItemsRequest({}),
+    fetchFavoritedItemsSuccess(
+      [item],
+      { [item.id]: Date.now() },
+      1,
+      {},
+      Date.now()
+    )
+  ]
+])('when reducing the %s action', (_action, requestAction, successAction) => {
+  const initialState = {
+    ...INITIAL_STATE,
+    data: { anotherId: anotherItem },
+    loading: loadingReducer([], requestAction)
+  }
+
+  it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
+    expect(itemReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: { ...initialState.data, [item.id]: item }
+    })
+  })
+})
+
 describe('when reducing the successful action of fetching an item', () => {
   const requestAction = fetchItemRequest(item.contractAddress, item.itemId)
   const successAction = fetchItemSuccess(item)
@@ -170,7 +215,7 @@ describe('when reducing the successful action of fetching an item', () => {
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the the loaded items plus the fetched item and the loading state cleared', () => {
+  it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
     expect(itemReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],

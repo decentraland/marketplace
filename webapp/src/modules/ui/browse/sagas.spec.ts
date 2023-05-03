@@ -9,7 +9,6 @@ import {
   unpickItemAsFavoriteSuccess
 } from '../../favorites/actions'
 import { PAGE_SIZE } from '../../vendor/api'
-import { View } from '../types'
 import { getCount, getItemsPickedByUser } from './selectors'
 import { browseSaga } from './sagas'
 
@@ -56,11 +55,12 @@ describe('when handling the success action of unpicking an item as favorite', ()
             [select(getCount), 2]
           ])
           .put(
-            fetchFavoritedItemsRequest({
-              filters: { first: 1, skip: PAGE_SIZE - 1 },
-              page: 1,
-              section: Section.LISTS
-            })
+            fetchFavoritedItemsRequest(
+              {
+                filters: { first: 1, skip: PAGE_SIZE - 1 }
+              },
+              true
+            )
           )
           .dispatch(unpickItemAsFavoriteSuccess({} as Item))
           .run({ silenceTimeout: true })
