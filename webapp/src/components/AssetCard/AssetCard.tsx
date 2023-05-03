@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Profile } from 'decentraland-dapps/dist/containers'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
 import { getAssetName, getAssetUrl, isNFT } from '../../modules/asset/utils'
@@ -15,10 +16,8 @@ import {
   isRentalListingOpen
 } from '../../modules/rental/utils'
 import { SortBy } from '../../modules/routing/types'
-import { locations } from '../../modules/routing/locations'
 import mintingIcon from '../../images/minting.png'
 import { Mana } from '../Mana'
-import { LinkedProfile } from '../LinkedProfile'
 import { AssetImage } from '../AssetImage'
 import { FavoritesCounter } from '../FavoritesCounter'
 import { ParcelTags } from './ParcelTags'
@@ -248,9 +247,9 @@ const AssetCard = (props: Props) => {
           <div className={isCatalogItem ? 'catalogTitle' : 'title'}>
             {title}
             {!isNFT(asset) && isCatalogItem && (
-              <Link className="creator" to={locations.account(asset.creator)}>
-                <LinkedProfile address={asset.creator} textOnly />
-              </Link>
+              <span className="creator">
+                <Profile address={asset.creator} textOnly />
+              </span>
             )}
           </div>
           {!isCatalogItem && price ? (
