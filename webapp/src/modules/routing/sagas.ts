@@ -109,7 +109,6 @@ import { getData } from '../event/selectors'
 import { getPage } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { AssetStatusFilter } from '../../utils/filters'
-// import { fetchCatalogRequest } from '../catalog/actions'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
