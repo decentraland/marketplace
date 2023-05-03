@@ -8,7 +8,7 @@ import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { View } from '../ui/types'
 import {
-  FETCH_FAVORITED_ITEMS_REQUEST,
+  FETCH_FAVORITED_ITEMS_SUCCESS,
   fetchFavoritedItemsRequest,
   fetchFavoritedItemsSuccess
 } from '../favorites/actions'
@@ -20,7 +20,7 @@ import {
   buyItemWithCardRequest,
   buyItemWithCardSuccess,
   FETCH_ITEM_SUCCESS,
-  FETCH_TRENDING_ITEMS_REQUEST,
+  FETCH_TRENDING_ITEMS_SUCCESS,
   fetchItemFailure,
   fetchItemRequest,
   fetchItemsFailure,
@@ -174,12 +174,12 @@ describe.each([
     fetchItemSuccess(item)
   ],
   [
-    FETCH_TRENDING_ITEMS_REQUEST,
+    FETCH_TRENDING_ITEMS_SUCCESS,
     fetchTrendingItemsRequest(trendingItemsBatchSize),
     fetchTrendingItemsSuccess([item])
   ],
   [
-    FETCH_FAVORITED_ITEMS_REQUEST,
+    FETCH_FAVORITED_ITEMS_SUCCESS,
     fetchFavoritedItemsRequest({}),
     fetchFavoritedItemsSuccess(
       [item],
