@@ -17,7 +17,7 @@ describe.each([
     })
   })
 
-  it('should refresh the page', async () => {
+  it('should refresh the page', () => {
     return expectSaga(walletSaga)
       .dispatch(action)
       .run({ silenceTimeout: true })
