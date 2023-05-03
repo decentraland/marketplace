@@ -79,7 +79,6 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
         handleTabChange(BelowTabs.OWNERS.value)
     }, [BelowTabs.OWNERS, handleTabChange, locations.search])
 
-    console.log(item)
     return (
       <TableContainer
         children={

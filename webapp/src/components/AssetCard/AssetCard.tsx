@@ -160,7 +160,12 @@ const AssetCard = (props: Props) => {
               : isAvailableForMint
               ? t('asset_card.available_for_mint')
               : t('asset_card.cheapest_listing'),
-          actionIcon: isAvailableForMint ? mintingIcon : null,
+          actionIcon:
+            isAvailableForMint &&
+            sortBy !== SortBy.MOST_EXPENSIVE &&
+            sortBy !== SortBy.CHEAPEST
+              ? mintingIcon
+              : null,
           price:
             sortBy === SortBy.MOST_EXPENSIVE
               ? mostExpensive === MINT
