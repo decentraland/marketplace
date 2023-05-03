@@ -601,6 +601,7 @@ describe('when there a status defined', () => {
 describe('when getting the Sort By options', () => {
   const baseSortByOptions = [
     getAllSortByOptions()[SortBy.NEWEST],
+    getAllSortByOptions()[SortBy.RECENTLY_LISTED],
     getAllSortByOptions()[SortBy.RECENTLY_SOLD],
     getAllSortByOptions()[SortBy.CHEAPEST],
     getAllSortByOptions()[SortBy.MOST_EXPENSIVE]
