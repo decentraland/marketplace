@@ -28,9 +28,7 @@ function* handleUnpickItemAsFavoriteSuccess() {
     yield put(
       fetchFavoritedItemsRequest(
         {
-          filters: { first: 1, skip: currentPage * PAGE_SIZE - 1 },
-          // Sets the page taking into consideration the 1 item page size
-          page: currentPage * PAGE_SIZE - 1
+          filters: { first: 1, skip: currentPage * PAGE_SIZE - 1 }
         },
         true
       )

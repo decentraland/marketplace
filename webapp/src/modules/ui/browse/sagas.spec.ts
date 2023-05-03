@@ -57,8 +57,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
           .put(
             fetchFavoritedItemsRequest(
               {
-                filters: { first: 1, skip: PAGE_SIZE - 1 },
-                page: PAGE_SIZE - 1
+                filters: { first: 1, skip: PAGE_SIZE - 1 }
               },
               true
             )
