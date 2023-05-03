@@ -51,7 +51,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
 
   useEffect(() => {
     if (asset && !isNFT(asset)) {
-      if (asset.available > 1 && asset.isOnSale) {
+      if (asset.available > 0 && asset.isOnSale) {
         setBuyOption(BuyOptions.MINT)
       } else {
         setIsLoading(true)
