@@ -230,7 +230,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const category = getCategoryFromSection(section)
 
   const currentPageInState: number = yield select(getPage)
-  const offset = currentPageInState ? page - 1 : 0
+  const offset = currentPageInState && currentPageInState < page ? page - 1 : 0
   const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
@@ -317,7 +317,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       }
       if (isItems) {
         const isCatalog = view === View.MARKET || view === View.LISTS
-        console.log('dispatching fetchItems')
         yield put(
           fetchItemsRequest({
             view,
