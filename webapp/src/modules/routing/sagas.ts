@@ -147,7 +147,6 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
     getNewBrowseOptions,
     action.payload.options
   )
-  console.log('newOptions: ', newOptions)
   yield call(fetchAssetsFromRoute, newOptions)
 }
 
