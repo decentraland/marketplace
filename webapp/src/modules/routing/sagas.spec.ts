@@ -186,10 +186,37 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       page: 1
     }
 
+    const filters: ItemBrowseOptions = {
+      view: browseOptions.view,
+      page: browseOptions.page,
+      filters: {
+        first: 24,
+        skip: 0,
+        sortBy: ItemSortBy.RECENTLY_REVIEWED,
+        creator: [address],
+        category: NFTCategory.EMOTE,
+        isWearableHead: false,
+        isWearableAccessory: false,
+        isOnSale: undefined,
+        wearableCategory: undefined,
+        emoteCategory: undefined,
+        isWearableSmart: undefined,
+        search: undefined,
+        rarities: undefined,
+        contractAddresses: undefined,
+        wearableGenders: undefined,
+        emotePlayMode: undefined,
+        minPrice: undefined,
+        maxPrice: undefined,
+        network: undefined
+      }
+    }
+
     return expectSaga(routingSaga)
       .provide([
         [call(getNewBrowseOptions, browseOptions), browseOptions],
-        [select(getPage), 1]
+        [select(getPage), 1],
+        [select(getSection), Section.WEARABLES]
       ])
       .put(fetchItemsRequest(filters))
       .dispatch(fetchAssetsFromRouteAction(browseOptions))
@@ -218,6 +245,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     return expectSaga(routingSaga)
       .provide([
         [select(getCurrentBrowseOptions), browseOptions],
+        [select(getSection), Section.LISTS],
         [select(getPage), 1]
       ])
       .put(fetchFavoritedItemsRequest(filters))
@@ -253,11 +281,12 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
           isWearableSmart: undefined,
           search: undefined,
           rarities: undefined,
-          contracts: undefined,
+          contractAddresses: undefined,
           wearableGenders: undefined,
           emotePlayMode: undefined,
           minPrice: undefined,
-          maxPrice: undefined
+          maxPrice: undefined,
+          network: undefined
         }
       }
       it('should fetch assets with the correct skip size', () => {
@@ -267,7 +296,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
               select(getCurrentBrowseOptions),
               { ...browseOptions, section: Section.WEARABLES_TRENDING }
             ],
-            [select(getPage), pageInState]
+            [select(getPage), pageInState],
+            [select(getSection), Section.WEARABLES_TRENDING]
           ])
           .put(fetchItemsRequest(filters))
           .dispatch(fetchAssetsFromRouteAction(browseOptions))
@@ -302,11 +332,12 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
             isWearableSmart: undefined,
             search: undefined,
             rarities: undefined,
-            contracts: undefined,
+            contractAddresses: undefined,
             wearableGenders: undefined,
             emotePlayMode: undefined,
             minPrice: undefined,
-            maxPrice: undefined
+            maxPrice: undefined,
+            network: undefined
           }
         }
         it('should fetch assets with the correct skip size', () => {
@@ -316,7 +347,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
                 select(getCurrentBrowseOptions),
                 { ...browseOptions, section: Section.WEARABLES_TRENDING }
               ],
-              [select(getPage), undefined]
+              [select(getPage), undefined],
+              [select(getSection), Section.WEARABLES_TRENDING]
             ])
             .put(fetchItemsRequest(filters))
             .dispatch(fetchAssetsFromRouteAction(browseOptions))
@@ -1043,6 +1075,7 @@ describe('when handling the browse action', () => {
       return expectSaga(routingSaga)
         .provide([
           [select(getCurrentBrowseOptions), {}],
+          [select(getSection), Section.WEARABLES],
           [select(getLocation), { pathname }],
           [select(getEventData), {}],
           [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
