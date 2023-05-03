@@ -41,8 +41,6 @@ export const AssetTopbar = ({
   onOpenFiltersModal,
   sortByOptions
 }: Props): JSX.Element => {
-  console.log('sortBy: ', sortBy)
-  console.log('sortByOptions: ', sortByOptions)
   const isMobile = useTabletAndBelowMediaQuery()
   const category = section ? getCategoryFromSection(section) : undefined
 
@@ -65,14 +63,11 @@ export const AssetTopbar = ({
       const sortBy: SortBy = props.value as SortBy
       if (!onlyOnRent && !onlyOnSale && isLandSection(section)) {
         if (sortBy === SortBy.CHEAPEST_SALE) {
-          console.log('calling onBrowse1: ', sortBy)
           onBrowse({ onlyOnSale: true, sortBy: SortBy.CHEAPEST })
         } else if (sortBy === SortBy.CHEAPEST_RENT) {
-          console.log('calling onBrowse2: ', sortBy)
           onBrowse({ onlyOnRent: true, sortBy: SortBy.MAX_RENTAL_PRICE })
         }
       } else {
-        console.log('calling onBrowse3: ', sortBy)
         onBrowse({ sortBy })
       }
     },
@@ -99,9 +94,7 @@ export const AssetTopbar = ({
 
   useEffect(() => {
     const option = sortByOptions.find(option => option.value === sortBy)
-    console.log('option: ', option)
     if (!option) {
-      console.log('calling onBrowse4:')
       onBrowse({ sortBy: sortByOptions[0].value })
     }
   }, [onBrowse, sortBy, sortByOptions])
