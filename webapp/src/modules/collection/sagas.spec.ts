@@ -95,13 +95,13 @@ describe('when handling a fetch collections request', () => {
           // Fetches items for contract address 2 because sizes are different
           .put(
             fetchItemsRequest({
-              filters: { contracts: [contractAddress2], first: size }
+              filters: { contractAddresses: [contractAddress2], first: size }
             })
           )
           // Fetches items for contract address 3 because there are no items for that collection stored
           .put(
             fetchItemsRequest({
-              filters: { contracts: [contractAddress3], first: size }
+              filters: { contractAddresses: [contractAddress3], first: size }
             })
           )
           .dispatch(fetchCollectionsRequest(filters, true))
