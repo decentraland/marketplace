@@ -109,9 +109,9 @@ export function isNFT(asset: Asset): asset is NFT {
   return 'tokenId' in asset
 }
 
-// export function isCatalogItem(asset: Asset): asset is CatalogItem {
-//   return 'minPrice' in asset
-// }
+export function isCatalogItem(asset: Asset): boolean {
+  return 'minPrice' in asset
+}
 
 export function isWearableOrEmote(asset: Asset): boolean {
   const categories: Array<typeof asset.category> = [
