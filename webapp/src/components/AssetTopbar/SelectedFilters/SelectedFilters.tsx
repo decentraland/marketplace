@@ -11,6 +11,7 @@ import {
 import { CreatorAccount } from '../../../modules/account/types'
 import ProfilesCache from '../../../lib/profiles'
 import { profileToCreatorAccount } from '../../AssetFilters/CreatorsFilter/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { Pill } from './Pill/Pill'
 import { Props } from './SelectedFilters.types'
 import { getCollectionByAddress } from './utils'
@@ -39,7 +40,8 @@ export const SelectedFilters = ({
     adjacentToRoad,
     minDistanceToPlaza,
     maxDistanceToPlaza,
-    rentalDays
+    rentalDays,
+    assetType
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
@@ -209,7 +211,7 @@ export const SelectedFilters = ({
           onDelete={handleDeleteGender}
         />
       ) : null}
-      {!onlyOnSale && !isLandSection ? (
+      {!onlyOnSale && !isLandSection && assetType !== AssetType.ITEM ? ( // TODO UNIFIED: CHECK THIS
         <Pill
           label={t('nft_filters.not_on_sale')}
           id="onlyOnSale"

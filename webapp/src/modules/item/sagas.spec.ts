@@ -14,6 +14,7 @@ import { NetworkGatewayType } from 'decentraland-ui'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { ItemAPI } from '../vendor/decentraland/item/api'
+import { catalogAPI } from '../vendor/decentraland/catalog/api'
 import { closeModal, openModal } from '../modal/actions'
 import {
   buyAssetWithCard,
@@ -370,7 +371,7 @@ describe('when handling the fetch items request action', () => {
     it('should dispatch a successful action with the fetched items', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
-          [matchers.call.fn(ItemAPI.prototype.get), fetchResult],
+          [matchers.call.fn(catalogAPI.get), fetchResult],
           [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
         ])
         .put(
@@ -390,7 +391,7 @@ describe('when handling the fetch items request action', () => {
     it('should dispatching a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
-          [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)],
+          [matchers.call.fn(catalogAPI.get), Promise.reject(anError)],
           [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
         ])
         .put(fetchItemsFailure(anError.message, itemBrowseOptions))
