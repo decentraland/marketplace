@@ -183,6 +183,7 @@ export const getSortByOptions = createSelector<
   if (status) {
     const baseFilters = [
       SORT_BY_MAP[SortBy.NEWEST],
+      SORT_BY_MAP[SortBy.RECENTLY_LISTED],
       SORT_BY_MAP[SortBy.RECENTLY_SOLD],
       SORT_BY_MAP[SortBy.CHEAPEST],
       SORT_BY_MAP[SortBy.MOST_EXPENSIVE]
