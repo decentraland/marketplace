@@ -18,6 +18,7 @@ import { getWallet } from '../wallet/selectors'
 import { buyAssetWithCard } from '../asset/utils'
 import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import { retryParams } from '../vendor/decentraland/utils'
+import { catalogAPI } from '../vendor/decentraland/catalog/api'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -48,7 +49,6 @@ import {
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 import { View } from '../ui/types'
-import { catalogAPI } from '../vendor/decentraland/catalog/api'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
@@ -100,15 +100,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         view === View.MARKET || view === View.LISTS ? catalogAPI : itemAPI
       const { data, total }: { data: Item[]; total: number } = yield call(
         [api, 'get'],
-        {
-          ...filters
-          // sortBy:
-          //   filters && (view === View.MARKET || view === View.LISTS)
-          //     ? getCatalogSortBy(filters.sortBy)
-          //     : filters?.sortBy
-        }
+        filters
       )
-
       yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
     } catch (error) {
       yield put(
