@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, useMobileMediaQuery } from 'decentraland-ui'
+import { Button } from 'decentraland-ui'
+import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import onBackIcon from '../../../images/onBack.png'
 import { isNFT, mapAsset } from '../../../modules/asset/utils'

@@ -2,24 +2,19 @@ import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { Asset } from '../../../modules/asset/types'
 import { INITIAL_STATE } from '../../../modules/favorites/reducer'
 import { renderWithProviders } from '../../../utils/test'
-import BaseDetail from './BaseDetail'
-import { Props as BaseDetailProps } from './BaseDetail.types'
+import { Props as OnBackProps } from './OnBack.types'
+import OnBack from './OnBack'
 
 jest.mock('decentraland-ui/dist/components/Media')
 
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
 
-function renderBaseDetail(props: Partial<BaseDetailProps> = {}) {
+function renderOnBack(props: Partial<OnBackProps> = {}) {
   return renderWithProviders(
-    <BaseDetail
-      asset={{} as Asset}
-      assetImage={undefined}
-      isFavoritesEnabled={false}
-      badges={undefined}
-      left={undefined}
-      box={undefined}
-      isOnSale
-      {...props}
+    <OnBack
+      asset={props.asset || ({} as Asset)}
+      isFavoritesEnabled={props.isFavoritesEnabled || false}
+      onBack={jest.fn()}
     />,
     {
       preloadedState: {
@@ -37,7 +32,7 @@ function renderBaseDetail(props: Partial<BaseDetailProps> = {}) {
   )
 }
 
-describe('BaseDetail', () => {
+describe('OnBack', () => {
   let asset: Asset
   let useMobileMediaQueryMock: jest.MockedFunction<typeof useMobileMediaQuery>
 
@@ -54,7 +49,7 @@ describe('BaseDetail', () => {
     })
 
     it('should not render the favorites counter', () => {
-      const { queryByTestId } = renderBaseDetail({
+      const { queryByTestId } = renderOnBack({
         asset,
         isFavoritesEnabled: false
       })
@@ -69,7 +64,7 @@ describe('BaseDetail', () => {
 
     describe('and the favorites feature flag is not enabled', () => {
       it('should not render the favorites counter', () => {
-        const { queryByTestId } = renderBaseDetail({
+        const { queryByTestId } = renderOnBack({
           asset,
           isFavoritesEnabled: false
         })
@@ -84,7 +79,7 @@ describe('BaseDetail', () => {
         })
 
         it('should not render the favorites counter', () => {
-          const { queryByTestId } = renderBaseDetail({
+          const { queryByTestId } = renderOnBack({
             asset,
             isFavoritesEnabled: true
           })
@@ -95,10 +90,11 @@ describe('BaseDetail', () => {
       describe('and the asset is an item', () => {
         beforeEach(() => {
           asset = { ...asset, itemId: 'itemId' } as Asset
+          useMobileMediaQueryMock.mockReturnValue(true)
         })
 
         it('should render the favorites counter', () => {
-          const { getByTestId } = renderBaseDetail({
+          const { getByTestId } = renderOnBack({
             asset,
             isFavoritesEnabled: true
           })
