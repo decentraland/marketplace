@@ -500,13 +500,23 @@ export const getWearablesUrlParams = createSelector(
   getViewAsGuest,
   getMinPrice,
   getMaxPrice,
-  (rarities, wearableGenders, view, viewAsGuest, minPrice, maxPrice) => ({
+  getStatus,
+  (
     rarities,
     wearableGenders,
     view,
     viewAsGuest,
     minPrice,
-    maxPrice
+    maxPrice,
+    status
+  ) => ({
+    rarities,
+    wearableGenders,
+    view,
+    viewAsGuest,
+    minPrice,
+    maxPrice,
+    status
   })
 )
 
