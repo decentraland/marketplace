@@ -3,9 +3,9 @@ import { utils } from 'ethers'
 import { TokenConverter } from '../../modules/vendor/TokenConverter'
 import { Props } from './ManaToFiat.types'
 
-const ONE_MILLION = 1000000
-const ONE_BILLION = 1000000000
-const ONE_TRILLION = 1000000000000
+const ONE_MILLION = { value: 1000000, displayValue: 'M' }
+const ONE_BILLION = { value: 1000000000, displayValue: 'B' }
+const ONE_TRILLION = { value: 1000000000000, displayValue: 'T' }
 
 const ManaToFiat = (props: Props) => {
   const { mana, digits = 2 } = props
@@ -17,40 +17,23 @@ const ManaToFiat = (props: Props) => {
       new TokenConverter()
         .marketMANAToUSD(value)
         .then(usd => {
-          if (usd > ONE_TRILLION) {
-            setFiatValue(
-              `$ ${(+(+usd / ONE_TRILLION).toFixed(digits)).toLocaleString(
-                undefined,
-                {
-                  maximumFractionDigits: 2
-                }
-              )}T`
-            )
-          } else if (usd > ONE_BILLION) {
-            setFiatValue(
-              `$ ${(+(+usd / ONE_BILLION).toFixed(digits)).toLocaleString(
-                undefined,
-                {
-                  maximumFractionDigits: 2
-                }
-              )}B`
-            )
-          } else if (usd > ONE_MILLION) {
-            setFiatValue(
-              `$ ${(+(+usd / ONE_MILLION).toFixed(digits)).toLocaleString(
-                undefined,
-                {
-                  maximumFractionDigits: 2
-                }
-              )}M`
-            )
-          } else {
-            setFiatValue(
-              `$ ${(+usd.toFixed(digits)).toLocaleString(undefined, {
+          const divider =
+            usd > ONE_TRILLION.value
+              ? ONE_TRILLION
+              : usd > ONE_BILLION.value
+              ? ONE_BILLION
+              : usd > ONE_MILLION.value
+              ? ONE_MILLION
+              : { value: 1, displayValue: '' }
+
+          setFiatValue(
+            `$ ${(+(+usd / divider.value).toFixed(digits)).toLocaleString(
+              undefined,
+              {
                 maximumFractionDigits: 2
-              })}`
-            )
-          }
+              }
+            )}${divider.displayValue}`
+          )
         })
         .catch()
     } catch (error) {

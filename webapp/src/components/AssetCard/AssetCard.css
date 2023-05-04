@@ -13,6 +13,12 @@
   flex-direction: column;
 }
 
+.AssetCard .textOverflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .ui.cards a.card.AssetCard.catalog:hover,
 .ui.link.card.AssetCard.catalog:hover,
 .ui.link.cards .card.AssetCard.catalog:hover,

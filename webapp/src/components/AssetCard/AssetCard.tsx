@@ -269,7 +269,7 @@ const AssetCard = (props: Props) => {
       >
         <Card.Header>
           <div className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}>
-            {title}
+            <span className={'textOverflow'}>{title}</span>
             {!isNFT(asset) && isCatalogItem(asset) && (
               <span className="creator">
                 <Profile address={asset.creator} textOnly />
