@@ -165,7 +165,7 @@ describe('when handling the request for unpicking a favorite item', () => {
     })
   })
 
-  describe('and the call to the favorites api fauks', () => {
+  describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
