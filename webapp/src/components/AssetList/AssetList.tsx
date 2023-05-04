@@ -94,21 +94,7 @@ const AssetList = (props: Props) => {
               assetType === AssetType.ITEM
                 ? t('browse_page.secondary_market_title').toLocaleLowerCase()
                 : t('browse_page.primary_market_title').toLocaleLowerCase(),
-            searchStore: (chunks: string) => (
-              <button
-                className="empty-actions"
-                onClick={() =>
-                  onBrowse({
-                    assetType:
-                      assetType === AssetType.ITEM
-                        ? AssetType.NFT
-                        : AssetType.ITEM
-                  })
-                }
-              >
-                {chunks}
-              </button>
-            ),
+            searchStore: (chunks: string) => chunks,
             'if-filters': (chunks: string) => (hasFiltersEnabled ? chunks : ''),
             clearFilters: (chunks: string) => (
               <button className="empty-actions" onClick={onClearFilters}>
@@ -124,7 +110,6 @@ const AssetList = (props: Props) => {
     assetType,
     emptyStateTranslationString,
     hasFiltersEnabled,
-    onBrowse,
     onClearFilters,
     search
   ])
