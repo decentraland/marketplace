@@ -2,6 +2,10 @@
   padding: 20px !important;
 }
 
+.linkedProfileRow {
+  color: var(--primary) !important;
+}
+
 .issuedIdContainer {
   display: flex;
   flex-direction: row;
@@ -27,15 +31,24 @@
   padding-right: 25px;
 }
 
-.emptyTable {
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.empty {
+  height: 86px;
 }
 
-.emptyTableActionButton {
+.emptyTable {
+  width: 100%;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 20px;
+}
+
+.OwnersTable .emptyTableActionButton :global(.ui.button.basic) {
   text-decoration: underline;
+  color: white !important;
 }
 
 @media (max-width: 768px) {

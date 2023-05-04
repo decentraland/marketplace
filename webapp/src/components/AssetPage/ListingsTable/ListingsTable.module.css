@@ -2,8 +2,8 @@
   position: relative;
 }
 
-.ListingsTable .linkedProfileRow {
-  margin-left: 20px;
+.linkedProfileRow {
+  color: var(--primary) !important;
 }
 
 .ListingsTable .headerMargin {
@@ -76,7 +76,7 @@
 }
 
 @media (max-width: 768px) {
-  .ListingsTable .linkedProfileRow {
+  .linkedProfileRow {
     margin-left: unset;
   }
 }

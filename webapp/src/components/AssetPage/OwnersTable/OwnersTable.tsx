@@ -6,6 +6,7 @@ import {
   OwnersSortBy
 } from '../../../modules/vendor/decentraland'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import emptyOwners from '../../../images/emptyOwners.png'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
@@ -59,6 +60,7 @@ const OwnersTable = (props: Props) => {
       totalPages={totalPages}
       empty={() => (
         <div className={styles.emptyTable}>
+          <img src={emptyOwners} alt="empty" className={styles.empty} />
           <span>
             {t('owners_table.there_are_no_owners')}
             <Button
