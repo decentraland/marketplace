@@ -14,6 +14,7 @@ import { Section } from '../vendor/decentraland'
 import { NFTSortBy } from '../nft/types'
 import { isAccountView, isLandSection } from '../ui/utils'
 import { AssetStatusFilter } from '../../utils/filters'
+import { AssetType } from '../asset/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -232,6 +233,21 @@ export function getSectionFromCategory(category: NFTCategory) {
       return Section.EMOTES
     case NFTCategory.WEARABLE:
       return Section.WEARABLES
+  }
+}
+
+export function getMarketAssetTypeFromCategory(category: NFTCategory) {
+  switch (category) {
+    case NFTCategory.PARCEL:
+      return AssetType.NFT
+    case NFTCategory.ESTATE:
+      return AssetType.NFT
+    case NFTCategory.ENS:
+      return AssetType.NFT
+    case NFTCategory.EMOTE:
+      return AssetType.ITEM
+    case NFTCategory.WEARABLE:
+      return AssetType.ITEM
   }
 }
 

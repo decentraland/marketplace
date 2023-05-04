@@ -191,13 +191,8 @@ export const getSortByOptions = createSelector<
     switch (status) {
       case AssetStatusFilter.ON_SALE:
       case AssetStatusFilter.ONLY_MINTING:
-        orderByDropdownOptions = baseFilters
-        break
       case AssetStatusFilter.ONLY_LISTING:
-        orderByDropdownOptions = [
-          SORT_BY_MAP[SortBy.RECENTLY_LISTED],
-          ...baseFilters
-        ]
+        orderByDropdownOptions = baseFilters
         break
       case AssetStatusFilter.NOT_FOR_SALE:
         orderByDropdownOptions = [SORT_BY_MAP[SortBy.NEWEST]]
@@ -588,7 +583,8 @@ export const hasFiltersEnabled = createSelector<
     maxDistanceToPlaza,
     adjacentToRoad,
     creators,
-    rentalDays
+    rentalDays,
+    status
   } = browseOptions
   const isLand = isLandSection(section as Section)
 
@@ -628,7 +624,8 @@ export const hasFiltersEnabled = createSelector<
     hasEmotePlayModeFilter ||
     !!minPrice ||
     !!maxPrice ||
-    hasNotOnSaleFilter
+    hasNotOnSaleFilter ||
+    (!!status && status !== AssetStatusFilter.ON_SALE)
   )
 })
 
