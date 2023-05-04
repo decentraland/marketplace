@@ -10,6 +10,7 @@ import { getAddress } from '../wallet/selectors'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import { ItemAPI } from '../vendor/decentraland/item/api'
+import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import {
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,

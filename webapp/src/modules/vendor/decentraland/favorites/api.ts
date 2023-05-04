@@ -1,6 +1,7 @@
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
 import { FavoritedItems } from '../../../favorites/types'
+import { isAPIError } from '../../../../lib/error'
 import { ItemFilters } from '../item/types'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
@@ -10,6 +11,8 @@ export const DEFAULT_FAVORITES_LIST_ID = config.get(
 export const MARKETPLACE_FAVORITES_SERVER_URL = config.get(
   'MARKETPLACE_FAVORITES_SERVER_URL'
 )!
+
+const ALREADY_PICKED_STATUS_CODE = 422
 
 export class FavoritesAPI extends BaseClient {
   async getWhoFavoritedAnItem(
@@ -29,13 +32,20 @@ export class FavoritesAPI extends BaseClient {
   }
 
   async pickItemAsFavorite(itemId: string): Promise<void> {
-    return this.fetch(`/v1/lists/${DEFAULT_FAVORITES_LIST_ID}/picks`, {
-      method: 'POST',
-      body: JSON.stringify({ itemId }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    try {
+      await this.fetch(`/v1/lists/${DEFAULT_FAVORITES_LIST_ID}/picks`, {
+        method: 'POST',
+        body: JSON.stringify({ itemId }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    } catch (error) {
+      if (isAPIError(error) && error.status === ALREADY_PICKED_STATUS_CODE)
+        return
+
+      throw error
+    }
   }
 
   async unpickItemAsFavorite(itemId: string): Promise<void> {
