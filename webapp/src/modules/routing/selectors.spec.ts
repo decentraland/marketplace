@@ -127,6 +127,32 @@ describe('when getting if the are filters set', () => {
     })
   })
 
+  describe('and the status is set', () => {
+    describe('and the status is ON SALE', () => {
+      it('should return false', () => {
+        expect(
+          hasFiltersEnabled.resultFunc({
+            status: AssetStatusFilter.ON_SALE
+          })
+        ).toBe(false)
+      })
+    })
+
+    describe.each([
+      [AssetStatusFilter.NOT_FOR_SALE],
+      [AssetStatusFilter.ONLY_LISTING],
+      [AssetStatusFilter.ONLY_MINTING]
+    ])('and the status is %s', status => {
+      it('should return true', () => {
+        expect(
+          hasFiltersEnabled.resultFunc({
+            status
+          })
+        ).toBe(true)
+      })
+    })
+  })
+
   describe('and it is the lists section', () => {
     it('should return false', () => {
       expect(
@@ -632,11 +658,10 @@ describe('when getting the Sort By options', () => {
       beforeEach(() => {
         status = AssetStatusFilter.ONLY_LISTING
       })
-      it('should return the base sort options array plus tghe RECENTLY_LISTED option', () => {
-        expect(getSortByOptions.resultFunc(true, true, status)).toEqual([
-          getAllSortByOptions()[SortBy.RECENTLY_LISTED],
-          ...baseSortByOptions
-        ])
+      it('should return the base sort options', () => {
+        expect(getSortByOptions.resultFunc(true, true, status)).toEqual(
+          baseSortByOptions
+        )
       })
     })
     describe('and the status is NOT_FOR_SALE', () => {
