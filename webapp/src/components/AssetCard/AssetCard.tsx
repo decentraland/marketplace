@@ -158,7 +158,12 @@ const AssetCard = (props: Props) => {
               : isAvailableForMint
               ? t('asset_card.available_for_mint')
               : t('asset_card.cheapest_listing'),
-          actionIcon: isAvailableForMint ? mintingIcon : null,
+          actionIcon:
+            isAvailableForMint &&
+            sortBy !== SortBy.MOST_EXPENSIVE &&
+            sortBy !== SortBy.CHEAPEST
+              ? mintingIcon
+              : null,
           price:
             sortBy === SortBy.MOST_EXPENSIVE
               ? mostExpensive === MINT
@@ -270,7 +275,7 @@ const AssetCard = (props: Props) => {
       >
         <Card.Header>
           <div className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}>
-            {title}
+            <span className={'textOverflow'}>{title}</span>
             {!isNFT(asset) && isCatalogItem(asset) && (
               <span className="creator">
                 <Profile address={asset.creator} textOnly />

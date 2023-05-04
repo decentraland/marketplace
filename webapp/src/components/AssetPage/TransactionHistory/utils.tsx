@@ -6,6 +6,7 @@ import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { LinkedProfile } from '../../LinkedProfile'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
+import './TransactionHistory.css'
 
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
@@ -20,8 +21,12 @@ const formatEventDate = (updatedAt: number) => {
 export const formatDataToTable = (sales: Sale[]): DataTableType[] => {
   return sales?.map((sale: Sale) => {
     const value: DataTableType = {
-      [t('transaction_history.from')]: <LinkedProfile address={sale.seller} />,
-      [t('transaction_history.to')]: <LinkedProfile address={sale.buyer} />,
+      [t('transaction_history.from')]: (
+        <LinkedProfile address={sale.seller} className="linkedProfile" />
+      ),
+      [t('transaction_history.to')]: (
+        <LinkedProfile address={sale.buyer} className="linkedProfile" />
+      ),
       [t('transaction_history.type')]: t(`global.${sale.type}`),
       [t('transaction_history.when')]: formatEventDate(sale.timestamp),
       [t('transaction_history.price')]: (
