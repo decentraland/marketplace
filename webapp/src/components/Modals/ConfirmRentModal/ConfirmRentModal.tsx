@@ -17,7 +17,7 @@ import { ContractName } from 'decentraland-transactions'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getContractNames } from '../../../modules/vendor'
-import { getRentStatus, getError } from '../../../modules/rental/selectors'
+import { getRentConfirmationStatus, getError } from '../../../modules/rental/selectors'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
@@ -211,5 +211,5 @@ const ConfirmRentModal = ({
 }
 
 export default React.memo(
-  withAuthorizedAction(ConfirmRentModal, AuthorizedAction.RENT, getRentStatus, getError)
+  withAuthorizedAction(ConfirmRentModal, AuthorizedAction.RENT, getRentConfirmationStatus, getError)
 )

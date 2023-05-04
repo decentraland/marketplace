@@ -25,7 +25,7 @@ export const isAcceptingRental = (state: RootState) =>
 export const isSubmittingTransaction = (state: RootState) =>
   getState(state).isSubmittingTransaction
 
-export const getRentStatus = (state: RootState) => {
+export const getRentConfirmationStatus = (state: RootState) => {
   if (isSubmittingTransaction(state)) {
     return AuthorizationStepStatus.WAITING
   }

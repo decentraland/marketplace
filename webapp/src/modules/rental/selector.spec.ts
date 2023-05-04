@@ -2,15 +2,17 @@ import { NFTCategory, RentalListing } from '@dcl/schemas'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { RootState } from '../reducer'
 import { NFT } from '../nft/types'
-import { claimAssetRequest, removeRentalRequest } from './actions'
+import { acceptRentalListingRequest, claimAssetRequest, removeRentalRequest } from './actions'
 import {
   getState,
   getData,
   getRentalById,
   isSubmittingTransaction,
   isClaimingAsset,
-  isRemovingRental
+  isRemovingRental,
+  getRentConfirmationStatus
 } from './selectors'
+import { AuthorizationStepStatus } from '../../components/HOC/withAuthorizedAction/AuthorizationModal'
 
 let rootState: RootState
 
@@ -131,6 +133,44 @@ describe('when getting if the transaction is being submitted', () => {
 
     it('should return false', () => {
       expect(isSubmittingTransaction(rootState)).toBe(false)
+    })
+  })
+})
+
+describe("when getting rental status", () => {
+  describe("and there is a transaction submitting", () => {
+    beforeEach(() => {
+      rootState.rental.isSubmittingTransaction = true
+    })
+    
+    it('should return authorization status WAITING', () => {
+      expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.WAITING)
+    })
+  })
+
+  describe("and there is a rental being accepted", () => {
+    beforeEach(() => {
+      rootState.rental.loading = [acceptRentalListingRequest({} as NFT, {} as RentalListing, 0, '')]
+    })
+    
+    it('should return authorization status WAITING', () => {
+      expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.PROCESSING)
+    })
+  })
+
+  describe("and there is an error", () => {
+    beforeEach(() => {
+      rootState.rental.error = 'error'
+    })
+    
+    it('should return authorization status WAITING', () => {
+      expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.ERROR)
+    })
+  })
+
+  describe("and there is no error and no transaction is being processed", () => {
+    it('should return authorization status PENDING', () => {
+      expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.PENDING)
     })
   })
 })
