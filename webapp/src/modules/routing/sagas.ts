@@ -304,36 +304,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       }
       if (isItems) {
         const isCatalog = view === View.MARKET || view === View.LISTS
-        const filters = {
-          view,
-          page,
-          filters: {
-            first,
-            skip,
-            sortBy: isCatalog
-              ? getCatalogSortBy(sortBy)
-              : getItemSortBy(sortBy),
-            isOnSale: onlyOnSale,
-            creator: address ? [address] : creators,
-            wearableCategory,
-            emoteCategory,
-            isWearableHead,
-            isWearableAccessory,
-            isWearableSmart: onlySmart,
-            search,
-            category,
-            rarities: rarities,
-            contractAddresses: contracts,
-            wearableGenders,
-            emotePlayMode,
-            minPrice,
-            maxPrice,
-            network,
-            ...statusParameters
-          }
-        }
-        // console.log('filters: ', filters);
-
         yield put(
           fetchItemsRequest({
             view,
