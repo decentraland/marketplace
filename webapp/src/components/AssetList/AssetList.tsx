@@ -52,8 +52,6 @@ const AssetList = (props: Props) => {
     },
     [onBrowse]
   )
-  console.log('Is loading', isLoading)
-
   const maxQuerySize = getMaxQuerySize(vendor)
 
   const hasMorePages =
