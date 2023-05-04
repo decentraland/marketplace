@@ -25,6 +25,12 @@
     left: 0;
     margin: auto;
   }
+
+  .transparentOverlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
 }
 
 @media (max-width: 767px) {
