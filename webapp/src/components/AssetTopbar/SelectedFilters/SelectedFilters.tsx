@@ -10,6 +10,7 @@ import {
 } from '../../../utils/filters'
 import { CreatorAccount } from '../../../modules/account/types'
 import ProfilesCache from '../../../lib/profiles'
+import { AssetStatusFilter } from '../../../utils/filters'
 import { profileToCreatorAccount } from '../../AssetFilters/CreatorsFilter/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { Pill } from './Pill/Pill'
@@ -41,7 +42,8 @@ export const SelectedFilters = ({
     minDistanceToPlaza,
     maxDistanceToPlaza,
     rentalDays,
-    assetType
+    assetType,
+    status
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
@@ -159,9 +161,20 @@ export const SelectedFilters = ({
     onBrowse({ adjacentToRoad: undefined })
   }, [onBrowse])
 
-  const handleDeleteRentalDays = useCallback((removeDays) => {
-    onBrowse({ rentalDays: rentalDays?.filter((day) => removeDays.toString() !== day.toString() )})
-  }, [onBrowse, rentalDays])
+  const handleDeleteStatus = useCallback(() => {
+    onBrowse({ status: AssetStatusFilter.ON_SALE })
+  }, [onBrowse])
+
+  const handleDeleteRentalDays = useCallback(
+    removeDays => {
+      onBrowse({
+        rentalDays: rentalDays?.filter(
+          day => removeDays.toString() !== day.toString()
+        )
+      })
+    },
+    [onBrowse, rentalDays]
+  )
 
   return (
     <div className={styles.pillContainer}>
@@ -259,17 +272,25 @@ export const SelectedFilters = ({
           onDelete={handleDeleteDistanceToPlaza}
           id="distanceToPlaza"
         />
-      ): null}
-      {rentalDays && rentalDays.length ? (
-        rentalDays.map((days) => (
-          <Pill
-            key={days}
-            label={t('nft_filters.periods.selection', { rentalDays: days })}
-            onDelete={handleDeleteRentalDays}
-            id={days.toString()}
-          />
-        ))
-      ): null}
+      ) : null}
+      {rentalDays && rentalDays.length
+        ? rentalDays.map(days => (
+            <Pill
+              key={days}
+              label={t('nft_filters.periods.selection', { rentalDays: days })}
+              onDelete={handleDeleteRentalDays}
+              id={days.toString()}
+            />
+          ))
+        : null}
+      {status && status !== AssetStatusFilter.ON_SALE ? (
+        <Pill
+          key={status}
+          label={t(`nft_filters.status.${status}`)}
+          onDelete={handleDeleteStatus}
+          id={status.toString()}
+        />
+      ) : null}
     </div>
   )
 }
