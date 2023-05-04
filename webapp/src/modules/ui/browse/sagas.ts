@@ -18,7 +18,7 @@ export function* browseSaga() {
 
 function* handleUnpickItemAsFavoriteSuccess() {
   const section: Section = yield select(getSection)
-  const page: number = yield select(getPageNumber)
+  const currentPage: number = yield select(getPageNumber)
   const favoritedAssets: Item[] = yield select(getItemsPickedByUser)
   const totalFavoritedAssets: number = yield select(getCount)
   if (
@@ -26,11 +26,12 @@ function* handleUnpickItemAsFavoriteSuccess() {
     favoritedAssets.length < totalFavoritedAssets
   ) {
     yield put(
-      fetchFavoritedItemsRequest({
-        filters: { first: 1, skip: page * PAGE_SIZE - 1 },
-        page,
-        section: Section.LISTS
-      })
+      fetchFavoritedItemsRequest(
+        {
+          filters: { first: 1, skip: currentPage * PAGE_SIZE - 1 }
+        },
+        true
+      )
     )
   }
 }

@@ -1,11 +1,11 @@
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
+import { Item } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   ConnectWalletSuccessAction,
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import {
   closeModal,
@@ -19,6 +19,8 @@ import {
 } from '../vendor/decentraland/favorites/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
+import { ItemAPI } from '../vendor/decentraland/item/api'
+import { NFT_SERVER_URL } from '../vendor/decentraland'
 import {
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
@@ -42,6 +44,12 @@ import { getListId } from './selectors'
 import { FavoritedItems } from './types'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
+  const itemAPI = new ItemAPI(NFT_SERVER_URL, {
+    retries: retryParams.attempts,
+    retryDelay: retryParams.delay,
+    identity: getIdentity
+  })
+
   const favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
     retries: retryParams.attempts,
     retryDelay: retryParams.delay,
@@ -135,8 +143,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleFetchFavoritedItemsRequest(
     action: FetchFavoritedItemsRequestAction
   ) {
-    const { filters } = action.payload
+    const { filters } = action.payload.options
     try {
+      let items: Item[] = []
       const listId: string = yield select(getListId)
       const {
         results,
@@ -146,9 +155,14 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         listId,
         filters
       )
-
+      const createdAt = Object.fromEntries(
+        results.map(favoritedItem => [
+          favoritedItem.itemId,
+          favoritedItem.createdAt
+        ])
+      )
       const options: ItemBrowseOptions = {
-        ...action.payload,
+        ...action.payload.options,
         filters: {
           first: results.length,
           ids: results.map(({ itemId }) => itemId)
@@ -156,11 +170,23 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (results.length > 0) {
-        yield put(fetchItemsRequest(options))
-      } else {
-        yield put(fetchItemsSuccess([], total, options, Date.now()))
+        const result: { data: Item[] } = yield call(
+          [itemAPI, 'get'],
+          options.filters
+        )
+        items = result.data
       }
-      yield put(fetchFavoritedItemsSuccess(results, total))
+
+      yield put(
+        fetchFavoritedItemsSuccess(
+          items,
+          createdAt,
+          total,
+          options,
+          Date.now(),
+          action.payload.forceLoadMore
+        )
+      )
     } catch (error) {
       yield put(fetchFavoritedItemsFailure((error as Error).message))
     }

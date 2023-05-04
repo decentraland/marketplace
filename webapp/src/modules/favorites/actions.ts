@@ -1,7 +1,6 @@
 import { action } from 'typesafe-actions'
 import { Item } from '@dcl/schemas'
 import { ItemBrowseOptions } from '../item/types'
-import { FavoritedItems } from './types'
 
 // Pick item as Favorite Request
 export const PICK_ITEM_AS_FAVORITE_REQUEST =
@@ -53,7 +52,9 @@ export const unpickItemAsFavoriteRequest = (item: Item) =>
   action(UNPICK_ITEM_AS_FAVORITE_REQUEST, { item })
 
 export const unpickItemAsFavoriteSuccess = (item: Item) =>
-  action(UNPICK_ITEM_AS_FAVORITE_SUCCESS, { item })
+  action(UNPICK_ITEM_AS_FAVORITE_SUCCESS, {
+    item
+  })
 
 export const unpickItemAsFavoriteFailure = (item: Item, error: string) =>
   action(UNPICK_ITEM_AS_FAVORITE_FAILURE, { item, error })
@@ -101,13 +102,27 @@ export const FETCH_FAVORITED_ITEMS_REQUEST = '[Request] Fetch Favorited Items'
 export const FETCH_FAVORITED_ITEMS_SUCCESS = '[Success] Fetch Favorited Items'
 export const FETCH_FAVORITED_ITEMS_FAILURE = '[Failure] Fetch Favorited Items'
 
-export const fetchFavoritedItemsRequest = (options: ItemBrowseOptions) =>
-  action(FETCH_FAVORITED_ITEMS_REQUEST, options)
+export const fetchFavoritedItemsRequest = (
+  options: ItemBrowseOptions,
+  forceLoadMore?: boolean
+) => action(FETCH_FAVORITED_ITEMS_REQUEST, { options, forceLoadMore })
 
 export const fetchFavoritedItemsSuccess = (
-  favoritedItems: FavoritedItems,
-  total: number
-) => action(FETCH_FAVORITED_ITEMS_SUCCESS, { favoritedItems, total })
+  items: Item[],
+  createdAt: Record<string, number>,
+  total: number,
+  options: ItemBrowseOptions,
+  timestamp: number,
+  forceLoadMore?: boolean
+) =>
+  action(FETCH_FAVORITED_ITEMS_SUCCESS, {
+    options,
+    items,
+    createdAt,
+    total,
+    timestamp,
+    forceLoadMore
+  })
 
 export const fetchFavoritedItemsFailure = (error: string) =>
   action(FETCH_FAVORITED_ITEMS_FAILURE, { error })
