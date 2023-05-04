@@ -112,7 +112,7 @@ describe('when picking an item as favorite', () => {
     })
   })
 
-  describe('when the request fails with an error code that's not a 422', () => {
+  describe('when the request fails with an error code that is not a 422', () => {
     const error = { message: errorMessage, status: 500 }
     beforeEach(() => {
       fetchMock.mockRejectedValue(error)
