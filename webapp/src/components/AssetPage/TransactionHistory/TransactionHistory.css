@@ -50,3 +50,7 @@
     padding: 20px;
   }
 }
+
+.linkedProfile {
+  color: var(--primary) !important;
+}

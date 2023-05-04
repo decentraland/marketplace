@@ -13,7 +13,6 @@ import {
   Rarity
 } from '@dcl/schemas'
 import { Button, Loader, Mana, Popup } from 'decentraland-ui'
-import { formatWeiMANA } from '../../../lib/mana'
 import { formatDistanceToNow } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
 import { isNFT } from '../../../modules/asset/utils'
@@ -24,6 +23,7 @@ import clock from '../../../images/clock.png'
 import noListings from '../../../images/noListings.png'
 import { ManaToFiat } from '../../ManaToFiat'
 import { LinkedProfile } from '../../LinkedProfile'
+import { fomrmatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BuyOptions, Props } from './BestBuyingOption.types'
@@ -162,7 +162,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                     network={asset.network}
                     className={styles.informationBold}
                   >
-                    {formatWeiMANA(asset.price)}
+                    {fomrmatWeiToAssetCard(asset.price)}
                   </Mana>
                 </div>
                 {+asset.price > 0 && (
@@ -207,7 +207,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                     network={listing.order.network}
                     className={styles.listingMana}
                   >
-                    {formatWeiMANA(listing.order.price)}
+                    {fomrmatWeiToAssetCard(listing.order.price)}
                   </Mana>
                 </div>
                 <div className={styles.informationListingText}>
@@ -232,7 +232,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                       network={listing.order.network}
                       className={styles.listingMana}
                     >
-                      {formatWeiMANA(mostExpensiveBid.price)}
+                      {fomrmatWeiToAssetCard(mostExpensiveBid.price)}
                     </Mana>
                   </div>
 
