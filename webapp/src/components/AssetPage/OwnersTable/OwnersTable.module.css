@@ -2,6 +2,10 @@
   padding: 20px !important;
 }
 
+.linkedProfileRow {
+  color: var(--primary) !important;
+}
+
 .issuedIdContainer {
   display: flex;
   flex-direction: row;
