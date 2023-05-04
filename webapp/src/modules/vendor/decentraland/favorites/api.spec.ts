@@ -118,7 +118,7 @@ describe('when picking an item as favorite', () => {
       fetchMock.mockRejectedValue(error)
     })
 
-    it('should catch the error and ignore it', () => {
+    it('should throw the error', () => {
       expect(favoritesAPI.pickItemAsFavorite(itemId)).rejects.toEqual(error)
     })
   })
