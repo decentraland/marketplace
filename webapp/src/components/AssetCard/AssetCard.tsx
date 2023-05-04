@@ -164,7 +164,13 @@ const AssetCard = (props: Props) => {
               ? mostExpensive === MINT
                 ? asset.price
                 : asset.maxListingPrice ?? null
-              : asset.minPrice ?? null,
+              : sortBy === SortBy.CHEAPEST
+              ? cheapest === MINT
+                ? asset.price
+                : asset.minPrice ?? null
+              : isAvailableForMint
+              ? asset.price
+              : asset.minListingPrice ?? null,
           extraInformation:
             asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
               <span>
