@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react'
-import { RentalListing } from '@dcl/schemas'
+import React, { useCallback, useMemo } from 'react'
+import { Item, RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { Link } from 'react-router-dom'
@@ -112,7 +112,7 @@ const AssetCard = (props: Props) => {
     [rental]
   )
 
-  const catalogItemInformation = () => {
+  const catalogItemInformation = useMemo(() => {
     let information: {
       action: string
       actionIcon: string | null
@@ -127,9 +127,7 @@ const AssetCard = (props: Props) => {
           action: t('asset_card.not_for_sale'),
           actionIcon: null,
           price: null,
-          extraInformation: `${t('asset_card.owners', {
-            count: asset.owners
-          })}`
+          extraInformation: null
         }
       } else {
         const mostExpensive =
@@ -190,30 +188,42 @@ const AssetCard = (props: Props) => {
         }
       }
     }
-    return information ? (
+    return information
+  }, [asset, sortBy])
+
+  const renderCatalogItemInformation = useCallback(() => {
+    return catalogItemInformation ? (
       <div className="CatalogItemInformation">
         <span>
-          {information.action} &nbsp;
-          {information.actionIcon && (
-            <img src={information.actionIcon} alt="mint" className="mintIcon" />
+          {catalogItemInformation.action} &nbsp;
+          {catalogItemInformation.actionIcon && (
+            <img
+              src={catalogItemInformation.actionIcon}
+              alt="mint"
+              className="mintIcon"
+            />
           )}
         </span>
 
-        {information.price && (
+        {catalogItemInformation.price ? (
           <div className="PriceInMana">
             <Mana size="large" network={asset.network} className="PriceInMana">
-              {fomrmatWeiToAssetCard(information.price)}
+              {fomrmatWeiToAssetCard(catalogItemInformation.price)}
             </Mana>
           </div>
+        ) : (
+          `${t('asset_card.owners', {
+            count: (asset as Item).owners
+          })}`
         )}
-        {information.extraInformation && (
+        {catalogItemInformation.extraInformation && (
           <span className="extraInformation">
-            {information.extraInformation}
+            {catalogItemInformation.extraInformation}
           </span>
         )}
       </div>
     ) : null
-  }
+  }, [asset, catalogItemInformation])
 
   return (
     <Card
@@ -227,7 +237,9 @@ const AssetCard = (props: Props) => {
       }`}
     >
       <AssetImage
-        className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''}`}
+        className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''} ${
+          !!catalogItemInformation?.extraInformation ? 'expandable' : ''
+        }`}
         asset={asset}
         showOrderListedTag={showListedTag}
         showMonospace
@@ -244,7 +256,11 @@ const AssetCard = (props: Props) => {
           rental={rental}
         />
       ) : null}
-      <Card.Content className={isCatalogItem(asset) ? 'catalog' : ''}>
+      <Card.Content
+        className={`${isCatalogItem(asset) ? 'catalog' : ''} ${
+          !!catalogItemInformation?.extraInformation ? 'expandable' : ''
+        }`}
+      >
         <Card.Header>
           <div className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}>
             {title}
@@ -278,7 +294,7 @@ const AssetCard = (props: Props) => {
             </div>
           ) : null}
         </div>
-        {catalogItemInformation()}
+        {renderCatalogItemInformation()}
 
         {parcel ? <ParcelTags nft={asset as NFT} /> : null}
         {estate ? <EstateTags nft={asset as NFT} /> : null}
