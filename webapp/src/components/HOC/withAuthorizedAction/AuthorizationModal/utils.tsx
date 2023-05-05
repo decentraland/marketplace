@@ -50,18 +50,15 @@ export function getStepStatus(
     return AuthorizationStepStatus.WAITING
   }
 
-  const actionTypeTransactions = getTransactions(
+  const pendingActionTypeTransactions = getTransactions(
     state,
     authorization.address
   ).filter(
     transaction =>
+      isPending(transaction.status) &&
       getType({ type: actionType }) ===
         getType({ type: transaction.actionType }) &&
       areEqual(transaction.payload.authorization, authorization)
-  )
-
-  const pendingActionTypeTransactions = actionTypeTransactions.filter(
-    transaction => isPending(transaction.status)
   )
 
   if (pendingActionTypeTransactions.length) {
