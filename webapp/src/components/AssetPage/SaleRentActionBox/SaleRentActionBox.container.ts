@@ -3,8 +3,6 @@ import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../../modules/reducer'
 import { getMana, getWallet } from '../../../modules/wallet/selectors'
 import { getNFTBids } from '../../../modules/ui/nft/bid/selectors'
-import { getContract } from '../../../modules/contract/selectors'
-import { Contract } from '../../../modules/vendor/services'
 import {
   OwnProps,
   MapStateProps,
@@ -21,7 +19,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     userHasAlreadyBidsOnNft: wallet
       ? getNFTBids(state).some(bid => bid.bidder === wallet.address)
       : false,
-    getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }
 

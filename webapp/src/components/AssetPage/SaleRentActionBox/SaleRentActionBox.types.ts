@@ -3,9 +3,6 @@ import { Order, RentalListing } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
 import { NFT } from '../../../modules/nft/types'
-import { Contract } from '../../../modules/vendor/services'
-import { getContract } from '../../../modules/contract/selectors'
-import { WithAuthorizedActionProps } from '../../HOC/withAuthorizedAction'
 
 export type Props = {
   nft: NFT
@@ -14,16 +11,14 @@ export type Props = {
   order: Order | null
   userHasAlreadyBidsOnNft: boolean
   currentMana: number | undefined
-  getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onRent: (selectedPeriodIndex: number) => void
-} & WithAuthorizedActionProps
+}
 
 export type OwnProps = Pick<Props, 'nft' | 'rental' | 'order'>
 export type MapStateProps = Pick<
   Props,
   | 'wallet'
   | 'userHasAlreadyBidsOnNft'
-  | 'getContract'
   | 'currentMana'
 >
 export type MapDispatchProps = Pick<Props, 'onRent'>
