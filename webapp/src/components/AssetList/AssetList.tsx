@@ -7,14 +7,14 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
+import { Section } from '../../modules/vendor/decentraland'
+import { locations } from '../../modules/routing/locations'
 import * as events from '../../utils/events'
 import { InfiniteScroll } from '../InfiniteScroll'
 import { AssetCard } from '../AssetCard'
 import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
 import './AssetList.css'
-import { Section } from '../../modules/vendor/decentraland'
-import { locations } from '../../modules/routing/locations'
 
 const AssetList = (props: Props) => {
   const {
@@ -86,17 +86,17 @@ const AssetList = (props: Props) => {
       return (
         <div className="empty">
           <div className="logo"></div>
-          <h1 className="title">You don't have any saved items</h1>
-          <p className="subtitle">Discover amazing items.</p>
+          <h1 className="title">{t('my_lists.empty.title')}</h1>
+          <p className="subtitle">{t('my_lists.empty.subtitle')}</p>
           <Button primary as={Link} to={locations.browse()}>
-            Explore collectibles
+            {t('my_lists.empty.action')}
           </Button>
         </div>
       )
     }
 
     return (
-      <div className="empty">
+      <div className="empty empty-assets">
         <div className="watermelon" />
         <T
           id={emptyStateTranslationString}

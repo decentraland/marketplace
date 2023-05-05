@@ -26,6 +26,12 @@
   height: 80px;
 }
 
+.AssetsList .empty.empty-assets {
+  font-size: 16px;
+  text-align: center;
+  color: var(--secondary-text);
+}
+
 .AssetsList .empty {
   display: flex;
   flex-direction: column;

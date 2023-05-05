@@ -1141,5 +1141,12 @@
     "title": "CLAIM YOUR OWN NAME",
     "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
     "btn": "Claim your name"
+  },
+  "my_lists": {
+    "empty": {
+      "title": "You don't have any saved items",
+      "subtitle": "Discover amazing items.",
+      "action": "Explore collectibles"
+    }
   }
 }

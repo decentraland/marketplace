@@ -28,12 +28,6 @@
   margin: 0;
 }
 
-.AssetBrowse .ui.cards + .empty {
-  font-size: 16px;
-  text-align: center;
-  color: var(--secondary-text);
-}
-
 .AssetBrowse .overlay {
   height: 100%;
   width: 100%;
