@@ -137,13 +137,13 @@ describe('when getting if the transaction is being submitted', () => {
   })
 })
 
-describe("when getting rental status", () => {
+describe("when getting a rental confirmation status", () => {
   describe("and there is a transaction submitting", () => {
     beforeEach(() => {
       rootState.rental.isSubmittingTransaction = true
     })
     
-    it('should return authorization status WAITING', () => {
+    it('should return an authorization status WAITING', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.WAITING)
     })
   })
@@ -153,7 +153,7 @@ describe("when getting rental status", () => {
       rootState.rental.loading = [acceptRentalListingRequest({} as NFT, {} as RentalListing, 0, '')]
     })
     
-    it('should return authorization status WAITING', () => {
+    it('should return an authorization status WAITING', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.PROCESSING)
     })
   })
@@ -163,13 +163,13 @@ describe("when getting rental status", () => {
       rootState.rental.error = 'error'
     })
     
-    it('should return authorization status WAITING', () => {
+    it('should return an authorization status WAITING', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.ERROR)
     })
   })
 
   describe("and there is no error and no transaction is being processed", () => {
-    it('should return authorization status PENDING', () => {
+    it('should return an authorization status PENDING', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.PENDING)
     })
   })
