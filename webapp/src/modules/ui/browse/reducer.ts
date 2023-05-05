@@ -21,12 +21,13 @@ import {
   FETCH_NFTS_SUCCESS
 } from '../../nft/actions'
 import { BrowseAction, BROWSE } from '../../routing/actions'
-import { Section } from '../../vendor/decentraland'
 import { SetViewAction, SET_VIEW } from '../actions'
 import { View } from '../types'
+import { isLoadingMoreResults } from './utils'
 
 export type BrowseUIState = {
   view?: View
+  page?: number
   nftIds: string[]
   itemIds: string[]
   lastTimestamp: number
@@ -35,6 +36,7 @@ export type BrowseUIState = {
 
 export const INITIAL_STATE: BrowseUIState = {
   view: undefined,
+  page: undefined,
   nftIds: [],
   itemIds: [],
   count: undefined,
@@ -61,7 +63,11 @@ export function browseReducer(
     case SET_VIEW: {
       return {
         ...state,
-        view: action.payload.view
+        view: action.payload.view,
+        nftIds: [],
+        itemIds: [],
+        count: undefined,
+        page: undefined
       }
     }
 
@@ -85,31 +91,20 @@ export function browseReducer(
       }
     }
 
-    case FETCH_NFTS_REQUEST: {
-      const { view } = action.payload.options
-      switch (view) {
-        case View.ATLAS:
-          return state
-        case View.LOAD_MORE:
-          return {
-            ...state,
-            nftIds: [...state.nftIds],
-            count: undefined
-          }
-        default:
-          return {
-            ...state,
-            nftIds: [],
-            count: undefined
-          }
-      }
-    }
-
     case FETCH_NFTS_SUCCESS: {
-      if (action.payload.timestamp < state.lastTimestamp) {
+      const {
+        timestamp,
+        nfts,
+        count,
+        options: { page, view }
+      } = action.payload
+      if (timestamp < state.lastTimestamp) {
         return state
       }
-      const view = action.payload.options.view
+      const newNftIds = nfts.map(nft => nft.id)
+      const nftIds = isLoadingMoreResults(state, page)
+        ? [...state.nftIds, ...newNftIds]
+        : newNftIds
       switch (view) {
         case View.MARKET:
         case View.CURRENT_ACCOUNT:
@@ -117,20 +112,10 @@ export function browseReducer(
           return {
             ...state,
             view,
-            nftIds: action.payload.nfts.map(nft => nft.id),
-            count: action.payload.count,
-            lastTimestamp: action.payload.timestamp
-          }
-        }
-        case View.LOAD_MORE: {
-          return {
-            ...state,
-            nftIds: [
-              ...state.nftIds,
-              ...action.payload.nfts.map(nft => nft.id)
-            ],
-            count: action.payload.count,
-            lastTimestamp: action.payload.timestamp
+            page,
+            nftIds,
+            count: count,
+            lastTimestamp: timestamp
           }
         }
         default:
@@ -138,21 +123,36 @@ export function browseReducer(
       }
     }
 
+    case FETCH_NFTS_REQUEST:
     case FETCH_ITEMS_REQUEST: {
-      const { view } = action.payload
+      const key = action.type === FETCH_NFTS_REQUEST ? 'nftIds' : 'itemIds'
+      const { view, page } =
+        action.type === FETCH_NFTS_REQUEST
+          ? action.payload.options
+          : action.payload
+
+      const isDifferentView = view !== state.view
+      if (isDifferentView) {
+        return {
+          ...state,
+          [key]: [],
+          count: undefined
+        }
+      }
+
+      const elements = isLoadingMoreResults(state, page) ? [...state[key]] : []
       switch (view) {
         case View.ATLAS:
           return state
-        case View.LOAD_MORE:
-          return {
-            ...state,
-            itemIds: [...state.itemIds],
-            count: undefined
-          }
+        case View.LISTS:
+        case View.CURRENT_ACCOUNT:
+        case View.ACCOUNT:
+        case View.MARKET:
+          return { ...state, [key]: elements, count: undefined }
         default:
           return {
             ...state,
-            nftIds: [],
+            [key]: [],
             count: undefined
           }
       }
@@ -165,17 +165,45 @@ export function browseReducer(
       }
 
     case FETCH_FAVORITED_ITEMS_SUCCESS:
+      const {
+        timestamp,
+        options: { page },
+        items,
+        forceLoadMore,
+        total
+      } = action.payload
+      if (timestamp < state.lastTimestamp) {
+        return state
+      }
+
+      const newItemIds = items.map(item => item.id)
+      const itemIds =
+        isLoadingMoreResults(state, page) || forceLoadMore
+          ? [...state.itemIds, ...newItemIds]
+          : newItemIds
+
       return {
         ...state,
-        count: action.payload.total
+        itemIds,
+        page: forceLoadMore ? state.page : page,
+        count: total
       }
 
     case FETCH_ITEMS_SUCCESS: {
-      if (action.payload.timestamp < state.lastTimestamp) {
+      const {
+        timestamp,
+        items,
+        total,
+        options: { page, view }
+      } = action.payload
+      if (timestamp < state.lastTimestamp) {
         return state
       }
-      const view = action.payload.options.view
-      const section = action.payload.options.section
+
+      const newItemIds = items.map(item => item.id)
+      const itemIds = isLoadingMoreResults(state, page)
+        ? [...state.itemIds, ...newItemIds]
+        : newItemIds
 
       switch (view) {
         case View.MARKET:
@@ -184,29 +212,10 @@ export function browseReducer(
           return {
             ...state,
             view,
-            itemIds: action.payload.items.map(item => item.id),
-            count: action.payload.total,
-            lastTimestamp: action.payload.timestamp
-          }
-        }
-        case View.LISTS: {
-          return {
-            ...state,
-            view,
-            itemIds: action.payload.items.map(item => item.id),
-            lastTimestamp: action.payload.timestamp
-          }
-        }
-        case View.LOAD_MORE: {
-          return {
-            ...state,
-            itemIds: [
-              ...state.itemIds,
-              ...action.payload.items.map(item => item.id)
-            ],
-            count:
-              section === Section.LISTS ? state.count : action.payload.total,
-            lastTimestamp: action.payload.timestamp
+            page,
+            itemIds,
+            count: total,
+            lastTimestamp: timestamp
           }
         }
         default:

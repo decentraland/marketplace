@@ -12,7 +12,6 @@ export const View = {
   PARTNERS_SUPER_RARE: 'super_rare',
   PARTNERS_MAKERS_PLACE: 'makers_place',
   PARTNERS_KNOWN_ORIGIN: 'known_origin',
-  LOAD_MORE: 'load_more',
   ATLAS: 'atlas'
 } as const
 

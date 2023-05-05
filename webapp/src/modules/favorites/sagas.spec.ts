@@ -1,17 +1,17 @@
-import { select, take } from 'redux-saga/effects'
+import { call, select, take } from 'redux-saga/effects'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { Item } from '@dcl/schemas'
 import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
-import {
-  FavoritesAPI,
-  MARKETPLACE_FAVORITES_SERVER_URL
-} from '../vendor/decentraland/favorites/api'
+import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
+import { getIdentity as getAccountIdentity } from '../identity/utils'
+import { ItemAPI } from '../vendor/decentraland/item/api'
+import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import {
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
@@ -29,11 +29,6 @@ import {
 } from './actions'
 import { favoritesSaga } from './sagas'
 import { getListId } from './selectors'
-import {
-  FETCH_ITEMS_SUCCESS,
-  fetchItemsRequest,
-  fetchItemsSuccess
-} from '../item/actions'
 import { FavoritedItems } from './types'
 
 let item: Item
@@ -67,6 +62,7 @@ describe('when handling the request for picking an item as favorite', () => {
             .provide([
               [select(getAddress), undefined],
               [take(CONNECT_WALLET_SUCCESS), {}],
+              [call(getAccountIdentity), Promise.resolve()],
               [
                 matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
                 undefined
@@ -103,11 +99,25 @@ describe('when handling the request for picking an item as favorite', () => {
     })
   })
 
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [select(getAddress), address],
+          [call(getAccountIdentity), Promise.reject(error)]
+        ])
+        .put(pickItemAsFavoriteFailure(item, error.message))
+        .dispatch(pickItemAsFavoriteRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [select(getAddress), address],
+          [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
             Promise.reject(error)
@@ -128,6 +138,7 @@ describe('when handling the request for picking an item as favorite', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [select(getAddress), address],
+          [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
             undefined
@@ -145,10 +156,21 @@ describe('when handling the request for picking an item as favorite', () => {
 })
 
 describe('when handling the request for unpicking a favorite item', () => {
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .put(unpickItemAsFavoriteFailure(item, error.message))
+        .dispatch(unpickItemAsFavoriteRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
+          [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.unpickItemAsFavorite),
             Promise.reject(error)
@@ -172,6 +194,7 @@ describe('when handling the request for unpicking a favorite item', () => {
             matchers.call.fn(FavoritesAPI.prototype.unpickItemAsFavorite),
             undefined
           ],
+          [call(getAccountIdentity), Promise.resolve()],
           [matchers.put(unpickItemAsFavoriteSuccess(item)), undefined]
         ])
         .call.like({
@@ -186,10 +209,21 @@ describe('when handling the request for unpicking a favorite item', () => {
 })
 
 describe('when handling the request for undo unpicking a favorite item', () => {
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .put(undoUnpickingItemAsFavoriteFailure(item, error.message))
+        .dispatch(undoUnpickingItemAsFavoriteRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
+          [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
             Promise.reject(error)
@@ -212,7 +246,8 @@ describe('when handling the request for undo unpicking a favorite item', () => {
           [
             matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
             undefined
-          ]
+          ],
+          [call(getAccountIdentity), Promise.resolve()]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.pickItemAsFavorite,
@@ -237,11 +272,25 @@ describe('when handling the request for fetching favorited items', () => {
     listId = 'listId'
   })
 
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [select(getListId), listId],
+          [call(getAccountIdentity), Promise.reject(error)]
+        ])
+        .put(fetchFavoritedItemsFailure(error.message))
+        .dispatch(fetchFavoritedItemsRequest(options))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [select(getListId), listId],
+          [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
             Promise.reject(error)
@@ -259,18 +308,110 @@ describe('when handling the request for fetching favorited items', () => {
 
   describe('and the call to the favorites api succeeds', () => {
     let favoritedItemIds: FavoritedItems
+    let createdAt: Record<string, number>
     let total: number
 
     describe("and there's more than favorited item", () => {
       beforeEach(() => {
         favoritedItemIds = [{ itemId: item.id, createdAt: Date.now() }]
+        createdAt = { [item.id]: favoritedItemIds[0].createdAt }
         total = 1
       })
 
-      it('should dispatch an action signaling the success of the handled action and the request of the retrieved items', () => {
+      describe('and the call to the items api fails', () => {
+        it('should dispatch an action signaling the failure of the handled action', () => {
+          return expectSaga(favoritesSaga, getIdentity)
+            .provide([
+              [select(getListId), listId],
+              [call(getAccountIdentity), Promise.resolve()],
+              [
+                matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
+                Promise.resolve({ results: favoritedItemIds, total })
+              ],
+              [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(error)]
+            ])
+            .call.like({
+              fn: ItemAPI.prototype.get,
+              args: [
+                {
+                  ...options.filters,
+                  first: 1,
+                  ids: [favoritedItemIds[0].itemId]
+                }
+              ]
+            })
+            .put(fetchFavoritedItemsFailure(error.message))
+            .dispatch(fetchFavoritedItemsRequest(options))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and the call to the items api succeeds', () => {
+        let currentTimestamp: number
+        beforeEach(() => {
+          total = 0
+          currentTimestamp = Date.now()
+          jest.spyOn(Date, 'now').mockReturnValueOnce(currentTimestamp)
+        })
+
+        it('should dispatch an action signaling the success of the handled action and the request of the retrieved items', () => {
+          return expectSaga(favoritesSaga, getIdentity)
+            .provide([
+              [select(getListId), listId],
+              [call(getAccountIdentity), Promise.resolve()],
+              [
+                matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
+                Promise.resolve({ results: favoritedItemIds, total })
+              ],
+              [
+                matchers.call.fn(ItemAPI.prototype.get),
+                Promise.resolve({ data: [item] })
+              ]
+            ])
+            .call.like({
+              fn: FavoritesAPI.prototype.getPicksByList,
+              args: [listId, options.filters]
+            })
+            .call.like({
+              fn: ItemAPI.prototype.get,
+              args: [
+                {
+                  ...options.filters,
+                  first: 1,
+                  ids: [favoritedItemIds[0].itemId]
+                }
+              ]
+            })
+            .put(
+              fetchFavoritedItemsSuccess(
+                [item],
+                createdAt,
+                total,
+                { ...options, filters: { ids: [item.id], first: 1 } },
+                currentTimestamp
+              )
+            )
+            .dispatch(fetchFavoritedItemsRequest(options))
+            .run({ silenceTimeout: true })
+        })
+      })
+    })
+
+    describe('and there are no favorited items', () => {
+      let currentTimestamp: number
+
+      beforeEach(() => {
+        favoritedItemIds = []
+        total = 0
+        currentTimestamp = Date.now()
+        jest.spyOn(Date, 'now').mockReturnValueOnce(currentTimestamp)
+      })
+
+      it('should dispatch an action signaling the success of the handled action', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
             [select(getListId), listId],
+            [call(getAccountIdentity), Promise.resolve()],
             [
               matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
               { results: favoritedItemIds, total }
@@ -280,61 +421,24 @@ describe('when handling the request for fetching favorited items', () => {
             fn: FavoritesAPI.prototype.getPicksByList,
             args: [listId, options.filters]
           })
-          .put(fetchFavoritedItemsSuccess(favoritedItemIds, total))
+          .not.call.like({
+            fn: ItemAPI.prototype.get,
+            args: [options.filters]
+          })
           .put(
-            fetchItemsRequest({
-              ...options,
-              filters: { ...options.filters, ids: [item.id], first: 1 }
-            })
+            fetchFavoritedItemsSuccess(
+              [],
+              {},
+              total,
+              {
+                ...options,
+                filters: { first: favoritedItemIds.length, ids: [] }
+              },
+              currentTimestamp
+            )
           )
           .dispatch(fetchFavoritedItemsRequest(options))
           .run({ silenceTimeout: true })
-      })
-
-      describe('and there are no favorited items', () => {
-        let currentTimestamp: number
-
-        beforeEach(() => {
-          favoritedItemIds = []
-          total = 0
-          currentTimestamp = Date.now()
-          jest.spyOn(Date, 'now').mockReturnValueOnce(currentTimestamp)
-        })
-
-        it('should dispatch an action signaling the success of the handled action and the success the items request', () => {
-          return expectSaga(favoritesSaga, getIdentity)
-            .provide([
-              [select(getListId), listId],
-              [
-                matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-                { results: favoritedItemIds, total }
-              ]
-            ])
-            .call.like({
-              fn: FavoritesAPI.prototype.getPicksByList,
-              args: [listId, options.filters]
-            })
-            .not.put(
-              fetchItemsRequest({
-                ...options,
-                filters: { ids: [item.id], first: 1 }
-              })
-            )
-            .put(
-              fetchItemsSuccess(
-                [],
-                total,
-                {
-                  ...options,
-                  filters: { first: total, ids: [] }
-                },
-                currentTimestamp
-              )
-            )
-            .put(fetchFavoritedItemsSuccess(favoritedItemIds, total))
-            .dispatch(fetchFavoritedItemsRequest(options))
-            .run({ silenceTimeout: true })
-        })
       })
     })
   })

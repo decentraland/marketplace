@@ -64,8 +64,8 @@ type FavoritesReducerAction =
   | FetchFavoritedItemsRequestAction
   | FetchFavoritedItemsSuccessAction
   | FetchFavoritedItemsFailureAction
-  | FetchItemsSuccessAction
   | FetchItemSuccessAction
+  | FetchItemsSuccessAction
 
 export function favoritesReducer(
   state = INITIAL_STATE,
@@ -126,29 +126,6 @@ export function favoritesReducer(
       }
     }
 
-    case FETCH_ITEMS_SUCCESS: {
-      const { items } = action.payload
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          items: {
-            ...state.data.items,
-            ...Object.fromEntries(
-              items
-                .map(item => [
-                  item.id,
-                  state.data.items[item.id] && item.picks
-                    ? { ...state.data.items[item.id], ...item.picks }
-                    : item.picks
-                ])
-                .filter(Boolean)
-            )
-          }
-        }
-      }
-    }
-
     case FETCH_ITEM_SUCCESS: {
       const { item } = action.payload
 
@@ -171,8 +148,8 @@ export function favoritesReducer(
       }
     }
 
-    case FETCH_FAVORITED_ITEMS_SUCCESS: {
-      const { total, favoritedItems } = action.payload
+    case FETCH_ITEMS_SUCCESS:
+      const { items } = action.payload
 
       return {
         ...state,
@@ -181,13 +158,45 @@ export function favoritesReducer(
           items: {
             ...state.data.items,
             ...Object.fromEntries(
-              favoritedItems.map(favoritedItem => [
-                favoritedItem.itemId,
-                {
-                  ...(state.data.items[favoritedItem.itemId] ?? { count: 0 }),
-                  createdAt: favoritedItem.createdAt
-                }
-              ])
+              items
+                .map(item => [
+                  item.id,
+                  state.data.items[item.id] && item.picks
+                    ? {
+                        ...state.data.items[item.id],
+                        ...item.picks
+                      }
+                    : { ...item.picks }
+                ])
+                .filter(Boolean)
+            )
+          }
+        },
+        loading: loadingReducer(state.loading, action)
+      }
+
+    case FETCH_FAVORITED_ITEMS_SUCCESS: {
+      const { total, items, createdAt } = action.payload
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          items: {
+            ...state.data.items,
+            ...Object.fromEntries(
+              items
+                .map(item => [
+                  item.id,
+                  state.data.items[item.id] && item.picks
+                    ? {
+                        ...state.data.items[item.id],
+                        ...item.picks,
+                        createdAt: createdAt[item.id]
+                      }
+                    : { ...item.picks, createdAt: createdAt[item.id] }
+                ])
+                .filter(Boolean)
             )
           },
           total

@@ -82,3 +82,44 @@ describe('when getting who favorited an item', () => {
     })
   })
 })
+
+describe('when picking an item as favorite', () => {
+  const errorMessage = 'anErrorMessage'
+
+  let itemId: string
+
+  beforeEach(() => {
+    itemId = '0xaddress-anItemId'
+  })
+
+  describe('when the request succeeds', () => {
+    beforeEach(() => {
+      fetchMock.mockResolvedValueOnce(undefined)
+    })
+
+    it('should return void', () => {
+      expect(favoritesAPI.pickItemAsFavorite(itemId)).resolves.toBeUndefined()
+    })
+  })
+
+  describe('when the request fails with a 422 status code error', () => {
+    beforeEach(() => {
+      fetchMock.mockRejectedValue({ message: errorMessage, status: 422 })
+    })
+
+    it('should catch the error and ignore it', () => {
+      expect(favoritesAPI.pickItemAsFavorite(itemId)).resolves.toBeUndefined()
+    })
+  })
+
+  describe('when the request fails with an error code that is not a 422', () => {
+    const error = { message: errorMessage, status: 500 }
+    beforeEach(() => {
+      fetchMock.mockRejectedValue(error)
+    })
+
+    it('should throw the error', () => {
+      expect(favoritesAPI.pickItemAsFavorite(itemId)).rejects.toEqual(error)
+    })
+  })
+})

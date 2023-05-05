@@ -83,7 +83,7 @@ const FavoritesModal = ({ metadata: { itemId }, identity, onClose }: Props) => {
           <LinkedProfile
             size="huge"
             key={favorites.addresses[index]}
-            sliceAddressBy={isMobile ? 18 : 40}
+            sliceAddressBy={isMobile ? 18 : 42}
             address={favorites.addresses[index]}
           />
         ) : (

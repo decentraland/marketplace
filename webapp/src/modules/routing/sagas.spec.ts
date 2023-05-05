@@ -14,14 +14,15 @@ import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
+import { getPage } from '../ui/browse/selectors'
+import { PAGE_SIZE } from '../vendor/api'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
 import {
   browse,
   clearFilters,
-  fetchAssetsFromRoute as FetchAssetsFromRouteAction,
-  setIsLoadMore
+  fetchAssetsFromRoute as FetchAssetsFromRouteAction
 } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import { getCurrentBrowseOptions } from './selectors'
@@ -125,6 +126,7 @@ describe('when handling the clear filters request action', () => {
                 section: Section.COLLECTIONS
               }
             ],
+            [select(getPage), 1],
             [select(getLocation), { pathname }],
             [select(getEventData), {}],
             [
@@ -157,7 +159,10 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     } as BrowseOptions
 
     return expectSaga(routingSaga)
-      .provide([[select(getCurrentBrowseOptions), browseOptions]])
+      .provide([
+        [select(getCurrentBrowseOptions), browseOptions],
+        [select(getPage), 1]
+      ])
       .put(fetchTrendingItemsRequest())
       .dispatch(FetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
@@ -200,7 +205,10 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     }
 
     return expectSaga(routingSaga)
-      .provide([[call(getNewBrowseOptions, browseOptions), browseOptions]])
+      .provide([
+        [call(getNewBrowseOptions, browseOptions), browseOptions],
+        [select(getPage), 1]
+      ])
       .put(fetchItemsRequest(filters))
       .dispatch(FetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
@@ -226,11 +234,114 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     }
 
     return expectSaga(routingSaga)
-      .provide([[select(getCurrentBrowseOptions), browseOptions]])
-      .put(setIsLoadMore(false))
+      .provide([
+        [select(getCurrentBrowseOptions), browseOptions],
+        [select(getPage), 1]
+      ])
       .put(fetchFavoritedItemsRequest(filters))
       .dispatch(FetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
+  })
+
+  describe('and the section is WEARABLES', () => {
+    describe('and there is a page in previous state', () => {
+      const pageInState = 1
+      const address = '0x...'
+      const browseOptions: BrowseOptions = {
+        address,
+        vendor: VendorName.DECENTRALAND,
+        section: Section.WEARABLES,
+        page: pageInState + 1,
+        assetType: AssetType.ITEM
+      } as BrowseOptions
+      const filters: ItemBrowseOptions = {
+        view: browseOptions.view,
+        page: browseOptions.page,
+        filters: {
+          first: (browseOptions.page! - 1) * PAGE_SIZE,
+          skip: pageInState * PAGE_SIZE, // should skip one page
+          creator: [address],
+          sortBy: ItemSortBy.RECENTLY_REVIEWED,
+          category: NFTCategory.WEARABLE,
+          isWearableHead: false,
+          isWearableAccessory: false,
+          isOnSale: undefined,
+          wearableCategory: undefined,
+          emoteCategory: undefined,
+          isWearableSmart: undefined,
+          search: undefined,
+          rarities: undefined,
+          contracts: undefined,
+          wearableGenders: undefined,
+          emotePlayMode: undefined,
+          minPrice: undefined,
+          maxPrice: undefined
+        }
+      }
+      it('should fetch assets with the correct skip size', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getCurrentBrowseOptions),
+              { ...browseOptions, section: Section.WEARABLES_TRENDING }
+            ],
+            [select(getPage), pageInState]
+          ])
+          .put(fetchItemsRequest(filters))
+          .dispatch(FetchAssetsFromRouteAction(browseOptions))
+          .run({ silenceTimeout: true })
+      })
+    })
+    describe('and there is no page in previous state', () => {
+      describe('and the page asked is greater than the first one', () => {
+        const page = 3
+        const address = '0x...'
+        const browseOptions: BrowseOptions = {
+          address,
+          vendor: VendorName.DECENTRALAND,
+          section: Section.WEARABLES,
+          page,
+          assetType: AssetType.ITEM
+        } as BrowseOptions
+        const filters: ItemBrowseOptions = {
+          view: browseOptions.view,
+          page: browseOptions.page,
+          filters: {
+            first: page * PAGE_SIZE,
+            skip: 0,
+            creator: [address],
+            sortBy: ItemSortBy.RECENTLY_REVIEWED,
+            category: NFTCategory.WEARABLE,
+            isWearableHead: false,
+            isWearableAccessory: false,
+            isOnSale: undefined,
+            wearableCategory: undefined,
+            emoteCategory: undefined,
+            isWearableSmart: undefined,
+            search: undefined,
+            rarities: undefined,
+            contracts: undefined,
+            wearableGenders: undefined,
+            emotePlayMode: undefined,
+            minPrice: undefined,
+            maxPrice: undefined
+          }
+        }
+        it('should fetch assets with the correct skip size', () => {
+          return expectSaga(routingSaga)
+            .provide([
+              [
+                select(getCurrentBrowseOptions),
+                { ...browseOptions, section: Section.WEARABLES_TRENDING }
+              ],
+              [select(getPage), undefined]
+            ])
+            .put(fetchItemsRequest(filters))
+            .dispatch(FetchAssetsFromRouteAction(browseOptions))
+            .run({ silenceTimeout: true })
+        })
+      })
+    })
   })
 })
 

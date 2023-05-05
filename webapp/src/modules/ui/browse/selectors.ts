@@ -35,6 +35,7 @@ export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState): View | undefined =>
   getState(state).view
 export const getCount = (state: RootState) => getState(state).count
+export const getPage = (state: RootState) => getState(state).page
 
 const getNFTs = createSelector<
   RootState,

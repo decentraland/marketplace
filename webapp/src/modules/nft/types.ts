@@ -48,6 +48,7 @@ export type NFTsCountParams = Omit<NFTsFetchParams, 'first' | 'skip'>
 export type NFTsFetchOptions = {
   vendor: VendorName
   view: View
+  page?: number
   params: NFTsFetchParams
   filters?: NFTsFetchFilters
 }

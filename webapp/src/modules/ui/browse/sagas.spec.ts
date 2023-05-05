@@ -9,7 +9,6 @@ import {
   unpickItemAsFavoriteSuccess
 } from '../../favorites/actions'
 import { PAGE_SIZE } from '../../vendor/api'
-import { View } from '../types'
 import { getCount, getItemsPickedByUser } from './selectors'
 import { browseSaga } from './sagas'
 
@@ -47,7 +46,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
         pickedItems = []
       })
 
-      it('should not put an action to fetch the last item of the loaded page to replace the unpicked item', () => {
+      it('should put an action to fetch the last item of the loaded page to replace the unpicked item', () => {
         return expectSaga(browseSaga)
           .provide([
             [select(getSection), section],
@@ -56,11 +55,12 @@ describe('when handling the success action of unpicking an item as favorite', ()
             [select(getCount), 2]
           ])
           .put(
-            fetchFavoritedItemsRequest({
-              filters: { first: 1, skip: PAGE_SIZE - 1 },
-              view: View.LOAD_MORE,
-              section: Section.LISTS
-            })
+            fetchFavoritedItemsRequest(
+              {
+                filters: { first: 1, skip: PAGE_SIZE - 1 }
+              },
+              true
+            )
           )
           .dispatch(unpickItemAsFavoriteSuccess({} as Item))
           .run({ silenceTimeout: true })

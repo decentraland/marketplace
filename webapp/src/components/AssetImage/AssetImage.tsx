@@ -184,6 +184,9 @@ const AssetImage = (props: Props) => {
           withNavigation={withNavigation}
           selection={selection}
           zoom={zoom}
+          showForRent={false}
+          showOnSale={false}
+          showOwned={false}
         >
           {hasBadges && children}
         </Atlas>
@@ -201,6 +204,9 @@ const AssetImage = (props: Props) => {
           withNavigation={withNavigation}
           selection={estateSelection}
           zoom={zoom}
+          showForRent={false}
+          showOnSale={false}
+          showOwned={false}
           isEstate
         >
           {hasBadges && children}

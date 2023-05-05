@@ -7,7 +7,6 @@ import {
 } from '../../favorites/actions'
 import { PAGE_SIZE } from '../../vendor/api'
 import { getPageNumber, getSection } from '../../routing/selectors'
-import { View } from '../types'
 import { getCount, getItemsPickedByUser } from './selectors'
 
 export function* browseSaga() {
@@ -19,7 +18,7 @@ export function* browseSaga() {
 
 function* handleUnpickItemAsFavoriteSuccess() {
   const section: Section = yield select(getSection)
-  const page: number = yield select(getPageNumber)
+  const currentPage: number = yield select(getPageNumber)
   const favoritedAssets: Item[] = yield select(getItemsPickedByUser)
   const totalFavoritedAssets: number = yield select(getCount)
   if (
@@ -27,11 +26,12 @@ function* handleUnpickItemAsFavoriteSuccess() {
     favoritedAssets.length < totalFavoritedAssets
   ) {
     yield put(
-      fetchFavoritedItemsRequest({
-        filters: { first: 1, skip: page * PAGE_SIZE - 1 },
-        view: View.LOAD_MORE,
-        section: Section.LISTS
-      })
+      fetchFavoritedItemsRequest(
+        {
+          filters: { first: 1, skip: currentPage * PAGE_SIZE - 1 }
+        },
+        true
+      )
     )
   }
 }

@@ -3,7 +3,6 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 
 import { RootState } from '../../modules/reducer'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
-import { FETCH_FAVORITED_ITEMS_REQUEST } from '../../modules/favorites/actions'
 import { browse, clearFilters } from '../../modules/routing/actions'
 import { getBrowseAssets, getCount } from '../../modules/ui/browse/selectors'
 import {
@@ -17,8 +16,7 @@ import {
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
-import { getLoading as getLoadingFavorites } from '../../modules/favorites/selectors'
-import { isLoadingMore } from '../../modules/routing/selectors'
+import { isLoadingFavoritedItems } from '../../modules/favorites/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { AssetType } from '../../modules/asset/types'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
@@ -28,7 +26,6 @@ const mapState = (state: RootState): MapStateProps => {
   const section = getSection(state)
   const page = getPageNumber(state)
   const assetType = getAssetType(state)
-
   return {
     vendor: getVendor(state),
     assetType,
@@ -40,12 +37,8 @@ const mapState = (state: RootState): MapStateProps => {
     isLoading:
       assetType === AssetType.ITEM
         ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) ||
-          isLoadingType(
-            getLoadingFavorites(state),
-            FETCH_FAVORITED_ITEMS_REQUEST
-          )
+          isLoadingFavoritedItems(state)
         : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
-    isLoadingMore: isLoadingMore(state),
     hasFiltersEnabled: hasFiltersEnabled(state),
     visitedLocations: getVisitedLocations(state)
   }
