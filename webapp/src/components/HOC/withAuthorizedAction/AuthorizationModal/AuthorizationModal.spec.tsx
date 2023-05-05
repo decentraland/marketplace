@@ -35,7 +35,9 @@ function renderAuthorizationModal(props: Partial<Props>) {
       onFetchAuthorizations={jest.fn()}
       onAuthorized={jest.fn()}
       contracts={[]}
-      getConfirmationStatus={jest.fn().mockReturnValue(AuthorizationStepStatus.PENDING)}
+      getConfirmationStatus={jest
+        .fn()
+        .mockReturnValue(AuthorizationStepStatus.PENDING)}
       getConfirmationError={jest.fn()}
       error={''}
       {...props}
@@ -175,9 +177,7 @@ describe('when authorization type is ALLOWANCE', () => {
         })
 
         it('should not render revoke step', () => {
-          expect(
-            screen.queryByTestId('revoke-step')
-          ).not.toBeInTheDocument()
+          expect(screen.queryByTestId('revoke-step')).not.toBeInTheDocument()
         })
 
         it('should render grant step', () => {
@@ -197,10 +197,9 @@ describe('when authorization type is ALLOWANCE', () => {
 
         it('should render revoke action button', () => {
           expect(
-            within(screen.getByTestId('revoke-step')).getByRole(
-              'button',
-              { name: t('mana_authorization_modal.revoke_cap.action') }
-            )
+            within(screen.getByTestId('revoke-step')).getByRole('button', {
+              name: t('mana_authorization_modal.revoke_cap.action')
+            })
           ).toBeInTheDocument()
         })
       })
@@ -296,17 +295,17 @@ describe('when authorization type is ALLOWANCE', () => {
     describe('when rendering grant action', () => {
       describe('and grant status is WAITING', () => {
         let grantStatusStep: HTMLElement
-    
+
         beforeEach(() => {
           screen = renderAuthorizationModal({
             authorizationType: AuthorizationType.ALLOWANCE,
             revokeStatus: AuthorizationStepStatus.DONE,
             grantStatus: AuthorizationStepStatus.WAITING
           })
-    
+
           grantStatusStep = screen.getByTestId('grant-step')
         })
-    
+
         it('should show waiting wallet for approval message', () => {
           expect(
             within(grantStatusStep).getByText(
@@ -314,13 +313,13 @@ describe('when authorization type is ALLOWANCE', () => {
             )
           ).toBeInTheDocument()
         })
-    
+
         it('should show loading icon', () => {
           expect(
             within(grantStatusStep).getByTestId('step-loader')
           ).toBeInTheDocument()
         })
-    
+
         it('should not show action button', () => {
           expect(
             within(grantStatusStep).queryByText(
@@ -329,20 +328,20 @@ describe('when authorization type is ALLOWANCE', () => {
           ).not.toBeInTheDocument()
         })
       })
-    
+
       describe('and grant status is PROCESSING', () => {
         let grantStatusStep: HTMLElement
-    
+
         beforeEach(() => {
           screen = renderAuthorizationModal({
             authorizationType: AuthorizationType.ALLOWANCE,
             revokeStatus: AuthorizationStepStatus.DONE,
             grantStatus: AuthorizationStepStatus.PROCESSING
           })
-    
+
           grantStatusStep = screen.getByTestId('grant-step')
         })
-    
+
         it('should show waiting wallet for approval message', () => {
           expect(
             within(grantStatusStep).getByText(
@@ -350,13 +349,13 @@ describe('when authorization type is ALLOWANCE', () => {
             )
           ).toBeInTheDocument()
         })
-    
+
         it('should show loading icon', () => {
           expect(
             within(grantStatusStep).getByTestId('step-loader')
           ).toBeInTheDocument()
         })
-    
+
         it('should not show action button', () => {
           expect(
             within(grantStatusStep).queryByText(
@@ -365,38 +364,76 @@ describe('when authorization type is ALLOWANCE', () => {
           ).not.toBeInTheDocument()
         })
       })
-    
+
       describe('and grant status is DONE', () => {
         let grantStatusStep: HTMLElement
-    
+
         beforeEach(() => {
           screen = renderAuthorizationModal({
             authorizationType: AuthorizationType.ALLOWANCE,
             revokeStatus: AuthorizationStepStatus.DONE,
             grantStatus: AuthorizationStepStatus.DONE
           })
-    
+
           grantStatusStep = screen.getByTestId('grant-step')
         })
-    
-        it('should show waiting wallet for approval message', () => {
+
+        it('should show done message', () => {
           expect(
-            within(grantStatusStep).getByText(t('mana_authorization_modal.done'))
+            within(grantStatusStep).getByText(
+              t('mana_authorization_modal.done')
+            )
           ).toBeInTheDocument()
         })
-    
+
         it('should not show loading icon', () => {
           expect(
             within(grantStatusStep).queryByTestId('step-loader')
           ).not.toBeInTheDocument()
         })
-    
+
         it('should not show action button', () => {
           expect(
             within(grantStatusStep).queryByText(
               t('mana_authorization_modal.authorize_mana.action')
             )
           ).not.toBeInTheDocument()
+        })
+      })
+
+      describe('and revoke status is ALLOWANCE_AMOUNT_ERROR', () => {
+        let grantStatusStep: HTMLElement
+
+        beforeEach(() => {
+          screen = renderAuthorizationModal({
+            authorizationType: AuthorizationType.ALLOWANCE,
+            revokeStatus: AuthorizationStepStatus.DONE,
+            grantStatus: AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR
+          })
+
+          grantStatusStep = screen.getByTestId('grant-step')
+        })
+
+        it('should show allowance error message', () => {
+          expect(
+            within(grantStatusStep).getByText(
+              t('mana_authorization_modal.spending_cap_error')
+            )
+          ).toBeInTheDocument()
+        })
+
+        it('should not show loading icon', () => {
+          expect(
+            within(grantStatusStep).queryByTestId('step-loader')
+          ).not.toBeInTheDocument()
+        })
+
+        it('should show action button', () => {
+          expect(
+            within(grantStatusStep).getByText(
+              t('mana_authorization_modal.authorize_mana.action')
+            )
+          ).toBeInTheDocument()
         })
       })
     })
@@ -415,9 +452,7 @@ describe('when authorization type is ALLOWANCE', () => {
       })
 
       it('should not render revoke step', () => {
-        expect(
-          screen.queryByTestId('revoke-step')
-        ).not.toBeInTheDocument()
+        expect(screen.queryByTestId('revoke-step')).not.toBeInTheDocument()
       })
 
       it('should render grant step', () => {
