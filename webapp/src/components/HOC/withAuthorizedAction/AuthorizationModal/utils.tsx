@@ -1,12 +1,13 @@
 import { BigNumber, ethers } from 'ethers'
 import {
+  getAuthorizationFlowError,
   getError,
   getLoading
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import {
   Authorization,
-  AuthorizationType,
-  AuthorizationAction
+  AuthorizationAction,
+  AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
   areEqual,
@@ -16,52 +17,58 @@ import {
 import { TransactionLink } from 'decentraland-dapps/dist/containers'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getType } from 'decentraland-dapps/dist/modules/loading/utils'
-import { getPendingTransactions } from 'decentraland-dapps/dist/modules/transaction/selectors'
+import { getTransactions } from 'decentraland-dapps/dist/modules/transaction/selectors'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  getData as getAuthorizations,
-  getLoading as getLoadingAuthorizations
-} from 'decentraland-dapps/dist/modules/authorization/selectors'
-import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
+import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { Network } from '@dcl/schemas'
 import { RootState } from '../../../../modules/reducer'
 import { Contract } from '../../../../modules/vendor/services'
-import { AuthorizationStepStatus } from './AuthorizationModal.types'
+import {
+  AuthorizationStepAction,
+  AuthorizationStepStatus
+} from './AuthorizationModal.types'
 import styles from './AuthorizationModal.module.css'
+import {
+  AUTHORIZATION_FLOW_REQUEST,
+  GRANT_TOKEN_REQUEST,
+  REVOKE_TOKEN_REQUEST
+} from 'decentraland-dapps/dist/modules/authorization/actions'
 
 export function getStepStatus(
   state: RootState,
-  actionType: string,
+  authorizationAction: AuthorizationAction,
   authorization: Authorization,
-  allowance?: BigNumber
+  allowance: BigNumber | undefined
 ): AuthorizationStepStatus {
-  if (isLoadingType(getLoadingAuthorizations(state), FETCH_AUTHORIZATIONS_REQUEST)) {
-    return AuthorizationStepStatus.LOADING_INFO
-  }
+  const actionType =
+    authorizationAction === AuthorizationAction.REVOKE
+      ? REVOKE_TOKEN_REQUEST
+      : GRANT_TOKEN_REQUEST
 
   if (isLoadingType(getLoading(state), actionType)) {
     return AuthorizationStepStatus.WAITING
   }
 
-  const pendingActionTypeTransactions = getPendingTransactions(
+  const actionTypeTransactions = getTransactions(
     state,
     authorization.address
   ).filter(
     transaction =>
-      isPending(transaction.status) &&
       getType({ type: actionType }) ===
-        getType({ type: transaction.actionType })
+        getType({ type: transaction.actionType }) &&
+      areEqual(transaction.payload.authorization, authorization)
   )
-  if (
-    pendingActionTypeTransactions.some(({ payload }) =>
-      areEqual(payload.authorization, authorization)
-    )
-  ) {
+
+  const pendingActionTypeTransactions = actionTypeTransactions.filter(
+    transaction => isPending(transaction.status)
+  )
+
+  if (pendingActionTypeTransactions.length) {
     return AuthorizationStepStatus.PROCESSING
   }
 
-  if (getError(state)) {
+  if (getAuthorizationFlowError(state) || getError(state)) {
     return AuthorizationStepStatus.ERROR
   }
 
@@ -88,6 +95,16 @@ export function getStepStatus(
     return AuthorizationStepStatus.DONE
   }
 
+  if (
+    isLoadingType(getLoading(state), AUTHORIZATION_FLOW_REQUEST) &&
+    getLoading(state).find(
+      loadingAction =>
+        loadingAction.payload?.authorizationAction === authorizationAction
+    )
+  ) {
+    return AuthorizationStepStatus.LOADING_INFO
+  }
+
   return AuthorizationStepStatus.PENDING
 }
 
@@ -112,6 +129,12 @@ export function getStepMessage(
       return t('mana_authorization_modal.waiting_confirmation')
     case AuthorizationStepStatus.ERROR:
       return <div className={styles.error}>{error}</div>
+    case AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR:
+      return (
+        <div className={styles.error}>
+          {t('mana_authorization_modal.spending_cap_error')}
+        </div>
+      )
     case AuthorizationStepStatus.DONE:
       return t('mana_authorization_modal.done')
     default:
@@ -146,16 +169,14 @@ export function getSteps({
         description: t('mana_authorization_modal.revoke_cap.description', {
           price: requiredAllowanceAsEth
         }),
-        authorizationAction: AuthorizationAction.REVOKE,
-        testId: 'revoke-action-step'
+        actionType: AuthorizationStepAction.REVOKE
       },
       {
         title: t('mana_authorization_modal.set_cap.title'),
         description: t('mana_authorization_modal.set_cap.description', {
           price: requiredAllowanceAsEth
         }),
-        authorizationAction: AuthorizationAction.GRANT,
-        testId: 'grant-action-step'
+        actionType: AuthorizationStepAction.GRANT
       }
     ]
   }
@@ -177,8 +198,7 @@ export function getSteps({
         description: t('mana_authorization_modal.authorize_mana.description', {
           price: requiredAllowanceAsEth
         }),
-        authorizationAction: AuthorizationAction.GRANT,
-        testId: 'grant-action-step'
+        actionType: AuthorizationStepAction.GRANT
       }
     ]
   }
@@ -196,8 +216,7 @@ export function getSteps({
           </TransactionLink>
         )
       }),
-      authorizationAction: AuthorizationAction.GRANT,
-      testId: 'grant-action-step'
+      actionType: AuthorizationStepAction.GRANT
     }
   ]
 }

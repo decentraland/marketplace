@@ -1,18 +1,12 @@
 import { connect } from 'react-redux'
 import {
-  fetchAuthorizationsRequest,
-  grantTokenRequest,
-  GRANT_TOKEN_REQUEST,
-  revokeTokenRequest,
-  REVOKE_TOKEN_REQUEST
+  authorizationFlowRequest,
+  fetchAuthorizationsRequest
 } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
-import {
-  getError
-} from 'decentraland-dapps/dist/modules/authorization/selectors'
+import { AuthorizationAction } from 'decentraland-dapps/dist/modules/authorization/types'
+import { getAuthorizationFlowError, getError } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { RootState } from '../../../../modules/reducer'
-import { getContract } from '../../../../modules/contract/selectors'
-import { Contract } from '../../../../modules/vendor/services'
+import { getContracts } from '../../../../modules/contract/selectors'
 import { AuthorizationModal } from './AuthorizationModal'
 import {
   AuthorizationStepStatus,
@@ -24,34 +18,58 @@ import {
 import { getStepStatus } from './utils'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const { authorization, requiredAllowance, getConfirmationStatus, getConfirmationError } = ownProps
+  const {
+    authorization,
+    requiredAllowance,
+    getConfirmationStatus,
+    getConfirmationError
+  } = ownProps
   return {
     revokeStatus: getStepStatus(
       state,
-      REVOKE_TOKEN_REQUEST,
+      AuthorizationAction.REVOKE,
       authorization,
       undefined
     ),
     grantStatus: getStepStatus(
       state,
-      GRANT_TOKEN_REQUEST,
+      AuthorizationAction.GRANT,
       authorization,
       requiredAllowance
     ),
-    confirmationStatus: getConfirmationStatus ? getConfirmationStatus(state) : AuthorizationStepStatus.PENDING,
-    confirmationError: getConfirmationError ? getConfirmationError(state) : null,
-    error: getError(state) || '',
-    getContract: (query: Partial<Contract>) => getContract(state, query)
+    confirmationStatus: getConfirmationStatus
+      ? getConfirmationStatus(state)
+      : AuthorizationStepStatus.PENDING,
+    confirmationError: getConfirmationError
+      ? getConfirmationError(state)
+      : null,
+    error: getAuthorizationFlowError(state) || getError(state) || '',
+    contracts: getContracts(state)
   }
 }
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onRevoke: (authorization: Authorization) =>
-    dispatch(revokeTokenRequest(authorization)),
-  onGrant: (authorization: Authorization) =>
-    dispatch(grantTokenRequest(authorization)),
-  onFetchAuthorizations: (authorizations: Authorization[]) =>
-    dispatch(fetchAuthorizationsRequest(authorizations))
+const mapDispatch = (
+  dispatch: MapDispatch,
+  ownProps: OwnProps
+): MapDispatchProps => ({
+  onRevoke: () =>
+    dispatch(
+      authorizationFlowRequest(
+        ownProps.authorization,
+        AuthorizationAction.REVOKE,
+        ''
+      )
+    ),
+  onGrant: () =>
+    dispatch(
+      authorizationFlowRequest(
+        ownProps.authorization,
+        AuthorizationAction.GRANT,
+        ownProps.requiredAllowance?.toString() || ''
+      )
+    ),
+  onFetchAuthorizations: () =>
+    dispatch(fetchAuthorizationsRequest([ownProps.authorization]))
 })
 
 export default connect(mapState, mapDispatch)(AuthorizationModal)
