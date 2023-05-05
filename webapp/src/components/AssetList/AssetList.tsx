@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useEffect } from 'react'
-import { Card, Loader } from 'decentraland-ui'
+import { Link } from 'react-router-dom'
+import { Button, Card, Loader } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -12,6 +13,8 @@ import { AssetCard } from '../AssetCard'
 import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
 import './AssetList.css'
+import { Section } from '../../modules/vendor/decentraland'
+import { locations } from '../../modules/routing/locations'
 
 const AssetList = (props: Props) => {
   const {
@@ -79,6 +82,19 @@ const AssetList = (props: Props) => {
   }, [assets.length, search, section, isManager])
 
   const renderEmptyState = useCallback(() => {
+    if (section === Section.LISTS) {
+      return (
+        <div className="empty">
+          <div className="logo"></div>
+          <h1 className="title">You don't have any saved items</h1>
+          <p className="subtitle">Discover amazing items.</p>
+          <Button primary as={Link} to={locations.browse()}>
+            Explore collectibles
+          </Button>
+        </div>
+      )
+    }
+
     return (
       <div className="empty">
         <div className="watermelon" />
@@ -126,7 +142,8 @@ const AssetList = (props: Props) => {
     hasFiltersEnabled,
     onBrowse,
     onClearFilters,
-    search
+    search,
+    section
   ])
 
   const shouldRenderEmptyState = useMemo(
@@ -147,14 +164,16 @@ const AssetList = (props: Props) => {
   )
 
   return (
-    <>
+    <div className="AssetsList">
       {isLoading ? (
         <>
           <div className="overlay" />
           <Loader size="massive" active className="asset-loader" />
         </>
       ) : null}
-      <Card.Group>{assets.length > 0 ? renderAssetCards() : null}</Card.Group>
+      {assets.length > 0 ? (
+        <Card.Group> {renderAssetCards()} </Card.Group>
+      ) : null}
       <InfiniteScroll
         page={page}
         hasMorePages={hasMorePages}
@@ -164,7 +183,7 @@ const AssetList = (props: Props) => {
       >
         {shouldRenderEmptyState ? renderEmptyState() : null}
       </InfiniteScroll>
-    </>
+    </div>
   )
 }
 
