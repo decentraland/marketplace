@@ -52,7 +52,6 @@ const AssetList = (props: Props) => {
     },
     [onBrowse]
   )
-
   const maxQuerySize = getMaxQuerySize(vendor)
 
   const hasMorePages =
@@ -151,7 +150,9 @@ const AssetList = (props: Props) => {
       {isLoading ? (
         <>
           <div className="overlay" />
-          <Loader size="massive" active className="asset-loader" />
+          <div className="transparentOverlay">
+            <Loader size="massive" active className="asset-loader" />
+          </div>
         </>
       ) : null}
       <Card.Group>{assets.length > 0 ? renderAssetCards() : null}</Card.Group>
