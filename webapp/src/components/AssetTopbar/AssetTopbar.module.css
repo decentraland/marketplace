@@ -17,7 +17,7 @@
   :global(.dcl.field.full)
   :global(.ui.input).searchField
   input:not(:focus) {
-  border: 0.5px solid rgba(255, 255, 255);
+  border: 2px solid #979797;
   border-radius: 10px;
 }
 
@@ -37,9 +37,10 @@
   min-height: 26px;
 }
 
-.assetTopbar .searchIcon :global(.dcl.field .ui.input .icon) {
+.assetTopbar :global(.dcl.field .ui.input .icon) {
   color: white;
-  margin-left: 20px;
+  left: 8px;
+  opacity: 1;
 }
 
 .assetTopbar :global(.dcl.field .message) {
@@ -172,6 +173,7 @@
   flex-wrap: wrap;
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 @media (max-width: 990px) {

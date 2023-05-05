@@ -63,7 +63,7 @@ const AssetList = (props: Props) => {
       return ''
     } else if (section) {
       if (isManager) {
-        return 'nft_list.simple_empty'
+        return 'nft_list.empty'
       }
 
       const isEmoteOrWearableSection = [
@@ -75,12 +75,12 @@ const AssetList = (props: Props) => {
         return search ? 'nft_list.empty_search' : 'nft_list.empty'
       }
     }
-    return 'nft_list.simple_empty'
+    return 'nft_list.empty'
   }, [assets.length, search, section, isManager])
 
   const renderEmptyState = useCallback(() => {
     return (
-      <div className="empty">
+      <div className="empty-state">
         <div className="watermelon" />
         <T
           id={emptyStateTranslationString}
