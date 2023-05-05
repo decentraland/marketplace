@@ -1,5 +1,6 @@
 import { BrowseOptions, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
+import { AssetStatusFilter } from '../../utils/filters'
 import {
   getPersistedIsMapProperty,
   isAccountView,
@@ -8,7 +9,6 @@ import {
 import { omit, reset } from '../../lib/utils'
 import { View } from '../ui/types'
 import { getSearchParams } from './search'
-import { AssetStatusFilter } from '../../utils/filters'
 
 export const rentalFilters = [
   SortBy.NAME,
@@ -101,6 +101,14 @@ export function getClearedBrowseOptions(
     !isLandSection(browseOptions.section as Section)
   ) {
     clearedBrowseOptions.status = AssetStatusFilter.ON_SALE
+  }
+
+  // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
+  if (
+    !clearedBrowseOptions.onlyOnSale &&
+    !isLandSection(browseOptions.section as Section)
+  ) {
+    clearedBrowseOptions.onlyOnSale = true
   }
 
   // reset the pages to the first one
