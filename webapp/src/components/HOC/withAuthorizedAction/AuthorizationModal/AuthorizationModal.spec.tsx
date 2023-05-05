@@ -34,7 +34,7 @@ function renderAuthorizationModal(props: Partial<Props>) {
       onGrant={jest.fn()}
       onFetchAuthorizations={jest.fn()}
       onAuthorized={jest.fn()}
-      getContract={jest.fn()}
+      contracts={[]}
       getConfirmationStatus={jest.fn().mockReturnValue(AuthorizationStepStatus.PENDING)}
       getConfirmationError={jest.fn()}
       error={''}
@@ -133,11 +133,11 @@ describe('when authorization type is ALLOWANCE', () => {
         })
 
         it('should render revoke step', () => {
-          expect(screen.getByTestId('revoke-action-step')).toBeInTheDocument()
+          expect(screen.getByTestId('revoke-step')).toBeInTheDocument()
         })
 
         it('should render grant step', () => {
-          expect(screen.getByTestId('grant-action-step')).toBeInTheDocument()
+          expect(screen.getByTestId('grant-step')).toBeInTheDocument()
         })
 
         it('should only show the first step enabled', () => {
@@ -176,12 +176,12 @@ describe('when authorization type is ALLOWANCE', () => {
 
         it('should not render revoke step', () => {
           expect(
-            screen.queryByTestId('revoke-action-step')
+            screen.queryByTestId('revoke-step')
           ).not.toBeInTheDocument()
         })
 
         it('should render grant step', () => {
-          expect(screen.getByTestId('grant-action-step')).toBeInTheDocument()
+          expect(screen.getByTestId('grant-step')).toBeInTheDocument()
         })
       })
     })
@@ -197,7 +197,7 @@ describe('when authorization type is ALLOWANCE', () => {
 
         it('should render revoke action button', () => {
           expect(
-            within(screen.getByTestId('revoke-action-step')).getByRole(
+            within(screen.getByTestId('revoke-step')).getByRole(
               'button',
               { name: t('mana_authorization_modal.revoke_cap.action') }
             )
@@ -225,7 +225,7 @@ describe('when authorization type is ALLOWANCE', () => {
         })
 
         it('should not show action button', () => {
-          const revokeStep = screen.getByTestId('revoke-action-step')
+          const revokeStep = screen.getByTestId('revoke-step')
           expect(
             within(revokeStep).queryByText(
               t('mana_authorization_modal.authorize_mana.action')
@@ -254,7 +254,7 @@ describe('when authorization type is ALLOWANCE', () => {
         })
 
         it('should not show action button', () => {
-          const revokeStep = screen.getByTestId('revoke-action-step')
+          const revokeStep = screen.getByTestId('revoke-step')
           expect(
             within(revokeStep).queryByText(
               t('mana_authorization_modal.authorize_mana.action')
@@ -283,7 +283,7 @@ describe('when authorization type is ALLOWANCE', () => {
         })
 
         it('should not show action button', () => {
-          const revokeStep = screen.getByTestId('revoke-action-step')
+          const revokeStep = screen.getByTestId('revoke-step')
           expect(
             within(revokeStep).queryByText(
               t('mana_authorization_modal.authorize_mana.action')
@@ -304,7 +304,7 @@ describe('when authorization type is ALLOWANCE', () => {
             grantStatus: AuthorizationStepStatus.WAITING
           })
     
-          grantStatusStep = screen.getByTestId('grant-action-step')
+          grantStatusStep = screen.getByTestId('grant-step')
         })
     
         it('should show waiting wallet for approval message', () => {
@@ -340,7 +340,7 @@ describe('when authorization type is ALLOWANCE', () => {
             grantStatus: AuthorizationStepStatus.PROCESSING
           })
     
-          grantStatusStep = screen.getByTestId('grant-action-step')
+          grantStatusStep = screen.getByTestId('grant-step')
         })
     
         it('should show waiting wallet for approval message', () => {
@@ -376,7 +376,7 @@ describe('when authorization type is ALLOWANCE', () => {
             grantStatus: AuthorizationStepStatus.DONE
           })
     
-          grantStatusStep = screen.getByTestId('grant-action-step')
+          grantStatusStep = screen.getByTestId('grant-step')
         })
     
         it('should show waiting wallet for approval message', () => {
@@ -416,12 +416,12 @@ describe('when authorization type is ALLOWANCE', () => {
 
       it('should not render revoke step', () => {
         expect(
-          screen.queryByTestId('revoke-action-step')
+          screen.queryByTestId('revoke-step')
         ).not.toBeInTheDocument()
       })
 
       it('should render grant step', () => {
-        expect(screen.getByTestId('grant-action-step')).toBeInTheDocument()
+        expect(screen.getByTestId('grant-step')).toBeInTheDocument()
       })
 
       it('should only show the first step enabled', () => {
@@ -450,7 +450,7 @@ describe('when clicking revoke authorization button', () => {
       network: Network.ETHEREUM,
       onRevoke: onRevokeMock
     })
-    const revokeStatusStep = screen.getByTestId('revoke-action-step')
+    const revokeStatusStep = screen.getByTestId('revoke-step')
     await userEvent.click(
       within(revokeStatusStep).getByRole('button', {
         name: t('mana_authorization_modal.revoke_cap.action')
@@ -469,7 +469,7 @@ describe('when clicking grant authorization button', () => {
       grantStatus: AuthorizationStepStatus.PENDING,
       onGrant: onGrantMock
     })
-    const grantStatusStep = screen.getByTestId('grant-action-step')
+    const grantStatusStep = screen.getByTestId('grant-step')
     await userEvent.click(
       within(grantStatusStep).getByRole('button', {
         name: t('mana_authorization_modal.set_cap.action')

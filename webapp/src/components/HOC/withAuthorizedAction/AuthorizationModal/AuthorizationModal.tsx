@@ -142,7 +142,6 @@ export function AuthorizationModal({
     handleAuthorized
   ])
 
-  console.log({grantStatus, revokeStatus })
   useEffect(() => {
     const currentStepData = steps[currentStep]
 
