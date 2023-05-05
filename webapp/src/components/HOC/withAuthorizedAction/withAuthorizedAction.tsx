@@ -64,7 +64,7 @@ export default function withAuthorizedAction<
         contractAddress: targetContract.address,
         chainId: targetContract.chainId,
         contractName: targetContractName
-      }
+      } as Authorization
 
       try {
         if (authorizationType === AuthorizationType.ALLOWANCE) {

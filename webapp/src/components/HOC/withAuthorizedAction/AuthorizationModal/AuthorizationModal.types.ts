@@ -1,12 +1,10 @@
 import { Dispatch } from 'redux'
 import { BigNumber } from 'ethers'
 import {
+  authorizationFlowRequest,
+  AuthorizationFlowRequestAction,
   fetchAuthorizationsRequest,
   FetchAuthorizationsRequestAction,
-  grantTokenRequest,
-  GrantTokenRequestAction,
-  revokeTokenRequest,
-  RevokeTokenRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import {
   Authorization,
@@ -32,41 +30,40 @@ export enum AuthorizationStepStatus {
   PENDING = 'pending',
   WAITING = 'waiting',
   PROCESSING = 'processing',
+  ALLOWANCE_AMOUNT_ERROR = 'allowance_amount_error',
   ERROR = 'error',
   DONE = 'done'
 }
 
+export enum AuthorizationStepAction {
+  REVOKE = 'revoke',
+  GRANT = 'grant',
+  CONFIRM = 'confirm'
+}
 export type Props = {
   authorization: Authorization
   requiredAllowance?: BigNumber
   currentAllowance?: BigNumber
   action: AuthorizedAction
   authorizationType: AuthorizationType
-  revokeStatus: AuthorizationStepStatus
-  grantStatus: AuthorizationStepStatus
   confirmationStatus: AuthorizationStepStatus
+  grantStatus: AuthorizationStepStatus
+  revokeStatus: AuthorizationStepStatus
   error: string
   confirmationError: string | null
   network: Network
+  contracts: Contract[]
   getConfirmationStatus?: (state: RootState) => AuthorizationStepStatus
   getConfirmationError?: (state: RootState) => string | null
-  getContract: (query: Partial<Contract>) => Contract | null
   onClose: () => void
   onAuthorized: () => void
-  onRevoke: typeof revokeTokenRequest
-  onGrant: typeof grantTokenRequest
-  onFetchAuthorizations: typeof fetchAuthorizationsRequest
+  onRevoke: () => ReturnType<typeof authorizationFlowRequest>
+  onGrant: () => ReturnType<typeof authorizationFlowRequest>
+  onFetchAuthorizations: () => ReturnType<typeof fetchAuthorizationsRequest>
 }
 
-export type MapDispatchProps = Pick<
-  Props,
-  'onRevoke' | 'onGrant' | 'onFetchAuthorizations'
->
-export type MapDispatch = Dispatch<
-  | RevokeTokenRequestAction
-  | GrantTokenRequestAction
-  | FetchAuthorizationsRequestAction
->
+export type MapDispatchProps = Pick<Props, 'onRevoke' | 'onGrant' | 'onFetchAuthorizations'>
+export type MapDispatch = Dispatch<AuthorizationFlowRequestAction | FetchAuthorizationsRequestAction>
 export type OwnProps = Pick<
   Props,
   | 'authorization'
@@ -79,7 +76,7 @@ export type MapStateProps = Pick<
   | 'revokeStatus'
   | 'grantStatus'
   | 'error'
-  | 'getContract'
+  | 'contracts'
   | 'confirmationStatus'
   | 'confirmationError'
 >
