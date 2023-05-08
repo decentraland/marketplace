@@ -10,6 +10,7 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
+  AuthorizationError,
   areEqual,
   hasAuthorization,
   hasAuthorizationAndEnoughAllowance
@@ -65,7 +66,13 @@ export function getStepStatus(
     return AuthorizationStepStatus.PROCESSING
   }
 
-  if (getAuthorizationFlowError(state) || getError(state)) {
+  const error = getAuthorizationFlowError(state)
+
+  if (error === AuthorizationError.INSUFFICIENT_ALLOWANCE) {
+    return AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR
+  }
+
+  if (error || getError(state)) {
     return AuthorizationStepStatus.ERROR
   }
 

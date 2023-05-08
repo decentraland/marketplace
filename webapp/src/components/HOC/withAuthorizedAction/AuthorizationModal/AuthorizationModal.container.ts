@@ -24,6 +24,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     getConfirmationStatus,
     getConfirmationError
   } = ownProps
+
   return {
     revokeStatus: getStepStatus(
       state,
