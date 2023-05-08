@@ -1,4 +1,4 @@
-.empty-actions {
+.AssetsList .empty-actions {
   font-weight: bold;
   background: none;
   border: none;
@@ -8,7 +8,7 @@
   cursor: pointer;
 }
 
-.watermelon {
+.AssetsList .watermelon {
   background-image: url('../../images/watermelon.svg');
   width: 56px;
   height: 56px;
@@ -16,6 +16,36 @@
   margin: auto;
   margin-bottom: 16px;
   background-size: cover;
+}
+
+.AssetsList .empty .logo {
+  background-image: url('../../images/empty-list.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+}
+
+.AssetsList .empty.empty-assets {
+  font-size: 16px;
+  text-align: center;
+  color: var(--secondary-text);
+}
+
+.AssetsList .empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.AssetsList .empty .title {
+  text-align: center;
+}
+
+.AssetsList .empty .subtitle {
+  margin-bottom: 40px;
+  text-align: center;
 }
 
 @media (min-width: 768px) {

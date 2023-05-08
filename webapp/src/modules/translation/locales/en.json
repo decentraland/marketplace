@@ -334,9 +334,18 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "We couldn’t find any results in the {currentSection}. <br></br><searchStore>Search the {section}</searchStore><if-filters> or <clearFilters>clear filters</clearFilters></if-filters>",
-    "simple_empty": "We couldn’t find any results. <if-filters><br></br><clearFilters>Clear filters</clearFilters></if-filters>",
-    "empty_search": "No results for \"{search}\" in the {currentSection}. <br></br><searchStore>Try searching the {section}</searchStore>"
+    "empty": {
+      "title": "We couldn’t find any results in the {currentSection}.",
+      "action": "<searchStore>Search the {section}</searchStore><if-filters> or <clearFilters>clear filters</clearFilters></if-filters>"
+    },
+    "simple_empty": {
+      "title": "We couldn’t find any results.",
+      "action": "<if-filters><clearFilters>Clear filters</clearFilters></if-filters>"
+    },
+    "empty_search": {
+      "title": "No results for \"{search}\" in the {currentSection}.",
+      "action": "<searchStore>Try searching the {section}</searchStore>"
+    }
   },
   "nft_filters": {
     "no_items": "No items",
@@ -1141,5 +1150,12 @@
     "title": "CLAIM YOUR OWN NAME",
     "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
     "btn": "Claim your name"
+  },
+  "my_lists": {
+    "empty": {
+      "title": "You don't have any saved items",
+      "subtitle": "Discover amazing items.",
+      "action": "Explore collectibles"
+    }
   }
 }

@@ -329,9 +329,18 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "No pudimos encontrar ningún resultado en la sección {currentSection}. <br></br><searchStore>Busca en {section}</searchStore><if-filters> o <clearFilters>limpia los filtros</clearFilters></if-filters>",
-    "simple_empty": "No pudimos encontrar ningún resultado. <if-filters><br></br><clearFilters>Limpia los filtros</clearFilters></if-filters>",
-    "empty_search": "No hay resultados para \"{search}\" en {currentSection}. <br></br><searchStore> Intenta buscando en {section}</searchStore>"
+    "empty": {
+      "title": "No pudimos encontrar ningún resultado en la sección {currentSection}.",
+      "action": "<searchStore>Busca en {section}</searchStore><if-filters> o <clearFilters>limpia los filtros</clearFilters></if-filters>"
+    },
+    "simple_empty": {
+      "title": "No pudimos encontrar ningún resultado.",
+      "action": "<if-filters><br></br><clearFilters>Limpia los filtros</clearFilters></if-filters>"
+    },
+    "empty_search": {
+      "title": "No hay resultados para \"{search}\" en {currentSection}.",
+      "action": "<searchStore> Intenta buscando en {section}</searchStore>"
+    }
   },
   "nft_filters": {
     "no_items": "Sin items",
@@ -1135,5 +1144,12 @@
     "title": "RECLAMA TU PROPIO NOMBRE",
     "text": "En esta sección puede encontrar NOMBRES que están listados para la venta por los usuarios de Decentraland. Alternativamente, puede reclamar su propio NOMBRE único de la sección Constructor por un precio fijo de {mana}.",
     "btn": "Reclama tu nombre"
+  },
+  "my_lists": {
+    "empty": {
+      "title": "No tienes ningún item guardado",
+      "subtitle": "Descubre items increíbles.",
+      "action": "Explora los colleccionables"
+    }
   }
 }

@@ -330,9 +330,18 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "我们在 {currentSection} 中找不到任何结果。 <br></br><searchStore>搜索 {section}</searchStore><if-filters>或<clearFilters>清除过滤器</clearFilters></if-filters>",
-    "simple_empty": "我们找不到任何结果。<if-filters><br></br><clearFilters>清除过滤器</clearFilters></if-filters>",
-    "empty_search": "{currentSection} 中没有“{search}”的结果。 <br></br><searchStore>尝试搜索{section}</searchStore>"
+    "empty": {
+      "title": "我们在 {currentSection} 中找不到任何结果。",
+      "action": "<searchStore>搜索 {section}</searchStore><if-filters>或<clearFilters>清除过滤器</clearFilters></if-filters>"
+    },
+    "simple_empty": {
+      "title": "我们找不到任何结果。",
+      "action": "<if-filters><br></br><clearFilters>清除过滤器</clearFilters></if-filters>"
+    },
+    "empty_search": {
+      "title": "{currentSection} 中没有“{search}”的结果。",
+      "action": "<searchStore>尝试搜索{section}</searchStore>"
+    }
   },
   "nft_filters": {
     "no_items": "没有相关产品",
@@ -1138,5 +1147,12 @@
     "title": "声称自己的名字",
     "text": "在本节中，您可以找到由 Decentraland 用户列出的待售名称。或者，您可以从'构建器'部分以{mana}的固定价格声明自己唯一的名称。",
     "btn": "认领你的名字"
+  },
+  "my_lists": {
+    "empty": {
+      "title": "您没有任何已保存的项目",
+      "subtitle": "发现惊人的项目。",
+      "action": "浏览项目"
+    }
   }
 }
