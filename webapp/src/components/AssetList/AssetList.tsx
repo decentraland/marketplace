@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Card, Loader } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
@@ -95,45 +95,54 @@ const AssetList = (props: Props) => {
       )
     }
 
+    const currentSection =
+      assetType === AssetType.ITEM
+        ? t('browse_page.primary_market_title').toLocaleLowerCase()
+        : t('browse_page.secondary_market_title').toLocaleLowerCase()
+    const alternativeSection =
+      assetType === AssetType.ITEM
+        ? t('browse_page.secondary_market_title').toLocaleLowerCase()
+        : t('browse_page.primary_market_title').toLocaleLowerCase()
     return (
       <div className="empty empty-assets">
         <div className="watermelon" />
-        <T
-          id={emptyStateTranslationString}
-          values={{
-            search,
-            currentSection:
-              assetType === AssetType.ITEM
-                ? t('browse_page.primary_market_title').toLocaleLowerCase()
-                : t('browse_page.secondary_market_title').toLocaleLowerCase(),
-            section:
-              assetType === AssetType.ITEM
-                ? t('browse_page.secondary_market_title').toLocaleLowerCase()
-                : t('browse_page.primary_market_title').toLocaleLowerCase(),
-            searchStore: (chunks: string) => (
-              <button
-                className="empty-actions"
-                onClick={() =>
-                  onBrowse({
-                    assetType:
-                      assetType === AssetType.ITEM
-                        ? AssetType.NFT
-                        : AssetType.ITEM
-                  })
-                }
-              >
-                {chunks}
-              </button>
-            ),
-            'if-filters': (chunks: string) => (hasFiltersEnabled ? chunks : ''),
-            clearFilters: (chunks: string) => (
-              <button className="empty-actions" onClick={onClearFilters}>
-                {chunks}
-              </button>
-            ),
-            br: () => <br />
-          }}
-        />
+        <span>
+          {t(`${emptyStateTranslationString}.title`, {
+            currentSection
+          })}
+        </span>
+        <span>
+          <T
+            id={`${emptyStateTranslationString}.action`}
+            values={{
+              search,
+              currentSection,
+              section: alternativeSection,
+              searchStore: (chunks: string) => (
+                <button
+                  className="empty-actions"
+                  onClick={() =>
+                    onBrowse({
+                      assetType:
+                        assetType === AssetType.ITEM
+                          ? AssetType.NFT
+                          : AssetType.ITEM
+                    })
+                  }
+                >
+                  {chunks}
+                </button>
+              ),
+              'if-filters': (chunks: string) =>
+                hasFiltersEnabled ? chunks : '',
+              clearFilters: (chunks: string) => (
+                <button className="empty-actions" onClick={onClearFilters}>
+                  {chunks}
+                </button>
+              )
+            }}
+          />
+        </span>
       </div>
     )
   }, [
