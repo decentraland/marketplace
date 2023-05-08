@@ -9,6 +9,7 @@ import {
 import { getLocation, push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
+import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
@@ -115,7 +116,7 @@ describe('when handling the clear filters request action', () => {
     })
 
     describe('and it is not the LAND section', () => {
-      it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
+      fit("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
         return expectSaga(routingSaga)
           .provide([
             [
@@ -139,7 +140,8 @@ describe('when handling the clear filters request action', () => {
               buildBrowseURL(pathname, {
                 ...browseOptionsWithoutFilters,
                 section: Section.COLLECTIONS,
-                onlyOnSale: true
+                onlyOnSale: true,
+                status: AssetStatusFilter.ON_SALE
               })
             )
           )
