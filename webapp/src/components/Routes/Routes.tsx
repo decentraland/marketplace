@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Switch, Route, Redirect, RouteComponentProps } from 'react-router-dom'
 import { Center, Page } from 'decentraland-ui'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
@@ -31,6 +32,15 @@ import { Props } from './Routes.types'
 
 const Routes = ({ inMaintenance, isFavoritesEnabled }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
+  const renderItemAssetPage = useCallback(
+    () => <AssetPage type={AssetType.ITEM} />,
+    []
+  )
+
+  const renderNFTAssetPage = useCallback(
+    () => <AssetPage type={AssetType.NFT} />,
+    []
+  )
 
   if (inMaintenance) {
     return (
@@ -92,16 +102,8 @@ const Routes = ({ inMaintenance, isFavoritesEnabled }: Props) => {
             <StatusPage {...props} type={AssetType.ITEM} />
           )}
         />
-        <Route
-          exact
-          path={locations.nft()}
-          component={() => <AssetPage type={AssetType.NFT} />}
-        />
-        <Route
-          exact
-          path={locations.item()}
-          component={() => <AssetPage type={AssetType.ITEM} />}
-        />
+        <Route exact path={locations.nft()} component={renderNFTAssetPage} />
+        <Route exact path={locations.item()} component={renderItemAssetPage} />
         <Route exact path={locations.settings()} component={SettingsPage} />
         <Route exact path={locations.activity()} component={ActivityPage} />
         <Route exact path={locations.root()} component={HomePage} />

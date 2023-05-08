@@ -36,7 +36,6 @@ import {
 } from './AssetProvider.types'
 import AssetProvider from './AssetProvider'
 
-
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   let contractAddress = ownProps.contractAddress
   let tokenId = ownProps.tokenId

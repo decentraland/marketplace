@@ -21,6 +21,7 @@ const TableContainer = forwardRef<HTMLDivElement, Props>((props, ref) => {
           <Tabs isFullscreen>
             {tabsList.map(tab => (
               <Tabs.Tab
+                key={tab.value}
                 active={activeTab === tab.value}
                 onClick={() => {
                   handleTabChange && handleTabChange(tab.value)

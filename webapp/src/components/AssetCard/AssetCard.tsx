@@ -123,7 +123,8 @@ const AssetCard = (props: Props) => {
     if (!isNFT(asset) && isCatalogItem(asset)) {
       const isAvailableForMint = asset.isOnSale && asset.available > 0
 
-      if (!isAvailableForMint && !asset.minListingPrice) {
+      const notForSale = !isAvailableForMint && !asset.minListingPrice
+      if (notForSale) {
         information = {
           action: t('asset_card.not_for_sale'),
           actionIcon: null,
@@ -149,6 +150,20 @@ const AssetCard = (props: Props) => {
           ((sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING) ||
             (sortBy === SortBy.CHEAPEST && cheapest === LISTING))
 
+        let price
+        switch (sortBy) {
+          case SortBy.MOST_EXPENSIVE:
+            price = mostExpensive === MINT ? asset.price : asset.maxListingPrice
+            break
+          case SortBy.CHEAPEST:
+            price = asset.minPrice
+            break
+
+          default:
+            price = isAvailableForMint ? asset.price : asset.minListingPrice
+            break
+        }
+
         information = {
           action:
             sortBy === SortBy.CHEAPEST
@@ -164,18 +179,7 @@ const AssetCard = (props: Props) => {
             sortBy !== SortBy.CHEAPEST
               ? mintingIcon
               : null,
-          price:
-            sortBy === SortBy.MOST_EXPENSIVE
-              ? mostExpensive === MINT
-                ? asset.price
-                : asset.maxListingPrice ?? null
-              : sortBy === SortBy.CHEAPEST
-              ? cheapest === MINT
-                ? asset.price
-                : asset.minPrice ?? null
-              : isAvailableForMint
-              ? asset.price
-              : asset.minListingPrice ?? null,
+          price: price ?? null,
           extraInformation:
             asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
               <span>
@@ -204,9 +208,12 @@ const AssetCard = (props: Props) => {
   }, [asset, sortBy])
 
   const renderCatalogItemInformation = useCallback(() => {
+    const isAvailableForMint = !isNFT(asset) && asset.isOnSale && asset.available > 0
+    const notForSale = !isAvailableForMint && !isNFT(asset) && !asset.minListingPrice
+
     return catalogItemInformation ? (
       <div className="CatalogItemInformation">
-        <span>
+        <span className={notForSale ? 'NotForSale' : ''}>
           {catalogItemInformation.action} &nbsp;
           {catalogItemInformation.actionIcon && (
             <img

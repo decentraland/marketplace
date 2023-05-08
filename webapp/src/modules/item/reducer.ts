@@ -1,3 +1,4 @@
+import isEqual from 'lodash/isEqual'
 import { Item } from '@dcl/schemas'
 import {
   loadingReducer,
@@ -97,7 +98,9 @@ export function itemReducer(
         data: {
           ...state.data,
           ...items.reduce((obj, item) => {
-            obj[item.id] = item
+            if (!state.data[item.id] || !isEqual(state.data[item.id], item)) {
+              obj[item.id] = item
+            }
             return obj
           }, {} as Record<string, Item>)
         },
