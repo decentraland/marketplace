@@ -188,6 +188,12 @@ a.ui.card.link:hover .meta {
   height: 223px;
 }
 
+.AssetCard .NotForSale {
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
 .AssetCard .AssetImage.catalog {
   height: 161px;
 }
