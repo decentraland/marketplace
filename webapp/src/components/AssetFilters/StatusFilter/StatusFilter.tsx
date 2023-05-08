@@ -28,7 +28,13 @@ export const StatusFilter = ({
   )
 
   const handleChange = useCallback(
-    (_evt, { value }) => onChange({ status: value }),
+    (_evt, { value }) => {
+      let options: BrowseOptions = { status: value }
+      if (value === AssetStatusFilter.NOT_FOR_SALE) {
+        options = { ...options, minPrice: undefined, maxPrice: undefined }
+      }
+      return onChange(options)
+    },
     [onChange]
   )
 
