@@ -401,39 +401,41 @@ describe('when authorization type is ALLOWANCE', () => {
         })
       })
 
-      describe('and revoke status is ALLOWANCE_AMOUNT_ERROR', () => {
+      describe('and grant status is ALLOWANCE_AMOUNT_ERROR', () => {
         let grantStatusStep: HTMLElement
 
-        beforeEach(() => {
-          screen = renderAuthorizationModal({
-            authorizationType: AuthorizationType.ALLOWANCE,
-            revokeStatus: AuthorizationStepStatus.DONE,
-            grantStatus: AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR
+        describe("and initial allowance was 0", () => {
+          beforeEach(() => {
+            screen = renderAuthorizationModal({
+              authorizationType: AuthorizationType.ALLOWANCE,
+              revokeStatus: AuthorizationStepStatus.DONE,
+              grantStatus: AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR
+            })
+  
+            grantStatusStep = screen.getByTestId('grant-step')
           })
-
-          grantStatusStep = screen.getByTestId('grant-step')
-        })
-
-        it('should show allowance error message', () => {
-          expect(
-            within(grantStatusStep).getByText(
-              t('mana_authorization_modal.spending_cap_error')
-            )
-          ).toBeInTheDocument()
-        })
-
-        it('should not show loading icon', () => {
-          expect(
-            within(grantStatusStep).queryByTestId('step-loader')
-          ).not.toBeInTheDocument()
-        })
-
-        it('should show action button', () => {
-          expect(
-            within(grantStatusStep).getByText(
-              t('mana_authorization_modal.authorize_mana.action')
-            )
-          ).toBeInTheDocument()
+  
+          it('should show allowance error message', () => {
+            expect(
+              within(grantStatusStep).getByText(
+                t('mana_authorization_modal.insufficient_amount_error.message')
+              )
+            ).toBeInTheDocument()
+          })
+  
+          it('should not show loading icon', () => {
+            expect(
+              within(grantStatusStep).queryByTestId('step-loader')
+            ).not.toBeInTheDocument()
+          })
+  
+          it('should show revoke action button', () => {
+            expect(
+              within(grantStatusStep).getByText(
+                t('mana_authorization_modal.insufficient_amount_error.action')
+              )
+            ).toBeInTheDocument()
+          })
         })
       })
     })

@@ -11,6 +11,8 @@ import styles from './AuthorizationModal.module.css'
 import { Step } from './MultiStep/MultiStep.types'
 import { getStepMessage, getSteps } from './utils'
 import { getContractByParams } from '../../../../modules/contract/utils'
+import { AuthorizationAction } from 'decentraland-dapps/dist/modules/authorization/types'
+import { Network } from '@dcl/schemas'
 
 const LOADING_STATUS = [
   AuthorizationStepStatus.LOADING_INFO,
@@ -86,6 +88,32 @@ export function AuthorizationModal({
     ]
       .map(step => {
         if (step.actionType === AuthorizationStepAction.GRANT) {
+          if (
+            grantStatus === AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR &&
+            network === Network.ETHEREUM
+          ) {
+            return {
+              ...step,
+              error: t(
+                'mana_authorization_modal.insufficient_amount_error.message'
+              ),
+              action: 'Revoke',
+              status: revokeStatus,
+              message:
+                revokeStatus === AuthorizationStepStatus.PENDING ? (
+                  <div className={styles.error}>
+                    {t(
+                      'mana_authorization_modal.insufficient_amount_error.message'
+                    )}
+                  </div>
+                ) : (
+                  undefined
+                ),
+              actionType: AuthorizationAction.REVOKE,
+              onActionClicked: handleRevokeToken
+            }
+          }
+
           return {
             ...step,
             action:
@@ -112,15 +140,20 @@ export function AuthorizationModal({
         }
 
         return step as Step & {
+          error: string
           status: AuthorizationStepStatus
           actionType: AuthorizationStepAction
+          message?: string
         }
       })
       .map((step, index) => {
         return {
           ...step,
-          isLoading: LOADING_STATUS.includes(step.status),
-          message: getStepMessage(index, step.status, error, currentStep),
+          isLoading: index === currentStep && LOADING_STATUS.includes(step.status),
+          message:
+            'message' in step && step.message
+              ? step.message
+              : getStepMessage(index, step.status, step.error, currentStep),
           testId: `${step.actionType}-step`
         }
       })

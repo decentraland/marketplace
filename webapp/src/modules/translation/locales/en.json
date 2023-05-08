@@ -1144,6 +1144,11 @@
     "done": "Done",
     "title": "Complete your {action}",
     "spending_cap_error": "Remember to set a cap equal to the item price or higher.",
+    "generic_error": "Something went wrong",
+    "insufficient_amount_error": {
+      "message": "Remember to set a spending cap equal to the item price or higher. You'll have to revoke your current spending cap before authorizing again.",
+      "action": "Revoke"
+    },
     "authorize_mana": {
       "title": "First, authorize the <contract></contract> contract to operate MANA on your behalf in Decentraland. ",
       "description": "Keep in mind that some wallets require setting a custom MANA spending limit. Enter the item price {price} MANA or a higher amount you're comfortable with for spending now or later. You can change the limit at any time.",
