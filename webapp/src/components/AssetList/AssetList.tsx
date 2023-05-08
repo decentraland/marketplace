@@ -108,6 +108,7 @@ const AssetList = (props: Props) => {
         <div className="watermelon" />
         <span>
           {t(`${emptyStateTranslationString}.title`, {
+            search,
             currentSection
           })}
         </span>
