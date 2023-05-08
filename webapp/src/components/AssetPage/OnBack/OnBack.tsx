@@ -18,7 +18,6 @@ const OnBack = ({ asset, isFavoritesEnabled, onBack }: Props) => {
     <div className="top-header">
       <Button
         className="back"
-        absolute
         onClick={() =>
           onBack(
             mapAsset(
@@ -71,7 +70,6 @@ const OnBack = ({ asset, isFavoritesEnabled, onBack }: Props) => {
           )
         }
         basic
-        white
       >
         <img src={onBackIcon} alt={t('global.back')} />
         {t('global.back')}
