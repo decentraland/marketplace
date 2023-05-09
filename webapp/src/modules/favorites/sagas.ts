@@ -6,6 +6,7 @@ import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { config } from '../../config'
 import { ItemBrowseOptions } from '../item/types'
 import {
   closeModal,
@@ -17,10 +18,9 @@ import {
   FavoritesAPI,
   MARKETPLACE_FAVORITES_SERVER_URL
 } from '../vendor/decentraland/favorites/api'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
-import { ItemAPI } from '../vendor/decentraland/item/api'
-import { NFT_SERVER_URL } from '../vendor/decentraland'
 import {
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
@@ -43,18 +43,20 @@ import {
 import { getListId } from './selectors'
 import { FavoritedItems } from './types'
 
+export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
+
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
-  const itemAPI = new ItemAPI(NFT_SERVER_URL, {
+  const API_OPTS = {
     retries: retryParams.attempts,
     retryDelay: retryParams.delay,
     identity: getIdentity
-  })
-
+  }
   const favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
     retries: retryParams.attempts,
     retryDelay: retryParams.delay,
     identity: getIdentity
   })
+  const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield takeEvery(
     PICK_ITEM_AS_FAVORITE_REQUEST,
@@ -161,19 +163,20 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           favoritedItem.createdAt
         ])
       )
+      const ids = results.map(({ itemId }) => itemId)
       const options: ItemBrowseOptions = {
         ...action.payload.options,
         filters: {
           first: results.length,
-          ids: results.map(({ itemId }) => itemId)
+          ids
         }
       }
 
       if (results.length > 0) {
-        const result: { data: Item[] } = yield call(
-          [itemAPI, 'get'],
-          options.filters
-        )
+        const result: { data: Item[] } = yield call([catalogAPI, 'get'], {
+          first: results.length,
+          ids
+        })
         items = result.data
       }
 
