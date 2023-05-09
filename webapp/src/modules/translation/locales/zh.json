@@ -568,7 +568,8 @@
       "issue_number": "發行編號",
       "owner": "所有者",
       "view_listing": "查看房源",
-      "expires": "過期"
+      "expires": "過期",
+      "no_offer": "沒有報價"
     }
   },
   "listings_table": {

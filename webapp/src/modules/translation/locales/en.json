@@ -571,7 +571,8 @@
       "issue_number": "Issue Number",
       "owner": "Owner",
       "view_listing": "View listing",
-      "expires": "Expires"
+      "expires": "Expires",
+      "no_offer": "No offer"
     }
   },
   "listings_table": {

@@ -565,7 +565,8 @@
       "issue_number": "Número de problema",
       "owner": "Propietario",
       "view_listing": "Ver listado",
-      "expires": "Expira"
+      "expires": "Expira",
+      "no_offer": "Sin ofertas"
     }
   },
   "listings_table": {
