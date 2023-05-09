@@ -331,16 +331,16 @@
   },
   "nft_list": {
     "empty": {
-      "title": "No pudimos encontrar ningún resultado en la sección {currentSection}.",
-      "action": "<searchStore>Busca en {section}</searchStore><if-filters> o <clearFilters>limpia los filtros</clearFilters></if-filters>"
+      "title": "No pudimos encontrar ningún resultado con esos filtros.",
+      "action": "<if-filters><clearFilters>Limpia los filtros</clearFilters></if-filters>"
     },
     "simple_empty": {
       "title": "No pudimos encontrar ningún resultado.",
       "action": "<if-filters><br></br><clearFilters>Limpia los filtros</clearFilters></if-filters>"
     },
     "empty_search": {
-      "title": "No hay resultados para \"{search}\" en {currentSection}.",
-      "action": "<searchStore> Intenta buscando en {section}</searchStore>"
+      "title": "No hay resultados para \"{search}\".",
+      "action": "Compruebe si hay errores tipográficos o de ortografía, o pruebe con un término de búsqueda diferente."
     }
   },
   "nft_filters": {
@@ -575,7 +575,8 @@
       "issue_number": "Número de problema",
       "owner": "Propietario",
       "view_listing": "Ver listado",
-      "expires": "Expira"
+      "expires": "Expira",
+      "no_offer": "Sin ofertas"
     }
   },
   "listings_table": {

@@ -334,16 +334,16 @@
   },
   "nft_list": {
     "empty": {
-      "title": "我们在 {currentSection} 中找不到任何结果。",
-      "action": "<searchStore>搜索 {section}</searchStore><if-filters>或<clearFilters>清除过滤器</clearFilters></if-filters>"
+      "title": "没有找到这些过滤器的结果",
+      "action": "<if-filters><clearFilters>重置过滤器</clearFilters></if-filters>"
     },
     "simple_empty": {
       "title": "我们找不到任何结果。",
       "action": "<if-filters><br></br><clearFilters>清除过滤器</clearFilters></if-filters>"
     },
     "empty_search": {
-      "title": "{currentSection} 中没有“{search}”的结果。",
-      "action": "<searchStore>尝试搜索{section}</searchStore>"
+      "title": "中没有“{search}”的结果。",
+      "action": "检查是否有任何拼写错误或拼写错误，或尝试使用不同的搜索词。"
     }
   },
   "nft_filters": {
@@ -578,7 +578,8 @@
       "issue_number": "發行編號",
       "owner": "所有者",
       "view_listing": "查看房源",
-      "expires": "過期"
+      "expires": "過期",
+      "no_offer": "沒有報價"
     }
   },
   "listings_table": {
