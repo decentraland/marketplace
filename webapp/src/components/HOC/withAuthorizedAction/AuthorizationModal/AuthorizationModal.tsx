@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Modal } from 'decentraland-ui'
+import { AuthorizationAction } from 'decentraland-dapps/dist/modules/authorization/types'
+import { Network } from '@dcl/schemas'
+import { getContractByParams } from '../../../../modules/contract/utils'
 import MultiStep from './MultiStep/MultiStep'
 import {
   AuthorizationStepAction,
@@ -10,9 +13,6 @@ import {
 import styles from './AuthorizationModal.module.css'
 import { Step } from './MultiStep/MultiStep.types'
 import { getStepMessage, getSteps } from './utils'
-import { getContractByParams } from '../../../../modules/contract/utils'
-import { AuthorizationAction } from 'decentraland-dapps/dist/modules/authorization/types'
-import { Network } from '@dcl/schemas'
 
 const LOADING_STATUS = [
   AuthorizationStepStatus.LOADING_INFO,
