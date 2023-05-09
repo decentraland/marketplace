@@ -80,7 +80,6 @@ describe('when handling the clear filters request action', () => {
     browseOptionsWithoutFilters.page = 1
     pathname = 'aPath'
   })
-
   describe('and the filters are set', () => {
     it('should build a browseURL without the filter values that got resetted', () => {
       return expectSaga(routingSaga)
