@@ -85,6 +85,7 @@ a.ui.card.AssetCard.catalog:hover,
 .AssetCard .ui.header.small {
   font-size: 14.5px;
   font-weight: 400;
+  margin-top: 0px;
 }
 
 .AssetCard .CatalogItemInformation {
@@ -223,6 +224,7 @@ a.ui.card.link:hover .meta {
 .AssetCard .wrapBigText {
   flex-wrap: wrap;
   display: flex;
+  align-items: center;
 }
 
 @media (max-width: 1199px) {
