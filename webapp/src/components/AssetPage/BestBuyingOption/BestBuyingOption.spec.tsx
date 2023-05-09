@@ -150,7 +150,7 @@ describe('Best Buying Option', () => {
       })
 
       expect(
-        getByText(t('best_buying_option.buy_listing.title'))
+        getByText(t('best_buying_option.buy_listing.title'), { exact: false })
       ).toBeInTheDocument()
     })
 

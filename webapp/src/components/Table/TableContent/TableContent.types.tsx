@@ -5,9 +5,9 @@ export type Props = {
   data: DataTableType[]
   isLoading: boolean
   setPage?: (page: number) => void
-  totalPages?: number
+  totalPages?: number | null
   empty: () => void
-  total: number
+  total: number | null
   rowsPerPage?: number
   mobileTableBody?: React.ReactNode
   hasHeaders?: boolean

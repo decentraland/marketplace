@@ -15,6 +15,7 @@ import {
 } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
+import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
@@ -145,7 +146,8 @@ describe('when handling the clear filters request action', () => {
               buildBrowseURL(pathname, {
                 ...browseOptionsWithoutFilters,
                 section: Section.COLLECTIONS,
-                onlyOnSale: true
+                onlyOnSale: true,
+                status: AssetStatusFilter.ON_SALE
               })
             )
           )

@@ -1,3 +1,4 @@
+import { AssetStatusFilter } from '../../utils/filters'
 import { Section } from '../vendor/decentraland/routing'
 import { getPersistedIsMapProperty } from '../ui/utils'
 import { View } from '../ui/types'
@@ -116,7 +117,8 @@ describe('when clearing browser options', () => {
     beforeEach(() => {
       baseBrowseOptions = {
         onlyOnSale: true,
-        page: 1
+        page: 1,
+        status: AssetStatusFilter.ON_SALE
       }
       options = {
         ...baseBrowseOptions,
