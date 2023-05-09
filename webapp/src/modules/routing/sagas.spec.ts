@@ -116,7 +116,7 @@ describe('when handling the clear filters request action', () => {
     })
 
     describe('and it is not the LAND section', () => {
-      fit("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
+      it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
         return expectSaga(routingSaga)
           .provide([
             [
