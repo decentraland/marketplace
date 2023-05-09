@@ -247,6 +247,7 @@ const AssetImage = (props: Props) => {
             : t('wearable_preview.missing_representation_error.female')
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
+        console.log('config.is(Env.DEVELOPMENT): ', config.is(Env.DEVELOPMENT));
 
         wearablePreview = (
           <>
@@ -266,7 +267,7 @@ const AssetImage = (props: Props) => {
               emote={isTryingOnEnabled ? previewEmote : undefined}
               onLoad={handleLoad}
               onError={handleError}
-              dev={config.is(Env.DEVELOPMENT)}
+              // dev={config.is(Env.DEVELOPMENT)}
             />
             {isLoadingWearablePreview ? (
               <Center>
@@ -424,7 +425,7 @@ const AssetImage = (props: Props) => {
               wheelStart={100}
               onLoad={handleLoad}
               onError={handleError}
-              dev={config.is(Env.DEVELOPMENT)}
+              // dev={config.is(Env.DEVELOPMENT)}
             />
             {isLoadingWearablePreview ? (
               <Center>
