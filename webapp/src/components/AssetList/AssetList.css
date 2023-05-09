@@ -19,10 +19,10 @@
   line-height: 24px;
 }
 
-.AssetsList .watermelon {
-  background-image: url('../../images/watermelon.svg');
-  width: 56px;
-  height: 56px;
+.watermelon {
+  background-image: url('../../images/noResults.svg');
+  width: 66px;
+  height: 66px;
   display: flex;
   margin: auto;
   margin-bottom: 16px;
