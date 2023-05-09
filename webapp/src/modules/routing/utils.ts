@@ -111,8 +111,6 @@ export function getClearedBrowseOptions(
     clearedBrowseOptions.onlyOnSale = true
   }
 
-  console.log('clearedBrowseOptions', clearedBrowseOptions)
-
   // reset the pages to the first one
   clearedBrowseOptions.page = 1
   return clearedBrowseOptions

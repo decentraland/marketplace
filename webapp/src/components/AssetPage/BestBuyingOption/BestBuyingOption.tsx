@@ -108,7 +108,13 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   }
 
   return (
-    <div className={styles.BestBuyingOption}>
+    <div
+      className={
+        buyOption === BuyOptions.MINT || buyOption === BuyOptions.BUY_LISTING
+          ? `${styles.BestBuyingOption} ${styles.AlignEnd}`
+          : styles.BestBuyingOption
+      }
+    >
       {isLoading ? (
         <div className={styles.emptyContainer}>
           <Loader active data-testid="loader" />
