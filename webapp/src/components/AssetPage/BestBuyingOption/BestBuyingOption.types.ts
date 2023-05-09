@@ -8,6 +8,5 @@ export type Props = {
 
 export enum BuyOptions {
   MINT = 'MINT',
-  BUY_LISTING = 'BUY_LISTING',
-  NOT_AVAILABLE = 'NOT_AVAILABLE'
+  BUY_LISTING = 'BUY_LISTING'
 }

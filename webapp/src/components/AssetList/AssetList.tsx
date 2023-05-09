@@ -63,7 +63,7 @@ const AssetList = (props: Props) => {
       return ''
     } else if (section) {
       if (isManager) {
-        return 'nft_list.simple_empty'
+        return 'nft_list.empty'
       }
 
       const isEmoteOrWearableSection = [
@@ -75,12 +75,12 @@ const AssetList = (props: Props) => {
         return search ? 'nft_list.empty_search' : 'nft_list.empty'
       }
     }
-    return 'nft_list.simple_empty'
+    return 'nft_list.empty'
   }, [assets.length, search, section, isManager])
 
   const renderEmptyState = useCallback(() => {
     return (
-      <div className="empty">
+      <div className="empty-state">
         <div className="watermelon" />
         <T
           id={emptyStateTranslationString}
@@ -94,21 +94,7 @@ const AssetList = (props: Props) => {
               assetType === AssetType.ITEM
                 ? t('browse_page.secondary_market_title').toLocaleLowerCase()
                 : t('browse_page.primary_market_title').toLocaleLowerCase(),
-            searchStore: (chunks: string) => (
-              <button
-                className="empty-actions"
-                onClick={() =>
-                  onBrowse({
-                    assetType:
-                      assetType === AssetType.ITEM
-                        ? AssetType.NFT
-                        : AssetType.ITEM
-                  })
-                }
-              >
-                {chunks}
-              </button>
-            ),
+            searchStore: (chunks: string) => chunks,
             'if-filters': (chunks: string) => (hasFiltersEnabled ? chunks : ''),
             clearFilters: (chunks: string) => (
               <button className="empty-actions" onClick={onClearFilters}>
@@ -124,7 +110,6 @@ const AssetList = (props: Props) => {
     assetType,
     emptyStateTranslationString,
     hasFiltersEnabled,
-    onBrowse,
     onClearFilters,
     search
   ])

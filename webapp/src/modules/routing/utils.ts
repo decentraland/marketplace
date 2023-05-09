@@ -1,5 +1,6 @@
 import { BrowseOptions, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
+import { AssetStatusFilter } from '../../utils/filters'
 import {
   getPersistedIsMapProperty,
   isAccountView,
@@ -86,12 +87,21 @@ export function getClearedBrowseOptions(
     'maxDistanceToPlaza',
     'adjacentToRoad',
     'creators',
-    'rentalDays'
+    'rentalDays',
+    'status'
   ]
 
   const clearedBrowseOptions = fillWithUndefined
     ? reset(browseOptions, keys)
     : omit(browseOptions, keys)
+
+  // The status as only on sale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
+  if (
+    !clearedBrowseOptions.status &&
+    !isLandSection(browseOptions.section as Section)
+  ) {
+    clearedBrowseOptions.status = AssetStatusFilter.ON_SALE
+  }
 
   // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
   if (
@@ -100,6 +110,7 @@ export function getClearedBrowseOptions(
   ) {
     clearedBrowseOptions.onlyOnSale = true
   }
+
   // reset the pages to the first one
   clearedBrowseOptions.page = 1
   return clearedBrowseOptions

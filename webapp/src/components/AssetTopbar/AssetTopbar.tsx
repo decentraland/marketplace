@@ -21,6 +21,7 @@ import {
   isListsSection,
   persistIsMapProperty
 } from '../../modules/ui/utils'
+import trash from '../../images/trash.png'
 import { Chip } from '../Chip'
 import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
@@ -118,7 +119,7 @@ export const AssetTopbar = ({
             kind="full"
             value={searchValue}
             onChange={setSearchValue}
-            icon={<Icon name="search" />}
+            icon={<Icon name="search" className="searchIcon" />}
             iconPosition="left"
           />
         )}
@@ -146,14 +147,6 @@ export const AssetTopbar = ({
           {!isLoading ? (
             <div className={styles.countContainer}>
               <p className={styles.countText}>{getCountText(count, search)}</p>
-              {hasFiltersEnabled && !isMobile && (
-                <button
-                  className={styles.clearFilters}
-                  onClick={onClearFilters}
-                >
-                  {t('filters.clear')}
-                </button>
-              )}
             </div>
           ) : null}
           {!isListsSection(section) ? (
@@ -181,11 +174,10 @@ export const AssetTopbar = ({
       {!isMap && hasFiltersEnabled ? (
         <div className={styles.selectedFiltersContainer}>
           <SelectedFilters />
-          {isMobile && (
-            <button className={styles.clearFilters} onClick={onClearFilters}>
-              {t('filters.clear')}
-            </button>
-          )}
+          <button className={styles.clearFilters} onClick={onClearFilters}>
+            <img src={trash} alt={t('filters.clear')} />
+            {t('filters.clear')}
+          </button>
         </div>
       ) : null}
     </div>
