@@ -2,7 +2,12 @@ import { AssetStatusFilter } from '../../utils/filters'
 import { Section } from '../vendor/decentraland/routing'
 import { getPersistedIsMapProperty } from '../ui/utils'
 import { View } from '../ui/types'
-import { getClearedBrowseOptions, isMapSet } from './utils'
+import {
+  CATALOG_VIEWS,
+  getClearedBrowseOptions,
+  isCatalogView,
+  isMapSet
+} from './utils'
 import { BrowseOptions } from './types'
 jest.mock('../ui/utils')
 
@@ -127,6 +132,14 @@ describe('when clearing browser options', () => {
     })
     it('should remove the creators key from the options', () => {
       expect(getClearedBrowseOptions(options)).toStrictEqual(baseBrowseOptions)
+    })
+  })
+})
+
+describe('when checking if a view is a Catalog View type', () => {
+  describe('and the creators filter is set', () => {
+    it.each(CATALOG_VIEWS)('should return true for %s', view => {
+      expect(isCatalogView(view)).toBe(true)
     })
   })
 })
