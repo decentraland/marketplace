@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Modal } from 'decentraland-ui'
+import { AuthorizationAction } from 'decentraland-dapps/dist/modules/authorization/types'
+import { Network } from '@dcl/schemas'
+import { getContractByParams } from '../../../../modules/contract/utils'
 import MultiStep from './MultiStep/MultiStep'
 import {
   AuthorizationStepAction,
@@ -10,7 +13,6 @@ import {
 import styles from './AuthorizationModal.module.css'
 import { Step } from './MultiStep/MultiStep.types'
 import { getStepMessage, getSteps } from './utils'
-import { getContractByParams } from '../../../../modules/contract/utils'
 
 const LOADING_STATUS = [
   AuthorizationStepStatus.LOADING_INFO,
@@ -39,6 +41,7 @@ export function AuthorizationModal({
 }: Props) {
   const [currentStep, setCurrentStep] = useState(0)
   const [loading, setLoading] = useState<AuthorizationStepAction>()
+  const [shouldReauthorize, setShouldReauthorize] = useState(false)
 
   useEffect(() => {
     onFetchAuthorizations()
@@ -86,6 +89,32 @@ export function AuthorizationModal({
     ]
       .map(step => {
         if (step.actionType === AuthorizationStepAction.GRANT) {
+          if (
+            shouldReauthorize ||
+            (grantStatus === AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR &&
+              network === Network.ETHEREUM)
+          ) {
+            return {
+              ...step,
+              error: t('mana_authorization_modal.insufficient_amount_error.message'),
+              action: 'Revoke',
+              status: revokeStatus,
+              message:
+                revokeStatus === AuthorizationStepStatus.PENDING || revokeStatus === AuthorizationStepStatus.DONE ? (
+                  <div className={styles.error}>
+                    {t(
+                      'mana_authorization_modal.insufficient_amount_error.message'
+                    )}
+                  </div>
+                ) : (
+                  undefined
+                ),
+              actionType: AuthorizationAction.REVOKE,
+              testId: 'reauthorize-step',
+              onActionClicked: handleRevokeToken
+            }
+          }
+
           return {
             ...step,
             action:
@@ -112,16 +141,22 @@ export function AuthorizationModal({
         }
 
         return step as Step & {
+          error: string
           status: AuthorizationStepStatus
           actionType: AuthorizationStepAction
+          message?: string
         }
       })
       .map((step, index) => {
         return {
           ...step,
-          isLoading: LOADING_STATUS.includes(step.status),
-          message: getStepMessage(index, step.status, error, currentStep),
-          testId: `${step.actionType}-step`
+          isLoading:
+            index === currentStep && LOADING_STATUS.includes(step.status),
+          message:
+            'message' in step && step.message
+              ? step.message
+              : getStepMessage(index, step.status, step.error, currentStep),
+          testId: step.testId || `${step.actionType}-step`
         }
       })
   }, [
@@ -135,6 +170,7 @@ export function AuthorizationModal({
     confirmationStatus,
     confirmationError,
     authorizedContract,
+    shouldReauthorize,
     currentStep,
     error,
     handleGrantToken,
@@ -144,17 +180,29 @@ export function AuthorizationModal({
 
   useEffect(() => {
     const currentStepData = steps[currentStep]
-
     if (
       currentStepData.status === AuthorizationStepStatus.DONE &&
       currentStepData.actionType === loading
     ) {
-      setCurrentStep(currentStep + 1)
-      setLoading(undefined)
+      if (shouldReauthorize) {
+        setShouldReauthorize(false)
+      } else {
+        setCurrentStep(currentStep + 1)
+        setLoading(undefined)
+      }
     }
     // We only want to run this when there is a change in the current steps status
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [steps[currentStep].status])
+
+  useEffect(() => {
+    if (
+      grantStatus === AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR &&
+      network === Network.ETHEREUM
+    ) {
+      setShouldReauthorize(true)
+    }
+  }, [grantStatus, network, setShouldReauthorize])
 
   return (
     <Modal

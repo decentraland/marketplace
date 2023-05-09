@@ -10,6 +10,7 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
+  AuthorizationError,
   areEqual,
   hasAuthorization,
   hasAuthorizationAndEnoughAllowance
@@ -65,7 +66,13 @@ export function getStepStatus(
     return AuthorizationStepStatus.PROCESSING
   }
 
-  if (getAuthorizationFlowError(state) || getError(state)) {
+  const error = getAuthorizationFlowError(state)
+
+  if (error === AuthorizationError.INSUFFICIENT_ALLOWANCE) {
+    return AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR
+  }
+
+  if (error || getError(state)) {
     return AuthorizationStepStatus.ERROR
   }
 
@@ -105,6 +112,14 @@ export function getStepStatus(
   return AuthorizationStepStatus.PENDING
 }
 
+export function getStepError(error: string | null) {
+  if (!error) {
+    return undefined;
+  }
+
+  return error.length > 100 ? t('mana_authorization_modal.generic_error') : error
+}
+
 export function getStepMessage(
   stepIndex: number,
   stepStatus: AuthorizationStepStatus,
@@ -125,7 +140,7 @@ export function getStepMessage(
     case AuthorizationStepStatus.PROCESSING:
       return t('mana_authorization_modal.waiting_confirmation')
     case AuthorizationStepStatus.ERROR:
-      return <div className={styles.error}>{error}</div>
+      return <div className={styles.error}>{getStepError(error)}</div>
     case AuthorizationStepStatus.ALLOWANCE_AMOUNT_ERROR:
       return (
         <div className={styles.error}>

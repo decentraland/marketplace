@@ -1138,6 +1138,11 @@
     "done": "Hecho",
     "title": "Completa tu {action}",
     "spending_cap_error": "Recuerde establecer un límite igual al precio del artículo o superior.",
+    "generic_error": "Algo salió mal",
+    "insufficient_amount_error": {
+      "message": "Recuerde establecer un límite de gasto igual al precio del artículo o superior.Tendrá que revocar su límite de gasto actual antes de autorizar nuevamente.",
+      "action": "Revocar"
+    },
     "authorize_mana": {
       "title": "Primero, autorice el contrato <contract></contract>  para operar MANA en su nombre en Decentraland. ",
       "description": "Tenga en cuenta que algunas billeteras requieren establecer un límite de gasto de MANA personalizado. Ingrese el precio del artículo {price} MANA o una cantidad más alta con la que se sienta cómodo para gastar ahora o más tarde. Puede cambiar el límite en cualquier momento.",

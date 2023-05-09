@@ -1141,6 +1141,11 @@
     "done": "完毕",
     "title": "完成您的 {action}",
     "spending_cap_error": "请记住，设置一个等于物品价格或更高的上限。",
+    "generic_error": "出了些问题",
+    "insufficient_amount_error": {
+      "message": "请记住，将支出帽设置为等于商品价格或更高的支出上限。在再次授权之前，您必须撤销当前的支出上限。",
+      "action": "撤销"
+    },
     "authorize_mana": {
       "title": "首先，授权<contract></contract> 合同运营 MANA 代表您在分权中。 ",
       "description": "请记住，某些钱包需要设置自定义 MANA 支出限制.输入商品价格 {price} MANA 或您现在或以后花费更高的钱。您可以随时更改限制。",
