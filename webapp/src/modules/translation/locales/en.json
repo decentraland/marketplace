@@ -338,16 +338,16 @@
   },
   "nft_list": {
     "empty": {
-      "title": "We couldn’t find any results in the {currentSection}.",
-      "action": "<searchStore>Search the {section}</searchStore><if-filters> or <clearFilters>clear filters</clearFilters></if-filters>"
+      "title": "No results found for these filters.",
+      "action": "<if-filters><clearFilters>Reset filters</clearFilters></if-filters>"
     },
     "simple_empty": {
       "title": "We couldn’t find any results.",
       "action": "<if-filters><clearFilters>Clear filters</clearFilters></if-filters>"
     },
     "empty_search": {
-      "title": "No results for \"{search}\" in the {currentSection}.",
-      "action": "<searchStore>Try searching the {section}</searchStore>"
+      "title": "No results for \"{search}\".",
+      "action": "Check for any typos or spelling errors, or try a different search term."
     }
   },
   "nft_filters": {
@@ -581,7 +581,8 @@
       "issue_number": "Issue Number",
       "owner": "Owner",
       "view_listing": "View listing",
-      "expires": "Expires"
+      "expires": "Expires",
+      "no_offer": "No offer"
     }
   },
   "listings_table": {

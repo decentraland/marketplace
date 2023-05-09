@@ -220,6 +220,11 @@ a.ui.card.link:hover .meta {
   border-top-left-radius: 10px;
 }
 
+.AssetCard .wrapBigText {
+  flex-wrap: wrap;
+  display: flex;
+}
+
 @media (max-width: 1199px) {
   .AssetCard .LandBubble {
     align-self: center;
