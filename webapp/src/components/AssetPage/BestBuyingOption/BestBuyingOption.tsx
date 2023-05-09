@@ -22,7 +22,6 @@ import infoIcon from '../../../images/infoIcon.png'
 import clock from '../../../images/clock.png'
 import noListings from '../../../images/noListings.png'
 import { ManaToFiat } from '../../ManaToFiat'
-import { LinkedProfile } from '../../LinkedProfile'
 import { fomrmatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
@@ -109,7 +108,13 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   }
 
   return (
-    <div className={styles.BestBuyingOption}>
+    <div
+      className={
+        buyOption === BuyOptions.MINT || buyOption === BuyOptions.BUY_LISTING
+          ? `${styles.BestBuyingOption} ${styles.AlignEnd}`
+          : styles.BestBuyingOption
+      }
+    >
       {isLoading ? (
         <div className={styles.emptyContainer}>
           <Loader active data-testid="loader" />
@@ -192,7 +197,9 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
       ) : buyOption === BuyOptions.BUY_LISTING && asset && listing ? (
         <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
           <span className={styles.cardTitle}>
-            {t('best_buying_option.buy_listing.title')}
+            {t('best_buying_option.buy_listing.title')}: &nbsp;
+            {t('best_buying_option.buy_listing.issue_number')}&nbsp; #
+            {listing.order.issuedId}
           </span>
           <div className={styles.informationContainer}>
             <div className={styles.columnListing}>
@@ -200,66 +207,58 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                 {t('best_buying_option.minting.price').toUpperCase()}
               </span>
               <div className={`${styles.containerRow} ${styles.centerItems}`}>
-                <div className={styles.listingMana}>
+                <div className={styles.informationBold}>
                   <Mana
                     withTooltip
-                    size="small"
-                    network={listing.order.network}
-                    className={styles.listingMana}
+                    size="large"
+                    network={asset.network}
+                    className={styles.informationBold}
                   >
                     {fomrmatWeiToAssetCard(listing.order.price)}
                   </Mana>
                 </div>
-                <div className={styles.informationListingText}>
-                  {'('}
-                  <ManaToFiat mana={listing.order.price} />
-                  {')'}
-                </div>
-              </div>
-            </div>
-            {mostExpensiveBid && (
-              <div className={styles.columnListing}>
-                <span className={styles.informationTitle}>
-                  {t(
-                    'best_buying_option.buy_listing.highest_offer'
-                  ).toUpperCase()}
-                </span>
-                <div className={`${styles.containerRow} ${styles.centerItems}`}>
-                  <div className={styles.listingMana}>
-                    <Mana
-                      withTooltip
-                      size="small"
-                      network={listing.order.network}
-                      className={styles.listingMana}
-                    >
-                      {fomrmatWeiToAssetCard(mostExpensiveBid.price)}
-                    </Mana>
-                  </div>
-
-                  <div className={styles.informationListingText}>
+                {+listing.order.price > 0 && (
+                  <div className={styles.informationText}>
                     {'('}
-                    <ManaToFiat mana={mostExpensiveBid.price} />
+                    <ManaToFiat mana={listing.order.price} />
                     {')'}
                   </div>
-                </div>
+                )}
               </div>
-            )}
-            <div className={styles.columnListing}>
-              <span className={styles.informationTitle}>
-                {t('best_buying_option.buy_listing.issue_number').toUpperCase()}
-              </span>
-              <span className={styles.informationListingText}>
-                #{listing.order.issuedId}
-              </span>
             </div>
+
             <div className={styles.columnListing}>
               <span className={styles.informationTitle}>
-                {t('best_buying_option.buy_listing.owner').toUpperCase()}
+                {t(
+                  'best_buying_option.buy_listing.highest_offer'
+                ).toUpperCase()}
               </span>
-              <LinkedProfile
-                className={styles.linkedProfileRow}
-                address={listing.order.owner}
-              />
+              <div className={`${styles.containerRow} ${styles.centerItems}`}>
+                {mostExpensiveBid ? (
+                  <>
+                    <div className={styles.listingMana}>
+                      <Mana
+                        withTooltip
+                        size="small"
+                        network={listing.order.network}
+                        className={styles.listingMana}
+                      >
+                        {fomrmatWeiToAssetCard(mostExpensiveBid.price)}
+                      </Mana>
+                    </div>
+
+                    <div className={styles.informationListingText}>
+                      {'('}
+                      <ManaToFiat mana={mostExpensiveBid.price} />
+                      {')'}
+                    </div>
+                  </>
+                ) : (
+                  <span className={styles.noOffer}>
+                    {t('best_buying_option.buy_listing.no_offer')}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
           <BuyNFTButtons

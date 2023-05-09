@@ -110,7 +110,13 @@ const ItemDetail = ({ item }: Props) => {
           </div>
 
           <Description text={description} />
-          <div className={styles.itemDetailBottomContainer}>
+          <div
+            className={
+              item.available > 0 && item.isOnSale
+                ? `${styles.itemDetailBottomContainer} ${styles.spaceInMint}`
+                : styles.itemDetailBottomContainer
+            }
+          >
             <div className={styles.basicRow}>
               <Owner asset={item} />
               <Collection asset={item} />

@@ -181,7 +181,7 @@ const AssetCard = (props: Props) => {
           price: price ?? null,
           extraInformation:
             asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
-              <span>
+              <span className={'wrapBigText'}>
                 {displayExtraInfomationToMint
                   ? t('asset_card.also_minting')
                   : t('asset_card.listings', { count: asset.listings })}
@@ -207,8 +207,10 @@ const AssetCard = (props: Props) => {
   }, [asset, sortBy])
 
   const renderCatalogItemInformation = useCallback(() => {
-    const isAvailableForMint = !isNFT(asset) && asset.isOnSale && asset.available > 0
-    const notForSale = !isAvailableForMint && !isNFT(asset) && !asset.minListingPrice
+    const isAvailableForMint =
+      !isNFT(asset) && asset.isOnSale && asset.available > 0
+    const notForSale =
+      !isAvailableForMint && !isNFT(asset) && !asset.minListingPrice
 
     return catalogItemInformation ? (
       <div className="CatalogItemInformation">

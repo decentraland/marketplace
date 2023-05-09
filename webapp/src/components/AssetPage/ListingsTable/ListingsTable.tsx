@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ListingStatus, Network } from '@dcl/schemas'
 import { OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { nftAPI, orderAPI } from '../../../modules/vendor/decentraland'
+import { orderAPI } from '../../../modules/vendor/decentraland'
 import noListings from '../../../images/noListings.png'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
@@ -17,9 +17,9 @@ const ListingsTable = (props: Props) => {
   const { asset, sortBy = OrderSortBy.CHEAPEST } = props
 
   const [orders, setOrders] = useState<DataTableType[]>([])
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState<number | null>(null)
   const [page, setPage] = useState(INITIAL_PAGE)
-  const [totalPages, setTotalPages] = useState<number>(0)
+  const [totalPages, setTotalPages] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the first ROWS_PER_PAGE
@@ -40,27 +40,12 @@ const ListingsTable = (props: Props) => {
         params.nftName = asset.name
       }
 
-      asset.itemId &&
-        nftAPI
-          .getOwners({
-            contractAddress: asset.contractAddress,
-            itemId: asset.itemId,
-            first: 1,
-            skip: 0
-          })
-          .then(response => {
-            setTotal(response.total)
-          })
-          .finally(() => setIsLoading(false))
-          .catch(error => {
-            console.error(error)
-          })
-
       orderAPI
         .fetchOrders(params, sortBy)
         .then(response => {
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
           setOrders(formatDataToTable(response.data))
+          setTotal(response.total)
         })
         .finally(() => setIsLoading(false))
         .catch(error => {

@@ -10,13 +10,15 @@
 .assetTopbar :global(.dcl.field.full) :global(.ui.input).searchField input {
   background: var(--secondary);
   font-size: 17px;
+  border-radius: 10px;
 }
 
 .assetTopbar
   :global(.dcl.field.full)
   :global(.ui.input).searchField
   input:not(:focus) {
-  border: 2px solid transparent;
+  border: 2px solid #979797;
+  border-radius: 10px;
 }
 
 .assetTopbar :global(.dcl.field.full) {
@@ -33,6 +35,12 @@
   align-items: center;
   font-size: 13px;
   min-height: 26px;
+}
+
+.assetTopbar :global(.dcl.field .ui.input .icon) {
+  color: white;
+  left: 8px;
+  opacity: 1;
 }
 
 .assetTopbar :global(.dcl.field .message) {
@@ -68,7 +76,7 @@
 }
 
 .countText {
-  color: #736e7d;
+  color: white;
   margin-bottom: 0;
   margin-right: 10px;
   font-size: 17px;
@@ -85,9 +93,12 @@
   line-height: 13px;
   text-transform: uppercase;
   cursor: pointer;
-  color: var(--primary);
+  color: white;
   background: transparent;
   border: none;
+  align-items: center;
+  display: flex;
+  gap: 6px;
 }
 
 .rightOptionsContainer :global(.ui.dropdown) {
@@ -158,6 +169,13 @@
   min-height: 32px;
 }
 
+.selectedFiltersContainer {
+  flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 @media (max-width: 990px) {
   .countText {
     max-width: 160px;
@@ -173,10 +191,8 @@
 
   .selectedFiltersContainer {
     display: flex;
-    align-items: baseline;
     padding: 16px 0;
     margin-bottom: 6px;
-    flex-wrap: wrap;
   }
 
   .clearFilters {
