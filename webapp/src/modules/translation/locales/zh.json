@@ -516,6 +516,10 @@
       "not_enough_mana": "你没有足够的 MANA",
       "select_period": "選擇期間"
     },
+    "available_for_mint_popup": {
+      "available_for_mint": "可用於鑄幣",
+      "buy_directly": "直接從創作者那裡購買"
+    },
     "description": "描述",
     "no_description": "沒有說明",
     "read_more": "閱讀更多",

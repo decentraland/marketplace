@@ -519,6 +519,10 @@
       "not_enough_mana": "You don't have enough MANA",
       "select_period": "Select Period"
     },
+    "available_for_mint_popup": {
+      "available_for_mint": "Currently available for minting",
+      "buy_directly": "Buy directly from the creator"
+    },
     "description": "Description",
     "no_description": "No description",
     "read_more": "Read more",
