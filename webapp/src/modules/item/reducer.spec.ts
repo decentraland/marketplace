@@ -180,7 +180,7 @@ describe('when reducing the successful action of fetching items', () => {
         loading: loadingReducer([], requestAction)
       }
     })
-    it('should return a state with the old items merged with the new items with the fetched item and the loading state cleared', () => {
+    it('should return a state with the old items merged with the new fetched items and the loading state cleared', () => {
       expect(itemReducer(initialState, successAction)).toEqual({
         ...INITIAL_STATE,
         loading: [],
@@ -239,7 +239,7 @@ describe('when reducing the successful action of fetching an item', () => {
   }
 
   describe('and the fetched item is not in the state', () => {
-    it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
+    it('should return a state with the loaded items, the fetched item and the loading state cleared', () => {
       expect(itemReducer(initialState, successAction)).toEqual({
         ...INITIAL_STATE,
         loading: [],
@@ -260,7 +260,7 @@ describe('when reducing the successful action of fetching an item', () => {
       }
       successAction = fetchItemSuccess({ ...item, ...newItemData })
     })
-    it('should return a state with the old items merged with the new items with the fetched item and the loading state cleared', () => {
+    it('should return a state containing the old items merged with the new fetched item and the loading state cleared', () => {
       expect(itemReducer(initialState, successAction)).toEqual({
         ...INITIAL_STATE,
         loading: [],
