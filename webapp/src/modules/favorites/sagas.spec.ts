@@ -13,6 +13,7 @@ import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import { SortDirection } from '../routing/types'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
   cancelPickItemAsFavorite,
   createListFailure,
@@ -351,10 +352,13 @@ describe('when handling the request for fetching favorited items', () => {
                 matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
                 Promise.resolve({ results: favoritedItemIds, total })
               ],
-              [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(error)]
+              [
+                matchers.call.fn(CatalogAPI.prototype.get),
+                Promise.reject(error)
+              ]
             ])
             .call.like({
-              fn: ItemAPI.prototype.get,
+              fn: CatalogAPI.prototype.get,
               args: [
                 {
                   ...options.filters,
@@ -387,7 +391,7 @@ describe('when handling the request for fetching favorited items', () => {
                 Promise.resolve({ results: favoritedItemIds, total })
               ],
               [
-                matchers.call.fn(ItemAPI.prototype.get),
+                matchers.call.fn(CatalogAPI.prototype.get),
                 Promise.resolve({ data: [item] })
               ]
             ])
@@ -396,7 +400,7 @@ describe('when handling the request for fetching favorited items', () => {
               args: [listId, options.filters]
             })
             .call.like({
-              fn: ItemAPI.prototype.get,
+              fn: CatalogAPI.prototype.get,
               args: [
                 {
                   ...options.filters,

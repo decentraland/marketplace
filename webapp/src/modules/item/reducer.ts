@@ -102,7 +102,7 @@ export function itemReducer(
           ...state.data,
           ...items.reduce((obj, item) => {
             if (!state.data[item.id] || !isEqual(state.data[item.id], item)) {
-              obj[item.id] = item
+              obj[item.id] = { ...state.data[item.id], ...item }
             }
             return obj
           }, {} as Record<string, Item>)
@@ -117,7 +117,7 @@ export function itemReducer(
         loading: loadingReducer(state.loading, action),
         data: {
           ...state.data,
-          [item.id]: { ...item }
+          [item.id]: { ...state.data[item.id], ...item }
         },
         error: null
       }

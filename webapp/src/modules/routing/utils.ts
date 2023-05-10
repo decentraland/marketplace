@@ -31,6 +31,19 @@ export const sellFilters = [
 export const COLLECTIONS_PER_PAGE = 6
 export const SALES_PER_PAGE = 6
 
+export const CATALOG_VIEWS: View[] = [
+  View.MARKET,
+  View.CURRENT_ACCOUNT,
+  View.ACCOUNT,
+  View.HOME_NEW_ITEMS,
+  View.LISTS,
+  View.HOME_TRENDING_ITEMS
+]
+
+export function isCatalogView(view: View | undefined) {
+  return view && CATALOG_VIEWS.includes(view)
+}
+
 export function buildBrowseURL(
   pathname: string,
   browseOptions: BrowseOptions
@@ -110,7 +123,6 @@ export function getClearedBrowseOptions(
   ) {
     clearedBrowseOptions.onlyOnSale = true
   }
-
   // reset the pages to the first one
   clearedBrowseOptions.page = 1
   return clearedBrowseOptions
