@@ -28,7 +28,7 @@ import { Section } from '../vendor/decentraland'
 import {
   browse,
   clearFilters,
-  fetchAssetsFromRoute as FetchAssetsFromRouteAction
+  fetchAssetsFromRoute as fetchAssetsFromRouteAction
 } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import { getCurrentBrowseOptions, getSection } from './selectors'
@@ -170,7 +170,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         [select(getPage), 1]
       ])
       .put(fetchTrendingItemsRequest())
-      .dispatch(FetchAssetsFromRouteAction(browseOptions))
+      .dispatch(fetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
   })
 
@@ -216,7 +216,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         [select(getPage), 1]
       ])
       .put(fetchItemsRequest(filters))
-      .dispatch(FetchAssetsFromRouteAction(browseOptions))
+      .dispatch(fetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
   })
 
@@ -245,7 +245,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         [select(getPage), 1]
       ])
       .put(fetchFavoritedItemsRequest(filters))
-      .dispatch(FetchAssetsFromRouteAction(browseOptions))
+      .dispatch(fetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
   })
 
@@ -294,7 +294,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
             [select(getPage), pageInState]
           ])
           .put(fetchItemsRequest(filters))
-          .dispatch(FetchAssetsFromRouteAction(browseOptions))
+          .dispatch(fetchAssetsFromRouteAction(browseOptions))
           .run({ silenceTimeout: true })
       })
     })
@@ -343,7 +343,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
               [select(getPage), undefined]
             ])
             .put(fetchItemsRequest(filters))
-            .dispatch(FetchAssetsFromRouteAction(browseOptions))
+            .dispatch(fetchAssetsFromRouteAction(browseOptions))
             .run({ silenceTimeout: true })
         })
       })
@@ -1090,7 +1090,7 @@ describe('when handling the location change action', () => {
           [select(getSection), Section.WEARABLES],
           [select(getPage), 1]
         ])
-        .put(FetchAssetsFromRouteAction(browseOptions))
+        .put(fetchAssetsFromRouteAction(browseOptions))
         .dispatch(locationChangeAction)
         .run({ silenceTimeout: true })
     })
@@ -1102,7 +1102,7 @@ describe('when handling the location change action', () => {
     it('should not dispatch the fetchAssetFromRoute action', () => {
       return expectSaga(routingSaga)
         .provide([[select(getCurrentBrowseOptions), browseOptions]])
-        .not.put(FetchAssetsFromRouteAction(browseOptions))
+        .not.put(fetchAssetsFromRouteAction(browseOptions))
         .dispatch(locationChangeAction)
         .run({ silenceTimeout: true })
     })
