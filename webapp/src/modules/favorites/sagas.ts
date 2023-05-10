@@ -51,11 +51,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     retryDelay: retryParams.delay,
     identity: getIdentity
   }
-  const favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
-    retries: retryParams.attempts,
-    retryDelay: retryParams.delay,
-    identity: getIdentity
-  })
+  const favoritesAPI = new FavoritesAPI(
+    MARKETPLACE_FAVORITES_SERVER_URL,
+    API_OPTS
+  )
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield takeEvery(
@@ -164,19 +163,20 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         ])
       )
       const ids = results.map(({ itemId }) => itemId)
+      const optionsFilters = {
+        first: results.length,
+        ids
+      }
       const options: ItemBrowseOptions = {
         ...action.payload.options,
-        filters: {
-          first: results.length,
-          ids
-        }
+        filters: optionsFilters
       }
 
       if (results.length > 0) {
-        const result: { data: Item[] } = yield call([catalogAPI, 'get'], {
-          first: results.length,
-          ids
-        })
+        const result: { data: Item[] } = yield call(
+          [catalogAPI, 'get'],
+          optionsFilters
+        )
         items = result.data
       }
 
