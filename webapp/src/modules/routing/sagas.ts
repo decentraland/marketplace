@@ -18,6 +18,7 @@ import {
 } from 'connected-react-router'
 import {
   CatalogFilters,
+  CatalogSortBy,
   NFTCategory,
   RentalStatus,
   Sale,
@@ -86,6 +87,7 @@ import { fetchCollectionsRequest } from '../collection/actions'
 import {
   COLLECTIONS_PER_PAGE,
   getClearedBrowseOptions,
+  isCatalogView,
   rentalFilters,
   SALES_PER_PAGE,
   sellFilters
@@ -314,7 +316,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           : {})
       }
       if (isItems) {
-        const isCatalog = view === View.MARKET || view === View.LISTS
         yield put(
           fetchItemsRequest({
             view,
@@ -322,8 +323,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
             filters: {
               first,
               skip,
-              sortBy: isCatalog
-                ? getCatalogSortBy(sortBy)
+              sortBy: isCatalogView(view)
+                ? view === View.HOME_NEW_ITEMS
+                  ? CatalogSortBy.NEWEST
+                  : getCatalogSortBy(sortBy)
                 : getItemSortBy(sortBy),
               isOnSale: onlyOnSale,
               creator: address ? [address] : creators,
