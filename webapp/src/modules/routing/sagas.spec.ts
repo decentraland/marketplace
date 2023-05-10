@@ -6,7 +6,13 @@ import {
   NFTCategory,
   Rarity
 } from '@dcl/schemas'
-import { getLocation, LOCATION_CHANGE, LocationChangeAction, push, RouterLocation } from 'connected-react-router'
+import {
+  getLocation,
+  LOCATION_CHANGE,
+  LocationChangeAction,
+  push,
+  RouterLocation
+} from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { AssetType } from '../asset/types'
