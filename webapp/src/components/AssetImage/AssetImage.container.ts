@@ -12,6 +12,7 @@ import {
   setIsTryingOn,
   setWearablePreviewController
 } from '../../modules/ui/preview/actions'
+import { getItem } from '../../modules/item/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -31,7 +32,8 @@ const mapState = (state: RootState): MapStateProps => {
     avatar,
     wearableController: getWearablePreviewController(state),
     isTryingOn: getIsTryingOn(state),
-    isPlayingEmote: getIsPlayingEmote(state)
+    isPlayingEmote: getIsPlayingEmote(state),
+    item: getItem(state)
   }
 }
 

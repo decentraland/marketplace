@@ -192,11 +192,6 @@ describe('when reducing the successful action of fetching items', () => {
 
 describe.each([
   [
-    FETCH_ITEM_SUCCESS,
-    fetchItemRequest(item.contractAddress, item.itemId),
-    fetchItemSuccess(item)
-  ],
-  [
     FETCH_TRENDING_ITEMS_SUCCESS,
     fetchTrendingItemsRequest(trendingItemsBatchSize),
     fetchTrendingItemsSuccess([item])
@@ -228,6 +223,26 @@ describe.each([
   })
 })
 
+describe('when reducing the fetchItem action', () => {
+  const initialState = {
+    ...INITIAL_STATE,
+    data: { anotherId: anotherItem },
+    loading: loadingReducer(
+      [],
+      fetchItemRequest(item.contractAddress, item.itemId)
+    )
+  }
+
+  it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
+    expect(itemReducer(initialState, fetchItemSuccess(item))).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: { ...initialState.data, [item.id]: item },
+      item: item
+    })
+  })
+})
+
 describe('when reducing the successful action of fetching an item', () => {
   const requestAction = fetchItemRequest(item.contractAddress, item.itemId)
   let successAction = fetchItemSuccess(item)
@@ -243,7 +258,8 @@ describe('when reducing the successful action of fetching an item', () => {
       expect(itemReducer(initialState, successAction)).toEqual({
         ...INITIAL_STATE,
         loading: [],
-        data: { ...initialState.data, [item.id]: item }
+        data: { ...initialState.data, [item.id]: item },
+        item: item
       })
     })
   })
@@ -264,7 +280,8 @@ describe('when reducing the successful action of fetching an item', () => {
       expect(itemReducer(initialState, successAction)).toEqual({
         ...INITIAL_STATE,
         loading: [],
-        data: { ...initialState.data, [item.id]: { ...item, ...newItemData } }
+        data: { ...initialState.data, [item.id]: { ...item, ...newItemData } },
+        item: { ...item, ...newItemData }
       })
     })
   })

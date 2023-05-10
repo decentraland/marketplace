@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { NFTCategory } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { Props } from './AssetProvider.types'
 
@@ -70,6 +71,21 @@ const AssetProvider = (props: Props) => {
     isLoading,
     isLandOrEstate
   ])
+
+  useEffect(() => {
+    if (
+      contractAddress &&
+      tokenId &&
+      asset !== null &&
+      !isLoading &&
+      asset.itemId &&
+      type === AssetType.NFT &&
+      (asset.category === NFTCategory.WEARABLE ||
+        asset.category === NFTCategory.EMOTE)
+    ) {
+      onFetchItem(contractAddress, asset.itemId)
+    }
+  }, [asset, contractAddress, tokenId, type, onFetchItem, isLoading])
 
   return (
     <>
