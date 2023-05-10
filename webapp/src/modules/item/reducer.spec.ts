@@ -164,10 +164,11 @@ describe('when reducing the successful action of fetching items', () => {
   })
 
   describe('and the fetched items are in the state', () => {
-    const newItemData = {
-      minPrice: '1234'
-    }
+    let newItemData: Item
     beforeEach(() => {
+      newItemData = {
+        minPrice: '1234'
+      } as Item
       successAction = fetchItemsSuccess(
         [{ ...item, ...newItemData }],
         1,
@@ -249,10 +250,11 @@ describe('when reducing the successful action of fetching an item', () => {
   })
 
   describe('and the item is already in the state', () => {
-    const newItemData = {
-      minPrice: '1234'
-    }
+    let newItemData: Item
     beforeEach(() => {
+      newItemData = {
+        minPrice: '1234'
+      } as Item
       initialState = {
         ...INITIAL_STATE,
         data: { anotherId: anotherItem, [item.id]: item },
