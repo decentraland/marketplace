@@ -325,13 +325,14 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
         />
       )}
-      {shouldRenderFilter(AssetFilter.Network) && (
-        <NetworkFilter
-          onChange={handleNetworkChange}
-          network={network}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
-        />
-      )}
+      {shouldRenderFilter(AssetFilter.Network) &&
+        status !== AssetStatusFilter.ONLY_MINTING && (
+          <NetworkFilter
+            onChange={handleNetworkChange}
+            network={network}
+            defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
+          />
+        )}
       {shouldRenderFilter(AssetFilter.BodyShape) && (
         <BodyShapeFilter
           onChange={handleBodyShapeChange}
