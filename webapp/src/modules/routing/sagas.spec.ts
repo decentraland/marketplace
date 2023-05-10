@@ -6,7 +6,7 @@ import {
   NFTCategory,
   Rarity
 } from '@dcl/schemas'
-import { getLocation, push } from 'connected-react-router'
+import { getLocation, LOCATION_CHANGE, LocationChangeAction, push, RouterLocation } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { AssetType } from '../asset/types'
@@ -25,7 +25,7 @@ import {
   fetchAssetsFromRoute as FetchAssetsFromRouteAction
 } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
-import { getCurrentBrowseOptions } from './selectors'
+import { getCurrentBrowseOptions, getSection } from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
 
@@ -1045,6 +1045,59 @@ describe('when handling the browse action', () => {
         ])
         .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
         .dispatch(browse(newBrowseOptions))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the location change action', () => {
+  let browseOptions: BrowseOptions,
+    location: RouterLocation<unknown>,
+    locationChangeAction: LocationChangeAction<unknown>
+  beforeEach(() => {
+    browseOptions = {
+      view: View.MARKET,
+      address: '0x...'
+    }
+    location = {
+      pathname: 'aPathName',
+      search: 'aSearch',
+      hash: 'aHash',
+      state: {},
+      key: 'aKey',
+      query: {}
+    }
+    locationChangeAction = {
+      type: LOCATION_CHANGE,
+      payload: {
+        isFirstRendering: false,
+        location,
+        action: 'POP'
+      }
+    }
+  })
+  describe('and the location action is a POP, meaning going back', () => {
+    it('should dispatch the fetchAssetFromRoute action', () => {
+      return expectSaga(routingSaga)
+        .provide([
+          [select(getCurrentBrowseOptions), browseOptions],
+          [select(getSection), Section.WEARABLES],
+          [select(getPage), 1]
+        ])
+        .put(FetchAssetsFromRouteAction(browseOptions))
+        .dispatch(locationChangeAction)
+        .run({ silenceTimeout: true })
+    })
+  })
+  describe('and the location action is not a POP', () => {
+    beforeEach(() => {
+      locationChangeAction.payload.action = 'PUSH'
+    })
+    it('should not dispatch the fetchAssetFromRoute action', () => {
+      return expectSaga(routingSaga)
+        .provide([[select(getCurrentBrowseOptions), browseOptions]])
+        .not.put(FetchAssetsFromRouteAction(browseOptions))
+        .dispatch(locationChangeAction)
         .run({ silenceTimeout: true })
     })
   })
