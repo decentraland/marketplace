@@ -13,7 +13,6 @@
 .Slideshow .assets {
   display: flex;
   flex-wrap: nowrap;
-  overflow: auto;
   position: relative;
   min-height: 336px;
   -ms-overflow-style: none; /* hide scrollbar IE and Edge */

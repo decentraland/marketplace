@@ -16,9 +16,10 @@ import { config } from '../../config'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
 import { buyAssetWithCard } from '../asset/utils'
+import { isCatalogView } from '../routing/utils'
 import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import { retryParams } from '../vendor/decentraland/utils'
-import { catalogAPI } from '../vendor/decentraland/catalog/api'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -48,16 +49,17 @@ import {
 } from './actions'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
-import { View } from '../ui/types'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
 export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
-  const itemAPI = new ItemAPI(NFT_SERVER_URL, {
+  const API_OPTS = {
     retries: retryParams.attempts,
     retryDelay: retryParams.delay,
     identity: getIdentity
-  })
+  }
+  const itemAPI = new ItemAPI(NFT_SERVER_URL, API_OPTS)
+  const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
@@ -79,7 +81,14 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         [itemAPI, 'getTrendings'],
         size
       )
-      yield put(fetchTrendingItemsSuccess(data))
+      const ids = data.map(item => item.id)
+      const { data: itemData }: { data: Item[]; total: number } = yield call(
+        [catalogAPI, 'get'],
+        {
+          ids
+        }
+      )
+      yield put(fetchTrendingItemsSuccess(itemData))
     } catch (error) {
       yield put(
         fetchTrendingItemsFailure(
@@ -96,8 +105,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     yield call(waitForWalletConnectionIfConnecting)
 
     try {
-      const api =
-        view === View.MARKET || view === View.LISTS ? catalogAPI : itemAPI
+      const api = isCatalogView(view) ? catalogAPI : itemAPI
       const { data, total }: { data: Item[]; total: number } = yield call(
         [api, 'get'],
         filters

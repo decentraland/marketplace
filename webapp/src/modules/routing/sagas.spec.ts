@@ -188,7 +188,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       filters: {
         first: 24,
         skip: 0,
-        sortBy: ItemSortBy.RECENTLY_REVIEWED,
+        sortBy: ItemSortBy.CHEAPEST,
         creator: [address],
         category: NFTCategory.EMOTE,
         isWearableHead: false,
@@ -1063,7 +1063,8 @@ describe('when handling the browse action', () => {
         sortBy: undefined,
         isMap: undefined,
         isFullscreen: undefined,
-        viewAsGuest: undefined
+        viewAsGuest: undefined,
+        status: AssetStatusFilter.ON_SALE
       }
     })
 

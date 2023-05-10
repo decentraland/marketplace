@@ -15,6 +15,7 @@ import { NFTSortBy } from '../nft/types'
 import { isAccountView, isLandSection } from '../ui/utils'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
+import { isCatalogView } from './utils'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -33,7 +34,7 @@ export function getDefaultOptionsByView(
         ? SortBy.NEWEST
         : SortBy.RECENTLY_LISTED
   }
-  if (section && view === View.MARKET) {
+  if (section && isCatalogView(view)) {
     const currentCategoryBySection = getCategoryFromSection(section)
     if (
       currentCategoryBySection &&

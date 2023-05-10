@@ -145,24 +145,48 @@ failureActions.forEach(action => {
 
 describe('when reducing the successful action of fetching items', () => {
   const requestAction = fetchItemsRequest(itemBrowseOptions)
-  const successAction = fetchItemsSuccess(
-    [item],
-    1,
-    itemBrowseOptions,
-    223423423
-  )
+  let successAction = fetchItemsSuccess([item], 1, itemBrowseOptions, 223423423)
 
-  const initialState = {
+  let initialState = {
     ...INITIAL_STATE,
     data: { anotherId: anotherItem },
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the the loaded items and the loading state cleared', () => {
-    expect(itemReducer(initialState, successAction)).toEqual({
-      ...INITIAL_STATE,
-      loading: [],
-      data: { ...initialState.data, [item.id]: item }
+  describe('and the fetched items are not in the state', () => {
+    it('should return a state with the the loaded items and the loading state cleared', () => {
+      expect(itemReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: { ...initialState.data, [item.id]: item }
+      })
+    })
+  })
+
+  describe('and the fetched items are in the state', () => {
+    let newItemData: Item
+    beforeEach(() => {
+      newItemData = {
+        minPrice: '1234'
+      } as Item
+      successAction = fetchItemsSuccess(
+        [{ ...item, ...newItemData }],
+        1,
+        itemBrowseOptions,
+        223423423
+      )
+      initialState = {
+        ...INITIAL_STATE,
+        data: { anotherId: anotherItem, [item.id]: item },
+        loading: loadingReducer([], requestAction)
+      }
+    })
+    it('should return a state with the old items merged with the new fetched items and the loading state cleared', () => {
+      expect(itemReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: { ...initialState.data, [item.id]: { ...item, ...newItemData } }
+      })
     })
   })
 })
@@ -207,19 +231,43 @@ describe.each([
 
 describe('when reducing the successful action of fetching an item', () => {
   const requestAction = fetchItemRequest(item.contractAddress, item.itemId)
-  const successAction = fetchItemSuccess(item)
+  let successAction = fetchItemSuccess(item)
 
-  const initialState = {
+  let initialState = {
     ...INITIAL_STATE,
     data: { anotherId: anotherItem },
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
-    expect(itemReducer(initialState, successAction)).toEqual({
-      ...INITIAL_STATE,
-      loading: [],
-      data: { ...initialState.data, [item.id]: item }
+  describe('and the fetched item is not in the state', () => {
+    it('should return a state with the loaded items, the fetched item and the loading state cleared', () => {
+      expect(itemReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: { ...initialState.data, [item.id]: item }
+      })
+    })
+  })
+
+  describe('and the item is already in the state', () => {
+    let newItemData: Item
+    beforeEach(() => {
+      newItemData = {
+        minPrice: '1234'
+      } as Item
+      initialState = {
+        ...INITIAL_STATE,
+        data: { anotherId: anotherItem, [item.id]: item },
+        loading: loadingReducer([], requestAction)
+      }
+      successAction = fetchItemSuccess({ ...item, ...newItemData })
+    })
+    it('should return a state containing the old items merged with the new fetched item and the loading state cleared', () => {
+      expect(itemReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: { ...initialState.data, [item.id]: { ...item, ...newItemData } }
+      })
     })
   })
 })
