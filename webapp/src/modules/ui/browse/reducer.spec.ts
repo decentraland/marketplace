@@ -3,7 +3,8 @@ import { AssetType } from '../../asset/types'
 import {
   fetchFavoritedItemsSuccess,
   unpickItemAsFavoriteSuccess,
-  undoUnpickingItemAsFavoriteSuccess
+  undoUnpickingItemAsFavoriteSuccess,
+  fetchListsSuccess
 } from '../../favorites/actions'
 import {
   fetchItemsRequest,
@@ -19,6 +20,7 @@ import { Section } from '../../vendor/decentraland'
 import { setView } from '../actions'
 import { View } from '../types'
 import { BrowseUIState, INITIAL_STATE, browseReducer } from './reducer'
+import { List } from '../../favorites/types'
 
 const assetIds = ['0x0-assetId1', '0x0-assetId2', '0x0-assetId3']
 
@@ -759,7 +761,76 @@ describe('when reducing the action of the success of the undo of the unpicking o
 
 describe('when reducing the action of the success of getting the lists', () => {
   let initialState: BrowseUIState
+  let browseOptions: ItemBrowseOptions
+  let lists: List[]
+  let total: number
+
   beforeEach(() => {
     initialState = { ...INITIAL_STATE }
+  })
+
+  describe('and its loading more results', () => {
+    beforeEach(() => {
+      total = 2
+      lists = [
+        {
+          id: 'anotherListId',
+          name: 'aName',
+          description: 'aDescription',
+          ownerAddress: 'anAddress',
+          createdAt: Date.now()
+        }
+      ]
+      initialState = {
+        ...initialState,
+        listIds: ['aListId'],
+        page: 1,
+        count: 1
+      }
+      browseOptions = { page: 2 }
+    })
+
+    it('should return a state with its count set and the list ids of the new lists appended to the existent ones', () => {
+      expect(
+        browseReducer(
+          initialState,
+          fetchListsSuccess(lists, total, browseOptions)
+        )
+      ).toEqual({
+        ...initialState,
+        listIds: ['aListId', 'anotherListId'],
+        count: 2
+      })
+    })
+  })
+
+  describe('and its loading a fresh batch of results', () => {
+    beforeEach(() => {
+      total = 1
+      lists = [
+        {
+          id: 'anotherListId',
+          name: 'aName',
+          description: 'aDescription',
+          ownerAddress: 'anAddress',
+          createdAt: Date.now()
+        }
+      ]
+      initialState = { ...initialState, listIds: [], page: undefined, count: 0 }
+      browseOptions = { page: 1 }
+    })
+
+    it('should return a state with its count set and the list ids of the new lists', () => {
+      expect(
+        browseReducer(
+          initialState,
+          fetchListsSuccess(lists, total, browseOptions)
+        )
+      ).toEqual({
+        ...initialState,
+        listIds: ['anotherListId'],
+        count: 1
+      })
+    })
   })
 })

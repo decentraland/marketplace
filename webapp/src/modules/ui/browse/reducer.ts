@@ -229,7 +229,11 @@ export function browseReducer(
     }
 
     case FETCH_LISTS_SUCCESS: {
-      const { lists, total } = action.payload
+      const {
+        lists,
+        total,
+        options: { page }
+      } = action.payload
       const newListIds = lists.map(list => list.id)
       const listIds = isLoadingMoreResults(state, page)
         ? [...state.listIds, ...newListIds]
