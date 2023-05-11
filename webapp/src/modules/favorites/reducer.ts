@@ -225,7 +225,8 @@ export function favoritesReducer(
             ...state.data.lists,
             ...Object.fromEntries(lists.map(list => [list.id, list]))
           }
-        }
+        },
+        loading: loadingReducer(state.loading, action)
       }
     }
 

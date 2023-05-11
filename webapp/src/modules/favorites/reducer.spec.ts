@@ -2,10 +2,13 @@ import { Item, Network } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
+import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   CancelPickItemAsFavoriteAction,
   FetchFavoritedItemsRequestAction,
   FetchFavoritedItemsSuccessAction,
+  FetchListsRequestAction,
+  FetchListsSuccessAction,
   PickItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteSuccessAction,
@@ -13,6 +16,9 @@ import {
   fetchFavoritedItemsFailure,
   fetchFavoritedItemsRequest,
   fetchFavoritedItemsSuccess,
+  fetchListsFailure,
+  fetchListsRequest,
+  fetchListsSuccess,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -24,13 +30,7 @@ import {
   unpickItemAsFavoriteSuccess
 } from './actions'
 import { FavoritesState, INITIAL_STATE, favoritesReducer } from './reducer'
-import {
-  FetchItemRequestAction,
-  FetchItemSuccessAction,
-  fetchItemRequest,
-  fetchItemSuccess,
-  fetchItemsSuccess
-} from '../item/actions'
+import { List } from './types'
 
 let createdAt: Record<string, number>
 let initialState: FavoritesState
@@ -58,7 +58,8 @@ const requestActions = [
   pickItemAsFavoriteRequest(item),
   unpickItemAsFavoriteRequest(item),
   undoUnpickingItemAsFavoriteRequest(item),
-  fetchFavoritedItemsRequest(itemBrowseOptions)
+  fetchFavoritedItemsRequest(itemBrowseOptions),
+  fetchListsRequest(itemBrowseOptions)
 ]
 
 beforeEach(() => {
@@ -105,6 +106,10 @@ const failureActions = [
   {
     request: fetchFavoritedItemsRequest(itemBrowseOptions),
     failure: fetchFavoritedItemsFailure(error)
+  },
+  {
+    request: fetchListsRequest(itemBrowseOptions),
+    failure: fetchListsFailure(error)
   }
 ]
 
@@ -151,7 +156,7 @@ describe.each(pickAndUndoSuccessActions)(
       initialState = {
         ...INITIAL_STATE,
         data: {
-          ...initialState.data,
+          lists: {},
           items: {
             [item.id]: {
               pickedByUser: false,
@@ -402,6 +407,57 @@ describe('when reducing the successful action of fetching the favorited items', 
             count: 2,
             createdAt: createdAt[item.id]
           }
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of fetching lists', () => {
+  let requestAction: FetchListsRequestAction
+  let successAction: FetchListsSuccessAction
+  let newList: List
+  let total: number
+
+  beforeEach(() => {
+    newList = {
+      id: 'aListId',
+      name: 'aName',
+      description: 'aDescription',
+      ownerAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    total = 2
+    requestAction = fetchListsRequest(itemBrowseOptions)
+    successAction = fetchListsSuccess([newList], total, {})
+
+    initialState = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        lists: {
+          anotherList: {
+            id: 'anId',
+            name: 'aName',
+            description: 'aDescription',
+            ownerAddress: 'anAddress',
+            createdAt: Date.now()
+          }
+        }
+      },
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return an estate with ', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          ...initialState.data.lists,
+          [newList.id]: newList
         }
       }
     })
