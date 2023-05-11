@@ -513,6 +513,10 @@
       "not_enough_mana": "No tienes suficiente MANA",
       "select_period": "Seleccionar Período"
     },
+    "available_for_mint_popup": {
+      "available_for_mint": "Disponible para mintear",
+      "buy_directly": "Compra directo al creador"
+    },
     "description": "Descripción",
     "no_description": "Sin descripción",
     "read_more": "Leer más",
