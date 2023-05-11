@@ -192,15 +192,6 @@
   align-items: center;
 }
 
-.AssetCard .ui.cards a.card:hover,
-.ui.link.card:hover,
-.ui.link.cards .card:hover,
-a.ui.card:hover,
-.ui.cards > .ui.card.link:hover,
-.ui.card.link:hover {
-  transform: none;
-}
-
 @media (min-width: 1199px) {
   .AssetCard:hover .extraInformation {
     visibility: visible;
@@ -281,6 +272,15 @@ a.ui.card:hover,
 }
 
 @media (max-width: 768px) {
+  .AssetCard .ui.cards a.card:hover,
+  .ui.link.card:hover,
+  .ui.link.cards .card:hover,
+  a.ui.card:hover,
+  .ui.cards > .ui.card.link:hover,
+  .ui.card.link:hover {
+    transform: none;
+  }
+
   .AssetCard.ui.card > .content.catalog > .header:not(.ui),
   .AssetCard.ui.cards > .card > .content.catalog > .header:not(.ui) .header,
   .AssetCard .CatalogItemInformation {
