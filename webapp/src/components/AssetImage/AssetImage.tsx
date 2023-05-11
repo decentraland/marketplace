@@ -14,8 +14,7 @@ import {
   Popup,
   WearablePreview
 } from 'decentraland-ui'
-
-import { getAssetImage, getAssetName } from '../../modules/asset/utils'
+import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
 import { Atlas } from '../Atlas'
@@ -24,6 +23,7 @@ import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import { JumpIn } from '../AssetPage/JumpIn'
 import { ControlOptionAction, Props } from './AssetImage.types'
+import AvailableForMintPopup from './AvailableForMintPopup'
 import './AssetImage.css'
 
 // 1x1 transparent pixel
@@ -74,7 +74,8 @@ const AssetImage = (props: Props) => {
     onSetIsTryingOn,
     onSetWearablePreviewController,
     children,
-    hasBadges
+    hasBadges,
+    item
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -143,6 +144,13 @@ const AssetImage = (props: Props) => {
   ])
 
   const [isTracked, setIsTracked] = useState(false)
+
+  const isAvailableForMint =
+    isNFT(asset) &&
+    (item?.category === NFTCategory.WEARABLE ||
+      item?.category === NFTCategory.EMOTE) &&
+    item.available > 0 &&
+    item.isOnSale
 
   // pick a random emote
   const previewEmote = useMemo(() => {
@@ -268,6 +276,16 @@ const AssetImage = (props: Props) => {
               onError={handleError}
               dev={config.is(Env.DEVELOPMENT)}
             />
+            {isAvailableForMint ? (
+              <AvailableForMintPopup
+                price={item.price}
+                stock={item.available}
+                rarity={item.rarity}
+                contractAddress={item.contractAddress}
+                itemId={item.itemId}
+                network={item.network}
+              />
+            ) : null}
             {isLoadingWearablePreview ? (
               <Center>
                 <Loader
