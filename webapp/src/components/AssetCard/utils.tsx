@@ -124,6 +124,13 @@ export function getCatalogCardInformation(
             ? getAlsoAvailableForMintingText(asset)
             : null
         }
+      } else {
+        const mintIsNotCheapestOption = BigNumber.from(asset.price).gt(
+          BigNumber.from(asset.minPrice)
+        )
+        if (mintIsNotCheapestOption) {
+          info.extraInformation = getAlsoAvailableForMintingText(asset)
+        }
       }
     }
     return info
