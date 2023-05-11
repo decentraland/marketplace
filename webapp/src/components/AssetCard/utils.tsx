@@ -167,17 +167,30 @@ export function getCatalogCardInformation(
         : asset.minPrice ?? ''
   } else {
     // both mint and listings available
+    info.actionIcon = mintingIcon
     const mintIsNotCheapestOption = BigNumber.from(asset.price).gt(
       BigNumber.from(asset.minPrice)
     )
     if (mintIsNotCheapestOption) {
-      info.action = hasRangeApplied
-        ? t('asset_card.available_listings_in_range')
-        : t('asset_card.cheapest_listing')
-      info.price = asset.minPrice ?? null
       if (hasRangeApplied) {
+        if (appliedFilters.minPrice) {
+          const isMintingLessThanMinPriceFilter = BigNumber.from(
+            asset.price
+          ).lt(ethers.utils.parseUnits(appliedFilters.minPrice))
+          info.action = isMintingLessThanMinPriceFilter
+            ? t('asset_card.available_listings_in_range')
+            : t('asset_card.available_for_mint')
+          info.price =
+            isMintingLessThanMinPriceFilter && asset.minListingPrice
+              ? asset.minListingPrice
+              : asset.price
+          info.extraInformation = isMintingLessThanMinPriceFilter
+            ? getAlsoAvailableForMintingText(asset)
+            : null
+        }
+
         const isMintingGreaterThanMaxPrice =
-          appliedFilters.maxPrice &&
+          !!appliedFilters.maxPrice &&
           BigNumber.from(asset.price).gt(
             ethers.utils.parseUnits(appliedFilters.maxPrice)
           )
@@ -188,7 +201,8 @@ export function getCatalogCardInformation(
           info.extraInformation = getAlsoAvailableForMintingText(asset)
         }
       } else {
-        info.extraInformation = getAlsoAvailableForMintingText(asset)
+        info.action = t('asset_card.available_for_mint')
+        info.extraInformation = getAssetListingsRangeInfoText(asset)
       }
     } else {
       // mint is the cheapest, show "available for mint" and the listings range
