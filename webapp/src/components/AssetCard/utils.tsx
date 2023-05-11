@@ -156,9 +156,13 @@ export function getCatalogCardInformation(
     info.action = t('asset_card.available_for_mint')
     info.actionIcon = mintingIcon
   } else if (hasOnlyListings) {
-    info.action = t('asset_card.available_listings_in_range')
+    info.action = hasRangeApplied
+      ? t('asset_card.available_listings_in_range')
+      : t('asset_card.cheapest_listing')
     info.price =
-      asset.listings && asset.listings > 1
+      asset.listings &&
+      asset.listings > 1 &&
+      asset.minListingPrice !== asset.maxListingPrice
         ? `${asset.minListingPrice} - ${asset.maxListingPrice}`
         : asset.minPrice ?? ''
   } else {
@@ -167,7 +171,9 @@ export function getCatalogCardInformation(
       BigNumber.from(asset.minPrice)
     )
     if (mintIsNotCheapestOption) {
-      info.action = t('asset_card.available_listings_in_range')
+      info.action = hasRangeApplied
+        ? t('asset_card.available_listings_in_range')
+        : t('asset_card.cheapest_listing')
       info.price = asset.minPrice ?? null
       if (hasRangeApplied) {
         const isMintingGreaterThanMaxPrice =
