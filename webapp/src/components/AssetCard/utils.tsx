@@ -141,13 +141,21 @@ export function getCatalogCardInformation(
       price: asset.price,
       extraInformation: getAssetListingsRangeInfoText(asset)
     }
-    // has a listing more expensive than the mint
-    if (
-      asset.maxListingPrice &&
-      BigNumber.from(asset.maxListingPrice).gt(BigNumber.from(asset.price))
-    ) {
-      info.price = asset.maxListingPrice
-    }
+
+    const isMintingGreaterThanMaxPrice =
+      !!appliedFilters.maxPrice &&
+      BigNumber.from(asset.price).gt(
+        ethers.utils.parseUnits(appliedFilters.maxPrice)
+      )
+
+    info.price = isMintingGreaterThanMaxPrice
+      ? asset.maxListingPrice ?? null
+      : asset.maxListingPrice
+      ? BigNumber.from(asset.maxListingPrice).gt(BigNumber.from(asset.price))
+        ? asset.maxListingPrice
+        : asset.price
+      : asset.price
+
     return info
   }
 
@@ -170,7 +178,9 @@ export function getCatalogCardInformation(
       asset.listings &&
       asset.listings > 1 &&
       asset.minListingPrice !== asset.maxListingPrice
-        ? `${asset.minListingPrice} - ${asset.maxListingPrice}`
+        ? hasRangeApplied
+          ? `${asset.minListingPrice} - ${asset.maxListingPrice}`
+          : asset.minListingPrice ?? ''
         : asset.minPrice ?? ''
   } else {
     // both mint and listings available
