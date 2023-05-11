@@ -209,7 +209,7 @@
   display: flex;
   flex-direction: column;
   z-index: 1;
-  background-color: var(--secondary);
+  background-color: #242129b2;
   border-radius: 10px;
   align-items: flex-start;
   padding: 29px 25px 20px;
@@ -220,6 +220,7 @@
   right: 24px;
   height: 100px;
   transition: height 0.3s !important;
+  overflow: hidden;
 }
 
 .AvailableForMintPopup .mintIcon {
@@ -245,6 +246,7 @@
 
 .AvailableForMintPopup .title {
   font-size: 18px;
+  font-weight: 500;
 }
 
 .AvailableForMintPopup .previewText {
@@ -276,7 +278,7 @@
 
 .AvailableForMintPopup .informationTitle {
   font-size: 14px;
-  color: var(--secondary-text);
+  color: #cfcdd4;
   font-weight: 600;
   display: flex;
   align-items: center;

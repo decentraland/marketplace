@@ -2,13 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
 import { Env } from '@dcl/ui-env'
-import {
-  BodyShape,
-  NFTCategory,
-  Network,
-  PreviewEmote,
-  Rarity
-} from '@dcl/schemas'
+import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
@@ -17,29 +11,20 @@ import {
   Center,
   Icon,
   Loader,
-  Mana,
   Popup,
   WearablePreview
 } from 'decentraland-ui'
 import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
-import { locations } from '../../modules/routing/locations'
 import * as events from '../../utils/events'
-import mintingIcon from '../../images/minting.png'
-import infoIcon from '../../images/infoIcon.png'
 import { Atlas } from '../Atlas'
 import ListedBadge from '../ListedBadge'
 import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import { JumpIn } from '../AssetPage/JumpIn'
-import { fomrmatWeiToAssetCard } from '../AssetCard/utils'
-import { ManaToFiat } from '../ManaToFiat'
-import {
-  AvailableForMintPopupType,
-  ControlOptionAction,
-  Props
-} from './AssetImage.types'
+import { ControlOptionAction, Props } from './AssetImage.types'
 import './AssetImage.css'
+import AvailableForMintPopup from './AvailableForMintPopup'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -72,82 +57,6 @@ const isColor = (maybeColor: Partial<Color>) =>
   typeof maybeColor.r === 'number' &&
   typeof maybeColor.g === 'number' &&
   typeof maybeColor.b === 'number'
-
-const AvailableForMintPopup = ({
-  price,
-  stock,
-  rarity,
-  contractAddress,
-  itemId,
-  network
-}: AvailableForMintPopupType) => (
-  <div className="AvailableForMintPopup">
-    <div className="popupPreview">
-      <img src={mintingIcon} alt="mint" className="mintIcon" />
-      <span className="previewText">
-        <span className="title">
-          {t('asset_page.available_for_mint_popup.available_for_mint')}
-        </span>
-        <br />
-        {t('asset_page.available_for_mint_popup.buy_directly')}
-      </span>
-      <Button
-        inverted
-        href={locations.item(contractAddress, itemId)}
-        className="goToItemButton"
-      >
-        <Icon name="chevron right" className="goToItem" />
-      </Button>
-    </div>
-    <div className="popupExtraInformation">
-      <div className="extraInfoContainer">
-        <span className="informationTitle">
-          {t('best_buying_option.minting.price').toUpperCase()}&nbsp;
-          <Popup
-            content={
-              network === Network.MATIC
-                ? t('best_buying_option.minting.polygon_mana')
-                : t('best_buying_option.minting.ethereum_mana')
-            }
-            position="top center"
-            trigger={
-              <img src={infoIcon} alt="info" className="informationTooltip" />
-            }
-            on="hover"
-          />
-        </span>
-        <div className="containerRow">
-          <div className="informationBold">
-            <Mana
-              withTooltip
-              size="large"
-              network={network as Network}
-              className="informationBold"
-            >
-              {fomrmatWeiToAssetCard(price)}
-            </Mana>
-          </div>
-          {+price > 0 && (
-            <div className="informationText">
-              {'('}
-              <ManaToFiat mana={price} />
-              {')'}
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="extraInfoContainer">
-        <span className="informationTitle">
-          {t('best_buying_option.minting.stock').toUpperCase()}
-        </span>
-        <span className="stockText">
-          {stock.toLocaleString()}/{' '}
-          {Rarity.getMaxSupply(rarity).toLocaleString()}
-        </span>
-      </div>
-    </div>
-  </div>
-)
 
 const AssetImage = (props: Props) => {
   const {

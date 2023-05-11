@@ -45,14 +45,12 @@ export type ItemState = {
   data: Record<string, Item>
   loading: LoadingState
   error: string | null
-  item: Item | null
 }
 
 export const INITIAL_STATE: ItemState = {
   data: {},
   loading: [],
-  error: null,
-  item: null
+  error: null
 }
 
 type ItemReducerAction =
@@ -87,8 +85,7 @@ export function itemReducer(
     case FETCH_ITEM_REQUEST: {
       return {
         ...state,
-        loading: loadingReducer(state.loading, action),
-        item: null
+        loading: loadingReducer(state.loading, action)
       }
     }
     case FETCH_TRENDING_ITEMS_SUCCESS:
@@ -119,8 +116,7 @@ export function itemReducer(
           ...state.data,
           [item.id]: { ...state.data[item.id], ...item }
         },
-        error: null,
-        item: item
+        error: null
       }
     }
 
@@ -133,8 +129,7 @@ export function itemReducer(
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
-        error,
-        item: null
+        error
       }
     }
     default:

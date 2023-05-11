@@ -30,7 +30,7 @@ export type Props = {
   item: Item | null
 }
 
-export type OwnProps = Pick<Props, 'showOrderListedTag'>
+export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>
 
 export enum ControlOptionAction {
   ZOOM_IN,
