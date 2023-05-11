@@ -11,6 +11,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useInput } from '../../lib/input'
 import { getCountText } from './utils'
 import { SortBy } from '../../modules/routing/types'
+import { isCatalogView } from '../../modules/routing/utils'
 import {
   getCategoryFromSection,
   getSectionFromCategory
@@ -146,7 +147,19 @@ export const AssetTopbar = ({
         <div className={styles.infoRow}>
           {!isLoading ? (
             <div className={styles.countContainer}>
-              <p className={styles.countText}>{getCountText(count, search)}</p>
+              <p className={styles.countText}>
+                {count && isCatalogView(view)
+                  ? t(
+                      search
+                        ? 'nft_filters.query_results'
+                        : 'nft_filters.results',
+                      {
+                        count: count.toLocaleString(),
+                        search
+                      }
+                    )
+                  : getCountText(count, search)}
+              </p>
             </div>
           ) : null}
           {!isListsSection(section) ? (
