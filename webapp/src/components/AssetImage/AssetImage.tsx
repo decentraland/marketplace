@@ -23,8 +23,8 @@ import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import { JumpIn } from '../AssetPage/JumpIn'
 import { ControlOptionAction, Props } from './AssetImage.types'
-import './AssetImage.css'
 import AvailableForMintPopup from './AvailableForMintPopup'
+import './AssetImage.css'
 
 // 1x1 transparent pixel
 const PIXEL =
