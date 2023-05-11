@@ -151,13 +151,13 @@ describe.each(pickAndUndoSuccessActions)(
       initialState = {
         ...INITIAL_STATE,
         data: {
+          ...initialState.data,
           items: {
             [item.id]: {
               pickedByUser: false,
               count: 0
             }
-          },
-          total: 0
+          }
         }
       }
     })
@@ -186,8 +186,7 @@ describe.each(pickAndUndoSuccessActions)(
                 count: 1,
                 createdAt: currentDate
               }
-            },
-            total: 1
+            }
           }
         })
       })
@@ -210,8 +209,7 @@ describe.each(pickAndUndoSuccessActions)(
                 pickedByUser: true,
                 count: 1
               }
-            },
-            total: 1
+            }
           }
         })
       })
@@ -267,8 +265,7 @@ describe('when reducing the successful action of unpicking the item as favorite'
               pickedByUser: false,
               count: 0
             }
-          },
-          total: 0
+          }
         }
       })
     })
@@ -279,13 +276,13 @@ describe('when reducing the successful action of unpicking the item as favorite'
       initialState = {
         ...initialState,
         data: {
+          ...initialState.data,
           items: {
             [item.id]: {
               pickedByUser: true,
               count: 1
             }
-          },
-          total: 1
+          }
         }
       }
     })
@@ -302,8 +299,7 @@ describe('when reducing the successful action of unpicking the item as favorite'
               pickedByUser: false,
               count: 0
             }
-          },
-          total: 0
+          }
         }
       })
     })
@@ -368,6 +364,7 @@ describe('when reducing the successful action of fetching the favorited items', 
     initialState = {
       ...initialState,
       data: {
+        ...initialState.data,
         items: {
           [item.id]: {
             pickedByUser: false,
@@ -386,14 +383,13 @@ describe('when reducing the successful action of fetching the favorited items', 
             count: 0,
             createdAt: undefined
           }
-        },
-        total: 1
+        }
       },
       loading: loadingReducer([], requestAction)
     }
   })
 
-  it('should return a state with the total and the loading state cleared with the createdAt property set for the favorited items', () => {
+  it('should return a state with the loading state cleared with the createdAt property set for the favorited items', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
@@ -406,8 +402,7 @@ describe('when reducing the successful action of fetching the favorited items', 
             count: 2,
             createdAt: createdAt[item.id]
           }
-        },
-        total
+        }
       }
     })
   })

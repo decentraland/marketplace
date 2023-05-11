@@ -756,3 +756,10 @@ describe('when reducing the action of the success of the undo of the unpicking o
     })
   })
 })
+
+describe('when reducing the action of the success of getting the lists', () => {
+  let initialState: BrowseUIState
+  beforeEach(() => {
+    initialState = { ...INITIAL_STATE }
+  })
+})

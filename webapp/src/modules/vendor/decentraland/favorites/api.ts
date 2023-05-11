@@ -1,7 +1,7 @@
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
-import { FavoritedItems } from '../../../favorites/types'
 import { isAPIError } from '../../../../lib/error'
+import { FavoritedItems, List } from '../../../favorites/types'
 import { ItemFilters } from '../item/types'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
@@ -77,6 +77,24 @@ export class FavoritesAPI extends BaseClient {
     return this.fetch(
       `/v1/lists/${listId}/picks` +
         (queryParams.toString() && `?${queryParams.toString()}`)
+    )
+  }
+
+  async getLists(
+    filters: ItemFilters = {}
+  ): Promise<{ results: List[]; total: number }> {
+    const queryParams = new URLSearchParams()
+
+    if (filters.first) {
+      queryParams.append('limit', filters.first.toString())
+    }
+
+    if (filters.skip) {
+      queryParams.append('offset', filters.skip.toString())
+    }
+
+    return this.fetch(
+      `/v1/lists` + (queryParams.toString() && `?${queryParams.toString()}`)
     )
   }
 }

@@ -1,6 +1,7 @@
 import { action } from 'typesafe-actions'
 import { Item } from '@dcl/schemas'
 import { ItemBrowseOptions } from '../item/types'
+import { List } from './types'
 
 // Pick item as Favorite Request
 export const PICK_ITEM_AS_FAVORITE_REQUEST =
@@ -136,3 +137,30 @@ export type FetchFavoritedItemsSuccessAction = ReturnType<
 export type FetchFavoritedItemsFailureAction = ReturnType<
   typeof fetchFavoritedItemsFailure
 >
+
+// Fetch lists
+
+export const FETCH_LISTS_REQUEST = '[Request] Fetch Lists'
+export const FETCH_LISTS_SUCCESS = '[Success] Fetch Lists'
+export const FETCH_LISTS_FAILURE = '[Failure] Fetch Lists'
+
+export const fetchListsRequest = (options: ItemBrowseOptions) =>
+  action(FETCH_LISTS_REQUEST, { options })
+
+export const fetchListsSuccess = (
+  lists: List[],
+  total: number,
+  options: ItemBrowseOptions
+) =>
+  action(FETCH_LISTS_SUCCESS, {
+    lists,
+    total,
+    options
+  })
+
+export const fetchListsFailure = (error: string) =>
+  action(FETCH_LISTS_FAILURE, { error })
+
+export type FetchListsRequestAction = ReturnType<typeof fetchListsRequest>
+export type FetchListsSuccessAction = ReturnType<typeof fetchListsSuccess>
+export type FetchListsFailureAction = ReturnType<typeof fetchListsFailure>
