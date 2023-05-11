@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dispatch } from 'redux'
-import { Avatar, IPreviewController } from '@dcl/schemas'
+import { Avatar, IPreviewController, Item, Rarity } from '@dcl/schemas'
 import {
   setIsTryingOn,
   SetIsTryingOnAction,
@@ -27,9 +27,10 @@ export type Props = {
   onSetWearablePreviewController: typeof setWearablePreviewController
   children?: React.ReactNode
   hasBadges?: boolean
+  item: Item | null
 }
 
-export type OwnProps = Pick<Props, 'showOrderListedTag'>
+export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>
 
 export enum ControlOptionAction {
   ZOOM_IN,
@@ -40,7 +41,7 @@ export enum ControlOptionAction {
 
 export type MapStateProps = Pick<
   Props,
-  'avatar' | 'wearableController' | 'isTryingOn' | 'isPlayingEmote'
+  'avatar' | 'wearableController' | 'isTryingOn' | 'isPlayingEmote' | 'item'
 >
 export type MapDispatchProps = Pick<
   Props,
@@ -49,3 +50,12 @@ export type MapDispatchProps = Pick<
 export type MapDispatch = Dispatch<
   SetIsTryingOnAction | SetWearablePreviewControllerAction
 >
+
+export type AvailableForMintPopupType = {
+  price: string
+  stock: number
+  rarity: Rarity
+  contractAddress: string
+  itemId: string
+  network: string
+}

@@ -3,6 +3,7 @@ import { Avatar } from '@dcl/schemas'
 import { connect } from 'react-redux'
 import { RootState } from '../../modules/reducer'
 import { getWallet } from '../../modules/wallet/selectors'
+import { getItem } from '../../modules/item/utils'
 import {
   getIsTryingOn,
   getIsPlayingEmote,
@@ -12,17 +13,26 @@ import {
   setIsTryingOn,
   setWearablePreviewController
 } from '../../modules/ui/preview/actions'
+import { getData as getItems } from '../../modules/item/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
-  MapDispatch
+  MapDispatch,
+  OwnProps
 } from './AssetImage.types'
 import AssetImage from './AssetImage'
 
-const mapState = (state: RootState): MapStateProps => {
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const profiles = getProfiles(state)
   const wallet = getWallet(state)
   let avatar: Avatar | undefined = undefined
+  const items = getItems(state)
+  const item = getItem(
+    ownProps.asset.contractAddress,
+    ownProps.asset.itemId,
+    items
+  )
+
   if (wallet && !!profiles[wallet.address]) {
     const profile = profiles[wallet.address]
     avatar = profile.avatars[0]
@@ -31,7 +41,8 @@ const mapState = (state: RootState): MapStateProps => {
     avatar,
     wearableController: getWearablePreviewController(state),
     isTryingOn: getIsTryingOn(state),
-    isPlayingEmote: getIsPlayingEmote(state)
+    isPlayingEmote: getIsPlayingEmote(state),
+    item
   }
 }
 
