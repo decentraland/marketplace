@@ -467,7 +467,7 @@ describe('when reducing the successful action of fetching lists', () => {
     }
   })
 
-  it('should return an estate with the old and the new lists', () => {
+  it('should return a state with the old and the new lists', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
@@ -516,7 +516,7 @@ describe('when reducing the successful action of deleting a list', () => {
     }
   })
 
-  it('should return an estate without the deleted list and the loading state cleared', () => {
+  it('should return a state without the deleted list and the loading state cleared', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
