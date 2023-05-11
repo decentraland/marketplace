@@ -187,18 +187,24 @@ const AssetCard = (props: Props) => {
                   ? t('asset_card.also_minting')
                   : t('asset_card.listings', { count: asset.listings })}
                 :&nbsp;
-                <Mana size="small" network={asset.network} className="tiniMana">
-                  {fomrmatWeiToAssetCard(
-                    displayExtraInfomationToMint
-                      ? asset.price
-                      : asset.minListingPrice
-                  )}
-                </Mana>
-                &nbsp;
-                {asset.listings > 1 &&
-                  !displayExtraInfomationToMint &&
-                  asset.minListingPrice !== asset.maxListingPrice &&
-                  `- ${fomrmatWeiToAssetCard(asset.maxListingPrice)}`}
+                <span>
+                  <Mana
+                    size="small"
+                    network={asset.network}
+                    className="tiniMana"
+                  >
+                    {fomrmatWeiToAssetCard(
+                      displayExtraInfomationToMint
+                        ? asset.price
+                        : asset.minListingPrice
+                    )}
+                  </Mana>
+                  &nbsp;
+                  {asset.listings > 1 &&
+                    !displayExtraInfomationToMint &&
+                    asset.minListingPrice !== asset.maxListingPrice &&
+                    `- ${fomrmatWeiToAssetCard(asset.maxListingPrice)}`}
+                </span>
               </span>
             ) : null
         }
