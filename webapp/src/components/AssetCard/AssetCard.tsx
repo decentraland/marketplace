@@ -21,7 +21,6 @@ import {
   isRentalListingOpen
 } from '../../modules/rental/utils'
 import { SortBy } from '../../modules/routing/types'
-import mintingIcon from '../../images/minting.png'
 import { Mana } from '../Mana'
 import { AssetImage } from '../AssetImage'
 import { FavoritesCounter } from '../FavoritesCounter'
@@ -30,12 +29,9 @@ import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
-import { fomrmatWeiToAssetCard } from './utils'
+import { fomrmatWeiToAssetCard, getCatalogCardInformation } from './utils'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
-
-const MINT = 'MINT'
-const LISTING = 'LISTING'
 
 const RentalPrice = ({
   asset,
@@ -103,7 +99,8 @@ const AssetCard = (props: Props) => {
     isClaimingBackLandTransactionPending,
     rental,
     isFavoritesEnabled,
-    sortBy
+    sortBy,
+    appliedFilters
   } = props
 
   const title = getAssetName(asset)
@@ -114,104 +111,14 @@ const AssetCard = (props: Props) => {
   )
 
   const catalogItemInformation = useMemo(() => {
-    let information: {
-      action: string
-      actionIcon: string | null
-      price: string | null
-      extraInformation: React.ReactNode | null
-    } | null = null
     if (!isNFT(asset) && isCatalogItem(asset)) {
-      const isAvailableForMint = asset.isOnSale && asset.available > 0
-
-      const notForSale = !isAvailableForMint && !asset.minListingPrice
-      if (notForSale) {
-        information = {
-          action: t('asset_card.not_for_sale'),
-          actionIcon: null,
-          price: null,
-          extraInformation: null
-        }
-      } else {
-        const mostExpensive =
-          asset.maxListingPrice && asset.price < asset.maxListingPrice
-            ? LISTING
-            : isAvailableForMint
-            ? MINT
-            : null
-        const cheapest =
-          asset.minListingPrice && asset.price > asset.minListingPrice
-            ? LISTING
-            : isAvailableForMint
-            ? MINT
-            : null
-
-        const displayExtraInfomationToMint =
-          isAvailableForMint &&
-          ((sortBy === SortBy.MOST_EXPENSIVE && mostExpensive === LISTING) ||
-            (sortBy === SortBy.CHEAPEST && cheapest === LISTING))
-
-        let price
-        switch (sortBy) {
-          case SortBy.MOST_EXPENSIVE:
-            price = mostExpensive === MINT ? asset.price : asset.maxListingPrice
-            break
-          case SortBy.CHEAPEST:
-            price = asset.minPrice
-            break
-
-          default:
-            price = isAvailableForMint ? asset.price : asset.minListingPrice
-            break
-        }
-
-        information = {
-          action:
-            sortBy === SortBy.CHEAPEST
-              ? t('asset_card.cheapest_option')
-              : sortBy === SortBy.MOST_EXPENSIVE
-              ? t('asset_card.most_expensive')
-              : isAvailableForMint
-              ? t('asset_card.available_for_mint')
-              : t('asset_card.cheapest_listing'),
-          actionIcon:
-            isAvailableForMint &&
-            sortBy !== SortBy.MOST_EXPENSIVE &&
-            sortBy !== SortBy.CHEAPEST
-              ? mintingIcon
-              : null,
-          price: price ?? null,
-          extraInformation:
-            asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
-              <span className={'wrapBigText'}>
-                {displayExtraInfomationToMint
-                  ? t('asset_card.also_minting')
-                  : t('asset_card.listings', { count: asset.listings })}
-                :&nbsp;
-                <span>
-                  <Mana
-                    size="small"
-                    network={asset.network}
-                    className="tiniMana"
-                  >
-                    {fomrmatWeiToAssetCard(
-                      displayExtraInfomationToMint
-                        ? asset.price
-                        : asset.minListingPrice
-                    )}
-                  </Mana>
-                  &nbsp;
-                  {asset.listings > 1 &&
-                    !displayExtraInfomationToMint &&
-                    asset.minListingPrice !== asset.maxListingPrice &&
-                    `- ${fomrmatWeiToAssetCard(asset.maxListingPrice)}`}
-                </span>
-              </span>
-            ) : null
-        }
-      }
+      return getCatalogCardInformation(asset, {
+        ...appliedFilters,
+        sortBy: sortBy as SortBy
+      })
     }
-    return information
-  }, [asset, sortBy])
+    return null
+  }, [appliedFilters, asset, sortBy])
 
   const renderCatalogItemInformation = useCallback(() => {
     const isAvailableForMint =
@@ -222,7 +129,7 @@ const AssetCard = (props: Props) => {
     return catalogItemInformation ? (
       <div className="CatalogItemInformation">
         <span className={notForSale ? 'NotForSale' : ''}>
-          {catalogItemInformation.action} &nbsp;
+          {catalogItemInformation.action}
           {catalogItemInformation.actionIcon && (
             <img
               src={catalogItemInformation.actionIcon}
@@ -235,7 +142,13 @@ const AssetCard = (props: Props) => {
         {catalogItemInformation.price ? (
           <div className="PriceInMana">
             <Mana size="large" network={asset.network} className="PriceInMana">
-              {fomrmatWeiToAssetCard(catalogItemInformation.price)}
+              {catalogItemInformation.price?.includes('-')
+                ? `${fomrmatWeiToAssetCard(
+                    catalogItemInformation.price.split(' - ')[0]
+                  )} - ${fomrmatWeiToAssetCard(
+                    catalogItemInformation.price.split(' - ')[1]
+                  )}`
+                : fomrmatWeiToAssetCard(catalogItemInformation.price)}
             </Mana>
           </div>
         ) : (

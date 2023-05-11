@@ -216,19 +216,19 @@ export const AssetFilters = ({
           landStatus={landStatus}
           onChange={handleLandStatusChange}
         />
-        {isPriceFilterEnabled ? (
-          <PriceFilter
-            onChange={(value, source) =>
-              handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
-                minPrice,
-                maxPrice
-              ])
-            }
-            minPrice={minPrice}
-            maxPrice={maxPrice}
-            values={values}
-          />
-        ) : null}
+
+        <PriceFilter
+          onChange={(value, source) =>
+            handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
+              minPrice,
+              maxPrice
+            ])
+          }
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          values={values}
+        />
+
         {isEstateSizeFilterEnabled &&
         section !== Sections.decentraland.PARCELS ? (
           <EstateSizeFilter
