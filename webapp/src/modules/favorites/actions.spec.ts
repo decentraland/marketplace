@@ -38,7 +38,8 @@ import {
   DELETE_LIST_REQUEST,
   deleteListFailure,
   DELETE_LIST_FAILURE,
-  DELETE_LIST_SUCCESS
+  DELETE_LIST_SUCCESS,
+  deleteListSuccess
 } from './actions'
 import { List, Permission } from './types'
 
@@ -250,7 +251,7 @@ describe('when creating the action to signal the start of the delete list reques
     expect(deleteListRequest(list)).toEqual({
       type: DELETE_LIST_REQUEST,
       meta: undefined,
-      payload: { options: itemBrowseOptions }
+      payload: { list }
     })
   })
 })
@@ -267,10 +268,10 @@ describe('when creating the action to signal a failure in the delete list reques
 
 describe('when creating the action to signal a successful delete list request', () => {
   it('should return an object representing the action', () => {
-    expect(fetchListsSuccess([list], total, itemBrowseOptions)).toEqual({
+    expect(deleteListSuccess(list)).toEqual({
       type: DELETE_LIST_SUCCESS,
       meta: undefined,
-      payload: { lists: [list], total, options: itemBrowseOptions }
+      payload: { list }
     })
   })
 })
