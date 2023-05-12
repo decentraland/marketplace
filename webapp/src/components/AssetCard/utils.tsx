@@ -75,21 +75,21 @@ function getAssetListingsRangeInfoText(asset: Item) {
   ) : null
 }
 
-function isMintPriceInRange(
-  asset: Item,
-  appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>
-) {
-  return (
-    !appliedFilters.minPrice ||
-    (BigNumber.from(asset.price).gt(
-      ethers.utils.parseUnits(appliedFilters.minPrice)
-    ) &&
-      (!appliedFilters.maxPrice ||
-        BigNumber.from(asset.price).lt(
-          ethers.utils.parseUnits(appliedFilters.maxPrice)
-        )))
-  )
-}
+// function isMintPriceInRange(
+//   asset: Item,
+//   appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>
+// ) {
+//   return (
+//     !appliedFilters.minPrice ||
+//     (BigNumber.from(asset.price).gt(
+//       ethers.utils.parseUnits(appliedFilters.minPrice)
+//     ) &&
+//       (!appliedFilters.maxPrice ||
+//         BigNumber.from(asset.price).lt(
+//           ethers.utils.parseUnits(appliedFilters.maxPrice)
+//         )))
+//   )
+// }
 
 export function getCatalogCardInformation(
   asset: Item,
