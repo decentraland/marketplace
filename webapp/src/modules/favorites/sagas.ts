@@ -43,7 +43,8 @@ import {
   UNPICK_ITEM_AS_FAVORITE_REQUEST,
   FETCH_LISTS_REQUEST,
   fetchListsFailure,
-  fetchListsSuccess
+  fetchListsSuccess,
+  FetchListsRequestAction
 } from './actions'
 import { getListId } from './selectors'
 import { FavoritedItems, List } from './types'
@@ -220,7 +221,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     }
   }
 
-  function* handleFetchListsRequest(action: FetchFavoritedItemsRequestAction) {
+  function* handleFetchListsRequest(action: FetchListsRequestAction) {
     const { options } = action.payload
 
     try {
