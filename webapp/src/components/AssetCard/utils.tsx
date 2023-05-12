@@ -75,6 +75,22 @@ function getAssetListingsRangeInfoText(asset: Item) {
   ) : null
 }
 
+function isMintPriceInRange(
+  asset: Item,
+  appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>
+) {
+  return (
+    !appliedFilters.minPrice ||
+    (BigNumber.from(asset.price).gt(
+      ethers.utils.parseUnits(appliedFilters.minPrice)
+    ) &&
+      (!appliedFilters.maxPrice ||
+        BigNumber.from(asset.price).lt(
+          ethers.utils.parseUnits(appliedFilters.maxPrice)
+        )))
+  )
+}
+
 export function getCatalogCardInformation(
   asset: Item,
   appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice' | 'sortBy'>
@@ -112,14 +128,15 @@ export function getCatalogCardInformation(
     } else {
       // has both minting and listings
       if (hasRangeApplied) {
+        info.price = asset.minPrice ?? asset.price
+        // info.price = isMintPriceInRange(asset, appliedFilters)
+        //   ? asset.price
+        //   : asset.minPrice ?? ''
+        // if the MINT is chepear, let's add it as extra info
         if (appliedFilters.minPrice) {
           const isMintingLessThanMinPriceFilter = BigNumber.from(
             asset.price
           ).lt(ethers.utils.parseUnits(appliedFilters.minPrice))
-          info.price =
-            isMintingLessThanMinPriceFilter && asset.minListingPrice
-              ? asset.minListingPrice
-              : asset.price
           info.extraInformation = isMintingLessThanMinPriceFilter
             ? getAlsoAvailableForMintingText(asset)
             : null
