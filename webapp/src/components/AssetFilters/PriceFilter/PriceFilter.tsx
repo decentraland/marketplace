@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { RentalsListingsFilterByCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getNetwork, getPriceLabel } from '../../../utils/filters'
+import { getPriceLabel } from '../../../utils/filters'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import { Section } from '../../../modules/vendor/routing/types'
 import { nftAPI } from '../../../modules/vendor/decentraland/nft/api'
@@ -143,7 +143,6 @@ export const PriceFilter = ({
         max={maxPrice}
         min={minPrice}
         upperBound={upperBound}
-        network={network || getNetwork(network, category)}
         onChange={onChange}
         errorMessage={t('filters.price_min_greater_max')}
       />

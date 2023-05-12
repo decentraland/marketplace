@@ -1,5 +1,6 @@
 import { NFTCategory, RentalListing } from '@dcl/schemas'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { AuthorizationStepStatus } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { RootState } from '../reducer'
 import { NFT } from '../nft/types'
 import { acceptRentalListingRequest, claimAssetRequest, removeRentalRequest } from './actions'
@@ -12,7 +13,6 @@ import {
   isRemovingRental,
   getRentConfirmationStatus
 } from './selectors'
-import { AuthorizationStepStatus } from '../../components/HOC/withAuthorizedAction/AuthorizationModal'
 
 let rootState: RootState
 

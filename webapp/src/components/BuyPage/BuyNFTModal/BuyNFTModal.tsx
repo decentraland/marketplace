@@ -2,26 +2,25 @@ import React, { useCallback } from 'react'
 import compact from 'lodash/compact'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
-import { NFTCategory } from '@dcl/schemas'
+import { Contract, NFTCategory } from '@dcl/schemas'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ChainButton } from 'decentraland-dapps/dist/containers'
+import { ChainButton, withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { ContractName } from 'decentraland-transactions'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { isWearableOrEmote } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
 import * as events from '../../../utils/events'
 import { AssetType } from '../../../modules/asset/types'
-import { Contract } from '../../../modules/vendor/services'
+import { Contract as DCLContract } from '../../../modules/vendor/services'
 import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
 import { AssetProviderPage } from '../../AssetProviderPage'
-import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
 import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
@@ -77,7 +76,12 @@ const BuyNFTModal = (props: Props) => {
   const mana = getContract({
     name: contractNames.MANA,
     network: nft.network
-  }) as Contract
+  }) as DCLContract
+
+  const marketplace = getContract({
+    address: order?.marketplaceAddress,
+    network: nft.network
+  }) as DCLContract
 
   const handleSubmit = useCallback(() => {
     if (isBuyWithCardPage) {
@@ -88,11 +92,12 @@ const BuyNFTModal = (props: Props) => {
       targetContractName: ContractName.MANAToken,
       authorizationType: AuthorizationType.ALLOWANCE,
       authorizedAddress: order.marketplaceAddress,
-      targetContract: mana,
+      targetContract: mana as Contract,
+      authorizedContractLabel: marketplace?.label,
       requiredAllowanceInWei: order.price,
       onAuthorized: handleExecuteOrder
     })
-  }, [handleExecuteOrder, onAuthorizedAction, isBuyWithCardPage, order, mana])
+  }, [handleExecuteOrder, onAuthorizedAction, isBuyWithCardPage, order, mana, marketplace])
 
   const isDisabled =
     !order ||

@@ -1,12 +1,13 @@
 import React, { useState, useCallback } from 'react'
 import { ethers } from 'ethers'
+import { Contract } from '@dcl/schemas'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { ContractName } from 'decentraland-transactions'
-import {
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import {
   getRentalEndDate,
@@ -23,8 +24,6 @@ import { getContractNames } from '../../../modules/vendor'
 import { isLand } from '../../../modules/nft/utils'
 import { getBidStatus, getError } from '../../../modules/bid/selectors'
 import { ManaField } from '../../ManaField'
-import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Mana } from '../../Mana'
 import { Props } from './BidModal.types'
@@ -81,12 +80,13 @@ const BidModal = (props: Props) => {
   }
 
   const handleConfirmBid = () => {
-    const { onAuthorizedAction } = props;
+    const { onAuthorizedAction } = props
     onAuthorizedAction({
       targetContractName: ContractName.MANAToken,
       authorizedAddress: bids.address,
-      targetContract: mana,
+      targetContract: mana as Contract,
       authorizationType: AuthorizationType.ALLOWANCE,
+      authorizedContractLabel: bids.label,
       requiredAllowanceInWei: ethers.utils.parseEther(price).toString(),
       onAuthorized: handlePlaceBid
     })
@@ -216,4 +216,6 @@ const BidModal = (props: Props) => {
   )
 }
 
-export default React.memo(withAuthorizedAction(BidModal, AuthorizedAction.BID, getBidStatus, getError))
+export default React.memo(
+  withAuthorizedAction(BidModal, AuthorizedAction.BID, getBidStatus, getError)
+)

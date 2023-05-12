@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
 import { Order } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { AuthorizationStepStatus } from '../../components/HOC/withAuthorizedAction/AuthorizationModal'
+import { AuthorizationStepStatus } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getCurrentNFT } from '../nft/selectors'
 import { RootState } from '../reducer'
 import { NFT } from '../nft/types'
