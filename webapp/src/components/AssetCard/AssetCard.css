@@ -48,14 +48,6 @@
   letter-spacing: -0.2px;
 }
 
-.AssetCard .extraInformation {
-  display: flex;
-  visibility: hidden;
-  height: 0px;
-  opacity: 0;
-  transition: height 0.1s, opacity 0.6s;
-}
-
 .AssetCard .ui.header.small {
   font-size: 14.5px;
   font-weight: 400;
@@ -202,6 +194,13 @@
 }
 
 @media (min-width: 1199px) {
+  .AssetCard .extraInformation {
+    display: flex;
+    visibility: hidden;
+    height: 0px;
+    opacity: 0;
+    transition: height 0.1s, opacity 0.6s;
+  }
   .ui.card.AssetCard.catalog {
     height: 360px;
   }
@@ -294,7 +293,7 @@
   a.ui.card:hover,
   .ui.cards > .ui.card.link:hover,
   .ui.card.link:hover {
-    transform: none;
+    transform: translateY(0px);
   }
 
   .AssetCard.ui.card > .content.catalog > .header:not(.ui),
