@@ -131,10 +131,12 @@ const AssetCard = (props: Props) => {
 
     return catalogItemInformation ? (
       <div className="CatalogItemInformation">
-        <span className={notForSale ? 'NotForSale' : ''}>
-          <span className="extraInformation">
-            {catalogItemInformation.action}
-          </span>
+        <span
+          className={
+            notForSale ? 'NotForSale extraInformation' : 'extraInformation'
+          }
+        >
+          <span>{catalogItemInformation.action}</span>
           {catalogItemInformation.actionIcon && (
             <img
               src={catalogItemInformation.actionIcon}
