@@ -90,7 +90,7 @@ const ConfirmRentModal = ({
         targetContract: mana as Contract,
         authorizationType: AuthorizationType.ALLOWANCE,
         requiredAllowanceInWei: pricePerRent,
-        authorizedContractLabel: rentals.label,
+        authorizedContractLabel: rentals.label || rentals.name,
         onAuthorized: () => onSubmitTransaction(operatorAddress)
       })
   }, [

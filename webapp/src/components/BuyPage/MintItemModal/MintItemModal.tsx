@@ -85,7 +85,7 @@ const MintItemModal = (props: Props) => {
         authorizationType: AuthorizationType.ALLOWANCE,
         authorizedAddress: collectionStore.address,
         targetContract: mana as Contract,
-        authorizedContractLabel: collectionStore.label,
+        authorizedContractLabel: collectionStore.label || collectionStore.name,
         requiredAllowanceInWei: item.price,
         onAuthorized: handleExecuteOrder
       })
@@ -94,6 +94,7 @@ const MintItemModal = (props: Props) => {
     isBuyWithCardPage,
     mana,
     collectionStore.address,
+    collectionStore.name,
     handleExecuteOrder,
     onAuthorizedAction,
     collectionStore.label

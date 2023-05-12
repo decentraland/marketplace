@@ -93,7 +93,7 @@ const BuyNFTModal = (props: Props) => {
       authorizationType: AuthorizationType.ALLOWANCE,
       authorizedAddress: order.marketplaceAddress,
       targetContract: mana as Contract,
-      authorizedContractLabel: marketplace?.label,
+      authorizedContractLabel: marketplace.label || marketplace.name,
       requiredAllowanceInWei: order.price,
       onAuthorized: handleExecuteOrder
     })

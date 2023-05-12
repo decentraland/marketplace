@@ -86,7 +86,7 @@ const BidModal = (props: Props) => {
       authorizedAddress: bids.address,
       targetContract: mana as Contract,
       authorizationType: AuthorizationType.ALLOWANCE,
-      authorizedContractLabel: bids.label,
+      authorizedContractLabel: bids.label || bids.name,
       requiredAllowanceInWei: ethers.utils.parseEther(price).toString(),
       onAuthorized: handlePlaceBid
     })
