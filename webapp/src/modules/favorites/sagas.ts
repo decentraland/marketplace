@@ -225,6 +225,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { options } = action.payload
 
     try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+
       const { results, total }: { results: List[]; total: number } = yield call(
         [favoritesAPI, 'getLists'],
         options.filters
