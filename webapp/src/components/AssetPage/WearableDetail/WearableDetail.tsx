@@ -103,7 +103,11 @@ const WearableDetail = ({ nft }: Props) => {
             sortbyList={listingSortByOptions}
             sortBy={sortBy}
             children={
-              <ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />
+              <ListingsTable
+                asset={nft}
+                sortBy={sortBy as OrderSortBy}
+                nftToRemove={nft.tokenId}
+              />
             }
           />
         </>

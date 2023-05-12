@@ -1,3 +1,4 @@
+import React from 'react'
 import { ListingStatus, Order } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Mana } from 'decentraland-ui'
