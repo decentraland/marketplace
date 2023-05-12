@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux'
 import { Item } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import {
   buyItemRequest,
   BuyItemRequestAction,
@@ -9,7 +10,6 @@ import {
 } from '../../../modules/item/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
-import { WithAuthorizedActionProps } from '../../HOC/withAuthorizedAction'
 
 export type Props = {
   item: Item

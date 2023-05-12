@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux'
 import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { NFT } from '../../../modules/nft/types'
 import {
   executeOrderRequest,
@@ -10,7 +11,6 @@ import {
 } from '../../../modules/order/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
-import { WithAuthorizedActionProps } from '../../HOC/withAuthorizedAction'
 
 export type Props = {
   nft: NFT

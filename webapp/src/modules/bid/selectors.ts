@@ -1,5 +1,5 @@
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { AuthorizationStepStatus } from '../../components/HOC/withAuthorizedAction/AuthorizationModal'
+import { AuthorizationStepStatus } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { RootState } from '../reducer'
 import { PLACE_BID_REQUEST } from './actions'
 

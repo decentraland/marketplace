@@ -12,18 +12,21 @@ import {
   Checkbox
 } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Modal } from 'decentraland-dapps/dist/containers'
+import { Modal, withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { ContractName } from 'decentraland-transactions'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getContractNames } from '../../../modules/vendor'
-import { getRentConfirmationStatus, getError } from '../../../modules/rental/selectors'
+import {
+  getRentConfirmationStatus,
+  getError
+} from '../../../modules/rental/selectors'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
-import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { Props } from './ConfirmRentModal.types'
 import styles from './ConfirmRentModal.module.css'
+import { Contract } from '@dcl/schemas'
 
 const ConfirmRentModal = ({
   wallet,
@@ -84,9 +87,10 @@ const ConfirmRentModal = ({
       onAuthorizedAction({
         targetContractName: ContractName.MANAToken,
         authorizedAddress: rentals.address,
-        targetContract: mana,
+        targetContract: mana as Contract,
         authorizationType: AuthorizationType.ALLOWANCE,
         requiredAllowanceInWei: pricePerRent,
+        authorizedContractLabel: rentals.label || rentals.name,
         onAuthorized: () => onSubmitTransaction(operatorAddress)
       })
   }, [
@@ -211,5 +215,10 @@ const ConfirmRentModal = ({
 }
 
 export default React.memo(
-  withAuthorizedAction(ConfirmRentModal, AuthorizedAction.RENT, getRentConfirmationStatus, getError)
+  withAuthorizedAction(
+    ConfirmRentModal,
+    AuthorizedAction.RENT,
+    getRentConfirmationStatus,
+    getError
+  )
 )

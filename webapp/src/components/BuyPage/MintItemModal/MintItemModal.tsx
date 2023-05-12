@@ -3,14 +3,18 @@ import { Link } from 'react-router-dom'
 import compact from 'lodash/compact'
 import classNames from 'classnames'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
-import { Item } from '@dcl/schemas'
+import { Contract, Item } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import { ChainButton } from 'decentraland-dapps/dist/containers'
+import {
+  ChainButton,
+  withAuthorizedAction
+} from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { ContractName } from 'decentraland-transactions'
 import { locations } from '../../../modules/routing/locations'
-import { Contract } from '../../../modules/vendor/services'
+import { Contract as DCLContract } from '../../../modules/vendor/services'
 import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
@@ -20,8 +24,6 @@ import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
 import { AssetProviderPage } from '../../AssetProviderPage'
-import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { getMintItemStatus, getError } from '../../../modules/item/selectors'
 import { Name } from '../Name'
 import { Price } from '../Price'
@@ -52,12 +54,12 @@ const MintItemModal = (props: Props) => {
   const mana = getContract({
     name: contractNames.MANA,
     network: item.network
-  }) as Contract
+  }) as DCLContract
 
   const collectionStore = getContract({
     name: contractNames.COLLECTION_STORE,
     network: item.network
-  }) as Contract
+  }) as DCLContract
 
   const handleExecuteOrder = useCallback(() => {
     if (isBuyWithCardPage) {
@@ -77,15 +79,26 @@ const MintItemModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    !!item && onAuthorizedAction({
-      targetContractName: ContractName.MANAToken,
-      authorizationType: AuthorizationType.ALLOWANCE,
-      authorizedAddress: collectionStore.address,
-      targetContract: mana,
-      requiredAllowanceInWei: item.price,
-      onAuthorized: handleExecuteOrder
-    })
-  }, [item, isBuyWithCardPage, mana, collectionStore.address, handleExecuteOrder, onAuthorizedAction])
+    !!item &&
+      onAuthorizedAction({
+        targetContractName: ContractName.MANAToken,
+        authorizationType: AuthorizationType.ALLOWANCE,
+        authorizedAddress: collectionStore.address,
+        targetContract: mana as Contract,
+        authorizedContractLabel: collectionStore.label || collectionStore.name,
+        requiredAllowanceInWei: item.price,
+        onAuthorized: handleExecuteOrder
+      })
+  }, [
+    item,
+    isBuyWithCardPage,
+    mana,
+    collectionStore.address,
+    collectionStore.name,
+    handleExecuteOrder,
+    onAuthorizedAction,
+    collectionStore.label
+  ])
 
   const isDisabled =
     !item.price || isOwner || (hasInsufficientMANA && !isBuyWithCardPage)
@@ -223,5 +236,10 @@ const MintItemModal = (props: Props) => {
 }
 
 export default React.memo(
-  withAuthorizedAction(MintItemModal, AuthorizedAction.MINT, getMintItemStatus, getError)
+  withAuthorizedAction(
+    MintItemModal,
+    AuthorizedAction.MINT,
+    getMintItemStatus,
+    getError
+  )
 )
