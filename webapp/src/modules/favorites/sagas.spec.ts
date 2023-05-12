@@ -497,7 +497,7 @@ describe('when handling the request for fetching lists', () => {
           id: 'anId',
           name: 'aName',
           description: 'aDescription',
-          ownerAddress: 'anOwnersAddress',
+          userAddress: 'anOwnersAddress',
           createdAt: Date.now(),
           permission: Permission.VIEW
         }

@@ -777,7 +777,7 @@ describe('when reducing the action of the success of getting the lists', () => {
           id: 'anotherListId',
           name: 'aName',
           description: 'aDescription',
-          ownerAddress: 'anAddress',
+          userAddress: 'anAddress',
           createdAt: Date.now()
         }
       ]
@@ -812,7 +812,7 @@ describe('when reducing the action of the success of getting the lists', () => {
           id: 'anotherListId',
           name: 'aName',
           description: 'aDescription',
-          ownerAddress: 'anAddress',
+          userAddress: 'anAddress',
           createdAt: Date.now()
         }
       ]

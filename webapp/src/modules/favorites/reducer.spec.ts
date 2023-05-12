@@ -424,7 +424,7 @@ describe('when reducing the successful action of fetching lists', () => {
       id: 'aListId',
       name: 'aName',
       description: 'aDescription',
-      ownerAddress: 'anAddress',
+      userAddress: 'anAddress',
       createdAt: Date.now()
     }
     total = 2
@@ -440,7 +440,7 @@ describe('when reducing the successful action of fetching lists', () => {
             id: 'anId',
             name: 'aName',
             description: 'aDescription',
-            ownerAddress: 'anAddress',
+            userAddress: 'anAddress',
             createdAt: Date.now()
           }
         }

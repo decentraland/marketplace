@@ -27,8 +27,15 @@ import {
   unpickItemAsFavoriteSuccess,
   UNPICK_ITEM_AS_FAVORITE_FAILURE,
   UNPICK_ITEM_AS_FAVORITE_REQUEST,
-  UNPICK_ITEM_AS_FAVORITE_SUCCESS
+  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+  fetchListsRequest,
+  FETCH_LISTS_REQUEST,
+  FETCH_LISTS_SUCCESS,
+  FETCH_LISTS_FAILURE,
+  fetchListsFailure,
+  fetchListsSuccess
 } from './actions'
+import { List, Permission } from './types'
 
 const itemBrowseOptions: ItemBrowseOptions = {
   view: View.LISTS,
@@ -43,6 +50,15 @@ const item = {
   price: '1500000000000000000000',
   network: Network.ETHEREUM
 } as Item
+
+const list: List = {
+  id: 'aListId',
+  name: 'aListName',
+  description: 'aDescription',
+  userAddress: 'anOwnerAddress',
+  createdAt: Date.now(),
+  permission: Permission.VIEW
+}
 
 const createdAt: Record<string, number> = { [item.id]: Date.now() }
 const total = 1
@@ -190,6 +206,36 @@ describe('when creating the action to signal a failure in the fetch favorited it
       type: FETCH_FAVORITED_ITEMS_FAILURE,
       meta: undefined,
       payload: { error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to signal the start of the fetch lists request', () => {
+  it('should return an object representing the action', () => {
+    expect(fetchListsRequest(itemBrowseOptions)).toEqual({
+      type: FETCH_LISTS_REQUEST,
+      meta: undefined,
+      payload: { options: itemBrowseOptions }
+    })
+  })
+})
+
+describe('when creating the action to signal a failure in the fetch lists request', () => {
+  it('should return an object representing the action', () => {
+    expect(fetchListsFailure(anErrorMessage)).toEqual({
+      type: FETCH_LISTS_FAILURE,
+      meta: undefined,
+      payload: { error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to signal a successful fetch lists request', () => {
+  it('should return an object representing the action', () => {
+    expect(fetchListsSuccess([list], total, itemBrowseOptions)).toEqual({
+      type: FETCH_LISTS_SUCCESS,
+      meta: undefined,
+      payload: { lists: [list], total, options: itemBrowseOptions }
     })
   })
 })

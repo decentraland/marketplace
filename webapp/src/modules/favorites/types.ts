@@ -15,7 +15,7 @@ export type List = {
   id: string
   name: string
   description: string
-  ownerAddress: string
+  userAddress: string
   createdAt: number
   permission?: Permission
 }

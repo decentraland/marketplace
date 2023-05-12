@@ -159,7 +159,7 @@ describe('when getting the lists', () => {
             id: 'aListId',
             name: 'aName',
             description: 'aDescription',
-            ownerAddress: 'anOwnerAddress',
+            userAddress: 'anOwnerAddress',
             createdAt: Date.now()
           }
         ],
