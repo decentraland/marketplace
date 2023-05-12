@@ -44,7 +44,11 @@ import {
   FETCH_LISTS_REQUEST,
   fetchListsFailure,
   fetchListsSuccess,
-  FetchListsRequestAction
+  FetchListsRequestAction,
+  DeleteListRequestAction,
+  deleteListFailure,
+  deleteListSuccess,
+  DELETE_LIST_REQUEST
 } from './actions'
 import { getListId } from './selectors'
 import { FavoritedItems, List } from './types'
@@ -79,6 +83,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     handleFetchFavoritedItemsRequest
   )
   yield takeEvery(FETCH_LISTS_REQUEST, handleFetchListsRequest)
+  yield takeEvery(DELETE_LIST_REQUEST, handleDeleteListRequest)
 
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
@@ -237,6 +242,23 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       yield put(
         fetchListsFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleDeleteListRequest(action: DeleteListRequestAction) {
+    const { list } = action.payload
+
+    try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+      yield call([favoritesAPI, 'deleteList'], list.id)
+      yield put(deleteListSuccess(list))
+    } catch (error) {
+      yield put(
+        deleteListFailure(
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )

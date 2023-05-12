@@ -14,6 +14,9 @@ import { ItemAPI } from '../vendor/decentraland/item/api'
 import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import {
   cancelPickItemAsFavorite,
+  deleteListFailure,
+  deleteListRequest,
+  deleteListSuccess,
   fetchFavoritedItemsFailure,
   fetchFavoritedItemsRequest,
   fetchFavoritedItemsSuccess,
@@ -520,6 +523,69 @@ describe('when handling the request for fetching lists', () => {
         })
         .put(fetchListsSuccess(lists, total, options))
         .dispatch(fetchListsRequest(options))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request for deleting a list', () => {
+  let list: List
+  beforeEach(() => {
+    list = {
+      id: 'anId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'aUserAddress',
+      createdAt: Date.now()
+    }
+  })
+
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .put(deleteListFailure(error.message))
+        .dispatch(deleteListRequest(list))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.deleteList),
+            Promise.reject(error)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.deleteList,
+          args: [list.id]
+        })
+        .put(deleteListFailure(error.message))
+        .dispatch(deleteListRequest(list))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api succeeds', () => {
+    it('should dispatch an action signaling the success of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.deleteList),
+            Promise.resolve()
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.deleteList,
+          args: [list.id]
+        })
+        .put(deleteListSuccess(list))
+        .dispatch(deleteListRequest(list))
         .run({ silenceTimeout: true })
     })
   })

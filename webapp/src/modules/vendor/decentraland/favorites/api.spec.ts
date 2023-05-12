@@ -173,3 +173,34 @@ describe('when getting the lists', () => {
     })
   })
 })
+
+describe('when deleting a list', () => {
+  describe('and the request fails', () => {
+    let error: { message: string; status: number }
+    beforeEach(() => {
+      error = {
+        message: 'An error ocurred',
+        status: 500
+      }
+      fetchMock.mockRejectedValue(error)
+    })
+
+    it('should reject with the request error', () => {
+      return expect(favoritesAPI.deleteList('aListId')).rejects.toEqual(error)
+    })
+  })
+
+  describe('when the request succeeds', () => {
+    let response: { ok: true }
+    beforeEach(() => {
+      response = { ok: true }
+      fetchMock.mockResolvedValueOnce(response)
+    })
+
+    it('should resolve', () => {
+      return expect(favoritesAPI.deleteList('aListId')).resolves.toEqual(
+        response
+      )
+    })
+  })
+})

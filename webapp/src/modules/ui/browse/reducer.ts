@@ -1,4 +1,6 @@
 import {
+  DELETE_LIST_SUCCESS,
+  DeleteListSuccessAction,
   FETCH_FAVORITED_ITEMS_SUCCESS,
   FETCH_LISTS_SUCCESS,
   FetchFavoritedItemsSuccessAction,
@@ -59,6 +61,7 @@ type UIReducerAction =
   | UnpickItemAsFavoriteSuccessAction
   | UndoUnpickingItemAsFavoriteSuccessAction
   | FetchListsSuccessAction
+  | DeleteListSuccessAction
 
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
@@ -243,6 +246,15 @@ export function browseReducer(
         ...state,
         listIds,
         count: total
+      }
+    }
+
+    case DELETE_LIST_SUCCESS: {
+      const { list } = action.payload
+
+      return {
+        ...state,
+        listIds: state.listIds.filter(listId => listId !== list.id)
       }
     }
 

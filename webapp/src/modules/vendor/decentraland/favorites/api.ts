@@ -97,4 +97,8 @@ export class FavoritesAPI extends BaseClient {
       `/v1/lists` + (queryParams.toString() && `?${queryParams.toString()}`)
     )
   }
+
+  async deleteList(listId: string): Promise<void> {
+    return this.fetch(`/v1/list/${listId}`)
+  }
 }
