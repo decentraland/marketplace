@@ -449,7 +449,7 @@ describe('when reducing the successful action of fetching lists', () => {
     }
   })
 
-  it('should return an estate with ', () => {
+  it('should return an estate with the old and the new lists', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
