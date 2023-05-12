@@ -75,21 +75,21 @@ function getAssetListingsRangeInfoText(asset: Item) {
   ) : null
 }
 
-// function isMintPriceInRange(
-//   asset: Item,
-//   appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>
-// ) {
-//   return (
-//     !appliedFilters.minPrice ||
-//     (BigNumber.from(asset.price).gt(
-//       ethers.utils.parseUnits(appliedFilters.minPrice)
-//     ) &&
-//       (!appliedFilters.maxPrice ||
-//         BigNumber.from(asset.price).lt(
-//           ethers.utils.parseUnits(appliedFilters.maxPrice)
-//         )))
-//   )
-// }
+function getIsMintPriceInRange(
+  asset: Item,
+  appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>
+) {
+  return (
+    !appliedFilters.minPrice ||
+    (BigNumber.from(asset.price).gt(
+      ethers.utils.parseUnits(appliedFilters.minPrice)
+    ) &&
+      (!appliedFilters.maxPrice ||
+        BigNumber.from(asset.price).lt(
+          ethers.utils.parseUnits(appliedFilters.maxPrice)
+        )))
+  )
+}
 
 export function getCatalogCardInformation(
   asset: Item,
@@ -203,36 +203,24 @@ export function getCatalogCardInformation(
     // both mint and listings available
 
     if (hasRangeApplied) {
+      const isMintInRange = getIsMintPriceInRange(asset, appliedFilters)
+      info.action = isMintInRange
+        ? t('asset_card.available_for_mint')
+        : t('asset_card.available_listings_in_range')
+      info.price = isMintInRange ? asset.price : asset.minListingPrice ?? ''
+      info.actionIcon = isMintInRange ? mintingIcon : null
+      info.extraInformation = isMintInRange
+        ? getAssetListingsRangeInfoText(asset)
+        : null
+
       if (appliedFilters.minPrice) {
         const isMintingLessThanMinPriceFilter = BigNumber.from(asset.price).lt(
           ethers.utils.parseUnits(appliedFilters.minPrice)
         )
-        info.action = isMintingLessThanMinPriceFilter
-          ? t('asset_card.available_listings_in_range')
-          : t('asset_card.available_for_mint')
-        info.actionIcon = isMintingLessThanMinPriceFilter ? null : mintingIcon
-        info.price =
-          isMintingLessThanMinPriceFilter && asset.minListingPrice
-            ? asset.minListingPrice
-            : asset.price
-        info.extraInformation = isMintingLessThanMinPriceFilter
-          ? getAlsoAvailableForMintingText(asset)
-          : null
-      }
-
-      if (appliedFilters.maxPrice) {
-        const isMintingGreaterThanMaxPrice =
-          !!appliedFilters.maxPrice &&
-          BigNumber.from(asset.price).gt(
-            ethers.utils.parseUnits(appliedFilters.maxPrice)
-          )
-        if (isMintingGreaterThanMaxPrice && asset.minListingPrice) {
-          // out of range, don't show it
-          info.action = t('asset_card.available_listings_in_range')
-          info.actionIcon = null
-          info.price = asset.minListingPrice
-          info.extraInformation = null
-        }
+        info.extraInformation =
+          !isMintInRange && isMintingLessThanMinPriceFilter
+            ? getAlsoAvailableForMintingText(asset)
+            : info.extraInformation
       }
     } else {
       // mint is the cheapest, show "available for mint" and the listings range
