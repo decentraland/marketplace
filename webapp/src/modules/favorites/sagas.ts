@@ -42,7 +42,6 @@ import {
   unpickItemAsFavoriteSuccess,
   UNPICK_ITEM_AS_FAVORITE_REQUEST,
   FETCH_LISTS_REQUEST,
-  fetchListsRequest,
   fetchListsFailure,
   fetchListsSuccess
 } from './actions'
