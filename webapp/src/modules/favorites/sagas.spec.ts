@@ -11,7 +11,6 @@ import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
-import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import {
   cancelPickItemAsFavorite,
   deleteListFailure,
