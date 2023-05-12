@@ -69,6 +69,7 @@ const ListingsTable = (props: Props) => {
       total={total}
       rowsPerPage={ROWS_PER_PAGE}
       activePage={page}
+      hasHeaders
     />
   )
 }

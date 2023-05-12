@@ -76,6 +76,7 @@ const OwnersTable = (props: Props) => {
         </div>
       )}
       total={total}
+      hasHeaders
     />
   )
 }

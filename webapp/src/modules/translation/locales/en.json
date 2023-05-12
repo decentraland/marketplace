@@ -590,6 +590,7 @@
     }
   },
   "listings_table": {
+    "other_availbale_listings": "Other available listings",
     "listings": "Listings",
     "owner": "Owner",
     "published_date": "Published date",
