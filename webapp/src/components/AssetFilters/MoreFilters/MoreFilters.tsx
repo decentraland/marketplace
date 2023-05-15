@@ -89,7 +89,7 @@ export const MoreFilters = ({
           <Checkbox
             label="Only smart"
             toggle
-            checked={isOnlySmart}
+            checked={!!isOnlySmart}
             onChange={handleOnlySmartChange}
           />
         )}
