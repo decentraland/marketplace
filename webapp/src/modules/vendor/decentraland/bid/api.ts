@@ -8,13 +8,15 @@ const FIRST = '1000'
 class BidAPI extends BaseAPI {
   async fetch(
     options: Record<string, string>,
-    sortBy?: BidSortBy
+    sortBy?: BidSortBy,
+    bidder?: string
   ): Promise<{ data: Bid[]; total: number }> {
     const queryParams = new URLSearchParams()
     for (const key of Object.keys(options)) {
       queryParams.append(key, options[key])
     }
     sortBy && queryParams.append('sortBy', sortBy.toString())
+    bidder && queryParams.append('bidder', bidder)
     try {
       const response: { data: Bid[]; total: number } = await this.request(
         'get',
@@ -43,7 +45,8 @@ class BidAPI extends BaseAPI {
     status?: ListingStatus | null,
     sortBy?: BidSortBy,
     first: string = FIRST,
-    skip: string = '0'
+    skip: string = '0',
+    bidder?: string
   ) {
     return this.fetch(
       {
@@ -53,7 +56,8 @@ class BidAPI extends BaseAPI {
         first,
         skip
       },
-      sortBy
+      sortBy,
+      bidder
     )
   }
 }

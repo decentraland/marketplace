@@ -3,7 +3,8 @@ import { NFT } from '../../../modules/nft/types'
 
 export type Props = {
   nft: NFT<VendorName.DECENTRALAND> | null
+  address?: string
 }
 
-export type MapStateProps = {}
+export type MapStateProps = Pick<Props, 'address'>
 export type MapDispatchProps = {}

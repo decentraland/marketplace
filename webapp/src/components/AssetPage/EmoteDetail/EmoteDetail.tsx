@@ -10,6 +10,7 @@ import TableContainer from '../../Table/TableContainer'
 import RarityBadge from '../../RarityBadge'
 import BaseDetail from '../BaseDetail'
 import { BidsTable } from '../BidsTable'
+import { YourOffer } from '../YourOffer'
 import Collection from '../Collection'
 import { Description } from '../Description'
 import IconBadge from '../IconBadge'
@@ -98,6 +99,7 @@ const EmoteDetail = ({ nft }: Props) => {
       actions={<SaleActionBox asset={nft} />}
       below={
         <>
+          <YourOffer nft={nft} />
           <BidsTable nft={nft} />
           <TransactionHistory asset={nft} />
           <TableContainer
