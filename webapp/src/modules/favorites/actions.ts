@@ -164,3 +164,24 @@ export const fetchListsFailure = (error: string) =>
 export type FetchListsRequestAction = ReturnType<typeof fetchListsRequest>
 export type FetchListsSuccessAction = ReturnType<typeof fetchListsSuccess>
 export type FetchListsFailureAction = ReturnType<typeof fetchListsFailure>
+
+// Delete list
+
+export const DELETE_LIST_REQUEST = '[Request] Delete List'
+export const DELETE_LIST_SUCCESS = '[Success] Delete List'
+export const DELETE_LIST_FAILURE = '[Failure] Delete List'
+
+export const deleteListRequest = (list: List) =>
+  action(DELETE_LIST_REQUEST, { list })
+
+export const deleteListSuccess = (list: List) =>
+  action(DELETE_LIST_SUCCESS, {
+    list
+  })
+
+export const deleteListFailure = (error: string) =>
+  action(DELETE_LIST_FAILURE, { error })
+
+export type DeleteListRequestAction = ReturnType<typeof deleteListRequest>
+export type DeleteListSuccessAction = ReturnType<typeof deleteListSuccess>
+export type DeleteListFailureAction = ReturnType<typeof deleteListFailure>

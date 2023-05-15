@@ -4,7 +4,8 @@ import {
   fetchFavoritedItemsSuccess,
   unpickItemAsFavoriteSuccess,
   undoUnpickingItemAsFavoriteSuccess,
-  fetchListsSuccess
+  fetchListsSuccess,
+  deleteListSuccess
 } from '../../favorites/actions'
 import {
   fetchItemsRequest,
@@ -831,6 +832,33 @@ describe('when reducing the action of the success of getting the lists', () => {
         listIds: ['anotherListId'],
         count: 1
       })
+    })
+  })
+})
+
+describe('when reducing the action of the success of deleting a list', () => {
+  let list: List
+  let initialState: BrowseUIState
+
+  beforeEach(() => {
+    list = {
+      id: 'anotherListId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+
+    initialState = {
+      ...initialState,
+      listIds: [list.id]
+    }
+  })
+
+  it('should return a state where the id of the deleted list is not part of the list ids', () => {
+    expect(browseReducer(initialState, deleteListSuccess(list))).toEqual({
+      ...initialState,
+      listIds: []
     })
   })
 })

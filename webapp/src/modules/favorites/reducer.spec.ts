@@ -5,6 +5,8 @@ import { View } from '../ui/types'
 import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   CancelPickItemAsFavoriteAction,
+  DeleteListRequestAction,
+  DeleteListSuccessAction,
   FetchFavoritedItemsRequestAction,
   FetchFavoritedItemsSuccessAction,
   FetchListsRequestAction,
@@ -13,6 +15,9 @@ import {
   UnpickItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteSuccessAction,
   cancelPickItemAsFavorite,
+  deleteListFailure,
+  deleteListRequest,
+  deleteListSuccess,
   fetchFavoritedItemsFailure,
   fetchFavoritedItemsRequest,
   fetchFavoritedItemsSuccess,
@@ -52,9 +57,18 @@ const item: Item = {
   }
 } as Item
 
+const actionList: List = {
+  id: 'aListId',
+  name: 'aName',
+  description: 'aDescription',
+  userAddress: 'anAddress',
+  createdAt: Date.now()
+}
+
 const error = 'anErrorMessage'
 
 const requestActions = [
+  deleteListRequest(actionList),
   pickItemAsFavoriteRequest(item),
   unpickItemAsFavoriteRequest(item),
   undoUnpickingItemAsFavoriteRequest(item),
@@ -110,6 +124,10 @@ const failureActions = [
   {
     request: fetchListsRequest(itemBrowseOptions),
     failure: fetchListsFailure(error)
+  },
+  {
+    request: deleteListRequest(actionList),
+    failure: deleteListFailure(error)
   }
 ]
 
@@ -458,6 +476,54 @@ describe('when reducing the successful action of fetching lists', () => {
         lists: {
           ...initialState.data.lists,
           [newList.id]: newList
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of deleting a list', () => {
+  let requestAction: DeleteListRequestAction
+  let successAction: DeleteListSuccessAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = deleteListRequest(list)
+    successAction = deleteListSuccess(list)
+    initialState = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        lists: {
+          anId: {
+            id: 'anId',
+            name: 'aName',
+            description: 'aDescription',
+            userAddress: 'anAddress',
+            createdAt: Date.now()
+          },
+          [list.id]: list
+        }
+      },
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return an estate without the deleted list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          [initialState.data.lists['anId'].id]: initialState.data.lists['anId']
         }
       }
     })

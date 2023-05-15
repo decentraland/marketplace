@@ -33,7 +33,13 @@ import {
   FETCH_LISTS_SUCCESS,
   FETCH_LISTS_FAILURE,
   fetchListsFailure,
-  fetchListsSuccess
+  fetchListsSuccess,
+  deleteListRequest,
+  DELETE_LIST_REQUEST,
+  deleteListFailure,
+  DELETE_LIST_FAILURE,
+  DELETE_LIST_SUCCESS,
+  deleteListSuccess
 } from './actions'
 import { List, Permission } from './types'
 
@@ -236,6 +242,36 @@ describe('when creating the action to signal a successful fetch lists request', 
       type: FETCH_LISTS_SUCCESS,
       meta: undefined,
       payload: { lists: [list], total, options: itemBrowseOptions }
+    })
+  })
+})
+
+describe('when creating the action to signal the start of the delete list request', () => {
+  it('should return an object representing the action', () => {
+    expect(deleteListRequest(list)).toEqual({
+      type: DELETE_LIST_REQUEST,
+      meta: undefined,
+      payload: { list }
+    })
+  })
+})
+
+describe('when creating the action to signal a failure in the delete list request', () => {
+  it('should return an object representing the action', () => {
+    expect(deleteListFailure(anErrorMessage)).toEqual({
+      type: DELETE_LIST_FAILURE,
+      meta: undefined,
+      payload: { error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to signal a successful delete list request', () => {
+  it('should return an object representing the action', () => {
+    expect(deleteListSuccess(list)).toEqual({
+      type: DELETE_LIST_SUCCESS,
+      meta: undefined,
+      payload: { list }
     })
   })
 })

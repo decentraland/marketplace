@@ -40,7 +40,13 @@ import {
   FetchListsSuccessAction,
   FetchListsFailureAction,
   FETCH_LISTS_SUCCESS,
-  FETCH_LISTS_FAILURE
+  FETCH_LISTS_FAILURE,
+  DELETE_LIST_REQUEST,
+  DeleteListRequestAction,
+  DeleteListSuccessAction,
+  DeleteListFailureAction,
+  DELETE_LIST_FAILURE,
+  DELETE_LIST_SUCCESS
 } from './actions'
 import { FavoritesData, List } from './types'
 
@@ -78,12 +84,16 @@ type FavoritesReducerAction =
   | FetchListsRequestAction
   | FetchListsSuccessAction
   | FetchListsFailureAction
+  | DeleteListRequestAction
+  | DeleteListSuccessAction
+  | DeleteListFailureAction
 
 export function favoritesReducer(
   state = INITIAL_STATE,
   action: FavoritesReducerAction
 ): FavoritesState {
   switch (action.type) {
+    case DELETE_LIST_REQUEST:
     case PICK_ITEM_AS_FAVORITE_REQUEST:
     case UNPICK_ITEM_AS_FAVORITE_REQUEST:
     case UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST:
@@ -230,6 +240,22 @@ export function favoritesReducer(
       }
     }
 
+    case DELETE_LIST_SUCCESS: {
+      const { list } = action.payload
+      const lists = { ...state.data.lists }
+      delete lists[list.id]
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          lists
+        },
+        loading: loadingReducer(state.loading, action)
+      }
+    }
+
+    case DELETE_LIST_FAILURE:
     case PICK_ITEM_AS_FAVORITE_FAILURE:
     case FETCH_LISTS_FAILURE:
     case UNPICK_ITEM_AS_FAVORITE_FAILURE:
