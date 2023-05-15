@@ -99,6 +99,6 @@ export class FavoritesAPI extends BaseClient {
   }
 
   async deleteList(listId: string): Promise<void> {
-    return this.fetch(`/v1/list/${listId}`, { method: 'DELETE' })
+    return this.fetch(`/v1/lists/${listId}`, { method: 'DELETE' })
   }
 }
