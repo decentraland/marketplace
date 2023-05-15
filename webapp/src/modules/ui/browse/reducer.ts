@@ -1,6 +1,8 @@
 import {
   FETCH_FAVORITED_ITEMS_SUCCESS,
+  FETCH_LISTS_SUCCESS,
   FetchFavoritedItemsSuccessAction,
+  FetchListsSuccessAction,
   UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS,
   UndoUnpickingItemAsFavoriteSuccessAction,
@@ -29,6 +31,7 @@ export type BrowseUIState = {
   view?: View
   page?: number
   nftIds: string[]
+  listIds: string[]
   itemIds: string[]
   lastTimestamp: number
   count?: number
@@ -38,6 +41,7 @@ export const INITIAL_STATE: BrowseUIState = {
   view: undefined,
   page: undefined,
   nftIds: [],
+  listIds: [],
   itemIds: [],
   count: undefined,
   lastTimestamp: 0
@@ -54,6 +58,7 @@ type UIReducerAction =
   | FetchFavoritedItemsSuccessAction
   | UnpickItemAsFavoriteSuccessAction
   | UndoUnpickingItemAsFavoriteSuccessAction
+  | FetchListsSuccessAction
 
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
@@ -222,6 +227,25 @@ export function browseReducer(
           return state
       }
     }
+
+    case FETCH_LISTS_SUCCESS: {
+      const {
+        lists,
+        total,
+        options: { page }
+      } = action.payload
+      const newListIds = lists.map(list => list.id)
+      const listIds = isLoadingMoreResults(state, page)
+        ? [...state.listIds, ...newListIds]
+        : newListIds
+
+      return {
+        ...state,
+        listIds,
+        count: total
+      }
+    }
+
     default:
       return state
   }

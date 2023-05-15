@@ -1,7 +1,7 @@
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
-import { FavoritedItems } from '../../../favorites/types'
 import { isAPIError } from '../../../../lib/error'
+import { FavoritedItems, List } from '../../../favorites/types'
 import { ItemFilters } from '../item/types'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
@@ -15,6 +15,19 @@ export const MARKETPLACE_FAVORITES_SERVER_URL = config.get(
 const ALREADY_PICKED_STATUS_CODE = 422
 
 export class FavoritesAPI extends BaseClient {
+  private buildURLWithParameters(endpoint: string, filters: ItemFilters) {
+    const queryParams = new URLSearchParams()
+    if (filters.first) {
+      queryParams.append('limit', filters.first.toString())
+    }
+
+    if (filters.skip) {
+      queryParams.append('offset', filters.skip.toString())
+    }
+
+    return endpoint + (queryParams.toString() && `?${queryParams.toString()}`)
+  }
+
   async getWhoFavoritedAnItem(
     itemId: string,
     limit: number,
@@ -23,7 +36,12 @@ export class FavoritesAPI extends BaseClient {
     const { results, total } = await this.fetch<{
       results: { userAddress: string }[]
       total: number
-    }>(`/v1/picks/${itemId}?limit=${limit}&offset=${offset}`)
+    }>(
+      this.buildURLWithParameters(`/v1/picks/${itemId}`, {
+        first: limit,
+        skip: offset
+      })
+    )
 
     return {
       addresses: results.map(pick => pick.userAddress),
@@ -64,19 +82,14 @@ export class FavoritesAPI extends BaseClient {
     results: FavoritedItems
     total: number
   }> {
-    const queryParams = new URLSearchParams()
-
-    if (filters.first) {
-      queryParams.append('limit', filters.first.toString())
-    }
-
-    if (filters.skip) {
-      queryParams.append('offset', filters.skip.toString())
-    }
-
     return this.fetch(
-      `/v1/lists/${listId}/picks` +
-        (queryParams.toString() && `?${queryParams.toString()}`)
+      this.buildURLWithParameters(`/v1/lists/${listId}/picks`, filters)
     )
+  }
+
+  async getLists(
+    filters: ItemFilters = {}
+  ): Promise<{ results: List[]; total: number }> {
+    return this.fetch(this.buildURLWithParameters('/v1/lists', filters))
   }
 }

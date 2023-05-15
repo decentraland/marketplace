@@ -162,7 +162,7 @@ beforeEach(() => {
       }
     },
     favorites: {
-      data: { items: {}, total: 0 },
+      data: { items: {}, lists: {}, total: 0 },
       loading: [],
       error: null
     } as FavoritesState

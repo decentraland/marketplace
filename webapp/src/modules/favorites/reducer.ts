@@ -34,18 +34,27 @@ import {
   FetchFavoritedItemsSuccessAction,
   FetchFavoritedItemsFailureAction,
   FETCH_FAVORITED_ITEMS_FAILURE,
-  FETCH_FAVORITED_ITEMS_SUCCESS
+  FETCH_FAVORITED_ITEMS_SUCCESS,
+  FETCH_LISTS_REQUEST,
+  FetchListsRequestAction,
+  FetchListsSuccessAction,
+  FetchListsFailureAction,
+  FETCH_LISTS_SUCCESS,
+  FETCH_LISTS_FAILURE
 } from './actions'
-import { FavoritesData } from './types'
+import { FavoritesData, List } from './types'
 
 export type FavoritesState = {
-  data: { items: Record<string, FavoritesData>; total: number }
+  data: {
+    items: Record<string, FavoritesData>
+    lists: Record<string, List>
+  }
   loading: LoadingState
   error: string | null
 }
 
 export const INITIAL_STATE: FavoritesState = {
-  data: { items: {}, total: 0 },
+  data: { items: {}, lists: {} },
   loading: [],
   error: null
 }
@@ -66,6 +75,9 @@ type FavoritesReducerAction =
   | FetchFavoritedItemsFailureAction
   | FetchItemSuccessAction
   | FetchItemsSuccessAction
+  | FetchListsRequestAction
+  | FetchListsSuccessAction
+  | FetchListsFailureAction
 
 export function favoritesReducer(
   state = INITIAL_STATE,
@@ -75,6 +87,7 @@ export function favoritesReducer(
     case PICK_ITEM_AS_FAVORITE_REQUEST:
     case UNPICK_ITEM_AS_FAVORITE_REQUEST:
     case UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST:
+    case FETCH_LISTS_REQUEST:
     case FETCH_FAVORITED_ITEMS_REQUEST: {
       return {
         ...state,
@@ -98,8 +111,7 @@ export function favoritesReducer(
               count: currentCount + 1,
               createdAt: Date.now()
             }
-          },
-          total: state.data.total + 1
+          }
         },
         loading: loadingReducer(state.loading, action)
       }
@@ -119,8 +131,7 @@ export function favoritesReducer(
               pickedByUser: false,
               count: Math.max(0, currentCount - 1)
             }
-          },
-          total: Math.max(0, state.data.total - 1)
+          }
         },
         loading: loadingReducer(state.loading, action)
       }
@@ -176,7 +187,7 @@ export function favoritesReducer(
       }
 
     case FETCH_FAVORITED_ITEMS_SUCCESS: {
-      const { total, items, createdAt } = action.payload
+      const { items, createdAt } = action.payload
 
       return {
         ...state,
@@ -198,14 +209,29 @@ export function favoritesReducer(
                 ])
                 .filter(Boolean)
             )
-          },
-          total
+          }
+        },
+        loading: loadingReducer(state.loading, action)
+      }
+    }
+
+    case FETCH_LISTS_SUCCESS: {
+      const { lists } = action.payload
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          lists: {
+            ...state.data.lists,
+            ...Object.fromEntries(lists.map(list => [list.id, list]))
+          }
         },
         loading: loadingReducer(state.loading, action)
       }
     }
 
     case PICK_ITEM_AS_FAVORITE_FAILURE:
+    case FETCH_LISTS_FAILURE:
     case UNPICK_ITEM_AS_FAVORITE_FAILURE:
     case UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE:
     case FETCH_FAVORITED_ITEMS_FAILURE: {

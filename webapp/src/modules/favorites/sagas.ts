@@ -6,6 +6,7 @@ import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { isErrorWithMessage } from '../../lib/error'
 import { ItemBrowseOptions } from '../item/types'
 import {
   closeModal,
@@ -39,10 +40,14 @@ import {
   unpickItemAsFavoriteFailure,
   UnpickItemAsFavoriteRequestAction,
   unpickItemAsFavoriteSuccess,
-  UNPICK_ITEM_AS_FAVORITE_REQUEST
+  UNPICK_ITEM_AS_FAVORITE_REQUEST,
+  FETCH_LISTS_REQUEST,
+  fetchListsFailure,
+  fetchListsSuccess,
+  FetchListsRequestAction
 } from './actions'
 import { getListId } from './selectors'
-import { FavoritedItems } from './types'
+import { FavoritedItems, List } from './types'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const itemAPI = new ItemAPI(NFT_SERVER_URL, {
@@ -73,6 +78,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     FETCH_FAVORITED_ITEMS_REQUEST,
     handleFetchFavoritedItemsRequest
   )
+  yield takeEvery(FETCH_LISTS_REQUEST, handleFetchListsRequest)
 
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
@@ -110,7 +116,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       yield call([favoritesAPI, 'pickItemAsFavorite'], item.id)
       yield put(pickItemAsFavoriteSuccess(item))
     } catch (error) {
-      yield put(pickItemAsFavoriteFailure(item, (error as Error).message))
+      yield put(
+        pickItemAsFavoriteFailure(
+          item,
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
     }
   }
 
@@ -125,7 +136,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
       yield put(unpickItemAsFavoriteSuccess(item))
     } catch (error) {
-      yield put(unpickItemAsFavoriteFailure(item, (error as Error).message))
+      yield put(
+        unpickItemAsFavoriteFailure(
+          item,
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
     }
   }
 
@@ -197,7 +213,33 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         )
       )
     } catch (error) {
-      yield put(fetchFavoritedItemsFailure((error as Error).message))
+      yield put(
+        fetchFavoritedItemsFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleFetchListsRequest(action: FetchListsRequestAction) {
+    const { options } = action.payload
+
+    try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+
+      const { results, total }: { results: List[]; total: number } = yield call(
+        [favoritesAPI, 'getLists'],
+        options.filters
+      )
+
+      yield put(fetchListsSuccess(results, total, options))
+    } catch (error) {
+      yield put(
+        fetchListsFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
     }
   }
 }

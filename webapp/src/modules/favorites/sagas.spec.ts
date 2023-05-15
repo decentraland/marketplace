@@ -17,6 +17,9 @@ import {
   fetchFavoritedItemsFailure,
   fetchFavoritedItemsRequest,
   fetchFavoritedItemsSuccess,
+  fetchListsFailure,
+  fetchListsRequest,
+  fetchListsSuccess,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -29,7 +32,7 @@ import {
 } from './actions'
 import { favoritesSaga } from './sagas'
 import { getListId } from './selectors'
-import { FavoritedItems } from './types'
+import { FavoritedItems, List, Permission } from './types'
 
 let item: Item
 let address: string
@@ -440,6 +443,84 @@ describe('when handling the request for fetching favorited items', () => {
           .dispatch(fetchFavoritedItemsRequest(options))
           .run({ silenceTimeout: true })
       })
+    })
+  })
+})
+
+describe('when handling the request for fetching lists', () => {
+  let options: ItemBrowseOptions
+
+  beforeEach(() => {
+    options = {
+      view: View.LISTS,
+      page: 0
+    }
+  })
+
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .put(fetchListsFailure(error.message))
+        .dispatch(fetchListsRequest(options))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.getLists),
+            Promise.reject(error)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.getLists,
+          args: [options.filters]
+        })
+        .put(fetchListsFailure(error.message))
+        .dispatch(fetchListsRequest(options))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api succeeds', () => {
+    let lists: List[]
+    let total: number
+
+    beforeEach(() => {
+      lists = [
+        {
+          id: 'anId',
+          name: 'aName',
+          description: 'aDescription',
+          userAddress: 'anOwnersAddress',
+          createdAt: Date.now(),
+          permission: Permission.VIEW
+        }
+      ]
+      total = 1
+    })
+
+    it('should dispatch an action signaling the success of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.getLists),
+            Promise.resolve({ results: lists, total })
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.getLists,
+          args: [options.filters]
+        })
+        .put(fetchListsSuccess(lists, total, options))
+        .dispatch(fetchListsRequest(options))
+        .run({ silenceTimeout: true })
     })
   })
 })
