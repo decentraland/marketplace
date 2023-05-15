@@ -9,7 +9,7 @@ import { AssetImage } from '../../AssetImage'
 import GenderBadge from '../../GenderBadge'
 import RarityBadge from '../../RarityBadge'
 import BaseDetail from '../BaseDetail'
-import { BidList } from '../BidList'
+import { BidsTable } from '../BidsTable'
 import CategoryBadge from '../CategoryBadge'
 import { ListingsTable } from '../ListingsTable'
 import Collection from '../Collection'
@@ -19,7 +19,6 @@ import { SaleActionBox } from '../SaleActionBox'
 import SmartBadge from '../SmartBadge'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './WearableDetail.types'
-
 const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
   const [sortBy, setSortBy] = useState<OrderSortBy>(OrderSortBy.CHEAPEST)
@@ -93,7 +92,7 @@ const WearableDetail = ({ nft }: Props) => {
       actions={<SaleActionBox asset={nft} />}
       below={
         <>
-          <BidList nft={nft} />
+          <BidsTable nft={nft} />
           <TransactionHistory asset={nft} />
           <TableContainer
             tabsList={tabList}

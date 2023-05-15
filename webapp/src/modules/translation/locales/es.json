@@ -583,6 +583,19 @@
       "no_offer": "Sin ofertas"
     }
   },
+  "offers_table": {
+    "offers": "Ofertas",
+    "from": "De",
+    "published_date": "Fecha de publicación",
+    "expiration_date": "Fecha de expiración",
+    "offer": "Ofertas",
+    "your_offer": "Your offer",
+    "date_published": "Fecha de publicación",
+    "remove": "Eliminar",
+    "most_expensive": "Más Caro",
+    "recenty_offered": "Ofrecido recientemente",
+    "recently_updated": "Actualizado recientemente"
+  },
   "listings_table": {
     "other_available_listings": "Otros coleccionables disponibles",
     "owner": "Dueño",
