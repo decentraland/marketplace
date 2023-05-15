@@ -17,10 +17,10 @@ import { NFT, NFTsFetchOptions } from '../../nft/types'
 import { browse } from '../../routing/actions'
 import { VendorName } from '../../vendor'
 import { Section } from '../../vendor/decentraland'
+import { List } from '../../favorites/types'
 import { setView } from '../actions'
 import { View } from '../types'
 import { BrowseUIState, INITIAL_STATE, browseReducer } from './reducer'
-import { List } from '../../favorites/types'
 
 const assetIds = ['0x0-assetId1', '0x0-assetId2', '0x0-assetId3']
 
