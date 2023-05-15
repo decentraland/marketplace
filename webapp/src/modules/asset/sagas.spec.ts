@@ -141,35 +141,44 @@ describe('when handling the set purchase action', () => {
     })
   })
 
-  describe('when the purchase of an item failed', () => {
-    it('should dispatch an action signaling the failure of the item', () => {
-      return expectSaga(assetSaga)
-        .provide([
-          [
-            select(getLocation),
-            {
-              pathname: mockPathname()
-            }
-          ]
-        ])
-        .put(buyItemWithCardFailure(t('global.unknown_error')))
-        .put(
-          push(
-            locations.buyWithCard(
-              AssetType.ITEM,
-              mockContractAddress,
-              mockTokenId
+  describe.each([
+    PurchaseStatus.FAILED,
+    PurchaseStatus.CANCELLED,
+    PurchaseStatus.REFUNDED
+  ])(
+    'when the purchase of an item has a status %s',
+    (status: PurchaseStatus) => {
+      it('should dispatch an action signaling the failure of the item', () => {
+        return expectSaga(assetSaga)
+          .provide([
+            [
+              select(getLocation),
+              {
+                pathname: mockPathname()
+              }
+            ]
+          ])
+          .put(buyItemWithCardFailure(t('global.unknown_error')))
+          .put(
+            push(
+              locations.buyWithCard(
+                AssetType.ITEM,
+                mockContractAddress,
+                mockTokenId
+              )
             )
           )
-        )
-        .dispatch(
-          setPurchase({ ...mockNFTPurchase, status: PurchaseStatus.FAILED })
-        )
-        .run({ silenceTimeout: true })
-    })
-  })
+          .dispatch(setPurchase({ ...mockNFTPurchase, status }))
+          .run({ silenceTimeout: true })
+      })
+    }
+  )
 
-  describe('when the purchase of an nft failed', () => {
+  describe.each([
+    PurchaseStatus.FAILED,
+    PurchaseStatus.CANCELLED,
+    PurchaseStatus.REFUNDED
+  ])('when the purchase of an nft has a status %s', status => {
     it('should dispatch an action signaling the failure of the nft', () => {
       return expectSaga(assetSaga)
         .provide([
@@ -193,7 +202,7 @@ describe('when handling the set purchase action', () => {
         .dispatch(
           setPurchase({
             ...mockNFTPurchase,
-            status: PurchaseStatus.FAILED,
+            status,
             nft: {
               ...mockNFTPurchase.nft,
               tokenId: mockTokenId,

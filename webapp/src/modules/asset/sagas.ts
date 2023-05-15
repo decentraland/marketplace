@@ -51,7 +51,13 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
       yield put(push(statusPagePathname))
     }
 
-    if (status === PurchaseStatus.FAILED) {
+    const failStatuses = [
+      PurchaseStatus.CANCELLED,
+      PurchaseStatus.FAILED,
+      PurchaseStatus.REFUNDED
+    ]
+
+    if (failStatuses.includes(status)) {
       const failureAction =
         assetType === AssetType.NFT
           ? executeOrderWithCardFailure

@@ -325,6 +325,8 @@ track<SetPurchaseAction>(
       ? events.PURCHASED_CANCELLED
       : action.payload.purchase.status === PurchaseStatus.COMPLETE
       ? events.PURCHASED_COMPLETE
+      : action.payload.purchase.status === PurchaseStatus.REFUNDED
+      ? events.PURCHASED_REFUNDED
       : action.payload.purchase.status === PurchaseStatus.FAILED
       ? events.PURCHASED_FAILED
       : events.PURCHASED_STARTED,
