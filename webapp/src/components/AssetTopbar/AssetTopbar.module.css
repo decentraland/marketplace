@@ -144,6 +144,12 @@
   width: 100%;
 }
 
+.searchContainer :global(.dcl.close) {
+  background: transparent;
+  position: absolute;
+  right: 12px;
+}
+
 .searchContainer.searchMap {
   align-self: flex-end;
   background-color: #16141a;
