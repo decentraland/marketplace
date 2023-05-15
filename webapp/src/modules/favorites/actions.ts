@@ -185,3 +185,22 @@ export const deleteListFailure = (error: string) =>
 export type DeleteListRequestAction = ReturnType<typeof deleteListRequest>
 export type DeleteListSuccessAction = ReturnType<typeof deleteListSuccess>
 export type DeleteListFailureAction = ReturnType<typeof deleteListFailure>
+
+// Get List
+export const GET_LIST_REQUEST = '[Request] Get List'
+export const GET_LIST_SUCCESS = '[Success] Get List'
+export const GET_LIST_FAILURE = '[Failure] Get List'
+
+export const getListRequest = (id: string) => action(GET_LIST_REQUEST, { id })
+
+export const getListSuccess = (list: List) =>
+  action(GET_LIST_SUCCESS, {
+    list
+  })
+
+export const getListFailure = (id: string, error: string) =>
+  action(GET_LIST_FAILURE, { id, error })
+
+export type GetListRequestAction = ReturnType<typeof getListRequest>
+export type GetListSuccessAction = ReturnType<typeof getListSuccess>
+export type GetListFailureAction = ReturnType<typeof getListFailure>

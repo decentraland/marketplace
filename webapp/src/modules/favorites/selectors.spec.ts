@@ -15,7 +15,8 @@ import {
   getLoading,
   getState,
   isPickingOrUnpicking,
-  getLists
+  getLists,
+  getList
 } from './selectors'
 import {
   fetchFavoritedItemsRequest,
@@ -218,5 +219,13 @@ describe.each([
 describe('when getting the lists', () => {
   it('should return the lists', () => {
     expect(getLists(state)).toEqual(state.favorites.data.lists)
+  })
+})
+
+describe('when getting a list by id', () => {
+  it('should return the list', () => {
+    expect(getList(state, 'aListId')).toEqual(
+      state.favorites.data.lists['aListId']
+    )
   })
 })

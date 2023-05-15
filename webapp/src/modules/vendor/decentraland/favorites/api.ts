@@ -97,7 +97,7 @@ export class FavoritesAPI extends BaseClient {
     return this.fetch(`/v1/lists/${listId}`, { method: 'DELETE' })
   }
 
-  async deleteList(listId: string): Promise<void> {
-    return this.fetch(`/v1/list/${listId}`)
+  async getList(listId: string): Promise<List> {
+    return this.fetch(`/v1/lists/${listId}`)
   }
 }

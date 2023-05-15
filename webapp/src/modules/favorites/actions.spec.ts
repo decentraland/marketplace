@@ -39,7 +39,13 @@ import {
   deleteListFailure,
   DELETE_LIST_FAILURE,
   DELETE_LIST_SUCCESS,
-  deleteListSuccess
+  deleteListSuccess,
+  GET_LIST_FAILURE,
+  GET_LIST_REQUEST,
+  GET_LIST_SUCCESS,
+  getListFailure,
+  getListRequest,
+  getListSuccess
 } from './actions'
 import { List, Permission } from './types'
 
@@ -270,6 +276,36 @@ describe('when creating the action to signal a successful delete list request', 
   it('should return an object representing the action', () => {
     expect(deleteListSuccess(list)).toEqual({
       type: DELETE_LIST_SUCCESS,
+      meta: undefined,
+      payload: { list }
+    })
+  })
+})
+
+describe('when creating the action to signal the start of the get list request', () => {
+  it('should return an object representing the action', () => {
+    expect(getListRequest(list.id)).toEqual({
+      type: GET_LIST_REQUEST,
+      meta: undefined,
+      payload: { id: list.id }
+    })
+  })
+})
+
+describe('when creating the action to signal a failure in the get list request', () => {
+  it('should return an object representing the action', () => {
+    expect(getListFailure(list.id, anErrorMessage)).toEqual({
+      type: GET_LIST_FAILURE,
+      meta: undefined,
+      payload: { id: list.id, error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to signal a successful get list request', () => {
+  it('should return an object representing the action', () => {
+    expect(getListSuccess(list)).toEqual({
+      type: GET_LIST_SUCCESS,
       meta: undefined,
       payload: { list }
     })

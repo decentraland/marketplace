@@ -11,6 +11,8 @@ import {
   FetchFavoritedItemsSuccessAction,
   FetchListsRequestAction,
   FetchListsSuccessAction,
+  GetListRequestAction,
+  GetListSuccessAction,
   PickItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteSuccessAction,
@@ -24,6 +26,9 @@ import {
   fetchListsFailure,
   fetchListsRequest,
   fetchListsSuccess,
+  getListFailure,
+  getListRequest,
+  getListSuccess,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -73,7 +78,8 @@ const requestActions = [
   unpickItemAsFavoriteRequest(item),
   undoUnpickingItemAsFavoriteRequest(item),
   fetchFavoritedItemsRequest(itemBrowseOptions),
-  fetchListsRequest(itemBrowseOptions)
+  fetchListsRequest(itemBrowseOptions),
+  getListRequest(actionList.id)
 ]
 
 beforeEach(() => {
@@ -128,6 +134,10 @@ const failureActions = [
   {
     request: deleteListRequest(actionList),
     failure: deleteListFailure(error)
+  },
+  {
+    request: getListRequest(actionList.id),
+    failure: getListFailure(actionList.id, error)
   }
 ]
 
@@ -524,6 +534,41 @@ describe('when reducing the successful action of deleting a list', () => {
         ...initialState.data,
         lists: {
           [initialState.data.lists['anId'].id]: initialState.data.lists['anId']
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of getting a list', () => {
+  let requestAction: GetListRequestAction
+  let successAction: GetListSuccessAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = getListRequest(list.id)
+    successAction = getListSuccess(list)
+    initialState = {
+      ...initialState,
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return an estate without the deleted list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          [list.id]: list
         }
       }
     })

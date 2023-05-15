@@ -22,6 +22,9 @@ import {
   fetchListsFailure,
   fetchListsRequest,
   fetchListsSuccess,
+  getListFailure,
+  getListRequest,
+  getListSuccess,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -585,6 +588,58 @@ describe('when handling the request for deleting a list', () => {
         })
         .put(deleteListSuccess(list))
         .dispatch(deleteListRequest(list))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request for getting a list', () => {
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'anId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'aUserAddress',
+      createdAt: Date.now()
+    }
+  })
+
+  describe('and the call to the favorites api fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [
+            matchers.call.fn(FavoritesAPI.prototype.getList),
+            Promise.reject(error)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.getList,
+          args: [list.id]
+        })
+        .put(getListFailure(list.id, error.message))
+        .dispatch(getListRequest(list.id))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api succeeds', () => {
+    it.only('should dispatch an action signaling the success of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [
+            matchers.call.fn(FavoritesAPI.prototype.getList),
+            Promise.resolve(list)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.getList,
+          args: [list.id]
+        })
+        .put(getListSuccess(list))
+        .dispatch(getListRequest(list.id))
         .run({ silenceTimeout: true })
     })
   })
