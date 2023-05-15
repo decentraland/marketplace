@@ -210,6 +210,7 @@ const AssetCard = (props: Props) => {
               />
             ) : null}
             <Card.Content
+              data-testid="asset-card-content"
               className={`${isCatalogItem(asset) ? 'catalog' : ''} ${
                 !!catalogItemInformation?.extraInformation ? 'expandable' : ''
               }`}

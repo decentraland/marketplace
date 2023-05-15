@@ -1,3 +1,5 @@
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils'
+import { screen } from '@testing-library/react'
 import {
   BodyShape,
   ChainId,
@@ -8,6 +10,7 @@ import {
 } from '@dcl/schemas'
 import { Asset } from '../../modules/asset/types'
 import { INITIAL_STATE } from '../../modules/favorites/reducer'
+import { SortBy } from '../../modules/routing/types'
 import { renderWithProviders } from '../../utils/test'
 import AssetCard from './AssetCard'
 import { Props as AssetCardProps } from './AssetCard.types'
@@ -23,6 +26,8 @@ function renderAssetCard(props: Partial<AssetCardProps> = {}) {
       showRentalChip={false}
       rental={null}
       isFavoritesEnabled={false}
+      sortBy={SortBy.RECENTLY_LISTED}
+      appliedFilters={{ maxPrice: '100', minPrice: '1' }}
       {...props}
     />,
     {
@@ -80,6 +85,26 @@ describe('AssetCard', () => {
     renderAssetCard({ asset })
   })
 
+  describe('when its interesected', () => {
+    it('should render the Asset Card content', () => {
+      renderAssetCard({
+        asset,
+        isFavoritesEnabled: true
+      })
+      mockAllIsIntersecting(true)
+      expect(screen.getByTestId('asset-card-content')).toBeInTheDocument()
+    })
+  })
+  describe('when its not interesected', () => {
+    it('should not render the Asset Card content', () => {
+      renderAssetCard({
+        asset,
+        isFavoritesEnabled: true
+      })
+      expect(screen.queryByTestId('asset-card-content')).not.toBeInTheDocument()
+    })
+  })
+
   describe('when the favorites feature flag is not enabled', () => {
     it('should not render the favorites counter', () => {
       const { queryByTestId } = renderAssetCard({
@@ -111,11 +136,14 @@ describe('AssetCard', () => {
       })
 
       it('should render the favorites counter', () => {
-        const { getByTestId } = renderAssetCard({
+        renderAssetCard({
           asset,
           isFavoritesEnabled: true
         })
-        expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
+        mockAllIsIntersecting(true)
+        expect(
+          screen.getByTestId(FAVORITES_COUNTER_TEST_ID)
+        ).toBeInTheDocument()
       })
     })
   })

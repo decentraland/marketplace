@@ -128,14 +128,6 @@ export function getClearedBrowseOptions(
     ? reset(browseOptions, keys)
     : omit(browseOptions, keys)
 
-  console.log('browseOptions.view: ', browseOptions.view)
-  console.log('browseOptions.section: ', browseOptions.section)
-  const pepe = isCatalogViewAndSection(
-    browseOptions.view,
-    browseOptions.section as Section
-  )
-  console.log('pepe: ', pepe)
-
   // The status as only on sale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
   if (
     !clearedBrowseOptions.status &&
@@ -144,16 +136,12 @@ export function getClearedBrowseOptions(
   ) {
     clearedBrowseOptions.status = AssetStatusFilter.ON_SALE
   }
-  console.log('clearedBrowseOptions.status: ', clearedBrowseOptions.status)
 
   // The onlyOnSale filter is ON by default for some sections. The clear should remove it if it's off so it's back on (default state)
   if (
     !clearedBrowseOptions.onlyOnSale &&
     !isLandSection(browseOptions.section as Section) &&
-    !isCatalogViewAndSection(
-      browseOptions.view,
-      browseOptions.section as Section
-    )
+    !isCatalogViewWithStatusFilter(browseOptions.view)
   ) {
     clearedBrowseOptions.onlyOnSale = true
   }
