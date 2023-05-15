@@ -1192,7 +1192,9 @@
     "not_for_sale": "Not for sale",
     "owners": "{count} {count, plural, one {Owner} other {Owners}}",
     "cheapest_option": "Cheapest Option",
+    "cheapest_option_range": "Cheapest Option within range",
     "most_expensive": "Most Expensive",
+    "most_expensive_range": "Most Expensive within range",
     "also_minting": "Also available for minting"
   },
   "rentals_promotional_modal": {
