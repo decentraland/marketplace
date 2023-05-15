@@ -385,6 +385,7 @@
     },
     "rarities": {
       "title": "Rarity",
+      "tooltip": "The Rarity determines the total number of NFTs that can be minted",
       "all_items": "All rarities",
       "count_items": "{count} {count, plural, one {rarity} other {rarities}}"
     },

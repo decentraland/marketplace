@@ -379,6 +379,7 @@
     },
     "rarities": {
       "title": "Rareza",
+      "tooltip": "La rareza determina la cantidad de NFTs que pueden ser minteados",
       "all_items": "Todas las rarezas",
       "count_items": "{count} {count, plural, one {rareza} other {rarezas}}"
     },

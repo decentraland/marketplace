@@ -382,6 +382,7 @@
     },
     "rarities": {
       "title": "稀有度",
+      "tooltip": "稀有度决定了可以铸造的 NFT 总数",
       "all_items": "所有稀有",
       "count_items": "{count} {count, plural, one {稀有度} other {珍品}}"
     },
