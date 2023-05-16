@@ -8,21 +8,23 @@ const FIRST = '1000'
 class BidAPI extends BaseAPI {
   async fetch(
     options: Record<string, string>,
-    sortBy?: BidSortBy
-  ): Promise<Bid[]> {
+    sortBy?: BidSortBy,
+    bidder?: string
+  ): Promise<{ data: Bid[]; total: number }> {
     const queryParams = new URLSearchParams()
     for (const key of Object.keys(options)) {
       queryParams.append(key, options[key])
     }
     sortBy && queryParams.append('sortBy', sortBy.toString())
+    bidder && queryParams.append('bidder', bidder)
     try {
       const response: { data: Bid[]; total: number } = await this.request(
         'get',
         `/bids?${queryParams.toString()}`
       )
-      return response.data
+      return response
     } catch (error) {
-      return []
+      return { data: [], total: 0 }
     }
   }
   async fetchBySeller(seller: string) {
@@ -40,18 +42,22 @@ class BidAPI extends BaseAPI {
   async fetchByNFT(
     contractAddress: string,
     tokenId: string,
-    status: ListingStatus = ListingStatus.OPEN,
+    status?: ListingStatus | null,
     sortBy?: BidSortBy,
-    first: string = FIRST
+    first: string = FIRST,
+    skip: string = '0',
+    bidder?: string
   ) {
     return this.fetch(
       {
         contractAddress,
         tokenId,
-        status,
-        first
+        status: status || ListingStatus.OPEN,
+        first,
+        skip
       },
-      sortBy
+      sortBy,
+      bidder
     )
   }
 }

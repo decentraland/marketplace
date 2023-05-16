@@ -586,6 +586,20 @@
       "no_offer": "沒有報價"
     }
   },
+  "offers_table": {
+    "offers": "優惠",
+    "from": "從",
+    "published_date": "發布日期",
+    "expiration_date": "到期日期",
+    "offer": "優惠",
+    "your_offer": "你的報價",
+    "date_published": "發布日期",
+    "remove": "刪除",
+    "most_expensive": "最貴",
+    "recenty_offered": "最近提供",
+    "recently_updated": "最近更新",
+    "accept": "接受"
+  },
   "listings_table": {
     "other_available_listings": "其他可用的收藏品",
     "listings": "收藏品",
