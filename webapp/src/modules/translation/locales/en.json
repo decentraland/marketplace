@@ -385,6 +385,7 @@
     },
     "rarities": {
       "title": "Rarity",
+      "tooltip": "The Rarity determines the total number of NFTs that can be minted",
       "all_items": "All rarities",
       "count_items": "{count} {count, plural, one {rarity} other {rarities}}"
     },
@@ -1206,12 +1207,15 @@
     },
     "listings": "{count} {count, plural, one {Listing} other {Listings}}",
     "available_for_mint": "Available for mint",
+    "available_listings_in_range": "Available listings in this range",
     "cheapest_listing": "Cheapest Listing",
     "not_for_sale": "Not for sale",
     "owners": "{count} {count, plural, one {Owner} other {Owners}}",
     "cheapest_option": "Cheapest Option",
+    "cheapest_option_range": "Cheapest Option within range",
     "most_expensive": "Most Expensive",
-    "also_minting": "Also Available for minting"
+    "most_expensive_range": "Most Expensive within range",
+    "also_minting": "Also available for minting"
   },
   "rentals_promotional_modal": {
     "title": "Announcing LAND rentals",

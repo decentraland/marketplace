@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import classNames from 'classnames'
 import {
+  Close,
   Dropdown,
   DropdownProps,
   Field,
@@ -124,6 +125,7 @@ export const AssetTopbar = ({
             iconPosition="left"
           />
         )}
+        {searchValue ? <Close onClick={() => handleSearch('')} /> : null}
         {isLandSection(section) && !isAccountView(view!) && (
           <div
             className={classNames(styles.mapToggle, { [styles.map]: isMap })}
