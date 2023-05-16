@@ -204,3 +204,21 @@ export const getListFailure = (id: string, error: string) =>
 export type GetListRequestAction = ReturnType<typeof getListRequest>
 export type GetListSuccessAction = ReturnType<typeof getListSuccess>
 export type GetListFailureAction = ReturnType<typeof getListFailure>
+
+// Update List
+export const UPDATE_LIST_REQUEST = '[Request] Update List'
+export const UPDATE_LIST_SUCCESS = '[Success] Update List'
+export const UPDATE_LIST_FAILURE = '[Failure] Update List'
+
+export const updateListRequest = (id: string, updatedList: Partial<List>) =>
+  action(UPDATE_LIST_REQUEST, { id, updatedList })
+
+export const updateListSuccess = (list: List) =>
+  action(UPDATE_LIST_SUCCESS, { list })
+
+export const updateListFailure = (id: string, error: string) =>
+  action(UPDATE_LIST_FAILURE, { id, error })
+
+export type UpdateListRequestAction = ReturnType<typeof updateListRequest>
+export type UpdateListSuccessAction = ReturnType<typeof updateListSuccess>
+export type UpdateListFailureAction = ReturnType<typeof updateListFailure>

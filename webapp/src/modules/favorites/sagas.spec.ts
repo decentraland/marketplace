@@ -33,7 +33,10 @@ import {
   undoUnpickingItemAsFavoriteSuccess,
   unpickItemAsFavoriteFailure,
   unpickItemAsFavoriteRequest,
-  unpickItemAsFavoriteSuccess
+  unpickItemAsFavoriteSuccess,
+  updateListFailure,
+  updateListRequest,
+  updateListSuccess
 } from './actions'
 import { favoritesSaga } from './sagas'
 import { getListId } from './selectors'
@@ -640,6 +643,58 @@ describe('when handling the request for getting a list', () => {
         })
         .put(getListSuccess(list))
         .dispatch(getListRequest(list.id))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request for updating a list', () => {
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'anId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'aUserAddress',
+      createdAt: Date.now()
+    }
+  })
+
+  describe('and the call to the favorites api fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [
+            matchers.call.fn(FavoritesAPI.prototype.updateList),
+            Promise.reject(error)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.updateList,
+          args: [list.id, list]
+        })
+        .put(updateListFailure(list.id, error.message))
+        .dispatch(updateListRequest(list.id, list))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api succeeds', () => {
+    it('should dispatch an action signaling the success of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [
+            matchers.call.fn(FavoritesAPI.prototype.updateList),
+            Promise.resolve(list)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.updateList,
+          args: [list.id, list]
+        })
+        .put(updateListSuccess(list))
+        .dispatch(updateListRequest(list.id, list))
         .run({ silenceTimeout: true })
     })
   })

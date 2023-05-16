@@ -100,4 +100,17 @@ export class FavoritesAPI extends BaseClient {
   async getList(listId: string): Promise<List> {
     return this.fetch(`/v1/lists/${listId}`)
   }
+
+  async updateList(
+    listId: string,
+    updatedList: Partial<List>
+  ): Promise<Partial<List>> {
+    return this.fetch(`/v1/lists/${listId}`, {
+      method: 'PUT',
+      body: JSON.stringify(updatedList),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  }
 }
