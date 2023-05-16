@@ -5,7 +5,7 @@ import { Button, Icon, Mana, Popup } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import mintingIcon from '../../images/minting.png'
 import infoIcon from '../../images/infoIcon.png'
-import { fomrmatWeiToAssetCard } from '../AssetCard/utils'
+import { formatWeiToAssetCard } from '../AssetCard/utils'
 import { ManaToFiat } from '../ManaToFiat'
 import { AvailableForMintPopupType } from './AssetImage.types'
 import './AssetImage.css'
@@ -62,7 +62,7 @@ const AvailableForMintPopup = ({
                 network={network as Network}
                 className="informationBold"
               >
-                {fomrmatWeiToAssetCard(price)}
+                {formatWeiToAssetCard(price)}
               </Mana>
             </div>
             {+price > 0 && (

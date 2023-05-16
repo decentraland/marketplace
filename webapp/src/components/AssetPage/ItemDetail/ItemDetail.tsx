@@ -1,5 +1,4 @@
 import React, { useMemo, useRef } from 'react'
-import { Container } from 'decentraland-ui'
 import { BodyShape, EmotePlayMode, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -126,10 +125,8 @@ const ItemDetail = ({ item }: Props) => {
         </div>
       </div>
 
-      <Container>
-        <ListingsTableContainer item={item} ref={tableRef} />
-        <TransactionHistory asset={item} />
-      </Container>
+      <ListingsTableContainer item={item} ref={tableRef} />
+      <TransactionHistory asset={item} />
     </div>
   )
 }

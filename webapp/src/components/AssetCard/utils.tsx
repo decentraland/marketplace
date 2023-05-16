@@ -11,7 +11,7 @@ const ONE_MILLION = 1000000
 const ONE_BILLION = 1000000000
 const ONE_TRILLION = 1000000000000
 
-export function fomrmatWeiToAssetCard(wei: string): string {
+export function formatWeiToAssetCard(wei: string): string {
   const maximumFractionDigits = MAXIMUM_FRACTION_DIGITS
   const value = Number(ethers.utils.formatEther(wei))
 
@@ -50,7 +50,7 @@ export function getAlsoAvailableForMintingText(asset: Item) {
     <span>
       {t('asset_card.also_minting')}:&nbsp;
       <Mana size="small" network={asset.network} className="tiniMana">
-        {fomrmatWeiToAssetCard(asset.price)}
+        {formatWeiToAssetCard(asset.price)}
       </Mana>
     </span>
   )
@@ -67,13 +67,13 @@ export function getAssetListingsRangeInfoText(asset: Item) {
       :&nbsp;
       <span>
         <Mana size="small" network={asset.network} className="tiniMana">
-          {fomrmatWeiToAssetCard(asset.minListingPrice)}
+          {formatWeiToAssetCard(asset.minListingPrice)}
         </Mana>
         &nbsp;
         {!!asset.listings &&
           asset.listings > 1 &&
           asset.minListingPrice !== asset.maxListingPrice &&
-          `- ${fomrmatWeiToAssetCard(asset.maxListingPrice)}`}
+          `- ${formatWeiToAssetCard(asset.maxListingPrice)}`}
       </span>
     </span>
   ) : null

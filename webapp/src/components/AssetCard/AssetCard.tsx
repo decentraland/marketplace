@@ -30,7 +30,7 @@ import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
-import { fomrmatWeiToAssetCard, getCatalogCardInformation } from './utils'
+import { formatWeiToAssetCard, getCatalogCardInformation } from './utils'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
 
@@ -44,7 +44,7 @@ const RentalPrice = ({
   return (
     <>
       <Mana className="rental-price" network={asset.network} inline>
-        {fomrmatWeiToAssetCard(rentalPricePerDay)}
+        {formatWeiToAssetCard(rentalPricePerDay)}
       </Mana>
       <span className="card-rental-day">/{t('global.day')}</span>
     </>
@@ -150,12 +150,12 @@ const AssetCard = (props: Props) => {
           <div className="PriceInMana">
             <Mana size="large" network={asset.network} className="PriceInMana">
               {catalogItemInformation.price?.includes('-')
-                ? `${fomrmatWeiToAssetCard(
+                ? `${formatWeiToAssetCard(
                     catalogItemInformation.price.split(' - ')[0]
-                  )} - ${fomrmatWeiToAssetCard(
+                  )} - ${formatWeiToAssetCard(
                     catalogItemInformation.price.split(' - ')[1]
                   )}`
-                : fomrmatWeiToAssetCard(catalogItemInformation.price)}
+                : formatWeiToAssetCard(catalogItemInformation.price)}
             </Mana>
           </div>
         ) : (
@@ -228,7 +228,7 @@ const AssetCard = (props: Props) => {
                 </div>
                 {!isCatalogItem(asset) && price ? (
                   <Mana network={asset.network} inline>
-                    {fomrmatWeiToAssetCard(price)}
+                    {formatWeiToAssetCard(price)}
                   </Mana>
                 ) : rentalPricePerDay ? (
                   <RentalPrice
