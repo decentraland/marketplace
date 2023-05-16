@@ -584,6 +584,7 @@
     }
   },
   "listings_table": {
+    "other_available_listings": "Otros coleccionables disponibles",
     "owner": "Dueño",
     "issue_number": "Número de emisión",
     "issue_number_asc": "Número de emisión ↑",

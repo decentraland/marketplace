@@ -76,6 +76,7 @@ const TransactionHistory = (props: Props) => {
       tabsList={tabList}
       children={
         <TableContent
+          hasHeaders
           data={sales}
           activePage={page}
           isLoading={isLoading}
