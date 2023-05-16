@@ -15,7 +15,7 @@ export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
 
 const ListingsTable = (props: Props) => {
-  const { asset, sortBy = OrderSortBy.CHEAPEST } = props
+  const { asset, sortBy = OrderSortBy.CHEAPEST, nftToRemove } = props
 
   const [orders, setOrders] = useState<DataTableType[]>([])
   const [total, setTotal] = useState<number | null>(null)
@@ -59,7 +59,7 @@ const ListingsTable = (props: Props) => {
           console.error(error)
         })
     }
-  }, [asset, setIsLoading, setOrders, sortBy, page])
+  }, [asset, setIsLoading, setOrders, sortBy, page, nftToRemove])
 
   return (
     <TableContent
