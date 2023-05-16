@@ -11,7 +11,7 @@ import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import styles from './ListingsTable.module.css'
 
 export const formatDataToTable = (orders: Order[]): DataTableType[] => {
-  return orders?.map((order: Order) => {
+  return orders.reduce((accumulator: DataTableType[], order: Order) => {
     const value: DataTableType = {
       [t('listings_table.owner')]: (
         <LinkedProfile
@@ -69,6 +69,6 @@ export const formatDataToTable = (orders: Order[]): DataTableType[] => {
         </div>
       )
     }
-    return value
-  })
+    return [...accumulator, value]
+  }, [])
 }

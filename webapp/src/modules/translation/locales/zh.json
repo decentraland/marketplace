@@ -587,6 +587,7 @@
     }
   },
   "listings_table": {
+    "other_available_listings": "其他可用的收藏品",
     "listings": "收藏品",
     "owner": "所有者",
     "published_date": "發布日期",

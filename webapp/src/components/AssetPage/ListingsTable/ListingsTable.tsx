@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ListingStatus, Network } from '@dcl/schemas'
 import { OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isNFT } from '../../../modules/asset/utils'
 import { orderAPI } from '../../../modules/vendor/decentraland'
 import noListings from '../../../images/noListings.png'
 import { TableContent } from '../../Table/TableContent'
@@ -44,7 +45,13 @@ const ListingsTable = (props: Props) => {
         .fetchOrders(params, sortBy)
         .then(response => {
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
-          setOrders(formatDataToTable(response.data))
+          setOrders(
+            formatDataToTable(
+              isNFT(asset)
+                ? response.data.filter(order => order.tokenId === asset.tokenId)
+                : response.data
+            )
+          )
           setTotal(response.total)
         })
         .finally(() => setIsLoading(false))
@@ -69,6 +76,7 @@ const ListingsTable = (props: Props) => {
       total={total}
       rowsPerPage={ROWS_PER_PAGE}
       activePage={page}
+      hasHeaders
     />
   )
 }
