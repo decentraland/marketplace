@@ -1,7 +1,7 @@
 import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { FavoritedItems, List, Permission } from '../../../favorites/types'
 import { ItemFilters } from '../item/types'
 import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from './api'
-import { FavoritedItems, List, Permission } from '../../../favorites/types'
 
 let itemId: string
 let identity: AuthIdentity
