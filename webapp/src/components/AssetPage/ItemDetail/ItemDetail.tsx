@@ -126,10 +126,8 @@ const ItemDetail = ({ item }: Props) => {
         </div>
       </div>
 
-      <Container>
-        <ListingsTableContainer item={item} ref={tableRef} />
-        <TransactionHistory asset={item} />
-      </Container>
+      <ListingsTableContainer item={item} ref={tableRef} />
+      <TransactionHistory asset={item} />
     </div>
   )
 }
