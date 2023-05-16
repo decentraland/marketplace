@@ -608,6 +608,16 @@ function* deriveCurrentOptions(
       }
       break
     }
+    case NFTCategory.ENS: {
+      // for ENS, if the previous page had `onlyOnSale` as `undefined` like wearables or emotes, it defaults to `true`, otherwise use the current value
+      newOptions = {
+        ...newOptions,
+        assetType: AssetType.NFT,
+        onlyOnSale:
+          previous.onlyOnSale === undefined ? true : current.onlyOnSale
+      }
+      break
+    }
     default: {
       newOptions = { ...newOptions, assetType: AssetType.NFT }
     }
