@@ -9,7 +9,8 @@ import CampaignBadge from '../../Campaign/CampaignBadge'
 import TableContainer from '../../Table/TableContainer'
 import RarityBadge from '../../RarityBadge'
 import BaseDetail from '../BaseDetail'
-import { BidList } from '../BidList'
+import { BidsTable } from '../BidsTable'
+import { YourOffer } from '../YourOffer'
 import Collection from '../Collection'
 import { Description } from '../Description'
 import IconBadge from '../IconBadge'
@@ -98,7 +99,8 @@ const EmoteDetail = ({ nft }: Props) => {
       actions={<SaleActionBox asset={nft} />}
       below={
         <>
-          <BidList nft={nft} />
+          <YourOffer nft={nft} />
+          <BidsTable nft={nft} />
           <TransactionHistory asset={nft} />
           <TableContainer
             tabsList={tabList}
