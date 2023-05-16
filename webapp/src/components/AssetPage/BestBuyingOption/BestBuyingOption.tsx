@@ -84,7 +84,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                   '1'
                 )
                 .then(response => {
-                  setMostExpensiveBid(response[0])
+                  setMostExpensiveBid(response.data[0])
                 })
                 .finally(() => setIsLoading(false))
                 .catch(error => {

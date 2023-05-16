@@ -67,7 +67,7 @@ describe('Best Buying Option', () => {
     tokenId: '1',
     owner: '0x92712b730b9a474f99a47bb8b1750190d5959a2b',
     buyer: null,
-    price: '10',
+    price: '100000000000000000000',
     status: ListingStatus.OPEN,
     expiresAt: 1671033414000,
     createdAt: 1671033414000,
