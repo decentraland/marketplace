@@ -26,8 +26,8 @@ const EmoteDetail = ({ nft }: Props) => {
 
   const tabList = [
     {
-      value: 'other_availbale_listings',
-      displayValue: t('listings_table.other_availbale_listings')
+      value: 'other_available_listings',
+      displayValue: t('listings_table.other_available_listings')
     }
   ]
 

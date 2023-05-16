@@ -9,6 +9,7 @@ import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
 import { Props } from './ListingsTable.types'
 import styles from './ListingsTable.module.css'
+import { isNFT } from '../../../modules/asset/utils'
 
 export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
@@ -44,7 +45,13 @@ const ListingsTable = (props: Props) => {
         .fetchOrders(params, sortBy)
         .then(response => {
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
-          setOrders(formatDataToTable(response.data, nftToRemove))
+          setOrders(
+            formatDataToTable(
+              isNFT(asset)
+                ? response.data.filter(order => order.tokenId === asset.tokenId)
+                : response.data
+            )
+          )
           setTotal(response.total)
         })
         .finally(() => setIsLoading(false))
