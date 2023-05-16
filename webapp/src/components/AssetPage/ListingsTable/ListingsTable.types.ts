@@ -4,7 +4,6 @@ import { Asset } from '../../../modules/asset/types'
 export type Props = {
   asset: Asset | null
   sortBy?: OrderSortBy
-  nftToRemove?: string
 }
 
 export type MapStateProps = {}

@@ -108,11 +108,7 @@ const EmoteDetail = ({ nft }: Props) => {
             sortbyList={listingSortByOptions}
             sortBy={sortBy}
             children={
-              <ListingsTable
-                asset={nft}
-                sortBy={sortBy as OrderSortBy}
-                nftToRemove={nft.tokenId}
-              />
+              <ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />
             }
           />
         </>
