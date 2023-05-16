@@ -275,7 +275,6 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
     try {
       const list: List = yield call([favoritesAPI, 'getList'], id)
-      console.log('the list', list)
       yield put(getListSuccess(list))
     } catch (error) {
       yield put(
