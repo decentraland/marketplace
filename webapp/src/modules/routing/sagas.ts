@@ -41,7 +41,8 @@ import {
   getSection,
   getMaxPrice,
   getMinPrice,
-  getStatus
+  getStatus,
+  getEmotePlayMode
 } from '../routing/selectors'
 import {
   fetchNFTRequest,
@@ -601,6 +602,7 @@ function* deriveCurrentOptions(
           maxPrice: yield select(getMaxPrice),
           minPrice: yield select(getMinPrice),
           status: yield select(getStatus),
+          emotePlayMode: yield select(getEmotePlayMode),
           ...newOptions
         }
       }
