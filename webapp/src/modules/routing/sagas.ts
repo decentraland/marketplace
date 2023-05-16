@@ -13,7 +13,8 @@ import {
   getLocation,
   goBack,
   LOCATION_CHANGE,
-  replace
+  replace,
+  LocationChangeAction
 } from 'connected-react-router'
 import {
   NFTCategory,
@@ -70,6 +71,7 @@ import {
   BROWSE,
   BrowseAction,
   FETCH_ASSETS_FROM_ROUTE,
+  fetchAssetsFromRoute as fetchAssetsFromRouteAction,
   FetchAssetsFromRouteAction,
   CLEAR_FILTERS,
   GO_BACK,
@@ -108,6 +110,7 @@ import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
+  yield takeEvery(LOCATION_CHANGE, handleLocationChange)
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
   yield takeEvery(BROWSE, handleBrowse)
   yield takeEvery(CLEAR_FILTERS, handleClearFilters)
@@ -125,6 +128,14 @@ export function* routingSaga() {
     ],
     handleRedirectToActivity
   )
+}
+
+function* handleLocationChange(action: LocationChangeAction) {
+  // Re-triggers fetchAssetsFromRoute action when the user goes back
+  if (action.payload.action === 'POP') {
+    const options: BrowseOptions = yield select(getCurrentBrowseOptions)
+    yield put(fetchAssetsFromRouteAction(options))
+  }
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
