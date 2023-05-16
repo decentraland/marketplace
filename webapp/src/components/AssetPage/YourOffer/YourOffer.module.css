@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   margin-top: 30px;
-  padding: 30px;
 }
 
 .YourOffer .actions {
@@ -15,6 +14,10 @@
 .YourOffer .actionsContainer {
   display: flex;
   gap: 14px;
+}
+
+.YourOffer .bottomInformationPadding {
+  padding: 0px 26px 15px 26px;
 }
 
 .YourOffer .calendar {
@@ -80,6 +83,7 @@
   font-size: 22px;
   font-weight: 700;
   gap: 10px;
+  padding: 28px 0px 0px 26px;
 }
 
 .YourOffer .texts {
