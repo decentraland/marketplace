@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { ListingStatus, Network } from '@dcl/schemas'
 import { OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isNFT } from '../../../modules/asset/utils'
 import { orderAPI } from '../../../modules/vendor/decentraland'
 import noListings from '../../../images/noListings.png'
 import { TableContent } from '../../Table/TableContent'
@@ -9,7 +10,6 @@ import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
 import { Props } from './ListingsTable.types'
 import styles from './ListingsTable.module.css'
-import { isNFT } from '../../../modules/asset/utils'
 
 export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
