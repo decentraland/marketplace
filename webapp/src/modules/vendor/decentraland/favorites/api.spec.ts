@@ -238,7 +238,7 @@ describe('when getting a list', () => {
       fetchMock.mockResolvedValueOnce(response)
     })
 
-    it('should resolve', () => {
+    it('should resolve with the retrieved list', () => {
       return expect(favoritesAPI.getList(list.id)).resolves.toEqual(response)
     })
   })
