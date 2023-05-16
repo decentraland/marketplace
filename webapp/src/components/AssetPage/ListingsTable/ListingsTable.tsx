@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { ListingStatus, Network } from '@dcl/schemas'
 import { OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -15,7 +16,8 @@ export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
 
 const ListingsTable = (props: Props) => {
-  const { asset, sortBy = OrderSortBy.CHEAPEST, nftToRemove } = props
+  const { asset, sortBy = OrderSortBy.CHEAPEST } = props
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const [orders, setOrders] = useState<DataTableType[]>([])
   const [total, setTotal] = useState<number | null>(null)
@@ -49,7 +51,8 @@ const ListingsTable = (props: Props) => {
             formatDataToTable(
               isNFT(asset)
                 ? response.data.filter(order => order.tokenId === asset.tokenId)
-                : response.data
+                : response.data,
+              isMobileOrTablet
             )
           )
           setTotal(response.total)
@@ -59,7 +62,7 @@ const ListingsTable = (props: Props) => {
           console.error(error)
         })
     }
-  }, [asset, setIsLoading, setOrders, sortBy, page, nftToRemove])
+  }, [asset, setIsLoading, setOrders, sortBy, page, isMobileOrTablet])
 
   return (
     <TableContent

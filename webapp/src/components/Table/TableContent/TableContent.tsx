@@ -58,6 +58,7 @@ const TableContent = (props: Props) => {
           {`${t('global.showing')} ${activePage}-${activePage *
             rowsPerPage}  ${t('global.of')} ${total}`}
           <Pagination
+            siblingRange={0}
             activePage={activePage}
             totalPages={totalPages}
             onPageChange={(_event, props) =>

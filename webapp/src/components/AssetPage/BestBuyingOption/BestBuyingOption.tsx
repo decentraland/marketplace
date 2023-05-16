@@ -22,7 +22,7 @@ import infoIcon from '../../../images/infoIcon.png'
 import clock from '../../../images/clock.png'
 import noListings from '../../../images/noListings.png'
 import { ManaToFiat } from '../../ManaToFiat'
-import { fomrmatWeiToAssetCard } from '../../AssetCard/utils'
+import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BuyOptions, Props } from './BestBuyingOption.types'
@@ -167,7 +167,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                     network={asset.network}
                     className={styles.informationBold}
                   >
-                    {fomrmatWeiToAssetCard(asset.price)}
+                    {formatWeiToAssetCard(asset.price)}
                   </Mana>
                 </div>
                 {+asset.price > 0 && (
@@ -214,7 +214,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                     network={asset.network}
                     className={styles.informationBold}
                   >
-                    {fomrmatWeiToAssetCard(listing.order.price)}
+                    {formatWeiToAssetCard(listing.order.price)}
                   </Mana>
                 </div>
                 {+listing.order.price > 0 && (
@@ -243,7 +243,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                         network={listing.order.network}
                         className={styles.listingMana}
                       >
-                        {fomrmatWeiToAssetCard(mostExpensiveBid.price)}
+                        {formatWeiToAssetCard(mostExpensiveBid.price)}
                       </Mana>
                     </div>
 

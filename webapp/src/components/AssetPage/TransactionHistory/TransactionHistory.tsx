@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Item } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { saleAPI } from '../../../modules/vendor/decentraland'
@@ -15,6 +16,7 @@ const ROWS_PER_PAGE = 12
 
 const TransactionHistory = (props: Props) => {
   const { asset } = props
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const tabList = [
     {
@@ -52,7 +54,7 @@ const TransactionHistory = (props: Props) => {
         .fetch(params)
         .then(response => {
           setTotal(response.total)
-          setSales(formatDataToTable(response.data))
+          setSales(formatDataToTable(response.data, isMobileOrTablet))
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => setIsLoading(false))
@@ -68,7 +70,8 @@ const TransactionHistory = (props: Props) => {
     setSales,
     page,
     isAssetNull,
-    isAssetNFT
+    isAssetNFT,
+    isMobileOrTablet
   ])
 
   return sales.length > 0 ? (
