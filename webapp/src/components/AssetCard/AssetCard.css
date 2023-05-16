@@ -1,5 +1,5 @@
 .AssetCard {
-  height: 346px;
+  height: 345px;
   overflow: visible;
 }
 
@@ -287,12 +287,7 @@
 }
 
 @media (max-width: 768px) {
-  .AssetCard .ui.cards a.card:hover,
-  .ui.link.card:hover,
-  .ui.link.cards .card:hover,
-  a.ui.card:hover,
-  .ui.cards > .ui.card.link:hover,
-  .ui.card.link:hover {
+  .AssetBrowse .ui.cards .ui.card.AssetCard {
     transform: translateY(0px);
   }
 
