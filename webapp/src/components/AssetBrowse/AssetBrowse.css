@@ -146,7 +146,7 @@
   .AssetBrowse .ui.cards {
     display: flex;
   }
-  .AssetBrowse .ui.cards .ui.card.AssetCard {
+  .AssetBrowse .ui.cards > div {
     width: 48%;
   }
   .AssetBrowse .ui.cards .content.catalog {

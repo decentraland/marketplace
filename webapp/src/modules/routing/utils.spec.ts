@@ -118,12 +118,43 @@ describe('when checking if the map is set', () => {
 describe('when clearing browser options', () => {
   let baseBrowseOptions: BrowseOptions
   let options: BrowseOptions
+  describe('and its a catalog view that should render the status filter', () => {
+    beforeEach(() => {
+      baseBrowseOptions = {
+        page: 1,
+        view: View.MARKET
+      }
+    })
+    it('should set the default status filter option', () => {
+      expect(getClearedBrowseOptions(baseBrowseOptions)).toStrictEqual({
+        ...baseBrowseOptions,
+        status: AssetStatusFilter.ON_SALE
+      })
+    })
+  })
+
+  describe('and its not a catalog view', () => {
+    beforeEach(() => {
+      baseBrowseOptions = {
+        onlyOnSale: false,
+        page: 1,
+        view: View.CURRENT_ACCOUNT,
+        section: Section.WEARABLES
+      }
+    })
+    it('should not set the status filter option', () => {
+      expect(getClearedBrowseOptions(baseBrowseOptions)).toStrictEqual({
+        ...baseBrowseOptions,
+        onlyOnSale: true
+      })
+    })
+  })
+
   describe('and the creators filter is set', () => {
     beforeEach(() => {
       baseBrowseOptions = {
         onlyOnSale: true,
-        page: 1,
-        status: AssetStatusFilter.ON_SALE
+        page: 1
       }
       options = {
         ...baseBrowseOptions,

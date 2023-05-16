@@ -39,7 +39,11 @@ import {
   getOnlySmart,
   getCurrentBrowseOptions,
   getCurrentLocationAddress,
-  getSection
+  getSection,
+  getMaxPrice,
+  getMinPrice,
+  getStatus,
+  getEmotePlayMode
 } from '../routing/selectors'
 import {
   fetchNFTRequest,
@@ -380,7 +384,9 @@ export function* getNewBrowseOptions(
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
-  const section = yield select(getSection)
+  const section: Section = current.section
+    ? current.section
+    : yield select(getSection)
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
@@ -543,9 +549,12 @@ function* deriveCurrentOptions(
     onlyOnRent: current.hasOwnProperty('onlyOnRent')
       ? current.onlyOnRent
       : previous.onlyOnRent,
-    onlyOnSale: current.hasOwnProperty('onlyOnSale')
-      ? current.onlyOnSale
-      : previous.onlyOnSale
+    onlyOnSale:
+      current.assetType === AssetType.ITEM
+        ? undefined
+        : current.hasOwnProperty('onlyOnSale')
+        ? current.onlyOnSale
+        : previous.onlyOnSale
   }
 
   // Checks if the sorting categories are correctly set for the onlyOnRental and the onlyOnSell filters
@@ -586,6 +595,9 @@ function* deriveCurrentOptions(
           network: yield select(getNetwork),
           contracts: yield select(getContracts),
           onlySmart: yield select(getOnlySmart),
+          maxPrice: yield select(getMaxPrice),
+          minPrice: yield select(getMinPrice),
+          status: yield select(getStatus),
           ...newOptions
         }
       }
@@ -598,8 +610,22 @@ function* deriveCurrentOptions(
       if (prevCategory && prevCategory === nextCategory) {
         newOptions = {
           rarities: yield select(getRarities),
+          maxPrice: yield select(getMaxPrice),
+          minPrice: yield select(getMinPrice),
+          status: yield select(getStatus),
+          emotePlayMode: yield select(getEmotePlayMode),
           ...newOptions
         }
+      }
+      break
+    }
+    case NFTCategory.ENS: {
+      // for ENS, if the previous page had `onlyOnSale` as `undefined` like wearables or emotes, it defaults to `true`, otherwise use the current value
+      newOptions = {
+        ...newOptions,
+        assetType: AssetType.NFT,
+        onlyOnSale:
+          previous.onlyOnSale === undefined ? true : current.onlyOnSale
       }
       break
     }

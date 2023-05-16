@@ -584,7 +584,8 @@ export const hasFiltersEnabled = createSelector<
     adjacentToRoad,
     creators,
     rentalDays,
-    status
+    status,
+    onlySmart
   } = browseOptions
   const isLand = isLandSection(section as Section)
 
@@ -618,6 +619,7 @@ export const hasFiltersEnabled = createSelector<
   return (
     hasNetworkFilter ||
     hasGenderFilter ||
+    onlySmart ||
     hasRarityFilter ||
     hasContractsFilter ||
     hasCreatorFilter ||
