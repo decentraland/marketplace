@@ -53,3 +53,5 @@ export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
         UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST
       ].includes(type) && payload.item.id === itemId
   )
+
+export const getList = (state: RootState, id: string) => getLists(state)[id]
