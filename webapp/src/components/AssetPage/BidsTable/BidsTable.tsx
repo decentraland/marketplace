@@ -75,7 +75,7 @@ const BidsTable = (props: Props) => {
           setBids(
             formatDataToTable(
               response.data.filter(bid => bid.bidder !== address),
-              bid => setShowConfirmationModal({ display: true, bid: bid }),
+              bid => setShowConfirmationModal({ display: true, bid }),
               address
             )
           )
