@@ -122,37 +122,76 @@ describe('when handling the clear filters request action', () => {
     })
 
     describe('and it is not the LAND section', () => {
-      it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
-        return expectSaga(routingSaga)
-          .provide([
-            [
-              select(getCurrentBrowseOptions),
-              {
-                ...browseOptions,
-                onlyOnSale: false,
-                section: Section.COLLECTIONS
-              }
-            ],
-            [select(getPage), 1],
-            [select(getLocation), { pathname }],
-            [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-              Promise.resolve()
-            ]
-          ])
-          .put(
-            push(
-              buildBrowseURL(pathname, {
-                ...browseOptionsWithoutFilters,
-                section: Section.COLLECTIONS,
-                onlyOnSale: true,
-                status: AssetStatusFilter.ON_SALE
-              })
+      describe('and the asset type is Item', () => {
+        it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
+          return expectSaga(routingSaga)
+            .provide([
+              [
+                select(getCurrentBrowseOptions),
+                {
+                  ...browseOptions,
+                  onlyOnSale: false,
+                  section: Section.COLLECTIONS,
+                  assetType: AssetType.NFT
+                }
+              ],
+              [select(getPage), 1],
+              [select(getLocation), { pathname }],
+              [select(getEventData), {}],
+              [
+                call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
+                Promise.resolve()
+              ]
+            ])
+            .put(
+              push(
+                buildBrowseURL(pathname, {
+                  ...browseOptionsWithoutFilters,
+                  section: Section.COLLECTIONS,
+                  assetType: AssetType.NFT,
+                  status: AssetStatusFilter.ON_SALE
+                })
+              )
             )
-          )
-          .dispatch(clearFilters())
-          .run({ silenceTimeout: true })
+            .dispatch(clearFilters())
+            .run({ silenceTimeout: true })
+        })
+      })
+      describe('and the asset type is NFT', () => {
+        it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and remove the onlyOnSale filter", () => {
+          return expectSaga(routingSaga)
+            .provide([
+              [
+                select(getCurrentBrowseOptions),
+                {
+                  ...browseOptions,
+                  onlyOnSale: true,
+                  section: Section.WEARABLES,
+                  assetType: AssetType.NFT,
+                  view: View.CURRENT_ACCOUNT
+                }
+              ],
+              [select(getPage), 1],
+              [select(getLocation), { pathname }],
+              [select(getEventData), {}],
+              [
+                call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
+                Promise.resolve()
+              ]
+            ])
+            .put(
+              push(
+                buildBrowseURL(pathname, {
+                  ...browseOptionsWithoutFilters,
+                  section: Section.WEARABLES,
+                  onlyOnSale: true,
+                  assetType: AssetType.NFT
+                })
+              )
+            )
+            .dispatch(clearFilters())
+            .run({ silenceTimeout: true })
+        })
       })
     })
   })
@@ -1069,8 +1108,7 @@ describe('when handling the browse action', () => {
         sortBy: undefined,
         isMap: undefined,
         isFullscreen: undefined,
-        viewAsGuest: undefined,
-        status: AssetStatusFilter.ON_SALE
+        viewAsGuest: undefined
       }
     })
 

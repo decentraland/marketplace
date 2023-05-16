@@ -1,5 +1,6 @@
 import { Order, RentalListing } from '@dcl/schemas'
 import { Asset } from '../../modules/asset/types'
+import { BrowseOptions } from '../../modules/routing/types'
 
 export type Props = {
   asset: Asset
@@ -12,6 +13,7 @@ export type Props = {
   showRentalChip: boolean
   rental: RentalListing | null
   sortBy: string | undefined
+  appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>
 }
 
 export type MapStateProps = Pick<
@@ -22,6 +24,7 @@ export type MapStateProps = Pick<
   | 'rental'
   | 'isClaimingBackLandTransactionPending'
   | 'sortBy'
+  | 'appliedFilters'
 >
 export type MapDispatchProps = {}
 export type OwnProps = Pick<Props, 'asset' | 'order' | 'isManager'>

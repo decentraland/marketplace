@@ -1,3 +1,4 @@
+import { NFTCategory } from '@dcl/schemas'
 import { BrowseOptions, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
 import { AssetStatusFilter } from '../../utils/filters'
@@ -8,7 +9,7 @@ import {
 } from '../ui/utils'
 import { omit, reset } from '../../lib/utils'
 import { View } from '../ui/types'
-import { getSearchParams } from './search'
+import { getCategoryFromSection, getSearchParams } from './search'
 
 export const rentalFilters = [
   SortBy.NAME,
@@ -42,6 +43,25 @@ export const CATALOG_VIEWS: View[] = [
 
 export function isCatalogView(view: View | undefined) {
   return view && CATALOG_VIEWS.includes(view)
+}
+
+export function isCatalogViewWithStatusFilter(view: View | undefined) {
+  return view && view === View.MARKET
+}
+
+export function isCatalogViewAndSection(
+  view: View | undefined,
+  section: Section | undefined
+) {
+  return (
+    view &&
+    CATALOG_VIEWS.includes(view) &&
+    section &&
+    [getCategoryFromSection(section)].some(
+      category =>
+        category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE
+    )
+  )
 }
 
 export function buildBrowseURL(
@@ -111,15 +131,17 @@ export function getClearedBrowseOptions(
   // The status as only on sale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
   if (
     !clearedBrowseOptions.status &&
-    !isLandSection(browseOptions.section as Section)
+    !isLandSection(browseOptions.section as Section) &&
+    isCatalogViewWithStatusFilter(browseOptions.view)
   ) {
     clearedBrowseOptions.status = AssetStatusFilter.ON_SALE
   }
 
-  // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
+  // The onlyOnSale filter is ON by default for some sections. The clear should remove it if it's off so it's back on (default state)
   if (
     !clearedBrowseOptions.onlyOnSale &&
-    !isLandSection(browseOptions.section as Section)
+    !isLandSection(browseOptions.section as Section) &&
+    !isCatalogViewWithStatusFilter(browseOptions.view)
   ) {
     clearedBrowseOptions.onlyOnSale = true
   }
