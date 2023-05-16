@@ -74,3 +74,30 @@
     width: 100%;
   }
 }
+
+@media (max-width: 600px) {
+  .ItemDetail .assetImageContainer {
+    height: 400px;
+  }
+
+  .ItemDetail :global(.dcl.tab.active) {
+    border-left: none;
+    border-bottom: 2px solid var(--primary);
+    margin-bottom: 0;
+  }
+
+  .ItemDetail :global(.dcl.tab) {
+    margin-bottom: 0;
+  }
+
+  .ItemDetail :global(.dcl.tabs) {
+    justify-content: space-evenly;
+  }
+  .ItemDetail :global(.dcl.tabs.fullscreen) {
+    border-bottom: 1px solid var(--divider);
+    margin-bottom: 0;
+  }
+  .ItemDetail .spaceInMint {
+    gap: 0px;
+  }
+}

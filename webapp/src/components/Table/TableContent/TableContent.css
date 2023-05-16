@@ -63,11 +63,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.TableContent .ui.loader.active {
-  display: flex;
-  position: initial;
+  position: relative;
 }
 
 .TableContent .pagination {
@@ -83,4 +79,35 @@
   font-size: 16px;
   font-weight: 700;
   color: white;
+}
+
+@media (max-width: 768px) {
+  .TableContent .ui.basic.table tbody tr {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+    height: 65px;
+  }
+  .TableContent .pagination {
+    flex-direction: column;
+  }
+  .TableContent .pagination .ui.pagination.menu {
+    display: flex;
+    flex-direction: row;
+  }
+  .TableContent .pagination .ui.pagination.menu .item + .item {
+    margin: 0;
+  }
+  .TableContent .pagination .ui.pagination.menu {
+    width: 100%;
+    justify-content: center;
+  }
+  .TableContent .pagination {
+    grid-gap: 10px;
+    gap: 10px;
+  }
+  .TableContent .ui.menu:after {
+    display: none;
+  }
 }

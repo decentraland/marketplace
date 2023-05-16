@@ -75,8 +75,11 @@
 
   .filtertabsContainer .ui.dropdown {
     position: relative;
-    left: 20px;
-    align-self: flex-start;
-    margin-bottom: 10px;
+    left: 0;
+    margin: 16px 12px 16px 0px;
+    align-self: flex-end;
+  }
+  .tableContainer {
+    margin-top: 16px;
   }
 }
