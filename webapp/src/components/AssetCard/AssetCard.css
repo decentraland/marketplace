@@ -3,6 +3,10 @@
   overflow: visible;
 }
 
+.AssetCard.ui.card > .content.catalog {
+  padding: 14px 14px 18px 14px;
+}
+
 .AssetCard .header .catalogTitle {
   flex: 1 2 auto;
   white-space: nowrap;
@@ -11,6 +15,8 @@
   margin-bottom: 0px;
   display: flex;
   flex-direction: column;
+  font-size: 14px;
+  line-height: 24px;
 }
 
 .AssetCard .textOverflow {
@@ -42,11 +48,6 @@
   letter-spacing: -0.2px;
 }
 
-.AssetCard .extraInformation {
-  visibility: hidden;
-  height: 0px;
-}
-
 .AssetCard .ui.header.small {
   font-size: 14.5px;
   font-weight: 400;
@@ -60,6 +61,10 @@
   font-size: 14px;
   transition: inherit;
   flex: 1;
+}
+
+.AssetCard .CatalogItemInformation > span > img {
+  margin-left: 4px;
 }
 
 .AssetCard .header .title {
@@ -96,7 +101,7 @@
 }
 
 .AssetCard .tags {
-  margin-top: 12px;
+  margin-top: 10px;
 }
 
 .AssetCard .AssetImage .ens-subdomain {
@@ -152,7 +157,12 @@
 }
 
 .AssetCard .AssetImage.catalog {
+  height: 209px;
+}
+
+.AssetCard:hover .AssetImage.catalog {
   height: 161px;
+  transition: height 0.3s !important;
 }
 
 .AssetCard .PriceInMana .ui.header.large {
@@ -183,19 +193,23 @@
   align-items: center;
 }
 
-.AssetCard .ui.cards a.card:hover,
-.ui.link.card:hover,
-.ui.link.cards .card:hover,
-a.ui.card:hover,
-.ui.cards > .ui.card.link:hover,
-.ui.card.link:hover {
-  transform: none;
-}
-
 @media (min-width: 1199px) {
+  .AssetCard .extraInformation {
+    display: flex;
+    visibility: hidden;
+    height: 0px;
+    opacity: 0;
+    transition: height 0.1s, opacity 0.6s;
+  }
+  .ui.card.AssetCard.catalog {
+    height: 360px;
+  }
   .AssetCard:hover .extraInformation {
     visibility: visible;
     margin-top: 5px;
+    height: auto;
+    opacity: 1;
+    align-items: center;
   }
 
   .ui.cards > .ui.card.AssetCard.link:hover .meta,
@@ -224,6 +238,7 @@ a.ui.card:hover,
   .ui.card.AssetCard:hover > .content.catalog,
   .ui.cards > .card.AssetCard:hover > .content.catalog {
     position: absolute;
+    height: 198px;
     margin-top: 161px;
     width: 100%;
     background-color: var(--card);
@@ -272,6 +287,15 @@ a.ui.card:hover,
 }
 
 @media (max-width: 768px) {
+  .AssetCard .ui.cards a.card:hover,
+  .ui.link.card:hover,
+  .ui.link.cards .card:hover,
+  a.ui.card:hover,
+  .ui.cards > .ui.card.link:hover,
+  .ui.card.link:hover {
+    transform: translateY(0px);
+  }
+
   .AssetCard.ui.card > .content.catalog > .header:not(.ui),
   .AssetCard.ui.cards > .card > .content.catalog > .header:not(.ui) .header,
   .AssetCard .CatalogItemInformation {

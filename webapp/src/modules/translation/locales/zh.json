@@ -382,6 +382,7 @@
     },
     "rarities": {
       "title": "稀有度",
+      "tooltip": "稀有度决定了可以铸造的 NFT 总数",
       "all_items": "所有稀有",
       "count_items": "{count} {count, plural, one {稀有度} other {珍品}}"
     },
@@ -1207,7 +1208,9 @@
     "not_for_sale": "不可出售",
     "owners": "{count} {count, plural, one {所有者} other {所有者}}",
     "cheapest_option": "最便宜",
+    "cheapest_option_range": "范围内最便宜的选择",
     "most_expensive": "最貴",
+    "most_expensive_range": "范围内最贵",
     "also_minting": "也可用於鑄造"
   },
   "rentals_promotional_modal": {

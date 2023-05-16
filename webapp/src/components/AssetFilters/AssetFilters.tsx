@@ -72,14 +72,6 @@ export const AssetFilters = ({
     [onBrowse]
   )
 
-  // const handlePriceChange = useCallback(
-  //   (value: [string, string]) => {
-  //     const [minPrice, maxPrice] = value
-  //     onBrowse({ minPrice, maxPrice })
-  //   },
-  //   [onBrowse]
-  // )
-
   const handleRangeFilterChange = useCallback(
     (
       filterNames: [string, string],
@@ -229,6 +221,7 @@ export const AssetFilters = ({
             values={values}
           />
         ) : null}
+
         {isEstateSizeFilterEnabled &&
         section !== Sections.decentraland.PARCELS ? (
           <EstateSizeFilter
@@ -276,7 +269,7 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       ) : null}
-      {shouldRenderFilter(AssetFilter.Status) ? (
+      {shouldRenderFilter(AssetFilter.Status) && view === View.MARKET ? (
         <StatusFilter
           onChange={handleBrowseParamChange}
           status={status}

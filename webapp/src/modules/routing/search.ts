@@ -15,7 +15,7 @@ import { NFTSortBy } from '../nft/types'
 import { isAccountView, isLandSection } from '../ui/utils'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
-import { isCatalogView } from './utils'
+import { isCatalogView, isCatalogViewWithStatusFilter } from './utils'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -44,8 +44,16 @@ export function getDefaultOptionsByView(
     ) {
       defaultOptions = {
         ...defaultOptions,
-        onlyOnSale: undefined,
-        status: AssetStatusFilter.ON_SALE
+        onlyOnSale: view === View.CURRENT_ACCOUNT ? false : undefined, // current account shows on sale false as default
+        status: isCatalogViewWithStatusFilter(view) // for market view, we show status on sale filter as default
+          ? AssetStatusFilter.ON_SALE
+          : undefined
+      }
+    } else if (currentCategoryBySection === NFTCategory.ENS) {
+      defaultOptions = {
+        ...defaultOptions,
+        status: undefined, // status doesn't apply to ENS
+        onlyOnSale: true // show ENS names on sale by default
       }
     }
   }

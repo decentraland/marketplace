@@ -379,6 +379,7 @@
     },
     "rarities": {
       "title": "Rareza",
+      "tooltip": "La rareza determina la cantidad de NFTs que pueden ser minteados",
       "all_items": "Todas las rarezas",
       "count_items": "{count} {count, plural, one {rareza} other {rarezas}}"
     },
@@ -1201,8 +1202,10 @@
     "cheapest_listing": "Coleccionable más barato",
     "not_for_sale": "No disponible para la venta",
     "owners": "{count} {count, plural, one {Dueño} other {Dueños}}",
-    "cheapest_option": "Más baratos",
+    "cheapest_option": "Más barato",
+    "cheapest_option_range": "Más barato en el rango",
     "most_expensive": "Más Caro",
+    "most_expensive_range": "Más Caro en el rango",
     "also_minting": "También disponibles para mintear"
   },
   "rentals_promotional_modal": {
