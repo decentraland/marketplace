@@ -13,6 +13,8 @@ import { ManaToFiat } from '../../ManaToFiat'
 import { Props } from './YourOffer.types'
 import styles from './YourOffer.module.css'
 
+const FIRST = '1'
+
 const YourOffer = (props: Props) => {
   const { nft, address, onUpdate, onCancel } = props
 
@@ -26,7 +28,7 @@ const YourOffer = (props: Props) => {
           nft.tokenId,
           null,
           undefined,
-          '1',
+          FIRST,
           undefined,
           address
         )
@@ -51,7 +53,7 @@ const YourOffer = (props: Props) => {
       </span>
 
       <Divider />
-      <div className={styles.row}>
+      <div className={`${styles.row} ${styles.bottomInformationPadding}`}>
         <div className={styles.column}>
           <span className={styles.texts}>
             {t('offers_table.offer').toUpperCase()}&nbsp;
