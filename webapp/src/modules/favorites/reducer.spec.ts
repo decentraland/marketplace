@@ -561,7 +561,7 @@ describe('when reducing the successful action of getting a list', () => {
     }
   })
 
-  it('should return an estate without the deleted list and the loading state cleared', () => {
+  it('should return a state with the the new list and the loading state cleared', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
