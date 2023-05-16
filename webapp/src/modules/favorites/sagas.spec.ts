@@ -626,7 +626,7 @@ describe('when handling the request for getting a list', () => {
   })
 
   describe('and the call to the favorites api succeeds', () => {
-    it.only('should dispatch an action signaling the success of the handled action', () => {
+    it('should dispatch an action signaling the success of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [
