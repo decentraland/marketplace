@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
-// import { Env } from '@dcl/ui-env'
+import { Env } from '@dcl/ui-env'
 import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -20,7 +20,7 @@ import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
 import { Atlas } from '../Atlas'
 import ListedBadge from '../ListedBadge'
-// import { config } from '../../config'
+import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import { JumpIn } from '../AssetPage/JumpIn'
 import { ControlOptionAction, Props } from './AssetImage.types'
@@ -266,7 +266,7 @@ const AssetImage = (props: Props) => {
               emote={isTryingOnEnabled ? previewEmote : undefined}
               onLoad={handleLoad}
               onError={handleError}
-              // dev={config.is(Env.DEVELOPMENT)}
+              dev={config.is(Env.DEVELOPMENT)}
             />
             {isLoadingWearablePreview ? (
               <Center>
@@ -424,7 +424,7 @@ const AssetImage = (props: Props) => {
               wheelStart={100}
               onLoad={handleLoad}
               onError={handleError}
-              // dev={config.is(Env.DEVELOPMENT)}
+              dev={config.is(Env.DEVELOPMENT)}
             />
             {isLoadingWearablePreview ? (
               <Center>
