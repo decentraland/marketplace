@@ -597,7 +597,8 @@
     "remove": "刪除",
     "most_expensive": "最貴",
     "recenty_offered": "最近提供",
-    "recently_updated": "最近更新"
+    "recently_updated": "最近更新",
+    "accept": "接受"
   },
   "listings_table": {
     "other_available_listings": "其他可用的收藏品",

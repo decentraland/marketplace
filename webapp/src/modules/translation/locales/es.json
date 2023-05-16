@@ -594,7 +594,8 @@
     "remove": "Eliminar",
     "most_expensive": "Más Caro",
     "recenty_offered": "Ofrecido recientemente",
-    "recently_updated": "Actualizado recientemente"
+    "recently_updated": "Actualizado recientemente",
+    "accept": "Aceptar"
   },
   "listings_table": {
     "other_available_listings": "Otros coleccionables disponibles",

@@ -600,7 +600,8 @@
     "remove": "Remove",
     "most_expensive": "Highest",
     "recenty_offered": "Recently offered",
-    "recently_updated": "Recently updated"
+    "recently_updated": "Recently updated",
+    "accept": "Accept"
   },
   "listings_table": {
     "other_available_listings": "Other available listings",

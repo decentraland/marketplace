@@ -1,6 +1,6 @@
 import { Bid } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Mana } from 'decentraland-ui'
+import { Button, Mana } from 'decentraland-ui'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { LinkedProfile } from '../../LinkedProfile'
@@ -10,41 +10,44 @@ import styles from './BidsTable.module.css'
 
 export const formatDataToTable = (
   bids: Bid[],
-  userAddress?: string
+  setShowConfirmationModal: (bid: Bid) => void,
+  address?: string | null
 ): DataTableType[] => {
   return bids.reduce((accumulator: DataTableType[], bid: Bid) => {
-    if (bid.bidAddress !== userAddress) {
-      const value: DataTableType = {
-        [t('offers_table.from')]: (
-          <LinkedProfile
-            className={styles.linkedProfileRow}
-            address={bid.bidder}
-          />
-        ),
-        [t('offers_table.published_date')]: getDateAndMonthName(bid.createdAt),
-        [t('offers_table.expiration_date')]: formatDistanceToNow(
-          +bid.expiresAt,
-          {
-            addSuffix: true
-          }
-        ),
-        [t('listings_table.price')]: (
-          <div className={styles.viewListingContainer}>
-            <div className={styles.manaField}>
-              <Mana className="manaField" network={bid.network}>
-                {formatWeiMANA(bid.price)}
-              </Mana>{' '}
-              &nbsp;
-              {'('}
-              <ManaToFiat mana={bid.price} />
-              {')'}
-            </div>
+    const value: DataTableType = {
+      [t('offers_table.from')]: (
+        <LinkedProfile
+          className={styles.linkedProfileRow}
+          address={bid.bidder}
+        />
+      ),
+      [t('offers_table.published_date')]: getDateAndMonthName(bid.createdAt),
+      [t('offers_table.expiration_date')]: formatDistanceToNow(+bid.expiresAt, {
+        addSuffix: true
+      }),
+      [t('listings_table.price')]: (
+        <div className={styles.viewListingContainer}>
+          <div className={styles.manaField}>
+            <Mana className="manaField" network={bid.network}>
+              {formatWeiMANA(bid.price)}
+            </Mana>{' '}
+            &nbsp;
+            {'('}
+            <ManaToFiat mana={bid.price} />
+            {')'}
           </div>
-        )
-      }
-      return [...accumulator, value]
-    } else {
-      return accumulator
+          {address === bid.seller ? (
+            <Button
+              primary
+              onClick={() => setShowConfirmationModal(bid)}
+              size="small"
+            >
+              {t('offers_table.accept')}
+            </Button>
+          ) : null}
+        </div>
+      )
     }
+    return [...accumulator, value]
   }, [])
 }
