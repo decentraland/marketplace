@@ -587,7 +587,8 @@
       "owner": "Owner",
       "view_listing": "View listing",
       "expires": "Expires",
-      "no_offer": "No offer"
+      "no_offer": "No offer",
+      "make_offer": "Make Offer"
     }
   },
   "offers_table": {

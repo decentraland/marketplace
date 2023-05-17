@@ -8,7 +8,6 @@ import TableContainer from '../../Table/TableContainer'
 import { AssetImage } from '../../AssetImage'
 import GenderBadge from '../../GenderBadge'
 import RarityBadge from '../../RarityBadge'
-import BaseDetail from '../BaseDetail'
 import { BidsTable } from '../BidsTable'
 import { YourOffer } from '../YourOffer'
 import CategoryBadge from '../CategoryBadge'
@@ -16,10 +15,13 @@ import { ListingsTable } from '../ListingsTable'
 import Collection from '../Collection'
 import { Description } from '../Description'
 import { Owner } from '../Owner'
-import { SaleActionBox } from '../SaleActionBox'
 import SmartBadge from '../SmartBadge'
 import { TransactionHistory } from '../TransactionHistory'
+import OnBack from '../OnBack'
+import Title from '../Title'
+import { BuyNFTBox } from '../BuyNFTBox'
 import { Props } from './WearableDetail.types'
+import styles from './WearableDetail.module.css'
 
 const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
@@ -56,61 +58,57 @@ const WearableDetail = ({ nft }: Props) => {
   ]
 
   return (
-    <BaseDetail
-      asset={nft}
-      assetImage={<AssetImage asset={nft} isDraggable />}
-      isOnSale={!!nft.activeOrderId}
-      badges={
-        <>
-          <RarityBadge
-            rarity={wearable.rarity}
-            assetType={AssetType.NFT}
-            category={NFTCategory.WEARABLE}
-          />
-          <CategoryBadge
-            category={wearable.category}
-            assetType={AssetType.NFT}
-          />
-          <GenderBadge
-            bodyShapes={wearable.bodyShapes}
-            assetType={AssetType.NFT}
-            section={Section.WEARABLES}
-          />
-          {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
-          <CampaignBadge contract={nft.contractAddress} />
-        </>
-      }
-      left={
-        <>
+    <div className={styles.WearableDetail}>
+      <OnBack asset={nft} />
+      <div className={styles.assetImageContainer}>
+        <AssetImage asset={nft} isDraggable />
+      </div>
+      <div className={styles.wearableInformationContainer}>
+        <div className={styles.wearableInformation}>
+          <div>
+            <Title asset={nft} />
+            <div className={styles.badges}>
+              <RarityBadge
+                rarity={wearable.rarity}
+                assetType={AssetType.NFT}
+                category={NFTCategory.WEARABLE}
+              />
+              <CategoryBadge
+                category={wearable.category}
+                assetType={AssetType.NFT}
+              />
+              <GenderBadge
+                bodyShapes={wearable.bodyShapes}
+                assetType={AssetType.NFT}
+                section={Section.WEARABLES}
+              />
+              {wearable.isSmart ? (
+                <SmartBadge assetType={AssetType.NFT} />
+              ) : null}
+              <CampaignBadge contract={nft.contractAddress} />
+            </div>
+          </div>
           <Description text={wearable.description} />
-          <div className="BaseDetail row">
+          <div>
             <Owner asset={nft} />
             <Collection asset={nft} />
           </div>
-        </>
-      }
-      box={null}
-      showDetails
-      actions={<SaleActionBox asset={nft} />}
-      below={
-        <>
-          <YourOffer nft={nft} />
-          <BidsTable nft={nft} />
-          <TransactionHistory asset={nft} />
-          <TableContainer
-            tabsList={tabList}
-            handleSortByChange={(value: string) =>
-              setSortBy(value as OrderSortBy)
-            }
-            sortbyList={listingSortByOptions}
-            sortBy={sortBy}
-            children={
-              <ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />
-            }
-          />
-        </>
-      }
-    />
+        </div>
+        <div className={styles.actionsContainer}>
+          <BuyNFTBox nft={nft} />
+        </div>
+      </div>
+      <YourOffer nft={nft} />
+      <BidsTable nft={nft} />
+      <TransactionHistory asset={nft} />
+      <TableContainer
+        tabsList={tabList}
+        handleSortByChange={(value: string) => setSortBy(value as OrderSortBy)}
+        sortbyList={listingSortByOptions}
+        sortBy={sortBy}
+        children={<ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />}
+      />
+    </div>
   )
 }
 

@@ -581,7 +581,8 @@
       "owner": "Propietario",
       "view_listing": "Ver listado",
       "expires": "Expira",
-      "no_offer": "Sin ofertas"
+      "no_offer": "Sin ofertas",
+      "make_offer": "Hacer Oferta"
     }
   },
   "offers_table": {
