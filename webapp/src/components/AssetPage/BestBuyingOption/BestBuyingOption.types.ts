@@ -3,7 +3,7 @@ import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
   asset: Asset | null
-  tableRef: RefObject<HTMLDivElement>
+  tableRef?: RefObject<HTMLDivElement> | null
 }
 
 export enum BuyOptions {

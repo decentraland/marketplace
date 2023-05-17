@@ -19,3 +19,7 @@
   color: var(--primary);
   cursor: pointer;
 }
+
+.Description :global(.ui.sub.header) {
+  font-weight: 600;
+}
