@@ -65,7 +65,7 @@ const WearableDetail = ({ nft }: Props) => {
       </div>
       <div className={styles.wearableInformationContainer}>
         <div className={styles.wearableInformation}>
-          <div>
+          <div className={styles.wearableBadgesContainer}>
             <Title asset={nft} />
             <div className={styles.badges}>
               <RarityBadge
@@ -89,7 +89,7 @@ const WearableDetail = ({ nft }: Props) => {
             </div>
           </div>
           <Description text={wearable.description} />
-          <div>
+          <div className={styles.wearableOwnerAndCollectionContainer}>
             <Owner asset={nft} />
             <Collection asset={nft} />
           </div>
