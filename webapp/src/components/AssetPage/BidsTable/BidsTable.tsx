@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import React, { useEffect, useState } from 'react'
 import { Bid, BidSortBy } from '@dcl/schemas'
-import { Mana } from 'decentraland-ui'
+import { Mana, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { bidAPI } from '../../../modules/vendor/decentraland'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -20,6 +20,7 @@ const INITIAL_PAGE = 1
 
 const BidsTable = (props: Props) => {
   const { nft, address, isAcceptingBid, onAccept } = props
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const tabList = [
     {
@@ -76,7 +77,8 @@ const BidsTable = (props: Props) => {
             formatDataToTable(
               response.data.filter(bid => bid.bidder !== address),
               bid => setShowConfirmationModal({ display: true, bid }),
-              address
+              address,
+              isMobileOrTablet
             )
           )
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
@@ -86,7 +88,7 @@ const BidsTable = (props: Props) => {
           console.error(error)
         })
     }
-  }, [nft, setIsLoading, setBids, page, sortBy, address])
+  }, [nft, setIsLoading, setBids, page, sortBy, address, isMobileOrTablet])
 
   return bids.length > 0 ? (
     <>

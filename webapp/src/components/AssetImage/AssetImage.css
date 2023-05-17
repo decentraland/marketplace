@@ -324,3 +324,25 @@
 .AssetImage .ui.button + .ui.button {
   margin-left: 0px;
 }
+
+@media (max-width: 768px) {
+  .AvailableForMintPopup {
+    right: 0;
+    width: 100%;
+    bottom: -110px;
+    padding-top: 20px;
+  }
+  .AssetImage .rarity-background,
+  .AssetImage .WearablePreview {
+    border-radius: 12px;
+  }
+  .AvailableForMintPopup .ui.button.inverted.goToItemButton {
+    align-self: center;
+  }
+  .AssetImage {
+    height: 400px;
+  }
+  .AssetImage.hasMintAvailable {
+    margin-bottom: 100px;
+  }
+}
