@@ -11,7 +11,8 @@ import styles from './BidsTable.module.css'
 export const formatDataToTable = (
   bids: Bid[],
   setShowConfirmationModal: (bid: Bid) => void,
-  address?: string | null
+  address?: string | null,
+  isMobile = false
 ): DataTableType[] => {
   return bids.reduce((accumulator: DataTableType[], bid: Bid) => {
     const value: DataTableType = {
@@ -21,11 +22,18 @@ export const formatDataToTable = (
           address={bid.bidder}
         />
       ),
-      [t('offers_table.published_date')]: getDateAndMonthName(bid.createdAt),
-      [t('offers_table.expiration_date')]: formatDistanceToNow(+bid.expiresAt, {
-        addSuffix: true
+      ...(!isMobile && {
+        [t('offers_table.published_date')]: getDateAndMonthName(bid.createdAt)
       }),
-      [t('listings_table.price')]: (
+      ...(!isMobile && {
+        [t('offers_table.expiration_date')]: formatDistanceToNow(
+          +bid.expiresAt,
+          {
+            addSuffix: true
+          }
+        )
+      }),
+      [t('listings_table.offer')]: (
         <div className={styles.viewListingContainer}>
           <div className={styles.manaField}>
             <Mana className="manaField" network={bid.network}>
