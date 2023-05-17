@@ -78,7 +78,6 @@
 
 .onSaleOrRentTable .ui.loader.active {
   display: flex;
-  position: initial;
 }
 
 .onSaleOrRentTable .pagination {
