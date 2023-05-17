@@ -16,6 +16,8 @@ import {
   PickItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteSuccessAction,
+  UpdateListRequestAction,
+  UpdateListSuccessAction,
   cancelPickItemAsFavorite,
   deleteListFailure,
   deleteListRequest,
@@ -37,7 +39,10 @@ import {
   undoUnpickingItemAsFavoriteSuccess,
   unpickItemAsFavoriteFailure,
   unpickItemAsFavoriteRequest,
-  unpickItemAsFavoriteSuccess
+  unpickItemAsFavoriteSuccess,
+  updateListFailure,
+  updateListRequest,
+  updateListSuccess
 } from './actions'
 import { FavoritesState, INITIAL_STATE, favoritesReducer } from './reducer'
 import { List } from './types'
@@ -79,7 +84,8 @@ const requestActions = [
   undoUnpickingItemAsFavoriteRequest(item),
   fetchFavoritedItemsRequest(itemBrowseOptions),
   fetchListsRequest(itemBrowseOptions),
-  getListRequest(actionList.id)
+  getListRequest(actionList.id),
+  updateListRequest(actionList.id, actionList)
 ]
 
 beforeEach(() => {
@@ -138,6 +144,10 @@ const failureActions = [
   {
     request: getListRequest(actionList.id),
     failure: getListFailure(actionList.id, error)
+  },
+  {
+    request: updateListRequest(actionList.id, actionList),
+    failure: updateListFailure(actionList.id, error)
   }
 ]
 
@@ -562,6 +572,51 @@ describe('when reducing the successful action of getting a list', () => {
   })
 
   it('should return a state with the the new list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          [list.id]: list
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of updating a list', () => {
+  let requestAction: UpdateListRequestAction
+  let successAction: UpdateListSuccessAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'newName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = updateListRequest(list.id, list)
+    successAction = updateListSuccess(list)
+    initialState = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        lists: {
+          ...initialState.data.lists,
+          [list.id]: {
+            ...list,
+            name: 'oldName'
+          }
+        }
+      },
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return a state with the the updated list and the loading state cleared', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],

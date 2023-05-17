@@ -51,7 +51,13 @@ import {
   GetListFailureAction,
   GetListRequestAction,
   GetListSuccessAction,
-  GET_LIST_SUCCESS
+  GET_LIST_SUCCESS,
+  UPDATE_LIST_FAILURE,
+  UPDATE_LIST_REQUEST,
+  UPDATE_LIST_SUCCESS,
+  UpdateListFailureAction,
+  UpdateListRequestAction,
+  UpdateListSuccessAction
 } from './actions'
 import { FavoritesData, List } from './types'
 import { GET_LIST_REQUEST } from './actions'
@@ -90,24 +96,28 @@ type FavoritesReducerAction =
   | FetchListsRequestAction
   | FetchListsSuccessAction
   | FetchListsFailureAction
-  | DeleteListRequestAction
-  | DeleteListSuccessAction
-  | DeleteListFailureAction
   | GetListRequestAction
   | GetListSuccessAction
   | GetListFailureAction
+  | DeleteListRequestAction
+  | DeleteListSuccessAction
+  | DeleteListFailureAction
+  | UpdateListRequestAction
+  | UpdateListSuccessAction
+  | UpdateListFailureAction
 
 export function favoritesReducer(
   state = INITIAL_STATE,
   action: FavoritesReducerAction
 ): FavoritesState {
   switch (action.type) {
-    case DELETE_LIST_REQUEST:
     case PICK_ITEM_AS_FAVORITE_REQUEST:
     case UNPICK_ITEM_AS_FAVORITE_REQUEST:
     case UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST:
     case FETCH_LISTS_REQUEST:
     case GET_LIST_REQUEST:
+    case DELETE_LIST_REQUEST:
+    case UPDATE_LIST_REQUEST:
     case FETCH_FAVORITED_ITEMS_REQUEST: {
       return {
         ...state,
@@ -265,6 +275,7 @@ export function favoritesReducer(
       }
     }
 
+    case UPDATE_LIST_SUCCESS:
     case GET_LIST_SUCCESS: {
       const { list } = action.payload
       return {
@@ -283,8 +294,9 @@ export function favoritesReducer(
       }
     }
 
-    case DELETE_LIST_FAILURE:
     case GET_LIST_FAILURE:
+    case DELETE_LIST_FAILURE:
+    case UPDATE_LIST_FAILURE:
     case PICK_ITEM_AS_FAVORITE_FAILURE:
     case FETCH_LISTS_FAILURE:
     case UNPICK_ITEM_AS_FAVORITE_FAILURE:

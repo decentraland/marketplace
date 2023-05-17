@@ -52,7 +52,11 @@ import {
   GetListRequestAction,
   GET_LIST_REQUEST,
   getListFailure,
-  getListSuccess
+  getListSuccess,
+  UpdateListRequestAction,
+  UPDATE_LIST_REQUEST,
+  updateListFailure,
+  updateListSuccess
 } from './actions'
 import { getListId } from './selectors'
 import { FavoritedItems, List } from './types'
@@ -89,6 +93,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(FETCH_LISTS_REQUEST, handleFetchListsRequest)
   yield takeEvery(DELETE_LIST_REQUEST, handleDeleteListRequest)
   yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
+  yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
 
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
@@ -279,6 +284,26 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       yield put(
         getListFailure(
+          id,
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleUpdateListRequest(action: UpdateListRequestAction) {
+    const { id, updatedList } = action.payload
+
+    try {
+      const list: List = yield call(
+        [favoritesAPI, 'updateList'],
+        id,
+        updatedList
+      )
+      yield put(updateListSuccess(list))
+    } catch (error) {
+      yield put(
+        updateListFailure(
           id,
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
