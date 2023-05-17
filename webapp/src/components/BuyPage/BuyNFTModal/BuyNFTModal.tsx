@@ -50,13 +50,13 @@ const BuyNFTModal = (props: Props) => {
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
   const analytics = getAnalytics()
 
-  const handleExecuteOrder = useCallback(() => {
+  const handleExecuteOrder = useCallback((alreadyAuthorized: boolean = true) => {
     if (isBuyWithCardPage) {
       analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
       return onExecuteOrderWithCard(nft)
     }
 
-    onExecuteOrder(order!, nft, fingerprint)
+    onExecuteOrder(order!, nft, fingerprint, !alreadyAuthorized)
   }, [
     isBuyWithCardPage,
     onExecuteOrderWithCard,

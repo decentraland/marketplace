@@ -88,7 +88,7 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 }
 
 function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
-  const { order, nft, fingerprint } = action.payload
+  const { order, nft, fingerprint, silent } = action.payload
 
   try {
     if (
@@ -136,7 +136,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
         ? (error as { code: ErrorCode }).code
         : undefined
 
-    yield put(executeOrderFailure(order, nft, errorMessage, errorCode))
+    yield put(executeOrderFailure(order, nft, errorMessage, errorCode, silent))
   }
 }
 

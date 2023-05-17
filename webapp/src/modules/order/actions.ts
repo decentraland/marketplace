@@ -62,8 +62,9 @@ export const EXECUTE_ORDER_TRANSACTION_SUBMITTED =
 export const executeOrderRequest = (
   order: Order,
   nft: NFT,
-  fingerprint?: string
-) => action(EXECUTE_ORDER_REQUEST, { order, nft, fingerprint })
+  fingerprint?: string,
+  silent?: boolean
+) => action(EXECUTE_ORDER_REQUEST, { order, nft, fingerprint, silent })
 export const executeOrderTransactionSubmitted = (
   order: Order,
   nft: NFT,
@@ -85,8 +86,9 @@ export const executeOrderFailure = (
   order: Order,
   nft: NFT,
   error: string,
-  errorCode?: ErrorCode
-) => action(EXECUTE_ORDER_FAILURE, { order, nft, error, errorCode })
+  errorCode?: ErrorCode,
+  silent?: boolean
+) => action(EXECUTE_ORDER_FAILURE, { order, nft, error, errorCode, silent })
 
 export type ExecuteOrderRequestAction = ReturnType<typeof executeOrderRequest>
 export type ExecuteOrderSuccessAction = ReturnType<typeof executeOrderSuccess>
