@@ -13,6 +13,9 @@ import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import {
   cancelPickItemAsFavorite,
+  createListFailure,
+  createListRequest,
+  createListSuccess,
   deleteListFailure,
   deleteListRequest,
   deleteListSuccess,
@@ -695,6 +698,58 @@ describe('when handling the request for updating a list', () => {
         })
         .put(updateListSuccess(list))
         .dispatch(updateListRequest(list.id, list))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request for creating a list', () => {
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'anId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'aUserAddress',
+      createdAt: Date.now()
+    }
+  })
+
+  describe('and the call to the favorites api fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [
+            matchers.call.fn(FavoritesAPI.prototype.createList),
+            Promise.reject(error)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.createList,
+          args: [list.name, true]
+        })
+        .put(createListFailure(error.message))
+        .dispatch(createListRequest(list.name, true))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api succeeds', () => {
+    it('should dispatch an action signaling the success of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [
+            matchers.call.fn(FavoritesAPI.prototype.createList),
+            Promise.resolve(list)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.createList,
+          args: [list.name, true]
+        })
+        .put(createListSuccess(list))
+        .dispatch(createListRequest(list.name, true))
         .run({ silenceTimeout: true })
     })
   })

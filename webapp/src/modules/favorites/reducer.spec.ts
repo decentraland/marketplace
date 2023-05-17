@@ -5,6 +5,8 @@ import { View } from '../ui/types'
 import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   CancelPickItemAsFavoriteAction,
+  CreateListRequestAction,
+  CreateListSuccessAction,
   DeleteListRequestAction,
   DeleteListSuccessAction,
   FetchFavoritedItemsRequestAction,
@@ -19,6 +21,9 @@ import {
   UpdateListRequestAction,
   UpdateListSuccessAction,
   cancelPickItemAsFavorite,
+  createListFailure,
+  createListRequest,
+  createListSuccess,
   deleteListFailure,
   deleteListRequest,
   deleteListSuccess,
@@ -85,7 +90,8 @@ const requestActions = [
   fetchFavoritedItemsRequest(itemBrowseOptions),
   fetchListsRequest(itemBrowseOptions),
   getListRequest(actionList.id),
-  updateListRequest(actionList.id, actionList)
+  updateListRequest(actionList.id, actionList),
+  createListRequest('aListName', true)
 ]
 
 beforeEach(() => {
@@ -148,6 +154,10 @@ const failureActions = [
   {
     request: updateListRequest(actionList.id, actionList),
     failure: updateListFailure(actionList.id, error)
+  },
+  {
+    request: createListRequest('aListName', true),
+    failure: createListFailure(error)
   }
 ]
 
@@ -612,6 +622,41 @@ describe('when reducing the successful action of updating a list', () => {
           }
         }
       },
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return a state with the the updated list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          [list.id]: list
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of creating a list', () => {
+  let requestAction: CreateListRequestAction
+  let successAction: CreateListSuccessAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'newName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = createListRequest(list.name, true)
+    successAction = createListSuccess(list)
+    initialState = {
+      ...initialState,
       loading: loadingReducer([], requestAction)
     }
   })
