@@ -320,3 +320,7 @@
   font-size: 18px;
   margin-bottom: 6px;
 }
+
+.AssetImage .ui.button + .ui.button {
+  margin-left: 0px;
+}

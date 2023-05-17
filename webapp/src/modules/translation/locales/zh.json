@@ -584,7 +584,8 @@
       "owner": "所有者",
       "view_listing": "查看房源",
       "expires": "過期",
-      "no_offer": "沒有報價"
+      "no_offer": "沒有報價",
+      "make_offer": "報價"
     }
   },
   "offers_table": {
