@@ -716,10 +716,21 @@ describe('when handling the request for creating a list', () => {
     }
   })
 
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .put(createListFailure(error.message))
+        .dispatch(createListRequest(list.name, true))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
+          [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.createList),
             Promise.reject(error)
@@ -739,6 +750,7 @@ describe('when handling the request for creating a list', () => {
     it('should dispatch an action signaling the success of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
+          [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.createList),
             Promise.resolve(list)
