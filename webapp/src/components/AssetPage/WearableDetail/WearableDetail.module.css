@@ -42,7 +42,7 @@
   color: var(--secondary-text);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .WearableDetail .wearableInformationContainer {
     gap: 16px;
   }
