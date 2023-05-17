@@ -32,8 +32,8 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onExecuteOrder: (order, nft, fingerprint) =>
-    dispatch(executeOrderRequest(order, nft, fingerprint)),
+  onExecuteOrder: (order, nft, fingerprint, silent) =>
+    dispatch(executeOrderRequest(order, nft, fingerprint, silent)),
   onExecuteOrderWithCard: nft => dispatch(executeOrderWithCardRequest(nft))
 })
 

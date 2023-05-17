@@ -124,7 +124,8 @@ export function getExcecuteOrderFailureToast(): Omit<Toast, 'id'> {
         })}
       </p>
     ),
-    icon: <Icon size="big" name="exclamation circle" />
+    icon: <Icon size="big" name="exclamation circle" />,
+    closable: true
   }
 }
 
