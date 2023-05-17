@@ -10,7 +10,9 @@ const Title = ({ asset, isFavoritesEnabled }: Props) => {
 
   return (
     <div className={styles.title}>
-      <span className={styles.text}>{getAssetName(asset)}</span>
+      <span className={styles.text}>
+        {getAssetName(asset)} {isNFT(asset) ? `#${asset.issuedId}` : ''}{' '}
+      </span>
       {/* TODO (lists): this may be moved after the new detail page for unified markets */}
       {isFavoritesEnabled && !isMobile && !isNFT(asset) ? (
         <FavoritesCounter

@@ -613,6 +613,7 @@
     "expiration_date": "Expiration date",
     "issue_number": "Issue Number",
     "price": "Price",
+    "offer": "Offer",
     "cheapest": "Cheapest",
     "newest": "Newest",
     "oldest": "Oldest",
