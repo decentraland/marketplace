@@ -302,7 +302,6 @@
 
 .RecentlySoldTable .ui.loader.active {
   display: flex;
-  position: initial;
 }
 
 .RecentlySoldTable .pagination {
@@ -320,7 +319,6 @@
 
 .RecentlySoldTable .ui.loader.active {
   display: flex;
-  position: absolute;
 }
 
 .RecentlySoldTable .ui.basic.table th {
