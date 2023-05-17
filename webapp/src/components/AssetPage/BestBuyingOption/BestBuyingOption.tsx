@@ -45,7 +45,8 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
       pathname: location.pathname,
       search: `selectedTableTab=owners`
     })
-    tableRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    tableRef &&
+      tableRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
   }
 
   useEffect(() => {
