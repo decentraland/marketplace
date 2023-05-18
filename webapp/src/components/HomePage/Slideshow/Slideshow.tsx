@@ -64,7 +64,7 @@ const Slideshow = (props: Props) => {
     (asset: Asset) => {
       getAnalytics().track(events.ASSET_CLICK, {
         id: asset.id,
-        section: title
+        section: title ?? 'Unknown'
       })
     },
     [title]
@@ -125,7 +125,7 @@ const Slideshow = (props: Props) => {
       <HeaderMenu>
         <HeaderMenu.Left>
           <div className="slideshow-header">
-            <Header sub={isSubHeader}>{title}</Header>
+            {title ? <Header sub={isSubHeader}>{title}</Header> : null}
             {subtitle ? <Header sub>{subtitle}</Header> : null}
             {hasItemsSection ? (
               <ItemsSection

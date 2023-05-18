@@ -12,10 +12,12 @@ const RECOMMENDER_URL = 'http://localhost:8000'
 
 export const Recommendation = ({
   itemId,
-  type
+  type,
+  noTitle
 }: {
   itemId: string
   type: RECO_TYPE
+  noTitle?: boolean
 }) => {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -56,9 +58,11 @@ export const Recommendation = ({
     <Slideshow
       view={View.HOME_NEW_ITEMS}
       title={
-        type === RECO_TYPE.SIMILARITY
-          ? 'You may also like'
-          : 'People also bought'
+        !noTitle
+          ? type === RECO_TYPE.SIMILARITY
+            ? 'You may also like'
+            : 'People also bought'
+          : undefined
       }
       onViewAll={() => undefined}
       hasItemsSection={false}
