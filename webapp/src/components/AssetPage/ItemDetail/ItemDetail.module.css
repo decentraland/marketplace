@@ -7,3 +7,11 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.recommendations > div {
+  margin-top: 30px;
+}
+
+.recommendations > :global(.Slideshow) {
+  margin-bottom: 0px !important;
+}

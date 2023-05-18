@@ -27,6 +27,7 @@ const Slideshow = (props: Props) => {
     title,
     subtitle,
     viewAllTitle,
+    showViewAll,
     emptyMessage,
     assets,
     isSubHeader,
@@ -125,24 +126,26 @@ const Slideshow = (props: Props) => {
         <HeaderMenu.Left>
           <div className="slideshow-header">
             <Header sub={isSubHeader}>{title}</Header>
-            <Header sub>{subtitle}</Header>
+            {subtitle ? <Header sub>{subtitle}</Header> : null}
             {hasItemsSection ? (
               <ItemsSection
                 view={view}
-                viewAllButton={viewAllButton()}
+                viewAllButton={showViewAll ? viewAllButton() : null}
                 onChangeItemSection={onChangeItemSection!}
               />
             ) : null}
           </div>
         </HeaderMenu.Left>
-        {!hasItemsSection ? (
+        {!hasItemsSection && showViewAll ? (
           <HeaderMenu.Right>{viewAllButton()}</HeaderMenu.Right>
         ) : null}
       </HeaderMenu>
       <div className="assets-container">
-        <div className={classNames("assets", {
-          "full-width": assetsToRender.length === pageSize
-        })}>
+        <div
+          className={classNames('assets', {
+            'full-width': assetsToRender.length === pageSize
+          })}
+        >
           {isLoading ? (
             assets.length === 0 ? (
               <Loader active size="massive" />
@@ -159,7 +162,7 @@ const Slideshow = (props: Props) => {
           className="arrow-container arrow-container-left"
           {...showArrowsHandlers}
         >
-          {showArrows && totalPages > 1 &&  (
+          {showArrows && totalPages > 1 && (
             <Button
               circular
               secondary

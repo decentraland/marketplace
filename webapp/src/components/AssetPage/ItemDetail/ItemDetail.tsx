@@ -8,6 +8,7 @@ import { AssetType } from '../../../modules/asset/types'
 import GenderBadge from '../../GenderBadge'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
+import { Recommendation, RECO_TYPE } from '../../Recommendation'
 import CategoryBadge from '../CategoryBadge'
 import SmartBadge from '../SmartBadge'
 import { Description } from '../Description'
@@ -18,6 +19,7 @@ import IconBadge from '../IconBadge'
 import { TransactionHistory } from '../TransactionHistory'
 import { SaleActionBox } from '../SaleActionBox'
 import { Props } from './ItemDetail.types'
+import styles from './ItemDetail.module.css'
 
 const ItemDetail = ({ item }: Props) => {
   let description = ''
@@ -109,7 +111,15 @@ const ItemDetail = ({ item }: Props) => {
       box={null}
       showDetails
       actions={<SaleActionBox asset={item} />}
-      below={<TransactionHistory asset={item} />}
+      below={
+        <div>
+          <TransactionHistory asset={item} />
+          <div className={styles.recommendations}>
+            <Recommendation itemId={item.id} type={RECO_TYPE.SIMILARITY} />
+            <Recommendation itemId={item.id} type={RECO_TYPE.OTHERS_BOUGHT} />
+          </div>
+        </div>
+      }
     />
   )
 }
