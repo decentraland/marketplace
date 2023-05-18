@@ -30,7 +30,12 @@ const UserMenu = (props: Props) => {
     [isFavoritesEnabled, onClickMyAssets, onClickMyLists]
   )
 
-  return <BaseUserMenu {...baseProps} menuItems={menuItems} />
+  return (
+    <div className="menu-with-shopping-cart">
+      <Icon name="shopping cart" />
+      <BaseUserMenu {...baseProps} menuItems={menuItems} />
+    </div>
+  )
 }
 
 export default React.memo(UserMenu)

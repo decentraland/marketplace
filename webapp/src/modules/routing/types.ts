@@ -66,6 +66,8 @@ export type BrowseOptions = {
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
+  ids?: string[]
+  previewMode?: boolean
 }
 
 export enum PageName {

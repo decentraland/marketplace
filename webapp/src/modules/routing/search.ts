@@ -154,6 +154,16 @@ export function getSearchParams(options?: BrowseOptions) {
         params.append('rentalDays', rentalDay.toString())
       }
     }
+
+    if (options.ids) {
+      for(const id of options.ids) {
+        params.append('id', id)
+      }
+    }
+
+    if (options.previewMode !== undefined) {
+      params.append('previewMode', options.previewMode.toString())
+    }
   }
   return params
 }

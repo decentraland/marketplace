@@ -23,6 +23,7 @@ export type Props = {
   isFullscreen?: boolean
   section?: Section
   sections?: Section[]
+  isPreviewMode?: boolean
   onSetView: typeof setView
   onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
   onBrowse: typeof browse
@@ -44,6 +45,7 @@ export type MapStateProps = Pick<
   | 'onlySmart'
   | 'onlyOnRent'
   | 'isMapViewFiltersEnabled'
+  | 'isPreviewMode'
   | 'visitedLocations'
 >
 export type MapDispatchProps = Pick<

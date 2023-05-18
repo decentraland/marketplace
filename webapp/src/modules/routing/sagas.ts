@@ -209,6 +209,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     tenant,
     minPrice,
     maxPrice,
+    ids,
     creators
   } = options
 
@@ -319,6 +320,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               wearableGenders,
               emotePlayMode,
               minPrice,
+              ids,
               maxPrice
             }
           })

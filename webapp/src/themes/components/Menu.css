@@ -36,3 +36,14 @@ ul.box-menu.Menu > .MenuItem.sub-2 {
   padding-left: 48px;
   width: 100%;
 }
+
+.menu-with-shopping-cart {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.menu-with-shopping-cart > i:first-child {
+  margin-bottom: 6px;
+}
+

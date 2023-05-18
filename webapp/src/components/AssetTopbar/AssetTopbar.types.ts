@@ -17,6 +17,7 @@ export type Props = {
   section: Section
   hasFiltersEnabled: boolean
   isLoading: boolean
+  isPreviewMode: boolean
   onBrowse: (options: BrowseOptions) => void
   onClearFilters: typeof clearFilters
   onOpenFiltersModal: () => ReturnType<typeof openModal>
@@ -33,6 +34,7 @@ export type MapStateProps = Pick<
   | 'onlyOnSale'
   | 'sortBy'
   | 'section'
+  | 'isPreviewMode'
   | 'hasFiltersEnabled'
   | 'isLoading'
 >

@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useEffect } from 'react'
+import { useCallback, useMemo, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import {
   Dropdown,
@@ -7,16 +7,10 @@ import {
   Icon,
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
-import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AssetType } from '../../modules/asset/types'
 import { useInput } from '../../lib/input'
 import { getCountText, getOrderByOptions } from './utils'
 import { SortBy } from '../../modules/routing/types'
-import {
-  getCategoryFromSection,
-  getSectionFromCategory
-} from '../../modules/routing/search'
 import {
   isAccountView,
   isLandSection,
@@ -24,7 +18,6 @@ import {
   persistIsMapProperty
 } from '../../modules/ui/utils'
 import { Chip } from '../Chip'
-import { AssetTypeFilter } from './AssetTypeFilter'
 import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
 import styles from './AssetTopbar.module.css'
@@ -32,7 +25,6 @@ import styles from './AssetTopbar.module.css'
 export const AssetTopbar = ({
   search,
   view,
-  assetType,
   count,
   isLoading,
   isMap,
@@ -41,33 +33,39 @@ export const AssetTopbar = ({
   sortBy,
   section,
   hasFiltersEnabled,
+  isPreviewMode,
   onBrowse,
   onClearFilters,
   onOpenFiltersModal
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
-  const category = section ? getCategoryFromSection(section) : undefined
+  const [isLoadingIds, setIsLoadingIds] = useState(false)
 
   const handleSearch = useCallback(
-    (value: string) => {
-      if (search !== value) {
-        onBrowse({
-          search: value,
-          section: category ? getSectionFromCategory(category) : section
-        })
+    async (value: string) => {
+      if (!value) {
+        onBrowse({ ids: [] })
+      } else if (search !== value) {
+        setIsLoadingIds(true)
+        try {
+          const response = await fetch(
+            `http://localhost:8080?search=${value}&limit=100&threshold=0.8`
+          )
+          const itemIds = (await response.json()).data
+          onBrowse({
+            ids: itemIds.map(({ id }: { id: string }) => id),
+            page: 1
+          })
+        } catch (e) {
+          console.error(e)
+        }
+        setIsLoadingIds(false)
       }
     },
-    [category, onBrowse, search, section]
+    [onBrowse, search]
   )
 
   const [searchValue, setSearchValue] = useInput(search, handleSearch, 500)
-
-  const handleAssetTypeChange = useCallback(
-    (value: AssetType) => {
-      onBrowse({ assetType: value })
-    },
-    [onBrowse]
-  )
 
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
@@ -103,6 +101,13 @@ export const AssetTopbar = ({
     [onBrowse, onlyOnSale, onlyOnRent]
   )
 
+  const handleChangePreviewMode = useCallback(
+    isPreviewMode => {
+      onBrowse({ previewMode: isPreviewMode })
+    },
+    [onBrowse]
+  )
+
   const orderByDropdownOptions = useMemo(
     () => getOrderByOptions(onlyOnRent, onlyOnSale),
     [onlyOnRent, onlyOnSale]
@@ -133,6 +138,7 @@ export const AssetTopbar = ({
             onChange={setSearchValue}
             icon={<Icon name="search" />}
             iconPosition="left"
+            disabled={isLoadingIds}
           />
         )}
         {isLandSection(section) && !isAccountView(view!) && (
@@ -153,20 +159,24 @@ export const AssetTopbar = ({
             />
           </div>
         )}
-      </div>
-      {view &&
-        !isLandSection(section) &&
-        !isAccountView(view) &&
-        !isListsSection(section) &&
-        (category === NFTCategory.WEARABLE ||
-          category === NFTCategory.EMOTE) && (
-          <AssetTypeFilter
-            view={view}
-            assetType={assetType}
-            onChange={handleAssetTypeChange}
-          />
+        {!isLandSection(section) && (
+          <div className={classNames(styles.mapToggle)}>
+            <Chip
+              className="grid"
+              icon="table"
+              isActive={!isPreviewMode}
+              onClick={handleChangePreviewMode.bind(null, false)}
+            />
+            <Chip
+              className="atlas"
+              icon="street view"
+              isActive={isPreviewMode}
+              onClick={handleChangePreviewMode.bind(null, true)}
+            />
+          </div>
         )}
-      {!isMap && (
+      </div>
+      {!isMap && !isPreviewMode && (
         <div className={styles.infoRow}>
           {!isLoading ? (
             <div className={styles.countContainer}>

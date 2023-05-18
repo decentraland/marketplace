@@ -272,6 +272,18 @@ export const getMinPrice = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'minPrice') as string) || ''
 )
 
+export const getIds = createSelector<RootState, string, Array<string>>(
+  getRouterSearch,
+  search => getURLParamArray<string>(search, 'id') || undefined
+)
+
+export const getPreviewMode = createSelector<RootState, string, boolean>(
+  getRouterSearch,
+  search => {
+    return getURLParam(search, 'previewMode') === 'true'
+  }
+)
+
 export const getMaxPrice = createSelector<RootState, string, string>(
   getRouterSearch,
   search => (getURLParam(search, 'maxPrice') as string) || ''
@@ -393,13 +405,17 @@ export const getWearablesUrlParams = createSelector(
   getView,
   getViewAsGuest,
   getMinPrice,
+  getIds,
+  getPreviewMode,
   getMaxPrice,
-  (rarities, wearableGenders, view, viewAsGuest, minPrice, maxPrice) => ({
+  (rarities, wearableGenders, view, viewAsGuest, minPrice, ids, previewMode, maxPrice) => ({
     rarities,
     wearableGenders,
     view,
     viewAsGuest,
     minPrice,
+    ids,
+    previewMode,
     maxPrice
   })
 )

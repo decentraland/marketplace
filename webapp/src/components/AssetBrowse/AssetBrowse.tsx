@@ -31,6 +31,7 @@ import { Props } from './AssetBrowse.types'
 import MapTopbar from './MapTopbar'
 import MapBrowse from './MapBrowse'
 import './AssetBrowse.css'
+import PreviewMode from './PreviewMode'
 
 const AssetBrowse = (props: Props) => {
   const {
@@ -38,6 +39,7 @@ const AssetBrowse = (props: Props) => {
     view,
     isMap,
     isFullscreen,
+    isPreviewMode,
     address,
     contracts,
     onSetView,
@@ -147,7 +149,7 @@ const AssetBrowse = (props: Props) => {
     visitedLocations
   ])
 
-  const left = isListsSection(section) ? null : (
+  const left = isListsSection(section) || isPreviewMode ? null : (
     <>
       <NotMobile>
         {isAccountOrCurrentAccount ? (
@@ -223,6 +225,8 @@ const AssetBrowse = (props: Props) => {
           {isMap && isFullscreen ? mapTopbar : <AssetTopbar />}
           {isMap ? (
             <MapBrowse showOwned={showOwnedLandOnMap} />
+          ) : isPreviewMode ? (
+            <PreviewMode />
           ) : (
             <AssetList isManager={isCurrentAccount} />
           )}
