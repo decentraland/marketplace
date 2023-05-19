@@ -148,6 +148,7 @@
 
 .AssetCard .AssetImage {
   height: 223px;
+  transition: height 0.3s !important;
 }
 
 .AssetCard .NotForSale {
@@ -158,6 +159,7 @@
 
 .AssetCard .AssetImage.catalog {
   height: 209px;
+  transition: height 0.3s !important;
 }
 
 .AssetCard:hover .AssetImage.catalog {
