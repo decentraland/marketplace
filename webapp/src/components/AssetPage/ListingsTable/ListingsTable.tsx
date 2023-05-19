@@ -50,7 +50,7 @@ const ListingsTable = (props: Props) => {
           setOrders(
             formatDataToTable(
               isNFT(asset)
-                ? response.data.filter(order => order.tokenId === asset.tokenId)
+                ? response.data.filter(order => order.tokenId !== asset.tokenId)
                 : response.data,
               isMobileOrTablet
             )
