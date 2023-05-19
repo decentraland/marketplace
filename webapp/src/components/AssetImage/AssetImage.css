@@ -326,6 +326,9 @@
 }
 
 @media (max-width: 768px) {
+  .AssetImage .image {
+    width: 100%;
+  }
   .AvailableForMintPopup {
     right: 0;
     width: 100%;
