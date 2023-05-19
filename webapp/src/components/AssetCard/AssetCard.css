@@ -162,11 +162,6 @@
   transition: height 0.3s !important;
 }
 
-.AssetCard:hover .AssetImage.catalog {
-  height: 161px;
-  transition: height 0.3s !important;
-}
-
 .AssetCard .PriceInMana .ui.header.large {
   font-size: 30px;
   font-weight: 600;
@@ -196,6 +191,11 @@
 }
 
 @media (min-width: 1199px) {
+  .AssetCard:hover .AssetImage.catalog {
+    height: 161px;
+    transition: height 0.3s !important;
+  }
+
   .AssetCard .extraInformation {
     display: flex;
     visibility: hidden;
@@ -289,6 +289,15 @@
 }
 
 @media (max-width: 768px) {
+  .AssetCard.ui.card > .content.catalog,
+  .ui.cards > .AssetCard.card > .content.catalog {
+    display: flex;
+  }
+
+  .AssetCard .catalog .tags {
+    margin-top: auto;
+  }
+
   .AssetBrowse .ui.cards .ui.card.AssetCard {
     transform: translateY(0px);
   }
