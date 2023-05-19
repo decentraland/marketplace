@@ -13,5 +13,6 @@ export enum FeatureName {
   RENTAL_PERIOD_FILTER = 'rental-period-filter',
   MAP_VIEW_FILTERS = 'map-view-filters',
   RENTAL_PRICE_FILTER_CHART = 'rental-price-fitler-chart',
-  FAVORITES = 'favorites'
+  FAVORITES = 'favorites,',
+  LISTS_V1 = 'lists-v1'
 }
