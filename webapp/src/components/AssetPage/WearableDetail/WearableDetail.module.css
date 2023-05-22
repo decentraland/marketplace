@@ -42,6 +42,10 @@
   color: var(--secondary-text);
 }
 
+.WearableDetail .wearableBadgesContainer {
+  margin-bottom: 18px;
+}
+
 @media (max-width: 768px) {
   .WearableDetail .wearableInformationContainer {
     gap: 16px;
