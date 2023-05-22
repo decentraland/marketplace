@@ -314,12 +314,13 @@
 
   .AssetCard .wrapBigText {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    font-size: 12px;
+    flex-direction: row;
+    align-items: center;
   }
 
-  .AssetCard .wrapBigText > span {
-    margin-top: 2px;
+  .AssetCard .wrapBigText .ui.small.header.dcl.mana.tiniMana {
+    font-size: 12px;
   }
 
   .AssetCard .PriceInMana {
@@ -335,6 +336,8 @@
     margin-top: 6px;
     visibility: visible;
     height: unset;
+    font-size: 12px;
+    font-weight: normal;
   }
 
   .ui.cards a.card.AssetCard.catalog:hover,
@@ -343,7 +346,7 @@
   a.ui.card.AssetCard.catalog:hover,
   .ui.cards > .ui.card.AssetCard.catalog.link:hover,
   .ui.card.AssetCard.catalog.link:hover {
-    transform: none;
+    transform: translateY(0px);
   }
 
   .AssetCard.ui.card > .content,
