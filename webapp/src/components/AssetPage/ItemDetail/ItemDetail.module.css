@@ -90,6 +90,10 @@
     margin-bottom: 0;
   }
 
+  .ItemDetail .basicRow :global(.dcl.stats) {
+    width: 100%;
+  }
+
   .ItemDetail :global(.dcl.tabs) {
     justify-content: space-evenly;
   }
