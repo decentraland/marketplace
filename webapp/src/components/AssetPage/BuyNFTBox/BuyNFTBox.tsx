@@ -144,7 +144,44 @@ const BuyNFTBox = ({ nft, address }: Props) => {
             .
           </span>
         </div>
-      ) : null}
+      ) : (
+        nft && (
+          <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
+            <div className={styles.informationContainer}>
+              <div className={styles.columnListing}>
+                <span className={styles.informationTitle}>
+                  {t('best_buying_option.minting.price').toUpperCase()}
+                </span>
+                <div className={`${styles.containerRow} ${styles.issueNumber}`}>
+                  {t('best_buying_option.buy_listing.no_offer')}
+                </div>
+              </div>
+              <div className={styles.columnListing}>
+                <span className={styles.informationTitle}>
+                  {t('best_buying_option.buy_listing.make_offer').toUpperCase()}
+                </span>
+                <div className={`${styles.containerRow} ${styles.issueNumber}`}>
+                  #{nft.issuedId}
+                </div>
+              </div>
+            </div>
+            <Button
+              href={locations.nft(nft.contractAddress, nft.tokenId)}
+              inverted
+              className={styles.makeOfferButton}
+              as={Link}
+              to={locations.bid(nft.contractAddress, nft.tokenId)}
+            >
+              <img
+                src={makeOffer}
+                alt={t('best_buying_option.buy_listing.make_offer')}
+              />
+              &nbsp;
+              {t('best_buying_option.buy_listing.make_offer')}
+            </Button>
+          </div>
+        )
+      )}
     </div>
   )
 }
