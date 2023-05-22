@@ -239,6 +239,10 @@ export default React.memo(
   withAuthorizedAction(
     MintItemModal,
     AuthorizedAction.MINT,
+    {
+      action: 'mint_with_mana_page.authorization.action',
+      title_action: 'mint_with_mana_page.authorization.title_action'
+    },
     getMintItemStatus,
     getError
   )

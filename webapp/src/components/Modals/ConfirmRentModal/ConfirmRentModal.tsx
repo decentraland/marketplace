@@ -218,6 +218,10 @@ export default React.memo(
   withAuthorizedAction(
     ConfirmRentModal,
     AuthorizedAction.RENT,
+    {
+      title: 'rental_modal.authorization.title',
+      title_action: 'rental_modal.authorization.title_action'
+    },
     getRentConfirmationStatus,
     getError
   )
