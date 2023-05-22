@@ -114,10 +114,14 @@ export class FavoritesAPI extends BaseClient {
     })
   }
 
-  async createList(name: string, isPrivate: boolean): Promise<List> {
+  async createList(
+    name: string,
+    isPrivate: boolean,
+    description?: string
+  ): Promise<List> {
     return this.fetch('/v1/lists/', {
       method: 'POST',
-      body: JSON.stringify({ name, private: isPrivate }),
+      body: JSON.stringify({ name, private: isPrivate, description }),
       headers: {
         'Content-Type': 'application/json'
       }

@@ -721,7 +721,7 @@ describe('when handling the request for creating a list', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([[call(getAccountIdentity), Promise.reject(error)]])
         .put(createListFailure(error.message))
-        .dispatch(createListRequest(list.name, true))
+        .dispatch(createListRequest(list.name, true, list.description))
         .run({ silenceTimeout: true })
     })
   })
@@ -738,10 +738,10 @@ describe('when handling the request for creating a list', () => {
         ])
         .call.like({
           fn: FavoritesAPI.prototype.createList,
-          args: [list.name, true]
+          args: [list.name, true, list.description]
         })
         .put(createListFailure(error.message))
-        .dispatch(createListRequest(list.name, true))
+        .dispatch(createListRequest(list.name, true, list.description))
         .run({ silenceTimeout: true })
     })
   })
@@ -758,10 +758,10 @@ describe('when handling the request for creating a list', () => {
         ])
         .call.like({
           fn: FavoritesAPI.prototype.createList,
-          args: [list.name, true]
+          args: [list.name, true, list.description]
         })
         .put(createListSuccess(list))
-        .dispatch(createListRequest(list.name, true))
+        .dispatch(createListRequest(list.name, true, list.description))
         .run({ silenceTimeout: true })
     })
   })
