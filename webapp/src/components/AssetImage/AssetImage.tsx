@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
-import { Env } from '@dcl/ui-env'
 import {
   BodyShape,
   NFTCategory,
@@ -10,6 +9,7 @@ import {
   PreviewType,
   Rarity
 } from '@dcl/schemas'
+// import { Env } from '@dcl/ui-env'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
@@ -26,7 +26,7 @@ import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
 import { Atlas } from '../Atlas'
 import ListedBadge from '../ListedBadge'
-import { config } from '../../config'
+// import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import { JumpIn } from '../AssetPage/JumpIn'
 import { getEthereumItemUrn } from './utils'
@@ -296,7 +296,7 @@ const AssetImage = (props: Props) => {
               onLoad={handleLoad}
               onError={handleError}
               {...wearablePreviewProps}
-              dev={config.is(Env.DEVELOPMENT)}
+              // dev={config.is(Env.DEVELOPMENT)}
             />
             {isAvailableForMint ? (
               <AvailableForMintPopup
@@ -464,7 +464,7 @@ const AssetImage = (props: Props) => {
               wheelStart={100}
               onLoad={handleLoad}
               onError={handleError}
-              dev={config.is(Env.DEVELOPMENT)}
+              // dev={config.is(Env.DEVELOPMENT)}
             />
             {isLoadingWearablePreview ? (
               <Center>
