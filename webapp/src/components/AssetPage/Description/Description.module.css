@@ -8,10 +8,6 @@
   font-size: 14px;
   line-height: 26px;
   letter-spacing: 0.2px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
 }
 
 .Description .readMore {

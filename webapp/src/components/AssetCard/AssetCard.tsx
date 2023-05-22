@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { Link } from 'react-router-dom'
-import { Card, Icon } from 'decentraland-ui'
+import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
 import {
   getAssetName,
   getAssetUrl,
@@ -104,6 +104,7 @@ const AssetCard = (props: Props) => {
   } = props
 
   const { ref, inView } = useInView()
+  const isMobile = useMobileMediaQuery()
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
@@ -130,11 +131,7 @@ const AssetCard = (props: Props) => {
 
     return catalogItemInformation ? (
       <div className="CatalogItemInformation">
-        <span
-          className={
-            notForSale ? 'NotForSale extraInformation' : 'extraInformation'
-          }
-        >
+        <span className={`extraInformation ${notForSale ? 'NotForSale' : ''}`}>
           <span>{catalogItemInformation.action}</span>
           {catalogItemInformation.actionIcon && (
             <img
@@ -193,7 +190,7 @@ const AssetCard = (props: Props) => {
               showOrderListedTag={showListedTag}
               showMonospace
             />
-            {!isNFT(asset) ? (
+            {!isNFT(asset) && !isMobile ? (
               <FavoritesCounter
                 className="FavoritesCounterBubble"
                 item={asset}
