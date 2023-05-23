@@ -60,7 +60,7 @@ const BuyNFTModal = (props: Props) => {
         return onExecuteOrderWithCard(nft)
       }
 
-      onExecuteOrder(order!, nft, fingerprint, !alreadyAuthorized)
+      !!order && onExecuteOrder(order, nft, fingerprint, !alreadyAuthorized)
     },
     [
       isBuyWithCardPage,
