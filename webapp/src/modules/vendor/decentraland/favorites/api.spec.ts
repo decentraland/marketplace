@@ -302,7 +302,11 @@ describe('when creating a list', () => {
 
     it('should reject with the request error', () => {
       return expect(
-        favoritesAPI.createList('aListId', false, 'aDescription')
+        favoritesAPI.createList({
+          name: 'aListName',
+          isPrivate: true,
+          description: 'aListDescription'
+        })
       ).rejects.toEqual(error)
     })
   })
@@ -326,7 +330,11 @@ describe('when creating a list', () => {
 
     it('should resolve with the retrieved list', () => {
       return expect(
-        favoritesAPI.createList(list.id, true, list.description)
+        favoritesAPI.createList({
+          name: list.name,
+          isPrivate: true,
+          description: list.description
+        })
       ).resolves.toEqual(response)
     })
   })

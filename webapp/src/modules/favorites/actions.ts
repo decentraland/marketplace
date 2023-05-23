@@ -228,11 +228,15 @@ export const CREATE_LIST_REQUEST = '[Request] Create List'
 export const CREATE_LIST_SUCCESS = '[Success] Create List'
 export const CREATE_LIST_FAILURE = '[Failure] Create List'
 
-export const createListRequest = (
-  name: string,
-  isPrivate: boolean,
+export const createListRequest = ({
+  name,
+  isPrivate,
+  description
+}: {
+  name: string
+  isPrivate: boolean
   description?: string
-) => action(CREATE_LIST_REQUEST, { name, description, isPrivate })
+}) => action(CREATE_LIST_REQUEST, { name, description, isPrivate })
 
 export const createListSuccess = (list: List) =>
   action(CREATE_LIST_SUCCESS, { list })

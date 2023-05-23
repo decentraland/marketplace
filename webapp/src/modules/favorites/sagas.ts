@@ -321,12 +321,11 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
-      const list: List = yield call(
-        [favoritesAPI, 'createList'],
+      const list: List = yield call([favoritesAPI, 'createList'], {
         name,
         isPrivate,
         description
-      )
+      })
       yield put(createListSuccess(list))
     } catch (error) {
       yield put(

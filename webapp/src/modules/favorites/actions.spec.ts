@@ -356,7 +356,13 @@ describe('when creating the action to signal a successful update list request', 
 
 describe('when creating the action to signal the start of the create list request', () => {
   it('should return an object representing the action', () => {
-    expect(createListRequest(list.name, true, list.description)).toEqual({
+    expect(
+      createListRequest({
+        name: list.name,
+        isPrivate: true,
+        description: list.description
+      })
+    ).toEqual({
       type: CREATE_LIST_REQUEST,
       meta: undefined,
       payload: {
