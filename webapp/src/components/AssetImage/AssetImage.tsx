@@ -527,7 +527,20 @@ const AssetImage = (props: Props) => {
 
 // the purpose of this wrapper is to make the div always be square, by using a 1x1 transparent pixel
 const AssetImageWrapper = (props: Props) => {
-  const { asset, className, showOrderListedTag, item, ...rest } = props
+  const {
+    asset,
+    className,
+    showOrderListedTag,
+    item,
+    onFetchItem,
+    ...rest
+  } = props
+
+  useEffect(() => {
+    if (!item && isNFT(asset) && asset.itemId) {
+      onFetchItem(asset.contractAddress, asset.itemId)
+    }
+  }, [asset, item, onFetchItem])
 
   const isAvailableForMint = useMemo(
     () =>
@@ -571,7 +584,12 @@ const AssetImageWrapper = (props: Props) => {
       <img src={PIXEL} alt="pixel" className="pixel" />
       <div className="image-wrapper">
         {showOrderListedTag ? <ListedBadge className="listed-badge" /> : null}
-        <AssetImage asset={asset} item={item} {...rest}>
+        <AssetImage
+          asset={asset}
+          item={item}
+          onFetchItem={onFetchItem}
+          {...rest}
+        >
           <div className="badges">
             {coordinates ? (
               <>

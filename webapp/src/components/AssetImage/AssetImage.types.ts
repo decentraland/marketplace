@@ -8,6 +8,10 @@ import {
   SetWearablePreviewControllerAction
 } from '../../modules/ui/preview/actions'
 import { Asset } from '../../modules/asset/types'
+import {
+  FetchItemRequestAction,
+  fetchItemRequest
+} from '../../modules/item/actions'
 
 export type Props = {
   asset: Asset
@@ -25,6 +29,7 @@ export type Props = {
   showOrderListedTag?: boolean
   onSetIsTryingOn: typeof setIsTryingOn
   onSetWearablePreviewController: typeof setWearablePreviewController
+  onFetchItem: typeof fetchItemRequest
   children?: React.ReactNode
   hasBadges?: boolean
   item: Item | null
@@ -45,10 +50,12 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onSetIsTryingOn' | 'onSetWearablePreviewController'
+  'onSetIsTryingOn' | 'onSetWearablePreviewController' | 'onFetchItem'
 >
 export type MapDispatch = Dispatch<
-  SetIsTryingOnAction | SetWearablePreviewControllerAction
+  | SetIsTryingOnAction
+  | SetWearablePreviewControllerAction
+  | FetchItemRequestAction
 >
 
 export type AvailableForMintPopupType = {

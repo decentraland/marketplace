@@ -14,6 +14,7 @@ import {
   setWearablePreviewController
 } from '../../modules/ui/preview/actions'
 import { getData as getItems } from '../../modules/item/selectors'
+import { fetchItemRequest } from '../../modules/item/actions'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -49,7 +50,9 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onSetIsTryingOn: value => dispatch(setIsTryingOn(value)),
   onSetWearablePreviewController: controller =>
-    dispatch(setWearablePreviewController(controller))
+    dispatch(setWearablePreviewController(controller)),
+  onFetchItem: (contractAddress: string, tokenId: string) =>
+    dispatch(fetchItemRequest(contractAddress, tokenId))
 })
 
 export default connect(mapState, mapDispatch)(AssetImage)
