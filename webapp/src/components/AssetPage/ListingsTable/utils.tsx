@@ -12,7 +12,8 @@ import styles from './ListingsTable.module.css'
 
 export const formatDataToTable = (
   orders: Order[],
-  isMobile = false
+  isMobile = false,
+  onNavigate: (path: string) => void
 ): DataTableType[] => {
   return orders.reduce((accumulator: DataTableType[], order: Order) => {
     const value: DataTableType = {
@@ -71,7 +72,11 @@ export const formatDataToTable = (
               ) : (
                 <Button
                   inverted
-                  href={locations.nft(order.contractAddress, order.tokenId)}
+                  onClick={() =>
+                    onNavigate(
+                      locations.nft(order.contractAddress, order.tokenId)
+                    )
+                  }
                   size="small"
                 >
                   {t('listings_table.view_listing')}

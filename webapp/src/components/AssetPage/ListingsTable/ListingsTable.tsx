@@ -16,7 +16,7 @@ export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
 
 const ListingsTable = (props: Props) => {
-  const { asset, sortBy = OrderSortBy.CHEAPEST } = props
+  const { asset, sortBy = OrderSortBy.CHEAPEST, onNavigate } = props
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const [orders, setOrders] = useState<DataTableType[]>([])
@@ -52,7 +52,8 @@ const ListingsTable = (props: Props) => {
               isNFT(asset)
                 ? response.data.filter(order => order.tokenId !== asset.tokenId)
                 : response.data,
-              isMobileOrTablet
+              isMobileOrTablet,
+              onNavigate
             )
           )
           setTotal(response.total)
@@ -62,7 +63,15 @@ const ListingsTable = (props: Props) => {
           console.error(error)
         })
     }
-  }, [asset, setIsLoading, setOrders, sortBy, page, isMobileOrTablet])
+  }, [
+    asset,
+    setIsLoading,
+    setOrders,
+    sortBy,
+    page,
+    isMobileOrTablet,
+    onNavigate
+  ])
 
   return (
     <TableContent

@@ -1,2 +1,3 @@
-import ListingsTable from './ListingsTable'
-export { ListingsTable }
+import ListingsTable from './ListingsTable.container'
+
+export default ListingsTable
