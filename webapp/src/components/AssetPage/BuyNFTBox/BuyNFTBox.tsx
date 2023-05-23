@@ -121,7 +121,6 @@ const BuyNFTBox = ({ nft, address }: Props) => {
           />
           {canBid && (
             <Button
-              href={locations.nft(nft.contractAddress, listing.order.tokenId)}
               inverted
               className={styles.makeOfferButton}
               as={Link}
@@ -167,7 +166,6 @@ const BuyNFTBox = ({ nft, address }: Props) => {
               </div>
             </div>
             <Button
-              href={locations.nft(nft.contractAddress, nft.tokenId)}
               inverted
               className={styles.makeOfferButton}
               as={Link}

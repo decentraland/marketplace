@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Bid,
@@ -268,7 +268,8 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             buyWithCardClassName={styles.buyWithCardClassName}
           />
           <Button
-            href={locations.nft(asset.contractAddress, listing.order.tokenId)}
+            as={Link}
+            to={locations.nft(asset.contractAddress, listing.order.tokenId)}
             inverted
           >
             {t('best_buying_option.buy_listing.view_listing')}

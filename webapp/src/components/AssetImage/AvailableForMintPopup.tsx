@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Network, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon, Popup } from 'decentraland-ui'
@@ -32,7 +33,8 @@ const AvailableForMintPopup = ({
         </span>
         <Button
           inverted
-          href={locations.item(contractAddress, itemId)}
+          as={Link}
+          to={locations.item(contractAddress, itemId)}
           className="goToItemButton"
         >
           <Icon name="chevron right" className="goToItem" />
