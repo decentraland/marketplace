@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Bid,
@@ -12,7 +12,7 @@ import {
   OrderSortBy,
   Rarity
 } from '@dcl/schemas'
-import { Button, Loader, Mana, Popup } from 'decentraland-ui'
+import { Button, Loader, Popup } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
 import { isNFT } from '../../../modules/asset/utils'
@@ -21,6 +21,7 @@ import mintingIcon from '../../../images/minting.png'
 import infoIcon from '../../../images/infoIcon.png'
 import clock from '../../../images/clock.png'
 import noListings from '../../../images/noListings.png'
+import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
@@ -267,7 +268,8 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             buyWithCardClassName={styles.buyWithCardClassName}
           />
           <Button
-            href={locations.nft(asset.contractAddress, listing.order.tokenId)}
+            as={Link}
+            to={locations.nft(asset.contractAddress, listing.order.tokenId)}
             inverted
           >
             {t('best_buying_option.buy_listing.view_listing')}

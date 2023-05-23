@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { ListingStatus, Order } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon, Mana } from 'decentraland-ui'
@@ -71,7 +72,8 @@ export const formatDataToTable = (
               ) : (
                 <Button
                   inverted
-                  href={locations.nft(order.contractAddress, order.tokenId)}
+                  as={Link}
+                  to={locations.nft(order.contractAddress, order.tokenId)}
                   size="small"
                 >
                   {t('listings_table.view_listing')}
