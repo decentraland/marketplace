@@ -438,9 +438,9 @@
     "price_per_day": "Price per day"
   },
   "nft_land_filters": {
-    "all_land": "All land",
-    "only_for_rent": "Available to rent",
-    "only_for_sale": "Available to buy"
+    "all_land": "All lands",
+    "only_for_rent": "Available to Rent",
+    "only_for_sale": "Available to Buy"
   },
   "nft_card": {
     "expires_at": "Expires {date}"
