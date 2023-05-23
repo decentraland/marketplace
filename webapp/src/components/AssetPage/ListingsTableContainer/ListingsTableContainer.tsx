@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { OrderSortBy } from '@dcl/schemas'
 import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 import { OwnersTable } from '../OwnersTable'
-import ListingsTable from '../ListingsTable/ListingsTable'
+import { ListingsTable } from '../ListingsTable'
 import TableContainer from '../../Table/TableContainer'
 import { Props, SortByType } from './ListingsTableContainer.types'
 

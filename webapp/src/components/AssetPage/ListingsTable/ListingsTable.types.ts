@@ -5,6 +5,3 @@ export type Props = {
   asset: Asset | null
   sortBy?: OrderSortBy
 }
-
-export type MapStateProps = {}
-export type MapDispatchProps = {}

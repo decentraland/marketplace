@@ -1,10 +1,12 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Network, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Icon, Mana, Popup } from 'decentraland-ui'
+import { Button, Icon, Popup } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import mintingIcon from '../../images/minting.png'
 import infoIcon from '../../images/infoIcon.png'
+import Mana from '../Mana/Mana'
 import { formatWeiToAssetCard } from '../AssetCard/utils'
 import { ManaToFiat } from '../ManaToFiat'
 import { AvailableForMintPopupType } from './AssetImage.types'
@@ -31,7 +33,8 @@ const AvailableForMintPopup = ({
         </span>
         <Button
           inverted
-          href={locations.item(contractAddress, itemId)}
+          as={Link}
+          to={locations.item(contractAddress, itemId)}
           className="goToItemButton"
         >
           <Icon name="chevron right" className="goToItem" />

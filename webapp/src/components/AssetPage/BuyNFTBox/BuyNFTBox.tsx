@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
-import { Button, Loader, Mana } from 'decentraland-ui'
+import { Button, Loader } from 'decentraland-ui'
+import Mana from '../../Mana/Mana'
 import { formatDistanceToNow } from '../../../lib/date'
 import clock from '../../../images/clock.png'
 import makeOffer from '../../../images/makeOffer.png'
@@ -120,7 +121,6 @@ const BuyNFTBox = ({ nft, address }: Props) => {
           />
           {canBid && (
             <Button
-              href={locations.nft(nft.contractAddress, listing.order.tokenId)}
               inverted
               className={styles.makeOfferButton}
               as={Link}
@@ -166,7 +166,6 @@ const BuyNFTBox = ({ nft, address }: Props) => {
               </div>
             </div>
             <Button
-              href={locations.nft(nft.contractAddress, nft.tokenId)}
               inverted
               className={styles.makeOfferButton}
               as={Link}
