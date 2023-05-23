@@ -13,6 +13,7 @@ import {
   getIsCreatorsFilterEnabled,
   getIsEstateSizeFilterEnabled,
   getIsFavoritesEnabled,
+  getIsListsV1Enabled,
   getIsLocationFilterEnabled,
   getIsMaintenanceEnabled,
   getIsMapViewFiltersEnabled,
@@ -191,6 +192,11 @@ const waitForInitialLoadingSelectors = [
     name: 'IsFavorites',
     feature: FeatureName.FAVORITES,
     selector: getIsFavoritesEnabled
+  },
+  {
+    name: 'IsListsV1',
+    feature: FeatureName.LISTS_V1,
+    selector: getIsListsV1Enabled
   }
 ]
 
