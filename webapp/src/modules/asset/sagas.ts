@@ -13,6 +13,12 @@ import { buyItemWithCardFailure } from '../item/actions'
 import { executeOrderWithCardFailure } from '../order/actions'
 import { AssetType } from './types'
 
+export const failStatuses = [
+  PurchaseStatus.CANCELLED,
+  PurchaseStatus.FAILED,
+  PurchaseStatus.REFUNDED
+]
+
 export function* assetSaga() {
   yield takeEvery(SET_PURCHASE, handleSetAssetPurchaseWithCard)
 }
@@ -50,12 +56,6 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
     ) {
       yield put(push(statusPagePathname))
     }
-
-    const failStatuses = [
-      PurchaseStatus.CANCELLED,
-      PurchaseStatus.FAILED,
-      PurchaseStatus.REFUNDED
-    ]
 
     if (failStatuses.includes(status)) {
       const failureAction =
