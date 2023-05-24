@@ -18,6 +18,7 @@
     "art": "艺术",
     "cancel": "取消",
     "proceed": "继续",
+    "create": "创造",
     "continue": "继续",
     "go_back": "回去",
     "nft": "NFT",
@@ -1154,5 +1155,11 @@
       "subtitle": "发现惊人的项目。",
       "action": "浏览项目"
     }
+  },
+  "create_list_modal": {
+    "title": "创建列表",
+    "name": "列表名称",
+    "description": "清单说明",
+    "private": "创建为私人列表"
   }
 }
