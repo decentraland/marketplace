@@ -26,6 +26,7 @@ import {
 import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_SUCCESS,
+  BuyItemSuccessAction,
   fetchItemRequest,
   fetchItemsRequest,
   fetchTrendingItemsRequest
@@ -601,6 +602,8 @@ function shouldResetOptions(previous: BrowseOptions, current: BrowseOptions) {
   )
 }
 
-function* handleRedirectToActivity() {
-  yield put(push(locations.activity()))
+function* handleRedirectToActivity(action: BuyItemSuccessAction) {
+  const boughtItem =
+    action.type === BUY_ITEM_SUCCESS ? action.payload.item.id : undefined
+  yield put(push(locations.activity(boughtItem)))
 }

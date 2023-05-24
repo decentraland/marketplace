@@ -106,7 +106,8 @@ export const locations = {
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
-  activity: () => `/activity`
+  activity: (boughtItem?: string) =>
+    `/activity${boughtItem ? `?${boughtItem}` : ''}`
 }
 
 function getResource(type: AssetType) {

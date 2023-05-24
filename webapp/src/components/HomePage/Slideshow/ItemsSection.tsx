@@ -14,7 +14,7 @@ import { Section } from '../../../modules/vendor/decentraland/routing/types'
 
 const ItemsSection = (props: {
   view: HomepageView
-  viewAllButton: React.ReactNode
+  viewAllButton?: React.ReactNode
   onChangeItemSection: (view: HomepageView, section: Section) => void
 }) => {
   const { view, viewAllButton, onChangeItemSection } = props
@@ -47,9 +47,11 @@ const ItemsSection = (props: {
           {t(`menu.${Section.EMOTES}`)}
         </div>
       </Tabs.Tab>
-      <div className="view-all-button">
-        <Tabs.Tab>{viewAllButton}</Tabs.Tab>
-      </div>
+      {viewAllButton ? (
+        <div className="view-all-button">
+          <Tabs.Tab>{viewAllButton}</Tabs.Tab>
+        </div>
+      ) : null}
     </Tabs>
   )
 

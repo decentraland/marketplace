@@ -1,6 +1,14 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Page, Header, Button, Modal } from 'decentraland-ui'
+import { useLocation } from 'react-router-dom'
+import {
+  Page,
+  Header,
+  Button,
+  Modal,
+  // Icon,
+  ModalNavigation
+} from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { locations } from '../../modules/routing/locations'
@@ -13,11 +21,17 @@ import { Transaction } from './Transaction'
 import { Props } from './ActivityPage.types'
 import './ActivityPage.css'
 import { NavigationTab } from '../Navigation/Navigation.types'
+import { RECO_TYPE, Recommendation } from '../Recommendation'
 
 const ActivityPage = (props: Props) => {
   const { address, transactions, onClearHistory } = props
-
+  const location = useLocation()
+  const boughtItem = useMemo(
+    () => new URLSearchParams(location.search).get('boughtItem'),
+    [location.search]
+  )
   const [showConfirmation, setShowConfirmation] = useState(false)
+  const [isBoughItemOpen, setIsBoughItemOpen] = useState(true)
 
   const handleClear = useCallback(() => {
     if (address) {
@@ -44,7 +58,9 @@ const ActivityPage = (props: Props) => {
               id="wallet.sign_in_required"
               values={{
                 sign_in: (
-                  <Link to={locations.signIn(locations.activity())}>{t('wallet.sign_in')}</Link>
+                  <Link to={locations.signIn(locations.activity())}>
+                    {t('wallet.sign_in')}
+                  </Link>
                 )
               }}
             />
@@ -85,6 +101,21 @@ const ActivityPage = (props: Props) => {
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.ACTIVITY} />
       <Page className="ActivityPage">{content}</Page>
+      {boughtItem ? (
+        <Modal open={isBoughItemOpen}>
+          <ModalNavigation
+            title={'You may also like'}
+            onClose={() => setIsBoughItemOpen(false)}
+          ></ModalNavigation>
+          <Modal.Content>
+            <Recommendation
+              noTitle
+              itemId={boughtItem}
+              type={RECO_TYPE.SIMILARITY}
+            />
+          </Modal.Content>
+        </Modal>
+      ) : null}
       <Modal size="tiny" open={showConfirmation}>
         <Modal.Header>
           {t('activity_page.clear_history_modal.title')}

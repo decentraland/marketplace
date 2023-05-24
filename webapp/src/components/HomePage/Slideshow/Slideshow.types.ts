@@ -3,10 +3,11 @@ import { HomepageView } from '../../../modules/ui/asset/homepage/types'
 import { Section } from '../../../modules/vendor/routing/types'
 
 export type Props = {
-  title: string
+  title?: string
   subtitle?: string
   viewAllTitle?: string
   emptyMessage?: string
+  showViewAll?: boolean
   assets: Asset[]
   view: HomepageView
   isSubHeader?: boolean
