@@ -5,7 +5,6 @@ import {
   isConnected,
   isConnecting
 } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { getIsFavoritesEnabled } from '../../modules/features/selectors'
 import { getTransactions } from '../../modules/transaction/selectors'
 import { locations } from '../../modules/routing/locations'
 import { RootState } from '../../modules/reducer'
@@ -17,8 +16,7 @@ const mapState = (state: RootState): MapStateProps => {
     isSignedIn: isConnected(state),
     isSigningIn: isConnecting(state),
     isActivity: getLocation(state).pathname === locations.activity(),
-    hasActivity: getTransactions(state).some(tx => isPending(tx.status)),
-    isFavoritesEnabled: getIsFavoritesEnabled(state)
+    hasActivity: getTransactions(state).some(tx => isPending(tx.status))
   }
 }
 

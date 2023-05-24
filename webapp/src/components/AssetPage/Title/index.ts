@@ -1,3 +1,2 @@
-import Title from './Title.container'
-
+import Title from './Title'
 export default Title

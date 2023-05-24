@@ -7,7 +7,6 @@ function renderUserMenu(props: Partial<UserMenuProps> = {}) {
     <UserMenu
       onClickMyAssets={jest.fn()}
       onClickMyLists={jest.fn()}
-      isFavoritesEnabled={false}
       isSignedIn
       {...props}
     />
@@ -20,17 +19,8 @@ describe('UserMenu', () => {
     expect(getByTestId('my-assets')).toBeInTheDocument()
   })
 
-  describe('when the favorites features is disabled', () => {
-    it('should not render the My Lists option in the menu', () => {
-      const { queryByTestId } = renderUserMenu()
-      expect(queryByTestId('my-lists')).not.toBeInTheDocument()
-    })
-  })
-
-  describe('when the favorites features is enabled', () => {
-    it('should render the My Lists option in the menu', () => {
-      const { getByTestId } = renderUserMenu({ isFavoritesEnabled: true })
-      expect(getByTestId('my-lists')).toBeInTheDocument()
-    })
+  it('should render the My Lists option in the menu', () => {
+    const { getByTestId } = renderUserMenu()
+    expect(getByTestId('my-lists')).toBeInTheDocument()
   })
 })

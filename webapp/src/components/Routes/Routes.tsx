@@ -29,7 +29,7 @@ import { StatusPage } from '../BuyPage/StatusPage'
 import { ListsPage } from '../ListsPage'
 import { Props } from './Routes.types'
 
-const Routes = ({ inMaintenance, isFavoritesEnabled }: Props) => {
+const Routes = ({ inMaintenance }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
 
   if (inMaintenance) {
@@ -56,11 +56,7 @@ const Routes = ({ inMaintenance, isFavoritesEnabled }: Props) => {
           component={AccountPage}
         />
         <Route exact path={locations.account()} component={AccountPage} />
-        <Route
-          exact
-          path={locations.list()}
-          component={isFavoritesEnabled ? ListsPage : undefined}
-        />
+        <Route exact path={locations.list()} component={ListsPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
         <Route exact path={locations.sell()} component={SellPage} />
         <Route exact path={locations.bid()} component={BidPage} />

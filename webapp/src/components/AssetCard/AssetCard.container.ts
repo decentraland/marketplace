@@ -9,7 +9,6 @@ import { getAssetPrice, isNFT } from '../../modules/asset/utils'
 import { locations } from '../../modules/routing/locations'
 import { getOpenRentalId } from '../../modules/rental/utils'
 import { getRentalById } from '../../modules/rental/selectors'
-import { getIsFavoritesEnabled } from '../../modules/features/selectors'
 import { getPageName } from '../../modules/routing/selectors'
 import { PageName } from '../../modules/routing/types'
 import { MapStateProps, OwnProps, MapDispatchProps } from './AssetCard.types'
@@ -40,8 +39,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       ? isClaimingBackLandTransactionPending(state, asset)
       : false,
     rental: rentalOfNFT,
-    showRentalChip: rentalOfNFT !== null && pageName === PageName.ACCOUNT,
-    isFavoritesEnabled: getIsFavoritesEnabled(state)
+    showRentalChip: rentalOfNFT !== null && pageName === PageName.ACCOUNT
   }
 }
 

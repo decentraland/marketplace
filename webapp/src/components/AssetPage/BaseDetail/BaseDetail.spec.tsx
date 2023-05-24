@@ -1,3 +1,4 @@
+import { within } from '@testing-library/dom'
 import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { Asset } from '../../../modules/asset/types'
 import { INITIAL_STATE } from '../../../modules/favorites/reducer'
@@ -7,6 +8,7 @@ import { Props as BaseDetailProps } from './BaseDetail.types'
 
 jest.mock('decentraland-ui/dist/components/Media')
 
+const BASE_DETAIL_TOP_HEADER = 'top-header'
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
 
 function renderBaseDetail(props: Partial<BaseDetailProps> = {}) {
@@ -14,10 +16,10 @@ function renderBaseDetail(props: Partial<BaseDetailProps> = {}) {
     <BaseDetail
       asset={{} as Asset}
       assetImage={undefined}
-      isFavoritesEnabled={false}
       badges={undefined}
       left={undefined}
       box={undefined}
+      onBack={jest.fn()}
       isOnSale
       {...props}
     />,
@@ -29,7 +31,7 @@ function renderBaseDetail(props: Partial<BaseDetailProps> = {}) {
             items: {
               '0xContractAddress-itemId': { pickedByUser: false, count: 35 }
             },
-            total: 0
+            lists: {}
           }
         }
       }
@@ -53,12 +55,15 @@ describe('BaseDetail', () => {
       useMobileMediaQueryMock.mockReturnValue(false)
     })
 
-    it('should not render the favorites counter', () => {
-      const { queryByTestId } = renderBaseDetail({
-        asset,
-        isFavoritesEnabled: false
+    it('should not render the favorites counter in the top-header', async () => {
+      const { getByTestId } = renderBaseDetail({
+        asset
       })
-      expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
+      expect(
+        within(
+          getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()
+        ).queryByTestId(FAVORITES_COUNTER_TEST_ID)
+      ).toBeNull()
     })
   })
 
@@ -67,43 +72,37 @@ describe('BaseDetail', () => {
       useMobileMediaQueryMock.mockReturnValue(true)
     })
 
-    describe('and the favorites feature flag is not enabled', () => {
-      it('should not render the favorites counter', () => {
-        const { queryByTestId } = renderBaseDetail({
-          asset,
-          isFavoritesEnabled: false
+    describe('and the asset is an nft', () => {
+      beforeEach(() => {
+        asset = { ...asset, tokenId: 'tokenId' } as Asset
+      })
+
+      it('should not render the favorites counter in the top-header', () => {
+        const { getByTestId } = renderBaseDetail({
+          asset
         })
-        expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
+        expect(
+          within(
+            getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()
+          ).queryByTestId(FAVORITES_COUNTER_TEST_ID)
+        ).toBeNull()
       })
     })
 
-    describe('and the favorites feature flag is enabled', () => {
-      describe('and the asset is an nft', () => {
-        beforeEach(() => {
-          asset = { ...asset, tokenId: 'tokenId' } as Asset
-        })
-
-        it('should not render the favorites counter', () => {
-          const { queryByTestId } = renderBaseDetail({
-            asset,
-            isFavoritesEnabled: true
-          })
-          expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
-        })
+    describe('and the asset is an item', () => {
+      beforeEach(() => {
+        asset = { ...asset, itemId: 'itemId' } as Asset
       })
 
-      describe('and the asset is an item', () => {
-        beforeEach(() => {
-          asset = { ...asset, itemId: 'itemId' } as Asset
+      it('should render the favorites counter', () => {
+        const { getByTestId } = renderBaseDetail({
+          asset
         })
-
-        it('should render the favorites counter', () => {
-          const { getByTestId } = renderBaseDetail({
-            asset,
-            isFavoritesEnabled: true
-          })
-          expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
-        })
+        expect(
+          within(
+            getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()
+          ).queryByTestId(FAVORITES_COUNTER_TEST_ID)
+        ).toBeInTheDocument()
       })
     })
   })

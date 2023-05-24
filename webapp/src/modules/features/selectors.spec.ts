@@ -12,7 +12,6 @@ import {
   getIsCampaignHomepageBannerEnabled,
   getIsCreatorsFilterEnabled,
   getIsEstateSizeFilterEnabled,
-  getIsFavoritesEnabled,
   getIsListsV1Enabled,
   getIsLocationFilterEnabled,
   getIsMaintenanceEnabled,
@@ -187,11 +186,6 @@ const waitForInitialLoadingSelectors = [
     name: 'IsRentalPriceFilterChart',
     feature: FeatureName.RENTAL_PRICE_FILTER_CHART,
     selector: getIsRentalPriceFilterChartEnabled
-  },
-  {
-    name: 'IsFavorites',
-    feature: FeatureName.FAVORITES,
-    selector: getIsFavoritesEnabled
   },
   {
     name: 'IsListsV1',
