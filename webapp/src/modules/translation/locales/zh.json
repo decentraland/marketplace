@@ -1160,6 +1160,9 @@
     "title": "创建列表",
     "name": "列表名称",
     "description": "清单说明",
-    "private": "创建为私人列表"
+    "private": "创建为私人列表",
+    "errors": {
+      "name_duplicated": "此名称已用于您的另一个列表。 <br></br> 选择不同的名称。"
+    }
   }
 }

@@ -1,7 +1,10 @@
 import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
 import { RootState } from '../../../modules/reducer'
-import { createListRequest } from '../../../modules/favorites/actions'
+import {
+  createListClear,
+  createListRequest
+} from '../../../modules/favorites/actions'
 import {
   isLoadingCreateList,
   getError
@@ -16,7 +19,12 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (dispatch: Dispatch): MapDispatchProps =>
-  bindActionCreators({ onCreateList: createListRequest }, dispatch)
+const mapDispatch = (dispatch: Dispatch, ownProps: any): MapDispatchProps => ({
+  onClose: () => {
+    dispatch(createListClear())
+    return ownProps.onClose()
+  },
+  ...bindActionCreators({ onCreateList: createListRequest }, dispatch)
+})
 
 export default connect(mapState, mapDispatch)(CreateListModal)

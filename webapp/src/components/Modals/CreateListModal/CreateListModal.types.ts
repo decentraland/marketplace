@@ -7,5 +7,5 @@ export type Props = ModalProps & {
   onCreateList: typeof createListRequest
 }
 
-export type MapDispatchProps = Pick<Props, 'onCreateList'>
+export type MapDispatchProps = Pick<Props, 'onCreateList' | 'onClose'>
 export type MapStateProps = Pick<Props, 'isLoading' | 'error'>

@@ -1163,6 +1163,9 @@
     "title": "Create List",
     "name": "List name",
     "description": "Description",
-    "private": "Create as private list"
+    "private": "Create as private list",
+    "errors": {
+      "name_duplicated": "This name is already in use for another of your lists. <br></br> Choose a different name."
+    }
   }
 }
