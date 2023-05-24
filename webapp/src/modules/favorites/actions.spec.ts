@@ -51,7 +51,13 @@ import {
   UPDATE_LIST_SUCCESS,
   updateListFailure,
   updateListRequest,
-  updateListSuccess
+  updateListSuccess,
+  CREATE_LIST_REQUEST,
+  CREATE_LIST_FAILURE,
+  CREATE_LIST_SUCCESS,
+  createListFailure,
+  createListRequest,
+  createListSuccess
 } from './actions'
 import { List, Permission } from './types'
 
@@ -342,6 +348,46 @@ describe('when creating the action to signal a successful update list request', 
   it('should return an object representing the action', () => {
     expect(updateListSuccess(list)).toEqual({
       type: UPDATE_LIST_SUCCESS,
+      meta: undefined,
+      payload: { list }
+    })
+  })
+})
+
+describe('when creating the action to signal the start of the create list request', () => {
+  it('should return an object representing the action', () => {
+    expect(
+      createListRequest({
+        name: list.name,
+        isPrivate: true,
+        description: list.description
+      })
+    ).toEqual({
+      type: CREATE_LIST_REQUEST,
+      meta: undefined,
+      payload: {
+        name: list.name,
+        isPrivate: true,
+        description: list.description
+      }
+    })
+  })
+})
+
+describe('when creating the action to signal a failure in the create list request', () => {
+  it('should return an object representing the action', () => {
+    expect(createListFailure(anErrorMessage)).toEqual({
+      type: CREATE_LIST_FAILURE,
+      meta: undefined,
+      payload: { error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to signal a successful create list request', () => {
+  it('should return an object representing the action', () => {
+    expect(createListSuccess(list)).toEqual({
+      type: CREATE_LIST_SUCCESS,
       meta: undefined,
       payload: { list }
     })

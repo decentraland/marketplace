@@ -56,7 +56,11 @@ import {
   UpdateListRequestAction,
   UPDATE_LIST_REQUEST,
   updateListFailure,
-  updateListSuccess
+  updateListSuccess,
+  CreateListRequestAction,
+  createListFailure,
+  createListSuccess,
+  CREATE_LIST_REQUEST
 } from './actions'
 import { getListId } from './selectors'
 import { FavoritedItems, List } from './types'
@@ -94,6 +98,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(DELETE_LIST_REQUEST, handleDeleteListRequest)
   yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
   yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
+  yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
 
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
@@ -305,6 +310,26 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       yield put(
         updateListFailure(
           id,
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleCreateListRequest(action: CreateListRequestAction) {
+    const { name, isPrivate, description } = action.payload
+    try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+      const list: List = yield call([favoritesAPI, 'createList'], {
+        name,
+        isPrivate,
+        description
+      })
+      yield put(createListSuccess(list))
+    } catch (error) {
+      yield put(
+        createListFailure(
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )

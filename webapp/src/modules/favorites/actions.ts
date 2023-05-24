@@ -222,3 +222,28 @@ export const updateListFailure = (id: string, error: string) =>
 export type UpdateListRequestAction = ReturnType<typeof updateListRequest>
 export type UpdateListSuccessAction = ReturnType<typeof updateListSuccess>
 export type UpdateListFailureAction = ReturnType<typeof updateListFailure>
+
+// Create List
+export const CREATE_LIST_REQUEST = '[Request] Create List'
+export const CREATE_LIST_SUCCESS = '[Success] Create List'
+export const CREATE_LIST_FAILURE = '[Failure] Create List'
+
+export const createListRequest = ({
+  name,
+  isPrivate,
+  description
+}: {
+  name: string
+  isPrivate: boolean
+  description?: string
+}) => action(CREATE_LIST_REQUEST, { name, description, isPrivate })
+
+export const createListSuccess = (list: List) =>
+  action(CREATE_LIST_SUCCESS, { list })
+
+export const createListFailure = (error: string) =>
+  action(CREATE_LIST_FAILURE, { error })
+
+export type CreateListRequestAction = ReturnType<typeof createListRequest>
+export type CreateListSuccessAction = ReturnType<typeof createListSuccess>
+export type CreateListFailureAction = ReturnType<typeof createListFailure>

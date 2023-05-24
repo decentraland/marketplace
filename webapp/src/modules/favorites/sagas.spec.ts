@@ -13,6 +13,9 @@ import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import {
   cancelPickItemAsFavorite,
+  createListFailure,
+  createListRequest,
+  createListSuccess,
   deleteListFailure,
   deleteListRequest,
   deleteListSuccess,
@@ -695,6 +698,92 @@ describe('when handling the request for updating a list', () => {
         })
         .put(updateListSuccess(list))
         .dispatch(updateListRequest(list.id, list))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request for creating a list', () => {
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'anId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'aUserAddress',
+      createdAt: Date.now()
+    }
+  })
+
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .put(createListFailure(error.message))
+        .dispatch(
+          createListRequest({
+            name: list.name,
+            isPrivate: true,
+            description: list.description
+          })
+        )
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.createList),
+            Promise.reject(error)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.createList,
+          args: [
+            { name: list.name, isPrivate: true, description: list.description }
+          ]
+        })
+        .put(createListFailure(error.message))
+        .dispatch(
+          createListRequest({
+            name: list.name,
+            isPrivate: true,
+            description: list.description
+          })
+        )
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api succeeds', () => {
+    it('should dispatch an action signaling the success of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.createList),
+            Promise.resolve(list)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.createList,
+          args: [
+            { name: list.name, isPrivate: true, description: list.description }
+          ]
+        })
+        .put(createListSuccess(list))
+        .dispatch(
+          createListRequest({
+            name: list.name,
+            isPrivate: true,
+            description: list.description
+          })
+        )
         .run({ silenceTimeout: true })
     })
   })

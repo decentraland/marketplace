@@ -287,3 +287,55 @@ describe('when updating a list', () => {
     })
   })
 })
+
+describe('when creating a list', () => {
+  describe('and the request fails', () => {
+    let error: { message: string; status: number }
+
+    beforeEach(() => {
+      error = {
+        message: 'An error ocurred',
+        status: 500
+      }
+      fetchMock.mockRejectedValue(error)
+    })
+
+    it('should reject with the request error', () => {
+      return expect(
+        favoritesAPI.createList({
+          name: 'aListName',
+          isPrivate: true,
+          description: 'aListDescription'
+        })
+      ).rejects.toEqual(error)
+    })
+  })
+
+  describe('when the request succeeds', () => {
+    let response: { ok: true; data: Partial<List> }
+    let list: List
+
+    beforeEach(() => {
+      list = {
+        id: 'aListId',
+        name: 'aName',
+        description: 'aDescription',
+        userAddress: 'anOwnerAddress',
+        createdAt: Date.now(),
+        permission: Permission.VIEW
+      }
+      response = { ok: true, data: list }
+      fetchMock.mockResolvedValueOnce(response)
+    })
+
+    it('should resolve with the retrieved list', () => {
+      return expect(
+        favoritesAPI.createList({
+          name: list.name,
+          isPrivate: true,
+          description: list.description
+        })
+      ).resolves.toEqual(response)
+    })
+  })
+})
