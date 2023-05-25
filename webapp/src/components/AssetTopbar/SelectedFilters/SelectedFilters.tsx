@@ -8,6 +8,7 @@ import {
   getNetwork,
   getPriceLabel
 } from '../../../utils/filters'
+import trash from '../../../images/trash.png'
 import { CreatorAccount } from '../../../modules/account/types'
 import ProfilesCache from '../../../lib/profiles'
 import { AssetStatusFilter } from '../../../utils/filters'
@@ -22,7 +23,8 @@ export const SelectedFilters = ({
   browseOptions,
   isLandSection,
   category,
-  onBrowse
+  onBrowse,
+  onClearFilters
 }: Props) => {
   const {
     rarities,
@@ -291,6 +293,10 @@ export const SelectedFilters = ({
           id={status.toString()}
         />
       ) : null}
+      <button className={styles.clearFilters} onClick={onClearFilters}>
+        <img src={trash} alt={t('filters.clear')} />
+        {t('filters.clear')}
+      </button>
     </div>
   )
 }

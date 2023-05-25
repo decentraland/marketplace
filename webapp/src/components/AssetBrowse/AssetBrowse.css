@@ -1,3 +1,12 @@
+.AssetBrowse.dcl.page {
+  margin-top: 12px;
+}
+
+.AssetBrowse .AssetsList .ui.cards {
+  height: 100%;
+  width: 100%;
+}
+
 .AssetBrowse .Row .right.Column {
   position: relative;
   max-width: calc(100% - 256px);
@@ -9,13 +18,6 @@
 
 .AssetBrowse.is-map .Row .right.Column {
   max-width: none;
-}
-
-.AssetBrowse .ui.cards {
-  position: relative;
-  display: grid;
-  gap: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
 
 .AssetBrowse .ui.cards {
@@ -35,7 +37,6 @@
   background: var(--background);
   opacity: 0.6;
   z-index: 1;
-  margin-top: -20px;
 }
 
 .AssetBrowse .load-more {
@@ -100,7 +101,8 @@
 
 .AssetBrowse .sidebar {
   margin-right: 20px;
-  width: var(--sidebar-width);
+  width: calc(var(--sidebar-width) + 10px);
+  background-color: var(--background);
 }
 
 .AssetBrowse.fullscreen .NFTFilters {

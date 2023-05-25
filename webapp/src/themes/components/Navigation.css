@@ -1,3 +1,7 @@
+.dcl.tabs {
+  margin-bottom: 0;
+}
+
 .dcl.tabs a {
   color: var(--text);
 }

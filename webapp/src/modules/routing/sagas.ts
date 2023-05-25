@@ -79,7 +79,7 @@ import {
   BROWSE,
   BrowseAction,
   FETCH_ASSETS_FROM_ROUTE,
-  fetchAssetsFromRoute as fetchAssetsFromRouteAction,
+  // fetchAssetsFromRoute as fetchAssetsFromRouteAction,
   FetchAssetsFromRouteAction,
   CLEAR_FILTERS,
   GO_BACK,
@@ -144,7 +144,7 @@ function* handleLocationChange(action: LocationChangeAction) {
   // Re-triggers fetchAssetsFromRoute action when the user goes back
   if (action.payload.action === 'POP') {
     const options: BrowseOptions = yield select(getCurrentBrowseOptions)
-    yield put(fetchAssetsFromRouteAction(options))
+    // yield put(fetchAssetsFromRouteAction(options))
   }
 }
 

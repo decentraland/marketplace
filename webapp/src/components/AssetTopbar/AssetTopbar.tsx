@@ -23,7 +23,6 @@ import {
   isListsSection,
   persistIsMapProperty
 } from '../../modules/ui/utils'
-import trash from '../../images/trash.png'
 import { Chip } from '../Chip'
 import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
@@ -147,7 +146,7 @@ export const AssetTopbar = ({
       </div>
       {!isMap && (
         <div className={styles.infoRow}>
-          {!isLoading ? (
+          {!isLoading || count ? (
             <div className={styles.countContainer}>
               <p className={styles.countText}>
                 {count && isCatalogView(view)
@@ -189,10 +188,6 @@ export const AssetTopbar = ({
       {!isMap && hasFiltersEnabled ? (
         <div className={styles.selectedFiltersContainer}>
           <SelectedFilters />
-          <button className={styles.clearFilters} onClick={onClearFilters}>
-            <img src={trash} alt={t('filters.clear')} />
-            {t('filters.clear')}
-          </button>
         </div>
       ) : null}
     </div>

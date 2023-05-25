@@ -71,6 +71,9 @@ export function browseReducer(
 ): BrowseUIState {
   switch (action.type) {
     case SET_VIEW: {
+      if (action.payload.view === state.view) {
+        return state
+      }
       return {
         ...state,
         view: action.payload.view,
@@ -142,7 +145,7 @@ export function browseReducer(
           : action.payload
 
       const isDifferentView = view !== state.view
-      if (isDifferentView) {
+      if (isDifferentView && view !== View.DETAIL) {
         return {
           ...state,
           [key]: [],
@@ -150,15 +153,21 @@ export function browseReducer(
         }
       }
 
-      const elements = isLoadingMoreResults(state, page) ? [...state[key]] : []
+      const isLoadingMore = isLoadingMoreResults(state, page)
+      const elements = isLoadingMore ? [...state[key]] : []
       switch (view) {
+        case View.DETAIL:
         case View.ATLAS:
           return state
         case View.LISTS:
         case View.CURRENT_ACCOUNT:
         case View.ACCOUNT:
         case View.MARKET:
-          return { ...state, [key]: elements, count: undefined }
+          return {
+            ...state,
+            [key]: elements,
+            count: isLoadingMore ? state.count : undefined // when loading more results, the total count shouldn't change
+          }
         default:
           return {
             ...state,

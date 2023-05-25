@@ -9,6 +9,7 @@
   background-color: var(--card);
   border-radius: 10px;
   padding-bottom: 12px;
+  margin-right: 0px;
 }
 
 .AccountSidebar ul.Menu > .MenuItem {
@@ -96,4 +97,13 @@
 
 .AccountSidebar ul.Menu.other-account-menu {
   padding-bottom: 0;
+}
+
+.AccountSidebar {
+  position: sticky;
+  top: 0;
+  overflow: auto;
+  height: calc(
+    100vh - 197px
+  ); /* 64px navbar + 65 navigation + 12 margin + 56 footer = 197  */
 }

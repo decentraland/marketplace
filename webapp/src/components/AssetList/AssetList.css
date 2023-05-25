@@ -1,3 +1,19 @@
+/* .AssetsList {
+  height: calc(
+    100vh - 287px
+  ); 
+} */
+/* 64px navbar + 65 navigation + 24 margin + 90 search bar + 20 margin + 56px footer = 319 */
+/* overflow-y: scroll; */
+
+/* 64px navbar + 65 navigation + 12 margin + 134 con pills + 56 = 331  */
+/* ideal 343 */
+/* ideal sin filtros 287 */
+
+.AssetsList {
+  position: relative;
+}
+
 .AssetsList .empty-actions {
   font-weight: bold;
   background: none;

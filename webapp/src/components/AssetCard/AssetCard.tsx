@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
 import { Item, RentalListing } from '@dcl/schemas'
-import { useInView } from 'react-intersection-observer'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { Link } from 'react-router-dom'
@@ -104,7 +103,6 @@ const AssetCard = (props: Props) => {
     appliedFilters
   } = props
 
-  const { ref, inView } = useInView()
   const isMobile = useMobileMediaQuery()
 
   const title = getAssetName(asset)
@@ -170,98 +168,89 @@ const AssetCard = (props: Props) => {
   }, [asset, catalogItemInformation])
 
   return (
-    <div ref={ref}>
-      <Card
-        className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
-        link
-        as={Link}
-        to={getAssetUrl(asset, isManager && isLand(asset))}
-        onClick={onClick}
-        id={`${asset.contractAddress}-${
-          'tokenId' in asset ? asset.tokenId : asset.itemId
-        }`}
-      >
-        {inView ? (
-          <>
-            <AssetImage
-              className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''} ${
-                !!catalogItemInformation?.extraInformation ? 'expandable' : ''
-              }`}
-              asset={asset}
-              showOrderListedTag={showListedTag}
-              showMonospace
-            />
-            {isFavoritesEnabled && !isNFT(asset) && !isMobile ? (
-              <FavoritesCounter
-                className="FavoritesCounterBubble"
-                item={asset}
-              />
-            ) : null}
-            {showRentalBubble ? (
-              <RentalChip
-                asset={asset}
-                isClaimingBackLandTransactionPending={
-                  isClaimingBackLandTransactionPending
-                }
-                rental={rental}
-              />
-            ) : null}
-            <Card.Content
-              data-testid="asset-card-content"
-              className={`${isCatalogItem(asset) ? 'catalog' : ''} ${
-                !!catalogItemInformation?.extraInformation ? 'expandable' : ''
-              }`}
-            >
-              <Card.Header>
-                <div
-                  className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}
-                >
-                  <span className={'textOverflow'}>{title}</span>
-                  {!isNFT(asset) && isCatalogItem(asset) && (
-                    <span className="creator">
-                      <Profile address={asset.creator} textOnly />
-                    </span>
-                  )}
-                </div>
-                {!isCatalogItem(asset) && price ? (
-                  <Mana network={asset.network} inline>
-                    {formatWeiToAssetCard(price)}
-                  </Mana>
-                ) : rentalPricePerDay ? (
-                  <RentalPrice
-                    asset={asset}
-                    rentalPricePerDay={rentalPricePerDay}
-                  />
-                ) : null}
-              </Card.Header>
-              <div className="sub-header">
-                {!isCatalogItem(asset) && (
-                  <Card.Meta className="card-meta">
-                    {t(`networks.${asset.network.toLowerCase()}`)}
-                  </Card.Meta>
-                )}
-
-                {rentalPricePerDay && price ? (
-                  <div>
-                    <RentalPrice
-                      asset={asset}
-                      rentalPricePerDay={rentalPricePerDay}
-                    />
-                  </div>
-                ) : null}
-              </div>
-              {renderCatalogItemInformation()}
-
-              {parcel ? <ParcelTags nft={asset as NFT} /> : null}
-              {estate ? <EstateTags nft={asset as NFT} /> : null}
-              {wearable ? <WearableTags asset={asset} /> : null}
-              {emote ? <EmoteTags asset={asset} /> : null}
-              {ens ? <ENSTags nft={asset as NFT} /> : null}
-            </Card.Content>
-          </>
+    <Card
+      className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
+      link
+      as={Link}
+      to={getAssetUrl(asset, isManager && isLand(asset))}
+      onClick={onClick}
+      id={`${asset.contractAddress}-${
+        'tokenId' in asset ? asset.tokenId : asset.itemId
+      }`}
+    >
+      <>
+        <AssetImage
+          className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''} ${
+            !!catalogItemInformation?.extraInformation ? 'expandable' : ''
+          }`}
+          asset={asset}
+          showOrderListedTag={showListedTag}
+          showMonospace
+        />
+        {isFavoritesEnabled && !isNFT(asset) && !isMobile ? (
+          <FavoritesCounter className="FavoritesCounterBubble" item={asset} />
         ) : null}
-      </Card>
-    </div>
+        {showRentalBubble ? (
+          <RentalChip
+            asset={asset}
+            isClaimingBackLandTransactionPending={
+              isClaimingBackLandTransactionPending
+            }
+            rental={rental}
+          />
+        ) : null}
+        <Card.Content
+          data-testid="asset-card-content"
+          className={`${isCatalogItem(asset) ? 'catalog' : ''} ${
+            !!catalogItemInformation?.extraInformation ? 'expandable' : ''
+          }`}
+        >
+          <Card.Header>
+            <div className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}>
+              <span className={'textOverflow'}>{title}</span>
+              {!isNFT(asset) && isCatalogItem(asset) && (
+                <span className="creator">
+                  <Profile address={asset.creator} textOnly />
+                </span>
+              )}
+            </div>
+            {!isCatalogItem(asset) && price ? (
+              <Mana network={asset.network} inline>
+                {formatWeiToAssetCard(price)}
+              </Mana>
+            ) : rentalPricePerDay ? (
+              <RentalPrice
+                asset={asset}
+                rentalPricePerDay={rentalPricePerDay}
+              />
+            ) : null}
+          </Card.Header>
+          <div className="sub-header">
+            {!isCatalogItem(asset) && (
+              <Card.Meta className="card-meta">
+                {t(`networks.${asset.network.toLowerCase()}`)}
+              </Card.Meta>
+            )}
+
+            {rentalPricePerDay && price ? (
+              <div>
+                <RentalPrice
+                  asset={asset}
+                  rentalPricePerDay={rentalPricePerDay}
+                />
+              </div>
+            ) : null}
+          </div>
+          {renderCatalogItemInformation()}
+
+          {parcel ? <ParcelTags nft={asset as NFT} /> : null}
+          {estate ? <EstateTags nft={asset as NFT} /> : null}
+          {wearable ? <WearableTags asset={asset} /> : null}
+          {emote ? <EmoteTags asset={asset} /> : null}
+          {ens ? <ENSTags nft={asset as NFT} /> : null}
+        </Card.Content>
+      </>
+    </Card>
   )
 }
 

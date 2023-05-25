@@ -1,6 +1,13 @@
 .assetTopbar {
-  margin-bottom: 20px;
   position: relative;
+}
+
+.assetTopbar.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: black;
+  z-index: 99999999;
 }
 
 .searchContainer :global(.dcl.field.full) {
@@ -35,6 +42,7 @@
   align-items: center;
   font-size: 13px;
   min-height: 26px;
+  margin-bottom: 12px;
 }
 
 .assetTopbar :global(.dcl.field .ui.input .icon) {
@@ -86,19 +94,6 @@
 .countContainer {
   display: flex;
   align-items: baseline;
-}
-
-.clearFilters {
-  font-size: 13px;
-  line-height: 13px;
-  text-transform: uppercase;
-  cursor: pointer;
-  color: white;
-  background: transparent;
-  border: none;
-  align-items: center;
-  display: flex;
-  gap: 6px;
 }
 
 .rightOptionsContainer :global(.ui.dropdown) {
@@ -180,6 +175,8 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 @media (max-width: 990px) {
