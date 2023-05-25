@@ -572,7 +572,7 @@
       "and_make_an_offer": "and make an offer."
     },
     "minting": {
-      "title": "Available for Minting",
+      "title": "Buy directly from the creator",
       "price": "Price",
       "stock": "Stock",
       "minting_popup": "When you mint an item you become its first owner. It also means buying directly from the creator. ",
@@ -1208,7 +1208,7 @@
       "rental_ended": "Rental period over"
     },
     "listings": "{count} {count, plural, one {Listing} other {Listings}}",
-    "available_for_mint": "Available for mint",
+    "available_for_mint": "Buy directly from creator",
     "available_listings_in_range": "Available listings in this range",
     "cheapest_listing": "Cheapest Listing",
     "not_for_sale": "Not for sale",
@@ -1217,7 +1217,7 @@
     "cheapest_option_range": "Cheapest Option within range",
     "most_expensive": "Most Expensive",
     "most_expensive_range": "Most Expensive within range",
-    "also_minting": "Also available for minting"
+    "also_minting": "Buy directly from the creator"
   },
   "rentals_promotional_modal": {
     "title": "Announcing LAND rentals",

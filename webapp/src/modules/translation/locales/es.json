@@ -109,7 +109,7 @@
     "wearables_mouth": "Boca",
     "wearables_upper_body": "Torso",
     "wearables_lower_body": "Piernas",
-    "wearables_feet": "Piez",
+    "wearables_feet": "Pies",
     "wearables_accessories": "Accesorios",
     "wearables_earring": "Aros",
     "wearables_eyewear": "Gafas",
@@ -566,7 +566,7 @@
       "and_make_an_offer": "y hacer una oferta"
     },
     "minting": {
-      "title": "Disponible para comprar",
+      "title": "Compra directo al creador",
       "price": "Precio",
       "stock": "Stock",
       "minting_popup": "Cuando compras un artículo, te conviertes en su primer propietario. También significa comprarlo directamente al creador",
@@ -1200,7 +1200,7 @@
       "rental_ended": "Período de renta terminado"
     },
     "listings": "{count} {count, plural, one {Collecionable} other {Collecionables}}",
-    "available_for_mint": "Disponible para mintear",
+    "available_for_mint": "Compra directo al creador",
     "cheapest_listing": "Coleccionable más barato",
     "not_for_sale": "No disponible para la venta",
     "owners": "{count} {count, plural, one {Dueño} other {Dueños}}",
@@ -1208,7 +1208,7 @@
     "cheapest_option_range": "Más barato en el rango",
     "most_expensive": "Más Caro",
     "most_expensive_range": "Más Caro en el rango",
-    "also_minting": "También disponibles para mintear"
+    "also_minting": "Compra directo al creador"
   },
   "rentals_promotional_modal": {
     "title": "¡La renta de tierras está disponible!",

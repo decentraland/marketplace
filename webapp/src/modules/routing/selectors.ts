@@ -449,13 +449,15 @@ export const getAssetsUrlParams = createSelector(
   getItemId,
   getContracts,
   getCreators,
-  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators) => ({
+  getSearch,
+  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators, search) => ({
     onlyOnSale,
     onlySmart,
     isSoldOut,
     itemId,
     contracts,
-    creators
+    creators,
+    search
   })
 )
 
