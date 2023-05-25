@@ -19,8 +19,12 @@ import {
   buyItemWithCardFailure,
   buyItemWithCardRequest,
   buyItemWithCardSuccess,
+  FETCH_COLLECTION_ITEMS_SUCCESS,
   FETCH_ITEM_SUCCESS,
   FETCH_TRENDING_ITEMS_SUCCESS,
+  fetchCollectionItemsFailure,
+  fetchCollectionItemsRequest,
+  fetchCollectionItemsSuccess,
   fetchItemFailure,
   fetchItemRequest,
   fetchItemsFailure,
@@ -79,6 +83,7 @@ const trendingItemsBatchSize = 20
 const requestActions = [
   fetchTrendingItemsRequest(trendingItemsBatchSize),
   fetchItemsRequest(itemBrowseOptions),
+  fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }),
   fetchItemRequest(item.contractAddress, item.itemId),
   buyItemRequest(item),
   buyItemWithCardRequest(item),
@@ -114,6 +119,10 @@ const failureActions = [
   {
     request: fetchItemsRequest(itemBrowseOptions),
     failure: fetchItemsFailure(anErrorMessage, itemBrowseOptions)
+  },
+  {
+    request: fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }),
+    failure: fetchCollectionItemsFailure(anErrorMessage)
   },
   {
     request: fetchItemRequest(item.contractAddress, item.itemId),
@@ -192,6 +201,11 @@ describe('when reducing the successful action of fetching items', () => {
 })
 
 describe.each([
+  [
+    FETCH_COLLECTION_ITEMS_SUCCESS,
+    fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }),
+    fetchCollectionItemsSuccess([item])
+  ],
   [
     FETCH_ITEM_SUCCESS,
     fetchItemRequest(item.contractAddress, item.itemId),

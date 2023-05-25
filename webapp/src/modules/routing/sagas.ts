@@ -8,6 +8,7 @@ import {
   race,
   spawn
 } from 'redux-saga/effects'
+import { matchPath } from 'react-router-dom'
 import {
   push,
   getLocation,
@@ -43,7 +44,8 @@ import {
   getMaxPrice,
   getMinPrice,
   getStatus,
-  getEmotePlayMode
+  getEmotePlayMode,
+  getLatestVisitedLocation
 } from '../routing/selectors'
 import {
   fetchNFTRequest,
@@ -143,8 +145,16 @@ export function* routingSaga() {
 function* handleLocationChange(action: LocationChangeAction) {
   // Re-triggers fetchAssetsFromRoute action when the user goes back
   if (action.payload.action === 'POP') {
-    const options: BrowseOptions = yield select(getCurrentBrowseOptions)
-    yield put(fetchAssetsFromRouteAction(options))
+    const latestVisitedLocation: ReturnType<typeof getLocation> = yield select(
+      getLatestVisitedLocation
+    )
+    const isComingFromBrowse = !!matchPath(latestVisitedLocation?.pathname, {
+      path: locations.browse()
+    })
+    if (isComingFromBrowse) {
+      const options: BrowseOptions = yield select(getCurrentBrowseOptions)
+      yield put(fetchAssetsFromRouteAction(options))
+    }
   }
 }
 

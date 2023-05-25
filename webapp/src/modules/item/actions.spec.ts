@@ -32,7 +32,13 @@ import {
   FETCH_ITEMS_FAILURE,
   FETCH_ITEMS_REQUEST,
   FETCH_ITEMS_SUCCESS,
-  FETCH_TRENDING_ITEMS_REQUEST
+  FETCH_TRENDING_ITEMS_REQUEST,
+  fetchCollectionItemsRequest,
+  FETCH_COLLECTION_ITEMS_REQUEST,
+  fetchCollectionItemsSuccess,
+  FETCH_COLLECTION_ITEMS_SUCCESS,
+  fetchCollectionItemsFailure,
+  FETCH_COLLECTION_ITEMS_FAILURE
 } from './actions'
 
 const itemBrowseOptions = {
@@ -197,6 +203,39 @@ describe('when creating the action to fetch the trending items request', () => {
       type: FETCH_TRENDING_ITEMS_REQUEST,
       meta: undefined,
       payload: { size }
+    })
+  })
+})
+
+describe('when creating the action to signal the start of the collection items request', () => {
+  let first: number
+  let contractAddresses: string[]
+  it('should return an object representing the action', () => {
+    expect(fetchCollectionItemsRequest({ first, contractAddresses })).toEqual({
+      type: FETCH_COLLECTION_ITEMS_REQUEST,
+      meta: undefined,
+      payload: { first, contractAddresses }
+    })
+  })
+})
+
+describe('when creating the action to signal a success in the collection items request', () => {
+  const items = [{} as Item]
+  it('should return an object representing the action', () => {
+    expect(fetchCollectionItemsSuccess(items)).toEqual({
+      type: FETCH_COLLECTION_ITEMS_SUCCESS,
+      meta: undefined,
+      payload: { items }
+    })
+  })
+})
+
+describe('when creating the action to signal a failure in the collection items request', () => {
+  it('should return an object representing the action', () => {
+    expect(fetchCollectionItemsFailure(anErrorMessage)).toEqual({
+      type: FETCH_COLLECTION_ITEMS_FAILURE,
+      meta: undefined,
+      payload: { error: anErrorMessage }
     })
   })
 })

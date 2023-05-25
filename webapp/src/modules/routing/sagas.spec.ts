@@ -15,6 +15,7 @@ import {
 } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
+import { locations } from './locations'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
@@ -32,7 +33,11 @@ import {
   fetchAssetsFromRoute as fetchAssetsFromRouteAction
 } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
-import { getCurrentBrowseOptions, getSection } from './selectors'
+import {
+  getCurrentBrowseOptions,
+  getLatestVisitedLocation,
+  getSection
+} from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
 
@@ -1155,16 +1160,43 @@ describe('when handling the location change action', () => {
     }
   })
   describe('and the location action is a POP, meaning going back', () => {
-    it('should dispatch the fetchAssetFromRoute action', () => {
-      return expectSaga(routingSaga)
-        .provide([
-          [select(getCurrentBrowseOptions), browseOptions],
-          [select(getSection), Section.WEARABLES],
-          [select(getPage), 1]
-        ])
-        .put(fetchAssetsFromRouteAction(browseOptions))
-        .dispatch(locationChangeAction)
-        .run({ silenceTimeout: true })
+    describe('and its coming from the browse', () => {
+      it('should dispatch the fetchAssetFromRoute action', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getLatestVisitedLocation),
+              {
+                pathname: locations.browse()
+              }
+            ],
+            [select(getCurrentBrowseOptions), browseOptions],
+            [select(getSection), Section.WEARABLES],
+            [select(getPage), 1]
+          ])
+          .put(fetchAssetsFromRouteAction(browseOptions))
+          .dispatch(locationChangeAction)
+          .run({ silenceTimeout: true })
+      })
+    })
+    describe('and its coming from another route', () => {
+      it('should not dispatch the fetchAssetFromRoute action', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getLatestVisitedLocation),
+              {
+                pathname: 'aNotBrowsePath'
+              }
+            ],
+            [select(getCurrentBrowseOptions), browseOptions],
+            [select(getSection), Section.WEARABLES],
+            [select(getPage), 1]
+          ])
+          .not.put(fetchAssetsFromRouteAction(browseOptions))
+          .dispatch(locationChangeAction)
+          .run({ silenceTimeout: true })
+      })
     })
   })
   describe('and the location action is not a POP', () => {

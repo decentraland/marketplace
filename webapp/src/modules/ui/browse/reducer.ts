@@ -71,6 +71,9 @@ export function browseReducer(
 ): BrowseUIState {
   switch (action.type) {
     case SET_VIEW: {
+      if (action.payload.view === state.view) {
+        return state
+      }
       return {
         ...state,
         view: action.payload.view,
