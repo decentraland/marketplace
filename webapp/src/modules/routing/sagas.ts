@@ -14,7 +14,7 @@ import {
   goBack,
   LOCATION_CHANGE,
   replace,
-  LocationChangeAction
+  // LocationChangeAction
 } from 'connected-react-router'
 import {
   CatalogFilters,
@@ -120,7 +120,7 @@ import { AssetStatusFilter } from '../../utils/filters'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
-  yield takeEvery(LOCATION_CHANGE, handleLocationChange)
+  // yield takeEvery(LOCATION_CHANGE, handleLocationChange)
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
   yield takeEvery(BROWSE, handleBrowse)
   yield takeEvery(CLEAR_FILTERS, handleClearFilters)
@@ -140,13 +140,13 @@ export function* routingSaga() {
   )
 }
 
-function* handleLocationChange(action: LocationChangeAction) {
-  // Re-triggers fetchAssetsFromRoute action when the user goes back
-  if (action.payload.action === 'POP') {
-    const options: BrowseOptions = yield select(getCurrentBrowseOptions)
-    // yield put(fetchAssetsFromRouteAction(options))
-  }
-}
+// function* handleLocationChange(action: LocationChangeAction) {
+//   // Re-triggers fetchAssetsFromRoute action when the user goes back
+//   // if (action.payload.action === 'POP') {
+//   //   const options: BrowseOptions = yield select(getCurrentBrowseOptions)
+//   //   // yield put(fetchAssetsFromRouteAction(options))
+//   // }
+// }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
   const newOptions: BrowseOptions = yield call(

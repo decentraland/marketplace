@@ -40,7 +40,7 @@ export const AssetTopbar = ({
   section,
   hasFiltersEnabled,
   onBrowse,
-  onClearFilters,
+  // onClearFilters,
   onOpenFiltersModal,
   sortByOptions
 }: Props): JSX.Element => {
