@@ -1,6 +1,12 @@
 import { renderWithProviders } from '../../../utils/test'
 import { Props } from './CreateListModal.types'
-import CreateListModal from './CreateListModal'
+import CreateListModal, {
+  CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID,
+  CREATE_LIST_CANCEL_BUTTON_DATA_TEST_ID,
+  CREATE_LIST_DESCRIPTION_DATA_TEST_ID,
+  CREATE_LIST_NAME_DATA_TEST_ID,
+  CREATE_LIST_PRIVATE_DATA_TEST_ID
+} from './CreateListModal'
 import { fireEvent } from '@testing-library/react'
 
 function renderCreateListModal(props: Partial<Props> = {}) {
@@ -29,34 +35,40 @@ describe('when the create list procedure is loading', () => {
 
   it('should render the name input as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-name').children[0]).toHaveAttribute(
-      'disabled'
-    )
+    expect(
+      getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0]
+    ).toHaveAttribute('disabled')
   })
 
   it('should render the name input as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-name').children[0]).toHaveAttribute(
-      'disabled'
-    )
+    expect(
+      getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0]
+    ).toHaveAttribute('disabled')
   })
 
   it('should render the checkbox input as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-private').children[0]).toHaveAttribute(
-      'disabled'
-    )
+    expect(
+      getByTestId(CREATE_LIST_PRIVATE_DATA_TEST_ID).children[0]
+    ).toHaveAttribute('disabled')
   })
 
   it('should render the accept button as disabled and loading', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-accept-button')).toHaveAttribute('disabled')
-    expect(getByTestId('create-list-accept-button')).toHaveClass('loading')
+    expect(getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).toHaveAttribute(
+      'disabled'
+    )
+    expect(getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).toHaveClass(
+      'loading'
+    )
   })
 
   it('should render the cancel button as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-cancel-button')).toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_LIST_CANCEL_BUTTON_DATA_TEST_ID)).toHaveAttribute(
+      'disabled'
+    )
   })
 })
 
@@ -68,38 +80,40 @@ describe('when the create list procedure is not loading', () => {
 
   it('should render the name input as not disabled', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-name').children[0]).not.toHaveAttribute(
-      'disabled'
-    )
+    expect(
+      getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0]
+    ).not.toHaveAttribute('disabled')
   })
 
   it('should render the name input as not disabled', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-name').children[0]).not.toHaveAttribute(
-      'disabled'
-    )
+    expect(
+      getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0]
+    ).not.toHaveAttribute('disabled')
   })
 
   it('should render the checkbox input as not disabled', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-private').children[0]).not.toHaveAttribute(
-      'disabled'
-    )
+    expect(
+      getByTestId(CREATE_LIST_PRIVATE_DATA_TEST_ID).children[0]
+    ).not.toHaveAttribute('disabled')
   })
 
   it('should render the accept button as not disabled nor loading', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-accept-button')).not.toHaveClass('loading')
-    expect(getByTestId('create-list-accept-button')).not.toHaveAttribute(
-      'disabled'
+    expect(getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).not.toHaveClass(
+      'loading'
     )
+    expect(
+      getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
+    ).not.toHaveAttribute('disabled')
   })
 
   it('should render the cancel button as not disabled', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId('create-list-cancel-button')).not.toHaveAttribute(
-      'disabled'
-    )
+    expect(
+      getByTestId(CREATE_LIST_CANCEL_BUTTON_DATA_TEST_ID)
+    ).not.toHaveAttribute('disabled')
   })
 })
 
@@ -114,7 +128,7 @@ describe('when clicking the cancel button', () => {
 
   it('should call the onClose prop function', () => {
     const { getByTestId } = renderedModal
-    fireEvent.click(getByTestId('create-list-cancel-button'))
+    fireEvent.click(getByTestId(CREATE_LIST_CANCEL_BUTTON_DATA_TEST_ID))
     expect(onClose).toHaveBeenCalled()
   })
 })
@@ -134,14 +148,14 @@ describe('when clicking the accept button', () => {
 
   it('should call the onCreateList prop function with the input values', () => {
     const { getByTestId } = renderedModal
-    fireEvent.change(getByTestId('create-list-name').children[0], {
+    fireEvent.change(getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0], {
       target: { value: name }
     })
-    fireEvent.change(getByTestId('create-list-description'), {
+    fireEvent.change(getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID), {
       target: { value: description }
     })
-    fireEvent.click(getByTestId('create-list-private').children[0])
-    fireEvent.click(getByTestId('create-list-accept-button'))
+    fireEvent.click(getByTestId(CREATE_LIST_PRIVATE_DATA_TEST_ID).children[0])
+    fireEvent.click(getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID))
 
     expect(onCreateList).toHaveBeenCalledWith({
       name,

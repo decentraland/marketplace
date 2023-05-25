@@ -14,6 +14,13 @@ import { Props } from './CreateListModal.types'
 
 const MAX_NAME_LENGTH = 32
 const MAX_DESCRIPTION_LENGTH = 100
+export const CREATE_LIST_NAME_DATA_TEST_ID = 'create-list-name'
+export const CREATE_LIST_DESCRIPTION_DATA_TEST_ID = 'create-list-description'
+export const CREATE_LIST_PRIVATE_DATA_TEST_ID = 'create-list-private'
+export const CREATE_LIST_CANCEL_BUTTON_DATA_TEST_ID =
+  'create-list-cancel-button'
+export const CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID =
+  'create-list-accept-button'
 
 const CreateListModal = ({
   onClose,
@@ -59,7 +66,7 @@ const CreateListModal = ({
       <Modal.Content className={styles.content}>
         <Field
           label={t('create_list_modal.name')}
-          data-testid="create-list-name"
+          data-testid={CREATE_LIST_NAME_DATA_TEST_ID}
           className={styles.name}
           value={name}
           message={
@@ -76,7 +83,7 @@ const CreateListModal = ({
         />
         <TextAreaField
           label={t('create_list_modal.description')}
-          data-testid="create-list-description"
+          data-testid={CREATE_LIST_DESCRIPTION_DATA_TEST_ID}
           value={description}
           className={styles.description}
           maxLength={MAX_DESCRIPTION_LENGTH}
@@ -104,7 +111,7 @@ const CreateListModal = ({
       <Modal.Actions>
         <Button
           onClick={onClose}
-          data-testid="create-list-cancel-button"
+          data-testid={CREATE_LIST_CANCEL_BUTTON_DATA_TEST_ID}
           disabled={isLoading}
         >
           {t('global.cancel')}
@@ -112,7 +119,7 @@ const CreateListModal = ({
         <Button
           primary
           disabled={isLoading}
-          data-testid="create-list-accept-button"
+          data-testid={CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID}
           loading={isLoading}
           onClick={handleCreateList}
         >
