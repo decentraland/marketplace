@@ -12,10 +12,10 @@ import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { AssetBrowse } from '../AssetBrowse'
 import { NavigationTab } from '../Navigation/Navigation.types'
-import { Props } from './ListsPage.types'
+import { Props } from './ListPage.types'
 import styles from './ListsPage.module.css'
 
-const ListsPage = ({ wallet, isConnecting, onRedirect }: Props) => {
+const ListPage = ({ wallet, isConnecting, onRedirect }: Props) => {
   // Redirect to signIn if trying to access current account without a wallet
   const { pathname, search } = useLocation()
 
@@ -50,4 +50,4 @@ const ListsPage = ({ wallet, isConnecting, onRedirect }: Props) => {
   )
 }
 
-export default React.memo(ListsPage)
+export default React.memo(ListPage)

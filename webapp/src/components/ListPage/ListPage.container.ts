@@ -7,8 +7,8 @@ import {
   MapDispatch,
   MapDispatchProps,
   OwnProps
-} from './ListsPage.types'
-import AccountPage from './ListsPage'
+} from './ListPage.types'
+import ListPage from './ListPage'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { listId } = ownProps.match.params
@@ -24,4 +24,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onRedirect: path => dispatch(replace(path))
 })
 
-export default connect(mapState, mapDispatch)(AccountPage)
+export default connect(mapState, mapDispatch)(ListPage)
