@@ -45,7 +45,7 @@ const AssetList = (props: Props) => {
     }
     // only run effect on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [assets])
+  }, [])
 
   const handleLoadMore = useCallback(
     newPage => {
