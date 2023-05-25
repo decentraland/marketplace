@@ -1,0 +1,22 @@
+.page {
+  /* min-height: 100vh; */
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .header:global(.ui.header) {
+    margin-left: 16px;
+  }
+}
+
+.subHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.subHeader .right {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}

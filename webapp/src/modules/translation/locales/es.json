@@ -149,9 +149,13 @@
   "filters": {
     "type": "Tipo",
     "status": "Estado",
+    "sort_by": "Ordenado por",
     "item": "Creaciones originales",
     "nft": "Artículos de reventa",
     "name": "Nombre",
+    "name_asc": "Nombre ⬆",
+    "name_dsc": "Nombre ⬇",
+    "recently_updated": "Recientemente actualizada",
     "newest": "Más nuevos",
     "recently_listed": "Listados recientemente",
     "recently_listed_for_rent": "Listados recientemente para rentar",
@@ -1144,6 +1148,10 @@
       "subtitle": "Descubre items increíbles.",
       "action": "Explora los colleccionables"
     }
+  },
+  "lists_page": {
+    "title": "Mis listas",
+    "create_list": "Crear lista"
   },
   "claim_your_own_name": {
     "title": "RECLAMA TU PROPIO NOMBRE",

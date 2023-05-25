@@ -149,9 +149,13 @@
   "filters": {
     "type": "物品类型",
     "status": "土地状况",
+    "sort_by": "排序方式",
     "item": "原创作品",
     "nft": "被转售的物品",
     "name": "名称",
+    "name_asc": "姓名 ⬆",
+    "name_dsc": "姓名 ⬇",
+    "recently_updated": "最近更新",
     "newest": "最新",
     "recently_listed": "最新上市",
     "recently_listed_for_rent": "最近挂牌出租",
@@ -1147,6 +1151,10 @@
       "subtitle": "发现惊人的项目。",
       "action": "浏览项目"
     }
+  },
+  "lists_page": {
+    "title": "我的清单",
+    "create_list": "创建列表"
   },
   "claim_your_own_name": {
     "title": "声称自己的名字",

@@ -153,9 +153,13 @@
   "filters": {
     "type": "Type",
     "status": "Status",
+    "sort_by": "Sort by",
     "item": "Items available for minting",
     "nft": "Items being resold",
     "name": "Name",
+    "name_asc": "Name ⬆",
+    "name_dsc": "Name ⬇",
+    "recently_updated": "Recently updated",
     "newest": "Newest",
     "recently_listed": "Recently listed",
     "recently_listed_for_rent": "Recently listed for rent",
@@ -1150,6 +1154,10 @@
       "subtitle": "Discover amazing items.",
       "action": "Explore collectibles"
     }
+  },
+  "lists_page": {
+    "title": "My Lists",
+    "create_list": "Create list"
   },
   "claim_your_own_name": {
     "title": "CLAIM YOUR OWN NAME",
