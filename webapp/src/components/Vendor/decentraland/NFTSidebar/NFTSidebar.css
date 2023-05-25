@@ -1,3 +1,9 @@
+.NFTSidebar {
+  /* 64px navbar + 65 navigation + 12 margin + 56px footer = 319 */
+  height: calc(100vh - 197px);
+  overflow-y: scroll;
+}
+
 .NFTSidebar > .ui.header.sub {
   margin-top: 3px;
   margin-bottom: 22px;

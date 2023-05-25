@@ -1,6 +1,7 @@
 .filters-sidebar {
   margin-top: 12px;
   margin-left: 0;
+  margin-right: 0;
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 12px;
@@ -10,7 +11,7 @@
 .dcl.box.filters-sidebar-box {
   padding: 21px 24px;
   background: #242129;
-  max-width: var(--menu-item-width);
+  max-width: var(--sidebar-width);
   border: none;
 }
 

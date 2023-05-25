@@ -65,9 +65,25 @@ code {
   .dcl.toast .toast-info .body .list-flow-toast {
     width: 350px;
   }
+  .dcl.footer.ui.container {
+    position: fixed;
+    bottom: 0;
+    background-color: var(--background);
+  }
+
+  .Navigation,
+  .dcl.navbar.fullscreen,
+  .dcl.page,
+  .dcl.footer {
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 767px) {
+  .dcl.footer.ui.container {
+    margin-top: 0;
+  }
+
   .Navigation,
   .dcl.navbar.fullscreen,
   .dcl.page {

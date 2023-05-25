@@ -1,4 +1,5 @@
 export const View = {
+  DETAIL: 'detail',
   MARKET: 'market',
   ACCOUNT: 'account',
   LISTS: 'lists',

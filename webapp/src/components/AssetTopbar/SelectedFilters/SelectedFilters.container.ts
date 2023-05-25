@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { RootState } from '../../../modules/reducer'
-import { browse } from '../../../modules/routing/actions'
+import { browse, clearFilters } from '../../../modules/routing/actions'
 import { isLandSection } from '../../../modules/ui/utils'
 import {
   getCurrentBrowseOptions,
@@ -24,7 +24,8 @@ const mapState = (state: RootState): MapStateProps => {
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
   return {
-    onBrowse: options => dispatch(browse(options))
+    onBrowse: options => dispatch(browse(options)),
+    onClearFilters: () => dispatch(clearFilters())
   }
 }
 

@@ -1,7 +1,8 @@
 .pillContainer {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 13px;
+  grid-gap: 10px;
+  gap: 10px;
 }
 
 :global(.ui.header.mana.mana-label-icon) {
@@ -18,6 +19,19 @@
 
 :global(.ui.header.mana.mana-label-icon .symbol) {
   padding-right: 0;
+}
+
+.clearFilters {
+  font-size: 13px;
+  line-height: 13px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: white;
+  background: transparent;
+  border: none;
+  align-items: center;
+  display: flex;
+  gap: 6px;
 }
 
 @media (max-width: 768px) {

@@ -12,6 +12,7 @@ import {
   isFetchingCollection,
   getError as getCollectionError
 } from '../../modules/collection/selectors'
+import { View } from '../../modules/ui/types'
 import { fetchItemsRequest } from '../../modules/item/actions'
 import {
   getItemsByContractAddress,
@@ -50,7 +51,8 @@ const mapDispatch = (
         filters: {
           first: collection.size,
           contractAddresses: [collection.contractAddress]
-        }
+        },
+        view: View.DETAIL
       })
     )
 })

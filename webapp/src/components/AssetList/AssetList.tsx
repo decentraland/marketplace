@@ -1,23 +1,32 @@
-import React, { useCallback, useMemo, useEffect } from 'react'
+import React, { useCallback, useMemo, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Card, Loader } from 'decentraland-ui'
+import InfiniteLoader from 'react-window-infinite-loader'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import {
+  FixedSizeGrid,
+  FixedSizeGrid as Grid,
+  GridChildComponentProps,
+  GridOnItemsRenderedProps
+} from 'react-window'
+import { Button, Card, Loader, useMobileMediaQuery } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
-import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
 import { Section } from '../../modules/vendor/decentraland'
 import { locations } from '../../modules/routing/locations'
 import * as events from '../../utils/events'
-import { InfiniteScroll } from '../InfiniteScroll'
 import { AssetCard } from '../AssetCard'
 import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
 import './AssetList.css'
 
+const GUTTER_SIZE = 6
+const CARD_MIN_WIDTH = 260
+const CARD_HEIGHT = 360
+
 const AssetList = (props: Props) => {
   const {
-    vendor,
     section,
     assetType,
     assets,
@@ -32,20 +41,30 @@ const AssetList = (props: Props) => {
     onClearFilters
   } = props
 
-  useEffect(() => {
-    if (visitedLocations.length > 1) {
-      const [currentLocation, previousLocation] = visitedLocations
-      const elementId = getLastVisitedElementId(
-        currentLocation?.pathname,
-        previousLocation?.pathname
-      )
-      if (elementId) {
-        document.getElementById(elementId)?.scrollIntoView()
+  const isMobile = useMobileMediaQuery()
+
+  const handleScroll = useCallback(
+    (gridRef: FixedSizeGrid<any> | null, cardsPerRow: number) => {
+      if (visitedLocations.length > 1) {
+        const [currentLocation, previousLocation] = visitedLocations
+        const elementId = getLastVisitedElementId(
+          currentLocation?.pathname,
+          previousLocation?.pathname
+        )
+        if (elementId && cardsPerRow && gridRef) {
+          const elementIndex = assets.findIndex(asset => asset.id === elementId)
+          const elementRow = Math.floor(elementIndex / cardsPerRow)
+          const elementColumn = elementIndex % cardsPerRow
+          gridRef.scrollToItem({
+            align: 'center',
+            columnIndex: elementColumn,
+            rowIndex: elementRow
+          })
+        }
       }
-    }
-    // only run effect on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    },
+    [assets, visitedLocations]
+  )
 
   const handleLoadMore = useCallback(
     newPage => {
@@ -54,10 +73,6 @@ const AssetList = (props: Props) => {
     },
     [onBrowse]
   )
-  const maxQuerySize = getMaxQuerySize(vendor)
-
-  const hasMorePages =
-    (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
 
   const emptyStateTranslationString = useMemo(() => {
     if (assets.length > 0) {
@@ -142,20 +157,199 @@ const AssetList = (props: Props) => {
     [assets.length, isLoading]
   )
 
-  const renderAssetCards = useCallback(
-    () =>
-      assets.map((assets, index) => (
-        <AssetCard
-          isManager={isManager}
-          key={assetType + '-' + assets.id + '-' + index}
-          asset={assets}
-        />
-      )),
-    [assetType, assets, isManager]
+  const EXTRA_SPACE_FOR_SHADOW = 26
+  const EXTRA_SPACE_TOP_FOR_SHADOW = 24
+
+  const VirtualizedCard = useCallback(
+    ({
+      columnIndex,
+      rowIndex,
+      style,
+      cardsPerRow
+    }: GridChildComponentProps & { cardsPerRow: number }) => {
+      const asset = assets[rowIndex * cardsPerRow + columnIndex]
+      return asset ? (
+        <div
+          style={{
+            ...style,
+            padding: GUTTER_SIZE,
+            paddingLeft: columnIndex === 0 ? 0 : GUTTER_SIZE,
+            paddingRight: isMobile && columnIndex === 1 ? 0 : GUTTER_SIZE,
+            left: +(style.left ?? 0) + EXTRA_SPACE_FOR_SHADOW,
+            top: +(style.top ?? 0) + EXTRA_SPACE_TOP_FOR_SHADOW
+          }}
+        >
+          <AssetCard
+            key={assetType + '-' + asset.id}
+            asset={asset}
+            isManager={isManager}
+          />
+        </div>
+      ) : null
+    },
+    [assetType, assets, isManager, isMobile]
   )
 
+  const promiseOfLoadingMore = useRef<(() => void) | null>()
+
+  /** The loadMoreItems fn needs to return a promise that is resolved when the load more finishes
+   to do so, we store a promise that resolves when the `isLoading` turns from true to false */
+  useEffect(() => {
+    if (!isLoading && promiseOfLoadingMore.current) {
+      promiseOfLoadingMore.current()
+      promiseOfLoadingMore.current = null // resets the ref
+    }
+  }, [isLoading])
+
+  const loadMoreItems = useCallback(() => {
+    handleLoadMore(page + 1)
+    return new Promise<void>(res => {
+      promiseOfLoadingMore.current = res
+    })
+  }, [handleLoadMore, page])
+
+  const getCardsDimensions = useCallback(
+    (width: number) => {
+      const CARDS_PER_ROW_MOBILE = 2
+      const CARD_HEIGHT_MOBILE = 345
+      if (isMobile) {
+        console.log('width * 0.5: ', width * 0.5)
+        return {
+          cardsPerRow: CARDS_PER_ROW_MOBILE,
+          cardWidth: width * 0.5,
+          cardHeight: CARD_HEIGHT_MOBILE
+        }
+      }
+      const quotient = Math.floor(width / CARD_MIN_WIDTH)
+      const reminder = width % CARD_MIN_WIDTH
+      const dimensions = {
+        cardsPerRow: quotient,
+        cardWidth: CARD_MIN_WIDTH + reminder / quotient,
+        cardHeight: CARD_HEIGHT
+      }
+      return dimensions
+    },
+    [isMobile]
+  )
+
+  const isItemLoaded = useCallback(
+    (index: number) => {
+      const hasNextPage = count && assets.length < count
+      return !hasNextPage || index < assets.length
+    },
+    [assets.length, count]
+  )
+
+  const renderAssetCards = useCallback(
+    () => (
+      <AutoSizer>
+        {({ height, width }) => {
+          if (!height || !width) return null
+          const { cardsPerRow, cardWidth } = getCardsDimensions(width)
+          const rowCount = Math.ceil(assets.length / cardsPerRow)
+          const threshold = cardsPerRow // 1 row more
+
+          return (
+            !!height &&
+            !!width && (
+              <InfiniteLoader
+                threshold={threshold}
+                isItemLoaded={isItemLoaded}
+                itemCount={count || 10000}
+                loadMoreItems={loadMoreItems}
+              >
+                {({ onItemsRendered, ref }) => {
+                  const newOnItemsRendered = (
+                    props: GridOnItemsRenderedProps
+                  ) => {
+                    const {
+                      overscanRowStartIndex,
+                      overscanRowStopIndex,
+                      visibleRowStopIndex,
+                      visibleRowStartIndex
+                    } = props
+                    const params = {
+                      overscanStartIndex: Math.ceil(
+                        overscanRowStartIndex * cardsPerRow
+                      ),
+                      overscanStopIndex: Math.ceil(
+                        (overscanRowStopIndex + 1) * cardsPerRow
+                      ),
+                      visibleStartIndex: Math.ceil(
+                        visibleRowStartIndex * cardsPerRow
+                      ),
+                      visibleStopIndex: Math.ceil(
+                        (visibleRowStopIndex + 1) * cardsPerRow
+                      )
+                    }
+                    onItemsRendered(params)
+                  }
+                  return (
+                    <Grid
+                      className="grid"
+                      ref={elemRef => {
+                        ref(elemRef)
+                        handleScroll(elemRef, cardsPerRow)
+                      }}
+                      height={height}
+                      width={width + EXTRA_SPACE_FOR_SHADOW * 2}
+                      columnCount={cardsPerRow}
+                      columnWidth={cardWidth}
+                      rowCount={rowCount}
+                      rowHeight={CARD_HEIGHT + GUTTER_SIZE * 2}
+                      onItemsRendered={newOnItemsRendered}
+                      style={{
+                        position: 'absolute',
+                        left: -EXTRA_SPACE_FOR_SHADOW
+                      }}
+                    >
+                      {props => (
+                        <VirtualizedCard cardsPerRow={cardsPerRow} {...props} />
+                      )}
+                    </Grid>
+                  )
+                }}
+              </InfiniteLoader>
+            )
+          )
+        }}
+      </AutoSizer>
+    ),
+    [
+      VirtualizedCard,
+      assets.length,
+      count,
+      getCardsDimensions,
+      handleScroll,
+      isItemLoaded,
+      loadMoreItems
+    ]
+  )
+
+  const DEFAULT_FOOTER_SIZE = 56
+  const footerHeight =
+    document.querySelector('ui.container.dcl.footer')?.getBoundingClientRect()
+      .height || DEFAULT_FOOTER_SIZE
+
+  const [assetListTopOffset, setAssetListTopOffset] = useState(0)
+
   return (
-    <div className="AssetsList">
+    <div
+      ref={ref => {
+        const rect = ref?.getBoundingClientRect()
+        rect && setAssetListTopOffset(rect.top)
+        !isMobile &&
+          window.addEventListener('scroll', () => {
+            const rect = ref?.getBoundingClientRect()
+            rect && setAssetListTopOffset(rect.top)
+          })
+      }}
+      className="AssetsList"
+      style={{
+        height: `calc(100vh - ${assetListTopOffset +
+          (isMobile ? 0 : footerHeight)}px)`
+      }}
+    >
       {isLoading ? (
         <>
           <div className="overlay" />
@@ -164,18 +358,11 @@ const AssetList = (props: Props) => {
           </div>
         </>
       ) : null}
-      {assets.length > 0 ? (
+      {assets.length > 0 && assetListTopOffset ? (
         <Card.Group> {renderAssetCards()} </Card.Group>
+      ) : shouldRenderEmptyState ? (
+        renderEmptyState()
       ) : null}
-      <InfiniteScroll
-        page={page}
-        hasMorePages={hasMorePages}
-        onLoadMore={handleLoadMore}
-        isLoading={isLoading}
-        maxScrollPages={3}
-      >
-        {shouldRenderEmptyState ? renderEmptyState() : null}
-      </InfiniteScroll>
     </div>
   )
 }
