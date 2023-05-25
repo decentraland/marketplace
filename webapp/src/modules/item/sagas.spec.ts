@@ -361,10 +361,7 @@ describe('when handling the fetch collections items request action', () => {
 
     it('should dispatch a successful action with the fetched items', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([
-          [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
-        ])
+        .provide([[matchers.call.fn(ItemAPI.prototype.get), fetchResult]])
         .put(fetchCollectionItemsSuccess(fetchResult.data))
         .dispatch(
           fetchCollectionItemsRequest({ contractAddresses: [], first: 10 })
@@ -377,8 +374,7 @@ describe('when handling the fetch collections items request action', () => {
     it('should dispatching a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
-          [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
-          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+          [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]
         ])
         .put(fetchCollectionItemsFailure(anError.message))
         .dispatch(
