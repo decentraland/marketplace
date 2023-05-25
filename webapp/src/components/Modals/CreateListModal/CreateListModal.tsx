@@ -78,6 +78,13 @@ const CreateListModal = ({
           }
           error={isNameDuplicatedError}
           disabled={isLoading}
+          info={
+            name.length === MAX_NAME_LENGTH
+              ? t('create_list_modal.info.max_name_length', {
+                  max: MAX_NAME_LENGTH
+                })
+              : undefined
+          }
           maxLength={MAX_NAME_LENGTH}
           onChange={handleNameChange}
         />

@@ -1164,6 +1164,9 @@
     "name": "List name",
     "description": "Description",
     "private": "Create as private list",
+    "info": {
+      "max_name_length": "List names can contain up to {max} characters."
+    },
     "errors": {
       "name_duplicated": "This name is already in use for another of your lists. <br></br> Choose a different name."
     }

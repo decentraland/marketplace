@@ -1158,6 +1158,9 @@
     "name": "Nombre de la lista",
     "description": "Descripción",
     "private": "Crea la lista como privada",
+    "info": {
+      "max_name_length": "Los nombres de las listas pueden tener hasta {max} caracteres."
+    },
     "errors": {
       "name_duplicated": "El nombre elegido esta siendo usado en otra de tus listas. <br></br> Elije uno diferente."
     }
