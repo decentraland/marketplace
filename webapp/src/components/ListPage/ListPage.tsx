@@ -32,7 +32,7 @@ const ListPage = ({ wallet, isConnecting, onRedirect }: Props) => {
       <Navigation activeTab={NavigationTab.MY_LISTS} />
       <Header className={styles.header} size="large">
         {/* TODO: use the name of the selected list */}
-        {t('lists_page.default_title')}
+        {t('list_page.default_title')}
       </Header>
       <div className={classNames(wallet ? null : styles.flexContainer)}>
         {wallet ? (
