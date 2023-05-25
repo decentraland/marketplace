@@ -152,17 +152,6 @@ export const getIsRentalPriceFilterChartEnabled = (state: RootState) => {
   return false
 }
 
-export const getIsFavoritesEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.FAVORITES
-    )
-  }
-  return false
-}
-
 export const getIsListsV1Enabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(

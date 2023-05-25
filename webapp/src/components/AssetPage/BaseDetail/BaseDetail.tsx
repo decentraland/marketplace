@@ -26,14 +26,13 @@ const BaseDetail = ({
   className,
   actions,
   showDetails,
-  isFavoritesEnabled,
   onBack
 }: Props) => {
   const isMobile = useMobileMediaQuery()
 
   return (
     <div className={classNames('BaseDetail', className)}>
-      <div className="top-header">
+      <div className="top-header" data-testid="top-header">
         <Back
           className="back"
           absolute
@@ -89,7 +88,7 @@ const BaseDetail = ({
             )
           }
         />
-        {isFavoritesEnabled && isMobile && !isNFT(asset) ? (
+        {isMobile && !isNFT(asset) ? (
           <FavoritesCounter isCollapsed className="favorites" item={asset} />
         ) : null}
       </div>

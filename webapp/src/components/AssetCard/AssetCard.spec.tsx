@@ -22,7 +22,6 @@ function renderAssetCard(props: Partial<AssetCardProps> = {}) {
       isClaimingBackLandTransactionPending={false}
       showRentalChip={false}
       rental={null}
-      isFavoritesEnabled={false}
       {...props}
     />,
     {
@@ -33,7 +32,7 @@ function renderAssetCard(props: Partial<AssetCardProps> = {}) {
             items: {
               '0xContractAddress-itemId': { pickedByUser: false, count: 35 }
             },
-            total: 0
+            lists: {}
           }
         }
       }
@@ -80,43 +79,29 @@ describe('AssetCard', () => {
     renderAssetCard({ asset })
   })
 
-  describe('when the favorites feature flag is not enabled', () => {
+  describe('when the asset is an nft', () => {
+    beforeEach(() => {
+      asset = { ...asset, tokenId: 'tokenId' } as Asset
+    })
+
     it('should not render the favorites counter', () => {
       const { queryByTestId } = renderAssetCard({
-        asset,
-        isFavoritesEnabled: false
+        asset
       })
       expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
     })
   })
 
-  describe('when the favorites feature flag is enabled', () => {
-    describe('when the asset is an nft', () => {
-      beforeEach(() => {
-        asset = { ...asset, tokenId: 'tokenId' } as Asset
-      })
-
-      it('should not render the favorites counter', () => {
-        const { queryByTestId } = renderAssetCard({
-          asset,
-          isFavoritesEnabled: true
-        })
-        expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
-      })
+  describe('when the asset is an item', () => {
+    beforeEach(() => {
+      asset = { ...asset, itemId: 'itemId' } as Asset
     })
 
-    describe('when the asset is an item', () => {
-      beforeEach(() => {
-        asset = { ...asset, itemId: 'itemId' } as Asset
+    it('should render the favorites counter', () => {
+      const { getByTestId } = renderAssetCard({
+        asset
       })
-
-      it('should render the favorites counter', () => {
-        const { getByTestId } = renderAssetCard({
-          asset,
-          isFavoritesEnabled: true
-        })
-        expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
-      })
+      expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
     })
   })
 })
