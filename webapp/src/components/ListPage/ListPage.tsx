@@ -13,7 +13,7 @@ import { Navigation } from '../Navigation'
 import { AssetBrowse } from '../AssetBrowse'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Props } from './ListPage.types'
-import styles from './ListsPage.module.css'
+import styles from './ListPage.module.css'
 
 const ListPage = ({ wallet, isConnecting, onRedirect }: Props) => {
   // Redirect to signIn if trying to access current account without a wallet
