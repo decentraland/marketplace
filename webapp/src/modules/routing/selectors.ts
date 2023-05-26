@@ -36,6 +36,15 @@ export const getState = (state: RootState) => state.routing
 export const getVisitedLocations = (state: RootState) =>
   getState(state).visitedLocations
 
+export const getLatestVisitedLocation = createSelector<
+  RootState,
+  ReturnType<typeof getLocation>[],
+  ReturnType<typeof getLocation>
+>(
+  getVisitedLocations,
+  visitedLocations => visitedLocations[visitedLocations.length - 1]
+)
+
 const getPathName = createSelector<
   RootState,
   ReturnType<typeof getLocation>,

@@ -1,3 +1,4 @@
+import { RouterLocation } from 'connected-react-router'
 import {
   EmotePlayMode,
   GenderFilterOption,
@@ -28,8 +29,34 @@ import {
   getViewAsGuest,
   getSortByOptions,
   getStatus,
-  hasFiltersEnabled
+  hasFiltersEnabled,
+  getLatestVisitedLocation
 } from './selectors'
+
+describe('when getting the latest visited location', () => {
+  describe('and there is no previous location', () => {
+    it('should return undefined', () => {
+      expect(getLatestVisitedLocation.resultFunc([])).toBe(undefined)
+    })
+  })
+
+  describe('and there is a previous location', () => {
+    let prevLocation: RouterLocation<unknown>
+    beforeEach(() => {
+      prevLocation = {
+        pathname: '/browse'
+      } as RouterLocation<unknown>
+    })
+    it('should return the location', () => {
+      expect(
+        getLatestVisitedLocation.resultFunc([
+          { ...prevLocation, pathname: 'an oldest location' },
+          prevLocation
+        ])
+      ).toBe(prevLocation)
+    })
+  })
+})
 
 describe('when getting if the are filters set', () => {
   describe('when the search filter is set', () => {
