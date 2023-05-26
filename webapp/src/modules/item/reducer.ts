@@ -38,7 +38,13 @@ import {
   BuyItemWithCardFailureAction,
   BuyItemWithCardRequestAction,
   BuyItemWithCardSuccessAction,
-  BUY_ITEM_WITH_CARD_FAILURE
+  BUY_ITEM_WITH_CARD_FAILURE,
+  FETCH_COLLECTION_ITEMS_SUCCESS,
+  FetchCollectionItemsRequestAction,
+  FetchCollectionItemsSuccessAction,
+  FetchCollectionItemsFailureAction,
+  FETCH_COLLECTION_ITEMS_REQUEST,
+  FETCH_COLLECTION_ITEMS_FAILURE
 } from './actions'
 
 export type ItemState = {
@@ -70,6 +76,9 @@ type ItemReducerAction =
   | BuyItemWithCardRequestAction
   | BuyItemWithCardSuccessAction
   | BuyItemWithCardFailureAction
+  | FetchCollectionItemsRequestAction
+  | FetchCollectionItemsSuccessAction
+  | FetchCollectionItemsFailureAction
 
 export function itemReducer(
   state = INITIAL_STATE,
@@ -82,6 +91,7 @@ export function itemReducer(
     case BUY_ITEM_WITH_CARD_SUCCESS:
     case FETCH_ITEMS_REQUEST:
     case FETCH_TRENDING_ITEMS_REQUEST:
+    case FETCH_COLLECTION_ITEMS_REQUEST:
     case FETCH_ITEM_REQUEST: {
       return {
         ...state,
@@ -90,6 +100,7 @@ export function itemReducer(
     }
     case FETCH_TRENDING_ITEMS_SUCCESS:
     case FETCH_FAVORITED_ITEMS_SUCCESS:
+    case FETCH_COLLECTION_ITEMS_SUCCESS:
     case FETCH_ITEMS_SUCCESS: {
       const { items } = action.payload
       return {
@@ -122,6 +133,7 @@ export function itemReducer(
 
     case BUY_ITEM_FAILURE:
     case BUY_ITEM_WITH_CARD_FAILURE:
+    case FETCH_COLLECTION_ITEMS_FAILURE:
     case FETCH_ITEMS_FAILURE:
     case FETCH_TRENDING_ITEMS_FAILURE:
     case FETCH_ITEM_FAILURE: {

@@ -26,13 +26,18 @@ import { PAGE_SIZE } from '../vendor/api'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
+import { locations } from './locations'
 import {
   browse,
   clearFilters,
   fetchAssetsFromRoute as fetchAssetsFromRouteAction
 } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
-import { getCurrentBrowseOptions, getSection } from './selectors'
+import {
+  getCurrentBrowseOptions,
+  getLatestVisitedLocation,
+  getSection
+} from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
 
@@ -1155,16 +1160,68 @@ describe('when handling the location change action', () => {
     }
   })
   describe('and the location action is a POP, meaning going back', () => {
-    it('should dispatch the fetchAssetFromRoute action', () => {
-      return expectSaga(routingSaga)
-        .provide([
-          [select(getCurrentBrowseOptions), browseOptions],
-          [select(getSection), Section.WEARABLES],
-          [select(getPage), 1]
-        ])
-        .put(fetchAssetsFromRouteAction(browseOptions))
-        .dispatch(locationChangeAction)
-        .run({ silenceTimeout: true })
+    describe("and the current pathname doesn't match the browse", () => {
+      beforeEach(() => {
+        locationChangeAction.payload.location.pathname = 'anotherPathName'
+      })
+      it('should not call the fetchAssetFromRoute', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getLatestVisitedLocation),
+              {
+                pathname: locations.browse()
+              }
+            ],
+            [select(getCurrentBrowseOptions), browseOptions],
+            [select(getSection), Section.WEARABLES],
+            [select(getPage), 1]
+          ])
+          .not.put(fetchAssetsFromRouteAction(browseOptions))
+          .dispatch(locationChangeAction)
+          .run({ silenceTimeout: true })
+      })
+    })
+    describe('and its coming from the browse', () => {
+      beforeEach(() => {
+        locationChangeAction.payload.location.pathname = locations.browse()
+      })
+      it('should dispatch the fetchAssetFromRoute action', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getLatestVisitedLocation),
+              {
+                pathname: locations.browse()
+              }
+            ],
+            [select(getCurrentBrowseOptions), browseOptions],
+            [select(getSection), Section.WEARABLES],
+            [select(getPage), 1]
+          ])
+          .put(fetchAssetsFromRouteAction(browseOptions))
+          .dispatch(locationChangeAction)
+          .run({ silenceTimeout: true })
+      })
+    })
+    describe('and its coming from another route', () => {
+      it('should not dispatch the fetchAssetFromRoute action', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getLatestVisitedLocation),
+              {
+                pathname: 'aNotBrowsePath'
+              }
+            ],
+            [select(getCurrentBrowseOptions), browseOptions],
+            [select(getSection), Section.WEARABLES],
+            [select(getPage), 1]
+          ])
+          .not.put(fetchAssetsFromRouteAction(browseOptions))
+          .dispatch(locationChangeAction)
+          .run({ silenceTimeout: true })
+      })
     })
   })
   describe('and the location action is not a POP', () => {
