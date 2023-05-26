@@ -36,15 +36,10 @@ describe('when reducing the action of setting a view', () => {
   }
 
   describe('and the payload view is the same as the state current one', () => {
-    it('should set the view and reset the state and empty the itemIds, nftIds, count and page', () => {
-      expect(browseReducer(initialState, setView(View.MARKET))).toEqual({
-        ...initialState,
-        view: View.MARKET,
-        itemIds: [],
-        nftIds: [],
-        count: undefined,
-        page: undefined
-      })
+    it('should return the same state', () => {
+      expect(browseReducer(initialState, setView(View.MARKET))).toEqual(
+        initialState
+      )
     })
   })
 
