@@ -362,6 +362,10 @@ describe('when handling the fetch collections items request action', () => {
     it('should dispatch a successful action with the fetched items', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([[matchers.call.fn(ItemAPI.prototype.get), fetchResult]])
+        .call.like({
+          fn: ItemAPI.prototype.get,
+          args: [{ first: 10, contractAddresses: [] }]
+        })
         .put(fetchCollectionItemsSuccess(fetchResult.data))
         .dispatch(
           fetchCollectionItemsRequest({ contractAddresses: [], first: 10 })
@@ -371,7 +375,7 @@ describe('when handling the fetch collections items request action', () => {
   })
 
   describe('when the request fails', () => {
-    it('should dispatching a failing action with the error and the options', () => {
+    it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]
@@ -421,7 +425,7 @@ describe('when handling the fetch items request action', () => {
   })
 
   describe('when the request fails', () => {
-    it('should dispatching a failing action with the error and the options', () => {
+    it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],

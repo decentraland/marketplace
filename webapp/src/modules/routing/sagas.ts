@@ -144,7 +144,10 @@ export function* routingSaga() {
 
 function* handleLocationChange(action: LocationChangeAction) {
   // Re-triggers fetchAssetsFromRoute action when the user goes back
-  if (action.payload.action === 'POP') {
+  if (
+    action.payload.action === 'POP' &&
+    matchPath(action.payload.location.pathname, { path: locations.browse() })
+  ) {
     const latestVisitedLocation: ReturnType<typeof getLocation> = yield select(
       getLatestVisitedLocation
     )

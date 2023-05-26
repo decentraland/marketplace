@@ -15,7 +15,6 @@ import {
 } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
-import { locations } from './locations'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
@@ -27,6 +26,7 @@ import { PAGE_SIZE } from '../vendor/api'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
+import { locations } from './locations'
 import {
   browse,
   clearFilters,
@@ -1160,7 +1160,32 @@ describe('when handling the location change action', () => {
     }
   })
   describe('and the location action is a POP, meaning going back', () => {
+    describe("and the current pathname doesn't match the browse", () => {
+      beforeEach(() => {
+        locationChangeAction.payload.location.pathname = 'anotherPathName'
+      })
+      it('should not call the fetchAssetFromRoute', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getLatestVisitedLocation),
+              {
+                pathname: locations.browse()
+              }
+            ],
+            [select(getCurrentBrowseOptions), browseOptions],
+            [select(getSection), Section.WEARABLES],
+            [select(getPage), 1]
+          ])
+          .not.put(fetchAssetsFromRouteAction(browseOptions))
+          .dispatch(locationChangeAction)
+          .run({ silenceTimeout: true })
+      })
+    })
     describe('and its coming from the browse', () => {
+      beforeEach(() => {
+        locationChangeAction.payload.location.pathname = locations.browse()
+      })
       it('should dispatch the fetchAssetFromRoute action', () => {
         return expectSaga(routingSaga)
           .provide([

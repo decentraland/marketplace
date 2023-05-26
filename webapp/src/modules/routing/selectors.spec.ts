@@ -40,7 +40,7 @@ describe('when getting the latest visited location', () => {
     })
   })
 
-  describe('and there is a previos location', () => {
+  describe('and there is a previous location', () => {
     let prevLocation: RouterLocation<unknown>
     beforeEach(() => {
       prevLocation = {

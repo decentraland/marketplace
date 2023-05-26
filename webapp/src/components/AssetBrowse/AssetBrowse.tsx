@@ -56,11 +56,11 @@ const AssetBrowse = (props: Props) => {
   const location = useLocation()
   const history = useHistory()
   // Prevent fetching more than once while browsing
-  const latestLocation = visitedLocations[visitedLocations.length - 2]
+  const lastLocation = visitedLocations[visitedLocations.length - 2]
   const [hasFetched, setHasFetched] = useState(
     history.action === 'POP' &&
-      latestLocation?.pathname === location.pathname &&
-      latestLocation?.search === location.search
+      lastLocation?.pathname === location.pathname &&
+      lastLocation?.search === location.search
   )
   const isCurrentAccount = view === View.CURRENT_ACCOUNT
   const isAccountOrCurrentAccount = view === View.ACCOUNT || isCurrentAccount
