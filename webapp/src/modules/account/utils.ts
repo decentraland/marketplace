@@ -1,4 +1,5 @@
 import { Account, Profile } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ethers } from 'ethers'
 import { NFTResult } from '../vendor/decentraland'
 import { AccountMetrics, CreatorAccount } from './types'
@@ -48,7 +49,9 @@ export function enhanceCreatorName(
         nft.nft.name.toLowerCase().includes(search.toLocaleLowerCase())
     )
     if (ensThatMatch) {
-      creator.name = `${ensThatMatch.nft.name} (currently ${creator.name})`
+      creator.name = `${ensThatMatch.nft.name} (${t('global.currently')} ${
+        creator.name
+      })`
     }
   }
 }

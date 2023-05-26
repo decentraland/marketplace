@@ -1,3 +1,4 @@
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Account, Avatar, Profile } from '@dcl/schemas'
 import {
   enhanceCreatorName,
@@ -100,7 +101,9 @@ describe('when enhancing creator name', () => {
     })
     it('should enhance the name and add the profile name at the end', () => {
       enhanceCreatorName(creator, ens, search)
-      expect(creator.name).toEqual('aName (currently anotherName)')
+      expect(creator.name).toEqual(
+        `aName (${t('global.currently')} anotherName)`
+      )
     })
   })
   describe('when the creator name contains the search', () => {
