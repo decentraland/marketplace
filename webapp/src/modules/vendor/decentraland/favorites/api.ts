@@ -1,8 +1,7 @@
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
 import { isAPIError } from '../../../../lib/error'
-import { FavoritedItems, List } from '../../../favorites/types'
-import { ItemFilters } from '../item/types'
+import { FavoritedItems, List, ListsFilters } from '../../../favorites/types'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
   'DEFAULT_FAVORITES_LIST_ID'
@@ -15,7 +14,7 @@ export const MARKETPLACE_FAVORITES_SERVER_URL = config.get(
 const ALREADY_PICKED_STATUS_CODE = 422
 
 export class FavoritesAPI extends BaseClient {
-  private buildURLWithParameters(endpoint: string, filters: ItemFilters) {
+  private buildURLWithParameters(endpoint: string, filters: ListsFilters) {
     const queryParams = new URLSearchParams()
     if (filters.first) {
       queryParams.append('limit', filters.first.toString())
@@ -77,7 +76,7 @@ export class FavoritesAPI extends BaseClient {
 
   async getPicksByList(
     listId: string,
-    filters: ItemFilters = {}
+    filters: ListsFilters = {}
   ): Promise<{
     results: FavoritedItems
     total: number
@@ -88,7 +87,7 @@ export class FavoritesAPI extends BaseClient {
   }
 
   async getLists(
-    filters: ItemFilters = {}
+    filters: ListsFilters = {}
   ): Promise<{ results: List[]; total: number }> {
     return this.fetch(this.buildURLWithParameters('/v1/lists', filters))
   }

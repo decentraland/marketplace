@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Button, Dropdown, Header, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NavigationTab } from '../Navigation/Navigation.types'
@@ -6,7 +7,20 @@ import { Props } from './ListsPage.types'
 import styles from './ListsPage.module.css'
 import { PageLayout } from '../PageLayout'
 
-const ListsPage = ({ count, lists }: Props) => {
+const ListsPage = ({ count, lists, fetchLists }: Props) => {
+  const { search } = useLocation()
+  const [_page, limit, offset] = useMemo(() => {
+    const params = new URLSearchParams(search)
+    const page = parseInt(params.get('page') ?? '1')
+    const limit = parseInt(params.get('limit') ?? '24')
+    const offset = (page - 1) * limit
+    return [page, limit, offset]
+  }, [search])
+
+  useEffect(() => {
+    fetchLists({ limit, offset })
+  }, [limit, offset, fetchLists])
+
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
       <Header className={styles.header} size="large">
@@ -22,10 +36,10 @@ const ListsPage = ({ count, lists }: Props) => {
                 value: 'recently_updated',
                 text: t('filters.recently_updated')
               },
-              { value: 'name', text: t('filters.name_asc') },
-              { value: 'name', text: t('filters.name_desc') },
-              { value: 'name', text: t('filters.newest') },
-              { value: 'name', text: t('filters.oldest') }
+              { value: 'name_asc', text: t('filters.name_asc') },
+              { value: 'name_desc', text: t('filters.name_desc') },
+              { value: 'newest', text: t('filters.newest') },
+              { value: 'oldest', text: t('filters.oldest') }
             ]}
             defaultValue="recently_updated"
           />
