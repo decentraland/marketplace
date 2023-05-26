@@ -197,7 +197,7 @@ describe('when the name input is empty', () => {
   })
 })
 
-describe('when the name input has reached its maximum length', () => {
+describe('when the name input is focused', () => {
   let renderedModal: ReturnType<typeof renderCreateListModal>
 
   beforeEach(() => {
@@ -206,16 +206,31 @@ describe('when the name input has reached its maximum length', () => {
 
   it('should render the max length info message', () => {
     const { getByTestId } = renderedModal
-    fireEvent.change(getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0], {
-      target: { value: 'a'.repeat(32) }
-    })
+    fireEvent.focusIn(getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0])
     expect(
       getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).nextSibling
     ).toHaveTextContent('List names can contain up to 32 characters')
   })
 })
 
-describe('when the description input has reached its maximum length', () => {
+describe('when the name input is blurred', () => {
+  let renderedModal: ReturnType<typeof renderCreateListModal>
+
+  beforeEach(() => {
+    renderedModal = renderCreateListModal()
+  })
+
+  it('should not render the max length info message', () => {
+    const { getByTestId } = renderedModal
+    fireEvent.focusIn(getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0])
+    fireEvent.focusOut(getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0])
+    expect(
+      getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).nextSibling
+    ).not.toHaveTextContent('List names can contain up to 32 characters')
+  })
+})
+
+describe('when the describe input is focused', () => {
   let renderedModal: ReturnType<typeof renderCreateListModal>
 
   beforeEach(() => {
@@ -224,12 +239,29 @@ describe('when the description input has reached its maximum length', () => {
 
   it('should render the max length info message', () => {
     const { getByTestId } = renderedModal
-    fireEvent.change(getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID), {
-      target: { value: 'a'.repeat(100) }
-    })
+    fireEvent.focusIn(getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID))
     expect(
       getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID).nextSibling
     ).toHaveTextContent('List descriptions can contain up to 100 characters')
+  })
+})
+
+describe('when the describe input is blurred', () => {
+  let renderedModal: ReturnType<typeof renderCreateListModal>
+
+  beforeEach(() => {
+    renderedModal = renderCreateListModal()
+  })
+
+  it('should not render the max length info message', () => {
+    const { getByTestId } = renderedModal
+    fireEvent.focusIn(getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID))
+    fireEvent.focusOut(getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID))
+    expect(
+      getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID).nextSibling
+    ).not.toHaveTextContent(
+      'List descriptions can contain up to 100 characters'
+    )
   })
 })
 

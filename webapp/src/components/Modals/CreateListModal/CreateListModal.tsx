@@ -31,6 +31,11 @@ const CreateListModal = ({
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [isPrivate, setIsPrivate] = useState(false)
+  const [showMaxLengthNameInfo, setShowMaxLengthNameInfo] = useState(false)
+  const [
+    showMaxLengthDescriptionInfo,
+    setShowMaxLengthDescriptionInfo
+  ] = useState(false)
 
   const handleCreateList = useCallback(
     () => onCreateList({ name, description, isPrivate }),
@@ -47,6 +52,20 @@ const CreateListModal = ({
   const handleIsOPrivateChange = useCallback(
     (_event, props) => setIsPrivate(props.checked),
     [setIsPrivate]
+  )
+  const handleNameFocus = useCallback(() => setShowMaxLengthNameInfo(true), [
+    setShowMaxLengthNameInfo
+  ])
+  const handleNameBlur = useCallback(() => setShowMaxLengthNameInfo(false), [
+    setShowMaxLengthNameInfo
+  ])
+  const handleDescriptionFocus = useCallback(
+    () => setShowMaxLengthDescriptionInfo(true),
+    [setShowMaxLengthDescriptionInfo]
+  )
+  const handleDescriptionBlur = useCallback(
+    () => setShowMaxLengthDescriptionInfo(false),
+    [setShowMaxLengthDescriptionInfo]
   )
 
   const isNameDuplicatedError = error?.includes(
@@ -78,8 +97,10 @@ const CreateListModal = ({
           }
           error={isNameDuplicatedError}
           disabled={isLoading}
+          onFocus={handleNameFocus}
+          onBlur={handleNameBlur}
           info={
-            name.length === MAX_NAME_LENGTH
+            showMaxLengthNameInfo
               ? t('create_list_modal.info.max_name_length', {
                   max: MAX_NAME_LENGTH
                 })
@@ -95,8 +116,10 @@ const CreateListModal = ({
           className={styles.description}
           maxLength={MAX_DESCRIPTION_LENGTH}
           disabled={isLoading}
+          onFocus={handleDescriptionFocus}
+          onBlur={handleDescriptionBlur}
           info={
-            description.length === MAX_DESCRIPTION_LENGTH
+            showMaxLengthDescriptionInfo
               ? t('create_list_modal.info.max_description_length', {
                   max: MAX_DESCRIPTION_LENGTH
                 })
