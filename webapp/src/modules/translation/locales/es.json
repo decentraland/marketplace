@@ -1156,10 +1156,11 @@
   "create_list_modal": {
     "title": "Crear lista",
     "name": "Nombre de la lista",
-    "description": "Descripción",
+    "description": "Descripción de la lista",
     "private": "Crea la lista como privada",
     "info": {
-      "max_name_length": "Los nombres de las listas pueden tener hasta {max} caracteres."
+      "max_name_length": "Los nombres de las listas pueden tener hasta {max} caracteres.",
+      "max_description_length": "Las descripciones de las listas pueden contener hasta {max} caracteres."
     },
     "errors": {
       "name_duplicated": "El nombre elegido esta siendo usado en otra de tus listas. <br></br> Elije uno diferente."

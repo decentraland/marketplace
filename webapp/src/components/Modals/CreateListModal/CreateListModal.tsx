@@ -95,6 +95,13 @@ const CreateListModal = ({
           className={styles.description}
           maxLength={MAX_DESCRIPTION_LENGTH}
           disabled={isLoading}
+          info={
+            description.length === MAX_DESCRIPTION_LENGTH
+              ? t('create_list_modal.info.max_description_length', {
+                  max: MAX_DESCRIPTION_LENGTH
+                })
+              : undefined
+          }
           onChange={handleDescriptionChange}
         />
         <Checkbox
@@ -125,7 +132,7 @@ const CreateListModal = ({
         </Button>
         <Button
           primary
-          disabled={isLoading}
+          disabled={isLoading || name.length === 0}
           data-testid={CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID}
           loading={isLoading}
           onClick={handleCreateList}

@@ -29,8 +29,16 @@ function renderCreateListModal(props: Partial<Props> = {}) {
 
 describe('when the create list procedure is loading', () => {
   let renderedModal: ReturnType<typeof renderCreateListModal>
+
   beforeEach(() => {
     renderedModal = renderCreateListModal({ isLoading: true })
+    // Write something into the field so the accept button doesn't get disabled
+    fireEvent.change(
+      renderedModal.getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0],
+      {
+        target: { value: 'aValue' }
+      }
+    )
   })
 
   it('should render the name input as disabled', () => {
@@ -74,8 +82,16 @@ describe('when the create list procedure is loading', () => {
 
 describe('when the create list procedure is not loading', () => {
   let renderedModal: ReturnType<typeof renderCreateListModal>
+
   beforeEach(() => {
     renderedModal = renderCreateListModal({ isLoading: false })
+    // Write something into the field so the accept button doesn't get disabled
+    fireEvent.change(
+      renderedModal.getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0],
+      {
+        target: { value: 'aValue' }
+      }
+    )
   })
 
   it('should render the name input as not disabled', () => {
@@ -119,6 +135,7 @@ describe('when the create list procedure is not loading', () => {
 
 describe('when clicking the cancel button', () => {
   let renderedModal: ReturnType<typeof renderCreateListModal>
+
   let onClose: jest.Mock
 
   beforeEach(() => {
@@ -162,5 +179,75 @@ describe('when clicking the accept button', () => {
       description,
       isPrivate: true
     })
+  })
+})
+
+describe('when the name input is empty', () => {
+  let renderedModal: ReturnType<typeof renderCreateListModal>
+
+  beforeEach(() => {
+    renderedModal = renderCreateListModal()
+  })
+
+  it('should render the accept button as disabled', () => {
+    const { getByTestId } = renderedModal
+    expect(getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).toHaveAttribute(
+      'disabled'
+    )
+  })
+})
+
+describe('when the name input has reached its maximum length', () => {
+  let renderedModal: ReturnType<typeof renderCreateListModal>
+
+  beforeEach(() => {
+    renderedModal = renderCreateListModal()
+  })
+
+  it('should render the max length info message', () => {
+    const { getByTestId } = renderedModal
+    fireEvent.change(getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0], {
+      target: { value: 'a'.repeat(32) }
+    })
+    expect(
+      getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).nextSibling
+    ).toHaveTextContent('List names can contain up to 32 characters')
+  })
+})
+
+describe('when the description input has reached its maximum length', () => {
+  let renderedModal: ReturnType<typeof renderCreateListModal>
+
+  beforeEach(() => {
+    renderedModal = renderCreateListModal()
+  })
+
+  it('should render the max length info message', () => {
+    const { getByTestId } = renderedModal
+    fireEvent.change(getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID), {
+      target: { value: 'a'.repeat(100) }
+    })
+    expect(
+      getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID).nextSibling
+    ).toHaveTextContent('List descriptions can contain up to 100 characters')
+  })
+})
+
+describe('when error is a duplicated name error', () => {
+  let renderedModal: ReturnType<typeof renderCreateListModal>
+  let error: string
+
+  beforeEach(() => {
+    error = 'There is already a list with the same name'
+    renderedModal = renderCreateListModal({ error })
+  })
+
+  it('should render the name input with an error message', () => {
+    const { getByTestId } = renderedModal
+    expect(
+      getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).nextSibling
+    ).toHaveTextContent(
+      'This name is already in use for another of your lists. Choose a different name.'
+    )
   })
 })
