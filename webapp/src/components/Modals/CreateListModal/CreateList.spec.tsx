@@ -1,3 +1,4 @@
+import { fireEvent } from '@testing-library/react'
 import { renderWithProviders } from '../../../utils/test'
 import { Props } from './CreateListModal.types'
 import CreateListModal, {
@@ -7,7 +8,6 @@ import CreateListModal, {
   CREATE_LIST_NAME_DATA_TEST_ID,
   CREATE_LIST_PRIVATE_DATA_TEST_ID
 } from './CreateListModal'
-import { fireEvent } from '@testing-library/react'
 
 function renderCreateListModal(props: Partial<Props> = {}) {
   return renderWithProviders(

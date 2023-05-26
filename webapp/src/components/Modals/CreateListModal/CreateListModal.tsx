@@ -14,6 +14,7 @@ import { Props } from './CreateListModal.types'
 
 const MAX_NAME_LENGTH = 32
 const MAX_DESCRIPTION_LENGTH = 100
+const DUPLICATED_ERROR = 'There is already a list with the same name'
 export const CREATE_LIST_NAME_DATA_TEST_ID = 'create-list-name'
 export const CREATE_LIST_DESCRIPTION_DATA_TEST_ID = 'create-list-description'
 export const CREATE_LIST_PRIVATE_DATA_TEST_ID = 'create-list-private'
@@ -68,9 +69,7 @@ const CreateListModal = ({
     [setShowMaxLengthDescriptionInfo]
   )
 
-  const isNameDuplicatedError = error?.includes(
-    'There is already a list with the same name'
-  )
+  const isNameDuplicatedError = error?.includes(DUPLICATED_ERROR)
 
   return (
     <Modal
