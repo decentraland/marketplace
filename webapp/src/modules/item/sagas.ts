@@ -45,7 +45,11 @@ import {
   FetchItemSuccessAction,
   FETCH_ITEM_FAILURE,
   FETCH_ITEM_SUCCESS,
-  fetchItemRequest
+  fetchItemRequest,
+  FetchCollectionItemsRequestAction,
+  fetchCollectionItemsSuccess,
+  fetchCollectionItemsFailure,
+  FETCH_COLLECTION_ITEMS_REQUEST
 } from './actions'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
@@ -62,6 +66,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
+  yield takeEvery(
+    FETCH_COLLECTION_ITEMS_REQUEST,
+    handleFetchCollectionItemsRequest
+  )
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
@@ -92,6 +100,25 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       yield put(
         fetchTrendingItemsFailure(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
+      )
+    }
+  }
+
+  function* handleFetchCollectionItemsRequest(
+    action: FetchCollectionItemsRequestAction
+  ) {
+    const { contractAddresses, first } = action.payload
+    try {
+      const { data }: { data: Item[]; total: number } = yield call(
+        [itemAPI, 'get'],
+        { first, contractAddresses }
+      )
+      yield put(fetchCollectionItemsSuccess(data))
+    } catch (error) {
+      yield put(
+        fetchCollectionItemsFailure(
           isErrorWithMessage(error) ? error.message : t('global.unknown_error')
         )
       )

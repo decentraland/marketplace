@@ -37,7 +37,10 @@ import {
   buyItemWithCardRequest,
   buyItemWithCardFailure,
   buyItemWithCardSuccess,
-  FETCH_ITEM_FAILURE
+  FETCH_ITEM_FAILURE,
+  fetchCollectionItemsRequest,
+  fetchCollectionItemsSuccess,
+  fetchCollectionItemsFailure
 } from './actions'
 import { itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
@@ -352,6 +355,40 @@ describe('when handling the set purchase action', () => {
   })
 })
 
+describe('when handling the fetch collections items request action', () => {
+  describe('when the request is successful', () => {
+    const fetchResult = { data: [item] }
+
+    it('should dispatch a successful action with the fetched items', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([[matchers.call.fn(ItemAPI.prototype.get), fetchResult]])
+        .call.like({
+          fn: ItemAPI.prototype.get,
+          args: [{ first: 10, contractAddresses: [] }]
+        })
+        .put(fetchCollectionItemsSuccess(fetchResult.data))
+        .dispatch(
+          fetchCollectionItemsRequest({ contractAddresses: [], first: 10 })
+        )
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when the request fails', () => {
+    it('should dispatch a failing action with the error and the options', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([
+          [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]
+        ])
+        .put(fetchCollectionItemsFailure(anError.message))
+        .dispatch(
+          fetchCollectionItemsRequest({ contractAddresses: [], first: 10 })
+        )
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
 describe('when handling the fetch items request action', () => {
   describe('when the request is successful', () => {
     let dateNowSpy: jest.SpyInstance
@@ -388,7 +425,7 @@ describe('when handling the fetch items request action', () => {
   })
 
   describe('when the request fails', () => {
-    it('should dispatching a failing action with the error and the options', () => {
+    it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
