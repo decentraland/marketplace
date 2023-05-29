@@ -5,7 +5,10 @@ import { Link } from 'react-router-dom'
 import { Contract, NFTCategory } from '@dcl/schemas'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ChainButton, withAuthorizedAction } from 'decentraland-dapps/dist/containers'
+import {
+  ChainButton,
+  withAuthorizedAction
+} from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { ContractName } from 'decentraland-transactions'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
@@ -50,22 +53,25 @@ const BuyNFTModal = (props: Props) => {
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
   const analytics = getAnalytics()
 
-  const handleExecuteOrder = useCallback((alreadyAuthorized: boolean = true) => {
-    if (isBuyWithCardPage) {
-      analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
-      return onExecuteOrderWithCard(nft)
-    }
+  const handleExecuteOrder = useCallback(
+    (alreadyAuthorized: boolean = true) => {
+      if (isBuyWithCardPage) {
+        analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
+        return onExecuteOrderWithCard(nft)
+      }
 
-    onExecuteOrder(order!, nft, fingerprint, !alreadyAuthorized)
-  }, [
-    isBuyWithCardPage,
-    onExecuteOrderWithCard,
-    onExecuteOrder,
-    order,
-    nft,
-    fingerprint,
-    analytics
-  ])
+      !!order && onExecuteOrder(order, nft, fingerprint, !alreadyAuthorized)
+    },
+    [
+      isBuyWithCardPage,
+      onExecuteOrderWithCard,
+      onExecuteOrder,
+      order,
+      nft,
+      fingerprint,
+      analytics
+    ]
+  )
 
   const handleCancel = useCallback(() => {
     if (isBuyWithCardPage) analytics.track(events.CANCEL_BUY_NFT_WITH_CARD)
@@ -88,16 +94,24 @@ const BuyNFTModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    !!order && onAuthorizedAction({
-      targetContractName: ContractName.MANAToken,
-      authorizationType: AuthorizationType.ALLOWANCE,
-      authorizedAddress: order.marketplaceAddress,
-      targetContract: mana as Contract,
-      authorizedContractLabel: marketplace.label || marketplace.name,
-      requiredAllowanceInWei: order.price,
-      onAuthorized: handleExecuteOrder
-    })
-  }, [handleExecuteOrder, onAuthorizedAction, isBuyWithCardPage, order, mana, marketplace])
+    !!order &&
+      onAuthorizedAction({
+        targetContractName: ContractName.MANAToken,
+        authorizationType: AuthorizationType.ALLOWANCE,
+        authorizedAddress: order.marketplaceAddress,
+        targetContract: mana as Contract,
+        authorizedContractLabel: marketplace.label || marketplace.name,
+        requiredAllowanceInWei: order.price,
+        onAuthorized: handleExecuteOrder
+      })
+  }, [
+    handleExecuteOrder,
+    onAuthorizedAction,
+    isBuyWithCardPage,
+    order,
+    mana,
+    marketplace
+  ])
 
   const isDisabled =
     !order ||
@@ -225,5 +239,14 @@ const BuyNFTModal = (props: Props) => {
 }
 
 export default React.memo(
-  withAuthorizedAction(BuyNFTModal, AuthorizedAction.BUY, getBuyItemStatus, getError)
+  withAuthorizedAction(
+    BuyNFTModal,
+    AuthorizedAction.BUY,
+    {
+      action: 'buy_with_mana_page.authorization.action',
+      title_action: 'buy_with_mana_page.authorization.title_action'
+    },
+    getBuyItemStatus,
+    getError
+  )
 )

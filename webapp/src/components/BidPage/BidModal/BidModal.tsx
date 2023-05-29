@@ -217,5 +217,14 @@ const BidModal = (props: Props) => {
 }
 
 export default React.memo(
-  withAuthorizedAction(BidModal, AuthorizedAction.BID, getBidStatus, getError)
+  withAuthorizedAction(
+    BidModal,
+    AuthorizedAction.BID,
+    {
+      action: 'bid_page.authorization.action',
+      title_action: 'bid_page.authorization.title_action'
+    },
+    getBidStatus,
+    getError
+  )
 )

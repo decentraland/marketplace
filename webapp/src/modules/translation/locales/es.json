@@ -656,7 +656,11 @@
     "buy": "Comprar con MANA",
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
-    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}.",
+    "authorization": {
+      "title_action": "compra",
+      "action": "comprar"
+    }
   },
   "buy_with_card_page": {
     "title": "Comprando {name}",
@@ -685,7 +689,11 @@
     "action": "Comprar con MANA",
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
-    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}.",
+    "authorization": {
+      "title_action": "compra",
+      "action": "comprar"
+    }
   },
   "mint_with_card_page": {
     "title": "Comprando {name}",
@@ -729,6 +737,10 @@
       "create_bid_line_one": "Estás por hacer una oferta en {name} por {amount}.",
       "accept_bid_line_one": "Estás por aceptar una oferta en {name} por {amount}.",
       "accept_bid_line_two": "Por favor vuelve a escribir el precio para confirmar:"
+    },
+    "authorization": {
+      "title_action": "oferta",
+      "action": "hacer una oferta para"
     }
   },
   "my_bids_page": {
@@ -954,7 +966,11 @@
         "title": "Administrar Land",
         "subtitle": "Agregue escenas existentees o revise los permisos."
       },
-      "onlyAvailableOnDesktop": "Solo disponible en la versión Desktop."
+      "onlyAvailableOnDesktop": "Solo disponible en la versión Desktop.",
+      "authorization": {
+        "title_action": "alquiler",
+        "action": "alquilar"
+      }
     },
     "authorization_step": {
       "title": "Poner en alquiler",
