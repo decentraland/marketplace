@@ -948,6 +948,10 @@
     "notice": "We're currently under maintenance, we'll be back soon!"
   },
   "rental_modal": {
+    "authorization": {
+      "title_action": "rental",
+      "action": "rent"
+    },
     "confirm_rent_step": {
       "title": "Confirm Rent",
       "operator_address": "Operator Address",
@@ -972,11 +976,7 @@
         "title": "Manage Land",
         "subtitle": "Add an existing scene, or review permissions."
       },
-      "onlyAvailableOnDesktop": "Only available on Desktop.",
-      "authorization": {
-        "title_action": "rental",
-        "action": "rent"
-      }
+      "onlyAvailableOnDesktop": "Only available on Desktop."
     },
     "authorization_step": {
       "title": "List for Rent",

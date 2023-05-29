@@ -46,7 +46,8 @@ const MintItemModal = (props: Props) => {
     getContract,
     onBuyItem,
     onBuyItemWithCard,
-    onAuthorizedAction
+    onAuthorizedAction,
+    onClearItemErrors
   } = props
 
   const analytics = getAnalytics()
@@ -79,7 +80,8 @@ const MintItemModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    !!item &&
+    if (!!item) {
+      onClearItemErrors()
       onAuthorizedAction({
         targetContractName: ContractName.MANAToken,
         authorizationType: AuthorizationType.ALLOWANCE,
@@ -89,6 +91,7 @@ const MintItemModal = (props: Props) => {
         requiredAllowanceInWei: item.price,
         onAuthorized: handleExecuteOrder
       })
+    }
   }, [
     item,
     isBuyWithCardPage,
@@ -97,6 +100,7 @@ const MintItemModal = (props: Props) => {
     collectionStore.name,
     handleExecuteOrder,
     onAuthorizedAction,
+    onClearItemErrors,
     collectionStore.label
   ])
 

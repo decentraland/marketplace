@@ -10,7 +10,8 @@ import { isLoadingFeatureFlags as getLoadingFeatureFlags } from '../../../module
 import {
   buyItemRequest,
   buyItemWithCardRequest,
-  BUY_ITEM_REQUEST
+  BUY_ITEM_REQUEST,
+  clearItemErrors
 } from '../../../modules/item/actions'
 import { getLoading as getItemsLoading } from '../../../modules/item/selectors'
 import { getContract } from '../../../modules/contract/selectors'
@@ -40,6 +41,7 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBuyItem: item => dispatch(buyItemRequest(item)),
-  onBuyItemWithCard: item => dispatch(buyItemWithCardRequest(item))
+  onBuyItemWithCard: item => dispatch(buyItemWithCardRequest(item)),
+  onClearItemErrors: () => dispatch(clearItemErrors())
 })
 export default connect(mapState, mapDispatch)(MintItemModal)

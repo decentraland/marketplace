@@ -38,6 +38,7 @@ const ConfirmRentModal = ({
   onAuthorizedAction,
   getContract,
   isLoadingAuthorization,
+  onClearRentalErrors,
   error
 }: Props) => {
   const [operatorAddress, setOperatorAddress] = useState(wallet?.address)
@@ -81,9 +82,8 @@ const ConfirmRentModal = ({
     operatorAddress === ethers.constants.AddressZero
 
   const handleSubmit = useCallback(() => {
-    operatorAddress &&
-      mana &&
-      rentals &&
+    if (operatorAddress && mana && rentals) {
+      onClearRentalErrors()
       onAuthorizedAction({
         targetContractName: ContractName.MANAToken,
         authorizedAddress: rentals.address,
@@ -93,13 +93,15 @@ const ConfirmRentModal = ({
         authorizedContractLabel: rentals.label || rentals.name,
         onAuthorized: () => onSubmitTransaction(operatorAddress)
       })
+    } 
   }, [
     operatorAddress,
     pricePerRent,
     rentals,
     mana,
     onAuthorizedAction,
-    onSubmitTransaction
+    onSubmitTransaction,
+    onClearRentalErrors
   ])
 
   return (
@@ -219,7 +221,7 @@ export default React.memo(
     ConfirmRentModal,
     AuthorizedAction.RENT,
     {
-      title: 'rental_modal.authorization.title',
+      action: 'rental_modal.authorization.action',
       title_action: 'rental_modal.authorization.title_action'
     },
     getRentConfirmationStatus,

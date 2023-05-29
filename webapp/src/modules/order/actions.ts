@@ -167,3 +167,9 @@ export const cancelOrderFailure = (
 export type CancelOrderRequestAction = ReturnType<typeof cancelOrderRequest>
 export type CancelOrderSuccessAction = ReturnType<typeof cancelOrderSuccess>
 export type CancelOrderFailureAction = ReturnType<typeof cancelOrderFailure>
+
+export const CLEAR_ORDER_ERRORS = 'Clear Order Errors'
+
+export const clearOrderErrors = () => action(CLEAR_ORDER_ERRORS)
+
+export type ClearOrderErrorsAction = ReturnType<typeof clearOrderErrors>

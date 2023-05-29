@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { Contract } from '@dcl/schemas'
 import { RootState } from '../../../modules/reducer'
-import { acceptRentalListingRequest } from '../../../modules/rental/actions'
+import { acceptRentalListingRequest, clearRentalErrors } from '../../../modules/rental/actions'
 import { getWallet } from '../../../modules/wallet/selectors'
 import {
   isSubmittingTransaction,
@@ -40,7 +40,8 @@ const mapDispatch = (
           ownProps.metadata.selectedPeriodIndex,
           addressOperator
         )
-      )
+      ),
+    onClearRentalErrors: () => dispatch(clearRentalErrors())
   }
 }
 

@@ -4,6 +4,7 @@ import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/Moda
 import { NFT } from '../../../modules/nft/types'
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { getContract } from '../../../modules/contract/selectors'
+import { clearRentalErrors } from '../../../modules/rental/actions'
 
 export type Metadata = {
   nft: NFT
@@ -19,6 +20,7 @@ export type Props = Omit<ModalProps, 'metadata'> & {
   isSubmittingTransaction: boolean
   error: string | null
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
+  onClearRentalErrors: typeof clearRentalErrors
 } & WithAuthorizedActionProps
 
 export type OwnProps = Pick<Props, 'metadata'>
@@ -30,4 +32,4 @@ export type MapStateProps = Pick<
   | 'error'
   | 'getContract'
 >
-export type MapDispatchProps = Pick<Props, 'onSubmitTransaction'>
+export type MapDispatchProps = Pick<Props, 'onSubmitTransaction' | 'onClearRentalErrors'>

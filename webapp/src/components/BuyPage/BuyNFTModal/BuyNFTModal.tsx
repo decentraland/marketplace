@@ -47,7 +47,8 @@ const BuyNFTModal = (props: Props) => {
     getContract,
     onExecuteOrder,
     onExecuteOrderWithCard,
-    onAuthorizedAction
+    onAuthorizedAction,
+    onClearOrderErrors
   } = props
 
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
@@ -94,7 +95,8 @@ const BuyNFTModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    !!order &&
+    if (!!order) {
+      onClearOrderErrors()
       onAuthorizedAction({
         targetContractName: ContractName.MANAToken,
         authorizationType: AuthorizationType.ALLOWANCE,
@@ -104,9 +106,11 @@ const BuyNFTModal = (props: Props) => {
         requiredAllowanceInWei: order.price,
         onAuthorized: handleExecuteOrder
       })
+    }
   }, [
     handleExecuteOrder,
     onAuthorizedAction,
+    onClearOrderErrors,
     isBuyWithCardPage,
     order,
     mana,

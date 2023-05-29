@@ -80,7 +80,8 @@ const BidModal = (props: Props) => {
   }
 
   const handleConfirmBid = () => {
-    const { onAuthorizedAction } = props
+    const { onAuthorizedAction, onClearBidError } = props
+    onClearBidError()
     onAuthorizedAction({
       targetContractName: ContractName.MANAToken,
       authorizedAddress: bids.address,

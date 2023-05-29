@@ -13,6 +13,7 @@ const BidPage = (props: Props) => {
     onNavigate,
     onPlaceBid,
     isPlacingBid,
+    onClearBidError,
     getContract
   } = props
   return (
@@ -31,6 +32,7 @@ const BidPage = (props: Props) => {
                   onPlaceBid={onPlaceBid}
                   isPlacingBid={isPlacingBid}
                   getContract={getContract}
+                  onClearBidError={onClearBidError}
                 />
               )}
             </AssetProviderPage>
