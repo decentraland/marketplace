@@ -5,6 +5,7 @@ import { View } from '../ui/types'
 import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   CancelPickItemAsFavoriteAction,
+  CreateListClearAction,
   CreateListRequestAction,
   CreateListSuccessAction,
   DeleteListRequestAction,
@@ -21,6 +22,7 @@ import {
   UpdateListRequestAction,
   UpdateListSuccessAction,
   cancelPickItemAsFavorite,
+  createListClear,
   createListFailure,
   createListRequest,
   createListSuccess,
@@ -91,7 +93,11 @@ const requestActions = [
   fetchListsRequest(itemBrowseOptions),
   getListRequest(actionList.id),
   updateListRequest(actionList.id, actionList),
-  createListRequest('aListName', true)
+  createListRequest({
+    name: 'aListName',
+    isPrivate: true,
+    description: 'aDescription'
+  })
 ]
 
 beforeEach(() => {
@@ -156,7 +162,11 @@ const failureActions = [
     failure: updateListFailure(actionList.id, error)
   },
   {
-    request: createListRequest('aListName', true),
+    request: createListRequest({
+      name: 'aListName',
+      isPrivate: true,
+      description: 'aDescription'
+    }),
     failure: createListFailure(error)
   }
 ]
@@ -653,7 +663,11 @@ describe('when reducing the successful action of creating a list', () => {
       userAddress: 'anAddress',
       createdAt: Date.now()
     }
-    requestAction = createListRequest(list.name, true)
+    requestAction = createListRequest({
+      name: list.name,
+      isPrivate: true,
+      description: list.description
+    })
     successAction = createListSuccess(list)
     initialState = {
       ...initialState,
@@ -671,6 +685,41 @@ describe('when reducing the successful action of creating a list', () => {
           [list.id]: list
         }
       }
+    })
+  })
+})
+
+describe('when reducing the clear action of creating a list', () => {
+  let clearAction: CreateListClearAction
+  let requestAction: CreateListRequestAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'newName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = createListRequest({
+      name: list.name,
+      isPrivate: true,
+      description: list.description
+    })
+    clearAction = createListClear()
+    initialState = {
+      ...initialState,
+      loading: loadingReducer([], requestAction),
+      error: 'An error'
+    }
+  })
+
+  it('should return a state with the the updated list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, clearAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      error: null
     })
   })
 })

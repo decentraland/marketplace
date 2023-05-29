@@ -18,6 +18,7 @@
     "art": "Art",
     "cancel": "Cancel",
     "proceed": "Proceed",
+    "create": "Create",
     "continue": "Continue",
     "go_back": "Go back",
     "nft": "NFT",
@@ -1156,6 +1157,19 @@
       "title": "You don't have any saved items",
       "subtitle": "Discover amazing items.",
       "action": "Explore collectibles"
+    }
+  },
+  "create_list_modal": {
+    "title": "Create List",
+    "name": "List name",
+    "description": "List description",
+    "private": "Create as private list",
+    "info": {
+      "max_name_length": "List names can contain up to {max} characters.",
+      "max_description_length": "List descriptions can contain up to {max} characters."
+    },
+    "errors": {
+      "name_duplicated": "This name is already in use for another of your lists. <br></br> Choose a different name."
     }
   }
 }

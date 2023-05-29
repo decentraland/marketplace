@@ -16,9 +16,11 @@ import {
   getState,
   isPickingOrUnpicking,
   getLists,
-  getList
+  getList,
+  isLoadingCreateList
 } from './selectors'
 import {
+  createListRequest,
   fetchFavoritedItemsRequest,
   pickItemAsFavoriteRequest,
   undoUnpickingItemAsFavoriteRequest,
@@ -227,5 +229,33 @@ describe('when getting a list by id', () => {
     expect(getList(state, 'aListId')).toEqual(
       state.favorites.data.lists['aListId']
     )
+  })
+})
+
+describe('when getting if the create list request is being loaded', () => {
+  describe("and there's no create list request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = []
+    })
+
+    it('should return false', () => {
+      expect(isLoadingCreateList(state)).toBe(false)
+    })
+  })
+
+  describe("and there's a create list request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = [
+        createListRequest({
+          name: 'aName',
+          description: 'aDescription',
+          isPrivate: true
+        })
+      ]
+    })
+
+    it('should return true', () => {
+      expect(isLoadingCreateList(state)).toBe(true)
+    })
   })
 })
