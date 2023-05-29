@@ -90,8 +90,7 @@ const AssetCard = (props: Props) => {
     showRentalChip: showRentalBubble,
     onClick,
     isClaimingBackLandTransactionPending,
-    rental,
-    isFavoritesEnabled
+    rental
   } = props
 
   const title = getAssetName(asset)
@@ -117,7 +116,7 @@ const AssetCard = (props: Props) => {
         showOrderListedTag={showListedTag}
         showMonospace
       />
-      {isFavoritesEnabled && !isNFT(asset) ? (
+      {!isNFT(asset) ? (
         <FavoritesCounter className="FavoritesCounterBubble" item={asset} />
       ) : null}
       {showRentalBubble ? (

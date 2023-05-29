@@ -1,7 +1,7 @@
 import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { FavoritedItems, List, Permission } from '../../../favorites/types'
 import { ItemFilters } from '../item/types'
 import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from './api'
-import { FavoritedItems } from '../../../favorites/types'
 
 let itemId: string
 let identity: AuthIdentity
@@ -30,13 +30,15 @@ describe('when getting the items picked in a list', () => {
     let data: { results: FavoritedItems; total: number }
 
     beforeEach(() => {
-      data = { results: [{ itemId: listId }], total: 1 }
+      data = { results: [{ itemId: listId, createdAt: Date.now() }], total: 1 }
       fetchMock.mockResolvedValueOnce(data)
     })
 
-    it('should resolve the favorited item ids and the total favorited', () => {
+    it('should resolve the favorited item ids and the total favorited', async () => {
       const expectedUrl = `/v1/lists/${listId}/picks`
-      expect(favoritesAPI.getPicksByList(listId, filters)).resolves.toBe(data)
+      await expect(favoritesAPI.getPicksByList(listId, filters)).resolves.toBe(
+        data
+      )
       expect(fetchMock).toHaveBeenCalledWith(expectedUrl)
     })
   })
@@ -45,14 +47,16 @@ describe('when getting the items picked in a list', () => {
     let data: { results: FavoritedItems; total: number }
 
     beforeEach(() => {
-      data = { results: [{ itemId: listId }], total: 1 }
+      data = { results: [{ itemId: listId, createdAt: Date.now() }], total: 1 }
       filters = { ...filters, first: 25, skip: 10 }
       fetchMock.mockResolvedValueOnce(data)
     })
 
-    it('should resolve the favorited item ids and the total favorited', () => {
+    it('should resolve the favorited item ids and the total favorited', async () => {
       const expectedUrl = `/v1/lists/${listId}/picks?limit=${filters.first}&offset=${filters.skip}`
-      expect(favoritesAPI.getPicksByList(listId, filters)).resolves.toBe(data)
+      await expect(favoritesAPI.getPicksByList(listId, filters)).resolves.toBe(
+        data
+      )
       expect(fetchMock).toHaveBeenCalledWith(expectedUrl)
     })
   })
@@ -98,7 +102,9 @@ describe('when picking an item as favorite', () => {
     })
 
     it('should return void', () => {
-      expect(favoritesAPI.pickItemAsFavorite(itemId)).resolves.toBeUndefined()
+      return expect(
+        favoritesAPI.pickItemAsFavorite(itemId)
+      ).resolves.toBeUndefined()
     })
   })
 
@@ -108,7 +114,9 @@ describe('when picking an item as favorite', () => {
     })
 
     it('should catch the error and ignore it', () => {
-      expect(favoritesAPI.pickItemAsFavorite(itemId)).resolves.toBeUndefined()
+      return expect(
+        favoritesAPI.pickItemAsFavorite(itemId)
+      ).resolves.toBeUndefined()
     })
   })
 
@@ -119,7 +127,215 @@ describe('when picking an item as favorite', () => {
     })
 
     it('should throw the error', () => {
-      expect(favoritesAPI.pickItemAsFavorite(itemId)).rejects.toEqual(error)
+      return expect(favoritesAPI.pickItemAsFavorite(itemId)).rejects.toEqual(
+        error
+      )
+    })
+  })
+})
+
+describe('when getting the lists', () => {
+  describe('when the request fails', () => {
+    let error: { message: string; status: number }
+    beforeEach(() => {
+      error = {
+        message: 'An error ocurred',
+        status: 500
+      }
+      fetchMock.mockRejectedValue(error)
+    })
+
+    it('should reject with the request error', () => {
+      return expect(favoritesAPI.getLists()).rejects.toEqual(error)
+    })
+  })
+
+  describe('when the request succeeds', () => {
+    let response: { results: List[]; total: number }
+    beforeEach(() => {
+      response = {
+        results: [
+          {
+            id: 'aListId',
+            name: 'aName',
+            description: 'aDescription',
+            userAddress: 'anOwnerAddress',
+            createdAt: Date.now()
+          }
+        ],
+        total: 1
+      }
+      fetchMock.mockResolvedValueOnce(response)
+    })
+
+    it('should resolve with the lists and the total number of lists', () => {
+      return expect(favoritesAPI.getLists()).resolves.toEqual(response)
+    })
+  })
+})
+
+describe('when deleting a list', () => {
+  describe('and the request fails', () => {
+    let error: { message: string; status: number }
+    beforeEach(() => {
+      error = {
+        message: 'An error ocurred',
+        status: 500
+      }
+      fetchMock.mockRejectedValue(error)
+    })
+
+    it('should reject with the request error', () => {
+      return expect(favoritesAPI.deleteList('aListId')).rejects.toEqual(error)
+    })
+  })
+
+  describe('when the request succeeds', () => {
+    let response: { ok: true }
+    beforeEach(() => {
+      response = { ok: true }
+      fetchMock.mockResolvedValueOnce(response)
+    })
+
+    it('should resolve', () => {
+      return expect(favoritesAPI.deleteList('aListId')).resolves.toEqual(
+        response
+      )
+    })
+  })
+})
+
+describe('when getting a list', () => {
+  describe('and the request fails', () => {
+    let error: { message: string; status: number }
+    beforeEach(() => {
+      error = {
+        message: 'An error ocurred',
+        status: 500
+      }
+      fetchMock.mockRejectedValue(error)
+    })
+
+    it('should reject with the request error', () => {
+      return expect(favoritesAPI.getList('aListId')).rejects.toEqual(error)
+    })
+  })
+
+  describe('when the request succeeds', () => {
+    let response: { ok: true; data: List }
+    let list: List
+
+    beforeEach(() => {
+      list = {
+        id: 'aListId',
+        name: 'aName',
+        description: 'aDescription',
+        userAddress: 'anOwnerAddress',
+        createdAt: Date.now(),
+        permission: Permission.VIEW
+      }
+      response = { ok: true, data: list }
+      fetchMock.mockResolvedValueOnce(response)
+    })
+
+    it('should resolve with the retrieved list', () => {
+      return expect(favoritesAPI.getList(list.id)).resolves.toEqual(response)
+    })
+  })
+})
+
+describe('when updating a list', () => {
+  describe('and the request fails', () => {
+    let error: { message: string; status: number }
+
+    beforeEach(() => {
+      error = {
+        message: 'An error ocurred',
+        status: 500
+      }
+      fetchMock.mockRejectedValue(error)
+    })
+
+    it('should reject with the request error', () => {
+      return expect(favoritesAPI.updateList('aListId', {})).rejects.toEqual(
+        error
+      )
+    })
+  })
+
+  describe('when the request succeeds', () => {
+    let response: { ok: true; data: Partial<List> }
+    let list: List
+
+    beforeEach(() => {
+      list = {
+        id: 'aListId',
+        name: 'aName',
+        description: 'aDescription',
+        userAddress: 'anOwnerAddress',
+        createdAt: Date.now(),
+        permission: Permission.VIEW
+      }
+      response = { ok: true, data: list }
+      fetchMock.mockResolvedValueOnce(response)
+    })
+
+    it('should resolve with the retrieved list', () => {
+      return expect(favoritesAPI.updateList(list.id, list)).resolves.toEqual(
+        response
+      )
+    })
+  })
+})
+
+describe('when creating a list', () => {
+  describe('and the request fails', () => {
+    let error: { message: string; status: number }
+
+    beforeEach(() => {
+      error = {
+        message: 'An error ocurred',
+        status: 500
+      }
+      fetchMock.mockRejectedValue(error)
+    })
+
+    it('should reject with the request error', () => {
+      return expect(
+        favoritesAPI.createList({
+          name: 'aListName',
+          isPrivate: true,
+          description: 'aListDescription'
+        })
+      ).rejects.toEqual(error)
+    })
+  })
+
+  describe('when the request succeeds', () => {
+    let response: { ok: true; data: Partial<List> }
+    let list: List
+
+    beforeEach(() => {
+      list = {
+        id: 'aListId',
+        name: 'aName',
+        description: 'aDescription',
+        userAddress: 'anOwnerAddress',
+        createdAt: Date.now(),
+        permission: Permission.VIEW
+      }
+      response = { ok: true, data: list }
+      fetchMock.mockResolvedValueOnce(response)
+    })
+
+    it('should resolve with the retrieved list', () => {
+      return expect(
+        favoritesAPI.createList({
+          name: list.name,
+          isPrivate: true,
+          description: list.description
+        })
+      ).resolves.toEqual(response)
     })
   })
 })

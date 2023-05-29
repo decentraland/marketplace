@@ -12,7 +12,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { buyItemWithCardFailure } from '../item/actions'
 import { locations } from '../routing/locations'
-import { assetSaga } from './sagas'
+import { assetSaga, failStatuses } from './sagas'
 import { AssetType } from './types'
 import { executeOrderWithCardFailure } from '../order/actions'
 
@@ -37,6 +37,7 @@ const mockNFTPurchase: NFTPurchase = {
   status: PurchaseStatus.PENDING,
   gateway: NetworkGatewayType.TRANSAK,
   txHash: 'aTxHash',
+  paymentMethod: 'aPaymentMethod',
   nft: {
     contractAddress: mockContractAddress,
     itemId: mockTokenId,
@@ -141,68 +142,76 @@ describe('when handling the set purchase action', () => {
     })
   })
 
-  describe('when the purchase of an item failed', () => {
-    it('should dispatch an action signaling the failure of the item', () => {
-      return expectSaga(assetSaga)
-        .provide([
-          [
-            select(getLocation),
-            {
-              pathname: mockPathname()
-            }
-          ]
-        ])
-        .put(buyItemWithCardFailure(t('global.unknown_error')))
-        .put(
-          push(
-            locations.buyWithCard(
-              AssetType.ITEM,
-              mockContractAddress,
-              mockTokenId
+  describe.each([
+    PurchaseStatus.FAILED,
+    PurchaseStatus.CANCELLED,
+    PurchaseStatus.REFUNDED
+  ])(
+    'when the purchase of an item has a status %s',
+    (status: PurchaseStatus) => {
+      it('should dispatch an action signaling the failure of the item', () => {
+        return expectSaga(assetSaga)
+          .provide([
+            [
+              select(getLocation),
+              {
+                pathname: mockPathname()
+              }
+            ]
+          ])
+          .put(buyItemWithCardFailure(t('global.unknown_error')))
+          .put(
+            push(
+              locations.buyWithCard(
+                AssetType.ITEM,
+                mockContractAddress,
+                mockTokenId
+              )
             )
           )
-        )
-        .dispatch(
-          setPurchase({ ...mockNFTPurchase, status: PurchaseStatus.FAILED })
-        )
-        .run({ silenceTimeout: true })
-    })
-  })
+          .dispatch(setPurchase({ ...mockNFTPurchase, status }))
+          .run({ silenceTimeout: true })
+      })
+    }
+  )
 
-  describe('when the purchase of an nft failed', () => {
-    it('should dispatch an action signaling the failure of the nft', () => {
-      return expectSaga(assetSaga)
-        .provide([
-          [
-            select(getLocation),
-            {
-              pathname: mockPathname(AssetType.NFT)
-            }
-          ]
-        ])
-        .put(executeOrderWithCardFailure(t('global.unknown_error')))
-        .put(
-          push(
-            locations.buyWithCard(
-              AssetType.NFT,
-              mockContractAddress,
-              mockTokenId
+  describe.each(failStatuses)(
+    'when the purchase of an nft has a status %s',
+    status => {
+      it('should dispatch an action signaling the failure of the nft', () => {
+        return expectSaga(assetSaga)
+          .provide([
+            [
+              select(getLocation),
+              {
+                pathname: mockPathname(AssetType.NFT)
+              }
+            ]
+          ])
+          .put(executeOrderWithCardFailure(t('global.unknown_error')))
+          .put(
+            push(
+              locations.buyWithCard(
+                AssetType.NFT,
+                mockContractAddress,
+                mockTokenId
+              )
             )
           )
-        )
-        .dispatch(
-          setPurchase({
-            ...mockNFTPurchase,
-            status: PurchaseStatus.FAILED,
-            nft: {
-              ...mockNFTPurchase.nft,
-              tokenId: mockTokenId,
-              itemId: undefined,
-              tradeType: TradeType.SECONDARY
-            }
-          })
-        )
-        .run({ silenceTimeout: true })
-    })
-  })
+          .dispatch(
+            setPurchase({
+              ...mockNFTPurchase,
+              status,
+              nft: {
+                ...mockNFTPurchase.nft,
+                tokenId: mockTokenId,
+                itemId: undefined,
+                tradeType: TradeType.SECONDARY
+              }
+            })
+          )
+          .run({ silenceTimeout: true })
+      })
+    }
+  )
 })

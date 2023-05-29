@@ -94,11 +94,13 @@ const CollectionPage = (props: Props) => {
                 <>
                   <Section>
                     <Column>
-                      <Back absolute onClick={onBack} />
                       <div className={styles.headerContainer}>
                         <Row stacked>
                           <Column>
                             <Row>
+                              <div className={styles.backBtnContainer}>
+                                <Back onClick={onBack} />
+                              </div>
                               <Header size="large">{collection.name}</Header>
                               {collection.isOnSale && (
                                 <Badge color={Color.SUMMER_RED}>

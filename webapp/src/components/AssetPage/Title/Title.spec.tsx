@@ -11,22 +11,19 @@ jest.mock('decentraland-ui/dist/components/Media')
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
 
 function renderTitle(props: Partial<TitleProps> = {}) {
-  return renderWithProviders(
-    <Title asset={{} as Asset} isFavoritesEnabled={false} {...props} />,
-    {
-      preloadedState: {
-        favorites: {
-          ...INITIAL_STATE,
-          data: {
-            items: {
-              '0xContractAddress-itemId': { pickedByUser: false, count: 35 }
-            },
-            total: 0
+  return renderWithProviders(<Title asset={{} as Asset} {...props} />, {
+    preloadedState: {
+      favorites: {
+        ...INITIAL_STATE,
+        data: {
+          lists: {},
+          items: {
+            '0xContractAddress-itemId': { pickedByUser: false, count: 35 }
           }
         }
       }
     }
-  )
+  })
 }
 
 describe('Title', () => {
@@ -41,66 +38,51 @@ describe('Title', () => {
   })
 
   it('should render the Asset Name', () => {
-    const { getByText } = renderTitle({ asset, isFavoritesEnabled: true })
+    const { getByText } = renderTitle({ asset })
     expect(getByText(getAssetName(asset))).toBeInTheDocument()
   })
 
-  describe('when the dispositive is mobile', () => {
+  describe('when the device is mobile', () => {
     beforeEach(() => {
       useMobileMediaQueryMock.mockReturnValue(true)
     })
 
     it('should not render the favorites counter', () => {
       const { queryByTestId } = renderTitle({
-        asset,
-        isFavoritesEnabled: false
+        asset
       })
       expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
     })
   })
 
-  describe('when the dispositive is not mobile', () => {
+  describe('when the device is not mobile', () => {
     beforeEach(() => {
       useMobileMediaQueryMock.mockReturnValue(false)
     })
 
-    describe('and the favorites feature flag is not enabled', () => {
+    describe('and the asset is an nft', () => {
+      beforeEach(() => {
+        asset = { ...asset, tokenId: 'tokenId' } as Asset
+      })
+
       it('should not render the favorites counter', () => {
         const { queryByTestId } = renderTitle({
-          asset,
-          isFavoritesEnabled: false
+          asset
         })
         expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
       })
     })
 
-    describe('and the favorites feature flag is enabled', () => {
-      describe('and the asset is an nft', () => {
-        beforeEach(() => {
-          asset = { ...asset, tokenId: 'tokenId' } as Asset
-        })
-
-        it('should not render the favorites counter', () => {
-          const { queryByTestId } = renderTitle({
-            asset,
-            isFavoritesEnabled: true
-          })
-          expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
-        })
+    describe('and the asset is an item', () => {
+      beforeEach(() => {
+        asset = { ...asset, itemId: 'itemId' } as Asset
       })
 
-      describe('and the asset is an item', () => {
-        beforeEach(() => {
-          asset = { ...asset, itemId: 'itemId' } as Asset
+      it('should render the favorites counter', () => {
+        const { getByTestId } = renderTitle({
+          asset
         })
-
-        it('should render the favorites counter', () => {
-          const { getByTestId } = renderTitle({
-            asset,
-            isFavoritesEnabled: true
-          })
-          expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
-        })
+        expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
       })
     })
   })

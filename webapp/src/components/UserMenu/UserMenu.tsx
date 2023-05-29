@@ -5,12 +5,7 @@ import { Icon } from 'decentraland-ui'
 import { Props } from './UserMenu.types'
 
 const UserMenu = (props: Props) => {
-  const {
-    isFavoritesEnabled,
-    onClickMyAssets,
-    onClickMyLists,
-    ...baseProps
-  } = props
+  const { onClickMyAssets, onClickMyLists, ...baseProps } = props
 
   const menuItems = useMemo(
     () => (
@@ -19,15 +14,13 @@ const UserMenu = (props: Props) => {
           <Icon name="briefcase"></Icon>
           {t('user_menu.my_assets')}
         </li>
-        {isFavoritesEnabled ? (
-          <li onClick={onClickMyLists} role="button" data-testid="my-lists">
-            <Icon name="bookmark"></Icon>
-            {t('user_menu.my_lists')}
-          </li>
-        ) : null}
+        <li onClick={onClickMyLists} role="button" data-testid="my-lists">
+          <Icon name="bookmark"></Icon>
+          {t('user_menu.my_lists')}
+        </li>
       </>
     ),
-    [isFavoritesEnabled, onClickMyAssets, onClickMyLists]
+    [onClickMyAssets, onClickMyLists]
   )
 
   return <BaseUserMenu {...baseProps} menuItems={menuItems} />

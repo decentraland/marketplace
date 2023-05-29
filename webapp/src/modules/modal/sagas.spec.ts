@@ -7,11 +7,27 @@ import {
   claimAssetSuccess,
   upsertRentalSuccess,
   removeRentalSuccess,
-  acceptRentalListingSuccess
+  acceptRentalListingSuccess,
+  CLAIM_ASSET_SUCCESS,
+  UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
+import { CREATE_LIST_SUCCESS } from '../favorites/actions'
 import { UpsertRentalOptType } from '../rental/types'
 import { closeAllModals, closeModal, openModal } from './actions'
 import { modalSaga } from './sagas'
+
+describe.each([
+  CLAIM_ASSET_SUCCESS,
+  UPSERT_RENTAL_SUCCESS,
+  CREATE_LIST_SUCCESS
+])('when handling the success action of the %s action', actionType => {
+  it('should put the action to close all modals', () => {
+    return expectSaga(modalSaga)
+      .put(closeAllModals())
+      .dispatch({ type: actionType })
+      .silentRun()
+  })
+})
 
 describe('when handling the success action of the claim LAND', () => {
   let nft: NFT
@@ -71,23 +87,6 @@ describe('when handling the success action of a rental creation', () => {
     return expectSaga(modalSaga)
       .put(closeAllModals())
       .dispatch(upsertRentalSuccess(nft, rental, UpsertRentalOptType.INSERT))
-      .silentRun()
-  })
-})
-
-describe('when handling the success action of a rental edit', () => {
-  let nft: NFT
-  let rental: RentalListing
-
-  beforeEach(() => {
-    nft = { id: 'aNftId' } as NFT
-    rental = { id: 'aRentalId' } as RentalListing
-  })
-
-  it('should put the action to close all modals', () => {
-    return expectSaga(modalSaga)
-      .put(closeAllModals())
-      .dispatch(upsertRentalSuccess(nft, rental, UpsertRentalOptType.EDIT))
       .silentRun()
   })
 })

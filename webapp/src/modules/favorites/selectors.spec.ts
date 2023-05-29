@@ -14,9 +14,13 @@ import {
   getListId,
   getLoading,
   getState,
-  isPickingOrUnpicking
+  isPickingOrUnpicking,
+  getLists,
+  getList,
+  isLoadingCreateList
 } from './selectors'
 import {
+  createListRequest,
   fetchFavoritedItemsRequest,
   pickItemAsFavoriteRequest,
   undoUnpickingItemAsFavoriteRequest,
@@ -39,6 +43,15 @@ beforeEach(() => {
           },
           item2: {},
           item3: {}
+        },
+        lists: {
+          ...INITIAL_STATE.data.lists,
+          listId: {
+            id: 'aListId',
+            name: 'aListName',
+            description: 'aListDescription',
+            ownerAddress: 'anOwnerAddress'
+          }
         }
       },
       error: 'anError',
@@ -201,6 +214,48 @@ describe.each([
 
     it('should return true', () => {
       expect(isPickingOrUnpicking(state, itemId)).toBe(true)
+    })
+  })
+})
+
+describe('when getting the lists', () => {
+  it('should return the lists', () => {
+    expect(getLists(state)).toEqual(state.favorites.data.lists)
+  })
+})
+
+describe('when getting a list by id', () => {
+  it('should return the list', () => {
+    expect(getList(state, 'aListId')).toEqual(
+      state.favorites.data.lists['aListId']
+    )
+  })
+})
+
+describe('when getting if the create list request is being loaded', () => {
+  describe("and there's no create list request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = []
+    })
+
+    it('should return false', () => {
+      expect(isLoadingCreateList(state)).toBe(false)
+    })
+  })
+
+  describe("and there's a create list request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = [
+        createListRequest({
+          name: 'aName',
+          description: 'aDescription',
+          isPrivate: true
+        })
+      ]
+    })
+
+    it('should return true', () => {
+      expect(isLoadingCreateList(state)).toBe(true)
     })
   })
 })

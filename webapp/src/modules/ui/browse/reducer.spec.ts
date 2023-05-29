@@ -3,7 +3,9 @@ import { AssetType } from '../../asset/types'
 import {
   fetchFavoritedItemsSuccess,
   unpickItemAsFavoriteSuccess,
-  undoUnpickingItemAsFavoriteSuccess
+  undoUnpickingItemAsFavoriteSuccess,
+  fetchListsSuccess,
+  deleteListSuccess
 } from '../../favorites/actions'
 import {
   fetchItemsRequest,
@@ -16,6 +18,7 @@ import { NFT, NFTsFetchOptions } from '../../nft/types'
 import { browse } from '../../routing/actions'
 import { VendorName } from '../../vendor'
 import { Section } from '../../vendor/decentraland'
+import { List } from '../../favorites/types'
 import { setView } from '../actions'
 import { View } from '../types'
 import { BrowseUIState, INITIAL_STATE, browseReducer } from './reducer'
@@ -753,6 +756,109 @@ describe('when reducing the action of the success of the undo of the unpicking o
         ...initialState,
         count: 2
       })
+    })
+  })
+})
+
+describe('when reducing the action of the success of getting the lists', () => {
+  let initialState: BrowseUIState
+  let browseOptions: ItemBrowseOptions
+  let lists: List[]
+  let total: number
+
+  beforeEach(() => {
+    initialState = { ...INITIAL_STATE }
+  })
+
+  describe('and its loading more results', () => {
+    beforeEach(() => {
+      total = 2
+      lists = [
+        {
+          id: 'anotherListId',
+          name: 'aName',
+          description: 'aDescription',
+          userAddress: 'anAddress',
+          createdAt: Date.now()
+        }
+      ]
+      initialState = {
+        ...initialState,
+        listIds: ['aListId'],
+        page: 1,
+        count: 1
+      }
+      browseOptions = { page: 2 }
+    })
+
+    it('should return a state with its count set and the list ids of the new lists appended to the existent ones', () => {
+      expect(
+        browseReducer(
+          initialState,
+          fetchListsSuccess(lists, total, browseOptions)
+        )
+      ).toEqual({
+        ...initialState,
+        listIds: ['aListId', 'anotherListId'],
+        count: 2
+      })
+    })
+  })
+
+  describe('and its loading a fresh batch of results', () => {
+    beforeEach(() => {
+      total = 1
+      lists = [
+        {
+          id: 'anotherListId',
+          name: 'aName',
+          description: 'aDescription',
+          userAddress: 'anAddress',
+          createdAt: Date.now()
+        }
+      ]
+      initialState = { ...initialState, listIds: [], page: undefined, count: 0 }
+      browseOptions = { page: 1 }
+    })
+
+    it('should return a state with its count set and the list ids of the new lists', () => {
+      expect(
+        browseReducer(
+          initialState,
+          fetchListsSuccess(lists, total, browseOptions)
+        )
+      ).toEqual({
+        ...initialState,
+        listIds: ['anotherListId'],
+        count: 1
+      })
+    })
+  })
+})
+
+describe('when reducing the action of the success of deleting a list', () => {
+  let list: List
+  let initialState: BrowseUIState
+
+  beforeEach(() => {
+    list = {
+      id: 'anotherListId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+
+    initialState = {
+      ...initialState,
+      listIds: [list.id]
+    }
+  })
+
+  it('should return a state where the id of the deleted list is not part of the list ids', () => {
+    expect(browseReducer(initialState, deleteListSuccess(list))).toEqual({
+      ...initialState,
+      listIds: []
     })
   })
 })

@@ -2,17 +2,42 @@ import { Item, Network } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
+import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   CancelPickItemAsFavoriteAction,
+  CreateListClearAction,
+  CreateListRequestAction,
+  CreateListSuccessAction,
+  DeleteListRequestAction,
+  DeleteListSuccessAction,
   FetchFavoritedItemsRequestAction,
   FetchFavoritedItemsSuccessAction,
+  FetchListsRequestAction,
+  FetchListsSuccessAction,
+  GetListRequestAction,
+  GetListSuccessAction,
   PickItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteSuccessAction,
+  UpdateListRequestAction,
+  UpdateListSuccessAction,
   cancelPickItemAsFavorite,
+  createListClear,
+  createListFailure,
+  createListRequest,
+  createListSuccess,
+  deleteListFailure,
+  deleteListRequest,
+  deleteListSuccess,
   fetchFavoritedItemsFailure,
   fetchFavoritedItemsRequest,
   fetchFavoritedItemsSuccess,
+  fetchListsFailure,
+  fetchListsRequest,
+  fetchListsSuccess,
+  getListFailure,
+  getListRequest,
+  getListSuccess,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -21,16 +46,13 @@ import {
   undoUnpickingItemAsFavoriteSuccess,
   unpickItemAsFavoriteFailure,
   unpickItemAsFavoriteRequest,
-  unpickItemAsFavoriteSuccess
+  unpickItemAsFavoriteSuccess,
+  updateListFailure,
+  updateListRequest,
+  updateListSuccess
 } from './actions'
 import { FavoritesState, INITIAL_STATE, favoritesReducer } from './reducer'
-import {
-  FetchItemRequestAction,
-  FetchItemSuccessAction,
-  fetchItemRequest,
-  fetchItemSuccess,
-  fetchItemsSuccess
-} from '../item/actions'
+import { List } from './types'
 
 let createdAt: Record<string, number>
 let initialState: FavoritesState
@@ -52,13 +74,30 @@ const item: Item = {
   }
 } as Item
 
+const actionList: List = {
+  id: 'aListId',
+  name: 'aName',
+  description: 'aDescription',
+  userAddress: 'anAddress',
+  createdAt: Date.now()
+}
+
 const error = 'anErrorMessage'
 
 const requestActions = [
+  deleteListRequest(actionList),
   pickItemAsFavoriteRequest(item),
   unpickItemAsFavoriteRequest(item),
   undoUnpickingItemAsFavoriteRequest(item),
-  fetchFavoritedItemsRequest(itemBrowseOptions)
+  fetchFavoritedItemsRequest(itemBrowseOptions),
+  fetchListsRequest(itemBrowseOptions),
+  getListRequest(actionList.id),
+  updateListRequest(actionList.id, actionList),
+  createListRequest({
+    name: 'aListName',
+    isPrivate: true,
+    description: 'aDescription'
+  })
 ]
 
 beforeEach(() => {
@@ -105,6 +144,30 @@ const failureActions = [
   {
     request: fetchFavoritedItemsRequest(itemBrowseOptions),
     failure: fetchFavoritedItemsFailure(error)
+  },
+  {
+    request: fetchListsRequest(itemBrowseOptions),
+    failure: fetchListsFailure(error)
+  },
+  {
+    request: deleteListRequest(actionList),
+    failure: deleteListFailure(error)
+  },
+  {
+    request: getListRequest(actionList.id),
+    failure: getListFailure(actionList.id, error)
+  },
+  {
+    request: updateListRequest(actionList.id, actionList),
+    failure: updateListFailure(actionList.id, error)
+  },
+  {
+    request: createListRequest({
+      name: 'aListName',
+      isPrivate: true,
+      description: 'aDescription'
+    }),
+    failure: createListFailure(error)
   }
 ]
 
@@ -151,13 +214,13 @@ describe.each(pickAndUndoSuccessActions)(
       initialState = {
         ...INITIAL_STATE,
         data: {
+          lists: {},
           items: {
             [item.id]: {
               pickedByUser: false,
               count: 0
             }
-          },
-          total: 0
+          }
         }
       }
     })
@@ -186,8 +249,7 @@ describe.each(pickAndUndoSuccessActions)(
                 count: 1,
                 createdAt: currentDate
               }
-            },
-            total: 1
+            }
           }
         })
       })
@@ -210,8 +272,7 @@ describe.each(pickAndUndoSuccessActions)(
                 pickedByUser: true,
                 count: 1
               }
-            },
-            total: 1
+            }
           }
         })
       })
@@ -267,8 +328,7 @@ describe('when reducing the successful action of unpicking the item as favorite'
               pickedByUser: false,
               count: 0
             }
-          },
-          total: 0
+          }
         }
       })
     })
@@ -279,13 +339,13 @@ describe('when reducing the successful action of unpicking the item as favorite'
       initialState = {
         ...initialState,
         data: {
+          ...initialState.data,
           items: {
             [item.id]: {
               pickedByUser: true,
               count: 1
             }
-          },
-          total: 1
+          }
         }
       }
     })
@@ -302,8 +362,7 @@ describe('when reducing the successful action of unpicking the item as favorite'
               pickedByUser: false,
               count: 0
             }
-          },
-          total: 0
+          }
         }
       })
     })
@@ -368,6 +427,7 @@ describe('when reducing the successful action of fetching the favorited items', 
     initialState = {
       ...initialState,
       data: {
+        ...initialState.data,
         items: {
           [item.id]: {
             pickedByUser: false,
@@ -386,14 +446,13 @@ describe('when reducing the successful action of fetching the favorited items', 
             count: 0,
             createdAt: undefined
           }
-        },
-        total: 1
+        }
       },
       loading: loadingReducer([], requestAction)
     }
   })
 
-  it('should return a state with the total and the loading state cleared with the createdAt property set for the favorited items', () => {
+  it('should return a state with the loading state cleared with the createdAt property set for the favorited items', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
@@ -406,9 +465,261 @@ describe('when reducing the successful action of fetching the favorited items', 
             count: 2,
             createdAt: createdAt[item.id]
           }
-        },
-        total
+        }
       }
+    })
+  })
+})
+
+describe('when reducing the successful action of fetching lists', () => {
+  let requestAction: FetchListsRequestAction
+  let successAction: FetchListsSuccessAction
+  let newList: List
+  let total: number
+
+  beforeEach(() => {
+    newList = {
+      id: 'aListId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    total = 2
+    requestAction = fetchListsRequest(itemBrowseOptions)
+    successAction = fetchListsSuccess([newList], total, {})
+
+    initialState = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        lists: {
+          anotherList: {
+            id: 'anId',
+            name: 'aName',
+            description: 'aDescription',
+            userAddress: 'anAddress',
+            createdAt: Date.now()
+          }
+        }
+      },
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return a state with the old and the new lists', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          ...initialState.data.lists,
+          [newList.id]: newList
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of deleting a list', () => {
+  let requestAction: DeleteListRequestAction
+  let successAction: DeleteListSuccessAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = deleteListRequest(list)
+    successAction = deleteListSuccess(list)
+    initialState = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        lists: {
+          anId: {
+            id: 'anId',
+            name: 'aName',
+            description: 'aDescription',
+            userAddress: 'anAddress',
+            createdAt: Date.now()
+          },
+          [list.id]: list
+        }
+      },
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return a state without the deleted list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          [initialState.data.lists['anId'].id]: initialState.data.lists['anId']
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of getting a list', () => {
+  let requestAction: GetListRequestAction
+  let successAction: GetListSuccessAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = getListRequest(list.id)
+    successAction = getListSuccess(list)
+    initialState = {
+      ...initialState,
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return a state with the the new list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          [list.id]: list
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of updating a list', () => {
+  let requestAction: UpdateListRequestAction
+  let successAction: UpdateListSuccessAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'newName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = updateListRequest(list.id, list)
+    successAction = updateListSuccess(list)
+    initialState = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        lists: {
+          ...initialState.data.lists,
+          [list.id]: {
+            ...list,
+            name: 'oldName'
+          }
+        }
+      },
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return a state with the the updated list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          [list.id]: list
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of creating a list', () => {
+  let requestAction: CreateListRequestAction
+  let successAction: CreateListSuccessAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'newName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = createListRequest({
+      name: list.name,
+      isPrivate: true,
+      description: list.description
+    })
+    successAction = createListSuccess(list)
+    initialState = {
+      ...initialState,
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return a state with the the updated list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        lists: {
+          [list.id]: list
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the clear action of creating a list', () => {
+  let clearAction: CreateListClearAction
+  let requestAction: CreateListRequestAction
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'newName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now()
+    }
+    requestAction = createListRequest({
+      name: list.name,
+      isPrivate: true,
+      description: list.description
+    })
+    clearAction = createListClear()
+    initialState = {
+      ...initialState,
+      loading: loadingReducer([], requestAction),
+      error: 'An error'
+    }
+  })
+
+  it('should return a state with the the updated list and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, clearAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      error: null
     })
   })
 })

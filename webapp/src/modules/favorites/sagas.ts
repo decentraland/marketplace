@@ -6,6 +6,7 @@ import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { isErrorWithMessage } from '../../lib/error'
 import { ItemBrowseOptions } from '../item/types'
 import {
   closeModal,
@@ -39,10 +40,30 @@ import {
   unpickItemAsFavoriteFailure,
   UnpickItemAsFavoriteRequestAction,
   unpickItemAsFavoriteSuccess,
-  UNPICK_ITEM_AS_FAVORITE_REQUEST
+  UNPICK_ITEM_AS_FAVORITE_REQUEST,
+  FETCH_LISTS_REQUEST,
+  fetchListsFailure,
+  fetchListsSuccess,
+  FetchListsRequestAction,
+  DeleteListRequestAction,
+  deleteListFailure,
+  deleteListSuccess,
+  DELETE_LIST_REQUEST,
+  GetListRequestAction,
+  GET_LIST_REQUEST,
+  getListFailure,
+  getListSuccess,
+  UpdateListRequestAction,
+  UPDATE_LIST_REQUEST,
+  updateListFailure,
+  updateListSuccess,
+  CreateListRequestAction,
+  createListFailure,
+  createListSuccess,
+  CREATE_LIST_REQUEST
 } from './actions'
 import { getListId } from './selectors'
-import { FavoritedItems } from './types'
+import { FavoritedItems, List } from './types'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const itemAPI = new ItemAPI(NFT_SERVER_URL, {
@@ -73,6 +94,11 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     FETCH_FAVORITED_ITEMS_REQUEST,
     handleFetchFavoritedItemsRequest
   )
+  yield takeEvery(FETCH_LISTS_REQUEST, handleFetchListsRequest)
+  yield takeEvery(DELETE_LIST_REQUEST, handleDeleteListRequest)
+  yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
+  yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
+  yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
 
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
@@ -110,7 +136,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       yield call([favoritesAPI, 'pickItemAsFavorite'], item.id)
       yield put(pickItemAsFavoriteSuccess(item))
     } catch (error) {
-      yield put(pickItemAsFavoriteFailure(item, (error as Error).message))
+      yield put(
+        pickItemAsFavoriteFailure(
+          item,
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
     }
   }
 
@@ -125,7 +156,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
       yield put(unpickItemAsFavoriteSuccess(item))
     } catch (error) {
-      yield put(unpickItemAsFavoriteFailure(item, (error as Error).message))
+      yield put(
+        unpickItemAsFavoriteFailure(
+          item,
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
     }
   }
 
@@ -197,7 +233,106 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         )
       )
     } catch (error) {
-      yield put(fetchFavoritedItemsFailure((error as Error).message))
+      yield put(
+        fetchFavoritedItemsFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleFetchListsRequest(action: FetchListsRequestAction) {
+    const { options } = action.payload
+
+    try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+
+      const { results, total }: { results: List[]; total: number } = yield call(
+        [favoritesAPI, 'getLists'],
+        options.filters
+      )
+
+      yield put(fetchListsSuccess(results, total, options))
+    } catch (error) {
+      yield put(
+        fetchListsFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleDeleteListRequest(action: DeleteListRequestAction) {
+    const { list } = action.payload
+
+    try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+      yield call([favoritesAPI, 'deleteList'], list.id)
+      yield put(deleteListSuccess(list))
+    } catch (error) {
+      yield put(
+        deleteListFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleGetListRequest(action: GetListRequestAction) {
+    const { id } = action.payload
+
+    try {
+      const list: List = yield call([favoritesAPI, 'getList'], id)
+      yield put(getListSuccess(list))
+    } catch (error) {
+      yield put(
+        getListFailure(
+          id,
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleUpdateListRequest(action: UpdateListRequestAction) {
+    const { id, updatedList } = action.payload
+
+    try {
+      const list: List = yield call(
+        [favoritesAPI, 'updateList'],
+        id,
+        updatedList
+      )
+      yield put(updateListSuccess(list))
+    } catch (error) {
+      yield put(
+        updateListFailure(
+          id,
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleCreateListRequest(action: CreateListRequestAction) {
+    const { name, isPrivate, description } = action.payload
+    try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+      const list: List = yield call([favoritesAPI, 'createList'], {
+        name,
+        isPrivate,
+        description
+      })
+      yield put(createListSuccess(list))
+    } catch (error) {
+      yield put(
+        createListFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
     }
   }
 }

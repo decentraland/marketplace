@@ -1,6 +1,7 @@
 import { action } from 'typesafe-actions'
 import { Item } from '@dcl/schemas'
 import { ItemBrowseOptions } from '../item/types'
+import { List } from './types'
 
 // Pick item as Favorite Request
 export const PICK_ITEM_AS_FAVORITE_REQUEST =
@@ -136,3 +137,117 @@ export type FetchFavoritedItemsSuccessAction = ReturnType<
 export type FetchFavoritedItemsFailureAction = ReturnType<
   typeof fetchFavoritedItemsFailure
 >
+
+// Fetch lists
+
+export const FETCH_LISTS_REQUEST = '[Request] Fetch Lists'
+export const FETCH_LISTS_SUCCESS = '[Success] Fetch Lists'
+export const FETCH_LISTS_FAILURE = '[Failure] Fetch Lists'
+
+export const fetchListsRequest = (options: ItemBrowseOptions) =>
+  action(FETCH_LISTS_REQUEST, { options })
+
+export const fetchListsSuccess = (
+  lists: List[],
+  total: number,
+  options: ItemBrowseOptions
+) =>
+  action(FETCH_LISTS_SUCCESS, {
+    lists,
+    total,
+    options
+  })
+
+export const fetchListsFailure = (error: string) =>
+  action(FETCH_LISTS_FAILURE, { error })
+
+export type FetchListsRequestAction = ReturnType<typeof fetchListsRequest>
+export type FetchListsSuccessAction = ReturnType<typeof fetchListsSuccess>
+export type FetchListsFailureAction = ReturnType<typeof fetchListsFailure>
+
+// Delete list
+
+export const DELETE_LIST_REQUEST = '[Request] Delete List'
+export const DELETE_LIST_SUCCESS = '[Success] Delete List'
+export const DELETE_LIST_FAILURE = '[Failure] Delete List'
+
+export const deleteListRequest = (list: List) =>
+  action(DELETE_LIST_REQUEST, { list })
+
+export const deleteListSuccess = (list: List) =>
+  action(DELETE_LIST_SUCCESS, {
+    list
+  })
+
+export const deleteListFailure = (error: string) =>
+  action(DELETE_LIST_FAILURE, { error })
+
+export type DeleteListRequestAction = ReturnType<typeof deleteListRequest>
+export type DeleteListSuccessAction = ReturnType<typeof deleteListSuccess>
+export type DeleteListFailureAction = ReturnType<typeof deleteListFailure>
+
+// Get List
+export const GET_LIST_REQUEST = '[Request] Get List'
+export const GET_LIST_SUCCESS = '[Success] Get List'
+export const GET_LIST_FAILURE = '[Failure] Get List'
+
+export const getListRequest = (id: string) => action(GET_LIST_REQUEST, { id })
+
+export const getListSuccess = (list: List) =>
+  action(GET_LIST_SUCCESS, {
+    list
+  })
+
+export const getListFailure = (id: string, error: string) =>
+  action(GET_LIST_FAILURE, { id, error })
+
+export type GetListRequestAction = ReturnType<typeof getListRequest>
+export type GetListSuccessAction = ReturnType<typeof getListSuccess>
+export type GetListFailureAction = ReturnType<typeof getListFailure>
+
+// Update List
+export const UPDATE_LIST_REQUEST = '[Request] Update List'
+export const UPDATE_LIST_SUCCESS = '[Success] Update List'
+export const UPDATE_LIST_FAILURE = '[Failure] Update List'
+
+export const updateListRequest = (id: string, updatedList: Partial<List>) =>
+  action(UPDATE_LIST_REQUEST, { id, updatedList })
+
+export const updateListSuccess = (list: List) =>
+  action(UPDATE_LIST_SUCCESS, { list })
+
+export const updateListFailure = (id: string, error: string) =>
+  action(UPDATE_LIST_FAILURE, { id, error })
+
+export type UpdateListRequestAction = ReturnType<typeof updateListRequest>
+export type UpdateListSuccessAction = ReturnType<typeof updateListSuccess>
+export type UpdateListFailureAction = ReturnType<typeof updateListFailure>
+
+// Create List
+export const CREATE_LIST_REQUEST = '[Request] Create List'
+export const CREATE_LIST_SUCCESS = '[Success] Create List'
+export const CREATE_LIST_FAILURE = '[Failure] Create List'
+export const CREATE_LIST_CLEAR = '[Clear] Create List'
+
+export const createListRequest = ({
+  name,
+  isPrivate,
+  description
+}: {
+  name: string
+  isPrivate: boolean
+  description?: string
+}) => action(CREATE_LIST_REQUEST, { name, description, isPrivate })
+
+export const createListSuccess = (list: List) =>
+  action(CREATE_LIST_SUCCESS, { list })
+
+export const createListFailure = (error: string) =>
+  action(CREATE_LIST_FAILURE, { error })
+
+export const createListClear = () => action(CREATE_LIST_CLEAR)
+
+export type CreateListRequestAction = ReturnType<typeof createListRequest>
+export type CreateListSuccessAction = ReturnType<typeof createListSuccess>
+export type CreateListFailureAction = ReturnType<typeof createListFailure>
+export type CreateListClearAction = ReturnType<typeof createListClear>
