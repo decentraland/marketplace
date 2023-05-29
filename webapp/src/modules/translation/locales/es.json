@@ -943,6 +943,10 @@
     "notice": "Estamos en mantenimiento, volveremos pronto!"
   },
   "rental_modal": {
+    "authorization": {
+      "title_action": "alquiler",
+      "action": "alquilar"
+    },
     "confirm_rent_step": {
       "title": "Confirmar renta",
       "operator_address": "Dirección del operador",
@@ -967,11 +971,7 @@
         "title": "Administrar Land",
         "subtitle": "Agregue escenas existentees o revise los permisos."
       },
-      "onlyAvailableOnDesktop": "Solo disponible en la versión Desktop.",
-      "authorization": {
-        "title_action": "alquiler",
-        "action": "alquilar"
-      }
+      "onlyAvailableOnDesktop": "Solo disponible en la versión Desktop."
     },
     "authorization_step": {
       "title": "Poner en alquiler",

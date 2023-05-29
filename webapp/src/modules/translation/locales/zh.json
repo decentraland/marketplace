@@ -946,6 +946,10 @@
     "notice": "我们目前正在维护中，我们会很快回来！"
   },
   "rental_modal": {
+    "authorization": {
+      "title_action": "租金",
+      "action": "租"
+    },
     "confirm_rent_step": {
       "title": "期间确认租金",
       "operator_address": "运营商地址",
@@ -970,11 +974,7 @@
         "title": "管理土地",
         "subtitle": "添加现有场景，或查看权限。"
       },
-      "onlyAvailableOnDesktop": "僅在桌面上可用",
-      "authorization": {
-        "title_action": "租金",
-        "action": "租"
-      }
+      "onlyAvailableOnDesktop": "僅在桌面上可用"
     },
     "authorization_step": {
       "title": "出租",
