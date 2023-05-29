@@ -48,11 +48,11 @@ describe('when the create list procedure is loading', () => {
     ).toHaveAttribute('disabled')
   })
 
-  it('should render the name input as disabled', () => {
+  it('should render the description input as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0]
-    ).toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID)).toHaveAttribute(
+      'disabled'
+    )
   })
 
   it('should render the checkbox input as disabled', () => {
@@ -64,12 +64,10 @@ describe('when the create list procedure is loading', () => {
 
   it('should render the accept button as disabled and loading', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).toHaveAttribute(
-      'disabled'
-    )
-    expect(getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).toHaveClass(
-      'loading'
-    )
+    const acceptButton = getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
+
+    expect(acceptButton).toHaveAttribute('disabled')
+    expect(acceptButton).toHaveClass('loading')
   })
 
   it('should render the cancel button as disabled', () => {
@@ -101,10 +99,10 @@ describe('when the create list procedure is not loading', () => {
     ).not.toHaveAttribute('disabled')
   })
 
-  it('should render the name input as not disabled', () => {
+  it('should render the description input as not disabled', () => {
     const { getByTestId } = renderedModal
     expect(
-      getByTestId(CREATE_LIST_NAME_DATA_TEST_ID).children[0]
+      getByTestId(CREATE_LIST_DESCRIPTION_DATA_TEST_ID)
     ).not.toHaveAttribute('disabled')
   })
 
@@ -117,12 +115,10 @@ describe('when the create list procedure is not loading', () => {
 
   it('should render the accept button as not disabled nor loading', () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).not.toHaveClass(
-      'loading'
-    )
-    expect(
-      getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
-    ).not.toHaveAttribute('disabled')
+    const acceptButton = getByTestId(CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
+
+    expect(acceptButton).not.toHaveClass('loading')
+    expect(acceptButton).not.toHaveAttribute('disabled')
   })
 
   it('should render the cancel button as not disabled', () => {
