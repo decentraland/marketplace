@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { Item, RentalListing } from '@dcl/schemas'
+import { Item, Network, RentalListing } from '@dcl/schemas'
 import { useInView } from 'react-intersection-observer'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
@@ -217,11 +217,13 @@ const AssetCard = (props: Props) => {
                   className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}
                 >
                   <span className={'textOverflow'}>{title}</span>
-                  {!isNFT(asset) && isCatalogItem(asset) && (
-                    <span className="creator">
-                      <Profile address={asset.creator} textOnly />
-                    </span>
-                  )}
+                  {!isNFT(asset) &&
+                    isCatalogItem(asset) &&
+                    asset.network === Network.MATIC && (
+                      <span className="creator">
+                        <Profile address={asset.creator} textOnly />
+                      </span>
+                    )}
                 </div>
                 {!isCatalogItem(asset) && price ? (
                   <Mana network={asset.network} inline>
