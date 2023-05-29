@@ -68,18 +68,19 @@ const CreateListModal = ({
     () => setShowMaxLengthDescriptionInfo(false),
     [setShowMaxLengthDescriptionInfo]
   )
+  const handleClose = useCallback(() => {
+    if (!isLoading) {
+      onClose()
+    }
+  }, [isLoading, onClose])
 
   const isNameDuplicatedError = error?.includes(DUPLICATED_ERROR)
 
   return (
-    <Modal
-      size="tiny"
-      className={styles.modal}
-      onClose={!isLoading ? onClose : undefined}
-    >
+    <Modal size="tiny" className={styles.modal} onClose={handleClose}>
       <ModalNavigation
         title={t('create_list_modal.title')}
-        onClose={!isLoading ? onClose : undefined}
+        onClose={handleClose}
       />
       <Modal.Content className={styles.content}>
         <Field
@@ -146,7 +147,7 @@ const CreateListModal = ({
       </Modal.Content>
       <Modal.Actions>
         <Button
-          onClick={onClose}
+          onClick={handleClose}
           data-testid={CREATE_LIST_CANCEL_BUTTON_DATA_TEST_ID}
           disabled={isLoading}
         >
