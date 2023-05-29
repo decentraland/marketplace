@@ -57,7 +57,9 @@ import {
   CREATE_LIST_SUCCESS,
   createListFailure,
   createListRequest,
-  createListSuccess
+  createListSuccess,
+  CREATE_LIST_CLEAR,
+  createListClear
 } from './actions'
 import { List, Permission } from './types'
 
@@ -390,6 +392,16 @@ describe('when creating the action to signal a successful create list request', 
       type: CREATE_LIST_SUCCESS,
       meta: undefined,
       payload: { list }
+    })
+  })
+})
+
+describe('when creating the action to signal a create list clear', () => {
+  it('should return an object representing the action', () => {
+    expect(createListClear()).toEqual({
+      type: CREATE_LIST_CLEAR,
+      meta: undefined,
+      payload: undefined
     })
   })
 })

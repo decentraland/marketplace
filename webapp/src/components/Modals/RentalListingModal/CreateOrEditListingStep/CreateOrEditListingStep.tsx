@@ -178,7 +178,7 @@ const CreateListingStep = (props: Props) => {
           <ManaField
             type="text"
             label={t('rental_modal.create_listing_step.price_per_day')}
-            maxLength="20"
+            maxLength={20}
             placeholder={1000}
             network={nft.network}
             autoFocus
