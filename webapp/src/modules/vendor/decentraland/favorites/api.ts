@@ -1,7 +1,8 @@
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
 import { isAPIError } from '../../../../lib/error'
-import { FavoritedItems, List, ListsFilters } from '../../../favorites/types'
+import { FavoritedItems, List } from '../../../favorites/types'
+import { ListsOptions, PicksOptions } from './types'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
   'DEFAULT_FAVORITES_LIST_ID'
@@ -14,14 +15,17 @@ export const MARKETPLACE_FAVORITES_SERVER_URL = config.get(
 const ALREADY_PICKED_STATUS_CODE = 422
 
 export class FavoritesAPI extends BaseClient {
-  private buildURLWithParameters(endpoint: string, filters: ListsFilters) {
+  private buildURLWithParameters(
+    endpoint: string,
+    _options: ListsOptions | PicksOptions
+  ) {
     const queryParams = new URLSearchParams()
-    if (filters.first) {
-      queryParams.append('limit', filters.first.toString())
+    if (options.first !== undefined) {
+      queryParams.append('limit', options.first.toString())
     }
 
-    if (filters.skip) {
-      queryParams.append('offset', filters.skip.toString())
+    if (options.skip !== undefined) {
+      queryParams.append('offset', options.skip.toString())
     }
 
     return endpoint + (queryParams.toString() && `?${queryParams.toString()}`)
@@ -76,19 +80,23 @@ export class FavoritesAPI extends BaseClient {
 
   async getPicksByList(
     listId: string,
-    filters: ListsFilters = {}
+    filters: PicksOptions = {}
   ): Promise<{
     results: FavoritedItems
     total: number
   }> {
     return this.fetch(
-      this.buildURLWithParameters(`/v1/lists/${listId}/picks`, filters)
+      this.buildURLWithParameters(`/v1/lists/${listId}/picks`, {
+        first: filters.first,
+        skip: filters.skip
+      })
     )
   }
 
   async getLists(
-    filters: ListsFilters = {}
+    filters: ListsOptions = {}
   ): Promise<{ results: List[]; total: number }> {
+    console.log('Filters', filters)
     return this.fetch(this.buildURLWithParameters('/v1/lists', filters))
   }
 

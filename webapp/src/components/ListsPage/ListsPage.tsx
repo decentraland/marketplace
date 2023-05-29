@@ -2,24 +2,25 @@ import React, { useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Button, Dropdown, Header, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { PAGE_SIZE } from '../../modules/vendor/api'
 import { NavigationTab } from '../Navigation/Navigation.types'
+import { PageLayout } from '../PageLayout'
 import { Props } from './ListsPage.types'
 import styles from './ListsPage.module.css'
-import { PageLayout } from '../PageLayout'
 
 const ListsPage = ({ count, lists, fetchLists }: Props) => {
   const { search } = useLocation()
-  const [_page, limit, offset] = useMemo(() => {
+  const [page, first] = useMemo(() => {
     const params = new URLSearchParams(search)
     const page = parseInt(params.get('page') ?? '1')
-    const limit = parseInt(params.get('limit') ?? '24')
-    const offset = (page - 1) * limit
-    return [page, limit, offset]
+    const first = parseInt(params.get('first') ?? PAGE_SIZE.toString())
+    const offset = (page - 1) * first
+    return [page, first, offset]
   }, [search])
 
   useEffect(() => {
-    fetchLists({ limit, offset })
-  }, [limit, offset, fetchLists])
+    fetchLists({ page, first })
+  }, [first, page, fetchLists])
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
@@ -43,7 +44,7 @@ const ListsPage = ({ count, lists, fetchLists }: Props) => {
             ]}
             defaultValue="recently_updated"
           />
-          <Button size="small" primary icon="plus">
+          <Button size="small" primary>
             <Icon name="plus" />
             {t('lists_page.create_list')}
           </Button>

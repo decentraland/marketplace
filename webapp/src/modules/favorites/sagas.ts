@@ -250,7 +250,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
       const { results, total }: { results: List[]; total: number } = yield call(
         [favoritesAPI, 'getLists'],
-        options.filters
+        {
+          first: options.first,
+          skip: (options.page - 1) * options.first
+        }
       )
 
       yield put(fetchListsSuccess(results, total, options))
