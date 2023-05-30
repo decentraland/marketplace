@@ -276,7 +276,7 @@ const AssetImage = (props: Props) => {
             : {
                 contractAddress: asset.contractAddress,
 
-                itemId: itemId,
+                itemId,
                 tokenId: tokenId
               }
 
