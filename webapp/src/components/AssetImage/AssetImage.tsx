@@ -29,10 +29,10 @@ import ListedBadge from '../ListedBadge'
 import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import { JumpIn } from '../AssetPage/JumpIn'
+import { getEthereumItemUrn } from './utils'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import AvailableForMintPopup from './AvailableForMintPopup'
 import './AssetImage.css'
-import { getUrn } from './utils'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -264,17 +264,14 @@ const AssetImage = (props: Props) => {
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
 
-        const urn = getUrn(asset)
-        console.log('urn: ', urn)
+        const urn = !isNFT(asset) ? getEthereumItemUrn(asset) : ''
 
         const wearablePreviewProps =
           !isNFT(asset) && asset.network === Network.ETHEREUM
             ? {
-                urns: [
-                  'urn:decentraland:ethereum:collections-v1:mf_sammichgamer:mf_sammichtorso'
-                ],
+                urns: [urn],
                 background: Rarity.getColor(asset.rarity),
-                type: PreviewType.WEARABLE
+                type: isTryingOn ? PreviewType.AVATAR : PreviewType.WEARABLE
               }
             : {
                 contractAddress: asset.contractAddress,
@@ -299,7 +296,7 @@ const AssetImage = (props: Props) => {
               onLoad={handleLoad}
               onError={handleError}
               {...wearablePreviewProps}
-              // dev={config.is(Env.DEVELOPMENT)}
+              dev={config.is(Env.DEVELOPMENT)}
             />
             {isAvailableForMint ? (
               <AvailableForMintPopup

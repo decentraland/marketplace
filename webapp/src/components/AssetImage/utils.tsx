@@ -1,15 +1,10 @@
-import { Network } from '@dcl/schemas'
-import { Asset } from '../../modules/asset/types'
+import { Item } from '@dcl/schemas'
 
-export const getUrn = (item: Asset) => {
-  let regex
-  if (item.network === Network.MATIC) {
-    regex = /urn:decentraland:matic:collections-v2:[^/]+/
-  } else {
-    regex = /urn:decentraland:ethereum:collections-v1:[^/]+/
-  }
-  if ('image' in item) {
-    const match = item.image.match(regex)
+export const getEthereumItemUrn = (item: Item) => {
+  let regex = /urn:decentraland:ethereum:collections-v1:[^/]+/
+
+  if ('thumbnail' in item) {
+    const match = item.thumbnail.match(regex)
     return match ? match[0] : ''
   }
   return ''
