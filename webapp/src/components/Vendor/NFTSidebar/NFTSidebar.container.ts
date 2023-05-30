@@ -2,7 +2,11 @@ import { connect } from 'react-redux'
 
 import { RootState } from '../../../modules/reducer'
 import { browse } from '../../../modules/routing/actions'
-import { getVendor, getSection } from '../../../modules/routing/selectors'
+import {
+  getVendor,
+  getSection,
+  getCurrentSearch
+} from '../../../modules/routing/selectors'
 import {
   MapStateProps,
   MapDispatch,
@@ -13,7 +17,8 @@ import NFTSidebar from './NFTSidebar'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   vendor: getVendor(state),
-  section: ownProps.section || getSection(state)
+  section: ownProps.section || getSection(state),
+  search: getCurrentSearch(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
