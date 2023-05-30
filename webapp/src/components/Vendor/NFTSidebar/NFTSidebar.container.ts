@@ -5,7 +5,7 @@ import { browse } from '../../../modules/routing/actions'
 import {
   getVendor,
   getSection,
-  getCurrentBrowseOptions
+  getCurrentSearch
 } from '../../../modules/routing/selectors'
 import {
   MapStateProps,
@@ -18,7 +18,7 @@ import NFTSidebar from './NFTSidebar'
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   vendor: getVendor(state),
   section: ownProps.section || getSection(state),
-  browseOptions: getCurrentBrowseOptions(state)
+  browseOptions: getCurrentSearch(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

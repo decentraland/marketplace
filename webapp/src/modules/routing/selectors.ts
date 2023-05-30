@@ -563,6 +563,16 @@ export const getCurrentBrowseOptions = createSelector(
     } as BrowseOptions)
 )
 
+export const getCurrentSearch = createSelector(
+  [getAssetsUrlParams],
+  AssetsUrlParams => {
+    const { search } = AssetsUrlParams
+    return {
+      search
+    } as BrowseOptions
+  }
+)
+
 export const hasFiltersEnabled = createSelector<
   RootState,
   BrowseOptions,
