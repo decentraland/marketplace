@@ -227,6 +227,7 @@ export type UpdateListFailureAction = ReturnType<typeof updateListFailure>
 export const CREATE_LIST_REQUEST = '[Request] Create List'
 export const CREATE_LIST_SUCCESS = '[Success] Create List'
 export const CREATE_LIST_FAILURE = '[Failure] Create List'
+export const CREATE_LIST_CLEAR = '[Clear] Create List'
 
 export const createListRequest = ({
   name,
@@ -244,6 +245,9 @@ export const createListSuccess = (list: List) =>
 export const createListFailure = (error: string) =>
   action(CREATE_LIST_FAILURE, { error })
 
+export const createListClear = () => action(CREATE_LIST_CLEAR)
+
 export type CreateListRequestAction = ReturnType<typeof createListRequest>
 export type CreateListSuccessAction = ReturnType<typeof createListSuccess>
 export type CreateListFailureAction = ReturnType<typeof createListFailure>
+export type CreateListClearAction = ReturnType<typeof createListClear>

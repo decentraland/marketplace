@@ -1,5 +1,12 @@
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Account, Avatar, Profile } from '@dcl/schemas'
-import { fromProfilesToCreators, sumAccountMetrics } from './utils'
+import { NFTResult } from '../vendor/decentraland'
+import {
+  enhanceCreatorName,
+  fromProfilesToCreators,
+  sumAccountMetrics
+} from './utils'
+import { CreatorAccount } from './types'
 
 describe('when summing account metrics', () => {
   it('should return an account metric with its values added from the provided account metrics', () => {
@@ -65,5 +72,44 @@ describe('when transforming profiles and accounts objects to creators entities',
         collections: collectionsAmount
       }
     ])
+  })
+})
+
+describe('when enhancing creator name', () => {
+  let creator: CreatorAccount
+  let ens: NFTResult[]
+  let search: string
+  beforeEach(() => {
+    creator = {
+      name: 'aName',
+      address: 'anAddress',
+      collections: 1
+    }
+    ens = [
+      {
+        nft: {
+          owner: creator.address,
+          name: 'aName'
+        }
+      } as NFTResult
+    ]
+    search = 'aName'
+  })
+  describe('when the creator name does not contain the search', () => {
+    beforeEach(() => {
+      creator.name = 'anotherName'
+    })
+    it('should enhance the name and add the profile name at the end', () => {
+      enhanceCreatorName(creator, ens, search)
+      expect(creator.name).toEqual(
+        `aName (${t('global.currently')} anotherName)`
+      )
+    })
+  })
+  describe('when the creator name contains the search', () => {
+    it('should not change the creator name', () => {
+      enhanceCreatorName(creator, ens, search)
+      expect(creator.name).toEqual('aName')
+    })
   })
 })

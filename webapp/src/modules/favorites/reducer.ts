@@ -61,9 +61,11 @@ import {
   CreateListRequestAction,
   CreateListSuccessAction,
   CreateListFailureAction,
+  CreateListClearAction,
   CREATE_LIST_FAILURE,
   CREATE_LIST_SUCCESS,
-  CREATE_LIST_REQUEST
+  CREATE_LIST_REQUEST,
+  CREATE_LIST_CLEAR
 } from './actions'
 import { FavoritesData, List } from './types'
 import { GET_LIST_REQUEST } from './actions'
@@ -114,6 +116,7 @@ type FavoritesReducerAction =
   | CreateListRequestAction
   | CreateListSuccessAction
   | CreateListFailureAction
+  | CreateListClearAction
 
 export function favoritesReducer(
   state = INITIAL_STATE,
@@ -281,6 +284,17 @@ export function favoritesReducer(
           ...state.data,
           lists
         },
+        loading: loadingReducer(state.loading, action)
+      }
+    }
+
+    case CREATE_LIST_CLEAR: {
+      return {
+        ...state,
+        data: {
+          ...state.data
+        },
+        error: null,
         loading: loadingReducer(state.loading, action)
       }
     }
