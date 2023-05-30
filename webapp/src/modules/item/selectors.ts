@@ -7,9 +7,9 @@ import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
 import {
   BUY_ITEM_REQUEST,
-  FETCH_ITEMS_REQUEST,
+  FETCH_COLLECTION_ITEMS_REQUEST,
   FETCH_ITEM_REQUEST,
-  FetchItemsRequestAction
+  FetchCollectionItemsRequestAction
 } from './actions'
 
 export const getState = (state: RootState) => state.item
@@ -47,8 +47,8 @@ export const isFetchingItemsOfCollection = (
 ) =>
   getLoading(state).find(
     action =>
-      action.type === FETCH_ITEMS_REQUEST &&
-      (action as FetchItemsRequestAction).payload.filters?.contractAddresses?.includes(
+      action.type === FETCH_COLLECTION_ITEMS_REQUEST &&
+      (action as FetchCollectionItemsRequestAction).payload?.contractAddresses?.includes(
         contractAddress
       )
   ) !== undefined
