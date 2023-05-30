@@ -1,6 +1,10 @@
 import { Item } from '@dcl/schemas'
 import { RootState } from '../reducer'
-import { fetchItemRequest, fetchItemsRequest } from './actions'
+import {
+  fetchCollectionItemsRequest,
+  fetchItemRequest,
+  fetchItemsRequest
+} from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
   getData,
@@ -126,7 +130,7 @@ describe('when getting if the items of a collection are being fetched', () => {
   describe("and they're being fetched", () => {
     beforeEach(() => {
       state.item.loading.push(
-        fetchItemsRequest({ filters: { contractAddresses: [contractAddress] } })
+        fetchCollectionItemsRequest({ contractAddresses: [contractAddress] })
       )
     })
 
