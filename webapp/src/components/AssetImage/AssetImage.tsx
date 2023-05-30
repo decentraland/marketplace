@@ -277,7 +277,7 @@ const AssetImage = (props: Props) => {
                 contractAddress: asset.contractAddress,
 
                 itemId,
-                tokenId: tokenId
+                tokenId
               }
 
         wearablePreview = (
