@@ -18,7 +18,7 @@ import NFTSidebar from './NFTSidebar'
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   vendor: getVendor(state),
   section: ownProps.section || getSection(state),
-  browseOptions: getCurrentSearch(state)
+  search: getCurrentSearch(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

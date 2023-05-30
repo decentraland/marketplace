@@ -567,9 +567,7 @@ export const getCurrentSearch = createSelector(
   [getAssetsUrlParams],
   AssetsUrlParams => {
     const { search } = AssetsUrlParams
-    return {
-      search
-    } as BrowseOptions
+    return search
   }
 )
 
