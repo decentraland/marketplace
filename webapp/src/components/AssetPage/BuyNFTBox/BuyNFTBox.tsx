@@ -9,6 +9,7 @@ import clock from '../../../images/clock.png'
 import makeOffer from '../../../images/makeOffer.png'
 import { locations } from '../../../modules/routing/locations'
 import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
+import { AssetType } from '../../../modules/asset/types'
 import { ManaToFiat } from '../../ManaToFiat'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
@@ -116,7 +117,10 @@ const BuyNFTBox = ({ nft, address }: Props) => {
             </div>
           </div>
           <BuyNFTButtons
-            asset={nft}
+            assetType={AssetType.NFT}
+            contractAddress={nft.contractAddress}
+            network={nft.network}
+            tokenId={nft.tokenId}
             buyWithCardClassName={styles.buyWithCardClassName}
           />
           {canBid && (

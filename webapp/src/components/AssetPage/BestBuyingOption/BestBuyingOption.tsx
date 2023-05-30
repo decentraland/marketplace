@@ -24,6 +24,7 @@ import noListings from '../../../images/noListings.png'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BuyOptions, Props } from './BestBuyingOption.types'
@@ -51,6 +52,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   }
 
   useEffect(() => {
+    let cancel = false
     if (asset && !isNFT(asset)) {
       if (asset.available > 0 && asset.isOnSale) {
         setBuyOption(BuyOptions.MINT)
@@ -75,6 +77,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
           .fetchOrders(params, sortBy)
           .then(response => {
             if (response.data.length > 0) {
+              if (cancel) return
               setBuyOption(BuyOptions.BUY_LISTING)
               setListing({ order: response.data[0], total: response.total })
               bidAPI
@@ -86,19 +89,23 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                   '1'
                 )
                 .then(response => {
+                  if (cancel) return
                   setMostExpensiveBid(response.data[0])
                 })
-                .finally(() => setIsLoading(false))
+                .finally(() => !cancel && setIsLoading(false))
                 .catch(error => {
                   console.error(error)
                 })
             }
           })
-          .finally(() => setIsLoading(false))
+          .finally(() => !cancel && setIsLoading(false))
           .catch(error => {
             console.error(error)
           })
       }
+    }
+    return () => {
+      cancel = true
     }
   }, [asset])
 
@@ -264,7 +271,10 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             </div>
           </div>
           <BuyNFTButtons
-            asset={asset}
+            assetType={AssetType.NFT}
+            contractAddress={asset.contractAddress}
+            network={asset.network}
+            tokenId={listing.order.tokenId}
             buyWithCardClassName={styles.buyWithCardClassName}
           />
           <Button
