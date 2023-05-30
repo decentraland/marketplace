@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from 'react'
-import { BodyShape, EmotePlayMode, NFTCategory } from '@dcl/schemas'
+import { BodyShape, EmotePlayMode, NFTCategory, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
@@ -117,7 +117,7 @@ const ItemDetail = ({ item }: Props) => {
             }
           >
             <div className={styles.basicRow}>
-              <Owner asset={item} />
+              {item.network === Network.MATIC ? <Owner asset={item} /> : null}
               <Collection asset={item} />
             </div>
             <BestBuyingOption asset={item} tableRef={tableRef} />
