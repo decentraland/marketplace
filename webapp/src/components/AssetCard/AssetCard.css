@@ -3,6 +3,10 @@
   overflow: visible;
 }
 
+.ui.card.AssetCard.catalog {
+  height: 360px;
+}
+
 .AssetCard.ui.card > .content.catalog {
   padding: 14px 14px 18px 14px;
 }
@@ -28,7 +32,6 @@
 .ui.card.AssetCard > .content,
 .ui.cards > .card.AssetCard > .content {
   height: 185px;
-  transition: height 0.3s !important;
 }
 
 .ui.card.AssetCard > .content > .header:not(.ui),
@@ -193,6 +196,7 @@
 @media (min-width: 1199px) {
   .AssetCard:hover .AssetImage.catalog {
     height: 161px;
+    transition: none;
     transition: height 0.3s !important;
   }
 
@@ -202,9 +206,6 @@
     height: 0px;
     opacity: 0;
     transition: height 0.1s, opacity 0.6s;
-  }
-  .ui.card.AssetCard.catalog {
-    height: 360px;
   }
   .AssetCard:hover .extraInformation {
     visibility: visible;
@@ -240,7 +241,7 @@
   .ui.card.AssetCard:hover > .content.catalog,
   .ui.cards > .card.AssetCard:hover > .content.catalog {
     position: absolute;
-    height: 198px;
+    height: 206px;
     margin-top: 161px;
     width: 100%;
     background-color: var(--card);
@@ -256,6 +257,10 @@
 }
 
 @media (max-width: 1199px) {
+  .AssetCard .AssetImage.catalog,
+  .AssetImage.catalog .image-wrapper {
+    height: 123px;
+  }
   .AssetCard .LandBubble {
     align-self: center;
     font-size: x-small;
@@ -289,6 +294,9 @@
 }
 
 @media (max-width: 768px) {
+  .ui.card.AssetCard.catalog {
+    height: 345px;
+  }
   .AssetCard.ui.card > .content.catalog,
   .ui.cards > .AssetCard.card > .content.catalog {
     display: flex;
