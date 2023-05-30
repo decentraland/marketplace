@@ -18,25 +18,34 @@ beforeEach(() => {
   } as RootState
 })
 
-describe('when getting buy item status', () => {
-  describe('and a execute order request is loading', () => {
-    it('should return WAITING status', () => {
+describe('when getting the buy item status', () => {
+  describe('and an execute order request is loading', () => {
+    beforeEach(() => {
       rootState.order.loading = [executeOrderRequest({} as Order, {} as NFT)]
+    })
+
+    it('should return WAITING status', () => {
       expect(getBuyItemStatus(rootState)).toEqual(AuthorizationStepStatus.WAITING)
     })
   })
 
-  describe('and there is an error in buy item flow', () => {
-    it('should return ERROR status', () => {
+  describe('and there is an error in the buy item flow', () => {
+    beforeEach(() => {
       rootState.order.error = 'Some test error'
+    })
+
+    it('should return ERROR status', () => {
       expect(getBuyItemStatus(rootState)).toEqual(AuthorizationStepStatus.ERROR)
     })
   })
 
-  describe('and there is no error and loading field is empty', () => {
-    it('should return PENDING status', () => {
+  describe('and there is no error and the loading field is empty', () => {
+    beforeEach(() => {
       rootState.order.loading = []
       rootState.order.error = null
+    })
+
+    it('should return PENDING status', () => {
       expect(getBuyItemStatus(rootState)).toEqual(AuthorizationStepStatus.PENDING)
     })
   })

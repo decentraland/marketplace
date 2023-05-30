@@ -17,25 +17,34 @@ beforeEach(() => {
   } as RootState
 })
 
-describe('when getting bid status', () => {
+describe('when getting the bid status', () => {
   describe('and a place bid request is loading', () => {
-    it('should return WAITING status', () => {
+    beforeEach(() => {
       rootState.bid.loading = [placeBidRequest({} as NFT, 1, 2)]
+    })
+
+    it('should return WAITING status', () => {
       expect(getBidStatus(rootState)).toEqual(AuthorizationStepStatus.WAITING)
     })
   })
 
-  describe('and there is an error in place bid flow', () => {
-    it('should return ERROR status', () => {
+  describe('and there is an error in the place bid flow', () => {
+    beforeEach(() => {
       rootState.bid.error = 'Some test error'
+    })
+
+    it('should return ERROR status', () => {
       expect(getBidStatus(rootState)).toEqual(AuthorizationStepStatus.ERROR)
     })
   })
 
-  describe('and there is no error and loading field is empty', () => {
-    it('should return PENDING status', () => {
+  describe('and there is no error and the loading field is empty', () => {
+    beforeEach(() => {
       rootState.bid.loading = []
       rootState.bid.error = null
+    })
+
+    it('should return PENDING status', () => {
       expect(getBidStatus(rootState)).toEqual(AuthorizationStepStatus.PENDING)
     })
   })

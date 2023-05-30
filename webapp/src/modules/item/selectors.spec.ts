@@ -138,25 +138,34 @@ describe('when getting if the items of a collection are being fetched', () => {
   })
 })
 
-describe('when getting mint item status', () => {
+describe('when getting the mint item status', () => {
   describe('and a mint item request is loading', () => {
-    it('should return WAITING status', () => {
+    beforeEach(() => {
       state.item.loading = [buyItemRequest({} as Item)]
+    })
+
+    it('should return WAITING status', () => {
       expect(getMintItemStatus(state)).toEqual(AuthorizationStepStatus.WAITING)
     })
   })
 
-  describe('and there is an error in buy item flow', () => {
-    it('should return ERROR status', () => {
+  describe('and there is an error in mint item flow', () => {
+    beforeEach(() => {
       state.item.error = 'Some test error'
+    })
+
+    it('should return ERROR status', () => {
       expect(getMintItemStatus(state)).toEqual(AuthorizationStepStatus.ERROR)
     })
   })
 
-  describe('and there is no error and loading field is empty', () => {
-    it('should return PENDING status', () => {
+  describe('and there is no error and the loading field is empty', () => {
+    beforeEach(() => {
       state.item.loading = []
       state.item.error = null
+    })
+
+    it('should return PENDING status', () => {
       expect(getMintItemStatus(state)).toEqual(AuthorizationStepStatus.PENDING)
     })
   })

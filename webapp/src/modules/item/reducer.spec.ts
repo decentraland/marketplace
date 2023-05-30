@@ -32,7 +32,7 @@ import {
   fetchTrendingItemsRequest,
   fetchTrendingItemsSuccess
 } from './actions'
-import { INITIAL_STATE, itemReducer } from './reducer'
+import { INITIAL_STATE, ItemState, itemReducer } from './reducer'
 
 const itemBrowseOptions = {
   view: View.MARKET,
@@ -245,11 +245,18 @@ describe('when reducing the successful action of fetching trending items', () =>
 })
 
 describe('when reducing a clear item errors action', () => {
-  it("should set error field as null", () => {
-    const stateWithError = {
+  let state: ItemState
+
+  beforeEach(() => {
+    state = {
       ...INITIAL_STATE,
       error: 'Some test error'
     }
-    expect(itemReducer(stateWithError, clearItemErrors())).toEqual(expect.objectContaining({ error: null }))
+  })
+
+  it('should set the error field as null', () => {
+    expect(itemReducer(state, clearItemErrors())).toEqual(
+      expect.objectContaining({ error: null })
+    )
   })
 })
