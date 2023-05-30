@@ -1,5 +1,7 @@
 import { Account, Profile } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ethers } from 'ethers'
+import { NFTResult } from '../vendor/decentraland'
 import { AccountMetrics, CreatorAccount } from './types'
 
 export function sumAccountMetrics(a: AccountMetrics, b: AccountMetrics) {
@@ -33,4 +35,23 @@ export function fromProfilesToCreators(
         )?.collections || 0
     }))
     .filter(account => account.collections > 0)
+}
+
+export function enhanceCreatorName(
+  creator: CreatorAccount,
+  ens: NFTResult[],
+  search: string
+) {
+  if (!creator.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
+    const ensThatMatch = ens.find(
+      nft =>
+        nft.nft.owner === creator.address &&
+        nft.nft.name.toLowerCase().includes(search.toLocaleLowerCase())
+    )
+    if (ensThatMatch) {
+      creator.name = `${ensThatMatch.nft.name} (${t('global.currently')} ${
+        creator.name
+      })`
+    }
+  }
 }

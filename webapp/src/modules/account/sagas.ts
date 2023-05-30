@@ -10,7 +10,12 @@ import { CatalystClient } from 'dcl-catalyst-client'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { cancelled, select, takeLatest } from 'redux-saga/effects'
 import { isErrorWithMessage } from '../../lib/error'
-import { accountAPI, nftAPI, NFTResult } from '../vendor/decentraland'
+import {
+  accountAPI,
+  nftAPI,
+  NFTResponse,
+  NFTResult
+} from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
 import {
   fetchAccountMetricsFailure,
@@ -24,10 +29,11 @@ import {
 } from './actions'
 import { getCreators, getCreatorsSearchQuery } from './selectors'
 import { CreatorAccount } from './types'
-import { fromProfilesToCreators } from './utils'
+import { enhanceCreatorName, fromProfilesToCreators } from './utils'
 
 export const DEFAULT_FIRST_VALUE = 20
 export const DEFAULT_SKIP_VALUE = 0
+export const MAX_ENS_SEARCH_REQUESTS = 5
 
 export function* accountSaga(catalystClient: CatalystClient) {
   yield takeEvery(
@@ -53,16 +59,29 @@ export function* accountSaga(catalystClient: CatalystClient) {
 
     try {
       let addresses: Set<string> = new Set()
+      let ens: NFTResult[] = []
       let accounts: Account[] | undefined = undefined
       if (search) {
-        const { data }: { data: NFTResult[] } = yield call([nftAPI, 'fetch'], {
-          category: NFTCategory.ENS,
-          search,
-          first: DEFAULT_FIRST_VALUE,
-          skip: DEFAULT_SKIP_VALUE
-        })
+        let skip = 0
+        while (true) {
+          const { data, total }: NFTResponse = yield call([nftAPI, 'fetch'], {
+            category: NFTCategory.ENS,
+            search,
+            first: DEFAULT_FIRST_VALUE,
+            skip
+          })
 
-        addresses = new Set([...data.map(nft => nft.nft.owner)])
+          ens = [...ens, ...data]
+          const hasReachedMaxSearchRequests =
+            MAX_ENS_SEARCH_REQUESTS - 1 === skip / DEFAULT_FIRST_VALUE
+          const hasFetchedAllResults = total === ens.length
+
+          if (hasFetchedAllResults || hasReachedMaxSearchRequests) {
+            break
+          }
+          skip += DEFAULT_FIRST_VALUE
+        }
+        addresses = new Set(ens.map(nft => nft.nft.owner))
       } else {
         const { data }: { data: Account[] } = yield call(
           [accountAPI, 'fetch'],
@@ -91,6 +110,9 @@ export function* accountSaga(catalystClient: CatalystClient) {
         profiles,
         accounts ?? creatorsAccounts.data
       )
+      if (search) {
+        creators.forEach(creator => enhanceCreatorName(creator, ens, search))
+      }
 
       yield put(fetchCreatorsAccountSuccess(search, creators))
     } catch (error) {

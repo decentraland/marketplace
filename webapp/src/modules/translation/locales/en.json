@@ -62,7 +62,8 @@
     "unknown_error": "Unknown error",
     "the_parcel": "the Parcel",
     "the_estate": "the Estate",
-    "discord_server": "Discord Server"
+    "discord_server": "Discord Server",
+    "currently": "currently"
   },
   "address": {
     "invalid_address": "That's not a valid address",

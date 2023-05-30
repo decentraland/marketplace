@@ -60,7 +60,8 @@
     "unknown_error": "Error desconocido",
     "the_parcel": "La Parcela",
     "the_estate": "El Estate",
-    "discord_server": "Servidor de Discord"
+    "discord_server": "Servidor de Discord",
+    "currently": "actualmente"
   },
   "address": {
     "invalid_address": "Dirección inválida",

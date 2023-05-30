@@ -60,7 +60,8 @@
     "unknown_error": "不明错误",
     "the_parcel": "地块",
     "the_estate": "产业",
-    "discord_server": "Discord 服务器"
+    "discord_server": "Discord 服务器",
+    "currently": "现在"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
