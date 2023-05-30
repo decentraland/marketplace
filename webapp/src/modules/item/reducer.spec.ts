@@ -19,6 +19,7 @@ import {
   buyItemWithCardFailure,
   buyItemWithCardRequest,
   buyItemWithCardSuccess,
+  clearItemErrors,
   FETCH_ITEM_SUCCESS,
   FETCH_TRENDING_ITEMS_SUCCESS,
   fetchItemFailure,
@@ -240,5 +241,15 @@ describe('when reducing the successful action of fetching trending items', () =>
       loading: [],
       data: { ...initialState.data, [item.id]: item }
     })
+  })
+})
+
+describe('when reducing a clear item errors action', () => {
+  it("should set error field as null", () => {
+    const stateWithError = {
+      ...INITIAL_STATE,
+      error: 'Some test error'
+    }
+    expect(itemReducer(stateWithError, clearItemErrors())).toEqual(expect.objectContaining({ error: null }))
   })
 })

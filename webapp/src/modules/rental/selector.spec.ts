@@ -153,7 +153,7 @@ describe("when getting a rental confirmation status", () => {
       rootState.rental.loading = [acceptRentalListingRequest({} as NFT, {} as RentalListing, 0, '')]
     })
     
-    it('should return an authorization status WAITING', () => {
+    it('should return an authorization status PROCESSING', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.PROCESSING)
     })
   })
@@ -163,7 +163,7 @@ describe("when getting a rental confirmation status", () => {
       rootState.rental.error = 'error'
     })
     
-    it('should return an authorization status WAITING', () => {
+    it('should return an authorization status ERROR', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.ERROR)
     })
   })

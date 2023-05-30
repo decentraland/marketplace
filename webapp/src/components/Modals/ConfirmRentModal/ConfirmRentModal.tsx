@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { ethers } from 'ethers'
+import { Contract } from '@dcl/schemas'
 import { isAddress } from 'ethers/lib/utils'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
@@ -26,7 +27,6 @@ import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { Props } from './ConfirmRentModal.types'
 import styles from './ConfirmRentModal.module.css'
-import { Contract } from '@dcl/schemas'
 
 const ConfirmRentModal = ({
   wallet,

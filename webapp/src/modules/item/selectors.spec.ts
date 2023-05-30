@@ -1,11 +1,13 @@
 import { Item } from '@dcl/schemas'
+import { AuthorizationStepStatus } from 'decentraland-ui'
 import { RootState } from '../reducer'
-import { fetchItemRequest, fetchItemsRequest } from './actions'
+import { buyItemRequest, fetchItemRequest, fetchItemsRequest } from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
   getData,
   getError,
   getLoading,
+  getMintItemStatus,
   getState,
   isFetchingItem,
   isFetchingItemsOfCollection
@@ -132,6 +134,30 @@ describe('when getting if the items of a collection are being fetched', () => {
 
     it('should return true', () => {
       expect(isFetchingItemsOfCollection(state, contractAddress)).toBe(true)
+    })
+  })
+})
+
+describe('when getting mint item status', () => {
+  describe('and a mint item request is loading', () => {
+    it('should return WAITING status', () => {
+      state.item.loading = [buyItemRequest({} as Item)]
+      expect(getMintItemStatus(state)).toEqual(AuthorizationStepStatus.WAITING)
+    })
+  })
+
+  describe('and there is an error in buy item flow', () => {
+    it('should return ERROR status', () => {
+      state.item.error = 'Some test error'
+      expect(getMintItemStatus(state)).toEqual(AuthorizationStepStatus.ERROR)
+    })
+  })
+
+  describe('and there is no error and loading field is empty', () => {
+    it('should return PENDING status', () => {
+      state.item.loading = []
+      state.item.error = null
+      expect(getMintItemStatus(state)).toEqual(AuthorizationStepStatus.PENDING)
     })
   })
 })

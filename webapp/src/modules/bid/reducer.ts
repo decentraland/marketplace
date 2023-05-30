@@ -45,7 +45,7 @@ export type BidState = {
   error: string | null
 }
 
-const INITIAL_STATE: BidState = {
+export const INITIAL_STATE: BidState = {
   data: {},
   loading: [],
   error: null
