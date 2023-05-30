@@ -16,8 +16,9 @@ const NFTSidebar = (props: Props) => {
   const handleOnBrowse = useCallback(
     (section: string) => {
       const category = getCategoryFromSection(section)
+      const { search } = browseOptions
       onBrowse({
-        ...browseOptions,
+        search,
         section,
         assetType: category
           ? getMarketAssetTypeFromCategory(category)
