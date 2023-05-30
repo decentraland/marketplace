@@ -264,7 +264,7 @@ const AssetImage = (props: Props) => {
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
 
-        const urn = !isNFT(asset) ? getEthereumItemUrn(asset) : ''
+        const urn = !isNFT(asset) && asset.network === Network.ETHEREUM ? getEthereumItemUrn(asset) : ''
 
         const wearablePreviewProps =
           !isNFT(asset) && asset.network === Network.ETHEREUM
