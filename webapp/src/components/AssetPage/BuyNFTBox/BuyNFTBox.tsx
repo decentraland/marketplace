@@ -26,9 +26,10 @@ const BuyNFTBox = ({ nft, address }: Props) => {
   } | null>(null)
 
   const [canBid, setCanBid] = useState(false)
+  const isOwner = nft && nft?.owner === address
 
   useEffect(() => {
-    if (nft && nft?.owner !== address) {
+    if (!isOwner && nft) {
       bidAPI
         .fetchByNFT(
           nft.contractAddress,
@@ -46,7 +47,7 @@ const BuyNFTBox = ({ nft, address }: Props) => {
           console.error(error)
         })
     }
-  }, [nft, address])
+  }, [nft, address, isOwner])
 
   useEffect(() => {
     if (nft) {
@@ -116,13 +117,45 @@ const BuyNFTBox = ({ nft, address }: Props) => {
               </div>
             </div>
           </div>
-          <BuyNFTButtons
-            assetType={AssetType.NFT}
-            contractAddress={nft.contractAddress}
-            network={nft.network}
-            tokenId={nft.tokenId}
-            buyWithCardClassName={styles.buyWithCardClassName}
-          />
+          {isOwner ? (
+            listing ? (
+              <>
+                <Button
+                  as={Link}
+                  to={locations.sell(nft.contractAddress, nft.tokenId)}
+                  primary
+                  fluid
+                >
+                  {t('asset_page.actions.update')}
+                </Button>
+                <Button
+                  as={Link}
+                  to={locations.cancel(nft.contractAddress, nft.tokenId)}
+                  fluid
+                  inverted
+                >
+                  {t('asset_page.actions.cancel_sale')}
+                </Button>
+              </>
+            ) : (
+              <Button
+                as={Link}
+                to={locations.sell(nft.contractAddress, nft.tokenId)}
+                primary
+                fluid
+              >
+                {t('asset_page.actions.sell')}
+              </Button>
+            )
+          ) : (
+            <BuyNFTButtons
+              assetType={AssetType.NFT}
+              contractAddress={nft.contractAddress}
+              network={nft.network}
+              tokenId={nft.tokenId}
+              buyWithCardClassName={styles.buyWithCardClassName}
+            />
+          )}
           {canBid && (
             <Button
               inverted
