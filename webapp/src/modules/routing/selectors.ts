@@ -458,13 +458,15 @@ export const getAssetsUrlParams = createSelector(
   getItemId,
   getContracts,
   getCreators,
-  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators) => ({
+  getSearch,
+  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators, search) => ({
     onlyOnSale,
     onlySmart,
     isSoldOut,
     itemId,
     contracts,
-    creators
+    creators,
+    search
   })
 )
 
@@ -568,6 +570,14 @@ export const getCurrentBrowseOptions = createSelector(
       onlyOnRent,
       onlyOnSale
     } as BrowseOptions)
+)
+
+export const getCurrentSearch = createSelector(
+  [getAssetsUrlParams],
+  AssetsUrlParams => {
+    const { search } = AssetsUrlParams
+    return search
+  }
 )
 
 export const hasFiltersEnabled = createSelector<

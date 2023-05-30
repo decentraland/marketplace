@@ -11,19 +11,20 @@ import { NFTSidebar as DecentralandNFTSidebar } from '../decentraland/NFTSidebar
 import { Props } from './NFTSidebar.types'
 
 const NFTSidebar = (props: Props) => {
-  const { vendor, section, sections, onBrowse } = props
+  const { vendor, section, sections, onBrowse, search } = props
 
   const handleOnBrowse = useCallback(
     (section: string) => {
       const category = getCategoryFromSection(section)
       onBrowse({
+        search,
         section,
         assetType: category
           ? getMarketAssetTypeFromCategory(category)
           : undefined
       })
     },
-    [onBrowse]
+    [onBrowse, search]
   )
 
   switch (vendor) {

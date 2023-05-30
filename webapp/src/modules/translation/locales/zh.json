@@ -569,7 +569,7 @@
       "and_make_an_offer": "然後出價。"
     },
     "minting": {
-      "title": "可鑄造",
+      "title": "直接從創作者那裡購買",
       "price": "價格",
       "stock": "庫存",
       "minting_popup": "當你鑄造一件物品時，你就成為了它的第一個所有者。這也意味著直接從創造者那裡購買。",
@@ -1205,7 +1205,7 @@
       "rental_ended": "租赁已结束"
     },
     "listings": "{count} {count, plural, one {收藏品} other {收藏品}}",
-    "available_for_mint": "可用於鑄幣",
+    "available_for_mint": "直接從創作者那裡購買",
     "cheapest_listing": "最便宜的收藏品",
     "not_for_sale": "不可出售",
     "owners": "{count} {count, plural, one {所有者} other {所有者}}",
@@ -1213,7 +1213,7 @@
     "cheapest_option_range": "范围内最便宜的选择",
     "most_expensive": "最貴",
     "most_expensive_range": "范围内最贵",
-    "also_minting": "也可用於鑄造"
+    "also_minting": "直接從創作者那裡購買"
   },
   "rentals_promotional_modal": {
     "title": "Announcing official LAND rentals",

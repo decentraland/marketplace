@@ -8,9 +8,10 @@ export type Props = {
   section: string
   sections?: Section[]
   onBrowse: typeof browse
+  search: string
 }
 
-export type MapStateProps = Pick<Props, 'vendor' | 'section'>
+export type MapStateProps = Pick<Props, 'vendor' | 'section' | 'search'>
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
 export type MapDispatch = Dispatch<BrowseAction>
 export type OwnProps = Partial<Pick<Props, 'section'>>
