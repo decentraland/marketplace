@@ -1,4 +1,5 @@
 import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
+import { Network } from '@dcl/schemas'
 import { Asset } from '../../../modules/asset/types'
 import { INITIAL_STATE } from '../../../modules/favorites/reducer'
 import { renderWithProviders } from '../../../utils/test'
@@ -89,7 +90,11 @@ describe('OnBack', () => {
 
       describe('and the asset is an item', () => {
         beforeEach(() => {
-          asset = { ...asset, itemId: 'itemId' } as Asset
+          asset = {
+            ...asset,
+            itemId: 'itemId',
+            network: Network.MATIC
+          } as Asset
           useMobileMediaQueryMock.mockReturnValue(true)
         })
 

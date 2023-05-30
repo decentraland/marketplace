@@ -1,4 +1,5 @@
 import React from 'react'
+import { Network } from '@dcl/schemas'
 import { Button } from 'decentraland-ui'
 import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -74,7 +75,10 @@ const OnBack = ({ asset, isFavoritesEnabled, onBack }: Props) => {
         <img src={onBackIcon} alt={t('global.back')} />
         {t('global.back')}
       </Button>
-      {isFavoritesEnabled && isMobile && !isNFT(asset) ? (
+      {isFavoritesEnabled &&
+      isMobile &&
+      !isNFT(asset) &&
+      asset.network === Network.MATIC ? (
         <FavoritesCounter isCollapsed className="favorites" item={asset} />
       ) : null}
     </div>
