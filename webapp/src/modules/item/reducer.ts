@@ -37,7 +37,9 @@ import {
   BuyItemWithCardFailureAction,
   BuyItemWithCardRequestAction,
   BuyItemWithCardSuccessAction,
-  BUY_ITEM_WITH_CARD_FAILURE
+  BUY_ITEM_WITH_CARD_FAILURE,
+  CLEAR_ITEM_ERRORS,
+  ClearItemErrorsAction
 } from './actions'
 
 export type ItemState = {
@@ -69,6 +71,7 @@ type ItemReducerAction =
   | BuyItemWithCardRequestAction
   | BuyItemWithCardSuccessAction
   | BuyItemWithCardFailureAction
+  | ClearItemErrorsAction
 
 export function itemReducer(
   state = INITIAL_STATE,
@@ -127,6 +130,12 @@ export function itemReducer(
         ...state,
         loading: loadingReducer(state.loading, action),
         error
+      }
+    }
+    case CLEAR_ITEM_ERRORS: {
+      return {
+        ...state,
+        error: null
       }
     }
     default:

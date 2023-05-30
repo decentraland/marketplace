@@ -171,3 +171,9 @@ export type FetchBidsByNFTSuccessAction = ReturnType<
 export type FetchBidsByNFTFailureAction = ReturnType<
   typeof fetchBidsByNFTFailure
 >
+
+export const CLEAR_BID_ERROR = 'Clear Bid Error'
+
+export const clearBidError = () => action(CLEAR_BID_ERROR)
+
+export type ClearBidErrorAction = ReturnType<typeof clearBidError>

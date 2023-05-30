@@ -34,7 +34,9 @@ import {
   AcceptBidSuccessAction,
   CancelBidRequestAction,
   CancelBidFailureAction,
-  CancelBidSuccessAction
+  CancelBidSuccessAction,
+  ClearBidErrorAction,
+  CLEAR_BID_ERROR
 } from './actions'
 
 export type BidState = {
@@ -43,7 +45,7 @@ export type BidState = {
   error: string | null
 }
 
-const INITIAL_STATE: BidState = {
+export const INITIAL_STATE: BidState = {
   data: {},
   loading: [],
   error: null
@@ -65,6 +67,7 @@ type BidReducerAction =
   | CancelBidRequestAction
   | CancelBidFailureAction
   | CancelBidSuccessAction
+  | ClearBidErrorAction
 
 export function bidReducer(state = INITIAL_STATE, action: BidReducerAction) {
   switch (action.type) {
@@ -126,6 +129,12 @@ export function bidReducer(state = INITIAL_STATE, action: BidReducerAction) {
         error: action.payload.error
       }
     }
+
+    case CLEAR_BID_ERROR:
+      return {
+        ...state,
+        error: null
+      }
 
     default:
       return state

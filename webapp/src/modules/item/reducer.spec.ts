@@ -19,6 +19,7 @@ import {
   buyItemWithCardFailure,
   buyItemWithCardRequest,
   buyItemWithCardSuccess,
+  clearItemErrors,
   FETCH_ITEM_SUCCESS,
   FETCH_TRENDING_ITEMS_SUCCESS,
   fetchItemFailure,
@@ -31,7 +32,7 @@ import {
   fetchTrendingItemsRequest,
   fetchTrendingItemsSuccess
 } from './actions'
-import { INITIAL_STATE, itemReducer } from './reducer'
+import { INITIAL_STATE, ItemState, itemReducer } from './reducer'
 
 const itemBrowseOptions = {
   view: View.MARKET,
@@ -240,5 +241,22 @@ describe('when reducing the successful action of fetching trending items', () =>
       loading: [],
       data: { ...initialState.data, [item.id]: item }
     })
+  })
+})
+
+describe('when reducing a clear item errors action', () => {
+  let state: ItemState
+
+  beforeEach(() => {
+    state = {
+      ...INITIAL_STATE,
+      error: 'Some test error'
+    }
+  })
+
+  it('should set the error field as null', () => {
+    expect(itemReducer(state, clearItemErrors())).toEqual(
+      expect.objectContaining({ error: null })
+    )
   })
 })

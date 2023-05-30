@@ -61,3 +61,15 @@ export function isStubMaticCollectionContract(contract: Contract) {
     contract.network === Network.MATIC
   )
 }
+
+export function getContractByParams(contracts: Contract[], query: Partial<Contract>) {
+  const found = contracts.find(contract =>
+    Object.keys(query).every(
+      key =>
+        query[key as keyof Contract]?.toString().toLowerCase() ===
+        contract[key as keyof Contract]?.toString().toLowerCase()
+    )
+  )
+
+  return found || null
+}

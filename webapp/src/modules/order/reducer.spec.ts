@@ -21,6 +21,7 @@ import {
   cancelOrderFailure,
   cancelOrderRequest,
   cancelOrderSuccess,
+  clearOrderErrors,
   createOrderFailure,
   createOrderRequest,
   createOrderSuccess,
@@ -279,5 +280,17 @@ describe('when reducing the successful action of accepting a rental', () => {
         } as Order
       }
     })
+  })
+})
+
+describe('when reducing a clear order errors action', () => {
+  beforeEach(() => {
+    state.error = 'Some test error'
+  })
+
+  it('should set the error field as null', () => {
+    expect(orderReducer(state, clearOrderErrors())).toEqual(
+      expect.objectContaining({ error: null })
+    )
   })
 })
