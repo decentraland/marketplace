@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { ethers } from 'ethers'
+import { Contract } from '@dcl/schemas'
 import { isAddress } from 'ethers/lib/utils'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
@@ -12,8 +13,16 @@ import {
   Checkbox
 } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Modal } from 'decentraland-dapps/dist/containers'
+import { Modal, withAuthorizedAction } from 'decentraland-dapps/dist/containers'
+import { ContractName } from 'decentraland-transactions'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { formatWeiMANA } from '../../../lib/mana'
+import { getContractNames } from '../../../modules/vendor'
+import {
+  getRentConfirmationStatus,
+  getError
+} from '../../../modules/rental/selectors'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { Props } from './ConfirmRentModal.types'
@@ -26,11 +35,18 @@ const ConfirmRentModal = ({
   isSubmittingTransaction,
   isTransactionBeingConfirmed,
   onSubmitTransaction,
+  onAuthorizedAction,
+  getContract,
+  isLoadingAuthorization,
+  onClearRentalErrors,
   error
 }: Props) => {
   const [operatorAddress, setOperatorAddress] = useState(wallet?.address)
   const [isUserTheOperatorAddress, setIsUserTheOperatorAddress] = useState(true)
-  const isLoading = isTransactionBeingConfirmed || isSubmittingTransaction
+  const isLoading =
+    isTransactionBeingConfirmed ||
+    isSubmittingTransaction ||
+    isLoadingAuthorization
   const [price, setPrice] = useState<string>()
   const startDate = new Date()
   const period = rental.periods[selectedPeriodIndex]
@@ -40,6 +56,16 @@ const ConfirmRentModal = ({
     .toString()
   const pricePerRentInEther = Number(ethers.utils.formatEther(pricePerRent))
   const formattedPricePerRent = formatWeiMANA(pricePerRent)
+
+  const contractNames = getContractNames()
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: nft.network
+  })
+  const rentals = getContract({
+    name: contractNames.RENTALS,
+    network: nft.network
+  })
 
   const handleOperatorToggle = useCallback(() => {
     if (isUserTheOperatorAddress) {
@@ -56,8 +82,27 @@ const ConfirmRentModal = ({
     operatorAddress === ethers.constants.AddressZero
 
   const handleSubmit = useCallback(() => {
-    operatorAddress && onSubmitTransaction(operatorAddress)
-  }, [onSubmitTransaction, operatorAddress])
+    if (operatorAddress && mana && rentals) {
+      onClearRentalErrors()
+      onAuthorizedAction({
+        targetContractName: ContractName.MANAToken,
+        authorizedAddress: rentals.address,
+        targetContract: mana as Contract,
+        authorizationType: AuthorizationType.ALLOWANCE,
+        requiredAllowanceInWei: pricePerRent,
+        authorizedContractLabel: rentals.label || rentals.name,
+        onAuthorized: () => onSubmitTransaction(operatorAddress)
+      })
+    } 
+  }, [
+    operatorAddress,
+    pricePerRent,
+    rentals,
+    mana,
+    onAuthorizedAction,
+    onSubmitTransaction,
+    onClearRentalErrors
+  ])
 
   return (
     <Modal
@@ -171,4 +216,15 @@ const ConfirmRentModal = ({
   )
 }
 
-export default React.memo(ConfirmRentModal)
+export default React.memo(
+  withAuthorizedAction(
+    ConfirmRentModal,
+    AuthorizedAction.RENT,
+    {
+      action: 'rental_modal.authorization.action',
+      title_action: 'rental_modal.authorization.title_action'
+    },
+    getRentConfirmationStatus,
+    getError
+  )
+)

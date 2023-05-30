@@ -1,5 +1,6 @@
 {
   "global": {
+    "close": "关闭",
     "day": "天",
     "assets": "资产",
     "address": "地址",
@@ -659,7 +660,11 @@
     "buy": "用 MANA 购买",
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
-    "not_enough_mana": "您没有足够的MANA来购买{name}。"
+    "not_enough_mana": "您没有足够的MANA来购买{name}。",
+    "authorization": {
+      "title_action": "购买",
+      "action": "买"
+    }
   },
   "buy_with_card_page": {
     "title": "购买{name}",
@@ -688,7 +693,11 @@
     "action": "用 MANA 购买",
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
-    "not_enough_mana": "您没有足够的MANA来购买{name}。"
+    "not_enough_mana": "您没有足够的MANA来购买{name}。",
+    "authorization": {
+      "title_action": "购买",
+      "action": "买"
+    }
   },
   "mint_with_card_page": {
     "title": "购买{name}",
@@ -733,6 +742,10 @@
       "create_bid_line_one": "您即将为 {name} 出价 {amount}。",
       "accept_bid_line_one": "您即将接受对 {name} 的 {amount} 出价。",
       "line_two": "请重新输入价格以确认："
+    },
+    "authorization": {
+      "title_action": "提供",
+      "action": "要约"
     }
   },
   "my_bids_page": {
@@ -934,6 +947,10 @@
     "notice": "我们目前正在维护中，我们会很快回来！"
   },
   "rental_modal": {
+    "authorization": {
+      "title_action": "租金",
+      "action": "租"
+    },
     "confirm_rent_step": {
       "title": "期间确认租金",
       "operator_address": "运营商地址",

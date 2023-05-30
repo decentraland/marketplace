@@ -1,14 +1,12 @@
 import React, { memo, useCallback, useMemo, useState } from 'react'
-import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import { Button, Popup } from 'decentraland-ui'
-import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+import { NFTCategory } from '@dcl/schemas'
 import { formatWeiMANA } from '../../../lib/mana'
 import {
   canBeClaimed,
@@ -18,8 +16,7 @@ import {
   isRentalListingExecuted,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
-import { getContractNames, VendorFactory } from '../../../modules/vendor'
-import { getContractAuthorization } from '../../../lib/authorization'
+import { VendorFactory } from '../../../modules/vendor'
 import { locations } from '../../../modules/routing/locations'
 import { isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
@@ -28,7 +25,6 @@ import { isOwnedBy } from '../../../modules/asset/utils'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
-import { AuthorizationModal } from '../../AuthorizationModal'
 import { LinkedProfile } from '../../LinkedProfile'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
@@ -42,12 +38,10 @@ enum View {
 const SaleRentActionBox = ({
   nft,
   wallet,
-  authorizations,
   order,
   rental,
   userHasAlreadyBidsOnNft,
   currentMana,
-  getContract,
   onRent
 }: Props) => {
   const isMobileView = isMobile()
@@ -79,61 +73,12 @@ const SaleRentActionBox = ({
   const isBiddable = bidService !== undefined
   const canBid = !isOwner && isBiddable && !userHasAlreadyBidsOnNft
   const isCurrentlyRented = isRentalListingExecuted(rental)
-  const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
-  const authorization = useMemo(() => {
-    if (!wallet) {
-      return null
-    }
-
-    const contractNames = getContractNames()
-    const mana = getContract({
-      name: contractNames.MANA,
-      network: nft.network
-    })
-    const rentals = getContract({
-      name: getContractNames().RENTALS,
-      network: nft.network
-    })
-    return getContractAuthorization(
-      wallet.address,
-      rentals?.address,
-      mana ? { ...mana, name: ContractName.MANAToken } : undefined
-    )
-  }, [wallet, getContract, nft.network])
-
-  const shouldUpdateSpendingCap: boolean =
-    !!authorization &&
-    selectedRentalPeriodIndex !== undefined &&
-    !!rental &&
-    (() => {
-      const bnPricePerDay = ethers.BigNumber.from(
-        rental.periods[selectedRentalPeriodIndex].pricePerDay
-      )
-
-      const bnMaxDays = ethers.BigNumber.from(
-        rental.periods[selectedRentalPeriodIndex].maxDays
-      )
-
-      return !hasAuthorizationAndEnoughAllowance(
-        authorizations,
-        authorization,
-        bnPricePerDay.mul(bnMaxDays).toString()
-      )
-    })()
 
   const handleOnRent = useCallback(() => {
-    if (!shouldUpdateSpendingCap) {
-      setShowAuthorizationModal(false)
+    if (selectedRentalPeriodIndex === undefined) return
+    onRent(selectedRentalPeriodIndex)
+  }, [selectedRentalPeriodIndex, onRent])
 
-      if (selectedRentalPeriodIndex !== undefined) {
-        onRent(selectedRentalPeriodIndex)
-      }
-    } else {
-      setShowAuthorizationModal(true)
-    }
-  }, [onRent, selectedRentalPeriodIndex, shouldUpdateSpendingCap])
-
-  const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
   const rentalEndDate: Date | null = isCurrentlyRented
     ? getRentalEndDate(rental!)
     : null
@@ -402,15 +347,6 @@ const SaleRentActionBox = ({
           >
             {t('asset_page.actions.manage')}
           </Button>
-        ) : null}
-        {authorization ? (
-          <AuthorizationModal
-            open={showAuthorizationModal}
-            authorization={authorization}
-            shouldUpdateSpendingCap={shouldUpdateSpendingCap}
-            onProceed={handleOnRent}
-            onCancel={handleCloseAuthorizationModal}
-          />
         ) : null}
       </div>
       {isCurrentlyRented && !rentalHasEnded && !isTenant && !isOwner ? (

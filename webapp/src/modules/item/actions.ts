@@ -139,3 +139,7 @@ export const fetchItemFailure = (
 export type FetchItemRequestAction = ReturnType<typeof fetchItemRequest>
 export type FetchItemSuccessAction = ReturnType<typeof fetchItemSuccess>
 export type FetchItemFailureAction = ReturnType<typeof fetchItemFailure>
+
+export const CLEAR_ITEM_ERRORS = 'Clear Item Errors'
+export const clearItemErrors = () => action(CLEAR_ITEM_ERRORS)
+export type ClearItemErrorsAction = ReturnType<typeof clearItemErrors>

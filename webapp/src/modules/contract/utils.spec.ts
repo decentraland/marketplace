@@ -10,7 +10,8 @@ import {
   upsertContracts,
   getStubMaticCollectionContract,
   STUB_MATIC_COLLECTION_CONTRACT_NAME,
-  isStubMaticCollectionContract
+  isStubMaticCollectionContract,
+  getContractByParams
 } from './utils'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
@@ -191,16 +192,16 @@ describe('when calling getAuthorizationKey', () => {
 })
 
 describe('when calling getStubMaticCollectionContract', () => {
-    it('should return stub matic collection contract with the address lowercased', () => {
-      expect(getStubMaticCollectionContract('ADDRESS')).toEqual({
-        address: 'address',
-        category: NFTCategory.WEARABLE,
-        chainId: undefined,
-        name: STUB_MATIC_COLLECTION_CONTRACT_NAME,
-        network: Network.MATIC,
-        vendor: VendorName.DECENTRALAND
-      })
+  it('should return stub matic collection contract with the address lowercased', () => {
+    expect(getStubMaticCollectionContract('ADDRESS')).toEqual({
+      address: 'address',
+      category: NFTCategory.WEARABLE,
+      chainId: undefined,
+      name: STUB_MATIC_COLLECTION_CONTRACT_NAME,
+      network: Network.MATIC,
+      vendor: VendorName.DECENTRALAND
     })
+  })
 })
 
 describe('when calling isStubMaticCollectionContract', () => {
@@ -242,6 +243,69 @@ describe('when calling isStubMaticCollectionContract', () => {
 
     it('should return true', () => {
       expect(isStubMaticCollectionContract(contract)).toBe(true)
+    })
+  })
+})
+
+describe('when calling getContractByParams', () => {
+  let contracts: Contract[]
+  beforeEach(() => {
+    contracts = [
+      {
+        label: 'contract1',
+        category: NFTCategory.EMOTE,
+        name: 'name1',
+        address: 'address1',
+        network: Network.ETHEREUM,
+        chainId: ChainId.ETHEREUM_GOERLI,
+        vendor: VendorName.DECENTRALAND
+      },
+      {
+        label: 'contract2',
+        category: NFTCategory.EMOTE,
+        name: 'name2',
+        address: 'address2',
+        network: Network.ETHEREUM,
+        chainId: ChainId.ETHEREUM_GOERLI,
+        vendor: VendorName.DECENTRALAND
+      },
+      {
+        label: 'contract3',
+        category: NFTCategory.EMOTE,
+        name: 'name3',
+        address: 'address3',
+        network: Network.ETHEREUM,
+        chainId: ChainId.ETHEREUM_GOERLI,
+        vendor: VendorName.DECENTRALAND
+      }
+    ]
+  })
+
+  describe('when sending one property in query', () => {
+    it('should return the contract that matches the property', () => {
+      expect(getContractByParams(contracts, { label: 'contract1' })).toEqual(
+        contracts[0]
+      )
+    })
+  })
+
+  describe('when sending multiple properties', () => {
+    it('should return the contract that matches all properties', () => {
+      expect(
+        getContractByParams(contracts, {
+          label: 'contract1',
+          category: NFTCategory.EMOTE
+        })
+      ).toEqual(contracts[0])
+    })
+
+    it('should return null if no contract matches', () => {
+      expect(
+        getContractByParams(contracts, {
+          label: 'contract1',
+          category: NFTCategory.ENS
+        })
+      ).toEqual(null)
     })
   })
 })

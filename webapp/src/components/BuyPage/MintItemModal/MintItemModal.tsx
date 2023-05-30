@@ -1,20 +1,20 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import compact from 'lodash/compact'
 import classNames from 'classnames'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
-import { Item } from '@dcl/schemas'
+import { Contract, Item } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
-import { ContractName } from 'decentraland-transactions'
-import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
-import { ChainButton } from 'decentraland-dapps/dist/containers'
+  ChainButton,
+  withAuthorizedAction
+} from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
+import { ContractName } from 'decentraland-transactions'
 import { locations } from '../../../modules/routing/locations'
-import { AuthorizationModal } from '../../AuthorizationModal'
+import { Contract as DCLContract } from '../../../modules/vendor/services'
 import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
@@ -24,6 +24,7 @@ import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
 import { AssetProviderPage } from '../../AssetProviderPage'
+import { getMintItemStatus, getError } from '../../../modules/item/selectors'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
@@ -36,21 +37,30 @@ import { Props } from './MintItemModal.types'
 const MintItemModal = (props: Props) => {
   const {
     item,
-    wallet,
-    authorizations,
     isLoading,
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
     isBuyWithCardPage,
+    isLoadingAuthorization,
     getContract,
     onBuyItem,
-    onBuyItemWithCard
+    onBuyItemWithCard,
+    onAuthorizedAction,
+    onClearItemErrors
   } = props
 
-  const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
-
   const analytics = getAnalytics()
+  const contractNames = getContractNames()
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: item.network
+  }) as DCLContract
+
+  const collectionStore = getContract({
+    name: contractNames.COLLECTION_STORE,
+    network: item.network
+  }) as DCLContract
 
   const handleExecuteOrder = useCallback(() => {
     if (isBuyWithCardPage) {
@@ -65,68 +75,33 @@ const MintItemModal = (props: Props) => {
     if (isBuyWithCardPage) analytics.track(events.CANCEL_BUY_NFT_WITH_CARD)
   }, [analytics, isBuyWithCardPage])
 
-  const authorization: Authorization | null = useMemo(() => {
-    const contractNames = getContractNames()
-    const mana = getContract({
-      name: contractNames.MANA,
-      network: item.network
-    })
-
-    const collectionStore = getContract({
-      name: contractNames.COLLECTION_STORE,
-      network: item.network
-    })
-
-    return mana && collectionStore
-      ? {
-          address: wallet.address,
-          authorizedAddress: collectionStore.address,
-          contractAddress: mana.address,
-          contractName: ContractName.MANAToken,
-          chainId: item.chainId,
-          type: AuthorizationType.ALLOWANCE
-        }
-      : null
-  }, [getContract, item.network, item.chainId, wallet.address])
-
-  const shouldUpdateSpendingCap: boolean = useMemo<boolean>(() => {
-    return (
-      !!authorizations &&
-      !!authorization &&
-      !!item?.price &&
-      !hasAuthorizationAndEnoughAllowance(
-        authorizations,
-        authorization,
-        item.price
-      )
-    )
-  }, [authorizations, authorization, item?.price])
-
   const handleSubmit = useCallback(() => {
-    if (
-      (authorization &&
-        hasAuthorizationAndEnoughAllowance(
-          authorizations,
-          authorization,
-          item.price
-        )) ||
-      isBuyWithCardPage ||
-      +item.price === 0
-    ) {
+    if (isBuyWithCardPage) {
       handleExecuteOrder()
-    } else {
-      setShowAuthorizationModal(true)
+      return
+    }
+    if (!!item) {
+      onClearItemErrors()
+      onAuthorizedAction({
+        targetContractName: ContractName.MANAToken,
+        authorizationType: AuthorizationType.ALLOWANCE,
+        authorizedAddress: collectionStore.address,
+        targetContract: mana as Contract,
+        authorizedContractLabel: collectionStore.label || collectionStore.name,
+        requiredAllowanceInWei: item.price,
+        onAuthorized: handleExecuteOrder
+      })
     }
   }, [
-    authorization,
-    authorizations,
-    handleExecuteOrder,
+    item,
     isBuyWithCardPage,
-    item.price
-  ])
-
-  const handleClose = useCallback(() => setShowAuthorizationModal(false), [
-    setShowAuthorizationModal
+    mana,
+    collectionStore.address,
+    collectionStore.name,
+    handleExecuteOrder,
+    onAuthorizedAction,
+    onClearItemErrors,
+    collectionStore.label
   ])
 
   const isDisabled =
@@ -239,9 +214,9 @@ const MintItemModal = (props: Props) => {
         {(!hasInsufficientMANA && !hasLowPrice) || isBuyWithCardPage ? (
           <ChainButton
             primary
-            disabled={isDisabled || isLoading}
+            disabled={isDisabled || isLoading || isLoadingAuthorization}
             onClick={handleSubmit}
-            loading={isLoading}
+            loading={isLoading || isLoadingAuthorization}
             chainId={item.chainId}
           >
             {isWearableOrEmote(item) ? (
@@ -260,18 +235,19 @@ const MintItemModal = (props: Props) => {
           translationPageDescriptorId={translationPageDescriptorId}
         />
       ) : null}
-      {authorization ? (
-        <AuthorizationModal
-          isLoading={isLoading}
-          open={showAuthorizationModal}
-          authorization={authorization}
-          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
-          onProceed={handleExecuteOrder}
-          onCancel={handleClose}
-        />
-      ) : null}
     </AssetAction>
   )
 }
 
-export default React.memo(MintItemModal)
+export default React.memo(
+  withAuthorizedAction(
+    MintItemModal,
+    AuthorizedAction.MINT,
+    {
+      action: 'mint_with_mana_page.authorization.action',
+      title_action: 'mint_with_mana_page.authorization.title_action'
+    },
+    getMintItemStatus,
+    getError
+  )
+)

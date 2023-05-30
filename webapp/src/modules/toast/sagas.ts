@@ -18,7 +18,8 @@ import {
 } from '../item/actions'
 import {
   EXECUTE_ORDER_WITH_CARD_FAILURE,
-  EXECUTE_ORDER_FAILURE
+  EXECUTE_ORDER_FAILURE,
+  ExecuteOrderFailureAction
 } from '../order/actions'
 import {
   getBuyNFTWithCardErrorToast,
@@ -121,8 +122,11 @@ function* handleBuyNFTWithCardFailure() {
   yield put(showToast(getBuyNFTWithCardErrorToast(), 'bottom center'))
 }
 
-function* handleExcecuteOrderFailure() {
-  yield put(showToast(getExcecuteOrderFailureToast(), 'bottom center'))
+function* handleExcecuteOrderFailure(action: ExecuteOrderFailureAction) {
+  const { silent } = action.payload
+  if (!silent) {
+    yield put(showToast(getExcecuteOrderFailureToast(), 'bottom center'))
+  }
 }
 
 function* handlePickItemAsFavoriteSuccess(

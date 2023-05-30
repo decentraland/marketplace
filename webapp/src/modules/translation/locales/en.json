@@ -1,5 +1,6 @@
 {
   "global": {
+    "close": "Close",
     "day": "day",
     "assets": "Assets",
     "address": "Address",
@@ -663,7 +664,11 @@
     "buy": "Buy with MANA",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
-    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}.",
+    "authorization": {
+      "title_action": "purchase",
+      "action": "buy"
+    }
   },
   "buy_with_card_page": {
     "title": "Buying {name}",
@@ -692,7 +697,11 @@
     "action": "Buy with MANA",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
-    "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."
+    "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}.",
+    "authorization": {
+      "title_action": "purchase",
+      "action": "buy"
+    }
   },
   "mint_with_card_page": {
     "title": "Buying {name}",
@@ -736,6 +745,10 @@
       "create_bid_line_one": "You are about to bid on {name} for {amount}.",
       "accept_bid_line_one": "You are about to accept a bid on {name} for {amount}.",
       "accept_bid_line_two": "Please re-enter the price to confirm:"
+    },
+    "authorization": {
+      "title_action": "offer",
+      "action": "make an offer for"
     }
   },
   "my_bids_page": {
@@ -937,6 +950,10 @@
     "notice": "We're currently under maintenance, we'll be back soon!"
   },
   "rental_modal": {
+    "authorization": {
+      "title_action": "rental",
+      "action": "rent"
+    },
     "confirm_rent_step": {
       "title": "Confirm Rent",
       "operator_address": "Operator Address",
