@@ -2,7 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
 import { Env } from '@dcl/ui-env'
-import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
+import {
+  BodyShape,
+  NFTCategory,
+  Network,
+  PreviewEmote,
+  PreviewType,
+  Rarity
+} from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
@@ -25,6 +32,7 @@ import { JumpIn } from '../AssetPage/JumpIn'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import AvailableForMintPopup from './AvailableForMintPopup'
 import './AssetImage.css'
+import { getUrn } from './utils'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -256,12 +264,28 @@ const AssetImage = (props: Props) => {
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
 
+        const urn = getUrn(asset)
+        console.log('urn: ', urn)
+
+        const wearablePreviewProps =
+          !isNFT(asset) && asset.network === Network.ETHEREUM
+            ? {
+                urns: [
+                  'urn:decentraland:ethereum:collections-v1:mf_sammichgamer:mf_sammichtorso'
+                ],
+                background: Rarity.getColor(asset.rarity),
+                type: PreviewType.WEARABLE
+              }
+            : {
+                contractAddress: asset.contractAddress,
+
+                itemId: itemId,
+                tokenId: tokenId
+              }
+
         wearablePreview = (
           <>
             <WearablePreview
-              contractAddress={asset.contractAddress}
-              itemId={itemId}
-              tokenId={tokenId}
               profile={
                 isTryingOnEnabled
                   ? avatar
@@ -274,7 +298,8 @@ const AssetImage = (props: Props) => {
               emote={isTryingOnEnabled ? previewEmote : undefined}
               onLoad={handleLoad}
               onError={handleError}
-              dev={config.is(Env.DEVELOPMENT)}
+              {...wearablePreviewProps}
+              // dev={config.is(Env.DEVELOPMENT)}
             />
             {isAvailableForMint ? (
               <AvailableForMintPopup
