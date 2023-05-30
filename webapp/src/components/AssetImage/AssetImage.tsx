@@ -2,7 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
 import { Env } from '@dcl/ui-env'
-import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
+import {
+  BodyShape,
+  NFTCategory,
+  Network,
+  PreviewEmote,
+  PreviewType,
+  Rarity
+} from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
@@ -22,6 +29,7 @@ import ListedBadge from '../ListedBadge'
 import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import { JumpIn } from '../AssetPage/JumpIn'
+import { getEthereumItemUrn } from './utils'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import AvailableForMintPopup from './AvailableForMintPopup'
 import './AssetImage.css'
@@ -256,12 +264,25 @@ const AssetImage = (props: Props) => {
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
 
+        const urn = !isNFT(asset) && asset.network === Network.ETHEREUM ? getEthereumItemUrn(asset) : ''
+
+        const wearablePreviewProps =
+          !isNFT(asset) && asset.network === Network.ETHEREUM
+            ? {
+                urns: [urn],
+                background: Rarity.getColor(asset.rarity),
+                type: isTryingOn ? PreviewType.AVATAR : PreviewType.WEARABLE
+              }
+            : {
+                contractAddress: asset.contractAddress,
+
+                itemId,
+                tokenId
+              }
+
         wearablePreview = (
           <>
             <WearablePreview
-              contractAddress={asset.contractAddress}
-              itemId={itemId}
-              tokenId={tokenId}
               profile={
                 isTryingOnEnabled
                   ? avatar
@@ -274,6 +295,7 @@ const AssetImage = (props: Props) => {
               emote={isTryingOnEnabled ? previewEmote : undefined}
               onLoad={handleLoad}
               onError={handleError}
+              {...wearablePreviewProps}
               dev={config.is(Env.DEVELOPMENT)}
             />
             {isAvailableForMint ? (
