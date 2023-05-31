@@ -1,7 +1,6 @@
 .TableContent {
   display: flex;
   flex-direction: column;
-  flex: 1;
 }
 
 .TableContent .ui.table {
@@ -61,6 +60,7 @@
 .TableContent .ui.table td a.ui.button.inverted {
   height: 32px;
   font-size: 12px;
+  margin-left: 8px;
 }
 
 .TableContent .emptyTable {

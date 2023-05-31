@@ -6,7 +6,7 @@ import { Props } from './TableContent.types'
 import './TableContent.css'
 
 const TABLE_SIBLINGS_RANGE_MOBILE = 0
-const TABLE_SIBLINGS_RANGE_DESKTOP = 0
+const TABLE_SIBLINGS_RANGE_DESKTOP = 1
 
 const TableContent = (props: Props) => {
   const {
