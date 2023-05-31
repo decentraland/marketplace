@@ -12,7 +12,7 @@ import {
   OrderSortBy,
   Rarity
 } from '@dcl/schemas'
-import { Button, Loader, Popup } from 'decentraland-ui'
+import { Button, Popup } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
 import { isNFT } from '../../../modules/asset/utils'
@@ -116,7 +116,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
     buyWithCardClassName: styles.buyWithCardClassName
   }
 
-  return (
+  return isLoading ? null : (
     <div
       className={
         buyOption === BuyOptions.MINT || buyOption === BuyOptions.BUY_LISTING
@@ -124,11 +124,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
           : styles.BestBuyingOption
       }
     >
-      {isLoading ? (
-        <div className={styles.emptyContainer}>
-          <Loader active data-testid="loader" />
-        </div>
-      ) : buyOption === BuyOptions.MINT && asset && !isNFT(asset) ? (
+      {buyOption === BuyOptions.MINT && asset && !isNFT(asset) ? (
         <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
           <span className={styles.cardTitle}>
             {t('best_buying_option.minting.title')}&nbsp;
