@@ -13,7 +13,7 @@ import { formatDataToTable } from './utils'
 import { OrderDirection, Props } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
 
-export const ROWS_PER_PAGE = 6
+export const ROWS_PER_PAGE = 5
 const INITIAL_PAGE = 1
 
 const OwnersTable = (props: Props) => {

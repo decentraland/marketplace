@@ -9,7 +9,8 @@ import styles from './CollectionPage.module.css'
 
 export const formatDataToTable = (
   rentals?: Item[],
-  isCollectionOwner: boolean = false
+  isCollectionOwner: boolean = false,
+  isMobile = false
 ): DataTableType[] => {
   const builderCollectionUrl = (contractAddress: string) =>
     getBuilderCollectionDetailUrl(contractAddress)
@@ -31,17 +32,23 @@ export const formatDataToTable = (
         const value: DataTableType = {
           [t('global.item')]: <AssetCell asset={item} />,
 
-          [t('global.category')]: getItemCategoryText(item),
+          ...(!isMobile && {
+            [t('global.category')]: getItemCategoryText(item)
+          }),
 
-          [t('global.rarity')]: t(`rarity.${item.rarity}`),
+          ...(!isMobile && {
+            [t('global.rarity')]: t(`rarity.${item.rarity}`)
+          }),
 
-          [t('global.stock')]: (
-            <>
-              {' '}
-              {item.available.toLocaleString()}/
-              {Rarity.getMaxSupply(item.rarity).toLocaleString()}
-            </>
-          ),
+          ...(!isMobile && {
+            [t('global.stock')]: (
+              <>
+                {' '}
+                {item.available.toLocaleString()}/
+                {Rarity.getMaxSupply(item.rarity).toLocaleString()}
+              </>
+            )
+          }),
 
           [t('global.price')]: (
             <Mana network={item.network} inline>

@@ -33,6 +33,7 @@
 
 .badgeContainer :global(.dcl.badge) {
   color: white;
+  height: 18px;
   background-color: transparent !important;
 }
 
@@ -40,6 +41,7 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
+  align-items: center;
 }
 
 .ListingsTable .goToNFT {
@@ -49,7 +51,7 @@
 
 .emptyTable {
   width: 100%;
-  height: 350px;
+  height: 398px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,6 +64,7 @@
   display: flex;
   align-items: center;
   font-size: 14px;
+  flex-wrap: wrap;
 }
 
 .manaField :global(.ui.header:last-child) {
@@ -97,5 +100,9 @@
   }
   .manaField {
     flex-wrap: wrap;
+  }
+  :global(.ui.small.inverted.button) {
+    min-width: auto;
+    border: none;
   }
 }

@@ -36,13 +36,24 @@
 .TransactionHistory .tableContainer {
   display: flex;
   flex-direction: column;
-  border: 2px solid var(--secondary);
   border-radius: 12px;
   margin-top: 48px;
 }
 
 .TransactionHistory .firstTabMargin {
   padding-left: 20px !important;
+}
+
+.TransactionHistory .filtertabsContainer {
+  height: 69px;
+}
+
+.TransactionHistory .ui.basic.table tbody tr {
+  height: 65px;
+}
+
+.TransactionHistory .dcl.mana.inline {
+  line-height: 20px;
 }
 
 @media (max-width: 768px) {

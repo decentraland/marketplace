@@ -1,9 +1,12 @@
 import React from 'react'
-import { Loader, Pagination, Table } from 'decentraland-ui'
+import { Loader, Pagination, Table, useMobileMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ROWS_PER_PAGE } from '../../AssetPage/OwnersTable/OwnersTable'
 import { Props } from './TableContent.types'
 import './TableContent.css'
+
+const TABLE_SIBLINGS_RANGE_MOBILE = 0
+const TABLE_SIBLINGS_RANGE_DESKTOP = 1
 
 const TableContent = (props: Props) => {
   const {
@@ -18,6 +21,7 @@ const TableContent = (props: Props) => {
     hasHeaders = false
   } = props
 
+  const isMobile = useMobileMediaQuery()
   const headers = data.length > 0 ? Object.keys(data[0]) : null
   const hasPagination = totalPages && totalPages > 1
 
@@ -44,7 +48,14 @@ const TableContent = (props: Props) => {
             {data?.map((data: any, index) => (
               <Table.Row key={index}>
                 {headers.map((header: string) => (
-                  <Table.Cell key={header}>{data[header]}</Table.Cell>
+                  <Table.Cell
+                    style={{
+                      width: `${100 / headers.length}%`
+                    }}
+                    key={header}
+                  >
+                    {data[header]}
+                  </Table.Cell>
                 ))}
               </Table.Row>
             ))}
@@ -53,12 +64,18 @@ const TableContent = (props: Props) => {
       ) : (
         empty()
       )}
-      {hasPagination ? (
+      {hasPagination && total ? (
         <div className="pagination">
-          {`${t('global.showing')} ${activePage}-${activePage *
-            rowsPerPage}  ${t('global.of')} ${total}`}
+          {`${t('global.showing')} ${(activePage - 1) * rowsPerPage +
+            1}-${Math.min(activePage * rowsPerPage, total)}  ${t(
+            'global.of'
+          )} ${total}`}
           <Pagination
-            siblingRange={0}
+            siblingRange={
+              isMobile
+                ? TABLE_SIBLINGS_RANGE_MOBILE
+                : TABLE_SIBLINGS_RANGE_DESKTOP
+            }
             activePage={activePage}
             totalPages={totalPages}
             onPageChange={(_event, props) =>

@@ -12,7 +12,7 @@ import { formatDataToTable } from './utils'
 import { Props } from './TransactionHistory.types'
 import './TransactionHistory.css'
 
-const ROWS_PER_PAGE = 12
+const ROWS_PER_PAGE = 5
 
 const TransactionHistory = (props: Props) => {
   const { asset } = props
@@ -38,6 +38,7 @@ const TransactionHistory = (props: Props) => {
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the last open one
   useEffect(() => {
+    let cancel = false
     if (!isAssetNull) {
       setIsLoading(true)
       let params: Record<string, string | number> = {
@@ -53,14 +54,18 @@ const TransactionHistory = (props: Props) => {
       saleAPI
         .fetch(params)
         .then(response => {
+          if (cancel) return
           setTotal(response.total)
           setSales(formatDataToTable(response.data, isMobileOrTablet))
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
-        .finally(() => setIsLoading(false))
+        .finally(() => !cancel && setIsLoading(false))
         .catch(error => {
           console.error(error)
         })
+    }
+    return () => {
+      cancel = true
     }
   }, [
     assetContractAddress,
@@ -75,22 +80,24 @@ const TransactionHistory = (props: Props) => {
   ])
 
   return sales.length > 0 ? (
-    <TableContainer
-      tabsList={tabList}
-      children={
-        <TableContent
-          hasHeaders
-          data={sales}
-          activePage={page}
-          isLoading={isLoading}
-          setPage={setPage}
-          totalPages={totalPages}
-          empty={() => null}
-          total={total}
-          rowsPerPage={ROWS_PER_PAGE}
-        />
-      }
-    />
+    <div className="TransactionHistory">
+      <TableContainer
+        tabsList={tabList}
+        children={
+          <TableContent
+            hasHeaders
+            data={sales}
+            activePage={page}
+            isLoading={isLoading}
+            setPage={setPage}
+            totalPages={totalPages}
+            empty={() => null}
+            total={total}
+            rowsPerPage={ROWS_PER_PAGE}
+          />
+        }
+      />
+    </div>
   ) : null
 }
 
