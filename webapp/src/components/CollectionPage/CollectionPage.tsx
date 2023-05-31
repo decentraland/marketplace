@@ -11,7 +11,8 @@ import {
   Icon,
   Color,
   Button,
-  Loader
+  Loader,
+  useMobileMediaQuery
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
@@ -30,6 +31,8 @@ import styles from './CollectionPage.module.css'
 
 const CollectionPage = (props: Props) => {
   const { contractAddress, currentAddress, onBack } = props
+
+  const isMobile = useMobileMediaQuery()
 
   const tabList = [
     {
@@ -83,7 +86,8 @@ const CollectionPage = (props: Props) => {
 
               const tableItems = formatDataToTable(
                 filteredItems,
-                isCollectionOwner
+                isCollectionOwner,
+                isMobile
               )
 
               const showShowTabs = hasEmotes && hasWearables

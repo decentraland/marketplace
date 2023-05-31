@@ -67,18 +67,18 @@ export const formatDataToTable = (
           </div>
           {order && (
             <div>
-              {isMobile ? (
-                <Icon name="chevron right" className={styles.gotToNFT} />
-              ) : (
-                <Button
-                  inverted
-                  as={Link}
-                  to={locations.nft(order.contractAddress, order.tokenId)}
-                  size="small"
-                >
-                  {t('listings_table.view_listing')}
-                </Button>
-              )}
+              <Button
+                inverted
+                as={Link}
+                to={locations.nft(order.contractAddress, order.tokenId)}
+                size="small"
+              >
+                {isMobile ? (
+                  <Icon name="chevron right" className={styles.gotToNFT} />
+                ) : (
+                  t('listings_table.view_listing')
+                )}
+              </Button>
             </div>
           )}
         </div>
