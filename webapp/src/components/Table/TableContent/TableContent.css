@@ -1,6 +1,7 @@
 .TableContent {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .TableContent .ui.table {
@@ -46,7 +47,7 @@
 
 .TableContent .ui.table tr td {
   border: 1px solid var(--divider);
-  padding: 18px;
+  padding: 15.5px;
 }
 
 .TableContent .ui.table tr td {
@@ -57,9 +58,14 @@
   color: var(--text);
 }
 
+.TableContent .ui.table td a.ui.button.inverted {
+  height: 32px;
+  font-size: 12px;
+}
+
 .TableContent .emptyTable {
   width: 100%;
-  height: 500px;
+  height: 404px;
   display: flex;
   align-items: center;
   justify-content: center;

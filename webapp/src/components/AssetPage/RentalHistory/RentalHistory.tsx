@@ -26,6 +26,7 @@ const RentalHistory = (props: Props) => {
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the last open one
   useEffect(() => {
+    let cancel = false
     if (asset) {
       rentalsAPI
         .getRentalListings({
@@ -36,14 +37,18 @@ const RentalHistory = (props: Props) => {
           page: (page - 1) * ROWS_PER_PAGE
         })
         .then(response => {
+          if (cancel) return
           setTotal(response.total)
           setRentals(formatDataToTable(response.results))
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
-        .finally(() => setIsLoading(false))
+        .finally(() => !cancel && setIsLoading(false))
         .catch(error => {
           console.error(error)
         })
+    }
+    return () => {
+      cancel = true
     }
   }, [asset, setIsLoading, setRentals, page])
 
