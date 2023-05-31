@@ -55,7 +55,7 @@
   margin-left: 0px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .ItemDetail .information {
     width: 100%;
   }
@@ -65,9 +65,6 @@
   }
   .ItemDetail .assetImageContainer {
     width: 100%;
-  }
-  .ItemDetail .basicRow {
-    flex-direction: column;
   }
 
   .ItemDetail :global(.dcl.stats + .dcl.stats) {
@@ -92,6 +89,9 @@
 
   .ItemDetail .basicRow :global(.dcl.stats) {
     width: 100%;
+  }
+  .ItemDetail .basicRow {
+    flex-direction: column;
   }
 
   .ItemDetail :global(.dcl.tabs) {

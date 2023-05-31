@@ -143,11 +143,7 @@ describe('Best Buying Option', () => {
         <BestBuyingOption asset={asset} tableRef={reference} />
       )
 
-      const loader = await findByTestId('loader')
-
-      await waitFor(() => {
-        expect(loader).not.toBeInTheDocument()
-      })
+      await findByTestId('best-buying-option-container')
 
       expect(
         getByText(t('best_buying_option.buy_listing.title'), { exact: false })
@@ -160,11 +156,7 @@ describe('Best Buying Option', () => {
         <BestBuyingOption asset={asset} tableRef={reference} />
       )
 
-      const loader = await findByTestId('loader')
-
-      await waitFor(() => {
-        expect(loader).not.toBeInTheDocument()
-      })
+      await findByTestId('best-buying-option-container')
 
       const price = formatWeiMANA(orderResponse.price)
 
@@ -194,11 +186,7 @@ describe('Best Buying Option', () => {
         <BestBuyingOption asset={asset} tableRef={reference} />
       )
 
-      const loader = await findByTestId('loader')
-
-      await waitFor(() => {
-        expect(loader).not.toBeInTheDocument()
-      })
+      await findByTestId('best-buying-option-container')
 
       expect(getByText(t('best_buying_option.empty.title'))).toBeInTheDocument()
     })
