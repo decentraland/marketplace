@@ -521,6 +521,7 @@
     "description": "Descripción",
     "no_description": "Sin descripción",
     "read_more": "Leer más",
+    "read_less": "Leer menos",
     "owner": "Dueño",
     "creator": "Creador",
     "price": "Precio",
