@@ -23,6 +23,8 @@ import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { NFT_SERVER_URL } from '../vendor/decentraland'
+import { SortDirection } from '../routing/types'
+import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import {
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
@@ -65,8 +67,6 @@ import {
 import { getListId } from './selectors'
 import { FavoritedItems, List } from './types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
-import { SortDirection } from '../routing/types'
-import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const itemAPI = new ItemAPI(NFT_SERVER_URL, {
