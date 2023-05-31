@@ -1,13 +1,15 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
+import { Contract } from '@dcl/schemas'
 import { RootState } from '../../../modules/reducer'
-import { acceptRentalListingRequest } from '../../../modules/rental/actions'
+import { acceptRentalListingRequest, clearRentalErrors } from '../../../modules/rental/actions'
 import { getWallet } from '../../../modules/wallet/selectors'
 import {
   isSubmittingTransaction,
   getError,
   isAcceptingRental
 } from '../../../modules/rental/selectors'
+import { getContract } from '../../../modules/contract/selectors'
 import {
   MapDispatchProps,
   MapStateProps,
@@ -20,7 +22,8 @@ const mapState = (state: RootState): MapStateProps => {
     wallet: getWallet(state),
     isTransactionBeingConfirmed: isAcceptingRental(state),
     isSubmittingTransaction: isSubmittingTransaction(state),
-    error: getError(state)
+    error: getError(state),
+    getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }
 
@@ -37,7 +40,8 @@ const mapDispatch = (
           ownProps.metadata.selectedPeriodIndex,
           addressOperator
         )
-      )
+      ),
+    onClearRentalErrors: () => dispatch(clearRentalErrors())
   }
 }
 

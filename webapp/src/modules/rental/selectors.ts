@@ -1,5 +1,6 @@
 import { RentalListing } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { AuthorizationStepStatus } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { RootState } from '../reducer'
 import {
   ACCEPT_RENTAL_LISTING_REQUEST,
@@ -23,3 +24,19 @@ export const isAcceptingRental = (state: RootState) =>
   isLoadingType(getLoading(state), ACCEPT_RENTAL_LISTING_REQUEST)
 export const isSubmittingTransaction = (state: RootState) =>
   getState(state).isSubmittingTransaction
+
+export const getRentConfirmationStatus = (state: RootState) => {
+  if (isSubmittingTransaction(state)) {
+    return AuthorizationStepStatus.WAITING
+  }
+
+  if (isAcceptingRental(state)) {
+    return AuthorizationStepStatus.PROCESSING
+  }
+
+  if (getError(state)) {
+    return AuthorizationStepStatus.ERROR
+  }
+
+  return AuthorizationStepStatus.PENDING
+}

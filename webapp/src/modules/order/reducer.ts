@@ -41,7 +41,9 @@ import {
   EXECUTE_ORDER_SUCCESS,
   EXECUTE_ORDER_WITH_CARD_FAILURE,
   EXECUTE_ORDER_WITH_CARD_REQUEST,
-  EXECUTE_ORDER_WITH_CARD_SUCCESS
+  EXECUTE_ORDER_WITH_CARD_SUCCESS,
+  ClearOrderErrorsAction,
+  CLEAR_ORDER_ERRORS
 } from './actions'
 
 export type OrderState = {
@@ -74,6 +76,7 @@ type OrderReducerAction =
   | CancelOrderFailureAction
   | CancelOrderSuccessAction
   | AcceptRentalListingSuccessAction
+  | ClearOrderErrorsAction
 
 export function orderReducer(
   state: OrderState = INITIAL_STATE,
@@ -154,6 +157,12 @@ export function orderReducer(
         )
       }
       return newState
+    }
+    case CLEAR_ORDER_ERRORS: {
+      return {
+        ...state,
+        error: null
+      }
     }
     default:
       return state
