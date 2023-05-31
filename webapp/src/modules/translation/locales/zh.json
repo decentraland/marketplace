@@ -524,6 +524,7 @@
     "description": "描述",
     "no_description": "沒有說明",
     "read_more": "閱讀更多",
+    "read_less": "少讀",
     "owner": "持有者",
     "creator": "创造者",
     "price": "价格",

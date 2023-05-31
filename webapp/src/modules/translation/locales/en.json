@@ -527,6 +527,7 @@
     "description": "Description",
     "no_description": "No description",
     "read_more": "Read more",
+    "read_less": "Read less",
     "owner": "Owner",
     "creator": "Creator",
     "price": "Price",
