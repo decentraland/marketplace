@@ -118,6 +118,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
 
   return isLoading ? null : (
     <div
+      data-testid="best-buying-option-container"
       className={
         buyOption === BuyOptions.MINT || buyOption === BuyOptions.BUY_LISTING
           ? `${styles.BestBuyingOption} ${styles.AlignEnd}`
