@@ -13,10 +13,20 @@
 .subHeader {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 46px;
 }
 
 .subHeader .right {
   display: inline-flex;
   gap: 10px;
   align-items: center;
+}
+
+.subHeader .left {
+  font-size: 17px;
+}
+
+.cards:global(.ui.cards) {
+  flex: 1 1 auto;
+  margin: 0px;
 }

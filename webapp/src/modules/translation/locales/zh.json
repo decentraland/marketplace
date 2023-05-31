@@ -1156,6 +1156,7 @@
   },
   "lists_page": {
     "title": "我的清单",
+    "subtitle": "{count} {count, plural, one {个清单} other {个列表}}",
     "create_list": "创建列表"
   },
   "claim_your_own_name": {

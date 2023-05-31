@@ -1159,6 +1159,7 @@
   },
   "lists_page": {
     "title": "My Lists",
+    "subtitle": "{count} {count, plural, one {List} other {Lists}}",
     "create_list": "Create list"
   },
   "claim_your_own_name": {

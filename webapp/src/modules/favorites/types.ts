@@ -1,5 +1,3 @@
-import { ListsSortBy } from '../vendor/decentraland/favorites/types'
-
 export enum Permission {
   VIEW = 'view',
   EDIT = 'edit'
@@ -24,8 +22,17 @@ export type List = {
 
 export type ListBrowseOptions = {}
 
+export enum ListsBrowseSortBy {
+  NAME_ASC = 'name_asc',
+  NAME_DESC = 'name_desc',
+  NEWEST = 'newest',
+  OLDEST = 'oldest',
+  RECENTLY_UPDATED = 'updatedAt'
+}
+
 export type ListsBrowseOptions = {
   page: number
   first: number
-  sortBy?: ListsSortBy
+  skip?: number
+  sortBy?: ListsBrowseSortBy
 }

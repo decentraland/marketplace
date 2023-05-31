@@ -1,5 +1,6 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../modules/reducer'
 import { getBrowseLists, getCount } from '../../modules/ui/browse/selectors'
 import { isLoadingLists } from '../../modules/favorites/selectors'
@@ -16,6 +17,12 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps =>
-  bindActionCreators({ fetchLists: fetchListsRequest }, dispatch)
+  bindActionCreators(
+    {
+      onFetchLists: fetchListsRequest,
+      onCreateList: () => openModal('CreateListModal')
+    },
+    dispatch
+  )
 
 export default connect(mapState, mapDispatch)(ListsPage)

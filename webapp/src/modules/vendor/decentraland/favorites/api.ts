@@ -15,20 +15,43 @@ export const MARKETPLACE_FAVORITES_SERVER_URL = config.get(
 const ALREADY_PICKED_STATUS_CODE = 422
 
 export class FavoritesAPI extends BaseClient {
-  private buildURLWithParameters(
-    endpoint: string,
-    _options: ListsOptions | PicksOptions
-  ) {
+  private buildPaginationParameters({
+    first,
+    skip
+  }: {
+    first?: number
+    skip?: number
+  }): URLSearchParams {
     const queryParams = new URLSearchParams()
-    if (options.first !== undefined) {
-      queryParams.append('limit', options.first.toString())
+    if (first !== undefined) {
+      queryParams.append('limit', first.toString())
     }
 
-    if (options.skip !== undefined) {
-      queryParams.append('offset', options.skip.toString())
+    if (skip !== undefined) {
+      queryParams.append('offset', skip.toString())
     }
+    return queryParams
+  }
 
+  private buildPaginatedUrl(endpoint: string, options: PicksOptions): string {
+    const queryParams = this.buildPaginationParameters(options)
     return endpoint + (queryParams.toString() && `?${queryParams.toString()}`)
+  }
+
+  private buildListsUrl(options: ListsOptions): string {
+    const queryParams = this.buildPaginationParameters(options)
+
+    if (options.sortDirection !== undefined) {
+      queryParams.append('sortDirection', options.sortDirection.toString())
+    }
+
+    if (options.sortBy !== undefined) {
+      queryParams.append('sortBy', options.sortBy.toString())
+    }
+
+    return (
+      '/v1/lists' + (queryParams.toString() && `?${queryParams.toString()}`)
+    )
   }
 
   async getWhoFavoritedAnItem(
@@ -40,7 +63,7 @@ export class FavoritesAPI extends BaseClient {
       results: { userAddress: string }[]
       total: number
     }>(
-      this.buildURLWithParameters(`/v1/picks/${itemId}`, {
+      this.buildPaginatedUrl(`/v1/picks/${itemId}`, {
         first: limit,
         skip: offset
       })
@@ -86,7 +109,7 @@ export class FavoritesAPI extends BaseClient {
     total: number
   }> {
     return this.fetch(
-      this.buildURLWithParameters(`/v1/lists/${listId}/picks`, {
+      this.buildPaginatedUrl(`/v1/lists/${listId}/picks`, {
         first: filters.first,
         skip: filters.skip
       })
@@ -94,10 +117,9 @@ export class FavoritesAPI extends BaseClient {
   }
 
   async getLists(
-    filters: ListsOptions = {}
+    options: ListsOptions = {}
   ): Promise<{ results: List[]; total: number }> {
-    console.log('Filters', filters)
-    return this.fetch(this.buildURLWithParameters('/v1/lists', filters))
+    return this.fetch(this.buildListsUrl(options))
   }
 
   async deleteList(listId: string): Promise<void> {

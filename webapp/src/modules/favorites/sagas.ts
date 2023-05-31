@@ -64,6 +64,9 @@ import {
 } from './actions'
 import { getListId } from './selectors'
 import { FavoritedItems, List } from './types'
+import { convertListsBrowseSortByIntoApiSortBy } from './utils'
+import { SortDirection } from '../routing/types'
+import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const itemAPI = new ItemAPI(NFT_SERVER_URL, {
@@ -247,12 +250,25 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
+      let sortBy: ListsSortBy | undefined
+      let sortDirection: SortDirection | undefined
+
+      if (options.sortBy) {
+        const sortValues: {
+          sortBy: ListsSortBy
+          sortDirection: SortDirection
+        } = yield call(convertListsBrowseSortByIntoApiSortBy, options.sortBy)
+        sortBy = sortValues.sortBy
+        sortDirection = sortValues.sortDirection
+      }
 
       const { results, total }: { results: List[]; total: number } = yield call(
         [favoritesAPI, 'getLists'],
         {
           first: options.first,
-          skip: (options.page - 1) * options.first
+          skip: options.skip ?? (options.page - 1) * options.first,
+          sortBy,
+          sortDirection
         }
       )
 

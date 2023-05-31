@@ -1,3 +1,5 @@
+import { SortDirection } from '../../../routing/types'
+
 export type PaginationParameters = {
   first?: number
   skip?: number
@@ -7,12 +9,11 @@ export type PicksOptions = PaginationParameters
 
 export type ListsOptions = PaginationParameters & {
   sortBy?: ListsSortBy
+  sortDirection?: SortDirection
 }
 
-export declare enum ListsSortBy {
-  NAME_ASC = 'name_asc',
-  NAME_DESC = 'name_desc',
-  NEWEST = 'newest',
-  OLDEST = 'oldest',
-  RECENTLY_UPDATED = 'recently_updated'
+export enum ListsSortBy {
+  NAME = 'name',
+  CREATED_AT = 'createdAt',
+  UPDATED_AT = 'updatedAt'
 }
