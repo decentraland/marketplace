@@ -14,13 +14,14 @@ import { NFT } from '../../nft/types'
 import { RootState } from '../../reducer'
 import { FavoritesState } from '../../favorites/reducer'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
-import { FavoritesData } from '../../favorites/types'
+import { FavoritesData, List } from '../../favorites/types'
 import { AssetType } from '../../asset/types'
 import { Section } from '../../vendor/decentraland/routing'
 import { View } from '../types'
 import { BrowseUIState } from './reducer'
 import {
   getBrowseAssets,
+  getBrowseLists,
   getCount,
   getItemsPickedByUser,
   getOnRentNFTsByLessor,
@@ -51,6 +52,7 @@ let rental: RentalListing
 let rentalCancelled: RentalListing
 let rentalExecutedByLessor: RentalListing
 let rentalExecutedByTenant: RentalListing
+let list: List
 
 beforeEach(() => {
   address = '0xaddress'
@@ -59,6 +61,13 @@ beforeEach(() => {
   nft = { id: '456', owner: address } as NFT
   order = { id: 'orderId ' } as Order
   nftOnSale = { id: '567', activeOrderId: order.id, owner: address } as NFT
+  list = {
+    id: 'listId',
+    name: 'listName',
+    description: 'listDescription',
+    userAddress: address,
+    createdAt: 123
+  }
   rental = {
     id: 'rentalId',
     status: RentalStatus.OPEN,
@@ -123,6 +132,7 @@ beforeEach(() => {
           nftWithExecutedRentByLessor.id,
           nftWithExecutedRentByTenant.id
         ],
+        listIds: [list.id],
         count: 1,
         page: 1,
         view: View.MARKET
@@ -162,7 +172,7 @@ beforeEach(() => {
       }
     },
     favorites: {
-      data: { items: {}, lists: {}, total: 0 },
+      data: { items: {}, lists: { [list.id]: list }, total: 0 },
       loading: [],
       error: null
     } as FavoritesState
@@ -439,5 +449,11 @@ describe('when getting the browse assets', () => {
         nftWithExecutedRentByTenant
       ])
     })
+  })
+})
+
+describe('when getting the browse lists', () => {
+  it('should retrieve the lists of the ui browse state', () => {
+    expect(getBrowseLists(rootState)).toStrictEqual([list])
   })
 })
