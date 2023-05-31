@@ -17,12 +17,16 @@
   padding-left: 20px;
 }
 
-.tableContainer {
-  display: flex;
-  flex-direction: column;
-  border: 2px solid var(--secondary);
-  border-radius: 12px;
-  margin-top: 48px;
+.listingsTableContainer :global(.filtertabsContainer) {
+  height: 69px;
+}
+
+.listingsTableContainer :global(.ui.basic.table tbody tr) {
+  height: 65px;
+}
+
+.listingsTableContainer :global(.dcl.mana.inline) {
+  line-height: 20px;
 }
 
 .sortByDropdown {

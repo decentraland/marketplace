@@ -12,6 +12,7 @@ const ManaToFiat = (props: Props) => {
   const [fiatValue, setFiatValue] = React.useState<string>()
 
   useEffect(() => {
+    let cancel = false
     try {
       const value = parseFloat(utils.formatEther(mana))
       new TokenConverter()
@@ -25,7 +26,7 @@ const ManaToFiat = (props: Props) => {
               : usd > ONE_MILLION.value
               ? ONE_MILLION
               : { value: 1, displayValue: '' }
-
+          if (cancel) return
           setFiatValue(
             `$ ${(+(+usd / divider.value).toFixed(digits)).toLocaleString(
               undefined,
@@ -38,6 +39,9 @@ const ManaToFiat = (props: Props) => {
         .catch()
     } catch (error) {
       // do nothing
+    }
+    return () => {
+      cancel = true
     }
   }, [digits, mana])
 

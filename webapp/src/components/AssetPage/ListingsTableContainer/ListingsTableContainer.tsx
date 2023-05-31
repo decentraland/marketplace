@@ -7,6 +7,7 @@ import { OwnersTable } from '../OwnersTable'
 import { ListingsTable } from '../ListingsTable'
 import TableContainer from '../../Table/TableContainer'
 import { Props, SortByType } from './ListingsTableContainer.types'
+import styles from './ListingsTableContainer.module.css'
 
 const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
   (props, ref) => {
@@ -80,29 +81,31 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
     }, [BelowTabs.OWNERS, handleTabChange, locations.search])
 
     return (
-      <TableContainer
-        children={
-          belowTab === BelowTabs.LISTINGS.value ? (
-            <ListingsTable asset={item} sortBy={sortBy as OrderSortBy} />
-          ) : (
-            <OwnersTable
-              asset={item}
-              orderDirection={sortBy as OrderDirection}
-            />
-          )
-        }
-        ref={ref}
-        tabsList={[BelowTabs.LISTINGS, BelowTabs.OWNERS]}
-        activeTab={belowTab}
-        handleTabChange={(tab: string) => handleTabChange(tab)}
-        sortbyList={
-          belowTab === BelowTabs.LISTINGS.value
-            ? listingSortByOptions
-            : ownerSortByOptions
-        }
-        handleSortByChange={(value: string) => setSortBy(value as SortByType)}
-        sortBy={sortBy}
-      />
+      <div className={styles.listingsTableContainer}>
+        <TableContainer
+          children={
+            belowTab === BelowTabs.LISTINGS.value ? (
+              <ListingsTable asset={item} sortBy={sortBy as OrderSortBy} />
+            ) : (
+              <OwnersTable
+                asset={item}
+                orderDirection={sortBy as OrderDirection}
+              />
+            )
+          }
+          ref={ref}
+          tabsList={[BelowTabs.LISTINGS, BelowTabs.OWNERS]}
+          activeTab={belowTab}
+          handleTabChange={(tab: string) => handleTabChange(tab)}
+          sortbyList={
+            belowTab === BelowTabs.LISTINGS.value
+              ? listingSortByOptions
+              : ownerSortByOptions
+          }
+          handleSortByChange={(value: string) => setSortBy(value as SortByType)}
+          sortBy={sortBy}
+        />
+      </div>
     )
   }
 )

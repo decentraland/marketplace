@@ -12,7 +12,7 @@ import { formatDataToTable } from './utils'
 import { Props } from './ListingsTable.types'
 import styles from './ListingsTable.module.css'
 
-export const ROWS_PER_PAGE = 6
+export const ROWS_PER_PAGE = 5
 const INITIAL_PAGE = 1
 
 const ListingsTable = (props: Props) => {
@@ -27,6 +27,7 @@ const ListingsTable = (props: Props) => {
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the first ROWS_PER_PAGE
   useEffect(() => {
+    let cancel = false
     if (asset) {
       setIsLoading(true)
 
@@ -46,6 +47,7 @@ const ListingsTable = (props: Props) => {
       orderAPI
         .fetchOrders(params, sortBy)
         .then(response => {
+          if (cancel) return
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
           setOrders(
             formatDataToTable(
@@ -57,10 +59,13 @@ const ListingsTable = (props: Props) => {
           )
           setTotal(response.total)
         })
-        .finally(() => setIsLoading(false))
+        .finally(() => !cancel && setIsLoading(false))
         .catch(error => {
           console.error(error)
         })
+    }
+    return () => {
+      cancel = true
     }
   }, [asset, setIsLoading, setOrders, sortBy, page, isMobileOrTablet])
 
