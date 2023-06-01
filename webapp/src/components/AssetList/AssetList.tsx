@@ -85,10 +85,10 @@ const AssetList = (props: Props) => {
       return (
         <div className="empty">
           <div className="logo"></div>
-          <h1 className="title">{t('my_lists.empty.title')}</h1>
-          <p className="subtitle">{t('my_lists.empty.subtitle')}</p>
+          <h1 className="title">{t('list_page.empty.title')}</h1>
+          <p className="subtitle">{t('list_page.empty.subtitle')}</p>
           <Button primary as={Link} to={locations.browse()}>
-            {t('my_lists.empty.action')}
+            {t('list_page.empty.action')}
           </Button>
         </div>
       )

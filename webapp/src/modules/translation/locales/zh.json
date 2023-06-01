@@ -152,10 +152,15 @@
   "filters": {
     "type": "物品类型",
     "status": "土地状况",
+    "sort_by": "排序方式",
     "item": "原创作品",
     "nft": "被转售的物品",
     "name": "名称",
+    "name_asc": "姓名 ⬆",
+    "name_desc": "姓名 ⬇",
+    "recently_updated": "最近更新",
     "newest": "最新",
+    "oldest": "最老的",
     "recently_listed": "最新上市",
     "recently_listed_for_rent": "最近挂牌出租",
     "recently_sold": "最近售出",
@@ -1159,20 +1164,23 @@
     "disclaimer": "仅统计超过 1 个 VP 的帐户。",
     "empty": "用户尚未保存此项"
   },
-  "lists_page": {
-    "default_title": "心愿单"
-  },
-  "claim_your_own_name": {
-    "title": "声称自己的名字",
-    "text": "在本节中，您可以找到由 Decentraland 用户列出的待售名称。或者，您可以从'构建器'部分以{mana}的固定价格声明自己唯一的名称。",
-    "btn": "认领你的名字"
-  },
-  "my_lists": {
+  "list_page": {
+    "default_title": "心愿单",
     "empty": {
       "title": "您没有任何已保存的项目",
       "subtitle": "发现惊人的项目。",
       "action": "浏览项目"
     }
+  },
+  "lists_page": {
+    "title": "我的清单",
+    "subtitle": "{count} {count, plural, one {个清单} other {个列表}}",
+    "create_list": "创建列表"
+  },
+  "claim_your_own_name": {
+    "title": "声称自己的名字",
+    "text": "在本节中，您可以找到由 Decentraland 用户列出的待售名称。或者，您可以从'构建器'部分以{mana}的固定价格声明自己唯一的名称。",
+    "btn": "认领你的名字"
   },
   "create_list_modal": {
     "title": "创建列表",

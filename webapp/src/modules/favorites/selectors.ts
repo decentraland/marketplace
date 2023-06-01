@@ -9,6 +9,7 @@ import {
   PICK_ITEM_AS_FAVORITE_REQUEST,
   UNPICK_ITEM_AS_FAVORITE_REQUEST,
   UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
+  FETCH_LISTS_REQUEST,
   CREATE_LIST_REQUEST
 } from './actions'
 
@@ -22,6 +23,8 @@ export const getError = (state: RootState) => getState(state).error
 export const isLoadingFavoritedItems = (state: RootState): boolean =>
   isLoadingType(getLoading(state), FETCH_FAVORITED_ITEMS_REQUEST)
 
+export const isLoadingLists = (state: RootState): boolean =>
+  isLoadingType(getLoading(state), FETCH_LISTS_REQUEST)
 export const isLoadingCreateList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), CREATE_LIST_REQUEST)
 

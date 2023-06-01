@@ -11,6 +11,8 @@ import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
+import { ListsSortBy } from '../vendor/decentraland/favorites/types'
+import { SortDirection } from '../routing/types'
 import {
   cancelPickItemAsFavorite,
   createListFailure,
@@ -43,7 +45,14 @@ import {
 } from './actions'
 import { favoritesSaga } from './sagas'
 import { getListId } from './selectors'
-import { FavoritedItems, List, Permission } from './types'
+import {
+  FavoritedItems,
+  List,
+  ListsBrowseOptions,
+  ListsBrowseSortBy,
+  Permission
+} from './types'
+import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 let item: Item
 let address: string
@@ -459,12 +468,12 @@ describe('when handling the request for fetching favorited items', () => {
 })
 
 describe('when handling the request for fetching lists', () => {
-  let options: ItemBrowseOptions
+  let options: ListsBrowseOptions
 
   beforeEach(() => {
     options = {
-      view: View.LISTS,
-      page: 0
+      page: 1,
+      first: 24
     }
   })
 
@@ -490,9 +499,92 @@ describe('when handling the request for fetching lists', () => {
         ])
         .call.like({
           fn: FavoritesAPI.prototype.getLists,
-          args: [options.filters]
+          args: [
+            {
+              first: options.first,
+              skip: (options.page - 1) * options.first,
+              sortBy: undefined,
+              sortDirection: undefined
+            }
+          ]
         })
         .put(fetchListsFailure(error.message))
+        .dispatch(fetchListsRequest(options))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the sortBy by option is set', () => {
+    let convertedSortBy: {
+      sortBy: ListsSortBy
+      sortDirection: SortDirection
+    }
+
+    beforeEach(() => {
+      options.sortBy = ListsBrowseSortBy.NAME_ASC
+      convertedSortBy = {
+        sortBy: ListsSortBy.NAME,
+        sortDirection: SortDirection.ASC
+      }
+    })
+
+    it('should convert the sort by options and call the api with the sortBy and sortDirection options', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.getLists),
+            Promise.reject(error)
+          ],
+          [
+            call(
+              convertListsBrowseSortByIntoApiSortBy,
+              options.sortBy ?? ListsBrowseSortBy.NAME_ASC
+            ),
+            convertedSortBy
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.getLists,
+          args: [
+            {
+              first: options.first,
+              skip: (options.page - 1) * options.first,
+              sortBy: convertedSortBy.sortBy,
+              sortDirection: convertedSortBy.sortDirection
+            }
+          ]
+        })
+        .dispatch(fetchListsRequest(options))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the skip option is set', () => {
+    beforeEach(() => {
+      options.skip = 1
+    })
+
+    it('should call the api with the skip option', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.getLists),
+            Promise.reject(error)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.getLists,
+          args: [
+            {
+              first: options.first,
+              skip: options.skip,
+              sortBy: undefined,
+              sortDirection: undefined
+            }
+          ]
+        })
         .dispatch(fetchListsRequest(options))
         .run({ silenceTimeout: true })
     })
@@ -527,7 +619,14 @@ describe('when handling the request for fetching lists', () => {
         ])
         .call.like({
           fn: FavoritesAPI.prototype.getLists,
-          args: [options.filters]
+          args: [
+            {
+              first: options.first,
+              skip: (options.page - 1) * options.first,
+              sortBy: undefined,
+              sortDirection: undefined
+            }
+          ]
         })
         .put(fetchListsSuccess(lists, total, options))
         .dispatch(fetchListsRequest(options))

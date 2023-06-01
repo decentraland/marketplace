@@ -14,8 +14,11 @@ import { getData as getNFTData, getWalletNFTs } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
 import { getData as getRentalData } from '../../rental/selectors'
-import { getFavoritedItems as getFavoritedItemsFromState } from '../../favorites/selectors'
-import { FavoritesData } from '../../favorites/types'
+import {
+  getFavoritedItems as getFavoritedItemsFromState,
+  getLists
+} from '../../favorites/selectors'
+import { FavoritesData, List } from '../../favorites/types'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { NFTState } from '../../nft/reducer'
 import { RootState } from '../../reducer'
@@ -79,6 +82,15 @@ export const getBrowseAssets = (
     return getNFTs(state)
   }
 }
+
+export const getBrowseLists = createSelector<
+  RootState,
+  BrowseUIState,
+  Record<string, List>,
+  List[]
+>(getState, getLists, (browse, listsById) =>
+  browse.listIds.map(id => listsById[id]).filter(Boolean)
+)
 
 export const getItemsPickedByUser = createSelector<
   RootState,
