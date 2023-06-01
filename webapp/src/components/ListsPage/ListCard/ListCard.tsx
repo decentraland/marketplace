@@ -1,5 +1,4 @@
 import React from 'react'
-// import classnames from 'classnames'
 import { Link } from 'react-router-dom'
 import { Card, Dropdown, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -13,18 +12,30 @@ const ListCard = (props: Props) => {
   return (
     <Card as={Link} to={locations.list(list.id)} className={styles.card}>
       <div className={styles.image}>
+        {true ? (
+          <div className={styles.private}>
+            <div className={styles.icon}></div>
+            {t('list_card.private')}
+          </div>
+        ) : null}
         {items.length > 0 ? (
           <div className={styles.grid}>
             {items.map(item => (
-              <img alt={'thumbnail of list item'} src={item.thumbnail} />
+              <img
+                key={item.id}
+                width={60}
+                height={60}
+                alt={'thumbnail of list item'}
+                src={item.thumbnail}
+              />
             ))}
           </div>
         ) : null}
         {items.length === 0 ? (
-          <span className={styles.empty}>
+          <div className={styles.empty}>
             <span className={styles.icon}></span>
             <span>{t('list_card.no_items')}</span>
-          </span>
+          </div>
         ) : null}
       </div>
       <div className={styles.content}>

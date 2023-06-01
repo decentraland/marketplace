@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { getListItems } from '../../../modules/favorites/selectors'
+import { getPreviewListItems } from '../../../modules/favorites/selectors'
 import { RootState } from '../../../modules/reducer'
 import {
   MapStateProps,
@@ -16,7 +16,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   console.log(state)
   console.log(ownProps)
   return {
-    items: getListItems(state, ownProps.list.id).slice(0, 3)
+    items: getPreviewListItems(state, ownProps.list.id)
     //   items: [
     //     {
     //       thumbnail:
