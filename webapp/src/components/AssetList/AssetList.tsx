@@ -6,7 +6,6 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
-import { AssetType } from '../../modules/asset/types'
 import { Section } from '../../modules/vendor/decentraland'
 import { locations } from '../../modules/routing/locations'
 import * as events from '../../utils/events'
@@ -65,7 +64,7 @@ const AssetList = (props: Props) => {
       return ''
     } else if (section) {
       if (isManager) {
-        return 'nft_list.simple_empty'
+        return 'nft_list.empty'
       }
 
       const isEmoteOrWearableSection = [
@@ -77,7 +76,7 @@ const AssetList = (props: Props) => {
         return search ? 'nft_list.empty_search' : 'nft_list.empty'
       }
     }
-    return 'nft_list.simple_empty'
+    return 'nft_list.empty'
   }, [assets.length, search, section, isManager])
 
   const renderEmptyState = useCallback(() => {
@@ -85,30 +84,21 @@ const AssetList = (props: Props) => {
       return (
         <div className="empty">
           <div className="logo"></div>
-          <h1 className="title">{t('my_lists.empty.title')}</h1>
-          <p className="subtitle">{t('my_lists.empty.subtitle')}</p>
+          <h1 className="title">{t('list_page.empty.title')}</h1>
+          <p className="subtitle">{t('list_page.empty.subtitle')}</p>
           <Button primary as={Link} to={locations.browse()}>
-            {t('my_lists.empty.action')}
+            {t('list_page.empty.action')}
           </Button>
         </div>
       )
     }
 
-    const currentSection =
-      assetType === AssetType.ITEM
-        ? t('browse_page.primary_market_title').toLocaleLowerCase()
-        : t('browse_page.secondary_market_title').toLocaleLowerCase()
-    const alternativeSection =
-      assetType === AssetType.ITEM
-        ? t('browse_page.secondary_market_title').toLocaleLowerCase()
-        : t('browse_page.primary_market_title').toLocaleLowerCase()
     return (
       <div className="empty empty-assets">
         <div className="watermelon" />
         <span>
           {t(`${emptyStateTranslationString}.title`, {
-            search,
-            currentSection
+            search
           })}
         </span>
         <span>
@@ -116,23 +106,6 @@ const AssetList = (props: Props) => {
             id={`${emptyStateTranslationString}.action`}
             values={{
               search,
-              currentSection,
-              section: alternativeSection,
-              searchStore: (chunks: string) => (
-                <button
-                  className="empty-actions"
-                  onClick={() =>
-                    onBrowse({
-                      assetType:
-                        assetType === AssetType.ITEM
-                          ? AssetType.NFT
-                          : AssetType.ITEM
-                    })
-                  }
-                >
-                  {chunks}
-                </button>
-              ),
               'if-filters': (chunks: string) =>
                 hasFiltersEnabled ? chunks : '',
               clearFilters: (chunks: string) => (
@@ -146,10 +119,8 @@ const AssetList = (props: Props) => {
       </div>
     )
   }, [
-    assetType,
     emptyStateTranslationString,
     hasFiltersEnabled,
-    onBrowse,
     onClearFilters,
     search,
     section

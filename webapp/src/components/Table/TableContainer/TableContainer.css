@@ -1,0 +1,85 @@
+.supply {
+  color: var(--secondary-text);
+}
+
+.ownerButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filtertabsContainer {
+  display: flex;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  align-items: center;
+  border-bottom: 1px solid var(--divider);
+  padding-left: 20px;
+}
+
+.filtertabsContainer .dcl.tab {
+  padding: 0px;
+  height: 46px;
+  align-items: center;
+  margin-top: 22px;
+}
+
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  margin-top: 48px;
+  background-color: var(--secondary);
+}
+
+.sortByDropdown {
+  border-radius: 12px;
+  margin-right: 20px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+}
+
+.filtertabsContainer .ui.dropdown {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  position: absolute;
+  right: 20px;
+}
+
+.ui.dropdown > .icon {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.tabStyle {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  :global(.ui.button.basic) {
+    text-align: left;
+  }
+
+  .filtertabsContainer {
+    flex-direction: column;
+    padding: unset;
+  }
+
+  .tabStyle {
+    padding-left: unset;
+  }
+
+  .filtertabsContainer .ui.dropdown {
+    position: relative;
+    left: 0;
+    margin: 16px 12px 16px 0px;
+    align-self: flex-end;
+  }
+  .tableContainer {
+    margin-top: 16px;
+  }
+}

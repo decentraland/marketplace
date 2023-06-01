@@ -52,3 +52,25 @@ export type NFTResponse = {
 }
 
 export type NFTData = BaseNFT['data']
+
+
+export enum OwnersSortBy {
+  ISSUED_ID = 'issuedId'
+}
+
+export type OwnersResponse = {
+  issuedId: number
+  ownerId: string
+  orderStatus: string | null
+  orderExpiresAt: string | null
+  tokenId: string
+}
+
+export type OwnersFilters = {
+  contractAddress: string
+  itemId: string
+  first: number
+  skip: number
+  sortBy?: OwnersSortBy
+  orderDirection?: string
+}

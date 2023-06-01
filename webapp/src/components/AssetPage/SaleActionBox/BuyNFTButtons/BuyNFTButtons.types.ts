@@ -1,7 +1,13 @@
-import { Asset } from '../../../../modules/asset/types'
+import { Network } from '@dcl/schemas'
+import { AssetType } from '../../../../modules/asset/types'
 
 export type Props = {
-  asset: Asset
+  assetType: AssetType
+  contractAddress: string
+  network: Network
+  tokenId?: string
+  itemId?: string
+  buyWithCardClassName?: string
 }
 
-export type OwnProps = Pick<Props, 'asset'>
+export type OwnProps = Props

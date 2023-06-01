@@ -19,10 +19,12 @@ import {
   MARKETPLACE_FAVORITES_SERVER_URL
 } from '../vendor/decentraland/favorites/api'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
-import { ItemAPI } from '../vendor/decentraland/item/api'
 import { NFT_SERVER_URL } from '../vendor/decentraland'
+import { SortDirection } from '../routing/types'
+import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import {
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
@@ -64,19 +66,19 @@ import {
 } from './actions'
 import { getListId } from './selectors'
 import { FavoritedItems, List } from './types'
+import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
-  const itemAPI = new ItemAPI(NFT_SERVER_URL, {
+  const API_OPTS = {
     retries: retryParams.attempts,
     retryDelay: retryParams.delay,
     identity: getIdentity
-  })
-
-  const favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
-    retries: retryParams.attempts,
-    retryDelay: retryParams.delay,
-    identity: getIdentity
-  })
+  }
+  const favoritesAPI = new FavoritesAPI(
+    MARKETPLACE_FAVORITES_SERVER_URL,
+    API_OPTS
+  )
+  const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield takeEvery(
     PICK_ITEM_AS_FAVORITE_REQUEST,
@@ -206,18 +208,20 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           favoritedItem.createdAt
         ])
       )
+      const ids = results.map(({ itemId }) => itemId)
+      const optionsFilters = {
+        first: results.length,
+        ids
+      }
       const options: ItemBrowseOptions = {
         ...action.payload.options,
-        filters: {
-          first: results.length,
-          ids: results.map(({ itemId }) => itemId)
-        }
+        filters: optionsFilters
       }
 
       if (results.length > 0) {
         const result: { data: Item[] } = yield call(
-          [itemAPI, 'get'],
-          options.filters
+          [catalogAPI, 'get'],
+          optionsFilters
         )
         items = result.data
       }
@@ -247,10 +251,26 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
+      let sortBy: ListsSortBy | undefined
+      let sortDirection: SortDirection | undefined
+
+      if (options.sortBy) {
+        const sortValues: {
+          sortBy: ListsSortBy
+          sortDirection: SortDirection
+        } = yield call(convertListsBrowseSortByIntoApiSortBy, options.sortBy)
+        sortBy = sortValues.sortBy
+        sortDirection = sortValues.sortDirection
+      }
 
       const { results, total }: { results: List[]; total: number } = yield call(
         [favoritesAPI, 'getLists'],
-        options.filters
+        {
+          first: options.first,
+          skip: options.skip ?? (options.page - 1) * options.first,
+          sortBy,
+          sortDirection
+        }
       )
 
       yield put(fetchListsSuccess(results, total, options))

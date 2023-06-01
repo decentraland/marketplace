@@ -13,7 +13,6 @@
 .Slideshow .assets {
   display: flex;
   flex-wrap: nowrap;
-  overflow: auto;
   position: relative;
   min-height: 336px;
   -ms-overflow-style: none; /* hide scrollbar IE and Edge */
@@ -39,7 +38,6 @@
   flex: 0 0 auto;
   width: 257px;
   margin-right: 12px;
-  height: 300px;
   margin-top: 12px;
 }
 
@@ -143,6 +141,9 @@
   .Slideshow {
     overflow: hidden;
   }
+  .Slideshow .assets {
+    overflow: scroll;
+  }
 }
 
 .Slideshow .ItemsSection .tabs {
@@ -178,6 +179,11 @@
 }
 
 @media (max-width: 768px) {
+  .Slideshow .AssetCard .wrapBigText {
+    flex-direction: row;
+    align-items: center;
+  }
+  
   .Slideshow .ItemsSection {
     display: flex;
     align-items: center;

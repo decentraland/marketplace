@@ -172,6 +172,42 @@ describe('when getting the lists', () => {
       return expect(favoritesAPI.getLists()).resolves.toEqual(response)
     })
   })
+
+  describe.each([
+    ['first', 10, 'limit'],
+    ['skip', 20, 'offset'],
+    ['sortBy', 'name', 'sortBy'],
+    ['sortDirection', 'asc', 'sortDirection']
+  ])(
+    'when the request is made with the %s parameter',
+    (parameter, value, expectedParameter) => {
+      let response: { results: List[]; total: number }
+      beforeEach(async () => {
+        response = {
+          results: [
+            {
+              id: 'aListId',
+              name: 'aName',
+              description: 'aDescription',
+              userAddress: 'anOwnerAddress',
+              createdAt: Date.now()
+            }
+          ],
+          total: 1
+        }
+        fetchMock.mockResolvedValueOnce(response)
+        await favoritesAPI.getLists({
+          [parameter]: value
+        })
+      })
+
+      it(`should have called the API with the query parameter ${parameter} with its value`, () => {
+        expect(fetchMock).toHaveBeenCalledWith(
+          expect.stringContaining(`${expectedParameter}=${value}`)
+        )
+      })
+    }
+  )
 })
 
 describe('when deleting a list', () => {

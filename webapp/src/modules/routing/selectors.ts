@@ -10,6 +10,8 @@ import {
   Network,
   Rarity
 } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { AssetStatusFilter } from '../../utils/filters'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor/types'
@@ -26,13 +28,22 @@ import {
   getURLParam,
   getURLParamArray_nonStandard
 } from './search'
-import { BrowseOptions, PageName, SortBy } from './types'
+import { BrowseOptions, PageName, SortBy, SortByOption } from './types'
 import { locations } from './locations'
 
 export const getState = (state: RootState) => state.routing
 
 export const getVisitedLocations = (state: RootState) =>
   getState(state).visitedLocations
+
+export const getLatestVisitedLocation = createSelector<
+  RootState,
+  ReturnType<typeof getLocation>[],
+  ReturnType<typeof getLocation>
+>(
+  getVisitedLocations,
+  visitedLocations => visitedLocations[visitedLocations.length - 1]
+)
 
 const getPathName = createSelector<
   RootState,
@@ -92,14 +103,12 @@ export const getSortBy = createSelector<
   View | undefined,
   Section,
   SortBy | undefined
->(
-  getRouterSearch,
-  getView,
-  getSection,
-  (search, view, section) =>
+>(getRouterSearch, getView, getSection, (search, view, section) => {
+  return (
     getURLParam<SortBy>(search, 'sortBy') ||
     getDefaultOptionsByView(view, section).sortBy
-)
+  )
+})
 
 export const getOnlyOnSale = createSelector<
   RootState,
@@ -135,6 +144,107 @@ export const getOnlyOnRent = createSelector<
     default:
       return undefined
   }
+})
+
+export const getAllSortByOptions = () => ({
+  [SortBy.NEWEST]: { value: SortBy.NEWEST, text: t('filters.newest') },
+  [SortBy.NAME]: { value: SortBy.NAME, text: t('filters.name') },
+  [SortBy.RECENTLY_SOLD]: {
+    value: SortBy.RECENTLY_SOLD,
+    text: t('filters.recently_sold')
+  },
+  [SortBy.CHEAPEST]: {
+    value: SortBy.CHEAPEST,
+    text: t('filters.cheapest')
+  },
+  [SortBy.MOST_EXPENSIVE]: {
+    value: SortBy.MOST_EXPENSIVE,
+    text: t('filters.most_expensive')
+  },
+  [SortBy.MAX_RENTAL_PRICE]: {
+    value: SortBy.MAX_RENTAL_PRICE,
+    text: t('filters.cheapest')
+  },
+  [SortBy.RECENTLY_LISTED]: {
+    value: SortBy.RECENTLY_LISTED,
+    text: t('filters.recently_listed')
+  },
+  [SortBy.RENTAL_LISTING_DATE]: {
+    value: SortBy.RENTAL_LISTING_DATE,
+    text: t('filters.recently_listed_for_rent')
+  }
+})
+
+export const getStatus = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => getURLParam(search, 'status') || ''
+)
+
+export const getSortByOptions = createSelector<
+  RootState,
+  boolean | undefined,
+  boolean | undefined,
+  string,
+  SortByOption[]
+>(getOnlyOnRent, getOnlyOnSale, getStatus, (onlyOnRent, onlyOnSale, status) => {
+  const SORT_BY_MAP = getAllSortByOptions()
+  let orderByDropdownOptions: SortByOption[] = []
+  if (status) {
+    const baseFilters = [
+      SORT_BY_MAP[SortBy.NEWEST],
+      SORT_BY_MAP[SortBy.RECENTLY_LISTED],
+      SORT_BY_MAP[SortBy.RECENTLY_SOLD],
+      SORT_BY_MAP[SortBy.CHEAPEST],
+      SORT_BY_MAP[SortBy.MOST_EXPENSIVE]
+    ]
+    switch (status) {
+      case AssetStatusFilter.ON_SALE:
+      case AssetStatusFilter.ONLY_MINTING:
+      case AssetStatusFilter.ONLY_LISTING:
+        orderByDropdownOptions = baseFilters
+        break
+      case AssetStatusFilter.NOT_FOR_SALE:
+        orderByDropdownOptions = [SORT_BY_MAP[SortBy.NEWEST]]
+        break
+    }
+    return orderByDropdownOptions
+  }
+  if (onlyOnRent) {
+    orderByDropdownOptions = [
+      {
+        value: SortBy.RENTAL_LISTING_DATE,
+        text: t('filters.recently_listed_for_rent')
+      },
+      { value: SortBy.NAME, text: t('filters.name') },
+      { value: SortBy.NEWEST, text: t('filters.newest') },
+      { value: SortBy.MAX_RENTAL_PRICE, text: t('filters.cheapest') }
+    ]
+  } else {
+    orderByDropdownOptions = [
+      { value: SortBy.NEWEST, text: t('filters.newest') },
+      { value: SortBy.NAME, text: t('filters.name') }
+    ]
+  }
+
+  if (onlyOnSale) {
+    orderByDropdownOptions = [
+      {
+        value: SortBy.RECENTLY_LISTED,
+        text: t('filters.recently_listed')
+      },
+      {
+        value: SortBy.RECENTLY_SOLD,
+        text: t('filters.recently_sold')
+      },
+      {
+        value: SortBy.CHEAPEST,
+        text: t('filters.cheapest')
+      },
+      ...orderByDropdownOptions
+    ]
+  }
+
+  return orderByDropdownOptions
 })
 
 export const getIsSoldOut = createSelector<
@@ -233,6 +343,7 @@ export const getAssetType = createSelector<
     if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
       return AssetType.ITEM
     }
+
     return AssetType.NFT
   }
   return assetTypeParam as AssetType
@@ -347,13 +458,15 @@ export const getAssetsUrlParams = createSelector(
   getItemId,
   getContracts,
   getCreators,
-  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators) => ({
+  getSearch,
+  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators, search) => ({
     onlyOnSale,
     onlySmart,
     isSoldOut,
     itemId,
     contracts,
-    creators
+    creators,
+    search
   })
 )
 
@@ -394,13 +507,23 @@ export const getWearablesUrlParams = createSelector(
   getViewAsGuest,
   getMinPrice,
   getMaxPrice,
-  (rarities, wearableGenders, view, viewAsGuest, minPrice, maxPrice) => ({
+  getStatus,
+  (
     rarities,
     wearableGenders,
     view,
     viewAsGuest,
     minPrice,
-    maxPrice
+    maxPrice,
+    status
+  ) => ({
+    rarities,
+    wearableGenders,
+    view,
+    viewAsGuest,
+    minPrice,
+    maxPrice,
+    status
   })
 )
 
@@ -449,6 +572,14 @@ export const getCurrentBrowseOptions = createSelector(
     } as BrowseOptions)
 )
 
+export const getCurrentSearch = createSelector(
+  [getAssetsUrlParams],
+  AssetsUrlParams => {
+    const { search } = AssetsUrlParams
+    return search
+  }
+)
+
 export const hasFiltersEnabled = createSelector<
   RootState,
   BrowseOptions,
@@ -471,7 +602,9 @@ export const hasFiltersEnabled = createSelector<
     maxDistanceToPlaza,
     adjacentToRoad,
     creators,
-    rentalDays
+    rentalDays,
+    status,
+    onlySmart
   } = browseOptions
   const isLand = isLandSection(section as Section)
 
@@ -505,13 +638,15 @@ export const hasFiltersEnabled = createSelector<
   return (
     hasNetworkFilter ||
     hasGenderFilter ||
+    onlySmart ||
     hasRarityFilter ||
     hasContractsFilter ||
     hasCreatorFilter ||
     hasEmotePlayModeFilter ||
     !!minPrice ||
     !!maxPrice ||
-    hasNotOnSaleFilter
+    hasNotOnSaleFilter ||
+    (!!status && status !== AssetStatusFilter.ON_SALE)
   )
 })
 

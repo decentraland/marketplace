@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Switch, Route, Redirect, RouteComponentProps } from 'react-router-dom'
 import { Center, Page } from 'decentraland-ui'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
@@ -26,11 +27,22 @@ import { ManageAssetPage } from '../ManageAssetPage'
 import { Footer } from '../Footer'
 import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
 import { StatusPage } from '../BuyPage/StatusPage'
+import { ListPage } from '../ListPage'
+import { ProtectedRoute } from '../ProtectedRoute'
 import { ListsPage } from '../ListsPage'
 import { Props } from './Routes.types'
 
 const Routes = ({ inMaintenance }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
+  const renderItemAssetPage = useCallback(
+    () => <AssetPage type={AssetType.ITEM} />,
+    []
+  )
+
+  const renderNFTAssetPage = useCallback(
+    () => <AssetPage type={AssetType.NFT} />,
+    []
+  )
 
   if (inMaintenance) {
     return (
@@ -56,7 +68,8 @@ const Routes = ({ inMaintenance }: Props) => {
           component={AccountPage}
         />
         <Route exact path={locations.account()} component={AccountPage} />
-        <Route exact path={locations.list()} component={ListsPage} />
+        <ProtectedRoute exact path={locations.lists()} component={ListsPage} />
+        <Route exact path={locations.list()} component={ListPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
         <Route exact path={locations.sell()} component={SellPage} />
         <Route exact path={locations.bid()} component={BidPage} />
@@ -88,16 +101,8 @@ const Routes = ({ inMaintenance }: Props) => {
             <StatusPage {...props} type={AssetType.ITEM} />
           )}
         />
-        <Route
-          exact
-          path={locations.nft()}
-          component={() => <AssetPage type={AssetType.NFT} />}
-        />
-        <Route
-          exact
-          path={locations.item()}
-          component={() => <AssetPage type={AssetType.ITEM} />}
-        />
+        <Route exact path={locations.nft()} component={renderNFTAssetPage} />
+        <Route exact path={locations.item()} component={renderItemAssetPage} />
         <Route exact path={locations.settings()} component={SettingsPage} />
         <Route exact path={locations.activity()} component={ActivityPage} />
         <Route exact path={locations.root()} component={HomePage} />

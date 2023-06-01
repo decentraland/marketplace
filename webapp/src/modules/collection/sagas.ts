@@ -1,7 +1,7 @@
 import { call, takeEvery, put, select } from '@redux-saga/core/effects'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
-import { fetchItemsRequest } from '../item/actions'
+import { fetchCollectionItemsRequest } from '../item/actions'
 import { getItemsByContractAddress } from '../item/selectors'
 import { collectionAPI } from '../vendor/decentraland'
 import { CollectionResponse } from '../vendor/decentraland/collection/types'
@@ -47,11 +47,9 @@ export function* handleFetchCollectionsRequest(
 
         if (!items || items.length !== collection.size) {
           yield put(
-            fetchItemsRequest({
-              filters: {
-                first: collection.size,
-                contracts: [collection.contractAddress]
-              }
+            fetchCollectionItemsRequest({
+              first: collection.size,
+              contractAddresses: [collection.contractAddress]
             })
           )
         }
@@ -97,11 +95,9 @@ export function* handleFetchSingleCollectionRequest(
 
       if (!items || items.length !== collection.size) {
         yield put(
-          fetchItemsRequest({
-            filters: {
-              first: collection.size,
-              contracts: [collection.contractAddress]
-            }
+          fetchCollectionItemsRequest({
+            first: collection.size,
+            contractAddresses: [collection.contractAddress]
           })
         )
       }

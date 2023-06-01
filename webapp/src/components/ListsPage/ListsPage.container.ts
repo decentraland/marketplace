@@ -1,27 +1,28 @@
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { replace } from 'connected-react-router'
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../modules/reducer'
-import { getWallet, isConnecting } from '../../modules/wallet/selectors'
-import {
-  MapStateProps,
-  MapDispatch,
-  MapDispatchProps,
-  OwnProps
-} from './ListsPage.types'
-import AccountPage from './ListsPage'
+import { getBrowseLists, getCount } from '../../modules/ui/browse/selectors'
+import { isLoadingLists } from '../../modules/favorites/selectors'
+import { fetchListsRequest } from '../../modules/favorites/actions'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './ListsPage.types'
+import ListsPage from './ListsPage'
 
-const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const { listId } = ownProps.match.params
-
+const mapState = (state: RootState): MapStateProps => {
   return {
-    wallet: getWallet(state),
-    isConnecting: isConnecting(state),
-    listId
+    isLoading: isLoadingLists(state),
+    lists: getBrowseLists(state),
+    count: getCount(state)
   }
 }
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onRedirect: path => dispatch(replace(path))
-})
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps =>
+  bindActionCreators(
+    {
+      onFetchLists: fetchListsRequest,
+      onCreateList: () => openModal('CreateListModal')
+    },
+    dispatch
+  )
 
-export default connect(mapState, mapDispatch)(AccountPage)
+export default connect(mapState, mapDispatch)(ListsPage)

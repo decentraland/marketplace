@@ -1,4 +1,5 @@
 import {
+  CatalogSortBy,
   CollectionSortBy,
   EmoteCategory,
   EmotePlayMode,
@@ -12,6 +13,9 @@ import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
 import { NFTSortBy } from '../nft/types'
 import { isAccountView, isLandSection } from '../ui/utils'
+import { AssetStatusFilter } from '../../utils/filters'
+import { AssetType } from '../asset/types'
+import { isCatalogView, isCatalogViewWithStatusFilter } from './utils'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -21,8 +25,8 @@ export function getDefaultOptionsByView(
 ): BrowseOptions {
   if (section === Section.LISTS) return {}
 
-  return {
-    onlyOnSale: !view || !isAccountView(view),
+  let defaultOptions: Partial<BrowseOptions> = {
+    onlyOnSale: view && isAccountView(view) ? false : undefined,
     sortBy:
       view && isAccountView(view)
         ? SortBy.NEWEST
@@ -30,6 +34,30 @@ export function getDefaultOptionsByView(
         ? SortBy.NEWEST
         : SortBy.RECENTLY_LISTED
   }
+  if (section && isCatalogView(view)) {
+    const currentCategoryBySection = getCategoryFromSection(section)
+    if (
+      currentCategoryBySection &&
+      [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(
+        currentCategoryBySection
+      )
+    ) {
+      defaultOptions = {
+        ...defaultOptions,
+        onlyOnSale: view === View.CURRENT_ACCOUNT ? false : undefined, // current account shows on sale false as default
+        status: isCatalogViewWithStatusFilter(view) // for market view, we show status on sale filter as default
+          ? AssetStatusFilter.ON_SALE
+          : undefined
+      }
+    } else if (currentCategoryBySection === NFTCategory.ENS) {
+      defaultOptions = {
+        ...defaultOptions,
+        status: undefined, // status doesn't apply to ENS
+        onlyOnSale: true // show ENS names on sale by default
+      }
+    }
+  }
+  return defaultOptions
 }
 
 export function getSearchParams(options?: BrowseOptions) {
@@ -73,6 +101,9 @@ export function getSearchParams(options?: BrowseOptions) {
         'rarities',
         options.rarities.join(SEARCH_ARRAY_PARAM_SEPARATOR)
       )
+    }
+    if (options.status) {
+      params.set('status', options.status.toString())
     }
     if (options.wearableGenders && options.wearableGenders.length > 0) {
       params.set(
@@ -214,6 +245,21 @@ export function getSectionFromCategory(category: NFTCategory) {
   }
 }
 
+export function getMarketAssetTypeFromCategory(category: NFTCategory) {
+  switch (category) {
+    case NFTCategory.PARCEL:
+      return AssetType.NFT
+    case NFTCategory.ESTATE:
+      return AssetType.NFT
+    case NFTCategory.ENS:
+      return AssetType.NFT
+    case NFTCategory.EMOTE:
+      return AssetType.ITEM
+    case NFTCategory.WEARABLE:
+      return AssetType.ITEM
+  }
+}
+
 export function getSearchSection(category: WearableCategory | EmoteCategory) {
   for (const section of Object.values(Section)) {
     const sectionCategory = Object.values(EmoteCategory).includes(
@@ -299,6 +345,23 @@ export function getItemSortBy(sortBy: SortBy): ItemSortBy {
       return ItemSortBy.RECENTLY_SOLD
     default:
       return ItemSortBy.RECENTLY_REVIEWED
+  }
+}
+
+export function getCatalogSortBy(sortBy: SortBy): CatalogSortBy {
+  switch (sortBy) {
+    case SortBy.CHEAPEST:
+      return CatalogSortBy.CHEAPEST
+    case SortBy.MOST_EXPENSIVE:
+      return CatalogSortBy.MOST_EXPENSIVE
+    case SortBy.NEWEST:
+      return CatalogSortBy.NEWEST
+    case SortBy.RECENTLY_LISTED:
+      return CatalogSortBy.RECENTLY_LISTED
+    case SortBy.RECENTLY_SOLD:
+      return CatalogSortBy.RECENTLY_SOLD
+    default:
+      return CatalogSortBy.CHEAPEST
   }
 }
 

@@ -1,4 +1,6 @@
 import {
+  CREATE_LIST_SUCCESS,
+  CreateListSuccessAction,
   DELETE_LIST_SUCCESS,
   DeleteListSuccessAction,
   FETCH_FAVORITED_ITEMS_SUCCESS,
@@ -35,6 +37,7 @@ export type BrowseUIState = {
   nftIds: string[]
   listIds: string[]
   itemIds: string[]
+  catalogIds: string[]
   lastTimestamp: number
   count?: number
 }
@@ -45,6 +48,7 @@ export const INITIAL_STATE: BrowseUIState = {
   nftIds: [],
   listIds: [],
   itemIds: [],
+  catalogIds: [],
   count: undefined,
   lastTimestamp: 0
 }
@@ -62,6 +66,7 @@ type UIReducerAction =
   | UndoUnpickingItemAsFavoriteSuccessAction
   | FetchListsSuccessAction
   | DeleteListSuccessAction
+  | CreateListSuccessAction
 
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
@@ -69,6 +74,9 @@ export function browseReducer(
 ): BrowseUIState {
   switch (action.type) {
     case SET_VIEW: {
+      if (action.payload.view === state.view) {
+        return state
+      }
       return {
         ...state,
         view: action.payload.view,
@@ -228,6 +236,15 @@ export function browseReducer(
         }
         default:
           return state
+      }
+    }
+
+    case CREATE_LIST_SUCCESS: {
+      const { list } = action.payload
+      return {
+        ...state,
+        count: (state.count ?? 0) + 1,
+        listIds: [list.id, ...state.listIds]
       }
     }
 

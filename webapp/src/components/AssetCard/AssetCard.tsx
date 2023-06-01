@@ -1,10 +1,16 @@
-import React, { useMemo } from 'react'
-import { RentalListing } from '@dcl/schemas'
+import React, { useCallback, useMemo } from 'react'
+import { Item, Network, RentalListing } from '@dcl/schemas'
+import { useInView } from 'react-intersection-observer'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Profile } from 'decentraland-dapps/dist/containers'
 import { Link } from 'react-router-dom'
-import { Card, Icon } from 'decentraland-ui'
-import { formatWeiMANA } from '../../lib/mana'
-import { getAssetName, getAssetUrl, isNFT } from '../../modules/asset/utils'
+import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
+import {
+  getAssetName,
+  getAssetUrl,
+  isNFT,
+  isCatalogItem
+} from '../../modules/asset/utils'
 import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
@@ -15,6 +21,7 @@ import {
   isRentalListingExecuted,
   isRentalListingOpen
 } from '../../modules/rental/utils'
+import { SortBy } from '../../modules/routing/types'
 import { Mana } from '../Mana'
 import { AssetImage } from '../AssetImage'
 import { FavoritesCounter } from '../FavoritesCounter'
@@ -23,6 +30,7 @@ import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
+import { formatWeiToAssetCard, getCatalogCardInformation } from './utils'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
 
@@ -35,8 +43,8 @@ const RentalPrice = ({
 }) => {
   return (
     <>
-      <Mana showTooltip className="rental-price" network={asset.network} inline>
-        {formatWeiMANA(rentalPricePerDay)}
+      <Mana className="rental-price" network={asset.network} inline>
+        {formatWeiToAssetCard(rentalPricePerDay)}
       </Mana>
       <span className="card-rental-day">/{t('global.day')}</span>
     </>
@@ -90,8 +98,13 @@ const AssetCard = (props: Props) => {
     showRentalChip: showRentalBubble,
     onClick,
     isClaimingBackLandTransactionPending,
-    rental
+    rental,
+    sortBy,
+    appliedFilters
   } = props
+
+  const { ref, inView } = useInView()
+  const isMobile = useMobileMediaQuery()
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
@@ -100,66 +113,156 @@ const AssetCard = (props: Props) => {
     [rental]
   )
 
-  return (
-    <Card
-      className="AssetCard"
-      link
-      as={Link}
-      to={getAssetUrl(asset, isManager && isLand(asset))}
-      onClick={onClick}
-      id={`${asset.contractAddress}-${
-        'tokenId' in asset ? asset.tokenId : asset.itemId
-      }`}
-    >
-      <AssetImage
-        asset={asset}
-        showOrderListedTag={showListedTag}
-        showMonospace
-      />
-      {!isNFT(asset) ? (
-        <FavoritesCounter className="FavoritesCounterBubble" item={asset} />
-      ) : null}
-      {showRentalBubble ? (
-        <RentalChip
-          asset={asset}
-          isClaimingBackLandTransactionPending={
-            isClaimingBackLandTransactionPending
-          }
-          rental={rental}
-        />
-      ) : null}
-      <Card.Content>
-        <Card.Header>
-          <div className="title">{title}</div>
-          {price ? (
-            <Mana showTooltip network={asset.network} inline>
-              {formatWeiMANA(price)}
-            </Mana>
-          ) : rentalPricePerDay ? (
-            <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
-          ) : null}
-        </Card.Header>
-        <div className="sub-header">
-          <Card.Meta className="card-meta">
-            {t(`networks.${asset.network.toLowerCase()}`)}
-          </Card.Meta>
-          {rentalPricePerDay && price ? (
-            <div>
-              <RentalPrice
-                asset={asset}
-                rentalPricePerDay={rentalPricePerDay}
-              />
-            </div>
-          ) : null}
-        </div>
+  const catalogItemInformation = useMemo(() => {
+    if (!isNFT(asset) && isCatalogItem(asset)) {
+      return getCatalogCardInformation(asset, {
+        ...appliedFilters,
+        sortBy: sortBy as SortBy
+      })
+    }
+    return null
+  }, [appliedFilters, asset, sortBy])
 
-        {parcel ? <ParcelTags nft={asset as NFT} /> : null}
-        {estate ? <EstateTags nft={asset as NFT} /> : null}
-        {wearable ? <WearableTags asset={asset} /> : null}
-        {emote ? <EmoteTags nft={asset as NFT} /> : null}
-        {ens ? <ENSTags nft={asset as NFT} /> : null}
-      </Card.Content>
-    </Card>
+  const renderCatalogItemInformation = useCallback(() => {
+    const isAvailableForMint =
+      !isNFT(asset) && asset.isOnSale && asset.available > 0
+    const notForSale =
+      !isAvailableForMint && !isNFT(asset) && !asset.minListingPrice
+
+    return catalogItemInformation ? (
+      <div className="CatalogItemInformation">
+        <span className={`extraInformation ${notForSale ? 'NotForSale' : ''}`}>
+          <span>{catalogItemInformation.action}</span>
+          {catalogItemInformation.actionIcon && (
+            <img
+              src={catalogItemInformation.actionIcon}
+              alt="mint"
+              className="mintIcon"
+            />
+          )}
+        </span>
+
+        {catalogItemInformation.price ? (
+          <div className="PriceInMana">
+            <Mana size="large" network={asset.network} className="PriceInMana">
+              {catalogItemInformation.price?.includes('-')
+                ? `${formatWeiToAssetCard(
+                    catalogItemInformation.price.split(' - ')[0]
+                  )} - ${formatWeiToAssetCard(
+                    catalogItemInformation.price.split(' - ')[1]
+                  )}`
+                : formatWeiToAssetCard(catalogItemInformation.price)}
+            </Mana>
+          </div>
+        ) : (
+          `${t('asset_card.owners', {
+            count: (asset as Item).owners
+          })}`
+        )}
+        {catalogItemInformation.extraInformation && (
+          <span className="extraInformation">
+            {catalogItemInformation.extraInformation}
+          </span>
+        )}
+      </div>
+    ) : null
+  }, [asset, catalogItemInformation])
+
+  return (
+    <div ref={ref}>
+      <Card
+        className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
+        link
+        as={Link}
+        to={getAssetUrl(asset, isManager && isLand(asset))}
+        onClick={onClick}
+        id={`${asset.contractAddress}-${
+          'tokenId' in asset ? asset.tokenId : asset.itemId
+        }`}
+      >
+        {inView ? (
+          <>
+            <AssetImage
+              className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''} ${
+                !!catalogItemInformation?.extraInformation ? 'expandable' : ''
+              }`}
+              asset={asset}
+              showOrderListedTag={showListedTag}
+              showMonospace
+            />
+            {!isNFT(asset) && !isMobile ? (
+              <FavoritesCounter
+                className="FavoritesCounterBubble"
+                item={asset}
+              />
+            ) : null}
+            {showRentalBubble ? (
+              <RentalChip
+                asset={asset}
+                isClaimingBackLandTransactionPending={
+                  isClaimingBackLandTransactionPending
+                }
+                rental={rental}
+              />
+            ) : null}
+            <Card.Content
+              data-testid="asset-card-content"
+              className={`${isCatalogItem(asset) ? 'catalog' : ''} ${
+                !!catalogItemInformation?.extraInformation ? 'expandable' : ''
+              }`}
+            >
+              <Card.Header>
+                <div
+                  className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}
+                >
+                  <span className={'textOverflow'}>{title}</span>
+                  {!isNFT(asset) &&
+                    isCatalogItem(asset) &&
+                    asset.network === Network.MATIC && (
+                      <span className="creator">
+                        <Profile address={asset.creator} textOnly />
+                      </span>
+                    )}
+                </div>
+                {!isCatalogItem(asset) && price ? (
+                  <Mana network={asset.network} inline>
+                    {formatWeiToAssetCard(price)}
+                  </Mana>
+                ) : rentalPricePerDay ? (
+                  <RentalPrice
+                    asset={asset}
+                    rentalPricePerDay={rentalPricePerDay}
+                  />
+                ) : null}
+              </Card.Header>
+              <div className="sub-header">
+                {!isCatalogItem(asset) && (
+                  <Card.Meta className="card-meta">
+                    {t(`networks.${asset.network.toLowerCase()}`)}
+                  </Card.Meta>
+                )}
+
+                {rentalPricePerDay && price ? (
+                  <div>
+                    <RentalPrice
+                      asset={asset}
+                      rentalPricePerDay={rentalPricePerDay}
+                    />
+                  </div>
+                ) : null}
+              </div>
+              {renderCatalogItemInformation()}
+
+              {parcel ? <ParcelTags nft={asset as NFT} /> : null}
+              {estate ? <EstateTags nft={asset as NFT} /> : null}
+              {wearable ? <WearableTags asset={asset} /> : null}
+              {emote ? <EmoteTags asset={asset} /> : null}
+              {ens ? <ENSTags nft={asset as NFT} /> : null}
+            </Card.Content>
+          </>
+        ) : null}
+      </Card>
+    </div>
   )
 }
 
