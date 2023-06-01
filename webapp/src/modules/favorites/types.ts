@@ -39,20 +39,3 @@ export type ListsBrowseOptions = {
   skip?: number
   sortBy?: ListsBrowseSortBy
 }
-
-export type ListBrowseOptions = {}
-
-export enum ListsBrowseSortBy {
-  NAME_ASC = 'name_asc',
-  NAME_DESC = 'name_desc',
-  NEWEST = 'newest',
-  OLDEST = 'oldest',
-  RECENTLY_UPDATED = 'updatedAt'
-}
-
-export type ListsBrowseOptions = {
-  page: number
-  first: number
-  skip?: number
-  sortBy?: ListsBrowseSortBy
-}
