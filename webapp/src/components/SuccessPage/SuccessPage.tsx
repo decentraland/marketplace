@@ -7,7 +7,7 @@ import { Props } from './SuccessPage.types'
 import styles from './SuccessPage.module.css'
 import { Footer } from '../Footer'
 import { locations } from '../../modules/routing/locations'
-import { Button, Loader } from 'decentraland-ui'
+import { Button, Header, Loader } from 'decentraland-ui'
 
 export function SuccessPage(props: Props) {
   const { isLoading, onNavigate } = props
@@ -31,13 +31,16 @@ export function SuccessPage(props: Props) {
             if (isLoading) {
               return (
                 <>
-                  <div>Your item is on its way</div>
+                  <Header className={styles.title}>Your item is on its way!</Header>
                   <AssetImage
                     asset={asset}
                     isSmall
                     className={styles.assetImage}
                   />
-                  <div><Loader size="small" inline />Processing transaction</div>
+                  <div>
+                    <Loader size="small" inline />
+                    Processing transaction
+                  </div>
                   <span>This transaction may take a few moments.</span>
                   <Button onClick={() => onNavigate(locations.activity())}>
                     View Progress in activity
@@ -48,7 +51,7 @@ export function SuccessPage(props: Props) {
 
             return (
               <>
-                <div>All done</div>
+                <Header className={styles.title}>All done!</Header>
                 <AssetImage
                   asset={asset}
                   isSmall

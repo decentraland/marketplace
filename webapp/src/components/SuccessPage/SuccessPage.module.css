@@ -10,6 +10,11 @@
   align-items: center;
   justify-content: center;
   flex: 1;
+  gap: 32px;
+}
+
+.title {
+  margin: 0;
 }
 
 .assetImage {
