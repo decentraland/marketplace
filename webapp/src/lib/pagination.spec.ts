@@ -44,7 +44,7 @@ describe('when getting the pagination hook', () => {
         currentResult = renderedHook.result.current as UsePaginationResult
       })
 
-      it('should return the value of the "first" parameter in the "first property"', () => {
+      it('should return the value of the "first" parameter in the "first" property', () => {
         expect(currentResult.first).toEqual(10)
       })
     })
@@ -74,7 +74,7 @@ describe('when getting the pagination hook', () => {
         currentResult = renderedHook.result.current as UsePaginationResult
       })
 
-      it('should return the value of the "first" parameter in the "first property"', () => {
+      it('should return the value of the "first" parameter in the "first" property', () => {
         expect(currentResult.first).toEqual(10)
       })
     })

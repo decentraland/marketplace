@@ -11,6 +11,8 @@ import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
+import { ListsSortBy } from '../vendor/decentraland/favorites/types'
+import { SortDirection } from '../routing/types'
 import {
   cancelPickItemAsFavorite,
   createListFailure,
@@ -50,8 +52,6 @@ import {
   ListsBrowseSortBy,
   Permission
 } from './types'
-import { ListsSortBy } from '../vendor/decentraland/favorites/types'
-import { SortDirection } from '../routing/types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 let item: Item
