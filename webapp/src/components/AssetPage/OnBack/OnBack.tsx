@@ -12,7 +12,7 @@ import { FavoritesCounter } from '../../FavoritesCounter'
 import { Props } from './OnBack.types'
 import './OnBack.css'
 
-const OnBack = ({ asset, isFavoritesEnabled, onBack }: Props) => {
+const OnBack = ({ asset, onBack }: Props) => {
   const isMobile = useMobileMediaQuery()
 
   return (
@@ -75,10 +75,7 @@ const OnBack = ({ asset, isFavoritesEnabled, onBack }: Props) => {
         <img src={onBackIcon} alt={t('global.back')} />
         {t('global.back')}
       </Button>
-      {isFavoritesEnabled &&
-      isMobile &&
-      !isNFT(asset) &&
-      asset.network === Network.MATIC ? (
+      {isMobile && !isNFT(asset) && asset.network === Network.MATIC ? (
         <FavoritesCounter isCollapsed className="favorites" item={asset} />
       ) : null}
     </div>
