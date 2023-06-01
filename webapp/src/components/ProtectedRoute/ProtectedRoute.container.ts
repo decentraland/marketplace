@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import ProtectedRoute from './ProtectedRoute'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import { RootState } from '../../modules/reducer'
+import ProtectedRoute from './ProtectedRoute'
 import { MapStateProps } from './ProtectedRoute.types'
 
 const mapState = (state: RootState): MapStateProps => {

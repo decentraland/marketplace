@@ -49,7 +49,7 @@ export function usePagination(
   const goToNextPage = useCallback(() => {
     const params = new URLSearchParams(search)
     params.set('page', (page + 1).toString())
-    push(`${pathname}${params ? `?${params.toString()}` : ''}`)
+    push(`${pathname}?${params.toString()}`)
   }, [search, page, push, pathname])
 
   const changeSorting = useCallback(
@@ -58,7 +58,7 @@ export function usePagination(
       // Reset the page when changing the sorting
       params.set('page', '1')
       params.set('sortBy', sort)
-      push(`${pathname}${params ? `?${params.toString()}` : ''}`)
+      push(`${pathname}?${params.toString()}`)
     },
     [pathname, push, search]
   )
@@ -69,7 +69,7 @@ export function usePagination(
       // Reset the page when changing the filter
       params.set('page', '1')
       params.set(filter, value)
-      push(`${pathname}${params ? `?${params.toString()}` : ''}`)
+      push(`${pathname}?${params.toString()}`)
     },
     [pathname, push, search]
   )
