@@ -16,7 +16,7 @@ const OnBack = ({ asset, onBack }: Props) => {
   const isMobile = useMobileMediaQuery()
 
   return (
-    <div className="top-header">
+    <div className="top-header" data-testid="top-header">
       <Button
         className="back"
         onClick={() =>

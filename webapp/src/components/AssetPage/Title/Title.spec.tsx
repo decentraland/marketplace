@@ -94,7 +94,6 @@ describe('Title', () => {
           })
           expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
         })
-        expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
       })
     })
   })
