@@ -1,0 +1,17 @@
+@media (max-width: 767px) {
+  .AuthorizationModalActions {
+    align-items: center;
+    bottom: 28px;
+    margin: 0px !important;
+    position: fixed;
+    width: 100%;
+  }
+
+  .AuthorizationModal {
+    flex-grow: 4 !important;
+  }
+
+  .AuthorizationModalButtons {
+    width: 80%;
+  }
+}
