@@ -20,7 +20,7 @@ export type List = {
   createdAt?: number
   updatedAt?: number | null
   permission?: Permission | null
-  itemIds?: string[]
+  previewOfItemIds?: string[]
 }
 
 export type ListBrowseOptions = {}
