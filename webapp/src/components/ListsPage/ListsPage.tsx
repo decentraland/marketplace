@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Button, Card, Dropdown, Header, Icon } from 'decentraland-ui'
+import { Button, Dropdown, Header, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { usePagination } from '../../lib/pagination'
 import { ListsBrowseSortBy } from '../../modules/favorites/types'
@@ -8,6 +8,7 @@ import { getParameter } from '../../lib/enum'
 import { InfiniteScroll } from '../InfiniteScroll'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
+import { ListCard } from './ListCard'
 import { Props } from './ListsPage.types'
 import styles from './ListsPage.module.css'
 
@@ -93,16 +94,13 @@ const ListsPage = ({
         isLoading={isLoading}
         maxScrollPages={3}
       >
-        <Card.Group className={styles.cards}>
+        {/* <Card.Group className={styles.cards}> */}
+        <div className={styles.cardsGroup}>
           {lists.map(list => (
-            <Card key={list.id}>
-              <Card.Content>
-                <Card.Header>{list.name}</Card.Header>
-                <Card.Meta>x Items</Card.Meta>
-              </Card.Content>
-            </Card>
+            <ListCard key={list.id} list={list} />
           ))}
-        </Card.Group>
+        </div>
+        {/* </Card.Group> */}
       </InfiniteScroll>
     </PageLayout>
   )

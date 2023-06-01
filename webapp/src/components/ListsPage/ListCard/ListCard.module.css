@@ -1,0 +1,95 @@
+.card {
+  height: 240px;
+  width: 320px;
+}
+
+.card:link {
+  text-decoration: none;
+}
+
+.image {
+  width: 100%;
+  flex: 1 0 auto;
+  display: flex;
+}
+
+.empty {
+  background-color: #43404A;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--text);
+}
+
+.empty .icon {
+  width: 59px;
+  height: 59px;
+  background-image: url('../../../images/empty-list.png');
+}
+
+.content {
+  flex-grow: 0;
+  width: 100%;
+  padding: 8px 12px 12px 14px;
+}
+
+.meta {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.shirtIcon {
+  width: 10px;
+  height: 10px;
+  background-image: url('../../../images/wearable-icon.png');
+  margin-right: 5px;
+}
+
+.header {
+  width: 100%;
+  font-size: 18px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header {
+  color: var(--text);
+}
+
+.content .left {
+  display: flex;
+  align-items: center;
+}
+
+.grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 100px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 200px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 200px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 200px;
+}

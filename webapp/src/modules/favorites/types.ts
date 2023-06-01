@@ -14,10 +14,13 @@ export type FavoritedItems = { itemId: string; createdAt: number }[]
 export type List = {
   id: string
   name: string
-  description: string
-  userAddress: string
-  createdAt: number
-  permission?: Permission
+  itemsCount: number
+  description?: string | null
+  userAddress?: string
+  createdAt?: number
+  updatedAt?: number | null
+  permission?: Permission | null
+  itemIds?: string[]
 }
 
 export type ListBrowseOptions = {}
