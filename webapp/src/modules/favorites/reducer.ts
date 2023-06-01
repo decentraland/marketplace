@@ -69,6 +69,7 @@ import {
 } from './actions'
 import { FavoritesData, List } from './types'
 import { GET_LIST_REQUEST } from './actions'
+import { ListDetails } from '../vendor/decentraland/favorites/types'
 
 export type FavoritesState = {
   data: {
@@ -311,6 +312,9 @@ export function favoritesReducer(
             ...state.data.lists,
             [list.id]: {
               ...state.data.lists[list.id],
+              itemsCount: Object.hasOwn(list, 'itemsCount')
+                ? (list as ListDetails).itemsCount
+                : state.data.lists[list.id].itemsCount ?? 0,
               ...list
             }
           }

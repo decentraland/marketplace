@@ -1,7 +1,12 @@
 import { action } from 'typesafe-actions'
 import { Item } from '@dcl/schemas'
 import { ItemBrowseOptions } from '../item/types'
-import { List, ListsBrowseOptions } from './types'
+import {
+  ListDetails,
+  ListOfLists,
+  UpdateOrCreateList
+} from '../vendor/decentraland/favorites/types'
+import { CreateListParameters, List, ListsBrowseOptions } from './types'
 
 // Pick item as Favorite Request
 export const PICK_ITEM_AS_FAVORITE_REQUEST =
@@ -148,12 +153,14 @@ export const fetchListsRequest = (options: ListsBrowseOptions) =>
   action(FETCH_LISTS_REQUEST, { options })
 
 export const fetchListsSuccess = (
-  lists: List[],
+  lists: ListOfLists[],
+  items: Item[],
   total: number,
   options: ListsBrowseOptions
 ) =>
   action(FETCH_LISTS_SUCCESS, {
     lists,
+    items,
     total,
     options
   })
@@ -193,7 +200,7 @@ export const GET_LIST_FAILURE = '[Failure] Get List'
 
 export const getListRequest = (id: string) => action(GET_LIST_REQUEST, { id })
 
-export const getListSuccess = (list: List) =>
+export const getListSuccess = (list: ListDetails) =>
   action(GET_LIST_SUCCESS, {
     list
   })
@@ -213,7 +220,7 @@ export const UPDATE_LIST_FAILURE = '[Failure] Update List'
 export const updateListRequest = (id: string, updatedList: Partial<List>) =>
   action(UPDATE_LIST_REQUEST, { id, updatedList })
 
-export const updateListSuccess = (list: List) =>
+export const updateListSuccess = (list: UpdateOrCreateList) =>
   action(UPDATE_LIST_SUCCESS, { list })
 
 export const updateListFailure = (id: string, error: string) =>
@@ -233,13 +240,10 @@ export const createListRequest = ({
   name,
   isPrivate,
   description
-}: {
-  name: string
-  isPrivate: boolean
-  description?: string
-}) => action(CREATE_LIST_REQUEST, { name, description, isPrivate })
+}: CreateListParameters) =>
+  action(CREATE_LIST_REQUEST, { name, description, isPrivate })
 
-export const createListSuccess = (list: List) =>
+export const createListSuccess = (list: UpdateOrCreateList) =>
   action(CREATE_LIST_SUCCESS, { list })
 
 export const createListFailure = (error: string) =>

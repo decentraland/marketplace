@@ -64,5 +64,7 @@ export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
   )
 
 export const getList = (state: RootState, id: string) => getLists(state)[id]
-export const getListItems = (state: RootState, id: string): Item[] =>
-  getLists(state)[id]?.itemIds?.map(itemId => getItems(state)[itemId]) ?? []
+export const getPreviewListItems = (state: RootState, id: string): Item[] =>
+  getLists(state)[id]?.previewOfItemIds?.map(
+    itemId => getItems(state)[itemId]
+  ) ?? []

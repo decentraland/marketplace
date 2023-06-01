@@ -24,7 +24,12 @@ import { getAddress } from '../wallet/selectors'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { NFT_SERVER_URL } from '../vendor/decentraland'
 import { SortDirection } from '../routing/types'
-import { ListsSortBy } from '../vendor/decentraland/favorites/types'
+import {
+  ListDetails,
+  ListOfLists,
+  ListsSortBy,
+  UpdateOrCreateList
+} from '../vendor/decentraland/favorites/types'
 import {
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
@@ -65,7 +70,7 @@ import {
   CREATE_LIST_REQUEST
 } from './actions'
 import { getListId } from './selectors'
-import { FavoritedItems, List } from './types'
+import { FavoritedItems } from './types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
@@ -262,7 +267,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         sortDirection = sortValues.sortDirection
       }
 
-      const { results, total }: { results: List[]; total: number } = yield call(
+      const {
+        results,
+        total
+      }: { results: ListOfLists[]; total: number } = yield call(
         [favoritesAPI, 'getLists'],
         {
           first: options.first,
@@ -272,7 +280,22 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         }
       )
 
-      yield put(fetchListsSuccess(results, total, options))
+      const previewListsItemIds = results.flatMap(list => list.previewOfItemIds)
+      const itemFilters: ItemBrowseOptions['filters'] = {
+        first: results.length,
+        ids: previewListsItemIds
+      }
+
+      let previewItems: Item[] = []
+      if (previewListsItemIds.length > 0) {
+        const result: { data: Item[] } = yield call(
+          [itemAPI, 'get'],
+          itemFilters
+        )
+        previewItems = result.data
+      }
+
+      yield put(fetchListsSuccess(results, previewItems, total, options))
     } catch (error) {
       yield put(
         fetchListsFailure(
@@ -303,7 +326,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { id } = action.payload
 
     try {
-      const list: List = yield call([favoritesAPI, 'getList'], id)
+      const list: ListDetails = yield call([favoritesAPI, 'getList'], id)
       yield put(getListSuccess(list))
     } catch (error) {
       yield put(
@@ -319,7 +342,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { id, updatedList } = action.payload
 
     try {
-      const list: List = yield call(
+      const list: UpdateOrCreateList = yield call(
         [favoritesAPI, 'updateList'],
         id,
         updatedList
@@ -340,11 +363,14 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
-      const list: List = yield call([favoritesAPI, 'createList'], {
-        name,
-        isPrivate,
-        description
-      })
+      const list: UpdateOrCreateList = yield call(
+        [favoritesAPI, 'createList'],
+        {
+          name,
+          isPrivate,
+          description
+        }
+      )
       yield put(createListSuccess(list))
     } catch (error) {
       yield put(

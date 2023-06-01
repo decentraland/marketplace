@@ -11,7 +11,12 @@ import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
-import { ListsSortBy } from '../vendor/decentraland/favorites/types'
+import {
+  ListOfLists,
+  ListsSortBy,
+  Permission,
+  UpdateOrCreateList
+} from '../vendor/decentraland/favorites/types'
 import { SortDirection } from '../routing/types'
 import {
   cancelPickItemAsFavorite,
@@ -49,8 +54,7 @@ import {
   FavoritedItems,
   List,
   ListsBrowseOptions,
-  ListsBrowseSortBy,
-  Permission
+  ListsBrowseSortBy
 } from './types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
@@ -591,7 +595,7 @@ describe('when handling the request for fetching lists', () => {
   })
 
   describe('and the call to the favorites api succeeds', () => {
-    let lists: List[]
+    let lists: ListOfLists[]
     let total: number
 
     beforeEach(() => {
@@ -599,10 +603,8 @@ describe('when handling the request for fetching lists', () => {
         {
           id: 'anId',
           name: 'aName',
-          description: 'aDescription',
-          userAddress: 'anOwnersAddress',
-          createdAt: Date.now(),
-          permission: Permission.VIEW
+          itemsCount: 1,
+          previewOfItemIds: []
         }
       ]
       total = 1
@@ -628,7 +630,7 @@ describe('when handling the request for fetching lists', () => {
             }
           ]
         })
-        .put(fetchListsSuccess(lists, total, options))
+        .put(fetchListsSuccess(lists, [], total, options))
         .dispatch(fetchListsRequest(options))
         .run({ silenceTimeout: true })
     })
@@ -751,15 +753,26 @@ describe('when handling the request for getting a list', () => {
 })
 
 describe('when handling the request for updating a list', () => {
-  let list: List
+  let listToUpdate: List
+  let updatedList: UpdateOrCreateList
 
   beforeEach(() => {
-    list = {
+    listToUpdate = {
       id: 'anId',
       name: 'aName',
       description: 'aDescription',
       userAddress: 'aUserAddress',
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      itemsCount: 1
+    }
+    updatedList = {
+      id: 'anId',
+      name: 'aName',
+      description: 'aDescription',
+      userAddress: 'aUserAddress',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      permission: Permission.VIEW
     }
   })
 
@@ -774,10 +787,10 @@ describe('when handling the request for updating a list', () => {
         ])
         .call.like({
           fn: FavoritesAPI.prototype.updateList,
-          args: [list.id, list]
+          args: [listToUpdate.id, listToUpdate]
         })
-        .put(updateListFailure(list.id, error.message))
-        .dispatch(updateListRequest(list.id, list))
+        .put(updateListFailure(listToUpdate.id, error.message))
+        .dispatch(updateListRequest(listToUpdate.id, listToUpdate))
         .run({ silenceTimeout: true })
     })
   })
@@ -788,25 +801,25 @@ describe('when handling the request for updating a list', () => {
         .provide([
           [
             matchers.call.fn(FavoritesAPI.prototype.updateList),
-            Promise.resolve(list)
+            Promise.resolve(updatedList)
           ]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.updateList,
-          args: [list.id, list]
+          args: [listToUpdate.id, listToUpdate]
         })
-        .put(updateListSuccess(list))
-        .dispatch(updateListRequest(list.id, list))
+        .put(updateListSuccess(updatedList))
+        .dispatch(updateListRequest(listToUpdate.id, listToUpdate))
         .run({ silenceTimeout: true })
     })
   })
 })
 
 describe('when handling the request for creating a list', () => {
-  let list: List
+  let listToCreate: List
 
   beforeEach(() => {
-    list = {
+    listToCreate = {
       id: 'anId',
       name: 'aName',
       description: 'aDescription',
@@ -822,9 +835,9 @@ describe('when handling the request for creating a list', () => {
         .put(createListFailure(error.message))
         .dispatch(
           createListRequest({
-            name: list.name,
+            name: listToCreate.name,
             isPrivate: true,
-            description: list.description
+            description: listToCreate.description
           })
         )
         .run({ silenceTimeout: true })
@@ -844,15 +857,19 @@ describe('when handling the request for creating a list', () => {
         .call.like({
           fn: FavoritesAPI.prototype.createList,
           args: [
-            { name: list.name, isPrivate: true, description: list.description }
+            {
+              name: listToCreate.name,
+              isPrivate: true,
+              description: listToCreate.description
+            }
           ]
         })
         .put(createListFailure(error.message))
         .dispatch(
           createListRequest({
-            name: list.name,
+            name: listToCreate.name,
             isPrivate: true,
-            description: list.description
+            description: listToCreate.description
           })
         )
         .run({ silenceTimeout: true })
@@ -866,21 +883,25 @@ describe('when handling the request for creating a list', () => {
           [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.createList),
-            Promise.resolve(list)
+            Promise.resolve(listToCreate)
           ]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.createList,
           args: [
-            { name: list.name, isPrivate: true, description: list.description }
+            {
+              name: listToCreate.name,
+              isPrivate: true,
+              description: listToCreate.description
+            }
           ]
         })
-        .put(createListSuccess(list))
+        .put(createListSuccess(listToCreate))
         .dispatch(
           createListRequest({
-            name: list.name,
+            name: listToCreate.name,
             isPrivate: true,
-            description: list.description
+            description: listToCreate.description
           })
         )
         .run({ silenceTimeout: true })
