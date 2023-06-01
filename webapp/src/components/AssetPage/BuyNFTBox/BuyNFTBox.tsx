@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
+import { ListingStatus, Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
 import { Button, Loader } from 'decentraland-ui'
 import Mana from '../../Mana/Mana'
 import { formatDistanceToNow } from '../../../lib/date'
@@ -57,7 +57,8 @@ const BuyNFTBox = ({ nft, address }: Props) => {
         contractAddress: nft.contractAddress,
         first: 1,
         skip: 0,
-        tokenId: nft.tokenId
+        tokenId: nft.tokenId,
+        status: ListingStatus.OPEN
       }
 
       orderAPI
