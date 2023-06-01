@@ -5,6 +5,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Props } from './ListCard.types'
 import styles from './ListCard.module.css'
+import { AssetImage } from '../../AssetImage'
 
 const ListCard = (props: Props) => {
   const { list, items, onDeleteList, onEditList } = props
@@ -19,15 +20,9 @@ const ListCard = (props: Props) => {
           </div>
         ) : null}
         {items.length > 0 ? (
-          <div className={styles.grid}>
+          <div className={styles[`grid-${items.length}`]}>
             {items.map(item => (
-              <img
-                key={item.id}
-                width={60}
-                height={60}
-                alt={'thumbnail of list item'}
-                src={item.thumbnail}
-              />
+              <AssetImage key={item.id} asset={item} />
             ))}
           </div>
         ) : null}
@@ -42,12 +37,11 @@ const ListCard = (props: Props) => {
         <div className={styles.header}>{list.name}</div>
         <div className={styles.meta}>
           <span className={styles.left}>
-            <div className={styles.shirtIcon}></div>
+            <div className={styles.icon}></div>
             {t('list_card.item_count', { count: list.itemsCount })}
           </span>
           <span>
             <Dropdown
-              className={styles.options}
               onClick={e => e.preventDefault()}
               icon={<Icon name="ellipsis vertical" size="large" />}
               direction="left"

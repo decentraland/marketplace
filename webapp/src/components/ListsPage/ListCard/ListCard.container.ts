@@ -10,19 +10,10 @@ import {
   OwnProps
 } from './ListCard.types'
 import ListCard from './ListCard'
-// import { Item } from '@dcl/schemas'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  console.log(state)
-  console.log(ownProps)
   return {
-    items: getPreviewListItems(state, ownProps.list.id)
-    //   items: [
-    //     {
-    //       thumbnail:
-    //         'https://peer.decentraland.zone/lambdas/collections/contents/urn:decentraland:mumbai:collections-v2:0xb726634ed82ac04e6bca66b3b97cc41a2c10ec31:0/thumbnail'
-    //     } as Item
-    //   ]
+    items: getPreviewListItems(state, ownProps.list.id).slice(0, 4)
   }
 }
 
