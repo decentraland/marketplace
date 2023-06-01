@@ -8,7 +8,8 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { RootState } from '../../modules/reducer'
 import {
   createOrderRequest,
-  CREATE_ORDER_REQUEST
+  CREATE_ORDER_REQUEST,
+  clearOrderErrors
 } from '../../modules/order/actions'
 import { getLoading as getLoadingOrders } from '../../modules/order/selectors'
 import { getContract } from '../../modules/contract/selectors'
@@ -28,7 +29,8 @@ const mapState = (state: RootState): MapStateProps => ({
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onGoBack: () => dispatch(goBack()),
   onCreateOrder: (nft, price, expiresAt) =>
-    dispatch(createOrderRequest(nft, price, expiresAt))
+    dispatch(createOrderRequest(nft, price, expiresAt)),
+  onClearOrderErrors: () => dispatch(clearOrderErrors()),
 })
 
 export default connect(mapState, mapDispatch)(SellPage)

@@ -44,7 +44,8 @@ const SellModal = (props: Props) => {
     getContract,
     onGoBack,
     onCreateOrder,
-    onAuthorizedAction
+    onAuthorizedAction,
+    onClearOrderErrors
   } = props
 
   const isUpdate = order !== null
@@ -111,6 +112,7 @@ const SellModal = (props: Props) => {
     )
 
   const handleSubmit = () => {
+    onClearOrderErrors()
     onAuthorizedAction({
       authorizationType: AuthorizationType.APPROVAL,
       authorizedAddress: marketplace.address,
