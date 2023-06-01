@@ -39,6 +39,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     avatar = profile.avatars[0]
   }
   return {
+    wallet,
     avatar,
     wearableController: getWearablePreviewController(state),
     isTryingOn: getIsTryingOn(state),

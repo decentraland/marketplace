@@ -93,6 +93,7 @@ describe('AssetCard', () => {
       expect(screen.getByTestId('asset-card-content')).toBeInTheDocument()
     })
   })
+
   describe('when its not interesected', () => {
     it('should not render the Asset Card content', () => {
       renderAssetCard({
@@ -107,20 +108,25 @@ describe('AssetCard', () => {
       asset = { ...asset, itemId: 'itemId' } as Asset
     })
 
-    describe('when the asset is an item', () => {
-      beforeEach(() => {
-        asset = { ...asset, itemId: 'itemId' } as Asset
+    it('should render the favorites counter', () => {
+      renderAssetCard({
+        asset
       })
+      mockAllIsIntersecting(true)
+      expect(screen.getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
+    })
+  })
 
-      it('should render the favorites counter', () => {
-        renderAssetCard({
-          asset
-        })
-        mockAllIsIntersecting(true)
-        expect(
-          screen.getByTestId(FAVORITES_COUNTER_TEST_ID)
-        ).toBeInTheDocument()
+  describe('when the asset is an nft', () => {
+    beforeEach(() => {
+      asset = { ...asset, tokenId: 'tokenId' } as Asset
+    })
+
+    it('should not render the favorites counter', () => {
+      const { queryByTestId } = renderAssetCard({
+        asset
       })
+      expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
     })
   })
 })

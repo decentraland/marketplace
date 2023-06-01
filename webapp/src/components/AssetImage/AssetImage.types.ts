@@ -1,6 +1,7 @@
 import React from 'react'
 import { Dispatch } from 'redux'
 import { Avatar, IPreviewController, Item, Rarity } from '@dcl/schemas'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   setIsTryingOn,
   SetIsTryingOnAction,
@@ -33,6 +34,7 @@ export type Props = {
   children?: React.ReactNode
   hasBadges?: boolean
   item: Item | null
+  wallet: Wallet | null
 }
 
 export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>
@@ -46,7 +48,12 @@ export enum ControlOptionAction {
 
 export type MapStateProps = Pick<
   Props,
-  'avatar' | 'wearableController' | 'isTryingOn' | 'isPlayingEmote' | 'item'
+  | 'avatar'
+  | 'wearableController'
+  | 'isTryingOn'
+  | 'isPlayingEmote'
+  | 'item'
+  | 'wallet'
 >
 export type MapDispatchProps = Pick<
   Props,

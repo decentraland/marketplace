@@ -92,7 +92,7 @@ const EmoteDetail = ({ nft }: Props) => {
             </div>
           </div>
           <Description text={emote.description} />
-          <div>
+          <div className={styles.emoteOwnerAndCollectionContainer}>
             <Owner asset={nft} />
             <Collection asset={nft} />
           </div>

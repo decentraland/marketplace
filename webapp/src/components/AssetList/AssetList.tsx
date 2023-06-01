@@ -93,21 +93,12 @@ const AssetList = (props: Props) => {
       )
     }
 
-    // const currentSection =
-    //   assetType === AssetType.ITEM
-    //     ? t('browse_page.primary_market_title').toLocaleLowerCase()
-    //     : t('browse_page.secondary_market_title').toLocaleLowerCase()
-    // const alternativeSection =
-    //   assetType === AssetType.ITEM
-    //     ? t('browse_page.secondary_market_title').toLocaleLowerCase()
-    //     : t('browse_page.primary_market_title').toLocaleLowerCase()
     return (
       <div className="empty empty-assets">
         <div className="watermelon" />
         <span>
           {t(`${emptyStateTranslationString}.title`, {
             search
-            // currentSection
           })}
         </span>
         <span>
@@ -115,8 +106,6 @@ const AssetList = (props: Props) => {
             id={`${emptyStateTranslationString}.action`}
             values={{
               search,
-              // currentSection,
-              // section: alternativeSection,
               'if-filters': (chunks: string) =>
                 hasFiltersEnabled ? chunks : '',
               clearFilters: (chunks: string) => (
