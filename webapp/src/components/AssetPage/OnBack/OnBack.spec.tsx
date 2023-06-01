@@ -14,11 +14,7 @@ const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
 
 function renderOnBack(props: Partial<OnBackProps> = {}) {
   return renderWithProviders(
-    <OnBack
-      asset={props.asset || ({} as Asset)}
-      isFavoritesEnabled={props.isFavoritesEnabled || false}
-      onBack={jest.fn()}
-    />,
+    <OnBack asset={props.asset || ({} as Asset)} onBack={jest.fn()} />,
     {
       preloadedState: {
         favorites: {
@@ -52,9 +48,8 @@ describe('OnBack', () => {
     })
 
     it('should not render the favorites counter', () => {
-      const { queryByTestId } = renderOnBack({
-        asset,
-        isFavoritesEnabled: false
+      const { getByTestId } = renderOnBack({
+        asset
       })
       expect(
         within(
@@ -71,9 +66,8 @@ describe('OnBack', () => {
 
     describe('and the favorites feature flag is not enabled', () => {
       it('should not render the favorites counter', () => {
-        const { queryByTestId } = renderOnBack({
-          asset,
-          isFavoritesEnabled: false
+        const { getByTestId } = renderOnBack({
+          asset
         })
         expect(
           within(
@@ -91,8 +85,7 @@ describe('OnBack', () => {
 
         it('should not render the favorites counter', () => {
           const { queryByTestId } = renderOnBack({
-            asset,
-            isFavoritesEnabled: true
+            asset
           })
           expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
         })
@@ -110,16 +103,15 @@ describe('OnBack', () => {
 
         it('should render the favorites counter', () => {
           const { getByTestId } = renderOnBack({
-            asset,
-            isFavoritesEnabled: true
+            asset
           })
           expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
+          expect(
+            within(
+              getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()
+            ).queryByTestId(FAVORITES_COUNTER_TEST_ID)
+          ).toBeInTheDocument()
         })
-        expect(
-          within(
-            getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()
-          ).queryByTestId(FAVORITES_COUNTER_TEST_ID)
-        ).toBeInTheDocument()
       })
     })
   })
