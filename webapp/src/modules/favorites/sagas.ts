@@ -7,7 +7,6 @@ import {
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isErrorWithMessage } from '../../lib/error'
-import { config } from '../../config'
 import { ItemBrowseOptions } from '../item/types'
 import {
   closeModal,
@@ -23,7 +22,6 @@ import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
-import { ItemAPI } from '../vendor/decentraland/item/api'
 import { NFT_SERVER_URL } from '../vendor/decentraland'
 import { SortDirection } from '../routing/types'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
@@ -69,8 +67,6 @@ import {
 import { getListId } from './selectors'
 import { FavoritedItems, List } from './types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
-
-export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
