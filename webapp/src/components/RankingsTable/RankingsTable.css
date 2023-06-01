@@ -242,7 +242,6 @@
 
 .RankingsTable .ui.loader.active {
   display: flex;
-  position: initial;
 }
 
 .RankingsTable .pagination {
@@ -256,9 +255,4 @@
 
 .RankingsTable .ui.dropdown {
   display: flex;
-}
-
-.RankingsTable .ui.loader.active {
-  display: flex;
-  position: absolute;
 }

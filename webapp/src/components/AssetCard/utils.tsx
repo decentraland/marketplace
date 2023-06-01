@@ -7,9 +7,7 @@ import { getMinimumValueForFractionDigits } from '../../lib/mana'
 import { BrowseOptions, SortBy } from '../../modules/routing/types'
 import { Mana } from '../Mana'
 
-const ONE_MILLION = 1000000
-const ONE_BILLION = 1000000000
-const ONE_TRILLION = 1000000000000
+const formatter = Intl.NumberFormat('en', { notation: 'compact' })
 
 export function formatWeiToAssetCard(wei: string): string {
   const maximumFractionDigits = MAXIMUM_FRACTION_DIGITS
@@ -27,15 +25,7 @@ export function formatWeiToAssetCard(wei: string): string {
     return getMinimumValueForFractionDigits(maximumFractionDigits).toString()
   }
 
-  if (value > ONE_TRILLION) {
-    return `${(+value / ONE_TRILLION).toLocaleString()}T`
-  } else if (value > ONE_BILLION) {
-    return `${(+value / ONE_BILLION).toLocaleString()}B`
-  } else if (value > ONE_MILLION) {
-    return `${(+value / ONE_MILLION).toLocaleString()}M`
-  }
-
-  return fixedValue
+  return formatter.format(value)
 }
 
 type CatalogCardInformation = {

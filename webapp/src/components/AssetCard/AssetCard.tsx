@@ -183,7 +183,9 @@ const AssetCard = (props: Props) => {
         {inView ? (
           <>
             <AssetImage
-              className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : ''} ${
+              className={`AssetImage ${
+                isCatalogItem(asset) ? 'catalog' : 'remove-margin'
+              } ${
                 !!catalogItemInformation?.extraInformation ? 'expandable' : ''
               }`}
               asset={asset}

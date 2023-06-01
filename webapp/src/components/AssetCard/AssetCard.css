@@ -165,6 +165,10 @@
   transition: height 0.3s !important;
 }
 
+.AssetCard .AssetImage.remove-margin {
+  margin-bottom: unset;
+}
+
 .AssetCard .PriceInMana .ui.header.large {
   font-size: 30px;
   font-weight: 600;
