@@ -156,10 +156,15 @@
   "filters": {
     "type": "Type",
     "status": "Status",
+    "sort_by": "Sort by",
     "item": "Items available for minting",
     "nft": "Items being resold",
     "name": "Name",
+    "name_asc": "Name ⬆",
+    "name_desc": "Name ⬇",
+    "recently_updated": "Recently updated",
     "newest": "Newest",
+    "oldest": "Oldest",
     "recently_listed": "Recently listed",
     "recently_listed_for_rent": "Recently listed for rent",
     "recently_sold": "Recently sold",
@@ -1162,20 +1167,23 @@
     "disclaimer": "Only accounts with more than 1 VP are counted.",
     "empty": "Users have not saved this item"
   },
-  "lists_page": {
-    "default_title": "Wishlist"
-  },
-  "claim_your_own_name": {
-    "title": "CLAIM YOUR OWN NAME",
-    "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
-    "btn": "Claim your name"
-  },
-  "my_lists": {
+  "list_page": {
+    "default_title": "Wishlist",
     "empty": {
       "title": "You don't have any saved items",
       "subtitle": "Discover amazing items.",
       "action": "Explore collectibles"
     }
+  },
+  "lists_page": {
+    "title": "My Lists",
+    "subtitle": "{count} {count, plural, one {List} other {Lists}}",
+    "create_list": "Create list"
+  },
+  "claim_your_own_name": {
+    "title": "CLAIM YOUR OWN NAME",
+    "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
+    "btn": "Claim your name"
   },
   "create_list_modal": {
     "title": "Create List",

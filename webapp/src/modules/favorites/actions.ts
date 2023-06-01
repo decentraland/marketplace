@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions'
 import { Item } from '@dcl/schemas'
 import { ItemBrowseOptions } from '../item/types'
-import { List } from './types'
+import { List, ListsBrowseOptions } from './types'
 
 // Pick item as Favorite Request
 export const PICK_ITEM_AS_FAVORITE_REQUEST =
@@ -144,13 +144,13 @@ export const FETCH_LISTS_REQUEST = '[Request] Fetch Lists'
 export const FETCH_LISTS_SUCCESS = '[Success] Fetch Lists'
 export const FETCH_LISTS_FAILURE = '[Failure] Fetch Lists'
 
-export const fetchListsRequest = (options: ItemBrowseOptions) =>
+export const fetchListsRequest = (options: ListsBrowseOptions) =>
   action(FETCH_LISTS_REQUEST, { options })
 
 export const fetchListsSuccess = (
   lists: List[],
   total: number,
-  options: ItemBrowseOptions
+  options: ListsBrowseOptions
 ) =>
   action(FETCH_LISTS_SUCCESS, {
     lists,

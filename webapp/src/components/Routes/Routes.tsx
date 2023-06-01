@@ -26,6 +26,8 @@ import { ManageAssetPage } from '../ManageAssetPage'
 import { Footer } from '../Footer'
 import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
 import { StatusPage } from '../BuyPage/StatusPage'
+import { ListPage } from '../ListPage'
+import { ProtectedRoute } from '../ProtectedRoute'
 import { ListsPage } from '../ListsPage'
 import { Props } from './Routes.types'
 
@@ -56,7 +58,8 @@ const Routes = ({ inMaintenance }: Props) => {
           component={AccountPage}
         />
         <Route exact path={locations.account()} component={AccountPage} />
-        <Route exact path={locations.list()} component={ListsPage} />
+        <ProtectedRoute exact path={locations.lists()} component={ListsPage} />
+        <Route exact path={locations.list()} component={ListPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
         <Route exact path={locations.sell()} component={SellPage} />
         <Route exact path={locations.bid()} component={BidPage} />

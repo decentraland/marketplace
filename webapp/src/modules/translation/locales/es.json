@@ -152,10 +152,15 @@
   "filters": {
     "type": "Tipo",
     "status": "Estado",
+    "sort_by": "Ordenado por",
     "item": "Creaciones originales",
     "nft": "Artículos de reventa",
     "name": "Nombre",
+    "name_asc": "Nombre ⬆",
+    "name_desc": "Nombre ⬇",
+    "recently_updated": "Recientemente actualizada",
     "newest": "Más nuevos",
+    "oldest": "Más viejos",
     "recently_listed": "Listados recientemente",
     "recently_listed_for_rent": "Listados recientemente para rentar",
     "recently_sold": "Vendidos recientemente",
@@ -1156,20 +1161,23 @@
     "disclaimer": "Solo se cuentan las cuentas con más de 1 VP.",
     "empty": "Los usuarios no han guardado este artículo"
   },
-  "lists_page": {
-    "default_title": "Lista de deseos"
-  },
-  "claim_your_own_name": {
-    "title": "RECLAMA TU PROPIO NOMBRE",
-    "text": "En esta sección puede encontrar NOMBRES que están listados para la venta por los usuarios de Decentraland. Alternativamente, puede reclamar su propio NOMBRE único de la sección Constructor por un precio fijo de {mana}.",
-    "btn": "Reclama tu nombre"
-  },
-  "my_lists": {
+  "list_page": {
+    "default_title": "Lista de deseos",
     "empty": {
       "title": "No tienes ningún item guardado",
       "subtitle": "Descubre items increíbles.",
       "action": "Explora los colleccionables"
     }
+  },
+  "lists_page": {
+    "title": "Mis listas",
+    "subtitle": "{count} {count, plural, one {lista} other {listas}}",
+    "create_list": "Crear lista"
+  },
+  "claim_your_own_name": {
+    "title": "RECLAMA TU PROPIO NOMBRE",
+    "text": "En esta sección puede encontrar NOMBRES que están listados para la venta por los usuarios de Decentraland. Alternativamente, puede reclamar su propio NOMBRE único de la sección Constructor por un precio fijo de {mana}.",
+    "btn": "Reclama tu nombre"
   },
   "create_list_modal": {
     "title": "Crear lista",

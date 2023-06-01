@@ -1,19 +1,19 @@
 import { Dispatch } from 'redux'
-import { CallHistoryMethodAction } from 'connected-react-router'
-import { RouteComponentProps } from 'react-router-dom'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-
-type Params = { listId?: string }
+import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
+import { List } from '../../modules/favorites/types'
+import {
+  FetchListsRequestAction,
+  fetchListsRequest
+} from '../../modules/favorites/actions'
 
 export type Props = {
-  wallet: Wallet | null
-  isConnecting: boolean
-  listId?: string
-  onRedirect: (path: string) => void
-} & RouteComponentProps<Params>
+  isLoading: boolean
+  lists: List[]
+  count?: number
+  onFetchLists: typeof fetchListsRequest
+  onCreateList: () => void
+}
 
-export type MapStateProps = Pick<Props, 'wallet' | 'isConnecting' | 'listId'>
-
-export type MapDispatchProps = Pick<Props, 'onRedirect'>
-export type MapDispatch = Dispatch<CallHistoryMethodAction>
-export type OwnProps = RouteComponentProps<Params>
+export type MapStateProps = Pick<Props, 'isLoading' | 'count' | 'lists'>
+export type MapDispatchProps = Pick<Props, 'onFetchLists' | 'onCreateList'>
+export type MapDispatch = Dispatch<FetchListsRequestAction | OpenModalAction>

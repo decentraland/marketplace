@@ -23,6 +23,8 @@ import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { NFT_SERVER_URL } from '../vendor/decentraland'
+import { SortDirection } from '../routing/types'
+import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import {
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
@@ -64,6 +66,7 @@ import {
 } from './actions'
 import { getListId } from './selectors'
 import { FavoritedItems, List } from './types'
+import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const itemAPI = new ItemAPI(NFT_SERVER_URL, {
@@ -247,10 +250,26 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
+      let sortBy: ListsSortBy | undefined
+      let sortDirection: SortDirection | undefined
+
+      if (options.sortBy) {
+        const sortValues: {
+          sortBy: ListsSortBy
+          sortDirection: SortDirection
+        } = yield call(convertListsBrowseSortByIntoApiSortBy, options.sortBy)
+        sortBy = sortValues.sortBy
+        sortDirection = sortValues.sortDirection
+      }
 
       const { results, total }: { results: List[]; total: number } = yield call(
         [favoritesAPI, 'getLists'],
-        options.filters
+        {
+          first: options.first,
+          skip: options.skip ?? (options.page - 1) * options.first,
+          sortBy,
+          sortDirection
+        }
       )
 
       yield put(fetchListsSuccess(results, total, options))
