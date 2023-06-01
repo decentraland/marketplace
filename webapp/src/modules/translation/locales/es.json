@@ -726,6 +726,10 @@
     "invalid_date": "Esta fecha ya pasó",
     "submit": "Poner en venta",
     "update_submit": "Actualizar",
+    "authorization": {
+      "title": "Poner el artículo en venta",
+      "confirm_transaction_title": "Confirme la transacción para poner el artículo en venta"
+    },
     "confirm": {
       "title": "Por favor confirma",
       "line_one": "Estás por poner en venta {name} por {amount}.",
