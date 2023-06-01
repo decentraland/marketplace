@@ -44,21 +44,23 @@
   padding-left: 20px !important;
 }
 
-.TransactionHistory .filtertabsContainer {
-  height: 69px;
-}
-
-.TransactionHistory .ui.basic.table tbody tr {
-  height: 65px;
-}
-
-.TransactionHistory .dcl.mana.inline {
-  line-height: 20px;
-}
-
 @media (max-width: 768px) {
   .TransactionHistory .titleContainer {
     padding: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .TransactionHistory .ui.basic.table tbody tr {
+    height: 65px;
+  }
+
+  .TransactionHistory .dcl.mana.inline {
+    line-height: 20px;
+  }
+
+  .TransactionHistory .filtertabsContainer {
+    height: 69px;
   }
 }
 

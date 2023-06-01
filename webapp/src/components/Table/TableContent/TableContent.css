@@ -93,7 +93,6 @@
     flex-direction: row;
     align-items: center;
     padding: 0;
-    height: 65px;
   }
   .TableContent .pagination {
     flex-direction: column;

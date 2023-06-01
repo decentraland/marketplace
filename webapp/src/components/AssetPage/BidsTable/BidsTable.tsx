@@ -15,7 +15,7 @@ import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { formatDataToTable } from './utils'
 import { Props } from './BidsTable.types'
 
-export const ROWS_PER_PAGE = 6
+export const ROWS_PER_PAGE = 5
 const INITIAL_PAGE = 1
 
 const BidsTable = (props: Props) => {
@@ -60,6 +60,7 @@ const BidsTable = (props: Props) => {
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the first ROWS_PER_PAGE
   useEffect(() => {
+    let cancel = false
     if (nft) {
       setIsLoading(true)
       bidAPI
@@ -72,6 +73,7 @@ const BidsTable = (props: Props) => {
           ((page - 1) * ROWS_PER_PAGE).toString()
         )
         .then(response => {
+          if (cancel) return
           setTotal(response.total)
           setBids(
             formatDataToTable(
@@ -83,10 +85,13 @@ const BidsTable = (props: Props) => {
           )
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
-        .finally(() => setIsLoading(false))
+        .finally(() => !cancel && setIsLoading(false))
         .catch(error => {
           console.error(error)
         })
+      return () => {
+        cancel = true
+      }
     }
   }, [nft, setIsLoading, setBids, page, sortBy, address, isMobileOrTablet])
 

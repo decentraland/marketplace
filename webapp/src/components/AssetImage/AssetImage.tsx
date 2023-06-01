@@ -83,7 +83,8 @@ const AssetImage = (props: Props) => {
     onSetWearablePreviewController,
     children,
     hasBadges,
-    item
+    item,
+    wallet
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -264,21 +265,25 @@ const AssetImage = (props: Props) => {
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
 
-        const urn = !isNFT(asset) && asset.network === Network.ETHEREUM ? getEthereumItemUrn(asset) : ''
+        const ethereumUrn =
+          !isNFT(asset) && asset.network === Network.ETHEREUM
+            ? getEthereumItemUrn(asset)
+            : ''
 
         const wearablePreviewProps =
           !isNFT(asset) && asset.network === Network.ETHEREUM
             ? {
-                urns: [urn],
+                urns: [ethereumUrn],
                 background: Rarity.getColor(asset.rarity),
                 type: isTryingOn ? PreviewType.AVATAR : PreviewType.WEARABLE
               }
             : {
                 contractAddress: asset.contractAddress,
-
                 itemId,
                 tokenId
               }
+
+        const isOwnerOfNFT = isNFT(asset) && wallet?.address === asset.owner
 
         wearablePreview = (
           <>
@@ -298,7 +303,7 @@ const AssetImage = (props: Props) => {
               {...wearablePreviewProps}
               dev={config.is(Env.DEVELOPMENT)}
             />
-            {isAvailableForMint ? (
+            {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
                 price={item.price}
                 stock={item.available}
@@ -451,6 +456,8 @@ const AssetImage = (props: Props) => {
         </div>
       )
 
+      const isOwnerOfNFT = isNFT(asset) && wallet?.address === asset.owner
+
       if (isDraggable) {
         wearablePreview = (
           <>
@@ -466,6 +473,16 @@ const AssetImage = (props: Props) => {
               onError={handleError}
               dev={config.is(Env.DEVELOPMENT)}
             />
+            {isAvailableForMint && !isOwnerOfNFT ? (
+              <AvailableForMintPopup
+                price={item.price}
+                stock={item.available}
+                rarity={item.rarity}
+                contractAddress={item.contractAddress}
+                itemId={item.itemId}
+                network={item.network}
+              />
+            ) : null}
             {isLoadingWearablePreview ? (
               <Center>
                 <Loader

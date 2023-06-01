@@ -182,4 +182,9 @@
   .BuyNFTBox .informationContainer {
     gap: 10px;
   }
+
+  .BuyNFTBox .centerItems {
+    flex-direction: column;
+    margin-top: 12px;
+  }
 }
