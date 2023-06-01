@@ -5,11 +5,15 @@
 
 .Owner .Profile .name {
   margin-left: 10px;
-  font-size: 21px;
+  font-size: 14px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 30px;
   letter-spacing: 0.3149999976158142px;
   text-align: left;
   color: var(--text);
+}
+
+.Owner .Profile.inline :global(.dcl.blockie) {
+  border-radius: 30px;
 }

@@ -2,10 +2,14 @@ import { connect } from 'react-redux'
 import { RootState } from '../../../../modules/reducer'
 import { getWallet } from '../../../../modules/wallet/selectors'
 import { MapStateProps } from './ItemSaleActions.types'
-import SaleRentActionBox from './ItemSaleActions'
+import ItemSaleActions from './ItemSaleActions'
 
-const mapState = (state: RootState): MapStateProps => ({
-  wallet: getWallet(state)
-})
+const mapState = (state: RootState): MapStateProps => {
+  const wallet = getWallet(state)
 
-export default connect(mapState)(SaleRentActionBox)
+  return {
+    wallet
+  }
+}
+
+export default connect(mapState)(ItemSaleActions)

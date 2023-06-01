@@ -1,5 +1,47 @@
 .AssetCard {
+  height: 345px;
+  overflow: visible;
+}
+
+.ui.card.AssetCard.catalog {
+  height: 360px;
+}
+
+.AssetCard.ui.card > .content.catalog {
+  padding: 14px 14px 18px 14px;
+}
+
+.AssetCard .header .catalogTitle {
+  flex: 1 2 auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   overflow: hidden;
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+.AssetCard .textOverflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.ui.card.AssetCard > .content,
+.ui.cards > .card.AssetCard > .content {
+  height: 185px;
+}
+
+.ui.card.AssetCard > .content > .header:not(.ui),
+.ui.cards > .card.AssetCard > .content > .header:not(.ui) {
+  flex: unset;
+}
+
+.ui.card.AssetCard .AssetImage,
+.ui.card.AssetCard .AssetImage .rarity-background {
+  border-radius: 10px 10px 0px 0px !important;
 }
 
 .AssetCard .header,
@@ -9,22 +51,46 @@
   letter-spacing: -0.2px;
 }
 
+.AssetCard .ui.header.small {
+  font-size: 14.5px;
+  font-weight: 400;
+  margin-top: -1px;
+}
+
+.AssetCard .CatalogItemInformation {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  transition: inherit;
+  flex: 1;
+}
+
+.AssetCard .CatalogItemInformation > span > img {
+  margin-left: 4px;
+}
+
 .AssetCard .header .title {
   flex: 1 2 auto;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   margin-right: 20px;
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
 }
 
-.ui.card.AssetCard > .content {
-  flex: none;
+.AssetCard .creator {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--secondary-text);
 }
 
 .ui.card.AssetCard > .content > .header:not(.ui),
 .ui.cards > .card.AssetCard > .content > .header:not(.ui) {
   display: flex;
-  margin-bottom: 6px;
+  margin-bottom: 0px;
 }
 
 .AssetCard .dcl.mana.inline {
@@ -37,17 +103,8 @@
   margin-bottom: 4px;
 }
 
-.ui.cards > .ui.card.AssetCard.link:hover .meta,
-a.ui.card.link:hover .meta {
-  color: var(--secondary-text);
-}
-
 .AssetCard .tags {
-  margin-top: 12px;
-}
-
-.AssetCard .AssetImage {
-  overflow: hidden;
+  margin-top: 10px;
 }
 
 .AssetCard .AssetImage .ens-subdomain {
@@ -79,7 +136,7 @@ a.ui.card.link:hover .meta {
   align-self: flex-end;
   background-color: #ecebed;
   border: 1px solid #a09ba8;
-  color: #43404A;
+  color: #43404a;
   font-size: 11px;
   border-radius: 50px !important;
   display: flex;
@@ -92,7 +149,118 @@ a.ui.card.link:hover .meta {
   z-index: 2;
 }
 
+.AssetCard .AssetImage {
+  height: 223px;
+  transition: height 0.3s !important;
+}
+
+.AssetCard .NotForSale {
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+.AssetCard .AssetImage.catalog {
+  height: 209px;
+  transition: height 0.3s !important;
+}
+
+.AssetCard .PriceInMana .ui.header.large {
+  font-size: 30px;
+  font-weight: 600;
+  margin: 0px;
+}
+
+.AssetCard .ens-subdomain {
+  overflow: hidden;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.AssetCard .mintIcon {
+  height: 14px;
+}
+
+.AssetCard .dcl.atlas {
+  overflow: hidden;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.AssetCard .wrapBigText {
+  flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 1199px) {
+  .AssetCard:hover .AssetImage.catalog {
+    height: 161px;
+    transition: none;
+    transition: height 0.3s !important;
+  }
+
+  .AssetCard .extraInformation {
+    display: flex;
+    visibility: hidden;
+    height: 0px;
+    opacity: 0;
+    transition: height 0.1s, opacity 0.6s;
+  }
+  .AssetCard:hover .extraInformation {
+    visibility: visible;
+    margin-top: 5px;
+    height: auto;
+    opacity: 1;
+    align-items: center;
+  }
+
+  .ui.cards > .ui.card.AssetCard.link:hover .meta,
+  a.ui.card.link:hover .meta {
+    color: var(--secondary-text);
+  }
+
+  .AssetCard:hover .CatalogItemInformation {
+    margin-top: 2px;
+  }
+
+  .ui.cards a.card.AssetCard.catalog:hover,
+  .ui.link.card.AssetCard.catalog:hover,
+  .ui.link.cards .card.AssetCard.catalog:hover,
+  a.ui.card.AssetCard.catalog:hover,
+  .ui.cards > .ui.card.AssetCard.catalog.link:hover,
+  .ui.card.AssetCard.catalog.link:hover {
+    border: none !important;
+  }
+
+  .ui.card.AssetCard:hover > .content.catalog.expandable,
+  .ui.cards > .card.AssetCard:hover > .content.catalog.expandable {
+    height: 222px;
+  }
+
+  .ui.card.AssetCard:hover > .content.catalog,
+  .ui.cards > .card.AssetCard:hover > .content.catalog {
+    position: absolute;
+    height: 206px;
+    margin-top: 161px;
+    width: 100%;
+    background-color: var(--card);
+    box-shadow: 0px 4px 34px 0px rgba(255, 255, 255, 0.37) !important;
+    border-radius: 0px 0px 10px 10px !important;
+  }
+
+  .ui.card.AssetCard:hover .AssetImage.catalog,
+  .ui.cards > .card.AssetCard:hover .AssetImage.catalog {
+    box-shadow: 0px 4px 34px 0px rgba(255, 255, 255, 0.37) !important;
+    border-radius: 10px !important;
+  }
+}
+
 @media (max-width: 1199px) {
+  .AssetCard .AssetImage.catalog,
+  .AssetImage.catalog .image-wrapper {
+    height: 123px;
+  }
   .AssetCard .LandBubble {
     align-self: center;
     font-size: x-small;
@@ -126,6 +294,69 @@ a.ui.card.link:hover .meta {
 }
 
 @media (max-width: 768px) {
+  .ui.card.AssetCard.catalog {
+    height: 345px;
+  }
+  .AssetCard.ui.card > .content.catalog,
+  .ui.cards > .AssetCard.card > .content.catalog {
+    display: flex;
+  }
+
+  .AssetCard .catalog .tags {
+    margin-top: auto;
+  }
+
+  .AssetBrowse .ui.cards .ui.card.AssetCard {
+    transform: translateY(0px);
+  }
+
+  .AssetCard.ui.card > .content.catalog > .header:not(.ui),
+  .AssetCard.ui.cards > .card > .content.catalog > .header:not(.ui) .header,
+  .AssetCard .CatalogItemInformation {
+    font-size: 15px;
+  }
+
+  .AssetCard .PriceInMana .ui.header.large {
+    font-size: 25px;
+  }
+
+  .AssetCard .wrapBigText {
+    display: flex;
+    font-size: 12px;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .AssetCard .wrapBigText .ui.small.header.dcl.mana.tiniMana {
+    font-size: 12px;
+  }
+
+  .AssetCard .PriceInMana {
+    margin-top: 6px;
+  }
+
+  .AssetCard .AssetImage.catalog,
+  .AssetImage.catalog .image-wrapper {
+    height: 123px;
+  }
+
+  .AssetCard .extraInformation {
+    margin-top: 6px;
+    visibility: visible;
+    height: unset;
+    font-size: 12px;
+    font-weight: normal;
+  }
+
+  .ui.cards a.card.AssetCard.catalog:hover,
+  .ui.link.card.AssetCard.catalog:hover,
+  .ui.link.cards .card.AssetCard.catalog:hover,
+  a.ui.card.AssetCard.catalog:hover,
+  .ui.cards > .ui.card.AssetCard.catalog.link:hover,
+  .ui.card.AssetCard.catalog.link:hover {
+    transform: translateY(0px);
+  }
+
   .AssetCard.ui.card > .content,
   .ui.cards > .AssetCard.card > .content {
     display: block;

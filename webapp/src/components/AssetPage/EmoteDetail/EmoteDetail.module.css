@@ -1,3 +1,63 @@
+.EmoteDetail {
+  display: flex;
+  flex-direction: column;
+}
+
+.EmoteDetail .actionsContainer {
+  width: 521px;
+}
+
+.EmoteDetail .assetImageContainer {
+  height: 602px;
+}
+
+.EmoteDetail .assetImageContainer :global(.AssetImage) {
+  border-radius: 12px;
+  overflow: visible;
+}
+
+.EmoteDetail .badges {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.EmoteDetail .wearableInformation {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.EmoteDetail .wearableInformationContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  width: 100%;
+  margin-top: 25px;
+}
+
 .issued {
   color: var(--secondary-text);
+}
+
+@media (max-width: 768px) {
+  .EmoteDetail .wearableInformationContainer {
+    flex-direction: column;
+  }
+  .EmoteDetail .assetImageContainer {
+    height: 100%;
+  }
+  .EmoteDetail .actionsContainer {
+    width: 100%;
+  }
+  .EmoteDetail .badges {
+    margin-bottom: 18px;
+  }
+  .EmoteDetail .emoteOwnerAndCollectionContainer {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+  }
 }

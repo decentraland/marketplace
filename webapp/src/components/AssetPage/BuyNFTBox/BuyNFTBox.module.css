@@ -1,0 +1,190 @@
+.BuyNFTBox {
+  border: 2px solid var(--secondary);
+  border-radius: 10px;
+  display: flex;
+  padding: 24px;
+  width: 100%;
+  background-color: var(--secondary);
+}
+
+.AlignEnd {
+  margin-top: auto;
+}
+
+.BuyNFTBox .containerColumn {
+  color: var(--primary-text);
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  font-size: 14px;
+  gap: 10px;
+}
+
+.BuyNFTBox .fullWidth {
+  width: 100%;
+}
+
+.BuyNFTBox .containerRow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.BuyNFTBox .informationContainer {
+  display: flex;
+  margin: 10px 0px 0px 0px;
+  justify-content: space-between;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.BuyNFTBox .mintingContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.BuyNFTBox .informationBold {
+  color: white;
+  font-size: 30px;
+  font-weight: 600;
+  margin: unset;
+}
+
+.BuyNFTBox .stockText {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 7px;
+}
+
+.BuyNFTBox .informationBold :global(.ui.header.large) {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.BuyNFTBox .informationBold :global(.dcl.mana .matic) {
+  margin-bottom: 5px;
+  width: 22px;
+  height: 22px;
+}
+
+.BuyNFTBox .informationText {
+  color: white;
+  font-size: 24px;
+  line-height: 1.7;
+}
+
+.BuyNFTBox .informationListingText {
+  color: white;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.BuyNFTBox .centerItems {
+  align-items: center;
+  gap: 0px;
+}
+
+.BuyNFTBox .issueNumber {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 15px;
+}
+
+.BuyNFTBox .informationTitle {
+  font-size: 14px;
+  color: var(--secondary-text);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  line-height: 7px;
+}
+
+.BuyNFTBox .informationTooltip {
+  width: 14px;
+  height: 14px;
+}
+
+.BuyNFTBox .mintingIcon {
+  height: 19px;
+}
+
+.BuyNFTBox :global(.ui.header.medium) {
+  font-size: 17px;
+}
+
+.BuyNFTBox :global(.ui.button + .ui.button) {
+  margin-left: unset;
+}
+
+.BuyNFTBox :global(.ui.loader.active) {
+  display: flex;
+  position: unset;
+  margin-top: 20px;
+}
+
+.BuyNFTBox .emptyContainer {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+}
+.BuyNFTBox .buyWithCardClassName {
+  background-color: white !important;
+  color: black !important;
+}
+
+.BuyNFTBox .primaryButton {
+  background-color: var(--primary) !important;
+}
+
+.BuyNFTBox .outlinedButton {
+  border: 1px solid var(--secondary-text) !important;
+}
+
+.BuyNFTBox .expiresAt {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.BuyNFTBox .listingMana :global(.ui.header.small) {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.BuyNFTBox .columnListing {
+  color: var(--primary-text);
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.BuyNFTBox .makeOfferButton {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .BuyNFTBox {
+    padding: 24px 15px;
+  }
+
+  .BuyNFTBox .informationContainer {
+    gap: 10px;
+  }
+
+  .BuyNFTBox .centerItems {
+    flex-direction: column;
+    margin-top: 12px;
+  }
+}

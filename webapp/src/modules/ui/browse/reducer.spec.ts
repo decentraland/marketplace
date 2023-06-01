@@ -35,14 +35,24 @@ describe('when reducing the action of setting a view', () => {
     page: 1
   }
 
-  it('should set the view and reset the state and empty the itemIds, nftIds, count and page', () => {
-    expect(browseReducer(initialState, setView(View.LISTS))).toEqual({
-      ...initialState,
-      view: View.LISTS,
-      itemIds: [],
-      nftIds: [],
-      count: undefined,
-      page: undefined
+  describe('and the payload view is the same as the state current one', () => {
+    it('should return the same state', () => {
+      expect(browseReducer(initialState, setView(View.MARKET))).toEqual(
+        initialState
+      )
+    })
+  })
+
+  describe('and the payload view is different then the state current one', () => {
+    it('should set the view and reset the state and empty the itemIds, nftIds, count and page', () => {
+      expect(browseReducer(initialState, setView(View.LISTS))).toEqual({
+        ...initialState,
+        view: View.LISTS,
+        itemIds: [],
+        nftIds: [],
+        count: undefined,
+        page: undefined
+      })
     })
   })
 })

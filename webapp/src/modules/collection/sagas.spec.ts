@@ -1,7 +1,7 @@
 import { select } from '@redux-saga/core/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call } from 'redux-saga-test-plan/matchers'
-import { fetchItemsRequest } from '../item/actions'
+import { fetchCollectionItemsRequest } from '../item/actions'
 import { getItemsByContractAddress } from '../item/selectors'
 import { collectionAPI } from '../vendor/decentraland'
 import {
@@ -52,7 +52,7 @@ describe('when handling a fetch collections request', () => {
     })
   })
   describe('when should fetch items argument is true', () => {
-    it('should put a fetch items request action for each collection', () => {
+    it('should put a fetch collection items request action for each collection', () => {
       const filters = {}
       const contractAddress1 = 'contract address 1'
       const contractAddress2 = 'contract address 2'
@@ -94,14 +94,16 @@ describe('when handling a fetch collections request', () => {
           .put(fetchCollectionsSuccess(collections as any, 100))
           // Fetches items for contract address 2 because sizes are different
           .put(
-            fetchItemsRequest({
-              filters: { contracts: [contractAddress2], first: size }
+            fetchCollectionItemsRequest({
+              contractAddresses: [contractAddress2],
+              first: size
             })
           )
           // Fetches items for contract address 3 because there are no items for that collection stored
           .put(
-            fetchItemsRequest({
-              filters: { contracts: [contractAddress3], first: size }
+            fetchCollectionItemsRequest({
+              contractAddresses: [contractAddress3],
+              first: size
             })
           )
           .dispatch(fetchCollectionsRequest(filters, true))

@@ -17,12 +17,12 @@ export class BidService
   implements BidServiceInterface<VendorName.DECENTRALAND> {
   async fetchBySeller(seller: string) {
     const bids = await bidAPI.fetchBySeller(seller)
-    return bids
+    return bids.data
   }
 
   async fetchByBidder(bidder: string) {
     const bids = await bidAPI.fetchByBidder(bidder)
-    return bids
+    return bids.data
   }
 
   async fetchByNFT(nft: NFT, status: ListingStatus = ListingStatus.OPEN) {
@@ -31,7 +31,7 @@ export class BidService
       nft.tokenId,
       status
     )
-    return bids
+    return bids.data
   }
 
   async place(

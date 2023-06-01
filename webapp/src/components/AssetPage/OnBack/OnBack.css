@@ -1,0 +1,21 @@
+.top-header .favorites {
+  flex-grow: 1;
+  justify-content: flex-end;
+}
+
+.top-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.top-header .dcl.back.absolute {
+  position: inherit;
+}
+
+.top-header .ui.button.basic {
+  color: white !important;
+  align-items: center;
+  display: flex;
+  gap: 10px;
+}
