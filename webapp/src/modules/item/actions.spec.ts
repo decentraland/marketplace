@@ -106,6 +106,7 @@ describe('when creating the action to signal a successful item request', () => {
       meta: undefined,
       payload: {
         item,
+        txHash,
         ...buildTransactionPayload(chainId, txHash, {
           itemId: item.itemId,
           contractAddress: item.contractAddress,

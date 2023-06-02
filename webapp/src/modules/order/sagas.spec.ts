@@ -48,7 +48,6 @@ import {
 import { orderSaga } from './sagas'
 import {
   fetchNFTRequest,
-  FETCH_NFTS_FAILURE,
   FETCH_NFT_FAILURE
 } from '../nft/actions'
 
@@ -228,7 +227,7 @@ describe('when handling the execute order request action', () => {
             [call(waitForTx, txHash), Promise.resolve()]
           ])
           .put(executeOrderTransactionSubmitted(order, nft, txHash))
-          .put(executeOrderSuccess())
+          .put(executeOrderSuccess(txHash, nft))
           .dispatch(executeOrderRequest(order, nft, fingerprint))
           .run({ silenceTimeout: true })
       })

@@ -107,7 +107,12 @@ export const locations = {
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
   activity: () => `/activity`,
-  success: () => '/success'
+  success: (searchOptions?: {
+    txHash: string
+    tokenId: string
+    assetType: string
+    contractAddress: string
+  }) => `/success${searchOptions? `?${new URLSearchParams(searchOptions).toString()}`: ''}`
 }
 
 function getResource(type: AssetType) {

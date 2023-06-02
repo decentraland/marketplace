@@ -67,6 +67,7 @@ export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
 export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
   action(BUY_ITEM_SUCCESS, {
     item,
+    txHash,
     ...buildTransactionPayload(chainId, txHash, {
       itemId: item.itemId,
       contractAddress: item.contractAddress,

@@ -1,6 +1,8 @@
 import {
+  ChainId,
   EmotePlayMode,
   GenderFilterOption,
+  Item,
   ItemSortBy,
   Network,
   NFTCategory,
@@ -18,7 +20,7 @@ import { call, select } from 'redux-saga/effects'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
-import { fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
+import { buyItemSuccess, fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import { getPage } from '../ui/browse/selectors'
 import { PAGE_SIZE } from '../vendor/api'
@@ -34,6 +36,9 @@ import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import { getCurrentBrowseOptions, getSection } from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
+import { executeOrderSuccess } from '../order/actions'
+import { NFT } from '../nft/types'
+import { locations } from './locations'
 
 beforeEach(() => {
   jest.spyOn(Date, 'now').mockReturnValue(100)
@@ -1104,6 +1109,62 @@ describe('when handling the location change action', () => {
         .provide([[select(getCurrentBrowseOptions), browseOptions]])
         .not.put(fetchAssetsFromRouteAction(browseOptions))
         .dispatch(locationChangeAction)
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('handleRedirectToSuccessPage saga', () => {
+  let searchParams: {
+    txHash: string
+    tokenId: string
+    assetType: AssetType
+    contractAddress: string
+  }
+
+  describe('when handling the execute order success action', () => {
+    beforeEach(() => {
+      searchParams = {
+        txHash: 'txHash',
+        tokenId: 'tokenId',
+        assetType: AssetType.NFT,
+        contractAddress: 'contractAddress'
+      }
+    })
+
+    it('should redirect to success page with the correct query params', () => {
+      return expectSaga(routingSaga)
+        .put(push(locations.success(searchParams)))
+        .dispatch(
+          executeOrderSuccess(searchParams.txHash, {
+            tokenId: searchParams.tokenId,
+            contractAddress: searchParams.contractAddress
+          } as NFT)
+        )
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when handling the buy item success action', () => {
+    beforeEach(() => {
+      searchParams = {
+        txHash: 'txHash',
+        tokenId: 'tokenId',
+        assetType: AssetType.ITEM,
+        contractAddress: 'contractAddress'
+      }
+    })
+
+    it('should redirect to success page with the correct query params', () => {
+      return expectSaga(routingSaga)
+        .put(push(locations.success(searchParams)))
+        .dispatch(
+          buyItemSuccess(ChainId.ETHEREUM_GOERLI, searchParams.txHash, {
+            itemId: searchParams.tokenId,
+            contractAddress: searchParams.contractAddress,
+            price: '10'
+          } as Item)
+        )
         .run({ silenceTimeout: true })
     })
   })

@@ -123,7 +123,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
       }
     }
 
-    yield put(executeOrderSuccess())
+    yield put(executeOrderSuccess(txHash, nft))
   } catch (error) {
     const errorMessage = isErrorWithMessage(error)
       ? error.message

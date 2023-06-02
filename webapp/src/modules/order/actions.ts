@@ -81,7 +81,7 @@ export const executeOrderTransactionSubmitted = (
       price: formatWeiMANA(order.price)
     })
   })
-export const executeOrderSuccess = () => action(EXECUTE_ORDER_SUCCESS)
+export const executeOrderSuccess = (txHash: string, nft: NFT) => action(EXECUTE_ORDER_SUCCESS, { txHash, nft })
 export const executeOrderFailure = (
   order: Order,
   nft: NFT,
