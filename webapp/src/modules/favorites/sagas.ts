@@ -1,5 +1,5 @@
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
-import { Item } from '@dcl/schemas'
+import { CatalogFilters, Item } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   ConnectWalletSuccessAction,
@@ -282,7 +282,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       )
 
       const previewListsItemIds = results.flatMap(list => list.previewOfItemIds)
-      const itemFilters: ItemBrowseOptions['filters'] = {
+      const itemFilters: CatalogFilters = {
         first: results.length,
         ids: previewListsItemIds
       }
@@ -290,7 +290,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       let previewItems: Item[] = []
       if (previewListsItemIds.length > 0) {
         const result: { data: Item[] } = yield call(
-          [itemAPI, 'get'],
+          [catalogAPI, 'get'],
           itemFilters
         )
         previewItems = result.data

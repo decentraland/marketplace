@@ -12,6 +12,7 @@ import { View } from '../ui/types'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import {
+  ListDetails,
   ListOfLists,
   ListsSortBy,
   Permission,
@@ -52,6 +53,7 @@ import {
 import { favoritesSaga } from './sagas'
 import { getListId } from './selectors'
 import {
+  CreateListParameters,
   FavoritedItems,
   List,
   ListsBrowseOptions,
@@ -608,35 +610,108 @@ describe('when handling the request for fetching lists', () => {
           id: 'anId',
           name: 'aName',
           itemsCount: 1,
-          previewOfItemIds: []
+          previewOfItemIds: ['anItemId']
+        },
+        {
+          id: 'anotherId',
+          name: 'anotherName',
+          itemsCount: 1,
+          previewOfItemIds: ['anotherItemId']
         }
       ]
-      total = 1
+      total = 2
     })
 
-    it('should dispatch an action signaling the success of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.getLists),
-            Promise.resolve({ results: lists, total })
-          ]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.getLists,
-          args: [
-            {
-              first: options.first,
-              skip: (options.page - 1) * options.first,
-              sortBy: undefined,
-              sortDirection: undefined
-            }
-          ]
-        })
-        .put(fetchListsSuccess(lists, [], total, options))
-        .dispatch(fetchListsRequest(options))
-        .run({ silenceTimeout: true })
+    describe('and the call to the catalog api succeeds', () => {
+      let items: Item[]
+
+      beforeEach(() => {
+        items = [
+          { id: 'anItemId', name: 'anItemName' } as Item,
+          { id: 'anotherItemId', name: 'anotherItemName' } as Item
+        ]
+      })
+
+      it('should dispatch an action signaling the success of the handled action', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [call(getAccountIdentity), Promise.resolve()],
+            [
+              matchers.call.fn(FavoritesAPI.prototype.getLists),
+              Promise.resolve({ results: lists, total })
+            ],
+            [
+              matchers.call.fn(CatalogAPI.prototype.get),
+              Promise.resolve({ data: items })
+            ]
+          ])
+          .call.like({
+            fn: FavoritesAPI.prototype.getLists,
+            args: [
+              {
+                first: options.first,
+                skip: (options.page - 1) * options.first,
+                sortBy: undefined,
+                sortDirection: undefined
+              }
+            ]
+          })
+          .call.like({
+            fn: CatalogAPI.prototype.get,
+            args: [
+              {
+                first: 2,
+                ids: [
+                  ...lists[0].previewOfItemIds,
+                  ...lists[1].previewOfItemIds
+                ]
+              }
+            ]
+          })
+          .put(fetchListsSuccess(lists, items, total, options))
+          .dispatch(fetchListsRequest(options))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the call to the catalog api fails', () => {
+      it('should dispatch an action signaling the failure of the handled action', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [call(getAccountIdentity), Promise.resolve()],
+            [
+              matchers.call.fn(FavoritesAPI.prototype.getLists),
+              Promise.resolve({ results: lists, total })
+            ],
+            [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(error)]
+          ])
+          .call.like({
+            fn: FavoritesAPI.prototype.getLists,
+            args: [
+              {
+                first: options.first,
+                skip: (options.page - 1) * options.first,
+                sortBy: undefined,
+                sortDirection: undefined
+              }
+            ]
+          })
+          .call.like({
+            fn: CatalogAPI.prototype.get,
+            args: [
+              {
+                first: 2,
+                ids: [
+                  ...lists[0].previewOfItemIds,
+                  ...lists[1].previewOfItemIds
+                ]
+              }
+            ]
+          })
+          .put(fetchListsFailure(error.message))
+          .dispatch(fetchListsRequest(options))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })
@@ -647,6 +722,7 @@ describe('when handling the request for deleting a list', () => {
     list = {
       id: 'anId',
       name: 'aName',
+      itemsCount: 1,
       description: 'aDescription',
       userAddress: 'aUserAddress',
       createdAt: Date.now()
@@ -705,7 +781,7 @@ describe('when handling the request for deleting a list', () => {
 })
 
 describe('when handling the request for getting a list', () => {
-  let list: List
+  let list: ListDetails
 
   beforeEach(() => {
     list = {
@@ -713,7 +789,10 @@ describe('when handling the request for getting a list', () => {
       name: 'aName',
       description: 'aDescription',
       userAddress: 'aUserAddress',
-      createdAt: Date.now()
+      itemsCount: 1,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      permission: Permission.VIEW
     }
   })
 
@@ -820,15 +899,23 @@ describe('when handling the request for updating a list', () => {
 })
 
 describe('when handling the request for creating a list', () => {
-  let listToCreate: List
+  let listToCreate: CreateListParameters
+  let returnedList: UpdateOrCreateList
 
   beforeEach(() => {
     listToCreate = {
+      name: 'aName',
+      description: 'aDescription',
+      isPrivate: false
+    }
+    returnedList = {
       id: 'anId',
       name: 'aName',
       description: 'aDescription',
       userAddress: 'aUserAddress',
-      createdAt: Date.now()
+      permission: Permission.EDIT,
+      createdAt: Date.now(),
+      updatedAt: null
     }
   })
 
@@ -837,13 +924,7 @@ describe('when handling the request for creating a list', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([[call(getAccountIdentity), Promise.reject(error)]])
         .put(createListFailure(error.message))
-        .dispatch(
-          createListRequest({
-            name: listToCreate.name,
-            isPrivate: true,
-            description: listToCreate.description
-          })
-        )
+        .dispatch(createListRequest(listToCreate))
         .run({ silenceTimeout: true })
     })
   })
@@ -860,22 +941,10 @@ describe('when handling the request for creating a list', () => {
         ])
         .call.like({
           fn: FavoritesAPI.prototype.createList,
-          args: [
-            {
-              name: listToCreate.name,
-              isPrivate: true,
-              description: listToCreate.description
-            }
-          ]
+          args: [listToCreate]
         })
         .put(createListFailure(error.message))
-        .dispatch(
-          createListRequest({
-            name: listToCreate.name,
-            isPrivate: true,
-            description: listToCreate.description
-          })
-        )
+        .dispatch(createListRequest(listToCreate))
         .run({ silenceTimeout: true })
     })
   })
@@ -887,27 +956,15 @@ describe('when handling the request for creating a list', () => {
           [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.createList),
-            Promise.resolve(listToCreate)
+            Promise.resolve(returnedList)
           ]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.createList,
-          args: [
-            {
-              name: listToCreate.name,
-              isPrivate: true,
-              description: listToCreate.description
-            }
-          ]
+          args: [listToCreate]
         })
-        .put(createListSuccess(listToCreate))
-        .dispatch(
-          createListRequest({
-            name: listToCreate.name,
-            isPrivate: true,
-            description: listToCreate.description
-          })
-        )
+        .put(createListSuccess(returnedList))
+        .dispatch(createListRequest(listToCreate))
         .run({ silenceTimeout: true })
     })
   })
