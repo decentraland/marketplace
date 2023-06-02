@@ -13,7 +13,12 @@
 
 .EmoteDetail .assetImageContainer :global(.AssetImage) {
   border-radius: 12px;
-  overflow: visible;
+  overflow: hidden;
+}
+
+.EmoteDetail :global(.AvailableForMintPopup) {
+  bottom: 64px;
+  right: 12px;
 }
 
 .EmoteDetail .badges {
@@ -45,6 +50,9 @@
 @media (max-width: 768px) {
   .EmoteDetail .wearableInformationContainer {
     flex-direction: column;
+  }
+  .EmoteDetail .assetImageContainer :global(.AssetImage) {
+    overflow: visible;
   }
   .EmoteDetail .assetImageContainer {
     height: 100%;
