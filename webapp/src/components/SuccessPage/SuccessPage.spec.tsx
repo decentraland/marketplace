@@ -5,11 +5,11 @@ import {
   renderWithProviders,
   waitForComponentToFinishLoading
 } from '../../utils/test'
-import { SuccessPage } from './SuccessPage'
-import { Props } from './SuccessPage.types'
 import { NFT } from '../../modules/nft/types'
 import { locations } from '../../modules/routing/locations'
 import { config } from '../../config'
+import { SuccessPage } from './SuccessPage'
+import { Props } from './SuccessPage.types'
 
 jest.mock('react-router-dom', () => ({
   useHistory: jest.fn(),
