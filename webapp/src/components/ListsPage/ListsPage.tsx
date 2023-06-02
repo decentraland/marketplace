@@ -60,7 +60,7 @@ const ListsPage = ({
           {count ? t('lists_page.subtitle', { count }) : null}
         </div>
         <div className={styles.right}>
-          {t('filters.sort_by')}
+          <span className={styles.sortBy}>{t('filters.sort_by')}</span>
           <Dropdown
             options={[
               {
@@ -81,8 +81,13 @@ const ListsPage = ({
             value={selectedSortBy}
             onChange={handleSortChange}
           />
-          <Button size="small" primary onClick={onCreateList}>
-            <Icon name="plus" />
+          <Button
+            size="small"
+            primary
+            className={styles.createList}
+            onClick={onCreateList}
+          >
+            <Icon name="plus" className={styles.icon} />
             {t('lists_page.create_list')}
           </Button>
         </div>
