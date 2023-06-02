@@ -51,6 +51,10 @@
   .EmoteDetail .wearableInformationContainer {
     flex-direction: column;
   }
+  .EmoteDetail :global(.AvailableForMintPopup) {
+    right: 0;
+    bottom: -110px;
+  }
   .EmoteDetail .assetImageContainer :global(.AssetImage) {
     overflow: visible;
   }
