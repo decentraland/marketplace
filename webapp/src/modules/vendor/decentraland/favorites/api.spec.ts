@@ -1,7 +1,13 @@
 import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { FavoritedItems, List, Permission } from '../../../favorites/types'
+import { FavoritedItems, List } from '../../../favorites/types'
 import { ItemFilters } from '../item/types'
 import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from './api'
+import {
+  ListDetails,
+  ListOfLists,
+  Permission,
+  UpdateOrCreateList
+} from './types'
 
 let itemId: string
 let identity: AuthIdentity
@@ -151,16 +157,15 @@ describe('when getting the lists', () => {
   })
 
   describe('when the request succeeds', () => {
-    let response: { results: List[]; total: number }
+    let response: { results: ListOfLists[]; total: number }
     beforeEach(() => {
       response = {
         results: [
           {
             id: 'aListId',
             name: 'aName',
-            description: 'aDescription',
-            userAddress: 'anOwnerAddress',
-            createdAt: Date.now()
+            itemsCount: 1,
+            previewOfItemIds: ['anItemId']
           }
         ],
         total: 1
@@ -181,16 +186,15 @@ describe('when getting the lists', () => {
   ])(
     'when the request is made with the %s parameter',
     (parameter, value, expectedParameter) => {
-      let response: { results: List[]; total: number }
+      let response: { results: ListOfLists[]; total: number }
       beforeEach(async () => {
         response = {
           results: [
             {
               id: 'aListId',
               name: 'aName',
-              description: 'aDescription',
-              userAddress: 'anOwnerAddress',
-              createdAt: Date.now()
+              itemsCount: 1,
+              previewOfItemIds: ['anItemId']
             }
           ],
           total: 1
@@ -258,8 +262,8 @@ describe('when getting a list', () => {
   })
 
   describe('when the request succeeds', () => {
-    let response: { ok: true; data: List }
-    let list: List
+    let response: { ok: true; data: ListDetails }
+    let list: ListDetails
 
     beforeEach(() => {
       list = {
@@ -268,6 +272,8 @@ describe('when getting a list', () => {
         description: 'aDescription',
         userAddress: 'anOwnerAddress',
         createdAt: Date.now(),
+        updatedAt: Date.now(),
+        itemsCount: 1,
         permission: Permission.VIEW
       }
       response = { ok: true, data: list }
@@ -301,7 +307,7 @@ describe('when updating a list', () => {
 
   describe('when the request succeeds', () => {
     let response: { ok: true; data: Partial<List> }
-    let list: List
+    let list: UpdateOrCreateList
 
     beforeEach(() => {
       list = {
@@ -310,6 +316,7 @@ describe('when updating a list', () => {
         description: 'aDescription',
         userAddress: 'anOwnerAddress',
         createdAt: Date.now(),
+        updatedAt: Date.now(),
         permission: Permission.VIEW
       }
       response = { ok: true, data: list }
@@ -348,8 +355,8 @@ describe('when creating a list', () => {
   })
 
   describe('when the request succeeds', () => {
-    let response: { ok: true; data: Partial<List> }
-    let list: List
+    let response: { ok: true; data: UpdateOrCreateList }
+    let list: UpdateOrCreateList
 
     beforeEach(() => {
       list = {
@@ -358,6 +365,7 @@ describe('when creating a list', () => {
         description: 'aDescription',
         userAddress: 'anOwnerAddress',
         createdAt: Date.now(),
+        updatedAt: null,
         permission: Permission.VIEW
       }
       response = { ok: true, data: list }
@@ -368,8 +376,7 @@ describe('when creating a list', () => {
       return expect(
         favoritesAPI.createList({
           name: list.name,
-          isPrivate: true,
-          description: list.description
+          isPrivate: true
         })
       ).resolves.toEqual(response)
     })
