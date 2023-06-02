@@ -27,6 +27,8 @@ import { PAGE_SIZE } from '../vendor/api'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
+import { executeOrderSuccess } from '../order/actions'
+import { NFT } from '../nft/types'
 import {
   browse,
   clearFilters,
@@ -36,8 +38,6 @@ import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import { getCurrentBrowseOptions, getSection } from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
-import { executeOrderSuccess } from '../order/actions'
-import { NFT } from '../nft/types'
 import { locations } from './locations'
 
 beforeEach(() => {
