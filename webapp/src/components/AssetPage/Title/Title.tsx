@@ -1,4 +1,5 @@
 import React from 'react'
+import { Network } from '@dcl/schemas'
 import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { getAssetName, isNFT } from '../../../modules/asset/utils'
 import { FavoritesCounter } from '../../FavoritesCounter'
@@ -10,9 +11,12 @@ const Title = ({ asset }: Props) => {
 
   return (
     <div className={styles.title}>
-      <span className={styles.text}>{getAssetName(asset)}</span>
+      <span className={styles.text}>
+        {getAssetName(asset)}{' '}
+        {isNFT(asset) && asset.issuedId ? `#${asset.issuedId}` : ''}{' '}
+      </span>
       {/* TODO (lists): this may be moved after the new detail page for unified markets */}
-      {!isMobile && !isNFT(asset) ? (
+      {!isMobile && !isNFT(asset) && asset.network === Network.MATIC ? (
         <FavoritesCounter
           isCollapsed
           className={styles.favorites}

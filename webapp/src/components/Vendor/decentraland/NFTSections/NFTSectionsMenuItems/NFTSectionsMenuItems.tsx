@@ -11,12 +11,14 @@ const shouldRenderSection = (section: Section, sections: Section[]) => {
 }
 
 const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
-
-  const handleOnSectionClick = useCallback((newSection) => {
-    if (section !== newSection) {
-      onSectionClick(newSection)
-    }
-  }, [onSectionClick, section])
+  const handleOnSectionClick = useCallback(
+    newSection => {
+      if (section !== newSection) {
+        onSectionClick(newSection)
+      }
+    },
+    [onSectionClick, section]
+  )
 
   return (
     <>

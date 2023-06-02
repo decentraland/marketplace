@@ -1,0 +1,58 @@
+.headerMargin {
+  padding: 20px !important;
+}
+
+.linkedProfileRow {
+  color: var(--primary) !important;
+}
+
+.issuedIdContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.badge {
+  color: white;
+  background-color: transparent !important;
+}
+
+.gotToNFT {
+  color: white;
+  padding-right: 25px;
+}
+
+.empty {
+  height: 86px;
+}
+
+.emptyTable {
+  width: 100%;
+  height: 448px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 20px;
+}
+
+.OwnersTable .emptyTableActionButton :global(.ui.button.basic) {
+  text-decoration: underline;
+  color: white !important;
+}
+
+@media (max-width: 768px) {
+  .linkedProfileRow {
+    margin-left: unset;
+  }
+}

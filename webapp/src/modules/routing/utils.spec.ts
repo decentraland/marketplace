@@ -1,7 +1,13 @@
+import { AssetStatusFilter } from '../../utils/filters'
 import { Section } from '../vendor/decentraland/routing'
 import { getPersistedIsMapProperty } from '../ui/utils'
 import { View } from '../ui/types'
-import { getClearedBrowseOptions, isMapSet } from './utils'
+import {
+  CATALOG_VIEWS,
+  getClearedBrowseOptions,
+  isCatalogView,
+  isMapSet
+} from './utils'
 import { BrowseOptions } from './types'
 jest.mock('../ui/utils')
 
@@ -112,6 +118,38 @@ describe('when checking if the map is set', () => {
 describe('when clearing browser options', () => {
   let baseBrowseOptions: BrowseOptions
   let options: BrowseOptions
+  describe('and its a catalog view that should render the status filter', () => {
+    beforeEach(() => {
+      baseBrowseOptions = {
+        page: 1,
+        view: View.MARKET
+      }
+    })
+    it('should set the default status filter option', () => {
+      expect(getClearedBrowseOptions(baseBrowseOptions)).toStrictEqual({
+        ...baseBrowseOptions,
+        status: AssetStatusFilter.ON_SALE
+      })
+    })
+  })
+
+  describe('and its not a catalog view', () => {
+    beforeEach(() => {
+      baseBrowseOptions = {
+        onlyOnSale: false,
+        page: 1,
+        view: View.CURRENT_ACCOUNT,
+        section: Section.WEARABLES
+      }
+    })
+    it('should not set the status filter option', () => {
+      expect(getClearedBrowseOptions(baseBrowseOptions)).toStrictEqual({
+        ...baseBrowseOptions,
+        onlyOnSale: true
+      })
+    })
+  })
+
   describe('and the creators filter is set', () => {
     beforeEach(() => {
       baseBrowseOptions = {
@@ -125,6 +163,14 @@ describe('when clearing browser options', () => {
     })
     it('should remove the creators key from the options', () => {
       expect(getClearedBrowseOptions(options)).toStrictEqual(baseBrowseOptions)
+    })
+  })
+})
+
+describe('when checking if a view is a Catalog View type', () => {
+  describe('and the creators filter is set', () => {
+    it.each(CATALOG_VIEWS)('should return true for %s', view => {
+      expect(isCatalogView(view)).toBe(true)
     })
   })
 })

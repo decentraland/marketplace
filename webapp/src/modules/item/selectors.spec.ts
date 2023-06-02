@@ -1,7 +1,12 @@
 import { Item } from '@dcl/schemas'
 import { AuthorizationStepStatus } from 'decentraland-ui'
 import { RootState } from '../reducer'
-import { buyItemRequest, fetchItemRequest, fetchItemsRequest } from './actions'
+import {
+  buyItemRequest,
+  fetchCollectionItemsRequest,
+  fetchItemRequest,
+  fetchItemsRequest
+} from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
   getData,
@@ -115,7 +120,7 @@ describe('when getting if the items of a collection are being fetched', () => {
     beforeEach(() => {
       state.item.loading.push(
         fetchItemsRequest({
-          filters: { contracts: ['anotherContractAddress'] }
+          filters: { contractAddresses: ['anotherContractAddress'] }
         })
       )
     })
@@ -128,7 +133,7 @@ describe('when getting if the items of a collection are being fetched', () => {
   describe("and they're being fetched", () => {
     beforeEach(() => {
       state.item.loading.push(
-        fetchItemsRequest({ filters: { contracts: [contractAddress] } })
+        fetchCollectionItemsRequest({ contractAddresses: [contractAddress] })
       )
     })
 

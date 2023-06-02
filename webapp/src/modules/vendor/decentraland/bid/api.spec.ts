@@ -38,7 +38,7 @@ describe('when fetching bids by nft', () => {
 
     expect(bidAPI.request).toHaveBeenCalledWith(
       'get',
-      '/bids?contractAddress=0x123&tokenId=123&status=open&first=1000'
+      '/bids?contractAddress=0x123&tokenId=123&status=open&first=1000&skip=0'
     )
   })
 })

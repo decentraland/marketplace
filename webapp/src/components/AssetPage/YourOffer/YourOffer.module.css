@@ -1,0 +1,92 @@
+.YourOffer {
+  background-color: var(--card);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+}
+
+.YourOffer .actions {
+  height: 44px;
+  width: 136px;
+}
+
+.YourOffer .actionsContainer {
+  display: flex;
+  gap: 14px;
+}
+
+.YourOffer .bottomInformationPadding {
+  padding: 0px 26px 15px 26px;
+}
+
+.YourOffer .calendar {
+  height: 26.5px;
+  width: 26.5px;
+}
+
+.YourOffer .center {
+  align-items: center;
+}
+
+.YourOffer .column {
+  display: flex;
+  flex-direction: column;
+}
+
+.YourOffer .informationBold {
+  color: white;
+  font-size: 30px;
+  font-weight: 600;
+  margin: unset;
+}
+
+.YourOffer .informationBold :global(.ui.header.large) {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.YourOffer .informationBold :global(.dcl.mana .matic),
+.YourOffer .informationBold :global(.dcl.mana .ethereum) {
+  height: 22px;
+  margin-bottom: 5px;
+  width: 22px;
+}
+
+.YourOffer .informationText {
+  color: white;
+  font-size: 24px;
+  line-height: 1.7;
+}
+
+.YourOffer .informationTooltip {
+  align-self: center;
+  height: 14px;
+  width: 14px;
+}
+
+.YourOffer .offerIcon {
+  height: 28.5px;
+  width: 28.5px;
+}
+
+.YourOffer .row {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.YourOffer .title {
+  align-items: center;
+  display: flex;
+  font-size: 22px;
+  font-weight: 700;
+  gap: 10px;
+  padding: 24px 0px 0px 26px;
+}
+
+.YourOffer .texts {
+  display: flex;
+  font-weight: 600;
+}

@@ -2,16 +2,27 @@
   font-weight: bold;
   background: none;
   border: none;
-  color: var(--summer-red);
+  color: white;
   padding: 0;
   padding-top: 6px;
   cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
-.AssetsList .watermelon {
-  background-image: url('../../images/watermelon.svg');
-  width: 56px;
-  height: 56px;
+.empty-state {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 24px;
+}
+
+.watermelon {
+  background-image: url('../../images/noResults.svg');
+  width: 66px;
+  height: 66px;
   display: flex;
   margin: auto;
   margin-bottom: 16px;

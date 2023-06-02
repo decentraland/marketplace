@@ -8,6 +8,7 @@ import {
   race,
   spawn
 } from 'redux-saga/effects'
+import { matchPath } from 'react-router-dom'
 import {
   push,
   getLocation,
@@ -17,6 +18,8 @@ import {
   LocationChangeAction
 } from 'connected-react-router'
 import {
+  CatalogFilters,
+  CatalogSortBy,
   NFTCategory,
   RentalStatus,
   Sale,
@@ -36,7 +39,13 @@ import {
   getNetwork,
   getOnlySmart,
   getCurrentBrowseOptions,
-  getCurrentLocationAddress
+  getCurrentLocationAddress,
+  getSection,
+  getMaxPrice,
+  getMinPrice,
+  getStatus,
+  getEmotePlayMode,
+  getLatestVisitedLocation
 } from '../routing/selectors'
 import {
   fetchNFTRequest,
@@ -56,10 +65,11 @@ import {
   getCategoryFromSection,
   getDefaultOptionsByView,
   getSearchWearableCategory,
+  getCollectionSortBy,
+  getSearchEmoteCategory,
   getItemSortBy,
   getAssetOrderBy,
-  getCollectionSortBy,
-  getSearchEmoteCategory
+  getCatalogSortBy
 } from './search'
 import {
   getRarities,
@@ -83,6 +93,7 @@ import { fetchCollectionsRequest } from '../collection/actions'
 import {
   COLLECTIONS_PER_PAGE,
   getClearedBrowseOptions,
+  isCatalogView,
   rentalFilters,
   SALES_PER_PAGE,
   sellFilters
@@ -107,6 +118,7 @@ import {
 import { getData } from '../event/selectors'
 import { getPage } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
+import { AssetStatusFilter } from '../../utils/filters'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -132,9 +144,20 @@ export function* routingSaga() {
 
 function* handleLocationChange(action: LocationChangeAction) {
   // Re-triggers fetchAssetsFromRoute action when the user goes back
-  if (action.payload.action === 'POP') {
-    const options: BrowseOptions = yield select(getCurrentBrowseOptions)
-    yield put(fetchAssetsFromRouteAction(options))
+  if (
+    action.payload.action === 'POP' &&
+    matchPath(action.payload.location.pathname, { path: locations.browse() })
+  ) {
+    const latestVisitedLocation: ReturnType<typeof getLocation> = yield select(
+      getLatestVisitedLocation
+    )
+    const isComingFromBrowse = !!matchPath(latestVisitedLocation?.pathname, {
+      path: locations.browse()
+    })
+    if (isComingFromBrowse) {
+      const options: BrowseOptions = yield select(getCurrentBrowseOptions)
+      yield put(fetchAssetsFromRouteAction(options))
+    }
   }
 }
 
@@ -209,7 +232,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     tenant,
     minPrice,
     maxPrice,
-    creators
+    creators,
+    network,
+    status
   } = options
 
   const address =
@@ -222,7 +247,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const category = getCategoryFromSection(section)
 
   const currentPageInState: number = yield select(getPage)
-  const offset = currentPageInState ? page - 1 : 0
+  const offset = currentPageInState && currentPageInState < page ? page - 1 : 0
   const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
@@ -279,24 +304,35 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       )
       break
     default:
-      if (isItems) {
-        // TODO: clean up
-        const isWearableHead =
-          section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
-        const isWearableAccessory =
-          section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
+      const isWearableHead =
+        section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
+      const isWearableAccessory =
+        section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
 
-        const wearableCategory = !isWearableAccessory
-          ? getSearchWearableCategory(section)
+      const wearableCategory = !isWearableAccessory
+        ? getSearchWearableCategory(section)
+        : undefined
+
+      const emoteCategory =
+        category === NFTCategory.EMOTE
+          ? getSearchEmoteCategory(section)
           : undefined
 
-        const emoteCategory =
-          category === NFTCategory.EMOTE
-            ? getSearchEmoteCategory(section)
-            : undefined
+      const { rarities, wearableGenders, emotePlayMode } = options
 
-        const { rarities, wearableGenders, emotePlayMode } = options
-
+      const statusParameters: Partial<Omit<CatalogFilters, 'sortBy'>> = {
+        ...(status === AssetStatusFilter.ON_SALE ? { isOnSale: true } : {}),
+        ...(status === AssetStatusFilter.NOT_FOR_SALE
+          ? { isOnSale: false }
+          : {}),
+        ...(status === AssetStatusFilter.ONLY_LISTING
+          ? { onlyListing: true }
+          : {}),
+        ...(status === AssetStatusFilter.ONLY_MINTING
+          ? { onlyMinting: true }
+          : {})
+      }
+      if (isItems) {
         yield put(
           fetchItemsRequest({
             view,
@@ -304,7 +340,11 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
             filters: {
               first,
               skip,
-              sortBy: getItemSortBy(sortBy),
+              sortBy: isCatalogView(view)
+                ? view === View.HOME_NEW_ITEMS
+                  ? CatalogSortBy.NEWEST
+                  : getCatalogSortBy(sortBy)
+                : getItemSortBy(sortBy),
               isOnSale: onlyOnSale,
               creator: address ? [address] : creators,
               wearableCategory,
@@ -315,11 +355,13 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               search,
               category,
               rarities: rarities,
-              contracts,
+              contractAddresses: contracts,
               wearableGenders,
               emotePlayMode,
               minPrice,
-              maxPrice
+              maxPrice,
+              network,
+              ...statusParameters
             }
           })
         )
@@ -355,6 +397,9 @@ export function* getNewBrowseOptions(
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
+  const section: Section = current.section
+    ? current.section
+    : yield select(getSection)
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
@@ -369,8 +414,7 @@ export function* getNewBrowseOptions(
     }
   }
 
-  const defaults = getDefaultOptionsByView(view, current.section as Section)
-
+  const defaults = getDefaultOptionsByView(view, section)
   return {
     ...defaults,
     ...previous,
@@ -518,9 +562,12 @@ function* deriveCurrentOptions(
     onlyOnRent: current.hasOwnProperty('onlyOnRent')
       ? current.onlyOnRent
       : previous.onlyOnRent,
-    onlyOnSale: current.hasOwnProperty('onlyOnSale')
-      ? current.onlyOnSale
-      : previous.onlyOnSale
+    onlyOnSale:
+      current.assetType === AssetType.ITEM
+        ? undefined
+        : current.hasOwnProperty('onlyOnSale')
+        ? current.onlyOnSale
+        : previous.onlyOnSale
   }
 
   // Checks if the sorting categories are correctly set for the onlyOnRental and the onlyOnSell filters
@@ -561,6 +608,9 @@ function* deriveCurrentOptions(
           network: yield select(getNetwork),
           contracts: yield select(getContracts),
           onlySmart: yield select(getOnlySmart),
+          maxPrice: yield select(getMaxPrice),
+          minPrice: yield select(getMinPrice),
+          status: yield select(getStatus),
           ...newOptions
         }
       }
@@ -573,8 +623,22 @@ function* deriveCurrentOptions(
       if (prevCategory && prevCategory === nextCategory) {
         newOptions = {
           rarities: yield select(getRarities),
+          maxPrice: yield select(getMaxPrice),
+          minPrice: yield select(getMinPrice),
+          status: yield select(getStatus),
+          emotePlayMode: yield select(getEmotePlayMode),
           ...newOptions
         }
+      }
+      break
+    }
+    case NFTCategory.ENS: {
+      // for ENS, if the previous page had `onlyOnSale` as `undefined` like wearables or emotes, it defaults to `true`, otherwise use the current value
+      newOptions = {
+        ...newOptions,
+        assetType: AssetType.NFT,
+        onlyOnSale:
+          previous.onlyOnSale === undefined ? true : current.onlyOnSale
       }
       break
     }

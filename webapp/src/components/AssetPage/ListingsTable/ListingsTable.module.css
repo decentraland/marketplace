@@ -1,0 +1,108 @@
+.ListingsTable {
+  position: relative;
+}
+
+.linkedProfileRow {
+  color: var(--primary) !important;
+}
+
+.ListingsTable .headerMargin {
+  padding: 20px !important;
+}
+
+.issuedIdContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.ListingsTable .issuedId {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badgeContainer :global(.dcl.badge) {
+  color: white;
+  height: 18px;
+  background-color: transparent !important;
+}
+
+.badgeContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.ListingsTable .goToNFT {
+  color: white;
+  padding-right: 25px;
+}
+
+.emptyTable {
+  width: 100%;
+  height: 398px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 20px;
+}
+
+.manaField {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.manaField :global(.ui.header:last-child) {
+  font-size: 14px;
+}
+
+.viewListingContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+  .linkedProfileRow {
+    margin-left: unset;
+  }
+  :global(.ui.very.basic.table tr th),
+  :global(.ui.very.basic.table tr td) {
+    width: 50% !important; /* 2 columns, needs to be overriden with the !important since the library uses it too */
+  }
+  :global(.ui.very.basic.table tr) {
+    border: 1px solid var(--divider);
+  }
+  :global(.ui.very.basic.table tr):first-of-type {
+    border: none;
+  }
+  :global(.ui.very.basic.table td) {
+    border-right: 1px solid var(--divider) !important; /* needs to be overriden with the !important since the library uses it too */
+  }
+  .viewListingContainer {
+    margin-right: 0;
+  }
+  .manaField {
+    flex-wrap: wrap;
+  }
+  :global(.ui.small.inverted.button) {
+    min-width: auto;
+    border: none;
+  }
+}

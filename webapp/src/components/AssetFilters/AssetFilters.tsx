@@ -7,10 +7,10 @@ import {
   WearableGender
 } from '@dcl/schemas'
 import { getSectionFromCategory } from '../../modules/routing/search'
-import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
+import { AssetStatusFilter } from '../../utils/filters'
 import { View } from '../../modules/ui/types'
-import { Sections, SortBy } from '../../modules/routing/types'
+import { Sections, SortBy, BrowseOptions } from '../../modules/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
@@ -31,6 +31,7 @@ import {
   filtersBySection,
   trackBarChartComponentChange
 } from './utils'
+import { StatusFilter } from './StatusFilter'
 import './AssetFilters.css'
 
 export const AssetFilters = ({
@@ -41,13 +42,13 @@ export const AssetFilters = ({
   collection,
   creators,
   rarities,
+  status,
   network,
   category,
   bodyShapes,
   isOnlySmart,
   isOnSale,
   emotePlayMode,
-  assetType,
   section,
   landStatus,
   defaultCollapsed,
@@ -64,8 +65,12 @@ export const AssetFilters = ({
   isCreatorFiltersEnabled,
   isRentalPeriodFilterEnabled
 }: Props): JSX.Element | null => {
-  const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
+
+  const handleBrowseParamChange = useCallback(
+    (options: BrowseOptions) => onBrowse(options),
+    [onBrowse]
+  )
 
   const handleRangeFilterChange = useCallback(
     (
@@ -216,6 +221,7 @@ export const AssetFilters = ({
             values={values}
           />
         ) : null}
+
         {isEstateSizeFilterEnabled &&
         section !== Sections.decentraland.PARCELS ? (
           <EstateSizeFilter
@@ -263,9 +269,16 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       ) : null}
+      {shouldRenderFilter(AssetFilter.Status) && view === View.MARKET ? (
+        <StatusFilter
+          onChange={handleBrowseParamChange}
+          status={status}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Status]}
+        />
+      ) : null}
       {isPriceFilterEnabled &&
       shouldRenderFilter(AssetFilter.Price) &&
-      isOnSale &&
+      (isOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
       view !== View.ACCOUNT ? (
         <PriceFilter
           onChange={(value, source) =>
@@ -305,13 +318,14 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
         />
       )}
-      {shouldRenderFilter(AssetFilter.Network) && !isPrimarySell && (
-        <NetworkFilter
-          onChange={handleNetworkChange}
-          network={network}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
-        />
-      )}
+      {shouldRenderFilter(AssetFilter.Network) &&
+        status !== AssetStatusFilter.ONLY_MINTING && (
+          <NetworkFilter
+            onChange={handleNetworkChange}
+            network={network}
+            defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
+          />
+        )}
       {shouldRenderFilter(AssetFilter.BodyShape) && (
         <BodyShapeFilter
           onChange={handleBodyShapeChange}

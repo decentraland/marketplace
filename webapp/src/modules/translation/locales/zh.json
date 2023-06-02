@@ -62,7 +62,9 @@
     "the_parcel": "地块",
     "the_estate": "产业",
     "discord_server": "Discord 服务器",
-    "currently": "现在"
+    "currently": "现在",
+    "showing": "顯示",
+    "of": "的"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -167,6 +169,7 @@
     "cheapest": "最低价",
     "cheapest_sale": "最低价 (文塔)",
     "cheapest_rent": "最低价 (莲太)",
+    "most_expensive": "最贵的",
     "no_results": "未找到结果。",
     "type_to_search": "键入以搜索集合。",
     "clear": "清除过滤器",
@@ -339,16 +342,16 @@
   },
   "nft_list": {
     "empty": {
-      "title": "我们在 {currentSection} 中找不到任何结果。",
-      "action": "<searchStore>搜索 {section}</searchStore><if-filters>或<clearFilters>清除过滤器</clearFilters></if-filters>"
+      "title": "没有找到这些过滤器的结果",
+      "action": "<if-filters><clearFilters>重置过滤器</clearFilters></if-filters>"
     },
     "simple_empty": {
       "title": "我们找不到任何结果。",
       "action": "<if-filters><br></br><clearFilters>清除过滤器</clearFilters></if-filters>"
     },
     "empty_search": {
-      "title": "{currentSection} 中没有“{search}”的结果。",
-      "action": "<searchStore>尝试搜索{section}</searchStore>"
+      "title": "中没有“{search}”的结果。",
+      "action": "检查是否有任何拼写错误或拼写错误，或尝试使用不同的搜索词。"
     }
   },
   "nft_filters": {
@@ -375,8 +378,19 @@
       "male": "只有男性",
       "unisex": "仅男女皆宜"
     },
+    "status": {
+      "title": "地位",
+      "on_sale": "特价中",
+      "on_sale_tooltip": "包括可用于铸造和/或具有可用列表的项目。",
+      "only_minting": "仅可用于铸币",
+      "only_minting_tooltip": "仅包括可铸造的物品（直接从创作者处购买）。",
+      "only_listing": "仅列表",
+      "only_listing_tooltip": "仅包括正在转售的项目。",
+      "not_for_sale": "不作为产品销售"
+    },
     "rarities": {
       "title": "稀有度",
+      "tooltip": "稀有度决定了可以铸造的 NFT 总数",
       "all_items": "所有稀有",
       "count_items": "{count} {count, plural, one {稀有度} other {珍品}}"
     },
@@ -511,7 +525,14 @@
       "not_enough_mana": "你没有足够的 MANA",
       "select_period": "選擇期間"
     },
+    "available_for_mint_popup": {
+      "available_for_mint": "可用於鑄幣",
+      "buy_directly": "直接從創作者那裡購買"
+    },
     "description": "描述",
+    "no_description": "沒有說明",
+    "read_more": "閱讀更多",
+    "read_less": "少讀",
     "owner": "持有者",
     "creator": "创造者",
     "price": "价格",
@@ -548,6 +569,73 @@
     "type": "类型",
     "when": "时间",
     "price": "价格"
+  },
+  "best_buying_option": {
+    "empty": {
+      "title": "此項目沒有可用的列表",
+      "you_can": "你可以",
+      "check_the_current_owners": "檢查當前所有者",
+      "and_make_an_offer": "然後出價。"
+    },
+    "minting": {
+      "title": "直接從創作者那裡購買",
+      "price": "價格",
+      "stock": "庫存",
+      "minting_popup": "當你鑄造一件物品時，你就成為了它的第一個所有者。這也意味著直接從創造者那裡購買。",
+      "polygon_mana": "Polygon MANA",
+      "ethereum_mana": "Ethereum MANA"
+    },
+    "buy_listing": {
+      "title": "最便宜的清單",
+      "price": "價格",
+      "highest_offer": "最高報價",
+      "issue_number": "發行編號",
+      "owner": "所有者",
+      "view_listing": "查看房源",
+      "expires": "過期",
+      "no_offer": "沒有報價",
+      "make_offer": "報價"
+    }
+  },
+  "offers_table": {
+    "offers": "優惠",
+    "from": "從",
+    "published_date": "發布日期",
+    "expiration_date": "到期日期",
+    "offer": "優惠",
+    "your_offer": "你的報價",
+    "date_published": "發布日期",
+    "remove": "刪除",
+    "most_expensive": "最貴",
+    "recenty_offered": "最近提供",
+    "recently_updated": "最近更新",
+    "accept": "接受"
+  },
+  "listings_table": {
+    "other_available_listings": "其他可用的收藏品",
+    "listings": "收藏品",
+    "owner": "所有者",
+    "published_date": "發布日期",
+    "expiration_date": "到期日期",
+    "issue_number": "發行編號",
+    "price": "價格",
+    "offer": "提供",
+    "cheapest": "最便宜",
+    "newest": "最新",
+    "oldest": "最老",
+    "issue_number_asc": "發行編號↑",
+    "issue_number_desc": "發行編號↓",
+    "there_are_no_listings": "沒有可用的列表",
+    "view_listing": "查看房源"
+  },
+  "owners_table": {
+    "owner": "所有者",
+    "issue_number": "发行数量",
+    "issue_number_asc": "发行数量 ↑",
+    "issue_number_desc": "发行数量 ↓",
+    "owners": "所有者",
+    "there_are_no_owners": "還沒有所有者",
+    "become_the_first_one": "成為第一個！"
   },
   "rental_history": {
     "title": "最新租金",
@@ -1140,7 +1228,17 @@
       "rented_until": "租到 {endDate, date, medium}",
       "claiming_back": "土地正在收回",
       "rental_ended": "租赁已结束"
-    }
+    },
+    "listings": "{count} {count, plural, one {收藏品} other {收藏品}}",
+    "available_for_mint": "直接從創作者那裡購買",
+    "cheapest_listing": "最便宜的收藏品",
+    "not_for_sale": "不可出售",
+    "owners": "{count} {count, plural, one {所有者} other {所有者}}",
+    "cheapest_option": "最便宜",
+    "cheapest_option_range": "范围内最便宜的选择",
+    "most_expensive": "最貴",
+    "most_expensive_range": "范围内最贵",
+    "also_minting": "直接從創作者那裡購買"
   },
   "rentals_promotional_modal": {
     "title": "Announcing official LAND rentals",
