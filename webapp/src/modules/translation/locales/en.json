@@ -1269,7 +1269,7 @@
   "list_page": {
     "default_title": "Wishlist",
     "empty": {
-      "title": "You don't have any saved items",
+      "title": "You don’t have any saved items in this list",
       "subtitle": "Discover amazing items.",
       "action": "Explore collectibles"
     }

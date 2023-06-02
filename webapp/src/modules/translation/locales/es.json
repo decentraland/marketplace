@@ -1260,7 +1260,7 @@
   "list_page": {
     "default_title": "Lista de deseos",
     "empty": {
-      "title": "No tienes ningún item guardado",
+      "title": "No tienes elementos guardados en esta lista",
       "subtitle": "Descubre items increíbles.",
       "action": "Explora los colleccionables"
     }
