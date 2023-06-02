@@ -13,7 +13,7 @@ import ListCard from './ListCard'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
-    items: getPreviewListItems(state, ownProps.list.id).slice(0, 4)
+    items: getPreviewListItems(state, ownProps.list.id)
   }
 }
 

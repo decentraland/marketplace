@@ -18,6 +18,7 @@ export type List = {
   id: string
   name: string
   itemsCount: number
+  isPrivate?: boolean
   description?: string | null
   userAddress?: string
   createdAt?: number
