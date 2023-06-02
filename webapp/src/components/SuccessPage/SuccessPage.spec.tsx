@@ -1,6 +1,6 @@
 import { RenderResult } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { NFTCategory } from '@dcl/schemas'
+import { NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   renderWithProviders,
@@ -29,8 +29,12 @@ function renderSuccessPage(props: Partial<Props> = {}) {
         nft: {
           data: {
             'address-1': {
-              data: {},
-              category: NFTCategory.WEARABLE
+              data: {
+                wearable: {
+                  rarity: Rarity.COMMON
+                }
+              },
+              category: NFTCategory.WEARABLE,
             } as NFT
           },
           loading: [],
