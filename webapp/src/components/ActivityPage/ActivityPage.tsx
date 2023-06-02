@@ -1,9 +1,7 @@
 import React, { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Page, Header, Button, Modal } from 'decentraland-ui'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { locations } from '../../modules/routing/locations'
 import { Navigation } from '../Navigation'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
@@ -35,24 +33,7 @@ const ActivityPage = (props: Props) => {
 
   let content = null
 
-  if (!address) {
-    content = (
-      <div className="center">
-        <p>
-          {
-            <T
-              id="wallet.sign_in_required"
-              values={{
-                sign_in: (
-                  <Link to={locations.signIn(locations.activity())}>{t('wallet.sign_in')}</Link>
-                )
-              }}
-            />
-          }
-        </p>
-      </div>
-    )
-  } else if (transactions.length === 0) {
+  if (transactions.length === 0) {
     content = (
       <div className="center">
         <p>{t('activity_page.empty')}</p>
