@@ -99,13 +99,11 @@ const ListsPage = ({
         isLoading={isLoading}
         maxScrollPages={3}
       >
-        {/* <Card.Group className={styles.cards}> */}
         <div className={styles.cardsGroup}>
           {lists.map(list => (
             <ListCard key={list.id} list={list} />
           ))}
         </div>
-        {/* </Card.Group> */}
       </InfiniteScroll>
     </PageLayout>
   )

@@ -8,6 +8,7 @@ import {
   FetchItemsSuccessAction,
   FetchItemSuccessAction
 } from '../item/actions'
+import { ListDetails } from '../vendor/decentraland/favorites/types'
 import {
   PickItemAsFavoriteFailureAction,
   PickItemAsFavoriteRequestAction,
@@ -69,7 +70,6 @@ import {
 } from './actions'
 import { FavoritesData, List } from './types'
 import { GET_LIST_REQUEST } from './actions'
-import { ListDetails } from '../vendor/decentraland/favorites/types'
 
 export type FavoritesState = {
   data: {

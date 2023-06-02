@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { Card, Dropdown, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
+import { AssetImage } from '../../AssetImage'
 import { Props } from './ListCard.types'
 import styles from './ListCard.module.css'
-import { AssetImage } from '../../AssetImage'
 
 const ListCard = (props: Props) => {
   const { list, items, onDeleteList, onEditList } = props
