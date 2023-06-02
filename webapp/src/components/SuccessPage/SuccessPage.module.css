@@ -45,6 +45,7 @@
 .assetImage {
   width: 256px;
   height: 256px;
+  z-index: -2;
 }
 
 .loading.assetImage {

@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import Lottie from 'lottie-react'
 import { useLocation } from 'react-router-dom'
 import { Button, Header, Icon, Loader } from 'decentraland-ui'
+import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { config } from '../../config'
@@ -94,11 +95,7 @@ export function SuccessPage(props: Props) {
                   <Header className={styles.title}>
                     {t('success_page.success_state.title')}
                   </Header>
-                  <AssetImage
-                    asset={asset}
-                    isSmall
-                    className={styles.assetImage}
-                  />
+                  <AssetImage asset={asset} className={styles.assetImage} />
                   <span
                     className={classNames(styles.statusInfo, styles.success)}
                   >
@@ -113,13 +110,16 @@ export function SuccessPage(props: Props) {
                     >
                       {t('success_page.success_state.view_item')}
                     </Button>
-                    <Button
-                      className={styles.successButton}
-                      primary
-                      onClick={handleRedirectToExplorer}
-                    >
-                      {t('success_page.success_state.try_genesis_city')}
-                    </Button>
+                    {(asset.category === NFTCategory.WEARABLE ||
+                      asset.category === NFTCategory.EMOTE) && (
+                      <Button
+                        className={styles.successButton}
+                        primary
+                        onClick={handleRedirectToExplorer}
+                      >
+                        {t('success_page.success_state.try_genesis_city')}
+                      </Button>
+                    )}
                   </div>
                 </>
               )
