@@ -314,7 +314,7 @@ export function favoritesReducer(
               ...state.data.lists[list.id],
               itemsCount: Object.hasOwn(list, 'itemsCount')
                 ? (list as ListDetails).itemsCount
-                : state.data.lists[list.id].itemsCount ?? 0,
+                : state.data.lists[list.id]?.itemsCount ?? 0,
               ...list
             }
           }

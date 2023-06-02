@@ -30,7 +30,7 @@ export type BaseList = {
   userAddress: string
   createdAt: number
   updatedAt: number | null
-  permission: Permission
+  permission: Permission | null
 }
 
 export type ListOfLists = Pick<BaseList, 'id' | 'name'> & {
