@@ -58,7 +58,16 @@ const getItems = createSelector<
   browse.itemIds.map(id => itemsById[id])
 )
 
-const getOnSaleItems = createSelector<
+// export const getCatalogItems = createSelector<
+//   RootState,
+//   BrowseUIState,
+//   CatalogState['data'],
+//   CatalogItem[]
+// >(getState, getCatalogData, (browse, catalogsById) =>
+//   browse.catalogIds.map(id => catalogsById[id])
+// )
+
+export const getOnSaleItems = createSelector<
   RootState,
   ReturnType<typeof getAddress>,
   ReturnType<typeof getItemData>,

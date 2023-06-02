@@ -77,17 +77,19 @@ export const MoreFilters = ({
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="more-filters-section">
-        <Checkbox
-          label="On sale"
-          toggle
-          checked={isOnSale} 
-          onChange={handleOnSaleChange}
-        />
+        {isOnSale !== undefined ? (
+          <Checkbox
+            label="On sale"
+            toggle
+            checked={isOnSale}
+            onChange={handleOnSaleChange}
+          />
+        ) : null}
         {isWearableCategory && (
           <Checkbox
             label="Only smart"
             toggle
-            checked={isOnlySmart}
+            checked={!!isOnlySmart}
             onChange={handleOnlySmartChange}
           />
         )}

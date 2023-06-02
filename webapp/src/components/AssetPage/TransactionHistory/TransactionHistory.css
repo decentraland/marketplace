@@ -22,3 +22,48 @@
 .TransactionHistory tbody.is-loading tr {
   opacity: 0.5;
 }
+
+.TransactionHistory .titleContainer {
+  display: flex;
+  padding: 20 0px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  align-items: center;
+  border-bottom: 1px solid var(--secondary);
+  padding-left: 20px;
+}
+
+.TransactionHistory .tableContainer {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  margin-top: 48px;
+}
+
+.TransactionHistory .firstTabMargin {
+  padding-left: 20px !important;
+}
+
+@media (max-width: 768px) {
+  .TransactionHistory .titleContainer {
+    padding: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .TransactionHistory .ui.basic.table tbody tr {
+    height: 65px;
+  }
+
+  .TransactionHistory .dcl.mana.inline {
+    line-height: 20px;
+  }
+
+  .TransactionHistory .filtertabsContainer {
+    height: 69px;
+  }
+}
+
+.linkedProfile {
+  color: var(--primary) !important;
+}

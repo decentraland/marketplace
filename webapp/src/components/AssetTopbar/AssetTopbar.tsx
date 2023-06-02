@@ -1,18 +1,18 @@
-import { useCallback, useMemo, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import classNames from 'classnames'
 import {
+  Close,
   Dropdown,
   DropdownProps,
   Field,
   Icon,
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
-import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AssetType } from '../../modules/asset/types'
 import { useInput } from '../../lib/input'
-import { getCountText, getOrderByOptions } from './utils'
+import { getCountText } from './utils'
 import { SortBy } from '../../modules/routing/types'
+import { isCatalogView } from '../../modules/routing/utils'
 import {
   getCategoryFromSection,
   getSectionFromCategory
@@ -23,8 +23,8 @@ import {
   isListsSection,
   persistIsMapProperty
 } from '../../modules/ui/utils'
+import trash from '../../images/trash.png'
 import { Chip } from '../Chip'
-import { AssetTypeFilter } from './AssetTypeFilter'
 import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
 import styles from './AssetTopbar.module.css'
@@ -32,7 +32,6 @@ import styles from './AssetTopbar.module.css'
 export const AssetTopbar = ({
   search,
   view,
-  assetType,
   count,
   isLoading,
   isMap,
@@ -43,7 +42,8 @@ export const AssetTopbar = ({
   hasFiltersEnabled,
   onBrowse,
   onClearFilters,
-  onOpenFiltersModal
+  onOpenFiltersModal,
+  sortByOptions
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
   const category = section ? getCategoryFromSection(section) : undefined
@@ -62,17 +62,10 @@ export const AssetTopbar = ({
 
   const [searchValue, setSearchValue] = useInput(search, handleSearch, 500)
 
-  const handleAssetTypeChange = useCallback(
-    (value: AssetType) => {
-      onBrowse({ assetType: value })
-    },
-    [onBrowse]
-  )
-
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
       const sortBy: SortBy = props.value as SortBy
-      if (!onlyOnRent && !onlyOnSale) {
+      if (!onlyOnRent && !onlyOnSale && isLandSection(section)) {
         if (sortBy === SortBy.CHEAPEST_SALE) {
           onBrowse({ onlyOnSale: true, sortBy: SortBy.CHEAPEST })
         } else if (sortBy === SortBy.CHEAPEST_RENT) {
@@ -82,7 +75,7 @@ export const AssetTopbar = ({
         onBrowse({ sortBy })
       }
     },
-    [onBrowse, onlyOnSale, onlyOnRent]
+    [onlyOnRent, onlyOnSale, section, onBrowse]
   )
 
   const handleIsMapChange = useCallback(
@@ -103,19 +96,16 @@ export const AssetTopbar = ({
     [onBrowse, onlyOnSale, onlyOnRent]
   )
 
-  const orderByDropdownOptions = useMemo(
-    () => getOrderByOptions(onlyOnRent, onlyOnSale),
-    [onlyOnRent, onlyOnSale]
-  )
-
   useEffect(() => {
-    const option = orderByDropdownOptions.find(
-      option => option.value === sortBy
-    )
+    const option = sortByOptions.find(option => option.value === sortBy)
     if (!option) {
-      onBrowse({ sortBy: orderByDropdownOptions[0].value })
+      onBrowse({ sortBy: sortByOptions[0].value })
     }
-  }, [onBrowse, sortBy, orderByDropdownOptions])
+  }, [onBrowse, sortBy, sortByOptions])
+
+  const sortByValue = sortByOptions.find(option => option.value === sortBy)
+    ? sortBy
+    : sortByOptions[0].value
 
   return (
     <div className={styles.assetTopbar}>
@@ -131,10 +121,11 @@ export const AssetTopbar = ({
             kind="full"
             value={searchValue}
             onChange={setSearchValue}
-            icon={<Icon name="search" />}
+            icon={<Icon name="search" className="searchIcon" />}
             iconPosition="left"
           />
         )}
+        {searchValue ? <Close onClick={() => handleSearch('')} /> : null}
         {isLandSection(section) && !isAccountView(view!) && (
           <div
             className={classNames(styles.mapToggle, { [styles.map]: isMap })}
@@ -154,39 +145,31 @@ export const AssetTopbar = ({
           </div>
         )}
       </div>
-      {view &&
-        !isLandSection(section) &&
-        !isAccountView(view) &&
-        !isListsSection(section) &&
-        (category === NFTCategory.WEARABLE ||
-          category === NFTCategory.EMOTE) && (
-          <AssetTypeFilter
-            view={view}
-            assetType={assetType}
-            onChange={handleAssetTypeChange}
-          />
-        )}
       {!isMap && (
         <div className={styles.infoRow}>
           {!isLoading ? (
             <div className={styles.countContainer}>
-              <p className={styles.countText}>{getCountText(count, search)}</p>
-              {hasFiltersEnabled && !isMobile && (
-                <button
-                  className={styles.clearFilters}
-                  onClick={onClearFilters}
-                >
-                  {t('filters.clear')}
-                </button>
-              )}
+              <p className={styles.countText}>
+                {count && isCatalogView(view)
+                  ? t(
+                      search
+                        ? 'nft_filters.query_results'
+                        : 'nft_filters.results',
+                      {
+                        count: count.toLocaleString(),
+                        search
+                      }
+                    )
+                  : getCountText(count, search)}
+              </p>
             </div>
           ) : null}
           {!isListsSection(section) ? (
             <div className={styles.rightOptionsContainer}>
               <Dropdown
                 direction="left"
-                value={sortBy}
-                options={orderByDropdownOptions}
+                value={sortByValue}
+                options={sortByOptions}
                 onChange={handleOrderByDropdownChange}
               />
               {isMobile ? (
@@ -206,11 +189,10 @@ export const AssetTopbar = ({
       {!isMap && hasFiltersEnabled ? (
         <div className={styles.selectedFiltersContainer}>
           <SelectedFilters />
-          {isMobile && (
-            <button className={styles.clearFilters} onClick={onClearFilters}>
-              {t('filters.clear')}
-            </button>
-          )}
+          <button className={styles.clearFilters} onClick={onClearFilters}>
+            <img src={trash} alt={t('filters.clear')} />
+            {t('filters.clear')}
+          </button>
         </div>
       ) : null}
     </div>

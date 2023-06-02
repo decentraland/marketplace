@@ -64,7 +64,9 @@
     "the_parcel": "the Parcel",
     "the_estate": "the Estate",
     "discord_server": "Discord Server",
-    "currently": "currently"
+    "currently": "currently",
+    "showing": "Showing",
+    "of": "of"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -171,6 +173,7 @@
     "cheapest": "Cheapest",
     "cheapest_sale": "Cheapest (Sale)",
     "cheapest_rent": "Cheapest (Rent)",
+    "most_expensive": "Most expensive",
     "no_results": "No results were found.",
     "type_to_search": "Type to search for collections.",
     "clear": "Clear all filters",
@@ -343,16 +346,16 @@
   },
   "nft_list": {
     "empty": {
-      "title": "We couldn’t find any results in the {currentSection}.",
-      "action": "<searchStore>Search the {section}</searchStore><if-filters> or <clearFilters>clear filters</clearFilters></if-filters>"
+      "title": "No results found for these filters.",
+      "action": "<if-filters><clearFilters>Reset filters</clearFilters></if-filters>"
     },
     "simple_empty": {
       "title": "We couldn’t find any results.",
       "action": "<if-filters><clearFilters>Clear filters</clearFilters></if-filters>"
     },
     "empty_search": {
-      "title": "No results for \"{search}\" in the {currentSection}.",
-      "action": "<searchStore>Try searching the {section}</searchStore>"
+      "title": "No results for \"{search}\".",
+      "action": "Check for any typos or spelling errors, or try a different search term."
     }
   },
   "nft_filters": {
@@ -378,8 +381,19 @@
       "available_for_female": "Available for female",
       "available_for_male": "Available for male"
     },
+    "status": {
+      "title": "Status",
+      "on_sale": "On Sale",
+      "on_sale_tooltip": "Includes items available for minting and/or with available listings.",
+      "only_minting": "Only available for minting",
+      "only_minting_tooltip": "Only includes items that are available for minting (buying directly from the creators).",
+      "only_listing": "Only listings",
+      "only_listing_tooltip": "Only includes items that are being resold.",
+      "not_for_sale": "Not for sale"
+    },
     "rarities": {
       "title": "Rarity",
+      "tooltip": "The Rarity determines the total number of NFTs that can be minted",
       "all_items": "All rarities",
       "count_items": "{count} {count, plural, one {rarity} other {rarities}}"
     },
@@ -514,7 +528,14 @@
       "not_enough_mana": "You don't have enough MANA",
       "select_period": "Select Period"
     },
+    "available_for_mint_popup": {
+      "available_for_mint": "Currently available for minting",
+      "buy_directly": "Buy directly from the creator"
+    },
     "description": "Description",
+    "no_description": "No description",
+    "read_more": "Read more",
+    "read_less": "Read less",
     "owner": "Owner",
     "creator": "Creator",
     "price": "Price",
@@ -551,6 +572,73 @@
     "type": "Type",
     "when": "When",
     "price": "Price"
+  },
+  "best_buying_option": {
+    "empty": {
+      "title": "There are no available listings for this item",
+      "you_can": "You can",
+      "check_the_current_owners": "check the current owners",
+      "and_make_an_offer": "and make an offer."
+    },
+    "minting": {
+      "title": "Buy directly from the creator",
+      "price": "Price",
+      "stock": "Stock",
+      "minting_popup": "When you mint an item you become its first owner. It also means buying directly from the creator. ",
+      "polygon_mana": "Polygon MANA",
+      "ethereum_mana": "Ethereum MANA"
+    },
+    "buy_listing": {
+      "title": "Cheapest Listing",
+      "price": "Price",
+      "highest_offer": "Highest Offer",
+      "issue_number": "Issue Number",
+      "owner": "Owner",
+      "view_listing": "View listing",
+      "expires": "Expires",
+      "no_offer": "No offer",
+      "make_offer": "Make Offer"
+    }
+  },
+  "offers_table": {
+    "offers": "Offers",
+    "from": "From",
+    "published_date": "Published date",
+    "expiration_date": "Expiration date",
+    "offer": "Offer",
+    "your_offer": "Your offer",
+    "date_published": "Date published",
+    "remove": "Remove",
+    "most_expensive": "Highest",
+    "recenty_offered": "Recently offered",
+    "recently_updated": "Recently updated",
+    "accept": "Accept"
+  },
+  "listings_table": {
+    "other_available_listings": "Other available listings",
+    "listings": "Listings",
+    "owner": "Owner",
+    "published_date": "Published date",
+    "expiration_date": "Expiration date",
+    "issue_number": "Issue Number",
+    "price": "Price",
+    "offer": "Offer",
+    "cheapest": "Cheapest",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "issue_number_asc": "Issue Number ↑",
+    "issue_number_desc": "Issue Number ↓",
+    "there_are_no_listings": "No available listings",
+    "view_listing": "View listing"
+  },
+  "owners_table": {
+    "owner": "Owner",
+    "issue_number": "Issue Number",
+    "issue_number_asc": "Issue Number ↑",
+    "issue_number_desc": "Issue Number ↓",
+    "owners": "Owners",
+    "there_are_no_owners": "There are no owners yet",
+    "become_the_first_one": "Become the first one!"
   },
   "rental_history": {
     "title": "Latest rentals",
@@ -1143,7 +1231,18 @@
       "rented_until": "Rented until {endDate, date, medium}",
       "claiming_back": "Claiming back {asset_type, select, parcel {parcel} estate {estate} other {LAND}}",
       "rental_ended": "Rental period over"
-    }
+    },
+    "listings": "{count} {count, plural, one {Listing} other {Listings}}",
+    "available_for_mint": "Buy directly from creator",
+    "available_listings_in_range": "Available listings in this range",
+    "cheapest_listing": "Cheapest Listing",
+    "not_for_sale": "Not for sale",
+    "owners": "{count} {count, plural, one {Owner} other {Owners}}",
+    "cheapest_option": "Cheapest Option",
+    "cheapest_option_range": "Cheapest Option within range",
+    "most_expensive": "Most Expensive",
+    "most_expensive_range": "Most Expensive within range",
+    "also_minting": "Buy directly from the creator"
   },
   "rentals_promotional_modal": {
     "title": "Announcing LAND rentals",

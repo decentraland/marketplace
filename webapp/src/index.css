@@ -61,6 +61,10 @@ code {
   padding: 0;
 }
 
+.Profile.inline .dcl.blockie {
+  border-radius: 50%;
+}
+
 @media only screen and (min-width: 768px) {
   .dcl.toast .toast-info .body .list-flow-toast {
     width: 350px;
