@@ -1,4 +1,5 @@
 import { BodyShape, Item, Rarity, WearableCategory } from '@dcl/schemas'
+import { fireEvent } from '@testing-library/react'
 import { renderWithProviders } from '../../../utils/test'
 import {
   DELETE_LIST_DATA_TEST_ID,
@@ -12,7 +13,6 @@ import {
 } from './ListCard'
 import { Props } from './ListCard.types'
 import { List } from '../../../modules/favorites/types'
-import { fireEvent } from '@testing-library/react'
 
 function renderListCard(props: Partial<Props> = {}) {
   return renderWithProviders(

@@ -19,10 +19,10 @@ import { browse } from '../../routing/actions'
 import { VendorName } from '../../vendor'
 import { Section } from '../../vendor/decentraland'
 import { List, ListsBrowseOptions } from '../../favorites/types'
+import { ListOfLists } from '../../vendor/decentraland/favorites/types'
 import { setView } from '../actions'
 import { View } from '../types'
 import { BrowseUIState, INITIAL_STATE, browseReducer } from './reducer'
-import { ListOfLists } from '../../vendor/decentraland/favorites/types'
 
 const assetIds = ['0x0-assetId1', '0x0-assetId2', '0x0-assetId3']
 
