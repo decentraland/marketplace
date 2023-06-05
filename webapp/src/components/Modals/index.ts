@@ -12,3 +12,4 @@ export { FavoritesModal } from './FavoritesModal'
 export { BuyWithCardExplanationModal } from './BuyWithCardExplanationModal'
 export { LeavingSiteModal } from './LeavingSiteModal'
 export { CreateListModal } from './CreateListModal'
+export const DeleteListModal = {} as any // TODO: remove this, is only for building sake

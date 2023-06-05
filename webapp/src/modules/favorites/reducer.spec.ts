@@ -2,6 +2,12 @@ import { Item, Network } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
+import {
+  ListDetails,
+  ListOfLists,
+  Permission,
+  UpdateOrCreateList
+} from '../vendor/decentraland/favorites/types'
 import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   CancelPickItemAsFavoriteAction,
@@ -52,13 +58,18 @@ import {
   updateListSuccess
 } from './actions'
 import { FavoritesState, INITIAL_STATE, favoritesReducer } from './reducer'
-import { List } from './types'
+import { CreateListParameters, List, ListsBrowseOptions } from './types'
 
 let createdAt: Record<string, number>
 let initialState: FavoritesState
 const itemBrowseOptions: ItemBrowseOptions = {
   view: View.LISTS,
   page: 0
+}
+
+const listsBrowseOptions: ListsBrowseOptions = {
+  page: 1,
+  first: 10
 }
 
 const item: Item = {
@@ -79,7 +90,8 @@ const actionList: List = {
   name: 'aName',
   description: 'aDescription',
   userAddress: 'anAddress',
-  createdAt: Date.now()
+  createdAt: Date.now(),
+  itemsCount: 1
 }
 
 const error = 'anErrorMessage'
@@ -90,7 +102,7 @@ const requestActions = [
   unpickItemAsFavoriteRequest(item),
   undoUnpickingItemAsFavoriteRequest(item),
   fetchFavoritedItemsRequest(itemBrowseOptions),
-  fetchListsRequest(itemBrowseOptions),
+  fetchListsRequest(listsBrowseOptions),
   getListRequest(actionList.id),
   updateListRequest(actionList.id, actionList),
   createListRequest({
@@ -146,7 +158,7 @@ const failureActions = [
     failure: fetchFavoritedItemsFailure(error)
   },
   {
-    request: fetchListsRequest(itemBrowseOptions),
+    request: fetchListsRequest(listsBrowseOptions),
     failure: fetchListsFailure(error)
   },
   {
@@ -474,20 +486,24 @@ describe('when reducing the successful action of fetching the favorited items', 
 describe('when reducing the successful action of fetching lists', () => {
   let requestAction: FetchListsRequestAction
   let successAction: FetchListsSuccessAction
-  let newList: List
+  let newList: ListOfLists
   let total: number
 
   beforeEach(() => {
     newList = {
       id: 'aListId',
       name: 'aName',
-      description: 'aDescription',
-      userAddress: 'anAddress',
-      createdAt: Date.now()
+      itemsCount: 1,
+      previewOfItemIds: [item.id]
     }
     total = 2
-    requestAction = fetchListsRequest(itemBrowseOptions)
-    successAction = fetchListsSuccess([newList], total, {})
+    requestAction = fetchListsRequest(listsBrowseOptions)
+    successAction = fetchListsSuccess(
+      [newList],
+      [item],
+      total,
+      listsBrowseOptions
+    )
 
     initialState = {
       ...initialState,
@@ -499,7 +515,9 @@ describe('when reducing the successful action of fetching lists', () => {
             name: 'aName',
             description: 'aDescription',
             userAddress: 'anAddress',
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            updatedAt: null,
+            itemsCount: 1
           }
         }
       },
@@ -533,6 +551,7 @@ describe('when reducing the successful action of deleting a list', () => {
       name: 'aName',
       description: 'aDescription',
       userAddress: 'anAddress',
+      itemsCount: 1,
       createdAt: Date.now()
     }
     requestAction = deleteListRequest(list)
@@ -547,6 +566,7 @@ describe('when reducing the successful action of deleting a list', () => {
             name: 'aName',
             description: 'aDescription',
             userAddress: 'anAddress',
+            itemsCount: 1,
             createdAt: Date.now()
           },
           [list.id]: list
@@ -573,7 +593,7 @@ describe('when reducing the successful action of deleting a list', () => {
 describe('when reducing the successful action of getting a list', () => {
   let requestAction: GetListRequestAction
   let successAction: GetListSuccessAction
-  let list: List
+  let list: ListDetails
 
   beforeEach(() => {
     list = {
@@ -581,7 +601,10 @@ describe('when reducing the successful action of getting a list', () => {
       name: 'aName',
       description: 'aDescription',
       userAddress: 'anAddress',
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      itemsCount: 1,
+      permission: Permission.EDIT
     }
     requestAction = getListRequest(list.id)
     successAction = getListSuccess(list)
@@ -589,6 +612,58 @@ describe('when reducing the successful action of getting a list', () => {
       ...initialState,
       loading: loadingReducer([], requestAction)
     }
+  })
+
+  describe('and the list already exists in the state', () => {
+    beforeEach(() => {
+      initialState = {
+        ...initialState,
+        data: {
+          ...initialState.data,
+          lists: {
+            [list.id]: {
+              id: list.id,
+              name: 'anotherName',
+              description: 'anotherDescription',
+              userAddress: 'anotherAddress',
+              createdAt: 1,
+              updatedAt: 2,
+              itemsCount: 3,
+              permission: Permission.VIEW
+            }
+          }
+        },
+        loading: loadingReducer([], requestAction)
+      }
+    })
+
+    it('should return an state with the the new list overwriting the old one and the loading state cleared', () => {
+      expect(favoritesReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: {
+          ...initialState.data,
+          lists: {
+            [list.id]: list
+          }
+        }
+      })
+    })
+  })
+
+  describe("and the list doesn't exist in the state", () => {
+    it('should return a state with the the new list and the loading state cleared', () => {
+      expect(favoritesReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: {
+          ...initialState.data,
+          lists: {
+            [list.id]: list
+          }
+        }
+      })
+    })
   })
 
   it('should return a state with the the new list and the loading state cleared', () => {
@@ -609,6 +684,7 @@ describe('when reducing the successful action of updating a list', () => {
   let requestAction: UpdateListRequestAction
   let successAction: UpdateListSuccessAction
   let list: List
+  let updatedList: UpdateOrCreateList
 
   beforeEach(() => {
     list = {
@@ -616,10 +692,20 @@ describe('when reducing the successful action of updating a list', () => {
       name: 'newName',
       description: 'aDescription',
       userAddress: 'anAddress',
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      itemsCount: 1
+    }
+    updatedList = {
+      id: 'aListId',
+      name: 'newName',
+      description: 'aDescription',
+      userAddress: 'anAddress',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+      permission: Permission.EDIT
     }
     requestAction = updateListRequest(list.id, list)
-    successAction = updateListSuccess(list)
+    successAction = updateListSuccess(updatedList)
     initialState = {
       ...initialState,
       data: {
@@ -643,7 +729,7 @@ describe('when reducing the successful action of updating a list', () => {
       data: {
         ...initialState.data,
         lists: {
-          [list.id]: list
+          [list.id]: { ...list, ...updatedList }
         }
       }
     })
@@ -653,22 +739,23 @@ describe('when reducing the successful action of updating a list', () => {
 describe('when reducing the successful action of creating a list', () => {
   let requestAction: CreateListRequestAction
   let successAction: CreateListSuccessAction
-  let list: List
+  let createdList: UpdateOrCreateList
 
   beforeEach(() => {
-    list = {
+    createdList = {
       id: 'aListId',
       name: 'newName',
       description: 'aDescription',
       userAddress: 'anAddress',
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      updatedAt: null,
+      permission: null
     }
     requestAction = createListRequest({
-      name: list.name,
-      isPrivate: true,
-      description: list.description
+      name: createdList.name,
+      isPrivate: true
     })
-    successAction = createListSuccess(list)
+    successAction = createListSuccess(createdList)
     initialState = {
       ...initialState,
       loading: loadingReducer([], requestAction)
@@ -682,7 +769,7 @@ describe('when reducing the successful action of creating a list', () => {
       data: {
         ...initialState.data,
         lists: {
-          [list.id]: list
+          [createdList.id]: { ...createdList, itemsCount: 0 }
         }
       }
     })
@@ -692,15 +779,13 @@ describe('when reducing the successful action of creating a list', () => {
 describe('when reducing the clear action of creating a list', () => {
   let clearAction: CreateListClearAction
   let requestAction: CreateListRequestAction
-  let list: List
+  let list: CreateListParameters
 
   beforeEach(() => {
     list = {
-      id: 'aListId',
       name: 'newName',
       description: 'aDescription',
-      userAddress: 'anAddress',
-      createdAt: Date.now()
+      isPrivate: true
     }
     requestAction = createListRequest({
       name: list.name,

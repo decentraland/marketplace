@@ -67,7 +67,7 @@ const Navigation = (props: Props) => {
               vendor: VendorName.DECENTRALAND,
               page: 1,
               sortBy: SortBy.NEWEST,
-              status: AssetStatusFilter.ON_SALE,
+              status: AssetStatusFilter.ON_SALE
             })}
           >
             <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>
@@ -84,7 +84,7 @@ const Navigation = (props: Props) => {
               {t('navigation.my_assets')}
             </Tabs.Tab>
           </Link>
-          <Link to={locations.defaultList()}>
+          <Link to={locations.lists()}>
             <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>
               {t('navigation.my_lists')}
             </Tabs.Tab>

@@ -7,7 +7,6 @@ import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization
 import { Page, Grid, Blockie, Loader, Form } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 
-import { locations } from '../../modules/routing/locations'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
@@ -16,9 +15,7 @@ import { getContractNames } from '../../modules/vendor'
 import { useTimer } from '../../lib/timer'
 import { Props } from './SettingsPage.types'
 import copyText from '../../lib/copyText'
-
 import './SettingsPage.css'
-import { useLocation } from 'react-router-dom'
 
 const SettingsPage = (props: Props) => {
   const {
@@ -28,27 +25,12 @@ const SettingsPage = (props: Props) => {
     hasError,
     hasFetchedContracts,
     getContract,
-    onNavigate,
     onFetchContracts
   } = props
 
   const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
-  const {pathname, search} = useLocation()
 
   useEffect(() => {
-    if (!wallet) {
-      onNavigate(locations.signIn(`${pathname}${search}`))
-    }
-  }, [wallet, onNavigate, pathname, search])
-
-  useEffect(() => {
-    // When this condition is met, the previous useEffect will redirect to the sign in page.
-    // However without checking here as well, the contracts will be fetched unnecessarily on the redirect as well
-    // causing an extra call.
-    if (!wallet) {
-      return
-    }
-
     // Only fetch the contracts if they were not already fetched.
     // hasFetchedContracts is reset to false whenever the connected account changes.
     if (!hasFetchedContracts && !isLoading) {

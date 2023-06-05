@@ -46,7 +46,6 @@ const NotFound = () => (
   </div>
 )
 
-// This page should be ideally provided by a protected router
 const Unauthorized = () => (
   <div className={styles.center}>
     <p className="secondary-text">{t('global.unauthorized')}&hellip;</p>
@@ -54,7 +53,7 @@ const Unauthorized = () => (
 )
 
 export const ManageAssetPage = (props: Props) => {
-  const { onBack, wallet, isConnecting } = props
+  const { onBack, wallet } = props
 
   const handleOpenInBuilder = useCallback((asset: NFT) => {
     window.location.replace(
@@ -82,10 +81,9 @@ export const ManageAssetPage = (props: Props) => {
               {(asset, order, rental, isLoading) => (
                 <>
                   <Back className="back" absolute onClick={onBack} />
-                  {isLoading || isConnecting ? <Loading /> : null}
+                  {isLoading ? <Loading /> : null}
                   {!isLoading && !asset ? <NotFound /> : null}
-                  {!isConnecting &&
-                  !isLoading &&
+                  {!isLoading &&
                   asset &&
                   wallet &&
                   isOwnedBy(asset, wallet, rental ?? undefined) ? (

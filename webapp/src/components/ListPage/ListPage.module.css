@@ -1,8 +1,17 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
 .header:global(.ui.header) {
   margin: 0 24px;
   display: flex;
   align-items: center;
   column-gap: 19px;
+}
+
+.header:global(.ui.header.large) {
+  margin-bottom: 7px;
 }
 
 .header:global(.ui.sub.header) {
@@ -14,7 +23,6 @@
   line-height: 18px;
   color: var(--text);
   text-transform: none;
-  margin-top: 7px;
 }
 
 .nameContainer {

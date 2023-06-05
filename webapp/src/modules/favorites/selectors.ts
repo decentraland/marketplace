@@ -1,8 +1,10 @@
 import { createMatchSelector } from 'connected-react-router'
 import { createSelector } from 'reselect'
+import { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
+import { getData as getItems } from '../item/selectors'
 import { FavoritesData } from './types'
 import {
   FETCH_FAVORITED_ITEMS_REQUEST,
@@ -62,3 +64,7 @@ export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
   )
 
 export const getList = (state: RootState, id: string) => getLists(state)[id]
+export const getPreviewListItems = (state: RootState, id: string): Item[] =>
+  getLists(state)
+    [id]?.previewOfItemIds?.map(itemId => getItems(state)[itemId])
+    .filter(Boolean) ?? []

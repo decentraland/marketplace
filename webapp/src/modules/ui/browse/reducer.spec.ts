@@ -18,7 +18,8 @@ import { NFT, NFTsFetchOptions } from '../../nft/types'
 import { browse } from '../../routing/actions'
 import { VendorName } from '../../vendor'
 import { Section } from '../../vendor/decentraland'
-import { List } from '../../favorites/types'
+import { List, ListsBrowseOptions } from '../../favorites/types'
+import { ListOfLists } from '../../vendor/decentraland/favorites/types'
 import { setView } from '../actions'
 import { View } from '../types'
 import { BrowseUIState, INITIAL_STATE, browseReducer } from './reducer'
@@ -772,8 +773,8 @@ describe('when reducing the action of the success of the undo of the unpicking o
 
 describe('when reducing the action of the success of getting the lists', () => {
   let initialState: BrowseUIState
-  let browseOptions: ItemBrowseOptions
-  let lists: List[]
+  let browseOptions: ListsBrowseOptions
+  let lists: ListOfLists[]
   let total: number
 
   beforeEach(() => {
@@ -787,9 +788,8 @@ describe('when reducing the action of the success of getting the lists', () => {
         {
           id: 'anotherListId',
           name: 'aName',
-          description: 'aDescription',
-          userAddress: 'anAddress',
-          createdAt: Date.now()
+          itemsCount: 0,
+          previewOfItemIds: []
         }
       ]
       initialState = {
@@ -798,14 +798,14 @@ describe('when reducing the action of the success of getting the lists', () => {
         page: 1,
         count: 1
       }
-      browseOptions = { page: 2 }
+      browseOptions = { page: 2, first: 10 }
     })
 
     it('should return a state with its count set and the list ids of the new lists appended to the existent ones', () => {
       expect(
         browseReducer(
           initialState,
-          fetchListsSuccess(lists, total, browseOptions)
+          fetchListsSuccess(lists, [], total, browseOptions)
         )
       ).toEqual({
         ...initialState,
@@ -822,20 +822,19 @@ describe('when reducing the action of the success of getting the lists', () => {
         {
           id: 'anotherListId',
           name: 'aName',
-          description: 'aDescription',
-          userAddress: 'anAddress',
-          createdAt: Date.now()
+          itemsCount: 0,
+          previewOfItemIds: []
         }
       ]
       initialState = { ...initialState, listIds: [], page: undefined, count: 0 }
-      browseOptions = { page: 1 }
+      browseOptions = { page: 1, first: 10 }
     })
 
     it('should return a state with its count set and the list ids of the new lists', () => {
       expect(
         browseReducer(
           initialState,
-          fetchListsSuccess(lists, total, browseOptions)
+          fetchListsSuccess(lists, [], total, browseOptions)
         )
       ).toEqual({
         ...initialState,
@@ -856,7 +855,8 @@ describe('when reducing the action of the success of deleting a list', () => {
       name: 'aName',
       description: 'aDescription',
       userAddress: 'anAddress',
-      createdAt: Date.now()
+      createdAt: Date.now(),
+      itemsCount: 1
     }
 
     initialState = {

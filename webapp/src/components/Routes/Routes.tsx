@@ -69,20 +69,32 @@ const Routes = ({ inMaintenance }: Props) => {
         />
         <Route exact path={locations.account()} component={AccountPage} />
         <ProtectedRoute exact path={locations.lists()} component={ListsPage} />
-        <Route exact path={locations.list()} component={ListPage} />
+        <ProtectedRoute exact path={locations.list()} component={ListPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
-        <Route exact path={locations.sell()} component={SellPage} />
-        <Route exact path={locations.bid()} component={BidPage} />
-        <Route exact path={locations.cancel()} component={CancelSalePage} />
-        <Route exact path={locations.transfer()} component={TransferPage} />
+        <ProtectedRoute exact path={locations.sell()} component={SellPage} />
+        <ProtectedRoute exact path={locations.bid()} component={BidPage} />
+        <ProtectedRoute
+          exact
+          path={locations.cancel()}
+          component={CancelSalePage}
+        />
+        <ProtectedRoute
+          exact
+          path={locations.transfer()}
+          component={TransferPage}
+        />
         <Route exact path={locations.collection()} component={CollectionPage} />
-        <Route exact path={locations.manage()} component={ManageAssetPage} />
-        <Route
+        <ProtectedRoute
+          exact
+          path={locations.manage()}
+          component={ManageAssetPage}
+        />
+        <ProtectedRoute
           exact
           path={locations.buy(AssetType.NFT)}
           component={() => <BuyPage type={AssetType.NFT} />}
         />
-        <Route
+        <ProtectedRoute
           exact
           path={locations.buy(AssetType.ITEM)}
           component={() => <BuyPage type={AssetType.ITEM} />}
@@ -103,8 +115,16 @@ const Routes = ({ inMaintenance }: Props) => {
         />
         <Route exact path={locations.nft()} component={renderNFTAssetPage} />
         <Route exact path={locations.item()} component={renderItemAssetPage} />
-        <Route exact path={locations.settings()} component={SettingsPage} />
-        <Route exact path={locations.activity()} component={ActivityPage} />
+        <ProtectedRoute
+          exact
+          path={locations.settings()}
+          component={SettingsPage}
+        />
+        <ProtectedRoute
+          exact
+          path={locations.activity()}
+          component={ActivityPage}
+        />
         <Route exact path={locations.root()} component={HomePage} />
         <Route exact path={locations.parcel()} component={LegacyNFTPage} />
         <Route exact path={locations.estate()} component={LegacyNFTPage} />

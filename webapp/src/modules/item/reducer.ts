@@ -6,7 +6,9 @@ import {
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FETCH_FAVORITED_ITEMS_SUCCESS,
-  FetchFavoritedItemsSuccessAction
+  FETCH_LISTS_SUCCESS,
+  FetchFavoritedItemsSuccessAction,
+  FetchListsSuccessAction
 } from '../favorites/actions'
 import {
   BuyItemFailureAction,
@@ -63,6 +65,7 @@ export const INITIAL_STATE: ItemState = {
 
 type ItemReducerAction =
   | FetchFavoritedItemsSuccessAction
+  | FetchListsSuccessAction
   | FetchTrendingItemsRequestAction
   | FetchTrendingItemsSuccessAction
   | FetchTrendingItemsFailureAction
@@ -103,6 +106,7 @@ export function itemReducer(
     }
     case FETCH_TRENDING_ITEMS_SUCCESS:
     case FETCH_FAVORITED_ITEMS_SUCCESS:
+    case FETCH_LISTS_SUCCESS:
     case FETCH_COLLECTION_ITEMS_SUCCESS:
     case FETCH_ITEMS_SUCCESS: {
       const { items } = action.payload

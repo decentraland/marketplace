@@ -14,12 +14,10 @@ type Params = { listId?: string }
 
 export type Props = {
   wallet: Wallet | null
-  isConnecting: boolean
   listId?: string
   list: List | null
   isLoading: boolean
   onFetchList: typeof getListRequest
-  onRedirect: (path: string) => void
   onBack: () => void
   onEditList: (list: List) => ReturnType<typeof openModal>
   onDeleteList: (listId: string) => ReturnType<typeof openModal>
@@ -28,17 +26,12 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'wallet' | 'isConnecting' | 'listId' | 'list' | 'isLoading'
+  'wallet' | 'listId' | 'list' | 'isLoading'
 >
 
 export type MapDispatchProps = Pick<
   Props,
-  | 'onRedirect'
-  | 'onBack'
-  | 'onFetchList'
-  | 'onEditList'
-  | 'onDeleteList'
-  | 'onShareList'
+  'onBack' | 'onFetchList' | 'onEditList' | 'onDeleteList' | 'onShareList'
 >
 export type MapDispatch = Dispatch<
   | CallHistoryMethodAction

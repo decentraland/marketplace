@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { replace } from 'connected-react-router'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getList } from '../../modules/favorites/selectors'
 import {
@@ -8,11 +7,7 @@ import {
 } from '../../modules/favorites/actions'
 import { RootState } from '../../modules/reducer'
 import { goBack } from '../../modules/routing/actions'
-import {
-  getLoading,
-  getWallet,
-  isConnecting
-} from '../../modules/wallet/selectors'
+import { getLoading, getWallet } from '../../modules/wallet/selectors'
 import { openModal } from '../../modules/modal/actions'
 import {
   MapStateProps,
@@ -27,7 +22,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 
   return {
     wallet: getWallet(state),
-    isConnecting: isConnecting(state),
     listId,
     list: listId ? getList(state, listId) : null,
     isLoading: isLoadingType(getLoading(state), GET_LIST_REQUEST)
@@ -36,9 +30,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBack: () => dispatch(goBack()),
-  onRedirect: path => dispatch(replace(path)),
   onFetchList: listId => dispatch(getListRequest(listId)),
-  onEditList: list => dispatch(openModal('CreateOrEditListModal', { list })),
+  onEditList: list => dispatch(openModal('CreateListModal', { list })), // It would become in CreateOrEditListModal
   onDeleteList: listId => dispatch(openModal('DeleteListModal', { listId }))
 })
 

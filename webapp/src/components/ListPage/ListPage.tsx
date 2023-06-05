@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import {
   Back,
@@ -11,7 +10,6 @@ import {
   Loader
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { locations } from '../../modules/routing/locations'
 import { Section } from '../../modules/vendor/decentraland'
 import { VendorName } from '../../modules/vendor'
 import { View } from '../../modules/ui/types'
@@ -22,62 +20,57 @@ import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
 import { timeAgo } from './utils'
 
+export const LOADER_TEST_ID = 'loader'
+export const EMPTY_VIEW_TEST_ID = 'empty-view'
+export const ASSET_BROWSE_TEST_ID = 'asset-browse'
+export const LIST_CONTAINER_TEST_ID = 'list-container'
+export const GO_BACK_TEST_ID = 'share-list'
+export const PRIVATE_BADGE_TEST_ID = 'private-badge'
+export const UPDATED_AT_TEST_ID = 'updated-at'
+export const SHARE_LIST_BUTTON_TEST_ID = 'share-list'
+export const EDIT_LIST_BUTTON_TEST_ID = 'edit-list'
+export const DELETE_LIST_BUTTON_TEST_ID = 'delete-list'
+
 const ListPage = ({
   wallet,
-  isConnecting,
   listId,
   list,
   isLoading,
   onFetchList,
-  onRedirect,
   onBack,
   onEditList,
   onDeleteList,
   onShareList
 }: Props) => {
+  // TODO: what is pushing the page up?
   const hasFetchedOnce = useRef(false)
-
-  // Redirect to signIn if trying to access current account without a wallet
-  const { pathname, search } = useLocation()
-
-  useEffect(() => {
-    if (!isConnecting && !wallet) {
-      onRedirect(locations.signIn(`${pathname}${search}`))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isConnecting, wallet, onRedirect])
 
   useEffect(() => {
     hasFetchedOnce.current = false
   }, [listId])
 
   useEffect(() => {
-    if (
-      listId &&
-      !list &&
-      !isLoading &&
-      !hasFetchedOnce.current &&
-      !isConnecting &&
-      wallet
-    ) {
+    if (listId && !list && !isLoading && !hasFetchedOnce.current && wallet) {
       onFetchList(listId)
       hasFetchedOnce.current = true
     }
-  }, [list, listId, onFetchList, isLoading, isConnecting, wallet])
+  }, [list, listId, onFetchList, isLoading, wallet])
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
       {list ? (
-        <>
+        <div data-testid={LIST_CONTAINER_TEST_ID}>
           <Header className={styles.header} size="large">
-            <Back onClick={onBack} />
+            <Back onClick={onBack} data-testid={GO_BACK_TEST_ID} />
             <div className={styles.nameContainer}>
               {list.name}
               {list.isPrivate && (
-                <Badge color="white" className={styles.privateBadge}>
-                  <Icon name="lock" />
-                  Private
-                </Badge>
+                <div data-testid={PRIVATE_BADGE_TEST_ID}>
+                  <Badge color="white" className={styles.privateBadge}>
+                    <Icon name="lock" />
+                    Private
+                  </Badge>
+                </div>
               )}
             </div>
             <div className={styles.actions}>
@@ -86,6 +79,8 @@ const ListPage = ({
                 inverted
                 compact
                 onClick={onShareList && (() => onShareList(list))}
+                disabled={list.isPrivate}
+                data-testid={SHARE_LIST_BUTTON_TEST_ID}
               >
                 <Icon name="share alternate" />
               </Button>
@@ -103,10 +98,12 @@ const ListPage = ({
                   <Dropdown.Item
                     text={t('list_page.edit_list')}
                     onClick={() => onEditList(list)}
+                    data-testid={EDIT_LIST_BUTTON_TEST_ID}
                   />
                   <Dropdown.Item
                     text={t('list_page.delete_list')}
                     onClick={() => onDeleteList(list.id)}
+                    data-testid={DELETE_LIST_BUTTON_TEST_ID}
                   />
                 </Dropdown.Menu>
               </Dropdown>
@@ -115,24 +112,32 @@ const ListPage = ({
           <Header className={styles.header} sub>
             <span className={styles.description}>{list.description}</span>
             {list.updatedAt ? (
-              <div className={styles.updatedAt}>
+              <div
+                className={styles.updatedAt}
+                data-testid={UPDATED_AT_TEST_ID}
+              >
                 <b>{t('list_page.last_updated_at')}:</b>{' '}
                 {timeAgo(list.updatedAt)}{' '}
               </div>
             ) : null}
           </Header>
           {wallet ? (
-            <AssetBrowse
-              view={View.LISTS}
-              section={Section.LISTS}
-              vendor={VendorName.DECENTRALAND}
-            />
+            <div data-testid={ASSET_BROWSE_TEST_ID}>
+              <AssetBrowse
+                view={View.LISTS}
+                section={Section.LISTS}
+                vendor={VendorName.DECENTRALAND}
+              />
+            </div>
           ) : (
-            <div className={styles.emptyState}></div>
+            <div
+              className={styles.emptyState}
+              data-testid={EMPTY_VIEW_TEST_ID}
+            ></div>
           )}
-        </>
+        </div>
       ) : (
-        <Loader active size="massive" />
+        <Loader active size="massive" data-testid={LOADER_TEST_ID} />
       )}
     </PageLayout>
   )
