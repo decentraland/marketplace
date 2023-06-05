@@ -13,6 +13,7 @@ import { SuccessPage } from './SuccessPage'
 const mapState = (state: RootState): MapStateProps => {
   const search = new URLSearchParams(getSearch(state))
   const transaction = getTransaction(state, search.get('txHash') || '')
+  console.log(transaction)
   return {
     isLoading: Boolean(
       transaction && transaction.status !== TransactionStatus.CONFIRMED
