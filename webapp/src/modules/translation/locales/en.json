@@ -734,6 +734,10 @@
     "submit": "List for sale",
     "update_submit": "Update",
     "invalid": "Something roto",
+    "authorization": {
+      "title": "List item for sale",
+      "confirm_transaction_title": "Confirm the transaction to list your item for sale."
+    },
     "confirm": {
       "title": "Please confirm",
       "line_one": "You are about to list {name} on sale for {amount}.",

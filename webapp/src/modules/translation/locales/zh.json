@@ -730,6 +730,10 @@
     "submit": "待售列表",
     "update_submit": "更新",
     "invalid": "无效",
+    "authorization": {
+      "title": "出售的列表项目",
+      "confirm_transaction_title": "确认交易以列出您的出售商品."
+    },
     "confirm": {
       "title": "请确认",
       "line_one": "您将要列出{amount}待售的{name}。",
