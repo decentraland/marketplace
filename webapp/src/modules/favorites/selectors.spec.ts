@@ -18,7 +18,8 @@ import {
   getLists,
   getList,
   isLoadingCreateList,
-  isLoadingLists
+  isLoadingLists,
+  getPreviewListItems
 } from './selectors'
 import {
   createListRequest,
@@ -49,15 +50,26 @@ beforeEach(() => {
         lists: {
           ...INITIAL_STATE.data.lists,
           listId: {
-            id: 'aListId',
+            id: 'listId',
             name: 'aListName',
             description: 'aListDescription',
-            ownerAddress: 'anOwnerAddress'
+            ownerAddress: 'anOwnerAddress',
+            previewOfItemIds: ['item1', 'item2', 'item3']
           }
         }
       },
       error: 'anError',
       loading: []
+    },
+    item: {
+      data: {
+        item1: {
+          id: 'item1'
+        },
+        item2: {
+          id: 'item2'
+        }
+      }
     }
   } as any
 })
@@ -281,5 +293,14 @@ describe('when getting if the lists are being loaded', () => {
     it('should return true', () => {
       expect(isLoadingLists(state)).toBe(true)
     })
+  })
+})
+
+describe('when getting the preview loading items', () => {
+  it('should get the items in the preview when they exist in the items state', () => {
+    expect(getPreviewListItems(state, 'listId')).toEqual([
+      state.item.data.item1,
+      state.item.data.item2
+    ])
   })
 })

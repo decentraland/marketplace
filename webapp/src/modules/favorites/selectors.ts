@@ -65,6 +65,6 @@ export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
 
 export const getList = (state: RootState, id: string) => getLists(state)[id]
 export const getPreviewListItems = (state: RootState, id: string): Item[] =>
-  getLists(state)[id]?.previewOfItemIds?.map(
-    itemId => getItems(state)[itemId]
-  ) ?? []
+  getLists(state)
+    [id]?.previewOfItemIds?.map(itemId => getItems(state)[itemId])
+    .filter(Boolean) ?? []
