@@ -2,7 +2,9 @@ import { BodyShape, Item, Rarity, WearableCategory } from '@dcl/schemas'
 import { fireEvent } from '@testing-library/react'
 import { renderWithProviders } from '../../../utils/test'
 import { List } from '../../../modules/favorites/types'
+import { DEFAULT_FAVORITES_LIST_ID } from '../../../modules/vendor/decentraland/favorites/api'
 import {
+  ACTIONS_DATA_TEST_ID,
   DELETE_LIST_DATA_TEST_ID,
   EDIT_LIST_DATA_TEST_ID,
   EMPTY_PREVIEW_DATA_TEST_ID,
@@ -189,5 +191,24 @@ describe('when clicking the delete list button', () => {
   it('should call the onDeleteList prop callback', () => {
     fireEvent.click(renderedModal.getByTestId(DELETE_LIST_DATA_TEST_ID))
     expect(onDeleteList).toHaveBeenCalled()
+  })
+})
+
+describe('when the list being rendered is the wishlist', () => {
+  let list: List
+
+  beforeEach(() => {
+    list = {
+      id: DEFAULT_FAVORITES_LIST_ID,
+      name: 'aListName',
+      itemsCount: 4
+    } as List
+    renderedModal = renderListCard({ list })
+  })
+
+  it('should not show the dropdown with the actions', () => {
+    expect(
+      renderedModal.queryByTestId(ACTIONS_DATA_TEST_ID)
+    ).not.toBeInTheDocument()
   })
 })

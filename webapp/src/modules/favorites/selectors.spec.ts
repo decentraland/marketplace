@@ -19,16 +19,19 @@ import {
   getList,
   isLoadingCreateList,
   isLoadingLists,
-  getPreviewListItems
+  getPreviewListItems,
+  isLoadingDeleteList
 } from './selectors'
 import {
   createListRequest,
+  deleteListRequest,
   fetchFavoritedItemsRequest,
   fetchListsRequest,
   pickItemAsFavoriteRequest,
   undoUnpickingItemAsFavoriteRequest,
   unpickItemAsFavoriteRequest
 } from './actions'
+import { List } from './types'
 
 let state: RootState
 
@@ -302,5 +305,35 @@ describe('when getting the preview loading items', () => {
       state.item.data.item1,
       state.item.data.item2
     ])
+  })
+})
+
+describe('when getting if the deletion of a list is being loaded', () => {
+  let list: List
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'aListName'
+    } as List
+  })
+
+  describe("and there's no delete list request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = []
+    })
+
+    it('should return false', () => {
+      expect(isLoadingDeleteList(state)).toBe(false)
+    })
+  })
+
+  describe("and there's a delete list request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = [deleteListRequest(list)]
+    })
+
+    it('should return true', () => {
+      expect(isLoadingDeleteList(state)).toBe(true)
+    })
   })
 })
