@@ -14,6 +14,7 @@ import { ItemBrowseOptions } from './types'
 export const FETCH_ITEMS_REQUEST = '[Request] Fetch Items'
 export const FETCH_ITEMS_SUCCESS = '[Success] Fetch Items'
 export const FETCH_ITEMS_FAILURE = '[Failure] Fetch Items'
+export const FETCH_ITEMS_CANCELLED_ERROR_MESSAGE = '[Cancelled] Fetch Items'
 
 export const fetchItemsRequest = (options: ItemBrowseOptions) =>
   action(FETCH_ITEMS_REQUEST, options)

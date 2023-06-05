@@ -15,10 +15,8 @@ import {
 import {
   FetchItemsRequestAction,
   FetchItemsSuccessAction,
-  FetchTrendingItemsSuccessAction,
   FETCH_ITEMS_REQUEST,
-  FETCH_ITEMS_SUCCESS,
-  FETCH_TRENDING_ITEMS_SUCCESS
+  FETCH_ITEMS_SUCCESS
 } from '../../item/actions'
 import {
   FetchNFTsRequestAction,
@@ -58,7 +56,6 @@ type UIReducerAction =
   | FetchNFTsRequestAction
   | FetchNFTsSuccessAction
   | BrowseAction
-  | FetchTrendingItemsSuccessAction
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
   | FetchFavoritedItemsSuccessAction
@@ -173,12 +170,6 @@ export function browseReducer(
           }
       }
     }
-
-    case FETCH_TRENDING_ITEMS_SUCCESS:
-      return {
-        ...state,
-        itemIds: action.payload.items.map(item => item.id)
-      }
 
     case FETCH_FAVORITED_ITEMS_SUCCESS:
       const {
