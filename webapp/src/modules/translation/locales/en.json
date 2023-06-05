@@ -1039,12 +1039,12 @@
       "reload_page": "reload the page"
     },
     "delete_list_success": {
-      "title": "List removed",
-      "body": "The <b>{name}</b> was successfully removed."
+      "title": "List deleted",
+      "body": "The list <b>{name}</b> was successfully removed."
     },
     "delete_list_failure": {
-      "title": "Error removing list",
-      "body": "There was an issue removing the <b>{name}</b> list. Please try again later."
+      "title": "Error deleting list",
+      "body": "There was an issue while removing the <b>{name}</b> list. Please try again later."
     }
   },
   "maintainance": {
