@@ -1,0 +1,129 @@
+:global(.ui.card).card {
+  height: 240px;
+  width: 320px;
+  margin: 0px;
+}
+
+.card:link {
+  text-decoration: none;
+}
+
+.image {
+  width: 100%;
+  height: 170px;
+  display: flex;
+  border: 0px;
+  overflow: hidden;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.empty {
+  background-color: #43404A;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--text);
+}
+
+.empty .icon {
+  width: 59px;
+  height: 59px;
+  background-image: url('../../../images/empty-list.png');
+}
+
+.content {
+  flex-grow: 0;
+  width: 100%;
+  padding: 8px 12px 12px 14px;
+}
+
+.meta {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.left .icon {
+  width: 10px;
+  height: 10px;
+  background-image: url('../../../images/wearable-icon.png');
+  margin-right: 5px;
+}
+
+.header {
+  width: 100%;
+  font-size: 18px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header {
+  color: var(--text);
+}
+
+.content .left {
+  display: flex;
+  align-items: center;
+}
+
+.private {
+  z-index: 2;
+  position: absolute;
+  height: 18px;
+  top: 15px;
+  right: 12px;
+  border: 1px solid #FFFFFF;
+  color: black;
+  border-radius: 30px;
+  background-color: white;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 5px 0px 5px;
+}
+
+.private .icon {
+  width: 12px;
+  height: 12px;
+  margin-right: 1px;
+  background-image: url('../../../images/lock-icon.png');
+}
+
+.grid-1 {
+  width: 100%;
+  height: 100%;
+}
+
+.grid-2 {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 170px;
+}
+
+.grid-3 {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 85px;
+}
+
+.grid-3 :global(.AssetImage):nth-child(3) {
+  grid-column: span 2;
+}
+
+.grid-4 {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 85px;
+}

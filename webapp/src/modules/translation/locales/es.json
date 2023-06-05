@@ -1287,5 +1287,12 @@
     "errors": {
       "name_duplicated": "El nombre elegido esta siendo usado en otra de tus listas. <br></br> Elije uno diferente."
     }
+  },
+  "list_card": {
+    "item_count": "{count} {count, plural, one {item} other {items}}",
+    "edit_list": "Editar lista",
+    "delete_list": "Borrar lista",
+    "no_items": "Sin items",
+    "private": "Privada"
   }
 }

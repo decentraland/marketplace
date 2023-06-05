@@ -1,7 +1,4 @@
-export enum Permission {
-  VIEW = 'view',
-  EDIT = 'edit'
-}
+import { Permission } from '../vendor/decentraland/favorites/types'
 
 export type FavoritesData = {
   pickedByUser?: boolean
@@ -11,13 +8,23 @@ export type FavoritesData = {
 
 export type FavoritedItems = { itemId: string; createdAt: number }[]
 
+export type CreateListParameters = {
+  name: string
+  isPrivate: boolean
+  description?: string
+}
+
 export type List = {
   id: string
   name: string
-  description: string
-  userAddress: string
-  createdAt: number
-  permission?: Permission
+  itemsCount: number
+  isPrivate?: boolean
+  description?: string | null
+  userAddress?: string
+  createdAt?: number
+  updatedAt?: number | null
+  permission?: Permission | null
+  previewOfItemIds?: string[]
 }
 
 export type ListBrowseOptions = {}

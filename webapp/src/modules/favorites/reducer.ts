@@ -8,6 +8,7 @@ import {
   FetchItemsSuccessAction,
   FetchItemSuccessAction
 } from '../item/actions'
+import { ListDetails } from '../vendor/decentraland/favorites/types'
 import {
   PickItemAsFavoriteFailureAction,
   PickItemAsFavoriteRequestAction,
@@ -311,6 +312,9 @@ export function favoritesReducer(
             ...state.data.lists,
             [list.id]: {
               ...state.data.lists[list.id],
+              itemsCount: Object.hasOwn(list, 'itemsCount')
+                ? (list as ListDetails).itemsCount
+                : state.data.lists[list.id]?.itemsCount ?? 0,
               ...list
             }
           }

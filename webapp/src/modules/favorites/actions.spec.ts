@@ -2,6 +2,12 @@ import { Item, Network } from '@dcl/schemas'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import {
+  ListDetails,
+  ListOfLists,
+  Permission,
+  UpdateOrCreateList
+} from '../vendor/decentraland/favorites/types'
+import {
   cancelPickItemAsFavorite,
   CANCEL_PICK_ITEM_AS_FAVORITE,
   fetchFavoritedItemsFailure,
@@ -61,11 +67,16 @@ import {
   CREATE_LIST_CLEAR,
   createListClear
 } from './actions'
-import { List, Permission } from './types'
+import { CreateListParameters, List, ListsBrowseOptions } from './types'
 
 const itemBrowseOptions: ItemBrowseOptions = {
   view: View.LISTS,
   page: 0
+}
+
+const listsBrowseOptions: ListsBrowseOptions = {
+  page: 1,
+  first: 10
 }
 
 const item = {
@@ -82,8 +93,37 @@ const list: List = {
   name: 'aListName',
   description: 'aDescription',
   userAddress: 'anOwnerAddress',
+  itemsCount: 1,
   createdAt: Date.now(),
   permission: Permission.VIEW
+}
+
+const listOfLists: ListOfLists = {
+  id: 'aListId',
+  name: 'aListName',
+  itemsCount: 1,
+  previewOfItemIds: [item.id]
+}
+
+const createList: CreateListParameters = {
+  name: 'aListName',
+  description: 'aDescription',
+  isPrivate: true
+}
+
+const createOrUpdateList: UpdateOrCreateList = {
+  id: 'aListId',
+  name: 'aListName',
+  description: 'aDescription',
+  userAddress: 'anOwnerAddress',
+  createdAt: Date.now(),
+  updatedAt: null,
+  permission: Permission.VIEW
+}
+
+const listDetails: ListDetails = {
+  ...createOrUpdateList,
+  itemsCount: 1
 }
 
 const createdAt: Record<string, number> = { [item.id]: Date.now() }
@@ -238,10 +278,10 @@ describe('when creating the action to signal a failure in the fetch favorited it
 
 describe('when creating the action to signal the start of the fetch lists request', () => {
   it('should return an object representing the action', () => {
-    expect(fetchListsRequest(itemBrowseOptions)).toEqual({
+    expect(fetchListsRequest(listsBrowseOptions)).toEqual({
       type: FETCH_LISTS_REQUEST,
       meta: undefined,
-      payload: { options: itemBrowseOptions }
+      payload: { options: listsBrowseOptions }
     })
   })
 })
@@ -258,10 +298,17 @@ describe('when creating the action to signal a failure in the fetch lists reques
 
 describe('when creating the action to signal a successful fetch lists request', () => {
   it('should return an object representing the action', () => {
-    expect(fetchListsSuccess([list], total, itemBrowseOptions)).toEqual({
+    expect(
+      fetchListsSuccess([listOfLists], [item], total, listsBrowseOptions)
+    ).toEqual({
       type: FETCH_LISTS_SUCCESS,
       meta: undefined,
-      payload: { lists: [list], total, options: itemBrowseOptions }
+      payload: {
+        lists: [listOfLists],
+        items: [item],
+        total,
+        options: listsBrowseOptions
+      }
     })
   })
 })
@@ -318,10 +365,10 @@ describe('when creating the action to signal a failure in the get list request',
 
 describe('when creating the action to signal a successful get list request', () => {
   it('should return an object representing the action', () => {
-    expect(getListSuccess(list)).toEqual({
+    expect(getListSuccess(listDetails)).toEqual({
       type: GET_LIST_SUCCESS,
       meta: undefined,
-      payload: { list }
+      payload: { list: listDetails }
     })
   })
 })
@@ -348,30 +395,20 @@ describe('when creating the action to signal a failure in the update list reques
 
 describe('when creating the action to signal a successful update list request', () => {
   it('should return an object representing the action', () => {
-    expect(updateListSuccess(list)).toEqual({
+    expect(updateListSuccess(createOrUpdateList)).toEqual({
       type: UPDATE_LIST_SUCCESS,
       meta: undefined,
-      payload: { list }
+      payload: { list: createOrUpdateList }
     })
   })
 })
 
 describe('when creating the action to signal the start of the create list request', () => {
   it('should return an object representing the action', () => {
-    expect(
-      createListRequest({
-        name: list.name,
-        isPrivate: true,
-        description: list.description
-      })
-    ).toEqual({
+    expect(createListRequest(createList)).toEqual({
       type: CREATE_LIST_REQUEST,
       meta: undefined,
-      payload: {
-        name: list.name,
-        isPrivate: true,
-        description: list.description
-      }
+      payload: createList
     })
   })
 })
@@ -388,10 +425,10 @@ describe('when creating the action to signal a failure in the create list reques
 
 describe('when creating the action to signal a successful create list request', () => {
   it('should return an object representing the action', () => {
-    expect(createListSuccess(list)).toEqual({
+    expect(createListSuccess(createOrUpdateList)).toEqual({
       type: CREATE_LIST_SUCCESS,
       meta: undefined,
-      payload: { list }
+      payload: { list: createOrUpdateList }
     })
   })
 })

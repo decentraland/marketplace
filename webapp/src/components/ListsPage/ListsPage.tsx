@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Button, Card, Dropdown, Header, Icon } from 'decentraland-ui'
+import { Button, Dropdown, Header, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { usePagination } from '../../lib/pagination'
 import { ListsBrowseSortBy } from '../../modules/favorites/types'
@@ -8,6 +8,7 @@ import { getParameter } from '../../lib/enum'
 import { InfiniteScroll } from '../InfiniteScroll'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
+import { ListCard } from './ListCard'
 import { Props } from './ListsPage.types'
 import styles from './ListsPage.module.css'
 
@@ -59,7 +60,7 @@ const ListsPage = ({
           {count ? t('lists_page.subtitle', { count }) : null}
         </div>
         <div className={styles.right}>
-          {t('filters.sort_by')}
+          <span className={styles.sortBy}>{t('filters.sort_by')}</span>
           <Dropdown
             options={[
               {
@@ -80,8 +81,13 @@ const ListsPage = ({
             value={selectedSortBy}
             onChange={handleSortChange}
           />
-          <Button size="small" primary onClick={onCreateList}>
-            <Icon name="plus" />
+          <Button
+            size="small"
+            primary
+            className={styles.createList}
+            onClick={onCreateList}
+          >
+            <Icon name="plus" className={styles.icon} />
             {t('lists_page.create_list')}
           </Button>
         </div>
@@ -93,16 +99,11 @@ const ListsPage = ({
         isLoading={isLoading}
         maxScrollPages={3}
       >
-        <Card.Group className={styles.cards}>
+        <div className={styles.cardsGroup}>
           {lists.map(list => (
-            <Card key={list.id}>
-              <Card.Content>
-                <Card.Header>{list.name}</Card.Header>
-                <Card.Meta>x Items</Card.Meta>
-              </Card.Content>
-            </Card>
+            <ListCard key={list.id} list={list} />
           ))}
-        </Card.Group>
+        </div>
       </InfiniteScroll>
     </PageLayout>
   )
