@@ -1264,6 +1264,9 @@
   },
   "list_page": {
     "default_title": "心愿单",
+    "edit_list": "编辑列表",
+    "delete_list": "删除列表",
+    "last_updated_at": "最后更新于",
     "empty": {
       "title": "您在此列表中没有任何已保存的项目",
       "subtitle": "发现惊人的项目。",

@@ -82,7 +82,7 @@ const AssetList = (props: Props) => {
   const renderEmptyState = useCallback(() => {
     if (section === Section.LISTS) {
       return (
-        <div className="empty">
+        <div className="empty empty-list">
           <div className="logo"></div>
           <h1 className="title">{t('list_page.empty.title')}</h1>
           <p className="subtitle">{t('list_page.empty.subtitle')}</p>

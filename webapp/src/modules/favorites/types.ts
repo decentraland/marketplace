@@ -17,6 +17,8 @@ export type List = {
   description: string
   userAddress: string
   createdAt: number
+  updatedAt: number
+  isPrivate: boolean
   permission?: Permission
 }
 

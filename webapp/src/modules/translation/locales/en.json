@@ -1268,6 +1268,9 @@
   },
   "list_page": {
     "default_title": "Wishlist",
+    "edit_list": "Edit List",
+    "delete_list": "Delete List",
+    "last_updated_at": "Last updated",
     "empty": {
       "title": "You don’t have any saved items in this list",
       "subtitle": "Discover amazing items.",

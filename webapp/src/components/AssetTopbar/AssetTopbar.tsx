@@ -148,21 +148,23 @@ export const AssetTopbar = ({
       {!isMap && (
         <div className={styles.infoRow}>
           {!isLoading ? (
-            <div className={styles.countContainer}>
-              <p className={styles.countText}>
-                {count && isCatalogView(view)
-                  ? t(
-                      search
-                        ? 'nft_filters.query_results'
-                        : 'nft_filters.results',
-                      {
-                        count: count.toLocaleString(),
+            isListsSection(section) && !count ? null : (
+              <div className={styles.countContainer}>
+                <p className={styles.countText}>
+                  {count && isCatalogView(view)
+                    ? t(
                         search
-                      }
-                    )
-                  : getCountText(count, search)}
-              </p>
-            </div>
+                          ? 'nft_filters.query_results'
+                          : 'nft_filters.results',
+                        {
+                          count: count.toLocaleString(),
+                          search
+                        }
+                      )
+                    : getCountText(count, search)}
+                </p>
+              </div>
+            )
           ) : null}
           {!isListsSection(section) ? (
             <div className={styles.rightOptionsContainer}>
