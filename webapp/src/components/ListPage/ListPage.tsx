@@ -56,6 +56,24 @@ const ListPage = ({
     }
   }, [list, listId, onFetchList, isLoading, wallet])
 
+  useEffect(() => {
+    hasFetchedOnce.current = false
+  }, [listId])
+
+  useEffect(() => {
+    if (
+      listId &&
+      !list &&
+      !isLoading &&
+      !hasFetchedOnce.current &&
+      !isConnecting &&
+      wallet
+    ) {
+      onFetchList(listId)
+      hasFetchedOnce.current = true
+    }
+  }, [list, listId, onFetchList, isLoading, isConnecting, wallet])
+
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
       {list ? (
