@@ -19,6 +19,7 @@ import { PageLayout } from '../PageLayout'
 import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
 import { timeAgo } from './utils'
+import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
 
 export const LOADER_TEST_ID = 'loader'
 export const EMPTY_VIEW_TEST_ID = 'empty-view'
@@ -73,39 +74,41 @@ const ListPage = ({
                 </div>
               )}
             </div>
-            <div className={styles.actions}>
-              <Button
-                className={classNames(styles.iconContainer, styles.share)}
-                inverted
-                compact
-                onClick={onShareList && (() => onShareList(list))}
-                disabled={list.isPrivate}
-                data-testid={SHARE_LIST_BUTTON_TEST_ID}
-              >
-                <Icon name="share alternate" />
-              </Button>
-              {/* TODO: should we change the icons to the ones used in the figma? */}
-              <Dropdown
-                compact
-                className={styles.iconContainer}
-                icon={<Icon name="ellipsis horizontal" />}
-                as={Button}
-                inverted
-              >
-                <Dropdown.Menu direction="left">
-                  <Dropdown.Item
-                    text={t('list_page.edit_list')}
-                    onClick={() => onEditList(list)}
-                    data-testid={EDIT_LIST_BUTTON_TEST_ID}
-                  />
-                  <Dropdown.Item
-                    text={t('list_page.delete_list')}
-                    onClick={() => onDeleteList(list)}
-                    data-testid={DELETE_LIST_BUTTON_TEST_ID}
-                  />
-                </Dropdown.Menu>
-              </Dropdown>
-            </div>
+            {list.id === DEFAULT_FAVORITES_LIST_ID ? null : (
+              <div className={styles.actions}>
+                <Button
+                  className={classNames(styles.iconContainer, styles.share)}
+                  inverted
+                  compact
+                  onClick={onShareList && (() => onShareList(list))}
+                  disabled={list.isPrivate}
+                  data-testid={SHARE_LIST_BUTTON_TEST_ID}
+                >
+                  <Icon name="share alternate" />
+                </Button>
+                {/* TODO: should we change the icons to the ones used in the figma? */}
+                <Dropdown
+                  compact
+                  className={styles.iconContainer}
+                  icon={<Icon name="ellipsis horizontal" />}
+                  as={Button}
+                  inverted
+                >
+                  <Dropdown.Menu direction="left">
+                    <Dropdown.Item
+                      text={t('list_page.edit_list')}
+                      onClick={() => onEditList(list)}
+                      data-testid={EDIT_LIST_BUTTON_TEST_ID}
+                    />
+                    <Dropdown.Item
+                      text={t('list_page.delete_list')}
+                      onClick={() => onDeleteList(list)}
+                      data-testid={DELETE_LIST_BUTTON_TEST_ID}
+                    />
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
+            )}
           </Header>
           <Header className={styles.header} sub>
             <span className={styles.description}>{list.description}</span>

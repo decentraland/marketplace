@@ -14,6 +14,7 @@ import ListPage, {
 } from './ListPage'
 import { Props } from './ListPage.types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
 
 const listId = 'aListId'
 let list: List = {
@@ -111,6 +112,26 @@ describe('when rendering the ListPage with a loaded list', () => {
       expect(renderedPage.getByTestId(SHARE_LIST_BUTTON_TEST_ID)).toBeEnabled()
     })
   })
+
+  describe('and the list is the default', () => {
+    beforeEach(() => {
+      renderedPage = renderListPage({
+        list: { ...list, id: DEFAULT_FAVORITES_LIST_ID }
+      })
+    })
+
+    it('should hide the share list button', () => {
+      expect(renderedPage.queryByTestId(SHARE_LIST_BUTTON_TEST_ID)).toBeNull()
+    })
+
+    it('should hide the edit list button', () => {
+      expect(renderedPage.queryByTestId(EDIT_LIST_BUTTON_TEST_ID)).toBeNull()
+    })
+
+    it('should hide the delete list button', () => {
+      expect(renderedPage.queryByTestId(DELETE_LIST_BUTTON_TEST_ID)).toBeNull()
+    })
+  })
 })
 
 describe('when rendering the ListPage but the wallet has not been yet fetched', () => {
@@ -171,6 +192,6 @@ describe('when clicking the delete list button', () => {
 
   it('should call the onDeleteList prop callback', () => {
     fireEvent.click(renderedPage.getByTestId(DELETE_LIST_BUTTON_TEST_ID))
-    expect(onDeleteList).toHaveBeenCalledWith(listId)
+    expect(onDeleteList).toHaveBeenCalledWith(list)
   })
 })
