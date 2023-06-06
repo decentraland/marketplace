@@ -64,7 +64,8 @@
     "discord_server": "Discord 服务器",
     "currently": "现在",
     "showing": "顯示",
-    "of": "的"
+    "of": "的",
+    "now": "现在"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",

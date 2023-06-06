@@ -64,7 +64,8 @@
     "discord_server": "Servidor de Discord",
     "currently": "actualmente",
     "showing": "Mostrando",
-    "of": "de"
+    "of": "de",
+    "now": "ahora"
   },
   "address": {
     "invalid_address": "Dirección inválida",

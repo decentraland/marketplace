@@ -1,3 +1,5 @@
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+
 type Range = keyof typeof ranges
 const ranges = {
   years: 3600 * 24 * 365,
@@ -14,6 +16,8 @@ const formatter = new Intl.RelativeTimeFormat('en')
 export function timeAgo(input: string | Date | number) {
   const date = input instanceof Date ? input : new Date(input)
   const secondsElapsed = (date.getTime() - Date.now()) / 1000
+
+  if (Math.abs(secondsElapsed) < ranges.seconds) return t('global.now')
 
   let key: Range
   for (key in ranges) {

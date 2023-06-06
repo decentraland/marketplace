@@ -66,7 +66,8 @@
     "discord_server": "Discord Server",
     "currently": "currently",
     "showing": "Showing",
-    "of": "of"
+    "of": "of",
+    "now": "now"
   },
   "address": {
     "invalid_address": "That's not a valid address",
