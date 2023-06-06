@@ -6,7 +6,6 @@ import {
   getListRequest
 } from '../../modules/favorites/actions'
 import { RootState } from '../../modules/reducer'
-import { goBack } from '../../modules/routing/actions'
 import { getLoading, getWallet } from '../../modules/wallet/selectors'
 import { openModal } from '../../modules/modal/actions'
 import {
@@ -16,6 +15,8 @@ import {
   OwnProps
 } from './ListPage.types'
 import ListPage from './ListPage'
+import { locations } from '../../modules/routing/locations'
+import { push } from 'connected-react-router'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { listId } = ownProps.match.params
@@ -29,7 +30,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onBack: () => dispatch(goBack()),
+  onBack: () => dispatch(push(locations.lists())),
   onFetchList: listId => dispatch(getListRequest(listId)),
   onEditList: list => dispatch(openModal('CreateListModal', { list })),
   onDeleteList: listId => dispatch(openModal('CreateListModal', { listId })) // TODO: should be ConfirmDeleteListModal after merging PR #1762
