@@ -3,6 +3,7 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { getList } from '../../modules/favorites/selectors'
 import {
   GET_LIST_REQUEST,
+  deleteListStart,
   getListRequest
 } from '../../modules/favorites/actions'
 import { RootState } from '../../modules/reducer'
@@ -33,7 +34,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBack: () => dispatch(push(locations.lists())),
   onFetchList: listId => dispatch(getListRequest(listId)),
   onEditList: list => dispatch(openModal('CreateListModal', { list })),
-  onDeleteList: listId => dispatch(openModal('CreateListModal', { listId })) // TODO: should be ConfirmDeleteListModal after merging PR #1762
+  onDeleteList: list => dispatch(deleteListStart(list))
 })
 
 export default connect(mapState, mapDispatch)(ListPage)

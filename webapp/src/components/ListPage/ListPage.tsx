@@ -100,7 +100,7 @@ const ListPage = ({
                   />
                   <Dropdown.Item
                     text={t('list_page.delete_list')}
-                    onClick={() => onDeleteList(list.id)}
+                    onClick={() => onDeleteList(list)}
                     data-testid={DELETE_LIST_BUTTON_TEST_ID}
                   />
                 </Dropdown.Menu>

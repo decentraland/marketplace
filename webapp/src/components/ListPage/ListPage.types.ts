@@ -5,7 +5,9 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { GoBackAction } from '../../modules/routing/actions'
 import { List } from '../../modules/favorites/types'
 import {
+  DeleteListStartAction,
   GetListRequestAction,
+  deleteListStart,
   getListRequest
 } from '../../modules/favorites/actions'
 import { OpenModalAction, openModal } from '../../modules/modal/actions'
@@ -20,7 +22,7 @@ export type Props = {
   onFetchList: typeof getListRequest
   onBack: () => void
   onEditList: (list: List) => ReturnType<typeof openModal>
-  onDeleteList: (listId: string) => ReturnType<typeof openModal>
+  onDeleteList: typeof deleteListStart
   onShareList?: (list: List) => ReturnType<typeof openModal>
 } & RouteComponentProps<Params>
 
@@ -38,5 +40,6 @@ export type MapDispatch = Dispatch<
   | GoBackAction
   | GetListRequestAction
   | OpenModalAction
+  | DeleteListStartAction
 >
 export type OwnProps = RouteComponentProps<Params>
