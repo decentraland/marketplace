@@ -1,10 +1,10 @@
 .page {
-  height: 100%; /* TODO: something is wrong with this height*/
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .content {
   padding: 0 24px;
-  flex: 1 1 auto;
+  flex-grow: 1;
 }
