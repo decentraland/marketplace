@@ -332,17 +332,15 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       const list: ListDetails = yield call([favoritesAPI, 'getList'], id)
       yield put(getListSuccess(list))
     } catch (error) {
-      if (isAPIError(error) && error.status === 404) {
-        yield put(push(locations.lists()))
-        return
-      }
-
       yield put(
         getListFailure(
           id,
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )
+
+      if (isAPIError(error) && error.status === 404)
+        yield put(push(locations.lists()))
     }
   }
 
