@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { Item } from '@dcl/schemas'
 import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
@@ -13,6 +13,7 @@ import {
   undoUnpickingItemAsFavoriteRequest,
   unpickItemAsFavoriteRequest
 } from '../favorites/actions'
+import { List } from '../favorites/types'
 import { toastDispatchableActionsChannel } from './utils'
 import { DispatchableFromToastActions } from './types'
 
@@ -110,7 +111,7 @@ export function getBuyNFTWithCardErrorToast(): Omit<Toast, 'id'> {
   }
 }
 
-export function getExcecuteOrderFailureToast(): Omit<Toast, 'id'> {
+export function getExecuteOrderFailureToast(): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,
     title: t('toast.meta_transaction_failure.title'),
@@ -250,5 +251,33 @@ export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
     icon: <Icon size="big" name="exclamation circle" />,
     closable: true,
     timeout: DEFAULT_TIMEOUT
+  }
+}
+
+export function getDeleteListSuccessToast(list: List): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: t('toast.delete_list_success.title'),
+    body: t('toast.delete_list_success.body', {
+      name: list.name,
+      b: (children: React.ReactChildren) => <b>{children}</b>
+    }),
+    closable: true,
+    timeout: DEFAULT_TIMEOUT,
+    icon: <Icon size="large" circular color="green" inverted name="checkmark" />
+  }
+}
+
+export function getDeleteListFailureToast(list: List): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.delete_list_failure.title'),
+    body: t('toast.delete_list_failure.body', {
+      name: list.name,
+      b: (children: React.ReactChildren) => <b>{children}</b>
+    }),
+    closable: true,
+    timeout: DEFAULT_TIMEOUT,
+    icon: <Icon size="large" name="exclamation circle" />
   }
 }

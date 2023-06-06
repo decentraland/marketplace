@@ -1038,6 +1038,14 @@
       "title": "网站无法加载",
       "body": "加载此页面内容时出现问题。请{reload_page} 或稍后重试。",
       "reload_page": "重新加载页面"
+    },
+    "delete_list_success": {
+      "title": "列表已删除",
+      "body": "列表 <b>{name}</b> 已成功删除。"
+    },
+    "delete_list_failure": {
+      "title": "删除列表时出错",
+      "body": "删除 <b>{name}</b> 列表时出现问题。 请稍后再试。"
     }
   },
   "maintainance": {
@@ -1303,5 +1311,10 @@
     "delete_list": "删除列表",
     "no_items": "没有项目",
     "private": "私人的"
+  },
+  "confirm_delete_list_modal": {
+    "title": "删除 <b>{name}</b> 列表",
+    "message": "您确定要删除此列表吗？ 里面的所有项目将被永久删除，无法撤消。",
+    "confirm": "永久删除"
   }
 }

@@ -1041,6 +1041,14 @@
       "title": "The site couldn’t load",
       "body": "There was an issue while loading the content of this page. Please {reload_page} or try again later.",
       "reload_page": "reload the page"
+    },
+    "delete_list_success": {
+      "title": "List deleted",
+      "body": "The list <b>{name}</b> was successfully removed."
+    },
+    "delete_list_failure": {
+      "title": "Error deleting list",
+      "body": "There was an issue while removing the <b>{name}</b> list. Please try again later."
     }
   },
   "maintainance": {
@@ -1307,5 +1315,10 @@
     "delete_list": "Delete List",
     "no_items": "No items",
     "private": "Private"
+  },
+  "confirm_delete_list_modal": {
+    "title": "Delete <b>{name}</b> list",
+    "message": "Are you sure you want to delete this list? All the items inside will be permanently removed and cannot be undone.",
+    "confirm": "Delete permanently"
   }
 }
