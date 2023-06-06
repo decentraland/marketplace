@@ -20,10 +20,12 @@ import {
   isLoadingCreateList,
   isLoadingLists,
   getPreviewListItems,
-  isLoadingUpdateList
+  isLoadingUpdateList,
+  isLoadingDeleteList
 } from './selectors'
 import {
   createListRequest,
+  deleteListRequest,
   fetchFavoritedItemsRequest,
   fetchListsRequest,
   pickItemAsFavoriteRequest,
@@ -31,6 +33,7 @@ import {
   unpickItemAsFavoriteRequest,
   updateListRequest
 } from './actions'
+import { List } from './types'
 
 let state: RootState
 
@@ -309,10 +312,6 @@ describe('when getting the preview loading items', () => {
 
 describe('when getting if the update list request is being loaded', () => {
   describe("and there's no update list request action in the loading state", () => {
-    beforeEach(() => {
-      state.favorites.loading = []
-    })
-
     it('should return false', () => {
       expect(isLoadingUpdateList(state)).toBe(false)
     })
@@ -331,6 +330,36 @@ describe('when getting if the update list request is being loaded', () => {
 
     it('should return true', () => {
       expect(isLoadingUpdateList(state)).toBe(true)
+    })
+  })
+})
+
+describe('when getting if the deletion of a list is being loaded', () => {
+  let list: List
+  beforeEach(() => {
+    list = {
+      id: 'aListId',
+      name: 'aListName'
+    } as List
+  })
+
+  describe("and there's no delete list request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = []
+    })
+
+    it('should return false', () => {
+      expect(isLoadingDeleteList(state)).toBe(false)
+    })
+  })
+
+  describe("and there's a delete list request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = [deleteListRequest(list)]
+    })
+
+    it('should return true', () => {
+      expect(isLoadingDeleteList(state)).toBe(true)
     })
   })
 })

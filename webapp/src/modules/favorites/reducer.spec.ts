@@ -163,7 +163,7 @@ const failureActions = [
   },
   {
     request: deleteListRequest(actionList),
-    failure: deleteListFailure(error)
+    failure: deleteListFailure({ id: 'aListId' } as List, error)
   },
   {
     request: getListRequest(actionList.id),

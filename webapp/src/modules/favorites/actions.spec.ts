@@ -325,10 +325,10 @@ describe('when creating the action to signal the start of the delete list reques
 
 describe('when creating the action to signal a failure in the delete list request', () => {
   it('should return an object representing the action', () => {
-    expect(deleteListFailure(anErrorMessage)).toEqual({
+    expect(deleteListFailure(list, anErrorMessage)).toEqual({
       type: DELETE_LIST_FAILURE,
       meta: undefined,
-      payload: { error: anErrorMessage }
+      payload: { list, error: anErrorMessage }
     })
   })
 })

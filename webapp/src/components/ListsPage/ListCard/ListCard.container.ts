@@ -2,6 +2,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { getPreviewListItems } from '../../../modules/favorites/selectors'
+import { deleteListStart } from '../../../modules/favorites/actions'
 import { RootState } from '../../../modules/reducer'
 import {
   MapStateProps,
@@ -25,8 +26,7 @@ const mapDispatch = (
     {
       onEditList: () =>
         openModal('CreateOrEditListModal', { list: ownProps.list }),
-      onDeleteList: () =>
-        openModal('CreateOrEditListModal', { list: ownProps.list })
+      onDeleteList: () => deleteListStart(ownProps.list)
     },
     dispatch
   )

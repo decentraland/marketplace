@@ -1033,6 +1033,14 @@
       "title": "El sitio no pudo cargar",
       "body": "Hubo un problema al cargar el contenido de esta página. {reload_page} o inténtalo de nuevo más tarde.",
       "reload_page": "Recargue la página"
+    },
+    "delete_list_success": {
+      "title": "Lista eliminando",
+      "body": "La lista <b>{name}</b> fue removida satisfactoriamente."
+    },
+    "delete_list_failure": {
+      "title": "Error eliminando lista",
+      "body": "Ocurrió un error al eliminar la lista <b>{name}</b>. Por favor inténtelo de nuevo más tarde."
     }
   },
   "maintainance": {
@@ -1298,5 +1306,10 @@
     "delete_list": "Borrar lista",
     "no_items": "Sin items",
     "private": "Privada"
+  },
+  "confirm_delete_list_modal": {
+    "title": "Eliminar la lista list <b>{name}</b>",
+    "message": "Está seguro de que quiere eliminar ésta lista? Todos los items dentro de la misma serán removidos permanentemente y la acción no podrá deshacerse.",
+    "confirm": "Borrar permanentemente"
   }
 }

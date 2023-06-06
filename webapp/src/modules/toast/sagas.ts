@@ -23,7 +23,9 @@ import {
 } from '../order/actions'
 import {
   getBuyNFTWithCardErrorToast,
-  getExcecuteOrderFailureToast,
+  getDeleteListFailureToast,
+  getDeleteListSuccessToast,
+  getExecuteOrderFailureToast,
   getFetchAssetsFailureToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
@@ -42,11 +44,15 @@ import {
   UnpickItemAsFavoriteFailureAction,
   UnpickItemAsFavoriteSuccessAction,
   UNPICK_ITEM_AS_FAVORITE_FAILURE,
-  UNPICK_ITEM_AS_FAVORITE_SUCCESS
+  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+  DeleteListSuccessAction,
+  DELETE_LIST_SUCCESS,
+  DELETE_LIST_FAILURE,
+  DeleteListFailureAction
 } from '../favorites/actions'
+import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
 import { toastDispatchableActionsChannel } from './utils'
 import { DispatchableFromToastActions } from './types'
-import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])
@@ -61,9 +67,11 @@ function* successToastSagas() {
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleRemoveRentalSuccess)
   yield takeEvery(CLAIM_ASSET_SUCCESS, handleClaimLandBackSuccess)
   yield takeEvery(UPSERT_RENTAL_SUCCESS, handleUpsertRentalSuccess)
+  yield takeEvery(DELETE_LIST_SUCCESS, handleDeleteListSuccess)
+  yield takeEvery(DELETE_LIST_FAILURE, handleDeleteListFailure)
   yield takeEvery(BUY_ITEM_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
-  yield takeEvery(EXECUTE_ORDER_FAILURE, handleExcecuteOrderFailure)
+  yield takeEvery(EXECUTE_ORDER_FAILURE, handleExecuteOrderFailure)
   yield takeEvery(FETCH_ITEMS_FAILURE, handleFetchAssetsFailure)
   yield takeEvery(FETCH_NFTS_FAILURE, handleFetchAssetsFailure)
   yield takeEvery(
@@ -118,14 +126,26 @@ function* handleUpsertRentalSuccess(action: UpsertRentalSuccessAction) {
   )
 }
 
+function* handleDeleteListSuccess(action: DeleteListSuccessAction) {
+  yield put(
+    showToast(getDeleteListSuccessToast(action.payload.list), 'bottom center')
+  )
+}
+
+function* handleDeleteListFailure(action: DeleteListFailureAction) {
+  yield put(
+    showToast(getDeleteListFailureToast(action.payload.list), 'bottom center')
+  )
+}
+
 function* handleBuyNFTWithCardFailure() {
   yield put(showToast(getBuyNFTWithCardErrorToast(), 'bottom center'))
 }
 
-function* handleExcecuteOrderFailure(action: ExecuteOrderFailureAction) {
+function* handleExecuteOrderFailure(action: ExecuteOrderFailureAction) {
   const { silent } = action.payload
   if (!silent) {
-    yield put(showToast(getExcecuteOrderFailureToast(), 'bottom center'))
+    yield put(showToast(getExecuteOrderFailureToast(), 'bottom center'))
   }
 }
 
