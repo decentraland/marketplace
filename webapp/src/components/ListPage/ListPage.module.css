@@ -10,7 +10,6 @@
 }
 
 .header:global(.ui.sub.header) {
-  margin-left: 77px;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
