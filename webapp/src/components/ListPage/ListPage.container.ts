@@ -18,6 +18,8 @@ import {
   OwnProps
 } from './ListPage.types'
 import ListPage from './ListPage'
+import { locations } from '../../modules/routing/locations'
+import { push } from 'connected-react-router'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { listId } = ownProps.match.params
