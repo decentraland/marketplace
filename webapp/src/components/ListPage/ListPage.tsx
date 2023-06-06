@@ -10,6 +10,7 @@ import {
   Loader
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { formatDistanceToNow } from '../../lib/date'
 import { Section } from '../../modules/vendor/decentraland'
 import { VendorName } from '../../modules/vendor'
 import { View } from '../../modules/ui/types'
@@ -19,7 +20,6 @@ import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
 import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
-import { timeAgo } from './utils'
 
 export const LOADER_TEST_ID = 'loader'
 export const EMPTY_VIEW_TEST_ID = 'empty-view'
@@ -116,7 +116,10 @@ const ListPage = ({
                 data-testid={UPDATED_AT_TEST_ID}
               >
                 <b>{t('list_page.last_updated_at')}:</b>{' '}
-                {timeAgo(list.updatedAt)}{' '}
+                {formatDistanceToNow(list.updatedAt, {
+                  addSuffix: true,
+                  includeSeconds: true
+                })}
               </div>
             ) : null}
           </Header>
