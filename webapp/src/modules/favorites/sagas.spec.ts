@@ -843,21 +843,43 @@ describe('when handling the request for getting a list', () => {
   })
 
   describe('and the call to the favorites api fails', () => {
-    it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [
-            matchers.call.fn(FavoritesAPI.prototype.getList),
-            Promise.reject(error)
-          ]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.getList,
-          args: [list.id]
-        })
-        .put(getListFailure(list.id, error.message))
-        .dispatch(getListRequest(list.id))
-        .run({ silenceTimeout: true })
+    describe('and the error is a 404', () => {
+      it('should dispatch an action signaling the failure of the handled action and should redirect user to the lists page', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [
+              matchers.call.fn(FavoritesAPI.prototype.getList),
+              Promise.reject({ message: error.message, status: 404 })
+            ]
+          ])
+          .call.like({
+            fn: FavoritesAPI.prototype.getList,
+            args: [list.id]
+          })
+          .put(getListFailure(list.id, error.message))
+          .put(push(locations.lists()))
+          .dispatch(getListRequest(list.id))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the error is another one', () => {
+      it('should dispatch an action signaling the failure of the handled action', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [
+              matchers.call.fn(FavoritesAPI.prototype.getList),
+              Promise.reject(error)
+            ]
+          ])
+          .call.like({
+            fn: FavoritesAPI.prototype.getList,
+            args: [list.id]
+          })
+          .put(getListFailure(list.id, error.message))
+          .dispatch(getListRequest(list.id))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 
