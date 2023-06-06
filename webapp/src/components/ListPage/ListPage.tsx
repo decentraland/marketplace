@@ -50,7 +50,7 @@ const ListPage = ({
   }, [listId])
 
   useEffect(() => {
-    if (listId && !list && !isLoading && !hasFetchedOnce.current && wallet) {
+    if (listId && !isLoading && !hasFetchedOnce.current && wallet) {
       onFetchList(listId)
       hasFetchedOnce.current = true
     }
