@@ -85,14 +85,12 @@ const ListPage = ({
                 <Icon name="share alternate" />
               </Button>
               {/* TODO: should we change the icons to the ones used in the figma? */}
-              {/* TODO: When the dropdown is open and I hover an item that overlaps it, the UI becomes weird */}
               <Dropdown
                 compact
                 className={styles.iconContainer}
                 icon={<Icon name="ellipsis horizontal" />}
                 as={Button}
                 inverted
-                tabIndex={999}
               >
                 <Dropdown.Menu direction="left">
                   <Dropdown.Item

@@ -31,8 +31,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBack: () => dispatch(goBack()),
   onFetchList: listId => dispatch(getListRequest(listId)),
-  onEditList: list => dispatch(openModal('CreateListModal', { list })), // It would become in CreateOrEditListModal
-  onDeleteList: listId => dispatch(openModal('DeleteListModal', { listId }))
+  onEditList: list => dispatch(openModal('CreateListModal', { list })),
+  onDeleteList: listId => dispatch(openModal('CreateListModal', { listId })) // TODO: should be ConfirmDeleteListModal after merging PR #1762
 })
 
 export default connect(mapState, mapDispatch)(ListPage)

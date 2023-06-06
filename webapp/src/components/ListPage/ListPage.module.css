@@ -71,6 +71,7 @@
   justify-content: center;
   cursor: pointer;
   padding: 0;
+  z-index: 11;
 }
 
 .actions :global(.ui.button).iconContainer.share {
