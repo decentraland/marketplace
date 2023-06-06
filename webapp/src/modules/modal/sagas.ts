@@ -10,13 +10,23 @@ import {
   ACCEPT_RENTAL_LISTING_SUCCESS,
   AcceptRentalListingSuccessAction
 } from '../rental/actions'
-import { CREATE_LIST_SUCCESS } from '../favorites/actions'
+import {
+  CREATE_LIST_SUCCESS,
+  DELETE_LIST_FAILURE,
+  DELETE_LIST_SUCCESS
+} from '../favorites/actions'
 import { closeAllModals, openModal } from './actions'
 
 export function* modalSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
   yield takeEvery(
-    [CLAIM_ASSET_SUCCESS, UPSERT_RENTAL_SUCCESS, CREATE_LIST_SUCCESS],
+    [
+      CLAIM_ASSET_SUCCESS,
+      UPSERT_RENTAL_SUCCESS,
+      CREATE_LIST_SUCCESS,
+      DELETE_LIST_SUCCESS,
+      DELETE_LIST_FAILURE
+    ],
     handleCloseAllModals
   )
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleCloseRemoveRentalModal)

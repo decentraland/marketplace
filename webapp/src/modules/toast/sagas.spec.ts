@@ -7,6 +7,8 @@ import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
 import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import {
+  deleteListFailure,
+  deleteListSuccess,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -32,7 +34,7 @@ import { UpsertRentalOptType } from '../rental/types'
 import { updateStoreSuccess } from '../store/actions'
 import { getEmptyStore } from '../store/utils'
 import {
-  getExcecuteOrderFailureToast,
+  getExecuteOrderFailureToast,
   getBuyNFTWithCardErrorToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
@@ -42,12 +44,15 @@ import {
   getPickItemAsFavoriteFailureToast,
   getUnpickItemAsFavoriteFailureToast,
   getUnpickItemAsFavoriteSuccessToast,
-  getFetchAssetsFailureToast
+  getFetchAssetsFailureToast,
+  getDeleteListSuccessToast,
+  getDeleteListFailureToast
 } from '../toast/toasts'
-import { toastSaga } from './sagas'
-import { toastDispatchableActionsChannel } from './utils'
 import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
+import { List } from '../favorites/types'
+import { toastSaga } from './sagas'
+import { toastDispatchableActionsChannel } from './utils'
 
 let nft: NFT
 let rental: RentalListing
@@ -138,7 +143,7 @@ describe('when handling the failure of a buy NFTs with card', () => {
   })
 })
 
-describe('when handling the failure of excecute order', () => {
+describe('when handling the failure of execute order', () => {
   const error = 'anError'
   const order = {
     contractAddress: 'aContractAddress',
@@ -149,7 +154,7 @@ describe('when handling the failure of excecute order', () => {
   it('should show a toast signaling the failure', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
-      .put(showToast(getExcecuteOrderFailureToast(), 'bottom center'))
+      .put(showToast(getExecuteOrderFailureToast(), 'bottom center'))
       .dispatch(executeOrderFailure(order, nft, error))
       .silentRun()
   })
@@ -205,6 +210,40 @@ describe('when handling the failure of unpicking a favorite item', () => {
         showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
       )
       .dispatch(unpickItemAsFavoriteFailure(item, error))
+      .silentRun()
+  })
+})
+
+describe('when handling the success of deleting a list', () => {
+  let list: List
+  beforeEach(() => {
+    list = {
+      name: 'aListName'
+    } as List
+  })
+
+  it('should show a toast signaling the success of the list deletion', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getDeleteListSuccessToast(list), 'bottom center'))
+      .dispatch(deleteListSuccess(list))
+      .silentRun()
+  })
+})
+
+describe('when handling the failure of deleting a list', () => {
+  let list: List
+  beforeEach(() => {
+    list = {
+      name: 'aListName'
+    } as List
+  })
+
+  it('should show a toast signaling the failure of the list deletion', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getDeleteListFailureToast(list), 'bottom center'))
+      .dispatch(deleteListFailure(list, error))
       .silentRun()
   })
 })

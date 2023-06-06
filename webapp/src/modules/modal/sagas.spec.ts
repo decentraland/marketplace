@@ -11,7 +11,11 @@ import {
   CLAIM_ASSET_SUCCESS,
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
-import { CREATE_LIST_SUCCESS } from '../favorites/actions'
+import {
+  CREATE_LIST_SUCCESS,
+  DELETE_LIST_FAILURE,
+  DELETE_LIST_SUCCESS
+} from '../favorites/actions'
 import { UpsertRentalOptType } from '../rental/types'
 import { closeAllModals, closeModal, openModal } from './actions'
 import { modalSaga } from './sagas'
@@ -19,7 +23,9 @@ import { modalSaga } from './sagas'
 describe.each([
   CLAIM_ASSET_SUCCESS,
   UPSERT_RENTAL_SUCCESS,
-  CREATE_LIST_SUCCESS
+  CREATE_LIST_SUCCESS,
+  DELETE_LIST_SUCCESS,
+  DELETE_LIST_FAILURE
 ])('when handling the success action of the %s action', actionType => {
   it('should put the action to close all modals', () => {
     return expectSaga(modalSaga)

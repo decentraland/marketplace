@@ -67,7 +67,10 @@ import {
   CreateListRequestAction,
   createListFailure,
   createListSuccess,
-  CREATE_LIST_REQUEST
+  CREATE_LIST_REQUEST,
+  DeleteListStartAction,
+  DELETE_LIST_START,
+  deleteListRequest
 } from './actions'
 import { getListId } from './selectors'
 import { FavoritedItems } from './types'
@@ -105,6 +108,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   )
   yield takeEvery(FETCH_LISTS_REQUEST, handleFetchListsRequest)
   yield takeEvery(DELETE_LIST_REQUEST, handleDeleteListRequest)
+  yield takeEvery(DELETE_LIST_START, handleDeleteListStart)
   yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
   yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
   yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
@@ -308,6 +312,17 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     }
   }
 
+  function* handleDeleteListStart(action: DeleteListStartAction) {
+    const { list } = action.payload
+    if (list.itemsCount > 0) {
+      yield put(
+        openModal('ConfirmDeleteListModal', { list: action.payload.list })
+      )
+    } else {
+      yield put(deleteListRequest(list))
+    }
+  }
+
   function* handleDeleteListRequest(action: DeleteListRequestAction) {
     const { list } = action.payload
 
@@ -319,6 +334,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       yield put(
         deleteListFailure(
+          list,
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )

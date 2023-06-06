@@ -27,6 +27,7 @@ import {
   createListSuccess,
   deleteListFailure,
   deleteListRequest,
+  deleteListStart,
   deleteListSuccess,
   fetchFavoritedItemsFailure,
   fetchFavoritedItemsRequest,
@@ -718,6 +719,49 @@ describe('when handling the request for fetching lists', () => {
   })
 })
 
+describe('when handling the start for deleting a list', () => {
+  let list: List
+  beforeEach(() => {
+    list = {
+      id: 'anId',
+      name: 'aName',
+      itemsCount: 1,
+      description: 'aDescription',
+      userAddress: 'aUserAddress',
+      createdAt: Date.now()
+    }
+  })
+
+  describe('and the list has items', () => {
+    beforeEach(() => {
+      list.itemsCount = 1
+    })
+
+    it('should only dispatch an action to open the delete list confirmation modal', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .put(openModal('ConfirmDeleteListModal', { list }))
+        .not.put(deleteListRequest(list))
+        .dispatch(deleteListStart(list))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the list has no items', () => {
+    beforeEach(() => {
+      list.itemsCount = 0
+    })
+
+    it('should only dispatch an action to start the deletion of the list', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[deleteListRequest(list), undefined]])
+        .put(deleteListRequest(list))
+        .not.put(openModal('ConfirmDeleteListModal', { list }))
+        .dispatch(deleteListStart(list))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
 describe('when handling the request for deleting a list', () => {
   let list: List
   beforeEach(() => {
@@ -735,7 +779,7 @@ describe('when handling the request for deleting a list', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([[call(getAccountIdentity), Promise.reject(error)]])
-        .put(deleteListFailure(error.message))
+        .put(deleteListFailure(list, error.message))
         .dispatch(deleteListRequest(list))
         .run({ silenceTimeout: true })
     })
@@ -755,7 +799,7 @@ describe('when handling the request for deleting a list', () => {
           fn: FavoritesAPI.prototype.deleteList,
           args: [list.id]
         })
-        .put(deleteListFailure(error.message))
+        .put(deleteListFailure(list, error.message))
         .dispatch(deleteListRequest(list))
         .run({ silenceTimeout: true })
     })
