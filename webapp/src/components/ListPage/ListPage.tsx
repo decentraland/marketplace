@@ -13,13 +13,13 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Section } from '../../modules/vendor/decentraland'
 import { VendorName } from '../../modules/vendor'
 import { View } from '../../modules/ui/types'
+import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
 import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
 import { timeAgo } from './utils'
-import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
 
 export const LOADER_TEST_ID = 'loader'
 export const EMPTY_VIEW_TEST_ID = 'empty-view'
@@ -43,7 +43,6 @@ const ListPage = ({
   onDeleteList,
   onShareList
 }: Props) => {
-  // TODO: what is pushing the page up?
   const hasFetchedOnce = useRef(false)
 
   useEffect(() => {
@@ -86,7 +85,6 @@ const ListPage = ({
                 >
                   <Icon name="share alternate" />
                 </Button>
-                {/* TODO: should we change the icons to the ones used in the figma? */}
                 <Dropdown
                   compact
                   className={styles.iconContainer}

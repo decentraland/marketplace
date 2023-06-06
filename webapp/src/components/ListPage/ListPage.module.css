@@ -10,7 +10,6 @@
 }
 
 .header:global(.ui.sub.header) {
-  /* TODO: to align the name with the description, the number of items now seems weird */ 
   margin-left: 77px;
   font-style: normal;
   font-weight: 400;

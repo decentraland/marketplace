@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getList } from '../../modules/favorites/selectors'
@@ -9,6 +10,7 @@ import {
 import { RootState } from '../../modules/reducer'
 import { getLoading, getWallet } from '../../modules/wallet/selectors'
 import { openModal } from '../../modules/modal/actions'
+import { locations } from '../../modules/routing/locations'
 import {
   MapStateProps,
   MapDispatch,
@@ -16,8 +18,6 @@ import {
   OwnProps
 } from './ListPage.types'
 import ListPage from './ListPage'
-import { locations } from '../../modules/routing/locations'
-import { push } from 'connected-react-router'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { listId } = ownProps.match.params

@@ -1,6 +1,8 @@
 import { fireEvent } from '@testing-library/react'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { renderWithProviders } from '../../utils/test'
 import { List } from '../../modules/favorites/types'
+import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
 import ListPage, {
   LOADER_TEST_ID,
   EMPTY_VIEW_TEST_ID,
@@ -13,8 +15,6 @@ import ListPage, {
   DELETE_LIST_BUTTON_TEST_ID
 } from './ListPage'
 import { Props } from './ListPage.types'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
 
 const listId = 'aListId'
 let list: List = {
