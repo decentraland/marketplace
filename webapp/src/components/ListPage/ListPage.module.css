@@ -95,7 +95,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: #242129;
+  background: var(--secondary);
   border-radius: 10px;
 }
 
