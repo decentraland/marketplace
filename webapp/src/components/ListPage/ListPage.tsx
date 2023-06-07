@@ -124,7 +124,10 @@ const ListPage = ({
             ) : null}
           </Header>
           {wallet ? (
-            <div data-testid={ASSET_BROWSE_TEST_ID}>
+            <div
+              data-testid={ASSET_BROWSE_TEST_ID}
+              className={styles.assetBrowseContainer}
+            >
               <AssetBrowse
                 view={View.LISTS}
                 section={Section.LISTS}

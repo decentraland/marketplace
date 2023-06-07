@@ -83,6 +83,10 @@
   flex-grow: 1;
 }
 
+.assetBrowseContainer :global(.dcl.page.AssetBrowse) {
+  min-height: unset;
+}
+
 @media (max-width: 768px) {
   .header:global(.ui.header) {
     margin-left: 16px;
