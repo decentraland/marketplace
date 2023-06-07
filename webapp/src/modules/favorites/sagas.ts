@@ -6,7 +6,7 @@ import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { isAPIError, isErrorWithMessage } from '../../lib/error'
+import { isErrorWithMessage } from '../../lib/error'
 import { ItemBrowseOptions } from '../item/types'
 import {
   closeModal,
@@ -75,8 +75,6 @@ import {
 import { getListId } from './selectors'
 import { FavoritedItems } from './types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
-import { push } from 'connected-react-router'
-import { locations } from '../routing/locations'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
