@@ -130,6 +130,11 @@
 .errorSubtitle {
   margin-bottom: 40px;
   text-align: center;
+
+}
+
+.assetBrowseContainer :global(.dcl.page.AssetBrowse) {
+  min-height: unset;
 }
 
 @media (max-width: 768px) {
