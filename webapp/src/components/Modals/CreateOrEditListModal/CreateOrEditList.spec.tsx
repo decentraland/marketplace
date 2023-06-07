@@ -293,7 +293,7 @@ describe('when the name input is blurred', () => {
   })
 })
 
-describe('when the describe input is focused', () => {
+describe('when the description input is focused', () => {
   let renderedModal: ReturnType<typeof renderCreateListModal>
 
   beforeEach(() => {
@@ -309,7 +309,7 @@ describe('when the describe input is focused', () => {
   })
 })
 
-describe('when the describe input is blurred', () => {
+describe('when the description input is blurred', () => {
   let renderedModal: ReturnType<typeof renderCreateListModal>
 
   beforeEach(() => {
