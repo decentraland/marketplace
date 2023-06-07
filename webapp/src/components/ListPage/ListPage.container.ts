@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { getList } from '../../modules/favorites/selectors'
+import { getError, getList } from '../../modules/favorites/selectors'
 import {
   GET_LIST_REQUEST,
   deleteListStart,
@@ -26,7 +26,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     wallet: getWallet(state),
     listId,
     list: listId ? getList(state, listId) : null,
-    isLoading: isLoadingType(getLoading(state), GET_LIST_REQUEST)
+    isLoading: isLoadingType(getLoading(state), GET_LIST_REQUEST),
+    error: getError(state)
   }
 }
 

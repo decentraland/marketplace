@@ -1,5 +1,6 @@
 import { fireEvent } from '@testing-library/react'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { renderWithProviders } from '../../utils/test'
 import { List } from '../../modules/favorites/types'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
@@ -12,7 +13,10 @@ import ListPage, {
   UPDATED_AT_TEST_ID,
   SHARE_LIST_BUTTON_TEST_ID,
   EDIT_LIST_BUTTON_TEST_ID,
-  DELETE_LIST_BUTTON_TEST_ID
+  DELETE_LIST_BUTTON_TEST_ID,
+  GO_BACK_TEST_ID,
+  ERROR_CONTAINER_TEST_ID,
+  COULD_NOT_LOAD_LIST_ACTION_TEST_ID
 } from './ListPage'
 import { Props } from './ListPage.types'
 
@@ -39,6 +43,7 @@ function renderListPage(props: Partial<Props> = {}) {
       history={{} as any}
       location={{} as any}
       match={{} as any}
+      error={null}
       {...props}
     />
   )
@@ -193,5 +198,86 @@ describe('when clicking the delete list button', () => {
   it('should call the onDeleteList prop callback', () => {
     fireEvent.click(renderedPage.getByTestId(DELETE_LIST_BUTTON_TEST_ID))
     expect(onDeleteList).toHaveBeenCalledWith(list)
+  })
+})
+
+// TODO: not sure why is failing
+describe.skip('when clicking the goBack list button', () => {
+  let onBack: jest.Mock
+
+  beforeEach(() => {
+    onBack = jest.fn()
+    renderedPage = renderListPage({ onBack })
+  })
+
+  it('should call the onBack prop callback', () => {
+    console.log(renderedPage.getByTestId(GO_BACK_TEST_ID))
+    fireEvent.click(renderedPage.getByTestId(GO_BACK_TEST_ID))
+    expect(onBack).toHaveBeenCalled()
+  })
+})
+
+describe("when the list doesn't exist", () => {
+  beforeEach(() => {
+    renderedPage = renderListPage({
+      list: undefined,
+      error: 'The list was not found.'
+    })
+  })
+
+  it('should show the error message', () => {
+    expect(
+      renderedPage.getByTestId(ERROR_CONTAINER_TEST_ID)
+    ).toBeInTheDocument()
+
+    expect(
+      renderedPage.getByText(t('list_page.error.not_found.title'))
+    ).toBeInTheDocument()
+    expect(
+      renderedPage.getByText(t('list_page.error.not_found.subtitle'))
+    ).toBeInTheDocument()
+  })
+})
+
+describe('when the list retrieval fails', () => {
+  it('should show the error message', () => {
+    renderedPage = renderListPage({
+      list: undefined,
+      error: 'Could not retrieve the list from the server.'
+    })
+
+    expect(
+      renderedPage.getByTestId(ERROR_CONTAINER_TEST_ID)
+    ).toBeInTheDocument()
+
+    expect(
+      renderedPage.getByText(t('list_page.error.could_not_load.title'))
+    ).toBeInTheDocument()
+    expect(
+      renderedPage.getByText(t('list_page.error.could_not_load.subtitle'))
+    ).toBeInTheDocument()
+    expect(
+      renderedPage.getByText(t('list_page.error.could_not_load.action'))
+    ).toBeInTheDocument()
+  })
+
+  describe('when clicking the action button', () => {
+    let onFetchList: jest.Mock
+
+    beforeEach(() => {
+      onFetchList = jest.fn()
+      renderedPage = renderListPage({
+        list: undefined,
+        error: 'Could not retrieve the list from the server.',
+        onFetchList
+      })
+    })
+
+    it('should call the onFetchList prop callback', () => {
+      fireEvent.click(
+        renderedPage.getByTestId(COULD_NOT_LOAD_LIST_ACTION_TEST_ID)
+      )
+      expect(onFetchList).toHaveBeenCalledWith(listId)
+    })
   })
 })

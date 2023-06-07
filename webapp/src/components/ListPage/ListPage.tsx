@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import {
   Back,
@@ -25,18 +25,21 @@ export const LOADER_TEST_ID = 'loader'
 export const EMPTY_VIEW_TEST_ID = 'empty-view'
 export const ASSET_BROWSE_TEST_ID = 'asset-browse'
 export const LIST_CONTAINER_TEST_ID = 'list-container'
+export const ERROR_CONTAINER_TEST_ID = 'error-container'
 export const GO_BACK_TEST_ID = 'share-list'
 export const PRIVATE_BADGE_TEST_ID = 'private-badge'
 export const UPDATED_AT_TEST_ID = 'updated-at'
 export const SHARE_LIST_BUTTON_TEST_ID = 'share-list'
 export const EDIT_LIST_BUTTON_TEST_ID = 'edit-list'
 export const DELETE_LIST_BUTTON_TEST_ID = 'delete-list'
+export const COULD_NOT_LOAD_LIST_ACTION_TEST_ID = 'could-not-load-list-action'
 
 const ListPage = ({
   wallet,
   listId,
   list,
   isLoading,
+  error,
   onFetchList,
   onBack,
   onEditList,
@@ -45,19 +48,58 @@ const ListPage = ({
 }: Props) => {
   const hasFetchedOnce = useRef(false)
 
-  useEffect(() => {
-    hasFetchedOnce.current = false
-  }, [listId])
-
-  useEffect(() => {
+  const handleFetchList = useCallback(() => {
     if (listId && !isLoading && !hasFetchedOnce.current && wallet) {
       onFetchList(listId)
       hasFetchedOnce.current = true
     }
-  }, [list, listId, onFetchList, isLoading, wallet])
+  }, [listId, isLoading, onFetchList, wallet])
+
+  const renderErrorView = useCallback(() => {
+    const isNotFound = error?.includes('list was not found')
+    const errorType = isNotFound ? 'not_found' : 'could_not_load'
+    return (
+      <div
+        className={styles.errorContainer}
+        data-testid={ERROR_CONTAINER_TEST_ID}
+      >
+        <div className={styles.error}>
+          <div
+            className={classNames(
+              styles.errorImage,
+              isNotFound ? styles.notFoundImage : styles.couldNotLoadImage
+            )}
+          ></div>
+          <h1 className={styles.errorTitle}>
+            {t(`list_page.error.${errorType}.title`)}
+          </h1>
+          <p className={styles.errorSubtitle}>
+            {t(`list_page.error.${errorType}.subtitle`)}
+          </p>
+          {!isNotFound && (
+            <Button
+              primary
+              data-testid={COULD_NOT_LOAD_LIST_ACTION_TEST_ID}
+              onClick={handleFetchList}
+            >
+              {t(`list_page.error.${errorType}.action`)}
+            </Button>
+          )}
+        </div>
+      </div>
+    )
+  }, [error, handleFetchList])
+
+  useEffect(() => {
+    hasFetchedOnce.current = false
+  }, [listId, error])
+
+  useEffect(() => {
+    handleFetchList()
+  }, [list, listId, onFetchList, isLoading, wallet, handleFetchList])
 
   return (
-    <PageLayout activeTab={NavigationTab.MY_LISTS}>
+    <PageLayout activeTab={NavigationTab.MY_LISTS} className={styles.layout}>
       {list ? (
         <div data-testid={LIST_CONTAINER_TEST_ID}>
           <Header className={styles.header} size="large">
@@ -138,8 +180,10 @@ const ListPage = ({
             ></div>
           )}
         </div>
-      ) : (
+      ) : isLoading ? (
         <Loader active size="massive" data-testid={LOADER_TEST_ID} />
+      ) : (
+        error && renderErrorView()
       )}
     </PageLayout>
   )
