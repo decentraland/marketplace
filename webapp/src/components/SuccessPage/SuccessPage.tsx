@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
 import Lottie from 'lottie-react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Button, Header, Icon, Loader } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -19,25 +19,11 @@ import styles from './SuccessPage.module.css'
 const EXPLORER_URL = config.get('EXPLORER_URL', '')
 
 export function SuccessPage(props: Props) {
-  const { isLoading, onNavigate } = props
+  const { isLoading, issuedId } = props
   const search = new URLSearchParams(useLocation().search)
   const contractAddress = search.get('contractAddress')
   const tokenId = search.get('tokenId')
   const assetType = search.get('assetType')
-
-  const handleViewInActivityPage = useCallback(() => {
-    onNavigate(locations.activity())
-  }, [onNavigate])
-
-  const handleViewMyItem = useCallback(() => {
-    if (contractAddress && tokenId) {
-      if (assetType === AssetType.ITEM) {
-        onNavigate(locations.item(contractAddress, tokenId))
-      } else {
-        onNavigate(locations.nft(contractAddress, tokenId))
-      }
-    }
-  }, [contractAddress, tokenId, assetType, onNavigate])
 
   const handleRedirectToExplorer = useCallback(() => {
     window.open(EXPLORER_URL, '_blank')
@@ -78,7 +64,7 @@ export function SuccessPage(props: Props) {
                     <span className={styles.description}>
                       {t('success_page.loading_state.description')}
                     </span>
-                    <Button secondary onClick={handleViewInActivityPage}>
+                    <Button secondary as={Link} to={locations.activity()}>
                       {t('success_page.loading_state.progress_in_activity')}
                     </Button>
                   </>
@@ -103,13 +89,42 @@ export function SuccessPage(props: Props) {
                     {t('success_page.success_state.status')}
                   </span>
                   <div className={styles.actionContainer}>
-                    <Button
-                      className={styles.successButton}
-                      secondary
-                      onClick={handleViewMyItem}
-                    >
-                      {t('success_page.success_state.view_item')}
-                    </Button>
+                    {assetType === AssetType.ITEM && !isLoading && issuedId ? (
+                      <AssetProvider
+                        retry
+                        type={AssetType.NFT}
+                        contractAddress={contractAddress}
+                        tokenId={issuedId.toString()}
+                      >
+                        {asset => {
+                          console.log(locations.nft(contractAddress, asset?.tokenId))
+                          return (
+                            <Button
+                              as={Link}
+                              className={styles.successButton}
+                              secondary
+                              loading={!asset}
+                              to={locations.nft(
+                                contractAddress,
+                                asset?.tokenId
+                              )}
+                            >
+                              {t('success_page.success_state.view_item')}
+                            </Button>
+                          )
+                        }}
+                      </AssetProvider>
+                    ) : (
+                      <Button
+                        as={Link}
+                        className={styles.successButton}
+                        secondary
+                        to={locations.nft(contractAddress, tokenId)}
+                      >
+                        {t('success_page.success_state.view_item')}
+                      </Button>
+                    )}
+
                     {(asset.category === NFTCategory.WEARABLE ||
                       asset.category === NFTCategory.EMOTE) && (
                       <Button
@@ -135,7 +150,7 @@ export function SuccessPage(props: Props) {
                 {t('success_page.error_state.description')}
               </p>
             </div>
-            <Button primary onClick={handleViewInActivityPage}>
+            <Button as={Link} primary to={locations.activity()}>
               {t('success_page.error_state.go_to_activity')}
             </Button>
           </div>

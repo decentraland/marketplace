@@ -6,7 +6,8 @@ import {
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   buildTransactionPayload,
-  buildTransactionWithFromPayload
+  buildTransactionWithFromPayload,
+  buildTransactionWithReceiptPayload
 } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
@@ -107,7 +108,7 @@ describe('when creating the action to signal a successful item request', () => {
       payload: {
         item,
         txHash,
-        ...buildTransactionPayload(chainId, txHash, {
+        ...buildTransactionWithReceiptPayload(chainId, txHash, {
           itemId: item.itemId,
           contractAddress: item.contractAddress,
           network: item.network,

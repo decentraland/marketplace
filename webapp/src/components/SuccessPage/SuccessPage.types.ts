@@ -1,12 +1,8 @@
-import { CallHistoryMethodAction } from "connected-react-router"
-import { Dispatch } from "redux"
+import { BigNumber } from "ethers"
 
 export type Props = {
   isLoading: boolean
-  onNavigate: (path: string) => void
+  issuedId: BigNumber | null
 }
 
-export type MapStateProps = Pick<Props, 'isLoading'>
-export type MapDispatchProps = Pick<Props, 'onNavigate'>
-
-export type MapDispatch = Dispatch<CallHistoryMethodAction>
+export type MapStateProps = Pick<Props, 'isLoading' | 'issuedId'>

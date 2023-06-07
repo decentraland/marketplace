@@ -26,7 +26,9 @@ import {
   TRANSFER_NFT_SUCCESS,
   TransferNFTRequestAction,
   TransferNFTSuccessAction,
-  TransferNFTFailureAction
+  TransferNFTFailureAction,
+  ClearNFTErrorsAction,
+  CLEAR_NFT_ERRORS
 } from './actions'
 
 export type NFTState = {
@@ -52,6 +54,7 @@ type NFTReducerAction =
   | TransferNFTSuccessAction
   | TransferNFTFailureAction
   | UpsertRentalSuccessAction
+  | ClearNFTErrorsAction
 
 export function nftReducer(
   state: NFTState = INITIAL_STATE,
@@ -119,6 +122,12 @@ export function nftReducer(
           }
         },
         loading: loadingReducer(state.loading, action),
+        error: null
+      }
+    }
+    case CLEAR_NFT_ERRORS: {
+      return {
+        ...state,
         error: null
       }
     }

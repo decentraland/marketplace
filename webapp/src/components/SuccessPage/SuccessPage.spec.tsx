@@ -23,7 +23,7 @@ jest.mock('lottie-react', () => () => <div>LOTTIE</div>)
 
 function renderSuccessPage(props: Partial<Props> = {}) {
   return renderWithProviders(
-    <SuccessPage isLoading={false} onNavigate={jest.fn()} {...props} />,
+    <SuccessPage isLoading={false} issuedId={null} {...props} />,
     {
       preloadedState: {
         nft: {
@@ -50,7 +50,7 @@ let screen: RenderResult
 
 describe('when transaction is still loading', () => {
   beforeEach(async () => {
-    props = { isLoading: true, onNavigate: jest.fn() }
+    props = { isLoading: true }
     screen = renderSuccessPage(props)
     await waitForComponentToFinishLoading(screen)
   })
@@ -60,21 +60,11 @@ describe('when transaction is still loading', () => {
       screen.getByText(t('success_page.loading_state.status'))
     ).toBeInTheDocument()
   })
-
-  describe('when see progress in activity button is clicked', () => {
-    it('should call onNavigate function with correct path', async () => {
-      const activityButton = screen.getByRole('button', {
-        name: t('success_page.loading_state.progress_in_activity')
-      })
-      await userEvent.click(activityButton)
-      expect(props.onNavigate).toHaveBeenCalledWith(locations.activity())
-    })
-  })
 })
 
 describe('when transaction finishes successfully', () => {
   beforeEach(async () => {
-    props = { isLoading: false, onNavigate: jest.fn() }
+    props = { isLoading: false }
     screen = renderSuccessPage(props)
     await waitForComponentToFinishLoading(screen)
   })
@@ -83,18 +73,6 @@ describe('when transaction finishes successfully', () => {
     expect(
       screen.getByText(t('success_page.success_state.status'))
     ).toBeInTheDocument()
-  })
-
-  describe('when view item button is clicked', () => {
-    it('should call onNavigate function with correct path', async () => {
-      const viewItemButton = screen.getByRole('button', {
-        name: t('success_page.success_state.view_item')
-      })
-      await userEvent.click(viewItemButton)
-      expect(props.onNavigate).toHaveBeenCalledWith(
-        locations.nft('address', '1')
-      )
-    })
   })
 
   describe('when view in explorer button clicked', () => {
