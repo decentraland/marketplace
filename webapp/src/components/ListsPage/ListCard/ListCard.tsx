@@ -16,7 +16,7 @@ import {
   ITEM_COUNT_DATA_TEST_ID,
   LIST_NAME_DATA_TEST_ID,
   PRIVATE_DATA_TEST_ID
-} from './consts'
+} from './constants'
 
 const ListCard = (props: Props) => {
   const { list, items, onDeleteList, onEditList } = props
