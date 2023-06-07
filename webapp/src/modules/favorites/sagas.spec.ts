@@ -843,23 +843,21 @@ describe('when handling the request for getting a list', () => {
   })
 
   describe('and the call to the favorites api fails', () => {
-    describe('and the error is another one', () => {
-      it('should dispatch an action signaling the failure of the handled action', () => {
-        return expectSaga(favoritesSaga, getIdentity)
-          .provide([
-            [
-              matchers.call.fn(FavoritesAPI.prototype.getList),
-              Promise.reject(error)
-            ]
-          ])
-          .call.like({
-            fn: FavoritesAPI.prototype.getList,
-            args: [list.id]
-          })
-          .put(getListFailure(list.id, error.message))
-          .dispatch(getListRequest(list.id))
-          .run({ silenceTimeout: true })
-      })
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [
+            matchers.call.fn(FavoritesAPI.prototype.getList),
+            Promise.reject(error)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.getList,
+          args: [list.id]
+        })
+        .put(getListFailure(list.id, error.message))
+        .dispatch(getListRequest(list.id))
+        .run({ silenceTimeout: true })
     })
   })
 
