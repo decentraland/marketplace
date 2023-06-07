@@ -69,6 +69,8 @@
 
 .CampaignHomepageBanner .event-banner-hat {
   width: 256px;
+  height: 219px;
+  align-self: center;
 }
 
 @media (max-width: 768px) {

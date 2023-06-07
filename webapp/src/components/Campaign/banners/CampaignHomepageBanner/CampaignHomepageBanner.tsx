@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button, Desktop, TabletAndBelow } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../../modules/routing/locations'
+import { AssetType } from '../../../../modules/asset/types'
 import * as decentraland from '../../../../modules/vendor/decentraland'
 import { VendorName } from '../../../../modules/vendor'
 import { SortBy } from '../../../../modules/routing/types'
@@ -41,7 +42,6 @@ const CampaignHomepageBanner: React.FC = () => {
             {t('event_campaign.homepage.subtitle_mobile')}
           </span>
         </TabletAndBelow>
-
         <Button
           primary
           as={Link}
@@ -50,6 +50,7 @@ const CampaignHomepageBanner: React.FC = () => {
             vendor: VendorName.DECENTRALAND,
             page: 1,
             sortBy: SortBy.RECENTLY_LISTED,
+            assetType: AssetType.ITEM,
             onlyOnSale: true
           })}
           className="event-banner-browse-button"
