@@ -1206,27 +1206,32 @@
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },
   "campaign": {
-    "tab": "MVFW23",
-    "badge": "MVFW23"
+    "tab": "PRIDE23",
+    "badge": "PRIDE23",
+    "event_tag": "PRIDE23",
+    "event_hashtag": "#MetaversePride23"
   },
-  "fashion_week_campaign": {
-    "banner": {
-      "homepage": {
-        "title": "¿Estás listo para la pasarela?",
-        "subtitle": "Ya sea que estes en un asiento de primera fila en la pasarela o luciendote, obtené todo lo que necesitas para el Metaverse Fashion Week: atuendos, accesorios y movimientos, todo en un solo lugar.",
-        "cta": "Buscar mvfw items",
-        "cta_mobile": "Buscar items"
-      },
-      "collectibles": {
-        "title": "¿Estás listo para la pasarela?",
-        "subtitle": "Ya sea que estes en un asiento de primera fila en la pasarela o luciendote, obtené todo lo que necesitas para el Metaverse Fashion Week: atuendos, accesorios y movimientos, todo en un solo lugar.",
-        "cta": "Buscar mvfw items",
-        "cta_mobile": "Buscar items"
-      },
-      "campaign_browser": {
-        "title": "Esenciales de la semana de la moda del metaverso",
-        "subtitle": "Encuentre aquí los Wearables y Emotes más populares para el evento más glamoroso de Decentraland."
-      }
+  "event_campaign": {
+    "homepage": {
+      "title": "Prepará el look perfecto para Pride!",
+      "subtitle": "Muestre su orgullo en Decentraland durante {event_hashtag} con Wearables y emotes que celebran la inclusión y la diversidad en el metaverso: encuentre todo lo que necesita en un solo lugar.",
+      "subtitle_mobile": "Muestre su orgullo en Decentraland con Wearables y Emotes creados por la comunidad: encuentre todo lo que necesita en un solo lugar.",
+      "cta": "Buscar Items Pride",
+      "dates": "JUNIO 27-29",
+      "slogan": "CELEBRA LA DIVERSIDAD E INCLUSION EN EL METAVERSO"
+    },
+    "collectibles": {
+      "title": "Prepará el look perfecto para Pride!",
+      "subtitle": "Muestre su orgullo en Decentraland durante {event_hashtag} con Wearables y emotes que celebran la inclusión y la diversidad en el metaverso: encuentre todo lo que necesita en un solo lugar.",
+      "subtitle_mobile": "Muestre su orgullo en Decentraland con Wearables y Emotes creados por la comunidad: encuentre todo lo que necesita en un solo lugar.",
+      "cta": "Buscar Items Pride",
+      "dates": "JUNIO 27-29",
+      "slogan": "CELEBRA LA DIVERSIDAD E INCLUSION EN EL METAVERSO"
+    },
+    "campaign_browser": {
+      "title": "Esenciales Pride del metaverso",
+      "subtitle": "Celebre la inclusión y la diversidad durante {event_hashtag} Prepare el look perfecto para el desfile del Orgullo con vibrantes Wearables y Emotes de la comunidad DCL.",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
     }
   },
   "asset_card": {

@@ -1214,27 +1214,32 @@
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
   "campaign": {
-    "tab": "MVFW23",
-    "badge": "MVFW23"
+    "tab": "PRIDE23",
+    "badge": "PRIDE23",
+    "event_tag": "PRIDE23",
+    "event_hashtag": "#MetaversePride23"
   },
-  "fashion_week_campaign": {
-    "banner": {
-      "homepage": {
-        "title": "Are you ready for the runway?",
-        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
-        "cta": "Browse mvfw Items",
-        "cta_mobile": "Browse"
-      },
-      "collectibles": {
-        "title": "Are you ready for the runway?",
-        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
-        "cta": "Browse mvfw Items",
-        "cta_mobile": "Browse"
-      },
-      "campaign_browser": {
-        "title": "Metaverse Fashion Week Essentials",
-        "subtitle": "Find the hottest Wearables and Emotes for Decentraland's most glamorous event right here."
-      }
+  "event_campaign": {
+    "homepage": {
+      "title": "Prepare the Perfect Pride Look!",
+      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
+      "subtitle_mobile": "Show your Pride in Decentraland with prismatic Wearables & Emotes made by the community—find everything you need in one place.",
+      "cta": "Browse Pride Items",
+      "dates": "JUNE 27-29",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+    },
+    "collectibles": {
+      "title": "Prepare the Perfect Pride Look!",
+      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
+      "cta": "Browse Pride Items",
+      "cta_mobile": "Browse",
+      "dates": "JUNE 27-29",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+    },
+    "campaign_browser": {
+      "title": "Metaverse Pride Essentials",
+      "subtitle": "Celebrate Inclusivity & Diversity during {event_hashtag} Prepare the perfect Pride parade look with vibrant Wearables & Emotes from the DCL community.",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
     }
   },
   "asset_card": {

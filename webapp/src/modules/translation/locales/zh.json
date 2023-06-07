@@ -1211,27 +1211,32 @@
     "confirm_transaction": "确认您钱包上的交易以继续"
   },
   "campaign": {
-    "tab": "MVFW23",
-    "badge": "MVFW23"
+    "tab": "PRIDE23",
+    "badge": "PRIDE23",
+    "event_tag": "PRIDE23",
+    "event_hashtag": "#MetaversePride23"
   },
-  "fashion_week_campaign": {
-    "banner": {
-      "homepage": {
-        "title": "你准备好跑道了吗？",
-        "subtitle": "无论您是坐在 T 台的前排座位上还是在 T 台上炫耀自己的东西，元界时装周所需的一切——服装、配饰和动作——都集中在一个地方。",
-        "cta": "浏览 mvfw 项目",
-        "cta_mobile": "浏览 mvfw 项目"
-      },
-      "collectibles": {
-        "title": "你准备好跑道了吗？",
-        "subtitle": "无论您是坐在 T 台的前排座位上还是在 T 台上炫耀自己的东西，元界时装周所需的一切——服装、配饰和动作——都集中在一个地方。",
-        "cta": "浏览 mvfw 项目",
-        "cta_mobile": "浏览 mvfw 项目"
-      },
-      "campaign_browser": {
-        "title": "元界时装周要点",
-        "subtitle": "在这里为 Decentraland 最迷人的活动寻找最热门的可穿戴设备和表情。"
-      }
+  "event_campaign": {
+    "homepage": {
+      "title": "為 Pride 打造完美造型！",
+      "subtitle": "在 {event_hashtag} 期間通過可穿戴設備和表情展示您對 Decentraland 的自豪感，慶祝元宇宙中的包容性和多樣性 - 在一個地方找到您需要的一切。",
+      "subtitle_mobile": "通過社區創建的可穿戴設備和表情展示您對 Decentraland 的自豪感——在一個地方找到您需要的一切。",
+      "cta": "搜索驕傲物品",
+      "dates": "月 27 日至 29 日",
+      "slogan": "慶祝元宇宙的多樣性和包容性"
+    },
+    "collectibles": {
+      "title": "為 Pride 打造完美造型！",
+      "subtitle": "在 {event_hashtag} 期間通過可穿戴設備和表情展示您對 Decentraland 的自豪感，慶祝元宇宙中的包容性和多樣性 - 在一個地方找到您需要的一切。",
+      "subtitle_mobile": "通過社區創建的可穿戴設備和表情展示您對 Decentraland 的自豪感——在一個地方找到您需要的一切。",
+      "cta": "搜索驕傲物品",
+      "dates": "月 27 日至 29 日",
+      "slogan": "慶祝元宇宙的多樣性和包容性"
+    },
+    "campaign_browser": {
+      "title": "元界驕傲精華",
+      "subtitle": "在 {event_hashtag} 期間慶祝包容性和多樣性 將驕傲遊行的完美外觀與來自 DCL 社區的充滿活力的可穿戴設備和表情組合在一起。",
+      "slogan": "慶祝元宇宙的多樣性和包容性"
     }
   },
   "asset_card": {
