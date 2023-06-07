@@ -1,0 +1,8 @@
+export const EMPTY_PREVIEW_DATA_TEST_ID = 'list-card-empty-preview'
+export const GRID_PREVIEW_DATA_TEST_ID = 'list-card-grid-preview'
+export const LIST_NAME_DATA_TEST_ID = 'list-card-list-name'
+export const ITEM_COUNT_DATA_TEST_ID = 'list-card-item-count'
+export const PRIVATE_DATA_TEST_ID = 'list-card-private'
+export const EDIT_LIST_DATA_TEST_ID = 'list-card-edit-list'
+export const DELETE_LIST_DATA_TEST_ID = 'list-card-delete-list'
+export const ACTIONS_DATA_TEST_ID = 'list-card-actions'
