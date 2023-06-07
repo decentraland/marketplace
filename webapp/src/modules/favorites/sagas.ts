@@ -354,9 +354,6 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )
-
-      if (isAPIError(error) && error.status === 404)
-        yield put(push(locations.lists()))
     }
   }
 
