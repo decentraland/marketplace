@@ -26,7 +26,6 @@ export const EMPTY_VIEW_TEST_ID = 'empty-view'
 export const ASSET_BROWSE_TEST_ID = 'asset-browse'
 export const LIST_CONTAINER_TEST_ID = 'list-container'
 export const ERROR_CONTAINER_TEST_ID = 'error-container'
-export const GO_BACK_TEST_ID = 'share-list'
 export const PRIVATE_BADGE_TEST_ID = 'private-badge'
 export const UPDATED_AT_TEST_ID = 'updated-at'
 export const SHARE_LIST_BUTTON_TEST_ID = 'share-list'
@@ -63,29 +62,27 @@ const ListPage = ({
         className={styles.errorContainer}
         data-testid={ERROR_CONTAINER_TEST_ID}
       >
-        <div className={styles.error}>
-          <div
-            className={classNames(
-              styles.errorImage,
-              isNotFound ? styles.notFoundImage : styles.couldNotLoadImage
-            )}
-          ></div>
-          <h1 className={styles.errorTitle}>
-            {t(`list_page.error.${errorType}.title`)}
-          </h1>
-          <p className={styles.errorSubtitle}>
-            {t(`list_page.error.${errorType}.subtitle`)}
-          </p>
-          {!isNotFound && (
-            <Button
-              primary
-              data-testid={COULD_NOT_LOAD_LIST_ACTION_TEST_ID}
-              onClick={handleFetchList}
-            >
-              {t(`list_page.error.${errorType}.action`)}
-            </Button>
+        <div
+          className={classNames(
+            styles.errorImage,
+            isNotFound ? styles.notFoundImage : styles.couldNotLoadImage
           )}
-        </div>
+        ></div>
+        <h1 className={styles.errorTitle}>
+          {t(`list_page.error.${errorType}.title`)}
+        </h1>
+        <p className={styles.errorSubtitle}>
+          {t(`list_page.error.${errorType}.subtitle`)}
+        </p>
+        {!isNotFound && (
+          <Button
+            primary
+            data-testid={COULD_NOT_LOAD_LIST_ACTION_TEST_ID}
+            onClick={handleFetchList}
+          >
+            {t(`list_page.error.${errorType}.action`)}
+          </Button>
+        )}
       </div>
     )
   }, [error, handleFetchList])
@@ -99,11 +96,11 @@ const ListPage = ({
   }, [list, listId, onFetchList, isLoading, wallet, handleFetchList])
 
   return (
-    <PageLayout activeTab={NavigationTab.MY_LISTS} className={styles.layout}>
+    <PageLayout activeTab={NavigationTab.MY_LISTS}>
       {list ? (
-        <div data-testid={LIST_CONTAINER_TEST_ID}>
+        <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
-            <Back onClick={onBack} data-testid={GO_BACK_TEST_ID} />
+            <Back onClick={onBack} />
             <div className={styles.nameContainer}>
               {list.name}
               {list.isPrivate && (

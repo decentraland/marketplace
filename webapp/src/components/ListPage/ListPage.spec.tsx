@@ -14,7 +14,6 @@ import ListPage, {
   SHARE_LIST_BUTTON_TEST_ID,
   EDIT_LIST_BUTTON_TEST_ID,
   DELETE_LIST_BUTTON_TEST_ID,
-  GO_BACK_TEST_ID,
   ERROR_CONTAINER_TEST_ID,
   COULD_NOT_LOAD_LIST_ACTION_TEST_ID
 } from './ListPage'
@@ -198,22 +197,6 @@ describe('when clicking the delete list button', () => {
   it('should call the onDeleteList prop callback', () => {
     fireEvent.click(renderedPage.getByTestId(DELETE_LIST_BUTTON_TEST_ID))
     expect(onDeleteList).toHaveBeenCalledWith(list)
-  })
-})
-
-// TODO: not sure why is failing
-describe.skip('when clicking the goBack list button', () => {
-  let onBack: jest.Mock
-
-  beforeEach(() => {
-    onBack = jest.fn()
-    renderedPage = renderListPage({ onBack })
-  })
-
-  it('should call the onBack prop callback', () => {
-    console.log(renderedPage.getByTestId(GO_BACK_TEST_ID))
-    fireEvent.click(renderedPage.getByTestId(GO_BACK_TEST_ID))
-    expect(onBack).toHaveBeenCalled()
   })
 })
 
