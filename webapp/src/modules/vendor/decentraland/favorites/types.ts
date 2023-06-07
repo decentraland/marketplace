@@ -10,6 +10,7 @@ export type PicksOptions = PaginationParameters
 export type ListsOptions = PaginationParameters & {
   sortBy?: ListsSortBy
   sortDirection?: SortDirection
+  itemId?: string
 }
 
 export enum ListsSortBy {

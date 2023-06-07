@@ -182,7 +182,8 @@ describe('when getting the lists', () => {
     ['first', 10, 'limit'],
     ['skip', 20, 'offset'],
     ['sortBy', 'name', 'sortBy'],
-    ['sortDirection', 'asc', 'sortDirection']
+    ['sortDirection', 'asc', 'sortDirection'],
+    ['itemId', 'anItemId', 'itemId']
   ])(
     'when the request is made with the %s parameter',
     (parameter, value, expectedParameter) => {

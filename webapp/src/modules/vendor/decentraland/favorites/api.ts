@@ -49,6 +49,10 @@ export class FavoritesAPI extends BaseClient {
       queryParams.append('sortBy', options.sortBy.toString())
     }
 
+    if (options.itemId !== undefined) {
+      queryParams.append('itemId', options.itemId)
+    }
+
     return (
       '/v1/lists' + (queryParams.toString() && `?${queryParams.toString()}`)
     )
