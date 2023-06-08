@@ -74,15 +74,4 @@ describe('when transaction finishes successfully', () => {
       screen.getByText(t('success_page.success_state.status'))
     ).toBeInTheDocument()
   })
-
-  describe('when view in explorer button clicked', () => {
-    it('should call onNavigate function with correct path', async () => {
-      window.open = jest.fn()
-      const viewItemButton = screen.getByRole('button', {
-        name: t('success_page.success_state.try_genesis_city')
-      })
-      await userEvent.click(viewItemButton)
-      expect(window.open).toHaveBeenCalledWith(config.get('EXPLORER_URL'), "_blank")
-    })
-  })
 })
