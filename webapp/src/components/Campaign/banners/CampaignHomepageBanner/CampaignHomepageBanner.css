@@ -1,61 +1,108 @@
 .CampaignHomepageBanner {
+  width: 100%;
+  padding: 25px 50px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-image: url(../mvfw-banner.png);
-  background-position: center;
-  background-repeat: no-repeat;
+  background-image: url('../pride-banner.png');
   background-size: cover;
-  height: 260px;
-  padding: 16px 48px;
+  background-position: center;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 50px;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-.CampaignHomepageBanner .ui.header {
-  color: white;
-  margin-bottom: 8px;
-  font-size: 24px;
-  line-height: 26px;
-  text-transform: uppercase;
-  font-weight: bold;
-  text-align: center;
-}
-
-.CampaignHomepageBanner p {
-  color: white;
-  font-size: 16px;
-  line-height: 18px;
-  text-align: center;
-}
-
-.CampaignHomepageBanner .copy {
-  flex: 0 1 auto;
-  margin-bottom: 20px;
-  max-width: 760px;
+.CampaignHomepageBanner .event-banner-text {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  color: white;
+  align-self: center;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 26px;
+  gap: 10px;
+  justify-content: center;
 }
 
-.CampaignHomepageBanner .ui.button.browse-button {
+.CampaignHomepageBanner .event-banner-logo-container {
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  line-height: unset;
+}
+
+.CampaignHomepageBanner .event-banner-logo {
+  width: 320px;
+}
+
+.CampaignHomepageBanner .title {
+  font-size: 34px;
+  line-height: 29px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  align-self: center;
+  margin-top: 15px;
+}
+
+.CampaignHomepageBanner .subtitle {
+  text-align: center;
+  overflow-wrap: break-word;
+  font-size: 19px;
+  font-weight: 700;
+  word-spacing: -1px;
+}
+
+.CampaignHomepageBanner .event-banner-pink {
+  color: #fd98ff;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.CampaignHomepageBanner .ui.button.event-banner-browse-button {
+  width: 256px;
   flex: none;
+  align-self: center;
+  font-weight: 800;
+  margin-top: 15px;
+}
+
+.CampaignHomepageBanner .event-banner-hat {
+  width: 256px;
+  height: 219px;
+  align-self: center;
 }
 
 @media (max-width: 768px) {
   .CampaignHomepageBanner {
-    background-image: url(../mvfw-banner-mobile.png);
+    background-image: url(../pride-banner-mobile.png);
     height: auto;
-    padding: 25px 48px;
+    padding: 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
   }
+
   .CampaignHomepageBanner .copy {
     margin-right: 0px;
     margin-bottom: 20px;
   }
 
-  .CampaignHomepageBanner .ui.header {
-    font-size: 20px;
+  .CampaignHomepageBanner .title {
+    font-size: 24px;
   }
+
   .CampaignHomepageBanner p {
     font-size: 14px;
+    word-spacing: -2.4px;
+  }
+  .CampaignHomepageBanner .subtitle {
+    text-align: unset;
+  }
+  .CampaignHomepageBanner .event-banner-hat {
+    display: none;
+  }
+  .CampaignHomepageBanner .event-banner-logo {
+    width: 250px;
   }
 }

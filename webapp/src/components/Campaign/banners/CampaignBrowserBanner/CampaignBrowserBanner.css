@@ -2,37 +2,48 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url(../mvfw-banner.png);
+  background-image: url(../pride-banner.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   height: 260px;
   padding: 16px 48px;
   text-align: center;
+  gap: 100px;
+}
+
+.CampaignBrowserBanner .logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .CampaignBrowserBanner .ui.header {
   color: white;
   margin-bottom: 8px;
-  font-size: 24px;
+  font-size: 34px;
   line-height: 26px;
-  font-weight: bold;
+  font-weight: 800;
+  margin-bottom: 10px;
   text-transform: uppercase;
+  text-align: start;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.CampaignBrowserBanner .copy::before {
-  content: '';
-  width: 118px;
-  height: 32px;
-  background: url('../mvmf-logo.png');
-  background-size: contain;
-  margin-bottom: 20px;
+.CampaignBrowserBanner .event-banner-logo {
+  width: 320px;
 }
 
 .CampaignBrowserBanner p {
-  color: white;
-  font-size: 16px;
-  line-height: 18px;
+  text-align: justify;
+  overflow-wrap: break-word;
+  font-size: 19px;
+  font-weight: 700;
+  word-spacing: -1px;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .CampaignBrowserBanner .copy {
@@ -41,27 +52,40 @@
   max-width: 700px;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
-.CampaignBrowserBanner .ui.button {
-  flex: none;
+.CampaignBrowserBanner .ui.primary.button.event-banner-browse-button {
+  background-color: #fd98ff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.CampaignBrowserBanner .event-banner-pink {
+  color: #fd98ff;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 768px) {
   .CampaignBrowserBanner {
-    background-image: url(../mvfw-banner-mobile.png);
+    background-image: url(../pride-banner-mobile.png);
     height: auto;
-    padding: 25px 48px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .CampaignBrowserBanner .event-banner-logo {
+    width: 250px;
   }
   .CampaignBrowserBanner .copy {
     margin-right: 0px;
-    margin-bottom: 20px;
   }
   .CampaignBrowserBanner .ui.header {
     font-size: 20px;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
   }
   .CampaignBrowserBanner p {
-    font-size: 14px;
+    font-size: 15px;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: start;
   }
 }
