@@ -162,7 +162,10 @@
   }
 
   .header:global(.ui.sub.header) {
-    margin-left: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 24px;
   }
 }
 
