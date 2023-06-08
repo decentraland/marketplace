@@ -3,15 +3,3 @@
   margin: 0 24px 20px;
   position: relative;
 }
-
-.CampaignHomepageBanner .copy::before,
-.CampaignBrowserBanner .copy::before,
-.CampaignCollectiblesBanner .copy::before
- {
-  content: '';
-  width: 118px;
-  height: 32px;
-  background: url('../banners/mvmf-logo.png');
-  background-size: contain;
-  margin-bottom: 20px;
-}
