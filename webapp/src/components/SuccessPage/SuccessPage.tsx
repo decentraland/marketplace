@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import classNames from 'classnames'
 import Lottie from 'lottie-react'
 import { Link, useLocation } from 'react-router-dom'
@@ -24,10 +23,6 @@ export function SuccessPage(props: Props) {
   const contractAddress = search.get('contractAddress')
   const tokenId = search.get('tokenId')
   const assetType = search.get('assetType')
-
-  const handleRedirectToExplorer = useCallback(() => {
-    window.open(EXPLORER_URL, '_blank')
-  }, [])
 
   return (
     <div className={styles.pageContainer}>
@@ -97,7 +92,9 @@ export function SuccessPage(props: Props) {
                         tokenId={issuedId.toString()}
                       >
                         {asset => {
-                          console.log(locations.nft(contractAddress, asset?.tokenId))
+                          console.log(
+                            locations.nft(contractAddress, asset?.tokenId)
+                          )
                           return (
                             <Button
                               as={Link}
@@ -119,7 +116,11 @@ export function SuccessPage(props: Props) {
                         as={Link}
                         className={styles.successButton}
                         secondary
-                        to={locations.nft(contractAddress, tokenId)}
+                        to={
+                          assetType === AssetType.ITEM
+                            ? locations.item(contractAddress, tokenId)
+                            : locations.nft(contractAddress, tokenId)
+                        }
                       >
                         {t('success_page.success_state.view_item')}
                       </Button>
@@ -130,7 +131,9 @@ export function SuccessPage(props: Props) {
                       <Button
                         className={styles.successButton}
                         primary
-                        onClick={handleRedirectToExplorer}
+                        as="a"
+                        href={EXPLORER_URL}
+                        target="_blank"
                       >
                         {t('success_page.success_state.try_genesis_city')}
                       </Button>
