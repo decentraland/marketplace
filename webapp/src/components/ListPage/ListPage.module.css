@@ -127,23 +127,33 @@
 
 }
 
-.assetBrowseContainer :global(.dcl.page.AssetBrowse) {
-  min-height: unset;
-}
-
 .assetBrowseContainer {
   flex-grow: 1;
 }
 
-.assetBrowseContainer :global(.dcl.page.AssetBrowse),
-.assetBrowseContainer :global(.dcl.page.AssetBrowse .ui.container),
-.assetBrowseContainer :global(.dcl.page.AssetBrowse .ui.container .Row),
-.assetBrowseContainer :global(.dcl.page.AssetBrowse .ui.container .AssetsList)
-{
+.empty {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+  text-align: center;
+  background: var(--secondary);
+  border-radius: 10px;
   flex-grow: 1;
   height: 100%;
+  justify-content: center;
+}
+
+.emptyLogo {
+  background-image: url('../../images/empty-list.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+}
+
+.emptyActions {
+  margin-top: 20px;
 }
 
 @media (max-width: 768px) {

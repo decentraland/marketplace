@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import {
   Back,
@@ -11,6 +12,7 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatDistanceToNow } from '../../lib/date'
+import { locations } from '../../modules/routing/locations'
 import { Section } from '../../modules/vendor/decentraland'
 import { VendorName } from '../../modules/vendor'
 import { View } from '../../modules/ui/types'
@@ -22,7 +24,7 @@ import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
 
 export const LOADER_TEST_ID = 'loader'
-export const EMPTY_VIEW_TEST_ID = 'empty-view'
+export const EMPTY_LIST_TEST_ID = 'empty-view'
 export const ASSET_BROWSE_TEST_ID = 'asset-browse'
 export const LIST_CONTAINER_TEST_ID = 'list-container'
 export const ERROR_CONTAINER_TEST_ID = 'error-container'
@@ -167,18 +169,26 @@ const ListPage = ({
               data-testid={ASSET_BROWSE_TEST_ID}
               className={styles.assetBrowseContainer}
             >
-              <AssetBrowse
-                view={View.LISTS}
-                section={Section.LISTS}
-                vendor={VendorName.DECENTRALAND}
-              />
+              {list.itemsCount ? (
+                <AssetBrowse
+                  view={View.LISTS}
+                  section={Section.LISTS}
+                  vendor={VendorName.DECENTRALAND}
+                />
+              ) : (
+                <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
+                  <div className={styles.emptyLogo}></div>
+                  <h1>{t('list_page.empty.title')}</h1>
+                  <p>{t('list_page.empty.subtitle')}</p>
+                  <div className={styles.emptyActions}>
+                    <Button primary as={Link} to={locations.browse()}>
+                      {t('list_page.empty.action')}
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
-          ) : (
-            <div
-              className={styles.emptyState}
-              data-testid={EMPTY_VIEW_TEST_ID}
-            ></div>
-          )}
+          ) : null}
         </div>
       ) : isLoading ? (
         <Loader active size="massive" data-testid={LOADER_TEST_ID} />

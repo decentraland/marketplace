@@ -6,7 +6,7 @@ import { List } from '../../modules/favorites/types'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
 import ListPage, {
   LOADER_TEST_ID,
-  EMPTY_VIEW_TEST_ID,
+  EMPTY_LIST_TEST_ID,
   ASSET_BROWSE_TEST_ID,
   LIST_CONTAINER_TEST_ID,
   PRIVATE_BADGE_TEST_ID,
@@ -143,8 +143,24 @@ describe('when rendering the ListPage but the wallet has not been yet fetched', 
     renderedPage = renderListPage({ wallet: undefined })
   })
 
-  it('should show the empty view', () => {
-    expect(renderedPage.getByTestId(EMPTY_VIEW_TEST_ID)).toBeInTheDocument()
+  it('should hide the asset browse content', () => {
+    expect(renderedPage.queryByTestId(ASSET_BROWSE_TEST_ID)).toBeNull()
+  })
+})
+
+describe('when rendering the ListPage with an empty list', () => {
+  beforeEach(() => {
+    renderedPage = renderListPage({ list: { ...list, itemsCount: 0 } })
+  })
+
+  it('should render the empty list message', () => {
+    expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
+    expect(
+      renderedPage.getByText(t('list_page.empty.title'))
+    ).toBeInTheDocument()
+    expect(
+      renderedPage.getByText(t('list_page.empty.subtitle'))
+    ).toBeInTheDocument()
   })
 })
 
