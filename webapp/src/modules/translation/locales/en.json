@@ -18,6 +18,7 @@
     "ens": "Name",
     "art": "Art",
     "cancel": "Cancel",
+    "save": "Save",
     "proceed": "Proceed",
     "create": "Create",
     "continue": "Continue",
@@ -1215,27 +1216,32 @@
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
   "campaign": {
-    "tab": "MVFW23",
-    "badge": "MVFW23"
+    "tab": "PRIDE23",
+    "badge": "PRIDE23",
+    "event_tag": "PRIDE23",
+    "event_hashtag": "#MetaversePride23"
   },
-  "fashion_week_campaign": {
-    "banner": {
-      "homepage": {
-        "title": "Are you ready for the runway?",
-        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
-        "cta": "Browse mvfw Items",
-        "cta_mobile": "Browse"
-      },
-      "collectibles": {
-        "title": "Are you ready for the runway?",
-        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
-        "cta": "Browse mvfw Items",
-        "cta_mobile": "Browse"
-      },
-      "campaign_browser": {
-        "title": "Metaverse Fashion Week Essentials",
-        "subtitle": "Find the hottest Wearables and Emotes for Decentraland's most glamorous event right here."
-      }
+  "event_campaign": {
+    "homepage": {
+      "title": "Prepare the Perfect Pride Look!",
+      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
+      "subtitle_mobile": "Show your Pride in Decentraland with prismatic Wearables & Emotes made by the community—find everything you need in one place.",
+      "cta": "Browse Pride Items",
+      "dates": "JUNE 27-29",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+    },
+    "collectibles": {
+      "title": "Prepare the Perfect Pride Look!",
+      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
+      "cta": "Browse Pride Items",
+      "cta_mobile": "Browse",
+      "dates": "JUNE 27-29",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+    },
+    "campaign_browser": {
+      "title": "Metaverse Pride Essentials",
+      "subtitle": "Celebrate Inclusivity & Diversity during {event_hashtag} Prepare the perfect Pride parade look with vibrant Wearables & Emotes from the DCL community.",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
     }
   },
   "asset_card": {
@@ -1300,11 +1306,17 @@
     "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
     "btn": "Claim your name"
   },
-  "create_list_modal": {
-    "title": "Create List",
+  "create_or_edit_list_modal": {
+    "create": {
+      "title": "Create List",
+      "private": "Create as private list"
+    },
+    "edit": {
+      "title": "Edit List",
+      "private": "List is private"
+    },
     "name": "List name",
     "description": "List description",
-    "private": "Create as private list",
     "info": {
       "max_name_length": "List names can contain up to {max} characters.",
       "max_description_length": "List descriptions can contain up to {max} characters."

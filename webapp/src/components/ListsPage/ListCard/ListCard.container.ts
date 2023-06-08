@@ -24,7 +24,8 @@ const mapDispatch = (
 ): MapDispatchProps =>
   bindActionCreators(
     {
-      onEditList: () => openModal('EditListModal', { list: ownProps.list }),
+      onEditList: () =>
+        openModal('CreateOrEditListModal', { list: ownProps.list }),
       onDeleteList: () => deleteListStart(ownProps.list)
     },
     dispatch
