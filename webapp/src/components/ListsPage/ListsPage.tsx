@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Button, Dropdown, Header, Icon } from 'decentraland-ui'
+import { Button, Dropdown, Header, Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { usePagination } from '../../lib/pagination'
 import { ListsBrowseSortBy } from '../../modules/favorites/types'
@@ -16,6 +16,7 @@ const ListsPage = ({
   count,
   lists,
   isLoading,
+  error,
   onFetchLists,
   onCreateList
 }: Props) => {
@@ -30,18 +31,38 @@ const ListsPage = ({
     [sortBy]
   )
 
-  useEffect(() => {
-    let skip: number | undefined = undefined
-    let first: number = PAGE_SIZE
-    // Check if this is a fresh load of the site trying to load a page that's not the first one
-    if (!count && page !== 1) {
-      skip = 0
-      // Load all pages up to the last one
-      first = page * PAGE_SIZE
-    }
-    onFetchLists({ page, first, skip, sortBy: selectedSortBy })
+  const fetchLists = useCallback(
+    () => {
+      let skip: number | undefined = undefined
+      let first: number = PAGE_SIZE
+      // Check if this is a fresh load of the site trying to load a page that's not the first one
+      if (!count && page !== 1) {
+        skip = 0
+        // Load all pages up to the last one
+        first = page * PAGE_SIZE
+      }
+      onFetchLists({ page, first, skip, sortBy: selectedSortBy })
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [first, page, selectedSortBy, onFetchLists])
+    [count, page, onFetchLists, first, selectedSortBy]
+  )
+
+  const handleFetchLists = useCallback(
+    (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      e.preventDefault()
+      e.stopPropagation()
+
+      if (!isLoading) {
+        fetchLists()
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [isLoading, fetchLists]
+  )
+
+  useEffect(() => {
+    fetchLists()
+  }, [fetchLists])
 
   const handleSortChange = useCallback(
     (_e, data) => changeSorting(data.value),
@@ -55,57 +76,77 @@ const ListsPage = ({
       <Header className={styles.header} size="large">
         {t('lists_page.title')}
       </Header>
-      <div className={styles.subHeader}>
-        <div className={styles.left}>
-          {count ? t('lists_page.subtitle', { count }) : null}
-        </div>
-        <div className={styles.right}>
-          <span className={styles.sortBy}>{t('filters.sort_by')}</span>
-          <Dropdown
-            pointing="top right"
-            options={[
-              {
-                value: ListsBrowseSortBy.RECENTLY_UPDATED,
-                text: t('filters.recently_updated')
-              },
-              {
-                value: ListsBrowseSortBy.NAME_ASC,
-                text: t('filters.name_asc')
-              },
-              {
-                value: ListsBrowseSortBy.NAME_DESC,
-                text: t('filters.name_desc')
-              },
-              { value: ListsBrowseSortBy.NEWEST, text: t('filters.newest') },
-              { value: ListsBrowseSortBy.OLDEST, text: t('filters.oldest') }
-            ]}
-            value={selectedSortBy}
-            onChange={handleSortChange}
-          />
-          <Button
-            size="small"
-            primary
-            className={styles.createList}
-            onClick={onCreateList}
+      {!error && lists.length > 0 ? (
+        <>
+          <div className={styles.subHeader}>
+            <div className={styles.left}>
+              {count ? t('lists_page.subtitle', { count }) : null}
+            </div>
+            <div className={styles.right}>
+              <span className={styles.sortBy}>{t('filters.sort_by')}</span>
+              <Dropdown
+                pointing="top right"
+                options={[
+                  {
+                    value: ListsBrowseSortBy.RECENTLY_UPDATED,
+                    text: t('filters.recently_updated')
+                  },
+                  {
+                    value: ListsBrowseSortBy.NAME_ASC,
+                    text: t('filters.name_asc')
+                  },
+                  {
+                    value: ListsBrowseSortBy.NAME_DESC,
+                    text: t('filters.name_desc')
+                  },
+                  {
+                    value: ListsBrowseSortBy.NEWEST,
+                    text: t('filters.newest')
+                  },
+                  { value: ListsBrowseSortBy.OLDEST, text: t('filters.oldest') }
+                ]}
+                value={selectedSortBy}
+                onChange={handleSortChange}
+              />
+              <Button
+                size="small"
+                primary
+                className={styles.createList}
+                onClick={onCreateList}
+              >
+                <Icon name="plus" className={styles.icon} />
+                {t('lists_page.create_list')}
+              </Button>
+            </div>
+          </div>
+          <InfiniteScroll
+            page={page}
+            hasMorePages={hasMorePages}
+            onLoadMore={goToNextPage}
+            isLoading={isLoading}
+            maxScrollPages={3}
           >
-            <Icon name="plus" className={styles.icon} />
-            {t('lists_page.create_list')}
-          </Button>
+            <div className={styles.cardsGroup}>
+              {lists.map(list => (
+                <ListCard key={list.id} list={list} />
+              ))}
+            </div>
+          </InfiniteScroll>
+        </>
+      ) : isLoading ? (
+        <Loader active size="massive" />
+      ) : (
+        <div className={styles.errorContainer}>
+          <div className={styles.errorImage}></div>
+          <h1>{t('lists_page.error.title')}</h1>
+          <p>{t('lists_page.error.subtitle')}</p>
+          <div className={styles.errorActions}>
+            <Button primary onClick={handleFetchLists}>
+              {t('lists_page.error.action')}
+            </Button>
+          </div>
         </div>
-      </div>
-      <InfiniteScroll
-        page={page}
-        hasMorePages={hasMorePages}
-        onLoadMore={goToNextPage}
-        isLoading={isLoading}
-        maxScrollPages={3}
-      >
-        <div className={styles.cardsGroup}>
-          {lists.map(list => (
-            <ListCard key={list.id} list={list} />
-          ))}
-        </div>
-      </InfiniteScroll>
+      )}
     </PageLayout>
   )
 }
