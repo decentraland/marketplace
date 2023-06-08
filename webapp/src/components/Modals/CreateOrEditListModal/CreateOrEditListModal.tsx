@@ -9,38 +9,47 @@ import {
   ModalNavigation,
   TextAreaField
 } from 'decentraland-ui'
-import styles from './CreateListModal.module.css'
-import { Props } from './CreateListModal.types'
+import styles from './CreateOrEditListModal.module.css'
+import { Props } from './CreateOrEditListModal.types'
 
 const MAX_NAME_LENGTH = 32
 const MAX_DESCRIPTION_LENGTH = 100
 const DUPLICATED_ERROR = 'There is already a list with the same name'
-export const CREATE_LIST_NAME_DATA_TEST_ID = 'create-list-name'
-export const CREATE_LIST_DESCRIPTION_DATA_TEST_ID = 'create-list-description'
-export const CREATE_LIST_PRIVATE_DATA_TEST_ID = 'create-list-private'
-export const CREATE_LIST_CANCEL_BUTTON_DATA_TEST_ID =
-  'create-list-cancel-button'
-export const CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID =
-  'create-list-accept-button'
+export const CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID = 'create-or-edit-list-name'
+export const CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID =
+  'create-or-edit-list-description'
+export const CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID =
+  'create-or-edit-list-private'
+export const CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID =
+  'create-or-edit-list-cancel-button'
+export const CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID =
+  'create-or-edit-list-accept-button'
 
-const CreateListModal = ({
+const CreateOrEditListModal = ({
   onClose,
   isLoading,
   onCreateList,
+  onEditList,
+  metadata,
   error
 }: Props) => {
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
-  const [isPrivate, setIsPrivate] = useState(false)
+  const list = metadata?.list
+
+  const [name, setName] = useState(list?.name ?? '')
+  const [description, setDescription] = useState(list?.description ?? '')
+  const [isPrivate, setIsPrivate] = useState(list?.isPrivate ?? false)
   const [showMaxLengthNameInfo, setShowMaxLengthNameInfo] = useState(false)
   const [
     showMaxLengthDescriptionInfo,
     setShowMaxLengthDescriptionInfo
   ] = useState(false)
 
-  const handleCreateList = useCallback(
-    () => onCreateList({ name, description, isPrivate }),
-    [onCreateList, name, description, isPrivate]
+  const handleCreateOrEditList = useCallback(
+    () =>
+      list
+        ? onEditList(list.id, { name, description, isPrivate })
+        : onCreateList({ name, description, isPrivate }),
+    [list, onEditList, name, description, isPrivate, onCreateList]
   )
   const handleNameChange = useCallback(
     (_event, props) => setName(props.value),
@@ -75,22 +84,31 @@ const CreateListModal = ({
   }, [isLoading, onClose])
 
   const isNameDuplicatedError = error?.includes(DUPLICATED_ERROR)
+  const listChanged = list
+    ? name !== list.name ||
+      description !== list.description ||
+      isPrivate !== list.isPrivate
+    : false
 
   return (
     <Modal size="tiny" className={styles.modal} onClose={handleClose}>
       <ModalNavigation
-        title={t('create_list_modal.title')}
+        title={
+          list
+            ? t('create_or_edit_list_modal.edit.title')
+            : t('create_or_edit_list_modal.create.title')
+        }
         onClose={handleClose}
       />
       <Modal.Content className={styles.content}>
         <Field
-          label={t('create_list_modal.name')}
-          data-testid={CREATE_LIST_NAME_DATA_TEST_ID}
+          label={t('create_or_edit_list_modal.name')}
+          data-testid={CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID}
           className={styles.name}
           value={name}
           message={
             isNameDuplicatedError
-              ? t('create_list_modal.errors.name_duplicated', {
+              ? t('create_or_edit_list_modal.errors.name_duplicated', {
                   br: () => <br />
                 })
               : undefined
@@ -101,7 +119,7 @@ const CreateListModal = ({
           onBlur={handleNameBlur}
           info={
             showMaxLengthNameInfo
-              ? t('create_list_modal.info.max_name_length', {
+              ? t('create_or_edit_list_modal.info.max_name_length', {
                   max: MAX_NAME_LENGTH
                 })
               : undefined
@@ -110,8 +128,8 @@ const CreateListModal = ({
           onChange={handleNameChange}
         />
         <TextAreaField
-          label={t('create_list_modal.description')}
-          data-testid={CREATE_LIST_DESCRIPTION_DATA_TEST_ID}
+          label={t('create_or_edit_list_modal.description')}
+          data-testid={CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID}
           value={description}
           className={styles.description}
           maxLength={MAX_DESCRIPTION_LENGTH}
@@ -120,7 +138,7 @@ const CreateListModal = ({
           onBlur={handleDescriptionBlur}
           info={
             showMaxLengthDescriptionInfo
-              ? t('create_list_modal.info.max_description_length', {
+              ? t('create_or_edit_list_modal.info.max_description_length', {
                   max: MAX_DESCRIPTION_LENGTH
                 })
               : undefined
@@ -129,8 +147,12 @@ const CreateListModal = ({
         />
         <Checkbox
           checked={isPrivate}
-          label={t('create_list_modal.private')}
-          data-testid="create-list-private"
+          label={
+            list
+              ? t('create_or_edit_list_modal.edit.private')
+              : t('create_or_edit_list_modal.create.private')
+          }
+          data-testid={CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID}
           disabled={isLoading}
           className={styles.checkbox}
           onChange={handleIsOPrivateChange}
@@ -148,23 +170,23 @@ const CreateListModal = ({
       <Modal.Actions>
         <Button
           onClick={handleClose}
-          data-testid={CREATE_LIST_CANCEL_BUTTON_DATA_TEST_ID}
+          data-testid={CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID}
           disabled={isLoading}
         >
           {t('global.cancel')}
         </Button>
         <Button
           primary
-          disabled={isLoading || name.length === 0}
-          data-testid={CREATE_LIST_ACCEPT_BUTTON_DATA_TEST_ID}
+          disabled={isLoading || name.length === 0 || (list && !listChanged)}
+          data-testid={CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID}
           loading={isLoading}
-          onClick={handleCreateList}
+          onClick={handleCreateOrEditList}
         >
-          {t('global.create')}
+          {list ? t('global.save') : t('global.create')}
         </Button>
       </Modal.Actions>
     </Modal>
   )
 }
 
-export default React.memo(CreateListModal)
+export default React.memo(CreateOrEditListModal)
