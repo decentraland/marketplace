@@ -91,7 +91,7 @@ const ListPage = ({
 
   useEffect(() => {
     hasFetchedOnce.current = false
-  }, [listId, error])
+  }, [listId])
 
   useEffect(() => {
     handleFetchList()
