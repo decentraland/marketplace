@@ -34,5 +34,6 @@
   "DISCORD_URL": "https://dcl.gg/discord",
   "ROLLBAR_ACCESS_TOKEN": "ad890a7699424114a771373ee60720ac",
   "ENVIRONMENT": "staging",
-  "MIN_SALE_VALUE_IN_WEI": "1000000000000000000"
+  "MIN_SALE_VALUE_IN_WEI": "1000000000000000000",
+  "MARKETPLACE_URL": "https://market.decentraland.today"
 }
