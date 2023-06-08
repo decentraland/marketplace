@@ -135,7 +135,6 @@
   flex-grow: 1;
 }
 
-/* TODO: improve this please */
 .assetBrowseContainer :global(.dcl.page.AssetBrowse),
 .assetBrowseContainer :global(.dcl.page.AssetBrowse .ui.container),
 .assetBrowseContainer :global(.dcl.page.AssetBrowse .ui.container .Row),
