@@ -4,7 +4,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { renderWithProviders } from '../../utils/test'
 import { List } from '../../modules/favorites/types'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
-import ListPage, {
+import ListPage from './ListPage'
+import {
   LOADER_TEST_ID,
   EMPTY_LIST_TEST_ID,
   ASSET_BROWSE_TEST_ID,
@@ -16,7 +17,7 @@ import ListPage, {
   DELETE_LIST_BUTTON_TEST_ID,
   ERROR_CONTAINER_TEST_ID,
   COULD_NOT_LOAD_LIST_ACTION_TEST_ID
-} from './ListPage'
+} from './constants'
 import { Props } from './ListPage.types'
 
 const listId = 'aListId'
