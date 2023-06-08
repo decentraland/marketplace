@@ -1,3 +1,4 @@
+import { push } from 'connected-react-router'
 import { call, select, take } from 'redux-saga/effects'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { expectSaga } from 'redux-saga-test-plan'
@@ -18,6 +19,7 @@ import {
   Permission,
   UpdateOrCreateList
 } from '../vendor/decentraland/favorites/types'
+import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
@@ -53,6 +55,7 @@ import {
 } from './actions'
 import { favoritesSaga } from './sagas'
 import { getListId } from './selectors'
+import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import {
   CreateListParameters,
   FavoritedItems,
@@ -60,7 +63,6 @@ import {
   ListsBrowseOptions,
   ListsBrowseSortBy
 } from './types'
-import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 let item: Item
 let address: string

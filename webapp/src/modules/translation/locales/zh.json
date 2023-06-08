@@ -65,7 +65,8 @@
     "discord_server": "Discord 服务器",
     "currently": "现在",
     "showing": "顯示",
-    "of": "的"
+    "of": "的",
+    "now": "现在"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -1282,8 +1283,11 @@
   },
   "list_page": {
     "default_title": "心愿单",
+    "edit_list": "编辑列表",
+    "delete_list": "删除列表",
+    "last_updated_at": "最后更新于",
     "empty": {
-      "title": "您没有任何已保存的项目",
+      "title": "您在此列表中没有任何已保存的项目",
       "subtitle": "发现惊人的项目。",
       "action": "浏览项目"
     }

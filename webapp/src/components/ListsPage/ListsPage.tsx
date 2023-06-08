@@ -62,6 +62,7 @@ const ListsPage = ({
         <div className={styles.right}>
           <span className={styles.sortBy}>{t('filters.sort_by')}</span>
           <Dropdown
+            pointing="top right"
             options={[
               {
                 value: ListsBrowseSortBy.RECENTLY_UPDATED,

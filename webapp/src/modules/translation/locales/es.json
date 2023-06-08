@@ -65,7 +65,8 @@
     "discord_server": "Servidor de Discord",
     "currently": "actualmente",
     "showing": "Mostrando",
-    "of": "de"
+    "of": "de",
+    "now": "ahora"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -1277,8 +1278,11 @@
   },
   "list_page": {
     "default_title": "Lista de deseos",
+    "edit_list": "Editar Lista",
+    "delete_list": "Eliminar Lista",
+    "last_updated_at": "Última actualización",
     "empty": {
-      "title": "No tienes ningún item guardado",
+      "title": "No tienes elementos guardados en esta lista",
       "subtitle": "Descubre items increíbles.",
       "action": "Explora los colleccionables"
     }

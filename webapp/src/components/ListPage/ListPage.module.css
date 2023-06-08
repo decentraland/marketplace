@@ -1,29 +1,102 @@
-.page {
-  min-height: 100vh;
+.header:global(.ui.header) {
+  margin: 0 24px;
+  display: flex;
+  align-items: center;
+  column-gap: 19px;
 }
 
-.header:global(.ui.header) {
-  margin-left: 24px;
+.header:global(.ui.header.large) {
+  margin-bottom: 7px;
+}
+
+.header:global(.ui.sub.header) {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--text);
+  text-transform: none;
+}
+
+.nameContainer {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  flex-grow: 1;
+}
+
+.privateBadge:global(.dcl.badge) {
+  box-sizing: border-box;
+  background-color: var(--secondary);
+  color: var(--secondary);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  padding: 3px 0px;
+  gap: 1px;
+  width: 68px;
+  height: 18px;
+  border: 1px solid #FFFFFF;
+  box-shadow: 0px 0px 12px rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  text-transform: none;
+  display: flex;
+  justify-content: center;
+}
+
+.privateBadge:global(.dcl.badge i.icon) {
+  margin-right: 1px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.actions :global(.ui.button).iconContainer {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  z-index: 11;
+}
+
+.actions :global(.ui.button).iconContainer.share {
+  background-color: var(--text);
+  color: var(--background);
+}
+
+:global(.ui.header).header .actions :global(.ui.button).iconContainer :global(.icon) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.description {
+  flex-grow: 1;
+}
+
+.assetBrowseContainer :global(.dcl.page.AssetBrowse) {
+  min-height: unset;
 }
 
 @media (max-width: 768px) {
   .header:global(.ui.header) {
     margin-left: 16px;
   }
-}
 
-.flexContainer {
-  display: flex;
-  flex-direction: column;
-  /* Height of the page minus the sizes of the elements before the footer */
-  /* Navbar, Navigation, Header (with paddings) */
-  min-height: calc(100vh - 64px - 65px - 42px - 28px - 28px);
+  .header:global(.ui.sub.header) {
+    margin-left: 18px;
+  }
 }
 
 .emptyState {
   flex-grow: 1;
-}
-
-.footer {
-  flex: 0;
 }
