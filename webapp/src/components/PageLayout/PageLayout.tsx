@@ -8,7 +8,7 @@ import styles from './PageLayout.module.css'
 const PageLayout = ({ children, activeTab }: Props) => {
   return (
     <div className={styles.page}>
-      <Navbar isFullscreen />
+      <Navbar className={styles.navbar} isFullscreen />
       <Navigation activeTab={activeTab} />
       <div className={styles.content}>{children}</div>
       <Footer className={styles.footer} />

@@ -8,3 +8,7 @@
   padding: 0 24px;
   flex-grow: 1;
 }
+
+.navbar {
+  flex-shrink: 0;
+}
