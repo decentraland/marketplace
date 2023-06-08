@@ -78,7 +78,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   const itemAPI = new ItemAPI(NFT_SERVER_URL, API_OPTS)
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
-  yield fork(handleOneFetchItemsRequestAtOnce)
+  yield fork(() => takeLatestByPath(FETCH_ITEMS_REQUEST, locations.browse()))
   yield takeEvery(
     FETCH_COLLECTION_ITEMS_REQUEST,
     handleFetchCollectionItemsRequest
@@ -90,20 +90,18 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
 
   // to avoid race conditions, just one fetch items request is handled at once in the browse page
-  function* handleOneFetchItemsRequestAtOnce(): SagaIterator {
+  function* takeLatestByPath(actionType: string, path: string): SagaIterator {
     let task
 
     while (true) {
-      const action: FetchItemsRequestAction = yield take(FETCH_ITEMS_REQUEST)
+      const action: FetchItemsRequestAction = yield take(actionType)
       const {
         pathname: currentPathname
       }: ReturnType<typeof getLocation> = yield select(getLocation)
 
       // if we have a task running in the browse path, we cancel the previous one
-      if (matchPath(currentPathname, { path: locations.browse() })) {
-        if (task && task.isRunning()) {
-          yield cancel(task)
-        }
+      if (matchPath(currentPathname, { path }) && task && task.isRunning()) {
+        yield cancel(task)
       }
       task = yield fork(handleFetchItemsRequest, action)
     }
