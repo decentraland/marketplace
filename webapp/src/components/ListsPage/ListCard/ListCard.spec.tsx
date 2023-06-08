@@ -3,6 +3,7 @@ import { fireEvent } from '@testing-library/react'
 import { renderWithProviders } from '../../../utils/test'
 import { List } from '../../../modules/favorites/types'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../../modules/vendor/decentraland/favorites/api'
+import { default as ListCard } from './ListCard'
 import {
   ACTIONS_DATA_TEST_ID,
   DELETE_LIST_DATA_TEST_ID,
@@ -11,9 +12,8 @@ import {
   GRID_PREVIEW_DATA_TEST_ID,
   ITEM_COUNT_DATA_TEST_ID,
   LIST_NAME_DATA_TEST_ID,
-  default as ListCard,
   PRIVATE_DATA_TEST_ID
-} from './ListCard'
+} from './constants'
 import { Props } from './ListCard.types'
 
 function renderListCard(props: Partial<Props> = {}) {

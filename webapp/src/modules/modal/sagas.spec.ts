@@ -14,7 +14,8 @@ import {
 import {
   CREATE_LIST_SUCCESS,
   DELETE_LIST_FAILURE,
-  DELETE_LIST_SUCCESS
+  DELETE_LIST_SUCCESS,
+  UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
 import { UpsertRentalOptType } from '../rental/types'
 import { closeAllModals, closeModal, openModal } from './actions'
@@ -25,7 +26,8 @@ describe.each([
   UPSERT_RENTAL_SUCCESS,
   CREATE_LIST_SUCCESS,
   DELETE_LIST_SUCCESS,
-  DELETE_LIST_FAILURE
+  DELETE_LIST_FAILURE,
+  UPDATE_LIST_SUCCESS
 ])('when handling the success action of the %s action', actionType => {
   it('should put the action to close all modals', () => {
     return expectSaga(modalSaga)

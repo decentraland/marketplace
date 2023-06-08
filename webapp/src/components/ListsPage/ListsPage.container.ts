@@ -21,7 +21,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps =>
   bindActionCreators(
     {
       onFetchLists: fetchListsRequest,
-      onCreateList: () => openModal('CreateListModal')
+      onCreateList: () => openModal('CreateOrEditListModal')
     },
     dispatch
   )

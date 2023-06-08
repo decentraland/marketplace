@@ -30,6 +30,7 @@ export type BaseList = {
   userAddress: string
   createdAt: number
   updatedAt: number | null
+  isPrivate: boolean
   permission: Permission | null
 }
 
