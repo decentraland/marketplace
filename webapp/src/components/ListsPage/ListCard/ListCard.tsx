@@ -7,15 +7,16 @@ import { DEFAULT_FAVORITES_LIST_ID } from '../../../modules/vendor/decentraland/
 import { AssetImage } from '../../AssetImage'
 import { Props } from './ListCard.types'
 import styles from './ListCard.module.css'
-
-export const EMPTY_PREVIEW_DATA_TEST_ID = 'list-card-empty-preview'
-export const GRID_PREVIEW_DATA_TEST_ID = 'list-card-grid-preview'
-export const LIST_NAME_DATA_TEST_ID = 'list-card-list-name'
-export const ITEM_COUNT_DATA_TEST_ID = 'list-card-item-count'
-export const PRIVATE_DATA_TEST_ID = 'list-card-private'
-export const EDIT_LIST_DATA_TEST_ID = 'list-card-edit-list'
-export const DELETE_LIST_DATA_TEST_ID = 'list-card-delete-list'
-export const ACTIONS_DATA_TEST_ID = 'list-card-actions'
+import {
+  ACTIONS_DATA_TEST_ID,
+  DELETE_LIST_DATA_TEST_ID,
+  EDIT_LIST_DATA_TEST_ID,
+  EMPTY_PREVIEW_DATA_TEST_ID,
+  GRID_PREVIEW_DATA_TEST_ID,
+  ITEM_COUNT_DATA_TEST_ID,
+  LIST_NAME_DATA_TEST_ID,
+  PRIVATE_DATA_TEST_ID
+} from './constants'
 
 const ListCard = (props: Props) => {
   const { list, items, onDeleteList, onEditList } = props

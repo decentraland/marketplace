@@ -18,6 +18,7 @@
     "ens": "名称",
     "art": "艺术",
     "cancel": "取消",
+    "save": "救",
     "proceed": "继续",
     "create": "创造",
     "continue": "继续",
@@ -1297,11 +1298,17 @@
     "text": "在本节中，您可以找到由 Decentraland 用户列出的待售名称。或者，您可以从'构建器'部分以{mana}的固定价格声明自己唯一的名称。",
     "btn": "认领你的名字"
   },
-  "create_list_modal": {
-    "title": "创建列表",
+  "create_or_edit_list_modal": {
+    "create": {
+      "title": "创建列表",
+      "private": "创建为私人列表"
+    },
+    "edit": {
+      "title": "编辑列表",
+      "private": "列表是私人的"
+    },
     "name": "列表名称",
     "description": "清单说明",
-    "private": "创建为私人列表",
     "info": {
       "max_name_length": "列表名称最多可以包含 {max} 个字符。",
       "max_description_length": "列表描述最多可以包含 {max} 个字符。"

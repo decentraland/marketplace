@@ -18,6 +18,7 @@
     "ens": "Name",
     "art": "Art",
     "cancel": "Cancel",
+    "save": "Save",
     "proceed": "Proceed",
     "create": "Create",
     "continue": "Continue",
@@ -1301,11 +1302,17 @@
     "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
     "btn": "Claim your name"
   },
-  "create_list_modal": {
-    "title": "Create List",
+  "create_or_edit_list_modal": {
+    "create": {
+      "title": "Create List",
+      "private": "Create as private list"
+    },
+    "edit": {
+      "title": "Edit List",
+      "private": "List is private"
+    },
     "name": "List name",
     "description": "List description",
-    "private": "Create as private list",
     "info": {
       "max_name_length": "List names can contain up to {max} characters.",
       "max_description_length": "List descriptions can contain up to {max} characters."

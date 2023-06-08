@@ -6,7 +6,12 @@ import {
   ListOfLists,
   UpdateOrCreateList
 } from '../vendor/decentraland/favorites/types'
-import { CreateListParameters, List, ListsBrowseOptions } from './types'
+import {
+  CreateListParameters,
+  List,
+  ListsBrowseOptions,
+  UpdateListParameters
+} from './types'
 
 // Pick item as Favorite Request
 export const PICK_ITEM_AS_FAVORITE_REQUEST =
@@ -221,8 +226,10 @@ export const UPDATE_LIST_REQUEST = '[Request] Update List'
 export const UPDATE_LIST_SUCCESS = '[Success] Update List'
 export const UPDATE_LIST_FAILURE = '[Failure] Update List'
 
-export const updateListRequest = (id: string, updatedList: Partial<List>) =>
-  action(UPDATE_LIST_REQUEST, { id, updatedList })
+export const updateListRequest = (
+  id: string,
+  updatedList: UpdateListParameters
+) => action(UPDATE_LIST_REQUEST, { id, updatedList })
 
 export const updateListSuccess = (list: UpdateOrCreateList) =>
   action(UPDATE_LIST_SUCCESS, { list })

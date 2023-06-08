@@ -1,8 +1,14 @@
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
 import { isAPIError } from '../../../../lib/error'
-import { FavoritedItems, List } from '../../../favorites/types'
-import { ListDetails, ListOfLists, ListsOptions, PicksOptions } from './types'
+import { FavoritedItems } from '../../../favorites/types'
+import {
+  ListDetails,
+  ListOfLists,
+  ListsOptions,
+  PicksOptions,
+  UpdateOrCreateList
+} from './types'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
   'DEFAULT_FAVORITES_LIST_ID'
@@ -132,11 +138,19 @@ export class FavoritesAPI extends BaseClient {
 
   async updateList(
     listId: string,
-    updatedList: Partial<List>
-  ): Promise<Partial<List>> {
+    updatedList: {
+      name?: string
+      isPrivate?: boolean
+      description?: string
+    }
+  ): Promise<UpdateOrCreateList> {
     return this.fetch(`/v1/lists/${listId}`, {
       method: 'PUT',
-      body: JSON.stringify(updatedList),
+      body: JSON.stringify({
+        name: updatedList.name,
+        private: updatedList.isPrivate,
+        description: updatedList.description
+      }),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -151,7 +165,7 @@ export class FavoritesAPI extends BaseClient {
     name: string
     isPrivate: boolean
     description?: string
-  }): Promise<List> {
+  }): Promise<UpdateOrCreateList> {
     return this.fetch('/v1/lists/', {
       method: 'POST',
       body: JSON.stringify({ name, private: isPrivate, description }),

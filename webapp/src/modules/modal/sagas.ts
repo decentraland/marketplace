@@ -13,7 +13,8 @@ import {
 import {
   CREATE_LIST_SUCCESS,
   DELETE_LIST_FAILURE,
-  DELETE_LIST_SUCCESS
+  DELETE_LIST_SUCCESS,
+  UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
 import { closeAllModals, openModal } from './actions'
 
@@ -25,7 +26,8 @@ export function* modalSaga() {
       UPSERT_RENTAL_SUCCESS,
       CREATE_LIST_SUCCESS,
       DELETE_LIST_SUCCESS,
-      DELETE_LIST_FAILURE
+      DELETE_LIST_FAILURE,
+      UPDATE_LIST_SUCCESS
     ],
     handleCloseAllModals
   )

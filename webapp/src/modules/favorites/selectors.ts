@@ -13,6 +13,7 @@ import {
   UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
   FETCH_LISTS_REQUEST,
   CREATE_LIST_REQUEST,
+  UPDATE_LIST_REQUEST,
   DELETE_LIST_REQUEST
 } from './actions'
 
@@ -30,6 +31,8 @@ export const isLoadingLists = (state: RootState): boolean =>
   isLoadingType(getLoading(state), FETCH_LISTS_REQUEST)
 export const isLoadingCreateList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), CREATE_LIST_REQUEST)
+export const isLoadingUpdateList = (state: RootState): boolean =>
+  isLoadingType(getLoading(state), UPDATE_LIST_REQUEST)
 export const isLoadingDeleteList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), DELETE_LIST_REQUEST)
 

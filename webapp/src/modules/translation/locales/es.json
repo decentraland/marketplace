@@ -18,6 +18,7 @@
     "ens": "Nombre",
     "art": "Arte",
     "cancel": "Cancelar",
+    "save": "Guardar",
     "proceed": "Aceptar",
     "create": "Crear",
     "continue": "Continuar",
@@ -1292,11 +1293,17 @@
     "text": "En esta sección puede encontrar NOMBRES que están listados para la venta por los usuarios de Decentraland. Alternativamente, puede reclamar su propio NOMBRE único de la sección Constructor por un precio fijo de {mana}.",
     "btn": "Reclama tu nombre"
   },
-  "create_list_modal": {
-    "title": "Crear lista",
+  "create_or_edit_list_modal": {
+    "create": {
+      "title": "Crear lista",
+      "private": "Crea la lista como privada"
+    },
+    "edit": {
+      "title": "Editar lista",
+      "private": "La lista es privada"
+    },
     "name": "Nombre de la lista",
     "description": "Descripción de la lista",
-    "private": "Crea la lista como privada",
     "info": {
       "max_name_length": "Los nombres de las listas pueden tener hasta {max} caracteres.",
       "max_description_length": "Las descripciones de las listas pueden contener hasta {max} caracteres."
