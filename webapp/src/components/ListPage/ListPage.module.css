@@ -137,9 +137,9 @@
 
 /* TODO: improve this please */
 .assetBrowseContainer :global(.dcl.page.AssetBrowse),
-.assetBrowseContainer :global(.dcl.page.AssetBrowse) :global(.ui.container),
-.assetBrowseContainer :global(.dcl.page.AssetBrowse) :global(.ui.container) :global(.Row),
-.assetBrowseContainer :global(.dcl.page.AssetBrowse) :global(.ui.container) :global(.AssetsList)
+.assetBrowseContainer :global(.dcl.page.AssetBrowse .ui.container),
+.assetBrowseContainer :global(.dcl.page.AssetBrowse .ui.container .Row),
+.assetBrowseContainer :global(.dcl.page.AssetBrowse .ui.container .AssetsList)
 {
   display: flex;
   flex-direction: column;
