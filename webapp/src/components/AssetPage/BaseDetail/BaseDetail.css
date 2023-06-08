@@ -1,18 +1,3 @@
-.BaseDetail .top-header {
-  display: flex;
-  align-items: center;
-}
-
-.BaseDetail .top-header .back {
-  display: unset;
-  align-self: flex-start;
-}
-
-.BaseDetail .top-header .favorites {
-  flex-grow: 1;
-  justify-content: flex-end;
-}
-
 .BaseDetail .ui.container > .info {
   width: 100%;
   display: flex;
@@ -91,10 +76,6 @@
 
 .BaseDetail .PageHeader > .AssetImage .ens-subdomain .name {
   padding: 25px;
-}
-
-.BaseDetail .ui.container > div {
-  margin-bottom: 48px;
 }
 
 /* Override ui stats */

@@ -73,7 +73,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   text-transform: lowercase;
-  color: #CFCDD4;
+  color: #cfcdd4;
 }
 
 .AssetImage .WearablePreview {
@@ -203,4 +203,150 @@
 
 .AssetImage .coordinates {
   margin-right: 8px;
+}
+
+.AvailableForMintPopup {
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  background-color: #242129b2;
+  border-radius: 10px;
+  align-items: flex-start;
+  padding: 29px 25px 20px;
+  gap: 10px;
+  width: 500px;
+  bottom: 24px;
+  position: absolute;
+  right: 24px;
+  height: 100px;
+  transition: height 0.3s !important;
+  overflow: hidden;
+}
+
+.AvailableForMintPopup .mintIcon {
+  height: 24.72px;
+}
+
+.AvailableForMintPopup .goToItem {
+  color: white;
+}
+
+.AvailableForMintPopup .popupPreview {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.ui.button.inverted.goToItemButton {
+  width: 38px;
+  height: 32px;
+  min-width: unset;
+  padding: 6px 7px 0px 0px;
+}
+
+.AvailableForMintPopup .title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.AvailableForMintPopup .previewText {
+  text-align: start;
+  width: 100%;
+}
+
+.AvailableForMintPopup .popupExtraInformation {
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.AvailableForMintPopup:hover {
+  height: 174px;
+}
+
+.AvailableForMintPopup:hover .popupExtraInformation {
+  opacity: 1;
+}
+
+.AvailableForMintPopup .informationTooltip {
+  width: 14px;
+  height: 14px;
+}
+
+.AvailableForMintPopup .informationTitle {
+  font-size: 14px;
+  color: #cfcdd4;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  line-height: 7px;
+}
+
+.AvailableForMintPopup .informationText {
+  color: white;
+  font-size: 24px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.AvailableForMintPopup .informationBold {
+  color: white;
+  font-size: 30px;
+  font-weight: 600;
+  margin: unset;
+}
+
+.AvailableForMintPopup .containerRow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.AvailableForMintPopup .extraInfoContainer {
+  color: var(--primary-text);
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  font-size: 15px;
+  justify-content: space-between;
+}
+
+.AvailableForMintPopup .stockText {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.AssetImage .ui.button + .ui.button {
+  margin-left: 0px;
+}
+
+@media (max-width: 768px) {
+  .AssetImage .image {
+    max-width: 100%;
+  }
+  .AvailableForMintPopup {
+    right: 0;
+    width: 100%;
+    bottom: -110px;
+    padding-top: 20px;
+    height: 94px;
+  }
+  .AssetImage .rarity-background,
+  .AssetImage .WearablePreview {
+    border-radius: 12px;
+  }
+  .AvailableForMintPopup .ui.button.inverted.goToItemButton {
+    align-self: center;
+  }
+  .AssetImage {
+    height: 400px;
+  }
+  .AssetImage.hasMintAvailable {
+    margin-bottom: 100px;
+  }
 }

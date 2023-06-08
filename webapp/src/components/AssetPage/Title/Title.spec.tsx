@@ -1,4 +1,5 @@
 import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
+import { Network } from '@dcl/schemas'
 import { Asset } from '../../../modules/asset/types'
 import { getAssetName } from '../../../modules/asset/utils'
 import { INITIAL_STATE } from '../../../modules/favorites/reducer'
@@ -78,11 +79,21 @@ describe('Title', () => {
         asset = { ...asset, itemId: 'itemId' } as Asset
       })
 
-      it('should render the favorites counter', () => {
-        const { getByTestId } = renderTitle({
-          asset
+      describe('and the asset is an item', () => {
+        beforeEach(() => {
+          asset = {
+            ...asset,
+            itemId: 'itemId',
+            network: Network.MATIC
+          } as Asset
         })
-        expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
+
+        it('should render the favorites counter', () => {
+          const { getByTestId } = renderTitle({
+            asset
+          })
+          expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
+        })
       })
     })
   })

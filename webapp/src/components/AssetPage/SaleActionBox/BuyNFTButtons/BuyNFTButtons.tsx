@@ -4,17 +4,20 @@ import { Button, Icon, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
-import { AssetType } from '../../../../modules/asset/types'
-import { isNFT } from '../../../../modules/asset/utils'
 import { locations } from '../../../../modules/routing/locations'
 import * as events from '../../../../utils/events'
 import styles from './BuyNFTButtons.module.css'
 import { Props } from './BuyNFTButtons.types'
 
-const BuyNFTButtons = ({ asset }: Props) => {
-  const { contractAddress, network } = asset
-  const assetType = isNFT(asset) ? AssetType.NFT : AssetType.ITEM
-  const assetId = isNFT(asset) ? asset.tokenId : asset.itemId
+const BuyNFTButtons = ({
+  assetType,
+  contractAddress,
+  network,
+  tokenId,
+  itemId,
+  buyWithCardClassName
+}: Props) => {
+  const assetId = tokenId || itemId
 
   const analytics = getAnalytics()
 
@@ -36,7 +39,7 @@ const BuyNFTButtons = ({ asset }: Props) => {
 
       <Button
         as={Link}
-        className={styles.buy_with_card}
+        className={`${styles.buy_with_card} ${buyWithCardClassName}`}
         to={locations.buyWithCard(assetType, contractAddress, assetId)}
         onClick={handleBuyWithCard}
         fluid

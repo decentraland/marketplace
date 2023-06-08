@@ -1,0 +1,10 @@
+.asset-status-filter .asset-status-options {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.asset-status-filter .asset-status-options .ui.radio.checkbox {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}

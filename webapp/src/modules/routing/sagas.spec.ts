@@ -4,8 +4,8 @@ import {
   GenderFilterOption,
   Item,
   ItemSortBy,
-  Network,
   NFTCategory,
+  Network,
   Rarity
 } from '@dcl/schemas'
 import {
@@ -17,6 +17,7 @@ import {
 } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
+import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
@@ -35,7 +36,11 @@ import {
   fetchAssetsFromRoute as fetchAssetsFromRouteAction
 } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
-import { getCurrentBrowseOptions, getSection } from './selectors'
+import {
+  getCurrentBrowseOptions,
+  getLatestVisitedLocation,
+  getSection
+} from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
 import { locations } from './locations'
@@ -126,36 +131,76 @@ describe('when handling the clear filters request action', () => {
     })
 
     describe('and it is not the LAND section', () => {
-      it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
-        return expectSaga(routingSaga)
-          .provide([
-            [
-              select(getCurrentBrowseOptions),
-              {
-                ...browseOptions,
-                onlyOnSale: false,
-                section: Section.COLLECTIONS
-              }
-            ],
-            [select(getPage), 1],
-            [select(getLocation), { pathname }],
-            [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-              Promise.resolve()
-            ]
-          ])
-          .put(
-            push(
-              buildBrowseURL(pathname, {
-                ...browseOptionsWithoutFilters,
-                section: Section.COLLECTIONS,
-                onlyOnSale: true
-              })
+      describe('and the asset type is Item', () => {
+        it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
+          return expectSaga(routingSaga)
+            .provide([
+              [
+                select(getCurrentBrowseOptions),
+                {
+                  ...browseOptions,
+                  onlyOnSale: false,
+                  section: Section.COLLECTIONS,
+                  assetType: AssetType.NFT
+                }
+              ],
+              [select(getPage), 1],
+              [select(getLocation), { pathname }],
+              [select(getEventData), {}],
+              [
+                call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
+                Promise.resolve()
+              ]
+            ])
+            .put(
+              push(
+                buildBrowseURL(pathname, {
+                  ...browseOptionsWithoutFilters,
+                  section: Section.COLLECTIONS,
+                  assetType: AssetType.NFT,
+                  status: AssetStatusFilter.ON_SALE
+                })
+              )
             )
-          )
-          .dispatch(clearFilters())
-          .run({ silenceTimeout: true })
+            .dispatch(clearFilters())
+            .run({ silenceTimeout: true })
+        })
+      })
+      describe('and the asset type is NFT', () => {
+        it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and remove the onlyOnSale filter", () => {
+          return expectSaga(routingSaga)
+            .provide([
+              [
+                select(getCurrentBrowseOptions),
+                {
+                  ...browseOptions,
+                  onlyOnSale: true,
+                  section: Section.WEARABLES,
+                  assetType: AssetType.NFT,
+                  view: View.CURRENT_ACCOUNT
+                }
+              ],
+              [select(getPage), 1],
+              [select(getLocation), { pathname }],
+              [select(getEventData), {}],
+              [
+                call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
+                Promise.resolve()
+              ]
+            ])
+            .put(
+              push(
+                buildBrowseURL(pathname, {
+                  ...browseOptionsWithoutFilters,
+                  section: Section.WEARABLES,
+                  onlyOnSale: true,
+                  assetType: AssetType.NFT
+                })
+              )
+            )
+            .dispatch(clearFilters())
+            .run({ silenceTimeout: true })
+        })
       })
     })
   })
@@ -172,7 +217,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     return expectSaga(routingSaga)
       .provide([
         [select(getCurrentBrowseOptions), browseOptions],
-        [select(getPage), 1]
+        [select(getPage), 1],
+        [select(getSection), Section.WEARABLES]
       ])
       .put(fetchTrendingItemsRequest())
       .dispatch(fetchAssetsFromRouteAction(browseOptions))
@@ -196,7 +242,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       filters: {
         first: 24,
         skip: 0,
-        sortBy: ItemSortBy.RECENTLY_REVIEWED,
+        sortBy: ItemSortBy.CHEAPEST,
         creator: [address],
         category: NFTCategory.EMOTE,
         isWearableHead: false,
@@ -207,18 +253,20 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         isWearableSmart: undefined,
         search: undefined,
         rarities: undefined,
-        contracts: undefined,
+        contractAddresses: undefined,
         wearableGenders: undefined,
         emotePlayMode: undefined,
         minPrice: undefined,
-        maxPrice: undefined
+        maxPrice: undefined,
+        network: undefined
       }
     }
 
     return expectSaga(routingSaga)
       .provide([
         [call(getNewBrowseOptions, browseOptions), browseOptions],
-        [select(getPage), 1]
+        [select(getPage), 1],
+        [select(getSection), Section.WEARABLES]
       ])
       .put(fetchItemsRequest(filters))
       .dispatch(fetchAssetsFromRouteAction(browseOptions))
@@ -247,6 +295,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     return expectSaga(routingSaga)
       .provide([
         [select(getCurrentBrowseOptions), browseOptions],
+        [select(getSection), Section.LISTS],
         [select(getPage), 1]
       ])
       .put(fetchFavoritedItemsRequest(filters))
@@ -282,11 +331,12 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
           isWearableSmart: undefined,
           search: undefined,
           rarities: undefined,
-          contracts: undefined,
+          contractAddresses: undefined,
           wearableGenders: undefined,
           emotePlayMode: undefined,
           minPrice: undefined,
-          maxPrice: undefined
+          maxPrice: undefined,
+          network: undefined
         }
       }
       it('should fetch assets with the correct skip size', () => {
@@ -296,7 +346,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
               select(getCurrentBrowseOptions),
               { ...browseOptions, section: Section.WEARABLES_TRENDING }
             ],
-            [select(getPage), pageInState]
+            [select(getPage), pageInState],
+            [select(getSection), Section.WEARABLES_TRENDING]
           ])
           .put(fetchItemsRequest(filters))
           .dispatch(fetchAssetsFromRouteAction(browseOptions))
@@ -331,11 +382,12 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
             isWearableSmart: undefined,
             search: undefined,
             rarities: undefined,
-            contracts: undefined,
+            contractAddresses: undefined,
             wearableGenders: undefined,
             emotePlayMode: undefined,
             minPrice: undefined,
-            maxPrice: undefined
+            maxPrice: undefined,
+            network: undefined
           }
         }
         it('should fetch assets with the correct skip size', () => {
@@ -345,7 +397,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
                 select(getCurrentBrowseOptions),
                 { ...browseOptions, section: Section.WEARABLES_TRENDING }
               ],
-              [select(getPage), undefined]
+              [select(getPage), undefined],
+              [select(getSection), Section.WEARABLES_TRENDING]
             ])
             .put(fetchItemsRequest(filters))
             .dispatch(fetchAssetsFromRouteAction(browseOptions))
@@ -405,6 +458,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -432,6 +486,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -459,6 +514,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -486,6 +542,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -524,6 +581,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -551,6 +609,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -584,6 +643,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -610,6 +670,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -636,6 +697,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -663,6 +725,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -701,6 +764,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -728,6 +792,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -755,6 +820,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -782,6 +848,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -820,6 +887,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -847,6 +915,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -880,6 +949,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -906,6 +976,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -932,6 +1003,7 @@ describe('when handling the browse action', () => {
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
+              [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [
                 call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -959,6 +1031,7 @@ describe('when handling the browse action', () => {
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
+            [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [
               call(fetchAssetsFromRoute, expectedBrowseOptions),
@@ -994,6 +1067,7 @@ describe('when handling the browse action', () => {
         .provide([
           [select(getCurrentBrowseOptions), browseOptions],
           [select(getLocation), { pathname }],
+          [select(getSection), Section.WEARABLES],
           [select(getEventData), eventContracts],
           [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
         ])
@@ -1017,6 +1091,7 @@ describe('when handling the browse action', () => {
         .provide([
           [select(getCurrentBrowseOptions), browseOptions],
           [select(getLocation), { pathname }],
+          [select(getSection), Section.WEARABLES],
           [select(getEventData), eventContracts],
           [call(fetchAssetsFromRoute, browseOptions), Promise.resolve()]
         ])
@@ -1050,6 +1125,7 @@ describe('when handling the browse action', () => {
       return expectSaga(routingSaga)
         .provide([
           [select(getCurrentBrowseOptions), {}],
+          [select(getSection), Section.WEARABLES],
           [select(getLocation), { pathname }],
           [select(getEventData), {}],
           [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
@@ -1088,16 +1164,68 @@ describe('when handling the location change action', () => {
     }
   })
   describe('and the location action is a POP, meaning going back', () => {
-    it('should dispatch the fetchAssetFromRoute action', () => {
-      return expectSaga(routingSaga)
-        .provide([
-          [select(getCurrentBrowseOptions), browseOptions],
-          [select(getSection), Section.WEARABLES],
-          [select(getPage), 1]
-        ])
-        .put(fetchAssetsFromRouteAction(browseOptions))
-        .dispatch(locationChangeAction)
-        .run({ silenceTimeout: true })
+    describe("and the current pathname doesn't match the browse", () => {
+      beforeEach(() => {
+        locationChangeAction.payload.location.pathname = 'anotherPathName'
+      })
+      it('should not call the fetchAssetFromRoute', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getLatestVisitedLocation),
+              {
+                pathname: locations.browse()
+              }
+            ],
+            [select(getCurrentBrowseOptions), browseOptions],
+            [select(getSection), Section.WEARABLES],
+            [select(getPage), 1]
+          ])
+          .not.put(fetchAssetsFromRouteAction(browseOptions))
+          .dispatch(locationChangeAction)
+          .run({ silenceTimeout: true })
+      })
+    })
+    describe('and its coming from the browse', () => {
+      beforeEach(() => {
+        locationChangeAction.payload.location.pathname = locations.browse()
+      })
+      it('should dispatch the fetchAssetFromRoute action', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getLatestVisitedLocation),
+              {
+                pathname: locations.browse()
+              }
+            ],
+            [select(getCurrentBrowseOptions), browseOptions],
+            [select(getSection), Section.WEARABLES],
+            [select(getPage), 1]
+          ])
+          .put(fetchAssetsFromRouteAction(browseOptions))
+          .dispatch(locationChangeAction)
+          .run({ silenceTimeout: true })
+      })
+    })
+    describe('and its coming from another route', () => {
+      it('should not dispatch the fetchAssetFromRoute action', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getLatestVisitedLocation),
+              {
+                pathname: 'aNotBrowsePath'
+              }
+            ],
+            [select(getCurrentBrowseOptions), browseOptions],
+            [select(getSection), Section.WEARABLES],
+            [select(getPage), 1]
+          ])
+          .not.put(fetchAssetsFromRouteAction(browseOptions))
+          .dispatch(locationChangeAction)
+          .run({ silenceTimeout: true })
+      })
     })
   })
   describe('and the location action is not a POP', () => {

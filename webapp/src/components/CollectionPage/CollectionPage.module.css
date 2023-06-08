@@ -33,9 +33,13 @@
 }
 
 .ellipsis {
-  visibility: hidden;
+  visibility: visible;
   color: var(--summer-red);
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 5px;
 }
 
 .row:hover .ellipsis {

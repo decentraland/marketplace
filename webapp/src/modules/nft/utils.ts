@@ -1,4 +1,5 @@
-import { BodyShape, Item, NFTCategory } from '@dcl/schemas'
+import { BodyShape, NFTCategory } from '@dcl/schemas'
+import { Asset } from '../asset/types'
 import { NFT } from './types'
 
 export function getNFTId(contractAddress: string, tokenId: string) {
@@ -35,13 +36,13 @@ export function isUnisex(bodyShapes: BodyShape[]) {
   return bodyShapes.length === 2
 }
 
-export function isLand(nft: NFT | Item) {
+export function isLand(nft: Asset) {
   return (
     nft.category === NFTCategory.PARCEL || nft.category === NFTCategory.ESTATE
   )
 }
 
-export function isParcel(nft: NFT | Item) {
+export function isParcel(nft: Asset) {
   return nft.category === NFTCategory.PARCEL
 }
 

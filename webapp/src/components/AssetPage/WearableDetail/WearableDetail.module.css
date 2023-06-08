@@ -1,3 +1,97 @@
+.WearableDetail {
+  display: flex;
+  flex-direction: column;
+}
+
+.WearableDetail .actionsContainer {
+  width: 521px;
+}
+
+.WearableDetail .assetImageContainer {
+  height: 602px;
+}
+
+.WearableDetail .assetImageContainer :global(.AssetImage) {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.WearableDetail .badges {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.WearableDetail .wearableInformation {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.WearableDetail .wearableInformationContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  width: 100%;
+  margin-top: 25px;
+}
+
 .issued {
   color: var(--secondary-text);
+}
+
+.WearableDetail .wearableBadgesContainer {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 768px) {
+  .WearableDetail .wearableInformationContainer {
+    gap: 16px;
+  }
+
+  .WearableDetail .actionsContainer {
+    width: 100%;
+  }
+
+  .WearableDetail .assetImageContainer {
+    height: unset;
+  }
+
+  .WearableDetail .assetImageContainer.availableForMint {
+    margin-bottom: 100px;
+  }
+
+  .WearableDetail .assetImageContainer :global(.AssetImage) {
+    overflow: visible;
+  }
+
+  .WearableDetail .wearableInformationContainer {
+    flex-direction: column;
+  }
+  .WearableDetail .wearableBadgesContainer {
+    margin-bottom: 18px;
+  }
+
+  .WearableDetail .wearableOwnerAndCollectionContainer {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .WearableDetail .wearableOwnerAndCollectionContainer :global(.dcl.stats) {
+    margin-bottom: 16px;
+  }
+
+  .WearableDetail :global(.dcl.tabs.fullscreen) {
+    padding-left: 21px;
+    margin: 0;
+    border-bottom: 1px solid var(--divider);
+  }
+
+  .WearableDetail :global(.filtertabsContainer .dcl.tab) {
+    height: unset;
+    margin-bottom: 22px;
+  }
 }

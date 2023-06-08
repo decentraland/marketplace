@@ -5,6 +5,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { builderUrl } from '../../../../lib/environment'
 import { isOwnedBy } from '../../../../modules/asset/utils'
+import { AssetType } from '../../../../modules/asset/types'
 import { locations } from '../../../../modules/routing/locations'
 import { VendorFactory } from '../../../../modules/vendor'
 import styles from './NFTSaleActions.module.css'
@@ -48,7 +49,12 @@ const NFTSaleActions = ({ bids, nft, order, wallet, onLeavingSite }: Props) => {
           </>
         ) : !isOwner ? (
           <>
-            <BuyNFTButtons asset={nft} />
+            <BuyNFTButtons
+              assetType={AssetType.ITEM}
+              contractAddress={nft.contractAddress}
+              network={nft.network}
+              tokenId={nft.tokenId}
+            />
             {canBid ? (
               <Button
                 as={Link}

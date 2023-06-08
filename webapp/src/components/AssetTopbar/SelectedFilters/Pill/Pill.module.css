@@ -1,6 +1,6 @@
 .pill {
   padding: 6px 16px;
-  background: rgba(115, 110, 125, 0.2);
+  background: var(--primary);
   border-radius: 16px;
   font-size: 13px;
   text-transform: uppercase;
@@ -35,4 +35,3 @@
 .pill .deleteBtn i {
   margin-right: 0;
 }
-

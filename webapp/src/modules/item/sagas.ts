@@ -16,8 +16,10 @@ import { config } from '../../config'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
 import { buyAssetWithCard } from '../asset/utils'
+import { isCatalogView } from '../routing/utils'
 import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import { retryParams } from '../vendor/decentraland/utils'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -43,7 +45,11 @@ import {
   FetchItemSuccessAction,
   FETCH_ITEM_FAILURE,
   FETCH_ITEM_SUCCESS,
-  fetchItemRequest
+  fetchItemRequest,
+  FetchCollectionItemsRequestAction,
+  fetchCollectionItemsSuccess,
+  fetchCollectionItemsFailure,
+  FETCH_COLLECTION_ITEMS_REQUEST
 } from './actions'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
@@ -51,13 +57,19 @@ import { getItem } from './utils'
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
 export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
-  const itemAPI = new ItemAPI(NFT_SERVER_URL, {
+  const API_OPTS = {
     retries: retryParams.attempts,
     retryDelay: retryParams.delay,
     identity: getIdentity
-  })
+  }
+  const itemAPI = new ItemAPI(NFT_SERVER_URL, API_OPTS)
+  const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
+  yield takeEvery(
+    FETCH_COLLECTION_ITEMS_REQUEST,
+    handleFetchCollectionItemsRequest
+  )
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
@@ -77,7 +89,14 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         [itemAPI, 'getTrendings'],
         size
       )
-      yield put(fetchTrendingItemsSuccess(data))
+      const ids = data.map(item => item.id)
+      const { data: itemData }: { data: Item[]; total: number } = yield call(
+        [catalogAPI, 'get'],
+        {
+          ids
+        }
+      )
+      yield put(fetchTrendingItemsSuccess(itemData))
     } catch (error) {
       yield put(
         fetchTrendingItemsFailure(
@@ -87,18 +106,37 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     }
   }
 
+  function* handleFetchCollectionItemsRequest(
+    action: FetchCollectionItemsRequestAction
+  ) {
+    const { contractAddresses, first } = action.payload
+    try {
+      const { data }: { data: Item[]; total: number } = yield call(
+        [itemAPI, 'get'],
+        { first, contractAddresses }
+      )
+      yield put(fetchCollectionItemsSuccess(data))
+    } catch (error) {
+      yield put(
+        fetchCollectionItemsFailure(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
+      )
+    }
+  }
+
   function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
-    const { filters } = action.payload
+    const { filters, view } = action.payload
 
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
     yield call(waitForWalletConnectionIfConnecting)
 
     try {
+      const api = isCatalogView(view) ? catalogAPI : itemAPI
       const { data, total }: { data: Item[]; total: number } = yield call(
-        [itemAPI, 'get'],
+        [api, 'get'],
         filters
       )
-
       yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
     } catch (error) {
       yield put(

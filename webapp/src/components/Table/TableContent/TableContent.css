@@ -1,0 +1,118 @@
+.TableContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.TableContent .ui.table {
+  font-size: 14px;
+  line-height: 24px;
+  color: white;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+.TableContent .header {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.TableContent .ui.table th {
+  padding: 18px;
+  border: 1px solid var(--divider);
+}
+
+.TableContent.radiusEnding .ui.table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.TableContent.radiusEnding .ui.table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+.TableContent.emptyHeaders .ui.table th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.TableContent.emptyHeaders .ui.table th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.TableContent .ui.table td:first-child,
+.TableContent .ui.table th:first-child {
+  padding: 18px !important;
+  border: 1px solid var(--divider);
+}
+
+.TableContent .ui.table tr td {
+  border: 1px solid var(--divider);
+  padding: 15.5px;
+}
+
+.TableContent .ui.table tr td {
+  border-top: 1px solid var(--divider);
+}
+
+.TableContent .ui.table td a {
+  color: var(--text);
+}
+
+.TableContent .ui.table td a.ui.button.inverted {
+  height: 32px;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.TableContent .emptyTable {
+  width: 100%;
+  height: 404px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.TableContent .pagination {
+  justify-content: flex-end;
+  gap: 20px;
+  display: flex;
+  color: var(--secondary-text);
+  align-items: center;
+  margin-bottom: 11px;
+}
+
+.TableContent .ui.basic.table th {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .TableContent .ui.basic.table tbody tr {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    padding: 0;
+  }
+  .TableContent .pagination {
+    flex-direction: column;
+  }
+  .TableContent .pagination .ui.pagination.menu {
+    display: flex;
+    flex-direction: row;
+  }
+  .TableContent .pagination .ui.pagination.menu .item + .item {
+    margin: 0;
+  }
+  .TableContent .pagination .ui.pagination.menu {
+    width: 100%;
+    justify-content: center;
+  }
+  .TableContent .pagination {
+    grid-gap: 10px;
+    gap: 10px;
+  }
+  .TableContent .ui.menu:after {
+    display: none;
+  }
+}

@@ -1,0 +1,16 @@
+.Description .descriptionText {
+  font-size: 14px;
+  line-height: 26px;
+  letter-spacing: 0.2px;
+  word-wrap: break-word;
+}
+
+.Description .readMore {
+  padding: 0px !important;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.Description :global(.ui.sub.header) {
+  font-weight: 600;
+}

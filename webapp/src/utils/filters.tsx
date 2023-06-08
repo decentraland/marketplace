@@ -9,6 +9,13 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana } from '../components/Mana'
 import { LANDFilters } from '../components/Vendor/decentraland/types'
 
+export enum AssetStatusFilter {
+  ON_SALE = 'on_sale',
+  ONLY_MINTING = 'only_minting',
+  ONLY_LISTING = 'only_listing',
+  NOT_FOR_SALE = 'not_for_sale'
+}
+
 export const AVAILABLE_FOR_MALE = 'AVAILABLE_FOR_MALE'
 export const AVAILABLE_FOR_FEMALE = 'AVAILABLE_FOR_FEMALE'
 

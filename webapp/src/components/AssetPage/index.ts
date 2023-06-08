@@ -1,3 +1,3 @@
-import AssetPage from './AssetPage.container'
+import AssetPage from './AssetPage'
 
 export { AssetPage }

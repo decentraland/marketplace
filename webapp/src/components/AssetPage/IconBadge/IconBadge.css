@@ -2,19 +2,19 @@
   display: inline-flex;
   align-items: center;
   text-transform: uppercase;
-  padding: 4px 12px;
+  padding: 2px 8px;
   border-radius: 5px;
   cursor: pointer;
   background-color: #37333d;
 }
 
 .IconBadge .text {
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .IconBadge .icon {
-  width: 15px;
-  height: 15px;
+  width: 13px;
+  height: 13px;
   margin-right: 10px;
   background-position: center;
   background-repeat: no-repeat;

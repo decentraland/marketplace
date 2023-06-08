@@ -6,6 +6,7 @@ import {
   Rarity,
   WearableGender
 } from '@dcl/schemas'
+import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../../modules/asset/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
@@ -20,6 +21,7 @@ export type Props = {
   minEstateSize: string
   maxEstateSize: string
   rarities: Rarity[]
+  status?: AssetStatusFilter
   network?: Network
   category?: NFTCategory
   bodyShapes?: (GenderFilterOption | WearableGender)[]
@@ -57,6 +59,7 @@ export type MapStateProps = Pick<
   | 'minEstateSize'
   | 'maxEstateSize'
   | 'rarities'
+  | 'status'
   | 'network'
   | 'category'
   | 'bodyShapes'

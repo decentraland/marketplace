@@ -21,6 +21,7 @@ import {
   getRentalDays,
   getRarities,
   getSection,
+  getStatus,
   getWearableGenders
 } from '../../modules/routing/selectors'
 import {
@@ -31,6 +32,7 @@ import {
   getIsRentalPeriodFilterEnabled
 } from '../../modules/features/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
+import { AssetStatusFilter } from '../../utils/filters'
 import { browse } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
 import { getView } from '../../modules/ui/browse/selectors'
@@ -69,6 +71,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
         ? values.maxEstateSize || ''
         : getMaxEstateSize(state),
     rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
+    status:
+      'status' in values
+        ? values.status
+        : (getStatus(state) as AssetStatusFilter),
     network: 'network' in values ? values.network : getNetwork(state),
     bodyShapes:
       'wearableGenders' in values
@@ -85,10 +91,20 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     landStatus,
     view: getView(state),
     section,
-    rentalDays: 'rentalDays' in values ? values.rentalDays : getRentalDays(state),
-    minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
-    maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
-    adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
+    rentalDays:
+      'rentalDays' in values ? values.rentalDays : getRentalDays(state),
+    minDistanceToPlaza:
+      'minDistanceToPlaza' in values
+        ? values.minDistanceToPlaza
+        : getMinDistanceToPlaza(state),
+    maxDistanceToPlaza:
+      'maxDistanceToPlaza' in values
+        ? values.maxDistanceToPlaza
+        : getMaxDistanceToPlaza(state),
+    adjacentToRoad:
+      'adjacentToRoad' in values
+        ? values.adjacentToRoad
+        : getAdjacentToRoad(state),
     isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state),
     isPriceFilterEnabled: getIsPriceFilterEnabled(state),
     isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),

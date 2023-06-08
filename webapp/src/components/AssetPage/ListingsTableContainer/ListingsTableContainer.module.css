@@ -1,0 +1,74 @@
+.supply {
+  color: var(--secondary-text);
+}
+
+.ownerButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filtertabsContainer {
+  display: flex;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  align-items: center;
+  border-bottom: 1px solid var(--secondary);
+  padding-left: 20px;
+}
+
+.sortByDropdown {
+  border-radius: 12px;
+  margin-right: 20px;
+  justify-content: space-between;
+}
+
+.filtertabsContainer :global(.ui.dropdown) {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  position: absolute;
+  right: 20px;
+}
+
+.ui.dropdown > .icon {
+  color: white !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .listingsTableContainer :global(.filtertabsContainer) {
+    height: 69px;
+  }
+
+  .listingsTableContainer :global(.ui.basic.table tbody tr) {
+    height: 65px;
+  }
+  .listingsTableContainer :global(.dcl.mana.inline) {
+    line-height: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  :global(.ui.button.basic) {
+    text-align: left;
+  }
+
+  .filtertabsContainer {
+    flex-direction: column;
+    padding: unset;
+  }
+
+  .tabStyle {
+    padding-left: unset;
+  }
+
+  .filtertabsContainer :global(.ui.dropdown) {
+    position: relative;
+    left: 20px;
+    align-self: flex-start;
+    margin-bottom: 10px;
+  }
+}

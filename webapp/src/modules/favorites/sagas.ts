@@ -1,5 +1,5 @@
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
-import { Item } from '@dcl/schemas'
+import { CatalogFilters, Item } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   ConnectWalletSuccessAction,
@@ -19,9 +19,9 @@ import {
   MARKETPLACE_FAVORITES_SERVER_URL
 } from '../vendor/decentraland/favorites/api'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
-import { ItemAPI } from '../vendor/decentraland/item/api'
 import { NFT_SERVER_URL } from '../vendor/decentraland'
 import { SortDirection } from '../routing/types'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
@@ -62,24 +62,25 @@ import {
   CreateListRequestAction,
   createListFailure,
   createListSuccess,
-  CREATE_LIST_REQUEST
+  CREATE_LIST_REQUEST,
+  DeleteListStartAction,
+  DELETE_LIST_START,
+  deleteListRequest
 } from './actions'
 import { getListId } from './selectors'
-import { FavoritedItems, List } from './types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
-  const itemAPI = new ItemAPI(NFT_SERVER_URL, {
+  const API_OPTS = {
     retries: retryParams.attempts,
     retryDelay: retryParams.delay,
     identity: getIdentity
-  })
-
-  const favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
-    retries: retryParams.attempts,
-    retryDelay: retryParams.delay,
-    identity: getIdentity
-  })
+  }
+  const favoritesAPI = new FavoritesAPI(
+    MARKETPLACE_FAVORITES_SERVER_URL,
+    API_OPTS
+  )
+  const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield takeEvery(
     PICK_ITEM_AS_FAVORITE_REQUEST,
@@ -99,6 +100,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   )
   yield takeEvery(FETCH_LISTS_REQUEST, handleFetchListsRequest)
   yield takeEvery(DELETE_LIST_REQUEST, handleDeleteListRequest)
+  yield takeEvery(DELETE_LIST_START, handleDeleteListStart)
   yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
   yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
   yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
@@ -198,7 +200,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       const {
         results,
         total
-      }: { results: FavoritedItems; total: number } = yield call(
+      }: Awaited<ReturnType<typeof favoritesAPI.getPicksByList>> = yield call(
         [favoritesAPI, 'getPicksByList'],
         listId,
         filters
@@ -209,18 +211,20 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           favoritedItem.createdAt
         ])
       )
+      const ids = results.map(({ itemId }) => itemId)
+      const optionsFilters = {
+        first: results.length,
+        ids
+      }
       const options: ItemBrowseOptions = {
         ...action.payload.options,
-        filters: {
-          first: results.length,
-          ids: results.map(({ itemId }) => itemId)
-        }
+        filters: optionsFilters
       }
 
       if (results.length > 0) {
         const result: { data: Item[] } = yield call(
-          [itemAPI, 'get'],
-          options.filters
+          [catalogAPI, 'get'],
+          optionsFilters
         )
         items = result.data
       }
@@ -262,7 +266,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         sortDirection = sortValues.sortDirection
       }
 
-      const { results, total }: { results: List[]; total: number } = yield call(
+      const {
+        results,
+        total
+      }: Awaited<ReturnType<typeof favoritesAPI.getLists>> = yield call(
         [favoritesAPI, 'getLists'],
         {
           first: options.first,
@@ -272,13 +279,39 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         }
       )
 
-      yield put(fetchListsSuccess(results, total, options))
+      const previewListsItemIds = results.flatMap(list => list.previewOfItemIds)
+      const itemFilters: CatalogFilters = {
+        first: results.length,
+        ids: previewListsItemIds
+      }
+
+      let previewItems: Item[] = []
+      if (previewListsItemIds.length > 0) {
+        const result: { data: Item[] } = yield call(
+          [catalogAPI, 'get'],
+          itemFilters
+        )
+        previewItems = result.data
+      }
+
+      yield put(fetchListsSuccess(results, previewItems, total, options))
     } catch (error) {
       yield put(
         fetchListsFailure(
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )
+    }
+  }
+
+  function* handleDeleteListStart(action: DeleteListStartAction) {
+    const { list } = action.payload
+    if (list.itemsCount > 0) {
+      yield put(
+        openModal('ConfirmDeleteListModal', { list: action.payload.list })
+      )
+    } else {
+      yield put(deleteListRequest(list))
     }
   }
 
@@ -293,6 +326,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       yield put(
         deleteListFailure(
+          list,
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )
@@ -303,7 +337,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { id } = action.payload
 
     try {
-      const list: List = yield call([favoritesAPI, 'getList'], id)
+      const list: Awaited<ReturnType<typeof favoritesAPI.getList>> = yield call(
+        [favoritesAPI, 'getList'],
+        id
+      )
       yield put(getListSuccess(list))
     } catch (error) {
       yield put(
@@ -319,11 +356,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { id, updatedList } = action.payload
 
     try {
-      const list: List = yield call(
-        [favoritesAPI, 'updateList'],
-        id,
-        updatedList
-      )
+      const list: Awaited<ReturnType<
+        typeof favoritesAPI.updateList
+      >> = yield call([favoritesAPI, 'updateList'], id, updatedList)
       yield put(updateListSuccess(list))
     } catch (error) {
       yield put(
@@ -340,7 +375,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
-      const list: List = yield call([favoritesAPI, 'createList'], {
+      const list: Awaited<ReturnType<
+        typeof favoritesAPI.createList
+      >> = yield call([favoritesAPI, 'createList'], {
         name,
         isPrivate,
         description

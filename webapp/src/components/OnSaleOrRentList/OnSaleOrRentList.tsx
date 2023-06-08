@@ -13,11 +13,13 @@ import { SortBy } from '../../modules/routing/types'
 import { useProcessedElements } from './utils'
 import OnSaleListElement from './OnSaleListElement'
 import OnRentListElement from './OnRentListElement'
-import styles from './OnSaleOrRentList.module.css'
+import './OnSaleOrRentList.css'
+
+const ROWS_PER_PAGE = 12
 
 const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
   const showRents = onSaleOrRentType === OnSaleOrRentType.RENT
-  const perPage = useRef(12)
+  const perPage = useRef(ROWS_PER_PAGE)
   const sortOptions = useRef([
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') }
@@ -52,9 +54,9 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
   )
 
   return (
-    <>
-      <div className={styles.filters}>
-        <div className={styles.search}>{searchNode}</div>
+    <div className="onSaleOrRentTable">
+      <div className="filters">
+        <div className="search">{searchNode}</div>
         <Dropdown
           direction="left"
           value={sort}
@@ -73,15 +75,23 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
             <NotMobile>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>{t('global.item')}</Table.HeaderCell>
-                  <Table.HeaderCell>{t('global.type')}</Table.HeaderCell>
                   <Table.HeaderCell>
-                    {showRents ? t('global.status') : t('global.sale_type')}
+                    <span>{t('global.item')}</span>
                   </Table.HeaderCell>
                   <Table.HeaderCell>
-                    {showRents
-                      ? t('global.rent_price')
-                      : t('global.sell_price')}
+                    <span>{t('global.type')}</span>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <span>
+                      {showRents ? t('global.status') : t('global.sale_type')}
+                    </span>
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    <span>
+                      {showRents
+                        ? t('global.rent_price')
+                        : t('global.sell_price')}
+                    </span>
                   </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
@@ -108,10 +118,10 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
             </Table.Body>
           </Table>
           {processedElements.total === 0 && (
-            <div className={styles.empty}>{t('global.no_results')}</div>
+            <div className="empty">{t('global.no_results')}</div>
           )}
           {showPagination && (
-            <div className={styles.pagination}>
+            <div className="pagination">
               <Pagination
                 totalPages={Math.ceil(
                   processedElements.total / perPage.current
@@ -123,7 +133,7 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
           )}
         </>
       )}
-    </>
+    </div>
   )
 }
 

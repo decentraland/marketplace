@@ -11,7 +11,7 @@
 }
 
 .RecentlySoldTable .recently-sold-card .ui.table td {
-  padding: 16px 0;
+  padding: 18px;
 }
 
 .RecentlySoldTable .recently-sold-card table.table td {
@@ -20,7 +20,6 @@
 
 .RecentlySoldTable .recently-sold-card-tabs {
   display: flex;
-  background-color: #2f2b35;
   padding: 0 24px;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -28,7 +27,7 @@
 }
 
 .RecentlySoldTable .ui.very.basic.table {
-  padding: 0 24px;
+  margin: 0px;
 }
 
 .RecentlySoldTable .dcl.tabs.fullscreen {
@@ -183,10 +182,6 @@
     border-bottom: none;
   }
 
-  .RecentlySoldTable .separator {
-    padding: 0 6px;
-  }
-
   .RecentlySoldTable .recently-sold-sale-info {
     color: #858585;
   }
@@ -249,4 +244,85 @@
     min-height: 161px;
     position: relative;
   }
+}
+
+.RecentlySoldTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.RecentlySoldTable .ui.table {
+  font-size: 14px;
+  line-height: 24px;
+  color: white;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+.RecentlySoldTable .ui.table th {
+  padding: 18px !important;
+  border: 1px solid var(--divider);
+}
+
+.RecentlySoldTable .ui.table td:first-child,
+.RecentlySoldTable .ui.table th:first-child {
+  padding: 18px !important;
+  border: 1px solid var(--divider);
+}
+
+.RecentlySoldTable .ui.table tr td {
+  border: 1px solid var(--divider);
+  padding: 18px;
+}
+
+.RecentlySoldTable .ui.table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.RecentlySoldTable .ui.table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+.RecentlySoldTable .ui.table tr td {
+  border-top: 1px solid var(--divider);
+}
+
+.RecentlySoldTable .ui.table td a {
+  color: var(--text);
+}
+
+.RecentlySoldTable .emptyTable {
+  width: 100%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.RecentlySoldTable .ui.loader.active {
+  display: flex;
+}
+
+.RecentlySoldTable .pagination {
+  justify-content: flex-end;
+  gap: 20px;
+  display: flex;
+  color: var(--secondary-text);
+  align-items: center;
+  margin-bottom: 11px;
+}
+
+.RecentlySoldTable .ui.dropdown {
+  display: flex;
+}
+
+.RecentlySoldTable .ui.loader.active {
+  display: flex;
+}
+
+.RecentlySoldTable .ui.basic.table th {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
 }

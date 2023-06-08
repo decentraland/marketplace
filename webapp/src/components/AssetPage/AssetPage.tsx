@@ -1,6 +1,7 @@
-import React from 'react'
-import { Page, Section, Column } from 'decentraland-ui'
+import React, { useCallback } from 'react'
+import { Item } from '@dcl/schemas'
 import { mapAsset } from '../../modules/asset/utils'
+import { Page, Section, Column } from 'decentraland-ui'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
@@ -16,6 +17,10 @@ import { EmoteDetail } from './EmoteDetail'
 import './AssetPage.css'
 
 const AssetPage = ({ type }: Props) => {
+  const renderItemDetail = useCallback(
+    (item: Item) => <ItemDetail item={item} />,
+    []
+  )
   return (
     <>
       <Navbar isFullscreen />
@@ -30,8 +35,8 @@ const AssetPage = ({ type }: Props) => {
                     {mapAsset<React.ReactNode>(
                       asset,
                       {
-                        wearable: item => <ItemDetail item={item} />,
-                        emote: item => <ItemDetail item={item} />
+                        wearable: renderItemDetail,
+                        emote: renderItemDetail
                       },
                       {
                         ens: nft => <ENSDetail nft={nft} />,

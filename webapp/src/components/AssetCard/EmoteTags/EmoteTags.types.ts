@@ -1,6 +1,5 @@
-import { NFT } from '../../../modules/nft/types'
-import { VendorName } from '../../../modules/vendor/types'
+import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
-  nft: NFT<VendorName.DECENTRALAND>
+  asset: Asset
 }

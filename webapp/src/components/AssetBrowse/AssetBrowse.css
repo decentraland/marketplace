@@ -143,6 +143,19 @@
   .AssetBrowse .overlay {
     margin-top: 0;
   }
+  .AssetBrowse .ui.cards {
+    display: flex;
+  }
+  .AssetBrowse .ui.cards > div {
+    width: 48%;
+  }
+  .AssetBrowse .ui.cards .content.catalog {
+    padding: 10px 10px 18px 10px;
+    display: flex;
+  }
+  .AssetBrowse .ui.cards .CatalogItemInformation {
+    margin-top: 6px;
+  }
   .AssetBrowse .ui.cards,
   .AssetBrowse .ui.cards > .ui.card {
     margin-left: 0;

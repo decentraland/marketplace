@@ -1,17 +1,21 @@
 import React from 'react'
 import { Dispatch } from 'redux'
-import { Avatar, IPreviewController } from '@dcl/schemas'
-import { Item } from '@dcl/schemas'
-import { NFT } from '../../modules/nft/types'
+import { Avatar, IPreviewController, Item, Rarity } from '@dcl/schemas'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   setIsTryingOn,
   SetIsTryingOnAction,
   setWearablePreviewController,
   SetWearablePreviewControllerAction
 } from '../../modules/ui/preview/actions'
+import { Asset } from '../../modules/asset/types'
+import {
+  FetchItemRequestAction,
+  fetchItemRequest
+} from '../../modules/item/actions'
 
 export type Props = {
-  asset: NFT | Item
+  asset: Asset
   className?: string
   isDraggable?: boolean
   withNavigation?: boolean
@@ -26,11 +30,14 @@ export type Props = {
   showOrderListedTag?: boolean
   onSetIsTryingOn: typeof setIsTryingOn
   onSetWearablePreviewController: typeof setWearablePreviewController
+  onFetchItem: typeof fetchItemRequest
   children?: React.ReactNode
   hasBadges?: boolean
+  item: Item | null
+  wallet: Wallet | null
 }
 
-export type OwnProps = Pick<Props, 'showOrderListedTag'>
+export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>
 
 export enum ControlOptionAction {
   ZOOM_IN,
@@ -41,12 +48,28 @@ export enum ControlOptionAction {
 
 export type MapStateProps = Pick<
   Props,
-  'avatar' | 'wearableController' | 'isTryingOn' | 'isPlayingEmote'
+  | 'avatar'
+  | 'wearableController'
+  | 'isTryingOn'
+  | 'isPlayingEmote'
+  | 'item'
+  | 'wallet'
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onSetIsTryingOn' | 'onSetWearablePreviewController'
+  'onSetIsTryingOn' | 'onSetWearablePreviewController' | 'onFetchItem'
 >
 export type MapDispatch = Dispatch<
-  SetIsTryingOnAction | SetWearablePreviewControllerAction
+  | SetIsTryingOnAction
+  | SetWearablePreviewControllerAction
+  | FetchItemRequestAction
 >
+
+export type AvailableForMintPopupType = {
+  price: string
+  stock: number
+  rarity: Rarity
+  contractAddress: string
+  itemId: string
+  network: string
+}

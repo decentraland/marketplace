@@ -1,6 +1,6 @@
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { AssetType } from '../../modules/asset/types'
-import { BrowseOptions } from '../../modules/routing/types'
+import { BrowseOptions, SortByOption } from '../../modules/routing/types'
 import { Section } from '../../modules/vendor/routing/types'
 import { View } from '../../modules/ui/types'
 import { clearFilters } from '../../modules/routing/actions'
@@ -11,6 +11,7 @@ export type Props = {
   isMap: boolean
   view: View | undefined
   sortBy: string | undefined
+  sortByOptions: SortByOption[]
   assetType: AssetType
   onlyOnSale: boolean | undefined
   onlyOnRent: boolean | undefined
@@ -32,6 +33,7 @@ export type MapStateProps = Pick<
   | 'onlyOnRent'
   | 'onlyOnSale'
   | 'sortBy'
+  | 'sortByOptions'
   | 'section'
   | 'hasFiltersEnabled'
   | 'isLoading'

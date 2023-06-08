@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react'
-import { matchPath } from 'react-router-dom'
+import { matchPath, useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -53,8 +53,15 @@ const AssetBrowse = (props: Props) => {
     isMapViewFiltersEnabled
   } = props
 
+  const location = useLocation()
+  const history = useHistory()
   // Prevent fetching more than once while browsing
-  const [hasFetched, setHasFetched] = useState(false)
+  const lastLocation = visitedLocations[visitedLocations.length - 2]
+  const [hasFetched, setHasFetched] = useState(
+    history.action === 'POP' &&
+      lastLocation?.pathname === location.pathname &&
+      lastLocation?.search === location.search
+  )
   const isCurrentAccount = view === View.CURRENT_ACCOUNT
   const isAccountOrCurrentAccount = view === View.ACCOUNT || isCurrentAccount
   const [showOwnedLandOnMap, setShowOwnedLandOnMap] = useState(true)

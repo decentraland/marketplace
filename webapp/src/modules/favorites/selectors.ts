@@ -1,8 +1,10 @@
 import { createMatchSelector } from 'connected-react-router'
 import { createSelector } from 'reselect'
+import { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
+import { getData as getItems } from '../item/selectors'
 import { FavoritesData } from './types'
 import {
   FETCH_FAVORITED_ITEMS_REQUEST,
@@ -10,7 +12,9 @@ import {
   UNPICK_ITEM_AS_FAVORITE_REQUEST,
   UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
   FETCH_LISTS_REQUEST,
-  CREATE_LIST_REQUEST
+  CREATE_LIST_REQUEST,
+  UPDATE_LIST_REQUEST,
+  DELETE_LIST_REQUEST
 } from './actions'
 
 export const getState = (state: RootState) => state.favorites
@@ -27,6 +31,10 @@ export const isLoadingLists = (state: RootState): boolean =>
   isLoadingType(getLoading(state), FETCH_LISTS_REQUEST)
 export const isLoadingCreateList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), CREATE_LIST_REQUEST)
+export const isLoadingUpdateList = (state: RootState): boolean =>
+  isLoadingType(getLoading(state), UPDATE_LIST_REQUEST)
+export const isLoadingDeleteList = (state: RootState): boolean =>
+  isLoadingType(getLoading(state), DELETE_LIST_REQUEST)
 
 export const getFavoritesDataByItemId = (
   state: RootState,
@@ -62,3 +70,7 @@ export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
   )
 
 export const getList = (state: RootState, id: string) => getLists(state)[id]
+export const getPreviewListItems = (state: RootState, id: string): Item[] =>
+  getLists(state)
+    [id]?.previewOfItemIds?.map(itemId => getItems(state)[itemId])
+    .filter(Boolean) ?? []

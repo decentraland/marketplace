@@ -4,12 +4,15 @@ import {
   ListingStatus,
   NFTCategory,
   Order,
+  OrderFilters,
+  OrderSortBy,
   RentalListing
 } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { Account } from '../account/types'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from '../analytics/types'
+import { OrderResponse } from './decentraland/order/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, TransferType, FetchOneOptions } from './types'
 
@@ -49,7 +52,10 @@ export interface NFTService<V extends VendorName> {
 export class NFTService<V> {}
 
 export interface OrderService<V extends VendorName> {
-  fetchByNFT: (nft: NFT<V>, status?: ListingStatus) => Promise<Order[]>
+  fetchOrders: (
+    params: OrderFilters,
+    sortBy: OrderSortBy
+  ) => Promise<OrderResponse>
   create: (
     wallet: Wallet | null,
     nft: NFT<V>,

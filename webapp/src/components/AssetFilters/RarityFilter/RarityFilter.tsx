@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react'
-import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { Box, Popup, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
@@ -52,7 +52,15 @@ export const RarityFilter = ({
           </span>
         </div>
       ) : (
-        t('nft_filters.rarities.title')
+        <>
+          {t('nft_filters.rarities.title')}
+          <Popup
+            content={t('nft_filters.rarities.tooltip')}
+            position="bottom right"
+            trigger={<div className="InfoTooltip" />}
+            on="hover"
+          />
+        </>
       ),
     [rarities, isMobileOrTablet, allRaritiesSelected]
   )

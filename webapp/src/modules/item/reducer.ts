@@ -1,3 +1,4 @@
+import isEqual from 'lodash/isEqual'
 import { Item } from '@dcl/schemas'
 import {
   loadingReducer,
@@ -5,7 +6,9 @@ import {
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FETCH_FAVORITED_ITEMS_SUCCESS,
-  FetchFavoritedItemsSuccessAction
+  FETCH_LISTS_SUCCESS,
+  FetchFavoritedItemsSuccessAction,
+  FetchListsSuccessAction
 } from '../favorites/actions'
 import {
   BuyItemFailureAction,
@@ -39,7 +42,13 @@ import {
   BuyItemWithCardSuccessAction,
   BUY_ITEM_WITH_CARD_FAILURE,
   CLEAR_ITEM_ERRORS,
-  ClearItemErrorsAction
+  ClearItemErrorsAction,
+  FETCH_COLLECTION_ITEMS_SUCCESS,
+  FetchCollectionItemsRequestAction,
+  FetchCollectionItemsSuccessAction,
+  FetchCollectionItemsFailureAction,
+  FETCH_COLLECTION_ITEMS_REQUEST,
+  FETCH_COLLECTION_ITEMS_FAILURE
 } from './actions'
 
 export type ItemState = {
@@ -56,6 +65,7 @@ export const INITIAL_STATE: ItemState = {
 
 type ItemReducerAction =
   | FetchFavoritedItemsSuccessAction
+  | FetchListsSuccessAction
   | FetchTrendingItemsRequestAction
   | FetchTrendingItemsSuccessAction
   | FetchTrendingItemsFailureAction
@@ -72,6 +82,9 @@ type ItemReducerAction =
   | BuyItemWithCardSuccessAction
   | BuyItemWithCardFailureAction
   | ClearItemErrorsAction
+  | FetchCollectionItemsRequestAction
+  | FetchCollectionItemsSuccessAction
+  | FetchCollectionItemsFailureAction
 
 export function itemReducer(
   state = INITIAL_STATE,
@@ -84,6 +97,7 @@ export function itemReducer(
     case BUY_ITEM_WITH_CARD_SUCCESS:
     case FETCH_ITEMS_REQUEST:
     case FETCH_TRENDING_ITEMS_REQUEST:
+    case FETCH_COLLECTION_ITEMS_REQUEST:
     case FETCH_ITEM_REQUEST: {
       return {
         ...state,
@@ -92,6 +106,8 @@ export function itemReducer(
     }
     case FETCH_TRENDING_ITEMS_SUCCESS:
     case FETCH_FAVORITED_ITEMS_SUCCESS:
+    case FETCH_LISTS_SUCCESS:
+    case FETCH_COLLECTION_ITEMS_SUCCESS:
     case FETCH_ITEMS_SUCCESS: {
       const { items } = action.payload
       return {
@@ -100,7 +116,9 @@ export function itemReducer(
         data: {
           ...state.data,
           ...items.reduce((obj, item) => {
-            obj[item.id] = item
+            if (!state.data[item.id] || !isEqual(state.data[item.id], item)) {
+              obj[item.id] = { ...state.data[item.id], ...item }
+            }
             return obj
           }, {} as Record<string, Item>)
         },
@@ -114,7 +132,7 @@ export function itemReducer(
         loading: loadingReducer(state.loading, action),
         data: {
           ...state.data,
-          [item.id]: { ...item }
+          [item.id]: { ...state.data[item.id], ...item }
         },
         error: null
       }
@@ -122,6 +140,7 @@ export function itemReducer(
 
     case BUY_ITEM_FAILURE:
     case BUY_ITEM_WITH_CARD_FAILURE:
+    case FETCH_COLLECTION_ITEMS_FAILURE:
     case FETCH_ITEMS_FAILURE:
     case FETCH_TRENDING_ITEMS_FAILURE:
     case FETCH_ITEM_FAILURE: {

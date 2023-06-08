@@ -98,7 +98,4 @@
   .rentedMessage {
     margin-top: 0px;
   }
-  .main :global(.dcl.back.absolute) {
-    margin-bottom: 15px;
-  }
 }

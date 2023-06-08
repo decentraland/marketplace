@@ -18,6 +18,7 @@
     "ens": "Nombre",
     "art": "Arte",
     "cancel": "Cancelar",
+    "save": "Guardar",
     "proceed": "Aceptar",
     "create": "Crear",
     "continue": "Continuar",
@@ -62,7 +63,10 @@
     "the_parcel": "La Parcela",
     "the_estate": "El Estate",
     "discord_server": "Servidor de Discord",
-    "currently": "actualmente"
+    "currently": "actualmente",
+    "showing": "Mostrando",
+    "of": "de",
+    "now": "ahora"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -110,7 +114,7 @@
     "wearables_mouth": "Boca",
     "wearables_upper_body": "Torso",
     "wearables_lower_body": "Piernas",
-    "wearables_feet": "Piez",
+    "wearables_feet": "Pies",
     "wearables_accessories": "Accesorios",
     "wearables_earring": "Aros",
     "wearables_eyewear": "Gafas",
@@ -165,8 +169,7 @@
     "recently_listed_for_rent": "Listados recientemente para rentar",
     "recently_sold": "Vendidos recientemente",
     "cheapest": "Más baratos",
-    "cheapest_sale": "Más baratos (Venta)",
-    "cheapest_rent": "Más baratos (Renta)",
+    "most_expensive": "Más caros",
     "no_results": "No se encontraron resultados.",
     "type_to_search": "Escriba para buscar collecciones.",
     "clear": "Borrar filtros",
@@ -338,16 +341,16 @@
   },
   "nft_list": {
     "empty": {
-      "title": "No pudimos encontrar ningún resultado en la sección {currentSection}.",
-      "action": "<searchStore>Busca en {section}</searchStore><if-filters> o <clearFilters>limpia los filtros</clearFilters></if-filters>"
+      "title": "No pudimos encontrar ningún resultado con esos filtros.",
+      "action": "<if-filters><clearFilters>Limpia los filtros</clearFilters></if-filters>"
     },
     "simple_empty": {
       "title": "No pudimos encontrar ningún resultado.",
       "action": "<if-filters><br></br><clearFilters>Limpia los filtros</clearFilters></if-filters>"
     },
     "empty_search": {
-      "title": "No hay resultados para \"{search}\" en {currentSection}.",
-      "action": "<searchStore> Intenta buscando en {section}</searchStore>"
+      "title": "No hay resultados para \"{search}\".",
+      "action": "Compruebe si hay errores tipográficos o de ortografía, o pruebe con un término de búsqueda diferente."
     }
   },
   "nft_filters": {
@@ -374,8 +377,19 @@
       "male": "Solo masculino",
       "unisex": "Solo unisex"
     },
+    "status": {
+      "title": "Estado",
+      "on_sale": "En venta",
+      "on_sale_tooltip": "Incluye items disponible para mintear o publicaciones disponibles",
+      "only_minting": "Solo disponible para mintear",
+      "only_minting_tooltip": "Solo incluye items disponibles para mintear (comprando directamente al creador).",
+      "only_listing": "Solo publicaciones",
+      "only_listing_tooltip": "Solo incluye items que estan siendo re-vendidos",
+      "not_for_sale": "No a la venta"
+    },
     "rarities": {
       "title": "Rareza",
+      "tooltip": "La rareza determina la cantidad de NFTs que pueden ser minteados",
       "all_items": "Todas las rarezas",
       "count_items": "{count} {count, plural, one {rareza} other {rarezas}}"
     },
@@ -510,7 +524,14 @@
       "not_enough_mana": "No tienes suficiente MANA",
       "select_period": "Seleccionar Período"
     },
+    "available_for_mint_popup": {
+      "available_for_mint": "Disponible para mintear",
+      "buy_directly": "Compra directo al creador"
+    },
     "description": "Descripción",
+    "no_description": "Sin descripción",
+    "read_more": "Leer más",
+    "read_less": "Leer menos",
     "owner": "Dueño",
     "creator": "Creador",
     "price": "Precio",
@@ -547,6 +568,73 @@
     "type": "Tipo",
     "when": "Fecha",
     "price": "Precio"
+  },
+  "best_buying_option": {
+    "empty": {
+      "title": "No hay listados disponibles para este artículo",
+      "you_can": "Puedes",
+      "check_the_current_owners": "verificar los propietarios actuales",
+      "and_make_an_offer": "y hacer una oferta"
+    },
+    "minting": {
+      "title": "Compra directo al creador",
+      "price": "Precio",
+      "stock": "Stock",
+      "minting_popup": "Cuando compras un artículo, te conviertes en su primer propietario. También significa comprarlo directamente al creador",
+      "polygon_mana": "Polygon MANA",
+      "ethereum_mana": "Ethereum MANA"
+    },
+    "buy_listing": {
+      "title": "Listado más barato",
+      "price": "Precio",
+      "highest_offer": "Oferta más alta",
+      "issue_number": "Número de problema",
+      "owner": "Propietario",
+      "view_listing": "Ver listado",
+      "expires": "Expira",
+      "no_offer": "Sin ofertas",
+      "make_offer": "Hacer Oferta"
+    }
+  },
+  "offers_table": {
+    "offers": "Ofertas",
+    "from": "De",
+    "published_date": "Fecha de publicación",
+    "expiration_date": "Fecha de expiración",
+    "offer": "Ofertas",
+    "your_offer": "Your offer",
+    "date_published": "Fecha de publicación",
+    "remove": "Eliminar",
+    "most_expensive": "Más Caro",
+    "recenty_offered": "Ofrecido recientemente",
+    "recently_updated": "Actualizado recientemente",
+    "accept": "Aceptar"
+  },
+  "listings_table": {
+    "other_available_listings": "Otros coleccionables disponibles",
+    "owner": "Dueño",
+    "issue_number": "Número de emisión",
+    "issue_number_asc": "Número de emisión ↑",
+    "issue_number_desc": "Número de emisión ↓",
+    "listings": "Coleccionables",
+    "published_date": "Fecha de publicación",
+    "expiration_date": "Fecha de expiración",
+    "price": "Precio",
+    "offer": "Oferta",
+    "cheapest": "Más baratos",
+    "newest": "Más nuevos",
+    "oldest": "Más viejos",
+    "there_are_no_listings": "No hay collecionables disponibles",
+    "view_listing": "Ver listado"
+  },
+  "owners_table": {
+    "owner": "Dueño",
+    "issue_number": "Número de emisión",
+    "issue_number_asc": "Número de emisión ↑",
+    "issue_number_desc": "Número de emisión ↓",
+    "owners": "Dueños",
+    "there_are_no_owners": "Aún no hay dueños",
+    "become_the_first_one": "Se el primero!"
   },
   "rental_history": {
     "title": "Últimas rentas",
@@ -640,6 +728,10 @@
     "invalid_date": "Esta fecha ya pasó",
     "submit": "Poner en venta",
     "update_submit": "Actualizar",
+    "authorization": {
+      "title": "Poner el artículo en venta",
+      "confirm_transaction_title": "Confirme la transacción para poner el artículo en venta"
+    },
     "confirm": {
       "title": "Por favor confirma",
       "line_one": "Estás por poner en venta {name} por {amount}.",
@@ -943,6 +1035,14 @@
       "title": "El sitio no pudo cargar",
       "body": "Hubo un problema al cargar el contenido de esta página. {reload_page} o inténtalo de nuevo más tarde.",
       "reload_page": "Recargue la página"
+    },
+    "delete_list_success": {
+      "title": "Lista eliminando",
+      "body": "La lista <b>{name}</b> fue removida satisfactoriamente."
+    },
+    "delete_list_failure": {
+      "title": "Error eliminando lista",
+      "body": "Ocurrió un error al eliminar la lista <b>{name}</b>. Por favor inténtelo de nuevo más tarde."
     }
   },
   "maintainance": {
@@ -1108,27 +1208,32 @@
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },
   "campaign": {
-    "tab": "MVFW23",
-    "badge": "MVFW23"
+    "tab": "PRIDE23",
+    "badge": "PRIDE23",
+    "event_tag": "PRIDE23",
+    "event_hashtag": "#MetaversePride23"
   },
-  "fashion_week_campaign": {
-    "banner": {
-      "homepage": {
-        "title": "¿Estás listo para la pasarela?",
-        "subtitle": "Ya sea que estes en un asiento de primera fila en la pasarela o luciendote, obtené todo lo que necesitas para el Metaverse Fashion Week: atuendos, accesorios y movimientos, todo en un solo lugar.",
-        "cta": "Buscar mvfw items",
-        "cta_mobile": "Buscar items"
-      },
-      "collectibles": {
-        "title": "¿Estás listo para la pasarela?",
-        "subtitle": "Ya sea que estes en un asiento de primera fila en la pasarela o luciendote, obtené todo lo que necesitas para el Metaverse Fashion Week: atuendos, accesorios y movimientos, todo en un solo lugar.",
-        "cta": "Buscar mvfw items",
-        "cta_mobile": "Buscar items"
-      },
-      "campaign_browser": {
-        "title": "Esenciales de la semana de la moda del metaverso",
-        "subtitle": "Encuentre aquí los Wearables y Emotes más populares para el evento más glamoroso de Decentraland."
-      }
+  "event_campaign": {
+    "homepage": {
+      "title": "Prepará el look perfecto para Pride!",
+      "subtitle": "Muestre su orgullo en Decentraland durante {event_hashtag} con Wearables y emotes que celebran la inclusión y la diversidad en el metaverso: encuentre todo lo que necesita en un solo lugar.",
+      "subtitle_mobile": "Muestre su orgullo en Decentraland con Wearables y Emotes creados por la comunidad: encuentre todo lo que necesita en un solo lugar.",
+      "cta": "Buscar Items Pride",
+      "dates": "JUNIO 27-29",
+      "slogan": "CELEBRA LA DIVERSIDAD E INCLUSION EN EL METAVERSO"
+    },
+    "collectibles": {
+      "title": "Prepará el look perfecto para Pride!",
+      "subtitle": "Muestre su orgullo en Decentraland durante {event_hashtag} con Wearables y emotes que celebran la inclusión y la diversidad en el metaverso: encuentre todo lo que necesita en un solo lugar.",
+      "subtitle_mobile": "Muestre su orgullo en Decentraland con Wearables y Emotes creados por la comunidad: encuentre todo lo que necesita en un solo lugar.",
+      "cta": "Buscar Items Pride",
+      "dates": "JUNIO 27-29",
+      "slogan": "CELEBRA LA DIVERSIDAD E INCLUSION EN EL METAVERSO"
+    },
+    "campaign_browser": {
+      "title": "Esenciales Pride del metaverso",
+      "subtitle": "Celebre la inclusión y la diversidad durante {event_hashtag} Prepare el look perfecto para el desfile del Orgullo con vibrantes Wearables y Emotes de la comunidad DCL.",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
     }
   },
   "asset_card": {
@@ -1137,7 +1242,17 @@
       "rented_until": "Rentada hasta {endDate, date, medium}",
       "claiming_back": "Reclamando {asset_type, select, parcel {la parcel} estate {el estate} other {LAND}}",
       "rental_ended": "Período de renta terminado"
-    }
+    },
+    "listings": "{count} {count, plural, one {Collecionable} other {Collecionables}}",
+    "available_for_mint": "Compra directo al creador",
+    "cheapest_listing": "Coleccionable más barato",
+    "not_for_sale": "No disponible para la venta",
+    "owners": "{count} {count, plural, one {Dueño} other {Dueños}}",
+    "cheapest_option": "Más barato",
+    "cheapest_option_range": "Más barato en el rango",
+    "most_expensive": "Más Caro",
+    "most_expensive_range": "Más Caro en el rango",
+    "also_minting": "Compra directo al creador"
   },
   "rentals_promotional_modal": {
     "title": "¡La renta de tierras está disponible!",
@@ -1163,8 +1278,11 @@
   },
   "list_page": {
     "default_title": "Lista de deseos",
+    "edit_list": "Editar Lista",
+    "delete_list": "Eliminar Lista",
+    "last_updated_at": "Última actualización",
     "empty": {
-      "title": "No tienes ningún item guardado",
+      "title": "No tienes elementos guardados en esta lista",
       "subtitle": "Descubre items increíbles.",
       "action": "Explora los colleccionables"
     }
@@ -1179,11 +1297,17 @@
     "text": "En esta sección puede encontrar NOMBRES que están listados para la venta por los usuarios de Decentraland. Alternativamente, puede reclamar su propio NOMBRE único de la sección Constructor por un precio fijo de {mana}.",
     "btn": "Reclama tu nombre"
   },
-  "create_list_modal": {
-    "title": "Crear lista",
+  "create_or_edit_list_modal": {
+    "create": {
+      "title": "Crear lista",
+      "private": "Crea la lista como privada"
+    },
+    "edit": {
+      "title": "Editar lista",
+      "private": "La lista es privada"
+    },
     "name": "Nombre de la lista",
     "description": "Descripción de la lista",
-    "private": "Crea la lista como privada",
     "info": {
       "max_name_length": "Los nombres de las listas pueden tener hasta {max} caracteres.",
       "max_description_length": "Las descripciones de las listas pueden contener hasta {max} caracteres."
@@ -1210,5 +1334,17 @@
       "description": "No pudimos cargar la información del artículo",
       "go_to_activity": "Ir a la página de actividad"
     }
+  },
+  "list_card": {
+    "item_count": "{count} {count, plural, one {item} other {items}}",
+    "edit_list": "Editar lista",
+    "delete_list": "Borrar lista",
+    "no_items": "Sin items",
+    "private": "Privada"
+  },
+  "confirm_delete_list_modal": {
+    "title": "Eliminar la lista list <b>{name}</b>",
+    "message": "Está seguro de que quiere eliminar ésta lista? Todos los items dentro de la misma serán removidos permanentemente y la acción no podrá deshacerse.",
+    "confirm": "Borrar permanentemente"
   }
 }

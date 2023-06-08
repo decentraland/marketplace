@@ -2,7 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
 import { Env } from '@dcl/ui-env'
-import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
+import {
+  BodyShape,
+  NFTCategory,
+  Network,
+  PreviewEmote,
+  PreviewType,
+  Rarity
+} from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
@@ -14,8 +21,7 @@ import {
   Popup,
   WearablePreview
 } from 'decentraland-ui'
-
-import { getAssetImage, getAssetName } from '../../modules/asset/utils'
+import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
 import { Atlas } from '../Atlas'
@@ -23,7 +29,9 @@ import ListedBadge from '../ListedBadge'
 import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import { JumpIn } from '../AssetPage/JumpIn'
+import { getEthereumItemUrn } from './utils'
 import { ControlOptionAction, Props } from './AssetImage.types'
+import AvailableForMintPopup from './AvailableForMintPopup'
 import './AssetImage.css'
 
 // 1x1 transparent pixel
@@ -74,7 +82,9 @@ const AssetImage = (props: Props) => {
     onSetIsTryingOn,
     onSetWearablePreviewController,
     children,
-    hasBadges
+    hasBadges,
+    item,
+    wallet
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -143,6 +153,13 @@ const AssetImage = (props: Props) => {
   ])
 
   const [isTracked, setIsTracked] = useState(false)
+
+  const isAvailableForMint =
+    isNFT(asset) &&
+    (item?.category === NFTCategory.WEARABLE ||
+      item?.category === NFTCategory.EMOTE) &&
+    item.available > 0 &&
+    item.isOnSale
 
   // pick a random emote
   const previewEmote = useMemo(() => {
@@ -248,12 +265,29 @@ const AssetImage = (props: Props) => {
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
 
+        const ethereumUrn =
+          !isNFT(asset) && asset.network === Network.ETHEREUM
+            ? getEthereumItemUrn(asset)
+            : ''
+
+        const wearablePreviewProps =
+          !isNFT(asset) && asset.network === Network.ETHEREUM
+            ? {
+                urns: [ethereumUrn],
+                background: Rarity.getColor(asset.rarity),
+                type: isTryingOn ? PreviewType.AVATAR : PreviewType.WEARABLE
+              }
+            : {
+                contractAddress: asset.contractAddress,
+                itemId,
+                tokenId
+              }
+
+        const isOwnerOfNFT = isNFT(asset) && wallet?.address === asset.owner
+
         wearablePreview = (
           <>
             <WearablePreview
-              contractAddress={asset.contractAddress}
-              itemId={itemId}
-              tokenId={tokenId}
               profile={
                 isTryingOnEnabled
                   ? avatar
@@ -266,8 +300,19 @@ const AssetImage = (props: Props) => {
               emote={isTryingOnEnabled ? previewEmote : undefined}
               onLoad={handleLoad}
               onError={handleError}
+              {...wearablePreviewProps}
               dev={config.is(Env.DEVELOPMENT)}
             />
+            {isAvailableForMint && !isOwnerOfNFT ? (
+              <AvailableForMintPopup
+                price={item.price}
+                stock={item.available}
+                rarity={item.rarity}
+                contractAddress={item.contractAddress}
+                itemId={item.itemId}
+                network={item.network}
+              />
+            ) : null}
             {isLoadingWearablePreview ? (
               <Center>
                 <Loader
@@ -411,6 +456,8 @@ const AssetImage = (props: Props) => {
         </div>
       )
 
+      const isOwnerOfNFT = isNFT(asset) && wallet?.address === asset.owner
+
       if (isDraggable) {
         wearablePreview = (
           <>
@@ -426,6 +473,16 @@ const AssetImage = (props: Props) => {
               onError={handleError}
               dev={config.is(Env.DEVELOPMENT)}
             />
+            {isAvailableForMint && !isOwnerOfNFT ? (
+              <AvailableForMintPopup
+                price={item.price}
+                stock={item.available}
+                rarity={item.rarity}
+                contractAddress={item.contractAddress}
+                itemId={item.itemId}
+                network={item.network}
+              />
+            ) : null}
             {isLoadingWearablePreview ? (
               <Center>
                 <Loader
@@ -509,9 +566,32 @@ const AssetImage = (props: Props) => {
 
 // the purpose of this wrapper is to make the div always be square, by using a 1x1 transparent pixel
 const AssetImageWrapper = (props: Props) => {
-  const { asset, className, showOrderListedTag, ...rest } = props
+  const {
+    asset,
+    className,
+    showOrderListedTag,
+    item,
+    onFetchItem,
+    ...rest
+  } = props
 
-  let classes = 'AssetImage'
+  useEffect(() => {
+    if (!item && isNFT(asset) && asset.itemId) {
+      onFetchItem(asset.contractAddress, asset.itemId)
+    }
+  }, [asset, item, onFetchItem])
+
+  const isAvailableForMint = useMemo(
+    () =>
+      isNFT(asset) &&
+      (item?.category === NFTCategory.WEARABLE ||
+        item?.category === NFTCategory.EMOTE) &&
+      item.available > 0 &&
+      item.isOnSale,
+    [asset, item]
+  )
+
+  let classes = `AssetImage ${isAvailableForMint ? 'hasMintAvailable' : ''}`
   if (className) {
     classes += ' ' + className
   }
@@ -543,7 +623,12 @@ const AssetImageWrapper = (props: Props) => {
       <img src={PIXEL} alt="pixel" className="pixel" />
       <div className="image-wrapper">
         {showOrderListedTag ? <ListedBadge className="listed-badge" /> : null}
-        <AssetImage asset={asset} {...rest}>
+        <AssetImage
+          asset={asset}
+          item={item}
+          onFetchItem={onFetchItem}
+          {...rest}
+        >
           <div className="badges">
             {coordinates ? (
               <>

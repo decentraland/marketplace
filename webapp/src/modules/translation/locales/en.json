@@ -18,6 +18,7 @@
     "ens": "Name",
     "art": "Art",
     "cancel": "Cancel",
+    "save": "Save",
     "proceed": "Proceed",
     "create": "Create",
     "continue": "Continue",
@@ -64,7 +65,10 @@
     "the_parcel": "the Parcel",
     "the_estate": "the Estate",
     "discord_server": "Discord Server",
-    "currently": "currently"
+    "currently": "currently",
+    "showing": "Showing",
+    "of": "of",
+    "now": "now"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -171,6 +175,7 @@
     "cheapest": "Cheapest",
     "cheapest_sale": "Cheapest (Sale)",
     "cheapest_rent": "Cheapest (Rent)",
+    "most_expensive": "Most expensive",
     "no_results": "No results were found.",
     "type_to_search": "Type to search for collections.",
     "clear": "Clear all filters",
@@ -343,16 +348,16 @@
   },
   "nft_list": {
     "empty": {
-      "title": "We couldn’t find any results in the {currentSection}.",
-      "action": "<searchStore>Search the {section}</searchStore><if-filters> or <clearFilters>clear filters</clearFilters></if-filters>"
+      "title": "No results found for these filters.",
+      "action": "<if-filters><clearFilters>Reset filters</clearFilters></if-filters>"
     },
     "simple_empty": {
       "title": "We couldn’t find any results.",
       "action": "<if-filters><clearFilters>Clear filters</clearFilters></if-filters>"
     },
     "empty_search": {
-      "title": "No results for \"{search}\" in the {currentSection}.",
-      "action": "<searchStore>Try searching the {section}</searchStore>"
+      "title": "No results for \"{search}\".",
+      "action": "Check for any typos or spelling errors, or try a different search term."
     }
   },
   "nft_filters": {
@@ -378,8 +383,19 @@
       "available_for_female": "Available for female",
       "available_for_male": "Available for male"
     },
+    "status": {
+      "title": "Status",
+      "on_sale": "On Sale",
+      "on_sale_tooltip": "Includes items available for minting and/or with available listings.",
+      "only_minting": "Only available for minting",
+      "only_minting_tooltip": "Only includes items that are available for minting (buying directly from the creators).",
+      "only_listing": "Only listings",
+      "only_listing_tooltip": "Only includes items that are being resold.",
+      "not_for_sale": "Not for sale"
+    },
     "rarities": {
       "title": "Rarity",
+      "tooltip": "The Rarity determines the total number of NFTs that can be minted",
       "all_items": "All rarities",
       "count_items": "{count} {count, plural, one {rarity} other {rarities}}"
     },
@@ -514,7 +530,14 @@
       "not_enough_mana": "You don't have enough MANA",
       "select_period": "Select Period"
     },
+    "available_for_mint_popup": {
+      "available_for_mint": "Currently available for minting",
+      "buy_directly": "Buy directly from the creator"
+    },
     "description": "Description",
+    "no_description": "No description",
+    "read_more": "Read more",
+    "read_less": "Read less",
     "owner": "Owner",
     "creator": "Creator",
     "price": "Price",
@@ -551,6 +574,73 @@
     "type": "Type",
     "when": "When",
     "price": "Price"
+  },
+  "best_buying_option": {
+    "empty": {
+      "title": "There are no available listings for this item",
+      "you_can": "You can",
+      "check_the_current_owners": "check the current owners",
+      "and_make_an_offer": "and make an offer."
+    },
+    "minting": {
+      "title": "Buy directly from the creator",
+      "price": "Price",
+      "stock": "Stock",
+      "minting_popup": "When you mint an item you become its first owner. It also means buying directly from the creator. ",
+      "polygon_mana": "Polygon MANA",
+      "ethereum_mana": "Ethereum MANA"
+    },
+    "buy_listing": {
+      "title": "Cheapest Listing",
+      "price": "Price",
+      "highest_offer": "Highest Offer",
+      "issue_number": "Issue Number",
+      "owner": "Owner",
+      "view_listing": "View listing",
+      "expires": "Expires",
+      "no_offer": "No offer",
+      "make_offer": "Make Offer"
+    }
+  },
+  "offers_table": {
+    "offers": "Offers",
+    "from": "From",
+    "published_date": "Published date",
+    "expiration_date": "Expiration date",
+    "offer": "Offer",
+    "your_offer": "Your offer",
+    "date_published": "Date published",
+    "remove": "Remove",
+    "most_expensive": "Highest",
+    "recenty_offered": "Recently offered",
+    "recently_updated": "Recently updated",
+    "accept": "Accept"
+  },
+  "listings_table": {
+    "other_available_listings": "Other available listings",
+    "listings": "Listings",
+    "owner": "Owner",
+    "published_date": "Published date",
+    "expiration_date": "Expiration date",
+    "issue_number": "Issue Number",
+    "price": "Price",
+    "offer": "Offer",
+    "cheapest": "Cheapest",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "issue_number_asc": "Issue Number ↑",
+    "issue_number_desc": "Issue Number ↓",
+    "there_are_no_listings": "No available listings",
+    "view_listing": "View listing"
+  },
+  "owners_table": {
+    "owner": "Owner",
+    "issue_number": "Issue Number",
+    "issue_number_asc": "Issue Number ↑",
+    "issue_number_desc": "Issue Number ↓",
+    "owners": "Owners",
+    "there_are_no_owners": "There are no owners yet",
+    "become_the_first_one": "Become the first one!"
   },
   "rental_history": {
     "title": "Latest rentals",
@@ -646,6 +736,10 @@
     "submit": "List for sale",
     "update_submit": "Update",
     "invalid": "Something roto",
+    "authorization": {
+      "title": "List item for sale",
+      "confirm_transaction_title": "Confirm the transaction to list your item for sale."
+    },
     "confirm": {
       "title": "Please confirm",
       "line_one": "You are about to list {name} on sale for {amount}.",
@@ -949,6 +1043,14 @@
       "title": "The site couldn’t load",
       "body": "There was an issue while loading the content of this page. Please {reload_page} or try again later.",
       "reload_page": "reload the page"
+    },
+    "delete_list_success": {
+      "title": "List deleted",
+      "body": "The list <b>{name}</b> was successfully removed."
+    },
+    "delete_list_failure": {
+      "title": "Error deleting list",
+      "body": "There was an issue while removing the <b>{name}</b> list. Please try again later."
     }
   },
   "maintainance": {
@@ -1114,27 +1216,32 @@
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
   "campaign": {
-    "tab": "MVFW23",
-    "badge": "MVFW23"
+    "tab": "PRIDE23",
+    "badge": "PRIDE23",
+    "event_tag": "PRIDE23",
+    "event_hashtag": "#MetaversePride23"
   },
-  "fashion_week_campaign": {
-    "banner": {
-      "homepage": {
-        "title": "Are you ready for the runway?",
-        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
-        "cta": "Browse mvfw Items",
-        "cta_mobile": "Browse"
-      },
-      "collectibles": {
-        "title": "Are you ready for the runway?",
-        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
-        "cta": "Browse mvfw Items",
-        "cta_mobile": "Browse"
-      },
-      "campaign_browser": {
-        "title": "Metaverse Fashion Week Essentials",
-        "subtitle": "Find the hottest Wearables and Emotes for Decentraland's most glamorous event right here."
-      }
+  "event_campaign": {
+    "homepage": {
+      "title": "Prepare the Perfect Pride Look!",
+      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
+      "subtitle_mobile": "Show your Pride in Decentraland with prismatic Wearables & Emotes made by the community—find everything you need in one place.",
+      "cta": "Browse Pride Items",
+      "dates": "JUNE 27-29",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+    },
+    "collectibles": {
+      "title": "Prepare the Perfect Pride Look!",
+      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
+      "cta": "Browse Pride Items",
+      "cta_mobile": "Browse",
+      "dates": "JUNE 27-29",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+    },
+    "campaign_browser": {
+      "title": "Metaverse Pride Essentials",
+      "subtitle": "Celebrate Inclusivity & Diversity during {event_hashtag} Prepare the perfect Pride parade look with vibrant Wearables & Emotes from the DCL community.",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
     }
   },
   "asset_card": {
@@ -1143,7 +1250,18 @@
       "rented_until": "Rented until {endDate, date, medium}",
       "claiming_back": "Claiming back {asset_type, select, parcel {parcel} estate {estate} other {LAND}}",
       "rental_ended": "Rental period over"
-    }
+    },
+    "listings": "{count} {count, plural, one {Listing} other {Listings}}",
+    "available_for_mint": "Buy directly from creator",
+    "available_listings_in_range": "Available listings in this range",
+    "cheapest_listing": "Cheapest Listing",
+    "not_for_sale": "Not for sale",
+    "owners": "{count} {count, plural, one {Owner} other {Owners}}",
+    "cheapest_option": "Cheapest Option",
+    "cheapest_option_range": "Cheapest Option within range",
+    "most_expensive": "Most Expensive",
+    "most_expensive_range": "Most Expensive within range",
+    "also_minting": "Buy directly from the creator"
   },
   "rentals_promotional_modal": {
     "title": "Announcing LAND rentals",
@@ -1169,8 +1287,11 @@
   },
   "list_page": {
     "default_title": "Wishlist",
+    "edit_list": "Edit List",
+    "delete_list": "Delete List",
+    "last_updated_at": "Last updated",
     "empty": {
-      "title": "You don't have any saved items",
+      "title": "You don’t have any saved items in this list",
       "subtitle": "Discover amazing items.",
       "action": "Explore collectibles"
     }
@@ -1185,11 +1306,17 @@
     "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
     "btn": "Claim your name"
   },
-  "create_list_modal": {
-    "title": "Create List",
+  "create_or_edit_list_modal": {
+    "create": {
+      "title": "Create List",
+      "private": "Create as private list"
+    },
+    "edit": {
+      "title": "Edit List",
+      "private": "List is private"
+    },
     "name": "List name",
     "description": "List description",
-    "private": "Create as private list",
     "info": {
       "max_name_length": "List names can contain up to {max} characters.",
       "max_description_length": "List descriptions can contain up to {max} characters."
@@ -1216,5 +1343,17 @@
       "description": "We couldn't load the item information",
       "go_to_activity": "Go to activity page"
     }
+  },
+  "list_card": {
+    "item_count": "{count} {count, plural, one {item} other {items}}",
+    "edit_list": "Edit List",
+    "delete_list": "Delete List",
+    "no_items": "No items",
+    "private": "Private"
+  },
+  "confirm_delete_list_modal": {
+    "title": "Delete <b>{name}</b> list",
+    "message": "Are you sure you want to delete this list? All the items inside will be permanently removed and cannot be undone.",
+    "confirm": "Delete permanently"
   }
 }

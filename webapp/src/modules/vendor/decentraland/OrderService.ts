@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { ListingStatus, Network, Order } from '@dcl/schemas'
+import { Network, Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
 import {
   ContractName,
   getContract,
@@ -11,11 +11,15 @@ import { NFT } from '../../nft/types'
 import { orderAPI } from './order/api'
 import { VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
+import { OrderResponse } from './order/types'
 
 export class OrderService
   implements OrderServiceInterface<VendorName.DECENTRALAND> {
-  fetchByNFT(nft: NFT, status?: ListingStatus): Promise<Order[]> {
-    return orderAPI.fetchByNFT(nft.contractAddress, nft.tokenId, status)
+  async fetchOrders(
+    params: OrderFilters,
+    sortBy: OrderSortBy
+  ): Promise<OrderResponse> {
+    return orderAPI.fetchOrders(params, sortBy)
   }
 
   async create(

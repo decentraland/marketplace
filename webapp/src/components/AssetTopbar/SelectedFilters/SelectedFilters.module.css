@@ -1,7 +1,7 @@
 .pillContainer {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 21px;
+  margin-top: 13px;
 }
 
 :global(.ui.header.mana.mana-label-icon) {

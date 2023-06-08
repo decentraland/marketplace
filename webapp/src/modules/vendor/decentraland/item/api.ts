@@ -1,6 +1,7 @@
 import { Item } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
-import { ItemFilters, ItemResponse } from './types'
+import { ItemFilters } from './types'
+import { ItemResponse } from './types'
 
 export const DEFAULT_TRENDING_PAGE_SIZE = 20
 
@@ -16,7 +17,7 @@ export class ItemAPI extends BaseClient {
 
   async getOne(contractAddress: string, itemId: string): Promise<Item> {
     const queryParams = this.buildItemsQueryString({
-      contracts: [contractAddress],
+      contractAddresses: [contractAddress],
       itemId
     })
     const response: ItemResponse = await this.fetch(
@@ -101,8 +102,8 @@ export class ItemAPI extends BaseClient {
     if (filters.ids) {
       filters.ids.forEach(id => queryParams.append('id', id))
     }
-    if (filters.contracts) {
-      filters.contracts.forEach(contract =>
+    if (filters.contractAddresses) {
+      filters.contractAddresses.forEach(contract =>
         queryParams.append('contractAddress', contract)
       )
     }
