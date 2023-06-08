@@ -49,12 +49,22 @@ const ListPage = ({
 }: Props) => {
   const hasFetchedOnce = useRef(false)
 
-  const handleFetchList = useCallback(() => {
+  const fetchList = useCallback(() => {
     if (listId && !isLoading && !hasFetchedOnce.current && wallet) {
       onFetchList(listId)
       hasFetchedOnce.current = true
     }
   }, [listId, isLoading, onFetchList, wallet])
+
+  const handleFetchList = useCallback(
+    (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      e.preventDefault()
+      e.stopPropagation()
+      hasFetchedOnce.current = false
+      fetchList()
+    },
+    [fetchList]
+  )
 
   const renderErrorView = useCallback(() => {
     const isNotFound = error?.includes('list was not found')
@@ -94,8 +104,8 @@ const ListPage = ({
   }, [listId])
 
   useEffect(() => {
-    handleFetchList()
-  }, [handleFetchList])
+    fetchList()
+  }, [fetchList])
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
