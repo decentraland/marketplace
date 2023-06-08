@@ -1,14 +1,18 @@
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { getError, getList } from '../../modules/favorites/selectors'
+import {
+  getError,
+  getList,
+  getLoading
+} from '../../modules/favorites/selectors'
 import {
   GET_LIST_REQUEST,
   deleteListStart,
   getListRequest
 } from '../../modules/favorites/actions'
 import { RootState } from '../../modules/reducer'
-import { getLoading, getWallet } from '../../modules/wallet/selectors'
+import { getWallet } from '../../modules/wallet/selectors'
 import { openModal } from '../../modules/modal/actions'
 import { locations } from '../../modules/routing/locations'
 import {

@@ -95,11 +95,13 @@ const ListPage = ({
 
   useEffect(() => {
     handleFetchList()
-  }, [list, listId, onFetchList, isLoading, wallet, handleFetchList])
+  }, [handleFetchList])
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
-      {list ? (
+      {isLoading ? (
+        <Loader active size="massive" data-testid={LOADER_TEST_ID} />
+      ) : list ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
             <Back onClick={onBack} />
@@ -152,7 +154,7 @@ const ListPage = ({
           <Header className={styles.header} sub>
             <span className={styles.description}>{list.description}</span>
             {list.updatedAt ? (
-              <div
+              <span
                 className={styles.updatedAt}
                 data-testid={UPDATED_AT_TEST_ID}
               >
@@ -161,7 +163,7 @@ const ListPage = ({
                   addSuffix: true,
                   includeSeconds: true
                 })}
-              </div>
+              </span>
             ) : null}
           </Header>
           {wallet ? (
@@ -190,8 +192,6 @@ const ListPage = ({
             </div>
           ) : null}
         </div>
-      ) : isLoading ? (
-        <Loader active size="massive" data-testid={LOADER_TEST_ID} />
       ) : (
         error && renderErrorView()
       )}
