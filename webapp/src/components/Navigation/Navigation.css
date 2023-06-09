@@ -10,7 +10,19 @@
 }
 
 .campaign-tab-animation {
-  animation: pulsate 0.11s ease-in-out infinite alternate;
+  background: linear-gradient(
+    to right,
+    #6666ff,
+    #0099ff,
+    #00ff00,
+    #ff3399,
+    #6666ff
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
 }
 
 .Navigation .download-icon {
@@ -64,14 +76,13 @@
   }
 }
 
-@keyframes pulsate {
+@keyframes rainbow_animation {
+  0%,
   100% {
-    text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px #f09,
-      0 0 80px #f09, 0 0 90px #f09, 0 0 100px #f09, 0 0 150px #f09;
+    background-position: 0 0;
   }
 
-  0% {
-    text-shadow: 0 0 4px #fff, 0 0 10px #fff, 0 0 18px #fff, 0 0 38px #f09,
-      0 0 73px #f09, 0 0 80px #f09, 0 0 94px #f09, 0 0 140px #f09;
+  50% {
+    background-position: 100% 0;
   }
 }

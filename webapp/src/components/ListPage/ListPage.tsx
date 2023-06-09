@@ -164,7 +164,7 @@ const ListPage = ({
           <Header className={styles.header} sub>
             <span className={styles.description}>{list.description}</span>
             {list.updatedAt ? (
-              <span
+              <div
                 className={styles.updatedAt}
                 data-testid={UPDATED_AT_TEST_ID}
               >
@@ -173,7 +173,7 @@ const ListPage = ({
                   addSuffix: true,
                   includeSeconds: true
                 })}
-              </span>
+              </div>
             ) : null}
           </Header>
           {wallet ? (
