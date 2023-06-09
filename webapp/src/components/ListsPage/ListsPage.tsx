@@ -45,7 +45,7 @@ const ListsPage = ({
       onFetchLists({ page, first, skip, sortBy: selectedSortBy })
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [count, page, onFetchLists, first, selectedSortBy]
+    [page, onFetchLists, first, selectedSortBy]
   )
 
   const handleFetchLists = useCallback(
