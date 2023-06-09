@@ -1290,6 +1290,17 @@
       "title": "您在此列表中没有任何已保存的项目",
       "subtitle": "发现惊人的项目。",
       "action": "浏览项目"
+    },
+    "error": {
+      "not_found": {
+        "title": "该列表是私有的或者不存在。",
+        "subtitle": "请尝试其他列表。"
+      },
+      "could_not_load": {
+        "title": "糟糕！无法加载该列表。",
+        "subtitle": "请重试。",
+        "action": "重试"
+      }
     }
   },
   "lists_page": {

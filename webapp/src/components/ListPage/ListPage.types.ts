@@ -19,6 +19,7 @@ export type Props = {
   listId?: string
   list: List | null
   isLoading: boolean
+  error: string | null
   onFetchList: typeof getListRequest
   onBack: () => void
   onEditList: (list: List) => ReturnType<typeof openModal>
@@ -28,7 +29,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'wallet' | 'listId' | 'list' | 'isLoading'
+  'wallet' | 'listId' | 'list' | 'isLoading' | 'error'
 >
 
 export type MapDispatchProps = Pick<

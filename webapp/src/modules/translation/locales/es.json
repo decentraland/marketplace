@@ -1285,6 +1285,17 @@
       "title": "No tienes elementos guardados en esta lista",
       "subtitle": "Descubre items increíbles.",
       "action": "Explora los colleccionables"
+    },
+    "error": {
+      "not_found": {
+        "title": "Esta lista es privada o no existe.",
+        "subtitle": "Intenta con otra lista."
+      },
+      "could_not_load": {
+        "title": "¡Ups! No se pudo cargar esta lista.",
+        "subtitle": "Por favor, inténtalo de nuevo.",
+        "action": "Intentar de nuevo"
+      }
     }
   },
   "lists_page": {
