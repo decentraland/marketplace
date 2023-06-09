@@ -1301,7 +1301,12 @@
   "lists_page": {
     "title": "Mis listas",
     "subtitle": "{count} {count, plural, one {lista} other {listas}}",
-    "create_list": "Crear lista"
+    "create_list": "Crear lista",
+    "error": {
+      "title": "¡Ups! No se pudieron cargar las listas.",
+      "subtitle": "Por favor, inténtalo de nuevo.",
+      "action": "Intentar de nuevo"
+    }
   },
   "claim_your_own_name": {
     "title": "RECLAMA TU PROPIO NOMBRE",

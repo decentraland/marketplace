@@ -22,18 +22,19 @@ import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
 import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
-
-export const LOADER_TEST_ID = 'loader'
-export const EMPTY_LIST_TEST_ID = 'empty-view'
-export const ASSET_BROWSE_TEST_ID = 'asset-browse'
-export const LIST_CONTAINER_TEST_ID = 'list-container'
-export const ERROR_CONTAINER_TEST_ID = 'error-container'
-export const PRIVATE_BADGE_TEST_ID = 'private-badge'
-export const UPDATED_AT_TEST_ID = 'updated-at'
-export const SHARE_LIST_BUTTON_TEST_ID = 'share-list'
-export const EDIT_LIST_BUTTON_TEST_ID = 'edit-list'
-export const DELETE_LIST_BUTTON_TEST_ID = 'delete-list'
-export const COULD_NOT_LOAD_LIST_ACTION_TEST_ID = 'could-not-load-list-action'
+import {
+  ERROR_CONTAINER_TEST_ID,
+  COULD_NOT_LOAD_LIST_ACTION_TEST_ID,
+  LOADER_TEST_ID,
+  LIST_CONTAINER_TEST_ID,
+  PRIVATE_BADGE_TEST_ID,
+  SHARE_LIST_BUTTON_TEST_ID,
+  EDIT_LIST_BUTTON_TEST_ID,
+  DELETE_LIST_BUTTON_TEST_ID,
+  UPDATED_AT_TEST_ID,
+  ASSET_BROWSE_TEST_ID,
+  EMPTY_LIST_TEST_ID
+} from './constants'
 
 const LIST_NOT_FOUND = 'list was not found'
 
