@@ -38,6 +38,8 @@ import {
   GO_BACK_BUTTON_TEST_ID
 } from './constants'
 
+const LIST_NOT_FOUND = 'list was not found'
+
 const ListPage = ({
   wallet,
   listId,
@@ -75,7 +77,7 @@ const ListPage = ({
   )
 
   const renderErrorView = useCallback(() => {
-    const isNotFound = error?.includes('list was not found')
+    const isNotFound = error?.includes(LIST_NOT_FOUND)
     const errorType = isNotFound ? 'not_found' : 'could_not_load'
     return (
       <div

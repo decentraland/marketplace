@@ -146,6 +146,47 @@
   flex-grow: 1;
 }
 
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: var(--secondary);
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+  line-height: 24px;
+}
+
+.notFoundImage {
+  background-image: url('../../images/list-not-found.svg');
+}
+
+.couldNotLoadImage {
+  background-image: url('../../images/could-not-load-list.svg');
+}
+
+.errorImage {
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+}
+
+.errorTitle {
+  text-align: center;
+}
+
+.errorSubtitle {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.assetBrowseContainer {
+  flex-grow: 1;
+}
+
 .empty {
   display: flex;
   flex-direction: column;
