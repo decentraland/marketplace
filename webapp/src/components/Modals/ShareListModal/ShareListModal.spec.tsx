@@ -49,7 +49,9 @@ describe('when the modal is rendered', () => {
   it('share on twitter should have the correct href', () => {
     const dclUrl = 'https://market.decentraland.zone'
     const locationsUrl = '/lists/aListId?assetType=item&section=lists&page=1'
-    const twitterURL = `https://twitter.com/intent/tweet?text=${dclUrl}${locationsUrl}`
+    const twitterURL = `https://twitter.com/intent/tweet?text=${t(
+      'share_list_modal.i_just_shared_a_new_list'
+    ).replace(/ /g, '%20')} ${dclUrl}${locationsUrl}`
     const { getByRole } = renderedModal
     expect(
       getByRole('button', { name: t('share_list_modal.share_on_twitter') })
