@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
-import { Button, Icon, ModalNavigation, Popup } from 'decentraland-ui'
+import { Button, Icon, ModalNavigation } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
 import { AssetType } from '../../../modules/asset/types'
 import { View } from '../../../modules/ui/types'
@@ -13,7 +13,6 @@ import { ListCard } from '../../ListsPage/ListCard'
 import { Props } from './ShareListModal.types'
 import styles from './ShareListModal.module.css'
 
-//TODO: check the message with product
 const twitterLink = 'https://twitter.com/intent/tweet?text='
 
 const ShareListModal = (props: Props) => {
@@ -61,7 +60,9 @@ const ShareListModal = (props: Props) => {
           as="a"
           fluid
           inverted
-          href={`${twitterLink}${MARKETPLACE_URL}${listLink}`}
+          href={`${twitterLink}${t(
+            'share_list_modal.i_just_shared_a_new_list'
+          ).replace(/ /g, '%20')} ${MARKETPLACE_URL}${listLink}`}
         >
           <Icon name="twitter" />
           {t('share_list_modal.share_on_twitter')}
