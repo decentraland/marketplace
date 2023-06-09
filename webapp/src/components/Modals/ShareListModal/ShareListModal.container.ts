@@ -1,9 +1,8 @@
 import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
 import { MapDispatchProps } from './ShareListModal.types'
 import ShareListModal from './ShareListModal'
 
-const mapDispatch = (dispatch: Dispatch, ownProps: any): MapDispatchProps => ({
+const mapDispatch = (ownProps: any): MapDispatchProps => ({
   onClose: () => {
     return ownProps.onClose()
   }

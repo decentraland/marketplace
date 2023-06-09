@@ -1320,7 +1320,8 @@
     "title": "Compartir Lista",
     "copy_link": "copiar link",
     "share_on_twitter": "Compartir en twitter",
-    "copied": "copiado"
+    "copied": "copiado",
+    "i_just_shared_a_new_list": "Acabo de compartir una nueva lista, échale un vistazo: "
   },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
