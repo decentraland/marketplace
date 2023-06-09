@@ -16,22 +16,31 @@ import {
   EDIT_LIST_BUTTON_TEST_ID,
   DELETE_LIST_BUTTON_TEST_ID,
   ERROR_CONTAINER_TEST_ID,
-  COULD_NOT_LOAD_LIST_ACTION_TEST_ID
+  COULD_NOT_LOAD_LIST_ACTION_TEST_ID,
+  GO_BACK_BUTTON_TEST_ID
 } from './constants'
 import { Props } from './ListPage.types'
+
+// This is to avoid errors with the canvas
+jest.mock('../LinkedProfile', () => {
+  return {
+    LinkedProfile: () => <div data-testid="linked-profile" />
+  }
+})
 
 const listId = 'aListId'
 let list: List = {
   id: listId,
   name: 'aListName',
   description: 'aListDescription',
-  isPrivate: false
+  isPrivate: false,
+  userAddress: '0x123owner'
 } as List
 
 function renderListPage(props: Partial<Props> = {}) {
   return renderWithProviders(
     <ListPage
-      wallet={{} as Wallet}
+      wallet={{ address: list.userAddress } as Wallet}
       listId={listId}
       list={list}
       onBack={jest.fn()}
@@ -105,16 +114,63 @@ describe('when rendering the ListPage with a loaded list', () => {
   })
 
   describe('and the list is public', () => {
-    beforeEach(() => {
-      renderedPage = renderListPage({ list: { ...list, isPrivate: false } })
+    describe('and the viewer is the owner', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({ list: { ...list, isPrivate: false } })
+      })
+
+      it('should hide the private badge', () => {
+        expect(renderedPage.queryByTestId(PRIVATE_BADGE_TEST_ID)).toBeNull()
+      })
+
+      it('should enable the share list button', () => {
+        expect(
+          renderedPage.getByTestId(SHARE_LIST_BUTTON_TEST_ID)
+        ).toBeEnabled()
+      })
+
+      it('should show the go back button', () => {
+        expect(
+          renderedPage.getByTestId(GO_BACK_BUTTON_TEST_ID)
+        ).toBeInTheDocument()
+      })
+
+      it('should show the edit button', () => {
+        expect(
+          renderedPage.getByTestId(EDIT_LIST_BUTTON_TEST_ID)
+        ).toBeInTheDocument()
+      })
+
+      it('should show the delete button', () => {
+        expect(
+          renderedPage.getByTestId(DELETE_LIST_BUTTON_TEST_ID)
+        ).toBeInTheDocument()
+      })
     })
 
-    it('should hide the private badge', () => {
-      expect(renderedPage.queryByTestId(PRIVATE_BADGE_TEST_ID)).toBeNull()
-    })
+    describe('and the viewer is not the owner', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({
+          list: {
+            ...list,
+            isPrivate: false
+          },
+          wallet: { address: '0xnnotanowner123' } as Wallet
+        })
+      })
 
-    it('should enable the share list button', () => {
-      expect(renderedPage.getByTestId(SHARE_LIST_BUTTON_TEST_ID)).toBeEnabled()
+      it.each([
+        ['go back', GO_BACK_BUTTON_TEST_ID],
+        ['share list', SHARE_LIST_BUTTON_TEST_ID],
+        ['edit list', EDIT_LIST_BUTTON_TEST_ID],
+        ['delete list', DELETE_LIST_BUTTON_TEST_ID]
+      ])('should hide the %s button', (_, testId) => {
+        expect(renderedPage.queryByTestId(testId)).toBeNull()
+      })
+
+      it('should show the owner profile ', () => {
+        expect(renderedPage.getByTestId('linked-profile')).toBeInTheDocument()
+      })
     })
   })
 
