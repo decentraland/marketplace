@@ -435,9 +435,7 @@ describe('when handling the fetch items request action', () => {
                     effect.args[0] === originalBrowseOptions.filters
                   ) {
                     // Add a setTimeout so it gives time to get it cancelled
-                    return new Promise(res =>
-                      setTimeout(() => res(fetchResult), 1000)
-                    )
+                    return new Promise(() => {})
                   }
                   if (
                     effect.fn === CatalogAPI.prototype.get &&
