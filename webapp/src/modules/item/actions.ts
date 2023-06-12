@@ -1,8 +1,8 @@
 import { ChainId, Item, ItemFilters } from '@dcl/schemas'
 import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
-  buildTransactionPayload,
-  buildTransactionWithFromPayload
+  buildTransactionWithFromPayload,
+  buildTransactionWithReceiptPayload
 } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { action } from 'typesafe-actions'
 import { formatWeiMANA } from '../../lib/mana'
@@ -94,7 +94,8 @@ export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
 export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
   action(BUY_ITEM_SUCCESS, {
     item,
-    ...buildTransactionPayload(chainId, txHash, {
+    txHash,
+    ...buildTransactionWithReceiptPayload(chainId, txHash, {
       itemId: item.itemId,
       contractAddress: item.contractAddress,
       network: item.network,

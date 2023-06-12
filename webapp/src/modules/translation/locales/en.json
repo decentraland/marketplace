@@ -1341,6 +1341,25 @@
       "name_duplicated": "This name is already in use for another of your lists. <br></br> Choose a different name."
     }
   },
+  "success_page": {
+    "loading_state": {
+      "title": "Your item is on its way!",
+      "status": "Processing transaction",
+      "description": "This transaction may take a few moments.",
+      "progress_in_activity": "View Progress in activity"
+    },
+    "success_state": {
+      "title": "All done!",
+      "status": "Transaction confirmed",
+      "view_item": "View my item",
+      "try_genesis_city": "Try it in Genesis city"
+    },
+    "error_state": {
+      "title": "Oops",
+      "description": "We couldn't load the item information",
+      "go_to_activity": "Go to activity page"
+    }
+  },
   "share_list_modal": {
     "title": "Share List",
     "copy_link": "copy link",

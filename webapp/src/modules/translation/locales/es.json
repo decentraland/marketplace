@@ -1332,6 +1332,25 @@
       "name_duplicated": "El nombre elegido esta siendo usado en otra de tus listas. <br></br> Elije uno diferente."
     }
   },
+  "success_page": {
+    "loading_state": {
+      "title": "Tu artículo está en camino!",
+      "status": "Transacción en procesamiento",
+      "description": "Esta transacción puede tomarse unos momentos.",
+      "progress_in_activity": "Ver el progreso en página de actividad"
+    },
+    "success_state": {
+      "title": "Todo listo!",
+      "status": "Transacción confirmada",
+      "view_item": "Ver mi artículo",
+      "try_genesis_city": "Pruébalo en Genesis City"
+    },
+    "error_state": {
+      "title": "Ups",
+      "description": "No pudimos cargar la información del artículo",
+      "go_to_activity": "Ir a la página de actividad"
+    }
+  },
   "share_list_modal": {
     "title": "Compartir Lista",
     "copy_link": "copiar link",

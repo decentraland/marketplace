@@ -35,5 +35,6 @@
   "ROLLBAR_ACCESS_TOKEN": "ad890a7699424114a7713o73ee60720ac",
   "ENVIRONMENT": "production",
   "MIN_SALE_VALUE_IN_WEI": "1000000000000000000",
+  "EXPLORER_URL": "https://play.decentraland.org",
   "MARKETPLACE_URL": "https://market.decentraland.org"
 }

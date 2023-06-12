@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AssetType } from '../../modules/asset/types'
 import { Props } from './AssetProvider.types'
 
@@ -12,16 +12,27 @@ const AssetProvider = (props: Props) => {
     children,
     onFetchNFT,
     onFetchItem,
+    onClearErrors,
     contractAddress,
     tokenId,
     rentalStatus,
     isLoadingFeatureFlags,
-    isLandOrEstate
+    isLandOrEstate,
+    retry,
+    error
   } = props
 
   const [hasLoadedInitialFlags, setHasLoadedInitialFlags] = useState(false)
+  const [hasFetchedOnce, setHasFetchedOnce] = useState(false)
 
-  const hasFetchedOnce = useRef(false)
+  useEffect(() => {
+    if (error && !isLoading && retry && hasFetchedOnce) {
+      onClearErrors()
+      setTimeout(() => {
+        setHasFetchedOnce(false)
+      }, 5000)
+    }
+  }, [hasFetchedOnce, isLoading, error, retry, onClearErrors])
 
   useEffect(() => {
     if (!isLoadingFeatureFlags) {
@@ -30,7 +41,7 @@ const AssetProvider = (props: Props) => {
   }, [isLoadingFeatureFlags])
 
   useEffect(() => {
-    hasFetchedOnce.current = false
+    setHasFetchedOnce(false)
   }, [contractAddress, tokenId])
 
   useEffect(() => {
@@ -39,7 +50,7 @@ const AssetProvider = (props: Props) => {
       tokenId &&
       asset === null &&
       !isLoading &&
-      !hasFetchedOnce.current
+      !hasFetchedOnce
     ) {
       switch (type) {
         case AssetType.NFT:
@@ -47,12 +58,12 @@ const AssetProvider = (props: Props) => {
             onFetchNFT(contractAddress, tokenId, {
               rentalStatus: isLandOrEstate ? rentalStatus : undefined
             })
-            hasFetchedOnce.current = true
+            setHasFetchedOnce(true)
           }
           break
         case AssetType.ITEM:
           onFetchItem(contractAddress, tokenId)
-          hasFetchedOnce.current = true
+          setHasFetchedOnce(true)
           break
         default:
           throw new Error(`Invalid Asset type ${type}`)
@@ -61,6 +72,7 @@ const AssetProvider = (props: Props) => {
   }, [
     asset,
     contractAddress,
+    hasFetchedOnce,
     tokenId,
     type,
     onFetchNFT,

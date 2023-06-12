@@ -6,7 +6,8 @@ import {
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   buildTransactionPayload,
-  buildTransactionWithFromPayload
+  buildTransactionWithFromPayload,
+  buildTransactionWithReceiptPayload
 } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
@@ -165,7 +166,7 @@ describe('when creating the action to signal the submission of the executed orde
       payload: {
         order,
         nft,
-        ...buildTransactionPayload(nft.chainId, txHash, {
+        ...buildTransactionWithReceiptPayload(nft.chainId, txHash, {
           tokenId: nft.tokenId,
           contractAddress: nft.contractAddress,
           network: nft.network,
@@ -179,10 +180,13 @@ describe('when creating the action to signal the submission of the executed orde
 
 describe('when creating the action to signal a successful execute order request', () => {
   it('should return an object representing the action', () => {
-    expect(executeOrderSuccess()).toEqual({
+    expect(executeOrderSuccess('txHash', { tokenId: 'tokenId' } as NFT)).toEqual({
       type: EXECUTE_ORDER_SUCCESS,
       meta: undefined,
-      payload: undefined
+      payload: {
+        txHash: 'txHash',
+        nft: { tokenId: 'tokenId' }
+      }
     })
   })
 })

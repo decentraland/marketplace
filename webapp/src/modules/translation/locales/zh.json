@@ -1337,6 +1337,25 @@
       "name_duplicated": "此名称已用于您的另一个列表。 <br></br> 选择不同的名称。"
     }
   },
+  "success_page": {
+    "loading_state": {
+      "title": "您的物品正在路上！",
+      "status": "处理交易",
+      "description": "这笔交易可能需要一些时间.",
+      "progress_in_activity": "查看活动进度"
+    },
+    "success_state": {
+      "title": "全做完了！",
+      "status": "交易确认",
+      "view_item": "查看我的物品",
+      "try_genesis_city": "在创世纪尝试"
+    },
+    "error_state": {
+      "title": "糟糕",
+      "description": "我们无法加载项目信息",
+      "go_to_activity": "转到活动页面"
+    }
+  },
   "share_list_modal": {
     "title": "分享列表",
     "copy_link": "複製鏈接",
