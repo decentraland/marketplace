@@ -2,7 +2,7 @@ import { BigNumber } from "ethers"
 
 export type Props = {
   isLoading: boolean
-  issuedId: BigNumber | null
+  mintedTokenId: BigNumber | null
 }
 
-export type MapStateProps = Pick<Props, 'isLoading' | 'issuedId'>
+export type MapStateProps = Pick<Props, 'isLoading' | 'mintedTokenId'>

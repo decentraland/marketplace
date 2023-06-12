@@ -4,7 +4,7 @@ import { ChainId } from '@dcl/schemas'
 import { getTransaction } from 'decentraland-dapps/dist/modules/transaction/selectors'
 import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { RootState } from '../../modules/reducer'
-import { getIssuedIdFromLogs } from './utils'
+import { getTokenIdFromLogs } from './utils'
 import {
   MapStateProps,
 } from './SuccessPage.types'
@@ -17,7 +17,7 @@ const mapState = (state: RootState): MapStateProps => {
     isLoading: Boolean(
       transaction && transaction.status !== TransactionStatus.CONFIRMED
     ),
-    issuedId: getIssuedIdFromLogs(ChainId.MATIC_MUMBAI, transaction?.receipt?.logs)
+    mintedTokenId: getTokenIdFromLogs(ChainId.MATIC_MUMBAI, transaction?.receipt?.logs)
   }
 }
 

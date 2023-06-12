@@ -18,7 +18,7 @@ import styles from './SuccessPage.module.css'
 const EXPLORER_URL = config.get('EXPLORER_URL', '')
 
 export function SuccessPage(props: Props) {
-  const { isLoading, issuedId } = props
+  const { isLoading, mintedTokenId } = props
   const search = new URLSearchParams(useLocation().search)
   const contractAddress = search.get('contractAddress')
   const tokenId = search.get('tokenId')
@@ -84,12 +84,12 @@ export function SuccessPage(props: Props) {
                     {t('success_page.success_state.status')}
                   </span>
                   <div className={styles.actionContainer}>
-                    {assetType === AssetType.ITEM && !isLoading && issuedId ? (
+                    {assetType === AssetType.ITEM && !isLoading && mintedTokenId ? (
                       <AssetProvider
                         retry
                         type={AssetType.NFT}
                         contractAddress={contractAddress}
-                        tokenId={issuedId.toString()}
+                        tokenId={mintedTokenId.toString()}
                       >
                         {asset => (
                           <Button
