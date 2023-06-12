@@ -142,7 +142,7 @@
   display: flex;
   font-weight: 700;
   padding: 4px 11px;
-  position: fixed;
+  position: absolute;
   right: 11px;
   text-transform: uppercase;
   top: 11px;
