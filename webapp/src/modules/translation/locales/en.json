@@ -1054,7 +1054,8 @@
       "body": {
         "add": "{item_name} was added to {count, plural, one {{first_list_name}} two {and {second_list_name}} other {{count} lists}}.",
         "remove": "{item_name} was removed to {count, plural, one {{first_list_name}} two {and {second_list_name}} other {{count} lists}}."
-      }
+      },
+      "undo": "Undo"
     }
   },
   "maintainance": {
