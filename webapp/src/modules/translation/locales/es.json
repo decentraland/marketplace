@@ -1311,5 +1311,10 @@
     "title": "Eliminar la lista list <b>{name}</b>",
     "message": "Está seguro de que quiere eliminar ésta lista? Todos los items dentro de la misma serán removidos permanentemente y la acción no podrá deshacerse.",
     "confirm": "Borrar permanentemente"
+  },
+  "save_to_list_modal": {
+    "title": "Guardar en la lista",
+    "items_count": "{count} {count, plural, one {item} other {items}}",
+    "create_list": "Crear lista"
   }
 }

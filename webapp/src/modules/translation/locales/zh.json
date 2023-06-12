@@ -1316,5 +1316,10 @@
     "title": "删除 <b>{name}</b> 列表",
     "message": "您确定要删除此列表吗？ 里面的所有项目将被永久删除，无法撤消。",
     "confirm": "永久删除"
+  },
+  "save_to_list_modal": {
+    "title": "保存到列表",
+    "items_count": "{count} {count, plural, one {项} other {项目}}",
+    "create_list": "创建列表"
   }
 }
