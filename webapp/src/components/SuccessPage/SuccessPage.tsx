@@ -91,25 +91,17 @@ export function SuccessPage(props: Props) {
                         contractAddress={contractAddress}
                         tokenId={issuedId.toString()}
                       >
-                        {asset => {
-                          console.log(
-                            locations.nft(contractAddress, asset?.tokenId)
-                          )
-                          return (
-                            <Button
-                              as={Link}
-                              className={styles.successButton}
-                              secondary
-                              loading={!asset}
-                              to={locations.nft(
-                                contractAddress,
-                                asset?.tokenId
-                              )}
-                            >
-                              {t('success_page.success_state.view_item')}
-                            </Button>
-                          )
-                        }}
+                        {asset => (
+                          <Button
+                            as={Link}
+                            className={styles.successButton}
+                            secondary
+                            loading={!asset}
+                            to={locations.nft(contractAddress, asset?.tokenId)}
+                          >
+                            {t('success_page.success_state.view_item')}
+                          </Button>
+                        )}
                       </AssetProvider>
                     ) : (
                       <Button
