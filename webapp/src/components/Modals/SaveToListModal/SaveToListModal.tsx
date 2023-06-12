@@ -19,12 +19,13 @@ import {
 } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { isErrorWithMessage } from '../../../lib/error'
-import styles from './SaveToListModal.module.css'
 import { Props } from './SaveToListModal.types'
+import styles from './SaveToListModal.module.css'
+import { PrivateTag } from '../../PrivateTag'
 
 export const LISTS_LOADER_DATA_TEST_ID = 'save-to-list-loader'
 export const CREATE_LIST_BUTTON_DATA_TEST_ID = 'save-to-list-create-list-button'
-const ITEM_HEIGHT = 55
+const ITEM_HEIGHT = 60
 const DEFAULT_LIST_HEIGHT = 300
 const DEFAULT_LIST_WIDTH = 650
 
@@ -34,7 +35,8 @@ const SaveToListModal = (props: Props) => {
     onPickItem,
     onUnpickItem,
     onCreateList,
-    metadata: { itemId }
+    identity,
+    metadata: { item }
   } = props
 
   const [lists, setLists] = useState<{ total: number; data: ListOfLists[] }>({
@@ -47,31 +49,26 @@ const SaveToListModal = (props: Props) => {
   // TODO: Check if isMobile is required
   const isMobile = false
 
-  const handleCreateList = useCallback(
-    itemId => {
-      onCreateList(itemId)
-    },
-    [onCreateList]
-  )
   const handlePickItem = useCallback(
     index => {
       if (lists.data[index].isItemInList) {
-        onPickItem(itemId, lists.data[index].id)
+        onPickItem(lists.data[index].id)
       } else {
-        onUnpickItem(itemId, lists.data[index].id)
+        onUnpickItem(lists.data[index].id)
       }
       // Optimistically update the list
       lists.data[index].isItemInList = !lists.data[index].isItemInList
     },
-    [itemId, lists.data, onPickItem, onUnpickItem]
+    [lists.data, onPickItem, onUnpickItem]
   )
 
   const favoritesAPI = useMemo(() => {
     return new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
       retries: retryParams.attempts,
-      retryDelay: retryParams.delay
+      retryDelay: retryParams.delay,
+      identity
     })
-  }, [])
+  }, [identity])
 
   const fetchNextPage = useCallback(
     async (startIndex: number, stopIndex: number) => {
@@ -80,7 +77,7 @@ const SaveToListModal = (props: Props) => {
         const result = await favoritesAPI.getLists({
           first: stopIndex - startIndex,
           skip: startIndex,
-          itemId
+          itemId: item.id
         })
 
         setLists({
@@ -95,7 +92,7 @@ const SaveToListModal = (props: Props) => {
         setIsLoading(false)
       }
     },
-    [favoritesAPI, itemId, lists.data]
+    [favoritesAPI, item.id, lists.data]
   )
 
   const isItemLoaded = useCallback(
@@ -111,7 +108,7 @@ const SaveToListModal = (props: Props) => {
       <div style={style} tabIndex={0}>
         {isItemLoaded(index) ? (
           <div className={styles.listRow}>
-            <span>
+            <div className={styles.left}>
               <Checkbox
                 checked={lists.data[index].isItemInList}
                 data-testid={`save-to-list-checkbox-${index}`}
@@ -119,17 +116,20 @@ const SaveToListModal = (props: Props) => {
                 onChange={() => handlePickItem(index)}
               />
               <div className={styles.listInfo}>
-                <span>{lists.data[index].name}</span>
-                <span>
-                  {t('save-to-list-items-count', {
+                <div className={styles.name}>{lists.data[index].name}</div>
+                <div>
+                  {t('save_to_list_modal.items_count', {
                     count: lists.data[index].itemsCount
                   })}
-                </span>
+                </div>
               </div>
-            </span>
+            </div>
+            <div className={styles.right}>
+              <PrivateTag />
+            </div>
           </div>
         ) : (
-          'Loading....'
+          t('global.loading')
         )}
       </div>
     ),
@@ -149,7 +149,7 @@ const SaveToListModal = (props: Props) => {
 
   return (
     <Modal
-      size="small"
+      size="tiny"
       className={styles.modal}
       onClose={!isLoading ? onClose : undefined}
     >
@@ -217,10 +217,10 @@ const SaveToListModal = (props: Props) => {
           disabled={isLoading}
           data-testid={CREATE_LIST_BUTTON_DATA_TEST_ID}
           loading={isLoading}
-          onClick={handleCreateList}
+          onClick={onCreateList}
         >
           <Icon name="plus" className={styles.icon} />
-          {t('save-to-list-create-list')}
+          {t('save_to_list_modal.create_list')}
         </Button>
       </Modal.Actions>
     </Modal>
