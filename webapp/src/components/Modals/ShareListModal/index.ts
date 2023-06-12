@@ -1,2 +1,2 @@
-import ShareListModal from './ShareListModal.container'
+import ShareListModal from './ShareListModal'
 export { ShareListModal }

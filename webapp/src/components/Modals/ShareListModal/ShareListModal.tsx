@@ -60,9 +60,9 @@ const ShareListModal = (props: Props) => {
           as="a"
           fluid
           inverted
-          href={`${twitterLink}${t(
-            'share_list_modal.i_just_shared_a_new_list'
-          ).replace(/ /g, '%20')} ${MARKETPLACE_URL}${listLink}`}
+          href={`${twitterLink}${encodeURIComponent(
+            t('share_list_modal.twitter_message')
+          )} ${MARKETPLACE_URL}${listLink}`}
         >
           <Icon name="twitter" />
           {t('share_list_modal.share_on_twitter')}

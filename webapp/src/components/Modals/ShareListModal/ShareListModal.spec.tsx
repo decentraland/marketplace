@@ -32,7 +32,7 @@ describe('when the modal is rendered', () => {
     renderedModal = renderShareListModal()
   })
 
-  it('should render title and share buttons', () => {
+  it('should render the title and share buttons', () => {
     const { getByText } = renderedModal
     expect(getByText(t('share_list_modal.title'))).toBeInTheDocument()
     expect(getByText(t('share_list_modal.copy_link'))).toBeInTheDocument()
@@ -41,17 +41,17 @@ describe('when the modal is rendered', () => {
     ).toBeInTheDocument()
   })
 
-  it('should render list card', () => {
+  it('should render the lists card', () => {
     const { getByText } = renderedModal
     expect(getByText(list.name)).toBeInTheDocument()
   })
 
-  it('share on twitter should have the correct href', () => {
+  it('should have a twitter share button with the href pointing to a twitter message', () => {
     const dclUrl = 'https://market.decentraland.zone'
     const locationsUrl = '/lists/aListId?assetType=item&section=lists&page=1'
-    const twitterURL = `https://twitter.com/intent/tweet?text=${t(
-      'share_list_modal.i_just_shared_a_new_list'
-    ).replace(/ /g, '%20')} ${dclUrl}${locationsUrl}`
+    const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      t('share_list_modal.twitter_message')
+    )} ${dclUrl}${locationsUrl}`
     const { getByRole } = renderedModal
     expect(
       getByRole('button', { name: t('share_list_modal.share_on_twitter') })

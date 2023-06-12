@@ -1330,7 +1330,7 @@
     "copy_link": "copy link",
     "share_on_twitter": "Share on twitter",
     "copied": "Copied",
-    "i_just_shared_a_new_list": "I just shared a new List, Check it out: "
+    "twitter_message": "I just shared a new List, Check it out: "
   },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
