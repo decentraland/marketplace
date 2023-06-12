@@ -1,5 +1,4 @@
 import { RenderResult } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import { NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -7,8 +6,6 @@ import {
   waitForComponentToFinishLoading
 } from '../../utils/test'
 import { NFT } from '../../modules/nft/types'
-import { locations } from '../../modules/routing/locations'
-import { config } from '../../config'
 import { SuccessPage } from './SuccessPage'
 import { Props } from './SuccessPage.types'
 
@@ -23,7 +20,7 @@ jest.mock('lottie-react', () => () => <div>LOTTIE</div>)
 
 function renderSuccessPage(props: Partial<Props> = {}) {
   return renderWithProviders(
-    <SuccessPage isLoading={false} issuedId={null} {...props} />,
+    <SuccessPage isLoading={false} mintedTokenId={null} {...props} />,
     {
       preloadedState: {
         nft: {

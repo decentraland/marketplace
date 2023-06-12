@@ -30,7 +30,7 @@ const AssetProvider = (props: Props) => {
       onClearErrors()
       setTimeout(() => {
         setHasFetchedOnce(false)
-      }, 5000)
+      }, 3000)
     }
   }, [hasFetchedOnce, isLoading, error, retry, onClearErrors])
 

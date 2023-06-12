@@ -3,7 +3,7 @@ import { Log } from '@ethersproject/providers'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { BigNumber, ethers } from 'ethers'
 
-export function getIssuedIdFromLogs(chainId: ChainId, logs?: Log[]): BigNumber | null {
+export function getTokenIdFromLogs(chainId: ChainId, logs?: Log[]): BigNumber | null {
   if (!logs) return null
 
   const contract = getContract(ContractName.ERC721CollectionV2, chainId)
@@ -12,7 +12,7 @@ export function getIssuedIdFromLogs(chainId: ChainId, logs?: Log[]): BigNumber |
     try {
       const parsedLog = collectionInterface.parseLog(log)
       if (parsedLog.name === 'Issue') {
-        return parsedLog.args._issuedId
+        return parsedLog.args._tokenId
       }
     } catch (e) {
       // Ignore log
