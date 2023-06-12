@@ -1332,6 +1332,13 @@
       "name_duplicated": "El nombre elegido esta siendo usado en otra de tus listas. <br></br> Elije uno diferente."
     }
   },
+  "share_list_modal": {
+    "title": "Compartir Lista",
+    "copy_link": "copiar link",
+    "share_on_twitter": "Compartir en twitter",
+    "copied": "copiado",
+    "twitter_message": "Acabo de compartir una nueva lista, échale un vistazo: "
+  },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
     "edit_list": "Editar lista",

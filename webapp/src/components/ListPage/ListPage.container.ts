@@ -39,6 +39,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBack: () => dispatch(push(locations.lists())),
   onFetchList: listId => dispatch(getListRequest(listId)),
   onEditList: list => dispatch(openModal('CreateOrEditListModal', { list })),
+  onShareList: list => dispatch(openModal('ShareListModal', { list })),
   onDeleteList: list => dispatch(deleteListStart(list))
 })
 

@@ -1337,6 +1337,13 @@
       "name_duplicated": "此名称已用于您的另一个列表。 <br></br> 选择不同的名称。"
     }
   },
+  "share_list_modal": {
+    "title": "分享列表",
+    "copy_link": "複製鏈接",
+    "share_on_twitter": "在推特上分享",
+    "copied": "複製",
+    "twitter_message": "我剛剛分享了一個新列表，看看吧："
+  },
   "list_card": {
     "item_count": "{count} {count, plural, one {项} other {项目}}",
     "edit_list": "编辑列表",

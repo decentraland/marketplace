@@ -1341,6 +1341,13 @@
       "name_duplicated": "This name is already in use for another of your lists. <br></br> Choose a different name."
     }
   },
+  "share_list_modal": {
+    "title": "Share List",
+    "copy_link": "copy link",
+    "share_on_twitter": "Share on twitter",
+    "copied": "Copied",
+    "twitter_message": "I just shared a new List, Check it out: "
+  },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
     "edit_list": "Edit List",
