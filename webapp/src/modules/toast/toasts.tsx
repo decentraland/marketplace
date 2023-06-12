@@ -281,3 +281,42 @@ export function getDeleteListFailureToast(list: List): Omit<Toast, 'id'> {
     icon: <Icon size="large" name="exclamation circle" />
   }
 }
+
+export function getBulkPickItemSuccessToast(
+  item: Item,
+  pickedFor: List[],
+  unpickedFor: List[]
+): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: t('toast.bulk_pick_success.title'),
+    body: (
+      <div className="list-flow-toast">
+        <p>
+          {pickedFor.length > 0
+            ? t('toast.bulk_pick_success.body.add', {
+                item_name: getAssetName(item),
+                count: pickedFor.length,
+                first_list_name: pickedFor[0]?.name,
+                second_list_name: pickedFor[1]?.name
+              })
+            : undefined}
+          {pickedFor.length > 0
+            ? t('toast.bulk_pick_success.body.remove', {
+                item_name: getAssetName(item),
+                count: unpickedFor.length,
+                first_list_name: unpickedFor[0]?.name,
+                second_list_name: unpickedFor[1]?.name
+              })
+            : undefined}
+        </p>
+        {/* <ToastCTA
+          action={undo(item)}
+          description={t('toast.bulk_pick_success.undo')}
+        /> */}
+      </div>
+    ),
+    closable: true,
+    icon: <Icon size="big" name="bookmark" />
+  }
+}

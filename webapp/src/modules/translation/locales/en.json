@@ -1049,6 +1049,12 @@
     "delete_list_failure": {
       "title": "Error deleting list",
       "body": "There was an issue while removing the <b>{name}</b> list. Please try again later."
+    },
+    "bulk_pick_success": {
+      "body": {
+        "add": "{item_name} was added to {count, plural, one {{first_list_name}} two {and {second_list_name}} other {{count} lists}}.",
+        "remove": "{item_name} was removed to {count, plural, one {{first_list_name}} two {and {second_list_name}} other {{count} lists}}."
+      }
     }
   },
   "maintainance": {

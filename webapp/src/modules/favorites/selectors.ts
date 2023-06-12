@@ -13,7 +13,8 @@ import {
   UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
   FETCH_LISTS_REQUEST,
   CREATE_LIST_REQUEST,
-  DELETE_LIST_REQUEST
+  DELETE_LIST_REQUEST,
+  BULK_PICK_REQUEST
 } from './actions'
 
 export const getState = (state: RootState) => state.favorites
@@ -32,6 +33,8 @@ export const isLoadingCreateList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), CREATE_LIST_REQUEST)
 export const isLoadingDeleteList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), DELETE_LIST_REQUEST)
+export const isLoadingBulkPicks = (state: RootState): boolean =>
+  isLoadingType(getLoading(state), BULK_PICK_REQUEST)
 
 export const getFavoritesDataByItemId = (
   state: RootState,

@@ -15,13 +15,15 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   FavoritesAPI,
   MARKETPLACE_FAVORITES_SERVER_URL,
-  ListOfLists
+  ListOfLists,
+  DEFAULT_FAVORITES_LIST_ID
 } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { isErrorWithMessage } from '../../../lib/error'
+import { List } from '../../../modules/favorites/types'
+import { PrivateTag } from '../../PrivateTag'
 import { Props } from './SaveToListModal.types'
 import styles from './SaveToListModal.module.css'
-import { PrivateTag } from '../../PrivateTag'
 
 export const LISTS_LOADER_DATA_TEST_ID = 'save-to-list-loader'
 export const CREATE_LIST_BUTTON_DATA_TEST_ID = 'save-to-list-create-list-button'
@@ -32,9 +34,9 @@ const DEFAULT_LIST_WIDTH = 650
 const SaveToListModal = (props: Props) => {
   const {
     onClose,
-    onPickItem,
-    onUnpickItem,
+    onSavePicks,
     onCreateList,
+    isSavingPicks,
     identity,
     metadata: { item }
   } = props
@@ -43,23 +45,83 @@ const SaveToListModal = (props: Props) => {
     total: 0,
     data: []
   })
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoadingLists, setIsLoadingLists] = useState(false)
   const [error, setError] = useState<string>()
+  const [picks, setPicks] = useState<{ pickFor: List[]; unpickFrom: List[] }>({
+    pickFor: [],
+    unpickFrom: []
+  })
+
+  const hasChanges = picks.pickFor.length === 0 && picks.unpickFrom.length === 0
 
   // TODO: Check if isMobile is required
   const isMobile = false
 
+  const saveButtonMessage = useMemo(() => {
+    if (picks.pickFor.length === 1 && picks.unpickFrom.length === 0) {
+      return t('save_to_list_modal.save_to_a_list', {
+        name: picks.pickFor[0].name
+      })
+    } else if (picks.pickFor.length === 1 && picks.unpickFrom.length === 0) {
+      return t('save_to_list_modal.remove_from_a_list', {
+        name: picks.unpickFrom[0].name
+      })
+    } else if (picks.pickFor.length > 0 && picks.unpickFrom.length === 0) {
+      return t('save_to_list_modal.save_to_lists', {
+        name: picks.pickFor[0].name,
+        count: picks.pickFor.length
+      })
+    } else if (picks.pickFor.length === 0 && picks.unpickFrom.length > 0) {
+      return t('save_to_list_modal.remove_from_lists', {
+        name: picks.unpickFrom[0].name,
+        count: picks.unpickFrom.length
+      })
+    } else if (picks.pickFor.length > 0 && picks.unpickFrom.length > 0) {
+      return t('save_to_list_modal.save_and_remove_from_lists', {
+        count: picks.pickFor.length + picks.unpickFrom.length
+      })
+    } else {
+      return t('save_to_list_modal.save_to_list')
+    }
+  }, [picks.pickFor, picks.unpickFrom])
+
+  const handleSavePicks = useCallback(() => {
+    onSavePicks(picks.pickFor, picks.unpickFrom)
+  }, [onSavePicks, picks.pickFor, picks.unpickFrom])
+
   const handlePickItem = useCallback(
     index => {
       if (lists.data[index].isItemInList) {
-        onPickItem(lists.data[index].id)
+        if (picks.unpickFrom.includes(lists.data[index])) {
+          setPicks({
+            ...picks,
+            unpickFrom: picks.unpickFrom.filter(
+              list => list.id !== lists.data[index].id
+            )
+          })
+        } else {
+          setPicks({
+            ...picks,
+            unpickFrom: picks.unpickFrom.concat(lists.data[index])
+          })
+        }
       } else {
-        onUnpickItem(lists.data[index].id)
+        if (picks.pickFor.includes(lists.data[index])) {
+          setPicks({
+            ...picks,
+            pickFor: picks.pickFor.filter(
+              list => list.id !== lists.data[index].id
+            )
+          })
+        } else {
+          setPicks({
+            ...picks,
+            pickFor: picks.pickFor.concat(lists.data[index])
+          })
+        }
       }
-      // Optimistically update the list
-      lists.data[index].isItemInList = !lists.data[index].isItemInList
     },
-    [lists.data, onPickItem, onUnpickItem]
+    [lists.data, picks]
   )
 
   const favoritesAPI = useMemo(() => {
@@ -72,13 +134,24 @@ const SaveToListModal = (props: Props) => {
 
   const fetchNextPage = useCallback(
     async (startIndex: number, stopIndex: number) => {
-      setIsLoading(true)
+      setIsLoadingLists(true)
       try {
         const result = await favoritesAPI.getLists({
           first: stopIndex - startIndex,
           skip: startIndex,
           itemId: item.id
         })
+
+        // Automatically select the default list
+        const defaultList = result.results.find(
+          list => list.id === DEFAULT_FAVORITES_LIST_ID
+        )
+        if (defaultList && defaultList.isItemInList) {
+          setPicks({
+            pickFor: picks.pickFor.concat(defaultList),
+            unpickFrom: picks.unpickFrom
+          })
+        }
 
         setLists({
           data: lists.data.concat(result.results),
@@ -89,10 +162,10 @@ const SaveToListModal = (props: Props) => {
           isErrorWithMessage(error) ? error.message : t('global.unknown_error')
         )
       } finally {
-        setIsLoading(false)
+        setIsLoadingLists(false)
       }
     },
-    [favoritesAPI, item.id, lists.data]
+    [favoritesAPI, item.id, lists.data, picks.pickFor, picks.unpickFrom]
   )
 
   const isItemLoaded = useCallback(
@@ -104,36 +177,51 @@ const SaveToListModal = (props: Props) => {
   )
 
   const Row = useCallback(
-    ({ index, style }: { index: number; style: object }) => (
-      <div style={style} tabIndex={0}>
-        {isItemLoaded(index) ? (
-          <div className={styles.listRow}>
-            <div className={styles.left}>
-              <Checkbox
-                checked={lists.data[index].isItemInList}
-                data-testid={`save-to-list-checkbox-${index}`}
-                className={styles.checkbox}
-                onChange={() => handlePickItem(index)}
-              />
-              <div className={styles.listInfo}>
-                <div className={styles.name}>{lists.data[index].name}</div>
-                <div>
-                  {t('save_to_list_modal.items_count', {
-                    count: lists.data[index].itemsCount
-                  })}
+    ({ index, style }: { index: number; style: object }) => {
+      const isPicked =
+        (lists.data[index].isItemInList &&
+          !picks.unpickFrom.includes(lists.data[index])) ||
+        (!lists.data[index].isItemInList &&
+          picks.pickFor.includes(lists.data[index]))
+      return (
+        <div style={style} tabIndex={0}>
+          {isItemLoaded(index) ? (
+            <div className={styles.listRow}>
+              <div className={styles.left}>
+                <Checkbox
+                  checked={isPicked}
+                  disabled={isSavingPicks}
+                  data-testid={`save-to-list-checkbox-${index}`}
+                  className={styles.checkbox}
+                  onChange={() => handlePickItem(index)}
+                />
+                <div className={styles.listInfo}>
+                  <div className={styles.name}>{lists.data[index].name}</div>
+                  <div>
+                    {t('save_to_list_modal.items_count', {
+                      count: lists.data[index].itemsCount
+                    })}
+                  </div>
                 </div>
               </div>
+              <div className={styles.right}>
+                <PrivateTag />
+              </div>
             </div>
-            <div className={styles.right}>
-              <PrivateTag />
-            </div>
-          </div>
-        ) : (
-          t('global.loading')
-        )}
-      </div>
-    ),
-    [isItemLoaded, lists.data, handlePickItem]
+          ) : (
+            t('global.loading')
+          )}
+        </div>
+      )
+    },
+    [
+      lists.data,
+      picks.unpickFrom,
+      picks.pickFor,
+      isItemLoaded,
+      isSavingPicks,
+      handlePickItem
+    ]
   )
 
   useEffect(() => {
@@ -151,14 +239,14 @@ const SaveToListModal = (props: Props) => {
     <Modal
       size="tiny"
       className={styles.modal}
-      onClose={!isLoading ? onClose : undefined}
+      onClose={!isLoadingLists ? onClose : undefined}
     >
       <ModalNavigation
         title={t('save_to_list_modal.title')}
-        onClose={!isLoading ? onClose : undefined}
+        onClose={!isLoadingLists ? onClose : undefined}
       />
       <Modal.Content className={styles.content}>
-        {isLoading && lists.data.length === 0 ? (
+        {isLoadingLists && lists.data.length === 0 ? (
           <div
             data-testid={LISTS_LOADER_DATA_TEST_ID}
             className={styles.loading}
@@ -214,13 +302,20 @@ const SaveToListModal = (props: Props) => {
       <Modal.Actions>
         <Button
           secondary
-          disabled={isLoading}
+          disabled={isLoadingLists || isSavingPicks}
           data-testid={CREATE_LIST_BUTTON_DATA_TEST_ID}
-          loading={isLoading}
           onClick={onCreateList}
         >
           <Icon name="plus" className={styles.icon} />
           {t('save_to_list_modal.create_list')}
+        </Button>
+        <Button
+          primary
+          disabled={isLoadingLists || isSavingPicks || hasChanges}
+          loading={isSavingPicks}
+          onClick={handleSavePicks}
+        >
+          {saveButtonMessage}
         </Button>
       </Modal.Actions>
     </Modal>

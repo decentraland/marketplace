@@ -11,6 +11,7 @@ import {
   AcceptRentalListingSuccessAction
 } from '../rental/actions'
 import {
+  BULK_PICK_SUCCESS,
   CREATE_LIST_SUCCESS,
   DELETE_LIST_FAILURE,
   DELETE_LIST_SUCCESS
@@ -25,7 +26,8 @@ export function* modalSaga() {
       UPSERT_RENTAL_SUCCESS,
       CREATE_LIST_SUCCESS,
       DELETE_LIST_SUCCESS,
-      DELETE_LIST_FAILURE
+      DELETE_LIST_FAILURE,
+      BULK_PICK_SUCCESS
     ],
     handleCloseAllModals
   )

@@ -259,3 +259,27 @@ export type CreateListRequestAction = ReturnType<typeof createListRequest>
 export type CreateListSuccessAction = ReturnType<typeof createListSuccess>
 export type CreateListFailureAction = ReturnType<typeof createListFailure>
 export type CreateListClearAction = ReturnType<typeof createListClear>
+
+// Bulk picking
+export const BULK_PICK_REQUEST = '[Request] Bulk pick'
+export const BULK_PICK_SUCCESS = '[Success] Bulk pick'
+export const BULK_PICK_FAILURE = '[Failure] Bulk pick'
+
+export const bulkPickRequest = (
+  item: Item,
+  pickFor: List[],
+  unpickFrom: List[]
+) => action(BULK_PICK_REQUEST, { item, pickFor, unpickFrom })
+
+export const bulkPickSuccess = (
+  item: Item,
+  pickFor: List[],
+  unpickFrom: List[]
+) => action(BULK_PICK_SUCCESS, { item, pickFor, unpickFrom })
+
+export const bulkPickFailure = (error: string) =>
+  action(BULK_PICK_FAILURE, { error })
+
+export type BulkPickRequestAction = ReturnType<typeof bulkPickRequest>
+export type BulkPickSuccessAction = ReturnType<typeof bulkPickSuccess>
+export type BulkPickFailureAction = ReturnType<typeof bulkPickFailure>

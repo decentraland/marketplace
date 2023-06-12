@@ -164,4 +164,21 @@ export class FavoritesAPI extends BaseClient {
       }
     })
   }
+
+  async bulkPick(
+    itemId: string,
+    pickedFor: string[],
+    unpickedFrom: string[]
+  ): Promise<void> {
+    return this.fetch(`/v1/picks/${itemId}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        pickedFor: pickedFor.length > 0 ? pickedFor : undefined,
+        unpickedFrom: unpickedFrom.length > 0 ? unpickedFrom : undefined
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  }
 }

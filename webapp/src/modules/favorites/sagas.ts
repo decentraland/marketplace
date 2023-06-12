@@ -70,7 +70,11 @@ import {
   CREATE_LIST_REQUEST,
   DeleteListStartAction,
   DELETE_LIST_START,
-  deleteListRequest
+  deleteListRequest,
+  BULK_PICK_REQUEST,
+  BulkPickRequestAction,
+  bulkPickFailure,
+  bulkPickSuccess
 } from './actions'
 import { getListId } from './selectors'
 import { FavoritedItems } from './types'
@@ -110,6 +114,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
   yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
   yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
+  yield takeEvery(BULK_PICK_REQUEST, handleBulkPickRequest)
 
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
@@ -392,6 +397,28 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       yield put(
         createListFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleBulkPickRequest(action: BulkPickRequestAction) {
+    const { item, pickFor, unpickFrom } = action.payload
+
+    try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+      yield call(
+        [favoritesAPI, 'bulkPick'],
+        item.id,
+        pickFor.map(list => list.id),
+        unpickFrom.map(list => list.id)
+      )
+      yield put(bulkPickSuccess(item, pickFor, unpickFrom))
+    } catch (error) {
+      yield put(
+        bulkPickFailure(
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )

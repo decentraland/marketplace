@@ -76,6 +76,8 @@ import {
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import * as events from '../../utils/events'
 import {
+  BULK_PICK_SUCCESS,
+  BulkPickSuccessAction,
   PICK_ITEM_AS_FAVORITE_FAILURE,
   PICK_ITEM_AS_FAVORITE_SUCCESS,
   PickItemAsFavoriteFailureAction,
@@ -387,5 +389,15 @@ track<UndoUnpickingItemAsFavoriteFailureAction>(
     item,
     listId: DEFAULT_FAVORITES_LIST_ID,
     error
+  })
+)
+
+track<BulkPickSuccessAction>(
+  BULK_PICK_SUCCESS,
+  events.BULK_PICK,
+  ({ payload: { item, pickFor, unpickFrom } }) => ({
+    item,
+    pickFor,
+    unpickFrom
   })
 )
