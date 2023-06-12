@@ -10,12 +10,14 @@ import {
   Transaction,
   TransactionStatus
 } from 'decentraland-dapps/dist/modules/transaction/types'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getData as getNFTData, getWalletNFTs } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
 import { getData as getRentalData } from '../../rental/selectors'
 import {
   getFavoritedItems as getFavoritedItemsFromState,
+  getListId,
   getLists
 } from '../../favorites/selectors'
 import { FavoritesData, List } from '../../favorites/types'
@@ -85,7 +87,7 @@ export const getBrowseAssets = (
 ): Asset[] => {
   if (assetType === AssetType.ITEM) {
     return section === Sections.decentraland.LISTS
-      ? getItemsPickedByUser(state)
+      ? getItemsPickedByUserOrCreator(state)
       : getItems(state)
   } else {
     return getNFTs(state)
@@ -101,15 +103,34 @@ export const getBrowseLists = createSelector<
   browse.listIds.map(id => listsById[id]).filter(Boolean)
 )
 
-export const getItemsPickedByUser = createSelector<
+const getCurrentList = createSelector<
+  RootState,
+  string | null,
+  Record<string, List>,
+  List | null
+>(getListId, getLists, (listId, listsById) =>
+  listId ? listsById[listId] : null
+)
+
+export const getItemsPickedByUserOrCreator = createSelector<
   RootState,
   Record<string, FavoritesData>,
   Item[],
+  List | null,
+  Wallet | null,
   Item[]
->(getFavoritedItemsFromState, getItems, (favoritedItems, items) =>
-  items
-    .filter(item => favoritedItems[item.id]?.pickedByUser)
-    .sort(byFavoriteCreatedAtAsc(favoritedItems))
+>(
+  getFavoritedItemsFromState,
+  getItems,
+  getCurrentList,
+  getWallet,
+  (favoritedItems, items, list, wallet) => {
+    const filteredItems =
+      wallet && list && wallet.address === list.userAddress
+        ? items.filter(item => favoritedItems[item.id]?.pickedByUser)
+        : items
+    return filteredItems.sort(byFavoriteCreatedAtAsc(favoritedItems))
+  }
 )
 
 export const getOnSaleNFTs = createSelector<

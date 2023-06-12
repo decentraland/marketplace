@@ -9,7 +9,7 @@ import {
   unpickItemAsFavoriteSuccess
 } from '../../favorites/actions'
 import { PAGE_SIZE } from '../../vendor/api'
-import { getCount, getItemsPickedByUser } from './selectors'
+import { getCount, getItemsPickedByUserOrCreator } from './selectors'
 import { browseSaga } from './sagas'
 
 describe('when handling the success action of unpicking an item as favorite', () => {
@@ -25,7 +25,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
         .provide([
           [select(getSection), section],
           [select(getPageNumber), 1],
-          [select(getItemsPickedByUser), []],
+          [select(getItemsPickedByUserOrCreator), []],
           [select(getCount), 2]
         ])
         .not.put.like({ action: { type: FETCH_FAVORITED_ITEMS_REQUEST } })
@@ -51,7 +51,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
           .provide([
             [select(getSection), section],
             [select(getPageNumber), 1],
-            [select(getItemsPickedByUser), pickedItems],
+            [select(getItemsPickedByUserOrCreator), pickedItems],
             [select(getCount), 2]
           ])
           .put(
@@ -77,7 +77,7 @@ describe('when handling the success action of unpicking an item as favorite', ()
           .provide([
             [select(getSection), section],
             [select(getPageNumber), 1],
-            [select(getItemsPickedByUser), pickedItems],
+            [select(getItemsPickedByUserOrCreator), pickedItems],
             [select(getCount), 2]
           ])
           .not.put.like({ action: { type: FETCH_FAVORITED_ITEMS_REQUEST } })

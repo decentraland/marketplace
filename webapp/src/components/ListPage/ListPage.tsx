@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import {
@@ -20,6 +20,7 @@ import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/fav
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
+import { LinkedProfile } from '../LinkedProfile'
 import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
 import {
@@ -33,7 +34,8 @@ import {
   DELETE_LIST_BUTTON_TEST_ID,
   UPDATED_AT_TEST_ID,
   ASSET_BROWSE_TEST_ID,
-  EMPTY_LIST_TEST_ID
+  EMPTY_LIST_TEST_ID,
+  GO_BACK_BUTTON_TEST_ID
 } from './constants'
 
 const LIST_NOT_FOUND = 'list was not found'
@@ -67,6 +69,11 @@ const ListPage = ({
       fetchList()
     },
     [fetchList]
+  )
+
+  const isPublicView = useMemo(
+    () => wallet && list && wallet.address !== list.userAddress,
+    [wallet, list]
   )
 
   const renderErrorView = useCallback(() => {
@@ -117,7 +124,11 @@ const ListPage = ({
       ) : list ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
-            <Back onClick={onBack} />
+            {!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID ? (
+              <span data-testid={GO_BACK_BUTTON_TEST_ID}>
+                <Back onClick={onBack} />
+              </span>
+            ) : null}
             <div className={styles.nameContainer}>
               {list.name}
               {list.isPrivate && (
@@ -129,7 +140,7 @@ const ListPage = ({
                 </div>
               )}
             </div>
-            {list.id === DEFAULT_FAVORITES_LIST_ID ? null : (
+            {list.id !== DEFAULT_FAVORITES_LIST_ID && !isPublicView ? (
               <div className={styles.actions}>
                 <Button
                   className={classNames(styles.iconContainer, styles.share)}
@@ -162,15 +173,22 @@ const ListPage = ({
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-            )}
+            ) : null}
           </Header>
           <Header className={styles.header} sub>
-            <span className={styles.description}>{list.description}</span>
+            <div className={styles.subHeaderLeft}>
+              <span>{list.description}</span>
+              {isPublicView && list.userAddress && (
+                <LinkedProfile
+                  data-testid={'linked-profile'}
+                  size="large"
+                  address={list.userAddress}
+                  className={styles.owner}
+                />
+              )}
+            </div>
             {list.updatedAt ? (
-              <div
-                className={styles.updatedAt}
-                data-testid={UPDATED_AT_TEST_ID}
-              >
+              <div data-testid={UPDATED_AT_TEST_ID}>
                 <b>{t('list_page.last_updated_at')}:</b>{' '}
                 {formatDistanceToNow(list.updatedAt, {
                   addSuffix: true,
