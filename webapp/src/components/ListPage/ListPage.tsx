@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import {
   Back,
@@ -11,6 +12,7 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatDistanceToNow } from '../../lib/date'
+import { locations } from '../../modules/routing/locations'
 import { Section } from '../../modules/vendor/decentraland'
 import { VendorName } from '../../modules/vendor'
 import { View } from '../../modules/ui/types'
@@ -18,25 +20,32 @@ import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/fav
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
+import { LinkedProfile } from '../LinkedProfile'
 import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
+import {
+  ERROR_CONTAINER_TEST_ID,
+  COULD_NOT_LOAD_LIST_ACTION_TEST_ID,
+  LOADER_TEST_ID,
+  LIST_CONTAINER_TEST_ID,
+  PRIVATE_BADGE_TEST_ID,
+  SHARE_LIST_BUTTON_TEST_ID,
+  EDIT_LIST_BUTTON_TEST_ID,
+  DELETE_LIST_BUTTON_TEST_ID,
+  UPDATED_AT_TEST_ID,
+  ASSET_BROWSE_TEST_ID,
+  EMPTY_LIST_TEST_ID,
+  GO_BACK_BUTTON_TEST_ID
+} from './constants'
 
-export const LOADER_TEST_ID = 'loader'
-export const EMPTY_VIEW_TEST_ID = 'empty-view'
-export const ASSET_BROWSE_TEST_ID = 'asset-browse'
-export const LIST_CONTAINER_TEST_ID = 'list-container'
-export const GO_BACK_TEST_ID = 'share-list'
-export const PRIVATE_BADGE_TEST_ID = 'private-badge'
-export const UPDATED_AT_TEST_ID = 'updated-at'
-export const SHARE_LIST_BUTTON_TEST_ID = 'share-list'
-export const EDIT_LIST_BUTTON_TEST_ID = 'edit-list'
-export const DELETE_LIST_BUTTON_TEST_ID = 'delete-list'
+const LIST_NOT_FOUND = 'list was not found'
 
 const ListPage = ({
   wallet,
   listId,
   list,
   isLoading,
+  error,
   onFetchList,
   onBack,
   onEditList,
@@ -45,23 +54,81 @@ const ListPage = ({
 }: Props) => {
   const hasFetchedOnce = useRef(false)
 
+  const fetchList = useCallback(() => {
+    if (listId && !isLoading && !hasFetchedOnce.current && wallet) {
+      onFetchList(listId)
+      hasFetchedOnce.current = true
+    }
+  }, [listId, isLoading, onFetchList, wallet])
+
+  const handleFetchList = useCallback(
+    (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      e.preventDefault()
+      e.stopPropagation()
+      hasFetchedOnce.current = false
+      fetchList()
+    },
+    [fetchList]
+  )
+
+  const isPublicView = useMemo(
+    () => wallet && list && wallet.address !== list.userAddress,
+    [wallet, list]
+  )
+
+  const renderErrorView = useCallback(() => {
+    const isNotFound = error?.includes(LIST_NOT_FOUND)
+    const errorType = isNotFound ? 'not_found' : 'could_not_load'
+    return (
+      <div
+        className={styles.errorContainer}
+        data-testid={ERROR_CONTAINER_TEST_ID}
+      >
+        <div
+          className={classNames(
+            styles.errorImage,
+            isNotFound ? styles.notFoundImage : styles.couldNotLoadImage
+          )}
+        ></div>
+        <h1 className={styles.errorTitle}>
+          {t(`list_page.error.${errorType}.title`)}
+        </h1>
+        <p className={styles.errorSubtitle}>
+          {t(`list_page.error.${errorType}.subtitle`)}
+        </p>
+        {!isNotFound && (
+          <Button
+            primary
+            data-testid={COULD_NOT_LOAD_LIST_ACTION_TEST_ID}
+            onClick={handleFetchList}
+          >
+            {t(`list_page.error.${errorType}.action`)}
+          </Button>
+        )}
+      </div>
+    )
+  }, [error, handleFetchList])
+
   useEffect(() => {
     hasFetchedOnce.current = false
   }, [listId])
 
   useEffect(() => {
-    if (listId && !isLoading && !hasFetchedOnce.current && wallet) {
-      onFetchList(listId)
-      hasFetchedOnce.current = true
-    }
-  }, [list, listId, onFetchList, isLoading, wallet])
+    fetchList()
+  }, [fetchList])
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
-      {list ? (
-        <div data-testid={LIST_CONTAINER_TEST_ID}>
+      {isLoading ? (
+        <Loader active size="massive" data-testid={LOADER_TEST_ID} />
+      ) : list ? (
+        <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
-            <Back onClick={onBack} data-testid={GO_BACK_TEST_ID} />
+            {!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID ? (
+              <span data-testid={GO_BACK_BUTTON_TEST_ID}>
+                <Back onClick={onBack} />
+              </span>
+            ) : null}
             <div className={styles.nameContainer}>
               {list.name}
               {list.isPrivate && (
@@ -73,7 +140,7 @@ const ListPage = ({
                 </div>
               )}
             </div>
-            {list.id === DEFAULT_FAVORITES_LIST_ID ? null : (
+            {list.id !== DEFAULT_FAVORITES_LIST_ID && !isPublicView ? (
               <div className={styles.actions}>
                 <Button
                   className={classNames(styles.iconContainer, styles.share)}
@@ -106,15 +173,22 @@ const ListPage = ({
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
-            )}
+            ) : null}
           </Header>
           <Header className={styles.header} sub>
-            <span className={styles.description}>{list.description}</span>
+            <div className={styles.subHeaderLeft}>
+              <span>{list.description}</span>
+              {isPublicView && list.userAddress && (
+                <LinkedProfile
+                  data-testid={'linked-profile'}
+                  size="large"
+                  address={list.userAddress}
+                  className={styles.owner}
+                />
+              )}
+            </div>
             {list.updatedAt ? (
-              <div
-                className={styles.updatedAt}
-                data-testid={UPDATED_AT_TEST_ID}
-              >
+              <div data-testid={UPDATED_AT_TEST_ID}>
                 <b>{t('list_page.last_updated_at')}:</b>{' '}
                 {formatDistanceToNow(list.updatedAt, {
                   addSuffix: true,
@@ -128,21 +202,29 @@ const ListPage = ({
               data-testid={ASSET_BROWSE_TEST_ID}
               className={styles.assetBrowseContainer}
             >
-              <AssetBrowse
-                view={View.LISTS}
-                section={Section.LISTS}
-                vendor={VendorName.DECENTRALAND}
-              />
+              {list.itemsCount ? (
+                <AssetBrowse
+                  view={View.LISTS}
+                  section={Section.LISTS}
+                  vendor={VendorName.DECENTRALAND}
+                />
+              ) : (
+                <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
+                  <div className={styles.emptyLogo}></div>
+                  <h1>{t('list_page.empty.title')}</h1>
+                  <p>{t('list_page.empty.subtitle')}</p>
+                  <div className={styles.emptyActions}>
+                    <Button primary as={Link} to={locations.browse()}>
+                      {t('list_page.empty.action')}
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
-          ) : (
-            <div
-              className={styles.emptyState}
-              data-testid={EMPTY_VIEW_TEST_ID}
-            ></div>
-          )}
+          ) : null}
         </div>
       ) : (
-        <Loader active size="massive" data-testid={LOADER_TEST_ID} />
+        error && renderErrorView()
       )}
     </PageLayout>
   )

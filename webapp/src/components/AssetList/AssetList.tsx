@@ -1,13 +1,10 @@
 import React, { useCallback, useMemo, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Card, Loader } from 'decentraland-ui'
+import { Card, Loader } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
-import { Section } from '../../modules/vendor/decentraland'
-import { locations } from '../../modules/routing/locations'
 import * as events from '../../utils/events'
 import { InfiniteScroll } from '../InfiniteScroll'
 import { AssetCard } from '../AssetCard'
@@ -80,19 +77,6 @@ const AssetList = (props: Props) => {
   }, [assets.length, search, section, isManager])
 
   const renderEmptyState = useCallback(() => {
-    if (section === Section.LISTS) {
-      return (
-        <div className="empty empty-list">
-          <div className="logo"></div>
-          <h1 className="title">{t('list_page.empty.title')}</h1>
-          <p className="subtitle">{t('list_page.empty.subtitle')}</p>
-          <Button primary as={Link} to={locations.browse()}>
-            {t('list_page.empty.action')}
-          </Button>
-        </div>
-      )
-    }
-
     return (
       <div className="empty empty-assets">
         <div className="watermelon" />
@@ -118,13 +102,7 @@ const AssetList = (props: Props) => {
         </span>
       </div>
     )
-  }, [
-    emptyStateTranslationString,
-    hasFiltersEnabled,
-    onClearFilters,
-    search,
-    section
-  ])
+  }, [emptyStateTranslationString, hasFiltersEnabled, onClearFilters, search])
 
   const shouldRenderEmptyState = useMemo(
     () => assets.length === 0 && !isLoading,

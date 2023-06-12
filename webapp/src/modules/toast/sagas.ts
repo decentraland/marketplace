@@ -13,6 +13,7 @@ import {
 } from '../rental/actions'
 import {
   BUY_ITEM_WITH_CARD_FAILURE,
+  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
   FETCH_ITEMS_FAILURE,
   FetchItemsFailureAction
 } from '../item/actions'
@@ -189,5 +190,7 @@ function* handleFetchAssetsFailure(
   action: FetchItemsFailureAction | FetchNFTsFailureAction
 ) {
   const { error } = action.payload
-  yield put(showToast(getFetchAssetsFailureToast(error), 'bottom right'))
+  if (error !== FETCH_ITEMS_CANCELLED_ERROR_MESSAGE) {
+    yield put(showToast(getFetchAssetsFailureToast(error), 'bottom right'))
+  }
 }

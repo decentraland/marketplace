@@ -1291,15 +1291,31 @@
     "delete_list": "Delete List",
     "last_updated_at": "Last updated",
     "empty": {
-      "title": "You don’t have any saved items in this list",
+      "title": "You don't have any saved items in this list",
       "subtitle": "Discover amazing items.",
       "action": "Explore collectibles"
+    },
+    "error": {
+      "not_found": {
+        "title": "This List is private or doesn't exist.",
+        "subtitle": "Try with another list."
+      },
+      "could_not_load": {
+        "title": "Oops! This List couldn't load.",
+        "subtitle": "Please try again.",
+        "action": "Try again"
+      }
     }
   },
   "lists_page": {
     "title": "My Lists",
     "subtitle": "{count} {count, plural, one {List} other {Lists}}",
-    "create_list": "Create list"
+    "create_list": "Create list",
+    "error": {
+      "title": "Oops! Lists couldn't load.",
+      "subtitle": "Please try again.",
+      "action": "Try again"
+    }
   },
   "claim_your_own_name": {
     "title": "CLAIM YOUR OWN NAME",
@@ -1343,6 +1359,13 @@
       "description": "We couldn't load the item information",
       "go_to_activity": "Go to activity page"
     }
+  },
+  "share_list_modal": {
+    "title": "Share List",
+    "copy_link": "copy link",
+    "share_on_twitter": "Share on twitter",
+    "copied": "Copied",
+    "twitter_message": "I just shared a new List, Check it out: "
   },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",

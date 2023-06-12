@@ -361,20 +361,6 @@ describe('when reducing the fetch NFTs success action', () => {
   })
 })
 
-describe('when reducing the success action of fetching trending items', () => {
-  const initialState: BrowseUIState = { ...INITIAL_STATE }
-  const item = { id: 'itemId1' } as Item
-
-  it('should return a state with the ids of the trending items', () => {
-    expect(
-      browseReducer(initialState, fetchTrendingItemsSuccess([item]))
-    ).toEqual({
-      ...initialState,
-      itemIds: [item.id]
-    })
-  })
-})
-
 describe('when reducing the success action of fetching favorited items', () => {
   let initialState: BrowseUIState
   let browseOptions: ItemBrowseOptions

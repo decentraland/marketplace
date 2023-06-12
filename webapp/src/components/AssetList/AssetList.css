@@ -59,6 +59,15 @@
   text-align: center;
 }
 
+.AssetsList .empty.empty-list {
+  background: var(--secondary);
+  border-radius: 10px;
+  flex-grow: 1;
+  height: 100%;
+  margin: 0;
+  justify-content: center;
+}
+
 @media (min-width: 768px) {
   .ui.massive.loader.asset-loader {
     position: sticky;

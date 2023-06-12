@@ -31,6 +31,32 @@
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr))
 }
 
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: var(--secondary);
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+  line-height: 24px;
+  text-align: center;
+}
+
+.errorImage {
+  background-image: url('../../images/could-not-load-list.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+}
+
+.errorActions {
+  margin-top: 40px;
+}
+
 @media (max-width: 767px) {
   .createList .icon {
     display: none;

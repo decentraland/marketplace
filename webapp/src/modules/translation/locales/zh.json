@@ -1290,12 +1290,28 @@
       "title": "您在此列表中没有任何已保存的项目",
       "subtitle": "发现惊人的项目。",
       "action": "浏览项目"
+    },
+    "error": {
+      "not_found": {
+        "title": "该列表是私有的或者不存在。",
+        "subtitle": "请尝试其他列表。"
+      },
+      "could_not_load": {
+        "title": "糟糕！无法加载该列表。",
+        "subtitle": "请重试。",
+        "action": "重试"
+      }
     }
   },
   "lists_page": {
     "title": "我的清单",
     "subtitle": "{count} {count, plural, one {个清单} other {个列表}}",
-    "create_list": "创建列表"
+    "create_list": "创建列表",
+    "error": {
+      "title": "哎呀！ 列表无法加载。",
+      "subtitle": "请重试。",
+      "action": "重试"
+    }
   },
   "claim_your_own_name": {
     "title": "声称自己的名字",
@@ -1339,6 +1355,13 @@
       "description": "我们无法加载项目信息",
       "go_to_activity": "转到活动页面"
     }
+  },
+  "share_list_modal": {
+    "title": "分享列表",
+    "copy_link": "複製鏈接",
+    "share_on_twitter": "在推特上分享",
+    "copied": "複製",
+    "twitter_message": "我剛剛分享了一個新列表，看看吧："
   },
   "list_card": {
     "item_count": "{count} {count, plural, one {项} other {项目}}",

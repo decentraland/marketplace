@@ -1,6 +1,17 @@
+import { matchPath } from 'react-router-dom'
+import { getLocation } from 'connected-react-router'
+import { SagaIterator } from 'redux-saga'
 import { Item } from '@dcl/schemas'
 import { put, takeEvery } from '@redux-saga/core/effects'
-import { call, race, select, take } from 'redux-saga/effects'
+import {
+  call,
+  cancel,
+  cancelled,
+  fork,
+  race,
+  select,
+  take
+} from 'redux-saga/effects'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
@@ -20,6 +31,7 @@ import { isCatalogView } from '../routing/utils'
 import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import { retryParams } from '../vendor/decentraland/utils'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
+import { locations } from '../routing/locations'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -49,7 +61,8 @@ import {
   FetchCollectionItemsRequestAction,
   fetchCollectionItemsSuccess,
   fetchCollectionItemsFailure,
-  FETCH_COLLECTION_ITEMS_REQUEST
+  FETCH_COLLECTION_ITEMS_REQUEST,
+  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE
 } from './actions'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
@@ -65,7 +78,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   const itemAPI = new ItemAPI(NFT_SERVER_URL, API_OPTS)
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
-  yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
+  yield fork(() => takeLatestByPath(FETCH_ITEMS_REQUEST, locations.browse()))
   yield takeEvery(
     FETCH_COLLECTION_ITEMS_REQUEST,
     handleFetchCollectionItemsRequest
@@ -75,6 +88,24 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
   yield takeEvery(SET_PURCHASE, handleSetItemPurchaseWithCard)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
+
+  // to avoid race conditions, just one fetch items request is handled at once in the browse page
+  function* takeLatestByPath(actionType: string, path: string): SagaIterator {
+    let task
+
+    while (true) {
+      const action: FetchItemsRequestAction = yield take(actionType)
+      const {
+        pathname: currentPathname
+      }: ReturnType<typeof getLocation> = yield select(getLocation)
+
+      // if we have a task running in the browse path, we cancel the previous one
+      if (matchPath(currentPathname, { path }) && task && task.isRunning()) {
+        yield cancel(task)
+      }
+      task = yield fork(handleFetchItemsRequest, action)
+    }
+  }
 
   function* handleFetchTrendingItemsRequest(
     action: FetchTrendingItemsRequestAction
@@ -125,7 +156,9 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     }
   }
 
-  function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
+  function* handleFetchItemsRequest(
+    action: FetchItemsRequestAction
+  ): SagaIterator {
     const { filters, view } = action.payload
 
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
@@ -145,6 +178,13 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
           action.payload
         )
       )
+    } finally {
+      if (yield cancelled()) {
+        // if cancelled, we dispatch a failure action so it cleans the loading state
+        yield put(
+          fetchItemsFailure(FETCH_ITEMS_CANCELLED_ERROR_MESSAGE, action.payload)
+        )
+      }
     }
   }
 
