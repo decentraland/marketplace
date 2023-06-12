@@ -1,7 +1,8 @@
+import { getLocation } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { call, select, take } from 'redux-saga/effects'
-import { ChainId, Item, Network } from '@dcl/schemas'
+import { ChainId, Item, Network, Rarity } from '@dcl/schemas'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
@@ -11,6 +12,7 @@ import {
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import { NetworkGatewayType } from 'decentraland-ui'
+import { locations } from '../routing/locations'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { ItemAPI } from '../vendor/decentraland/item/api'
@@ -40,11 +42,13 @@ import {
   FETCH_ITEM_FAILURE,
   fetchCollectionItemsRequest,
   fetchCollectionItemsSuccess,
-  fetchCollectionItemsFailure
+  fetchCollectionItemsFailure,
+  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE
 } from './actions'
 import { itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
+import { ItemBrowseOptions } from './types'
 
 const item = {
   itemId: 'anItemId',
@@ -62,7 +66,7 @@ const txHash =
 
 const anError = new Error('An error occured')
 
-const itemBrowseOptions = {
+const itemBrowseOptions: ItemBrowseOptions = {
   view: View.MARKET,
   page: 0,
   filters: {}
@@ -391,6 +395,7 @@ describe('when handling the fetch collections items request action', () => {
 
 describe('when handling the fetch items request action', () => {
   describe('when the request is successful', () => {
+    let pathname: string
     let dateNowSpy: jest.SpyInstance
     const nowTimestamp = 1487076708000
     const fetchResult = { data: [item], total: 1 }
@@ -405,22 +410,91 @@ describe('when handling the fetch items request action', () => {
       dateNowSpy.mockRestore()
     })
 
-    it('should dispatch a successful action with the fetched items', () => {
-      return expectSaga(itemSaga, getIdentity)
-        .provide([
-          [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
-        ])
-        .put(
-          fetchItemsSuccess(
-            fetchResult.data,
-            fetchResult.total,
-            itemBrowseOptions,
-            nowTimestamp
+    describe('and its dispatched from the browse path', () => {
+      beforeEach(() => {
+        pathname = locations.browse()
+      })
+      describe('and there is an ongoing fetch item request', () => {
+        let originalBrowseOptions = itemBrowseOptions
+        let newBrowseOptions: ItemBrowseOptions = {
+          ...itemBrowseOptions,
+          filters: { ...itemBrowseOptions.filters, rarities: [Rarity.COMMON] }
+        }
+        it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
+          return expectSaga(itemSaga, getIdentity)
+            .provide([
+              [
+                matchers.call.fn(waitForWalletConnectionIfConnecting),
+                undefined
+              ],
+              [select(getLocation), { pathname }],
+              {
+                call(effect, next) {
+                  if (
+                    effect.fn === CatalogAPI.prototype.get &&
+                    effect.args[0] === originalBrowseOptions.filters
+                  ) {
+                    // Add a setTimeout so it gives time to get it cancelled
+                    return new Promise(() => {})
+                  }
+                  if (
+                    effect.fn === CatalogAPI.prototype.get &&
+                    effect.args[0] === newBrowseOptions.filters
+                  ) {
+                    // Mock without timeout
+                    return fetchResult
+                  }
+                  return next()
+                }
+              }
+            ])
+            .call.like({
+              fn: CatalogAPI.prototype.get,
+              args: [newBrowseOptions.filters]
+            })
+            .put(
+              fetchItemsFailure(
+                FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
+                originalBrowseOptions
+              )
+            )
+            .put(
+              fetchItemsSuccess(
+                fetchResult.data,
+                fetchResult.total,
+                newBrowseOptions,
+                nowTimestamp
+              )
+            )
+            .dispatch(fetchItemsRequest(originalBrowseOptions))
+            .dispatch(fetchItemsRequest(newBrowseOptions))
+            .run({ silenceTimeout: true })
+        })
+      })
+    })
+
+    describe('and its dispatches from a path that is not the browse', () => {
+      beforeEach(() => {
+        pathname = locations.root()
+      })
+      it('should dispatch a successful action with the fetched items', () => {
+        return expectSaga(itemSaga, getIdentity)
+          .provide([
+            [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
+            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined],
+            [select(getLocation), { pathname }]
+          ])
+          .put(
+            fetchItemsSuccess(
+              fetchResult.data,
+              fetchResult.total,
+              itemBrowseOptions,
+              nowTimestamp
+            )
           )
-        )
-        .dispatch(fetchItemsRequest(itemBrowseOptions))
-        .run({ silenceTimeout: true })
+          .dispatch(fetchItemsRequest(itemBrowseOptions))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 
@@ -428,6 +502,7 @@ describe('when handling the fetch items request action', () => {
     it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
+          [select(getLocation), { pathname: '' }],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
           [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
         ])
