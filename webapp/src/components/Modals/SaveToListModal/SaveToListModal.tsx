@@ -59,15 +59,15 @@ const SaveToListModal = (props: Props) => {
 
   const saveButtonMessage = useMemo(() => {
     if (picks.pickFor.length === 1 && picks.unpickFrom.length === 0) {
-      return t('save_to_list_modal.save_to_a_list', {
+      return t('save_to_list_modal.save_in_a_list', {
         name: picks.pickFor[0].name
       })
-    } else if (picks.pickFor.length === 1 && picks.unpickFrom.length === 0) {
+    } else if (picks.pickFor.length === 0 && picks.unpickFrom.length === 1) {
       return t('save_to_list_modal.remove_from_a_list', {
         name: picks.unpickFrom[0].name
       })
     } else if (picks.pickFor.length > 0 && picks.unpickFrom.length === 0) {
-      return t('save_to_list_modal.save_to_lists', {
+      return t('save_to_list_modal.save_in_lists', {
         name: picks.pickFor[0].name,
         count: picks.pickFor.length
       })
@@ -81,9 +81,10 @@ const SaveToListModal = (props: Props) => {
         count: picks.pickFor.length + picks.unpickFrom.length
       })
     } else {
-      return t('save_to_list_modal.save_to_list')
+      return t('save_to_list_modal.save_in_list')
     }
   }, [picks.pickFor, picks.unpickFrom])
+  console.log(picks.pickFor, picks.unpickFrom)
 
   const handleSavePicks = useCallback(() => {
     onSavePicks(picks.pickFor, picks.unpickFrom)
@@ -146,7 +147,7 @@ const SaveToListModal = (props: Props) => {
         const defaultList = result.results.find(
           list => list.id === DEFAULT_FAVORITES_LIST_ID
         )
-        if (defaultList && defaultList.isItemInList) {
+        if (defaultList && !defaultList.isItemInList) {
           setPicks({
             pickFor: picks.pickFor.concat(defaultList),
             unpickFrom: picks.unpickFrom

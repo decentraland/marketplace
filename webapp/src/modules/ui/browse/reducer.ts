@@ -1,5 +1,4 @@
 import {
-  BULK_PICK_SUCCESS,
   CREATE_LIST_SUCCESS,
   CreateListSuccessAction,
   DELETE_LIST_SUCCESS,
