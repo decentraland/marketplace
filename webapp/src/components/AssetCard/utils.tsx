@@ -74,14 +74,14 @@ function getIsMintPriceInRange(
   appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>
 ) {
   return (
-    !appliedFilters.minPrice ||
-    (BigNumber.from(asset.price).gte(
-      ethers.utils.parseUnits(appliedFilters.minPrice)
-    ) &&
-      (!appliedFilters.maxPrice ||
-        BigNumber.from(asset.price).lte(
-          ethers.utils.parseUnits(appliedFilters.maxPrice)
-        )))
+    (!appliedFilters.minPrice ||
+      BigNumber.from(asset.price).gte(
+        ethers.utils.parseUnits(appliedFilters.minPrice)
+      )) &&
+    (!appliedFilters.maxPrice ||
+      BigNumber.from(asset.price).lte(
+        ethers.utils.parseUnits(appliedFilters.maxPrice)
+      ))
   )
 }
 

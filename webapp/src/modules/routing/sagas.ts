@@ -29,6 +29,7 @@ import {
 import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_SUCCESS,
+  BuyItemSuccessAction,
   fetchItemRequest,
   fetchItemsRequest,
   fetchTrendingItemsRequest
@@ -108,7 +109,8 @@ import { getSales } from '../sale/selectors'
 import {
   CANCEL_ORDER_SUCCESS,
   CREATE_ORDER_SUCCESS,
-  EXECUTE_ORDER_SUCCESS
+  EXECUTE_ORDER_SUCCESS,
+  ExecuteOrderSuccessAction
 } from '../order/actions'
 import {
   ACCEPT_BID_SUCCESS,
@@ -130,15 +132,18 @@ export function* routingSaga() {
   yield takeEvery(
     [
       CREATE_ORDER_SUCCESS,
-      EXECUTE_ORDER_SUCCESS,
       CANCEL_ORDER_SUCCESS,
       PLACE_BID_SUCCESS,
       ACCEPT_BID_SUCCESS,
       CANCEL_BID_SUCCESS,
-      BUY_ITEM_SUCCESS,
       TRANSFER_NFT_SUCCESS
     ],
     handleRedirectToActivity
+  )
+
+  yield takeEvery(
+    [EXECUTE_ORDER_SUCCESS, BUY_ITEM_SUCCESS],
+    handleRedirectToSuccessPage
   )
 }
 
@@ -667,4 +672,23 @@ function shouldResetOptions(previous: BrowseOptions, current: BrowseOptions) {
 
 function* handleRedirectToActivity() {
   yield put(push(locations.activity()))
+}
+
+function* handleRedirectToSuccessPage(
+  action: ExecuteOrderSuccessAction | BuyItemSuccessAction
+) {
+  const payload = action.payload
+  yield put(
+    push(
+      locations.success({
+        txHash: payload.txHash,
+        tokenId: 'item' in payload ? payload.item.itemId : payload.nft.tokenId,
+        assetType: 'item' in payload ? AssetType.ITEM : AssetType.NFT,
+        contractAddress:
+          'item' in payload
+            ? payload.item.contractAddress
+            : payload.nft.contractAddress
+      })
+    )
+  )
 }

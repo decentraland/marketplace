@@ -20,8 +20,9 @@ import {
   isLoadingCreateList,
   isLoadingLists,
   getPreviewListItems,
-  isLoadingDeleteList,
-  isLoadingBulkPicksUnpicks
+  isLoadingBulkPicksUnpicks,
+  isLoadingUpdateList,
+  isLoadingDeleteList
 } from './selectors'
 import {
   bulkPickUnpickRequest,
@@ -31,7 +32,8 @@ import {
   fetchListsRequest,
   pickItemAsFavoriteRequest,
   undoUnpickingItemAsFavoriteRequest,
-  unpickItemAsFavoriteRequest
+  unpickItemAsFavoriteRequest,
+  updateListRequest
 } from './actions'
 import { List } from './types'
 
@@ -307,6 +309,30 @@ describe('when getting the preview loading items', () => {
       state.item.data.item1,
       state.item.data.item2
     ])
+  })
+})
+
+describe('when getting if the update list request is being loaded', () => {
+  describe("and there's no update list request action in the loading state", () => {
+    it('should return false', () => {
+      expect(isLoadingUpdateList(state)).toBe(false)
+    })
+  })
+
+  describe("and there's a update list request action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = [
+        updateListRequest('aListId', {
+          name: 'aName',
+          description: 'aDescription',
+          isPrivate: true
+        })
+      ]
+    })
+
+    it('should return true', () => {
+      expect(isLoadingUpdateList(state)).toBe(true)
+    })
   })
 })
 

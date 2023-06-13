@@ -15,7 +15,8 @@ import {
   BULK_PICK_SUCCESS,
   CREATE_LIST_SUCCESS,
   DELETE_LIST_FAILURE,
-  DELETE_LIST_SUCCESS
+  DELETE_LIST_SUCCESS,
+  UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
 import { closeAllModals, openModal } from './actions'
 
@@ -29,7 +30,8 @@ export function* modalSaga() {
       DELETE_LIST_SUCCESS,
       DELETE_LIST_FAILURE,
       BULK_PICK_SUCCESS,
-      BULK_PICK_FAILURE
+      BULK_PICK_FAILURE,
+      UPDATE_LIST_SUCCESS
     ],
     handleCloseAllModals
   )

@@ -55,7 +55,8 @@ import {
   updateListSuccess
 } from './actions'
 import { favoritesSaga } from './sagas'
-import { getIsPickedByUser, getListId } from './selectors'
+import { getListId } from './selectors'
+import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import {
   CreateListParameters,
   FavoritedItems,
@@ -63,7 +64,6 @@ import {
   ListsBrowseOptions,
   ListsBrowseSortBy
 } from './types'
-import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 let item: Item
 let address: string
@@ -839,7 +839,8 @@ describe('when handling the request for getting a list', () => {
       itemsCount: 1,
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      permission: Permission.VIEW
+      permission: Permission.VIEW,
+      isPrivate: false
     }
   })
 
@@ -883,17 +884,14 @@ describe('when handling the request for getting a list', () => {
 })
 
 describe('when handling the request for updating a list', () => {
-  let listToUpdate: List
+  let listToUpdate: CreateListParameters
   let updatedList: UpdateOrCreateList
 
   beforeEach(() => {
     listToUpdate = {
-      id: 'anId',
       name: 'aName',
       description: 'aDescription',
-      userAddress: 'aUserAddress',
-      createdAt: Date.now(),
-      itemsCount: 1
+      isPrivate: false
     }
     updatedList = {
       id: 'anId',
@@ -902,7 +900,8 @@ describe('when handling the request for updating a list', () => {
       userAddress: 'aUserAddress',
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      permission: Permission.VIEW
+      permission: Permission.VIEW,
+      isPrivate: false
     }
   })
 
@@ -917,10 +916,10 @@ describe('when handling the request for updating a list', () => {
         ])
         .call.like({
           fn: FavoritesAPI.prototype.updateList,
-          args: [listToUpdate.id, listToUpdate]
+          args: [updatedList.id, listToUpdate]
         })
-        .put(updateListFailure(listToUpdate.id, error.message))
-        .dispatch(updateListRequest(listToUpdate.id, listToUpdate))
+        .put(updateListFailure(updatedList.id, error.message))
+        .dispatch(updateListRequest(updatedList.id, listToUpdate))
         .run({ silenceTimeout: true })
     })
   })
@@ -936,10 +935,10 @@ describe('when handling the request for updating a list', () => {
         ])
         .call.like({
           fn: FavoritesAPI.prototype.updateList,
-          args: [listToUpdate.id, listToUpdate]
+          args: [updatedList.id, listToUpdate]
         })
         .put(updateListSuccess(updatedList))
-        .dispatch(updateListRequest(listToUpdate.id, listToUpdate))
+        .dispatch(updateListRequest(updatedList.id, listToUpdate))
         .run({ silenceTimeout: true })
     })
   })
@@ -962,7 +961,8 @@ describe('when handling the request for creating a list', () => {
       userAddress: 'aUserAddress',
       permission: Permission.EDIT,
       createdAt: Date.now(),
-      updatedAt: null
+      updatedAt: null,
+      isPrivate: false
     }
   })
 

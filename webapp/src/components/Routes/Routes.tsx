@@ -25,6 +25,7 @@ import { CollectionPage } from '../CollectionPage'
 import { Navbar } from '../Navbar'
 import { ManageAssetPage } from '../ManageAssetPage'
 import { Footer } from '../Footer'
+import { SuccessPage } from '../SuccessPage'
 import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
 import { StatusPage } from '../BuyPage/StatusPage'
 import { ListPage } from '../ListPage'
@@ -128,6 +129,7 @@ const Routes = ({ inMaintenance }: Props) => {
         <Route exact path={locations.root()} component={HomePage} />
         <Route exact path={locations.parcel()} component={LegacyNFTPage} />
         <Route exact path={locations.estate()} component={LegacyNFTPage} />
+        <Route exact path={locations.success()} component={SuccessPage} />
         <Redirect
           from="/browse"
           to={locations.browse() + window.location.search}

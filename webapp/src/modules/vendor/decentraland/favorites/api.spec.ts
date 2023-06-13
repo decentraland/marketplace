@@ -275,6 +275,7 @@ describe('when getting a list', () => {
         createdAt: Date.now(),
         updatedAt: Date.now(),
         itemsCount: 1,
+        isPrivate: true,
         permission: Permission.VIEW
       }
       response = { ok: true, data: list }
@@ -318,6 +319,7 @@ describe('when updating a list', () => {
         userAddress: 'anOwnerAddress',
         createdAt: Date.now(),
         updatedAt: Date.now(),
+        isPrivate: true,
         permission: Permission.VIEW
       }
       response = { ok: true, data: list }
@@ -325,9 +327,13 @@ describe('when updating a list', () => {
     })
 
     it('should resolve with the retrieved list', () => {
-      return expect(favoritesAPI.updateList(list.id, list)).resolves.toEqual(
-        response
-      )
+      return expect(
+        favoritesAPI.updateList(list.id, {
+          name: list.name,
+          description: list.description ?? '',
+          isPrivate: list.isPrivate
+        })
+      ).resolves.toEqual(response)
     })
   })
 })
@@ -367,6 +373,7 @@ describe('when creating a list', () => {
         userAddress: 'anOwnerAddress',
         createdAt: Date.now(),
         updatedAt: null,
+        isPrivate: true,
         permission: Permission.VIEW
       }
       response = { ok: true, data: list }

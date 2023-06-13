@@ -1,3 +1,4 @@
+import { RouterState } from 'connected-react-router'
 import {
   ChainId,
   Item,
@@ -10,9 +11,11 @@ import {
   Transaction,
   TransactionStatus
 } from 'decentraland-dapps/dist/modules/transaction/types'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../../nft/types'
 import { RootState } from '../../reducer'
 import { FavoritesState } from '../../favorites/reducer'
+import * as FavoritesSelectors from '../../favorites/selectors'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { FavoritesData, List } from '../../favorites/types'
 import { AssetType } from '../../asset/types'
@@ -23,7 +26,7 @@ import {
   getBrowseAssets,
   getBrowseLists,
   getCount,
-  getItemsPickedByUser,
+  getItemsPickedByUserOrCreator,
   getOnRentNFTsByLessor,
   getOnRentNFTsByTenant,
   getOnSaleElements,
@@ -34,6 +37,11 @@ import {
   getWalletOwnedLands,
   isClaimingBackLandTransactionPending
 } from './selectors'
+
+jest.mock('../../favorites/selectors', () => ({
+  ...jest.requireActual('../../favorites/selectors'),
+  getListId: jest.fn()
+}))
 
 let rootState: RootState
 let item: Item
@@ -66,8 +74,10 @@ beforeEach(() => {
     name: 'listName',
     description: 'listDescription',
     userAddress: address,
-    createdAt: 123
+    createdAt: 123,
+    itemsCount: 1
   }
+
   rental = {
     id: 'rentalId',
     status: RentalStatus.OPEN,
@@ -175,7 +185,12 @@ beforeEach(() => {
       data: { items: {}, lists: { [list.id]: list }, total: 0 },
       loading: [],
       error: null
-    } as FavoritesState
+    } as FavoritesState,
+    router: {
+      location: {
+        pathname: `/lists/${list.id}`
+      }
+    } as RouterState
   } as RootState
 })
 
@@ -388,10 +403,45 @@ describe('when getting the user favorited items of the ui browse state', () => {
     }
   })
 
-  it('should retrieve the items that were favorited by the user', () => {
-    expect(
-      getItemsPickedByUser.resultFunc(favoritedItems, [item, itemOnSale])
-    ).toEqual([item])
+  describe('and the user is logged in', () => {
+    describe('and is the owner of the list', () => {
+      it('should retrieve the items that were favorited by them', () => {
+        expect(
+          getItemsPickedByUserOrCreator.resultFunc(
+            favoritedItems,
+            [item, itemOnSale],
+            list,
+            { address: list.userAddress } as Wallet
+          )
+        ).toEqual([item])
+      })
+    })
+
+    describe('and is not the owner of the list', () => {
+      it('should retrieve the items that were favorited by the owner of the list', () => {
+        expect(
+          getItemsPickedByUserOrCreator.resultFunc(
+            favoritedItems,
+            [item, itemOnSale],
+            list,
+            { address: '0xanotherAddress' } as Wallet
+          )
+        ).toEqual([item, itemOnSale])
+      })
+    })
+  })
+
+  describe('and the user is not logged in', () => {
+    it('should retrieve the items that were favorited by owner of the list', () => {
+      expect(
+        getItemsPickedByUserOrCreator.resultFunc(
+          favoritedItems,
+          [item, itemOnSale],
+          list,
+          null
+        )
+      ).toEqual([item, itemOnSale])
+    })
   })
 })
 
@@ -411,6 +461,7 @@ describe('when getting the browse assets', () => {
           [item.id]: { pickedByUser: true, count: 1 },
           [itemOnSale.id]: { pickedByUser: false, count: 4 }
         }
+        jest.spyOn(FavoritesSelectors, 'getListId').mockReturnValue(list.id)
       })
 
       it('should return all browsable items picked by the user', () => {
@@ -420,7 +471,7 @@ describe('when getting the browse assets', () => {
       })
     })
 
-    describe('and the section not My Lists', () => {
+    describe('and the section is not My Lists', () => {
       beforeEach(() => {
         section = Section.ENS
       })

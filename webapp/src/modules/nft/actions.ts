@@ -123,3 +123,7 @@ export const transferNFTransactionSubmitted = (
 export type TransferNFTRequestAction = ReturnType<typeof transferNFTRequest>
 export type TransferNFTSuccessAction = ReturnType<typeof transferNFTSuccess>
 export type TransferNFTFailureAction = ReturnType<typeof transferNFTFailure>
+
+export const CLEAR_NFT_ERRORS = '[Clear] NFT Errors'
+export const clearNFTErrors = () => action(CLEAR_NFT_ERRORS)
+export type ClearNFTErrorsAction = ReturnType<typeof clearNFTErrors>

@@ -14,6 +14,8 @@ export type CreateListParameters = {
   description?: string
 }
 
+export type UpdateListParameters = Partial<CreateListParameters>
+
 export type List = {
   id: string
   name: string

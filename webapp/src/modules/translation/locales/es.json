@@ -18,6 +18,7 @@
     "ens": "Nombre",
     "art": "Arte",
     "cancel": "Cancelar",
+    "save": "Guardar",
     "proceed": "Aceptar",
     "create": "Crear",
     "continue": "Continuar",
@@ -64,7 +65,8 @@
     "discord_server": "Servidor de Discord",
     "currently": "actualmente",
     "showing": "Mostrando",
-    "of": "de"
+    "of": "de",
+    "now": "ahora"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -1240,27 +1242,32 @@
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },
   "campaign": {
-    "tab": "MVFW23",
-    "badge": "MVFW23"
+    "tab": "PRIDE23",
+    "badge": "PRIDE23",
+    "event_tag": "PRIDE23",
+    "event_hashtag": "#MetaversePride23"
   },
-  "fashion_week_campaign": {
-    "banner": {
-      "homepage": {
-        "title": "¿Estás listo para la pasarela?",
-        "subtitle": "Ya sea que estes en un asiento de primera fila en la pasarela o luciendote, obtené todo lo que necesitas para el Metaverse Fashion Week: atuendos, accesorios y movimientos, todo en un solo lugar.",
-        "cta": "Buscar mvfw items",
-        "cta_mobile": "Buscar items"
-      },
-      "collectibles": {
-        "title": "¿Estás listo para la pasarela?",
-        "subtitle": "Ya sea que estes en un asiento de primera fila en la pasarela o luciendote, obtené todo lo que necesitas para el Metaverse Fashion Week: atuendos, accesorios y movimientos, todo en un solo lugar.",
-        "cta": "Buscar mvfw items",
-        "cta_mobile": "Buscar items"
-      },
-      "campaign_browser": {
-        "title": "Esenciales de la semana de la moda del metaverso",
-        "subtitle": "Encuentre aquí los Wearables y Emotes más populares para el evento más glamoroso de Decentraland."
-      }
+  "event_campaign": {
+    "homepage": {
+      "title": "Prepará el look perfecto para Pride!",
+      "subtitle": "Muestre su orgullo en Decentraland durante {event_hashtag} con Wearables y emotes que celebran la inclusión y la diversidad en el metaverso: encuentre todo lo que necesita en un solo lugar.",
+      "subtitle_mobile": "Muestre su orgullo en Decentraland con Wearables y Emotes creados por la comunidad: encuentre todo lo que necesita en un solo lugar.",
+      "cta": "Buscar Items Pride",
+      "dates": "JUNIO 27-29",
+      "slogan": "CELEBRA LA DIVERSIDAD E INCLUSION EN EL METAVERSO"
+    },
+    "collectibles": {
+      "title": "Prepará el look perfecto para Pride!",
+      "subtitle": "Muestre su orgullo en Decentraland durante {event_hashtag} con Wearables y emotes que celebran la inclusión y la diversidad en el metaverso: encuentre todo lo que necesita en un solo lugar.",
+      "subtitle_mobile": "Muestre su orgullo en Decentraland con Wearables y Emotes creados por la comunidad: encuentre todo lo que necesita en un solo lugar.",
+      "cta": "Buscar Items Pride",
+      "dates": "JUNIO 27-29",
+      "slogan": "CELEBRA LA DIVERSIDAD E INCLUSION EN EL METAVERSO"
+    },
+    "campaign_browser": {
+      "title": "Esenciales Pride del metaverso",
+      "subtitle": "Celebre la inclusión y la diversidad durante {event_hashtag} Prepare el look perfecto para el desfile del Orgullo con vibrantes Wearables y Emotes de la comunidad DCL.",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
     }
   },
   "asset_card": {
@@ -1305,27 +1312,52 @@
   },
   "list_page": {
     "default_title": "Lista de deseos",
+    "edit_list": "Editar Lista",
+    "delete_list": "Eliminar Lista",
+    "last_updated_at": "Última actualización",
     "empty": {
-      "title": "No tienes ningún item guardado",
+      "title": "No tienes elementos guardados en esta lista",
       "subtitle": "Descubre items increíbles.",
       "action": "Explora los colleccionables"
+    },
+    "error": {
+      "not_found": {
+        "title": "Esta lista es privada o no existe.",
+        "subtitle": "Intenta con otra lista."
+      },
+      "could_not_load": {
+        "title": "¡Ups! No se pudo cargar esta lista.",
+        "subtitle": "Por favor, inténtalo de nuevo.",
+        "action": "Intentar de nuevo"
+      }
     }
   },
   "lists_page": {
     "title": "Mis listas",
     "subtitle": "{count} {count, plural, one {lista} other {listas}}",
-    "create_list": "Crear lista"
+    "create_list": "Crear lista",
+    "error": {
+      "title": "¡Ups! No se pudieron cargar las listas.",
+      "subtitle": "Por favor, inténtalo de nuevo.",
+      "action": "Intentar de nuevo"
+    }
   },
   "claim_your_own_name": {
     "title": "RECLAMA TU PROPIO NOMBRE",
     "text": "En esta sección puede encontrar NOMBRES que están listados para la venta por los usuarios de Decentraland. Alternativamente, puede reclamar su propio NOMBRE único de la sección Constructor por un precio fijo de {mana}.",
     "btn": "Reclama tu nombre"
   },
-  "create_list_modal": {
-    "title": "Crear lista",
+  "create_or_edit_list_modal": {
+    "create": {
+      "title": "Crear lista",
+      "private": "Crea la lista como privada"
+    },
+    "edit": {
+      "title": "Editar lista",
+      "private": "La lista es privada"
+    },
     "name": "Nombre de la lista",
     "description": "Descripción de la lista",
-    "private": "Crea la lista como privada",
     "info": {
       "max_name_length": "Los nombres de las listas pueden tener hasta {max} caracteres.",
       "max_description_length": "Las descripciones de las listas pueden contener hasta {max} caracteres."
@@ -1333,6 +1365,32 @@
     "errors": {
       "name_duplicated": "El nombre elegido esta siendo usado en otra de tus listas. <br></br> Elije uno diferente."
     }
+  },
+  "success_page": {
+    "loading_state": {
+      "title": "Tu artículo está en camino!",
+      "status": "Transacción en procesamiento",
+      "description": "Esta transacción puede tomarse unos momentos.",
+      "progress_in_activity": "Ver el progreso en página de actividad"
+    },
+    "success_state": {
+      "title": "Todo listo!",
+      "status": "Transacción confirmada",
+      "view_item": "Ver mi artículo",
+      "try_genesis_city": "Pruébalo en Genesis City"
+    },
+    "error_state": {
+      "title": "Ups",
+      "description": "No pudimos cargar la información del artículo",
+      "go_to_activity": "Ir a la página de actividad"
+    }
+  },
+  "share_list_modal": {
+    "title": "Compartir Lista",
+    "copy_link": "copiar link",
+    "share_on_twitter": "Compartir en twitter",
+    "copied": "copiado",
+    "twitter_message": "Acabo de compartir una nueva lista, échale un vistazo: "
   },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",

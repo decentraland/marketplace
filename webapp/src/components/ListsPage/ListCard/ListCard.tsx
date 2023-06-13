@@ -4,25 +4,38 @@ import { Card, Dropdown, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../../modules/vendor/decentraland/favorites/api'
+import { AssetType } from '../../../modules/asset/types'
+import { Section } from '../../../modules/vendor/decentraland'
+import { View } from '../../../modules/ui/types'
 import { AssetImage } from '../../AssetImage'
 import { Props } from './ListCard.types'
 import styles from './ListCard.module.css'
-
-export const EMPTY_PREVIEW_DATA_TEST_ID = 'list-card-empty-preview'
-export const GRID_PREVIEW_DATA_TEST_ID = 'list-card-grid-preview'
-export const LIST_NAME_DATA_TEST_ID = 'list-card-list-name'
-export const ITEM_COUNT_DATA_TEST_ID = 'list-card-item-count'
-export const PRIVATE_DATA_TEST_ID = 'list-card-private'
-export const EDIT_LIST_DATA_TEST_ID = 'list-card-edit-list'
-export const DELETE_LIST_DATA_TEST_ID = 'list-card-delete-list'
-export const ACTIONS_DATA_TEST_ID = 'list-card-actions'
+import {
+  ACTIONS_DATA_TEST_ID,
+  DELETE_LIST_DATA_TEST_ID,
+  EDIT_LIST_DATA_TEST_ID,
+  EMPTY_PREVIEW_DATA_TEST_ID,
+  GRID_PREVIEW_DATA_TEST_ID,
+  ITEM_COUNT_DATA_TEST_ID,
+  LIST_NAME_DATA_TEST_ID,
+  PRIVATE_DATA_TEST_ID
+} from './constants'
 
 const ListCard = (props: Props) => {
   const { list, items, onDeleteList, onEditList } = props
   const isWishlist = list.id === DEFAULT_FAVORITES_LIST_ID
 
   return (
-    <Card as={Link} to={locations.list(list.id)} className={styles.card}>
+    <Card
+      as={Link}
+      to={locations.list(list.id, {
+        assetType: AssetType.ITEM,
+        page: 1,
+        section: Section.LISTS,
+        view: View.LISTS
+      })}
+      className={styles.card}
+    >
       <div className={styles.image}>
         {list.isPrivate ? (
           <div className={styles.private} data-testid={PRIVATE_DATA_TEST_ID}>

@@ -4,18 +4,24 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
-import { fetchNFTRequest, FETCH_NFT_REQUEST } from '../../modules/nft/actions'
-import { fetchItemRequest } from '../../modules/item/actions'
+import {
+  fetchNFTRequest,
+  FETCH_NFT_REQUEST,
+  clearNFTErrors
+} from '../../modules/nft/actions'
+import { clearItemErrors, fetchItemRequest } from '../../modules/item/actions'
 import {
   getContractAddress as getNFTContractAddress,
   getTokenId as getNFTTokenId,
   getLoading as getNFTLoading,
+  getError as getNFTError,
   getData as getNFTs
 } from '../../modules/nft/selectors'
 import {
   getContractAddress as getItemContractAddress,
   getTokenId as getItemTokenId,
   isFetchingItem,
+  getError as getItemsError,
   getData as getItems
 } from '../../modules/item/selectors'
 import { getData as getOrders } from '../../modules/order/selectors'
@@ -40,6 +46,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   let contractAddress = ownProps.contractAddress
   let tokenId = ownProps.tokenId
   const orders = getOrders(state)
+  let error: string | null = null
 
   let asset: Asset | null = null
   let isLoading = false
@@ -50,6 +57,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       tokenId = tokenId || getNFTTokenId(state)
       asset = getNFT(contractAddress, tokenId, nfts)
       isLoading = isLoadingType(getNFTLoading(state), FETCH_NFT_REQUEST)
+      error = getNFTError(state)
       break
     }
     case AssetType.ITEM: {
@@ -58,6 +66,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       tokenId = tokenId || getItemTokenId(state)
       asset = getItem(contractAddress, tokenId, items)
       isLoading = isFetchingItem(state, contractAddress!, tokenId!)
+      error = getItemsError(state)
       break
     }
     default:
@@ -93,18 +102,29 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       getIsLoadingFeatureFlags(state),
       FETCH_APPLICATION_FEATURES_REQUEST
     ),
-    isLandOrEstate
+    isLandOrEstate,
+    error
   }
 }
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+const mapDispatch = (
+  dispatch: MapDispatch,
+  ownProps: OwnProps
+): MapDispatchProps => ({
   onFetchNFT: (
     contractAddress: string,
     tokenId: string,
     options?: FetchOneOptions
   ) => dispatch(fetchNFTRequest(contractAddress, tokenId, options)),
   onFetchItem: (contractAddress: string, tokenId: string) =>
-    dispatch(fetchItemRequest(contractAddress, tokenId))
+    dispatch(fetchItemRequest(contractAddress, tokenId)),
+  onClearErrors: () => {
+    if (ownProps.type === AssetType.ITEM) {
+      return dispatch(clearItemErrors())
+    }
+
+    return dispatch(clearNFTErrors())
+  }
 })
 
 const mergeProps = (

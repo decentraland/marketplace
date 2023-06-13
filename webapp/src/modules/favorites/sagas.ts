@@ -24,12 +24,7 @@ import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
 import { NFT_SERVER_URL } from '../vendor/decentraland'
 import { SortDirection } from '../routing/types'
-import {
-  ListDetails,
-  ListOfLists,
-  ListsSortBy,
-  UpdateOrCreateList
-} from '../vendor/decentraland/favorites/types'
+import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import {
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
@@ -77,7 +72,6 @@ import {
   bulkPickUnpickSuccess
 } from './actions'
 import { getListId } from './selectors'
-import { FavoritedItems } from './types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
@@ -211,7 +205,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       const {
         results,
         total
-      }: { results: FavoritedItems; total: number } = yield call(
+      }: Awaited<ReturnType<typeof favoritesAPI.getPicksByList>> = yield call(
         [favoritesAPI, 'getPicksByList'],
         listId,
         filters
@@ -280,7 +274,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       const {
         results,
         total
-      }: { results: ListOfLists[]; total: number } = yield call(
+      }: Awaited<ReturnType<typeof favoritesAPI.getLists>> = yield call(
         [favoritesAPI, 'getLists'],
         {
           first: options.first,
@@ -348,7 +342,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { id } = action.payload
 
     try {
-      const list: ListDetails = yield call([favoritesAPI, 'getList'], id)
+      const list: Awaited<ReturnType<typeof favoritesAPI.getList>> = yield call(
+        [favoritesAPI, 'getList'],
+        id
+      )
       yield put(getListSuccess(list))
     } catch (error) {
       yield put(
@@ -364,11 +361,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { id, updatedList } = action.payload
 
     try {
-      const list: UpdateOrCreateList = yield call(
-        [favoritesAPI, 'updateList'],
-        id,
-        updatedList
-      )
+      const list: Awaited<ReturnType<
+        typeof favoritesAPI.updateList
+      >> = yield call([favoritesAPI, 'updateList'], id, updatedList)
       yield put(updateListSuccess(list))
     } catch (error) {
       yield put(
@@ -385,14 +380,13 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
-      const list: UpdateOrCreateList = yield call(
-        [favoritesAPI, 'createList'],
-        {
-          name,
-          isPrivate,
-          description
-        }
-      )
+      const list: Awaited<ReturnType<
+        typeof favoritesAPI.createList
+      >> = yield call([favoritesAPI, 'createList'], {
+        name,
+        isPrivate,
+        description
+      })
       yield put(createListSuccess(list))
     } catch (error) {
       yield put(

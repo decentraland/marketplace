@@ -18,6 +18,7 @@
     "ens": "Name",
     "art": "Art",
     "cancel": "Cancel",
+    "save": "Save",
     "proceed": "Proceed",
     "create": "Create",
     "continue": "Continue",
@@ -66,7 +67,8 @@
     "discord_server": "Discord Server",
     "currently": "currently",
     "showing": "Showing",
-    "of": "of"
+    "of": "of",
+    "now": "now"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -1248,27 +1250,32 @@
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
   "campaign": {
-    "tab": "MVFW23",
-    "badge": "MVFW23"
+    "tab": "PRIDE23",
+    "badge": "PRIDE23",
+    "event_tag": "PRIDE23",
+    "event_hashtag": "#MetaversePride23"
   },
-  "fashion_week_campaign": {
-    "banner": {
-      "homepage": {
-        "title": "Are you ready for the runway?",
-        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
-        "cta": "Browse mvfw Items",
-        "cta_mobile": "Browse"
-      },
-      "collectibles": {
-        "title": "Are you ready for the runway?",
-        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
-        "cta": "Browse mvfw Items",
-        "cta_mobile": "Browse"
-      },
-      "campaign_browser": {
-        "title": "Metaverse Fashion Week Essentials",
-        "subtitle": "Find the hottest Wearables and Emotes for Decentraland's most glamorous event right here."
-      }
+  "event_campaign": {
+    "homepage": {
+      "title": "Prepare the Perfect Pride Look!",
+      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
+      "subtitle_mobile": "Show your Pride in Decentraland with prismatic Wearables & Emotes made by the community—find everything you need in one place.",
+      "cta": "Browse Pride Items",
+      "dates": "JUNE 27-29",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+    },
+    "collectibles": {
+      "title": "Prepare the Perfect Pride Look!",
+      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
+      "cta": "Browse Pride Items",
+      "cta_mobile": "Browse",
+      "dates": "JUNE 27-29",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+    },
+    "campaign_browser": {
+      "title": "Metaverse Pride Essentials",
+      "subtitle": "Celebrate Inclusivity & Diversity during {event_hashtag} Prepare the perfect Pride parade look with vibrant Wearables & Emotes from the DCL community.",
+      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
     }
   },
   "asset_card": {
@@ -1314,27 +1321,52 @@
   },
   "list_page": {
     "default_title": "Wishlist",
+    "edit_list": "Edit List",
+    "delete_list": "Delete List",
+    "last_updated_at": "Last updated",
     "empty": {
-      "title": "You don't have any saved items",
+      "title": "You don't have any saved items in this list",
       "subtitle": "Discover amazing items.",
       "action": "Explore collectibles"
+    },
+    "error": {
+      "not_found": {
+        "title": "This List is private or doesn't exist.",
+        "subtitle": "Try with another list."
+      },
+      "could_not_load": {
+        "title": "Oops! This List couldn't load.",
+        "subtitle": "Please try again.",
+        "action": "Try again"
+      }
     }
   },
   "lists_page": {
     "title": "My Lists",
     "subtitle": "{count} {count, plural, one {List} other {Lists}}",
-    "create_list": "Create list"
+    "create_list": "Create list",
+    "error": {
+      "title": "Oops! Lists couldn't load.",
+      "subtitle": "Please try again.",
+      "action": "Try again"
+    }
   },
   "claim_your_own_name": {
     "title": "CLAIM YOUR OWN NAME",
     "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
     "btn": "Claim your name"
   },
-  "create_list_modal": {
-    "title": "Create List",
+  "create_or_edit_list_modal": {
+    "create": {
+      "title": "Create List",
+      "private": "Create as private list"
+    },
+    "edit": {
+      "title": "Edit List",
+      "private": "List is private"
+    },
     "name": "List name",
     "description": "List description",
-    "private": "Create as private list",
     "info": {
       "max_name_length": "List names can contain up to {max} characters.",
       "max_description_length": "List descriptions can contain up to {max} characters."
@@ -1342,6 +1374,32 @@
     "errors": {
       "name_duplicated": "This name is already in use for another of your lists. <br></br> Choose a different name."
     }
+  },
+  "success_page": {
+    "loading_state": {
+      "title": "Your item is on its way!",
+      "status": "Processing transaction",
+      "description": "This transaction may take a few moments.",
+      "progress_in_activity": "View Progress in activity"
+    },
+    "success_state": {
+      "title": "All done!",
+      "status": "Transaction confirmed",
+      "view_item": "View my item",
+      "try_genesis_city": "Try it in Genesis city"
+    },
+    "error_state": {
+      "title": "Oops",
+      "description": "We couldn't load the item information",
+      "go_to_activity": "Go to activity page"
+    }
+  },
+  "share_list_modal": {
+    "title": "Share List",
+    "copy_link": "copy link",
+    "share_on_twitter": "Share on twitter",
+    "copied": "Copied",
+    "twitter_message": "I just shared a new List, Check it out: "
   },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
