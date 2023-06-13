@@ -2,7 +2,13 @@ import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
 import { isAPIError } from '../../../../lib/error'
 import { FavoritedItems, List } from '../../../favorites/types'
-import { ListDetails, ListOfLists, ListsOptions, PicksOptions } from './types'
+import {
+  BulkPickUnpickResponse,
+  ListDetails,
+  ListOfLists,
+  ListsOptions,
+  PicksOptions
+} from './types'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
   'DEFAULT_FAVORITES_LIST_ID'
@@ -165,11 +171,11 @@ export class FavoritesAPI extends BaseClient {
     })
   }
 
-  async bulkPick(
+  async bulkPickUnpick(
     itemId: string,
     pickedFor: string[],
     unpickedFrom: string[]
-  ): Promise<void> {
+  ): Promise<BulkPickUnpickResponse> {
     return this.fetch(`/v1/picks/${itemId}`, {
       method: 'POST',
       body: JSON.stringify({

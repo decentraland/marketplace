@@ -20,9 +20,11 @@ import {
   isLoadingCreateList,
   isLoadingLists,
   getPreviewListItems,
-  isLoadingDeleteList
+  isLoadingDeleteList,
+  isLoadingBulkPicksUnpicks
 } from './selectors'
 import {
+  bulkPickUnpickRequest,
   createListRequest,
   deleteListRequest,
   fetchFavoritedItemsRequest,
@@ -334,6 +336,28 @@ describe('when getting if the deletion of a list is being loaded', () => {
 
     it('should return true', () => {
       expect(isLoadingDeleteList(state)).toBe(true)
+    })
+  })
+})
+
+describe("when getting if it's loading a bulk item pick and unpick", () => {
+  describe("and there's no bulk pick and unpick action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = []
+    })
+
+    it('should return false', () => {
+      expect(isLoadingBulkPicksUnpicks(state)).toBe(false)
+    })
+  })
+
+  describe("and there's a bulk pick and unpick action in the loading state", () => {
+    beforeEach(() => {
+      state.favorites.loading = [bulkPickUnpickRequest({} as Item, [], [])]
+    })
+
+    it('should return true', () => {
+      expect(isLoadingBulkPicksUnpicks(state)).toBe(true)
     })
   })
 })

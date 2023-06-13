@@ -27,6 +27,8 @@ import {
   UnpickItemAsFavoriteSuccessAction,
   UpdateListRequestAction,
   UpdateListSuccessAction,
+  bulkPickUnpickFailure,
+  bulkPickUnpickRequest,
   cancelPickItemAsFavorite,
   createListClear,
   createListFailure,
@@ -97,6 +99,7 @@ const actionList: List = {
 const error = 'anErrorMessage'
 
 const requestActions = [
+  bulkPickUnpickRequest(item, [actionList], []),
   deleteListRequest(actionList),
   pickItemAsFavoriteRequest(item),
   unpickItemAsFavoriteRequest(item),
@@ -180,6 +183,10 @@ const failureActions = [
       description: 'aDescription'
     }),
     failure: createListFailure(error)
+  },
+  {
+    request: bulkPickUnpickRequest(item, [actionList], []),
+    failure: bulkPickUnpickFailure(item, [actionList], [], error)
   }
 ]
 
@@ -806,5 +813,28 @@ describe('when reducing the clear action of creating a list', () => {
       loading: [],
       error: null
     })
+  })
+})
+
+describe('when reducing the successful action of bulk picking and unpicking', () => {
+  let requestAction: CreateListRequestAction
+  let list: CreateListParameters
+
+  beforeEach(() => {
+    initialState = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        items: {}
+      }
+    }
+  })
+
+  describe("and the item was picked before and now isn't", () => {
+    it('should return a state where the item is flagged as not picked by the user, the counter decreased and the loading state cleared', () => {})
+  })
+
+  describe("and the item wasn't picked before and now is", () => {
+    it('should return a state where the item is flagged as picked by the user, the counter increased and the loading state cleared', () => {})
   })
 })

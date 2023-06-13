@@ -23,16 +23,16 @@ async function main() {
   const component = (
     <Provider store={initStore()}>
       <TranslationProvider locales={Object.keys(locales)}>
-        <ToastProvider>
-          <WalletProvider>
-            <ConnectedRouter history={history}>
+        <WalletProvider>
+          <ConnectedRouter history={history}>
+            <ToastProvider>
               <ModalProvider components={modals}>
                 <ScrollToTop />
                 <Routes />
               </ModalProvider>
-            </ConnectedRouter>
-          </WalletProvider>
-        </ToastProvider>
+            </ToastProvider>
+          </ConnectedRouter>
+        </WalletProvider>
       </TranslationProvider>
     </Provider>
   )

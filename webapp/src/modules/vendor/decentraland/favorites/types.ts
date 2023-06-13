@@ -45,3 +45,7 @@ export type UpdateOrCreateList = BaseList
 export type ListDetails = BaseList & {
   itemsCount: number
 }
+
+export type BulkPickUnpickResponse = {
+  pickedByUser: boolean
+}

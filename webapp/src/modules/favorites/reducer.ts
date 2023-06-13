@@ -68,11 +68,11 @@ import {
   CREATE_LIST_REQUEST,
   CREATE_LIST_CLEAR,
   BULK_PICK_REQUEST,
-  BulkPickRequestAction,
-  BulkPickSuccessAction,
+  BulkPickUnpickRequestAction,
+  BulkPickUnpickSuccessAction,
   BULK_PICK_SUCCESS,
   BULK_PICK_FAILURE,
-  BulkPickFailureAction
+  BulkPickUnpickFailureAction
 } from './actions'
 import { FavoritesData, List } from './types'
 import { GET_LIST_REQUEST } from './actions'
@@ -123,9 +123,9 @@ type FavoritesReducerAction =
   | CreateListRequestAction
   | CreateListSuccessAction
   | CreateListFailureAction
-  | BulkPickRequestAction
-  | BulkPickSuccessAction
-  | BulkPickFailureAction
+  | BulkPickUnpickRequestAction
+  | BulkPickUnpickSuccessAction
+  | BulkPickUnpickFailureAction
   | CreateListClearAction
 
 export function favoritesReducer(
@@ -311,8 +311,29 @@ export function favoritesReducer(
     }
 
     case BULK_PICK_SUCCESS: {
+      const { isPickedByUser, item } = action.payload
+
+      const wasPickedBefore = state.data.items[item.id]?.pickedByUser ?? false
+      let newCount = state.data.items[item.id]?.count ?? 0
+      if (wasPickedBefore && !isPickedByUser) {
+        newCount--
+      } else if (!wasPickedBefore && isPickedByUser) {
+        newCount++
+      }
+
       return {
         ...state,
+        data: {
+          ...state.data,
+          items: {
+            ...state.data.items,
+            [item.id]: {
+              pickedByUser: isPickedByUser,
+              count: newCount,
+              createdAt: Date.now()
+            }
+          }
+        },
         loading: loadingReducer(state.loading, action)
       }
     }

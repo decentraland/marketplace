@@ -1050,12 +1050,39 @@
       "title": "Error deleting list",
       "body": "There was an issue while removing the <b>{name}</b> list. Please try again later."
     },
-    "bulk_pick_success": {
-      "body": {
-        "add": "{item_name} was added to {count, plural, one {{first_list_name}} two {and {second_list_name}} other {{count} lists}}.",
-        "remove": "{item_name} was removed to {count, plural, one {{first_list_name}} two {and {second_list_name}} other {{count} lists}}."
+    "bulk_pick": {
+      "success": {
+        "title": "Save to lists",
+        "body": {
+          "add": {
+            "one": "{item_name} was added to {first_list_name}.",
+            "two": "{item_name} was added to {first_list_name} and {second_list_name}.",
+            "many": "{item_name} was added to {first_list_name} and other {count} lists."
+          },
+          "remove": {
+            "one": "{item_name} was removed from {first_list_name}.",
+            "two": "{item_name} was removed from {first_list_name} and {second_list_name}.",
+            "many": "{item_name} was removed from {first_list_name} and other {count} lists."
+          }
+        },
+        "undo": "Undo"
       },
-      "undo": "Undo"
+      "failure": {
+        "title": "Error saving to lists",
+        "body": {
+          "add": {
+            "one": "There was an issue while adding {item_name} to {first_list_name}.",
+            "two": "There was an issue while adding {item_name} to {first_list_name} and {second_list_name}.",
+            "many": "There was an issue while adding {item_name} to {first_list_name} and other {count} lists."
+          },
+          "remove": {
+            "one": "There was an issue while removing {item_name} from {first_list_name}.",
+            "two": "There was an issue while removing {item_name} from {first_list_name} and {second_list_name}.",
+            "many": "There was an issue while removing {item_name} from {first_list_name} and other {count} lists."
+          }
+        },
+        "try_again": "Try again"
+      }
     }
   },
   "maintainance": {

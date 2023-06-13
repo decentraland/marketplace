@@ -3,7 +3,7 @@ import { put, select, takeEvery } from 'redux-saga/effects'
 import { Section } from '../../vendor/decentraland/routing'
 import {
   BULK_PICK_SUCCESS,
-  BulkPickSuccessAction,
+  BulkPickUnpickSuccessAction,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS,
   fetchFavoritedItemsRequest
 } from '../../favorites/actions'
@@ -40,18 +40,16 @@ function* handleUnpickItemAsFavoriteSuccess() {
   }
 }
 
-function* handleBulkPickSuccess(action: BulkPickSuccessAction) {
-  const { unpickFrom } = action.payload
+function* handleBulkPickSuccess(action: BulkPickUnpickSuccessAction) {
+  const { unpickedFrom } = action.payload
 
-  const section: Section = yield select(getSection)
   const currentPage: number = yield select(getPageNumber)
   const currentListId: string = yield select(getListId)
   const favoritedAssets: Item[] = yield select(getItemsPickedByUser)
   const totalFavoritedAssets: number = yield select(getCount)
   if (
-    section === Section.LISTS &&
     favoritedAssets.length < totalFavoritedAssets &&
-    unpickFrom.find(list => list.id === currentListId)
+    unpickedFrom.find(list => list.id === currentListId)
   ) {
     yield put(
       fetchFavoritedItemsRequest(

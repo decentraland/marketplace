@@ -33,7 +33,7 @@ export const isLoadingCreateList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), CREATE_LIST_REQUEST)
 export const isLoadingDeleteList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), DELETE_LIST_REQUEST)
-export const isLoadingBulkPicks = (state: RootState): boolean =>
+export const isLoadingBulkPicksUnpicks = (state: RootState): boolean =>
   isLoadingType(getLoading(state), BULK_PICK_REQUEST)
 
 export const getFavoritesDataByItemId = (

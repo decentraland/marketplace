@@ -21,6 +21,9 @@ import {
 import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
+  bulkPickUnpickFailure,
+  bulkPickUnpickRequest,
+  bulkPickUnpickSuccess,
   cancelPickItemAsFavorite,
   createListFailure,
   createListRequest,
@@ -52,7 +55,7 @@ import {
   updateListSuccess
 } from './actions'
 import { favoritesSaga } from './sagas'
-import { getListId } from './selectors'
+import { getIsPickedByUser, getListId } from './selectors'
 import {
   CreateListParameters,
   FavoritedItems,
@@ -1009,6 +1012,80 @@ describe('when handling the request for creating a list', () => {
         })
         .put(createListSuccess(returnedList))
         .dispatch(createListRequest(listToCreate))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request to perform picks and unpicks in bulk', () => {
+  let fstList: List
+  let sndList: List
+
+  beforeEach(() => {
+    fstList = {
+      id: 'anId',
+      name: 'aName',
+      itemsCount: 1,
+      description: 'aDescription',
+      userAddress: 'aUserAddress',
+      createdAt: Date.now()
+    }
+    sndList = {
+      id: 'anotherId',
+      name: 'anotherName',
+      itemsCount: 2,
+      description: 'anotherDescription',
+      userAddress: 'anotherUserAddress',
+      createdAt: Date.now()
+    }
+  })
+
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .put(bulkPickUnpickFailure(item, [fstList], [sndList], error.message))
+        .dispatch(bulkPickUnpickRequest(item, [fstList], [sndList]))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick),
+            Promise.reject(error)
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.bulkPickUnpick,
+          args: [item.id, [fstList.id], [sndList.id]]
+        })
+        .put(bulkPickUnpickFailure(item, [fstList], [sndList], error.message))
+        .dispatch(bulkPickUnpickRequest(item, [fstList], [sndList]))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and call to the favorites api succeeds', () => {
+    it('should dispatch an action signaling the success of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [call(getAccountIdentity), Promise.resolve()],
+          [
+            matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick),
+            Promise.resolve({ pickedByUser: true })
+          ]
+        ])
+        .call.like({
+          fn: FavoritesAPI.prototype.bulkPickUnpick,
+          args: [item.id, [fstList.id], [sndList.id]]
+        })
+        .put(bulkPickUnpickSuccess(item, [fstList], [sndList], true))
+        .dispatch(bulkPickUnpickRequest(item, [fstList], [sndList]))
         .run({ silenceTimeout: true })
     })
   })

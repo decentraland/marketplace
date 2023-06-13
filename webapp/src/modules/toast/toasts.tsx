@@ -1,14 +1,16 @@
 import React, { useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { Item } from '@dcl/schemas'
 import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { config } from '../../config'
 import { getAssetName } from '../asset/utils'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
 import { NFT } from '../nft/types'
 import {
+  bulkPickUnpickRequest,
   pickItemAsFavoriteRequest,
   undoUnpickingItemAsFavoriteRequest,
   unpickItemAsFavoriteRequest
@@ -282,41 +284,124 @@ export function getDeleteListFailureToast(list: List): Omit<Toast, 'id'> {
   }
 }
 
+enum BulkPickUnpickMessageType {
+  ADD = 'add',
+  REMOVE = 'remove'
+}
+
+enum BulkPickUnpickSuccessOrFailureType {
+  SUCCESS = 'success',
+  FAILURE = 'failure'
+}
+
+function buildBulkPickItemBodyMessage(
+  addOrRemove: BulkPickUnpickMessageType,
+  successOrFailure: BulkPickUnpickSuccessOrFailureType,
+  item: Item,
+  lists: List[]
+) {
+  const count = lists.length === 1 ? 'one' : lists.length === 2 ? 'two' : 'many'
+  return (
+    <T
+      id={`toast.bulk_pick.${successOrFailure}.body.${addOrRemove}.${count}`}
+      values={{
+        item_name: <b>{getAssetName(item)}</b>,
+        count: lists.length,
+        first_list_name: (
+          <b>
+            <Link to={locations.list(lists[0]?.id ?? '')}>
+              {lists[0]?.name ?? ''}
+            </Link>
+          </b>
+        ),
+        second_list_name: (
+          <b>
+            <Link to={locations.list(lists[1]?.id ?? '')}>
+              {lists[1]?.name ?? ''}
+            </Link>
+          </b>
+        )
+      }}
+    />
+  )
+}
+
 export function getBulkPickItemSuccessToast(
   item: Item,
   pickedFor: List[],
-  unpickedFor: List[]
+  unpickedFrom: List[]
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
-    title: t('toast.bulk_pick_success.title'),
+    title: t('toast.bulk_pick.success.title'),
     body: (
       <div className="list-flow-toast">
         <p>
           {pickedFor.length > 0
-            ? t('toast.bulk_pick_success.body.add', {
-                item_name: getAssetName(item),
-                count: pickedFor.length,
-                first_list_name: pickedFor[0]?.name,
-                second_list_name: pickedFor[1]?.name
-              })
-            : undefined}
-          {pickedFor.length > 0
-            ? t('toast.bulk_pick_success.body.remove', {
-                item_name: getAssetName(item),
-                count: unpickedFor.length,
-                first_list_name: unpickedFor[0]?.name,
-                second_list_name: unpickedFor[1]?.name
-              })
+            ? buildBulkPickItemBodyMessage(
+                BulkPickUnpickMessageType.ADD,
+                BulkPickUnpickSuccessOrFailureType.SUCCESS,
+                item,
+                pickedFor
+              )
+            : undefined}{' '}
+          {unpickedFrom.length > 0
+            ? buildBulkPickItemBodyMessage(
+                BulkPickUnpickMessageType.REMOVE,
+                BulkPickUnpickSuccessOrFailureType.SUCCESS,
+                item,
+                unpickedFrom
+              )
             : undefined}
         </p>
-        {/* <ToastCTA
-          action={undo(item)}
-          description={t('toast.bulk_pick_success.undo')}
-        /> */}
+        <ToastCTA
+          action={bulkPickUnpickRequest(item, unpickedFrom, pickedFor)}
+          description={t('toast.bulk_pick.success.undo')}
+        />
       </div>
     ),
     closable: true,
+    timeout: DEFAULT_TIMEOUT,
     icon: <Icon size="big" name="bookmark" />
+  }
+}
+
+export function getBulkPickItemFailureToast(
+  item: Item,
+  pickedFor: List[],
+  unpickedFrom: List[]
+): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.bulk_pick.failure.title'),
+    body: (
+      <div className="list-flow-toast">
+        <p>
+          {pickedFor.length > 0
+            ? buildBulkPickItemBodyMessage(
+                BulkPickUnpickMessageType.ADD,
+                BulkPickUnpickSuccessOrFailureType.FAILURE,
+                item,
+                pickedFor
+              )
+            : undefined}{' '}
+          {unpickedFrom.length > 0
+            ? buildBulkPickItemBodyMessage(
+                BulkPickUnpickMessageType.REMOVE,
+                BulkPickUnpickSuccessOrFailureType.FAILURE,
+                item,
+                unpickedFrom
+              )
+            : undefined}
+        </p>
+        <ToastCTA
+          action={bulkPickUnpickRequest(item, pickedFor, unpickedFrom)}
+          description={t('toast.bulk_pick.failure.try_again')}
+        />
+      </div>
+    ),
+    closable: true,
+    timeout: DEFAULT_TIMEOUT,
+    icon: <Icon size="big" name="exclamation circle" />
   }
 }

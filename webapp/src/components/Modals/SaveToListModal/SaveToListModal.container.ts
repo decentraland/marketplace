@@ -2,8 +2,8 @@ import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { RootState } from '../../../modules/reducer'
-import { bulkPickRequest } from '../../../modules/favorites/actions'
-import { isLoadingBulkPicks } from '../../../modules/favorites/selectors'
+import { bulkPickUnpickRequest } from '../../../modules/favorites/actions'
+import { isLoadingBulkPicksUnpicks } from '../../../modules/favorites/selectors'
 import { getCurrentIdentity } from '../../../modules/identity/selectors'
 import { List } from '../../../modules/favorites/types'
 import {
@@ -16,7 +16,7 @@ import SaveToListModal from './SaveToListModal'
 const mapState = (state: RootState): MapStateProps => {
   return {
     identity: (getCurrentIdentity(state) as AuthIdentity | null) ?? undefined,
-    isSavingPicks: isLoadingBulkPicks(state)
+    isSavingPicks: isLoadingBulkPicksUnpicks(state)
   }
 }
 
@@ -27,7 +27,7 @@ const mapDispatch = (
   bindActionCreators(
     {
       onSavePicks: (picksFor: List[], unpickFrom: List[]) =>
-        bulkPickRequest(ownProps.metadata.item, picksFor, unpickFrom),
+        bulkPickUnpickRequest(ownProps.metadata.item, picksFor, unpickFrom),
       onCreateList: () => undefined
     },
     dispatch

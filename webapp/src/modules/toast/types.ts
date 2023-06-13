@@ -1,4 +1,5 @@
 import {
+  BulkPickUnpickRequestAction,
   PickItemAsFavoriteRequestAction,
   UndoUnpickingItemAsFavoriteRequestAction,
   UnpickItemAsFavoriteRequestAction
@@ -8,3 +9,4 @@ export type DispatchableFromToastActions =
   | PickItemAsFavoriteRequestAction
   | UnpickItemAsFavoriteRequestAction
   | UndoUnpickingItemAsFavoriteRequestAction
+  | BulkPickUnpickRequestAction

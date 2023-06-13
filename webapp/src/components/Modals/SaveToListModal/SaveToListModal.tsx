@@ -84,7 +84,6 @@ const SaveToListModal = (props: Props) => {
       return t('save_to_list_modal.save_in_list')
     }
   }, [picks.pickFor, picks.unpickFrom])
-  console.log(picks.pickFor, picks.unpickFrom)
 
   const handleSavePicks = useCallback(() => {
     onSavePicks(picks.pickFor, picks.unpickFrom)

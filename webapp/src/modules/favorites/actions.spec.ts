@@ -65,7 +65,13 @@ import {
   createListRequest,
   createListSuccess,
   CREATE_LIST_CLEAR,
-  createListClear
+  createListClear,
+  bulkPickUnpickRequest,
+  bulkPickUnpickSuccess,
+  bulkPickUnpickFailure,
+  BULK_PICK_REQUEST,
+  BULK_PICK_SUCCESS,
+  BULK_PICK_FAILURE
 } from './actions'
 import { CreateListParameters, List, ListsBrowseOptions } from './types'
 
@@ -439,6 +445,50 @@ describe('when creating the action to signal a create list clear', () => {
       type: CREATE_LIST_CLEAR,
       meta: undefined,
       payload: undefined
+    })
+  })
+})
+
+describe('when creating the action to signal the start of the bulk item pick-unpick request', () => {
+  it('should return an object representing the action', () => {
+    expect(bulkPickUnpickRequest(item, [list], [])).toEqual({
+      type: BULK_PICK_REQUEST,
+      meta: undefined,
+      payload: {
+        item,
+        pickedFor: [list],
+        unpickedFrom: []
+      }
+    })
+  })
+})
+
+describe('when creating the action to signal a successful bulk item pick-unpick request', () => {
+  it('should return an object representing the action', () => {
+    expect(bulkPickUnpickSuccess(item, [list], [], true)).toEqual({
+      type: BULK_PICK_SUCCESS,
+      meta: undefined,
+      payload: {
+        item,
+        pickedFor: [list],
+        unpickedFrom: [],
+        isPickedByUser: true
+      }
+    })
+  })
+})
+
+describe('when creating the action to signal a failure in the bulk item pick-unpick request', () => {
+  it('should return an object representing the action', () => {
+    expect(bulkPickUnpickFailure(item, [list], [], anErrorMessage)).toEqual({
+      type: BULK_PICK_FAILURE,
+      meta: undefined,
+      payload: {
+        item,
+        pickedFor: [list],
+        unpickedFrom: [],
+        error: anErrorMessage
+      }
     })
   })
 })
