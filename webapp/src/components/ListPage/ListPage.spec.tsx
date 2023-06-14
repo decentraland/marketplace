@@ -17,7 +17,8 @@ import {
   DELETE_LIST_BUTTON_TEST_ID,
   ERROR_CONTAINER_TEST_ID,
   COULD_NOT_LOAD_LIST_ACTION_TEST_ID,
-  GO_BACK_BUTTON_TEST_ID
+  GO_BACK_BUTTON_TEST_ID,
+  EMPTY_LIST_ACTION_TEST_ID
 } from './constants'
 import { Props } from './ListPage.types'
 
@@ -226,6 +227,9 @@ describe('when rendering the ListPage with an empty list', () => {
         expect(
           renderedPage.getByText(t('list_page.empty.owner.subtitle'))
         ).toBeInTheDocument()
+        expect(
+          renderedPage.getByTestId(EMPTY_LIST_ACTION_TEST_ID)
+        ).toBeInTheDocument()
       })
     })
 
@@ -249,6 +253,7 @@ describe('when rendering the ListPage with an empty list', () => {
         expect(
           renderedPage.getByText(t('list_page.empty.public.subtitle'))
         ).toBeInTheDocument()
+        expect(renderedPage.queryByTestId(EMPTY_LIST_ACTION_TEST_ID)).toBeNull()
       })
     })
   })
@@ -264,13 +269,16 @@ describe('when rendering the ListPage with an empty list', () => {
       })
     })
 
-    it('should render the empty list message', () => {
+    it('should render the correct empty list message with the action button', () => {
       expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
       expect(
         renderedPage.getByText(t('list_page.empty.owner.title'))
       ).toBeInTheDocument()
       expect(
         renderedPage.getByText(t('list_page.empty.owner.subtitle'))
+      ).toBeInTheDocument()
+      expect(
+        renderedPage.getByTestId(EMPTY_LIST_ACTION_TEST_ID)
       ).toBeInTheDocument()
     })
   })

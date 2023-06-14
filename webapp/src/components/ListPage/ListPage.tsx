@@ -35,7 +35,8 @@ import {
   UPDATED_AT_TEST_ID,
   ASSET_BROWSE_TEST_ID,
   EMPTY_LIST_TEST_ID,
-  GO_BACK_BUTTON_TEST_ID
+  GO_BACK_BUTTON_TEST_ID,
+  EMPTY_LIST_ACTION_TEST_ID
 } from './constants'
 
 const LIST_NOT_FOUND = 'list was not found'
@@ -217,7 +218,12 @@ const ListPage = ({
                   <p>{t(`list_page.empty.${privacyView}.subtitle`)}</p>
                   {!isPublicView && (
                     <div className={styles.emptyActions}>
-                      <Button primary as={Link} to={locations.browse()}>
+                      <Button
+                        primary
+                        as={Link}
+                        to={locations.browse()}
+                        data-testid={EMPTY_LIST_ACTION_TEST_ID}
+                      >
                         {t(`list_page.empty.${privacyView}.action`)}
                       </Button>
                     </div>

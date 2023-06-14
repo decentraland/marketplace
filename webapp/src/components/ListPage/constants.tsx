@@ -1,5 +1,6 @@
 export const LOADER_TEST_ID = 'loader'
 export const EMPTY_LIST_TEST_ID = 'empty-view'
+export const EMPTY_LIST_ACTION_TEST_ID = 'empty-view-action'
 export const ASSET_BROWSE_TEST_ID = 'asset-browse'
 export const LIST_CONTAINER_TEST_ID = 'list-container'
 export const ERROR_CONTAINER_TEST_ID = 'error-container'
