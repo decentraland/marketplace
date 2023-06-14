@@ -54,6 +54,7 @@ function renderListPage(props: Partial<Props> = {}) {
       location={{} as any}
       match={{} as any}
       error={null}
+      isListV1Enabled={true}
       {...props}
     />
   )

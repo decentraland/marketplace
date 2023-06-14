@@ -1,6 +1,7 @@
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { getIsListsV1Enabled } from '../../modules/features/selectors'
 import {
   getError,
   getList,
@@ -31,7 +32,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     listId,
     list: listId ? getList(state, listId) : null,
     isLoading: isLoadingType(getLoading(state), GET_LIST_REQUEST),
-    error: getError(state)
+    error: getError(state),
+    isListV1Enabled: getIsListsV1Enabled(state)
   }
 }
 
