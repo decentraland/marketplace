@@ -21,8 +21,9 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
 import { LinkedProfile } from '../LinkedProfile'
-import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
+import styles from './ListPage.module.css'
+
 import {
   ERROR_CONTAINER_TEST_ID,
   COULD_NOT_LOAD_LIST_ACTION_TEST_ID,
@@ -51,7 +52,8 @@ const ListPage = ({
   onBack,
   onEditList,
   onDeleteList,
-  onShareList
+  onShareList,
+  isListV1Enabled
 }: Props) => {
   const hasFetchedOnce = useRef(false)
 
@@ -73,7 +75,11 @@ const ListPage = ({
   )
 
   const isPublicView = useMemo(
-    () => wallet && list && wallet.address !== list.userAddress,
+    () =>
+      wallet &&
+      list &&
+      wallet.address !== list.userAddress &&
+      list.id !== DEFAULT_FAVORITES_LIST_ID,
     [wallet, list]
   )
 
@@ -127,7 +133,8 @@ const ListPage = ({
       ) : list ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
-            {!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID ? (
+            {(!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID) &&
+            isListV1Enabled ? (
               <span data-testid={GO_BACK_BUTTON_TEST_ID}>
                 <Back onClick={onBack} />
               </span>

@@ -54,6 +54,7 @@ function renderListPage(props: Partial<Props> = {}) {
       location={{} as any}
       match={{} as any}
       error={null}
+      isListV1Enabled={true}
       {...props}
     />
   )
@@ -176,22 +177,40 @@ describe('when rendering the ListPage with a loaded list', () => {
   })
 
   describe('and the list is the default', () => {
-    beforeEach(() => {
-      renderedPage = renderListPage({
-        list: { ...list, id: DEFAULT_FAVORITES_LIST_ID }
+    describe('when the lists feature flag is on', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({
+          list: { ...list, id: DEFAULT_FAVORITES_LIST_ID },
+          isListV1Enabled: true
+        })
+      })
+
+      it('should hide the share list button', () => {
+        expect(renderedPage.queryByTestId(SHARE_LIST_BUTTON_TEST_ID)).toBeNull()
+      })
+
+      it('should hide the edit list button', () => {
+        expect(renderedPage.queryByTestId(EDIT_LIST_BUTTON_TEST_ID)).toBeNull()
+      })
+
+      it('should hide the delete list button', () => {
+        expect(
+          renderedPage.queryByTestId(DELETE_LIST_BUTTON_TEST_ID)
+        ).toBeNull()
       })
     })
 
-    it('should hide the share list button', () => {
-      expect(renderedPage.queryByTestId(SHARE_LIST_BUTTON_TEST_ID)).toBeNull()
-    })
+    describe('when the lists feature flag is off', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({
+          list: { ...list, id: DEFAULT_FAVORITES_LIST_ID },
+          isListV1Enabled: false
+        })
+      })
 
-    it('should hide the edit list button', () => {
-      expect(renderedPage.queryByTestId(EDIT_LIST_BUTTON_TEST_ID)).toBeNull()
-    })
-
-    it('should hide the delete list button', () => {
-      expect(renderedPage.queryByTestId(DELETE_LIST_BUTTON_TEST_ID)).toBeNull()
+      it('should hide the go back button', () => {
+        expect(renderedPage.queryByTestId(GO_BACK_BUTTON_TEST_ID)).toBeNull()
+      })
     })
   })
 })

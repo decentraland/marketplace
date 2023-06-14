@@ -25,11 +25,12 @@ export type Props = {
   onEditList: (list: List) => ReturnType<typeof openModal>
   onDeleteList: typeof deleteListStart
   onShareList?: (list: List) => ReturnType<typeof openModal>
+  isListV1Enabled: boolean
 } & RouteComponentProps<Params>
 
 export type MapStateProps = Pick<
   Props,
-  'wallet' | 'listId' | 'list' | 'isLoading' | 'error'
+  'wallet' | 'listId' | 'list' | 'isLoading' | 'error' | 'isListV1Enabled'
 >
 
 export type MapDispatchProps = Pick<
