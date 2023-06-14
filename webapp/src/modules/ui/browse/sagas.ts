@@ -1,5 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { put, select, takeEvery } from 'redux-saga/effects'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { Section } from '../../vendor/decentraland/routing'
 import {
   BULK_PICK_SUCCESS,
@@ -9,7 +10,8 @@ import {
 } from '../../favorites/actions'
 import { PAGE_SIZE } from '../../vendor/api'
 import { getPageNumber, getSection } from '../../routing/selectors'
-import { getListId } from '../../favorites/selectors'
+import { getListId, getList } from '../../favorites/selectors'
+import { List } from '../../favorites/types'
 import { getCount, getItemsPickedByUserOrCreator } from './selectors'
 
 export function* browseSaga() {
@@ -44,12 +46,17 @@ function* handleBulkPickSuccess(action: BulkPickUnpickSuccessAction) {
   const { unpickedFrom } = action.payload
 
   const currentPage: number = yield select(getPageNumber)
-  const currentListId: string = yield select(getListId)
+  const currentListId: string | null = yield select(getListId)
+  const currentList: List | null = currentListId
+    ? yield select(getList, currentListId)
+    : null
+  const currentAddress: string | null = yield select(getAddress)
   const favoritedAssets: Item[] = yield select(getItemsPickedByUserOrCreator)
   const totalFavoritedAssets: number = yield select(getCount)
   if (
     favoritedAssets.length < totalFavoritedAssets &&
-    unpickedFrom.find(list => list.id === currentListId)
+    unpickedFrom.find(list => list.id === currentListId) &&
+    currentList?.userAddress?.toLowerCase() === currentAddress?.toLowerCase()
   ) {
     yield put(
       fetchFavoritedItemsRequest(

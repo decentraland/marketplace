@@ -29,6 +29,7 @@ import {
   UpdateListSuccessAction,
   bulkPickUnpickFailure,
   bulkPickUnpickRequest,
+  bulkPickUnpickSuccess,
   cancelPickItemAsFavorite,
   createListClear,
   createListFailure,
@@ -817,24 +818,75 @@ describe('when reducing the clear action of creating a list', () => {
 })
 
 describe('when reducing the successful action of bulk picking and unpicking', () => {
-  let requestAction: CreateListRequestAction
-  let list: CreateListParameters
-
   beforeEach(() => {
     initialState = {
       ...initialState,
-      data: {
-        ...initialState.data,
-        items: {}
-      }
+      loading: [bulkPickUnpickRequest(item, [actionList], [])]
     }
   })
 
   describe("and the item was picked before and now isn't", () => {
-    it('should return a state where the item is flagged as not picked by the user, the counter decreased and the loading state cleared', () => {})
+    beforeEach(() => {
+      initialState = {
+        ...initialState,
+        data: {
+          ...initialState.data,
+          items: {
+            ...initialState.data.items,
+            [item.id]: {
+              pickedByUser: true,
+              count: 1,
+              createdAt: Date.now()
+            }
+          }
+        }
+      }
+    })
+
+    it('should return a state where the item is flagged as not picked by the user, the counter decreased and the loading state cleared', () => {
+      expect(
+        favoritesReducer(
+          initialState,
+          bulkPickUnpickSuccess(item, [actionList], [], false)
+        )
+      ).toEqual({
+        ...INITIAL_STATE,
+        data: {
+          ...INITIAL_STATE.data,
+          items: {
+            ...INITIAL_STATE.data.items,
+            [item.id]: {
+              pickedByUser: false,
+              count: 0,
+              createdAt: undefined
+            }
+          }
+        },
+        loading: []
+      })
+    })
   })
 
   describe("and the item wasn't picked before and now is", () => {
+    beforeEach(() => {
+      initialState = {
+        ...initialState,
+        data: {
+          ...initialState.data,
+          items: {
+            ...initialState.data.items,
+            [item.id]: {
+              pickedByUser: false,
+              count: 1,
+              createdAt: Date.now()
+            }
+          }
+        }
+      }
+    })
+
     it('should return a state where the item is flagged as picked by the user, the counter increased and the loading state cleared', () => {})
   })
+
+  describe('and the item was picked before and it is still picked', () => {})
 })
