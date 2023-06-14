@@ -76,6 +76,8 @@ const ListPage = ({
     [wallet, list]
   )
 
+  const privacyView = isPublicView ? 'public' : 'owner'
+
   const renderErrorView = useCallback(() => {
     const isNotFound = error?.includes(LIST_NOT_FOUND)
     const errorType = isNotFound ? 'not_found' : 'could_not_load'
@@ -211,13 +213,15 @@ const ListPage = ({
               ) : (
                 <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
                   <div className={styles.emptyLogo}></div>
-                  <h1>{t('list_page.empty.title')}</h1>
-                  <p>{t('list_page.empty.subtitle')}</p>
-                  <div className={styles.emptyActions}>
-                    <Button primary as={Link} to={locations.browse()}>
-                      {t('list_page.empty.action')}
-                    </Button>
-                  </div>
+                  <h1>{t(`list_page.empty.${privacyView}.title`)}</h1>
+                  <p>{t(`list_page.empty.${privacyView}.subtitle`)}</p>
+                  {!isPublicView && (
+                    <div className={styles.emptyActions}>
+                      <Button primary as={Link} to={locations.browse()}>
+                        {t(`list_page.empty.${privacyView}.action`)}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

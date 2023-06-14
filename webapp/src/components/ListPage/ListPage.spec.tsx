@@ -206,18 +206,73 @@ describe('when rendering the ListPage but the wallet has not been yet fetched', 
 })
 
 describe('when rendering the ListPage with an empty list', () => {
-  beforeEach(() => {
-    renderedPage = renderListPage({ list: { ...list, itemsCount: 0 } })
+  describe('and the list is public', () => {
+    describe('and the viewer is the owner', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({
+          list: {
+            ...list,
+            itemsCount: 0,
+            isPrivate: false
+          }
+        })
+      })
+
+      it('should render the empty list message', () => {
+        expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
+        expect(
+          renderedPage.getByText(t('list_page.empty.owner.title'))
+        ).toBeInTheDocument()
+        expect(
+          renderedPage.getByText(t('list_page.empty.owner.subtitle'))
+        ).toBeInTheDocument()
+      })
+    })
+
+    describe('and the viewer is not the owner', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({
+          list: {
+            ...list,
+            itemsCount: 0,
+            isPrivate: false
+          },
+          wallet: { address: '0xnnotanowner123' } as Wallet
+        })
+      })
+
+      it('should render the empty list message', () => {
+        expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
+        expect(
+          renderedPage.getByText(t('list_page.empty.public.title'))
+        ).toBeInTheDocument()
+        expect(
+          renderedPage.getByText(t('list_page.empty.public.subtitle'))
+        ).toBeInTheDocument()
+      })
+    })
   })
 
-  it('should render the empty list message', () => {
-    expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
-    expect(
-      renderedPage.getByText(t('list_page.empty.title'))
-    ).toBeInTheDocument()
-    expect(
-      renderedPage.getByText(t('list_page.empty.subtitle'))
-    ).toBeInTheDocument()
+  describe('and the list is private', () => {
+    beforeEach(() => {
+      renderedPage = renderListPage({
+        list: {
+          ...list,
+          itemsCount: 0,
+          isPrivate: true
+        }
+      })
+    })
+
+    it('should render the empty list message', () => {
+      expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
+      expect(
+        renderedPage.getByText(t('list_page.empty.owner.title'))
+      ).toBeInTheDocument()
+      expect(
+        renderedPage.getByText(t('list_page.empty.owner.subtitle'))
+      ).toBeInTheDocument()
+    })
   })
 })
 

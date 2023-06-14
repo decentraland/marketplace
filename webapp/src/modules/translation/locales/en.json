@@ -1291,17 +1291,23 @@
     "delete_list": "Delete List",
     "last_updated_at": "Last updated",
     "empty": {
-      "title": "You don't have any saved items in this list",
-      "subtitle": "Discover amazing items.",
-      "action": "Explore collectibles"
+      "owner": {
+        "title": "You don't have any saved items in this list",
+        "subtitle": "Discover amazing items.",
+        "action": "Explore collectibles"
+      },
+      "public": {
+        "title": "The list is empty",
+        "subtitle": "Try with another list."
+      }
     },
     "error": {
       "not_found": {
-        "title": "This List is private or doesn't exist.",
+        "title": "This list is private or doesn't exist.",
         "subtitle": "Try with another list."
       },
       "could_not_load": {
-        "title": "Oops! This List couldn't load.",
+        "title": "Oops! This list couldn't load.",
         "subtitle": "Please try again.",
         "action": "Try again"
       }
