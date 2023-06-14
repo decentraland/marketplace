@@ -1373,6 +1373,12 @@
     "copied": "Copied",
     "twitter_message": "I just shared a new List, Check it out: "
   },
+  "lists_ftu": {
+    "title": "Introducing Marketplace Lists",
+    "description": "Now you can save wearables and emotes to your <b>Wishlist.</b> <br></br> You will find them in <b>My Lists</b> section.",
+    "explore_collectibles": "Explore collectibles",
+    "learn_more": "Learn More"
+  },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
     "edit_list": "Edit List",
