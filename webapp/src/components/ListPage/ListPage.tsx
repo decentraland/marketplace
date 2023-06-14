@@ -126,7 +126,6 @@ const ListPage = ({
     fetchList()
   }, [fetchList])
 
-  console.log('isListV1Enabled', isListV1Enabled)
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
       {isLoading ? (

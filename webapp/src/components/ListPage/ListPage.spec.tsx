@@ -203,13 +203,7 @@ describe('when rendering the ListPage with a loaded list', () => {
     describe('when the lists feature flag is off', () => {
       beforeEach(() => {
         renderedPage = renderListPage({
-          list: {
-            ...list,
-            itemsCount: 0,
-            isPrivate: false,
-            id: DEFAULT_FAVORITES_LIST_ID
-          },
-          wallet: { address: '0xnnotanowner123' } as Wallet,
+          list: { ...list, id: DEFAULT_FAVORITES_LIST_ID },
           isListV1Enabled: false
         })
       })
