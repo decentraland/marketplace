@@ -79,9 +79,8 @@ const ListPage = ({
       wallet &&
       list &&
       wallet.address !== list.userAddress &&
-      isListV1Enabled &&
       list.id !== DEFAULT_FAVORITES_LIST_ID,
-    [wallet, list, isListV1Enabled]
+    [wallet, list]
   )
 
   const privacyView = isPublicView ? 'public' : 'owner'
@@ -127,6 +126,7 @@ const ListPage = ({
     fetchList()
   }, [fetchList])
 
+  console.log('isListV1Enabled', isListV1Enabled)
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
       {isLoading ? (
