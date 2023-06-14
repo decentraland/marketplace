@@ -124,7 +124,8 @@ const createOrUpdateList: UpdateOrCreateList = {
   userAddress: 'anOwnerAddress',
   createdAt: Date.now(),
   updatedAt: null,
-  permission: Permission.VIEW
+  permission: Permission.VIEW,
+  isPrivate: true
 }
 
 const listDetails: ListDetails = {
@@ -381,10 +382,10 @@ describe('when creating the action to signal a successful get list request', () 
 
 describe('when creating the action to signal the start of the update list request', () => {
   it('should return an object representing the action', () => {
-    expect(updateListRequest(list.id, list)).toEqual({
+    expect(updateListRequest(list.id, createList)).toEqual({
       type: UPDATE_LIST_REQUEST,
       meta: undefined,
-      payload: { id: list.id, updatedList: list }
+      payload: { id: list.id, updatedList: createList }
     })
   })
 })

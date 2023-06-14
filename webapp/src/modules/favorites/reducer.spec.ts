@@ -97,6 +97,12 @@ const actionList: List = {
   itemsCount: 1
 }
 
+const createOrUpdateList: CreateListParameters = {
+  name: 'aName',
+  description: 'aDescription',
+  isPrivate: true
+}
+
 const error = 'anErrorMessage'
 
 const requestActions = [
@@ -108,7 +114,7 @@ const requestActions = [
   fetchFavoritedItemsRequest(itemBrowseOptions),
   fetchListsRequest(listsBrowseOptions),
   getListRequest(actionList.id),
-  updateListRequest(actionList.id, actionList),
+  updateListRequest(actionList.id, createOrUpdateList),
   createListRequest({
     name: 'aListName',
     isPrivate: true,
@@ -174,7 +180,7 @@ const failureActions = [
     failure: getListFailure(actionList.id, error)
   },
   {
-    request: updateListRequest(actionList.id, actionList),
+    request: updateListRequest(actionList.id, createOrUpdateList),
     failure: updateListFailure(actionList.id, error)
   },
   {
@@ -612,7 +618,8 @@ describe('when reducing the successful action of getting a list', () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
       itemsCount: 1,
-      permission: Permission.EDIT
+      permission: Permission.EDIT,
+      isPrivate: true
     }
     requestAction = getListRequest(list.id)
     successAction = getListSuccess(list)
@@ -637,7 +644,8 @@ describe('when reducing the successful action of getting a list', () => {
               createdAt: 1,
               updatedAt: 2,
               itemsCount: 3,
-              permission: Permission.VIEW
+              permission: Permission.VIEW,
+              isPrivate: false
             }
           }
         },
@@ -693,15 +701,21 @@ describe('when reducing the successful action of updating a list', () => {
   let successAction: UpdateListSuccessAction
   let list: List
   let updatedList: UpdateOrCreateList
+  let updatedListParameters: Partial<CreateListParameters>
 
   beforeEach(() => {
     list = {
       id: 'aListId',
-      name: 'newName',
+      name: 'oldName',
       description: 'aDescription',
       userAddress: 'anAddress',
       createdAt: Date.now(),
-      itemsCount: 1
+      itemsCount: 1,
+      isPrivate: false
+    }
+    updatedListParameters = {
+      name: 'newName',
+      description: 'aDescription'
     }
     updatedList = {
       id: 'aListId',
@@ -710,9 +724,10 @@ describe('when reducing the successful action of updating a list', () => {
       userAddress: 'anAddress',
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      permission: Permission.EDIT
+      permission: Permission.EDIT,
+      isPrivate: true
     }
-    requestAction = updateListRequest(list.id, list)
+    requestAction = updateListRequest(list.id, updatedListParameters)
     successAction = updateListSuccess(updatedList)
     initialState = {
       ...initialState,
@@ -720,10 +735,7 @@ describe('when reducing the successful action of updating a list', () => {
         ...initialState.data,
         lists: {
           ...initialState.data.lists,
-          [list.id]: {
-            ...list,
-            name: 'oldName'
-          }
+          [list.id]: list
         }
       },
       loading: loadingReducer([], requestAction)
@@ -748,6 +760,7 @@ describe('when reducing the successful action of creating a list', () => {
   let requestAction: CreateListRequestAction
   let successAction: CreateListSuccessAction
   let createdList: UpdateOrCreateList
+  let createListParameters: CreateListParameters
 
   beforeEach(() => {
     createdList = {
@@ -757,12 +770,15 @@ describe('when reducing the successful action of creating a list', () => {
       userAddress: 'anAddress',
       createdAt: Date.now(),
       updatedAt: null,
-      permission: null
-    }
-    requestAction = createListRequest({
-      name: createdList.name,
+      permission: null,
       isPrivate: true
-    })
+    }
+    createListParameters = {
+      name: createdList.name,
+      description: createdList.description ?? '',
+      isPrivate: createdList.isPrivate
+    }
+    requestAction = createListRequest(createListParameters)
     successAction = createListSuccess(createdList)
     initialState = {
       ...initialState,

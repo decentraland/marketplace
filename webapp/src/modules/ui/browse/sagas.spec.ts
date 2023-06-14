@@ -173,6 +173,21 @@ describe('when handling the success action of a bulk item pick and unpick', () =
       beforeEach(() => {
         unpickedFrom = [{ id: 'anotherListId' } as List]
       })
+
+      it('should not put the fetch favorited items request action', () => {
+        return expectSaga(browseSaga)
+          .provide([
+            [select(getPageNumber), 1],
+            [select(getListId), list.id],
+            [select(getList, list.id), list],
+            [select(getAddress), list.userAddress],
+            [select(getItemsPickedByUserOrCreator), pickedStateItems],
+            [select(getCount), count]
+          ])
+          .not.put.like({ action: { type: FETCH_FAVORITED_ITEMS_REQUEST } })
+          .dispatch(bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 
