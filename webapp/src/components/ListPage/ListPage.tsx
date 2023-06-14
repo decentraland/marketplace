@@ -35,7 +35,8 @@ import {
   UPDATED_AT_TEST_ID,
   ASSET_BROWSE_TEST_ID,
   EMPTY_LIST_TEST_ID,
-  GO_BACK_BUTTON_TEST_ID
+  GO_BACK_BUTTON_TEST_ID,
+  EMPTY_LIST_ACTION_TEST_ID
 } from './constants'
 
 const LIST_NOT_FOUND = 'list was not found'
@@ -75,6 +76,8 @@ const ListPage = ({
     () => wallet && list && wallet.address !== list.userAddress,
     [wallet, list]
   )
+
+  const privacyView = isPublicView ? 'public' : 'owner'
 
   const renderErrorView = useCallback(() => {
     const isNotFound = error?.includes(LIST_NOT_FOUND)
@@ -211,13 +214,20 @@ const ListPage = ({
               ) : (
                 <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
                   <div className={styles.emptyLogo}></div>
-                  <h1>{t('list_page.empty.title')}</h1>
-                  <p>{t('list_page.empty.subtitle')}</p>
-                  <div className={styles.emptyActions}>
-                    <Button primary as={Link} to={locations.browse()}>
-                      {t('list_page.empty.action')}
-                    </Button>
-                  </div>
+                  <h1>{t(`list_page.empty.${privacyView}.title`)}</h1>
+                  <p>{t(`list_page.empty.${privacyView}.subtitle`)}</p>
+                  {!isPublicView && (
+                    <div className={styles.emptyActions}>
+                      <Button
+                        primary
+                        as={Link}
+                        to={locations.browse()}
+                        data-testid={EMPTY_LIST_ACTION_TEST_ID}
+                      >
+                        {t(`list_page.empty.${privacyView}.action`)}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
