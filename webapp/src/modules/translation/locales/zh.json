@@ -1287,9 +1287,15 @@
     "delete_list": "删除列表",
     "last_updated_at": "最后更新于",
     "empty": {
-      "title": "您在此列表中没有任何已保存的项目",
-      "subtitle": "发现惊人的项目。",
-      "action": "浏览项目"
+      "owner": {
+        "title": "您在此列表中没有任何已保存的项目",
+        "subtitle": "发现惊人的项目。",
+        "action": "浏览项目"
+      },
+      "public": {
+        "title": "列表为空",
+        "subtitle": "请尝试其他列表。"
+      }
     },
     "error": {
       "not_found": {

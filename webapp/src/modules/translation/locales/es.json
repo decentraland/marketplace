@@ -1282,9 +1282,15 @@
     "delete_list": "Eliminar Lista",
     "last_updated_at": "Última actualización",
     "empty": {
-      "title": "No tienes elementos guardados en esta lista",
-      "subtitle": "Descubre items increíbles.",
-      "action": "Explora los colleccionables"
+      "owner": {
+        "title": "No tienes elementos guardados en esta lista",
+        "subtitle": "Descubre items increíbles.",
+        "action": "Explora los colleccionables"
+      },
+      "public": {
+        "title": "Esta lista está vacía",
+        "subtitle": "Intenta con otra lista."
+      }
     },
     "error": {
       "not_found": {
