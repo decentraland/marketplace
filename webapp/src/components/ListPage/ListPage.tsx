@@ -130,7 +130,6 @@ const ListPage = ({
   }, [fetchList])
 
   if (!isConnecting && !wallet && list?.isPrivate) {
-    console.log('redirecting to sign in')
     return <Redirect to={locations.signIn(`${pathname}${search}`)} />
   }
 
