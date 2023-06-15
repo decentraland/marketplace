@@ -359,7 +359,7 @@ describe('when handling the request for fetching favorited items', () => {
       let createdAt: Record<string, number>
       let total: number
 
-      describe("and there's more than favorited item", () => {
+      describe("and there's more than one favorited item", () => {
         beforeEach(() => {
           favoritedItemIds = [{ itemId: item.id, createdAt: Date.now() }]
           createdAt = { [item.id]: favoritedItemIds[0].createdAt }
