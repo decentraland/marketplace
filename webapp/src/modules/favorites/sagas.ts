@@ -279,9 +279,11 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         }
       )
 
-      const previewListsItemIds = results.flatMap(list => list.previewOfItemIds)
+      const previewListsItemIds = Array.from(
+        new Set(results.flatMap(list => list.previewOfItemIds))
+      )
       const itemFilters: CatalogFilters = {
-        first: results.length,
+        first: previewListsItemIds.length,
         ids: previewListsItemIds
       }
 
