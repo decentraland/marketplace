@@ -1,6 +1,11 @@
 import { Item } from '@dcl/schemas'
+import { act } from 'react-dom/test-utils'
+import { fireEvent } from '@testing-library/react'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { FavoritesAPI } from '../../../modules/vendor/decentraland/favorites/api'
+import {
+  DEFAULT_FAVORITES_LIST_ID,
+  FavoritesAPI
+} from '../../../modules/vendor/decentraland/favorites/api'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { renderWithProviders } from '../../../utils/test'
 import SaveToListModal, {
@@ -12,8 +17,6 @@ import SaveToListModal, {
   LIST_PRIVATE
 } from './SaveToListModal'
 import { Props } from './SaveToListModal.types'
-import { act } from 'react-dom/test-utils'
-import { fireEvent } from '@testing-library/react'
 
 jest.mock('react-virtualized-auto-sizer', () => {
   return {
@@ -101,7 +104,6 @@ describe('when loading the component', () => {
 
     it('should not show the loader', () => {
       const { queryByTestId } = renderedModal
-
       expect(queryByTestId(LISTS_LOADER_DATA_TEST_ID)).not.toBeInTheDocument()
     })
 
@@ -113,14 +115,12 @@ describe('when loading the component', () => {
 
     it('should show the list names and items count', () => {
       const { getByTestId } = renderedModal
-
       expect(getByTestId(LIST_NAME + lists[0].id)).toBeInTheDocument()
       expect(getByTestId(LIST_NAME + lists[1].id)).toBeInTheDocument()
     })
 
     it('should show the lists checked if the item is the list', () => {
       const { getByTestId } = renderedModal
-
       expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeChecked()
       expect(
         getByTestId(LIST_CHECKBOX + lists[1].id).children[0]
@@ -177,20 +177,80 @@ describe('when saving the picks', () => {
 
   it('should disable the save and create list buttons', () => {
     const { getByTestId } = renderedModal
-
     expect(getByTestId(CREATE_LIST_BUTTON_DATA_TEST_ID)).toBeDisabled()
     expect(getByTestId(SAVE_BUTTON_DATA_TEST_ID)).toBeDisabled()
   })
 
   it('should disable any list checkbox', () => {
     const { getByTestId } = renderedModal
-
     expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeDisabled()
   })
 
   it('should set the loading save button as loading', () => {
     const { getByTestId } = renderedModal
-
+    expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeChecked()
     expect(getByTestId(SAVE_BUTTON_DATA_TEST_ID)).toHaveClass('loading')
+  })
+})
+
+describe("when loading the lists and in the loaded lists there's the default list", () => {
+  let lists: ListOfLists[]
+
+  describe('and the default list is already picked', () => {
+    beforeEach(async () => {
+      lists = [
+        {
+          id: DEFAULT_FAVORITES_LIST_ID,
+          name: 'aListName',
+          itemsCount: 1,
+          isPrivate: true,
+          isItemInList: true,
+          previewOfItemIds: []
+        }
+      ]
+      jest.spyOn(FavoritesAPI.prototype, 'getLists').mockResolvedValueOnce({
+        results: lists,
+        total: 1
+      })
+      await act(async () => {
+        renderedModal = renderSaveToListModalModal({ metadata: { item } })
+      })
+    })
+
+    it('should not mark it as picked', () => {
+      const { getByTestId } = renderedModal
+      expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeChecked()
+      // We test if the button is disabled, meaning that there weren't any changes
+      expect(getByTestId(SAVE_BUTTON_DATA_TEST_ID)).toBeDisabled()
+    })
+  })
+
+  describe('and the default list is not picked', () => {
+    beforeEach(async () => {
+      lists = [
+        {
+          id: DEFAULT_FAVORITES_LIST_ID,
+          name: 'aListName',
+          itemsCount: 1,
+          isPrivate: true,
+          isItemInList: false,
+          previewOfItemIds: []
+        }
+      ]
+      jest.spyOn(FavoritesAPI.prototype, 'getLists').mockResolvedValueOnce({
+        results: lists,
+        total: 1
+      })
+      await act(async () => {
+        renderedModal = renderSaveToListModalModal({ metadata: { item } })
+      })
+    })
+
+    it('should mark it as picked', () => {
+      const { getByTestId } = renderedModal
+      expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeChecked()
+      // We test if the button is disabled, meaning that there weren't any changes
+      expect(getByTestId(SAVE_BUTTON_DATA_TEST_ID)).not.toBeDisabled()
+    })
   })
 })
