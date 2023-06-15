@@ -308,7 +308,7 @@ const SaveToListModal = (props: Props) => {
           ) : null}
         </>
       </Modal.Content>
-      <Modal.Actions>
+      <Modal.Actions className={styles.actions}>
         <Button
           secondary
           disabled={isLoadingLists || isSavingPicks}

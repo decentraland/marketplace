@@ -50,13 +50,6 @@
   height: 23px;
 }
 
-.checkbox:global(.ui.checkbox.checked:not(.toggle)) :global(input[type='checkbox'].hidden + label:after) {
-  width: 15px;
-  height: 15px;
-  top: 5px;
-  left: 5px;
-}
-
 .checkbox:global(.ui.checkbox.checked:not(.toggle)) :global(input[type='checkbox'].hidden + label:after),
 .checkbox:global(.ui.checkbox.checked:not(.toggle) input[type='checkbox'].hidden:focus + label:after) {
   width: 15px;
@@ -74,4 +67,10 @@
 
 .loading span {
   margin-left: 20px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
 }
