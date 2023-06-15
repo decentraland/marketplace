@@ -1418,6 +1418,12 @@
   "save_to_list_modal": {
     "title": "保存到列表",
     "items_count": "{count} {count, plural, one {项} other {项目}}",
-    "create_list": "创建列表"
+    "create_list": "创建列表",
+    "save_in_a_list": "保存在{name}",
+    "remove_from_a_list": "从{name}中删除",
+    "save_in_lists": "保存在 {count} 个列表中",
+    "remove_from_lists": "从 {count} 个列表中删除",
+    "save_and_remove_from_lists": "保存并从 {count} 个列表中删除",
+    "save_in_list": "保存在列表中"
   }
 }

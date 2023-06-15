@@ -1413,6 +1413,12 @@
   "save_to_list_modal": {
     "title": "Guardar en la lista",
     "items_count": "{count} {count, plural, one {item} other {items}}",
-    "create_list": "Crear lista"
+    "create_list": "Crear lista",
+    "save_in_a_list": "Guardar en {name}",
+    "remove_from_a_list": "Remover de {name}",
+    "save_in_lists": "Guardar en {count} listas",
+    "remove_from_lists": "Remover de {count} listas",
+    "save_and_remove_from_lists": "Guardar y remover de {count} lists",
+    "save_in_list": "Guardar en lista"
   }
 }
