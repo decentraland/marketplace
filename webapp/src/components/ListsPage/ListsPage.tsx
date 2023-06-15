@@ -77,7 +77,7 @@ const ListsPage = ({
       <Header className={styles.header} size="large">
         {t('lists_page.title')}
       </Header>
-      {!error && !isLoading && (
+      {!error && (
         <div className={styles.subHeader}>
           <div className={styles.left}>
             {count ? t('lists_page.subtitle', { count }) : null}
