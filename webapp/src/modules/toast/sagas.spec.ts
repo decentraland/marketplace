@@ -326,7 +326,9 @@ describe('when handling the success of a bulk pick and unpick action', () => {
           'bottom center'
         )
       )
-      .dispatch(bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, true))
+      .dispatch(
+        bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, true, true)
+      )
       .silentRun()
   })
 })
