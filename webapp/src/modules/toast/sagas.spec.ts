@@ -13,7 +13,8 @@ import {
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
   unpickItemAsFavoriteFailure,
-  unpickItemAsFavoriteSuccess
+  unpickItemAsFavoriteSuccess,
+  updateListSuccess
 } from '../favorites/actions'
 import {
   FetchItemsFailureAction,
@@ -46,13 +47,15 @@ import {
   getUnpickItemAsFavoriteSuccessToast,
   getFetchAssetsFailureToast,
   getDeleteListSuccessToast,
-  getDeleteListFailureToast
+  getDeleteListFailureToast,
+  getUpdateListSuccessToast
 } from '../toast/toasts'
 import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 import { List } from '../favorites/types'
 import { toastSaga } from './sagas'
 import { toastDispatchableActionsChannel } from './utils'
+import { UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 
 let nft: NFT
 let rental: RentalListing
@@ -214,19 +217,19 @@ describe('when handling the failure of unpicking a favorite item', () => {
   })
 })
 
-describe('when handling the success of deleting a list', () => {
-  let list: List
+describe('when handling the success of updating a list', () => {
+  let list: UpdateOrCreateList
   beforeEach(() => {
     list = {
       name: 'aListName'
-    } as List
+    } as UpdateOrCreateList
   })
 
   it('should show a toast signaling the success of the list deletion', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
-      .put(showToast(getDeleteListSuccessToast(list), 'bottom center'))
-      .dispatch(deleteListSuccess(list))
+      .put(showToast(getUpdateListSuccessToast(list), 'bottom center'))
+      .dispatch(updateListSuccess(list))
       .silentRun()
   })
 })

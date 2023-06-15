@@ -14,6 +14,7 @@ import {
   unpickItemAsFavoriteRequest
 } from '../favorites/actions'
 import { List } from '../favorites/types'
+import { UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { toastDispatchableActionsChannel } from './utils'
 import { DispatchableFromToastActions } from './types'
 
@@ -251,6 +252,22 @@ export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
     icon: <Icon size="big" name="exclamation circle" />,
     closable: true,
     timeout: DEFAULT_TIMEOUT
+  }
+}
+
+export function getUpdateListSuccessToast(
+  list: UpdateOrCreateList
+): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: t('toast.update_list_success.title'),
+    body: t('toast.update_list_success.body', {
+      name: list.name,
+      b: (children: React.ReactChildren) => <b>{children}</b>
+    }),
+    closable: true,
+    timeout: DEFAULT_TIMEOUT,
+    icon: <Icon size="large" circular color="green" inverted name="checkmark" />
   }
 }
 

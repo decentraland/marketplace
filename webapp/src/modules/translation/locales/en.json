@@ -1044,6 +1044,10 @@
       "body": "There was an issue while loading the content of this page. Please {reload_page} or try again later.",
       "reload_page": "reload the page"
     },
+    "update_list_success": {
+      "title": "List updated",
+      "body": "The list <b>{name}</b> was successfully updated."
+    },
     "delete_list_success": {
       "title": "List deleted",
       "body": "The list <b>{name}</b> was successfully removed."

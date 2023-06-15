@@ -35,6 +35,7 @@ import {
   getStoreUpdateSuccessToast,
   getUnpickItemAsFavoriteFailureToast,
   getUnpickItemAsFavoriteSuccessToast,
+  getUpdateListSuccessToast,
   getUpsertRentalSuccessToast
 } from './toasts'
 import {
@@ -49,7 +50,9 @@ import {
   DeleteListSuccessAction,
   DELETE_LIST_SUCCESS,
   DELETE_LIST_FAILURE,
-  DeleteListFailureAction
+  DeleteListFailureAction,
+  UpdateListSuccessAction,
+  UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
 import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
 import { toastDispatchableActionsChannel } from './utils'
@@ -68,6 +71,7 @@ function* successToastSagas() {
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleRemoveRentalSuccess)
   yield takeEvery(CLAIM_ASSET_SUCCESS, handleClaimLandBackSuccess)
   yield takeEvery(UPSERT_RENTAL_SUCCESS, handleUpsertRentalSuccess)
+  yield takeEvery(UPDATE_LIST_SUCCESS, handleUpdateListSuccess)
   yield takeEvery(DELETE_LIST_SUCCESS, handleDeleteListSuccess)
   yield takeEvery(DELETE_LIST_FAILURE, handleDeleteListFailure)
   yield takeEvery(BUY_ITEM_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
@@ -124,6 +128,12 @@ function* handleUpsertRentalSuccess(action: UpsertRentalSuccessAction) {
         action.payload.operationType
       )
     )
+  )
+}
+
+function* handleUpdateListSuccess(action: UpdateListSuccessAction) {
+  yield put(
+    showToast(getUpdateListSuccessToast(action.payload.list), 'bottom center')
   )
 }
 
