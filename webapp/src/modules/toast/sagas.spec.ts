@@ -53,9 +53,9 @@ import {
 import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 import { List } from '../favorites/types'
+import { UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { toastSaga } from './sagas'
 import { toastDispatchableActionsChannel } from './utils'
-import { UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 
 let nft: NFT
 let rental: RentalListing
@@ -225,11 +225,28 @@ describe('when handling the success of updating a list', () => {
     } as UpdateOrCreateList
   })
 
-  it('should show a toast signaling the success of the list deletion', () => {
+  it('should show a toast signaling the success of the list update', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
       .put(showToast(getUpdateListSuccessToast(list), 'bottom center'))
       .dispatch(updateListSuccess(list))
+      .silentRun()
+  })
+})
+
+describe('when handling the success of deleting a list', () => {
+  let list: List
+  beforeEach(() => {
+    list = {
+      name: 'aListName'
+    } as List
+  })
+
+  it('should show a toast signaling the success of the list deletion', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getDeleteListSuccessToast(list), 'bottom center'))
+      .dispatch(deleteListSuccess(list))
       .silentRun()
   })
 })
