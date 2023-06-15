@@ -614,13 +614,15 @@ describe('when handling the request for fetching lists', () => {
           id: 'anId',
           name: 'aName',
           itemsCount: 1,
-          previewOfItemIds: ['anItemId']
+          previewOfItemIds: ['anItemId'],
+          isPrivate: true
         },
         {
           id: 'anotherId',
           name: 'anotherName',
           itemsCount: 1,
-          previewOfItemIds: ['anotherItemId']
+          previewOfItemIds: ['anotherItemId'],
+          isPrivate: true
         }
       ]
       total = 2
