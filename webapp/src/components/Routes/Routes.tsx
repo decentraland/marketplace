@@ -70,7 +70,7 @@ const Routes = ({ inMaintenance }: Props) => {
         />
         <Route exact path={locations.account()} component={AccountPage} />
         <ProtectedRoute exact path={locations.lists()} component={ListsPage} />
-        <ProtectedRoute exact path={locations.list()} component={ListPage} />
+        <Route exact path={locations.list()} component={ListPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
         <ProtectedRoute exact path={locations.sell()} component={SellPage} />
         <ProtectedRoute exact path={locations.bid()} component={BidPage} />

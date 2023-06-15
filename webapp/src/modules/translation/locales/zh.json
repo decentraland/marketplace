@@ -1041,6 +1041,10 @@
       "body": "加载此页面内容时出现问题。请{reload_page} 或稍后重试。",
       "reload_page": "重新加载页面"
     },
+    "update_list_success": {
+      "title": "列表已更新",
+      "body": "列表 <b>{name}</b> 已成功更新。"
+    },
     "delete_list_success": {
       "title": "列表已删除",
       "body": "列表 <b>{name}</b> 已成功删除。"

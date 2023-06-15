@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import {
   Back,
@@ -21,8 +21,9 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
 import { LinkedProfile } from '../LinkedProfile'
-import styles from './ListPage.module.css'
 import { Props } from './ListPage.types'
+import styles from './ListPage.module.css'
+
 import {
   ERROR_CONTAINER_TEST_ID,
   COULD_NOT_LOAD_LIST_ACTION_TEST_ID,
@@ -42,6 +43,7 @@ import {
 const LIST_NOT_FOUND = 'list was not found'
 
 const ListPage = ({
+  isConnecting,
   wallet,
   listId,
   list,
@@ -51,15 +53,18 @@ const ListPage = ({
   onBack,
   onEditList,
   onDeleteList,
-  onShareList
+  onShareList,
+  isListV1Enabled
 }: Props) => {
   const hasFetchedOnce = useRef(false)
+  const { pathname, search } = useLocation()
 
   const fetchList = useCallback(() => {
-    if (listId && !isLoading && !hasFetchedOnce.current && wallet) {
+    if (listId && !isLoading && !hasFetchedOnce.current) {
       onFetchList(listId)
       hasFetchedOnce.current = true
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listId, isLoading, onFetchList, wallet])
 
   const handleFetchList = useCallback(
@@ -73,7 +78,11 @@ const ListPage = ({
   )
 
   const isPublicView = useMemo(
-    () => wallet && list && wallet.address !== list.userAddress,
+    () =>
+      !wallet ||
+      (list &&
+        wallet.address !== list.userAddress &&
+        list.id !== DEFAULT_FAVORITES_LIST_ID),
     [wallet, list]
   )
 
@@ -120,6 +129,10 @@ const ListPage = ({
     fetchList()
   }, [fetchList])
 
+  if (!isConnecting && !wallet && list?.isPrivate) {
+    return <Redirect to={locations.signIn(`${pathname}${search}`)} />
+  }
+
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
       {isLoading ? (
@@ -127,7 +140,8 @@ const ListPage = ({
       ) : list ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
-            {!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID ? (
+            {(!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID) &&
+            isListV1Enabled ? (
               <span data-testid={GO_BACK_BUTTON_TEST_ID}>
                 <Back onClick={onBack} />
               </span>
@@ -200,38 +214,36 @@ const ListPage = ({
               </div>
             ) : null}
           </Header>
-          {wallet ? (
-            <div
-              data-testid={ASSET_BROWSE_TEST_ID}
-              className={styles.assetBrowseContainer}
-            >
-              {list.itemsCount ? (
-                <AssetBrowse
-                  view={View.LISTS}
-                  section={Section.LISTS}
-                  vendor={VendorName.DECENTRALAND}
-                />
-              ) : (
-                <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
-                  <div className={styles.emptyLogo}></div>
-                  <h1>{t(`list_page.empty.${privacyView}.title`)}</h1>
-                  <p>{t(`list_page.empty.${privacyView}.subtitle`)}</p>
-                  {!isPublicView && (
-                    <div className={styles.emptyActions}>
-                      <Button
-                        primary
-                        as={Link}
-                        to={locations.browse()}
-                        data-testid={EMPTY_LIST_ACTION_TEST_ID}
-                      >
-                        {t(`list_page.empty.${privacyView}.action`)}
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ) : null}
+          <div
+            data-testid={ASSET_BROWSE_TEST_ID}
+            className={styles.assetBrowseContainer}
+          >
+            {list.itemsCount ? (
+              <AssetBrowse
+                view={View.LISTS}
+                section={Section.LISTS}
+                vendor={VendorName.DECENTRALAND}
+              />
+            ) : (
+              <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
+                <div className={styles.emptyLogo}></div>
+                <h1>{t(`list_page.empty.${privacyView}.title`)}</h1>
+                <p>{t(`list_page.empty.${privacyView}.subtitle`)}</p>
+                {!isPublicView && (
+                  <div className={styles.emptyActions}>
+                    <Button
+                      primary
+                      as={Link}
+                      to={locations.browse()}
+                      data-testid={EMPTY_LIST_ACTION_TEST_ID}
+                    >
+                      {t(`list_page.empty.${privacyView}.action`)}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         error && renderErrorView()

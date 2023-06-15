@@ -77,7 +77,7 @@ const ListsPage = ({
       <Header className={styles.header} size="large">
         {t('lists_page.title')}
       </Header>
-      {!error && !isLoading && (
+      {!error && (
         <div className={styles.subHeader}>
           <div className={styles.left}>
             {count ? t('lists_page.subtitle', { count }) : null}
@@ -85,7 +85,6 @@ const ListsPage = ({
           <div className={styles.right}>
             <span className={styles.sortBy}>{t('filters.sort_by')}</span>
             <Dropdown
-              pointing="top right"
               options={[
                 {
                   value: ListsBrowseSortBy.RECENTLY_UPDATED,
@@ -107,6 +106,7 @@ const ListsPage = ({
               ]}
               value={selectedSortBy}
               onChange={handleSortChange}
+              className={styles.customDropdown}
             />
             <Button
               size="small"

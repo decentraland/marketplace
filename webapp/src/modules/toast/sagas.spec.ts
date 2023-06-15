@@ -15,7 +15,8 @@ import {
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
   unpickItemAsFavoriteFailure,
-  unpickItemAsFavoriteSuccess
+  unpickItemAsFavoriteSuccess,
+  updateListSuccess
 } from '../favorites/actions'
 import {
   FetchItemsFailureAction,
@@ -50,11 +51,13 @@ import {
   getDeleteListSuccessToast,
   getDeleteListFailureToast,
   getBulkPickItemSuccessToast,
-  getBulkPickItemFailureToast
+  getBulkPickItemFailureToast,
+  getUpdateListSuccessToast
 } from '../toast/toasts'
 import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 import { List } from '../favorites/types'
+import { UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { toastSaga } from './sagas'
 import { toastDispatchableActionsChannel } from './utils'
 
@@ -214,6 +217,23 @@ describe('when handling the failure of unpicking a favorite item', () => {
         showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
       )
       .dispatch(unpickItemAsFavoriteFailure(item, error))
+      .silentRun()
+  })
+})
+
+describe('when handling the success of updating a list', () => {
+  let list: UpdateOrCreateList
+  beforeEach(() => {
+    list = {
+      name: 'aListName'
+    } as UpdateOrCreateList
+  })
+
+  it('should show a toast signaling the success of the list update', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getUpdateListSuccessToast(list), 'bottom center'))
+      .dispatch(updateListSuccess(list))
       .silentRun()
   })
 })

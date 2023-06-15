@@ -1,6 +1,7 @@
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { getIsListsV1Enabled } from '../../modules/features/selectors'
 import {
   getError,
   getList,
@@ -12,7 +13,7 @@ import {
   getListRequest
 } from '../../modules/favorites/actions'
 import { RootState } from '../../modules/reducer'
-import { getWallet } from '../../modules/wallet/selectors'
+import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import { openModal } from '../../modules/modal/actions'
 import { locations } from '../../modules/routing/locations'
 import {
@@ -27,11 +28,13 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { listId } = ownProps.match.params
 
   return {
+    isConnecting: isConnecting(state),
     wallet: getWallet(state),
     listId,
     list: listId ? getList(state, listId) : null,
     isLoading: isLoadingType(getLoading(state), GET_LIST_REQUEST),
-    error: getError(state)
+    error: getError(state),
+    isListV1Enabled: getIsListsV1Enabled(state)
   }
 }
 

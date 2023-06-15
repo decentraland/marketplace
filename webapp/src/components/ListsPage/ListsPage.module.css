@@ -28,7 +28,7 @@
   display: grid;
   grid-gap: 12px;
   gap: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr))
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
 
 .errorContainer {
@@ -55,6 +55,19 @@
 
 .errorActions {
   margin-top: 40px;
+}
+
+.customDropdown:global(.ui.dropdown) {
+  display: flex;
+  align-items: center;
+}
+
+.customDropdown:global(.ui.dropdown .menu) {
+  width: 100%;
+}
+
+.customDropdown:global(.ui.dropdown .menu > .item) {
+  min-width: unset;
 }
 
 @media (max-width: 767px) {
@@ -84,7 +97,7 @@
   .subHeader .left {
     font-size: 12px;
   }
-  
+
   .header:global(.ui.header) {
     margin-left: 0px;
     margin-bottom: 10px;

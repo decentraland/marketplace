@@ -41,6 +41,7 @@ let list: List = {
 function renderListPage(props: Partial<Props> = {}) {
   return renderWithProviders(
     <ListPage
+      isConnecting={false}
       wallet={{ address: list.userAddress } as Wallet}
       listId={listId}
       list={list}
@@ -54,6 +55,7 @@ function renderListPage(props: Partial<Props> = {}) {
       location={{} as any}
       match={{} as any}
       error={null}
+      isListV1Enabled={true}
       {...props}
     />
   )
@@ -176,33 +178,41 @@ describe('when rendering the ListPage with a loaded list', () => {
   })
 
   describe('and the list is the default', () => {
-    beforeEach(() => {
-      renderedPage = renderListPage({
-        list: { ...list, id: DEFAULT_FAVORITES_LIST_ID }
+    describe('when the lists feature flag is on', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({
+          list: { ...list, id: DEFAULT_FAVORITES_LIST_ID },
+          isListV1Enabled: true
+        })
+      })
+
+      it('should hide the share list button', () => {
+        expect(renderedPage.queryByTestId(SHARE_LIST_BUTTON_TEST_ID)).toBeNull()
+      })
+
+      it('should hide the edit list button', () => {
+        expect(renderedPage.queryByTestId(EDIT_LIST_BUTTON_TEST_ID)).toBeNull()
+      })
+
+      it('should hide the delete list button', () => {
+        expect(
+          renderedPage.queryByTestId(DELETE_LIST_BUTTON_TEST_ID)
+        ).toBeNull()
       })
     })
 
-    it('should hide the share list button', () => {
-      expect(renderedPage.queryByTestId(SHARE_LIST_BUTTON_TEST_ID)).toBeNull()
+    describe('when the lists feature flag is off', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({
+          list: { ...list, id: DEFAULT_FAVORITES_LIST_ID },
+          isListV1Enabled: false
+        })
+      })
+
+      it('should hide the go back button', () => {
+        expect(renderedPage.queryByTestId(GO_BACK_BUTTON_TEST_ID)).toBeNull()
+      })
     })
-
-    it('should hide the edit list button', () => {
-      expect(renderedPage.queryByTestId(EDIT_LIST_BUTTON_TEST_ID)).toBeNull()
-    })
-
-    it('should hide the delete list button', () => {
-      expect(renderedPage.queryByTestId(DELETE_LIST_BUTTON_TEST_ID)).toBeNull()
-    })
-  })
-})
-
-describe('when rendering the ListPage but the wallet has not been yet fetched', () => {
-  beforeEach(() => {
-    renderedPage = renderListPage({ wallet: undefined })
-  })
-
-  it('should hide the asset browse content', () => {
-    expect(renderedPage.queryByTestId(ASSET_BROWSE_TEST_ID)).toBeNull()
   })
 })
 
@@ -242,6 +252,30 @@ describe('when rendering the ListPage with an empty list', () => {
             isPrivate: false
           },
           wallet: { address: '0xnnotanowner123' } as Wallet
+        })
+      })
+
+      it('should render the empty list message', () => {
+        expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
+        expect(
+          renderedPage.getByText(t('list_page.empty.public.title'))
+        ).toBeInTheDocument()
+        expect(
+          renderedPage.getByText(t('list_page.empty.public.subtitle'))
+        ).toBeInTheDocument()
+        expect(renderedPage.queryByTestId(EMPTY_LIST_ACTION_TEST_ID)).toBeNull()
+      })
+    })
+
+    describe('and the viewer is not logged in', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({
+          list: {
+            ...list,
+            itemsCount: 0,
+            isPrivate: false
+          },
+          wallet: null
         })
       })
 
