@@ -1,6 +1,7 @@
 import { Item } from '@dcl/schemas'
 import { match } from 'react-router-dom'
 import { RootState } from '../reducer'
+import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 import { locations } from '../routing/locations'
 import { INITIAL_STATE } from './reducer'
 import {
@@ -22,7 +23,8 @@ import {
   getPreviewListItems,
   isLoadingBulkPicksUnpicks,
   isLoadingUpdateList,
-  isLoadingDeleteList
+  isLoadingDeleteList,
+  isOwnerUnpickingFromCurrentList
 } from './selectors'
 import {
   bulkPickUnpickRequest,
@@ -394,7 +396,6 @@ describe("when getting if it's loading a bulk item pick and unpick", () => {
 })
 
 describe('when getting if the owner of the current list is unpicking an item from the list', () => {
-  let listId: string
   let unpickedFrom: List[]
 
   beforeEach(() => {
@@ -406,30 +407,177 @@ describe('when getting if the owner of the current list is unpicking an item fro
         userAddress: 'anAddress'
       } as List
     ]
+    state = {
+      ...state,
+      router: {
+        location: {
+          pathname: locations.list('aListId')
+        },
+        action: {} as any
+      } as any
+    }
   })
 
-  describe('and the item is being unpicked from the current list', () => {
+  describe("and the list isn't the default list", () => {
     beforeEach(() => {
-      // Mock list id
+      unpickedFrom[0].id = 'aListId'
     })
 
     describe("and the user isn't the owner of the list", () => {
-      describe("and the list isn't the default list", () => {})
+      beforeEach(() => {
+        state = {
+          ...state,
+          wallet: {
+            ...state.wallet,
+            data: {
+              address: 'anotherAddress'
+            } as any
+          }
+        }
+      })
 
-      describe('and the list is the default list', () => {})
+      describe('and the item is being unpicked from the current list', () => {
+        beforeEach(() => {
+          state.router.location.pathname = locations.list(unpickedFrom[0].id)
+        })
+
+        it('should return false', () => {
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
+            false
+          )
+        })
+      })
+
+      describe("and the item isn't being unpicked from the current list", () => {
+        beforeEach(() => {
+          state.router.location.pathname = locations.list('someOtherId')
+        })
+
+        it('should return false', () => {
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
+            false
+          )
+        })
+      })
     })
-    describe('and the user is the owner of the list', () => {})
+
+    describe('and the user is the owner of the list', () => {
+      beforeEach(() => {
+        state = {
+          ...state,
+          wallet: {
+            ...state.wallet,
+            data: {
+              address: unpickedFrom[0].userAddress ?? ''
+            } as any
+          }
+        }
+      })
+
+      describe('and the item is being unpicked from the current list', () => {
+        beforeEach(() => {
+          state.router.location.pathname = locations.list(unpickedFrom[0].id)
+        })
+
+        it('should return true', () => {
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
+            true
+          )
+        })
+      })
+
+      describe("and the item isn't being unpicked from the current list", () => {
+        beforeEach(() => {
+          state.router.location.pathname = locations.list('someOtherId')
+        })
+
+        it('should return false', () => {
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
+            false
+          )
+        })
+      })
+    })
   })
-  describe("and item is being unpicked from a list that's not the current", () => {
+  describe('and the list is the default list', () => {
     beforeEach(() => {
-      // Mock list id
+      unpickedFrom[0].id = DEFAULT_FAVORITES_LIST_ID
     })
 
     describe("and the user isn't the owner of the list", () => {
-      describe("and the list isn't the default list", () => {})
+      beforeEach(() => {
+        state = {
+          ...state,
+          wallet: {
+            ...state.wallet,
+            data: {
+              address: 'anotherAddress'
+            } as any
+          }
+        }
+      })
 
-      describe('and the list is the default list', () => {})
+      describe('and the item is being unpicked from the current list', () => {
+        beforeEach(() => {
+          state.router.location.pathname = locations.list(unpickedFrom[0].id)
+        })
+
+        it('should return true', () => {
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
+            true
+          )
+        })
+      })
+
+      describe("and the item isn't being unpicked from the current list", () => {
+        beforeEach(() => {
+          state.router.location.pathname = locations.list('someOtherId')
+        })
+
+        it('should return false', () => {
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
+            false
+          )
+        })
+      })
     })
-    describe('and the user is the owner of the list', () => {})
+
+    describe('and the user is the owner of the list', () => {
+      beforeEach(() => {
+        state = {
+          ...state,
+          wallet: {
+            ...state.wallet,
+            data: {
+              address: unpickedFrom[0].userAddress ?? ''
+            } as any
+          }
+        }
+      })
+
+      describe('and the item is being unpicked from the current list', () => {
+        beforeEach(() => {
+          state.router.location.pathname = locations.list(unpickedFrom[0].id)
+        })
+
+        it('should return true', () => {
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
+            true
+          )
+        })
+      })
+
+      describe("and the item isn't being unpicked from the current list", () => {
+        beforeEach(() => {
+          state.router.location.pathname = locations.list('someOtherId')
+        })
+
+        it('should return false', () => {
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
+            false
+          )
+        })
+      })
+    })
   })
 })
