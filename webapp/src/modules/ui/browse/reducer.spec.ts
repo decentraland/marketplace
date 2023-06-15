@@ -5,13 +5,10 @@ import {
   unpickItemAsFavoriteSuccess,
   undoUnpickingItemAsFavoriteSuccess,
   fetchListsSuccess,
-  deleteListSuccess
+  deleteListSuccess,
+  bulkPickUnpickSuccess
 } from '../../favorites/actions'
-import {
-  fetchItemsRequest,
-  fetchItemsSuccess,
-  fetchTrendingItemsSuccess
-} from '../../item/actions'
+import { fetchItemsRequest, fetchItemsSuccess } from '../../item/actions'
 import { ItemBrowseOptions } from '../../item/types'
 import { fetchNFTsRequest, fetchNFTsSuccess } from '../../nft/actions'
 import { NFT, NFTsFetchOptions } from '../../nft/types'
@@ -775,7 +772,8 @@ describe('when reducing the action of the success of getting the lists', () => {
           id: 'anotherListId',
           name: 'aName',
           itemsCount: 0,
-          previewOfItemIds: []
+          previewOfItemIds: [],
+          isPrivate: true
         }
       ]
       initialState = {
@@ -809,7 +807,8 @@ describe('when reducing the action of the success of getting the lists', () => {
           id: 'anotherListId',
           name: 'aName',
           itemsCount: 0,
-          previewOfItemIds: []
+          previewOfItemIds: [],
+          isPrivate: true
         }
       ]
       initialState = { ...initialState, listIds: [], page: undefined, count: 0 }
@@ -855,6 +854,93 @@ describe('when reducing the action of the success of deleting a list', () => {
     expect(browseReducer(initialState, deleteListSuccess(list))).toEqual({
       ...initialState,
       listIds: []
+    })
+  })
+})
+
+describe('when reducing the action of the success of an item picking and unpicking in bulk', () => {
+  let initialState: BrowseUIState
+  let ownerRemovedFromCurrentList: boolean
+  let pickedByUser: boolean
+  let unpickedFrom: List[]
+  let pickedFor: List[]
+  let item: Item
+
+  beforeEach(() => {
+    item = { id: 'anItemId' } as Item
+    pickedByUser = true
+    initialState = { ...INITIAL_STATE }
+    unpickedFrom = []
+    pickedFor = []
+  })
+
+  describe('and the owner removed the current list removed an item from it', () => {
+    beforeEach(() => {
+      ownerRemovedFromCurrentList = true
+    })
+
+    describe('and the count is undefined', () => {
+      beforeEach(() => {
+        initialState.count = undefined
+      })
+
+      it('should return the state unchanged', () => {
+        expect(
+          browseReducer(
+            initialState,
+            bulkPickUnpickSuccess(
+              item,
+              pickedFor,
+              unpickedFrom,
+              pickedByUser,
+              ownerRemovedFromCurrentList
+            )
+          )
+        ).toEqual({ ...INITIAL_STATE })
+      })
+    })
+
+    describe('and the count is defined', () => {
+      beforeEach(() => {
+        initialState.count = 1
+      })
+
+      it('should return a state with the count decreased by one', () => {
+        expect(
+          browseReducer(
+            initialState,
+            bulkPickUnpickSuccess(
+              item,
+              pickedFor,
+              unpickedFrom,
+              pickedByUser,
+              ownerRemovedFromCurrentList
+            )
+          )
+        ).toEqual({ ...INITIAL_STATE, count: 0 })
+      })
+    })
+  })
+
+  describe("and the owner removed the current list didn't remove an item from it", () => {
+    beforeEach(() => {
+      initialState.count = 1
+      ownerRemovedFromCurrentList = false
+    })
+
+    it('should return the state unchanged', () => {
+      expect(
+        browseReducer(
+          initialState,
+          bulkPickUnpickSuccess(
+            item,
+            pickedFor,
+            unpickedFrom,
+            pickedByUser,
+            ownerRemovedFromCurrentList
+          )
+        )
+      ).toEqual({ ...INITIAL_STATE, count: 1 })
     })
   })
 })
