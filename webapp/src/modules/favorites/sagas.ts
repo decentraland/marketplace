@@ -192,8 +192,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   ) {
     const { filters } = action.payload.options
     try {
+      const address: ReturnType<typeof getAddress> = yield select(getAddress)
       // Force the user to have the signed identity
-      yield call(getAccountIdentity)
+      if (address) yield call(getAccountIdentity)
 
       let items: Item[] = []
       const listId: string = yield select(getListId)

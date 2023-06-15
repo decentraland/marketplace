@@ -13,7 +13,7 @@ import {
   getListRequest
 } from '../../modules/favorites/actions'
 import { RootState } from '../../modules/reducer'
-import { getWallet } from '../../modules/wallet/selectors'
+import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import { openModal } from '../../modules/modal/actions'
 import { locations } from '../../modules/routing/locations'
 import {
@@ -28,6 +28,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { listId } = ownProps.match.params
 
   return {
+    isConnecting: isConnecting(state),
     wallet: getWallet(state),
     listId,
     list: listId ? getList(state, listId) : null,
