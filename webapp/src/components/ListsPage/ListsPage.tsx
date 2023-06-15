@@ -121,7 +121,7 @@ const ListsPage = ({
           </div>
         </div>
       )}
-      {isLoading ? (
+      {isLoading && lists.length === 0 ? (
         <Loader active size="massive" data-testid={LOADER_TEST_ID} />
       ) : (
         <InfiniteScroll
