@@ -3,6 +3,7 @@ import { createSelector } from 'reselect'
 import { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
 import { getData as getItems } from '../item/selectors'
@@ -18,7 +19,6 @@ import {
   BULK_PICK_REQUEST,
   UPDATE_LIST_REQUEST
 } from './actions'
-import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 
 export const getState = (state: RootState) => state.favorites
 export const getData = (state: RootState) => getState(state).data
