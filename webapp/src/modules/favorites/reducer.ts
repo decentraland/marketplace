@@ -311,14 +311,23 @@ export function favoritesReducer(
     }
 
     case BULK_PICK_SUCCESS: {
-      const { isPickedByUser, item } = action.payload
+      const {
+        isPickedByUser,
+        ownerRemovedFromCurrentList,
+        item
+      } = action.payload
 
       const wasPickedBefore = state.data.items[item.id]?.pickedByUser ?? false
+      const isNowPicked = isPickedByUser && !ownerRemovedFromCurrentList
       let newCount = state.data.items[item.id]?.count ?? 0
-      if (wasPickedBefore && !isPickedByUser) {
+      let createdAt = state.data.items[item.id]?.createdAt
+
+      if (wasPickedBefore && !isNowPicked) {
         newCount--
-      } else if (!wasPickedBefore && isPickedByUser) {
+        createdAt = undefined
+      } else if (!wasPickedBefore && isNowPicked) {
         newCount++
+        createdAt = Date.now()
       }
 
       return {
@@ -330,7 +339,7 @@ export function favoritesReducer(
             [item.id]: {
               pickedByUser: isPickedByUser,
               count: newCount,
-              createdAt: Date.now()
+              createdAt
             }
           }
         },

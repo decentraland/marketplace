@@ -2,10 +2,11 @@ import { createMatchSelector } from 'connected-react-router'
 import { createSelector } from 'reselect'
 import { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
 import { getData as getItems } from '../item/selectors'
-import { FavoritesData } from './types'
+import { FavoritesData, List } from './types'
 import {
   FETCH_FAVORITED_ITEMS_REQUEST,
   PICK_ITEM_AS_FAVORITE_REQUEST,
@@ -17,6 +18,7 @@ import {
   BULK_PICK_REQUEST,
   UPDATE_LIST_REQUEST
 } from './actions'
+import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 
 export const getState = (state: RootState) => state.favorites
 export const getData = (state: RootState) => getState(state).data
@@ -77,3 +79,18 @@ export const getPreviewListItems = (state: RootState, id: string): Item[] =>
   getLists(state)
     [id]?.previewOfItemIds?.map(itemId => getItems(state)[itemId])
     .filter(Boolean) ?? []
+
+export const isOwnerUnpickingFromCurrentList = (
+  state: RootState,
+  unpickedFrom: List[]
+): boolean => {
+  const currentListId = getListId(state)
+  const userAddress = getAddress(state)
+  const currentUnpickedList = unpickedFrom.find(
+    list => list.id === currentListId
+  )
+  const isListOwner =
+    currentUnpickedList?.userAddress?.toLowerCase() ===
+      userAddress?.toLowerCase() || currentListId === DEFAULT_FAVORITES_LIST_ID
+  return isListOwner && currentUnpickedList !== undefined
+}

@@ -77,6 +77,11 @@ beforeEach(() => {
           id: 'item2'
         }
       }
+    },
+    wallet: {
+      data: {
+        address: 'anAddress'
+      }
     }
   } as any
 })
@@ -385,5 +390,46 @@ describe("when getting if it's loading a bulk item pick and unpick", () => {
     it('should return true', () => {
       expect(isLoadingBulkPicksUnpicks(state)).toBe(true)
     })
+  })
+})
+
+describe('when getting if the owner of the current list is unpicking an item from the list', () => {
+  let listId: string
+  let unpickedFrom: List[]
+
+  beforeEach(() => {
+    unpickedFrom = [
+      {
+        id: 'aListId',
+        name: 'aList',
+        itemsCount: 2,
+        userAddress: 'anAddress'
+      } as List
+    ]
+  })
+
+  describe('and the item is being unpicked from the current list', () => {
+    beforeEach(() => {
+      // Mock list id
+    })
+
+    describe("and the user isn't the owner of the list", () => {
+      describe("and the list isn't the default list", () => {})
+
+      describe('and the list is the default list', () => {})
+    })
+    describe('and the user is the owner of the list', () => {})
+  })
+  describe("and item is being unpicked from a list that's not the current", () => {
+    beforeEach(() => {
+      // Mock list id
+    })
+
+    describe("and the user isn't the owner of the list", () => {
+      describe("and the list isn't the default list", () => {})
+
+      describe('and the list is the default list', () => {})
+    })
+    describe('and the user is the owner of the list', () => {})
   })
 })

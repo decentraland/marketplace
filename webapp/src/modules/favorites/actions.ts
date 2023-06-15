@@ -282,9 +282,16 @@ export const bulkPickUnpickSuccess = (
   item: Item,
   pickedFor: List[],
   unpickedFrom: List[],
-  isPickedByUser: boolean
+  isPickedByUser: boolean,
+  ownerRemovedFromCurrentList: boolean
 ) =>
-  action(BULK_PICK_SUCCESS, { item, pickedFor, unpickedFrom, isPickedByUser })
+  action(BULK_PICK_SUCCESS, {
+    item,
+    pickedFor,
+    unpickedFrom,
+    isPickedByUser,
+    ownerRemovedFromCurrentList
+  })
 
 export const bulkPickUnpickFailure = (
   item: Item,

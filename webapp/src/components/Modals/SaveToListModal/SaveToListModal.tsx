@@ -27,6 +27,12 @@ import styles from './SaveToListModal.module.css'
 
 export const LISTS_LOADER_DATA_TEST_ID = 'save-to-list-loader'
 export const CREATE_LIST_BUTTON_DATA_TEST_ID = 'save-to-list-create-list-button'
+export const SAVE_BUTTON_DATA_TEST_ID = 'save-to-list-save-button'
+export const LIST_CHECKBOX = 'save-to-list-data-checkbox-'
+export const LIST_NAME = 'save-to-list-data-name-'
+export const LIST_ITEMS_COUNT = 'save-to-list-data-count-'
+export const LIST_PRIVATE = 'save-to-list-data-private-'
+
 const ITEM_HEIGHT = 60
 const DEFAULT_LIST_HEIGHT = 300
 const DEFAULT_LIST_WIDTH = 650
@@ -53,10 +59,6 @@ const SaveToListModal = (props: Props) => {
   })
 
   const hasChanges = picks.pickFor.length === 0 && picks.unpickFrom.length === 0
-
-  // TODO: Check if isMobile is required
-  const isMobile = false
-
   const saveButtonMessage = useMemo(() => {
     if (picks.pickFor.length === 1 && picks.unpickFrom.length === 0) {
       return t('save_to_list_modal.save_in_a_list', {
@@ -191,13 +193,18 @@ const SaveToListModal = (props: Props) => {
                 <Checkbox
                   checked={isPicked}
                   disabled={isSavingPicks}
-                  data-testid={`save-to-list-checkbox-${index}`}
+                  data-testid={LIST_CHECKBOX + lists.data[index].id}
                   className={styles.checkbox}
                   onChange={() => handlePickItem(index)}
                 />
                 <div className={styles.listInfo}>
-                  <div className={styles.name}>{lists.data[index].name}</div>
-                  <div>
+                  <div
+                    className={styles.name}
+                    data-testid={LIST_NAME + lists.data[index].id}
+                  >
+                    {lists.data[index].name}
+                  </div>
+                  <div data-testid={LIST_ITEMS_COUNT + lists.data[index].id}>
                     {t('save_to_list_modal.items_count', {
                       count: lists.data[index].itemsCount
                     })}
@@ -205,7 +212,13 @@ const SaveToListModal = (props: Props) => {
                 </div>
               </div>
               <div className={styles.right}>
-                <PrivateTag />
+                {lists.data[index].isPrivate ? (
+                  <PrivateTag
+                    data-testid={LIST_PRIVATE + lists.data[index].id}
+                  />
+                ) : (
+                  undefined
+                )}
               </div>
             </div>
           ) : (
@@ -236,16 +249,12 @@ const SaveToListModal = (props: Props) => {
       : lists.data.length * ITEM_HEIGHT
 
   return (
-    <Modal
-      size="tiny"
-      className={styles.modal}
-      onClose={!isLoadingLists ? onClose : undefined}
-    >
+    <Modal size="tiny" onClose={!isLoadingLists ? onClose : undefined}>
       <ModalNavigation
         title={t('save_to_list_modal.title')}
         onClose={!isLoadingLists ? onClose : undefined}
       />
-      <Modal.Content className={styles.content}>
+      <Modal.Content>
         {isLoadingLists && lists.data.length === 0 ? (
           <div
             data-testid={LISTS_LOADER_DATA_TEST_ID}
@@ -261,7 +270,7 @@ const SaveToListModal = (props: Props) => {
               <div className={styles.separator}></div>
               <div
                 className={styles.favoritesList}
-                style={{ height: !isMobile ? desktopHeight : undefined }}
+                style={{ height: desktopHeight }}
               >
                 <AutoSizer>
                   {({ height, width }) => (
@@ -312,6 +321,7 @@ const SaveToListModal = (props: Props) => {
         <Button
           primary
           disabled={isLoadingLists || isSavingPicks || hasChanges}
+          data-testid={SAVE_BUTTON_DATA_TEST_ID}
           loading={isSavingPicks}
           onClick={handleSavePicks}
         >

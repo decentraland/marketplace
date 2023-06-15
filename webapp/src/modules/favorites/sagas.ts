@@ -71,7 +71,7 @@ import {
   bulkPickUnpickFailure,
   bulkPickUnpickSuccess
 } from './actions'
-import { getListId } from './selectors'
+import { getListId, isOwnerUnpickingFromCurrentList } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
@@ -411,8 +411,19 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         pickedFor.map(list => list.id),
         unpickedFrom.map(list => list.id)
       )
+      const isOwnerUnpickingFromListInView: ReturnType<typeof isOwnerUnpickingFromCurrentList> = yield select(
+        isOwnerUnpickingFromCurrentList,
+        unpickedFrom
+      )
+
       yield put(
-        bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, pickedByUser)
+        bulkPickUnpickSuccess(
+          item,
+          pickedFor,
+          unpickedFrom,
+          pickedByUser,
+          isOwnerUnpickingFromListInView
+        )
       )
     } catch (error) {
       yield put(

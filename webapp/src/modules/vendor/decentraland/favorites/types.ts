@@ -35,7 +35,7 @@ export type BaseList = {
   permission: Permission | null
 }
 
-export type ListOfLists = Pick<BaseList, 'id' | 'name'> & {
+export type ListOfLists = Pick<BaseList, 'id' | 'name' | 'isPrivate'> & {
   itemsCount: number
   isItemInList?: boolean
   previewOfItemIds: string[]

@@ -9,12 +9,11 @@ import {
   fetchFavoritedItemsRequest,
   unpickItemAsFavoriteSuccess
 } from '../../favorites/actions'
-import { getList, getListId } from '../../favorites/selectors'
+import { isOwnerUnpickingFromCurrentList } from '../../favorites/selectors'
 import { List } from '../../favorites/types'
 import { PAGE_SIZE } from '../../vendor/api'
 import { getCount, getItemsPickedByUserOrCreator } from './selectors'
 import { browseSaga } from './sagas'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 describe('when handling the success action of unpicking an item as favorite', () => {
   let section: Section
@@ -113,63 +112,34 @@ describe('when handling the success action of a bulk item pick and unpick', () =
     })
 
     describe('and the unpicked item is from the current list', () => {
-      let userAddress: string
-
       beforeEach(() => {
         unpickedFrom = [list]
       })
 
-      describe('and the user is the owner of the list', () => {
-        beforeEach(() => {
-          userAddress = list.userAddress ?? ''
-        })
-
-        it('should put an action to fetch the last item of the loaded page to replace the unpicked item', () => {
-          return expectSaga(browseSaga)
-            .provide([
-              [select(getPageNumber), 1],
-              [select(getListId), list.id],
-              [select(getList, list.id), list],
-              [select(getAddress), userAddress],
-              [select(getItemsPickedByUserOrCreator), pickedStateItems],
-              [select(getCount), count]
-            ])
-            .put(
-              fetchFavoritedItemsRequest(
-                {
-                  filters: { first: 1, skip: PAGE_SIZE - 1 }
-                },
-                true
-              )
+      it('should put an action to fetch the last item of the loaded page to replace the unpicked item', () => {
+        return expectSaga(browseSaga)
+          .provide([
+            [select(getPageNumber), 1],
+            [select(isOwnerUnpickingFromCurrentList, unpickedFrom), true],
+            [select(getItemsPickedByUserOrCreator), pickedStateItems],
+            [select(getCount), count]
+          ])
+          .put(
+            fetchFavoritedItemsRequest(
+              {
+                filters: { first: 1, skip: PAGE_SIZE - 1 }
+              },
+              true
             )
-            .dispatch(bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true))
-            .run({ silenceTimeout: true })
-        })
-      })
-
-      describe('and the user is not the owner of the list', () => {
-        beforeEach(() => {
-          userAddress = 'anotherAddress'
-        })
-
-        it('should not put the fetch favorited items request action', () => {
-          return expectSaga(browseSaga)
-            .provide([
-              [select(getPageNumber), 1],
-              [select(getListId), list.id],
-              [select(getList, list.id), list],
-              [select(getAddress), userAddress],
-              [select(getItemsPickedByUserOrCreator), pickedStateItems],
-              [select(getCount), count]
-            ])
-            .not.put.like({ action: { type: FETCH_FAVORITED_ITEMS_REQUEST } })
-            .dispatch(bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true))
-            .run({ silenceTimeout: true })
-        })
+          )
+          .dispatch(
+            bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true, true)
+          )
+          .run({ silenceTimeout: true })
       })
     })
 
-    describe('and the unpicked item is from another list', () => {
+    describe('and the unpicked item is not from the current list', () => {
       beforeEach(() => {
         unpickedFrom = [{ id: 'anotherListId' } as List]
       })
@@ -178,14 +148,14 @@ describe('when handling the success action of a bulk item pick and unpick', () =
         return expectSaga(browseSaga)
           .provide([
             [select(getPageNumber), 1],
-            [select(getListId), list.id],
-            [select(getList, list.id), list],
-            [select(getAddress), list.userAddress],
+            [select(isOwnerUnpickingFromCurrentList, unpickedFrom), false],
             [select(getItemsPickedByUserOrCreator), pickedStateItems],
             [select(getCount), count]
           ])
           .not.put.like({ action: { type: FETCH_FAVORITED_ITEMS_REQUEST } })
-          .dispatch(bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true))
+          .dispatch(
+            bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true, true)
+          )
           .run({ silenceTimeout: true })
       })
     })
@@ -201,14 +171,12 @@ describe('when handling the success action of a bulk item pick and unpick', () =
       return expectSaga(browseSaga)
         .provide([
           [select(getPageNumber), 1],
-          [select(getListId), list.id],
-          [select(getList, list.id), list],
-          [select(getAddress), list.userAddress],
+          [select(isOwnerUnpickingFromCurrentList, [list]), true],
           [select(getItemsPickedByUserOrCreator), pickedStateItems],
           [select(getCount), count]
         ])
         .not.put.like({ action: { type: FETCH_FAVORITED_ITEMS_REQUEST } })
-        .dispatch(bulkPickUnpickSuccess({} as Item, [], [list], true))
+        .dispatch(bulkPickUnpickSuccess({} as Item, [], [list], true, true))
         .run({ silenceTimeout: true })
     })
   })

@@ -859,7 +859,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
       }
     })
 
-    it('should return a state where the item is flagged as not picked by the user, the counter decreased and the loading state cleared', () => {
+    it('should return a state where the item is flagged as not picked by the user, the created date set as undefined, the counter decreased and the loading state cleared', () => {
       expect(
         favoritesReducer(
           initialState,
@@ -884,7 +884,13 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
   })
 
   describe("and the item wasn't picked before and now is", () => {
+    let oldDate: number
+    let newDate: number
+
     beforeEach(() => {
+      oldDate = Date.now()
+      newDate = oldDate + 30
+      jest.spyOn(Date, 'now').mockReturnValueOnce(newDate)
       initialState = {
         ...initialState,
         data: {
@@ -894,6 +900,48 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
             [item.id]: {
               pickedByUser: false,
               count: 1,
+              createdAt: oldDate
+            }
+          }
+        }
+      }
+    })
+
+    it('should return a state where the item is flagged as picked by the user, the created date set as now, the counter increased and the loading state cleared', () => {
+      expect(
+        favoritesReducer(
+          initialState,
+          bulkPickUnpickSuccess(item, [actionList], [], true)
+        )
+      ).toEqual({
+        ...INITIAL_STATE,
+        data: {
+          ...INITIAL_STATE.data,
+          items: {
+            ...INITIAL_STATE.data.items,
+            [item.id]: {
+              pickedByUser: true,
+              count: 2,
+              createdAt: newDate
+            }
+          }
+        },
+        loading: []
+      })
+    })
+  })
+
+  describe('and the item was picked before and it is still picked', () => {
+    beforeEach(() => {
+      initialState = {
+        ...initialState,
+        data: {
+          ...initialState.data,
+          items: {
+            ...initialState.data.items,
+            [item.id]: {
+              pickedByUser: true,
+              count: 1,
               createdAt: Date.now()
             }
           }
@@ -901,8 +949,16 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
       }
     })
 
-    it('should return a state where the item is flagged as picked by the user, the counter increased and the loading state cleared', () => {})
+    it("should return an estate where the pick didn't change at all and the loading state cleared", () => {
+      expect(
+        favoritesReducer(
+          initialState,
+          bulkPickUnpickSuccess(item, [actionList], [], true)
+        )
+      ).toEqual({
+        ...initialState,
+        loading: []
+      })
+    })
   })
-
-  describe('and the item was picked before and it is still picked', () => {})
 })

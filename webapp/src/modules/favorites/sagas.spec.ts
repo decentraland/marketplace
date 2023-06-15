@@ -55,7 +55,7 @@ import {
   updateListSuccess
 } from './actions'
 import { favoritesSaga } from './sagas'
-import { getListId } from './selectors'
+import { getListId, isOwnerUnpickingFromCurrentList } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import {
   CreateListParameters,
@@ -1075,6 +1075,7 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [call(getAccountIdentity), Promise.resolve()],
+          [select(isOwnerUnpickingFromCurrentList, [sndList]), true],
           [
             matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick),
             Promise.resolve({ pickedByUser: true })
@@ -1084,7 +1085,7 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
           fn: FavoritesAPI.prototype.bulkPickUnpick,
           args: [item.id, [fstList.id], [sndList.id]]
         })
-        .put(bulkPickUnpickSuccess(item, [fstList], [sndList], true))
+        .put(bulkPickUnpickSuccess(item, [fstList], [sndList], true, true))
         .dispatch(bulkPickUnpickRequest(item, [fstList], [sndList]))
         .run({ silenceTimeout: true })
     })

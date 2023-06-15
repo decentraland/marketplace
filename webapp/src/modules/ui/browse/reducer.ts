@@ -1,4 +1,6 @@
 import {
+  BULK_PICK_SUCCESS,
+  BulkPickUnpickSuccessAction,
   CREATE_LIST_SUCCESS,
   CreateListSuccessAction,
   DELETE_LIST_SUCCESS,
@@ -64,6 +66,7 @@ type UIReducerAction =
   | FetchListsSuccessAction
   | DeleteListSuccessAction
   | CreateListSuccessAction
+  | BulkPickUnpickSuccessAction
 
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
@@ -94,6 +97,17 @@ export function browseReducer(
       return {
         ...state,
         count: state.count !== undefined ? ++state.count : state.count
+      }
+
+    case BULK_PICK_SUCCESS:
+      const { ownerRemovedFromCurrentList } = action.payload
+
+      return {
+        ...state,
+        count:
+          state.count !== undefined && ownerRemovedFromCurrentList
+            ? --state.count
+            : state.count
       }
 
     case BROWSE: {
