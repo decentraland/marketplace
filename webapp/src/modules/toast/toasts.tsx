@@ -18,7 +18,11 @@ import {
 import { List } from '../favorites/types'
 import { UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { toastDispatchableActionsChannel } from './utils'
-import { DispatchableFromToastActions } from './types'
+import {
+  BulkPickUnpickMessageType,
+  BulkPickUnpickSuccessOrFailureType,
+  DispatchableFromToastActions
+} from './types'
 
 const DEFAULT_TIMEOUT = 6000
 
@@ -301,16 +305,6 @@ export function getDeleteListFailureToast(list: List): Omit<Toast, 'id'> {
   }
 }
 
-enum BulkPickUnpickMessageType {
-  ADD = 'add',
-  REMOVE = 'remove'
-}
-
-enum BulkPickUnpickSuccessOrFailureType {
-  SUCCESS = 'success',
-  FAILURE = 'failure'
-}
-
 function buildBulkPickItemBodyMessage(
   addOrRemove: BulkPickUnpickMessageType,
   successOrFailure: BulkPickUnpickSuccessOrFailureType,
@@ -361,7 +355,8 @@ export function getBulkPickItemSuccessToast(
                 item,
                 pickedFor
               )
-            : undefined}{' '}
+            : undefined}
+          {pickedFor.length > 0 && unpickedFrom.length > 0 ? ' ' : undefined}
           {unpickedFrom.length > 0
             ? buildBulkPickItemBodyMessage(
                 BulkPickUnpickMessageType.REMOVE,
@@ -401,7 +396,8 @@ export function getBulkPickItemFailureToast(
                 item,
                 pickedFor
               )
-            : undefined}{' '}
+            : undefined}
+          {pickedFor.length > 0 && unpickedFrom.length > 0 ? ' ' : undefined}
           {unpickedFrom.length > 0
             ? buildBulkPickItemBodyMessage(
                 BulkPickUnpickMessageType.REMOVE,

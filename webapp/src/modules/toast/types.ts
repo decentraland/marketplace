@@ -10,3 +10,13 @@ export type DispatchableFromToastActions =
   | UnpickItemAsFavoriteRequestAction
   | UndoUnpickingItemAsFavoriteRequestAction
   | BulkPickUnpickRequestAction
+
+export enum BulkPickUnpickMessageType {
+  ADD = 'add',
+  REMOVE = 'remove'
+}
+
+export enum BulkPickUnpickSuccessOrFailureType {
+  SUCCESS = 'success',
+  FAILURE = 'failure'
+}
