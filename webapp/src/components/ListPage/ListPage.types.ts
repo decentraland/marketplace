@@ -15,6 +15,7 @@ import { OpenModalAction, openModal } from '../../modules/modal/actions'
 type Params = { listId?: string }
 
 export type Props = {
+  isConnecting: boolean
   wallet: Wallet | null
   listId?: string
   list: List | null
@@ -30,7 +31,13 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'wallet' | 'listId' | 'list' | 'isLoading' | 'error' | 'isListV1Enabled'
+  | 'isConnecting'
+  | 'wallet'
+  | 'listId'
+  | 'list'
+  | 'isLoading'
+  | 'error'
+  | 'isListV1Enabled'
 >
 
 export type MapDispatchProps = Pick<

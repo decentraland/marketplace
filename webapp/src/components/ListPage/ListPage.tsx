@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import {
   Back,
@@ -43,6 +43,7 @@ import {
 const LIST_NOT_FOUND = 'list was not found'
 
 const ListPage = ({
+  isConnecting,
   wallet,
   listId,
   list,
@@ -56,12 +57,14 @@ const ListPage = ({
   isListV1Enabled
 }: Props) => {
   const hasFetchedOnce = useRef(false)
+  const { pathname, search } = useLocation()
 
   const fetchList = useCallback(() => {
-    if (listId && !isLoading && !hasFetchedOnce.current && wallet) {
+    if (listId && !isLoading && !hasFetchedOnce.current) {
       onFetchList(listId)
       hasFetchedOnce.current = true
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listId, isLoading, onFetchList, wallet])
 
   const handleFetchList = useCallback(
@@ -76,10 +79,10 @@ const ListPage = ({
 
   const isPublicView = useMemo(
     () =>
-      wallet &&
-      list &&
-      wallet.address !== list.userAddress &&
-      list.id !== DEFAULT_FAVORITES_LIST_ID,
+      !wallet ||
+      (list &&
+        wallet.address !== list.userAddress &&
+        list.id !== DEFAULT_FAVORITES_LIST_ID),
     [wallet, list]
   )
 
@@ -125,6 +128,10 @@ const ListPage = ({
   useEffect(() => {
     fetchList()
   }, [fetchList])
+
+  if (!isConnecting && !wallet && list?.isPrivate) {
+    return <Redirect to={locations.signIn(`${pathname}${search}`)} />
+  }
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
@@ -207,38 +214,36 @@ const ListPage = ({
               </div>
             ) : null}
           </Header>
-          {wallet ? (
-            <div
-              data-testid={ASSET_BROWSE_TEST_ID}
-              className={styles.assetBrowseContainer}
-            >
-              {list.itemsCount ? (
-                <AssetBrowse
-                  view={View.LISTS}
-                  section={Section.LISTS}
-                  vendor={VendorName.DECENTRALAND}
-                />
-              ) : (
-                <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
-                  <div className={styles.emptyLogo}></div>
-                  <h1>{t(`list_page.empty.${privacyView}.title`)}</h1>
-                  <p>{t(`list_page.empty.${privacyView}.subtitle`)}</p>
-                  {!isPublicView && (
-                    <div className={styles.emptyActions}>
-                      <Button
-                        primary
-                        as={Link}
-                        to={locations.browse()}
-                        data-testid={EMPTY_LIST_ACTION_TEST_ID}
-                      >
-                        {t(`list_page.empty.${privacyView}.action`)}
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          ) : null}
+          <div
+            data-testid={ASSET_BROWSE_TEST_ID}
+            className={styles.assetBrowseContainer}
+          >
+            {list.itemsCount ? (
+              <AssetBrowse
+                view={View.LISTS}
+                section={Section.LISTS}
+                vendor={VendorName.DECENTRALAND}
+              />
+            ) : (
+              <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
+                <div className={styles.emptyLogo}></div>
+                <h1>{t(`list_page.empty.${privacyView}.title`)}</h1>
+                <p>{t(`list_page.empty.${privacyView}.subtitle`)}</p>
+                {!isPublicView && (
+                  <div className={styles.emptyActions}>
+                    <Button
+                      primary
+                      as={Link}
+                      to={locations.browse()}
+                      data-testid={EMPTY_LIST_ACTION_TEST_ID}
+                    >
+                      {t(`list_page.empty.${privacyView}.action`)}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         error && renderErrorView()

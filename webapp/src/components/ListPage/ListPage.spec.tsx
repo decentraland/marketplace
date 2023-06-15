@@ -41,6 +41,7 @@ let list: List = {
 function renderListPage(props: Partial<Props> = {}) {
   return renderWithProviders(
     <ListPage
+      isConnecting={false}
       wallet={{ address: list.userAddress } as Wallet}
       listId={listId}
       list={list}
@@ -215,16 +216,6 @@ describe('when rendering the ListPage with a loaded list', () => {
   })
 })
 
-describe('when rendering the ListPage but the wallet has not been yet fetched', () => {
-  beforeEach(() => {
-    renderedPage = renderListPage({ wallet: undefined })
-  })
-
-  it('should hide the asset browse content', () => {
-    expect(renderedPage.queryByTestId(ASSET_BROWSE_TEST_ID)).toBeNull()
-  })
-})
-
 describe('when rendering the ListPage with an empty list', () => {
   describe('and the list is public', () => {
     describe('and the viewer is the owner', () => {
@@ -261,6 +252,30 @@ describe('when rendering the ListPage with an empty list', () => {
             isPrivate: false
           },
           wallet: { address: '0xnnotanowner123' } as Wallet
+        })
+      })
+
+      it('should render the empty list message', () => {
+        expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
+        expect(
+          renderedPage.getByText(t('list_page.empty.public.title'))
+        ).toBeInTheDocument()
+        expect(
+          renderedPage.getByText(t('list_page.empty.public.subtitle'))
+        ).toBeInTheDocument()
+        expect(renderedPage.queryByTestId(EMPTY_LIST_ACTION_TEST_ID)).toBeNull()
+      })
+    })
+
+    describe('and the viewer is not logged in', () => {
+      beforeEach(() => {
+        renderedPage = renderListPage({
+          list: {
+            ...list,
+            itemsCount: 0,
+            isPrivate: false
+          },
+          wallet: null
         })
       })
 
