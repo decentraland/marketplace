@@ -1036,6 +1036,10 @@
       "body": "Hubo un problema al cargar el contenido de esta página. {reload_page} o inténtalo de nuevo más tarde.",
       "reload_page": "Recargue la página"
     },
+    "update_list_success": {
+      "title": "Lista actualizada",
+      "body": "La lista <b>{name}</b> fue actualizada satisfactoriamente."
+    },
     "delete_list_success": {
       "title": "Lista eliminando",
       "body": "La lista <b>{name}</b> fue removida satisfactoriamente."
