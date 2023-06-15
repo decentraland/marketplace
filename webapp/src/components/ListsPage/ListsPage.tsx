@@ -77,10 +77,10 @@ const ListsPage = ({
       <Header className={styles.header} size="large">
         {t('lists_page.title')}
       </Header>
-      {!error && !isLoading && (
+      {!error && (
         <div className={styles.subHeader}>
           <div className={styles.left}>
-            {count ? t('lists_page.subtitle', { count }) : null}
+            {!isLoading && count ? t('lists_page.subtitle', { count }) : null}
           </div>
           <div className={styles.right}>
             <span className={styles.sortBy}>{t('filters.sort_by')}</span>
@@ -121,7 +121,7 @@ const ListsPage = ({
           </div>
         </div>
       )}
-      {isLoading && lists.length === 0 ? (
+      {isLoading ? (
         <Loader active size="massive" data-testid={LOADER_TEST_ID} />
       ) : (
         <InfiniteScroll
