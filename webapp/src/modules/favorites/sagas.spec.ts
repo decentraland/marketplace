@@ -625,55 +625,123 @@ describe('when handling the request for fetching lists', () => {
       total = 2
     })
 
-    describe('and the call to the catalog api succeeds', () => {
-      let items: Item[]
+    describe('and all the preview items are different', () => {
+      describe('and the call to the catalog api succeeds', () => {
+        let items: Item[]
 
-      beforeEach(() => {
-        items = [
-          { id: 'anItemId', name: 'anItemName' } as Item,
-          { id: 'anotherItemId', name: 'anotherItemName' } as Item
-        ]
+        beforeEach(() => {
+          items = [
+            { id: 'anItemId', name: 'anItemName' } as Item,
+            { id: 'anotherItemId', name: 'anotherItemName' } as Item
+          ]
+        })
+
+        it('should dispatch an action signaling the success of the handled action', () => {
+          return expectSaga(favoritesSaga, getIdentity)
+            .provide([
+              [call(getAccountIdentity), Promise.resolve()],
+              [
+                matchers.call.fn(FavoritesAPI.prototype.getLists),
+                Promise.resolve({ results: lists, total })
+              ],
+              [
+                matchers.call.fn(CatalogAPI.prototype.get),
+                Promise.resolve({ data: items })
+              ]
+            ])
+            .call.like({
+              fn: FavoritesAPI.prototype.getLists,
+              args: [
+                {
+                  first: options.first,
+                  skip: (options.page - 1) * options.first,
+                  sortBy: undefined,
+                  sortDirection: undefined
+                }
+              ]
+            })
+            .call.like({
+              fn: CatalogAPI.prototype.get,
+              args: [
+                {
+                  first: 2,
+                  ids: [
+                    ...lists[0].previewOfItemIds,
+                    ...lists[1].previewOfItemIds
+                  ]
+                }
+              ]
+            })
+            .put(fetchListsSuccess(lists, items, total, options))
+            .dispatch(fetchListsRequest(options))
+            .run({ silenceTimeout: true })
+        })
       })
+    })
 
-      it('should dispatch an action signaling the success of the handled action', () => {
-        return expectSaga(favoritesSaga, getIdentity)
-          .provide([
-            [call(getAccountIdentity), Promise.resolve()],
-            [
-              matchers.call.fn(FavoritesAPI.prototype.getLists),
-              Promise.resolve({ results: lists, total })
-            ],
-            [
-              matchers.call.fn(CatalogAPI.prototype.get),
-              Promise.resolve({ data: items })
-            ]
-          ])
-          .call.like({
-            fn: FavoritesAPI.prototype.getLists,
-            args: [
-              {
-                first: options.first,
-                skip: (options.page - 1) * options.first,
-                sortBy: undefined,
-                sortDirection: undefined
-              }
-            ]
-          })
-          .call.like({
-            fn: CatalogAPI.prototype.get,
-            args: [
-              {
-                first: 2,
-                ids: [
-                  ...lists[0].previewOfItemIds,
-                  ...lists[1].previewOfItemIds
-                ]
-              }
-            ]
-          })
-          .put(fetchListsSuccess(lists, items, total, options))
-          .dispatch(fetchListsRequest(options))
-          .run({ silenceTimeout: true })
+    describe('and there are different lists with at least the same preview item', () => {
+      describe('and the call to the catalog api succeeds', () => {
+        let items: Item[]
+
+        beforeEach(() => {
+          lists = [
+            {
+              ...lists[0],
+              previewOfItemIds: ['anItemId', 'anotherItemId']
+            },
+            {
+              ...lists[1],
+              previewOfItemIds: ['anotherItemId']
+            }
+          ]
+          items = [
+            { id: 'anItemId', name: 'anItemName' } as Item,
+            { id: 'anotherItemId', name: 'anotherItemName' } as Item
+          ]
+        })
+
+        it('should dispatch an action signaling the success of the handled action', () => {
+          return expectSaga(favoritesSaga, getIdentity)
+            .provide([
+              [call(getAccountIdentity), Promise.resolve()],
+              [
+                matchers.call.fn(FavoritesAPI.prototype.getLists),
+                Promise.resolve({ results: lists, total })
+              ],
+              [
+                matchers.call.fn(CatalogAPI.prototype.get),
+                Promise.resolve({ data: items })
+              ]
+            ])
+            .call.like({
+              fn: FavoritesAPI.prototype.getLists,
+              args: [
+                {
+                  first: options.first,
+                  skip: (options.page - 1) * options.first,
+                  sortBy: undefined,
+                  sortDirection: undefined
+                }
+              ]
+            })
+            .call.like({
+              fn: CatalogAPI.prototype.get,
+              args: [
+                {
+                  first: 2,
+                  ids: Array.from(
+                    new Set([
+                      ...lists[0].previewOfItemIds,
+                      ...lists[1].previewOfItemIds
+                    ])
+                  )
+                }
+              ]
+            })
+            .put(fetchListsSuccess(lists, items, total, options))
+            .dispatch(fetchListsRequest(options))
+            .run({ silenceTimeout: true })
+        })
       })
     })
 
