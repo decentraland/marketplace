@@ -34,7 +34,7 @@ import {
   LIST_PRIVATE,
   SAVE_BUTTON_DATA_TEST_ID
 } from './constants'
-import { Props } from './SaveToListModal.types'
+import { PickType, Props } from './SaveToListModal.types'
 import styles from './SaveToListModal.module.css'
 
 const SaveToListModal = (props: Props) => {
@@ -91,39 +91,37 @@ const SaveToListModal = (props: Props) => {
     onSavePicks(picks.pickFor, picks.unpickFrom)
   }, [onSavePicks, picks.pickFor, picks.unpickFrom])
 
+  const handleClose = useCallback(
+    () => (!isLoadingLists ? onClose : undefined),
+    [isLoadingLists, onClose]
+  )
+
+  const addOrRemovePick = useCallback(
+    (list: List, type: PickType) => {
+      if (picks[type].includes(list)) {
+        setPicks({
+          ...picks,
+          [type]: picks[type].filter(l => l.id !== list.id)
+        })
+      } else {
+        setPicks({
+          ...picks,
+          [type]: picks[type].concat(list)
+        })
+      }
+    },
+    [setPicks, picks]
+  )
+
   const handlePickItem = useCallback(
     index => {
       if (lists.data[index].isItemInList) {
-        if (picks.unpickFrom.includes(lists.data[index])) {
-          setPicks({
-            ...picks,
-            unpickFrom: picks.unpickFrom.filter(
-              list => list.id !== lists.data[index].id
-            )
-          })
-        } else {
-          setPicks({
-            ...picks,
-            unpickFrom: picks.unpickFrom.concat(lists.data[index])
-          })
-        }
+        addOrRemovePick(lists.data[index], PickType.UNPICK_FROM)
       } else {
-        if (picks.pickFor.includes(lists.data[index])) {
-          setPicks({
-            ...picks,
-            pickFor: picks.pickFor.filter(
-              list => list.id !== lists.data[index].id
-            )
-          })
-        } else {
-          setPicks({
-            ...picks,
-            pickFor: picks.pickFor.concat(lists.data[index])
-          })
-        }
+        addOrRemovePick(lists.data[index], PickType.PICK_FOR)
       }
     },
-    [lists.data, picks]
+    [addOrRemovePick, lists.data]
   )
 
   const favoritesAPI = useMemo(() => {
@@ -249,10 +247,10 @@ const SaveToListModal = (props: Props) => {
       : lists.data.length * ITEM_HEIGHT
 
   return (
-    <Modal size="tiny" onClose={!isLoadingLists ? onClose : undefined}>
+    <Modal size="tiny" onClose={handleClose}>
       <ModalNavigation
         title={t('save_to_list_modal.title')}
-        onClose={!isLoadingLists ? onClose : undefined}
+        onClose={handleClose}
       />
       <Modal.Content>
         {isLoadingLists && lists.data.length === 0 ? (

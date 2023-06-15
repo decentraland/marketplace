@@ -7,6 +7,11 @@ type Metadata = {
   item: Item
 }
 
+export enum PickType {
+  PICK_FOR = 'pickFor',
+  UNPICK_FROM = 'unpickFrom'
+}
+
 export type Props = Omit<ModalProps, 'metadata'> & {
   metadata: Metadata
   identity: AuthIdentity | undefined
