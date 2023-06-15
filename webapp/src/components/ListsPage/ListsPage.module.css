@@ -67,7 +67,7 @@
 }
 
 .customDropdown:global(.ui.dropdown .menu > .item) {
-  min-width: unset !important;
+  min-width: unset;
 }
 
 @media (max-width: 767px) {
