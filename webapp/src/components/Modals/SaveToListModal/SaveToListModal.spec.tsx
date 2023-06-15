@@ -1,6 +1,7 @@
 import { Item } from '@dcl/schemas'
 import { act } from 'react-dom/test-utils'
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   DEFAULT_FAVORITES_LIST_ID,
@@ -8,14 +9,15 @@ import {
 } from '../../../modules/vendor/decentraland/favorites/api'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { renderWithProviders } from '../../../utils/test'
-import SaveToListModal, {
+import {
   CREATE_LIST_BUTTON_DATA_TEST_ID,
   SAVE_BUTTON_DATA_TEST_ID,
   LISTS_LOADER_DATA_TEST_ID,
   LIST_CHECKBOX,
   LIST_NAME,
   LIST_PRIVATE
-} from './SaveToListModal'
+} from './constants'
+import SaveToListModal from './SaveToListModal'
 import { Props } from './SaveToListModal.types'
 
 jest.mock('react-virtualized-auto-sizer', () => {

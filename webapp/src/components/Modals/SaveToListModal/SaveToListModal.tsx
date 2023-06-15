@@ -22,20 +22,20 @@ import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { isErrorWithMessage } from '../../../lib/error'
 import { List } from '../../../modules/favorites/types'
 import { PrivateTag } from '../../PrivateTag'
+import {
+  CREATE_LIST_BUTTON_DATA_TEST_ID,
+  DEFAULT_LIST_HEIGHT,
+  DEFAULT_LIST_WIDTH,
+  ITEM_HEIGHT,
+  LISTS_LOADER_DATA_TEST_ID,
+  LIST_CHECKBOX,
+  LIST_ITEMS_COUNT,
+  LIST_NAME,
+  LIST_PRIVATE,
+  SAVE_BUTTON_DATA_TEST_ID
+} from './constants'
 import { Props } from './SaveToListModal.types'
 import styles from './SaveToListModal.module.css'
-
-export const LISTS_LOADER_DATA_TEST_ID = 'save-to-list-loader'
-export const CREATE_LIST_BUTTON_DATA_TEST_ID = 'save-to-list-create-list-button'
-export const SAVE_BUTTON_DATA_TEST_ID = 'save-to-list-save-button'
-export const LIST_CHECKBOX = 'save-to-list-data-checkbox-'
-export const LIST_NAME = 'save-to-list-data-name-'
-export const LIST_ITEMS_COUNT = 'save-to-list-data-count-'
-export const LIST_PRIVATE = 'save-to-list-data-private-'
-
-const ITEM_HEIGHT = 60
-const DEFAULT_LIST_HEIGHT = 300
-const DEFAULT_LIST_WIDTH = 650
 
 const SaveToListModal = (props: Props) => {
   const {
