@@ -62,6 +62,14 @@
   align-items: center;
 }
 
+.customDropdown:global(.ui.dropdown .menu) {
+  width: 100%;
+}
+
+.customDropdown:global(.ui.dropdown .menu > .item) {
+  min-width: unset !important;
+}
+
 @media (max-width: 767px) {
   .createList .icon {
     display: none;
