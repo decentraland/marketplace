@@ -337,7 +337,7 @@ export function favoritesReducer(
           items: {
             ...state.data.items,
             [item.id]: {
-              pickedByUser: isPickedByUser,
+              pickedByUser: isNowPicked,
               count: newCount,
               createdAt
             }

@@ -508,7 +508,8 @@ describe('when reducing the successful action of fetching lists', () => {
       id: 'aListId',
       name: 'aName',
       itemsCount: 1,
-      previewOfItemIds: [item.id]
+      previewOfItemIds: [item.id],
+      isPrivate: true
     }
     total = 2
     requestAction = fetchListsRequest(listsBrowseOptions)
@@ -834,6 +835,8 @@ describe('when reducing the clear action of creating a list', () => {
 })
 
 describe('when reducing the successful action of bulk picking and unpicking', () => {
+  let ownerRemovedFromCurrentList: boolean
+
   beforeEach(() => {
     initialState = {
       ...initialState,
@@ -841,123 +844,292 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
     }
   })
 
-  describe("and the item was picked before and now isn't", () => {
+  describe('and the item was removed by the owner from the current lists', () => {
     beforeEach(() => {
-      initialState = {
-        ...initialState,
-        data: {
-          ...initialState.data,
-          items: {
-            ...initialState.data.items,
-            [item.id]: {
-              pickedByUser: true,
-              count: 1,
-              createdAt: Date.now()
+      ownerRemovedFromCurrentList = true
+    })
+
+    describe("and the item was picked before and now isn't", () => {
+      beforeEach(() => {
+        initialState = {
+          ...initialState,
+          data: {
+            ...initialState.data,
+            items: {
+              ...initialState.data.items,
+              [item.id]: {
+                pickedByUser: true,
+                count: 1,
+                createdAt: Date.now()
+              }
             }
           }
         }
-      }
+      })
+
+      it('should return a state where the item is flagged as not picked by the user, the created date set as undefined, the counter decreased and the loading state cleared', () => {
+        expect(
+          favoritesReducer(
+            initialState,
+            bulkPickUnpickSuccess(
+              item,
+              [actionList],
+              [],
+              false,
+              ownerRemovedFromCurrentList
+            )
+          )
+        ).toEqual({
+          ...INITIAL_STATE,
+          data: {
+            ...INITIAL_STATE.data,
+            items: {
+              ...INITIAL_STATE.data.items,
+              [item.id]: {
+                pickedByUser: false,
+                count: 0,
+                createdAt: undefined
+              }
+            }
+          },
+          loading: []
+        })
+      })
     })
 
-    it('should return a state where the item is flagged as not picked by the user, the created date set as undefined, the counter decreased and the loading state cleared', () => {
-      expect(
-        favoritesReducer(
-          initialState,
-          bulkPickUnpickSuccess(item, [actionList], [], false)
-        )
-      ).toEqual({
-        ...INITIAL_STATE,
-        data: {
-          ...INITIAL_STATE.data,
-          items: {
-            ...INITIAL_STATE.data.items,
-            [item.id]: {
-              pickedByUser: false,
-              count: 0,
-              createdAt: undefined
+    describe("and the item wasn't picked before and now is", () => {
+      beforeEach(() => {
+        initialState = {
+          ...initialState,
+          data: {
+            ...initialState.data,
+            items: {
+              ...initialState.data.items,
+              [item.id]: {
+                pickedByUser: false,
+                count: 1,
+                createdAt: Date.now()
+              }
             }
           }
-        },
-        loading: []
+        }
+      })
+
+      it("should return a state where the item favorite data hasn't changed and the loading state cleared", () => {
+        expect(
+          favoritesReducer(
+            initialState,
+            bulkPickUnpickSuccess(
+              item,
+              [actionList],
+              [],
+              true,
+              ownerRemovedFromCurrentList
+            )
+          )
+        ).toEqual({
+          ...INITIAL_STATE,
+          data: {
+            ...INITIAL_STATE.data,
+            items: {
+              ...initialState.data.items
+            }
+          },
+          loading: []
+        })
+      })
+    })
+
+    describe('and the item was picked before and it is still picked', () => {
+      beforeEach(() => {
+        initialState = {
+          ...initialState,
+          data: {
+            ...initialState.data,
+            items: {
+              ...initialState.data.items,
+              [item.id]: {
+                pickedByUser: true,
+                count: 1,
+                createdAt: Date.now()
+              }
+            }
+          }
+        }
+      })
+
+      it('should return a state where the item is flagged as not picked by the user, the created date set as undefined, the counter decreased and the loading state cleared', () => {
+        expect(
+          favoritesReducer(
+            initialState,
+            bulkPickUnpickSuccess(
+              item,
+              [actionList],
+              [],
+              true,
+              ownerRemovedFromCurrentList
+            )
+          )
+        ).toEqual({
+          ...INITIAL_STATE,
+          data: {
+            ...INITIAL_STATE.data,
+            items: {
+              ...INITIAL_STATE.data.items,
+              [item.id]: {
+                pickedByUser: false,
+                count: 0,
+                createdAt: undefined
+              }
+            }
+          },
+          loading: []
+        })
       })
     })
   })
 
-  describe("and the item wasn't picked before and now is", () => {
-    let oldDate: number
-    let newDate: number
-
+  describe('and the item was not removed by the owner from the current list', () => {
     beforeEach(() => {
-      oldDate = Date.now()
-      newDate = oldDate + 30
-      jest.spyOn(Date, 'now').mockReturnValueOnce(newDate)
-      initialState = {
-        ...initialState,
-        data: {
-          ...initialState.data,
-          items: {
-            ...initialState.data.items,
-            [item.id]: {
-              pickedByUser: false,
-              count: 1,
-              createdAt: oldDate
+      ownerRemovedFromCurrentList = false
+    })
+
+    describe("and the item was picked before and now isn't", () => {
+      beforeEach(() => {
+        initialState = {
+          ...initialState,
+          data: {
+            ...initialState.data,
+            items: {
+              ...initialState.data.items,
+              [item.id]: {
+                pickedByUser: true,
+                count: 1,
+                createdAt: Date.now()
+              }
             }
           }
         }
-      }
-    })
+      })
 
-    it('should return a state where the item is flagged as picked by the user, the created date set as now, the counter increased and the loading state cleared', () => {
-      expect(
-        favoritesReducer(
-          initialState,
-          bulkPickUnpickSuccess(item, [actionList], [], true)
-        )
-      ).toEqual({
-        ...INITIAL_STATE,
-        data: {
-          ...INITIAL_STATE.data,
-          items: {
-            ...INITIAL_STATE.data.items,
-            [item.id]: {
-              pickedByUser: true,
-              count: 2,
-              createdAt: newDate
+      it('should return a state where the item is flagged as not picked by the user, the created date set as undefined, the counter decreased and the loading state cleared', () => {
+        expect(
+          favoritesReducer(
+            initialState,
+            bulkPickUnpickSuccess(
+              item,
+              [actionList],
+              [],
+              false,
+              ownerRemovedFromCurrentList
+            )
+          )
+        ).toEqual({
+          ...INITIAL_STATE,
+          data: {
+            ...INITIAL_STATE.data,
+            items: {
+              ...INITIAL_STATE.data.items,
+              [item.id]: {
+                pickedByUser: false,
+                count: 0,
+                createdAt: undefined
+              }
             }
-          }
-        },
-        loading: []
+          },
+          loading: []
+        })
       })
     })
-  })
 
-  describe('and the item was picked before and it is still picked', () => {
-    beforeEach(() => {
-      initialState = {
-        ...initialState,
-        data: {
-          ...initialState.data,
-          items: {
-            ...initialState.data.items,
-            [item.id]: {
-              pickedByUser: true,
-              count: 1,
-              createdAt: Date.now()
+    describe("and the item wasn't picked before and now is", () => {
+      let oldDate: number
+      let newDate: number
+
+      beforeEach(() => {
+        oldDate = Date.now()
+        newDate = oldDate + 30
+        jest.spyOn(Date, 'now').mockReturnValueOnce(newDate)
+        initialState = {
+          ...initialState,
+          data: {
+            ...initialState.data,
+            items: {
+              ...initialState.data.items,
+              [item.id]: {
+                pickedByUser: false,
+                count: 1,
+                createdAt: oldDate
+              }
             }
           }
         }
-      }
+      })
+
+      it('should return a state where the item is flagged as picked by the user, the created date set as now, the counter increased and the loading state cleared', () => {
+        expect(
+          favoritesReducer(
+            initialState,
+            bulkPickUnpickSuccess(
+              item,
+              [actionList],
+              [],
+              true,
+              ownerRemovedFromCurrentList
+            )
+          )
+        ).toEqual({
+          ...INITIAL_STATE,
+          data: {
+            ...INITIAL_STATE.data,
+            items: {
+              ...INITIAL_STATE.data.items,
+              [item.id]: {
+                pickedByUser: true,
+                count: 2,
+                createdAt: newDate
+              }
+            }
+          },
+          loading: []
+        })
+      })
     })
 
-    it("should return an estate where the pick didn't change at all and the loading state cleared", () => {
-      expect(
-        favoritesReducer(
-          initialState,
-          bulkPickUnpickSuccess(item, [actionList], [], true)
-        )
-      ).toEqual({
-        ...initialState,
-        loading: []
+    describe('and the item was picked before and it is still picked', () => {
+      beforeEach(() => {
+        initialState = {
+          ...initialState,
+          data: {
+            ...initialState.data,
+            items: {
+              ...initialState.data.items,
+              [item.id]: {
+                pickedByUser: true,
+                count: 1,
+                createdAt: Date.now()
+              }
+            }
+          }
+        }
+      })
+
+      it("should return an estate where the pick didn't change at all and the loading state cleared", () => {
+        expect(
+          favoritesReducer(
+            initialState,
+            bulkPickUnpickSuccess(
+              item,
+              [actionList],
+              [],
+              true,
+              ownerRemovedFromCurrentList
+            )
+          )
+        ).toEqual({
+          ...initialState,
+          loading: []
+        })
       })
     })
   })
