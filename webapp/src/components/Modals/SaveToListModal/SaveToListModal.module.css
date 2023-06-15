@@ -39,9 +39,9 @@
   width: 24px;
 }
 
-.checkbox input {
-  height: 23px !important;
-  width: 23px !important;
+.checkbox:global(.ui.checkbox) input[type='checkbox'] {
+  height: 23px;
+  width: 23px;
 }
 
 .checkbox:global(.ui.checkbox) :global(label:before) {
