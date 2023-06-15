@@ -80,7 +80,7 @@ const ListsPage = ({
       {!error && (
         <div className={styles.subHeader}>
           <div className={styles.left}>
-            {!isLoading && count ? t('lists_page.subtitle', { count }) : null}
+            {count ? t('lists_page.subtitle', { count }) : null}
           </div>
           <div className={styles.right}>
             <span className={styles.sortBy}>{t('filters.sort_by')}</span>
