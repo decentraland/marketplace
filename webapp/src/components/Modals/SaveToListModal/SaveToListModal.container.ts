@@ -12,6 +12,7 @@ import {
 } from './SaveToListModal.types'
 import SaveToListModal from './SaveToListModal'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
+import { openModal } from '../../../modules/modal/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -28,7 +29,7 @@ const mapDispatch = (
     {
       onSavePicks: (picksFor: ListOfLists[], unpickFrom: ListOfLists[]) =>
         bulkPickUnpickRequest(ownProps.metadata.item, picksFor, unpickFrom),
-      onCreateList: () => undefined
+      onCreateList: () => openModal('CreateOrEditListModal')
     },
     dispatch
   )
