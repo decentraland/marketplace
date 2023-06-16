@@ -274,14 +274,14 @@ export const BULK_PICK_FAILURE = '[Failure] Bulk pick'
 
 export const bulkPickUnpickRequest = (
   item: Item,
-  pickedFor: List[],
-  unpickedFrom: List[]
+  pickedFor: ListOfLists[],
+  unpickedFrom: ListOfLists[]
 ) => action(BULK_PICK_REQUEST, { item, pickedFor, unpickedFrom })
 
 export const bulkPickUnpickSuccess = (
   item: Item,
-  pickedFor: List[],
-  unpickedFrom: List[],
+  pickedFor: ListOfLists[],
+  unpickedFrom: ListOfLists[],
   isPickedByUser: boolean,
   ownerRemovedFromCurrentList: boolean
 ) =>
@@ -295,8 +295,8 @@ export const bulkPickUnpickSuccess = (
 
 export const bulkPickUnpickFailure = (
   item: Item,
-  pickedFor: List[],
-  unpickedFrom: List[],
+  pickedFor: ListOfLists[],
+  unpickedFrom: ListOfLists[],
   error: string
 ) => action(BULK_PICK_FAILURE, { item, pickedFor, unpickedFrom, error })
 

@@ -19,7 +19,10 @@ import { AssetType } from '../asset/types'
 import { Section } from '../vendor/decentraland'
 import { View } from '../ui/types'
 import { List } from '../favorites/types'
-import { UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
+import {
+  ListOfLists,
+  UpdateOrCreateList
+} from '../vendor/decentraland/favorites/types'
 import { toastDispatchableActionsChannel } from './utils'
 import {
   BulkPickUnpickMessageType,
@@ -312,7 +315,7 @@ function buildBulkPickItemBodyMessage(
   addOrRemove: BulkPickUnpickMessageType,
   successOrFailure: BulkPickUnpickSuccessOrFailureType,
   item: Item,
-  lists: List[]
+  lists: ListOfLists[]
 ) {
   const count = lists.length === 1 ? 'one' : lists.length === 2 ? 'two' : 'many'
   return (
@@ -356,8 +359,8 @@ function buildBulkPickItemBodyMessage(
 
 export function getBulkPickItemSuccessToast(
   item: Item,
-  pickedFor: List[],
-  unpickedFrom: List[]
+  pickedFor: ListOfLists[],
+  unpickedFrom: ListOfLists[]
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
@@ -397,8 +400,8 @@ export function getBulkPickItemSuccessToast(
 
 export function getBulkPickItemFailureToast(
   item: Item,
-  pickedFor: List[],
-  unpickedFrom: List[]
+  pickedFor: ListOfLists[],
+  unpickedFrom: ListOfLists[]
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,

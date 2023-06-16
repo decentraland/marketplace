@@ -3,7 +3,10 @@ import { createSelector } from 'reselect'
 import { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
+import {
+  DEFAULT_FAVORITES_LIST_ID,
+  ListOfLists
+} from '../vendor/decentraland/favorites'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
 import { getData as getItems } from '../item/selectors'
@@ -74,7 +77,8 @@ export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
       ].includes(type) && payload.item.id === itemId
   )
 
-export const getList = (state: RootState, id: string) => getLists(state)[id]
+export const getList = (state: RootState, id: string): List | null =>
+  getLists(state)[id] ?? null
 export const getPreviewListItems = (state: RootState, id: string): Item[] =>
   getLists(state)
     [id]?.previewOfItemIds?.map(itemId => getItems(state)[itemId])
@@ -82,13 +86,17 @@ export const getPreviewListItems = (state: RootState, id: string): Item[] =>
 
 export const isOwnerUnpickingFromCurrentList = (
   state: RootState,
-  unpickedFrom: List[]
+  unpickedFrom: ListOfLists[]
 ): boolean => {
   const currentListId = getListId(state)
-  const userAddress = getAddress(state)
-  const currentUnpickedList = unpickedFrom.find(
+  const isCurrentListUnpicked = unpickedFrom.some(
     list => list.id === currentListId
   )
+  if (!isCurrentListUnpicked || !currentListId) {
+    return false
+  }
+  const userAddress = getAddress(state)
+  const currentUnpickedList = getList(state, currentListId)
   const isListOwner =
     currentUnpickedList?.userAddress?.toLowerCase() ===
       userAddress?.toLowerCase() || currentListId === DEFAULT_FAVORITES_LIST_ID

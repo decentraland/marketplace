@@ -1,7 +1,10 @@
 import { Item } from '@dcl/schemas'
 import { match } from 'react-router-dom'
 import { RootState } from '../reducer'
-import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
+import {
+  DEFAULT_FAVORITES_LIST_ID,
+  ListOfLists
+} from '../vendor/decentraland/favorites'
 import { locations } from '../routing/locations'
 import { INITIAL_STATE } from './reducer'
 import {
@@ -253,10 +256,18 @@ describe('when getting the lists', () => {
 })
 
 describe('when getting a list by id', () => {
-  it('should return the list', () => {
-    expect(getList(state, 'aListId')).toEqual(
-      state.favorites.data.lists['aListId']
-    )
+  describe('and the list is not loaded', () => {
+    it('should return null', () => {
+      expect(getList(state, 'aNotLoadedListId')).toBeNull()
+    })
+  })
+
+  describe('and the list is loaded in the state', () => {
+    it('should return the list', () => {
+      expect(getList(state, 'listId')).toEqual(
+        state.favorites.data.lists['listId']
+      )
+    })
   })
 })
 
@@ -396,7 +407,7 @@ describe("when getting if it's loading a bulk item pick and unpick", () => {
 })
 
 describe('when getting if the owner of the current list is unpicking an item from the list', () => {
-  let unpickedFrom: List[]
+  let unpickedFrom: ListOfLists[]
 
   beforeEach(() => {
     unpickedFrom = [
@@ -404,8 +415,9 @@ describe('when getting if the owner of the current list is unpicking an item fro
         id: 'aListId',
         name: 'aList',
         itemsCount: 2,
-        userAddress: 'anAddress'
-      } as List
+        isPrivate: true,
+        previewOfItemIds: []
+      }
     ]
     state = {
       ...state,
@@ -421,6 +433,22 @@ describe('when getting if the owner of the current list is unpicking an item fro
   describe("and the list isn't the default list", () => {
     beforeEach(() => {
       unpickedFrom[0].id = 'aListId'
+      state = {
+        ...state,
+        favorites: {
+          ...state.favorites,
+          data: {
+            ...state.favorites.data,
+            lists: {
+              ...state.favorites.data.lists,
+              [unpickedFrom[0].id]: {
+                ...unpickedFrom[0],
+                userAddress: 'anAddress'
+              }
+            }
+          }
+        }
+      }
     })
 
     describe("and the user isn't the owner of the list", () => {
@@ -468,7 +496,8 @@ describe('when getting if the owner of the current list is unpicking an item fro
           wallet: {
             ...state.wallet,
             data: {
-              address: unpickedFrom[0].userAddress ?? ''
+              address:
+                state.favorites.data.lists[unpickedFrom[0].id].userAddress ?? ''
             } as any
           }
         }
@@ -502,6 +531,22 @@ describe('when getting if the owner of the current list is unpicking an item fro
   describe('and the list is the default list', () => {
     beforeEach(() => {
       unpickedFrom[0].id = DEFAULT_FAVORITES_LIST_ID
+      state = {
+        ...state,
+        favorites: {
+          ...state.favorites,
+          data: {
+            ...state.favorites.data,
+            lists: {
+              ...state.favorites.data.lists,
+              [unpickedFrom[0].id]: {
+                ...unpickedFrom[0],
+                userAddress: 'anAddress'
+              }
+            }
+          }
+        }
+      }
     })
 
     describe("and the user isn't the owner of the list", () => {
@@ -549,7 +594,8 @@ describe('when getting if the owner of the current list is unpicking an item fro
           wallet: {
             ...state.wallet,
             data: {
-              address: unpickedFrom[0].userAddress ?? ''
+              address:
+                state.favorites.data.lists[unpickedFrom[0].id].userAddress ?? ''
             } as any
           }
         }

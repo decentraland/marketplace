@@ -20,7 +20,6 @@ import {
 } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { isErrorWithMessage } from '../../../lib/error'
-import { List } from '../../../modules/favorites/types'
 import { PrivateTag } from '../../PrivateTag'
 import {
   CREATE_LIST_BUTTON_DATA_TEST_ID,
@@ -53,7 +52,10 @@ const SaveToListModal = (props: Props) => {
   })
   const [isLoadingLists, setIsLoadingLists] = useState(false)
   const [error, setError] = useState<string>()
-  const [picks, setPicks] = useState<{ pickFor: List[]; unpickFrom: List[] }>({
+  const [picks, setPicks] = useState<{
+    pickFor: ListOfLists[]
+    unpickFrom: ListOfLists[]
+  }>({
     pickFor: [],
     unpickFrom: []
   })
@@ -97,7 +99,7 @@ const SaveToListModal = (props: Props) => {
   )
 
   const addOrRemovePick = useCallback(
-    (list: List, type: PickType) => {
+    (list: ListOfLists, type: PickType) => {
       if (picks[type].includes(list)) {
         setPicks({
           ...picks,
