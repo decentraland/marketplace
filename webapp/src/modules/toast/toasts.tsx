@@ -15,6 +15,9 @@ import {
   undoUnpickingItemAsFavoriteRequest,
   unpickItemAsFavoriteRequest
 } from '../favorites/actions'
+import { AssetType } from '../asset/types'
+import { Section } from '../vendor/decentraland'
+import { View } from '../ui/types'
 import { List } from '../favorites/types'
 import { UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { toastDispatchableActionsChannel } from './utils'
@@ -320,14 +323,28 @@ function buildBulkPickItemBodyMessage(
         count: lists.length,
         first_list_name: (
           <b>
-            <Link to={locations.list(lists[0]?.id ?? '')}>
+            <Link
+              to={locations.list(lists[0]?.id ?? '', {
+                assetType: AssetType.ITEM,
+                page: 1,
+                section: Section.LISTS,
+                view: View.LISTS
+              })}
+            >
               {lists[0]?.name ?? ''}
             </Link>
           </b>
         ),
         second_list_name: (
           <b>
-            <Link to={locations.list(lists[1]?.id ?? '')}>
+            <Link
+              to={locations.list(lists[1]?.id ?? '', {
+                assetType: AssetType.ITEM,
+                page: 1,
+                section: Section.LISTS,
+                view: View.LISTS
+              })}
+            >
               {lists[1]?.name ?? ''}
             </Link>
           </b>
