@@ -65,7 +65,7 @@ describe('when rendering the ListsPage with 5 lists', () => {
     })
   })
 
-  it('should show the error view', () => {
+  it('should show the list of lists', () => {
     expect(
       renderedPage.getByText(t('lists_page.subtitle', { count }))
     ).toBeInTheDocument()

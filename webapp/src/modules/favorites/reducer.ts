@@ -72,7 +72,11 @@ import {
   BulkPickUnpickSuccessAction,
   BULK_PICK_SUCCESS,
   BULK_PICK_FAILURE,
-  BulkPickUnpickFailureAction
+  BulkPickUnpickFailureAction,
+  BULK_PICK_CANCEL,
+  BulkPickUnpickStartAction,
+  BulkPickUnpickCancelAction,
+  BULK_PICK_START
 } from './actions'
 import { FavoritesData, List } from './types'
 import { GET_LIST_REQUEST } from './actions'
@@ -123,9 +127,11 @@ type FavoritesReducerAction =
   | CreateListRequestAction
   | CreateListSuccessAction
   | CreateListFailureAction
+  | BulkPickUnpickStartAction
   | BulkPickUnpickRequestAction
   | BulkPickUnpickSuccessAction
   | BulkPickUnpickFailureAction
+  | BulkPickUnpickCancelAction
   | CreateListClearAction
 
 export function favoritesReducer(
@@ -142,6 +148,7 @@ export function favoritesReducer(
     case UPDATE_LIST_REQUEST:
     case CREATE_LIST_REQUEST:
     case BULK_PICK_REQUEST:
+    case BULK_PICK_START:
     case FETCH_FAVORITED_ITEMS_REQUEST: {
       return {
         ...state,
@@ -393,6 +400,15 @@ export function favoritesReducer(
         ...state,
         loading: [],
         error: null
+      }
+    }
+
+    case BULK_PICK_CANCEL: {
+      const { error } = action.payload
+      return {
+        ...state,
+        loading: [],
+        error: error ?? null
       }
     }
 

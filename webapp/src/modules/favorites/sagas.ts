@@ -69,10 +69,23 @@ import {
   BULK_PICK_REQUEST,
   BulkPickUnpickRequestAction,
   bulkPickUnpickFailure,
-  bulkPickUnpickSuccess
+  bulkPickUnpickSuccess,
+  BULK_PICK_START,
+  BulkPickUnpickStartAction,
+  bulkPickUnpickCancel,
+  CreateListSuccessAction,
+  CreateListFailureAction,
+  CREATE_LIST_SUCCESS,
+  CREATE_LIST_FAILURE,
+  bulkPickUnpickRequest
 } from './actions'
-import { getListId, isOwnerUnpickingFromCurrentList } from './selectors'
+import {
+  getList,
+  getListId,
+  isOwnerUnpickingFromCurrentList
+} from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
+import { List } from './types'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
@@ -108,6 +121,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
   yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
   yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
+  yield takeEvery(BULK_PICK_START, handleBulkPickStart)
   yield takeEvery(BULK_PICK_REQUEST, handleBulkPickRequest)
 
   function* handlePickItemAsFavoriteRequest(
@@ -394,6 +408,75 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       yield put(
         createListFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleBulkPickStart(action: BulkPickUnpickStartAction) {
+    const { item } = action.payload
+
+    try {
+      const address: string = yield select(getAddress)
+
+      if (!address) {
+        yield put(openModal('LoginModal'))
+
+        const {
+          success,
+          close
+        }: {
+          success: ConnectWalletSuccessAction
+          failure: ConnectWalletSuccessAction
+          close: CloseModalAction
+        } = yield race({
+          success: take(CONNECT_WALLET_SUCCESS),
+          failure: take(CONNECT_WALLET_FAILURE),
+          close: take(CLOSE_MODAL)
+        })
+
+        if (close) {
+          yield put(bulkPickUnpickCancel(item))
+          return
+        }
+
+        if (success) yield put(closeModal('LoginModal'))
+      }
+
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+
+      yield put(openModal('SaveToListModal', { item }))
+
+      const {
+        listCreationSuccess
+      }: {
+        listCreationSuccess: CreateListSuccessAction
+        listCreationFailure: CreateListFailureAction
+        modalClosed: CloseModalAction
+      } = yield race({
+        listCreationSuccess: take(CREATE_LIST_SUCCESS),
+        listCreationFailure: take(CREATE_LIST_FAILURE),
+        modalClosed: take(CLOSE_MODAL)
+      })
+
+      if (listCreationSuccess) {
+        const { list: newList } = listCreationSuccess.payload
+        const list: List = yield select(getList, newList.id)
+
+        const pickedList = {
+          ...list,
+          ...newList,
+          previewOfItemIds: list.previewOfItemIds ?? []
+        }
+
+        yield put(bulkPickUnpickRequest(item, [pickedList], []))
+      }
+    } catch (error) {
+      yield put(
+        bulkPickUnpickCancel(
+          item,
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )

@@ -78,65 +78,67 @@ const ListsPage = ({
         {t('lists_page.title')}
       </Header>
       {!error && (
-        <div className={styles.subHeader}>
-          <div className={styles.left}>
-            {count ? t('lists_page.subtitle', { count }) : null}
+        <>
+          <div className={styles.subHeader}>
+            <div className={styles.left}>
+              {count ? t('lists_page.subtitle', { count }) : null}
+            </div>
+            <div className={styles.right}>
+              <span className={styles.sortBy}>{t('filters.sort_by')}</span>
+              <Dropdown
+                options={[
+                  {
+                    value: ListsBrowseSortBy.RECENTLY_UPDATED,
+                    text: t('filters.recently_updated')
+                  },
+                  {
+                    value: ListsBrowseSortBy.NAME_ASC,
+                    text: t('filters.name_asc')
+                  },
+                  {
+                    value: ListsBrowseSortBy.NAME_DESC,
+                    text: t('filters.name_desc')
+                  },
+                  {
+                    value: ListsBrowseSortBy.NEWEST,
+                    text: t('filters.newest')
+                  },
+                  { value: ListsBrowseSortBy.OLDEST, text: t('filters.oldest') }
+                ]}
+                value={selectedSortBy}
+                onChange={handleSortChange}
+                className={styles.customDropdown}
+              />
+              <Button
+                size="small"
+                primary
+                className={styles.createList}
+                onClick={onCreateList}
+                data-testid={CREATE_LIST_TEST_ID}
+              >
+                <Icon name="plus" className={styles.icon} />
+                {t('lists_page.create_list')}
+              </Button>
+            </div>
           </div>
-          <div className={styles.right}>
-            <span className={styles.sortBy}>{t('filters.sort_by')}</span>
-            <Dropdown
-              options={[
-                {
-                  value: ListsBrowseSortBy.RECENTLY_UPDATED,
-                  text: t('filters.recently_updated')
-                },
-                {
-                  value: ListsBrowseSortBy.NAME_ASC,
-                  text: t('filters.name_asc')
-                },
-                {
-                  value: ListsBrowseSortBy.NAME_DESC,
-                  text: t('filters.name_desc')
-                },
-                {
-                  value: ListsBrowseSortBy.NEWEST,
-                  text: t('filters.newest')
-                },
-                { value: ListsBrowseSortBy.OLDEST, text: t('filters.oldest') }
-              ]}
-              value={selectedSortBy}
-              onChange={handleSortChange}
-              className={styles.customDropdown}
-            />
-            <Button
-              size="small"
-              primary
-              className={styles.createList}
-              onClick={onCreateList}
-              data-testid={CREATE_LIST_TEST_ID}
+          {isLoading && lists.length === 0 ? (
+            <Loader active size="massive" data-testid={LOADER_TEST_ID} />
+          ) : (
+            <InfiniteScroll
+              page={page}
+              hasMorePages={hasMorePages}
+              onLoadMore={goToNextPage}
+              isLoading={isLoading}
+              maxScrollPages={3}
             >
-              <Icon name="plus" className={styles.icon} />
-              {t('lists_page.create_list')}
-            </Button>
-          </div>
-        </div>
-      )}
-      {isLoading && lists.length === 0 ? (
-        <Loader active size="massive" data-testid={LOADER_TEST_ID} />
-      ) : (
-        <InfiniteScroll
-          page={page}
-          hasMorePages={hasMorePages}
-          onLoadMore={goToNextPage}
-          isLoading={isLoading}
-          maxScrollPages={3}
-        >
-          <div className={styles.cardsGroup}>
-            {lists.map(list => (
-              <ListCard key={list.id} list={list} />
-            ))}
-          </div>
-        </InfiniteScroll>
+              <div className={styles.cardsGroup}>
+                {lists.map(list => (
+                  <ListCard key={list.id} list={list} />
+                ))}
+              </div>
+            </InfiniteScroll>
+          )}
+        </>
       )}
       {error && (
         <div className={styles.errorContainer} data-testid={ERROR_TEST_ID}>

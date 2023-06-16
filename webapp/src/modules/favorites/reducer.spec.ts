@@ -10,6 +10,8 @@ import {
 } from '../vendor/decentraland/favorites/types'
 import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
+  BulkPickUnpickCancelAction,
+  BulkPickUnpickStartAction,
   CancelPickItemAsFavoriteAction,
   CreateListClearAction,
   CreateListRequestAction,
@@ -27,8 +29,10 @@ import {
   UnpickItemAsFavoriteSuccessAction,
   UpdateListRequestAction,
   UpdateListSuccessAction,
+  bulkPickUnpickCancel,
   bulkPickUnpickFailure,
   bulkPickUnpickRequest,
+  bulkPickUnpickStart,
   bulkPickUnpickSuccess,
   cancelPickItemAsFavorite,
   createListClear,
@@ -114,6 +118,7 @@ const createOrUpdateList: CreateListParameters = {
 const error = 'anErrorMessage'
 
 const requestActions = [
+  bulkPickUnpickStart(item),
   bulkPickUnpickRequest(item, [listOfLists], []),
   deleteListRequest(actionList),
   pickItemAsFavoriteRequest(item),
@@ -332,6 +337,52 @@ describe('when reducing the action of canceling a pick item as favorite', () => 
     expect(favoritesReducer(initialState, cancelAction)).toEqual({
       ...INITIAL_STATE,
       loading: []
+    })
+  })
+})
+
+describe('when reducing the action of canceling a bulk pick/unpick item process', () => {
+  let requestAction: BulkPickUnpickStartAction
+  let cancelAction: BulkPickUnpickCancelAction
+
+  describe('when it is canceled without an error', () => {
+    beforeEach(() => {
+      requestAction = bulkPickUnpickStart(item)
+      cancelAction = bulkPickUnpickCancel(item)
+
+      initialState = {
+        ...initialState,
+        loading: loadingReducer([], requestAction)
+      }
+    })
+
+    it('should return a state with an empty loading state', () => {
+      expect(favoritesReducer(initialState, cancelAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: []
+      })
+    })
+  })
+
+  describe('when it is canceled with an error', () => {
+    const error = 'an error'
+
+    beforeEach(() => {
+      requestAction = bulkPickUnpickStart(item)
+      cancelAction = bulkPickUnpickCancel(item, error)
+
+      initialState = {
+        ...initialState,
+        loading: loadingReducer([], requestAction)
+      }
+    })
+
+    it('should return a state with an empty loading state and the error', () => {
+      expect(favoritesReducer(initialState, cancelAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        error
+      })
     })
   })
 })

@@ -65,7 +65,7 @@ const ListPage = ({
       hasFetchedOnce.current = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listId, isLoading, onFetchList, wallet])
+  }, [listId, isLoading, onFetchList, isConnecting, wallet])
 
   const handleFetchList = useCallback(
     (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -123,11 +123,11 @@ const ListPage = ({
 
   useEffect(() => {
     hasFetchedOnce.current = false
-  }, [listId])
+  }, [listId, isConnecting])
 
   useEffect(() => {
-    fetchList()
-  }, [fetchList])
+    if (!isConnecting) fetchList()
+  }, [fetchList, isConnecting])
 
   if (!isConnecting && !wallet && list?.isPrivate) {
     return <Redirect to={locations.signIn(`${pathname}${search}`)} />
@@ -135,7 +135,7 @@ const ListPage = ({
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
-      {isLoading ? (
+      {isLoading || isConnecting ? (
         <Loader active size="massive" data-testid={LOADER_TEST_ID} />
       ) : list ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
