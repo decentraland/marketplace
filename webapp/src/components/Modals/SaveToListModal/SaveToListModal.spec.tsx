@@ -1,7 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { act } from 'react-dom/test-utils'
-import { fireEvent, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { fireEvent } from '@testing-library/react'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   DEFAULT_FAVORITES_LIST_ID,
