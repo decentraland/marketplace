@@ -21,6 +21,7 @@ import {
 import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
+  CREATE_LIST_FAILURE,
   CREATE_LIST_SUCCESS,
   bulkPickUnpickCancel,
   bulkPickUnpickFailure,
@@ -1279,16 +1280,15 @@ describe('when handling the request for creating a list', () => {
 })
 
 describe('when handling the request to start the picks and unpicks in bulk process', () => {
-  let newList: List
+  let newList: ListOfLists
 
   beforeEach(() => {
     newList = {
       id: 'anId',
       name: 'aName',
       itemsCount: 1,
-      description: 'aDescription',
-      userAddress: 'aUserAddress',
-      createdAt: Date.now()
+      previewOfItemIds: ['anItemId'],
+      isPrivate: true
     }
   })
 
@@ -1365,7 +1365,38 @@ describe('when handling the request to start the picks and unpicks in bulk proce
           ])
           .put(openModal('SaveToListModal', { item }))
           .put(bulkPickUnpickRequest(item, [newList], []))
-          .put(closeModal('SaveToListModal'))
+          .dispatch(bulkPickUnpickStart(item))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the creation of the list fails', () => {
+      it('should dispatch an action signaling the cancel of the pick item in bulk process', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [select(getAddress), address],
+            [call(getAccountIdentity), Promise.resolve()],
+            [take(CREATE_LIST_FAILURE), {}],
+            [put(bulkPickUnpickRequest(item, [newList], [])), undefined]
+          ])
+          .put(openModal('SaveToListModal', { item }))
+          .not.put(bulkPickUnpickRequest(item, [newList], []))
+          .dispatch(bulkPickUnpickStart(item))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the user closes the creation list modal', () => {
+      it('should dispatch an action signaling the cancel of the pick item in bulk process', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [select(getAddress), address],
+            [call(getAccountIdentity), Promise.resolve()],
+            [take(CLOSE_MODAL), {}],
+            [put(bulkPickUnpickRequest(item, [newList], [])), undefined]
+          ])
+          .put(openModal('SaveToListModal', { item }))
+          .not.put(bulkPickUnpickRequest(item, [newList], []))
           .dispatch(bulkPickUnpickStart(item))
           .run({ silenceTimeout: true })
       })
@@ -1374,25 +1405,23 @@ describe('when handling the request to start the picks and unpicks in bulk proce
 })
 
 describe('when handling the request to perform picks and unpicks in bulk', () => {
-  let fstList: List
-  let sndList: List
+  let fstList: ListOfLists
+  let sndList: ListOfLists
 
   beforeEach(() => {
     fstList = {
       id: 'anId',
       name: 'aName',
       itemsCount: 1,
-      description: 'aDescription',
-      userAddress: 'aUserAddress',
-      createdAt: Date.now()
+      previewOfItemIds: ['anItemId'],
+      isPrivate: true
     }
     sndList = {
       id: 'anotherId',
       name: 'anotherName',
       itemsCount: 2,
-      description: 'anotherDescription',
-      userAddress: 'anotherUserAddress',
-      createdAt: Date.now()
+      previewOfItemIds: ['anotherItemId'],
+      isPrivate: true
     }
   })
 

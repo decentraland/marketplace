@@ -462,13 +462,16 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       })
 
       if (listCreationSuccess) {
-        const {
-          list: { id }
-        } = listCreationSuccess.payload
-        const list: List = yield select(getList, id)
+        const { list: newList } = listCreationSuccess.payload
+        const list: List = yield select(getList, newList.id)
 
-        yield put(bulkPickUnpickRequest(item, [list], []))
-        yield put(closeModal('SaveToListModal'))
+        const pickedList = {
+          ...list,
+          ...newList,
+          previewOfItemIds: list.previewOfItemIds ?? []
+        }
+
+        yield put(bulkPickUnpickRequest(item, [pickedList], []))
       }
     } catch (error) {
       yield put(
