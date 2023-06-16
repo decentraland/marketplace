@@ -377,7 +377,7 @@ describe('when reducing the action of canceling a bulk pick/unpick item process'
       }
     })
 
-    it('should return a state with an empty loading state', () => {
+    it('should return a state with an empty loading state and the error', () => {
       expect(favoritesReducer(initialState, cancelAction)).toEqual({
         ...INITIAL_STATE,
         loading: [],
