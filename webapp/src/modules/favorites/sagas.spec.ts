@@ -1,4 +1,4 @@
-import { call, select, take } from 'redux-saga/effects'
+import { call, put, select, take } from 'redux-saga/effects'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
@@ -21,8 +21,11 @@ import {
 import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
+  CREATE_LIST_SUCCESS,
+  bulkPickUnpickCancel,
   bulkPickUnpickFailure,
   bulkPickUnpickRequest,
+  bulkPickUnpickStart,
   bulkPickUnpickSuccess,
   cancelPickItemAsFavorite,
   createListFailure,
@@ -55,7 +58,11 @@ import {
   updateListSuccess
 } from './actions'
 import { favoritesSaga } from './sagas'
-import { getListId, isOwnerUnpickingFromCurrentList } from './selectors'
+import {
+  getList,
+  getListId,
+  isOwnerUnpickingFromCurrentList
+} from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import {
   CreateListParameters,
@@ -1267,6 +1274,101 @@ describe('when handling the request for creating a list', () => {
         .put(createListSuccess(returnedList))
         .dispatch(createListRequest(listToCreate))
         .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request to start the picks and unpicks in bulk process', () => {
+  let newList: List
+
+  beforeEach(() => {
+    newList = {
+      id: 'anId',
+      name: 'aName',
+      itemsCount: 1,
+      description: 'aDescription',
+      userAddress: 'aUserAddress',
+      createdAt: Date.now()
+    }
+  })
+
+  describe('and getting the address fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[select(getAddress), throwError(error)]])
+        .put(bulkPickUnpickCancel(item, error.message))
+        .dispatch(bulkPickUnpickStart(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and getting the address succeeds', () => {
+    describe('and the user is not connected', () => {
+      describe('and the user succeeds to connect the wallet', () => {
+        it('should close the login modal after the success', () => {
+          return expectSaga(favoritesSaga, getIdentity)
+            .provide([
+              [select(getAddress), undefined],
+              [take(CONNECT_WALLET_SUCCESS), {}],
+              [call(getAccountIdentity), Promise.resolve()]
+            ])
+            .put(openModal('LoginModal'))
+            .put(closeModal('LoginModal'))
+            .put(openModal('SaveToListModal', { item }))
+            .dispatch(bulkPickUnpickStart(item))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and the user closes the login modal', () => {
+        it('should finish the saga', () => {
+          return expectSaga(favoritesSaga, getIdentity)
+            .provide([
+              [select(getAddress), undefined],
+              [take(CLOSE_MODAL), {}]
+            ])
+            .put(openModal('LoginModal'))
+            .put(bulkPickUnpickCancel(item))
+            .dispatch(bulkPickUnpickStart(item))
+            .run({ silenceTimeout: true })
+            .then(({ effects }) => {
+              expect(effects.put).toBeUndefined()
+            })
+        })
+      })
+    })
+  })
+
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [select(getAddress), address],
+          [call(getAccountIdentity), Promise.reject(error)]
+        ])
+        .put(bulkPickUnpickCancel(item, error.message))
+        .dispatch(bulkPickUnpickStart(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the user tries to create a new list', () => {
+    describe('and the creation of the list succeeds', () => {
+      it('should dispatch an action signaling the pick item in bulk request for the created list', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [select(getAddress), address],
+            [call(getAccountIdentity), Promise.resolve()],
+            [take(CREATE_LIST_SUCCESS), { payload: { list: newList } }],
+            [select(getList, newList.id), newList],
+            [put(bulkPickUnpickRequest(item, [newList], [])), undefined]
+          ])
+          .put(openModal('SaveToListModal', { item }))
+          .put(bulkPickUnpickRequest(item, [newList], []))
+          .put(closeModal('SaveToListModal'))
+          .dispatch(bulkPickUnpickStart(item))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })

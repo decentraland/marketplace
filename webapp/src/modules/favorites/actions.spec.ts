@@ -71,7 +71,11 @@ import {
   bulkPickUnpickFailure,
   BULK_PICK_REQUEST,
   BULK_PICK_SUCCESS,
-  BULK_PICK_FAILURE
+  BULK_PICK_FAILURE,
+  BULK_PICK_START,
+  bulkPickUnpickStart,
+  bulkPickUnpickCancel,
+  BULK_PICK_CANCEL
 } from './actions'
 import { CreateListParameters, List, ListsBrowseOptions } from './types'
 
@@ -108,7 +112,8 @@ const listOfLists: ListOfLists = {
   id: 'aListId',
   name: 'aListName',
   itemsCount: 1,
-  previewOfItemIds: [item.id]
+  previewOfItemIds: [item.id],
+  isPrivate: true
 }
 
 const createList: CreateListParameters = {
@@ -450,6 +455,18 @@ describe('when creating the action to signal a create list clear', () => {
   })
 })
 
+describe('when creating the action to signal the start the bulk item pick-unpick process', () => {
+  it('should return an object representing the action', () => {
+    expect(bulkPickUnpickStart(item)).toEqual({
+      type: BULK_PICK_START,
+      meta: undefined,
+      payload: {
+        item
+      }
+    })
+  })
+})
+
 describe('when creating the action to signal the start of the bulk item pick-unpick request', () => {
   it('should return an object representing the action', () => {
     expect(bulkPickUnpickRequest(item, [list], [])).toEqual({
@@ -466,14 +483,15 @@ describe('when creating the action to signal the start of the bulk item pick-unp
 
 describe('when creating the action to signal a successful bulk item pick-unpick request', () => {
   it('should return an object representing the action', () => {
-    expect(bulkPickUnpickSuccess(item, [list], [], true)).toEqual({
+    expect(bulkPickUnpickSuccess(item, [list], [], true, false)).toEqual({
       type: BULK_PICK_SUCCESS,
       meta: undefined,
       payload: {
         item,
         pickedFor: [list],
         unpickedFrom: [],
-        isPickedByUser: true
+        isPickedByUser: true,
+        ownerRemovedFromCurrentList: false
       }
     })
   })
@@ -489,6 +507,30 @@ describe('when creating the action to signal a failure in the bulk item pick-unp
         pickedFor: [list],
         unpickedFrom: [],
         error: anErrorMessage
+      }
+    })
+  })
+})
+
+describe('when creating the action to signal the cancel of the bulk item pick-unpick process', () => {
+  it('should return an object representing the action without errors', () => {
+    expect(bulkPickUnpickCancel(item)).toEqual({
+      type: BULK_PICK_CANCEL,
+      meta: undefined,
+      payload: {
+        item
+      }
+    })
+  })
+
+  it('should return an object representing the action with an error', () => {
+    const error = 'An Error'
+    expect(bulkPickUnpickCancel(item, error)).toEqual({
+      type: BULK_PICK_CANCEL,
+      meta: undefined,
+      payload: {
+        item,
+        error
       }
     })
   })
