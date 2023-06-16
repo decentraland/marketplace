@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Modal,
-  // Image,
-  Button,
-  ModalNavigation
-} from 'decentraland-ui'
+import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import * as decentraland from '../../../modules/vendor/decentraland'
@@ -13,7 +8,6 @@ import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
 import { SortBy } from '../../../modules/routing/types'
 import { VendorName } from '../../../modules/vendor'
-import { config } from '../../../config'
 import { Props } from './ListsLaunchModal.types'
 import styles from './ListsLaunchModal.module.css'
 
@@ -23,11 +17,6 @@ export const ListsLaunchModal = ({
   isListsLaunchPopupEnabled,
   isLoadingFeatureFlags
 }: Props) => {
-  const blogPostUrl = `${config.get(
-    'DECENTRALAND_BLOG'
-  )}/announcements/land-rentals-become-an-easy-process-via-decentraland-s-marketplace/`
-  //TODO: get litsts announcement url
-
   const onClose = useCallback(() => {
     localStorage.setItem(LISTS_PROMO_POPUP_KEY, 'true')
     setIsOpen(false)
@@ -89,12 +78,12 @@ export const ListsLaunchModal = ({
         <Button
           as={Link}
           inverted
-          to={blogPostUrl}
+          to={locations.lists()}
           onClick={onClose}
           fluid
           primary
         >
-          {t('lists_ftu.learn_more')}
+          {t('lists_ftu.view_my_lists')}
         </Button>
       </Modal.Actions>
     </Modal>
