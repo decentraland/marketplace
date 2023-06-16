@@ -73,6 +73,16 @@ describe('when rendering the ListPage without a fetched list because it is being
   })
 })
 
+describe('when rendering the ListPage without a connected wallet and the isConnecting flag in true', () => {
+  beforeEach(() => {
+    renderedPage = renderListPage({ list: undefined, isConnecting: true })
+  })
+
+  it('should show the loader', () => {
+    expect(renderedPage.getByTestId(LOADER_TEST_ID)).toBeInTheDocument()
+  })
+})
+
 describe('when rendering the ListPage with a loaded list', () => {
   it('should show the list container', () => {
     renderedPage = renderListPage()

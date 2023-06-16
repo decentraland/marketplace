@@ -135,7 +135,7 @@ const ListPage = ({
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
-      {isLoading ? (
+      {isLoading || isConnecting ? (
         <Loader active size="massive" data-testid={LOADER_TEST_ID} />
       ) : list ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
