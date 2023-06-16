@@ -101,6 +101,14 @@ const actionList: List = {
   itemsCount: 1
 }
 
+const listOfLists: ListOfLists = {
+  id: 'aListId',
+  name: 'aName',
+  itemsCount: 1,
+  isPrivate: true,
+  previewOfItemIds: []
+}
+
 const createOrUpdateList: CreateListParameters = {
   name: 'aName',
   description: 'aDescription',
@@ -110,8 +118,8 @@ const createOrUpdateList: CreateListParameters = {
 const error = 'anErrorMessage'
 
 const requestActions = [
-  bulkPickUnpickRequest(item, [actionList], []),
   bulkPickUnpickStart(item),
+  bulkPickUnpickRequest(item, [listOfLists], []),
   deleteListRequest(actionList),
   pickItemAsFavoriteRequest(item),
   unpickItemAsFavoriteRequest(item),
@@ -197,8 +205,8 @@ const failureActions = [
     failure: createListFailure(error)
   },
   {
-    request: bulkPickUnpickRequest(item, [actionList], []),
-    failure: bulkPickUnpickFailure(item, [actionList], [], error)
+    request: bulkPickUnpickRequest(item, [listOfLists], []),
+    failure: bulkPickUnpickFailure(item, [listOfLists], [], error)
   }
 ]
 
@@ -891,7 +899,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
   beforeEach(() => {
     initialState = {
       ...initialState,
-      loading: [bulkPickUnpickRequest(item, [actionList], [])]
+      loading: [bulkPickUnpickRequest(item, [listOfLists], [])]
     }
   })
 
@@ -924,7 +932,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
             initialState,
             bulkPickUnpickSuccess(
               item,
-              [actionList],
+              [listOfLists],
               [],
               false,
               ownerRemovedFromCurrentList
@@ -972,7 +980,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
             initialState,
             bulkPickUnpickSuccess(
               item,
-              [actionList],
+              [listOfLists],
               [],
               true,
               ownerRemovedFromCurrentList
@@ -1015,7 +1023,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
             initialState,
             bulkPickUnpickSuccess(
               item,
-              [actionList],
+              [listOfLists],
               [],
               true,
               ownerRemovedFromCurrentList
@@ -1069,7 +1077,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
             initialState,
             bulkPickUnpickSuccess(
               item,
-              [actionList],
+              [listOfLists],
               [],
               false,
               ownerRemovedFromCurrentList
@@ -1123,7 +1131,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
             initialState,
             bulkPickUnpickSuccess(
               item,
-              [actionList],
+              [listOfLists],
               [],
               true,
               ownerRemovedFromCurrentList
@@ -1171,7 +1179,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
             initialState,
             bulkPickUnpickSuccess(
               item,
-              [actionList],
+              [listOfLists],
               [],
               true,
               ownerRemovedFromCurrentList

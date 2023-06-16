@@ -20,7 +20,6 @@ import {
 } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { isErrorWithMessage } from '../../../lib/error'
-import { List } from '../../../modules/favorites/types'
 import { PrivateTag } from '../../PrivateTag'
 import {
   CREATE_LIST_BUTTON_DATA_TEST_ID,
@@ -53,7 +52,10 @@ const SaveToListModal = (props: Props) => {
   })
   const [isLoadingLists, setIsLoadingLists] = useState(false)
   const [error, setError] = useState<string>()
-  const [picks, setPicks] = useState<{ pickFor: List[]; unpickFrom: List[] }>({
+  const [picks, setPicks] = useState<{
+    pickFor: ListOfLists[]
+    unpickFrom: ListOfLists[]
+  }>({
     pickFor: [],
     unpickFrom: []
   })
@@ -92,12 +94,12 @@ const SaveToListModal = (props: Props) => {
   }, [onSavePicks, picks.pickFor, picks.unpickFrom])
 
   const handleClose = useCallback(
-    () => (!isLoadingLists ? onClose : undefined),
+    () => (!isLoadingLists ? onClose() : undefined),
     [isLoadingLists, onClose]
   )
 
   const addOrRemovePick = useCallback(
-    (list: List, type: PickType) => {
+    (list: ListOfLists, type: PickType) => {
       if (picks[type].includes(list)) {
         setPicks({
           ...picks,
@@ -179,9 +181,9 @@ const SaveToListModal = (props: Props) => {
   const Row = useCallback(
     ({ index, style }: { index: number; style: object }) => {
       const isPicked =
-        (lists.data[index].isItemInList &&
+        (lists.data[index]?.isItemInList &&
           !picks.unpickFrom.includes(lists.data[index])) ||
-        (!lists.data[index].isItemInList &&
+        (!lists.data[index]?.isItemInList &&
           picks.pickFor.includes(lists.data[index]))
       return (
         <div style={style} tabIndex={0}>
