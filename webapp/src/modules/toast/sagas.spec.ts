@@ -7,6 +7,8 @@ import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
 import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import {
+  bulkPickUnpickFailure,
+  bulkPickUnpickSuccess,
   deleteListFailure,
   deleteListSuccess,
   pickItemAsFavoriteFailure,
@@ -48,6 +50,8 @@ import {
   getFetchAssetsFailureToast,
   getDeleteListSuccessToast,
   getDeleteListFailureToast,
+  getBulkPickItemSuccessToast,
+  getBulkPickItemFailureToast,
   getUpdateListSuccessToast
 } from '../toast/toasts'
 import { ItemBrowseOptions } from '../item/types'
@@ -298,3 +302,63 @@ describe.each(actions)(
     })
   }
 )
+
+describe('when handling the success of a bulk pick and unpick action', () => {
+  let item: Item
+  let pickedFor: List[]
+  let unpickedFrom: List[]
+
+  beforeEach(() => {
+    item = {
+      id: 'anItemId'
+    } as Item
+    pickedFor = [{ id: 'aListId' } as List]
+    unpickedFrom = [{ id: 'anotherListId' } as List]
+  })
+
+  it('should hide all toasts and show a success toast', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(hideAllToasts())
+      .put(
+        showToast(
+          getBulkPickItemSuccessToast(item, pickedFor, unpickedFrom),
+          'bottom center'
+        )
+      )
+      .dispatch(
+        bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, true, true)
+      )
+      .silentRun()
+  })
+})
+
+describe('when handling the failure of a bulk pick and unpick action', () => {
+  let item: Item
+  let pickedFor: List[]
+  let unpickedFrom: List[]
+
+  beforeEach(() => {
+    item = {
+      id: 'anItemId'
+    } as Item
+    pickedFor = [{ id: 'aListId' } as List]
+    unpickedFrom = [{ id: 'anotherListId' } as List]
+  })
+
+  it('should hide all toasts and show a failure toast', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(hideAllToasts())
+      .put(
+        showToast(
+          getBulkPickItemFailureToast(item, pickedFor, unpickedFrom),
+          'bottom center'
+        )
+      )
+      .dispatch(
+        bulkPickUnpickFailure(item, pickedFor, unpickedFrom, 'anErrorMessage')
+      )
+      .silentRun()
+  })
+})

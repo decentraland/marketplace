@@ -17,6 +17,8 @@ const FavoritesCounter = (props: Props) => {
     isCollapsed = false,
     item,
     isLoading,
+    isV1ListsEnabled,
+    onV1PickClick,
     onCounterClick,
     onPick,
     onUnpick
@@ -51,11 +53,22 @@ const FavoritesCounter = (props: Props) => {
       e.preventDefault()
       e.stopPropagation()
       if (!isLoading) {
+        if (isV1ListsEnabled) {
+          return onV1PickClick()
+        }
         const handler = isPickedByUser ? onUnpick : onPick
         return handler(item)
       }
     },
-    [isLoading, isPickedByUser, item, onPick, onUnpick]
+    [
+      isLoading,
+      isPickedByUser,
+      isV1ListsEnabled,
+      item,
+      onPick,
+      onUnpick,
+      onV1PickClick
+    ]
   )
 
   return (

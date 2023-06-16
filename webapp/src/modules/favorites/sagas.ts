@@ -65,9 +65,13 @@ import {
   CREATE_LIST_REQUEST,
   DeleteListStartAction,
   DELETE_LIST_START,
-  deleteListRequest
+  deleteListRequest,
+  BULK_PICK_REQUEST,
+  BulkPickUnpickRequestAction,
+  bulkPickUnpickFailure,
+  bulkPickUnpickSuccess
 } from './actions'
-import { getListId } from './selectors'
+import { getListId, isOwnerUnpickingFromCurrentList } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
@@ -104,6 +108,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
   yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
   yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
+  yield takeEvery(BULK_PICK_REQUEST, handleBulkPickRequest)
 
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
@@ -389,6 +394,46 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       yield put(
         createListFailure(
+          isErrorWithMessage(error) ? error.message : 'Unknown error'
+        )
+      )
+    }
+  }
+
+  function* handleBulkPickRequest(action: BulkPickUnpickRequestAction) {
+    const { item, pickedFor, unpickedFrom } = action.payload
+
+    try {
+      // Force the user to have the signed identity
+      yield call(getAccountIdentity)
+      const {
+        pickedByUser
+      }: Awaited<ReturnType<typeof favoritesAPI.bulkPickUnpick>> = yield call(
+        [favoritesAPI, 'bulkPickUnpick'],
+        item.id,
+        pickedFor.map(list => list.id),
+        unpickedFrom.map(list => list.id)
+      )
+      const isOwnerUnpickingFromListInView: ReturnType<typeof isOwnerUnpickingFromCurrentList> = yield select(
+        isOwnerUnpickingFromCurrentList,
+        unpickedFrom
+      )
+
+      yield put(
+        bulkPickUnpickSuccess(
+          item,
+          pickedFor,
+          unpickedFrom,
+          pickedByUser,
+          isOwnerUnpickingFromListInView
+        )
+      )
+    } catch (error) {
+      yield put(
+        bulkPickUnpickFailure(
+          item,
+          pickedFor,
+          unpickedFrom,
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )

@@ -66,7 +66,13 @@ import {
   CREATE_LIST_FAILURE,
   CREATE_LIST_SUCCESS,
   CREATE_LIST_REQUEST,
-  CREATE_LIST_CLEAR
+  CREATE_LIST_CLEAR,
+  BULK_PICK_REQUEST,
+  BulkPickUnpickRequestAction,
+  BulkPickUnpickSuccessAction,
+  BULK_PICK_SUCCESS,
+  BULK_PICK_FAILURE,
+  BulkPickUnpickFailureAction
 } from './actions'
 import { FavoritesData, List } from './types'
 import { GET_LIST_REQUEST } from './actions'
@@ -117,6 +123,9 @@ type FavoritesReducerAction =
   | CreateListRequestAction
   | CreateListSuccessAction
   | CreateListFailureAction
+  | BulkPickUnpickRequestAction
+  | BulkPickUnpickSuccessAction
+  | BulkPickUnpickFailureAction
   | CreateListClearAction
 
 export function favoritesReducer(
@@ -132,6 +141,7 @@ export function favoritesReducer(
     case DELETE_LIST_REQUEST:
     case UPDATE_LIST_REQUEST:
     case CREATE_LIST_REQUEST:
+    case BULK_PICK_REQUEST:
     case FETCH_FAVORITED_ITEMS_REQUEST: {
       return {
         ...state,
@@ -300,6 +310,43 @@ export function favoritesReducer(
       }
     }
 
+    case BULK_PICK_SUCCESS: {
+      const {
+        isPickedByUser,
+        ownerRemovedFromCurrentList,
+        item
+      } = action.payload
+
+      const wasPickedBefore = state.data.items[item.id]?.pickedByUser ?? false
+      const isNowPicked = isPickedByUser && !ownerRemovedFromCurrentList
+      let newCount = state.data.items[item.id]?.count ?? 0
+      let createdAt = state.data.items[item.id]?.createdAt
+
+      if (wasPickedBefore && !isNowPicked) {
+        newCount--
+        createdAt = undefined
+      } else if (!wasPickedBefore && isNowPicked) {
+        newCount++
+        createdAt = Date.now()
+      }
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          items: {
+            ...state.data.items,
+            [item.id]: {
+              pickedByUser: isNowPicked,
+              count: newCount,
+              createdAt
+            }
+          }
+        },
+        loading: loadingReducer(state.loading, action)
+      }
+    }
+
     case CREATE_LIST_SUCCESS:
     case UPDATE_LIST_SUCCESS:
     case GET_LIST_SUCCESS: {
@@ -331,6 +378,7 @@ export function favoritesReducer(
     case FETCH_LISTS_FAILURE:
     case UNPICK_ITEM_AS_FAVORITE_FAILURE:
     case UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE:
+    case BULK_PICK_FAILURE:
     case FETCH_FAVORITED_ITEMS_FAILURE: {
       const { error } = action.payload
       return {

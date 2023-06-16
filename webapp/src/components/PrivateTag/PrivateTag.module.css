@@ -1,0 +1,23 @@
+.private {
+  display: flex;
+  align-items: center;
+  line-height: 1px;
+  z-index: 2;
+  height: 18px;
+  border: 1px solid #FFFFFF;
+  color: black;
+  border-radius: 30px;
+  background-color: white;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 5px 0px 5px;
+}
+
+.private .icon {
+  width: 12px;
+  height: 12px;
+  margin-right: 1px;
+  background-image: url('../../images/lock-icon.png');
+}

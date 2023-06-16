@@ -2,10 +2,15 @@ import { createMatchSelector } from 'connected-react-router'
 import { createSelector } from 'reselect'
 import { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import {
+  DEFAULT_FAVORITES_LIST_ID,
+  ListOfLists
+} from '../vendor/decentraland/favorites'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
 import { getData as getItems } from '../item/selectors'
-import { FavoritesData } from './types'
+import { FavoritesData, List } from './types'
 import {
   FETCH_FAVORITED_ITEMS_REQUEST,
   PICK_ITEM_AS_FAVORITE_REQUEST,
@@ -13,8 +18,9 @@ import {
   UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
   FETCH_LISTS_REQUEST,
   CREATE_LIST_REQUEST,
-  UPDATE_LIST_REQUEST,
-  DELETE_LIST_REQUEST
+  DELETE_LIST_REQUEST,
+  BULK_PICK_REQUEST,
+  UPDATE_LIST_REQUEST
 } from './actions'
 
 export const getState = (state: RootState) => state.favorites
@@ -35,6 +41,8 @@ export const isLoadingUpdateList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), UPDATE_LIST_REQUEST)
 export const isLoadingDeleteList = (state: RootState): boolean =>
   isLoadingType(getLoading(state), DELETE_LIST_REQUEST)
+export const isLoadingBulkPicksUnpicks = (state: RootState): boolean =>
+  isLoadingType(getLoading(state), BULK_PICK_REQUEST)
 
 export const getFavoritesDataByItemId = (
   state: RootState,
@@ -69,8 +77,28 @@ export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
       ].includes(type) && payload.item.id === itemId
   )
 
-export const getList = (state: RootState, id: string) => getLists(state)[id]
+export const getList = (state: RootState, id: string): List | null =>
+  getLists(state)[id] ?? null
 export const getPreviewListItems = (state: RootState, id: string): Item[] =>
   getLists(state)
     [id]?.previewOfItemIds?.map(itemId => getItems(state)[itemId])
     .filter(Boolean) ?? []
+
+export const isOwnerUnpickingFromCurrentList = (
+  state: RootState,
+  unpickedFrom: ListOfLists[]
+): boolean => {
+  const currentListId = getListId(state)
+  const isCurrentListUnpicked = unpickedFrom.some(
+    list => list.id === currentListId
+  )
+  if (!isCurrentListUnpicked || !currentListId) {
+    return false
+  }
+  const userAddress = getAddress(state)
+  const currentUnpickedList = getList(state, currentListId)
+  const isListOwner =
+    currentUnpickedList?.userAddress?.toLowerCase() ===
+      userAddress?.toLowerCase() || currentListId === DEFAULT_FAVORITES_LIST_ID
+  return isListOwner && currentUnpickedList !== undefined
+}

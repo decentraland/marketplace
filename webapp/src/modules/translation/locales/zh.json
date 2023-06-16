@@ -1052,6 +1052,40 @@
     "delete_list_failure": {
       "title": "删除列表时出错",
       "body": "删除 <b>{name}</b> 列表时出现问题。 请稍后再试。"
+    },
+    "bulk_pick": {
+      "success": {
+        "title": "保存到列表",
+        "body": {
+          "add": {
+            "one": "{item_name} 已添加到 {first_list_name}。",
+            "two": "{item_name} 已添加到 {first_list_name} 和 {second_list_name}。",
+            "many": "{item_name} 已添加到 {first_list_name} 和其他 {count} 个列表。"
+          },
+          "remove": {
+            "one": "{item_name} 已从 {first_list_name} 中删除。",
+            "two": "{item_name} 已从 {first_list_name} 和 {second_list_name} 中删除。",
+            "many": "{item_name} 已从 {first_list_name} 和其他 {count} 个列表中删除。"
+          }
+        },
+        "undo": "撤消"
+      },
+      "failure": {
+        "title": "保存到列表时出错",
+        "body": {
+          "add": {
+            "one": "将 {item_name} 添加到 {first_list_name} 时出现问题。",
+            "two": "将 {item_name} 添加到 {first_list_name} 和 {second_list_name} 时出现问题。",
+            "many": "将 {item_name} 添加到 {first_list_name} 和其他 {count} 个列表时出现问题。"
+          },
+          "remove": {
+            "one": "从 {first_list_name} 中删除 {item_name} 时出现问题。",
+            "two": "从 {first_list_name} 和 {second_list_name} 中删除 {item_name} 时出现问题。",
+            "many": "从 {first_list_name} 和其他 {count} 个列表中删除 {item_name} 时出现问题。"
+          }
+        },
+        "try_again": "Try again"
+      }
     }
   },
   "maintainance": {
@@ -1384,5 +1418,16 @@
     "title": "删除 <b>{name}</b> 列表",
     "message": "您确定要删除此列表吗？ 里面的所有项目将被永久删除，无法撤消。",
     "confirm": "永久删除"
+  },
+  "save_to_list_modal": {
+    "title": "保存到列表",
+    "items_count": "{count} {count, plural, one {项} other {项目}}",
+    "create_list": "创建列表",
+    "save_in_a_list": "保存在{name}",
+    "remove_from_a_list": "从{name}中删除",
+    "save_in_lists": "保存在 {count} 个列表中",
+    "remove_from_lists": "从 {count} 个列表中删除",
+    "save_and_remove_from_lists": "保存并从 {count} 个列表中删除",
+    "save_in_list": "保存在列表中"
   }
 }

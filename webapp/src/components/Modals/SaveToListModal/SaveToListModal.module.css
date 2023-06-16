@@ -1,0 +1,76 @@
+.listRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #736E7D;
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.listInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.listInfo .name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.listRow .left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.listRow .right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkbox {
+  margin-right: 15px;
+  height: 24px;
+  width: 24px;
+}
+
+.checkbox:global(.ui.checkbox) input[type='checkbox'] {
+  height: 23px;
+  width: 23px;
+}
+
+.checkbox:global(.ui.checkbox) :global(label:before) {
+  width: 23px;
+  left: 1px;
+  height: 23px;
+}
+
+.checkbox:global(.ui.checkbox.checked:not(.toggle)) :global(input[type='checkbox'].hidden + label:after),
+.checkbox:global(.ui.checkbox.checked:not(.toggle) input[type='checkbox'].hidden:focus + label:after) {
+  width: 15px;
+  height: 15px;
+  top: 5px;
+  left: 5px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.loading span {
+  margin-left: 20px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+}

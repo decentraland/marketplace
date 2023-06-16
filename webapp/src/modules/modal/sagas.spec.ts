@@ -12,6 +12,8 @@ import {
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
 import {
+  BULK_PICK_FAILURE,
+  BULK_PICK_SUCCESS,
   CREATE_LIST_SUCCESS,
   DELETE_LIST_FAILURE,
   DELETE_LIST_SUCCESS,
@@ -27,6 +29,8 @@ describe.each([
   CREATE_LIST_SUCCESS,
   DELETE_LIST_SUCCESS,
   DELETE_LIST_FAILURE,
+  BULK_PICK_SUCCESS,
+  BULK_PICK_FAILURE,
   UPDATE_LIST_SUCCESS
 ])('when handling the success action of the %s action', actionType => {
   it('should put the action to close all modals', () => {

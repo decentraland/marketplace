@@ -57,3 +57,4 @@ export const UNPICK_ITEM = 'Unpick Item'
 export const UNDO_UNPICK_ITEM = 'Undo unpick Item'
 
 export const CLICK_CLAIM_NEW_NAME = 'Click Claim New Name'
+export const BULK_PICK = 'Bulk Pick'

@@ -10,6 +10,7 @@ export type PicksOptions = PaginationParameters
 export type ListsOptions = PaginationParameters & {
   sortBy?: ListsSortBy
   sortDirection?: SortDirection
+  itemId?: string
 }
 
 export enum ListsSortBy {
@@ -34,7 +35,7 @@ export type BaseList = {
   permission: Permission | null
 }
 
-export type ListOfLists = Pick<BaseList, 'id' | 'name'> & {
+export type ListOfLists = Pick<BaseList, 'id' | 'name' | 'isPrivate'> & {
   itemsCount: number
   isItemInList?: boolean
   previewOfItemIds: string[]
@@ -44,4 +45,8 @@ export type UpdateOrCreateList = BaseList
 
 export type ListDetails = BaseList & {
   itemsCount: number
+}
+
+export type BulkPickUnpickResponse = {
+  pickedByUser: boolean
 }

@@ -1047,6 +1047,40 @@
     "delete_list_failure": {
       "title": "Error eliminando lista",
       "body": "Ocurrió un error al eliminar la lista <b>{name}</b>. Por favor inténtelo de nuevo más tarde."
+    },
+    "bulk_pick": {
+      "success": {
+        "title": "Guardar en listas",
+        "body": {
+          "add": {
+            "one": "{item_name} fue añadido a {first_list_name}.",
+            "two": "{item_name} fue añadido a {first_list_name} y {second_list_name}.",
+            "many": "{item_name} fue añadido a {first_list_name} y a otras {count} listas."
+          },
+          "remove": {
+            "one": "{item_name} fue removido de {first_list_name}.",
+            "two": "{item_name} fue removido de {first_list_name} y {second_list_name}.",
+            "many": "{item_name} fue removido de {first_list_name} y de otras {count} lists."
+          }
+        },
+        "undo": "Deshacer"
+      },
+      "failure": {
+        "title": "Error guardando en listas",
+        "body": {
+          "add": {
+            "one": "Ocurrió un error al agregar el item {item_name} a {first_list_name}.",
+            "two": "Ocurrió un error al agregar el item {item_name} a {first_list_name} y {second_list_name}.",
+            "many": "Ocurrió un error al agregar el item {item_name} a {first_list_name} y a otras {count} listas."
+          },
+          "remove": {
+            "one": "Ocurrió un error al remover {item_name} de {first_list_name}.",
+            "two": "Ocurrió un error al remover {item_name} de {first_list_name} y {second_list_name}.",
+            "many": "Ocurrió un error al remover {item_name} de {first_list_name} y de otras {count} listas."
+          }
+        },
+        "try_again": "Intentar de nuevo"
+      }
     }
   },
   "maintainance": {
@@ -1379,5 +1413,16 @@
     "title": "Eliminar la lista list <b>{name}</b>",
     "message": "Está seguro de que quiere eliminar ésta lista? Todos los items dentro de la misma serán removidos permanentemente y la acción no podrá deshacerse.",
     "confirm": "Borrar permanentemente"
+  },
+  "save_to_list_modal": {
+    "title": "Guardar en la lista",
+    "items_count": "{count} {count, plural, one {item} other {items}}",
+    "create_list": "Crear lista",
+    "save_in_a_list": "Guardar en {name}",
+    "remove_from_a_list": "Remover de {name}",
+    "save_in_lists": "Guardar en {count} listas",
+    "remove_from_lists": "Remover de {count} listas",
+    "save_and_remove_from_lists": "Guardar y remover de {count} lists",
+    "save_in_list": "Guardar en lista"
   }
 }

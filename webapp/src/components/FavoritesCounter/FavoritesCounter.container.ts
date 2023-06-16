@@ -10,6 +10,7 @@ import {
   getCount,
   isPickingOrUnpicking
 } from '../../modules/favorites/selectors'
+import { getIsListsV1Enabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import FavoritesCounter from './FavoritesCounter'
 import {
@@ -25,14 +26,20 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   } = ownProps
   return {
     isPickedByUser: getIsPickedByUser(state, itemId),
+    isV1ListsEnabled: getIsListsV1Enabled(state),
     count: getCount(state, itemId),
     isLoading: isPickingOrUnpicking(state, itemId)
   }
 }
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+const mapDispatch = (
+  dispatch: MapDispatch,
+  ownProps: OwnProps
+): MapDispatchProps => ({
   onPick: (item: Item) => dispatch(pickItemAsFavoriteRequest(item)),
   onUnpick: (item: Item) => dispatch(unpickItemAsFavoriteRequest(item)),
+  onV1PickClick: () =>
+    dispatch(openModal('SaveToListModal', { item: ownProps.item })),
   onCounterClick: (item: Item) =>
     dispatch(openModal('FavoritesModal', { itemId: item.id }))
 })

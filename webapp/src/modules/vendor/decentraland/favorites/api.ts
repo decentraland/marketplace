@@ -3,6 +3,7 @@ import { config } from '../../../../config'
 import { isAPIError } from '../../../../lib/error'
 import { FavoritedItems } from '../../../favorites/types'
 import {
+  BulkPickUnpickResponse,
   ListDetails,
   ListOfLists,
   ListsOptions,
@@ -53,6 +54,10 @@ export class FavoritesAPI extends BaseClient {
 
     if (options.sortBy !== undefined) {
       queryParams.append('sortBy', options.sortBy.toString())
+    }
+
+    if (options.itemId !== undefined) {
+      queryParams.append('itemId', options.itemId)
     }
 
     return (
@@ -169,6 +174,23 @@ export class FavoritesAPI extends BaseClient {
     return this.fetch('/v1/lists/', {
       method: 'POST',
       body: JSON.stringify({ name, private: isPrivate, description }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+  }
+
+  async bulkPickUnpick(
+    itemId: string,
+    pickedFor: string[],
+    unpickedFrom: string[]
+  ): Promise<BulkPickUnpickResponse> {
+    return this.fetch(`/v1/picks/${itemId}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        pickedFor: pickedFor.length > 0 ? pickedFor : undefined,
+        unpickedFrom: unpickedFrom.length > 0 ? unpickedFrom : undefined
+      }),
       headers: {
         'Content-Type': 'application/json'
       }
