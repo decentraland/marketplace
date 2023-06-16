@@ -92,7 +92,7 @@ const SaveToListModal = (props: Props) => {
   }, [onSavePicks, picks.pickFor, picks.unpickFrom])
 
   const handleClose = useCallback(
-    () => (!isLoadingLists ? onClose : undefined),
+    () => (!isLoadingLists ? onClose() : undefined),
     [isLoadingLists, onClose]
   )
 
@@ -179,9 +179,9 @@ const SaveToListModal = (props: Props) => {
   const Row = useCallback(
     ({ index, style }: { index: number; style: object }) => {
       const isPicked =
-        (lists.data[index].isItemInList &&
+        (lists.data[index]?.isItemInList &&
           !picks.unpickFrom.includes(lists.data[index])) ||
-        (!lists.data[index].isItemInList &&
+        (!lists.data[index]?.isItemInList &&
           picks.pickFor.includes(lists.data[index]))
       return (
         <div style={style} tabIndex={0}>
