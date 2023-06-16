@@ -474,7 +474,7 @@ describe('when creating the action to signal the start of the bulk item pick-unp
       meta: undefined,
       payload: {
         item,
-        pickedFor: [list],
+        pickedFor: [listOfLists],
         unpickedFrom: []
       }
     })
@@ -489,7 +489,7 @@ describe('when creating the action to signal a successful bulk item pick-unpick 
         meta: undefined,
         payload: {
           item,
-          pickedFor: [list],
+          pickedFor: [listOfLists],
           unpickedFrom: [],
           isPickedByUser: true,
           ownerRemovedFromCurrentList: false
@@ -508,7 +508,7 @@ describe('when creating the action to signal a failure in the bulk item pick-unp
       meta: undefined,
       payload: {
         item,
-        pickedFor: [list],
+        pickedFor: [listOfLists],
         unpickedFrom: [],
         error: anErrorMessage
       }
