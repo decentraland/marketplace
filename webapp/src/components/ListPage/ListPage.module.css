@@ -31,7 +31,7 @@
   flex-grow: 1;
 }
 
-.privateBadge:global(.dcl.badge) {
+/* .privateBadge:global(.dcl.badge) {
   box-sizing: border-box;
   background-color: var(--secondary);
   color: var(--secondary);
@@ -53,7 +53,7 @@
 
 .privateBadge:global(.dcl.badge i.icon) {
   margin-right: 1px;
-}
+} */
 
 .actions {
   display: flex;
