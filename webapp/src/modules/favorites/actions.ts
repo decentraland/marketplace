@@ -304,10 +304,12 @@ export const bulkPickUnpickFailure = (
   unpickedFrom: ListOfLists[],
   error: string
 ) => action(BULK_PICK_FAILURE, { item, pickedFor, unpickedFrom, error })
+
 export const bulkPickUnpickCancel = (item: Item, error?: string) =>
   action(BULK_PICK_CANCEL, { item, error })
 
 export type BulkPickUnpickStartAction = ReturnType<typeof bulkPickUnpickStart>
+
 export type BulkPickUnpickRequestAction = ReturnType<
   typeof bulkPickUnpickRequest
 >

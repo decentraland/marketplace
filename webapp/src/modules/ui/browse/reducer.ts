@@ -267,6 +267,7 @@ export function browseReducer(
       return {
         ...state,
         listIds,
+        page,
         count: total
       }
     }

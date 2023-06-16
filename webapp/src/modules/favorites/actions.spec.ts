@@ -469,7 +469,7 @@ describe('when creating the action to signal the start the bulk item pick-unpick
 
 describe('when creating the action to signal the start of the bulk item pick-unpick request', () => {
   it('should return an object representing the action', () => {
-    expect(bulkPickUnpickRequest(item, [list], [])).toEqual({
+    expect(bulkPickUnpickRequest(item, [listOfLists], [])).toEqual({
       type: BULK_PICK_REQUEST,
       meta: undefined,
       payload: {
@@ -483,23 +483,27 @@ describe('when creating the action to signal the start of the bulk item pick-unp
 
 describe('when creating the action to signal a successful bulk item pick-unpick request', () => {
   it('should return an object representing the action', () => {
-    expect(bulkPickUnpickSuccess(item, [list], [], true, false)).toEqual({
-      type: BULK_PICK_SUCCESS,
-      meta: undefined,
-      payload: {
-        item,
-        pickedFor: [list],
-        unpickedFrom: [],
-        isPickedByUser: true,
-        ownerRemovedFromCurrentList: false
+    expect(bulkPickUnpickSuccess(item, [listOfLists], [], true, false)).toEqual(
+      {
+        type: BULK_PICK_SUCCESS,
+        meta: undefined,
+        payload: {
+          item,
+          pickedFor: [list],
+          unpickedFrom: [],
+          isPickedByUser: true,
+          ownerRemovedFromCurrentList: false
+        }
       }
-    })
+    )
   })
 })
 
 describe('when creating the action to signal a failure in the bulk item pick-unpick request', () => {
   it('should return an object representing the action', () => {
-    expect(bulkPickUnpickFailure(item, [list], [], anErrorMessage)).toEqual({
+    expect(
+      bulkPickUnpickFailure(item, [listOfLists], [], anErrorMessage)
+    ).toEqual({
       type: BULK_PICK_FAILURE,
       meta: undefined,
       payload: {

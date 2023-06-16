@@ -5,14 +5,14 @@ import { RootState } from '../../../modules/reducer'
 import { bulkPickUnpickRequest } from '../../../modules/favorites/actions'
 import { isLoadingBulkPicksUnpicks } from '../../../modules/favorites/selectors'
 import { getCurrentIdentity } from '../../../modules/identity/selectors'
+import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
+import { openModal } from '../../../modules/modal/actions'
 import {
   MapDispatchProps,
   MapStateProps,
   OwnProps
 } from './SaveToListModal.types'
 import SaveToListModal from './SaveToListModal'
-import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
-import { openModal } from '../../../modules/modal/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

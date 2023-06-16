@@ -94,4 +94,8 @@
     height: unset;
     margin-bottom: 22px;
   }
+
+  .WearableDetail .assetImageContainer :global(.AssetImage .rarity-background) {
+    border-radius: 12px;
+  }
 }

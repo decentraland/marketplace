@@ -336,10 +336,6 @@
     padding-top: 20px;
     height: 94px;
   }
-  .AssetImage .rarity-background,
-  .AssetImage .WearablePreview {
-    border-radius: 12px;
-  }
   .AvailableForMintPopup .ui.button.inverted.goToItemButton {
     align-self: center;
   }

@@ -794,6 +794,7 @@ describe('when reducing the action of the success of getting the lists', () => {
       ).toEqual({
         ...initialState,
         listIds: ['aListId', 'anotherListId'],
+        page: 2,
         count: 2
       })
     })
@@ -824,6 +825,7 @@ describe('when reducing the action of the success of getting the lists', () => {
       ).toEqual({
         ...initialState,
         listIds: ['anotherListId'],
+        page: 1,
         count: 1
       })
     })
