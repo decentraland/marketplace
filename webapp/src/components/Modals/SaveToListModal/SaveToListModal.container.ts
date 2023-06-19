@@ -6,7 +6,7 @@ import { bulkPickUnpickRequest } from '../../../modules/favorites/actions'
 import { isLoadingBulkPicksUnpicks } from '../../../modules/favorites/selectors'
 import { getCurrentIdentity } from '../../../modules/identity/selectors'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
-import { closeModal, openModal } from '../../../modules/modal/actions'
+import { openModal } from '../../../modules/modal/actions'
 import {
   MapDispatchProps,
   MapStateProps,
@@ -30,7 +30,6 @@ const mapDispatch = (
       bulkPickUnpickRequest(ownProps.metadata.item, picksFor, unpickFrom)
     ),
   onCreateList: () => {
-    dispatch(closeModal('SaveToListModal'))
     dispatch(openModal('CreateOrEditListModal'))
   }
 })
