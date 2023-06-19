@@ -4,6 +4,7 @@ import { List } from '../../../modules/favorites/types'
 import { Props } from './ShareListModal.types'
 import ShareListModal from './ShareListModal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { fireEvent } from '@testing-library/react'
 
 let list: List = {
   id: 'aListId',
@@ -47,14 +48,18 @@ describe('when the modal is rendered', () => {
   })
 
   it('should have a twitter share button with the href pointing to a twitter message', () => {
+    jest.spyOn(window, 'open').mockImplementation(() => null)
     const dclUrl = 'https://market.decentraland.zone'
     const locationsUrl = '/lists/aListId?assetType=item&section=lists&page=1'
     const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       t('share_list_modal.twitter_message')
     )} ${dclUrl}${locationsUrl}`
     const { getByRole } = renderedModal
-    expect(
-      getByRole('button', { name: t('share_list_modal.share_on_twitter') })
-    ).toHaveAttribute('href', twitterURL)
+    const button = getByRole('button', {
+      name: t('share_list_modal.share_on_twitter')
+    })
+    expect(button).toBeInTheDocument()
+    fireEvent.click(button)
+    expect(window.open).toHaveBeenCalledWith(twitterURL, '_blank')
   })
 })

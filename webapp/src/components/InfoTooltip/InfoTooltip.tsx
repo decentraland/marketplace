@@ -4,9 +4,10 @@ import { Props } from './InfoTooltip.types'
 import './InfoTooltip.css'
 
 const InfoTooltip = (props: Props) => {
-  const { content } = props
+  const { content, className } = props
   return (
     <Popup
+      className={className}
       content={content}
       position="top center"
       trigger={<div className="InfoTooltip" />}

@@ -1379,7 +1379,8 @@
     "description": "List description",
     "info": {
       "max_name_length": "List names can contain up to {max} characters.",
-      "max_description_length": "List descriptions can contain up to {max} characters."
+      "max_description_length": "List descriptions can contain up to {max} characters.",
+      "private": "A public list will be available for everyone to view."
     },
     "errors": {
       "name_duplicated": "This name is already in use for another of your lists. <br></br> Choose a different name."
@@ -1424,7 +1425,7 @@
     "confirm": "Delete permanently"
   },
   "save_to_list_modal": {
-    "title": "Save to list",
+    "title": "Edit Lists",
     "items_count": "{count} {count, plural, one {item} other {items}}",
     "create_list": "Create list",
     "save_in_a_list": "Save in {name}",

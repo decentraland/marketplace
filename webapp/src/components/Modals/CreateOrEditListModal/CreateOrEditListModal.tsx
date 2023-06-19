@@ -9,6 +9,7 @@ import {
   ModalNavigation,
   TextAreaField
 } from 'decentraland-ui'
+import { InfoTooltip } from '../../InfoTooltip'
 import styles from './CreateOrEditListModal.module.css'
 import { Props } from './CreateOrEditListModal.types'
 
@@ -148,9 +149,15 @@ const CreateOrEditListModal = ({
         <Checkbox
           checked={isPrivate}
           label={
-            list
-              ? t('create_or_edit_list_modal.edit.private')
-              : t('create_or_edit_list_modal.create.private')
+            <label>
+              {list
+                ? t('create_or_edit_list_modal.edit.private')
+                : t('create_or_edit_list_modal.create.private')}
+              <InfoTooltip
+                className={styles.privatePopup}
+                content={t('create_or_edit_list_modal.info.private')}
+              />
+            </label>
           }
           data-testid={CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID}
           disabled={isLoading}
@@ -169,13 +176,7 @@ const CreateOrEditListModal = ({
       </Modal.Content>
       <Modal.Actions>
         <Button
-          onClick={handleClose}
-          data-testid={CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID}
-          disabled={isLoading}
-        >
-          {t('global.cancel')}
-        </Button>
-        <Button
+          fluid
           primary
           disabled={isLoading || name.length === 0 || (list && !listChanged)}
           data-testid={CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID}
@@ -183,6 +184,14 @@ const CreateOrEditListModal = ({
           onClick={handleCreateOrEditList}
         >
           {list ? t('global.save') : t('global.create')}
+        </Button>
+        <Button
+          onClick={handleClose}
+          data-testid={CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID}
+          disabled={isLoading}
+          fluid
+        >
+          {t('global.cancel')}
         </Button>
       </Modal.Actions>
     </Modal>
