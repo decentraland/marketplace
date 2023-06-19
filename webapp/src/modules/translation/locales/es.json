@@ -1319,6 +1319,8 @@
     "edit_list": "Editar Lista",
     "delete_list": "Eliminar Lista",
     "last_updated_at": "Última actualización",
+    "disable_sharing": "Las listas privadas no se pueden compartir.",
+    "disable_kebab_menu": "La lista de deseos no se puede editar ni eliminar.",
     "empty": {
       "owner": {
         "title": "No tienes elementos guardados en esta lista",

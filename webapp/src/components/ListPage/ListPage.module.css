@@ -34,6 +34,7 @@
 .actions {
   display: flex;
   align-items: center;
+  column-gap: 15px;
 }
 
 .actions :global(.ui.button).iconContainer {
@@ -52,6 +53,10 @@
 .actions :global(.ui.button).iconContainer.share {
   background-color: var(--text);
   color: var(--background);
+}
+
+.actions :global(.ui.button + .ui.button) {
+  margin: 0;
 }
 
 :global(.ui.header).header .actions :global(.ui.button).iconContainer :global(.icon) {

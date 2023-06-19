@@ -1324,6 +1324,8 @@
     "edit_list": "编辑列表",
     "delete_list": "删除列表",
     "last_updated_at": "最后更新于",
+    "disable_sharing": "私人列表不能共享。",
+    "disable_kebab_menu": "心愿单无法编辑或删除。",
     "empty": {
       "owner": {
         "title": "您在此列表中没有任何已保存的项目",
