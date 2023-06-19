@@ -1,3 +1,7 @@
 .modal :global(.dcl.field), :global(.dcl.text-area) {
   margin-bottom: 20px;
 }
+
+.privatePopup:global(.ui.popup) {
+  z-index: 9999;
+}
