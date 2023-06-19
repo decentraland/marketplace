@@ -13,7 +13,7 @@
     padding: 0;
   }
 
-  :global(.ui.modal > .content) {
+  .modal:global(.ui.modal > .content) {
     font-size: 15px;
   }
 }

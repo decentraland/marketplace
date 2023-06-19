@@ -413,7 +413,12 @@ const SellModal = ({
   }
 
   return (
-    <Modal size="small" name={'SellModal'} onClose={onClose}>
+    <Modal
+      className={styles.modal}
+      size="small"
+      name={'SellModal'}
+      onClose={onClose}
+    >
       {Stepper[step].navigation}
       {Stepper[step].description}
       {Stepper[step].content}

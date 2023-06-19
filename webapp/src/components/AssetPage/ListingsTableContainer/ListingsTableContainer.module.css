@@ -1,43 +1,3 @@
-.supply {
-  color: var(--secondary-text);
-}
-
-.ownerButtons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.filtertabsContainer {
-  display: flex;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  align-items: center;
-  border-bottom: 1px solid var(--secondary);
-  padding-left: 20px;
-}
-
-.sortByDropdown {
-  border-radius: 12px;
-  margin-right: 20px;
-  justify-content: space-between;
-}
-
-.filtertabsContainer :global(.ui.dropdown) {
-  display: flex;
-  align-items: center;
-  font-size: 13px;
-  position: absolute;
-  right: 20px;
-}
-
-.ui.dropdown > .icon {
-  color: white !important;
-  height: 100%;
-  display: flex;
-  align-items: center;
-}
-
 @media (min-width: 768px) {
   .listingsTableContainer :global(.filtertabsContainer) {
     height: 69px;
@@ -52,23 +12,21 @@
 }
 
 @media (max-width: 768px) {
-  :global(.ui.button.basic) {
-    text-align: left;
+  .listingsTableContainer :global(.ui.very.basic.table tr th),
+  .listingsTableContainer :global(.ui.very.basic.table tr td) {
+    width: 50% !important; /* 2 columns, needs to be overriden with the !important since the library uses it too */
   }
-
-  .filtertabsContainer {
-    flex-direction: column;
-    padding: unset;
+  .listingsTableContainer :global(.ui.very.basic.table tr) {
+    border: 1px solid var(--divider);
   }
-
-  .tabStyle {
-    padding-left: unset;
+  .listingsTableContainer :global(.ui.very.basic.table tr):first-of-type {
+    border: none;
   }
-
-  .filtertabsContainer :global(.ui.dropdown) {
-    position: relative;
-    left: 20px;
-    align-self: flex-start;
-    margin-bottom: 10px;
+  .listingsTableContainer :global(.ui.very.basic.table td) {
+    border-right: 1px solid var(--divider) !important; /* needs to be overriden with the !important since the library uses it too */
+  }
+  .listingsTableContainer :global(.ui.small.inverted.button) {
+    min-width: auto;
+    border: none;
   }
 }

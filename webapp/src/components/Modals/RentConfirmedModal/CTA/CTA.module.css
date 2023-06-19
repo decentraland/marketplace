@@ -72,7 +72,7 @@
 }
 
 @media (max-width: 767px) {
-  :global(.ui.modal > .content) {
+  .modal:global(.ui.modal > .content) {
     font-size: 15px;
   }
 

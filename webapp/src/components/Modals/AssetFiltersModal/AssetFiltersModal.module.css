@@ -58,6 +58,7 @@
   margin-bottom: 0;
 }
 
+/* This MUST be changed in the UI as this removes the padding from all modals */
 :global(.ui.page.modals) {
   padding-top: 0;
   padding-bottom: 0;

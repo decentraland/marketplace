@@ -1,10 +1,10 @@
-.filters {
+.onSaleOrRentTable .filters {
   display: flex;
   padding: 10px 10px 0px 10px;
   align-items: center;
 }
 
-.filters .ui.dropdown {
+.onSaleOrRentTable .filters .ui.dropdown {
   display: flex;
   align-items: center;
   font-size: 13px;
@@ -12,13 +12,13 @@
   right: 20px;
 }
 
-.ui.dropdown > .icon {
+.onSaleOrRentTable .filters .ui.dropdown > .icon {
   height: 100%;
   display: flex;
   align-items: center;
 }
 
-.search {
+.onSaleOrRentTable .search {
   flex: 1;
 }
 

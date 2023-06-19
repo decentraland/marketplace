@@ -8,7 +8,7 @@
     min-width: auto;
   }
 
-  :global(.ui.modal .actions) {
+  .ConfirmInputValueModal:global(.ui.modal .actions) {
     align-items: center;
     bottom: 30px;
     display: flex;
