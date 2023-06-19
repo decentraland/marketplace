@@ -80,12 +80,8 @@ const SaveToListModal = (props: Props) => {
         name: picks.unpickFrom[0].name,
         count: picks.unpickFrom.length
       })
-    } else if (picks.pickFor.length > 0 && picks.unpickFrom.length > 0) {
-      return t('save_to_list_modal.save_and_remove_from_lists', {
-        count: picks.pickFor.length + picks.unpickFrom.length
-      })
     } else {
-      return t('save_to_list_modal.save_in_list')
+      return t('save_to_list_modal.save_changes')
     }
   }, [picks.pickFor, picks.unpickFrom])
 

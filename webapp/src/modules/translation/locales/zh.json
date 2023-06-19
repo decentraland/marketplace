@@ -1437,6 +1437,6 @@
     "save_in_lists": "保存在 {count} 个列表中",
     "remove_from_lists": "从 {count} 个列表中删除",
     "save_and_remove_from_lists": "保存并从 {count} 个列表中删除",
-    "save_in_list": "保存在列表中"
+    "save_changes": "保存变更"
   }
 }

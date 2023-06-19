@@ -1432,6 +1432,6 @@
     "save_in_lists": "Guardar en {count} listas",
     "remove_from_lists": "Remover de {count} listas",
     "save_and_remove_from_lists": "Guardar y remover de {count} lists",
-    "save_in_list": "Guardar en lista"
+    "save_changes": "Guardar cambios"
   }
 }
