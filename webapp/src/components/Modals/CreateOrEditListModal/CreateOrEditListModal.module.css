@@ -7,3 +7,13 @@
   flex-direction: column;
   gap: 15px;
 }
+
+@media (max-width: 768px) {
+  .modal:global(.ui.modal > .actions) {
+    gap: unset;
+  }
+
+  .modal :global(.dcl.field) {
+    min-width: unset;
+  }
+}

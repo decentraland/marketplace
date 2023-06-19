@@ -169,14 +169,6 @@ const CreateOrEditListModal = ({
       </Modal.Content>
       <Modal.Actions>
         <Button
-          onClick={handleClose}
-          data-testid={CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID}
-          disabled={isLoading}
-          fluid
-        >
-          {t('global.cancel')}
-        </Button>
-        <Button
           fluid
           primary
           disabled={isLoading || name.length === 0 || (list && !listChanged)}
@@ -185,6 +177,14 @@ const CreateOrEditListModal = ({
           onClick={handleCreateOrEditList}
         >
           {list ? t('global.save') : t('global.create')}
+        </Button>
+        <Button
+          onClick={handleClose}
+          data-testid={CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID}
+          disabled={isLoading}
+          fluid
+        >
+          {t('global.cancel')}
         </Button>
       </Modal.Actions>
     </Modal>
