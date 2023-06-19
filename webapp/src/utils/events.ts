@@ -58,3 +58,11 @@ export const UNDO_UNPICK_ITEM = 'Undo unpick Item'
 
 export const CLICK_CLAIM_NEW_NAME = 'Click Claim New Name'
 export const BULK_PICK = 'Bulk Pick'
+
+export const CREATE_LIST = 'Create List'
+export const UPDATE_LIST = 'Update List'
+export const DELETE_LIST = 'Delete List'
+
+export const OPEN_SHARE_LIST_MODAL = 'Open share list modal'
+export const COPY_LINK_TO_SHARE_LIST = 'Copy link to share list'
+export const SHARE_LIST_ON_TWITTER = 'Share list on Twitter'

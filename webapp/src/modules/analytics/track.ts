@@ -80,6 +80,14 @@ import {
   BULK_PICK_SUCCESS,
   BulkPickUnpickFailureAction,
   BulkPickUnpickSuccessAction,
+  CREATE_LIST_FAILURE,
+  CREATE_LIST_SUCCESS,
+  CreateListFailureAction,
+  CreateListSuccessAction,
+  DELETE_LIST_FAILURE,
+  DELETE_LIST_SUCCESS,
+  DeleteListFailureAction,
+  DeleteListSuccessAction,
   PICK_ITEM_AS_FAVORITE_FAILURE,
   PICK_ITEM_AS_FAVORITE_SUCCESS,
   PickItemAsFavoriteFailureAction,
@@ -88,10 +96,14 @@ import {
   UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
   UNPICK_ITEM_AS_FAVORITE_FAILURE,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+  UPDATE_LIST_FAILURE,
+  UPDATE_LIST_SUCCESS,
   UndoUnpickingItemAsFavoriteFailureAction,
   UndoUnpickingItemAsFavoriteSuccessAction,
   UnpickItemAsFavoriteFailureAction,
-  UnpickItemAsFavoriteSuccessAction
+  UnpickItemAsFavoriteSuccessAction,
+  UpdateListFailureAction,
+  UpdateListSuccessAction
 } from '../favorites/actions'
 import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 
@@ -411,6 +423,56 @@ track<BulkPickUnpickFailureAction>(
     item,
     pickedFor,
     unpickedFrom,
+    error
+  })
+)
+
+track<CreateListSuccessAction>(
+  CREATE_LIST_SUCCESS,
+  events.CREATE_LIST,
+  ({ payload: { list } }) => ({
+    list
+  })
+)
+
+track<CreateListFailureAction>(
+  CREATE_LIST_FAILURE,
+  events.CREATE_LIST,
+  ({ payload: { error } }) => ({
+    error
+  })
+)
+
+track<UpdateListSuccessAction>(
+  UPDATE_LIST_SUCCESS,
+  events.UPDATE_LIST,
+  ({ payload: { list } }) => ({
+    list
+  })
+)
+
+track<UpdateListFailureAction>(
+  UPDATE_LIST_FAILURE,
+  events.UPDATE_LIST,
+  ({ payload: { id, error } }) => ({
+    id,
+    error
+  })
+)
+
+track<DeleteListSuccessAction>(
+  DELETE_LIST_SUCCESS,
+  events.DELETE_LIST,
+  ({ payload: { list } }) => ({
+    list
+  })
+)
+
+track<DeleteListFailureAction>(
+  DELETE_LIST_FAILURE,
+  events.DELETE_LIST,
+  ({ payload: { list, error } }) => ({
+    list,
     error
   })
 )
