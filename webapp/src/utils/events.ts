@@ -62,3 +62,5 @@ export const BULK_PICK = 'Bulk Pick'
 export const CREATE_LIST = 'Create List'
 export const UPDATE_LIST = 'Update List'
 export const DELETE_LIST = 'Delete List'
+
+export const OPEN_SHARE_LIST_MODAL = 'Open share list modal'
