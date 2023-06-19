@@ -1,7 +1,23 @@
-.modal :global(.dcl.field), :global(.dcl.text-area) {
+.modal :global(.dcl.field),
+:global(.dcl.text-area) {
   margin-bottom: 20px;
 }
 
 .privatePopup:global(.ui.popup) {
   z-index: 9999;
+}
+
+.modal:global(.ui.modal > .actions) {
+  flex-direction: column;
+  gap: 15px;
+}
+
+@media (max-width: 768px) {
+  .modal:global(.ui.modal > .actions) {
+    gap: unset;
+  }
+
+  .modal :global(.dcl.field) {
+    min-width: unset;
+  }
 }

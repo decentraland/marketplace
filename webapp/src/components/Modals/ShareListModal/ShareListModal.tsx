@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Button, Icon, ModalNavigation } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
 import { AssetType } from '../../../modules/asset/types'
@@ -9,15 +10,15 @@ import { Section } from '../../../modules/vendor/decentraland/routing'
 import { config } from '../../../config'
 import copyText from '../../../lib/copyText'
 import { useTimer } from '../../../lib/timer'
+import * as events from '../../../utils/events'
 import { ListCard } from '../../ListsPage/ListCard'
 import { Props } from './ShareListModal.types'
 import styles from './ShareListModal.module.css'
 
 const twitterLink = 'https://twitter.com/intent/tweet?text='
+const MARKETPLACE_URL = config.get('MARKETPLACE_URL', '')
 
 const ShareListModal = (props: Props) => {
-  const MARKETPLACE_URL = config.get('MARKETPLACE_URL', '')
-
   const {
     metadata: { list },
     onClose
@@ -35,6 +36,26 @@ const ShareListModal = (props: Props) => {
     onClose()
   }, [onClose])
 
+  const handleCopyLink = useCallback(() => {
+    const url = `${MARKETPLACE_URL}${listLink}`
+    getAnalytics().track(events.COPY_LINK_TO_SHARE_LIST, {
+      list,
+      url
+    })
+    copyText(url, setHasCopied)
+  }, [list, listLink, setHasCopied])
+
+  const handleShareOnTwitter = useCallback(() => {
+    const url = `${twitterLink}${encodeURIComponent(
+      t('share_list_modal.twitter_message')
+    )} ${MARKETPLACE_URL}${listLink}`
+    getAnalytics().track(events.SHARE_LIST_ON_TWITTER, {
+      list,
+      url
+    })
+    window.open(url, '_blank')
+  }, [list, listLink])
+
   return (
     <Modal size="tiny" className={styles.modal} onClose={handleClose}>
       <ModalNavigation
@@ -45,25 +66,12 @@ const ShareListModal = (props: Props) => {
         <ListCard list={list} />
       </Modal.Content>
       <Modal.Actions className={styles.actions}>
-        <Button
-          primary
-          fluid
-          onClick={() =>
-            copyText(`${MARKETPLACE_URL}${listLink}`, setHasCopied)
-          }
-        >
+        <Button primary fluid onClick={handleCopyLink}>
           {hasCopiedAddress
             ? t('share_list_modal.copied')
             : t('share_list_modal.copy_link')}
         </Button>
-        <Button
-          as="a"
-          fluid
-          inverted
-          href={`${twitterLink}${encodeURIComponent(
-            t('share_list_modal.twitter_message')
-          )} ${MARKETPLACE_URL}${listLink}`}
-        >
+        <Button fluid inverted onClick={handleShareOnTwitter}>
           <Icon name="twitter" />
           {t('share_list_modal.share_on_twitter')}
         </Button>

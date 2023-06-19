@@ -11,6 +11,7 @@ import {
   Loader
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { formatDistanceToNow } from '../../lib/date'
 import { locations } from '../../modules/routing/locations'
 import { Section } from '../../modules/vendor/decentraland'
@@ -21,6 +22,7 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
 import { LinkedProfile } from '../LinkedProfile'
+import * as events from '../../utils/events'
 import { Props } from './ListPage.types'
 import styles from './ListPage.module.css'
 
@@ -87,6 +89,15 @@ const ListPage = ({
   )
 
   const privacyView = isPublicView ? 'public' : 'owner'
+
+  const handleShareList = useCallback(() => {
+    if (onShareList && list) {
+      getAnalytics().track(events.OPEN_SHARE_LIST_MODAL, {
+        list
+      })
+      onShareList(list)
+    }
+  }, [onShareList, list])
 
   const renderErrorView = useCallback(() => {
     const isNotFound = error?.includes(LIST_NOT_FOUND)
@@ -163,7 +174,7 @@ const ListPage = ({
                   className={classNames(styles.iconContainer, styles.share)}
                   inverted
                   compact
-                  onClick={onShareList && (() => onShareList(list))}
+                  onClick={handleShareList}
                   disabled={list.isPrivate}
                   data-testid={SHARE_LIST_BUTTON_TEST_ID}
                 >
