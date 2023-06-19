@@ -19,7 +19,7 @@
 }
 
 .empty {
-  background-color: #43404A;
+  background-color: #43404a;
   width: 100%;
   height: 100%;
   display: flex;
@@ -32,7 +32,7 @@
 .empty .icon {
   width: 59px;
   height: 59px;
-  background-image: url('../../../images/empty-list.png');
+  background-image: url('../../../images/empty-list.svg');
 }
 
 .content {
@@ -80,7 +80,7 @@
   height: 18px;
   top: 15px;
   right: 12px;
-  border: 1px solid #FFFFFF;
+  border: 1px solid #ffffff;
   color: black;
   border-radius: 30px;
   background-color: white;
