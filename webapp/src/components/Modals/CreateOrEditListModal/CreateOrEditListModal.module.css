@@ -3,6 +3,10 @@
   margin-bottom: 20px;
 }
 
+.privatePopup:global(.ui.popup) {
+  z-index: 9999;
+}
+
 .modal:global(.ui.modal > .actions) {
   flex-direction: column;
   gap: 15px;

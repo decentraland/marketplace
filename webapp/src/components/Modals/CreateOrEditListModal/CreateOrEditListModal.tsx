@@ -9,6 +9,7 @@ import {
   ModalNavigation,
   TextAreaField
 } from 'decentraland-ui'
+import { InfoTooltip } from '../../InfoTooltip'
 import styles from './CreateOrEditListModal.module.css'
 import { Props } from './CreateOrEditListModal.types'
 
@@ -148,9 +149,15 @@ const CreateOrEditListModal = ({
         <Checkbox
           checked={isPrivate}
           label={
-            list
-              ? t('create_or_edit_list_modal.edit.private')
-              : t('create_or_edit_list_modal.create.private')
+            <label>
+              {list
+                ? t('create_or_edit_list_modal.edit.private')
+                : t('create_or_edit_list_modal.create.private')}
+              <InfoTooltip
+                className={styles.privatePopup}
+                content={t('create_or_edit_list_modal.info.private')}
+              />
+            </label>
           }
           data-testid={CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID}
           disabled={isLoading}

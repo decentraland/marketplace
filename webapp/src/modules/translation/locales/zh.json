@@ -1375,7 +1375,8 @@
     "description": "清单说明",
     "info": {
       "max_name_length": "列表名称最多可以包含 {max} 个字符。",
-      "max_description_length": "列表描述最多可以包含 {max} 个字符。"
+      "max_description_length": "列表描述最多可以包含 {max} 个字符。",
+      "private": "每个人都可以查看公共列表。"
     },
     "errors": {
       "name_duplicated": "此名称已用于您的另一个列表。 <br></br> 选择不同的名称。"
