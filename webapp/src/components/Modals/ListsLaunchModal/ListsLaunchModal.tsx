@@ -61,7 +61,7 @@ export const ListsLaunchModal = ({
       <Modal.Actions className={styles.actions}>
         <Button
           as={Link}
-          to={locations.currentAccount({
+          to={locations.browse({
             section: decentraland.Section.WEARABLES,
             vendor: VendorName.DECENTRALAND,
             page: 1,
