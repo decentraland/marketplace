@@ -51,8 +51,8 @@ describe('when the modal is rendered', () => {
     jest.spyOn(window, 'open').mockImplementation(() => null)
     const dclUrl = 'https://market.decentraland.zone'
     const locationsUrl = '/lists/aListId?assetType=item&section=lists&page=1'
-    const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      t('share_list_modal.twitter_message')
+    const twitterURL = `https://twitter.com/intent/tweet?text=${t(
+      'share_list_modal.twitter_message'
     )} ${dclUrl}${locationsUrl}`
     const { getByRole } = renderedModal
     const button = getByRole('button', {
