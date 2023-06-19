@@ -77,25 +77,8 @@
 .private {
   z-index: 2;
   position: absolute;
-  height: 18px;
   top: 15px;
   right: 12px;
-  border: 1px solid #ffffff;
-  color: black;
-  border-radius: 30px;
-  background-color: white;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0px 5px 0px 5px;
-}
-
-.private .icon {
-  width: 12px;
-  height: 12px;
-  margin-right: 1px;
-  background-image: url('../../../images/lock-icon.png');
 }
 
 .grid-1 {

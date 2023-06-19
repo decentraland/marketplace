@@ -8,6 +8,7 @@ import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { View } from '../../../modules/ui/types'
 import { AssetImage } from '../../AssetImage'
+import { PrivateTag } from '../../PrivateTag'
 import { Props } from './ListCard.types'
 import styles from './ListCard.module.css'
 import {
@@ -38,10 +39,10 @@ const ListCard = (props: Props) => {
     >
       <div className={styles.image}>
         {list.isPrivate ? (
-          <div className={styles.private} data-testid={PRIVATE_DATA_TEST_ID}>
-            <div className={styles.icon}></div>
-            {t('list_card.private')}
-          </div>
+          <PrivateTag
+            data-testid={PRIVATE_DATA_TEST_ID}
+            className={styles.private}
+          />
         ) : null}
         {items.length > 0 ? (
           <div

@@ -21,6 +21,20 @@ function renderListsPage(props: Partial<Props> = {}) {
 }
 
 let renderedPage: ReturnType<typeof renderListsPage>
+let lists: List[]
+
+beforeEach(() => {
+  lists = Array.from(
+    { length: 5 },
+    (_e, i) =>
+      ({
+        id: i.toString(),
+        name: 'aListName',
+        itemsCount: 1,
+        previewOfItemIds: []
+      } as List)
+  )
+})
 
 describe('when rendering the ListsPage with the request loading', () => {
   beforeEach(() => {
@@ -47,7 +61,7 @@ describe('when clicking the create list button', () => {
 
   beforeEach(() => {
     onCreateList = jest.fn()
-    renderedPage = renderListsPage({ onCreateList, lists: [{} as List] })
+    renderedPage = renderListsPage({ onCreateList, lists })
   })
 
   it('should call the onCreateList prop callback', () => {
@@ -61,7 +75,7 @@ describe('when rendering the ListsPage with 5 lists', () => {
   beforeEach(() => {
     renderedPage = renderListsPage({
       count,
-      lists: Array(count).fill({} as List)
+      lists
     })
   })
 
