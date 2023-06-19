@@ -1415,7 +1415,7 @@
     "confirm": "Borrar permanentemente"
   },
   "save_to_list_modal": {
-    "title": "Editar lista",
+    "title": "Editar listas",
     "items_count": "{count} {count, plural, one {item} other {items}}",
     "create_list": "Crear lista",
     "save_in_a_list": "Guardar en {name}",
