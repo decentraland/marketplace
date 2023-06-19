@@ -1410,6 +1410,12 @@
     "copied": "複製",
     "twitter_message": "我剛剛分享了一個新列表，看看吧："
   },
+  "lists_ftu": {
+    "title": "市場列表介紹",
+    "description": "您現在可以將可穿戴設備和表情保存到您的<b>自定義列表</b><br></br>。您可以在<b>我的列表</b>部分找到它們。",
+    "explore_collectibles": "探索收藏品",
+    "view_my_lists": "查看我的列表"
+  },
   "list_card": {
     "item_count": "{count} {count, plural, one {项} other {项目}}",
     "edit_list": "编辑列表",

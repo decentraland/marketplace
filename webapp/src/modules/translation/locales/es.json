@@ -1405,6 +1405,12 @@
     "copied": "copiado",
     "twitter_message": "Acabo de compartir una nueva lista, échale un vistazo: "
   },
+  "lists_ftu": {
+    "title": "Introducción a las listas de Marketplace",
+    "description": "Ahora puedes guardar wearables y emotes en tus <b>Listas Personalizadas</b> <br></br>. Los encontrarás en la sección <b>Mis listas</b>.",
+    "explore_collectibles": "Explora coleccionables",
+    "view_my_lists": "Ver Mis Listas"
+  },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
     "edit_list": "Editar lista",

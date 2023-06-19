@@ -19,6 +19,7 @@ import { CampaignBanner } from '../Campaign/CampaignBanner'
 import { Slideshow } from './Slideshow'
 import { RankingsTable } from '../RankingsTable'
 import { BackToTopButton } from '../BackToTopButton'
+import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
 import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
 import { Props } from './HomePage.types'
 import './HomePage.css'
@@ -211,6 +212,7 @@ const HomePage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.OVERVIEW} />
+      <ListsLaunchModal />
       {isCampaignHomepageBannerEnabled ? (
         <CampaignBanner>
           <CampaignHomepageBanner />
