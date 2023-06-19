@@ -197,7 +197,7 @@ describe('when rendering the ListPage with a loaded list', () => {
         })
       })
 
-      it('should show the share list button disable', () => {
+      it('should show the share list button disabled', () => {
         expect(
           renderedPage.getByTestId(SHARE_LIST_BUTTON_TEST_ID)
         ).toBeDisabled()
