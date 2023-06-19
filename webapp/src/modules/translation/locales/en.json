@@ -1425,7 +1425,7 @@
     "confirm": "Delete permanently"
   },
   "save_to_list_modal": {
-    "title": "Save to list",
+    "title": "Edit Lists",
     "items_count": "{count} {count, plural, one {item} other {items}}",
     "create_list": "Create list",
     "save_in_a_list": "Save in {name}",

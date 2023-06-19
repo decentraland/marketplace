@@ -1421,7 +1421,7 @@
     "confirm": "永久删除"
   },
   "save_to_list_modal": {
-    "title": "保存到列表",
+    "title": "编辑列表",
     "items_count": "{count} {count, plural, one {项} other {项目}}",
     "create_list": "创建列表",
     "save_in_a_list": "保存在{name}",
