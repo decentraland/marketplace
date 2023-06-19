@@ -61,13 +61,6 @@
   left: 5px;
 }
 
-.checkbox:global(.ui.checkbox input[type='checkbox'].hidden ~ label:before),
-.checkbox:global(.ui.checkbox
-    input[type='checkbox'].hidden
-    ~ label:hover:before) {
-  border: 1px solid white;
-}
-
 .loading {
   display: flex;
   align-items: center;
