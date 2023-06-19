@@ -100,23 +100,6 @@ const ListPage = ({
     }
   }, [onShareList, list])
 
-  const shareButton = useMemo(
-    () =>
-      list && (
-        <Button
-          className={classNames(styles.iconContainer, styles.share)}
-          inverted
-          compact
-          onClick={handleShareList}
-          disabled={list.isPrivate}
-          data-testid={SHARE_LIST_BUTTON_TEST_ID}
-        >
-          <Icon name="share alternate" />
-        </Button>
-      ),
-    [list, handleShareList]
-  )
-
   const renderErrorView = useCallback(() => {
     const isNotFound = error?.includes(LIST_NOT_FOUND)
     const errorType = isNotFound ? 'not_found' : 'could_not_load'
@@ -188,40 +171,63 @@ const ListPage = ({
             </div>
             {!isPublicView ? (
               <div className={styles.actions}>
-                {list.isPrivate ? (
-                  <Popup
-                    content={t('list_page.disable_sharing')}
-                    position="top left"
-                    trigger={<span>{shareButton}</span>}
-                    on="hover"
-                  />
-                ) : (
-                  shareButton
-                )}
-                <Dropdown
-                  compact
-                  className={styles.iconContainer}
-                  icon={<Icon name="ellipsis horizontal" />}
-                  as={Button}
-                  inverted
-                  disabled={list.id === DEFAULT_FAVORITES_LIST_ID}
-                  data-testid={MORE_OPTIONS_DROPDOWN_TEST_ID}
-                >
-                  <Dropdown.Menu direction="left">
-                    <Dropdown.Item
-                      text={t('list_page.edit_list')}
-                      onClick={() => onEditList(list)}
-                      data-testid={EDIT_LIST_BUTTON_TEST_ID}
-                      disabled={list.id === DEFAULT_FAVORITES_LIST_ID}
-                    />
-                    <Dropdown.Item
-                      text={t('list_page.delete_list')}
-                      onClick={() => onDeleteList(list)}
-                      data-testid={DELETE_LIST_BUTTON_TEST_ID}
-                      disabled={list.id === DEFAULT_FAVORITES_LIST_ID}
-                    />
-                  </Dropdown.Menu>
-                </Dropdown>
+                <Popup
+                  content={t('list_page.disable_sharing')}
+                  position="top left"
+                  trigger={
+                    <span>
+                      <Button
+                        className={classNames(
+                          styles.iconContainer,
+                          styles.share
+                        )}
+                        inverted
+                        compact
+                        onClick={handleShareList}
+                        disabled={list.isPrivate}
+                        data-testid={SHARE_LIST_BUTTON_TEST_ID}
+                      >
+                        <Icon name="share alternate" />
+                      </Button>
+                    </span>
+                  }
+                  on="hover"
+                  disabled={!list.isPrivate}
+                />
+                <Popup
+                  content={t('list_page.disable_kebab_menu')}
+                  position="top left"
+                  trigger={
+                    <span>
+                      <Dropdown
+                        compact
+                        className={styles.iconContainer}
+                        icon={<Icon name="ellipsis horizontal" />}
+                        as={Button}
+                        inverted
+                        disabled={list.id === DEFAULT_FAVORITES_LIST_ID}
+                        data-testid={MORE_OPTIONS_DROPDOWN_TEST_ID}
+                      >
+                        <Dropdown.Menu direction="left">
+                          <Dropdown.Item
+                            text={t('list_page.edit_list')}
+                            onClick={() => onEditList(list)}
+                            data-testid={EDIT_LIST_BUTTON_TEST_ID}
+                            disabled={list.id === DEFAULT_FAVORITES_LIST_ID}
+                          />
+                          <Dropdown.Item
+                            text={t('list_page.delete_list')}
+                            onClick={() => onDeleteList(list)}
+                            data-testid={DELETE_LIST_BUTTON_TEST_ID}
+                            disabled={list.id === DEFAULT_FAVORITES_LIST_ID}
+                          />
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </span>
+                  }
+                  on="hover"
+                  disabled={list.id !== DEFAULT_FAVORITES_LIST_ID}
+                />
               </div>
             ) : null}
           </Header>
