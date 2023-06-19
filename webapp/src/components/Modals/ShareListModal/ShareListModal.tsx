@@ -46,8 +46,8 @@ const ShareListModal = (props: Props) => {
   }, [list, listLink, setHasCopied])
 
   const handleShareOnTwitter = useCallback(() => {
-    const url = `${twitterLink}${encodeURIComponent(
-      t('share_list_modal.twitter_message')
+    const url = `${twitterLink}${t(
+      'share_list_modal.twitter_message'
     )} ${MARKETPLACE_URL}${listLink}`
     getAnalytics().track(events.SHARE_LIST_ON_TWITTER, {
       list,
