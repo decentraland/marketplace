@@ -1364,6 +1364,7 @@ describe('when handling the request to start the picks and unpicks in bulk proce
             [put(bulkPickUnpickRequest(item, [newList], [])), undefined]
           ])
           .put(openModal('SaveToListModal', { item }))
+          .put(closeModal('SaveToListModal'))
           .put(bulkPickUnpickRequest(item, [newList], []))
           .dispatch(bulkPickUnpickStart(item))
           .run({ silenceTimeout: true })

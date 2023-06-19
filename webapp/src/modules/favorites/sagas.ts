@@ -462,6 +462,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       })
 
       if (listCreationSuccess) {
+        yield put(closeModal('SaveToListModal'))
+
         const { list: newList } = listCreationSuccess.payload
         const list: List = yield select(getList, newList.id)
 
