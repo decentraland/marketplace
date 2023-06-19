@@ -9,16 +9,20 @@ import { NFT } from '../../modules/nft/types'
 import { SuccessPage } from './SuccessPage'
 import { Props } from './SuccessPage.types'
 
-jest.mock('react-router-dom', () => ({
-  useHistory: jest.fn(),
-  useLocation: () => ({
-    search: '?txHash=txhash&tokenId=1&contractAddress=address&assetType=nft'
-  })
-}))
+jest.mock('react-router-dom', () => {
+  const module = jest.requireActual('react-router-dom')
+  return {
+    ...module,
+    useHistory: jest.fn(),
+    useLocation: () => ({
+      search: '?txHash=txhash&tokenId=1&contractAddress=address&assetType=nft'
+    })
+  }
+})
 
 jest.mock('lottie-react', () => () => <div>LOTTIE</div>)
 
-function renderSuccessPage(props: Partial<Props> = {}) {
+function renderSuccessPage(props: Partial<Props> = {}): RenderResult {
   return renderWithProviders(
     <SuccessPage isLoading={false} mintedTokenId={null} {...props} />,
     {

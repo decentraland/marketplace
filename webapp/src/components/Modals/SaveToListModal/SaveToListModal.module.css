@@ -3,7 +3,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #736E7D;
+  border-bottom: 1px solid #736e7d;
   padding-bottom: 10px;
   padding-top: 10px;
 }
@@ -50,8 +50,11 @@
   height: 23px;
 }
 
-.checkbox:global(.ui.checkbox.checked:not(.toggle)) :global(input[type='checkbox'].hidden + label:after),
-.checkbox:global(.ui.checkbox.checked:not(.toggle) input[type='checkbox'].hidden:focus + label:after) {
+.checkbox:global(.ui.checkbox.checked:not(.toggle))
+  :global(input[type='checkbox'].hidden + label:after),
+.checkbox:global(.ui.checkbox.checked:not(.toggle)
+    input[type='checkbox'].hidden:focus
+    + label:after) {
   width: 15px;
   height: 15px;
   top: 5px;

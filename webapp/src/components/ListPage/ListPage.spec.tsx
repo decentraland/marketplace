@@ -18,7 +18,8 @@ import {
   ERROR_CONTAINER_TEST_ID,
   COULD_NOT_LOAD_LIST_ACTION_TEST_ID,
   GO_BACK_BUTTON_TEST_ID,
-  EMPTY_LIST_ACTION_TEST_ID
+  EMPTY_LIST_ACTION_TEST_ID,
+  MORE_OPTIONS_DROPDOWN_TEST_ID
 } from './constants'
 import { Props } from './ListPage.types'
 
@@ -191,23 +192,33 @@ describe('when rendering the ListPage with a loaded list', () => {
     describe('when the lists feature flag is on', () => {
       beforeEach(() => {
         renderedPage = renderListPage({
-          list: { ...list, id: DEFAULT_FAVORITES_LIST_ID },
+          list: { ...list, id: DEFAULT_FAVORITES_LIST_ID, isPrivate: true },
           isListV1Enabled: true
         })
       })
 
-      it('should hide the share list button', () => {
-        expect(renderedPage.queryByTestId(SHARE_LIST_BUTTON_TEST_ID)).toBeNull()
-      })
-
-      it('should hide the edit list button', () => {
-        expect(renderedPage.queryByTestId(EDIT_LIST_BUTTON_TEST_ID)).toBeNull()
-      })
-
-      it('should hide the delete list button', () => {
+      it('should show the share list button disabled', () => {
         expect(
-          renderedPage.queryByTestId(DELETE_LIST_BUTTON_TEST_ID)
-        ).toBeNull()
+          renderedPage.getByTestId(SHARE_LIST_BUTTON_TEST_ID)
+        ).toBeDisabled()
+      })
+
+      it('should disable the dropdown to edit and delete the list', () => {
+        expect(
+          renderedPage.getByTestId(MORE_OPTIONS_DROPDOWN_TEST_ID)
+        ).toHaveClass('disabled')
+      })
+
+      it('should disable the dropdown item to edit the list', () => {
+        expect(renderedPage.getByTestId(EDIT_LIST_BUTTON_TEST_ID)).toHaveClass(
+          'disabled'
+        )
+      })
+
+      it('should disable the dropdown item to delete the list', () => {
+        expect(
+          renderedPage.getByTestId(DELETE_LIST_BUTTON_TEST_ID)
+        ).toHaveClass('disabled')
       })
     })
 

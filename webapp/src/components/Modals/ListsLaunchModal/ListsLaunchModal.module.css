@@ -1,0 +1,39 @@
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.modalDescription {
+  text-align: center;
+}
+
+:global(.ui.modal .actions > .button:first-child) {
+  width: 80%;
+  align-self: center;
+}
+
+:global(.ui.modal .actions .ui.button + .ui.button) {
+  margin: unset;
+  width: 80%;
+  align-self: center;
+  color: white;
+  border-color: white;
+}
+
+.launchModal:global(.ui.modal > .content) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 50px;
+}
+
+:global(.ui.medium.image).listsLogo {
+  background-image: url('../../../images/empty-list.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+}
