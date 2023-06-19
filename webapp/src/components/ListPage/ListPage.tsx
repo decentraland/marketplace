@@ -1,15 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Link, Redirect, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
-import {
-  Back,
-  Badge,
-  Button,
-  Dropdown,
-  Header,
-  Icon,
-  Loader
-} from 'decentraland-ui'
+import { Back, Button, Dropdown, Header, Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { formatDistanceToNow } from '../../lib/date'
@@ -18,11 +10,12 @@ import { Section } from '../../modules/vendor/decentraland'
 import { VendorName } from '../../modules/vendor'
 import { View } from '../../modules/ui/types'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
+import * as events from '../../utils/events'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
 import { LinkedProfile } from '../LinkedProfile'
-import * as events from '../../utils/events'
+import { PrivateTag } from '../PrivateTag'
 import { Props } from './ListPage.types'
 import styles from './ListPage.module.css'
 
@@ -160,12 +153,10 @@ const ListPage = ({
             <div className={styles.nameContainer}>
               {list.name}
               {list.isPrivate && (
-                <div data-testid={PRIVATE_BADGE_TEST_ID}>
-                  <Badge color="white" className={styles.privateBadge}>
-                    <Icon name="lock" />
-                    Private
-                  </Badge>
-                </div>
+                <PrivateTag
+                  data-testid={PRIVATE_BADGE_TEST_ID}
+                  className={styles.privateBadge}
+                />
               )}
             </div>
             {list.id !== DEFAULT_FAVORITES_LIST_ID && !isPublicView ? (
