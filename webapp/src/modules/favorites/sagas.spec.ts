@@ -1,3 +1,4 @@
+import { getLocation, push } from 'connected-react-router'
 import { call, put, select, take } from 'redux-saga/effects'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { expectSaga } from 'redux-saga-test-plan'
@@ -18,6 +19,7 @@ import {
   Permission,
   UpdateOrCreateList
 } from '../vendor/decentraland/favorites/types'
+import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
@@ -73,8 +75,6 @@ import {
   ListsBrowseSortBy,
   UpdateListParameters
 } from './types'
-import { getLocation, push } from 'connected-react-router'
-import { locations } from '../routing/locations'
 
 let item: Item
 let address: string

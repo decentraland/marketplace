@@ -1,3 +1,4 @@
+import { getLocation, push } from 'connected-react-router'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { CatalogFilters, Item } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
@@ -23,6 +24,7 @@ import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
 import { NFT_SERVER_URL } from '../vendor/decentraland'
+import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import {
@@ -87,8 +89,6 @@ import {
 } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
-import { getLocation, push } from 'connected-react-router'
-import { locations } from '../routing/locations'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
