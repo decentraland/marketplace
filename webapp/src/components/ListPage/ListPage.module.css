@@ -209,3 +209,11 @@
 .emptyState {
   flex-grow: 1;
 }
+
+.cardsGroup {
+  margin-top: 30px;
+  display: grid;
+  grid-gap: 12px;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, 290px);
+}
