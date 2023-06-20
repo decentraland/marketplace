@@ -70,6 +70,10 @@
   min-width: unset;
 }
 
+.createList:global(.ui.small.primary.button) {
+  margin-left: 10px;
+}
+
 @media (max-width: 767px) {
   .createList .icon {
     display: none;

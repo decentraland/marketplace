@@ -127,6 +127,7 @@ const CreateOrEditListModal = ({
           }
           maxLength={MAX_NAME_LENGTH}
           onChange={handleNameChange}
+          autoFocus
         />
         <TextAreaField
           label={t('create_or_edit_list_modal.description')}
