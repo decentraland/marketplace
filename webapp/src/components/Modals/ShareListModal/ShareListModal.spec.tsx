@@ -50,7 +50,8 @@ describe('when the modal is rendered', () => {
   it('should have a twitter share button with the href pointing to a twitter message', () => {
     jest.spyOn(window, 'open').mockImplementation(() => null)
     const dclUrl = 'https://market.decentraland.zone'
-    const locationsUrl = '/lists/aListId?assetType=item&section=lists&page=1'
+    const locationsUrl =
+      '/lists/aListId?assetType=item&section=lists&vendor=decentraland&page=1&sortBy=newest'
     const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       t('share_list_modal.twitter_message')
     )} ${dclUrl}${locationsUrl}`
