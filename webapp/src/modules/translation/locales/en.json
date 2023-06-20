@@ -1412,7 +1412,11 @@
     "copy_link": "copy link",
     "share_on_twitter": "Share on twitter",
     "copied": "Copied",
-    "twitter_message": "I%20just%20shared%20a%20new%20List%20%F0%9F%AB%B6%2C%0ACheck%20it%20out%3A%0A%F0%9F%93%8D"
+    "twitter_message": {
+      "first_line": "I just shared a new List 🫶,",
+      "second_line": "Check it out:",
+      "third_line": "📍"
+    }
   },
   "lists_ftu": {
     "title": "Introducing Marketplace Lists",
