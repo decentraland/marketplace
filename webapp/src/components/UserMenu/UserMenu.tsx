@@ -5,7 +5,13 @@ import { Icon } from 'decentraland-ui'
 import { Props } from './UserMenu.types'
 
 const UserMenu = (props: Props) => {
-  const { onClickMyAssets, onClickMyLists, ...baseProps } = props
+  const {
+    onClickMyAssets,
+    onClickMyLists,
+    isListV1Enabled,
+    onClickMyListsV1,
+    ...baseProps
+  } = props
 
   const menuItems = useMemo(
     () => (
@@ -14,13 +20,17 @@ const UserMenu = (props: Props) => {
           <Icon name="briefcase"></Icon>
           {t('user_menu.my_assets')}
         </li>
-        <li onClick={onClickMyLists} role="button" data-testid="my-lists">
+        <li
+          onClick={isListV1Enabled ? onClickMyListsV1 : onClickMyLists}
+          role="button"
+          data-testid="my-lists"
+        >
           <Icon name="bookmark"></Icon>
           {t('user_menu.my_lists')}
         </li>
       </>
     ),
-    [onClickMyAssets, onClickMyLists]
+    [isListV1Enabled, onClickMyAssets, onClickMyLists, onClickMyListsV1]
   )
 
   return <BaseUserMenu {...baseProps} menuItems={menuItems} />
