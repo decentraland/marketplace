@@ -60,7 +60,7 @@ const CampaignHomepageBanner: React.FC = () => {
       </div>
       <img
         src={hat}
-        alt={t('event_banner.event_tag')}
+        alt={t('campaign.event_tag')}
         className="event-banner-hat"
       />
     </div>
