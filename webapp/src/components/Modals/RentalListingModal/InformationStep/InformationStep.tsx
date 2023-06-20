@@ -43,10 +43,12 @@ const InformationStep = (props: Props) => {
       </Modal.Content>
 
       <Modal.Actions className={styles.actions}>
-        <Button primary onClick={handleSubmit}>
+        <Button primary fluid onClick={handleSubmit}>
           {t('rental_modal.authorization_step_again.title')}
         </Button>
-        <Button onClick={onCancel}>{t('global.cancel')}</Button>
+        <Button fluid onClick={onCancel}>
+          {t('global.cancel')}
+        </Button>
       </Modal.Actions>
     </>
   )

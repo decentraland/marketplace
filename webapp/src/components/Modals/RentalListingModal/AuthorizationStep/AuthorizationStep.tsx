@@ -157,6 +157,7 @@ const AuthorizationStep = (props: Props) => {
             ) : (
               <Button
                 primary
+                fluid
                 loading={isLoading}
                 onClick={handleSubmit}
                 disabled={isLoading}
@@ -164,7 +165,7 @@ const AuthorizationStep = (props: Props) => {
                 {t('global.proceed')}
               </Button>
             )}
-            <Button onClick={handleCancel} disabled={isLoading}>
+            <Button fluid onClick={handleCancel} disabled={isLoading}>
               {t('global.cancel')}
             </Button>
             {showError && (
