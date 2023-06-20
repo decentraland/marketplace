@@ -6,7 +6,8 @@ import {
   undoUnpickingItemAsFavoriteSuccess,
   fetchListsSuccess,
   deleteListSuccess,
-  bulkPickUnpickSuccess
+  bulkPickUnpickSuccess,
+  fetchFavoritedItemsRequest
 } from '../../favorites/actions'
 import { fetchItemsRequest, fetchItemsSuccess } from '../../item/actions'
 import { ItemBrowseOptions } from '../../item/types'
@@ -943,6 +944,45 @@ describe('when reducing the action of the success of an item picking and unpicki
           )
         )
       ).toEqual({ ...INITIAL_STATE, count: 1 })
+    })
+  })
+})
+
+describe('when reducing the action of requesting the items added to a list', () => {
+  let initialState: BrowseUIState
+  let browseOptions: ItemBrowseOptions
+
+  beforeEach(() => {
+    initialState = {
+      ...INITIAL_STATE
+    }
+    browseOptions = {}
+  })
+
+  describe('and is the first time loading the items', () => {
+    beforeEach(() => {
+      delete initialState.page
+    })
+
+    it('should return the state with the itemIds cleared', () => {
+      expect(
+        browseReducer(initialState, fetchFavoritedItemsRequest(browseOptions))
+      ).toEqual({ ...initialState, itemIds: [] })
+    })
+  })
+
+  describe('and is loading more items', () => {
+    const itemIds = ['anItemId']
+    beforeEach(() => {
+      initialState.page = 1
+      initialState.itemIds = itemIds
+      browseOptions = { page: 2 }
+    })
+
+    it('should return the state without changes', () => {
+      expect(
+        browseReducer(initialState, fetchFavoritedItemsRequest(browseOptions))
+      ).toEqual(initialState)
     })
   })
 })

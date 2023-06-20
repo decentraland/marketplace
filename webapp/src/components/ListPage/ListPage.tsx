@@ -45,20 +45,21 @@ import {
 
 const LIST_NOT_FOUND = 'list was not found'
 
-const ListPage = ({
-  isConnecting,
-  wallet,
-  listId,
-  list,
-  isLoading,
-  error,
-  onFetchList,
-  onBack,
-  onEditList,
-  onDeleteList,
-  onShareList,
-  isListV1Enabled
-}: Props) => {
+const ListPage = (props: Props) => {
+  const {
+    isConnecting,
+    wallet,
+    listId,
+    list,
+    isLoading,
+    error,
+    onFetchList,
+    onBack,
+    onEditList,
+    onDeleteList,
+    onShareList,
+    isListV1Enabled
+  } = props
   const hasFetchedOnce = useRef(false)
   const { pathname, search } = useLocation()
 
@@ -149,7 +150,8 @@ const ListPage = ({
     <PageLayout activeTab={isPublicView ? undefined : NavigationTab.MY_LISTS}>
       {isLoading || isConnecting ? (
         <Loader active size="massive" data-testid={LOADER_TEST_ID} />
-      ) : list ? (
+      ) : null}
+      {!isLoading && !isConnecting && listId && list && !error ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
             {(!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID) &&
@@ -282,9 +284,8 @@ const ListPage = ({
             )}
           </div>
         </div>
-      ) : (
-        error && renderErrorView()
-      )}
+      ) : null}
+      {!isLoading && !isConnecting && error && renderErrorView()}
     </PageLayout>
   )
 }

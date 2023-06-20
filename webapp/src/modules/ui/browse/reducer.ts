@@ -5,8 +5,10 @@ import {
   CreateListSuccessAction,
   DELETE_LIST_SUCCESS,
   DeleteListSuccessAction,
+  FETCH_FAVORITED_ITEMS_REQUEST,
   FETCH_FAVORITED_ITEMS_SUCCESS,
   FETCH_LISTS_SUCCESS,
+  FetchFavoritedItemsRequestAction,
   FetchFavoritedItemsSuccessAction,
   FetchListsSuccessAction,
   UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
@@ -60,6 +62,7 @@ type UIReducerAction =
   | BrowseAction
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
+  | FetchFavoritedItemsRequestAction
   | FetchFavoritedItemsSuccessAction
   | UnpickItemAsFavoriteSuccessAction
   | UndoUnpickingItemAsFavoriteSuccessAction
@@ -184,6 +187,14 @@ export function browseReducer(
           }
       }
     }
+
+    case FETCH_FAVORITED_ITEMS_REQUEST:
+      return {
+        ...state,
+        itemIds: isLoadingMoreResults(state, action.payload.options.page)
+          ? state.itemIds
+          : []
+      }
 
     case FETCH_FAVORITED_ITEMS_SUCCESS:
       const {

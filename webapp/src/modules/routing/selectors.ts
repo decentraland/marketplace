@@ -431,11 +431,11 @@ export const getCurrentLocationAddress = createSelector<
   getPathName,
   getWalletAddress,
   getAccountAddress,
-  (pathname, walletAddess, accountAddress) => {
+  (pathname, walletAddress, accountAddress) => {
     let address: string | undefined
 
     if (pathname === locations.currentAccount()) {
-      address = walletAddess
+      address = walletAddress
     } else {
       address = accountAddress
     }

@@ -11,6 +11,8 @@ import { config } from '../../../config'
 import copyText from '../../../lib/copyText'
 import { useTimer } from '../../../lib/timer'
 import * as events from '../../../utils/events'
+import { VendorName } from '../../../modules/vendor'
+import { SortBy } from '../../../modules/routing/types'
 import { ListCard } from '../../ListsPage/ListCard'
 import { Props } from './ShareListModal.types'
 import styles from './ShareListModal.module.css'
@@ -29,7 +31,9 @@ const ShareListModal = (props: Props) => {
     assetType: AssetType.ITEM,
     page: 1,
     section: Section.LISTS,
-    view: View.LISTS
+    view: View.LISTS,
+    vendor: VendorName.DECENTRALAND,
+    sortBy: SortBy.NEWEST
   })
 
   const handleClose = useCallback(() => {

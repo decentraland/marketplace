@@ -23,6 +23,8 @@ import {
   ListOfLists,
   UpdateOrCreateList
 } from '../vendor/decentraland/favorites/types'
+import { SortBy } from '../routing/types'
+import { VendorName } from '../vendor'
 import { toastDispatchableActionsChannel } from './utils'
 import {
   BulkPickUnpickMessageType,
@@ -331,7 +333,9 @@ function buildBulkPickItemBodyMessage(
                 assetType: AssetType.ITEM,
                 page: 1,
                 section: Section.LISTS,
-                view: View.LISTS
+                view: View.LISTS,
+                vendor: VendorName.DECENTRALAND,
+                sortBy: SortBy.NEWEST
               })}
             >
               {lists[0]?.name ?? ''}
@@ -345,7 +349,9 @@ function buildBulkPickItemBodyMessage(
                 assetType: AssetType.ITEM,
                 page: 1,
                 section: Section.LISTS,
-                view: View.LISTS
+                view: View.LISTS,
+                vendor: VendorName.DECENTRALAND,
+                sortBy: SortBy.NEWEST
               })}
             >
               {lists[1]?.name ?? ''}

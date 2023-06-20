@@ -7,6 +7,8 @@ import { DEFAULT_FAVORITES_LIST_ID } from '../../../modules/vendor/decentraland/
 import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { View } from '../../../modules/ui/types'
+import { VendorName } from '../../../modules/vendor'
+import { SortBy } from '../../../modules/routing/types'
 import { AssetImage } from '../../AssetImage'
 import { PrivateTag } from '../../PrivateTag'
 import { Props } from './ListCard.types'
@@ -33,7 +35,9 @@ const ListCard = (props: Props) => {
         assetType: AssetType.ITEM,
         page: 1,
         section: Section.LISTS,
-        view: View.LISTS
+        view: View.LISTS,
+        vendor: VendorName.DECENTRALAND,
+        sortBy: SortBy.NEWEST
       })}
       className={styles.card}
     >
