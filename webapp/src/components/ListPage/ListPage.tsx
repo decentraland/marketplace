@@ -146,7 +146,7 @@ const ListPage = ({
   }
 
   return (
-    <PageLayout activeTab={NavigationTab.MY_LISTS}>
+    <PageLayout activeTab={isPublicView ? undefined : NavigationTab.MY_LISTS}>
       {isLoading || isConnecting ? (
         <Loader active size="massive" data-testid={LOADER_TEST_ID} />
       ) : list ? (
