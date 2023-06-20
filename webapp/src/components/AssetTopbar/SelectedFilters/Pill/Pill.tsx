@@ -1,5 +1,5 @@
 import { Icon } from 'decentraland-ui'
-import classnames from 'classnames'
+import classNames from 'classnames'
 import styles from './Pill.module.css'
 
 type Props = {
@@ -17,7 +17,7 @@ export const Pill = ({
 }: Props): JSX.Element => {
   return (
     <div
-      className={classnames(styles.pill, className)}
+      className={classNames(styles.pill, className)}
       data-testid={`pill-${id}`}
     >
       {label}

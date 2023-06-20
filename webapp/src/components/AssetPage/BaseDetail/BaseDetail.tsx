@@ -48,7 +48,7 @@ const BaseDetail = ({
             )}
           </div>
         </div>
-        <div className={'below'}>{below}</div>
+        <span className={'below'}>{below}</span>
       </Container>
     </div>
   )
