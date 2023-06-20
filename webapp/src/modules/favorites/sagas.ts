@@ -77,7 +77,8 @@ import {
   CreateListFailureAction,
   CREATE_LIST_SUCCESS,
   CREATE_LIST_FAILURE,
-  bulkPickUnpickRequest
+  bulkPickUnpickRequest,
+  DELETE_LIST_SUCCESS
 } from './actions'
 import {
   getList,
@@ -86,6 +87,8 @@ import {
 } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
+import { getLocation, push } from 'connected-react-router'
+import { locations } from '../routing/locations'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
@@ -118,6 +121,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(FETCH_LISTS_REQUEST, handleFetchListsRequest)
   yield takeEvery(DELETE_LIST_REQUEST, handleDeleteListRequest)
   yield takeEvery(DELETE_LIST_START, handleDeleteListStart)
+  yield takeEvery(DELETE_LIST_SUCCESS, handleDeleteListSuccess)
   yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
   yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
   yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
@@ -335,6 +339,11 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     } else {
       yield put(deleteListRequest(list))
     }
+  }
+
+  function* handleDeleteListSuccess() {
+    const { pathname } = yield select(getLocation)
+    if (pathname !== locations.lists()) yield put(push(locations.lists()))
   }
 
   function* handleDeleteListRequest(action: DeleteListRequestAction) {

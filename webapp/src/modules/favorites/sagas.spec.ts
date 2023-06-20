@@ -73,6 +73,8 @@ import {
   ListsBrowseSortBy,
   UpdateListParameters
 } from './types'
+import { getLocation, push } from 'connected-react-router'
+import { locations } from '../routing/locations'
 
 let item: Item
 let address: string
@@ -1076,7 +1078,8 @@ describe('when handling the request for deleting a list', () => {
           [
             matchers.call.fn(FavoritesAPI.prototype.deleteList),
             Promise.resolve()
-          ]
+          ],
+          [select(getLocation), { pathname: locations.lists() }]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.deleteList,
@@ -1084,6 +1087,33 @@ describe('when handling the request for deleting a list', () => {
         })
         .put(deleteListSuccess(list))
         .dispatch(deleteListRequest(list))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the success deletion of a list', () => {
+  let list: List
+  beforeEach(() => {
+    list = { id: 'anId', name: 'aName', itemsCount: 1, createdAt: Date.now() }
+  })
+
+  describe('and the user performed the action from the list detail page', () => {
+    it('should dispatch an action to redirect the user to the My Lists tab', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[select(getLocation), { pathname: locations.list(list.id) }]])
+        .put(push(locations.lists()))
+        .dispatch(deleteListSuccess(list))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the user performed the action from the My Lists tab', () => {
+    it('should not dispatch the action signaling the redirection', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([[select(getLocation), { pathname: locations.lists() }]])
+        .not.put(push(locations.lists()))
+        .dispatch(deleteListSuccess(list))
         .run({ silenceTimeout: true })
     })
   })
