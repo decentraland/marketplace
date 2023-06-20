@@ -268,12 +268,14 @@ const CreateListingStep = (props: Props) => {
               primary
               onClick={handleSubmit}
               disabled={isInvalid || !isUpdated}
+              fluid
             >
               {isListForRentAgain
                 ? t('rental_modal.authorization_step_again.title')
                 : t('rental_modal.create_listing_step.update_listing')}
             </Button>
             <Button
+              fluid
               className={styles.actionButton}
               secondary
               onClick={handleRemove}
