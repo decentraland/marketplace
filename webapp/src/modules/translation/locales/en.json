@@ -1441,6 +1441,6 @@
     "save_in_lists": "Save in {count} lists",
     "remove_from_lists": "Remove from {count} lists",
     "save_and_remove_from_lists": "Save and remove from {count} lists",
-    "save_in_list": "Save in list"
+    "save_changes": "Save changes"
   }
 }
