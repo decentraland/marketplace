@@ -1,3 +1,4 @@
+import { getLocation, push } from 'connected-react-router'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { CatalogFilters, Item } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
@@ -23,6 +24,7 @@ import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
 import { NFT_SERVER_URL } from '../vendor/decentraland'
+import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import {
@@ -77,7 +79,8 @@ import {
   CreateListFailureAction,
   CREATE_LIST_SUCCESS,
   CREATE_LIST_FAILURE,
-  bulkPickUnpickRequest
+  bulkPickUnpickRequest,
+  DELETE_LIST_SUCCESS
 } from './actions'
 import {
   getList,
@@ -118,6 +121,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(FETCH_LISTS_REQUEST, handleFetchListsRequest)
   yield takeEvery(DELETE_LIST_REQUEST, handleDeleteListRequest)
   yield takeEvery(DELETE_LIST_START, handleDeleteListStart)
+  yield takeEvery(DELETE_LIST_SUCCESS, handleDeleteListSuccess)
   yield takeEvery(GET_LIST_REQUEST, handleGetListRequest)
   yield takeEvery(UPDATE_LIST_REQUEST, handleUpdateListRequest)
   yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
@@ -335,6 +339,11 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     } else {
       yield put(deleteListRequest(list))
     }
+  }
+
+  function* handleDeleteListSuccess() {
+    const { pathname } = yield select(getLocation)
+    if (pathname !== locations.lists()) yield put(push(locations.lists()))
   }
 
   function* handleDeleteListRequest(action: DeleteListRequestAction) {
