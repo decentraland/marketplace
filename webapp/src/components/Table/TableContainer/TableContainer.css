@@ -82,4 +82,8 @@
   .tableContainer {
     margin-top: 16px;
   }
+  .tableContainer .ui.very.basic.table tr th,
+  .tableContainer .ui.very.basic.table tr td {
+    width: 50% !important; /* 2 columns, needs to be overridden with the !important since the library uses it too */
+  }
 }
