@@ -8,13 +8,11 @@
 .modalDescription {
   text-align: center;
 }
-
-.launchModal:global(.ui.modal .actions > .button:first-child) {
+.ListsLaunchModal:global(.ui.modal .actions > .button:first-child) {
   width: 80%;
   align-self: center;
 }
-
-.launchModal:global(.ui.modal .actions .ui.button + .ui.button) {
+.ListsLaunchModal:global(.ui.modal .actions .ui.button + .ui.button) {
   margin: unset;
   width: 80%;
   align-self: center;
@@ -22,7 +20,7 @@
   border-color: white;
 }
 
-.launchModal:global(.ui.modal > .content) {
+.ListsLaunchModal:global(.ui.modal > .content) {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,10 +28,21 @@
   margin-bottom: 50px;
 }
 
-.launchModal:global(.ui.medium.image).listsLogo {
+.listsLogo {
   background-image: url('../../../images/empty-list.svg');
   background-repeat: no-repeat;
   background-size: cover;
   width: 80px;
   height: 80px;
+}
+
+@media (max-width: 768px) {
+  .actions {
+    gap: unset;
+  }
+
+  .ListsLaunchModal:global(.ui.modal .actions > .button:first-child),
+  .ListsLaunchModal:global(.ui.modal .actions .ui.button + .ui.button) {
+    width: 100%;
+  }
 }

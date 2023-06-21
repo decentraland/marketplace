@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal, Button, ModalNavigation } from 'decentraland-ui'
-import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import * as decentraland from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
@@ -40,7 +39,7 @@ export const ListsLaunchModal = ({
 
   return (
     <Modal
-      className={styles.launchModal}
+      className={styles.ListsLaunchModal}
       open={isOpen}
       size={'small'}
       onClose={onClose}
@@ -48,7 +47,7 @@ export const ListsLaunchModal = ({
     >
       <ModalNavigation title={t('lists_ftu.title')} onClose={onClose} />
       <Modal.Content className={styles.content}>
-        <div className={classNames(styles.listsLogo, 'ui medium image')}></div>
+        <div className={styles.listsLogo}></div>
         <Modal.Description>
           <div className={styles.modalDescription}>
             {t('lists_ftu.description', {
