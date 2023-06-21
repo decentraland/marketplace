@@ -52,10 +52,8 @@ describe('when the modal is rendered', () => {
     const dclUrl = 'https://market.decentraland.zone'
     const locationsUrl = '/lists/aListId?assetType=item&section=lists&page=1'
     const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      ` ${t('share_list_modal.twitter_message.first_line')}
- ${t('share_list_modal.twitter_message.second_line')}
- ${t('share_list_modal.twitter_message.third_line')}`
-    )}${dclUrl}${locationsUrl}`
+      `${t('share_list_modal.twitter_message')}${dclUrl}${locationsUrl}`
+    )}`
 
     const { getByRole } = renderedModal
     const button = getByRole('button', {
