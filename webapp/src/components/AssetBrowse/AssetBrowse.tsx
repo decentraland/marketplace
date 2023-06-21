@@ -9,8 +9,7 @@ import { Sections } from '../../modules/vendor/routing/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import {
   getPersistedIsMapProperty,
-  isAccountView,
-  isListsSection
+  isAccountView
 } from '../../modules/ui/utils'
 import { locations } from '../../modules/routing/locations'
 import { AccountSidebar } from '../AccountSidebar'
@@ -154,7 +153,7 @@ const AssetBrowse = (props: Props) => {
     visitedLocations
   ])
 
-  const left = isListsSection(section) ? null : (
+  const left = (
     <>
       <NotMobile>
         {isAccountOrCurrentAccount ? (

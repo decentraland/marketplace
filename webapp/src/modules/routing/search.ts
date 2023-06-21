@@ -23,8 +23,6 @@ export function getDefaultOptionsByView(
   view?: View,
   section?: Section
 ): BrowseOptions {
-  if (section === Section.LISTS) return {}
-
   let defaultOptions: Partial<BrowseOptions> = {
     onlyOnSale: view && isAccountView(view) ? false : undefined,
     sortBy:

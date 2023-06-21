@@ -119,7 +119,6 @@ import {
 } from '../bid/actions'
 import { getData } from '../event/selectors'
 import { getPage } from '../ui/browse/selectors'
-import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { AssetStatusFilter } from '../../utils/filters'
 import { buildBrowseURL } from './utils'
 
@@ -296,16 +295,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         Array.isArray(address) ? address[0] : address,
         sortBy,
         search
-      )
-      break
-    case Section.LISTS:
-      yield put(
-        fetchFavoritedItemsRequest({
-          view,
-          section,
-          page,
-          filters: { first, skip }
-        })
       )
       break
     default:
@@ -559,8 +548,6 @@ function* deriveCurrentOptions(
     assetType: current.assetType || previous.assetType,
     section: current.section || previous.section
   }
-
-  if (newOptions.section === Section.LISTS) return newOptions
 
   newOptions = {
     ...newOptions,

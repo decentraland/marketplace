@@ -11,8 +11,6 @@ const landSections = new Set<Section>([
 ])
 
 export const isAccountView = (view: View) => accountViews.has(view)
-export const isListsSection = (section?: Section) =>
-  Sections.decentraland.LISTS === section
 export const isLandSection = (section?: Section) =>
   !!section && landSections.has(section)
 

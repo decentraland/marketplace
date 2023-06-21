@@ -15,28 +15,25 @@ import {
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
-import { isLoadingFavoritedItems } from '../../modules/favorites/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { AssetType } from '../../modules/asset/types'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
 import AssetList from './AssetList'
 
 const mapState = (state: RootState): MapStateProps => {
-  const section = getSection(state)
   const page = getPageNumber(state)
   const assetType = getAssetType(state)
   return {
     vendor: getVendor(state),
     assetType,
     section: getSection(state),
-    assets: getBrowseAssets(state, section, assetType),
+    assets: getBrowseAssets(state, assetType),
     page,
     count: getCount(state),
     search: getSearch(state),
     isLoading:
       assetType === AssetType.ITEM
-        ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) ||
-          isLoadingFavoritedItems(state)
+        ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST)
         : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
     hasFiltersEnabled: hasFiltersEnabled(state),
     visitedLocations: getVisitedLocations(state)

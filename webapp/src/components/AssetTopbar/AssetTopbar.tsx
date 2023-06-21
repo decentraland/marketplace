@@ -20,7 +20,6 @@ import {
 import {
   isAccountView,
   isLandSection,
-  isListsSection,
   persistIsMapProperty
 } from '../../modules/ui/utils'
 import trash from '../../images/trash.png'
@@ -114,7 +113,7 @@ export const AssetTopbar = ({
           [styles.searchMap]: isMap
         })}
       >
-        {!isMap && !isListsSection(section) && (
+        {!isMap && (
           <Field
             className={styles.searchField}
             placeholder={t('nft_filters.search')}
@@ -148,44 +147,40 @@ export const AssetTopbar = ({
       {!isMap && (
         <div className={styles.infoRow}>
           {!isLoading ? (
-            isListsSection(section) && !count ? null : (
-              <div className={styles.countContainer}>
-                <p className={styles.countText}>
-                  {count && isCatalogView(view)
-                    ? t(
+            <div className={styles.countContainer}>
+              <p className={styles.countText}>
+                {count && isCatalogView(view)
+                  ? t(
+                      search
+                        ? 'nft_filters.query_results'
+                        : 'nft_filters.results',
+                      {
+                        count: count.toLocaleString(),
                         search
-                          ? 'nft_filters.query_results'
-                          : 'nft_filters.results',
-                        {
-                          count: count.toLocaleString(),
-                          search
-                        }
-                      )
-                    : getCountText(count, search)}
-                </p>
-              </div>
-            )
-          ) : null}
-          {!isListsSection(section) ? (
-            <div className={styles.rightOptionsContainer}>
-              <Dropdown
-                direction="left"
-                value={sortByValue}
-                options={sortByOptions}
-                onChange={handleOrderByDropdownChange}
-              />
-              {isMobile ? (
-                <i
-                  className={classNames(
-                    styles.openFilters,
-                    styles.openFiltersWrapper,
-                    hasFiltersEnabled && styles.active
-                  )}
-                  onClick={onOpenFiltersModal}
-                />
-              ) : null}
+                      }
+                    )
+                  : getCountText(count, search)}
+              </p>
             </div>
           ) : null}
+          <div className={styles.rightOptionsContainer}>
+            <Dropdown
+              direction="left"
+              value={sortByValue}
+              options={sortByOptions}
+              onChange={handleOrderByDropdownChange}
+            />
+            {isMobile ? (
+              <i
+                className={classNames(
+                  styles.openFilters,
+                  styles.openFiltersWrapper,
+                  hasFiltersEnabled && styles.active
+                )}
+                onClick={onOpenFiltersModal}
+              />
+            ) : null}
+          </div>
         </div>
       )}
       {!isMap && hasFiltersEnabled ? (
