@@ -120,7 +120,7 @@
     margin: auto;
   }
 
-  .loader {
+  .loader:global(.ui.massive.loader) {
     position: fixed;
   }
 }
@@ -132,7 +132,7 @@
     position: absolute;
   }
 
-  .loader {
+  .loader:global(.ui.massive.loader) {
     position: sticky;
     top: 50vh;
     left: 0;
