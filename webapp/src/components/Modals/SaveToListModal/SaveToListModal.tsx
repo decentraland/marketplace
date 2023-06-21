@@ -294,6 +294,7 @@ const SaveToListModal = (props: Props) => {
       </Modal.Content>
       <Modal.Actions className={styles.actions}>
         <Button
+          fluid
           secondary
           disabled={isLoadingLists || isSavingPicks}
           data-testid={CREATE_LIST_BUTTON_DATA_TEST_ID}
@@ -303,6 +304,7 @@ const SaveToListModal = (props: Props) => {
           {t('save_to_list_modal.create_list')}
         </Button>
         <Button
+          fluid
           primary
           disabled={isLoadingLists || isSavingPicks || hasChanges}
           data-testid={SAVE_BUTTON_DATA_TEST_ID}

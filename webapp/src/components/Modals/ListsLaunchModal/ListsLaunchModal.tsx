@@ -40,7 +40,7 @@ export const ListsLaunchModal = ({
 
   return (
     <Modal
-      className={styles.launchModal}
+      className={styles.ListsLaunchModal}
       open={isOpen}
       size={'small'}
       onClose={onClose}
@@ -48,7 +48,7 @@ export const ListsLaunchModal = ({
     >
       <ModalNavigation title={t('lists_ftu.title')} onClose={onClose} />
       <Modal.Content className={styles.content}>
-        <div className={classNames(styles.listsLogo, 'ui medium image')}></div>
+        <div className={styles.listsLogo}></div>
         <Modal.Description>
           <div className={styles.modalDescription}>
             {t('lists_ftu.description', {
