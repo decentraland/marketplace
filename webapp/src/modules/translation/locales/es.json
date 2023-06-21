@@ -1403,11 +1403,7 @@
     "copy_link": "copiar link",
     "share_on_twitter": "Compartir en twitter",
     "copied": "copiado",
-    "twitter_message": {
-      "first_line": "Acabo de compartir una nueva Lista 🫶,",
-      "second_line": "Échale un vistazo:",
-      "third_line": "📍"
-    }
+    "twitter_message": "Acabo de compartir una nueva Lista 🫶,\nÉchale un vistazo:\n📍"
   },
   "lists_ftu": {
     "title": "Introducción a las listas de Marketplace",
