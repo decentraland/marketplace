@@ -15,8 +15,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   FavoritesAPI,
   MARKETPLACE_FAVORITES_SERVER_URL,
-  ListOfLists,
-  DEFAULT_FAVORITES_LIST_ID
+  ListOfLists
 } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { isErrorWithMessage } from '../../../lib/error'
@@ -140,17 +139,6 @@ const SaveToListModal = (props: Props) => {
           itemId: item.id
         })
 
-        // Automatically select the default list
-        const defaultList = result.results.find(
-          list => list.id === DEFAULT_FAVORITES_LIST_ID
-        )
-        if (defaultList && !defaultList.isItemInList) {
-          setPicks({
-            pickFor: picks.pickFor.concat(defaultList),
-            unpickFrom: picks.unpickFrom
-          })
-        }
-
         setLists({
           data: lists.data.concat(result.results),
           total: result.total
@@ -163,7 +151,7 @@ const SaveToListModal = (props: Props) => {
         setIsLoadingLists(false)
       }
     },
-    [favoritesAPI, item.id, lists.data, picks.pickFor, picks.unpickFrom]
+    [favoritesAPI, item.id, lists.data]
   )
 
   const isItemLoaded = useCallback(
