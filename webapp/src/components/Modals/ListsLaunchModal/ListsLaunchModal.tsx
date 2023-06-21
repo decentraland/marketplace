@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal, Button, ModalNavigation } from 'decentraland-ui'
-import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import * as decentraland from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
