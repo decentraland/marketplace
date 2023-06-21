@@ -71,7 +71,6 @@ const ListsPage = ({
   )
 
   const hasMorePages = lists.length < (count ?? 0)
-  console.log('Lists length and count', lists.length, count)
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
