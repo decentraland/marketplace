@@ -121,16 +121,19 @@ const ListsPage = ({
               </Button>
             </div>
           </div>
-          {isLoading && (
+          {isLoading && lists.length === 0 ? (
             <>
               <div className={styles.overlay} />
               <div className={styles.transparentOverlay}>
-                <Loader size="massive" active className={styles.loader} />
-                <Loader active size="massive" data-testid={LOADER_TEST_ID} />
+                <Loader
+                  active
+                  className={styles.loader}
+                  data-testid={LOADER_TEST_ID}
+                  size="massive"
+                />
               </div>
             </>
-          )}
-          {lists.length > 0 && (
+          ) : (
             <>
               <div className={styles.cardsGroup}>
                 {lists.map((list, index) => (
