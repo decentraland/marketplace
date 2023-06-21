@@ -1,14 +1,14 @@
-.supply {
+.tableContainer .supply {
   color: var(--secondary-text);
 }
 
-.ownerButtons {
+.tableContainer .ownerButtons {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.filtertabsContainer {
+.tableContainer .filtertabsContainer {
   display: flex;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -17,7 +17,7 @@
   padding-left: 20px;
 }
 
-.filtertabsContainer .dcl.tab {
+.tableContainer .filtertabsContainer .dcl.tab {
   padding: 0px;
   height: 46px;
   align-items: center;
@@ -32,7 +32,7 @@
   background-color: var(--secondary);
 }
 
-.sortByDropdown {
+.tableContainer .sortByDropdown {
   border-radius: 12px;
   margin-right: 20px;
   justify-content: space-between;
@@ -40,7 +40,7 @@
   flex-direction: row;
 }
 
-.filtertabsContainer .ui.dropdown {
+.tableContainer .filtertabsContainer .ui.dropdown {
   display: flex;
   align-items: center;
   font-size: 13px;
@@ -48,32 +48,32 @@
   right: 20px;
 }
 
-.ui.dropdown > .icon {
+.tableContainer .filtertabsContainer .ui.dropdown > .icon {
   height: 100%;
   display: flex;
   align-items: center;
 }
 
-.tabStyle {
+.tableContainer .tabStyle {
   font-size: 22px;
   font-weight: 700;
 }
 
 @media (max-width: 768px) {
-  :global(.ui.button.basic) {
+  .tableContainer :global(.ui.button.basic) {
     text-align: left;
   }
 
-  .filtertabsContainer {
+  .tableContainer .filtertabsContainer {
     flex-direction: column;
     padding: unset;
   }
 
-  .tabStyle {
+  .tableContainer .tabStyle {
     padding-left: unset;
   }
 
-  .filtertabsContainer .ui.dropdown {
+  .tableContainer .filtertabsContainer .ui.dropdown {
     position: relative;
     left: 0;
     margin: 16px 12px 16px 0px;
@@ -81,5 +81,9 @@
   }
   .tableContainer {
     margin-top: 16px;
+  }
+  .tableContainer .ui.very.basic.table tr th,
+  .tableContainer .ui.very.basic.table tr td {
+    width: 50% !important; /* 2 columns, needs to be overridden with the !important since the library uses it too */
   }
 }

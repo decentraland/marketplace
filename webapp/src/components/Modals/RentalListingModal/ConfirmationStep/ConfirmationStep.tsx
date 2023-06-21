@@ -87,10 +87,11 @@ const ConfirmationStep = (props: Props) => {
           loading={isSigning}
           onClick={handleSubmit}
           disabled={isSigning}
+          fluid
         >
           {t('global.confirm')}
         </Button>
-        <Button onClick={onBack} disabled={isSigning}>
+        <Button fluid onClick={onBack} disabled={isSigning}>
           {t('global.back')}
         </Button>
       </Modal.Actions>

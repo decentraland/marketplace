@@ -1,5 +1,5 @@
 .modal :global(.dcl.field),
-:global(.dcl.text-area) {
+.modal :global(.dcl.text-area) {
   margin-bottom: 20px;
 }
 
@@ -10,6 +10,17 @@
 .modal:global(.ui.modal > .actions) {
   flex-direction: column;
   gap: 15px;
+}
+
+.checkbox:global(.ui.checkbox input[type='checkbox'].hidden ~ label:before),
+.checkbox:global(.ui.checkbox
+    input[type='checkbox'].hidden
+    ~ label:hover:before) {
+  border: 1px solid white;
+}
+
+.modal :global(.actions > .ui.button + .ui.button) {
+  margin-left: 0;
 }
 
 @media (max-width: 768px) {

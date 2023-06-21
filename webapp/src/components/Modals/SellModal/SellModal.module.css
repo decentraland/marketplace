@@ -14,13 +14,9 @@
   width: 100%;
 }
 
-:global(.dcl.field) {
+.fieldsContainer :global(.field) {
   width: 100% !important;
-  align-self: center;
-}
-
-:global(.dcl.field) {
-  display: grid;
+  min-width: auto;
 }
 
 .clndr-control .ui.compact.icon.button,
@@ -30,22 +26,15 @@
 }
 
 @media (max-width: 767px) {
-  :global(.dcl.field) {
-    width: 100%;
-    min-width: auto;
-  }
-
-  :global(.ui.modal .actions) {
+  .modal:global(.ui.modal .actions) {
     align-items: center;
     bottom: 30px;
     display: flex;
     justify-content: center;
     position: fixed;
-    width: 90%;
+    width: 100%;
   }
-}
 
-@media (max-width: 767px) {
   .AuthorizationModalActions {
     align-items: center;
     bottom: 28px;
@@ -60,14 +49,5 @@
 
   .AuthorizationModalButtons {
     width: 80%;
-  }
-
-  :global(.ui.modal .actions) {
-    align-items: center;
-    bottom: 30px;
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    width: 100%;
   }
 }

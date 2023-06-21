@@ -9,12 +9,12 @@
   text-align: center;
 }
 
-:global(.ui.modal .actions > .button:first-child) {
+.launchModal:global(.ui.modal .actions > .button:first-child) {
   width: 80%;
   align-self: center;
 }
 
-:global(.ui.modal .actions .ui.button + .ui.button) {
+.launchModal:global(.ui.modal .actions .ui.button + .ui.button) {
   margin: unset;
   width: 80%;
   align-self: center;
@@ -30,7 +30,7 @@
   margin-bottom: 50px;
 }
 
-:global(.ui.medium.image).listsLogo {
+.launchModal:global(.ui.medium.image).listsLogo {
   background-image: url('../../../images/empty-list.svg');
   background-repeat: no-repeat;
   background-size: cover;

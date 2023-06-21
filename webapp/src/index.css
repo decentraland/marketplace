@@ -84,10 +84,29 @@ code {
 
   .ui.modal .actions {
     flex-direction: column-reverse;
-    margin: 0px;
   }
 
   .ui.modal .actions .ui.button + .ui.button {
     margin-left: 0px;
+  }
+
+  .modals.dimmer .ui.scrolling.modal {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .ui.modal > .content {
+    flex: 1;
+  }
+
+  .ui.modal .actions {
+    align-self: flex-end;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-right: unset;
   }
 }

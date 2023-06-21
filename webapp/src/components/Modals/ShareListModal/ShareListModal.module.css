@@ -5,7 +5,7 @@
   gap: 18px;
 }
 
-:global(.ui.modal .actions .ui.button + .ui.button) {
+.modal:global(.ui.modal .actions .ui.button + .ui.button) {
   margin: unset;
 }
 
