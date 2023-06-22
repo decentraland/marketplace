@@ -3,6 +3,10 @@
   flex-direction: column;
 }
 
+.content {
+   padding: 0 24px;
+}
+
 .subHeader {
   display: flex;
   justify-content: space-between;
@@ -90,7 +94,6 @@
   }
 
   .createList:global(.ui.small.primary.button) {
-    padding: 14px 62px;
     font-size: 12px;
     width: 97px;
     height: 34px;
