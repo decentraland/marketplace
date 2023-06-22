@@ -15,16 +15,11 @@ import {
   undoUnpickingItemAsFavoriteRequest,
   unpickItemAsFavoriteRequest
 } from '../favorites/actions'
-import { AssetType } from '../asset/types'
-import { Section } from '../vendor/decentraland'
-import { View } from '../ui/types'
 import { List } from '../favorites/types'
 import {
   ListOfLists,
   UpdateOrCreateList
 } from '../vendor/decentraland/favorites/types'
-import { SortBy } from '../routing/types'
-import { VendorName } from '../vendor'
 import { toastDispatchableActionsChannel } from './utils'
 import {
   BulkPickUnpickMessageType,
@@ -328,32 +323,14 @@ function buildBulkPickItemBodyMessage(
         count: lists.length,
         first_list_name: (
           <b>
-            <Link
-              to={locations.list(lists[0]?.id ?? '', {
-                assetType: AssetType.ITEM,
-                page: 1,
-                section: Section.LISTS,
-                view: View.LISTS,
-                vendor: VendorName.DECENTRALAND,
-                sortBy: SortBy.NEWEST
-              })}
-            >
+            <Link to={locations.list(lists[0]?.id ?? '')}>
               {lists[0]?.name ?? ''}
             </Link>
           </b>
         ),
         second_list_name: (
           <b>
-            <Link
-              to={locations.list(lists[1]?.id ?? '', {
-                assetType: AssetType.ITEM,
-                page: 1,
-                section: Section.LISTS,
-                view: View.LISTS,
-                vendor: VendorName.DECENTRALAND,
-                sortBy: SortBy.NEWEST
-              })}
-            >
+            <Link to={locations.list(lists[1]?.id ?? '')}>
               {lists[1]?.name ?? ''}
             </Link>
           </b>

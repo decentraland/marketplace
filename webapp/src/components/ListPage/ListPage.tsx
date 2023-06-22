@@ -53,7 +53,8 @@ const ListPage = ({
   listId,
   items,
   list,
-  isLoading,
+  isLoadingList,
+  isLoadingItems,
   error,
   onFetchList,
   onBack,
@@ -66,6 +67,7 @@ const ListPage = ({
   const hasFetchedOnce = useRef(false)
   const { pathname, search } = useLocation()
   const { page, first, offset, goToNextPage } = usePagination()
+  const isLoading = isLoadingList || isLoadingItems
 
   // Fetching list
   const fetchList = useCallback(() => {
@@ -170,9 +172,19 @@ const ListPage = ({
   return (
     <PageLayout activeTab={isPublicView ? undefined : NavigationTab.MY_LISTS}>
       {isLoading || isConnecting ? (
-        <Loader active size="massive" data-testid={LOADER_TEST_ID} />
+        <>
+          <div className={styles.overlay} />
+          <div className={styles.transparentOverlay}>
+            <Loader
+              active
+              className={styles.loader}
+              data-testid={LOADER_TEST_ID}
+              size="massive"
+            />
+          </div>
+        </>
       ) : null}
-      {!isLoading && !isConnecting && listId && list && !error ? (
+      {!isConnecting && listId && list && !error ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
             {(!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID) &&
@@ -278,20 +290,28 @@ const ListPage = ({
             data-testid={ASSET_BROWSE_TEST_ID}
             className={styles.assetBrowseContainer}
           >
+            <div className={styles.count}>
+              {list.itemsCount
+                ? t('lists_page.subtitle', { count: list.itemsCount })
+                : null}
+            </div>
             {list.itemsCount ? (
-              <InfiniteScroll
-                page={page}
-                hasMorePages={hasMorePages}
-                onLoadMore={goToNextPage}
-                isLoading={isLoading}
-                maxScrollPages={3}
-              >
+              <>
                 <div className={styles.cardsGroup}>
                   {items.map((item, index) => (
                     <AssetCard key={item.id + '-' + index} asset={item} />
                   ))}
                 </div>
-              </InfiniteScroll>
+                <InfiniteScroll
+                  page={page}
+                  hasMorePages={hasMorePages}
+                  onLoadMore={goToNextPage}
+                  isLoading={isLoading}
+                  maxScrollPages={3}
+                >
+                  {null}
+                </InfiniteScroll>
+              </>
             ) : (
               <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
                 <div className={styles.emptyLogo}></div>

@@ -23,7 +23,8 @@ export type Props = {
   listId?: string
   list: List | null
   items: Item[]
-  isLoading: boolean
+  isLoadingList: boolean
+  isLoadingItems: boolean
   error: string | null
   onFetchList: typeof getListRequest
   onBack: () => void
@@ -41,7 +42,8 @@ export type MapStateProps = Pick<
   | 'listId'
   | 'list'
   | 'items'
-  | 'isLoading'
+  | 'isLoadingList'
+  | 'isLoadingItems'
   | 'error'
   | 'isListV1Enabled'
 >

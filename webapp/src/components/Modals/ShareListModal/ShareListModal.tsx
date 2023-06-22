@@ -4,15 +4,10 @@ import { Modal } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Button, Icon, ModalNavigation } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
-import { AssetType } from '../../../modules/asset/types'
-import { View } from '../../../modules/ui/types'
-import { Section } from '../../../modules/vendor/decentraland/routing'
 import { config } from '../../../config'
 import copyText from '../../../lib/copyText'
 import { useTimer } from '../../../lib/timer'
 import * as events from '../../../utils/events'
-import { VendorName } from '../../../modules/vendor'
-import { SortBy } from '../../../modules/routing/types'
 import { ListCard } from '../../ListsPage/ListCard'
 import { Props } from './ShareListModal.types'
 import styles from './ShareListModal.module.css'
@@ -27,14 +22,7 @@ const ShareListModal = (props: Props) => {
   } = props
   const [hasCopiedAddress, setHasCopied] = useTimer(1200)
 
-  const listLink = locations.list(list.id, {
-    assetType: AssetType.ITEM,
-    page: 1,
-    section: Section.LISTS,
-    view: View.LISTS,
-    vendor: VendorName.DECENTRALAND,
-    sortBy: SortBy.NEWEST
-  })
+  const listLink = locations.list(list.id)
 
   const handleClose = useCallback(() => {
     onClose()

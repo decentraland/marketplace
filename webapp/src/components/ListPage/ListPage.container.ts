@@ -17,10 +17,8 @@ import { RootState } from '../../modules/reducer'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import { openModal } from '../../modules/modal/actions'
 import { locations } from '../../modules/routing/locations'
-import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import { isLoadingFavoritedItems } from '../../modules/favorites/selectors'
 import { getItemsPickedByUserOrCreator } from '../../modules/ui/browse/selectors'
-import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import {
   MapStateProps,
   MapDispatch,
@@ -37,10 +35,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     wallet: getWallet(state),
     listId,
     list: listId ? getList(state, listId) : null,
-    isLoading:
-      isLoadingType(getLoading(state), GET_LIST_REQUEST) ||
-      isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) ||
-      isLoadingFavoritedItems(state),
+    isLoadingList: isLoadingType(getLoading(state), GET_LIST_REQUEST),
+    isLoadingItems: isLoadingFavoritedItems(state),
     items: getItemsPickedByUserOrCreator(state),
     error: getError(state),
     isListV1Enabled: getIsListsV1Enabled(state)

@@ -4,11 +4,6 @@ import { Card, Dropdown, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../../modules/vendor/decentraland/favorites/api'
-import { AssetType } from '../../../modules/asset/types'
-import { Section } from '../../../modules/vendor/decentraland'
-import { View } from '../../../modules/ui/types'
-import { VendorName } from '../../../modules/vendor'
-import { SortBy } from '../../../modules/routing/types'
 import { AssetImage } from '../../AssetImage'
 import { PrivateTag } from '../../PrivateTag'
 import { Props } from './ListCard.types'
@@ -33,18 +28,7 @@ const ListCard = (props: Props) => {
   )
 
   return (
-    <Card
-      as={Link}
-      to={locations.list(list.id, {
-        assetType: AssetType.ITEM,
-        page: 1,
-        section: Section.LISTS,
-        view: View.LISTS,
-        vendor: VendorName.DECENTRALAND,
-        sortBy: SortBy.NEWEST
-      })}
-      className={styles.card}
-    >
+    <Card as={Link} to={locations.list(list.id)} className={styles.card}>
       <div className={styles.image}>
         {list.isPrivate ? (
           <PrivateTag
