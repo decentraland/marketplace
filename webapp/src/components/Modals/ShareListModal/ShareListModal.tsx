@@ -49,16 +49,20 @@ const ShareListModal = (props: Props) => {
     copyText(url, setHasCopied)
   }, [list, listLink, setHasCopied])
 
-  const handleShareOnTwitter = useCallback(() => {
-    const url = `${twitterLink}${encodeURIComponent(
-      `${t('share_list_modal.twitter_message')}${MARKETPLACE_URL}${listLink}`
-    )}`
-    getAnalytics().track(events.SHARE_LIST_ON_TWITTER, {
-      list,
-      url
-    })
-    window.open(url, '_blank')
-  }, [list, listLink])
+  const handleShareOnTwitter = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      const url = `${twitterLink}${encodeURIComponent(
+        `${t('share_list_modal.twitter_message')}${MARKETPLACE_URL}${listLink}`
+      )}`
+      getAnalytics().track(events.SHARE_LIST_ON_TWITTER, {
+        list,
+        url
+      })
+      window.open(url, '_blank')
+      e.currentTarget.blur()
+    },
+    [list, listLink]
+  )
 
   return (
     <Modal size="tiny" className={styles.modal} onClose={handleClose}>
