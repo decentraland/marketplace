@@ -81,7 +81,9 @@ const ListsPage = ({
         <>
           <div className={styles.subHeader}>
             <div className={styles.left}>
-              {count ? t('lists_page.subtitle', { count }) : null}
+              {lists.length > 0 && count
+                ? t('lists_page.subtitle', { count })
+                : null}
             </div>
             <div className={styles.right}>
               <span className={styles.sortBy}>{t('filters.sort_by')}</span>
