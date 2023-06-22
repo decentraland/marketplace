@@ -1,4 +1,5 @@
 import { fireEvent } from '@testing-library/react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { renderWithProviders } from '../../../utils/test'
 import { List } from '../../../modules/favorites/types'
 import { Props } from './CreateOrEditListModal.types'
@@ -414,7 +415,7 @@ describe('when the component is rendered with a list', () => {
     const { getByTestId } = renderedModal
     expect(
       getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID)
-    ).toHaveTextContent('List is private')
+    ).toHaveTextContent(t('create_or_edit_list_modal.edit.private'))
   })
 
   it("should render the accept button disabled as the list's properties didn't change", () => {
