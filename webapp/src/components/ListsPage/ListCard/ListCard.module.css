@@ -1,10 +1,15 @@
-:global(.ui.card).card {
+:global(.ui.card).ListCard {
   height: 240px;
   width: 100%;
   margin: 0px;
 }
 
-.card:link {
+:global(.ui.card).ListCard.viewOnly {
+  transition: none;
+  transform: none;
+}
+
+.ListCard:link {
   text-decoration: none;
 }
 
@@ -112,7 +117,7 @@
 }
 
 @media (max-width: 768px) {
-  .card :global(.AssetImage) {
+  .ListCard :global(.AssetImage) {
     height: 100%;
   }
 }
