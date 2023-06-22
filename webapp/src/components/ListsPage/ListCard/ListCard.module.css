@@ -1,6 +1,6 @@
 :global(.ui.card).card {
   height: 240px;
-  width: 320px;
+  width: 100%;
   margin: 0px;
 }
 
@@ -109,4 +109,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: 85px;
+}
+
+@media (max-width: 768px) {
+  .card :global(.AssetImage) {
+    height: 100%;
+  }
 }
