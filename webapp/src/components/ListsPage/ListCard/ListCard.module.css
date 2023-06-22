@@ -110,3 +110,9 @@
   grid-template-columns: 1fr 1fr;
   grid-auto-rows: 85px;
 }
+
+@media (max-width: 768px) {
+  .card :global(.AssetImage) {
+    height: 100%;
+  }
+}
