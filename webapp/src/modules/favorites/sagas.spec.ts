@@ -1261,7 +1261,10 @@ describe('when handling the request for creating a list', () => {
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .provide([
+          [select(getLocation), { pathname: locations.lists() }],
+          [call(getAccountIdentity), Promise.reject(error)]
+        ])
         .put(createListFailure(error.message))
         .dispatch(createListRequest(listToCreate))
         .run({ silenceTimeout: true })
@@ -1272,6 +1275,7 @@ describe('when handling the request for creating a list', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
+          [select(getLocation), { pathname: locations.lists() }],
           [call(getAccountIdentity), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.createList),
@@ -1289,22 +1293,48 @@ describe('when handling the request for creating a list', () => {
   })
 
   describe('and the call to the favorites api succeeds', () => {
-    it('should dispatch an action signaling the success of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.createList),
-            Promise.resolve(returnedList)
-          ]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.createList,
-          args: [listToCreate]
-        })
-        .put(createListSuccess(returnedList))
-        .dispatch(createListRequest(listToCreate))
-        .run({ silenceTimeout: true })
+    describe('and the current path is the lists one', () => {
+      it('should dispatch an action signaling the success of the handled action and a push to the created list page', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [select(getLocation), { pathname: locations.lists() }],
+            [call(getAccountIdentity), Promise.resolve()],
+            [
+              matchers.call.fn(FavoritesAPI.prototype.createList),
+              Promise.resolve(returnedList)
+            ]
+          ])
+          .call.like({
+            fn: FavoritesAPI.prototype.createList,
+            args: [listToCreate]
+          })
+          .put(createListSuccess(returnedList))
+          .put(push(locations.list(returnedList.id)))
+          .dispatch(createListRequest(listToCreate))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the current path is not the lists one', () => {
+      it('should dispatch an action signaling the success of the handled action without a push to the created list page', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [select(getLocation), { pathname: locations.browse() }],
+            [call(getAccountIdentity), Promise.resolve()],
+            [
+              matchers.call.fn(FavoritesAPI.prototype.createList),
+              Promise.resolve(returnedList)
+            ]
+          ])
+          .call.like({
+            fn: FavoritesAPI.prototype.createList,
+            args: [listToCreate]
+          })
+          .put(createListSuccess(returnedList))
+          .not.put(push(locations.list(returnedList.id)))
+          .dispatch(createListRequest(listToCreate))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })
