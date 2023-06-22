@@ -1366,14 +1366,14 @@
     },
     "edit": {
       "title": "Editar lista",
-      "private": "La lista es privada"
+      "private": "Establecer la lista como privada"
     },
     "name": "Nombre de la lista",
     "description": "Descripción de la lista",
     "info": {
       "max_name_length": "Los nombres de las listas pueden tener hasta {max} caracteres.",
       "max_description_length": "Las descripciones de las listas pueden contener hasta {max} caracteres.",
-      "private": "A public list will be available for everyone to view."
+      "private": "Cuando cree o establezca una lista como privada, solo usted podrá verla."
     },
     "errors": {
       "name_duplicated": "El nombre elegido esta siendo usado en otra de tus listas. <br></br> Elije uno diferente."
