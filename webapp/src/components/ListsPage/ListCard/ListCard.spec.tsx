@@ -212,3 +212,74 @@ describe('when the list being rendered is the wishlist', () => {
     ).not.toBeInTheDocument()
   })
 })
+
+describe('when rendering the ListCard', () => {
+  let list: List
+
+  describe('when NOT having viewOnly prop', () => {
+    describe('when the list is NOT the default list', () => {
+      beforeEach(() => {
+        list = {
+          name: 'aListName',
+          itemsCount: 4
+        } as List
+        renderedModal = renderListCard({ list })
+      })
+
+      it('should render the actions', () => {
+        expect(
+          renderedModal.getByTestId(EDIT_LIST_DATA_TEST_ID)
+        ).toBeInTheDocument()
+      })
+    })
+
+    describe('when the list is the default list', () => {
+      beforeEach(() => {
+        list = {
+          id: DEFAULT_FAVORITES_LIST_ID,
+          name: 'aListName',
+          itemsCount: 4
+        } as List
+        renderedModal = renderListCard({ list })
+      })
+
+      it('should NOT render the actions', () => {
+        expect(renderedModal.queryByTestId(EDIT_LIST_DATA_TEST_ID)).toBeNull()
+      })
+    })
+  })
+
+  describe('when having viewOnly prop', () => {
+    let viewOnly = true
+    describe('and viewOnly is true', () => {
+      beforeEach(() => {
+        list = {
+          name: 'aListName',
+          itemsCount: 4
+        } as List
+        renderedModal = renderListCard({ list, viewOnly })
+      })
+
+      it('should NOT render the actions', () => {
+        expect(renderedModal.queryByTestId(EDIT_LIST_DATA_TEST_ID)).toBeNull()
+      })
+    })
+
+    describe('and viewOnly is false', () => {
+      beforeEach(() => {
+        viewOnly = false
+        list = {
+          name: 'aListName',
+          itemsCount: 4
+        } as List
+        renderedModal = renderListCard({ list, viewOnly })
+      })
+
+      it('should render the actions', () => {
+        expect(
+          renderedModal.getByTestId(EDIT_LIST_DATA_TEST_ID)
+        ).toBeInTheDocument()
+      })
+    })
+  })
+})

@@ -67,7 +67,7 @@ const ShareListModal = (props: Props) => {
         onClose={handleClose}
       />
       <Modal.Content className={styles.content}>
-        <ListCard list={list} />
+        <ListCard list={list} viewOnly />
       </Modal.Content>
       <Modal.Actions className={styles.actions}>
         <Button primary fluid onClick={handleCopyLink}>
