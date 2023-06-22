@@ -137,11 +137,7 @@ const ListsPage = ({
             <>
               <div className={styles.cardsGroup}>
                 {lists.map((list, index) => (
-                  <ListCard
-                    key={`${list.id}-${index}`}
-                    list={list}
-                    enableActions
-                  />
+                  <ListCard key={`${list.id}-${index}`} list={list} />
                 ))}
               </div>
               <InfiniteScroll

@@ -25,11 +25,11 @@ import {
 } from './constants'
 
 const ListCard = (props: Props) => {
-  const { list, items, onDeleteList, onEditList, enableActions = true } = props
+  const { list, items, onDeleteList, onEditList, viewOnly = false } = props
 
   const isViewOnly = useMemo(
-    () => list.id === DEFAULT_FAVORITES_LIST_ID || !enableActions,
-    [list, enableActions]
+    () => list.id === DEFAULT_FAVORITES_LIST_ID || viewOnly,
+    [list, viewOnly]
   )
 
   return (
