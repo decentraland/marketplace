@@ -75,6 +75,15 @@
   margin-left: 10px;
 }
 
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: var(--background);
+  opacity: 0.6;
+  z-index: 15;
+}
+
 @media (max-width: 767px) {
   .createList .icon {
     display: none;
@@ -109,6 +118,25 @@
   }
 
   .cardsGroup :global(.ui.card) {
+    margin: auto;
+  }
+
+  .loader:global(.ui.massive.loader) {
+    position: fixed;
+  }
+}
+
+@media (min-width: 768px) {
+  .transparentOverlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+
+  .loader:global(.ui.massive.loader) {
+    position: sticky;
+    top: 50vh;
+    left: 0;
     margin: auto;
   }
 }

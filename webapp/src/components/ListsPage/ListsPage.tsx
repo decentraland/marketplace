@@ -122,21 +122,34 @@ const ListsPage = ({
             </div>
           </div>
           {isLoading && lists.length === 0 ? (
-            <Loader active size="massive" data-testid={LOADER_TEST_ID} />
+            <>
+              <div className={styles.overlay} />
+              <div className={styles.transparentOverlay}>
+                <Loader
+                  active
+                  className={styles.loader}
+                  data-testid={LOADER_TEST_ID}
+                  size="massive"
+                />
+              </div>
+            </>
           ) : (
-            <InfiniteScroll
-              page={page}
-              hasMorePages={hasMorePages}
-              onLoadMore={goToNextPage}
-              isLoading={isLoading}
-              maxScrollPages={3}
-            >
+            <>
               <div className={styles.cardsGroup}>
-                {lists.map(list => (
-                  <ListCard key={list.id} list={list} />
+                {lists.map((list, index) => (
+                  <ListCard key={`${list.id}-${index}`} list={list} />
                 ))}
               </div>
-            </InfiniteScroll>
+              <InfiniteScroll
+                page={page}
+                hasMorePages={hasMorePages}
+                onLoadMore={goToNextPage}
+                isLoading={isLoading}
+                maxScrollPages={3}
+              >
+                {null}
+              </InfiniteScroll>
+            </>
           )}
         </>
       )}
