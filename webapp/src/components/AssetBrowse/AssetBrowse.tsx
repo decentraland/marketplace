@@ -60,7 +60,9 @@ const AssetBrowse = (props: Props) => {
   const [hasFetched, setHasFetched] = useState(
     history.action === 'POP' &&
       lastLocation?.pathname === location.pathname &&
-      lastLocation?.search === location.search
+      lastLocation?.search === location.search &&
+      // We're re-fetching items when going back into a list
+      location.pathname === locations.list()
   )
   const isCurrentAccount = view === View.CURRENT_ACCOUNT
   const isAccountOrCurrentAccount = view === View.ACCOUNT || isCurrentAccount
