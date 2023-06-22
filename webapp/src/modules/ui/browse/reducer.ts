@@ -7,9 +7,11 @@ import {
   DeleteListSuccessAction,
   FETCH_FAVORITED_ITEMS_REQUEST,
   FETCH_FAVORITED_ITEMS_SUCCESS,
+  FETCH_LISTS_REQUEST,
   FETCH_LISTS_SUCCESS,
   FetchFavoritedItemsRequestAction,
   FetchFavoritedItemsSuccessAction,
+  FetchListsRequestAction,
   FetchListsSuccessAction,
   UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS,
@@ -67,6 +69,7 @@ type UIReducerAction =
   | UnpickItemAsFavoriteSuccessAction
   | UndoUnpickingItemAsFavoriteSuccessAction
   | FetchListsSuccessAction
+  | FetchListsRequestAction
   | DeleteListSuccessAction
   | CreateListSuccessAction
   | BulkPickUnpickSuccessAction
@@ -261,6 +264,14 @@ export function browseReducer(
         ...state,
         count: (state.count ?? 0) + 1,
         listIds: [list.id, ...state.listIds]
+      }
+    }
+
+    case FETCH_LISTS_REQUEST: {
+      const { page } = action.payload.options
+      return {
+        ...state,
+        listIds: page === 1 ? [] : state.listIds
       }
     }
 

@@ -29,6 +29,7 @@
   grid-gap: 12px;
   gap: 12px;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  margin-bottom: 12px;
 }
 
 .errorContainer {
@@ -74,13 +75,25 @@
   margin-left: 10px;
 }
 
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: var(--background);
+  opacity: 0.6;
+  z-index: 15;
+}
+
 @media (max-width: 767px) {
+  .content {
+    padding: 0 24px;
+  }
+
   .createList .icon {
     display: none;
   }
 
   .createList:global(.ui.small.primary.button) {
-    padding: 14px 62px;
     font-size: 12px;
     width: 97px;
     height: 34px;
@@ -108,6 +121,25 @@
   }
 
   .cardsGroup :global(.ui.card) {
+    margin: auto;
+  }
+
+  .loader:global(.ui.massive.loader) {
+    position: fixed;
+  }
+}
+
+@media (min-width: 768px) {
+  .transparentOverlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+
+  .loader:global(.ui.massive.loader) {
+    position: sticky;
+    top: 50vh;
+    left: 0;
     margin: auto;
   }
 }

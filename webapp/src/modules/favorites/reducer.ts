@@ -321,6 +321,8 @@ export function favoritesReducer(
       const {
         isPickedByUser,
         ownerRemovedFromCurrentList,
+        pickedFor,
+        unpickedFrom,
         item
       } = action.payload
 
@@ -336,6 +338,20 @@ export function favoritesReducer(
         newCount++
         createdAt = Date.now()
       }
+      const pickedLists = pickedFor
+        .map(list =>
+          state.data.lists[list.id]
+            ? { ...state.data.lists[list.id], itemsCount: list.itemsCount + 1 }
+            : undefined
+        )
+        .filter(Boolean) as List[]
+      const unpickedLists = unpickedFrom
+        .map(list =>
+          state.data.lists[list.id]
+            ? { ...state.data.lists[list.id], itemsCount: list.itemsCount - 1 }
+            : undefined
+        )
+        .filter(Boolean) as List[]
 
       return {
         ...state,
@@ -348,6 +364,11 @@ export function favoritesReducer(
               count: newCount,
               createdAt
             }
+          },
+          lists: {
+            ...state.data.lists,
+            ...Object.fromEntries(pickedLists.map(list => [list.id, list])),
+            ...Object.fromEntries(unpickedLists.map(list => [list.id, list]))
           }
         },
         loading: loadingReducer(state.loading, action)

@@ -240,7 +240,12 @@ export const SelectedFilters = ({
         />
       ))}
       {minPrice || maxPrice ? (
-        <Pill label={priceLabel} onDelete={handleDeletePrice} id="price" />
+        <Pill
+          label={priceLabel}
+          className={styles.pricePill}
+          onDelete={handleDeletePrice}
+          id="price"
+        />
       ) : null}
       {minEstateSize || maxEstateSize ? (
         <Pill

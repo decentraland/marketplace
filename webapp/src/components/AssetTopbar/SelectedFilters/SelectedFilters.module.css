@@ -4,19 +4,19 @@
   margin-top: 13px;
 }
 
-:global(.ui.header.mana.mana-label-icon) {
+.pricePill :global(.ui.header.mana.mana-label-icon) {
   filter: brightness(0) invert(1);
   font-size: 13px;
   margin: 0 5px 2px 10px;
   line-height: 13px;
 }
 
-:global(.ui.header.mana.mana-label-icon.mana-label-range) {
+.pricePill :global(.ui.header.mana.mana-label-icon.mana-label-range) {
   margin: 0 5px 2px 5px;
   padding-left: 0;
 }
 
-:global(.ui.header.mana.mana-label-icon .symbol) {
+.pricePill :global(.ui.header.mana.mana-label-icon .symbol) {
   padding-right: 0;
 }
 

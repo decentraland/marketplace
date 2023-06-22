@@ -53,8 +53,9 @@ describe('when the modal is rendered', () => {
     const locationsUrl =
       '/lists/aListId?assetType=item&section=lists&vendor=decentraland&page=1&sortBy=newest'
     const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      t('share_list_modal.twitter_message')
-    )} ${dclUrl}${locationsUrl}`
+      `${t('share_list_modal.twitter_message')}${dclUrl}${locationsUrl}`
+    )}`
+
     const { getByRole } = renderedModal
     const button = getByRole('button', {
       name: t('share_list_modal.share_on_twitter')

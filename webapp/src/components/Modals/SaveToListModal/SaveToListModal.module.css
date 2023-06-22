@@ -77,3 +77,7 @@
   flex-direction: column-reverse;
   gap: 10px;
 }
+
+.actions :global(.ui.button + .ui.button) {
+  margin: 0px;
+}

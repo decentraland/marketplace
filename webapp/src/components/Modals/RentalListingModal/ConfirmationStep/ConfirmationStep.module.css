@@ -55,7 +55,7 @@
 }
 
 @media (max-width: 767px) {
-  :global(.ui.modal > .actions > .ui.button) {
+  .modal:global(.ui.modal > .actions > .ui.button) {
     width: 85%;
   }
 }

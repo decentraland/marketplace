@@ -7,7 +7,8 @@ import {
   fetchListsSuccess,
   deleteListSuccess,
   bulkPickUnpickSuccess,
-  fetchFavoritedItemsRequest
+  fetchFavoritedItemsRequest,
+  fetchListsRequest
 } from '../../favorites/actions'
 import { fetchItemsRequest, fetchItemsSuccess } from '../../item/actions'
 import { ItemBrowseOptions } from '../../item/types'
@@ -833,6 +834,45 @@ describe('when reducing the action of the success of getting the lists', () => {
   })
 })
 
+describe('when reducing the action of the request of getting the lists', () => {
+  let initialState: BrowseUIState
+  let page: number
+
+  beforeEach(() => {
+    initialState = {
+      ...INITIAL_STATE,
+      listIds: ['aListId']
+    }
+  })
+
+  describe('and the page is the first', () => {
+    beforeEach(() => {
+      page = 1
+    })
+
+    it('should return a state with the list ids cleared', () => {
+      expect(
+        browseReducer(initialState, fetchListsRequest({ page, first: 1 }))
+      ).toEqual({
+        ...initialState,
+        listIds: []
+      })
+    })
+  })
+
+  describe('and the page is not the first', () => {
+    beforeEach(() => {
+      page = 2
+    })
+
+    it('should return the state unchanged', () => {
+      expect(
+        browseReducer(initialState, fetchListsRequest({ page, first: 1 }))
+      ).toEqual(initialState)
+    })
+  })
+})
+
 describe('when reducing the action of the success of deleting a list', () => {
   let list: List
   let initialState: BrowseUIState
@@ -865,8 +905,8 @@ describe('when reducing the action of the success of an item picking and unpicki
   let initialState: BrowseUIState
   let ownerRemovedFromCurrentList: boolean
   let pickedByUser: boolean
-  let unpickedFrom: List[]
-  let pickedFor: List[]
+  let unpickedFrom: ListOfLists[]
+  let pickedFor: ListOfLists[]
   let item: Item
 
   beforeEach(() => {

@@ -12,3 +12,9 @@
 .navbar {
   flex-shrink: 0;
 }
+
+@media (max-width: 767px) {
+  .content {
+    padding: 0;
+  }
+}

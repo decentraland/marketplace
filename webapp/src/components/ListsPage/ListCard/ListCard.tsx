@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Dropdown, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -25,8 +25,12 @@ import {
 } from './constants'
 
 const ListCard = (props: Props) => {
-  const { list, items, onDeleteList, onEditList } = props
-  const isWishlist = list.id === DEFAULT_FAVORITES_LIST_ID
+  const { list, items, onDeleteList, onEditList, viewOnly = false } = props
+
+  const isViewOnly = useMemo(
+    () => list.id === DEFAULT_FAVORITES_LIST_ID || viewOnly,
+    [list, viewOnly]
+  )
 
   return (
     <Card
@@ -78,7 +82,7 @@ const ListCard = (props: Props) => {
             {t('list_card.item_count', { count: list.itemsCount })}
           </span>
           <span>
-            {!isWishlist ? (
+            {!isViewOnly ? (
               <Dropdown
                 data-testid={ACTIONS_DATA_TEST_ID}
                 onClick={e => e.preventDefault()}

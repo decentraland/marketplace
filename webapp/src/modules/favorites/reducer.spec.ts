@@ -1192,4 +1192,84 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
       })
     })
   })
+
+  describe('and the item was added or removed from some lists', () => {
+    let aList: List
+    let anotherList: List
+    let aListOfLists: ListOfLists
+    let anotherListOfLists: ListOfLists
+
+    beforeEach(() => {
+      aList = {
+        ...actionList
+      }
+      anotherList = {
+        ...actionList,
+        id: 'anotherListId'
+      }
+      aListOfLists = {
+        id: aList.id,
+        name: aList.name,
+        itemsCount: aList.itemsCount,
+        previewOfItemIds: aList.previewOfItemIds ?? [],
+        isPrivate: aList.isPrivate ?? true
+      }
+      anotherListOfLists = {
+        id: anotherList.id,
+        name: anotherList.name,
+        itemsCount: anotherList.itemsCount,
+        previewOfItemIds: anotherList.previewOfItemIds ?? [],
+        isPrivate: anotherList.isPrivate ?? true
+      }
+      initialState = {
+        ...initialState,
+        data: {
+          ...initialState.data,
+          lists: {
+            [aList.id]: aList,
+            [anotherList.id]: anotherList
+          }
+        }
+      }
+    })
+
+    it('should decrease or increase the item count in the lists accordingly and remove the loading state', () => {
+      expect(
+        favoritesReducer(
+          initialState,
+          bulkPickUnpickSuccess(
+            item,
+            [aListOfLists],
+            [anotherListOfLists],
+            true,
+            false
+          )
+        )
+      ).toEqual({
+        ...initialState,
+        data: {
+          ...initialState.data,
+          lists: {
+            ...initialState.data.lists,
+            [aList.id]: {
+              ...initialState.data.lists[aList.id],
+              itemsCount: aList.itemsCount + 1
+            },
+            [anotherList.id]: {
+              ...initialState.data.lists[anotherList.id],
+              itemsCount: anotherList.itemsCount - 1
+            }
+          },
+          items: {
+            [item.id]: {
+              pickedByUser: true,
+              count: 1,
+              createdAt: undefined
+            }
+          }
+        },
+        loading: []
+      })
+    })
+  })
 })

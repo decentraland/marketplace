@@ -17,16 +17,3 @@
 .container:empty {
   display: none;
 }
-
-:global(.dcl.stats .ui.header.sub) {
-  font-weight: 600;
-  font-size: 13px;
-  line-height: 18px;
-  text-transform: uppercase;
-  color: #736e7d;
-}
-
-.notEnoughMana {
-  margin-top: 20px;
-  color: var(--sunish);
-}

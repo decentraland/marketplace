@@ -82,27 +82,10 @@
   .linkedProfileRow {
     margin-left: unset;
   }
-  :global(.ui.very.basic.table tr th),
-  :global(.ui.very.basic.table tr td) {
-    width: 50% !important; /* 2 columns, needs to be overriden with the !important since the library uses it too */
-  }
-  :global(.ui.very.basic.table tr) {
-    border: 1px solid var(--divider);
-  }
-  :global(.ui.very.basic.table tr):first-of-type {
-    border: none;
-  }
-  :global(.ui.very.basic.table td) {
-    border-right: 1px solid var(--divider) !important; /* needs to be overriden with the !important since the library uses it too */
-  }
   .viewListingContainer {
     margin-right: 0;
   }
   .manaField {
     flex-wrap: wrap;
-  }
-  :global(.ui.small.inverted.button) {
-    min-width: auto;
-    border: none;
   }
 }

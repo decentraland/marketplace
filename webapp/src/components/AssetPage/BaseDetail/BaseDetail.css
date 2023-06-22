@@ -90,6 +90,10 @@
   width: unset;
 }
 
+.BaseDetail .below {
+  margin-top: 20px;
+}
+
 @media (max-width: 768px) {
   .BaseDetail .dcl.stats {
     margin-right: unset;

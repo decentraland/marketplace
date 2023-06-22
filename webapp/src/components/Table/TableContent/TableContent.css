@@ -115,4 +115,13 @@
   .TableContent .ui.menu:after {
     display: none;
   }
+  .TableContent .ui.very.basic.table tr {
+    border: 1px solid var(--divider);
+  }
+  .TableContent .ui.very.basic.table tr:first-of-type {
+    border: none;
+  }
+  .TableContent .ui.very.basic.table td {
+    border-right: 1px solid var(--divider) !important;
+  }
 }

@@ -548,30 +548,47 @@ describe('when handling the fetch items request action', () => {
 
 describe('when handling the fetch trending items request action', () => {
   describe('when the request is successful', () => {
-    let dateNowSpy: jest.SpyInstance
-    const nowTimestamp = 1487076708000
-    const fetchResult = { data: [item], total: 1 }
+    describe('and there are some trending items', () => {
+      let dateNowSpy: jest.SpyInstance
+      const nowTimestamp = 1487076708000
+      const fetchResult = { data: [item], total: 1 }
 
-    beforeEach(() => {
-      dateNowSpy = jest
-        .spyOn(Date, 'now')
-        .mockImplementation(() => nowTimestamp)
+      beforeEach(() => {
+        dateNowSpy = jest
+          .spyOn(Date, 'now')
+          .mockImplementation(() => nowTimestamp)
+      })
+
+      afterEach(() => {
+        dateNowSpy.mockRestore()
+      })
+
+      it('should dispatch a successful action with the fetched trending items', () => {
+        return expectSaga(itemSaga, getIdentity)
+          .provide([
+            [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
+            [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
+            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+          ])
+          .put(fetchTrendingItemsSuccess(fetchResult.data))
+          .dispatch(fetchTrendingItemsRequest())
+          .run({ silenceTimeout: true })
+      })
     })
 
-    afterEach(() => {
-      dateNowSpy.mockRestore()
-    })
+    describe('and there are no trending items', () => {
+      const fetchResult = { data: [], total: 0 }
 
-    it('should dispatch a successful action with the fetched trending items', () => {
-      return expectSaga(itemSaga, getIdentity)
-        .provide([
-          [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
-          [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
-        ])
-        .put(fetchTrendingItemsSuccess(fetchResult.data))
-        .dispatch(fetchTrendingItemsRequest())
-        .run({ silenceTimeout: true })
+      it('should dispatch a successful action with the fetched trending items', () => {
+        return expectSaga(itemSaga, getIdentity)
+          .provide([
+            [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
+            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+          ])
+          .put(fetchTrendingItemsSuccess(fetchResult.data))
+          .dispatch(fetchTrendingItemsRequest())
+          .run({ silenceTimeout: true })
+      })
     })
   })
 

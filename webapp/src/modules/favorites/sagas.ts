@@ -404,6 +404,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleCreateListRequest(action: CreateListRequestAction) {
     const { name, isPrivate, description } = action.payload
     try {
+      const { pathname } = yield select(getLocation)
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
       const list: Awaited<ReturnType<
@@ -414,6 +415,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         description
       })
       yield put(createListSuccess(list))
+      if (pathname === locations.lists()) {
+        yield put(push(locations.list(list.id)))
+      }
     } catch (error) {
       yield put(
         createListFailure(
