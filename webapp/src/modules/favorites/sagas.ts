@@ -459,10 +459,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         listCreationSuccess
       }: {
         listCreationSuccess: CreateListSuccessAction
+        picksInBulkRequest: BulkPickUnpickRequestAction
         modalClosed: CloseModalAction
       } = yield race({
         listCreationSuccess: take(CREATE_LIST_SUCCESS),
-        modalClosed: take([CLOSE_MODAL, BULK_PICK_REQUEST])
+        picksInBulkRequest: take(BULK_PICK_REQUEST),
+        modalClosed: take(CLOSE_MODAL)
       })
 
       if (listCreationSuccess) {
