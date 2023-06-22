@@ -85,12 +85,15 @@
 }
 
 @media (max-width: 767px) {
+  .content {
+    padding: 0 24px;
+  }
+
   .createList .icon {
     display: none;
   }
 
   .createList:global(.ui.small.primary.button) {
-    padding: 14px 62px;
     font-size: 12px;
     width: 97px;
     height: 34px;

@@ -74,99 +74,102 @@ const ListsPage = ({
 
   return (
     <PageLayout activeTab={NavigationTab.MY_LISTS}>
-      <Header className={styles.header} size="large">
-        {t('lists_page.title')}
-      </Header>
-      {!error && (
-        <>
-          <div className={styles.subHeader}>
-            <div className={styles.left}>
-              {lists.length > 0 && count
-                ? t('lists_page.subtitle', { count })
-                : null}
+      <div className={styles.content}>
+        <Header className={styles.header} size="large">
+          {t('lists_page.title')}
+        </Header>
+        {!error && (
+          <>
+            <div className={styles.subHeader}>
+              <div className={styles.left}>
+                {count ? t('lists_page.subtitle', { count }) : null}
+              </div>
+              <div className={styles.right}>
+                <span className={styles.sortBy}>{t('filters.sort_by')}</span>
+                <Dropdown
+                  options={[
+                    {
+                      value: ListsBrowseSortBy.RECENTLY_UPDATED,
+                      text: t('filters.recently_updated')
+                    },
+                    {
+                      value: ListsBrowseSortBy.NAME_ASC,
+                      text: t('filters.name_asc')
+                    },
+                    {
+                      value: ListsBrowseSortBy.NAME_DESC,
+                      text: t('filters.name_desc')
+                    },
+                    {
+                      value: ListsBrowseSortBy.NEWEST,
+                      text: t('filters.newest')
+                    },
+                    {
+                      value: ListsBrowseSortBy.OLDEST,
+                      text: t('filters.oldest')
+                    }
+                  ]}
+                  value={selectedSortBy}
+                  onChange={handleSortChange}
+                  className={styles.customDropdown}
+                />
+                <Button
+                  size="small"
+                  primary
+                  className={styles.createList}
+                  onClick={onCreateList}
+                  data-testid={CREATE_LIST_TEST_ID}
+                >
+                  <Icon name="plus" className={styles.icon} />
+                  {t('lists_page.create_list')}
+                </Button>
+              </div>
             </div>
-            <div className={styles.right}>
-              <span className={styles.sortBy}>{t('filters.sort_by')}</span>
-              <Dropdown
-                options={[
-                  {
-                    value: ListsBrowseSortBy.RECENTLY_UPDATED,
-                    text: t('filters.recently_updated')
-                  },
-                  {
-                    value: ListsBrowseSortBy.NAME_ASC,
-                    text: t('filters.name_asc')
-                  },
-                  {
-                    value: ListsBrowseSortBy.NAME_DESC,
-                    text: t('filters.name_desc')
-                  },
-                  {
-                    value: ListsBrowseSortBy.NEWEST,
-                    text: t('filters.newest')
-                  },
-                  { value: ListsBrowseSortBy.OLDEST, text: t('filters.oldest') }
-                ]}
-                value={selectedSortBy}
-                onChange={handleSortChange}
-                className={styles.customDropdown}
-              />
-              <Button
-                size="small"
-                primary
-                className={styles.createList}
-                onClick={onCreateList}
-                data-testid={CREATE_LIST_TEST_ID}
-              >
-                <Icon name="plus" className={styles.icon} />
-                {t('lists_page.create_list')}
+            {isLoading && lists.length === 0 ? (
+              <>
+                <div className={styles.overlay} />
+                <div className={styles.transparentOverlay}>
+                  <Loader
+                    active
+                    className={styles.loader}
+                    data-testid={LOADER_TEST_ID}
+                    size="massive"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.cardsGroup}>
+                  {lists.map((list, index) => (
+                    <ListCard key={`${list.id}-${index}`} list={list} />
+                  ))}
+                </div>
+                <InfiniteScroll
+                  page={page}
+                  hasMorePages={hasMorePages}
+                  onLoadMore={goToNextPage}
+                  isLoading={isLoading}
+                  maxScrollPages={3}
+                >
+                  {null}
+                </InfiniteScroll>
+              </>
+            )}
+          </>
+        )}
+        {error && (
+          <div className={styles.errorContainer} data-testid={ERROR_TEST_ID}>
+            <div className={styles.errorImage}></div>
+            <h1>{t('lists_page.error.title')}</h1>
+            <p>{t('lists_page.error.subtitle')}</p>
+            <div className={styles.errorActions}>
+              <Button primary onClick={handleFetchLists}>
+                {t('lists_page.error.action')}
               </Button>
             </div>
           </div>
-          {isLoading && lists.length === 0 ? (
-            <>
-              <div className={styles.overlay} />
-              <div className={styles.transparentOverlay}>
-                <Loader
-                  active
-                  className={styles.loader}
-                  data-testid={LOADER_TEST_ID}
-                  size="massive"
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className={styles.cardsGroup}>
-                {lists.map((list, index) => (
-                  <ListCard key={`${list.id}-${index}`} list={list} />
-                ))}
-              </div>
-              <InfiniteScroll
-                page={page}
-                hasMorePages={hasMorePages}
-                onLoadMore={goToNextPage}
-                isLoading={isLoading}
-                maxScrollPages={3}
-              >
-                {null}
-              </InfiniteScroll>
-            </>
-          )}
-        </>
-      )}
-      {error && (
-        <div className={styles.errorContainer} data-testid={ERROR_TEST_ID}>
-          <div className={styles.errorImage}></div>
-          <h1>{t('lists_page.error.title')}</h1>
-          <p>{t('lists_page.error.subtitle')}</p>
-          <div className={styles.errorActions}>
-            <Button primary onClick={handleFetchLists}>
-              {t('lists_page.error.action')}
-            </Button>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </PageLayout>
   )
 }
