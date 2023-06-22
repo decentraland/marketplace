@@ -1,6 +1,6 @@
 :global(.ui.card).card {
   height: 240px;
-  width: 320px;
+  width: 100%;
   margin: 0px;
 }
 
