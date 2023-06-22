@@ -5,9 +5,16 @@
 }
 
 .content {
+  padding: 0 24px;
   flex-grow: 1;
 }
 
 .navbar {
   flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+  .content {
+    padding: 0;
+  }
 }

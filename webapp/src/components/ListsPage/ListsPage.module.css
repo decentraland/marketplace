@@ -3,10 +3,6 @@
   flex-direction: column;
 }
 
-.content {
-   padding: 0 24px;
-}
-
 .subHeader {
   display: flex;
   justify-content: space-between;
@@ -89,6 +85,10 @@
 }
 
 @media (max-width: 767px) {
+  .content {
+    padding: 0 24px;
+  }
+
   .createList .icon {
     display: none;
   }
