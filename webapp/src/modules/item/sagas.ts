@@ -121,6 +121,12 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         size
       )
       const ids = data.map(item => item.id)
+
+      if (!ids.length) {
+        yield put(fetchTrendingItemsSuccess([]))
+        return
+      }
+
       const { data: itemData }: { data: Item[]; total: number } = yield call(
         [catalogAPI, 'get'],
         {
