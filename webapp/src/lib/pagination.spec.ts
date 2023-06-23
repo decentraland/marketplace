@@ -204,4 +204,46 @@ describe('when getting the pagination hook', () => {
       })
     })
   })
+
+  describe('and the count option is set', () => {
+    beforeEach(() => {
+      useLocationMock.search = 'page=1'
+      renderedHook = renderHook(() =>
+        usePagination({ pageSize: 50, count: 101 })
+      )
+      currentResult = renderedHook.result.current as UsePaginationResult
+    })
+
+    it('should compute the number of pages', () => {
+      expect(currentResult.pages).toEqual(3)
+    })
+  })
+
+  describe("and there's no more pages left", () => {
+    beforeEach(() => {
+      useLocationMock.search = 'page=3'
+      renderedHook = renderHook(() =>
+        usePagination({ pageSize: 50, count: 101 })
+      )
+      currentResult = renderedHook.result.current as UsePaginationResult
+    })
+
+    it('should return hasMorePages as false', () => {
+      expect(currentResult.hasMorePages).toBe(false)
+    })
+  })
+
+  describe('and there are more pages left', () => {
+    beforeEach(() => {
+      useLocationMock.search = 'page=1'
+      renderedHook = renderHook(() =>
+        usePagination({ pageSize: 50, count: 101 })
+      )
+      currentResult = renderedHook.result.current as UsePaginationResult
+    })
+
+    it('should return hasMorePages as true', () => {
+      expect(currentResult.hasMorePages).toBe(true)
+    })
+  })
 })
