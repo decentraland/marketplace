@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import classnames from 'classnames'
 import { Card, Dropdown, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -43,7 +44,7 @@ const ListCard = (props: Props) => {
         vendor: VendorName.DECENTRALAND,
         sortBy: SortBy.NEWEST
       })}
-      className={styles.card}
+      className={classnames(styles.ListCard, isViewOnly ?? styles.viewOnly)}
     >
       <div className={styles.image}>
         {list.isPrivate ? (
