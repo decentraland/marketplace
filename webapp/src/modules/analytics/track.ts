@@ -76,10 +76,6 @@ import {
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import * as events from '../../utils/events'
 import {
-  BULK_PICK_FAILURE,
-  BULK_PICK_SUCCESS,
-  BulkPickUnpickFailureAction,
-  BulkPickUnpickSuccessAction,
   CREATE_LIST_FAILURE,
   CREATE_LIST_SUCCESS,
   CreateListFailureAction,
@@ -90,18 +86,26 @@ import {
   DeleteListSuccessAction,
   PICK_ITEM_AS_FAVORITE_FAILURE,
   PICK_ITEM_AS_FAVORITE_SUCCESS,
+  PICK_ITEM_FAILURE,
+  PICK_ITEM_SUCCESS,
   PickItemAsFavoriteFailureAction,
   PickItemAsFavoriteSuccessAction,
+  PickItemFailureAction,
+  PickItemSuccessAction,
   UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
   UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
   UNPICK_ITEM_AS_FAVORITE_FAILURE,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+  UNPICK_ITEM_FAILURE,
+  UNPICK_ITEM_SUCCESS,
   UPDATE_LIST_FAILURE,
   UPDATE_LIST_SUCCESS,
   UndoUnpickingItemAsFavoriteFailureAction,
   UndoUnpickingItemAsFavoriteSuccessAction,
   UnpickItemAsFavoriteFailureAction,
   UnpickItemAsFavoriteSuccessAction,
+  UnpickItemFailureAction,
+  UnpickItemSuccessAction,
   UpdateListFailureAction,
   UpdateListSuccessAction
 } from '../favorites/actions'
@@ -406,23 +410,40 @@ track<UndoUnpickingItemAsFavoriteFailureAction>(
   })
 )
 
-track<BulkPickUnpickSuccessAction>(
-  BULK_PICK_SUCCESS,
-  events.BULK_PICK,
-  ({ payload: { item, pickedFor, unpickedFrom } }) => ({
+track<PickItemSuccessAction>(
+  PICK_ITEM_SUCCESS,
+  events.PICK_ITEM,
+  ({ payload: { item, listId } }) => ({
     item,
-    pickedFor,
-    unpickedFrom
+    listId
   })
 )
 
-track<BulkPickUnpickFailureAction>(
-  BULK_PICK_FAILURE,
-  events.BULK_PICK,
-  ({ payload: { item, pickedFor, unpickedFrom, error } }) => ({
+track<PickItemFailureAction>(
+  PICK_ITEM_FAILURE,
+  events.PICK_ITEM,
+  ({ payload: { item, listId, error } }) => ({
     item,
-    pickedFor,
-    unpickedFrom,
+    listId,
+    error
+  })
+)
+
+track<UnpickItemSuccessAction>(
+  UNPICK_ITEM_SUCCESS,
+  events.UNPICK_ITEM,
+  ({ payload: { item, listId } }) => ({
+    item,
+    listId
+  })
+)
+
+track<UnpickItemFailureAction>(
+  UNPICK_ITEM_FAILURE,
+  events.UNPICK_ITEM,
+  ({ payload: { item, listId, error } }) => ({
+    item,
+    listId,
     error
   })
 )
