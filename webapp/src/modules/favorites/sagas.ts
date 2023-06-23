@@ -481,7 +481,6 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
         yield put(bulkPickUnpickRequest(item, [pickedList], []))
       }
-      console.log('end sagas')
     } catch (error) {
       yield put(
         bulkPickUnpickCancel(
