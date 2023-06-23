@@ -166,18 +166,42 @@ describe('when getting the pagination hook', () => {
 
   describe('and using the changeFilter function', () => {
     beforeEach(() => {
-      useLocationMock.search = 'filter=value&sortBy=createdAt'
+      useLocationMock.search =
+        'filter=value&anotherFilter=someValue&sortBy=createdAt'
       renderedHook = renderHook(() => usePagination())
       currentResult = renderedHook.result.current as UsePaginationResult
-      act(() => {
-        currentResult.changeFilter('filter', 'newValue')
+    })
+
+    describe('and the flag to remove all the old filters is set', () => {
+      beforeEach(() => {
+        act(() => {
+          currentResult.changeFilter('filter', 'newValue', {
+            clearOldFilters: true
+          })
+        })
+      })
+
+      it('should push the first page into the history only with the new filter and the current sorting', () => {
+        expect(historyPushMock).toHaveBeenCalledWith(
+          '/v1/lists?page=1&sortBy=createdAt&filter=newValue'
+        )
       })
     })
 
-    it('should push the first page into the history with the changed filter and the current sorting', () => {
-      expect(historyPushMock).toHaveBeenCalledWith(
-        '/v1/lists?filter=newValue&sortBy=createdAt&page=1'
-      )
+    describe('and the flag to remove all the old filters is not set', () => {
+      beforeEach(() => {
+        act(() => {
+          currentResult.changeFilter('filter', 'newValue', {
+            clearOldFilters: false
+          })
+        })
+      })
+
+      it('should push the first page into the history with the changed filter and the current sorting', () => {
+        expect(historyPushMock).toHaveBeenCalledWith(
+          '/v1/lists?filter=newValue&anotherFilter=someValue&sortBy=createdAt&page=1'
+        )
+      })
     })
   })
 })

@@ -16,7 +16,7 @@ export type UsePaginationResult = {
   changeFilter: (
     filter: string,
     value: string,
-    clearOldFilters?: boolean
+    options?: { clearOldFilters: boolean }
   ) => void
 }
 
@@ -81,14 +81,21 @@ export function usePagination(
   )
 
   const changeFilter = useCallback(
-    (filter: string, value: string, clearOldFilters: boolean = false) => {
-      const params = new URLSearchParams(clearOldFilters ? {} : search)
+    (
+      filter: string,
+      value: string,
+      options: { clearOldFilters: boolean } = { clearOldFilters: false }
+    ) => {
+      const params = new URLSearchParams(options.clearOldFilters ? {} : search)
       // Reset the page when changing the filter
       params.set('page', '1')
+      if (options.clearOldFilters && sortBy) {
+        params.set('sortBy', sortBy)
+      }
       params.set(filter, value)
       push(`${pathname}?${params.toString()}`)
     },
-    [pathname, push, search]
+    [pathname, push, search, sortBy]
   )
 
   const pages = options?.count
