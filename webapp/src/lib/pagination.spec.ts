@@ -147,6 +147,23 @@ describe('when getting the pagination hook', () => {
     })
   })
 
+  describe('and using the goToPage function', () => {
+    beforeEach(() => {
+      useLocationMock.search = 'filter=value&sortBy=createdAt'
+      renderedHook = renderHook(() => usePagination())
+      currentResult = renderedHook.result.current as UsePaginationResult
+      act(() => {
+        currentResult.goToPage(4)
+      })
+    })
+
+    it('should push the desired page into the history with the current parameters', () => {
+      expect(historyPushMock).toHaveBeenCalledWith(
+        '/v1/lists?filter=value&sortBy=createdAt&page=4'
+      )
+    })
+  })
+
   describe('and using the changeSorting function', () => {
     beforeEach(() => {
       useLocationMock.search = 'filter=value&sortBy=createdAt'
