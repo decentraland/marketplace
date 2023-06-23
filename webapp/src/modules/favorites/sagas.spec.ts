@@ -23,6 +23,7 @@ import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
+  BULK_PICK_SUCCESS,
   CREATE_LIST_FAILURE,
   CREATE_LIST_SUCCESS,
   bulkPickUnpickCancel,
@@ -1412,6 +1413,22 @@ describe('when handling the request to start the picks and unpicks in bulk proce
     })
   })
 
+  describe('and the user picks or unpicks in bulk without trying to create a new list', () => {
+    it('should end the saga without dispatching a bulk request', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [select(getAddress), address],
+          [call(getAccountIdentity), Promise.resolve()],
+          [take(BULK_PICK_SUCCESS), { payload: { list: newList } }]
+        ])
+        .put(openModal('SaveToListModal', { item }))
+        .not.put(closeModal('SaveToListModal'))
+        .not.put(bulkPickUnpickRequest(item, [newList], []))
+        .dispatch(bulkPickUnpickStart(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe('and the user tries to create a new list', () => {
     describe('and the creation of the list succeeds', () => {
       it('should dispatch an action signaling the pick item in bulk request for the created list', () => {
@@ -1426,22 +1443,6 @@ describe('when handling the request to start the picks and unpicks in bulk proce
           .put(openModal('SaveToListModal', { item }))
           .put(closeModal('SaveToListModal'))
           .put(bulkPickUnpickRequest(item, [newList], []))
-          .dispatch(bulkPickUnpickStart(item))
-          .run({ silenceTimeout: true })
-      })
-    })
-
-    describe('and the creation of the list fails', () => {
-      it('should dispatch an action signaling the cancel of the pick item in bulk process', () => {
-        return expectSaga(favoritesSaga, getIdentity)
-          .provide([
-            [select(getAddress), address],
-            [call(getAccountIdentity), Promise.resolve()],
-            [take(CREATE_LIST_FAILURE), {}],
-            [put(bulkPickUnpickRequest(item, [newList], [])), undefined]
-          ])
-          .put(openModal('SaveToListModal', { item }))
-          .not.put(bulkPickUnpickRequest(item, [newList], []))
           .dispatch(bulkPickUnpickStart(item))
           .run({ silenceTimeout: true })
       })

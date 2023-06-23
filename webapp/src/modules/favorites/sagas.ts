@@ -76,9 +76,7 @@ import {
   BulkPickUnpickStartAction,
   bulkPickUnpickCancel,
   CreateListSuccessAction,
-  CreateListFailureAction,
   CREATE_LIST_SUCCESS,
-  CREATE_LIST_FAILURE,
   bulkPickUnpickRequest,
   DELETE_LIST_SUCCESS
 } from './actions'
@@ -429,7 +427,6 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleBulkPickStart(action: BulkPickUnpickStartAction) {
     const { item } = action.payload
-
     try {
       const address: string = yield select(getAddress)
 
@@ -466,11 +463,11 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         listCreationSuccess
       }: {
         listCreationSuccess: CreateListSuccessAction
-        listCreationFailure: CreateListFailureAction
+        picksInBulkRequest: BulkPickUnpickRequestAction
         modalClosed: CloseModalAction
       } = yield race({
         listCreationSuccess: take(CREATE_LIST_SUCCESS),
-        listCreationFailure: take(CREATE_LIST_FAILURE),
+        picksInBulkRequest: take(BULK_PICK_REQUEST),
         modalClosed: take(CLOSE_MODAL)
       })
 
