@@ -272,7 +272,8 @@ const AssetBrowse = (props: Props) => {
                       ? () =>
                           changeFilter(
                             'section',
-                            Sections.decentraland.COLLECTIONS
+                            Sections.decentraland.COLLECTIONS,
+                            { clearOldFilters: true }
                           )
                       : () => onBrowse({ section: value })
                   }

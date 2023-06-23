@@ -38,7 +38,9 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => {
           key={COLLECTIONS}
           value={COLLECTIONS}
           currentValue={section}
-          onClick={section => changeFilter('section', section, true)}
+          onClick={section =>
+            changeFilter('section', section, { clearOldFilters: true })
+          }
         />
         <NFTSectionsMenuItems
           sections={[LAND, WEARABLES, EMOTES, ENS]}
