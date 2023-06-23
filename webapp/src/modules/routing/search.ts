@@ -1,6 +1,5 @@
 import {
   CatalogSortBy,
-  CollectionSortBy,
   EmoteCategory,
   EmotePlayMode,
   ItemSortBy,
@@ -362,21 +361,6 @@ export function getCatalogSortBy(sortBy: SortBy): CatalogSortBy {
       return CatalogSortBy.RECENTLY_SOLD
     default:
       return CatalogSortBy.CHEAPEST
-  }
-}
-
-export function getCollectionSortBy(sortBy: SortBy): CollectionSortBy {
-  switch (sortBy) {
-    case SortBy.NAME:
-      return CollectionSortBy.NAME
-    case SortBy.NEWEST:
-      return CollectionSortBy.NEWEST
-    case SortBy.RECENTLY_REVIEWED:
-      return CollectionSortBy.RECENTLY_REVIEWED
-    case SortBy.SIZE:
-      return CollectionSortBy.SIZE
-    default:
-      return CollectionSortBy.NEWEST
   }
 }
 
