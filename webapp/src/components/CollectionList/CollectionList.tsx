@@ -40,7 +40,6 @@ const CollectionList = ({
   ])
 
   useEffect(() => {
-    console.log('Fetching collections through the component')
     onFetchCollections(
       {
         first,
