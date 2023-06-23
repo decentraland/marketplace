@@ -4,17 +4,25 @@ import { PAGE_SIZE } from '../modules/vendor/api'
 
 export type UsePaginationResult = {
   page: number
+  pages?: number
+  hasMorePages?: boolean
   first: number
   offset: number
   sortBy?: string
   filters: Record<string, string | null>
   goToNextPage: () => void
+  goToPage: (newPage: number) => void
   changeSorting: (sort: string) => void
-  changeFilter: (filter: string, value: string) => void
+  changeFilter: (
+    filter: string,
+    value: string,
+    clearOldFilters?: boolean
+  ) => void
 }
 
 export type PaginationOptions = {
   pageSize?: number
+  count?: number
 }
 
 export function usePagination(
@@ -52,6 +60,15 @@ export function usePagination(
     push(`${pathname}?${params.toString()}`)
   }, [search, page, push, pathname])
 
+  const goToPage = useCallback(
+    (newPage: number) => {
+      const params = new URLSearchParams(search)
+      params.set('page', newPage.toString())
+      push(`${pathname}?${params.toString()}`)
+    },
+    [search, push, pathname]
+  )
+
   const changeSorting = useCallback(
     (sort: string) => {
       const params = new URLSearchParams(search)
@@ -64,8 +81,8 @@ export function usePagination(
   )
 
   const changeFilter = useCallback(
-    (filter: string, value: string) => {
-      const params = new URLSearchParams(search)
+    (filter: string, value: string, clearOldFilters: boolean = false) => {
+      const params = new URLSearchParams(clearOldFilters ? {} : search)
       // Reset the page when changing the filter
       params.set('page', '1')
       params.set(filter, value)
@@ -74,13 +91,21 @@ export function usePagination(
     [pathname, push, search]
   )
 
+  const pages = options?.count
+    ? Math.ceil(options?.count / (options?.pageSize ?? PAGE_SIZE))
+    : undefined
+  const hasMorePages = pages ? page < pages : undefined
+
   return {
     page,
+    pages,
+    hasMorePages,
     first,
     offset,
     sortBy,
     filters,
     goToNextPage,
+    goToPage,
     changeSorting,
     changeFilter
   }

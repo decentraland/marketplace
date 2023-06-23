@@ -291,6 +291,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       })
       break
     case Section.COLLECTIONS:
+      console.log('Fetching collections through browse')
       yield handleFetchCollections(
         page,
         Array.isArray(address) ? address[0] : address,
