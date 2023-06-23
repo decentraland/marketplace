@@ -15,14 +15,16 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { formatDistanceToNow } from '../../lib/date'
 import { locations } from '../../modules/routing/locations'
 import { Section } from '../../modules/vendor/decentraland'
-import { VendorName } from '../../modules/vendor'
-import { View } from '../../modules/ui/types'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
 import * as events from '../../utils/events'
+import { usePagination } from '../../lib/pagination'
+import { Sections } from '../../modules/routing/types'
+import { MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
 import { NavigationTab } from '../Navigation/Navigation.types'
-import { AssetBrowse } from '../AssetBrowse'
 import { PageLayout } from '../PageLayout'
 import { LinkedProfile } from '../LinkedProfile'
+import { InfiniteScroll } from '../InfiniteScroll'
+import { AssetCard } from '../AssetCard'
 import { PrivateTag } from '../PrivateTag'
 import { Props } from './ListPage.types'
 import styles from './ListPage.module.css'
@@ -45,24 +47,29 @@ import {
 
 const LIST_NOT_FOUND = 'list was not found'
 
-const ListPage = (props: Props) => {
-  const {
-    isConnecting,
-    wallet,
-    listId,
-    list,
-    isLoading,
-    error,
-    onFetchList,
-    onBack,
-    onEditList,
-    onDeleteList,
-    onShareList,
-    isListV1Enabled
-  } = props
+const ListPage = ({
+  isConnecting,
+  wallet,
+  listId,
+  items,
+  list,
+  isLoadingList,
+  isLoadingItems,
+  error,
+  onFetchList,
+  onBack,
+  onEditList,
+  onDeleteList,
+  onShareList,
+  onFetchFavoritedItems,
+  isListV1Enabled
+}: Props) => {
   const hasFetchedOnce = useRef(false)
   const { pathname, search } = useLocation()
+  const { page, first, offset, goToNextPage } = usePagination()
+  const isLoading = isLoadingList || isLoadingItems
 
+  // Fetching list
   const fetchList = useCallback(() => {
     if (listId && !isLoading && !hasFetchedOnce.current) {
       onFetchList(listId)
@@ -142,6 +149,22 @@ const ListPage = (props: Props) => {
     if (!isConnecting) fetchList()
   }, [fetchList, isConnecting])
 
+  useEffect(() => {
+    if (list) {
+      onFetchFavoritedItems({
+        view: Section.LISTS,
+        section: Sections.decentraland.LISTS,
+        page,
+        filters: { first, skip: offset }
+      })
+    }
+  }, [first, list, offset, onFetchFavoritedItems, page])
+
+  const hasMorePages =
+    Boolean(list) &&
+    (items.length !== list?.itemsCount || list?.itemsCount === PAGE_SIZE) &&
+    page <= MAX_PAGE
+
   if (!isConnecting && !wallet && list?.isPrivate) {
     return <Redirect to={locations.signIn(`${pathname}${search}`)} />
   }
@@ -149,9 +172,19 @@ const ListPage = (props: Props) => {
   return (
     <PageLayout activeTab={isPublicView ? undefined : NavigationTab.MY_LISTS}>
       {isLoading || isConnecting ? (
-        <Loader active size="massive" data-testid={LOADER_TEST_ID} />
+        <>
+          <div className={styles.overlay} />
+          <div className={styles.transparentOverlay}>
+            <Loader
+              active
+              className={styles.loader}
+              data-testid={LOADER_TEST_ID}
+              size="massive"
+            />
+          </div>
+        </>
       ) : null}
-      {!isLoading && !isConnecting && listId && list && !error ? (
+      {!isConnecting && listId && list && !error ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
             {(!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID) &&
@@ -257,12 +290,28 @@ const ListPage = (props: Props) => {
             data-testid={ASSET_BROWSE_TEST_ID}
             className={styles.assetBrowseContainer}
           >
+            <div className={styles.count}>
+              {list.itemsCount
+                ? t('lists_page.subtitle', { count: list.itemsCount })
+                : null}
+            </div>
             {list.itemsCount ? (
-              <AssetBrowse
-                view={View.LISTS}
-                section={Section.LISTS}
-                vendor={VendorName.DECENTRALAND}
-              />
+              <>
+                <div className={styles.cardsGroup}>
+                  {items.map((item, index) => (
+                    <AssetCard key={item.id + '-' + index} asset={item} />
+                  ))}
+                </div>
+                <InfiniteScroll
+                  page={page}
+                  hasMorePages={hasMorePages}
+                  onLoadMore={goToNextPage}
+                  isLoading={isLoading}
+                  maxScrollPages={3}
+                >
+                  {null}
+                </InfiniteScroll>
+              </>
             ) : (
               <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
                 <div className={styles.emptyLogo}></div>

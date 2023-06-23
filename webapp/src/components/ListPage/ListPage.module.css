@@ -5,7 +5,7 @@
 }
 
 .header:global(.ui.header) {
-  margin: 0 24px;
+  margin: 0;
   display: flex;
   align-items: center;
   column-gap: 19px;
@@ -166,6 +166,7 @@
 
 .assetBrowseContainer {
   flex-grow: 1;
+  margin-top: 30px;
 }
 
 .empty {
@@ -193,6 +194,31 @@
   margin-top: 20px;
 }
 
+.count {
+  font-size: 17px;
+  margin-bottom: 20px
+}
+
+.emptyState {
+  flex-grow: 1;
+}
+
+.cardsGroup {
+  display: grid;
+  grid-gap: 12px;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, 290px);
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: var(--background);
+  opacity: 0.6;
+  z-index: 3;
+}
+
 @media (max-width: 768px) {
   .header:global(.ui.header) {
     margin-left: 16px;
@@ -206,6 +232,10 @@
   }
 }
 
-.emptyState {
-  flex-grow: 1;
+@media (min-width: 768px) {
+  .transparentOverlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
 }

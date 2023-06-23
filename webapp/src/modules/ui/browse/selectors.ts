@@ -30,7 +30,6 @@ import { ItemState } from '../../item/reducer'
 import { VendorName } from '../../vendor'
 import { getAddress, getWallet } from '../../wallet/selectors'
 import { getTransactionsByType } from '../../transaction/selectors'
-import { Section, Sections } from '../../vendor/routing/types'
 import { Asset, AssetType } from '../../asset/types'
 import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
@@ -60,15 +59,6 @@ const getItems = createSelector<
   browse.itemIds.map(id => itemsById[id])
 )
 
-// export const getCatalogItems = createSelector<
-//   RootState,
-//   BrowseUIState,
-//   CatalogState['data'],
-//   CatalogItem[]
-// >(getState, getCatalogData, (browse, catalogsById) =>
-//   browse.catalogIds.map(id => catalogsById[id])
-// )
-
 export const getOnSaleItems = createSelector<
   RootState,
   ReturnType<typeof getAddress>,
@@ -82,16 +72,9 @@ export const getOnSaleItems = createSelector<
 
 export const getBrowseAssets = (
   state: RootState,
-  section: Section,
   assetType: AssetType
 ): Asset[] => {
-  if (assetType === AssetType.ITEM) {
-    return section === Sections.decentraland.LISTS
-      ? getItemsPickedByUserOrCreator(state)
-      : getItems(state)
-  } else {
-    return getNFTs(state)
-  }
+  return assetType === AssetType.ITEM ? getItems(state) : getNFTs(state)
 }
 
 export const getBrowseLists = createSelector<

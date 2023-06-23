@@ -10,12 +10,15 @@ import {
 import {
   GET_LIST_REQUEST,
   deleteListStart,
+  fetchFavoritedItemsRequest,
   getListRequest
 } from '../../modules/favorites/actions'
 import { RootState } from '../../modules/reducer'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import { openModal } from '../../modules/modal/actions'
 import { locations } from '../../modules/routing/locations'
+import { isLoadingFavoritedItems } from '../../modules/favorites/selectors'
+import { getItemsPickedByUserOrCreator } from '../../modules/ui/browse/selectors'
 import {
   MapStateProps,
   MapDispatch,
@@ -32,7 +35,9 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     wallet: getWallet(state),
     listId,
     list: listId ? getList(state, listId) : null,
-    isLoading: isLoadingType(getLoading(state), GET_LIST_REQUEST),
+    isLoadingList: isLoadingType(getLoading(state), GET_LIST_REQUEST),
+    isLoadingItems: isLoadingFavoritedItems(state),
+    items: getItemsPickedByUserOrCreator(state),
     error: getError(state),
     isListV1Enabled: getIsListsV1Enabled(state)
   }
@@ -43,7 +48,9 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onFetchList: listId => dispatch(getListRequest(listId)),
   onEditList: list => dispatch(openModal('CreateOrEditListModal', { list })),
   onShareList: list => dispatch(openModal('ShareListModal', { list })),
-  onDeleteList: list => dispatch(deleteListStart(list))
+  onDeleteList: list => dispatch(deleteListStart(list)),
+  onFetchFavoritedItems: (options: any, force?) =>
+    dispatch(fetchFavoritedItemsRequest(options, force))
 })
 
 export default connect(mapState, mapDispatch)(ListPage)

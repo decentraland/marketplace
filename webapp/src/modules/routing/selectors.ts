@@ -21,7 +21,7 @@ import { RootState } from '../reducer'
 import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
-import { isLandSection, isListsSection } from '../ui/utils'
+import { isLandSection } from '../ui/utils'
 import {
   getDefaultOptionsByView,
   getURLParamArray,
@@ -607,8 +607,6 @@ export const hasFiltersEnabled = createSelector<
     onlySmart
   } = browseOptions
   const isLand = isLandSection(section as Section)
-
-  if (isListsSection(section as Section)) return false
 
   if (isLand) {
     const hasOnSaleFilter = onlyOnSale === true

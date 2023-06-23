@@ -1325,6 +1325,7 @@
   },
   "list_page": {
     "default_title": "Wishlist",
+    "subtitle": "{count} {count, plural, one {item} other {items}}",
     "edit_list": "Edit List",
     "delete_list": "Delete List",
     "last_updated_at": "Last updated",

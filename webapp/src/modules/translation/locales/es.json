@@ -1316,6 +1316,7 @@
   },
   "list_page": {
     "default_title": "Lista de deseos",
+    "subtitle": "{count} {count, plural, one {item} other {items}}",
     "edit_list": "Editar Lista",
     "delete_list": "Eliminar Lista",
     "last_updated_at": "Última actualización",
