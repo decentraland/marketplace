@@ -26,9 +26,9 @@
     "babel-register": "^6.26.0",
     "dcl-tslint-config-standard": "^2.0.0",
     "prettier": "^1.19.1",
-    "truffle": "^5.0.4",
-    "truffle-contract": "^4.0.5",
-    "truffle-hdwallet-provider": "^1.0.4",
+    "truffle": "^5.10.1",
+    "truffle-contract": "^4.0.31",
+    "truffle-hdwallet-provider": "^1.0.17",
     "tslint-plugin-prettier": "^2.0.1"
   }
 }
