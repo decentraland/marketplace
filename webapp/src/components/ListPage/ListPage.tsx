@@ -233,7 +233,7 @@ const ListPage = (props: Props) => {
           </Header>
           <Header className={styles.header} sub>
             <div className={styles.subHeaderLeft}>
-              <span>{list.description}</span>
+              <span className={styles.description}>{list.description}</span>
               {isPublicView && list.userAddress && (
                 <LinkedProfile
                   data-testid={'linked-profile'}
