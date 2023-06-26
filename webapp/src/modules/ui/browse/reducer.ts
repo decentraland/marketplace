@@ -192,6 +192,10 @@ export function browseReducer(
     }
 
     case FETCH_FAVORITED_ITEMS_REQUEST:
+      if (action.payload.forceLoadMore) {
+        return state
+      }
+
       return {
         ...state,
         itemIds: isLoadingMoreResults(state, action.payload.options.page)
