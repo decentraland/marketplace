@@ -988,8 +988,9 @@ describe('when reducing the action of the success of an item picking and unpicki
   })
 })
 
-describe('when reducing the action of requesting the items added to a list', () => {
+describe('when reducing the action of requesting favorited items', () => {
   let initialState: BrowseUIState
+  let forceLoadMore: boolean
   let browseOptions: ItemBrowseOptions
 
   beforeEach(() => {
@@ -999,30 +1000,57 @@ describe('when reducing the action of requesting the items added to a list', () 
     browseOptions = {}
   })
 
-  describe('and is the first time loading the items', () => {
+  describe('and the load more flag is forced as true', () => {
     beforeEach(() => {
-      delete initialState.page
+      forceLoadMore = true
     })
 
-    it('should return the state with the itemIds cleared', () => {
+    it('should return the state unchanged', () => {
       expect(
-        browseReducer(initialState, fetchFavoritedItemsRequest(browseOptions))
-      ).toEqual({ ...initialState, itemIds: [] })
+        browseReducer(
+          initialState,
+          fetchFavoritedItemsRequest(browseOptions, forceLoadMore)
+        )
+      ).toEqual(initialState)
     })
   })
 
-  describe('and is loading more items', () => {
-    const itemIds = ['anItemId']
+  describe('and the load more flag is forced as false or undefined', () => {
     beforeEach(() => {
-      initialState.page = 1
-      initialState.itemIds = itemIds
-      browseOptions = { page: 2 }
+      forceLoadMore = false
     })
 
-    it('should return the state without changes', () => {
-      expect(
-        browseReducer(initialState, fetchFavoritedItemsRequest(browseOptions))
-      ).toEqual(initialState)
+    describe('and is the first time loading the items', () => {
+      beforeEach(() => {
+        delete initialState.page
+      })
+
+      it('should return the state with the itemIds cleared', () => {
+        expect(
+          browseReducer(
+            initialState,
+            fetchFavoritedItemsRequest(browseOptions, forceLoadMore)
+          )
+        ).toEqual({ ...initialState, itemIds: [] })
+      })
+    })
+
+    describe('and is loading more items', () => {
+      const itemIds = ['anItemId']
+      beforeEach(() => {
+        initialState.page = 1
+        initialState.itemIds = itemIds
+        browseOptions = { page: 2 }
+      })
+
+      it('should return the state without changes', () => {
+        expect(
+          browseReducer(
+            initialState,
+            fetchFavoritedItemsRequest(browseOptions, forceLoadMore)
+          )
+        ).toEqual(initialState)
+      })
     })
   })
 })
