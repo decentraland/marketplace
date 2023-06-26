@@ -51,12 +51,16 @@ import {
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
+  pickItemFailure,
+  pickItemSuccess,
   undoUnpickingItemAsFavoriteFailure,
   undoUnpickingItemAsFavoriteRequest,
   undoUnpickingItemAsFavoriteSuccess,
   unpickItemAsFavoriteFailure,
   unpickItemAsFavoriteRequest,
   unpickItemAsFavoriteSuccess,
+  unpickItemFailure,
+  unpickItemSuccess,
   updateListFailure,
   updateListRequest,
   updateListSuccess
@@ -1536,5 +1540,67 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
         .dispatch(bulkPickUnpickRequest(item, [fstList], [sndList]))
         .run({ silenceTimeout: true })
     })
+  })
+})
+
+describe('when handling the success of the bulk pick and unpick process', () => {
+  let fstList: ListOfLists
+  let sndList: ListOfLists
+
+  beforeEach(() => {
+    fstList = {
+      id: 'anId',
+      name: 'aName',
+      itemsCount: 1,
+      previewOfItemIds: ['anItemId'],
+      isPrivate: true
+    }
+    sndList = {
+      id: 'anotherId',
+      name: 'anotherName',
+      itemsCount: 2,
+      previewOfItemIds: ['anotherItemId'],
+      isPrivate: true
+    }
+  })
+
+  it('should dispatch a pick success action and an unpick success action for each picked or unpicked lists', () => {
+    return expectSaga(favoritesSaga, getIdentity)
+      .put(pickItemSuccess(item, fstList.id))
+      .put(unpickItemSuccess(item, sndList.id))
+      .dispatch(bulkPickUnpickSuccess(item, [fstList], [sndList], true, true))
+      .run({ silenceTimeout: true })
+  })
+})
+
+describe('when handling the failure of the bulk pick and unpick process', () => {
+  let error: string
+  let fstList: ListOfLists
+  let sndList: ListOfLists
+
+  beforeEach(() => {
+    error = 'An error occurred'
+    fstList = {
+      id: 'anId',
+      name: 'aName',
+      itemsCount: 1,
+      previewOfItemIds: ['anItemId'],
+      isPrivate: true
+    }
+    sndList = {
+      id: 'anotherId',
+      name: 'anotherName',
+      itemsCount: 2,
+      previewOfItemIds: ['anotherItemId'],
+      isPrivate: true
+    }
+  })
+
+  it('should dispatch a pick failure action and an unpick success action for each picked or unpicked lists', () => {
+    return expectSaga(favoritesSaga, getIdentity)
+      .put(pickItemFailure(item, fstList.id, error))
+      .put(unpickItemFailure(item, sndList.id, error))
+      .dispatch(bulkPickUnpickFailure(item, [fstList], [sndList], error))
+      .run({ silenceTimeout: true })
   })
 })

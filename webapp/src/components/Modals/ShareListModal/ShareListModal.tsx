@@ -42,9 +42,10 @@ const ShareListModal = (props: Props) => {
 
   const handleCopyLink = useCallback(() => {
     const url = `${MARKETPLACE_URL}${listLink}`
-    getAnalytics().track(events.COPY_LINK_TO_SHARE_LIST, {
+    getAnalytics().track(events.SHARE_LIST, {
       list,
-      url
+      url,
+      type: events.SHARE_LIST_TYPE.COPY_LINK
     })
     copyText(url, setHasCopied)
   }, [list, listLink, setHasCopied])
@@ -54,9 +55,10 @@ const ShareListModal = (props: Props) => {
       const url = `${twitterLink}${encodeURIComponent(
         `${t('share_list_modal.twitter_message')}${MARKETPLACE_URL}${listLink}`
       )}`
-      getAnalytics().track(events.SHARE_LIST_ON_TWITTER, {
+      getAnalytics().track(events.SHARE_LIST, {
         list,
-        url
+        url,
+        type: events.SHARE_LIST_TYPE.TWITTER
       })
       window.open(url, '_blank')
       e.currentTarget.blur()

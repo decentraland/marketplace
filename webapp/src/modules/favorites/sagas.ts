@@ -78,7 +78,15 @@ import {
   CreateListSuccessAction,
   CREATE_LIST_SUCCESS,
   bulkPickUnpickRequest,
-  DELETE_LIST_SUCCESS
+  DELETE_LIST_SUCCESS,
+  BulkPickUnpickSuccessAction,
+  BulkPickUnpickFailureAction,
+  BULK_PICK_SUCCESS,
+  pickItemSuccess,
+  unpickItemSuccess,
+  pickItemFailure,
+  unpickItemFailure,
+  BULK_PICK_FAILURE
 } from './actions'
 import {
   getList,
@@ -125,6 +133,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
   yield takeEvery(BULK_PICK_START, handleBulkPickStart)
   yield takeEvery(BULK_PICK_REQUEST, handleBulkPickRequest)
+  yield takeEvery(
+    [BULK_PICK_SUCCESS, BULK_PICK_FAILURE],
+    handleBulkPickSuccessOrFailure
+  )
 
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
@@ -532,6 +544,29 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )
+    }
+  }
+
+  function* handleBulkPickSuccessOrFailure(
+    action: BulkPickUnpickSuccessAction | BulkPickUnpickFailureAction
+  ) {
+    const { item, pickedFor, unpickedFrom } = action.payload
+
+    if (action.type === BULK_PICK_SUCCESS) {
+      for (const list of pickedFor) {
+        yield put(pickItemSuccess(item, list.id))
+      }
+      for (const list of unpickedFrom) {
+        yield put(unpickItemSuccess(item, list.id))
+      }
+    } else {
+      const { error } = action.payload
+      for (const list of pickedFor) {
+        yield put(pickItemFailure(item, list.id, error))
+      }
+      for (const list of unpickedFrom) {
+        yield put(unpickItemFailure(item, list.id, error))
+      }
     }
   }
 }

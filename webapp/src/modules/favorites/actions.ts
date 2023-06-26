@@ -321,3 +321,41 @@ export type BulkPickUnpickFailureAction = ReturnType<
 >
 
 export type BulkPickUnpickCancelAction = ReturnType<typeof bulkPickUnpickCancel>
+
+// Actions to track bulk picks and unpicks
+
+export const PICK_ITEM_SUCCESS = '[Tracking] Pick item success'
+export const PICK_ITEM_FAILURE = '[Tracking] Pick item failure'
+export const UNPICK_ITEM_SUCCESS = '[Tracking] Unpick item success'
+export const UNPICK_ITEM_FAILURE = '[Tracking] Unpick item failure'
+
+export const pickItemSuccess = (item: Item, listId: string) =>
+  action(PICK_ITEM_SUCCESS, {
+    item,
+    listId
+  })
+
+export const pickItemFailure = (item: Item, listId: string, error: string) =>
+  action(PICK_ITEM_FAILURE, {
+    item,
+    listId,
+    error
+  })
+
+export const unpickItemSuccess = (item: Item, listId: string) =>
+  action(UNPICK_ITEM_SUCCESS, {
+    item,
+    listId
+  })
+
+export const unpickItemFailure = (item: Item, listId: string, error: string) =>
+  action(UNPICK_ITEM_FAILURE, {
+    item,
+    listId,
+    error
+  })
+
+export type PickItemSuccessAction = ReturnType<typeof pickItemSuccess>
+export type PickItemFailureAction = ReturnType<typeof pickItemFailure>
+export type UnpickItemSuccessAction = ReturnType<typeof unpickItemSuccess>
+export type UnpickItemFailureAction = ReturnType<typeof unpickItemFailure>
