@@ -7,6 +7,7 @@
 :global(.ui.card).ListCard.viewOnly {
   transition: none;
   transform: none;
+  box-shadow: unset;
 }
 
 .ListCard:link {

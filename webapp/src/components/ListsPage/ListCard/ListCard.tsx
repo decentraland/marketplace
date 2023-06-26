@@ -44,7 +44,7 @@ const ListCard = (props: Props) => {
         vendor: VendorName.DECENTRALAND,
         sortBy: SortBy.NEWEST
       })}
-      className={classnames(styles.ListCard, isViewOnly ?? styles.viewOnly)}
+      className={classnames(styles.ListCard, isViewOnly && styles.viewOnly)}
     >
       <div className={styles.image}>
         {list.isPrivate ? (
