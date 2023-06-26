@@ -1,10 +1,15 @@
+import { fireEvent } from '@testing-library/react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { renderWithProviders } from '../../../utils/test'
 import { List } from '../../../modules/favorites/types'
 
 import { Props } from './ShareListModal.types'
 import ShareListModal from './ShareListModal'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { fireEvent } from '@testing-library/react'
+
+jest.mock('decentraland-dapps/dist/modules/analytics/utils')
+
+const getAnalyticsMock = getAnalytics as jest.Mock
 
 let list: List = {
   id: 'aListId',
@@ -26,6 +31,18 @@ function renderShareListModal(props: Partial<Props> = {}) {
   )
 }
 
+beforeEach(() => {
+  getAnalyticsMock.mockReturnValue({
+    page: jest.fn(),
+    track: (
+      _event: unknown,
+      _data: unknown,
+      _options: unknown,
+      callback: () => unknown
+    ) => callback()
+  })
+})
+
 describe('when the modal is rendered', () => {
   let renderedModal: ReturnType<typeof renderShareListModal>
 
@@ -46,8 +63,16 @@ describe('when the modal is rendered', () => {
     const { getByText } = renderedModal
     expect(getByText(list.name)).toBeInTheDocument()
   })
+})
 
-  it('should have a twitter share button with the href pointing to a twitter message', () => {
+describe('when the share on twitter button is clicked', () => {
+  let renderedModal: ReturnType<typeof renderShareListModal>
+
+  beforeEach(() => {
+    renderedModal = renderShareListModal()
+  })
+
+  it('should open a new page with a twitter message', () => {
     jest.spyOn(window, 'open').mockImplementation(() => null)
     const dclUrl = 'https://market.decentraland.zone'
     const locationsUrl =
