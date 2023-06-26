@@ -55,12 +55,18 @@ const ShareListModal = (props: Props) => {
       const url = `${twitterLink}${encodeURIComponent(
         `${t('share_list_modal.twitter_message')}${MARKETPLACE_URL}${listLink}`
       )}`
-      getAnalytics().track(events.SHARE_LIST, {
-        list,
-        url,
-        type: events.SHARE_LIST_TYPE.TWITTER
-      })
-      window.open(url, '_blank')
+      getAnalytics().track(
+        events.SHARE_LIST,
+        {
+          list,
+          url,
+          type: events.SHARE_LIST_TYPE.TWITTER
+        },
+        {},
+        () => {
+          window.open(url, '_blank')
+        }
+      )
       e.currentTarget.blur()
     },
     [list, listLink]
