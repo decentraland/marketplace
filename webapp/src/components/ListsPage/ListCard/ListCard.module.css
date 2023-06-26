@@ -9,6 +9,10 @@
   transform: none;
 }
 
+:global(.ui.card:hover).ListCard.viewOnly {
+  box-shadow: var(--shadow-1);
+}
+
 .ListCard:link {
   text-decoration: none;
 }
