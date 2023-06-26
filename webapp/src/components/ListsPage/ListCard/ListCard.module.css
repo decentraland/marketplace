@@ -7,7 +7,10 @@
 :global(.ui.card).ListCard.viewOnly {
   transition: none;
   transform: none;
-  box-shadow: unset;
+}
+
+:global(.ui.card:hover).ListCard.viewOnly {
+  box-shadow: var(--shadow-1);
 }
 
 .ListCard:link {
