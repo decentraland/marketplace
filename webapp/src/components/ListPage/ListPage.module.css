@@ -71,6 +71,7 @@
   display: flex;
   flex-direction: column;
   row-gap: 10px;
+  width: 100%;
 }
 
 .subHeaderLeft :global(.Profile.avatar) {
@@ -191,6 +192,10 @@
 
 .emptyActions {
   margin-top: 20px;
+}
+
+.description {
+  overflow-wrap: break-word;
 }
 
 @media (max-width: 768px) {
