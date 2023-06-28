@@ -140,13 +140,17 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   )
 
   function* fetchPreviewItems(previewListsItemIds: string[]) {
-    const itemFilters: CatalogFilters = {
-      first: previewListsItemIds.length,
-      ids: previewListsItemIds
-    }
-
     let previewItems: Item[] = []
+
     if (previewListsItemIds.length > 0) {
+      const items: ReturnType<typeof getItemsData> = yield select(getItemsData)
+      previewListsItemIds = previewListsItemIds.filter(itemId => !items[itemId])
+
+      const itemFilters: CatalogFilters = {
+        first: previewListsItemIds.length,
+        ids: previewListsItemIds
+      }
+
       const result: { data: Item[] } = yield call(
         [catalogAPI, 'get'],
         itemFilters
@@ -394,13 +398,6 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       )
 
       let { previewOfItemIds } = list
-
-      if (previewOfItemIds.length > 0) {
-        const items: ReturnType<typeof getItemsData> = yield select(
-          getItemsData
-        )
-        previewOfItemIds = previewOfItemIds.filter(itemId => !items[itemId])
-      }
 
       let previewItems: Item[] = yield call(fetchPreviewItems, previewOfItemIds)
 

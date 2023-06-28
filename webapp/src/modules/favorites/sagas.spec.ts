@@ -22,6 +22,7 @@ import {
 import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
+import { getData as getItemsData } from '../item/selectors'
 import {
   BULK_PICK_SUCCESS,
   CREATE_LIST_SUCCESS,
@@ -79,7 +80,6 @@ import {
   ListsBrowseSortBy,
   UpdateListParameters
 } from './types'
-import { getData } from '../item/selectors'
 
 let item: Item
 let address: string
@@ -838,45 +838,89 @@ describe('when handling the request for fetching lists', () => {
           ]
         })
 
-        it('should dispatch an action signaling the success of the handled action', () => {
-          return expectSaga(favoritesSaga, getIdentity)
-            .provide([
-              [call(getAccountIdentity), Promise.resolve()],
-              [
-                matchers.call.fn(FavoritesAPI.prototype.getLists),
-                Promise.resolve({ results: lists, total })
-              ],
-              [
-                matchers.call.fn(CatalogAPI.prototype.get),
-                Promise.resolve({ data: items })
-              ]
-            ])
-            .call.like({
-              fn: FavoritesAPI.prototype.getLists,
-              args: [
-                {
-                  first: options.first,
-                  skip: (options.page - 1) * options.first,
-                  sortBy: undefined,
-                  sortDirection: undefined
-                }
-              ]
-            })
-            .call.like({
-              fn: CatalogAPI.prototype.get,
-              args: [
-                {
-                  first: 2,
-                  ids: [
-                    ...lists[0].previewOfItemIds,
-                    ...lists[1].previewOfItemIds
-                  ]
-                }
-              ]
-            })
-            .put(fetchListsSuccess(lists, items, total, options))
-            .dispatch(fetchListsRequest(options))
-            .run({ silenceTimeout: true })
+        describe('and there are not items in the state', () => {
+          it('should dispatch an action signaling the success of the handled action', () => {
+            return expectSaga(favoritesSaga, getIdentity)
+              .provide([
+                [call(getAccountIdentity), Promise.resolve()],
+                [
+                  matchers.call.fn(FavoritesAPI.prototype.getLists),
+                  Promise.resolve({ results: lists, total })
+                ],
+                [select(getItemsData), {}],
+                [
+                  matchers.call.fn(CatalogAPI.prototype.get),
+                  Promise.resolve({ data: items })
+                ]
+              ])
+              .call.like({
+                fn: FavoritesAPI.prototype.getLists,
+                args: [
+                  {
+                    first: options.first,
+                    skip: (options.page - 1) * options.first,
+                    sortBy: undefined,
+                    sortDirection: undefined
+                  }
+                ]
+              })
+              .call.like({
+                fn: CatalogAPI.prototype.get,
+                args: [
+                  {
+                    first: 2,
+                    ids: [
+                      ...lists[0].previewOfItemIds,
+                      ...lists[1].previewOfItemIds
+                    ]
+                  }
+                ]
+              })
+              .put(fetchListsSuccess(lists, items, total, options))
+              .dispatch(fetchListsRequest(options))
+              .run({ silenceTimeout: true })
+          })
+        })
+
+        describe('and there are already some items in the sate', () => {
+          it('should dispatch an action signaling the success of the handled action', () => {
+            return expectSaga(favoritesSaga, getIdentity)
+              .provide([
+                [call(getAccountIdentity), Promise.resolve()],
+                [
+                  matchers.call.fn(FavoritesAPI.prototype.getLists),
+                  Promise.resolve({ results: lists, total })
+                ],
+                [select(getItemsData), { anItemId: items[0] }],
+                [
+                  matchers.call.fn(CatalogAPI.prototype.get),
+                  Promise.resolve({ data: items })
+                ]
+              ])
+              .call.like({
+                fn: FavoritesAPI.prototype.getLists,
+                args: [
+                  {
+                    first: options.first,
+                    skip: (options.page - 1) * options.first,
+                    sortBy: undefined,
+                    sortDirection: undefined
+                  }
+                ]
+              })
+              .call.like({
+                fn: CatalogAPI.prototype.get,
+                args: [
+                  {
+                    first: 1,
+                    ids: ['anotherItemId']
+                  }
+                ]
+              })
+              .put(fetchListsSuccess(lists, items, total, options))
+              .dispatch(fetchListsRequest(options))
+              .run({ silenceTimeout: true })
+          })
         })
       })
     })
@@ -910,6 +954,7 @@ describe('when handling the request for fetching lists', () => {
                 matchers.call.fn(FavoritesAPI.prototype.getLists),
                 Promise.resolve({ results: lists, total })
               ],
+              [select(getItemsData), {}],
               [
                 matchers.call.fn(CatalogAPI.prototype.get),
                 Promise.resolve({ data: items })
@@ -956,6 +1001,7 @@ describe('when handling the request for fetching lists', () => {
               matchers.call.fn(FavoritesAPI.prototype.getLists),
               Promise.resolve({ results: lists, total })
             ],
+            [select(getItemsData), {}],
             [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(error)]
           ])
           .call.like({
@@ -1181,7 +1227,7 @@ describe('when handling the request for getting a list', () => {
               matchers.call.fn(FavoritesAPI.prototype.getList),
               Promise.resolve(list)
             ],
-            [select(getData), {}],
+            [select(getItemsData), {}],
             [
               matchers.call.fn(CatalogAPI.prototype.get),
               Promise.resolve({ data: items })
@@ -1225,7 +1271,7 @@ describe('when handling the request for getting a list', () => {
               matchers.call.fn(FavoritesAPI.prototype.getList),
               Promise.resolve(list)
             ],
-            [select(getData), { anotherItemId: {} }],
+            [select(getItemsData), { anotherItemId: {} }],
             [
               matchers.call.fn(CatalogAPI.prototype.get),
               Promise.resolve({ data: items })
