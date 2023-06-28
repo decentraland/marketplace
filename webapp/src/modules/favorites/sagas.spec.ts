@@ -1218,7 +1218,7 @@ describe('when handling the request for getting a list', () => {
         list = { ...list, previewOfItemIds: ['anItemId', 'anotherItemId'] }
       })
 
-      it('should dispatch an action signaling the success of the handled action', () => {
+      it('should dispatch an action signaling the success of the handled action with the received list and the items that are not in the state', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
             [
