@@ -95,6 +95,7 @@ import {
 } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
+import { getData as getItemsData } from '../item/selectors'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
@@ -392,10 +393,16 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         id
       )
 
-      let previewItems: Item[] = yield call(
-        fetchPreviewItems,
-        list.previewOfItemIds
-      )
+      let { previewOfItemIds } = list
+
+      if (previewOfItemIds.length > 0) {
+        const items: ReturnType<typeof getItemsData> = yield select(
+          getItemsData
+        )
+        previewOfItemIds = previewOfItemIds.filter(itemId => !items[itemId])
+      }
+
+      let previewItems: Item[] = yield call(fetchPreviewItems, previewOfItemIds)
 
       yield put(getListSuccess(list, previewItems))
     } catch (error) {
