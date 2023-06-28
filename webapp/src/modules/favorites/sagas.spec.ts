@@ -894,7 +894,7 @@ describe('when handling the request for fetching lists', () => {
                 [select(getItemsData), { anItemId: items[0] }],
                 [
                   matchers.call.fn(CatalogAPI.prototype.get),
-                  Promise.resolve({ data: items })
+                  Promise.resolve({ data: [items[1]] })
                 ]
               ])
               .call.like({
@@ -917,7 +917,41 @@ describe('when handling the request for fetching lists', () => {
                   }
                 ]
               })
-              .put(fetchListsSuccess(lists, items, total, options))
+              .put(fetchListsSuccess(lists, [items[1]], total, options))
+              .dispatch(fetchListsRequest(options))
+              .run({ silenceTimeout: true })
+          })
+        })
+
+        describe('and there are already all the items in the state', () => {
+          it('should dispatch an action signaling the success of the handled action without fetching the catalog items', () => {
+            return expectSaga(favoritesSaga, getIdentity)
+              .provide([
+                [call(getAccountIdentity), Promise.resolve()],
+                [
+                  matchers.call.fn(FavoritesAPI.prototype.getLists),
+                  Promise.resolve({ results: lists, total })
+                ],
+                [
+                  select(getItemsData),
+                  { [items[0].id]: items[0], [items[1].id]: items[1] }
+                ]
+              ])
+              .call.like({
+                fn: FavoritesAPI.prototype.getLists,
+                args: [
+                  {
+                    first: options.first,
+                    skip: (options.page - 1) * options.first,
+                    sortBy: undefined,
+                    sortDirection: undefined
+                  }
+                ]
+              })
+              .not.call.like({
+                fn: CatalogAPI.prototype.get
+              })
+              .put(fetchListsSuccess(lists, [], total, options))
               .dispatch(fetchListsRequest(options))
               .run({ silenceTimeout: true })
           })
