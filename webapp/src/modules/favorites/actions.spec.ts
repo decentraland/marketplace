@@ -130,7 +130,8 @@ const createOrUpdateList: UpdateOrCreateList = {
   createdAt: Date.now(),
   updatedAt: null,
   permission: Permission.VIEW,
-  isPrivate: true
+  isPrivate: true,
+  previewOfItemIds: []
 }
 
 const listDetails: ListDetails = {
@@ -377,10 +378,10 @@ describe('when creating the action to signal a failure in the get list request',
 
 describe('when creating the action to signal a successful get list request', () => {
   it('should return an object representing the action', () => {
-    expect(getListSuccess(listDetails)).toEqual({
+    expect(getListSuccess(listDetails, [])).toEqual({
       type: GET_LIST_SUCCESS,
       meta: undefined,
-      payload: { list: listDetails }
+      payload: { list: listDetails, items: [] }
     })
   })
 })

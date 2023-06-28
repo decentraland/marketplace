@@ -138,6 +138,24 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     handleBulkPickSuccessOrFailure
   )
 
+  function* fetchPreviewItems(previewListsItemIds: string[]) {
+    const itemFilters: CatalogFilters = {
+      first: previewListsItemIds.length,
+      ids: previewListsItemIds
+    }
+
+    let previewItems: Item[] = []
+    if (previewListsItemIds.length > 0) {
+      const result: { data: Item[] } = yield call(
+        [catalogAPI, 'get'],
+        itemFilters
+      )
+      previewItems = result.data
+    }
+
+    return previewItems
+  }
+
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
   ) {
@@ -316,19 +334,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       const previewListsItemIds = Array.from(
         new Set(results.flatMap(list => list.previewOfItemIds))
       )
-      const itemFilters: CatalogFilters = {
-        first: previewListsItemIds.length,
-        ids: previewListsItemIds
-      }
-
-      let previewItems: Item[] = []
-      if (previewListsItemIds.length > 0) {
-        const result: { data: Item[] } = yield call(
-          [catalogAPI, 'get'],
-          itemFilters
-        )
-        previewItems = result.data
-      }
+      let previewItems: Item[] = yield call(
+        fetchPreviewItems,
+        previewListsItemIds
+      )
 
       yield put(fetchListsSuccess(results, previewItems, total, options))
     } catch (error) {
@@ -382,7 +391,13 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         [favoritesAPI, 'getList'],
         id
       )
-      yield put(getListSuccess(list))
+
+      let previewItems: Item[] = yield call(
+        fetchPreviewItems,
+        list.previewOfItemIds
+      )
+
+      yield put(getListSuccess(list, previewItems))
     } catch (error) {
       yield put(
         getListFailure(

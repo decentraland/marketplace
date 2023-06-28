@@ -679,10 +679,11 @@ describe('when reducing the successful action of getting a list', () => {
       updatedAt: Date.now(),
       itemsCount: 1,
       permission: Permission.EDIT,
-      isPrivate: true
+      isPrivate: true,
+      previewOfItemIds: []
     }
     requestAction = getListRequest(list.id)
-    successAction = getListSuccess(list)
+    successAction = getListSuccess(list, [])
     initialState = {
       ...initialState,
       loading: loadingReducer([], requestAction)
@@ -785,7 +786,8 @@ describe('when reducing the successful action of updating a list', () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
       permission: Permission.EDIT,
-      isPrivate: true
+      isPrivate: true,
+      previewOfItemIds: []
     }
     requestAction = updateListRequest(list.id, updatedListParameters)
     successAction = updateListSuccess(updatedList)
@@ -831,7 +833,8 @@ describe('when reducing the successful action of creating a list', () => {
       createdAt: Date.now(),
       updatedAt: null,
       permission: null,
-      isPrivate: true
+      isPrivate: true,
+      previewOfItemIds: []
     }
     createListParameters = {
       name: createdList.name,

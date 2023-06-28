@@ -209,9 +209,10 @@ export const GET_LIST_FAILURE = '[Failure] Get List'
 
 export const getListRequest = (id: string) => action(GET_LIST_REQUEST, { id })
 
-export const getListSuccess = (list: ListDetails) =>
+export const getListSuccess = (list: ListDetails, items: Item[]) =>
   action(GET_LIST_SUCCESS, {
-    list
+    list,
+    items
   })
 
 export const getListFailure = (id: string, error: string) =>

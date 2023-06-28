@@ -24,7 +24,6 @@ import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
   BULK_PICK_SUCCESS,
-  CREATE_LIST_FAILURE,
   CREATE_LIST_SUCCESS,
   bulkPickUnpickCancel,
   bulkPickUnpickFailure,
@@ -1137,7 +1136,8 @@ describe('when handling the request for getting a list', () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
       permission: Permission.VIEW,
-      isPrivate: false
+      isPrivate: false,
+      previewOfItemIds: ['anItemId']
     }
   })
 
@@ -1161,19 +1161,43 @@ describe('when handling the request for getting a list', () => {
   })
 
   describe('and the call to the favorites api succeeds', () => {
+    let items: Item[]
+
+    beforeEach(() => {
+      items = [
+        {
+          id: 'anItemId',
+          name: 'anItemName'
+        } as Item
+      ]
+    })
+
     it('should dispatch an action signaling the success of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [
             matchers.call.fn(FavoritesAPI.prototype.getList),
             Promise.resolve(list)
+          ],
+          [
+            matchers.call.fn(CatalogAPI.prototype.get),
+            Promise.resolve({ data: items })
           ]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.getList,
           args: [list.id]
         })
-        .put(getListSuccess(list))
+        .call.like({
+          fn: CatalogAPI.prototype.get,
+          args: [
+            {
+              first: 1,
+              ids: list.previewOfItemIds
+            }
+          ]
+        })
+        .put(getListSuccess(list, items))
         .dispatch(getListRequest(list.id))
         .run({ silenceTimeout: true })
     })
@@ -1198,7 +1222,8 @@ describe('when handling the request for updating a list', () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
       permission: Permission.VIEW,
-      isPrivate: false
+      isPrivate: false,
+      previewOfItemIds: []
     }
   })
 
@@ -1259,7 +1284,8 @@ describe('when handling the request for creating a list', () => {
       permission: Permission.EDIT,
       createdAt: Date.now(),
       updatedAt: null,
-      isPrivate: false
+      isPrivate: false,
+      previewOfItemIds: []
     }
   })
 
