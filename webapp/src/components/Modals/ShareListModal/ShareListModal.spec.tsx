@@ -69,7 +69,6 @@ describe('when the share on twitter button is clicked', () => {
   })
 
   afterEach(() => {
-    jest.runOnlyPendingTimers()
     jest.useRealTimers()
   })
 
@@ -89,8 +88,8 @@ describe('when the share on twitter button is clicked', () => {
     expect(button).toBeInTheDocument()
     fireEvent.click(button)
 
-    await waitFor(() =>
-      expect(window.open).toHaveBeenCalledWith(twitterURL, '_blank')
-    )
+    jest.runAllTimers()
+
+    expect(window.open).toHaveBeenCalledWith(twitterURL, '_blank')
   })
 })
