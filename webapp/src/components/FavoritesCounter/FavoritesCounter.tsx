@@ -17,11 +17,8 @@ const FavoritesCounter = (props: Props) => {
     isCollapsed = false,
     item,
     isLoading,
-    isV1ListsEnabled,
-    onV1PickClick,
-    onCounterClick,
-    onPick,
-    onUnpick
+    onClick,
+    onCounterClick
   } = props
 
   const handleOnCounterClick = useCallback(() => {
@@ -48,27 +45,15 @@ const FavoritesCounter = (props: Props) => {
     [isLoading, count, isCollapsed, handleOnCounterClick]
   )
 
-  const onClick = useCallback(
+  const handleClick = useCallback(
     (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
       e.preventDefault()
       e.stopPropagation()
       if (!isLoading) {
-        if (isV1ListsEnabled) {
-          return onV1PickClick()
-        }
-        const handler = isPickedByUser ? onUnpick : onPick
-        return handler(item)
+        onClick()
       }
     },
-    [
-      isLoading,
-      isPickedByUser,
-      isV1ListsEnabled,
-      item,
-      onPick,
-      onUnpick,
-      onV1PickClick
-    ]
+    [isLoading, onClick]
   )
 
   return (
@@ -89,7 +74,7 @@ const FavoritesCounter = (props: Props) => {
       {isCollapsed ? counter : null}
       <div
         className={styles.bubble}
-        onClick={onClick}
+        onClick={handleClick}
         data-testid="favorites-counter-bubble"
       >
         <span className={styles.iconContainer}>

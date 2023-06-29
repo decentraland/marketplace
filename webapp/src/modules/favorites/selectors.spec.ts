@@ -35,9 +35,6 @@ import {
   deleteListRequest,
   fetchFavoritedItemsRequest,
   fetchListsRequest,
-  pickItemAsFavoriteRequest,
-  undoUnpickingItemAsFavoriteRequest,
-  unpickItemAsFavoriteRequest,
   updateListRequest
 } from './actions'
 import { List } from './types'
@@ -182,10 +179,6 @@ describe('when getting the listId from the pathname', () => {
 
 describe('when getting if the favorited items are being loaded', () => {
   describe("and there's no favorited items request action in the loading state", () => {
-    beforeEach(() => {
-      state.favorites.loading = [pickItemAsFavoriteRequest({} as Item)]
-    })
-
     it('should return false', () => {
       expect(isLoadingFavoritedItems(state)).toBe(false)
     })
@@ -202,11 +195,7 @@ describe('when getting if the favorited items are being loaded', () => {
   })
 })
 
-describe.each([
-  ['picked', pickItemAsFavoriteRequest],
-  ['unpicked', unpickItemAsFavoriteRequest],
-  ['undone', undoUnpickingItemAsFavoriteRequest]
-])('when getting if an item is being %s', (description, action) => {
+describe('when getting if an item is being bulk picked or unpicked', () => {
   let itemId: string
   let item: Item
 
@@ -216,7 +205,7 @@ describe.each([
     state.favorites.loading = []
   })
 
-  describe(`and no items are being ${description}`, () => {
+  describe(`and no items are being bulk picked or unpicked`, () => {
     beforeEach(() => {
       state.favorites.loading = []
     })
@@ -226,10 +215,10 @@ describe.each([
     })
   })
 
-  describe(`and it isn't not being ${description}`, () => {
+  describe(`and it isn't not being bulk picked or unpicked`, () => {
     beforeEach(() => {
       state.favorites.loading = [
-        action({ id: '0xaddress-anotherItemId' } as Item)
+        bulkPickUnpickRequest({ id: '0xaddress-anotherItemId' } as Item, [], [])
       ]
     })
 
@@ -238,9 +227,9 @@ describe.each([
     })
   })
 
-  describe(`and it is being ${description}`, () => {
+  describe(`and it is being bulk picked or unpicked`, () => {
     beforeEach(() => {
-      state.favorites.loading.push(action(item))
+      state.favorites.loading.push(bulkPickUnpickRequest(item, [], []))
     })
 
     it('should return true', () => {

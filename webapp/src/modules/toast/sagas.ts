@@ -32,23 +32,11 @@ import {
   getFetchAssetsFailureToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
-  getPickItemAsFavoriteFailureToast,
-  getPickItemAsFavoriteSuccessToast,
   getStoreUpdateSuccessToast,
-  getUnpickItemAsFavoriteFailureToast,
-  getUnpickItemAsFavoriteSuccessToast,
   getUpdateListSuccessToast,
   getUpsertRentalSuccessToast
 } from './toasts'
 import {
-  PickItemAsFavoriteFailureAction,
-  PickItemAsFavoriteSuccessAction,
-  PICK_ITEM_AS_FAVORITE_FAILURE,
-  PICK_ITEM_AS_FAVORITE_SUCCESS,
-  UnpickItemAsFavoriteFailureAction,
-  UnpickItemAsFavoriteSuccessAction,
-  UNPICK_ITEM_AS_FAVORITE_FAILURE,
-  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
   DeleteListSuccessAction,
   DELETE_LIST_SUCCESS,
   DELETE_LIST_FAILURE,
@@ -85,22 +73,6 @@ function* successToastSagas() {
   yield takeEvery(EXECUTE_ORDER_FAILURE, handleExecuteOrderFailure)
   yield takeEvery(FETCH_ITEMS_FAILURE, handleFetchAssetsFailure)
   yield takeEvery(FETCH_NFTS_FAILURE, handleFetchAssetsFailure)
-  yield takeEvery(
-    PICK_ITEM_AS_FAVORITE_SUCCESS,
-    handlePickItemAsFavoriteSuccess
-  )
-  yield takeEvery(
-    PICK_ITEM_AS_FAVORITE_FAILURE,
-    handlePickItemAsFavoriteFailure
-  )
-  yield takeEvery(
-    UNPICK_ITEM_AS_FAVORITE_SUCCESS,
-    handleUnpickItemAsFavoriteSuccess
-  )
-  yield takeEvery(
-    UNPICK_ITEM_AS_FAVORITE_FAILURE,
-    handleUnpickItemAsFavoriteFailure
-  )
   yield takeEvery(
     toastDispatchableActionsChannel,
     handleToastTryAgainActionChannel
@@ -166,42 +138,6 @@ function* handleExecuteOrderFailure(action: ExecuteOrderFailureAction) {
   if (!silent) {
     yield put(showToast(getExecuteOrderFailureToast(), 'bottom center'))
   }
-}
-
-function* handlePickItemAsFavoriteSuccess(
-  action: PickItemAsFavoriteSuccessAction
-) {
-  const { item } = action.payload
-  yield put(hideAllToasts())
-  yield put(showToast(getPickItemAsFavoriteSuccessToast(item), 'bottom center'))
-}
-
-function* handlePickItemAsFavoriteFailure(
-  action: PickItemAsFavoriteFailureAction
-) {
-  const { item } = action.payload
-  yield put(hideAllToasts())
-  yield put(showToast(getPickItemAsFavoriteFailureToast(item), 'bottom center'))
-}
-
-function* handleUnpickItemAsFavoriteSuccess(
-  action: UnpickItemAsFavoriteSuccessAction
-) {
-  const { item } = action.payload
-  yield put(hideAllToasts())
-  yield put(
-    showToast(getUnpickItemAsFavoriteSuccessToast(item), 'bottom center')
-  )
-}
-
-function* handleUnpickItemAsFavoriteFailure(
-  action: UnpickItemAsFavoriteFailureAction
-) {
-  const { item } = action.payload
-  yield put(hideAllToasts())
-  yield put(
-    showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
-  )
 }
 
 function* handleFetchAssetsFailure(

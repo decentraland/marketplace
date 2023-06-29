@@ -6,41 +6,26 @@ import {
 } from 'decentraland-dapps/dist/modules/modal/actions'
 import {
   bulkPickUnpickStart,
-  BulkPickUnpickStartAction,
-  pickItemAsFavoriteRequest,
-  PickItemAsFavoriteRequestAction,
-  unpickItemAsFavoriteRequest,
-  UnpickItemAsFavoriteRequestAction
+  BulkPickUnpickStartAction
 } from '../../modules/favorites/actions'
 
 export type Props = {
   className?: string
   item: Item
   isCollapsed?: boolean
-  isV1ListsEnabled: boolean
   isPickedByUser: boolean
   count: number
   isLoading: boolean
   onCounterClick: (item: Item) => ReturnType<typeof openModal>
-  onV1PickClick: () => ReturnType<typeof bulkPickUnpickStart>
-  onPick: typeof pickItemAsFavoriteRequest
-  onUnpick: typeof unpickItemAsFavoriteRequest
+  onClick: () => ReturnType<typeof bulkPickUnpickStart>
 }
 
 export type MapStateProps = Pick<
   Props,
-  'isPickedByUser' | 'isV1ListsEnabled' | 'count' | 'isLoading'
+  'isPickedByUser' | 'count' | 'isLoading'
 >
 
-export type MapDispatchProps = Pick<
-  Props,
-  'onPick' | 'onUnpick' | 'onCounterClick' | 'onV1PickClick'
->
-export type MapDispatch = Dispatch<
-  | BulkPickUnpickStartAction
-  | PickItemAsFavoriteRequestAction
-  | UnpickItemAsFavoriteRequestAction
-  | OpenModalAction
->
+export type MapDispatchProps = Pick<Props, 'onCounterClick' | 'onClick'>
+export type MapDispatch = Dispatch<BulkPickUnpickStartAction | OpenModalAction>
 
 export type OwnProps = Pick<Props, 'item'>

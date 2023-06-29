@@ -10,26 +10,6 @@ import {
 } from '../item/actions'
 import { ListDetails } from '../vendor/decentraland/favorites/types'
 import {
-  PickItemAsFavoriteFailureAction,
-  PickItemAsFavoriteRequestAction,
-  PickItemAsFavoriteSuccessAction,
-  PICK_ITEM_AS_FAVORITE_FAILURE,
-  PICK_ITEM_AS_FAVORITE_REQUEST,
-  PICK_ITEM_AS_FAVORITE_SUCCESS,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
-  UnpickItemAsFavoriteFailureAction,
-  UnpickItemAsFavoriteRequestAction,
-  UnpickItemAsFavoriteSuccessAction,
-  UNPICK_ITEM_AS_FAVORITE_FAILURE,
-  UNPICK_ITEM_AS_FAVORITE_REQUEST,
-  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
-  UndoUnpickingItemAsFavoriteRequestAction,
-  UndoUnpickingItemAsFavoriteSuccessAction,
-  UndoUnpickingItemAsFavoriteFailureAction,
-  CancelPickItemAsFavoriteAction,
-  CANCEL_PICK_ITEM_AS_FAVORITE,
   FETCH_FAVORITED_ITEMS_REQUEST,
   FetchFavoritedItemsRequestAction,
   FetchFavoritedItemsSuccessAction,
@@ -97,16 +77,6 @@ export const INITIAL_STATE: FavoritesState = {
 }
 
 type FavoritesReducerAction =
-  | PickItemAsFavoriteRequestAction
-  | PickItemAsFavoriteSuccessAction
-  | PickItemAsFavoriteFailureAction
-  | CancelPickItemAsFavoriteAction
-  | UnpickItemAsFavoriteRequestAction
-  | UnpickItemAsFavoriteSuccessAction
-  | UnpickItemAsFavoriteFailureAction
-  | UndoUnpickingItemAsFavoriteRequestAction
-  | UndoUnpickingItemAsFavoriteSuccessAction
-  | UndoUnpickingItemAsFavoriteFailureAction
   | FetchFavoritedItemsRequestAction
   | FetchFavoritedItemsSuccessAction
   | FetchFavoritedItemsFailureAction
@@ -139,9 +109,6 @@ export function favoritesReducer(
   action: FavoritesReducerAction
 ): FavoritesState {
   switch (action.type) {
-    case PICK_ITEM_AS_FAVORITE_REQUEST:
-    case UNPICK_ITEM_AS_FAVORITE_REQUEST:
-    case UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST:
     case FETCH_LISTS_REQUEST:
     case GET_LIST_REQUEST:
     case DELETE_LIST_REQUEST:
@@ -154,47 +121,6 @@ export function favoritesReducer(
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null
-      }
-    }
-
-    case PICK_ITEM_AS_FAVORITE_SUCCESS:
-    case UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS: {
-      const { item } = action.payload
-      const currentCount = state.data.items[item.id]?.count ?? 0
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          items: {
-            ...state.data.items,
-            [item.id]: {
-              pickedByUser: true,
-              count: currentCount + 1,
-              createdAt: Date.now()
-            }
-          }
-        },
-        loading: loadingReducer(state.loading, action)
-      }
-    }
-
-    case UNPICK_ITEM_AS_FAVORITE_SUCCESS: {
-      const { item } = action.payload
-      const currentCount = state.data.items[item.id]?.count ?? 0
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          items: {
-            ...state.data.items,
-            [item.id]: {
-              ...state.data.items[item.id],
-              pickedByUser: false,
-              count: Math.max(0, currentCount - 1)
-            }
-          }
-        },
-        loading: loadingReducer(state.loading, action)
       }
     }
 
@@ -402,10 +328,7 @@ export function favoritesReducer(
     case GET_LIST_FAILURE:
     case DELETE_LIST_FAILURE:
     case UPDATE_LIST_FAILURE:
-    case PICK_ITEM_AS_FAVORITE_FAILURE:
     case FETCH_LISTS_FAILURE:
-    case UNPICK_ITEM_AS_FAVORITE_FAILURE:
-    case UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE:
     case BULK_PICK_FAILURE:
     case FETCH_FAVORITED_ITEMS_FAILURE: {
       const { error } = action.payload
@@ -413,14 +336,6 @@ export function favoritesReducer(
         ...state,
         loading: loadingReducer(state.loading, action),
         error
-      }
-    }
-
-    case CANCEL_PICK_ITEM_AS_FAVORITE: {
-      return {
-        ...state,
-        loading: [],
-        error: null
       }
     }
 
