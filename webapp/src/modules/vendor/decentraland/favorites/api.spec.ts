@@ -93,53 +93,6 @@ describe('when getting who favorited an item', () => {
   })
 })
 
-describe('when picking an item as favorite', () => {
-  const errorMessage = 'anErrorMessage'
-
-  let itemId: string
-
-  beforeEach(() => {
-    itemId = '0xaddress-anItemId'
-  })
-
-  describe('when the request succeeds', () => {
-    beforeEach(() => {
-      fetchMock.mockResolvedValueOnce(undefined)
-    })
-
-    it('should return void', () => {
-      return expect(
-        favoritesAPI.pickItemAsFavorite(itemId)
-      ).resolves.toBeUndefined()
-    })
-  })
-
-  describe('when the request fails with a 422 status code error', () => {
-    beforeEach(() => {
-      fetchMock.mockRejectedValue({ message: errorMessage, status: 422 })
-    })
-
-    it('should catch the error and ignore it', () => {
-      return expect(
-        favoritesAPI.pickItemAsFavorite(itemId)
-      ).resolves.toBeUndefined()
-    })
-  })
-
-  describe('when the request fails with an error code that is not a 422', () => {
-    const error = { message: errorMessage, status: 500 }
-    beforeEach(() => {
-      fetchMock.mockRejectedValue(error)
-    })
-
-    it('should throw the error', () => {
-      return expect(favoritesAPI.pickItemAsFavorite(itemId)).rejects.toEqual(
-        error
-      )
-    })
-  })
-})
-
 describe('when getting the lists', () => {
   describe('when the request fails', () => {
     let error: { message: string; status: number }
@@ -165,6 +118,7 @@ describe('when getting the lists', () => {
             id: 'aListId',
             name: 'aName',
             itemsCount: 1,
+            isPrivate: true,
             previewOfItemIds: ['anItemId']
           }
         ],
@@ -195,6 +149,7 @@ describe('when getting the lists', () => {
               id: 'aListId',
               name: 'aName',
               itemsCount: 1,
+              isPrivate: true,
               previewOfItemIds: ['anItemId']
             }
           ],
@@ -276,7 +231,8 @@ describe('when getting a list', () => {
         updatedAt: Date.now(),
         itemsCount: 1,
         isPrivate: true,
-        permission: Permission.VIEW
+        permission: Permission.VIEW,
+        previewOfItemIds: ['anItemId']
       }
       response = { ok: true, data: list }
       fetchMock.mockResolvedValueOnce(response)
@@ -320,7 +276,8 @@ describe('when updating a list', () => {
         createdAt: Date.now(),
         updatedAt: Date.now(),
         isPrivate: true,
-        permission: Permission.VIEW
+        permission: Permission.VIEW,
+        previewOfItemIds: ['anItemId']
       }
       response = { ok: true, data: list }
       fetchMock.mockResolvedValueOnce(response)
@@ -374,7 +331,8 @@ describe('when creating a list', () => {
         createdAt: Date.now(),
         updatedAt: null,
         isPrivate: true,
-        permission: Permission.VIEW
+        permission: Permission.VIEW,
+        previewOfItemIds: ['anItemId']
       }
       response = { ok: true, data: list }
       fetchMock.mockResolvedValueOnce(response)
