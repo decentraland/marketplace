@@ -2,8 +2,6 @@ import { Item } from '@dcl/schemas'
 import { AssetType } from '../../asset/types'
 import {
   fetchFavoritedItemsSuccess,
-  unpickItemAsFavoriteSuccess,
-  undoUnpickingItemAsFavoriteSuccess,
   fetchListsSuccess,
   deleteListSuccess,
   bulkPickUnpickSuccess,
@@ -677,80 +675,6 @@ describe('when reducing the fetch items success action', () => {
             fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
           )
         ).toEqual(initialState)
-      })
-    })
-  })
-})
-
-describe('when reducing the action of the success of the unpicking of an item', () => {
-  let initialState: BrowseUIState = { ...INITIAL_STATE }
-
-  describe('and the current state has no count', () => {
-    beforeEach(() => {
-      initialState.count = undefined
-    })
-
-    it('should return a state with its count unchanged', () => {
-      expect(
-        browseReducer(initialState, unpickItemAsFavoriteSuccess({} as Item))
-      ).toEqual({
-        ...initialState,
-        count: undefined
-      })
-    })
-  })
-
-  describe('and the current state has a count', () => {
-    beforeEach(() => {
-      initialState.count = 1
-    })
-
-    it('should return a state with its count reduced', () => {
-      expect(
-        browseReducer(initialState, unpickItemAsFavoriteSuccess({} as Item))
-      ).toEqual({
-        ...initialState,
-        count: 0
-      })
-    })
-  })
-})
-
-describe('when reducing the action of the success of the undo of the unpicking of an item', () => {
-  let initialState: BrowseUIState = { ...INITIAL_STATE }
-
-  describe('and the current state has no count', () => {
-    beforeEach(() => {
-      initialState.count = undefined
-    })
-
-    it('should return a state with its count unchanged', () => {
-      expect(
-        browseReducer(
-          initialState,
-          undoUnpickingItemAsFavoriteSuccess({} as Item)
-        )
-      ).toEqual({
-        ...initialState,
-        count: undefined
-      })
-    })
-  })
-
-  describe('and the current state has a count', () => {
-    beforeEach(() => {
-      initialState.count = 1
-    })
-
-    it('should return a state with its count increased', () => {
-      expect(
-        browseReducer(
-          initialState,
-          undoUnpickingItemAsFavoriteSuccess({} as Item)
-        )
-      ).toEqual({
-        ...initialState,
-        count: 2
       })
     })
   })

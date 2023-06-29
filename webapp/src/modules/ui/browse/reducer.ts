@@ -12,11 +12,7 @@ import {
   FetchFavoritedItemsRequestAction,
   FetchFavoritedItemsSuccessAction,
   FetchListsRequestAction,
-  FetchListsSuccessAction,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
-  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
-  UndoUnpickingItemAsFavoriteSuccessAction,
-  UnpickItemAsFavoriteSuccessAction
+  FetchListsSuccessAction
 } from '../../favorites/actions'
 import {
   FetchItemsRequestAction,
@@ -66,8 +62,6 @@ type UIReducerAction =
   | FetchItemsSuccessAction
   | FetchFavoritedItemsRequestAction
   | FetchFavoritedItemsSuccessAction
-  | UnpickItemAsFavoriteSuccessAction
-  | UndoUnpickingItemAsFavoriteSuccessAction
   | FetchListsSuccessAction
   | FetchListsRequestAction
   | DeleteListSuccessAction
@@ -92,18 +86,6 @@ export function browseReducer(
         page: undefined
       }
     }
-
-    case UNPICK_ITEM_AS_FAVORITE_SUCCESS:
-      return {
-        ...state,
-        count: state.count !== undefined ? --state.count : state.count
-      }
-
-    case UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS:
-      return {
-        ...state,
-        count: state.count !== undefined ? ++state.count : state.count
-      }
 
     case BULK_PICK_SUCCESS:
       const { ownerRemovedFromCurrentList } = action.payload

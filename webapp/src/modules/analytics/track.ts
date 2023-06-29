@@ -84,32 +84,19 @@ import {
   DELETE_LIST_SUCCESS,
   DeleteListFailureAction,
   DeleteListSuccessAction,
-  PICK_ITEM_AS_FAVORITE_FAILURE,
-  PICK_ITEM_AS_FAVORITE_SUCCESS,
   PICK_ITEM_FAILURE,
   PICK_ITEM_SUCCESS,
-  PickItemAsFavoriteFailureAction,
-  PickItemAsFavoriteSuccessAction,
   PickItemFailureAction,
   PickItemSuccessAction,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
-  UNPICK_ITEM_AS_FAVORITE_FAILURE,
-  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
   UNPICK_ITEM_FAILURE,
   UNPICK_ITEM_SUCCESS,
   UPDATE_LIST_FAILURE,
   UPDATE_LIST_SUCCESS,
-  UndoUnpickingItemAsFavoriteFailureAction,
-  UndoUnpickingItemAsFavoriteSuccessAction,
-  UnpickItemAsFavoriteFailureAction,
-  UnpickItemAsFavoriteSuccessAction,
   UnpickItemFailureAction,
   UnpickItemSuccessAction,
   UpdateListFailureAction,
   UpdateListSuccessAction
 } from '../favorites/actions'
-import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -351,63 +338,6 @@ track<SetPurchaseAction>(
       ? events.PURCHASED_FAILED
       : events.PURCHASED_STARTED,
   action => action.payload.purchase
-)
-
-track<PickItemAsFavoriteSuccessAction>(
-  PICK_ITEM_AS_FAVORITE_SUCCESS,
-  events.PICK_ITEM,
-  ({ payload: { item } }) => ({
-    item,
-    listId: DEFAULT_FAVORITES_LIST_ID
-  })
-)
-
-track<PickItemAsFavoriteFailureAction>(
-  PICK_ITEM_AS_FAVORITE_FAILURE,
-  events.PICK_ITEM,
-  ({ payload: { item, error } }) => ({
-    item,
-    listId: DEFAULT_FAVORITES_LIST_ID,
-    error
-  })
-)
-
-track<UnpickItemAsFavoriteSuccessAction>(
-  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
-  events.UNPICK_ITEM,
-  ({ payload: { item } }) => ({
-    item,
-    listId: DEFAULT_FAVORITES_LIST_ID
-  })
-)
-
-track<UnpickItemAsFavoriteFailureAction>(
-  UNPICK_ITEM_AS_FAVORITE_FAILURE,
-  events.UNPICK_ITEM,
-  ({ payload: { item, error } }) => ({
-    item,
-    listId: DEFAULT_FAVORITES_LIST_ID,
-    error
-  })
-)
-
-track<UndoUnpickingItemAsFavoriteSuccessAction>(
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
-  events.UNDO_UNPICK_ITEM,
-  ({ payload: { item } }) => ({
-    item,
-    listId: DEFAULT_FAVORITES_LIST_ID
-  })
-)
-
-track<UndoUnpickingItemAsFavoriteFailureAction>(
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
-  events.UNDO_UNPICK_ITEM,
-  ({ payload: { item, error } }) => ({
-    item,
-    listId: DEFAULT_FAVORITES_LIST_ID,
-    error
-  })
 )
 
 track<PickItemSuccessAction>(

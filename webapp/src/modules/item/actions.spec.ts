@@ -5,7 +5,6 @@ import {
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
-  buildTransactionPayload,
   buildTransactionWithFromPayload,
   buildTransactionWithReceiptPayload
 } from 'decentraland-dapps/dist/modules/transaction/utils'
@@ -157,6 +156,7 @@ describe('when creating the action to signal a successful buy item with card req
     status: PurchaseStatus.PENDING,
     gateway: NetworkGatewayType.TRANSAK,
     txHash: 'mock-transaction-hash',
+    paymentMethod: 'mock-payment-method',
     nft: {
       contractAddress: 'contractAddress',
       itemId: 'anId',

@@ -9,12 +9,7 @@ import { getAssetName } from '../asset/utils'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
 import { NFT } from '../nft/types'
-import {
-  bulkPickUnpickRequest,
-  pickItemAsFavoriteRequest,
-  undoUnpickingItemAsFavoriteRequest,
-  unpickItemAsFavoriteRequest
-} from '../favorites/actions'
+import { bulkPickUnpickRequest } from '../favorites/actions'
 import { AssetType } from '../asset/types'
 import { Section } from '../vendor/decentraland'
 import { View } from '../ui/types'
@@ -142,111 +137,6 @@ export function getExecuteOrderFailureToast(): Omit<Toast, 'id'> {
     ),
     icon: <Icon size="big" name="exclamation circle" />,
     closable: true
-  }
-}
-
-export function getPickItemAsFavoriteSuccessToast(
-  item: Item
-): Omit<Toast, 'id'> {
-  return {
-    type: ToastType.INFO,
-    title: t('toast.pick_item_as_favorite_success.title'),
-    // TODO (lists): redirect to the chosen list
-    body: (
-      <div className="list-flow-toast">
-        <p>
-          {t('toast.pick_item_as_favorite_success.body', {
-            name: getAssetName(item)
-          })}
-        </p>
-        <Button
-          as="a"
-          basic
-          className="no-padding"
-          href={locations.defaultList()}
-        >
-          {t('toast.pick_item_as_favorite_success.view_my_lists')}
-        </Button>
-      </div>
-    ),
-    closable: true,
-    timeout: DEFAULT_TIMEOUT,
-    icon: <Icon size="big" name="bookmark" />
-  }
-}
-
-export function getPickItemAsFavoriteFailureToast(
-  item: Item
-): Omit<Toast, 'id'> {
-  return {
-    type: ToastType.ERROR,
-    title: t('toast.pick_item_as_favorite_failure.title'),
-    body: (
-      <div className="list-flow-toast">
-        <p>
-          {t('toast.pick_item_as_favorite_failure.body', {
-            name: getAssetName(item)
-          })}
-        </p>
-        <ToastCTA
-          action={pickItemAsFavoriteRequest(item)}
-          description={t('toast.pick_item_as_favorite_failure.try_again')}
-        />
-      </div>
-    ),
-    closable: true,
-    timeout: DEFAULT_TIMEOUT,
-    icon: <Icon size="big" name="exclamation circle" />
-  }
-}
-
-export function getUnpickItemAsFavoriteSuccessToast(
-  item: Item
-): Omit<Toast, 'id'> {
-  return {
-    type: ToastType.INFO,
-    title: t('toast.unpick_item_as_favorite_success.title'),
-    body: (
-      <div className="list-flow-toast">
-        <p>
-          {t('toast.unpick_item_as_favorite_success.body', {
-            name: getAssetName(item)
-          })}
-        </p>
-        <ToastCTA
-          action={undoUnpickingItemAsFavoriteRequest(item)}
-          description={t('toast.unpick_item_as_favorite_success.undo')}
-        />
-      </div>
-    ),
-    closable: true,
-    timeout: DEFAULT_TIMEOUT,
-    icon: <Icon size="big" name="trash" />
-  }
-}
-
-export function getUnpickItemAsFavoriteFailureToast(
-  item: Item
-): Omit<Toast, 'id'> {
-  return {
-    type: ToastType.ERROR,
-    title: t('toast.unpick_item_as_favorite_failure.title'),
-    body: (
-      <div className="list-flow-toast">
-        <p>
-          {t('toast.unpick_item_as_favorite_failure.body', {
-            name: getAssetName(item)
-          })}
-        </p>
-        <ToastCTA
-          action={unpickItemAsFavoriteRequest(item)}
-          description={t('toast.unpick_item_as_favorite_failure.try_again')}
-        />
-      </div>
-    ),
-    closable: true,
-    timeout: DEFAULT_TIMEOUT,
-    icon: <Icon size="big" name="exclamation circle" />
   }
 }
 
