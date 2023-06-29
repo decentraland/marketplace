@@ -12,7 +12,6 @@ import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   BulkPickUnpickCancelAction,
   BulkPickUnpickStartAction,
-  CancelPickItemAsFavoriteAction,
   CreateListClearAction,
   CreateListRequestAction,
   CreateListSuccessAction,
@@ -24,9 +23,6 @@ import {
   FetchListsSuccessAction,
   GetListRequestAction,
   GetListSuccessAction,
-  PickItemAsFavoriteRequestAction,
-  UnpickItemAsFavoriteRequestAction,
-  UnpickItemAsFavoriteSuccessAction,
   UpdateListRequestAction,
   UpdateListSuccessAction,
   bulkPickUnpickCancel,
@@ -34,7 +30,6 @@ import {
   bulkPickUnpickRequest,
   bulkPickUnpickStart,
   bulkPickUnpickSuccess,
-  cancelPickItemAsFavorite,
   createListClear,
   createListFailure,
   createListRequest,
@@ -51,15 +46,6 @@ import {
   getListFailure,
   getListRequest,
   getListSuccess,
-  pickItemAsFavoriteFailure,
-  pickItemAsFavoriteRequest,
-  pickItemAsFavoriteSuccess,
-  undoUnpickingItemAsFavoriteFailure,
-  undoUnpickingItemAsFavoriteRequest,
-  undoUnpickingItemAsFavoriteSuccess,
-  unpickItemAsFavoriteFailure,
-  unpickItemAsFavoriteRequest,
-  unpickItemAsFavoriteSuccess,
   updateListFailure,
   updateListRequest,
   updateListSuccess
@@ -121,9 +107,6 @@ const requestActions = [
   bulkPickUnpickStart(item),
   bulkPickUnpickRequest(item, [listOfLists], []),
   deleteListRequest(actionList),
-  pickItemAsFavoriteRequest(item),
-  unpickItemAsFavoriteRequest(item),
-  undoUnpickingItemAsFavoriteRequest(item),
   fetchFavoritedItemsRequest(itemBrowseOptions),
   fetchListsRequest(listsBrowseOptions),
   getListRequest(actionList.id),
@@ -164,18 +147,6 @@ describe.each(requestActions)('when reducing the "$type" action', action => {
 })
 
 const failureActions = [
-  {
-    request: pickItemAsFavoriteRequest(item),
-    failure: pickItemAsFavoriteFailure(item, error)
-  },
-  {
-    request: unpickItemAsFavoriteRequest(item),
-    failure: unpickItemAsFavoriteFailure(item, error)
-  },
-  {
-    request: undoUnpickingItemAsFavoriteRequest(item),
-    failure: undoUnpickingItemAsFavoriteFailure(item, error)
-  },
   {
     request: fetchFavoritedItemsRequest(itemBrowseOptions),
     failure: fetchFavoritedItemsFailure(error)
@@ -233,114 +204,6 @@ describe.each(failureActions)(
   }
 )
 
-const pickAndUndoSuccessActions = [
-  {
-    request: pickItemAsFavoriteRequest,
-    success: pickItemAsFavoriteSuccess
-  },
-  {
-    request: undoUnpickingItemAsFavoriteRequest,
-    success: undoUnpickingItemAsFavoriteSuccess
-  }
-]
-
-describe.each(pickAndUndoSuccessActions)(
-  `when reducing the "$success(item).type" action`,
-  ({ request, success }) => {
-    let initialState: FavoritesState
-
-    beforeEach(() => {
-      initialState = {
-        ...INITIAL_STATE,
-        data: {
-          lists: {},
-          items: {
-            [item.id]: {
-              pickedByUser: false,
-              count: 0
-            }
-          }
-        }
-      }
-    })
-
-    describe('when the item is not in the state', () => {
-      let anotherItem: Item
-      let currentDate: number
-
-      beforeEach(() => {
-        currentDate = Date.now()
-        jest.spyOn(Date, 'now').mockReturnValueOnce(currentDate)
-        anotherItem = { id: '0xContactAddress-anotherItemId' } as Item
-        initialState.loading = loadingReducer([], request(anotherItem))
-      })
-
-      it('should return a state with the current item count incremented by one, flagged as picked by user, and the loading state cleared', () => {
-        expect(favoritesReducer(initialState, success(anotherItem))).toEqual({
-          ...INITIAL_STATE,
-          loading: [],
-          data: {
-            ...initialState.data,
-            items: {
-              ...initialState.data.items,
-              [anotherItem.id]: {
-                pickedByUser: true,
-                count: 1,
-                createdAt: currentDate
-              }
-            }
-          }
-        })
-      })
-    })
-
-    describe('when the item is in the state', () => {
-      beforeEach(() => {
-        initialState.loading = loadingReducer([], request(item))
-      })
-
-      it('should return a state with the current item count incremented by one, flagged as picked by user, and the loading state cleared', () => {
-        expect(favoritesReducer(initialState, success(item))).toEqual({
-          ...INITIAL_STATE,
-          loading: [],
-          data: {
-            ...initialState.data,
-            items: {
-              ...initialState.data.items,
-              [item.id]: {
-                pickedByUser: true,
-                count: 1
-              }
-            }
-          }
-        })
-      })
-    })
-  }
-)
-
-describe('when reducing the action of canceling a pick item as favorite', () => {
-  let requestAction: PickItemAsFavoriteRequestAction
-  let cancelAction: CancelPickItemAsFavoriteAction
-
-  beforeEach(() => {
-    requestAction = pickItemAsFavoriteRequest(item)
-    cancelAction = cancelPickItemAsFavorite()
-
-    initialState = {
-      ...initialState,
-      loading: loadingReducer([], requestAction)
-    }
-  })
-
-  it('should return a state with an empty loading state', () => {
-    expect(favoritesReducer(initialState, cancelAction)).toEqual({
-      ...INITIAL_STATE,
-      loading: []
-    })
-  })
-})
-
 describe('when reducing the action of canceling a bulk pick/unpick item process', () => {
   let requestAction: BulkPickUnpickStartAction
   let cancelAction: BulkPickUnpickCancelAction
@@ -382,73 +245,6 @@ describe('when reducing the action of canceling a bulk pick/unpick item process'
         ...INITIAL_STATE,
         loading: [],
         error
-      })
-    })
-  })
-})
-
-describe('when reducing the successful action of unpicking the item as favorite', () => {
-  let requestAction: UnpickItemAsFavoriteRequestAction
-  let successAction: UnpickItemAsFavoriteSuccessAction
-
-  beforeEach(() => {
-    requestAction = unpickItemAsFavoriteRequest(item)
-    successAction = unpickItemAsFavoriteSuccess(item)
-
-    initialState = {
-      ...initialState,
-      loading: loadingReducer([], requestAction)
-    }
-  })
-
-  describe('when the picks stats are not defined', () => {
-    it('should return a state with the count in 0, flagged as non picked by user, and the loading state cleared', () => {
-      expect(favoritesReducer(initialState, successAction)).toEqual({
-        ...INITIAL_STATE,
-        loading: [],
-        data: {
-          ...initialState.data,
-          items: {
-            [item.id]: {
-              pickedByUser: false,
-              count: 0
-            }
-          }
-        }
-      })
-    })
-  })
-
-  describe('when the picks stats are defined', () => {
-    beforeEach(() => {
-      initialState = {
-        ...initialState,
-        data: {
-          ...initialState.data,
-          items: {
-            [item.id]: {
-              pickedByUser: true,
-              count: 1
-            }
-          }
-        }
-      }
-    })
-
-    it('should return a state with the current item count decreased by one, flagged as non picked by user, and the loading state cleared', () => {
-      expect(favoritesReducer(initialState, successAction)).toEqual({
-        ...INITIAL_STATE,
-        loading: [],
-        data: {
-          ...initialState.data,
-          items: {
-            ...initialState.data.items,
-            [item.id]: {
-              pickedByUser: false,
-              count: 0
-            }
-          }
-        }
       })
     })
   })
