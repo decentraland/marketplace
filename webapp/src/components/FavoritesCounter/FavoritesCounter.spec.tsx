@@ -143,7 +143,13 @@ describe('FavoritesCounter', () => {
   })
 
   describe('when the user clicks the component', () => {
-    const onClick = jest.fn() as () => ReturnType<typeof bulkPickUnpickStart>
+    let onClick: jest.MockedFunction<() => ReturnType<
+      typeof bulkPickUnpickStart
+    >>
+
+    beforeEach(() => {
+      onClick = jest.fn()
+    })
 
     it('should start the pick unpick in bulk mechanism', async () => {
       const { getByTestId } = renderFavoritesCounter({
