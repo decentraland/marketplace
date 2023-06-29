@@ -33,12 +33,15 @@ export type BaseList = {
   updatedAt: number | null
   isPrivate: boolean
   permission: Permission | null
+  previewOfItemIds: string[]
 }
 
-export type ListOfLists = Pick<BaseList, 'id' | 'name' | 'isPrivate'> & {
+export type ListOfLists = Pick<
+  BaseList,
+  'id' | 'name' | 'isPrivate' | 'previewOfItemIds'
+> & {
   itemsCount: number
   isItemInList?: boolean
-  previewOfItemIds: string[]
 }
 
 export type UpdateOrCreateList = BaseList

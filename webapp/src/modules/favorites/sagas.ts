@@ -95,6 +95,7 @@ import {
 } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
+import { getData as getItemsData } from '../item/selectors'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
@@ -137,6 +138,30 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     [BULK_PICK_SUCCESS, BULK_PICK_FAILURE],
     handleBulkPickSuccessOrFailure
   )
+
+  function* fetchPreviewItems(previewListsItemIds: string[]) {
+    let previewItems: Item[] = []
+
+    if (previewListsItemIds.length > 0) {
+      const items: ReturnType<typeof getItemsData> = yield select(getItemsData)
+      previewListsItemIds = previewListsItemIds.filter(itemId => !items[itemId])
+
+      if (previewListsItemIds.length > 0) {
+        const itemFilters: CatalogFilters = {
+          first: previewListsItemIds.length,
+          ids: previewListsItemIds
+        }
+
+        const result: { data: Item[] } = yield call(
+          [catalogAPI, 'get'],
+          itemFilters
+        )
+        previewItems = result.data
+      }
+    }
+
+    return previewItems
+  }
 
   function* handlePickItemAsFavoriteRequest(
     action: PickItemAsFavoriteRequestAction
@@ -316,19 +341,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       const previewListsItemIds = Array.from(
         new Set(results.flatMap(list => list.previewOfItemIds))
       )
-      const itemFilters: CatalogFilters = {
-        first: previewListsItemIds.length,
-        ids: previewListsItemIds
-      }
-
-      let previewItems: Item[] = []
-      if (previewListsItemIds.length > 0) {
-        const result: { data: Item[] } = yield call(
-          [catalogAPI, 'get'],
-          itemFilters
-        )
-        previewItems = result.data
-      }
+      let previewItems: Item[] = yield call(
+        fetchPreviewItems,
+        previewListsItemIds
+      )
 
       yield put(fetchListsSuccess(results, previewItems, total, options))
     } catch (error) {
@@ -382,7 +398,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         [favoritesAPI, 'getList'],
         id
       )
-      yield put(getListSuccess(list))
+
+      let { previewOfItemIds } = list
+
+      let previewItems: Item[] = yield call(fetchPreviewItems, previewOfItemIds)
+
+      yield put(getListSuccess(list, previewItems))
     } catch (error) {
       yield put(
         getListFailure(
