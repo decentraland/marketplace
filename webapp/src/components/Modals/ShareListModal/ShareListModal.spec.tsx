@@ -1,4 +1,4 @@
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { renderWithProviders } from '../../../utils/test'
@@ -34,12 +34,7 @@ function renderShareListModal(props: Partial<Props> = {}) {
 beforeEach(() => {
   getAnalyticsMock.mockReturnValue({
     page: jest.fn(),
-    track: (
-      _event: unknown,
-      _data: unknown,
-      _options: unknown,
-      callback: () => unknown
-    ) => callback()
+    track: jest.fn()
   })
 })
 
@@ -69,10 +64,15 @@ describe('when the share on twitter button is clicked', () => {
   let renderedModal: ReturnType<typeof renderShareListModal>
 
   beforeEach(() => {
+    jest.useFakeTimers()
     renderedModal = renderShareListModal()
   })
 
-  it('should open a new page with a twitter message', () => {
+  afterEach(() => {
+    jest.useRealTimers()
+  })
+
+  it('should open a new page with a twitter message', async () => {
     jest.spyOn(window, 'open').mockImplementation(() => null)
     const dclUrl = 'https://market.decentraland.zone'
     const locationsUrl =
@@ -87,6 +87,9 @@ describe('when the share on twitter button is clicked', () => {
     })
     expect(button).toBeInTheDocument()
     fireEvent.click(button)
+
+    jest.runAllTimers()
+
     expect(window.open).toHaveBeenCalledWith(twitterURL, '_blank')
   })
 })
