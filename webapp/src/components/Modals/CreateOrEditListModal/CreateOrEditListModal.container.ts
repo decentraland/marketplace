@@ -11,6 +11,7 @@ import {
   getError,
   isLoadingUpdateList
 } from '../../../modules/favorites/selectors'
+import { CreateListParameters } from '../../../modules/favorites/types'
 import {
   MapDispatchProps,
   MapStateProps,
@@ -18,10 +19,12 @@ import {
 } from './CreateOrEditListModal.types'
 import CreateListModal from './CreateOrEditListModal'
 
-const mapState = (state: RootState): MapStateProps => {
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
-    isLoading: isLoadingCreateList(state) || isLoadingUpdateList(state),
-    error: getError(state)
+    isLoading:
+      ownProps.metadata?.isLoading ??
+      (isLoadingCreateList(state) || isLoadingUpdateList(state)),
+    error: ownProps.metadata?.error ?? getError(state)
   }
 }
 
@@ -33,10 +36,10 @@ const mapDispatch = (
     dispatch(createListClear())
     return ownProps.onClose()
   },
-  ...bindActionCreators(
-    { onCreateList: createListRequest, onEditList: updateListRequest },
-    dispatch
-  )
+  onCreateList:
+    ownProps.metadata?.onCreateList ??
+    ((params: CreateListParameters) => dispatch(createListRequest(params))),
+  ...bindActionCreators({ onEditList: updateListRequest }, dispatch)
 })
 
 export default connect(mapState, mapDispatch)(CreateListModal)

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../../modules/reducer'
 import { bulkPickUnpickRequest } from '../../../modules/favorites/actions'
 import { isLoadingBulkPicksUnpicks } from '../../../modules/favorites/selectors'
@@ -13,6 +14,7 @@ import {
   OwnProps
 } from './SaveToListModal.types'
 import SaveToListModal from './SaveToListModal'
+import { OverrideCreateListTypes } from '../CreateOrEditListModal/CreateOrEditListModal.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -29,9 +31,10 @@ const mapDispatch = (
     dispatch(
       bulkPickUnpickRequest(ownProps.metadata.item, picksFor, unpickFrom)
     ),
-  onCreateList: () => {
-    dispatch(openModal('CreateOrEditListModal'))
-  }
+  onCreateList: (overrideCreateListData: OverrideCreateListTypes) => {
+    dispatch(openModal('CreateOrEditListModal', overrideCreateListData))
+  },
+  onFinishListCreation: () => dispatch(closeModal('CreateOrEditListModal'))
 })
 
 export default connect(mapState, mapDispatch)(SaveToListModal)

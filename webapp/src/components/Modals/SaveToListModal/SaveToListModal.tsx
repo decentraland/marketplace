@@ -18,6 +18,7 @@ import {
   ListOfLists
 } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
+import { CreateListParameters } from '../../../modules/favorites/types'
 import { isErrorWithMessage } from '../../../lib/error'
 import { PrivateTag } from '../../PrivateTag'
 import {
@@ -42,6 +43,7 @@ const SaveToListModal = (props: Props) => {
     onCreateList,
     isSavingPicks,
     identity,
+    onFinishListCreation,
     metadata: { item }
   } = props
 
@@ -161,6 +163,41 @@ const SaveToListModal = (props: Props) => {
     },
     [lists]
   )
+
+  const createListFunction = useCallback(
+    (params: CreateListParameters) => {
+      onCreateList({ isLoading: true, onCreateList: createListFunction })
+      favoritesAPI
+        .createList(params)
+        .then(response => {
+          const stateLists = [...lists.data]
+          stateLists.splice(1, 0, {
+            ...response,
+            itemsCount: 0,
+            previewOfItemIds: []
+          })
+          setLists({
+            total: lists.total++,
+            data: stateLists
+          })
+          onFinishListCreation()
+        })
+        .catch(error => {
+          onCreateList({
+            isLoading: false,
+            onCreateList: createListFunction,
+            error: isErrorWithMessage(error)
+              ? error.message
+              : t('global.unknown_error')
+          })
+        })
+    },
+    [favoritesAPI, lists.data, lists.total, onCreateList, onFinishListCreation]
+  )
+
+  const handleOnCreateListClick = useCallback(() => {
+    onCreateList({ onCreateList: createListFunction })
+  }, [createListFunction, onCreateList])
 
   const Row = useCallback(
     ({ index, style }: { index: number; style: object }) => {
@@ -298,7 +335,10 @@ const SaveToListModal = (props: Props) => {
           secondary
           disabled={isLoadingLists || isSavingPicks}
           data-testid={CREATE_LIST_BUTTON_DATA_TEST_ID}
-          onClick={onCreateList}
+          onClick={handleOnCreateListClick}
+          // (name: string, description: string, isPrivate: boolean) =>
+          // createList(name, description, isPrivate)
+          // }
         >
           <Icon name="plus" className={styles.icon} />
           {t('save_to_list_modal.create_list')}
