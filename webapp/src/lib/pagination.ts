@@ -2,19 +2,19 @@ import { useCallback, useMemo } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { PAGE_SIZE } from '../modules/vendor/api'
 
-export type UsePaginationResult = {
+export type UsePaginationResult<T extends string, S extends string> = {
   page: number
   pages?: number
   hasMorePages?: boolean
   first: number
   offset: number
-  sortBy?: string
-  filters: Record<string, string | null>
+  sortBy?: S
+  filters: Record<T, string | null>
   goToNextPage: () => void
   goToPage: (newPage: number) => void
-  changeSorting: (sort: string) => void
+  changeSorting: (sort: S) => void
   changeFilter: (
-    filter: string,
+    filter: T,
     value: string,
     options?: { clearOldFilters: boolean }
   ) => void
@@ -25,25 +25,26 @@ export type PaginationOptions = {
   count?: number
 }
 
-export function usePagination(
-  options?: PaginationOptions
-): UsePaginationResult {
+export function usePagination<
+  T extends string = string,
+  S extends string = string
+>(options?: PaginationOptions): UsePaginationResult<T, S> {
   const { search, pathname } = useLocation()
   const { push } = useHistory()
   const pageSize = useMemo(
     () => options?.pageSize?.toString() ?? PAGE_SIZE.toString(),
     [options?.pageSize]
   )
-  const filters: Record<string, string | null> = useMemo(() => {
+  const filters: Record<T, string | null> = useMemo(() => {
     const params = new URLSearchParams(search)
     params.delete('page')
     params.delete('first')
     params.delete('offset')
     params.delete('sortBy')
-    return Object.fromEntries(params.entries())
+    return Object.fromEntries(params.entries()) as Record<T, string | null>
   }, [search])
   const sortBy =
-    useMemo(() => new URLSearchParams(search).get('sortBy'), [search]) ??
+    (useMemo(() => new URLSearchParams(search).get('sortBy'), [search]) as S) ??
     undefined
 
   const [page, first, offset] = useMemo(() => {
@@ -70,7 +71,7 @@ export function usePagination(
   )
 
   const changeSorting = useCallback(
-    (sort: string) => {
+    (sort: S) => {
       const params = new URLSearchParams(search)
       // Reset the page when changing the sorting
       params.set('page', '1')

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Sections } from '../../../modules/routing/types'
+import { BrowseOptions, Sections } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { VendorName } from '../../../modules/vendor/types'
 import { usePagination } from '../../../lib/pagination'
@@ -28,7 +28,7 @@ const {
 } = Sections.decentraland
 
 const CurrentAccountSidebar = ({ section, onBrowse }: Props) => {
-  const { changeFilter } = usePagination()
+  const { changeFilter } = usePagination<keyof BrowseOptions>()
 
   return (
     <>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
-import { CollectionSortBy } from '@dcl/schemas'
+import { CollectionFilters, CollectionSortBy } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
 import { locations } from '../../modules/routing/locations'
@@ -28,7 +28,10 @@ const CollectionList = ({
     goToPage,
     changeSorting,
     changeFilter
-  } = usePagination({ pageSize: COLLECTIONS_PER_PAGE, count })
+  } = usePagination<keyof CollectionFilters, CollectionSortBy>({
+    pageSize: COLLECTIONS_PER_PAGE,
+    count
+  })
   const sortOptions = useRef([
     { value: CollectionSortBy.NAME, text: t('filters.name') },
     { value: CollectionSortBy.NEWEST, text: t('filters.newest') },
@@ -64,7 +67,7 @@ const CollectionList = ({
             value={search}
             onChange={newSearch => {
               if (search !== newSearch) {
-                changeFilter(search, newSearch)
+                changeFilter('search', newSearch)
               }
             }}
             placeholder={t('collection_list.search', {
@@ -79,7 +82,7 @@ const CollectionList = ({
           options={sortOptions.current}
           onChange={(_, data) => {
             if (sortBy !== data.value) {
-              changeSorting(data.value?.toString() ?? '')
+              changeSorting((data.value?.toString() as CollectionSortBy) ?? '')
             }
           }}
         />
