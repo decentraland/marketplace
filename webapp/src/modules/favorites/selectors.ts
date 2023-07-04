@@ -13,9 +13,6 @@ import { getData as getItems } from '../item/selectors'
 import { FavoritesData, List } from './types'
 import {
   FETCH_FAVORITED_ITEMS_REQUEST,
-  PICK_ITEM_AS_FAVORITE_REQUEST,
-  UNPICK_ITEM_AS_FAVORITE_REQUEST,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
   FETCH_LISTS_REQUEST,
   CREATE_LIST_REQUEST,
   DELETE_LIST_REQUEST,
@@ -70,11 +67,7 @@ export const getListId = createSelector<
 export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
   getLoading(state).some(
     ({ type, payload }) =>
-      [
-        PICK_ITEM_AS_FAVORITE_REQUEST,
-        UNPICK_ITEM_AS_FAVORITE_REQUEST,
-        UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST
-      ].includes(type) && payload.item.id === itemId
+      [BULK_PICK_REQUEST].includes(type) && payload.item.id === itemId
   )
 
 export const getList = (state: RootState, id: string): List | null =>

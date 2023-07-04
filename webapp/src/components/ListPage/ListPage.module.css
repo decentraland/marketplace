@@ -193,6 +193,10 @@
   margin-top: 20px;
 }
 
+.description {
+  overflow-wrap: break-word;
+}
+
 @media (max-width: 768px) {
   .header:global(.ui.header) {
     margin-left: 16px;
@@ -203,6 +207,10 @@
     flex-direction: column;
     align-items: flex-start;
     row-gap: 24px;
+  }
+
+  .subHeaderLeft {
+    width: 100%;
   }
 }
 

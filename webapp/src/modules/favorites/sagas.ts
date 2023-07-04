@@ -28,23 +28,10 @@ import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import {
-  cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
   FetchFavoritedItemsRequestAction,
   fetchFavoritedItemsSuccess,
   FETCH_FAVORITED_ITEMS_REQUEST,
-  pickItemAsFavoriteFailure,
-  PickItemAsFavoriteRequestAction,
-  pickItemAsFavoriteSuccess,
-  PICK_ITEM_AS_FAVORITE_REQUEST,
-  undoUnpickingItemAsFavoriteFailure,
-  UndoUnpickingItemAsFavoriteRequestAction,
-  undoUnpickingItemAsFavoriteSuccess,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
-  unpickItemAsFavoriteFailure,
-  UnpickItemAsFavoriteRequestAction,
-  unpickItemAsFavoriteSuccess,
-  UNPICK_ITEM_AS_FAVORITE_REQUEST,
   FETCH_LISTS_REQUEST,
   fetchListsFailure,
   fetchListsSuccess,
@@ -76,11 +63,17 @@ import {
   BulkPickUnpickStartAction,
   bulkPickUnpickCancel,
   CreateListSuccessAction,
-  CreateListFailureAction,
   CREATE_LIST_SUCCESS,
-  CREATE_LIST_FAILURE,
   bulkPickUnpickRequest,
-  DELETE_LIST_SUCCESS
+  DELETE_LIST_SUCCESS,
+  BulkPickUnpickSuccessAction,
+  BulkPickUnpickFailureAction,
+  BULK_PICK_SUCCESS,
+  pickItemSuccess,
+  unpickItemSuccess,
+  pickItemFailure,
+  unpickItemFailure,
+  BULK_PICK_FAILURE
 } from './actions'
 import {
   getList,
@@ -89,6 +82,7 @@ import {
 } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
+import { getData as getItemsData } from '../item/selectors'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
@@ -103,18 +97,6 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield takeEvery(
-    PICK_ITEM_AS_FAVORITE_REQUEST,
-    handlePickItemAsFavoriteRequest
-  )
-  yield takeEvery(
-    UNPICK_ITEM_AS_FAVORITE_REQUEST,
-    handleUnpickItemAsFavoriteRequest
-  )
-  yield takeEvery(
-    UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
-    handleUndoUnpickingItemAsFavoriteRequest
-  )
-  yield takeEvery(
     FETCH_FAVORITED_ITEMS_REQUEST,
     handleFetchFavoritedItemsRequest
   )
@@ -127,87 +109,33 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(CREATE_LIST_REQUEST, handleCreateListRequest)
   yield takeEvery(BULK_PICK_START, handleBulkPickStart)
   yield takeEvery(BULK_PICK_REQUEST, handleBulkPickRequest)
+  yield takeEvery(
+    [BULK_PICK_SUCCESS, BULK_PICK_FAILURE],
+    handleBulkPickSuccessOrFailure
+  )
 
-  function* handlePickItemAsFavoriteRequest(
-    action: PickItemAsFavoriteRequestAction
-  ) {
-    const { item } = action.payload
+  function* fetchPreviewItems(previewListsItemIds: string[]) {
+    let previewItems: Item[] = []
 
-    try {
-      const address: string = yield select(getAddress)
+    if (previewListsItemIds.length > 0) {
+      const items: ReturnType<typeof getItemsData> = yield select(getItemsData)
+      previewListsItemIds = previewListsItemIds.filter(itemId => !items[itemId])
 
-      if (!address) {
-        yield put(openModal('LoginModal'))
-
-        const {
-          success,
-          close
-        }: {
-          success: ConnectWalletSuccessAction
-          failure: ConnectWalletSuccessAction
-          close: CloseModalAction
-        } = yield race({
-          success: take(CONNECT_WALLET_SUCCESS),
-          failure: take(CONNECT_WALLET_FAILURE),
-          close: take(CLOSE_MODAL)
-        })
-
-        if (close) {
-          yield put(cancelPickItemAsFavorite())
-          return
+      if (previewListsItemIds.length > 0) {
+        const itemFilters: CatalogFilters = {
+          first: previewListsItemIds.length,
+          ids: previewListsItemIds
         }
 
-        if (success) yield put(closeModal('LoginModal'))
+        const result: { data: Item[] } = yield call(
+          [catalogAPI, 'get'],
+          itemFilters
+        )
+        previewItems = result.data
       }
-      // Force the user to have the signed identity
-      yield call(getAccountIdentity)
-      yield call([favoritesAPI, 'pickItemAsFavorite'], item.id)
-      yield put(pickItemAsFavoriteSuccess(item))
-    } catch (error) {
-      yield put(
-        pickItemAsFavoriteFailure(
-          item,
-          isErrorWithMessage(error) ? error.message : 'Unknown error'
-        )
-      )
     }
-  }
 
-  function* handleUnpickItemAsFavoriteRequest(
-    action: UnpickItemAsFavoriteRequestAction
-  ) {
-    const { item } = action.payload
-    try {
-      // Force the user to have the signed identity
-      yield call(getAccountIdentity)
-      yield call([favoritesAPI, 'unpickItemAsFavorite'], item.id)
-
-      yield put(unpickItemAsFavoriteSuccess(item))
-    } catch (error) {
-      yield put(
-        unpickItemAsFavoriteFailure(
-          item,
-          isErrorWithMessage(error) ? error.message : 'Unknown error'
-        )
-      )
-    }
-  }
-
-  function* handleUndoUnpickingItemAsFavoriteRequest(
-    action: UndoUnpickingItemAsFavoriteRequestAction
-  ) {
-    const { item } = action.payload
-    try {
-      // Force the user to have the signed identity
-      yield call(getAccountIdentity)
-      yield call([favoritesAPI, 'pickItemAsFavorite'], item.id)
-
-      yield put(undoUnpickingItemAsFavoriteSuccess(item))
-    } catch (error) {
-      yield put(
-        undoUnpickingItemAsFavoriteFailure(item, (error as Error).message)
-      )
-    }
+    return previewItems
   }
 
   function* handleFetchFavoritedItemsRequest(
@@ -306,19 +234,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       const previewListsItemIds = Array.from(
         new Set(results.flatMap(list => list.previewOfItemIds))
       )
-      const itemFilters: CatalogFilters = {
-        first: previewListsItemIds.length,
-        ids: previewListsItemIds
-      }
-
-      let previewItems: Item[] = []
-      if (previewListsItemIds.length > 0) {
-        const result: { data: Item[] } = yield call(
-          [catalogAPI, 'get'],
-          itemFilters
-        )
-        previewItems = result.data
-      }
+      let previewItems: Item[] = yield call(
+        fetchPreviewItems,
+        previewListsItemIds
+      )
 
       yield put(fetchListsSuccess(results, previewItems, total, options))
     } catch (error) {
@@ -372,7 +291,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         [favoritesAPI, 'getList'],
         id
       )
-      yield put(getListSuccess(list))
+
+      let { previewOfItemIds } = list
+
+      let previewItems: Item[] = yield call(fetchPreviewItems, previewOfItemIds)
+
+      yield put(getListSuccess(list, previewItems))
     } catch (error) {
       yield put(
         getListFailure(
@@ -429,7 +353,6 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleBulkPickStart(action: BulkPickUnpickStartAction) {
     const { item } = action.payload
-
     try {
       const address: string = yield select(getAddress)
 
@@ -466,11 +389,11 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         listCreationSuccess
       }: {
         listCreationSuccess: CreateListSuccessAction
-        listCreationFailure: CreateListFailureAction
+        picksInBulkRequest: BulkPickUnpickRequestAction
         modalClosed: CloseModalAction
       } = yield race({
         listCreationSuccess: take(CREATE_LIST_SUCCESS),
-        listCreationFailure: take(CREATE_LIST_FAILURE),
+        picksInBulkRequest: take(BULK_PICK_REQUEST),
         modalClosed: take(CLOSE_MODAL)
       })
 
@@ -535,6 +458,29 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           isErrorWithMessage(error) ? error.message : 'Unknown error'
         )
       )
+    }
+  }
+
+  function* handleBulkPickSuccessOrFailure(
+    action: BulkPickUnpickSuccessAction | BulkPickUnpickFailureAction
+  ) {
+    const { item, pickedFor, unpickedFrom } = action.payload
+
+    if (action.type === BULK_PICK_SUCCESS) {
+      for (const list of pickedFor) {
+        yield put(pickItemSuccess(item, list.id))
+      }
+      for (const list of unpickedFrom) {
+        yield put(unpickItemSuccess(item, list.id))
+      }
+    } else {
+      const { error } = action.payload
+      for (const list of pickedFor) {
+        yield put(pickItemFailure(item, list.id, error))
+      }
+      for (const list of unpickedFrom) {
+        yield put(unpickItemFailure(item, list.id, error))
+      }
     }
   }
 }

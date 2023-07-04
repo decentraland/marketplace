@@ -22,15 +22,15 @@ import {
 import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
+import { getData as getItemsData } from '../item/selectors'
 import {
-  CREATE_LIST_FAILURE,
+  BULK_PICK_SUCCESS,
   CREATE_LIST_SUCCESS,
   bulkPickUnpickCancel,
   bulkPickUnpickFailure,
   bulkPickUnpickRequest,
   bulkPickUnpickStart,
   bulkPickUnpickSuccess,
-  cancelPickItemAsFavorite,
   createListFailure,
   createListRequest,
   createListSuccess,
@@ -47,15 +47,10 @@ import {
   getListFailure,
   getListRequest,
   getListSuccess,
-  pickItemAsFavoriteFailure,
-  pickItemAsFavoriteRequest,
-  pickItemAsFavoriteSuccess,
-  undoUnpickingItemAsFavoriteFailure,
-  undoUnpickingItemAsFavoriteRequest,
-  undoUnpickingItemAsFavoriteSuccess,
-  unpickItemAsFavoriteFailure,
-  unpickItemAsFavoriteRequest,
-  unpickItemAsFavoriteSuccess,
+  pickItemFailure,
+  pickItemSuccess,
+  unpickItemFailure,
+  unpickItemSuccess,
   updateListFailure,
   updateListRequest,
   updateListSuccess
@@ -86,223 +81,6 @@ beforeEach(() => {
   error = new Error('error')
   item = { id: 'anAddress-itemId', itemId: 'itemId' } as Item
   address = '0xb549b2442b2bd0a53795bc5cdcbfe0caf7aca9f8'
-})
-
-describe('when handling the request for picking an item as favorite', () => {
-  describe('and getting the address fails', () => {
-    it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([[select(getAddress), throwError(error)]])
-        .put(pickItemAsFavoriteFailure(item, error.message))
-        .dispatch(pickItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('and getting the address succeeds', () => {
-    describe('and the user is not connected', () => {
-      describe('and the user succeeds to connect the wallet', () => {
-        it('should close the login modal after the success', () => {
-          return expectSaga(favoritesSaga, getIdentity)
-            .provide([
-              [select(getAddress), undefined],
-              [take(CONNECT_WALLET_SUCCESS), {}],
-              [call(getAccountIdentity), Promise.resolve()],
-              [
-                matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
-                undefined
-              ]
-            ])
-            .call.like({
-              fn: FavoritesAPI.prototype.pickItemAsFavorite,
-              args: [item.id]
-            })
-            .put(openModal('LoginModal'))
-            .put(closeModal('LoginModal'))
-            .put(pickItemAsFavoriteSuccess(item))
-            .dispatch(pickItemAsFavoriteRequest(item))
-            .run({ silenceTimeout: true })
-        })
-      })
-
-      describe('and the user closes the login modal', () => {
-        it('should finish the saga', () => {
-          return expectSaga(favoritesSaga, getIdentity)
-            .provide([
-              [select(getAddress), undefined],
-              [take(CLOSE_MODAL), {}]
-            ])
-            .put(openModal('LoginModal'))
-            .put(cancelPickItemAsFavorite())
-            .dispatch(pickItemAsFavoriteRequest(item))
-            .run({ silenceTimeout: true })
-            .then(({ effects }) => {
-              expect(effects.put).toBeUndefined()
-            })
-        })
-      })
-    })
-  })
-
-  describe('and getting the identity fails', () => {
-    it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [select(getAddress), address],
-          [call(getAccountIdentity), Promise.reject(error)]
-        ])
-        .put(pickItemAsFavoriteFailure(item, error.message))
-        .dispatch(pickItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('and the call to the favorites api fails', () => {
-    it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [select(getAddress), address],
-          [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
-            Promise.reject(error)
-          ]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.pickItemAsFavorite,
-          args: [item.id]
-        })
-        .put(pickItemAsFavoriteFailure(item, error.message))
-        .dispatch(pickItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('and the call to the favorites api succeeds', () => {
-    it('should dispatch an action signaling the success of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [select(getAddress), address],
-          [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
-            undefined
-          ]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.pickItemAsFavorite,
-          args: [item.id]
-        })
-        .put(pickItemAsFavoriteSuccess(item))
-        .dispatch(pickItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-})
-
-describe('when handling the request for unpicking a favorite item', () => {
-  describe('and getting the identity fails', () => {
-    it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([[call(getAccountIdentity), Promise.reject(error)]])
-        .put(unpickItemAsFavoriteFailure(item, error.message))
-        .dispatch(unpickItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('and the call to the favorites api fails', () => {
-    it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.unpickItemAsFavorite),
-            Promise.reject(error)
-          ]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.unpickItemAsFavorite,
-          args: [item.id]
-        })
-        .put(unpickItemAsFavoriteFailure(item, error.message))
-        .dispatch(unpickItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('and the call to the favorites api succeeds', () => {
-    it('should dispatch an action signaling the success of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [
-            matchers.call.fn(FavoritesAPI.prototype.unpickItemAsFavorite),
-            undefined
-          ],
-          [call(getAccountIdentity), Promise.resolve()],
-          [matchers.put(unpickItemAsFavoriteSuccess(item)), undefined]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.unpickItemAsFavorite,
-          args: [item.id]
-        })
-        .put(unpickItemAsFavoriteSuccess(item))
-        .dispatch(unpickItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-})
-
-describe('when handling the request for undo unpicking a favorite item', () => {
-  describe('and getting the identity fails', () => {
-    it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([[call(getAccountIdentity), Promise.reject(error)]])
-        .put(undoUnpickingItemAsFavoriteFailure(item, error.message))
-        .dispatch(undoUnpickingItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('and the call to the favorites api fails', () => {
-    it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
-            Promise.reject(error)
-          ]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.pickItemAsFavorite,
-          args: [item.id]
-        })
-        .put(undoUnpickingItemAsFavoriteFailure(item, error.message))
-        .dispatch(undoUnpickingItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('and the call to the favorites api succeeds', () => {
-    it('should dispatch an action signaling the success of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [
-            matchers.call.fn(FavoritesAPI.prototype.pickItemAsFavorite),
-            undefined
-          ],
-          [call(getAccountIdentity), Promise.resolve()]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.pickItemAsFavorite,
-          args: [item.id]
-        })
-        .put(undoUnpickingItemAsFavoriteSuccess(item))
-        .dispatch(undoUnpickingItemAsFavoriteRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
 })
 
 describe('when handling the request for fetching favorited items', () => {
@@ -833,45 +611,123 @@ describe('when handling the request for fetching lists', () => {
           ]
         })
 
-        it('should dispatch an action signaling the success of the handled action', () => {
-          return expectSaga(favoritesSaga, getIdentity)
-            .provide([
-              [call(getAccountIdentity), Promise.resolve()],
-              [
-                matchers.call.fn(FavoritesAPI.prototype.getLists),
-                Promise.resolve({ results: lists, total })
-              ],
-              [
-                matchers.call.fn(CatalogAPI.prototype.get),
-                Promise.resolve({ data: items })
-              ]
-            ])
-            .call.like({
-              fn: FavoritesAPI.prototype.getLists,
-              args: [
-                {
-                  first: options.first,
-                  skip: (options.page - 1) * options.first,
-                  sortBy: undefined,
-                  sortDirection: undefined
-                }
-              ]
-            })
-            .call.like({
-              fn: CatalogAPI.prototype.get,
-              args: [
-                {
-                  first: 2,
-                  ids: [
-                    ...lists[0].previewOfItemIds,
-                    ...lists[1].previewOfItemIds
-                  ]
-                }
-              ]
-            })
-            .put(fetchListsSuccess(lists, items, total, options))
-            .dispatch(fetchListsRequest(options))
-            .run({ silenceTimeout: true })
+        describe('and there are not items in the state', () => {
+          it('should dispatch an action signaling the success of the handled action', () => {
+            return expectSaga(favoritesSaga, getIdentity)
+              .provide([
+                [call(getAccountIdentity), Promise.resolve()],
+                [
+                  matchers.call.fn(FavoritesAPI.prototype.getLists),
+                  Promise.resolve({ results: lists, total })
+                ],
+                [select(getItemsData), {}],
+                [
+                  matchers.call.fn(CatalogAPI.prototype.get),
+                  Promise.resolve({ data: items })
+                ]
+              ])
+              .call.like({
+                fn: FavoritesAPI.prototype.getLists,
+                args: [
+                  {
+                    first: options.first,
+                    skip: (options.page - 1) * options.first,
+                    sortBy: undefined,
+                    sortDirection: undefined
+                  }
+                ]
+              })
+              .call.like({
+                fn: CatalogAPI.prototype.get,
+                args: [
+                  {
+                    first: 2,
+                    ids: [
+                      ...lists[0].previewOfItemIds,
+                      ...lists[1].previewOfItemIds
+                    ]
+                  }
+                ]
+              })
+              .put(fetchListsSuccess(lists, items, total, options))
+              .dispatch(fetchListsRequest(options))
+              .run({ silenceTimeout: true })
+          })
+        })
+
+        describe('and there are already some items in the sate', () => {
+          it('should dispatch an action signaling the success of the handled action', () => {
+            return expectSaga(favoritesSaga, getIdentity)
+              .provide([
+                [call(getAccountIdentity), Promise.resolve()],
+                [
+                  matchers.call.fn(FavoritesAPI.prototype.getLists),
+                  Promise.resolve({ results: lists, total })
+                ],
+                [select(getItemsData), { anItemId: items[0] }],
+                [
+                  matchers.call.fn(CatalogAPI.prototype.get),
+                  Promise.resolve({ data: [items[1]] })
+                ]
+              ])
+              .call.like({
+                fn: FavoritesAPI.prototype.getLists,
+                args: [
+                  {
+                    first: options.first,
+                    skip: (options.page - 1) * options.first,
+                    sortBy: undefined,
+                    sortDirection: undefined
+                  }
+                ]
+              })
+              .call.like({
+                fn: CatalogAPI.prototype.get,
+                args: [
+                  {
+                    first: 1,
+                    ids: ['anotherItemId']
+                  }
+                ]
+              })
+              .put(fetchListsSuccess(lists, [items[1]], total, options))
+              .dispatch(fetchListsRequest(options))
+              .run({ silenceTimeout: true })
+          })
+        })
+
+        describe('and there are already all the items in the state', () => {
+          it('should dispatch an action signaling the success of the handled action without fetching the catalog items', () => {
+            return expectSaga(favoritesSaga, getIdentity)
+              .provide([
+                [call(getAccountIdentity), Promise.resolve()],
+                [
+                  matchers.call.fn(FavoritesAPI.prototype.getLists),
+                  Promise.resolve({ results: lists, total })
+                ],
+                [
+                  select(getItemsData),
+                  { [items[0].id]: items[0], [items[1].id]: items[1] }
+                ]
+              ])
+              .call.like({
+                fn: FavoritesAPI.prototype.getLists,
+                args: [
+                  {
+                    first: options.first,
+                    skip: (options.page - 1) * options.first,
+                    sortBy: undefined,
+                    sortDirection: undefined
+                  }
+                ]
+              })
+              .not.call.like({
+                fn: CatalogAPI.prototype.get
+              })
+              .put(fetchListsSuccess(lists, [], total, options))
+              .dispatch(fetchListsRequest(options))
+              .run({ silenceTimeout: true })
+          })
         })
       })
     })
@@ -905,6 +761,7 @@ describe('when handling the request for fetching lists', () => {
                 matchers.call.fn(FavoritesAPI.prototype.getLists),
                 Promise.resolve({ results: lists, total })
               ],
+              [select(getItemsData), {}],
               [
                 matchers.call.fn(CatalogAPI.prototype.get),
                 Promise.resolve({ data: items })
@@ -951,6 +808,7 @@ describe('when handling the request for fetching lists', () => {
               matchers.call.fn(FavoritesAPI.prototype.getLists),
               Promise.resolve({ results: lists, total })
             ],
+            [select(getItemsData), {}],
             [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(error)]
           ])
           .call.like({
@@ -1132,7 +990,8 @@ describe('when handling the request for getting a list', () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
       permission: Permission.VIEW,
-      isPrivate: false
+      isPrivate: false,
+      previewOfItemIds: ['anItemId']
     }
   })
 
@@ -1156,21 +1015,92 @@ describe('when handling the request for getting a list', () => {
   })
 
   describe('and the call to the favorites api succeeds', () => {
-    it('should dispatch an action signaling the success of the handled action', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [
-            matchers.call.fn(FavoritesAPI.prototype.getList),
-            Promise.resolve(list)
-          ]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.getList,
-          args: [list.id]
-        })
-        .put(getListSuccess(list))
-        .dispatch(getListRequest(list.id))
-        .run({ silenceTimeout: true })
+    let items: Item[]
+
+    beforeEach(() => {
+      items = [
+        {
+          id: 'anItemId',
+          name: 'anItemName'
+        } as Item
+      ]
+    })
+
+    describe('and non of the preview items are already in the state', () => {
+      it('should dispatch an action signaling the success of the handled action with the received list and items', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [
+              matchers.call.fn(FavoritesAPI.prototype.getList),
+              Promise.resolve(list)
+            ],
+            [select(getItemsData), {}],
+            [
+              matchers.call.fn(CatalogAPI.prototype.get),
+              Promise.resolve({ data: items })
+            ]
+          ])
+          .call.like({
+            fn: FavoritesAPI.prototype.getList,
+            args: [list.id]
+          })
+          .call.like({
+            fn: CatalogAPI.prototype.get,
+            args: [
+              {
+                first: 1,
+                ids: list.previewOfItemIds
+              }
+            ]
+          })
+          .put(getListSuccess(list, items))
+          .dispatch(getListRequest(list.id))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and some of the preview items are already in the state', () => {
+      beforeEach(() => {
+        items = [
+          ...items,
+          {
+            id: 'anotherItemId',
+            name: 'anotherItemName'
+          } as Item
+        ]
+        list = { ...list, previewOfItemIds: ['anItemId', 'anotherItemId'] }
+      })
+
+      it('should dispatch an action signaling the success of the handled action with the received list and the items that are not in the state', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [
+              matchers.call.fn(FavoritesAPI.prototype.getList),
+              Promise.resolve(list)
+            ],
+            [select(getItemsData), { anotherItemId: {} }],
+            [
+              matchers.call.fn(CatalogAPI.prototype.get),
+              Promise.resolve({ data: items })
+            ]
+          ])
+          .call.like({
+            fn: FavoritesAPI.prototype.getList,
+            args: [list.id]
+          })
+          .call.like({
+            fn: CatalogAPI.prototype.get,
+            args: [
+              {
+                first: 1,
+                ids: ['anItemId']
+              }
+            ]
+          })
+          .put(getListSuccess(list, items))
+          .dispatch(getListRequest(list.id))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })
@@ -1193,7 +1123,8 @@ describe('when handling the request for updating a list', () => {
       createdAt: Date.now(),
       updatedAt: Date.now(),
       permission: Permission.VIEW,
-      isPrivate: false
+      isPrivate: false,
+      previewOfItemIds: []
     }
   })
 
@@ -1254,7 +1185,8 @@ describe('when handling the request for creating a list', () => {
       permission: Permission.EDIT,
       createdAt: Date.now(),
       updatedAt: null,
-      isPrivate: false
+      isPrivate: false,
+      previewOfItemIds: []
     }
   })
 
@@ -1412,6 +1344,22 @@ describe('when handling the request to start the picks and unpicks in bulk proce
     })
   })
 
+  describe('and the user picks or unpicks in bulk without trying to create a new list', () => {
+    it('should end the saga without dispatching a bulk request', () => {
+      return expectSaga(favoritesSaga, getIdentity)
+        .provide([
+          [select(getAddress), address],
+          [call(getAccountIdentity), Promise.resolve()],
+          [take(BULK_PICK_SUCCESS), { payload: { list: newList } }]
+        ])
+        .put(openModal('SaveToListModal', { item }))
+        .not.put(closeModal('SaveToListModal'))
+        .not.put(bulkPickUnpickRequest(item, [newList], []))
+        .dispatch(bulkPickUnpickStart(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
   describe('and the user tries to create a new list', () => {
     describe('and the creation of the list succeeds', () => {
       it('should dispatch an action signaling the pick item in bulk request for the created list', () => {
@@ -1426,22 +1374,6 @@ describe('when handling the request to start the picks and unpicks in bulk proce
           .put(openModal('SaveToListModal', { item }))
           .put(closeModal('SaveToListModal'))
           .put(bulkPickUnpickRequest(item, [newList], []))
-          .dispatch(bulkPickUnpickStart(item))
-          .run({ silenceTimeout: true })
-      })
-    })
-
-    describe('and the creation of the list fails', () => {
-      it('should dispatch an action signaling the cancel of the pick item in bulk process', () => {
-        return expectSaga(favoritesSaga, getIdentity)
-          .provide([
-            [select(getAddress), address],
-            [call(getAccountIdentity), Promise.resolve()],
-            [take(CREATE_LIST_FAILURE), {}],
-            [put(bulkPickUnpickRequest(item, [newList], [])), undefined]
-          ])
-          .put(openModal('SaveToListModal', { item }))
-          .not.put(bulkPickUnpickRequest(item, [newList], []))
           .dispatch(bulkPickUnpickStart(item))
           .run({ silenceTimeout: true })
       })
@@ -1535,5 +1467,67 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
         .dispatch(bulkPickUnpickRequest(item, [fstList], [sndList]))
         .run({ silenceTimeout: true })
     })
+  })
+})
+
+describe('when handling the success of the bulk pick and unpick process', () => {
+  let fstList: ListOfLists
+  let sndList: ListOfLists
+
+  beforeEach(() => {
+    fstList = {
+      id: 'anId',
+      name: 'aName',
+      itemsCount: 1,
+      previewOfItemIds: ['anItemId'],
+      isPrivate: true
+    }
+    sndList = {
+      id: 'anotherId',
+      name: 'anotherName',
+      itemsCount: 2,
+      previewOfItemIds: ['anotherItemId'],
+      isPrivate: true
+    }
+  })
+
+  it('should dispatch a pick success action and an unpick success action for each picked or unpicked lists', () => {
+    return expectSaga(favoritesSaga, getIdentity)
+      .put(pickItemSuccess(item, fstList.id))
+      .put(unpickItemSuccess(item, sndList.id))
+      .dispatch(bulkPickUnpickSuccess(item, [fstList], [sndList], true, true))
+      .run({ silenceTimeout: true })
+  })
+})
+
+describe('when handling the failure of the bulk pick and unpick process', () => {
+  let error: string
+  let fstList: ListOfLists
+  let sndList: ListOfLists
+
+  beforeEach(() => {
+    error = 'An error occurred'
+    fstList = {
+      id: 'anId',
+      name: 'aName',
+      itemsCount: 1,
+      previewOfItemIds: ['anItemId'],
+      isPrivate: true
+    }
+    sndList = {
+      id: 'anotherId',
+      name: 'anotherName',
+      itemsCount: 2,
+      previewOfItemIds: ['anotherItemId'],
+      isPrivate: true
+    }
+  })
+
+  it('should dispatch a pick failure action and an unpick success action for each picked or unpicked lists', () => {
+    return expectSaga(favoritesSaga, getIdentity)
+      .put(pickItemFailure(item, fstList.id, error))
+      .put(unpickItemFailure(item, sndList.id, error))
+      .dispatch(bulkPickUnpickFailure(item, [fstList], [sndList], error))
+      .run({ silenceTimeout: true })
   })
 })

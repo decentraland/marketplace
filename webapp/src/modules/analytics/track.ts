@@ -76,10 +76,6 @@ import {
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import * as events from '../../utils/events'
 import {
-  BULK_PICK_FAILURE,
-  BULK_PICK_SUCCESS,
-  BulkPickUnpickFailureAction,
-  BulkPickUnpickSuccessAction,
   CREATE_LIST_FAILURE,
   CREATE_LIST_SUCCESS,
   CreateListFailureAction,
@@ -88,24 +84,19 @@ import {
   DELETE_LIST_SUCCESS,
   DeleteListFailureAction,
   DeleteListSuccessAction,
-  PICK_ITEM_AS_FAVORITE_FAILURE,
-  PICK_ITEM_AS_FAVORITE_SUCCESS,
-  PickItemAsFavoriteFailureAction,
-  PickItemAsFavoriteSuccessAction,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
-  UNPICK_ITEM_AS_FAVORITE_FAILURE,
-  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+  PICK_ITEM_FAILURE,
+  PICK_ITEM_SUCCESS,
+  PickItemFailureAction,
+  PickItemSuccessAction,
+  UNPICK_ITEM_FAILURE,
+  UNPICK_ITEM_SUCCESS,
   UPDATE_LIST_FAILURE,
   UPDATE_LIST_SUCCESS,
-  UndoUnpickingItemAsFavoriteFailureAction,
-  UndoUnpickingItemAsFavoriteSuccessAction,
-  UnpickItemAsFavoriteFailureAction,
-  UnpickItemAsFavoriteSuccessAction,
+  UnpickItemFailureAction,
+  UnpickItemSuccessAction,
   UpdateListFailureAction,
   UpdateListSuccessAction
 } from '../favorites/actions'
-import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -349,80 +340,40 @@ track<SetPurchaseAction>(
   action => action.payload.purchase
 )
 
-track<PickItemAsFavoriteSuccessAction>(
-  PICK_ITEM_AS_FAVORITE_SUCCESS,
+track<PickItemSuccessAction>(
+  PICK_ITEM_SUCCESS,
   events.PICK_ITEM,
-  ({ payload: { item } }) => ({
+  ({ payload: { item, listId } }) => ({
     item,
-    listId: DEFAULT_FAVORITES_LIST_ID
+    listId
   })
 )
 
-track<PickItemAsFavoriteFailureAction>(
-  PICK_ITEM_AS_FAVORITE_FAILURE,
+track<PickItemFailureAction>(
+  PICK_ITEM_FAILURE,
   events.PICK_ITEM,
-  ({ payload: { item, error } }) => ({
+  ({ payload: { item, listId, error } }) => ({
     item,
-    listId: DEFAULT_FAVORITES_LIST_ID,
+    listId,
     error
   })
 )
 
-track<UnpickItemAsFavoriteSuccessAction>(
-  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+track<UnpickItemSuccessAction>(
+  UNPICK_ITEM_SUCCESS,
   events.UNPICK_ITEM,
-  ({ payload: { item } }) => ({
+  ({ payload: { item, listId } }) => ({
     item,
-    listId: DEFAULT_FAVORITES_LIST_ID
+    listId
   })
 )
 
-track<UnpickItemAsFavoriteFailureAction>(
-  UNPICK_ITEM_AS_FAVORITE_FAILURE,
+track<UnpickItemFailureAction>(
+  UNPICK_ITEM_FAILURE,
   events.UNPICK_ITEM,
-  ({ payload: { item, error } }) => ({
+  ({ payload: { item, listId, error } }) => ({
     item,
-    listId: DEFAULT_FAVORITES_LIST_ID,
-    error
-  })
-)
-
-track<UndoUnpickingItemAsFavoriteSuccessAction>(
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
-  events.UNDO_UNPICK_ITEM,
-  ({ payload: { item } }) => ({
-    item,
-    listId: DEFAULT_FAVORITES_LIST_ID
-  })
-)
-
-track<UndoUnpickingItemAsFavoriteFailureAction>(
-  UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
-  events.UNDO_UNPICK_ITEM,
-  ({ payload: { item, error } }) => ({
-    item,
-    listId: DEFAULT_FAVORITES_LIST_ID,
-    error
-  })
-)
-
-track<BulkPickUnpickSuccessAction>(
-  BULK_PICK_SUCCESS,
-  events.BULK_PICK,
-  ({ payload: { item, pickedFor, unpickedFrom } }) => ({
-    item,
-    pickedFor,
-    unpickedFrom
-  })
-)
-
-track<BulkPickUnpickFailureAction>(
-  BULK_PICK_FAILURE,
-  events.BULK_PICK,
-  ({ payload: { item, pickedFor, unpickedFrom, error } }) => ({
-    item,
-    pickedFor,
-    unpickedFrom,
+    listId,
     error
   })
 )

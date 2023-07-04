@@ -64,5 +64,8 @@ export const UPDATE_LIST = 'Update List'
 export const DELETE_LIST = 'Delete List'
 
 export const OPEN_SHARE_LIST_MODAL = 'Open share list modal'
-export const COPY_LINK_TO_SHARE_LIST = 'Copy link to share list'
-export const SHARE_LIST_ON_TWITTER = 'Share list on Twitter'
+export const SHARE_LIST = 'Share list'
+export enum SHARE_LIST_TYPE {
+  COPY_LINK = 'Copy link',
+  TWITTER = 'Twitter'
+}

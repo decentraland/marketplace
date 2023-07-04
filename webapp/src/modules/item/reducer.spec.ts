@@ -9,9 +9,17 @@ import { NetworkGatewayType } from 'decentraland-ui'
 import { View } from '../ui/types'
 import {
   FETCH_FAVORITED_ITEMS_SUCCESS,
+  FETCH_LISTS_SUCCESS,
+  GET_LIST_SUCCESS,
   fetchFavoritedItemsRequest,
-  fetchFavoritedItemsSuccess
+  fetchFavoritedItemsSuccess,
+  fetchListsRequest,
+  fetchListsSuccess,
+  getListRequest,
+  getListSuccess
 } from '../favorites/actions'
+import { ListsBrowseOptions } from '../favorites/types'
+import { ListDetails, Permission } from '../vendor/decentraland/favorites'
 import {
   buyItemFailure,
   buyItemRequest,
@@ -80,6 +88,24 @@ const txHash = 'aTxHash'
 const anErrorMessage = 'An error'
 
 const trendingItemsBatchSize = 20
+
+const listsBrowseOptions: ListsBrowseOptions = {
+  page: 1,
+  first: 10
+}
+
+const list: ListDetails = {
+  id: 'aListId',
+  name: 'aName',
+  description: 'aDescription',
+  userAddress: 'anAddress',
+  createdAt: Date.now(),
+  updatedAt: Date.now(),
+  itemsCount: 1,
+  permission: Permission.EDIT,
+  isPrivate: true,
+  previewOfItemIds: [item.id]
+}
 
 const requestActions = [
   fetchTrendingItemsRequest(trendingItemsBatchSize),
@@ -206,6 +232,12 @@ describe.each([
     FETCH_COLLECTION_ITEMS_SUCCESS,
     fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }),
     fetchCollectionItemsSuccess([item])
+  ],
+  [GET_LIST_SUCCESS, getListRequest(item.id), getListSuccess(list, [item])],
+  [
+    FETCH_LISTS_SUCCESS,
+    fetchListsRequest(listsBrowseOptions),
+    fetchListsSuccess([list], [item], 1, listsBrowseOptions)
   ],
   [
     FETCH_ITEM_SUCCESS,

@@ -1,15 +1,6 @@
-import {
-  BulkPickUnpickRequestAction,
-  PickItemAsFavoriteRequestAction,
-  UndoUnpickingItemAsFavoriteRequestAction,
-  UnpickItemAsFavoriteRequestAction
-} from '../favorites/actions'
+import { BulkPickUnpickRequestAction } from '../favorites/actions'
 
-export type DispatchableFromToastActions =
-  | PickItemAsFavoriteRequestAction
-  | UnpickItemAsFavoriteRequestAction
-  | UndoUnpickingItemAsFavoriteRequestAction
-  | BulkPickUnpickRequestAction
+export type DispatchableFromToastActions = BulkPickUnpickRequestAction
 
 export enum BulkPickUnpickMessageType {
   ADD = 'add',

@@ -8,14 +8,10 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import {
   bulkPickUnpickFailure,
+  bulkPickUnpickRequest,
   bulkPickUnpickSuccess,
   deleteListFailure,
   deleteListSuccess,
-  pickItemAsFavoriteFailure,
-  pickItemAsFavoriteRequest,
-  pickItemAsFavoriteSuccess,
-  unpickItemAsFavoriteFailure,
-  unpickItemAsFavoriteSuccess,
   updateListSuccess
 } from '../favorites/actions'
 import {
@@ -43,10 +39,6 @@ import {
   getListingRemoveSuccessToast,
   getStoreUpdateSuccessToast,
   getUpsertRentalSuccessToast,
-  getPickItemAsFavoriteSuccessToast,
-  getPickItemAsFavoriteFailureToast,
-  getUnpickItemAsFavoriteFailureToast,
-  getUnpickItemAsFavoriteSuccessToast,
   getFetchAssetsFailureToast,
   getDeleteListSuccessToast,
   getDeleteListFailureToast,
@@ -57,7 +49,10 @@ import {
 import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 import { List } from '../favorites/types'
-import { UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
+import {
+  ListOfLists,
+  UpdateOrCreateList
+} from '../vendor/decentraland/favorites/types'
 import { toastSaga } from './sagas'
 import { toastDispatchableActionsChannel } from './utils'
 
@@ -167,60 +162,6 @@ describe('when handling the failure of execute order', () => {
   })
 })
 
-describe('when handling the success of picking an item as favorite', () => {
-  it('should show a toast signaling the success ', () => {
-    const item = {} as Item
-    return expectSaga(toastSaga)
-      .provide([[select(getState), []]])
-      .put(hideAllToasts())
-      .put(showToast(getPickItemAsFavoriteSuccessToast(item), 'bottom center'))
-      .dispatch(pickItemAsFavoriteSuccess(item))
-      .silentRun()
-  })
-})
-
-describe('when handling the failure of picking an item as favorite', () => {
-  it('should show a toast signaling the failure ', () => {
-    const item = {} as Item
-    const error = 'anError'
-    return expectSaga(toastSaga)
-      .provide([[select(getState), []]])
-      .put(hideAllToasts())
-      .put(showToast(getPickItemAsFavoriteFailureToast(item), 'bottom center'))
-      .dispatch(pickItemAsFavoriteFailure(item, error))
-      .silentRun()
-  })
-})
-
-describe('when handling the success of unpicking a favorite item', () => {
-  it('should show a toast signaling the success ', () => {
-    const item = {} as Item
-    return expectSaga(toastSaga)
-      .provide([[select(getState), []]])
-      .put(hideAllToasts())
-      .put(
-        showToast(getUnpickItemAsFavoriteSuccessToast(item), 'bottom center')
-      )
-      .dispatch(unpickItemAsFavoriteSuccess(item))
-      .silentRun()
-  })
-})
-
-describe('when handling the failure of unpicking a favorite item', () => {
-  it('should show a toast signaling the failure ', () => {
-    const item = {} as Item
-    const error = 'anError'
-    return expectSaga(toastSaga)
-      .provide([[select(getState), []]])
-      .put(hideAllToasts())
-      .put(
-        showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
-      )
-      .dispatch(unpickItemAsFavoriteFailure(item, error))
-      .silentRun()
-  })
-})
-
 describe('when handling the success of updating a list', () => {
   let list: UpdateOrCreateList
   beforeEach(() => {
@@ -272,18 +213,6 @@ describe('when handling the failure of deleting a list', () => {
   })
 })
 
-describe('when handling a put into the toastDispatchableActionsChannel', () => {
-  it('should hide all the previous rendered toasts and dispatch the given action', () => {
-    const item = {} as Item
-    toastDispatchableActionsChannel.put(pickItemAsFavoriteRequest(item))
-
-    return expectSaga(toastSaga)
-      .put(pickItemAsFavoriteRequest(item))
-      .put(hideAllToasts())
-      .silentRun()
-  })
-})
-
 const error = 'anError'
 const actions: [string, FetchItemsFailureAction | FetchNFTsFailureAction][] = [
   ['items', fetchItemsFailure(error, {} as ItemBrowseOptions)],
@@ -305,15 +234,15 @@ describe.each(actions)(
 
 describe('when handling the success of a bulk pick and unpick action', () => {
   let item: Item
-  let pickedFor: List[]
-  let unpickedFrom: List[]
+  let pickedFor: ListOfLists[]
+  let unpickedFrom: ListOfLists[]
 
   beforeEach(() => {
     item = {
       id: 'anItemId'
     } as Item
-    pickedFor = [{ id: 'aListId' } as List]
-    unpickedFrom = [{ id: 'anotherListId' } as List]
+    pickedFor = [{ id: 'aListId' } as ListOfLists]
+    unpickedFrom = [{ id: 'anotherListId' } as ListOfLists]
   })
 
   it('should hide all toasts and show a success toast', () => {
@@ -335,15 +264,15 @@ describe('when handling the success of a bulk pick and unpick action', () => {
 
 describe('when handling the failure of a bulk pick and unpick action', () => {
   let item: Item
-  let pickedFor: List[]
-  let unpickedFrom: List[]
+  let pickedFor: ListOfLists[]
+  let unpickedFrom: ListOfLists[]
 
   beforeEach(() => {
     item = {
       id: 'anItemId'
     } as Item
-    pickedFor = [{ id: 'aListId' } as List]
-    unpickedFrom = [{ id: 'anotherListId' } as List]
+    pickedFor = [{ id: 'aListId' } as ListOfLists]
+    unpickedFrom = [{ id: 'anotherListId' } as ListOfLists]
   })
 
   it('should hide all toasts and show a failure toast', () => {
@@ -359,6 +288,18 @@ describe('when handling the failure of a bulk pick and unpick action', () => {
       .dispatch(
         bulkPickUnpickFailure(item, pickedFor, unpickedFrom, 'anErrorMessage')
       )
+      .silentRun()
+  })
+})
+
+describe('when handling a put into the toastDispatchableActionsChannel', () => {
+  it('should hide all the previous rendered toasts and dispatch the given action', () => {
+    const item = {} as Item
+    toastDispatchableActionsChannel.put(bulkPickUnpickRequest(item, [], []))
+
+    return expectSaga(toastSaga)
+      .put(bulkPickUnpickRequest(item, [], []))
+      .put(hideAllToasts())
       .silentRun()
   })
 })

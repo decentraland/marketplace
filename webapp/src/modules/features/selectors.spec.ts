@@ -12,7 +12,6 @@ import {
   getIsCampaignHomepageBannerEnabled,
   getIsCreatorsFilterEnabled,
   getIsEstateSizeFilterEnabled,
-  getIsListsV1Enabled,
   getIsLocationFilterEnabled,
   getIsMaintenanceEnabled,
   getIsMapViewFiltersEnabled,
@@ -186,11 +185,6 @@ const waitForInitialLoadingSelectors = [
     name: 'IsRentalPriceFilterChart',
     feature: FeatureName.RENTAL_PRICE_FILTER_CHART,
     selector: getIsRentalPriceFilterChartEnabled
-  },
-  {
-    name: 'IsListsV1',
-    feature: FeatureName.LISTS_V1,
-    selector: getIsListsV1Enabled
   }
 ]
 

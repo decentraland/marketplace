@@ -3,12 +3,9 @@ import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import {
-  pickItemAsFavoriteRequest,
-  unpickItemAsFavoriteRequest
-} from '../../modules/favorites/actions'
 import FavoritesCounter from './FavoritesCounter'
 import { Props as FavoritesCounterProps } from './FavoritesCounter.types'
+import { bulkPickUnpickStart } from '../../modules/favorites/actions'
 
 jest.mock('decentraland-dapps/dist/modules/analytics/utils')
 const getAnalyticsMock = (getAnalytics as unknown) as jest.MockedFunction<
@@ -25,8 +22,7 @@ function renderFavoritesCounter(props: Partial<FavoritesCounterProps> = {}) {
       isLoading={false}
       isPickedByUser={false}
       item={{} as Item}
-      onPick={jest.fn()}
-      onUnpick={jest.fn()}
+      onClick={jest.fn()}
       onCounterClick={jest.fn()}
       {...props}
     />
@@ -147,53 +143,34 @@ describe('FavoritesCounter', () => {
   })
 
   describe('when the user clicks the component', () => {
-    describe('and the item is unpicked', () => {
-      const onPick = jest.fn() as typeof pickItemAsFavoriteRequest
+    let onClick: jest.MockedFunction<() => ReturnType<
+      typeof bulkPickUnpickStart
+    >>
 
-      it('should start the pick mechanism', async () => {
-        const { getByTestId } = renderFavoritesCounter({
-          item,
-          isPickedByUser: false,
-          onPick
-        })
-        await userEvent.click(getByTestId(FAVORITES_COUNTER_TEST_ID))
-        expect(onPick).toHaveBeenCalledWith(item)
-      })
+    beforeEach(() => {
+      onClick = jest.fn()
     })
 
-    describe('and the item is picked', () => {
-      const onUnpick = jest.fn() as typeof unpickItemAsFavoriteRequest
-
-      it('should start the unpick mechanism', async () => {
-        const { getByTestId } = renderFavoritesCounter({
-          item,
-          isPickedByUser: true,
-          onUnpick
-        })
-        await userEvent.click(getByTestId(FAVORITES_COUNTER_TEST_ID))
-        expect(onUnpick).toHaveBeenCalledWith(item)
+    it('should start the pick unpick in bulk mechanism', async () => {
+      const { getByTestId } = renderFavoritesCounter({
+        item,
+        isPickedByUser: false,
+        onClick
       })
+      await userEvent.click(getByTestId(FAVORITES_COUNTER_TEST_ID))
+      expect(onClick).toHaveBeenCalled()
     })
 
-    describe('and the item picking or unpicking process is being loaded', () => {
-      let onUnpick: jest.Mock
-      let onPick: jest.Mock
-      beforeEach(() => {
-        onUnpick = jest.fn()
-        onPick = jest.fn()
-      })
-
-      it('should not start the unpick nor the pick mechanism', async () => {
+    describe('and the item picking or unpicking in bulk is in progress', () => {
+      it('should not start the unpick nor the pick in bulk mechanism again', async () => {
         const { getByTestId } = renderFavoritesCounter({
           item,
           isLoading: true,
           isPickedByUser: true,
-          onUnpick,
-          onPick
+          onClick
         })
         await userEvent.click(getByTestId(FAVORITES_COUNTER_TEST_ID))
-        expect(onUnpick).not.toHaveBeenCalled()
-        expect(onPick).not.toHaveBeenCalled()
+        expect(onClick).not.toHaveBeenCalled()
       })
     })
   })

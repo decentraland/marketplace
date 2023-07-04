@@ -57,8 +57,7 @@ const ListPage = (props: Props) => {
     onBack,
     onEditList,
     onDeleteList,
-    onShareList,
-    isListV1Enabled
+    onShareList
   } = props
   const hasFetchedOnce = useRef(false)
   const { pathname, search } = useLocation()
@@ -154,8 +153,7 @@ const ListPage = (props: Props) => {
       {!isLoading && !isConnecting && listId && list && !error ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
-            {(!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID) &&
-            isListV1Enabled ? (
+            {!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID ? (
               <span data-testid={GO_BACK_BUTTON_TEST_ID}>
                 <Back onClick={onBack} />
               </span>
@@ -233,7 +231,7 @@ const ListPage = (props: Props) => {
           </Header>
           <Header className={styles.header} sub>
             <div className={styles.subHeaderLeft}>
-              <span>{list.description}</span>
+              <span className={styles.description}>{list.description}</span>
               {isPublicView && list.userAddress && (
                 <LinkedProfile
                   data-testid={'linked-profile'}
