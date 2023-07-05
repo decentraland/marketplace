@@ -19,6 +19,7 @@ import {
 } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { CreateListParameters } from '../../../modules/favorites/types'
+import * as events from '../../../utils/events'
 import { isErrorWithMessage } from '../../../lib/error'
 import { PrivateTag } from '../../PrivateTag'
 import {
@@ -35,6 +36,7 @@ import {
 } from './constants'
 import { PickType, Props } from './SaveToListModal.types'
 import styles from './SaveToListModal.module.css'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 const SaveToListModal = (props: Props) => {
   const {
@@ -167,6 +169,9 @@ const SaveToListModal = (props: Props) => {
   const createListFunction = useCallback(
     (params: CreateListParameters) => {
       onCreateList({ isLoading: true, onCreateList: createListFunction })
+      getAnalytics().track(events.CREATE_LIST, {
+        params
+      })
       favoritesAPI
         .createList(params)
         .then(response => {
@@ -336,9 +341,6 @@ const SaveToListModal = (props: Props) => {
           disabled={isLoadingLists || isSavingPicks}
           data-testid={CREATE_LIST_BUTTON_DATA_TEST_ID}
           onClick={handleOnCreateListClick}
-          // (name: string, description: string, isPrivate: boolean) =>
-          // createList(name, description, isPrivate)
-          // }
         >
           <Icon name="plus" className={styles.icon} />
           {t('save_to_list_modal.create_list')}
