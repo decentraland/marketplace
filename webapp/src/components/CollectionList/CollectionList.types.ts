@@ -1,23 +1,19 @@
 import { Collection } from '@dcl/schemas'
 import { Dispatch } from 'redux'
-import { browse, BrowseAction } from '../../modules/routing/actions'
-import { SortBy } from '../../modules/routing/types'
+import {
+  fetchCollectionsRequest,
+  FetchCollectionsRequestAction
+} from '../../modules/collection/actions'
 
 export type Props = {
   collections: Collection[]
+  creator: string
   count: number
   isLoading: boolean
-  search: string
-  page: number
-  sortBy?: SortBy
-  onBrowse: (...params: Parameters<typeof browse>) => void
+  onFetchCollections: typeof fetchCollectionsRequest
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'collections' | 'count' | 'isLoading' | 'search' | 'sortBy' | 'page'
->
-
-export type MapDispatchProps = Pick<Props, 'onBrowse'>
-
-export type MapDispatch = Dispatch<BrowseAction>
+export type MapStateProps = Pick<Props, 'collections' | 'count' | 'isLoading'>
+export type MapDispatchProps = Pick<Props, 'onFetchCollections'>
+export type MapDispatch = Dispatch<FetchCollectionsRequestAction>
+export type OwnProps = Pick<Props, 'creator'>

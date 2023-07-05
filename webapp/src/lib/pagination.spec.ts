@@ -147,6 +147,23 @@ describe('when getting the pagination hook', () => {
     })
   })
 
+  describe('and using the goToPage function', () => {
+    beforeEach(() => {
+      useLocationMock.search = 'filter=value&sortBy=createdAt'
+      renderedHook = renderHook(() => usePagination())
+      currentResult = renderedHook.result.current as UsePaginationResult
+      act(() => {
+        currentResult.goToPage(4)
+      })
+    })
+
+    it('should push the desired page into the history with the current parameters', () => {
+      expect(historyPushMock).toHaveBeenCalledWith(
+        '/v1/lists?filter=value&sortBy=createdAt&page=4'
+      )
+    })
+  })
+
   describe('and using the changeSorting function', () => {
     beforeEach(() => {
       useLocationMock.search = 'filter=value&sortBy=createdAt'
@@ -166,18 +183,84 @@ describe('when getting the pagination hook', () => {
 
   describe('and using the changeFilter function', () => {
     beforeEach(() => {
-      useLocationMock.search = 'filter=value&sortBy=createdAt'
+      useLocationMock.search =
+        'filter=value&anotherFilter=someValue&sortBy=createdAt'
       renderedHook = renderHook(() => usePagination())
       currentResult = renderedHook.result.current as UsePaginationResult
-      act(() => {
-        currentResult.changeFilter('filter', 'newValue')
+    })
+
+    describe('and the flag to remove all the old filters is set', () => {
+      beforeEach(() => {
+        act(() => {
+          currentResult.changeFilter('filter', 'newValue', {
+            clearOldFilters: true
+          })
+        })
+      })
+
+      it('should push the first page into the history only with the new filter and the current sorting', () => {
+        expect(historyPushMock).toHaveBeenCalledWith(
+          '/v1/lists?page=1&sortBy=createdAt&filter=newValue'
+        )
       })
     })
 
-    it('should push the first page into the history with the changed filter and the current sorting', () => {
-      expect(historyPushMock).toHaveBeenCalledWith(
-        '/v1/lists?filter=newValue&sortBy=createdAt&page=1'
+    describe('and the flag to remove all the old filters is not set', () => {
+      beforeEach(() => {
+        act(() => {
+          currentResult.changeFilter('filter', 'newValue', {
+            clearOldFilters: false
+          })
+        })
+      })
+
+      it('should push the first page into the history with the changed filter and the current sorting', () => {
+        expect(historyPushMock).toHaveBeenCalledWith(
+          '/v1/lists?filter=newValue&anotherFilter=someValue&sortBy=createdAt&page=1'
+        )
+      })
+    })
+  })
+
+  describe('and the count option is set', () => {
+    beforeEach(() => {
+      useLocationMock.search = 'page=1'
+      renderedHook = renderHook(() =>
+        usePagination({ pageSize: 50, count: 101 })
       )
+      currentResult = renderedHook.result.current as UsePaginationResult
+    })
+
+    it('should compute the number of pages', () => {
+      expect(currentResult.pages).toEqual(3)
+    })
+  })
+
+  describe("and there's no more pages left", () => {
+    beforeEach(() => {
+      useLocationMock.search = 'page=3'
+      renderedHook = renderHook(() =>
+        usePagination({ pageSize: 50, count: 101 })
+      )
+      currentResult = renderedHook.result.current as UsePaginationResult
+    })
+
+    it('should return hasMorePages as false', () => {
+      expect(currentResult.hasMorePages).toBe(false)
+    })
+  })
+
+  describe('and there are more pages left', () => {
+    beforeEach(() => {
+      useLocationMock.search = 'page=1'
+      renderedHook = renderHook(() =>
+        usePagination({ pageSize: 50, count: 101 })
+      )
+      currentResult = renderedHook.result.current as UsePaginationResult
+    })
+
+    it('should return hasMorePages as true', () => {
+      expect(currentResult.hasMorePages).toBe(true)
     })
   })
 })

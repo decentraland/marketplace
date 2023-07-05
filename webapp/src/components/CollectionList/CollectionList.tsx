@@ -1,37 +1,63 @@
-import React, { useRef } from 'react'
-import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
+import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
+import { CollectionFilters, CollectionSortBy } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Props } from './CollectionList.types'
-import { SortBy } from '../../modules/routing/types'
 import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
-import CollectionImage from '../CollectionImage'
 import { locations } from '../../modules/routing/locations'
-import styles from './CollectionList.module.css'
+import { usePagination } from '../../lib/pagination'
+import CollectionImage from '../CollectionImage'
 import ListedBadge from '../ListedBadge'
+import { Props } from './CollectionList.types'
+import styles from './CollectionList.module.css'
 
 const CollectionList = ({
   collections,
   count,
+  creator,
   isLoading,
-  search,
-  sortBy,
-  page,
-  onBrowse
+  onFetchCollections
 }: Props) => {
+  const {
+    page,
+    first,
+    offset,
+    pages,
+    sortBy,
+    filters,
+    goToPage,
+    changeSorting,
+    changeFilter
+  } = usePagination<keyof CollectionFilters, CollectionSortBy>({
+    pageSize: COLLECTIONS_PER_PAGE,
+    count
+  })
   const sortOptions = useRef([
-    { value: SortBy.NAME, text: t('filters.name') },
-    { value: SortBy.NEWEST, text: t('filters.newest') },
+    { value: CollectionSortBy.NAME, text: t('filters.name') },
+    { value: CollectionSortBy.NEWEST, text: t('filters.newest') },
     {
-      value: SortBy.RECENTLY_REVIEWED,
+      value: CollectionSortBy.RECENTLY_REVIEWED,
       text: t('filters.recently_reviewed')
     },
-    { value: SortBy.SIZE, text: t('filters.size') }
+    { value: CollectionSortBy.SIZE, text: t('filters.size') }
   ])
 
-  const pages = Math.ceil(count / COLLECTIONS_PER_PAGE)
+  useEffect(() => {
+    onFetchCollections(
+      {
+        first,
+        skip: offset,
+        creator,
+        sortBy:
+          (sortBy as CollectionSortBy | undefined) ?? CollectionSortBy.NEWEST,
+        search: filters.search ?? undefined
+      },
+      true
+    )
+  }, [creator, filters.search, first, offset, onFetchCollections, sortBy])
 
-  const hasPagination = pages > 1
+  const search = filters.search ?? ''
+  const hasPagination = pages ?? 0 > 1
 
   return (
     <>
@@ -41,7 +67,7 @@ const CollectionList = ({
             value={search}
             onChange={newSearch => {
               if (search !== newSearch) {
-                onBrowse({ search: newSearch, page: 1 })
+                changeFilter('search', newSearch)
               }
             }}
             placeholder={t('collection_list.search', {
@@ -52,10 +78,11 @@ const CollectionList = ({
         <Dropdown
           direction="left"
           value={sortBy}
+          defaultValue={CollectionSortBy.NEWEST}
           options={sortOptions.current}
           onChange={(_, data) => {
             if (sortBy !== data.value) {
-              onBrowse({ sortBy: data.value as SortBy })
+              changeSorting((data.value?.toString() as CollectionSortBy) ?? '')
             }
           }}
         />
@@ -109,11 +136,11 @@ const CollectionList = ({
           {hasPagination && (
             <div className={styles.pagination}>
               <Pagination
-                totalPages={pages}
+                totalPages={pages ?? 0}
                 activePage={page}
                 onPageChange={(_, data) => {
                   if (page !== data.activePage) {
-                    onBrowse({ page: Number(data.activePage) })
+                    goToPage(Number(data.activePage))
                   }
                 }}
               />

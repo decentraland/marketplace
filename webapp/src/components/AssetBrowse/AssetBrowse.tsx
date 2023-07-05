@@ -12,6 +12,7 @@ import {
   isAccountView,
   isListsSection
 } from '../../modules/ui/utils'
+import { usePagination } from '../../lib/pagination'
 import { locations } from '../../modules/routing/locations'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
@@ -55,6 +56,8 @@ const AssetBrowse = (props: Props) => {
 
   const location = useLocation()
   const history = useHistory()
+  const { changeFilter } = usePagination()
+
   // Prevent fetching more than once while browsing
   const lastLocation = visitedLocations[visitedLocations.length - 2]
   const [hasFetched, setHasFetched] = useState(
@@ -96,7 +99,11 @@ const AssetBrowse = (props: Props) => {
   }, [section, view, isMap, isMapPropertyPersisted])
 
   useEffect(() => {
-    if (viewInState === view && !hasFetched) {
+    if (
+      viewInState === view &&
+      !hasFetched &&
+      section !== DecentralandSection.COLLECTIONS
+    ) {
       // Options used to fetch the assets.
       const browseOpts: BrowseOptions = {
         vendor,
@@ -188,7 +195,7 @@ const AssetBrowse = (props: Props) => {
 
   switch (section) {
     case DecentralandSection.COLLECTIONS:
-      right = <CollectionList />
+      right = <CollectionList creator={address ?? ''} />
       break
     case DecentralandSection.ON_SALE:
       right = (
@@ -262,7 +269,16 @@ const AssetBrowse = (props: Props) => {
                 <Tabs.Tab
                   key={key}
                   active={section === value}
-                  onClick={() => onBrowse({ section: value })}
+                  onClick={
+                    section === Sections.decentraland.COLLECTIONS
+                      ? () =>
+                          changeFilter(
+                            'section',
+                            Sections.decentraland.COLLECTIONS,
+                            { clearOldFilters: true }
+                          )
+                      : () => onBrowse({ section: value })
+                  }
                 >
                   {t(`menu.${value}`)}
                 </Tabs.Tab>

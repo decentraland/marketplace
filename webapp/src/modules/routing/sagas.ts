@@ -66,7 +66,6 @@ import {
   getCategoryFromSection,
   getDefaultOptionsByView,
   getSearchWearableCategory,
-  getCollectionSortBy,
   getSearchEmoteCategory,
   getItemSortBy,
   getAssetOrderBy,
@@ -88,11 +87,9 @@ import {
   GO_BACK,
   GoBackAction
 } from './actions'
-import { BrowseOptions, Sections, SortBy } from './types'
+import { BrowseOptions, Sections } from './types'
 import { Section } from '../vendor/decentraland'
-import { fetchCollectionsRequest } from '../collection/actions'
 import {
-  COLLECTIONS_PER_PAGE,
   getClearedBrowseOptions,
   isCatalogView,
   rentalFilters,
@@ -289,14 +286,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         page,
         pageSize: SALES_PER_PAGE
       })
-      break
-    case Section.COLLECTIONS:
-      yield handleFetchCollections(
-        page,
-        Array.isArray(address) ? address[0] : address,
-        sortBy,
-        search
-      )
       break
     case Section.LISTS:
       yield put(
@@ -527,26 +516,6 @@ function* handleFetchSales({
   for (const tokenSale of tokenSales) {
     yield put(fetchNFTRequest(tokenSale.contractAddress, tokenSale.tokenId))
   }
-}
-
-function* handleFetchCollections(
-  page: number,
-  creator: string,
-  sortBy: SortBy,
-  search?: string
-) {
-  yield put(
-    fetchCollectionsRequest(
-      {
-        first: COLLECTIONS_PER_PAGE,
-        skip: (page - 1) * COLLECTIONS_PER_PAGE,
-        creator,
-        search,
-        sortBy: getCollectionSortBy(sortBy)
-      },
-      true
-    )
-  )
 }
 
 // TODO: Consider moving this should live to each vendor

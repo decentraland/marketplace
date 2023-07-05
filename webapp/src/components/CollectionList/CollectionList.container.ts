@@ -1,18 +1,16 @@
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { connect } from 'react-redux'
-import { FETCH_COLLECTIONS_REQUEST } from '../../modules/collection/actions'
+import { bindActionCreators } from 'redux'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import {
+  FETCH_COLLECTIONS_REQUEST,
+  fetchCollectionsRequest
+} from '../../modules/collection/actions'
 import {
   getCollections,
   getCount,
   getLoading
 } from '../../modules/collection/selectors'
 import { RootState } from '../../modules/reducer'
-import { browse } from '../../modules/routing/actions'
-import {
-  getPageNumber,
-  getSearch,
-  getSortBy
-} from '../../modules/routing/selectors'
 import CollectionList from './CollectionList'
 import {
   MapStateProps,
@@ -23,14 +21,15 @@ import {
 const mapState = (state: RootState): MapStateProps => ({
   collections: getCollections(state),
   count: getCount(state),
-  isLoading: isLoadingType(getLoading(state), FETCH_COLLECTIONS_REQUEST),
-  search: getSearch(state),
-  sortBy: getSortBy(state),
-  page: getPageNumber(state)
+  isLoading: isLoadingType(getLoading(state), FETCH_COLLECTIONS_REQUEST)
 })
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onBrowse: options => dispatch(browse(options))
-})
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps =>
+  bindActionCreators(
+    {
+      onFetchCollections: fetchCollectionsRequest
+    },
+    dispatch
+  )
 
 export default connect(mapState, mapDispatch)(CollectionList)
