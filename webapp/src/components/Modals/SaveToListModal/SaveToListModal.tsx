@@ -169,9 +169,6 @@ const SaveToListModal = (props: Props) => {
   const createListFunction = useCallback(
     (params: CreateListParameters) => {
       onCreateList({ isLoading: true, onCreateList: createListFunction })
-      getAnalytics().track(events.CREATE_LIST, {
-        params
-      })
       favoritesAPI
         .createList(params)
         .then(response => {
@@ -185,15 +182,22 @@ const SaveToListModal = (props: Props) => {
             total: lists.total++,
             data: stateLists
           })
+          getAnalytics().track(events.CREATE_LIST, {
+            list: response
+          })
           onFinishListCreation()
         })
         .catch(error => {
+          const errorMessage = isErrorWithMessage(error)
+            ? error.message
+            : t('global.unknown_error')
           onCreateList({
             isLoading: false,
             onCreateList: createListFunction,
-            error: isErrorWithMessage(error)
-              ? error.message
-              : t('global.unknown_error')
+            error: errorMessage
+          })
+          getAnalytics().track(events.CREATE_LIST, {
+            error: errorMessage
           })
         })
     },
