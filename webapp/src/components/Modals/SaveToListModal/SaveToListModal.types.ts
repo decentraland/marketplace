@@ -2,6 +2,7 @@ import { Item } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
+import { OverrideCreateListTypes } from '../CreateOrEditListModal/CreateOrEditListModal.types'
 
 type Metadata = {
   item: Item
@@ -17,9 +18,13 @@ export type Props = Omit<ModalProps, 'metadata'> & {
   identity: AuthIdentity | undefined
   isSavingPicks: boolean
   onSavePicks: (picksFor: ListOfLists[], picksFrom: ListOfLists[]) => void
-  onCreateList: () => void
+  onCreateList: (params: OverrideCreateListTypes) => void
+  onFinishListCreation: () => void
 }
 
 export type MapStateProps = Pick<Props, 'identity' | 'isSavingPicks'>
 export type OwnProps = Pick<Props, 'metadata' | 'onClose'>
-export type MapDispatchProps = Pick<Props, 'onSavePicks' | 'onCreateList'>
+export type MapDispatchProps = Pick<
+  Props,
+  'onSavePicks' | 'onCreateList' | 'onFinishListCreation'
+>
