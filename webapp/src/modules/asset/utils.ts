@@ -93,7 +93,7 @@ export function isOwnedBy(
   // but rental lessor will still be the past owner.
   const rentalsContract: ContractData = getContract(
     ContractName.Rentals,
-    (asset as NFT).chainId
+    (asset as NFT).chainId as any
   )
   const rentalContractHasTheAsset =
     rentalsContract.address === (asset as NFT).owner

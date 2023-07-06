@@ -205,7 +205,7 @@ const SettingsPage = (props: Props) => {
                               authorizedAddress: marketplaceEthereum.address,
                               contractAddress: manaEthereum.address,
                               contractName: ContractName.MANAToken,
-                              chainId: manaEthereum.chainId,
+                              chainId: manaEthereum.chainId as any,
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
@@ -215,7 +215,7 @@ const SettingsPage = (props: Props) => {
                               authorizedAddress: marketplaceMatic.address,
                               contractAddress: manaMatic.address,
                               contractName: ContractName.MANAToken,
-                              chainId: manaMatic.chainId,
+                              chainId: manaMatic.chainId as any,
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
@@ -225,7 +225,7 @@ const SettingsPage = (props: Props) => {
                               authorizedAddress: collectionStore.address,
                               contractAddress: manaMatic.address,
                               contractName: ContractName.MANAToken,
-                              chainId: manaMatic.chainId,
+                              chainId: manaMatic.chainId as any,
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
@@ -241,7 +241,7 @@ const SettingsPage = (props: Props) => {
                               authorizedAddress: bidsEthereum.address,
                               contractAddress: manaEthereum.address,
                               contractName: ContractName.MANAToken,
-                              chainId: manaEthereum.chainId,
+                              chainId: manaEthereum.chainId as any,
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
@@ -251,7 +251,7 @@ const SettingsPage = (props: Props) => {
                               authorizedAddress: bidsMatic.address,
                               contractAddress: manaMatic.address,
                               contractName: ContractName.MANAToken,
-                              chainId: manaMatic.chainId,
+                              chainId: manaMatic.chainId as any,
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
@@ -267,7 +267,7 @@ const SettingsPage = (props: Props) => {
                               authorizedAddress: rentals.address,
                               contractAddress: manaEthereum.address,
                               contractName: ContractName.MANAToken,
-                              chainId: manaEthereum.chainId,
+                              chainId: manaEthereum.chainId as any,
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />

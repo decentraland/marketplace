@@ -111,7 +111,7 @@ export const transferNFTransactionSubmitted = (
 ) =>
   action(TRANSFER_NFT_TRANSACTION_SUBMITTED, {
     nft,
-    ...buildTransactionPayload(nft.chainId, txHash, {
+    ...buildTransactionPayload(nft.chainId as any, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       chainId: nft.chainId,

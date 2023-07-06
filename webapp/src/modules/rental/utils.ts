@@ -53,7 +53,7 @@ export async function getSignature(
 
   const rentalsContract: ContractData = getContract(
     ContractName.Rentals,
-    chainId
+    chainId as any
   )
 
   const domain: TypedDataDomain = {
@@ -249,7 +249,7 @@ export function canBeClaimed(
   ) {
     const rentalsContract: ContractData = getContract(
       ContractName.Rentals,
-      (asset as NFT).chainId
+      (asset as NFT).chainId as any
     )
     // can only be claimed from the contract address
     // this avoids the case where the asset was transfer with an open rental

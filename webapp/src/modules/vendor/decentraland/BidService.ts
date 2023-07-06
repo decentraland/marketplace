@@ -52,7 +52,7 @@ export class BidService
       case Network.ETHEREUM: {
         const contract: ContractData = getContract(
           ContractName.Bid,
-          nft.chainId
+          nft.chainId as any
         )
 
         if (fingerprint) {
@@ -79,7 +79,7 @@ export class BidService
       case Network.MATIC: {
         const contract: ContractData = getContract(
           ContractName.BidV2,
-          nft.chainId
+          nft.chainId as any
         )
         return sendTransaction(
           contract,
@@ -117,8 +117,8 @@ export class BidService
 
     const contract: ContractData =
       bid.network === Network.ETHEREUM
-        ? getContract(ContractName.Bid, bid.chainId)
-        : getContract(ContractName.BidV2, bid.chainId)
+        ? getContract(ContractName.Bid, bid.chainId as any)
+        : getContract(ContractName.BidV2, bid.chainId as any)
     return sendTransaction(
       contract,
       'cancelBid(address,uint256)',

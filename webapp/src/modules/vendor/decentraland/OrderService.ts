@@ -32,7 +32,7 @@ export class OrderService
       nft.network === Network.ETHEREUM
         ? ContractName.Marketplace
         : ContractName.MarketplaceV2,
-      nft.chainId
+      nft.chainId as any
     )
     return sendTransaction(
       contract,
@@ -51,7 +51,7 @@ export class OrderService
     fingerprint?: string
   ) {
     const contractName = getContractName(order.marketplaceAddress)
-    const contract = getContract(contractName, order.chainId)
+    const contract = getContract(contractName, order.chainId as any)
     if (fingerprint) {
       return sendTransaction(
         contract,
@@ -74,7 +74,7 @@ export class OrderService
 
   async cancel(_wallet: Wallet | null, order: Order) {
     const contractName = getContractName(order.marketplaceAddress)
-    const contract = getContract(contractName, order.chainId)
+    const contract = getContract(contractName, order.chainId as any)
     return sendTransaction(
       contract,
       'cancelOrder',

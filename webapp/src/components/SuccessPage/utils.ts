@@ -6,7 +6,7 @@ import { BigNumber, ethers } from 'ethers'
 export function getTokenIdFromLogs(chainId: ChainId, logs?: Log[]): BigNumber | null {
   if (!logs) return null
 
-  const contract = getContract(ContractName.ERC721CollectionV2, chainId)
+  const contract = getContract(ContractName.ERC721CollectionV2, chainId as any)
   const collectionInterface = new ethers.utils.Interface(contract.abi)
   for (const log of logs) {
     try {

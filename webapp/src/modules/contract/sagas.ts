@@ -135,7 +135,7 @@ export function* handleFetchContractsSuccess() {
     authorizedAddress: marketplaceEthereum.address,
     contractAddress: manaEthereum.address,
     contractName: ContractName.MANAToken,
-    chainId: manaEthereum.chainId,
+    chainId: manaEthereum.chainId as any,
     type: AuthorizationType.ALLOWANCE
   })
 
@@ -144,7 +144,7 @@ export function* handleFetchContractsSuccess() {
     authorizedAddress: marketplaceMatic.address,
     contractAddress: manaMatic.address,
     contractName: ContractName.MANAToken,
-    chainId: manaMatic.chainId,
+    chainId: manaMatic.chainId as any,
     type: AuthorizationType.ALLOWANCE
   })
 
@@ -153,7 +153,7 @@ export function* handleFetchContractsSuccess() {
     authorizedAddress: legacyMarketplaceMatic.address,
     contractAddress: manaMatic.address,
     contractName: ContractName.MANAToken,
-    chainId: manaMatic.chainId,
+    chainId: manaMatic.chainId as any,
     type: AuthorizationType.ALLOWANCE
   })
 
@@ -162,7 +162,7 @@ export function* handleFetchContractsSuccess() {
     authorizedAddress: bidsEthereum.address,
     contractAddress: manaEthereum.address,
     contractName: ContractName.MANAToken,
-    chainId: manaEthereum.chainId,
+    chainId: manaEthereum.chainId as any,
     type: AuthorizationType.ALLOWANCE
   })
 
@@ -171,7 +171,7 @@ export function* handleFetchContractsSuccess() {
     authorizedAddress: bidsMatic.address,
     contractAddress: manaMatic.address,
     contractName: ContractName.MANAToken,
-    chainId: manaMatic.chainId,
+    chainId: manaMatic.chainId as any,
     type: AuthorizationType.ALLOWANCE
   })
 
@@ -180,7 +180,7 @@ export function* handleFetchContractsSuccess() {
     authorizedAddress: collectionStore.address,
     contractAddress: manaMatic.address,
     contractName: ContractName.MANAToken,
-    chainId: manaMatic.chainId,
+    chainId: manaMatic.chainId as any,
     type: AuthorizationType.ALLOWANCE
   })
 
@@ -189,7 +189,7 @@ export function* handleFetchContractsSuccess() {
     authorizedAddress: rentals.address,
     contractAddress: manaEthereum.address,
     contractName: ContractName.MANAToken,
-    chainId: manaEthereum.chainId,
+    chainId: manaEthereum.chainId as any,
     type: AuthorizationType.ALLOWANCE
   })
 
@@ -218,7 +218,7 @@ export function* handleFetchContractsSuccess() {
             contract.network === Network.MATIC
               ? ContractName.ERC721CollectionV2
               : ContractName.ERC721,
-          chainId: contract.chainId,
+          chainId: contract.chainId as any,
           type: AuthorizationType.APPROVAL
         })
       }
@@ -231,7 +231,7 @@ export function* handleFetchContractsSuccess() {
           contract.network === Network.MATIC
             ? ContractName.ERC721CollectionV2
             : ContractName.ERC721,
-        chainId: contract.chainId,
+        chainId: contract.chainId as any,
         type: AuthorizationType.APPROVAL
       })
     }
@@ -246,7 +246,7 @@ export function* handleFetchContractsSuccess() {
         authorizedAddress: rentals.address,
         contractAddress: contract.address,
         contractName: ContractName.ERC721,
-        chainId: contract.chainId,
+        chainId: contract.chainId as any,
         type: AuthorizationType.APPROVAL
       })
     }

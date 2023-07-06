@@ -99,7 +99,7 @@ const SellModal = ({
       nft.network === Network.MATIC
         ? ContractName.ERC721CollectionV2
         : ContractName.ERC721,
-    chainId: nft.chainId,
+    chainId: nft.chainId as any,
     type: AuthorizationType.APPROVAL
   }
 
@@ -213,7 +213,7 @@ const SellModal = ({
             onClick={() => setStep(StepperValues.CONFIRM_INPUT)}
             primary
             disabled={isDisabledSell}
-            chainId={nft.chainId}
+            chainId={nft.chainId as any}
           >
             {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
           </ChainButton>

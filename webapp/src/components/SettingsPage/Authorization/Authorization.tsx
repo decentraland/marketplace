@@ -55,7 +55,7 @@ const Authorization = (props: Props) => {
     return null
   }
 
-  const { network } = getChainConfiguration(token.chainId)
+  const { network } = getChainConfiguration(token.chainId as any)
 
   return (
     <div className="Authorization">

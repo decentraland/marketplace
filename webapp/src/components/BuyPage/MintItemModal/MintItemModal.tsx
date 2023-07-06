@@ -86,7 +86,7 @@ const MintItemModal = (props: Props) => {
         targetContractName: ContractName.MANAToken,
         authorizationType: AuthorizationType.ALLOWANCE,
         authorizedAddress: collectionStore.address,
-        targetContract: mana as Contract,
+        targetContract: mana as Contract as any,
         authorizedContractLabel: collectionStore.label || collectionStore.name,
         requiredAllowanceInWei: item.price,
         onAuthorized: handleExecuteOrder
@@ -217,7 +217,7 @@ const MintItemModal = (props: Props) => {
             disabled={isDisabled || isLoading || isLoadingAuthorization}
             onClick={handleSubmit}
             loading={isLoading || isLoadingAuthorization}
-            chainId={item.chainId}
+            chainId={item.chainId as any}
           >
             {isWearableOrEmote(item) ? (
               isBuyWithCardPage ? (

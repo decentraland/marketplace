@@ -80,7 +80,7 @@ const CancelSalePage = (props: Props) => {
                         loading={isLoading}
                         disabled={isDisabled || isLoading}
                         onClick={() => onCancelOrder(order!, nft)}
-                        chainId={nft.chainId}
+                        chainId={nft.chainId as any}
                       >
                         {t('cancel_sale_page.submit')}
                       </ChainButton>

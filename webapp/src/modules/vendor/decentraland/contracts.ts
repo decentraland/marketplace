@@ -416,7 +416,7 @@ const localContracts = {
   [AppNetwork.GOERLI]: [
     {
       name: ContractName.MANA,
-      address: getContract(CN.MANAToken, ChainId.ETHEREUM_GOERLI).address,
+      address: getContract(CN.MANAToken, ChainId.ETHEREUM_GOERLI as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
@@ -424,7 +424,7 @@ const localContracts = {
     },
     {
       name: ContractName.MARKETPLACE,
-      address: getContract(CN.Marketplace, ChainId.ETHEREUM_GOERLI).address,
+      address: getContract(CN.Marketplace, ChainId.ETHEREUM_GOERLI as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
@@ -432,7 +432,7 @@ const localContracts = {
     },
     {
       name: ContractName.BIDS,
-      address: getContract(CN.Bid, ChainId.ETHEREUM_GOERLI).address,
+      address: getContract(CN.Bid, ChainId.ETHEREUM_GOERLI as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
@@ -440,7 +440,7 @@ const localContracts = {
     },
     {
       name: ContractName.MANA,
-      address: getContract(CN.MANAToken, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.MANAToken, ChainId.MATIC_MUMBAI as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -448,7 +448,7 @@ const localContracts = {
     },
     {
       name: ContractName.MARKETPLACE,
-      address: getContract(CN.MarketplaceV2, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.MarketplaceV2, ChainId.MATIC_MUMBAI as any).address,
       label: 'MarketplaceV2',
       vendor: 'decentraland',
       category: null,
@@ -457,7 +457,7 @@ const localContracts = {
     },
     {
       name: ContractName.LEGACY_MARKETPLACE,
-      address: getContract(CN.Marketplace, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.Marketplace, ChainId.MATIC_MUMBAI as any).address,
       label: 'MarketplaceV1',
       vendor: 'decentraland',
       category: null,
@@ -466,7 +466,7 @@ const localContracts = {
     },
     {
       name: CN.CollectionStore,
-      address: getContract(CN.CollectionStore, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.CollectionStore, ChainId.MATIC_MUMBAI as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -474,7 +474,7 @@ const localContracts = {
     },
     {
       name: ContractName.BIDS,
-      address: getContract(CN.BidV2, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.BidV2, ChainId.MATIC_MUMBAI as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -482,7 +482,7 @@ const localContracts = {
     },
     {
       name: ContractName.RENTALS,
-      address: getContract(CN.Rentals, ChainId.ETHEREUM_GOERLI).address,
+      address: getContract(CN.Rentals, ChainId.ETHEREUM_GOERLI as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
@@ -492,7 +492,7 @@ const localContracts = {
   [AppNetwork.MAINNET]: [
     {
       name: ContractName.MANA,
-      address: getContract(CN.MANAToken, ChainId.ETHEREUM_MAINNET).address,
+      address: getContract(CN.MANAToken, ChainId.ETHEREUM_MAINNET as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
@@ -500,7 +500,7 @@ const localContracts = {
     },
     {
       name: ContractName.MARKETPLACE,
-      address: getContract(CN.Marketplace, ChainId.ETHEREUM_MAINNET).address,
+      address: getContract(CN.Marketplace, ChainId.ETHEREUM_MAINNET as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
@@ -508,7 +508,7 @@ const localContracts = {
     },
     {
       name: ContractName.BIDS,
-      address: getContract(CN.Bid, ChainId.ETHEREUM_MAINNET).address,
+      address: getContract(CN.Bid, ChainId.ETHEREUM_MAINNET as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
@@ -516,7 +516,7 @@ const localContracts = {
     },
     {
       name: ContractName.MANA,
-      address: getContract(CN.MANAToken, ChainId.MATIC_MAINNET).address,
+      address: getContract(CN.MANAToken, ChainId.MATIC_MAINNET as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -524,7 +524,7 @@ const localContracts = {
     },
     {
       name: ContractName.MARKETPLACE,
-      address: getContract(CN.MarketplaceV2, ChainId.MATIC_MAINNET).address,
+      address: getContract(CN.MarketplaceV2, ChainId.MATIC_MAINNET as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -532,7 +532,7 @@ const localContracts = {
     },
     {
       name: ContractName.LEGACY_MARKETPLACE,
-      address: getContract(CN.Marketplace, ChainId.MATIC_MAINNET).address,
+      address: getContract(CN.Marketplace, ChainId.MATIC_MAINNET as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -540,7 +540,7 @@ const localContracts = {
     },
     {
       name: CN.CollectionStore,
-      address: getContract(CN.CollectionStore, ChainId.MATIC_MAINNET).address,
+      address: getContract(CN.CollectionStore, ChainId.MATIC_MAINNET as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -548,7 +548,7 @@ const localContracts = {
     },
     {
       name: ContractName.BIDS,
-      address: getContract(CN.BidV2, ChainId.MATIC_MAINNET).address,
+      address: getContract(CN.BidV2, ChainId.MATIC_MAINNET as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -556,7 +556,7 @@ const localContracts = {
     },
     {
       name: ContractName.RENTALS,
-      address: getContract(CN.Rentals, ChainId.ETHEREUM_MAINNET).address,
+      address: getContract(CN.Rentals, ChainId.ETHEREUM_MAINNET as any).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,

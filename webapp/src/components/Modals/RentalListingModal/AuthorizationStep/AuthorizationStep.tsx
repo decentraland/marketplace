@@ -36,14 +36,14 @@ const AuthorizationStep = (props: Props) => {
   const isLoading = isConfirmingAuthorization || isAuthorizing
 
   // Authorization
-  const rentalContractData = getContract(ContractName.Rentals, nft.chainId)
+  const rentalContractData = getContract(ContractName.Rentals, nft.chainId as any)
   const authorization: Authorization = useMemo(
     () => ({
       address: address!,
       authorizedAddress: rentalContractData.address,
       contractAddress: nft.contractAddress,
       contractName: ContractName.ERC721,
-      chainId: nft.chainId,
+      chainId: nft.chainId as any,
       type: AuthorizationType.APPROVAL
     }),
     [address, rentalContractData, nft]

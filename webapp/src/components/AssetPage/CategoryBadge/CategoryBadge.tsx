@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo } from 'react'
 import { EmoteCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getSearchSection } from '../../../modules/routing/search'
@@ -23,13 +23,13 @@ const CategoryBadge = ({ category, assetType }: Props) => {
   }, [assetType, section])
 
   // TODO: we have to handle these types of errors and report them somewhere
-  useEffect(() => {
-    if (!section) {
-      throw new Error(
-        `Invalid ${isEmote ? 'emote' : 'wearable'} category ${category}`
-      )
-    }
-  }, [section, category, isEmote])
+  // useEffect(() => {
+  //   if (!section) {
+  //     throw new Error(
+  //       `Invalid ${isEmote ? 'emote' : 'wearable'} category ${category}`
+  //     )
+  //   }
+  // }, [section, category, isEmote])
 
   return (
     <IconBadge

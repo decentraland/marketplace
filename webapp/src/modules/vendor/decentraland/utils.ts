@@ -18,11 +18,11 @@ export function getERC721ContractData(data: {
       */
     data.network !== Network.ETHEREUM
       ? {
-          ...getContract(ContractName.ERC721CollectionV2, data.chainId),
+          ...getContract(ContractName.ERC721CollectionV2, data.chainId as any),
           address: data.contractAddress
         }
       : {
-          ...getContract(ContractName.ERC721, data.chainId),
+          ...getContract(ContractName.ERC721, data.chainId as any),
           address: data.contractAddress
         }
   return contract

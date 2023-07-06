@@ -105,7 +105,7 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
 
     const rentalsContract: ContractData = getContract(
       ContractName.Rentals,
-      nft.chainId
+      nft.chainId as any
     )
 
     const rentalListingCreation: RentalListingCreation = {
@@ -160,7 +160,7 @@ function* handleClaimLandRequest(action: ClaimAssetRequestAction) {
     const rentalsContract: ContractData = yield call(
       getContract,
       ContractName.Rentals,
-      nft.chainId
+      nft.chainId as any
     )
 
     const txHash: string = yield call(
@@ -223,7 +223,7 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
     const rentalsContract: ContractData = yield call(
       getContract,
       ContractName.Rentals,
-      nft.chainId
+      nft.chainId as any
     )
 
     const txHash: string = yield call(
@@ -269,7 +269,7 @@ function* handleAcceptRentalListingRequest(
     const rentalsContract: ContractData = yield call(
       getContract,
       ContractName.Rentals,
-      nft.chainId
+      nft.chainId as any
     )
 
     // the contract expects these as arrays of values

@@ -7,8 +7,8 @@ import { isErrorWithMessage } from '../../lib/error'
 
 export async function isInsufficientMANA(bid: Bid) {
   try {
-    const provider = await getNetworkProvider(bid.chainId)
-    const contract = getContract(ContractName.MANAToken, bid.chainId)
+    const provider = await getNetworkProvider(bid.chainId as any)
+    const contract = getContract(ContractName.MANAToken, bid.chainId as any)
     const mana = new ethers.Contract(
       contract.address,
       contract.abi,

@@ -228,7 +228,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         throw new Error('A defined wallet is required to buy an item')
       }
 
-      const contract = getContract(ContractName.CollectionStore, item.chainId)
+      const contract = getContract(ContractName.CollectionStore, item.chainId as any)
 
       const txHash: string = yield call(
         sendTransaction,

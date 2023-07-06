@@ -44,7 +44,7 @@ export const getContractAuthorization = (
     authorizedAddress,
     contractAddress: contract.address,
     contractName: contract.name as ContractName,
-    chainId: contract.chainId,
+    chainId: contract.chainId as any,
     type: authorizationType
   }
   return authorization

@@ -85,7 +85,7 @@ const BidModal = (props: Props) => {
     onAuthorizedAction({
       targetContractName: ContractName.MANAToken,
       authorizedAddress: bids.address,
-      targetContract: mana as Contract,
+      targetContract: mana as Contract as any,
       authorizationType: AuthorizationType.ALLOWANCE,
       authorizedContractLabel: bids.label || bids.name,
       requiredAllowanceInWei: ethers.utils.parseEther(price).toString(),
@@ -177,7 +177,7 @@ const BidModal = (props: Props) => {
               primary
               loading={isPlacingBid}
               disabled={isDisabled}
-              chainId={nft.chainId}
+              chainId={nft.chainId as any}
             >
               {t('bid_page.submit')}
             </ChainButton>

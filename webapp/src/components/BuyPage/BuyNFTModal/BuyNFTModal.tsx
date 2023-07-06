@@ -101,7 +101,7 @@ const BuyNFTModal = (props: Props) => {
         targetContractName: ContractName.MANAToken,
         authorizationType: AuthorizationType.ALLOWANCE,
         authorizedAddress: order.marketplaceAddress,
-        targetContract: mana as Contract,
+        targetContract: mana as Contract as any,
         authorizedContractLabel: marketplace.label || marketplace.name,
         requiredAllowanceInWei: order.price,
         onAuthorized: handleExecuteOrder
@@ -220,7 +220,7 @@ const BuyNFTModal = (props: Props) => {
             disabled={isDisabled || isLoading || isLoadingAuthorization}
             onClick={handleSubmit}
             loading={isLoading || isLoadingAuthorization}
-            chainId={nft.chainId}
+            chainId={nft.chainId as any}
           >
             {isWearableOrEmote(nft) ? (
               isBuyWithCardPage ? (

@@ -67,7 +67,7 @@ export const claimAssetTransactionSubmitted = (
 ) =>
   action(
     CLAIM_ASSET_TRANSACTION_SUBMITTED,
-    buildTransactionPayload(nft.chainId, txHash, {
+    buildTransactionPayload(nft.chainId as any, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       rentalContractAddress,
@@ -105,7 +105,7 @@ export const removeRentalFailure = (error: string) =>
 export const removeRentalTransactionSubmitted = (nft: NFT, txHash: string) =>
   action(
     REMOVE_RENTAL_TRANSACTION_SUBMITTED,
-    buildTransactionPayload(nft.chainId, txHash, {
+    buildTransactionPayload(nft.chainId as any, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress
     })
@@ -156,7 +156,7 @@ export const acceptRentalListingTransactionSubmitted = (
 ) =>
   action(
     ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
-    buildTransactionPayload(nft.chainId, txHash, {
+    buildTransactionPayload(nft.chainId as any, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       pricePerDay: rental.periods[periodIndexChosen].pricePerDay,

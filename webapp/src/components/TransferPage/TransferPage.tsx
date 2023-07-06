@@ -116,7 +116,7 @@ const TransferPage = (props: Props) => {
                           primary
                           loading={isTransferring}
                           disabled={isDisabled}
-                          chainId={nft.chainId}
+                          chainId={nft.chainId as any}
                         >
                           {t('transfer_page.submit')}
                         </ChainButton>

@@ -30,7 +30,7 @@ export const placeBidSuccess = (
     expiresAt,
     bidder,
     fingerprint,
-    ...buildTransactionPayload(chainId, txHash, {
+    ...buildTransactionPayload(chainId as any, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       price
@@ -84,7 +84,7 @@ export const acceptBidFailure = (bid: Bid, error: string) =>
 export const acceptBidtransactionSubmitted = (bid: Bid, txHash: string) =>
   action(ACCEPT_BID_TRANSACTION_SUBMITTED, {
     bid,
-    ...buildTransactionPayload(bid.chainId, txHash, {
+    ...buildTransactionPayload(bid.chainId as any, txHash, {
       tokenId: bid.tokenId,
       contractAddress: bid.contractAddress,
       price: formatWeiMANA(bid.price)
@@ -108,7 +108,7 @@ export const cancelBidRequest = (bid: Bid) =>
 export const cancelBidSuccess = (bid: Bid, txHash: string) =>
   action(CANCEL_BID_SUCCESS, {
     bid,
-    ...buildTransactionPayload(bid.chainId, txHash, {
+    ...buildTransactionPayload(bid.chainId as any, txHash, {
       tokenId: bid.tokenId,
       contractAddress: bid.contractAddress,
       price: formatWeiMANA(bid.price)

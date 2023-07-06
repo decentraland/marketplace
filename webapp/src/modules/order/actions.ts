@@ -32,7 +32,7 @@ export const createOrderSuccess = (
     nft,
     price,
     expiresAt,
-    ...buildTransactionPayload(nft.chainId, txHash, {
+    ...buildTransactionPayload(nft.chainId as any, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       network: nft.network,
@@ -74,7 +74,7 @@ export const executeOrderTransactionSubmitted = (
   action(EXECUTE_ORDER_TRANSACTION_SUBMITTED, {
     order,
     nft,
-    ...buildTransactionWithReceiptPayload(nft.chainId, txHash, {
+    ...buildTransactionWithReceiptPayload(nft.chainId as any, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       network: nft.network,
@@ -117,7 +117,7 @@ export const executeOrderWithCardSuccess = (
   action(EXECUTE_ORDER_WITH_CARD_SUCCESS, {
     purchase,
     nft,
-    ...buildTransactionWithFromPayload(nft.chainId, txHash, purchase.address, {
+    ...buildTransactionWithFromPayload(nft.chainId as any, txHash, purchase.address, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       network: nft.network,
@@ -150,7 +150,7 @@ export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
   action(CANCEL_ORDER_SUCCESS, {
     order,
     nft,
-    ...buildTransactionPayload(nft.chainId, txHash, {
+    ...buildTransactionPayload(nft.chainId as any, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       network: nft.network,

@@ -25,7 +25,7 @@ const mapState = (state: RootState, { nft }: OwnProps): MapStateProps => ({
   address: getAddress(state)!,
   isAuthorizing: hasTransactionPending(
     getPendingAuthorizationTransactions(state),
-    getContract(ContractName.Rentals, nft.chainId).address,
+    getContract(ContractName.Rentals, nft.chainId as any).address,
     nft.contractAddress
   ),
   isConfirmingAuthorization: isLoadingType(

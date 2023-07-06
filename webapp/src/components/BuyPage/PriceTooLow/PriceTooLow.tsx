@@ -37,7 +37,7 @@ const PriceTooLow = (props: Props) => {
             <Button
               basic
               size="small"
-              onClick={() => onSwitchNetwork(chainId)}
+              onClick={() => onSwitchNetwork(chainId as any)}
               className={styles.switchNetwork}
             >
               {t('price_too_low.switch_network', { network: humanNetwork })}

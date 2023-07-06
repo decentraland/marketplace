@@ -87,7 +87,7 @@ const ConfirmRentModal = ({
       onAuthorizedAction({
         targetContractName: ContractName.MANAToken,
         authorizedAddress: rentals.address,
-        targetContract: mana as Contract,
+        targetContract: mana as Contract as any,
         authorizationType: AuthorizationType.ALLOWANCE,
         requiredAllowanceInWei: pricePerRent,
         authorizedContractLabel: rentals.label || rentals.name,

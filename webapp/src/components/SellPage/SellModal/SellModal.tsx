@@ -70,7 +70,7 @@ const SellModal = (props: Props) => {
     if (nftContract.address && isStubMaticCollectionContract(nftContract)) {
       const fetchContractName = async () => {
         try {
-          const provider = await getNetworkProvider(nftContract.chainId)
+          const provider = await getNetworkProvider(nftContract.chainId as any)
 
           const erc721 = new ethers.Contract(
             nftContract.address,
@@ -117,7 +117,7 @@ const SellModal = (props: Props) => {
       authorizationType: AuthorizationType.APPROVAL,
       authorizedAddress: marketplace.address,
       authorizedContractLabel: marketplace?.label || marketplace.name,
-      targetContract: nftContract as Contract,
+      targetContract: nftContract as Contract as any,
       targetContractName:
         (nft.category === NFTCategory.WEARABLE ||
           nft.category === NFTCategory.EMOTE) &&
@@ -189,7 +189,7 @@ const SellModal = (props: Props) => {
             primary
             disabled={isDisabled || isLoading}
             loading={isLoading}
-            chainId={nft.chainId}
+            chainId={nft.chainId as any}
           >
             {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
           </ChainButton>
