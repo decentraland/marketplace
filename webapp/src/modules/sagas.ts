@@ -8,8 +8,10 @@ import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sag
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
 import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
 import { locationSaga } from 'decentraland-dapps/dist/modules/location/sagas'
-import { CatalystClient } from 'dcl-catalyst-client'
+import { createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
+import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { NetworkGatewayType } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
+import { createFetchComponent } from '@well-known-components/fetch-component'
 
 import { config } from '../config'
 import { peerUrl } from '../lib/environment'
@@ -40,9 +42,12 @@ import { favoritesSaga } from './favorites/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
-const catalystClient = new CatalystClient({
-  catalystUrl: peerUrl
+const lambdasClient = createLambdasClient({
+  url: peerUrl,
+  fetcher: createFetchComponent()
 })
+const contentClient = createContentClient({ url: peerUrl, fetcher: createFetchComponent() })
+
 const gatewaySaga = createGatewaySaga({
   [NetworkGatewayType.MOON_PAY]: {
     apiBaseUrl: config.get('MOON_PAY_API_URL'),
@@ -82,9 +87,9 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     walletSaga(),
     collectionSaga(),
     saleSaga(),
-    accountSaga(catalystClient),
+    accountSaga(lambdasClient),
     collectionSaga(),
-    storeSaga(catalystClient),
+    storeSaga(contentClient),
     identitySaga(),
     marketplaceAnalyticsSagas(),
     featuresSaga({
