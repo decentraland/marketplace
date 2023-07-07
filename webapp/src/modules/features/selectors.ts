@@ -151,3 +151,14 @@ export const getIsRentalPriceFilterChartEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsHandsCategoryEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.HANDS_CATEGORY
+    )
+  }
+  return false
+}
