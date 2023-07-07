@@ -9,7 +9,7 @@ class ProfilesCache {
 
   constructor() {
     this.cache = {}
-    this.client = createLambdasClient({ url: peerUrl, fetcher: createFetchComponent() })
+    this.client = createLambdasClient({ url: `${peerUrl}/lambdas`, fetcher: createFetchComponent() })
   }
 
   public async fetchProfile(address: string[]) {

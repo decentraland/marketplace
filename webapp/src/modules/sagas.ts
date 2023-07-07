@@ -43,10 +43,10 @@ import { favoritesSaga } from './favorites/sagas'
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
 const lambdasClient = createLambdasClient({
-  url: peerUrl,
+  url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()
 })
-const contentClient = createContentClient({ url: peerUrl, fetcher: createFetchComponent() })
+const contentClient = createContentClient({ url: `${peerUrl}/content`, fetcher: createFetchComponent() })
 
 const gatewaySaga = createGatewaySaga({
   [NetworkGatewayType.MOON_PAY]: {
