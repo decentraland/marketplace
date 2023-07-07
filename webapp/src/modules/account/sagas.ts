@@ -6,7 +6,7 @@ import {
   Profile
 } from '@dcl/schemas'
 import { call, takeEvery, put, all } from '@redux-saga/core/effects'
-import { LambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
+import { CatalystClient } from 'dcl-catalyst-client'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { cancelled, select, takeLatest } from 'redux-saga/effects'
 import { isErrorWithMessage } from '../../lib/error'
@@ -35,7 +35,7 @@ export const DEFAULT_FIRST_VALUE = 20
 export const DEFAULT_SKIP_VALUE = 0
 export const MAX_ENS_SEARCH_REQUESTS = 5
 
-export function* accountSaga(catalystLambdasClient: LambdasClient) {
+export function* accountSaga(catalystClient: CatalystClient) {
   yield takeEvery(
     FETCH_ACCOUNT_METRICS_REQUEST,
     handleFetchAccountMetricsRequest
@@ -97,7 +97,7 @@ export function* accountSaga(catalystLambdasClient: LambdasClient) {
         Profile[],
         AccountResponse
       ] = yield all([
-        call([catalystLambdasClient, 'getAvatarsDetailsByPost'], {ids: Array.from(addresses)}),
+        call([catalystClient, 'fetchProfiles'], Array.from(addresses)),
         search
           ? call([accountAPI, 'fetch'], {
               address: Array.from(addresses),
