@@ -306,6 +306,8 @@ export function getSearchWearableCategory(section: string) {
       return WearableCategory.TOP_HEAD
     case Section.WEARABLES_SKIN:
       return WearableCategory.SKIN
+    case Section.WEARABLES_HANDS:
+      return WearableCategory.HANDS_WEAR
   }
 }
 
