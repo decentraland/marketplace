@@ -77,7 +77,8 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
             Section.WEARABLES_MASK,
             Section.WEARABLES_TIARA,
             Section.WEARABLES_TOP_HEAD,
-            Section.WEARABLES_SKIN
+            Section.WEARABLES_SKIN,
+            Section.WEARABLES_HANDS
           ].includes(section!) ? (
             <>
               <DropdownMenu
@@ -124,6 +125,13 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
 
               <MenuItem
                 value={Section.WEARABLES_SKIN}
+                currentValue={section}
+                onClick={handleOnSectionClick}
+                nestedLevel={1}
+              />
+
+              <MenuItem
+                value={Section.WEARABLES_HANDS}
                 currentValue={section}
                 onClick={handleOnSectionClick}
                 nestedLevel={1}
