@@ -4,6 +4,7 @@ enum Network {
   MAINNET = 'mainnet',
   ROPSTEN = 'ropsten',
   GOERLI = 'goerli',
+  SEPOLIA = 'sepolia',
   TEMP = 'temp'
 }
 
@@ -11,6 +12,7 @@ const graphByNetwork: Record<Network, string> = {
   [Network.MAINNET]: process.env.GRAPH_NAME || 'decentraland/marketplace',
   [Network.ROPSTEN]: process.env.GRAPH_NAME || 'decentraland/marketplace-ropsten',
   [Network.GOERLI]:  process.env.GRAPH_NAME || 'decentraland/marketplace-goerli',
+  [Network.SEPOLIA]: process.env.GRAPH_NAME || 'decentraland/marketplace-sepolia',
   [Network.TEMP]:  process.env.GRAPH_NAME || 'decentraland/marketplace-temp'
 }
 

@@ -12,6 +12,7 @@
     "deploy:ropsten": "ts-node ./scripts/buildData.ts --network ropsten && ts-node ./scripts/deploy.ts --network ropsten",
     "deploy:mainnet": "ts-node ./scripts/buildData.ts --network mainnet && ts-node ./scripts/deploy.ts --network mainnet",
     "deploy:goerli": "ts-node ./scripts/buildData.ts --network goerli && ts-node ./scripts/deploy.ts --network goerli",
+    "deploy:sepolia": "ts-node ./scripts/buildData.ts --network sepolia && ts-node ./scripts/deploy.ts --network sepolia",
     "deploy:temp": "ts-node ./scripts/buildData.ts --network mainnet && ts-node ./scripts/deploy.ts --network temp",
     "calculate-proximities": "ts-node ./scripts/calculateProximities.ts"
   },
