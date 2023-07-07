@@ -683,5 +683,9 @@ export const contracts = {
   [AppNetwork.MAINNET]: [
     ...localContracts[AppNetwork.MAINNET],
     ...nftServerReplicatedMarketplaceContracts[AppNetwork.MAINNET]
+  ],
+  [AppNetwork.SEPOLIA]: [
+    ...localContracts[AppNetwork.SEPOLIA],
+    ...nftServerReplicatedMarketplaceContracts[AppNetwork.SEPOLIA]
   ]
 }
