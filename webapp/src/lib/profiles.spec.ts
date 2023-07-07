@@ -41,7 +41,7 @@ describe('when getting profiles from the cache', () => {
       expect(
         await ProfilesCache.fetchProfile([anAddress, anotherAddress])
       ).toBe(profiles)
-      expect(mockFetchProfile).toHaveBeenCalledWith([anAddress, anotherAddress])
+      expect(mockFetchProfile).toHaveBeenCalledWith({ids: [anAddress, anotherAddress]})
     })
   })
 
