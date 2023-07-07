@@ -1,6 +1,7 @@
 import { Entity } from '@dcl/schemas'
 import { AuthIdentity } from '@dcl/crypto'
-import { CatalystClient } from 'dcl-catalyst-client'
+import { createContentClient, ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
+import { createFetchComponent } from '@well-known-components/fetch-component'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
@@ -26,12 +27,12 @@ jest.mock('../../lib/environment', () => ({
 }))
 
 let mockAddress: string
-let mockClient: CatalystClient
+let mockClient: ContentClient
 let mockStore: Store
 
 beforeEach(() => {
   mockAddress = 'address'
-  mockClient = new CatalystClient({ catalystUrl: 'some-url' })
+  mockClient = createContentClient({ url: 'some-url', fetcher: createFetchComponent() })
   mockStore = getEmptyStore({ owner: mockAddress })
 })
 
