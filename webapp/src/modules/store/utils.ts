@@ -1,8 +1,10 @@
 import { Entity } from '@dcl/schemas'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
-import { ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
-import { DeploymentPreparationData, buildEntity } from 'dcl-catalyst-client/dist/client/utils/DeploymentBuilder'
-import { BuildEntityWithoutFilesOptions } from 'dcl-catalyst-client/dist/client/types'
+import {
+  BuildEntityWithoutFilesOptions,
+  CatalystClient,
+  DeploymentPreparationData
+} from 'dcl-catalyst-client'
 import { EntityContentItemReference } from 'dcl-catalyst-commons'
 import { LinkType, Store, StoreEntityMetadata } from './types'
 import { peerUrl } from '../../lib/environment'
@@ -119,7 +121,7 @@ export const getEntityMetadataFilesFromStore = async (store: Store) => {
 // Requests
 
 export const fetchStoreEntity = async (
-  client: ContentClient,
+  client: CatalystClient,
   address: string
 ): Promise<Entity | null> => {
   const urn = getStoreUrn(address)
@@ -128,7 +130,7 @@ export const fetchStoreEntity = async (
 }
 
 export const deployStoreEntity = async (
-  client: ContentClient,
+  client: CatalystClient,
   identity: AuthIdentity,
   store: Store
 ) => {
@@ -143,14 +145,14 @@ export const deployStoreEntity = async (
     timestamp: Date.now()
   }
 
-  const entity: DeploymentPreparationData = await buildEntity({
+  const entity: DeploymentPreparationData = await client.buildEntity({
     ...options,
     files
   })
 
   const authChain = Authenticator.signPayload(identity, entity.entityId)
 
-  return client.deploy({ ...entity, authChain })
+  return client.deployEntity({ ...entity, authChain })
 }
 
 // Validations

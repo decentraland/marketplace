@@ -1,4 +1,5 @@
 import { Avatar, Profile } from '@dcl/schemas'
+import { CatalystClient } from 'dcl-catalyst-client'
 import ProfilesCache from './profiles'
 
 describe('when getting profiles from the cache', () => {
@@ -30,9 +31,8 @@ describe('when getting profiles from the cache', () => {
         ]
       }
     ]
-    //@ts-ignore
     mockFetchProfile = jest
-      .spyOn(ProfilesCache.client, 'getAvatarsDetailsByPost')
+      .spyOn(CatalystClient.prototype, 'fetchProfiles')
       .mockResolvedValueOnce(profiles)
   })
 
@@ -41,7 +41,7 @@ describe('when getting profiles from the cache', () => {
       expect(
         await ProfilesCache.fetchProfile([anAddress, anotherAddress])
       ).toBe(profiles)
-      expect(mockFetchProfile).toHaveBeenCalledWith({ids: [anAddress, anotherAddress]})
+      expect(mockFetchProfile).toHaveBeenCalledWith([anAddress, anotherAddress])
     })
   })
 

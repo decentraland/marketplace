@@ -1,15 +1,13 @@
 import { Profile } from '@dcl/schemas'
-import { LambdasClient, createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
+import { CatalystClient } from 'dcl-catalyst-client'
 import { peerUrl } from './environment'
-import { createFetchComponent } from '@well-known-components/fetch-component'
 
 class ProfilesCache {
   cache: Record<string, Promise<Profile[]>>
-  client: LambdasClient
-
+  client: CatalystClient
   constructor() {
     this.cache = {}
-    this.client = createLambdasClient({ url: peerUrl, fetcher: createFetchComponent() })
+    this.client = new CatalystClient({ catalystUrl: peerUrl })
   }
 
   public async fetchProfile(address: string[]) {
@@ -17,11 +15,7 @@ class ProfilesCache {
     if (addressesString in this.cache) {
       return this.cache[addressesString]
     }
-
-    this.cache[addressesString] = 
-      this.client.getAvatarsDetailsByPost({ ids: address })
-      .then((profiles) => profiles as any) // "as any" so that no need to map types (prior versions returned any)
-    
+    this.cache[addressesString] = this.client.fetchProfiles(address)
     return this.cache[addressesString]
   }
 }

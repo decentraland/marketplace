@@ -4,7 +4,7 @@ import { Entity } from '@dcl/schemas'
 import { AuthIdentity } from '@dcl/crypto'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
+import { CatalystClient } from 'dcl-catalyst-client'
 import { isErrorWithMessage } from '../../lib/error'
 import { getIdentity } from '../identity/utils'
 import {
@@ -25,7 +25,7 @@ import {
 } from './utils'
 import { getIsLocalStoreDirty } from './selectors'
 
-export function* storeSaga(client: ContentClient) {
+export function* storeSaga(client: CatalystClient) {
   yield takeEvery(FETCH_STORE_REQUEST, handleFetchStoreRequest)
   yield takeEvery(UPDATE_STORE_REQUEST, handleUpdateStoreRequest)
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
