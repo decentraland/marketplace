@@ -7,7 +7,7 @@ export function getCatalystBase(): string {
     return 'https://peer.decentraland.org'
   }
 
-  if (network == 'ropsten' || network == 'goerli' || network == 'mumbai') {
+  if (network == 'ropsten' || network == 'goerli' || network == "sepolia" || network == 'mumbai') {
     return 'https://peer.decentraland.zone'
   }
 
