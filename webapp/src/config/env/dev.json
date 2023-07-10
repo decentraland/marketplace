@@ -1,6 +1,6 @@
 {
-  "NETWORK": "sepolia",
-  "CHAIN_ID": "11155111",
+  "NETWORK": "goerli",
+  "CHAIN_ID": "5",
   "NFT_SERVER_URL": "https://nft-api.decentraland.zone/v1",
   "BUILDER_SERVER_URL": "https://builder-api.decentraland.zone/v1",
   "ATLAS_SERVER_URL": "https://api.decentraland.zone",
