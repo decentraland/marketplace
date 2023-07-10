@@ -8,6 +8,7 @@
 .modalDescription {
   text-align: center;
 }
+
 .ListsLaunchModal:global(.ui.modal .actions > .button:first-child) {
   width: 80%;
   align-self: center;
