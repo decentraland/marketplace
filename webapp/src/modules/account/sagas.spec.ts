@@ -7,7 +7,8 @@ import {
   NFTCategory,
   Profile
 } from '@dcl/schemas'
-import { CatalystClient } from 'dcl-catalyst-client'
+import { createFetchComponent } from '@well-known-components/fetch-component'
+import { createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { NFTsFetchParams } from '../nft/types'
@@ -30,6 +31,7 @@ import {
 import { getCreators, getCreatorsSearchQuery } from './selectors'
 import { CreatorAccount } from './types'
 import { fromProfilesToCreators } from './utils'
+
 
 let account: Account
 let filters: AccountFilters
@@ -64,7 +66,7 @@ beforeEach(() => {
   }
 })
 
-const catalystClient = new CatalystClient({ catalystUrl: 'aMockedURL' })
+const lambdasClient = createLambdasClient({ url: 'aMockedURL', fetcher: createFetchComponent()  })
 
 describe('when handling the request to fetch account metrics', () => {
   describe('when a call to the accountApi fails', () => {
@@ -72,7 +74,7 @@ describe('when handling the request to fetch account metrics', () => {
 
     describe('when the call with ETHEREUM as network fails', () => {
       it('should signal that the request has failed with the request error', () => {
-        return expectSaga(accountSaga, catalystClient)
+        return expectSaga(accountSaga, lambdasClient)
           .provide([
             [
               call([accountAPI, accountAPI.fetch], ethereumFilters),
@@ -94,7 +96,7 @@ describe('when handling the request to fetch account metrics', () => {
 
     describe('when the call with MATIC as network fails', () => {
       it('should signal that the request has failed with the request error', () => {
-        return expectSaga(accountSaga, catalystClient)
+        return expectSaga(accountSaga, lambdasClient)
           .provide([
             [
               call([accountAPI, accountAPI.fetch], ethereumFilters),
@@ -120,7 +122,7 @@ describe('when handling the request to fetch account metrics', () => {
       const account1: Account = { ...account, earned: '200' }
       const account2: Account = { ...account, earned: '100' }
 
-      return expectSaga(accountSaga, catalystClient)
+      return expectSaga(accountSaga, lambdasClient)
         .provide([
           [
             call([accountAPI, accountAPI.fetch], {
@@ -175,7 +177,7 @@ describe('when handling the request to fetch creators accounts', () => {
         }
       })
       it('should signal that the request has failed with the request error', () => {
-        return expectSaga(accountSaga, catalystClient)
+        return expectSaga(accountSaga, lambdasClient)
           .provide([
             [select(getCreatorsSearchQuery), null],
             [
@@ -202,7 +204,7 @@ describe('when handling the request to fetch creators accounts', () => {
         }
       })
       it('should signal that the request has failed with the request error', () => {
-        return expectSaga(accountSaga, catalystClient)
+        return expectSaga(accountSaga, lambdasClient)
           .provide([
             [select(getCreatorsSearchQuery), null],
             [
@@ -232,12 +234,12 @@ describe('when handling the request to fetch creators accounts', () => {
         addresses = accounts.map(account => account.address)
       })
       it('should signal that the request has failed with the request error', () => {
-        return expectSaga(accountSaga, catalystClient)
+        return expectSaga(accountSaga, lambdasClient)
           .provide([
             [select(getCreatorsSearchQuery), null],
             [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
             [
-              call([catalystClient, 'fetchProfiles'], addresses),
+              call([lambdasClient, 'getAvatarsDetailsByPost'], { ids: addresses }),
               Promise.reject(new Error(error))
             ]
           ])
@@ -268,11 +270,11 @@ describe('when handling the request to fetch creators accounts', () => {
         ]
       })
       it('should fetch the accounts with more collections using the accountAPI and their profiles using the catalyst lambdas', () => {
-        return expectSaga(accountSaga, catalystClient)
+        return expectSaga(accountSaga, lambdasClient)
           .provide([
             [select(getCreatorsSearchQuery), null],
             [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
-            [call([catalystClient, 'fetchProfiles'], addresses), profiles]
+            [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
           ])
           .put(
             fetchCreatorsAccountSuccess(
@@ -320,11 +322,11 @@ describe('when handling the request to fetch creators accounts', () => {
       })
       describe('and the term is the same as the last search', () => {
         it('should return the accounts fetched on the lastest action', () => {
-          return expectSaga(accountSaga, catalystClient)
+          return expectSaga(accountSaga, lambdasClient)
             .provide([
               [select(getCreatorsSearchQuery), search],
               [select(getCreators), creatorAccounts],
-              [call([catalystClient, 'fetchProfiles'], addresses), profiles]
+              [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
             ])
             .put(fetchCreatorsAccountSuccess(search, creatorAccounts))
             .dispatch(fetchCreatorsAccountRequest(search))
@@ -338,7 +340,7 @@ describe('when handling the request to fetch creators accounts', () => {
             total = MAX_ENS_SEARCH_REQUESTS * DEFAULT_FIRST_VALUE + 1
           })
           it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
-            return expectSaga(accountSaga, catalystClient)
+            return expectSaga(accountSaga, lambdasClient)
               .provide([
                 [select(getCreatorsSearchQuery), null],
                 ...[...Array(MAX_ENS_SEARCH_REQUESTS).keys()].map(
@@ -355,7 +357,7 @@ describe('when handling the request to fetch creators accounts', () => {
                   call([accountAPI, accountAPI.fetch], filters),
                   { data: accounts }
                 ],
-                [call([catalystClient, 'fetchProfiles'], addresses), profiles]
+                [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
               ])
               .put(
                 fetchCreatorsAccountSuccess(
@@ -373,7 +375,7 @@ describe('when handling the request to fetch creators accounts', () => {
             total = nftResults.length * REQUESTS_UNTIL_FILLED
           })
           it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
-            return expectSaga(accountSaga, catalystClient)
+            return expectSaga(accountSaga, lambdasClient)
               .provide([
                 [select(getCreatorsSearchQuery), null],
                 ...[...Array(REQUESTS_UNTIL_FILLED).keys()].map(
@@ -394,7 +396,7 @@ describe('when handling the request to fetch creators accounts', () => {
                   call([accountAPI, accountAPI.fetch], filters),
                   { data: accounts }
                 ],
-                [call([catalystClient, 'fetchProfiles'], addresses), profiles]
+                [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
               ])
               .put(
                 fetchCreatorsAccountSuccess(

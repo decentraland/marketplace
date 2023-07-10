@@ -8,7 +8,6 @@ import {
   Order,
   Rarity
 } from '@dcl/schemas'
-import { waitFor } from '@testing-library/react'
 import React, { RefObject } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 

@@ -7,8 +7,9 @@ enum Network {
   MAINNET = 'mainnet',
   ROPSTEN = 'ropsten',
   GOERLI = 'goerli',
-  SEPOLIA = 'sepolia',
+  SEPOLIA = 'sepolia'
 }
+
 enum ContractName {
   MANAToken = 'MANAToken',
   ERC721Bid = 'ERC721Bid',
@@ -18,6 +19,7 @@ enum ContractName {
   DCLRegistrar = 'DCLRegistrar',
   DCLControllerV2 = 'DCLControllerV2'
 }
+
 type ContractsResponse = Record<Network, Record<ContractName, string>>
 
 const startBlockByNetwork: Record<Network, Record<ContractName, number>> = {
