@@ -6,7 +6,7 @@ import * as path from 'path'
 enum Network {
   MAINNET = 'mainnet',
   ROPSTEN = 'ropsten',
-  GOERLI = 'goerli'
+  GOERLI = 'goerli',
 }
 enum ContractName {
   MANAToken = 'MANAToken',
@@ -46,7 +46,7 @@ const startBlockByNetwork: Record<Network, Record<ContractName, number>> = {
     MarketplaceProxy: 7097561,
     DCLRegistrar: 7098224,
     DCLControllerV2: 8767204
-  }
+  },
 }
 
 const contractNameToProxy: Record<string, ContractName> = {
