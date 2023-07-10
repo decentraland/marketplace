@@ -4,7 +4,7 @@ import {
   Modal,
   Button,
   ModalNavigation,
-  useMobileMediaQuery
+  useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import * as decentraland from '../../../modules/vendor/decentraland'
@@ -33,16 +33,16 @@ export const ListsLaunchModal = ({
     }
   }, [isLoadingFeatureFlags])
 
-  const isMobile = useMobileMediaQuery()
+  const isTabletOrBelow = useTabletAndBelowMediaQuery()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   useEffect(() => {
     setIsOpen(
       !localStorage.getItem(LISTS_PROMO_POPUP_KEY) &&
         hasLoadedInitialFlags &&
         isListsLaunchPopupEnabled &&
-        !isMobile
+        !isTabletOrBelow
     )
-  }, [hasLoadedInitialFlags, isListsLaunchPopupEnabled, isMobile])
+  }, [hasLoadedInitialFlags, isListsLaunchPopupEnabled, isTabletOrBelow])
 
   return (
     <Modal
