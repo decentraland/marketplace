@@ -124,6 +124,7 @@
     "wearables_tiara": "头饰",
     "wearables_top_head": "头顶",
     "wearables_skin": "皮肤",
+    "wearables_hands": "手",
     "emotes": "表情",
     "emotes_dance": "舞蹈",
     "emotes_poses": "姿势",
@@ -689,7 +690,8 @@
       "tiara": "头饰",
       "top_head": "头顶",
       "upper_body": "上半身",
-      "skin": "皮肤"
+      "skin": "皮肤",
+      "hands_wear": "手"
     },
     "smart": "智能穿戴",
     "smart_badge": "聪明的"

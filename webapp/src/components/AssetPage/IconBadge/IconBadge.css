@@ -106,10 +106,15 @@
   background-image: url(../../../images/wearables/SkinIcon.svg);
 }
 
+.IconBadge .hands_wear {
+  background-image: url(../../../images/wearables/hands.svg);
+}
+
 .IconBadge .play-once {
   background-image: url(../../../images/emotes/play-once.svg);
   width: 19px;
 }
+
 
 .IconBadge .play-loop {
   background-image: url(../../../images/emotes/play-loop.svg);

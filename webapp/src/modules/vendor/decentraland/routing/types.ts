@@ -17,6 +17,7 @@ export enum Section {
   WEARABLES_UPPER_BODY = 'wearables_upper_body',
   WEARABLES_LOWER_BODY = 'wearables_lower_body',
   WEARABLES_FEET = 'wearables_feet',
+  WEARABLES_HANDS = 'wearables_hands',
 
   WEARABLES_ACCESSORIES = 'wearables_accessories',
   WEARABLES_EARRING = 'wearables_earring',

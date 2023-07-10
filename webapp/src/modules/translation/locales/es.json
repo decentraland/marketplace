@@ -124,6 +124,7 @@
     "wearables_tiara": "Tiara",
     "wearables_top_head": "Tope de la cabeza",
     "wearables_skin": "Skin",
+    "wearables_hands": "Manos",
     "emotes": "Emotes",
     "emotes_dance": "Baile",
     "emotes_poses": "Poses",
@@ -686,7 +687,8 @@
       "tiara": "Tiara",
       "top_head": "Cabeza",
       "upper_body": "Torso",
-      "skin": "Skin"
+      "skin": "Skin",
+      "hands_wear": "Manos"
     },
     "smart": "Vestimenta Interactiva",
     "smart_badge": "Interactivo"

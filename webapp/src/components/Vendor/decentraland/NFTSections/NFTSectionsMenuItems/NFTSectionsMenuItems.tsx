@@ -10,7 +10,12 @@ const shouldRenderSection = (section: Section, sections: Section[]) => {
   return sections.includes(section) || sections.includes(Section.ALL)
 }
 
-const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
+const NFTSectionsMenuItems = ({
+  section,
+  sections,
+  isHandsCategoryEnabled,
+  onSectionClick
+}: Props) => {
   const handleOnSectionClick = useCallback(
     newSection => {
       if (section !== newSection) {
@@ -77,7 +82,8 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
             Section.WEARABLES_MASK,
             Section.WEARABLES_TIARA,
             Section.WEARABLES_TOP_HEAD,
-            Section.WEARABLES_SKIN
+            Section.WEARABLES_SKIN,
+            Section.WEARABLES_HANDS
           ].includes(section!) ? (
             <>
               <DropdownMenu
@@ -128,6 +134,15 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                 onClick={handleOnSectionClick}
                 nestedLevel={1}
               />
+
+              {isHandsCategoryEnabled && (
+                <MenuItem
+                  value={Section.WEARABLES_HANDS}
+                  currentValue={section}
+                  onClick={handleOnSectionClick}
+                  nestedLevel={1}
+                />
+              )}
             </>
           ) : null}
         </>
