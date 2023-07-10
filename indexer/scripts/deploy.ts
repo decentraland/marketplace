@@ -4,6 +4,7 @@ enum Network {
   MAINNET = 'mainnet',
   ROPSTEN = 'ropsten',
   GOERLI = 'goerli',
+  SEPOLIA = 'sepolia',
   TEMP = 'temp'
 }
 
@@ -11,27 +12,43 @@ const graphByNetwork: Record<Network, string> = {
   [Network.MAINNET]: process.env.GRAPH_NAME || 'decentraland/marketplace',
   [Network.ROPSTEN]: process.env.GRAPH_NAME || 'decentraland/marketplace-ropsten',
   [Network.GOERLI]:  process.env.GRAPH_NAME || 'decentraland/marketplace-goerli',
+  [Network.SEPOLIA]:  process.env.GRAPH_NAME || 'marketplace-sepolia',
   [Network.TEMP]:  process.env.GRAPH_NAME || 'decentraland/marketplace-temp'
 }
 
 // TODO: Handle ctrl+C
 async function deploy() {
   const network = getNetwork()
-  await run(
-    `npx`,
-    [
-      'graph',
-      'deploy',
-      graphByNetwork[network],
-      '--ipfs',
-      'https://api.thegraph.com/ipfs/',
-      '--node',
-      'https://api.thegraph.com/deploy/'
-    ],
-    {
-      stdio: 'inherit'
-    }
-  )
+
+  if (network !== Network.SEPOLIA) {
+    await run(
+      `npx`,
+      [
+        'graph',
+        'deploy',
+        graphByNetwork[network],
+        '--ipfs',
+        'https://api.thegraph.com/ipfs/',
+        '--node',
+        'https://api.thegraph.com/deploy/'
+      ],
+      {
+        stdio: 'inherit'
+      }
+    )
+  } else {
+    await run(
+      'npx', 
+      [
+        'graph',
+        'deploy',
+        '--studio', 
+        graphByNetwork[network]
+      ], {
+        stdio: 'inherit'
+      }
+    )
+  }
 }
 
 // ------------------------------------------------------------------
