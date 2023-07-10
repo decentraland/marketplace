@@ -405,14 +405,124 @@ const nftServerReplicatedMarketplaceContracts = {
       name: 'Exclusive Masks',
       address: '0x1f0880E0b4514DC58e68B9BE91693bFA8C067ac1',
       vendor: 'decentraland',
+      category: NFTCategory.WEARABLE,
       network: Network.ETHEREUM,
       chainId: ChainId.ETHEREUM_GOERLI,
-      category: NFTCategory.WEARABLE
+    }
+  ],
+  [AppNetwork.SEPOLIA]: [
+    {
+      name: ContractName.LAND,
+      address: '0x42f4ba48791e2de32f5fbf553441c2672864bb33',
+      vendor: 'decentraland',
+      category: NFTCategory.PARCEL,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA
+    },
+    {
+      name: ContractName.ESTATES,
+      address: '0x369a7fbe718c870c79f99fb423882e8dd8b20486',
+      vendor: 'decentraland',
+      category: NFTCategory.ESTATE,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA
+    },
+    {
+      name: 'Names',
+      address: '0x7518456ae93eb98f3e64571b689c626616bb7f30',
+      vendor: 'decentraland',
+      category: NFTCategory.ENS,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA
+    },
+    {
+      name: 'Exclusive Masks',
+      address: '0x11a970e744ff69db8f461c2d0fc91d4293914301',
+      vendor: 'decentraland',
+      category: NFTCategory.WEARABLE,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA,
     }
   ]
 }
 
 const localContracts = {
+  [AppNetwork.SEPOLIA]: [
+    {
+      name: ContractName.MANA,
+      address: getContract(CN.MANAToken, ChainId.ETHEREUM_SEPOLIA).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA
+    },
+    {
+      name: ContractName.MARKETPLACE,
+      address: getContract(CN.Marketplace, ChainId.ETHEREUM_SEPOLIA).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA
+    },
+    {
+      name: ContractName.BIDS,
+      address: getContract(CN.Bid, ChainId.ETHEREUM_SEPOLIA).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA
+    },
+    {
+      name: ContractName.RENTALS,
+      address: getContract(CN.Rentals, ChainId.ETHEREUM_SEPOLIA).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA
+    },
+    {
+      name: ContractName.MANA,
+      address: getContract(CN.MANAToken, ChainId.MATIC_MUMBAI).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      name: ContractName.MARKETPLACE,
+      address: getContract(CN.MarketplaceV2, ChainId.MATIC_MUMBAI).address,
+      label: 'MarketplaceV2',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      name: ContractName.LEGACY_MARKETPLACE,
+      address: getContract(CN.Marketplace, ChainId.MATIC_MUMBAI).address,
+      label: 'MarketplaceV1',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      name: CN.CollectionStore,
+      address: getContract(CN.CollectionStore, ChainId.MATIC_MUMBAI).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      name: ContractName.BIDS,
+      address: getContract(CN.BidV2, ChainId.MATIC_MUMBAI).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    },
+  ],
   [AppNetwork.GOERLI]: [
     {
       name: ContractName.MANA,
@@ -433,6 +543,14 @@ const localContracts = {
     {
       name: ContractName.BIDS,
       address: getContract(CN.Bid, ChainId.ETHEREUM_GOERLI).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_GOERLI
+    },
+    {
+      name: ContractName.RENTALS,
+      address: getContract(CN.Rentals, ChainId.ETHEREUM_GOERLI).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
@@ -480,14 +598,6 @@ const localContracts = {
       network: Network.MATIC,
       chainId: ChainId.MATIC_MUMBAI
     },
-    {
-      name: ContractName.RENTALS,
-      address: getContract(CN.Rentals, ChainId.ETHEREUM_GOERLI).address,
-      vendor: 'decentraland',
-      category: null,
-      network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_GOERLI
-    }
   ],
   [AppNetwork.MAINNET]: [
     {
@@ -509,6 +619,14 @@ const localContracts = {
     {
       name: ContractName.BIDS,
       address: getContract(CN.Bid, ChainId.ETHEREUM_MAINNET).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    },
+    {
+      name: ContractName.RENTALS,
+      address: getContract(CN.Rentals, ChainId.ETHEREUM_MAINNET).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
@@ -554,14 +672,6 @@ const localContracts = {
       network: Network.MATIC,
       chainId: ChainId.MATIC_MAINNET
     },
-    {
-      name: ContractName.RENTALS,
-      address: getContract(CN.Rentals, ChainId.ETHEREUM_MAINNET).address,
-      vendor: 'decentraland',
-      category: null,
-      network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_MAINNET
-    }
   ]
 }
 
@@ -573,5 +683,9 @@ export const contracts = {
   [AppNetwork.MAINNET]: [
     ...localContracts[AppNetwork.MAINNET],
     ...nftServerReplicatedMarketplaceContracts[AppNetwork.MAINNET]
+  ],
+  [AppNetwork.SEPOLIA]: [
+    ...localContracts[AppNetwork.SEPOLIA],
+    ...nftServerReplicatedMarketplaceContracts[AppNetwork.SEPOLIA]
   ]
 }
