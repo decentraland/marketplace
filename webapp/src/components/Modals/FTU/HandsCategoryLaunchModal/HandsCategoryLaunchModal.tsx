@@ -4,10 +4,10 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { locations } from '../../../../modules/routing/locations'
 import { Section } from '../../../../modules/vendor/decentraland'
+import { AssetStatusFilter } from '../../../../utils/filters'
 import handsCategoryImg from '../../../../images/hands_category_img.png'
 import { Props } from './HandsCategoryLaunchModa.types'
 import styles from './HandsCategoryLaunchModal.module.css'
-import { AssetStatusFilter } from '../../../../utils/filters'
 
 const HANDS_CATEGORY_FTU_KEY = 'hands-category-ftu-key'
 

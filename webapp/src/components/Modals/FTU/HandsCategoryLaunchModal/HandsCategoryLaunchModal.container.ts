@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
+import { isLoadingFeatureFlags } from 'decentraland-dapps/dist/modules/features/selectors'
+import { RootState } from '../../../../modules/reducer'
+import { getIsHandsCategoryEnabled } from '../../../../modules/features/selectors'
 import { MapStateProps } from './HandsCategoryLaunchModa.types'
 import { HandsCategoryLaunchModal } from './HandsCategoryLaunchModal'
-import { RootState } from '../../../../modules/reducer'
-import { isLoadingFeatureFlags } from 'decentraland-dapps/dist/modules/features/selectors'
-import { getIsHandsCategoryEnabled } from '../../../../modules/features/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
