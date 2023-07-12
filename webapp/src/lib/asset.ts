@@ -12,7 +12,7 @@ export const getSmartWearableSceneContent = async (
   try {
     const wearableEntity = await contentClient.fetchEntitiesByPointers([urn])
     if (wearableEntity.length > 0) {
-      const scene = wearableEntity[0].content.find((entity: any) =>
+      const scene = wearableEntity[0].content?.find(entity =>
         entity.file.endsWith('scene.json')
       )
       if (scene) {
