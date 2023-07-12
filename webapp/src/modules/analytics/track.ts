@@ -97,6 +97,7 @@ import {
   UpdateListFailureAction,
   UpdateListSuccessAction
 } from '../favorites/actions'
+import { getCategoryInfo } from '../../utils/category'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -119,7 +120,8 @@ track<ExecuteOrderTransactionSubmittedAction>(
     nft: payload.nft.id,
     price: payload.order.price,
     seller: payload.order.owner,
-    buyer: payload.order.buyer
+    buyer: payload.order.buyer,
+    ...getCategoryInfo(payload.nft)
   })
 )
 
