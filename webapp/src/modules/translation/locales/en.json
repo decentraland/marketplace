@@ -552,7 +552,8 @@
     "district": "District",
     "jump_in": "Jump In",
     "part_of_estate": "Part of {estate_name}",
-    "sold_out": "Sold Out"
+    "sold_out": "Sold Out",
+    "required_permissions": "Required Permissions"
   },
   "proximity": {
     "adjacent": "Adjacent",

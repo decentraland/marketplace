@@ -546,7 +546,8 @@
     "district": "Distrito",
     "jump_in": "Ingresar",
     "part_of_estate": "Parte de {estate_name}",
-    "sold_out": "Sin Stock"
+    "sold_out": "Sin Stock",
+    "required_permissions": "Permisos Requeridos"
   },
   "proximity": {
     "adjacent": "Adyacente",

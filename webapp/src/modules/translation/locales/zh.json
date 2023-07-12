@@ -549,7 +549,8 @@
     "district": "区域",
     "jump_in": "进入",
     "part_of_estate": "{estate_name}一部分",
-    "sold_out": "无库存"
+    "sold_out": "无库存",
+    "required_permissions": "所需的权限"
   },
   "proximity": {
     "adjacent": "相邻",
