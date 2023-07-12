@@ -98,20 +98,32 @@ const NFTSectionsMenuItems = ({
                 currentValue={section}
                 onMenuItemClick={handleOnSectionClick}
               />
-
-              {[
-                Section.WEARABLES_UPPER_BODY,
-                Section.WEARABLES_LOWER_BODY,
-                Section.WEARABLES_FEET
-              ].map(menuSection => (
+              <MenuItem
+                key={Section.WEARABLES_UPPER_BODY}
+                value={Section.WEARABLES_UPPER_BODY}
+                currentValue={section}
+                onClick={handleOnSectionClick}
+                nestedLevel={1}
+              />
+              {isHandsCategoryEnabled && (
                 <MenuItem
-                  key={menuSection}
-                  value={menuSection}
+                  value={Section.WEARABLES_HANDS}
                   currentValue={section}
                   onClick={handleOnSectionClick}
                   nestedLevel={1}
                 />
-              ))}
+              )}
+              {[Section.WEARABLES_LOWER_BODY, Section.WEARABLES_FEET].map(
+                menuSection => (
+                  <MenuItem
+                    key={menuSection}
+                    value={menuSection}
+                    currentValue={section}
+                    onClick={handleOnSectionClick}
+                    nestedLevel={1}
+                  />
+                )
+              )}
 
               <DropdownMenu
                 values={[
@@ -134,15 +146,6 @@ const NFTSectionsMenuItems = ({
                 onClick={handleOnSectionClick}
                 nestedLevel={1}
               />
-
-              {isHandsCategoryEnabled && (
-                <MenuItem
-                  value={Section.WEARABLES_HANDS}
-                  currentValue={section}
-                  onClick={handleOnSectionClick}
-                  nestedLevel={1}
-                />
-              )}
             </>
           ) : null}
         </>
