@@ -55,6 +55,14 @@
   margin-left: 0px;
 }
 
+.ItemDetail .swRequiredPermissions :global(.ui.sub.header) {
+  font-weight: 600;
+}
+
+.ItemDetail .swRequiredPermissions .badges :global(.IconBadge) {
+  cursor: auto;
+}
+
 @media (max-width: 1000px) {
   .ItemDetail .information {
     width: 100%;

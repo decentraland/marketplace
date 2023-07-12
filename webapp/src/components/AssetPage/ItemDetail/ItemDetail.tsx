@@ -1,8 +1,10 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { BodyShape, EmotePlayMode, NFTCategory, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
+import { getSmartWearableRequiredPermissions } from '../../../lib/asset'
 import RarityBadge from '../../RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
 import GenderBadge from '../../GenderBadge'
@@ -23,10 +25,21 @@ import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
 const ItemDetail = ({ item }: Props) => {
+  const [requiredPermissions, setRequiredPermissions] = useState<string[]>([])
   let description = ''
   let bodyShapes: BodyShape[] = []
   let category
   let loop = false
+
+  useEffect(() => {
+    if (item.category === NFTCategory.WEARABLE && item.data.wearable?.isSmart) {
+      getSmartWearableRequiredPermissions(item.urn).then(
+        requiredPermissions => {
+          setRequiredPermissions(requiredPermissions)
+        }
+      )
+    }
+  }, [item])
 
   const tableRef = useRef<HTMLDivElement>(null)
 
@@ -109,6 +122,18 @@ const ItemDetail = ({ item }: Props) => {
           </div>
 
           <Description text={description} />
+
+          {item.category === NFTCategory.WEARABLE &&
+            item.data.wearable!.isSmart && (
+              <div className={styles.swRequiredPermissions}>
+                <Header sub>{t('asset_page.required_permissions')}</Header>
+                <div className={styles.badges}>
+                  {requiredPermissions.map(permission => (
+                    <IconBadge key={permission} text={permission} />
+                  ))}
+                </div>
+              </div>
+            )}
           <div
             className={
               item.available > 0 && item.isOnSale
