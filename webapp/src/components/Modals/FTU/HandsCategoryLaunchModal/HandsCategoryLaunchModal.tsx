@@ -6,7 +6,7 @@ import { locations } from '../../../../modules/routing/locations'
 import { Section } from '../../../../modules/vendor/decentraland'
 import { AssetStatusFilter } from '../../../../utils/filters'
 import handsCategoryImg from '../../../../images/hands_category_img.png'
-import { Props } from './HandsCategoryLaunchModa.types'
+import { Props } from './HandsCategoryLaunchModal.types'
 import styles from './HandsCategoryLaunchModal.module.css'
 
 const HANDS_CATEGORY_FTU_KEY = 'hands-category-ftu-key'
