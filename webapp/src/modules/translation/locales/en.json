@@ -1422,6 +1422,12 @@
     "explore_collectibles": "Explore collectibles",
     "view_my_lists": "View My Lists"
   },
+  "hands_category_ftu": {
+    "title": "Now you can buy Hands wearables!",
+    "subtitle": "Discover the new Hands wearables in marketplace!",
+    "action": "Discover amazing hands wearables",
+    "img_alt": "New hands category"
+  },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
     "edit_list": "Edit List",

@@ -1418,6 +1418,12 @@
     "explore_collectibles": "探索收藏品",
     "view_my_lists": "查看我的列表"
   },
+  "hands_category_ftu": {
+    "title": "现在，您可以买手可穿戴设备！",
+    "subtitle": "在市场上发现新手可穿戴设备！",
+    "action": "发现惊人的手可穿戴设备",
+    "img_alt": "新手类别"
+  },
   "list_card": {
     "item_count": "{count} {count, plural, one {项} other {项目}}",
     "edit_list": "编辑列表",

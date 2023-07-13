@@ -1413,6 +1413,12 @@
     "explore_collectibles": "Explora coleccionables",
     "view_my_lists": "Ver Mis Listas"
   },
+  "hands_category_ftu": {
+    "title": "¡Ahora puedes comprar manos!",
+    "subtitle": "¡Descubre los nuevos wearables en el mercado!",
+    "action": "Descubre los increibles wearables de manos",
+    "img_alt": "Categoría nueva de manos"
+  },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
     "edit_list": "Editar lista",

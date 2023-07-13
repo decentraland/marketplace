@@ -1,0 +1,19 @@
+.handCategoryModal :global(.dcl.modal-navigation-title) {
+  font-size: 26px;
+  font-weight: 600;
+  margin-top: 25px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  padding: 25px;
+  padding-bottom: 40px;
+}
+
+.actionButton {
+  max-width: 380px;
+}
