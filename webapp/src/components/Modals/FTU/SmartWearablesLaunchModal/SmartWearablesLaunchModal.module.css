@@ -1,0 +1,49 @@
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.description {
+  text-align: center;
+}
+
+.video {
+  display: block;
+  height: 238px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.SmartWearablesLaunchModal:global(.ui.modal .actions > .button:first-child) {
+  width: 80%;
+  align-self: center;
+}
+
+.SmartWearablesLaunchModal:global(.ui.modal .actions .ui.button + .ui.button) {
+  margin: unset;
+  width: 80%;
+  align-self: center;
+  color: white;
+  border-color: white;
+}
+
+.SmartWearablesLaunchModal:global(.ui.modal > .content) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 50px;
+}
+
+@media (max-width: 768px) {
+  .actions {
+    gap: unset;
+  }
+
+  .SmartWearablesLaunchModal:global(.ui.modal .actions > .button:first-child),
+  .SmartWearablesLaunchModal:global(.ui.modal .actions .ui.button + .ui.button) {
+    width: 100%;
+  }
+}

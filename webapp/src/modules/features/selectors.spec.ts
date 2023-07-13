@@ -12,6 +12,8 @@ import {
   getIsCampaignHomepageBannerEnabled,
   getIsCreatorsFilterEnabled,
   getIsEstateSizeFilterEnabled,
+  getIsHandsCategoryEnabled,
+  getIsHandsCategoryFTUEnabled,
   getIsLocationFilterEnabled,
   getIsMaintenanceEnabled,
   getIsMapViewFiltersEnabled,
@@ -19,6 +21,7 @@ import {
   getIsPriceFilterEnabled,
   getIsRentalPeriodFilterEnabled,
   getIsRentalPriceFilterChartEnabled,
+  getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags
 } from './selectors'
 import { FeatureName } from './types'
@@ -185,6 +188,21 @@ const waitForInitialLoadingSelectors = [
     name: 'IsRentalPriceFilterChart',
     feature: FeatureName.RENTAL_PRICE_FILTER_CHART,
     selector: getIsRentalPriceFilterChartEnabled
+  },
+  {
+    name: 'IsHandsCategory',
+    feature: FeatureName.HANDS_CATEGORY,
+    selector: getIsHandsCategoryEnabled
+  },
+  {
+    name: 'IsHandsCategoryFTU',
+    feature: FeatureName.HANDS_CATEGORY_FTU,
+    selector: getIsHandsCategoryFTUEnabled
+  },
+  {
+    name: 'IsHandsCategoryFTU',
+    feature: FeatureName.SMART_WEARABLES_FTU,
+    selector: getIsSmartWearablesFTUEnabled
   }
 ]
 

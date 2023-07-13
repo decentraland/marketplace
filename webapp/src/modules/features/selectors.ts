@@ -173,3 +173,14 @@ export const getIsHandsCategoryFTUEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsSmartWearablesFTUEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.SMART_WEARABLES_FTU
+    )
+  }
+  return false
+}
