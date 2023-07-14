@@ -19,8 +19,10 @@ import ListingsTableContainer from '../ListingsTableContainer/ListingsTableConta
 import { BestBuyingOption } from '../BestBuyingOption'
 import Title from '../Title'
 import OnBack from '../OnBack'
-import { Props } from './ItemDetail.types'
+import { Props, SmartWearableRequiredPermission } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
+import { Header, Popup, Stats } from 'decentraland-ui'
+import { Chip } from '../../Chip'
 
 const ItemDetail = ({ item }: Props) => {
   let description = ''
@@ -120,6 +122,47 @@ const ItemDetail = ({ item }: Props) => {
               {item.network === Network.MATIC ? <Owner asset={item} /> : null}
               <Collection asset={item} />
             </div>
+            {item.data.wearable?.isSmart && (
+              <Stats title="" className={styles.requiredPermissionsStat}>
+                <Header sub className={styles.requiredPermissionsTitle}>
+                  {t('smart_wearable.required_permission.title')}
+                  <Popup
+                    className={styles.periodsTooltip}
+                    content={t(
+                      'smart_wearable.required_permission.tooltip_info',
+                      {
+                        learn_more: (
+                          <a
+                            href="https://docs.decentraland.org/creator/development-guide/sdk7/scene-metadata/#required-permissions"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {t('global.learn_more')}
+                          </a>
+                        )
+                      }
+                    )}
+                    trigger={<i className={styles.tooltipInfo} />}
+                    position="top center"
+                    on="hover"
+                    hoverable
+                  />
+                </Header>
+                <div className={styles.requiredPermissionsContainer}>
+                  {Object.values(SmartWearableRequiredPermission).map(
+                    (requiredPermission, i) => (
+                      <Chip
+                        key={`${requiredPermission}-${i}`}
+                        className={styles.requiredPermission}
+                        text={t(
+                          `smart_wearable.required_permission.${requiredPermission}`
+                        )}
+                      />
+                    )
+                  )}
+                </div>
+              </Stats>
+            )}
             <BestBuyingOption asset={item} tableRef={tableRef} />
           </div>
         </div>

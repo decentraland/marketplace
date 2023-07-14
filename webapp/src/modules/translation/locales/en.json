@@ -716,6 +716,19 @@
       "loop": "Play loop"
     }
   },
+  "smart_wearable": {
+    "required_permission": {
+      "title": "This wearable require permissions",
+      "tooltip_info": "When you want to use this wearable you will have to accept this permissions to live the full experience. {learn_more}",
+      "move_player": "Move player",
+      "trigger_emotes": "Trigger emotes",
+      "play_media_content": "Play media content",
+      "wallet_interaction": "Wallet interaction",
+      "communicate_with_other_servers": "Communicate with other servers",
+      "exchange_data": "Exchange data",
+      "open_external_links": "Open external links"
+    }
+  },
   "wearable_preview": {
     "toggle_wearable": "Wearable",
     "toggle_avatar": "Try On",
