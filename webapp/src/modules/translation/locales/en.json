@@ -717,6 +717,7 @@
     }
   },
   "smart_wearable": {
+    "play_showcase": "Play showcase video",
     "required_permission": {
       "title": "This wearable require permissions",
       "tooltip_info": "When you want to use this wearable you will have to accept this permissions to live the full experience. {learn_more}",
@@ -1463,5 +1464,8 @@
     "remove_from_lists": "Remove from {count} lists",
     "save_and_remove_from_lists": "Save and remove from {count} lists",
     "save_changes": "Save changes"
+  },
+  "smart_wearable_video_showcase_modal": {
+    "title": "Showcase video"
   }
 }

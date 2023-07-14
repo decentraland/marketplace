@@ -128,6 +128,7 @@ const ItemDetail = ({ item }: Props) => {
               {item.network === Network.MATIC ? <Owner asset={item} /> : null}
               <Collection asset={item} />
             </div>
+            {/* TODO: the required permissions should come from the item data */}
             {item.data.wearable?.isSmart && (
               <Stats title="" className={styles.requiredPermissionsStat}>
                 <Header sub className={styles.requiredPermissionsTitle}>

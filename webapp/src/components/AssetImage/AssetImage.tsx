@@ -81,6 +81,7 @@ const AssetImage = (props: Props) => {
     isPlayingEmote,
     onSetIsTryingOn,
     onSetWearablePreviewController,
+    onPlaySmartWearableVideoShowcase,
     children,
     hasBadges,
     item,
@@ -122,6 +123,12 @@ const AssetImage = (props: Props) => {
     async (action: ControlOptionAction) => {
       const ZOOM_DELTA = 0.03
 
+      console.log('handleControlActionChange', action, item, wearableController)
+
+      if (ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE && item) {
+        return onPlaySmartWearableVideoShowcase(item)
+      }
+
       if (wearableController) {
         switch (action) {
           case ControlOptionAction.ZOOM_IN: {
@@ -145,7 +152,7 @@ const AssetImage = (props: Props) => {
         }
       }
     },
-    [wearableController]
+    [wearableController, onPlaySmartWearableVideoShowcase, item]
   )
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
@@ -321,6 +328,21 @@ const AssetImage = (props: Props) => {
                   size="large"
                 />
               </Center>
+            ) : asset.data.wearable?.isSmart ? (
+              <div className="play-control">
+                <Button
+                  className="play-button"
+                  size="small"
+                  onClick={() =>
+                    handleControlActionChange(
+                      ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE
+                    )
+                  }
+                >
+                  <Icon name="video" />
+                  <span>{t('smart_wearable.play_showcase')}</span>
+                </Button>
+              </div>
             ) : null}
             <Popup
               content={
@@ -435,8 +457,9 @@ const AssetImage = (props: Props) => {
         </div>
       )
       const playButton = (
-        <div className="play-emote-control">
+        <div className="play-control">
           <Button
+            className="play-button"
             size="small"
             onClick={() =>
               handleControlActionChange(

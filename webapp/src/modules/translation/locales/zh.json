@@ -713,6 +713,7 @@
     }
   },
   "smart_wearable": {
+    "play_showcase": "播放展示视频",
     "required_permission": {
       "title": "此可穿戴设备需要权限",
       "tooltip_info": "当您想要使用这款可穿戴设备时，您必须接受此权限才能获得完整的体验。{learn_more}",
@@ -1459,5 +1460,8 @@
     "remove_from_lists": "从 {count} 个列表中删除",
     "save_and_remove_from_lists": "保存并从 {count} 个列表中删除",
     "save_changes": "保存变更"
+  },
+  "smart_wearable_video_showcase_modal": {
+    "title": "展示视频"
   }
 }

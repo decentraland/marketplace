@@ -710,6 +710,7 @@
     }
   },
   "smart_wearable": {
+    "play_showcase": "Reproducir vista previa",
     "required_permission": {
       "title": "Esta vestimenta inteligente requiere permisos",
       "tooltip_info": "Cuando quieras usar este wearable tendrás que aceptar estos permisos para vivir la experiencia completa. {learn_more}",
@@ -1454,5 +1455,8 @@
     "remove_from_lists": "Remover de {count} listas",
     "save_and_remove_from_lists": "Guardar y remover de {count} lists",
     "save_changes": "Guardar cambios"
+  },
+  "smart_wearable_video_showcase_modal": {
+    "title": "Vídeo de presentación"
   }
 }
