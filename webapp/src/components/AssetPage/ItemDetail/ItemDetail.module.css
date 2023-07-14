@@ -13,6 +13,10 @@
   height: 602px;
 }
 
+.ItemDetail.smart .assetImageContainer {
+  height: auto;
+}
+
 .ItemDetail .badges {
   margin-top: 8px;
   display: flex;

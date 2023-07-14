@@ -1,6 +1,8 @@
 import React, { useMemo, useRef } from 'react'
 import { BodyShape, EmotePlayMode, NFTCategory, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header, Popup, Stats } from 'decentraland-ui'
+import classNames from 'classnames'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
@@ -8,6 +10,7 @@ import { AssetType } from '../../../modules/asset/types'
 import GenderBadge from '../../GenderBadge'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
+import { Chip } from '../../Chip'
 import CategoryBadge from '../CategoryBadge'
 import SmartBadge from '../SmartBadge'
 import { Description } from '../Description'
@@ -21,8 +24,6 @@ import Title from '../Title'
 import OnBack from '../OnBack'
 import { Props, SmartWearableRequiredPermission } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
-import { Header, Popup, Stats } from 'decentraland-ui'
-import { Chip } from '../../Chip'
 
 const ItemDetail = ({ item }: Props) => {
   let description = ''
@@ -57,7 +58,12 @@ const ItemDetail = ({ item }: Props) => {
   )
 
   return (
-    <div className={styles.ItemDetail}>
+    <div
+      className={classNames(
+        styles.ItemDetail,
+        item.data.wearable?.isSmart && styles.smart
+      )}
+    >
       <OnBack asset={item} />
       <div className={styles.informationContainer}>
         <div className={styles.assetImageContainer}>
