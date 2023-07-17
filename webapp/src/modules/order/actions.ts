@@ -20,6 +20,7 @@ export const CREATE_ORDER_FAILURE = '[Failure] Create Order'
 export const createOrderRequest = (
   nft: NFT,
   price: number,
+  /* The expiration date in seconds */
   expiresAt: number
 ) => action(CREATE_ORDER_REQUEST, { nft, price, expiresAt })
 export const createOrderSuccess = (
@@ -82,7 +83,8 @@ export const executeOrderTransactionSubmitted = (
       price: formatWeiMANA(order.price)
     })
   })
-export const executeOrderSuccess = (txHash: string, nft: NFT) => action(EXECUTE_ORDER_SUCCESS, { txHash, nft })
+export const executeOrderSuccess = (txHash: string, nft: NFT) =>
+  action(EXECUTE_ORDER_SUCCESS, { txHash, nft })
 export const executeOrderFailure = (
   order: Order,
   nft: NFT,

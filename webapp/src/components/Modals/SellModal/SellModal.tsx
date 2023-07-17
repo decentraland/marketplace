@@ -33,6 +33,7 @@ import { ManaField } from '../../ManaField'
 import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { useAuthorization } from '../../../lib/authorization'
+import { fromMillisecondsToSeconds } from '../../../lib/time'
 import { showPriceBelowMarketValueWarning } from '../../SellPage/SellModal/utils'
 import { Authorization } from '../../SettingsPage/Authorization'
 import { Props } from './SellModal.types'
@@ -132,7 +133,7 @@ const SellModal = ({
     onCreateOrder(
       nft,
       parseMANANumber(price),
-      new Date(`${expiresAt} 00:00:00`).getTime()
+      fromMillisecondsToSeconds(new Date(`${expiresAt} 00:00:00`).getTime())
     )
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
