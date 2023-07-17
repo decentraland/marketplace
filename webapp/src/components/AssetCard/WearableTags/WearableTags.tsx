@@ -4,7 +4,7 @@ import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
 import GenderBadge from '../../GenderBadge/GenderBadge'
 import { AssetType } from '../../../modules/asset/types'
-import { isCatalogItem } from '../../../modules/asset/utils'
+import { isCatalogItem, isNFT } from '../../../modules/asset/utils'
 import SmartBadge from '../../AssetPage/SmartBadge'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
@@ -37,7 +37,10 @@ const WearableTags = (props: Props) => {
         />
       )}
       {isSmart ? (
-        <SmartBadge assetType={AssetType.ITEM} clickable={false} />
+        <SmartBadge
+          assetType={isNFT(asset) ? AssetType.NFT : AssetType.ITEM}
+          clickable={false}
+        />
       ) : null}
     </div>
   )
