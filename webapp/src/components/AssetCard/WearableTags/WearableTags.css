@@ -90,8 +90,39 @@
   background-image: url(../../../images/wearables/SkinIcon.svg);
 }
 
-.WearableTags .dcl.smart-icon {
-  width: 14px;
-  height: 14px;
-  margin: 5px;
+.WearableTags .IconBadge.SmartBadge {
+  margin-left: 6px;
+}
+
+.ui.link.card.AssetCard.catalog:hover .WearableTags .IconBadge.SmartBadge {
+  mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300% 100%;
+  -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/300% 100%;
+  animation: shimmer 2.5s infinite;
+}
+
+.WearableTags .IconBadge.SmartBadge .custom-icon {
+  margin: 0px;
+}
+
+.WearableTags .IconBadge.SmartBadge .text {
+  transition: opacity .5s ease-in;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+  margin-left: 0px;
+}
+
+.ui.link.card.AssetCard.catalog:hover .WearableTags .IconBadge.SmartBadge .text {
+  opacity: 1;
+  height: auto;
+  width: auto;
+  margin-left: 10px;
+}
+
+@keyframes shimmer {
+  100% {
+    mask-position: left;
+    -webkit-mask-position: left;
+  }
 }
