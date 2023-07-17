@@ -7,7 +7,7 @@ import IconBadge from '../IconBadge'
 import { Props } from './SmartBadge.types'
 import './SmartBadge.css'
 
-const SmartBadge = ({ assetType }: Props) => {
+const SmartBadge = ({ assetType, clickable = true }: Props) => {
   const href = useMemo(
     () =>
       locations.browse({
@@ -22,7 +22,7 @@ const SmartBadge = ({ assetType }: Props) => {
     <IconBadge
       className="SmartBadge"
       text={t('wearable.smart_badge')}
-      href={href}
+      href={clickable ? href : undefined}
     >
       <SmartIcon />
     </IconBadge>
