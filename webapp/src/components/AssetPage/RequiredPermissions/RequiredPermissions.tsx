@@ -9,7 +9,18 @@ import {
 import styles from './RequiredPermissions.module.css'
 
 const RequiredPermissions = ({ asset }: Props) => {
-  /* TODO: the required permissions should come from the item data */
+  const [requiredPermissions, setRequiredPermissions] = useState<string[]>([])
+
+  useEffect(() => {
+    if (item.category === NFTCategory.WEARABLE && item.data.wearable?.isSmart) {
+      getSmartWearableRequiredPermissions(item.urn).then(
+        requiredPermissions => {
+          setRequiredPermissions(requiredPermissions)
+        }
+      )
+    }
+  }, [item])
+
   return (
     <Stats title="" className={styles.RequiredPermissions}>
       <Header sub className={styles.title}>
