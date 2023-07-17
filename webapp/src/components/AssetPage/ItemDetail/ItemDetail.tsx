@@ -1,7 +1,6 @@
 import React, { useMemo, useRef } from 'react'
 import { BodyShape, EmotePlayMode, NFTCategory, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Header, Popup, Stats } from 'decentraland-ui'
 import classNames from 'classnames'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
@@ -10,7 +9,6 @@ import { AssetType } from '../../../modules/asset/types'
 import GenderBadge from '../../GenderBadge'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
-import { Chip } from '../../Chip'
 import CategoryBadge from '../CategoryBadge'
 import SmartBadge from '../SmartBadge'
 import { Description } from '../Description'
@@ -22,7 +20,8 @@ import ListingsTableContainer from '../ListingsTableContainer/ListingsTableConta
 import { BestBuyingOption } from '../BestBuyingOption'
 import Title from '../Title'
 import OnBack from '../OnBack'
-import { Props, SmartWearableRequiredPermission } from './ItemDetail.types'
+import { RequiredPermissions } from '../RequiredPermissions'
+import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
 const ItemDetail = ({ item }: Props) => {
@@ -128,47 +127,8 @@ const ItemDetail = ({ item }: Props) => {
               {item.network === Network.MATIC ? <Owner asset={item} /> : null}
               <Collection asset={item} />
             </div>
-            {/* TODO: the required permissions should come from the item data */}
             {item.data.wearable?.isSmart && (
-              <Stats title="" className={styles.requiredPermissionsStat}>
-                <Header sub className={styles.requiredPermissionsTitle}>
-                  {t('smart_wearable.required_permission.title')}
-                  <Popup
-                    className={styles.periodsTooltip}
-                    content={t(
-                      'smart_wearable.required_permission.tooltip_info',
-                      {
-                        learn_more: (
-                          <a
-                            href="https://docs.decentraland.org/creator/development-guide/sdk7/scene-metadata/#required-permissions"
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            {t('global.learn_more')}
-                          </a>
-                        )
-                      }
-                    )}
-                    trigger={<i className={styles.tooltipInfo} />}
-                    position="top center"
-                    on="hover"
-                    hoverable
-                  />
-                </Header>
-                <div className={styles.requiredPermissionsContainer}>
-                  {Object.values(SmartWearableRequiredPermission).map(
-                    (requiredPermission, i) => (
-                      <Chip
-                        key={`${requiredPermission}-${i}`}
-                        className={styles.requiredPermission}
-                        text={t(
-                          `smart_wearable.required_permission.${requiredPermission}`
-                        )}
-                      />
-                    )
-                  )}
-                </div>
-              </Stats>
+              <RequiredPermissions asset={item} />
             )}
             <BestBuyingOption asset={item} tableRef={tableRef} />
           </div>

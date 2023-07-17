@@ -123,8 +123,6 @@ const AssetImage = (props: Props) => {
     async (action: ControlOptionAction) => {
       const ZOOM_DELTA = 0.03
 
-      console.log('handleControlActionChange', action, item, wearableController)
-
       if (ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE && item) {
         return onPlaySmartWearableVideoShowcase(item)
       }

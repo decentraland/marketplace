@@ -59,43 +59,6 @@
   margin-left: 0px;
 }
 
-.ItemDetail .requiredPermissionsStat {
-  margin: 21px 0 24px;
-}
-
-.ItemDetail .requiredPermissionsTitle {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-}
-
-.ItemDetail .requiredPermissionsContainer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.ItemDetail .requiredPermission {
-  padding: 2px 8px;
-  min-width: none;
-  border-radius: 34px;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.ItemDetail .tooltipInfo {
-  width: 16px;
-  height: 16px;
-  background-image: url(/src/images/info.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  display: inline-block;
-  margin-left: 4px;
-  cursor: pointer;
-}
-
 @media (max-width: 1000px) {
   .ItemDetail .information {
     width: 100%;
@@ -145,8 +108,5 @@
   }
   .ItemDetail .spaceInMint {
     gap: 0px;
-  }
-  .ItemDetail .requiredPermissionsStat {
-    margin: 0 0 24px;
   }
 }
