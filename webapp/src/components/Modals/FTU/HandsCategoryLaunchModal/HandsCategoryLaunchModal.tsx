@@ -12,7 +12,7 @@ import styles from './HandsCategoryLaunchModal.module.css'
 const HANDS_CATEGORY_FTU_KEY = 'hands-category-ftu-key'
 
 export const HandsCategoryLaunchModal = ({
-  isHandsCategoryEnabled,
+  isHandsCategoryFTUEnabled,
   isLoadingFeatureFlags
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,12 +25,12 @@ export const HandsCategoryLaunchModal = ({
   useEffect(() => {
     if (
       !isLoadingFeatureFlags &&
-      isHandsCategoryEnabled &&
+      isHandsCategoryFTUEnabled &&
       !localStorage.getItem(HANDS_CATEGORY_FTU_KEY)
     ) {
       setIsOpen(true)
     }
-  }, [isLoadingFeatureFlags, isHandsCategoryEnabled])
+  }, [isLoadingFeatureFlags, isHandsCategoryFTUEnabled])
 
   return (
     <Modal
