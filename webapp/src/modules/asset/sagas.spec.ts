@@ -23,6 +23,9 @@ import {
 } from './actions'
 import { getSmartWearableRequiredPermissions } from '../../lib/asset'
 
+import util from 'util'
+util.inspect.defaultOptions.depth = null
+
 const mockContractAddress = 'a-contract-address'
 const mockTokenId = 'aTokenId'
 const mockTradeType = TradeType.PRIMARY
@@ -230,19 +233,15 @@ describe('when handling the fetch asset request action', () => {
     asset = ({
       id: 'anId',
       name: 'aName',
-      description: 'aDescription'
+      description: 'aDescription',
+      data: {}
     } as unknown) as Asset
   })
 
   describe('when the asset is not smart wearable', () => {
-    it('should not dispatch any new actions', () => {
+    it('should dispatch an action signaling the success of the request with an empty array of required permissions', () => {
       return expectSaga(assetSaga)
-        .not.put(
-          fetchSmartWearableRequiredPermissionsSuccess(expect.any(Array))
-        )
-        .not.put(
-          fetchSmartWearableRequiredPermissionsFailure(asset, expect.any(Error))
-        )
+        .put(fetchSmartWearableRequiredPermissionsSuccess(asset, []))
         .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
         .run({ silenceTimeout: true })
     })
@@ -260,14 +259,9 @@ describe('when handling the fetch asset request action', () => {
       }
     })
 
-    it('should not dispatch any new actions', () => {
+    it('should dispatch an action signaling the success of the request with an empty array of required permissions', () => {
       return expectSaga(assetSaga)
-        .not.put(
-          fetchSmartWearableRequiredPermissionsSuccess(expect.any(Array))
-        )
-        .not.put(
-          fetchSmartWearableRequiredPermissionsFailure(asset, expect.any(Error))
-        )
+        .put(fetchSmartWearableRequiredPermissionsSuccess(asset, []))
         .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
         .run({ silenceTimeout: true })
     })
@@ -289,7 +283,7 @@ describe('when handling the fetch asset request action', () => {
 
     describe('and the fetch process fails', () => {
       const anErrorMessage = 'An error'
-      it('should dispatch an action signaling the failure of the fetch process', () => {
+      it('should dispatch an action signaling the failure of the request', () => {
         return expectSaga(assetSaga)
           .provide([
             [
@@ -300,6 +294,16 @@ describe('when handling the fetch asset request action', () => {
           .put(
             fetchSmartWearableRequiredPermissionsFailure(asset, anErrorMessage)
           )
+          .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the fetch process succeeds', () => {
+      it('should dispatch an action signaling the succeed of the request', () => {
+        return expectSaga(assetSaga)
+          .provide([[call(getSmartWearableRequiredPermissions, urn), []]])
+          .put(fetchSmartWearableRequiredPermissionsSuccess(asset, []))
           .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
           .run({ silenceTimeout: true })
       })

@@ -9,17 +9,17 @@ import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../routing/locations'
-import { FETCH_ITEM_SUCCESS, buyItemWithCardFailure } from '../item/actions'
+import { buyItemWithCardFailure } from '../item/actions'
 import { executeOrderWithCardFailure } from '../order/actions'
 import { AssetType } from './types'
-import { FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getSmartWearableRequiredPermissions } from '../../lib/asset'
+import { isErrorWithMessage } from '../../lib/error'
 import {
+  FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
   FetchSmartWearableRequiredPermissionsRequestAction,
   fetchSmartWearableRequiredPermissionsFailure,
   fetchSmartWearableRequiredPermissionsSuccess
 } from './actions'
-import { isErrorWithMessage } from '../../lib/error'
 
 export const failStatuses = [
   PurchaseStatus.CANCELLED,
@@ -30,7 +30,7 @@ export const failStatuses = [
 export function* assetSaga() {
   yield takeEvery(SET_PURCHASE, handleSetAssetPurchaseWithCard)
   yield takeEvery(
-    [FETCH_ITEM_SUCCESS, FETCH_NFT_SUCCESS],
+    FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
     handleFetchAssetSuccess
   )
 }
@@ -86,26 +86,26 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
 function* handleFetchAssetSuccess(
   action: FetchSmartWearableRequiredPermissionsRequestAction
 ) {
+  const { asset } = action.payload
+  let requiredPermissions: string[] = []
+
   try {
     const {
       urn,
       data: { wearable }
-    } = action.payload.asset
+    } = asset
 
     if (wearable?.isSmart && urn) {
-      const requiredPermissions: string[] = yield call(
-        getSmartWearableRequiredPermissions,
-        urn
-      )
-
-      yield put(
-        fetchSmartWearableRequiredPermissionsSuccess(requiredPermissions)
-      )
+      requiredPermissions = yield call(getSmartWearableRequiredPermissions, urn)
     }
+
+    yield put(
+      fetchSmartWearableRequiredPermissionsSuccess(asset, requiredPermissions)
+    )
   } catch (error) {
     yield put(
       fetchSmartWearableRequiredPermissionsFailure(
-        action.payload.asset,
+        asset,
         isErrorWithMessage(error) ? error.message : t('global.unknown_error')
       )
     )

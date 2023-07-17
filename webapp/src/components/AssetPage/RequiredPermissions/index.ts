@@ -1,3 +1,3 @@
-import RequiredPermissions from './RequiredPermissions'
+import RequiredPermissions from './RequiredPermissions.container'
 
 export { RequiredPermissions }

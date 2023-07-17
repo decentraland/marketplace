@@ -2,7 +2,6 @@ import { action } from 'typesafe-actions'
 import { Asset } from './types'
 
 // Fetch Smart Wearable Required Permissions
-
 export const FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST =
   '[Request] Fetch Smart Wearable Required Permissions'
 export const FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_SUCCESS =
@@ -14,9 +13,11 @@ export const fetchSmartWearableRequiredPermissionsRequest = (asset: Asset) =>
   action(FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST, { asset })
 
 export const fetchSmartWearableRequiredPermissionsSuccess = (
+  asset: Asset,
   requiredPermissions: string[]
 ) =>
   action(FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_SUCCESS, {
+    asset,
     requiredPermissions
   })
 

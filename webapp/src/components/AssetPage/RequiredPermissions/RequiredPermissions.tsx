@@ -2,26 +2,11 @@ import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header, Popup, Stats } from 'decentraland-ui'
 import { Chip } from '../../Chip'
-import {
-  Props,
-  SmartWearableRequiredPermission
-} from './RequiredPermissions.types'
+import { Props } from './RequiredPermissions.types'
 import styles from './RequiredPermissions.module.css'
 
-const RequiredPermissions = ({ asset }: Props) => {
-  const [requiredPermissions, setRequiredPermissions] = useState<string[]>([])
-
-  useEffect(() => {
-    if (item.category === NFTCategory.WEARABLE && item.data.wearable?.isSmart) {
-      getSmartWearableRequiredPermissions(item.urn).then(
-        requiredPermissions => {
-          setRequiredPermissions(requiredPermissions)
-        }
-      )
-    }
-  }, [item])
-
-  return (
+const RequiredPermissions = ({ requiredPermissions }: Props) => {
+  return requiredPermissions.length > 0 ? (
     <Stats title="" className={styles.RequiredPermissions}>
       <Header sub className={styles.title}>
         {t('smart_wearable.required_permission.title')}
@@ -45,20 +30,18 @@ const RequiredPermissions = ({ asset }: Props) => {
         />
       </Header>
       <div className={styles.container}>
-        {Object.values(SmartWearableRequiredPermission).map(
-          (requiredPermission, i) => (
-            <Chip
-              key={`${requiredPermission}-${i}`}
-              className={styles.permission}
-              text={t(
-                `smart_wearable.required_permission.${requiredPermission}`
-              )}
-            />
-          )
-        )}
+        {requiredPermissions.map((requiredPermission, i) => (
+          <Chip
+            key={`${requiredPermission}-${i}`}
+            className={styles.permission}
+            text={t(
+              `smart_wearable.required_permission.${requiredPermission.toLowerCase()}`
+            )}
+          />
+        ))}
       </div>
     </Stats>
-  )
+  ) : null
 }
 
 export default React.memo(RequiredPermissions)

@@ -34,11 +34,11 @@ describe('when creating the action to signal a success in the smart wearable req
 
   it('should return an object representing the action', () => {
     expect(
-      fetchSmartWearableRequiredPermissionsSuccess(requiredPermissions)
+      fetchSmartWearableRequiredPermissionsSuccess(asset, requiredPermissions)
     ).toEqual({
       type: FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_SUCCESS,
       meta: undefined,
-      payload: { requiredPermissions }
+      payload: { asset, requiredPermissions }
     })
   })
 })
