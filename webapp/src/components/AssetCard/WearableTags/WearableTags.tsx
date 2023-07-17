@@ -1,11 +1,11 @@
 import { NFTCategory } from '@dcl/schemas'
-import { SmartIcon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
 import GenderBadge from '../../GenderBadge/GenderBadge'
 import { AssetType } from '../../../modules/asset/types'
-import { isCatalogItem } from '../../../modules/asset/utils'
+import { isCatalogItem, isNFT } from '../../../modules/asset/utils'
+import SmartBadge from '../../AssetPage/SmartBadge'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
 
@@ -37,9 +37,10 @@ const WearableTags = (props: Props) => {
         />
       )}
       {isSmart ? (
-        <div className="icon smart" title={t(`wearable.smart`)}>
-          <SmartIcon />
-        </div>
+        <SmartBadge
+          assetType={isNFT(asset) ? AssetType.NFT : AssetType.ITEM}
+          clickable={false}
+        />
       ) : null}
     </div>
   )
