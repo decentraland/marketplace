@@ -162,3 +162,14 @@ export const getIsHandsCategoryEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsHandsCategoryFTUEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.HANDS_CATEGORY_FTU
+    )
+  }
+  return false
+}
