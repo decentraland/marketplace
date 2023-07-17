@@ -4,6 +4,7 @@ import { Modal } from 'decentraland-dapps/dist/containers'
 import { ModalNavigation } from 'decentraland-ui'
 import { Props } from './SmartWearableVideoShowcaseModal.types'
 import styles from './SmartWearableVideoShowcaseModal.module.css'
+import { VIDEO_TEST_ID } from './constants'
 
 const SmartWearableVideoShowcaseModal = (props: Props) => {
   const {
@@ -27,6 +28,7 @@ const SmartWearableVideoShowcaseModal = (props: Props) => {
           loop
           muted
           playsInline
+          data-testid={VIDEO_TEST_ID}
         />
       </Modal.Content>
     </Modal>
