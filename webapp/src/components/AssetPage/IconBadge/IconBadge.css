@@ -107,7 +107,8 @@
 }
 
 .IconBadge .hands_wear {
-  background-image: url(../../../images/wearables/hands.svg);
+  background-size: contain;
+  background-image: url(../../../images/wearables/HandsIcon.svg);
 }
 
 .IconBadge .play-once {

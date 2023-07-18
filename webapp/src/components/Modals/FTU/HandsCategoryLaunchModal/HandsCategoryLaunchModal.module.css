@@ -14,6 +14,10 @@
   padding-bottom: 40px;
 }
 
+.img {
+  max-width: 350px;
+}
+
 .actionButton {
   max-width: 380px;
 }

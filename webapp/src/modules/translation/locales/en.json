@@ -126,7 +126,7 @@
     "wearables_tiara": "Tiara",
     "wearables_top_head": "Top head",
     "wearables_skin": "Skins",
-    "wearables_hands": "Hands",
+    "wearables_hands": "Handwear",
     "emotes": "Emotes",
     "emotes_dance": "Dance",
     "emotes_poses": "Poses",
@@ -695,7 +695,7 @@
       "top_head": "Top Head",
       "upper_body": "Upper Body",
       "skin": "Skin",
-      "hands_wear": "Hands"
+      "hands_wear": "Handwear"
     },
     "smart": "Smart Wearable",
     "smart_badge": "Smart"
