@@ -27,6 +27,7 @@ import { isStubMaticCollectionContract } from '../../../modules/contract/utils'
 import { getSellItemStatus, getError } from '../../../modules/order/selectors'
 import ERC721ABI from '../../../contracts/ERC721.json'
 import { Contract as DCLContract } from '../../../modules/vendor/services'
+import { fromMillisecondsToSeconds } from '../../../lib/time'
 import { AssetAction } from '../../AssetAction'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
@@ -108,7 +109,7 @@ const SellModal = (props: Props) => {
     onCreateOrder(
       nft,
       parseMANANumber(price),
-      new Date(`${expiresAt} 00:00:00`).getTime()
+      fromMillisecondsToSeconds(new Date(`${expiresAt} 00:00:00`).getTime())
     )
 
   const handleSubmit = () => {
@@ -124,7 +125,8 @@ const SellModal = (props: Props) => {
         nft.network === Network.MATIC
           ? ContractName.ERC721CollectionV2
           : ContractName.ERC721,
-      targetContractLabel: targetContractLabel || nftContract.label || nftContract.name,
+      targetContractLabel:
+        targetContractLabel || nftContract.label || nftContract.name,
       onAuthorized: handleCreateOrder,
       tokenId: nft.tokenId
     })
