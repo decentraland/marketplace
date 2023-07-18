@@ -45,6 +45,7 @@ export const HandsCategoryLaunchModal = ({
       />
       <div className={styles.container}>
         <img
+          className={styles.img}
           src={handsCategoryImg}
           aria-label={t('hands_category_ftu.img_alt')}
         />
