@@ -10,11 +10,11 @@
 
 .ItemDetail .assetImageContainer {
   width: 52.5%;
-  height: 602px;
+  max-height: 602px;
 }
 
-.ItemDetail.smart .assetImageContainer {
-  height: auto;
+.ItemDetail.smart.withRequiredPermissions .assetImageContainer {
+  max-height: 707px;
 }
 
 .ItemDetail .badges {

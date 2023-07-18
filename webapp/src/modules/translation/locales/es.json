@@ -714,13 +714,13 @@
     "required_permission": {
       "title": "Esta vestimenta inteligente requiere permisos",
       "tooltip_info": "Cuando quieras usar este wearable tendrás que aceptar estos permisos para vivir la experiencia completa. {learn_more}",
-      "move_player": "Mover jugador",
-      "trigger_emotes": "Activar gestos",
-      "play_media_content": "Reproducir contenido multimedia",
-      "wallet_interaction": "Interacción con tu billetera",
-      "communicate_with_other_servers": "Comunicarse con otros servidores",
-      "exchange_data": "Intercambiar datos",
-      "open_external_links": "Abrir enlaces externos"
+      "allow_to_move_player_inside_scene": "Mover jugador",
+      "allow_to_trigger_avatar_emote": "Activar gestos",
+      "allow_media_hostnames": "Reproducir contenido multimedia",
+      "use_web3_api": "Interacción con tu billetera",
+      "use_fetch": "Comunicarse con otros servidores",
+      "use_websocket": "Intercambiar datos",
+      "open_external_link": "Abrir enlaces externos"
     }
   },
   "wearable_preview": {

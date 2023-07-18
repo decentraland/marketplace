@@ -12,7 +12,12 @@ const asset = {
   id: 'anId',
   itemId: 'anItemId',
   contractAddress: 'aContractAddress',
-  price: '5000000000000000000'
+  price: '5000000000000000000',
+  data: {
+    wearable: {
+      isSmart: true
+    }
+  }
 } as Asset
 
 const anErrorMessage = 'An error'
@@ -30,6 +35,26 @@ requestActions.forEach(action => {
       expect(assetReducer(initialState, action)).toEqual({
         ...INITIAL_STATE,
         loading: loadingReducer(initialState.loading, action)
+      })
+    })
+  })
+})
+
+describe('when reducing the fetch required permissions request action', () => {
+  describe('and the asset is not a smart wearable', () => {
+    it('should return the previous state', () => {
+      const initialState = {
+        ...INITIAL_STATE,
+        loading: []
+      }
+      const action = fetchSmartWearableRequiredPermissionsRequest({
+        ...asset,
+        data: {}
+      })
+
+      expect(assetReducer(initialState, action)).toEqual({
+        ...INITIAL_STATE,
+        loading: []
       })
     })
   })

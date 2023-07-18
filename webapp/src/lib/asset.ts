@@ -9,22 +9,19 @@ export const getSmartWearableSceneContent = async (
     url: `${peerUrl}/content`,
     fetcher: createFetchComponent()
   })
-  try {
-    const wearableEntity = await contentClient.fetchEntitiesByPointers([urn])
-    if (wearableEntity.length > 0) {
-      const scene = wearableEntity[0].content?.find(entity =>
-        entity.file.endsWith('scene.json')
-      )
-      if (scene) {
-        const wearableScene = await contentClient.downloadContent(scene.hash)
 
-        const enc = new TextDecoder('utf-8')
-        const data = new Uint8Array(wearableScene)
-        return JSON.parse(enc.decode(data))
-      }
+  const wearableEntity = await contentClient.fetchEntitiesByPointers([urn])
+  if (wearableEntity.length > 0) {
+    const scene = wearableEntity[0].content?.find(entity =>
+      entity.file.endsWith('scene.json')
+    )
+    if (scene) {
+      const wearableScene = await contentClient.downloadContent(scene.hash)
+
+      const enc = new TextDecoder('utf-8')
+      const data = new Uint8Array(wearableScene)
+      return JSON.parse(enc.decode(data))
     }
-  } catch (error) {
-    console.error(error)
   }
 }
 

@@ -1,7 +1,10 @@
 import React, { useMemo, useRef } from 'react'
+import { useSelector } from 'react-redux'
+import classNames from 'classnames'
 import { BodyShape, EmotePlayMode, NFTCategory, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import classNames from 'classnames'
+import { getRequiredPermissions } from '../../../modules/asset/selectors'
+import { RootState } from '../../../modules/reducer'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
@@ -31,6 +34,9 @@ const ItemDetail = ({ item }: Props) => {
   let loop = false
 
   const tableRef = useRef<HTMLDivElement>(null)
+  const requiredPermissions = useSelector((state: RootState) =>
+    getRequiredPermissions(state, item.id)
+  )
 
   switch (item.category) {
     case NFTCategory.WEARABLE:
@@ -60,7 +66,8 @@ const ItemDetail = ({ item }: Props) => {
     <div
       className={classNames(
         styles.ItemDetail,
-        item.data.wearable?.isSmart && styles.smart
+        item.data.wearable?.isSmart && styles.smart,
+        requiredPermissions.length > 0 && styles.withRequiredPermissions
       )}
     >
       <OnBack asset={item} />

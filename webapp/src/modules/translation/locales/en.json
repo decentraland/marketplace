@@ -721,13 +721,13 @@
     "required_permission": {
       "title": "This wearable require permissions",
       "tooltip_info": "When you want to use this wearable you will have to accept this permissions to live the full experience. {learn_more}",
-      "move_player": "Move player",
-      "trigger_emotes": "Trigger emotes",
-      "play_media_content": "Play media content",
-      "wallet_interaction": "Wallet interaction",
-      "communicate_with_other_servers": "Communicate with other servers",
-      "exchange_data": "Exchange data",
-      "open_external_links": "Open external links"
+      "allow_to_move_player_inside_scene": "Move player",
+      "allow_to_trigger_avatar_emote": "Trigger emotes",
+      "allow_media_hostnames": "Play media content",
+      "use_web3_api": "Wallet interaction",
+      "use_fetch": "Communicate with other servers",
+      "use_websocket": "Exchange data",
+      "open_external_link": "Open external links"
     }
   },
   "wearable_preview": {

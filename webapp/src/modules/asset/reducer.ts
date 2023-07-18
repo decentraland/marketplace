@@ -34,6 +34,9 @@ export function assetReducer(
 ): AssetState {
   switch (action.type) {
     case FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST: {
+      const { asset } = action.payload
+      if (!asset.data.wearable?.isSmart) return state
+
       return {
         ...state,
         loading: loadingReducer(state.loading, action)

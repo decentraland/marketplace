@@ -717,13 +717,13 @@
     "required_permission": {
       "title": "此可穿戴设备需要权限",
       "tooltip_info": "当您想要使用这款可穿戴设备时，您必须接受此权限才能获得完整的体验。{learn_more}",
-      "move_player": "移动玩家",
-      "trigger_emotes": "触发表情",
-      "play_media_content": "播放媒体内容",
-      "wallet_interaction": "钱包交互",
-      "communicate_with_other_servers": "与其他服务器通信",
-      "exchange_data": "交换数据",
-      "open_external_links": "打开外部链接"
+      "allow_to_move_player_inside_scene": "移动玩家",
+      "allow_to_trigger_avatar_emote": "触发表情",
+      "allow_media_hostnames": "播放媒体内容",
+      "use_web3_api": "钱包交互",
+      "use_fetch": "与其他服务器通信",
+      "use_websocket": "交换数据",
+      "open_external_link": "打开外部链接"
     }
   },
   "wearable_preview": {
