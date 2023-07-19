@@ -15,6 +15,8 @@ import {
 } from '../../modules/ui/preview/actions'
 import { getData as getItems } from '../../modules/item/selectors'
 import { fetchItemRequest } from '../../modules/item/actions'
+import { openModal } from '../../modules/modal/actions'
+import { Asset } from '../../modules/asset/types'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -22,8 +24,6 @@ import {
   OwnProps
 } from './AssetImage.types'
 import AssetImage from './AssetImage'
-import { openModal } from '../../modules/modal/actions'
-import { Asset } from '../../modules/asset/types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const profiles = getProfiles(state)
