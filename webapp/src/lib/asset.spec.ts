@@ -1,7 +1,8 @@
 import * as contentClient from 'dcl-catalyst-client/dist/client/ContentClient'
 import {
   getSmartWearableRequiredPermissions,
-  getSmartWearableSceneContent
+  getSmartWearableSceneContent,
+  getSmartWearableVideoShowcase
 } from './asset'
 
 const anSWUrn = 'aUrn'
@@ -95,6 +96,57 @@ describe('when getting a smart wearable required permissions', () => {
       expect(await getSmartWearableRequiredPermissions(anSWUrn)).toStrictEqual(
         SWSceneContent.requiredPermissions
       )
+    })
+  })
+})
+
+describe('when getting a smart wearable video showcase', () => {
+  describe('and the smart wearable does not have an entity', () => {
+    beforeEach(() => {
+      mockClient = mockClient.mockReturnValueOnce({
+        fetchEntitiesByPointers: jest.fn().mockResolvedValueOnce([])
+      })
+    })
+
+    it('should return undefined', async () => {
+      expect(await getSmartWearableVideoShowcase(anSWUrn)).toBe(undefined)
+    })
+  })
+
+  describe('and the smart wearable has an entity', () => {
+    describe('and the smart wearable does not have the video in its content', () => {
+      beforeEach(() => {
+        mockClient.mockReturnValueOnce({
+          fetchEntitiesByPointers: jest.fn().mockResolvedValueOnce(entity)
+        })
+      })
+
+      it('should return undefined', async () => {
+        expect(await getSmartWearableVideoShowcase(anSWUrn)).toBeUndefined()
+      })
+    })
+
+    describe('and the smart wearable have video showcase', () => {
+      const entityWithVideo = [
+        {
+          content: [
+            { file: 'scene.json', hash: 'aHash' },
+            { file: 'video.mp4', hash: 'aVideoHash' }
+          ]
+        }
+      ]
+
+      beforeEach(() => {
+        mockClient.mockReturnValueOnce({
+          fetchEntitiesByPointers: jest
+            .fn()
+            .mockResolvedValueOnce(entityWithVideo)
+        })
+      })
+
+      it('should return the video hash', async () => {
+        expect(await getSmartWearableVideoShowcase(anSWUrn)).toBe('aVideoHash')
+      })
     })
   })
 })

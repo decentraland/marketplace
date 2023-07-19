@@ -2,14 +2,16 @@ import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClie
 import { createFetchComponent } from '@well-known-components/fetch-component'
 import { peerUrl } from './environment'
 
-const contentClient = createContentClient({
-  url: `${peerUrl}/content`,
-  fetcher: createFetchComponent()
-})
+const getContentClient = () =>
+  createContentClient({
+    url: `${peerUrl}/content`,
+    fetcher: createFetchComponent()
+  })
 
 export const getSmartWearableSceneContent = async (
   urn: string
 ): Promise<Record<string, unknown> | undefined> => {
+  const contentClient = getContentClient()
   const wearableEntity = await contentClient.fetchEntitiesByPointers([urn])
 
   if (wearableEntity.length > 0) {
@@ -39,6 +41,7 @@ export const getSmartWearableRequiredPermissions = async (
 export const getSmartWearableVideoShowcase = async (
   urn: string
 ): Promise<string | undefined> => {
+  const contentClient = getContentClient()
   const wearableEntity = await contentClient.fetchEntitiesByPointers([urn])
 
   const video = wearableEntity[0]?.content?.find(entity =>

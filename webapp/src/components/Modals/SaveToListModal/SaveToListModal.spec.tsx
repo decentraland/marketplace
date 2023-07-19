@@ -2,10 +2,7 @@ import { Item } from '@dcl/schemas'
 import { act } from 'react-dom/test-utils'
 import { fireEvent } from '@testing-library/react'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
-import {
-  DEFAULT_FAVORITES_LIST_ID,
-  FavoritesAPI
-} from '../../../modules/vendor/decentraland/favorites/api'
+import { FavoritesAPI } from '../../../modules/vendor/decentraland/favorites/api'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { renderWithProviders } from '../../../utils/test'
 import {
@@ -38,6 +35,7 @@ function renderSaveToListModalModal(props: Partial<Props> = {}) {
       onCreateList={jest.fn()}
       onSavePicks={jest.fn()}
       onClose={jest.fn()}
+      onFinishListCreation={jest.fn()}
       {...props}
     />,
     {
