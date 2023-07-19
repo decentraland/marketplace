@@ -1,5 +1,5 @@
 import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
-import { Avatar, Item } from '@dcl/schemas'
+import { Avatar } from '@dcl/schemas'
 import { connect } from 'react-redux'
 import { RootState } from '../../modules/reducer'
 import { getWallet } from '../../modules/wallet/selectors'
@@ -23,6 +23,7 @@ import {
 } from './AssetImage.types'
 import AssetImage from './AssetImage'
 import { openModal } from '../../modules/modal/actions'
+import { Asset } from '../../modules/asset/types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const profiles = getProfiles(state)
@@ -39,6 +40,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     const profile = profiles[wallet.address]
     avatar = profile.avatars[0]
   }
+
   return {
     wallet,
     avatar,
@@ -53,8 +55,8 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onSetIsTryingOn: value => dispatch(setIsTryingOn(value)),
   onSetWearablePreviewController: controller =>
     dispatch(setWearablePreviewController(controller)),
-  onPlaySmartWearableVideoShowcase: (item: Item) =>
-    dispatch(openModal('SmartWearableVideoShowcaseModal', { item })),
+  onPlaySmartWearableVideoShowcase: (asset: Asset) =>
+    dispatch(openModal('SmartWearableVideoShowcaseModal', { asset })),
   onFetchItem: (contractAddress: string, tokenId: string) =>
     dispatch(fetchItemRequest(contractAddress, tokenId))
 })

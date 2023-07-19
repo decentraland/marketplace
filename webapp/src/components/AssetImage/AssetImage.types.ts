@@ -32,7 +32,9 @@ export type Props = {
   onSetIsTryingOn: typeof setIsTryingOn
   onSetWearablePreviewController: typeof setWearablePreviewController
   onFetchItem: typeof fetchItemRequest
-  onPlaySmartWearableVideoShowcase: (item: Item) => ReturnType<typeof openModal>
+  onPlaySmartWearableVideoShowcase: (
+    asset: Asset
+  ) => ReturnType<typeof openModal>
   children?: React.ReactNode
   hasBadges?: boolean
   item: Item | null

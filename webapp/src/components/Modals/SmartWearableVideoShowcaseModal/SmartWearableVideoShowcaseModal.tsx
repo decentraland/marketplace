@@ -1,16 +1,30 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { ModalNavigation } from 'decentraland-ui'
+import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
+import { getSmartWearableVideoShowcase } from '../../../lib/asset'
+import { VIDEO_TEST_ID } from './constants'
 import { Props } from './SmartWearableVideoShowcaseModal.types'
 import styles from './SmartWearableVideoShowcaseModal.module.css'
-import { VIDEO_TEST_ID } from './constants'
 
 const SmartWearableVideoShowcaseModal = (props: Props) => {
   const {
-    // metadata: { item },
+    metadata: { asset },
     onClose
   } = props
+  const [videoSrc, setVideoSrc] = useState<string | undefined>(undefined)
+
+  const fetchVideoSrc = useCallback(async () => {
+    if (!asset?.urn) return
+
+    const videoHash = await getSmartWearableVideoShowcase(asset.urn)
+    if (videoHash) setVideoSrc(builderAPI.contentUrl(videoHash))
+  }, [asset.urn])
+
+  useEffect(() => {
+    fetchVideoSrc()
+  }, [fetchVideoSrc])
 
   return (
     <Modal size="tiny" className={styles.modal} onClose={onClose} open>
@@ -19,17 +33,19 @@ const SmartWearableVideoShowcaseModal = (props: Props) => {
         onClose={onClose}
       />
       <Modal.Content className={styles.content}>
-        <video
-          // TODO: use the item video url instead of the hardcoded one
-          src="https://www.youtube.com/watch?v=crqI_aDlYYM"
-          className={styles.video}
-          autoPlay
-          controls
-          loop
-          muted
-          playsInline
-          data-testid={VIDEO_TEST_ID}
-        />
+        {videoSrc ? (
+          <video
+            src={videoSrc}
+            className={styles.video}
+            autoPlay
+            controls
+            loop
+            muted
+            playsInline
+            data-testid={VIDEO_TEST_ID}
+            height={364}
+          />
+        ) : null}
       </Modal.Content>
     </Modal>
   )

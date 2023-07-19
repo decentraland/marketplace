@@ -1,8 +1,8 @@
-import { Item } from '@dcl/schemas'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
+import { Asset } from '../../../modules/asset/types'
 
 export type SmartWearableVideoShowcaseMetadata = {
-  item: Item
+  asset: Asset
 }
 
 export type Props = Omit<ModalProps, 'metadata'> & {

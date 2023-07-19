@@ -123,8 +123,8 @@ const AssetImage = (props: Props) => {
     async (action: ControlOptionAction) => {
       const ZOOM_DELTA = 0.03
 
-      if (ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE && item) {
-        return onPlaySmartWearableVideoShowcase(item)
+      if (ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE && asset) {
+        return onPlaySmartWearableVideoShowcase(asset)
       }
 
       if (wearableController) {
@@ -150,7 +150,7 @@ const AssetImage = (props: Props) => {
         }
       }
     },
-    [wearableController, onPlaySmartWearableVideoShowcase, item]
+    [wearableController, onPlaySmartWearableVideoShowcase, asset]
   )
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
@@ -326,7 +326,7 @@ const AssetImage = (props: Props) => {
                   size="large"
                 />
               </Center>
-            ) : asset.data.wearable?.isSmart ? (
+            ) : asset.data.wearable?.isSmart && asset.urn ? (
               <div className="play-control">
                 <Button
                   className="play-button"

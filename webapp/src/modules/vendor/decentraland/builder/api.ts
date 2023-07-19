@@ -14,6 +14,10 @@ class BuilderAPI extends BaseAPI {
       `/addresses?${tags.map(tag => `tag=${tag}`).join('&')}`
     )
   }
+
+  contentUrl(hash: string) {
+    return `${this.url}/storage/contents/${hash}`
+  }
 }
 
 export const builderAPI = new BuilderAPI(BUILDER_SERVER_URL, retryParams)
