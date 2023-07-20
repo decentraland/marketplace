@@ -1,0 +1,42 @@
+.RequiredPermissions {
+  margin: 24px 0 24px;
+}
+
+.RequiredPermissions .title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.RequiredPermissions .container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.RequiredPermissions .permission {
+  padding: 2px 8px;
+  min-width: min-content;
+  border-radius: 34px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.RequiredPermissions .tooltipInfo {
+  width: 16px;
+  height: 16px;
+  background-image: url(/src/images/info.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .RequiredPermissions {
+    margin: 0 0 24px;
+  }
+}

@@ -1,6 +1,6 @@
 import { getLocation, push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
-import { select } from 'redux-saga/effects'
+import { call, select } from 'redux-saga/effects'
 import { Network } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import {
@@ -13,8 +13,18 @@ import { NetworkGatewayType } from 'decentraland-ui'
 import { buyItemWithCardFailure } from '../item/actions'
 import { locations } from '../routing/locations'
 import { assetSaga, failStatuses } from './sagas'
-import { AssetType } from './types'
+import { Asset, AssetType } from './types'
 import { executeOrderWithCardFailure } from '../order/actions'
+import { NFT } from '../nft/types'
+import {
+  fetchSmartWearableRequiredPermissionsFailure,
+  fetchSmartWearableRequiredPermissionsRequest,
+  fetchSmartWearableRequiredPermissionsSuccess
+} from './actions'
+import { getSmartWearableRequiredPermissions } from '../../lib/asset'
+
+import util from 'util'
+util.inspect.defaultOptions.depth = null
 
 const mockContractAddress = 'a-contract-address'
 const mockTokenId = 'aTokenId'
@@ -214,4 +224,89 @@ describe('when handling the set purchase action', () => {
       })
     }
   )
+})
+
+describe('when handling the fetch asset request action', () => {
+  let asset: Asset
+
+  beforeEach(() => {
+    asset = ({
+      id: 'anId',
+      name: 'aName',
+      description: 'aDescription',
+      data: {}
+    } as unknown) as Asset
+  })
+
+  describe('when the asset is not smart wearable', () => {
+    it('should dispatch an action signaling the success of the request with an empty array of required permissions', () => {
+      return expectSaga(assetSaga)
+        .put(fetchSmartWearableRequiredPermissionsSuccess(asset, []))
+        .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when the asset is a smart wearable but does not have an urn', () => {
+    beforeEach(() => {
+      asset = {
+        ...asset,
+        data: {
+          wearable: {
+            isSmart: true
+          } as NFT['data']['wearable']
+        }
+      }
+    })
+
+    it('should dispatch an action signaling the success of the request with an empty array of required permissions', () => {
+      return expectSaga(assetSaga)
+        .put(fetchSmartWearableRequiredPermissionsSuccess(asset, []))
+        .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when the asset is a smart wearable and has an urn', () => {
+    const urn = 'anUrn'
+    beforeEach(() => {
+      asset = {
+        ...asset,
+        data: {
+          wearable: {
+            isSmart: true
+          } as NFT['data']['wearable']
+        },
+        urn
+      }
+    })
+
+    describe('and the fetch process fails', () => {
+      const anErrorMessage = 'An error'
+      it('should dispatch an action signaling the failure of the request', () => {
+        return expectSaga(assetSaga)
+          .provide([
+            [
+              call(getSmartWearableRequiredPermissions, urn),
+              Promise.reject(new Error(anErrorMessage))
+            ]
+          ])
+          .put(
+            fetchSmartWearableRequiredPermissionsFailure(asset, anErrorMessage)
+          )
+          .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the fetch process succeeds', () => {
+      it('should dispatch an action signaling the succeed of the request', () => {
+        return expectSaga(assetSaga)
+          .provide([[call(getSmartWearableRequiredPermissions, urn), []]])
+          .put(fetchSmartWearableRequiredPermissionsSuccess(asset, []))
+          .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
+          .run({ silenceTimeout: true })
+      })
+    })
+  })
 })

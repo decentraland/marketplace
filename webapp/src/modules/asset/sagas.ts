@@ -1,5 +1,5 @@
 import { getLocation, push } from 'connected-react-router'
-import { put, select, takeEvery } from 'redux-saga/effects'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 import {
   SetPurchaseAction,
   SET_PURCHASE
@@ -12,6 +12,14 @@ import { locations } from '../routing/locations'
 import { buyItemWithCardFailure } from '../item/actions'
 import { executeOrderWithCardFailure } from '../order/actions'
 import { AssetType } from './types'
+import { getSmartWearableRequiredPermissions } from '../../lib/asset'
+import { isErrorWithMessage } from '../../lib/error'
+import {
+  FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
+  FetchSmartWearableRequiredPermissionsRequestAction,
+  fetchSmartWearableRequiredPermissionsFailure,
+  fetchSmartWearableRequiredPermissionsSuccess
+} from './actions'
 
 export const failStatuses = [
   PurchaseStatus.CANCELLED,
@@ -21,6 +29,10 @@ export const failStatuses = [
 
 export function* assetSaga() {
   yield takeEvery(SET_PURCHASE, handleSetAssetPurchaseWithCard)
+  yield takeEvery(
+    FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
+    handleFetchAssetSuccess
+  )
 }
 
 function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
@@ -68,5 +80,34 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
       // TODO (buy nfts with card): is there a way to get the reason of the failure?
       yield put(failureAction(t('global.unknown_error')))
     }
+  }
+}
+
+function* handleFetchAssetSuccess(
+  action: FetchSmartWearableRequiredPermissionsRequestAction
+) {
+  const { asset } = action.payload
+  let requiredPermissions: string[] = []
+
+  try {
+    const {
+      urn,
+      data: { wearable }
+    } = asset
+
+    if (wearable?.isSmart && urn) {
+      requiredPermissions = yield call(getSmartWearableRequiredPermissions, urn)
+    }
+
+    yield put(
+      fetchSmartWearableRequiredPermissionsSuccess(asset, requiredPermissions)
+    )
+  } catch (error) {
+    yield put(
+      fetchSmartWearableRequiredPermissionsFailure(
+        asset,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }

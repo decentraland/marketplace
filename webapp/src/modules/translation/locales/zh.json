@@ -720,6 +720,20 @@
       "loop": "循环播放"
     }
   },
+  "smart_wearable": {
+    "play_showcase": "播放展示视频",
+    "required_permission": {
+      "title": "此可穿戴设备需要权限",
+      "tooltip_info": "当您想要使用这款可穿戴设备时，您必须接受此权限才能获得完整的体验。{learn_more}",
+      "allow_to_move_player_inside_scene": "移动玩家",
+      "allow_to_trigger_avatar_emote": "触发表情",
+      "allow_media_hostnames": "播放媒体内容",
+      "use_web3_api": "钱包交互",
+      "use_fetch": "与其他服务器通信",
+      "use_websocket": "交换数据",
+      "open_external_link": "打开外部链接"
+    }
+  },
   "wearable_preview": {
     "toggle_wearable": "可穿戴",
     "toggle_avatar": "试试看",
@@ -1461,5 +1475,8 @@
     "remove_from_lists": "从 {count} 个列表中删除",
     "save_and_remove_from_lists": "保存并从 {count} 个列表中删除",
     "save_changes": "保存变更"
+  },
+  "smart_wearable_video_showcase_modal": {
+    "title": "展示视频"
   }
 }

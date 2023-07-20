@@ -30,9 +30,11 @@ import { rentalReducer as rental } from './rental/reducer'
 import { eventReducer as event } from './event/reducer'
 import { contractReducer as contract } from './contract/reducer'
 import { favoritesReducer as favorites } from './favorites/reducer'
+import { assetReducer as asset } from './asset/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
+    asset,
     account,
     authorization,
     bid,
