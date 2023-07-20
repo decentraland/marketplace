@@ -3,11 +3,11 @@
   "version": "0.0.0-development",
   "dependencies": {
     "@dcl/crypto": "^3.0.0",
-    "@dcl/schemas": "^8.1.0",
+    "@dcl/schemas": "^8.2.2",
     "@dcl/single-sign-on-client": "^0.0.12",
     "@dcl/ui-env": "^1.2.0",
     "@ethersproject/providers": "^5.6.2",
-    "@well-known-components/fetch-component": "^2.0.1",
+    "@well-known-components/fetch-component": "^2.0.2",
     "classnames": "^2.3.1",
     "connected-react-router": "^6.9.1",
     "date-fns": "^2.23.0",

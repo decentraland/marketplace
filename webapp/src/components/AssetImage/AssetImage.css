@@ -180,10 +180,15 @@
   border-radius: 0px 0px 6px 6px;
 }
 
-.AssetImage .play-emote-control {
+.AssetImage .play-control {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
+  bottom: 24px;
+  left: 24px;
+}
+
+.AssetImage .play-control .ui.button.play-button {
+  color: black;
+  background-color: var(--text);
 }
 
 .AssetImage .listed-badge {

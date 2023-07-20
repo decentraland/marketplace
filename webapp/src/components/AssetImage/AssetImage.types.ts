@@ -13,6 +13,7 @@ import {
   FetchItemRequestAction,
   fetchItemRequest
 } from '../../modules/item/actions'
+import { OpenModalAction, openModal } from '../../modules/modal/actions'
 
 export type Props = {
   asset: Asset
@@ -32,6 +33,9 @@ export type Props = {
   onSetIsTryingOn: typeof setIsTryingOn
   onSetWearablePreviewController: typeof setWearablePreviewController
   onFetchItem: typeof fetchItemRequest
+  onPlaySmartWearableVideoShowcase: (
+    asset: Asset
+  ) => ReturnType<typeof openModal>
   children?: React.ReactNode
   hasBadges?: boolean
   item: Item | null
@@ -44,7 +48,8 @@ export enum ControlOptionAction {
   ZOOM_IN,
   ZOOM_OUT,
   PLAY_EMOTE,
-  STOP_EMOTE
+  STOP_EMOTE,
+  PLAY_SMART_WEARABLE_VIDEO_SHOWCASE
 }
 
 export type MapStateProps = Pick<
@@ -59,12 +64,16 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onSetIsTryingOn' | 'onSetWearablePreviewController' | 'onFetchItem'
+  | 'onSetIsTryingOn'
+  | 'onSetWearablePreviewController'
+  | 'onFetchItem'
+  | 'onPlaySmartWearableVideoShowcase'
 >
 export type MapDispatch = Dispatch<
   | SetIsTryingOnAction
   | SetWearablePreviewControllerAction
   | FetchItemRequestAction
+  | OpenModalAction
 >
 
 export type AvailableForMintPopupType = {

@@ -32,6 +32,7 @@ import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import { retryParams } from '../vendor/decentraland/utils'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { locations } from '../routing/locations'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -207,6 +208,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         tokenId
       )
       yield put(fetchItemSuccess(item))
+      yield put(fetchSmartWearableRequiredPermissionsRequest(item))
     } catch (error) {
       yield put(
         fetchItemFailure(
