@@ -109,7 +109,7 @@ const SellModal = (props: Props) => {
     onCreateOrder(
       nft,
       parseMANANumber(price),
-      fromMillisecondsToSeconds(new Date(`${expiresAt} 00:00:00`).getTime())
+      new Date(`${expiresAt} 00:00:00`).getTime()
     )
 
   const handleSubmit = () => {

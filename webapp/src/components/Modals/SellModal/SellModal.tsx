@@ -133,7 +133,7 @@ const SellModal = ({
     onCreateOrder(
       nft,
       parseMANANumber(price),
-      fromMillisecondsToSeconds(new Date(`${expiresAt} 00:00:00`).getTime())
+      new Date(`${expiresAt} 00:00:00`).getTime()
     )
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()

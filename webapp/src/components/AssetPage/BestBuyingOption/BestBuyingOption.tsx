@@ -13,7 +13,7 @@ import {
   Rarity
 } from '@dcl/schemas'
 import { Button, Popup } from 'decentraland-ui'
-import { formatDistanceToNow } from '../../../lib/date'
+import { getExpirationDateLabel } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
 import { isNFT } from '../../../modules/asset/utils'
 import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
@@ -285,10 +285,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             <img src={clock} alt="clock" className={styles.mintingIcon} />
             &nbsp;
             {t('best_buying_option.buy_listing.expires')}&nbsp;
-            {formatDistanceToNow(listing.order.expiresAt, {
-              addSuffix: true
-            })}
-            .
+            {getExpirationDateLabel(listing.order.expiresAt * 1000)}.
           </span>
         </div>
       ) : (
