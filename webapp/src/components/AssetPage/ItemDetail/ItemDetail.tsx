@@ -1,6 +1,10 @@
 import React, { useMemo, useRef } from 'react'
+import { useSelector } from 'react-redux'
+import classNames from 'classnames'
 import { BodyShape, EmotePlayMode, NFTCategory, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getRequiredPermissions } from '../../../modules/asset/selectors'
+import { RootState } from '../../../modules/reducer'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
@@ -19,6 +23,7 @@ import ListingsTableContainer from '../ListingsTableContainer/ListingsTableConta
 import { BestBuyingOption } from '../BestBuyingOption'
 import Title from '../Title'
 import OnBack from '../OnBack'
+import { RequiredPermissions } from '../RequiredPermissions'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
@@ -29,6 +34,9 @@ const ItemDetail = ({ item }: Props) => {
   let loop = false
 
   const tableRef = useRef<HTMLDivElement>(null)
+  const requiredPermissions = useSelector((state: RootState) =>
+    getRequiredPermissions(state, item.id)
+  )
 
   switch (item.category) {
     case NFTCategory.WEARABLE:
@@ -55,7 +63,13 @@ const ItemDetail = ({ item }: Props) => {
   )
 
   return (
-    <div className={styles.ItemDetail}>
+    <div
+      className={classNames(
+        styles.ItemDetail,
+        item.data.wearable?.isSmart && styles.smart,
+        requiredPermissions.length > 0 && styles.withRequiredPermissions
+      )}
+    >
       <OnBack asset={item} />
       <div className={styles.informationContainer}>
         <div className={styles.assetImageContainer}>
@@ -120,6 +134,9 @@ const ItemDetail = ({ item }: Props) => {
               {item.network === Network.MATIC ? <Owner asset={item} /> : null}
               <Collection asset={item} />
             </div>
+            {item.data.wearable?.isSmart && (
+              <RequiredPermissions asset={item} />
+            )}
             <BestBuyingOption asset={item} tableRef={tableRef} />
           </div>
         </div>

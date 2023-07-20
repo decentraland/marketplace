@@ -35,6 +35,7 @@ import { upsertContracts } from '../contract/actions'
 import { getStubMaticCollectionContract } from '../contract/utils'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { getRentalById } from '../rental/selectors'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
 
@@ -181,6 +182,7 @@ describe('when handling the fetch NFT request action', () => {
         ])
         .put(upsertContracts([contract]))
         .put(fetchNFTSuccess(nft, order, rental))
+        .put(fetchSmartWearableRequiredPermissionsRequest(nft))
         .dispatch(fetchNFTRequest(contractAddress, tokenId))
         .run({ silenceTimeout: true })
     })
@@ -255,7 +257,10 @@ describe('when handling the fetch NFT request action', () => {
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
-          [select(getContract, { address: contractAddress.toLowerCase() }), contract],
+          [
+            select(getContract, { address: contractAddress.toLowerCase() }),
+            contract
+          ],
           [call(VendorFactory.build, contract.vendor), vendor],
           [
             call(
@@ -290,7 +295,10 @@ describe('when handling the fetch NFT request action', () => {
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
-          [select(getContract, { address: contractAddress.toLowerCase() }), contract],
+          [
+            select(getContract, { address: contractAddress.toLowerCase() }),
+            contract
+          ],
           [call(VendorFactory.build, contract.vendor), vendor],
           [
             call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
@@ -300,6 +308,7 @@ describe('when handling the fetch NFT request action', () => {
           ]
         ])
         .put(fetchNFTSuccess(nft, order, rental))
+        .put(fetchSmartWearableRequiredPermissionsRequest(nft))
         .dispatch(
           fetchNFTRequest(contractAddress, tokenId, {
             rentalStatus: [RentalStatus.EXECUTED]

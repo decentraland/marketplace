@@ -21,6 +21,7 @@ import {
 } from '../rental/utils'
 import { upsertContracts } from '../contract/actions'
 import { Contract } from '../vendor/services'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -150,6 +151,7 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
     )
 
     yield put(fetchNFTSuccess(nft as NFT, order, rental))
+    yield put(fetchSmartWearableRequiredPermissionsRequest(nft as NFT))
   } catch (error) {
     yield put(
       fetchNFTFailure(contractAddress, tokenId, (error as Error).message)

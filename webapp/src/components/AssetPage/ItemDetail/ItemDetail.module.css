@@ -10,7 +10,11 @@
 
 .ItemDetail .assetImageContainer {
   width: 52.5%;
-  height: 602px;
+  max-height: 602px;
+}
+
+.ItemDetail.smart.withRequiredPermissions .assetImageContainer {
+  max-height: 707px;
 }
 
 .ItemDetail .badges {
@@ -90,6 +94,7 @@
   .ItemDetail .basicRow :global(.dcl.stats) {
     width: 100%;
   }
+  
   .ItemDetail .basicRow {
     flex-direction: column;
   }
