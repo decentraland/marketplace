@@ -18,6 +18,8 @@ import { getData as getOrders } from '../../modules/order/selectors'
 import { isNFT } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
 import { fetchItemRequest } from '../../modules/item/actions'
+import { openModal } from '../../modules/modal/actions'
+import { Asset } from '../../modules/asset/types'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -49,6 +51,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     const profile = profiles[wallet.address]
     avatar = profile.avatars[0]
   }
+
   return {
     wallet,
     avatar,
@@ -64,6 +67,8 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onSetIsTryingOn: value => dispatch(setIsTryingOn(value)),
   onSetWearablePreviewController: controller =>
     dispatch(setWearablePreviewController(controller)),
+  onPlaySmartWearableVideoShowcase: (asset: Asset) =>
+    dispatch(openModal('SmartWearableVideoShowcaseModal', { asset })),
   onFetchItem: (contractAddress: string, tokenId: string) =>
     dispatch(fetchItemRequest(contractAddress, tokenId))
 })

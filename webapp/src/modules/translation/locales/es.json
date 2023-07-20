@@ -717,6 +717,20 @@
       "loop": "Reproduce en bucle"
     }
   },
+  "smart_wearable": {
+    "play_showcase": "Reproducir vista previa",
+    "required_permission": {
+      "title": "Esta vestimenta inteligente requiere permisos",
+      "tooltip_info": "Cuando quieras usar este wearable tendrás que aceptar estos permisos para vivir la experiencia completa. {learn_more}",
+      "allow_to_move_player_inside_scene": "Mover jugador",
+      "allow_to_trigger_avatar_emote": "Activar gestos",
+      "allow_media_hostnames": "Reproducir contenido multimedia",
+      "use_web3_api": "Interacción con tu billetera",
+      "use_fetch": "Comunicarse con otros servidores",
+      "use_websocket": "Intercambiar datos",
+      "open_external_link": "Abrir enlaces externos"
+    }
+  },
   "wearable_preview": {
     "toggle_wearable": "Vestimenta",
     "toggle_avatar": "Pruébatelo",
@@ -1456,5 +1470,8 @@
     "remove_from_lists": "Remover de {count} listas",
     "save_and_remove_from_lists": "Guardar y remover de {count} lists",
     "save_changes": "Guardar cambios"
+  },
+  "smart_wearable_video_showcase_modal": {
+    "title": "Vídeo de presentación"
   }
 }
