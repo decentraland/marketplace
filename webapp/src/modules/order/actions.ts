@@ -20,7 +20,6 @@ export const CREATE_ORDER_FAILURE = '[Failure] Create Order'
 export const createOrderRequest = (
   nft: NFT,
   price: number,
-  /* The expiration date in seconds */
   expiresAt: number
 ) => action(CREATE_ORDER_REQUEST, { nft, price, expiresAt })
 export const createOrderSuccess = (
