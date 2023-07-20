@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ListingStatus, Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
 import { Button, Loader } from 'decentraland-ui'
 import Mana from '../../Mana/Mana'
-import { formatDistanceToNow } from '../../../lib/date'
+import { getExpirationDateLabel } from '../../../lib/date'
 import clock from '../../../images/clock.png'
 import makeOffer from '../../../images/makeOffer.png'
 import { locations } from '../../../modules/routing/locations'
@@ -94,6 +94,10 @@ const BuyNFTBox = ({ nft, address }: Props) => {
 
   const renderHasListing = useCallback(() => {
     if (!nft || !listing) return null
+    const expiresAtLabel = getExpirationDateLabel(
+      listing.order.expiresAt * 1000
+    )
+
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
         <div className={styles.informationContainer}>
@@ -176,12 +180,7 @@ const BuyNFTBox = ({ nft, address }: Props) => {
         )}
         <span className={styles.expiresAt}>
           <img src={clock} alt="clock" className={styles.mintingIcon} />
-          &nbsp;
-          {t('best_buying_option.buy_listing.expires')}&nbsp;
-          {formatDistanceToNow(listing.order.expiresAt, {
-            addSuffix: true
-          })}
-          .
+          &nbsp; {expiresAtLabel}.
         </span>
       </div>
     )

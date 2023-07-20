@@ -596,6 +596,7 @@
       "owner": "所有者",
       "view_listing": "查看房源",
       "expires": "過期",
+      "never_expires": "它永远不会过期",
       "no_offer": "沒有報價",
       "make_offer": "報價"
     }

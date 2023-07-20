@@ -275,7 +275,7 @@ describe("Decentraland's OrderService", () => {
           nft.contractAddress,
           nft.tokenId,
           priceInWei,
-          expiresAt
+          Math.round(expiresAt / 1000)
         )
       })
 

@@ -593,6 +593,7 @@
       "owner": "Propietario",
       "view_listing": "Ver listado",
       "expires": "Expira",
+      "never_expires": "No expira nunca",
       "no_offer": "Sin ofertas",
       "make_offer": "Hacer Oferta"
     }

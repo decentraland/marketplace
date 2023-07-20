@@ -7,6 +7,7 @@ import {
 } from 'decentraland-transactions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { fromMillisecondsToSeconds } from '../../../lib/time'
 import { NFT } from '../../nft/types'
 import { orderAPI } from './order/api'
 import { VendorName } from '../types'
@@ -40,7 +41,7 @@ export class OrderService
       nft.contractAddress,
       nft.tokenId,
       ethers.utils.parseEther(price.toString()),
-      expiresAt
+      fromMillisecondsToSeconds(expiresAt)
     )
   }
 

@@ -124,7 +124,8 @@ const SellModal = (props: Props) => {
         nft.network === Network.MATIC
           ? ContractName.ERC721CollectionV2
           : ContractName.ERC721,
-      targetContractLabel: targetContractLabel || nftContract.label || nftContract.name,
+      targetContractLabel:
+        targetContractLabel || nftContract.label || nftContract.name,
       onAuthorized: handleCreateOrder,
       tokenId: nft.tokenId
     })
