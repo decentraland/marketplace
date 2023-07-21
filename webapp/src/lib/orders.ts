@@ -20,7 +20,6 @@ export function getExpiresAtInMiliSeconds(expiresAt: number) {
 }
 
 export function getIsOrderExpired(expiresAt: number) {
-  console.log(Date.now)
   return getExpiresAtInMiliSeconds(expiresAt) < Date.now()
 }
 

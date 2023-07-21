@@ -117,9 +117,6 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
     buyWithCardClassName: styles.buyWithCardClassName
   }
 
-  console.log(listing && getIsOrderExpired(
-      listing.order.expiresAt
-  ))
   return isLoading ? null : (
     <div
       data-testid="best-buying-option-container"
