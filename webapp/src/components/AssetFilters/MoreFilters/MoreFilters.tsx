@@ -6,35 +6,20 @@ import {
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { NFTCategory } from '@dcl/schemas'
 import './MoreFilters.css'
 
 export type MoreFiltersProps = {
-  isOnlySmart?: boolean
   isOnSale?: boolean
-  category?: NFTCategory
-  onOnlySmartChange: (value: boolean) => void
   onSaleChange: (value: boolean) => void
   defaultCollapsed?: boolean
 }
 
 export const MoreFilters = ({
-  isOnlySmart,
   isOnSale,
-  category,
-  onOnlySmartChange,
   onSaleChange,
   defaultCollapsed = false
 }: MoreFiltersProps) => {
-  const isWearableCategory = category === NFTCategory.WEARABLE
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
-
-  const handleOnlySmartChange = useCallback(
-    (_, props: CheckboxProps) => {
-      onOnlySmartChange(!!props.checked)
-    },
-    [onOnlySmartChange]
-  )
 
   const handleOnSaleChange = useCallback(
     (_, props: CheckboxProps) => {
@@ -48,11 +33,8 @@ export const MoreFilters = ({
     values.push(
       isOnSale ? t('nft_filters.for_sale') : t('nft_filters.not_on_sale')
     )
-    if (isOnlySmart) {
-      values.push(t('nft_filters.only_smart'))
-    }
     return values.join(', ')
-  }, [isOnSale, isOnlySmart])
+  }, [isOnSale])
 
   const header = useMemo(
     () =>
@@ -85,14 +67,6 @@ export const MoreFilters = ({
             onChange={handleOnSaleChange}
           />
         ) : null}
-        {isWearableCategory && (
-          <Checkbox
-            label="Only smart"
-            toggle
-            checked={!!isOnlySmart}
-            onChange={handleOnlySmartChange}
-          />
-        )}
       </div>
     </Box>
   )

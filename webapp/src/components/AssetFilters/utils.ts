@@ -13,10 +13,12 @@ export const enum AssetFilter {
   Network,
   BodyShape,
   OnSale,
+  OnlySmart,
   More
 }
 
 const WearablesFilters = [
+  AssetFilter.OnlySmart,
   AssetFilter.Rarity,
   AssetFilter.Status,
   AssetFilter.Price,
@@ -33,7 +35,8 @@ const EmotesFilters = [
     filter =>
       filter !== AssetFilter.BodyShape &&
       filter !== AssetFilter.Network &&
-      filter !== AssetFilter.More
+      filter !== AssetFilter.More &&
+      filter !== AssetFilter.OnlySmart
   ),
   AssetFilter.PlayMode
 ]

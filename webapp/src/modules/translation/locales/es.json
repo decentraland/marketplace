@@ -443,7 +443,10 @@
     },
     "more_filters": "Más filtros",
     "location": "Ubicación",
-    "only_smart": "Solo vestimentas interactivas",
+    "only_smart": {
+      "title": "Vestimentas interactivas",
+      "selected": "Solo vestimentas interactivas"
+    },
     "not_on_sale": "Incluye no a la venta",
     "for_sale": "A la venta",
     "category": "Categoría",
