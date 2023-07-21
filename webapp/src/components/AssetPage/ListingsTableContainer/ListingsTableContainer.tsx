@@ -25,7 +25,7 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
     }
 
     const locations = useLocation()
-    const [belowTab, setBelowTab] = useState(BelowTabs.OWNERS.value)
+    const [belowTab, setBelowTab] = useState(BelowTabs.LISTINGS.value)
     const [sortBy, setSortBy] = useState<SortByType>(OrderSortBy.CHEAPEST)
 
     const ownerSortByOptions = [
@@ -94,7 +94,7 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
             )
           }
           ref={ref}
-          tabsList={[BelowTabs.OWNERS]}
+          tabsList={[BelowTabs.LISTINGS, BelowTabs.OWNERS]}
           activeTab={belowTab}
           handleTabChange={(tab: string) => handleTabChange(tab)}
           sortbyList={
