@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import formatDistanceToNowI18N from 'date-fns/formatDistanceToNow'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ListingStatus, Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
 import { Button, Icon, Loader } from 'decentraland-ui'
