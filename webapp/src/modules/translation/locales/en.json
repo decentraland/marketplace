@@ -515,7 +515,9 @@
       "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace",
       "edit_price": "Edit price",
       "change_beneficiary": "Change beneficiary",
-      "mint_item": "Mint item"
+      "mint_item": "Mint item",
+      "legacy_order_expired_warning": "This NFT has an open listing that has been created with an invalid expiration date in the smart contract, so it never really expired. The listing is not being shown to buyers in the Marketplace to avoid unintended sales, but someone could buy it directly from the smart contract. Please remove this listing. If you list the item for sale again, the new expiration date will be updated in the smart contract.",
+      "legacy_order_not_expired_warning": "This NFT has an open listing that has been created with an invalid expiration date in the smart contract, so it will not expire at the current expiration date. The listing is currently being shown to buyers and will be removed from the Marketplace on the expiration date (in about X months), but the NFT could be bought through the smart contract afterward.  Please remove this listing and create it again, the new expiration date will be updated in the smart contract."
     },
     "sales_rent_action_box": {
       "until": "From {from_date} to {to_date}",

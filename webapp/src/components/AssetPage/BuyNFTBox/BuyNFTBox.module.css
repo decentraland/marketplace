@@ -11,6 +11,35 @@
   margin-top: auto;
 }
 
+.BuyNFTBox .warningExpiration:global(.icon) {
+  font-size: 12px;
+  line-height: 10px;
+  margin-right: 0;
+}
+
+.warningIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #ff7439;
+  border-radius: 50%;
+}
+
+.BuyNFTBox .expirationMessage {
+  font-size: 12px;
+  padding: 10px;
+  background-color: #474450;
+  border-radius: 4px;
+  display: flex;
+  gap: 5px;
+}
+
+.BuyNFTBox .expirationMessage > span {
+  flex: 1
+}
+
 .BuyNFTBox .containerColumn {
   color: var(--primary-text);
   display: flex;

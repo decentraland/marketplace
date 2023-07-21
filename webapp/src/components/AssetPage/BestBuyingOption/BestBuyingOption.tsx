@@ -22,6 +22,7 @@ import infoIcon from '../../../images/infoIcon.png'
 import clock from '../../../images/clock.png'
 import noListings from '../../../images/noListings.png'
 import { AssetType } from '../../../modules/asset/types'
+import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
@@ -200,7 +201,10 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             customClassnames={customClasses}
           />
         </div>
-      ) : buyOption === BuyOptions.BUY_LISTING && asset && listing ? (
+      ) : buyOption === BuyOptions.BUY_LISTING &&
+        asset &&
+        listing &&
+        !getIsOrderExpired(listing.order.expiresAt) ? (
         <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
           <span className={styles.cardTitle}>
             {t('best_buying_option.buy_listing.title')}: &nbsp;
@@ -285,7 +289,11 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             <img src={clock} alt="clock" className={styles.mintingIcon} />
             &nbsp;
             {t('best_buying_option.buy_listing.expires')}&nbsp;
-            {getExpirationDateLabel(listing.order.expiresAt * 1000)}.
+            {getExpirationDateLabel(
+              listing.order.expiresAt *
+                (isLegacyOrder(listing.order) ? 1 : 1000)
+            )}
+            .
           </span>
         </div>
       ) : (
