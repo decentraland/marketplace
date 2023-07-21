@@ -150,13 +150,6 @@ const BuyNFTBox = ({ nft, address }: Props) => {
                     className={styles.warningExpiration}
                   />
                 </div>
-                <span>
-                  {isOrderExpired
-                    ? t('asset_page.actions.legacy_order_expired_warning')
-                    : t('asset_page.actions.legacy_order_not_expired_warning', {
-                        date: formatDistanceToNowI18N(listing.order.expiresAt)
-                      })}
-                </span>
               </div>
             ) : null}
             {!isOrderExpired ? (
