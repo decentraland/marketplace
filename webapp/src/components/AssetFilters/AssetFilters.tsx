@@ -343,8 +343,11 @@ export const AssetFilters = ({
       )}
       {shouldRenderFilter(AssetFilter.More) && (
         <MoreFilters
+          category={category}
           isOnSale={isOnSale}
+          isOnlySmart={isOnlySmart}
           onSaleChange={handleOnSaleChange}
+          onOnlySmartChange={handleOnlySmartChange}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.More]}
         />
       )}

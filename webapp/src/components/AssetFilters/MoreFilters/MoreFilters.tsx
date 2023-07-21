@@ -1,25 +1,31 @@
 import { useCallback, useMemo } from 'react'
-import {
-  Box,
-  CheckboxProps,
-  Checkbox,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { Box, CheckboxProps, Checkbox } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { useTabletAndBelowMediaQuery } from 'decentraland-ui/dist/components/Media'
+import { NFTCategory } from '@dcl/schemas'
+import { OnlySmartFilterContent } from '../OnlySmartFilter'
 import './MoreFilters.css'
 
 export type MoreFiltersProps = {
+  isOnlySmart?: boolean
   isOnSale?: boolean
+  category?: NFTCategory
+  onOnlySmartChange: (value: boolean) => void
   onSaleChange: (value: boolean) => void
   defaultCollapsed?: boolean
 }
 
 export const MoreFilters = ({
+  isOnlySmart,
   isOnSale,
+  category,
+  onOnlySmartChange,
   onSaleChange,
   defaultCollapsed = false
 }: MoreFiltersProps) => {
+  const isWearableCategory = category === NFTCategory.WEARABLE
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
+  const showOnlySmartFilter = isWearableCategory && isMobileOrTablet
 
   const handleOnSaleChange = useCallback(
     (_, props: CheckboxProps) => {
@@ -33,8 +39,11 @@ export const MoreFilters = ({
     values.push(
       isOnSale ? t('nft_filters.for_sale') : t('nft_filters.not_on_sale')
     )
+    if (isOnlySmart && showOnlySmartFilter) {
+      values.push(t('nft_filters.only_smart.selected'))
+    }
     return values.join(', ')
-  }, [isOnSale])
+  }, [isOnSale, isOnlySmart, showOnlySmartFilter])
 
   const header = useMemo(
     () =>
@@ -51,7 +60,7 @@ export const MoreFilters = ({
     [filterText, isMobileOrTablet]
   )
 
-  return (
+  return isOnSale !== undefined || showOnlySmartFilter ? (
     <Box
       header={header}
       className="filters-sidebar-box"
@@ -67,7 +76,14 @@ export const MoreFilters = ({
             onChange={handleOnSaleChange}
           />
         ) : null}
+        {showOnlySmartFilter && (
+          <OnlySmartFilterContent
+            data-testid="only-smart-filter"
+            isOnlySmart={isOnlySmart}
+            onChange={onOnlySmartChange}
+          />
+        )}
       </div>
     </Box>
-  )
+  ) : null
 }
