@@ -37,13 +37,14 @@ export const OnlySmartFilter = ({
             {t('nft_filters.only_smart.title')}
           </span>
           <span className="box-filter-value">
-            {t('nft_filters.only_smart.???')}
+            {/* TODO: modify wording after product feedback */}
+            {isOnlySmart ? t('nft_filters.only_smart.selected') : ''}
           </span>
         </div>
       ) : (
         t('nft_filters.only_smart.title')
       ),
-    [isMobileOrTablet]
+    [isMobileOrTablet, isOnlySmart]
   )
 
   return (
