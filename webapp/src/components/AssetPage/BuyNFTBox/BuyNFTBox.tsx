@@ -97,7 +97,7 @@ const BuyNFTBox = ({ nft, address }: Props) => {
   const renderHasListing = useCallback(() => {
     if (!nft || !listing) return null
     const expiresAtLabel = getExpirationDateLabel(
-      listing.order.expiresAt * 1000
+      listing.order.expiresAt * (isLegacyOrder(listing.order) ? 1 : 1000)
     )
     const isOrderExpired = getIsOrderExpired(listing.order.expiresAt)
 
