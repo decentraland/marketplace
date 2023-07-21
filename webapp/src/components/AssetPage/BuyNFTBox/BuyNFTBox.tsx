@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ListingStatus, Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
-import { Button, Icon, Loader } from 'decentraland-ui'
+import { Button, Loader } from 'decentraland-ui'
 import Mana from '../../Mana/Mana'
 import { getExpirationDateLabel } from '../../../lib/date'
 import clock from '../../../images/clock.png'
@@ -10,7 +10,7 @@ import makeOffer from '../../../images/makeOffer.png'
 import { locations } from '../../../modules/routing/locations'
 import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
-import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { getIsOrderExpired } from '../../../lib/orders'
 import { ManaToFiat } from '../../ManaToFiat'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
@@ -96,71 +96,57 @@ const BuyNFTBox = ({ nft, address }: Props) => {
   const renderHasListing = useCallback(() => {
     if (!nft || !listing) return null
     const expiresAtLabel = getExpirationDateLabel(
-      listing.order.expiresAt * (isLegacyOrder(listing.order) ? 1 : 1000)
+      listing.order.expiresAt
     )
     const isOrderExpired = getIsOrderExpired(listing.order.expiresAt)
 
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
-        {!isOrderExpired || (isLegacyOrder(listing.order) && isOwner) ? (
-          <div className={styles.informationContainer}>
-            <div className={styles.columnListing}>
-              <span className={styles.informationTitle}>
-                {t('best_buying_option.minting.price').toUpperCase()}
-              </span>
-              <div className={`${styles.containerRow} ${styles.centerItems}`}>
-                <div className={styles.informationBold}>
-                  <Mana
-                    withTooltip
-                    size="large"
-                    network={nft.network}
-                    className={styles.informationBold}
-                  >
-                    {formatWeiToAssetCard(listing.order.price)}
-                  </Mana>
+        <div className={styles.informationContainer}>
+          <div className={styles.columnListing}>
+            <span className={styles.informationTitle}>
+              {t('best_buying_option.minting.price').toUpperCase()}
+            </span>
+            <div className={`${styles.containerRow} ${styles.centerItems}`}>
+              <div className={styles.informationBold}>
+                <Mana
+                  withTooltip
+                  size="large"
+                  network={nft.network}
+                  className={styles.informationBold}
+                >
+                  {formatWeiToAssetCard(listing.order.price)}
+                </Mana>
+              </div>
+              {+listing.order.price > 0 && (
+                <div className={styles.informationText}>
+                  {'('}
+                  <ManaToFiat mana={listing.order.price} />
+                  {')'}
                 </div>
-                {+listing.order.price > 0 && (
-                  <div className={styles.informationText}>
-                    {'('}
-                    <ManaToFiat mana={listing.order.price} />
-                    {')'}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.columnListing}>
-              <span className={styles.informationTitle}>
-                {t('best_buying_option.buy_listing.issue_number').toUpperCase()}
-              </span>
-              <div className={`${styles.containerRow} ${styles.issueNumber}`}>
-                #{listing.order.issuedId}
-              </div>
+              )}
             </div>
           </div>
-        ) : null}
+
+          <div className={styles.columnListing}>
+            <span className={styles.informationTitle}>
+              {t('best_buying_option.buy_listing.issue_number').toUpperCase()}
+            </span>
+            <div className={`${styles.containerRow} ${styles.issueNumber}`}>
+              #{listing.order.issuedId}
+            </div>
+          </div>
+        </div>
         {isOwner ? (
           <>
-            {isLegacyOrder(listing.order) ? (
-              <div className={styles.expirationMessage}>
-                <div className={styles.warningIconContainer}>
-                  <Icon
-                    name="exclamation triangle"
-                    className={styles.warningExpiration}
-                  />
-                </div>
-              </div>
-            ) : null}
-            {!isOrderExpired ? (
-              <Button
-                as={Link}
-                to={locations.sell(nft.contractAddress, nft.tokenId)}
-                primary
-                fluid
-              >
-                {t('asset_page.actions.update')}
-              </Button>
-            ) : null}
+            <Button
+              as={Link}
+              to={locations.sell(nft.contractAddress, nft.tokenId)}
+              primary
+              fluid
+            >
+              {t('asset_page.actions.update')}
+            </Button>
 
             <Button
               as={Link}
@@ -236,52 +222,52 @@ const BuyNFTBox = ({ nft, address }: Props) => {
       {isLoading
         ? renderLoading()
         : !!listing
-        ? renderHasListing()
-        : isOwner
-        ? renderOwnerAndNoListingOptions()
-        : nft && (
-            <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
-              <div className={styles.informationContainer}>
-                <div className={styles.columnListing}>
-                  <span className={styles.informationTitle}>
-                    {t('best_buying_option.minting.price').toUpperCase()}
-                  </span>
-                  <div
-                    className={`${styles.containerRow} ${styles.issueNumber}`}
-                  >
-                    {t('asset_card.not_for_sale')}
+          ? renderHasListing()
+          : isOwner
+            ? renderOwnerAndNoListingOptions()
+            : nft && (
+              <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
+                <div className={styles.informationContainer}>
+                  <div className={styles.columnListing}>
+                    <span className={styles.informationTitle}>
+                      {t('best_buying_option.minting.price').toUpperCase()}
+                    </span>
+                    <div
+                      className={`${styles.containerRow} ${styles.issueNumber}`}
+                    >
+                      {t('asset_card.not_for_sale')}
+                    </div>
+                  </div>
+                  <div className={styles.columnListing}>
+                    <span className={styles.informationTitle}>
+                      {t(
+                        'best_buying_option.buy_listing.issue_number'
+                      ).toUpperCase()}
+                    </span>
+                    <div
+                      className={`${styles.containerRow} ${styles.issueNumber}`}
+                    >
+                      #{nft.issuedId}
+                    </div>
                   </div>
                 </div>
-                <div className={styles.columnListing}>
-                  <span className={styles.informationTitle}>
-                    {t(
-                      'best_buying_option.buy_listing.issue_number'
-                    ).toUpperCase()}
-                  </span>
-                  <div
-                    className={`${styles.containerRow} ${styles.issueNumber}`}
+                {!isOwner && canBid && (
+                  <Button
+                    inverted
+                    className={styles.makeOfferButton}
+                    as={Link}
+                    to={locations.bid(nft.contractAddress, nft.tokenId)}
                   >
-                    #{nft.issuedId}
-                  </div>
-                </div>
+                    <img
+                      src={makeOffer}
+                      alt={t('best_buying_option.buy_listing.make_offer')}
+                    />
+                    &nbsp;
+                    {t('best_buying_option.buy_listing.make_offer')}
+                  </Button>
+                )}
               </div>
-              {!isOwner && canBid && (
-                <Button
-                  inverted
-                  className={styles.makeOfferButton}
-                  as={Link}
-                  to={locations.bid(nft.contractAddress, nft.tokenId)}
-                >
-                  <img
-                    src={makeOffer}
-                    alt={t('best_buying_option.buy_listing.make_offer')}
-                  />
-                  &nbsp;
-                  {t('best_buying_option.buy_listing.make_offer')}
-                </Button>
-              )}
-            </div>
-          )}
+            )}
     </div>
   )
 }
