@@ -28,6 +28,8 @@ jest.mock('decentraland-dapps/dist/containers', () => {
   }
 })
 
+const dateNowFn = Date.now
+
 describe('Best Buying Option', () => {
   let asset: Item = {
     contractAddress: '0xaddress',
@@ -68,7 +70,7 @@ describe('Best Buying Option', () => {
     buyer: null,
     price: '100000000000000000000',
     status: ListingStatus.OPEN,
-    expiresAt: 1671033414000,
+    expiresAt: 1671033414,
     createdAt: 1671033414000,
     updatedAt: 0,
     network: Network.MATIC,
@@ -86,7 +88,7 @@ describe('Best Buying Option', () => {
     status: ListingStatus.OPEN,
     blockchainId: '1',
     blockNumber: '',
-    expiresAt: 1671033414000,
+    expiresAt: 1671033414,
     createdAt: 1671033414000,
     updatedAt: 0,
     contractAddress: '0xaddress',
@@ -97,6 +99,7 @@ describe('Best Buying Option', () => {
 
   afterEach(() => {
     jest.resetAllMocks()
+    Date.now = dateNowFn
   })
 
   describe('Mint option', () => {
@@ -125,6 +128,7 @@ describe('Best Buying Option', () => {
 
   describe('Listing option', () => {
     beforeEach(() => {
+      Date.now = () => 1671033414000
       asset.available = 0
       ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
         data: [orderResponse],

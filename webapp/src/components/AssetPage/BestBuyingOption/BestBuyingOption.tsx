@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -22,10 +22,7 @@ import infoIcon from '../../../images/infoIcon.png'
 import clock from '../../../images/clock.png'
 import noListings from '../../../images/noListings.png'
 import { AssetType } from '../../../modules/asset/types'
-import {
-  getIsLegacyOrderAndShouldHaveExpired,
-  getIsOrderExpired
-} from '../../../lib/orders'
+import { getIsOrderExpired } from '../../../lib/orders'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
@@ -120,6 +117,9 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
     buyWithCardClassName: styles.buyWithCardClassName
   }
 
+  console.log(listing && getIsOrderExpired(
+      listing.order.expiresAt
+  ))
   return isLoading ? null : (
     <div
       data-testid="best-buying-option-container"

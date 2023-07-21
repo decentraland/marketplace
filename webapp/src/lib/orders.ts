@@ -1,24 +1,12 @@
 import { Order } from '@dcl/schemas'
 
 export function getIsLegacyOrderAndShouldHaveExpired(order: Order) {
-  console.log('isLegacyOrder(order): ', isLegacyOrder(order))
   return isLegacyOrder(order) && new Date(order.expiresAt / 1000) < new Date()
 }
 
 export function isExpiresAtInSeconds(expiresAt: number) {
-  // Convert the expiresAt value to a string to check its length
-  const expiresAtString = expiresAt.toString()
-
   // Check if the length is 10 digits (seconds since Unix epoch)
-  if (expiresAtString.length === 10) {
-    return true
-  }
-
-  // Check if the length is 13 digits (milliseconds since Unix epoch)
-  if (expiresAtString.length === 13) {
-    return false
-  }
-  return false
+  return expiresAt.toString().length === 10
 }
 
 export function getExpiresAtInMiliSeconds(expiresAt: number) {
@@ -32,8 +20,7 @@ export function getExpiresAtInMiliSeconds(expiresAt: number) {
 }
 
 export function getIsOrderExpired(expiresAt: number) {
-  const isExpired = getExpiresAtInMiliSeconds(expiresAt) < Date.now()
-  console.log('isExpired: ', isExpired)
+  console.log(Date.now)
   return getExpiresAtInMiliSeconds(expiresAt) < Date.now()
 }
 

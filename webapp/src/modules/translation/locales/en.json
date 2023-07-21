@@ -516,8 +516,8 @@
       "edit_price": "Edit price",
       "change_beneficiary": "Change beneficiary",
       "mint_item": "Mint item",
-      "legacy_order_expired_warning": "This NFT has an open order that been created with an invalid expiration date so it never actually expired. It's currently not being shown to users to avoid unwanted sells. Please cancel it and submit it again.",
-      "legacy_order_not_expired_warning": "This NFT has an open order that has been created with an invalid expiration date so it won't ever expire. It's currently being shown to users and will be delisted on the expiration ({date}) but will be available to buy through the contract. Can you cancel it and create it again."
+      "legacy_order_expired_warning": "This NFT has an open listing that has been created with an invalid expiration date so it never expired. The listing it’s not being shown to buyers in the Marketplace to avoid unintended sales. Please remove the listing",
+      "legacy_order_not_expired_warning": "This NFT has an open listing that has been created with an invalid expiration date so it never expired. The listing it’s currently being shown to buyers and will be removed from the Marketplace on the expiration date ({date}), but the NFT could be bought through the smart contract. Please remove this listing and create it again, the new expiration date will be updated in the smart contract."
     },
     "sales_rent_action_box": {
       "until": "From {from_date} to {to_date}",

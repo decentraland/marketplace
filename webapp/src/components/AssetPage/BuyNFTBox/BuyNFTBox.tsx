@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import formatDistanceToNowI18N from 'date-fns/formatDistanceToNow'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ListingStatus, Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
-import { Button, Loader } from 'decentraland-ui'
+import { Button, Icon, Loader } from 'decentraland-ui'
 import Mana from '../../Mana/Mana'
 import { getExpirationDateLabel } from '../../../lib/date'
 import clock from '../../../images/clock.png'
@@ -143,13 +143,21 @@ const BuyNFTBox = ({ nft, address }: Props) => {
         {isOwner ? (
           <>
             {isLegacyOrder(listing.order) ? (
-              <span>
-                {isOrderExpired
-                  ? t('asset_page.actions.legacy_order_expired_warning')
-                  : t('asset_page.actions.legacy_order_not_expired_warning', {
-                      date: formatDistanceToNowI18N(listing.order.expiresAt)
-                    })}
-              </span>
+              <div className={styles.expirationMessage}>
+                <div className={styles.warningIconContainer}>
+                  <Icon
+                    name="exclamation triangle"
+                    className={styles.warningExpiration}
+                  />
+                </div>
+                <span>
+                  {isOrderExpired
+                    ? t('asset_page.actions.legacy_order_expired_warning')
+                    : t('asset_page.actions.legacy_order_not_expired_warning', {
+                        date: formatDistanceToNowI18N(listing.order.expiresAt)
+                      })}
+                </span>
+              </div>
             ) : null}
             {!isOrderExpired ? (
               <Button
