@@ -11,6 +11,7 @@ import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
 import { Props } from './ListingsTable.types'
 import styles from './ListingsTable.module.css'
+import { getIsOrderExpired } from '../../../lib/orders'
 
 export const ROWS_PER_PAGE = 5
 const INITIAL_PAGE = 1
@@ -52,7 +53,11 @@ const ListingsTable = (props: Props) => {
           setOrders(
             formatDataToTable(
               isNFT(asset)
-                ? response.data.filter(order => order.tokenId !== asset.tokenId)
+                ? response.data.filter(
+                    order =>
+                      order.tokenId !== asset.tokenId &&
+                      !getIsOrderExpired(order.expiresAt)
+                  )
                 : response.data,
               isMobileOrTablet
             )
