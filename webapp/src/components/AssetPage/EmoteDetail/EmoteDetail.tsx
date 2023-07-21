@@ -104,19 +104,13 @@ const EmoteDetail = ({ nft }: Props) => {
       <YourOffer nft={nft} />
       <BidsTable nft={nft} />
       <TransactionHistory asset={nft} />
-      {false && (
-        <TableContainer
-          tabsList={tabList}
-          handleSortByChange={(value: string) =>
-            setSortBy(value as OrderSortBy)
-          }
-          sortbyList={listingSortByOptions}
-          sortBy={sortBy}
-          children={
-            <ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />
-          }
-        />
-      )}
+      <TableContainer
+        tabsList={tabList}
+        handleSortByChange={(value: string) => setSortBy(value as OrderSortBy)}
+        sortbyList={listingSortByOptions}
+        sortBy={sortBy}
+        children={<ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />}
+      />
     </div>
   )
 }
