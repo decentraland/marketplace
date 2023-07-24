@@ -195,7 +195,7 @@ export const SelectedFilters = ({
       ) : null}
       {onlySmart ? (
         <Pill
-          label={t('nft_filters.only_smart')}
+          label={t('nft_filters.only_smart.selected')}
           id="onlySmart"
           onDelete={handleDeleteOnlySmart}
         />

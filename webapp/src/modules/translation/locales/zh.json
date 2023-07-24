@@ -448,7 +448,10 @@
     },
     "more_filters": "更多过滤器",
     "location": "地点",
-    "only_smart": "只有聪明",
+    "only_smart": {
+      "title": "智能穿戴设备",
+      "selected": "只有聪明"
+    },
     "not_on_sale": "包括非卖品",
     "adjacent_to_road": "毗邻道路",
     "distance_to_plaza": {
