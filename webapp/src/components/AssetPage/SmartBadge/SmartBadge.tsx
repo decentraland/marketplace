@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SmartIcon } from 'decentraland-ui'
 import { Section } from '../../../modules/vendor/decentraland'
@@ -20,7 +21,7 @@ const SmartBadge = ({ assetType, clickable = true }: Props) => {
 
   return (
     <IconBadge
-      className="SmartBadge"
+      className={classNames('SmartBadge', { clickable })}
       text={t('wearable.smart_badge')}
       href={clickable ? href : undefined}
     >
