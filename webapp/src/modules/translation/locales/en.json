@@ -400,6 +400,10 @@
       "all_items": "All rarities",
       "count_items": "{count} {count, plural, one {rarity} other {rarities}}"
     },
+    "only_smart": {
+      "title": "Smart Wearables",
+      "selected": "Only Smart"
+    },
     "periods": {
       "title": "Rental Period",
       "all_items": "All periods",
@@ -449,7 +453,6 @@
     },
     "more_filters": "More filters",
     "location": "Location",
-    "only_smart": "Only smart",
     "not_on_sale": "Includes not on sale",
     "for_sale": "For sale",
     "category": "Category",
