@@ -18,9 +18,9 @@ const SmartWearableVideoShowcaseModal = (props: Props) => {
   const fetchVideoSrc = useCallback(async () => {
     if (!asset?.urn) return
 
-    const videoHash = await getSmartWearableVideoShowcase(asset.urn)
+    const videoHash = await getSmartWearableVideoShowcase(asset)
     if (videoHash) setVideoSrc(builderAPI.contentUrl(videoHash))
-  }, [asset.urn])
+  }, [asset])
 
   useEffect(() => {
     fetchVideoSrc()
