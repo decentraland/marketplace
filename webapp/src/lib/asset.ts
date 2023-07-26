@@ -2,7 +2,6 @@ import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClie
 import { createFetchComponent } from '@well-known-components/fetch-component'
 import { Asset } from '../modules/asset/types'
 import { builderAPI } from '../modules/vendor/decentraland/builder/api'
-import { isNFT } from '../modules/asset/utils'
 import { peerUrl } from './environment'
 
 export const SCENE_PATH = 'scene.json'
@@ -48,10 +47,11 @@ export const getSmartWearableVideoShowcase = async (
   asset: Asset
 ): Promise<string | undefined> => {
   try {
-    const contents = await builderAPI.fetchItemContent(
-      asset.contractAddress,
-      isNFT(asset) ? asset.tokenId : asset.itemId
-    )
+    const { contractAddress, itemId } = asset
+
+    if (!itemId) return undefined
+
+    const contents = await builderAPI.fetchItemContent(contractAddress, itemId)
 
     const videoContentKey = Object.keys(contents).find(key =>
       key.endsWith(VIDEO_PATH)

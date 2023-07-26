@@ -16,7 +16,7 @@ jest.mock('../modules/vendor/decentraland/builder/api', () => ({
 const anSWUrn = 'aUrn'
 const smartWearable = {
   contractAddress: '0xcontractAddress',
-  tokenId: 'tokenId',
+  itemId: 'itemId',
   urn: anSWUrn
 } as Asset
 const entity = [{ content: [{ file: 'scene.json', hash: 'aHash' }] }]
@@ -116,6 +116,17 @@ describe('when getting a smart wearable required permissions', () => {
 })
 
 describe('when getting a smart wearable video showcase', () => {
+  describe.each([null, undefined])('and the asset itemId is %s', itemId => {
+    it('should return undefined', async () => {
+      expect(
+        await getSmartWearableVideoShowcase({
+          ...smartWearable,
+          itemId
+        } as Asset)
+      ).toBe(undefined)
+    })
+  })
+
   describe('and the builder api fails', () => {
     beforeEach(() => {
       fetchItemContentMock.mockRejectedValueOnce(new Error('aError'))
