@@ -500,10 +500,12 @@
   "asset_page": {
     "actions": {
       "cancel_sale": "Remove listing",
+      "terminate_listing": "Terminate listing",
       "update_sale": "Update listing",
       "manage": "Manage",
       "manage_in_builder": "Manage in builder",
       "update": "Update price",
+      "update_listing": "Update listing",
       "buy": "Buy",
       "buy_with_mana": "Buy with MANA",
       "get_mana": "Get MANA",

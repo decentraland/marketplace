@@ -60,7 +60,6 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
         : order.expiresAt
     )
     const isOrderExpired = getIsOrderExpired(order.expiresAt)
-    console.log('isOrderExpired: ', isOrderExpired);
 
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
@@ -133,14 +132,25 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
               </Button>
             ) : null}
 
-            <Button
-              as={Link}
-              to={locations.cancel(nft.contractAddress, nft.tokenId)}
-              fluid
-              inverted
-            >
-              {t('asset_page.actions.cancel_sale')}
-            </Button>
+            {isLegacyOrder(order) ? (
+              <Button
+                as={Link}
+                to={locations.cancel(nft.contractAddress, nft.tokenId)}
+                fluid
+                primary
+              >
+                {t('asset_page.actions.terminate_listing')}
+              </Button>
+            ) : (
+              <Button
+                as={Link}
+                to={locations.cancel(nft.contractAddress, nft.tokenId)}
+                fluid
+                inverted
+              >
+                {t('asset_page.actions.cancel_sale')}
+              </Button>
+            )}
           </>
         ) : !isOrderExpired ? (
           <BuyNFTButtons
