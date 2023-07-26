@@ -10,7 +10,11 @@ import makeOffer from '../../../images/makeOffer.png'
 import { locations } from '../../../modules/routing/locations'
 import { bidAPI } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
-import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import {
+  getIsLegacyOrderExpired,
+  getIsOrderExpired,
+  isLegacyOrder
+} from '../../../lib/orders'
 import { ManaToFiat } from '../../ManaToFiat'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
@@ -19,7 +23,7 @@ import styles from './BuyNFTBox.module.css'
 
 const FIRST = '1'
 
-const BuyNFTBox = ({ nft, address, order }: Props) => {
+const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
   const [canBid, setCanBid] = useState(false)
   const isOwner = nft && nft?.owner === address
 
@@ -50,8 +54,13 @@ const BuyNFTBox = ({ nft, address, order }: Props) => {
 
   const renderHasListing = useCallback(() => {
     if (!nft || !order) return null
-    const expiresAtLabel = getExpirationDateLabel(order.expiresAt * 1000)
+    const expiresAtLabel = getExpirationDateLabel(
+      wallet && wallet.address === order.owner
+        ? order.expiresAt * 1000
+        : order.expiresAt
+    )
     const isOrderExpired = getIsOrderExpired(order.expiresAt)
+    console.log('isOrderExpired: ', isOrderExpired);
 
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
@@ -101,23 +110,28 @@ const BuyNFTBox = ({ nft, address, order }: Props) => {
                   />
                 </div>
                 <span>
-                  {isOrderExpired
+                  {getIsLegacyOrderExpired(order.expiresAt)
                     ? t('asset_page.actions.legacy_order_expired_warning')
                     : t('asset_page.actions.legacy_order_not_expired_warning', {
                         date: formatDistanceToNowI18N(order.expiresAt)
                       })}
                 </span>
               </div>
-            ) : (
+            ) : null}
+            {!isLegacyOrder(order) ||
+            (isLegacyOrder(order) &&
+              !getIsLegacyOrderExpired(order.expiresAt)) ? (
               <Button
                 as={Link}
                 to={locations.sell(nft.contractAddress, nft.tokenId)}
                 primary
                 fluid
               >
-                {t('asset_page.actions.update')}
+                {isLegacyOrder(order)
+                  ? t('asset_page.actions.update_listing')
+                  : t('asset_page.actions.update')}
               </Button>
-            )}
+            ) : null}
 
             <Button
               as={Link}
@@ -160,7 +174,7 @@ const BuyNFTBox = ({ nft, address, order }: Props) => {
         ) : null}
       </div>
     )
-  }, [canBid, isOwner, order, nft])
+  }, [nft, order, wallet, isOwner, canBid])
 
   const renderOwnerAndNoListingOptions = useCallback(() => {
     if (!nft) return null

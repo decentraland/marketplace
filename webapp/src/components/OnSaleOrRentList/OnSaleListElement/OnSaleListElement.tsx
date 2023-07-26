@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Icon, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { getIsLegacyOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { locations } from '../../../modules/routing/locations'
 import { LEGACY_MARKETPLACE_MAINNET_CONTRACT } from '../../../modules/vendor/decentraland'
 import { Mana } from '../../Mana'
@@ -38,7 +38,11 @@ const OnSaleListElement = ({
               <AssetCell asset={item || nft!} />
               {order && isLegacyOrder(order) ? (
                 <Popup
-                  content={t('asset_page.actions.legacy_order_expired_warning')}
+                  content={
+                    getIsLegacyOrderExpired(order.expiresAt)
+                      ? t('asset_page.actions.legacy_order_expired_warning')
+                      : t('asset_page.actions.legacy_order_not_expired_warning')
+                  }
                   position="top center"
                   trigger={
                     <div className="warningExpiration">
@@ -75,7 +79,7 @@ const OnSaleListElement = ({
                 {t('account_page.revoke')}
               </Button>
             ) : order && nft && isLegacyOrder(order) ? (
-              getIsOrderExpired(order.expiresAt) ? (
+              getIsLegacyOrderExpired(order.expiresAt) ? (
                 <Button
                   as={Link}
                   to={locations.cancel(nft.contractAddress, nft.tokenId)}
