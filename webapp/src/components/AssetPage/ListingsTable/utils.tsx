@@ -4,6 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon, Mana } from 'decentraland-ui'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { isLegacyOrder } from '../../../lib/orders'
 import { locations } from '../../../modules/routing/locations'
 import { LinkedProfile } from '../../LinkedProfile'
 import ListedBadge from '../../ListedBadge'
@@ -30,7 +31,7 @@ export const formatDataToTable = (
       }),
       ...(!isMobile && {
         [t('listings_table.expiration_date')]: formatDistanceToNow(
-          +order.expiresAt,
+          +order.expiresAt * (isLegacyOrder(order) ? 1 : 1000),
           {
             addSuffix: true
           }
@@ -42,7 +43,9 @@ export const formatDataToTable = (
             <div className={styles.badgeContainer}>
               {order.status === ListingStatus.OPEN &&
               order.expiresAt &&
-              Number(order.expiresAt) >= Date.now() ? (
+              (isLegacyOrder(order)
+                ? order.expiresAt
+                : order.expiresAt * 1000) >= Date.now() ? (
                 <ListedBadge className={styles.badge} />
               ) : null}
               <div className={styles.row}>
