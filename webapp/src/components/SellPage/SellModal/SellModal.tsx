@@ -53,11 +53,23 @@ const SellModal = (props: Props) => {
     isUpdate ? ethers.utils.formatEther(order!.price) : ''
   )
 
-  const [expiresAt, setExpiresAt] = useState(
-    isUpdate && order!.expiresAt && isValid(order!.expiresAt)
-      ? formatDate(addDays(order!.expiresAt, 1), INPUT_FORMAT)
-      : getDefaultExpirationDate()
-  )
+  const [expiresAt, setExpiresAt] = useState(() => {
+    let exp = order?.expiresAt
+
+    if (isUpdate && exp) {
+      // If the order's expiration is in seconds, convert it to milliseconds
+      if (exp.toString().length === 10) {
+        exp = exp * 1000
+      }
+
+      if (isValid(exp)) {
+        return formatDate(addDays(exp, 1), INPUT_FORMAT)
+      }
+    }
+
+    return getDefaultExpirationDate()
+  })
+
   const [showConfirm, setShowConfirm] = useState(false)
   const [targetContractLabel, setTargetContractLabel] = useState<string>()
 
