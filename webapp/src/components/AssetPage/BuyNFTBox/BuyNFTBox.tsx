@@ -50,11 +50,7 @@ const BuyNFTBox = ({ nft, address, order }: Props) => {
 
   const renderHasListing = useCallback(() => {
     if (!nft || !order) return null
-    const expiresAtLabel = getExpirationDateLabel(
-      order.expiresAt.toString().length === 10
-        ? order.expiresAt * 1000
-        : order.expiresAt
-    )
+    const expiresAtLabel = getExpirationDateLabel(order.expiresAt * 1000)
     const isOrderExpired = getIsOrderExpired(order.expiresAt)
 
     return (
@@ -112,8 +108,7 @@ const BuyNFTBox = ({ nft, address, order }: Props) => {
                       })}
                 </span>
               </div>
-            ) : null}
-            {!isLegacyOrder(order) ? (
+            ) : (
               <Button
                 as={Link}
                 to={locations.sell(nft.contractAddress, nft.tokenId)}
@@ -122,7 +117,7 @@ const BuyNFTBox = ({ nft, address, order }: Props) => {
               >
                 {t('asset_page.actions.update')}
               </Button>
-            ) : null}
+            )}
 
             <Button
               as={Link}
