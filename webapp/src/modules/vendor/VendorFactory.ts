@@ -1,3 +1,4 @@
+import { BaseClientConfig } from 'decentraland-dapps/dist/lib/BaseClient'
 import { services as decentraland } from './decentraland'
 import {
   ContractService,
@@ -9,13 +10,16 @@ import {
 import { VendorName } from './types'
 
 export class VendorFactory {
-  static build(vendor: VendorName): Vendor<VendorName> {
+  static build(
+    vendor: VendorName,
+    config?: BaseClientConfig | undefined
+  ): Vendor<VendorName> {
     switch (vendor) {
       case VendorName.DECENTRALAND:
         return new Vendor<VendorName.DECENTRALAND>(
           vendor,
           new decentraland.ContractService(),
-          new decentraland.NFTService(),
+          new decentraland.NFTService(config),
           new decentraland.OrderService(),
           new decentraland.BidService(),
           new decentraland.AnalyticsService()

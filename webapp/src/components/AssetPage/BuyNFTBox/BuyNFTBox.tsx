@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import formatDistanceToNowI18N from 'date-fns/formatDistanceToNow'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ListingStatus, Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
-import { Button, Loader } from 'decentraland-ui'
+import { Button, Icon } from 'decentraland-ui'
 import Mana from '../../Mana/Mana'
 import { getExpirationDateLabel } from '../../../lib/date'
 import clock from '../../../images/clock.png'
 import makeOffer from '../../../images/makeOffer.png'
 import { locations } from '../../../modules/routing/locations'
-import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
+import { bidAPI } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
-import { getIsOrderExpired } from '../../../lib/orders'
+import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { ManaToFiat } from '../../ManaToFiat'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
@@ -19,13 +19,7 @@ import styles from './BuyNFTBox.module.css'
 
 const FIRST = '1'
 
-const BuyNFTBox = ({ nft, address }: Props) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [listing, setListing] = useState<{
-    order: Order
-    total: number
-  } | null>(null)
-
+const BuyNFTBox = ({ nft, address, order }: Props) => {
   const [canBid, setCanBid] = useState(false)
   const isOwner = nft && nft?.owner === address
 
@@ -54,51 +48,14 @@ const BuyNFTBox = ({ nft, address }: Props) => {
     }
   }, [nft, address, isOwner])
 
-  useEffect(() => {
-    let cancel = false
-    if (nft) {
-      setIsLoading(true)
-
-      let params: OrderFilters = {
-        contractAddress: nft.contractAddress,
-        first: 1,
-        skip: 0,
-        tokenId: nft.tokenId,
-        status: ListingStatus.OPEN
-      }
-
-      orderAPI
-        .fetchOrders(params, OrderSortBy.CHEAPEST)
-        .then(response => {
-          if (!cancel && response.data.length > 0) {
-            setListing({ order: response.data[0], total: response.total })
-          }
-        })
-        .finally(() => !cancel && setIsLoading(false))
-        .catch(error => {
-          console.error(error)
-        })
-    }
-    return () => {
-      cancel = true
-    }
-  }, [nft])
-
-  const renderLoading = useCallback(
-    () => (
-      <div className={styles.emptyContainer}>
-        <Loader active data-testid="loader" />
-      </div>
-    ),
-    []
-  )
-
   const renderHasListing = useCallback(() => {
-    if (!nft || !listing) return null
+    if (!nft || !order) return null
     const expiresAtLabel = getExpirationDateLabel(
-      listing.order.expiresAt
+      order.expiresAt.toString().length === 10
+        ? order.expiresAt * 1000
+        : order.expiresAt
     )
-    const isOrderExpired = getIsOrderExpired(listing.order.expiresAt)
+    const isOrderExpired = getIsOrderExpired(order.expiresAt)
 
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
@@ -115,13 +72,13 @@ const BuyNFTBox = ({ nft, address }: Props) => {
                   network={nft.network}
                   className={styles.informationBold}
                 >
-                  {formatWeiToAssetCard(listing.order.price)}
+                  {formatWeiToAssetCard(order.price)}
                 </Mana>
               </div>
-              {+listing.order.price > 0 && (
+              {+order.price > 0 && (
                 <div className={styles.informationText}>
                   {'('}
-                  <ManaToFiat mana={listing.order.price} />
+                  <ManaToFiat mana={order.price} />
                   {')'}
                 </div>
               )}
@@ -133,20 +90,39 @@ const BuyNFTBox = ({ nft, address }: Props) => {
               {t('best_buying_option.buy_listing.issue_number').toUpperCase()}
             </span>
             <div className={`${styles.containerRow} ${styles.issueNumber}`}>
-              #{listing.order.issuedId}
+              #{order.issuedId}
             </div>
           </div>
         </div>
         {isOwner ? (
           <>
-            <Button
-              as={Link}
-              to={locations.sell(nft.contractAddress, nft.tokenId)}
-              primary
-              fluid
-            >
-              {t('asset_page.actions.update')}
-            </Button>
+            {isLegacyOrder(order) ? (
+              <div className={styles.expirationMessage}>
+                <div className={styles.warningIconContainer}>
+                  <Icon
+                    name="exclamation triangle"
+                    className={styles.warningExpiration}
+                  />
+                </div>
+                <span>
+                  {isOrderExpired
+                    ? t('asset_page.actions.legacy_order_expired_warning')
+                    : t('asset_page.actions.legacy_order_not_expired_warning', {
+                        date: formatDistanceToNowI18N(order.expiresAt)
+                      })}
+                </span>
+              </div>
+            ) : null}
+            {!isLegacyOrder(order) ? (
+              <Button
+                as={Link}
+                to={locations.sell(nft.contractAddress, nft.tokenId)}
+                primary
+                fluid
+              >
+                {t('asset_page.actions.update')}
+              </Button>
+            ) : null}
 
             <Button
               as={Link}
@@ -189,7 +165,7 @@ const BuyNFTBox = ({ nft, address }: Props) => {
         ) : null}
       </div>
     )
-  }, [canBid, isOwner, listing, nft])
+  }, [canBid, isOwner, order, nft])
 
   const renderOwnerAndNoListingOptions = useCallback(() => {
     if (!nft) return null
@@ -203,7 +179,7 @@ const BuyNFTBox = ({ nft, address }: Props) => {
         >
           {t('asset_page.actions.sell')}
         </Button>
-        {!listing ? (
+        {!order ? (
           <Button
             inverted
             as={Link}
@@ -215,59 +191,57 @@ const BuyNFTBox = ({ nft, address }: Props) => {
         ) : null}
       </div>
     )
-  }, [listing, nft])
+  }, [order, nft])
 
   return (
     <div className={styles.BuyNFTBox}>
-      {isLoading
-        ? renderLoading()
-        : !!listing
-          ? renderHasListing()
-          : isOwner
-            ? renderOwnerAndNoListingOptions()
-            : nft && (
-              <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
-                <div className={styles.informationContainer}>
-                  <div className={styles.columnListing}>
-                    <span className={styles.informationTitle}>
-                      {t('best_buying_option.minting.price').toUpperCase()}
-                    </span>
-                    <div
-                      className={`${styles.containerRow} ${styles.issueNumber}`}
-                    >
-                      {t('asset_card.not_for_sale')}
-                    </div>
-                  </div>
-                  <div className={styles.columnListing}>
-                    <span className={styles.informationTitle}>
-                      {t(
-                        'best_buying_option.buy_listing.issue_number'
-                      ).toUpperCase()}
-                    </span>
-                    <div
-                      className={`${styles.containerRow} ${styles.issueNumber}`}
-                    >
-                      #{nft.issuedId}
-                    </div>
+      {!!order
+        ? renderHasListing()
+        : isOwner
+        ? renderOwnerAndNoListingOptions()
+        : nft && (
+            <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
+              <div className={styles.informationContainer}>
+                <div className={styles.columnListing}>
+                  <span className={styles.informationTitle}>
+                    {t('best_buying_option.minting.price').toUpperCase()}
+                  </span>
+                  <div
+                    className={`${styles.containerRow} ${styles.issueNumber}`}
+                  >
+                    {t('asset_card.not_for_sale')}
                   </div>
                 </div>
-                {!isOwner && canBid && (
-                  <Button
-                    inverted
-                    className={styles.makeOfferButton}
-                    as={Link}
-                    to={locations.bid(nft.contractAddress, nft.tokenId)}
+                <div className={styles.columnListing}>
+                  <span className={styles.informationTitle}>
+                    {t(
+                      'best_buying_option.buy_listing.issue_number'
+                    ).toUpperCase()}
+                  </span>
+                  <div
+                    className={`${styles.containerRow} ${styles.issueNumber}`}
                   >
-                    <img
-                      src={makeOffer}
-                      alt={t('best_buying_option.buy_listing.make_offer')}
-                    />
-                    &nbsp;
-                    {t('best_buying_option.buy_listing.make_offer')}
-                  </Button>
-                )}
+                    #{nft.issuedId}
+                  </div>
+                </div>
               </div>
-            )}
+              {!isOwner && canBid && (
+                <Button
+                  inverted
+                  className={styles.makeOfferButton}
+                  as={Link}
+                  to={locations.bid(nft.contractAddress, nft.tokenId)}
+                >
+                  <img
+                    src={makeOffer}
+                    alt={t('best_buying_option.buy_listing.make_offer')}
+                  />
+                  &nbsp;
+                  {t('best_buying_option.buy_listing.make_offer')}
+                </Button>
+              )}
+            </div>
+          )}
     </div>
   )
 }

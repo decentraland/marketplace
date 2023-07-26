@@ -1,5 +1,9 @@
 import { put, call, takeEvery, select, race, take } from 'redux-saga/effects'
-import { RentalListing, RentalStatus } from '@dcl/schemas'
+import { ListingStatus, RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  CONNECT_WALLET_SUCCESS,
+  ConnectWalletSuccessAction
+} from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ErrorCode } from 'decentraland-transactions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
@@ -38,7 +42,12 @@ import {
   ExecuteOrderWithCardRequestAction,
   EXECUTE_ORDER_WITH_CARD_REQUEST,
   executeOrderWithCardFailure,
-  executeOrderWithCardSuccess
+  executeOrderWithCardSuccess,
+  FETCH_LEGACY_ORDERS_REQUEST,
+  FetchLegacyOrdersRequestAction,
+  fetchOrdersSuccess,
+  fetchOrdersRequest,
+  fetchOrdersFailure
 } from './actions'
 import {
   FetchNFTFailureAction,
@@ -47,6 +56,9 @@ import {
   FETCH_NFT_FAILURE,
   FETCH_NFT_SUCCESS
 } from '../nft/actions'
+import SubgraphService from '../vendor/decentraland/SubgraphService'
+import { getSubgraphOrdersQuery } from './utils'
+import { LegacyOrderFragment } from './types'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
@@ -57,6 +69,43 @@ export function* orderSaga() {
   )
   yield takeEvery(SET_PURCHASE, handleSetNftPurchaseWithCard)
   yield takeEvery(CANCEL_ORDER_REQUEST, handleCancelOrderRequest)
+  yield takeEvery(FETCH_LEGACY_ORDERS_REQUEST, handleFetchLegacyOrdersRequest)
+  yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
+}
+
+function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
+  const { address } = action.payload.wallet
+  yield put(fetchOrdersRequest(address, { status: ListingStatus.OPEN }))
+}
+
+function* handleFetchLegacyOrdersRequest(
+  action: FetchLegacyOrdersRequestAction
+) {
+  const { address, filters } = action.payload
+
+  try {
+    const query = getSubgraphOrdersQuery({ ...filters, owner: address })
+
+    const response: { data: { orders: LegacyOrderFragment[] } } = yield call(
+      [SubgraphService, 'fetch'],
+      'marketplace-legacy', // @TODO: put this nicer
+      query
+    )
+    yield put(fetchOrdersSuccess(response.data.orders))
+  } catch (error) {
+    const errorMessage = isErrorWithMessage(error)
+      ? error.message
+      : t('global.unknown_error')
+    const errorCode =
+      error !== undefined &&
+      error !== null &&
+      typeof error === 'object' &&
+      'code' in error
+        ? (error as { code: ErrorCode }).code
+        : undefined
+
+    yield put(fetchOrdersFailure(address, errorMessage, errorCode))
+  }
 }
 
 function* handleCreateOrderRequest(action: CreateOrderRequestAction) {

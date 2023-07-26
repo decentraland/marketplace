@@ -16,7 +16,7 @@ const locales: Record<string, Locale> = {
 
 // Until recently, the past orders have been stored in milliseconds instead of seconds won't expire until the year 5500 or so.
 // This constant puts a limit to the expiration date of the orders, for those orders exceding this, it will show that they never expire.
-export const MAX_EXPIRATION_YEAR = 2100
+export const MAX_EXPIRATION_YEAR = 2500
 
 export function getExpirationDateLabel(date: number | Date) {
   date = new Date(date)

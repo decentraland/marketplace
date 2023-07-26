@@ -74,7 +74,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     authorizationSaga(),
     bidSaga(),
     itemSaga(getIdentity),
-    nftSaga(),
+    nftSaga(getIdentity),
     orderSaga(),
     profileSaga(),
     proximitySaga(),

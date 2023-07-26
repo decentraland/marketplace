@@ -14,6 +14,9 @@ import {
   setWearablePreviewController
 } from '../../modules/ui/preview/actions'
 import { getData as getItems } from '../../modules/item/selectors'
+import { getData as getOrders } from '../../modules/order/selectors'
+import { isNFT } from '../../modules/asset/utils'
+import { NFT } from '../../modules/nft/types'
 import { fetchItemRequest } from '../../modules/item/actions'
 import {
   MapStateProps,
@@ -33,6 +36,14 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     ownProps.asset.itemId,
     items
   )
+  const orders = getOrders(state)
+  const order = isNFT(ownProps.asset)
+    ? Object.values(orders).find(
+        order =>
+          order.contractAddress === ownProps.asset.contractAddress &&
+          order.tokenId === (ownProps.asset as NFT).tokenId
+      )
+    : undefined
 
   if (wallet && !!profiles[wallet.address]) {
     const profile = profiles[wallet.address]
@@ -44,7 +55,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     wearableController: getWearablePreviewController(state),
     isTryingOn: getIsTryingOn(state),
     isPlayingEmote: getIsPlayingEmote(state),
-    item
+    item,
+    order
   }
 }
 

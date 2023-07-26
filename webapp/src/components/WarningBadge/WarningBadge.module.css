@@ -1,0 +1,15 @@
+.WarningIcon {
+  display: flex;
+}
+
+.badge {
+  color: white;
+  position: absolute;
+  width: 100%;
+  justify-content: center;
+}
+
+.WarningIcon :global(i.icon) {
+  margin: 0;
+  right: 0;
+}

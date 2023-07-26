@@ -19,7 +19,8 @@ const AssetProvider = (props: Props) => {
     isLoadingFeatureFlags,
     isLandOrEstate,
     retry,
-    error
+    error,
+    isConnecting
   } = props
 
   const [hasLoadedInitialFlags, setHasLoadedInitialFlags] = useState(false)
@@ -50,7 +51,8 @@ const AssetProvider = (props: Props) => {
       tokenId &&
       asset === null &&
       !isLoading &&
-      !hasFetchedOnce
+      !hasFetchedOnce &&
+      !isConnecting
     ) {
       switch (type) {
         case AssetType.NFT:
@@ -80,7 +82,8 @@ const AssetProvider = (props: Props) => {
     rentalStatus,
     hasLoadedInitialFlags,
     isLoading,
-    isLandOrEstate
+    isLandOrEstate,
+    isConnecting
   ])
 
   return (

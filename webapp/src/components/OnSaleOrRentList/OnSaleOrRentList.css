@@ -38,6 +38,14 @@
   font-stretch: normal;
 }
 
+.onSaleOrRentTable .ui.basic.table .itemTitle {
+  width: 45%;
+}
+
+.onSaleOrRentTable .ui.basic.table .actions {
+  width: 16%;
+}
+
 .onSaleOrRentTable .ui.basic.table th {
   font-size: 16px;
   font-weight: 700;
@@ -87,4 +95,17 @@
   color: var(--secondary-text);
   align-items: center;
   margin-bottom: 11px;
+}
+
+.onSaleOrRentTable
+  .ui[class*='very basic'].table:not(.sortable):not(.striped)
+  td:last-child,
+.onSaleOrRentTable
+  .ui[class*='very basic'].table:not(.sortable):not(.striped)
+  th:last-child {
+  padding-right: 18px;
+}
+
+.onSaleOrRentTable .ui.table td .ui.primary.button {
+  width: 100%;
 }

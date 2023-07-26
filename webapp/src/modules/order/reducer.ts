@@ -43,17 +43,26 @@ import {
   EXECUTE_ORDER_WITH_CARD_REQUEST,
   EXECUTE_ORDER_WITH_CARD_SUCCESS,
   ClearOrderErrorsAction,
-  CLEAR_ORDER_ERRORS
+  CLEAR_ORDER_ERRORS,
+  FETCH_LEGACY_ORDERS_REQUEST,
+  FetchLegacyOrdersRequestAction,
+  FetchLegacyOrdersFailureAction,
+  FetchLegacyOrdersSuccessAction,
+  FETCH_LEGACY_ORDERS_SUCCESS,
+  FETCH_LEGACY_ORDERS_FAILURE
 } from './actions'
+import { LegacyOrderFragment } from './types'
 
 export type OrderState = {
   data: Record<string, Order>
+  dataLegacy: Record<string, LegacyOrderFragment>
   loading: LoadingState
   error: string | null
 }
 
 export const INITIAL_STATE: OrderState = {
   data: {},
+  dataLegacy: {},
   loading: [],
   error: null
 }
@@ -77,6 +86,9 @@ type OrderReducerAction =
   | CancelOrderSuccessAction
   | AcceptRentalListingSuccessAction
   | ClearOrderErrorsAction
+  | FetchLegacyOrdersRequestAction
+  | FetchLegacyOrdersSuccessAction
+  | FetchLegacyOrdersFailureAction
 
 export function orderReducer(
   state: OrderState = INITIAL_STATE,
@@ -87,6 +99,7 @@ export function orderReducer(
     case EXECUTE_ORDER_REQUEST:
     case EXECUTE_ORDER_WITH_CARD_REQUEST:
     case CANCEL_ORDER_REQUEST:
+    case FETCH_LEGACY_ORDERS_REQUEST:
     case FETCH_NFTS_REQUEST: {
       return {
         ...state,
@@ -119,6 +132,7 @@ export function orderReducer(
     }
     case CREATE_ORDER_FAILURE:
     case EXECUTE_ORDER_FAILURE:
+    case FETCH_LEGACY_ORDERS_FAILURE:
     case EXECUTE_ORDER_WITH_CARD_FAILURE:
     case CANCEL_ORDER_FAILURE:
     case FETCH_NFTS_FAILURE: {
@@ -157,6 +171,21 @@ export function orderReducer(
         )
       }
       return newState
+    }
+
+    case FETCH_LEGACY_ORDERS_SUCCESS: {
+      const { orders } = action.payload
+      return {
+        ...state,
+        dataLegacy: {
+          ...state.dataLegacy,
+          ...orders.reduce((obj, order) => {
+            obj[order.id] = order
+            return obj
+          }, {} as Record<string, LegacyOrderFragment>)
+        },
+        loading: loadingReducer(state.loading, action)
+      }
     }
     case CLEAR_ORDER_ERRORS: {
       return {

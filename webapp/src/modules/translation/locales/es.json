@@ -66,7 +66,9 @@
     "currently": "actualmente",
     "showing": "Mostrando",
     "of": "de",
-    "now": "ahora"
+    "now": "ahora",
+    "actions": "Acciones",
+    "action_required": "Acción requerida"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -301,7 +303,9 @@
     "edit_in_builder": "Editar en el builder",
     "on_sale": "En Venta",
     "edit_price": "Editar precio",
-    "mint_item": "Acuñar item"
+    "mint_item": "Acuñar item",
+    "legacy_order_expired_warning": "Este listado no se muestra a los compradores en Marketplace, pero se creó con una fecha de vencimiento no válida y, por lo tanto, aún se puede comprar a través del contrato. Elimine esta lista manualmente.",
+    "legacy_order_not_expired_warning": "Este anuncio se ha creado con una fecha de caducidad no válida. Elimine este anuncio y vuelva a ponerlo a la venta para solucionar el problema."
   },
   "store_settings": {
     "settings": "Configuración",
@@ -492,6 +496,7 @@
   "asset_page": {
     "actions": {
       "cancel_sale": "Borrar publicación",
+      "update_sale": "Actualizar publicación",
       "manage": "Gestionar",
       "manage_in_builder": "Gestionar en el builder",
       "update": "Actualizar precio",
@@ -880,7 +885,8 @@
     "primary_market_title": "Creaciones",
     "primary_market_subtitle": "Creado por este usuario",
     "secondary_market_title": "Colecciones",
-    "secondary_market_subtitle": "Colleccionado por este usuario"
+    "secondary_market_subtitle": "Colleccionado por este usuario",
+    "revoke": "Revocar permisos del contrato"
   },
   "settings_page": {
     "authorizations": "Autorizaciones",

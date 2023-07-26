@@ -51,7 +51,7 @@ export const getContractAuthorization = (
 }
 
 export const useAuthorization = (
-  authorization: Authorization,
+  authorization: Authorization | null,
   onFetchAuthorizations: typeof fetchAuthorizationsRequest
 ) => {
   const authorizations = useSelector(getAuthorizations)
@@ -60,7 +60,7 @@ export const useAuthorization = (
 
   useEffect(() => {
     // Authorization fetch has to be done only once using this hook
-    if (hasFetchedAuthorizations.current) {
+    if (hasFetchedAuthorizations.current || !authorization) {
       return
     }
 
@@ -78,5 +78,8 @@ export const useAuthorization = (
     onFetchAuthorizations([authorization])
   }, [authorization, authorizations, onFetchAuthorizations])
 
-  return [isLoadingAuthorizations, isAuthorized(authorization, authorizations)]
+  return [
+    isLoadingAuthorizations,
+    authorization ? isAuthorized(authorization, authorizations) : false
+  ]
 }
