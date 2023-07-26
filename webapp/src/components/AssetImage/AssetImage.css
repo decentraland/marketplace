@@ -193,6 +193,16 @@
   right: 11px;
 }
 
+.AssetImage .badge-container {
+  z-index: 10;
+  position: absolute;
+  bottom: 11px;
+  right: 11px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 8px;
+}
+
 .AssetImage .badges {
   position: absolute;
   left: 10px;

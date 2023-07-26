@@ -66,7 +66,9 @@
     "currently": "现在",
     "showing": "顯示",
     "of": "的",
-    "now": "现在"
+    "now": "现在",
+    "actions": "行动",
+    "action_required": "需要采取的行动"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -495,9 +497,12 @@
   "asset_page": {
     "actions": {
       "cancel_sale": "删除列表",
+      "terminate_listing": "终止上市",
+      "update_sale": "更新清单",
       "manage": "管理",
       "manage_in_builder": "在 Builder 中管理",
       "update": "更新价格",
+      "update_listing": "更新清单",
       "buy": "购买",
       "buy_with_mana": "用 MANA 购买",
       "buy_with_card": "刷卡购买",
@@ -513,8 +518,8 @@
       "edit_price": "编辑价格",
       "change_beneficiary": "变更受益人",
       "mint_item": "薄荷项目",
-      "legacy_order_expired_warning": "此NFT的开放列表是由非到期日期创建的，因此从未过期。",
-      "legacy_order_not_expired_warning": "此NFT的开放列表是在有效期的日期不正确的，因此它从未过期。目前向买家展示的列表将在到期日（{date}）中从市场中删除，但可以通过智能签订购买NFT。消除此列表。消除此列表并创建新的期刊日期，将在智能合同中更新。"
+      "legacy_order_expired_warning": "此列表不会向市场中的买家显示，但创建时的到期日期无效，因此仍然可以通过合同购买。请手动删除此列表。",
+      "legacy_order_not_expired_warning": "此列表已创建，但过期日期无效。请删除此列表并再次出售以解决问题。"
     },
     "sales_rent_action_box": {
       "until": "从 {from_date} 到 {to_date}",
@@ -885,7 +890,8 @@
     "primary_market_title": "创作",
     "primary_market_subtitle": "此用户创建的项目",
     "secondary_market_title": "收藏品",
-    "secondary_market_subtitle": "该用户收集的物品"
+    "secondary_market_subtitle": "该用户收集的物品",
+    "revoke": "撤销合约权限"
   },
   "settings_page": {
     "authorizations": "授权",

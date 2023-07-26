@@ -23,6 +23,7 @@ export type Props<T extends AssetType = AssetType> = {
   isLoading: boolean
   rentalStatus?: RentalStatus[]
   isLoadingFeatureFlags: boolean
+  isConnecting: boolean
   isLandOrEstate: boolean
   retry?: boolean
   error: string | null
@@ -48,6 +49,7 @@ export type MapStateProps = Pick<
   | 'isLoadingFeatureFlags'
   | 'isLandOrEstate'
   | 'error'
+  | 'isConnecting'
 >
 export type MapDispatchProps = Pick<
   Props,

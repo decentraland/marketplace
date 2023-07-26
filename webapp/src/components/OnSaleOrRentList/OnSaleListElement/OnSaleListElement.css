@@ -12,3 +12,48 @@
 .mobile-row a {
   color: var(--text);
 }
+
+.expirationMessage {
+  font-size: 12px;
+  padding: 10px;
+  background-color: #474450;
+  border-radius: 4px;
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.warningExpiration.icon {
+  font-size: 12px;
+  line-height: 10px;
+}
+
+.expirationMessage > span {
+  flex: 1;
+}
+
+.warningIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #ff7439;
+  border-radius: 50%;
+}
+
+.warningExpiration {
+  color: white;
+  background-color: #ff7439;
+  border-radius: 20px;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  margin-left: 16px;
+  padding: 2px 22px 2px 12px;
+}
+
+.nameCell {
+  display: flex;
+}

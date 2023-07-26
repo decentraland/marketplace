@@ -1,5 +1,5 @@
 import { action } from 'typesafe-actions'
-import { Order } from '@dcl/schemas'
+import { Order, OrderFilters } from '@dcl/schemas'
 import {
   buildTransactionPayload,
   buildTransactionWithFromPayload,
@@ -10,6 +10,7 @@ import { ErrorCode } from 'decentraland-transactions'
 import { NFT } from '../nft/types'
 import { getAssetName } from '../asset/utils'
 import { formatWeiMANA } from '../../lib/mana'
+import { LegacyOrderFragment } from './types'
 
 // Create Order (aka Sell)
 
@@ -175,3 +176,32 @@ export const CLEAR_ORDER_ERRORS = 'Clear Order Errors'
 export const clearOrderErrors = () => action(CLEAR_ORDER_ERRORS)
 
 export type ClearOrderErrorsAction = ReturnType<typeof clearOrderErrors>
+
+// Fetch orders
+export const FETCH_LEGACY_ORDERS_REQUEST = '[Request] Fetch Legacy Orders'
+export const FETCH_LEGACY_ORDERS_SUCCESS = '[Success] Fetch Legacy Orders'
+export const FETCH_LEGACY_ORDERS_FAILURE = '[Failure] Fetch Legacy Orders'
+
+export const fetchOrdersRequest = (address: string, filters?: OrderFilters) =>
+  action(FETCH_LEGACY_ORDERS_REQUEST, { address, filters })
+
+export const fetchOrdersSuccess = (orders: LegacyOrderFragment[]) =>
+  action(FETCH_LEGACY_ORDERS_SUCCESS, {
+    orders
+  })
+
+export const fetchOrdersFailure = (
+  address: string,
+  error: string,
+  errorCode?: ErrorCode
+) => action(FETCH_LEGACY_ORDERS_FAILURE, { address, error, errorCode })
+
+export type FetchLegacyOrdersRequestAction = ReturnType<
+  typeof fetchOrdersRequest
+>
+export type FetchLegacyOrdersSuccessAction = ReturnType<
+  typeof fetchOrdersSuccess
+>
+export type FetchLegacyOrdersFailureAction = ReturnType<
+  typeof fetchOrdersFailure
+>

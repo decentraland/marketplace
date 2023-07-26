@@ -49,7 +49,7 @@ export function* handleFetchContractsRequest() {
       throw new Error('Contracts have already been fetched')
     }
 
-    const vendors = Object.values(VendorName).map(VendorFactory.build)
+    const vendors = Object.values(VendorName).map(v => VendorFactory.build(v))
     let contracts: Contract[] = []
 
     for (const vendor of vendors) {

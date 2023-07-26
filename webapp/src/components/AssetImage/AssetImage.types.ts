@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dispatch } from 'redux'
-import { Avatar, IPreviewController, Item, Rarity } from '@dcl/schemas'
+import { Avatar, IPreviewController, Item, Order, Rarity } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   setIsTryingOn,
@@ -16,6 +16,7 @@ import {
 
 export type Props = {
   asset: Asset
+  order?: Order
   className?: string
   isDraggable?: boolean
   withNavigation?: boolean
@@ -48,6 +49,7 @@ export enum ControlOptionAction {
 
 export type MapStateProps = Pick<
   Props,
+  | 'order'
   | 'avatar'
   | 'wearableController'
   | 'isTryingOn'

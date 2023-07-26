@@ -68,7 +68,9 @@
     "currently": "currently",
     "showing": "Showing",
     "of": "of",
-    "now": "now"
+    "now": "now",
+    "actions": "Actions",
+    "action_required": "Action required"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -498,9 +500,12 @@
   "asset_page": {
     "actions": {
       "cancel_sale": "Remove listing",
+      "terminate_listing": "Terminate listing",
+      "update_sale": "Update listing",
       "manage": "Manage",
       "manage_in_builder": "Manage in builder",
       "update": "Update price",
+      "update_listing": "Update listing",
       "buy": "Buy",
       "buy_with_mana": "Buy with MANA",
       "get_mana": "Get MANA",
@@ -516,8 +521,8 @@
       "edit_price": "Edit price",
       "change_beneficiary": "Change beneficiary",
       "mint_item": "Mint item",
-      "legacy_order_expired_warning": "This NFT has an open listing that has been created with an invalid expiration date in the smart contract, so it never really expired. The listing is not being shown to buyers in the Marketplace to avoid unintended sales, but someone could buy it directly from the smart contract. Please remove this listing. If you list the item for sale again, the new expiration date will be updated in the smart contract.",
-      "legacy_order_not_expired_warning": "This NFT has an open listing that has been created with an invalid expiration date in the smart contract, so it will not expire at the current expiration date. The listing is currently being shown to buyers and will be removed from the Marketplace on the expiration date (in about X months), but the NFT could be bought through the smart contract afterward.  Please remove this listing and create it again, the new expiration date will be updated in the smart contract."
+      "legacy_order_expired_warning": "This listing is not being shown to buyers in the Marketplace but has been created with an invalid expiration date and therefore could still be purchased via the contract. Please remove this listing manually.",
+      "legacy_order_not_expired_warning": "This listing has been created with an invalid expiration date. Please remove this listing and put it for sale again to fix the issue."
     },
     "sales_rent_action_box": {
       "until": "From {from_date} to {to_date}",
@@ -888,7 +893,8 @@
     "primary_market_title": "Creations",
     "primary_market_subtitle": "Items created by this user",
     "secondary_market_title": "Collectibles",
-    "secondary_market_subtitle": "Items collected by this user"
+    "secondary_market_subtitle": "Items collected by this user",
+    "revoke": "Revoke contract permissions"
   },
   "settings_page": {
     "authorizations": "Authorizations",

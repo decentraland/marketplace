@@ -4,6 +4,7 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
+import { isConnecting } from '../../modules/wallet/selectors'
 import {
   fetchNFTRequest,
   FETCH_NFT_REQUEST,
@@ -103,7 +104,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       FETCH_APPLICATION_FEATURES_REQUEST
     ),
     isLandOrEstate,
-    error
+    error,
+    isConnecting: isConnecting(state)
   }
 }
 

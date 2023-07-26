@@ -2,6 +2,9 @@ import { NFTCategory, ChainId, Network } from '@dcl/schemas'
 import { getContract, ContractName as CN } from 'decentraland-transactions'
 import { Network as AppNetwork } from '../../contract/types'
 
+export const LEGACY_MARKETPLACE_MAINNET_CONTRACT =
+  '0xb3bca6f5052c7e24726b44da7403b56a8a1b98f8'
+
 export enum ContractName {
   MANA = 'MANA',
   MARKETPLACE = 'Marketplace',
@@ -10,7 +13,7 @@ export enum ContractName {
   COLLECTION_STORE = 'CollectionStore',
   RENTALS = 'Rentals',
   LAND = 'LAND',
-  ESTATES = 'Estates',
+  ESTATES = 'Estates'
 }
 
 const nftServerReplicatedMarketplaceContracts = {
@@ -407,7 +410,7 @@ const nftServerReplicatedMarketplaceContracts = {
       vendor: 'decentraland',
       category: NFTCategory.WEARABLE,
       network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_GOERLI,
+      chainId: ChainId.ETHEREUM_GOERLI
     }
   ],
   [AppNetwork.SEPOLIA]: [
@@ -441,7 +444,7 @@ const nftServerReplicatedMarketplaceContracts = {
       vendor: 'decentraland',
       category: NFTCategory.WEARABLE,
       network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_SEPOLIA,
+      chainId: ChainId.ETHEREUM_SEPOLIA
     }
   ]
 }
@@ -521,7 +524,7 @@ const localContracts = {
       category: null,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MUMBAI
-    },
+    }
   ],
   [AppNetwork.GOERLI]: [
     {
@@ -597,7 +600,7 @@ const localContracts = {
       category: null,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MUMBAI
-    },
+    }
   ],
   [AppNetwork.MAINNET]: [
     {
@@ -671,7 +674,7 @@ const localContracts = {
       category: null,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MAINNET
-    },
+    }
   ]
 }
 

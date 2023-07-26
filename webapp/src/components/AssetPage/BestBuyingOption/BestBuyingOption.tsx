@@ -288,7 +288,6 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
           <span className={styles.expiresAt}>
             <img src={clock} alt="clock" className={styles.mintingIcon} />
             &nbsp;
-            {t('best_buying_option.buy_listing.expires')}&nbsp;
             {getExpirationDateLabel(
               listing.order.expiresAt *
                 (isLegacyOrder(listing.order) ? 1 : 1000)

@@ -1,4 +1,5 @@
 import { Order, RentalListing } from '@dcl/schemas'
+import { BaseClientConfig } from 'decentraland-dapps/dist/lib/BaseClient'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
@@ -6,11 +7,17 @@ import { Account } from '../../account/types'
 import { NFTService as NFTServiceInterface } from '../services'
 import { FetchOneOptions, VendorName } from '../types'
 import { NFTsFetchFilters } from './nft/types'
-import { nftAPI } from './nft/api'
+import { NFT_SERVER_URL } from './nft/api'
+import { NFTAuthAPI } from './nft/authApi'
 import { getERC721ContractData } from './utils'
 
 export class NFTService
   implements NFTServiceInterface<VendorName.DECENTRALAND> {
+  nftAPI: NFTAuthAPI
+
+  constructor(config?: BaseClientConfig | undefined) {
+    this.nftAPI = new NFTAuthAPI(NFT_SERVER_URL, config)
+  }
   async fetch(
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters
@@ -23,7 +30,7 @@ export class NFTService
       number
     ]
   > {
-    const { data: results, total } = await nftAPI.fetch(params, filters)
+    const { data: results, total } = await this.nftAPI.get(params, filters)
 
     const accounts: Account[] = results.reduce((accumulator, nftResult) => {
       const address = nftResult.nft.owner
@@ -53,7 +60,7 @@ export class NFTService
   }
 
   async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {
-    const result = await nftAPI.fetch(
+    const result = await this.nftAPI.get(
       { ...countParams, first: 0, skip: 0 },
       filters
     )
@@ -67,7 +74,11 @@ export class NFTService
   ): Promise<
     readonly [NFT<VendorName.DECENTRALAND>, Order | null, RentalListing | null]
   > {
-    const response = await nftAPI.fetchOne(contractAddress, tokenId, options)
+    const response = await this.nftAPI.fetchOne(
+      contractAddress,
+      tokenId,
+      options
+    )
     const nft: NFT = { ...response.nft, vendor: VendorName.DECENTRALAND }
     return [nft, response.order, response.rental]
   }

@@ -24,10 +24,12 @@ import {
 import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
+import { isLegacyOrder } from '../../lib/orders'
 import { Atlas } from '../Atlas'
 import ListedBadge from '../ListedBadge'
 import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
+import WarningBadge from '../WarningBadge'
 import { JumpIn } from '../AssetPage/JumpIn'
 import { getEthereumItemUrn } from './utils'
 import { ControlOptionAction, Props } from './AssetImage.types'
@@ -572,6 +574,8 @@ const AssetImageWrapper = (props: Props) => {
     showOrderListedTag,
     item,
     onFetchItem,
+    order,
+    wallet,
     ...rest
   } = props
 
@@ -622,11 +626,23 @@ const AssetImageWrapper = (props: Props) => {
     <div className={classes}>
       <img src={PIXEL} alt="pixel" className="pixel" />
       <div className="image-wrapper">
-        {showOrderListedTag ? <ListedBadge className="listed-badge" /> : null}
+        {showOrderListedTag || !!order ? (
+          <>
+            {showOrderListedTag ? (
+              <ListedBadge className="listed-badge" />
+            ) : null}
+            {!!order &&
+            wallet?.address === order.owner &&
+            isLegacyOrder(order) ? (
+              <WarningBadge />
+            ) : null}
+          </>
+        ) : null}
         <AssetImage
           asset={asset}
           item={item}
           onFetchItem={onFetchItem}
+          wallet={wallet}
           {...rest}
         >
           <div className="badges">

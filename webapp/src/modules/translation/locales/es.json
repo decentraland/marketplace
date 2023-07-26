@@ -66,7 +66,9 @@
     "currently": "actualmente",
     "showing": "Mostrando",
     "of": "de",
-    "now": "ahora"
+    "now": "ahora",
+    "actions": "Acciones",
+    "action_required": "Acción requerida"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -492,9 +494,12 @@
   "asset_page": {
     "actions": {
       "cancel_sale": "Borrar publicación",
+      "terminate_listing": "Terminar publicación",
+      "update_sale": "Actualizar publicación",
       "manage": "Gestionar",
       "manage_in_builder": "Gestionar en el builder",
       "update": "Actualizar precio",
+      "update_listing": "Actualizar publicación",
       "buy": "Comprar",
       "buy_with_mana": "Comprar con MANA",
       "buy_with_card": "Comprar con tarjeta",
@@ -510,8 +515,8 @@
       "edit_price": "Editar precio",
       "change_beneficiary": "Cambiar de beneficiario",
       "mint_item": "Acuñar item",
-      "legacy_order_expired_warning": "Este NFT tiene una orden abierta que se ha creado con una fecha de vencimiento no válida.El listado no se muestra a los compradores en el mercado para evitar ventas involuntarias. Elimina la orden de venta",
-      "legacy_order_not_expired_warning": "Este NFT tiene una orden abierta que se ha creado con una fecha de vencimiento no válida.El listado que actualmente se muestra a los compradores y se eliminará del mercado en la fecha de vencimiento ({fecha}), pero el NFT podría comprarse a través del contrato. Eliminar este listado y volver a crearlo, la nueva fecha de vencimiento se actualizará en el contrato."
+      "legacy_order_expired_warning": "Este listado no se muestra a los compradores en Marketplace, pero se creó con una fecha de vencimiento no válida y, por lo tanto, aún se puede comprar a través del contrato. Elimine esta lista manualmente.",
+    "legacy_order_not_expired_warning": "Este anuncio se ha creado con una fecha de caducidad no válida. Elimine este anuncio y vuelva a ponerlo a la venta para solucionar el problema."
     },
     "sales_rent_action_box": {
       "until": "Desde {from_date} a {to_date}",
@@ -880,7 +885,8 @@
     "primary_market_title": "Creaciones",
     "primary_market_subtitle": "Creado por este usuario",
     "secondary_market_title": "Colecciones",
-    "secondary_market_subtitle": "Colleccionado por este usuario"
+    "secondary_market_subtitle": "Colleccionado por este usuario",
+    "revoke": "Revocar permisos del contrato"
   },
   "settings_page": {
     "authorizations": "Autorizaciones",
