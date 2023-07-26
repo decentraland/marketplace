@@ -91,7 +91,7 @@ const OnSaleListElement = ({
                 <Button
                   as={Link}
                   to={locations.sell(nft.contractAddress, nft.tokenId)}
-                  primary
+                  inverted
                   fluid
                 >
                   {t('asset_page.actions.update_sale')}
