@@ -1,6 +1,7 @@
 import { Order, OrderFilters } from '@dcl/schemas'
 import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
+import { getIsOrderExpired } from '../../lib/orders'
 import { Asset } from '../asset/types'
 
 export const DEFAULT_EXPIRATION_IN_DAYS = 30
@@ -26,7 +27,8 @@ export function getActiveOrder(
     asset &&
     'activeOrderId' in asset &&
     !!asset.activeOrderId &&
-    asset.activeOrderId in orders
+    asset.activeOrderId in orders &&
+    !getIsOrderExpired(orders[asset.activeOrderId].expiresAt)
   ) {
     return orders[asset.activeOrderId]
   }

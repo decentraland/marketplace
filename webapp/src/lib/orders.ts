@@ -19,8 +19,12 @@ export function getExpiresAtInMiliSeconds(expiresAt: number) {
   return expiresAt
 }
 
-export function getIsOrderExpired(expiresAt: number) {
+export function getIsLegacyOrderExpired(expiresAt: number) {
   return getExpiresAtInMiliSeconds(expiresAt) < Date.now()
+}
+
+export function getIsOrderExpired(expiresAt: number) {
+  return expiresAt * 1000 < Date.now()
 }
 
 export function isLegacyOrder(order: Order) {
