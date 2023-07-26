@@ -497,10 +497,12 @@
   "asset_page": {
     "actions": {
       "cancel_sale": "删除列表",
+      "terminate_listing": "终止上市",
       "update_sale": "更新清单",
       "manage": "管理",
       "manage_in_builder": "在 Builder 中管理",
       "update": "更新价格",
+      "update_listing": "更新清单",
       "buy": "购买",
       "buy_with_mana": "用 MANA 购买",
       "buy_with_card": "刷卡购买",

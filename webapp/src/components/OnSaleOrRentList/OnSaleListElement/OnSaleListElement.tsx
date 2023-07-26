@@ -85,13 +85,13 @@ const OnSaleListElement = ({
                   to={locations.cancel(nft.contractAddress, nft.tokenId)}
                   primary
                 >
-                  {t('asset_page.actions.cancel_sale')}
+                  {t('asset_page.actions.terminate_listing')}
                 </Button>
               ) : (
                 <Button
                   as={Link}
                   to={locations.sell(nft.contractAddress, nft.tokenId)}
-                  primary
+                  inverted
                   fluid
                 >
                   {t('asset_page.actions.update_sale')}
