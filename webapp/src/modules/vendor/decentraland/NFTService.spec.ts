@@ -10,7 +10,7 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT, NFTsCountParams, NFTsFetchParams } from '../../nft/types'
 import { VendorName } from '../types'
 import { NFTService } from './NFTService'
-import * as api from './nft/api'
+import * as authApi from './nft/authApi'
 import { NFTResult, NFTsFetchFilters } from './nft'
 import {
   ContractData,
@@ -62,9 +62,12 @@ describe("Decentraland's NFTService", () => {
 
     describe('when the fetch fails', () => {
       beforeEach(() => {
-        ;(api.nftAPI.fetch as jest.Mock).mockRejectedValueOnce(
-          aBasicErrorMessage
-        )
+        // ;(api.nftAPI.fetch as jest.Mock).mockRejectedValueOnce(
+        //   aBasicErrorMessage
+        // )
+        jest
+          .spyOn(authApi.NFTAuthAPI.prototype, 'get')
+          .mockRejectedValueOnce(aBasicErrorMessage)
       })
 
       it("should reject with the fetch's error", () => {
@@ -85,7 +88,7 @@ describe("Decentraland's NFTService", () => {
           { nft, order, rental },
           { nft: anotherNFT, order: null, rental: null }
         ]
-        ;(api.nftAPI.fetch as jest.Mock).mockResolvedValueOnce({
+        jest.spyOn(authApi.NFTAuthAPI.prototype, 'get').mockResolvedValueOnce({
           data: nftResults,
           total
         })
@@ -93,10 +96,9 @@ describe("Decentraland's NFTService", () => {
 
       it('should have fetched the NFTs with the filter and NFT params', async () => {
         await nftService.fetch(fetchParams, filters)
-        expect(api.nftAPI.fetch as jest.Mock).toHaveBeenCalledWith(
-          fetchParams,
-          filters
-        )
+        expect(
+          authApi.NFTAuthAPI.prototype.get as jest.Mock
+        ).toHaveBeenCalledWith(fetchParams, filters)
       })
 
       it('should return the NFTs, the accounts, the orders, the rentals and the total', () => {
@@ -130,9 +132,9 @@ describe("Decentraland's NFTService", () => {
 
     describe('when the fetch fails', () => {
       beforeEach(() => {
-        ;(api.nftAPI.fetch as jest.Mock).mockRejectedValueOnce(
-          aBasicErrorMessage
-        )
+        jest
+          .spyOn(authApi.NFTAuthAPI.prototype, 'get')
+          .mockRejectedValueOnce(aBasicErrorMessage)
       })
 
       it("should reject with the fetch's error", () => {
@@ -146,12 +148,16 @@ describe("Decentraland's NFTService", () => {
       const total = 1
 
       beforeEach(() => {
-        ;(api.nftAPI.fetch as jest.Mock).mockResolvedValueOnce({ total })
+        jest
+          .spyOn(authApi.NFTAuthAPI.prototype, 'get')
+          .mockResolvedValueOnce({ total, data: [] })
       })
 
       it('should have fetched the NFTs with the count and filter params, with the first and skip params as 0', async () => {
         await nftService.count(countParams, filters)
-        expect(api.nftAPI.fetch as jest.Mock).toHaveBeenCalledWith(
+        expect(
+          authApi.NFTAuthAPI.prototype.get as jest.Mock
+        ).toHaveBeenCalledWith(
           {
             ...countParams,
             skip: 0,
@@ -172,9 +178,9 @@ describe("Decentraland's NFTService", () => {
   describe('when fetching one NFT', () => {
     describe('when the fetch fails', () => {
       beforeEach(() => {
-        ;(api.nftAPI.fetchOne as jest.Mock).mockRejectedValueOnce(
-          aBasicErrorMessage
-        )
+        jest
+          .spyOn(authApi.NFTAuthAPI.prototype, 'fetchOne')
+          .mockRejectedValueOnce(aBasicErrorMessage)
       })
 
       it("should reject with the fetch's error", () => {
@@ -186,24 +192,24 @@ describe("Decentraland's NFTService", () => {
 
     describe('when the fetch is successful', () => {
       beforeEach(() => {
-        ;(api.nftAPI.fetchOne as jest.Mock).mockResolvedValueOnce({
-          order,
-          nft,
-          rental
-        })
+        jest
+          .spyOn(authApi.NFTAuthAPI.prototype, 'fetchOne')
+          .mockResolvedValueOnce({
+            order,
+            nft,
+            rental
+          })
       })
 
       it('should fetch the NFT with the provided address and the token ID', async () => {
         await nftService.fetchOne(nft.contractAddress, nft.id, {
           rentalStatus: [RentalStatus.EXECUTED]
         })
-        expect(api.nftAPI.fetchOne as jest.Mock).toHaveBeenCalledWith(
-          nft.contractAddress,
-          nft.id,
-          {
-            rentalStatus: [RentalStatus.EXECUTED]
-          }
-        )
+        expect(
+          authApi.NFTAuthAPI.prototype.fetchOne as jest.Mock
+        ).toHaveBeenCalledWith(nft.contractAddress, nft.id, {
+          rentalStatus: [RentalStatus.EXECUTED]
+        })
       })
 
       it('should return the NFT with its vendor and the order', () => {
