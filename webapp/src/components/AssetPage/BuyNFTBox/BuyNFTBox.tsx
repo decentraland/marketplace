@@ -123,8 +123,10 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
               <Button
                 as={Link}
                 to={locations.sell(nft.contractAddress, nft.tokenId)}
-                primary
                 fluid
+                {...(isLegacyOrder(order)
+                  ? { inverted: true }
+                  : { primary: true })}
               >
                 {isLegacyOrder(order)
                   ? t('asset_page.actions.update_listing')
