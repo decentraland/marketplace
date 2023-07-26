@@ -32,10 +32,10 @@ export type EstateSizeFilters = Pick<
 >
 
 export class NFTAuthAPI extends BaseClient {
-  get = async (
+  async get(
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters
-  ): Promise<NFTResponse> => {
+  ): Promise<NFTResponse> {
     const queryParams = this.buildNFTQueryString(params, filters)
     return this.fetch(`/v1/nfts?${queryParams}`)
   }
