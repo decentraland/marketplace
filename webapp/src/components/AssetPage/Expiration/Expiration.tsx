@@ -4,6 +4,7 @@ import { isValid } from 'date-fns'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './Expiration.types'
 import { formatDistanceToNow } from '../../../lib/date'
+import { isLegacyOrder } from '../../../lib/orders'
 import styles from './Expiration.module.css'
 
 const Expiration = ({ order }: Props) => {
@@ -21,9 +22,12 @@ const Expiration = ({ order }: Props) => {
     <div className={styles.container}>
       <Icon name="clock outline" />
       {t('asset_page.expires')}{' '}
-      {formatDistanceToNow(order.expiresAt, {
-        addSuffix: true
-      })}
+      {formatDistanceToNow(
+        order.expiresAt * (isLegacyOrder(order) ? 1 : 1000),
+        {
+          addSuffix: true
+        }
+      )}
     </div>
   )
 }

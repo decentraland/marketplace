@@ -26,8 +26,10 @@ export const formatDataToTable = (
         <div className={styles.issuedIdContainer}>
           <div className={styles.row}>
             {owner.orderStatus === ListingStatus.OPEN &&
-            owner.orderExpiresAt &&
-            Number(owner.orderExpiresAt) >= Date.now() ? (
+            !!owner.orderExpiresAt &&
+            (owner.orderExpiresAt.length === 10
+              ? +owner.orderExpiresAt * 1000
+              : +owner.orderExpiresAt) >= Date.now() ? (
               <ListedBadge className={styles.badge} />
             ) : null}
             #<span className={styles.issuedId}>{owner.issuedId}</span>
