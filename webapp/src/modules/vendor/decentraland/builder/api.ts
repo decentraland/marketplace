@@ -18,6 +18,13 @@ class BuilderAPI extends BaseAPI {
   contentUrl(hash: string) {
     return `${this.url}/storage/contents/${hash}`
   }
+
+  fetchItemContent = async (
+    collectionAddress: string,
+    itemId: string
+  ): Promise<Record<string, string>> => {
+    return this.request('get', `/items/${collectionAddress}/${itemId}/contents`)
+  }
 }
 
 export const builderAPI = new BuilderAPI(BUILDER_SERVER_URL, retryParams)
