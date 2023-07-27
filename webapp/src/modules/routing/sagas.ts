@@ -462,7 +462,11 @@ function* handleFetchOnSaleNFTsSuccess(action: FetchNFTsSuccessAction) {
     wallet?.address === options.params.address &&
     options.params.onlyOnSale
   ) {
-    if (orders.some(isLegacyOrder)) {
+    if (
+      orders.some(
+        order => isLegacyOrder(order) && order.owner === wallet.address
+      )
+    ) {
       yield put(openModal('ExpiredListingsModal'))
     }
   }

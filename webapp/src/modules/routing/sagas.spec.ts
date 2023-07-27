@@ -1359,6 +1359,7 @@ describe('when handling the connect wallet success action', () => {
 describe('when handling the fetch nfts success action', () => {
   let view: View
   let wallet: Wallet
+  let orders: Order[]
   const address = '0x...'
   beforeEach(() => {
     wallet = {
@@ -1369,8 +1370,10 @@ describe('when handling the fetch nfts success action', () => {
     beforeEach(() => {
       view = View.MARKET
     })
-    describe('and the are some legacy orders among those NFTs', () => {
-      const orders = [{ expiresAt: Date.now() } as Order]
+    describe('and the are some legacy orders among those NFTs and belong to the wallet connected', () => {
+      beforeEach(() => {
+        orders = [{ expiresAt: Date.now(), owner: wallet.address } as Order]
+      })
       it('should open the ExpiresListingsModal', () => {
         return expectSaga(routingSaga)
           .provide([
@@ -1378,6 +1381,42 @@ describe('when handling the fetch nfts success action', () => {
             [select(getWallet), wallet]
           ])
           .put(openModal('ExpiredListingsModal'))
+          .dispatch(
+            fetchNFTsSuccess(
+              {
+                params: {
+                  onlyOnSale: true,
+                  first: 1000,
+                  skip: 0,
+                  address: wallet.address
+                },
+                view,
+                vendor: VendorName.DECENTRALAND
+              },
+              [],
+              [],
+              orders,
+              [],
+              1,
+              Date.now()
+            )
+          )
+          .run({ silenceTimeout: true })
+      })
+    })
+    describe('and the are some legacy orders among those NFTs and do not belong to the wallet connected', () => {
+      beforeEach(() => {
+        orders = [
+          { expiresAt: Date.now(), owner: 'some other address' } as Order
+        ]
+      })
+      it('should not open the ExpiresListingsModal', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [select(getView), view],
+            [select(getWallet), wallet]
+          ])
+          .not.put(openModal('ExpiredListingsModal'))
           .dispatch(
             fetchNFTsSuccess(
               {
