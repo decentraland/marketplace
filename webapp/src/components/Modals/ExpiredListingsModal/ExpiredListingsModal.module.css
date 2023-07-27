@@ -1,0 +1,65 @@
+.ExpiredListingsModal .warningIconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: #ff7439;
+  border-radius: 50%;
+}
+
+.ExpiredListingsModal .warningExpiration:global(.icon) {
+  font-size: 20px;
+  line-height: 20px;
+  margin-right: 0;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.modalDescription {
+  text-align: center;
+}
+
+.ExpiredListingsModal:global(.ui.modal .actions > .button:first-child) {
+  width: 80%;
+  align-self: center;
+}
+.ExpiredListingsModal:global(.ui.modal .actions .ui.button + .ui.button) {
+  margin: unset;
+  width: 80%;
+  align-self: center;
+  color: white;
+  border-color: white;
+}
+
+.ExpiredListingsModal:global(.ui.modal > .content) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 50px;
+}
+
+.listsLogo {
+  background-image: url('../../../images/empty-list.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+}
+
+@media (max-width: 768px) {
+  .actions {
+    gap: unset;
+  }
+
+  .ExpiredListingsModal:global(.ui.modal .actions > .button:first-child),
+  .ExpiredListingsModal:global(.ui.modal .actions .ui.button + .ui.button) {
+    width: 100%;
+  }
+}

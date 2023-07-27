@@ -34,6 +34,7 @@ export const useScrollSectionIntoView = <T>(
 }
 
 export const PERSISTED_IS_MAP_STORAGE_KEY = 'is-map'
+export const EXPIRED_LISTINGS_MODAL_KEY = 'expired-listing-modals-key'
 
 export const persistIsMapProperty = (val: boolean) => {
   localStorage.setItem(PERSISTED_IS_MAP_STORAGE_KEY, val.toString())

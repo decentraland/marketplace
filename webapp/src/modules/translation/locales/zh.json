@@ -1427,6 +1427,12 @@
     "explore_collectibles": "探索收藏品",
     "view_my_lists": "查看我的列表"
   },
+  "expired_listings_modal": {
+    "title": "您的一些资产需要您的关注",
+    "description": "请转到“我的资产”并查看您的列表<br></br>，因为其中一些列表需要更新",
+    "go_to_my_assets": "前往我的资产",
+    "do_not_show_again": "不要再给我看这个"
+  },
   "hands_category_ftu": {
     "title": "现在，您可以买手可穿戴设备！",
     "subtitle": "在市场上发现新手可穿戴设备！",
