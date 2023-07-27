@@ -1431,6 +1431,12 @@
     "explore_collectibles": "Explore collectibles",
     "view_my_lists": "View My Lists"
   },
+  "expired_listings_modal": {
+    "title": "Some of your assets need attention",
+    "description": "Please go to My Assets and review your listings <br></br> as some of them have to be updated",
+    "go_to_my_assets": "Go to My Assets",
+    "do_not_show_again": "Don't show me this again"
+  },
   "hands_category_ftu": {
     "title": "Now you can buy Hands wearables!",
     "subtitle": "Discover the new Hands wearables in marketplace!",

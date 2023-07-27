@@ -26,6 +26,12 @@ import {
   SaleSortBy,
   SaleType
 } from '@dcl/schemas'
+import {
+  CONNECT_WALLET_SUCCESS,
+  ConnectWalletSuccessAction
+} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { isLegacyOrder } from '../../lib/orders'
 import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_SUCCESS,
@@ -51,6 +57,8 @@ import {
 import {
   fetchNFTRequest,
   fetchNFTsRequest,
+  FetchNFTsSuccessAction,
+  FETCH_NFTS_SUCCESS,
   TRANSFER_NFT_SUCCESS
 } from '../nft/actions'
 import { setView } from '../ui/actions'
@@ -115,7 +123,10 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
-import { getPage } from '../ui/browse/selectors'
+import { getWallet } from '../wallet/selectors'
+import { openModal } from '../modal/actions'
+import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
+import { getPage, getView } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { AssetStatusFilter } from '../../utils/filters'
 import { buildBrowseURL } from './utils'
@@ -142,6 +153,8 @@ export function* routingSaga() {
     [EXECUTE_ORDER_SUCCESS, BUY_ITEM_SUCCESS],
     handleRedirectToSuccessPage
   )
+  yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
+  yield takeEvery(FETCH_NFTS_SUCCESS, handleFetchOnSaleNFTsSuccess)
 }
 
 function* handleLocationChange(action: LocationChangeAction) {
@@ -415,6 +428,47 @@ export function* getNewBrowseOptions(
     ...current,
     view,
     vendor
+  }
+}
+
+function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
+  const {
+    payload: {
+      wallet: { address }
+    }
+  } = action
+
+  const view: View = yield select(getView)
+  const hasShownTheExpiredListingsModalBefore: string | null = yield call(
+    [localStorage, 'getItem'],
+    EXPIRED_LISTINGS_MODAL_KEY
+  )
+
+  if (hasShownTheExpiredListingsModalBefore !== 'true') {
+    yield handleFetchOnSale(address, view)
+  }
+}
+
+function* handleFetchOnSaleNFTsSuccess(action: FetchNFTsSuccessAction) {
+  const wallet: Wallet = yield select(getWallet)
+  const {
+    payload: { options, orders }
+  } = action
+
+  const view: View = yield select(getView)
+
+  if (
+    view !== View.CURRENT_ACCOUNT &&
+    wallet?.address === options.params.address &&
+    options.params.onlyOnSale
+  ) {
+    if (
+      orders.some(
+        order => isLegacyOrder(order) && order.owner === wallet.address
+      )
+    ) {
+      yield put(openModal('ExpiredListingsModal'))
+    }
   }
 }
 

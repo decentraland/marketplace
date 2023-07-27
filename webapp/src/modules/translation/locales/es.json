@@ -1422,6 +1422,12 @@
     "explore_collectibles": "Explora coleccionables",
     "view_my_lists": "Ver Mis Listas"
   },
+  "expired_listings_modal": {
+    "title": "Algunos de sus objetos necesitan su atención",
+    "description": "Vaya a Mis Objetos y revise sus listados <br></br> ya que algunos de ellos deben actualizarse",
+    "go_to_my_assets": "Ir a mis Objetos",
+    "do_not_show_again": "No me muestres esto de nuevo"
+  },
   "hands_category_ftu": {
     "title": "¡Ahora puedes comprar manos!",
     "subtitle": "¡Descubre los nuevos wearables en el mercado!",

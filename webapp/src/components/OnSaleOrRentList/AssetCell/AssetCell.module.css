@@ -14,6 +14,10 @@
   overflow: hidden;
 }
 
+.imageContainer :global(.dcl.badge) {
+  display: none;
+}
+
 .title {
   font-weight: 600;
 }
