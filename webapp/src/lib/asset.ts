@@ -1,6 +1,11 @@
 import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { createFetchComponent } from '@well-known-components/fetch-component'
+import { Asset } from '../modules/asset/types'
+import { builderAPI } from '../modules/vendor/decentraland/builder/api'
 import { peerUrl } from './environment'
+
+export const SCENE_PATH = 'scene.json'
+export const VIDEO_PATH = 'video.mp4'
 
 const getContentClient = () =>
   createContentClient({
@@ -16,7 +21,7 @@ export const getSmartWearableSceneContent = async (
 
   if (wearableEntity.length > 0) {
     const scene = wearableEntity[0].content?.find(entity =>
-      entity.file.endsWith('scene.json')
+      entity.file.endsWith(SCENE_PATH)
     )
 
     if (scene) {
@@ -39,14 +44,21 @@ export const getSmartWearableRequiredPermissions = async (
 }
 
 export const getSmartWearableVideoShowcase = async (
-  urn: string
+  asset: Asset
 ): Promise<string | undefined> => {
-  const contentClient = getContentClient()
-  const wearableEntity = await contentClient.fetchEntitiesByPointers([urn])
+  try {
+    const { contractAddress, itemId } = asset
 
-  const video = wearableEntity[0]?.content?.find(entity =>
-    entity.file.endsWith('video.mp4')
-  )
+    if (!itemId) return undefined
 
-  return video ? video.hash : undefined
+    const contents = await builderAPI.fetchItemContent(contractAddress, itemId)
+
+    const videoContentKey = Object.keys(contents).find(key =>
+      key.endsWith(VIDEO_PATH)
+    )
+
+    return videoContentKey ? contents[videoContentKey] : undefined
+  } catch (error) {
+    return undefined
+  }
 }
