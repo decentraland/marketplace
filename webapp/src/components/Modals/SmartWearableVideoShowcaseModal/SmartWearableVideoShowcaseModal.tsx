@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
-import { ModalNavigation } from 'decentraland-ui'
+import { Loader, ModalNavigation } from 'decentraland-ui'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
 import { getSmartWearableVideoShowcase } from '../../../lib/asset'
 import { VIDEO_TEST_ID } from './constants'
@@ -39,13 +39,15 @@ const SmartWearableVideoShowcaseModal = (props: Props) => {
             className={styles.video}
             autoPlay
             controls
-            loop
             muted
             playsInline
             data-testid={VIDEO_TEST_ID}
             height={364}
+            preload="auto"
           />
-        ) : null}
+        ) : (
+          <Loader size="big" />
+        )}
       </Modal.Content>
     </Modal>
   )
