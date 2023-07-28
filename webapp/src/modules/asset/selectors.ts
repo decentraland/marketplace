@@ -6,12 +6,13 @@ export const getData = (state: RootState) => getState(state).data
 export const getError = (state: RootState) => getState(state).error
 export const getLoading = (state: RootState) => getState(state).loading
 
-export const isFetchingRequiredPermissions = (state: RootState, id: string) =>
+export const isFetchingRequiredPermissions = (state: RootState, urn: string) =>
   getLoading(state).find(
     action =>
       action.type === FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST &&
-      action.payload.asset.id === id
+      action.payload.asset.urn === urn
   ) !== undefined
 
-export const getRequiredPermissions = (state: RootState, id: string) =>
-  getData(state)[id] || []
+export const getRequiredPermissions = (state: RootState, urn: string) => {
+  return getData(state)[urn] || []
+}

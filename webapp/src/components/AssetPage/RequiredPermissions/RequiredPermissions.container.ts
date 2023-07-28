@@ -20,15 +20,16 @@ import {
 } from './RequiredPermissions.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const { id } = ownProps.asset
+  // Smart Wearables should always have a urn
+  const urn = ownProps.asset.urn as string
 
   return {
     isLoading: isLoadingType(
       getLoading(state),
       FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST
     ),
-    hasFetched: id in getData(state),
-    requiredPermissions: getRequiredPermissions(state, id)
+    hasFetched: urn in getData(state),
+    requiredPermissions: getRequiredPermissions(state, urn)
   }
 }
 

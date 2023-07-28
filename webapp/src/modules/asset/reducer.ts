@@ -45,12 +45,13 @@ export function assetReducer(
 
     case FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_SUCCESS: {
       const { asset, requiredPermissions } = action.payload
+      const urn = asset.urn as string // Smart Wearables should always have a urn
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         data: {
           ...state.data,
-          [asset.id]: requiredPermissions
+          [urn]: requiredPermissions
         },
         error: null
       }
