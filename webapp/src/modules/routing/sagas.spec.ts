@@ -35,7 +35,11 @@ import { MAX_QUERY_SIZE, PAGE_SIZE } from '../vendor/api'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
-import { executeOrderSuccess } from '../order/actions'
+import {
+  cancelOrderSuccess,
+  createOrderSuccess,
+  executeOrderSuccess
+} from '../order/actions'
 import { NFT } from '../nft/types'
 import { openModal } from '../modal/actions'
 import { fetchNFTsRequest, fetchNFTsSuccess } from '../nft/actions'
@@ -1504,5 +1508,40 @@ describe('when handling the fetch nfts success action', () => {
         )
         .run({ silenceTimeout: true })
     })
+  })
+})
+
+describe.each([
+  ['CREATE_ORDER_SUCCESS', createOrderSuccess, {} as NFT, 123, 123, ''],
+  [
+    'CANCEL_ORDER_SUCCESS',
+    cancelOrderSuccess,
+    { price: '1000000000000' } as Order,
+    {} as NFT,
+    ''
+  ]
+])('%s action', (_name, action, ...args) => {
+  it('should redirect to the location when redirectTo is present', () => {
+    const redirectTo = '/account?section=on_sale'
+    const location = { search: `?redirectTo=${encodeURIComponent(redirectTo)}` }
+
+    return (
+      expectSaga(routingSaga)
+        .provide([[select(getLocation), location]])
+        //@ts-ignore
+        .dispatch(action(...args))
+        .put(push(redirectTo))
+        .run()
+    )
+  })
+
+  it('should redirect to the default activity location when redirectTo is not present', () => {
+    const location = { search: '' }
+    return expectSaga(routingSaga)
+      .provide([[select(getLocation), location]])
+      //@ts-ignore
+      .dispatch(action(...args))
+      .put(push(locations.activity()))
+      .run()
   })
 })

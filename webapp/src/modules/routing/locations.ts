@@ -92,12 +92,24 @@ export const locations = {
     `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy/status`,
   sell: (
     contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/sell`,
+    tokenId: string = ':tokenId',
+    options?: {
+      redirectTo?: string
+    }
+  ) =>
+    `/contracts/${contractAddress}/tokens/${tokenId}/sell${
+      options ? `?${new URLSearchParams(options).toString()}` : ''
+    }`,
   cancel: (
     contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/cancel`,
+    tokenId: string = ':tokenId',
+    options?: {
+      redirectTo?: string
+    }
+  ) =>
+    `/contracts/${contractAddress}/tokens/${tokenId}/cancel${
+      options ? `?${new URLSearchParams(options).toString()}` : ''
+    }`,
   transfer: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
@@ -112,7 +124,10 @@ export const locations = {
     tokenId: string
     assetType: string
     contractAddress: string
-  }) => `/success${searchOptions? `?${new URLSearchParams(searchOptions).toString()}`: ''}`
+  }) =>
+    `/success${
+      searchOptions ? `?${new URLSearchParams(searchOptions).toString()}` : ''
+    }`
 }
 
 function getResource(type: AssetType) {
