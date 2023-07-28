@@ -13,6 +13,5 @@ export const isFetchingRequiredPermissions = (state: RootState, urn: string) =>
       action.payload.asset.urn === urn
   ) !== undefined
 
-export const getRequiredPermissions = (state: RootState, urn: string) => {
-  return getData(state)[urn] || []
-}
+export const getRequiredPermissions = (state: RootState, urn: string) =>
+  getData(state)[urn] || []
