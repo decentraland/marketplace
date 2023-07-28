@@ -696,7 +696,13 @@ function shouldResetOptions(previous: BrowseOptions, current: BrowseOptions) {
 }
 
 function* handleRedirectToActivity() {
-  yield put(push(locations.activity()))
+  const location: ReturnType<typeof getLocation> = yield select(getLocation)
+  const redirectTo = new URLSearchParams(location.search).get('redirectTo')
+  if (redirectTo) {
+    yield put(push(decodeURIComponent(redirectTo)))
+  } else {
+    yield put(push(locations.activity()))
+  }
 }
 
 function* handleRedirectToSuccessPage(

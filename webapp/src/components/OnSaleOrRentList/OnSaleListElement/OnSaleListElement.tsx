@@ -4,7 +4,10 @@ import { Button, Icon, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getIsLegacyOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { locations } from '../../../modules/routing/locations'
-import { LEGACY_MARKETPLACE_MAINNET_CONTRACT } from '../../../modules/vendor/decentraland'
+import {
+  LEGACY_MARKETPLACE_MAINNET_CONTRACT,
+  Section
+} from '../../../modules/vendor/decentraland'
 import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Props } from './OnSaleListElement.types'
@@ -20,6 +23,12 @@ const OnSaleListElement = ({
   onRevoke
 }: Props) => {
   const category = item?.category || nft!.category
+
+  const cancelOrSellOptions = {
+    redirectTo: locations.currentAccount({
+      section: Section.ON_SALE
+    })
+  }
 
   return (
     <>
@@ -82,7 +91,11 @@ const OnSaleListElement = ({
               getIsLegacyOrderExpired(order.expiresAt) ? (
                 <Button
                   as={Link}
-                  to={locations.cancel(nft.contractAddress, nft.tokenId)}
+                  to={locations.cancel(
+                    nft.contractAddress,
+                    nft.tokenId,
+                    cancelOrSellOptions
+                  )}
                   primary
                 >
                   {t('asset_page.actions.terminate_listing')}
@@ -90,7 +103,11 @@ const OnSaleListElement = ({
               ) : (
                 <Button
                   as={Link}
-                  to={locations.sell(nft.contractAddress, nft.tokenId)}
+                  to={locations.sell(
+                    nft.contractAddress,
+                    nft.tokenId,
+                    cancelOrSellOptions
+                  )}
                   inverted
                   fluid
                 >
