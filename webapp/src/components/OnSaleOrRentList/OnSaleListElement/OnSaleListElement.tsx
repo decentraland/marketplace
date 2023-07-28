@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom'
 import { Button, Icon, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getIsLegacyOrderExpired, isLegacyOrder } from '../../../lib/orders'
-import * as decentraland from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
-import { LEGACY_MARKETPLACE_MAINNET_CONTRACT } from '../../../modules/vendor/decentraland'
+import {
+  LEGACY_MARKETPLACE_MAINNET_CONTRACT,
+  Section
+} from '../../../modules/vendor/decentraland'
 import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Props } from './OnSaleListElement.types'
@@ -24,7 +26,7 @@ const OnSaleListElement = ({
 
   const cancelOrSellOptions = {
     redirectTo: locations.currentAccount({
-      section: decentraland.Section.ON_SALE
+      section: Section.ON_SALE
     })
   }
 
