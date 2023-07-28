@@ -458,7 +458,9 @@ function* handleFetchOnSaleNFTsSuccess(action: FetchNFTsSuccessAction) {
   const view: View = yield select(getView)
 
   if (
+    wallet &&
     view !== View.CURRENT_ACCOUNT &&
+    options.params &&
     wallet?.address === options.params.address &&
     options.params.onlyOnSale
   ) {
