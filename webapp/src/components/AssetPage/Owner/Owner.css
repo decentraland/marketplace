@@ -17,3 +17,7 @@
 .Owner .Profile.inline :global(.dcl.blockie) {
   border-radius: 30px;
 }
+
+.OwnerStats .ui.sub.header {
+  font-weight: 600;
+}

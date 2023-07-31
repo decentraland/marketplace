@@ -36,7 +36,7 @@ const Owner = (props: Props) => {
   }
 
   return (
-    <Stats title={label}>
+    <Stats title={label} className="OwnerStats">
       <Link to={locations.account(address, browseOptions)}>
         <div className="Owner">
           <Profile size="huge" address={address} />

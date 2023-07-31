@@ -41,6 +41,10 @@
   cursor: pointer;
 }
 
+.RequiredPermissions :global(.ui.sub.header) {
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .RequiredPermissions {
     margin: 0 0 24px;

@@ -34,7 +34,10 @@ const Collection = (props: Props) => {
         }
 
         return (
-          <Stats title={t('global.collection')}>
+          <Stats
+            title={t('global.collection')}
+            className={styles.CollectionStats}
+          >
             <Link to={locations.collection(asset.contractAddress)}>
               <div className={styles.container}>
                 <div className={styles.image}>
