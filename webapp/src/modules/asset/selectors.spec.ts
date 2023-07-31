@@ -51,10 +51,10 @@ describe('when getting the loading state of the state', () => {
 })
 
 describe('when getting if the required permissions are being fetched', () => {
-  let id: string
+  let urn: string
 
   beforeEach(() => {
-    id = 'anAssetId'
+    urn = 'anAssetUrn'
     state.asset.loading = []
   })
 
@@ -64,7 +64,7 @@ describe('when getting if the required permissions are being fetched', () => {
     })
 
     it('should return false', () => {
-      expect(isFetchingRequiredPermissions(state, id)).toBe(false)
+      expect(isFetchingRequiredPermissions(state, urn)).toBe(false)
     })
   })
 
@@ -72,40 +72,40 @@ describe('when getting if the required permissions are being fetched', () => {
     beforeEach(() => {
       state.asset.loading = [
         fetchSmartWearableRequiredPermissionsRequest({
-          id: 'anotherItemId'
+          urn: 'anotherItemUrn'
         } as Asset)
       ]
     })
 
     it('should return false', () => {
-      expect(isFetchingRequiredPermissions(state, id)).toBe(false)
+      expect(isFetchingRequiredPermissions(state, urn)).toBe(false)
     })
   })
 
   describe('and it is being fetched', () => {
     beforeEach(() => {
       state.asset.loading.push(
-        fetchSmartWearableRequiredPermissionsRequest({ id } as Asset)
+        fetchSmartWearableRequiredPermissionsRequest({ urn } as Asset)
       )
     })
 
     it('should return true', () => {
-      expect(isFetchingRequiredPermissions(state, id)).toBe(true)
+      expect(isFetchingRequiredPermissions(state, urn)).toBe(true)
     })
   })
 })
 
 describe('when getting the required permissions of an asset', () => {
-  let id: string
+  let urn: string
   let requiredPermissions: string[]
 
   beforeEach(() => {
-    id = 'anAssetId'
+    urn = 'anAssetUrn'
   })
 
   describe('and there are no required permissions related to that asset', () => {
     it('should return the them ', () => {
-      expect(getRequiredPermissions(state, id)).toEqual([])
+      expect(getRequiredPermissions(state, urn)).toEqual([])
     })
   })
 
@@ -113,12 +113,12 @@ describe('when getting the required permissions of an asset', () => {
     beforeEach(() => {
       requiredPermissions = ['aPermission']
       state.asset.data = {
-        [id]: requiredPermissions
+        [urn]: requiredPermissions
       }
     })
 
     it('should return the them ', () => {
-      expect(getRequiredPermissions(state, id)).toEqual(state.asset.data[id])
+      expect(getRequiredPermissions(state, urn)).toEqual(state.asset.data[urn])
     })
   })
 })

@@ -17,7 +17,8 @@ const asset = {
     wearable: {
       isSmart: true
     }
-  }
+  },
+  urn: 'aUrn'
 } as Asset
 
 const anErrorMessage = 'An error'
@@ -102,7 +103,7 @@ describe.each([
     expect(assetReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
-      data: { ...initialState.data, [asset.id]: [] }
+      data: { ...initialState.data, [asset.urn as string]: [] }
     })
   })
 })
