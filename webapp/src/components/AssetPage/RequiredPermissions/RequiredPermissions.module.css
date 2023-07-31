@@ -24,6 +24,12 @@
   white-space: nowrap;
 }
 
+.RequiredPermissions .permission :global(.text) {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
 .RequiredPermissions .tooltipInfo {
   width: 16px;
   height: 16px;
