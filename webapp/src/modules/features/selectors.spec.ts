@@ -12,6 +12,8 @@ import {
   getIsCampaignHomepageBannerEnabled,
   getIsCreatorsFilterEnabled,
   getIsEstateSizeFilterEnabled,
+  getIsHandsCategoryEnabled,
+  getIsHandsCategoryFTUEnabled,
   getIsLocationFilterEnabled,
   getIsMaintenanceEnabled,
   getIsMapViewFiltersEnabled,
@@ -20,6 +22,7 @@ import {
   getIsProfileEnabled,
   getIsRentalPeriodFilterEnabled,
   getIsRentalPriceFilterChartEnabled,
+  getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags
 } from './selectors'
 import { FeatureName } from './types'
@@ -192,6 +195,21 @@ const waitForInitialLoadingSelectors = [
     app: ApplicationName.DAPPS,
     feature: FeatureName.PROFILE,
     selector: getIsProfileEnabled
+  },
+  {
+    name: 'IsHandsCategory',
+    feature: FeatureName.HANDS_CATEGORY,
+    selector: getIsHandsCategoryEnabled
+  },
+  {
+    name: 'IsHandsCategoryFTU',
+    feature: FeatureName.HANDS_CATEGORY_FTU,
+    selector: getIsHandsCategoryFTUEnabled
+  },
+  {
+    name: 'isSmartWearablesFTU',
+    feature: FeatureName.SMART_WEARABLES_FTU,
+    selector: getIsSmartWearablesFTUEnabled
   }
 ]
 

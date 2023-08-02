@@ -15,5 +15,6 @@ export enum FeatureName {
   RENTAL_PRICE_FILTER_CHART = 'rental-price-fitler-chart',
   HANDS_CATEGORY = 'hands-category',
   HANDS_CATEGORY_FTU = 'hands-category-ftu',
-  PROFILE = 'profile'
+  PROFILE = 'profile',
+  SMART_WEARABLES_FTU = 'smart-wearables-ftu'
 }

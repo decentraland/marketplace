@@ -1481,5 +1481,10 @@
   },
   "smart_wearable_video_showcase_modal": {
     "title": "展示视频"
+  },
+  "smart_wearables_ftu_modal": {
+    "title": "智能穿戴设备现已上线！🟢",
+    "description": "<b>释放您的好奇心并潜入市场收集它们</b>，打开 Decentraland 中激动人心的新体验领域的大门。拥抱旅程！",
+    "explore_collectibles": "开始探索"
   }
 }

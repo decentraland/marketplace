@@ -1485,5 +1485,10 @@
   },
   "smart_wearable_video_showcase_modal": {
     "title": "Showcase video"
+  },
+  "smart_wearables_ftu_modal": {
+    "title": "Smart Wearables are now live! 🟢",
+    "description": "<b>Unleash your curiosity and dive into the marketplace to collect them</b>, opening the door to a realm of thrilling new experiences in Decentraland. Embrace the journey!",
+    "explore_collectibles": "Start exploring"
   }
 }

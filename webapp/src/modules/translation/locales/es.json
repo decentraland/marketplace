@@ -519,7 +519,7 @@
       "change_beneficiary": "Cambiar de beneficiario",
       "mint_item": "Acuñar item",
       "legacy_order_expired_warning": "Este listado no se muestra a los compradores en Marketplace, pero se creó con una fecha de vencimiento no válida y, por lo tanto, aún se puede comprar a través del contrato. Elimine esta lista manualmente.",
-    "legacy_order_not_expired_warning": "Este anuncio se ha creado con una fecha de caducidad no válida. Elimine este anuncio y vuelva a ponerlo a la venta para solucionar el problema."
+      "legacy_order_not_expired_warning": "Este anuncio se ha creado con una fecha de caducidad no válida. Elimine este anuncio y vuelva a ponerlo a la venta para solucionar el problema."
     },
     "sales_rent_action_box": {
       "until": "Desde {from_date} a {to_date}",
@@ -1476,5 +1476,10 @@
   },
   "smart_wearable_video_showcase_modal": {
     "title": "Vídeo de presentación"
+  },
+  "smart_wearables_ftu_modal": {
+    "title": "¡Las vestimentas inteligentes ya están disponibles! 🟢",
+    "description": "<b>Da rienda suelta a tu curiosidad y sumérgete en el mercado para recogerlos</b>, abriendo la puerta a un reino de nuevas y emocionantes experiencias en Decentraland. ¡Acepta el viaje!",
+    "explore_collectibles": "Comienza a explorar"
   }
 }

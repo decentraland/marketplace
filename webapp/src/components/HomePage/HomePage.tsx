@@ -21,6 +21,7 @@ import { RankingsTable } from '../RankingsTable'
 import { BackToTopButton } from '../BackToTopButton'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
 import HandsCategoryLaunchModal from '../Modals/FTU/HandsCategoryLaunchModal'
+import { SmartWearablesLaunchModal } from '../Modals/FTU/SmartWearablesLaunchModal'
 import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
 import { Props } from './HomePage.types'
 import './HomePage.css'
@@ -215,6 +216,7 @@ const HomePage = (props: Props) => {
       <Navigation activeTab={NavigationTab.OVERVIEW} />
       <ListsLaunchModal />
       <HandsCategoryLaunchModal />
+      <SmartWearablesLaunchModal />
       {isCampaignHomepageBannerEnabled ? (
         <CampaignBanner>
           <CampaignHomepageBanner />
