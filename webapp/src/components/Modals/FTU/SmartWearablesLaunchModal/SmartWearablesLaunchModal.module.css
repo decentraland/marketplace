@@ -6,6 +6,9 @@
 }
 
 .description {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
   text-align: center;
 }
 
@@ -14,6 +17,15 @@
   height: 238px;
   object-fit: cover;
   border-radius: 10px;
+  border: 3px solid #fff;
+}
+
+.SmartWearablesLaunchModal :global(.dcl.modal-navigation-title) {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: center;
 }
 
 .SmartWearablesLaunchModal:global(.ui.modal .actions > .button:first-child) {
@@ -33,8 +45,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  margin-bottom: 50px;
+  gap: 32px;
+  margin: 32px 0;
+  padding: 0 120px;
 }
 
 @media (max-width: 768px) {

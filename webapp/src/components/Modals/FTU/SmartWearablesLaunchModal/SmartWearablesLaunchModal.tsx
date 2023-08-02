@@ -53,8 +53,13 @@ export const SmartWearablesLaunchModal = ({
         onClose={onClose}
       />
       <Modal.Content className={styles.content}>
-        {/* TODO: add video */}
-        <video autoPlay loop className={styles.video} src={''} muted />
+        <video
+          autoPlay
+          loop
+          className={styles.video}
+          src={`${process.env.PUBLIC_URL}/smart-wearables-ftu.mp4`}
+          muted
+        />
         <Modal.Description>
           <div className={styles.description}>
             {t('smart_wearables_ftu_modal.description', {
