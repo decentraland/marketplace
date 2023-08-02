@@ -200,7 +200,7 @@ const waitForInitialLoadingSelectors = [
     selector: getIsHandsCategoryFTUEnabled
   },
   {
-    name: 'IsHandsCategoryFTU',
+    name: 'isSmartWearablesFTU',
     feature: FeatureName.SMART_WEARABLES_FTU,
     selector: getIsSmartWearablesFTUEnabled
   }

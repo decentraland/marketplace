@@ -7,13 +7,13 @@ import {
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
-import * as decentraland from '../../../../modules/vendor/decentraland'
+import { Section } from '../../../../modules/vendor/decentraland'
 import { AssetType } from '../../../../modules/asset/types'
 import { locations } from '../../../../modules/routing/locations'
 import { SortBy } from '../../../../modules/routing/types'
 import { VendorName } from '../../../../modules/vendor'
-import styles from './SmartWearablesLaunchModal.module.css'
 import { Props } from './SmartWearablesLaunchModal.types'
+import styles from './SmartWearablesLaunchModal.module.css'
 
 const SMARTS_WEARABLES_PROMO_POPUP_KEY = 'smart-wearables-intro-popup-key'
 
@@ -72,7 +72,7 @@ export const SmartWearablesLaunchModal = ({
         <Button
           as={Link}
           to={locations.browse({
-            section: decentraland.Section.WEARABLES,
+            section: Section.WEARABLES,
             vendor: VendorName.DECENTRALAND,
             page: 1,
             sortBy: SortBy.RECENTLY_LISTED,
