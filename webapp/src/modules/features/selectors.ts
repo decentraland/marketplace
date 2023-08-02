@@ -173,3 +173,14 @@ export const getIsHandsCategoryFTUEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsProfileEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.DAPPS,
+      FeatureName.PROFILE
+    )
+  }
+  return false
+}
