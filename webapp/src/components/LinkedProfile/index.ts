@@ -1,1 +1,3 @@
-export { LinkedProfile } from './LinkedProfile'
+import LinkedProfile from './LinkedProfile.container'
+
+export { LinkedProfile }
