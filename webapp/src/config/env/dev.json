@@ -36,5 +36,6 @@
   "ENVIRONMENT": "development",
   "MIN_SALE_VALUE_IN_WEI": "1000000000000000000",
   "EXPLORER_URL": "https://play.decentraland.zone",
-  "MARKETPLACE_URL": "https://market.decentraland.zone"
+  "MARKETPLACE_URL": "https://market.decentraland.zone",
+  "PROFILE_URL": "https://profile.decentraland.zone"
 }

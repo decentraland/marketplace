@@ -14,5 +14,6 @@ export enum FeatureName {
   MAP_VIEW_FILTERS = 'map-view-filters',
   RENTAL_PRICE_FILTER_CHART = 'rental-price-fitler-chart',
   HANDS_CATEGORY = 'hands-category',
-  HANDS_CATEGORY_FTU = 'hands-category-ftu'
+  HANDS_CATEGORY_FTU = 'hands-category-ftu',
+  PROFILE = 'profile'
 }
