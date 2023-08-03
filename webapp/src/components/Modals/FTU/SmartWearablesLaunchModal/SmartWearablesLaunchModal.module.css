@@ -14,9 +14,10 @@
 
 .video {
   display: block;
-  height: 238px;
+  height: 250px;
   object-fit: cover;
   border-radius: 10px;
+  border: 3px solid #fff;
 }
 
 .SmartWearablesLaunchModal :global(.dcl.modal-navigation-title) {
