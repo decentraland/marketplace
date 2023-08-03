@@ -29,7 +29,9 @@ const RequiredPermissions = (props: Props) => {
   return requiredPermissions.length > 0 ? (
     <Stats title="" className={styles.RequiredPermissions}>
       <Header sub className={styles.title}>
-        {t('smart_wearable.required_permission.title')}
+        {t('smart_wearable.required_permission.title', {
+          count: requiredPermissions.length
+        })}
         <Popup
           className={styles.periodsTooltip}
           content={t('smart_wearable.required_permission.tooltip_info', {

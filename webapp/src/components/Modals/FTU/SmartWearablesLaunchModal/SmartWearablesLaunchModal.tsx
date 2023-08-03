@@ -24,10 +24,20 @@ export const SmartWearablesLaunchModal = ({
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const isTabletOrBelow = useTabletAndBelowMediaQuery()
 
-  const onClose = useCallback(() => {
+  const markAsSeen = useCallback(() => {
     localStorage.setItem(SMARTS_WEARABLES_PROMO_POPUP_KEY, 'true')
-    setIsOpen(false)
   }, [])
+
+  const onClose = useCallback(() => {
+    markAsSeen()
+    setIsOpen(false)
+  }, [markAsSeen])
+
+  const onLearnMore = useCallback(() => {
+    markAsSeen()
+    // TODO: Where should this link point to?
+    window.open('???', '_blank', 'noopener noreferrer')
+  }, [markAsSeen])
 
   useEffect(() => {
     if (
@@ -85,6 +95,9 @@ export const SmartWearablesLaunchModal = ({
           fluid
         >
           {t('smart_wearables_ftu_modal.explore_collectibles')}
+        </Button>
+        <Button onClick={onLearnMore} fluid>
+          {t('global.learn_more')}
         </Button>
       </Modal.Actions>
     </Modal>

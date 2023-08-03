@@ -70,7 +70,7 @@ export const MoreFilters = ({
       <div className="more-filters-section">
         {isOnSale !== undefined ? (
           <Checkbox
-            label="On sale"
+            label={t('nft_filters.on_sale')}
             toggle
             checked={isOnSale}
             onChange={handleOnSaleChange}
