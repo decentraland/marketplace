@@ -9,7 +9,7 @@ export const LinkedProfile = ({ isProfileEnabled, ...props }: Props) => {
   const redirectionProps: RedirectionProps = isProfileEnabled
     ? {
         as: 'a',
-        href: `${profileUrl}/${address}`
+        href: `${profileUrl}/accounts/${address}`
       }
     : {
         as: Link,
