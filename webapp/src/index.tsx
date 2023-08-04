@@ -16,11 +16,12 @@ import * as locales from './modules/translation/locales'
 import { initStore, history } from './modules/store'
 import { Routes } from './components/Routes'
 import * as modals from './components/Modals'
+import { config } from './config'
 
 import './themes'
 import './index.css'
 
-SingleSignOn.init('https://id.decentraland.org')
+SingleSignOn.init(config.get('SSO_URL'))
 
 async function main() {
   const component = (
