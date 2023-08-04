@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
-import { ScrollToTop } from './components/ScrollToTop'
+import * as SingleSignOn from '@dcl/single-sign-on-client'
 import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
 import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
@@ -11,6 +11,7 @@ import './setup'
 import './modules/analytics/track'
 import './modules/analytics/rollbar'
 
+import { ScrollToTop } from './components/ScrollToTop'
 import * as locales from './modules/translation/locales'
 import { initStore, history } from './modules/store'
 import { Routes } from './components/Routes'
@@ -18,6 +19,8 @@ import * as modals from './components/Modals'
 
 import './themes'
 import './index.css'
+
+SingleSignOn.init('https://id.decentraland.org')
 
 async function main() {
   const component = (

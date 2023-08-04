@@ -1,8 +1,13 @@
-import { takeLatest, put, call, select } from 'redux-saga/effects'
+import { takeLatest, put, call } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
+import * as SingleSignOn from '@dcl/single-sign-on-client'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
+import {
+  CONNECT_WALLET_SUCCESS,
+  DISCONNECT_WALLET,
+  DisconnectWalletAction
+} from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isErrorWithMessage } from '../../lib/error'
 import { getEth } from '../wallet/utils'
@@ -15,11 +20,11 @@ import {
   generateIdentitySuccess
 } from './actions'
 import { IDENTITY_EXPIRATION_IN_MINUTES } from './utils'
-import { getCurrentIdentity } from './selectors'
 
 export function* identitySaga() {
   yield takeLatest(GENERATE_IDENTITY_REQUEST, handleGenerateIdentityRequest)
   yield takeLatest(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
+  yield takeLatest(DISCONNECT_WALLET, handleDisconnect)
 }
 
 function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
@@ -44,6 +49,8 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
       message => signer.signMessage(message)
     )
 
+    yield call([SingleSignOn, 'storeIdentity'], address, identity)
+
     yield put(generateIdentitySuccess(address, identity))
   } catch (error) {
     yield put(
@@ -55,10 +62,30 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
   }
 }
 
+// Persist the address of the connected wallet.
+// This is a workaround for when the user disconnects as not selector will be able to retrieve the address.
+// Preventing the identity from being removed from storage.
+let _address: string | null = null
+
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
-  const identity: AuthIdentity = yield select(getCurrentIdentity)
+  const address = action.payload.wallet.address
+  _address = address
+
+  const identity: AuthIdentity | null = yield call(
+    [SingleSignOn, 'getIdentity'],
+    address
+  )
+
   if (!identity) {
     // Generate a new identity
-    yield put(generateIdentityRequest(action.payload.wallet.address))
+    yield put(generateIdentityRequest(address))
+  } else {
+    yield put(generateIdentitySuccess(address, identity))
+  }
+}
+
+function* handleDisconnect(_action: DisconnectWalletAction) {
+  if (_address) {
+    yield call([SingleSignOn, 'clearIdentity'], _address)
   }
 }
