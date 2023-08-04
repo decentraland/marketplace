@@ -65,11 +65,16 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
 // Persist the address of the connected wallet.
 // This is a workaround for when the user disconnects as not selector will be able to retrieve the address.
 // Preventing the identity from being removed from storage.
-let _address: string | null = null
+let auxAddress: string | null = null
+
+export function setAuxAddress(address: string | null) {
+  auxAddress = address
+}
 
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
   const address = action.payload.wallet.address
-  _address = address
+
+  yield call(setAuxAddress, address)
 
   const identity: AuthIdentity | null = yield call(
     [SingleSignOn, 'getIdentity'],
@@ -85,7 +90,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
 }
 
 function* handleDisconnect(_action: DisconnectWalletAction) {
-  if (_address) {
-    yield call([SingleSignOn, 'clearIdentity'], _address)
+  if (auxAddress) {
+    yield call([SingleSignOn, 'clearIdentity'], auxAddress)
   }
 }
