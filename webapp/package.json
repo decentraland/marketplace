@@ -117,7 +117,7 @@
   "homepage": "",
   "jest": {
     "moduleNameMapper": {
-      "@dcl/single-sign-on-client": "<rootDir>/src/lib/@dcl/single-sign-on-client.ts"
+      "@dcl/single-sign-on-client": "identity-obj-proxy"
     }
   }
 }
