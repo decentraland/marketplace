@@ -14,7 +14,6 @@ import { createRootReducer, RootState } from './reducer'
 import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
-import { GENERATE_IDENTITY_SUCCESS } from './identity/actions'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
 import { getCurrentIdentity } from './identity/selectors'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
@@ -49,13 +48,11 @@ export function initStore() {
     paths: [
       ['ui', 'archivedBidIds'],
       ['ui', 'preview', 'isTryingOn'],
-      ['identity', 'data']
     ], // array of paths from state to be persisted (optional)
     actions: [
       CLEAR_TRANSACTIONS,
       ARCHIVE_BID,
       UNARCHIVE_BID,
-      GENERATE_IDENTITY_SUCCESS,
       SET_IS_TRYING_ON
     ], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
@@ -105,13 +102,11 @@ export function initTestStore(preloadedState = {}) {
     paths: [
       ['ui', 'archivedBidIds'],
       ['ui', 'preview', 'isTryingOn'],
-      ['identity', 'data']
     ], // array of paths from state to be persisted (optional)
     actions: [
       CLEAR_TRANSACTIONS,
       ARCHIVE_BID,
       UNARCHIVE_BID,
-      GENERATE_IDENTITY_SUCCESS,
       SET_IS_TRYING_ON
     ], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
