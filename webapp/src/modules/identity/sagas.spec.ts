@@ -9,7 +9,12 @@ import * as SingleSignOn from '@dcl/single-sign-on-client'
 import { identitySaga, setAuxAddress } from './sagas'
 import { generateIdentityRequest, generateIdentitySuccess } from './actions'
 
-jest.mock('@dcl/single-sign-on-client')
+jest.mock('@dcl/single-sign-on-client', () => {
+  return {
+    getIdentity: jest.fn(),
+    clearIdentity: jest.fn()
+  }
+})
 
 const SingleSignOnMock = SingleSignOn as jest.Mocked<typeof SingleSignOn>
 
