@@ -63,8 +63,7 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
 }
 
 // Persist the address of the connected wallet.
-// This is a workaround for when the user disconnects as not selector will be able to retrieve the address.
-// Preventing the identity from being removed from storage.
+// This is a workaround for when the user disconnects as there is no selector that provides the address at that point
 let auxAddress: string | null = null
 
 export function setAuxAddress(address: string | null) {
