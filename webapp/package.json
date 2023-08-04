@@ -114,5 +114,10 @@
       "last 1 safari version"
     ]
   },
-  "homepage": ""
+  "homepage": "",
+  "jest": {
+    "moduleNameMapper": {
+      "@dcl/single-sign-on-client": "<rootDir>/src/lib/@dcl/single-sign-on-client.ts"
+    }
+  }
 }
