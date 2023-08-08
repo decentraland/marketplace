@@ -68,6 +68,7 @@ export const SmartWearablesLaunchModal = ({
           loop
           className={styles.video}
           src={`${process.env.PUBLIC_URL}/smart-wearables-ftu.mp4`}
+          preload="auto"
           muted
         />
         <Modal.Description>
