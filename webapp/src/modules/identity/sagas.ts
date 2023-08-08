@@ -93,6 +93,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
 
 function* handleDisconnect(_action: DisconnectWalletAction) {
   if (auxAddress) {
+    // Clears the identity from the SSO iframe when the user disconnects the wallet.
     yield call([SingleSignOn, 'clearIdentity'], auxAddress)
   }
 }
