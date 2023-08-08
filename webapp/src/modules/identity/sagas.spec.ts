@@ -5,7 +5,7 @@ import {
   connectWalletSuccess,
   disconnectWallet
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import * as SingleSignOn from '@dcl/single-sign-on-client'
+import { getIdentity, clearIdentity } from '@dcl/single-sign-on-client'
 import { identitySaga, setAuxAddress } from './sagas'
 import { generateIdentityRequest, generateIdentitySuccess } from './actions'
 
@@ -15,8 +15,6 @@ jest.mock('@dcl/single-sign-on-client', () => {
     clearIdentity: jest.fn()
   }
 })
-
-const SingleSignOnMock = SingleSignOn as jest.Mocked<typeof SingleSignOn>
 
 beforeEach(() => {
   jest.resetAllMocks()
@@ -36,9 +34,7 @@ describe('when handling the wallet connection success', () => {
   describe("and there's no identity", () => {
     it('should put an action to generate the identity', () => {
       return expectSaga(identitySaga)
-        .provide([
-          [call([SingleSignOnMock, 'getIdentity'], wallet.address), null]
-        ])
+        .provide([[call(getIdentity, wallet.address), null]])
         .put(generateIdentityRequest(wallet.address))
         .dispatch(connectWalletSuccess(wallet))
         .run({ silenceTimeout: true })
@@ -50,9 +46,7 @@ describe('when handling the wallet connection success', () => {
       const identity = {} as any
 
       return expectSaga(identitySaga)
-        .provide([
-          [call([SingleSignOnMock, 'getIdentity'], wallet.address), identity]
-        ])
+        .provide([[call(getIdentity, wallet.address), identity]])
         .put(generateIdentitySuccess(wallet.address, identity))
         .dispatch(connectWalletSuccess(wallet))
         .run({ silenceTimeout: true })
@@ -73,7 +67,7 @@ describe('when handling the disconnect', () => {
         .dispatch(disconnectWallet())
         .run({ silenceTimeout: true })
 
-      expect(SingleSignOnMock.clearIdentity).toHaveBeenCalledWith(address)
+      expect(clearIdentity).toHaveBeenCalledWith(address)
     })
   })
 
@@ -87,7 +81,7 @@ describe('when handling the disconnect', () => {
         .dispatch(disconnectWallet())
         .run({ silenceTimeout: true })
 
-      expect(SingleSignOnMock.clearIdentity).not.toHaveBeenCalled()
+      expect(clearIdentity).not.toHaveBeenCalled()
     })
   })
 })
