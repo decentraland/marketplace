@@ -49,6 +49,7 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
       message => signer.signMessage(message)
     )
 
+    // Stores the identity into the SSO iframe.
     yield call([SingleSignOn, 'storeIdentity'], address, identity)
 
     yield put(generateIdentitySuccess(address, identity))
@@ -75,13 +76,15 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
 
   yield call(setAuxAddress, address)
 
+  // Obtains the identity from the SSO iframe.
   const identity: AuthIdentity | null = yield call(
     [SingleSignOn, 'getIdentity'],
     address
   )
 
+  // If the identity was persisted in the iframe, store in in redux.
+  // If not, generate a new one, which wil be stored in the iframe.
   if (!identity) {
-    // Generate a new identity
     yield put(generateIdentityRequest(address))
   } else {
     yield put(generateIdentitySuccess(address, identity))
