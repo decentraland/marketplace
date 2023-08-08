@@ -1,8 +1,17 @@
-import { takeLatest, put, call, select } from 'redux-saga/effects'
+import { takeLatest, put, call } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
+import {
+  getIdentity,
+  storeIdentity,
+  clearIdentity
+} from '@dcl/single-sign-on-client'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
+import {
+  CONNECT_WALLET_SUCCESS,
+  DISCONNECT_WALLET,
+  DisconnectWalletAction
+} from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isErrorWithMessage } from '../../lib/error'
 import { getEth } from '../wallet/utils'
@@ -15,11 +24,11 @@ import {
   generateIdentitySuccess
 } from './actions'
 import { IDENTITY_EXPIRATION_IN_MINUTES } from './utils'
-import { getCurrentIdentity } from './selectors'
 
 export function* identitySaga() {
   yield takeLatest(GENERATE_IDENTITY_REQUEST, handleGenerateIdentityRequest)
   yield takeLatest(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
+  yield takeLatest(DISCONNECT_WALLET, handleDisconnect)
 }
 
 function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
@@ -44,6 +53,9 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
       message => signer.signMessage(message)
     )
 
+    // Stores the identity into the SSO iframe.
+    yield call(storeIdentity, address, identity)
+
     yield put(generateIdentitySuccess(address, identity))
   } catch (error) {
     yield put(
@@ -55,10 +67,34 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
   }
 }
 
+// Persist the address of the connected wallet.
+// This is a workaround for when the user disconnects as there is no selector that provides the address at that point
+let auxAddress: string | null = null
+
+export function setAuxAddress(address: string | null) {
+  auxAddress = address
+}
+
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
-  const identity: AuthIdentity = yield select(getCurrentIdentity)
+  const address = action.payload.wallet.address
+
+  yield call(setAuxAddress, address)
+
+  // Obtains the identity from the SSO iframe.
+  const identity: AuthIdentity | null = yield call(getIdentity, address)
+
+  // If the identity was persisted in the iframe, store in in redux.
+  // If not, generate a new one, which wil be stored in the iframe.
   if (!identity) {
-    // Generate a new identity
-    yield put(generateIdentityRequest(action.payload.wallet.address))
+    yield put(generateIdentityRequest(address))
+  } else {
+    yield put(generateIdentitySuccess(address, identity))
+  }
+}
+
+function* handleDisconnect(_action: DisconnectWalletAction) {
+  if (auxAddress) {
+    // Clears the identity from the SSO iframe when the user disconnects the wallet.
+    yield call(clearIdentity, auxAddress)
   }
 }

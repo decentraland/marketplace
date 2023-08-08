@@ -37,5 +37,6 @@
   "MIN_SALE_VALUE_IN_WEI": "1000000000000000000",
   "EXPLORER_URL": "https://play.decentraland.org",
   "MARKETPLACE_URL": "https://market.decentraland.org",
-  "PROFILE_URL": "https://profile.decentraland.org"
+  "PROFILE_URL": "https://profile.decentraland.org",
+  "SSO_URL": "https://id.decentraland.org"
 }
