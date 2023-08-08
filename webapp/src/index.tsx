@@ -21,6 +21,9 @@ import { config } from './config'
 import './themes'
 import './index.css'
 
+// Initializes the SSO client.
+// This will create a new iframe and append it to the body.
+// It is ideal to do this as soon as possible to avoid any availability issues.
 SingleSignOn.init(config.get('SSO_URL'))
 
 async function main() {
