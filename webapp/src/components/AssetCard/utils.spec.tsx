@@ -40,7 +40,7 @@ describe('AssetCard utils', () => {
       it('should show "Not for sale" title, no icon, no extra information and no price', () => {
         const result = getCatalogCardInformation(asset, appliedFilters)
         expect(result).toEqual({
-          action: 'Not for sale',
+          action: t('asset_card.not_for_sale'),
           actionIcon: null,
           extraInformation: null,
           price: null
