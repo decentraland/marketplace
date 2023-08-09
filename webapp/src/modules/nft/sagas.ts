@@ -23,6 +23,7 @@ import {
 import { upsertContracts } from '../contract/actions'
 import { Contract } from '../vendor/services'
 import { retryParams } from '../vendor/decentraland/utils'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -158,57 +159,58 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
       )
 
       yield put(fetchNFTSuccess(nft as NFT, order, rental))
+      yield put(fetchSmartWearableRequiredPermissionsRequest(nft as NFT))
     } catch (error) {
       yield put(
         fetchNFTFailure(contractAddress, tokenId, (error as Error).message)
       )
     }
   }
-}
 
-function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
-  const { nft, address } = action.payload
-  try {
-    const vendor: Vendor<VendorName> = yield call(
-      VendorFactory.build,
-      nft.vendor
-    )
-
-    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    if (!wallet) {
-      throw new Error('A wallet is needed to perform a NFT transfer request')
-    }
-
-    const txHash: string = yield call(
-      [vendor.nftService, 'transfer'],
-      wallet,
-      address,
-      nft
-    )
-    yield put(transferNFTransactionSubmitted(nft, address, txHash))
-    if (nft?.openRentalId) {
-      yield call(waitForTx, txHash)
-      const rental: RentalListing | null = yield select(
-        getRentalById,
-        nft.openRentalId
+  function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
+    const { nft, address } = action.payload
+    try {
+      const vendor: Vendor<VendorName> = yield call(
+        VendorFactory.build,
+        nft.vendor
       )
-      if (isRentalListingOpen(rental)) {
-        yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
-      }
-    }
 
-    yield put(transferNFTSuccess(nft, address))
-  } catch (error) {
-    const errorMessage = isErrorWithMessage(error)
-      ? error.message
-      : t('global.unknown_error')
-    const errorCode =
-      error !== undefined &&
-      error !== null &&
-      typeof error === 'object' &&
-      'code' in error
-        ? (error as { code: ErrorCode }).code
-        : undefined
-    yield put(transferNFTFailure(nft, address, errorMessage, errorCode))
+      const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
+      if (!wallet) {
+        throw new Error('A wallet is needed to perform a NFT transfer request')
+      }
+
+      const txHash: string = yield call(
+        [vendor.nftService, 'transfer'],
+        wallet,
+        address,
+        nft
+      )
+      yield put(transferNFTransactionSubmitted(nft, address, txHash))
+      if (nft?.openRentalId) {
+        yield call(waitForTx, txHash)
+        const rental: RentalListing | null = yield select(
+          getRentalById,
+          nft.openRentalId
+        )
+        if (isRentalListingOpen(rental)) {
+          yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
+        }
+      }
+
+      yield put(transferNFTSuccess(nft, address))
+    } catch (error) {
+      const errorMessage = isErrorWithMessage(error)
+        ? error.message
+        : t('global.unknown_error')
+      const errorCode =
+        error !== undefined &&
+        error !== null &&
+        typeof error === 'object' &&
+        'code' in error
+          ? (error as { code: ErrorCode }).code
+          : undefined
+      yield put(transferNFTFailure(nft, address, errorMessage, errorCode))
+    }
   }
 }

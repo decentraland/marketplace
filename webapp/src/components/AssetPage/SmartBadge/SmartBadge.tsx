@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SmartIcon } from 'decentraland-ui'
 import { Section } from '../../../modules/vendor/decentraland'
@@ -7,7 +8,7 @@ import IconBadge from '../IconBadge'
 import { Props } from './SmartBadge.types'
 import './SmartBadge.css'
 
-const SmartBadge = ({ assetType }: Props) => {
+const SmartBadge = ({ assetType, clickable = true }: Props) => {
   const href = useMemo(
     () =>
       locations.browse({
@@ -20,9 +21,9 @@ const SmartBadge = ({ assetType }: Props) => {
 
   return (
     <IconBadge
-      className="SmartBadge"
+      className={classNames('SmartBadge', { clickable })}
       text={t('wearable.smart_badge')}
-      href={href}
+      href={clickable ? href : undefined}
     >
       <SmartIcon />
     </IconBadge>

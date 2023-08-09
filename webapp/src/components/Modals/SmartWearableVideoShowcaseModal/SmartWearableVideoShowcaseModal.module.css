@@ -1,0 +1,8 @@
+.video {
+  width: 100%;
+  object-fit: contain;
+}
+
+.content {
+  min-height: 440px;
+}

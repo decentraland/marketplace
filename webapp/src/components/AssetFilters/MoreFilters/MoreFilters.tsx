@@ -1,12 +1,9 @@
 import { useCallback, useMemo } from 'react'
-import {
-  Box,
-  CheckboxProps,
-  Checkbox,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { Box, CheckboxProps, Checkbox } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { useTabletAndBelowMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { NFTCategory } from '@dcl/schemas'
+import { OnlySmartFilterContent } from '../OnlySmartFilter'
 import './MoreFilters.css'
 
 export type MoreFiltersProps = {
@@ -28,13 +25,7 @@ export const MoreFilters = ({
 }: MoreFiltersProps) => {
   const isWearableCategory = category === NFTCategory.WEARABLE
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
-
-  const handleOnlySmartChange = useCallback(
-    (_, props: CheckboxProps) => {
-      onOnlySmartChange(!!props.checked)
-    },
-    [onOnlySmartChange]
-  )
+  const showOnlySmartFilter = isWearableCategory && isMobileOrTablet
 
   const handleOnSaleChange = useCallback(
     (_, props: CheckboxProps) => {
@@ -48,11 +39,11 @@ export const MoreFilters = ({
     values.push(
       isOnSale ? t('nft_filters.for_sale') : t('nft_filters.not_on_sale')
     )
-    if (isOnlySmart) {
-      values.push(t('nft_filters.only_smart'))
+    if (isOnlySmart && showOnlySmartFilter) {
+      values.push(t('nft_filters.only_smart.selected'))
     }
     return values.join(', ')
-  }, [isOnSale, isOnlySmart])
+  }, [isOnSale, isOnlySmart, showOnlySmartFilter])
 
   const header = useMemo(
     () =>
@@ -69,7 +60,7 @@ export const MoreFilters = ({
     [filterText, isMobileOrTablet]
   )
 
-  return (
+  return isOnSale !== undefined || showOnlySmartFilter ? (
     <Box
       header={header}
       className="filters-sidebar-box"
@@ -79,21 +70,20 @@ export const MoreFilters = ({
       <div className="more-filters-section">
         {isOnSale !== undefined ? (
           <Checkbox
-            label="On sale"
+            label={t('nft_filters.on_sale')}
             toggle
             checked={isOnSale}
             onChange={handleOnSaleChange}
           />
         ) : null}
-        {isWearableCategory && (
-          <Checkbox
-            label="Only smart"
-            toggle
-            checked={!!isOnlySmart}
-            onChange={handleOnlySmartChange}
+        {showOnlySmartFilter && (
+          <OnlySmartFilterContent
+            data-testid="only-smart-filter"
+            isOnlySmart={isOnlySmart}
+            onChange={onOnlySmartChange}
           />
         )}
       </div>
     </Box>
-  )
+  ) : null
 }

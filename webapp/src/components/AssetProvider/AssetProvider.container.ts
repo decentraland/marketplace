@@ -25,6 +25,7 @@ import {
   getError as getItemsError,
   getData as getItems
 } from '../../modules/item/selectors'
+import { isFetchingRequiredPermissions } from '../../modules/asset/selectors'
 import { getData as getOrders } from '../../modules/order/selectors'
 import { getNFT } from '../../modules/nft/utils'
 import { getItem } from '../../modules/item/utils'
@@ -98,7 +99,9 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     asset,
     rental,
     order,
-    isLoading: !asset && isLoading,
+    isLoading: !asset
+      ? isLoading
+      : isFetchingRequiredPermissions(state, asset.id),
     isLoadingFeatureFlags: isLoadingType(
       getIsLoadingFeatureFlags(state),
       FETCH_APPLICATION_FEATURES_REQUEST

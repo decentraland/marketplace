@@ -113,11 +113,11 @@
     "wearables_head": "Head",
     "wearables_eyebrows": "Eyebrows",
     "wearables_eyes": "Eyes",
-    "wearables_facial_hair": "Facial hair",
+    "wearables_facial_hair": "Facial Hair",
     "wearables_hair": "Hair",
     "wearables_mouth": "Mouth",
-    "wearables_upper_body": "Upper body",
-    "wearables_lower_body": "Lower body",
+    "wearables_upper_body": "Upper Body",
+    "wearables_lower_body": "Lower Body",
     "wearables_feet": "Feet",
     "wearables_accessories": "Accessories",
     "wearables_earring": "Earring",
@@ -126,7 +126,7 @@
     "wearables_helmet": "Helmet",
     "wearables_mask": "Mask",
     "wearables_tiara": "Tiara",
-    "wearables_top_head": "Top head",
+    "wearables_top_head": "Top Head",
     "wearables_skin": "Skins",
     "wearables_hands": "Handwear",
     "emotes": "Emotes",
@@ -364,8 +364,8 @@
     }
   },
   "nft_filters": {
-    "no_items": "No items",
-    "on_sale": "On sale",
+    "no_items": "No Items",
+    "on_sale": "On Sale",
     "filter": "Filter",
     "order_by": "Order By",
     "results": "{count} {count, plural, one {item} other {items}}",
@@ -373,7 +373,7 @@
     "more_than_results": "+{count} items",
     "query_more_than_results": "Showing +{count} items for \"{search}\"",
     "search": "Search",
-    "search_land": "Search land...",
+    "search_land": "Search Land...",
     "gender": "Gender",
     "smart_wearables": "Smart Wearables",
     "emote_play_mode": {
@@ -381,26 +381,30 @@
       "all_items": "All Play Modes"
     },
     "body_shapes": {
-      "title": "Body shape",
+      "title": "Body Shape",
       "all_items": "All Body Shapes",
-      "available_for_female": "Available for female",
-      "available_for_male": "Available for male"
+      "available_for_female": "Available for Female",
+      "available_for_male": "Available for Male"
     },
     "status": {
       "title": "Status",
       "on_sale": "On Sale",
       "on_sale_tooltip": "Includes items available for minting and/or with available listings.",
-      "only_minting": "Only available for minting",
+      "only_minting": "Only Available For Minting",
       "only_minting_tooltip": "Only includes items that are available for minting (buying directly from the creators).",
-      "only_listing": "Only listings",
+      "only_listing": "Only Listings",
       "only_listing_tooltip": "Only includes items that are being resold.",
-      "not_for_sale": "Not for sale"
+      "not_for_sale": "Not For Sale"
     },
     "rarities": {
       "title": "Rarity",
       "tooltip": "The Rarity determines the total number of NFTs that can be minted",
       "all_items": "All rarities",
       "count_items": "{count} {count, plural, one {rarity} other {rarities}}"
+    },
+    "only_smart": {
+      "title": "Smart Wearables",
+      "selected": "Only Smart"
     },
     "periods": {
       "title": "Rental Period",
@@ -436,7 +440,7 @@
     },
     "network": {
       "title": "Network",
-      "all_items": "All networks"
+      "all_items": "All Networks"
     },
     "map": {
       "on_rent": "Available to rent",
@@ -451,7 +455,6 @@
     },
     "more_filters": "More filters",
     "location": "Location",
-    "only_smart": "Only smart",
     "not_on_sale": "Includes not on sale",
     "for_sale": "For sale",
     "category": "Category",
@@ -722,6 +725,20 @@
     "play_mode": {
       "simple": "Play once",
       "loop": "Play loop"
+    }
+  },
+  "smart_wearable": {
+    "play_showcase": "Play showcase video",
+    "required_permission": {
+      "title": "This wearable requires the following {count, plural, one {permission} other {permissions}}",
+      "tooltip_info": "To use this Wearable, you must grant it the following permissions to experience the Wearable's full effect. {learn_more}",
+      "allow_to_move_player_inside_scene": "Move player",
+      "allow_to_trigger_avatar_emote": "Trigger emotes",
+      "allow_media_hostnames": "Play media content",
+      "use_web3_api": "Wallet interaction",
+      "use_fetch": "Communicate with other servers",
+      "use_websocket": "Exchange data",
+      "open_external_link": "Open external links"
     }
   },
   "wearable_preview": {
@@ -1304,7 +1321,7 @@
     "available_for_mint": "Buy directly from creator",
     "available_listings_in_range": "Available listings in this range",
     "cheapest_listing": "Cheapest Listing",
-    "not_for_sale": "Not for sale",
+    "not_for_sale": "Not For Sale",
     "owners": "{count} {count, plural, one {Owner} other {Owners}}",
     "cheapest_option": "Cheapest Option",
     "cheapest_option_range": "Cheapest Option within range",
@@ -1465,5 +1482,13 @@
     "remove_from_lists": "Remove from {count} lists",
     "save_and_remove_from_lists": "Save and remove from {count} lists",
     "save_changes": "Save changes"
+  },
+  "smart_wearable_video_showcase_modal": {
+    "title": "Showcase video"
+  },
+  "smart_wearables_ftu_modal": {
+    "title": "Smart Wearables are now live! 🟢",
+    "description": "<b>Unlock the world of Portable Experiences you can own in the form of Smart Wearables.</b> Experience Decentraland like never before with Wearables that give you new abilities (like flying!) or add an extra layer of content, visible only to you, overlaid on Decentraland scenes.",
+    "explore_collectibles": "Browse Smart Wearables"
   }
 }

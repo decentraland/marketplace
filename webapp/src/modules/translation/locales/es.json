@@ -445,7 +445,10 @@
     },
     "more_filters": "Más filtros",
     "location": "Ubicación",
-    "only_smart": "Solo vestimentas interactivas",
+    "only_smart": {
+      "title": "Vestimentas interactivas",
+      "selected": "Solo vestimentas interactivas"
+    },
     "not_on_sale": "Incluye no a la venta",
     "for_sale": "A la venta",
     "category": "Categoría",
@@ -516,7 +519,7 @@
       "change_beneficiary": "Cambiar de beneficiario",
       "mint_item": "Acuñar item",
       "legacy_order_expired_warning": "Este listado no se muestra a los compradores en Marketplace, pero se creó con una fecha de vencimiento no válida y, por lo tanto, aún se puede comprar a través del contrato. Elimine esta lista manualmente.",
-    "legacy_order_not_expired_warning": "Este anuncio se ha creado con una fecha de caducidad no válida. Elimine este anuncio y vuelva a ponerlo a la venta para solucionar el problema."
+      "legacy_order_not_expired_warning": "Este anuncio se ha creado con una fecha de caducidad no válida. Elimine este anuncio y vuelva a ponerlo a la venta para solucionar el problema."
     },
     "sales_rent_action_box": {
       "until": "Desde {from_date} a {to_date}",
@@ -715,6 +718,20 @@
     "play_mode": {
       "simple": "Reproduce una vez",
       "loop": "Reproduce en bucle"
+    }
+  },
+  "smart_wearable": {
+    "play_showcase": "Reproducir vista previa",
+    "required_permission": {
+      "title": "Esta vestimenta inteligente requiere {count, plural, one {el siguiente permiso} other {los siguientes permisos}}",
+      "tooltip_info": "Para usar esta vestimenta interactiva, debe otorgarle los siguientes permisos para experimentar el efecto completo de la misma. {learn_more}",
+      "allow_to_move_player_inside_scene": "Mover jugador",
+      "allow_to_trigger_avatar_emote": "Activar gestos",
+      "allow_media_hostnames": "Reproducir contenido multimedia",
+      "use_web3_api": "Interacción con tu billetera",
+      "use_fetch": "Comunicarse con otros servidores",
+      "use_websocket": "Intercambiar datos",
+      "open_external_link": "Abrir enlaces externos"
     }
   },
   "wearable_preview": {
@@ -1456,5 +1473,13 @@
     "remove_from_lists": "Remover de {count} listas",
     "save_and_remove_from_lists": "Guardar y remover de {count} lists",
     "save_changes": "Guardar cambios"
+  },
+  "smart_wearable_video_showcase_modal": {
+    "title": "Vídeo de presentación"
+  },
+  "smart_wearables_ftu_modal": {
+    "title": "¡Las vestimentas inteligentes ya están disponibles! 🟢",
+    "description": "<b>Desbloquea el mundo de Experiencias Portátiles que puedes tener en forma de Vestimenta Interactiva.</b> Experimenta Decentraland como nunca antes con Vestimentas que te brindan nuevas habilidades (¡como volar!) o agrega una capa adicional de contenido, visible solo para usted, superpuesto en escenas de Decentraland.",
+    "explore_collectibles": "Explorar vestimentas interactivas"
   }
 }

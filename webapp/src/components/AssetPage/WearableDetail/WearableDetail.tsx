@@ -20,6 +20,7 @@ import { TransactionHistory } from '../TransactionHistory'
 import OnBack from '../OnBack'
 import Title from '../Title'
 import { BuyNFTBox } from '../BuyNFTBox'
+import { RequiredPermissions } from '../RequiredPermissions'
 import { Props } from './WearableDetail.types'
 import styles from './WearableDetail.module.css'
 
@@ -89,6 +90,7 @@ const WearableDetail = ({ nft }: Props) => {
             </div>
           </div>
           <Description text={wearable.description} />
+          {wearable.isSmart ? <RequiredPermissions asset={nft} /> : null}
           <div className={styles.wearableOwnerAndCollectionContainer}>
             <Owner asset={nft} />
             <Collection asset={nft} />

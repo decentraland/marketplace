@@ -17,6 +17,7 @@ import PriceFilter from './PriceFilter'
 import EstateSizeFilter from './EstateSizeFilter'
 import CreatorsFilter from './CreatorsFilter'
 import { RarityFilter } from './RarityFilter'
+import { OnlySmartFilter } from './OnlySmartFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
 import { CollectionFilter } from './CollectionFilter'
@@ -262,6 +263,13 @@ export const AssetFilters = ({
 
   return (
     <Menu className="filters-sidebar">
+      {shouldRenderFilter(AssetFilter.OnlySmart) ? (
+        <OnlySmartFilter
+          isOnlySmart={isOnlySmart}
+          onChange={handleOnlySmartChange}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.OnlySmart]}
+        />
+      ) : null}
       {shouldRenderFilter(AssetFilter.Rarity) ? (
         <RarityFilter
           onChange={handleRarityChange}
