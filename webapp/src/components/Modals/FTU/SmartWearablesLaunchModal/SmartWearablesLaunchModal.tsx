@@ -35,8 +35,11 @@ export const SmartWearablesLaunchModal = ({
 
   const onLearnMore = useCallback(() => {
     markAsSeen()
-    // TODO: Where should this link point to?
-    window.open('???', '_blank', 'noopener noreferrer')
+    window.open(
+      'https://decentraland.org/blog/announcements/smart-wearables-and-portable-experiences',
+      '_blank',
+      'noopener noreferrer'
+    )
   }, [markAsSeen])
 
   useEffect(() => {
