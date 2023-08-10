@@ -12,9 +12,12 @@ export const ExpirationInfo = ({
 }: Props) => (
   <Info title={title} popupContent={popupContent} icon={icon}>
     <span>
-      {formatDistanceToNow(expirationDate, {
-        addSuffix: true
-      })}
+      {formatDistanceToNow(
+        expirationDate * (expirationDate.toString().length === 10 ? 1000 : 1),
+        {
+          addSuffix: true
+        }
+      )}
     </span>
   </Info>
 )
