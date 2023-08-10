@@ -16,5 +16,6 @@ export enum FeatureName {
   HANDS_CATEGORY = 'hands-category',
   HANDS_CATEGORY_FTU = 'hands-category-ftu',
   PROFILE = 'profile',
-  SMART_WEARABLES_FTU = 'smart-wearables-ftu'
+  SMART_WEARABLES_FTU = 'smart-wearables-ftu',
+  MARKETPLACE_SERVER = 'marketplace-server'
 }
