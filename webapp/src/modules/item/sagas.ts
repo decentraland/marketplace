@@ -33,6 +33,8 @@ import { retryParams } from '../vendor/decentraland/utils'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { locations } from '../routing/locations'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
+import { getIsMarketplaceServerEnabled } from '../features/selectors'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -78,6 +80,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     identity: getIdentity
   }
   const itemAPI = new ItemAPI(NFT_SERVER_URL, API_OPTS)
+  const marketplaceServerCatalogAPI = new CatalogAPI(
+    MARKETPLACE_SERVER_URL,
+    API_OPTS
+  )
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield fork(() => takeLatestByPath(FETCH_ITEMS_REQUEST, locations.browse()))
@@ -130,8 +136,14 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       const ids = data.map(item => item.id)
+      const isMarketplaceServerEnabled: boolean = yield select(
+        getIsMarketplaceServerEnabled
+      )
+      const api = isMarketplaceServerEnabled
+        ? marketplaceServerCatalogAPI
+        : catalogAPI
       const { data: itemData }: { data: Item[]; total: number } = yield call(
-        [catalogAPI, 'get'],
+        [api, 'get'],
         {
           ids
         }
@@ -173,7 +185,13 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // If the wallet is getting connected, wait until it finishes to fetch the wallet and generate the identity so it can fetch them with authentication
       yield call(waitForWalletConnectionAndIdentityIfConnecting)
-      const api = isCatalogView(view) ? catalogAPI : itemAPI
+      const isMarketplaceServerEnabled: boolean = yield select(
+        getIsMarketplaceServerEnabled
+      )
+      const catalogViewAPI = isMarketplaceServerEnabled
+        ? marketplaceServerCatalogAPI
+        : catalogAPI
+      const api = isCatalogView(view) ? catalogViewAPI : itemAPI
       const { data, total }: { data: Item[]; total: number } = yield call(
         [api, 'get'],
         filters

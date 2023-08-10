@@ -206,3 +206,13 @@ export const getIsNewNavbarDropdownEnabled = (state: RootState) => {
   }
   return false
 }
+export const getIsMarketplaceServerEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.MARKETPLACE_SERVER
+    )
+  }
+  return false
+}
