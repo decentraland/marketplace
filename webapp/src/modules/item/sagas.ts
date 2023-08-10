@@ -35,6 +35,7 @@ import { locations } from '../routing/locations'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getIsMarketplaceServerEnabled } from '../features/selectors'
+import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -184,9 +185,11 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     yield call(waitForWalletConnectionIfConnecting)
 
     try {
+      yield call(waitForFeatureFlagsToBeLoaded)
       const isMarketplaceServerEnabled: boolean = yield select(
         getIsMarketplaceServerEnabled
       )
+      console.log('isMarketplaceServerEnabled: ', isMarketplaceServerEnabled)
       const catalogViewAPI = isMarketplaceServerEnabled
         ? marketplaceServerCatalogAPI
         : catalogAPI
