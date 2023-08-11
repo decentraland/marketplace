@@ -445,7 +445,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
   )
 
   if (hasShownTheExpiredListingsModalBefore !== 'true') {
-    yield handleFetchOnSale(address, view)
+    yield handleFetchNFTsOnSale(address, view)
   }
 }
 
@@ -481,6 +481,10 @@ function* handleFetchOnSale(address: string, view: View) {
     })
   )
 
+  yield call(handleFetchNFTsOnSale, address, view)
+}
+
+function* handleFetchNFTsOnSale(address: string, view: View) {
   yield put(
     fetchNFTsRequest({
       view,
