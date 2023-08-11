@@ -22,6 +22,8 @@ import {
   buyAssetWithCard,
   BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
 } from '../asset/utils'
+import { getIsMarketplaceServerEnabled } from '../features/selectors'
+import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import {
   buyItemRequest,
@@ -428,6 +430,8 @@ describe('when handling the fetch items request action', () => {
                 matchers.call.fn(waitForWalletConnectionIfConnecting),
                 undefined
               ],
+              [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
+              [select(getIsMarketplaceServerEnabled), true],
               [select(getLocation), { pathname }],
               {
                 call(effect, next) {
@@ -483,7 +487,9 @@ describe('when handling the fetch items request action', () => {
           .provide([
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
             [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined],
-            [select(getLocation), { pathname }]
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
+            [select(getLocation), { pathname }],
+            [select(getIsMarketplaceServerEnabled), false]
           ])
           .put(
             fetchItemsSuccess(
@@ -504,8 +510,10 @@ describe('when handling the fetch items request action', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [select(getLocation), { pathname: '' }],
+          [select(getIsMarketplaceServerEnabled), true],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
-          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined],
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined]
         ])
         .put(fetchItemsFailure(anError.message, itemBrowseOptions))
         .dispatch(fetchItemsRequest(itemBrowseOptions))
@@ -568,6 +576,7 @@ describe('when handling the fetch trending items request action', () => {
       it('should dispatch a successful action with the fetched trending items', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
+            [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
             [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
@@ -584,6 +593,7 @@ describe('when handling the fetch trending items request action', () => {
       it('should dispatch a successful action with the fetched trending items', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
+            // [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
             [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
           ])
