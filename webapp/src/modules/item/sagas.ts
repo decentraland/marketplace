@@ -190,7 +190,6 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       const isMarketplaceServerEnabled: boolean = yield select(
         getIsMarketplaceServerEnabled
       )
-      console.log('isMarketplaceServerEnabled: ', isMarketplaceServerEnabled)
       const catalogViewAPI = isMarketplaceServerEnabled
         ? marketplaceServerCatalogAPI
         : catalogAPI
