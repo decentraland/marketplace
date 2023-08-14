@@ -1,9 +1,9 @@
+import { race, select, take } from 'redux-saga/effects'
 import {
   FETCH_APPLICATION_FEATURES_FAILURE,
   FETCH_APPLICATION_FEATURES_SUCCESS
 } from 'decentraland-dapps/dist/modules/features/actions'
 import { isLoadingFeatureFlags } from 'decentraland-dapps/dist/modules/features/selectors'
-import { race, select, take } from 'redux-saga/effects'
 
 export function* waitForFeatureFlagsToBeLoaded() {
   const isFetchingFeatureFlags: boolean = yield select(isLoadingFeatureFlags)

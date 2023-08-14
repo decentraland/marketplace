@@ -1086,7 +1086,7 @@ describe('when handling the request for getting a list', () => {
     })
 
     describe('and non of the preview items are already in the state', () => {
-      it('should dispatch an action signaling the success of the handled action with the recieved list and items', () => {
+      it('should dispatch an action signaling the success of the handled action with the received list and items', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
             [
