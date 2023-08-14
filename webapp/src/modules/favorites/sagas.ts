@@ -119,6 +119,13 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     handleBulkPickSuccessOrFailure
   )
 
+  function* getCatalogAPI() {
+    const isMarketplaceServerEnabled: boolean = yield select(
+      getIsMarketplaceServerEnabled
+    )
+    return isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
+  }
+
   function* fetchPreviewItems(previewListsItemIds: string[]) {
     let previewItems: Item[] = []
 
@@ -132,12 +139,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           ids: previewListsItemIds
         }
 
-        const isMarketplaceServerEnabled: boolean = yield select(
-          getIsMarketplaceServerEnabled
-        )
-        const api = isMarketplaceServerEnabled
-          ? marketplaceServerCatalogAPI
-          : catalogAPI
+        const api: CatalogAPI = yield getCatalogAPI()
         const result: { data: Item[] } = yield call([api, 'get'], itemFilters)
         previewItems = result.data
       }
@@ -181,12 +183,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         filters: optionsFilters
       }
 
-      const isMarketplaceServerEnabled: boolean = yield select(
-        getIsMarketplaceServerEnabled
-      )
-      const api = isMarketplaceServerEnabled
-        ? marketplaceServerCatalogAPI
-        : catalogAPI
+      const api: CatalogAPI = yield getCatalogAPI()
 
       if (results.length > 0) {
         const result: { data: Item[] } = yield call(
