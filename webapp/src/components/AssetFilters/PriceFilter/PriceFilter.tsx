@@ -70,26 +70,37 @@ export const PriceFilter = ({
     section
   ])
 
-  const rentalPriceFetchFilters = useCallback(() => ({
-    category: category as any as RentalsListingsFilterByCategory,
-    rentalDays,
-    minEstateSize: minEstateSize ? Number.parseFloat(minEstateSize) : undefined,
-    maxEstateSize: maxEstateSize ? Number.parseFloat(maxEstateSize) : undefined,
-    minDistanceToPlaza: minDistanceToPlaza ? Number.parseFloat(minDistanceToPlaza) : undefined,
-    maxDistanceToPlaza: maxDistanceToPlaza ? Number.parseFloat(maxDistanceToPlaza) : undefined,
-    adjacentToRoad: adjacentToRoad || undefined,
-  }), [
-    category,
-    minEstateSize,
-    maxEstateSize,
-    minDistanceToPlaza,
-    maxDistanceToPlaza,
-    adjacentToRoad,
-    rentalDays
-  ])
+  const rentalPriceFetchFilters = useCallback(
+    () => ({
+      category: (category as any) as RentalsListingsFilterByCategory,
+      rentalDays,
+      minEstateSize: minEstateSize
+        ? Number.parseFloat(minEstateSize)
+        : undefined,
+      maxEstateSize: maxEstateSize
+        ? Number.parseFloat(maxEstateSize)
+        : undefined,
+      minDistanceToPlaza: minDistanceToPlaza
+        ? Number.parseFloat(minDistanceToPlaza)
+        : undefined,
+      maxDistanceToPlaza: maxDistanceToPlaza
+        ? Number.parseFloat(maxDistanceToPlaza)
+        : undefined,
+      adjacentToRoad: adjacentToRoad || undefined
+    }),
+    [
+      category,
+      minEstateSize,
+      maxEstateSize,
+      minDistanceToPlaza,
+      maxDistanceToPlaza,
+      adjacentToRoad,
+      rentalDays
+    ]
+  )
 
   const title = useMemo(() => {
-    if(landStatus === LANDFilters.ONLY_FOR_RENT) {
+    if (landStatus === LANDFilters.ONLY_FOR_RENT) {
       return t('nft_filters.price_per_day')
     }
     return t('filters.price')
@@ -128,7 +139,12 @@ export const PriceFilter = ({
       acc[ethers.utils.formatEther(key)] = value
       return acc
     }, {} as Record<string, number>)
-  }, [priceFetchFilters, landStatus, isRentalPriceFitlerChartEnabled, rentalPriceFetchFilters])
+  }, [
+    priceFetchFilters,
+    landStatus,
+    isRentalPriceFitlerChartEnabled,
+    rentalPriceFetchFilters
+  ])
 
   return (
     <Box
@@ -143,7 +159,7 @@ export const PriceFilter = ({
         max={maxPrice}
         min={minPrice}
         upperBound={upperBound}
-        network={network || getNetwork(network, category)}
+        network={getNetwork(network, category)}
         onChange={onChange}
         errorMessage={t('filters.price_min_greater_max')}
       />
