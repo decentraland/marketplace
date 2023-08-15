@@ -139,7 +139,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           ids: previewListsItemIds
         }
 
-        const api: CatalogAPI = yield getCatalogAPI()
+        const api: CatalogAPI = yield call(getCatalogAPI)
         const result: { data: Item[] } = yield call([api, 'get'], itemFilters)
         previewItems = result.data
       }
@@ -183,7 +183,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         filters: optionsFilters
       }
 
-      const api: CatalogAPI = yield getCatalogAPI()
+      const api: CatalogAPI = yield call(getCatalogAPI)
 
       if (results.length > 0) {
         const result: { data: Item[] } = yield call(
