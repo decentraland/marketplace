@@ -579,6 +579,7 @@ describe('when handling the fetch items request action', () => {
           [select(getLocation), { pathname: '' }],
           [select(getWallet), undefined],
           [select(getIsMarketplaceServerEnabled), true],
+          [select(getWallet), undefined],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
           [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
         ])
