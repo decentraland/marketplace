@@ -22,6 +22,7 @@ import {
 } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { isErrorWithMessage } from '../../lib/error'
 import { config } from '../../config'
 import { ItemAPI } from '../vendor/decentraland/item/api'
@@ -36,6 +37,7 @@ import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getIsMarketplaceServerEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
+import { GENERATE_IDENTITY_SUCCESS } from '../identity/actions'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -66,12 +68,14 @@ import {
   fetchCollectionItemsSuccess,
   fetchCollectionItemsFailure,
   FETCH_COLLECTION_ITEMS_REQUEST,
-  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE
+  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
+  FetchItemsFailureAction
 } from './actions'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
+export const CANCEL_FETCH_ITEMS = 'CANCEL_FETCH_ITEMS'
 
 export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
@@ -109,6 +113,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
       // if we have a task running in the browse path, we cancel the previous one
       if (matchPath(currentPathname, { path }) && task && task.isRunning()) {
+        yield put({ type: CANCEL_FETCH_ITEMS }) // to unblock the saga waiting for the identity success
         yield cancel(task)
       }
       task = yield fork(handleFetchItemsRequest, action)
@@ -176,6 +181,22 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     }
   }
 
+  function* waitForIdentityToBeGenerated(action: FetchItemsRequestAction) {
+    const {
+      wasFetchedCancelled
+    }: {
+      wasFetchedCancelled: FetchItemsFailureAction
+    } = yield race({
+      wasFetchedCancelled: take(CANCEL_FETCH_ITEMS),
+      identiyGenerated: take(GENERATE_IDENTITY_SUCCESS)
+    })
+    if (wasFetchedCancelled) {
+      yield put(
+        fetchItemsFailure(FETCH_ITEMS_CANCELLED_ERROR_MESSAGE, action.payload)
+      )
+    }
+  }
+
   function* handleFetchItemsRequest(
     action: FetchItemsRequestAction
   ): SagaIterator {
@@ -183,6 +204,11 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
     yield call(waitForWalletConnectionIfConnecting)
+    const wallet: Wallet | undefined = yield select(getWallet)
+
+    if (wallet) {
+      yield call(waitForIdentityToBeGenerated, action)
+    }
 
     try {
       yield call(waitForFeatureFlagsToBeLoaded)
