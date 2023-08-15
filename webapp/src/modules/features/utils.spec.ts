@@ -5,9 +5,9 @@ import {
   FETCH_APPLICATION_FEATURES_FAILURE,
   FETCH_APPLICATION_FEATURES_SUCCESS
 } from 'decentraland-dapps/dist/modules/features/actions'
-import { waitForFeatureFlagsToBeLoaded } from './utils' // adjust the path
+import { waitForFeatureFlagsToBeLoaded } from './utils'
 
-describe('waitForFeatureFlagsToBeLoaded Saga', () => {
+describe('waitForFeatureFlagsToBeLoaded Util', () => {
   it('should do nothing if feature flags are already loaded', () => {
     return expectSaga(waitForFeatureFlagsToBeLoaded)
       .provide([[select(isLoadingFeatureFlags), false]])
