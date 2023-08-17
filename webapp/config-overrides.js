@@ -5,8 +5,12 @@ module.exports = override(
   babelInclude([
     path.resolve(__dirname, 'src'),
     path.resolve(__dirname, 'node_modules/react-virtualized-auto-sizer'),
-    path.resolve(__dirname, 'node_modules/decentraland-connect/node_modules/@walletconnect'),
+    path.resolve(
+      __dirname,
+      'node_modules/decentraland-connect/node_modules/@walletconnect'
+    ),
+    path.resolve('node_modules/@metamask/utils/node_modules/superstruct'),
     path.resolve(__dirname, 'node_modules/@walletconnect'),
-    path.resolve(__dirname, 'node_modules/@dcl/single-sign-on-client'),
+    path.resolve(__dirname, 'node_modules/@dcl/single-sign-on-client')
   ])
 )
