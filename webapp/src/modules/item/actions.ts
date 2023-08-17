@@ -1,10 +1,10 @@
+import { action } from 'typesafe-actions'
 import { ChainId, Item, ItemFilters } from '@dcl/schemas'
 import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   buildTransactionWithFromPayload,
   buildTransactionWithReceiptPayload
 } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { action } from 'typesafe-actions'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'
 import { ItemBrowseOptions } from './types'

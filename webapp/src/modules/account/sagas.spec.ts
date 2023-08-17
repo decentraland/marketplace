@@ -1,4 +1,8 @@
+import { createFetchComponent } from '@well-known-components/fetch-component'
+import { createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
 import { Task } from 'redux-saga'
+import { call, select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
 import {
   Account,
   AccountFilters,
@@ -7,10 +11,6 @@ import {
   NFTCategory,
   Profile
 } from '@dcl/schemas'
-import { createFetchComponent } from '@well-known-components/fetch-component'
-import { createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
-import { expectSaga } from 'redux-saga-test-plan'
-import { call, select } from 'redux-saga/effects'
 import { NFTsFetchParams } from '../nft/types'
 import { accountAPI, nftAPI, NFTResult } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
@@ -31,7 +31,6 @@ import {
 import { getCreators, getCreatorsSearchQuery } from './selectors'
 import { CreatorAccount } from './types'
 import { fromProfilesToCreators } from './utils'
-
 
 let account: Account
 let filters: AccountFilters
@@ -66,7 +65,10 @@ beforeEach(() => {
   }
 })
 
-const lambdasClient = createLambdasClient({ url: 'aMockedURL', fetcher: createFetchComponent()  })
+const lambdasClient = createLambdasClient({
+  url: 'aMockedURL',
+  fetcher: createFetchComponent()
+})
 
 describe('when handling the request to fetch account metrics', () => {
   describe('when a call to the accountApi fails', () => {
@@ -231,7 +233,7 @@ describe('when handling the request to fetch creators accounts', () => {
         filters = {
           sortBy: AccountSortBy.MOST_COLLECTIONS
         }
-        addresses = accounts.map(account => account.address)
+        addresses = accounts.map((account) => account.address)
       })
       it('should signal that the request has failed with the request error', () => {
         return expectSaga(accountSaga, lambdasClient)
@@ -239,7 +241,9 @@ describe('when handling the request to fetch creators accounts', () => {
             [select(getCreatorsSearchQuery), null],
             [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
             [
-              call([lambdasClient, 'getAvatarsDetailsByPost'], { ids: addresses }),
+              call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                ids: addresses
+              }),
               Promise.reject(new Error(error))
             ]
           ])
@@ -263,7 +267,7 @@ describe('when handling the request to fetch creators accounts', () => {
           { address: 'address1' } as Account,
           { address: 'address2' } as Account
         ]
-        addresses = accounts.map(account => account.address)
+        addresses = accounts.map((account) => account.address)
         profiles = [
           { avatars: [{ ethAddress: addresses[0] }] } as Profile,
           { avatars: [{ ethAddress: addresses[1] }] } as Profile
@@ -274,7 +278,12 @@ describe('when handling the request to fetch creators accounts', () => {
           .provide([
             [select(getCreatorsSearchQuery), null],
             [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
-            [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
+            [
+              call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                ids: addresses
+              }),
+              profiles
+            ]
           ])
           .put(
             fetchCreatorsAccountSuccess(
@@ -301,7 +310,7 @@ describe('when handling the request to fetch creators accounts', () => {
           { address: 'address1', collections: 2 } as Account,
           { address: 'address2', collections: 3 } as Account
         ]
-        addresses = accounts.map(account => account.address)
+        addresses = accounts.map((account) => account.address)
         filters = {
           address: addresses,
           sortBy: AccountSortBy.MOST_COLLECTIONS
@@ -326,7 +335,12 @@ describe('when handling the request to fetch creators accounts', () => {
             .provide([
               [select(getCreatorsSearchQuery), search],
               [select(getCreators), creatorAccounts],
-              [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
+              [
+                call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                  ids: addresses
+                }),
+                profiles
+              ]
             ])
             .put(fetchCreatorsAccountSuccess(search, creatorAccounts))
             .dispatch(fetchCreatorsAccountRequest(search))
@@ -344,20 +358,25 @@ describe('when handling the request to fetch creators accounts', () => {
               .provide([
                 [select(getCreatorsSearchQuery), null],
                 ...[...Array(MAX_ENS_SEARCH_REQUESTS).keys()].map(
-                  index =>
-                    ([
+                  (index) =>
+                    [
                       call([nftAPI, nftAPI.fetch], {
                         ...nftAPIFilters,
                         skip: index * DEFAULT_FIRST_VALUE
                       }),
                       { data: nftResults, total }
-                    ] as unknown) as Task
+                    ] as unknown as Task
                 ),
                 [
                   call([accountAPI, accountAPI.fetch], filters),
                   { data: accounts }
                 ],
-                [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
+                [
+                  call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                    ids: addresses
+                  }),
+                  profiles
+                ]
               ])
               .put(
                 fetchCreatorsAccountSuccess(
@@ -379,14 +398,14 @@ describe('when handling the request to fetch creators accounts', () => {
               .provide([
                 [select(getCreatorsSearchQuery), null],
                 ...[...Array(REQUESTS_UNTIL_FILLED).keys()].map(
-                  index =>
-                    ([
+                  (index) =>
+                    [
                       call([nftAPI, nftAPI.fetch], {
                         ...nftAPIFilters,
                         skip: index * DEFAULT_FIRST_VALUE
                       }),
                       { data: nftResults, total }
-                    ] as unknown) as Task
+                    ] as unknown as Task
                 ),
                 [
                   call([nftAPI, nftAPI.fetch], nftAPIFilters),
@@ -396,7 +415,12 @@ describe('when handling the request to fetch creators accounts', () => {
                   call([accountAPI, accountAPI.fetch], filters),
                   { data: accounts }
                 ],
-                [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
+                [
+                  call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                    ids: addresses
+                  }),
+                  profiles
+                ]
               ])
               .put(
                 fetchCreatorsAccountSuccess(

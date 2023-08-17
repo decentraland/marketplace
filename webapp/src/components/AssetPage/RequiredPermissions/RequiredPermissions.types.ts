@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
-import { Asset } from '../../../modules/asset/types'
 import { FetchSmartWearableRequiredPermissionsRequestAction } from '../../../modules/asset/actions'
+import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
   asset: Asset
@@ -16,6 +16,5 @@ export type MapStateProps = Pick<
   'requiredPermissions' | 'isLoading' | 'hasFetched'
 >
 export type MapDispatchProps = Pick<Props, 'onFetchRequiredPermissions'>
-export type MapDispatch = Dispatch<
-  FetchSmartWearableRequiredPermissionsRequestAction
->
+export type MapDispatch =
+  Dispatch<FetchSmartWearableRequiredPermissionsRequestAction>

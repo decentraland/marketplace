@@ -1,10 +1,10 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { LocationChangeAction, LOCATION_CHANGE } from 'connected-react-router'
-import { Entity } from '@dcl/schemas'
-import { AuthIdentity } from '@dcl/crypto'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { AuthIdentity } from '@dcl/crypto'
+import { Entity } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isErrorWithMessage } from '../../lib/error'
 import { getIdentity } from '../identity/utils'
 import {
@@ -18,12 +18,12 @@ import {
   UPDATE_STORE_REQUEST,
   revertLocalStore
 } from './actions'
+import { getIsLocalStoreDirty } from './selectors'
 import {
   deployStoreEntity,
   fetchStoreEntity,
   getStoreFromEntity
 } from './utils'
-import { getIsLocalStoreDirty } from './selectors'
 
 export function* storeSaga(client: ContentClient) {
   yield takeEvery(FETCH_STORE_REQUEST, handleFetchStoreRequest)
@@ -40,7 +40,7 @@ export function* storeSaga(client: ContentClient) {
 
     const address: string = yield select(getAddress)
     const allowed = ['section=store_settings&', 'viewAsGuest=true']
-    if (!allowed.some(value => location.search.includes(value))) {
+    if (!allowed.some((value) => location.search.includes(value))) {
       yield put(revertLocalStore(address))
     }
   }

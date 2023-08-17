@@ -1,7 +1,6 @@
 import React from 'react'
-import { Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { Stats } from 'decentraland-ui'
 import { Props } from './Network.types'
 
 const Network = (props: Props) => {

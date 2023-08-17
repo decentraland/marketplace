@@ -1,6 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ChainId } from '@dcl/schemas'
 import {
+  AuthorizationType,
+  Authorization as Authorizations
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ContractName } from 'decentraland-transactions'
+import {
   Table,
   Loader,
   TextFilter,
@@ -8,26 +14,20 @@ import {
   Pagination,
   NotMobile
 } from 'decentraland-ui'
-import {
-  AuthorizationType,
-  Authorization as Authorizations
-} from 'decentraland-dapps/dist/modules/authorization/types'
-import { ContractName } from 'decentraland-transactions'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { useAuthorization } from '../../lib/authorization'
+import { SortBy } from '../../modules/routing/types'
+import { LEGACY_MARKETPLACE_MAINNET_CONTRACT } from '../../modules/vendor/decentraland'
+import OnRentListElement from './OnRentListElement'
+import { Props as OnRentListElementProps } from './OnRentListElement/OnRentListElement.types'
+import OnSaleListElement from './OnSaleListElement'
+import { Props as OnSaleListElementProps } from './OnSaleListElement/OnSaleListElement.types'
+import { useProcessedElements } from './utils'
 import {
   OnSaleOrRentType,
   Props,
   isOnSaleListElementProps
 } from './OnSaleOrRentList.types'
-import { SortBy } from '../../modules/routing/types'
-import { useProcessedElements } from './utils'
-import OnSaleListElement from './OnSaleListElement'
-import OnRentListElement from './OnRentListElement'
 import './OnSaleOrRentList.css'
-import { LEGACY_MARKETPLACE_MAINNET_CONTRACT } from '../../modules/vendor/decentraland'
-import { useAuthorization } from '../../lib/authorization'
-import { Props as OnSaleListElementProps } from './OnSaleListElement/OnSaleListElement.types'
-import { Props as OnRentListElementProps } from './OnRentListElement/OnRentListElement.types'
 
 const ROWS_PER_PAGE = 12
 
@@ -50,7 +50,7 @@ const OnSaleOrRentList = ({
           el.order &&
           el.order.marketplaceAddress === LEGACY_MARKETPLACE_MAINNET_CONTRACT
       )
-      if (!!legacyMarketplaceOrder) {
+      if (legacyMarketplaceOrder) {
         const authorization: Authorizations = {
           address: wallet?.address || '',
           authorizedAddress: LEGACY_MARKETPLACE_MAINNET_CONTRACT,
@@ -94,7 +94,7 @@ const OnSaleOrRentList = ({
     () => (
       <TextFilter
         value={search}
-        onChange={val => {
+        onChange={(val) => {
           setSearch(val)
           setPage(1)
         }}
@@ -151,7 +151,7 @@ const OnSaleOrRentList = ({
               </Table.Header>
             </NotMobile>
             <Table.Body>
-              {processedElements.paginated.map(element =>
+              {processedElements.paginated.map((element) =>
                 showRents && element.nft && element.rental ? (
                   <OnRentListElement
                     key={`n-${element.nft.id}`}

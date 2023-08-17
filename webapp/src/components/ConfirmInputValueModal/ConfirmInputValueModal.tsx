@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Props } from './ConfirmInputValueModal.types'
+import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { ManaField } from '../ManaField'
+import { Props } from './ConfirmInputValueModal.types'
 import './ConfirmInputValueModal.css'
 
 const ConfirmInputValueModal = ({

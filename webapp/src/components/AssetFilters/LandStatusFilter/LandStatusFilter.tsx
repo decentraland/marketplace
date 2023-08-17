@@ -1,6 +1,11 @@
 import { useCallback, useMemo } from 'react'
-import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import {
+  Box,
+  CheckboxProps,
+  Radio,
+  useTabletAndBelowMediaQuery
+} from 'decentraland-ui'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import './LandStatusFilter.css'
 import { getLandLabel } from '../../../utils/filters'
@@ -62,7 +67,7 @@ export const LandStatusFilter = ({
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="filters-radio-group land-status-options">
-        {landStatusFilterOptions.map(option => {
+        {landStatusFilterOptions.map((option) => {
           return (
             <Radio
               id={`landStatus-${option.value}`}

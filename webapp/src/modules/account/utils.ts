@@ -1,6 +1,6 @@
+import { ethers } from 'ethers'
 import { Account, Profile } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ethers } from 'ethers'
 import { NFTResult } from '../vendor/decentraland'
 import { AccountMetrics, CreatorAccount } from './types'
 
@@ -16,9 +16,7 @@ export function sumAccountMetrics(a: AccountMetrics, b: AccountMetrics) {
 }
 
 function addStrings(a: string, b: string) {
-  return ethers.BigNumber.from(a)
-    .add(b)
-    .toString()
+  return ethers.BigNumber.from(a).add(b).toString()
 }
 
 export function fromProfilesToCreators(
@@ -26,15 +24,15 @@ export function fromProfilesToCreators(
   accounts: Account[]
 ): CreatorAccount[] {
   return profiles
-    .map(profile => ({
+    .map((profile) => ({
       name: profile.avatars[0].name,
       address: profile.avatars[0].ethAddress,
       collections:
         accounts.find(
-          account => account.address === profile.avatars[0].ethAddress
+          (account) => account.address === profile.avatars[0].ethAddress
         )?.collections || 0
     }))
-    .filter(account => account.collections > 0)
+    .filter((account) => account.collections > 0)
 }
 
 export function enhanceCreatorName(
@@ -44,7 +42,7 @@ export function enhanceCreatorName(
 ) {
   if (!creator.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
     const ensThatMatch = ens.find(
-      nft =>
+      (nft) =>
         nft.nft.owner === creator.address &&
         nft.nft.name.toLowerCase().includes(search.toLocaleLowerCase())
     )

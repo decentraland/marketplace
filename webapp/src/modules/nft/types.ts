@@ -1,9 +1,9 @@
 import { NFT as BaseNFT, NFTCategory } from '@dcl/schemas'
+import { SortDirection } from '../routing/types'
 import { View } from '../ui/types'
+import { NFTData as DecentralandData } from '../vendor/decentraland/nft/types'
 import { NFTsFetchFilters } from '../vendor/nft/types'
 import { VendorName } from '../vendor/types'
-import { SortDirection } from '../routing/types'
-import { NFTData as DecentralandData } from '../vendor/decentraland/nft/types'
 
 export enum NFTSortBy {
   NAME = 'name',

@@ -9,9 +9,8 @@ import { rentalsAPI } from './api'
 
 jest.mock('decentraland-crypto-fetch')
 
-const signedFetchMock: jest.MockedFunction<typeof signedFetch> = (signedFetch as unknown) as jest.MockedFunction<
-  typeof signedFetch
->
+const signedFetchMock: jest.MockedFunction<typeof signedFetch> =
+  signedFetch as unknown as jest.MockedFunction<typeof signedFetch>
 let rental: RentalListing
 
 beforeEach(() => {
@@ -181,7 +180,7 @@ describe('when getting rental listings', () => {
 
 describe('when getting rental listings prices', () => {
   describe('when request finished successfully', () => {
-    let prices = { '100': 1 }
+    const prices = { '100': 1 }
     beforeEach(() => {
       jest.spyOn(rentalsAPI, 'request').mockResolvedValueOnce(prices)
     })

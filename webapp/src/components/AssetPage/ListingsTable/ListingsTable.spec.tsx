@@ -28,7 +28,7 @@ jest.mock('decentraland-dapps/dist/containers', () => {
 })
 
 describe('Listings Table', () => {
-  let asset: Item = {
+  const asset: Item = {
     contractAddress: '0xaddress',
     itemId: '1',
     id: '1',
@@ -58,7 +58,7 @@ describe('Listings Table', () => {
     firstListedAt: null
   }
 
-  let ownersResponse: OwnersResponse = {
+  const ownersResponse: OwnersResponse = {
     issuedId: 1,
     ownerId: '0x92712b730b9a474f99a47bb8b1750190d5959a2b',
     orderStatus: 'open',
@@ -66,7 +66,7 @@ describe('Listings Table', () => {
     tokenId: '1'
   }
 
-  let orderResponse: Order = {
+  const orderResponse: Order = {
     id: '1',
     marketplaceAddress: '0xmarketplace',
     contractAddress: '0xaddress',

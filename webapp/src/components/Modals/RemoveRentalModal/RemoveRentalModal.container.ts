@@ -7,12 +7,12 @@ import {
   isSubmittingTransaction,
   getError
 } from '../../../modules/rental/selectors'
+import ClaimLandModal from './RemoveRentalModal'
 import {
   MapDispatchProps,
   MapStateProps,
   OwnProps
 } from './RemoveRentalModal.types'
-import ClaimLandModal from './RemoveRentalModal'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

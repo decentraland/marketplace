@@ -9,7 +9,7 @@ const TextInput = ({ type, value, onChange }: Props) => {
     <Input
       className="TextInput"
       value={value}
-      onChange={e => onChange(e.target.value)}
+      onChange={(e) => onChange(e.target.value)}
     />
   )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Loader } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Loader } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { Props } from './Wallet.types'
 import './Wallet.css'

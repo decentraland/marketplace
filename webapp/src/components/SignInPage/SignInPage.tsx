@@ -1,9 +1,8 @@
 import React from 'react'
 import { default as SignIn } from 'decentraland-dapps/dist/containers/SignInPage'
 import { Page } from 'decentraland-ui'
-
-import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
+import { Navbar } from '../Navbar'
 import './SignInPage.css'
 
 const SignInPage = () => {

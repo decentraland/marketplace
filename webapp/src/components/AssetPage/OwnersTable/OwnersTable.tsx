@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
+import emptyOwners from '../../../images/emptyOwners.png'
 import {
   nftAPI,
   OwnersFilters,
   OwnersSortBy
 } from '../../../modules/vendor/decentraland'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import emptyOwners from '../../../images/emptyOwners.png'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
@@ -29,7 +29,7 @@ const OwnersTable = (props: Props) => {
   useEffect(() => {
     if (asset && asset.itemId) {
       setIsLoading(true)
-      let params: OwnersFilters = {
+      const params: OwnersFilters = {
         contractAddress: asset.contractAddress,
         itemId: asset.itemId,
         first: ROWS_PER_PAGE,
@@ -39,13 +39,13 @@ const OwnersTable = (props: Props) => {
       }
       nftAPI
         .getOwners(params)
-        .then(response => {
+        .then((response) => {
           setTotal(response.total)
           setOwners(formatDataToTable(response.data, asset))
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => setIsLoading(false))
-        .catch(error => {
+        .catch((error) => {
           console.error(error)
         })
     }

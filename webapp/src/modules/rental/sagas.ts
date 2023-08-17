@@ -1,3 +1,5 @@
+import { ethers } from 'ethers'
+import { call, delay, put, select, take, takeEvery } from 'redux-saga/effects'
 import {
   NFT,
   NFTCategory,
@@ -6,6 +8,9 @@ import {
   RentalListingCreation,
   RentalStatus
 } from '@dcl/schemas'
+import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   ContractData,
@@ -13,20 +18,15 @@ import {
   getContract,
   Provider
 } from 'decentraland-transactions'
-import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
-import { ethers } from 'ethers'
-import { call, delay, put, select, take, takeEvery } from 'redux-saga/effects'
+import { getContract as getContractByQuery } from '../contract/selectors'
 import { getIdentity } from '../identity/utils'
+import { CloseModalAction, CLOSE_MODAL } from '../modal/actions'
+import { fetchNFTRequest, FETCH_NFT_SUCCESS } from '../nft/actions'
+import { getFingerprint } from '../nft/estate/utils'
+import { getCurrentNFT } from '../nft/selectors'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
-import { getContract as getContractByQuery } from '../contract/selectors'
-import { getFingerprint } from '../nft/estate/utils'
-import { CloseModalAction, CLOSE_MODAL } from '../modal/actions'
 import { addressEquals } from '../wallet/utils'
-import { fetchNFTRequest, FETCH_NFT_SUCCESS } from '../nft/actions'
-import { getCurrentNFT } from '../nft/selectors'
 import {
   claimAssetFailure,
   ClaimAssetRequestAction,
@@ -71,7 +71,7 @@ export function* rentalSaga() {
 function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
   const { nft, pricePerDay, expiresAt, operationType } = action.payload
 
-  const periods: PeriodCreation[] = action.payload.periods.map(period => ({
+  const periods: PeriodCreation[] = action.payload.periods.map((period) => ({
     maxDays: daysByPeriod[period],
     minDays: daysByPeriod[period],
     pricePerDay: ethers.utils.parseUnits(pricePerDay.toString()).toString()
@@ -80,7 +80,7 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
   try {
     const address: string | undefined = yield select(getAddress)
     if (!address) {
-      throw new Error(`Invalid address`)
+      throw new Error('Invalid address')
     }
 
     const nonces: string[] = yield call(
@@ -303,12 +303,10 @@ function* handleAcceptRentalListingRequest(
 
     let fingerprint = ethers.utils.randomBytes(32).map(() => 0)
     if (nft.category === NFTCategory.ESTATE) {
-      const estateContract: ReturnType<typeof getContractByQuery> = yield select(
-        getContractByQuery,
-        {
+      const estateContract: ReturnType<typeof getContractByQuery> =
+        yield select(getContractByQuery, {
           category: NFTCategory.ESTATE
-        }
-      )
+        })
       if (estateContract) {
         fingerprint = yield call(getFingerprint, nft.tokenId, estateContract)
       }

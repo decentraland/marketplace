@@ -1,16 +1,15 @@
 import React, { useCallback, useState } from 'react'
-import { Page, Header, Button, Modal } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
-import { Navigation } from '../Navigation'
-import { Row } from '../Layout/Row'
-import { Column } from '../Layout/Column'
-import { Navbar } from '../Navbar'
+import { Page, Header, Button, Modal } from 'decentraland-ui'
 import { Footer } from '../Footer'
+import { Column } from '../Layout/Column'
+import { Row } from '../Layout/Row'
+import { Navbar } from '../Navbar'
+import { Navigation } from '../Navigation'
+import { NavigationTab } from '../Navigation/Navigation.types'
 import { Transaction } from './Transaction'
 import { Props } from './ActivityPage.types'
 import './ActivityPage.css'
-import { NavigationTab } from '../Navigation/Navigation.types'
 
 const ActivityPage = (props: Props) => {
   const { address, transactions, onClearHistory } = props
@@ -24,12 +23,14 @@ const ActivityPage = (props: Props) => {
     setShowConfirmation(false)
   }, [address, onClearHistory])
 
-  const handleConfirm = useCallback(() => setShowConfirmation(true), [
-    setShowConfirmation
-  ])
-  const handleCancel = useCallback(() => setShowConfirmation(false), [
-    setShowConfirmation
-  ])
+  const handleConfirm = useCallback(
+    () => setShowConfirmation(true),
+    [setShowConfirmation]
+  )
+  const handleCancel = useCallback(
+    () => setShowConfirmation(false),
+    [setShowConfirmation]
+  )
 
   let content = null
 
@@ -54,7 +55,7 @@ const ActivityPage = (props: Props) => {
         </Row>
         <div className="transactions">
           {transactions
-            .map(tx => <Transaction tx={tx} key={tx.hash} />)
+            .map((tx) => <Transaction tx={tx} key={tx.hash} />)
             .reverse()}
         </div>
       </>

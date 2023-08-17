@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
-import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { UpsertRentalOptType } from '../../../../modules/rental/types'
 import { daysByPeriod } from '../../../../modules/rental/utils'
 import { Mana } from '../../../Mana'
@@ -63,7 +63,8 @@ const ConfirmationStep = (props: Props) => {
                 {t('rental_modal.confirmation_step.periods')}
               </div>
               <div className={styles.noticeText}>
-                {periods.map(period => daysByPeriod[period]).join(' / ')}&nbsp;
+                {periods.map((period) => daysByPeriod[period]).join(' / ')}
+                &nbsp;
                 {t('global.days')}
               </div>
             </div>

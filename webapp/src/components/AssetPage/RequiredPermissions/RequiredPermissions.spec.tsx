@@ -1,8 +1,8 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { renderWithProviders } from '../../../utils/test'
 import { Asset } from '../../../modules/asset/types'
-import { Props } from './RequiredPermissions.types'
+import { renderWithProviders } from '../../../utils/test'
 import RequiredPermissions from './RequiredPermissions'
+import { Props } from './RequiredPermissions.types'
 
 const asset: Asset = {
   id: '1'
@@ -51,7 +51,7 @@ describe('when the permissions were fetched and the array is not empty', () => {
 
   it('should render them as badges', () => {
     const { getByText } = renderRequiredPermissions({ requiredPermissions })
-    requiredPermissions.forEach(requiredPermission => {
+    requiredPermissions.forEach((requiredPermission) => {
       expect(
         getByText(
           t(

@@ -1,12 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Header, Row, Column, Button, Loader } from 'decentraland-ui'
 import { Link, Prompt } from 'react-router-dom'
 import { Location } from 'history'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import InputContainer from './InputContainer'
-import CoverPicker from './CoverPicker'
-import TextInput from './TextInput'
-import { Props } from './StoreSettings.types'
+import { Header, Row, Column, Button, Loader } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { LinkType, Store } from '../../modules/store/types'
 import {
@@ -14,6 +10,10 @@ import {
   getPrefixedCoverName,
   linkStartsWith
 } from '../../modules/store/utils'
+import CoverPicker from './CoverPicker'
+import InputContainer from './InputContainer'
+import TextInput from './TextInput'
+import { Props } from './StoreSettings.types'
 import './StoreSettings.css'
 
 const MAX_FILE_SIZE = 1000000
@@ -52,7 +52,7 @@ const StoreSettings = ({
     }
 
     if (coverSize !== undefined && coverSize > MAX_FILE_SIZE) {
-      newErrors.size = t(`store_settings.size_error`, {
+      newErrors.size = t('store_settings.size_error', {
         max: sizeInMbs(MAX_FILE_SIZE),
         current: sizeInMbs(coverSize)
       })
@@ -70,7 +70,7 @@ const StoreSettings = ({
   }, [coverSize, website])
 
   const hasErrors = useMemo(
-    () => Object.values(errors).some(error => !!error),
+    () => Object.values(errors).some((error) => !!error),
     [errors]
   )
 
@@ -144,14 +144,14 @@ const StoreSettings = ({
               <TextInput
                 type="textarea"
                 value={description}
-                onChange={description => onChange({ ...store, description })}
+                onChange={(description) => onChange({ ...store, description })}
               />
             </InputContainer>
             <InputContainer title={t('store_settings.website')}>
               <TextInput
                 type="input"
                 value={website}
-                onChange={website => onChange({ ...store, website })}
+                onChange={(website) => onChange({ ...store, website })}
               />
               {errors.website && <div className="error">{errors.website}</div>}
             </InputContainer>
@@ -159,7 +159,7 @@ const StoreSettings = ({
               <TextInput
                 type="input"
                 value={getInputValue(LinkType.FACEBOOK)}
-                onChange={value =>
+                onChange={(value) =>
                   handleInputOnChange(LinkType.FACEBOOK, value)
                 }
               />
@@ -169,7 +169,9 @@ const StoreSettings = ({
               <TextInput
                 type="input"
                 value={getInputValue(LinkType.TWITTER)}
-                onChange={value => handleInputOnChange(LinkType.TWITTER, value)}
+                onChange={(value) =>
+                  handleInputOnChange(LinkType.TWITTER, value)
+                }
               />
               <div className="info">{twitter}</div>
             </InputContainer>
@@ -177,7 +179,9 @@ const StoreSettings = ({
               <TextInput
                 type="input"
                 value={getInputValue(LinkType.DISCORD)}
-                onChange={value => handleInputOnChange(LinkType.DISCORD, value)}
+                onChange={(value) =>
+                  handleInputOnChange(LinkType.DISCORD, value)
+                }
               />
               <div className="info">{discord}</div>
             </InputContainer>

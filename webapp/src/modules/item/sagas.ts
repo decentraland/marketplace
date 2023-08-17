@@ -1,8 +1,7 @@
 import { matchPath } from 'react-router-dom'
+import { put, takeEvery } from '@redux-saga/core/effects'
 import { getLocation } from 'connected-react-router'
 import { SagaIterator } from 'redux-saga'
-import { Item } from '@dcl/schemas'
-import { put, takeEvery } from '@redux-saga/core/effects'
 import {
   call,
   cancel,
@@ -12,27 +11,28 @@ import {
   select,
   take
 } from 'redux-saga/effects'
-import { ContractName, getContract } from 'decentraland-transactions'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Item } from '@dcl/schemas'
 import {
   SetPurchaseAction,
   SET_PURCHASE
 } from 'decentraland-dapps/dist/modules/gateway/actions'
-import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
-import { isErrorWithMessage } from '../../lib/error'
+import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
-import { ItemAPI } from '../vendor/decentraland/item/api'
-import { getWallet } from '../wallet/selectors'
-import { buyAssetWithCard } from '../asset/utils'
-import { isCatalogView } from '../routing/utils'
-import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
-import { retryParams } from '../vendor/decentraland/utils'
-import { CatalogAPI } from '../vendor/decentraland/catalog/api'
-import { locations } from '../routing/locations'
+import { isErrorWithMessage } from '../../lib/error'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { buyAssetWithCard } from '../asset/utils'
+import { locations } from '../routing/locations'
+import { isCatalogView } from '../routing/utils'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
+import { ItemAPI } from '../vendor/decentraland/item/api'
+import { retryParams } from '../vendor/decentraland/utils'
+import { getWallet } from '../wallet/selectors'
+import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -96,9 +96,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
     while (true) {
       const action: FetchItemsRequestAction = yield take(actionType)
-      const {
-        pathname: currentPathname
-      }: ReturnType<typeof getLocation> = yield select(getLocation)
+      const { pathname: currentPathname }: ReturnType<typeof getLocation> =
+        yield select(getLocation)
 
       // if we have a task running in the browse path, we cancel the previous one
       if (matchPath(currentPathname, { path }) && task && task.isRunning()) {
@@ -127,7 +126,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         return
       }
 
-      const ids = data.map(item => item.id)
+      const ids = data.map((item) => item.id)
       const { data: itemData }: { data: Item[]; total: number } = yield call(
         [catalogAPI, 'get'],
         {
@@ -235,7 +234,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       const txHash: string = yield call(
         sendTransaction,
         contract,
-        collectionStore =>
+        (collectionStore) =>
           collectionStore.buy([
             [
               item.contractAddress,

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
-import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { EmotePlayMode } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
 
 export type NetworkFilterProps = {
@@ -18,9 +18,9 @@ export const EmotePlayModeFilter = ({
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const emotePlayModeOptions = useMemo(() => {
     const options = Object.values(EmotePlayMode).filter(
-      value => typeof value === 'string'
+      (value) => typeof value === 'string'
     ) as EmotePlayMode[]
-    return options.map(playMode => ({
+    return options.map((playMode) => ({
       value: playMode,
       text: t(`emote.play_mode.${playMode}`)
     }))
@@ -46,7 +46,7 @@ export const EmotePlayModeFilter = ({
             {areAllItemsSelected
               ? t('nft_filters.emote_play_mode.all_items')
               : emotePlayMode
-                  .map(mode => t(`emote.play_mode.${mode}`))
+                  .map((mode) => t(`emote.play_mode.${mode}`))
                   .join(', ')}
           </span>
         </div>

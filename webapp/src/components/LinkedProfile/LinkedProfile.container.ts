@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
-import { RootState } from '../../modules/reducer'
 import { getIsProfileEnabled } from '../../modules/features/selectors'
-import { MapStateProps } from './LinkedProfile.types'
+import { RootState } from '../../modules/reducer'
 import { LinkedProfile } from './LinkedProfile'
+import { MapStateProps } from './LinkedProfile.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   isProfileEnabled: getIsProfileEnabled(state)

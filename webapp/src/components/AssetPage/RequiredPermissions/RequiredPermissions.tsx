@@ -6,7 +6,7 @@ import { Props } from './RequiredPermissions.types'
 import styles from './RequiredPermissions.module.css'
 
 const RequiredPermissions = (props: Props) => {
-  let {
+  const {
     asset,
     isLoading,
     hasFetched,

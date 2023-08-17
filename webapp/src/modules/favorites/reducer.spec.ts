@@ -1,5 +1,6 @@
 import { Item, Network } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import {
@@ -8,7 +9,6 @@ import {
   Permission,
   UpdateOrCreateList
 } from '../vendor/decentraland/favorites/types'
-import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   BulkPickUnpickCancelAction,
   BulkPickUnpickStartAction,
@@ -128,7 +128,7 @@ beforeEach(() => {
   }
 })
 
-describe.each(requestActions)('when reducing the "$type" action', action => {
+describe.each(requestActions)('when reducing the "$type" action', (action) => {
   let initialState: FavoritesState
 
   beforeEach(() => {
@@ -182,7 +182,7 @@ const failureActions = [
 ]
 
 describe.each(failureActions)(
-  `when reducing the "$failure.type" action`,
+  'when reducing the "$failure.type" action',
   ({ request, failure }) => {
     let initialState: FavoritesState
 

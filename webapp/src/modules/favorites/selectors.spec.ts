@@ -1,11 +1,19 @@
-import { Item } from '@dcl/schemas'
 import { match } from 'react-router-dom'
+import { Item } from '@dcl/schemas'
 import { RootState } from '../reducer'
+import { locations } from '../routing/locations'
 import {
   DEFAULT_FAVORITES_LIST_ID,
   ListOfLists
 } from '../vendor/decentraland/favorites'
-import { locations } from '../routing/locations'
+import {
+  bulkPickUnpickRequest,
+  createListRequest,
+  deleteListRequest,
+  fetchFavoritedItemsRequest,
+  fetchListsRequest,
+  updateListRequest
+} from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
   getCount,
@@ -29,14 +37,6 @@ import {
   isLoadingDeleteList,
   isOwnerUnpickingFromCurrentList
 } from './selectors'
-import {
-  bulkPickUnpickRequest,
-  createListRequest,
-  deleteListRequest,
-  fetchFavoritedItemsRequest,
-  fetchListsRequest,
-  updateListRequest
-} from './actions'
 import { List } from './types'
 
 let state: RootState
@@ -205,7 +205,7 @@ describe('when getting if an item is being bulk picked or unpicked', () => {
     state.favorites.loading = []
   })
 
-  describe(`and no items are being bulk picked or unpicked`, () => {
+  describe('and no items are being bulk picked or unpicked', () => {
     beforeEach(() => {
       state.favorites.loading = []
     })
@@ -215,7 +215,7 @@ describe('when getting if an item is being bulk picked or unpicked', () => {
     })
   })
 
-  describe(`and it isn't not being bulk picked or unpicked`, () => {
+  describe("and it isn't not being bulk picked or unpicked", () => {
     beforeEach(() => {
       state.favorites.loading = [
         bulkPickUnpickRequest({ id: '0xaddress-anotherItemId' } as Item, [], [])
@@ -227,7 +227,7 @@ describe('when getting if an item is being bulk picked or unpicked', () => {
     })
   })
 
-  describe(`and it is being bulk picked or unpicked`, () => {
+  describe('and it is being bulk picked or unpicked', () => {
     beforeEach(() => {
       state.favorites.loading.push(bulkPickUnpickRequest(item, [], []))
     })

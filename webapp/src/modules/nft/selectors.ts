@@ -1,8 +1,8 @@
-import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
+import { createSelector } from 'reselect'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
+import { locations } from '../routing/locations'
 import { NFTState } from './reducer'
 import { NFT } from './types'
 import { getNFT } from './utils'
@@ -26,14 +26,14 @@ export const getContractAddress = createSelector<
   string | null
 >(
   nftDetailMatchSelector,
-  match => match?.params.contractAddress.toLowerCase() || null
+  (match) => match?.params.contractAddress.toLowerCase() || null
 )
 
 export const getTokenId = createSelector<
   RootState,
   ReturnType<typeof nftDetailMatchSelector>,
   string | null
->(nftDetailMatchSelector, match => match?.params.tokenId || null)
+>(nftDetailMatchSelector, (match) => match?.params.tokenId || null)
 
 export const getCurrentNFT = createSelector<
   RootState,
@@ -42,9 +42,9 @@ export const getCurrentNFT = createSelector<
   NFTState['data'],
   NFT | null
 >(
-  state => getContractAddress(state),
-  state => getTokenId(state),
-  state => getData(state),
+  (state) => getContractAddress(state),
+  (state) => getTokenId(state),
+  (state) => getData(state),
   (contractAddress, tokenId, nfts) => getNFT(contractAddress, tokenId, nfts)
 )
 
@@ -53,9 +53,9 @@ export const getNFTsByOwner = createSelector<
   NFTState['data'],
   Record<string, NFT[]>
 >(
-  state => getData(state),
-  data => {
-    let nftsByOwner: Record<string, NFT[]> = {}
+  (state) => getData(state),
+  (data) => {
+    const nftsByOwner: Record<string, NFT[]> = {}
     for (const id of Object.keys(data)) {
       const nft = data[id]
       const key = nft.owner.toLowerCase()
@@ -74,8 +74,8 @@ export const getWalletNFTs = createSelector<
   string | undefined,
   NFT[]
 >(
-  state => getNFTsByOwner(state),
-  state => getAddress(state),
+  (state) => getNFTsByOwner(state),
+  (state) => getAddress(state),
   (nftsByOwner, address) => {
     if (address && address.toLowerCase() in nftsByOwner) {
       return nftsByOwner[address.toLowerCase()]

@@ -57,11 +57,7 @@ export class TokenConverter {
     )
   }
 
-  async marketEthToToken(
-    ethAmount: number,
-    coinId: string,
-    exchange: string = ''
-  ) {
+  async marketEthToToken(ethAmount: number, coinId: string, exchange = '') {
     if (!pricesCache[coinId]) {
       pricesCache[coinId] = {}
     }

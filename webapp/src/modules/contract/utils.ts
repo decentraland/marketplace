@@ -14,7 +14,7 @@ export function upsertContracts(
     new Map<string, Contract>()
   )
 
-  newContracts.forEach(contract => {
+  newContracts.forEach((contract) => {
     contractsByAddressAndChain.set(getContractKey(contract), {
       ...contract,
       address: contract.address.toLowerCase()
@@ -62,10 +62,13 @@ export function isStubMaticCollectionContract(contract: Contract) {
   )
 }
 
-export function getContractByParams(contracts: Contract[], query: Partial<Contract>) {
-  const found = contracts.find(contract =>
+export function getContractByParams(
+  contracts: Contract[],
+  query: Partial<Contract>
+) {
+  const found = contracts.find((contract) =>
     Object.keys(query).every(
-      key =>
+      (key) =>
         query[key as keyof Contract]?.toString().toLowerCase() ===
         contract[key as keyof Contract]?.toString().toLowerCase()
     )

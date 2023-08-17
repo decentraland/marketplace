@@ -1,11 +1,14 @@
-import { Entity } from '@dcl/schemas'
-import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import { ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
-import { DeploymentPreparationData, buildEntity } from 'dcl-catalyst-client/dist/client/utils/DeploymentBuilder'
 import { BuildEntityWithoutFilesOptions } from 'dcl-catalyst-client/dist/client/types'
+import {
+  DeploymentPreparationData,
+  buildEntity
+} from 'dcl-catalyst-client/dist/client/utils/DeploymentBuilder'
 import { EntityContentItemReference } from 'dcl-catalyst-commons'
-import { LinkType, Store, StoreEntityMetadata } from './types'
+import { Authenticator, AuthIdentity } from '@dcl/crypto'
+import { Entity } from '@dcl/schemas'
 import { peerUrl } from '../../lib/environment'
+import { LinkType, Store, StoreEntityMetadata } from './types'
 
 export const getPeerCoverUrl = (hash: string) =>
   `${peerUrl}/content/contents/${hash}`
@@ -41,7 +44,7 @@ export const getStoreFromEntity = (entity: Entity): Store => {
   let cover = ''
   let coverName = ''
 
-  const image = metadata.images.find(image => image.name === 'cover')
+  const image = metadata.images.find((image) => image.name === 'cover')
 
   const reference =
     image && content
@@ -54,7 +57,7 @@ export const getStoreFromEntity = (entity: Entity): Store => {
   }
 
   const getLink = (type: LinkType) =>
-    metadata.links.find(link => link.name === type)?.url || ''
+    metadata.links.find((link) => link.name === type)?.url || ''
 
   return {
     cover,

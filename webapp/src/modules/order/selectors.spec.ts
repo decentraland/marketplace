@@ -1,10 +1,10 @@
-import { Order } from "@dcl/schemas"
-import { AuthorizationStepStatus } from "decentraland-ui"
-import { LoadingState } from "decentraland-dapps/dist/modules/loading/reducer"
-import { createOrderRequest, executeOrderRequest } from "./actions"
-import { NFT } from "../nft/types"
-import { RootState } from "../reducer"
-import { getBuyItemStatus, getSellItemStatus } from "./selectors"
+import { Order } from '@dcl/schemas'
+import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { AuthorizationStepStatus } from 'decentraland-ui'
+import { NFT } from '../nft/types'
+import { RootState } from '../reducer'
+import { createOrderRequest, executeOrderRequest } from './actions'
+import { getBuyItemStatus, getSellItemStatus } from './selectors'
 
 let rootState: RootState
 
@@ -25,7 +25,9 @@ describe('when getting the buy item status', () => {
     })
 
     it('should return WAITING status', () => {
-      expect(getBuyItemStatus(rootState)).toEqual(AuthorizationStepStatus.WAITING)
+      expect(getBuyItemStatus(rootState)).toEqual(
+        AuthorizationStepStatus.WAITING
+      )
     })
   })
 
@@ -46,7 +48,9 @@ describe('when getting the buy item status', () => {
     })
 
     it('should return PENDING status', () => {
-      expect(getBuyItemStatus(rootState)).toEqual(AuthorizationStepStatus.PENDING)
+      expect(getBuyItemStatus(rootState)).toEqual(
+        AuthorizationStepStatus.PENDING
+      )
     })
   })
 })
@@ -58,7 +62,9 @@ describe('when getting the sell item status', () => {
     })
 
     it('should return WAITING status', () => {
-      expect(getSellItemStatus(rootState)).toEqual(AuthorizationStepStatus.WAITING)
+      expect(getSellItemStatus(rootState)).toEqual(
+        AuthorizationStepStatus.WAITING
+      )
     })
   })
 
@@ -68,7 +74,9 @@ describe('when getting the sell item status', () => {
     })
 
     it('should return ERROR status', () => {
-      expect(getSellItemStatus(rootState)).toEqual(AuthorizationStepStatus.ERROR)
+      expect(getSellItemStatus(rootState)).toEqual(
+        AuthorizationStepStatus.ERROR
+      )
     })
   })
 
@@ -79,7 +87,9 @@ describe('when getting the sell item status', () => {
     })
 
     it('should return PENDING status', () => {
-      expect(getSellItemStatus(rootState)).toEqual(AuthorizationStepStatus.PENDING)
+      expect(getSellItemStatus(rootState)).toEqual(
+        AuthorizationStepStatus.PENDING
+      )
     })
   })
 })

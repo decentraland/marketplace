@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Item, NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   HeaderMenu,
   Header,
@@ -12,20 +15,17 @@ import {
   DropdownProps,
   Mobile
 } from 'decentraland-ui'
-import { Item, NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
-import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { useScrollSectionIntoView } from '../../modules/ui/utils'
-import * as events from '../../utils/events'
-import { AssetProvider } from '../AssetProvider'
-import { AssetType } from '../../modules/asset/types'
-import { formatWeiMANA } from '../../lib/mana'
-import { ManaToFiat } from '../ManaToFiat'
-import { VendorName } from '../../modules/vendor/types'
-import { NFT } from '../../modules/nft/types'
-import { LinkedProfile } from '../LinkedProfile'
-import { AssetImage } from '../AssetImage'
 import { formatDistanceToNow } from '../../lib/date'
+import { formatWeiMANA } from '../../lib/mana'
+import { AssetType } from '../../modules/asset/types'
+import { NFT } from '../../modules/nft/types'
+import { useScrollSectionIntoView } from '../../modules/ui/utils'
+import { VendorName } from '../../modules/vendor/types'
+import * as events from '../../utils/events'
+import { AssetImage } from '../AssetImage'
+import { AssetProvider } from '../AssetProvider'
+import { LinkedProfile } from '../LinkedProfile'
+import { ManaToFiat } from '../ManaToFiat'
 import { Props } from './RecentlySoldTable.types'
 import './RecentlySoldTable.css'
 
@@ -83,11 +83,11 @@ const RecentlySoldTable = (props: Props) => {
               NFTCategory.PARCEL,
               NFTCategory.EMOTE,
               NFTCategory.ENS
-            ]).map(category => (
+            ]).map((category) => (
               <Tabs.Tab
                 key={category as string}
                 active={currentCategory === category}
-                onClick={() => handleTabChange(category as NFTCategory)}
+                onClick={() => handleTabChange(category)}
               >
                 {t(`home_page.recently_sold.tabs.${category}`)}
               </Tabs.Tab>
@@ -115,7 +115,7 @@ const RecentlySoldTable = (props: Props) => {
           NFTCategory.PARCEL,
           NFTCategory.EMOTE,
           NFTCategory.ENS
-        ].map(category => ({
+        ].map((category) => ({
           value: category as string,
           text: t(`home_page.recently_sold.tabs.${category}`)
         }))}
@@ -197,7 +197,7 @@ const RecentlySoldTable = (props: Props) => {
   const renderMobileTableHeader = () => {
     let header = <span>{t('global.item')}</span>
     if (currentCategory === NFTCategory.EMOTE) {
-      header = <span>{t(`global.emote`)}</span>
+      header = <span>{t('global.emote')}</span>
     } else if (
       currentCategory === NFTCategory.PARCEL ||
       currentCategory === NFTCategory.ENS
@@ -542,7 +542,7 @@ const RecentlySoldTable = (props: Props) => {
     switch (currentCategory) {
       case NFTCategory.WEARABLE:
       case NFTCategory.EMOTE:
-        content = data.map(sale => (
+        content = data.map((sale) => (
           <AssetProvider
             key={sale.id}
             type={AssetType.ITEM}
@@ -557,7 +557,7 @@ const RecentlySoldTable = (props: Props) => {
         break
       case NFTCategory.ENS:
       case NFTCategory.PARCEL:
-        content = data.map(sale => (
+        content = data.map((sale) => (
           <AssetProvider
             key={sale.id}
             type={AssetType.NFT}

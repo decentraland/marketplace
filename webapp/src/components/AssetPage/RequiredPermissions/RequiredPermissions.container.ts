@@ -1,16 +1,16 @@
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import {
+  FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
+  fetchSmartWearableRequiredPermissionsRequest
+} from '../../../modules/asset/actions'
+import {
   getData,
   getLoading,
   getRequiredPermissions
 } from '../../../modules/asset/selectors'
-import { RootState } from '../../../modules/reducer'
-import {
-  FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
-  fetchSmartWearableRequiredPermissionsRequest
-} from '../../../modules/asset/actions'
 import { Asset } from '../../../modules/asset/types'
+import { RootState } from '../../../modules/reducer'
 import RequiredPermissions from './RequiredPermissions'
 import {
   OwnProps,

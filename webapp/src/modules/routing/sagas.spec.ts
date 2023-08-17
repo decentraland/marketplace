@@ -1,4 +1,13 @@
 import {
+  getLocation,
+  LOCATION_CHANGE,
+  LocationChangeAction,
+  push,
+  RouterLocation
+} from 'connected-react-router'
+import { call, select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
+import {
   ChainId,
   EmotePlayMode,
   GenderFilterOption,
@@ -9,15 +18,6 @@ import {
   Order,
   Rarity
 } from '@dcl/schemas'
-import {
-  getLocation,
-  LOCATION_CHANGE,
-  LocationChangeAction,
-  push,
-  RouterLocation
-} from 'connected-react-router'
-import { expectSaga } from 'redux-saga-test-plan'
-import { call, select } from 'redux-saga/effects'
 import { connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { AssetStatusFilter } from '../../utils/filters'
@@ -30,26 +30,27 @@ import {
   fetchTrendingItemsRequest
 } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
-import { getPage, getView } from '../ui/browse/selectors'
-import { MAX_QUERY_SIZE, PAGE_SIZE } from '../vendor/api'
-import { View } from '../ui/types'
-import { VendorName } from '../vendor'
-import { Section } from '../vendor/decentraland'
+import { openModal } from '../modal/actions'
+import { fetchNFTsRequest, fetchNFTsSuccess } from '../nft/actions'
+import { NFT } from '../nft/types'
 import {
   cancelOrderSuccess,
   createOrderSuccess,
   executeOrderSuccess
 } from '../order/actions'
-import { NFT } from '../nft/types'
-import { openModal } from '../modal/actions'
-import { fetchNFTsRequest, fetchNFTsSuccess } from '../nft/actions'
-import { getWallet } from '../wallet/selectors'
+import { getPage, getView } from '../ui/browse/selectors'
+import { View } from '../ui/types'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
+import { VendorName } from '../vendor'
+import { MAX_QUERY_SIZE, PAGE_SIZE } from '../vendor/api'
+import { Section } from '../vendor/decentraland'
+import { getWallet } from '../wallet/selectors'
 import {
   browse,
   clearFilters,
   fetchAssetsFromRoute as fetchAssetsFromRouteAction
 } from './actions'
+import { locations } from './locations'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import {
   getCurrentBrowseOptions,
@@ -58,7 +59,6 @@ import {
 } from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
-import { locations } from './locations'
 
 beforeEach(() => {
   jest.spyOn(Date, 'now').mockReturnValue(100)
@@ -1537,11 +1537,13 @@ describe.each([
 
   it('should redirect to the default activity location when redirectTo is not present', () => {
     const location = { search: '' }
-    return expectSaga(routingSaga)
-      .provide([[select(getLocation), location]])
-      //@ts-ignore
-      .dispatch(action(...args))
-      .put(push(locations.activity()))
-      .run()
+    return (
+      expectSaga(routingSaga)
+        .provide([[select(getLocation), location]])
+        //@ts-ignore
+        .dispatch(action(...args))
+        .put(push(locations.activity()))
+        .run()
+    )
   })
 })

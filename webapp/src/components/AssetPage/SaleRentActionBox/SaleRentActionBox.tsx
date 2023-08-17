@@ -1,13 +1,17 @@
 import React, { memo, useCallback, useMemo, useState } from 'react'
-import { ethers } from 'ethers'
-import intlFormat from 'date-fns/intlFormat'
-import classNames from 'classnames'
 import { Link } from 'react-router-dom'
-import { Button, Popup } from 'decentraland-ui'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+import classNames from 'classnames'
+import intlFormat from 'date-fns/intlFormat'
+import { ethers } from 'ethers'
 import { NFTCategory } from '@dcl/schemas'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Popup } from 'decentraland-ui'
+import { builderUrl } from '../../../lib/environment'
 import { formatWeiMANA } from '../../../lib/mana'
+import { AssetType } from '../../../modules/asset/types'
+import { isOwnedBy } from '../../../modules/asset/utils'
+import { isPartOfEstate } from '../../../modules/nft/utils'
 import {
   canBeClaimed,
   getMaxPriceOfPeriods,
@@ -16,16 +20,12 @@ import {
   isRentalListingExecuted,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
-import { VendorFactory } from '../../../modules/vendor'
 import { locations } from '../../../modules/routing/locations'
-import { isPartOfEstate } from '../../../modules/nft/utils'
-import { AssetType } from '../../../modules/asset/types'
-import { builderUrl } from '../../../lib/environment'
-import { isOwnedBy } from '../../../modules/asset/utils'
+import { VendorFactory } from '../../../modules/vendor'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
-import { LinkedProfile } from '../../LinkedProfile'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
@@ -221,7 +221,7 @@ const SaleRentActionBox = ({
             ) : isOwner && rental?.tenant && !rentalHasEnded ? (
               <div className={styles.upperMessage}>
                 {t('asset_page.sales_rent_action_box.in_rent_owner', {
-                  tenant: <LinkedProfile address={rental.tenant!} inline />,
+                  tenant: <LinkedProfile address={rental.tenant} inline />,
                   asset_type: nft.category,
                   rental_end_date: rentalEndDate,
                   strong: (children: React.ReactElement) => (

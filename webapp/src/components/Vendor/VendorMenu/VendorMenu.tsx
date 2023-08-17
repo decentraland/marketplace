@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
 import { getMaxQuerySize } from '../../../modules/vendor/api'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { Menu } from '../../Menu'

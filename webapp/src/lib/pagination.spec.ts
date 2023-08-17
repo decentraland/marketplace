@@ -1,5 +1,5 @@
-import { renderHook, act } from '@testing-library/react-hooks'
 import { useHistory, useLocation } from 'react-router-dom'
+import { renderHook, act } from '@testing-library/react-hooks'
 import { PAGE_SIZE } from '../modules/vendor/api'
 import { UsePaginationResult, usePagination } from './pagination'
 

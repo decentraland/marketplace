@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import classNames from 'classnames'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   HeaderMenu,
   Header,
@@ -8,13 +10,11 @@ import {
   Empty,
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Asset } from '../../../modules/asset/types'
 import * as events from '../../../utils/events'
 import { AssetCard } from '../../AssetCard'
-import { Props } from './Slideshow.types'
 import ItemsSection from './ItemsSection'
+import { Props } from './Slideshow.types'
 import './Slideshow.css'
 
 const DEFAULT_PAGE_SIZE = 5
@@ -71,7 +71,7 @@ const Slideshow = (props: Props) => {
 
   const renderNfts = useCallback(
     () =>
-      assetsToRender.map(asset => (
+      assetsToRender.map((asset) => (
         <AssetCard
           key={asset.id}
           asset={asset}
@@ -102,7 +102,7 @@ const Slideshow = (props: Props) => {
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       const contained =
         event.relatedTarget instanceof Node &&
-        slideRef.current?.contains(event.relatedTarget as Node)
+        slideRef.current?.contains(event.relatedTarget)
       if (!contained) {
         setShowArrows(false)
       }
@@ -140,9 +140,11 @@ const Slideshow = (props: Props) => {
         ) : null}
       </HeaderMenu>
       <div className="assets-container">
-        <div className={classNames("assets", {
-          "full-width": assetsToRender.length === pageSize
-        })}>
+        <div
+          className={classNames('assets', {
+            'full-width': assetsToRender.length === pageSize
+          })}
+        >
           {isLoading ? (
             assets.length === 0 ? (
               <Loader active size="massive" />
@@ -159,7 +161,7 @@ const Slideshow = (props: Props) => {
           className="arrow-container arrow-container-left"
           {...showArrowsHandlers}
         >
-          {showArrows && totalPages > 1 &&  (
+          {showArrows && totalPages > 1 && (
             <Button
               circular
               secondary

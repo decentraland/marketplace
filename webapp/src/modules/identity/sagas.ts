@@ -1,5 +1,5 @@
-import { takeLatest, put, call } from 'redux-saga/effects'
 import { ethers } from 'ethers'
+import { takeLatest, put, call } from 'redux-saga/effects'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import {
   getIdentity,
@@ -10,12 +10,11 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   CONNECT_WALLET_SUCCESS,
   DISCONNECT_WALLET,
-  DisconnectWalletAction
+  DisconnectWalletAction,
+  ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isErrorWithMessage } from '../../lib/error'
 import { getEth } from '../wallet/utils'
-
 import {
   GENERATE_IDENTITY_REQUEST,
   GenerateIdentityRequestAction,
@@ -50,7 +49,7 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
       address,
       payload,
       IDENTITY_EXPIRATION_IN_MINUTES,
-      message => signer.signMessage(message)
+      (message) => signer.signMessage(message)
     )
 
     // Stores the identity into the SSO iframe.

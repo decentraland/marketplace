@@ -39,9 +39,7 @@ export class MarketplacePrice {
   }
 
   addMaxSlippage(manaWeiAmount: string | number) {
-    return ethers.BigNumber.from(manaWeiAmount)
-      .mul(110)
-      .div(100) // 10 percent increase
+    return ethers.BigNumber.from(manaWeiAmount).mul(110).div(100) // 10 percent increase
   }
 
   isAboveMaxIncreasePercentage(percentage: number) {

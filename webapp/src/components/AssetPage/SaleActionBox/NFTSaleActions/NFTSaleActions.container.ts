@@ -1,16 +1,16 @@
 import { connect } from 'react-redux'
-import { RootState } from '../../../../modules/reducer'
-import { getWallet } from '../../../../modules/wallet/selectors'
-import { getNFTBids } from '../../../../modules/ui/nft/bid/selectors'
+import { openModal } from '../../../../modules/modal/actions'
+import { NFT } from '../../../../modules/nft/types'
 import { getCurrentOrder } from '../../../../modules/order/selectors'
+import { RootState } from '../../../../modules/reducer'
+import { getNFTBids } from '../../../../modules/ui/nft/bid/selectors'
+import { getWallet } from '../../../../modules/wallet/selectors'
+import SaleRentActionBox from './NFTSaleActions'
 import {
   MapDispatch,
   MapDispatchProps,
   MapStateProps
 } from './NFTSaleActions.types'
-import SaleRentActionBox from './NFTSaleActions'
-import { openModal } from '../../../../modules/modal/actions'
-import { NFT } from '../../../../modules/nft/types'
 
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),

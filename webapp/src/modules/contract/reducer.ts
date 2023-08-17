@@ -28,7 +28,7 @@ export type ContractState = {
 }
 
 const network = config.get('NETWORK') as Network
-const networkContracts = contracts[network].map(contract => ({
+const networkContracts = contracts[network].map((contract) => ({
   ...contract,
   address: contract.address.toLowerCase()
 }))

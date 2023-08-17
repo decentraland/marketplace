@@ -7,7 +7,7 @@ export function getCategoryInfo(nft: NFT) {
       return { emoteCategory: nft.data.emote?.category }
     case NFTCategory.WEARABLE:
       return { wearableCategory: nft.data.wearable?.category }
-    default: 
+    default:
       return {}
   }
 }

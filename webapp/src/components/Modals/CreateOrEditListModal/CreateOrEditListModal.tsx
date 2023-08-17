@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Button,
   Checkbox,
@@ -10,8 +10,8 @@ import {
   TextAreaField
 } from 'decentraland-ui'
 import { InfoTooltip } from '../../InfoTooltip'
-import styles from './CreateOrEditListModal.module.css'
 import { Props } from './CreateOrEditListModal.types'
+import styles from './CreateOrEditListModal.module.css'
 
 const MAX_NAME_LENGTH = 32
 const MAX_DESCRIPTION_LENGTH = 100
@@ -40,10 +40,8 @@ const CreateOrEditListModal = ({
   const [description, setDescription] = useState(list?.description ?? '')
   const [isPrivate, setIsPrivate] = useState(list?.isPrivate ?? false)
   const [showMaxLengthNameInfo, setShowMaxLengthNameInfo] = useState(false)
-  const [
-    showMaxLengthDescriptionInfo,
-    setShowMaxLengthDescriptionInfo
-  ] = useState(false)
+  const [showMaxLengthDescriptionInfo, setShowMaxLengthDescriptionInfo] =
+    useState(false)
 
   const handleCreateOrEditList = useCallback(
     () =>
@@ -64,12 +62,14 @@ const CreateOrEditListModal = ({
     (_event, props) => setIsPrivate(props.checked),
     [setIsPrivate]
   )
-  const handleNameFocus = useCallback(() => setShowMaxLengthNameInfo(true), [
-    setShowMaxLengthNameInfo
-  ])
-  const handleNameBlur = useCallback(() => setShowMaxLengthNameInfo(false), [
-    setShowMaxLengthNameInfo
-  ])
+  const handleNameFocus = useCallback(
+    () => setShowMaxLengthNameInfo(true),
+    [setShowMaxLengthNameInfo]
+  )
+  const handleNameBlur = useCallback(
+    () => setShowMaxLengthNameInfo(false),
+    [setShowMaxLengthNameInfo]
+  )
   const handleDescriptionFocus = useCallback(
     () => setShowMaxLengthDescriptionInfo(true),
     [setShowMaxLengthDescriptionInfo]

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Bid, Network } from '@dcl/schemas'
-import { Button, Divider, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import Mana from '../../Mana/Mana'
-import { formatDistanceToNow } from '../../../lib/date'
-import iconListings from '../../../images/iconListings.png'
-import infoIcon from '../../../images/infoIcon.png'
+import { Button, Divider, Popup } from 'decentraland-ui'
 import calendar from '../../../images/calendar.png'
 import expiration from '../../../images/expiration.png'
-import { bidAPI } from '../../../modules/vendor/decentraland'
+import iconListings from '../../../images/iconListings.png'
+import infoIcon from '../../../images/infoIcon.png'
+import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { bidAPI } from '../../../modules/vendor/decentraland'
+import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { Props } from './YourOffer.types'
 import styles from './YourOffer.module.css'
@@ -33,10 +33,10 @@ const YourOffer = (props: Props) => {
           undefined,
           address
         )
-        .then(response => {
+        .then((response) => {
           setBid(response.data[0])
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error)
         })
     }

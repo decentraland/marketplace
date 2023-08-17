@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import classNames from 'classnames'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Close,
   Dropdown,
@@ -8,25 +9,24 @@ import {
   Icon,
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import trash from '../../images/trash.png'
 import { useInput } from '../../lib/input'
-import { getCountText } from './utils'
-import { SortBy } from '../../modules/routing/types'
-import { isCatalogView } from '../../modules/routing/utils'
 import {
   getCategoryFromSection,
   getSectionFromCategory
 } from '../../modules/routing/search'
+import { SortBy } from '../../modules/routing/types'
+import { isCatalogView } from '../../modules/routing/utils'
 import {
   isAccountView,
   isLandSection,
   isListsSection,
   persistIsMapProperty
 } from '../../modules/ui/utils'
-import trash from '../../images/trash.png'
 import { Chip } from '../Chip'
-import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
+import { getCountText } from './utils'
+import { Props } from './AssetTopbar.types'
 import styles from './AssetTopbar.module.css'
 
 export const AssetTopbar = ({
@@ -97,13 +97,13 @@ export const AssetTopbar = ({
   )
 
   useEffect(() => {
-    const option = sortByOptions.find(option => option.value === sortBy)
+    const option = sortByOptions.find((option) => option.value === sortBy)
     if (!option) {
       onBrowse({ sortBy: sortByOptions[0].value })
     }
   }, [onBrowse, sortBy, sortByOptions])
 
-  const sortByValue = sortByOptions.find(option => option.value === sortBy)
+  const sortByValue = sortByOptions.find((option) => option.value === sortBy)
     ? sortBy
     : sortByOptions[0].value
 

@@ -1,3 +1,6 @@
+import { call, takeEvery, put, all } from '@redux-saga/core/effects'
+import { LambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
+import { cancelled, select, takeLatest } from 'redux-saga/effects'
 import {
   Account,
   AccountSortBy,
@@ -5,10 +8,7 @@ import {
   NFTCategory,
   Profile
 } from '@dcl/schemas'
-import { call, takeEvery, put, all } from '@redux-saga/core/effects'
-import { LambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { cancelled, select, takeLatest } from 'redux-saga/effects'
 import { isErrorWithMessage } from '../../lib/error'
 import {
   accountAPI,
@@ -81,7 +81,7 @@ export function* accountSaga(catalystLambdasClient: LambdasClient) {
           }
           skip += DEFAULT_FIRST_VALUE
         }
-        addresses = new Set(ens.map(nft => nft.nft.owner))
+        addresses = new Set(ens.map((nft) => nft.nft.owner))
       } else {
         const { data }: { data: Account[] } = yield call(
           [accountAPI, 'fetch'],
@@ -90,28 +90,28 @@ export function* accountSaga(catalystLambdasClient: LambdasClient) {
           }
         )
         accounts = data
-        addresses = new Set([...accounts.map(nft => nft.address)])
+        addresses = new Set([...accounts.map((nft) => nft.address)])
       }
 
-      const [profiles, creatorsAccounts]: [
-        Profile[],
-        AccountResponse
-      ] = yield all([
-        call([catalystLambdasClient, 'getAvatarsDetailsByPost'], {ids: Array.from(addresses)}),
-        search
-          ? call([accountAPI, 'fetch'], {
-              address: Array.from(addresses),
-              sortBy: AccountSortBy.MOST_COLLECTIONS
-            })
-          : Promise.resolve()
-      ])
+      const [profiles, creatorsAccounts]: [Profile[], AccountResponse] =
+        yield all([
+          call([catalystLambdasClient, 'getAvatarsDetailsByPost'], {
+            ids: Array.from(addresses)
+          }),
+          search
+            ? call([accountAPI, 'fetch'], {
+                address: Array.from(addresses),
+                sortBy: AccountSortBy.MOST_COLLECTIONS
+              })
+            : Promise.resolve()
+        ])
 
       const creators = fromProfilesToCreators(
         profiles,
         accounts ?? creatorsAccounts.data
       )
       if (search) {
-        creators.forEach(creator => enhanceCreatorName(creator, ens, search))
+        creators.forEach((creator) => enhanceCreatorName(creator, ens, search))
       }
 
       yield put(fetchCreatorsAccountSuccess(search, creators))

@@ -180,7 +180,9 @@ describe('when creating the action to signal the submission of the executed orde
 
 describe('when creating the action to signal a successful execute order request', () => {
   it('should return an object representing the action', () => {
-    expect(executeOrderSuccess('txHash', { tokenId: 'tokenId' } as NFT)).toEqual({
+    expect(
+      executeOrderSuccess('txHash', { tokenId: 'tokenId' } as NFT)
+    ).toEqual({
       type: EXECUTE_ORDER_SUCCESS,
       meta: undefined,
       payload: {

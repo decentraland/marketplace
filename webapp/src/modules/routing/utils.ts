@@ -1,15 +1,15 @@
 import { NFTCategory } from '@dcl/schemas'
-import { BrowseOptions, SortBy } from './types'
-import { Section } from '../vendor/decentraland'
+import { omit, reset } from '../../lib/utils'
 import { AssetStatusFilter } from '../../utils/filters'
+import { View } from '../ui/types'
 import {
   getPersistedIsMapProperty,
   isAccountView,
   isLandSection
 } from '../ui/utils'
-import { omit, reset } from '../../lib/utils'
-import { View } from '../ui/types'
+import { Section } from '../vendor/decentraland'
 import { getCategoryFromSection, getSearchParams } from './search'
+import { BrowseOptions, SortBy } from './types'
 
 export const rentalFilters = [
   SortBy.NAME,
@@ -58,7 +58,7 @@ export function isCatalogViewAndSection(
     CATALOG_VIEWS.includes(view) &&
     section &&
     [getCategoryFromSection(section)].some(
-      category =>
+      (category) =>
         category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE
     )
   )
@@ -90,7 +90,7 @@ export function isMapSet(
     (section === Section.LAND &&
     (view === undefined || (view && !isAccountView(view))) &&
     isMapPropertyPersisted !== null
-      ? isMapPropertyPersisted!
+      ? isMapPropertyPersisted
       : false)
   )
 }

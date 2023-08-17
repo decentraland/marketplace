@@ -1,11 +1,11 @@
 import { ethers } from 'ethers'
 import { race, select, take } from 'redux-saga/effects'
-import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
+import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { config } from '../../config'
 import { isConnecting } from './selectors'
 

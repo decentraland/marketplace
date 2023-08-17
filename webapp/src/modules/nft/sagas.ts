@@ -1,15 +1,13 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
-import { ErrorCode } from 'decentraland-transactions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { ErrorCode } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
-import { getWallet } from '../wallet/selectors'
-import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { upsertContracts } from '../contract/actions'
 import { getContract, getContracts } from '../contract/selectors'
-import { VendorName } from '../vendor/types'
-import { AwaitFn } from '../types'
 import {
   getContractKey,
   getContractKeyFromNFT,
@@ -20,10 +18,12 @@ import {
   isRentalListingOpen,
   waitUntilRentalChangesStatus
 } from '../rental/utils'
-import { upsertContracts } from '../contract/actions'
-import { Contract } from '../vendor/services'
+import { AwaitFn } from '../types'
 import { retryParams } from '../vendor/decentraland/utils'
-import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { Contract } from '../vendor/services'
+import { VendorName } from '../vendor/types'
+import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { getWallet } from '../wallet/selectors'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -69,17 +69,9 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
         API_OPTS
       )
 
-      const [
-        nfts,
-        accounts,
-        orders,
-        rentals,
-        count
-      ]: AwaitFn<typeof vendor.nftService.fetch> = yield call(
-        [vendor.nftService, 'fetch'],
-        params,
-        filters
-      )
+      const [nfts, accounts, orders, rentals, count]: AwaitFn<
+        typeof vendor.nftService.fetch
+      > = yield call([vendor.nftService, 'fetch'], params, filters)
 
       const contracts: Contract[] = yield select(getContracts)
 
@@ -106,7 +98,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
       yield put(
         fetchNFTsSuccess(
           options,
-          nfts as NFT[],
+          nfts,
           accounts,
           orders,
           rentals,
@@ -147,19 +139,16 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
         API_OPTS
       )
 
-      const [
-        nft,
-        order,
-        rental
-      ]: AwaitFn<typeof vendor.nftService.fetchOne> = yield call(
-        [vendor.nftService, 'fetchOne'],
-        contractAddress,
-        tokenId,
-        options
-      )
+      const [nft, order, rental]: AwaitFn<typeof vendor.nftService.fetchOne> =
+        yield call(
+          [vendor.nftService, 'fetchOne'],
+          contractAddress,
+          tokenId,
+          options
+        )
 
-      yield put(fetchNFTSuccess(nft as NFT, order, rental))
-      yield put(fetchSmartWearableRequiredPermissionsRequest(nft as NFT))
+      yield put(fetchNFTSuccess(nft, order, rental))
+      yield put(fetchSmartWearableRequiredPermissionsRequest(nft))
     } catch (error) {
       yield put(
         fetchNFTFailure(contractAddress, tokenId, (error as Error).message)

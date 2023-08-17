@@ -6,7 +6,6 @@ import {
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
-import { View } from '../ui/types'
 import {
   FETCH_FAVORITED_ITEMS_SUCCESS,
   FETCH_LISTS_SUCCESS,
@@ -19,6 +18,7 @@ import {
   getListSuccess
 } from '../favorites/actions'
 import { ListsBrowseOptions } from '../favorites/types'
+import { View } from '../ui/types'
 import { ListDetails, Permission } from '../vendor/decentraland/favorites'
 import {
   buyItemFailure,
@@ -118,7 +118,7 @@ const requestActions = [
   buyItemWithCardSuccess(chainId, txHash, item, purchase)
 ]
 
-requestActions.forEach(action => {
+requestActions.forEach((action) => {
   describe(`when reducing the "${action.type}" action`, () => {
     it('should return a state with the loading set', () => {
       const initialState = {
@@ -161,7 +161,7 @@ const failureActions = [
   }
 ]
 
-failureActions.forEach(action => {
+failureActions.forEach((action) => {
   describe(`when reducing the "${action.failure.type}" action`, () => {
     it('should return a state with the error set and the loading state cleared', () => {
       const initialState = {

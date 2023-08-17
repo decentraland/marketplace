@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux'
-import { AnalyticsVolumeData } from '../../modules/analytics/types'
 import {
   fetchAnalyticsVolumeDataRequest,
   FetchAnalyticsDayDataRequestAction
 } from '../../modules/analytics/actions'
+import { AnalyticsVolumeData } from '../../modules/analytics/types'
 
 export type Props = {
   data: AnalyticsVolumeData | null

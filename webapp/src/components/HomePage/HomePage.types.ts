@@ -1,13 +1,13 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import {
-  getHomepage,
-  getHomepageLoading
-} from '../../modules/ui/asset/homepage/selectors'
+import { Dispatch } from 'redux'
 import {
   fetchAssetsFromRoute,
   FetchAssetsFromRouteAction
 } from '../../modules/routing/actions'
+import {
+  getHomepage,
+  getHomepageLoading
+} from '../../modules/ui/asset/homepage/selectors'
 
 export type Props = {
   homepage: ReturnType<typeof getHomepage>

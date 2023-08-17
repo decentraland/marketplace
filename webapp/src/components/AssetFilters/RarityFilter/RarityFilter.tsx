@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react'
-import { Box, Popup, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, Popup, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
 
 export type RarityFilterProps = {
@@ -18,9 +18,9 @@ export const RarityFilter = ({
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const rarityOptions = useMemo(() => {
     const options = Object.values(Rarity)
-      .filter(value => typeof value === 'string')
+      .filter((value) => typeof value === 'string')
       .reverse() as string[]
-    return options.map(rarity => ({
+    return options.map((rarity) => ({
       value: rarity,
       text: t(`rarity.${rarity}`)
     }))

@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 import { AtlasTile } from 'decentraland-ui'
-import { browse, BrowseAction } from '../../../modules/routing/actions'
 import { NFT } from '../../../modules/nft/types'
+import { browse, BrowseAction } from '../../../modules/routing/actions'
 
 export type Props = {
   onlyOnSale?: boolean
@@ -15,7 +15,11 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'onlyOnSale' | 'onlyOnRent' | 'isMapViewFiltersEnabled' | 'tiles' | 'ownedLands'
+  | 'onlyOnSale'
+  | 'onlyOnRent'
+  | 'isMapViewFiltersEnabled'
+  | 'tiles'
+  | 'ownedLands'
 >
 
 export type MapDispatchProps = Pick<Props, 'onBrowse'>

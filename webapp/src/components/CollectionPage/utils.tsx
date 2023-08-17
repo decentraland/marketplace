@@ -9,7 +9,7 @@ import styles from './CollectionPage.module.css'
 
 export const formatDataToTable = (
   rentals?: Item[],
-  isCollectionOwner: boolean = false,
+  isCollectionOwner = false,
   isMobile = false
 ): DataTableType[] => {
   const builderCollectionUrl = (contractAddress: string) =>

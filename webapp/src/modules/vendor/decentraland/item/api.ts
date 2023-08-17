@@ -1,7 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
-import { ItemFilters } from './types'
-import { ItemResponse } from './types'
+import { ItemFilters, ItemResponse } from './types'
 
 export const DEFAULT_TRENDING_PAGE_SIZE = 20
 
@@ -51,10 +50,10 @@ export class ItemAPI extends BaseClient {
     }
 
     if (filters.creator) {
-      let creators = Array.isArray(filters.creator)
+      const creators = Array.isArray(filters.creator)
         ? filters.creator
         : [filters.creator]
-      creators.forEach(creator => queryParams.append('creator', creator))
+      creators.forEach((creator) => queryParams.append('creator', creator))
     }
 
     if (filters.isSoldOut) {
@@ -100,10 +99,10 @@ export class ItemAPI extends BaseClient {
       }
     }
     if (filters.ids) {
-      filters.ids.forEach(id => queryParams.append('id', id))
+      filters.ids.forEach((id) => queryParams.append('id', id))
     }
     if (filters.contractAddresses) {
-      filters.contractAddresses.forEach(contract =>
+      filters.contractAddresses.forEach((contract) =>
         queryParams.append('contractAddress', contract)
       )
     }

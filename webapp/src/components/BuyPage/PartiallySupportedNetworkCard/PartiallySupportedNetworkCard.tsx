@@ -1,6 +1,6 @@
-import { Card } from 'decentraland-ui'
 import ChainProvider from 'decentraland-dapps/dist/containers/ChainProvider'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Card } from 'decentraland-ui'
 import { Mana } from '../../Mana'
 import { Props } from './PartiallySupportedNetworkCard.types'
 import styles from './PartiallySupportedNetworkCard.module.css'

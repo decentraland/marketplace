@@ -1,6 +1,6 @@
-import { Network, Rarity } from '@dcl/schemas'
 import { render, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Network, Rarity } from '@dcl/schemas'
 import { SelectedFilters } from './SelectedFilters'
 import { Props } from './SelectedFilters.types'
 

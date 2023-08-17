@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
-import { Store } from './types'
 import { RootState } from '../reducer'
+import { Store } from './types'
 
 export const getState = (state: RootState) => state.store
 export const getData = (state: RootState) => getState(state).data
@@ -17,6 +17,6 @@ export const getIsLocalStoreDirty = createSelector<
 >(getData, getLocalStore, (storeData, localStore) => {
   return (
     !!localStore &&
-    !Object.values(storeData).some(store => store === localStore)
+    !Object.values(storeData).some((store) => store === localStore)
   )
 })

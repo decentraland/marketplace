@@ -5,8 +5,8 @@ import {
   getSearchWearableCategory
 } from '../routing/search'
 import { BrowseOptions } from '../routing/types'
-import { Sections } from './routing/types'
 import { NFTsFetchFilters } from './nft/types'
+import { Sections } from './routing/types'
 import { VendorName, Disabled } from './types'
 
 export function getFilters(
@@ -108,6 +108,6 @@ export function getPartners(): VendorName[] {
   const disabledVendors = Object.values(Disabled)
 
   return Object.values(VendorName).filter(
-    vendor => isPartner(vendor) && !disabledVendors.includes(vendor)
+    (vendor) => isPartner(vendor) && !disabledVendors.includes(vendor)
   )
 }

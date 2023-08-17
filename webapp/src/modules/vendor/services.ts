@@ -9,9 +9,9 @@ import {
   RentalListing
 } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { Account } from '../account/types'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from '../analytics/types'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { OrderResponse } from './decentraland/order/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, TransferType, FetchOneOptions } from './types'

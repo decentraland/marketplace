@@ -1,11 +1,11 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { NFT_SERVER_URL } from '../nft'
 import {
   AnalyticsTimeframe,
   RankingEntities,
   RankingEntity,
   RankingsFilters
 } from '../../../analytics/types'
+import { NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 
 const DEFAULT_REQUEST_SIZE = 5
@@ -17,7 +17,10 @@ class RankingsAPI extends BaseAPI {
     filters: RankingsFilters = {}
   ): Promise<RankingEntity> => {
     const queryParams = this.buildItemsQueryString(filters)
-    return this.request('get', `/rankings/${entity}/${timeframe}?${queryParams}`)
+    return this.request(
+      'get',
+      `/rankings/${entity}/${timeframe}?${queryParams}`
+    )
   }
 
   private buildItemsQueryString(

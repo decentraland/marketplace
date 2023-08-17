@@ -1,7 +1,9 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
-import AutoSizer from 'react-virtualized-auto-sizer'
+import { Modal } from 'decentraland-dapps/dist/containers'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   ModalNavigation,
   Message,
@@ -9,8 +11,6 @@ import {
   Empty,
   Loader
 } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Modal } from 'decentraland-dapps/dist/containers'
 import { isErrorWithMessage } from '../../../lib/error'
 import {
   FavoritesAPI,
@@ -69,7 +69,7 @@ const FavoritesModal = ({ metadata: { itemId }, identity, onClose }: Props) => {
   )
 
   const isItemLoaded = useCallback(
-    index => {
+    (index) => {
       const hasNextPage = favorites.addresses.length < favorites.total
       return !hasNextPage || index < favorites.addresses.length
     },

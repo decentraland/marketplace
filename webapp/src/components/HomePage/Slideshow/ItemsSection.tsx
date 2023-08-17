@@ -58,7 +58,7 @@ const ItemsSection = (props: {
       defaultValue={currentItemSection}
       value={currentItemSection}
       direction="right"
-      options={[Section.WEARABLES, Section.EMOTES].map(section => ({
+      options={[Section.WEARABLES, Section.EMOTES].map((section) => ({
         value: section,
         text: t(`menu.${section}`)
       }))}

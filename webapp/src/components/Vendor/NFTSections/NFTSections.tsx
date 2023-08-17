@@ -1,10 +1,8 @@
 import React from 'react'
-
-import { VendorName } from '../../../modules/vendor/types'
-import { Sections } from '../../../modules/vendor/routing/types'
 import { Section as DecentralandSection } from '../../../modules/vendor/decentraland/routing/types'
+import { Sections } from '../../../modules/vendor/routing/types'
+import { VendorName } from '../../../modules/vendor/types'
 import { NFTSections as DecentralandNFTSections } from '../decentraland/NFTSections'
-
 import { Props } from './NFTSections.types'
 
 const NFTSections = (props: Props) => {

@@ -9,9 +9,9 @@ const getConnectedProviderMock = getConnectedProvider as jest.MockedFunction<
   typeof getConnectedProvider
 >
 
-const providerMock = ({
+const providerMock = {
   send: jest.fn()
-} as unknown) as any
+} as unknown as any
 
 describe('when getting a rental contract instance', () => {
   describe('and the provider is not connected', () => {

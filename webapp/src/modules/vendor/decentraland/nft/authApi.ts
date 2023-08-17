@@ -1,13 +1,18 @@
 import { NFTCategory, NFTFilters, RentalStatus } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
-import { NFTsFetchParams } from '../../../nft/types'
-import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
-import { ATLAS_SERVER_URL } from '../land'
-import { FetchOneOptions } from '../../types'
-import { getNFTSortBy } from '../../../routing/search'
-import { AssetType } from '../../../asset/types'
 import { config } from '../../../../config'
-import { OwnersFilters, OwnersResponse } from './types'
+import { AssetType } from '../../../asset/types'
+import { NFTsFetchParams } from '../../../nft/types'
+import { getNFTSortBy } from '../../../routing/search'
+import { FetchOneOptions } from '../../types'
+import { ATLAS_SERVER_URL } from '../land'
+import {
+  NFTsFetchFilters,
+  NFTResponse,
+  NFTResult,
+  OwnersFilters,
+  OwnersResponse
+} from './types'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
@@ -66,7 +71,7 @@ export class NFTAuthAPI extends BaseClient {
     try {
       const { id } = await fetch(
         `${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`
-      ).then(resp => resp.json())
+      ).then((resp) => resp.json())
       return id
     } catch (error) {
       return null
@@ -123,14 +128,14 @@ export class NFTAuthAPI extends BaseClient {
       const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus)
         ? [filters.rentalStatus]
         : filters.rentalStatus
-      statuses.forEach(status => queryParams.append('rentalStatus', status))
+      statuses.forEach((status) => queryParams.append('rentalStatus', status))
     }
 
     if (filters.creator) {
       const creators = Array.isArray(filters.creator)
         ? filters.creator
         : [filters.creator]
-      creators.forEach(creator => queryParams.append('creator', creator))
+      creators.forEach((creator) => queryParams.append('creator', creator))
     }
 
     if (filters.contracts && filters.contracts.length > 0) {
@@ -216,7 +221,7 @@ export class NFTAuthAPI extends BaseClient {
 
     const entries = Object.entries(filters)
 
-    for (let [key, value] of entries) {
+    for (const [key, value] of entries) {
       queryParams.append(key, value.toString())
     }
 

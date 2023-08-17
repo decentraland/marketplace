@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { NFTCategory } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Radio,
   CheckboxProps,
@@ -11,23 +13,20 @@ import {
   Icon,
   NotMobile
 } from 'decentraland-ui'
-import { NFTCategory } from '@dcl/schemas'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
-import { SortBy } from '../../../../modules/routing/types'
-import { getCategoryFromSection } from '../../../../modules/routing/search'
-import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
-import { NFTSidebar } from '../../NFTSidebar'
-import { Chip } from '../../../Chip'
-import { TextFilter } from '../../NFTFilters/TextFilter'
 import { AssetType } from '../../../../modules/asset/types'
+import { getCategoryFromSection } from '../../../../modules/routing/search'
+import { SortBy } from '../../../../modules/routing/types'
+import { View } from '../../../../modules/ui/types'
 import {
   isAccountView,
   isLandSection,
   persistIsMapProperty
 } from '../../../../modules/ui/utils'
-import { View } from '../../../../modules/ui/types'
+import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
 import { ToggleBox } from '../../../AssetBrowse/ToggleBox'
+import { Chip } from '../../../Chip'
+import { TextFilter } from '../../NFTFilters/TextFilter'
+import { NFTSidebar } from '../../NFTSidebar'
 import { LANDFilters } from '../types'
 import { browseRentedLAND } from '../utils'
 import { Props } from './NFTFilters.types'
@@ -91,7 +90,7 @@ const NFTFilters = (props: Props) => {
   ]
 
   const shouldShowOnSaleFilter =
-    (section && !isLandSection(section!)) || !section
+    (section && !isLandSection(section)) || !section
 
   if (onlyOnSale) {
     orderByDropdownOptions.unshift({
@@ -109,7 +108,7 @@ const NFTFilters = (props: Props) => {
   }
 
   const sortBy = orderByDropdownOptions.find(
-    option => option.value === props.sortBy
+    (option) => option.value === props.sortBy
   )
     ? props.sortBy
     : orderByDropdownOptions[0].value

@@ -1,5 +1,19 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import addDays from 'date-fns/addDays'
+import formatDate from 'date-fns/format'
+import isValid from 'date-fns/isValid'
+import { ethers } from 'ethers'
+import { Network, NFTCategory } from '@dcl/schemas'
+import { ChainButton, Modal } from 'decentraland-dapps/dist/containers'
+import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
+import {
+  AuthorizationType,
+  Authorization as Authorizations
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ContractName } from 'decentraland-transactions'
 import {
   Button,
   Field,
@@ -8,31 +22,16 @@ import {
   Message,
   ModalNavigation
 } from 'decentraland-ui'
-import { Network, NFTCategory } from '@dcl/schemas'
-import { ethers } from 'ethers'
-import addDays from 'date-fns/addDays'
-import formatDate from 'date-fns/format'
-import isValid from 'date-fns/isValid'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
-import { ContractName } from 'decentraland-transactions'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  AuthorizationType,
-  Authorization as Authorizations
-} from 'decentraland-dapps/dist/modules/authorization/types'
-import { ChainButton, Modal } from 'decentraland-dapps/dist/containers'
-import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-
-import { getContractNames, VendorFactory } from '../../../modules/vendor'
+import { useAuthorization } from '../../../lib/authorization'
+import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import {
   getDefaultExpirationDate,
   INPUT_FORMAT
 } from '../../../modules/order/utils'
-import { ManaField } from '../../ManaField'
-import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
-import { useAuthorization } from '../../../lib/authorization'
+import { getContractNames, VendorFactory } from '../../../modules/vendor'
+import { ManaField } from '../../ManaField'
 import { showPriceBelowMarketValueWarning } from '../../SellPage/SellModal/utils'
 import { Authorization } from '../../SettingsPage/Authorization'
 import { Props } from './SellModal.types'
@@ -68,12 +67,12 @@ const SellModal = ({
   const isUpdate = order !== null
 
   const [price, setPrice] = useState<string>(
-    isUpdate ? ethers.utils.formatEther(order!.price) : ''
+    isUpdate ? ethers.utils.formatEther(order.price) : ''
   )
 
   const [expiresAt, setExpiresAt] = useState(
-    isUpdate && order!.expiresAt && isValid(order!.expiresAt)
-      ? formatDate(addDays(order!.expiresAt, 1), INPUT_FORMAT)
+    isUpdate && order.expiresAt && isValid(order.expiresAt)
+      ? formatDate(addDays(order.expiresAt, 1), INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
 
@@ -91,7 +90,7 @@ const SellModal = ({
 
   const authorization: Authorizations = {
     address: wallet?.address || '',
-    authorizedAddress: marketplace!.address,
+    authorizedAddress: marketplace.address,
     contractAddress: nft.contractAddress,
     contractName:
       (nft.category === NFTCategory.WEARABLE ||

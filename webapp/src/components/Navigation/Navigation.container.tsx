@@ -1,14 +1,14 @@
 import { connect } from 'react-redux'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { getIsCampaignBrowserEnabled } from '../../modules/features/selectors'
-import { getIsFullscreen } from '../../modules/routing/selectors'
 import { RootState } from '../../modules/reducer'
+import { getIsFullscreen } from '../../modules/routing/selectors'
+import Navigation from './Navigation'
 import {
   MapDispatch,
   MapDispatchProps,
   MapStateProps
 } from './Navigation.types'
-import Navigation from './Navigation'
 
 const mapState = (state: RootState): MapStateProps => ({
   isCampaignBrowserEnabled: getIsCampaignBrowserEnabled(state),

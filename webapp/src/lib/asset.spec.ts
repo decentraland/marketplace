@@ -1,6 +1,6 @@
 import * as contentClient from 'dcl-catalyst-client/dist/client/ContentClient'
-import { builderAPI } from '../modules/vendor/decentraland/builder/api'
 import { Asset } from '../modules/asset/types'
+import { builderAPI } from '../modules/vendor/decentraland/builder/api'
 import {
   getSmartWearableRequiredPermissions,
   getSmartWearableSceneContent,
@@ -116,7 +116,7 @@ describe('when getting a smart wearable required permissions', () => {
 })
 
 describe('when getting a smart wearable video showcase', () => {
-  describe.each([null, undefined])('and the asset itemId is %s', itemId => {
+  describe.each([null, undefined])('and the asset itemId is %s', (itemId) => {
     it('should return undefined', async () => {
       expect(
         await getSmartWearableVideoShowcase({

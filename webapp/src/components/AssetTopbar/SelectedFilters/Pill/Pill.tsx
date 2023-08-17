@@ -1,5 +1,5 @@
-import { Icon } from 'decentraland-ui'
 import classNames from 'classnames'
+import { Icon } from 'decentraland-ui'
 import styles from './Pill.module.css'
 
 type Props = {

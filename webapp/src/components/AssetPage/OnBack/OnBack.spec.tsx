@@ -1,11 +1,11 @@
 import { within } from '@testing-library/dom'
-import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { Network } from '@dcl/schemas'
+import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { Asset } from '../../../modules/asset/types'
 import { INITIAL_STATE } from '../../../modules/favorites/reducer'
 import { renderWithProviders } from '../../../utils/test'
-import { Props as OnBackProps } from './OnBack.types'
 import OnBack from './OnBack'
+import { Props as OnBackProps } from './OnBack.types'
 
 jest.mock('decentraland-ui/dist/components/Media')
 

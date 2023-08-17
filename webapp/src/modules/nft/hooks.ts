@@ -19,9 +19,9 @@ export const useFingerprint = (nft: NFT | null) => {
         case NFTCategory.ESTATE: {
           setIsLoading(true)
           getFingerprint(nft.tokenId, estate)
-            .then(result => setFingerprint(result))
+            .then((result) => setFingerprint(result))
             .finally(() => setIsLoading(false))
-            .catch(error =>
+            .catch((error) =>
               console.error(
                 `Error getting fingerprint for nft ${nft.tokenId}`,
                 error

@@ -1,5 +1,5 @@
-import { DropdownItemProps } from 'decentraland-ui'
 import React, { RefObject } from 'react'
+import { DropdownItemProps } from 'decentraland-ui'
 
 export type Props = {
   children: React.ReactNode

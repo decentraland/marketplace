@@ -1,10 +1,9 @@
-import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-
 import { RootState } from '../../../modules/reducer'
-import { MapDispatchProps, MapStateProps, OwnProps } from './Sell.types'
 import Sell from './Sell'
+import { MapDispatchProps, MapStateProps, OwnProps } from './Sell.types'
 
 const mapState = (_state: RootState): MapStateProps => ({})
 

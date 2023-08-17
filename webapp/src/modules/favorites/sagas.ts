@@ -1,13 +1,15 @@
 import { getLocation, push } from 'connected-react-router'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { CatalogFilters, Item } from '@dcl/schemas'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   ConnectWalletSuccessAction,
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { isErrorWithMessage } from '../../lib/error'
+import { getIdentity as getAccountIdentity } from '../identity/utils'
+import { getData as getItemsData } from '../item/selectors'
 import { ItemBrowseOptions } from '../item/types'
 import {
   closeModal,
@@ -15,18 +17,17 @@ import {
   CLOSE_MODAL,
   openModal
 } from '../modal/actions'
+import { locations } from '../routing/locations'
+import { SortDirection } from '../routing/types'
+import { NFT_SERVER_URL } from '../vendor/decentraland'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import {
   FavoritesAPI,
   MARKETPLACE_FAVORITES_SERVER_URL
 } from '../vendor/decentraland/favorites/api'
-import { getIdentity as getAccountIdentity } from '../identity/utils'
-import { CatalogAPI } from '../vendor/decentraland/catalog/api'
+import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
-import { NFT_SERVER_URL } from '../vendor/decentraland'
-import { locations } from '../routing/locations'
-import { SortDirection } from '../routing/types'
-import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import {
   fetchFavoritedItemsFailure,
   FetchFavoritedItemsRequestAction,
@@ -80,9 +81,8 @@ import {
   getListId,
   isOwnerUnpickingFromCurrentList
 } from './selectors'
-import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
-import { getData as getItemsData } from '../item/selectors'
+import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
@@ -119,7 +119,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
     if (previewListsItemIds.length > 0) {
       const items: ReturnType<typeof getItemsData> = yield select(getItemsData)
-      previewListsItemIds = previewListsItemIds.filter(itemId => !items[itemId])
+      previewListsItemIds = previewListsItemIds.filter(
+        (itemId) => !items[itemId]
+      )
 
       if (previewListsItemIds.length > 0) {
         const itemFilters: CatalogFilters = {
@@ -158,7 +160,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         filters
       )
       const createdAt = Object.fromEntries(
-        results.map(favoritedItem => [
+        results.map((favoritedItem) => [
           favoritedItem.itemId,
           favoritedItem.createdAt
         ])
@@ -232,9 +234,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       )
 
       const previewListsItemIds = Array.from(
-        new Set(results.flatMap(list => list.previewOfItemIds))
+        new Set(results.flatMap((list) => list.previewOfItemIds))
       )
-      let previewItems: Item[] = yield call(
+      const previewItems: Item[] = yield call(
         fetchPreviewItems,
         previewListsItemIds
       )
@@ -292,9 +294,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         id
       )
 
-      let { previewOfItemIds } = list
+      const { previewOfItemIds } = list
 
-      let previewItems: Item[] = yield call(fetchPreviewItems, previewOfItemIds)
+      const previewItems: Item[] = yield call(
+        fetchPreviewItems,
+        previewOfItemIds
+      )
 
       yield put(getListSuccess(list, previewItems))
     } catch (error) {
@@ -311,9 +316,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { id, updatedList } = action.payload
 
     try {
-      const list: Awaited<ReturnType<
-        typeof favoritesAPI.updateList
-      >> = yield call([favoritesAPI, 'updateList'], id, updatedList)
+      const list: Awaited<ReturnType<typeof favoritesAPI.updateList>> =
+        yield call([favoritesAPI, 'updateList'], id, updatedList)
       yield put(updateListSuccess(list))
     } catch (error) {
       yield put(
@@ -331,13 +335,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       const { pathname } = yield select(getLocation)
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
-      const list: Awaited<ReturnType<
-        typeof favoritesAPI.createList
-      >> = yield call([favoritesAPI, 'createList'], {
-        name,
-        isPrivate,
-        description
-      })
+      const list: Awaited<ReturnType<typeof favoritesAPI.createList>> =
+        yield call([favoritesAPI, 'createList'], {
+          name,
+          isPrivate,
+          description
+        })
       yield put(createListSuccess(list))
       if (pathname === locations.lists()) {
         yield put(push(locations.list(list.id)))
@@ -432,13 +435,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       }: Awaited<ReturnType<typeof favoritesAPI.bulkPickUnpick>> = yield call(
         [favoritesAPI, 'bulkPickUnpick'],
         item.id,
-        pickedFor.map(list => list.id),
-        unpickedFrom.map(list => list.id)
+        pickedFor.map((list) => list.id),
+        unpickedFrom.map((list) => list.id)
       )
-      const isOwnerUnpickingFromListInView: ReturnType<typeof isOwnerUnpickingFromCurrentList> = yield select(
-        isOwnerUnpickingFromCurrentList,
-        unpickedFrom
-      )
+      const isOwnerUnpickingFromListInView: ReturnType<
+        typeof isOwnerUnpickingFromCurrentList
+      > = yield select(isOwnerUnpickingFromCurrentList, unpickedFrom)
 
       yield put(
         bulkPickUnpickSuccess(

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
-import { RootState } from '../../../modules/reducer'
 import { getIsCampaignBrowserEnabled } from '../../../modules/features/selectors'
-import { MapStateProps } from './CampaignBadge.types'
+import { RootState } from '../../../modules/reducer'
 import CampaignBadge from './CampaignBadge'
+import { MapStateProps } from './CampaignBadge.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   isCampaignBrowserEnabled: getIsCampaignBrowserEnabled(state)

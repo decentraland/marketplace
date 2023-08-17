@@ -1,5 +1,5 @@
-import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
+import { createSelector } from 'reselect'
 import { Network } from '@dcl/schemas'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
@@ -8,8 +8,10 @@ import { sumAccountMetrics } from './utils'
 
 export const getState = (state: RootState) => state.account
 export const getData = (state: RootState) => getState(state).data
-export const getCreators = (state: RootState) => getState(state).creators.accounts
-export const getCreatorsSearchQuery = (state: RootState) => getState(state).creators.search
+export const getCreators = (state: RootState) =>
+  getState(state).creators.accounts
+export const getCreatorsSearchQuery = (state: RootState) =>
+  getState(state).creators.search
 export const getMetricsByNetworkByAddress = (state: RootState) =>
   getState(state).metrics
 export const getLoading = (state: RootState) => getState(state).loading
@@ -24,11 +26,11 @@ export const getAddress = createSelector<
   RootState,
   ReturnType<typeof accountMatchSelector>,
   string | undefined
->(accountMatchSelector, match => match?.params.address?.toLowerCase())
+>(accountMatchSelector, (match) => match?.params.address?.toLowerCase())
 
 export const getMetricsByAddressByNetwork = createSelector(
   getMetricsByNetworkByAddress,
-  metrics => {
+  (metrics) => {
     const addresses = new Set([
       ...Object.keys(metrics.ETHEREUM),
       ...Object.keys(metrics.MATIC)
@@ -49,7 +51,7 @@ export const getMetricsByAddressByNetwork = createSelector(
 
 export const getAggregatedMetricsByAddress = createSelector(
   getMetricsByAddressByNetwork,
-  metrics => {
+  (metrics) => {
     const addresses = Object.keys(metrics)
     const res: Record<string, AccountMetrics> = {}
 

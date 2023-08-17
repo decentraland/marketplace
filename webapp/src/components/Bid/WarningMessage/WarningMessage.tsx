@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
-import { useFingerprint } from '../../../modules/nft/hooks'
 import {
   isInsufficientMANA,
   checkFingerprint
 } from '../../../modules/bid/utils'
+import { useFingerprint } from '../../../modules/nft/hooks'
 import { Props } from './WarningMessage.types'
 import './WarningMessage.css'
 
@@ -18,7 +17,7 @@ const WarningMessage = (props: Props) => {
   useEffect(() => {
     isInsufficientMANA(bid)
       .then(setHasInsufficientMANA)
-      .catch(error =>
+      .catch((error) =>
         console.error(`Could not get the MANA from bidder ${bid.bidder}`, error)
       )
   }, [bid])

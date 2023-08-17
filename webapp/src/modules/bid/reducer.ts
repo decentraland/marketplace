@@ -3,7 +3,6 @@ import {
   LoadingState,
   loadingReducer
 } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { toBidObject } from './utils'
 import {
   FetchBidsByAddressRequestAction,
   FetchBidsByAddressSuccessAction,
@@ -38,6 +37,7 @@ import {
   ClearBidErrorAction,
   CLEAR_BID_ERROR
 } from './actions'
+import { toBidObject } from './utils'
 
 export type BidState = {
   data: Record<string, Bid>

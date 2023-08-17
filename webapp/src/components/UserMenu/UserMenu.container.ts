@@ -5,12 +5,12 @@ import {
   isConnected,
   isConnecting
 } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { RootState } from '../../modules/reducer'
-import { getTransactions } from '../../modules/transaction/selectors'
-import { locations } from '../../modules/routing/locations'
 import { getIsProfileEnabled } from '../../modules/features/selectors'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './UserMenu.types'
+import { RootState } from '../../modules/reducer'
+import { locations } from '../../modules/routing/locations'
+import { getTransactions } from '../../modules/transaction/selectors'
 import UserMenu from './UserMenu'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './UserMenu.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -18,7 +18,7 @@ const mapState = (state: RootState): MapStateProps => {
     isSigningIn: isConnecting(state),
     isActivity: getLocation(state).pathname === locations.activity(),
     isProfileEnabled: getIsProfileEnabled(state),
-    hasActivity: getTransactions(state).some(tx => isPending(tx.status))
+    hasActivity: getTransactions(state).some((tx) => isPending(tx.status))
   }
 }
 

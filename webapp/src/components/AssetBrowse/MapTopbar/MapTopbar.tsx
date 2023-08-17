@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Button,
   CheckboxProps,
@@ -8,7 +9,6 @@ import {
   Radio,
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { persistIsMapProperty } from '../../../modules/ui/utils'
 import { Chip } from '../../Chip'
 import { Props } from './MapTopbar.types'

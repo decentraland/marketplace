@@ -1,11 +1,11 @@
 import { RenderResult } from '@testing-library/react'
 import { NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { NFT } from '../../modules/nft/types'
 import {
   renderWithProviders,
   waitForComponentToFinishLoading
 } from '../../utils/test'
-import { NFT } from '../../modules/nft/types'
 import { SuccessPage } from './SuccessPage'
 import { Props } from './SuccessPage.types'
 
@@ -35,7 +35,7 @@ function renderSuccessPage(props: Partial<Props> = {}): RenderResult {
                   rarity: Rarity.COMMON
                 }
               },
-              category: NFTCategory.WEARABLE,
+              category: NFTCategory.WEARABLE
             } as NFT
           },
           loading: [],

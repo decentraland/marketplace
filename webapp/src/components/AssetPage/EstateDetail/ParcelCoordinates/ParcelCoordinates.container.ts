@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../../../modules/reducer'
 import { getTilesByEstateId } from '../../../../modules/tile/selectors'
-import { MapStateProps, OwnProps } from './ParcelCoordinates.types'
 import ParcelCoordinates from './ParcelCoordinates'
+import { MapStateProps, OwnProps } from './ParcelCoordinates.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   parcelCoordinates: getTilesByEstateId(state)[ownProps.estateId] ?? []

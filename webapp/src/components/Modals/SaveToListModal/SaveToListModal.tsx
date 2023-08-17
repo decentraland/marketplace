@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import InfiniteLoader from 'react-window-infinite-loader'
 import { FixedSizeList } from 'react-window'
+import InfiniteLoader from 'react-window-infinite-loader'
+import Modal from 'decentraland-dapps/dist/containers/Modal'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Button,
   Checkbox,
@@ -10,17 +13,15 @@ import {
   Message,
   ModalNavigation
 } from 'decentraland-ui'
-import Modal from 'decentraland-dapps/dist/containers/Modal'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../../lib/error'
+import { CreateListParameters } from '../../../modules/favorites/types'
 import {
   FavoritesAPI,
   MARKETPLACE_FAVORITES_SERVER_URL,
   ListOfLists
 } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
-import { CreateListParameters } from '../../../modules/favorites/types'
 import * as events from '../../../utils/events'
-import { isErrorWithMessage } from '../../../lib/error'
 import { PrivateTag } from '../../PrivateTag'
 import {
   CREATE_LIST_BUTTON_DATA_TEST_ID,
@@ -36,7 +37,6 @@ import {
 } from './constants'
 import { PickType, Props } from './SaveToListModal.types'
 import styles from './SaveToListModal.module.css'
-import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 const SaveToListModal = (props: Props) => {
   const {
@@ -102,7 +102,7 @@ const SaveToListModal = (props: Props) => {
       if (picks[type].includes(list)) {
         setPicks({
           ...picks,
-          [type]: picks[type].filter(l => l.id !== list.id)
+          [type]: picks[type].filter((l) => l.id !== list.id)
         })
       } else {
         setPicks({
@@ -115,7 +115,7 @@ const SaveToListModal = (props: Props) => {
   )
 
   const handlePickItem = useCallback(
-    index => {
+    (index) => {
       if (lists.data[index].isItemInList) {
         addOrRemovePick(lists.data[index], PickType.UNPICK_FROM)
       } else {
@@ -159,7 +159,7 @@ const SaveToListModal = (props: Props) => {
   )
 
   const isItemLoaded = useCallback(
-    index => {
+    (index) => {
       const hasNextPage = lists.data.length < lists.total
       return !hasNextPage || index < lists.data.length
     },
@@ -171,7 +171,7 @@ const SaveToListModal = (props: Props) => {
       onCreateList({ isLoading: true, onCreateList: createListFunction })
       favoritesAPI
         .createList(params)
-        .then(response => {
+        .then((response) => {
           const stateLists = [...lists.data]
           stateLists.splice(1, 0, {
             ...response,
@@ -187,7 +187,7 @@ const SaveToListModal = (props: Props) => {
           })
           onFinishListCreation()
         })
-        .catch(error => {
+        .catch((error) => {
           const errorMessage = isErrorWithMessage(error)
             ? error.message
             : t('global.unknown_error')
@@ -246,9 +246,7 @@ const SaveToListModal = (props: Props) => {
                   <PrivateTag
                     data-testid={LIST_PRIVATE + lists.data[index].id}
                   />
-                ) : (
-                  undefined
-                )}
+                ) : undefined}
               </div>
             </div>
           ) : (

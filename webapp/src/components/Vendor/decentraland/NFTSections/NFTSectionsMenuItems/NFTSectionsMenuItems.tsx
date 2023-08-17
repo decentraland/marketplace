@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-
 import { isLandSection } from '../../../../../modules/ui/utils'
 import { Section } from '../../../../../modules/vendor/decentraland/routing/types'
 import { DropdownMenu } from '../../../../Menu/DropdownMenu'
@@ -17,7 +16,7 @@ const NFTSectionsMenuItems = ({
   onSectionClick
 }: Props) => {
   const handleOnSectionClick = useCallback(
-    newSection => {
+    (newSection) => {
       if (section !== newSection) {
         onSectionClick(newSection)
       }
@@ -44,7 +43,7 @@ const NFTSectionsMenuItems = ({
             onClick={handleOnSectionClick}
           />
           {isLandSection(section)
-            ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
+            ? [Section.PARCELS, Section.ESTATES].map((menuSection) => (
                 <MenuItem
                   key={menuSection}
                   value={menuSection}
@@ -114,7 +113,7 @@ const NFTSectionsMenuItems = ({
                 />
               )}
               {[Section.WEARABLES_LOWER_BODY, Section.WEARABLES_FEET].map(
-                menuSection => (
+                (menuSection) => (
                   <MenuItem
                     key={menuSection}
                     value={menuSection}
@@ -177,7 +176,7 @@ const NFTSectionsMenuItems = ({
                 Section.EMOTES_MISCELLANEOUS,
                 Section.EMOTES_STUNT,
                 Section.EMOTES_REACTIONS
-              ].map(menuSection => (
+              ].map((menuSection) => (
                 <MenuItem
                   key={menuSection}
                   value={menuSection}

@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
-import { ContractName, getContract } from 'decentraland-transactions'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { ContractName, getContract } from 'decentraland-transactions'
 
 /* This helper had to be moved to a separate file so it can be mocked independently on tests */
 

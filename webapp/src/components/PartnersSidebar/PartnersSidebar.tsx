@@ -1,7 +1,6 @@
 import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header } from 'decentraland-ui'
-
 import { getPartners } from '../../modules/vendor/utils'
 import { Menu } from '../Menu'
 import { MenuItem } from '../Menu/MenuItem'
@@ -15,7 +14,7 @@ const PartnersSidebar = (props: Props) => {
     <div className="PartnersSidebar">
       <Header sub>{t('partners_page.partners')}</Header>
       <Menu>
-        {getPartners().map(vendor => (
+        {getPartners().map((vendor) => (
           <MenuItem
             key={vendor}
             value={vendor}

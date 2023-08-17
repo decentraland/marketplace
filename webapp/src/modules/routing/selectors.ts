@@ -1,9 +1,9 @@
-import { createSelector } from 'reselect'
 import { matchPath } from 'react-router'
 import {
   getSearch as getRouterSearch,
   getLocation
 } from 'connected-react-router'
+import { createSelector } from 'reselect'
 import {
   EmotePlayMode,
   GenderFilterOption,
@@ -12,16 +12,17 @@ import {
 } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetStatusFilter } from '../../utils/filters'
+import { getAddress as getAccountAddress } from '../account/selectors'
+import { AssetType } from '../asset/types'
+import { RootState } from '../reducer'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
+import { isLandSection, isListsSection } from '../ui/utils'
+import { Section, Sections } from '../vendor/routing/types'
 import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
-import { Section, Sections } from '../vendor/routing/types'
-import { RootState } from '../reducer'
-import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
-import { getAddress as getAccountAddress } from '../account/selectors'
-import { isLandSection, isListsSection } from '../ui/utils'
+import { locations } from './locations'
 import {
   getDefaultOptionsByView,
   getURLParamArray,
@@ -29,7 +30,6 @@ import {
   getURLParamArray_nonStandard
 } from './search'
 import { BrowseOptions, PageName, SortBy, SortByOption } from './types'
-import { locations } from './locations'
 
 export const getState = (state: RootState) => state.routing
 
@@ -42,18 +42,18 @@ export const getLatestVisitedLocation = createSelector<
   ReturnType<typeof getLocation>
 >(
   getVisitedLocations,
-  visitedLocations => visitedLocations[visitedLocations.length - 1]
+  (visitedLocations) => visitedLocations[visitedLocations.length - 1]
 )
 
 const getPathName = createSelector<
   RootState,
   ReturnType<typeof getLocation>,
   string
->(getLocation, location => location.pathname)
+>(getLocation, (location) => location.pathname)
 
 export const getVendor = createSelector<RootState, string, VendorName>(
   getRouterSearch,
-  search => {
+  (search) => {
     const vendor = getURLParam<VendorName>(search, 'vendor')
     if (vendor && isVendor(vendor)) {
       return vendor
@@ -91,7 +91,7 @@ export const getSection = createSelector<
 
 export const getPageNumber = createSelector<RootState, string, number>(
   getRouterSearch,
-  search => {
+  (search) => {
     const page = getURLParam(search, 'page')
     return page === null || isNaN(+page) ? 1 : +page
   }
@@ -134,7 +134,7 @@ export const getOnlyOnRent = createSelector<
   RootState,
   string,
   boolean | undefined
->(getRouterSearch, search => {
+>(getRouterSearch, (search) => {
   const onlyOnRent = getURLParam(search, 'onlyOnRent')
   switch (onlyOnRent) {
     case 'true':
@@ -177,7 +177,7 @@ export const getAllSortByOptions = () => ({
 
 export const getStatus = createSelector<RootState, string, string>(
   getRouterSearch,
-  search => getURLParam(search, 'status') || ''
+  (search) => getURLParam(search, 'status') || ''
 )
 
 export const getSortByOptions = createSelector<
@@ -251,14 +251,14 @@ export const getIsSoldOut = createSelector<
   RootState,
   string,
   boolean | undefined
->(getRouterSearch, search => {
+>(getRouterSearch, (search) => {
   const isSoldOut = getURLParam(search, 'isSoldOut')
   return isSoldOut === 'true'
 })
 
 export const getIsMap = createSelector<RootState, string, boolean | undefined>(
   getRouterSearch,
-  search => {
+  (search) => {
     const isMap = getURLParam(search, 'isMap')
     return isMap === null ? undefined : isMap === 'true'
   }
@@ -266,7 +266,7 @@ export const getIsMap = createSelector<RootState, string, boolean | undefined>(
 
 export const getItemId = createSelector<RootState, string, string | undefined>(
   getRouterSearch,
-  search => {
+  (search) => {
     const itemId = getURLParam(search, 'itemId')
     return itemId ? itemId : undefined
   }
@@ -284,12 +284,12 @@ export const getIsFullscreen = createSelector<
 
 export const getRarities = createSelector<RootState, string, Rarity[]>(
   getRouterSearch,
-  search =>
+  (search) =>
     getURLParamArray_nonStandard<Rarity>(
       search,
       'rarities',
       Object.values(Rarity).filter(
-        value => typeof value === 'string'
+        (value) => typeof value === 'string'
       ) as string[]
     )
 )
@@ -298,7 +298,7 @@ export const getWearableGenders = createSelector<
   RootState,
   string,
   GenderFilterOption[]
->(getRouterSearch, search =>
+>(getRouterSearch, (search) =>
   getURLParamArray_nonStandard<GenderFilterOption>(
     search,
     'genders',
@@ -308,17 +308,17 @@ export const getWearableGenders = createSelector<
 
 export const getContracts = createSelector<RootState, string, string[]>(
   getRouterSearch,
-  search => getURLParamArray<string>(search, 'contracts')
+  (search) => getURLParamArray<string>(search, 'contracts')
 )
 
 export const getCreators = createSelector<RootState, string, string[]>(
   getRouterSearch,
-  search => getURLParamArray<string>(search, 'creators')
+  (search) => getURLParamArray<string>(search, 'creators')
 )
 
 export const getSearch = createSelector<RootState, string, string>(
   getRouterSearch,
-  search => getURLParam(search, 'search') || ''
+  (search) => getURLParam(search, 'search') || ''
 )
 
 export const getNetwork = createSelector<
@@ -327,7 +327,7 @@ export const getNetwork = createSelector<
   Network | undefined
 >(
   getRouterSearch,
-  search => (getURLParam(search, 'network') as Network) || undefined
+  (search) => (getURLParam(search, 'network') as Network) || undefined
 )
 
 export const getAssetType = createSelector<
@@ -337,7 +337,7 @@ export const getAssetType = createSelector<
   VendorName,
   AssetType
 >(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
-  let assetTypeParam = getURLParam(search, 'assetType') ?? ''
+  const assetTypeParam = getURLParam(search, 'assetType') ?? ''
 
   if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
     if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
@@ -355,7 +355,7 @@ export const getEmotePlayMode = createSelector<
   EmotePlayMode[] | undefined
 >(
   getRouterSearch,
-  search =>
+  (search) =>
     getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
 )
 
@@ -363,7 +363,7 @@ export const getViewAsGuest = createSelector<
   RootState,
   string,
   boolean | undefined
->(getRouterSearch, search =>
+>(getRouterSearch, (search) =>
   getURLParam(search, 'viewAsGuest')
     ? getURLParam(search, 'viewAsGuest') === 'true'
     : undefined
@@ -372,7 +372,7 @@ export const getOnlySmart = createSelector<
   RootState,
   string,
   boolean | undefined
->(getRouterSearch, search =>
+>(getRouterSearch, (search) =>
   getURLParam(search, 'onlySmart')
     ? getURLParam(search, 'onlySmart') === 'true'
     : undefined
@@ -380,45 +380,45 @@ export const getOnlySmart = createSelector<
 
 export const getMinPrice = createSelector<RootState, string, string>(
   getRouterSearch,
-  search => (getURLParam(search, 'minPrice') as string) || ''
+  (search) => (getURLParam(search, 'minPrice') as string) || ''
 )
 
 export const getMaxPrice = createSelector<RootState, string, string>(
   getRouterSearch,
-  search => (getURLParam(search, 'maxPrice') as string) || ''
+  (search) => (getURLParam(search, 'maxPrice') as string) || ''
 )
 
 export const getMinEstateSize = createSelector<RootState, string, string>(
   getRouterSearch,
-  search => (getURLParam(search, 'minEstateSize') as string) || ''
+  (search) => (getURLParam(search, 'minEstateSize') as string) || ''
 )
 
 export const getMaxEstateSize = createSelector<RootState, string, string>(
   getRouterSearch,
-  search => (getURLParam(search, 'maxEstateSize') as string) || ''
+  (search) => (getURLParam(search, 'maxEstateSize') as string) || ''
 )
 
 export const getRentalDays = createSelector<RootState, string, number[]>(
   getRouterSearch,
-  search =>
-    getURLParamArray(search, 'rentalDays').map(value =>
+  (search) =>
+    getURLParamArray(search, 'rentalDays').map((value) =>
       Number.parseInt(value)
-    ) as number[]
+    )
 )
 
 export const getMinDistanceToPlaza = createSelector<RootState, string, string>(
   getRouterSearch,
-  search => (getURLParam(search, 'minDistanceToPlaza') as string) || ''
+  (search) => (getURLParam(search, 'minDistanceToPlaza') as string) || ''
 )
 
 export const getMaxDistanceToPlaza = createSelector<RootState, string, string>(
   getRouterSearch,
-  search => (getURLParam(search, 'maxDistanceToPlaza') as string) || ''
+  (search) => (getURLParam(search, 'maxDistanceToPlaza') as string) || ''
 )
 
 export const getAdjacentToRoad = createSelector<RootState, string, boolean>(
   getRouterSearch,
-  search => getURLParam(search, 'adjacentToRoad') === 'true'
+  (search) => getURLParam(search, 'adjacentToRoad') === 'true'
 )
 
 export const getCurrentLocationAddress = createSelector<
@@ -574,7 +574,7 @@ export const getCurrentBrowseOptions = createSelector(
 
 export const getCurrentSearch = createSelector(
   [getAssetsUrlParams],
-  AssetsUrlParams => {
+  (AssetsUrlParams) => {
     const { search } = AssetsUrlParams
     return search
   }
@@ -584,7 +584,7 @@ export const hasFiltersEnabled = createSelector<
   RootState,
   BrowseOptions,
   boolean
->(getCurrentBrowseOptions, browseOptions => {
+>(getCurrentBrowseOptions, (browseOptions) => {
   const {
     network,
     wearableGenders,
@@ -652,7 +652,7 @@ export const hasFiltersEnabled = createSelector<
 
 export const getIsBuyWithCardPage = createSelector<RootState, string, boolean>(
   getRouterSearch,
-  search => {
+  (search) => {
     const withCard = getURLParam(search, 'withCard')
     return withCard !== null && withCard === 'true'
   }
@@ -664,7 +664,7 @@ const buildExactMatchProps = (path: string) => {
 
 export const getPageName = createSelector<RootState, string, PageName>(
   getPathName,
-  pathname => {
+  (pathname) => {
     if (pathname === '/') {
       return PageName.HOME
     } else if (

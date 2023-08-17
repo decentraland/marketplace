@@ -1,16 +1,16 @@
 import React from 'react'
-import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header } from 'decentraland-ui'
+import { usePagination } from '../../../lib/pagination'
 import { BrowseOptions, Sections } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { VendorName } from '../../../modules/vendor/types'
-import { usePagination } from '../../../lib/pagination'
-import { Menu } from '../../Menu'
 import { AssetFilters } from '../../AssetFilters'
-import { MenuItem } from '../../Menu/MenuItem'
-import { Props } from './CurrentAccountSidebar.types'
-import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { AssetFilter } from '../../AssetFilters/utils'
+import { Menu } from '../../Menu'
+import { MenuItem } from '../../Menu/MenuItem'
+import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
+import { Props } from './CurrentAccountSidebar.types'
 
 const decentraland = VendorName.DECENTRALAND
 
@@ -38,14 +38,14 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => {
           key={COLLECTIONS}
           value={COLLECTIONS}
           currentValue={section}
-          onClick={section =>
+          onClick={(section) =>
             changeFilter('section', section, { clearOldFilters: true })
           }
         />
         <NFTSectionsMenuItems
           sections={[LAND, WEARABLES, EMOTES, ENS]}
           section={section as Section}
-          onSectionClick={section => onBrowse(decentraland, section)}
+          onSectionClick={(section) => onBrowse(decentraland, section)}
         />
       </Menu>
       <Menu>
@@ -54,31 +54,31 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => {
           key={ON_SALE}
           value={ON_SALE}
           currentValue={section}
-          onClick={section => onBrowse(decentraland, section)}
+          onClick={(section) => onBrowse(decentraland, section)}
         />
         <MenuItem
           key={ON_RENT}
           value={ON_RENT}
           currentValue={section}
-          onClick={section => onBrowse(decentraland, section)}
+          onClick={(section) => onBrowse(decentraland, section)}
         />
         <MenuItem
           key={SALES}
           value={SALES}
           currentValue={section}
-          onClick={section => onBrowse(decentraland, section)}
+          onClick={(section) => onBrowse(decentraland, section)}
         />
         <MenuItem
           key={BIDS}
           value={BIDS}
           currentValue={section}
-          onClick={section => onBrowse(decentraland, section)}
+          onClick={(section) => onBrowse(decentraland, section)}
         />
         <MenuItem
           key={STORE_SETTINGS}
           value={STORE_SETTINGS}
           currentValue={section}
-          onClick={section => onBrowse(decentraland, section)}
+          onClick={(section) => onBrowse(decentraland, section)}
         />
       </Menu>
       <AssetFilters

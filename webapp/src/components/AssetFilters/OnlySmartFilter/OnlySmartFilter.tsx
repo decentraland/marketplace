@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { Box, Checkbox, CheckboxProps } from 'decentraland-ui'
 import { useTabletAndBelowMediaQuery } from 'decentraland-ui/dist/components/Media'
+import { Box, Checkbox, CheckboxProps } from 'decentraland-ui'
 import SmartBadge from '../../AssetPage/SmartBadge'
 import styles from './OnlySmartFilter.module.css'
 

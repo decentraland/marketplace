@@ -1,8 +1,7 @@
 import React from 'react'
-import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button } from 'decentraland-ui'
 import { AnalyticsTimeframe } from '../../../modules/analytics/types'
-
 import { Props } from './TimeframeSelector.types'
 import './TimeframeSelector.css'
 

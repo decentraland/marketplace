@@ -1,17 +1,18 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Row } from '../Layout/Row'
-import styles from './Collapsible.module.css'
 import { Props } from './Collapsible.types'
+import styles from './Collapsible.module.css'
 
 const Collapsible = (props: Props) => {
   const { children, collapsedHeight } = props
   const [isCollapsed, setIsCollapsed] = useState(true)
   const [isCollapsible, setIsCollapsible] = useState(false)
   const mainElement = useRef<HTMLDivElement>(null)
-  const handleChangeShowMore = useCallback(() => setIsCollapsed(!isCollapsed), [
-    isCollapsed
-  ])
+  const handleChangeShowMore = useCallback(
+    () => setIsCollapsed(!isCollapsed),
+    [isCollapsed]
+  )
 
   useEffect(() => {
     setIsCollapsed(true)

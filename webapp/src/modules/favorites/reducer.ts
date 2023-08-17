@@ -56,10 +56,10 @@ import {
   BULK_PICK_CANCEL,
   BulkPickUnpickStartAction,
   BulkPickUnpickCancelAction,
-  BULK_PICK_START
+  BULK_PICK_START,
+  GET_LIST_REQUEST
 } from './actions'
 import { FavoritesData, List } from './types'
-import { GET_LIST_REQUEST } from './actions'
 
 export type FavoritesState = {
   data: {
@@ -157,7 +157,7 @@ export function favoritesReducer(
             ...state.data.items,
             ...Object.fromEntries(
               items
-                .map(item => [
+                .map((item) => [
                   item.id,
                   state.data.items[item.id] && item.picks
                     ? {
@@ -184,7 +184,7 @@ export function favoritesReducer(
             ...state.data.items,
             ...Object.fromEntries(
               items
-                .map(item => [
+                .map((item) => [
                   item.id,
                   state.data.items[item.id] && item.picks
                     ? {
@@ -210,7 +210,7 @@ export function favoritesReducer(
           ...state.data,
           lists: {
             ...state.data.lists,
-            ...Object.fromEntries(lists.map(list => [list.id, list]))
+            ...Object.fromEntries(lists.map((list) => [list.id, list]))
           }
         },
         loading: loadingReducer(state.loading, action)
@@ -265,14 +265,14 @@ export function favoritesReducer(
         createdAt = Date.now()
       }
       const pickedLists = pickedFor
-        .map(list =>
+        .map((list) =>
           state.data.lists[list.id]
             ? { ...state.data.lists[list.id], itemsCount: list.itemsCount + 1 }
             : undefined
         )
         .filter(Boolean) as List[]
       const unpickedLists = unpickedFrom
-        .map(list =>
+        .map((list) =>
           state.data.lists[list.id]
             ? { ...state.data.lists[list.id], itemsCount: list.itemsCount - 1 }
             : undefined
@@ -293,8 +293,8 @@ export function favoritesReducer(
           },
           lists: {
             ...state.data.lists,
-            ...Object.fromEntries(pickedLists.map(list => [list.id, list])),
-            ...Object.fromEntries(unpickedLists.map(list => [list.id, list]))
+            ...Object.fromEntries(pickedLists.map((list) => [list.id, list])),
+            ...Object.fromEntries(unpickedLists.map((list) => [list.id, list]))
           }
         },
         loading: loadingReducer(state.loading, action)

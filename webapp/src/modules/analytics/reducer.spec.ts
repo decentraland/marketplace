@@ -4,8 +4,7 @@ import {
   fetchAnalyticsVolumeDataSuccess,
   FETCH_ANALYTICS_VOLUME_DATA_REQUEST
 } from './actions'
-import { analyticsReducer } from './reducer'
-import { INITIAL_STATE } from './reducer'
+import { analyticsReducer, INITIAL_STATE } from './reducer'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from './types'
 
 describe('when fetch volume data request action is received', () => {

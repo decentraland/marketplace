@@ -1,12 +1,12 @@
 import { act, cleanup, waitFor } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { renderWithProviders } from '../../../utils/test'
-import { Asset } from '../../../modules/asset/types'
 import * as assetLib from '../../../lib/asset'
+import { Asset } from '../../../modules/asset/types'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
-import { Props } from './SmartWearableVideoShowcaseModal.types'
-import SmartWearableVideoShowcaseModal from './SmartWearableVideoShowcaseModal'
+import { renderWithProviders } from '../../../utils/test'
 import { VIDEO_TEST_ID } from './constants'
+import SmartWearableVideoShowcaseModal from './SmartWearableVideoShowcaseModal'
+import { Props } from './SmartWearableVideoShowcaseModal.types'
 
 jest.mock('../../../lib/asset')
 
@@ -15,7 +15,7 @@ Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
   set: () => {}
 })
 
-let asset: Asset = {
+const asset: Asset = {
   id: 'aListId'
 } as Asset
 

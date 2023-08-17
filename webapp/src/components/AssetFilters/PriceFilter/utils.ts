@@ -1,5 +1,5 @@
-import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
+import { NFTCategory } from '@dcl/schemas'
 import {
   getCategoryFromSection,
   getSearchEmoteCategory,
@@ -47,7 +47,7 @@ export const getPriceFiltersForSection = (section: Section): PriceFilters => {
   const category =
     section === Section.LAND
       ? PriceFilterExtraOption.LAND
-      : getCategoryFromSection(section!)
+      : getCategoryFromSection(section)
 
   if (!category) {
     throw Error('Invalid section to fetch price')
@@ -57,13 +57,11 @@ export const getPriceFiltersForSection = (section: Section): PriceFilters => {
   const isWearableAccessory = section === Section.WEARABLES_ACCESSORIES
   const wearableCategory =
     !isWearableAccessory && category === NFTCategory.WEARABLE
-      ? getSearchWearableCategory(section!)
+      ? getSearchWearableCategory(section)
       : undefined
 
   const emoteCategory =
-    category === NFTCategory.EMOTE
-      ? getSearchEmoteCategory(section!)
-      : undefined
+    category === NFTCategory.EMOTE ? getSearchEmoteCategory(section) : undefined
 
   return {
     isWearableHead,

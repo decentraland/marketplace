@@ -1,14 +1,14 @@
 import { Item, RentalListing, RentalStatus } from '@dcl/schemas'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   ContractData,
   ContractName,
   getContract
 } from 'decentraland-transactions'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
-import { getAssetUrl, isOwnedBy, mapAsset } from './utils'
 import { Asset } from './types'
+import { getAssetUrl, isOwnedBy, mapAsset } from './utils'
 
 let asset: Asset
 let wallet: Wallet
@@ -302,7 +302,7 @@ describe('when mapping the asset', () => {
 
     describe.each(['wearable', 'emote', 'parcel', 'estate', 'ens'] as Array<
       keyof typeof nftMappers
-    >)('and is a %s', category => {
+    >)('and is a %s', (category) => {
       beforeEach(() => {
         asset = { ...asset, data: { [category]: {} } } as NFT
       })
@@ -321,7 +321,7 @@ describe('when mapping the asset', () => {
 
     describe.each(['wearable', 'emote'] as Array<keyof typeof itemMappers>)(
       'and is a %s',
-      category => {
+      (category) => {
         beforeEach(() => {
           asset = { ...asset, data: { [category]: {} } } as Item
         })

@@ -18,7 +18,7 @@ export const locations = {
     const params = getSearchParams(options)
     return params ? `/lands?${params.toString()}` : '/lands'
   },
-  collection: (contractAddress: string = ':contractAddress') =>
+  collection: (contractAddress = ':contractAddress') =>
     `/collections/${contractAddress}`,
   browse: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
@@ -33,17 +33,17 @@ export const locations = {
     const params = getSearchParams(options)
     return params ? `/account?${params.toString()}` : '/account'
   },
-  defaultCurrentAccount: function() {
+  defaultCurrentAccount: function () {
     return this.currentAccount({
       section: Section.COLLECTIONS
     })
   },
   lists: () => '/lists',
-  list: (listId: string = ':listId', options?: BrowseOptions) => {
+  list: (listId = ':listId', options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/lists/${listId}?${params.toString()}` : `/lists/${listId}`
   },
-  defaultList: function() {
+  defaultList: function () {
     return this.list(DEFAULT_FAVORITES_LIST_ID, {
       assetType: AssetType.ITEM,
       page: 1,
@@ -51,48 +51,42 @@ export const locations = {
       view: View.LISTS
     })
   },
-  account: (address: string = ':address', options?: BrowseOptions) => {
+  account: (address = ':address', options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params
       ? `/accounts/${address}?${params.toString()}`
       : `/accounts/${address}`
   },
-  nft: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}`,
-  manage: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/manage`,
-  item: (
-    contractAddress: string = ':contractAddress',
-    itemId: string = ':itemId'
-  ) => `/contracts/${contractAddress}/items/${itemId}`,
-  parcel: (x: string = ':x', y: string = ':y') => `/parcels/${x}/${y}/detail`,
-  estate: (estateId: string = ':estateId') => `/estates/${estateId}/detail`,
+  nft: (contractAddress = ':contractAddress', tokenId = ':tokenId') =>
+    `/contracts/${contractAddress}/tokens/${tokenId}`,
+  manage: (contractAddress = ':contractAddress', tokenId = ':tokenId') =>
+    `/contracts/${contractAddress}/tokens/${tokenId}/manage`,
+  item: (contractAddress = ':contractAddress', itemId = ':itemId') =>
+    `/contracts/${contractAddress}/items/${itemId}`,
+  parcel: (x = ':x', y = ':y') => `/parcels/${x}/${y}/detail`,
+  estate: (estateId = ':estateId') => `/estates/${estateId}/detail`,
   buy: (
     type: AssetType,
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
+    contractAddress = ':contractAddress',
+    tokenId = ':tokenId'
   ) => `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy`,
   buyWithCard: (
     type: AssetType,
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
+    contractAddress = ':contractAddress',
+    tokenId = ':tokenId'
   ) =>
     `/contracts/${contractAddress}/${getResource(
       type
     )}/${tokenId}/buy?withCard=true`,
   buyStatusPage: (
     type: AssetType,
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
+    contractAddress = ':contractAddress',
+    tokenId = ':tokenId'
   ) =>
     `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy/status`,
   sell: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId',
+    contractAddress = ':contractAddress',
+    tokenId = ':tokenId',
     options?: {
       redirectTo?: string
     }
@@ -101,8 +95,8 @@ export const locations = {
       options ? `?${new URLSearchParams(options).toString()}` : ''
     }`,
   cancel: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId',
+    contractAddress = ':contractAddress',
+    tokenId = ':tokenId',
     options?: {
       redirectTo?: string
     }
@@ -110,15 +104,11 @@ export const locations = {
     `/contracts/${contractAddress}/tokens/${tokenId}/cancel${
       options ? `?${new URLSearchParams(options).toString()}` : ''
     }`,
-  transfer: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/transfer`,
-  bid: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
-  activity: () => `/activity`,
+  transfer: (contractAddress = ':contractAddress', tokenId = ':tokenId') =>
+    `/contracts/${contractAddress}/tokens/${tokenId}/transfer`,
+  bid: (contractAddress = ':contractAddress', tokenId = ':tokenId') =>
+    `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
+  activity: () => '/activity',
   success: (searchOptions?: {
     txHash: string
     tokenId: string

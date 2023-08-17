@@ -1,5 +1,4 @@
 import { action } from 'typesafe-actions'
-
 import { BrowseOptions } from './types'
 
 // Browse NFTs

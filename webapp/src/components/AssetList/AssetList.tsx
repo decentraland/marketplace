@@ -1,13 +1,13 @@
 import React, { useCallback, useMemo, useEffect } from 'react'
-import { Card, Loader } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Card, Loader } from 'decentraland-ui'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
 import * as events from '../../utils/events'
-import { InfiniteScroll } from '../InfiniteScroll'
 import { AssetCard } from '../AssetCard'
+import { InfiniteScroll } from '../InfiniteScroll'
 import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
 import './AssetList.css'
@@ -45,7 +45,7 @@ const AssetList = (props: Props) => {
   }, [])
 
   const handleLoadMore = useCallback(
-    newPage => {
+    (newPage) => {
       onBrowse({ page: newPage })
       getAnalytics().track(events.LOAD_MORE, { page: newPage })
     },

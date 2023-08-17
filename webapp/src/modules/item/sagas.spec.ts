@@ -1,9 +1,8 @@
 import { getLocation } from 'connected-react-router'
+import { call, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { call, select, take } from 'redux-saga/effects'
 import { ChainId, Item, Network, Rarity } from '@dcl/schemas'
-import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import {
@@ -11,17 +10,19 @@ import {
   NFTPurchase,
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
-import { locations } from '../routing/locations'
-import { getWallet } from '../wallet/selectors'
-import { View } from '../ui/types'
-import { ItemAPI } from '../vendor/decentraland/item/api'
-import { CatalogAPI } from '../vendor/decentraland/catalog/api'
-import { closeModal, openModal } from '../modal/actions'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import {
   buyAssetWithCard,
   BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
 } from '../asset/utils'
+import { closeModal, openModal } from '../modal/actions'
+import { locations } from '../routing/locations'
+import { View } from '../ui/types'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
+import { ItemAPI } from '../vendor/decentraland/item/api'
+import { getWallet } from '../wallet/selectors'
 import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import {
   buyItemRequest,
@@ -47,9 +48,8 @@ import {
 } from './actions'
 import { itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
-import { getItem } from './utils'
 import { ItemBrowseOptions } from './types'
-import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { getItem } from './utils'
 
 const item = {
   itemId: 'anItemId',
@@ -416,8 +416,8 @@ describe('when handling the fetch items request action', () => {
         pathname = locations.browse()
       })
       describe('and there is an ongoing fetch item request', () => {
-        let originalBrowseOptions = itemBrowseOptions
-        let newBrowseOptions: ItemBrowseOptions = {
+        const originalBrowseOptions = itemBrowseOptions
+        const newBrowseOptions: ItemBrowseOptions = {
           ...itemBrowseOptions,
           filters: { ...itemBrowseOptions.filters, rarities: [Rarity.COMMON] }
         }

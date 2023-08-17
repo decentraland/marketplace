@@ -1,16 +1,15 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { Button } from 'decentraland-ui'
 import { builderUrl } from '../../../../lib/environment'
-import { isOwnedBy } from '../../../../modules/asset/utils'
 import { AssetType } from '../../../../modules/asset/types'
+import { isOwnedBy } from '../../../../modules/asset/utils'
 import { locations } from '../../../../modules/routing/locations'
 import { VendorFactory } from '../../../../modules/vendor'
-import styles from './NFTSaleActions.module.css'
-import { Props } from './NFTSaleActions.types'
 import { BuyNFTButtons } from '../BuyNFTButtons'
+import { Props } from './NFTSaleActions.types'
+import styles from './NFTSaleActions.module.css'
 
 const NFTSaleActions = ({ bids, nft, order, wallet, onLeavingSite }: Props) => {
   const { contractAddress, tokenId, data } = nft
@@ -23,7 +22,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet, onLeavingSite }: Props) => {
 
   const canSell = orderService.canSell()
   const notLoggedOrHasAlreadyBidsOnNft =
-    !wallet || !bids.some(bid => bid.bidder === wallet.address)
+    !wallet || !bids.some((bid) => bid.bidder === wallet.address)
   const canBid = !isOwner && isBiddable && notLoggedOrHasAlreadyBidsOnNft
 
   return (

@@ -1,27 +1,40 @@
 import { all, takeEvery, put } from 'redux-saga/effects'
-import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
 import {
   showToast,
   hideAllToasts
 } from 'decentraland-dapps/dist/modules/toast/actions'
-import { UPDATE_STORE_SUCCESS } from '../store/actions'
+import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
 import {
-  CLAIM_ASSET_SUCCESS,
-  REMOVE_RENTAL_SUCCESS,
-  UpsertRentalSuccessAction,
-  UPSERT_RENTAL_SUCCESS
-} from '../rental/actions'
+  DeleteListSuccessAction,
+  DELETE_LIST_SUCCESS,
+  DELETE_LIST_FAILURE,
+  DeleteListFailureAction,
+  BULK_PICK_SUCCESS,
+  BulkPickUnpickSuccessAction,
+  BulkPickUnpickFailureAction,
+  BULK_PICK_FAILURE,
+  UpdateListSuccessAction,
+  UPDATE_LIST_SUCCESS
+} from '../favorites/actions'
 import {
   BUY_ITEM_WITH_CARD_FAILURE,
   FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
   FETCH_ITEMS_FAILURE,
   FetchItemsFailureAction
 } from '../item/actions'
+import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
 import {
   EXECUTE_ORDER_WITH_CARD_FAILURE,
   EXECUTE_ORDER_FAILURE,
   ExecuteOrderFailureAction
 } from '../order/actions'
+import {
+  CLAIM_ASSET_SUCCESS,
+  REMOVE_RENTAL_SUCCESS,
+  UpsertRentalSuccessAction,
+  UPSERT_RENTAL_SUCCESS
+} from '../rental/actions'
+import { UPDATE_STORE_SUCCESS } from '../store/actions'
 import {
   getBulkPickItemFailureToast,
   getBulkPickItemSuccessToast,
@@ -36,21 +49,8 @@ import {
   getUpdateListSuccessToast,
   getUpsertRentalSuccessToast
 } from './toasts'
-import {
-  DeleteListSuccessAction,
-  DELETE_LIST_SUCCESS,
-  DELETE_LIST_FAILURE,
-  DeleteListFailureAction,
-  BULK_PICK_SUCCESS,
-  BulkPickUnpickSuccessAction,
-  BulkPickUnpickFailureAction,
-  BULK_PICK_FAILURE,
-  UpdateListSuccessAction,
-  UPDATE_LIST_SUCCESS
-} from '../favorites/actions'
-import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
-import { toastDispatchableActionsChannel } from './utils'
 import { DispatchableFromToastActions } from './types'
+import { toastDispatchableActionsChannel } from './utils'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])

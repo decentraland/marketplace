@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import formatDistanceToNowI18N from 'date-fns/formatDistanceToNow'
 import { Link } from 'react-router-dom'
+import formatDistanceToNowI18N from 'date-fns/formatDistanceToNow'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon } from 'decentraland-ui'
-import Mana from '../../Mana/Mana'
-import { getExpirationDateLabel } from '../../../lib/date'
 import clock from '../../../images/clock.png'
 import makeOffer from '../../../images/makeOffer.png'
-import { locations } from '../../../modules/routing/locations'
-import { bidAPI } from '../../../modules/vendor/decentraland'
-import { AssetType } from '../../../modules/asset/types'
+import { getExpirationDateLabel } from '../../../lib/date'
 import {
   getIsLegacyOrderExpired,
   getIsOrderExpired,
   isLegacyOrder
 } from '../../../lib/orders'
-import { ManaToFiat } from '../../ManaToFiat'
+import { AssetType } from '../../../modules/asset/types'
+import { locations } from '../../../modules/routing/locations'
+import { bidAPI } from '../../../modules/vendor/decentraland'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
+import Mana from '../../Mana/Mana'
+import { ManaToFiat } from '../../ManaToFiat'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { Props } from './BuyNFTBox.types'
 import styles from './BuyNFTBox.module.css'
@@ -40,10 +40,10 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
           undefined,
           address
         )
-        .then(response => {
+        .then((response) => {
           if (response.total === 0 && !cancel) setCanBid(true)
         })
-        .catch(error => {
+        .catch((error) => {
           console.error(error)
         })
     }
@@ -218,7 +218,7 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
 
   return (
     <div className={styles.BuyNFTBox}>
-      {!!order
+      {order
         ? renderHasListing()
         : isOwner
         ? renderOwnerAndNoListingOptions()

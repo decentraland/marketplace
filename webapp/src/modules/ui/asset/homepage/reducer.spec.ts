@@ -1,6 +1,5 @@
 import { Item } from '@dcl/schemas'
 import { fetchTrendingItemsSuccess } from '../../../item/actions'
-
 import { INITIAL_STATE, homepageReducer, HomepageUIState } from './reducer'
 
 const item = {

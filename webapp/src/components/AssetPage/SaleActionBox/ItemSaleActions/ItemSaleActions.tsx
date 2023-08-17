@@ -1,12 +1,11 @@
 import { memo } from 'react'
-import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
+import { Button } from 'decentraland-ui'
 import { AssetType } from '../../../../modules/asset/types'
+import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
 import { BuyNFTButtons } from '../BuyNFTButtons'
-
-import styles from './ItemSaleActions.module.css'
 import { Props } from './ItemSaleActions.types'
+import styles from './ItemSaleActions.module.css'
 
 const ItemSaleActions = ({ item, wallet, customClassnames }: Props) => {
   const isOwner = wallet?.address === item.creator

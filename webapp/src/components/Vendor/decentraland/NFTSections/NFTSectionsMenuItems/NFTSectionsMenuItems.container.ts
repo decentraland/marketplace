@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
-import { RootState } from '../../../../../modules/reducer'
 import { getIsHandsCategoryEnabled } from '../../../../../modules/features/selectors'
-import { MapStateProps } from './NFTSectionsMenuItems.types'
+import { RootState } from '../../../../../modules/reducer'
 import NFTSectionsMenuItems from './NFTSectionsMenuItems'
+import { MapStateProps } from './NFTSectionsMenuItems.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

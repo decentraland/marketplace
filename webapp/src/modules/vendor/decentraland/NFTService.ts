@@ -2,17 +2,18 @@ import { Order, RentalListing } from '@dcl/schemas'
 import { BaseClientConfig } from 'decentraland-dapps/dist/lib/BaseClient'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
-import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { NFTService as NFTServiceInterface } from '../services'
 import { FetchOneOptions, VendorName } from '../types'
-import { NFTsFetchFilters } from './nft/types'
 import { NFT_SERVER_URL } from './nft/api'
 import { NFTAuthAPI } from './nft/authApi'
+import { NFTsFetchFilters } from './nft/types'
 import { getERC721ContractData } from './utils'
 
 export class NFTService
-  implements NFTServiceInterface<VendorName.DECENTRALAND> {
+  implements NFTServiceInterface<VendorName.DECENTRALAND>
+{
   nftAPI: NFTAuthAPI
 
   constructor(config?: BaseClientConfig | undefined) {
@@ -34,7 +35,7 @@ export class NFTService
 
     const accounts: Account[] = results.reduce((accumulator, nftResult) => {
       const address = nftResult.nft.owner
-      let account = accumulator.find(account => account.id === address)
+      let account = accumulator.find((account) => account.id === address)
       if (!account) {
         account = this.toAccount(address)
         accumulator.push(account)
@@ -43,18 +44,18 @@ export class NFTService
       return accumulator
     }, [] as Account[])
 
-    const nfts: NFT[] = results.map(nftResult => ({
+    const nfts: NFT[] = results.map((nftResult) => ({
       ...nftResult.nft,
       vendor: VendorName.DECENTRALAND
     }))
 
     const orders: Order[] = results
-      .filter(nftResult => nftResult.order)
-      .map(nftResult => nftResult.order as Order)
+      .filter((nftResult) => nftResult.order)
+      .map((nftResult) => nftResult.order as Order)
 
     const rentals: RentalListing[] = results
-      .filter(nftResult => nftResult.rental)
-      .map(nftResult => nftResult.rental as RentalListing)
+      .filter((nftResult) => nftResult.rental)
+      .map((nftResult) => nftResult.rental as RentalListing)
 
     return [nfts, accounts, orders, rentals, total]
   }

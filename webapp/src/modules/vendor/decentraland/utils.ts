@@ -28,7 +28,7 @@ export function getERC721ContractData(data: {
   return contract
 }
 
-export const retryParams : RetryParams = {
+export const retryParams: RetryParams = {
   attempts: 3,
   delay: 1500
 }

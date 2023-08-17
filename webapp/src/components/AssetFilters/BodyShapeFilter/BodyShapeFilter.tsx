@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
-import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { GenderFilterOption, WearableGender } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import './BodyShapeFilter.css'
 import {
   AVAILABLE_FOR_FEMALE,
@@ -82,7 +82,7 @@ export const BodyShapeFilter = ({
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="body-shape-options filters-radio-group">
-        {genderOptions.map(option => {
+        {genderOptions.map((option) => {
           return (
             <Radio
               type="radio"

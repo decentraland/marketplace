@@ -1,17 +1,17 @@
-import { Dispatch } from 'redux'
 import React from 'react'
+import { Dispatch } from 'redux'
 import { Order, RentalListing, RentalStatus } from '@dcl/schemas'
-import {
-  ClearNFTErrorsAction,
-  fetchNFTRequest,
-  FetchNFTRequestAction
-} from '../../modules/nft/actions'
+import { Asset, AssetType } from '../../modules/asset/types'
 import {
   ClearItemErrorsAction,
   fetchItemRequest,
   FetchItemRequestAction
 } from '../../modules/item/actions'
-import { Asset, AssetType } from '../../modules/asset/types'
+import {
+  ClearNFTErrorsAction,
+  fetchNFTRequest,
+  FetchNFTRequestAction
+} from '../../modules/nft/actions'
 
 export type Props<T extends AssetType = AssetType> = {
   type: T

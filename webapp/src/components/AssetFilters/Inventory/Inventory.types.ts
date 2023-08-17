@@ -1,5 +1,8 @@
 import { Network } from '@dcl/schemas/dist/dapps/network'
-import { BarChartProps, BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
+import {
+  BarChartProps,
+  BarChartSource
+} from 'decentraland-ui/lib/components/BarChart/BarChart.types'
 import { BrowseOptions } from '../../../modules/routing/types'
 
 export type Props = {

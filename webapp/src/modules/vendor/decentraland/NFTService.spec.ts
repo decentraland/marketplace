@@ -5,18 +5,18 @@ import {
   RentalListing,
   RentalStatus
 } from '@dcl/schemas'
-import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { NFT, NFTsCountParams, NFTsFetchParams } from '../../nft/types'
-import { VendorName } from '../types'
-import { NFTService } from './NFTService'
-import * as authApi from './nft/authApi'
-import { NFTResult, NFTsFetchFilters } from './nft'
+import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
 import {
   ContractData,
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { NFT, NFTsCountParams, NFTsFetchParams } from '../../nft/types'
+import { VendorName } from '../types'
+import { NFTResult, NFTsFetchFilters } from './nft'
+import * as authApi from './nft/authApi'
+import { NFTService } from './NFTService'
 import { getERC721ContractData } from './utils'
 
 jest.mock('decentraland-dapps/dist/modules/wallet/utils')

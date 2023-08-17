@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { Loader, HeaderMenu, Header, Button } from 'decentraland-ui'
 import { useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { Loader, HeaderMenu, Header, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { Bid } from '../Bid'
 import { Props } from './Bids.types'
@@ -41,8 +40,10 @@ const Bids = (props: Props) => {
     }
   }, [wallet, onFetchBids])
 
-  const archived = sellerBids.filter(bid => archivedBidIds.includes(bid.id))
-  const unarchived = sellerBids.filter(bid => !archivedBidIds.includes(bid.id))
+  const archived = sellerBids.filter((bid) => archivedBidIds.includes(bid.id))
+  const unarchived = sellerBids.filter(
+    (bid) => !archivedBidIds.includes(bid.id)
+  )
   const filteredSeller = showArchived ? archived : unarchived
 
   return (
@@ -93,7 +94,7 @@ const Bids = (props: Props) => {
               </div>
             ) : null}
             {filteredSeller.length > 0
-              ? filteredSeller.map(bid => <Bid key={bid.id} bid={bid} />)
+              ? filteredSeller.map((bid) => <Bid key={bid.id} bid={bid} />)
               : null}
           </div>
           <HeaderMenu>
@@ -113,7 +114,7 @@ const Bids = (props: Props) => {
               </div>
             ) : null}
             {bidderBids.length > 0
-              ? bidderBids.map(bid => <Bid key={bid.id} bid={bid} />)
+              ? bidderBids.map((bid) => <Bid key={bid.id} bid={bid} />)
               : null}
           </div>
         </>

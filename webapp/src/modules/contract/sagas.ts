@@ -1,5 +1,5 @@
-import { Network, NFTCategory } from '@dcl/schemas'
 import { call, takeEvery, put, select } from '@redux-saga/core/effects'
+import { Network, NFTCategory } from '@dcl/schemas'
 import {
   fetchAuthorizationsRequest,
   GRANT_TOKEN_SUCCESS
@@ -49,7 +49,7 @@ export function* handleFetchContractsRequest() {
       throw new Error('Contracts have already been fetched')
     }
 
-    const vendors = Object.values(VendorName).map(v => VendorFactory.build(v))
+    const vendors = Object.values(VendorName).map((v) => VendorFactory.build(v))
     let contracts: Contract[] = []
 
     for (const vendor of vendors) {
@@ -193,7 +193,7 @@ export function* handleFetchContractsSuccess() {
     type: AuthorizationType.ALLOWANCE
   })
 
-  for (const contract of contracts.filter(c => c.category !== null)) {
+  for (const contract of contracts.filter((c) => c.category !== null)) {
     // If the contract is a partner we might need to use a different contract name. See PR #680
     const marketplace: Contract =
       contract.network === Network.MATIC
@@ -207,7 +207,7 @@ export function* handleFetchContractsSuccess() {
       // just add the authorizations for the contracts that are not already in the array
       if (
         !authorizations.some(
-          authorization => authorization.contractAddress === contract.address
+          (authorization) => authorization.contractAddress === contract.address
         )
       ) {
         authorizations.push({
@@ -264,7 +264,7 @@ export function* handleFetchContractsSuccess() {
   )
 
   authorizations = authorizations.filter(
-    authorization =>
+    (authorization) =>
       !storeAuthorizationsMap.has(getAuthorizationKey(authorization))
   )
 

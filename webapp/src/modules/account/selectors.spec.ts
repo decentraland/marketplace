@@ -70,7 +70,9 @@ beforeEach(() => {
 
 describe('when getting account metrics by address by network', () => {
   it('should return a record of of metrics by networks inside another record with addresses as keys', () => {
-    const metricsByNetworkByAddress: ReturnType<typeof getMetricsByNetworkByAddress> = {
+    const metricsByNetworkByAddress: ReturnType<
+      typeof getMetricsByNetworkByAddress
+    > = {
       [Network.ETHEREUM]: {
         address1: metrics1,
         address2: metrics2
@@ -100,17 +102,19 @@ describe('when getting account metrics by address by network', () => {
 
 describe('when getting aggregated metrics by address', () => {
   it('should return a record of of metrics that have been sumed together by address', () => {
-    const metricsByAddressByNetwork: ReturnType<typeof getMetricsByAddressByNetwork> = {
+    const metricsByAddressByNetwork: ReturnType<
+      typeof getMetricsByAddressByNetwork
+    > = {
       address1: {
         [Network.ETHEREUM]: metrics1,
         [Network.MATIC]: metrics3
       },
       address2: {
         [Network.ETHEREUM]: metrics2,
-        [Network.MATIC]: (undefined as unknown) as AccountMetrics
+        [Network.MATIC]: undefined as unknown as AccountMetrics
       },
       address3: {
-        [Network.ETHEREUM]: (undefined as unknown) as AccountMetrics,
+        [Network.ETHEREUM]: undefined as unknown as AccountMetrics,
         [Network.MATIC]: metrics4
       }
     }
@@ -127,22 +131,26 @@ describe('when getting aggregated metrics by address', () => {
 
 describe('when getting metrics by address', () => {
   it('should return a record with aggregated and by network metrics of each user', () => {
-    const metricsByAddressByNetwork: ReturnType<typeof getMetricsByAddressByNetwork> = {
+    const metricsByAddressByNetwork: ReturnType<
+      typeof getMetricsByAddressByNetwork
+    > = {
       address1: {
         [Network.ETHEREUM]: metrics1,
         [Network.MATIC]: metrics3
       },
       address2: {
         [Network.ETHEREUM]: metrics2,
-        [Network.MATIC]: (undefined as unknown) as AccountMetrics
+        [Network.MATIC]: undefined as unknown as AccountMetrics
       },
       address3: {
-        [Network.ETHEREUM]: (undefined as unknown) as AccountMetrics,
+        [Network.ETHEREUM]: undefined as unknown as AccountMetrics,
         [Network.MATIC]: metrics4
       }
     }
 
-    const aggregatedMetricsByAddress: ReturnType<typeof getAggregatedMetricsByAddress> = {
+    const aggregatedMetricsByAddress: ReturnType<
+      typeof getAggregatedMetricsByAddress
+    > = {
       address1: sumAccountMetrics(metrics1, metrics3),
       address2: metrics2,
       address3: metrics4

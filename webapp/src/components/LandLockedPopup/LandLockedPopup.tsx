@@ -1,5 +1,5 @@
-import { Popup, useMobileMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Popup, useMobileMediaQuery } from 'decentraland-ui'
 import { isParcel } from '../../modules/nft/utils'
 import { isLandLocked } from '../../modules/rental/utils'
 import { Props } from './LandLockedPopup.types'

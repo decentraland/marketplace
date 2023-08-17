@@ -1,9 +1,7 @@
 import * as React from 'react'
-import { Icon } from 'decentraland-ui'
 import classNames from 'classnames'
-
+import { Icon } from 'decentraland-ui'
 import { Props } from './Chip.types'
-
 import './Chip.css'
 
 const Chip = (props: Props) => {
@@ -18,16 +16,11 @@ const Chip = (props: Props) => {
     }
   }
 
-  const containerClass = classNames(
-    'Chip',
-    type,
-    className,
-    {
-      active: isActive,
-      disabled: isDisabled,
-      clickeable: onClick && !isDisabled
-    }
-  )
+  const containerClass = classNames('Chip', type, className, {
+    active: isActive,
+    disabled: isDisabled,
+    clickeable: onClick && !isDisabled
+  })
 
   return (
     <div

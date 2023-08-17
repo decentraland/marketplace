@@ -1,29 +1,29 @@
+import util from 'util'
 import { getLocation, push } from 'connected-react-router'
-import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
 import { Network } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
+import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import {
   NFTPurchase,
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
-import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
+import { getSmartWearableRequiredPermissions } from '../../lib/asset'
 import { buyItemWithCardFailure } from '../item/actions'
-import { locations } from '../routing/locations'
-import { assetSaga, failStatuses } from './sagas'
-import { Asset, AssetType } from './types'
-import { executeOrderWithCardFailure } from '../order/actions'
 import { NFT } from '../nft/types'
+import { executeOrderWithCardFailure } from '../order/actions'
+import { locations } from '../routing/locations'
 import {
   fetchSmartWearableRequiredPermissionsFailure,
   fetchSmartWearableRequiredPermissionsRequest,
   fetchSmartWearableRequiredPermissionsSuccess
 } from './actions'
-import { getSmartWearableRequiredPermissions } from '../../lib/asset'
+import { assetSaga, failStatuses } from './sagas'
+import { Asset, AssetType } from './types'
 
-import util from 'util'
 util.inspect.defaultOptions.depth = null
 
 const mockContractAddress = 'a-contract-address'
@@ -187,7 +187,7 @@ describe('when handling the set purchase action', () => {
 
   describe.each(failStatuses)(
     'when the purchase of an nft has a status %s',
-    status => {
+    (status) => {
       it('should dispatch an action signaling the failure of the nft', () => {
         return expectSaga(assetSaga)
           .provide([
@@ -230,12 +230,12 @@ describe('when handling the fetch asset request action', () => {
   let asset: Asset
 
   beforeEach(() => {
-    asset = ({
+    asset = {
       id: 'anId',
       name: 'aName',
       description: 'aDescription',
       data: {}
-    } as unknown) as Asset
+    } as unknown as Asset
   })
 
   describe('when the asset is not smart wearable', () => {

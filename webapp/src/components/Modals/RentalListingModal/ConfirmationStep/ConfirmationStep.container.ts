@@ -11,12 +11,12 @@ import {
   getError
 } from '../../../../modules/rental/selectors'
 import { UpsertRentalOptType } from '../../../../modules/rental/types'
+import ConfirmationStep from './ConfirmationStep'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
 } from './ConfirmationStep.types'
-import ConfirmationStep from './ConfirmationStep'
 
 const mapState = (state: RootState): MapStateProps => ({
   isSigning: isLoadingType(getRentalLoading(state), UPSERT_RENTAL_REQUEST),

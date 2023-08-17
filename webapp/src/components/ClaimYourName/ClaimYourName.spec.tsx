@@ -1,7 +1,7 @@
 import { render, fireEvent } from '@testing-library/react'
-import ClaimYourName from './ClaimYourName'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import * as events from '../../utils/events'
+import ClaimYourName from './ClaimYourName'
 
 jest.mock('../../lib/environment', () => {
   return {
@@ -20,7 +20,7 @@ describe('ClaimYourName', () => {
     const { findByRole } = render(<ClaimYourName />)
     const button = await findByRole('button')
     expect(button.getAttribute('href')).toBe(
-      `https://mocked-builder-url.com/claim-name`
+      'https://mocked-builder-url.com/claim-name'
     )
   })
 

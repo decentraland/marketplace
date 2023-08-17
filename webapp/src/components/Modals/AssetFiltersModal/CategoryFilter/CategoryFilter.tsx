@@ -1,12 +1,17 @@
+import { useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { useMemo } from 'react'
 import NFTSectionsMenuItems from '../../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { getAvailableSections } from './utils'
 import { Props } from './CategoryFilter.types'
 import './CategoryFilter.css'
 
-export const CategoryFilter = ({ section, view, assetType, onChange }: Props): JSX.Element => {
+export const CategoryFilter = ({
+  section,
+  view,
+  assetType,
+  onChange
+}: Props): JSX.Element => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const header = useMemo(

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Header, Dropdown, Icon } from 'decentraland-ui'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header, Dropdown, Icon } from 'decentraland-ui'
 import { Props } from './SelectFilter.types'
 import './SelectFilter.css'
 
@@ -34,7 +34,7 @@ const SelectFilter = (props: Props) => {
       if (
         !value ||
         !fetchOptionFromValue ||
-        providedOptions.some(option => option.value === value)
+        providedOptions.some((option) => option.value === value)
       ) {
         return
       }

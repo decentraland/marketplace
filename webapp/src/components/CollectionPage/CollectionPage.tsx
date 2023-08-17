@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { NFTCategory } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Back,
   Column,
@@ -14,15 +15,14 @@ import {
   Loader,
   useMobileMediaQuery
 } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import { formatWeiMANA } from '../../lib/mana'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
+import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import CollectionProvider from '../CollectionProvider'
+import { Footer } from '../Footer'
+import { Mana } from '../Mana'
+import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import AssetCell from '../OnSaleOrRentList/AssetCell'
-import { Mana } from '../Mana'
 import TableContainer from '../Table/TableContainer'
 import { TableContent } from '../Table/TableContent'
 import { formatDataToTable } from './utils'
@@ -67,18 +67,17 @@ const CollectionPage = (props: Props) => {
                 !!currentAddress &&
                 collection.creator.toLowerCase() === currentAddress
 
-              const builderCollectionUrl = getBuilderCollectionDetailUrl(
-                contractAddress
-              )
+              const builderCollectionUrl =
+                getBuilderCollectionDetailUrl(contractAddress)
               const hasWearables = items?.some(
-                item => item.category === NFTCategory.WEARABLE
+                (item) => item.category === NFTCategory.WEARABLE
               )
               const hasEmotes = items?.some(
-                item => item.category === NFTCategory.EMOTE
+                (item) => item.category === NFTCategory.EMOTE
               )
               const hasOnlyEmotes = hasEmotes && !hasWearables
 
-              const filteredItems = items?.filter(item => {
+              const filteredItems = items?.filter((item) => {
                 return hasOnlyEmotes
                   ? item.category === NFTCategory.EMOTE
                   : item.category === NFTCategory.WEARABLE
@@ -163,7 +162,7 @@ const CollectionPage = (props: Props) => {
                           empty={() => (
                             <div>{t('collection_page.no_collection')}</div>
                           )}
-                          mobileTableBody={filteredItems.map(item => (
+                          mobileTableBody={filteredItems.map((item) => (
                             <div key={item.id} className="mobile-row">
                               <AssetCell asset={item} />
                               <Mana network={item.network} inline>

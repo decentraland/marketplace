@@ -26,7 +26,7 @@ export const useScrollSectionIntoView = <T>(
   useEffect(() => {
     if (location.hash && location.hash.includes(prefix)) {
       ref.current?.scrollIntoView({ behavior: behavior || 'smooth' })
-      setter?.((location.hash.replace(prefix, '') as unknown) as T)
+      setter?.(location.hash.replace(prefix, '') as unknown as T)
     }
     // we only want this behavior after the first render
     // eslint-disable-next-line react-hooks/exhaustive-deps

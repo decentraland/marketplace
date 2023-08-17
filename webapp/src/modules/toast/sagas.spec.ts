@@ -1,11 +1,11 @@
+import { select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
 import { Item, Order, RentalListing } from '@dcl/schemas'
 import {
   hideAllToasts,
   showToast
 } from 'decentraland-dapps/dist/modules/toast/actions'
 import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
-import { expectSaga } from 'redux-saga-test-plan'
-import { select } from 'redux-saga/effects'
 import {
   bulkPickUnpickFailure,
   bulkPickUnpickRequest,
@@ -14,11 +14,14 @@ import {
   deleteListSuccess,
   updateListSuccess
 } from '../favorites/actions'
+import { List } from '../favorites/types'
 import {
   FetchItemsFailureAction,
   buyItemWithCardFailure,
   fetchItemsFailure
 } from '../item/actions'
+import { ItemBrowseOptions } from '../item/types'
+import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 import { NFT, NFTsFetchOptions } from '../nft/types'
 import {
   executeOrderFailure,
@@ -46,9 +49,6 @@ import {
   getBulkPickItemFailureToast,
   getUpdateListSuccessToast
 } from '../toast/toasts'
-import { ItemBrowseOptions } from '../item/types'
-import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
-import { List } from '../favorites/types'
 import {
   ListOfLists,
   UpdateOrCreateList

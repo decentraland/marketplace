@@ -27,14 +27,16 @@ export const AssetTypeFilter = ({
           title: t(`${toggleBoxI18nKey}.primary_market_title`),
           active: assetType === AssetType.ITEM,
           description: t(`${toggleBoxI18nKey}.primary_market_subtitle`),
-          onClick: () => assetType !== AssetType.ITEM ? onChange(AssetType.ITEM) : undefined,
+          onClick: () =>
+            assetType !== AssetType.ITEM ? onChange(AssetType.ITEM) : undefined,
           icon: <div className={styles.marketIcon} />
         },
         {
           title: t(`${toggleBoxI18nKey}.secondary_market_title`),
           active: assetType === AssetType.NFT,
           description: t(`${toggleBoxI18nKey}.secondary_market_subtitle`),
-          onClick: () => assetType !== AssetType.NFT ? onChange(AssetType.NFT) : undefined,
+          onClick: () =>
+            assetType !== AssetType.NFT ? onChange(AssetType.NFT) : undefined,
           icon: <div className={styles.listingsIcon} />
         }
       ]}

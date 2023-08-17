@@ -1,10 +1,10 @@
-import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
+import { createSelector } from 'reselect'
 import { Item } from '@dcl/schemas'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { AuthorizationStepStatus } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
-import { locations } from '../routing/locations'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../reducer'
+import { locations } from '../routing/locations'
 import {
   BUY_ITEM_REQUEST,
   FETCH_COLLECTION_ITEMS_REQUEST,
@@ -35,7 +35,7 @@ export const isFetchingItem = (
   tokenId: string
 ) =>
   getLoading(state).find(
-    action =>
+    (action) =>
       action.type === FETCH_ITEM_REQUEST &&
       action.payload.contractAddress === contractAddress &&
       action.payload.tokenId === tokenId
@@ -46,18 +46,18 @@ export const isFetchingItemsOfCollection = (
   contractAddress: string
 ) =>
   getLoading(state).find(
-    action =>
+    (action) =>
       action.type === FETCH_COLLECTION_ITEMS_REQUEST &&
-      (action as FetchCollectionItemsRequestAction).payload?.contractAddresses?.includes(
-        contractAddress
-      )
+      (
+        action as FetchCollectionItemsRequestAction
+      ).payload?.contractAddresses?.includes(contractAddress)
   ) !== undefined
 
 export const getItems = createSelector<
   RootState,
   ReturnType<typeof getData>,
   Item[]
->(getData, itemsById => Object.values(itemsById))
+>(getData, (itemsById) => Object.values(itemsById))
 
 const ItemDetailMatchSelector = createMatchSelector<
   RootState,
@@ -73,16 +73,16 @@ export const getContractAddress = createSelector<
   string | null
 >(
   ItemDetailMatchSelector,
-  match => match?.params.contractAddress.toLowerCase() || null
+  (match) => match?.params.contractAddress.toLowerCase() || null
 )
 
 export const getTokenId = createSelector<
   RootState,
   ReturnType<typeof ItemDetailMatchSelector>,
   string | null
->(ItemDetailMatchSelector, match => match?.params.tokenId || null)
+>(ItemDetailMatchSelector, (match) => match?.params.tokenId || null)
 
-export const getItemsByContractAddress = createSelector(getItems, items =>
+export const getItemsByContractAddress = createSelector(getItems, (items) =>
   items.reduce((acc, item) => {
     const { contractAddress } = item
     if (!acc[contractAddress]) acc[contractAddress] = []

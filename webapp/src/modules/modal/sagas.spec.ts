@@ -1,7 +1,15 @@
+import { select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
 import { RentalListing } from '@dcl/schemas'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
-import { expectSaga } from 'redux-saga-test-plan'
-import { select } from 'redux-saga/effects'
+import {
+  BULK_PICK_FAILURE,
+  BULK_PICK_SUCCESS,
+  CREATE_LIST_SUCCESS,
+  DELETE_LIST_FAILURE,
+  DELETE_LIST_SUCCESS,
+  UPDATE_LIST_SUCCESS
+} from '../favorites/actions'
 import { NFT } from '../nft/types'
 import {
   claimAssetSuccess,
@@ -11,14 +19,6 @@ import {
   CLAIM_ASSET_SUCCESS,
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
-import {
-  BULK_PICK_FAILURE,
-  BULK_PICK_SUCCESS,
-  CREATE_LIST_SUCCESS,
-  DELETE_LIST_FAILURE,
-  DELETE_LIST_SUCCESS,
-  UPDATE_LIST_SUCCESS
-} from '../favorites/actions'
 import { UpsertRentalOptType } from '../rental/types'
 import { closeAllModals, closeModal, openModal } from './actions'
 import { modalSaga } from './sagas'
@@ -32,7 +32,7 @@ describe.each([
   BULK_PICK_SUCCESS,
   BULK_PICK_FAILURE,
   UPDATE_LIST_SUCCESS
-])('when handling the success action of the %s action', actionType => {
+])('when handling the success action of the %s action', (actionType) => {
   it('should put the action to close all modals', () => {
     return expectSaga(modalSaga)
       .put(closeAllModals())

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import { RootState } from '../../modules/reducer'
+import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import ProtectedRoute from './ProtectedRoute'
 import { MapStateProps } from './ProtectedRoute.types'
 

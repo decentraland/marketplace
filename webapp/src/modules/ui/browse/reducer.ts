@@ -116,7 +116,7 @@ export function browseReducer(
       if (timestamp < state.lastTimestamp) {
         return state
       }
-      const newNftIds = nfts.map(nft => nft.id)
+      const newNftIds = nfts.map((nft) => nft.id)
       const nftIds = isLoadingMoreResults(state, page)
         ? [...state.nftIds, ...newNftIds]
         : newNftIds
@@ -197,7 +197,7 @@ export function browseReducer(
         return state
       }
 
-      const newItemIds = items.map(item => item.id)
+      const newItemIds = items.map((item) => item.id)
       const itemIds =
         isLoadingMoreResults(state, page) || forceLoadMore
           ? [...state.itemIds, ...newItemIds]
@@ -221,7 +221,7 @@ export function browseReducer(
         return state
       }
 
-      const newItemIds = items.map(item => item.id)
+      const newItemIds = items.map((item) => item.id)
       const itemIds = isLoadingMoreResults(state, page)
         ? [...state.itemIds, ...newItemIds]
         : newItemIds
@@ -267,7 +267,7 @@ export function browseReducer(
         total,
         options: { page }
       } = action.payload
-      const newListIds = lists.map(list => list.id)
+      const newListIds = lists.map((list) => list.id)
       const listIds = isLoadingMoreResults(state, page)
         ? [...state.listIds, ...newListIds]
         : newListIds
@@ -285,7 +285,7 @@ export function browseReducer(
 
       return {
         ...state,
-        listIds: state.listIds.filter(listId => listId !== list.id)
+        listIds: state.listIds.filter((listId) => listId !== list.id)
       }
     }
 

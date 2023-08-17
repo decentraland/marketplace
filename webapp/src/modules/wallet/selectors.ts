@@ -14,7 +14,7 @@ export const getWallet = createSelector<
   RootState,
   Wallet | null,
   Wallet | null
->(getData, wallet =>
+>(getData, (wallet) =>
   wallet ? { ...wallet, address: wallet.address.toLowerCase() } : null
 )
 

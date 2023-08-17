@@ -8,7 +8,7 @@ export const getLoading = (state: RootState) => getState(state).loading
 
 export const isFetchingRequiredPermissions = (state: RootState, id: string) =>
   getLoading(state).find(
-    action =>
+    (action) =>
       action.type === FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST &&
       action.payload.asset.id === id
   ) !== undefined

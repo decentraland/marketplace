@@ -1,11 +1,11 @@
 import { memo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import Price from '../../Price'
-import styles from './SaleActionBox.module.css'
-import { Props } from './SaleActionBox.types'
 import { isNFT } from '../../../modules/asset/utils'
+import Price from '../../Price'
 import { ItemSaleActions } from './ItemSaleActions'
 import { NFTSaleActions } from './NFTSaleActions'
+import { Props } from './SaleActionBox.types'
+import styles from './SaleActionBox.module.css'
 
 const SaleActionBox = ({ asset }: Props) => {
   return isNFT(asset) || asset.isOnSale ? (

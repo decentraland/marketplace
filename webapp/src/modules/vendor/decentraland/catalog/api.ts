@@ -1,5 +1,5 @@
-import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { Item, CatalogFilters } from '@dcl/schemas'
+import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 
 export class CatalogAPI extends BaseClient {
   async get(filters: CatalogFilters = {}): Promise<Item[]> {
@@ -23,10 +23,10 @@ export class CatalogAPI extends BaseClient {
     }
 
     if (filters.creator) {
-      let creators = Array.isArray(filters.creator)
+      const creators = Array.isArray(filters.creator)
         ? filters.creator
         : [filters.creator]
-      creators.forEach(creator => queryParams.append('creator', creator))
+      creators.forEach((creator) => queryParams.append('creator', creator))
     }
 
     if (filters.isSoldOut) {
@@ -86,7 +86,7 @@ export class CatalogAPI extends BaseClient {
     // }
 
     if (filters.contractAddresses) {
-      filters.contractAddresses.forEach(contract =>
+      filters.contractAddresses.forEach((contract) =>
         queryParams.append('contractAddress', contract)
       )
     }
@@ -132,7 +132,7 @@ export class CatalogAPI extends BaseClient {
     }
 
     if (filters.ids) {
-      filters.ids.forEach(id => queryParams.append('id', id))
+      filters.ids.forEach((id) => queryParams.append('id', id))
     }
 
     return queryParams.toString()

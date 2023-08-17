@@ -1,7 +1,6 @@
-import { ChainId, Network } from '@dcl/schemas'
-import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
-import { ContractName } from 'decentraland-transactions'
+import { expectSaga } from 'redux-saga-test-plan'
+import { ChainId, Network } from '@dcl/schemas'
 import { fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
@@ -9,6 +8,7 @@ import {
   changeAccount,
   connectWalletSuccess
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { ContractName } from 'decentraland-transactions'
 import { getContractNames, VendorName } from '../vendor'
 import { services as decentraland } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'

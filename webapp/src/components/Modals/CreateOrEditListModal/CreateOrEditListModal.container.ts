@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
-import { RootState } from '../../../modules/reducer'
 import {
   createListClear,
   createListRequest,
@@ -12,12 +11,13 @@ import {
   isLoadingUpdateList
 } from '../../../modules/favorites/selectors'
 import { CreateListParameters } from '../../../modules/favorites/types'
+import { RootState } from '../../../modules/reducer'
+import CreateListModal from './CreateOrEditListModal'
 import {
   MapDispatchProps,
   MapStateProps,
   OwnProps
 } from './CreateOrEditListModal.types'
-import CreateListModal from './CreateOrEditListModal'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {

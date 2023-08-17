@@ -7,10 +7,9 @@ import {
 } from '@dcl/schemas'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
+import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/routing/types'
-import { View } from '../ui/types'
-import { PageName, Sections, SortBy } from './types'
 import { locations } from './locations'
 import {
   getAllSortByOptions,
@@ -32,6 +31,7 @@ import {
   hasFiltersEnabled,
   getLatestVisitedLocation
 } from './selectors'
+import { PageName, Sections, SortBy } from './types'
 
 describe('when getting the latest visited location', () => {
   describe('and there is no previous location', () => {
@@ -169,7 +169,7 @@ describe('when getting if the are filters set', () => {
       [AssetStatusFilter.NOT_FOR_SALE],
       [AssetStatusFilter.ONLY_LISTING],
       [AssetStatusFilter.ONLY_MINTING]
-    ])('and the status is %s', status => {
+    ])('and the status is %s', (status) => {
       it('should return true', () => {
         expect(
           hasFiltersEnabled.resultFunc({
@@ -436,7 +436,7 @@ describe('when there is a creator defined', () => {
 describe("when there aren't any creators defined", () => {
   let url: string
   beforeEach(() => {
-    url = `sortBy=a_sort_by`
+    url = 'sortBy=a_sort_by'
   })
   it('should return an empty array', () => {
     expect(getCreators.resultFunc(url)).toEqual([])

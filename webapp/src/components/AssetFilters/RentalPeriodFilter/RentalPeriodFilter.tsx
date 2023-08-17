@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import classNames from 'classnames'
-import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { PeriodOption } from '../../../modules/rental/types'
 import { daysByPeriod } from '../../../modules/rental/utils'
 import styles from './RentalPeriodFilter.module.css'
@@ -24,15 +24,18 @@ export const RentalPeriodFilter = ({
       if (checked) {
         onChange([...rentalDays, value])
       } else {
-        onChange(rentalDays.filter((period) => period !== value ))
+        onChange(rentalDays.filter((period) => period !== value))
       }
     },
     [rentalDays, onChange]
   )
 
-  const allPeriodsSelected = useMemo(() => (
-    rentalDays.length === 0 || rentalDays.length === Object.values(PeriodOption).length
-  ), [rentalDays.length])
+  const allPeriodsSelected = useMemo(
+    () =>
+      rentalDays.length === 0 ||
+      rentalDays.length === Object.values(PeriodOption).length,
+    [rentalDays.length]
+  )
 
   const header = useMemo(
     () =>
@@ -58,11 +61,14 @@ export const RentalPeriodFilter = ({
   return (
     <Box
       header={header}
-      className={classNames("filters-sidebar-box", styles.rentalPeriodContainer)}
+      className={classNames(
+        'filters-sidebar-box',
+        styles.rentalPeriodContainer
+      )}
       collapsible
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
-      {Object.values(PeriodOption).map(option => (
+      {Object.values(PeriodOption).map((option) => (
         <Radio
           key={option}
           label={t(`rental_modal.create_listing_step.period_options.${option}`)}

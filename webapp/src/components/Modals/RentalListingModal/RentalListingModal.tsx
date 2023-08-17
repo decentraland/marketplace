@@ -1,27 +1,27 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import classNames from 'classnames'
+import { Modal } from 'decentraland-dapps/dist/containers'
 import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
-import { Modal } from 'decentraland-dapps/dist/containers'
 import { ContractName, getContract } from 'decentraland-transactions'
-import {
-  canBeClaimed,
-  isRentalListingOpen
-} from '../../../modules/rental/utils'
 import {
   upsertRentalRequest,
   UpsertRentalRequestAction
 } from '../../../modules/rental/actions'
-import { Props } from './RentalListingModal.types'
+import {
+  canBeClaimed,
+  isRentalListingOpen
+} from '../../../modules/rental/utils'
 import { AuthorizationStep } from './AuthorizationStep'
+import { ConfirmationStep } from './ConfirmationStep'
 import { CreateOrEditListingStep } from './CreateOrEditListingStep'
 import { EditConfirmationStep } from './EditConfirmationStep'
-import { ConfirmationStep } from './ConfirmationStep'
-import styles from './RentalListingModal.module.css'
 import InformationStep from './InformationStep/InformationStep'
+import { Props } from './RentalListingModal.types'
+import styles from './RentalListingModal.module.css'
 
 const RentalListingModal = (props: Props) => {
   const {
@@ -67,10 +67,10 @@ const RentalListingModal = (props: Props) => {
   )
   const isAuthorized = hasAuthorization(authorizations, authorization)
 
-  const isConfirmingEditingStep = useMemo(() => !!listing && !!rental, [
-    listing,
-    rental
-  ])
+  const isConfirmingEditingStep = useMemo(
+    () => !!listing && !!rental,
+    [listing, rental]
+  )
 
   const isListForRentAgain =
     wallet &&

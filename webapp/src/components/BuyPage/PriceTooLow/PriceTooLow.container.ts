@@ -14,7 +14,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onSwitchNetwork: chainId => dispatch(switchNetworkRequest(chainId))
+  onSwitchNetwork: (chainId) => dispatch(switchNetworkRequest(chainId))
 })
 
 export default connect(mapState, mapDispatch)(PriceTooLow)

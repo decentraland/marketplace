@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
-import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AssetStatusFilter } from '../../../utils/filters'
+import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { BrowseOptions } from '../../../modules/routing/types'
+import { AssetStatusFilter } from '../../../utils/filters'
 import { InfoTooltip } from '../../InfoTooltip'
 import './StatusFilter.css'
 
@@ -20,7 +20,7 @@ export const StatusFilter = ({
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const statusOptions = useMemo(
     () =>
-      Object.keys(AssetStatusFilter).map(opt => ({
+      Object.keys(AssetStatusFilter).map((opt) => ({
         value: opt.toLocaleLowerCase(),
         text: t(`nft_filters.status.${opt.toLocaleLowerCase()}`)
       })),
@@ -65,7 +65,7 @@ export const StatusFilter = ({
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="asset-status-options filters-radio-group">
-        {statusOptions.map(option => (
+        {statusOptions.map((option) => (
           <Radio
             type="radio"
             key={option.value || 'all'}

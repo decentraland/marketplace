@@ -12,14 +12,14 @@ import {
   isRemovingRental,
   isSubmittingTransaction
 } from '../../../../modules/rental/selectors'
+import { UpsertRentalOptType } from '../../../../modules/rental/types'
+import ConfirmationStep from './EditConfirmationStep'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch,
   OwnProps
 } from './EditConfirmationStep.types'
-import ConfirmationStep from './EditConfirmationStep'
-import { UpsertRentalOptType } from '../../../../modules/rental/types'
 
 const mapState = (state: RootState): MapStateProps => ({
   isSigning: isLoadingType(getRentalLoading(state), UPSERT_RENTAL_REQUEST),

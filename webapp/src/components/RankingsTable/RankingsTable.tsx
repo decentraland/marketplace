@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import { EmoteCategory, Rarity, WearableCategory } from '@dcl/schemas'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   HeaderMenu,
   Header,
@@ -11,8 +13,6 @@ import {
   DropdownProps,
   Mobile
 } from 'decentraland-ui'
-import { EmoteCategory, Rarity, WearableCategory } from '@dcl/schemas'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   AnalyticsTimeframe,
   CollectorRank,
@@ -23,14 +23,14 @@ import {
   RankingsSortBy
 } from '../../modules/analytics/types'
 import { useScrollSectionIntoView } from '../../modules/ui/utils'
-import { TimeframeSelector } from '../Rankings/TimeframeSelector'
 import { InfoTooltip } from '../InfoTooltip'
+import { TimeframeSelector } from '../Rankings/TimeframeSelector'
+import { RankingCollectorRow } from './RankingCollectorRow'
+import { RankingCreatorRow } from './RankingCreatorRow'
+import { RankingItemRow } from './RankingItemRow'
 import { Props } from './RankingsTable.types'
 import './RankingsTable.css'
-import { RankingItemRow } from './RankingItemRow'
 import { parseURLHash } from './utils'
-import { RankingCreatorRow } from './RankingCreatorRow'
-import { RankingCollectorRow } from './RankingCollectorRow'
 
 const ALL_FILTER = 'all'
 const INITIAL_FILTERS = {
@@ -64,21 +64,23 @@ const RankingsTable = (props: Props) => {
     onFetchRankings(currentEntity, currentTimeframe, currentFilters)
   }, [onFetchRankings, currentTimeframe, currentEntity, currentFilters])
 
-  const registerHandleFilterChange = (filterName: keyof RankingsFilters) => (
-    _event: React.SyntheticEvent<HTMLElement, Event>,
-    { value }: DropdownProps
-  ) => {
-    setCurrentFilters({
-      ...currentFilters,
-      [filterName]: value !== ALL_FILTER ? value : undefined
-    })
-    if (filterName === 'sortBy') {
-      history.replace({
-        pathname: location.pathname,
-        hash: `${TABS_PREFIX}${currentEntity}-${currentTimeframe}-${value}`
+  const registerHandleFilterChange =
+    (filterName: keyof RankingsFilters) =>
+    (
+      _event: React.SyntheticEvent<HTMLElement, Event>,
+      { value }: DropdownProps
+    ) => {
+      setCurrentFilters({
+        ...currentFilters,
+        [filterName]: value !== ALL_FILTER ? value : undefined
       })
+      if (filterName === 'sortBy') {
+        history.replace({
+          pathname: location.pathname,
+          hash: `${TABS_PREFIX}${currentEntity}-${currentTimeframe}-${value}`
+        })
+      }
     }
-  }
 
   const handleTabChange = (entity: RankingEntities) => {
     setCurrentEntity(entity)
@@ -102,7 +104,7 @@ const RankingsTable = (props: Props) => {
       <div className="rankings-card-tabs">
         <Tabs isFullscreen>
           <Tabs.Left>
-            {Object.values(RankingEntities).map(entity => (
+            {Object.values(RankingEntities).map((entity) => (
               <Tabs.Tab
                 key={entity}
                 active={currentEntity === entity}
@@ -129,7 +131,7 @@ const RankingsTable = (props: Props) => {
                     ? EmoteCategory.schema.enum
                     : WearableCategory.schema.enum
                 )
-              ].map(category => ({
+              ].map((category) => ({
                 value: category as string,
                 text:
                   category === ALL_FILTER
@@ -149,7 +151,7 @@ const RankingsTable = (props: Props) => {
               value={currentFilters.rarity || ALL_FILTER}
               direction="right"
               options={[ALL_FILTER, ...Object.values(Rarity.schema.enum)].map(
-                rarity => ({
+                (rarity) => ({
                   value: rarity as string,
                   text:
                     rarity === ALL_FILTER
@@ -172,7 +174,7 @@ const RankingsTable = (props: Props) => {
         defaultValue={RankingEntities.WEARABLES}
         value={currentEntity}
         direction="right"
-        options={[...Object.values(RankingEntities)].map(entity => ({
+        options={[...Object.values(RankingEntities)].map((entity) => ({
           value: entity as string,
           text: t(`home_page.analytics.rankings.${entity}.tab_title`)
         }))}
@@ -411,7 +413,7 @@ const RankingsTable = (props: Props) => {
     switch (currentEntity) {
       case RankingEntities.EMOTES:
       case RankingEntities.WEARABLES:
-        content = (data as ItemRank[]).map(entity => (
+        content = (data as ItemRank[]).map((entity) => (
           <RankingItemRow
             key={entity.id}
             entity={entity}
@@ -420,7 +422,7 @@ const RankingsTable = (props: Props) => {
         ))
         break
       case RankingEntities.CREATORS:
-        content = (data as CreatorRank[])?.map(entity => (
+        content = (data as CreatorRank[])?.map((entity) => (
           <RankingCreatorRow
             key={entity.id}
             entity={entity}
@@ -429,7 +431,7 @@ const RankingsTable = (props: Props) => {
         ))
         break
       case RankingEntities.COLLECTORS:
-        content = (data as CollectorRank[])?.map(entity => (
+        content = (data as CollectorRank[])?.map((entity) => (
           <RankingCollectorRow
             key={entity.id}
             entity={entity}
@@ -471,7 +473,7 @@ const RankingsTable = (props: Props) => {
             className="sort-by-dropdown"
             text={t(`home_page.analytics.rankings.${currentFilters.sortBy}`)}
             direction="right"
-            options={Object.values(RankingsSortBy).map(sortOption => ({
+            options={Object.values(RankingsSortBy).map((sortOption) => ({
               value: sortOption as string,
               text: t(`home_page.analytics.rankings.${sortOption}`)
             }))}

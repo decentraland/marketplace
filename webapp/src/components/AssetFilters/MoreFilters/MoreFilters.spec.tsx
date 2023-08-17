@@ -18,12 +18,15 @@ function renderMoreFilters(props: Partial<MoreFiltersProps> = {}) {
 }
 
 describe('MoreFilters', () => {
-  let useTabletAndBelowMediaQueryMock: jest.MockedFunction<typeof useTabletAndBelowMediaQuery>
+  let useTabletAndBelowMediaQueryMock: jest.MockedFunction<
+    typeof useTabletAndBelowMediaQuery
+  >
 
   beforeEach(() => {
-    useTabletAndBelowMediaQueryMock = useTabletAndBelowMediaQuery as jest.MockedFunction<
-      typeof useTabletAndBelowMediaQuery
-    >
+    useTabletAndBelowMediaQueryMock =
+      useTabletAndBelowMediaQuery as jest.MockedFunction<
+        typeof useTabletAndBelowMediaQuery
+      >
   })
 
   describe('when the isOnSale filter is visible', () => {

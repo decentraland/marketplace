@@ -2,18 +2,18 @@ import React from 'react'
 import { Dispatch } from 'redux'
 import { Avatar, IPreviewController, Item, Order, Rarity } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import {
-  setIsTryingOn,
-  SetIsTryingOnAction,
-  setWearablePreviewController,
-  SetWearablePreviewControllerAction
-} from '../../modules/ui/preview/actions'
 import { Asset } from '../../modules/asset/types'
 import {
   FetchItemRequestAction,
   fetchItemRequest
 } from '../../modules/item/actions'
 import { OpenModalAction, openModal } from '../../modules/modal/actions'
+import {
+  setIsTryingOn,
+  SetIsTryingOnAction,
+  setWearablePreviewController,
+  SetWearablePreviewControllerAction
+} from '../../modules/ui/preview/actions'
 
 export type Props = {
   asset: Asset

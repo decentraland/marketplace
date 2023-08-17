@@ -1,10 +1,9 @@
 import { connect } from 'react-redux'
-
-import { RootState } from '../../modules/reducer'
 import { AssetType } from '../../modules/asset/types'
+import { RootState } from '../../modules/reducer'
 import { isConnecting } from '../../modules/wallet/selectors'
-import { MapStateProps, OwnProps } from './AssetProviderPage.types'
 import AssetProviderPage from './AssetProviderPage'
+import { MapStateProps, OwnProps } from './AssetProviderPage.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   isConnecting: isConnecting(state)

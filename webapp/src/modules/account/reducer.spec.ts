@@ -124,7 +124,7 @@ describe('when reducing the action that signals the request of the fetch of crea
 describe('when reducing the action that signals the successful fetch of creators accounts ', () => {
   let result: AccountState
   let search: string
-  let creatorsAccounts = [{} as CreatorAccount]
+  const creatorsAccounts = [{} as CreatorAccount]
 
   beforeEach(() => {
     search = 'aSearchTerm'

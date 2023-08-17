@@ -41,15 +41,16 @@ describe('when getting profiles from the cache', () => {
       expect(
         await ProfilesCache.fetchProfile([anAddress, anotherAddress])
       ).toBe(profiles)
-      expect(mockFetchProfile).toHaveBeenCalledWith({ids: [anAddress, anotherAddress]})
+      expect(mockFetchProfile).toHaveBeenCalledWith({
+        ids: [anAddress, anotherAddress]
+      })
     })
   })
 
   describe('and the request is in the cache', () => {
     beforeEach(() => {
-      ProfilesCache.cache[
-        [anAddress, anotherAddress].join(',')
-      ] = Promise.resolve(profiles)
+      ProfilesCache.cache[[anAddress, anotherAddress].join(',')] =
+        Promise.resolve(profiles)
     })
     it('should return the ongoing request and to not have called the fetchProfiles endpoint', async () => {
       expect(

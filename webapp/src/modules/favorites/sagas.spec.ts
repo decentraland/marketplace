@@ -1,17 +1,19 @@
 import { getLocation, push } from 'connected-react-router'
 import { call, put, select, take } from 'redux-saga/effects'
-import * as matchers from 'redux-saga-test-plan/matchers'
 import { expectSaga } from 'redux-saga-test-plan'
+import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { Item } from '@dcl/schemas'
 import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
-import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
-import { getAddress } from '../wallet/selectors'
-import { ItemBrowseOptions } from '../item/types'
-import { View } from '../ui/types'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
-import { ItemAPI } from '../vendor/decentraland/item/api'
+import { getData as getItemsData } from '../item/selectors'
+import { ItemBrowseOptions } from '../item/types'
+import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
+import { locations } from '../routing/locations'
+import { SortDirection } from '../routing/types'
+import { View } from '../ui/types'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
+import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
 import {
   ListDetails,
   ListOfLists,
@@ -19,10 +21,8 @@ import {
   Permission,
   UpdateOrCreateList
 } from '../vendor/decentraland/favorites/types'
-import { locations } from '../routing/locations'
-import { SortDirection } from '../routing/types'
-import { CatalogAPI } from '../vendor/decentraland/catalog/api'
-import { getData as getItemsData } from '../item/selectors'
+import { ItemAPI } from '../vendor/decentraland/item/api'
+import { getAddress } from '../wallet/selectors'
 import {
   BULK_PICK_SUCCESS,
   CREATE_LIST_SUCCESS,
@@ -61,7 +61,6 @@ import {
   getListId,
   isOwnerUnpickingFromCurrentList
 } from './selectors'
-import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import {
   CreateListParameters,
   FavoritedItems,
@@ -70,6 +69,7 @@ import {
   ListsBrowseSortBy,
   UpdateListParameters
 } from './types'
+import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 let item: Item
 let address: string

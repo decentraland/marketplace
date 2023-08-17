@@ -1,21 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Button, Popup as UIPopup } from 'decentraland-ui'
-import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import classNames from 'classnames'
+import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
+  Button,
+  Popup as UIPopup,
   Atlas as AtlasComponent,
   AtlasTile,
   Color,
   Layer
 } from 'decentraland-ui'
-import { locations } from '../../modules/routing/locations'
 import { isErrorWithMessage } from '../../lib/error'
-import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
-import { Props, Tile } from './Atlas.types'
-import { VendorName } from '../../modules/vendor'
 import { NFT } from '../../modules/nft/types'
+import { locations } from '../../modules/routing/locations'
+import { VendorName } from '../../modules/vendor'
+import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import Popup from './Popup'
+import { Props, Tile } from './Atlas.types'
 import './Atlas.css'
 
 const getCoords = (x: number | string, y: number | string) => `${x},${y}`
@@ -297,9 +298,10 @@ const Atlas: React.FC<Props> = (props: Props) => {
     }
   }, [withPopup, showPopup, mouseX, mouseY])
 
-  const handleInfoPopupOpen = useCallback(() => setIsInfoPopupOpen(true), [
-    setIsInfoPopupOpen
-  ])
+  const handleInfoPopupOpen = useCallback(
+    () => setIsInfoPopupOpen(true),
+    [setIsInfoPopupOpen]
+  )
 
   const handleInfoPopupClose = useCallback(
     (evt: React.MouseEvent) => {

@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { Props } from './PageHeader.types'
 import './PageHeader.css'
 import classNames from 'classnames'

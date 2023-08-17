@@ -1,6 +1,14 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
+import {
+  getIsCreatorsFilterEnabled,
+  getIsEstateSizeFilterEnabled,
+  getIsLocationFilterEnabled,
+  getIsPriceFilterEnabled,
+  getIsRentalPeriodFilterEnabled
+} from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
+import { browse } from '../../modules/routing/actions'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import {
   getAdjacentToRoad,
@@ -24,20 +32,12 @@ import {
   getStatus,
   getWearableGenders
 } from '../../modules/routing/selectors'
-import {
-  getIsCreatorsFilterEnabled,
-  getIsEstateSizeFilterEnabled,
-  getIsLocationFilterEnabled,
-  getIsPriceFilterEnabled,
-  getIsRentalPeriodFilterEnabled
-} from '../../modules/features/selectors'
-import { LANDFilters } from '../Vendor/decentraland/types'
-import { AssetStatusFilter } from '../../utils/filters'
-import { browse } from '../../modules/routing/actions'
-import { Section } from '../../modules/vendor/routing/types'
 import { getView } from '../../modules/ui/browse/selectors'
-import { MapDispatchProps, MapStateProps, OwnProps } from './AssetFilters.types'
+import { Section } from '../../modules/vendor/routing/types'
+import { AssetStatusFilter } from '../../utils/filters'
+import { LANDFilters } from '../Vendor/decentraland/types'
 import { AssetFilters } from './AssetFilters'
+import { MapDispatchProps, MapStateProps, OwnProps } from './AssetFilters.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps
@@ -118,7 +118,7 @@ const mapDispatch = (
   ownProps: OwnProps
 ): MapDispatchProps => {
   return {
-    onBrowse: options =>
+    onBrowse: (options) =>
       ownProps.onFilterChange
         ? ownProps.onFilterChange(options)
         : dispatch(browse(options))

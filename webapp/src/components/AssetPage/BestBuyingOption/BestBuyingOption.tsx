@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Bid,
   BidSortBy,
@@ -12,20 +11,21 @@ import {
   OrderSortBy,
   Rarity
 } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Popup } from 'decentraland-ui'
-import { getExpirationDateLabel } from '../../../lib/date'
-import { locations } from '../../../modules/routing/locations'
-import { isNFT } from '../../../modules/asset/utils'
-import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
-import mintingIcon from '../../../images/minting.png'
-import infoIcon from '../../../images/infoIcon.png'
 import clock from '../../../images/clock.png'
+import infoIcon from '../../../images/infoIcon.png'
+import mintingIcon from '../../../images/minting.png'
 import noListings from '../../../images/noListings.png'
-import { AssetType } from '../../../modules/asset/types'
+import { getExpirationDateLabel } from '../../../lib/date'
 import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { AssetType } from '../../../modules/asset/types'
+import { isNFT } from '../../../modules/asset/utils'
+import { locations } from '../../../modules/routing/locations'
+import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
+import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
-import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BuyOptions, Props } from './BestBuyingOption.types'
@@ -46,7 +46,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const handleViewOffers = () => {
     history.replace({
       pathname: location.pathname,
-      search: `selectedTableTab=owners`
+      search: 'selectedTableTab=owners'
     })
     tableRef &&
       tableRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
@@ -60,7 +60,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
       } else {
         setIsLoading(true)
 
-        let params: OrderFilters = {
+        const params: OrderFilters = {
           contractAddress: asset.contractAddress,
           first: 1,
           skip: 0,
@@ -76,7 +76,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
 
         orderAPI
           .fetchOrders(params, sortBy)
-          .then(response => {
+          .then((response) => {
             if (response.data.length > 0) {
               if (cancel) return
               setBuyOption(BuyOptions.BUY_LISTING)
@@ -89,18 +89,18 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                   BidSortBy.MOST_EXPENSIVE,
                   '1'
                 )
-                .then(response => {
+                .then((response) => {
                   if (cancel) return
                   setMostExpensiveBid(response.data[0])
                 })
                 .finally(() => !cancel && setIsLoading(false))
-                .catch(error => {
+                .catch((error) => {
                   console.error(error)
                 })
             }
           })
           .finally(() => !cancel && setIsLoading(false))
-          .catch(error => {
+          .catch((error) => {
             console.error(error)
           })
       }
@@ -196,10 +196,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
               </span>
             </div>
           </div>
-          <ItemSaleActions
-            item={asset as Item}
-            customClassnames={customClasses}
-          />
+          <ItemSaleActions item={asset} customClassnames={customClasses} />
         </div>
       ) : buyOption === BuyOptions.BUY_LISTING &&
         asset &&

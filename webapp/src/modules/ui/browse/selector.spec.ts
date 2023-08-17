@@ -12,13 +12,13 @@ import {
   TransactionStatus
 } from 'decentraland-dapps/dist/modules/transaction/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { NFT } from '../../nft/types'
-import { RootState } from '../../reducer'
+import { AssetType } from '../../asset/types'
 import { FavoritesState } from '../../favorites/reducer'
 import * as FavoritesSelectors from '../../favorites/selectors'
-import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { FavoritesData, List } from '../../favorites/types'
-import { AssetType } from '../../asset/types'
+import { NFT } from '../../nft/types'
+import { RootState } from '../../reducer'
+import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { Section } from '../../vendor/decentraland/routing'
 import { View } from '../types'
 import { BrowseUIState } from './reducer'
@@ -272,7 +272,7 @@ describe('when getting if the claiming back transaction is pending', () => {
   beforeEach(() => {
     nft = { id: '567', tokenId, contractAddress, chainId } as NFT
 
-    state = ({
+    state = {
       wallet: {
         data: {
           address: null
@@ -281,7 +281,7 @@ describe('when getting if the claiming back transaction is pending', () => {
       transaction: {
         data: [] as Transaction[]
       }
-    } as unknown) as RootState
+    } as unknown as RootState
   })
 
   describe('and there is no address', () => {
@@ -329,7 +329,7 @@ describe('when getting if the claiming back transaction is pending', () => {
       status: TransactionStatus.REVERTED,
       expectedResult: false
     }
-  ].forEach(element => {
+  ].forEach((element) => {
     describe(`and there is one transaction with status: ${element.status}`, () => {
       beforeEach(() => {
         state.wallet.data!.address = myAddress

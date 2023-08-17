@@ -4,11 +4,9 @@ import { ChainId } from '@dcl/schemas'
 import { getTransaction } from 'decentraland-dapps/dist/modules/transaction/selectors'
 import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { RootState } from '../../modules/reducer'
-import { getTokenIdFromLogs } from './utils'
-import {
-  MapStateProps,
-} from './SuccessPage.types'
 import { SuccessPage } from './SuccessPage'
+import { getTokenIdFromLogs } from './utils'
+import { MapStateProps } from './SuccessPage.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const search = new URLSearchParams(getSearch(state))
@@ -17,7 +15,10 @@ const mapState = (state: RootState): MapStateProps => {
     isLoading: Boolean(
       transaction && transaction.status !== TransactionStatus.CONFIRMED
     ),
-    mintedTokenId: getTokenIdFromLogs(ChainId.MATIC_MUMBAI, transaction?.receipt?.logs)
+    mintedTokenId: getTokenIdFromLogs(
+      ChainId.MATIC_MUMBAI,
+      transaction?.receipt?.logs
+    )
   }
 }
 

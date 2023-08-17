@@ -1,7 +1,7 @@
-import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
-import { throwError } from 'redux-saga-test-plan/providers'
+import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
+import { throwError } from 'redux-saga-test-plan/providers'
 import {
   ChainId,
   NFTCategory,
@@ -9,9 +9,18 @@ import {
   RentalListing,
   RentalStatus
 } from '@dcl/schemas'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { Account } from '../account/types'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { upsertContracts } from '../contract/actions'
+import { getContract, getContracts, getLoading } from '../contract/selectors'
+import { getStubMaticCollectionContract } from '../contract/utils'
+import { getRentalById } from '../rental/selectors'
+import { waitUntilRentalChangesStatus } from '../rental/utils'
+import { View } from '../ui/types'
 import { Vendor, VendorFactory, VendorName } from '../vendor'
+import { retryParams } from '../vendor/decentraland/utils'
 import { getWallet } from '../wallet/selectors'
 import {
   DEFAULT_BASE_NFT_PARAMS,
@@ -28,15 +37,6 @@ import {
 } from './actions'
 import { nftSaga } from './sagas'
 import { NFT, NFTsFetchOptions, NFTsFetchParams } from './types'
-import { View } from '../ui/types'
-import { Account } from '../account/types'
-import { getContract, getContracts, getLoading } from '../contract/selectors'
-import { upsertContracts } from '../contract/actions'
-import { getStubMaticCollectionContract } from '../contract/utils'
-import { waitUntilRentalChangesStatus } from '../rental/utils'
-import { getRentalById } from '../rental/selectors'
-import { retryParams } from '../vendor/decentraland/utils'
-import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
 

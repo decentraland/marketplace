@@ -1,3 +1,12 @@
+import { matchPath } from 'react-router-dom'
+import {
+  push,
+  getLocation,
+  goBack,
+  LOCATION_CHANGE,
+  replace,
+  LocationChangeAction
+} from 'connected-react-router'
 import {
   takeEvery,
   put,
@@ -8,15 +17,6 @@ import {
   race,
   spawn
 } from 'redux-saga/effects'
-import { matchPath } from 'react-router-dom'
-import {
-  push,
-  getLocation,
-  goBack,
-  LOCATION_CHANGE,
-  replace,
-  LocationChangeAction
-} from 'connected-react-router'
 import {
   CatalogFilters,
   CatalogSortBy,
@@ -32,7 +32,15 @@ import {
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { isLegacyOrder } from '../../lib/orders'
+import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
+import {
+  ACCEPT_BID_SUCCESS,
+  CANCEL_BID_SUCCESS,
+  PLACE_BID_SUCCESS
+} from '../bid/actions'
+import { getData } from '../event/selectors'
+import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import {
   BUY_ITEM_SUCCESS,
   BuyItemSuccessAction,
@@ -40,8 +48,20 @@ import {
   fetchItemsRequest,
   fetchTrendingItemsRequest
 } from '../item/actions'
-import { VendorName } from '../vendor/types'
-import { View } from '../ui/types'
+import { openModal } from '../modal/actions'
+import {
+  fetchNFTRequest,
+  fetchNFTsRequest,
+  FetchNFTsSuccessAction,
+  FETCH_NFTS_SUCCESS,
+  TRANSFER_NFT_SUCCESS
+} from '../nft/actions'
+import {
+  CANCEL_ORDER_SUCCESS,
+  CREATE_ORDER_SUCCESS,
+  EXECUTE_ORDER_SUCCESS,
+  ExecuteOrderSuccessAction
+} from '../order/actions'
 import {
   getNetwork,
   getOnlySmart,
@@ -52,39 +72,33 @@ import {
   getMinPrice,
   getStatus,
   getEmotePlayMode,
-  getLatestVisitedLocation
+  getLatestVisitedLocation,
+  getRarities,
+  getWearableGenders,
+  getContracts,
+  getSearch
 } from '../routing/selectors'
 import {
-  fetchNFTRequest,
-  fetchNFTsRequest,
-  FetchNFTsSuccessAction,
-  FETCH_NFTS_SUCCESS,
-  TRANSFER_NFT_SUCCESS
-} from '../nft/actions'
+  FetchSalesFailureAction,
+  fetchSalesRequest,
+  FETCH_SALES_FAILURE,
+  FETCH_SALES_SUCCESS
+} from '../sale/actions'
+import { getSales } from '../sale/selectors'
 import { setView } from '../ui/actions'
-import { getFilters } from '../vendor/utils'
+import { getPage, getView } from '../ui/browse/selectors'
+import { View } from '../ui/types'
+import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import {
   MAX_PAGE,
   PAGE_SIZE,
   getMaxQuerySize,
   MAX_QUERY_SIZE
 } from '../vendor/api'
-import { locations } from './locations'
-import {
-  getCategoryFromSection,
-  getDefaultOptionsByView,
-  getSearchWearableCategory,
-  getSearchEmoteCategory,
-  getItemSortBy,
-  getAssetOrderBy,
-  getCatalogSortBy
-} from './search'
-import {
-  getRarities,
-  getWearableGenders,
-  getContracts,
-  getSearch
-} from './selectors'
+import { Section } from '../vendor/decentraland'
+import { VendorName } from '../vendor/types'
+import { getFilters } from '../vendor/utils'
+import { getWallet } from '../wallet/selectors'
 import {
   BROWSE,
   BrowseAction,
@@ -95,41 +109,25 @@ import {
   GO_BACK,
   GoBackAction
 } from './actions'
+import { locations } from './locations'
+import {
+  getCategoryFromSection,
+  getDefaultOptionsByView,
+  getSearchWearableCategory,
+  getSearchEmoteCategory,
+  getItemSortBy,
+  getAssetOrderBy,
+  getCatalogSortBy
+} from './search'
 import { BrowseOptions, Sections } from './types'
-import { Section } from '../vendor/decentraland'
 import {
   getClearedBrowseOptions,
   isCatalogView,
   rentalFilters,
   SALES_PER_PAGE,
-  sellFilters
+  sellFilters,
+  buildBrowseURL
 } from './utils'
-import {
-  FetchSalesFailureAction,
-  fetchSalesRequest,
-  FETCH_SALES_FAILURE,
-  FETCH_SALES_SUCCESS
-} from '../sale/actions'
-import { getSales } from '../sale/selectors'
-import {
-  CANCEL_ORDER_SUCCESS,
-  CREATE_ORDER_SUCCESS,
-  EXECUTE_ORDER_SUCCESS,
-  ExecuteOrderSuccessAction
-} from '../order/actions'
-import {
-  ACCEPT_BID_SUCCESS,
-  CANCEL_BID_SUCCESS,
-  PLACE_BID_SUCCESS
-} from '../bid/actions'
-import { getData } from '../event/selectors'
-import { getWallet } from '../wallet/selectors'
-import { openModal } from '../modal/actions'
-import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
-import { getPage, getView } from '../ui/browse/selectors'
-import { fetchFavoritedItemsRequest } from '../favorites/actions'
-import { AssetStatusFilter } from '../../utils/filters'
-import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
@@ -466,7 +464,7 @@ function* handleFetchOnSaleNFTsSuccess(action: FetchNFTsSuccessAction) {
   ) {
     if (
       orders.some(
-        order => isLegacyOrder(order) && order.owner === wallet.address
+        (order) => isLegacyOrder(order) && order.owner === wallet.address
       )
     ) {
       yield put(openModal('ExpiredListingsModal'))

@@ -9,11 +9,11 @@ import {
   Pagination,
   Table
 } from 'decentraland-ui'
-import { SALES_PER_PAGE } from '../../../modules/routing/utils'
 import { formatWeiMANA } from '../../../lib/mana'
-import AssetCell from '../../OnSaleOrRentList/AssetCell'
+import { SALES_PER_PAGE } from '../../../modules/routing/utils'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Mana } from '../../Mana'
+import AssetCell from '../../OnSaleOrRentList/AssetCell'
 import { Props } from './Activity.types'
 import './Activity.css'
 

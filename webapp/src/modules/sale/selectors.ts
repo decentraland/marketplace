@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
-import { RootState } from '../reducer'
 import { Sale } from '@dcl/schemas'
+import { RootState } from '../reducer'
 
 export const getState = (state: RootState) => state.sale
 export const getData = (state: RootState) => getState(state).data
@@ -12,6 +12,6 @@ export const getSales = createSelector<
   RootState,
   ReturnType<typeof getData>,
   Sale[]
->(getData, data => {
+>(getData, (data) => {
   return Object.values(data)
 })

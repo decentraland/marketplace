@@ -1,6 +1,6 @@
 import React from 'react'
-import { Loader, Pagination, Table, useMobileMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Loader, Pagination, Table, useMobileMediaQuery } from 'decentraland-ui'
 import { ROWS_PER_PAGE } from '../../AssetPage/OwnersTable/OwnersTable'
 import { Props } from './TableContent.types'
 import './TableContent.css'
@@ -39,7 +39,7 @@ const TableContent = (props: Props) => {
         <Table basic="very" data-testid="table-content">
           <Table.Body className={isLoading ? 'is-loading' : ''}>
             <Table.Row>
-              {headers.map(header => (
+              {headers.map((header) => (
                 <Table.HeaderCell key={header}>
                   <span>{header}</span>
                 </Table.HeaderCell>
@@ -66,8 +66,9 @@ const TableContent = (props: Props) => {
       )}
       {hasPagination && total ? (
         <div className="pagination">
-          {`${t('global.showing')} ${(activePage - 1) * rowsPerPage +
-            1}-${Math.min(activePage * rowsPerPage, total)}  ${t(
+          {`${t('global.showing')} ${
+            (activePage - 1) * rowsPerPage + 1
+          }-${Math.min(activePage * rowsPerPage, total)}  ${t(
             'global.of'
           )} ${total}`}
           <Pagination

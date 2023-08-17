@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-
 import { Info } from '../../Info'
 import { Props } from './ExpirationInfo.types'
 

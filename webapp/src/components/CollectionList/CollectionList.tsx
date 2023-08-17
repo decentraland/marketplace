@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
 import { CollectionFilters, CollectionSortBy } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
-import { locations } from '../../modules/routing/locations'
+import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
 import { usePagination } from '../../lib/pagination'
+import { locations } from '../../modules/routing/locations'
+import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
 import CollectionImage from '../CollectionImage'
 import ListedBadge from '../ListedBadge'
 import { Props } from './CollectionList.types'
@@ -48,8 +48,7 @@ const CollectionList = ({
         first,
         skip: offset,
         creator,
-        sortBy:
-          (sortBy as CollectionSortBy | undefined) ?? CollectionSortBy.NEWEST,
+        sortBy: sortBy ?? CollectionSortBy.NEWEST,
         search: filters.search ?? undefined
       },
       true
@@ -65,7 +64,7 @@ const CollectionList = ({
         <div className={styles.search}>
           <TextFilter
             value={search}
-            onChange={newSearch => {
+            onChange={(newSearch) => {
               if (search !== newSearch) {
                 changeFilter('search', newSearch)
               }
@@ -97,7 +96,7 @@ const CollectionList = ({
           {collections.length === 0 ? (
             <div className={styles.empty}>{t('global.no_results')}</div>
           ) : (
-            collections.map(collection => (
+            collections.map((collection) => (
               <Card
                 key={collection.contractAddress}
                 className={styles.card}

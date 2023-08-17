@@ -1,15 +1,20 @@
-import { RentalListing, RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { BigNumber, ethers } from 'ethers'
+import {
+  RentalListing,
+  RentalListingPeriod,
+  RentalStatus,
+  ChainId
+} from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import {
   ContractData,
   ContractName,
   getContract
 } from 'decentraland-transactions'
-import { ChainId } from '@dcl/schemas'
 import { Asset } from '../asset/types'
-import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { NFT } from '../nft/types'
+import { rentalsAPI } from '../vendor/decentraland/rentals/api'
+import { getRentalsContractInstance } from './contract'
 import {
   getAssetNonce,
   getContractNonce,
@@ -29,7 +34,6 @@ import {
   waitUntilRentalChangesStatus,
   generateECDSASignatureWithValidV
 } from './utils'
-import { getRentalsContractInstance } from './contract'
 
 jest.useFakeTimers()
 jest.mock('decentraland-dapps/dist/lib/eth')
@@ -37,7 +41,7 @@ jest.mock('./contract')
 jest.mock('../vendor/decentraland/rentals/api')
 
 const runTimerAutomaticallyOnce = () => {
-  ;((setTimeout as unknown) as jest.Mock).mockImplementationOnce(callback =>
+  ;(setTimeout as unknown as jest.Mock).mockImplementationOnce((callback) =>
     callback()
   )
 }
@@ -47,14 +51,15 @@ const signerMock = {
   getAddress: jest.fn(),
   _signTypedData: jest.fn()
 }
-const getRentalsContractInstanceMock = getRentalsContractInstance as jest.MockedFunction<
-  typeof getRentalsContractInstance
->
-const rentalsMock = ({
+const getRentalsContractInstanceMock =
+  getRentalsContractInstance as jest.MockedFunction<
+    typeof getRentalsContractInstance
+  >
+const rentalsMock = {
   getContractIndex: jest.fn(),
   getAssetIndex: jest.fn(),
   getSignerIndex: jest.fn()
-} as unknown) as ethers.Contract
+} as unknown as ethers.Contract
 const aDay = 24 * 60 * 60 * 1000
 
 describe('when getting a signature', () => {
@@ -80,7 +85,7 @@ describe('when getting a signature', () => {
   describe('and the signer can be retrieved', () => {
     beforeEach(() => {
       getSignerMock.mockResolvedValueOnce(
-        (signerMock as unknown) as ethers.providers.JsonRpcSigner
+        signerMock as unknown as ethers.providers.JsonRpcSigner
       )
     })
     describe('and can not get the address', () => {
@@ -364,7 +369,7 @@ describe('when checking if a rental is being rented', () => {
       } as RentalListing
     })
 
-    Object.values(RentalStatus).forEach(rentalStatus => {
+    Object.values(RentalStatus).forEach((rentalStatus) => {
       describe(`and its status is "${rentalStatus}"`, () => {
         beforeEach(() => {
           rental.status = rentalStatus
@@ -514,7 +519,7 @@ describe('when checking if a rental listing is open', () => {
       } as RentalListing
     })
 
-    Object.values(RentalStatus).forEach(rentalStatus => {
+    Object.values(RentalStatus).forEach((rentalStatus) => {
       describe(`and its status is "${rentalStatus}"`, () => {
         beforeEach(() => {
           rental.status = rentalStatus
@@ -545,7 +550,7 @@ describe('when checking if a rental listing is cancelled', () => {
       } as RentalListing
     })
 
-    Object.values(RentalStatus).forEach(rentalStatus => {
+    Object.values(RentalStatus).forEach((rentalStatus) => {
       describe(`and its status is "${rentalStatus}"`, () => {
         beforeEach(() => {
           rental.status = rentalStatus

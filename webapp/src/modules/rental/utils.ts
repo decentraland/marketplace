@@ -1,5 +1,6 @@
-import { BigNumber, ethers } from 'ethers'
+import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer'
 import add from 'date-fns/add'
+import { BigNumber, ethers } from 'ethers'
 import {
   ChainId,
   PeriodCreation,
@@ -7,7 +8,6 @@ import {
   RentalListingPeriod,
   RentalStatus
 } from '@dcl/schemas'
-import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import {
   ContractData,
@@ -15,13 +15,13 @@ import {
   getContract
 } from 'decentraland-transactions'
 import { config } from '../../config'
+import { Asset } from '../asset/types'
+import { NFT } from '../nft/types'
 import { VendorName } from '../vendor'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { addressEquals } from '../wallet/utils'
-import { Asset } from '../asset/types'
-import { NFT } from '../nft/types'
-import { PeriodOption } from './types'
 import { getRentalsContractInstance } from './contract'
+import { PeriodOption } from './types'
 
 export const daysByPeriod: Record<PeriodOption, number> = {
   [PeriodOption.ONE_DAY]: 1,
@@ -33,9 +33,9 @@ export const daysByPeriod: Record<PeriodOption, number> = {
   [PeriodOption.ONE_YEAR]: 365
 }
 
-export const periodsByDays = (Object.keys(
-  daysByPeriod
-) as PeriodOption[]).reduce((acc, period) => {
+export const periodsByDays = (
+  Object.keys(daysByPeriod) as PeriodOption[]
+).reduce((acc, period) => {
   acc[daysByPeriod[period]] = period
   return acc
 }, {} as Record<number, PeriodOption>)
@@ -83,9 +83,9 @@ export async function getSignature(
     tokenId,
     expiration: ((expiration / 1000) | 0).toString(),
     indexes: nonces,
-    pricePerDay: periods.map(period => period.pricePerDay),
-    maxDays: periods.map(period => period.maxDays.toString()),
-    minDays: periods.map(period => period.minDays.toString()),
+    pricePerDay: periods.map((period) => period.pricePerDay),
+    maxDays: periods.map((period) => period.maxDays.toString()),
+    minDays: periods.map((period) => period.minDays.toString()),
     target: ethers.constants.AddressZero
   }
 
@@ -159,7 +159,7 @@ export function getRentalChosenPeriod(
   rental: RentalListing
 ): RentalListingPeriod {
   const rentalPeriod = rental.periods.find(
-    period => period.maxDays === rental.rentedDays
+    (period) => period.maxDays === rental.rentedDays
   )
   if (!rentalPeriod) {
     throw Error('Rental period was not found')
@@ -275,7 +275,7 @@ export function isLandLocked(
 }
 
 async function delay(milliseconds: number) {
-  return await new Promise<void>(resolve =>
+  return await new Promise<void>((resolve) =>
     setTimeout(() => resolve(), milliseconds)
   )
 }

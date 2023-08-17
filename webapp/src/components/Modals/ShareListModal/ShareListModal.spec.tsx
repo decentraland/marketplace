@@ -1,17 +1,16 @@
 import { fireEvent, waitFor } from '@testing-library/react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { renderWithProviders } from '../../../utils/test'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { List } from '../../../modules/favorites/types'
-
-import { Props } from './ShareListModal.types'
+import { renderWithProviders } from '../../../utils/test'
 import ShareListModal from './ShareListModal'
+import { Props } from './ShareListModal.types'
 
 jest.mock('decentraland-dapps/dist/modules/analytics/utils')
 
 const getAnalyticsMock = getAnalytics as jest.Mock
 
-let list: List = {
+const list: List = {
   id: 'aListId',
   name: 'aListName',
   description: 'aListDescription',

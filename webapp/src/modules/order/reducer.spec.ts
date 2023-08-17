@@ -1,13 +1,11 @@
 import { Network, Order, RentalListing } from '@dcl/schemas'
-import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import {
   NFTPurchase,
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
-import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
-import { acceptRentalListingSuccess } from '../rental/actions'
-import { NFT, NFTsFetchOptions, NFTsFetchParams } from '../nft/types'
 import {
   fetchNFTRequest,
   fetchNFTsFailure,
@@ -15,8 +13,10 @@ import {
   fetchNFTsSuccess,
   fetchNFTSuccess
 } from '../nft/actions'
-import { VendorName } from '../vendor'
+import { NFT, NFTsFetchOptions, NFTsFetchParams } from '../nft/types'
+import { acceptRentalListingSuccess } from '../rental/actions'
 import { View } from '../ui/types'
+import { VendorName } from '../vendor'
 import {
   cancelOrderFailure,
   cancelOrderRequest,
@@ -101,7 +101,7 @@ const requestActions = [
   fetchNFTsRequest(nftsFetchOptions)
 ]
 
-requestActions.forEach(action => {
+requestActions.forEach((action) => {
   describe(`when reducing the "${action.type}" action`, () => {
     it('should return a state with the loading set', () => {
       const initialState = {
@@ -124,7 +124,7 @@ const successActions = [
   cancelOrderSuccess(order, nft, txHash)
 ]
 
-successActions.forEach(action => {
+successActions.forEach((action) => {
   describe(`when reducing the "${action.type}" action`, () => {
     it('should return a state with the loading set', () => {
       const initialState = {
@@ -197,7 +197,7 @@ const failureActions = [
   }
 ]
 
-failureActions.forEach(action => {
+failureActions.forEach((action) => {
   describe(`when reducing the "${action.failure.type}" action`, () => {
     it('should return a state with the error set and the loading state cleared', () => {
       const initialState = {

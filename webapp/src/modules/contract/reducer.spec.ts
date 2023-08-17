@@ -8,8 +8,7 @@ import {
   resetHasFetched,
   upsertContracts
 } from './actions'
-import { contractReducer } from './reducer'
-import { INITIAL_STATE } from './reducer'
+import { contractReducer, INITIAL_STATE } from './reducer'
 
 describe('when fetch contract request action is received', () => {
   it('should add a loading state action to the loading state array', () => {

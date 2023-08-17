@@ -1,9 +1,9 @@
 import { fireEvent } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { renderWithProviders } from '../../utils/test'
 import { List } from '../../modules/favorites/types'
-import ListsPage from './ListsPage'
+import { renderWithProviders } from '../../utils/test'
 import { LOADER_TEST_ID, ERROR_TEST_ID, CREATE_LIST_TEST_ID } from './constants'
+import ListsPage from './ListsPage'
 import { Props } from './ListsPage.types'
 
 function renderListsPage(props: Partial<Props> = {}) {

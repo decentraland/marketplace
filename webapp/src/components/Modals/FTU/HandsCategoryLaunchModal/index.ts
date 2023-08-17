@@ -1,3 +1,3 @@
-import HandsCategoryLaunchModal from "./HandsCategoryLaunchModal.container";
+import HandsCategoryLaunchModal from './HandsCategoryLaunchModal.container'
 
 export default HandsCategoryLaunchModal

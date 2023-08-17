@@ -1,11 +1,11 @@
 import { URLSearchParams } from 'url'
-import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   RentalListing,
   RentalListingCreation,
   RentalsListingsFilterBy
 } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
+import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
 import { config } from '../../../../config'
 import { objectToURLSearchParams } from './utils'
 
@@ -17,7 +17,7 @@ class RentalsAPI extends BaseAPI {
     listing: RentalListingCreation,
     identity: AuthIdentity
   ): Promise<RentalListing> => {
-    const url = SIGNATURES_SERVER_URL + `/rentals-listings`
+    const url = SIGNATURES_SERVER_URL + '/rentals-listings'
     const response = await signedFetch(url, {
       method: 'POST',
       identity,
@@ -71,10 +71,10 @@ class RentalsAPI extends BaseAPI {
     const UrlSearchParams = URLSearchParams ?? window.URLSearchParams
     const urlSearchParams = new UrlSearchParams()
     ;(Object.keys(params) as Array<keyof typeof params>).forEach(
-      parameterName => {
+      (parameterName) => {
         if (Array.isArray(params[parameterName])) {
           ;(params[parameterName] as ValueOf<typeof params>[]).forEach(
-            parameterValue => {
+            (parameterValue) => {
               urlSearchParams.append(
                 parameterName,
                 (parameterValue ?? '').toString()
@@ -90,7 +90,7 @@ class RentalsAPI extends BaseAPI {
       }
     )
     const url =
-      SIGNATURES_SERVER_URL + `/rentals-listings?` + urlSearchParams.toString()
+      SIGNATURES_SERVER_URL + '/rentals-listings?' + urlSearchParams.toString()
     const response = await signedFetch(url)
 
     if (!response.ok) {
@@ -111,10 +111,15 @@ class RentalsAPI extends BaseAPI {
     }
   }
 
-  getRentalListingsPrices = async (filters: RentalsListingsFilterBy): Promise<Record<string, number>> => {
+  getRentalListingsPrices = async (
+    filters: RentalsListingsFilterBy
+  ): Promise<Record<string, number>> => {
     const queryParams = objectToURLSearchParams(filters)
     try {
-      const response = await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)
+      const response = await this.request(
+        'get',
+        `/rental-listings/prices?${queryParams.toString()}`
+      )
       return response
     } catch (error) {
       throw new Error((error as Error).message)

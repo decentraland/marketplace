@@ -6,14 +6,14 @@ import {
   OrderFilters,
   OrderSortBy
 } from '@dcl/schemas'
+import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
 import {
   ContractData,
   ContractName,
   getContract
 } from 'decentraland-transactions'
-import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
-import * as orderAPI from './order/api'
 import { NFT } from '../../nft/types'
+import * as orderAPI from './order/api'
 import { OrderService } from './OrderService'
 
 jest.mock('decentraland-dapps/dist/modules/wallet/utils')

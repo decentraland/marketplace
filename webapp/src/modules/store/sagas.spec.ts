@@ -1,9 +1,12 @@
-import { Entity } from '@dcl/schemas'
-import { AuthIdentity } from '@dcl/crypto'
-import { createContentClient, ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { createFetchComponent } from '@well-known-components/fetch-component'
-import { expectSaga } from 'redux-saga-test-plan'
+import {
+  createContentClient,
+  ContentClient
+} from 'dcl-catalyst-client/dist/client/ContentClient'
 import { call, select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
+import { AuthIdentity } from '@dcl/crypto'
+import { Entity } from '@dcl/schemas'
 import { getIdentity } from '../identity/utils'
 import { getAddress } from '../wallet/selectors'
 import {
@@ -32,7 +35,10 @@ let mockStore: Store
 
 beforeEach(() => {
   mockAddress = 'address'
-  mockClient = createContentClient({ url: 'some-url', fetcher: createFetchComponent() })
+  mockClient = createContentClient({
+    url: 'some-url',
+    fetcher: createFetchComponent()
+  })
   mockStore = getEmptyStore({ owner: mockAddress })
 })
 

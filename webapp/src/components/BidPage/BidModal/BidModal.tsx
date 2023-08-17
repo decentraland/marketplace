@@ -1,31 +1,33 @@
 import React, { useState, useCallback } from 'react'
 import { ethers } from 'ethers'
 import { Contract } from '@dcl/schemas'
-import { Header, Form, Field, Button } from 'decentraland-ui'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
+import {
+  withAuthorizedAction,
+  ChainButton
+} from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import { ContractName } from 'decentraland-transactions'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import { ChainButton } from 'decentraland-dapps/dist/containers'
+import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ContractName } from 'decentraland-transactions'
+import { Header, Form, Field, Button } from 'decentraland-ui'
+import { parseMANANumber } from '../../../lib/mana'
+import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
+import { getBidStatus, getError } from '../../../modules/bid/selectors'
+import { useFingerprint } from '../../../modules/nft/hooks'
+import { isLand } from '../../../modules/nft/utils'
+import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import {
   getRentalEndDate,
   hasRentalEnded,
   isRentalListingExecuted
 } from '../../../modules/rental/utils'
-import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
-import { parseMANANumber } from '../../../lib/mana'
-import { AssetAction } from '../../AssetAction'
-import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
-import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
-import { isLand } from '../../../modules/nft/utils'
-import { getBidStatus, getError } from '../../../modules/bid/selectors'
-import { ManaField } from '../../ManaField'
+import { AssetAction } from '../../AssetAction'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Mana } from '../../Mana'
+import { ManaField } from '../../ManaField'
 import { Props } from './BidModal.types'
 import './BidModal.css'
 

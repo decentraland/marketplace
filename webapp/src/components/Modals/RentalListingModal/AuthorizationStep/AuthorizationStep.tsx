@@ -1,4 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { TransactionLink } from 'decentraland-dapps/dist/containers'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ContractName, getContract } from 'decentraland-transactions'
 import {
   Modal,
   Button,
@@ -6,13 +13,6 @@ import {
   Loader,
   Message
 } from 'decentraland-ui'
-import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
-import { ContractName, getContract } from 'decentraland-transactions'
-import { TransactionLink } from 'decentraland-dapps/dist/containers'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { config } from '../../../../config'
 import { Props } from './AuthorizationStep.types'
 import styles from './AuthorizationStep.module.css'
@@ -39,7 +39,7 @@ const AuthorizationStep = (props: Props) => {
   const rentalContractData = getContract(ContractName.Rentals, nft.chainId)
   const authorization: Authorization = useMemo(
     () => ({
-      address: address!,
+      address: address,
       authorizedAddress: rentalContractData.address,
       contractAddress: nft.contractAddress,
       contractName: ContractName.ERC721,

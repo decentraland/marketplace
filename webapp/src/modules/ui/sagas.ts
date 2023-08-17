@@ -1,18 +1,18 @@
-import { takeEvery, put, select, take, spawn } from 'redux-saga/effects'
+import { push, getLocation } from 'connected-react-router'
 import { eventChannel } from 'redux-saga'
+import { takeEvery, put, select, take, spawn } from 'redux-saga/effects'
 import { IPreviewController, PreviewEmoteEventType } from '@dcl/schemas'
 import {
   CONNECT_WALLET_SUCCESS,
   ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { push, getLocation } from 'connected-react-router'
 import { locations } from '../routing/locations'
+import { browseSaga } from './browse/sagas'
 import {
   setEmotePlaying,
   SetWearablePreviewControllerAction,
   SET_WEARABLE_PREVIEW_CONTROLLER
 } from './preview/actions'
-import { browseSaga } from './browse/sagas'
 
 export function* uiSaga() {
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
@@ -37,7 +37,7 @@ function* handleConnectWalletSuccess(_action: ConnectWalletSuccessAction) {
 }
 
 function createWearablePreviewChannel(controller: IPreviewController) {
-  return eventChannel(emit => {
+  return eventChannel((emit) => {
     const eventEmit = (type: string) => {
       emit(type)
     }

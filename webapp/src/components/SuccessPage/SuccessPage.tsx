@@ -1,18 +1,18 @@
+import { Link, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import Lottie from 'lottie-react'
-import { Link, useLocation } from 'react-router-dom'
-import { Button, Header, Icon, Loader } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { locations } from '../../modules/routing/locations'
+import { Button, Header, Icon, Loader } from 'decentraland-ui'
 import { config } from '../../config'
-import { Footer } from '../Footer'
 import { AssetType } from '../../modules/asset/types'
+import { locations } from '../../modules/routing/locations'
 import { AssetImage } from '../AssetImage'
 import { AssetProvider } from '../AssetProvider'
+import { Footer } from '../Footer'
 import { Navbar } from '../Navbar'
-import { Props } from './SuccessPage.types'
 import successAnimation from './successAnimation.json'
+import { Props } from './SuccessPage.types'
 import styles from './SuccessPage.module.css'
 
 const EXPLORER_URL = config.get('EXPLORER_URL', '')
@@ -34,7 +34,7 @@ export function SuccessPage(props: Props) {
             contractAddress={contractAddress}
             tokenId={tokenId}
           >
-            {asset => {
+            {(asset) => {
               if (!asset) {
                 return (
                   <Loader data-testid="asset-loader" size="massive" active />
@@ -84,14 +84,16 @@ export function SuccessPage(props: Props) {
                     {t('success_page.success_state.status')}
                   </span>
                   <div className={styles.actionContainer}>
-                    {assetType === AssetType.ITEM && !isLoading && mintedTokenId ? (
+                    {assetType === AssetType.ITEM &&
+                    !isLoading &&
+                    mintedTokenId ? (
                       <AssetProvider
                         retry
                         type={AssetType.NFT}
                         contractAddress={contractAddress}
                         tokenId={mintedTokenId.toString()}
                       >
-                        {asset => (
+                        {(asset) => (
                           <Button
                             as={Link}
                             className={styles.successButton}

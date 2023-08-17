@@ -1,13 +1,12 @@
 import { memo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Icon, Mana } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Icon, Mana } from 'decentraland-ui'
 import { locations } from '../../../../modules/routing/locations'
 import * as events from '../../../../utils/events'
-import styles from './BuyNFTButtons.module.css'
 import { Props } from './BuyNFTButtons.types'
+import styles from './BuyNFTButtons.module.css'
 
 const BuyNFTButtons = ({
   assetType,

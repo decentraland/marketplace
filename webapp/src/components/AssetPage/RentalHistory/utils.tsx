@@ -1,11 +1,11 @@
-import { capitalize } from 'lodash'
 import dateFnsFormat from 'date-fns/format'
+import { capitalize } from 'lodash'
 import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana } from 'decentraland-ui'
-import { getRentalChosenPeriod } from '../../../modules/rental/utils'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { getRentalChosenPeriod } from '../../../modules/rental/utils'
 import { LinkedProfile } from '../../LinkedProfile'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 

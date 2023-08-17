@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 import { Order, RentalListing } from '@dcl/schemas'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../../../modules/nft/types'
 
 export type Props = {
@@ -17,9 +17,7 @@ export type Props = {
 export type OwnProps = Pick<Props, 'nft' | 'rental' | 'order'>
 export type MapStateProps = Pick<
   Props,
-  | 'wallet'
-  | 'userHasAlreadyBidsOnNft'
-  | 'currentMana'
+  'wallet' | 'userHasAlreadyBidsOnNft' | 'currentMana'
 >
 export type MapDispatchProps = Pick<Props, 'onRent'>
 export type MapDispatch = Dispatch<OpenModalAction>

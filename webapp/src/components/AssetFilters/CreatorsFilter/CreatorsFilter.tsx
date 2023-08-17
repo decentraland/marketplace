@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Box, Loader, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, Loader, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import ProfilesCache from '../../../lib/profiles'
 import { Pill } from '../../AssetTopbar/SelectedFilters/Pill/Pill'
 import { InfoTooltip } from '../../InfoTooltip'
-import { Props } from './CreatorsFilter.types'
 import { profileToCreatorAccount } from './utils'
+import { Props } from './CreatorsFilter.types'
 import './CreatorsFilter.css'
 
 export type Creator = {
@@ -27,14 +27,14 @@ export const CreatorsFilter = ({
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedCreators, setSelectedCreators] = useState<Creator[]>(
     creators?.length && fetchedCreators
-      ? fetchedCreators.filter(creator => creators.includes(creator.address))
+      ? fetchedCreators.filter((creator) => creators.includes(creator.address))
       : []
   )
 
   useEffect(() => {
     if (creators?.length) {
       setIsFetchingNames(true)
-      ProfilesCache.fetchProfile(creators).then(profiles => {
+      ProfilesCache.fetchProfile(creators).then((profiles) => {
         setSelectedCreators(profileToCreatorAccount(profiles))
         setIsFetchingNames(false)
       })
@@ -45,14 +45,16 @@ export const CreatorsFilter = ({
 
   const handleCreatorsChange = useCallback(
     (value: string) => {
-      const creator = fetchedCreators.find(creator => creator.address === value)
+      const creator = fetchedCreators.find(
+        (creator) => creator.address === value
+      )
       if (
         creator &&
-        !selectedCreators.find(c => c.address === creator.address)
+        !selectedCreators.find((c) => c.address === creator.address)
       ) {
         const newCreators = [...selectedCreators, creator]
         setSelectedCreators(newCreators)
-        onChange(newCreators.map(creator => creator.address))
+        onChange(newCreators.map((creator) => creator.address))
         setShowSuggestions(false)
         setSearchTerm('')
       }
@@ -90,7 +92,7 @@ export const CreatorsFilter = ({
             {isFetchingNames ? (
               <Loader inline size="mini" />
             ) : selectedCreators.length ? (
-              selectedCreators.map(creator => creator.name).join(', ')
+              selectedCreators.map((creator) => creator.name).join(', ')
             ) : (
               t('nft_filters.creators.all_creators')
             )}
@@ -108,10 +110,10 @@ export const CreatorsFilter = ({
   const handleDeleteCreator = useCallback(
     (creatorAddressToDelete: string) => {
       const updatedArray = selectedCreators.filter(
-        creator => creator.address !== creatorAddressToDelete
+        (creator) => creator.address !== creatorAddressToDelete
       )
       setSelectedCreators(updatedArray)
-      onChange(updatedArray.map(creator => creator.address))
+      onChange(updatedArray.map((creator) => creator.address))
     },
     [onChange, selectedCreators]
   )
@@ -141,7 +143,7 @@ export const CreatorsFilter = ({
   }, [onFetchCreators])
 
   const handleSearchInputChange = useCallback(
-    e => {
+    (e) => {
       const value = e.target.value
       if (!value) {
         clearAndShowSuggestions()
@@ -195,7 +197,7 @@ export const CreatorsFilter = ({
             {searchTerm && !fetchedCreators.length ? (
               <div className="item no-results">{t('filters.no_results')}</div>
             ) : null}
-            {fetchedCreators.map(creator => (
+            {fetchedCreators.map((creator) => (
               <div
                 key={creator.address}
                 className="item"
@@ -208,7 +210,7 @@ export const CreatorsFilter = ({
         ) : null}
       </div>
       <div className="pill-container">
-        {selectedCreators.map(creator => (
+        {selectedCreators.map((creator) => (
           <Pill
             id={creator.address}
             key={creator.address}

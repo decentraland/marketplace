@@ -8,6 +8,7 @@ import {
   fetchFavoritedItemsRequest,
   fetchListsRequest
 } from '../../favorites/actions'
+import { List, ListsBrowseOptions } from '../../favorites/types'
 import { fetchItemsRequest, fetchItemsSuccess } from '../../item/actions'
 import { ItemBrowseOptions } from '../../item/types'
 import { fetchNFTsRequest, fetchNFTsSuccess } from '../../nft/actions'
@@ -15,7 +16,6 @@ import { NFT, NFTsFetchOptions } from '../../nft/types'
 import { browse } from '../../routing/actions'
 import { VendorName } from '../../vendor'
 import { Section } from '../../vendor/decentraland'
-import { List, ListsBrowseOptions } from '../../favorites/types'
 import { ListOfLists } from '../../vendor/decentraland/favorites/types'
 import { setView } from '../actions'
 import { View } from '../types'
@@ -151,7 +151,7 @@ describe.each(fetchRequestActions)(
 
     describe.each(views[assetType])(
       'when it is loading more AND view is %s',
-      view => {
+      (view) => {
         beforeEach(() => {
           fetchOptions = {
             ...fetchOptions,
@@ -426,7 +426,7 @@ describe('when reducing the success action of fetching favorited items', () => {
           )
         ).toEqual({
           ...initialState,
-          itemIds: items.map(item => item.id),
+          itemIds: items.map((item) => item.id),
           page: 1,
           count: total
         })
@@ -454,7 +454,7 @@ describe('when reducing the success action of fetching favorited items', () => {
           )
         ).toEqual({
           ...initialState,
-          itemIds: [...initialState.itemIds, ...items.map(item => item.id)],
+          itemIds: [...initialState.itemIds, ...items.map((item) => item.id)],
           page: browseOptions.page,
           count: total
         })
@@ -481,7 +481,7 @@ describe('when reducing the success action of fetching favorited items', () => {
           )
         ).toEqual({
           ...initialState,
-          itemIds: items.map(item => item.id),
+          itemIds: items.map((item) => item.id),
           page: 1,
           count: total
         })
@@ -510,7 +510,7 @@ describe('when reducing the success action of fetching favorited items', () => {
           )
         ).toEqual({
           ...initialState,
-          itemIds: [...initialState.itemIds, ...items.map(item => item.id)],
+          itemIds: [...initialState.itemIds, ...items.map((item) => item.id)],
           count: total
         })
       })
@@ -562,7 +562,7 @@ describe('when reducing the fetch items success action', () => {
 
     describe.each([View.MARKET, View.CURRENT_ACCOUNT, View.ACCOUNT])(
       'and the view is %s',
-      view => {
+      (view) => {
         beforeEach(() => {
           initialState = { ...initialState, lastTimestamp: 2 }
           itemsBrowserOptions = {

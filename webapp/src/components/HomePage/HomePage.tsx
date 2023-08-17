@@ -1,28 +1,28 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Page } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { locations } from '../../modules/routing/locations'
-import { VendorName } from '../../modules/vendor/types'
-import { BrowseOptions, SortBy } from '../../modules/routing/types'
-import { View } from '../../modules/ui/types'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Page } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
+import { locations } from '../../modules/routing/locations'
+import { BrowseOptions, SortBy } from '../../modules/routing/types'
 import { HomepageView } from '../../modules/ui/asset/homepage/types'
+import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
-import { Navigation } from '../Navigation'
-import { NavigationTab } from '../Navigation/Navigation.types'
-import { Navbar } from '../Navbar'
-import { RecentlySoldTable } from '../RecentlySoldTable'
-import { Footer } from '../Footer'
+import { VendorName } from '../../modules/vendor/types'
 import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
-import { CampaignBanner } from '../Campaign/CampaignBanner'
-import { Slideshow } from './Slideshow'
-import { RankingsTable } from '../RankingsTable'
 import { BackToTopButton } from '../BackToTopButton'
-import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
+import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
+import { CampaignBanner } from '../Campaign/CampaignBanner'
+import { Footer } from '../Footer'
 import HandsCategoryLaunchModal from '../Modals/FTU/HandsCategoryLaunchModal'
 import { SmartWearablesLaunchModal } from '../Modals/FTU/SmartWearablesLaunchModal'
-import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
+import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
+import { Navbar } from '../Navbar'
+import { Navigation } from '../Navigation'
+import { NavigationTab } from '../Navigation/Navigation.types'
+import { RankingsTable } from '../RankingsTable'
+import { RecentlySoldTable } from '../RecentlySoldTable'
+import { Slideshow } from './Slideshow'
 import { Props } from './HomePage.types'
 import './HomePage.css'
 
@@ -87,12 +87,12 @@ const HomePage = (props: Props) => {
   )
 
   const handleViewAll = useCallback(
-    (view: View, fromEmptyState: boolean = false) => {
+    (view: View, fromEmptyState = false) => {
       const section = sections[view]
       const assetType = assetTypes[view]
       const sortBy = sort[view]
 
-      let trackMessage: string = ''
+      let trackMessage = ''
       let browseOptions: BrowseOptions = {}
 
       if (Section.LAND === section) {
@@ -200,7 +200,7 @@ const HomePage = (props: Props) => {
   }
 
   const homepageWithoutLatestSales = Object.keys(homepage).filter(
-    view => view !== View.HOME_SOLD_ITEMS
+    (view) => view !== View.HOME_SOLD_ITEMS
   )
   // trending and newest sections
   const firstViewsSection = homepageWithoutLatestSales.splice(

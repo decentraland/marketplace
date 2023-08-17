@@ -1,15 +1,15 @@
 import { connect } from 'react-redux'
-import { RootState } from '../../../modules/reducer'
 import { getIsMapViewFiltersEnabled } from '../../../modules/features/selectors'
+import { RootState } from '../../../modules/reducer'
+import { browse } from '../../../modules/routing/actions'
 import {
   getOnlyOnRent,
   getOnlyOnSale
 } from '../../../modules/routing/selectors'
-import { browse } from '../../../modules/routing/actions'
 import { getTiles } from '../../../modules/tile/selectors'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './MapBrowse.types'
-import { MapBrowse } from './MapBrowse'
 import { getWalletOwnedLands } from '../../../modules/ui/browse/selectors'
+import { MapBrowse } from './MapBrowse'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './MapBrowse.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -22,7 +22,7 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onBrowse: options => dispatch(browse(options))
+  onBrowse: (options) => dispatch(browse(options))
 })
 
 export default connect(mapState, mapDispatch)(MapBrowse)

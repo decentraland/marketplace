@@ -13,7 +13,7 @@ const eventAddresses = ['0x1', '0x2']
 
 const requestActions = [fetchEventRequest(eventTag)]
 
-requestActions.forEach(action => {
+requestActions.forEach((action) => {
   describe(`when reducing the "${action.type}" action`, () => {
     it('should return a state with the loading set', () => {
       const initialState = {
@@ -36,7 +36,7 @@ const failureActions = [
   }
 ]
 
-failureActions.forEach(action => {
+failureActions.forEach((action) => {
   describe(`when reducing the "${action.failure.type}" action`, () => {
     it('should return a state with the error set and the loading state cleared', () => {
       const initialState = {

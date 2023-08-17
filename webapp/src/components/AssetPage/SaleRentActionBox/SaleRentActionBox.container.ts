@@ -1,15 +1,15 @@
 import { connect } from 'react-redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../../modules/reducer'
-import { getMana, getWallet } from '../../../modules/wallet/selectors'
 import { getNFTBids } from '../../../modules/ui/nft/bid/selectors'
+import { getMana, getWallet } from '../../../modules/wallet/selectors'
+import SaleRentActionBox from './SaleRentActionBox'
 import {
   OwnProps,
   MapStateProps,
   MapDispatchProps,
   MapDispatch
 } from './SaleRentActionBox.types'
-import SaleRentActionBox from './SaleRentActionBox'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const wallet = getWallet(state)
@@ -17,8 +17,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     wallet,
     currentMana: getMana(state, ownProps.nft.network),
     userHasAlreadyBidsOnNft: wallet
-      ? getNFTBids(state).some(bid => bid.bidder === wallet.address)
-      : false,
+      ? getNFTBids(state).some((bid) => bid.bidder === wallet.address)
+      : false
   }
 }
 

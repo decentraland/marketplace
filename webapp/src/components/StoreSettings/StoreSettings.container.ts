@@ -1,17 +1,8 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { RootState } from '../../modules/reducer'
-import { MapStateProps, MapDispatchProps } from './StoreSettings.types'
-import StoreSettings from './StoreSettings'
-import {
-  getStoresByOwner,
-  getLocalStore,
-  getLoading as getStoreLoading,
-  getError
-} from '../../modules/store/selectors'
-import { Store } from '../../modules/store/types'
 import {
   fetchStoreRequest,
   FETCH_STORE_REQUEST,
@@ -20,11 +11,20 @@ import {
   updateStoreRequest,
   UPDATE_STORE_REQUEST
 } from '../../modules/store/actions'
+import {
+  getStoresByOwner,
+  getLocalStore,
+  getLoading as getStoreLoading,
+  getError
+} from '../../modules/store/selectors'
+import { Store } from '../../modules/store/types'
 import { getEmptyStore } from '../../modules/store/utils'
+import StoreSettings from './StoreSettings'
+import { MapStateProps, MapDispatchProps } from './StoreSettings.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const address = getAddress(state)!
-  const savedStore = getStoresByOwner(state)[address!]
+  const savedStore = getStoresByOwner(state)[address]
   const emptyStore = getEmptyStore({ owner: address })
   const localStore = getLocalStore(state)
   const baseStore = savedStore || emptyStore

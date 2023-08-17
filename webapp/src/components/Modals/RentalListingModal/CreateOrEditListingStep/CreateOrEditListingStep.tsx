@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { ethers } from 'ethers'
+import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Modal,
   Button,
@@ -10,17 +12,15 @@ import {
   Popup,
   InputOnChangeData
 } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import {
-  PeriodOption,
-  UpsertRentalOptType
-} from '../../../../modules/rental/types'
 import { parseMANANumber } from '../../../../lib/mana'
 import {
   convertDateToDateInputValue,
   getDefaultExpirationDate
 } from '../../../../modules/order/utils'
+import {
+  PeriodOption,
+  UpsertRentalOptType
+} from '../../../../modules/rental/types'
 import {
   daysByPeriod,
   getMaxPriceOfPeriods,
@@ -33,14 +33,8 @@ import styles from './CreateOrEditListingStep.module.css'
 const RENTAL_MIN_PRICE = 1
 
 const CreateListingStep = (props: Props) => {
-  const {
-    onCancel,
-    nft,
-    onCreate,
-    onRemove,
-    rental,
-    isListForRentAgain
-  } = props
+  const { onCancel, nft, onCreate, onRemove, rental, isListForRentAgain } =
+    props
 
   // Editing properties
   const oldPrice = useMemo(
@@ -51,7 +45,7 @@ const CreateListingStep = (props: Props) => {
   const oldPeriods = useMemo(
     () =>
       rental
-        ? rental.periods.map(period => periodsByDays[period.maxDays])
+        ? rental.periods.map((period) => periodsByDays[period.maxDays])
         : null,
     [rental]
   )
@@ -72,9 +66,10 @@ const CreateListingStep = (props: Props) => {
     oldExpirationDate ?? getDefaultExpirationDate()
   )
 
-  const fixedPriceInput = useMemo(() => toFixedMANAValue(pricePerDayInput), [
-    pricePerDayInput
-  ])
+  const fixedPriceInput = useMemo(
+    () => toFixedMANAValue(pricePerDayInput),
+    [pricePerDayInput]
+  )
 
   // Checks if the new and the old price are the same by converting them
   // and checking their integer and floating point parts.
@@ -116,14 +111,17 @@ const CreateListingStep = (props: Props) => {
         )
       )
     } else {
-      setPeriodOptions(periodOptions.filter(option => option !== periodOption))
+      setPeriodOptions(
+        periodOptions.filter((option) => option !== periodOption)
+      )
     }
   }
 
   // Validations
-  const parsedPriceInput = useMemo(() => parseMANANumber(pricePerDayInput), [
-    pricePerDayInput
-  ])
+  const parsedPriceInput = useMemo(
+    () => parseMANANumber(pricePerDayInput),
+    [pricePerDayInput]
+  )
   const isInvalidPrice = parsedPriceInput < 0 || Number(pricePerDayInput) < 0
   const isLessThanMinPrice = parsedPriceInput < RENTAL_MIN_PRICE
   const isInvalidExpirationDate =
@@ -140,7 +138,7 @@ const CreateListingStep = (props: Props) => {
     !isOldNumberTheSameAsTheNewOne ||
     (oldPeriods &&
       (oldPeriods.length !== periodOptions.length ||
-        !oldPeriods.every(period => periodOptions.includes(period))))
+        !oldPeriods.every((period) => periodOptions.includes(period))))
 
   const handlePriceChange = useCallback(
     (_event: React.ChangeEvent<HTMLInputElement>, props: InputOnChangeData) => {
@@ -207,7 +205,7 @@ const CreateListingStep = (props: Props) => {
           </Header>
 
           <div className={styles.periodOptions}>
-            {Object.values(PeriodOption).map(option => (
+            {Object.values(PeriodOption).map((option) => (
               <Radio
                 key={option}
                 label={t(

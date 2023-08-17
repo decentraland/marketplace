@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
-import { List } from '../../modules/favorites/types'
 import {
   FetchListsRequestAction,
   fetchListsRequest
 } from '../../modules/favorites/actions'
+import { List } from '../../modules/favorites/types'
 
 export type Props = {
   isLoading: boolean

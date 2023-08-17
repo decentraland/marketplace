@@ -20,7 +20,7 @@ const TableContainer = forwardRef<HTMLDivElement, Props>((props, ref) => {
         <div className={'filtertabsContainer'}>
           {tabsList.length > 0 ? (
             <Tabs isFullscreen>
-              {tabsList.map(tab => (
+              {tabsList.map((tab) => (
                 <Tabs.Tab
                   key={tab.value}
                   active={activeTab === tab.value}

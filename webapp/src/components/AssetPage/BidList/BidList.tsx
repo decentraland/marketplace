@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Header } from 'decentraland-ui'
-import { Props } from './BidList.types'
 import { Bid } from '../../Bid'
+import { Props } from './BidList.types'
 import './BidList.css'
 
 const BidList = (props: Props) => {
@@ -13,7 +13,7 @@ const BidList = (props: Props) => {
   const filteredBids = useMemo(
     () =>
       bids.filter(
-        bid =>
+        (bid) =>
           bid.contractAddress === nft.contractAddress &&
           bid.tokenId === nft.tokenId
       ),
@@ -38,7 +38,7 @@ const BidList = (props: Props) => {
     <div className="BidList">
       <Header sub>Bids</Header>
       <div className="list">
-        {filteredBids.map(bid => (
+        {filteredBids.map((bid) => (
           <Bid key={bid.id} bid={bid} isArchivable={false} hasImage={false} />
         ))}
       </div>

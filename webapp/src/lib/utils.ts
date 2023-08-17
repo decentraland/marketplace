@@ -7,7 +7,7 @@ export function omit(
   obj: Record<string, unknown>,
   keys: string[]
 ): Record<string, unknown> {
-  const newKeys = Object.keys(obj).filter(key => !keys.includes(key))
+  const newKeys = Object.keys(obj).filter((key) => !keys.includes(key))
   return pick(obj, newKeys)
 }
 
@@ -15,10 +15,13 @@ export function reset(
   obj: Record<string, unknown>,
   keys: string[]
 ): Record<string, unknown> {
-  return keys.reduce((newObj, key) => ({
-    ...newObj,
-    [key]: undefined
-  }), obj)
+  return keys.reduce(
+    (newObj, key) => ({
+      ...newObj,
+      [key]: undefined
+    }),
+    obj
+  )
 }
 
 /**

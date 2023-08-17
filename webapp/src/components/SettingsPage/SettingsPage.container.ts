@@ -1,36 +1,35 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
+import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
 import {
   getData as getAuthorizations,
   getLoading,
   getError
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
-import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
-
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import {
+  fetchContractsRequest,
+  FETCH_CONTRACTS_REQUEST
+} from '../../modules/contract/actions'
+import {
+  getContract,
+  getHasFetched,
+  getLoading as getContractLoading
+} from '../../modules/contract/selectors'
 import { RootState } from '../../modules/reducer'
 import {
   isUserCanceled,
   isUserDeniedSignatureError,
   isContractAccountError
 } from '../../modules/transaction/utils'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { getWallet, isConnecting } from '../../modules/wallet/selectors'
-import {
-  getContract,
-  getHasFetched,
-  getLoading as getContractLoading
-} from '../../modules/contract/selectors'
 import { Contract } from '../../modules/vendor/services'
-import {
-  fetchContractsRequest,
-  FETCH_CONTRACTS_REQUEST
-} from '../../modules/contract/actions'
+import { getWallet, isConnecting } from '../../modules/wallet/selectors'
+import SettingsPage from './SettingsPage'
 import {
   MapStateProps,
   MapDispatch,
   MapDispatchProps
 } from './SettingsPage.types'
-import SettingsPage from './SettingsPage'
 
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
@@ -58,7 +57,7 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path)),
+  onNavigate: (path) => dispatch(push(path)),
   onFetchContracts: () => dispatch(fetchContractsRequest())
 })
 

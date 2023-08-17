@@ -1,3 +1,8 @@
+import { call, select } from '@redux-saga/core/effects'
+import { ethers } from 'ethers'
+import { delay, take } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
+import { throwError } from 'redux-saga-test-plan/providers'
 import {
   ChainId,
   Network,
@@ -6,20 +11,15 @@ import {
   RentalListing,
   RentalStatus
 } from '@dcl/schemas'
-import { call, select } from '@redux-saga/core/effects'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   ContractData,
   ContractName,
   getContract
 } from 'decentraland-transactions'
-import { ethers } from 'ethers'
-import { expectSaga } from 'redux-saga-test-plan'
-import { throwError } from 'redux-saga-test-plan/providers'
-import { delay, take } from 'redux-saga/effects'
 import { getCurrentIdentity } from '../identity/selectors'
 import { closeModal } from '../modal/actions'
 import { FETCH_NFT_SUCCESS } from '../nft/actions'

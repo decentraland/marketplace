@@ -1,13 +1,13 @@
 import { Dispatch } from 'redux'
-import { RankingEntity } from '../../modules/analytics/types'
 import {
   fetchRankingsRequest,
   FetchRankingsRequestAction
 } from '../../modules/analytics/actions'
+import { RankingEntity } from '../../modules/analytics/types'
 
 export type Props = {
-  data: RankingEntity[] | null        
-  isLoading: boolean    
+  data: RankingEntity[] | null
+  isLoading: boolean
   onFetchRankings: typeof fetchRankingsRequest
 }
 

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { ListingStatus, Network } from '@dcl/schemas'
 import { OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import noListings from '../../../images/noListings.png'
 import { isNFT } from '../../../modules/asset/utils'
 import { orderAPI } from '../../../modules/vendor/decentraland'
-import noListings from '../../../images/noListings.png'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
@@ -31,7 +31,7 @@ const ListingsTable = (props: Props) => {
     if (asset) {
       setIsLoading(true)
 
-      let params: OrderFilters = {
+      const params: OrderFilters = {
         contractAddress: asset.contractAddress,
         first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE,
@@ -46,13 +46,15 @@ const ListingsTable = (props: Props) => {
 
       orderAPI
         .fetchOrders(params, sortBy)
-        .then(response => {
+        .then((response) => {
           if (cancel) return
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
           setOrders(
             formatDataToTable(
               isNFT(asset)
-                ? response.data.filter(order => order.tokenId !== asset.tokenId)
+                ? response.data.filter(
+                    (order) => order.tokenId !== asset.tokenId
+                  )
                 : response.data,
               isMobileOrTablet
             )
@@ -60,7 +62,7 @@ const ListingsTable = (props: Props) => {
           setTotal(response.total)
         })
         .finally(() => !cancel && setIsLoading(false))
-        .catch(error => {
+        .catch((error) => {
           console.error(error)
         })
     }

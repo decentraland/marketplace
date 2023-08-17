@@ -1,9 +1,9 @@
 import { Dispatch } from 'react'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { Bid } from '@dcl/schemas'
-import { VendorName } from '../../../modules/vendor'
-import { NFT } from '../../../modules/nft/types'
 import { CancelBidRequestAction } from '../../../modules/bid/actions'
+import { NFT } from '../../../modules/nft/types'
+import { VendorName } from '../../../modules/vendor'
 
 export type Props = {
   nft: NFT<VendorName.DECENTRALAND> | null

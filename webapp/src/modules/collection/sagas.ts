@@ -38,11 +38,11 @@ export function* handleFetchCollectionsRequest(
     yield put(fetchCollectionsSuccess(collections, total))
 
     if (shouldFetchItems) {
-      const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(
-        getItemsByContractAddress
-      )
+      const itemsByContractAddress: ReturnType<
+        typeof getItemsByContractAddress
+      > = yield select(getItemsByContractAddress)
 
-      for (let collection of collections) {
+      for (const collection of collections) {
         const items = itemsByContractAddress[collection.contractAddress]
 
         if (!items || items.length !== collection.size) {
@@ -87,9 +87,9 @@ export function* handleFetchSingleCollectionRequest(
     const [collection] = collections
 
     if (shouldFetchItems) {
-      const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(
-        getItemsByContractAddress
-      )
+      const itemsByContractAddress: ReturnType<
+        typeof getItemsByContractAddress
+      > = yield select(getItemsByContractAddress)
 
       const items = itemsByContractAddress[collection.contractAddress]
 

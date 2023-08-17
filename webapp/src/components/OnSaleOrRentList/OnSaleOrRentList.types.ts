@@ -6,8 +6,8 @@ import {
   revokeTokenRequest
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { Props as OnSaleListElementProps } from './OnSaleListElement/OnSaleListElement.types'
 import { Props as OnRentListElementProps } from './OnRentListElement/OnRentListElement.types'
+import { Props as OnSaleListElementProps } from './OnSaleListElement/OnSaleListElement.types'
 
 export enum OnSaleOrRentType {
   RENT,

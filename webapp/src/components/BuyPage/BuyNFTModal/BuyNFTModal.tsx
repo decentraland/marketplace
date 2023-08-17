@@ -1,37 +1,37 @@
 import React, { useCallback } from 'react'
-import compact from 'lodash/compact'
-import classNames from 'classnames'
 import { Link } from 'react-router-dom'
+import classNames from 'classnames'
+import compact from 'lodash/compact'
 import { Contract, NFTCategory } from '@dcl/schemas'
-import { Header, Button, Mana, Icon } from 'decentraland-ui'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   ChainButton,
   withAuthorizedAction
 } from 'decentraland-dapps/dist/containers'
-import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { ContractName } from 'decentraland-transactions'
-import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
-import { isWearableOrEmote } from '../../../modules/asset/utils'
-import { locations } from '../../../modules/routing/locations'
-import { useFingerprint } from '../../../modules/nft/hooks'
-import { getContractNames } from '../../../modules/vendor'
-import * as events from '../../../utils/events'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ContractName } from 'decentraland-transactions'
+import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { AssetType } from '../../../modules/asset/types'
+import { isWearableOrEmote } from '../../../modules/asset/utils'
+import { useFingerprint } from '../../../modules/nft/hooks'
+import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
+import { locations } from '../../../modules/routing/locations'
+import { getContractNames } from '../../../modules/vendor'
 import { Contract as DCLContract } from '../../../modules/vendor/services'
+import * as events from '../../../utils/events'
 import { AssetAction } from '../../AssetAction'
+import { AssetProviderPage } from '../../AssetProviderPage'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
-import { AssetProviderPage } from '../../AssetProviderPage'
-import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
-import { PriceTooLow } from '../PriceTooLow'
-import { Name } from '../Name'
-import { Price } from '../Price'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
-import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
+import { Name } from '../Name'
 import { NotEnoughMana } from '../NotEnoughMana'
+import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
+import { Price } from '../Price'
 import { PriceHasChanged } from '../PriceHasChanged'
+import { PriceTooLow } from '../PriceTooLow'
 import { Props } from './BuyNFTModal.types'
 
 const BuyNFTModal = (props: Props) => {
@@ -55,7 +55,7 @@ const BuyNFTModal = (props: Props) => {
   const analytics = getAnalytics()
 
   const handleExecuteOrder = useCallback(
-    (alreadyAuthorized: boolean = true) => {
+    (alreadyAuthorized = true) => {
       if (isBuyWithCardPage) {
         analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
         return onExecuteOrderWithCard(nft)
@@ -95,7 +95,7 @@ const BuyNFTModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    if (!!order) {
+    if (order) {
       onClearOrderErrors()
       onAuthorizedAction({
         targetContractName: ContractName.MANAToken,

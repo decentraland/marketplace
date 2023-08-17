@@ -1,14 +1,10 @@
 import { connect } from 'react-redux'
-
 import { RootState } from '../../../../modules/reducer'
 import { clearFilters } from '../../../../modules/routing/actions'
 import {
   getOnlyOnRent,
   getOnlySmart,
-  hasFiltersEnabled
-} from '../../../../modules/routing/selectors'
-import { getCount, getView } from '../../../../modules/ui/browse/selectors'
-import {
+  hasFiltersEnabled,
   getSection,
   getSortBy,
   getOnlyOnSale,
@@ -22,6 +18,8 @@ import {
   getEmotePlayMode
 } from '../../../../modules/routing/selectors'
 import { isMapSet } from '../../../../modules/routing/utils'
+import { getCount, getView } from '../../../../modules/ui/browse/selectors'
+import NFTFilters from './NFTFilters'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -29,7 +27,6 @@ import {
   Props,
   MapDispatch
 } from './NFTFilters.types'
-import NFTFilters from './NFTFilters'
 
 const mapState = (state: RootState): MapStateProps => ({
   assetType: getAssetType(state),

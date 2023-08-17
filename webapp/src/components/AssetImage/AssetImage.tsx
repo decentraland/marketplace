@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
-import { Env } from '@dcl/ui-env'
 import {
   BodyShape,
   NFTCategory,
@@ -10,8 +9,9 @@ import {
   PreviewType,
   Rarity
 } from '@dcl/schemas'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Badge,
   Button,
@@ -21,19 +21,19 @@ import {
   Popup,
   WearablePreview
 } from 'decentraland-ui'
+import { config } from '../../config'
+import { isLegacyOrder } from '../../lib/orders'
 import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
-import { isLegacyOrder } from '../../lib/orders'
-import { Atlas } from '../Atlas'
-import ListedBadge from '../ListedBadge'
-import { config } from '../../config'
-import { Coordinate } from '../Coordinate'
-import WarningBadge from '../WarningBadge'
 import { JumpIn } from '../AssetPage/JumpIn'
+import { Atlas } from '../Atlas'
+import { Coordinate } from '../Coordinate'
+import ListedBadge from '../ListedBadge'
+import WarningBadge from '../WarningBadge'
+import AvailableForMintPopup from './AvailableForMintPopup'
 import { getEthereumItemUrn } from './utils'
 import { ControlOptionAction, Props } from './AssetImage.types'
-import AvailableForMintPopup from './AvailableForMintPopup'
 import './AssetImage.css'
 
 // 1x1 transparent pixel
@@ -52,7 +52,7 @@ const colorToHex = (color: Color): string => {
   if (isColor(color)) {
     return valueToHex(color.r) + valueToHex(color.g) + valueToHex(color.b)
   }
-  const maybeWrapped = (color as unknown) as Partial<WrappedColor>
+  const maybeWrapped = color as unknown as Partial<WrappedColor>
   if (isWrapped(maybeWrapped)) {
     return colorToHex(maybeWrapped.color!)
   }
@@ -91,9 +91,8 @@ const AssetImage = (props: Props) => {
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
-  const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(
-    isDraggable
-  )
+  const [isLoadingWearablePreview, setIsLoadingWearablePreview] =
+    useState(isDraggable)
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
@@ -104,7 +103,7 @@ const AssetImage = (props: Props) => {
       )
     }
   }, [asset.category, wearableController, onSetWearablePreviewController])
-  const handleError = useCallback(error => {
+  const handleError = useCallback((error) => {
     console.warn(error)
     setWearablePreviewError(true)
     setIsLoadingWearablePreview(false)
@@ -159,9 +158,10 @@ const AssetImage = (props: Props) => {
     [wearableController, onPlaySmartWearableVideoShowcase, asset]
   )
 
-  const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
-    estate
-  ])
+  const estateSelection = useMemo(
+    () => (estate ? getSelection(estate) : []),
+    [estate]
+  )
 
   const [isTracked, setIsTracked] = useState(false)
 
@@ -262,7 +262,7 @@ const AssetImage = (props: Props) => {
 
         const hasRepresentation = avatar
           ? wearable &&
-            wearable.bodyShapes.some(shape =>
+            wearable.bodyShapes.some((shape) =>
               avatar.avatar.bodyShape.includes(shape)
             )
           : true
@@ -556,7 +556,7 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.ENS: {
       let name = ens!.subdomain
-      let classes = ['ens-subdomain']
+      const classes = ['ens-subdomain']
       if (isSmall) {
         name = name.slice(0, 2)
         classes.push('small')

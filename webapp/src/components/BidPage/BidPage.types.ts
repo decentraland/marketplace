@@ -1,5 +1,5 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
+import { Dispatch } from 'redux'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
   clearBidError,
@@ -7,8 +7,8 @@ import {
   placeBidRequest,
   PlaceBidRequestAction
 } from '../../modules/bid/actions'
-import { Contract } from '../../modules/vendor/services'
 import { getContract } from '../../modules/contract/selectors'
+import { Contract } from '../../modules/vendor/services'
 
 export type Props = {
   authorizations: Authorization[]
@@ -19,11 +19,11 @@ export type Props = {
   onClearBidError: typeof clearBidError
 }
 
-export type MapStateProps = Pick<
+export type MapStateProps = Pick<Props, 'isPlacingBid' | 'getContract'>
+export type MapDispatchProps = Pick<
   Props,
-  'isPlacingBid' | 'getContract'
+  'onNavigate' | 'onPlaceBid' | 'onClearBidError'
 >
-export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onPlaceBid' | 'onClearBidError'>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | PlaceBidRequestAction | ClearBidErrorAction
 >

@@ -6,12 +6,12 @@ import {
   Rarity,
   WearableGender
 } from '@dcl/schemas'
-import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../../modules/asset/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor'
 import { Section } from '../../modules/vendor/routing/types'
+import { AssetStatusFilter } from '../../utils/filters'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { AssetFilter } from './utils'
 

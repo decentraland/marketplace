@@ -1,17 +1,17 @@
-import { ethers } from 'ethers'
 import React, { useEffect, useState } from 'react'
+import { ethers } from 'ethers'
 import { Bid, BidSortBy } from '@dcl/schemas'
-import { Mana, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { bidAPI } from '../../../modules/vendor/decentraland'
+import { Mana, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
-import { TableContent } from '../../Table/TableContent'
-import { DataTableType } from '../../Table/TableContent/TableContent.types'
-import TableContainer from '../../Table/TableContainer'
 import { AssetType } from '../../../modules/asset/types'
 import { getAssetName } from '../../../modules/asset/utils'
+import { bidAPI } from '../../../modules/vendor/decentraland'
 import { AssetProvider } from '../../AssetProvider'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
+import TableContainer from '../../Table/TableContainer'
+import { TableContent } from '../../Table/TableContent'
+import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
 import { Props } from './BidsTable.types'
 
@@ -72,13 +72,13 @@ const BidsTable = (props: Props) => {
           ROWS_PER_PAGE.toString(),
           ((page - 1) * ROWS_PER_PAGE).toString()
         )
-        .then(response => {
+        .then((response) => {
           if (cancel) return
           setTotal(response.total)
           setBids(
             formatDataToTable(
-              response.data.filter(bid => bid.bidder !== address),
-              bid => setShowConfirmationModal({ display: true, bid }),
+              response.data.filter((bid) => bid.bidder !== address),
+              (bid) => setShowConfirmationModal({ display: true, bid }),
               address,
               isMobileOrTablet
             )
@@ -86,7 +86,7 @@ const BidsTable = (props: Props) => {
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => !cancel && setIsLoading(false))
-        .catch(error => {
+        .catch((error) => {
           console.error(error)
         })
       return () => {
@@ -121,7 +121,7 @@ const BidsTable = (props: Props) => {
           contractAddress={showConfirmationModal.bid.contractAddress}
           tokenId={showConfirmationModal.bid.tokenId}
         >
-          {nft =>
+          {(nft) =>
             nft &&
             showConfirmationModal.bid && (
               <ConfirmInputValueModal

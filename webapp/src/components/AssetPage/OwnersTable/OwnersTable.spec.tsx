@@ -1,5 +1,5 @@
-import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { waitFor } from '@testing-library/react'
+import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { OwnersResponse } from '../../../modules/vendor/decentraland'
 import * as nftAPI from '../../../modules/vendor/decentraland/nft/api'
@@ -18,7 +18,7 @@ jest.mock('decentraland-dapps/dist/containers', () => {
 })
 
 describe('Owners Table', () => {
-  let asset: Item = {
+  const asset: Item = {
     contractAddress: '0xaddress',
     itemId: '1',
     id: '1',
@@ -47,7 +47,7 @@ describe('Owners Table', () => {
     chainId: ChainId.ETHEREUM_GOERLI,
     firstListedAt: null
   }
-  let ownersResponse: OwnersResponse = {
+  const ownersResponse: OwnersResponse = {
     issuedId: 1,
     ownerId: ownerIdMock,
     orderStatus: 'open',

@@ -1,16 +1,16 @@
-import { Dispatch } from 'redux'
-import { CallHistoryMethodAction } from 'connected-react-router'
 import { RouteComponentProps } from 'react-router-dom'
+import { CallHistoryMethodAction } from 'connected-react-router'
+import { Dispatch } from 'redux'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { GoBackAction } from '../../modules/routing/actions'
-import { List } from '../../modules/favorites/types'
 import {
   DeleteListStartAction,
   GetListRequestAction,
   deleteListStart,
   getListRequest
 } from '../../modules/favorites/actions'
+import { List } from '../../modules/favorites/types'
 import { OpenModalAction, openModal } from '../../modules/modal/actions'
+import { GoBackAction } from '../../modules/routing/actions'
 
 type Params = { listId?: string }
 

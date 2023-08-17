@@ -17,7 +17,7 @@ const ManaToFiat = (props: Props) => {
       const value = parseFloat(utils.formatEther(mana))
       new TokenConverter()
         .marketMANAToUSD(value)
-        .then(usd => {
+        .then((usd) => {
           const divider =
             usd > ONE_TRILLION.value
               ? ONE_TRILLION

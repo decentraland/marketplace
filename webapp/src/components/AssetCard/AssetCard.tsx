@@ -1,17 +1,17 @@
 import React, { useCallback, useMemo } from 'react'
-import { Item, Network, RentalListing } from '@dcl/schemas'
 import { useInView } from 'react-intersection-observer'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import { Link } from 'react-router-dom'
+import { Item, Network, RentalListing } from '@dcl/schemas'
+import { Profile } from 'decentraland-dapps/dist/containers'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
+import { Asset } from '../../modules/asset/types'
 import {
   getAssetName,
   getAssetUrl,
   isNFT,
   isCatalogItem
 } from '../../modules/asset/utils'
-import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
 import {
@@ -22,15 +22,15 @@ import {
   isRentalListingOpen
 } from '../../modules/rental/utils'
 import { SortBy } from '../../modules/routing/types'
-import { Mana } from '../Mana'
 import { AssetImage } from '../AssetImage'
 import { FavoritesCounter } from '../FavoritesCounter'
-import { ParcelTags } from './ParcelTags'
-import { EstateTags } from './EstateTags'
-import { WearableTags } from './WearableTags'
+import { Mana } from '../Mana'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
+import { EstateTags } from './EstateTags'
+import { ParcelTags } from './ParcelTags'
 import { formatWeiToAssetCard, getCatalogCardInformation } from './utils'
+import { WearableTags } from './WearableTags'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
 
@@ -186,7 +186,7 @@ const AssetCard = (props: Props) => {
               className={`AssetImage ${
                 isCatalogItem(asset) ? 'catalog' : 'remove-margin'
               } ${
-                !!catalogItemInformation?.extraInformation ? 'expandable' : ''
+                catalogItemInformation?.extraInformation ? 'expandable' : ''
               }`}
               asset={asset}
               showOrderListedTag={showListedTag}
@@ -210,7 +210,7 @@ const AssetCard = (props: Props) => {
             <Card.Content
               data-testid="asset-card-content"
               className={`${isCatalogItem(asset) ? 'catalog' : ''} ${
-                !!catalogItemInformation?.extraInformation ? 'expandable' : ''
+                catalogItemInformation?.extraInformation ? 'expandable' : ''
               }`}
             >
               <Card.Header>

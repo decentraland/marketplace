@@ -1,24 +1,24 @@
 import React, { useMemo, useState } from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { EmotePlayMode, NFTCategory, OrderSortBy } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../../modules/asset/types'
-import { Section } from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
+import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
-import TableContainer from '../../Table/TableContainer'
 import RarityBadge from '../../RarityBadge'
+import TableContainer from '../../Table/TableContainer'
 import { BidsTable } from '../BidsTable'
-import { YourOffer } from '../YourOffer'
+import { BuyNFTBox } from '../BuyNFTBox'
 import Collection from '../Collection'
 import { Description } from '../Description'
 import IconBadge from '../IconBadge'
-import { Owner } from '../Owner'
 import { ListingsTable } from '../ListingsTable'
-import { TransactionHistory } from '../TransactionHistory'
 import OnBack from '../OnBack'
+import { Owner } from '../Owner'
 import Title from '../Title'
-import { BuyNFTBox } from '../BuyNFTBox'
+import { TransactionHistory } from '../TransactionHistory'
+import { YourOffer } from '../YourOffer'
 import { Props } from './EmoteDetail.types'
 import styles from './EmoteDetail.module.css'
 
@@ -109,7 +109,7 @@ const EmoteDetail = ({ nft }: Props) => {
         handleSortByChange={(value: string) => setSortBy(value as OrderSortBy)}
         sortbyList={listingSortByOptions}
         sortBy={sortBy}
-        children={<ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />}
+        children={<ListingsTable asset={nft} sortBy={sortBy} />}
       />
     </div>
   )

@@ -45,7 +45,7 @@ class BidAPI extends BaseAPI {
     status?: ListingStatus | null,
     sortBy?: BidSortBy,
     first: string = FIRST,
-    skip: string = '0',
+    skip = '0',
     bidder?: string
   ) {
     return this.fetch(

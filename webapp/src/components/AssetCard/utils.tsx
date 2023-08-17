@@ -1,7 +1,7 @@
 import { BigNumber, ethers } from 'ethers'
+import { Item } from '@dcl/schemas'
 import { MAXIMUM_FRACTION_DIGITS } from 'decentraland-dapps/dist/lib/mana'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Item } from '@dcl/schemas'
 import mintingIcon from '../../images/minting.png'
 import { getMinimumValueForFractionDigits } from '../../lib/mana'
 import { BrowseOptions, SortBy } from '../../modules/routing/types'

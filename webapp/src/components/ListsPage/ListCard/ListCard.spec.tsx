@@ -1,9 +1,8 @@
-import { BodyShape, Item, Rarity, WearableCategory } from '@dcl/schemas'
 import { fireEvent } from '@testing-library/react'
-import { renderWithProviders } from '../../../utils/test'
+import { BodyShape, Item, Rarity, WearableCategory } from '@dcl/schemas'
 import { List } from '../../../modules/favorites/types'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../../modules/vendor/decentraland/favorites/api'
-import { default as ListCard } from './ListCard'
+import { renderWithProviders } from '../../../utils/test'
 import {
   ACTIONS_DATA_TEST_ID,
   DELETE_LIST_DATA_TEST_ID,
@@ -14,6 +13,7 @@ import {
   LIST_NAME_DATA_TEST_ID,
   PRIVATE_DATA_TEST_ID
 } from './constants'
+import { default as ListCard } from './ListCard'
 import { Props } from './ListCard.types'
 
 function renderListCard(props: Partial<Props> = {}) {
@@ -66,7 +66,7 @@ describe('when rendering the ListCard with a list with no items', () => {
 
 describe.each([1, 2, 3, 4])(
   'when rendering the ListCard with %i items',
-  count => {
+  (count) => {
     beforeEach(() => {
       renderedModal = renderListCard({
         items: Array.from({ length: count }, (_v, i) => ({

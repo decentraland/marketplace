@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Modal,
@@ -6,12 +7,11 @@ import {
   ModalNavigation,
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
-import { Link } from 'react-router-dom'
-import * as decentraland from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
 import { SortBy } from '../../../modules/routing/types'
 import { VendorName } from '../../../modules/vendor'
+import * as decentraland from '../../../modules/vendor/decentraland'
 import { Props } from './ListsLaunchModal.types'
 import styles from './ListsLaunchModal.module.css'
 

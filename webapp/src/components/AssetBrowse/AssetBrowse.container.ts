@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
+import { getIsMapViewFiltersEnabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
-import { setView } from '../../modules/ui/actions'
 import { browse, fetchAssetsFromRoute } from '../../modules/routing/actions'
 import {
   getIsMap,
@@ -12,8 +12,10 @@ import {
   getIsFullscreen,
   getVisitedLocations
 } from '../../modules/routing/selectors'
-import { getView } from '../../modules/ui/browse/selectors'
 import { isMapSet } from '../../modules/routing/utils'
+import { setView } from '../../modules/ui/actions'
+import { getView } from '../../modules/ui/browse/selectors'
+import AssetBrowse from './AssetBrowse'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -21,8 +23,6 @@ import {
   OwnProps,
   Props
 } from './AssetBrowse.types'
-import AssetBrowse from './AssetBrowse'
-import { getIsMapViewFiltersEnabled } from '../../modules/features/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   const isMap = isMapSet(getIsMap(state), getSection(state), getView(state))
@@ -42,9 +42,9 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onSetView: view => dispatch(setView(view)),
-  onFetchAssetsFromRoute: options => dispatch(fetchAssetsFromRoute(options)),
-  onBrowse: options => dispatch(browse(options))
+  onSetView: (view) => dispatch(setView(view)),
+  onFetchAssetsFromRoute: (options) => dispatch(fetchAssetsFromRoute(options)),
+  onBrowse: (options) => dispatch(browse(options))
 })
 
 const mergeProps = (

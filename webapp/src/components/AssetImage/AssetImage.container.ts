@@ -1,32 +1,32 @@
-import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
-import { Avatar } from '@dcl/schemas'
 import { connect } from 'react-redux'
-import { RootState } from '../../modules/reducer'
-import { getWallet } from '../../modules/wallet/selectors'
+import { Avatar } from '@dcl/schemas'
+import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
+import { Asset } from '../../modules/asset/types'
+import { isNFT } from '../../modules/asset/utils'
+import { fetchItemRequest } from '../../modules/item/actions'
+import { getData as getItems } from '../../modules/item/selectors'
 import { getItem } from '../../modules/item/utils'
+import { openModal } from '../../modules/modal/actions'
+import { NFT } from '../../modules/nft/types'
+import { getData as getOrders } from '../../modules/order/selectors'
+import { RootState } from '../../modules/reducer'
+import {
+  setIsTryingOn,
+  setWearablePreviewController
+} from '../../modules/ui/preview/actions'
 import {
   getIsTryingOn,
   getIsPlayingEmote,
   getWearablePreviewController
 } from '../../modules/ui/preview/selectors'
-import {
-  setIsTryingOn,
-  setWearablePreviewController
-} from '../../modules/ui/preview/actions'
-import { getData as getItems } from '../../modules/item/selectors'
-import { getData as getOrders } from '../../modules/order/selectors'
-import { isNFT } from '../../modules/asset/utils'
-import { NFT } from '../../modules/nft/types'
-import { fetchItemRequest } from '../../modules/item/actions'
-import { openModal } from '../../modules/modal/actions'
-import { Asset } from '../../modules/asset/types'
+import { getWallet } from '../../modules/wallet/selectors'
+import AssetImage from './AssetImage'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch,
   OwnProps
 } from './AssetImage.types'
-import AssetImage from './AssetImage'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const profiles = getProfiles(state)
@@ -41,7 +41,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const orders = getOrders(state)
   const order = isNFT(ownProps.asset)
     ? Object.values(orders).find(
-        order =>
+        (order) =>
           order.contractAddress === ownProps.asset.contractAddress &&
           order.tokenId === (ownProps.asset as NFT).tokenId
       )
@@ -64,8 +64,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onSetIsTryingOn: value => dispatch(setIsTryingOn(value)),
-  onSetWearablePreviewController: controller =>
+  onSetIsTryingOn: (value) => dispatch(setIsTryingOn(value)),
+  onSetWearablePreviewController: (controller) =>
     dispatch(setWearablePreviewController(controller)),
   onPlaySmartWearableVideoShowcase: (asset: Asset) =>
     dispatch(openModal('SmartWearableVideoShowcaseModal', { asset })),

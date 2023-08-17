@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import CountUp from 'react-countup'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   HeaderMenu,
   Header,
@@ -12,14 +13,13 @@ import {
   NotMobile,
   Mobile
 } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   AnalyticsTimeframe,
   AnalyticsVolumeData
 } from '../../modules/analytics/types'
 import { TimeframeSelector } from '../Rankings/TimeframeSelector'
-import { Props } from './AnalyticsVolumeDayData.types'
 import { formatAnalyticsVolume, formatDailySales } from './utils'
+import { Props } from './AnalyticsVolumeDayData.types'
 import './AnalyticsVolumeDayData.css'
 
 const StatSections = [
@@ -74,21 +74,21 @@ const AnalyticsVolumeDayData = (props: Props) => {
           <HeaderMenu.Right>
             <TimeframeSelector
               value={currentTimeframe}
-              onChange={timeframe => setCurrentTimeframe(timeframe)}
+              onChange={(timeframe) => setCurrentTimeframe(timeframe)}
             />
           </HeaderMenu.Right>
         </NotMobile>
         <Mobile>
           <TimeframeSelector
             value={currentTimeframe}
-            onChange={timeframe => setCurrentTimeframe(timeframe)}
+            onChange={(timeframe) => setCurrentTimeframe(timeframe)}
           />
         </Mobile>
       </HeaderMenu>
       <div className="stats-card">
         {!isLoading && data ? (
           <>
-            {StatSections.map(statSection => (
+            {StatSections.map((statSection) => (
               <div className="stats-container" key={statSection.key}>
                 <Icon
                   className="stat-icon"
@@ -125,7 +125,7 @@ const AnalyticsVolumeDayData = (props: Props) => {
                     <span className="stats-usd">
                       <CountUp
                         end={statSection.getUSDData(data)}
-                        formattingFn={number =>
+                        formattingFn={(number) =>
                           statSection.formatUSDVolume(number, currentTimeframe)
                         }
                       />

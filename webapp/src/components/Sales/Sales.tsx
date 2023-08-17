@@ -1,8 +1,8 @@
 import React from 'react'
-import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import Stats from './Stats'
+import { Header } from 'decentraland-ui'
 import Activity from './Activity'
+import Stats from './Stats'
 import './Sales.css'
 
 const Sales = () => {

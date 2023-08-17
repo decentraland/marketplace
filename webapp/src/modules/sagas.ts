@@ -1,44 +1,43 @@
+import { createFetchComponent } from '@well-known-components/fetch-component'
+import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
+import { createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
 import { all } from 'redux-saga/effects'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
-import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
-import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
-import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
+import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
+import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
 import { locationSaga } from 'decentraland-dapps/dist/modules/location/sagas'
-import { createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
-import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
+import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
+import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
 import { NetworkGatewayType } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
-import { createFetchComponent } from '@well-known-components/fetch-component'
-
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { config } from '../config'
 import { peerUrl } from '../lib/environment'
+import { accountSaga } from './account/sagas'
 import { analyticsSagas as marketplaceAnalyticsSagas } from './analytics/sagas'
+import { assetSaga } from './asset/sagas'
 import { bidSaga } from './bid/sagas'
+import { collectionSaga } from './collection/sagas'
+import { contractSaga } from './contract/sagas'
+import { eventSaga } from './event/sagas'
+import { favoritesSaga } from './favorites/sagas'
+import { identitySaga } from './identity/sagas'
+import { itemSaga } from './item/sagas'
+import { modalSaga } from './modal/sagas'
 import { nftSaga } from './nft/sagas'
 import { orderSaga } from './order/sagas'
 import { proximitySaga } from './proximity/sagas'
+import { rentalSaga } from './rental/sagas'
 import { routingSaga } from './routing/sagas'
+import { saleSaga } from './sale/sagas'
+import { storeSaga } from './store/sagas'
 import { tileSaga } from './tile/sagas'
 import { toastSaga } from './toast/sagas'
+import { transakSaga } from './transak/sagas'
 import { translationSaga } from './translation/sagas'
 import { uiSaga } from './ui/sagas'
 import { walletSaga } from './wallet/sagas'
-import { itemSaga } from './item/sagas'
-import { collectionSaga } from './collection/sagas'
-import { saleSaga } from './sale/sagas'
-import { accountSaga } from './account/sagas'
-import { storeSaga } from './store/sagas'
-import { identitySaga } from './identity/sagas'
-import { rentalSaga } from './rental/sagas'
-import { modalSaga } from './modal/sagas'
-import { eventSaga } from './event/sagas'
-import { contractSaga } from './contract/sagas'
-import { transakSaga } from './transak/sagas'
-import { assetSaga } from './asset/sagas'
-import { favoritesSaga } from './favorites/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
@@ -46,7 +45,10 @@ const lambdasClient = createLambdasClient({
   url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()
 })
-const contentClient = createContentClient({ url: `${peerUrl}/content`, fetcher: createFetchComponent() })
+const contentClient = createContentClient({
+  url: `${peerUrl}/content`,
+  fetcher: createFetchComponent()
+})
 
 const gatewaySaga = createGatewaySaga({
   [NetworkGatewayType.MOON_PAY]: {

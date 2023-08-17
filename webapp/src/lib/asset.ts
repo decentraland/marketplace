@@ -1,5 +1,5 @@
-import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { createFetchComponent } from '@well-known-components/fetch-component'
+import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { Asset } from '../modules/asset/types'
 import { builderAPI } from '../modules/vendor/decentraland/builder/api'
 import { peerUrl } from './environment'
@@ -20,7 +20,7 @@ export const getSmartWearableSceneContent = async (
   const wearableEntity = await contentClient.fetchEntitiesByPointers([urn])
 
   if (wearableEntity.length > 0) {
-    const scene = wearableEntity[0].content?.find(entity =>
+    const scene = wearableEntity[0].content?.find((entity) =>
       entity.file.endsWith(SCENE_PATH)
     )
 
@@ -53,7 +53,7 @@ export const getSmartWearableVideoShowcase = async (
 
     const contents = await builderAPI.fetchItemContent(contractAddress, itemId)
 
-    const videoContentKey = Object.keys(contents).find(key =>
+    const videoContentKey = Object.keys(contents).find((key) =>
       key.endsWith(VIDEO_PATH)
     )
 

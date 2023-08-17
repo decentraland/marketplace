@@ -11,7 +11,7 @@ export function getItem(
 
   return (
     Object.values(items).find(
-      item =>
+      (item) =>
         item.itemId === tokenId && item.contractAddress === contractAddress
     ) || null
   )

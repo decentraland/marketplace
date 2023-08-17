@@ -1,16 +1,16 @@
 import { put, select, takeEvery } from 'redux-saga/effects'
 import { Network } from '@dcl/schemas'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
 import {
   ProductsAvailed,
   TradeType
 } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
-import { isMobile } from 'decentraland-dapps/dist/lib/utils'
-import { closeAllModals } from '../modal/actions'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { config } from '../../config'
 import { isNFT } from '../asset/utils'
+import { closeAllModals } from '../modal/actions'
 import { OPEN_TRANSAK, OpenTransakAction } from './actions'
 
 export function* transakSaga() {

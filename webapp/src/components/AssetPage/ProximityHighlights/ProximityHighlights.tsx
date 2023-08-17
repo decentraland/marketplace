@@ -1,20 +1,17 @@
 import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { NFT } from '../../../modules/nft/types'
+import { useProximity } from '../../../modules/proximity/hooks'
 import { getDistanceText } from '../../../modules/proximity/utils'
+import { VendorName } from '../../../modules/vendor'
+import { Highlight } from '../Highlight'
 import { Highlights } from '../Highlights'
 import { Props } from './ProximityHighlights.types'
-import { Highlight } from '../Highlight'
-import { useProximity } from '../../../modules/proximity/hooks'
-import { VendorName } from '../../../modules/vendor'
-import { NFT } from '../../../modules/nft/types'
 import './ProximityHighlights.css'
 
 const ProximityHighlights = (props: Props) => {
   const { nft, proximities } = props
-  const proximity = useProximity(
-    nft as NFT<VendorName.DECENTRALAND>,
-    proximities
-  )
+  const proximity = useProximity(nft, proximities)
 
   return proximity ? (
     <div className="ProximityHighlights">

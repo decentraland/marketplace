@@ -1,3 +1,4 @@
+import React, { RefObject } from 'react'
 import {
   Bid,
   ChainId,
@@ -8,14 +9,12 @@ import {
   Order,
   Rarity
 } from '@dcl/schemas'
-import React, { RefObject } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { formatWeiMANA } from '../../../lib/mana'
 import * as bidAPI from '../../../modules/vendor/decentraland/bid/api'
 import * as orderAPI from '../../../modules/vendor/decentraland/order/api'
 import { renderWithProviders } from '../../../utils/tests'
 import BestBuyingOption from './BestBuyingOption'
-import { formatWeiMANA } from '../../../lib/mana'
 
 jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('../../../modules/vendor/decentraland/order/api')
@@ -31,7 +30,7 @@ jest.mock('decentraland-dapps/dist/containers', () => {
 const dateNowFn = Date.now
 
 describe('Best Buying Option', () => {
-  let asset: Item = {
+  const asset: Item = {
     contractAddress: '0xaddress',
     itemId: '1',
     id: '1',
@@ -61,7 +60,7 @@ describe('Best Buying Option', () => {
     firstListedAt: null
   }
 
-  let orderResponse: Order = {
+  const orderResponse: Order = {
     id: '1',
     marketplaceAddress: '0xmarketplace',
     contractAddress: '0xaddress',
@@ -78,7 +77,7 @@ describe('Best Buying Option', () => {
     issuedId: '1'
   }
 
-  let bid: Bid = {
+  const bid: Bid = {
     id: '1',
     bidAddress: '0xbid',
     bidder: 'bidder',

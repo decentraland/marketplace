@@ -1,8 +1,7 @@
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
-import styles from './CTA.module.css'
 import { Props } from './CTA.types'
+import styles from './CTA.module.css'
 
 const CTA = ({ to, name, isDisabledOnMobile }: Props) => {
   const renderContent = () => (
@@ -16,7 +15,7 @@ const CTA = ({ to, name, isDisabledOnMobile }: Props) => {
         {isDisabledOnMobile && (
           <span className={styles.ctaSubtitleMobile}>
             <i className={styles.infoIcon} />
-            {t(`rental_modal.rent_confirmed_step.onlyAvailableOnDesktop`)}
+            {t('rental_modal.rent_confirmed_step.onlyAvailableOnDesktop')}
           </span>
         )}
       </div>

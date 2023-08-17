@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Coordinate } from 'recharts/types/util/types'
+import { NFTCategory } from '@dcl/schemas'
 import { useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Atlas } from '../../Atlas'
-import { Props } from './MapBrowse.types'
-import { Coordinate } from 'recharts/types/util/types'
 import { getNearestTile, Coord } from './utils'
-import { NFTCategory } from '@dcl/schemas'
+import { Props } from './MapBrowse.types'
 
 export function MapBrowse({
   isMapViewFiltersEnabled,
@@ -27,14 +27,14 @@ export function MapBrowse({
   const tilesForRent = useMemo(
     () =>
       Object.values(tiles)
-        .filter(tile => 'rentalPricePerDay' in tile)
+        .filter((tile) => 'rentalPricePerDay' in tile)
         .map(({ x, y }) => ({ x, y })),
     [tiles]
   )
   const tilesForSale = useMemo(
     () =>
       Object.values(tiles)
-        .filter(tile => 'price' in tile)
+        .filter((tile) => 'price' in tile)
         .map(({ x, y }) => ({ x, y })),
     [tiles]
   )
@@ -50,7 +50,7 @@ export function MapBrowse({
         }
 
         if (nft.category === NFTCategory.ESTATE && nft.data.estate) {
-          nft.data.estate.parcels.forEach(parcel => {
+          nft.data.estate.parcels.forEach((parcel) => {
             tiles.push({
               x: parcel.x,
               y: parcel.y

@@ -1,31 +1,31 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Item } from '@dcl/schemas'
-import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Icon, ToastType } from 'decentraland-ui'
 import { config } from '../../config'
+import { AssetType } from '../asset/types'
 import { getAssetName } from '../asset/utils'
+import { bulkPickUnpickRequest } from '../favorites/actions'
+import { List } from '../favorites/types'
+import { NFT } from '../nft/types'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
-import { NFT } from '../nft/types'
-import { bulkPickUnpickRequest } from '../favorites/actions'
-import { AssetType } from '../asset/types'
-import { Section } from '../vendor/decentraland'
+import { SortBy } from '../routing/types'
 import { View } from '../ui/types'
-import { List } from '../favorites/types'
+import { VendorName } from '../vendor'
+import { Section } from '../vendor/decentraland'
 import {
   ListOfLists,
   UpdateOrCreateList
 } from '../vendor/decentraland/favorites/types'
-import { SortBy } from '../routing/types'
-import { VendorName } from '../vendor'
-import { toastDispatchableActionsChannel } from './utils'
 import {
   BulkPickUnpickMessageType,
   BulkPickUnpickSuccessOrFailureType,
   DispatchableFromToastActions
 } from './types'
+import { toastDispatchableActionsChannel } from './utils'
 
 const DEFAULT_TIMEOUT = 6000
 

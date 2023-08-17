@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
+import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { Props } from './PageLayout.types'
 import styles from './PageLayout.module.css'

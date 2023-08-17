@@ -1,6 +1,6 @@
+import { useCallback, useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { useCallback, useMemo } from 'react'
 import { AssetType } from '../../../../modules/asset/types'
 import { SelectFilter } from '../../../Vendor/NFTFilters/SelectFilter'
 import './AssetTypeFilter.css'
@@ -10,7 +10,10 @@ type Props = {
   onChange: (assetType: AssetType) => void
 }
 
-export const AssetTypeFilter = ({ assetType, onChange }: Props): JSX.Element => {
+export const AssetTypeFilter = ({
+  assetType,
+  onChange
+}: Props): JSX.Element => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const assetTypeOptions = useMemo(() => {
     return [
@@ -25,9 +28,12 @@ export const AssetTypeFilter = ({ assetType, onChange }: Props): JSX.Element => 
     ]
   }, [])
 
-  const handleAssetTypeChange = useCallback((type: string) => {
-    onChange(type as AssetType)
-  }, [onChange])
+  const handleAssetTypeChange = useCallback(
+    (type: string) => {
+      onChange(type as AssetType)
+    },
+    [onChange]
+  )
 
   const header = useMemo(
     () =>

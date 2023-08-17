@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import classNames from 'classnames'
-import { Button, Icon, useNotMobileMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Icon, useNotMobileMediaQuery } from 'decentraland-ui'
 import { Props } from './BackToTopButton.types'
 import styles from './BackToTopButton.module.css'
 

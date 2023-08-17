@@ -4,10 +4,10 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isNFT } from '../../modules/asset/utils'
 import { Box } from '../AssetBrowse/Box'
 import { LinkedProfile } from '../LinkedProfile'
-import { Props } from './DetailsBox.types'
-import { Info } from './Info'
-import styles from './DetailsBox.module.css'
 import { Availability, Expiration, Type } from './DetailsRow'
+import { Info } from './Info'
+import { Props } from './DetailsBox.types'
+import styles from './DetailsBox.module.css'
 
 export const DetailsBox = (props: Props) => {
   const { asset, order, rental, className } = props

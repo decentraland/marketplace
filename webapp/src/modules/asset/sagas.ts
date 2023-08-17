@@ -5,21 +5,21 @@ import {
   SET_PURCHASE
 } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { locations } from '../routing/locations'
-import { buyItemWithCardFailure } from '../item/actions'
-import { executeOrderWithCardFailure } from '../order/actions'
-import { AssetType } from './types'
 import { getSmartWearableRequiredPermissions } from '../../lib/asset'
 import { isErrorWithMessage } from '../../lib/error'
+import { buyItemWithCardFailure } from '../item/actions'
+import { executeOrderWithCardFailure } from '../order/actions'
+import { locations } from '../routing/locations'
 import {
   FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
   FetchSmartWearableRequiredPermissionsRequestAction,
   fetchSmartWearableRequiredPermissionsFailure,
   fetchSmartWearableRequiredPermissionsSuccess
 } from './actions'
+import { AssetType } from './types'
 
 export const failStatuses = [
   PurchaseStatus.CANCELLED,

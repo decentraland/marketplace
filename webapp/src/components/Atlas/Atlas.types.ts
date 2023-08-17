@@ -1,12 +1,12 @@
 import React from 'react'
+import { CallHistoryMethodAction } from 'connected-react-router'
 import { Dispatch } from 'redux'
 import { RentalListing } from '@dcl/schemas'
-import { CallHistoryMethodAction } from 'connected-react-router'
 import { AtlasTile, AtlasProps } from 'decentraland-ui'
-import { OnRentNFT } from '../../modules/ui/browse/types'
-import { NFT } from '../../modules/nft/types'
-import { Contract } from '../../modules/vendor/services'
 import { getContract } from '../../modules/contract/selectors'
+import { NFT } from '../../modules/nft/types'
+import { OnRentNFT } from '../../modules/ui/browse/types'
+import { Contract } from '../../modules/vendor/services'
 
 export type TileRentalListing = Pick<RentalListing, 'expiration' | 'periods'>
 

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header } from 'decentraland-ui'
 import logo from '../pride-logo.png'
 import './CampaignBrowserBanner.css'
 

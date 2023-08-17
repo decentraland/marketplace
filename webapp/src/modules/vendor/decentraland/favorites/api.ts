@@ -78,7 +78,7 @@ export class FavoritesAPI extends BaseClient {
     )
 
     return {
-      addresses: results.map(pick => pick.userAddress),
+      addresses: results.map((pick) => pick.userAddress),
       total
     }
   }

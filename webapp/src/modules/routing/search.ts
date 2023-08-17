@@ -7,13 +7,13 @@ import {
   NFTCategory,
   WearableCategory
 } from '@dcl/schemas'
-import { View } from '../ui/types'
-import { BrowseOptions, SortBy, SortDirection } from './types'
-import { Section } from '../vendor/decentraland'
-import { NFTSortBy } from '../nft/types'
-import { isAccountView, isLandSection } from '../ui/utils'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
+import { NFTSortBy } from '../nft/types'
+import { View } from '../ui/types'
+import { isAccountView, isLandSection } from '../ui/utils'
+import { Section } from '../vendor/decentraland'
+import { BrowseOptions, SortBy, SortDirection } from './types'
 import { isCatalogView, isCatalogViewWithStatusFilter } from './utils'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
@@ -134,7 +134,7 @@ export function getSearchParams(options?: BrowseOptions) {
 
     if (
       options.emotePlayMode?.length &&
-      options.emotePlayMode?.every(option =>
+      options.emotePlayMode?.every((option) =>
         Object.values(EmotePlayMode).includes(option)
       )
     ) {
@@ -453,7 +453,7 @@ export function getURLParamArray<T extends string>(
   let params = new URLSearchParams(search).getAll(paramName) as T[]
 
   if (validValues.length > 0) {
-    params = params.filter(item => validValues.includes(item))
+    params = params.filter((item) => validValues.includes(item))
   }
 
   return params
@@ -474,7 +474,7 @@ export function getURLParamArray_nonStandard<T extends string>(
     ? []
     : (param
         .split(SEARCH_ARRAY_PARAM_SEPARATOR)
-        .filter(item => validValues.includes(item as T)) as T[])
+        .filter((item) => validValues.includes(item as T)) as T[])
 }
 
 export function getURLParam<T extends string>(

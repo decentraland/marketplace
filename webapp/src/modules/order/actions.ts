@@ -1,15 +1,15 @@
 import { action } from 'typesafe-actions'
 import { Order, OrderFilters } from '@dcl/schemas'
+import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   buildTransactionPayload,
   buildTransactionWithFromPayload,
   buildTransactionWithReceiptPayload
 } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import { ErrorCode } from 'decentraland-transactions'
-import { NFT } from '../nft/types'
-import { getAssetName } from '../asset/utils'
 import { formatWeiMANA } from '../../lib/mana'
+import { getAssetName } from '../asset/utils'
+import { NFT } from '../nft/types'
 import { LegacyOrderFragment } from './types'
 
 // Create Order (aka Sell)

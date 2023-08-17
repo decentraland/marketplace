@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
-import { Page, Header, Form, Field, Button } from 'decentraland-ui'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
-import { Wallet } from '../Wallet'
-import { AssetProviderPage } from '../AssetProviderPage'
-import { AssetAction } from '../AssetAction'
-import { locations } from '../../modules/routing/locations'
-import { getAssetName, isOwnedBy } from '../../modules/asset/utils'
+import { Page, Header, Form, Field, Button } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
+import { getAssetName, isOwnedBy } from '../../modules/asset/utils'
+import { locations } from '../../modules/routing/locations'
+import { AssetAction } from '../AssetAction'
+import { AssetProviderPage } from '../AssetProviderPage'
+import { Footer } from '../Footer'
+import { Navbar } from '../Navbar'
+import { Wallet } from '../Wallet'
 import { Props } from './TransferPage.types'
 import './TransferPage.css'
 
@@ -24,7 +24,7 @@ const TransferPage = (props: Props) => {
       <Navbar isFullscreen />
       <Page className="TransferPage">
         <Wallet>
-          {wallet => (
+          {(wallet) => (
             <AssetProviderPage type={AssetType.NFT}>
               {(nft, order) => {
                 let subtitle

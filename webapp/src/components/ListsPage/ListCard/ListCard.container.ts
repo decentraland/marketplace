@@ -1,16 +1,16 @@
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { getPreviewListItems } from '../../../modules/favorites/selectors'
 import { deleteListStart } from '../../../modules/favorites/actions'
+import { getPreviewListItems } from '../../../modules/favorites/selectors'
 import { RootState } from '../../../modules/reducer'
+import ListCard from './ListCard'
 import {
   MapStateProps,
   MapDispatch,
   MapDispatchProps,
   OwnProps
 } from './ListCard.types'
-import ListCard from './ListCard'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {

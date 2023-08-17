@@ -1,11 +1,11 @@
 import React, { memo, useMemo, useCallback, useState } from 'react'
-import { ethers } from 'ethers'
 import classNames from 'classnames'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import { Dropdown, DropdownItemProps, DropdownProps } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ethers } from 'ethers'
 import { RentalListingPeriod } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Dropdown, DropdownItemProps, DropdownProps } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../../lib/mana'
 import { Mana } from '../../../Mana'
 import { Props } from './PeriodsDropdown.types'
@@ -20,13 +20,10 @@ const Trigger = ({
 }) => {
   const period = value !== undefined ? periods[value] : undefined
   const pricePerRent = period
-    ? ethers.BigNumber.from(period.pricePerDay)
-        .mul(period.maxDays)
-        .toString()
+    ? ethers.BigNumber.from(period.pricePerDay).mul(period.maxDays).toString()
     : ethers.BigNumber.from(periods[0].pricePerDay)
         .mul(periods[0].maxDays)
         .toString()
-
 
   return (
     <div className={period ? styles.trigger : styles.triggerPlaceholder}>
@@ -75,7 +72,9 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
                 </div>
               </div>
               <div className={styles.periodPrice}>
-                <Mana className={styles.mana}>{formatWeiMANA(pricePerRent)}</Mana>
+                <Mana className={styles.mana}>
+                  {formatWeiMANA(pricePerRent)}
+                </Mana>
               </div>
             </div>
           )
@@ -92,7 +91,7 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
           <Trigger value={value} periods={periods} />
         ) : null
       }
-      onClick={() => setIsOpenDropdown(prevState => !prevState)}
+      onClick={() => setIsOpenDropdown((prevState) => !prevState)}
       value={value}
       placeholder={t('asset_page.sales_rent_action_box.select_period')}
       options={options}

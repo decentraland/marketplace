@@ -6,8 +6,6 @@ import {
   UpsertRentalSuccessAction,
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
-
-import { NFT } from './types'
 import {
   FetchNFTRequestAction,
   FetchNFTSuccessAction,
@@ -30,6 +28,7 @@ import {
   ClearNFTErrorsAction,
   CLEAR_NFT_ERRORS
 } from './actions'
+import { NFT } from './types'
 
 export type NFTState = {
   data: Record<string, NFT>

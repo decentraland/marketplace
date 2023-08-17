@@ -1,21 +1,21 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import ProfilesCache from '../../../lib/profiles'
+import { CreatorAccount } from '../../../modules/account/types'
+import { AssetType } from '../../../modules/asset/types'
 import {
   getEstateSizeLabel,
   getGenderFilterLabel,
   getLandLabel,
   getNetwork,
-  getPriceLabel
+  getPriceLabel,
+  AssetStatusFilter
 } from '../../../utils/filters'
-import { CreatorAccount } from '../../../modules/account/types'
-import ProfilesCache from '../../../lib/profiles'
-import { AssetStatusFilter } from '../../../utils/filters'
 import { profileToCreatorAccount } from '../../AssetFilters/CreatorsFilter/utils'
-import { AssetType } from '../../../modules/asset/types'
 import { Pill } from './Pill/Pill'
-import { Props } from './SelectedFilters.types'
 import { getCollectionByAddress } from './utils'
+import { Props } from './SelectedFilters.types'
 import styles from './SelectedFilters.module.css'
 
 export const SelectedFilters = ({
@@ -49,9 +49,8 @@ export const SelectedFilters = ({
     Record<string, string> | undefined
   >()
 
-  const [selectedCreators, setSelectedCreators] = useState<
-    Pick<CreatorAccount, 'address' | 'name'>[]
-  >()
+  const [selectedCreators, setSelectedCreators] =
+    useState<Pick<CreatorAccount, 'address' | 'name'>[]>()
 
   useEffect(() => {
     const fetchData = async (contract: string) => {
@@ -60,7 +59,7 @@ export const SelectedFilters = ({
     }
 
     if (contracts?.length && contracts[0] !== collection?.address) {
-      fetchData(contracts[0]).then(collection =>
+      fetchData(contracts[0]).then((collection) =>
         setCollection({
           address: collection.contractAddress,
           name: collection.name
@@ -73,7 +72,7 @@ export const SelectedFilters = ({
 
   useEffect(() => {
     if (creators?.length) {
-      ProfilesCache.fetchProfile(creators).then(profiles => {
+      ProfilesCache.fetchProfile(creators).then((profiles) => {
         setSelectedCreators(profileToCreatorAccount(profiles))
       })
     } else if (!creators?.length) {
@@ -107,7 +106,7 @@ export const SelectedFilters = ({
 
   const handleDeleteCreator = useCallback(
     (address: string) => {
-      onBrowse({ creators: creators?.filter(creator => creator !== address) })
+      onBrowse({ creators: creators?.filter((creator) => creator !== address) })
     },
     [creators, onBrowse]
   )
@@ -133,9 +132,9 @@ export const SelectedFilters = ({
   }, [onBrowse])
 
   const handleDeleteEmotePlayMode = useCallback(
-    playMode => {
+    (playMode) => {
       onBrowse({
-        emotePlayMode: emotePlayMode?.filter(mode => playMode !== mode)
+        emotePlayMode: emotePlayMode?.filter((mode) => playMode !== mode)
       })
     },
     [onBrowse, emotePlayMode]
@@ -166,10 +165,10 @@ export const SelectedFilters = ({
   }, [onBrowse])
 
   const handleDeleteRentalDays = useCallback(
-    removeDays => {
+    (removeDays) => {
       onBrowse({
         rentalDays: rentalDays?.filter(
-          day => removeDays.toString() !== day.toString()
+          (day) => removeDays.toString() !== day.toString()
         )
       })
     },
@@ -178,7 +177,7 @@ export const SelectedFilters = ({
 
   return (
     <div className={styles.pillContainer}>
-      {rarities?.map(rarity => (
+      {rarities?.map((rarity) => (
         <Pill
           key={rarity}
           label={rarity}
@@ -208,7 +207,7 @@ export const SelectedFilters = ({
         />
       ) : null}
       {selectedCreators?.length
-        ? selectedCreators.map(creator => (
+        ? selectedCreators.map((creator) => (
             <Pill
               key={creator.address}
               label={creator.name}
@@ -231,7 +230,7 @@ export const SelectedFilters = ({
           onDelete={handleDeleteOnlySale}
         />
       ) : null}
-      {emotePlayMode?.map(playMode => (
+      {emotePlayMode?.map((playMode) => (
         <Pill
           key={playMode}
           label={t(`emote.play_mode.${playMode}`)}
@@ -279,7 +278,7 @@ export const SelectedFilters = ({
         />
       ) : null}
       {rentalDays && rentalDays.length
-        ? rentalDays.map(days => (
+        ? rentalDays.map((days) => (
             <Pill
               key={days}
               label={t('nft_filters.periods.selection', { rentalDays: days })}

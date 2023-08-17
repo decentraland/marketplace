@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
+import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Image } from 'decentraland-ui'
-import classNames from 'classnames'
-
 import { Props } from './MenuItem.types'
 import './MenuItem.css'
 
@@ -23,7 +22,7 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
   }, [value, onClick])
 
   const handleOnKeyDown = useCallback(
-    event => {
+    (event) => {
       if (event.keyCode === 13) {
         handleOnClick()
       }

@@ -1,5 +1,5 @@
-import { AuthorizationStepStatus } from 'decentraland-ui'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { AuthorizationStepStatus } from 'decentraland-ui'
 import { NFT } from '../nft/types'
 import { RootState } from '../reducer'
 import { placeBidRequest } from './actions'

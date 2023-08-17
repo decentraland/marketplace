@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 import './CampaignBanner.css'
 
 const CampaignBanner: React.FC = (props) => {

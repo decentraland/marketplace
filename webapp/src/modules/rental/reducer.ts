@@ -176,7 +176,7 @@ export function rentalReducer(
         data: {
           ...state.data,
           ...Object.fromEntries(
-            action.payload.rentals.map(rental => [rental.id, rental])
+            action.payload.rentals.map((rental) => [rental.id, rental])
           )
         }
       }

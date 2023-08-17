@@ -1,7 +1,7 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { AddressesByTagResponse } from './types'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
+import { AddressesByTagResponse } from './types'
 
 export const BUILDER_SERVER_URL = config.get('BUILDER_SERVER_URL')!
 
@@ -11,7 +11,7 @@ class BuilderAPI extends BaseAPI {
   ): Promise<AddressesByTagResponse> => {
     return this.request(
       'get',
-      `/addresses?${tags.map(tag => `tag=${tag}`).join('&')}`
+      `/addresses?${tags.map((tag) => `tag=${tag}`).join('&')}`
     )
   }
 

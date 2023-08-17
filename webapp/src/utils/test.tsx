@@ -1,21 +1,18 @@
+import { Provider } from 'react-redux'
 import { render, RenderResult, waitFor } from '@testing-library/react'
 import { ConnectedRouter } from 'connected-react-router'
-import { createMemoryHistory } from 'history'
-import { Provider } from 'react-redux'
-import { Store } from 'redux'
 import mediaQuery from 'css-mediaquery'
 import flatten from 'flat'
-import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
-import { mergeTranslations } from 'decentraland-dapps/dist/modules/translation/utils'
+import { createMemoryHistory } from 'history'
+import { Store } from 'redux'
 import { en } from 'decentraland-dapps/dist/modules/translation/defaults'
+import { mergeTranslations } from 'decentraland-dapps/dist/modules/translation/utils'
+import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 import { RootState } from '../modules/reducer'
 import { initTestStore } from '../modules/store'
 import * as locales from '../modules/translation/locales'
 
-const allTranslations = mergeTranslations(
-  flatten(en) as any,
-  flatten(locales.en)
-)
+const allTranslations = mergeTranslations(flatten(en), flatten(locales.en))
 
 export function renderWithProviders(
   component: JSX.Element,
