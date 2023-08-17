@@ -89,7 +89,7 @@
     "pre-commit:fix:code": "eslint -c .eslintrc.js --fix",
     "pre-commit:fix:prettier": "prettier --config .prettierrc.json --write",
     "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json",
-    "prepare": "husky install"
+    "prepare": "cd .. && husky install webapp/.husky"
   },
   "engines": {
     "node": "16.13.0"
