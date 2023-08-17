@@ -27,6 +27,6 @@
       }
     ]
   },
-  "include": ["src"],
+  "include": ["src", ".eslintrc.js"],
   "exclude": ["src/contracts/*.ts"]
 }
