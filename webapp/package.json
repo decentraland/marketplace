@@ -3,7 +3,6 @@
   "version": "0.0.0-development",
   "dependencies": {
     "@dcl/crypto": "^3.0.0",
-    "@dcl/eslint-config": "^1.1.10",
     "@dcl/schemas": "^9.2.0",
     "@dcl/single-sign-on-client": "^0.0.12",
     "@dcl/ui-env": "^1.2.0",
@@ -43,6 +42,7 @@
     "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {
+    "@dcl/eslint-config": "^1.1.10",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.4",
     "@testing-library/react-hooks": "^8.0.1",
