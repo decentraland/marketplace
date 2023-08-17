@@ -19,5 +19,6 @@ module.exports = {
         ]
       }
     }
-  ]
+  ],
+  ignorePatterns: ['src/contracts/*']
 }
