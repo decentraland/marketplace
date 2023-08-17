@@ -68,9 +68,7 @@ describe('Owners Table', () => {
     })
 
     it('should render the empty table message', async () => {
-      const { getByText, findByTestId } = renderWithProviders(
-        <OwnersTable asset={asset} />
-      )
+      const { getByText, findByTestId } = renderWithProviders(<OwnersTable asset={asset} />)
 
       const loader = await findByTestId('loader')
 
@@ -78,9 +76,7 @@ describe('Owners Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(
-        getByText(t('owners_table.there_are_no_owners'))
-      ).toBeInTheDocument()
+      expect(getByText(t('owners_table.there_are_no_owners'))).toBeInTheDocument()
     })
   })
 

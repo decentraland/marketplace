@@ -11,9 +11,7 @@ export type OnlySmartFilterProps = {
   'data-testid'?: string
 }
 
-export const OnlySmartFilterContent = (
-  props: Pick<OnlySmartFilterProps, 'isOnlySmart' | 'onChange' | 'data-testid'>
-) => {
+export const OnlySmartFilterContent = (props: Pick<OnlySmartFilterProps, 'isOnlySmart' | 'onChange' | 'data-testid'>) => {
   const { isOnlySmart, onChange } = props
 
   const handleChange = useCallback(
@@ -24,21 +22,14 @@ export const OnlySmartFilterContent = (
   )
 
   return (
-    <div
-      className={styles.onlySmartFilterSection}
-      data-testid={props['data-testid']}
-    >
+    <div className={styles.onlySmartFilterSection} data-testid={props['data-testid']}>
       <SmartBadge clickable={false} />
       <Checkbox toggle checked={!!isOnlySmart} onChange={handleChange} />
     </div>
   )
 }
 
-export const OnlySmartFilter = ({
-  isOnlySmart,
-  onChange,
-  defaultCollapsed = false
-}: OnlySmartFilterProps) => {
+export const OnlySmartFilter = ({ isOnlySmart, onChange, defaultCollapsed = false }: OnlySmartFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   return isMobileOrTablet ? null : (

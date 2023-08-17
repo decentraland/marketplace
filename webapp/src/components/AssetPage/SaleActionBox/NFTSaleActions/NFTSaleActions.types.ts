@@ -1,9 +1,6 @@
 import { Dispatch } from 'redux'
 import { Bid, Order } from '@dcl/schemas'
-import {
-  openModal,
-  OpenModalAction
-} from 'decentraland-dapps/dist/modules/modal/actions'
+import { openModal, OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../../../../modules/nft/types'
 

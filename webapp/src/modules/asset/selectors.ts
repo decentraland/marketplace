@@ -7,11 +7,7 @@ export const getError = (state: RootState) => getState(state).error
 export const getLoading = (state: RootState) => getState(state).loading
 
 export const isFetchingRequiredPermissions = (state: RootState, id: string) =>
-  getLoading(state).find(
-    (action) =>
-      action.type === FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST &&
-      action.payload.asset.id === id
-  ) !== undefined
+  getLoading(state).find(action => action.type === FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST && action.payload.asset.id === id) !==
+  undefined
 
-export const getRequiredPermissions = (state: RootState, id: string) =>
-  getData(state)[id] || []
+export const getRequiredPermissions = (state: RootState, id: string) => getData(state)[id] || []

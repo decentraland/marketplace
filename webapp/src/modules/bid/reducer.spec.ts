@@ -13,8 +13,6 @@ describe('when clear bid error action is received', () => {
   })
 
   it('should set error field as null', () => {
-    expect(bidReducer(state, clearBidError())).toEqual(
-      expect.objectContaining({ error: null })
-    )
+    expect(bidReducer(state, clearBidError())).toEqual(expect.objectContaining({ error: null }))
   })
 })

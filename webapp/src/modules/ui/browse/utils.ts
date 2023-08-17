@@ -1,10 +1,4 @@
-import {
-  ChainId,
-  Item,
-  ListingStatus,
-  NFTCategory,
-  Network
-} from '@dcl/schemas'
+import { ChainId, Item, ListingStatus, NFTCategory, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { FavoritesData } from '../../favorites/types'
 import { LegacyOrderFragment } from '../../order/types'
@@ -13,29 +7,26 @@ import { BrowseUIState } from './reducer'
 import { OnSaleElement } from './types'
 
 export function orderById(ids: string[], items: Item[]) {
-  const itemsById = Object.fromEntries(items.map((item) => [item.id, item]))
-  return ids.map((id) => itemsById[id])
+  const itemsById = Object.fromEntries(items.map(item => [item.id, item]))
+  return ids.map(id => itemsById[id])
 }
 
-export const byFavoriteCreatedAtAsc =
-  (favoritedItems: Record<string, FavoritesData>) => (a: Item, b: Item) => {
-    const favoriteACreatedAt = favoritedItems[a.id]?.createdAt ?? 0
-    const favoriteBCreatedAt = favoritedItems[b.id]?.createdAt ?? 0
-    if (favoriteACreatedAt < favoriteBCreatedAt) {
-      return 1
-    } else if (favoriteACreatedAt > favoriteBCreatedAt) {
-      return -1
-    }
-    return 0
+export const byFavoriteCreatedAtAsc = (favoritedItems: Record<string, FavoritesData>) => (a: Item, b: Item) => {
+  const favoriteACreatedAt = favoritedItems[a.id]?.createdAt ?? 0
+  const favoriteBCreatedAt = favoritedItems[b.id]?.createdAt ?? 0
+  if (favoriteACreatedAt < favoriteBCreatedAt) {
+    return 1
+  } else if (favoriteACreatedAt > favoriteBCreatedAt) {
+    return -1
   }
+  return 0
+}
 
 export const isLoadingMoreResults = (state: BrowseUIState, page?: number) => {
   return !!state.page && !!page && page > state.page
 }
 
-export function legacyOrderToOnSaleElement(
-  legacyOrder: LegacyOrderFragment
-): OnSaleElement {
+export function legacyOrderToOnSaleElement(legacyOrder: LegacyOrderFragment): OnSaleElement {
   return [
     {
       category: NFTCategory.PARCEL,

@@ -19,10 +19,7 @@ const pricesCache: Record<string, Record<number, number>> = {}
 
 // { coinId: {tickerKey: result } }
 const coinTickersCache: Record<string, Record<string, number>> = {}
-const coinTickersPromiseCache: Record<
-  string,
-  Record<string, Promise<CoinTickers>>
-> = {}
+const coinTickersPromiseCache: Record<string, Record<string, Promise<CoinTickers>>> = {}
 
 export class TokenConverter {
   apiURL: string
@@ -50,11 +47,7 @@ export class TokenConverter {
   }
 
   async marketEthToMANA(ethAmount: number) {
-    return this.marketEthToToken(
-      ethAmount,
-      'decentraland',
-      this.converterExchange
-    )
+    return this.marketEthToToken(ethAmount, 'decentraland', this.converterExchange)
   }
 
   async marketEthToToken(ethAmount: number, coinId: string, exchange = '') {
@@ -63,9 +56,7 @@ export class TokenConverter {
     }
 
     if (!pricesCache[coinId][ethAmount]) {
-      const response = await window.fetch(
-        `${this.apiURL}/coins/${coinId}/tickers?exchange_ids=${exchange}`
-      )
+      const response = await window.fetch(`${this.apiURL}/coins/${coinId}/tickers?exchange_ids=${exchange}`)
       const coinTickers: CoinTickers = await response.json()
       const ticker = coinTickers.tickers[0]
 
@@ -87,22 +78,17 @@ export class TokenConverter {
       }
       const ongoingPromise = coinTickersPromiseCache[coinId][usdTicker]
       if (!ongoingPromise) {
-        coinTickersPromiseCache[coinId][usdTicker] = new Promise<CoinTickers>(
-          async (res, rej) => {
-            try {
-              const response = await window.fetch(
-                `${this.apiURL}/coins/decentraland/tickers?exchange_ids=${this.converterExchange}`
-              )
-              res(response.json())
-            } catch (error) {
-              rej(error)
-            }
+        coinTickersPromiseCache[coinId][usdTicker] = new Promise<CoinTickers>(async (res, rej) => {
+          try {
+            const response = await window.fetch(`${this.apiURL}/coins/decentraland/tickers?exchange_ids=${this.converterExchange}`)
+            res(response.json())
+          } catch (error) {
+            rej(error)
           }
-        )
+        })
       }
       const coinTickers = await coinTickersPromiseCache[coinId][usdTicker]
-      coinTickersCache[coinId][usdTicker] =
-        coinTickers.tickers[0].converted_last[usdTicker]
+      coinTickersCache[coinId][usdTicker] = coinTickers.tickers[0].converted_last[usdTicker]
     }
     return coinTickersCache[coinId][usdTicker] * amount
   }
@@ -112,18 +98,9 @@ export class TokenConverter {
     return this.contractEthToToken(ethAmount, manaAddress)
   }
 
-  async contractEthToToken(
-    ethAmount: string,
-    tokenAddress: string
-  ): Promise<string> {
-    const converter = Converter__factory.connect(
-      this.converterAddress,
-      await getSigner()
-    )
-    const tokens = await converter.calcNeededTokensForEther(
-      tokenAddress,
-      ethAmount
-    )
+  async contractEthToToken(ethAmount: string, tokenAddress: string): Promise<string> {
+    const converter = Converter__factory.connect(this.converterAddress, await getSigner())
+    const tokens = await converter.calcNeededTokensForEther(tokenAddress, ethAmount)
     return tokens.toString()
   }
 }

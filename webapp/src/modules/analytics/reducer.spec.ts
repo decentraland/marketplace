@@ -9,10 +9,7 @@ import { AnalyticsTimeframe, AnalyticsVolumeData } from './types'
 
 describe('when fetch volume data request action is received', () => {
   it('should add a loading state action to the loading state array', () => {
-    const newState = analyticsReducer(
-      INITIAL_STATE,
-      fetchAnalyticsVolumeDataRequest(AnalyticsTimeframe.MONTH)
-    )
+    const newState = analyticsReducer(INITIAL_STATE, fetchAnalyticsVolumeDataRequest(AnalyticsTimeframe.MONTH))
     expect(newState.loading.length).toBe(1)
     expect(newState.loading[0].type).toBe(FETCH_ANALYTICS_VOLUME_DATA_REQUEST)
   })

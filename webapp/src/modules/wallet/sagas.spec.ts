@@ -1,8 +1,5 @@
 import { expectSaga } from 'redux-saga-test-plan'
-import {
-  changeAccount,
-  disconnectWallet
-} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { changeAccount, disconnectWallet } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { walletSaga } from './sagas'
 

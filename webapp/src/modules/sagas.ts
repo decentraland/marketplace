@@ -96,11 +96,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     marketplaceAnalyticsSagas(),
     featuresSaga({
       polling: {
-        apps: [
-          ApplicationName.MARKETPLACE,
-          ApplicationName.BUILDER,
-          ApplicationName.DAPPS
-        ],
+        apps: [ApplicationName.MARKETPLACE, ApplicationName.BUILDER, ApplicationName.DAPPS],
         delay: 60000 /** 60 seconds */
       }
     }),

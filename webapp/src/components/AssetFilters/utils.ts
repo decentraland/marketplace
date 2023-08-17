@@ -32,11 +32,8 @@ const WearablesFilters = [
 
 const EmotesFilters = [
   ...WearablesFilters.filter(
-    (filter) =>
-      filter !== AssetFilter.BodyShape &&
-      filter !== AssetFilter.Network &&
-      filter !== AssetFilter.More &&
-      filter !== AssetFilter.OnlySmart
+    filter =>
+      filter !== AssetFilter.BodyShape && filter !== AssetFilter.Network && filter !== AssetFilter.More && filter !== AssetFilter.OnlySmart
   ),
   AssetFilter.PlayMode
 ]

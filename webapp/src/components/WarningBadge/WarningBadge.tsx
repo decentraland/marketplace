@@ -8,10 +8,7 @@ type Props = {
 }
 
 const WarningBadge = ({ className }: Props) => (
-  <Badge
-    className={classNames(styles.WarningIcon, styles.badge, className)}
-    color={Color.OJ_NOT_SIMPSON}
-  >
+  <Badge className={classNames(styles.WarningIcon, styles.badge, className)} color={Color.OJ_NOT_SIMPSON}>
     {t('global.action_required')}
   </Badge>
 )

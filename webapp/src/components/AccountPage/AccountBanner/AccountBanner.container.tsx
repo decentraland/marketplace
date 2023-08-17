@@ -5,15 +5,8 @@ import { getAddress as getAddressFromUrl } from '../../../modules/account/select
 import { RootState } from '../../../modules/reducer'
 import { goBack } from '../../../modules/routing/actions'
 import { getViewAsGuest } from '../../../modules/routing/selectors'
-import {
-  fetchStoreRequest,
-  FETCH_STORE_REQUEST
-} from '../../../modules/store/actions'
-import {
-  getStoresByOwner,
-  getLocalStore,
-  getLoading as getStoreLoading
-} from '../../../modules/store/selectors'
+import { fetchStoreRequest, FETCH_STORE_REQUEST } from '../../../modules/store/actions'
+import { getStoresByOwner, getLocalStore, getLoading as getStoreLoading } from '../../../modules/store/selectors'
 import { Store } from '../../../modules/store/types'
 import { getAddress as getAddressFromWallet } from '../../../modules/wallet/selectors'
 import AccountBanner from './AccountBanner'
@@ -24,9 +17,7 @@ const mapState = (state: RootState): MapStateProps => {
   const address = getAddressFromUrl(state) || getAddressFromWallet(state)
   const isLoading = isLoadingType(getStoreLoading(state), FETCH_STORE_REQUEST)
 
-  let store: Store | undefined = address
-    ? getStoresByOwner(state)[address]
-    : undefined
+  let store: Store | undefined = address ? getStoresByOwner(state)[address] : undefined
 
   if (viewAsGuest) {
     store = getLocalStore(state) || store

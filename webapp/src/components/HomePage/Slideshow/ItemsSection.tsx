@@ -1,14 +1,6 @@
 import React, { useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Dropdown,
-  DropdownProps,
-  EmoteIcon,
-  Mobile,
-  NotMobile,
-  Tabs,
-  WearableIcon
-} from 'decentraland-ui'
+import { Dropdown, DropdownProps, EmoteIcon, Mobile, NotMobile, Tabs, WearableIcon } from 'decentraland-ui'
 import { HomepageView } from '../../../modules/ui/asset/homepage/types'
 import { Section } from '../../../modules/vendor/decentraland/routing/types'
 
@@ -18,9 +10,7 @@ const ItemsSection = (props: {
   onChangeItemSection: (view: HomepageView, section: Section) => void
 }) => {
   const { view, viewAllButton, onChangeItemSection } = props
-  const [currentItemSection, setCurrentItemSection] = useState<Section>(
-    Section.WEARABLES
-  )
+  const [currentItemSection, setCurrentItemSection] = useState<Section>(Section.WEARABLES)
 
   const handleOnChangeItemSection = (view: HomepageView, section: Section) => {
     setCurrentItemSection(section)
@@ -29,19 +19,13 @@ const ItemsSection = (props: {
 
   const renderTabs = () => (
     <Tabs>
-      <Tabs.Tab
-        active={currentItemSection === Section.WEARABLES}
-        onClick={() => handleOnChangeItemSection(view, Section.WEARABLES)}
-      >
+      <Tabs.Tab active={currentItemSection === Section.WEARABLES} onClick={() => handleOnChangeItemSection(view, Section.WEARABLES)}>
         <div id={Section.WEARABLES}>
           <WearableIcon />
           {t(`menu.${Section.WEARABLES}`)}
         </div>
       </Tabs.Tab>
-      <Tabs.Tab
-        active={currentItemSection === Section.EMOTES}
-        onClick={() => handleOnChangeItemSection(view, Section.EMOTES)}
-      >
+      <Tabs.Tab active={currentItemSection === Section.EMOTES} onClick={() => handleOnChangeItemSection(view, Section.EMOTES)}>
         <div id={Section.EMOTES}>
           <EmoteIcon />
           {t(`menu.${Section.EMOTES}`)}
@@ -58,14 +42,13 @@ const ItemsSection = (props: {
       defaultValue={currentItemSection}
       value={currentItemSection}
       direction="right"
-      options={[Section.WEARABLES, Section.EMOTES].map((section) => ({
+      options={[Section.WEARABLES, Section.EMOTES].map(section => ({
         value: section,
         text: t(`menu.${section}`)
       }))}
-      onChange={(
-        _event: React.SyntheticEvent<HTMLElement, Event>,
-        { value }: DropdownProps
-      ) => handleOnChangeItemSection(view, value as Section)}
+      onChange={(_event: React.SyntheticEvent<HTMLElement, Event>, { value }: DropdownProps) =>
+        handleOnChangeItemSection(view, value as Section)
+      }
     />
   )
 

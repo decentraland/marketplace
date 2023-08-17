@@ -5,8 +5,7 @@ import { Icon } from 'decentraland-ui'
 import { Props } from './UserMenu.types'
 
 const UserMenu = (props: Props) => {
-  const { onClickMyAssets, onClickMyLists, isProfileEnabled, ...baseProps } =
-    props
+  const { onClickMyAssets, onClickMyLists, isProfileEnabled, ...baseProps } = props
 
   const menuItems = useMemo(
     () => (
@@ -24,13 +23,7 @@ const UserMenu = (props: Props) => {
     [onClickMyAssets, onClickMyLists]
   )
 
-  return (
-    <BaseUserMenu
-      {...baseProps}
-      menuItems={menuItems}
-      newMenu={isProfileEnabled}
-    />
-  )
+  return <BaseUserMenu {...baseProps} menuItems={menuItems} newMenu={isProfileEnabled} />
 }
 
 export default React.memo(UserMenu)

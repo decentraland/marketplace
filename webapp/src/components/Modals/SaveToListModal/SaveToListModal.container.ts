@@ -10,11 +10,7 @@ import { RootState } from '../../../modules/reducer'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { OverrideCreateListTypes } from '../CreateOrEditListModal/CreateOrEditListModal.types'
 import SaveToListModal from './SaveToListModal'
-import {
-  MapDispatchProps,
-  MapStateProps,
-  OwnProps
-} from './SaveToListModal.types'
+import { MapDispatchProps, MapStateProps, OwnProps } from './SaveToListModal.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -23,14 +19,9 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (
-  dispatch: Dispatch,
-  ownProps: OwnProps
-): MapDispatchProps => ({
+const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => ({
   onSavePicks: (picksFor: ListOfLists[], unpickFrom: ListOfLists[]) =>
-    dispatch(
-      bulkPickUnpickRequest(ownProps.metadata.item, picksFor, unpickFrom)
-    ),
+    dispatch(bulkPickUnpickRequest(ownProps.metadata.item, picksFor, unpickFrom)),
   onCreateList: (overrideCreateListData: OverrideCreateListTypes) => {
     dispatch(openModal('CreateOrEditListModal', overrideCreateListData))
   },

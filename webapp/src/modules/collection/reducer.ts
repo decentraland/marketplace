@@ -1,8 +1,5 @@
 import { Collection } from '@dcl/schemas'
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchCollectionsFailureAction,
   FetchCollectionsRequestAction,
@@ -40,10 +37,7 @@ type CollectionReducerAction =
   | FetchSingleCollectionSuccessAction
   | FetchSingleCollectionFailureAction
 
-export function collectionReducer(
-  state = INITIAL_STATE,
-  action: CollectionReducerAction
-): CollectionState {
+export function collectionReducer(state = INITIAL_STATE, action: CollectionReducerAction): CollectionState {
   switch (action.type) {
     case FETCH_COLLECTIONS_REQUEST:
     case FETCH_SINGLE_COLLECTION_REQUEST:

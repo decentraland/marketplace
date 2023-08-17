@@ -1,18 +1,9 @@
 import { Network, Order, RentalListing } from '@dcl/schemas'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import {
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
-import {
-  fetchNFTRequest,
-  fetchNFTsFailure,
-  fetchNFTsRequest,
-  fetchNFTsSuccess,
-  fetchNFTSuccess
-} from '../nft/actions'
+import { fetchNFTRequest, fetchNFTsFailure, fetchNFTsRequest, fetchNFTsSuccess, fetchNFTSuccess } from '../nft/actions'
 import { NFT, NFTsFetchOptions, NFTsFetchParams } from '../nft/types'
 import { acceptRentalListingSuccess } from '../rental/actions'
 import { View } from '../ui/types'
@@ -101,7 +92,7 @@ const requestActions = [
   fetchNFTsRequest(nftsFetchOptions)
 ]
 
-requestActions.forEach((action) => {
+requestActions.forEach(action => {
   describe(`when reducing the "${action.type}" action`, () => {
     it('should return a state with the loading set', () => {
       const initialState = {
@@ -124,7 +115,7 @@ const successActions = [
   cancelOrderSuccess(order, nft, txHash)
 ]
 
-successActions.forEach((action) => {
+successActions.forEach(action => {
   describe(`when reducing the "${action.type}" action`, () => {
     it('should return a state with the loading set', () => {
       const initialState = {
@@ -144,15 +135,7 @@ successActions.forEach((action) => {
 
 describe('when reducing the successful action of fetching nfts', () => {
   const requestAction = fetchNFTsRequest(nftsFetchOptions)
-  const successAction = fetchNFTsSuccess(
-    nftsFetchOptions,
-    [nft],
-    [],
-    [order],
-    [],
-    1,
-    timestamp
-  )
+  const successAction = fetchNFTsSuccess(nftsFetchOptions, [nft], [], [order], [], 1, timestamp)
 
   const initialState = {
     ...INITIAL_STATE,
@@ -172,12 +155,7 @@ describe('when reducing the successful action of fetching nfts', () => {
 const failureActions = [
   {
     request: createOrderRequest(nft, Number(order.price), order.expiresAt),
-    failure: createOrderFailure(
-      nft,
-      Number(order.price),
-      order.expiresAt,
-      anErrorMessage
-    )
+    failure: createOrderFailure(nft, Number(order.price), order.expiresAt, anErrorMessage)
   },
   {
     request: executeOrderRequest(order, nft, fingerprint),
@@ -197,7 +175,7 @@ const failureActions = [
   }
 ]
 
-failureActions.forEach((action) => {
+failureActions.forEach(action => {
   describe(`when reducing the "${action.failure.type}" action`, () => {
     it('should return a state with the error set and the loading state cleared', () => {
       const initialState = {
@@ -261,9 +239,7 @@ describe('when reducing the successful action of accepting a rental', () => {
   })
 
   it('should remove the order of the NFT that had the rental listing', () => {
-    expect(
-      orderReducer(state, acceptRentalListingSuccess(nft, rentalListing, 0))
-    ).toEqual({
+    expect(orderReducer(state, acceptRentalListingSuccess(nft, rentalListing, 0))).toEqual({
       ...state,
       data: {
         ftOrder: {
@@ -289,8 +265,6 @@ describe('when reducing a clear order errors action', () => {
   })
 
   it('should set the error field as null', () => {
-    expect(orderReducer(state, clearOrderErrors())).toEqual(
-      expect.objectContaining({ error: null })
-    )
+    expect(orderReducer(state, clearOrderErrors())).toEqual(expect.objectContaining({ error: null }))
   })
 })

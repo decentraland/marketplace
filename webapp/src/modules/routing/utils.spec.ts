@@ -3,18 +3,10 @@ import { View } from '../ui/types'
 import { getPersistedIsMapProperty } from '../ui/utils'
 import { Section } from '../vendor/decentraland/routing'
 import { BrowseOptions } from './types'
-import {
-  CATALOG_VIEWS,
-  getClearedBrowseOptions,
-  isCatalogView,
-  isMapSet
-} from './utils'
+import { CATALOG_VIEWS, getClearedBrowseOptions, isCatalogView, isMapSet } from './utils'
 jest.mock('../ui/utils')
 
-const mockedGetPersistedIsMapProperty =
-  getPersistedIsMapProperty as unknown as jest.MockedFunction<
-    typeof getPersistedIsMapProperty
-  >
+const mockedGetPersistedIsMapProperty = getPersistedIsMapProperty as unknown as jest.MockedFunction<typeof getPersistedIsMapProperty>
 
 describe('when checking if the map is set', () => {
   let isMap: boolean | undefined
@@ -170,7 +162,7 @@ describe('when clearing browser options', () => {
 
 describe('when checking if a view is a Catalog View type', () => {
   describe('and the creators filter is set', () => {
-    it.each(CATALOG_VIEWS)('should return true for %s', (view) => {
+    it.each(CATALOG_VIEWS)('should return true for %s', view => {
       expect(isCatalogView(view)).toBe(true)
     })
   })

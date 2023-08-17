@@ -1,12 +1,7 @@
 import { RouterLocation } from 'connected-react-router'
 import { Dispatch } from 'redux'
 import { AssetType } from '../../modules/asset/types'
-import {
-  browse,
-  BrowseAction,
-  fetchAssetsFromRoute,
-  FetchAssetsFromRouteAction
-} from '../../modules/routing/actions'
+import { browse, BrowseAction, fetchAssetsFromRoute, FetchAssetsFromRouteAction } from '../../modules/routing/actions'
 import { setView, SetViewAction } from '../../modules/ui/actions'
 import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/routing/types'
@@ -46,21 +41,6 @@ export type MapStateProps = Pick<
   | 'isMapViewFiltersEnabled'
   | 'visitedLocations'
 >
-export type MapDispatchProps = Pick<
-  Props,
-  'onSetView' | 'onFetchAssetsFromRoute' | 'onBrowse'
->
-export type MapDispatch = Dispatch<
-  SetViewAction | FetchAssetsFromRouteAction | BrowseAction
->
-export type OwnProps = Pick<
-  Props,
-  | 'vendor'
-  | 'address'
-  | 'isFullscreen'
-  | 'isMap'
-  | 'view'
-  | 'sections'
-  | 'section'
-  | 'contracts'
->
+export type MapDispatchProps = Pick<Props, 'onSetView' | 'onFetchAssetsFromRoute' | 'onBrowse'>
+export type MapDispatch = Dispatch<SetViewAction | FetchAssetsFromRouteAction | BrowseAction>
+export type OwnProps = Pick<Props, 'vendor' | 'address' | 'isFullscreen' | 'isMap' | 'view' | 'sections' | 'section' | 'contracts'>

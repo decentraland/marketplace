@@ -19,9 +19,7 @@ const formatEventDate = (updatedAt: number) => {
     : formatDistanceToNow(newUpdatedAt, { addSuffix: true })
 }
 
-export const formatDataToTable = (
-  rentals: RentalListing[]
-): DataTableType[] => {
+export const formatDataToTable = (rentals: RentalListing[]): DataTableType[] => {
   return rentals?.map((rental: RentalListing) => {
     const value: DataTableType = {
       [t('rental_history.lessor')]: <LinkedProfile address={rental.lessor!} />,

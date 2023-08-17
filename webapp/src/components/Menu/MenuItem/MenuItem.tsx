@@ -6,23 +6,14 @@ import { Props } from './MenuItem.types'
 import './MenuItem.css'
 
 const MenuItem = <T extends unknown>(props: Props<T>) => {
-  const {
-    className = '',
-    value,
-    currentValue,
-    subtitle,
-    image,
-    nestedLevel,
-    withCaret,
-    onClick
-  } = props
+  const { className = '', value, currentValue, subtitle, image, nestedLevel, withCaret, onClick } = props
 
   const handleOnClick = useCallback(() => {
     onClick(value)
   }, [value, onClick])
 
   const handleOnKeyDown = useCallback(
-    (event) => {
+    event => {
       if (event.keyCode === 13) {
         handleOnClick()
       }
@@ -36,12 +27,7 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
   })
 
   return (
-    <li
-      className={containerClass}
-      onClick={handleOnClick}
-      tabIndex={0}
-      onKeyDown={handleOnKeyDown}
-    >
+    <li className={containerClass} onClick={handleOnClick} tabIndex={0} onKeyDown={handleOnKeyDown}>
       {image && <Image alt={image} src={image} width="25" circular />}
 
       <div className="content">

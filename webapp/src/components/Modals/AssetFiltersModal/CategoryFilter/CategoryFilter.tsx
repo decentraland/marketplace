@@ -6,12 +6,7 @@ import { getAvailableSections } from './utils'
 import { Props } from './CategoryFilter.types'
 import './CategoryFilter.css'
 
-export const CategoryFilter = ({
-  section,
-  view,
-  assetType,
-  onChange
-}: Props): JSX.Element => {
+export const CategoryFilter = ({ section, view, assetType, onChange }: Props): JSX.Element => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const header = useMemo(
@@ -28,18 +23,9 @@ export const CategoryFilter = ({
   )
 
   return (
-    <Box
-      header={header}
-      className="filters-sidebar-box category-filter"
-      collapsible
-      defaultCollapsed={true}
-    >
+    <Box header={header} className="filters-sidebar-box category-filter" collapsible defaultCollapsed={true}>
       <ul className="Menu box-menu">
-        <NFTSectionsMenuItems
-          section={section}
-          sections={getAvailableSections(view, section, assetType)}
-          onSectionClick={onChange}
-        />
+        <NFTSectionsMenuItems section={section} sections={getAvailableSections(view, section, assetType)} onSectionClick={onChange} />
       </ul>
     </Box>
   )

@@ -12,30 +12,17 @@ import { ManaToFiat } from '../../ManaToFiat'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import styles from './ListingsTable.module.css'
 
-export const formatDataToTable = (
-  orders: Order[],
-  isMobile = false
-): DataTableType[] => {
+export const formatDataToTable = (orders: Order[], isMobile = false): DataTableType[] => {
   return orders.reduce((accumulator: DataTableType[], order: Order) => {
     const value: DataTableType = {
-      [t('listings_table.owner')]: (
-        <LinkedProfile
-          className={styles.linkedProfileRow}
-          address={order.owner}
-        />
-      ),
+      [t('listings_table.owner')]: <LinkedProfile className={styles.linkedProfileRow} address={order.owner} />,
       ...(!isMobile && {
-        [t('listings_table.published_date')]: getDateAndMonthName(
-          order.createdAt
-        )
+        [t('listings_table.published_date')]: getDateAndMonthName(order.createdAt)
       }),
       ...(!isMobile && {
-        [t('listings_table.expiration_date')]: formatDistanceToNow(
-          +order.expiresAt * (isLegacyOrder(order) ? 1 : 1000),
-          {
-            addSuffix: true
-          }
-        )
+        [t('listings_table.expiration_date')]: formatDistanceToNow(+order.expiresAt * (isLegacyOrder(order) ? 1 : 1000), {
+          addSuffix: true
+        })
       }),
       ...(!isMobile && {
         [t('listings_table.issue_number')]: (
@@ -43,9 +30,7 @@ export const formatDataToTable = (
             <div className={styles.badgeContainer}>
               {order.status === ListingStatus.OPEN &&
               order.expiresAt &&
-              (isLegacyOrder(order)
-                ? order.expiresAt
-                : order.expiresAt * 1000) >= Date.now() ? (
+              (isLegacyOrder(order) ? order.expiresAt : order.expiresAt * 1000) >= Date.now() ? (
                 <ListedBadge className={styles.badge} />
               ) : null}
               <div className={styles.row}>
@@ -70,17 +55,8 @@ export const formatDataToTable = (
           </div>
           {order && (
             <div>
-              <Button
-                inverted
-                as={Link}
-                to={locations.nft(order.contractAddress, order.tokenId)}
-                size="small"
-              >
-                {isMobile ? (
-                  <Icon name="chevron right" className={styles.gotToNFT} />
-                ) : (
-                  t('listings_table.view_listing')
-                )}
+              <Button inverted as={Link} to={locations.nft(order.contractAddress, order.tokenId)} size="small">
+                {isMobile ? <Icon name="chevron right" className={styles.gotToNFT} /> : t('listings_table.view_listing')}
               </Button>
             </div>
           )}

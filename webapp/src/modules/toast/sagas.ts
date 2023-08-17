@@ -1,8 +1,5 @@
 import { all, takeEvery, put } from 'redux-saga/effects'
-import {
-  showToast,
-  hideAllToasts
-} from 'decentraland-dapps/dist/modules/toast/actions'
+import { showToast, hideAllToasts } from 'decentraland-dapps/dist/modules/toast/actions'
 import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
 import {
   DeleteListSuccessAction,
@@ -23,17 +20,8 @@ import {
   FetchItemsFailureAction
 } from '../item/actions'
 import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
-import {
-  EXECUTE_ORDER_WITH_CARD_FAILURE,
-  EXECUTE_ORDER_FAILURE,
-  ExecuteOrderFailureAction
-} from '../order/actions'
-import {
-  CLAIM_ASSET_SUCCESS,
-  REMOVE_RENTAL_SUCCESS,
-  UpsertRentalSuccessAction,
-  UPSERT_RENTAL_SUCCESS
-} from '../rental/actions'
+import { EXECUTE_ORDER_WITH_CARD_FAILURE, EXECUTE_ORDER_FAILURE, ExecuteOrderFailureAction } from '../order/actions'
+import { CLAIM_ASSET_SUCCESS, REMOVE_RENTAL_SUCCESS, UpsertRentalSuccessAction, UPSERT_RENTAL_SUCCESS } from '../rental/actions'
 import { UPDATE_STORE_SUCCESS } from '../store/actions'
 import {
   getBulkPickItemFailureToast,
@@ -73,16 +61,11 @@ function* successToastSagas() {
   yield takeEvery(EXECUTE_ORDER_FAILURE, handleExecuteOrderFailure)
   yield takeEvery(FETCH_ITEMS_FAILURE, handleFetchAssetsFailure)
   yield takeEvery(FETCH_NFTS_FAILURE, handleFetchAssetsFailure)
-  yield takeEvery(
-    toastDispatchableActionsChannel,
-    handleToastTryAgainActionChannel
-  )
+  yield takeEvery(toastDispatchableActionsChannel, handleToastTryAgainActionChannel)
   yield takeEvery(BULK_PICK_SUCCESS, handleBulkPickUnpickSuccess)
   yield takeEvery(BULK_PICK_FAILURE, handleBulkPickUnpickFailure)
 
-  function* handleToastTryAgainActionChannel(
-    action: DispatchableFromToastActions
-  ) {
+  function* handleToastTryAgainActionChannel(action: DispatchableFromToastActions) {
     yield put(action)
     yield put(hideAllToasts())
   }
@@ -101,32 +84,19 @@ function* handleClaimLandBackSuccess() {
 }
 
 function* handleUpsertRentalSuccess(action: UpsertRentalSuccessAction) {
-  yield put(
-    showToast(
-      getUpsertRentalSuccessToast(
-        action.payload.nft,
-        action.payload.operationType
-      )
-    )
-  )
+  yield put(showToast(getUpsertRentalSuccessToast(action.payload.nft, action.payload.operationType)))
 }
 
 function* handleUpdateListSuccess(action: UpdateListSuccessAction) {
-  yield put(
-    showToast(getUpdateListSuccessToast(action.payload.list), 'bottom center')
-  )
+  yield put(showToast(getUpdateListSuccessToast(action.payload.list), 'bottom center'))
 }
 
 function* handleDeleteListSuccess(action: DeleteListSuccessAction) {
-  yield put(
-    showToast(getDeleteListSuccessToast(action.payload.list), 'bottom center')
-  )
+  yield put(showToast(getDeleteListSuccessToast(action.payload.list), 'bottom center'))
 }
 
 function* handleDeleteListFailure(action: DeleteListFailureAction) {
-  yield put(
-    showToast(getDeleteListFailureToast(action.payload.list), 'bottom center')
-  )
+  yield put(showToast(getDeleteListFailureToast(action.payload.list), 'bottom center'))
 }
 
 function* handleBuyNFTWithCardFailure() {
@@ -140,9 +110,7 @@ function* handleExecuteOrderFailure(action: ExecuteOrderFailureAction) {
   }
 }
 
-function* handleFetchAssetsFailure(
-  action: FetchItemsFailureAction | FetchNFTsFailureAction
-) {
+function* handleFetchAssetsFailure(action: FetchItemsFailureAction | FetchNFTsFailureAction) {
   const { error } = action.payload
   if (error !== FETCH_ITEMS_CANCELLED_ERROR_MESSAGE) {
     yield put(showToast(getFetchAssetsFailureToast(error), 'bottom right'))
@@ -152,21 +120,11 @@ function* handleFetchAssetsFailure(
 function* handleBulkPickUnpickSuccess(action: BulkPickUnpickSuccessAction) {
   const { item, pickedFor, unpickedFrom } = action.payload
   yield put(hideAllToasts())
-  yield put(
-    showToast(
-      getBulkPickItemSuccessToast(item, pickedFor, unpickedFrom),
-      'bottom center'
-    )
-  )
+  yield put(showToast(getBulkPickItemSuccessToast(item, pickedFor, unpickedFrom), 'bottom center'))
 }
 
 function* handleBulkPickUnpickFailure(action: BulkPickUnpickFailureAction) {
   const { item, pickedFor, unpickedFrom } = action.payload
   yield put(hideAllToasts())
-  yield put(
-    showToast(
-      getBulkPickItemFailureToast(item, pickedFor, unpickedFrom),
-      'bottom center'
-    )
-  )
+  yield put(showToast(getBulkPickItemFailureToast(item, pickedFor, unpickedFrom), 'bottom center'))
 }

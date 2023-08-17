@@ -11,13 +11,7 @@ const SaleActionBox = ({ asset }: Props) => {
   return isNFT(asset) || asset.isOnSale ? (
     <div className={styles.main}>
       <Price asset={asset} title={t('asset_page.sell_price')} />
-      <div className={styles.container}>
-        {isNFT(asset) ? (
-          <NFTSaleActions nft={asset} />
-        ) : (
-          <ItemSaleActions item={asset} />
-        )}
-      </div>
+      <div className={styles.container}>{isNFT(asset) ? <NFTSaleActions nft={asset} /> : <ItemSaleActions item={asset} />}</div>
     </div>
   ) : null
 }

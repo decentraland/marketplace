@@ -32,12 +32,9 @@ describe.each([
   BULK_PICK_SUCCESS,
   BULK_PICK_FAILURE,
   UPDATE_LIST_SUCCESS
-])('when handling the success action of the %s action', (actionType) => {
+])('when handling the success action of the %s action', actionType => {
   it('should put the action to close all modals', () => {
-    return expectSaga(modalSaga)
-      .put(closeAllModals())
-      .dispatch({ type: actionType })
-      .silentRun()
+    return expectSaga(modalSaga).put(closeAllModals()).dispatch({ type: actionType }).silentRun()
   })
 })
 
@@ -51,10 +48,7 @@ describe('when handling the success action of the claim LAND', () => {
   })
 
   it('should put the action to close all modals', () => {
-    return expectSaga(modalSaga)
-      .put(closeAllModals())
-      .dispatch(claimAssetSuccess(nft, rental))
-      .silentRun()
+    return expectSaga(modalSaga).put(closeAllModals()).dispatch(claimAssetSuccess(nft, rental)).silentRun()
   })
 })
 
@@ -96,10 +90,7 @@ describe('when handling the success action of a rental creation', () => {
   })
 
   it('should put the action to close all modals', () => {
-    return expectSaga(modalSaga)
-      .put(closeAllModals())
-      .dispatch(upsertRentalSuccess(nft, rental, UpsertRentalOptType.INSERT))
-      .silentRun()
+    return expectSaga(modalSaga).put(closeAllModals()).dispatch(upsertRentalSuccess(nft, rental, UpsertRentalOptType.INSERT)).silentRun()
   })
 })
 

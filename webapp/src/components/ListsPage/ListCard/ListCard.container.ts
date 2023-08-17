@@ -5,12 +5,7 @@ import { deleteListStart } from '../../../modules/favorites/actions'
 import { getPreviewListItems } from '../../../modules/favorites/selectors'
 import { RootState } from '../../../modules/reducer'
 import ListCard from './ListCard'
-import {
-  MapStateProps,
-  MapDispatch,
-  MapDispatchProps,
-  OwnProps
-} from './ListCard.types'
+import { MapStateProps, MapDispatch, MapDispatchProps, OwnProps } from './ListCard.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
@@ -18,14 +13,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   }
 }
 
-const mapDispatch = (
-  dispatch: MapDispatch,
-  ownProps: OwnProps
-): MapDispatchProps =>
+const mapDispatch = (dispatch: MapDispatch, ownProps: OwnProps): MapDispatchProps =>
   bindActionCreators(
     {
-      onEditList: () =>
-        openModal('CreateOrEditListModal', { list: ownProps.list }),
+      onEditList: () => openModal('CreateOrEditListModal', { list: ownProps.list }),
       onDeleteList: () => deleteListStart(ownProps.list)
     },
     dispatch

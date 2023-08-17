@@ -34,9 +34,7 @@ const ItemDetail = ({ item }: Props) => {
   let loop = false
 
   const tableRef = useRef<HTMLDivElement>(null)
-  const requiredPermissions = useSelector((state: RootState) =>
-    getRequiredPermissions(state, item.id)
-  )
+  const requiredPermissions = useSelector((state: RootState) => getRequiredPermissions(state, item.id))
 
   switch (item.category) {
     case NFTCategory.WEARABLE:
@@ -79,19 +77,10 @@ const ItemDetail = ({ item }: Props) => {
           <div>
             <Title asset={item} />
             <div className={styles.badges}>
-              <RarityBadge
-                rarity={item.rarity}
-                assetType={AssetType.ITEM}
-                category={NFTCategory.WEARABLE}
-                size="small"
-              />
+              <RarityBadge rarity={item.rarity} assetType={AssetType.ITEM} category={NFTCategory.WEARABLE} size="small" />
               {category && (
                 <CategoryBadge
-                  category={
-                    item.data.emote
-                      ? item.data.emote.category
-                      : item.data.wearable!.category
-                  }
+                  category={item.data.emote ? item.data.emote.category : item.data.wearable!.category}
                   assetType={AssetType.ITEM}
                 />
               )}
@@ -106,17 +95,10 @@ const ItemDetail = ({ item }: Props) => {
                 <GenderBadge
                   bodyShapes={bodyShapes}
                   assetType={AssetType.ITEM}
-                  section={
-                    item.category === NFTCategory.WEARABLE
-                      ? Section.WEARABLES
-                      : Section.EMOTES
-                  }
+                  section={item.category === NFTCategory.WEARABLE ? Section.WEARABLES : Section.EMOTES}
                 />
               )}
-              {item.category === NFTCategory.WEARABLE &&
-                item.data.wearable!.isSmart && (
-                  <SmartBadge assetType={AssetType.ITEM} />
-                )}
+              {item.category === NFTCategory.WEARABLE && item.data.wearable!.isSmart && <SmartBadge assetType={AssetType.ITEM} />}
 
               <CampaignBadge contract={item.contractAddress} />
             </div>
@@ -134,9 +116,7 @@ const ItemDetail = ({ item }: Props) => {
               {item.network === Network.MATIC ? <Owner asset={item} /> : null}
               <Collection asset={item} />
             </div>
-            {item.data.wearable?.isSmart && (
-              <RequiredPermissions asset={item} />
-            )}
+            {item.data.wearable?.isSmart && <RequiredPermissions asset={item} />}
             <BestBuyingOption asset={item} tableRef={tableRef} />
           </div>
         </div>

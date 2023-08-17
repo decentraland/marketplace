@@ -1,29 +1,15 @@
 import { createFetchComponent } from '@well-known-components/fetch-component'
-import {
-  createContentClient,
-  ContentClient
-} from 'dcl-catalyst-client/dist/client/ContentClient'
+import { createContentClient, ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { AuthIdentity } from '@dcl/crypto'
 import { Entity } from '@dcl/schemas'
 import { getIdentity } from '../identity/utils'
 import { getAddress } from '../wallet/selectors'
-import {
-  fetchStoreFailure,
-  fetchStoreRequest,
-  fetchStoreSuccess,
-  updateStoreRequest,
-  updateStoreSuccess
-} from './actions'
+import { fetchStoreFailure, fetchStoreRequest, fetchStoreSuccess, updateStoreRequest, updateStoreSuccess } from './actions'
 import { storeSaga } from './sagas'
 import { Store, StoreEntityMetadata } from './types'
-import {
-  deployStoreEntity,
-  fetchStoreEntity,
-  getEmptyStore,
-  getPeerCoverUrl
-} from './utils'
+import { deployStoreEntity, fetchStoreEntity, getEmptyStore, getPeerCoverUrl } from './utils'
 
 jest.mock('../../lib/environment', () => ({
   peerUrl: 'http://peer.com'
@@ -48,12 +34,7 @@ describe('when handling the fetch of a user store', () => {
       const error = new Error('Failed to fetch')
 
       return expectSaga(storeSaga, mockClient)
-        .provide([
-          [
-            call(fetchStoreEntity, mockClient, mockAddress),
-            Promise.reject(error)
-          ]
-        ])
+        .provide([[call(fetchStoreEntity, mockClient, mockAddress), Promise.reject(error)]])
         .dispatch(fetchStoreRequest(mockAddress))
         .put(fetchStoreFailure(error.message))
         .silentRun()

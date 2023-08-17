@@ -16,11 +16,7 @@ const ClaimYourName = () => {
   return (
     <div className={styles.gradient}>
       <div className={styles.container}>
-        <img
-          className={styles.img}
-          src={claimYourOwnNameImg}
-          alt="Claim your own name"
-        ></img>
+        <img className={styles.img} src={claimYourOwnNameImg} alt="Claim your own name"></img>
         <div>
           <h4 className={styles.title}>{t('claim_your_own_name.title')}</h4>
           <div className={styles.text}>

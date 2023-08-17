@@ -1,9 +1,4 @@
-import {
-  fetchCollectionsFailure,
-  fetchCollectionsRequest,
-  fetchCollectionsSuccess,
-  FETCH_COLLECTIONS_REQUEST
-} from './actions'
+import { fetchCollectionsFailure, fetchCollectionsRequest, fetchCollectionsSuccess, FETCH_COLLECTIONS_REQUEST } from './actions'
 import { collectionReducer, INITIAL_STATE } from './reducer'
 
 describe('when fetch collection request action is received', () => {

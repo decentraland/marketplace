@@ -1,10 +1,7 @@
 import { call } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { getIdentity, clearIdentity } from '@dcl/single-sign-on-client'
-import {
-  connectWalletSuccess,
-  disconnectWallet
-} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { connectWalletSuccess, disconnectWallet } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { generateIdentityRequest, generateIdentitySuccess } from './actions'
 import { identitySaga, setAuxAddress } from './sagas'
@@ -63,9 +60,7 @@ describe('when handling the disconnect', () => {
     })
 
     it('should call the sso client to clear the identity', async () => {
-      await expectSaga(identitySaga)
-        .dispatch(disconnectWallet())
-        .run({ silenceTimeout: true })
+      await expectSaga(identitySaga).dispatch(disconnectWallet()).run({ silenceTimeout: true })
 
       expect(clearIdentity).toHaveBeenCalledWith(address)
     })
@@ -77,9 +72,7 @@ describe('when handling the disconnect', () => {
     })
 
     it('should not call the sso client to clear the identity', async () => {
-      await expectSaga(identitySaga)
-        .dispatch(disconnectWallet())
-        .run({ silenceTimeout: true })
+      await expectSaga(identitySaga).dispatch(disconnectWallet()).run({ silenceTimeout: true })
 
       expect(clearIdentity).not.toHaveBeenCalled()
     })

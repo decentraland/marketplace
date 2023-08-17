@@ -10,10 +10,7 @@ type Props = {
   onChange: (assetType: AssetType) => void
 }
 
-export const AssetTypeFilter = ({
-  assetType,
-  onChange
-}: Props): JSX.Element => {
+export const AssetTypeFilter = ({ assetType, onChange }: Props): JSX.Element => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const assetTypeOptions = useMemo(() => {
     return [
@@ -49,18 +46,8 @@ export const AssetTypeFilter = ({
   )
 
   return (
-    <Box
-      header={header}
-      className="filters-sidebar-box asset-type-filter"
-      collapsible
-      defaultCollapsed={true}
-    >
-      <SelectFilter
-        name=""
-        value={assetType || ''}
-        options={assetTypeOptions}
-        onChange={handleAssetTypeChange}
-      />
+    <Box header={header} className="filters-sidebar-box asset-type-filter" collapsible defaultCollapsed={true}>
+      <SelectFilter name="" value={assetType || ''} options={assetTypeOptions} onChange={handleAssetTypeChange} />
     </Box>
   )
 }

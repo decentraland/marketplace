@@ -5,11 +5,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header, Row, Column, Button, Loader } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { LinkType, Store } from '../../modules/store/types'
-import {
-  getIsValidLink,
-  getPrefixedCoverName,
-  linkStartsWith
-} from '../../modules/store/utils'
+import { getIsValidLink, getPrefixedCoverName, linkStartsWith } from '../../modules/store/utils'
 import CoverPicker from './CoverPicker'
 import InputContainer from './InputContainer'
 import TextInput from './TextInput'
@@ -18,25 +14,12 @@ import './StoreSettings.css'
 
 const MAX_FILE_SIZE = 1000000
 
-const StoreSettings = ({
-  address,
-  store,
-  canSubmit,
-  error,
-  isLoading,
-  isSaving,
-  onChange,
-  onRevert,
-  onSave,
-  onFetchStore
-}: Props) => {
+const StoreSettings = ({ address, store, canSubmit, error, isLoading, isSaving, onChange, onRevert, onSave, onFetchStore }: Props) => {
   const { cover, description, website, facebook, twitter, discord } = store
 
   const [coverSize, setCoverSize] = useState<number>()
 
-  const [errors, setErrors] = useState<
-    { [key in keyof Store]?: string } & { size?: string }
-  >({})
+  const [errors, setErrors] = useState<{ [key in keyof Store]?: string } & { size?: string }>({})
 
   useEffect(() => {
     onFetchStore(address)
@@ -69,15 +52,9 @@ const StoreSettings = ({
     }
   }, [coverSize, website])
 
-  const hasErrors = useMemo(
-    () => Object.values(errors).some((error) => !!error),
-    [errors]
-  )
+  const hasErrors = useMemo(() => Object.values(errors).some(error => !!error), [errors])
 
-  const getInputValue = useCallback(
-    (type: LinkType) => store[type].replace(linkStartsWith[type], ''),
-    [store]
-  )
+  const getInputValue = useCallback((type: LinkType) => store[type].replace(linkStartsWith[type], ''), [store])
 
   const handleInputOnChange = useCallback(
     (type: LinkType, value: string) =>
@@ -113,10 +90,7 @@ const StoreSettings = ({
           <Header>{t('store_settings.settings')}</Header>
         </Column>
         <Column align="right">
-          <Link
-            className={'see-store-as-guest'}
-            to={locations.currentAccount({ viewAsGuest: true })}
-          >
+          <Link className={'see-store-as-guest'} to={locations.currentAccount({ viewAsGuest: true })}>
             {t('store_settings.see_store_as_guest')}
           </Link>
         </Column>
@@ -141,27 +115,17 @@ const StoreSettings = ({
               {errors.size && <div className="error">{errors.size}</div>}
             </InputContainer>
             <InputContainer title={t('store_settings.description')}>
-              <TextInput
-                type="textarea"
-                value={description}
-                onChange={(description) => onChange({ ...store, description })}
-              />
+              <TextInput type="textarea" value={description} onChange={description => onChange({ ...store, description })} />
             </InputContainer>
             <InputContainer title={t('store_settings.website')}>
-              <TextInput
-                type="input"
-                value={website}
-                onChange={(website) => onChange({ ...store, website })}
-              />
+              <TextInput type="input" value={website} onChange={website => onChange({ ...store, website })} />
               {errors.website && <div className="error">{errors.website}</div>}
             </InputContainer>
             <InputContainer title={t('store_settings.facebook')}>
               <TextInput
                 type="input"
                 value={getInputValue(LinkType.FACEBOOK)}
-                onChange={(value) =>
-                  handleInputOnChange(LinkType.FACEBOOK, value)
-                }
+                onChange={value => handleInputOnChange(LinkType.FACEBOOK, value)}
               />
               <div className="info">{facebook}</div>
             </InputContainer>
@@ -169,9 +133,7 @@ const StoreSettings = ({
               <TextInput
                 type="input"
                 value={getInputValue(LinkType.TWITTER)}
-                onChange={(value) =>
-                  handleInputOnChange(LinkType.TWITTER, value)
-                }
+                onChange={value => handleInputOnChange(LinkType.TWITTER, value)}
               />
               <div className="info">{twitter}</div>
             </InputContainer>
@@ -179,20 +141,13 @@ const StoreSettings = ({
               <TextInput
                 type="input"
                 value={getInputValue(LinkType.DISCORD)}
-                onChange={(value) =>
-                  handleInputOnChange(LinkType.DISCORD, value)
-                }
+                onChange={value => handleInputOnChange(LinkType.DISCORD, value)}
               />
               <div className="info">{discord}</div>
             </InputContainer>
           </div>
           <div className="bottom">
-            <Button
-              onClick={() => onSave(store)}
-              primary
-              disabled={!canSubmit || hasErrors || isSaving}
-              loading={isSaving}
-            >
+            <Button onClick={() => onSave(store)} primary disabled={!canSubmit || hasErrors || isSaving} loading={isSaving}>
               {t('store_settings.save')}
             </Button>
             <Button

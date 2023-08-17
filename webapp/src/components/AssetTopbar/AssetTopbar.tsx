@@ -1,28 +1,13 @@
 import { useCallback, useEffect } from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Close,
-  Dropdown,
-  DropdownProps,
-  Field,
-  Icon,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { Close, Dropdown, DropdownProps, Field, Icon, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import trash from '../../images/trash.png'
 import { useInput } from '../../lib/input'
-import {
-  getCategoryFromSection,
-  getSectionFromCategory
-} from '../../modules/routing/search'
+import { getCategoryFromSection, getSectionFromCategory } from '../../modules/routing/search'
 import { SortBy } from '../../modules/routing/types'
 import { isCatalogView } from '../../modules/routing/utils'
-import {
-  isAccountView,
-  isLandSection,
-  isListsSection,
-  persistIsMapProperty
-} from '../../modules/ui/utils'
+import { isAccountView, isLandSection, isListsSection, persistIsMapProperty } from '../../modules/ui/utils'
 import { Chip } from '../Chip'
 import { SelectedFilters } from './SelectedFilters'
 import { getCountText } from './utils'
@@ -87,25 +72,20 @@ export const AssetTopbar = ({
         isFullscreen: isMap,
         search: '',
         // Forces the onlyOnSale property in the defined cases so the users can see LAND on sale.
-        onlyOnSale:
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
-          onlyOnSale
+        onlyOnSale: (!onlyOnSale && onlyOnRent === false) || (onlyOnSale === undefined && onlyOnRent === undefined) || onlyOnSale
       })
     },
     [onBrowse, onlyOnSale, onlyOnRent]
   )
 
   useEffect(() => {
-    const option = sortByOptions.find((option) => option.value === sortBy)
+    const option = sortByOptions.find(option => option.value === sortBy)
     if (!option) {
       onBrowse({ sortBy: sortByOptions[0].value })
     }
   }, [onBrowse, sortBy, sortByOptions])
 
-  const sortByValue = sortByOptions.find((option) => option.value === sortBy)
-    ? sortBy
-    : sortByOptions[0].value
+  const sortByValue = sortByOptions.find(option => option.value === sortBy) ? sortBy : sortByOptions[0].value
 
   return (
     <div className={styles.assetTopbar}>
@@ -127,21 +107,9 @@ export const AssetTopbar = ({
         )}
         {searchValue ? <Close onClick={() => handleSearch('')} /> : null}
         {isLandSection(section) && !isAccountView(view!) && (
-          <div
-            className={classNames(styles.mapToggle, { [styles.map]: isMap })}
-          >
-            <Chip
-              className="grid"
-              icon="table"
-              isActive={!isMap}
-              onClick={handleIsMapChange.bind(null, false)}
-            />
-            <Chip
-              className="atlas"
-              icon="map marker alternate"
-              isActive={isMap}
-              onClick={handleIsMapChange.bind(null, true)}
-            />
+          <div className={classNames(styles.mapToggle, { [styles.map]: isMap })}>
+            <Chip className="grid" icon="table" isActive={!isMap} onClick={handleIsMapChange.bind(null, false)} />
+            <Chip className="atlas" icon="map marker alternate" isActive={isMap} onClick={handleIsMapChange.bind(null, true)} />
           </div>
         )}
       </div>
@@ -152,15 +120,10 @@ export const AssetTopbar = ({
               <div className={styles.countContainer}>
                 <p className={styles.countText}>
                   {count && isCatalogView(view)
-                    ? t(
+                    ? t(search ? 'nft_filters.query_results' : 'nft_filters.results', {
+                        count: count.toLocaleString(),
                         search
-                          ? 'nft_filters.query_results'
-                          : 'nft_filters.results',
-                        {
-                          count: count.toLocaleString(),
-                          search
-                        }
-                      )
+                      })
                     : getCountText(count, search)}
                 </p>
               </div>
@@ -168,19 +131,10 @@ export const AssetTopbar = ({
           ) : null}
           {!isListsSection(section) ? (
             <div className={styles.rightOptionsContainer}>
-              <Dropdown
-                direction="left"
-                value={sortByValue}
-                options={sortByOptions}
-                onChange={handleOrderByDropdownChange}
-              />
+              <Dropdown direction="left" value={sortByValue} options={sortByOptions} onChange={handleOrderByDropdownChange} />
               {isMobile ? (
                 <i
-                  className={classNames(
-                    styles.openFilters,
-                    styles.openFiltersWrapper,
-                    hasFiltersEnabled && styles.active
-                  )}
+                  className={classNames(styles.openFilters, styles.openFiltersWrapper, hasFiltersEnabled && styles.active)}
                   onClick={onOpenFiltersModal}
                 />
               ) : null}

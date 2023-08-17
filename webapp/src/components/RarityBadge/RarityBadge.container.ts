@@ -6,10 +6,7 @@ import { getSectionFromCategory } from '../../modules/routing/search'
 import RarityBadge from './RarityBadge'
 import { MapDispatchProps, OwnProps } from './RarityBadge.types'
 
-const mapDispatch = (
-  dispatch: Dispatch,
-  { rarity, category, assetType }: OwnProps
-): MapDispatchProps => ({
+const mapDispatch = (dispatch: Dispatch, { rarity, category, assetType }: OwnProps): MapDispatchProps => ({
   onClick: () =>
     dispatch(
       push(

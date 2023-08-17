@@ -17,15 +17,7 @@ import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
 
 const SettingsPage = (props: Props) => {
-  const {
-    wallet,
-    authorizations,
-    isLoading,
-    hasError,
-    hasFetchedContracts,
-    getContract,
-    onFetchContracts
-  } = props
+  const { wallet, authorizations, isLoading, hasError, hasFetchedContracts, getContract, onFetchContracts } = props
 
   const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
 
@@ -94,7 +86,7 @@ const SettingsPage = (props: Props) => {
     return null
   }
 
-  const authorizationsForSelling = authorizations.filter((authorization) => {
+  const authorizationsForSelling = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
 
     return (
@@ -106,16 +98,14 @@ const SettingsPage = (props: Props) => {
     )
   })
 
-  const authorizationsForRenting = authorizations.filter((authorization) => {
+  const authorizationsForRenting = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
 
     if (!contract) {
       return false
     }
 
-    const isParcelOrEstate =
-      contract.category === NFTCategory.PARCEL ||
-      contract.category === NFTCategory.ESTATE
+    const isParcelOrEstate = contract.category === NFTCategory.PARCEL || contract.category === NFTCategory.ESTATE
 
     return (
       contract &&
@@ -134,11 +124,7 @@ const SettingsPage = (props: Props) => {
         {wallet ? (
           <Grid>
             <Grid.Row>
-              <Grid.Column
-                className="left-column secondary-text"
-                computer={4}
-                mobile={16}
-              >
+              <Grid.Column className="left-column secondary-text" computer={4} mobile={16}>
                 {t('global.address')}
               </Grid.Column>
               <Grid.Column computer={12} mobile={16}>
@@ -146,37 +132,19 @@ const SettingsPage = (props: Props) => {
                   <Blockie seed={wallet.address} scale={12} />
                 </div>
                 <div className="address-container">
-                  <div className="address">
-                    {isMobile()
-                      ? shortenAddress(wallet.address)
-                      : wallet.address}
-                  </div>
-                  <div
-                    role="button"
-                    aria-label="copy"
-                    onClick={() =>
-                      copyText(wallet.address, setHasCopiedAddress)
-                    }
-                  >
+                  <div className="address">{isMobile() ? shortenAddress(wallet.address) : wallet.address}</div>
+                  <div role="button" aria-label="copy" onClick={() => copyText(wallet.address, setHasCopiedAddress)}>
                     {hasCopiedText ? (
-                      <span className="copy-text">
-                        {t('settings_page.copied')}
-                      </span>
+                      <span className="copy-text">{t('settings_page.copied')}</span>
                     ) : (
-                      <span className="copy-text link">
-                        {t('settings_page.copy_address')}
-                      </span>
+                      <span className="copy-text link">{t('settings_page.copy_address')}</span>
                     )}
                   </div>
                 </div>
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
-              <Grid.Column
-                className="left-column secondary-text"
-                computer={4}
-                mobile={16}
-              >
+              <Grid.Column className="left-column secondary-text" computer={4} mobile={16}>
                 {t('settings_page.authorizations')}
               </Grid.Column>
               <Grid.Column computer={12} mobile={16}>
@@ -195,9 +163,7 @@ const SettingsPage = (props: Props) => {
                     ) : (
                       <Form>
                         <div className="authorization-checks">
-                          <label className="secondary-text">
-                            {t('settings_page.for_buying')}
-                          </label>
+                          <label className="secondary-text">{t('settings_page.for_buying')}</label>
                           <Authorization
                             authorization={{
                               address: wallet.address,
@@ -231,9 +197,7 @@ const SettingsPage = (props: Props) => {
                         </div>
 
                         <div className="authorization-checks">
-                          <label className="secondary-text">
-                            {t('settings_page.for_bidding')}
-                          </label>
+                          <label className="secondary-text">{t('settings_page.for_bidding')}</label>
                           <Authorization
                             authorization={{
                               address: wallet.address,
@@ -257,9 +221,7 @@ const SettingsPage = (props: Props) => {
                         </div>
 
                         <div className="authorization-checks">
-                          <label className="secondary-text">
-                            {t('settings_page.for_renting')}
-                          </label>
+                          <label className="secondary-text">{t('settings_page.for_renting')}</label>
                           <Authorization
                             authorization={{
                               address: wallet.address,
@@ -270,13 +232,10 @@ const SettingsPage = (props: Props) => {
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
-                          {authorizationsForRenting.map((authorization) => {
+                          {authorizationsForRenting.map(authorization => {
                             return (
                               <Authorization
-                                key={
-                                  authorization.authorizedAddress +
-                                  authorization.contractAddress
-                                }
+                                key={authorization.authorizedAddress + authorization.contractAddress}
                                 authorization={authorization}
                               />
                             )
@@ -285,17 +244,12 @@ const SettingsPage = (props: Props) => {
 
                         {authorizationsForSelling.length > 0 ? (
                           <div className="authorization-checks">
-                            <label className="secondary-text">
-                              {t('settings_page.for_selling')}
-                            </label>
+                            <label className="secondary-text">{t('settings_page.for_selling')}</label>
 
-                            {authorizationsForSelling.map((authorization) => {
+                            {authorizationsForSelling.map(authorization => {
                               return (
                                 <Authorization
-                                  key={
-                                    authorization.authorizedAddress +
-                                    authorization.contractAddress
-                                  }
+                                  key={authorization.authorizedAddress + authorization.contractAddress}
                                   authorization={authorization}
                                 />
                               )

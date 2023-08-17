@@ -53,31 +53,21 @@ const TransactionHistory = (props: Props) => {
       }
       saleAPI
         .fetch(params)
-        .then((response) => {
+        .then(response => {
           if (cancel) return
           setTotal(response.total)
           setSales(formatDataToTable(response.data, isMobileOrTablet))
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => !cancel && setIsLoading(false))
-        .catch((error) => {
+        .catch(error => {
           console.error(error)
         })
     }
     return () => {
       cancel = true
     }
-  }, [
-    assetContractAddress,
-    assetTokenId,
-    assetItemId,
-    setIsLoading,
-    setSales,
-    page,
-    isAssetNull,
-    isAssetNFT,
-    isMobileOrTablet
-  ])
+  }, [assetContractAddress, assetTokenId, assetItemId, setIsLoading, setSales, page, isAssetNull, isAssetNFT, isMobileOrTablet])
 
   return sales.length > 0 ? (
     <div className="TransactionHistory">

@@ -3,10 +3,7 @@ import { Dispatch } from 'redux'
 import { Avatar, IPreviewController, Item, Order, Rarity } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Asset } from '../../modules/asset/types'
-import {
-  FetchItemRequestAction,
-  fetchItemRequest
-} from '../../modules/item/actions'
+import { FetchItemRequestAction, fetchItemRequest } from '../../modules/item/actions'
 import { OpenModalAction, openModal } from '../../modules/modal/actions'
 import {
   setIsTryingOn,
@@ -33,9 +30,7 @@ export type Props = {
   onSetIsTryingOn: typeof setIsTryingOn
   onSetWearablePreviewController: typeof setWearablePreviewController
   onFetchItem: typeof fetchItemRequest
-  onPlaySmartWearableVideoShowcase: (
-    asset: Asset
-  ) => ReturnType<typeof openModal>
+  onPlaySmartWearableVideoShowcase: (asset: Asset) => ReturnType<typeof openModal>
   children?: React.ReactNode
   hasBadges?: boolean
   item: Item | null
@@ -52,29 +47,12 @@ export enum ControlOptionAction {
   PLAY_SMART_WEARABLE_VIDEO_SHOWCASE
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'order'
-  | 'avatar'
-  | 'wearableController'
-  | 'isTryingOn'
-  | 'isPlayingEmote'
-  | 'item'
-  | 'wallet'
->
+export type MapStateProps = Pick<Props, 'order' | 'avatar' | 'wearableController' | 'isTryingOn' | 'isPlayingEmote' | 'item' | 'wallet'>
 export type MapDispatchProps = Pick<
   Props,
-  | 'onSetIsTryingOn'
-  | 'onSetWearablePreviewController'
-  | 'onFetchItem'
-  | 'onPlaySmartWearableVideoShowcase'
+  'onSetIsTryingOn' | 'onSetWearablePreviewController' | 'onFetchItem' | 'onPlaySmartWearableVideoShowcase'
 >
-export type MapDispatch = Dispatch<
-  | SetIsTryingOnAction
-  | SetWearablePreviewControllerAction
-  | FetchItemRequestAction
-  | OpenModalAction
->
+export type MapDispatch = Dispatch<SetIsTryingOnAction | SetWearablePreviewControllerAction | FetchItemRequestAction | OpenModalAction>
 
 export type AvailableForMintPopupType = {
   price: string

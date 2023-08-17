@@ -6,11 +6,7 @@ import { retryParams } from '../utils'
 const FIRST = '1000'
 
 class BidAPI extends BaseAPI {
-  async fetch(
-    options: Record<string, string>,
-    sortBy?: BidSortBy,
-    bidder?: string
-  ): Promise<{ data: Bid[]; total: number }> {
+  async fetch(options: Record<string, string>, sortBy?: BidSortBy, bidder?: string): Promise<{ data: Bid[]; total: number }> {
     const queryParams = new URLSearchParams()
     for (const key of Object.keys(options)) {
       queryParams.append(key, options[key])
@@ -18,10 +14,7 @@ class BidAPI extends BaseAPI {
     sortBy && queryParams.append('sortBy', sortBy.toString())
     bidder && queryParams.append('bidder', bidder)
     try {
-      const response: { data: Bid[]; total: number } = await this.request(
-        'get',
-        `/bids?${queryParams.toString()}`
-      )
+      const response: { data: Bid[]; total: number } = await this.request('get', `/bids?${queryParams.toString()}`)
       return response
     } catch (error) {
       return { data: [], total: 0 }

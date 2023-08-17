@@ -9,17 +9,14 @@ import { BrowseOptions } from './types'
 export const locations = {
   root: () => '/',
   signIn: (redirectTo?: string) => {
-    return `/sign-in${
-      redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''
-    }`
+    return `/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`
   },
   settings: () => '/settings',
   lands: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/lands?${params.toString()}` : '/lands'
   },
-  collection: (contractAddress = ':contractAddress') =>
-    `/collections/${contractAddress}`,
+  collection: (contractAddress = ':contractAddress') => `/collections/${contractAddress}`,
   browse: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
@@ -53,36 +50,18 @@ export const locations = {
   },
   account: (address = ':address', options?: BrowseOptions) => {
     const params = getSearchParams(options)
-    return params
-      ? `/accounts/${address}?${params.toString()}`
-      : `/accounts/${address}`
+    return params ? `/accounts/${address}?${params.toString()}` : `/accounts/${address}`
   },
-  nft: (contractAddress = ':contractAddress', tokenId = ':tokenId') =>
-    `/contracts/${contractAddress}/tokens/${tokenId}`,
-  manage: (contractAddress = ':contractAddress', tokenId = ':tokenId') =>
-    `/contracts/${contractAddress}/tokens/${tokenId}/manage`,
-  item: (contractAddress = ':contractAddress', itemId = ':itemId') =>
-    `/contracts/${contractAddress}/items/${itemId}`,
+  nft: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}`,
+  manage: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}/manage`,
+  item: (contractAddress = ':contractAddress', itemId = ':itemId') => `/contracts/${contractAddress}/items/${itemId}`,
   parcel: (x = ':x', y = ':y') => `/parcels/${x}/${y}/detail`,
   estate: (estateId = ':estateId') => `/estates/${estateId}/detail`,
-  buy: (
-    type: AssetType,
-    contractAddress = ':contractAddress',
-    tokenId = ':tokenId'
-  ) => `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy`,
-  buyWithCard: (
-    type: AssetType,
-    contractAddress = ':contractAddress',
-    tokenId = ':tokenId'
-  ) =>
-    `/contracts/${contractAddress}/${getResource(
-      type
-    )}/${tokenId}/buy?withCard=true`,
-  buyStatusPage: (
-    type: AssetType,
-    contractAddress = ':contractAddress',
-    tokenId = ':tokenId'
-  ) =>
+  buy: (type: AssetType, contractAddress = ':contractAddress', tokenId = ':tokenId') =>
+    `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy`,
+  buyWithCard: (type: AssetType, contractAddress = ':contractAddress', tokenId = ':tokenId') =>
+    `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy?withCard=true`,
+  buyStatusPage: (type: AssetType, contractAddress = ':contractAddress', tokenId = ':tokenId') =>
     `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy/status`,
   sell: (
     contractAddress = ':contractAddress',
@@ -90,34 +69,19 @@ export const locations = {
     options?: {
       redirectTo?: string
     }
-  ) =>
-    `/contracts/${contractAddress}/tokens/${tokenId}/sell${
-      options ? `?${new URLSearchParams(options).toString()}` : ''
-    }`,
+  ) => `/contracts/${contractAddress}/tokens/${tokenId}/sell${options ? `?${new URLSearchParams(options).toString()}` : ''}`,
   cancel: (
     contractAddress = ':contractAddress',
     tokenId = ':tokenId',
     options?: {
       redirectTo?: string
     }
-  ) =>
-    `/contracts/${contractAddress}/tokens/${tokenId}/cancel${
-      options ? `?${new URLSearchParams(options).toString()}` : ''
-    }`,
-  transfer: (contractAddress = ':contractAddress', tokenId = ':tokenId') =>
-    `/contracts/${contractAddress}/tokens/${tokenId}/transfer`,
-  bid: (contractAddress = ':contractAddress', tokenId = ':tokenId') =>
-    `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
+  ) => `/contracts/${contractAddress}/tokens/${tokenId}/cancel${options ? `?${new URLSearchParams(options).toString()}` : ''}`,
+  transfer: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}/transfer`,
+  bid: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
   activity: () => '/activity',
-  success: (searchOptions?: {
-    txHash: string
-    tokenId: string
-    assetType: string
-    contractAddress: string
-  }) =>
-    `/success${
-      searchOptions ? `?${new URLSearchParams(searchOptions).toString()}` : ''
-    }`
+  success: (searchOptions?: { txHash: string; tokenId: string; assetType: string; contractAddress: string }) =>
+    `/success${searchOptions ? `?${new URLSearchParams(searchOptions).toString()}` : ''}`
 }
 
 function getResource(type: AssetType) {

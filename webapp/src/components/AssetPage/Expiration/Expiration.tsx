@@ -22,12 +22,9 @@ const Expiration = ({ order }: Props) => {
     <div className={styles.container}>
       <Icon name="clock outline" />
       {t('asset_page.expires')}{' '}
-      {formatDistanceToNow(
-        order.expiresAt * (isLegacyOrder(order) ? 1 : 1000),
-        {
-          addSuffix: true
-        }
-      )}
+      {formatDistanceToNow(order.expiresAt * (isLegacyOrder(order) ? 1 : 1000), {
+        addSuffix: true
+      })}
     </div>
   )
 }

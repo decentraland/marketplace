@@ -3,7 +3,4 @@ export type Props = {
   isHandsCategoryFTUEnabled: boolean
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'isHandsCategoryFTUEnabled' | 'isLoadingFeatureFlags'
->
+export type MapStateProps = Pick<Props, 'isHandsCategoryFTUEnabled' | 'isLoadingFeatureFlags'>

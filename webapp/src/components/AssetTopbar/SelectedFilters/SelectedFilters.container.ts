@@ -3,10 +3,7 @@ import { Dispatch } from 'redux'
 import { RootState } from '../../../modules/reducer'
 import { browse } from '../../../modules/routing/actions'
 import { getCategoryFromSection } from '../../../modules/routing/search'
-import {
-  getCurrentBrowseOptions,
-  getSection
-} from '../../../modules/routing/selectors'
+import { getCurrentBrowseOptions, getSection } from '../../../modules/routing/selectors'
 import { isLandSection } from '../../../modules/ui/utils'
 import { SelectedFilters } from './SelectedFilters'
 import { MapStateProps, MapDispatchProps } from './SelectedFilters.types'
@@ -24,7 +21,7 @@ const mapState = (state: RootState): MapStateProps => {
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
   return {
-    onBrowse: (options) => dispatch(browse(options))
+    onBrowse: options => dispatch(browse(options))
   }
 }
 

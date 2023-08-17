@@ -39,7 +39,4 @@ export type MapStateProps = Pick<
   | 'isLoading'
 >
 
-export type MapDispatchProps = Pick<
-  Props,
-  'onBrowse' | 'onClearFilters' | 'onOpenFiltersModal'
->
+export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters' | 'onOpenFiltersModal'>

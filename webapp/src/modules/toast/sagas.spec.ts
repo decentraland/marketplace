@@ -1,10 +1,7 @@
 import { select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { Item, Order, RentalListing } from '@dcl/schemas'
-import {
-  hideAllToasts,
-  showToast
-} from 'decentraland-dapps/dist/modules/toast/actions'
+import { hideAllToasts, showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
 import {
   bulkPickUnpickFailure,
@@ -15,23 +12,12 @@ import {
   updateListSuccess
 } from '../favorites/actions'
 import { List } from '../favorites/types'
-import {
-  FetchItemsFailureAction,
-  buyItemWithCardFailure,
-  fetchItemsFailure
-} from '../item/actions'
+import { FetchItemsFailureAction, buyItemWithCardFailure, fetchItemsFailure } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 import { NFT, NFTsFetchOptions } from '../nft/types'
-import {
-  executeOrderFailure,
-  executeOrderWithCardFailure
-} from '../order/actions'
-import {
-  claimAssetSuccess,
-  removeRentalSuccess,
-  upsertRentalSuccess
-} from '../rental/actions'
+import { executeOrderFailure, executeOrderWithCardFailure } from '../order/actions'
+import { claimAssetSuccess, removeRentalSuccess, upsertRentalSuccess } from '../rental/actions'
 import { UpsertRentalOptType } from '../rental/types'
 import { updateStoreSuccess } from '../store/actions'
 import { getEmptyStore } from '../store/utils'
@@ -49,10 +35,7 @@ import {
   getBulkPickItemFailureToast,
   getUpdateListSuccessToast
 } from '../toast/toasts'
-import {
-  ListOfLists,
-  UpdateOrCreateList
-} from '../vendor/decentraland/favorites/types'
+import { ListOfLists, UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { toastSaga } from './sagas'
 import { toastDispatchableActionsChannel } from './utils'
 
@@ -105,9 +88,7 @@ describe('when handling the success of a rental listing update', () => {
   it('should show a toast signaling the success of a rental listing update', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
-      .put(
-        showToast(getUpsertRentalSuccessToast(nft, UpsertRentalOptType.EDIT))
-      )
+      .put(showToast(getUpsertRentalSuccessToast(nft, UpsertRentalOptType.EDIT)))
       .dispatch(upsertRentalSuccess(nft, rental, UpsertRentalOptType.EDIT))
       .silentRun()
   })
@@ -117,9 +98,7 @@ describe('when handling the success of a rental listing creation', () => {
   it('should show a toast signaling the success of a rental listing creation', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
-      .put(
-        showToast(getUpsertRentalSuccessToast(nft, UpsertRentalOptType.INSERT))
-      )
+      .put(showToast(getUpsertRentalSuccessToast(nft, UpsertRentalOptType.INSERT)))
       .dispatch(upsertRentalSuccess(nft, rental, UpsertRentalOptType.INSERT))
       .silentRun()
   })
@@ -219,18 +198,15 @@ const actions: [string, FetchItemsFailureAction | FetchNFTsFailureAction][] = [
   ['NFTs', fetchNFTsFailure({} as NFTsFetchOptions, error, 123456789)]
 ]
 
-describe.each(actions)(
-  'when handling the failure of fetching %s',
-  (_, action) => {
-    it('should show a toast signaling the failure ', () => {
-      return expectSaga(toastSaga)
-        .provide([[select(getState), []]])
-        .put(showToast(getFetchAssetsFailureToast(error), 'bottom right'))
-        .dispatch(action)
-        .silentRun()
-    })
-  }
-)
+describe.each(actions)('when handling the failure of fetching %s', (_, action) => {
+  it('should show a toast signaling the failure ', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getFetchAssetsFailureToast(error), 'bottom right'))
+      .dispatch(action)
+      .silentRun()
+  })
+})
 
 describe('when handling the success of a bulk pick and unpick action', () => {
   let item: Item
@@ -249,15 +225,8 @@ describe('when handling the success of a bulk pick and unpick action', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
       .put(hideAllToasts())
-      .put(
-        showToast(
-          getBulkPickItemSuccessToast(item, pickedFor, unpickedFrom),
-          'bottom center'
-        )
-      )
-      .dispatch(
-        bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, true, true)
-      )
+      .put(showToast(getBulkPickItemSuccessToast(item, pickedFor, unpickedFrom), 'bottom center'))
+      .dispatch(bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, true, true))
       .silentRun()
   })
 })
@@ -279,15 +248,8 @@ describe('when handling the failure of a bulk pick and unpick action', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
       .put(hideAllToasts())
-      .put(
-        showToast(
-          getBulkPickItemFailureToast(item, pickedFor, unpickedFrom),
-          'bottom center'
-        )
-      )
-      .dispatch(
-        bulkPickUnpickFailure(item, pickedFor, unpickedFrom, 'anErrorMessage')
-      )
+      .put(showToast(getBulkPickItemFailureToast(item, pickedFor, unpickedFrom), 'bottom center'))
+      .dispatch(bulkPickUnpickFailure(item, pickedFor, unpickedFrom, 'anErrorMessage'))
       .silentRun()
   })
 })
@@ -297,9 +259,6 @@ describe('when handling a put into the toastDispatchableActionsChannel', () => {
     const item = {} as Item
     toastDispatchableActionsChannel.put(bulkPickUnpickRequest(item, [], []))
 
-    return expectSaga(toastSaga)
-      .put(bulkPickUnpickRequest(item, [], []))
-      .put(hideAllToasts())
-      .silentRun()
+    return expectSaga(toastSaga).put(bulkPickUnpickRequest(item, [], [])).put(hideAllToasts()).silentRun()
   })
 })

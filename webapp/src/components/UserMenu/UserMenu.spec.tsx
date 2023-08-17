@@ -3,14 +3,7 @@ import UserMenu from './UserMenu'
 import { Props as UserMenuProps } from './UserMenu.types'
 
 function renderUserMenu(props: Partial<UserMenuProps> = {}) {
-  return renderWithProviders(
-    <UserMenu
-      onClickMyAssets={jest.fn()}
-      onClickMyLists={jest.fn()}
-      isSignedIn
-      {...props}
-    />
-  )
+  return renderWithProviders(<UserMenu onClickMyAssets={jest.fn()} onClickMyLists={jest.fn()} isSignedIn {...props} />)
 }
 
 describe('UserMenu', () => {

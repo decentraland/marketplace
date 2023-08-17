@@ -39,18 +39,10 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
       showDetails={isLand(nft)}
       assetImage={
         <>
-          <AssetImage
-            className={classNames(estate.size === 0 && 'dissolved')}
-            asset={nft}
-            isDraggable
-            withNavigation
-            hasPopup
-          />
+          <AssetImage className={classNames(estate.size === 0 && 'dissolved')} asset={nft} isDraggable withNavigation hasPopup />
           {estate.size === 0 && (
             <div className="dissolved-wrapper">
-              <div className="dissolved-notice">
-                {t('estate_detail.dissolved')}
-              </div>
+              <div className="dissolved-notice">{t('estate_detail.dissolved')}</div>
             </div>
           )}
         </>

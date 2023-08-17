@@ -1,10 +1,7 @@
 import { ethers } from 'ethers'
 import { race, select, take } from 'redux-saga/effects'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import {
-  CONNECT_WALLET_FAILURE,
-  CONNECT_WALLET_SUCCESS
-} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { CONNECT_WALLET_FAILURE, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { config } from '../../config'
 import { isConnecting } from './selectors'
@@ -18,11 +15,7 @@ export function shortenAddress(address: string) {
 }
 
 export function addressEquals(address1?: string, address2?: string) {
-  return (
-    address1 !== undefined &&
-    address2 !== undefined &&
-    address1.toLowerCase() === address2.toLowerCase()
-  )
+  return address1 !== undefined && address2 !== undefined && address1.toLowerCase() === address2.toLowerCase()
 }
 
 export async function getEth(): Promise<ethers.providers.Web3Provider> {
@@ -42,9 +35,7 @@ function removeScientificNotationForSmallNumbers(number: number): string {
 }
 
 export function formatBalance(balance: number) {
-  return balance.toString().includes('-')
-    ? removeScientificNotationForSmallNumbers(balance)
-    : balance.toString()
+  return balance.toString().includes('-') ? removeScientificNotationForSmallNumbers(balance) : balance.toString()
 }
 
 export function* waitForWalletConnectionIfConnecting() {

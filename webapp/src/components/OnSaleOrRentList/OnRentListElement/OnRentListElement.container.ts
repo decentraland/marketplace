@@ -6,10 +6,7 @@ import { MapStateProps, OwnProps } from './OnRentListElement.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
-    isClaimingBackLandTransactionPending: isClaimingBackLandTransactionPending(
-      state,
-      ownProps.nft
-    )
+    isClaimingBackLandTransactionPending: isClaimingBackLandTransactionPending(state, ownProps.nft)
   }
 }
 

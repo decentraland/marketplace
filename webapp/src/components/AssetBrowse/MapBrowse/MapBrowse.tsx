@@ -6,35 +6,24 @@ import { Atlas } from '../../Atlas'
 import { getNearestTile, Coord } from './utils'
 import { Props } from './MapBrowse.types'
 
-export function MapBrowse({
-  isMapViewFiltersEnabled,
-  onlyOnRent,
-  onlyOnSale,
-  showOwned,
-  tiles,
-  ownedLands,
-  onBrowse
-}: Props) {
+export function MapBrowse({ isMapViewFiltersEnabled, onlyOnRent, onlyOnSale, showOwned, tiles, ownedLands, onBrowse }: Props) {
   const isMobileOrTable = useTabletAndBelowMediaQuery()
   const [x, setX] = useState<number>()
   const [y, setY] = useState<number>()
 
-  const handleSetFullscreen = useCallback(
-    () => onBrowse({ isMap: true, isFullscreen: true }),
-    [onBrowse]
-  )
+  const handleSetFullscreen = useCallback(() => onBrowse({ isMap: true, isFullscreen: true }), [onBrowse])
 
   const tilesForRent = useMemo(
     () =>
       Object.values(tiles)
-        .filter((tile) => 'rentalPricePerDay' in tile)
+        .filter(tile => 'rentalPricePerDay' in tile)
         .map(({ x, y }) => ({ x, y })),
     [tiles]
   )
   const tilesForSale = useMemo(
     () =>
       Object.values(tiles)
-        .filter((tile) => 'price' in tile)
+        .filter(tile => 'price' in tile)
         .map(({ x, y }) => ({ x, y })),
     [tiles]
   )
@@ -50,7 +39,7 @@ export function MapBrowse({
         }
 
         if (nft.category === NFTCategory.ESTATE && nft.data.estate) {
-          nft.data.estate.parcels.forEach((parcel) => {
+          nft.data.estate.parcels.forEach(parcel => {
             tiles.push({
               x: parcel.x,
               y: parcel.y

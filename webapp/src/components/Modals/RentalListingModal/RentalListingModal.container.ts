@@ -5,11 +5,7 @@ import { NFT } from '../../../modules/nft/types'
 import { RootState } from '../../../modules/reducer'
 import { getAddress, getWallet } from '../../../modules/wallet/selectors'
 import RentalModal from './RentalListingModal'
-import {
-  MapStateProps,
-  MapDispatchProps,
-  MapDispatch
-} from './RentalListingModal.types'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './RentalListingModal.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   address: getAddress(state),

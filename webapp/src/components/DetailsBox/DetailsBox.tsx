@@ -12,12 +12,7 @@ import styles from './DetailsBox.module.css'
 export const DetailsBox = (props: Props) => {
   const { asset, order, rental, className } = props
 
-  const owner =
-    rental && rental.lessor
-      ? rental.lessor
-      : isNFT(asset)
-      ? asset.owner
-      : asset.creator
+  const owner = rental && rental.lessor ? rental.lessor : isNFT(asset) ? asset.owner : asset.creator
 
   return (
     <Box header={t('details_box.title')} className={classNames(className)}>

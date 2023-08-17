@@ -16,13 +16,7 @@ import { isMapSet } from '../../modules/routing/utils'
 import { setView } from '../../modules/ui/actions'
 import { getView } from '../../modules/ui/browse/selectors'
 import AssetBrowse from './AssetBrowse'
-import {
-  MapDispatch,
-  MapDispatchProps,
-  MapStateProps,
-  OwnProps,
-  Props
-} from './AssetBrowse.types'
+import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps, Props } from './AssetBrowse.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const isMap = isMapSet(getIsMap(state), getSection(state), getView(state))
@@ -42,16 +36,12 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onSetView: (view) => dispatch(setView(view)),
-  onFetchAssetsFromRoute: (options) => dispatch(fetchAssetsFromRoute(options)),
-  onBrowse: (options) => dispatch(browse(options))
+  onSetView: view => dispatch(setView(view)),
+  onFetchAssetsFromRoute: options => dispatch(fetchAssetsFromRoute(options)),
+  onBrowse: options => dispatch(browse(options))
 })
 
-const mergeProps = (
-  stateProps: MapStateProps,
-  dispatchProps: MapDispatchProps,
-  ownProps: OwnProps
-): Props => ({
+const mergeProps = (stateProps: MapStateProps, dispatchProps: MapDispatchProps, ownProps: OwnProps): Props => ({
   ...stateProps,
   ...dispatchProps,
   ...ownProps,

@@ -6,13 +6,7 @@ import { Props } from './InfiniteScroll.types'
 
 function renderInfiniteScroll(props: Partial<Props>) {
   return render(
-    <InfiniteScroll
-      maxScrollPages={0}
-      hasMorePages
-      onLoadMore={jest.fn()}
-      page={0}
-      {...props}
-    >
+    <InfiniteScroll maxScrollPages={0} hasMorePages onLoadMore={jest.fn()} page={0} {...props}>
       <span>My container</span>
     </InfiniteScroll>
   )
@@ -22,9 +16,7 @@ describe('when maxScrollPages is 0', () => {
   describe('and hasMorePages is true', () => {
     it('should show load button from the start', () => {
       const screen = renderInfiniteScroll({ maxScrollPages: 0 })
-      expect(
-        screen.getByRole('button', { name: t('global.load_more') })
-      ).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: t('global.load_more') })).toBeInTheDocument()
     })
 
     describe('and load more button is clicked', () => {
@@ -34,9 +26,7 @@ describe('when maxScrollPages is 0', () => {
           maxScrollPages: 0,
           onLoadMore: loadMoreMock
         })
-        await userEvent.click(
-          screen.getByRole('button', { name: t('global.load_more') })
-        )
+        await userEvent.click(screen.getByRole('button', { name: t('global.load_more') }))
         expect(loadMoreMock).toHaveBeenCalledWith(1)
       })
     })
@@ -48,9 +38,7 @@ describe('when maxScrollPages is 0', () => {
         maxScrollPages: 0,
         hasMorePages: false
       })
-      expect(
-        screen.queryByRole('button', { name: t('global.load_more') })
-      ).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: t('global.load_more') })).not.toBeInTheDocument()
     })
   })
 })

@@ -10,18 +10,7 @@ import Title from '../Title'
 import { Props } from './BaseDetail.types'
 import './BaseDetail.css'
 
-const BaseDetail = ({
-  asset,
-  rental,
-  assetImage,
-  badges,
-  left,
-  box,
-  below,
-  className,
-  actions,
-  showDetails
-}: Props) => {
+const BaseDetail = ({ asset, rental, assetImage, badges, left, box, below, className, actions, showDetails }: Props) => {
   return (
     <div className={classNames('BaseDetail', className)}>
       <OnBack asset={asset} />
@@ -36,9 +25,7 @@ const BaseDetail = ({
             {left}
           </div>
           <div className="right">
-            {showDetails && actions ? (
-              <div className="action-box">{actions}</div>
-            ) : null}
+            {showDetails && actions ? <div className="action-box">{actions}</div> : null}
             {showDetails ? (
               <DetailsBox rental={rental} asset={asset} />
             ) : (

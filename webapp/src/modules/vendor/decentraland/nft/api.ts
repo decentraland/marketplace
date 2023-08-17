@@ -8,13 +8,7 @@ import { Contract } from '../../services'
 import { FetchOneOptions, VendorName } from '../../types'
 import { ATLAS_SERVER_URL } from '../land'
 import { retryParams } from '../utils'
-import {
-  NFTsFetchFilters,
-  NFTResponse,
-  NFTResult,
-  OwnersFilters,
-  OwnersResponse
-} from './types'
+import { NFTsFetchFilters, NFTResponse, NFTResult, OwnersFilters, OwnersResponse } from './types'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
@@ -30,35 +24,21 @@ export type PriceFilters = Omit<NFTsFetchFilters, 'category'> & {
 
 export type EstateSizeFilters = Pick<
   NFTFilters,
-  | 'isOnSale'
-  | 'adjacentToRoad'
-  | 'minDistanceToPlaza'
-  | 'maxDistanceToPlaza'
-  | 'minPrice'
-  | 'maxPrice'
+  'isOnSale' | 'adjacentToRoad' | 'minDistanceToPlaza' | 'maxDistanceToPlaza' | 'minPrice' | 'maxPrice'
 >
 
 class NFTAPI extends BaseAPI {
-  fetchEstateSizes = async (
-    filters: EstateSizeFilters
-  ): Promise<Record<string, number>> => {
+  fetchEstateSizes = async (filters: EstateSizeFilters): Promise<Record<string, number>> => {
     const { data } = await this.request('get', '/stats/estate/size', filters)
     return data
   }
 
-  fetch = async (
-    params: NFTsFetchParams,
-    filters?: NFTsFetchFilters
-  ): Promise<NFTResponse> => {
+  fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters): Promise<NFTResponse> => {
     const queryParams = this.buildNFTQueryString(params, filters)
     return this.request('get', `/nfts?${queryParams}`)
   }
 
-  async fetchOne(
-    contractAddress: string,
-    tokenId: string,
-    options?: FetchOneOptions
-  ): Promise<NFTResult> {
+  async fetchOne(contractAddress: string, tokenId: string, options?: FetchOneOptions): Promise<NFTResult> {
     const response: NFTResponse = await this.request('get', '/nfts', {
       contractAddress,
       tokenId,
@@ -74,9 +54,7 @@ class NFTAPI extends BaseAPI {
 
   async fetchTokenId(x: number, y: number) {
     try {
-      const { id } = await fetch(
-        `${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`
-      ).then((resp) => resp.json())
+      const { id } = await fetch(`${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`).then(resp => resp.json())
       return id
     } catch (error) {
       return null
@@ -105,22 +83,17 @@ class NFTAPI extends BaseAPI {
         data: Omit<Contract, 'vendor'>[]
         total: number
       } = await this.request('get', '/contracts', { first: 0 })
-      const contracts: Contract[] = response.data.map(
-        (contractWithoutVendor) => ({
-          ...contractWithoutVendor,
-          vendor: VendorName.DECENTRALAND
-        })
-      )
+      const contracts: Contract[] = response.data.map(contractWithoutVendor => ({
+        ...contractWithoutVendor,
+        vendor: VendorName.DECENTRALAND
+      }))
       return contracts
     } catch (error) {
       return []
     }
   }
 
-  private appendNFTFiltersToQueryParams(
-    queryParams: URLSearchParams,
-    filters: NFTsFetchFilters
-  ): void {
+  private appendNFTFiltersToQueryParams(queryParams: URLSearchParams, filters: NFTsFetchFilters): void {
     if (filters.rarities) {
       for (const rarity of filters.rarities) {
         queryParams.append('itemRarity', rarity)
@@ -164,17 +137,13 @@ class NFTAPI extends BaseAPI {
     }
 
     if (filters.rentalStatus) {
-      const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus)
-        ? [filters.rentalStatus]
-        : filters.rentalStatus
-      statuses.forEach((status) => queryParams.append('rentalStatus', status))
+      const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus) ? [filters.rentalStatus] : filters.rentalStatus
+      statuses.forEach(status => queryParams.append('rentalStatus', status))
     }
 
     if (filters.creator) {
-      const creators = Array.isArray(filters.creator)
-        ? filters.creator
-        : [filters.creator]
-      creators.forEach((creator) => queryParams.append('creator', creator))
+      const creators = Array.isArray(filters.creator) ? filters.creator : [filters.creator]
+      creators.forEach(creator => queryParams.append('creator', creator))
     }
 
     if (filters.contracts && filters.contracts.length > 0) {
@@ -216,10 +185,7 @@ class NFTAPI extends BaseAPI {
     }
   }
 
-  private buildNFTQueryString(
-    params: NFTsFetchParams,
-    filters?: NFTsFetchFilters
-  ): string {
+  private buildNFTQueryString(params: NFTsFetchParams, filters?: NFTsFetchFilters): string {
     const queryParams = new URLSearchParams()
     queryParams.append('first', params.first.toString())
     queryParams.append('skip', params.skip.toString())
@@ -248,9 +214,7 @@ class NFTAPI extends BaseAPI {
     return queryParams.toString()
   }
 
-  async getOwners(
-    params: OwnersFilters
-  ): Promise<{ data: OwnersResponse[]; total: number }> {
+  async getOwners(params: OwnersFilters): Promise<{ data: OwnersResponse[]; total: number }> {
     const queryParams = this.buildGetOwnersParams(params)
     return this.request('get', `/owners?${queryParams}`)
   }

@@ -5,15 +5,7 @@ import './InfoTooltip.css'
 
 const InfoTooltip = (props: Props) => {
   const { content, className } = props
-  return (
-    <Popup
-      className={className}
-      content={content}
-      position="top center"
-      trigger={<div className="InfoTooltip" />}
-      on="hover"
-    />
-  )
+  return <Popup className={className} content={content} position="top center" trigger={<div className="InfoTooltip" />} on="hover" />
 }
 
 export default React.memo(InfoTooltip)

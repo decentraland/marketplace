@@ -13,9 +13,7 @@ const ROWS_PER_PAGE = 12
 const RentalHistory = (props: Props) => {
   const { asset } = props
 
-  const tabList = [
-    { value: 'rental_history', displayValue: t('rental_history.title') }
-  ]
+  const tabList = [{ value: 'rental_history', displayValue: t('rental_history.title') }]
 
   const [rentals, setRentals] = useState<DataTableType[]>([])
   const [page, setPage] = useState(1)
@@ -35,14 +33,14 @@ const RentalHistory = (props: Props) => {
           limit: ROWS_PER_PAGE,
           page: (page - 1) * ROWS_PER_PAGE
         })
-        .then((response) => {
+        .then(response => {
           if (cancel) return
           setTotal(response.total)
           setRentals(formatDataToTable(response.results))
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => !cancel && setIsLoading(false))
-        .catch((error) => {
+        .catch(error => {
           console.error(error)
         })
     }

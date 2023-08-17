@@ -7,21 +7,14 @@ jest.mock('decentraland-ui/dist/components/Media', () => ({
 }))
 
 function renderOnlySmartFilter(props: Partial<OnlySmartFilterProps> = {}) {
-  return renderWithProviders(
-    <OnlySmartFilter onChange={jest.fn()} {...props} />
-  )
+  return renderWithProviders(<OnlySmartFilter onChange={jest.fn()} {...props} />)
 }
 
 describe('OnlySmartFilter', () => {
-  let useTabletAndBelowMediaQueryMock: jest.MockedFunction<
-    typeof useTabletAndBelowMediaQuery
-  >
+  let useTabletAndBelowMediaQueryMock: jest.MockedFunction<typeof useTabletAndBelowMediaQuery>
 
   beforeEach(() => {
-    useTabletAndBelowMediaQueryMock =
-      useTabletAndBelowMediaQuery as jest.MockedFunction<
-        typeof useTabletAndBelowMediaQuery
-      >
+    useTabletAndBelowMediaQueryMock = useTabletAndBelowMediaQuery as jest.MockedFunction<typeof useTabletAndBelowMediaQuery>
   })
 
   describe('when the dispositive is mobile or tablet', () => {

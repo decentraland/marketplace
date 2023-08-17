@@ -5,10 +5,7 @@ import { VendorName } from '../vendor/types'
 import { Proximity } from './types'
 import { getParcelProximity, getEstateProximity } from './utils'
 
-export const useProximity = (
-  nft: NFT<VendorName.DECENTRALAND>,
-  proximities: Record<string, Proximity>
-) =>
+export const useProximity = (nft: NFT<VendorName.DECENTRALAND>, proximities: Record<string, Proximity>) =>
   useMemo(() => {
     switch (nft.category) {
       case NFTCategory.PARCEL:

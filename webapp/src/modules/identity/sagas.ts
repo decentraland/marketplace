@@ -1,11 +1,7 @@
 import { ethers } from 'ethers'
 import { takeLatest, put, call } from 'redux-saga/effects'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
-import {
-  getIdentity,
-  storeIdentity,
-  clearIdentity
-} from '@dcl/single-sign-on-client'
+import { getIdentity, storeIdentity, clearIdentity } from '@dcl/single-sign-on-client'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   CONNECT_WALLET_SUCCESS,
@@ -45,11 +41,8 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
 
     const signer = eth.getSigner()
 
-    const identity: AuthIdentity = yield Authenticator.initializeAuthChain(
-      address,
-      payload,
-      IDENTITY_EXPIRATION_IN_MINUTES,
-      (message) => signer.signMessage(message)
+    const identity: AuthIdentity = yield Authenticator.initializeAuthChain(address, payload, IDENTITY_EXPIRATION_IN_MINUTES, message =>
+      signer.signMessage(message)
     )
 
     // Stores the identity into the SSO iframe.
@@ -57,12 +50,7 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
 
     yield put(generateIdentitySuccess(address, identity))
   } catch (error) {
-    yield put(
-      generateIdentityFailure(
-        address,
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(generateIdentityFailure(address, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }
 

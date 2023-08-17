@@ -9,8 +9,7 @@ import { MapStateProps, OwnProps } from './CategoryFilter.types'
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values } = ownProps
   return {
-    section:
-      'section' in values ? (values.section as Section) : getSection(state),
+    section: 'section' in values ? (values.section as Section) : getSection(state),
     assetType: 'assetType' in values ? values.assetType : getAssetType(state),
     view: getView(state)
   }

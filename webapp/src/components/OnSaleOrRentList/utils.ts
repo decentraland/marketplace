@@ -6,20 +6,11 @@ import { Props as SaleElement } from './OnSaleListElement/OnSaleListElement.type
 
 type Element = SaleElement & { rental?: RentalListing }
 
-export const useProcessedElements = (
-  elems: Element[],
-  search: string,
-  sortBy: SortBy,
-  page: number,
-  perPage: number
-) => {
+export const useProcessedElements = (elems: Element[], search: string, sortBy: SortBy, page: number, perPage: number) => {
   const filtered = useMemo(() => filterByName(elems, search), [elems, search])
   const total = useMemo(() => filtered.length, [filtered])
   const sorted = useMemo(() => sort(filtered, sortBy), [filtered, sortBy])
-  const paginated = useMemo(
-    () => paginate(sorted, page, perPage),
-    [sorted, page, perPage]
-  )
+  const paginated = useMemo(() => paginate(sorted, page, perPage), [sorted, page, perPage])
 
   return {
     paginated,
@@ -28,11 +19,11 @@ export const useProcessedElements = (
 }
 
 export const filterByName = (elements: Element[], name: string) =>
-  elements.filter((element) =>
+  elements.filter(element =>
     handleElement(
       element,
-      (item) => item.name.toLowerCase().includes(name.toLowerCase()),
-      (nft) => nft.name.toLowerCase().includes(name.toLowerCase())
+      item => item.name.toLowerCase().includes(name.toLowerCase()),
+      nft => nft.name.toLowerCase().includes(name.toLowerCase())
     )
   )
 
@@ -48,11 +39,7 @@ export const sort = (elements: Element[], sortBy: SortBy) =>
     }
   })
 
-export const paginate = (
-  elements: Element[],
-  page: number,
-  perPage: number
-) => {
+export const paginate = (elements: Element[], page: number, perPage: number) => {
   const start = (page - 1) * perPage
   const end = Math.min(start + perPage, elements.length)
   return elements.slice(start, end)
@@ -61,14 +48,14 @@ export const paginate = (
 const getName = (element: Element) =>
   handleElement(
     element,
-    (item) => item.name,
-    (nft) => nft.name
+    item => item.name,
+    nft => nft.name
   )
 
 const getUpdatedAt = (element: Element) =>
   handleElement(
     element,
-    (item) => item.updatedAt,
+    item => item.updatedAt,
     (_nft, orderOrRent) => orderOrRent.updatedAt
   )
 
@@ -76,7 +63,4 @@ const handleElement = <T>(
   element: Element,
   handleItem: (item: Item) => T,
   handleNFT: (nft: NFT, orderOrRental: Order | RentalListing) => T
-) =>
-  element.item
-    ? handleItem(element.item)
-    : handleNFT(element.nft!, element.order ? element.order : element.rental!)
+) => (element.item ? handleItem(element.item) : handleNFT(element.nft!, element.order ? element.order : element.rental!))

@@ -11,12 +11,7 @@ const BidList = (props: Props) => {
 
   // this is because when you change from one nft detail to another you would still see the previous nft bids
   const filteredBids = useMemo(
-    () =>
-      bids.filter(
-        (bid) =>
-          bid.contractAddress === nft.contractAddress &&
-          bid.tokenId === nft.tokenId
-      ),
+    () => bids.filter(bid => bid.contractAddress === nft.contractAddress && bid.tokenId === nft.tokenId),
     [nft, bids]
   )
 
@@ -38,7 +33,7 @@ const BidList = (props: Props) => {
     <div className="BidList">
       <Header sub>Bids</Header>
       <div className="list">
-        {filteredBids.map((bid) => (
+        {filteredBids.map(bid => (
           <Bid key={bid.id} bid={bid} isArchivable={false} hasImage={false} />
         ))}
       </div>

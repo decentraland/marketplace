@@ -11,13 +11,9 @@ class AccountAPI extends BaseAPI {
   }
 
   fetchOne = async (address: string): Promise<Account> => {
-    const { data }: AccountResponse = await this.request(
-      'get',
-      '/collections',
-      {
-        address
-      }
-    )
+    const { data }: AccountResponse = await this.request('get', '/collections', {
+      address
+    })
 
     if (data.length === 0) {
       throw new Error('Not found')
@@ -46,9 +42,7 @@ class AccountAPI extends BaseAPI {
     }
 
     if (filters.address) {
-      filters.address.forEach((address) =>
-        queryParams.append('address', address)
-      )
+      filters.address.forEach(address => queryParams.append('address', address))
     }
 
     if (filters.network) {

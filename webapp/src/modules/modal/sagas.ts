@@ -36,10 +36,7 @@ export function* modalSaga() {
     handleCloseAllModals
   )
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleCloseRemoveRentalModal)
-  yield takeEvery(
-    ACCEPT_RENTAL_LISTING_SUCCESS,
-    handleOpenRentConfirmationModal
-  )
+  yield takeEvery(ACCEPT_RENTAL_LISTING_SUCCESS, handleOpenRentConfirmationModal)
 }
 
 function* handleLocationChange() {
@@ -62,9 +59,7 @@ function* handleCloseRemoveRentalModal() {
   }
 }
 
-function* handleOpenRentConfirmationModal(
-  action: AcceptRentalListingSuccessAction
-) {
+function* handleOpenRentConfirmationModal(action: AcceptRentalListingSuccessAction) {
   const { rental, periodIndexChosen } = action.payload
   yield put(closeModal('ConfirmRentModal'))
   yield put(

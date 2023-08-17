@@ -1,13 +1,7 @@
 import { Dispatch } from 'redux'
 import { Item } from '@dcl/schemas'
-import {
-  openModal,
-  OpenModalAction
-} from 'decentraland-dapps/dist/modules/modal/actions'
-import {
-  bulkPickUnpickStart,
-  BulkPickUnpickStartAction
-} from '../../modules/favorites/actions'
+import { openModal, OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
+import { bulkPickUnpickStart, BulkPickUnpickStartAction } from '../../modules/favorites/actions'
 
 export type Props = {
   className?: string
@@ -20,10 +14,7 @@ export type Props = {
   onClick: () => ReturnType<typeof bulkPickUnpickStart>
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'isPickedByUser' | 'count' | 'isLoading'
->
+export type MapStateProps = Pick<Props, 'isPickedByUser' | 'count' | 'isLoading'>
 
 export type MapDispatchProps = Pick<Props, 'onCounterClick' | 'onClick'>
 export type MapDispatch = Dispatch<BulkPickUnpickStartAction | OpenModalAction>

@@ -11,9 +11,7 @@ import './VendorMenu.css'
 const VendorMenu = (props: Props) => {
   const { count, currentVendor, address, vendor, section, onClick } = props
 
-  const [isCurrentVendor, setIsCurrentVendor] = useState(
-    currentVendor === vendor
-  )
+  const [isCurrentVendor, setIsCurrentVendor] = useState(currentVendor === vendor)
   const [isOpen, setIsOpen] = useState(isCurrentVendor)
   const [currentCount, setCurrentCount] = useState(count)
 
@@ -69,20 +67,8 @@ const VendorMenu = (props: Props) => {
   return (
     <div className={className.join(' ')}>
       <Menu>
-        <MenuItem
-          className="vendor-menu-item"
-          value={vendor}
-          subtitle={subtitle}
-          image={`/${vendor}.png`}
-          onClick={handleToggleOpen}
-        />
-        {isOpen ? (
-          <NFTSections
-            vendor={vendor}
-            section={isCurrentVendor ? section : undefined}
-            onSectionClick={onClick}
-          />
-        ) : null}
+        <MenuItem className="vendor-menu-item" value={vendor} subtitle={subtitle} image={`/${vendor}.png`} onClick={handleToggleOpen} />
+        {isOpen ? <NFTSections vendor={vendor} section={isCurrentVendor ? section : undefined} onSectionClick={onClick} /> : null}
       </Menu>
     </div>
   )

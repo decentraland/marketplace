@@ -69,23 +69,10 @@ const WearableDetail = ({ nft }: Props) => {
           <div className={styles.wearableBadgesContainer}>
             <Title asset={nft} />
             <div className={styles.badges}>
-              <RarityBadge
-                rarity={wearable.rarity}
-                assetType={AssetType.NFT}
-                category={NFTCategory.WEARABLE}
-              />
-              <CategoryBadge
-                category={wearable.category}
-                assetType={AssetType.NFT}
-              />
-              <GenderBadge
-                bodyShapes={wearable.bodyShapes}
-                assetType={AssetType.NFT}
-                section={Section.WEARABLES}
-              />
-              {wearable.isSmart ? (
-                <SmartBadge assetType={AssetType.NFT} />
-              ) : null}
+              <RarityBadge rarity={wearable.rarity} assetType={AssetType.NFT} category={NFTCategory.WEARABLE} />
+              <CategoryBadge category={wearable.category} assetType={AssetType.NFT} />
+              <GenderBadge bodyShapes={wearable.bodyShapes} assetType={AssetType.NFT} section={Section.WEARABLES} />
+              {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
               <CampaignBadge contract={nft.contractAddress} />
             </div>
           </div>

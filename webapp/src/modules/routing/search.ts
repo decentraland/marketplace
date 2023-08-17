@@ -1,12 +1,4 @@
-import {
-  CatalogSortBy,
-  EmoteCategory,
-  EmotePlayMode,
-  ItemSortBy,
-  Network,
-  NFTCategory,
-  WearableCategory
-} from '@dcl/schemas'
+import { CatalogSortBy, EmoteCategory, EmotePlayMode, ItemSortBy, Network, NFTCategory, WearableCategory } from '@dcl/schemas'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { NFTSortBy } from '../nft/types'
@@ -18,29 +10,16 @@ import { isCatalogView, isCatalogViewWithStatusFilter } from './utils'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
-export function getDefaultOptionsByView(
-  view?: View,
-  section?: Section
-): BrowseOptions {
+export function getDefaultOptionsByView(view?: View, section?: Section): BrowseOptions {
   if (section === Section.LISTS) return {}
 
   let defaultOptions: Partial<BrowseOptions> = {
     onlyOnSale: view && isAccountView(view) ? false : undefined,
-    sortBy:
-      view && isAccountView(view)
-        ? SortBy.NEWEST
-        : section && isLandSection(section)
-        ? SortBy.NEWEST
-        : SortBy.RECENTLY_LISTED
+    sortBy: view && isAccountView(view) ? SortBy.NEWEST : section && isLandSection(section) ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
   }
   if (section && isCatalogView(view)) {
     const currentCategoryBySection = getCategoryFromSection(section)
-    if (
-      currentCategoryBySection &&
-      [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(
-        currentCategoryBySection
-      )
-    ) {
+    if (currentCategoryBySection && [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(currentCategoryBySection)) {
       defaultOptions = {
         ...defaultOptions,
         onlyOnSale: view === View.CURRENT_ACCOUNT ? false : undefined, // current account shows on sale false as default
@@ -96,26 +75,17 @@ export function getSearchParams(options?: BrowseOptions) {
       params.set('onlyOnRent', options.onlyOnRent.toString())
     }
     if (options.rarities && options.rarities.length > 0) {
-      params.set(
-        'rarities',
-        options.rarities.join(SEARCH_ARRAY_PARAM_SEPARATOR)
-      )
+      params.set('rarities', options.rarities.join(SEARCH_ARRAY_PARAM_SEPARATOR))
     }
     if (options.status) {
       params.set('status', options.status.toString())
     }
     if (options.wearableGenders && options.wearableGenders.length > 0) {
-      params.set(
-        'genders',
-        options.wearableGenders.join(SEARCH_ARRAY_PARAM_SEPARATOR)
-      )
+      params.set('genders', options.wearableGenders.join(SEARCH_ARRAY_PARAM_SEPARATOR))
     }
 
     if (options.contracts && options.contracts.length > 0) {
-      params.set(
-        'contracts',
-        options.contracts.join(SEARCH_ARRAY_PARAM_SEPARATOR)
-      )
+      params.set('contracts', options.contracts.join(SEARCH_ARRAY_PARAM_SEPARATOR))
     }
 
     if (options.creators && options.creators.length > 0) {
@@ -132,12 +102,7 @@ export function getSearchParams(options?: BrowseOptions) {
       params.set('network', options.network)
     }
 
-    if (
-      options.emotePlayMode?.length &&
-      options.emotePlayMode?.every((option) =>
-        Object.values(EmotePlayMode).includes(option)
-      )
-    ) {
+    if (options.emotePlayMode?.length && options.emotePlayMode?.every(option => Object.values(EmotePlayMode).includes(option))) {
       for (const emotePlayMode of options.emotePlayMode) {
         params.append('emotePlayMode', emotePlayMode)
       }
@@ -262,9 +227,7 @@ export function getMarketAssetTypeFromCategory(category: NFTCategory) {
 
 export function getSearchSection(category: WearableCategory | EmoteCategory) {
   for (const section of Object.values(Section)) {
-    const sectionCategory = Object.values(EmoteCategory).includes(
-      category as EmoteCategory
-    )
+    const sectionCategory = Object.values(EmoteCategory).includes(category as EmoteCategory)
       ? getSearchEmoteCategory(section)
       : getSearchWearableCategory(section)
     if (category === sectionCategory) {
@@ -445,15 +408,11 @@ export function getNFTSortBy(orderBy: NFTSortBy) {
   return sortBy
 }
 
-export function getURLParamArray<T extends string>(
-  search: string,
-  paramName: string,
-  validValues: string[] = []
-) {
+export function getURLParamArray<T extends string>(search: string, paramName: string, validValues: string[] = []) {
   let params = new URLSearchParams(search).getAll(paramName) as T[]
 
   if (validValues.length > 0) {
-    params = params.filter((item) => validValues.includes(item))
+    params = params.filter(item => validValues.includes(item))
   }
 
   return params
@@ -464,23 +423,12 @@ export function getURLParamArray<T extends string>(
 // from the URL are parsed from rarities=common_uncommon instead of
 // rarities=common&rarities=uncommon I'll leave it as it is for now to prevent
 // further refactoring but should be changed in the future.
-export function getURLParamArray_nonStandard<T extends string>(
-  search: string,
-  paramName: string,
-  validValues: string[] = []
-) {
+export function getURLParamArray_nonStandard<T extends string>(search: string, paramName: string, validValues: string[] = []) {
   const param = getURLParam<T>(search, paramName)
-  return param === null
-    ? []
-    : (param
-        .split(SEARCH_ARRAY_PARAM_SEPARATOR)
-        .filter((item) => validValues.includes(item as T)) as T[])
+  return param === null ? [] : (param.split(SEARCH_ARRAY_PARAM_SEPARATOR).filter(item => validValues.includes(item as T)) as T[])
 }
 
-export function getURLParam<T extends string>(
-  search: string,
-  paramName: string
-) {
+export function getURLParam<T extends string>(search: string, paramName: string) {
   const param = new URLSearchParams(search).get(paramName) as T | null
   return param
 }

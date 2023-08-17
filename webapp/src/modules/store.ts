@@ -51,9 +51,7 @@ export function initStore() {
     actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   })
-  const analyticsMiddleware = createAnalyticsMiddleware(
-    config.get('SEGMENT_API_KEY')!
-  )
+  const analyticsMiddleware = createAnalyticsMiddleware(config.get('SEGMENT_API_KEY')!)
 
   const middleware = applyMiddleware(
     sagasMiddleware,
@@ -64,14 +62,9 @@ export function initStore() {
     analyticsMiddleware
   )
   const enhancer = composeEnhancers(middleware)
-  const store = createStore(
-    rootReducer as unknown as ReturnType<typeof createRootReducer>,
-    enhancer
-  )
+  const store = createStore(rootReducer as unknown as ReturnType<typeof createRootReducer>, enhancer)
   const getIdentity = () => {
-    return (
-      (getCurrentIdentity(store.getState()) as AuthIdentity | null) ?? undefined
-    )
+    return (getCurrentIdentity(store.getState()) as AuthIdentity | null) ?? undefined
   }
   sagasMiddleware.run(rootSaga, getIdentity)
   loadStorageMiddleware(store)
@@ -101,12 +94,7 @@ export function initTestStore(preloadedState = {}) {
     migrations: {} // migration object that will migrate your localstorage (optional)
   })
 
-  const middleware = applyMiddleware(
-    sagasMiddleware,
-    routerMiddleware(history),
-    transactionMiddleware,
-    storageMiddleware
-  )
+  const middleware = applyMiddleware(sagasMiddleware, routerMiddleware(history), transactionMiddleware, storageMiddleware)
   const enhancer = compose(middleware)
   const store = createStore(rootReducer, preloadedState, enhancer)
   sagasMiddleware.run(rootSaga, () => undefined)

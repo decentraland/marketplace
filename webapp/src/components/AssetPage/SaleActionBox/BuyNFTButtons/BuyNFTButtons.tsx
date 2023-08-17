@@ -8,14 +8,7 @@ import * as events from '../../../../utils/events'
 import { Props } from './BuyNFTButtons.types'
 import styles from './BuyNFTButtons.module.css'
 
-const BuyNFTButtons = ({
-  assetType,
-  contractAddress,
-  network,
-  tokenId,
-  itemId,
-  buyWithCardClassName
-}: Props) => {
+const BuyNFTButtons = ({ assetType, contractAddress, network, tokenId, itemId, buyWithCardClassName }: Props) => {
   const assetId = tokenId || itemId
 
   const analytics = getAnalytics()
@@ -26,12 +19,7 @@ const BuyNFTButtons = ({
 
   return (
     <>
-      <Button
-        as={Link}
-        to={locations.buy(assetType, contractAddress, assetId)}
-        primary
-        fluid
-      >
+      <Button as={Link} to={locations.buy(assetType, contractAddress, assetId)} primary fluid>
         <Mana showTooltip inline size="small" network={network} />
         {t('asset_page.actions.buy_with_mana')}
       </Button>

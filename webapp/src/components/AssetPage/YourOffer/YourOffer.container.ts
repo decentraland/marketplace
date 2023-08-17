@@ -12,9 +12,8 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onUpdate: (bid) =>
-    dispatch(push(locations.bid(bid.contractAddress, bid.tokenId))),
-  onCancel: (bid) => dispatch(cancelBidRequest(bid))
+  onUpdate: bid => dispatch(push(locations.bid(bid.contractAddress, bid.tokenId))),
+  onCancel: bid => dispatch(cancelBidRequest(bid))
 })
 
 export default connect(mapState, mapDispatch)(YourOffer)

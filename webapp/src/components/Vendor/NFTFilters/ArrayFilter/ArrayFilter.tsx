@@ -4,20 +4,17 @@ import { Props } from './ArrayFilter.types'
 import './ArrayFilter.css'
 
 const getNewValues = (value: string, values: string[]) => {
-  return values.some((x) => x === value)
-    ? values.filter((x) => x !== value)
-    : [...values, value]
+  return values.some(x => x === value) ? values.filter(x => x !== value) : [...values, value]
 }
 
 const ArrayFilter = (props: Props) => {
   const { name, values, options, onChange } = props
 
-  const handleKeyDown =
-    (option: string) => (evt: React.KeyboardEvent<HTMLDivElement>) => {
-      if (evt.key === 'Enter') {
-        onChange(getNewValues(option, values))
-      }
+  const handleKeyDown = (option: string) => (evt: React.KeyboardEvent<HTMLDivElement>) => {
+    if (evt.key === 'Enter') {
+      onChange(getNewValues(option, values))
     }
+  }
 
   const handleOnClick = (option: string) => () => {
     onChange(getNewValues(option, values))
@@ -31,7 +28,7 @@ const ArrayFilter = (props: Props) => {
         </Header>
       ) : null}
       <div className="options">
-        {options.map((option) => {
+        {options.map(option => {
           const isActive = values.includes(option.value)
           return (
             <div

@@ -1,8 +1,4 @@
-import {
-  LocationChangeAction,
-  LOCATION_CHANGE,
-  RouterLocation
-} from 'connected-react-router'
+import { LocationChangeAction, LOCATION_CHANGE, RouterLocation } from 'connected-react-router'
 
 export type RoutingState = {
   isLoadMore: boolean
@@ -16,18 +12,12 @@ const INITIAL_STATE: RoutingState = {
 
 type RoutingReducerAction = LocationChangeAction
 
-export function routingReducer(
-  state: RoutingState = INITIAL_STATE,
-  action: RoutingReducerAction
-) {
+export function routingReducer(state: RoutingState = INITIAL_STATE, action: RoutingReducerAction) {
   switch (action.type) {
     case LOCATION_CHANGE: {
       return {
         ...state,
-        visitedLocations: [
-          action.payload.location,
-          ...state.visitedLocations
-        ].slice(0, 2) // only save last 2 locations
+        visitedLocations: [action.payload.location, ...state.visitedLocations].slice(0, 2) // only save last 2 locations
       }
     }
     default:

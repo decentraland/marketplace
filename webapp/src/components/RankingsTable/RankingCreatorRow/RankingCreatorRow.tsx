@@ -45,10 +45,7 @@ const RankingCreatorRow = ({ entity }: Props) => {
                   </>
                 )}
               </span>
-              <div
-                className="arrow-container"
-                onClick={() => setExpanded(!expanded)}
-              >
+              <div className="arrow-container" onClick={() => setExpanded(!expanded)}>
                 <span> {t(`global.${expanded ? 'less' : 'more'}`)} </span>
                 <i className={`caret back ${expanded ? 'up' : ''}`} />
               </div>
@@ -59,15 +56,11 @@ const RankingCreatorRow = ({ entity }: Props) => {
           <div>
             <div className="rankings-creator-more-data-container">
               <div>
-                <span>
-                  {t('home_page.analytics.rankings.creators.unique_collectors')}
-                </span>
+                <span>{t('home_page.analytics.rankings.creators.unique_collectors')}</span>
                 {entity.uniqueCollectors}
               </div>
               <div>
-                <span>
-                  {t('home_page.analytics.rankings.creators.items_sold')}
-                </span>
+                <span>{t('home_page.analytics.rankings.creators.items_sold')}</span>
                 {entity.sales}
               </div>
             </div>

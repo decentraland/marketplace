@@ -12,13 +12,8 @@ const mapState = (state: RootState): MapStateProps => {
   const search = new URLSearchParams(getSearch(state))
   const transaction = getTransaction(state, search.get('txHash') || '')
   return {
-    isLoading: Boolean(
-      transaction && transaction.status !== TransactionStatus.CONFIRMED
-    ),
-    mintedTokenId: getTokenIdFromLogs(
-      ChainId.MATIC_MUMBAI,
-      transaction?.receipt?.logs
-    )
+    isLoading: Boolean(transaction && transaction.status !== TransactionStatus.CONFIRMED),
+    mintedTokenId: getTokenIdFromLogs(ChainId.MATIC_MUMBAI, transaction?.receipt?.logs)
   }
 }
 

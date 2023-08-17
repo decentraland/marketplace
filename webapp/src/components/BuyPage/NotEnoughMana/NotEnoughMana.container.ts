@@ -7,7 +7,7 @@ import { MapDispatchProps, MapDispatch } from './NotEnoughMana.types'
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onGetMana: () => dispatch(openBuyManaWithFiatModalRequest(Network.MATIC)),
-  onBuyWithCard: (asset) => dispatch(openTransak(asset))
+  onBuyWithCard: asset => dispatch(openTransak(asset))
 })
 
 export default connect(null, mapDispatch)(NotEnoughMana)

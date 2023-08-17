@@ -1,11 +1,7 @@
 import { call } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { builderAPI } from '../vendor/decentraland/builder/api'
-import {
-  fetchEventFailure,
-  fetchEventRequest,
-  fetchEventSuccess
-} from './actions'
+import { fetchEventFailure, fetchEventRequest, fetchEventSuccess } from './actions'
 import { eventSaga } from './sagas'
 
 const anError = new Error('An error occured')
@@ -17,12 +13,7 @@ describe('when handling the fetch events request action', () => {
   describe('and the api call fails', () => {
     it('should dispatch an action signaling the failure of the action handling', () => {
       return expectSaga(eventSaga)
-        .provide([
-          [
-            call([builderAPI, 'fetchAddressesByTag'], [eventTag]),
-            Promise.reject(anError)
-          ]
-        ])
+        .provide([[call([builderAPI, 'fetchAddressesByTag'], [eventTag]), Promise.reject(anError)]])
         .put(fetchEventFailure(anError.message))
         .dispatch(fetchEventRequest(eventTag))
         .run({ silenceTimeout: true })
@@ -32,12 +23,7 @@ describe('when handling the fetch events request action', () => {
   describe('and the api call fails', () => {
     it('should dispatch an action signaling the success of the action handling', () => {
       return expectSaga(eventSaga)
-        .provide([
-          [
-            call([builderAPI, 'fetchAddressesByTag'], [eventTag]),
-            eventContracts
-          ]
-        ])
+        .provide([[call([builderAPI, 'fetchAddressesByTag'], [eventTag]), eventContracts]])
         .put(fetchEventSuccess(eventTag, eventContracts))
         .dispatch(fetchEventRequest(eventTag))
         .run({ silenceTimeout: true })

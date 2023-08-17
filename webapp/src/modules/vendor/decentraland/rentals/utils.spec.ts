@@ -20,14 +20,8 @@ describe('#objectToURLSearchParams', () => {
         const urlSearchParams = objectToURLSearchParams({
           property1: ['value1', 'value2', 'value3']
         })
-        expect(urlSearchParams.getAll('property1')).toEqual([
-          'value1',
-          'value2',
-          'value3'
-        ])
-        expect(urlSearchParams.toString()).toEqual(
-          'property1=value1&property1=value2&property1=value3'
-        )
+        expect(urlSearchParams.getAll('property1')).toEqual(['value1', 'value2', 'value3'])
+        expect(urlSearchParams.toString()).toEqual('property1=value1&property1=value2&property1=value3')
       })
     })
   })

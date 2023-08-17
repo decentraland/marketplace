@@ -19,9 +19,7 @@ export class ItemAPI extends BaseClient {
       contractAddresses: [contractAddress],
       itemId
     })
-    const response: ItemResponse = await this.fetch(
-      `/v1/items?${queryParams.toString()}`
-    )
+    const response: ItemResponse = await this.fetch(`/v1/items?${queryParams.toString()}`)
 
     if (response.data.length === 0) {
       throw new Error('Not found')
@@ -50,10 +48,8 @@ export class ItemAPI extends BaseClient {
     }
 
     if (filters.creator) {
-      const creators = Array.isArray(filters.creator)
-        ? filters.creator
-        : [filters.creator]
-      creators.forEach((creator) => queryParams.append('creator', creator))
+      const creators = Array.isArray(filters.creator) ? filters.creator : [filters.creator]
+      creators.forEach(creator => queryParams.append('creator', creator))
     }
 
     if (filters.isSoldOut) {
@@ -99,12 +95,10 @@ export class ItemAPI extends BaseClient {
       }
     }
     if (filters.ids) {
-      filters.ids.forEach((id) => queryParams.append('id', id))
+      filters.ids.forEach(id => queryParams.append('id', id))
     }
     if (filters.contractAddresses) {
-      filters.contractAddresses.forEach((contract) =>
-        queryParams.append('contractAddress', contract)
-      )
+      filters.contractAddresses.forEach(contract => queryParams.append('contractAddress', contract))
     }
     if (filters.itemId) {
       queryParams.append('itemId', filters.itemId)

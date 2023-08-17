@@ -28,10 +28,7 @@ import styles from './ListCard.module.css'
 const ListCard = (props: Props) => {
   const { list, items, onDeleteList, onEditList, viewOnly = false } = props
 
-  const isViewOnly = useMemo(
-    () => list.id === DEFAULT_FAVORITES_LIST_ID || viewOnly,
-    [list, viewOnly]
-  )
+  const isViewOnly = useMemo(() => list.id === DEFAULT_FAVORITES_LIST_ID || viewOnly, [list, viewOnly])
 
   return (
     <Card
@@ -47,27 +44,16 @@ const ListCard = (props: Props) => {
       className={classnames(styles.ListCard, isViewOnly && styles.viewOnly)}
     >
       <div className={styles.image}>
-        {list.isPrivate ? (
-          <PrivateTag
-            data-testid={PRIVATE_DATA_TEST_ID}
-            className={styles.private}
-          />
-        ) : null}
+        {list.isPrivate ? <PrivateTag data-testid={PRIVATE_DATA_TEST_ID} className={styles.private} /> : null}
         {items.length > 0 ? (
-          <div
-            className={styles[`grid-${items.length}`]}
-            data-testid={GRID_PREVIEW_DATA_TEST_ID}
-          >
-            {items.map((item) => (
+          <div className={styles[`grid-${items.length}`]} data-testid={GRID_PREVIEW_DATA_TEST_ID}>
+            {items.map(item => (
               <AssetImage key={item.id} asset={item} />
             ))}
           </div>
         ) : null}
         {items.length === 0 ? (
-          <div
-            className={styles.empty}
-            data-testid={EMPTY_PREVIEW_DATA_TEST_ID}
-          >
+          <div className={styles.empty} data-testid={EMPTY_PREVIEW_DATA_TEST_ID}>
             <span className={styles.icon}></span>
             <span>{t('list_card.no_items')}</span>
           </div>
@@ -86,21 +72,13 @@ const ListCard = (props: Props) => {
             {!isViewOnly ? (
               <Dropdown
                 data-testid={ACTIONS_DATA_TEST_ID}
-                onClick={(e) => e.preventDefault()}
+                onClick={e => e.preventDefault()}
                 icon={<Icon name="ellipsis vertical" size="large" />}
                 direction="left"
               >
                 <Dropdown.Menu>
-                  <Dropdown.Item
-                    data-testid={EDIT_LIST_DATA_TEST_ID}
-                    onClick={onEditList}
-                    text={t('list_card.edit_list')}
-                  />
-                  <Dropdown.Item
-                    data-testid={DELETE_LIST_DATA_TEST_ID}
-                    onClick={onDeleteList}
-                    text={t('list_card.delete_list')}
-                  />
+                  <Dropdown.Item data-testid={EDIT_LIST_DATA_TEST_ID} onClick={onEditList} text={t('list_card.edit_list')} />
+                  <Dropdown.Item data-testid={DELETE_LIST_DATA_TEST_ID} onClick={onDeleteList} text={t('list_card.delete_list')} />
                 </Dropdown.Menu>
               </Dropdown>
             ) : null}

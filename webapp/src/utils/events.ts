@@ -15,10 +15,8 @@ export const CLICK_BUY_NFT_WITH_CARD = 'Click on Buy NFT With Card'
 export const CANCEL_BUY_NFT_WITH_CARD = 'Cancel Buy NFT With Card'
 export const CLICK_GO_TO_BUY_NFT_WITH_CARD = 'Click on go to Buy NFT With Card'
 export const OPEN_BUY_MANA_MODAL = 'Open BUY MANA modal'
-export const CONTINUE_BUY_WITH_CARD_MODAL =
-  'Click on Continue in Buy With Card Explanation Modal'
-export const BACK_BUY_WITH_CARD_MODAL =
-  'Click on Go Back in Buy With Card Explanation Modal'
+export const CONTINUE_BUY_WITH_CARD_MODAL = 'Click on Continue in Buy With Card Explanation Modal'
+export const BACK_BUY_WITH_CARD_MODAL = 'Click on Go Back in Buy With Card Explanation Modal'
 
 export const TOGGLE_PREVIEW_MODE = 'Toggle Preview Mode'
 export const UPSERT_LAND_RENTAL = 'Upsert Land Rental'

@@ -27,10 +27,8 @@ import { MapStateProps, OwnProps } from './PriceFilter.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps
-  const section =
-    'section' in values ? (values.section as Section) : getSection(state)
-  const onlyOnSale =
-    'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
+  const section = 'section' in values ? (values.section as Section) : getSection(state)
+  const onlyOnSale = 'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
   const onlyOnRent = getOnlyOnRent(state)
   let landStatus = LANDFilters.ALL_LAND
 
@@ -45,37 +43,17 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     assetType: getAssetType(state),
     rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
     network: 'network' in values ? values.network : getNetwork(state),
-    bodyShapes:
-      'wearableGenders' in values
-        ? values.wearableGenders
-        : getWearableGenders(state),
+    bodyShapes: 'wearableGenders' in values ? values.wearableGenders : getWearableGenders(state),
     isOnlySmart: getOnlySmart(state),
     landStatus,
     emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
-    collection:
-      'contracts' in values ? values.contracts?.[0] : getContracts(state)[0],
-    minDistanceToPlaza:
-      'minDistanceToPlaza' in values
-        ? values.minDistanceToPlaza
-        : getMinDistanceToPlaza(state),
-    maxDistanceToPlaza:
-      'maxDistanceToPlaza' in values
-        ? values.maxDistanceToPlaza
-        : getMaxDistanceToPlaza(state),
-    adjacentToRoad:
-      'adjacentToRoad' in values
-        ? values.adjacentToRoad
-        : getAdjacentToRoad(state),
-    minEstateSize:
-      'minEstateSize' in values
-        ? values.minEstateSize || ''
-        : getMinEstateSize(state),
-    maxEstateSize:
-      'maxEstateSize' in values
-        ? values.maxEstateSize || ''
-        : getMaxEstateSize(state),
-    rentalDays:
-      'rentalDays' in values ? values.rentalDays : getRentalDays(state),
+    collection: 'contracts' in values ? values.contracts?.[0] : getContracts(state)[0],
+    minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
+    maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
+    adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
+    minEstateSize: 'minEstateSize' in values ? values.minEstateSize || '' : getMinEstateSize(state),
+    maxEstateSize: 'maxEstateSize' in values ? values.maxEstateSize || '' : getMaxEstateSize(state),
+    rentalDays: 'rentalDays' in values ? values.rentalDays : getRentalDays(state),
     isRentalPriceFitlerChartEnabled: getIsRentalPriceFilterChartEnabled(state)
   }
 }

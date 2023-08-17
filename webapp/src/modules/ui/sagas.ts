@@ -2,24 +2,14 @@ import { push, getLocation } from 'connected-react-router'
 import { eventChannel } from 'redux-saga'
 import { takeEvery, put, select, take, spawn } from 'redux-saga/effects'
 import { IPreviewController, PreviewEmoteEventType } from '@dcl/schemas'
-import {
-  CONNECT_WALLET_SUCCESS,
-  ConnectWalletSuccessAction
-} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { locations } from '../routing/locations'
 import { browseSaga } from './browse/sagas'
-import {
-  setEmotePlaying,
-  SetWearablePreviewControllerAction,
-  SET_WEARABLE_PREVIEW_CONTROLLER
-} from './preview/actions'
+import { setEmotePlaying, SetWearablePreviewControllerAction, SET_WEARABLE_PREVIEW_CONTROLLER } from './preview/actions'
 
 export function* uiSaga() {
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
-  yield takeEvery(
-    SET_WEARABLE_PREVIEW_CONTROLLER,
-    handleSetWearablePreviewController
-  )
+  yield takeEvery(SET_WEARABLE_PREVIEW_CONTROLLER, handleSetWearablePreviewController)
   yield spawn(browseSaga)
 }
 
@@ -37,7 +27,7 @@ function* handleConnectWalletSuccess(_action: ConnectWalletSuccessAction) {
 }
 
 function createWearablePreviewChannel(controller: IPreviewController) {
-  return eventChannel((emit) => {
+  return eventChannel(emit => {
     const eventEmit = (type: string) => {
       emit(type)
     }
@@ -51,27 +41,16 @@ function createWearablePreviewChannel(controller: IPreviewController) {
     handleEvent(PreviewEmoteEventType.ANIMATION_END)
 
     const unsubscribe = () => {
-      controller.emote.events.off(
-        PreviewEmoteEventType.ANIMATION_PLAY,
-        eventEmit
-      )
-      controller.emote.events.off(
-        PreviewEmoteEventType.ANIMATION_PAUSE,
-        eventEmit
-      )
-      controller.emote.events.off(
-        PreviewEmoteEventType.ANIMATION_END,
-        eventEmit
-      )
+      controller.emote.events.off(PreviewEmoteEventType.ANIMATION_PLAY, eventEmit)
+      controller.emote.events.off(PreviewEmoteEventType.ANIMATION_PAUSE, eventEmit)
+      controller.emote.events.off(PreviewEmoteEventType.ANIMATION_END, eventEmit)
     }
 
     return unsubscribe
   })
 }
 
-function* handleSetWearablePreviewController(
-  action: SetWearablePreviewControllerAction
-) {
+function* handleSetWearablePreviewController(action: SetWearablePreviewControllerAction) {
   const controller: IPreviewController | null = action.payload.controller
 
   if (controller) {

@@ -17,18 +17,10 @@ const ProximityHighlights = (props: Props) => {
     <div className="ProximityHighlights">
       <Highlights>
         {proximity?.plaza !== undefined ? (
-          <Highlight
-            icon={<div className="plaza" />}
-            name={t('asset_page.plaza')}
-            description={getDistanceText(proximity?.plaza)}
-          />
+          <Highlight icon={<div className="plaza" />} name={t('asset_page.plaza')} description={getDistanceText(proximity?.plaza)} />
         ) : null}
         {proximity?.road !== undefined ? (
-          <Highlight
-            icon={<div className="road" />}
-            name={t('asset_page.road')}
-            description={getDistanceText(proximity?.road)}
-          />
+          <Highlight icon={<div className="road" />} name={t('asset_page.road')} description={getDistanceText(proximity?.road)} />
         ) : null}
         {proximity?.district !== undefined ? (
           <Highlight

@@ -6,9 +6,7 @@ import { Props } from './ClaimLandModal.types'
 import styles from './ClaimLandModal.module.css'
 
 const ClaimLandModal = ({ ...props }: Props) => {
-  const assetText = isParcel(props.metadata.nft)
-    ? t('global.parcel')
-    : t('global.estate')
+  const assetText = isParcel(props.metadata.nft) ? t('global.parcel') : t('global.estate')
   return (
     <SubmitTransactionModal
       title={t('claim_land_modal.title', {

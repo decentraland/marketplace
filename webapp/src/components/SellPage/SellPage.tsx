@@ -10,20 +10,13 @@ import { Props } from './SellPage.types'
 import './SellPage.css'
 
 const SellPage = (props: Props) => {
-  const {
-    isLoading,
-    isCreatingOrder,
-    onGoBack,
-    getContract,
-    onCreateOrder,
-    onClearOrderErrors
-  } = props
+  const { isLoading, isCreatingOrder, onGoBack, getContract, onCreateOrder, onClearOrderErrors } = props
   return (
     <>
       <Navbar isFullscreen />
       <Page className="SellPage">
         <Wallet>
-          {(wallet) => (
+          {wallet => (
             <AssetProviderPage type={AssetType.NFT}>
               {(nft, order) => (
                 <SellModal

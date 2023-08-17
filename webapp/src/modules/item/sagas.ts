@@ -2,20 +2,9 @@ import { matchPath } from 'react-router-dom'
 import { put, takeEvery } from '@redux-saga/core/effects'
 import { getLocation } from 'connected-react-router'
 import { SagaIterator } from 'redux-saga'
-import {
-  call,
-  cancel,
-  cancelled,
-  fork,
-  race,
-  select,
-  take
-} from 'redux-saga/effects'
+import { call, cancel, cancelled, fork, race, select, take } from 'redux-saga/effects'
 import { Item } from '@dcl/schemas'
-import {
-  SetPurchaseAction,
-  SET_PURCHASE
-} from 'decentraland-dapps/dist/modules/gateway/actions'
+import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -80,10 +69,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
 
   yield fork(() => takeLatestByPath(FETCH_ITEMS_REQUEST, locations.browse()))
-  yield takeEvery(
-    FETCH_COLLECTION_ITEMS_REQUEST,
-    handleFetchCollectionItemsRequest
-  )
+  yield takeEvery(FETCH_COLLECTION_ITEMS_REQUEST, handleFetchCollectionItemsRequest)
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
@@ -96,8 +82,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
     while (true) {
       const action: FetchItemsRequestAction = yield take(actionType)
-      const { pathname: currentPathname }: ReturnType<typeof getLocation> =
-        yield select(getLocation)
+      const { pathname: currentPathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
       // if we have a task running in the browse path, we cancel the previous one
       if (matchPath(currentPathname, { path }) && task && task.isRunning()) {
@@ -107,64 +92,41 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     }
   }
 
-  function* handleFetchTrendingItemsRequest(
-    action: FetchTrendingItemsRequestAction
-  ) {
+  function* handleFetchTrendingItemsRequest(action: FetchTrendingItemsRequestAction) {
     const { size } = action.payload
 
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
     yield call(waitForWalletConnectionIfConnecting)
 
     try {
-      const { data }: { data: Item[] } = yield call(
-        [itemAPI, 'getTrendings'],
-        size
-      )
+      const { data }: { data: Item[] } = yield call([itemAPI, 'getTrendings'], size)
 
       if (!data.length) {
         yield put(fetchTrendingItemsSuccess([]))
         return
       }
 
-      const ids = data.map((item) => item.id)
-      const { data: itemData }: { data: Item[]; total: number } = yield call(
-        [catalogAPI, 'get'],
-        {
-          ids
-        }
-      )
+      const ids = data.map(item => item.id)
+      const { data: itemData }: { data: Item[]; total: number } = yield call([catalogAPI, 'get'], {
+        ids
+      })
       yield put(fetchTrendingItemsSuccess(itemData))
     } catch (error) {
-      yield put(
-        fetchTrendingItemsFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(fetchTrendingItemsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 
-  function* handleFetchCollectionItemsRequest(
-    action: FetchCollectionItemsRequestAction
-  ) {
+  function* handleFetchCollectionItemsRequest(action: FetchCollectionItemsRequestAction) {
     const { contractAddresses, first } = action.payload
     try {
-      const { data }: { data: Item[]; total: number } = yield call(
-        [itemAPI, 'get'],
-        { first, contractAddresses }
-      )
+      const { data }: { data: Item[]; total: number } = yield call([itemAPI, 'get'], { first, contractAddresses })
       yield put(fetchCollectionItemsSuccess(data))
     } catch (error) {
-      yield put(
-        fetchCollectionItemsFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(fetchCollectionItemsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 
-  function* handleFetchItemsRequest(
-    action: FetchItemsRequestAction
-  ): SagaIterator {
+  function* handleFetchItemsRequest(action: FetchItemsRequestAction): SagaIterator {
     const { filters, view } = action.payload
 
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
@@ -172,24 +134,14 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
     try {
       const api = isCatalogView(view) ? catalogAPI : itemAPI
-      const { data, total }: { data: Item[]; total: number } = yield call(
-        [api, 'get'],
-        filters
-      )
+      const { data, total }: { data: Item[]; total: number } = yield call([api, 'get'], filters)
       yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
     } catch (error) {
-      yield put(
-        fetchItemsFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error'),
-          action.payload
-        )
-      )
+      yield put(fetchItemsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error'), action.payload))
     } finally {
       if (yield cancelled()) {
         // if cancelled, we dispatch a failure action so it cleans the loading state
-        yield put(
-          fetchItemsFailure(FETCH_ITEMS_CANCELLED_ERROR_MESSAGE, action.payload)
-        )
+        yield put(fetchItemsFailure(FETCH_ITEMS_CANCELLED_ERROR_MESSAGE, action.payload))
       }
     }
   }
@@ -201,21 +153,11 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     yield call(waitForWalletConnectionIfConnecting)
 
     try {
-      const item: Item = yield call(
-        [itemAPI, 'getOne'],
-        contractAddress,
-        tokenId
-      )
+      const item: Item = yield call([itemAPI, 'getOne'], contractAddress, tokenId)
       yield put(fetchItemSuccess(item))
       yield put(fetchSmartWearableRequiredPermissionsRequest(item))
     } catch (error) {
-      yield put(
-        fetchItemFailure(
-          contractAddress,
-          tokenId,
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(fetchItemFailure(contractAddress, tokenId, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 
@@ -231,27 +173,13 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
       const contract = getContract(ContractName.CollectionStore, item.chainId)
 
-      const txHash: string = yield call(
-        sendTransaction,
-        contract,
-        (collectionStore) =>
-          collectionStore.buy([
-            [
-              item.contractAddress,
-              [item.itemId],
-              [item.price],
-              [wallet.address]
-            ]
-          ])
+      const txHash: string = yield call(sendTransaction, contract, collectionStore =>
+        collectionStore.buy([[item.contractAddress, [item.itemId], [item.price], [wallet.address]]])
       )
 
       yield put(buyItemSuccess(item.chainId, txHash, item))
     } catch (error) {
-      yield put(
-        buyItemFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(buyItemFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 
@@ -260,11 +188,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       const { item } = action.payload
       yield call(buyAssetWithCard, item)
     } catch (error) {
-      yield put(
-        buyItemWithCardFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(buyItemWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 
@@ -273,23 +197,13 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       const { purchase } = action.payload
       const { status, txHash } = purchase
 
-      if (
-        isNFTPurchase(purchase) &&
-        purchase.nft.itemId &&
-        status === PurchaseStatus.COMPLETE &&
-        txHash
-      ) {
+      if (isNFTPurchase(purchase) && purchase.nft.itemId && status === PurchaseStatus.COMPLETE && txHash) {
         const {
           nft: { contractAddress, itemId }
         } = purchase
 
         const items: ReturnType<typeof getItems> = yield select(getItems)
-        let item: ReturnType<typeof getItem> = yield call(
-          getItem,
-          contractAddress,
-          itemId,
-          items
-        )
+        let item: ReturnType<typeof getItem> = yield call(getItem, contractAddress, itemId, items)
 
         if (!item) {
           yield put(fetchItemRequest(contractAddress, itemId))
@@ -313,11 +227,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         yield put(buyItemWithCardSuccess(item.chainId, txHash, item, purchase))
       }
     } catch (error) {
-      yield put(
-        buyItemWithCardFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(buyItemWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 }

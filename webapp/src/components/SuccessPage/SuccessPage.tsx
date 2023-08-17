@@ -29,36 +29,22 @@ export function SuccessPage(props: Props) {
       <Navbar isFullscreen />
       <div className={styles.container}>
         {assetType && contractAddress && tokenId ? (
-          <AssetProvider
-            type={assetType as AssetType}
-            contractAddress={contractAddress}
-            tokenId={tokenId}
-          >
-            {(asset) => {
+          <AssetProvider type={assetType as AssetType} contractAddress={contractAddress} tokenId={tokenId}>
+            {asset => {
               if (!asset) {
-                return (
-                  <Loader data-testid="asset-loader" size="massive" active />
-                )
+                return <Loader data-testid="asset-loader" size="massive" active />
               }
 
               if (isLoading) {
                 return (
                   <>
-                    <Header className={styles.title}>
-                      {t('success_page.loading_state.title')}
-                    </Header>
-                    <AssetImage
-                      asset={asset}
-                      isSmall
-                      className={classNames(styles.assetImage, styles.loading)}
-                    />
+                    <Header className={styles.title}>{t('success_page.loading_state.title')}</Header>
+                    <AssetImage asset={asset} isSmall className={classNames(styles.assetImage, styles.loading)} />
                     <div className={styles.statusInfo}>
                       <Loader size="small" inline active />
                       {t('success_page.loading_state.status')}
                     </div>
-                    <span className={styles.description}>
-                      {t('success_page.loading_state.description')}
-                    </span>
+                    <span className={styles.description}>{t('success_page.loading_state.description')}</span>
                     <Button secondary as={Link} to={locations.activity()}>
                       {t('success_page.loading_state.progress_in_activity')}
                     </Button>
@@ -68,32 +54,17 @@ export function SuccessPage(props: Props) {
 
               return (
                 <>
-                  <Lottie
-                    animationData={successAnimation}
-                    loop={1}
-                    className={styles.animation}
-                  />
-                  <Header className={styles.title}>
-                    {t('success_page.success_state.title')}
-                  </Header>
+                  <Lottie animationData={successAnimation} loop={1} className={styles.animation} />
+                  <Header className={styles.title}>{t('success_page.success_state.title')}</Header>
                   <AssetImage asset={asset} className={styles.assetImage} />
-                  <span
-                    className={classNames(styles.statusInfo, styles.success)}
-                  >
+                  <span className={classNames(styles.statusInfo, styles.success)}>
                     <Icon name="check circle" className={styles.checkIcon} />
                     {t('success_page.success_state.status')}
                   </span>
                   <div className={styles.actionContainer}>
-                    {assetType === AssetType.ITEM &&
-                    !isLoading &&
-                    mintedTokenId ? (
-                      <AssetProvider
-                        retry
-                        type={AssetType.NFT}
-                        contractAddress={contractAddress}
-                        tokenId={mintedTokenId.toString()}
-                      >
-                        {(asset) => (
+                    {assetType === AssetType.ITEM && !isLoading && mintedTokenId ? (
+                      <AssetProvider retry type={AssetType.NFT} contractAddress={contractAddress} tokenId={mintedTokenId.toString()}>
+                        {asset => (
                           <Button
                             as={Link}
                             className={styles.successButton}
@@ -111,24 +82,15 @@ export function SuccessPage(props: Props) {
                         className={styles.successButton}
                         secondary
                         to={
-                          assetType === AssetType.ITEM
-                            ? locations.item(contractAddress, tokenId)
-                            : locations.nft(contractAddress, tokenId)
+                          assetType === AssetType.ITEM ? locations.item(contractAddress, tokenId) : locations.nft(contractAddress, tokenId)
                         }
                       >
                         {t('success_page.success_state.view_item')}
                       </Button>
                     )}
 
-                    {(asset.category === NFTCategory.WEARABLE ||
-                      asset.category === NFTCategory.EMOTE) && (
-                      <Button
-                        className={styles.successButton}
-                        primary
-                        as="a"
-                        href={EXPLORER_URL}
-                        target="_blank"
-                      >
+                    {(asset.category === NFTCategory.WEARABLE || asset.category === NFTCategory.EMOTE) && (
+                      <Button className={styles.successButton} primary as="a" href={EXPLORER_URL} target="_blank">
                         {t('success_page.success_state.try_genesis_city')}
                       </Button>
                     )}
@@ -140,12 +102,8 @@ export function SuccessPage(props: Props) {
         ) : (
           <div className={styles.errorContainer}>
             <div className={styles.errorInfo}>
-              <h1 className={styles.errorTitle}>
-                {t('success_page.error_state.title')}
-              </h1>
-              <p className={styles.errorDescription}>
-                {t('success_page.error_state.description')}
-              </p>
+              <h1 className={styles.errorTitle}>{t('success_page.error_state.title')}</h1>
+              <p className={styles.errorDescription}>{t('success_page.error_state.description')}</p>
             </div>
             <Button as={Link} primary to={locations.activity()}>
               {t('success_page.error_state.go_to_activity')}

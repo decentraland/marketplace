@@ -9,14 +9,13 @@ import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
 
 const BidPage = (props: Props) => {
-  const { onNavigate, onPlaceBid, isPlacingBid, onClearBidError, getContract } =
-    props
+  const { onNavigate, onPlaceBid, isPlacingBid, onClearBidError, getContract } = props
   return (
     <>
       <Navbar isFullscreen />
       <Page className="BidPage">
         <Wallet>
-          {(wallet) => (
+          {wallet => (
             <AssetProviderPage type={AssetType.NFT}>
               {(nft, _order, rental) => (
                 <BidModal

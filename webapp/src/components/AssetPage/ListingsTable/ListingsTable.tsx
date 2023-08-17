@@ -46,23 +46,19 @@ const ListingsTable = (props: Props) => {
 
       orderAPI
         .fetchOrders(params, sortBy)
-        .then((response) => {
+        .then(response => {
           if (cancel) return
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
           setOrders(
             formatDataToTable(
-              isNFT(asset)
-                ? response.data.filter(
-                    (order) => order.tokenId !== asset.tokenId
-                  )
-                : response.data,
+              isNFT(asset) ? response.data.filter(order => order.tokenId !== asset.tokenId) : response.data,
               isMobileOrTablet
             )
           )
           setTotal(response.total)
         })
         .finally(() => !cancel && setIsLoading(false))
-        .catch((error) => {
+        .catch(error => {
           console.error(error)
         })
     }

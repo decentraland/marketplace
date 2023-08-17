@@ -46,14 +46,7 @@ const AssetProvider = (props: Props) => {
   }, [contractAddress, tokenId])
 
   useEffect(() => {
-    if (
-      contractAddress &&
-      tokenId &&
-      asset === null &&
-      !isLoading &&
-      !hasFetchedOnce &&
-      !isConnecting
-    ) {
+    if (contractAddress && tokenId && asset === null && !isLoading && !hasFetchedOnce && !isConnecting) {
       switch (type) {
         case AssetType.NFT:
           if (hasLoadedInitialFlags) {
@@ -86,16 +79,7 @@ const AssetProvider = (props: Props) => {
     isConnecting
   ])
 
-  return (
-    <>
-      {children(
-        asset,
-        order,
-        rental,
-        isLoading || (!hasLoadedInitialFlags && type === AssetType.NFT)
-      )}
-    </>
-  )
+  return <>{children(asset, order, rental, isLoading || (!hasLoadedInitialFlags && type === AssetType.NFT))}</>
 }
 
 export default React.memo(AssetProvider)

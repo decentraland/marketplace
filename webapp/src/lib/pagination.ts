@@ -13,11 +13,7 @@ export type UsePaginationResult<T extends string, S extends string> = {
   goToNextPage: () => void
   goToPage: (newPage: number) => void
   changeSorting: (sort: S) => void
-  changeFilter: (
-    filter: T,
-    value: string,
-    options?: { clearOldFilters: boolean }
-  ) => void
+  changeFilter: (filter: T, value: string, options?: { clearOldFilters: boolean }) => void
 }
 
 export type PaginationOptions = {
@@ -25,16 +21,12 @@ export type PaginationOptions = {
   count?: number
 }
 
-export function usePagination<
-  T extends string = string,
-  S extends string = string
->(options?: PaginationOptions): UsePaginationResult<T, S> {
+export function usePagination<T extends string = string, S extends string = string>(
+  options?: PaginationOptions
+): UsePaginationResult<T, S> {
   const { search, pathname } = useLocation()
   const { push } = useHistory()
-  const pageSize = useMemo(
-    () => options?.pageSize?.toString() ?? PAGE_SIZE.toString(),
-    [options?.pageSize]
-  )
+  const pageSize = useMemo(() => options?.pageSize?.toString() ?? PAGE_SIZE.toString(), [options?.pageSize])
   const filters: Record<T, string | null> = useMemo(() => {
     const params = new URLSearchParams(search)
     params.delete('page')
@@ -43,9 +35,7 @@ export function usePagination<
     params.delete('sortBy')
     return Object.fromEntries(params.entries()) as Record<T, string | null>
   }, [search])
-  const sortBy =
-    (useMemo(() => new URLSearchParams(search).get('sortBy'), [search]) as S) ??
-    undefined
+  const sortBy = (useMemo(() => new URLSearchParams(search).get('sortBy'), [search]) as S) ?? undefined
 
   const [page, first, offset] = useMemo(() => {
     const params = new URLSearchParams(search)
@@ -82,11 +72,7 @@ export function usePagination<
   )
 
   const changeFilter = useCallback(
-    (
-      filter: string,
-      value: string,
-      options: { clearOldFilters: boolean } = { clearOldFilters: false }
-    ) => {
+    (filter: string, value: string, options: { clearOldFilters: boolean } = { clearOldFilters: false }) => {
       const params = new URLSearchParams(options.clearOldFilters ? {} : search)
       // Reset the page when changing the filter
       params.set('page', '1')
@@ -99,9 +85,7 @@ export function usePagination<
     [pathname, push, search, sortBy]
   )
 
-  const pages = options?.count
-    ? Math.ceil(options?.count / (options?.pageSize ?? PAGE_SIZE))
-    : undefined
+  const pages = options?.count ? Math.ceil(options?.count / (options?.pageSize ?? PAGE_SIZE)) : undefined
   const hasMorePages = pages ? page < pages : undefined
 
   return {

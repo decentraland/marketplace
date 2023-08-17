@@ -15,11 +15,7 @@ import {
   getData as getItems
 } from '../../modules/item/selectors'
 import { getItem } from '../../modules/item/utils'
-import {
-  fetchNFTRequest,
-  FETCH_NFT_REQUEST,
-  clearNFTErrors
-} from '../../modules/nft/actions'
+import { fetchNFTRequest, FETCH_NFT_REQUEST, clearNFTErrors } from '../../modules/nft/actions'
 import {
   getContractAddress as getNFTContractAddress,
   getTokenId as getNFTTokenId,
@@ -37,12 +33,7 @@ import { FetchOneOptions } from '../../modules/vendor'
 import { ContractName } from '../../modules/vendor/decentraland'
 import { isConnecting } from '../../modules/wallet/selectors'
 import AssetProvider from './AssetProvider'
-import {
-  MapDispatch,
-  MapDispatchProps,
-  MapStateProps,
-  OwnProps
-} from './AssetProvider.types'
+import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './AssetProvider.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   let contractAddress = ownProps.contractAddress
@@ -88,10 +79,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     network: Network.ETHEREUM
   })
 
-  const isLandOrEstate =
-    !!contractAddress &&
-    (contractAddress === landContract?.address ||
-      contractAddress === estateContract?.address)
+  const isLandOrEstate = !!contractAddress && (contractAddress === landContract?.address || contractAddress === estateContract?.address)
 
   return {
     tokenId,
@@ -99,30 +87,18 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     asset,
     rental,
     order,
-    isLoading: !asset
-      ? isLoading
-      : isFetchingRequiredPermissions(state, asset.id),
-    isLoadingFeatureFlags: isLoadingType(
-      getIsLoadingFeatureFlags(state),
-      FETCH_APPLICATION_FEATURES_REQUEST
-    ),
+    isLoading: !asset ? isLoading : isFetchingRequiredPermissions(state, asset.id),
+    isLoadingFeatureFlags: isLoadingType(getIsLoadingFeatureFlags(state), FETCH_APPLICATION_FEATURES_REQUEST),
     isLandOrEstate,
     error,
     isConnecting: isConnecting(state)
   }
 }
 
-const mapDispatch = (
-  dispatch: MapDispatch,
-  ownProps: OwnProps
-): MapDispatchProps => ({
-  onFetchNFT: (
-    contractAddress: string,
-    tokenId: string,
-    options?: FetchOneOptions
-  ) => dispatch(fetchNFTRequest(contractAddress, tokenId, options)),
-  onFetchItem: (contractAddress: string, tokenId: string) =>
-    dispatch(fetchItemRequest(contractAddress, tokenId)),
+const mapDispatch = (dispatch: MapDispatch, ownProps: OwnProps): MapDispatchProps => ({
+  onFetchNFT: (contractAddress: string, tokenId: string, options?: FetchOneOptions) =>
+    dispatch(fetchNFTRequest(contractAddress, tokenId, options)),
+  onFetchItem: (contractAddress: string, tokenId: string) => dispatch(fetchItemRequest(contractAddress, tokenId)),
   onClearErrors: () => {
     if (ownProps.type === AssetType.ITEM) {
       return dispatch(clearItemErrors())
@@ -132,18 +108,12 @@ const mapDispatch = (
   }
 })
 
-const mergeProps = (
-  stateProps: MapStateProps,
-  dispatchProps: MapDispatchProps,
-  ownProps: OwnProps
-) => ({
+const mergeProps = (stateProps: MapStateProps, dispatchProps: MapDispatchProps, ownProps: OwnProps) => ({
   ...stateProps,
   ...dispatchProps,
   ...ownProps
 })
 
-export default connect(mapState, mapDispatch, mergeProps)(AssetProvider) as <
-  T extends AssetType = AssetType
->(
+export default connect(mapState, mapDispatch, mergeProps)(AssetProvider) as <T extends AssetType = AssetType>(
   props: OwnProps<T>
 ) => JSX.Element

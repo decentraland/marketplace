@@ -1,8 +1,5 @@
 import { createFetchComponent } from '@well-known-components/fetch-component'
-import {
-  LambdasClient,
-  createLambdasClient
-} from 'dcl-catalyst-client/dist/client/LambdasClient'
+import { LambdasClient, createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
 import { Profile } from '@dcl/schemas'
 import { peerUrl } from './environment'
 
@@ -24,9 +21,7 @@ class ProfilesCache {
       return this.cache[addressesString]
     }
 
-    this.cache[addressesString] = this.client
-      .getAvatarsDetailsByPost({ ids: address })
-      .then((profiles) => profiles as any) // "as any" so that no need to map types (prior versions returned any)
+    this.cache[addressesString] = this.client.getAvatarsDetailsByPost({ ids: address }).then(profiles => profiles as any) // "as any" so that no need to map types (prior versions returned any)
 
     return this.cache[addressesString]
   }

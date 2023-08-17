@@ -1,9 +1,6 @@
 import { Dispatch } from 'redux'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
-import {
-  FetchListsRequestAction,
-  fetchListsRequest
-} from '../../modules/favorites/actions'
+import { FetchListsRequestAction, fetchListsRequest } from '../../modules/favorites/actions'
 import { List } from '../../modules/favorites/types'
 
 export type Props = {
@@ -15,9 +12,6 @@ export type Props = {
   onCreateList: () => void
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'isLoading' | 'count' | 'lists' | 'error'
->
+export type MapStateProps = Pick<Props, 'isLoading' | 'count' | 'lists' | 'error'>
 export type MapDispatchProps = Pick<Props, 'onFetchLists' | 'onCreateList'>
 export type MapDispatch = Dispatch<FetchListsRequestAction | OpenModalAction>

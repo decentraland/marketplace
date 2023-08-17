@@ -11,8 +11,5 @@ export type Props = {
   onBrowse: (options: BrowseOptions) => void
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'sales' | 'assets' | 'count' | 'page' | 'isLoading'
->
+export type MapStateProps = Pick<Props, 'sales' | 'assets' | 'count' | 'page' | 'isLoading'>
 export type MapDispatchProps = Pick<Props, 'onBrowse'>

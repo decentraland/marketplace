@@ -11,10 +11,7 @@ import styles from './HandsCategoryLaunchModal.module.css'
 
 const HANDS_CATEGORY_FTU_KEY = 'hands-category-ftu-key'
 
-export const HandsCategoryLaunchModal = ({
-  isHandsCategoryFTUEnabled,
-  isLoadingFeatureFlags
-}: Props) => {
+export const HandsCategoryLaunchModal = ({ isHandsCategoryFTUEnabled, isLoadingFeatureFlags }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
 
   const onClose = useCallback(() => {
@@ -23,32 +20,16 @@ export const HandsCategoryLaunchModal = ({
   }, [])
 
   useEffect(() => {
-    if (
-      !isLoadingFeatureFlags &&
-      isHandsCategoryFTUEnabled &&
-      !localStorage.getItem(HANDS_CATEGORY_FTU_KEY)
-    ) {
+    if (!isLoadingFeatureFlags && isHandsCategoryFTUEnabled && !localStorage.getItem(HANDS_CATEGORY_FTU_KEY)) {
       setIsOpen(true)
     }
   }, [isLoadingFeatureFlags, isHandsCategoryFTUEnabled])
 
   return (
-    <Modal
-      open={isOpen}
-      size={'small'}
-      onClose={onClose}
-      className={styles.handCategoryModal}
-    >
-      <ModalNavigation
-        title={t('hands_category_ftu.title')}
-        onClose={onClose}
-      />
+    <Modal open={isOpen} size={'small'} onClose={onClose} className={styles.handCategoryModal}>
+      <ModalNavigation title={t('hands_category_ftu.title')} onClose={onClose} />
       <div className={styles.container}>
-        <img
-          className={styles.img}
-          src={handsCategoryImg}
-          aria-label={t('hands_category_ftu.img_alt')}
-        />
+        <img className={styles.img} src={handsCategoryImg} aria-label={t('hands_category_ftu.img_alt')} />
         <span>{t('hands_category_ftu.subtitle')}</span>
         <Button
           as={Link}

@@ -1,9 +1,6 @@
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import {
-  ACCEPT_BID_REQUEST,
-  acceptBidRequest
-} from '../../../modules/bid/actions'
+import { ACCEPT_BID_REQUEST, acceptBidRequest } from '../../../modules/bid/actions'
 import { RootState } from '../../../modules/reducer'
 import { getAddress, getLoading } from '../../../modules/wallet/selectors'
 import BidsTable from './BidsTable'
@@ -15,7 +12,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onAccept: (bid) => dispatch(acceptBidRequest(bid))
+  onAccept: bid => dispatch(acceptBidRequest(bid))
 })
 
 export default connect(mapState, mapDispatch)(BidsTable)

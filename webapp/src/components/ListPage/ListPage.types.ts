@@ -2,12 +2,7 @@ import { RouteComponentProps } from 'react-router-dom'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { Dispatch } from 'redux'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import {
-  DeleteListStartAction,
-  GetListRequestAction,
-  deleteListStart,
-  getListRequest
-} from '../../modules/favorites/actions'
+import { DeleteListStartAction, GetListRequestAction, deleteListStart, getListRequest } from '../../modules/favorites/actions'
 import { List } from '../../modules/favorites/types'
 import { OpenModalAction, openModal } from '../../modules/modal/actions'
 import { GoBackAction } from '../../modules/routing/actions'
@@ -28,20 +23,8 @@ export type Props = {
   onShareList?: (list: List) => ReturnType<typeof openModal>
 } & RouteComponentProps<Params>
 
-export type MapStateProps = Pick<
-  Props,
-  'isConnecting' | 'wallet' | 'listId' | 'list' | 'isLoading' | 'error'
->
+export type MapStateProps = Pick<Props, 'isConnecting' | 'wallet' | 'listId' | 'list' | 'isLoading' | 'error'>
 
-export type MapDispatchProps = Pick<
-  Props,
-  'onBack' | 'onFetchList' | 'onEditList' | 'onDeleteList' | 'onShareList'
->
-export type MapDispatch = Dispatch<
-  | CallHistoryMethodAction
-  | GoBackAction
-  | GetListRequestAction
-  | OpenModalAction
-  | DeleteListStartAction
->
+export type MapDispatchProps = Pick<Props, 'onBack' | 'onFetchList' | 'onEditList' | 'onDeleteList' | 'onShareList'>
+export type MapDispatch = Dispatch<CallHistoryMethodAction | GoBackAction | GetListRequestAction | OpenModalAction | DeleteListStartAction>
 export type OwnProps = RouteComponentProps<Params>

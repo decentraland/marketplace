@@ -9,10 +9,7 @@ const InformationStep = (props: Props) => {
 
   return (
     <>
-      <ModalNavigation
-        title={t('rental_modal.authorization_step_again.title')}
-        onClose={onCancel}
-      />
+      <ModalNavigation title={t('rental_modal.authorization_step_again.title')} onClose={onCancel} />
       <Modal.Content>
         <div className={styles.contentContainerRentAgain}>
           <span>

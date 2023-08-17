@@ -1,8 +1,5 @@
 import React, { useCallback } from 'react'
-import {
-  getMarketAssetTypeFromCategory,
-  getCategoryFromSection
-} from '../../../modules/routing/search'
+import { getMarketAssetTypeFromCategory, getCategoryFromSection } from '../../../modules/routing/search'
 import { Section as DecentralandSection } from '../../../modules/vendor/decentraland/routing/types'
 import { Sections } from '../../../modules/vendor/routing/types'
 import { VendorName } from '../../../modules/vendor/types'
@@ -18,9 +15,7 @@ const NFTSidebar = (props: Props) => {
       onBrowse({
         search,
         section,
-        assetType: category
-          ? getMarketAssetTypeFromCategory(category)
-          : undefined
+        assetType: category ? getMarketAssetTypeFromCategory(category) : undefined
       })
     },
     [onBrowse, search]
@@ -32,9 +27,7 @@ const NFTSidebar = (props: Props) => {
       return (
         <DecentralandNFTSidebar
           section={section as DecentralandSection}
-          sections={
-            (sections as DecentralandSection[]) ?? [Sections.decentraland.ALL]
-          }
+          sections={(sections as DecentralandSection[]) ?? [Sections.decentraland.ALL]}
           onMenuItemClick={handleOnBrowse}
           onBrowse={onBrowse}
         />

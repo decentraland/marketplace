@@ -1,13 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Box,
-  CheckboxProps,
-  Checkbox,
-  useTabletAndBelowMediaQuery,
-  SliderField
-} from 'decentraland-ui'
+import { Box, CheckboxProps, Checkbox, useTabletAndBelowMediaQuery, SliderField } from 'decentraland-ui'
 import styles from './LocationFilter.module.css'
 
 export const DISTANCE_TO_PLAZA_MIN = 1
@@ -49,10 +43,7 @@ export const LocationFilter = ({
   const handleToggleDistanceFilter = useCallback(
     (_evt, props: CheckboxProps) => {
       if (props.checked) {
-        onDistanceToPlazaChange([
-          DISTANCE_TO_PLAZA_MIN.toString(),
-          DISTANCE_TO_PLAZA_MAX.toString()
-        ])
+        onDistanceToPlazaChange([DISTANCE_TO_PLAZA_MIN.toString(), DISTANCE_TO_PLAZA_MAX.toString()])
       } else {
         onDistanceToPlazaChange(['', ''])
       }
@@ -123,16 +114,8 @@ export const LocationFilter = ({
           max={DISTANCE_TO_PLAZA_MAX}
           onChange={handleDistanceToPlazaChange}
           step={1}
-          valueFrom={
-            minDistanceToPlaza
-              ? Number.parseFloat(minDistanceToPlaza)
-              : undefined
-          }
-          valueTo={
-            maxDistanceToPlaza
-              ? Number.parseFloat(maxDistanceToPlaza)
-              : undefined
-          }
+          valueFrom={minDistanceToPlaza ? Number.parseFloat(minDistanceToPlaza) : undefined}
+          valueTo={maxDistanceToPlaza ? Number.parseFloat(maxDistanceToPlaza) : undefined}
           range
           header=""
           label={t('nft_filters.distance_to_plaza.subtitle')}

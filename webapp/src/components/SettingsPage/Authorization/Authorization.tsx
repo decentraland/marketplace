@@ -13,15 +13,7 @@ import { Props } from './Authorization.types'
 import './Authorization.css'
 
 const Authorization = (props: Props) => {
-  const {
-    authorization,
-    authorizations,
-    shouldUpdateSpendingCap,
-    isLoading,
-    onGrant,
-    onRevoke,
-    getContract
-  } = props
+  const { authorization, authorizations, shouldUpdateSpendingCap, isLoading, onGrant, onRevoke, getContract } = props
 
   const handleOnChange = useCallback(
     (isChecked: boolean) => {
@@ -58,10 +50,7 @@ const Authorization = (props: Props) => {
 
   return (
     <div className="Authorization">
-      <Form.Field
-        key={contractAddress}
-        className={isLoading ? 'is-pending' : ''}
-      >
+      <Form.Field key={contractAddress} className={isLoading ? 'is-pending' : ''}>
         <Popup
           content={t('settings_page.pending_tx')}
           position="top left"
@@ -72,17 +61,12 @@ const Authorization = (props: Props) => {
           }
         />
         <ChainCheck chainId={authorization.chainId}>
-          {(isEnabled) => (
+          {isEnabled => (
             <Radio
-              checked={
-                isAuthorized(authorization, authorizations) &&
-                !shouldUpdateSpendingCap
-              }
+              checked={isAuthorized(authorization, authorizations) && !shouldUpdateSpendingCap}
               label={token.name}
               disabled={!isEnabled}
-              onClick={(_, props: RadioProps) =>
-                handleOnChange(!!props.checked)
-              }
+              onClick={(_, props: RadioProps) => handleOnChange(!!props.checked)}
             />
           )}
         </ChainCheck>
@@ -91,11 +75,7 @@ const Authorization = (props: Props) => {
             id="authorization.authorize"
             values={{
               contract_link: (
-                <TransactionLink
-                  address={authorizedAddress}
-                  txHash=""
-                  chainId={authorization.chainId}
-                >
+                <TransactionLink address={authorizedAddress} txHash="" chainId={authorization.chainId}>
                   {contract.label || contract.name}
                 </TransactionLink>
               ),

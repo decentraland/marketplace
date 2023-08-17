@@ -24,16 +24,7 @@ export type Props = {
 export type OwnProps = Pick<Props, 'asset'>
 export type MapStateProps = Pick<
   Props,
-  | 'wallet'
-  | 'order'
-  | 'bids'
-  | 'authorizations'
-  | 'userHasAlreadyBidsOnNft'
-  | 'getContract'
-  | 'currentMana'
+  'wallet' | 'order' | 'bids' | 'authorizations' | 'userHasAlreadyBidsOnNft' | 'getContract' | 'currentMana'
 >
-export type MapDispatchProps = Pick<
-  Props,
-  'onBuyWithMana' | 'onBuyWithCard' | 'onBid'
->
+export type MapDispatchProps = Pick<Props, 'onBuyWithMana' | 'onBuyWithCard' | 'onBid'>
 export type MapDispatch = Dispatch<OpenModalAction>

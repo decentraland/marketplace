@@ -18,7 +18,7 @@ class SaleAPI extends BaseAPI {
     for (const [key, value] of entries) {
       // when passing categories as an array, it should be added as a query param multiple times
       if (key === 'categories' && Array.isArray(value)) {
-        value.forEach((v) => queryParams.append('category', v))
+        value.forEach(v => queryParams.append('category', v))
       } else {
         queryParams.append(key, value.toString())
       }

@@ -15,11 +15,7 @@ const LandsPage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.LANDS} />
-      <AssetBrowse
-        vendor={VendorName.DECENTRALAND}
-        view={View.MARKET}
-        sections={[Section.LAND]}
-      />
+      <AssetBrowse vendor={VendorName.DECENTRALAND} view={View.MARKET} sections={[Section.LAND]} />
       <Footer isFullscreen={isFullscreen} />
     </>
   )

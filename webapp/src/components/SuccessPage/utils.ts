@@ -3,10 +3,7 @@ import { BigNumber, ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
 import { ContractName, getContract } from 'decentraland-transactions'
 
-export function getTokenIdFromLogs(
-  chainId: ChainId,
-  logs?: Log[]
-): BigNumber | null {
+export function getTokenIdFromLogs(chainId: ChainId, logs?: Log[]): BigNumber | null {
   if (!logs) return null
 
   const contract = getContract(ContractName.ERC721CollectionV2, chainId)

@@ -74,29 +74,13 @@ export const PriceFilter = ({
     () => ({
       category: category as any as RentalsListingsFilterByCategory,
       rentalDays,
-      minEstateSize: minEstateSize
-        ? Number.parseFloat(minEstateSize)
-        : undefined,
-      maxEstateSize: maxEstateSize
-        ? Number.parseFloat(maxEstateSize)
-        : undefined,
-      minDistanceToPlaza: minDistanceToPlaza
-        ? Number.parseFloat(minDistanceToPlaza)
-        : undefined,
-      maxDistanceToPlaza: maxDistanceToPlaza
-        ? Number.parseFloat(maxDistanceToPlaza)
-        : undefined,
+      minEstateSize: minEstateSize ? Number.parseFloat(minEstateSize) : undefined,
+      maxEstateSize: maxEstateSize ? Number.parseFloat(maxEstateSize) : undefined,
+      minDistanceToPlaza: minDistanceToPlaza ? Number.parseFloat(minDistanceToPlaza) : undefined,
+      maxDistanceToPlaza: maxDistanceToPlaza ? Number.parseFloat(maxDistanceToPlaza) : undefined,
       adjacentToRoad: adjacentToRoad || undefined
     }),
-    [
-      category,
-      minEstateSize,
-      maxEstateSize,
-      minDistanceToPlaza,
-      maxDistanceToPlaza,
-      adjacentToRoad,
-      rentalDays
-    ]
+    [category, minEstateSize, maxEstateSize, minDistanceToPlaza, maxDistanceToPlaza, adjacentToRoad, rentalDays]
   )
 
   const title = useMemo(() => {
@@ -111,9 +95,7 @@ export const PriceFilter = ({
       isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">{title}</span>
-          <span className="box-filter-value">
-            {getPriceLabel(minPrice, maxPrice, network)}
-          </span>
+          <span className="box-filter-value">{getPriceLabel(minPrice, maxPrice, network)}</span>
         </div>
       ) : (
         title
@@ -139,20 +121,10 @@ export const PriceFilter = ({
       acc[ethers.utils.formatEther(key)] = value
       return acc
     }, {} as Record<string, number>)
-  }, [
-    priceFetchFilters,
-    landStatus,
-    isRentalPriceFitlerChartEnabled,
-    rentalPriceFetchFilters
-  ])
+  }, [priceFetchFilters, landStatus, isRentalPriceFitlerChartEnabled, rentalPriceFetchFilters])
 
   return (
-    <Box
-      header={header}
-      className="filters-sidebar-box price-filter"
-      collapsible
-      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
-    >
+    <Box header={header} className="filters-sidebar-box price-filter" collapsible defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
       <Inventory
         isMana
         fetcher={fetcher}

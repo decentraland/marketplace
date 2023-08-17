@@ -2,17 +2,9 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { RootState } from '../../../modules/reducer'
 import { claimAssetRequest } from '../../../modules/rental/actions'
-import {
-  isClaimingAsset,
-  isSubmittingTransaction,
-  getError
-} from '../../../modules/rental/selectors'
+import { isClaimingAsset, isSubmittingTransaction, getError } from '../../../modules/rental/selectors'
 import ClaimLandModal from './ClaimLandModal'
-import {
-  MapDispatchProps,
-  MapStateProps,
-  OwnProps
-} from './ClaimLandModal.types'
+import { MapDispatchProps, MapStateProps, OwnProps } from './ClaimLandModal.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -22,15 +14,9 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (
-  dispatch: Dispatch,
-  ownProps: OwnProps
-): MapDispatchProps => {
+const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => {
   return {
-    onSubmitTransaction: () =>
-      dispatch(
-        claimAssetRequest(ownProps.metadata.nft, ownProps.metadata.rental)
-      )
+    onSubmitTransaction: () => dispatch(claimAssetRequest(ownProps.metadata.nft, ownProps.metadata.rental))
   }
 }
 

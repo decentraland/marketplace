@@ -4,11 +4,7 @@ import { RootState } from '../../modules/reducer'
 import { getTransactions } from '../../modules/transaction/selectors'
 import { getAddress } from '../../modules/wallet/selectors'
 import ActivityPage from './ActivityPage'
-import {
-  MapStateProps,
-  MapDispatchProps,
-  MapDispatch
-} from './ActivityPage.types'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './ActivityPage.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   address: getAddress(state),
@@ -16,7 +12,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onClearHistory: (address) => dispatch(clearTransactions(address))
+  onClearHistory: address => dispatch(clearTransactions(address))
 })
 
 export default connect(mapState, mapDispatch)(ActivityPage)

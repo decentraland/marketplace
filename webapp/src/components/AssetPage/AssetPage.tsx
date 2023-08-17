@@ -17,10 +17,7 @@ import { Props } from './AssetPage.types'
 import './AssetPage.css'
 
 const AssetPage = ({ type }: Props) => {
-  const renderItemDetail = useCallback(
-    (item: Item) => <ItemDetail item={item} />,
-    []
-  )
+  const renderItemDetail = useCallback((item: Item) => <ItemDetail item={item} />, [])
   return (
     <>
       <Navbar isFullscreen />
@@ -39,23 +36,11 @@ const AssetPage = ({ type }: Props) => {
                         emote: renderItemDetail
                       },
                       {
-                        ens: (nft) => <ENSDetail nft={nft} />,
-                        estate: (nft) => (
-                          <EstateDetail
-                            nft={nft}
-                            order={order}
-                            rental={rental}
-                          />
-                        ),
-                        parcel: (nft) => (
-                          <ParcelDetail
-                            nft={nft}
-                            order={order}
-                            rental={rental}
-                          />
-                        ),
-                        wearable: (nft) => <WearableDetail nft={nft} />,
-                        emote: (nft) => <EmoteDetail nft={nft} />
+                        ens: nft => <ENSDetail nft={nft} />,
+                        estate: nft => <EstateDetail nft={nft} order={order} rental={rental} />,
+                        parcel: nft => <ParcelDetail nft={nft} order={order} rental={rental} />,
+                        wearable: nft => <WearableDetail nft={nft} />,
+                        emote: nft => <EmoteDetail nft={nft} />
                       },
                       () => null
                     )}

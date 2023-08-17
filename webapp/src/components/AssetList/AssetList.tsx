@@ -32,10 +32,7 @@ const AssetList = (props: Props) => {
   useEffect(() => {
     if (visitedLocations.length > 1) {
       const [currentLocation, previousLocation] = visitedLocations
-      const elementId = getLastVisitedElementId(
-        currentLocation?.pathname,
-        previousLocation?.pathname
-      )
+      const elementId = getLastVisitedElementId(currentLocation?.pathname, previousLocation?.pathname)
       if (elementId) {
         document.getElementById(elementId)?.scrollIntoView()
       }
@@ -45,7 +42,7 @@ const AssetList = (props: Props) => {
   }, [])
 
   const handleLoadMore = useCallback(
-    (newPage) => {
+    newPage => {
       onBrowse({ page: newPage })
       getAnalytics().track(events.LOAD_MORE, { page: newPage })
     },
@@ -53,8 +50,7 @@ const AssetList = (props: Props) => {
   )
   const maxQuerySize = getMaxQuerySize(vendor)
 
-  const hasMorePages =
-    (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
+  const hasMorePages = (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
 
   const emptyStateTranslationString = useMemo(() => {
     if (assets.length > 0) {
@@ -64,10 +60,7 @@ const AssetList = (props: Props) => {
         return 'nft_list.empty'
       }
 
-      const isEmoteOrWearableSection = [
-        NFTCategory.EMOTE,
-        NFTCategory.WEARABLE
-      ].includes(getCategoryFromSection(section)!)
+      const isEmoteOrWearableSection = [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(getCategoryFromSection(section)!)
 
       if (isEmoteOrWearableSection) {
         return search ? 'nft_list.empty_search' : 'nft_list.empty'
@@ -90,8 +83,7 @@ const AssetList = (props: Props) => {
             id={`${emptyStateTranslationString}.action`}
             values={{
               search,
-              'if-filters': (chunks: string) =>
-                hasFiltersEnabled ? chunks : '',
+              'if-filters': (chunks: string) => (hasFiltersEnabled ? chunks : ''),
               clearFilters: (chunks: string) => (
                 <button className="empty-actions" onClick={onClearFilters}>
                   {chunks}
@@ -104,20 +96,10 @@ const AssetList = (props: Props) => {
     )
   }, [emptyStateTranslationString, hasFiltersEnabled, onClearFilters, search])
 
-  const shouldRenderEmptyState = useMemo(
-    () => assets.length === 0 && !isLoading,
-    [assets.length, isLoading]
-  )
+  const shouldRenderEmptyState = useMemo(() => assets.length === 0 && !isLoading, [assets.length, isLoading])
 
   const renderAssetCards = useCallback(
-    () =>
-      assets.map((assets, index) => (
-        <AssetCard
-          isManager={isManager}
-          key={assetType + '-' + assets.id + '-' + index}
-          asset={assets}
-        />
-      )),
+    () => assets.map((assets, index) => <AssetCard isManager={isManager} key={assetType + '-' + assets.id + '-' + index} asset={assets} />),
     [assetType, assets, isManager]
   )
 
@@ -131,16 +113,8 @@ const AssetList = (props: Props) => {
           </div>
         </>
       ) : null}
-      {assets.length > 0 ? (
-        <Card.Group> {renderAssetCards()} </Card.Group>
-      ) : null}
-      <InfiniteScroll
-        page={page}
-        hasMorePages={hasMorePages}
-        onLoadMore={handleLoadMore}
-        isLoading={isLoading}
-        maxScrollPages={3}
-      >
+      {assets.length > 0 ? <Card.Group> {renderAssetCards()} </Card.Group> : null}
+      <InfiniteScroll page={page} hasMorePages={hasMorePages} onLoadMore={handleLoadMore} isLoading={isLoading} maxScrollPages={3}>
         {shouldRenderEmptyState ? renderEmptyState() : null}
       </InfiniteScroll>
     </div>

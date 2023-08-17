@@ -33,9 +33,7 @@ describe('Title', () => {
 
   beforeEach(() => {
     asset = { id: '0xContractAddress-itemId', name: 'Asset Name' } as Asset
-    useMobileMediaQueryMock = useMobileMediaQuery as jest.MockedFunction<
-      typeof useMobileMediaQuery
-    >
+    useMobileMediaQueryMock = useMobileMediaQuery as jest.MockedFunction<typeof useMobileMediaQuery>
   })
 
   it('should render the Asset Name', () => {

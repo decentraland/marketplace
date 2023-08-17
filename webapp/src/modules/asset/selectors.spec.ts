@@ -1,14 +1,7 @@
 import { RootState } from '../reducer'
 import { fetchSmartWearableRequiredPermissionsRequest } from './actions'
 import { INITIAL_STATE } from './reducer'
-import {
-  getData,
-  getError,
-  getLoading,
-  getRequiredPermissions,
-  getState,
-  isFetchingRequiredPermissions
-} from './selectors'
+import { getData, getError, getLoading, getRequiredPermissions, getState, isFetchingRequiredPermissions } from './selectors'
 import { Asset } from './types'
 
 let state: RootState
@@ -84,9 +77,7 @@ describe('when getting if the required permissions are being fetched', () => {
 
   describe('and it is being fetched', () => {
     beforeEach(() => {
-      state.asset.loading.push(
-        fetchSmartWearableRequiredPermissionsRequest({ id } as Asset)
-      )
+      state.asset.loading.push(fetchSmartWearableRequiredPermissionsRequest({ id } as Asset))
     })
 
     it('should return true', () => {

@@ -8,11 +8,7 @@ export const getTiles = (state: RootState) => getState(state).data
 export const getLoading = (state: RootState) => getState(state).loading
 export const getError = (state: RootState) => getState(state).error
 
-export const getTilesByEstateId = createSelector<
-  RootState,
-  TileState['data'],
-  Record<string, Tile[]>
->(getTiles, (tiles) => {
+export const getTilesByEstateId = createSelector<RootState, TileState['data'], Record<string, Tile[]>>(getTiles, tiles => {
   const tilesByEstateId: Record<string, Tile[]> = {}
   for (const tile of Object.values(tiles)) {
     if (tile.estate_id) {

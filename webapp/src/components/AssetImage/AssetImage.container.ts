@@ -10,40 +10,22 @@ import { openModal } from '../../modules/modal/actions'
 import { NFT } from '../../modules/nft/types'
 import { getData as getOrders } from '../../modules/order/selectors'
 import { RootState } from '../../modules/reducer'
-import {
-  setIsTryingOn,
-  setWearablePreviewController
-} from '../../modules/ui/preview/actions'
-import {
-  getIsTryingOn,
-  getIsPlayingEmote,
-  getWearablePreviewController
-} from '../../modules/ui/preview/selectors'
+import { setIsTryingOn, setWearablePreviewController } from '../../modules/ui/preview/actions'
+import { getIsTryingOn, getIsPlayingEmote, getWearablePreviewController } from '../../modules/ui/preview/selectors'
 import { getWallet } from '../../modules/wallet/selectors'
 import AssetImage from './AssetImage'
-import {
-  MapStateProps,
-  MapDispatchProps,
-  MapDispatch,
-  OwnProps
-} from './AssetImage.types'
+import { MapStateProps, MapDispatchProps, MapDispatch, OwnProps } from './AssetImage.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const profiles = getProfiles(state)
   const wallet = getWallet(state)
   let avatar: Avatar | undefined = undefined
   const items = getItems(state)
-  const item = getItem(
-    ownProps.asset.contractAddress,
-    ownProps.asset.itemId,
-    items
-  )
+  const item = getItem(ownProps.asset.contractAddress, ownProps.asset.itemId, items)
   const orders = getOrders(state)
   const order = isNFT(ownProps.asset)
     ? Object.values(orders).find(
-        (order) =>
-          order.contractAddress === ownProps.asset.contractAddress &&
-          order.tokenId === (ownProps.asset as NFT).tokenId
+        order => order.contractAddress === ownProps.asset.contractAddress && order.tokenId === (ownProps.asset as NFT).tokenId
       )
     : undefined
 
@@ -64,13 +46,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onSetIsTryingOn: (value) => dispatch(setIsTryingOn(value)),
-  onSetWearablePreviewController: (controller) =>
-    dispatch(setWearablePreviewController(controller)),
-  onPlaySmartWearableVideoShowcase: (asset: Asset) =>
-    dispatch(openModal('SmartWearableVideoShowcaseModal', { asset })),
-  onFetchItem: (contractAddress: string, tokenId: string) =>
-    dispatch(fetchItemRequest(contractAddress, tokenId))
+  onSetIsTryingOn: value => dispatch(setIsTryingOn(value)),
+  onSetWearablePreviewController: controller => dispatch(setWearablePreviewController(controller)),
+  onPlaySmartWearableVideoShowcase: (asset: Asset) => dispatch(openModal('SmartWearableVideoShowcaseModal', { asset })),
+  onFetchItem: (contractAddress: string, tokenId: string) => dispatch(fetchItemRequest(contractAddress, tokenId))
 })
 
 export default connect(mapState, mapDispatch)(AssetImage)

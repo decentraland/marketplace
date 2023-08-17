@@ -8,16 +8,11 @@ import '@testing-library/jest-dom'
 import { config } from 'dotenv'
 import flatten from 'flat'
 import { en as dappsEn } from 'decentraland-dapps/dist/modules/translation/defaults'
-import {
-  mergeTranslations,
-  setCurrentLocale
-} from 'decentraland-dapps/dist/modules/translation/utils'
+import { mergeTranslations, setCurrentLocale } from 'decentraland-dapps/dist/modules/translation/utils'
 import * as locales from './modules/translation/locales'
 
 jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
-  const module = jest.requireActual(
-    'decentraland-dapps/dist/modules/translation/utils'
-  )
+  const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
   return {
     ...module,
     T: ({ id, values }: (typeof module)['T']) => module.t(id, values)
@@ -25,9 +20,7 @@ jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
 })
 
 jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
-  const module = jest.requireActual(
-    'decentraland-dapps/dist/modules/translation/utils'
-  )
+  const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
   return {
     ...module,
     T: ({ id, values }: (typeof module)['T']) => module.t(id, values)

@@ -44,8 +44,7 @@ const mapState = (state: RootState): MapStateProps => {
     hasFiltersEnabled: hasFiltersEnabled(state),
     isLoading:
       assetType === AssetType.ITEM
-        ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) ||
-          isLoadingFavoritedItems(state)
+        ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) || isLoadingFavoritedItems(state)
         : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST)
   }
 }

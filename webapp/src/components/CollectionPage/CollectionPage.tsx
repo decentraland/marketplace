@@ -1,20 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Back,
-  Column,
-  Page,
-  Row,
-  Section,
-  Header,
-  Badge,
-  Icon,
-  Color,
-  Button,
-  Loader,
-  useMobileMediaQuery
-} from 'decentraland-ui'
+import { Back, Column, Page, Row, Section, Header, Badge, Icon, Color, Button, Loader, useMobileMediaQuery } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import CollectionProvider from '../CollectionProvider'
@@ -62,32 +49,18 @@ const CollectionPage = (props: Props) => {
         {contractAddress ? (
           <CollectionProvider contractAddress={contractAddress} withItems>
             {({ collection, items, isLoading }) => {
-              const isCollectionOwner =
-                !!collection &&
-                !!currentAddress &&
-                collection.creator.toLowerCase() === currentAddress
+              const isCollectionOwner = !!collection && !!currentAddress && collection.creator.toLowerCase() === currentAddress
 
-              const builderCollectionUrl =
-                getBuilderCollectionDetailUrl(contractAddress)
-              const hasWearables = items?.some(
-                (item) => item.category === NFTCategory.WEARABLE
-              )
-              const hasEmotes = items?.some(
-                (item) => item.category === NFTCategory.EMOTE
-              )
+              const builderCollectionUrl = getBuilderCollectionDetailUrl(contractAddress)
+              const hasWearables = items?.some(item => item.category === NFTCategory.WEARABLE)
+              const hasEmotes = items?.some(item => item.category === NFTCategory.EMOTE)
               const hasOnlyEmotes = hasEmotes && !hasWearables
 
-              const filteredItems = items?.filter((item) => {
-                return hasOnlyEmotes
-                  ? item.category === NFTCategory.EMOTE
-                  : item.category === NFTCategory.WEARABLE
+              const filteredItems = items?.filter(item => {
+                return hasOnlyEmotes ? item.category === NFTCategory.EMOTE : item.category === NFTCategory.WEARABLE
               })
 
-              const tableItems = formatDataToTable(
-                filteredItems,
-                isCollectionOwner,
-                isMobile
-              )
+              const tableItems = formatDataToTable(filteredItems, isCollectionOwner, isMobile)
 
               const showShowTabs = hasEmotes && hasWearables
 
@@ -110,38 +83,19 @@ const CollectionPage = (props: Props) => {
                               {collection.isOnSale && (
                                 <Badge color={Color.SUMMER_RED}>
                                   <Icon name="tag" />
-                                  <span className={styles.badge}>
-                                    {t('collection_page.on_sale')}
-                                  </span>
+                                  <span className={styles.badge}>{t('collection_page.on_sale')}</span>
                                 </Badge>
                               )}
                             </Row>
                           </Column>
                           {isCollectionOwner && (
-                            <Column
-                              align="right"
-                              className={styles.columnRight}
-                            >
+                            <Column align="right" className={styles.columnRight}>
                               <Row align="right">
-                                <Button
-                                  primary
-                                  inverted
-                                  compact
-                                  as="a"
-                                  href={builderCollectionUrl}
-                                >
+                                <Button primary inverted compact as="a" href={builderCollectionUrl}>
                                   {t('collection_page.edit_in_builder')}
                                 </Button>
-                                <Button
-                                  primary
-                                  inverted
-                                  compact
-                                  as="a"
-                                  href={builderCollectionUrl}
-                                >
-                                  {collection.isOnSale
-                                    ? t('collection_page.unlist_from_market')
-                                    : t('collection_page.list_on_market')}
+                                <Button primary inverted compact as="a" href={builderCollectionUrl}>
+                                  {collection.isOnSale ? t('collection_page.unlist_from_market') : t('collection_page.list_on_market')}
                                 </Button>
                               </Row>
                             </Column>
@@ -159,10 +113,8 @@ const CollectionPage = (props: Props) => {
                         <TableContent
                           data={tableItems}
                           isLoading={isLoading}
-                          empty={() => (
-                            <div>{t('collection_page.no_collection')}</div>
-                          )}
-                          mobileTableBody={filteredItems.map((item) => (
+                          empty={() => <div>{t('collection_page.no_collection')}</div>}
+                          mobileTableBody={filteredItems.map(item => (
                             <div key={item.id} className="mobile-row">
                               <AssetCell asset={item} />
                               <Mana network={item.network} inline>

@@ -19,37 +19,23 @@ function addStrings(a: string, b: string) {
   return ethers.BigNumber.from(a).add(b).toString()
 }
 
-export function fromProfilesToCreators(
-  profiles: Profile[],
-  accounts: Account[]
-): CreatorAccount[] {
+export function fromProfilesToCreators(profiles: Profile[], accounts: Account[]): CreatorAccount[] {
   return profiles
-    .map((profile) => ({
+    .map(profile => ({
       name: profile.avatars[0].name,
       address: profile.avatars[0].ethAddress,
-      collections:
-        accounts.find(
-          (account) => account.address === profile.avatars[0].ethAddress
-        )?.collections || 0
+      collections: accounts.find(account => account.address === profile.avatars[0].ethAddress)?.collections || 0
     }))
-    .filter((account) => account.collections > 0)
+    .filter(account => account.collections > 0)
 }
 
-export function enhanceCreatorName(
-  creator: CreatorAccount,
-  ens: NFTResult[],
-  search: string
-) {
+export function enhanceCreatorName(creator: CreatorAccount, ens: NFTResult[], search: string) {
   if (!creator.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
     const ensThatMatch = ens.find(
-      (nft) =>
-        nft.nft.owner === creator.address &&
-        nft.nft.name.toLowerCase().includes(search.toLocaleLowerCase())
+      nft => nft.nft.owner === creator.address && nft.nft.name.toLowerCase().includes(search.toLocaleLowerCase())
     )
     if (ensThatMatch) {
-      creator.name = `${ensThatMatch.nft.name} (${t('global.currently')} ${
-        creator.name
-      })`
+      creator.name = `${ensThatMatch.nft.name} (${t('global.currently')} ${creator.name})`
     }
   }
 }

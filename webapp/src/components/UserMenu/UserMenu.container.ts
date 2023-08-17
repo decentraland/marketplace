@@ -1,10 +1,7 @@
 import { connect } from 'react-redux'
 import { getLocation, push } from 'connected-react-router'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
-import {
-  isConnected,
-  isConnecting
-} from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { isConnected, isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { getIsProfileEnabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import { locations } from '../../modules/routing/locations'
@@ -18,7 +15,7 @@ const mapState = (state: RootState): MapStateProps => {
     isSigningIn: isConnecting(state),
     isActivity: getLocation(state).pathname === locations.activity(),
     isProfileEnabled: getIsProfileEnabled(state),
-    hasActivity: getTransactions(state).some((tx) => isPending(tx.status))
+    hasActivity: getTransactions(state).some(tx => isPending(tx.status))
   }
 }
 

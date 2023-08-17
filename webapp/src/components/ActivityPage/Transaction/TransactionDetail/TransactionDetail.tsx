@@ -2,14 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Network } from '@dcl/schemas'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
-import {
-  TransactionStatus,
-  Transaction
-} from 'decentraland-dapps/dist/modules/transaction/types'
-import {
-  isPending,
-  getTransactionHref
-} from 'decentraland-dapps/dist/modules/transaction/utils'
+import { TransactionStatus, Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
+import { isPending, getTransactionHref } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Loader, Icon } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../../../lib/date'
@@ -41,14 +35,7 @@ const TransactionDetail = (props: Props) => {
               <AssetImage asset={asset} isSmall />
             </Link>
           ) : (
-            <Mana
-              showTooltip
-              network={
-                tx.chainId
-                  ? getChainConfiguration(tx.chainId).network
-                  : Network.ETHEREUM
-              }
-            />
+            <Mana showTooltip network={tx.chainId ? getChainConfiguration(tx.chainId).network : Network.ETHEREUM} />
           )}
         </div>
         <div className="text">
@@ -57,25 +44,15 @@ const TransactionDetail = (props: Props) => {
         </div>
       </Column>
       <Column align="right">
-        <a
-          href={getHref(tx)}
-          className={tx.status ? 'status ' + tx.status : 'status'}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href={getHref(tx)} className={tx.status ? 'status ' + tx.status : 'status'} target="_blank" rel="noopener noreferrer">
           <div className="description">{tx.status || t('global.loading')}</div>
           {isPending(tx.status) ? (
             <div className="spinner">
               <Loader active size="mini" />
             </div>
           ) : null}
-          {tx.status === TransactionStatus.REVERTED ? (
-            <Icon name="warning sign" />
-          ) : null}
-          {tx.status === TransactionStatus.CONFIRMED ||
-          tx.status === TransactionStatus.REPLACED ? (
-            <Icon name="check" />
-          ) : null}
+          {tx.status === TransactionStatus.REVERTED ? <Icon name="warning sign" /> : null}
+          {tx.status === TransactionStatus.CONFIRMED || tx.status === TransactionStatus.REPLACED ? <Icon name="check" /> : null}
         </a>
       </Column>
     </Row>

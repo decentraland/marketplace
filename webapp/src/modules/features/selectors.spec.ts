@@ -1,9 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { INITIAL_STATE } from 'decentraland-dapps/dist/modules/features/reducer'
-import {
-  getIsFeatureEnabled,
-  hasLoadedInitialFlags
-} from 'decentraland-dapps/dist/modules/features/selectors'
+import { getIsFeatureEnabled, hasLoadedInitialFlags } from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { RootState } from '../reducer'
 import {
@@ -28,9 +25,7 @@ import {
 import { FeatureName } from './types'
 
 jest.mock('decentraland-dapps/dist/modules/features/selectors', () => {
-  const originalModule = jest.requireActual(
-    'decentraland-dapps/dist/modules/features/selectors'
-  )
+  const originalModule = jest.requireActual('decentraland-dapps/dist/modules/features/selectors')
 
   return {
     __esModule: true,
@@ -55,12 +50,8 @@ beforeEach(() => {
       loading: []
     }
   } as any
-  getIsFeatureEnabledMock = getIsFeatureEnabled as jest.MockedFunction<
-    typeof getIsFeatureEnabled
-  >
-  hasLoadedInitialFlagsMock = hasLoadedInitialFlags as jest.MockedFunction<
-    typeof hasLoadedInitialFlags
-  >
+  getIsFeatureEnabledMock = getIsFeatureEnabled as jest.MockedFunction<typeof getIsFeatureEnabled>
+  hasLoadedInitialFlagsMock = hasLoadedInitialFlags as jest.MockedFunction<typeof hasLoadedInitialFlags>
 })
 
 describe('when getting the loading state of the features state', () => {
@@ -110,11 +101,7 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
         const isEnabled = selector(state)
 
         expect(isEnabled).toBe(false)
-        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
-          state,
-          ApplicationName.MARKETPLACE,
-          feature
-        )
+        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, ApplicationName.MARKETPLACE, feature)
       })
     })
 
@@ -127,11 +114,7 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
         const isEnabled = selector(state)
 
         expect(isEnabled).toBe(false)
-        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
-          state,
-          ApplicationName.MARKETPLACE,
-          feature
-        )
+        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, ApplicationName.MARKETPLACE, feature)
       })
     })
 
@@ -144,11 +127,7 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
         const isEnabled = selector(state)
 
         expect(isEnabled).toBe(true)
-        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
-          state,
-          ApplicationName.MARKETPLACE,
-          feature
-        )
+        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, ApplicationName.MARKETPLACE, feature)
       })
     })
   })
@@ -213,60 +192,51 @@ const waitForInitialLoadingSelectors = [
   }
 ]
 
-waitForInitialLoadingSelectors.forEach(
-  ({ name, app = ApplicationName.MARKETPLACE, feature, selector }) =>
-    describe(`when getting if the ${name} feature flag is enabled`, () => {
-      describe('when the initial flags have not been yet loaded', () => {
+waitForInitialLoadingSelectors.forEach(({ name, app = ApplicationName.MARKETPLACE, feature, selector }) =>
+  describe(`when getting if the ${name} feature flag is enabled`, () => {
+    describe('when the initial flags have not been yet loaded', () => {
+      beforeEach(() => {
+        hasLoadedInitialFlagsMock.mockReturnValueOnce(false)
+      })
+
+      it('should return false', () => {
+        const isEnabled = selector(state)
+
+        expect(isEnabled).toBe(false)
+        expect(getIsFeatureEnabledMock).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('when the initial flags have not been yet loaded', () => {
+      beforeEach(() => {
+        hasLoadedInitialFlagsMock.mockReturnValueOnce(true)
+      })
+
+      describe('when the feature is not enabled', () => {
         beforeEach(() => {
-          hasLoadedInitialFlagsMock.mockReturnValueOnce(false)
+          getIsFeatureEnabledMock.mockReturnValueOnce(false)
         })
 
         it('should return false', () => {
           const isEnabled = selector(state)
 
           expect(isEnabled).toBe(false)
-          expect(getIsFeatureEnabledMock).not.toHaveBeenCalled()
+          expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, app, feature)
         })
       })
 
-      describe('when the initial flags have not been yet loaded', () => {
+      describe('when the feature is enabled', () => {
         beforeEach(() => {
-          hasLoadedInitialFlagsMock.mockReturnValueOnce(true)
+          getIsFeatureEnabledMock.mockReturnValueOnce(true)
         })
 
-        describe('when the feature is not enabled', () => {
-          beforeEach(() => {
-            getIsFeatureEnabledMock.mockReturnValueOnce(false)
-          })
+        it('should return true', () => {
+          const isEnabled = selector(state)
 
-          it('should return false', () => {
-            const isEnabled = selector(state)
-
-            expect(isEnabled).toBe(false)
-            expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
-              state,
-              app,
-              feature
-            )
-          })
-        })
-
-        describe('when the feature is enabled', () => {
-          beforeEach(() => {
-            getIsFeatureEnabledMock.mockReturnValueOnce(true)
-          })
-
-          it('should return true', () => {
-            const isEnabled = selector(state)
-
-            expect(isEnabled).toBe(true)
-            expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
-              state,
-              app,
-              feature
-            )
-          })
+          expect(isEnabled).toBe(true)
+          expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, app, feature)
         })
       })
     })
+  })
 )

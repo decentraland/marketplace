@@ -47,13 +47,7 @@ const ConfirmInputValueModal = ({
         >
           {t('global.cancel')}
         </Button>
-        <Button
-          type="submit"
-          primary
-          disabled={isDisabled}
-          loading={loading}
-          onClick={onConfirm}
-        >
+        <Button type="submit" primary disabled={isDisabled} loading={loading} onClick={onConfirm}>
           {t('global.proceed')}
         </Button>
       </Modal.Actions>

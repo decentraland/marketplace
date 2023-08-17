@@ -10,7 +10,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchBids: (nft) => dispatch(fetchBidsByNFTRequest(nft))
+  onFetchBids: nft => dispatch(fetchBidsByNFTRequest(nft))
 })
 
 export default connect(mapState, mapDispatch)(BidList)

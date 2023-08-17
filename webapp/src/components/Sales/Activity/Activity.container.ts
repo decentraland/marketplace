@@ -4,33 +4,19 @@ import { Item, Sale, SaleType } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { Asset } from '../../../modules/asset/types'
 import { FETCH_ITEM_REQUEST } from '../../../modules/item/actions'
-import {
-  getData as getItemsData,
-  getLoading as getItemLoading
-} from '../../../modules/item/selectors'
+import { getData as getItemsData, getLoading as getItemLoading } from '../../../modules/item/selectors'
 import { FETCH_NFT_REQUEST } from '../../../modules/nft/actions'
-import {
-  getData as getNftData,
-  getLoading as getNftLoading
-} from '../../../modules/nft/selectors'
+import { getData as getNftData, getLoading as getNftLoading } from '../../../modules/nft/selectors'
 import { NFT } from '../../../modules/nft/types'
 import { RootState } from '../../../modules/reducer'
 import { browse } from '../../../modules/routing/actions'
 import { getPageNumber } from '../../../modules/routing/selectors'
 import { FETCH_SALES_REQUEST } from '../../../modules/sale/actions'
-import {
-  getSales,
-  getCount,
-  getLoading as getSaleLoading
-} from '../../../modules/sale/selectors'
+import { getSales, getCount, getLoading as getSaleLoading } from '../../../modules/sale/selectors'
 import Activity from './Activity'
 import { MapStateProps, MapDispatchProps } from './Activity.types'
 
-const getAssets = (
-  sales: Sale[],
-  items: Record<string, Item>,
-  nfts: Record<string, NFT>
-) =>
+const getAssets = (sales: Sale[], items: Record<string, Item>, nfts: Record<string, NFT>) =>
   sales.reduce((acc, sale) => {
     const { contractAddress, itemId, tokenId, type } = sale
 
@@ -71,7 +57,7 @@ const mapState = (state: RootState): MapStateProps => {
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
   return {
-    onBrowse: (options) => dispatch(browse(options))
+    onBrowse: options => dispatch(browse(options))
   }
 }
 

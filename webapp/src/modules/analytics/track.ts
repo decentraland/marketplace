@@ -1,10 +1,7 @@
 import { ethers } from 'ethers'
 import { PayloadAction } from 'typesafe-actions'
 import { NFTCategory } from '@dcl/schemas'
-import {
-  EventName,
-  GetPayload
-} from 'decentraland-dapps/dist/modules/analytics/types'
+import { EventName, GetPayload } from 'decentraland-dapps/dist/modules/analytics/types'
 import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
   GrantTokenSuccessAction,
@@ -12,10 +9,7 @@ import {
   RevokeTokenSuccessAction,
   REVOKE_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
-import {
-  SetPurchaseAction,
-  SET_PURCHASE
-} from 'decentraland-dapps/dist/modules/gateway/actions'
+import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   FETCH_TRANSACTION_FAILURE,
@@ -71,12 +65,7 @@ import {
   FetchItemsSuccessAction,
   FETCH_ITEMS_SUCCESS
 } from '../item/actions'
-import {
-  TRANSFER_NFT_TRANSACTION_SUBMITTED,
-  TransferNFTSuccessAction,
-  FETCH_NFTS_SUCCESS,
-  FetchNFTsSuccessAction
-} from '../nft/actions'
+import { TRANSFER_NFT_TRANSACTION_SUBMITTED, TransferNFTSuccessAction, FETCH_NFTS_SUCCESS, FetchNFTsSuccessAction } from '../nft/actions'
 import { isParcel } from '../nft/utils'
 import {
   CREATE_ORDER_SUCCESS,
@@ -168,20 +157,12 @@ track<TransferNFTSuccessAction>(
 )
 
 track<FetchTransactionFailureAction>(FETCH_TRANSACTION_FAILURE, ({ payload }) =>
-  payload.status === TransactionStatus.REVERTED
-    ? events.TRANSACTION_FAILED
-    : events.TRANSACTION_DROPPED
+  payload.status === TransactionStatus.REVERTED ? events.TRANSACTION_FAILED : events.TRANSACTION_DROPPED
 )
 
-track<FixRevertedTransactionAction>(
-  FIX_REVERTED_TRANSACTION,
-  events.TRANSACTION_FIXED
-)
+track<FixRevertedTransactionAction>(FIX_REVERTED_TRANSACTION, events.TRANSACTION_FIXED)
 
-track<ReplaceTransactionSuccessAction>(
-  REPLACE_TRANSACTION_SUCCESS,
-  events.TRANSACTION_REPLACED
-)
+track<ReplaceTransactionSuccessAction>(REPLACE_TRANSACTION_SUCCESS, events.TRANSACTION_REPLACED)
 
 track<GrantTokenSuccessAction>(GRANT_TOKEN_SUCCESS, () => events.AUTHORIZE)
 
@@ -198,26 +179,18 @@ track<PlaceBidSuccessAction>(
   })
 )
 
-track<AcceptBidTransactionSubmittedAction>(
-  ACCEPT_BID_TRANSACTION_SUBMITTED,
-  events.ACCEPT_BID,
-  ({ payload }) => ({
-    tokenId: payload.bid.tokenId,
-    bidId: payload.bid.id,
-    bidder: payload.bid.bidder,
-    seller: payload.bid.seller
-  })
-)
+track<AcceptBidTransactionSubmittedAction>(ACCEPT_BID_TRANSACTION_SUBMITTED, events.ACCEPT_BID, ({ payload }) => ({
+  tokenId: payload.bid.tokenId,
+  bidId: payload.bid.id,
+  bidder: payload.bid.bidder,
+  seller: payload.bid.seller
+}))
 
-track<CancelBidSuccessAction>(
-  CANCEL_BID_SUCCESS,
-  events.CANCEL_BID,
-  ({ payload }) => ({
-    tokenId: payload.bid.tokenId,
-    bidId: payload.bid.id,
-    bidder: payload.bid.bidder
-  })
-)
+track<CancelBidSuccessAction>(CANCEL_BID_SUCCESS, events.CANCEL_BID, ({ payload }) => ({
+  tokenId: payload.bid.tokenId,
+  bidId: payload.bid.id,
+  bidder: payload.bid.bidder
+}))
 
 track<ArchiveBidAction>(ARCHIVE_BID, events.ARCHIVE_BID, ({ payload }) => ({
   tokenId: payload.bid.tokenId,
@@ -225,95 +198,63 @@ track<ArchiveBidAction>(ARCHIVE_BID, events.ARCHIVE_BID, ({ payload }) => ({
   price: payload.bid.price
 }))
 
-track<UnarchiveBidAction>(
-  UNARCHIVE_BID,
-  events.UNARCHIVE_BID,
-  ({ payload }) => ({
-    tokenId: payload.bid.tokenId,
-    bidId: payload.bid.id,
-    price: payload.bid.price
-  })
-)
+track<UnarchiveBidAction>(UNARCHIVE_BID, events.UNARCHIVE_BID, ({ payload }) => ({
+  tokenId: payload.bid.tokenId,
+  bidId: payload.bid.id,
+  price: payload.bid.price
+}))
 
-track<FetchNFTsSuccessAction>(
-  FETCH_NFTS_SUCCESS,
-  events.FETCH_NFTS,
-  ({ payload }) => ({
-    ...payload.options.params,
-    view: payload.options.view,
-    vendor: payload.options.vendor,
-    count: payload.count
-  })
-)
+track<FetchNFTsSuccessAction>(FETCH_NFTS_SUCCESS, events.FETCH_NFTS, ({ payload }) => ({
+  ...payload.options.params,
+  view: payload.options.view,
+  vendor: payload.options.vendor,
+  count: payload.count
+}))
 
-track<FetchItemsSuccessAction>(
-  FETCH_ITEMS_SUCCESS,
-  events.FETCH_ITEMS,
-  ({ payload }) => ({
-    options: payload.options,
-    total: payload.total
-  })
-)
+track<FetchItemsSuccessAction>(FETCH_ITEMS_SUCCESS, events.FETCH_ITEMS, ({ payload }) => ({
+  options: payload.options,
+  total: payload.total
+}))
 
-track<BuyItemSuccessAction>(
-  BUY_ITEM_SUCCESS,
-  events.BUY_ITEM,
-  ({ payload }) => ({
-    itemId: payload.item.itemId,
-    contractAddress: payload.item.contractAddress,
-    rarity: payload.item.rarity,
-    network: payload.item.network,
-    chainId: payload.item.chainId,
-    price: Number(ethers.utils.formatEther(payload.item.price)),
-    data: payload.item.data
-  })
-)
+track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, events.BUY_ITEM, ({ payload }) => ({
+  itemId: payload.item.itemId,
+  contractAddress: payload.item.contractAddress,
+  rarity: payload.item.rarity,
+  network: payload.item.network,
+  chainId: payload.item.chainId,
+  price: Number(ethers.utils.formatEther(payload.item.price)),
+  data: payload.item.data
+}))
 
-track<BuyItemWithCardSuccessAction>(
-  BUY_ITEM_WITH_CARD_SUCCESS,
-  events.BUY_ITEM_WITH_CARD,
-  ({ payload }) => ({
-    itemId: payload.item.itemId,
-    contractAddress: payload.item.contractAddress,
-    rarity: payload.item.rarity,
-    network: payload.item.network,
-    chainId: payload.item.chainId,
-    price: payload.purchase.nft.cryptoAmount,
-    data: payload.item.data,
-    purchase: payload.purchase
-  })
-)
+track<BuyItemWithCardSuccessAction>(BUY_ITEM_WITH_CARD_SUCCESS, events.BUY_ITEM_WITH_CARD, ({ payload }) => ({
+  itemId: payload.item.itemId,
+  contractAddress: payload.item.contractAddress,
+  rarity: payload.item.rarity,
+  network: payload.item.network,
+  chainId: payload.item.chainId,
+  price: payload.purchase.nft.cryptoAmount,
+  data: payload.item.data,
+  purchase: payload.purchase
+}))
 
-track<SetIsTryingOnAction>(
-  SET_IS_TRYING_ON,
-  events.TOGGLE_PREVIEW_MODE,
-  ({ payload }) => ({
-    mode: payload.value ? 'avatar' : 'wearable'
-  })
-)
+track<SetIsTryingOnAction>(SET_IS_TRYING_ON, events.TOGGLE_PREVIEW_MODE, ({ payload }) => ({
+  mode: payload.value ? 'avatar' : 'wearable'
+}))
 
-track<UpsertRentalSuccessAction>(
-  UPSERT_RENTAL_SUCCESS,
-  events.UPSERT_LAND_RENTAL,
-  ({ payload: { nft, operationType, rental } }) => ({
-    nftId: nft.id,
-    assetType: isParcel(nft) ? NFTCategory.PARCEL : NFTCategory.ESTATE,
-    rentalId: rental.id,
-    pricePerDay: rental.periods[0].pricePerDay, // we're accepting just one price per day for all periods
-    operation: operationType === UpsertRentalOptType.EDIT ? 'edit' : 'create',
-    periods: rental.periods.map((period) => period.maxDays).join(','), // maxDays is going to tell the duration for now
-    experiesAt: rental.expiration
-  })
-)
+track<UpsertRentalSuccessAction>(UPSERT_RENTAL_SUCCESS, events.UPSERT_LAND_RENTAL, ({ payload: { nft, operationType, rental } }) => ({
+  nftId: nft.id,
+  assetType: isParcel(nft) ? NFTCategory.PARCEL : NFTCategory.ESTATE,
+  rentalId: rental.id,
+  pricePerDay: rental.periods[0].pricePerDay, // we're accepting just one price per day for all periods
+  operation: operationType === UpsertRentalOptType.EDIT ? 'edit' : 'create',
+  periods: rental.periods.map(period => period.maxDays).join(','), // maxDays is going to tell the duration for now
+  experiesAt: rental.expiration
+}))
 
-track<ClaimAssetSuccessAction>(
-  CLAIM_ASSET_SUCCESS,
-  events.CLAIM_LAND_RENTAL,
-  ({ payload: { nft, rental } }) => ({
-    nftId: nft.id,
-    rentalId: rental.id
-  })
-)
+track<ClaimAssetSuccessAction>(CLAIM_ASSET_SUCCESS, events.CLAIM_LAND_RENTAL, ({ payload: { nft, rental } }) => ({
+  nftId: nft.id,
+  rentalId: rental.id
+}))
 
 track<AcceptRentalListingSuccessAction>(
   ACCEPT_RENTAL_LISTING_SUCCESS,
@@ -329,7 +270,7 @@ track<AcceptRentalListingSuccessAction>(
 
 track<SetPurchaseAction>(
   SET_PURCHASE,
-  (action) =>
+  action =>
     action.payload.purchase.status === PurchaseStatus.CANCELLED
       ? events.PURCHASED_CANCELLED
       : action.payload.purchase.status === PurchaseStatus.COMPLETE
@@ -339,93 +280,53 @@ track<SetPurchaseAction>(
       : action.payload.purchase.status === PurchaseStatus.FAILED
       ? events.PURCHASED_FAILED
       : events.PURCHASED_STARTED,
-  (action) => action.payload.purchase
+  action => action.payload.purchase
 )
 
-track<PickItemSuccessAction>(
-  PICK_ITEM_SUCCESS,
-  events.PICK_ITEM,
-  ({ payload: { item, listId } }) => ({
-    item,
-    listId
-  })
-)
+track<PickItemSuccessAction>(PICK_ITEM_SUCCESS, events.PICK_ITEM, ({ payload: { item, listId } }) => ({
+  item,
+  listId
+}))
 
-track<PickItemFailureAction>(
-  PICK_ITEM_FAILURE,
-  events.PICK_ITEM,
-  ({ payload: { item, listId, error } }) => ({
-    item,
-    listId,
-    error
-  })
-)
+track<PickItemFailureAction>(PICK_ITEM_FAILURE, events.PICK_ITEM, ({ payload: { item, listId, error } }) => ({
+  item,
+  listId,
+  error
+}))
 
-track<UnpickItemSuccessAction>(
-  UNPICK_ITEM_SUCCESS,
-  events.UNPICK_ITEM,
-  ({ payload: { item, listId } }) => ({
-    item,
-    listId
-  })
-)
+track<UnpickItemSuccessAction>(UNPICK_ITEM_SUCCESS, events.UNPICK_ITEM, ({ payload: { item, listId } }) => ({
+  item,
+  listId
+}))
 
-track<UnpickItemFailureAction>(
-  UNPICK_ITEM_FAILURE,
-  events.UNPICK_ITEM,
-  ({ payload: { item, listId, error } }) => ({
-    item,
-    listId,
-    error
-  })
-)
+track<UnpickItemFailureAction>(UNPICK_ITEM_FAILURE, events.UNPICK_ITEM, ({ payload: { item, listId, error } }) => ({
+  item,
+  listId,
+  error
+}))
 
-track<CreateListSuccessAction>(
-  CREATE_LIST_SUCCESS,
-  events.CREATE_LIST,
-  ({ payload: { list } }) => ({
-    list
-  })
-)
+track<CreateListSuccessAction>(CREATE_LIST_SUCCESS, events.CREATE_LIST, ({ payload: { list } }) => ({
+  list
+}))
 
-track<CreateListFailureAction>(
-  CREATE_LIST_FAILURE,
-  events.CREATE_LIST,
-  ({ payload: { error } }) => ({
-    error
-  })
-)
+track<CreateListFailureAction>(CREATE_LIST_FAILURE, events.CREATE_LIST, ({ payload: { error } }) => ({
+  error
+}))
 
-track<UpdateListSuccessAction>(
-  UPDATE_LIST_SUCCESS,
-  events.UPDATE_LIST,
-  ({ payload: { list } }) => ({
-    list
-  })
-)
+track<UpdateListSuccessAction>(UPDATE_LIST_SUCCESS, events.UPDATE_LIST, ({ payload: { list } }) => ({
+  list
+}))
 
-track<UpdateListFailureAction>(
-  UPDATE_LIST_FAILURE,
-  events.UPDATE_LIST,
-  ({ payload: { id, error } }) => ({
-    id,
-    error
-  })
-)
+track<UpdateListFailureAction>(UPDATE_LIST_FAILURE, events.UPDATE_LIST, ({ payload: { id, error } }) => ({
+  id,
+  error
+}))
 
-track<DeleteListSuccessAction>(
-  DELETE_LIST_SUCCESS,
-  events.DELETE_LIST,
-  ({ payload: { list } }) => ({
-    list
-  })
-)
+track<DeleteListSuccessAction>(DELETE_LIST_SUCCESS, events.DELETE_LIST, ({ payload: { list } }) => ({
+  list
+}))
 
-track<DeleteListFailureAction>(
-  DELETE_LIST_FAILURE,
-  events.DELETE_LIST,
-  ({ payload: { list, error } }) => ({
-    list,
-    error
-  })
-)
+track<DeleteListFailureAction>(DELETE_LIST_FAILURE, events.DELETE_LIST, ({ payload: { list, error } }) => ({
+  list,
+  error
+}))

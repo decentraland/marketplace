@@ -4,10 +4,7 @@ import {
   FETCH_ITEMS_SUCCESS,
   FETCH_TRENDING_ITEMS_SUCCESS
 } from '../../../item/actions'
-import {
-  FetchNFTsSuccessAction,
-  FETCH_NFTS_SUCCESS
-} from '../../../nft/actions'
+import { FetchNFTsSuccessAction, FETCH_NFTS_SUCCESS } from '../../../nft/actions'
 import { View } from '../../types'
 
 export type HomepageUIState = {
@@ -28,19 +25,13 @@ export const INITIAL_STATE: HomepageUIState = {
   [View.HOME_ENS]: []
 }
 
-type UIReducerAction =
-  | FetchItemsSuccessAction
-  | FetchTrendingItemsSuccessAction
-  | FetchNFTsSuccessAction
+type UIReducerAction = FetchItemsSuccessAction | FetchTrendingItemsSuccessAction | FetchNFTsSuccessAction
 
-export function homepageReducer(
-  state: HomepageUIState = INITIAL_STATE,
-  action: UIReducerAction
-) {
+export function homepageReducer(state: HomepageUIState = INITIAL_STATE, action: UIReducerAction) {
   switch (action.type) {
     case FETCH_ITEMS_SUCCESS: {
       const { items, options } = action.payload
-      const itemIds = items.map((items) => items.id)
+      const itemIds = items.map(items => items.id)
 
       switch (options.view) {
         case View.HOME_NEW_ITEMS: {
@@ -61,7 +52,7 @@ export function homepageReducer(
     }
     case FETCH_TRENDING_ITEMS_SUCCESS: {
       const { items } = action.payload
-      const itemIds = items.map((items) => items.id)
+      const itemIds = items.map(items => items.id)
 
       return {
         ...state,
@@ -70,7 +61,7 @@ export function homepageReducer(
     }
     case FETCH_NFTS_SUCCESS: {
       const { nfts, options } = action.payload
-      const nftIds = nfts.map((nft) => nft.id)
+      const nftIds = nfts.map(nft => nft.id)
 
       switch (options.view) {
         case View.HOME_WEARABLES: {

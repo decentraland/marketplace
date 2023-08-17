@@ -13,8 +13,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
-  onBrowse: (options: BrowseOptions) =>
-    dispatch(browse({ vendor: VendorName.DECENTRALAND, ...options }))
+  onBrowse: (options: BrowseOptions) => dispatch(browse({ vendor: VendorName.DECENTRALAND, ...options }))
 })
 
 export default connect(mapState, mapDispatch)(OtherAccountSidebar)

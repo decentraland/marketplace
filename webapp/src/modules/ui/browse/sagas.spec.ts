@@ -1,11 +1,7 @@
 import { select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { Item } from '@dcl/schemas'
-import {
-  FETCH_FAVORITED_ITEMS_REQUEST,
-  bulkPickUnpickSuccess,
-  fetchFavoritedItemsRequest
-} from '../../favorites/actions'
+import { FETCH_FAVORITED_ITEMS_REQUEST, bulkPickUnpickSuccess, fetchFavoritedItemsRequest } from '../../favorites/actions'
 import { isOwnerUnpickingFromCurrentList } from '../../favorites/selectors'
 import { getPageNumber } from '../../routing/selectors'
 import { PAGE_SIZE } from '../../vendor/api'
@@ -54,9 +50,7 @@ describe('when handling the success action of a bulk item pick and unpick', () =
               true
             )
           )
-          .dispatch(
-            bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true, true)
-          )
+          .dispatch(bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true, true))
           .run({ silenceTimeout: true })
       })
     })
@@ -75,9 +69,7 @@ describe('when handling the success action of a bulk item pick and unpick', () =
             [select(getCount), count]
           ])
           .not.put.like({ action: { type: FETCH_FAVORITED_ITEMS_REQUEST } })
-          .dispatch(
-            bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true, true)
-          )
+          .dispatch(bulkPickUnpickSuccess({} as Item, [], unpickedFrom, true, true))
           .run({ silenceTimeout: true })
       })
     })

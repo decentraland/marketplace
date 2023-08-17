@@ -18,15 +18,8 @@ const ParcelCoordinates = (props: Props) => {
       <Collapsible collapsedHeight={60}>
         <Row className={styles.coordinates}>
           {parcelCoordinates.map((parcel, index) => (
-            <Link
-              key={index}
-              to={locations.parcel(parcel.x.toString(), parcel.y.toString())}
-            >
-              <Coordinate
-                className={styles.coordinate}
-                x={parcel.x}
-                y={parcel.y}
-              />
+            <Link key={index} to={locations.parcel(parcel.x.toString(), parcel.y.toString())}>
+              <Coordinate className={styles.coordinate} x={parcel.x} y={parcel.y} />
             </Link>
           ))}
         </Row>

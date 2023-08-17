@@ -10,13 +10,11 @@ import { MapStateProps, MapDispatch, MapDispatchProps } from './Navbar.types'
 const mapState = (state: RootState): MapStateProps => ({
   isConnected: isConnected(state),
   location: getLocation(state),
-  hasPendingTransactions: getTransactions(state).some((tx) =>
-    isPending(tx.status)
-  )
+  hasPendingTransactions: getTransactions(state).some(tx => isPending(tx.status))
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: (path) => dispatch(push(path))
+  onNavigate: path => dispatch(push(path))
 })
 
 export default connect(mapState, mapDispatch)(Navbar)

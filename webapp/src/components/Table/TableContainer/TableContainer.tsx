@@ -4,15 +4,7 @@ import { Props } from './TableContianer.types'
 import './TableContainer.css'
 
 const TableContainer = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const {
-    children,
-    tabsList,
-    activeTab,
-    handleTabChange,
-    sortbyList,
-    handleSortByChange,
-    sortBy
-  } = props
+  const { children, tabsList, activeTab, handleTabChange, sortbyList, handleSortByChange, sortBy } = props
 
   return (
     <div className={'tableContainer'} ref={ref}>
@@ -20,7 +12,7 @@ const TableContainer = forwardRef<HTMLDivElement, Props>((props, ref) => {
         <div className={'filtertabsContainer'}>
           {tabsList.length > 0 ? (
             <Tabs isFullscreen>
-              {tabsList.map((tab) => (
+              {tabsList.map(tab => (
                 <Tabs.Tab
                   key={tab.value}
                   active={activeTab === tab.value}

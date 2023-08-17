@@ -1,12 +1,6 @@
 import { RootState } from '../reducer'
 import { StoreState } from './reducer'
-import {
-  getLocalStore,
-  getState,
-  getError,
-  getLoading,
-  getData
-} from './selectors'
+import { getLocalStore, getState, getError, getLoading, getData } from './selectors'
 
 let state: RootState
 

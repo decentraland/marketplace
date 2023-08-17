@@ -14,18 +14,8 @@ import {
   FetchListsRequestAction,
   FetchListsSuccessAction
 } from '../../favorites/actions'
-import {
-  FetchItemsRequestAction,
-  FetchItemsSuccessAction,
-  FETCH_ITEMS_REQUEST,
-  FETCH_ITEMS_SUCCESS
-} from '../../item/actions'
-import {
-  FetchNFTsRequestAction,
-  FetchNFTsSuccessAction,
-  FETCH_NFTS_REQUEST,
-  FETCH_NFTS_SUCCESS
-} from '../../nft/actions'
+import { FetchItemsRequestAction, FetchItemsSuccessAction, FETCH_ITEMS_REQUEST, FETCH_ITEMS_SUCCESS } from '../../item/actions'
+import { FetchNFTsRequestAction, FetchNFTsSuccessAction, FETCH_NFTS_REQUEST, FETCH_NFTS_SUCCESS } from '../../nft/actions'
 import { BrowseAction, BROWSE } from '../../routing/actions'
 import { SetViewAction, SET_VIEW } from '../actions'
 import { View } from '../types'
@@ -68,10 +58,7 @@ type UIReducerAction =
   | CreateListSuccessAction
   | BulkPickUnpickSuccessAction
 
-export function browseReducer(
-  state: BrowseUIState = INITIAL_STATE,
-  action: UIReducerAction
-): BrowseUIState {
+export function browseReducer(state: BrowseUIState = INITIAL_STATE, action: UIReducerAction): BrowseUIState {
   switch (action.type) {
     case SET_VIEW: {
       if (action.payload.view === state.view) {
@@ -92,10 +79,7 @@ export function browseReducer(
 
       return {
         ...state,
-        count:
-          state.count !== undefined && ownerRemovedFromCurrentList
-            ? --state.count
-            : state.count
+        count: state.count !== undefined && ownerRemovedFromCurrentList ? --state.count : state.count
       }
 
     case BROWSE: {
@@ -116,10 +100,8 @@ export function browseReducer(
       if (timestamp < state.lastTimestamp) {
         return state
       }
-      const newNftIds = nfts.map((nft) => nft.id)
-      const nftIds = isLoadingMoreResults(state, page)
-        ? [...state.nftIds, ...newNftIds]
-        : newNftIds
+      const newNftIds = nfts.map(nft => nft.id)
+      const nftIds = isLoadingMoreResults(state, page) ? [...state.nftIds, ...newNftIds] : newNftIds
       switch (view) {
         case View.MARKET:
         case View.CURRENT_ACCOUNT:
@@ -141,10 +123,7 @@ export function browseReducer(
     case FETCH_NFTS_REQUEST:
     case FETCH_ITEMS_REQUEST: {
       const key = action.type === FETCH_NFTS_REQUEST ? 'nftIds' : 'itemIds'
-      const { view, page } =
-        action.type === FETCH_NFTS_REQUEST
-          ? action.payload.options
-          : action.payload
+      const { view, page } = action.type === FETCH_NFTS_REQUEST ? action.payload.options : action.payload
 
       const isDifferentView = view !== state.view
       if (isDifferentView) {
@@ -180,9 +159,7 @@ export function browseReducer(
 
       return {
         ...state,
-        itemIds: isLoadingMoreResults(state, action.payload.options.page)
-          ? state.itemIds
-          : []
+        itemIds: isLoadingMoreResults(state, action.payload.options.page) ? state.itemIds : []
       }
 
     case FETCH_FAVORITED_ITEMS_SUCCESS:
@@ -197,11 +174,8 @@ export function browseReducer(
         return state
       }
 
-      const newItemIds = items.map((item) => item.id)
-      const itemIds =
-        isLoadingMoreResults(state, page) || forceLoadMore
-          ? [...state.itemIds, ...newItemIds]
-          : newItemIds
+      const newItemIds = items.map(item => item.id)
+      const itemIds = isLoadingMoreResults(state, page) || forceLoadMore ? [...state.itemIds, ...newItemIds] : newItemIds
 
       return {
         ...state,
@@ -221,10 +195,8 @@ export function browseReducer(
         return state
       }
 
-      const newItemIds = items.map((item) => item.id)
-      const itemIds = isLoadingMoreResults(state, page)
-        ? [...state.itemIds, ...newItemIds]
-        : newItemIds
+      const newItemIds = items.map(item => item.id)
+      const itemIds = isLoadingMoreResults(state, page) ? [...state.itemIds, ...newItemIds] : newItemIds
 
       switch (view) {
         case View.MARKET:
@@ -267,10 +239,8 @@ export function browseReducer(
         total,
         options: { page }
       } = action.payload
-      const newListIds = lists.map((list) => list.id)
-      const listIds = isLoadingMoreResults(state, page)
-        ? [...state.listIds, ...newListIds]
-        : newListIds
+      const newListIds = lists.map(list => list.id)
+      const listIds = isLoadingMoreResults(state, page) ? [...state.listIds, ...newListIds] : newListIds
 
       return {
         ...state,
@@ -285,7 +255,7 @@ export function browseReducer(
 
       return {
         ...state,
-        listIds: state.listIds.filter((listId) => listId !== list.id)
+        listIds: state.listIds.filter(listId => listId !== list.id)
       }
     }
 

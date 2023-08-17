@@ -12,11 +12,7 @@ export type RentalPeriodFilterProps = {
   defaultCollapsed?: boolean
 }
 
-export const RentalPeriodFilter = ({
-  onChange,
-  rentalDays = [],
-  defaultCollapsed = false
-}: RentalPeriodFilterProps) => {
+export const RentalPeriodFilter = ({ onChange, rentalDays = [], defaultCollapsed = false }: RentalPeriodFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const handleRentalDaysChange = useCallback(
@@ -24,16 +20,14 @@ export const RentalPeriodFilter = ({
       if (checked) {
         onChange([...rentalDays, value])
       } else {
-        onChange(rentalDays.filter((period) => period !== value))
+        onChange(rentalDays.filter(period => period !== value))
       }
     },
     [rentalDays, onChange]
   )
 
   const allPeriodsSelected = useMemo(
-    () =>
-      rentalDays.length === 0 ||
-      rentalDays.length === Object.values(PeriodOption).length,
+    () => rentalDays.length === 0 || rentalDays.length === Object.values(PeriodOption).length,
     [rentalDays.length]
   )
 
@@ -41,9 +35,7 @@ export const RentalPeriodFilter = ({
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">
-            {t('nft_filters.periods.title')}
-          </span>
+          <span className="box-filter-name">{t('nft_filters.periods.title')}</span>
           <span className="box-filter-value">
             {allPeriodsSelected
               ? t('nft_filters.periods.all_items')
@@ -61,14 +53,11 @@ export const RentalPeriodFilter = ({
   return (
     <Box
       header={header}
-      className={classNames(
-        'filters-sidebar-box',
-        styles.rentalPeriodContainer
-      )}
+      className={classNames('filters-sidebar-box', styles.rentalPeriodContainer)}
       collapsible
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
-      {Object.values(PeriodOption).map((option) => (
+      {Object.values(PeriodOption).map(option => (
         <Radio
           key={option}
           label={t(`rental_modal.create_listing_step.period_options.${option}`)}

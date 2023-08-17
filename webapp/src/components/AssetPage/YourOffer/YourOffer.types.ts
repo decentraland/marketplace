@@ -16,6 +16,4 @@ export type MapStateProps = Pick<Props, 'address'>
 
 export type MapDispatchProps = Pick<Props, 'onUpdate' | 'onCancel'>
 
-export type MapDispatch = Dispatch<
-  CallHistoryMethodAction | CancelBidRequestAction
->
+export type MapDispatch = Dispatch<CallHistoryMethodAction | CancelBidRequestAction>

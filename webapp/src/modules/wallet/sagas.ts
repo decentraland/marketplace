@@ -1,8 +1,5 @@
 import { all, takeEvery } from 'redux-saga/effects'
-import {
-  CHANGE_ACCOUNT,
-  DISCONNECT_WALLET
-} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { CHANGE_ACCOUNT, DISCONNECT_WALLET } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { createWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
 import { config } from '../../config'
 import { TRANSACTIONS_API_URL } from './utils'

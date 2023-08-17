@@ -1,27 +1,13 @@
 import { ethers } from 'ethers'
 import { NFTCategory } from '@dcl/schemas'
-import {
-  getCategoryFromSection,
-  getSearchEmoteCategory,
-  getSearchWearableCategory
-} from '../../../modules/routing/search'
-import {
-  PriceFilterExtraOption,
-  PriceFilters,
-  Section
-} from '../../../modules/vendor/decentraland'
+import { getCategoryFromSection, getSearchEmoteCategory, getSearchWearableCategory } from '../../../modules/routing/search'
+import { PriceFilterExtraOption, PriceFilters, Section } from '../../../modules/vendor/decentraland'
 
-const LAND_MAX_PRICE_ALLOWED = ethers.BigNumber.from(
-  '1000000000000000000000000000'
-) // 1B
+const LAND_MAX_PRICE_ALLOWED = ethers.BigNumber.from('1000000000000000000000000000') // 1B
 
-const ENS_MAX_PRICE_ALLOWED = ethers.BigNumber.from(
-  '100000000000000000000000000'
-) // 100M
+const ENS_MAX_PRICE_ALLOWED = ethers.BigNumber.from('100000000000000000000000000') // 100M
 
-const WEARABLES_MAX_PRICE_ALLOWED = ethers.BigNumber.from(
-  '1000000000000000000000'
-) // 1k
+const WEARABLES_MAX_PRICE_ALLOWED = ethers.BigNumber.from('1000000000000000000000') // 1k
 
 export const getChartUpperBound = (section: string) => {
   let upperBound = WEARABLES_MAX_PRICE_ALLOWED
@@ -44,10 +30,7 @@ export const getChartUpperBound = (section: string) => {
 }
 
 export const getPriceFiltersForSection = (section: Section): PriceFilters => {
-  const category =
-    section === Section.LAND
-      ? PriceFilterExtraOption.LAND
-      : getCategoryFromSection(section)
+  const category = section === Section.LAND ? PriceFilterExtraOption.LAND : getCategoryFromSection(section)
 
   if (!category) {
     throw Error('Invalid section to fetch price')
@@ -55,13 +38,9 @@ export const getPriceFiltersForSection = (section: Section): PriceFilters => {
 
   const isWearableHead = section === Section.WEARABLES_HEAD
   const isWearableAccessory = section === Section.WEARABLES_ACCESSORIES
-  const wearableCategory =
-    !isWearableAccessory && category === NFTCategory.WEARABLE
-      ? getSearchWearableCategory(section)
-      : undefined
+  const wearableCategory = !isWearableAccessory && category === NFTCategory.WEARABLE ? getSearchWearableCategory(section) : undefined
 
-  const emoteCategory =
-    category === NFTCategory.EMOTE ? getSearchEmoteCategory(section) : undefined
+  const emoteCategory = category === NFTCategory.EMOTE ? getSearchEmoteCategory(section) : undefined
 
   return {
     isWearableHead,

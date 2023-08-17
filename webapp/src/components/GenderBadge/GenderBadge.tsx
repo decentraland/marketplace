@@ -31,13 +31,7 @@ const GenderBadge = ({ bodyShapes, withText, assetType, section }: Props) => {
   return withText ? (
     <IconBadge
       icon={icon}
-      text={
-        isUnisex
-          ? t('body_shape.unisex')
-          : isGenderBodyShape
-          ? t('body_shape.male')
-          : t('body_shape.female')
-      }
+      text={isUnisex ? t('body_shape.unisex') : isGenderBodyShape ? t('body_shape.male') : t('body_shape.female')}
       href={href}
     />
   ) : (

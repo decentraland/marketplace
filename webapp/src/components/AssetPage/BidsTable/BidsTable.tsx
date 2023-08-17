@@ -64,21 +64,14 @@ const BidsTable = (props: Props) => {
     if (nft) {
       setIsLoading(true)
       bidAPI
-        .fetchByNFT(
-          nft.contractAddress,
-          nft.tokenId,
-          null,
-          sortBy,
-          ROWS_PER_PAGE.toString(),
-          ((page - 1) * ROWS_PER_PAGE).toString()
-        )
-        .then((response) => {
+        .fetchByNFT(nft.contractAddress, nft.tokenId, null, sortBy, ROWS_PER_PAGE.toString(), ((page - 1) * ROWS_PER_PAGE).toString())
+        .then(response => {
           if (cancel) return
           setTotal(response.total)
           setBids(
             formatDataToTable(
-              response.data.filter((bid) => bid.bidder !== address),
-              (bid) => setShowConfirmationModal({ display: true, bid }),
+              response.data.filter(bid => bid.bidder !== address),
+              bid => setShowConfirmationModal({ display: true, bid }),
               address,
               isMobileOrTablet
             )
@@ -86,7 +79,7 @@ const BidsTable = (props: Props) => {
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => !cancel && setIsLoading(false))
-        .catch((error) => {
+        .catch(error => {
           console.error(error)
         })
       return () => {
@@ -121,7 +114,7 @@ const BidsTable = (props: Props) => {
           contractAddress={showConfirmationModal.bid.contractAddress}
           tokenId={showConfirmationModal.bid.tokenId}
         >
-          {(nft) =>
+          {nft =>
             nft &&
             showConfirmationModal.bid && (
               <ConfirmInputValueModal
@@ -145,16 +138,11 @@ const BidsTable = (props: Props) => {
                   </>
                 }
                 onConfirm={() => {
-                  showConfirmationModal.bid &&
-                    onAccept(showConfirmationModal.bid)
+                  showConfirmationModal.bid && onAccept(showConfirmationModal.bid)
                 }}
-                valueToConfirm={ethers.utils.formatEther(
-                  showConfirmationModal.bid.price
-                )}
+                valueToConfirm={ethers.utils.formatEther(showConfirmationModal.bid.price)}
                 network={nft.network}
-                onCancel={() =>
-                  setShowConfirmationModal({ display: false, bid: null })
-                }
+                onCancel={() => setShowConfirmationModal({ display: false, bid: null })}
                 loading={isAcceptingBid}
                 disabled={isAcceptingBid}
               />

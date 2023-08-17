@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import {
-  Bid,
-  BidSortBy,
-  Item,
-  ListingStatus,
-  Network,
-  Order,
-  OrderFilters,
-  OrderSortBy,
-  Rarity
-} from '@dcl/schemas'
+import { Bid, BidSortBy, Item, ListingStatus, Network, Order, OrderFilters, OrderSortBy, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Popup } from 'decentraland-ui'
 import clock from '../../../images/clock.png'
@@ -48,8 +38,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
       pathname: location.pathname,
       search: 'selectedTableTab=owners'
     })
-    tableRef &&
-      tableRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+    tableRef && tableRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
   }
 
   useEffect(() => {
@@ -76,31 +65,25 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
 
         orderAPI
           .fetchOrders(params, sortBy)
-          .then((response) => {
+          .then(response => {
             if (response.data.length > 0) {
               if (cancel) return
               setBuyOption(BuyOptions.BUY_LISTING)
               setListing({ order: response.data[0], total: response.total })
               bidAPI
-                .fetchByNFT(
-                  asset.contractAddress,
-                  response.data[0].tokenId,
-                  ListingStatus.OPEN,
-                  BidSortBy.MOST_EXPENSIVE,
-                  '1'
-                )
-                .then((response) => {
+                .fetchByNFT(asset.contractAddress, response.data[0].tokenId, ListingStatus.OPEN, BidSortBy.MOST_EXPENSIVE, '1')
+                .then(response => {
                   if (cancel) return
                   setMostExpensiveBid(response.data[0])
                 })
                 .finally(() => !cancel && setIsLoading(false))
-                .catch((error) => {
+                .catch(error => {
                   console.error(error)
                 })
             }
           })
           .finally(() => !cancel && setIsLoading(false))
-          .catch((error) => {
+          .catch(error => {
             console.error(error)
           })
       }
@@ -135,13 +118,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             <Popup
               content={t('best_buying_option.minting.minting_popup')}
               position="top center"
-              trigger={
-                <img
-                  src={infoIcon}
-                  alt="info"
-                  className={styles.informationTooltip}
-                />
-              }
+              trigger={<img src={infoIcon} alt="info" className={styles.informationTooltip} />}
               on="hover"
             />
           </span>
@@ -156,24 +133,13 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                       : t('best_buying_option.minting.ethereum_mana')
                   }
                   position="top center"
-                  trigger={
-                    <img
-                      src={infoIcon}
-                      alt="info"
-                      className={styles.informationTooltip}
-                    />
-                  }
+                  trigger={<img src={infoIcon} alt="info" className={styles.informationTooltip} />}
                   on="hover"
                 />
               </span>
               <div className={styles.containerRow}>
                 <div className={styles.informationBold}>
-                  <Mana
-                    withTooltip
-                    size="large"
-                    network={asset.network}
-                    className={styles.informationBold}
-                  >
+                  <Mana withTooltip size="large" network={asset.network} className={styles.informationBold}>
                     {formatWeiToAssetCard(asset.price)}
                   </Mana>
                 </div>
@@ -187,40 +153,26 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
               </div>
             </div>
             <div className={styles.mintingStockContainer}>
-              <span className={styles.informationTitle}>
-                {t('best_buying_option.minting.stock').toUpperCase()}
-              </span>
+              <span className={styles.informationTitle}>{t('best_buying_option.minting.stock').toUpperCase()}</span>
               <span className={styles.stockText}>
-                {asset.available.toLocaleString()}/{' '}
-                {Rarity.getMaxSupply(asset.rarity).toLocaleString()}
+                {asset.available.toLocaleString()}/ {Rarity.getMaxSupply(asset.rarity).toLocaleString()}
               </span>
             </div>
           </div>
           <ItemSaleActions item={asset} customClassnames={customClasses} />
         </div>
-      ) : buyOption === BuyOptions.BUY_LISTING &&
-        asset &&
-        listing &&
-        !getIsOrderExpired(listing.order.expiresAt) ? (
+      ) : buyOption === BuyOptions.BUY_LISTING && asset && listing && !getIsOrderExpired(listing.order.expiresAt) ? (
         <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
           <span className={styles.cardTitle}>
             {t('best_buying_option.buy_listing.title')}: &nbsp;
-            {t('best_buying_option.buy_listing.issue_number')}&nbsp; #
-            {listing.order.issuedId}
+            {t('best_buying_option.buy_listing.issue_number')}&nbsp; #{listing.order.issuedId}
           </span>
           <div className={styles.informationContainer}>
             <div className={styles.columnListing}>
-              <span className={styles.informationTitle}>
-                {t('best_buying_option.minting.price').toUpperCase()}
-              </span>
+              <span className={styles.informationTitle}>{t('best_buying_option.minting.price').toUpperCase()}</span>
               <div className={`${styles.containerRow} ${styles.centerItems}`}>
                 <div className={styles.informationBold}>
-                  <Mana
-                    withTooltip
-                    size="large"
-                    network={asset.network}
-                    className={styles.informationBold}
-                  >
+                  <Mana withTooltip size="large" network={asset.network} className={styles.informationBold}>
                     {formatWeiToAssetCard(listing.order.price)}
                   </Mana>
                 </div>
@@ -235,21 +187,12 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             </div>
 
             <div className={styles.columnListing}>
-              <span className={styles.informationTitle}>
-                {t(
-                  'best_buying_option.buy_listing.highest_offer'
-                ).toUpperCase()}
-              </span>
+              <span className={styles.informationTitle}>{t('best_buying_option.buy_listing.highest_offer').toUpperCase()}</span>
               <div className={`${styles.containerRow} ${styles.centerItems}`}>
                 {mostExpensiveBid ? (
                   <>
                     <div className={styles.listingMana}>
-                      <Mana
-                        withTooltip
-                        size="small"
-                        network={listing.order.network}
-                        className={styles.listingMana}
-                      >
+                      <Mana withTooltip size="small" network={listing.order.network} className={styles.listingMana}>
                         {formatWeiToAssetCard(mostExpensiveBid.price)}
                       </Mana>
                     </div>
@@ -261,9 +204,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                     </div>
                   </>
                 ) : (
-                  <span className={styles.noOffer}>
-                    {t('best_buying_option.buy_listing.no_offer')}
-                  </span>
+                  <span className={styles.noOffer}>{t('best_buying_option.buy_listing.no_offer')}</span>
                 )}
               </div>
             </div>
@@ -275,40 +216,23 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             tokenId={listing.order.tokenId}
             buyWithCardClassName={styles.buyWithCardClassName}
           />
-          <Button
-            as={Link}
-            to={locations.nft(asset.contractAddress, listing.order.tokenId)}
-            inverted
-          >
+          <Button as={Link} to={locations.nft(asset.contractAddress, listing.order.tokenId)} inverted>
             {t('best_buying_option.buy_listing.view_listing')}
           </Button>
           <span className={styles.expiresAt}>
             <img src={clock} alt="clock" className={styles.mintingIcon} />
             &nbsp;
-            {getExpirationDateLabel(
-              listing.order.expiresAt *
-                (isLegacyOrder(listing.order) ? 1 : 1000)
-            )}
-            .
+            {getExpirationDateLabel(listing.order.expiresAt * (isLegacyOrder(listing.order) ? 1 : 1000))}.
           </span>
         </div>
       ) : (
         <div className={styles.emptyCardContainer}>
-          <img
-            src={noListings}
-            alt={t('best_buying_option.empty.title')}
-            className={styles.nolistingsImage}
-          />
+          <img src={noListings} alt={t('best_buying_option.empty.title')} className={styles.nolistingsImage} />
           <div className={styles.containerColumn}>
-            <span className={styles.emptyCardTitle}>
-              {t('best_buying_option.empty.title')}
-            </span>
+            <span className={styles.emptyCardTitle}>{t('best_buying_option.empty.title')}</span>
             <span>
               {t('best_buying_option.empty.you_can')}
-              <span
-                onClick={handleViewOffers}
-                className={styles.checkTheOwners}
-              >
+              <span onClick={handleViewOffers} className={styles.checkTheOwners}>
                 {t('best_buying_option.empty.check_the_current_owners')}
               </span>
 

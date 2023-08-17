@@ -10,10 +10,7 @@ const PRICE_CHANGE_NOTICE_KEY = 'price-change-notice'
 const PriceChangeNotice = (props: Props) => {
   const { view } = props
 
-  const isValidView = useCallback(
-    () => view !== undefined && !isAccountView(view),
-    [view]
-  )
+  const isValidView = useCallback(() => view !== undefined && !isAccountView(view), [view])
 
   const isDismissed = localStorage.getItem(PRICE_CHANGE_NOTICE_KEY) !== null
   const [isVisible, setIsVisible] = useState(isValidView())

@@ -21,8 +21,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet, onLeavingSite }: Props) => {
   const isENSName = !!data.ens
 
   const canSell = orderService.canSell()
-  const notLoggedOrHasAlreadyBidsOnNft =
-    !wallet || !bids.some((bid) => bid.bidder === wallet.address)
+  const notLoggedOrHasAlreadyBidsOnNft = !wallet || !bids.some(bid => bid.bidder === wallet.address)
   const canBid = !isOwner && isBiddable && notLoggedOrHasAlreadyBidsOnNft
 
   return (
@@ -30,37 +29,18 @@ const NFTSaleActions = ({ bids, nft, order, wallet, onLeavingSite }: Props) => {
       {order ? (
         isOwner && canSell ? (
           <>
-            <Button
-              as={Link}
-              to={locations.sell(contractAddress, tokenId)}
-              primary
-              fluid
-            >
+            <Button as={Link} to={locations.sell(contractAddress, tokenId)} primary fluid>
               {t('asset_page.actions.update')}
             </Button>
-            <Button
-              as={Link}
-              to={locations.cancel(contractAddress, tokenId)}
-              fluid
-            >
+            <Button as={Link} to={locations.cancel(contractAddress, tokenId)} fluid>
               {t('asset_page.actions.cancel_sale')}
             </Button>
           </>
         ) : !isOwner ? (
           <>
-            <BuyNFTButtons
-              assetType={AssetType.ITEM}
-              contractAddress={nft.contractAddress}
-              network={nft.network}
-              tokenId={nft.tokenId}
-            />
+            <BuyNFTButtons assetType={AssetType.ITEM} contractAddress={nft.contractAddress} network={nft.network} tokenId={nft.tokenId} />
             {canBid ? (
-              <Button
-                as={Link}
-                className={styles.bid}
-                to={locations.bid(contractAddress, tokenId)}
-                fluid
-              >
+              <Button as={Link} className={styles.bid} to={locations.bid(contractAddress, tokenId)} fluid>
                 {t('asset_page.actions.bid')}
               </Button>
             ) : null}
@@ -71,12 +51,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet, onLeavingSite }: Props) => {
           </Button>
         )
       ) : isOwner && canSell ? (
-        <Button
-          as={Link}
-          to={locations.sell(contractAddress, tokenId)}
-          primary
-          fluid
-        >
+        <Button as={Link} to={locations.sell(contractAddress, tokenId)} primary fluid>
           {t('asset_page.actions.sell')}
         </Button>
       ) : isOwner && !canSell ? (
@@ -84,21 +59,12 @@ const NFTSaleActions = ({ bids, nft, order, wallet, onLeavingSite }: Props) => {
           {t('asset_page.actions.sell')}
         </Button>
       ) : canBid ? (
-        <Button
-          as={Link}
-          to={locations.bid(contractAddress, tokenId)}
-          primary
-          fluid
-        >
+        <Button as={Link} to={locations.bid(contractAddress, tokenId)} primary fluid>
           {t('asset_page.actions.bid')}
         </Button>
       ) : null}
       {isOwner && !order ? (
-        <Button
-          as={Link}
-          to={locations.transfer(contractAddress, tokenId)}
-          fluid
-        >
+        <Button as={Link} to={locations.transfer(contractAddress, tokenId)} fluid>
           {t('asset_page.actions.transfer')}
         </Button>
       ) : null}

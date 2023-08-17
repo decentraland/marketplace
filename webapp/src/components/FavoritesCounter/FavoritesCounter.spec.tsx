@@ -8,9 +8,7 @@ import FavoritesCounter from './FavoritesCounter'
 import { Props as FavoritesCounterProps } from './FavoritesCounter.types'
 
 jest.mock('decentraland-dapps/dist/modules/analytics/utils')
-const getAnalyticsMock = getAnalytics as unknown as jest.MockedFunction<
-  typeof getAnalytics
->
+const getAnalyticsMock = getAnalytics as unknown as jest.MockedFunction<typeof getAnalytics>
 
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter-bubble'
 const FAVORITES_COUNTER_NUMBER_TEST_ID = 'favorites-counter-number'
@@ -68,9 +66,7 @@ describe('FavoritesCounter', () => {
         isPickedByUser: false,
         item: item
       })
-      expect(
-        getByLabelText(t('favorites_counter.pick_label'))
-      ).toBeInTheDocument()
+      expect(getByLabelText(t('favorites_counter.pick_label'))).toBeInTheDocument()
     })
   })
 
@@ -81,9 +77,7 @@ describe('FavoritesCounter', () => {
         isPickedByUser: true,
         item: item
       })
-      expect(
-        getByLabelText(t('favorites_counter.unpick_label'))
-      ).toBeInTheDocument()
+      expect(getByLabelText(t('favorites_counter.unpick_label'))).toBeInTheDocument()
     })
   })
 
@@ -143,9 +137,7 @@ describe('FavoritesCounter', () => {
   })
 
   describe('when the user clicks the component', () => {
-    let onClick: jest.MockedFunction<
-      () => ReturnType<typeof bulkPickUnpickStart>
-    >
+    let onClick: jest.MockedFunction<() => ReturnType<typeof bulkPickUnpickStart>>
 
     beforeEach(() => {
       onClick = jest.fn()
@@ -189,9 +181,7 @@ describe('FavoritesCounter', () => {
           count: 0,
           isCollapsed: true
         })
-        expect(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID)).toHaveClass(
-          'nonClickable'
-        )
+        expect(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID)).toHaveClass('nonClickable')
       })
 
       it('should not call the onCounterClick prop method', async () => {
@@ -212,9 +202,7 @@ describe('FavoritesCounter', () => {
           count: 1000,
           isCollapsed: true
         })
-        expect(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID)).not.toHaveClass(
-          'nonClickable'
-        )
+        expect(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID)).not.toHaveClass('nonClickable')
       })
 
       it('should call the onCounterClick prop method', async () => {
@@ -236,9 +224,7 @@ describe('FavoritesCounter', () => {
           isCollapsed: true,
           isLoading: true
         })
-        expect(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID)).toHaveClass(
-          'nonClickable'
-        )
+        expect(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID)).toHaveClass('nonClickable')
       })
 
       it('should not call the onCounterClick prop method', async () => {

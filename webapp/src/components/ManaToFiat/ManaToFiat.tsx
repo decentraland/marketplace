@@ -17,7 +17,7 @@ const ManaToFiat = (props: Props) => {
       const value = parseFloat(utils.formatEther(mana))
       new TokenConverter()
         .marketMANAToUSD(value)
-        .then((usd) => {
+        .then(usd => {
           const divider =
             usd > ONE_TRILLION.value
               ? ONE_TRILLION
@@ -28,12 +28,9 @@ const ManaToFiat = (props: Props) => {
               : { value: 1, displayValue: '' }
           if (cancel) return
           setFiatValue(
-            `$ ${(+(+usd / divider.value).toFixed(digits)).toLocaleString(
-              undefined,
-              {
-                maximumFractionDigits: 2
-              }
-            )}${divider.displayValue}`
+            `$ ${(+(+usd / divider.value).toFixed(digits)).toLocaleString(undefined, {
+              maximumFractionDigits: 2
+            })}${divider.displayValue}`
           )
         })
         .catch()

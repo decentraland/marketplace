@@ -23,17 +23,8 @@ const Chip = (props: Props) => {
   })
 
   return (
-    <div
-      className={containerClass}
-      tabIndex={0}
-      onClick={isActive || isDisabled ? undefined : onClick}
-      onKeyDown={handleKeyDown}
-    >
-      {text ? (
-        <span className="text">{text}</span>
-      ) : icon ? (
-        <Icon name={icon} />
-      ) : null}
+    <div className={containerClass} tabIndex={0} onClick={isActive || isDisabled ? undefined : onClick} onKeyDown={handleKeyDown}>
+      {text ? <span className="text">{text}</span> : icon ? <Icon name={icon} /> : null}
     </div>
   )
 }

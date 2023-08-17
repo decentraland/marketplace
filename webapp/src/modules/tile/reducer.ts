@@ -1,7 +1,4 @@
-import {
-  LoadingState,
-  loadingReducer
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { AtlasTile } from 'decentraland-ui'
 import {
   FetchTilesRequestAction,
@@ -24,10 +21,7 @@ const INITIAL_STATE: TileState = {
   error: null
 }
 
-type TileReducerAction =
-  | FetchTilesRequestAction
-  | FetchTilesSuccessAction
-  | FetchTilesFailureAction
+type TileReducerAction = FetchTilesRequestAction | FetchTilesSuccessAction | FetchTilesFailureAction
 
 export function tileReducer(state = INITIAL_STATE, action: TileReducerAction) {
   switch (action.type) {

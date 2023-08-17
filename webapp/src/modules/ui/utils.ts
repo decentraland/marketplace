@@ -4,17 +4,11 @@ import { Section, Sections } from '../vendor/routing/types'
 import { View } from './types'
 
 const accountViews = new Set<View>([View.ACCOUNT, View.CURRENT_ACCOUNT])
-const landSections = new Set<Section>([
-  Sections.decentraland.LAND,
-  Sections.decentraland.PARCELS,
-  Sections.decentraland.ESTATES
-])
+const landSections = new Set<Section>([Sections.decentraland.LAND, Sections.decentraland.PARCELS, Sections.decentraland.ESTATES])
 
 export const isAccountView = (view: View) => accountViews.has(view)
-export const isListsSection = (section?: Section) =>
-  Sections.decentraland.LISTS === section
-export const isLandSection = (section?: Section) =>
-  !!section && landSections.has(section)
+export const isListsSection = (section?: Section) => Sections.decentraland.LISTS === section
+export const isLandSection = (section?: Section) => !!section && landSections.has(section)
 
 export const useScrollSectionIntoView = <T>(
   ref: React.RefObject<HTMLDivElement>,
@@ -41,8 +35,7 @@ export const persistIsMapProperty = (val: boolean) => {
 }
 
 export const getPersistedIsMapProperty = (): boolean | null => {
-  const persistedIsMapProperty =
-    localStorage.getItem(PERSISTED_IS_MAP_STORAGE_KEY) || ''
+  const persistedIsMapProperty = localStorage.getItem(PERSISTED_IS_MAP_STORAGE_KEY) || ''
 
   if (['true', 'false'].includes(persistedIsMapProperty)) {
     return persistedIsMapProperty === 'true'

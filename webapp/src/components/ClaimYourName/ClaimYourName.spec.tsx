@@ -11,17 +11,13 @@ jest.mock('../../lib/environment', () => {
 
 jest.mock('decentraland-dapps/dist/modules/analytics/utils')
 
-const mockGetAnalytics = getAnalytics as jest.MockedFunction<
-  typeof getAnalytics
->
+const mockGetAnalytics = getAnalytics as jest.MockedFunction<typeof getAnalytics>
 
 describe('ClaimYourName', () => {
   it('should have a link to the builder with the names path', async () => {
     const { findByRole } = render(<ClaimYourName />)
     const button = await findByRole('button')
-    expect(button.getAttribute('href')).toBe(
-      'https://mocked-builder-url.com/claim-name'
-    )
+    expect(button.getAttribute('href')).toBe('https://mocked-builder-url.com/claim-name')
   })
 
   describe('when tracking the event that the button was clicked', () => {

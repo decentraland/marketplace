@@ -20,11 +20,7 @@ const SmartBadge = ({ assetType, clickable = true }: Props) => {
   )
 
   return (
-    <IconBadge
-      className={classNames('SmartBadge', { clickable })}
-      text={t('wearable.smart_badge')}
-      href={clickable ? href : undefined}
-    >
+    <IconBadge className={classNames('SmartBadge', { clickable })} text={t('wearable.smart_badge')} href={clickable ? href : undefined}>
       <SmartIcon />
     </IconBadge>
   )

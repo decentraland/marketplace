@@ -20,41 +20,26 @@ const nftDetailMatchSelector = createMatchSelector<
   }
 >(locations.nft(':contractAddress', ':tokenId'))
 
-export const getContractAddress = createSelector<
-  RootState,
-  ReturnType<typeof nftDetailMatchSelector>,
-  string | null
->(
+export const getContractAddress = createSelector<RootState, ReturnType<typeof nftDetailMatchSelector>, string | null>(
   nftDetailMatchSelector,
-  (match) => match?.params.contractAddress.toLowerCase() || null
+  match => match?.params.contractAddress.toLowerCase() || null
 )
 
-export const getTokenId = createSelector<
-  RootState,
-  ReturnType<typeof nftDetailMatchSelector>,
-  string | null
->(nftDetailMatchSelector, (match) => match?.params.tokenId || null)
+export const getTokenId = createSelector<RootState, ReturnType<typeof nftDetailMatchSelector>, string | null>(
+  nftDetailMatchSelector,
+  match => match?.params.tokenId || null
+)
 
-export const getCurrentNFT = createSelector<
-  RootState,
-  string | null,
-  string | null,
-  NFTState['data'],
-  NFT | null
->(
-  (state) => getContractAddress(state),
-  (state) => getTokenId(state),
-  (state) => getData(state),
+export const getCurrentNFT = createSelector<RootState, string | null, string | null, NFTState['data'], NFT | null>(
+  state => getContractAddress(state),
+  state => getTokenId(state),
+  state => getData(state),
   (contractAddress, tokenId, nfts) => getNFT(contractAddress, tokenId, nfts)
 )
 
-export const getNFTsByOwner = createSelector<
-  RootState,
-  NFTState['data'],
-  Record<string, NFT[]>
->(
-  (state) => getData(state),
-  (data) => {
+export const getNFTsByOwner = createSelector<RootState, NFTState['data'], Record<string, NFT[]>>(
+  state => getData(state),
+  data => {
     const nftsByOwner: Record<string, NFT[]> = {}
     for (const id of Object.keys(data)) {
       const nft = data[id]
@@ -68,14 +53,9 @@ export const getNFTsByOwner = createSelector<
   }
 )
 
-export const getWalletNFTs = createSelector<
-  RootState,
-  Record<string, NFT[]>,
-  string | undefined,
-  NFT[]
->(
-  (state) => getNFTsByOwner(state),
-  (state) => getAddress(state),
+export const getWalletNFTs = createSelector<RootState, Record<string, NFT[]>, string | undefined, NFT[]>(
+  state => getNFTsByOwner(state),
+  state => getAddress(state),
   (nftsByOwner, address) => {
     if (address && address.toLowerCase() in nftsByOwner) {
       return nftsByOwner[address.toLowerCase()]

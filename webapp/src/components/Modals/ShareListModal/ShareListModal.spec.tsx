@@ -48,9 +48,7 @@ describe('when the modal is rendered', () => {
     const { getByText } = renderedModal
     expect(getByText(t('share_list_modal.title'))).toBeInTheDocument()
     expect(getByText(t('share_list_modal.copy_link'))).toBeInTheDocument()
-    expect(
-      getByText(t('share_list_modal.share_on_twitter'))
-    ).toBeInTheDocument()
+    expect(getByText(t('share_list_modal.share_on_twitter'))).toBeInTheDocument()
   })
 
   it('should render the lists card', () => {
@@ -74,8 +72,7 @@ describe('when the share on twitter button is clicked', () => {
   it('should open a new page with a twitter message', async () => {
     jest.spyOn(window, 'open').mockImplementation(() => null)
     const dclUrl = 'https://market.decentraland.zone'
-    const locationsUrl =
-      '/lists/aListId?assetType=item&section=lists&vendor=decentraland&page=1&sortBy=newest'
+    const locationsUrl = '/lists/aListId?assetType=item&section=lists&vendor=decentraland&page=1&sortBy=newest'
     const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       `${t('share_list_modal.twitter_message')}${dclUrl}${locationsUrl}`
     )}`

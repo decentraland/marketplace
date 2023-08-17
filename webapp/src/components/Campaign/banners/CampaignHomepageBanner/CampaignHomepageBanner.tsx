@@ -16,11 +16,7 @@ const CampaignHomepageBanner: React.FC = () => {
     <div className="CampaignHomepageBanner">
       <div className="event-banner-text event-banner-logo-container">
         <span className="subtitle">{t('event_campaign.homepage.dates')}</span>
-        <img
-          src={logo}
-          alt={t('campaign.event_hashtag')}
-          className="event-banner-logo"
-        />
+        <img src={logo} alt={t('campaign.event_hashtag')} className="event-banner-logo" />
         <span>{t('event_campaign.homepage.slogan')}</span>
       </div>
       <div className="event-banner-text">
@@ -28,19 +24,13 @@ const CampaignHomepageBanner: React.FC = () => {
         <Desktop>
           <span className="subtitle">
             {t('event_campaign.homepage.subtitle', {
-              event_hashtag: (
-                <b className="event-banner-pink">
-                  {t('campaign.event_hashtag')}
-                </b>
-              ),
+              event_hashtag: <b className="event-banner-pink">{t('campaign.event_hashtag')}</b>,
               enter: <br />
             })}
           </span>
         </Desktop>
         <TabletAndBelow>
-          <span className="subtitle">
-            {t('event_campaign.homepage.subtitle_mobile')}
-          </span>
+          <span className="subtitle">{t('event_campaign.homepage.subtitle_mobile')}</span>
         </TabletAndBelow>
         <Button
           primary
@@ -58,11 +48,7 @@ const CampaignHomepageBanner: React.FC = () => {
           {t('event_campaign.homepage.cta')}
         </Button>
       </div>
-      <img
-        src={hat}
-        alt={t('campaign.event_tag')}
-        className="event-banner-hat"
-      />
+      <img src={hat} alt={t('campaign.event_tag')} className="event-banner-hat" />
     </div>
   )
 }

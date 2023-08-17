@@ -6,25 +6,13 @@ import { Props } from './RequiredPermissions.types'
 import styles from './RequiredPermissions.module.css'
 
 const RequiredPermissions = (props: Props) => {
-  const {
-    asset,
-    isLoading,
-    hasFetched,
-    requiredPermissions,
-    onFetchRequiredPermissions
-  } = props
+  const { asset, isLoading, hasFetched, requiredPermissions, onFetchRequiredPermissions } = props
 
   useEffect(() => {
     if (requiredPermissions.length === 0 && !isLoading && !hasFetched) {
       onFetchRequiredPermissions(asset)
     }
-  }, [
-    asset,
-    isLoading,
-    hasFetched,
-    onFetchRequiredPermissions,
-    requiredPermissions.length
-  ])
+  }, [asset, isLoading, hasFetched, onFetchRequiredPermissions, requiredPermissions.length])
 
   return requiredPermissions.length > 0 ? (
     <Stats title="" className={styles.RequiredPermissions}>
@@ -56,9 +44,7 @@ const RequiredPermissions = (props: Props) => {
           <Chip
             key={`${requiredPermission}-${i}`}
             className={styles.permission}
-            text={t(
-              `smart_wearable.required_permission.${requiredPermission.toLowerCase()}`
-            )}
+            text={t(`smart_wearable.required_permission.${requiredPermission.toLowerCase()}`)}
           />
         ))}
       </div>

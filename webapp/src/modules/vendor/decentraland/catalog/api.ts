@@ -23,10 +23,8 @@ export class CatalogAPI extends BaseClient {
     }
 
     if (filters.creator) {
-      const creators = Array.isArray(filters.creator)
-        ? filters.creator
-        : [filters.creator]
-      creators.forEach((creator) => queryParams.append('creator', creator))
+      const creators = Array.isArray(filters.creator) ? filters.creator : [filters.creator]
+      creators.forEach(creator => queryParams.append('creator', creator))
     }
 
     if (filters.isSoldOut) {
@@ -86,9 +84,7 @@ export class CatalogAPI extends BaseClient {
     // }
 
     if (filters.contractAddresses) {
-      filters.contractAddresses.forEach((contract) =>
-        queryParams.append('contractAddress', contract)
-      )
+      filters.contractAddresses.forEach(contract => queryParams.append('contractAddress', contract))
     }
 
     if (filters.itemId) {
@@ -132,7 +128,7 @@ export class CatalogAPI extends BaseClient {
     }
 
     if (filters.ids) {
-      filters.ids.forEach((id) => queryParams.append('id', id))
+      filters.ids.forEach(id => queryParams.append('id', id))
     }
 
     return queryParams.toString()

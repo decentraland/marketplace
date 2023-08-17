@@ -1,13 +1,5 @@
 import { waitFor } from '@testing-library/react'
-import {
-  ChainId,
-  Item,
-  ListingStatus,
-  Network,
-  NFTCategory,
-  Order,
-  Rarity
-} from '@dcl/schemas'
+import { ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -100,9 +92,7 @@ describe('Listings Table', () => {
     })
 
     it('should render the empty table message', async () => {
-      const { getByText, findByTestId } = renderWithProviders(
-        <ListingsTable asset={asset} />
-      )
+      const { getByText, findByTestId } = renderWithProviders(<ListingsTable asset={asset} />)
 
       const loader = await findByTestId('loader')
 
@@ -110,9 +100,7 @@ describe('Listings Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(
-        getByText(t('listings_table.there_are_no_listings'))
-      ).toBeInTheDocument()
+      expect(getByText(t('listings_table.there_are_no_listings'))).toBeInTheDocument()
     })
   })
 

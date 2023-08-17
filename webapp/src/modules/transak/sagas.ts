@@ -2,10 +2,7 @@ import { put, select, takeEvery } from 'redux-saga/effects'
 import { Network } from '@dcl/schemas'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
-import {
-  ProductsAvailed,
-  TradeType
-} from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { ProductsAvailed, TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { config } from '../../config'
@@ -43,8 +40,5 @@ function* handleOpenTransak(action: OpenTransakAction) {
 
   yield put(closeAllModals())
 
-  new Transak(transakConfig, customizationOptions).openWidget(
-    address,
-    Network.MATIC
-  )
+  new Transak(transakConfig, customizationOptions).openWidget(address, Network.MATIC)
 }

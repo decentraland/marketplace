@@ -5,9 +5,7 @@ import { Props } from './DropdownMenu.types'
 
 const DropdownMenu = <T extends unknown>(props: Props<T>) => {
   const { values, currentValue, onMenuItemClick } = props
-  const [isDropdownOpen, setIsDropdownOpen] = useState(
-    currentValue && values.includes(currentValue)
-  )
+  const [isDropdownOpen, setIsDropdownOpen] = useState(currentValue && values.includes(currentValue))
 
   const handleMenuItemClick = useCallback(
     (value: T) => {
@@ -41,13 +39,7 @@ const DropdownMenu = <T extends unknown>(props: Props<T>) => {
           ? values
               .slice(1)
               .map((value, index) => (
-                <MenuItem<T>
-                  key={index}
-                  value={value}
-                  currentValue={currentValue}
-                  onClick={handleMenuItemClick}
-                  nestedLevel={2}
-                />
+                <MenuItem<T> key={index} value={value} currentValue={currentValue} onClick={handleMenuItemClick} nestedLevel={2} />
               ))
           : null}
       </ul>

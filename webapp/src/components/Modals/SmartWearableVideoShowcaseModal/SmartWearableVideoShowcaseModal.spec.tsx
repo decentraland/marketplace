@@ -38,9 +38,7 @@ describe('when the modal is rendered', () => {
   it('should render the title and share buttons', () => {
     renderedModal = renderSmartWearableVideoShowcaseModal()
     const { getByText } = renderedModal
-    expect(
-      getByText(t('smart_wearable_video_showcase_modal.title'))
-    ).toBeInTheDocument()
+    expect(getByText(t('smart_wearable_video_showcase_modal.title'))).toBeInTheDocument()
   })
 
   describe('when the asset does not have a urn', () => {
@@ -56,9 +54,7 @@ describe('when the modal is rendered', () => {
 
   describe('when the asset does has the urn set', () => {
     beforeEach(async () => {
-      jest
-        .spyOn(assetLib, 'getSmartWearableVideoShowcase')
-        .mockResolvedValueOnce('videoHash')
+      jest.spyOn(assetLib, 'getSmartWearableVideoShowcase').mockResolvedValueOnce('videoHash')
 
       await act(async () => {
         renderedModal = renderSmartWearableVideoShowcaseModal({

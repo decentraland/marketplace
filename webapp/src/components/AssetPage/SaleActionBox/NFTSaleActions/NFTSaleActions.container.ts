@@ -6,11 +6,7 @@ import { RootState } from '../../../../modules/reducer'
 import { getNFTBids } from '../../../../modules/ui/nft/bid/selectors'
 import { getWallet } from '../../../../modules/wallet/selectors'
 import SaleRentActionBox from './NFTSaleActions'
-import {
-  MapDispatch,
-  MapDispatchProps,
-  MapStateProps
-} from './NFTSaleActions.types'
+import { MapDispatch, MapDispatchProps, MapStateProps } from './NFTSaleActions.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),

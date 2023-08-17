@@ -1,17 +1,7 @@
 import { Dispatch } from 'redux'
-import {
-  EmotePlayMode,
-  GenderFilterOption,
-  Network,
-  Rarity,
-  WearableGender
-} from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
 import { AssetType } from '../../../../modules/asset/types'
-import {
-  browse,
-  clearFilters,
-  ClearFiltersAction
-} from '../../../../modules/routing/actions'
+import { browse, clearFilters, ClearFiltersAction } from '../../../../modules/routing/actions'
 import { SortBy } from '../../../../modules/routing/types'
 import { View } from '../../../../modules/ui/types'
 import { Section } from '../../../../modules/vendor/routing/types'

@@ -1,11 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import {
-  placeBidRequest,
-  PLACE_BID_REQUEST,
-  clearBidError
-} from '../../modules/bid/actions'
+import { placeBidRequest, PLACE_BID_REQUEST, clearBidError } from '../../modules/bid/actions'
 import { getLoading } from '../../modules/bid/selectors'
 import { getContract } from '../../modules/contract/selectors'
 import { RootState } from '../../modules/reducer'
@@ -19,9 +15,8 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: (path) => dispatch(push(path)),
-  onPlaceBid: (nft, price, expiresAt, fingerprint) =>
-    dispatch(placeBidRequest(nft, price, expiresAt, fingerprint)),
+  onNavigate: path => dispatch(push(path)),
+  onPlaceBid: (nft, price, expiresAt, fingerprint) => dispatch(placeBidRequest(nft, price, expiresAt, fingerprint)),
   onClearBidError: () => dispatch(clearBidError())
 })
 

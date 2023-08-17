@@ -20,13 +20,7 @@ import {
 import { isMapSet } from '../../../../modules/routing/utils'
 import { getCount, getView } from '../../../../modules/ui/browse/selectors'
 import NFTFilters from './NFTFilters'
-import {
-  MapStateProps,
-  MapDispatchProps,
-  OwnProps,
-  Props,
-  MapDispatch
-} from './NFTFilters.types'
+import { MapStateProps, MapDispatchProps, OwnProps, Props, MapDispatch } from './NFTFilters.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   assetType: getAssetType(state),
@@ -51,11 +45,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onClearFilters: () => dispatch(clearFilters())
 })
 
-const mergeProps = (
-  stateProps: MapStateProps,
-  dispatchProps: MapDispatchProps,
-  ownProps: OwnProps
-): Props => ({
+const mergeProps = (stateProps: MapStateProps, dispatchProps: MapDispatchProps, ownProps: OwnProps): Props => ({
   ...stateProps,
   ...dispatchProps,
   ...ownProps

@@ -20,15 +20,7 @@ const RarityBadge = ({ rarity, size, withTooltip, onClick }: Props) => {
     </div>
   )
 
-  return withTooltip ? (
-    <Popup
-      position="top center"
-      content={t(`rarity_description.${rarity}`)}
-      trigger={trigger}
-    />
-  ) : (
-    trigger
-  )
+  return withTooltip ? <Popup position="top center" content={t(`rarity_description.${rarity}`)} trigger={trigger} /> : trigger
 }
 
 RarityBadge.defaultProps = {

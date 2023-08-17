@@ -27,7 +27,7 @@ const StatusPage = ({ type, purchase }: Props) => {
       <Navbar isFullscreen />
       <Page className="StatusPage">
         <AssetProviderPage type={type}>
-          {(asset) => {
+          {asset => {
             const browserOptions: BrowseOptions = {
               assetType: type,
               section: asset.category === NFTCategory.EMOTE ? EMOTES : WEARABLES
@@ -45,32 +45,16 @@ const StatusPage = ({ type, purchase }: Props) => {
                     {status === PurchaseStatus.PENDING ? (
                       <div className="status-wrapper">
                         <Loader size="small" active inline />
-                        <p className="status">
-                          {t(`asset_purchase_with_card_${status}_page.status`)}
-                        </p>
+                        <p className="status">{t(`asset_purchase_with_card_${status}_page.status`)}</p>
                       </div>
                     ) : null}
                     <p className="description">
-                      {t(
-                        `asset_purchase_with_card_${status}_page.description`,
-                        {
-                          my_assets: (
-                            <Link to={locations.currentAccount(browserOptions)}>
-                              {t('navigation.my_assets')}
-                            </Link>
-                          )
-                        }
-                      )}
+                      {t(`asset_purchase_with_card_${status}_page.description`, {
+                        my_assets: <Link to={locations.currentAccount(browserOptions)}>{t('navigation.my_assets')}</Link>
+                      })}
                     </p>
                     {status === PurchaseStatus.COMPLETE ? (
-                      <Button
-                        className="cta"
-                        as={Link}
-                        to={locations.browse(browserOptions)}
-                        inverted
-                        primary
-                        fluid
-                      >
+                      <Button className="cta" as={Link} to={locations.browse(browserOptions)} inverted primary fluid>
                         {t(`asset_purchase_with_card_${status}_page.cta`)}
                       </Button>
                     ) : null}

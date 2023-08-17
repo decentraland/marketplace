@@ -13,12 +13,7 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { Props } from './BrowsePage.types'
 
 const BrowsePage = (props: Props) => {
-  const {
-    isFullscreen,
-    section,
-    isCampaignCollectiblesBannerEnabled,
-    contracts
-  } = props
+  const { isFullscreen, section, isCampaignCollectiblesBannerEnabled, contracts } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
   const activeTab = NavigationTab.COLLECTIBLES

@@ -11,12 +11,7 @@ import {
   updateStoreRequest,
   UPDATE_STORE_REQUEST
 } from '../../modules/store/actions'
-import {
-  getStoresByOwner,
-  getLocalStore,
-  getLoading as getStoreLoading,
-  getError
-} from '../../modules/store/selectors'
+import { getStoresByOwner, getLocalStore, getLoading as getStoreLoading, getError } from '../../modules/store/selectors'
 import { Store } from '../../modules/store/types'
 import { getEmptyStore } from '../../modules/store/utils'
 import StoreSettings from './StoreSettings'

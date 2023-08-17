@@ -28,10 +28,7 @@ const SmartWearableVideoShowcaseModal = (props: Props) => {
 
   return (
     <Modal size="tiny" className={styles.modal} onClose={onClose} open>
-      <ModalNavigation
-        title={t('smart_wearable_video_showcase_modal.title')}
-        onClose={onClose}
-      />
+      <ModalNavigation title={t('smart_wearable_video_showcase_modal.title')} onClose={onClose} />
       <Modal.Content className={styles.content}>
         {videoSrc ? (
           <video

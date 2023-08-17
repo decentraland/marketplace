@@ -1,27 +1,14 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import {
-  GET_LIST_REQUEST,
-  deleteListStart,
-  getListRequest
-} from '../../modules/favorites/actions'
-import {
-  getError,
-  getList,
-  getLoading
-} from '../../modules/favorites/selectors'
+import { GET_LIST_REQUEST, deleteListStart, getListRequest } from '../../modules/favorites/actions'
+import { getError, getList, getLoading } from '../../modules/favorites/selectors'
 import { openModal } from '../../modules/modal/actions'
 import { RootState } from '../../modules/reducer'
 import { locations } from '../../modules/routing/locations'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import ListPage from './ListPage'
-import {
-  MapStateProps,
-  MapDispatch,
-  MapDispatchProps,
-  OwnProps
-} from './ListPage.types'
+import { MapStateProps, MapDispatch, MapDispatchProps, OwnProps } from './ListPage.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { listId } = ownProps.match.params
@@ -38,10 +25,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBack: () => dispatch(push(locations.lists())),
-  onFetchList: (listId) => dispatch(getListRequest(listId)),
-  onEditList: (list) => dispatch(openModal('CreateOrEditListModal', { list })),
-  onShareList: (list) => dispatch(openModal('ShareListModal', { list })),
-  onDeleteList: (list) => dispatch(deleteListStart(list))
+  onFetchList: listId => dispatch(getListRequest(listId)),
+  onEditList: list => dispatch(openModal('CreateOrEditListModal', { list })),
+  onShareList: list => dispatch(openModal('ShareListModal', { list })),
+  onDeleteList: list => dispatch(deleteListStart(list))
 })
 
 export default connect(mapState, mapDispatch)(ListPage)
