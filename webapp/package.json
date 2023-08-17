@@ -68,6 +68,7 @@
     "css-mediaquery": "^0.1.2",
     "customize-cra": "^1.0.0",
     "dcl-tslint-config-standard": "^3.0.0",
+    "husky": "^8.0.3",
     "prettier": "^1.19.1",
     "react-app-rewired": "^2.2.1",
     "react-error-overlay": "^6.0.9",
@@ -90,7 +91,8 @@
     "fix:code": "npm run check:code -- --fix",
     "pre-commit:fix:code": "eslint -c .eslintrc.js --fix",
     "pre-commit:fix:prettier": "prettier --config .prettierrc.json --write",
-    "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json"
+    "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json",
+    "prepare": "husky install"
   },
   "engines": {
     "node": "16.13.0"
