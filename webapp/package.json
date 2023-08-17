@@ -85,17 +85,12 @@
     "test": "react-app-rewired test",
     "test:coverage": "npm run test -- --coverage",
     "eject": "react-app-rewired eject",
-    "lint": "tslint -p tsconfig.json",
-    "lint:fix": "tslint -p tsconfig.json --fix",
+    "lint": "eslint -c .eslintrc.js --ext .ts src",
+    "check:code": "eslint -c .eslintrc.js src",
+    "fix:code": "npm run check:code -- --fix",
+    "pre-commit:fix:code": "eslint -c .eslintrc.js --fix",
+    "pre-commit:fix:prettier": "prettier --config .prettierrc.json --write",
     "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "prettier": {
-    "printWidth": 80,
-    "singleQuote": true,
-    "semi": false
   },
   "engines": {
     "node": "16.13.0"
