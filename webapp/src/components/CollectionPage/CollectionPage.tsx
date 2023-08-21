@@ -29,6 +29,9 @@ import { formatDataToTable } from './utils'
 import { Props } from './CollectionPage.types'
 import styles from './CollectionPage.module.css'
 
+const WEARABLES_TAB = 'wearables'
+const EMOTES_TAB = 'emotes'
+
 const CollectionPage = (props: Props) => {
   const { contractAddress, currentAddress, onBack } = props
 
@@ -36,16 +39,16 @@ const CollectionPage = (props: Props) => {
 
   const tabList = [
     {
-      value: 'wearable',
+      value: WEARABLES_TAB,
       displayValue: t('home_page.recently_sold.tabs.wearable')
     },
     {
-      value: 'emote',
+      value: EMOTES_TAB,
       displayValue: t('home_page.recently_sold.tabs.emote')
     }
   ]
 
-  const [tab, setTab] = useState<string>()
+  const [tab, setTab] = useState<string>(WEARABLES_TAB)
 
   const handleTabChange = useCallback(
     (tab: string) => {
@@ -76,12 +79,13 @@ const CollectionPage = (props: Props) => {
               const hasEmotes = items?.some(
                 item => item.category === NFTCategory.EMOTE
               )
-              const hasOnlyEmotes = hasEmotes && !hasWearables
 
               const filteredItems = items?.filter(item => {
-                return hasOnlyEmotes
-                  ? item.category === NFTCategory.EMOTE
-                  : item.category === NFTCategory.WEARABLE
+                return hasWearables && hasEmotes
+                  ? tab === WEARABLES_TAB
+                    ? item.category === NFTCategory.WEARABLE
+                    : item.category === NFTCategory.EMOTE
+                  : items
               })
 
               const tableItems = formatDataToTable(
