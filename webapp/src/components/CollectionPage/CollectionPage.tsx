@@ -81,7 +81,7 @@ const CollectionPage = (props: Props) => {
               )
 
               const filteredItems = items?.filter(item => {
-                return tab
+                return hasWearables && hasEmotes
                   ? tab === WEARABLES_TAB
                     ? item.category === NFTCategory.WEARABLE
                     : item.category === NFTCategory.EMOTE
