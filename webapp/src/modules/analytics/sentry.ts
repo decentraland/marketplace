@@ -3,7 +3,7 @@ import { config } from '../../config'
 
 init({
   environment: config.get('ENVIRONMENT'),
-  release: '6.6.7',
+  release: '6.6.7', // TODO: Replace with the app's version
   dsn: config.get('SENTRY_DSN'),
   integrations: [
     new BrowserTracing({
