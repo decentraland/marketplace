@@ -3,18 +3,13 @@ import { CallHistoryMethodAction } from 'connected-react-router'
 import { UserMenuProps } from 'decentraland-ui'
 
 export type Props = Partial<UserMenuProps> & {
-  isProfileEnabled: boolean
   onClickMyAssets: () => void
   onClickMyLists: () => void
 }
 
 export type MapStateProps = Pick<
   Props,
-  | 'isSignedIn'
-  | 'isSigningIn'
-  | 'isActivity'
-  | 'isProfileEnabled'
-  | 'hasActivity'
+  'isSignedIn' | 'isSigningIn' | 'isActivity' | 'hasActivity'
 >
 export type MapDispatchProps = Pick<
   Props,
