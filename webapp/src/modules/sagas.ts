@@ -46,7 +46,10 @@ const lambdasClient = createLambdasClient({
   url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()
 })
-const contentClient = createContentClient({ url: `${peerUrl}/content`, fetcher: createFetchComponent() })
+const contentClient = createContentClient({
+  url: `${peerUrl}/content`,
+  fetcher: createFetchComponent()
+})
 
 const gatewaySaga = createGatewaySaga({
   [NetworkGatewayType.MOON_PAY]: {
@@ -94,11 +97,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     marketplaceAnalyticsSagas(),
     featuresSaga({
       polling: {
-        apps: [
-          ApplicationName.MARKETPLACE,
-          ApplicationName.BUILDER,
-          ApplicationName.DAPPS
-        ],
+        apps: [ApplicationName.MARKETPLACE, ApplicationName.BUILDER],
         delay: 60000 /** 60 seconds */
       }
     }),

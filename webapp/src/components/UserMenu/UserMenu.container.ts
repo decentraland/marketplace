@@ -8,7 +8,6 @@ import {
 import { RootState } from '../../modules/reducer'
 import { getTransactions } from '../../modules/transaction/selectors'
 import { locations } from '../../modules/routing/locations'
-import { getIsProfileEnabled } from '../../modules/features/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './UserMenu.types'
 import UserMenu from './UserMenu'
 
@@ -17,7 +16,6 @@ const mapState = (state: RootState): MapStateProps => {
     isSignedIn: isConnected(state),
     isSigningIn: isConnecting(state),
     isActivity: getLocation(state).pathname === locations.activity(),
-    isProfileEnabled: getIsProfileEnabled(state),
     hasActivity: getTransactions(state).some(tx => isPending(tx.status))
   }
 }
