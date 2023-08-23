@@ -6,10 +6,7 @@ init({
   release: `${process.env.REACT_APP_WEBSITE_NAME}@${process.env.REACT_APP_WEBSITE_VERSION}`,
   dsn: config.get('SENTRY_DSN'),
   integrations: [
-    new BrowserTracing({
-      // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-      tracePropagationTargets: [config.get('MARKETPLACE_URL')]
-    }),
+    new BrowserTracing(),
     new Replay()
   ],
   // Performance Monitoring
