@@ -9,7 +9,7 @@ import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
 
 import './setup'
 import './modules/analytics/track'
-import './modules/analytics/rollbar'
+import './modules/analytics/sentry'
 
 import { ScrollToTop } from './components/ScrollToTop'
 import * as locales from './modules/translation/locales'

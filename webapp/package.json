@@ -7,6 +7,7 @@
     "@dcl/single-sign-on-client": "^0.0.12",
     "@dcl/ui-env": "^1.2.0",
     "@ethersproject/providers": "^5.6.2",
+    "@sentry/react": "^7.64.0",
     "@well-known-components/fetch-component": "^2.0.2",
     "classnames": "^2.3.1",
     "connected-react-router": "^6.9.1",
@@ -42,6 +43,7 @@
     "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {
+    "@sentry/cli": "^2.20.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.4",
     "@testing-library/react-hooks": "^8.0.1",
@@ -80,13 +82,14 @@
   "scripts": {
     "start": "react-app-rewired start",
     "prebuild": "node scripts/prebuild.js",
-    "build": "CI=false react-scripts build",
+    "build": "CI=false react-scripts build && npm run sentry:sourcemaps",
     "test": "react-app-rewired test",
     "test:coverage": "npm run test -- --coverage",
     "eject": "react-app-rewired eject",
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "tslint -p tsconfig.json --fix",
-    "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json"
+    "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org decentraland --project marketplace ./build/static/js && sentry-cli sourcemaps upload --org decentraland --project marketplace ./build/static/js"
   },
   "eslintConfig": {
     "extends": "react-app"

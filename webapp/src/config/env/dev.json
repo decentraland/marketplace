@@ -32,12 +32,12 @@
   "INTERCOM_APP_ID": "z0h94kay",
   "SEGMENT_API_KEY": "gMnkewUBzA6J879kAtMvp2WhohEk36uy",
   "DISCORD_URL": "https://dcl.gg/discord",
-  "ROLLBAR_ACCESS_TOKEN": "ad890a7699424114a771373ee60720ac",
   "ENVIRONMENT": "development",
   "MIN_SALE_VALUE_IN_WEI": "1000000000000000000",
   "EXPLORER_URL": "https://play.decentraland.zone",
   "MARKETPLACE_URL": "https://market.decentraland.zone",
   "PROFILE_URL": "https://profile.decentraland.zone",
   "SSO_URL": "https://id.decentraland.zone",
-  "SUBGRAPH_WORKER": "https://subgraph.decentraland.zone"
+  "SUBGRAPH_WORKER": "https://subgraph.decentraland.zone",
+  "SENTRY_DSN": "https://1dc401149e1c819b8477565c9cdd9b70@o4504361728212992.ingest.sentry.io/4505743351676928"
 }
