@@ -82,7 +82,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "prebuild": "node scripts/prebuild.js",
-    "build": "CI=false react-scripts build && npm run sentry:sourcemaps",
+    "build": "CI=false react-scripts build",
     "test": "react-app-rewired test",
     "test:coverage": "npm run test -- --coverage",
     "eject": "react-app-rewired eject",
