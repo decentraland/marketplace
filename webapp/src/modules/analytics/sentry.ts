@@ -10,8 +10,8 @@ init({
     new Replay()
   ],
   // Performance Monitoring
-  tracesSampleRate: 0.001, // Capture 1% of the transactions
+  tracesSampleRate: 0.001,
   // Session Replay
-  replaysSessionSampleRate: 0.01, // This sets the sample rate at 1%.
+  replaysSessionSampleRate: 0.01,
   replaysOnErrorSampleRate: 0.01
 })
