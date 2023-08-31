@@ -3,15 +3,24 @@ import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
 
 import { locations } from '../../modules/routing/locations'
 import UserMenu from '../UserMenu'
+import UserInformation from '../UserInformation'
 import { Props } from './Navbar.types'
 import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const { location, onNavigate, isConnected } = props
+  const {
+    location,
+    onNavigate,
+    isConnected,
+    isNewNavbarDropdownEnabled
+  } = props
   const { pathname, search } = location
 
   if (isConnected) {
-    props = { ...props, rightMenu: <UserMenu /> }
+    props = {
+      ...props,
+      rightMenu: isNewNavbarDropdownEnabled ? <UserInformation /> : <UserMenu />
+    }
   }
 
   const handleOnSignIn = useCallback(() => {

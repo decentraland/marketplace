@@ -22,7 +22,8 @@ import {
   getIsRentalPeriodFilterEnabled,
   getIsRentalPriceFilterChartEnabled,
   getIsSmartWearablesFTUEnabled,
-  isLoadingFeatureFlags
+  isLoadingFeatureFlags,
+  getIsNewNavbarDropdownEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -203,6 +204,11 @@ const waitForInitialLoadingSelectors = [
     name: 'isSmartWearablesFTU',
     feature: FeatureName.SMART_WEARABLES_FTU,
     selector: getIsSmartWearablesFTUEnabled
+  },
+  {
+    name: 'navbar-dropdown',
+    feature: FeatureName.NEW_NAVBAR_DROPDOWN,
+    selector: getIsNewNavbarDropdownEnabled
   }
 ]
 
