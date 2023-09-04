@@ -43,3 +43,15 @@ jobs:
           gitlab-pipeline-url: ${{ secrets.GITLAB_CDN_DEPLOYER_URL }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Create Sentry release
+        if: github.event_name == 'release'
+        uses: getsentry/action-release@v1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+        with:
+          sourcemaps: ./webapp/build
+          version: "@dcl/marketplace-site@${{ github.event.release.tag_name }}"
+          url_prefix: "~"
+          working_directory: ./webapp
