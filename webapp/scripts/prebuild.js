@@ -14,9 +14,6 @@ const publicPackageJson = JSON.parse(
   fs.readFileSync('./public/package.json').toString()
 )
 
-// set name
-ENV_CONTENT['REACT_APP_WEBSITE_NAME'] = packageJson.name
-
 // set version
 ENV_CONTENT['REACT_APP_WEBSITE_VERSION'] = packageJson.version
 publicPackageJson.version = packageJson.version
