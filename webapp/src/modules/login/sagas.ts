@@ -13,8 +13,7 @@ import {
 import { OpenLoginAction, OPEN_LOGIN } from './actions'
 import { getAddress } from '../wallet/selectors'
 
-function* handleOpenLoginModal(action: OpenLoginAction) {
-  console.log('action: ', action)
+function* handleOpenLoginModal(_action: OpenLoginAction) {
   const address: string = yield select(getAddress)
 
   if (!address) {
@@ -38,7 +37,6 @@ function* handleOpenLoginModal(action: OpenLoginAction) {
     }
 
     if (success) {
-      console.log('success: ', success)
       yield put(closeModal('LoginModal'))
     }
   }
