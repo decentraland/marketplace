@@ -7,6 +7,7 @@ const UserInformation = (props: Props) => {
     onClickMyAssets,
     onClickMyLists,
     onClickSettings,
+    onSignIn,
     ...baseProps
   } = props
 
@@ -16,6 +17,7 @@ const UserInformation = (props: Props) => {
       onClickMyAssets={onClickMyAssets}
       onClickMyLists={onClickMyLists}
       onClickSettings={onClickSettings}
+      onSignIn={onSignIn}
     />
   )
 }

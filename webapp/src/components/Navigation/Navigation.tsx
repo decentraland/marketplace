@@ -100,7 +100,7 @@ const Navigation = (props: Props) => {
         {!isMobile ? (
           <Tabs.Right>
             <Button
-              primary
+              inverted
               onClick={handleOpenBuyManaWithFiatModal}
               size="small"
             >
