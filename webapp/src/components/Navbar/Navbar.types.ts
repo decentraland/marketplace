@@ -8,13 +8,17 @@ export type Props = Partial<NavbarProps> & {
   hasPendingTransactions: boolean
   enablePartialSupportAlert?: boolean
   onNavigate: (path: string) => void
+  isNewNavbarDropdownEnabled: boolean
 }
 
 export type OwnProps = Pick<Props, 'enablePartialSupportAlert'>
 
 export type MapStateProps = Pick<
   Props,
-  'location' | 'hasPendingTransactions' | 'isConnected'
+  | 'location'
+  | 'hasPendingTransactions'
+  | 'isConnected'
+  | 'isNewNavbarDropdownEnabled'
 >
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

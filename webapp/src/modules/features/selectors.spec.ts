@@ -23,7 +23,8 @@ import {
   getIsRentalPeriodFilterEnabled,
   getIsRentalPriceFilterChartEnabled,
   getIsSmartWearablesFTUEnabled,
-  isLoadingFeatureFlags
+  isLoadingFeatureFlags,
+  getIsNewNavbarDropdownEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -209,6 +210,11 @@ const waitForInitialLoadingSelectors = [
     name: 'isEmotesV2',
     feature: FeatureName.EMOTES_V2,
     selector: getIsEmotesV2Enabled
+  },
+  {
+    name: 'navbar-dropdown',
+    feature: FeatureName.NEW_NAVBAR_DROPDOWN,
+    selector: getIsNewNavbarDropdownEnabled
   }
 ]
 

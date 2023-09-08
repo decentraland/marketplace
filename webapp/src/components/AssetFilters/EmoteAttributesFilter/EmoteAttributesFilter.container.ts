@@ -1,24 +1,13 @@
 import { connect } from 'react-redux'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../../../modules/reducer'
 import {
-  fetchCreatorsAccountRequest,
-  FETCH_CREATORS_ACCOUNT_REQUEST
-} from '../../../modules/account/actions'
-import { getCreators, getLoading } from '../../../modules/account/selectors'
-import {
   MapStateProps
-} from './EmoteAttributesFilter'
+} from './EmoteAttributesFilter.types'
 import { EmoteAttributesFilter } from './EmoteAttributesFilter'
+import { getIsEmotesV2Enabled } from '../../../modules/features/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
-  fetchedCreators: getCreators(state),
-  isLoading: isLoadingType(getLoading(state), FETCH_CREATORS_ACCOUNT_REQUEST)
+  isEmotesV2Enabled: getIsEmotesV2Enabled(state)
 })
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchCreators: (search: string) =>
-    dispatch(fetchCreatorsAccountRequest(search))
-})
-
-export default connect(mapState, mapDispatch)(CreatorsFilter)
+export default connect(mapState)(EmoteAttributesFilter)

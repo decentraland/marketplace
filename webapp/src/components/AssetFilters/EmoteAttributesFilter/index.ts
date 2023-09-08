@@ -1,1 +1,3 @@
-export * from './EmoteAttributesFilter'
+import EmoteAttributesFilter from './EmoteAttributesFilter.container'
+
+export { EmoteAttributesFilter }

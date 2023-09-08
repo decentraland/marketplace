@@ -93,7 +93,7 @@ export const EmoteAttributesFilter = ({
       ) : (
         title
       ),
-    [areAllItemsSelected, emotePlayMode, isMobileOrTablet]
+    [areAllItemsSelected, emotePlayMode, isMobileOrTablet, allTitle, title]
   )
 
   return (
@@ -106,14 +106,14 @@ export const EmoteAttributesFilter = ({
       {isEmotesV2Enabled && (
         <ArrayFilter
           options={emoteAttributesOptions}
-          name="attributes"
+          name=""
           onChange={handleEmoteAttributesChange}
           values={emoteAttributes || []}
         />
       )}
       <ArrayFilter
         options={emotePlayModeOptions}
-        name="playMode"
+        name=""
         onChange={handlePlayModeChange}
         values={emotePlayMode || []}
       />

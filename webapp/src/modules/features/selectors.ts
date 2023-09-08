@@ -195,3 +195,14 @@ export const getIsEmotesV2Enabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsNewNavbarDropdownEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.NEW_NAVBAR_DROPDOWN
+    )
+  }
+  return false
+}
