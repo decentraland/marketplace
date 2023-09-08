@@ -725,7 +725,9 @@
     "play_mode": {
       "simple": "播放一次",
       "loop": "循环播放"
-    }
+    },
+    "sound": "声音",
+    "props": "道具"
   },
   "smart_wearable": {
     "play_showcase": "播放展示视频",
