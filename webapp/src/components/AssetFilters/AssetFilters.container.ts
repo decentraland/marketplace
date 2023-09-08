@@ -22,7 +22,9 @@ import {
   getRarities,
   getSection,
   getStatus,
-  getWearableGenders
+  getWearableGenders,
+  getEmoteHasSound,
+  getEmoteHasGeometry
 } from '../../modules/routing/selectors'
 import {
   getIsCreatorsFilterEnabled,
@@ -105,6 +107,14 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       'adjacentToRoad' in values
         ? values.adjacentToRoad
         : getAdjacentToRoad(state),
+    emoteHasSound:
+      'emoteHasSound' in values
+        ? values.emoteHasSound
+        : getEmoteHasSound(state),
+    emoteHasGeometry:
+      'emoteHasGeometry' in values
+        ? values.emoteHasGeometry
+        : getEmoteHasGeometry(state),
     isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state),
     isPriceFilterEnabled: getIsPriceFilterEnabled(state),
     isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),

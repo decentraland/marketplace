@@ -184,6 +184,14 @@ export function getSearchParams(options?: BrowseOptions) {
         params.append('rentalDays', rentalDay.toString())
       }
     }
+
+    if (options.emoteHasSound) {
+      params.set('emoteHasSound', 'true')
+    }
+
+    if (options.emoteHasGeometry) {
+      params.set('emoteHasGeometry', 'true')
+    }
   }
   return params
 }

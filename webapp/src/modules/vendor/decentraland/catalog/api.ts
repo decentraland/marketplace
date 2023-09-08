@@ -135,6 +135,14 @@ export class CatalogAPI extends BaseClient {
       filters.ids.forEach(id => queryParams.append('id', id))
     }
 
+    if (filters.emoteHasGeometry) {
+      queryParams.append('emoteHasGeometry', 'true')
+    }
+
+    if (filters.emoteHasSound) {
+      queryParams.append('emoteHasSound', 'true')
+    }
+
     return queryParams.toString()
   }
 }

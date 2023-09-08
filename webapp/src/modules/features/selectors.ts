@@ -184,3 +184,14 @@ export const getIsSmartWearablesFTUEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsEmotesV2Enabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.EMOTES_V2
+    )
+  }
+  return false
+}

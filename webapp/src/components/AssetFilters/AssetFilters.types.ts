@@ -41,6 +41,8 @@ export type Props = {
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
+  emoteHasSound?: boolean
+  emoteHasGeometry?: boolean
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
 
@@ -82,6 +84,8 @@ export type MapStateProps = Pick<
   | 'isEstateSizeFilterEnabled'
   | 'isLocationFilterEnabled'
   | 'isRentalPeriodFilterEnabled'
+  | 'emoteHasGeometry'
+  | 'emoteHasSound'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

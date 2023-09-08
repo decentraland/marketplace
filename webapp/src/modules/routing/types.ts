@@ -74,6 +74,8 @@ export type BrowseOptions = {
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
+  emoteHasSound?: boolean
+  emoteHasGeometry?: boolean
 }
 
 export enum PageName {

@@ -25,7 +25,7 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { RentalPeriodFilter } from './RentalPeriodFilter'
 import { MoreFilters } from './MoreFilters'
-import { EmotePlayModeFilter } from './EmotePlayModeFilter'
+import { EmoteAttributesFilter } from './EmoteAttributesFilter'
 import { LocationFilter } from './LocationFilter'
 import {
   AssetFilter,
@@ -60,6 +60,8 @@ export const AssetFilters = ({
   adjacentToRoad,
   values,
   rentalDays,
+  emoteHasSound,
+  emoteHasGeometry,
   isPriceFilterEnabled,
   isEstateSizeFilterEnabled,
   isLocationFilterEnabled,
@@ -128,9 +130,17 @@ export const AssetFilters = ({
     [onBrowse]
   )
 
-  const handleEmotePlayModeChange = useCallback(
-    (value: EmotePlayMode[]) => {
-      onBrowse({ emotePlayMode: value })
+  const handleEmoteAttributesChange = useCallback(
+    (value: {
+      emotePlayMode?: EmotePlayMode[]
+      emoteHasSound?: boolean
+      emoteHasGeometry?: boolean
+    }) => {
+      onBrowse({
+        emotePlayMode: value.emotePlayMode,
+        emoteHasSound: value.emoteHasSound,
+        emoteHasGeometry: value.emoteHasGeometry
+      })
     },
     [onBrowse]
   )
@@ -263,6 +273,15 @@ export const AssetFilters = ({
 
   return (
     <Menu className="filters-sidebar">
+      {shouldRenderFilter(AssetFilter.PlayMode) && (
+        <EmoteAttributesFilter
+          onChange={handleEmoteAttributesChange}
+          emotePlayMode={emotePlayMode}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
+          emoteHasSound={emoteHasSound}
+          emoteHasGeometry={emoteHasGeometry}
+        />
+      )}
       {shouldRenderFilter(AssetFilter.OnlySmart) ? (
         <OnlySmartFilter
           isOnlySmart={isOnlySmart}
@@ -318,14 +337,6 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Collection]}
         />
       ) : null}
-
-      {shouldRenderFilter(AssetFilter.PlayMode) && (
-        <EmotePlayModeFilter
-          onChange={handleEmotePlayModeChange}
-          emotePlayMode={emotePlayMode}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
-        />
-      )}
       {shouldRenderFilter(AssetFilter.Network) &&
         status !== AssetStatusFilter.ONLY_MINTING && (
           <NetworkFilter

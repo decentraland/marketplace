@@ -122,6 +122,16 @@
   width: 19px;
 }
 
+.IconBadge .sound {
+  background-image: url(../../../images/emotes/sound.svg);
+  width: 19px;
+}
+
+.IconBadge .props {
+  background-image: url(../../../images/emotes/props.svg);
+  width: 19px;
+}
+
 .IconBadge .sparkles {
   filter: brightness(0) invert(1);
   background-image: url(../../../images/sparkles.svg);

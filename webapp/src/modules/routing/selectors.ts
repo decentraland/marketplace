@@ -421,6 +421,16 @@ export const getAdjacentToRoad = createSelector<RootState, string, boolean>(
   search => getURLParam(search, 'adjacentToRoad') === 'true'
 )
 
+export const getEmoteHasSound = createSelector<RootState, string, boolean>(
+  getRouterSearch,
+  search => getURLParam(search, 'emoteHasSound') === 'true'
+)
+
+export const getEmoteHasGeometry = createSelector<RootState, string, boolean>(
+  getRouterSearch,
+  search => getURLParam(search, 'emoteHasGeometry') === 'true'
+)
+
 export const getCurrentLocationAddress = createSelector<
   RootState,
   string,
@@ -527,6 +537,15 @@ export const getWearablesUrlParams = createSelector(
   })
 )
 
+export const getEmoteUrlParams = createSelector(
+  [getEmotePlayMode, getEmoteHasGeometry, getEmoteHasSound],
+  (emotePlayMode, emoteHasGeometry, emoteHasSound) => ({
+    emotePlayMode,
+    emoteHasGeometry,
+    emoteHasSound
+  })
+)
+
 export const getCurrentBrowseOptions = createSelector(
   [
     getAssetType,
@@ -534,13 +553,13 @@ export const getCurrentBrowseOptions = createSelector(
     getVendor,
     getSection,
     getNetwork,
-    getEmotePlayMode,
     getPaginationUrlParams,
     getAssetsUrlParams,
     getLandsUrlParams,
     getWearablesUrlParams,
     getOnlyOnRent,
-    getOnlyOnSale
+    getOnlyOnSale,
+    getEmoteUrlParams
   ],
   (
     assetType,
@@ -548,13 +567,13 @@ export const getCurrentBrowseOptions = createSelector(
     vendor,
     section,
     network,
-    emotePlayMode,
     paginationUrlParams,
     AssetsUrlParams,
     landsUrlParams,
     wearablesUrlParams,
     onlyOnRent,
-    onlyOnSale
+    onlyOnSale,
+    emoteUrlParams
   ) =>
     ({
       assetType,
@@ -562,7 +581,7 @@ export const getCurrentBrowseOptions = createSelector(
       vendor,
       section,
       network,
-      emotePlayMode,
+      ...emoteUrlParams,
       ...AssetsUrlParams,
       ...paginationUrlParams,
       ...landsUrlParams,

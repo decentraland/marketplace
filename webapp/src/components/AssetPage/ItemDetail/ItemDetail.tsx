@@ -32,6 +32,8 @@ const ItemDetail = ({ item }: Props) => {
   let bodyShapes: BodyShape[] = []
   let category
   let loop = false
+  let hasSound = false
+  let hasGeometry = false
 
   const tableRef = useRef<HTMLDivElement>(null)
   const requiredPermissions = useSelector((state: RootState) =>
@@ -49,6 +51,8 @@ const ItemDetail = ({ item }: Props) => {
       bodyShapes = item.data.emote!.bodyShapes
       category = item.data.emote!.category
       loop = item.data.emote!.loop
+      hasSound = item.data.emote!.hasSound
+      hasGeometry = item.data.emote!.hasGeometry
       break
   }
 
@@ -61,6 +65,18 @@ const ItemDetail = ({ item }: Props) => {
       }),
     [loop]
   )
+
+  const emoteSoundHref = locations.browse({
+    assetType: AssetType.ITEM,
+    section: Section.EMOTES,
+    emoteHasSound: true
+  })
+
+  const emoteGeometryHref = locations.browse({
+    assetType: AssetType.ITEM,
+    section: Section.EMOTES,
+    emoteHasGeometry: true
+  })
 
   return (
     <div
@@ -100,6 +116,20 @@ const ItemDetail = ({ item }: Props) => {
                   icon={loop ? 'play-loop' : 'play-once'}
                   text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
                   href={emoteBadgeHref}
+                />
+              )}
+              {hasSound && (
+                <IconBadge
+                  icon="sound"
+                  text={t('emote.sound')}
+                  href={emoteSoundHref}
+                />
+              )}
+              {hasGeometry && (
+                <IconBadge
+                  icon="props"
+                  text={t('emote.props')}
+                  href={emoteGeometryHref}
                 />
               )}
               {bodyShapes.length > 0 && !item.data.emote && (
