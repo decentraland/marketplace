@@ -59,10 +59,8 @@ export const EmoteAttributesFilter = ({
   const handleEmoteAttributesChange = useCallback(
     (values: string[]) =>
       onChange({
-        emoteHasSound: values.includes(WITH_SOUND_VALUE) ? true : undefined,
-        emoteHasGeometry: values.includes(WITH_GEOMETRY_VALUE)
-          ? true
-          : undefined
+        emoteHasSound: values.includes(WITH_SOUND_VALUE) || undefined,
+        emoteHasGeometry: values.includes(WITH_GEOMETRY_VALUE) || undefined
       }),
     [onChange]
   )
