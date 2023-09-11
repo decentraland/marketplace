@@ -369,9 +369,13 @@
     "search_land": "Buscar tierras...",
     "gender": "Género",
     "smart_wearables": "Vestimentas Interactivas",
-    "emote_play_mode": {
-      "title": "Play Mode",
-      "all_items": "All Play Modes"
+    "emote_attributes": {
+      "title": "Emote attributes",
+      "play_mode": "Modo de reproducción",
+      "all_play_modes": "Todos",
+      "all_items": "Todos los emotes",
+      "with_sound": "con sonido",
+      "with_props": "con props"
     },
     "body_shapes": {
       "title": "Género",
@@ -718,7 +722,9 @@
     "play_mode": {
       "simple": "Reproduce una vez",
       "loop": "Reproduce en bucle"
-    }
+    },
+    "sound": "Sonido",
+    "props": "Accesorios"
   },
   "smart_wearable": {
     "play_showcase": "Reproducir vista previa",

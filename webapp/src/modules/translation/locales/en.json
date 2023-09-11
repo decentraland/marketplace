@@ -376,9 +376,13 @@
     "search_land": "Search Land...",
     "gender": "Gender",
     "smart_wearables": "Smart Wearables",
-    "emote_play_mode": {
-      "title": "Play Mode",
-      "all_items": "All Play Modes"
+    "emote_attributes": {
+      "title": "Emote attributes",
+      "play_mode": "Play Mode",
+      "all_play_modes": "All Play Modes",
+      "all_items": "All emotes",
+      "with_sound": "with sound",
+      "with_props": "with props"
     },
     "body_shapes": {
       "title": "Body Shape",
@@ -725,7 +729,9 @@
     "play_mode": {
       "simple": "Play once",
       "loop": "Play loop"
-    }
+    },
+    "sound": "Sound",
+    "props": "Props"
   },
   "smart_wearable": {
     "play_showcase": "Play showcase video",

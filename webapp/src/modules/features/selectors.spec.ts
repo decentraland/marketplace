@@ -11,6 +11,7 @@ import {
   getIsCampaignCollectionsBannerEnabled,
   getIsCampaignHomepageBannerEnabled,
   getIsCreatorsFilterEnabled,
+  getIsEmotesV2Enabled,
   getIsEstateSizeFilterEnabled,
   getIsHandsCategoryEnabled,
   getIsHandsCategoryFTUEnabled,
@@ -204,6 +205,11 @@ const waitForInitialLoadingSelectors = [
     name: 'isSmartWearablesFTU',
     feature: FeatureName.SMART_WEARABLES_FTU,
     selector: getIsSmartWearablesFTUEnabled
+  },
+  {
+    name: 'isEmotesV2',
+    feature: FeatureName.EMOTES_V2,
+    selector: getIsEmotesV2Enabled
   },
   {
     name: 'navbar-dropdown',

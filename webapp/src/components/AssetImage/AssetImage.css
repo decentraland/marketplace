@@ -184,11 +184,35 @@
   position: absolute;
   bottom: 24px;
   left: 24px;
+  display: flex;
+  gap: 5px;
 }
 
-.AssetImage .play-control .ui.button.play-button {
+.AssetImage .play-control .ui.button.play-button,
+.AssetImage .play-control .ui.button.sound-button {
   color: black;
   background-color: var(--text);
+}
+
+.AssetImage .play-control .ui.button.sound-button {
+  min-width: unset;
+  padding: 8px;
+}
+
+.AssetImage .play-control .ui.button.sound-button::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-image: url('../../images/emotes/mute.svg');
+  filter: invert(1);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.AssetImage .play-control .ui.button.sound-button.enabled::before {
+  background-image: url('../../images/emotes/volume.svg');
 }
 
 .AssetImage .listed-badge {

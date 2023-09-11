@@ -249,7 +249,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     maxPrice,
     creators,
     network,
-    status
+    status,
+    emoteHasGeometry,
+    emoteHasSound
   } = options
 
   const address =
@@ -368,6 +370,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               minPrice,
               maxPrice,
               network,
+              emoteHasGeometry,
+              emoteHasSound,
               ...statusParameters
             }
           })

@@ -49,7 +49,9 @@ export enum ControlOptionAction {
   ZOOM_OUT,
   PLAY_EMOTE,
   STOP_EMOTE,
-  PLAY_SMART_WEARABLE_VIDEO_SHOWCASE
+  PLAY_SMART_WEARABLE_VIDEO_SHOWCASE,
+  ENABLE_SOUND,
+  DISABLE_SOUND
 }
 
 export type MapStateProps = Pick<

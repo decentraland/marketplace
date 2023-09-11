@@ -95,6 +95,8 @@ const AssetImage = (props: Props) => {
     isDraggable
   )
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
+  const [isSoundEnabled, setIsSoundEnabled] = useState(false)
+  const [hasSound, setHasSound] = useState<boolean | undefined>(undefined)
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
@@ -104,6 +106,7 @@ const AssetImage = (props: Props) => {
       )
     }
   }, [asset.category, wearableController, onSetWearablePreviewController])
+
   const handleError = useCallback(error => {
     console.warn(error)
     setWearablePreviewError(true)
@@ -151,6 +154,14 @@ const AssetImage = (props: Props) => {
             await wearableController.emote.stop()
             break
           }
+          case ControlOptionAction.ENABLE_SOUND: {
+            await wearableController.emote.enableSound()
+            break
+          }
+          case ControlOptionAction.DISABLE_SOUND: {
+            await wearableController.emote.disableSound()
+            break
+          }
           default:
             break
         }
@@ -158,6 +169,19 @@ const AssetImage = (props: Props) => {
     },
     [wearableController, onPlaySmartWearableVideoShowcase, asset]
   )
+
+  useEffect(() => {
+    if (
+      asset.category === NFTCategory.EMOTE &&
+      wearableController &&
+      isDraggable &&
+      hasSound === undefined
+    ) {
+      wearableController.emote?.hasSound().then(sound => {
+        setHasSound(sound)
+      })
+    }
+  }, [wearableController, asset.category, isDraggable, hasSound])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
@@ -480,6 +504,23 @@ const AssetImage = (props: Props) => {
                 : t('wearable_preview.play_emote')}
             </span>
           </Button>
+          {hasSound && (
+            <Button
+              className={classNames('sound-button', {
+                enabled: isSoundEnabled
+              })}
+              size="small"
+              aria-label="enable sound"
+              onClick={() => {
+                handleControlActionChange(
+                  isSoundEnabled
+                    ? ControlOptionAction.DISABLE_SOUND
+                    : ControlOptionAction.ENABLE_SOUND
+                )
+                setIsSoundEnabled(!isSoundEnabled)
+              }}
+            />
+          )}
         </div>
       )
 

@@ -372,9 +372,13 @@
     "search_land": "搜寻...",
     "gender": "性别",
     "smart_wearables": "智能穿戴",
-    "emote_play_mode": {
-      "title": "游戏模式",
-      "all_items": "所有播放模式"
+    "emote_attributes": {
+      "title": "表情属性",
+      "play_mode": "游戏模式",
+      "all_play_modes": "所有游戏模式",
+      "all_items": "所有的情绪",
+      "with_sound": "有声音的",
+      "with_props": "与道具"
     },
     "body_shapes": {
       "title": "身材",
@@ -721,7 +725,9 @@
     "play_mode": {
       "simple": "播放一次",
       "loop": "循环播放"
-    }
+    },
+    "sound": "声音",
+    "props": "道具"
   },
   "smart_wearable": {
     "play_showcase": "播放展示视频",
