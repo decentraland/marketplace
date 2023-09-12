@@ -14,6 +14,7 @@ import {
   MapDispatchProps
 } from './UserInformation.types'
 import UserMenu from './UserInformation'
+import { openLogin } from '../../modules/login/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -27,7 +28,8 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onClickActivity: () => dispatch(push(locations.activity())),
   onClickSettings: () => dispatch(push(locations.settings())),
   onClickMyAssets: () => dispatch(push(locations.defaultCurrentAccount())),
-  onClickMyLists: () => dispatch(push(locations.lists()))
+  onClickMyLists: () => dispatch(push(locations.lists())),
+  onSignIn: () => dispatch(openLogin())
 })
 
 export default connect(mapState, mapDispatch)(UserMenu)

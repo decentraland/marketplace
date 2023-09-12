@@ -19,7 +19,13 @@ const Navbar = (props: Props) => {
   if (isConnected) {
     props = {
       ...props,
-      rightMenu: isNewNavbarDropdownEnabled ? <UserInformation /> : <UserMenu />
+      rightMenu: <UserMenu />
+    }
+  }
+  if (isNewNavbarDropdownEnabled) {
+    props = {
+      ...props,
+      rightMenu: <UserInformation />
     }
   }
 

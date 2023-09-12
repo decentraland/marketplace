@@ -39,6 +39,7 @@ import { contractSaga } from './contract/sagas'
 import { transakSaga } from './transak/sagas'
 import { assetSaga } from './asset/sagas'
 import { favoritesSaga } from './favorites/sagas'
+import { loginSaga } from './login/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
@@ -108,6 +109,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     gatewaySaga(),
     locationSaga(),
     transakSaga(),
-    favoritesSaga(getIdentity)
+    favoritesSaga(getIdentity),
+    loginSaga()
   ])
 }
