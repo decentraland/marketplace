@@ -270,7 +270,7 @@ const AssetBrowse = (props: Props) => {
                   key={key}
                   active={section === value}
                   onClick={
-                    section === Sections.decentraland.COLLECTIONS
+                    value === Sections.decentraland.COLLECTIONS
                       ? () =>
                           changeFilter(
                             'section',
