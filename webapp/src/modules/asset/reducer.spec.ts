@@ -1,9 +1,13 @@
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_SUCCESS,
+  FETCH_SMART_WEARABLE_VIDEO_HASH_SUCCESS,
   fetchSmartWearableRequiredPermissionsFailure,
   fetchSmartWearableRequiredPermissionsRequest,
-  fetchSmartWearableRequiredPermissionsSuccess
+  fetchSmartWearableRequiredPermissionsSuccess,
+  fetchSmartWearableVideoHashFailure,
+  fetchSmartWearableVideoHashRequest,
+  fetchSmartWearableVideoHashSuccess
 } from './actions'
 import { INITIAL_STATE, assetReducer } from './reducer'
 import { Asset } from './types'
@@ -20,9 +24,17 @@ const asset = {
   }
 } as Asset
 
+const notSmartWearableAsset = {
+  ...asset,
+  data: {}
+}
+
 const anErrorMessage = 'An error'
 
-const requestActions = [fetchSmartWearableRequiredPermissionsRequest(asset)]
+const requestActions = [
+  fetchSmartWearableRequiredPermissionsRequest(asset),
+  fetchSmartWearableRequiredPermissionsRequest(asset)
+]
 
 requestActions.forEach(action => {
   describe(`when reducing the "${action.type}" action`, () => {
@@ -40,21 +52,24 @@ requestActions.forEach(action => {
   })
 })
 
-describe('when reducing the fetch required permissions request action', () => {
-  describe('and the asset is not a smart wearable', () => {
-    it('should return the previous state', () => {
-      const initialState = {
-        ...INITIAL_STATE,
-        loading: []
-      }
-      const action = fetchSmartWearableRequiredPermissionsRequest({
-        ...asset,
-        data: {}
-      })
+const requestAssetNotSWActions = [
+  fetchSmartWearableRequiredPermissionsRequest(notSmartWearableAsset),
+  fetchSmartWearableRequiredPermissionsRequest(notSmartWearableAsset)
+]
 
-      expect(assetReducer(initialState, action)).toEqual({
-        ...INITIAL_STATE,
-        loading: []
+requestAssetNotSWActions.forEach(action => {
+  describe(`when reducing the ${action.type} action`, () => {
+    describe('and the asset is not a smart wearable', () => {
+      it('should return the previous state', () => {
+        const initialState = {
+          ...INITIAL_STATE,
+          loading: []
+        }
+
+        expect(assetReducer(initialState, action)).toEqual({
+          ...INITIAL_STATE,
+          loading: []
+        })
       })
     })
   })
@@ -64,6 +79,10 @@ const failureActions = [
   {
     request: fetchSmartWearableRequiredPermissionsRequest(asset),
     failure: fetchSmartWearableRequiredPermissionsFailure(asset, anErrorMessage)
+  },
+  {
+    request: fetchSmartWearableVideoHashRequest(asset),
+    failure: fetchSmartWearableVideoHashFailure(asset, anErrorMessage)
   }
 ]
 
@@ -89,20 +108,30 @@ describe.each([
   [
     FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_SUCCESS,
     fetchSmartWearableRequiredPermissionsRequest(asset),
-    fetchSmartWearableRequiredPermissionsSuccess(asset, [])
+    fetchSmartWearableRequiredPermissionsSuccess(asset, []),
+    { requiredPermissions: [] }
+  ],
+  [
+    FETCH_SMART_WEARABLE_VIDEO_HASH_SUCCESS,
+    fetchSmartWearableVideoHashRequest(asset),
+    fetchSmartWearableVideoHashSuccess(asset, 'videoHash'),
+    { videoHash: 'videoHash' }
   ]
-])('when reducing the %s action', (_action, requestAction, successAction) => {
-  const initialState = {
-    ...INITIAL_STATE,
-    data: { anotherId: [] },
-    loading: loadingReducer([], requestAction)
-  }
-
-  it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
-    expect(assetReducer(initialState, successAction)).toEqual({
+])(
+  'when reducing the %s action',
+  (_action, requestAction, successAction, expectedData) => {
+    const initialState = {
       ...INITIAL_STATE,
-      loading: [],
-      data: { ...initialState.data, [asset.id]: [] }
+      data: { anotherId: { requiredPermissions: [] } },
+      loading: loadingReducer([], requestAction)
+    }
+
+    it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
+      expect(assetReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: { ...initialState.data, [asset.id]: expectedData }
+      })
     })
-  })
-})
+  }
+)

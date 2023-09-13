@@ -26,7 +26,6 @@ import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
 import { isLegacyOrder } from '../../lib/orders'
 import { config } from '../../config'
-import { getSmartWearableVideoShowcase } from '../../lib/asset'
 import { Atlas } from '../Atlas'
 import ListedBadge from '../ListedBadge'
 import { Coordinate } from '../Coordinate'
@@ -645,26 +644,32 @@ const AssetImageWrapper = (props: Props) => {
     onFetchItem,
     order,
     wallet,
+    onFetchSmartWearableVideoHash,
+    isLoadingVideoHash,
+    hasFetchedVideoHash,
+    videoHash,
     ...rest
   } = props
-
-  const [videoHash, setVideoHash] = useState<string | undefined>(undefined)
-
-  const fetchSmartWearableVideoHash = useCallback(async () => {
-    if (!asset?.urn) return
-
-    const videoHash = await getSmartWearableVideoShowcase(asset)
-    if (videoHash) setVideoHash(videoHash)
-  }, [asset])
 
   useEffect(() => {
     if (!item && isNFT(asset) && asset.itemId) {
       onFetchItem(asset.contractAddress, asset.itemId)
+    } else if (
+      videoHash === undefined &&
+      !isLoadingVideoHash &&
+      !hasFetchedVideoHash
+    ) {
+      onFetchSmartWearableVideoHash(asset)
     }
-
-    if (asset && asset.data.wearable?.isSmart && asset.urn)
-      fetchSmartWearableVideoHash()
-  }, [asset, fetchSmartWearableVideoHash, item, onFetchItem])
+  }, [
+    asset,
+    hasFetchedVideoHash,
+    isLoadingVideoHash,
+    item,
+    onFetchItem,
+    onFetchSmartWearableVideoHash,
+    videoHash
+  ])
 
   const isAvailableForMint = useMemo(
     () =>
@@ -722,9 +727,12 @@ const AssetImageWrapper = (props: Props) => {
         <AssetImage
           asset={asset}
           item={item}
-          onFetchItem={onFetchItem}
-          wallet={wallet}
           videoHash={videoHash}
+          isLoadingVideoHash={isLoadingVideoHash}
+          hasFetchedVideoHash={hasFetchedVideoHash}
+          wallet={wallet}
+          onFetchSmartWearableVideoHash={onFetchSmartWearableVideoHash}
+          onFetchItem={onFetchItem}
           {...rest}
         >
           <div className="badges">

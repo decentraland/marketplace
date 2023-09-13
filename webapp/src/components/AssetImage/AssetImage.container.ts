@@ -19,6 +19,16 @@ import { isNFT } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
 import { fetchItemRequest } from '../../modules/item/actions'
 import { openModal } from '../../modules/modal/actions'
+import { Asset } from '../../modules/asset/types'
+import {
+  FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST,
+  fetchSmartWearableVideoHashRequest
+} from '../../modules/asset/actions'
+import {
+  getVideoHash,
+  getLoading as getLoadingAsset,
+  getData as getAssetData
+} from '../../modules/asset/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -26,10 +36,12 @@ import {
   OwnProps
 } from './AssetImage.types'
 import AssetImage from './AssetImage'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const profiles = getProfiles(state)
   const wallet = getWallet(state)
+  const assetId = ownProps.asset.id
   let avatar: Avatar | undefined = undefined
   const items = getItems(state)
   const item = getItem(
@@ -58,7 +70,13 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     isTryingOn: getIsTryingOn(state),
     isPlayingEmote: getIsPlayingEmote(state),
     item,
-    order
+    order,
+    videoHash: getVideoHash(state, assetId),
+    isLoadingVideoHash: isLoadingType(
+      getLoadingAsset(state),
+      FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST
+    ),
+    hasFetchedVideoHash: assetId in getAssetData(state)
   }
 }
 
@@ -69,7 +87,9 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onPlaySmartWearableVideoShowcase: (videoHash: string) =>
     dispatch(openModal('SmartWearableVideoShowcaseModal', { videoHash })),
   onFetchItem: (contractAddress: string, tokenId: string) =>
-    dispatch(fetchItemRequest(contractAddress, tokenId))
+    dispatch(fetchItemRequest(contractAddress, tokenId)),
+  onFetchSmartWearableVideoHash: (asset: Asset) =>
+    dispatch(fetchSmartWearableVideoHashRequest(asset))
 })
 
 export default connect(mapState, mapDispatch)(AssetImage)

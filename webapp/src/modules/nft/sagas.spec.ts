@@ -36,7 +36,10 @@ import { getStubMaticCollectionContract } from '../contract/utils'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { getRentalById } from '../rental/selectors'
 import { retryParams } from '../vendor/decentraland/utils'
-import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import {
+  fetchSmartWearableRequiredPermissionsRequest,
+  fetchSmartWearableVideoHashRequest
+} from '../asset/actions'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
 
@@ -192,6 +195,7 @@ describe('when handling the fetch NFT request action', () => {
         .put(upsertContracts([contract]))
         .put(fetchNFTSuccess(nft, order, rental))
         .put(fetchSmartWearableRequiredPermissionsRequest(nft))
+        .put(fetchSmartWearableVideoHashRequest(nft))
         .dispatch(fetchNFTRequest(contractAddress, tokenId))
         .run({ silenceTimeout: true })
     })
@@ -318,6 +322,7 @@ describe('when handling the fetch NFT request action', () => {
         ])
         .put(fetchNFTSuccess(nft, order, rental))
         .put(fetchSmartWearableRequiredPermissionsRequest(nft))
+        .put(fetchSmartWearableVideoHashRequest(nft))
         .dispatch(
           fetchNFTRequest(contractAddress, tokenId, {
             rentalStatus: [RentalStatus.EXECUTED]

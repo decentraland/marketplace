@@ -1,5 +1,8 @@
 import { RootState } from '../reducer'
-import { fetchSmartWearableRequiredPermissionsRequest } from './actions'
+import {
+  fetchSmartWearableRequiredPermissionsRequest,
+  fetchSmartWearableVideoHashRequest
+} from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
   getData,
@@ -7,7 +10,9 @@ import {
   getLoading,
   getRequiredPermissions,
   getState,
-  isFetchingRequiredPermissions
+  getVideoHash,
+  isFetchingRequiredPermissions,
+  isFetchingVideoHash
 } from './selectors'
 import { Asset } from './types'
 
@@ -18,7 +23,7 @@ beforeEach(() => {
     asset: {
       ...INITIAL_STATE,
       data: {
-        anItemId: []
+        anItemId: {}
       },
       error: 'anError',
       loading: []
@@ -58,7 +63,7 @@ describe('when getting if the required permissions are being fetched', () => {
     state.asset.loading = []
   })
 
-  describe('and no assets are being fetched', () => {
+  describe('and no required permissions are being fetched', () => {
     beforeEach(() => {
       state.asset.loading = []
     })
@@ -95,6 +100,51 @@ describe('when getting if the required permissions are being fetched', () => {
   })
 })
 
+describe('when getting if the video hash is being fetched', () => {
+  let id: string
+
+  beforeEach(() => {
+    id = 'anAssetId'
+    state.asset.loading = []
+  })
+
+  describe('and no video hash is being fetched', () => {
+    beforeEach(() => {
+      state.asset.loading = []
+    })
+
+    it('should return false', () => {
+      expect(isFetchingVideoHash(state, id)).toBe(false)
+    })
+  })
+
+  describe("and it isn't not being fetched", () => {
+    beforeEach(() => {
+      state.asset.loading = [
+        fetchSmartWearableVideoHashRequest({
+          id: 'anotherItemId'
+        } as Asset)
+      ]
+    })
+
+    it('should return false', () => {
+      expect(isFetchingVideoHash(state, id)).toBe(false)
+    })
+  })
+
+  describe('and it is being fetched', () => {
+    beforeEach(() => {
+      state.asset.loading.push(
+        fetchSmartWearableVideoHashRequest({ id } as Asset)
+      )
+    })
+
+    it('should return true', () => {
+      expect(isFetchingVideoHash(state, id)).toBe(true)
+    })
+  })
+})
+
 describe('when getting the required permissions of an asset', () => {
   let id: string
   let requiredPermissions: string[]
@@ -113,12 +163,42 @@ describe('when getting the required permissions of an asset', () => {
     beforeEach(() => {
       requiredPermissions = ['aPermission']
       state.asset.data = {
-        [id]: requiredPermissions
+        [id]: { requiredPermissions }
       }
     })
 
     it('should return the them ', () => {
-      expect(getRequiredPermissions(state, id)).toEqual(state.asset.data[id])
+      expect(getRequiredPermissions(state, id)).toEqual(
+        state.asset.data[id].requiredPermissions
+      )
+    })
+  })
+})
+
+describe('when getting the video hash of an asset', () => {
+  let id: string
+  let videoHash: string | undefined
+
+  beforeEach(() => {
+    id = 'anAssetId'
+  })
+
+  describe('and there are no required permissions related to that asset', () => {
+    it('should return the them ', () => {
+      expect(getVideoHash(state, id)).toBeUndefined()
+    })
+  })
+
+  describe('and there were fetched', () => {
+    beforeEach(() => {
+      videoHash = 'aVideoHash'
+      state.asset.data = {
+        [id]: { videoHash }
+      }
+    })
+
+    it('should return the them ', () => {
+      expect(getVideoHash(state, id)).toEqual(state.asset.data[id].videoHash)
     })
   })
 })

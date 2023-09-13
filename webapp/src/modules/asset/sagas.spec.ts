@@ -19,9 +19,15 @@ import { NFT } from '../nft/types'
 import {
   fetchSmartWearableRequiredPermissionsFailure,
   fetchSmartWearableRequiredPermissionsRequest,
-  fetchSmartWearableRequiredPermissionsSuccess
+  fetchSmartWearableRequiredPermissionsSuccess,
+  fetchSmartWearableVideoHashFailure,
+  fetchSmartWearableVideoHashRequest,
+  fetchSmartWearableVideoHashSuccess
 } from './actions'
-import { getSmartWearableRequiredPermissions } from '../../lib/asset'
+import {
+  getSmartWearableRequiredPermissions,
+  getSmartWearableVideoShowcase
+} from '../../lib/asset'
 
 import util from 'util'
 util.inspect.defaultOptions.depth = null
@@ -226,7 +232,7 @@ describe('when handling the set purchase action', () => {
   )
 })
 
-describe('when handling the fetch asset request action', () => {
+describe('when handling the fetch smart wearable required permissions request action', () => {
   let asset: Asset
 
   beforeEach(() => {
@@ -305,6 +311,91 @@ describe('when handling the fetch asset request action', () => {
           .provide([[call(getSmartWearableRequiredPermissions, urn), []]])
           .put(fetchSmartWearableRequiredPermissionsSuccess(asset, []))
           .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
+          .run({ silenceTimeout: true })
+      })
+    })
+  })
+})
+
+describe('when handling the fetch smart wearable video hash request action', () => {
+  let asset: Asset
+
+  beforeEach(() => {
+    asset = ({
+      id: 'anId',
+      name: 'aName',
+      description: 'aDescription',
+      data: {}
+    } as unknown) as Asset
+  })
+
+  describe('when the asset is not smart wearable', () => {
+    it('should dispatch an action signaling the success of the request with an undefined video hash', () => {
+      return expectSaga(assetSaga)
+        .put(fetchSmartWearableVideoHashSuccess(asset, undefined))
+        .dispatch(fetchSmartWearableVideoHashRequest(asset))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when the asset is a smart wearable but does not have an urn', () => {
+    beforeEach(() => {
+      asset = {
+        ...asset,
+        data: {
+          wearable: {
+            isSmart: true
+          } as NFT['data']['wearable']
+        }
+      }
+    })
+
+    it('should dispatch an action signaling the success of the request with an undefined video hash', () => {
+      return expectSaga(assetSaga)
+        .put(fetchSmartWearableVideoHashSuccess(asset, undefined))
+        .dispatch(fetchSmartWearableVideoHashRequest(asset))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when the asset is a smart wearable and has an urn', () => {
+    const urn = 'anUrn'
+    beforeEach(() => {
+      asset = {
+        ...asset,
+        data: {
+          wearable: {
+            isSmart: true
+          } as NFT['data']['wearable']
+        },
+        urn
+      }
+    })
+
+    describe('and the fetch process fails', () => {
+      const anErrorMessage = 'An error'
+      it('should dispatch an action signaling the failure of the request', () => {
+        return expectSaga(assetSaga)
+          .provide([
+            [
+              call(getSmartWearableVideoShowcase, asset),
+              Promise.reject(new Error(anErrorMessage))
+            ]
+          ])
+          .put(fetchSmartWearableVideoHashFailure(asset, anErrorMessage))
+          .dispatch(fetchSmartWearableVideoHashRequest(asset))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the fetch process succeeds', () => {
+      const videoHash = 'aVideoHash'
+
+      it('should dispatch an action signaling the succeed of the request', () => {
+        return expectSaga(assetSaga)
+          .provide([[call(getSmartWearableVideoShowcase, asset), videoHash]])
+          .put(fetchSmartWearableVideoHashSuccess(asset, videoHash))
+          .dispatch(fetchSmartWearableVideoHashRequest(asset))
           .run({ silenceTimeout: true })
       })
     })

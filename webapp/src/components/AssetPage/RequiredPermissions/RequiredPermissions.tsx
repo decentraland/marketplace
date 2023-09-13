@@ -15,9 +15,8 @@ const RequiredPermissions = (props: Props) => {
   } = props
 
   useEffect(() => {
-    if (requiredPermissions.length === 0 && !isLoading && !hasFetched) {
+    if (requiredPermissions.length === 0 && !isLoading && !hasFetched)
       onFetchRequiredPermissions(asset)
-    }
   }, [
     asset,
     isLoading,

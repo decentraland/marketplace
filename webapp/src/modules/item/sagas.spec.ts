@@ -49,7 +49,10 @@ import { itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 import { ItemBrowseOptions } from './types'
-import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import {
+  fetchSmartWearableRequiredPermissionsRequest,
+  fetchSmartWearableVideoHashRequest
+} from '../asset/actions'
 
 const item = {
   itemId: 'anItemId',
@@ -523,6 +526,7 @@ describe('when handling the fetch items request action', () => {
           ])
           .put(fetchItemSuccess(item))
           .put(fetchSmartWearableRequiredPermissionsRequest(item))
+          .put(fetchSmartWearableVideoHashRequest(item))
           .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
           .run({ silenceTimeout: true })
       })
