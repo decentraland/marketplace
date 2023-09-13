@@ -34,6 +34,8 @@ export const PriceFilter = ({
   emotePlayMode,
   rentalDays,
   isRentalPriceFitlerChartEnabled,
+  emoteHasGeometry,
+  emoteHasSound,
   onChange
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
@@ -52,7 +54,9 @@ export const PriceFilter = ({
       minDistanceToPlaza: minDistanceToPlaza || undefined,
       maxDistanceToPlaza: maxDistanceToPlaza || undefined,
       maxEstateSize,
-      minEstateSize
+      minEstateSize,
+      emoteHasGeometry,
+      emoteHasSound
     }
   }, [
     adjacentToRoad,
@@ -67,7 +71,9 @@ export const PriceFilter = ({
     minEstateSize,
     network,
     rarities,
-    section
+    section,
+    emoteHasGeometry,
+    emoteHasSound
   ])
 
   const rentalPriceFetchFilters = useCallback(
@@ -159,7 +165,7 @@ export const PriceFilter = ({
         max={maxPrice}
         min={minPrice}
         upperBound={upperBound}
-        network={getNetwork(network, category)}
+        network={getNetwork(network, category) as any}
         onChange={onChange}
         errorMessage={t('filters.price_min_greater_max')}
       />

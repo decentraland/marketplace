@@ -38,6 +38,8 @@ export type NFTsFetchFilters = {
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
   rentalDays?: number[]
+  emoteHasGeometry?: boolean
+  emoteHasSound?: boolean
 }
 
 export type NFTResult = {

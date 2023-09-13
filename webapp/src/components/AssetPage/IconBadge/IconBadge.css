@@ -129,6 +129,7 @@
 
 .IconBadge .props {
   background-image: url(../../../images/emotes/props.svg);
+  background-size: contain;
   width: 19px;
 }
 
