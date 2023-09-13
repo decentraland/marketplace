@@ -25,9 +25,10 @@ import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
 import { isLegacyOrder } from '../../lib/orders'
+import { config } from '../../config'
+import { getSmartWearableVideoShowcase } from '../../lib/asset'
 import { Atlas } from '../Atlas'
 import ListedBadge from '../ListedBadge'
-import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import WarningBadge from '../WarningBadge'
 import { JumpIn } from '../AssetPage/JumpIn'
@@ -87,7 +88,8 @@ const AssetImage = (props: Props) => {
     children,
     hasBadges,
     item,
-    wallet
+    wallet,
+    videoHash
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -131,9 +133,10 @@ const AssetImage = (props: Props) => {
       if (
         ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE &&
         asset &&
-        asset.data.wearable?.isSmart
+        asset.data.wearable?.isSmart &&
+        videoHash
       ) {
-        return onPlaySmartWearableVideoShowcase(asset)
+        return onPlaySmartWearableVideoShowcase(videoHash)
       }
 
       if (wearableController) {
@@ -167,7 +170,7 @@ const AssetImage = (props: Props) => {
         }
       }
     },
-    [wearableController, onPlaySmartWearableVideoShowcase, asset]
+    [asset, videoHash, wearableController, onPlaySmartWearableVideoShowcase]
   )
 
   useEffect(() => {
@@ -356,7 +359,7 @@ const AssetImage = (props: Props) => {
                   size="large"
                 />
               </Center>
-            ) : asset.data.wearable?.isSmart && asset.urn ? (
+            ) : asset.data.wearable?.isSmart && asset.urn && videoHash ? (
               <div className="play-control">
                 <Button
                   className="play-button"
@@ -645,11 +648,23 @@ const AssetImageWrapper = (props: Props) => {
     ...rest
   } = props
 
+  const [videoHash, setVideoHash] = useState<string | undefined>(undefined)
+
+  const fetchSmartWearableVideoHash = useCallback(async () => {
+    if (!asset?.urn) return
+
+    const videoHash = await getSmartWearableVideoShowcase(asset)
+    if (videoHash) setVideoHash(videoHash)
+  }, [asset])
+
   useEffect(() => {
     if (!item && isNFT(asset) && asset.itemId) {
       onFetchItem(asset.contractAddress, asset.itemId)
     }
-  }, [asset, item, onFetchItem])
+
+    if (asset && asset.data.wearable?.isSmart && asset.urn)
+      fetchSmartWearableVideoHash()
+  }, [asset, fetchSmartWearableVideoHash, item, onFetchItem])
 
   const isAvailableForMint = useMemo(
     () =>
@@ -709,6 +724,7 @@ const AssetImageWrapper = (props: Props) => {
           item={item}
           onFetchItem={onFetchItem}
           wallet={wallet}
+          videoHash={videoHash}
           {...rest}
         >
           <div className="badges">

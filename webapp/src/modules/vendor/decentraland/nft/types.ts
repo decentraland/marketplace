@@ -53,7 +53,6 @@ export type NFTResponse = {
 
 export type NFTData = BaseNFT['data']
 
-
 export enum OwnersSortBy {
   ISSUED_ID = 'issuedId'
 }
