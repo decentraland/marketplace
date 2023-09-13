@@ -34,7 +34,7 @@ export type Props = {
   onSetWearablePreviewController: typeof setWearablePreviewController
   onFetchItem: typeof fetchItemRequest
   onPlaySmartWearableVideoShowcase: (
-    asset: string
+    videoHash: string
   ) => ReturnType<typeof openModal>
   children?: React.ReactNode
   hasBadges?: boolean

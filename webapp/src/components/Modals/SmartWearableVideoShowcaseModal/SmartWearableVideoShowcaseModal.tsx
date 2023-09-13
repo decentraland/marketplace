@@ -2,10 +2,10 @@ import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { Loader, ModalNavigation } from 'decentraland-ui'
+import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
 import { VIDEO_TEST_ID } from './constants'
 import { Props } from './SmartWearableVideoShowcaseModal.types'
 import styles from './SmartWearableVideoShowcaseModal.module.css'
-import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
 
 const SmartWearableVideoShowcaseModal = (props: Props) => {
   const {
