@@ -19,7 +19,6 @@ import { isNFT } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
 import { fetchItemRequest } from '../../modules/item/actions'
 import { openModal } from '../../modules/modal/actions'
-import { Asset } from '../../modules/asset/types'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -67,8 +66,8 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onSetIsTryingOn: value => dispatch(setIsTryingOn(value)),
   onSetWearablePreviewController: controller =>
     dispatch(setWearablePreviewController(controller)),
-  onPlaySmartWearableVideoShowcase: (asset: Asset) =>
-    dispatch(openModal('SmartWearableVideoShowcaseModal', { asset })),
+  onPlaySmartWearableVideoShowcase: (videoHash: string) =>
+    dispatch(openModal('SmartWearableVideoShowcaseModal', { videoHash })),
   onFetchItem: (contractAddress: string, tokenId: string) =>
     dispatch(fetchItemRequest(contractAddress, tokenId))
 })

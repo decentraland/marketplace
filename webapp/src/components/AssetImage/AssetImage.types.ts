@@ -34,12 +34,13 @@ export type Props = {
   onSetWearablePreviewController: typeof setWearablePreviewController
   onFetchItem: typeof fetchItemRequest
   onPlaySmartWearableVideoShowcase: (
-    asset: Asset
+    videoHash: string
   ) => ReturnType<typeof openModal>
   children?: React.ReactNode
   hasBadges?: boolean
   item: Item | null
   wallet: Wallet | null
+  videoHash?: string
 }
 
 export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>

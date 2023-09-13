@@ -1,8 +1,7 @@
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
-import { Asset } from '../../../modules/asset/types'
 
 export type SmartWearableVideoShowcaseMetadata = {
-  asset: Asset
+  videoHash: string
 }
 
 export type Props = Omit<ModalProps, 'metadata'> & {
