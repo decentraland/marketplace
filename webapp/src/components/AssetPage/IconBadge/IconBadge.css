@@ -114,12 +114,14 @@
 .IconBadge .play-once {
   background-image: url(../../../images/emotes/play-once.svg);
   width: 19px;
+  filter: brightness(0) invert(1);
 }
 
 
 .IconBadge .play-loop {
   background-image: url(../../../images/emotes/play-loop.svg);
   width: 19px;
+  filter: brightness(0) invert(1);
 }
 
 .IconBadge .sound {
