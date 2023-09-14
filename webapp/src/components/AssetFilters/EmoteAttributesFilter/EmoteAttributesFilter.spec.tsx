@@ -33,7 +33,7 @@ describe('when isEmotesV2Enabled is false', () => {
 })
 
 describe('when isEmotesV2Enabled is true', () => {
-  it("should render sound filter", () => {
+  it('should render sound filter', () => {
     const screen = renderEmoteAttributesFilter({ isEmotesV2Enabled: true })
     expect(
       screen.getByText(t('nft_filters.emote_attributes.with_sound'))
@@ -47,21 +47,35 @@ describe('when isEmotesV2Enabled is true', () => {
     ).toBeInTheDocument()
   })
 
-  describe("when sound filter is clicked", () => {
-    it("should call onChange with emoteHasSound true", () => {
+  describe('when sound filter is clicked', () => {
+    it('should call onChange with emoteHasSound true', () => {
       const onChange = jest.fn()
-      const screen = renderEmoteAttributesFilter({ isEmotesV2Enabled: true, onChange })
+      const screen = renderEmoteAttributesFilter({
+        isEmotesV2Enabled: true,
+        onChange
+      })
       screen.getByText(t('nft_filters.emote_attributes.with_sound')).click()
-      expect(onChange).toHaveBeenCalledWith({ emoteHasSound: true })
+      expect(onChange).toHaveBeenCalledWith({
+        emoteHasSound: true,
+        emoteHasGeometry: undefined,
+        emotePlayMode: []
+      })
     })
   })
 
-  describe("when prop filter is clicked", () => {
-    it("should call onChange with emoteHasGeometry true", () => {
+  describe('when prop filter is clicked', () => {
+    it('should call onChange with emoteHasGeometry true', () => {
       const onChange = jest.fn()
-      const screen = renderEmoteAttributesFilter({ isEmotesV2Enabled: true, onChange })
+      const screen = renderEmoteAttributesFilter({
+        isEmotesV2Enabled: true,
+        onChange
+      })
       screen.getByText(t('nft_filters.emote_attributes.with_props')).click()
-      expect(onChange).toHaveBeenCalledWith({ emoteHasGeometry: true })
+      expect(onChange).toHaveBeenCalledWith({
+        emoteHasGeometry: true,
+        emoteHasSound: undefined,
+        emotePlayMode: []
+      })
     })
   })
 })

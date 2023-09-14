@@ -52,17 +52,22 @@ export const EmoteAttributesFilter = ({
 
   const handlePlayModeChange = useCallback(
     (values: string[]) =>
-      onChange({ emotePlayMode: values as EmotePlayMode[] }),
-    [onChange]
+      onChange({
+        emotePlayMode: values as EmotePlayMode[],
+        emoteHasSound,
+        emoteHasGeometry
+      }),
+    [emoteHasGeometry, emoteHasSound, onChange]
   )
 
   const handleEmoteAttributesChange = useCallback(
     (values: string[]) =>
       onChange({
         emoteHasSound: values.includes(WITH_SOUND_VALUE) || undefined,
-        emoteHasGeometry: values.includes(WITH_GEOMETRY_VALUE) || undefined
+        emoteHasGeometry: values.includes(WITH_GEOMETRY_VALUE) || undefined,
+        emotePlayMode
       }),
-    [onChange]
+    [emotePlayMode, onChange]
   )
 
   const areAllItemsSelected =

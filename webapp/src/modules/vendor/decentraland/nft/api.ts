@@ -212,6 +212,14 @@ class NFTAPI extends BaseAPI {
         queryParams.append('rentalDays', rentalDay.toString())
       }
     }
+
+    if (filters.emoteHasGeometry) {
+      queryParams.append('emoteHasGeometry', 'true')
+    }
+
+    if (filters.emoteHasSound) {
+      queryParams.append('emoteHasSound', 'true')
+    }
   }
 
   private buildNFTQueryString(
