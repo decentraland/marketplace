@@ -1,0 +1,38 @@
+.emoteV2Modal :global(.dcl.modal-navigation-title) {
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 25px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding: 25px;
+  padding-bottom: 40px;
+}
+
+.subtitle {
+  text-align: center;
+  line-height: 20px;
+  font-size: 14px;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+
+.actionButton {
+  width: 100%;
+  max-width: 380px;
+}
+
+:global(.ui.button).actionButton + :global(.ui.button).actionButton {
+  margin: 0;
+}
+
+.video {
+  display: block;
+  height: 250px;
+  object-fit: cover;
+}

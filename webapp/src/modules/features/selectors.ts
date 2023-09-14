@@ -163,17 +163,6 @@ export const getIsHandsCategoryEnabled = (state: RootState) => {
   return false
 }
 
-export const getIsHandsCategoryFTUEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.HANDS_CATEGORY_FTU
-    )
-  }
-  return false
-}
-
 export const getIsSmartWearablesFTUEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(
@@ -191,6 +180,17 @@ export const getIsEmotesV2Enabled = (state: RootState) => {
       state,
       ApplicationName.MARKETPLACE,
       FeatureName.EMOTES_V2
+    )
+  }
+  return false
+}
+
+export const getIsEmotesV2FTUEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.EMOTES_V2_FTU
     )
   }
   return false

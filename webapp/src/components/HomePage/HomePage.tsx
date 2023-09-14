@@ -20,7 +20,7 @@ import { Slideshow } from './Slideshow'
 import { RankingsTable } from '../RankingsTable'
 import { BackToTopButton } from '../BackToTopButton'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
-import HandsCategoryLaunchModal from '../Modals/FTU/HandsCategoryLaunchModal'
+import EmotesV2LaunchModal from '../Modals/FTU/EmotesV2LaunchModal'
 import { SmartWearablesLaunchModal } from '../Modals/FTU/SmartWearablesLaunchModal'
 import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
 import { Props } from './HomePage.types'
@@ -215,7 +215,7 @@ const HomePage = (props: Props) => {
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.OVERVIEW} />
       <ListsLaunchModal />
-      <HandsCategoryLaunchModal />
+      <EmotesV2LaunchModal />
       <SmartWearablesLaunchModal />
       {isCampaignHomepageBannerEnabled ? (
         <CampaignBanner>
