@@ -20,14 +20,11 @@ import { NFT } from '../../modules/nft/types'
 import { fetchItemRequest } from '../../modules/item/actions'
 import { openModal } from '../../modules/modal/actions'
 import { Asset } from '../../modules/asset/types'
-import {
-  FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST,
-  fetchSmartWearableVideoHashRequest
-} from '../../modules/asset/actions'
+import { fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
 import {
   getVideoHash,
-  getLoading as getLoadingAsset,
-  getAssetData
+  getAssetData,
+  isFetchingVideoHash
 } from '../../modules/asset/selectors'
 import {
   MapStateProps,
@@ -36,7 +33,6 @@ import {
   OwnProps
 } from './AssetImage.types'
 import AssetImage from './AssetImage'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const profiles = getProfiles(state)
@@ -72,10 +68,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     item,
     order,
     videoHash: getVideoHash(state, assetId),
-    isLoadingVideoHash: isLoadingType(
-      getLoadingAsset(state),
-      FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST
-    ),
+    isLoadingVideoHash: isFetchingVideoHash(state, assetId),
     hasFetchedVideoHash: 'videoHash' in getAssetData(state, assetId)
   }
 }

@@ -84,11 +84,14 @@ const AssetImage = (props: Props) => {
     onSetIsTryingOn,
     onSetWearablePreviewController,
     onPlaySmartWearableVideoShowcase,
+    onFetchSmartWearableVideoHash,
     children,
     hasBadges,
     item,
     wallet,
-    videoHash
+    videoHash,
+    isLoadingVideoHash,
+    hasFetchedVideoHash
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -211,12 +214,25 @@ const AssetImage = (props: Props) => {
   // This effect is here just to track on which mode the preview is initialized, that's why it has an empty dependency array, so this is triggered once on mount
   useEffect(() => {
     const isPreview = asset.category === NFTCategory.WEARABLE && isDraggable
+
     if (!isTracked && isPreview) {
       getAnalytics().track(events.INIT_PREVIEW, {
         mode: isTryingOn ? 'avatar' : 'wearable'
       })
       setIsTracked(true)
     }
+
+    if (
+      isPreview &&
+      asset.data.wearable?.isSmart &&
+      asset.urn &&
+      videoHash === undefined &&
+      !isLoadingVideoHash &&
+      !hasFetchedVideoHash
+    ) {
+      onFetchSmartWearableVideoHash(asset)
+    }
+
     return () => {
       if (asset.category === NFTCategory.EMOTE && wearableController) {
         onSetWearablePreviewController(null)
@@ -644,32 +660,14 @@ const AssetImageWrapper = (props: Props) => {
     onFetchItem,
     order,
     wallet,
-    onFetchSmartWearableVideoHash,
-    isLoadingVideoHash,
-    hasFetchedVideoHash,
-    videoHash,
     ...rest
   } = props
 
   useEffect(() => {
     if (!item && isNFT(asset) && asset.itemId) {
       onFetchItem(asset.contractAddress, asset.itemId)
-    } else if (
-      videoHash === undefined &&
-      !isLoadingVideoHash &&
-      !hasFetchedVideoHash
-    ) {
-      onFetchSmartWearableVideoHash && onFetchSmartWearableVideoHash(asset)
     }
-  }, [
-    asset,
-    hasFetchedVideoHash,
-    isLoadingVideoHash,
-    item,
-    onFetchItem,
-    onFetchSmartWearableVideoHash,
-    videoHash
-  ])
+  }, [asset, item, onFetchItem])
 
   const isAvailableForMint = useMemo(
     () =>
@@ -727,7 +725,6 @@ const AssetImageWrapper = (props: Props) => {
         <AssetImage
           asset={asset}
           item={item}
-          videoHash={videoHash}
           wallet={wallet}
           onFetchItem={onFetchItem}
           {...rest}

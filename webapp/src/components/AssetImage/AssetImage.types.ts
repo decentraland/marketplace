@@ -40,7 +40,7 @@ export type Props = {
   onPlaySmartWearableVideoShowcase: (
     videoHash: string
   ) => ReturnType<typeof openModal>
-  onFetchSmartWearableVideoHash?: typeof fetchSmartWearableVideoHashRequest
+  onFetchSmartWearableVideoHash: typeof fetchSmartWearableVideoHashRequest
   children?: React.ReactNode
   hasBadges?: boolean
   item: Item | null

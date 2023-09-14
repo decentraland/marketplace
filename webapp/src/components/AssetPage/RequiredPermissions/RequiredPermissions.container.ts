@@ -1,15 +1,11 @@
 import { connect } from 'react-redux'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import {
   getAssetData,
-  getLoading,
-  getRequiredPermissions
+  getRequiredPermissions,
+  isFetchingRequiredPermissions
 } from '../../../modules/asset/selectors'
 import { RootState } from '../../../modules/reducer'
-import {
-  FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
-  fetchSmartWearableRequiredPermissionsRequest
-} from '../../../modules/asset/actions'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../../../modules/asset/actions'
 import { Asset } from '../../../modules/asset/types'
 import RequiredPermissions from './RequiredPermissions'
 import {
@@ -23,10 +19,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { id } = ownProps.asset
 
   return {
-    isLoading: isLoadingType(
-      getLoading(state),
-      FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST
-    ),
+    isLoading: isFetchingRequiredPermissions(state, id),
     hasFetched: 'requiredPermissions' in getAssetData(state, id),
     requiredPermissions: getRequiredPermissions(state, id)
   }
