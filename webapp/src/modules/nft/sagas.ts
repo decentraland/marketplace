@@ -23,6 +23,7 @@ import {
 import { upsertContracts } from '../contract/actions'
 import { Contract } from '../vendor/services'
 import { retryParams } from '../vendor/decentraland/utils'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -158,6 +159,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
       )
 
       yield put(fetchNFTSuccess(nft as NFT, order, rental))
+      yield put(fetchSmartWearableRequiredPermissionsRequest(nft as NFT))
     } catch (error) {
       yield put(
         fetchNFTFailure(contractAddress, tokenId, (error as Error).message)
