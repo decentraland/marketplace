@@ -657,7 +657,8 @@ const AssetImageWrapper = (props: Props) => {
     } else if (
       videoHash === undefined &&
       !isLoadingVideoHash &&
-      !hasFetchedVideoHash
+      !hasFetchedVideoHash &&
+      onFetchSmartWearableVideoHash
     ) {
       onFetchSmartWearableVideoHash(asset)
     }
@@ -728,10 +729,7 @@ const AssetImageWrapper = (props: Props) => {
           asset={asset}
           item={item}
           videoHash={videoHash}
-          isLoadingVideoHash={isLoadingVideoHash}
-          hasFetchedVideoHash={hasFetchedVideoHash}
           wallet={wallet}
-          onFetchSmartWearableVideoHash={onFetchSmartWearableVideoHash}
           onFetchItem={onFetchItem}
           {...rest}
         >

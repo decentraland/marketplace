@@ -40,14 +40,14 @@ export type Props = {
   onPlaySmartWearableVideoShowcase: (
     videoHash: string
   ) => ReturnType<typeof openModal>
-  onFetchSmartWearableVideoHash: typeof fetchSmartWearableVideoHashRequest
+  onFetchSmartWearableVideoHash?: typeof fetchSmartWearableVideoHashRequest
   children?: React.ReactNode
   hasBadges?: boolean
   item: Item | null
   wallet: Wallet | null
   videoHash?: string
-  isLoadingVideoHash: boolean
-  hasFetchedVideoHash: boolean
+  isLoadingVideoHash?: boolean
+  hasFetchedVideoHash?: boolean
 }
 
 export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>
