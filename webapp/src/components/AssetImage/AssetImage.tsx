@@ -657,10 +657,9 @@ const AssetImageWrapper = (props: Props) => {
     } else if (
       videoHash === undefined &&
       !isLoadingVideoHash &&
-      !hasFetchedVideoHash &&
-      onFetchSmartWearableVideoHash
+      !hasFetchedVideoHash
     ) {
-      onFetchSmartWearableVideoHash(asset)
+      onFetchSmartWearableVideoHash && onFetchSmartWearableVideoHash(asset)
     }
   }, [
     asset,

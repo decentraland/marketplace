@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import {
-  getData,
+  getAssetData,
   getLoading,
   getRequiredPermissions
 } from '../../../modules/asset/selectors'
@@ -27,7 +27,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       getLoading(state),
       FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST
     ),
-    hasFetched: id in getData(state),
+    hasFetched: 'requiredPermissions' in getAssetData(state, id),
     requiredPermissions: getRequiredPermissions(state, id)
   }
 }

@@ -33,10 +33,6 @@ import { retryParams } from '../vendor/decentraland/utils'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { locations } from '../routing/locations'
 import {
-  fetchSmartWearableRequiredPermissionsRequest,
-  fetchSmartWearableVideoHashRequest
-} from '../asset/actions'
-import {
   buyItemFailure,
   BuyItemRequestAction,
   buyItemSuccess,
@@ -211,8 +207,6 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         tokenId
       )
       yield put(fetchItemSuccess(item))
-      yield put(fetchSmartWearableRequiredPermissionsRequest(item))
-      yield put(fetchSmartWearableVideoHashRequest(item))
     } catch (error) {
       yield put(
         fetchItemFailure(

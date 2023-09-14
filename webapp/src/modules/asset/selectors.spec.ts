@@ -5,6 +5,7 @@ import {
 } from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
+  getAssetData,
   getData,
   getError,
   getLoading,
@@ -40,6 +41,33 @@ describe("when getting the asset's state", () => {
 describe('when getting the data of the state', () => {
   it('should return the data', () => {
     expect(getData(state)).toEqual(state.asset.data)
+  })
+})
+
+describe('when getting the asset data of the state', () => {
+  let id: string
+
+  describe('and the asset is not set', () => {
+    beforeEach(() => {
+      id = 'anotherItemId'
+    })
+
+    it('should return an empty object', () => {
+      expect(getAssetData(state, id)).toEqual({})
+    })
+  })
+
+  describe('and the asset is already set', () => {
+    beforeEach(() => {
+      id = 'anItemId'
+      state.asset.data = {
+        [id]: { requiredPermissions: [], videoHash: 'aVideoHash' }
+      }
+    })
+
+    it('should return the asset data', () => {
+      expect(getAssetData(state, id)).toEqual(state.asset.data[id])
+    })
   })
 })
 

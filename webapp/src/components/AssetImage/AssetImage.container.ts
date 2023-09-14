@@ -27,7 +27,7 @@ import {
 import {
   getVideoHash,
   getLoading as getLoadingAsset,
-  getData as getAssetData
+  getAssetData
 } from '../../modules/asset/selectors'
 import {
   MapStateProps,
@@ -76,7 +76,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       getLoadingAsset(state),
       FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST
     ),
-    hasFetchedVideoHash: assetId in getAssetData(state)
+    hasFetchedVideoHash: 'videoHash' in getAssetData(state, assetId)
   }
 }
 
