@@ -165,7 +165,7 @@ export const PriceFilter = ({
         max={maxPrice}
         min={minPrice}
         upperBound={upperBound}
-        network={getNetwork(network, category) as any}
+        network={getNetwork(network, category)}
         onChange={onChange}
         errorMessage={t('filters.price_min_greater_max')}
       />

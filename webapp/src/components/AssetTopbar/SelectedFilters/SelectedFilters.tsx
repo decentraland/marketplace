@@ -43,7 +43,9 @@ export const SelectedFilters = ({
     maxDistanceToPlaza,
     rentalDays,
     assetType,
-    status
+    status,
+    emoteHasSound,
+    emoteHasGeometry
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
@@ -176,8 +178,30 @@ export const SelectedFilters = ({
     [onBrowse, rentalDays]
   )
 
+  const handleDeleteEmoteHasSound = useCallback(() => {
+    onBrowse({ emoteHasSound: undefined })
+  }, [onBrowse])
+
+  const handleDeleteEmoteHasGeometry = useCallback(() => {
+    onBrowse({ emoteHasGeometry: undefined })
+  }, [onBrowse])
+
   return (
     <div className={styles.pillContainer}>
+      {emoteHasSound ? (
+        <Pill
+          label={t('nft_filters.emote_attributes.with_sound')}
+          id="emoteHasSound"
+          onDelete={handleDeleteEmoteHasSound}
+        />
+      ): null}
+      {emoteHasGeometry ? (
+        <Pill
+          label={t('nft_filters.emote_attributes.with_props')}
+          id="emoteHasGeomtry"
+          onDelete={handleDeleteEmoteHasGeometry}
+        />
+      ): null}
       {rarities?.map(rarity => (
         <Pill
           key={rarity}
