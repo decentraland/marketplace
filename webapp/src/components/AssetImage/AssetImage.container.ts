@@ -19,6 +19,13 @@ import { isNFT } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
 import { fetchItemRequest } from '../../modules/item/actions'
 import { openModal } from '../../modules/modal/actions'
+import { Asset } from '../../modules/asset/types'
+import { fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
+import {
+  getVideoHash,
+  getAssetData,
+  isFetchingVideoHash
+} from '../../modules/asset/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -30,6 +37,7 @@ import AssetImage from './AssetImage'
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const profiles = getProfiles(state)
   const wallet = getWallet(state)
+  const assetId = ownProps.asset.id
   let avatar: Avatar | undefined = undefined
   const items = getItems(state)
   const item = getItem(
@@ -58,7 +66,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     isTryingOn: getIsTryingOn(state),
     isPlayingEmote: getIsPlayingEmote(state),
     item,
-    order
+    order,
+    videoHash: getVideoHash(state, assetId),
+    isLoadingVideoHash: isFetchingVideoHash(state, assetId),
+    hasFetchedVideoHash: 'videoHash' in getAssetData(state, assetId)
   }
 }
 
@@ -69,7 +80,9 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onPlaySmartWearableVideoShowcase: (videoHash: string) =>
     dispatch(openModal('SmartWearableVideoShowcaseModal', { videoHash })),
   onFetchItem: (contractAddress: string, tokenId: string) =>
-    dispatch(fetchItemRequest(contractAddress, tokenId))
+    dispatch(fetchItemRequest(contractAddress, tokenId)),
+  onFetchSmartWearableVideoHash: (asset: Asset) =>
+    dispatch(fetchSmartWearableVideoHashRequest(asset))
 })
 
 export default connect(mapState, mapDispatch)(AssetImage)

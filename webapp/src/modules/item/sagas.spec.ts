@@ -13,6 +13,7 @@ import {
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { locations } from '../routing/locations'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { ItemAPI } from '../vendor/decentraland/item/api'
@@ -49,7 +50,6 @@ import { itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 import { ItemBrowseOptions } from './types'
-import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 
 const item = {
   itemId: 'anItemId',

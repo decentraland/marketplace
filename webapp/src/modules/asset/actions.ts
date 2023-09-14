@@ -35,3 +35,38 @@ export type FetchSmartWearableRequiredPermissionsSuccessAction = ReturnType<
 export type FetchSmartWearableRequiredPermissionsFailureAction = ReturnType<
   typeof fetchSmartWearableRequiredPermissionsFailure
 >
+
+// Fetch Video Hash
+export const FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST =
+  '[Request] Fetch Smart Wearable Video Hash'
+export const FETCH_SMART_WEARABLE_VIDEO_HASH_SUCCESS =
+  '[Success] Fetch Smart Wearable Video Hash'
+export const FETCH_SMART_WEARABLE_VIDEO_HASH_FAILURE =
+  '[Failure] Fetch Smart Wearable Video Hash'
+
+export const fetchSmartWearableVideoHashRequest = (asset: Asset) =>
+  action(FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST, { asset })
+
+export const fetchSmartWearableVideoHashSuccess = (
+  asset: Asset,
+  videoHash: string | undefined
+) =>
+  action(FETCH_SMART_WEARABLE_VIDEO_HASH_SUCCESS, {
+    asset,
+    videoHash
+  })
+
+export const fetchSmartWearableVideoHashFailure = (
+  asset: Asset,
+  error: string
+) => action(FETCH_SMART_WEARABLE_VIDEO_HASH_FAILURE, { asset, error })
+
+export type FetchSmartWearableVideoHashRequestAction = ReturnType<
+  typeof fetchSmartWearableVideoHashRequest
+>
+export type FetchSmartWearableVideoHashSuccessAction = ReturnType<
+  typeof fetchSmartWearableVideoHashSuccess
+>
+export type FetchSmartWearableVideoHashFailureAction = ReturnType<
+  typeof fetchSmartWearableVideoHashFailure
+>
