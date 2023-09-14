@@ -4,7 +4,7 @@
   "dependencies": {
     "@dcl/crypto": "^3.0.0",
     "@dcl/schemas": "^9.6.0",
-    "@dcl/single-sign-on-client": "^0.0.12",
+    "@dcl/single-sign-on-client": "^0.1.0",
     "@dcl/ui-env": "^1.2.0",
     "@ethersproject/providers": "^5.6.2",
     "@sentry/react": "^7.64.0",
