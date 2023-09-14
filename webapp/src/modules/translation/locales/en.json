@@ -1460,11 +1460,11 @@
     "go_to_my_assets": "Go to My Assets",
     "do_not_show_again": "Don't show me this again"
   },
-  "hands_category_ftu": {
-    "title": "Now you can buy Hands wearables!",
-    "subtitle": "Discover the new Hands wearables in marketplace!",
-    "action": "Discover amazing hands wearables",
-    "img_alt": "New hands category"
+  "emotes_v2_ftu": {
+    "title": "Emotes 2.0 are Live! 🟢",
+    "subtitle": "<b>Emotes now offer more than movement!</b><br></br>Enhance the way you express yourself in Decentraland with Emotes that have added props and sounds for a more immersive experience.",
+    "action": "Browse emotes with props and sounds",
+    "img_alt": "Emotes 2.0"
   },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",

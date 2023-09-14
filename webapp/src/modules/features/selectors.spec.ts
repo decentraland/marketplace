@@ -14,7 +14,7 @@ import {
   getIsEmotesV2Enabled,
   getIsEstateSizeFilterEnabled,
   getIsHandsCategoryEnabled,
-  getIsHandsCategoryFTUEnabled,
+  getIsEmotesV2FTUEnabled,
   getIsLocationFilterEnabled,
   getIsMaintenanceEnabled,
   getIsMapViewFiltersEnabled,
@@ -197,11 +197,6 @@ const waitForInitialLoadingSelectors = [
     selector: getIsHandsCategoryEnabled
   },
   {
-    name: 'IsHandsCategoryFTU',
-    feature: FeatureName.HANDS_CATEGORY_FTU,
-    selector: getIsHandsCategoryFTUEnabled
-  },
-  {
     name: 'isSmartWearablesFTU',
     feature: FeatureName.SMART_WEARABLES_FTU,
     selector: getIsSmartWearablesFTUEnabled
@@ -210,6 +205,11 @@ const waitForInitialLoadingSelectors = [
     name: 'isEmotesV2',
     feature: FeatureName.EMOTES_V2,
     selector: getIsEmotesV2Enabled
+  },
+  {
+    name: 'isEmotesV2FTU',
+    feature: FeatureName.EMOTES_V2_FTU,
+    selector: getIsEmotesV2FTUEnabled
   },
   {
     name: 'navbar-dropdown',
