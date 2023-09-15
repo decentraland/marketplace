@@ -46,8 +46,14 @@
   background: #242129;
   border-radius: 14.482757568359375px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   padding: 0 33px 0 15px;
+}
+
+.imgTitleAndTextContainer {
+  display: flex;
+  align-items: center;
 }
 
 .img {
