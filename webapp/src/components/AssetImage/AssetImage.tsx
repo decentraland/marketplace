@@ -180,13 +180,13 @@ const AssetImage = (props: Props) => {
       asset.category === NFTCategory.EMOTE &&
       wearableController &&
       isDraggable &&
-      hasSound === undefined
+      !isLoadingWearablePreview
     ) {
       wearableController.emote?.hasSound().then(sound => {
         setHasSound(sound)
       })
     }
-  }, [wearableController, asset.category, isDraggable, hasSound])
+  }, [wearableController, asset.category, isDraggable, hasSound, isLoadingWearablePreview])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate

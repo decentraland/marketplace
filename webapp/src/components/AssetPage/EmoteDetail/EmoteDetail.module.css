@@ -23,6 +23,7 @@
 
 .EmoteDetail .badges {
   margin-top: 8px;
+  margin-bottom: 15px;
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
