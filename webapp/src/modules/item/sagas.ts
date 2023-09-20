@@ -192,8 +192,9 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
     yield call(waitForWalletConnectionIfConnecting)
     const wallet: Wallet | undefined = yield select(getWallet)
+    const identity: AuthIdentity | undefined = yield select(getIdentity)
 
-    if (wallet) {
+    if (wallet && !identity) {
       yield call(waitForIdentityToBeGenerated, action)
     }
 
