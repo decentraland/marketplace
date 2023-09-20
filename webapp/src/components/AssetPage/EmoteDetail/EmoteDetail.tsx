@@ -67,6 +67,18 @@ const EmoteDetail = ({ nft }: Props) => {
     [loop]
   )
 
+  const emoteSoundHref = locations.browse({
+    assetType: AssetType.ITEM,
+    section: Section.EMOTES,
+    emoteHasSound: true
+  })
+
+  const emoteGeometryHref = locations.browse({
+    assetType: AssetType.ITEM,
+    section: Section.EMOTES,
+    emoteHasGeometry: true
+  })
+
   return (
     <div className={styles.EmoteDetail}>
       <OnBack asset={nft} />
@@ -89,6 +101,20 @@ const EmoteDetail = ({ nft }: Props) => {
                 href={emoteBadgeHref}
               />
               <CampaignBadge contract={nft.contractAddress} />
+              {emote.hasSound && (
+                <IconBadge
+                  icon="sound"
+                  text={t('emote.sound')}
+                  href={emoteSoundHref}
+                />
+              )}
+              {emote.hasGeometry && (
+                <IconBadge
+                  icon="props"
+                  text={t('emote.props')}
+                  href={emoteGeometryHref}
+                />
+              )}
             </div>
           </div>
           <Description text={emote.description} />
