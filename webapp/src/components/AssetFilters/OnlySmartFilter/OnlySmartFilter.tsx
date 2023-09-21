@@ -7,7 +7,6 @@ import styles from './OnlySmartFilter.module.css'
 export type OnlySmartFilterProps = {
   isOnlySmart?: boolean
   onChange: (value: boolean) => void
-  defaultCollapsed?: boolean
   'data-testid'?: string
 }
 
@@ -36,13 +35,12 @@ export const OnlySmartFilterContent = (
 
 export const OnlySmartFilter = ({
   isOnlySmart,
-  onChange,
-  defaultCollapsed = false
+  onChange
 }: OnlySmartFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   return isMobileOrTablet ? null : (
-    <Box className="filters-sidebar-box" defaultCollapsed={defaultCollapsed}>
+    <Box className="filters-sidebar-box">
       <OnlySmartFilterContent isOnlySmart={isOnlySmart} onChange={onChange} />
     </Box>
   )
