@@ -37,7 +37,7 @@ export type Props = {
   vendor?: VendorName
   view?: View
   rentalDays?: number[]
-  defaultCollapsed?: Record<AssetFilter, boolean>
+  defaultCollapsed?: Partial<Record<AssetFilter, boolean>>
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean

@@ -84,7 +84,6 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => {
       <AssetFilters
         defaultCollapsed={{
           [AssetFilter.Status]: true,
-          [AssetFilter.OnlySmart]: false,
           [AssetFilter.Rarity]: true,
           [AssetFilter.Price]: true,
           [AssetFilter.Collection]: true,

@@ -286,7 +286,6 @@ export const AssetFilters = ({
         <OnlySmartFilter
           isOnlySmart={isOnlySmart}
           onChange={handleOnlySmartChange}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.OnlySmart]}
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.Rarity) ? (
