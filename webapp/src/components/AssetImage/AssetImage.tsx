@@ -353,6 +353,7 @@ const AssetImage = (props: Props) => {
               emote={isTryingOnEnabled ? previewEmote : undefined}
               onLoad={handleLoad}
               onError={handleError}
+              disableDefaultWearables
               {...wearablePreviewProps}
               dev={config.is(Env.DEVELOPMENT)}
             />
@@ -558,6 +559,7 @@ const AssetImage = (props: Props) => {
               onLoad={handleLoad}
               onError={handleError}
               dev={config.is(Env.DEVELOPMENT)}
+              disableDefaultWearables
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
