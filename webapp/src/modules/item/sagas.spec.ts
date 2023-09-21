@@ -3,6 +3,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { call, select, take } from 'redux-saga/effects'
 import { ChainId, Item, Network, Rarity } from '@dcl/schemas'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
@@ -46,7 +47,7 @@ import {
   fetchCollectionItemsFailure,
   FETCH_ITEMS_CANCELLED_ERROR_MESSAGE
 } from './actions'
-import { itemSaga } from './sagas'
+import { CANCEL_FETCH_ITEMS, itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 import { ItemBrowseOptions } from './types'
@@ -416,60 +417,124 @@ describe('when handling the fetch items request action', () => {
         pathname = locations.browse()
       })
       describe('and there is an ongoing fetch item request', () => {
+        let wallet: Wallet | undefined
         let originalBrowseOptions = itemBrowseOptions
         let newBrowseOptions: ItemBrowseOptions = {
           ...itemBrowseOptions,
           filters: { ...itemBrowseOptions.filters, rarities: [Rarity.COMMON] }
         }
-        it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
-          return expectSaga(itemSaga, getIdentity)
-            .provide([
-              [
-                matchers.call.fn(waitForWalletConnectionIfConnecting),
-                undefined
-              ],
-              [select(getLocation), { pathname }],
-              {
-                call(effect, next) {
-                  if (
-                    effect.fn === CatalogAPI.prototype.get &&
-                    effect.args[0] === originalBrowseOptions.filters
-                  ) {
-                    // Add a setTimeout so it gives time to get it cancelled
-                    return new Promise(() => {})
+        describe('and there is a wallet connected', () => {
+          beforeEach(() => {
+            wallet = {} as Wallet
+          })
+
+          it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [
+                  matchers.call.fn(waitForWalletConnectionIfConnecting),
+                  undefined
+                ],
+                [select(getWallet), wallet],
+                [select(getLocation), { pathname }],
+                {
+                  call(effect, next) {
+                    if (
+                      effect.fn === CatalogAPI.prototype.get &&
+                      effect.args[0] === originalBrowseOptions.filters
+                    ) {
+                      // Add a setTimeout so it gives time to get it cancelled
+                      return new Promise(() => {})
+                    }
+                    if (
+                      effect.fn === CatalogAPI.prototype.get &&
+                      effect.args[0] === newBrowseOptions.filters
+                    ) {
+                      // Mock without timeout
+                      return fetchResult
+                    }
+                    return next()
                   }
-                  if (
-                    effect.fn === CatalogAPI.prototype.get &&
-                    effect.args[0] === newBrowseOptions.filters
-                  ) {
-                    // Mock without timeout
-                    return fetchResult
-                  }
-                  return next()
                 }
-              }
-            ])
-            .call.like({
-              fn: CatalogAPI.prototype.get,
-              args: [newBrowseOptions.filters]
-            })
-            .put(
-              fetchItemsFailure(
-                FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
-                originalBrowseOptions
+              ])
+              .call.like({
+                fn: CatalogAPI.prototype.get,
+                args: [newBrowseOptions.filters]
+              })
+              .put(
+                fetchItemsFailure(
+                  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
+                  originalBrowseOptions
+                )
               )
-            )
-            .put(
-              fetchItemsSuccess(
-                fetchResult.data,
-                fetchResult.total,
-                newBrowseOptions,
-                nowTimestamp
+              .put(
+                fetchItemsSuccess(
+                  fetchResult.data,
+                  fetchResult.total,
+                  newBrowseOptions,
+                  nowTimestamp
+                )
               )
-            )
-            .dispatch(fetchItemsRequest(originalBrowseOptions))
-            .dispatch(fetchItemsRequest(newBrowseOptions))
-            .run({ silenceTimeout: true })
+              .dispatch(fetchItemsRequest(originalBrowseOptions))
+              .dispatch({ type: CANCEL_FETCH_ITEMS })
+              .dispatch(fetchItemsRequest(newBrowseOptions))
+              .run({ silenceTimeout: true })
+          })
+        })
+
+        describe('and there is no wallet connected', () => {
+          it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [
+                  matchers.call.fn(waitForWalletConnectionIfConnecting),
+                  undefined
+                ],
+                [select(getWallet), wallet],
+                [select(getLocation), { pathname }],
+                {
+                  call(effect, next) {
+                    if (
+                      effect.fn === CatalogAPI.prototype.get &&
+                      effect.args[0] === originalBrowseOptions.filters
+                    ) {
+                      // Add a setTimeout so it gives time to get it cancelled
+                      return new Promise(() => {})
+                    }
+                    if (
+                      effect.fn === CatalogAPI.prototype.get &&
+                      effect.args[0] === newBrowseOptions.filters
+                    ) {
+                      // Mock without timeout
+                      return fetchResult
+                    }
+                    return next()
+                  }
+                }
+              ])
+              .call.like({
+                fn: CatalogAPI.prototype.get,
+                args: [newBrowseOptions.filters]
+              })
+              .put(
+                fetchItemsFailure(
+                  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
+                  originalBrowseOptions
+                )
+              )
+              .put(
+                fetchItemsSuccess(
+                  fetchResult.data,
+                  fetchResult.total,
+                  newBrowseOptions,
+                  nowTimestamp
+                )
+              )
+              .dispatch(fetchItemsRequest(originalBrowseOptions))
+              .dispatch({ type: CANCEL_FETCH_ITEMS })
+              .dispatch(fetchItemsRequest(newBrowseOptions))
+              .run({ silenceTimeout: true })
+          })
         })
       })
     })
@@ -483,6 +548,7 @@ describe('when handling the fetch items request action', () => {
           .provide([
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
             [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined],
+            [select(getWallet), undefined],
             [select(getLocation), { pathname }]
           ])
           .put(
@@ -504,6 +570,7 @@ describe('when handling the fetch items request action', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [select(getLocation), { pathname: '' }],
+          [select(getWallet), undefined],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
           [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
         ])
