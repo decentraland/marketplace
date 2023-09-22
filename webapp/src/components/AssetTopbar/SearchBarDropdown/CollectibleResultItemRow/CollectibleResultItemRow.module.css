@@ -1,0 +1,20 @@
+.collectibleItemRowContainer {
+  display: flex;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.itemDataContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.itemName {
+  font-weight: bold;
+  color: white;
+}
+
+.creator {
+  margin-top: 2px;
+  color: #a09ba8;
+}

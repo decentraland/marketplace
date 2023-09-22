@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import {
   Close,
@@ -28,6 +28,7 @@ import { Chip } from '../Chip'
 import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
 import styles from './AssetTopbar.module.css'
+import { SearchBarDropdown } from './SearchBarDropdown'
 
 export const AssetTopbar = ({
   search,
@@ -47,6 +48,7 @@ export const AssetTopbar = ({
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
   const category = section ? getCategoryFromSection(section) : undefined
+  console.log('category: ', category)
 
   const handleSearch = useCallback(
     (value: string) => {
@@ -56,11 +58,24 @@ export const AssetTopbar = ({
           section: category ? getSectionFromCategory(category) : section
         })
       }
+      setShouldRenderSearchDropdown(false)
     },
     [category, onBrowse, search, section]
   )
 
-  const [searchValue, setSearchValue] = useInput(search, handleSearch, 500)
+  const [searchValueForDropdown, setSearchValueForDropdown] = useState(search)
+
+  const handleSearch2 = useCallback(text => {
+    setSearchValueForDropdown(text)
+  }, [])
+
+  const handleClearSearch = useCallback(() => {
+    handleSearch('')
+    setSearchValueForDropdown('')
+  }, [handleSearch])
+
+  const [searchValue, setSearchValue] = useInput(search, handleSearch2, 500)
+  console.log('searchValue outside: ', searchValue)
 
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
@@ -107,6 +122,25 @@ export const AssetTopbar = ({
     ? sortBy
     : sortByOptions[0].value
 
+  const [shouldRenderSearchDropdown, setShouldRenderSearchDropdown] = useState(
+    false
+  )
+  const handleFieldClick = useCallback(() => {
+    console.log('clicked')
+    setShouldRenderSearchDropdown(true)
+  }, [])
+
+  const renderSearch = useCallback(() => {
+    return (
+      <SearchBarDropdown
+        category={category}
+        searchTerm={searchValueForDropdown}
+        onSearch={handleSearch}
+      />
+    )
+    // return <div className={styles.searchDropdown}> HI </div>
+  }, [category, handleSearch, searchValueForDropdown])
+
   return (
     <div className={styles.assetTopbar}>
       <div
@@ -123,9 +157,11 @@ export const AssetTopbar = ({
             onChange={setSearchValue}
             icon={<Icon name="search" className="searchIcon" />}
             iconPosition="left"
+            onClick={handleFieldClick}
           />
         )}
-        {searchValue ? <Close onClick={() => handleSearch('')} /> : null}
+        {shouldRenderSearchDropdown && renderSearch()}
+        {searchValue ? <Close onClick={handleClearSearch} /> : null}
         {isLandSection(section) && !isAccountView(view!) && (
           <div
             className={classNames(styles.mapToggle, { [styles.map]: isMap })}
