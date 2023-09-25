@@ -23,3 +23,5 @@ Contributing to the Marketplace is easy, you just need to go through the followi
 ## Copyright & License
 
 This repository is protected with a standard Apache 2 license. See the terms and conditions in the [LICENSE](https://github.com/decentraland/marketplace/blob/master/LICENSE) file.
+
+.
