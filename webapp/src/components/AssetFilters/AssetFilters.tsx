@@ -6,6 +6,7 @@ import {
   Rarity,
   WearableGender
 } from '@dcl/schemas'
+import { RarityFilter } from 'decentraland-dapps/dist/containers/RarityFilter'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { isLandSection } from '../../modules/ui/utils'
 import { AssetStatusFilter } from '../../utils/filters'
@@ -16,7 +17,6 @@ import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
 import EstateSizeFilter from './EstateSizeFilter'
 import CreatorsFilter from './CreatorsFilter'
-import { RarityFilter } from './RarityFilter'
 import { OnlySmartFilter } from './OnlySmartFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
@@ -290,6 +290,7 @@ export const AssetFilters = ({
       ) : null}
       {shouldRenderFilter(AssetFilter.Rarity) ? (
         <RarityFilter
+          className="filters-sidebar-box"
           onChange={handleRarityChange}
           rarities={rarities}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
