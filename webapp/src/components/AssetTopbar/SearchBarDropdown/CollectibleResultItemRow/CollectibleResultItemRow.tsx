@@ -7,11 +7,12 @@ import styles from './CollectibleResultItemRow.module.css'
 
 type CollectibleResultItemRowProps = {
   item: Item
+  onClick: (item: Item) => void
 }
 
-const CollectibleResultItemRow = ({ item }: CollectibleResultItemRowProps) => {
+const CollectibleResultItemRow = ({ item, onClick }: CollectibleResultItemRowProps) => {
   return (
-    <Link to={getAssetUrl(item)}>
+    <Link to={getAssetUrl(item)} onClick={() => onClick(item)}>
       <div className={styles.collectibleItemRowContainer}>
         <AssetImage asset={item} isSmall />
         <div className={styles.itemDataContainer}>

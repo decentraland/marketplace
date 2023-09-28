@@ -1,1 +1,4 @@
-export * from './SearchBarDropdown'
+import SearchBarDropdown from './SearchBarDropdown.container'
+export { SearchBarDropdown }
+
+

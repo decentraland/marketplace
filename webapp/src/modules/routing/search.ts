@@ -16,7 +16,7 @@ import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { isCatalogView, isCatalogViewWithStatusFilter } from './utils'
 
-const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
+export const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
 export function getDefaultOptionsByView(
   view?: View,

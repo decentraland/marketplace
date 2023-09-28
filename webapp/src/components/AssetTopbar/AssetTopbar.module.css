@@ -226,4 +226,8 @@
   .assetTopbar .infoRow {
     margin-bottom: 10px;
   }
+
+  .searchContainer :global(.dcl.close) {
+    right: 0;
+  }
 }

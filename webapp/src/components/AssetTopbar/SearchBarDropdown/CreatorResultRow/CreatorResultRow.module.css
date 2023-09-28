@@ -1,7 +1,12 @@
-.collectibleItemRowContainer {
+.creatorRowContainer {
   display: flex;
-  padding: 8px;
   align-items: center;
+  padding: 8px;
+}
+
+.creatorRowContainer :global(.dcl.avatar-face.tiny.inline) {
+  width: 30px;
+  height: 30px;
 }
 
 .itemDataContainer {
@@ -17,12 +22,4 @@
 .creator {
   margin-top: 2px;
   color: #a09ba8;
-}
-
-.collectibleItemRowContainer :global(.AssetImage) {
-  width: 30px;
-  height: 30px;
-  margin-right: 16px;
-  border-radius: 5px;
-  overflow: hidden;
 }

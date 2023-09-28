@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { NFTCategory } from '@dcl/schemas'
 import classNames from 'classnames'
 import {
   Close,
@@ -27,8 +28,8 @@ import trash from '../../images/trash.png'
 import { Chip } from '../Chip'
 import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
-import styles from './AssetTopbar.module.css'
 import { SearchBarDropdown } from './SearchBarDropdown'
+import styles from './AssetTopbar.module.css'
 
 export const AssetTopbar = ({
   search,
@@ -47,35 +48,50 @@ export const AssetTopbar = ({
   sortByOptions
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
+  const searchBarFieldRef = useRef<HTMLDivElement>(null)
   const category = section ? getCategoryFromSection(section) : undefined
-  console.log('category: ', category)
+  const [searchValueForDropdown, setSearchValueForDropdown] = useState(search)
+
+  const handleInputChange = useCallback(text => {
+    setSearchValueForDropdown(text)
+  }, [])
+  const [searchValue, setSearchValue] = useInput(search, handleInputChange, 500)
+
+  const handleClearSearch = useCallback(() => {
+    setSearchValue({ target: { value: '' } } as React.ChangeEvent<
+      HTMLInputElement
+    >)
+    setSearchValueForDropdown('') // clears the input
+
+    onBrowse({
+      search: ''
+    }) // triggers search with no search term
+  }, [onBrowse, setSearchValue])
 
   const handleSearch = useCallback(
-    (value: string) => {
-      if (search !== value) {
+    ({
+      value,
+      contractAddresses
+    }: {
+      value?: string
+      contractAddresses?: string[]
+    }) => {
+      if (value !== undefined && search !== value) {
         onBrowse({
           search: value,
           section: category ? getSectionFromCategory(category) : section
         })
+      } else if (contractAddresses && contractAddresses.length) {
+        onBrowse({
+          contracts: contractAddresses,
+          search: ''
+        })
+        handleClearSearch()
       }
       setShouldRenderSearchDropdown(false)
     },
-    [category, onBrowse, search, section]
+    [category, handleClearSearch, onBrowse, search, section]
   )
-
-  const [searchValueForDropdown, setSearchValueForDropdown] = useState(search)
-
-  const handleSearch2 = useCallback(text => {
-    setSearchValueForDropdown(text)
-  }, [])
-
-  const handleClearSearch = useCallback(() => {
-    handleSearch('')
-    setSearchValueForDropdown('')
-  }, [handleSearch])
-
-  const [searchValue, setSearchValue] = useInput(search, handleSearch2, 500)
-  console.log('searchValue outside: ', searchValue)
 
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
@@ -125,9 +141,23 @@ export const AssetTopbar = ({
   const [shouldRenderSearchDropdown, setShouldRenderSearchDropdown] = useState(
     false
   )
+
+  useEffect(() => {
+    setShouldRenderSearchDropdown(false)
+  }, [category])
+
   const handleFieldClick = useCallback(() => {
-    console.log('clicked')
-    setShouldRenderSearchDropdown(true)
+    setShouldRenderSearchDropdown(
+      category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE
+    )
+  }, [category])
+
+  const handleSearchBarDropdownClickOutside = useCallback(event => {
+    const containsClick = searchBarFieldRef.current?.contains(event.target)
+    console.log('containsClick: ', containsClick)
+    if (!containsClick) {
+      setShouldRenderSearchDropdown(false)
+    }
   }, [])
 
   const renderSearch = useCallback(() => {
@@ -136,13 +166,20 @@ export const AssetTopbar = ({
         category={category}
         searchTerm={searchValueForDropdown}
         onSearch={handleSearch}
+        onChange={handleInputChange}
+        onClickOutside={handleSearchBarDropdownClickOutside}
       />
     )
-    // return <div className={styles.searchDropdown}> HI </div>
-  }, [category, handleSearch, searchValueForDropdown])
+  }, [
+    category,
+    handleSearch,
+    handleInputChange,
+    handleSearchBarDropdownClickOutside,
+    searchValueForDropdown
+  ])
 
   return (
-    <div className={styles.assetTopbar}>
+    <div className={styles.assetTopbar} ref={searchBarFieldRef}>
       <div
         className={classNames(styles.searchContainer, {
           [styles.searchMap]: isMap
