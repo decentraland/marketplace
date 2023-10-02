@@ -220,12 +220,12 @@ export const SearchBarDropdown = ({
 
   // useEffect to track the event of the creators fetched by the search
   useEffect(() => {
-    if (fetchedCreators) {
+    if (fetchedCreators.length) {
       getAnalytics().track(events.SEARCH_RESULT, {
         tab: currentSearchTab,
         searchTerm,
         searchUUID,
-        creatores: fetchedCreators.map(creator => creator.address)
+        creators: fetchedCreators.map(creator => creator.address)
       })
     }
   }, [currentSearchTab, fetchedCreators, searchTerm, searchUUID])
