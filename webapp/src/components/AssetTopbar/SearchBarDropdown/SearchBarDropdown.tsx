@@ -36,6 +36,7 @@ function isItemRecentSearch(search: RecentSearch): search is Item {
 
 const LOCAL_STORAGE_RECENT_SEARCHES_KEY = 'marketplace_recent_searches'
 const MAX_AMOUNT_OF_RESULTS = 5
+const MAX_RECENT_RESULTS = 10
 
 // Defines a custom random namespace to create UUIDs
 const UUID_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341'
@@ -375,42 +376,57 @@ export const SearchBarDropdown = ({
           <div className={styles.recentSearchesTitle}>
             {t('search_dropdown.recent')}
           </div>
-          {recentSearches.reverse().map((recentSearch, index) => (
-            <div className={styles.recentSearchContainer} key={index}>
-              {isCollectionRecentSearch(recentSearch) ? (
-                <>
-                  <img src={clock} alt="clock" className={styles.recentIcon} />
-                  <CollectionResultRow
-                    key={recentSearch.contract_address}
-                    collection={recentSearch}
-                    onClick={() =>
-                      onSearch({
-                        contractAddresses: [recentSearch.contract_address]
-                      })
-                    }
-                  />
-                </>
-              ) : isCreatorRecentSearch(recentSearch) ? (
-                <>
-                  <img src={clock} alt="clock" className={styles.recentIcon} />
-                  <CreatorResultItemRow
-                    key={recentSearch.address}
-                    creator={recentSearch}
-                    onClick={handleSaveToLocalStorage}
-                  />
-                </>
-              ) : isItemRecentSearch(recentSearch) ? (
-                <>
-                  <img src={clock} alt="clock" className={styles.recentIcon} />
-                  <CollectibleResultItemRow
-                    item={recentSearch}
-                    onClick={handleSaveToLocalStorage}
-                  />
-                </>
-              ) : null}
-              <Close onClick={() => handleRemoveRecentSearch(recentSearch)} />
-            </div>
-          ))}
+          {[...recentSearches]
+            .reverse()
+            .splice(0, MAX_RECENT_RESULTS)
+            .map((recentSearch, index) => (
+              <div className={styles.recentSearchContainer} key={index}>
+                {isCollectionRecentSearch(recentSearch) ? (
+                  <>
+                    <img
+                      src={clock}
+                      alt="clock"
+                      className={styles.recentIcon}
+                    />
+                    <CollectionResultRow
+                      key={recentSearch.contract_address}
+                      collection={recentSearch}
+                      onClick={() =>
+                        onSearch({
+                          contractAddresses: [recentSearch.contract_address]
+                        })
+                      }
+                    />
+                  </>
+                ) : isCreatorRecentSearch(recentSearch) ? (
+                  <>
+                    <img
+                      src={clock}
+                      alt="clock"
+                      className={styles.recentIcon}
+                    />
+                    <CreatorResultItemRow
+                      key={recentSearch.address}
+                      creator={recentSearch}
+                      onClick={handleSaveToLocalStorage}
+                    />
+                  </>
+                ) : isItemRecentSearch(recentSearch) ? (
+                  <>
+                    <img
+                      src={clock}
+                      alt="clock"
+                      className={styles.recentIcon}
+                    />
+                    <CollectibleResultItemRow
+                      item={recentSearch}
+                      onClick={handleSaveToLocalStorage}
+                    />
+                  </>
+                ) : null}
+                <Close onClick={() => handleRemoveRecentSearch(recentSearch)} />
+              </div>
+            ))}
         </div>
       )
     }
