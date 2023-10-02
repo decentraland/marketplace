@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { v5 as uuidv5 } from 'uuid'
 import { Button, Close, Icon, Tabs } from 'decentraland-ui'
 import { Item, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import * as events from '../../../utils/events'
 import clock from '../../../images/clock.png'
 import { catalogAPI } from '../../../modules/vendor/decentraland/catalog/api'
 import { BuilderCollectionAttributes } from '../../../modules/vendor/decentraland/builder/types'
@@ -9,7 +12,7 @@ import { CreatorAccount } from '../../../modules/account/types'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
 import SearchBarDropdownOptionSkeleton from './SearchBarDropdownOptionSkeleton/SearchBarDropdownOptionSkeleton'
 import { SearchBarDropdownProps, SearchTab } from './SearchBarDropdown.types'
-import CreatorsResultItemRow from './CreatorResultRow/CreatorResultRow'
+import CreatorResultItemRow from './CreatorResultRow/CreatorResultRow'
 import CollectionResultRow from './CollectionResultRow/CollectionResultRow'
 import CollectibleResultItemRow from './CollectibleResultItemRow/CollectibleResultItemRow'
 import styles from './SearchBarDropdown.module.css'
@@ -32,7 +35,10 @@ function isItemRecentSearch(search: RecentSearch): search is Item {
 }
 
 const LOCAL_STORAGE_RECENT_SEARCHES_KEY = 'marketplace_recent_searches'
-const MAX_AMOUNT_OF_RESULTS = 10
+const MAX_AMOUNT_OF_RESULTS = 5
+
+// Defines a custom random namespace to create UUIDs
+const UUID_NAMESPACE = '1b671a64-40d5-491e-99b0-da01ff1f3341'
 
 export const SearchBarDropdown = ({
   searchTerm,
@@ -43,6 +49,15 @@ export const SearchBarDropdown = ({
   onFetchCreators,
   onClickOutside
 }: SearchBarDropdownProps) => {
+  const [searchUUID, setSearchUUID] = useState(
+    uuidv5(searchTerm, UUID_NAMESPACE)
+  )
+
+  // assigns a UUID to the search term to link the events of rendering the results with the search term selected
+  useEffect(() => {
+    setSearchUUID(uuidv5(searchTerm, UUID_NAMESPACE))
+  }, [searchTerm])
+
   const isSearchingWearables = category === NFTCategory.WEARABLE
   const isSearchingEmotes = category === NFTCategory.EMOTE
 
@@ -70,6 +85,7 @@ export const SearchBarDropdown = ({
           JSON.stringify(withNewSelection)
         )
         setRecentSearchs(withNewSelection)
+        // getAnalytics().track(events.LOAD_MORE, { page: newPage })
       }
     },
     [recentSearches]
@@ -95,11 +111,19 @@ export const SearchBarDropdown = ({
       currentSearchTab === SearchTab.WEARABLES
     ) {
       onSearch({ value: searchTerm })
+      getAnalytics().track(events.SEARCH_ALL, {
+        tab: currentSearchTab,
+        searchTerm
+      })
     } else if (currentSearchTab === SearchTab.COLLECTIONS) {
       const contractAddresses = (results as BuilderCollectionAttributes[]).map(
         collection => collection.contract_address
       )
       onSearch({ contractAddresses, value: '' })
+      getAnalytics().track(events.SEARCH_ALL, {
+        tab: currentSearchTab,
+        searchTerm
+      })
     }
   }, [currentSearchTab, onSearch, results, searchTerm])
 
@@ -137,13 +161,22 @@ export const SearchBarDropdown = ({
           .then(response => {
             if (!cancel) {
               setResults(response.data)
+              getAnalytics().track(events.SEARCH_RESULT, {
+                tab: currentSearchTab,
+                searchTerm,
+                searchUUID,
+                items: response.data.map(item => item.id)
+              })
             }
           })
-          .finally(() => !cancel && setIsLoading(false))
+          .finally(() => {
+            if (!cancel) {
+              setIsLoading(false)
+            }
+          })
           .catch(error => {
             console.error(error)
           })
-        // }
       } else if (currentSearchTab === SearchTab.CREATORS) {
         onFetchCreators(searchTerm)
       } else {
@@ -157,6 +190,14 @@ export const SearchBarDropdown = ({
             if (!cancel) {
               setResults(response)
             }
+            getAnalytics().track(events.SEARCH_RESULT, {
+              tab: currentSearchTab,
+              searchTerm,
+              searchUUID,
+              collections: response.map(
+                collection => collection.contract_address
+              )
+            })
           })
           .finally(() => !cancel && setIsLoading(false))
           .catch(error => {
@@ -173,8 +214,21 @@ export const SearchBarDropdown = ({
     searchTerm,
     isSearchingEmotes,
     isSearchingWearables,
+    searchUUID,
     onFetchCreators
   ])
+
+  // useEffect to track the event of the creators fetched by the search
+  useEffect(() => {
+    if (fetchedCreators) {
+      getAnalytics().track(events.SEARCH_RESULT, {
+        tab: currentSearchTab,
+        searchTerm,
+        searchUUID,
+        creatores: fetchedCreators.map(creator => creator.address)
+      })
+    }
+  }, [currentSearchTab, fetchedCreators, searchTerm, searchUUID])
 
   // tracks the click outside the main div and close suggestions if needed
   useEffect(() => {
@@ -192,14 +246,29 @@ export const SearchBarDropdown = ({
     }
   }, [onClickOutside])
 
+  const onCollectibleResultClick = useCallback(
+    (collectible, index) => {
+      handleSaveToLocalStorage(collectible)
+      getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
+        searchTerm,
+        item_id: collectible.id,
+        search_uuid: searchUUID,
+        item_position: index
+      })
+    },
+    [handleSaveToLocalStorage, searchTerm, searchUUID]
+  )
+
   const renderCollectiblesSearch = useCallback(() => {
     return (
       <>
-        {(results as Item[]).map(item => (
+        {(results as Item[]).map((item, index) => (
           <CollectibleResultItemRow
             key={item.id}
             item={item}
-            onClick={handleSaveToLocalStorage}
+            onClick={collectible =>
+              onCollectibleResultClick(collectible, index)
+            }
           />
         ))}
         <Button
@@ -213,16 +282,29 @@ export const SearchBarDropdown = ({
         </Button>
       </>
     )
-  }, [handleSaveToLocalStorage, handleSeeAll, results])
+  }, [handleSeeAll, onCollectibleResultClick, results])
+
+  const onCreatorsResultClick = useCallback(
+    (creator, index) => {
+      handleSaveToLocalStorage(creator)
+      getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
+        searchTerm,
+        wallet_id: creator.address,
+        search_uuid: searchUUID,
+        item_position: index
+      })
+    },
+    [handleSaveToLocalStorage, searchTerm, searchUUID]
+  )
 
   const renderCreatorsSearch = useCallback(() => {
     return (
       <>
-        {fetchedCreators.map(creator => (
-          <CreatorsResultItemRow
+        {fetchedCreators.map((creator, index) => (
+          <CreatorResultItemRow
             key={creator.address}
             creator={creator}
-            onClick={handleSaveToLocalStorage}
+            onClick={creator => onCreatorsResultClick(creator, index)}
           />
         ))}
         {fetchedCreators.length === 0 && !isLoadingCreators ? (
@@ -232,19 +314,30 @@ export const SearchBarDropdown = ({
         ) : null}
       </>
     )
-  }, [fetchedCreators, handleSaveToLocalStorage, isLoadingCreators])
+  }, [fetchedCreators, isLoadingCreators, onCreatorsResultClick])
+
+  const onCollectionResultClick = useCallback(
+    (collection, index) => {
+      onSearch({ contractAddresses: [collection.contract_address] })
+      handleSaveToLocalStorage(collection)
+      getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
+        searchTerm,
+        collection_id: collection.contract_address,
+        search_uuid: searchUUID,
+        item_position: index
+      })
+    },
+    [handleSaveToLocalStorage, onSearch, searchTerm, searchUUID]
+  )
 
   const renderCollectionsSearch = useCallback(() => {
     return (
       <>
-        {(results as BuilderCollectionAttributes[]).map(collection => (
+        {(results as BuilderCollectionAttributes[]).map((collection, index) => (
           <CollectionResultRow
             key={collection.contract_address}
             collection={collection}
-            onClick={contractAddress => {
-              onSearch({ contractAddresses: [contractAddress] })
-              handleSaveToLocalStorage(collection)
-            }}
+            onClick={() => onCollectionResultClick(collection, index)}
           />
         ))}
         {results.length === 0 && !isLoadingCreators ? (
@@ -254,7 +347,7 @@ export const SearchBarDropdown = ({
         ) : null}
       </>
     )
-  }, [handleSaveToLocalStorage, isLoadingCreators, onSearch, results])
+  }, [isLoadingCreators, onCollectionResultClick, results])
 
   const renderLoading = useCallback(() => {
     switch (currentSearchTab) {
@@ -283,7 +376,7 @@ export const SearchBarDropdown = ({
           <div className={styles.recentSearchesTitle}>
             {t('search_dropdown.recent')}
           </div>
-          {recentSearches.map((recentSearch, index) => (
+          {recentSearches.reverse().map((recentSearch, index) => (
             <div className={styles.recentSearchContainer} key={index}>
               {isCollectionRecentSearch(recentSearch) ? (
                 <>
@@ -291,15 +384,17 @@ export const SearchBarDropdown = ({
                   <CollectionResultRow
                     key={recentSearch.contract_address}
                     collection={recentSearch}
-                    onClick={contractAddress =>
-                      onSearch({ contractAddresses: [contractAddress] })
+                    onClick={() =>
+                      onSearch({
+                        contractAddresses: [recentSearch.contract_address]
+                      })
                     }
                   />
                 </>
               ) : isCreatorRecentSearch(recentSearch) ? (
                 <>
                   <img src={clock} alt="clock" className={styles.recentIcon} />
-                  <CreatorsResultItemRow
+                  <CreatorResultItemRow
                     key={recentSearch.address}
                     creator={recentSearch}
                     onClick={handleSaveToLocalStorage}

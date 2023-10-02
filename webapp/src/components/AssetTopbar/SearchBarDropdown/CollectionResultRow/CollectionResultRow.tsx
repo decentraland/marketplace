@@ -5,7 +5,7 @@ import styles from './CollectionResultRow.module.css'
 
 type CollectionResultRowProps = {
   collection: BuilderCollectionAttributes
-  onClick: (contractAddress: string) => void
+  onClick: () => void
 }
 
 const CollectionResultRow = ({
@@ -13,10 +13,7 @@ const CollectionResultRow = ({
   onClick
 }: CollectionResultRowProps) => {
   return (
-    <div
-      className={styles.collectionRowContainer}
-      onClick={() => onClick(collection.contract_address)}
-    >
+    <div className={styles.collectionRowContainer} onClick={onClick}>
       <div className={styles.image}>
         <CollectionImage contractAddress={collection.contract_address} />
       </div>
