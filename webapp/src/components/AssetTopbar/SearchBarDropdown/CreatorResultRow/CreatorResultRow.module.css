@@ -23,3 +23,13 @@
   margin-top: 2px;
   color: #a09ba8;
 }
+
+.creatorRowContainer :global(.Owner) {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.creatorRowContainer :global(.Profile.avatar.huge.inline .dcl.avatar-face.tiny.inline) {
+  margin-right: 16px;
+}

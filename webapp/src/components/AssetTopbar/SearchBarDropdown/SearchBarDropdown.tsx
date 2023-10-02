@@ -67,7 +67,7 @@ export const SearchBarDropdown = ({
   const [currentSearchTab, setCurrentSearchTab] = useState<SearchTab>(
     category === NFTCategory.WEARABLE ? SearchTab.WEARABLES : SearchTab.EMOTES
   )
-  const [recentSearches, setRecentSearchs] = useState<RecentSearch[]>(
+  const [recentSearches, setRecentSearches] = useState<RecentSearch[]>(
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY) || '[]')
   )
 
@@ -84,8 +84,7 @@ export const SearchBarDropdown = ({
           LOCAL_STORAGE_RECENT_SEARCHES_KEY,
           JSON.stringify(withNewSelection)
         )
-        setRecentSearchs(withNewSelection)
-        // getAnalytics().track(events.LOAD_MORE, { page: newPage })
+        setRecentSearches(withNewSelection)
       }
     },
     [recentSearches]
@@ -100,7 +99,7 @@ export const SearchBarDropdown = ({
         LOCAL_STORAGE_RECENT_SEARCHES_KEY,
         JSON.stringify(newRecentSearches)
       )
-      setRecentSearchs(newRecentSearches)
+      setRecentSearches(newRecentSearches)
     },
     [recentSearches]
   )

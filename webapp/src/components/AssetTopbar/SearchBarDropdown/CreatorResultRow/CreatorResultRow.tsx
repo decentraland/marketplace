@@ -4,6 +4,8 @@ import { locations } from '../../../../modules/routing/locations'
 import { CreatorAccount } from '../../../../modules/account/types'
 import { AssetType } from '../../../../modules/asset/types'
 import { Section } from '../../../../modules/vendor/decentraland'
+import { SortBy } from '../../../../modules/routing/types'
+import { VendorName } from '../../../../modules/vendor'
 import styles from './CreatorResultRow.module.css'
 
 type CreatorResultRowProps = {
@@ -17,12 +19,16 @@ const CreatorsResultItemRow = ({ creator, onClick }: CreatorResultRowProps) => {
       className={styles.creatorRowContainer}
       to={locations.account(creator.address, {
         assetType: AssetType.ITEM,
-        section: Section.WEARABLES
+        section: Section.WEARABLES,
+        vendor: VendorName.DECENTRALAND,
+        page: 1,
+        sortBy: SortBy.NEWEST
       })}
       onClick={() => onClick(creator)}
     >
       <div className="Owner">
-        <Profile size="huge" address={creator.address} />
+        <Profile size="huge" imageOnly address={creator.address} />
+        <span> {creator.name} </span>
       </div>
     </Link>
   )
