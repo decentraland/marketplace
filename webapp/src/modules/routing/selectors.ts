@@ -623,7 +623,9 @@ export const hasFiltersEnabled = createSelector<
     creators,
     rentalDays,
     status,
-    onlySmart
+    onlySmart,
+    emoteHasGeometry,
+    emoteHasSound
   } = browseOptions
   const isLand = isLandSection(section as Section)
 
@@ -665,6 +667,8 @@ export const hasFiltersEnabled = createSelector<
     !!minPrice ||
     !!maxPrice ||
     hasNotOnSaleFilter ||
+    emoteHasSound ||
+    emoteHasGeometry ||
     (!!status && status !== AssetStatusFilter.ON_SALE)
   )
 })
