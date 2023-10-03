@@ -262,27 +262,35 @@ export const SearchBarDropdown = ({
   const renderCollectiblesSearch = useCallback(() => {
     return (
       <>
-        {(results as Item[]).map((item, index) => (
-          <CollectibleResultItemRow
-            key={item.id}
-            item={item}
-            onClick={collectible =>
-              onCollectibleResultClick(collectible, index)
-            }
-          />
-        ))}
-        <Button
-          className={styles.seeAllButton}
-          inverted
-          fluid
-          onClick={handleSeeAll}
-        >
-          <Icon name="search" className="searchIcon" />
-          {t('search_dropdown.see_all_wearables')}
-        </Button>
+        {results.length ? (
+          <>
+            {(results as Item[]).map((item, index) => (
+              <CollectibleResultItemRow
+                key={item.id}
+                item={item}
+                onClick={collectible =>
+                  onCollectibleResultClick(collectible, index)
+                }
+              />
+            ))}
+            <Button
+              className={styles.seeAllButton}
+              inverted
+              fluid
+              onClick={handleSeeAll}
+            >
+              <Icon name="search" className="searchIcon" />
+              {t('search_dropdown.see_all_wearables')}
+            </Button>
+          </>
+        ) : !isLoading ? (
+          <span className={styles.searchEmpty}>
+            {t('search_dropdown.no_results')}
+          </span>
+        ) : null}
       </>
     )
-  }, [handleSeeAll, onCollectibleResultClick, results])
+  }, [handleSeeAll, isLoading, onCollectibleResultClick, results])
 
   const onCreatorsResultClick = useCallback(
     (creator, index) => {
@@ -300,13 +308,15 @@ export const SearchBarDropdown = ({
   const renderCreatorsSearch = useCallback(() => {
     return (
       <>
-        {fetchedCreators.splice(0, MAX_AMOUNT_OF_RESULTS).map((creator, index) => (
-          <CreatorResultItemRow
-            key={creator.address}
-            creator={creator}
-            onClick={creator => onCreatorsResultClick(creator, index)}
-          />
-        ))}
+        {fetchedCreators
+          .splice(0, MAX_AMOUNT_OF_RESULTS)
+          .map((creator, index) => (
+            <CreatorResultItemRow
+              key={creator.address}
+              creator={creator}
+              onClick={creator => onCreatorsResultClick(creator, index)}
+            />
+          ))}
         {fetchedCreators.length === 0 && !isLoadingCreators ? (
           <span className={styles.searchEmpty}>
             {t('search_dropdown.no_results')}
