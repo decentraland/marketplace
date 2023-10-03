@@ -300,7 +300,7 @@ export const SearchBarDropdown = ({
   const renderCreatorsSearch = useCallback(() => {
     return (
       <>
-        {fetchedCreators.map((creator, index) => (
+        {fetchedCreators.splice(0, MAX_AMOUNT_OF_RESULTS).map((creator, index) => (
           <CreatorResultItemRow
             key={creator.address}
             creator={creator}
