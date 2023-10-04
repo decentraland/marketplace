@@ -106,6 +106,9 @@ export const SearchBarDropdown = ({
   )
 
   const handleSeeAll = useCallback(() => {
+    if (!searchTerm) {
+      return
+    }
     if (
       currentSearchTab === SearchTab.EMOTES ||
       currentSearchTab === SearchTab.WEARABLES
