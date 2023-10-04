@@ -164,6 +164,7 @@
 
   .AssetBrowse .Row .right.Column {
     max-width: 100%;
+    overflow: visible; /* so it shows the absolute positioned elements */
   }
 
   .AssetBrowse .sidebar {
