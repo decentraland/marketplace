@@ -6,7 +6,7 @@
   position: absolute;
   max-height: 735px;
   top: 60px;
-  z-index: 6;
+  z-index: 1001; /* Loader has 1000, so this is should be above it */
   border-radius: 10px;
   padding: 16px;
   padding-top: 0;

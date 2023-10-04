@@ -51,10 +51,24 @@ export const AssetTopbar = ({
   const searchBarFieldRef = useRef<HTMLDivElement>(null)
   const category = section ? getCategoryFromSection(section) : undefined
   const [searchValueForDropdown, setSearchValueForDropdown] = useState(search)
+  const [shouldRenderSearchDropdown, setShouldRenderSearchDropdown] = useState(
+    false
+  )
 
-  const handleInputChange = useCallback(text => {
-    setSearchValueForDropdown(text)
-  }, [])
+  const handleInputChange = useCallback(
+    text => {
+      if (shouldRenderSearchDropdown) {
+        setSearchValueForDropdown(text)
+      } else if (text) {
+        // common search, when the dropdown is not opened
+        onBrowse({
+          search: text,
+          section: category ? getSectionFromCategory(category) : section
+        })
+      }
+    },
+    [category, onBrowse, section, shouldRenderSearchDropdown]
+  )
   const [searchValue, setSearchValue] = useInput(search, handleInputChange, 500)
 
   const handleClearSearch = useCallback(() => {
@@ -138,23 +152,21 @@ export const AssetTopbar = ({
     ? sortBy
     : sortByOptions[0].value
 
-  const [shouldRenderSearchDropdown, setShouldRenderSearchDropdown] = useState(
-    false
-  )
-
   useEffect(() => {
+    // when the category changes, close the dropdown
     setShouldRenderSearchDropdown(false)
   }, [category])
 
   const handleFieldClick = useCallback(() => {
+    // opens the dropdown on the field focus
     setShouldRenderSearchDropdown(
       category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE
     )
   }, [category])
 
   const handleSearchBarDropdownClickOutside = useCallback(event => {
+    // when clicking outside the dropdown, close it
     const containsClick = searchBarFieldRef.current?.contains(event.target)
-    console.log('containsClick: ', containsClick)
     if (!containsClick) {
       setShouldRenderSearchDropdown(false)
     }
@@ -186,19 +198,21 @@ export const AssetTopbar = ({
         })}
       >
         {!isMap && !isListsSection(section) && (
-          <Field
-            className={styles.searchField}
-            placeholder={t('nft_filters.search')}
-            kind="full"
-            value={searchValue}
-            onChange={setSearchValue}
-            icon={<Icon name="search" className="searchIcon" />}
-            iconPosition="left"
-            onClick={handleFieldClick}
-          />
+          <div className={styles.searchFieldContainer}>
+            <Field
+              className={styles.searchField}
+              placeholder={t('nft_filters.search')}
+              kind="full"
+              value={searchValue}
+              onChange={setSearchValue}
+              icon={<Icon name="search" className="searchIcon" />}
+              iconPosition="left"
+              onClick={handleFieldClick}
+            />
+            {searchValue ? <Close onClick={handleClearSearch} /> : null}
+          </div>
         )}
         {shouldRenderSearchDropdown && renderSearch()}
-        {searchValue ? <Close onClick={handleClearSearch} /> : null}
         {isLandSection(section) && !isAccountView(view!) && (
           <div
             className={classNames(styles.mapToggle, { [styles.map]: isMap })}

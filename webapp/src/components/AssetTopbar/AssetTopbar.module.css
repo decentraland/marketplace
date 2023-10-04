@@ -161,6 +161,14 @@
   right: 12px;
 }
 
+.searchFieldContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  justify-content: center;
+}
+
 .searchContainer.searchMap {
   align-self: flex-end;
   background-color: #16141a;
