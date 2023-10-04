@@ -312,7 +312,7 @@ export const SearchBarDropdown = ({
     return (
       <>
         {fetchedCreators
-          .splice(0, MAX_AMOUNT_OF_RESULTS)
+          .slice(0, MAX_AMOUNT_OF_RESULTS)
           .map((creator, index) => (
             <CreatorResultItemRow
               key={creator.address}
@@ -389,9 +389,9 @@ export const SearchBarDropdown = ({
           <div className={styles.recentSearchesTitle}>
             {t('search_dropdown.recent')}
           </div>
-          {[...recentSearches]
+          {recentSearches
             .reverse()
-            .splice(0, MAX_RECENT_RESULTS)
+            .slice(0, MAX_RECENT_RESULTS)
             .map((recentSearch, index) => (
               <div className={styles.recentSearchContainer} key={index}>
                 {isCollectionRecentSearch(recentSearch) ? (
