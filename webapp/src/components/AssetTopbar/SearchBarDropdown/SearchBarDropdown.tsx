@@ -283,7 +283,9 @@ export const SearchBarDropdown = ({
               onClick={handleSeeAll}
             >
               <Icon name="search" className="searchIcon" />
-              {t('search_dropdown.see_all_wearables')}
+              {isSearchingEmotes
+                ? t('search_dropdown.see_all_emotes')
+                : t('search_dropdown.see_all_wearables')}
             </Button>
           </>
         ) : !isLoading ? (
@@ -293,7 +295,13 @@ export const SearchBarDropdown = ({
         ) : null}
       </>
     )
-  }, [handleSeeAll, isLoading, onCollectibleResultClick, results])
+  }, [
+    handleSeeAll,
+    isLoading,
+    isSearchingEmotes,
+    onCollectibleResultClick,
+    results
+  ])
 
   const onCreatorsResultClick = useCallback(
     (creator, index) => {
