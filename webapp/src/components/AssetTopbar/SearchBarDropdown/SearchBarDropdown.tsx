@@ -397,7 +397,7 @@ export const SearchBarDropdown = ({
           <div className={styles.recentSearchesTitle}>
             {t('search_dropdown.recent')}
           </div>
-          {recentSearches
+          {[...recentSearches]
             .reverse()
             .slice(0, MAX_RECENT_RESULTS)
             .map((recentSearch, index) => (
