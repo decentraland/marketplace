@@ -178,14 +178,12 @@ export const AssetTopbar = ({
         category={category}
         searchTerm={searchValueForDropdown}
         onSearch={handleSearch}
-        onChange={handleInputChange}
         onClickOutside={handleSearchBarDropdownClickOutside}
       />
     )
   }, [
     category,
     handleSearch,
-    handleInputChange,
     handleSearchBarDropdownClickOutside,
     searchValueForDropdown
   ])

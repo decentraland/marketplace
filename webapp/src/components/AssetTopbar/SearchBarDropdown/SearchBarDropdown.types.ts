@@ -18,7 +18,6 @@ export type SearchBarDropdownProps = {
   }) => void
   fetchedCreators: CreatorAccount[]
   onFetchCreators: typeof fetchCreatorsAccountRequest
-  onChange: (creators?: string[]) => void
   isLoadingCreators: boolean
   onClickOutside: (event: MouseEvent) => void
 }
@@ -34,8 +33,6 @@ export type MapStateProps = Pick<
   SearchBarDropdownProps,
   'fetchedCreators' | 'isLoadingCreators'
 >
-
-export type OwnProps = Pick<SearchBarDropdownProps, 'onChange'>
 
 export type MapDispatchProps = Pick<SearchBarDropdownProps, 'onFetchCreators'>
 export type MapDispatch = Dispatch<FetchCreatorsAccountRequestAction>

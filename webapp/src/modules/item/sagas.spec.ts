@@ -24,7 +24,7 @@ import {
   buyAssetWithCard,
   BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
 } from '../asset/utils'
-import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
+import { waitForWalletConnectionAndIdentityIfConnecting } from '../wallet/utils'
 import {
   buyItemRequest,
   buyItemFailure,
@@ -432,7 +432,7 @@ describe('when handling the fetch items request action', () => {
             return expectSaga(itemSaga, getIdentity)
               .provide([
                 [
-                  matchers.call.fn(waitForWalletConnectionIfConnecting),
+                  matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
                   undefined
                 ],
                 [select(getWallet), wallet],
@@ -487,7 +487,7 @@ describe('when handling the fetch items request action', () => {
             return expectSaga(itemSaga, getIdentity)
               .provide([
                 [
-                  matchers.call.fn(waitForWalletConnectionIfConnecting),
+                  matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
                   undefined
                 ],
                 [select(getWallet), wallet],
@@ -547,7 +547,7 @@ describe('when handling the fetch items request action', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined],
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
             [select(getWallet), undefined],
             [select(getLocation), { pathname }]
           ])
@@ -572,7 +572,7 @@ describe('when handling the fetch items request action', () => {
           [select(getLocation), { pathname: '' }],
           [select(getWallet), undefined],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
-          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+          [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
         ])
         .put(fetchItemsFailure(anError.message, itemBrowseOptions))
         .dispatch(fetchItemsRequest(itemBrowseOptions))
@@ -586,7 +586,7 @@ describe('when handling the fetch items request action', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(ItemAPI.prototype.getOne), item],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
           ])
           .put(fetchItemSuccess(item))
           .put(fetchSmartWearableRequiredPermissionsRequest(item))
@@ -603,7 +603,7 @@ describe('when handling the fetch items request action', () => {
               matchers.call.fn(ItemAPI.prototype.getOne),
               Promise.reject(anError)
             ],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
           ])
           .put(
             fetchItemFailure(item.contractAddress, item.itemId, anError.message)
@@ -637,7 +637,7 @@ describe('when handling the fetch trending items request action', () => {
           .provide([
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
           ])
           .put(fetchTrendingItemsSuccess(fetchResult.data))
           .dispatch(fetchTrendingItemsRequest())
@@ -652,7 +652,7 @@ describe('when handling the fetch trending items request action', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
           ])
           .put(fetchTrendingItemsSuccess(fetchResult.data))
           .dispatch(fetchTrendingItemsRequest())
@@ -669,7 +669,7 @@ describe('when handling the fetch trending items request action', () => {
             matchers.call.fn(ItemAPI.prototype.getTrendings),
             Promise.reject(anError)
           ],
-          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+          [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
         ])
         .put(fetchTrendingItemsFailure(anError.message))
         .dispatch(fetchTrendingItemsRequest())
