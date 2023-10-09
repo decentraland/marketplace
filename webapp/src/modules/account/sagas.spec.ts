@@ -349,15 +349,16 @@ describe('when handling the request to fetch creators accounts', () => {
       })
       describe('and the term is different than the last search', () => {
         let total: number
+        let creators: CreatorAccount[]
         describe('and there are more results than the max requests allowed', () => {
           beforeEach(() => {
+            creators = fromProfilesToCreators(profiles, accounts)
             total = MAX_ENS_SEARCH_REQUESTS * DEFAULT_FIRST_VALUE + 1
-          })
-          it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
-            const creators = fromProfilesToCreators(profiles, accounts)
             creators.forEach(creator =>
               enhanceCreatorName(creator, nftResults, search)
             )
+          })
+          it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
             return expectSaga(accountSaga, lambdasClient)
               .provide([
                 [select(getCreatorsSearchQuery), null],
@@ -389,14 +390,15 @@ describe('when handling the request to fetch creators accounts', () => {
         })
         describe('and there are less results than the max requests allowed', () => {
           const REQUESTS_UNTIL_FILLED = 3
+          let creators: CreatorAccount[]
           beforeEach(() => {
+            creators = fromProfilesToCreators(profiles, accounts)
             total = nftResults.length * REQUESTS_UNTIL_FILLED
-          })
-          it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
-            const creators = fromProfilesToCreators(profiles, accounts)
             creators.forEach(creator =>
               enhanceCreatorName(creator, nftResults, search)
             )
+          })
+          it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
             return expectSaga(accountSaga, lambdasClient)
               .provide([
                 [select(getCreatorsSearchQuery), null],

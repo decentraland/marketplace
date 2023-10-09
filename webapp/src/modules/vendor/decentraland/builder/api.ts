@@ -15,6 +15,10 @@ class BuilderAPI extends BaseAPI {
     )
   }
 
+  publishedCollectionURL(searchTerm: string, limit: number) {
+    return `/collections?is_published=true&status=approved&q=${searchTerm}&limit=${limit}`
+  }
+
   fetchPublishedCollectionsBySearchTerm = async ({
     searchTerm,
     limit
@@ -22,10 +26,7 @@ class BuilderAPI extends BaseAPI {
     searchTerm: string
     limit: number
   }): Promise<BuilderCollectionAttributes[]> => {
-    return this.request(
-      'get',
-      `/collections?is_published=true&status=approved&q=${searchTerm}&limit=${limit}`
-    )
+    return this.request('get', this.publishedCollectionURL(searchTerm, limit))
   }
 
   contentUrl(hash: string) {

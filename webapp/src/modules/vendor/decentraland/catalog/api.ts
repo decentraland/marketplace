@@ -152,5 +152,4 @@ export class CatalogAPI extends BaseClient {
 export const catalogAPI = new CatalogAPI(NFT_SERVER_URL, {
   retries: retryParams.attempts,
   retryDelay: retryParams.delay
-  // identity: undefined
 })

@@ -24,7 +24,7 @@
   color: #a09ba8;
 }
 
-.creatorRowContainer :global(.Owner) {
+.creatorRowContainer .owner {
   display: flex;
   align-items: center;
   color: white;

@@ -26,7 +26,7 @@ const CreatorsResultItemRow = ({ creator, onClick }: CreatorResultRowProps) => {
       })}
       onClick={() => onClick(creator)}
     >
-      <div className="Owner">
+      <div className={styles.owner}>
         <Profile size="huge" imageOnly address={creator.address} />
         <span> {creator.name} </span>
       </div>
