@@ -39,12 +39,20 @@ export const FETCH_CREATORS_ACCOUNT_SUCCESS =
 export const FETCH_CREATORS_ACCOUNT_FAILURE =
   '[Failure] Fetch creators accounts'
 
-export const fetchCreatorsAccountRequest = (search: string) =>
-  action(FETCH_CREATORS_ACCOUNT_REQUEST, { search })
+export const fetchCreatorsAccountRequest = (
+  search: string,
+  searchUUID?: string
+) => action(FETCH_CREATORS_ACCOUNT_REQUEST, { search, searchUUID })
 export const fetchCreatorsAccountSuccess = (
   search: string,
-  creatorAccounts: CreatorAccount[]
-) => action(FETCH_CREATORS_ACCOUNT_SUCCESS, { search, creatorAccounts })
+  creatorAccounts: CreatorAccount[],
+  searchUUID?: string
+) =>
+  action(FETCH_CREATORS_ACCOUNT_SUCCESS, {
+    search,
+    creatorAccounts,
+    searchUUID
+  })
 export const fetchCreatorsAccountFailure = (search: string, error: string) =>
   action(FETCH_CREATORS_ACCOUNT_FAILURE, { search, error })
 

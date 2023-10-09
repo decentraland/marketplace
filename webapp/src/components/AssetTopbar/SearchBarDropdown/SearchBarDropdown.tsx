@@ -116,7 +116,8 @@ export const SearchBarDropdown = ({
       onSearch({ value: searchTerm })
       getAnalytics().track(events.SEARCH_ALL, {
         tab: currentSearchTab,
-        searchTerm
+        searchTerm,
+        searchUUID
       })
     } else if (currentSearchTab === SearchTab.COLLECTIONS) {
       const contractAddresses = (results as BuilderCollectionAttributes[]).map(
@@ -128,7 +129,7 @@ export const SearchBarDropdown = ({
         searchTerm
       })
     }
-  }, [currentSearchTab, onSearch, results, searchTerm])
+  }, [currentSearchTab, onSearch, results, searchTerm, searchUUID])
 
   // handle the enter key press and trigger the See all feature
   useEffect(() => {
@@ -181,7 +182,7 @@ export const SearchBarDropdown = ({
             console.error(error)
           })
       } else if (currentSearchTab === SearchTab.CREATORS) {
-        onFetchCreators(searchTerm)
+        onFetchCreators(searchTerm, searchUUID)
       } else {
         setIsLoading(true)
         builderAPI
@@ -220,18 +221,6 @@ export const SearchBarDropdown = ({
     searchUUID,
     onFetchCreators
   ])
-
-  // useEffect to track the event of the creators fetched by the search
-  useEffect(() => {
-    if (fetchedCreators.length) {
-      getAnalytics().track(events.SEARCH_RESULT, {
-        tab: currentSearchTab,
-        searchTerm,
-        searchUUID,
-        creators: fetchedCreators.map(creator => creator.address)
-      })
-    }
-  }, [currentSearchTab, fetchedCreators, searchTerm, searchUUID])
 
   // tracks the click outside the main div and close suggestions if needed
   useEffect(() => {

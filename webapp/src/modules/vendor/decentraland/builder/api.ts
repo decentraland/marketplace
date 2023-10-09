@@ -16,14 +16,15 @@ class BuilderAPI extends BaseAPI {
   }
 
   fetchPublishedCollectionsBySearchTerm = async ({
-    searchTerm
+    searchTerm,
+    limit
   }: {
     searchTerm: string
     limit: number
   }): Promise<BuilderCollectionAttributes[]> => {
     return this.request(
       'get',
-      `/collections?is_published=true&status=approved&q=${searchTerm}`
+      `/collections?is_published=true&status=approved&q=${searchTerm}&limit=${limit}`
     )
   }
 

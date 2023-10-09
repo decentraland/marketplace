@@ -22,8 +22,8 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchCreators: (search: string) =>
-    dispatch(fetchCreatorsAccountRequest(search))
+  onFetchCreators: (search: string, searchUUID?: string) =>
+    dispatch(fetchCreatorsAccountRequest(search, searchUUID))
 })
 
 export default connect(mapState, mapDispatch)(SearchBarDropdown)
