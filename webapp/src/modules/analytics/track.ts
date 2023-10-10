@@ -98,6 +98,10 @@ import {
   UpdateListSuccessAction
 } from '../favorites/actions'
 import { getCategoryInfo } from '../../utils/category'
+import {
+  FETCH_CREATORS_ACCOUNT_SUCCESS,
+  FetchCreatorsAccountSuccessAction
+} from '../account/actions'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -427,5 +431,16 @@ track<DeleteListFailureAction>(
   ({ payload: { list, error } }) => ({
     list,
     error
+  })
+)
+
+track<FetchCreatorsAccountSuccessAction>(
+  FETCH_CREATORS_ACCOUNT_SUCCESS,
+  events.SEARCH_RESULT,
+  ({ payload: { creatorAccounts, search, searchUUID } }) => ({
+    tab: 'creators',
+    searchTerm: search,
+    searchUUID,
+    creators: creatorAccounts.map(creator => creator.address)
   })
 )

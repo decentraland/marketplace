@@ -1,0 +1,6 @@
+export const RECENT_SEARCHES_DATA_TEST_ID = 'recent-searches'
+export const SKELETONS_DATA_TEST_ID = 'skeletons'
+export const COLLECTIBLE_DATA_TEST_ID = 'collectible'
+export const COLLECTION_ROW_DATA_TEST_ID = 'collection-row'
+export const SEE_ALL_COLLECTIBLES_DATA_TEST_ID = 'see-all-collectibles'
+export const NO_RESULTS_DATA_TEST_ID = 'no-results'

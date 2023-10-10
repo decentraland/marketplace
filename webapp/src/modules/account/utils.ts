@@ -43,13 +43,10 @@ export function enhanceCreatorName(
   search: string
 ) {
   if (!creator.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
-    const ensThatMatch = ens.find(
-      nft =>
-        nft.nft.owner === creator.address &&
-        nft.nft.name.toLowerCase().includes(search.toLocaleLowerCase())
-    )
-    if (ensThatMatch) {
-      creator.name = `${ensThatMatch.nft.name} (${t('global.currently')} ${
+    const ensThatMatches = ens.find(nft => nft.nft.owner === creator.address)
+    const hasADifferentName = ensThatMatches?.nft.name !== creator.name
+    if (ensThatMatches && hasADifferentName) {
+      creator.name = `${ensThatMatches.nft.name} (${t('global.currently')} ${
         creator.name
       })`
     }

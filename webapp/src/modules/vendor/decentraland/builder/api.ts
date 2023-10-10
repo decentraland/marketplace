@@ -1,5 +1,5 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { AddressesByTagResponse } from './types'
+import { AddressesByTagResponse, BuilderCollectionAttributes } from './types'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
 
@@ -13,6 +13,20 @@ class BuilderAPI extends BaseAPI {
       'get',
       `/addresses?${tags.map(tag => `tag=${tag}`).join('&')}`
     )
+  }
+
+  publishedCollectionURL(searchTerm: string, limit: number) {
+    return `/collections?is_published=true&status=approved&q=${searchTerm}&limit=${limit}`
+  }
+
+  async fetchPublishedCollectionsBySearchTerm({
+    searchTerm,
+    limit
+  }: {
+    searchTerm: string
+    limit: number
+  }): Promise<BuilderCollectionAttributes[]> {
+    return this.request('get', this.publishedCollectionURL(searchTerm, limit))
   }
 
   contentUrl(hash: string) {

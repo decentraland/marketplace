@@ -3,6 +3,17 @@
   position: relative;
 }
 
+.searchDropdown {
+  width: 100%;
+  background-color: red;
+  position: absolute;
+  height: 350px;
+  top: 60px;
+  z-index: 2;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
 .searchContainer :global(.dcl.field.full) {
   flex: 1;
 }
@@ -150,6 +161,14 @@
   right: 12px;
 }
 
+.searchFieldContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  justify-content: center;
+}
+
 .searchContainer.searchMap {
   align-self: flex-end;
   background-color: #16141a;
@@ -214,5 +233,9 @@
 
   .assetTopbar .infoRow {
     margin-bottom: 10px;
+  }
+
+  .searchContainer :global(.dcl.close) {
+    right: 0;
   }
 }

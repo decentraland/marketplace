@@ -69,3 +69,9 @@ export enum SHARE_LIST_TYPE {
   COPY_LINK = 'Copy link',
   TWITTER = 'Twitter'
 }
+
+// Search bar component
+
+export const SEARCH_RESULT = 'Search Result'
+export const SEARCH_RESULT_CLICKED = 'Search Result Clicked'
+export const SEARCH_ALL = 'Search all results'

@@ -70,6 +70,14 @@
     "actions": "行动",
     "action_required": "需要采取的行动"
   },
+  "search_dropdown": {
+    "recent": "最近的",
+    "creators": "创作者",
+    "collections": "收藏",
+    "see_all_wearables": "查看所有可穿戴结果",
+    "see_all_emotes": "查看所有表情结果",
+    "no_results": "尝试不同的词"
+  },
   "address": {
     "invalid_address": "这不是一个有效的地址",
     "ens_not_resolved": "这不是有效的 ENS 名称"

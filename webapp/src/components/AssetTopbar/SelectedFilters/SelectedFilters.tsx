@@ -47,9 +47,9 @@ export const SelectedFilters = ({
     emoteHasSound,
     emoteHasGeometry
   } = browseOptions
-  const [collection, setCollection] = useState<
-    Record<string, string> | undefined
-  >()
+  const [collections, setCollections] = useState<Record<string, string>[] | []>(
+    []
+  )
 
   const [selectedCreators, setSelectedCreators] = useState<
     Pick<CreatorAccount, 'address' | 'name'>[]
@@ -61,17 +61,20 @@ export const SelectedFilters = ({
       return collection
     }
 
-    if (contracts?.length && contracts[0] !== collection?.address) {
-      fetchData(contracts[0]).then(collection =>
-        setCollection({
-          address: collection.contractAddress,
-          name: collection.name
-        })
-      )
+    if (contracts?.length) {
+      const promises = contracts.map(contract => fetchData(contract))
+      Promise.all(promises).then(collections => {
+        setCollections(
+          collections.map(collection => ({
+            address: collection.contractAddress,
+            name: collection.name
+          }))
+        )
+      })
     } else if (!contracts?.length) {
-      setCollection(undefined)
+      setCollections([])
     }
-  }, [contracts, onlyOnSale, collection?.address])
+  }, [contracts, onlyOnSale])
 
   useEffect(() => {
     if (creators?.length) {
@@ -114,9 +117,14 @@ export const SelectedFilters = ({
     [creators, onBrowse]
   )
 
-  const handleDeleteCollection = useCallback(() => {
-    onBrowse({ contracts: [] })
-  }, [onBrowse])
+  const handleDeleteCollection = useCallback(
+    contract => {
+      onBrowse({
+        contracts: contracts?.filter(collection => collection !== contract)
+      })
+    },
+    [contracts, onBrowse]
+  )
 
   const handleDeleteNetwork = useCallback(() => {
     onBrowse({ network: undefined })
@@ -194,14 +202,14 @@ export const SelectedFilters = ({
           id="emoteHasSound"
           onDelete={handleDeleteEmoteHasSound}
         />
-      ): null}
+      ) : null}
       {emoteHasGeometry ? (
         <Pill
           label={t('nft_filters.emote_attributes.with_props')}
           id="emoteHasGeomtry"
           onDelete={handleDeleteEmoteHasGeometry}
         />
-      ): null}
+      ) : null}
       {rarities?.map(rarity => (
         <Pill
           key={rarity}
@@ -224,13 +232,16 @@ export const SelectedFilters = ({
           onDelete={handleDeleteOnlySmart}
         />
       ) : null}
-      {collection ? (
-        <Pill
-          label={collection.name}
-          id="collection"
-          onDelete={handleDeleteCollection}
-        />
-      ) : null}
+      {collections.length
+        ? collections.map(collection => (
+            <Pill
+              key={collection.address}
+              id={`collection-${collection.address}`}
+              label={collection.name}
+              onDelete={() => handleDeleteCollection(collection.address)}
+            />
+          ))
+        : null}
       {selectedCreators?.length
         ? selectedCreators.map(creator => (
             <Pill
