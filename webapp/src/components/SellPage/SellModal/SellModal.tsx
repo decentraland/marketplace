@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
+import isPast from 'date-fns/isPast'
 import formatDate from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
@@ -50,20 +51,18 @@ const SellModal = (props: Props) => {
 
   const isUpdate = order !== null
   const [price, setPrice] = useState<string>(
-    isUpdate ? ethers.utils.formatEther(order!.price) : ''
+    isUpdate && order ? ethers.utils.formatEther(order.price) : ''
   )
 
   const [expiresAt, setExpiresAt] = useState(() => {
-    let exp = order?.expiresAt
+    if (order) {
+      const expiresAt =
+        order.expiresAt.toString().length === 10
+          ? order.expiresAt * 1000
+          : order.expiresAt
 
-    if (isUpdate && exp) {
-      // If the order's expiration is in seconds, convert it to milliseconds
-      if (exp.toString().length === 10) {
-        exp = exp * 1000
-      }
-
-      if (isValid(exp)) {
-        return formatDate(addDays(exp, 1), INPUT_FORMAT)
+      if (isValid(expiresAt) && !isPast(expiresAt)) {
+        return formatDate(addDays(expiresAt, 1), INPUT_FORMAT)
       }
     }
 
