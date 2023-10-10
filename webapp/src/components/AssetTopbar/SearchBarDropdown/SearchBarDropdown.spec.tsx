@@ -200,12 +200,8 @@ describe('SearchBarDropdown', () => {
           })
         })
 
-        it('should have the correct asset url with in the result rendered', async () => {
-          const onSearch = jest.fn()
-          const { container } = renderSearchDropBarDropdown({
-            ...props,
-            onSearch
-          })
+        it('should have the correct asset url in the result rendered', async () => {
+          const { container } = renderSearchDropBarDropdown(props)
           await waitFor(async () => {
             expect(within(container).getByRole('link')).toHaveAttribute(
               'href',
@@ -214,12 +210,8 @@ describe('SearchBarDropdown', () => {
           })
         })
 
-        it('should have the save the result in the recent searches on the click event', async () => {
-          const onSearch = jest.fn()
-          const { container } = renderSearchDropBarDropdown({
-            ...props,
-            onSearch
-          })
+        it('should save the result in the recent searches on the click event', async () => {
+          const { container } = renderSearchDropBarDropdown(props)
           await waitFor(async () => {
             const link = within(container).getByRole('link')
             await fireEvent.click(link)
@@ -289,7 +281,6 @@ describe('SearchBarDropdown', () => {
         props: Partial<SearchBarDropdownProps> = {}
       ) => {
         const render = renderSearchDropBarDropdown(props)
-        render.debug()
         await waitFor(() => {
           const creatorsTab = render.getByText('Creators')
           fireEvent.click(creatorsTab)
@@ -314,14 +305,13 @@ describe('SearchBarDropdown', () => {
 
         it('should render the results', async () => {
           const render = await renderAndSelectCreatorsTab(props)
-          render.debug()
 
           await waitFor(() => {
             expect(render.getByText(MOCKED_CREATOR.name)).toBeInTheDocument()
           })
         })
 
-        it('should have the correct asset url with in the result rendered', async () => {
+        it('should have the correct asset url in the result rendered', async () => {
           const onSearch = jest.fn()
           const { container } = await renderAndSelectCreatorsTab({
             ...props,
@@ -341,7 +331,7 @@ describe('SearchBarDropdown', () => {
           })
         })
 
-        it('should have the save the result in the recent searches on the click event', async () => {
+        it('should save the result in the recent searches on the click event', async () => {
           const onSearch = jest.fn()
           const { container } = await renderAndSelectCreatorsTab({
             ...props,
@@ -387,7 +377,6 @@ describe('SearchBarDropdown', () => {
         props: Partial<SearchBarDropdownProps> = {}
       ) => {
         const render = renderSearchDropBarDropdown(props)
-        render.debug()
         await waitFor(() => {
           const creatorsTab = render.getByText('Collections')
           fireEvent.click(creatorsTab)
@@ -411,7 +400,6 @@ describe('SearchBarDropdown', () => {
 
         it('should render the results', async () => {
           const render = await renderAndSelectCollectionsTab(props)
-          render.debug()
 
           await waitFor(() => {
             expect(render.getByText(MOCKED_COLLECTION.name)).toBeInTheDocument()
@@ -435,20 +423,22 @@ describe('SearchBarDropdown', () => {
           })
         })
 
-        it('should have the save the result in the recent searches on the click event', async () => {
-          const onSearch = jest.fn()
-          const { container } = await renderAndSelectCollectionsTab({
-            ...props,
-            onSearch
-          })
-          await waitFor(async () => {
-            const collectionRow = within(container).getByTestId(
-              `${COLLECTION_ROW_DATA_TEST_ID}-${MOCKED_COLLECTION.name}`
-            )
-            await fireEvent.click(collectionRow)
-            expect(
-              localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)
-            ).toBe(JSON.stringify([MOCKED_COLLECTION]))
+        describe('when clicking the component', () => {
+          it('should save the result in the recent searches on the click event', async () => {
+            const onSearch = jest.fn()
+            const { container } = await renderAndSelectCollectionsTab({
+              ...props,
+              onSearch
+            })
+            await waitFor(async () => {
+              const collectionRow = within(container).getByTestId(
+                `${COLLECTION_ROW_DATA_TEST_ID}-${MOCKED_COLLECTION.name}`
+              )
+              await fireEvent.click(collectionRow)
+              expect(
+                localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)
+              ).toBe(JSON.stringify([MOCKED_COLLECTION]))
+            })
           })
         })
 
