@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import styles from './SearchBarDropdownOptionSkeleton.module.css'
+import { SKELETONS_DATA_TEST_ID } from '../constants'
 
 type SearchBarDropdownOptionSkeletonProps = {
   shape?: 'rect' | 'circle'
@@ -11,7 +12,10 @@ const SearchBarDropdownOptionSkeleton = ({
   lines = 2
 }: SearchBarDropdownOptionSkeletonProps) => {
   return (
-    <div className={styles.skeletonContainer}>
+    <div
+      className={styles.skeletonContainer}
+      data-testid={SKELETONS_DATA_TEST_ID}
+    >
       <div
         className={classNames(
           styles.assetImageSkeleton,

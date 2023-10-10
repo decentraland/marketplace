@@ -6,14 +6,20 @@ import styles from './CollectionResultRow.module.css'
 type CollectionResultRowProps = {
   collection: BuilderCollectionAttributes
   onClick: () => void
+  'data-testid'?: string
 }
 
 const CollectionResultRow = ({
   collection,
-  onClick
+  onClick,
+  'data-testid': dataTestId
 }: CollectionResultRowProps) => {
   return (
-    <div className={styles.collectionRowContainer} onClick={onClick}>
+    <div
+      className={styles.collectionRowContainer}
+      onClick={onClick}
+      data-testid={dataTestId}
+    >
       <div className={styles.image}>
         <CollectionImage contractAddress={collection.contract_address} />
       </div>

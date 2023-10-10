@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { v5 as uuidv5 } from 'uuid'
-import { Button, Close, Icon, Tabs } from 'decentraland-ui'
+import { Button, Close, Icon } from 'decentraland-ui'
+import { Tabs } from 'decentraland-ui/dist'
 import { Item, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -16,6 +17,13 @@ import CreatorResultItemRow from './CreatorResultRow/CreatorResultRow'
 import CollectionResultRow from './CollectionResultRow/CollectionResultRow'
 import CollectibleResultItemRow from './CollectibleResultItemRow/CollectibleResultItemRow'
 import styles from './SearchBarDropdown.module.css'
+import {
+  COLLECTIBLE_DATA_TEST_ID,
+  COLLECTION_ROW_DATA_TEST_ID,
+  NO_RESULTS_DATA_TEST_ID,
+  RECENT_SEARCHES_DATA_TEST_ID,
+  SEE_ALL_COLLECTIBLES_DATA_TEST_ID
+} from './constants'
 
 type Results = Item[] | BuilderCollectionAttributes[]
 type RecentSearch = CreatorAccount | BuilderCollectionAttributes | Item
@@ -34,7 +42,7 @@ function isItemRecentSearch(search: RecentSearch): search is Item {
   return 'itemId' in search
 }
 
-const LOCAL_STORAGE_RECENT_SEARCHES_KEY = 'marketplace_recent_searches'
+export const LOCAL_STORAGE_RECENT_SEARCHES_KEY = 'marketplace_recent_searches'
 const MAX_AMOUNT_OF_RESULTS = 5
 const MAX_RECENT_RESULTS = 10
 
@@ -258,6 +266,7 @@ export const SearchBarDropdown = ({
           <>
             {(results as Item[]).map((item, index) => (
               <CollectibleResultItemRow
+                data-testid={`${COLLECTIBLE_DATA_TEST_ID}-${item.name}`}
                 key={item.id}
                 item={item}
                 onClick={collectible =>
@@ -270,6 +279,7 @@ export const SearchBarDropdown = ({
               inverted
               fluid
               onClick={handleSeeAll}
+              data-testid={SEE_ALL_COLLECTIBLES_DATA_TEST_ID}
             >
               <Icon name="search" className="searchIcon" />
               {isSearchingEmotes
@@ -278,7 +288,10 @@ export const SearchBarDropdown = ({
             </Button>
           </>
         ) : !isLoading ? (
-          <span className={styles.searchEmpty}>
+          <span
+            className={styles.searchEmpty}
+            data-testid={NO_RESULTS_DATA_TEST_ID}
+          >
             {t('search_dropdown.no_results')}
           </span>
         ) : null}
@@ -348,6 +361,7 @@ export const SearchBarDropdown = ({
             key={collection.contract_address}
             collection={collection}
             onClick={() => onCollectionResultClick(collection, index)}
+            data-testid={`${COLLECTION_ROW_DATA_TEST_ID}-${collection.name}`}
           />
         ))}
         {results.length === 0 && !isLoadingCreators ? (
@@ -382,7 +396,10 @@ export const SearchBarDropdown = ({
   const renderRecentContent = useCallback(() => {
     if (recentSearches.length) {
       return (
-        <div className={styles.recentSearchesContainer}>
+        <div
+          className={styles.recentSearchesContainer}
+          data-testid={RECENT_SEARCHES_DATA_TEST_ID}
+        >
           <div className={styles.recentSearchesTitle}>
             {t('search_dropdown.recent')}
           </div>
@@ -515,7 +532,11 @@ export const SearchBarDropdown = ({
   }, [currentSearchTab, handleTabChange, isSearchingWearables])
 
   return recentSearches.length || searchTerm ? (
-    <div className={styles.searchBarDropdown} ref={dropdownContainerRef}>
+    <div
+      className={styles.searchBarDropdown}
+      ref={dropdownContainerRef}
+      data-testid="search-bar-dropdown"
+    >
       {searchTerm ? (
         <>
           {renderTabs()}

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Profile } from 'decentraland-dapps/dist/containers'
+import Profile from 'decentraland-dapps/dist/containers/Profile'
 import { locations } from '../../../../modules/routing/locations'
 import { CreatorAccount } from '../../../../modules/account/types'
 import { AssetType } from '../../../../modules/asset/types'
