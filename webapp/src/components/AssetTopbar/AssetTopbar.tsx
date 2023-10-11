@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { NFTCategory } from '@dcl/schemas'
 import classNames from 'classnames'
 import {
   Close,
@@ -27,6 +28,7 @@ import trash from '../../images/trash.png'
 import { Chip } from '../Chip'
 import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
+import { SearchBarDropdown } from './SearchBarDropdown'
 import styles from './AssetTopbar.module.css'
 
 export const AssetTopbar = ({
@@ -46,21 +48,64 @@ export const AssetTopbar = ({
   sortByOptions
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
+  const searchBarFieldRef = useRef<HTMLDivElement>(null)
   const category = section ? getCategoryFromSection(section) : undefined
+  const [searchValueForDropdown, setSearchValueForDropdown] = useState(search)
+  const [shouldRenderSearchDropdown, setShouldRenderSearchDropdown] = useState(
+    false
+  )
 
-  const handleSearch = useCallback(
-    (value: string) => {
-      if (search !== value) {
+  const handleInputChange = useCallback(
+    text => {
+      if (shouldRenderSearchDropdown) {
+        setSearchValueForDropdown(text)
+      } else if (text) {
+        // common search, when the dropdown is not opened
         onBrowse({
-          search: value,
+          search: text,
           section: category ? getSectionFromCategory(category) : section
         })
       }
     },
-    [category, onBrowse, search, section]
+    [category, onBrowse, section, shouldRenderSearchDropdown]
   )
+  const [searchValue, setSearchValue] = useInput(search, handleInputChange, 500)
 
-  const [searchValue, setSearchValue] = useInput(search, handleSearch, 500)
+  const handleClearSearch = useCallback(() => {
+    setSearchValue({ target: { value: '' } } as React.ChangeEvent<
+      HTMLInputElement
+    >)
+    setSearchValueForDropdown('') // clears the input
+
+    onBrowse({
+      search: ''
+    }) // triggers search with no search term
+  }, [onBrowse, setSearchValue])
+
+  const handleSearch = useCallback(
+    ({
+      value,
+      contractAddresses
+    }: {
+      value?: string
+      contractAddresses?: string[]
+    }) => {
+      if (value !== undefined && search !== value) {
+        onBrowse({
+          search: value,
+          section: category ? getSectionFromCategory(category) : section
+        })
+      } else if (contractAddresses && contractAddresses.length) {
+        onBrowse({
+          contracts: contractAddresses,
+          search: ''
+        })
+        handleClearSearch()
+      }
+      setShouldRenderSearchDropdown(false)
+    },
+    [category, handleClearSearch, onBrowse, search, section]
+  )
 
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
@@ -107,25 +152,65 @@ export const AssetTopbar = ({
     ? sortBy
     : sortByOptions[0].value
 
+  useEffect(() => {
+    // when the category changes, close the dropdown
+    setShouldRenderSearchDropdown(false)
+  }, [category])
+
+  const handleFieldClick = useCallback(() => {
+    // opens the dropdown on the field focus
+    setShouldRenderSearchDropdown(
+      category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE
+    )
+  }, [category])
+
+  const handleSearchBarDropdownClickOutside = useCallback(event => {
+    // when clicking outside the dropdown, close it
+    const containsClick = searchBarFieldRef.current?.contains(event.target)
+    if (!containsClick) {
+      setShouldRenderSearchDropdown(false)
+    }
+  }, [])
+
+  const renderSearch = useCallback(() => {
+    return (
+      <SearchBarDropdown
+        category={category}
+        searchTerm={searchValueForDropdown}
+        onSearch={handleSearch}
+        onClickOutside={handleSearchBarDropdownClickOutside}
+      />
+    )
+  }, [
+    category,
+    handleSearch,
+    handleSearchBarDropdownClickOutside,
+    searchValueForDropdown
+  ])
+
   return (
-    <div className={styles.assetTopbar}>
+    <div className={styles.assetTopbar} ref={searchBarFieldRef}>
       <div
         className={classNames(styles.searchContainer, {
           [styles.searchMap]: isMap
         })}
       >
         {!isMap && !isListsSection(section) && (
-          <Field
-            className={styles.searchField}
-            placeholder={t('nft_filters.search')}
-            kind="full"
-            value={searchValue}
-            onChange={setSearchValue}
-            icon={<Icon name="search" className="searchIcon" />}
-            iconPosition="left"
-          />
+          <div className={styles.searchFieldContainer}>
+            <Field
+              className={styles.searchField}
+              placeholder={t('nft_filters.search')}
+              kind="full"
+              value={searchValue}
+              onChange={setSearchValue}
+              icon={<Icon name="search" className="searchIcon" />}
+              iconPosition="left"
+              onClick={handleFieldClick}
+            />
+            {searchValue ? <Close onClick={handleClearSearch} /> : null}
+          </div>
         )}
-        {searchValue ? <Close onClick={() => handleSearch('')} /> : null}
+        {shouldRenderSearchDropdown && renderSearch()}
         {isLandSection(section) && !isAccountView(view!) && (
           <div
             className={classNames(styles.mapToggle, { [styles.map]: isMap })}

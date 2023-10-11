@@ -26,7 +26,8 @@ import {
   getDefaultOptionsByView,
   getURLParamArray,
   getURLParam,
-  getURLParamArray_nonStandard
+  getURLParamArray_nonStandard,
+  SEARCH_ARRAY_PARAM_SEPARATOR
 } from './search'
 import { BrowseOptions, PageName, SortBy, SortByOption } from './types'
 import { locations } from './locations'
@@ -308,7 +309,10 @@ export const getWearableGenders = createSelector<
 
 export const getContracts = createSelector<RootState, string, string[]>(
   getRouterSearch,
-  search => getURLParamArray<string>(search, 'contracts')
+  search =>
+    getURLParam<string>(search, 'contracts')?.split(
+      SEARCH_ARRAY_PARAM_SEPARATOR
+    ) || []
 )
 
 export const getCreators = createSelector<RootState, string, string[]>(
@@ -623,7 +627,9 @@ export const hasFiltersEnabled = createSelector<
     creators,
     rentalDays,
     status,
-    onlySmart
+    onlySmart,
+    emoteHasGeometry,
+    emoteHasSound
   } = browseOptions
   const isLand = isLandSection(section as Section)
 
@@ -665,6 +671,8 @@ export const hasFiltersEnabled = createSelector<
     !!minPrice ||
     !!maxPrice ||
     hasNotOnSaleFilter ||
+    emoteHasSound ||
+    emoteHasGeometry ||
     (!!status && status !== AssetStatusFilter.ON_SALE)
   )
 })

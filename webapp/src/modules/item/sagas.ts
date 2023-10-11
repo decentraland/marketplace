@@ -22,19 +22,17 @@ import {
 } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { isErrorWithMessage } from '../../lib/error'
 import { config } from '../../config'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
 import { buyAssetWithCard } from '../asset/utils'
 import { isCatalogView } from '../routing/utils'
-import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
+import { waitForWalletConnectionAndIdentityIfConnecting } from '../wallet/utils'
 import { retryParams } from '../vendor/decentraland/utils'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { locations } from '../routing/locations'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
-import { GENERATE_IDENTITY_SUCCESS } from '../identity/actions'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -65,8 +63,7 @@ import {
   fetchCollectionItemsSuccess,
   fetchCollectionItemsFailure,
   FETCH_COLLECTION_ITEMS_REQUEST,
-  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
-  FetchItemsFailureAction
+  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE
 } from './actions'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
@@ -119,9 +116,9 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     const { size } = action.payload
 
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
-    yield call(waitForWalletConnectionIfConnecting)
 
     try {
+      yield call(waitForWalletConnectionAndIdentityIfConnecting)
       const { data }: { data: Item[] } = yield call(
         [itemAPI, 'getTrendings'],
         size
@@ -168,37 +165,14 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     }
   }
 
-  function* waitForIdentityToBeGenerated(action: FetchItemsRequestAction) {
-    const {
-      wasFetchedCancelled
-    }: {
-      wasFetchedCancelled: FetchItemsFailureAction
-    } = yield race({
-      wasFetchedCancelled: take(CANCEL_FETCH_ITEMS),
-      identiyGenerated: take(GENERATE_IDENTITY_SUCCESS)
-    })
-    if (wasFetchedCancelled) {
-      yield put(
-        fetchItemsFailure(FETCH_ITEMS_CANCELLED_ERROR_MESSAGE, action.payload)
-      )
-    }
-  }
-
   function* handleFetchItemsRequest(
     action: FetchItemsRequestAction
   ): SagaIterator {
     const { filters, view } = action.payload
 
-    // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
-    yield call(waitForWalletConnectionIfConnecting)
-    const wallet: Wallet | undefined = yield select(getWallet)
-    const identity: AuthIdentity | undefined = yield select(getIdentity)
-
-    if (wallet && !identity) {
-      yield call(waitForIdentityToBeGenerated, action)
-    }
-
     try {
+      // If the wallet is getting connected, wait until it finishes to fetch the wallet and generate the identity so it can fetch them with authentication
+      yield call(waitForWalletConnectionAndIdentityIfConnecting)
       const api = isCatalogView(view) ? catalogAPI : itemAPI
       const { data, total }: { data: Item[]; total: number } = yield call(
         [api, 'get'],
@@ -226,9 +200,9 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     const { contractAddress, tokenId } = action.payload
 
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
-    yield call(waitForWalletConnectionIfConnecting)
 
     try {
+      yield call(waitForWalletConnectionAndIdentityIfConnecting)
       const item: Item = yield call(
         [itemAPI, 'getOne'],
         contractAddress,

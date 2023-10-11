@@ -72,6 +72,14 @@
     "actions": "Actions",
     "action_required": "Action required"
   },
+  "search_dropdown": {
+    "recent": "Recent",
+    "creators": "Creators",
+    "collections": "Collections",
+    "see_all_wearables": "See all wearable results",
+    "see_all_emotes": "See all emote results",
+    "no_results": "Try a different word"
+  },
   "address": {
     "invalid_address": "That's not a valid address",
     "ens_not_resolved": "That's not a valid ENS name"

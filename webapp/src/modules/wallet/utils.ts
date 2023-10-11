@@ -6,6 +6,10 @@ import {
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import {
+  GENERATE_IDENTITY_FAILURE,
+  GENERATE_IDENTITY_SUCCESS
+} from '../identity/actions'
 import { config } from '../../config'
 import { isConnecting } from './selectors'
 
@@ -47,12 +51,18 @@ export function formatBalance(balance: number) {
     : balance.toString()
 }
 
-export function* waitForWalletConnectionIfConnecting() {
+export function* waitForWalletConnectionAndIdentityIfConnecting() {
   const isConnectingToWallet: boolean = yield select(isConnecting)
   if (isConnectingToWallet) {
-    yield race({
+    const { success } = yield race({
       success: take(CONNECT_WALLET_SUCCESS),
       failure: take(CONNECT_WALLET_FAILURE)
     })
+    if (success) {
+      yield race({
+        success: take(GENERATE_IDENTITY_SUCCESS),
+        failure: take(GENERATE_IDENTITY_FAILURE)
+      })
+    }
   }
 }

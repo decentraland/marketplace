@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { ArrayFilter } from 'decentraland-ui/dist/components/ArrayFilter'
 import { EmotePlayMode } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
 import { Props } from './EmoteAttributesFilter.types'
 const WITH_SOUND_VALUE = 'sound'
 const WITH_GEOMETRY_VALUE = 'geometry'
@@ -108,15 +108,15 @@ export const EmoteAttributesFilter = ({
     >
       {isEmotesV2Enabled && (
         <ArrayFilter
+          className="Filters"
           options={emoteAttributesOptions}
-          name=""
           onChange={handleEmoteAttributesChange}
           values={emoteAttributes || []}
         />
       )}
       <ArrayFilter
+        className="Filters"
         options={emotePlayModeOptions}
-        name=""
         onChange={handlePlayModeChange}
         values={emotePlayMode || []}
       />

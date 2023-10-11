@@ -30,8 +30,10 @@ import {
   getSortByOptions,
   getStatus,
   hasFiltersEnabled,
-  getLatestVisitedLocation
+  getLatestVisitedLocation,
+  getContracts
 } from './selectors'
+import { SEARCH_ARRAY_PARAM_SEPARATOR } from './search'
 
 describe('when getting the latest visited location', () => {
   describe('and there is no previous location', () => {
@@ -430,6 +432,24 @@ describe('when there is a creator defined', () => {
 
   it('should return an array with the creator address', () => {
     expect(getCreators.resultFunc(url)).toEqual([anAddress])
+  })
+})
+
+describe('when there are contracts defined', () => {
+  let url: string
+  let contract1: string
+  let contract2: string
+  let contracts: string[]
+
+  beforeEach(() => {
+    contract1 = '0xAddress'
+    contract2 = '0xAnotherAddress'
+    contracts = [contract1, contract2]
+    url = `contracts=${contracts.join(SEARCH_ARRAY_PARAM_SEPARATOR)}`
+  })
+
+  it('should return an array with the contract addresses', () => {
+    expect(getContracts.resultFunc(url)).toEqual(contracts)
   })
 })
 

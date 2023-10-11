@@ -121,7 +121,9 @@ export function getClearedBrowseOptions(
     'adjacentToRoad',
     'creators',
     'rentalDays',
-    'status'
+    'status',
+    'emoteHasSound',
+    'emoteHasGeometry'
   ]
 
   const clearedBrowseOptions = fillWithUndefined

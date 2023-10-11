@@ -70,6 +70,14 @@
     "actions": "Acciones",
     "action_required": "Acción requerida"
   },
+  "search_dropdown": {
+    "recent": "Reciente",
+    "creators": "Creadores",
+    "collections": "Colecciones",
+    "see_all_wearables": "Ver todos los resultados de vestimenta",
+    "see_all_emotes": "Ver todos los resultados de emotes",
+    "no_results": "Intenta con otra palabra"
+  },
   "address": {
     "invalid_address": "Dirección inválida",
     "ens_not_resolved": "Nombre ENS inválido"
