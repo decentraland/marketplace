@@ -1,7 +1,14 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { matchPath, useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
-import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
+import {
+  BackToTopButton,
+  Container,
+  Mobile,
+  NotMobile,
+  Page,
+  Tabs
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -27,7 +34,6 @@ import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
 import { ClaimYourName } from '../ClaimYourName'
-import { BackToTopButton } from '../BackToTopButton'
 import { Props } from './AssetBrowse.types'
 import MapTopbar from './MapTopbar'
 import MapBrowse from './MapBrowse'

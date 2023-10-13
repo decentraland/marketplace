@@ -6,6 +6,7 @@ import {
   Rarity,
   WearableGender
 } from '@dcl/schemas'
+import { SmartWearableFilter } from 'decentraland-ui'
 import { RarityFilter } from 'decentraland-dapps/dist/containers/RarityFilter'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { isLandSection } from '../../modules/ui/utils'
@@ -17,7 +18,6 @@ import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
 import EstateSizeFilter from './EstateSizeFilter'
 import CreatorsFilter from './CreatorsFilter'
-import { OnlySmartFilter } from './OnlySmartFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
 import { CollectionFilter } from './CollectionFilter'
@@ -283,7 +283,7 @@ export const AssetFilters = ({
         />
       )}
       {shouldRenderFilter(AssetFilter.OnlySmart) ? (
-        <OnlySmartFilter
+        <SmartWearableFilter
           isOnlySmart={isOnlySmart}
           onChange={handleOnlySmartChange}
         />
