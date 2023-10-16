@@ -36,7 +36,6 @@ import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getIsMarketplaceServerEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
-import { GENERATE_IDENTITY_SUCCESS } from '../identity/actions'
 import {
   buyItemFailure,
   BuyItemRequestAction,
