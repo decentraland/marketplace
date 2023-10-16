@@ -3,6 +3,7 @@ import {
   openBuyManaWithFiatModalRequest,
   OpenBuyManaWithFiatModalRequestAction
 } from 'decentraland-dapps/dist/modules/gateway/actions'
+import { browse, BrowseAction } from '../../modules/routing/actions'
 
 export enum NavigationTab {
   OVERVIEW = 'overview',
@@ -23,12 +24,18 @@ export type Props = {
   onOpenBuyManaWithFiatModal: () => ReturnType<
     typeof openBuyManaWithFiatModalRequest
   >
+  onBrowse: typeof browse
 }
 
-export type MapDispatch = Dispatch<OpenBuyManaWithFiatModalRequestAction>
+export type MapDispatch = Dispatch<
+  OpenBuyManaWithFiatModalRequestAction | BrowseAction
+>
 
 export type MapStateProps = Pick<
   Props,
   'isCampaignBrowserEnabled' | 'isFullScreen'
 >
-export type MapDispatchProps = Pick<Props, 'onOpenBuyManaWithFiatModal'>
+export type MapDispatchProps = Pick<
+  Props,
+  'onOpenBuyManaWithFiatModal' | 'onBrowse'
+>

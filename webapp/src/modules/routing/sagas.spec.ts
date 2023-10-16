@@ -1249,41 +1249,16 @@ describe('when handling the location change action', () => {
       })
     })
   })
-  describe('and the location action is a PUSH', () => {
+  describe('and the location action is not a POP', () => {
     beforeEach(() => {
       locationChangeAction.payload.action = 'PUSH'
     })
-    describe('and the new location is the browse path', () => {
-      beforeEach(() => {
-        locationChangeAction.payload.location.pathname = locations.browse()
-      })
-      it('should dispatch the fetchAssetFromRoute action', () => {
-        return expectSaga(routingSaga)
-          .provide([
-            [select(getCurrentBrowseOptions), browseOptions],
-            [select(getSection), Section.WEARABLES],
-            [select(getPage), 1]
-          ])
-          .put(fetchAssetsFromRouteAction(browseOptions))
-          .dispatch(locationChangeAction)
-          .run({ silenceTimeout: true })
-      })
-    })
-    describe('and the new location is the browse path is not', () => {
-      beforeEach(() => {
-        locationChangeAction.payload.location.pathname = 'not the browse path'
-      })
-      it('should not dispatch the fetchAssetFromRoute action', () => {
-        return expectSaga(routingSaga)
-          .provide([
-            [select(getCurrentBrowseOptions), browseOptions],
-            [select(getSection), Section.WEARABLES],
-            [select(getPage), 1]
-          ])
-          .not.put(fetchAssetsFromRouteAction(browseOptions))
-          .dispatch(locationChangeAction)
-          .run({ silenceTimeout: true })
-      })
+    it('should not dispatch the fetchAssetFromRoute action', () => {
+      return expectSaga(routingSaga)
+        .provide([[select(getCurrentBrowseOptions), browseOptions]])
+        .not.put(fetchAssetsFromRouteAction(browseOptions))
+        .dispatch(locationChangeAction)
+        .run({ silenceTimeout: true })
     })
   })
 })
@@ -1568,13 +1543,11 @@ describe.each([
 
   it('should redirect to the default activity location when redirectTo is not present', () => {
     const location = { search: '' }
-    return (
-      expectSaga(routingSaga)
-        .provide([[select(getLocation), location]])
-        //@ts-ignore
-        .dispatch(action(...args))
-        .put(push(locations.activity()))
-        .run()
-    )
+    return expectSaga(routingSaga)
+      .provide([[select(getLocation), location]])
+      //@ts-ignore
+      .dispatch(action(...args))
+      .put(push(locations.activity()))
+      .run()
   })
 })

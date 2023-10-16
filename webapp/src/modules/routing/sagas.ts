@@ -158,25 +158,18 @@ export function* routingSaga() {
 }
 
 function* handleLocationChange(action: LocationChangeAction) {
-  let shouldFetchAssets = false
   // Re-triggers fetchAssetsFromRoute action when the user goes back
   if (
+    action.payload.action === 'POP' &&
     matchPath(action.payload.location.pathname, { path: locations.browse() })
   ) {
-    if (action.payload.action === 'POP') {
-      const latestVisitedLocation: ReturnType<typeof getLocation> = yield select(
-        getLatestVisitedLocation
-      )
-      const isComingFromBrowse = !!matchPath(latestVisitedLocation?.pathname, {
-        path: locations.browse()
-      })
-      if (isComingFromBrowse) {
-        shouldFetchAssets = true
-      }
-    } else if (action.payload.action === 'PUSH') {
-      shouldFetchAssets = true
-    }
-    if (shouldFetchAssets) {
+    const latestVisitedLocation: ReturnType<typeof getLocation> = yield select(
+      getLatestVisitedLocation
+    )
+    const isComingFromBrowse = !!matchPath(latestVisitedLocation?.pathname, {
+      path: locations.browse()
+    })
+    if (isComingFromBrowse) {
       const options: BrowseOptions = yield select(getCurrentBrowseOptions)
       yield put(fetchAssetsFromRouteAction(options))
     }
