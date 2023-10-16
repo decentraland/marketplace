@@ -3,7 +3,7 @@ import {
   openBuyManaWithFiatModalRequest,
   OpenBuyManaWithFiatModalRequestAction
 } from 'decentraland-dapps/dist/modules/gateway/actions'
-import { browse, BrowseAction } from '../../modules/routing/actions'
+import { clearFilters, ClearFiltersAction } from '../../modules/routing/actions'
 
 export enum NavigationTab {
   OVERVIEW = 'overview',
@@ -24,11 +24,11 @@ export type Props = {
   onOpenBuyManaWithFiatModal: () => ReturnType<
     typeof openBuyManaWithFiatModalRequest
   >
-  onBrowse: typeof browse
+  onClearFilters: typeof clearFilters
 }
 
 export type MapDispatch = Dispatch<
-  OpenBuyManaWithFiatModalRequestAction | BrowseAction
+  OpenBuyManaWithFiatModalRequestAction | ClearFiltersAction
 >
 
 export type MapStateProps = Pick<
@@ -37,5 +37,5 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onOpenBuyManaWithFiatModal' | 'onBrowse'
+  'onOpenBuyManaWithFiatModal' | 'onClearFilters'
 >

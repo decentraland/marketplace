@@ -21,7 +21,7 @@ const Navigation = (props: Props) => {
     isFullscreen,
     isCampaignBrowserEnabled,
     onOpenBuyManaWithFiatModal,
-    onBrowse
+    onClearFilters
   } = props
   const analytics = getAnalytics()
   const isMobile = useMobileMediaQuery()
@@ -72,12 +72,7 @@ const Navigation = (props: Props) => {
           ) : null}
           <Link
             to={locations.browse(browseDefaultOptions)}
-            onClick={() =>
-              onBrowse({
-                ...browseDefaultOptions,
-                search: ''
-              })
-            }
+            onClick={onClearFilters}
           >
             <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>
               {t('navigation.collectibles')}
