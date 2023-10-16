@@ -20,7 +20,8 @@ const Navigation = (props: Props) => {
     activeTab,
     isFullscreen,
     isCampaignBrowserEnabled,
-    onOpenBuyManaWithFiatModal
+    onOpenBuyManaWithFiatModal,
+    onClearFilters
   } = props
   const analytics = getAnalytics()
   const isMobile = useMobileMediaQuery()
@@ -28,6 +29,14 @@ const Navigation = (props: Props) => {
   const handleOpenBuyManaWithFiatModal = () => {
     analytics.track(events.OPEN_BUY_MANA_MODAL)
     onOpenBuyManaWithFiatModal()
+  }
+
+  const browseDefaultOptions = {
+    section: decentraland.Section.WEARABLES,
+    vendor: VendorName.DECENTRALAND,
+    page: 1,
+    sortBy: SortBy.NEWEST,
+    status: AssetStatusFilter.ON_SALE
   }
 
   return (
@@ -62,13 +71,8 @@ const Navigation = (props: Props) => {
             </Link>
           ) : null}
           <Link
-            to={locations.browse({
-              section: decentraland.Section.WEARABLES,
-              vendor: VendorName.DECENTRALAND,
-              page: 1,
-              sortBy: SortBy.NEWEST,
-              status: AssetStatusFilter.ON_SALE
-            })}
+            to={locations.browse(browseDefaultOptions)}
+            onClick={onClearFilters}
           >
             <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>
               {t('navigation.collectibles')}
