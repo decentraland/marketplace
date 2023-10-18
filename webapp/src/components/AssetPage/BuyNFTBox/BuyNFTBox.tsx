@@ -163,6 +163,7 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
             network={nft.network}
             tokenId={nft.tokenId}
             buyWithCardClassName={styles.buyWithCardClassName}
+            onBuyWithCrypto={() => {}}
           />
         ) : null}
         {canBid && !isOwner && (

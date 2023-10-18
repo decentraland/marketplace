@@ -11,6 +11,9 @@ module.exports = override(
     ),
     path.resolve('node_modules/@metamask/utils/node_modules/superstruct'),
     path.resolve(__dirname, 'node_modules/@walletconnect'),
-    path.resolve(__dirname, 'node_modules/@dcl/single-sign-on-client')
+    path.resolve(__dirname, 'node_modules/@dcl/single-sign-on-client'),
+    path.resolve(__dirname, 'node_modules/@0xsquid/sdk'),
+    path.resolve(__dirname, 'node_modules/@cosmjs'),
+    path.resolve(__dirname, 'node_modules/cosmjs-types')
   ])
 )

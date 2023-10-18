@@ -527,6 +527,7 @@
       "update_listing": "Update listing",
       "buy": "Buy",
       "buy_with_mana": "Buy with MANA",
+      "buy_with_crypto": "Buy with Crypto",
       "get_mana": "Get MANA",
       "buy_with_card": "Buy with card",
       "mint": "Mint",
@@ -824,6 +825,17 @@
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}.",
     "regions_where_operates": "regions where Transak operates",
     "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
+  },
+  "buy_with_crypto": {
+    "title": "Buying {name}",
+    "subtitle": "You are about to buy {name} for {amount}.",
+    "balance": "Balance",
+    "buy_with_token": "Buy with {token}",
+    "select_a_token": "Select a token to buy",
+    "summary": "Summary",
+    "exchange_rate": "Exchange Rate: 1 {symbol} = {manaAmount} MANA",
+    "fetching_route": "Calculating route...",
+    "insufficient_funds": "You don't have enough {token} balance..."
   },
   "partially_supported_network_card": {
     "content": "You are connected to the Polygon Network for purchasing items below <mana>1</mana>. You will need to have MATIC in your wallet to cover the transaction fee for this purchase."

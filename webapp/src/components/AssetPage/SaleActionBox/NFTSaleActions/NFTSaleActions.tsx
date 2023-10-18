@@ -54,6 +54,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet, onLeavingSite }: Props) => {
               contractAddress={nft.contractAddress}
               network={nft.network}
               tokenId={nft.tokenId}
+              onBuyWithCrypto={() => {}}
             />
             {canBid ? (
               <Button

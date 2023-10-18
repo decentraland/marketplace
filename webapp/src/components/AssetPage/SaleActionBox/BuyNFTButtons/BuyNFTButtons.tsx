@@ -15,7 +15,8 @@ const BuyNFTButtons = ({
   network,
   tokenId,
   itemId,
-  buyWithCardClassName
+  buyWithCardClassName,
+  onBuyWithCrypto
 }: Props) => {
   const assetId = tokenId || itemId
 
@@ -27,6 +28,10 @@ const BuyNFTButtons = ({
 
   return (
     <>
+      <Button onClick={onBuyWithCrypto} primary fluid>
+        <Mana showTooltip inline size="small" network={network} />
+        {t('asset_page.actions.buy_with_crypto')}
+      </Button>
       <Button
         as={Link}
         to={locations.buy(assetType, contractAddress, assetId)}

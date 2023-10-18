@@ -8,6 +8,5 @@ export type Props = {
   tokenId?: string
   itemId?: string
   buyWithCardClassName?: string
+  onBuyWithCrypto: () => void
 }
-
-export type OwnProps = Props

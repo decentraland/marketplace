@@ -8,7 +8,12 @@ import { BuyNFTButtons } from '../BuyNFTButtons'
 import styles from './ItemSaleActions.module.css'
 import { Props } from './ItemSaleActions.types'
 
-const ItemSaleActions = ({ item, wallet, customClassnames }: Props) => {
+const ItemSaleActions = ({
+  item,
+  wallet,
+  customClassnames,
+  onBuyWithCrypto
+}: Props) => {
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
   const builderCollectionUrl = getBuilderCollectionDetailUrl(
@@ -52,6 +57,7 @@ const ItemSaleActions = ({ item, wallet, customClassnames }: Props) => {
             network={item.network}
             itemId={item.itemId}
             buyWithCardClassName={customClassnames?.buyWithCardClassName}
+            onBuyWithCrypto={onBuyWithCrypto}
           />
         )
       )}

@@ -1,0 +1,58 @@
+.dropdown_container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.balance_container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--secondary-text);
+}
+
+.dcl_dropdown {
+  background: var(--text);
+  color: var(--background);
+  border-radius: 20px;
+  padding: 6px;
+}
+
+.dcl_dropdown:global(.ui.dropdown .menu .item) {
+  display: flex;
+  align-items: center;
+}
+
+.dcl_dropdown:global(.ui.dropdown .menu .item) {
+  display: flex;
+  align-items: center;
+}
+
+.dcl_dropdown:global(.ui.dropdown > .text) {
+  color: var(--black);
+}
+
+.dcl_dropdown :global(.ui.avatar.image) {
+  width: 25px;
+  height: 25px;
+  margin-top: 0px;
+}
+
+.dcl_dropdown:global(.ui.dropdown > .text > .image) {
+  width: 25px;
+  height: 25px;
+  margin-top: 0px;
+}
+
+.summaryContainer {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: var(--secondary-text);
+}
+
+.insufficientFunds {
+  color: red;
+  font-size: 14px;
+}
