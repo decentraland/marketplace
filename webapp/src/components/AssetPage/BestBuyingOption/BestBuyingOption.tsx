@@ -277,7 +277,7 @@ const BestBuyingOption = ({ asset, tableRef, onBuyWithCrypto }: Props) => {
             network={asset.network}
             tokenId={listing.order.tokenId}
             buyWithCardClassName={styles.buyWithCardClassName}
-            onBuyWithCrypto={onBuyWithCrypto}
+            onBuyWithCrypto={() => onBuyWithCrypto(listing.order)}
           />
           <Button
             as={Link}

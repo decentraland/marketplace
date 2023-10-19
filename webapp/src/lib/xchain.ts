@@ -236,9 +236,6 @@ export class AxelarProvider implements XChainProvider {
       toChain
     ).address
 
-    const args = [collectionAddress, [itemId], [price], [fromAddress]]
-    console.log('args: ', args)
-
     return this.squid.getRoute({
       fromAddress,
       fromAmount,

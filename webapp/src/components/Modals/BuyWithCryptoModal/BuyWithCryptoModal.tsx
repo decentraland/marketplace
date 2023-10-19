@@ -1,11 +1,12 @@
-import { ChainId } from '@dcl/schemas'
+import React, { useEffect, useState } from 'react'
+import classNames from 'classnames'
 import { Squid } from '@0xsquid/sdk'
 import {
   ChainData,
   TokenData as Token,
   RouteResponse
 } from '@0xsquid/sdk/dist/types'
-import React, { useEffect, useState } from 'react'
+import { ChainId } from '@dcl/schemas'
 import { Button, Dropdown, ModalNavigation } from 'decentraland-ui'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -44,7 +45,11 @@ export type ProviderChain = ChainData
 export type ProviderToken = Token
 
 const BuyWithCryptoModal = (props: Props) => {
-  const { wallet, onClose, metadata } = props
+  const {
+    wallet,
+    onClose,
+    metadata: { asset, order }
+  } = props
 
   const [squid, setSquid] = useState<Squid>()
   const [selectedChain, setSelectedChain] = useState(
@@ -56,13 +61,11 @@ const BuyWithCryptoModal = (props: Props) => {
     DEFAULT_TOKEN_BY_CHAIN[DEFAULT_CHAIN]
   )
   const [selectedTokenPrice, setSelectedTokenPrice] = useState<number>()
-  console.log('selectedTokenPrice: ', selectedTokenPrice)
   const [isLoading, setIsLoading] = useState({ balance: false, route: false })
   const [selectedTokenBalance, setSelectedTokenBalance] = useState<BigNumber>()
   const [route, setRoute] = useState<RouteResponse>()
+  console.log('route: ', route)
   const [canBuyItem, setCanBuyItem] = useState(false)
-
-  const { asset } = metadata
 
   // fetch chains & supported tokens
   useEffect(() => {
@@ -184,7 +187,7 @@ const BuyWithCryptoModal = (props: Props) => {
   useEffect(() => {
     let cancel = false
     ;(async () => {
-      if (squid && squid.initialized && wallet && !isNFT(asset)) {
+      if (squid && squid.initialized && wallet) {
         const selectedTokenPrice = await squid.getTokenPrice({
           tokenAddress: selectedToken.address,
           chainId: selectedToken.chainId
@@ -201,29 +204,56 @@ const BuyWithCryptoModal = (props: Props) => {
 
         setIsLoading(prevState => ({ ...prevState, route: true }))
         const xChainProvider = new AxelarProvider()
+        let route: RouteResponse | undefined = undefined
+
         const fromAmount =
-          (Number(ethers.utils.formatEther(asset.price)) * manaPrice) /
+          (Number(
+            ethers.utils.formatEther(
+              order ? order.price : !isNFT(asset) ? asset.price : ''
+            )
+          ) *
+            manaPrice) /
           selectedTokenPrice
         const fromAmountWei = ethers.utils
-          .parseUnits(fromAmount.toFixed(6))
+          .parseUnits(fromAmount.toFixed(6), selectedToken.decimals)
           .toString()
 
-        const route = await xChainProvider.getMintNFTRoute({
+        const baseRouteConfig = {
           fromAddress: wallet.address,
           fromAmount: fromAmountWei,
           fromChain: selectedChain,
-          fromToken: selectedToken.address,
-          item: {
-            collectionAddress: asset.contractAddress,
-            itemId: asset.itemId,
-            price: asset.price
-          },
-          toAmount: asset.price,
-          toChain: asset.chainId
-        })
+          fromToken: selectedToken.address
+        }
+        // there's an order so it's buying an NFT
+        if (order) {
+          route = await xChainProvider.getBuyNFTRoute({
+            ...baseRouteConfig,
+            nft: {
+              collectionAddress: order.contractAddress,
+              tokenId: order.tokenId,
+              price: order.price
+            },
+            toAmount: order.price,
+            toChain: order.chainId
+          })
+        } else if (!isNFT(asset)) {
+          // buying an item
+          route = await xChainProvider.getMintNFTRoute({
+            ...baseRouteConfig,
+            item: {
+              collectionAddress: asset.contractAddress,
+              itemId: asset.itemId,
+              price: asset.price
+            },
+            toAmount: asset.price,
+            toChain: asset.chainId
+          })
+        }
 
         if (!cancel) {
-          setRoute(route)
+          if (route) {
+            setRoute(route)
+          }
           setIsLoading(prevState => ({ ...prevState, route: false }))
         }
       }
@@ -231,7 +261,15 @@ const BuyWithCryptoModal = (props: Props) => {
     return () => {
       cancel = true
     }
-  }, [asset, selectedChain, selectedToken, selectedTokenBalance, squid, wallet])
+  }, [
+    asset,
+    order,
+    selectedChain,
+    selectedToken,
+    selectedTokenBalance,
+    squid,
+    wallet
+  ])
 
   return (
     <Modal size="tiny" onClose={onClose}>
@@ -248,7 +286,9 @@ const BuyWithCryptoModal = (props: Props) => {
             name: asset.name,
             amount: (
               <Mana showTooltip network={asset.network} inline withTooltip>
-                {formatWeiMANA(isNFT(asset) ? '' : asset.price)}
+                {formatWeiMANA(
+                  order ? order.price : !isNFT(asset) ? asset.price : ''
+                )}
               </Mana>
             )
           })}
@@ -264,7 +304,7 @@ const BuyWithCryptoModal = (props: Props) => {
               onChange={(_, data) => setSelectedChain(data.value as any)}
             />
             <Dropdown
-              className={styles.dcl_dropdown}
+              className={classNames(styles.dcl_dropdown, styles.token_dropdown)}
               search
               scrolling
               value={selectedToken.address}
@@ -297,7 +337,7 @@ const BuyWithCryptoModal = (props: Props) => {
         {isLoading.route ? (
           <div>{t('buy_with_crypto.fetching_route')}</div>
         ) : null}
-        {route ? (
+        {route && !isLoading.route ? (
           <div className={styles.summaryContainer}>
             <span>{t('buy_with_crypto.summary')}</span>
             <span>
@@ -306,6 +346,30 @@ const BuyWithCryptoModal = (props: Props) => {
                 manaAmount: route.route.estimate.exchangeRate?.slice(0, 7)
               })}
             </span>
+            <span>
+              {t('buy_with_crypto.route.estimated_route_duration', {
+                duration: route.route.estimate.estimatedRouteDuration
+              })}
+            </span>
+            {route.route.estimate.gasCosts.map((gasCost, index) => (
+              <span key={index}>
+                {t('buy_with_crypto.route.gas_cost_in_token', {
+                  cost: ethers.utils.formatEther(gasCost.amount).slice(0, 6),
+                  token: gasCost.token.symbol,
+                  costInUSD: gasCost.amountUSD
+                })}
+              </span>
+            ))}
+            {route.route.estimate.feeCosts.map(feeCost => (
+              <span key={feeCost.name}>
+                {t('buy_with_crypto.route.fee_cost', {
+                  feeName: feeCost.name,
+                  cost: ethers.utils.formatEther(feeCost.amount).slice(0, 6),
+                  token: feeCost.token.symbol,
+                  costInUSD: feeCost.amountUSD
+                })}
+              </span>
+            ))}
           </div>
         ) : null}
         {!canBuyItem ? (

@@ -56,3 +56,18 @@
   color: red;
   font-size: 14px;
 }
+
+.token_dropdown:global(.ui.dropdown > .dropdown.icon) {
+  margin-left: auto;
+  align-self: center;
+  margin-right: 6px;
+}
+
+.token_dropdown:global(.ui.search.dropdown) {
+  width: 150px;
+  display: flex;
+}
+
+.token_dropdown:global(.ui.dropdown.scrolling .menu) {
+  width: 100% !important; /* semantic ui has auto!important; */
+}

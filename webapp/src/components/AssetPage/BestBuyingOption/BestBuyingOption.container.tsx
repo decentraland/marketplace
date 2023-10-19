@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { Order } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import {
   OwnProps,
@@ -11,10 +12,11 @@ const mapDispatch = (
   dispatch: MapDispatch,
   ownProps: OwnProps
 ): MapDispatchProps => ({
-  onBuyWithCrypto: () =>
+  onBuyWithCrypto: (order?: Order) =>
     dispatch(
       openModal('BuyWithCryptoModal', {
-        asset: ownProps.asset
+        asset: ownProps.asset,
+        order
       })
     )
 })

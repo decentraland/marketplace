@@ -1,12 +1,13 @@
 import { RefObject } from 'react'
 import { Dispatch } from 'redux'
+import { Order } from '@dcl/schemas'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
   asset: Asset | null
   tableRef?: RefObject<HTMLDivElement> | null
-  onBuyWithCrypto: () => void
+  onBuyWithCrypto: (order?: Order) => void
 }
 
 export enum BuyOptions {

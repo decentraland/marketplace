@@ -835,7 +835,12 @@
     "summary": "Summary",
     "exchange_rate": "Exchange Rate: 1 {symbol} = {manaAmount} MANA",
     "fetching_route": "Calculating route...",
-    "insufficient_funds": "You don't have enough {token} balance..."
+    "insufficient_funds": "You don't have enough {token} balance...",
+    "route": {
+      "estimated_route_duration": "Estimated route duration: {duration}s",
+      "gas_cost_in_token": "Gas cost: {cost} {token} ({costInUSD} USD)",
+      "fee_cost": "{feeName}: {cost} {token} ({costInUSD} USD)"
+    }
   },
   "partially_supported_network_card": {
     "content": "You are connected to the Polygon Network for purchasing items below <mana>1</mana>. You will need to have MATIC in your wallet to cover the transaction fee for this purchase."
