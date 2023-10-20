@@ -1,6 +1,10 @@
 import { ethers } from 'ethers'
 import { Squid } from '@0xsquid/sdk'
-import { RouteResponse, SquidCallType } from '@0xsquid/sdk/dist/types'
+import {
+  RouteResponse,
+  SquidCallType,
+  ChainType
+} from '@0xsquid/sdk/dist/types'
 import { ChainId } from '@dcl/schemas'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -50,9 +54,11 @@ export class AxelarProvider implements XChainProvider {
 
   constructor() {
     this.squid = new Squid({
-      baseUrl: 'https://api.squidrouter.com',
+      baseUrl: 'https://v2.api.squidrouter.com',
+      // baseUrl: 'https://api.squidrouter.com',
       integratorId: 'decentraland-sdk'
     })
+    this.squid.init()
   }
 
   private async init() {
@@ -61,19 +67,19 @@ export class AxelarProvider implements XChainProvider {
     }
   }
 
-  private async executeRoute(
+  async executeRoute(
     route: RouteResponse,
     provider: Provider
   ): Promise<ethers.providers.TransactionReceipt> {
-    const { route: data } = route
     const signer = await new ethers.providers.Web3Provider(provider).getSigner()
 
     // tslint:disable-next-line
     // @ts-ignore
     const txResponse = (await this.squid.executeRoute({
-      route: data,
+      route: route.route,
       signer
     })) as ethers.providers.TransactionResponse
+
     return txResponse.wait()
   }
 
@@ -121,82 +127,93 @@ export class AxelarProvider implements XChainProvider {
       toToken: destinyChainMANA,
       toChain: toChain.toString(),
       toAddress: destinyChainMarketplaceV2,
-      enableExpress,
-      slippage,
-      customContractCalls: [
-        // ===================================
-        // Approve MANA to be spent by Decentraland contract
-        // ===================================
-        {
-          callType: SquidCallType.FULL_TOKEN_BALANCE,
-          target: destinyChainMANA,
-          value: '0',
-          callData: ERC20ContractInterface.encodeFunctionData('approve', [
-            getContract(ContractName.MarketplaceV2, toChain).address,
-            toAmount
-          ]),
-          payload: {
-            tokenAddress: destinyChainMarketplaceV2,
-            inputPos: 1
+      enableBoost: enableExpress,
+      slippageConfig: {
+        autoMode: 1 // 1 is "normal" slippage. Always set to 1
+      },
+      postHook: {
+        chainType: ChainType.EVM,
+        fundAmount: '1',
+        fundToken: destinyChainMANA,
+        calls: [
+          // ===================================
+          // Approve MANA to be spent by Decentraland contract
+          // ===================================
+          {
+            chainType: ChainType.EVM,
+            callType: SquidCallType.FULL_TOKEN_BALANCE,
+            target: destinyChainMANA,
+            value: '0',
+            callData: ERC20ContractInterface.encodeFunctionData('approve', [
+              getContract(ContractName.MarketplaceV2, toChain).address,
+              toAmount
+            ]),
+            payload: {
+              tokenAddress: destinyChainMarketplaceV2,
+              inputPos: 1
+            },
+            estimatedGas: '50000'
           },
-          estimatedGas: '50000'
-        },
-        // ===================================
-        // EXECUTE ORDER
-        // ===================================
-        {
-          callType: SquidCallType.DEFAULT,
-          target: destinyChainMANA,
-          value: '0',
-          callData: marketplaceInterface.encodeFunctionData('executeOrder', [
-            collectionAddress,
-            tokenId,
-            price
-          ]),
+          // ===================================
+          // EXECUTE ORDER
+          // ===================================
+          {
+            chainType: ChainType.EVM,
+            callType: SquidCallType.DEFAULT,
+            target: destinyChainMANA,
+            value: '0',
+            callData: marketplaceInterface.encodeFunctionData('executeOrder', [
+              collectionAddress,
+              tokenId,
+              price
+            ]),
 
-          payload: {
-            tokenAddress: '0x', // TODO: what's this?
-            inputPos: 0
+            payload: {
+              tokenAddress: '0x', // TODO: what's this?
+              inputPos: 0
+            },
+            estimatedGas: '300000'
           },
-          estimatedGas: '300000'
-        },
-        // ===================================
-        // Transfer NFT to buyer
-        // ===================================
-        {
-          callType: SquidCallType.DEFAULT,
-          target: collectionAddress,
-          value: '0',
-          callData: ERC721ContractInterface.encodeFunctionData(
-            'safeTransferFrom(address, address, uint256)',
-            [this.squidMulticall, fromAddress, tokenId]
-          ),
-          payload: {
-            tokenAddress: '0x',
-            inputPos: 1
+          // ===================================
+          // Transfer NFT to buyer
+          // ===================================
+          {
+            chainType: ChainType.EVM,
+            callType: SquidCallType.DEFAULT,
+            target: collectionAddress,
+            value: '0',
+            callData: ERC721ContractInterface.encodeFunctionData(
+              'safeTransferFrom(address, address, uint256)',
+              [this.squidMulticall, fromAddress, tokenId]
+            ),
+            payload: {
+              tokenAddress: '0x',
+              inputPos: 1
+            },
+            estimatedGas: '50000'
           },
-          estimatedGas: '50000'
-        },
-        // ===================================
-        // Transfer remaining MANA to buyer
-        // ===================================
-        {
-          callType: SquidCallType.FULL_TOKEN_BALANCE,
-          target: destinyChainMANA,
-          value: '0',
-          callData: ERC20ContractInterface.encodeFunctionData('transfer', [
-            fromAddress,
-            '0'
-          ]),
-          payload: {
-            tokenAddress: destinyChainMANA,
-            // This will replace the parameter at index 1 in the encoded Function,
-            //  with FULL_TOKEN_BALANCE (instead of "0")
-            inputPos: 1
-          },
-          estimatedGas: '50000'
-        }
-      ]
+          // ===================================
+          // Transfer remaining MANA to buyer
+          // ===================================
+          {
+            chainType: ChainType.EVM,
+            callType: SquidCallType.FULL_TOKEN_BALANCE,
+            target: destinyChainMANA,
+            value: '0',
+            callData: ERC20ContractInterface.encodeFunctionData('transfer', [
+              fromAddress,
+              '0'
+            ]),
+            payload: {
+              tokenAddress: destinyChainMANA,
+              // This will replace the parameter at index 1 in the encoded Function,
+              //  with FULL_TOKEN_BALANCE (instead of "0")
+              inputPos: 1
+            },
+            estimatedGas: '50000'
+          }
+        ]
+      }
     })
   }
 
@@ -244,64 +261,76 @@ export class AxelarProvider implements XChainProvider {
       toToken: destinyChainMANA,
       toChain: toChain.toString(),
       toAddress: destinyChaiCollectionStoreAddress,
-      enableExpress, // TODO: check if we need this
-      slippage,
-      customContractCalls: [
-        // ===================================
-        // Approve MANA to be spent by Decentraland contract
-        // ===================================
-        {
-          callType: SquidCallType.FULL_TOKEN_BALANCE,
-          target: destinyChainMANA,
-          value: '0',
-          callData: ERC20ContractInterface.encodeFunctionData('approve', [
-            getContract(ContractName.CollectionStore, toChain).address,
-            toAmount
-          ]),
-          payload: {
-            tokenAddress: destinyChaiCollectionStoreAddress,
-            inputPos: 1
+      enableBoost: enableExpress, // TODO: check if we need this
+      slippageConfig: {
+        autoMode: 1 // 1 is "normal" slippage. Always set to 1
+      },
+      postHook: {
+        chainType: ChainType.EVM,
+        fundAmount: '1',
+        fundToken: destinyChainMANA,
+        calls: [
+          // ===================================
+          // Approve MANA to be spent by Decentraland contract
+          // ===================================
+          {
+            chainType: ChainType.EVM,
+            callType: SquidCallType.FULL_TOKEN_BALANCE,
+            target: destinyChainMANA,
+            value: '0',
+            callData: ERC20ContractInterface.encodeFunctionData('approve', [
+              getContract(ContractName.CollectionStore, toChain).address,
+              toAmount
+            ]),
+            payload: {
+              tokenAddress: destinyChaiCollectionStoreAddress,
+              inputPos: 1
+            },
+            estimatedGas: '50000'
           },
-          estimatedGas: '50000'
-        },
-        // ===================================
-        // BUY ITEM
-        // ===================================
-        {
-          callType: SquidCallType.DEFAULT,
-          target: destinyChainMANA,
-          value: '0', // @TODO: WHY 0?
-          callData: collectionStoreInterface.encodeFunctionData(
-            'buy((address,uint256[],uint256[],address[])[])',
-            [[[collectionAddress, [itemId], [price], [fromAddress]]]]
-          ),
+          // ===================================
+          // BUY ITEM
+          // ===================================
+          {
+            chainType: ChainType.EVM,
+            callType: SquidCallType.DEFAULT,
+            target: destinyChainMANA,
+            value: '0', // @TODO: WHY 0?
+            callData: collectionStoreInterface.encodeFunctionData(
+              'buy((address,uint256[],uint256[],address[])[])',
+              [[[collectionAddress, [itemId], [price], [fromAddress]]]]
+            ),
 
-          payload: {
-            tokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // TODO: do we need this to be set as the native? it's working like this
-            inputPos: 0
+            payload: {
+              tokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE', // TODO: do we need this to be set as the native? it's working like this
+              inputPos: 0
+            },
+            estimatedGas: '300000' // TODO: where do we get this value from?
           },
-          estimatedGas: '300000' // TODO: where do we get this value from?
-        },
-        // ===================================
-        // Transfer remaining MANA to buyer
-        // ===================================
-        {
-          callType: SquidCallType.FULL_TOKEN_BALANCE,
-          target: destinyChainMANA,
-          value: '0',
-          callData: ERC20ContractInterface.encodeFunctionData('transfer', [
-            fromAddress,
-            '0'
-          ]),
-          payload: {
-            tokenAddress: destinyChainMANA,
-            // This will replace the parameter at index 1 in the encoded Function,
-            //  with FULL_TOKEN_BALANCE (instead of "0")
-            inputPos: 1
-          },
-          estimatedGas: '50000'
-        }
-      ]
+          // ===================================
+          // Transfer remaining MANA to buyer
+          // ===================================
+          {
+            chainType: ChainType.EVM,
+            callType: SquidCallType.FULL_TOKEN_BALANCE,
+            target: destinyChainMANA,
+            value: '0',
+            callData: ERC20ContractInterface.encodeFunctionData('transfer', [
+              fromAddress,
+              '0'
+            ]),
+            payload: {
+              tokenAddress: destinyChainMANA,
+              // This will replace the parameter at index 1 in the encoded Function,
+              //  with FULL_TOKEN_BALANCE (instead of "0")
+              inputPos: 1
+            },
+            estimatedGas: '50000'
+          }
+        ]
+      }
     })
   }
 }
+
+export const axelarProvider = new AxelarProvider()

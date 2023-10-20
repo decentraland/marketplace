@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
+import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
 import { getCurrentOrder } from '../../../modules/order/selectors'
@@ -13,12 +14,17 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (dispatch: Dispatch): MapDispatchProps =>
-  bindActionCreators(
-    {
-      onConfirm: () => {}
-    },
-    dispatch
-  )
+const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
+  onConfirm: () => {},
+  onSwitchNetwork: chainId => dispatch(switchNetworkRequest(chainId))
+})
+// const mapDispatch = (dispatch: Dispatch): MapDispatchProps =>
+//   bindActionCreators(
+//     {
+//       onConfirm: () => {},
+//       onSwitchNetwork: chainId => dispatch(switchNetworkRequest(chainId))
+//     },
+//     dispatch
+//   )
 
 export default connect(mapState, mapDispatch)(BuyWithCryptoModal)

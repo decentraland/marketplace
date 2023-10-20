@@ -2,8 +2,8 @@
   "name": "@dcl/marketplace-site",
   "version": "0.0.0-development",
   "dependencies": {
-    "@0xsquid/sdk": "^1.14.0",
-    "@0xsquid/squid-types": "^0.1.28",
+    "@0xsquid/sdk": "^2.8.1-beta.0",
+    "@0xsquid/squid-types": "^0.1.29",
     "@dcl/crypto": "^3.0.0",
     "@dcl/schemas": "^9.6.0",
     "@dcl/single-sign-on-client": "^0.1.0",

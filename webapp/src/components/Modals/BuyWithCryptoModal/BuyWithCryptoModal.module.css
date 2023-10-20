@@ -1,7 +1,55 @@
-.dropdown_container {
+.buyWithCryptoModal .tokenDropdownContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.buyWithCryptoModal:global(.ui.tiny.modal) {
+  height: 730px;
+  display: flex !important;
+  flex-direction: column;
+}
+
+.buyWithCryptoModal:global(.ui.modal > .actions) {
+  margin-top: auto;
+}
+
+.buyWithCryptoModal:global(.ui.modal > .content) {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+}
+
+.buyWithCryptoModal .mainLoader:global(.ui.loader) {
+  position: relative;
+  top: 25%;
+}
+
+.buyWithCryptoModal :global(.AssetImage) {
+  display: flex;
+  width: 250px;
+  border-radius: 25px;
+  overflow: hidden;
+  margin: 25px;
+}
+
+.buyWithCryptoModal .assetContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.buyWithCryptoModal .subtitle {
+  font-size: 15px;
+}
+
+.dropdownContainer {
   display: flex;
   justify-content: space-between;
-  margin-top: 14px;
+  color: var(--text);
+}
+
+.dropdownContainer :global(span) {
+  font-size: 14px;
 }
 
 .balance_container {
@@ -17,6 +65,7 @@
   color: var(--background);
   border-radius: 20px;
   padding: 6px;
+  width: 190px;
 }
 
 .dcl_dropdown:global(.ui.dropdown .menu .item) {
@@ -45,27 +94,42 @@
   margin-top: 0px;
 }
 
-.summaryContainer {
+/* .summaryContainer {
   display: flex;
   flex-direction: column;
   font-size: 14px;
   color: var(--secondary-text);
-}
+} */
 
+.buyWithCryptoModal .routeUnavailable,
 .insufficientFunds {
   color: red;
   font-size: 14px;
 }
 
-.token_dropdown:global(.ui.dropdown > .dropdown.icon) {
+.dcl_dropdown:global(.ui.dropdown > .dropdown.icon) {
   margin-left: auto;
   align-self: center;
   margin-right: 6px;
 }
 
-.token_dropdown:global(.ui.search.dropdown) {
-  width: 150px;
+.dcl_dropdown:global(.ui.dropdown) {
   display: flex;
+  margin-top: 2px;
+}
+
+.token_dropdown:global(.ui.dropdown) {
+  width: 140px;
+}
+
+.token_dropdown:global(.ui.search.dropdown.active > input.search) {
+  padding-left: 40px;
+  height: 100%;
+}
+
+.token_dropdown:global(.ui.search.dropdown > input.search) {
+  padding-left: 40px;
+  height: 100%;
 }
 
 .token_dropdown:global(.ui.dropdown.scrolling .menu) {

@@ -829,15 +829,19 @@
   "buy_with_crypto": {
     "title": "Buying {name}",
     "subtitle": "You are about to buy {name} for {amount}.",
+    "choose_chain": "Choose the origin chain:",
+    "choose_token": "Choose the token to pay with:",
     "balance": "Balance",
     "buy_with_token": "Buy with {token}",
     "select_a_token": "Select a token to buy",
     "summary": "Summary",
-    "exchange_rate": "Exchange Rate: 1 {symbol} = {manaAmount} MANA",
+    "exchange_rate_2": "Exchange Rate: 1 {symbol} = {manaAmount} MANA",
     "fetching_route": "Calculating route...",
+    "route_unavailable": "Buying with {token} is not available at the moment. Please try again later.",
     "insufficient_funds": "You don't have enough {token} balance...",
     "route": {
-      "estimated_route_duration": "Estimated route duration: {duration}s",
+      "exchange_rate": "Exchange Rate: ",
+      "estimated_route_duration": "Estimated route duration: ",
       "gas_cost_in_token": "Gas cost: {cost} {token} ({costInUSD} USD)",
       "fee_cost": "{feeName}: {cost} {token} ({costInUSD} USD)"
     }
