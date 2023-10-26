@@ -28,10 +28,6 @@ const BuyNFTButtons = ({
 
   return (
     <>
-      <Button onClick={onBuyWithCrypto} primary fluid>
-        <Mana showTooltip inline size="small" network={network} />
-        {t('asset_page.actions.buy_with_crypto')}
-      </Button>
       <Button
         as={Link}
         to={locations.buy(assetType, contractAddress, assetId)}
@@ -39,8 +35,12 @@ const BuyNFTButtons = ({
         fluid
       >
         <Mana showTooltip inline size="small" network={network} />
-        {t('asset_page.actions.buy_with_mana')}
+        {t('asset_page.actions.buy_with_crypto')}
       </Button>
+      {/* <Button onClick={onBuyWithCrypto} primary fluid>
+        <Mana showTooltip inline size="small" network={network} />
+        {t('asset_page.actions.buy_with_crypto')} modal
+      </Button> */}
 
       <Button
         as={Link}

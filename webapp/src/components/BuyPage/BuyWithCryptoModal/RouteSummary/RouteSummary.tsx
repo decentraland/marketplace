@@ -15,6 +15,22 @@ const RouteSummary = ({ route, selectedToken }: RouteSummaryProps) => {
       <div className={styles.summaryContainer}>
         <span>{t('buy_with_crypto.summary')}</span>
         <div className={styles.summaryRow}>
+          {t('buy_with_crypto.route.nft_cost')}
+          {route ? (
+            <>
+              {ethers.utils.formatUnits(
+                route.route.estimate.fromAmount,
+                selectedToken.decimals
+              )}{' '}
+              {selectedToken.symbol}
+            </>
+          ) : (
+            <div
+              className={classNames(styles.skeleton, styles.exchangeSkeleton)}
+            />
+          )}
+        </div>
+        <div className={styles.summaryRow}>
           {t('buy_with_crypto.route.exchange_rate')}
           {route ? (
             <>

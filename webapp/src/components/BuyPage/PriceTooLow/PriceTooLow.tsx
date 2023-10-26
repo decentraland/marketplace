@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Button, Card } from 'decentraland-ui'
+import { Button, Card, Icon } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getMinSaleValueInWei } from '../utils'
 import { Price } from '../Price'
@@ -8,7 +8,13 @@ import { Props } from './PriceTooLow.types'
 import styles from './PriceTooLow.module.css'
 
 const PriceTooLow = (props: Props) => {
-  const { chainId, network, isBuyWithCardPage, onSwitchNetwork } = props
+  const {
+    chainId,
+    network,
+    isBuyWithCardPage,
+    onSwitchNetwork,
+    onBuyWithAnotherToken
+  } = props
 
   const humanNetwork = t(`networks.${network.toLowerCase()}`)
   const humanToken = t(`tokens.${network.toLowerCase()}`)
@@ -52,6 +58,12 @@ const PriceTooLow = (props: Props) => {
               rel="noopener noreferrer"
             >
               {t('global.learn_more')}
+            </Button>
+          ) : null}
+          {onBuyWithAnotherToken ? (
+            <Button basic size="small" onClick={onBuyWithAnotherToken}>
+              <Icon name="ethereum" />
+              {t('price_too_low.buy_with_another_token')}
             </Button>
           ) : null}
         </div>

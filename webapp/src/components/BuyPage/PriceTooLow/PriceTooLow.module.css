@@ -3,6 +3,17 @@
   width: 460px !important;
 }
 
+.card :global(.ui.button + .ui.button) {
+  /* Override semantic UI's width */
+  margin-left: 0;
+}
+
+.card
+  :global(.ui.button:not(.icon)
+    > .icon:not(.button):not(.dropdown).ethereum.icon) {
+  margin-right: 2px;
+}
+
 .card.buyWithCard {
   /* Override semantic UI's width */
   width: 416px !important;
@@ -19,7 +30,6 @@
 .switchNetwork {
   padding-left: 0px !important;
 }
-
 
 @media (max-width: 768px) {
   .card {
