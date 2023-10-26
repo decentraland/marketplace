@@ -527,6 +527,7 @@
       "update_listing": "Update listing",
       "buy": "Buy",
       "buy_with_mana": "Buy with MANA",
+      "buy_with_another_token": "Use another Token",
       "buy_with_crypto": "Buy with Crypto",
       "get_mana": "Get MANA",
       "buy_with_card": "Buy with card",
@@ -833,6 +834,10 @@
     "choose_token": "Choose the token to pay with:",
     "balance": "Balance",
     "buy_with_token": "Buy with {token}",
+    "buy_with_mana": "Buy with MANA",
+    "buy_with_card": "Buy with card",
+    "not_enough_funds": "You don't have enough {token} in {network} to buy {name} for {amount} MANA.",
+    "switch_network": "Switch network to {chain}",
     "select_a_token": "Select a token to buy",
     "summary": "Summary",
     "exchange_rate_2": "Exchange Rate: 1 {symbol} = {manaAmount} MANA",
@@ -840,6 +845,7 @@
     "route_unavailable": "Buying with {token} is not available at the moment. Please try again later.",
     "insufficient_funds": "You don't have enough {token} balance...",
     "route": {
+      "nft_cost": "NFT cost: ",
       "exchange_rate": "Exchange Rate: ",
       "estimated_route_duration": "Estimated route duration: ",
       "gas_cost_in_token": "Gas cost: {cost} {token} ({costInUSD} USD)",
@@ -852,7 +858,8 @@
   "price_too_low": {
     "minimum_price": "The minimun amount supported for costless transactions is {price}",
     "get_item_in_network": "In order to get this item you'll need to switch your network to {network} and then cover the transaction cost with {token}.",
-    "switch_network": "Switch to {network}"
+    "switch_network": "Switch to {network}",
+    "buy_with_another_token": "Use another Token"
   },
   "mint_with_mana_page": {
     "title": "Buying {name}",
