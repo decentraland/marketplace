@@ -24,6 +24,7 @@ import {
   isListsSection,
   persistIsMapProperty
 } from '../../modules/ui/utils'
+import { View } from '../../modules/ui/types'
 import trash from '../../images/trash.png'
 import { Chip } from '../Chip'
 import { Props } from './AssetTopbar.types'
@@ -160,9 +161,11 @@ export const AssetTopbar = ({
   const handleFieldClick = useCallback(() => {
     // opens the dropdown on the field focus
     setShouldRenderSearchDropdown(
-      category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE
+      (category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE) &&
+        view !== View.CURRENT_ACCOUNT &&
+        view !== View.ACCOUNT
     )
-  }, [category])
+  }, [category, view])
 
   const handleSearchBarDropdownClickOutside = useCallback(event => {
     // when clicking outside the dropdown, close it
