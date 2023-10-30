@@ -58,15 +58,6 @@ export const SearchBarDropdown = ({
   onFetchCreators,
   onClickOutside
 }: SearchBarDropdownProps) => {
-  const [searchUUID, setSearchUUID] = useState(
-    uuidv5(searchTerm, UUID_NAMESPACE)
-  )
-
-  // assigns a UUID to the search term to link the events of rendering the results with the search term selected
-  useEffect(() => {
-    setSearchUUID(uuidv5(searchTerm, UUID_NAMESPACE))
-  }, [searchTerm])
-
   const isSearchingWearables = category === NFTCategory.WEARABLE
   const isSearchingEmotes = category === NFTCategory.EMOTE
 
@@ -114,9 +105,6 @@ export const SearchBarDropdown = ({
   )
 
   const handleSeeAll = useCallback(() => {
-    if (!searchTerm) {
-      return
-    }
     if (
       currentSearchTab === SearchTab.EMOTES ||
       currentSearchTab === SearchTab.WEARABLES
@@ -125,7 +113,7 @@ export const SearchBarDropdown = ({
       getAnalytics().track(events.SEARCH_ALL, {
         tab: currentSearchTab,
         searchTerm,
-        searchUUID
+        searchUUID: uuidv5(searchTerm, UUID_NAMESPACE)
       })
     } else if (currentSearchTab === SearchTab.COLLECTIONS) {
       const contractAddresses = (results as BuilderCollectionAttributes[]).map(
@@ -137,7 +125,7 @@ export const SearchBarDropdown = ({
         searchTerm
       })
     }
-  }, [currentSearchTab, onSearch, results, searchTerm, searchUUID])
+  }, [currentSearchTab, onSearch, results, searchTerm])
 
   // handle the enter key press and trigger the See all feature
   useEffect(() => {
@@ -159,6 +147,7 @@ export const SearchBarDropdown = ({
   useEffect(() => {
     let cancel = false
     if (searchTerm) {
+      const searchUUID = uuidv5(searchTerm, UUID_NAMESPACE)
       if (
         currentSearchTab === SearchTab.EMOTES ||
         currentSearchTab === SearchTab.WEARABLES
@@ -226,7 +215,6 @@ export const SearchBarDropdown = ({
     searchTerm,
     isSearchingEmotes,
     isSearchingWearables,
-    searchUUID,
     onFetchCreators
   ])
 
@@ -252,11 +240,11 @@ export const SearchBarDropdown = ({
       getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
         searchTerm,
         item_id: collectible.id,
-        search_uuid: searchUUID,
+        search_uuid: uuidv5(searchTerm, UUID_NAMESPACE),
         item_position: index
       })
     },
-    [handleSaveToLocalStorage, searchTerm, searchUUID]
+    [handleSaveToLocalStorage, searchTerm]
   )
 
   const renderCollectiblesSearch = useCallback(() => {
@@ -311,11 +299,11 @@ export const SearchBarDropdown = ({
       getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
         searchTerm,
         wallet_id: creator.address,
-        search_uuid: searchUUID,
+        search_uuid: uuidv5(searchTerm, UUID_NAMESPACE),
         item_position: index
       })
     },
-    [handleSaveToLocalStorage, searchTerm, searchUUID]
+    [handleSaveToLocalStorage, searchTerm]
   )
 
   const renderCreatorsSearch = useCallback(() => {
@@ -346,11 +334,11 @@ export const SearchBarDropdown = ({
       getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
         searchTerm,
         collection_id: collection.contract_address,
-        search_uuid: searchUUID,
+        search_uuid: uuidv5(searchTerm, UUID_NAMESPACE),
         item_position: index
       })
     },
-    [handleSaveToLocalStorage, onSearch, searchTerm, searchUUID]
+    [handleSaveToLocalStorage, onSearch, searchTerm]
   )
 
   const renderCollectionsSearch = useCallback(() => {

@@ -91,17 +91,17 @@ export const AssetTopbar = ({
       value?: string
       contractAddresses?: string[]
     }) => {
-      if (value !== undefined && search !== value) {
-        onBrowse({
-          search: value,
-          section: category ? getSectionFromCategory(category) : section
-        })
-      } else if (contractAddresses && contractAddresses.length) {
+      if (contractAddresses && contractAddresses.length) {
         onBrowse({
           contracts: contractAddresses,
           search: ''
         })
         handleClearSearch()
+      } else if (search !== value) {
+        onBrowse({
+          search: value,
+          section: category ? getSectionFromCategory(category) : section
+        })
       }
       setShouldRenderSearchDropdown(false)
     },
