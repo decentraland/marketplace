@@ -88,6 +88,7 @@ const Sell = (props: Props) => {
             <div className={styles.columnContent}>
               {intlFormat(
                 order.expiresAt *
+                  // if the expire date length is 10 then it is assumed that it is in seconds
                   (order.expiresAt.toString().length === 10 ? 1000 : 1)
               )}
             </div>
