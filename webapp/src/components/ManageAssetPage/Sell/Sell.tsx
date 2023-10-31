@@ -86,7 +86,10 @@ const Sell = (props: Props) => {
               {t('manage_asset_page.sell.expiration_date')}
             </div>
             <div className={styles.columnContent}>
-              {intlFormat(order.expiresAt)}
+              {intlFormat(
+                order.expiresAt *
+                  (order.expiresAt.toString().length === 10 ? 1000 : 1)
+              )}
             </div>
           </div>
         </div>
