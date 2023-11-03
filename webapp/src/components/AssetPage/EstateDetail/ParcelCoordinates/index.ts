@@ -1,2 +1,2 @@
-import ParcelCoordinates from './ParcelCoordinates.container'
+import ParcelCoordinates from './ParcelCoordinates'
 export { ParcelCoordinates }

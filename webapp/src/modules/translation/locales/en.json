@@ -1011,7 +1011,8 @@
   "parcel_coordinates": {
     "title": "Parcels",
     "show_more": "SHOW MORE",
-    "show_less": "SHOW LESS"
+    "show_less": "SHOW LESS",
+    "and_more": "and <strong>{amount}</strong> more..."
   },
   "price_change_notice": {
     "message": "The price may fluctuate due to market changes"
