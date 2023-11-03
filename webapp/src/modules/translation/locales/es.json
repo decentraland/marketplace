@@ -1003,7 +1003,8 @@
   "parcel_coordinates": {
     "title": "Parcelas",
     "show_more": "MOSTRAR MÁS",
-    "show_less": "MOSTRAR MENOS"
+    "show_less": "MOSTRAR MENOS",
+    "and_more": "y <strong>{amount}</strong> más..."
   },
   "price_change_notice": {
     "message": "El precio puede variar debido a cambios en el mercado"
