@@ -1,0 +1,28 @@
+.container {
+  background: var(--dropdown);
+  display: flex;
+  padding: 20px;
+  gap: 10px;
+}
+
+.icon {
+  background: var(--oj-not-simpson);
+  border-radius: 50%;
+  min-width: 25px;
+  height: 25px;
+  text-align: center;
+  margin: 0;
+}
+
+.icon :global(.icon) {
+  position: relative;
+  top: 2px;
+  margin: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: left;
+}

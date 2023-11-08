@@ -29,6 +29,11 @@
   outline: 1px solid white;
 }
 
+.atlas-wrapper .atlas-warning-banner {
+  position: absolute;
+  bottom: 0;
+}
+
 .atlas-wrapper .atlas-info-button .info-icon {
   background-image: url('../../images/info.svg');
   width: 16px;

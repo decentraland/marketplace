@@ -14,12 +14,14 @@ import {
 
 export type TileState = {
   data: Record<string, AtlasTile>
+  lastModified: Date | null
   loading: LoadingState
   error: string | null
 }
 
 const INITIAL_STATE: TileState = {
   data: {},
+  lastModified: null,
   loading: [],
   error: null
 }
@@ -34,6 +36,7 @@ export function tileReducer(state = INITIAL_STATE, action: TileReducerAction) {
     case FETCH_TILES_REQUEST: {
       return {
         ...state,
+        lastModified: null,
         loading: loadingReducer(state.loading, action)
       }
     }
@@ -41,6 +44,7 @@ export function tileReducer(state = INITIAL_STATE, action: TileReducerAction) {
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
+        lastModified: action.payload.lastModified,
         error: null,
         data: action.payload.tiles
       }
