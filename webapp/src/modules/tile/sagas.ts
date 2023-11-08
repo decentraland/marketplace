@@ -28,7 +28,7 @@ function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
   try {
     const response: AxiosResponse<{
       data: Record<string, AtlasTile>
-    }> = yield call(() => atlasAPI.fetchTiles())
+    }> = yield call(atlasAPI.fetchTiles)
     const tiles = response.data.data
     const lastModified = response.headers['last-modified']
     yield put(fetchTilesSuccess(tiles, new Date(lastModified)))
