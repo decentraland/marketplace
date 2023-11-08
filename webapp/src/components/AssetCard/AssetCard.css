@@ -4,6 +4,7 @@
 }
 
 .ui.card.AssetCard.catalog {
+  overflow: hidden;
   height: 360px;
 }
 

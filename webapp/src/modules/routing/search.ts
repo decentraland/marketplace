@@ -271,7 +271,7 @@ export function getMarketAssetTypeFromCategory(category: NFTCategory) {
 export function getSearchSection(category: WearableCategory | EmoteCategory) {
   for (const section of Object.values(Section)) {
     const sectionCategory = Object.values(EmoteCategory).includes(
-      category as EmoteCategory
+      category.toLocaleLowerCase() as EmoteCategory //@TODO: Remove toLowerCase() when the indexer save them as lowercase
     )
       ? getSearchEmoteCategory(section)
       : getSearchWearableCategory(section)

@@ -51,6 +51,8 @@ import { CANCEL_FETCH_ITEMS, itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 import { ItemBrowseOptions } from './types'
+import { getIsMarketplaceServerEnabled } from '../features/selectors'
+import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 
 const item = {
   itemId: 'anItemId',
@@ -432,10 +434,14 @@ describe('when handling the fetch items request action', () => {
             return expectSaga(itemSaga, getIdentity)
               .provide([
                 [
-                  matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+                  matchers.call.fn(
+                    waitForWalletConnectionAndIdentityIfConnecting
+                  ),
                   undefined
                 ],
+                [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
+                [select(getIsMarketplaceServerEnabled), true],
                 [select(getLocation), { pathname }],
                 {
                   call(effect, next) {
@@ -487,10 +493,14 @@ describe('when handling the fetch items request action', () => {
             return expectSaga(itemSaga, getIdentity)
               .provide([
                 [
-                  matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+                  matchers.call.fn(
+                    waitForWalletConnectionAndIdentityIfConnecting
+                  ),
                   undefined
                 ],
+                [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
+                [select(getIsMarketplaceServerEnabled), true],
                 [select(getLocation), { pathname }],
                 {
                   call(effect, next) {
@@ -547,9 +557,14 @@ describe('when handling the fetch items request action', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
+            [
+              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+              undefined
+            ],
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
             [select(getWallet), undefined],
-            [select(getLocation), { pathname }]
+            [select(getLocation), { pathname }],
+            [select(getIsMarketplaceServerEnabled), false]
           ])
           .put(
             fetchItemsSuccess(
@@ -571,8 +586,14 @@ describe('when handling the fetch items request action', () => {
         .provide([
           [select(getLocation), { pathname: '' }],
           [select(getWallet), undefined],
+          [select(getIsMarketplaceServerEnabled), true],
+          [select(getWallet), undefined],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
-          [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
+          [
+            matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+            undefined
+          ],
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined]
         ])
         .put(fetchItemsFailure(anError.message, itemBrowseOptions))
         .dispatch(fetchItemsRequest(itemBrowseOptions))
@@ -586,7 +607,10 @@ describe('when handling the fetch items request action', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(ItemAPI.prototype.getOne), item],
-            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
+            [
+              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+              undefined
+            ]
           ])
           .put(fetchItemSuccess(item))
           .put(fetchSmartWearableRequiredPermissionsRequest(item))
@@ -603,7 +627,10 @@ describe('when handling the fetch items request action', () => {
               matchers.call.fn(ItemAPI.prototype.getOne),
               Promise.reject(anError)
             ],
-            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
+            [
+              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+              undefined
+            ]
           ])
           .put(
             fetchItemFailure(item.contractAddress, item.itemId, anError.message)
@@ -635,9 +662,13 @@ describe('when handling the fetch trending items request action', () => {
       it('should dispatch a successful action with the fetched trending items', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
+            [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
+            [
+              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+              undefined
+            ]
           ])
           .put(fetchTrendingItemsSuccess(fetchResult.data))
           .dispatch(fetchTrendingItemsRequest())
@@ -651,8 +682,12 @@ describe('when handling the fetch trending items request action', () => {
       it('should dispatch a successful action with the fetched trending items', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
+            // [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
-            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
+            [
+              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+              undefined
+            ]
           ])
           .put(fetchTrendingItemsSuccess(fetchResult.data))
           .dispatch(fetchTrendingItemsRequest())
@@ -669,7 +704,10 @@ describe('when handling the fetch trending items request action', () => {
             matchers.call.fn(ItemAPI.prototype.getTrendings),
             Promise.reject(anError)
           ],
-          [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
+          [
+            matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+            undefined
+          ]
         ])
         .put(fetchTrendingItemsFailure(anError.message))
         .dispatch(fetchTrendingItemsRequest())
