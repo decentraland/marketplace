@@ -111,6 +111,10 @@
     gap: 30px;
   }
 
+  .CampaignHomepageBanner .event-banner-logo-container  {
+    padding: 0;
+  }
+
   .CampaignHomepageBanner .copy {
     margin-right: 0px;
     margin-bottom: 20px;
