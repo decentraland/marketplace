@@ -1289,32 +1289,23 @@
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },
   "campaign": {
-    "tab": "PRIDE23",
-    "badge": "PRIDE23",
-    "event_tag": "PRIDE23",
-    "event_hashtag": "#MetaversePride23"
+    "tab": "DCLMF23",
+    "badge": "DCLMF23",
+    "event_tag": "DCLMF23",
+    "event_hashtag": "#DCLMF23"
   },
   "event_campaign": {
     "homepage": {
-      "title": "Prepará el look perfecto para Pride!",
-      "subtitle": "Muestre su orgullo en Decentraland durante {event_hashtag} con Wearables y emotes que celebran la inclusión y la diversidad en el metaverso: encuentre todo lo que necesita en un solo lugar.",
-      "subtitle_mobile": "Muestre su orgullo en Decentraland con Wearables y Emotes creados por la comunidad: encuentre todo lo que necesita en un solo lugar.",
-      "cta": "Buscar Items Pride",
-      "dates": "JUNIO 27-29",
-      "slogan": "CELEBRA LA DIVERSIDAD E INCLUSION EN EL METAVERSO"
+      "title": "¡Prepárate para Decentraland Music Festival!",
+      "subtitle": "3 días de experiencia musical inmersiva y actuaciones digitalmente nativas están llegando a Decentral y del 16 al 18 de noviembre.Prepárese con los últimos wearables y emots del festival de los creadores de la comunidad de DCL."
     },
     "collectibles": {
-      "title": "Prepará el look perfecto para Pride!",
-      "subtitle": "Muestre su orgullo en Decentraland durante {event_hashtag} con Wearables y emotes que celebran la inclusión y la diversidad en el metaverso: encuentre todo lo que necesita en un solo lugar.",
-      "subtitle_mobile": "Muestre su orgullo en Decentraland con Wearables y Emotes creados por la comunidad: encuentre todo lo que necesita en un solo lugar.",
-      "cta": "Buscar Items Pride",
-      "dates": "JUNIO 27-29",
-      "slogan": "CELEBRA LA DIVERSIDAD E INCLUSION EN EL METAVERSO"
+      "title": "¡Prepárate para Decentraland Music Festival!",
+      "subtitle": "3 días de experiencia musical inmersiva y actuaciones digitalmente nativas están llegando a Decentral y del 16 al 18 de noviembre.Prepárese con los últimos wearables y emots del festival de los creadores de la comunidad de DCL."
     },
     "campaign_browser": {
-      "title": "Esenciales Pride del metaverso",
-      "subtitle": "Celebre la inclusión y la diversidad durante {event_hashtag} Prepare el look perfecto para el desfile del Orgullo con vibrantes Wearables y Emotes de la comunidad DCL.",
-      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+      "title": "Esenciales del Music Festival",
+      "subtitle": "Desde Emotes de surf en la multitud hasta wearables brillantes, encuentre todos los artículos del festival que necesita para #DCLMF23 aquí"
     }
   },
   "asset_card": {

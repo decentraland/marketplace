@@ -1294,32 +1294,23 @@
     "confirm_transaction": "确认您钱包上的交易以继续"
   },
   "campaign": {
-    "tab": "PRIDE23",
-    "badge": "PRIDE23",
-    "event_tag": "PRIDE23",
-    "event_hashtag": "#MetaversePride23"
+    "tab": "DCLMF23",
+    "badge": "DCLMF23",
+    "event_tag": "DCLMF23",
+    "event_hashtag": "#DCLMF23"
   },
   "event_campaign": {
     "homepage": {
-      "title": "為 Pride 打造完美造型！",
-      "subtitle": "在 {event_hashtag} 期間通過可穿戴設備和表情展示您對 Decentraland 的自豪感, 慶祝元宇宙中的包容性和多樣性 - 在一個地方找到您需要的一切。",
-      "subtitle_mobile": "通過社區創建的可穿戴設備和表情展示您對 Decentraland 的自豪感——在一個地方找到您需要的一切。",
-      "cta": "搜索驕傲物品",
-      "dates": "月 27 日至 29 日",
-      "slogan": "慶祝元宇宙的多樣性和包容性"
+      "title": "准备去分散音乐节！",
+      "subtitle": "11月16日至18日，分散的3天的沉浸式音乐经验和数字表演即将到来。为DCL社区创作者的最新节日可穿戴设备和情感做好准备。"
     },
     "collectibles": {
-      "title": "為 Pride 打造完美造型！",
-      "subtitle": "在 {event_hashtag} 期間通過可穿戴設備和表情展示您對 Decentraland 的自豪感, 慶祝元宇宙中的包容性和多樣性 - 在一個地方找到您需要的一切。",
-      "subtitle_mobile": "通過社區創建的可穿戴設備和表情展示您對 Decentraland 的自豪感——在一個地方找到您需要的一切。",
-      "cta": "搜索驕傲物品",
-      "dates": "月 27 日至 29 日",
-      "slogan": "慶祝元宇宙的多樣性和包容性"
+      "title": "准备去分散音乐节！",
+      "subtitle": "11月16日至18日，分散的3天的沉浸式音乐经验和数字表演即将到来。为DCL社区创作者的最新节日可穿戴设备和情感做好准备。"
     },
     "campaign_browser": {
-      "title": "元界驕傲精華",
-      "subtitle": "在 {event_hashtag} 期間慶祝包容性和多樣性 將驕傲遊行的完美外觀與來自 DCL 社區的充滿活力的可穿戴設備和表情組合在一起。",
-      "slogan": "慶祝元宇宙的多樣性和包容性"
+      "title": "分散音乐节的要点",
+      "subtitle": "从人群冲浪到发光的可穿戴设备，在这里找到＃DCLMF23所需的所有节日项目"
     }
   },
   "asset_card": {

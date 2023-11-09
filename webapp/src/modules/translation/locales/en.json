@@ -1297,32 +1297,23 @@
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
   "campaign": {
-    "tab": "PRIDE23",
-    "badge": "PRIDE23",
-    "event_tag": "PRIDE23",
-    "event_hashtag": "#MetaversePride23"
+    "tab": "DCLMF23",
+    "badge": "DCLMF23",
+    "event_tag": "DCLMF23",
+    "event_hashtag": "#DCLMF23"
   },
   "event_campaign": {
     "homepage": {
-      "title": "Prepare the Perfect Pride Look!",
-      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
-      "subtitle_mobile": "Show your Pride in Decentraland with prismatic Wearables & Emotes made by the community—find everything you need in one place.",
-      "cta": "Browse Pride Items",
-      "dates": "JUNE 27-29",
-      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+      "title": "Get Ready for Decentraland Music Festival!",
+      "subtitle": "3 Days Of Immersive Musical Experience & Digitally-Native Performances Are Coming To Decentraland Nov 16-18. Get Ready With The Latest Festival Wearables & Emotes From DCL's Community Creators."
     },
     "collectibles": {
-      "title": "Prepare the Perfect Pride Look!",
-      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
-      "cta": "Browse Pride Items",
-      "cta_mobile": "Browse",
-      "dates": "JUNE 27-29",
-      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+      "title": "Get Ready for Decentraland Music Festival!",
+      "subtitle": "3 Days Of Immersive Musical Experience & Digitally-Native Performances Are Coming To Decentraland Nov 16-18. Get Ready With The Latest Festival Wearables & Emotes From DCL's Community Creators."
     },
     "campaign_browser": {
-      "title": "Metaverse Pride Essentials",
-      "subtitle": "Celebrate Inclusivity & Diversity during {event_hashtag} Prepare the perfect Pride parade look with vibrant Wearables & Emotes from the DCL community.",
-      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+      "title": "Decentraland Music Festival Essentials",
+      "subtitle": "From Crowd Surfing Emotes to Glowing Wearables, Find All The Festival Items You Need For #DCLMF23 Right Here"
     }
   },
   "asset_card": {
