@@ -369,6 +369,10 @@
     "empty_search": {
       "title": "No results for \"{search}\".",
       "action": "Check for any typos or spelling errors, or try a different search term."
+    },
+    "empty_campaign": {
+      "title": "Creators haven't added their items here yet. In the meantime, check out the community's creations in the 'Collectibles' tab to find something you like.",
+      "action": "<collectiblesLink>Go to Collectibles</collectiblesLink>"
     }
   },
   "nft_filters": {

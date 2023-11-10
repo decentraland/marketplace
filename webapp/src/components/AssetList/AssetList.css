@@ -29,6 +29,10 @@
   background-size: cover;
 }
 
+.AssetsList .empty-text {
+  max-width: 600px;
+}
+
 .AssetsList .empty .logo {
   background-image: url('../../images/empty-list.svg');
   background-repeat: no-repeat;

@@ -1311,6 +1311,10 @@
     "campaign_browser": {
       "title": "分散音乐节的要点",
       "subtitle": "从人群冲浪到发光的可穿戴设备，在这里找到＃DCLMF23所需的所有节日项目"
+    },
+    "empty_campaign": {
+      "title": "创作者还没有在这里添加他们的物品。同时，在“收藏品”选项卡中查看社区的创作，以找到您喜欢的东西。",
+      "action": "<collectiblesLink>去收藏品</collectiblesLink>"
     }
   },
   "asset_card": {
