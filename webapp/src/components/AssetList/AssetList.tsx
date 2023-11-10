@@ -1,10 +1,12 @@
 import React, { useCallback, useMemo, useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Card, Loader } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
+import { locations } from '../../modules/routing/locations'
 import * as events from '../../utils/events'
 import { InfiniteScroll } from '../InfiniteScroll'
 import { AssetCard } from '../AssetCard'
@@ -28,6 +30,8 @@ const AssetList = (props: Props) => {
     isManager,
     onClearFilters
   } = props
+
+  const location = useLocation()
 
   useEffect(() => {
     if (visitedLocations.length > 1) {
@@ -69,18 +73,22 @@ const AssetList = (props: Props) => {
         NFTCategory.WEARABLE
       ].includes(getCategoryFromSection(section)!)
 
+      if (location.pathname === locations.campaign()) {
+        return 'nft_list.empty_campaign'
+      }
+
       if (isEmoteOrWearableSection) {
         return search ? 'nft_list.empty_search' : 'nft_list.empty'
       }
     }
     return 'nft_list.empty'
-  }, [assets.length, search, section, isManager])
+  }, [assets.length, search, section, isManager, location])
 
   const renderEmptyState = useCallback(() => {
     return (
       <div className="empty empty-assets">
         <div className="watermelon" />
-        <span>
+        <span className="empty-text">
           {t(`${emptyStateTranslationString}.title`, {
             search
           })}
@@ -96,6 +104,11 @@ const AssetList = (props: Props) => {
                 <button className="empty-actions" onClick={onClearFilters}>
                   {chunks}
                 </button>
+              ),
+              collectiblesLink: (chunks: string) => (
+                <Link className="empty-actions" to={locations.browse()}>
+                  {chunks}
+                </Link>
               )
             }}
           />
