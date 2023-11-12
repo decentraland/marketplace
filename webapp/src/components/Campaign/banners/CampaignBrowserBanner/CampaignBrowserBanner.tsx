@@ -1,34 +1,37 @@
 import React from 'react'
-import { Header } from 'decentraland-ui'
+import { Header, Mobile } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import logo from '../pride-logo.png'
+import logo from '../logo.png'
+import wearableIcon from '../wearables.png'
 import './CampaignBrowserBanner.css'
 
 const CampaignBrowserBanner: React.FC = () => {
   return (
     <div className="CampaignBrowserBanner">
-      <div className="logo-container">
+      <div className="banner-container">
         <img
           src={logo}
           alt={t('campaign.event_hashtag')}
           className="event-banner-logo"
         />
-        <span>{t('event_campaign.campaign_browser.slogan')}</span>
+        <div className="copy">
+          <Header>{t('event_campaign.campaign_browser.title')}</Header>
+          <p>
+            {t('event_campaign.campaign_browser.subtitle', {
+              event_hashtag: t('campaign.event_hashtag'),
+              enter: <br />
+            })}
+          </p>
+        </div>
+        <img
+          src={wearableIcon}
+          alt={t('campaign.event_hashtag')}
+          className="event-banner-icon"
+        />
       </div>
-
-      <div className="copy">
-        <Header>{t('event_campaign.campaign_browser.title')}</Header>
-        <p>
-          {t('event_campaign.campaign_browser.subtitle', {
-            event_hashtag: (
-              <b className="event-banner-pink">
-                {t('campaign.event_hashtag')}!
-              </b>
-            ),
-            enter: <br />
-          })}
-        </p>
-      </div>
+      <Mobile>
+        <div className="event-banner-vertical-icon" />
+      </Mobile>
     </div>
   )
 }

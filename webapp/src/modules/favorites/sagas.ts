@@ -23,7 +23,7 @@ import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
-import { NFT_SERVER_URL } from '../vendor/decentraland'
+import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from '../vendor/decentraland'
 import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
@@ -83,6 +83,7 @@ import {
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
 import { getData as getItemsData } from '../item/selectors'
+import { getIsMarketplaceServerEnabled } from '../features/selectors'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
@@ -95,6 +96,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     API_OPTS
   )
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
+  const marketplaceServerCatalogAPI = new CatalogAPI(
+    MARKETPLACE_SERVER_URL,
+    API_OPTS
+  )
 
   yield takeEvery(
     FETCH_FAVORITED_ITEMS_REQUEST,
@@ -114,6 +119,13 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     handleBulkPickSuccessOrFailure
   )
 
+  function* getCatalogAPI() {
+    const isMarketplaceServerEnabled: boolean = yield select(
+      getIsMarketplaceServerEnabled
+    )
+    return isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
+  }
+
   function* fetchPreviewItems(previewListsItemIds: string[]) {
     let previewItems: Item[] = []
 
@@ -127,10 +139,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           ids: previewListsItemIds
         }
 
-        const result: { data: Item[] } = yield call(
-          [catalogAPI, 'get'],
-          itemFilters
-        )
+        const api: CatalogAPI = yield call(getCatalogAPI)
+        const result: { data: Item[] } = yield call([api, 'get'], itemFilters)
         previewItems = result.data
       }
     }
@@ -173,9 +183,11 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         filters: optionsFilters
       }
 
+      const api: CatalogAPI = yield call(getCatalogAPI)
+
       if (results.length > 0) {
         const result: { data: Item[] } = yield call(
-          [catalogAPI, 'get'],
+          [api, 'get'],
           optionsFilters
         )
         items = result.data
