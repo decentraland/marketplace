@@ -15,9 +15,9 @@ import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { Props, Tile } from './Atlas.types'
 import { VendorName } from '../../modules/vendor'
 import { NFT } from '../../modules/nft/types'
+import ErrorBanner from '../ErrorBanner'
 import Popup from './Popup'
 import './Atlas.css'
-import ErrorBanner from '../ErrorBanner'
 
 const getCoords = (x: number | string, y: number | string) => `${x},${y}`
 

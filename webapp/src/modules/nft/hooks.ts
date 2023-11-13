@@ -31,6 +31,7 @@ export const useFingerprint = (nft: NFT | null) => {
           if (parcels.length) {
             setIsLoading(true)
             generateFingerprint(nft.tokenId, parcels, landContract!)
+              .then((result) => setFingerprint(result))
               .finally(() => setIsLoading(false))
               .catch(error =>
                 console.error(
@@ -38,7 +39,7 @@ export const useFingerprint = (nft: NFT | null) => {
                   error
                 )
               )
-          }
+          }                                                                                                                 
           setIsLoadingContract(true)
           getFingerprint(nft.tokenId, estate)
             .then(result => setContractFingerprint(result))

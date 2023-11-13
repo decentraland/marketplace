@@ -26,9 +26,9 @@ import { getBidStatus, getError } from '../../../modules/bid/selectors'
 import { ManaField } from '../../ManaField'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Mana } from '../../Mana'
+import ErrorBanner from '../../ErrorBanner'
 import { Props } from './BidModal.types'
 import './BidModal.css'
-import ErrorBanner from '../../ErrorBanner'
 
 const BidModal = (props: Props) => {
   const {

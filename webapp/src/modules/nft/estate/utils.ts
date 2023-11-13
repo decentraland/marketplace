@@ -51,9 +51,7 @@ export async function generateFingerprint(
   const estateTokenIds = []
 
   for (const parcel of parcels) {
-    estateTokenIds.push(
-      (await contract.encodeTokenId(parcel.x, parcel.y)).toString()
-    )
+    estateTokenIds.push(await contract.encodeTokenId(parcel.x, parcel.y))
   }
 
   let fingerprint = BigInt(
