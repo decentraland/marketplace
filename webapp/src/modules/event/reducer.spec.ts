@@ -55,8 +55,8 @@ failureActions.forEach(action => {
 })
 
 describe('when reducing the successful action of fetching an event addresses by tag', () => {
-  const requestAction = fetchEventRequest(eventTag)
-  const successAction = fetchEventSuccess(eventTag, eventAddresses)
+  const requestAction = fetchEventRequest([eventTag])
+  const successAction = fetchEventSuccess([eventTag], eventAddresses)
 
   const initialState = {
     ...INITIAL_STATE,

@@ -24,7 +24,7 @@ describe('when handling the fetch events request action', () => {
           ]
         ])
         .put(fetchEventFailure(anError.message))
-        .dispatch(fetchEventRequest(eventTag))
+        .dispatch(fetchEventRequest([eventTag]))
         .run({ silenceTimeout: true })
     })
   })
@@ -38,8 +38,8 @@ describe('when handling the fetch events request action', () => {
             eventContracts
           ]
         ])
-        .put(fetchEventSuccess(eventTag, eventContracts))
-        .dispatch(fetchEventRequest(eventTag))
+        .put(fetchEventSuccess([eventTag], eventContracts))
+        .dispatch(fetchEventRequest([eventTag]))
         .run({ silenceTimeout: true })
     })
   })

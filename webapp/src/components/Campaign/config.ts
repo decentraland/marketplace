@@ -1,2 +1,3 @@
 export const CAMPAIGN_TAG = 'DCLMF23'
+export const CAMPAIGN_BROWSE_TAGS = [CAMPAIGN_TAG, 'MVMF22']
 export const CAMPAING_TAB_ANIMATION_ENABLED = true

@@ -10,34 +10,34 @@ import {
 const anErrorMessage = 'An error'
 
 describe('when creating the action to signal the start of the events request', () => {
-  let tag: string
+  let tags: string[]
   beforeEach(() => {
-    tag = 'a tag'
+    tags = ['a tag']
   })
   it('should return an object representing the action', () => {
-    expect(fetchEventRequest(tag)).toEqual({
+    expect(fetchEventRequest(tags)).toEqual({
       type: FETCH_EVENT_REQUEST,
       meta: undefined,
       payload: {
-        tag
+        tags
       }
     })
   })
 })
 
 describe('when creating the action to signal a success in the events request', () => {
-  let tag: string
+  let tags: string[]
   let contracts: string[]
   beforeEach(() => {
-    tag = 'a tag'
+    tags = ['a tag']
     contracts = ['0x1', '0x2']
   })
 
   it('should return an object representing the action', () => {
-    expect(fetchEventSuccess(tag, contracts)).toEqual({
+    expect(fetchEventSuccess(tags, contracts)).toEqual({
       type: FETCH_EVENT_SUCCESS,
       meta: undefined,
-      payload: { tag, contracts }
+      payload: { tags, contracts }
     })
   })
 })
