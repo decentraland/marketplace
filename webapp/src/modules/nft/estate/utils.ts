@@ -67,7 +67,7 @@ export async function generateFingerprint(
     )
   }
 
-  return fingerprint.toString(16)
+  return ethers.utils.hexlify(fingerprint)
 }
 
 export async function getFingerprint(

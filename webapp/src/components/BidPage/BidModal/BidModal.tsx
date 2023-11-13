@@ -45,7 +45,7 @@ const BidModal = (props: Props) => {
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
 
-  const [fingerprint, isLoading, contractFingerprint] = useFingerprint(nft)
+  const [fingerprint, isLoadingFingerprint, contractFingerprint] = useFingerprint(nft)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
@@ -106,7 +106,7 @@ const BidModal = (props: Props) => {
     isInvalidPrice ||
     isInvalidDate ||
     hasInsufficientMANA ||
-    isLoading ||
+    isLoadingFingerprint ||
     isPlacingBid ||
     (!fingerprint && nft.category === NFTCategory.ESTATE) ||
     contractFingerprint !== fingerprint
@@ -164,14 +164,14 @@ const BidModal = (props: Props) => {
               error={isInvalidDate}
               message={isInvalidDate ? t('bid_page.invalid_date') : undefined}
             />
-            {contractFingerprint !== fingerprint ? (
+            {!isLoadingFingerprint && contractFingerprint !== fingerprint ? (
               <ErrorBanner info={t('atlas_updated_warning.fingerprint_missmatch')} />
             ) : null}
           </div>
           <div className="buttons">
             <Button
               as="div"
-              disabled={isLoading || isPlacingBid}
+              disabled={isLoadingFingerprint || isPlacingBid}
               onClick={() =>
                 onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
               }

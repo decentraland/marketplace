@@ -203,7 +203,7 @@ const BuyNFTModal = (props: Props) => {
         <PriceTooLow chainId={nft.chainId} network={nft.network} />
       ) : null}
       <PartiallySupportedNetworkCard asset={nft} />
-      {contractFingerprint !== fingerprint ? (
+      {!isFingerprintLoading && contractFingerprint !== fingerprint ? (
         <ErrorBanner info={t('atlas_updated_warning.fingerprint_missmatch')} />
       ) : null}
       <div
