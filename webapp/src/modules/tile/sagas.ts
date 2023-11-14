@@ -1,7 +1,7 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
 import { RentalStatus } from '@dcl/schemas'
-import { Atlas, AtlasTile } from 'decentraland-ui'
-import { ATLAS_SERVER_URL } from '../../modules/vendor/decentraland'
+import { AxiosResponse } from 'axios'
+import { atlasAPI } from '../../modules/vendor/decentraland'
 import {
   FETCH_TILES_REQUEST,
   FetchTilesRequestAction,
@@ -17,6 +17,7 @@ import { isErrorWithMessage } from '../../lib/error'
 import { fetchNFTsRequest } from '../nft/actions'
 import { VendorName } from '../vendor'
 import { View } from '../ui/types'
+import { AtlasTile } from 'decentraland-ui'
 
 export function* tileSaga() {
   yield takeEvery(FETCH_TILES_REQUEST, handleFetchTilesRequest)
@@ -25,10 +26,12 @@ export function* tileSaga() {
 
 function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
   try {
-    const tiles: Record<string, AtlasTile> = yield call(() =>
-      Atlas.fetchTiles(ATLAS_SERVER_URL + '/v1/tiles')
-    )
-    yield put(fetchTilesSuccess(tiles))
+    const response: AxiosResponse<{
+      data: Record<string, AtlasTile>
+    }> = yield call(atlasAPI.fetchTiles)
+    const tiles = response.data.data
+    const lastModified = response.headers['last-modified']
+    yield put(fetchTilesSuccess(tiles, new Date(lastModified)))
   } catch (error) {
     yield put(
       fetchTilesFailure(

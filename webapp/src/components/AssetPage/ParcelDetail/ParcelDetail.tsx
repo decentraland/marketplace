@@ -32,7 +32,13 @@ const ParcelDetail = ({ nft, order, rental }: Props) => {
       asset={nft}
       rental={rental ?? undefined}
       assetImage={
-        <AssetImage asset={nft} isDraggable withNavigation hasPopup />
+        <AssetImage
+          asset={nft}
+          isDraggable
+          withNavigation
+          hasPopup
+          showUpdatedDateWarning
+        />
       }
       showDetails={isLand(nft)}
       isOnSale={!!nft.activeOrderId}

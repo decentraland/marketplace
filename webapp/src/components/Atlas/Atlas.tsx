@@ -15,6 +15,7 @@ import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { Props, Tile } from './Atlas.types'
 import { VendorName } from '../../modules/vendor'
 import { NFT } from '../../modules/nft/types'
+import ErrorBanner from '../ErrorBanner'
 import Popup from './Popup'
 import './Atlas.css'
 
@@ -35,8 +36,10 @@ const Atlas: React.FC<Props> = (props: Props) => {
     tilesByEstateId,
     withMapColorsInfo,
     withZoomControls,
+    lastAtlasModifiedDate,
     getContract,
-    children
+    children,
+    lastUpdated
   } = props
 
   const [showPopup, setShowPopup] = useState(false)
@@ -375,6 +378,16 @@ const Atlas: React.FC<Props> = (props: Props) => {
         layers={layers}
         withZoomControls={withZoomControls}
       />
+      {lastAtlasModifiedDate &&
+      lastUpdated &&
+      lastUpdated > lastAtlasModifiedDate ? (
+        <ErrorBanner
+          className="atlas-warning-banner"
+          info={t('atlas_updated_warning.info', {
+            strong: (text: string) => <strong>{text}</strong>
+          })}
+        />
+      ) : null}
       {hoveredTile ? (
         <Popup
           x={x}

@@ -1491,5 +1491,9 @@
     "title": "¡Las vestimentas inteligentes ya están disponibles! 🟢",
     "description": "<b>Desbloquea el mundo de Experiencias Portátiles que puedes tener en forma de Vestimenta Interactiva.</b> Experimenta Decentraland como nunca antes con Vestimentas que te brindan nuevas habilidades (¡como volar!) o agrega una capa adicional de contenido, visible solo para usted, superpuesto en escenas de Decentraland.",
     "explore_collectibles": "Explorar vestimentas interactivas"
+  },
+  "atlas_updated_warning": {
+    "info": "<strong>Los datos del mapa pueden estar desactualizados</strong>Encuentre los detalles de la LAND más recientes en la sección debajo de este mapa. Refrescar esta página puede actualizar la información. Si el problema persiste, comuníquese con nuestro equipo de soporte.",
+    "fingerprint_missmatch": "La información de esta LAND puede no estar actualizada. Actualice la página para obtener la información más reciente. Si el problema persiste, comuníquese con nuestro equipo de soporte."
   }
 }

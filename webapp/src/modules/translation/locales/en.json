@@ -1500,5 +1500,9 @@
     "title": "Smart Wearables are now live! 🟢",
     "description": "<b>Unlock the world of Portable Experiences you can own in the form of Smart Wearables.</b> Experience Decentraland like never before with Wearables that give you new abilities (like flying!) or add an extra layer of content, visible only to you, overlaid on Decentraland scenes.",
     "explore_collectibles": "Browse Smart Wearables"
+  },
+  "atlas_updated_warning": {
+    "info": "<strong>Map data may be outdated</strong>Find the most recent LAND details in the section below this map. Refreshing this page may update the information. If the problem persists, please contact our support team.",
+    "fingerprint_missmatch": "The information of this LAND may not be updated. Please refresh the page to get the latest information. If the problem persists, please contact our support team."
   }
 }

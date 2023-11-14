@@ -1496,5 +1496,9 @@
     "title": "智能穿戴设备现已上线！🟢",
     "description": "<b>以智能可穿戴设备的形式解锁您可以拥有的便携式体验世界。</b> 使用可穿戴设备以前所未有的方式体验 Decentraland, 这些可穿戴设备为您提供新的能力（例如飞行！）或添加额外的层 覆盖在 Decentraland 场景上的内容, 只有您可见。",
     "explore_collectibles": "浏览智能可穿戴设备"
+  },
+  "atlas_updated_warning": {
+    "info": "<strong>地图数据可能过时</strong>Find the moST在此地图下方的部分中的最新土地详细信息。刷新此页面可能会更新信息。如果问题仍然存在，请联系我们的支持团队。",
+    "fingerprint_missmatch": "这片土地的信息可能不会更新。请刷新页面以获取最新信息。如果问题仍然存在，请联系我们的支持团队。"
   }
 }

@@ -45,6 +45,7 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
             isDraggable
             withNavigation
             hasPopup
+            showUpdatedDateWarning
           />
           {estate.size === 0 && (
             <div className="dissolved-wrapper">

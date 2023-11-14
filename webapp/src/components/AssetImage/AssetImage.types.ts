@@ -25,6 +25,7 @@ export type Props = {
   className?: string
   isDraggable?: boolean
   withNavigation?: boolean
+  showUpdatedDateWarning?: boolean
   hasPopup?: boolean
   zoom?: number
   isSmall?: boolean

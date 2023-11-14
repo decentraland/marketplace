@@ -81,6 +81,7 @@ const AssetImage = (props: Props) => {
     wearableController,
     isTryingOn,
     isPlayingEmote,
+    showUpdatedDateWarning,
     onSetIsTryingOn,
     onSetWearablePreviewController,
     onPlaySmartWearableVideoShowcase,
@@ -186,7 +187,13 @@ const AssetImage = (props: Props) => {
         setHasSound(sound)
       })
     }
-  }, [wearableController, asset.category, isDraggable, hasSound, isLoadingWearablePreview])
+  }, [
+    wearableController,
+    asset.category,
+    isDraggable,
+    hasSound,
+    isLoadingWearablePreview
+  ])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
@@ -257,6 +264,9 @@ const AssetImage = (props: Props) => {
           showForRent={false}
           showOnSale={false}
           showOwned={false}
+          lastUpdated={
+            showUpdatedDateWarning ? new Date(asset.updatedAt) : undefined
+          }
         >
           {hasBadges && children}
         </Atlas>
@@ -278,6 +288,9 @@ const AssetImage = (props: Props) => {
           showOnSale={false}
           showOwned={false}
           isEstate
+          lastUpdated={
+            showUpdatedDateWarning ? new Date(asset.updatedAt) : undefined
+          }
         >
           {hasBadges && children}
         </Atlas>
