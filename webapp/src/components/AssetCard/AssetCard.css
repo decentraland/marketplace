@@ -198,6 +198,11 @@
   align-items: center;
 }
 
+.ui.card.AssetCard:hover > .content,
+.ui.cards > .card.AssetCard:hover > .content {
+  height: fit-content;
+}
+
 @media (min-width: 1199px) {
   .AssetCard:hover .AssetImage.catalog {
     height: 161px;
@@ -240,7 +245,7 @@
 
   .ui.card.AssetCard:hover > .content.catalog.expandable,
   .ui.cards > .card.AssetCard:hover > .content.catalog.expandable {
-    height: 222px;
+    height: fit-content;
   }
 
   .ui.card.AssetCard:hover > .content.catalog,
