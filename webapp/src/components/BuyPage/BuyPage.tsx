@@ -14,11 +14,10 @@ import { BuyNFTModal } from './BuyNFTModal'
 import { MintItemModal } from './MintItemModal'
 import { isPriceTooLow } from './utils'
 import { Props } from './BuyPage.types'
-import { BuyWithCryptoModal } from './BuyWithCryptoModal'
 import './BuyPage.css'
 
 const BuyPage = (props: Props) => {
-  const { type, isBuyCrossChainEnabled } = props
+  const { type } = props
 
   const isInsufficientMANA = (
     wallet: Wallet,
@@ -54,9 +53,7 @@ const BuyPage = (props: Props) => {
                     wallet.chainId !== asset.chainId && isPriceTooLow(price)
                 }
 
-                return isBuyCrossChainEnabled ? (
-                  <BuyWithCryptoModal asset={asset} />
-                ) : type === AssetType.NFT ? (
+                return type === AssetType.NFT ? (
                   <BuyNFTModal
                     nft={asset as NFT}
                     order={order}
