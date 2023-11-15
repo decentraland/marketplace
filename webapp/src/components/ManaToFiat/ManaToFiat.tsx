@@ -31,7 +31,7 @@ const ManaToFiat = (props: Props) => {
             `$ ${(+(+usd / divider.value).toFixed(digits)).toLocaleString(
               undefined,
               {
-                maximumFractionDigits: 2
+                maximumFractionDigits: digits
               }
             )}${divider.displayValue}`
           )

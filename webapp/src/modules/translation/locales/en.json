@@ -827,30 +827,53 @@
     "regions_where_operates": "regions where Transak operates",
     "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
   },
-  "buy_with_crypto": {
-    "title": "Buying {name}",
-    "subtitle": "You are about to buy {name} for {amount}.",
-    "choose_chain": "Choose the origin chain:",
+  "buy_with_crypto_modal": {
+    "title": "Confirm your purchase",
+    "pay_with": "Pay with",
     "choose_token": "Choose the token to pay with:",
     "balance": "Balance",
+    "item_cost": "Item cost",
+    "fee_cost": "Estimated fee cost",
     "buy_with_token": "Buy with {token}",
-    "buy_with_mana": "Buy with MANA",
+    "buy_now": "Buy now",
     "buy_with_card": "Buy with card",
+    "get_mana": "Get MANA",
     "not_enough_funds": "You don't have enough {token} in {network} to buy {name} for {amount} MANA.",
+    "transaction_fee_covered": "Transaction cost is {free} cover by the DAO.",
+    "free": "free",
     "switch_network": "Switch network to {chain}",
+    "confirm_switch_network": "Confirm switch in your wallet",
+    "confirm_transaction": "Confirm transaction in your wallet",
     "select_a_token": "Select a token to buy",
     "summary": "Summary",
-    "exchange_rate_2": "Exchange Rate: 1 {symbol} = {manaAmount} MANA",
     "fetching_route": "Calculating route...",
     "route_unavailable": "Buying with {token} is not available at the moment. Please try again later.",
-    "insufficient_funds": "You don't have enough {token} balance...",
+    "exchange_rate": "Exchange rate",
+    "durations": {
+      "transaction_duration": "Transaction duration",
+      "fast": "Fast ≈ 2s",
+      "normal": "Normal ≈ 20s",
+      "slow": "Slow ≈ 1m"
+    },
+    "insufficient_funds": "You don’t have enough funds in {token}. Try paying with other token or get MANA or pay with card.",
     "route": {
       "nft_cost": "NFT cost: ",
       "exchange_rate": "Exchange Rate: ",
       "estimated_route_duration": "Estimated route duration: ",
       "gas_cost_in_token": "Gas cost: {cost} {token} ({costInUSD} USD)",
       "fee_cost": "{feeName}: {cost} {token} ({costInUSD} USD)"
-    }
+    },
+    "token_and_chain_selector": {
+      "title": "Select chain",
+      "available_chains": "Available chains",
+      "select_chain": "Select chain",
+      "available_tokens": "Available tokens on {chain}",
+      "select_token": "Select token",
+      "no_matches": "No matches for {search}..."
+    },
+    "price_too_low": "For free transactions, you need to spend at least 1 MANA. To get this item, switch your network to Polygon to cover the fee cost with MATIC. {learn_more}",
+    "remember_transaction_fee_covered": "Remember, for items 1 MANA or more, transaction fees are {free} paying with Polygon MANA",
+    "learn_more": "Learn More"
   },
   "partially_supported_network_card": {
     "content": "You are connected to the Polygon Network for purchasing items below <mana>1</mana>. You will need to have MATIC in your wallet to cover the transaction fee for this purchase."

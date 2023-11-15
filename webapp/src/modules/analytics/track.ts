@@ -55,7 +55,9 @@ import {
   BUY_ITEM_SUCCESS,
   BUY_ITEM_WITH_CARD_SUCCESS,
   FetchItemsSuccessAction,
-  FETCH_ITEMS_SUCCESS
+  FETCH_ITEMS_SUCCESS,
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
+  BuyItemCrossChainSuccessAction
 } from '../item/actions'
 import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
 import { isParcel } from '../nft/utils'
@@ -262,6 +264,20 @@ track<FetchItemsSuccessAction>(
 track<BuyItemSuccessAction>(
   BUY_ITEM_SUCCESS,
   events.BUY_ITEM,
+  ({ payload }) => ({
+    itemId: payload.item.itemId,
+    contractAddress: payload.item.contractAddress,
+    rarity: payload.item.rarity,
+    network: payload.item.network,
+    chainId: payload.item.chainId,
+    price: Number(ethers.utils.formatEther(payload.item.price)),
+    data: payload.item.data
+  })
+)
+
+track<BuyItemCrossChainSuccessAction>(
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
+  events.BUY_ITEM_CROSS_CHAIN,
   ({ payload }) => ({
     itemId: payload.item.itemId,
     contractAddress: payload.item.contractAddress,

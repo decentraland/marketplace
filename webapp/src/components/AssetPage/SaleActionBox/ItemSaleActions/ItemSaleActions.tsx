@@ -52,12 +52,9 @@ const ItemSaleActions = ({
       ) : (
         canBuy && (
           <BuyNFTButtons
+            asset={item}
             assetType={AssetType.ITEM}
-            contractAddress={item.contractAddress}
-            network={item.network}
-            itemId={item.itemId}
             buyWithCardClassName={customClassnames?.buyWithCardClassName}
-            onBuyWithCrypto={onBuyWithCrypto}
           />
         )
       )}

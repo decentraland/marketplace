@@ -28,7 +28,7 @@
 
 .buyWithCryptoModal .mainLoader:global(.ui.loader) {
   position: relative;
-  top: 25%;
+  height: 220px;
 }
 
 .buyWithCryptoModal .assetContainer {

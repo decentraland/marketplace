@@ -14,7 +14,7 @@ const mapDispatch = (
 ): MapDispatchProps => ({
   onBuyWithCrypto: (order?: Order) =>
     dispatch(
-      openModal('BuyWithCryptoModal', {
+      openModal('BuyNFTWithCryptoModal', {
         asset: ownProps.asset,
         order
       })

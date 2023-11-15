@@ -1,10 +1,11 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { Item } from '@dcl/schemas'
+import { Item, Network } from '@dcl/schemas'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getLoading as getLoadingAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
+import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
 import { getContract } from '../../../modules/contract/selectors'
@@ -48,6 +49,7 @@ const mapDispatch = (
   dispatch: Dispatch,
   ownProps: OwnProps
 ): MapDispatchProps => ({
+  onGetMana: () => dispatch(openBuyManaWithFiatModalRequest(Network.MATIC)),
   onBuyItemThroughProvider: (route: Route) =>
     dispatch(buyItemCrossChainRequest(ownProps.asset as Item, route)),
   onSwitchNetwork: chainId => dispatch(switchNetworkRequest(chainId)),

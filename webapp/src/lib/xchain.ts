@@ -7,8 +7,6 @@ import { ChainId } from '@dcl/schemas'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { AxelarProvider } from './axelar'
 
-export type Route = RouteResponse
-
 export type BuyNFTXChainData = {
   fromAddress: string
   fromAmount: string
@@ -33,7 +31,15 @@ export type MintNFTXChainData = Omit<BuyNFTXChainData, 'nft'> & {
   }
 }
 
-export const SUPPORTED_CHAINS = [
+export type FromAmountParams = {
+  fromToken: Token
+  toAmount: string
+  toToken: Token
+}
+
+export const CROSS_CHAIN_SUPPORTED_CHAINS = [
+  ChainId.MATIC_MUMBAI,
+  ChainId.ETHEREUM_SEPOLIA,
   ChainId.ETHEREUM_MAINNET,
   ChainId.MATIC_MAINNET
 ]
@@ -41,13 +47,21 @@ export const SUPPORTED_CHAINS = [
 export type ChainData = SquidChainData
 export type Token = SquidToken
 export type RouteResponse = SquidRouteResponse
+export type Route = RouteResponse
 
 export interface XChainProvider {
+  init(): void
+  isLibInitialized(): boolean
+  getFromAmount(fromAmountParams: FromAmountParams): Promise<string>
+  getSupportedTokens(): Token[]
+  getSupportedChains(): ChainData[]
   buyNFT(
     provider: Provider,
     buyNFTXChainData: BuyNFTXChainData
   ): Promise<string>
   mintNFT(provider: Provider, ChainCallData: MintNFTXChainData): Promise<string>
+  getBuyNFTRoute(buyNFTXChainData: BuyNFTXChainData): Promise<RouteResponse>
+  getMintNFTRoute(buyNFTXChainData: MintNFTXChainData): Promise<RouteResponse>
 }
 
 export const crossChainProvider = new AxelarProvider()

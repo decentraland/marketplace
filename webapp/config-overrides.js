@@ -14,6 +14,8 @@ module.exports = override(
     path.resolve(__dirname, 'node_modules/@dcl/single-sign-on-client'),
     path.resolve(__dirname, 'node_modules/@0xsquid/sdk'),
     path.resolve(__dirname, 'node_modules/@cosmjs'),
-    path.resolve(__dirname, 'node_modules/cosmjs-types')
+    path.resolve(__dirname, 'node_modules/cosmjs-types'),
+    path.resolve(__dirname, 'node_modules/ethers-multicall-provide'),
+    path.resolve(__dirname, 'node_modules/@noble')
   ])
 )

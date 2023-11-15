@@ -72,7 +72,9 @@ import {
   FETCH_COLLECTION_ITEMS_REQUEST,
   FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
   BuyItemCrossChainRequestAction,
-  BUY_ITEM_CROSS_CHAIN_REQUEST
+  BUY_ITEM_CROSS_CHAIN_REQUEST,
+  buyItemCrossChainSuccess,
+  buyItemCrossChainFailure
 } from './actions'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
@@ -308,12 +310,12 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
           txRespose.wait
         )
         console.log('tx: ', tx)
-        yield put(buyItemSuccess(item.chainId, tx.transactionHash, item))
+        yield put(buyItemCrossChainSuccess(item.chainId, tx.transactionHash, item))
       }
     } catch (error) {
       console.log('error: ', error)
       yield put(
-        buyItemFailure(
+        buyItemCrossChainFailure(
           isErrorWithMessage(error) ? error.message : t('global.unknown_error')
         )
       )

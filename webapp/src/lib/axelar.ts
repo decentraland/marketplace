@@ -1,6 +1,8 @@
 import { ethers } from 'ethers'
 import { Squid } from '@0xsquid/sdk'
 import { SquidCallType, ChainType } from '@0xsquid/sdk/dist/types'
+import { ChainId } from '@dcl/schemas'
+import { Marketplace } from './abis/Marketplace'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC20 } from './abis/ERC20'
@@ -9,27 +11,47 @@ import { ERC721 } from './abis/ERC721'
 import { CollectionStore } from './abis/CollectionStore'
 import {
   BuyNFTXChainData,
+  FromAmountParams,
   MintNFTXChainData,
   RouteResponse,
   XChainProvider
 } from './xchain'
+import { config } from '../config'
 
 export class AxelarProvider implements XChainProvider {
   public squid: Squid
+  public initialized = false
   private squidMulticall = '0x4fd39C9E151e50580779bd04B1f7eCc310079fd3' // Squid calling contract
 
   constructor() {
     this.squid = new Squid({
-      baseUrl: 'https://v2.api.squidrouter.com',
+      baseUrl: config.get('SQUID_API_URL'), //'https://v2.api.squidrouter.com'
       integratorId: 'decentraland-sdk'
     })
-    this.squid.init()
+    this.init()
   }
 
-  private async init() {
+  async init() {
     if (!this.squid.initialized) {
       await this.squid.init()
+      this.initialized = true
     }
+  }
+
+  isLibInitialized() {
+    return this.squid.initialized
+  }
+
+  async getFromAmount(fromAmountParams: FromAmountParams) {
+    return this.squid.getFromAmount(fromAmountParams)
+  }
+
+  getSupportedTokens() {
+    return this.squid.tokens
+  }
+
+  getSupportedChains() {
+    return this.squid.chains
   }
 
   async executeRoute(
@@ -69,18 +91,26 @@ export class AxelarProvider implements XChainProvider {
       toChain,
       toAmount, // the item price
       enableExpress = true, // TODO: check if we need this
-      slippage = 1, // TODO: check if we need this
+      slippage = 1, // 1 is "normal" slippage. Always set to 1
       nft: { collectionAddress, price, tokenId }
     } = buyNFTXChainData
 
     const ERC20ContractInterface = new ethers.utils.Interface(ERC20)
-    const marketplaceInterface = new ethers.utils.Interface(MarketplaceV2)
+    const marketplaceContractABI =
+      toChain === ChainId.MATIC_MAINNET ? MarketplaceV2 : Marketplace
+
+    const marketplaceInterface = new ethers.utils.Interface(
+      marketplaceContractABI
+    )
     const ERC721ContractInterface = new ethers.utils.Interface(ERC721)
 
     const destinyChainMANA = getContract(ContractName.MANAToken, toChain)
       .address
-    const destinyChainMarketplaceV2 = getContract(
-      ContractName.MarketplaceV2,
+
+    const destinyChainMarketplace = getContract(
+      toChain === ChainId.MATIC_MAINNET
+        ? ContractName.MarketplaceV2
+        : ContractName.Marketplace,
       toChain
     ).address
 
@@ -91,10 +121,10 @@ export class AxelarProvider implements XChainProvider {
       fromChain: fromChain.toString(),
       toToken: destinyChainMANA,
       toChain: toChain.toString(),
-      toAddress: destinyChainMarketplaceV2,
+      toAddress: destinyChainMarketplace,
       enableBoost: enableExpress,
       slippageConfig: {
-        autoMode: 1 // 1 is "normal" slippage. Always set to 1
+        autoMode: slippage
       },
       postHook: {
         chainType: ChainType.EVM,
@@ -123,7 +153,7 @@ export class AxelarProvider implements XChainProvider {
             target: destinyChainMANA,
             value: '0',
             callData: ERC20ContractInterface.encodeFunctionData('approve', [
-              getContract(ContractName.MarketplaceV2, toChain).address,
+              destinyChainMarketplace,
               toAmount
             ]),
             payload: {
@@ -138,7 +168,7 @@ export class AxelarProvider implements XChainProvider {
           {
             chainType: ChainType.EVM,
             callType: SquidCallType.DEFAULT,
-            target: destinyChainMarketplaceV2,
+            target: destinyChainMarketplace,
             value: '0',
             callData: marketplaceInterface.encodeFunctionData('executeOrder', [
               collectionAddress,
@@ -217,7 +247,7 @@ export class AxelarProvider implements XChainProvider {
       toChain,
       toAmount, // the item price
       enableExpress = true,
-      slippage = 1,
+      slippage = 1, // 1 is "normal" slippage. Always set to 1
       item: { collectionAddress, price, itemId }
     } = buyNFTXChainData
 
@@ -241,7 +271,7 @@ export class AxelarProvider implements XChainProvider {
       toAddress: fromAddress,
       enableBoost: enableExpress, // TODO: check if we need this
       slippageConfig: {
-        autoMode: 1 // 1 is "normal" slippage. Always set to 1
+        autoMode: slippage
       },
       postHook: {
         chainType: ChainType.EVM,

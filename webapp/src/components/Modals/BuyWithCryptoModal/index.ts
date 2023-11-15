@@ -1,1 +1,4 @@
-export { default as BuyWithCryptoModal } from './BuyWithCryptoModal.container'
+export {
+  BuyNFTWithCryptoModalContainer,
+  MintNFTWithCryptoModalConatiner
+} from './BuyWithCryptoModal.container'

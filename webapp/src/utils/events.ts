@@ -71,7 +71,10 @@ export enum SHARE_LIST_TYPE {
 }
 
 // Search bar component
-
 export const SEARCH_RESULT = 'Search Result'
 export const SEARCH_RESULT_CLICKED = 'Search Result Clicked'
 export const SEARCH_ALL = 'Search all results'
+
+// Buy Cross-chain
+export const ERROR_GETTING_ROUTE = 'Error getting Route'
+export const BUY_ITEM_CROSS_CHAIN = 'Buy Item Cross Chain'

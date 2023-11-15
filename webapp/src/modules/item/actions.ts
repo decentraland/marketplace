@@ -113,9 +113,9 @@ export type BuyItemSuccessAction = ReturnType<typeof buyItemSuccess>
 export type BuyItemFailureAction = ReturnType<typeof buyItemFailure>
 
 // Buy Item Cross Chain
-export const BUY_ITEM_CROSS_CHAIN_REQUEST = '[Request] Buy item Cross chain'
-export const BUY_ITEM_CROSS_CHAIN_SUCCESS = '[Success] Buy item Cross chain'
-export const BUY_ITEM_CROSS_CHAIN_FAILURE = '[Failure] Buy item Cross chain'
+export const BUY_ITEM_CROSS_CHAIN_REQUEST = '[Request] Buy item cross-chain'
+export const BUY_ITEM_CROSS_CHAIN_SUCCESS = '[Success] Buy item cross-chain'
+export const BUY_ITEM_CROSS_CHAIN_FAILURE = '[Failure] Buy item cross-chain'
 
 export const buyItemCrossChainRequest = (item: Item, route: Route) =>
   action(BUY_ITEM_CROSS_CHAIN_REQUEST, { item, route })

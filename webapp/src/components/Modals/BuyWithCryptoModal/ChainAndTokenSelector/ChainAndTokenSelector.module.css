@@ -1,0 +1,58 @@
+.chainAndTokenSelector .listContainer {
+  display: flex;
+  flex-direction: column;
+  max-height: 550px;
+  overflow-y: scroll;
+  margin-top: 8px;
+}
+
+.chainAndTokenSelector .listContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.chainAndTokenSelector .searchContainer {
+  position: relative;
+}
+
+.chainAndTokenSelector .searchContainer :global(.dcl.close) {
+  top: 2px;
+  right: 2px;
+  background: none;
+}
+
+.chainAndTokenSelector .noResults {
+  padding-top: 8px;
+  display: flex;
+}
+
+.chainAndTokenSelector .listContainer img {
+  width: 36px;
+  height: 36px;
+  margin-right: 16px;
+}
+
+.chainAndTokenSelector .listContainer .rowItem {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.chainAndTokenSelector .searchInput {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  background-color: #332f3a;
+  border: 1px solid white;
+  margin-bottom: 28px;
+  color: white;
+  padding-left: 40px;
+}
+
+.chainAndTokenSelector .searchIcon {
+  position: absolute;
+  margin-left: 12px;
+  margin-top: 10px;
+}

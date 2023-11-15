@@ -1,38 +1,54 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
+import compact from 'lodash/compact'
 import { ethers, BigNumber } from 'ethers'
-import { Squid } from '@0xsquid/sdk'
-import { ChainData, Token, RouteResponse } from '@0xsquid/sdk/dist/types'
-import { ChainId } from '@dcl/schemas'
-import { Button, Dropdown, Loader, ModalNavigation } from 'decentraland-ui'
+import { ChainId, Contract, Network } from '@dcl/schemas'
+import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
+import {
+  ChainButton,
+  withAuthorizedAction
+} from 'decentraland-dapps/dist/containers'
+import { Button, Icon, Loader, ModalNavigation } from 'decentraland-ui'
 import { ContractName, getContract } from 'decentraland-transactions'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   getConnectedProvider,
   getNetworkProvider
 } from 'decentraland-dapps/dist/lib/eth'
-import { getAssetName, isNFT } from '../../../modules/asset/utils'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { Contract as DCLContract } from '../../../modules/vendor/services'
+import { isNFT, isWearableOrEmote } from '../../../modules/asset/utils'
+import { getContractNames } from '../../../modules/vendor'
+import * as events from '../../../utils/events'
 import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'
-import { AxelarProvider, axelarProvider } from '../../../lib/xchain'
+import {
+  CROSS_CHAIN_SUPPORTED_CHAINS,
+  ChainData,
+  RouteResponse,
+  Token,
+  crossChainProvider
+} from '../../../lib/xchain'
 import { AssetImage } from '../../AssetImage'
+import { isPriceTooLow } from '../../BuyPage/utils'
+import { CardPaymentsExplanation } from '../../BuyPage/CardPaymentsExplanation'
+import { ManaToFiat } from '../../ManaToFiat'
+import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
+import { getMintItemStatus } from '../../../modules/item/selectors'
+import { NFT } from '../../../modules/nft/types'
+import ChainAndTokenSelector from './ChainAndTokenSelector/ChainAndTokenSelector'
+import { getMANAToken, getShouldUseMetaTx, isToken } from './utils'
 import { Props } from './BuyWithCryptoModal.types'
 import styles from './BuyWithCryptoModal.module.css'
-import RouteSummary from './RouteSummary/RouteSummary'
 
 export const CANCEL_DATA_TEST_ID = 'confirm-buy-with-crypto-modal-cancel'
 export const CONFIRM_DATA_TEST_ID = 'confirm-buy-with-crypto-modal-confirm'
 
 const NATIVE_TOKEN = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
-
-// const DEFAULT_TOKEN_BY_CHAIN = {
-//   [ChainId.ETHEREUM_MAINNET]: 'MANA',
-//   [ChainId.MATIC_MUMBAI]: 'MANA'
-// }
-
-const DEFAULT_CHAIN = ChainId.MATIC_MUMBAI
+const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
 
 export type ProviderChain = ChainData
 export type ProviderToken = Token
@@ -40,100 +56,284 @@ export type ProviderToken = Token
 const BuyWithCryptoModal = (props: Props) => {
   const {
     wallet,
-    onClose,
     metadata: { asset, order },
-    onSwitchNetwork
+    getContract: getContractProp,
+    isLoading,
+    isLoadingBuyCrossChain,
+    isLoadingAuthorization,
+    isSwitchingNetwork,
+    isBuyWithCardPage,
+    onAuthorizedAction,
+    onSwitchNetwork,
+    onBuyItem: onBuyItemProp,
+    onBuyItemThroughProvider,
+    onBuyItemWithCard,
+    onExecuteOrder,
+    onExecuteOrderWithCard,
+    onGetMana,
+    onClose
   } = props
 
+  const analytics = getAnalytics()
+  const destinyChainMANA = getContract(ContractName.MANAToken, asset.chainId)
+    .address
   const abortControllerRef = useRef(new AbortController())
 
-  const tokenDropdownRef = useRef(null)
-  const [squid, setSquid] = useState<Squid>()
-  const [selectedChain, setSelectedChain] = useState(
-    wallet?.chainId || ChainId.ETHEREUM_MAINNET
-  )
-  const [providerChains, setProviderChains] = useState<ProviderChain[]>([])
-  const [providerTokens, setProviderTokens] = useState<ProviderToken[]>([])
+  // useStates
+  const [providerChains, setProviderChains] = useState<ChainData[]>([])
+  const [providerTokens, setProviderTokens] = useState<Token[]>([])
+  const [selectedChain, setSelectedChain] = useState(asset.chainId)
   const [selectedToken, setSelectedToken] = useState<Token>()
-  console.log('selectedToken: ', selectedToken)
-  // const [selectedTokenPrice, setSelectedTokenPrice] = useState<number>()
-  // const [isLoading, setIsLoading] = useState({ balance: false, route: false })
   const [isFetchingBalance, setIsFetchingBalance] = useState(false)
   const [isFetchingRoute, setIsFetchingRoute] = useState(false)
-  console.log('isFetchingRoute: ', isFetchingRoute)
   const [selectedTokenBalance, setSelectedTokenBalance] = useState<BigNumber>()
   const [route, setRoute] = useState<RouteResponse>()
   const [routeFailed, setRouteFailed] = useState(false)
-  console.log('route: ', route)
-  const [canBuyItem, setCanBuyItem] = useState(false)
+  const [canBuyItem, setCanBuyItem] = useState<boolean | undefined>(undefined)
+  const [fromAmount, setFromAmount] = useState<string | undefined>(undefined)
+  const [showChainSelector, setShowChainSelector] = useState(false)
+  const [showTokenSelector, setShowTokenSelector] = useState(false)
 
-  // fetch chains & supported tokens
+  // useMemos
+
+  // if the tx should be done through the provider
+  const shouldUseCrossChainProvider = useMemo(
+    () =>
+      selectedToken &&
+      !(
+        (
+          (selectedToken.symbol === 'MANA' &&
+            getNetwork(selectedChain) === Network.MATIC &&
+            asset.network === Network.MATIC) || // MANA selected and it's sending the tx from MATIC
+          (selectedToken.symbol === 'MANA' &&
+            getNetwork(selectedChain) === Network.ETHEREUM &&
+            asset.network === Network.ETHEREUM)
+        ) // MANA selected and it's connected to ETH and buying a L1 NFT
+      ),
+    [asset.network, selectedChain, selectedToken]
+  )
+
+  // Compute if the process should use a meta tx (connected in ETH and buying a L2 NFT)
+  const useMetaTx = useMemo(() => {
+    return (
+      !!selectedToken &&
+      !!wallet &&
+      getShouldUseMetaTx(
+        asset,
+        selectedChain,
+        selectedToken.address,
+        destinyChainMANA,
+        wallet.network
+      )
+    )
+  }, [asset, destinyChainMANA, selectedChain, selectedToken, wallet])
+
+  const selectedProviderChain = useMemo(() => {
+    return providerChains.find(c => c.chainId === selectedChain.toString())
+  }, [providerChains, selectedChain])
+
+  // the price of the order or the item
+  const price = useMemo(
+    () => (order ? order.price : !isNFT(asset) ? asset.price : ''),
+    [asset, order]
+  )
+
+  // Compute if the price is too low for meta tx
+  const hasLowPriceForMetaTx = useMemo(
+    () => wallet?.chainId !== ChainId.MATIC_MAINNET && isPriceTooLow(price), // not connected to polygon AND has price < minimun for meta tx
+    [price, wallet?.chainId]
+  )
+
+  // Compute the route fee cost
+  const routeFeeCost = useMemo(() => {
+    if (route) {
+      const {
+        route: {
+          estimate: { gasCosts, feeCosts }
+        }
+      } = route
+      return {
+        token: gasCosts[0].token,
+        gasCost: parseFloat(
+          ethers.utils.formatUnits(
+            gasCosts
+              .map(c => BigNumber.from(c.amount))
+              .reduce((a, b) => a.add(b), BigNumber.from(0)),
+            route.route.estimate.gasCosts[0].token.decimals
+          )
+        ).toFixed(6),
+        feeCost: parseFloat(
+          ethers.utils.formatUnits(
+            feeCosts
+              .map(c => BigNumber.from(c.amount))
+              .reduce((a, b) => a.add(b), BigNumber.from(0)),
+            route.route.estimate.gasCosts[0].token.decimals
+          )
+        ).toFixed(6)
+      }
+    }
+  }, [route])
+
+  // useEffects
+
+  // init lib if necessary and fetch chains & supported tokens
   useEffect(() => {
     ;(async () => {
-      // instantiate the SDK
-      const squid = new Squid({
-        baseUrl: 'https://v2.api.squidrouter.com', // for testnet use "https://testnet.v2.api.squidrouter.com"
-        integratorId: 'decentraland-sdk'
-      })
-
-      await squid.init()
-      setSquid(squid)
-
-      const ALLOWED_CHAINS = [1, 137, 5, 80001, 43113]
-      const fromToken = squid.tokens.filter(t =>
-        ALLOWED_CHAINS.includes(+t.chainId)
-      )
-      const fromChain = squid.chains.filter(c =>
-        ALLOWED_CHAINS.includes(+c.chainId)
-      )
-      setProviderChains(fromChain)
-      setProviderTokens(fromToken)
-
-      const MANAToken = fromToken.find(t => t.symbol === 'MANA')
-      if (MANAToken) {
-        console.log('setting it here')
-        setSelectedToken(MANAToken)
+      if (crossChainProvider) {
+        if (!crossChainProvider.isLibInitialized()) {
+          await crossChainProvider.init()
+        }
+        setProviderChains(
+          crossChainProvider
+            .getSupportedChains()
+            .filter(c => CROSS_CHAIN_SUPPORTED_CHAINS.includes(+c.chainId))
+        )
+        setProviderTokens(
+          crossChainProvider
+            .getSupportedTokens()
+            .filter(t => CROSS_CHAIN_SUPPORTED_CHAINS.includes(+t.chainId))
+        )
       }
     })()
-  }, [])
+  }, [wallet])
+
+  // calculates Route for the selectedToken
+  const calculateRoute = useCallback(async () => {
+    const abortController = abortControllerRef.current
+    const signal = abortController.signal
+
+    const providerMANA = providerTokens.find(
+      t =>
+        t.address.toLocaleLowerCase() === destinyChainMANA.toLocaleLowerCase()
+    )
+    if (
+      !crossChainProvider ||
+      !crossChainProvider.isLibInitialized() ||
+      !wallet ||
+      !selectedToken ||
+      !providerMANA
+    ) {
+      return
+    }
+    try {
+      setRoute(undefined)
+      setIsFetchingRoute(true)
+      setRouteFailed(false)
+      let route: RouteResponse | undefined = undefined
+      const fromAmountParams = {
+        fromToken: selectedToken,
+        toAmount: ethers.utils.formatEther(
+          order
+            ? order.price
+            : !isNFT(asset) && +asset.price > 0
+            ? asset.price
+            : 1 //TODO: review this
+        ),
+        toToken: providerMANA
+      }
+      const fromAmount = Number(
+        await crossChainProvider.getFromAmount(fromAmountParams)
+      ).toFixed(6)
+      setFromAmount(fromAmount)
+
+      const fromAmountWei = ethers.utils
+        .parseUnits(fromAmount.toString(), selectedToken.decimals)
+        .toString()
+
+      const baseRouteConfig = {
+        fromAddress: wallet.address,
+        fromAmount: fromAmountWei,
+        fromChain: selectedChain,
+        fromToken: selectedToken.address
+      }
+
+      if (order) {
+        // there's an order so it's buying an NFT
+        route = await crossChainProvider.getBuyNFTRoute({
+          ...baseRouteConfig,
+          nft: {
+            collectionAddress: order.contractAddress,
+            tokenId: order.tokenId,
+            price: order.price
+          },
+          toAmount: order.price,
+          toChain: order.chainId
+        })
+      } else if (!isNFT(asset)) {
+        // buying an item
+        route = await crossChainProvider.getMintNFTRoute({
+          ...baseRouteConfig,
+          item: {
+            collectionAddress: asset.contractAddress,
+            itemId: asset.itemId,
+            price: asset.price
+          },
+          toAmount: asset.price,
+          toChain: asset.chainId
+        })
+      }
+
+      if (route && !signal.aborted) {
+        setRoute(route)
+      }
+    } catch (error) {
+      console.error('Error while getting Route: ', error)
+      analytics.track(events.ERROR_GETTING_ROUTE, {
+        error,
+        selectedToken,
+        selectedChain
+      })
+      setRouteFailed(true)
+    } finally {
+      setIsFetchingRoute(false)
+    }
+  }, [
+    analytics,
+    asset,
+    destinyChainMANA,
+    order,
+    providerTokens,
+    selectedChain,
+    selectedToken,
+    wallet
+  ])
+
+  // when providerTokens are loaded and there's no selected token or the token selected if from another network
+  useEffect(() => {
+    if (
+      crossChainProvider.initialized &&
+      ((!selectedToken && providerTokens.length) || // only run if not selectedToken, meaning the first render
+        (selectedToken && selectedChain.toString() !== selectedToken.chainId)) // or if selectedToken is not from the selectedChain
+    ) {
+      const MANAToken = providerTokens.find(
+        t => t.symbol === 'MANA' && selectedChain.toString() === t.chainId
+      )
+
+      setSelectedToken(MANAToken || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
+    }
+  }, [calculateRoute, providerTokens, selectedChain, selectedToken])
 
   // fetch selected token balance & price
   useEffect(() => {
     let cancel = false
     ;(async () => {
       try {
-        // setIsLoading(prevState => ({ ...prevState, balance: true }))
         setIsFetchingBalance(true)
         if (
-          squid &&
-          squid.initialized &&
+          crossChainProvider &&
+          crossChainProvider.isLibInitialized() &&
           selectedChain &&
           selectedToken &&
+          selectedToken.symbol !== 'MANA' && // mana balance is already available in the wallet
           wallet
         ) {
           const networkProvider = await getNetworkProvider(selectedChain)
           const provider = new ethers.providers.Web3Provider(networkProvider)
-          // const fromAmount = await squid.getFromAmount({
-          //   fromToken: selectedToken,
-          //   toAmount: ,
-          //   toToken,
-          //   slippagePercentage: 0.5
-          // })
-          // // const selectedTokenPrice = await squid.getTokenPrice({
-          // //   tokenAddress: selectedToken.address,
-          // //   chainId: selectedToken.chainId
-          // // })
-
-          // if (!cancel) {
-          //   setSelectedTokenPrice(selectedTokenPrice)
-          // }
 
           // if native token
           if (selectedToken.address === NATIVE_TOKEN) {
             const balanceWei = await provider.getBalance(wallet.address)
-            const balanceEther = ethers.utils.formatEther(balanceWei)
             setSelectedTokenBalance(balanceWei)
-            console.log(`Balance of ${wallet.address} is ${balanceEther} ETH`)
 
             return
           }
@@ -152,10 +352,9 @@ const BuyWithCryptoModal = (props: Props) => {
           }
         }
       } catch (error) {
-        console.log('error getting balance: ', error)
+        console.error('Error getting balance: ', error)
       } finally {
         if (!cancel) {
-          // setIsLoading(prevState => ({ ...prevState, balance: false }))
           setIsFetchingBalance(false)
         }
       }
@@ -163,666 +362,752 @@ const BuyWithCryptoModal = (props: Props) => {
     return () => {
       cancel = true
     }
-  }, [selectedToken, selectedChain, wallet, squid])
+  }, [selectedToken, selectedChain, wallet])
 
-  // check if user can buy item
+  // computes if the user can buy the item with the selected token
   useEffect(() => {
     ;(async () => {
       if (
-        squid &&
-        squid.initialized &&
-        selectedTokenBalance &&
-        // selectedTokenPrice &&
-        !isNFT(asset)
+        selectedToken &&
+        ((selectedToken.symbol === 'MANA' && !!wallet) ||
+          (selectedToken.symbol !== 'MANA' && // MANA balance is calculated differently
+            selectedTokenBalance))
       ) {
-        const balance = parseFloat(
-          ethers.utils.formatEther(selectedTokenBalance)
-        )
-        console.log('balance: ', balance)
-
-        const destinyChainMANA = getContract(
-          ContractName.MANAToken,
-          asset.chainId
-        ).address
-        // const manaPrice = await squid.getTokenPrice({
-        //   tokenAddress: destinyChainMANA,
-        //   chainId: asset.chainId
-        // })
-
-        // const itemPriceInUSD =
-        //   Number(ethers.utils.formatEther(asset.price)) * manaPrice
-
-        // const balanceInUSD = balance * selectedTokenPrice
-        // setCanBuyItem(balanceInUSD >= itemPriceInUSD)
-
-        const providerMANA = providerTokens.find(
-          t =>
-            t.address.toLocaleLowerCase() ===
-            destinyChainMANA.toLocaleLowerCase()
-        )
-        if (providerMANA && selectedToken) {
-          const fromAmountParams = {
-            fromToken: selectedToken,
-            toAmount: ethers.utils.formatEther(
-              order ? order.price : !isNFT(asset) ? asset.price : ''
-            ),
-            toToken: providerMANA
-            // slippagePercentage: 0.5
+        let canBuy
+        if (selectedToken.symbol === 'MANA' && wallet) {
+          // wants to buy a L2 item with ETH MANA (through the provider)
+          if (
+            asset.network === Network.MATIC &&
+            getNetwork(selectedChain) === Network.ETHEREUM
+          ) {
+            canBuy =
+              wallet.networks[Network.ETHEREUM].mana >=
+              +ethers.utils.formatEther(price)
+          } else {
+            canBuy =
+              wallet.networks[asset.network].mana >=
+              +ethers.utils.formatEther(price)
           }
-          console.log('fromAmountParams: ', fromAmountParams)
-          const fromAmount = Number(
-            await squid.getFromAmount(fromAmountParams)
-          ).toFixed(6)
-          console.log('fromAmount inside useeffect: ', fromAmount)
+        } else if (selectedTokenBalance) {
+          const balance = parseFloat(
+            ethers.utils.formatUnits(
+              selectedTokenBalance,
+              selectedToken.decimals
+            )
+          )
+          const destinyChainMANA = getContract(
+            ContractName.MANAToken,
+            asset.chainId
+          ).address
 
-          if (balance > Number(fromAmount)) {
-            setCanBuyItem(true)
+          const providerMANA = providerTokens.find(
+            t =>
+              t.address.toLocaleLowerCase() ===
+              destinyChainMANA.toLocaleLowerCase()
+          )
+          if (providerMANA && selectedToken) {
+            const fromAmountParams = {
+              fromToken: selectedToken,
+              toAmount: ethers.utils.formatEther(price),
+              toToken: providerMANA
+            }
+            const fromAmount = Number(
+              await crossChainProvider.getFromAmount(fromAmountParams)
+            ).toFixed(6)
+            canBuy = balance > Number(fromAmount)
           }
         }
+        console.log('bug canBuy: ', canBuy)
+        setCanBuyItem(canBuy)
+        // setCanBuyItem(balance > Number(fromAmount))
       }
     })()
   }, [
     asset,
     order,
+    price,
     providerTokens,
+    selectedChain,
     selectedToken,
     selectedTokenBalance,
-    // selectedTokenPrice,
-    squid
+    wallet
   ])
 
-  // reset route when changing token
+  // sets interval to refresh route within a certain amount of time
   useEffect(() => {
-    setRouteFailed(false)
-    setRoute(undefined)
-  }, [selectedToken])
-
-  // calculate route on selectedToken change
-  // useEffect(() => {
-  //   // if (isFetchingRoute) {
-  //   //   return
-  //   // }
-  //   // let cancel = false
-
-  //   const getRoute = async (
-  //     squid: Squid,
-  //     wallet: Wallet,
-  //     selectedToken: Token,
-  //     providerMANA: Token
-  //   ) => {
-  //     try {
-  //       // const destinyChainMANA = getContract(
-  //       //   ContractName.MANAToken,
-  //       //   asset.chainId
-  //       // ).address
-  //       // const manaPrice = await squid.getTokenPrice({
-  //       //   tokenAddress: destinyChainMANA,
-  //       //   chainId: asset.chainId
-  //       // })
-
-  //       setIsFetchingRoute(true)
-  //       setRouteFailed(false)
-  //       // const xChainProvider = new AxelarProvider()
-  //       let route: RouteResponse | undefined = undefined
-
-  //       // const fromAmount =
-  //       //   (Number(
-  //       // ethers.utils.formatEther(
-  //       //   order ? order.price : !isNFT(asset) ? asset.price : ''
-  //       // )
-  //       //   ) *
-  //       //     manaPrice) /
-  //       //   selectedTokenPrice
-
-  //       const fromAmountParams = {
-  //         fromToken: selectedToken,
-  //         toAmount: ethers.utils.formatEther(
-  //           order ? order.price : !isNFT(asset) ? asset.price : ''
-  //         ),
-  //         toToken: providerMANA
-  //         // slippagePercentage: 0.5
-  //       }
-  //       console.log('fromAmountParams: ', fromAmountParams)
-  //       const fromAmount = Number(
-  //         await squid.getFromAmount(fromAmountParams)
-  //       ).toFixed(6)
-
-  //       // const balance = parseFloat(
-  //       //   ethers.utils.formatEther(selectedTokenBalance)
-  //       // )
-  //       // console.log('balance: ', balance)
-
-  //       // if (fromAmount > balance) {
-  //       //   setRouteFailed(true)
-  //       //   return
-  //       // }
-  //       console.log('fromAmount: ', fromAmount)
-
-  //       // if (!cancel) {
-  //       //   setSelectedTokenPrice(selectedTokenPrice)
-  //       // }
-
-  //       const fromAmountWei = ethers.utils
-  //         .parseUnits(fromAmount, selectedToken.decimals)
-  //         .toString()
-
-  //       const baseRouteConfig = {
-  //         fromAddress: wallet.address,
-  //         fromAmount: fromAmountWei,
-  //         fromChain: selectedChain,
-  //         fromToken: selectedToken.address
-  //       }
-  //       // there's an order so it's buying an NFT
-  //       console.log('baseRouteConfig: ', baseRouteConfig)
-  //       if (order) {
-  //         console.log('fetching1')
-  //         route = await axelarProvider.getBuyNFTRoute({
-  //           ...baseRouteConfig,
-  //           nft: {
-  //             collectionAddress: order.contractAddress,
-  //             tokenId: order.tokenId,
-  //             price: order.price
-  //           },
-  //           toAmount: order.price,
-  //           toChain: order.chainId
-  //         })
-  //       } else if (!isNFT(asset)) {
-  //         console.log('fetching2')
-  //         // buying an item
-  //         route = await axelarProvider.getMintNFTRoute({
-  //           ...baseRouteConfig,
-  //           item: {
-  //             collectionAddress: asset.contractAddress,
-  //             itemId: asset.itemId,
-  //             price: asset.price
-  //           },
-  //           toAmount: asset.price,
-  //           toChain: asset.chainId
-  //         })
-  //       }
-
-  //       if (route) {
-  //         setRoute(route)
-  //       }
-
-  //       // const selectedTokenPrice = await squid.getTokenPrice({
-  //       //   tokenAddress: selectedToken.address,
-  //       //   chainId: selectedToken.chainId
-  //       // })
-  //     } catch (error) {
-  //       console.log('error: ', error)
-  //       setRouteFailed(true)
-  //     } finally {
-  //       console.log('inside finally')
-  //       // if (!cancel) {
-  //       setIsFetchingRoute(false)
-
-  //       // }
-  //     }
-  //   }
-
-  //   const destinyChainMANA = getContract(ContractName.MANAToken, asset.chainId)
-  //     .address
-  //   const providerMANA = providerTokens.find(
-  //     t =>
-  //       t.address.toLocaleLowerCase() === destinyChainMANA.toLocaleLowerCase()
-  //   )
-  //   console.log('providerMANA: ', providerMANA)
-
-  //   if (
-  //     squid &&
-  //     squid.initialized &&
-  //     wallet &&
-  //     selectedToken &&
-  //     providerMANA &&
-  //     !route &&
-  //     !isFetchingRoute &&
-  //     !routeFailed
-  //   ) {
-  //     getRoute(squid, wallet, selectedToken, providerMANA)
-  //     // try {
-  //     // } catch (error) {
-  //     //   console.log('inside error: ', error);
-  //     //   setIsFetchingRoute(false)
-  //     // }
-  //   }
-
-  //   // ;(async () => {
-  //   //   try {
-  //   //     if (squid && squid.initialized && wallet && !isFetchingRoute) {
-  //   //       // const selectedTokenPrice = await squid.getTokenPrice({
-  //   //       //   tokenAddress: selectedToken.address,
-  //   //       //   chainId: selectedToken.chainId
-  //   //       // })
-
-  //   //       const destinyChainMANA = getContract(
-  //   //         ContractName.MANAToken,
-  //   //         asset.chainId
-  //   //       ).address
-  //   //       // const manaPrice = await squid.getTokenPrice({
-  //   //       //   tokenAddress: destinyChainMANA,
-  //   //       //   chainId: asset.chainId
-  //   //       // })
-
-  //   //       setIsFetchingRoute(true)
-  //   //       setRouteFailed(false)
-  //   //       const xChainProvider = new AxelarProvider()
-  //   //       let route: RouteResponse | undefined = undefined
-
-  //   //       // const fromAmount =
-  //   //       //   (Number(
-  //   //       // ethers.utils.formatEther(
-  //   //       //   order ? order.price : !isNFT(asset) ? asset.price : ''
-  //   //       // )
-  //   //       //   ) *
-  //   //       //     manaPrice) /
-  //   //       //   selectedTokenPrice
-
-  //   //       const providerMANA = providerTokens.find(
-  //   //         t =>
-  //   //           t.address.toLocaleLowerCase() ===
-  //   //           destinyChainMANA.toLocaleLowerCase()
-  //   //       )
-
-  //   //       const ETH = squid.getTokenData(
-  //   //         '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-  //   //         '1'
-  //   //       )
-
-  //   //       const USDC = squid.getTokenData(
-  //   //         '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-  //   //         '1'
-  //   //       )
-
-  //   //       const usdcToEth = await squid.getFromAmount({
-  //   //         fromToken: USDC,
-  //   //         toAmount: '1',
-  //   //         toToken: ETH
-  //   //       }) // expected: ~1600
-  //   //       console.log('usdcToEth: ', usdcToEth)
-
-  //   //       const ethToUsdc = await squid.getFromAmount({
-  //   //         fromToken: ETH,
-  //   //         toAmount: '200',
-  //   //         toToken: USDC
-  //   //       }) // expected: ~0.12...
-  //   //       console.log('ethToUsdc: ', ethToUsdc)
-
-  //   //       if (providerMANA) {
-  //   //         const fromAmountParams = {
-  //   //           fromToken: selectedToken,
-  //   //           toAmount: ethers.utils.formatEther(
-  //   //             order ? order.price : !isNFT(asset) ? asset.price : ''
-  //   //           ),
-  //   //           toToken: providerMANA
-  //   //           // slippagePercentage: 0.5
-  //   //         }
-  //   //         console.log('fromAmountParams: ', fromAmountParams)
-  //   //         const fromAmount = Number(
-  //   //           await squid.getFromAmount(fromAmountParams)
-  //   //         ).toFixed(6)
-  //   //         console.log('fromAmount: ', fromAmount)
-
-  //   //         if (!cancel) {
-  //   //           setSelectedTokenPrice(selectedTokenPrice)
-  //   //         }
-  //   //         const fromAmountWei = ethers.utils
-  //   //           .parseUnits(fromAmount, selectedToken.decimals)
-  //   //           .toString()
-
-  //   //         const baseRouteConfig = {
-  //   //           fromAddress: wallet.address,
-  //   //           fromAmount: fromAmountWei,
-  //   //           fromChain: selectedChain,
-  //   //           fromToken: selectedToken.address
-  //   //         }
-  //   //         // there's an order so it's buying an NFT
-  //   //         if (order) {
-  //   //           route = await xChainProvider.getBuyNFTRoute({
-  //   //             ...baseRouteConfig,
-  //   //             nft: {
-  //   //               collectionAddress: order.contractAddress,
-  //   //               tokenId: order.tokenId,
-  //   //               price: order.price
-  //   //             },
-  //   //             toAmount: order.price,
-  //   //             toChain: order.chainId
-  //   //           })
-  //   //         } else if (!isNFT(asset)) {
-  //   //           // buying an item
-  //   //           route = await xChainProvider.getMintNFTRoute({
-  //   //             ...baseRouteConfig,
-  //   //             item: {
-  //   //               collectionAddress: asset.contractAddress,
-  //   //               itemId: asset.itemId,
-  //   //               price: asset.price
-  //   //             },
-  //   //             toAmount: asset.price,
-  //   //             toChain: asset.chainId
-  //   //           })
-  //   //         }
-  //   //       }
-
-  //   //       // const selectedTokenPrice = await squid.getTokenPrice({
-  //   //       //   tokenAddress: selectedToken.address,
-  //   //       //   chainId: selectedToken.chainId
-  //   //       // })
-
-  //   //       if (!cancel) {
-  //   //         if (route) {
-  //   //           setRoute(route)
-  //   //         }
-  //   //       }
-  //   //     }
-  //   //   } catch (error) {
-  //   //     console.log('error getting route: ', error)
-  //   //     setRouteFailed(true)
-  //   //     // TODO: track that route failed
-  //   //   } finally {
-  //   //     if (!cancel) {
-  //   //       setIsFetchingRoute(false)
-  //   //     }
-  //   //   }
-  //   // })()
-
-  //   // return () => {
-  //   //   cancel = true
-  //   // }
-  // }, [
-  //   asset,
-  //   isFetchingRoute,
-  //   order,
-  //   providerTokens,
-  //   route,
-  //   routeFailed,
-  //   selectedChain,
-  //   selectedToken,
-  //   selectedTokenBalance,
-  //   // selectedTokenPrice,
-  //   squid,
-  //   wallet
-  // ])
-
-  const calculateRoute = useCallback(
-    async (selectedToken: Token) => {
-      const abortController = abortControllerRef.current
-      const signal = abortController.signal
-      const destinyChainMANA = getContract(
-        ContractName.MANAToken,
-        asset.chainId
-      ).address
-      const providerMANA = providerTokens.find(
-        t =>
-          t.address.toLocaleLowerCase() === destinyChainMANA.toLocaleLowerCase()
-      )
-      if (
-        !squid ||
-        !squid.initialized ||
-        !wallet ||
-        !selectedToken ||
-        !providerMANA
-      ) {
-        return
-      }
-      try {
-        // const destinyChainMANA = getContract(
-        //   ContractName.MANAToken,
-        //   asset.chainId
-        // ).address
-        // const manaPrice = await squid.getTokenPrice({
-        //   tokenAddress: destinyChainMANA,
-        //   chainId: asset.chainId
-        // })
-
+    let interval: NodeJS.Timeout | undefined = undefined
+    if (route) {
+      // setRouteSetInterval(
+      interval = setInterval(() => {
         setIsFetchingRoute(true)
+        console.log('EXECUTING THE CALCULATE ROUTE FROM THE SET INTERVAL')
+        console.log('calculate2')
+        calculateRoute()
+      }, ROUTE_FETCH_INTERVAL)
+      // )
+    }
+    return () => {
+      if (interval) {
+        console.log('CLEARING INTERVAL')
+        clearInterval(interval)
+      }
+    }
+  }, [calculateRoute, route])
+
+  // when changing the selectedToken and it's not fetching route, trigger fetch route
+  useEffect(() => {
+    if (
+      selectedToken &&
+      !route &&
+      !isFetchingRoute &&
+      !useMetaTx &&
+      !routeFailed
+    ) {
+      const isBuyingL1WithOtherTokenThanEthereumMANA =
+        asset.chainId === ChainId.ETHEREUM_MAINNET &&
+        selectedToken.chainId !== ChainId.ETHEREUM_MAINNET.toString() &&
+        selectedToken.symbol !== 'MANA'
+
+      const isPayingWithOtherTokenThanMANA = selectedToken.symbol !== 'MANA'
+      const isPayingWithMANAButFromOtherChain =
+        selectedToken.symbol === 'MANA' &&
+        selectedToken.chainId !== asset.chainId.toString()
+
+      if (
+        isBuyingL1WithOtherTokenThanEthereumMANA ||
+        isPayingWithOtherTokenThanMANA ||
+        isPayingWithMANAButFromOtherChain
+      ) {
+        setIsFetchingRoute(true)
+        calculateRoute()
+      }
+    }
+  }, [
+    calculateRoute,
+    isFetchingRoute,
+    route,
+    routeFailed,
+    selectedToken,
+    useMetaTx,
+    selectedChain,
+    asset.chainId
+  ])
+
+  const onBuyWithCrypto = useCallback(async () => {
+    const provider = await getConnectedProvider()
+    if (
+      route &&
+      crossChainProvider &&
+      crossChainProvider.isLibInitialized() &&
+      provider
+    ) {
+      onBuyItemThroughProvider(route)
+      // const axelarScanUrl = `https://axelarscan.io/gmp/${tx.transactionHash}`
+    }
+  }, [onBuyItemThroughProvider, route])
+
+  // useCallbacks
+
+  const renderSwitchNetworkButton = useCallback(() => {
+    return (
+      <Button
+        fluid
+        primary
+        className={styles.switchNetworkButton}
+        disabled={isSwitchingNetwork}
+        data-testid={CONFIRM_DATA_TEST_ID}
+        onClick={() => onSwitchNetwork(selectedChain)}
+      >
+        {isSwitchingNetwork ? (
+          <>
+            <Loader inline active size="tiny" />
+            {t('buy_with_crypto_modal.confirm_switch_network')}
+          </>
+        ) : (
+          t('buy_with_crypto_modal.switch_network', {
+            chain: providerChains.find(
+              c => c.chainId === selectedChain.toString()
+            )?.networkName
+          })
+        )}
+      </Button>
+    )
+  }, [isSwitchingNetwork, onSwitchNetwork, providerChains, selectedChain])
+
+  const onBuyNFT = useCallback(() => {
+    if (order) {
+      const contractNames = getContractNames()
+
+      const mana = getContractProp({
+        name: contractNames.MANA,
+        network: asset.network
+      }) as DCLContract
+
+      const marketplace = getContractProp({
+        address: order?.marketplaceAddress,
+        network: asset.network
+      }) as DCLContract
+
+      onAuthorizedAction({
+        targetContractName: ContractName.MANAToken,
+        authorizationType: AuthorizationType.ALLOWANCE,
+        authorizedAddress: order.marketplaceAddress,
+        targetContract: mana as Contract,
+        authorizedContractLabel: marketplace.label || marketplace.name,
+        requiredAllowanceInWei: order.price,
+        onAuthorized: alreadyAuthorized =>
+          onExecuteOrder(order, asset as NFT, undefined, !alreadyAuthorized) // undefined as fingerprint
+      })
+    }
+  }, [asset, order, getContractProp, onAuthorizedAction, onExecuteOrder])
+
+  const onBuyItem = useCallback(() => {
+    if (!isNFT(asset)) {
+      const contractNames = getContractNames()
+
+      const mana = getContractProp({
+        name: contractNames.MANA,
+        network: asset.network
+      }) as DCLContract
+
+      const collectionStore = getContractProp({
+        name: contractNames.COLLECTION_STORE,
+        network: asset.network
+      }) as DCLContract
+
+      onAuthorizedAction({
+        targetContractName: ContractName.MANAToken,
+        authorizationType: AuthorizationType.ALLOWANCE,
+        authorizedAddress: collectionStore.address,
+        targetContract: mana as Contract,
+        authorizedContractLabel: collectionStore.label || collectionStore.name,
+        requiredAllowanceInWei: asset.price,
+        onAuthorized: () => onBuyItemProp(asset)
+      })
+    }
+  }, [asset, getContractProp, onAuthorizedAction, onBuyItemProp])
+
+  const onBuyWithCard = useCallback(() => {
+    analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
+    return !isNFT(asset)
+      ? onBuyItemWithCard(asset)
+      : !!order
+      ? onExecuteOrderWithCard(asset)
+      : () => {}
+  }, [analytics, asset, onBuyItemWithCard, onExecuteOrderWithCard, order])
+
+  const renderGetMANAButton = useCallback(() => {
+    return (
+      <>
+        <Button
+          fluid
+          primary
+          data-testid={CONFIRM_DATA_TEST_ID}
+          loading={isFetchingBalance || isLoading}
+          onClick={() => onGetMana()}
+        >
+          {t('buy_with_crypto_modal.get_mana')}
+        </Button>
+        <ChainButton
+          inverted
+          fluid
+          disabled={isLoading || isLoadingAuthorization}
+          onClick={onBuyWithCard}
+          loading={isLoading || isLoadingAuthorization}
+          chainId={asset.chainId}
+        >
+          <Icon name="credit card outline" />
+          {t(`buy_with_crypto_modal.buy_with_card`)}
+        </ChainButton>
+      </>
+    )
+  }, [
+    isFetchingBalance,
+    isLoading,
+    isLoadingAuthorization,
+    asset.chainId,
+    onBuyWithCard,
+    onGetMana
+  ])
+
+  const renderBuyNowButton = useCallback(() => {
+    let onClick =
+      selectedToken?.symbol === 'MANA' && !route
+        ? !!order
+          ? onBuyNFT
+          : onBuyItem
+        : onBuyWithCrypto
+
+    return (
+      <>
+        <Button
+          fluid
+          primary
+          data-testid={CONFIRM_DATA_TEST_ID}
+          disabled={
+            (selectedToken?.symbol !== 'MANA' && !route) ||
+            isFetchingRoute ||
+            isLoadingBuyCrossChain
+          }
+          loading={isFetchingBalance || isLoading}
+          onClick={onClick}
+        >
+          <>
+            {isLoadingBuyCrossChain || isFetchingRoute ? (
+              <Loader inline active size="tiny" />
+            ) : null}
+            {!isFetchingRoute // if fetching route, just render the Loader
+              ? isLoadingBuyCrossChain
+                ? t('buy_with_crypto_modal.confirm_transaction')
+                : t('buy_with_crypto_modal.buy_now')
+              : null}
+          </>
+        </Button>
+      </>
+    )
+  }, [
+    route,
+    order,
+    selectedToken,
+    isFetchingRoute,
+    isLoadingBuyCrossChain,
+    isFetchingBalance,
+    isLoading,
+    onBuyNFT,
+    onBuyItem,
+    onBuyWithCrypto
+  ])
+
+  const renderMainActionButton = useCallback(() => {
+    if (wallet && selectedToken && canBuyItem !== undefined) {
+      if (canBuyItem) {
+        if (
+          selectedToken.symbol === 'MANA' &&
+          wallet.network === Network.ETHEREUM
+        ) {
+          return isPriceTooLow(price)
+            ? renderSwitchNetworkButton()
+            : renderBuyNowButton()
+        }
+        // for any other token, it needs to be connected on the selectedChain network
+        return selectedChain === wallet.chainId
+          ? renderBuyNowButton()
+          : renderSwitchNetworkButton()
+      } else {
+        console.log('rendering get mana button')
+        // can't buy Get Mana and Buy With Card buttons
+        return renderGetMANAButton()
+      }
+    }
+  }, [
+    price,
+    wallet,
+    selectedToken,
+    canBuyItem,
+    selectedChain,
+    renderBuyNowButton,
+    renderSwitchNetworkButton,
+    renderGetMANAButton
+  ])
+
+  const renderTokenBalance = useCallback(() => {
+    let balance
+    if (selectedToken && selectedToken.symbol === 'MANA') {
+      balance = wallet?.networks[getNetwork(selectedChain)]?.mana.toFixed(2)
+    } else if (selectedToken && selectedTokenBalance) {
+      balance = Number(
+        ethers.utils.formatUnits(selectedTokenBalance, selectedToken.decimals)
+      ).toFixed(4)
+    }
+
+    return !isFetchingBalance ? (
+      <span className={styles.balance}>{balance}</span>
+    ) : (
+      <div className={styles.balanceSkeleton} />
+    )
+  }, [
+    wallet,
+    isFetchingBalance,
+    selectedChain,
+    selectedToken,
+    selectedTokenBalance
+  ])
+
+  const onTokenOrChainSelection = useCallback(
+    (selectedOption: Token | ChainData) => {
+      setShowChainSelector(false)
+      setShowTokenSelector(false)
+
+      if (isToken(selectedOption)) {
+        abortControllerRef.current.abort()
+
+        const selectedToken = providerTokens.find(
+          t =>
+            t.address === selectedOption.address &&
+            t.chainId === selectedChain.toString()
+        ) as Token
+        // reset all fields
+        setSelectedToken(selectedToken)
+        setFromAmount(undefined)
+        setSelectedTokenBalance(undefined)
+        setCanBuyItem(undefined)
+        setRoute(undefined)
         setRouteFailed(false)
-        // const xChainProvider = new AxelarProvider()
-        let route: RouteResponse | undefined = undefined
-
-        // const fromAmount =
-        //   (Number(
-        // ethers.utils.formatEther(
-        //   order ? order.price : !isNFT(asset) ? asset.price : ''
-        // )
-        //   ) *
-        //     manaPrice) /
-        //   selectedTokenPrice
-
-        const fromAmountParams = {
-          fromToken: selectedToken,
-          toAmount: ethers.utils.formatEther(
-            order ? order.price : !isNFT(asset) ? asset.price : ''
-          ),
-          toToken: providerMANA
-          // slippagePercentage: 0.5
-        }
-        console.log('fromAmountParams: ', fromAmountParams)
-        const fromAmount = Number(
-          await squid.getFromAmount(fromAmountParams)
-        ).toFixed(6)
-        console.log('fromAmount: ', fromAmount)
-
-        const fromAmountWei = ethers.utils
-          .parseUnits(fromAmount, selectedToken.decimals)
-          .toString()
-
-        const baseRouteConfig = {
-          fromAddress: wallet.address,
-          fromAmount: fromAmountWei,
-          fromChain: selectedChain,
-          fromToken: selectedToken.address
-        }
-        // there's an order so it's buying an NFT
-        console.log('baseRouteConfig: ', baseRouteConfig)
-        if (order) {
-          console.log('fetching1')
-          route = await axelarProvider.getBuyNFTRoute({
-            ...baseRouteConfig,
-            nft: {
-              collectionAddress: order.contractAddress,
-              tokenId: order.tokenId,
-              price: order.price
-            },
-            toAmount: order.price,
-            toChain: order.chainId
-          })
-        } else if (!isNFT(asset)) {
-          console.log('fetching2')
-          // buying an item
-          route = await axelarProvider.getMintNFTRoute({
-            ...baseRouteConfig,
-            item: {
-              collectionAddress: asset.contractAddress,
-              itemId: asset.itemId,
-              price: asset.price
-            },
-            toAmount: asset.price,
-            toChain: asset.chainId
-          })
-        }
-
-        console.log('signal.aborted in route ', signal.aborted, route)
-        if (route && !signal.aborted) {
-          setRoute(route)
-        }
-
-        // const selectedTokenPrice = await squid.getTokenPrice({
-        //   tokenAddress: selectedToken.address,
-        //   chainId: selectedToken.chainId
-        // })
-      } catch (error) {
-        console.log('error: ', error)
-        setRouteFailed(true)
-      } finally {
-        console.log('inside finally')
-        // if (!cancel) {
-        setIsFetchingRoute(false)
-
-        // }
+        abortControllerRef.current = new AbortController()
+      } else {
+        setSelectedChain(Number(selectedOption.chainId) as ChainId)
+        const manaDestinyChain = providerTokens.find(
+          t => t.symbol === 'MANA' && t.chainId === selectedOption.chainId
+        )
+        // set the selected token on the new chain selected to MANA or the first one found
+        setSelectedToken(
+          manaDestinyChain ||
+            providerTokens.find(t => t.chainId === selectedOption.chainId)
+        )
+        setRoute(undefined)
+        setRouteFailed(false)
       }
     },
-    [asset, order, providerTokens, selectedChain, squid, wallet]
+    [providerTokens, selectedChain]
   )
 
-  // when changing the chain, reset the selected token to MANA
-  // useEffect(() => {
-  //   const manaToken = providerTokens.find(
-  //     t => t.symbol === 'MANA' && t.chainId === selectedChain.toString()
-  //   )
-  //   setSelectedToken(manaToken)
-  //   setSelectedTokenBalance(undefined)
-  //   setRouteFailed(false)
-  //   setRoute(undefined)
-  //   if (manaToken) {
-  //     calculateRoute(manaToken)
-  //   }
-  // }, [calculateRoute, providerTokens, selectedChain])
-
-  const onBuy = useCallback(async () => {
-    const provider = await getConnectedProvider()
-    if (route && squid && squid.initialized && provider) {
-      // const networkProvider = await getNetworkProvider(selectedChain)
-      // const tx = await axelarProvider.executeRoute(route, networkProvider)
-
-      const signer = await new ethers.providers.Web3Provider(
-        provider
-      ).getSigner()
-
-      console.log('signer: ', signer)
-      console.log('route.route: ', route.route)
-      // tslint:disable-next-line
-      // @ts-ignore
-      const txResponse = (await squid.executeRoute({
-        route: route.route,
-        signer
-      })) as ethers.providers.TransactionResponse
-
-      const tx = await txResponse.wait()
-      // Step 5: With hash, you can check the transaction on the blockchain & Axelarscan
-      const axelarScanUrl = `https://axelarscan.io/gmp/${tx.transactionHash}`
-      console.log('axelarScanUrl: ', axelarScanUrl)
-      console.log('Follow your transaction here: ', axelarScanUrl)
+  const renderModalNavigation = useCallback(() => {
+    if (showChainSelector || showTokenSelector) {
+      return (
+        <ModalNavigation
+          title={t(
+            `buy_with_crypto_modal.token_and_chain_selector.select_${
+              showChainSelector ? 'chain' : 'token'
+            }`
+          )}
+          onBack={() => {
+            setShowChainSelector(false)
+            setShowTokenSelector(false)
+          }}
+        />
+      )
     }
-  }, [route, squid])
-
-  return (
-    <Modal size="tiny" onClose={onClose} className={styles.buyWithCryptoModal}>
+    return (
       <ModalNavigation
-        title={t('buy_with_crypto.title', {
+        title={t('buy_with_crypto_modal.title', {
           name: asset.name,
           b: (children: React.ReactChildren) => <b>{children}</b>
         })}
         onClose={onClose}
       />
+    )
+  }, [asset.name, onClose, showChainSelector, showTokenSelector])
+
+  const translationPageDescriptorId = compact([
+    'mint',
+    isWearableOrEmote(asset)
+      ? isBuyWithCardPage
+        ? 'with_card'
+        : 'with_mana'
+      : null,
+    'page'
+  ]).join('_')
+
+  return (
+    <Modal size="tiny" onClose={onClose} className={styles.buyWithCryptoModal}>
+      {renderModalNavigation()}
       <Modal.Content>
         <>
-          <div>
-            <span className={styles.subtitle}>
-              {t('buy_with_crypto.subtitle', {
-                name: <b>{getAssetName(asset)}</b>,
-                amount: (
-                  <Mana showTooltip network={asset.network} inline withTooltip>
+          {showChainSelector || showTokenSelector ? (
+            <div>
+              {showChainSelector ? (
+                <ChainAndTokenSelector
+                  currentChain={selectedChain}
+                  chains={providerChains}
+                  onSelect={onTokenOrChainSelection}
+                />
+              ) : null}
+              {showTokenSelector ? (
+                <ChainAndTokenSelector
+                  currentChain={selectedChain}
+                  tokens={providerTokens}
+                  onSelect={onTokenOrChainSelection}
+                />
+              ) : null}
+            </div>
+          ) : (
+            <>
+              <div className={styles.assetContainer}>
+                <AssetImage asset={asset} isSmall />
+                <span className={styles.assetName}>{asset.name}</span>
+                <div className={styles.priceContainer}>
+                  <Mana network={asset.network} inline withTooltip>
                     {formatWeiMANA(
                       order ? order.price : !isNFT(asset) ? asset.price : ''
                     )}
                   </Mana>
-                )
-              })}
-            </span>
-            <div className={styles.assetContainer}>
-              <AssetImage asset={asset} isSmall />
-            </div>
-          </div>
-
-          {!providerTokens.length || !selectedToken ? (
-            <Loader className={styles.mainLoader} active />
-          ) : (
-            <>
-              <div className={styles.dropdownContainer}>
-                <div>
-                  <span>{t('buy_with_crypto.choose_chain')}</span>
-                  <Dropdown
-                    // disabled={isFetchingRoute}
-                    className={classNames(
-                      styles.dcl_dropdown
-                      // styles.token_dropdown
-                    )}
-                    value={selectedChain}
-                    options={providerChains.map(chain => ({
-                      text: chain.networkName,
-                      value: +chain.chainId,
-                      image: { avatar: true, src: chain.nativeCurrency.icon }
-                    }))}
-                    onChange={(_, data) => {
-                      setSelectedChain(data.value as any)
-                      onSwitchNetwork(data.value as ChainId)
-                    }}
-                  />
-                </div>
-                <div className={styles.tokenDropdownContainer}>
-                  <span>{t('buy_with_crypto.choose_token')}</span>
-                  <Dropdown
-                    ref={tokenDropdownRef}
-                    // disabled={isFetchingRoute}
-                    className={classNames(
-                      styles.dcl_dropdown,
-                      styles.token_dropdown
-                    )}
-                    search
-                    scrolling
-                    value={selectedToken?.address}
-                    options={providerTokens
-                      .filter(
-                        token => token.chainId === selectedChain.toString()
-                      )
-                      .map(token => ({
-                        text: token.symbol,
-                        value: token.address,
-                        image: { avatar: true, src: token.logoURI }
-                      }))}
-                    onChange={(_, data) => {
-                      abortControllerRef.current.abort()
-                      console.log('tokenDropdownRef: ', tokenDropdownRef)
-                      // walk-around to remove focus from the dropdown component from semantic
-                      setTimeout(() => {
-                        ;(tokenDropdownRef.current as any).ref.current.firstElementChild.blur()
-                      }, 100)
-
-                      const selectedToken = providerTokens.find(
-                        t => t.address === data.value
-                      ) as Token
-                      setSelectedToken(selectedToken)
-                      abortControllerRef.current = new AbortController()
-                      calculateRoute(selectedToken)
-                    }}
-                  />
+                  <span className={styles.priceInUSD}>
+                    <ManaToFiat
+                      mana={
+                        order ? order.price : !isNFT(asset) ? asset.price : ''
+                      }
+                      digits={6}
+                    />
+                  </span>
                 </div>
               </div>
-              <div className={styles.balance_container}>
-                {selectedTokenBalance ? (
-                  <span>
-                    {t('buy_with_crypto.balance')}:{' '}
-                    {ethers.utils
-                      .formatEther(selectedTokenBalance)
-                      .toString()
-                      .slice(0, 6)}
-                  </span>
+
+              {!providerTokens.length || !selectedToken ? (
+                <Loader active className={styles.mainLoader} />
+              ) : (
+                <>
+                  <div className={styles.dropdownContainer}>
+                    <div>
+                      <span>{t('buy_with_crypto_modal.pay_with')}</span>
+                      <div
+                        className={styles.tokenAndChainSelector}
+                        onClick={() => setShowChainSelector(true)}
+                      >
+                        <img
+                          src={selectedProviderChain?.nativeCurrency.icon}
+                          alt={selectedProviderChain?.nativeCurrency.name}
+                        />
+                        <span className={styles.tokenAndChainSelectorName}>
+                          {' '}
+                          {selectedProviderChain?.networkName}{' '}
+                        </span>
+                        <Icon name="chevron down" />
+                      </div>
+                    </div>
+                    <div className={styles.tokenDropdownContainer}>
+                      <div
+                        className={classNames(
+                          styles.tokenAndChainSelector,
+                          styles.tokenDropdown
+                        )}
+                        onClick={() => setShowTokenSelector(true)}
+                      >
+                        <img
+                          src={selectedToken.logoURI}
+                          alt={selectedToken.name}
+                        />
+                        <span className={styles.tokenAndChainSelectorName}>
+                          {selectedToken.symbol}{' '}
+                        </span>
+                        <div className={styles.balanceContainer}>
+                          {t('buy_with_crypto_modal.balance')}:{' '}
+                          {renderTokenBalance()}
+                        </div>
+                        <Icon name="chevron down" />
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <div className={styles.costContainer}>
+                {!!selectedToken ? (
+                  <>
+                    <div className={styles.itemCost}>
+                      <>
+                        <div className={styles.itemCostLabels}>
+                          {t('buy_with_crypto_modal.item_cost')}
+                          {useMetaTx && !isPriceTooLow(price) ? (
+                            <span className={styles.feeCovered}>
+                              {t(
+                                'buy_with_crypto_modal.transaction_fee_covered',
+                                {
+                                  free: (
+                                    <span className={styles.feeCoveredFree}>
+                                      {t('buy_with_crypto_modal.free')}
+                                    </span>
+                                  )
+                                }
+                              )}
+                            </span>
+                          ) : null}
+                        </div>
+                        <div className={styles.fromAmountContainer}>
+                          <div className={styles.fromAmountTokenContainer}>
+                            <img
+                              src={selectedToken?.logoURI}
+                              alt={selectedToken?.name}
+                            />
+                            {selectedToken.symbol === 'MANA' ? (
+                              ethers.utils.formatEther(price)
+                            ) : !!fromAmount ? (
+                              fromAmount
+                            ) : (
+                              <span
+                                className={classNames(
+                                  styles.skeleton,
+                                  styles.estimatedFeeSkeleton
+                                )}
+                              />
+                            )}
+                          </div>
+                          {selectedToken.usdPrice ? (
+                            fromAmount || selectedToken.symbol === 'MANA' ? (
+                              <span className={styles.fromAmountUSD}>
+                                $
+                                {(
+                                  Number(
+                                    selectedToken.symbol === 'MANA'
+                                      ? ethers.utils.formatEther(price)
+                                      : fromAmount
+                                  ) * selectedToken.usdPrice
+                                ).toFixed(6)}
+                              </span>
+                            ) : (
+                              <span
+                                className={classNames(
+                                  styles.skeleton,
+                                  styles.fromAmountUSDSkeleton
+                                )}
+                              />
+                            )
+                          ) : null}
+                        </div>
+                      </>
+                    </div>
+
+                    {shouldUseCrossChainProvider ? (
+                      <div className={styles.itemCost}>
+                        {t('buy_with_crypto_modal.fee_cost')}
+                        <div className={styles.fromAmountContainer}>
+                          {!!route ? (
+                            <div className={styles.fromAmountTokenContainer}>
+                              <img
+                                src={
+                                  route.route.estimate.gasCosts[0].token.logoURI
+                                }
+                                alt={
+                                  route.route.estimate.gasCosts[0].token.name
+                                }
+                              />
+                              {parseFloat(
+                                ethers.utils.formatUnits(
+                                  route.route.estimate.gasCosts[0].amount,
+                                  route.route.estimate.gasCosts[0].token
+                                    .decimals
+                                )
+                              ).toFixed(6)}
+                            </div>
+                          ) : (
+                            <div
+                              className={classNames(
+                                styles.skeleton,
+                                styles.estimatedFeeSkeleton
+                              )}
+                            />
+                          )}
+                          {!!routeFeeCost && routeFeeCost.token.usdPrice ? (
+                            <span className={styles.fromAmountUSD}>
+                              $
+                              {(Number(routeFeeCost.feeCost) +
+                                Number(routeFeeCost.gasCost)) *
+                                routeFeeCost.token.usdPrice}
+                            </span>
+                          ) : (
+                            <span
+                              className={classNames(
+                                styles.skeleton,
+                                styles.fromAmountUSDSkeleton
+                              )}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    ) : null}
+                  </>
+                ) : null}
+                {selectedToken && shouldUseCrossChainProvider ? (
+                  <div className={styles.durationAndExchangeContainer}>
+                    <div>
+                      <span>
+                        {' '}
+                        {t(
+                          'buy_with_crypto_modal.durations.transaction_duration'
+                        )}{' '}
+                      </span>
+                      {route ? (
+                        t(
+                          `buy_with_crypto_modal.durations.${
+                            route.route.estimate.estimatedRouteDuration === 0
+                              ? 'fast'
+                              : route.route.estimate.estimatedRouteDuration ===
+                                20
+                              ? 'normal'
+                              : 'slow'
+                          }`
+                        )
+                      ) : (
+                        <span
+                          className={classNames(
+                            styles.skeleton,
+                            styles.fromAmountUSDSkeleton
+                          )}
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <span> {t('buy_with_crypto_modal.exchange_rate')} </span>
+                      {route && selectedToken ? (
+                        <>
+                          1 {selectedToken.symbol} ={' '}
+                          {route.route.estimate.exchangeRate?.slice(0, 7)} MANA
+                        </>
+                      ) : (
+                        <span
+                          className={classNames(
+                            styles.skeleton,
+                            styles.fromAmountUSDSkeleton
+                          )}
+                        />
+                      )}
+                    </div>
+                  </div>
                 ) : null}
               </div>
 
-              <RouteSummary route={route} selectedToken={selectedToken} />
-
-              {routeFailed && selectedToken ? (
-                <span className={styles.routeUnavailable}>
-                  {' '}
-                  {t('buy_with_crypto.route_unavailable', {
-                    token: selectedToken.symbol
+              {selectedToken &&
+              shouldUseCrossChainProvider &&
+              asset.network === Network.MATIC && // and it's buying a MATIC wearable
+              !isPriceTooLow(price) ? (
+                <span className={styles.rememberFreeTxs}>
+                  {t('buy_with_crypto_modal.remember_transaction_fee_covered', {
+                    free: (
+                      <span className={styles.feeCoveredFree}>
+                        {t('buy_with_crypto_modal.free')}
+                      </span>
+                    )
                   })}
                 </span>
               ) : null}
-              {!canBuyItem ? (
-                <span className={styles.insufficientFunds}>
-                  {t('buy_with_crypto.insufficient_funds', {
+
+              {hasLowPriceForMetaTx && !isBuyWithCardPage && useMetaTx ? (
+                <span className={styles.warning}>
+                  {' '}
+                  {t('buy_with_crypto_modal.price_too_low', {
+                    learn_more: (
+                      <a
+                        href="https://docs.decentraland.org"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {/* TODO: add this URL */}
+                        <u> {t('buy_with_crypto_modal.learn_more')} </u>
+                      </a>
+                    )
+                  })}
+                </span>
+              ) : null}
+              {canBuyItem === false && isWearableOrEmote(asset) ? (
+                <span className={styles.warning}>
+                  {t('buy_with_crypto_modal.insufficient_funds', {
+                    token: selectedToken?.symbol || 'MANA'
+                  })}
+                </span>
+              ) : null}
+              {routeFailed && selectedToken ? (
+                <span className={styles.warning}>
+                  {' '}
+                  {t('buy_with_crypto_modal.route_unavailable', {
                     token: selectedToken.symbol
                   })}
                 </span>
@@ -831,29 +1116,49 @@ const BuyWithCryptoModal = (props: Props) => {
           )}
         </>
       </Modal.Content>
-      <Modal.Actions>
-        <Button data-testid={CANCEL_DATA_TEST_ID} onClick={onClose}>
-          {t('global.cancel')}
-        </Button>
-        <Button
-          primary
-          data-testid={CONFIRM_DATA_TEST_ID}
-          loading={isFetchingBalance}
-          disabled={!selectedToken || !canBuyItem || !route} // TODO: OR INSUFFIENT BALANCE
-          onClick={onBuy} // TODO
-        >
-          {!!selectedToken &&
-          !!providerTokens.find(t => t.address === selectedToken.address)
-            ? t('buy_with_crypto.buy_with_token', {
-                token: providerTokens.find(
-                  t => t.address === selectedToken.address
-                )?.symbol
-              })
-            : t('buy_with_crypto.select_a_token')}
-        </Button>
-      </Modal.Actions>
+      {showChainSelector || showTokenSelector ? null : (
+        <Modal.Actions>
+          <div
+            className={classNames(
+              styles.buttons,
+              isWearableOrEmote(asset) && 'with-mana'
+            )}
+          >
+            {renderMainActionButton()}
+          </div>
+          {isWearableOrEmote(asset) && isBuyWithCardPage ? (
+            <CardPaymentsExplanation
+              translationPageDescriptorId={translationPageDescriptorId}
+            />
+          ) : null}
+        </Modal.Actions>
+      )}
     </Modal>
   )
 }
 
-export default React.memo(BuyWithCryptoModal)
+export const BuyNFTWithCryptoModal = React.memo(
+  withAuthorizedAction(
+    BuyWithCryptoModal,
+    AuthorizedAction.BUY,
+    {
+      action: 'buy_with_mana_page.authorization.action',
+      title_action: 'buy_with_mana_page.authorization.title_action'
+    },
+    getBuyItemStatus,
+    getError
+  )
+)
+
+export const MintNFTWithCryptoModal = React.memo(
+  withAuthorizedAction(
+    BuyWithCryptoModal,
+    AuthorizedAction.MINT,
+    {
+      action: 'mint_with_mana_page.authorization.action',
+      title_action: 'mint_with_mana_page.authorization.title_action'
+    },
+    getMintItemStatus,
+    getError
+  )
+)
