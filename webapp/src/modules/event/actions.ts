@@ -4,10 +4,10 @@ export const FETCH_EVENT_REQUEST = '[Request] Fetch event'
 export const FETCH_EVENT_SUCCESS = '[Success] Fetch event'
 export const FETCH_EVENT_FAILURE = '[Failure] Fetch event'
 
-export const fetchEventRequest = (tags: string[]) =>
-  action(FETCH_EVENT_REQUEST, { tags })
-export const fetchEventSuccess = (tags: string[], contracts: string[]) =>
-  action(FETCH_EVENT_SUCCESS, { tags, contracts })
+export const fetchEventRequest = (eventTag: string, additionalSearchTags: string[] = []) =>
+  action(FETCH_EVENT_REQUEST, { eventTag, additionalSearchTags })
+export const fetchEventSuccess = (eventTag: string, contracts: string[]) =>
+  action(FETCH_EVENT_SUCCESS, { eventTag, contracts })
 export const fetchEventFailure = (error: string) =>
   action(FETCH_EVENT_FAILURE, { error })
 

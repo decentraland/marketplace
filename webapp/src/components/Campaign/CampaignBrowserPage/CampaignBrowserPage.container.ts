@@ -22,7 +22,8 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch) => ({
-  onFetchEventContracts: (tags: string[]) => dispatch(fetchEventRequest(tags))
+  onFetchEventContracts: (eventTag: string, additionalSearchTags: string[] = []) =>
+    dispatch(fetchEventRequest(eventTag, additionalSearchTags))
 })
 
 export default connect(mapState, mapDispatch)(BrowsePage)

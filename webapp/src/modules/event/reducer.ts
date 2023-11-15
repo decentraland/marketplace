@@ -39,14 +39,14 @@ export function eventReducer(
         loading: loadingReducer(state.loading, action)
       }
     case FETCH_EVENT_SUCCESS:
-      const { tags, contracts } = action.payload
+      const { eventTag, contracts } = action.payload
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
         data: {
           ...state.data,
-          [tags[0]]: contracts
+          [eventTag]: contracts
         }
       }
     case FETCH_EVENT_FAILURE:
