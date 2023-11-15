@@ -1,11 +1,21 @@
 import { connect } from 'react-redux'
 import { Order } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { MapDispatchProps, MapDispatch } from './BuyNFTButtons.types'
+import {
+  MapDispatchProps,
+  MapDispatch,
+  MapStateProps
+} from './BuyNFTButtons.types'
 import { executeOrderWithCardRequest } from '../../../../modules/order/actions'
 import { buyItemWithCardRequest } from '../../../../modules/item/actions'
 import { Asset } from '../../../../modules/asset/types'
+import { RootState } from '../../../../modules/reducer'
+import { getIsBuyCrossChainEnabled } from '../../../../modules/features/selectors'
 import BuyNFTButtons from './BuyNFTButtons'
+
+const mapState = (state: RootState): MapStateProps => ({
+  isBuyCrossChainEnabled: getIsBuyCrossChainEnabled(state)
+})
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onExecuteOrderWithCard: nft => dispatch(executeOrderWithCardRequest(nft)),
@@ -19,4 +29,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBuyItemWithCard: item => dispatch(buyItemWithCardRequest(item))
 })
 
-export default connect(null, mapDispatch)(BuyNFTButtons)
+export default connect(mapState, mapDispatch)(BuyNFTButtons)

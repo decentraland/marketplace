@@ -16,10 +16,13 @@ export type Props = {
   assetType: AssetType
   tokenId?: string
   buyWithCardClassName?: string
+  isBuyCrossChainEnabled: boolean
   onBuyWithCrypto: (asset: Asset, order?: Order | null) => void
   onExecuteOrderWithCard: typeof executeOrderWithCardRequest
   onBuyItemWithCard: typeof buyItemWithCardRequest
 }
+
+export type MapStateProps = Pick<Props, 'isBuyCrossChainEnabled'>
 
 export type MapDispatchProps = Pick<
   Props,
