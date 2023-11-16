@@ -14,15 +14,15 @@ export function* eventSaga() {
 }
 
 export function* handleFetchEventRequest(action: FetchEventRequestAction) {
-  const { tag } = action.payload
+  const { eventTag, additionalSearchTags } = action.payload
 
   try {
     const addresses: string[] = yield call(
       [builderAPI, builderAPI.fetchAddressesByTag],
-      [tag]
+      [eventTag, ...additionalSearchTags]
     )
 
-    yield put(fetchEventSuccess(tag, addresses))
+    yield put(fetchEventSuccess(eventTag, addresses))
   } catch (error) {
     yield put(
       fetchEventFailure(

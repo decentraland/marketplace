@@ -12,7 +12,7 @@ import { Navigation } from '../../Navigation'
 import { AssetBrowse } from '../../AssetBrowse'
 import { CampaignBrowserBanner } from '../banners/CampaignBrowserBanner'
 import { CampaignBanner } from '../CampaignBanner'
-import { CAMPAIGN_TAG } from '../config'
+import { ADDITIONAL_CAMPAIGN_BROWSE_TAGS, CAMPAIGN_TAG } from '../config'
 import { Props } from './CampaignBrowserPage.types'
 import './CampaignBrowserPage.css'
 
@@ -27,7 +27,7 @@ const CampaignBrowserPage = (props: Props) => {
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
   useEffect(() => {
-    onFetchEventContracts(CAMPAIGN_TAG)
+    onFetchEventContracts(CAMPAIGN_TAG, ADDITIONAL_CAMPAIGN_BROWSE_TAGS)
   }, [onFetchEventContracts])
 
   const activeTab = NavigationTab.CAMPAIGN_BROWSER
