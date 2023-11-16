@@ -2,12 +2,12 @@
 
 |Network|Provider|URL|Current|Previous|
 |-|-|-|-|-|
-|Mainnet|Hosted Services|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace|QmPdVPhDvK3bs8cmUeFeMAYRYky6yqYE9jYwpcMdi4QCdB|Qmf8fcWxGiKcxffcWRfhbAb36HEvXFNXsoRunuf4sPR1Bp|
-|Mainnet|Satsuma|https://subgraph.satsuma-prod.com/decentraland/marketplace/playground|QmPdVPhDvK3bs8cmUeFeMAYRYky6yqYE9jYwpcMdi4QCdB|Qmf8fcWxGiKcxffcWRfhbAb36HEvXFNXsoRunuf4sPR1Bp|
-|Mainnet Temp|Hosted Services|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-temp|QmPT9v6EsqqCA8BzrYtArJL54mVgfH81FzFTX2gLv9XcSp|QmR9z6HJpRP9tSPLNPWkQ67JbDP4wzM4hBVkWmbgdKBCuo|
-|Sepolia|Graph Studio|https://api.studio.thegraph.com/query/49472/marketplace-sepolia/version/latest|QmTu8KKidkfRaCCvEHdBnWhRfLRLwPmhHpfRFxTk2wPAzN|-|
-|Goerli|Hosted Services|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli|QmS2GCuAkzH2kNDYe2pA9HkRTPLpC5DpbXRqhQW93exZEM|QmRDXpMaGDL2Sq9Jfw7VfPz6aTfJNorEcY5LfhyQGgHeRY|
-|Goerli|Satsuma|https://subgraph.satsuma-prod.com/decentraland/marketplace-goerli/playground|QmS2GCuAkzH2kNDYe2pA9HkRTPLpC5DpbXRqhQW93exZEM|-|
+|Mainnet|Hosted Services|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace|Qmc9dMhcgUqH77cTtDfnXduxMfavrKjX2SSDBhiwWpEvKx|QmPdVPhDvK3bs8cmUeFeMAYRYky6yqYE9jYwpcMdi4QCdB|
+|Mainnet|Satsuma|https://subgraph.satsuma-prod.com/decentraland/marketplace/playground|Qmc9dMhcgUqH77cTtDfnXduxMfavrKjX2SSDBhiwWpEvKx|QmPdVPhDvK3bs8cmUeFeMAYRYky6yqYE9jYwpcMdi4QCdB|
+|Mainnet Temp|Hosted Services|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-temp|QmPdVPhDvK3bs8cmUeFeMAYRYky6yqYE9jYwpcMdi4QCdB|QmPT9v6EsqqCA8BzrYtArJL54mVgfH81FzFTX2gLv9XcSp|
+|Sepolia|Graph Studio|https://api.studio.thegraph.com/query/49472/marketplace-sepolia/version/latest|QmVvJsoaTLi5HVfdUaLTsKcbvxB3ZE2ksZH9ENh8EoStaE|QmTu8KKidkfRaCCvEHdBnWhRfLRLwPmhHpfRFxTk2wPAzN|
+|Goerli|Hosted Services|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli|QmcWhGQxQ3gnkqPNhx4mTZti3jcKjp7vo8JenreUqytzF8|QmS2GCuAkzH2kNDYe2pA9HkRTPLpC5DpbXRqhQW93exZEM|
+|Goerli|Satsuma|https://subgraph.satsuma-prod.com/decentraland/marketplace-goerli/playground|QmcWhGQxQ3gnkqPNhx4mTZti3jcKjp7vo8JenreUqytzF8|QmS2GCuAkzH2kNDYe2pA9HkRTPLpC5DpbXRqhQW93exZEM|
 |Ropsten|Hosted Services|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-ropsten|QmZTADndoP4XRoWGVoQuaz8WTATx3UDXMn5SdE3GfkErkW|QmfHCGhLTZV8v2duxDkKtPZKMEdJM7X8YGRj2UvqmrAUBB|
 
 Using [The Graph](https://thegraph.com) and [Satsuma](https://www.satsuma.xyz/)
