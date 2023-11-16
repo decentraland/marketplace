@@ -31,7 +31,7 @@ import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BuyOptions, Props } from './BestBuyingOption.types'
 import styles from './BestBuyingOption.module.css'
 
-const BestBuyingOption = ({ asset, tableRef, onBuyWithCrypto }: Props) => {
+const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const [buyOption, setBuyOption] = useState<BuyOptions | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [listing, setListing] = useState<{

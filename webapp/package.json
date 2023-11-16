@@ -120,10 +120,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "",
-  "jest": {
-    "moduleNameMapper": {
-      "@dcl/single-sign-on-client": "identity-obj-proxy"
-    }
-  }
+  "homepage": ""
 }
