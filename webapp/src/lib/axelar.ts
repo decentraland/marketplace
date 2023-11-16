@@ -28,7 +28,6 @@ export class AxelarProvider implements XChainProvider {
       baseUrl: config.get('SQUID_API_URL'), //'https://v2.api.squidrouter.com'
       integratorId: 'decentraland-sdk'
     })
-    this.init()
   }
 
   async init() {

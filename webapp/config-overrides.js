@@ -33,7 +33,6 @@ const jestConfig = config => {
   return config
 }
 
-module.exports = {
-  ...overridedConfig,
-  jest: jestConfig
-}
+overridedConfig.jest = jestConfig
+
+module.exports = overridedConfig

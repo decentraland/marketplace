@@ -53,6 +53,8 @@ const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
 export type ProviderChain = ChainData
 export type ProviderToken = Token
 
+crossChainProvider.init()
+
 const BuyWithCryptoModal = (props: Props) => {
   const {
     wallet,
