@@ -28,7 +28,7 @@ const ManaToFiat = (props: Props) => {
               : { value: 1, displayValue: '' }
           if (cancel) return
           setFiatValue(
-            `$ ${(+(+usd / divider.value).toFixed(digits)).toLocaleString(
+            `$${(+(+usd / divider.value).toFixed(digits)).toLocaleString(
               undefined,
               {
                 maximumFractionDigits: digits

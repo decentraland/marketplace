@@ -154,27 +154,54 @@ const BuyWithCryptoModal = (props: Props) => {
           estimate: { gasCosts, feeCosts }
         }
       } = route
+      const totalGasCost = gasCosts
+        .map(c => BigNumber.from(c.amount))
+        .reduce((a, b) => a.add(b), BigNumber.from(0))
+      const totalFeeCost = feeCosts
+        .map(c => BigNumber.from(c.amount))
+        .reduce((a, b) => a.add(b), BigNumber.from(0))
+      const token = gasCosts[0].token
       return {
-        token: gasCosts[0].token,
+        token,
+        gasCostWei: totalGasCost,
         gasCost: parseFloat(
           ethers.utils.formatUnits(
-            gasCosts
-              .map(c => BigNumber.from(c.amount))
-              .reduce((a, b) => a.add(b), BigNumber.from(0)),
+            totalGasCost,
             route.route.estimate.gasCosts[0].token.decimals
           )
         ).toFixed(6),
         feeCost: parseFloat(
           ethers.utils.formatUnits(
-            feeCosts
-              .map(c => BigNumber.from(c.amount))
-              .reduce((a, b) => a.add(b), BigNumber.from(0)),
+            totalFeeCost,
             route.route.estimate.gasCosts[0].token.decimals
+          )
+        ).toFixed(6),
+        feeCostWei: totalFeeCost,
+        totalCost: parseFloat(
+          ethers.utils.formatUnits(
+            totalGasCost.add(totalFeeCost),
+            token.decimals
           )
         ).toFixed(6)
       }
     }
   }, [route])
+
+  const routeTotalUSDCost = useMemo(() => {
+    if (
+      route &&
+      routeFeeCost &&
+      routeFeeCost.token.usdPrice &&
+      fromAmount &&
+      selectedToken?.usdPrice
+    ) {
+      const { feeCost, gasCost } = routeFeeCost
+      return (
+        routeFeeCost.token.usdPrice * (Number(gasCost) + Number(feeCost)) +
+        selectedToken.usdPrice * Number(fromAmount)
+      )
+    }
+  }, [fromAmount, route, routeFeeCost, selectedToken])
 
   // useEffects
 
@@ -839,17 +866,10 @@ const BuyWithCryptoModal = (props: Props) => {
                 <span className={styles.assetName}>{asset.name}</span>
                 <div className={styles.priceContainer}>
                   <Mana network={asset.network} inline withTooltip>
-                    {formatWeiMANA(
-                      order ? order.price : !isNFT(asset) ? asset.price : ''
-                    )}
+                    {formatWeiMANA(price)}
                   </Mana>
                   <span className={styles.priceInUSD}>
-                    <ManaToFiat
-                      mana={
-                        order ? order.price : !isNFT(asset) ? asset.price : ''
-                      }
-                      digits={6}
-                    />
+                    <ManaToFiat mana={price} digits={4} />
                   </span>
                 </div>
               </div>
@@ -857,7 +877,7 @@ const BuyWithCryptoModal = (props: Props) => {
               {!providerTokens.length || !selectedToken ? (
                 <Loader active className={styles.mainLoader} />
               ) : (
-                <>
+                <div className={styles.payWithContainer}>
                   <div className={styles.dropdownContainer}>
                     <div>
                       <span>{t('buy_with_crypto_modal.pay_with')}</span>
@@ -899,173 +919,228 @@ const BuyWithCryptoModal = (props: Props) => {
                       </div>
                     </div>
                   </div>
-                </>
-              )}
-
-              <div className={styles.costContainer}>
-                {!!selectedToken ? (
-                  <>
-                    <div className={styles.itemCost}>
+                  <div className={styles.costContainer}>
+                    {!!selectedToken ? (
                       <>
-                        <div className={styles.itemCostLabels}>
-                          {t('buy_with_crypto_modal.item_cost')}
-                          {useMetaTx && !isPriceTooLow(price) ? (
-                            <span className={styles.feeCovered}>
-                              {t(
-                                'buy_with_crypto_modal.transaction_fee_covered',
-                                {
-                                  free: (
-                                    <span className={styles.feeCoveredFree}>
-                                      {t('buy_with_crypto_modal.free')}
-                                    </span>
-                                  )
-                                }
-                              )}
-                            </span>
-                          ) : null}
+                        <div className={styles.itemCost}>
+                          <>
+                            <div className={styles.itemCostLabels}>
+                              {t('buy_with_crypto_modal.item_cost')}
+                            </div>
+                            <div className={styles.fromAmountContainer}>
+                              <div className={styles.fromAmountTokenContainer}>
+                                <img
+                                  src={selectedToken?.logoURI}
+                                  alt={selectedToken?.name}
+                                />
+                                {selectedToken.symbol === 'MANA' ? (
+                                  ethers.utils.formatEther(price)
+                                ) : !!fromAmount ? (
+                                  fromAmount
+                                ) : (
+                                  <span
+                                    className={classNames(
+                                      styles.skeleton,
+                                      styles.estimatedFeeSkeleton
+                                    )}
+                                  />
+                                )}
+                              </div>
+                              {selectedToken.usdPrice ? (
+                                fromAmount ||
+                                selectedToken.symbol === 'MANA' ? (
+                                  <span className={styles.fromAmountUSD}>
+                                    ≈{' '}
+                                    {!!route ? (
+                                      <>
+                                        $
+                                        {(
+                                          Number(fromAmount) *
+                                          selectedToken.usdPrice
+                                        ).toFixed(4)}
+                                      </>
+                                    ) : (
+                                      <ManaToFiat mana={price} digits={4} />
+                                    )}
+                                  </span>
+                                ) : null
+                              ) : null}
+                            </div>
+                          </>
                         </div>
-                        <div className={styles.fromAmountContainer}>
-                          <div className={styles.fromAmountTokenContainer}>
+
+                        {shouldUseCrossChainProvider ? (
+                          <div className={styles.itemCost}>
+                            {t('buy_with_crypto_modal.fee_cost')}
+                            <div className={styles.fromAmountContainer}>
+                              {!!route && routeFeeCost ? (
+                                <div
+                                  className={styles.fromAmountTokenContainer}
+                                >
+                                  <img
+                                    src={
+                                      route.route.estimate.gasCosts[0].token
+                                        .logoURI
+                                    }
+                                    alt={
+                                      route.route.estimate.gasCosts[0].token
+                                        .name
+                                    }
+                                  />
+                                  {routeFeeCost.totalCost}
+                                </div>
+                              ) : (
+                                <div
+                                  className={classNames(
+                                    styles.skeleton,
+                                    styles.estimatedFeeSkeleton
+                                  )}
+                                />
+                              )}
+                              {!!routeFeeCost && routeFeeCost.token.usdPrice ? (
+                                <span className={styles.fromAmountUSD}>
+                                  ≈ $
+                                  {(
+                                    (Number(routeFeeCost.feeCost) +
+                                      Number(routeFeeCost.gasCost)) *
+                                    routeFeeCost.token.usdPrice
+                                  ).toFixed(4)}
+                                </span>
+                              ) : null}
+                            </div>
+                          </div>
+                        ) : null}
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+              )}
+              <div className={styles.totalContainer}>
+                <div>
+                  <span className={styles.total}>
+                    {t('buy_with_crypto_modal.total')}
+                  </span>
+                  {useMetaTx && !isPriceTooLow(price) ? (
+                    <span className={styles.feeCovered}>
+                      {t('buy_with_crypto_modal.transaction_fee_covered', {
+                        free: (
+                          <span className={styles.feeCoveredFree}>
+                            {t('buy_with_crypto_modal.free')}
+                          </span>
+                        )
+                      })}
+                    </span>
+                  ) : null}
+                </div>
+                <div className={styles.totalPrice}>
+                  <div>
+                    {!!selectedToken ? (
+                      shouldUseCrossChainProvider ? (
+                        !!route && routeFeeCost ? (
+                          <>
                             <img
                               src={selectedToken?.logoURI}
                               alt={selectedToken?.name}
                             />
-                            {selectedToken.symbol === 'MANA' ? (
-                              ethers.utils.formatEther(price)
-                            ) : !!fromAmount ? (
-                              fromAmount
+                            {routeFeeCost?.token.symbol !==
+                            selectedToken.symbol ? (
+                              <>
+                                {fromAmount}
+                                <span> + </span>
+                                <img
+                                  src={routeFeeCost.token.logoURI}
+                                  alt={routeFeeCost.token.name}
+                                />
+                                {routeFeeCost.totalCost}
+                              </>
                             ) : (
-                              <span
-                                className={classNames(
-                                  styles.skeleton,
-                                  styles.estimatedFeeSkeleton
-                                )}
-                              />
+                              <>
+                                {Number(fromAmount) +
+                                  Number(routeFeeCost.totalCost)}
+                              </>
                             )}
-                          </div>
-                          {selectedToken.usdPrice ? (
-                            fromAmount || selectedToken.symbol === 'MANA' ? (
-                              <span className={styles.fromAmountUSD}>
-                                $
-                                {(
-                                  Number(
-                                    selectedToken.symbol === 'MANA'
-                                      ? ethers.utils.formatEther(price)
-                                      : fromAmount
-                                  ) * selectedToken.usdPrice
-                                ).toFixed(6)}
-                              </span>
-                            ) : (
-                              <span
-                                className={classNames(
-                                  styles.skeleton,
-                                  styles.fromAmountUSDSkeleton
-                                )}
-                              />
-                            )
-                          ) : null}
-                        </div>
-                      </>
-                    </div>
-
-                    {shouldUseCrossChainProvider ? (
-                      <div className={styles.itemCost}>
-                        {t('buy_with_crypto_modal.fee_cost')}
-                        <div className={styles.fromAmountContainer}>
-                          {!!route ? (
-                            <div className={styles.fromAmountTokenContainer}>
-                              <img
-                                src={
-                                  route.route.estimate.gasCosts[0].token.logoURI
-                                }
-                                alt={
-                                  route.route.estimate.gasCosts[0].token.name
-                                }
-                              />
-                              {parseFloat(
-                                ethers.utils.formatUnits(
-                                  route.route.estimate.gasCosts[0].amount,
-                                  route.route.estimate.gasCosts[0].token
-                                    .decimals
-                                )
-                              ).toFixed(6)}
-                            </div>
-                          ) : (
-                            <div
-                              className={classNames(
-                                styles.skeleton,
-                                styles.estimatedFeeSkeleton
-                              )}
-                            />
-                          )}
-                          {!!routeFeeCost && routeFeeCost.token.usdPrice ? (
-                            <span className={styles.fromAmountUSD}>
-                              $
-                              {(Number(routeFeeCost.feeCost) +
-                                Number(routeFeeCost.gasCost)) *
-                                routeFeeCost.token.usdPrice}
-                            </span>
-                          ) : (
-                            <span
-                              className={classNames(
-                                styles.skeleton,
-                                styles.fromAmountUSDSkeleton
-                              )}
-                            />
-                          )}
-                        </div>
-                      </div>
-                    ) : null}
-                  </>
-                ) : null}
-                {selectedToken && shouldUseCrossChainProvider ? (
-                  <div className={styles.durationAndExchangeContainer}>
-                    <div>
-                      <span>
-                        {' '}
-                        {t(
-                          'buy_with_crypto_modal.durations.transaction_duration'
-                        )}{' '}
-                      </span>
-                      {route ? (
-                        t(
-                          `buy_with_crypto_modal.durations.${
-                            route.route.estimate.estimatedRouteDuration === 0
-                              ? 'fast'
-                              : route.route.estimate.estimatedRouteDuration ===
-                                20
-                              ? 'normal'
-                              : 'slow'
-                          }`
-                        )
+                          </>
+                        ) : isFetchingRoute ? (
+                          <span
+                            className={classNames(
+                              styles.skeleton,
+                              styles.estimatedFeeSkeleton
+                            )}
+                          />
+                        ) : null
                       ) : (
-                        <span
-                          className={classNames(
-                            styles.skeleton,
-                            styles.fromAmountUSDSkeleton
-                          )}
-                        />
-                      )}
-                    </div>
-                    <div>
-                      <span> {t('buy_with_crypto_modal.exchange_rate')} </span>
-                      {route && selectedToken ? (
                         <>
-                          1 {selectedToken.symbol} ={' '}
-                          {route.route.estimate.exchangeRate?.slice(0, 7)} MANA
+                          <img
+                            src={selectedToken?.logoURI}
+                            alt={selectedToken?.name}
+                          />
+                          {ethers.utils.formatEther(price)}
+                        </>
+                      )
+                    ) : null}
+                  </div>
+                  <div>
+                    <span className={styles.fromAmountUSD}>
+                      {shouldUseCrossChainProvider ? (
+                        <>
+                          {' '}
+                          {!!route
+                            ? `$${routeTotalUSDCost?.toFixed(6)}`
+                            : null}{' '}
                         </>
                       ) : (
-                        <span
-                          className={classNames(
-                            styles.skeleton,
-                            styles.fromAmountUSDSkeleton
-                          )}
-                        />
+                        <ManaToFiat mana={price} digits={4} />
                       )}
-                    </div>
+                    </span>
                   </div>
-                ) : null}
+                </div>
               </div>
+              {selectedToken && shouldUseCrossChainProvider ? (
+                <div className={styles.durationAndExchangeContainer}>
+                  <div>
+                    <span>
+                      {' '}
+                      {t(
+                        'buy_with_crypto_modal.durations.transaction_duration'
+                      )}{' '}
+                    </span>
+                    {route ? (
+                      t(
+                        `buy_with_crypto_modal.durations.${
+                          route.route.estimate.estimatedRouteDuration === 0
+                            ? 'fast'
+                            : route.route.estimate.estimatedRouteDuration === 20
+                            ? 'normal'
+                            : 'slow'
+                        }`
+                      )
+                    ) : (
+                      <span
+                        className={classNames(
+                          styles.skeleton,
+                          styles.fromAmountUSDSkeleton
+                        )}
+                      />
+                    )}
+                  </div>
+                  <div>
+                    <span> {t('buy_with_crypto_modal.exchange_rate')} </span>
+                    {route && selectedToken ? (
+                      <>
+                        1 {selectedToken.symbol} ={' '}
+                        {route.route.estimate.exchangeRate?.slice(0, 7)} MANA
+                      </>
+                    ) : (
+                      <span
+                        className={classNames(
+                          styles.skeleton,
+                          styles.fromAmountUSDSkeleton
+                        )}
+                      />
+                    )}
+                  </div>
+                </div>
+              ) : null}
 
               {selectedToken &&
               shouldUseCrossChainProvider &&

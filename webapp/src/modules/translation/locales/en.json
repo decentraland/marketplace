@@ -845,6 +845,7 @@
     "confirm_switch_network": "Confirm switch in your wallet",
     "confirm_transaction": "Confirm transaction in your wallet",
     "select_a_token": "Select a token to buy",
+    "total": "Total",
     "summary": "Summary",
     "fetching_route": "Calculating route...",
     "route_unavailable": "Buying with {token} is not available at the moment. Please try again later.",

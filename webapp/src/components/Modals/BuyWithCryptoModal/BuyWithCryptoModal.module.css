@@ -169,7 +169,7 @@
   letter-spacing: 0px;
   text-align: left;
   color: #a09ba8;
-  margin-top: 6px;
+  margin-top: 12px;
 }
 
 .buyWithCryptoModal .feeCoveredFree {
@@ -192,13 +192,14 @@
 .buyWithCryptoModal .costContainer .itemCost {
   display: flex;
   justify-content: space-between;
-  font-size: 24px;
+  font-size: 16px;
   line-height: 26px;
-  font-weight: 700;
+  font-weight: 400;
   margin-top: 16px;
 }
 
-.buyWithCryptoModal .costContainer .itemCost img {
+.buyWithCryptoModal .costContainer .itemCost img,
+.buyWithCryptoModal .totalContainer img {
   width: 24px;
   height: 24px;
   margin-right: 6px;
@@ -206,13 +207,16 @@
 
 .buyWithCryptoModal .costContainer .itemCost .fromAmountContainer {
   display: flex;
-  align-items: flex-end;
-  flex-direction: column;
+  align-items: center;
 }
 
 .buyWithCryptoModal .costContainer .itemCost .fromAmountTokenContainer {
   display: flex;
   align-items: center;
+  margin-right: 4px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 26px;
 }
 
 .buyWithCryptoModal .costContainer .itemCost .fromAmountUSD {
@@ -220,8 +224,6 @@
   color: #a09ba8;
   line-height: 18px;
   font-weight: 400;
-  align-self: self-end;
-  margin-top: 4px;
 }
 
 .buyWithCryptoModal .tokenAndChainSelector {
@@ -321,7 +323,7 @@
 }
 
 .buyWithCryptoModal .estimatedFeeSkeleton {
-  width: 130px;
+  width: 180px;
   height: 26px;
 }
 
@@ -380,12 +382,60 @@
   font-size: 15px;
 }
 
-.dropdownContainer {
+.buyWithCryptoModal .dropdownContainer {
   display: flex;
   color: var(--text);
   margin-top: 16px;
-  border-bottom: 1px solid var(--dropdown);
   padding-bottom: 24px;
+}
+
+.buyWithCryptoModal .payWithContainer {
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--dropdown);
+}
+
+.buyWithCryptoModal .total {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.buyWithCryptoModal .totalPrice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.buyWithCryptoModal .totalPrice div {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.buyWithCryptoModal .totalPrice > div > span {
+  margin: 0 12px;
+}
+
+.buyWithCryptoModal .totalPrice .fromAmountUSD {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 26px;
+  color: #a09ba8;
+  margin: 0;
+  margin-top: 4px;
+}
+
+.buyWithCryptoModal .totalContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.buyWithCryptoModal .totalContainer > div {
+  display: flex;
+  flex-direction: column;
 }
 
 .dropdownContainer :global(span) {
