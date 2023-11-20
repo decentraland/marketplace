@@ -17,10 +17,14 @@ import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
 import { getCurrentIdentity } from './identity/selectors'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { createMemoryHistory, createBrowserHistory, History } from 'history'
 
-export const history = require('history').createBrowserHistory()
+export const createHistory = () =>
+  createBrowserHistory({
+    basename: config.get('BASE_NAME') ?? undefined
+  })
 
-export function initStore() {
+export function initStore(history: History) {
   const anyWindow = window as any
 
   const isDev = config.is(Env.DEVELOPMENT)
@@ -47,14 +51,9 @@ export function initStore() {
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
     paths: [
       ['ui', 'archivedBidIds'],
-      ['ui', 'preview', 'isTryingOn'],
+      ['ui', 'preview', 'isTryingOn']
     ], // array of paths from state to be persisted (optional)
-    actions: [
-      CLEAR_TRANSACTIONS,
-      ARCHIVE_BID,
-      UNARCHIVE_BID,
-      SET_IS_TRYING_ON
-    ], // array of actions types that will trigger a SAVE (optional)
+    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   })
   const analyticsMiddleware = createAnalyticsMiddleware(
@@ -94,27 +93,23 @@ export function initStore() {
 }
 
 export function initTestStore(preloadedState = {}) {
-  const rootReducer = storageReducerWrapper(createRootReducer(history))
+  const testHistory = createMemoryHistory({ initialEntries: ['/marketplace'] })
+  const rootReducer = storageReducerWrapper(createRootReducer(testHistory))
   const sagasMiddleware = createSagasMiddleware()
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
     paths: [
       ['ui', 'archivedBidIds'],
-      ['ui', 'preview', 'isTryingOn'],
+      ['ui', 'preview', 'isTryingOn']
     ], // array of paths from state to be persisted (optional)
-    actions: [
-      CLEAR_TRANSACTIONS,
-      ARCHIVE_BID,
-      UNARCHIVE_BID,
-      SET_IS_TRYING_ON
-    ], // array of actions types that will trigger a SAVE (optional)
+    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   })
 
   const middleware = applyMiddleware(
     sagasMiddleware,
-    routerMiddleware(history),
+    routerMiddleware(testHistory),
     transactionMiddleware,
     storageMiddleware
   )

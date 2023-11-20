@@ -1,4 +1,4 @@
-import { fireEvent, waitFor } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { renderWithProviders } from '../../../utils/test'
@@ -74,7 +74,7 @@ describe('when the share on twitter button is clicked', () => {
 
   it('should open a new page with a twitter message', async () => {
     jest.spyOn(window, 'open').mockImplementation(() => null)
-    const dclUrl = 'https://market.decentraland.zone'
+    const dclUrl = 'https://decentraland.zone/marketplace'
     const locationsUrl =
       '/lists/aListId?assetType=item&section=lists&vendor=decentraland&page=1&sortBy=newest'
     const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(

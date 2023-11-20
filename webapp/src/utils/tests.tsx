@@ -68,7 +68,7 @@ export function renderWithProviders(
       translation: { data: locales, locale: 'en' }
     })
 
-  const history = createMemoryHistory()
+  const history = createMemoryHistory({ initialEntries: ['/marketplace'] })
 
   function AppProviders({ children }: { children: JSX.Element }) {
     return (
