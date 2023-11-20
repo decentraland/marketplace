@@ -1,6 +1,7 @@
 {
   "NETWORK": "sepolia",
   "CHAIN_ID": "11155111",
+  "BASE_NAME": "/marketplace",
   "NFT_SERVER_URL": "https://nft-api.decentraland.zone/v1",
   "MARKETPLACE_SERVER_URL": "https://marketplace-api.decentraland.zone/v1",
   "BUILDER_SERVER_URL": "https://builder-api.decentraland.zone/v1",
@@ -22,7 +23,7 @@
   "MOON_PAY_API_KEY": "pk_test_WVS2xVSCnSnR7A7qIueWwCtcKnrGb55p",
   "MOON_PAY_POLLING_DELAY": "6000",
   "MOON_PAY_WIDGET_URL": "https://buy-staging.moonpay.io",
-  "BUILDER_URL": "https://builder.decentraland.zone",
+  "BUILDER_URL": "https://decentraland.zone/builder",
   "COINGECKO_API_URL": "https://api.coingecko.com/api/v3",
   "DOCS_URL": "https://docs.decentraland.org",
   "MARKETPLACE_ADAPTER_FEE_PER_MILLION": "25000",
@@ -36,8 +37,8 @@
   "ENVIRONMENT": "development",
   "MIN_SALE_VALUE_IN_WEI": "1000000000000000000",
   "EXPLORER_URL": "https://play.decentraland.zone",
-  "MARKETPLACE_URL": "https://market.decentraland.zone",
-  "PROFILE_URL": "https://profile.decentraland.zone",
+  "MARKETPLACE_URL": "https://decentraland.zone/marketplace",
+  "PROFILE_URL": "https://decentraland.zone/profile",
   "SSO_URL": "https://id.decentraland.zone",
   "SUBGRAPH_WORKER": "https://subgraph.decentraland.zone",
   "SENTRY_DSN": "https://1dc401149e1c819b8477565c9cdd9b70@o4504361728212992.ingest.sentry.io/4505743351676928"

@@ -18,7 +18,9 @@ import { SET_IS_TRYING_ON } from './ui/preview/actions'
 import { getCurrentIdentity } from './identity/selectors'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 
-export const history = require('history').createBrowserHistory()
+export const history = require('history').createBrowserHistory({
+  basename: config.get('BASE_NAME') ?? undefined
+})
 
 export function initStore() {
   const anyWindow = window as any
@@ -47,14 +49,9 @@ export function initStore() {
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
     paths: [
       ['ui', 'archivedBidIds'],
-      ['ui', 'preview', 'isTryingOn'],
+      ['ui', 'preview', 'isTryingOn']
     ], // array of paths from state to be persisted (optional)
-    actions: [
-      CLEAR_TRANSACTIONS,
-      ARCHIVE_BID,
-      UNARCHIVE_BID,
-      SET_IS_TRYING_ON
-    ], // array of actions types that will trigger a SAVE (optional)
+    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   })
   const analyticsMiddleware = createAnalyticsMiddleware(
@@ -101,14 +98,9 @@ export function initTestStore(preloadedState = {}) {
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
     paths: [
       ['ui', 'archivedBidIds'],
-      ['ui', 'preview', 'isTryingOn'],
+      ['ui', 'preview', 'isTryingOn']
     ], // array of paths from state to be persisted (optional)
-    actions: [
-      CLEAR_TRANSACTIONS,
-      ARCHIVE_BID,
-      UNARCHIVE_BID,
-      SET_IS_TRYING_ON
-    ], // array of actions types that will trigger a SAVE (optional)
+    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   })
 
