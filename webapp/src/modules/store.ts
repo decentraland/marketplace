@@ -17,12 +17,14 @@ import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
 import { getCurrentIdentity } from './identity/selectors'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { createMemoryHistory, createBrowserHistory, History } from 'history'
 
-export const history = require('history').createBrowserHistory({
-  basename: config.get('BASE_NAME') ?? undefined
-})
+export const createHistory = () =>
+  createBrowserHistory({
+    basename: config.get('BASE_NAME') ?? undefined
+  })
 
-export function initStore() {
+export function initStore(history: History) {
   const anyWindow = window as any
 
   const isDev = config.is(Env.DEVELOPMENT)
@@ -91,7 +93,8 @@ export function initStore() {
 }
 
 export function initTestStore(preloadedState = {}) {
-  const rootReducer = storageReducerWrapper(createRootReducer(history))
+  const testHistory = createMemoryHistory({ initialEntries: ['/marketplace'] })
+  const rootReducer = storageReducerWrapper(createRootReducer(testHistory))
   const sagasMiddleware = createSagasMiddleware()
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
@@ -106,7 +109,7 @@ export function initTestStore(preloadedState = {}) {
 
   const middleware = applyMiddleware(
     sagasMiddleware,
-    routerMiddleware(history),
+    routerMiddleware(testHistory),
     transactionMiddleware,
     storageMiddleware
   )
