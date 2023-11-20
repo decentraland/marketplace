@@ -40,7 +40,7 @@ import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
 import { getMintItemStatus } from '../../../modules/item/selectors'
 import { NFT } from '../../../modules/nft/types'
 import ChainAndTokenSelector from './ChainAndTokenSelector/ChainAndTokenSelector'
-import { getMANAToken, getShouldUseMetaTx, isToken } from './utils'
+import { formatPrice, getMANAToken, getShouldUseMetaTx, isToken } from './utils'
 import { Props } from './BuyWithCryptoModal.types'
 import styles from './BuyWithCryptoModal.module.css'
 
@@ -86,6 +86,7 @@ const BuyWithCryptoModal = (props: Props) => {
   const [providerTokens, setProviderTokens] = useState<Token[]>([])
   const [selectedChain, setSelectedChain] = useState(asset.chainId)
   const [selectedToken, setSelectedToken] = useState<Token>()
+  console.log('selectedToken: ', selectedToken)
   const [isFetchingBalance, setIsFetchingBalance] = useState(false)
   const [isFetchingRoute, setIsFetchingRoute] = useState(false)
   const [selectedTokenBalance, setSelectedTokenBalance] = useState<BigNumber>()
@@ -93,6 +94,7 @@ const BuyWithCryptoModal = (props: Props) => {
   const [routeFailed, setRouteFailed] = useState(false)
   const [canBuyItem, setCanBuyItem] = useState<boolean | undefined>(undefined)
   const [fromAmount, setFromAmount] = useState<string | undefined>(undefined)
+  console.log('fromAmount: ', fromAmount)
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
 
@@ -541,7 +543,7 @@ const BuyWithCryptoModal = (props: Props) => {
     return (
       <Button
         fluid
-        primary
+        inverted
         className={styles.switchNetworkButton}
         disabled={isSwitchingNetwork}
         data-testid={CONFIRM_DATA_TEST_ID}
@@ -723,7 +725,6 @@ const BuyWithCryptoModal = (props: Props) => {
           ? renderBuyNowButton()
           : renderSwitchNetworkButton()
       } else {
-        console.log('rendering get mana button')
         // can't buy Get Mana and Buy With Card buttons
         return renderGetMANAButton()
       }
@@ -1043,20 +1044,26 @@ const BuyWithCryptoModal = (props: Props) => {
                               alt={selectedToken?.name}
                             />
                             {routeFeeCost?.token.symbol !==
-                            selectedToken.symbol ? (
+                              selectedToken.symbol && fromAmount ? (
                               <>
-                                {fromAmount}
+                                {formatPrice(fromAmount, selectedToken)}
                                 <span> + </span>
                                 <img
                                   src={routeFeeCost.token.logoURI}
                                   alt={routeFeeCost.token.name}
                                 />
-                                {routeFeeCost.totalCost}
+                                {formatPrice(
+                                  routeFeeCost.totalCost,
+                                  routeFeeCost.token
+                                )}
                               </>
                             ) : (
                               <>
-                                {Number(fromAmount) +
-                                  Number(routeFeeCost.totalCost)}
+                                {formatPrice(
+                                  Number(fromAmount) +
+                                    Number(routeFeeCost.totalCost),
+                                  selectedToken
+                                )}
                               </>
                             )}
                           </>
@@ -1099,7 +1106,7 @@ const BuyWithCryptoModal = (props: Props) => {
                 <div className={styles.durationAndExchangeContainer}>
                   <div>
                     <span>
-                      {' '}
+                      <Icon name="clock outline" />{' '}
                       {t(
                         'buy_with_crypto_modal.durations.transaction_duration'
                       )}{' '}
@@ -1123,8 +1130,11 @@ const BuyWithCryptoModal = (props: Props) => {
                       />
                     )}
                   </div>
-                  <div>
-                    <span> {t('buy_with_crypto_modal.exchange_rate')} </span>
+                  <div className={styles.exchangeContainer}>
+                    <div className={styles.exchangeContainerLabel}>
+                      <span className={styles.exchangeIcon} />
+                      <span> {t('buy_with_crypto_modal.exchange_rate')} </span>
+                    </div>
                     {route && selectedToken ? (
                       <>
                         1 {selectedToken.symbol} ={' '}

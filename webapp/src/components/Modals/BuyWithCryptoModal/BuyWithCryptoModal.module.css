@@ -62,7 +62,7 @@
 }
 
 .buyWithCryptoModal .priceContainer .priceInUSD {
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 18px;
   letter-spacing: 0px;
@@ -178,6 +178,10 @@
 
 .buyWithCryptoModal :global(.dcl.modal-navigation-title) {
   font-weight: bold;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+  margin-bottom: 40px;
 }
 
 .buyWithCryptoModal .costContainer {
@@ -264,13 +268,32 @@
   font-weight: 400;
   line-height: 18px;
   color: #a09ba8;
-  padding-bottom: 4px;
 }
 
 .buyWithCryptoModal .durationAndExchangeContainer div {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
+}
+
+.buyWithCryptoModal .durationAndExchangeContainer :global(.icon) {
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+.buyWithCryptoModal .durationAndExchangeContainer .exchangeIcon {
+  width: 15px;
+  height: 15px;
+  background-image: url(../../../images/exchange.svg);
+  background-size: contain;
+  margin-right: 10px;
+}
+
+.buyWithCryptoModal .exchangeContainer {
+  margin-top: 8px;
+}
+
+.buyWithCryptoModal .exchangeContainerLabel {
+  align-items: center;
 }
 
 .buyWithCryptoModal .rememberFreeTxs {
@@ -280,9 +303,7 @@
   text-align: center;
   color: #a09ba8;
   margin-top: auto;
-  padding: 0 50px;
-  margin-bottom: 4px;
-  margin-top: 12px;
+  padding: 20px 50px;
 }
 
 .buyWithCryptoModal .buttons {
@@ -341,7 +362,6 @@
   text-align: center;
   color: #ff8362;
   padding: 24px 48px;
-  padding-bottom: 0;
   margin-top: auto;
 }
 
@@ -371,6 +391,7 @@
   flex: 1;
   flex-direction: column;
   margin-top: 12px;
+  margin-bottom: 0;
 }
 
 .buyWithCryptoModal .mainLoader:global(.ui.loader) {

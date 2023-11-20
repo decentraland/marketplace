@@ -45,3 +45,28 @@ export function getMANAToken(chainId: ChainId) {
     usdPrice: 0 // not necessary
   }
 }
+
+function truncateToDecimals(num: number, dec = 2) {
+  const calcDec = Math.pow(10, dec)
+  return Math.trunc(num * calcDec) / calcDec
+}
+
+export function formatPrice(price: string | number, token: Token): number {
+  // Determine the number of decimals based on the USD price
+  let decimalsToShow: number
+
+  // Show more decimals for smaller fractions of higher-value tokens like Ethereum
+  if (token.usdPrice && token.usdPrice < 1) {
+    decimalsToShow = 4 // Show 4 decimals for tokens with prices less than 1 USD
+  } else {
+    decimalsToShow = 2 // Show 2 decimals for other tokens or higher-value fractions
+  }
+
+  // Format the price using toFixed to round and limit the number of decimals
+  const formattedPrice = truncateToDecimals(
+    typeof price === 'string' ? Number(price) : price,
+    decimalsToShow
+  )
+
+  return formattedPrice
+}
