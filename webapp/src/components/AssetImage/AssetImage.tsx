@@ -366,9 +366,8 @@ const AssetImage = (props: Props) => {
               emote={isTryingOnEnabled ? previewEmote : undefined}
               onLoad={handleLoad}
               onError={handleError}
-              baseUrl='https://wearable-preview.decentraland.org'
               {...wearablePreviewProps}
-              // dev={config.is(Env.DEVELOPMENT)}
+              dev={config.is(Env.DEVELOPMENT)}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
@@ -571,8 +570,7 @@ const AssetImage = (props: Props) => {
               wheelStart={100}
               onLoad={handleLoad}
               onError={handleError}
-              baseUrl='https://wearable-preview.decentraland.org'
-              // dev={config.is(Env.DEVELOPMENT)}
+              dev={config.is(Env.DEVELOPMENT)}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
