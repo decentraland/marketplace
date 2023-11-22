@@ -636,7 +636,10 @@ export const BuyWithCryptoModal = (props: Props) => {
           primary
           data-testid={GET_MANA_BUTTON_TEST_ID}
           loading={isFetchingBalance || isLoading}
-          onClick={() => onGetMana()}
+          onClick={() => {
+            onGetMana()
+            onClose()
+          }}
         >
           {t('buy_with_crypto_modal.get_mana')}
         </Button>
@@ -882,7 +885,7 @@ export const BuyWithCryptoModal = (props: Props) => {
               </div>
 
               {!providerTokens.length || !selectedToken ? (
-                <Loader active className={styles.mainLoader} />
+                <Loader inline active className={styles.mainLoader} />
               ) : (
                 <div
                   className={styles.payWithContainer}

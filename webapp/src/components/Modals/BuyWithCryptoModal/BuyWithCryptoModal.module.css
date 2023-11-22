@@ -395,8 +395,13 @@
 }
 
 .buyWithCryptoModal .mainLoader:global(.ui.loader) {
-  position: relative;
+  align-self: center;
   height: 220px;
+}
+
+.buyWithCryptoModal .mainLoader:global(.ui.loader::before),
+.buyWithCryptoModal .mainLoader:global(.ui.loader::after) {
+  top: 50%;
 }
 
 .buyWithCryptoModal .subtitle {
