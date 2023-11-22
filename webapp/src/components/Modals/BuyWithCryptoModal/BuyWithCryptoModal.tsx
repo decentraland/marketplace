@@ -12,10 +12,7 @@ import { Button, Icon, Loader, ModalNavigation } from 'decentraland-ui'
 import { ContractName, getContract } from 'decentraland-transactions'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  getConnectedProvider,
-  getNetworkProvider
-} from 'decentraland-dapps/dist/lib/eth'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -45,7 +42,15 @@ import { Props } from './BuyWithCryptoModal.types'
 import styles from './BuyWithCryptoModal.module.css'
 
 export const CANCEL_DATA_TEST_ID = 'confirm-buy-with-crypto-modal-cancel'
-export const CONFIRM_DATA_TEST_ID = 'confirm-buy-with-crypto-modal-confirm'
+export const BUY_NOW_BUTTON_TEST_ID = 'buy-now-button'
+export const SWITCH_NETWORK_BUTTON_TEST_ID = 'switch-network'
+export const GET_MANA_BUTTON_TEST_ID = 'get-mana-button'
+export const BUY_WITH_CARD_TEST_ID = 'buy-with-card-button'
+export const PAY_WITH_DATA_TEST_ID = 'pay-with-container'
+export const CHAIN_SELECTOR_DATA_TEST_ID = 'chain-selector'
+export const TOKEN_SELECTOR_DATA_TEST_ID = 'token-selector'
+export const FREE_TX_CONVERED_TEST_ID = 'free-tx-label'
+export const PRICE_TOO_LOW_TEST_ID = 'price-too-low-label'
 
 const NATIVE_TOKEN = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
 const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
@@ -53,9 +58,7 @@ const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
 export type ProviderChain = ChainData
 export type ProviderToken = Token
 
-crossChainProvider.init()
-
-const BuyWithCryptoModal = (props: Props) => {
+export const BuyWithCryptoModal = (props: Props) => {
   const {
     wallet,
     metadata: { asset, order },
@@ -86,7 +89,6 @@ const BuyWithCryptoModal = (props: Props) => {
   const [providerTokens, setProviderTokens] = useState<Token[]>([])
   const [selectedChain, setSelectedChain] = useState(asset.chainId)
   const [selectedToken, setSelectedToken] = useState<Token>()
-  console.log('selectedToken: ', selectedToken)
   const [isFetchingBalance, setIsFetchingBalance] = useState(false)
   const [isFetchingRoute, setIsFetchingRoute] = useState(false)
   const [selectedTokenBalance, setSelectedTokenBalance] = useState<BigNumber>()
@@ -94,11 +96,14 @@ const BuyWithCryptoModal = (props: Props) => {
   const [routeFailed, setRouteFailed] = useState(false)
   const [canBuyItem, setCanBuyItem] = useState<boolean | undefined>(undefined)
   const [fromAmount, setFromAmount] = useState<string | undefined>(undefined)
-  console.log('fromAmount: ', fromAmount)
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
 
   // useMemos
+
+  useEffect(() => {
+    crossChainProvider.init()
+  }, [])
 
   // if the tx should be done through the provider
   const shouldUseCrossChainProvider = useMemo(
@@ -210,20 +215,26 @@ const BuyWithCryptoModal = (props: Props) => {
   // init lib if necessary and fetch chains & supported tokens
   useEffect(() => {
     ;(async () => {
-      if (crossChainProvider) {
-        if (!crossChainProvider.isLibInitialized()) {
-          await crossChainProvider.init()
+      try {
+        if (crossChainProvider) {
+          if (!crossChainProvider.isLibInitialized()) {
+            await crossChainProvider.init()
+          }
+          const supportedTokens = crossChainProvider.getSupportedTokens()
+          const supportedChains = crossChainProvider.getSupportedChains()
+          setProviderChains(
+            supportedChains.filter(c =>
+              CROSS_CHAIN_SUPPORTED_CHAINS.includes(+c.chainId)
+            )
+          )
+          setProviderTokens(
+            supportedTokens.filter(t =>
+              CROSS_CHAIN_SUPPORTED_CHAINS.includes(+t.chainId)
+            )
+          )
         }
-        setProviderChains(
-          crossChainProvider
-            .getSupportedChains()
-            .filter(c => CROSS_CHAIN_SUPPORTED_CHAINS.includes(+c.chainId))
-        )
-        setProviderTokens(
-          crossChainProvider
-            .getSupportedTokens()
-            .filter(t => CROSS_CHAIN_SUPPORTED_CHAINS.includes(+t.chainId))
-        )
+      } catch (error) {
+        console.log('error: ', error)
       }
     })()
   }, [wallet])
@@ -339,7 +350,6 @@ const BuyWithCryptoModal = (props: Props) => {
       const MANAToken = providerTokens.find(
         t => t.symbol === 'MANA' && selectedChain.toString() === t.chainId
       )
-
       setSelectedToken(MANAToken || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
     }
   }, [calculateRoute, providerTokens, selectedChain, selectedToken])
@@ -442,13 +452,13 @@ const BuyWithCryptoModal = (props: Props) => {
               toAmount: ethers.utils.formatEther(price),
               toToken: providerMANA
             }
-            const fromAmount = Number(
-              await crossChainProvider.getFromAmount(fromAmountParams)
-            ).toFixed(6)
+            const from = await crossChainProvider.getFromAmount(
+              fromAmountParams
+            )
+            const fromAmount = Number(from).toFixed(6)
             canBuy = balance > Number(fromAmount)
           }
         }
-        console.log('bug canBuy: ', canBuy)
         setCanBuyItem(canBuy)
         // setCanBuyItem(balance > Number(fromAmount))
       }
@@ -471,15 +481,12 @@ const BuyWithCryptoModal = (props: Props) => {
       // setRouteSetInterval(
       interval = setInterval(() => {
         setIsFetchingRoute(true)
-        console.log('EXECUTING THE CALCULATE ROUTE FROM THE SET INTERVAL')
-        console.log('calculate2')
         calculateRoute()
       }, ROUTE_FETCH_INTERVAL)
       // )
     }
     return () => {
       if (interval) {
-        console.log('CLEARING INTERVAL')
         clearInterval(interval)
       }
     }
@@ -514,24 +521,18 @@ const BuyWithCryptoModal = (props: Props) => {
       }
     }
   }, [
-    calculateRoute,
-    isFetchingRoute,
     route,
+    useMetaTx,
     routeFailed,
     selectedToken,
-    useMetaTx,
+    isFetchingRoute,
     selectedChain,
-    asset.chainId
+    asset.chainId,
+    calculateRoute
   ])
 
   const onBuyWithCrypto = useCallback(async () => {
-    const provider = await getConnectedProvider()
-    if (
-      route &&
-      crossChainProvider &&
-      crossChainProvider.isLibInitialized() &&
-      provider
-    ) {
+    if (route && crossChainProvider && crossChainProvider.isLibInitialized()) {
       onBuyItemThroughProvider(route)
       // const axelarScanUrl = `https://axelarscan.io/gmp/${tx.transactionHash}`
     }
@@ -546,7 +547,7 @@ const BuyWithCryptoModal = (props: Props) => {
         inverted
         className={styles.switchNetworkButton}
         disabled={isSwitchingNetwork}
-        data-testid={CONFIRM_DATA_TEST_ID}
+        data-testid={SWITCH_NETWORK_BUTTON_TEST_ID}
         onClick={() => onSwitchNetwork(selectedChain)}
       >
         {isSwitchingNetwork ? (
@@ -633,7 +634,7 @@ const BuyWithCryptoModal = (props: Props) => {
         <Button
           fluid
           primary
-          data-testid={CONFIRM_DATA_TEST_ID}
+          data-testid={GET_MANA_BUTTON_TEST_ID}
           loading={isFetchingBalance || isLoading}
           onClick={() => onGetMana()}
         >
@@ -642,10 +643,11 @@ const BuyWithCryptoModal = (props: Props) => {
         <ChainButton
           inverted
           fluid
-          disabled={isLoading || isLoadingAuthorization}
-          onClick={onBuyWithCard}
-          loading={isLoading || isLoadingAuthorization}
           chainId={asset.chainId}
+          data-testid={BUY_WITH_CARD_TEST_ID}
+          disabled={isLoading || isLoadingAuthorization}
+          loading={isLoading || isLoadingAuthorization}
+          onClick={onBuyWithCard}
         >
           <Icon name="credit card outline" />
           {t(`buy_with_crypto_modal.buy_with_card`)}
@@ -674,7 +676,7 @@ const BuyWithCryptoModal = (props: Props) => {
         <Button
           fluid
           primary
-          data-testid={CONFIRM_DATA_TEST_ID}
+          data-testid={BUY_NOW_BUTTON_TEST_ID}
           disabled={
             (selectedToken?.symbol !== 'MANA' && !route) ||
             isFetchingRoute ||
@@ -712,13 +714,16 @@ const BuyWithCryptoModal = (props: Props) => {
   const renderMainActionButton = useCallback(() => {
     if (wallet && selectedToken && canBuyItem !== undefined) {
       if (canBuyItem) {
+        // it's paying with MANA but connected on Ethereum
         if (
           selectedToken.symbol === 'MANA' &&
           wallet.network === Network.ETHEREUM
         ) {
-          return isPriceTooLow(price)
+          return asset.network === Network.ETHEREUM // if it's buying a L1 NFT, render buy now
+            ? renderBuyNowButton()
+            : isPriceTooLow(price) // if it's too low for a meta tx, render switch button
             ? renderSwitchNetworkButton()
-            : renderBuyNowButton()
+            : renderBuyNowButton() // else, buy button
         }
         // for any other token, it needs to be connected on the selectedChain network
         return selectedChain === wallet.chainId
@@ -735,6 +740,7 @@ const BuyWithCryptoModal = (props: Props) => {
     selectedToken,
     canBuyItem,
     selectedChain,
+    asset.network,
     renderBuyNowButton,
     renderSwitchNetworkButton,
     renderGetMANAButton
@@ -878,12 +884,16 @@ const BuyWithCryptoModal = (props: Props) => {
               {!providerTokens.length || !selectedToken ? (
                 <Loader active className={styles.mainLoader} />
               ) : (
-                <div className={styles.payWithContainer}>
+                <div
+                  className={styles.payWithContainer}
+                  data-testid={PAY_WITH_DATA_TEST_ID}
+                >
                   <div className={styles.dropdownContainer}>
                     <div>
                       <span>{t('buy_with_crypto_modal.pay_with')}</span>
                       <div
                         className={styles.tokenAndChainSelector}
+                        data-testid={CHAIN_SELECTOR_DATA_TEST_ID}
                         onClick={() => setShowChainSelector(true)}
                       >
                         <img
@@ -903,6 +913,7 @@ const BuyWithCryptoModal = (props: Props) => {
                           styles.tokenAndChainSelector,
                           styles.tokenDropdown
                         )}
+                        data-testid={TOKEN_SELECTOR_DATA_TEST_ID}
                         onClick={() => setShowTokenSelector(true)}
                       >
                         <img
@@ -1022,7 +1033,10 @@ const BuyWithCryptoModal = (props: Props) => {
                     {t('buy_with_crypto_modal.total')}
                   </span>
                   {useMetaTx && !isPriceTooLow(price) ? (
-                    <span className={styles.feeCovered}>
+                    <span
+                      className={styles.feeCovered}
+                      data-testid={FREE_TX_CONVERED_TEST_ID}
+                    >
                       {t('buy_with_crypto_modal.transaction_fee_covered', {
                         free: (
                           <span className={styles.feeCoveredFree}>
@@ -1168,7 +1182,10 @@ const BuyWithCryptoModal = (props: Props) => {
               ) : null}
 
               {hasLowPriceForMetaTx && !isBuyWithCardPage && useMetaTx ? (
-                <span className={styles.warning}>
+                <span
+                  className={styles.warning}
+                  data-testid={PRICE_TOO_LOW_TEST_ID}
+                >
                   {' '}
                   {t('buy_with_crypto_modal.price_too_low', {
                     learn_more: (

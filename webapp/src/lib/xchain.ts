@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import {
   ChainData as SquidChainData,
   Token as SquidToken,
@@ -62,6 +63,10 @@ export interface XChainProvider {
   mintNFT(provider: Provider, ChainCallData: MintNFTXChainData): Promise<string>
   getBuyNFTRoute(buyNFTXChainData: BuyNFTXChainData): Promise<RouteResponse>
   getMintNFTRoute(buyNFTXChainData: MintNFTXChainData): Promise<RouteResponse>
+  executeRoute(
+    route: RouteResponse,
+    provider: Provider
+  ): Promise<ethers.providers.TransactionReceipt>
 }
 
 export const crossChainProvider = new AxelarProvider()

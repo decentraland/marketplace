@@ -299,18 +299,18 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (provider) {
-        const signer = new ethers.providers.Web3Provider(provider).getSigner()
-
         const txRespose: ethers.providers.TransactionResponse = yield call(
-          [crossChainProvider.squid, 'executeRoute'],
-          { route: route.route, signer }
+          [crossChainProvider, 'executeRoute'],
+          route,
+          provider
         )
 
         const tx: ethers.providers.TransactionReceipt = yield call(
           txRespose.wait
         )
-        console.log('tx: ', tx)
-        yield put(buyItemCrossChainSuccess(item.chainId, tx.transactionHash, item))
+        yield put(
+          buyItemCrossChainSuccess(item.chainId, tx.transactionHash, item)
+        )
       }
     } catch (error) {
       console.log('error: ', error)

@@ -6,6 +6,8 @@ import { ChainId } from '@dcl/schemas'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { Close, Icon } from 'decentraland-ui'
 
+export const CHAIN_AND_TOKEN_SELECTOR_DATA_TEST_ID = 'chain-and-token-selector'
+
 type Props = {
   currentChain: ChainId
   chains?: ChainData[]
@@ -49,7 +51,10 @@ const ChainAndTokenSelector = (props: Props) => {
   }, [tokens, search, currentChain])
 
   return (
-    <div className={styles.chainAndTokenSelector}>
+    <div
+      className={styles.chainAndTokenSelector}
+      data-testid={CHAIN_AND_TOKEN_SELECTOR_DATA_TEST_ID}
+    >
       <div className={styles.searchContainer}>
         <Icon name="search" className={styles.searchIcon} />
         <input
