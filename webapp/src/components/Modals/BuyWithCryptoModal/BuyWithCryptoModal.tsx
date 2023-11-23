@@ -8,7 +8,7 @@ import {
   ChainButton,
   withAuthorizedAction
 } from 'decentraland-dapps/dist/containers'
-import { Button, Icon, Loader, ModalNavigation } from 'decentraland-ui'
+import { Button, Icon, Loader, ModalNavigation, Popup } from 'decentraland-ui'
 import { ContractName, getContract } from 'decentraland-transactions'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -18,6 +18,7 @@ import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Contract as DCLContract } from '../../../modules/vendor/services'
 import { isNFT, isWearableOrEmote } from '../../../modules/asset/utils'
+import infoIcon from '../../../images/infoIcon.png'
 import { getContractNames } from '../../../modules/vendor'
 import * as events from '../../../utils/events'
 import { Mana } from '../../Mana'
@@ -86,6 +87,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // useStates
   const [providerChains, setProviderChains] = useState<ChainData[]>([])
+  console.log('providerChains: ', providerChains)
   const [providerTokens, setProviderTokens] = useState<Token[]>([])
   const [selectedChain, setSelectedChain] = useState(asset.chainId)
   const [selectedToken, setSelectedToken] = useState<Token>()
@@ -222,6 +224,22 @@ export const BuyWithCryptoModal = (props: Props) => {
           }
           const supportedTokens = crossChainProvider.getSupportedTokens()
           const supportedChains = crossChainProvider.getSupportedChains()
+          // if for any reasons Polygon is not in the supported chains, add it manually to support our main flow (buying Polygon NFTs with Polygon MANA)
+          if (
+            !supportedChains.find(c => +c.chainId === ChainId.MATIC_MAINNET)
+          ) {
+            supportedChains.push({
+              chainId: ChainId.MATIC_MAINNET.toString(),
+              networkName: 'Polygon',
+              nativeCurrency: {
+                name: 'MATIC',
+                symbol: 'MATIC',
+                decimals: 18,
+                icon:
+                  'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg'
+              }
+            } as ChainData)
+          }
           setProviderChains(
             supportedChains.filter(c =>
               CROSS_CHAIN_SUPPORTED_CHAINS.includes(+c.chainId)
@@ -660,10 +678,11 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [
     isFetchingBalance,
     isLoading,
-    isLoadingAuthorization,
     asset.chainId,
+    isLoadingAuthorization,
     onBuyWithCard,
-    onGetMana
+    onGetMana,
+    onClose
   ])
 
   const renderBuyNowButton = useCallback(() => {
@@ -736,14 +755,19 @@ export const BuyWithCryptoModal = (props: Props) => {
         // can't buy Get Mana and Buy With Card buttons
         return renderGetMANAButton()
       }
+    } else if (!route && routeFailed) {
+      // can't buy Get Mana and Buy With Card buttons
+      return renderGetMANAButton()
     }
   }, [
-    price,
     wallet,
     selectedToken,
     canBuyItem,
+    route,
+    asset,
+    price,
+    routeFailed,
     selectedChain,
-    asset.network,
     renderBuyNowButton,
     renderSwitchNetworkButton,
     renderGetMANAButton
@@ -986,7 +1010,25 @@ export const BuyWithCryptoModal = (props: Props) => {
 
                         {shouldUseCrossChainProvider ? (
                           <div className={styles.itemCost}>
-                            {t('buy_with_crypto_modal.fee_cost')}
+                            <div className={styles.feeCostContainer}>
+                              {t('buy_with_crypto_modal.fee_cost')}
+                              <Popup
+                                content={t(
+                                  'best_buying_option.minting.minting_popup'
+                                )}
+                                style={{ zIndex: 3001 }}
+                                position="top center"
+                                className={styles.infoIconPopUp}
+                                trigger={
+                                  <img
+                                    src={infoIcon}
+                                    alt="info"
+                                    className={styles.informationTooltip}
+                                  />
+                                }
+                                on="hover"
+                              />
+                            </div>
                             <div className={styles.fromAmountContainer}>
                               {!!route && routeFeeCost ? (
                                 <div
@@ -1041,9 +1083,9 @@ export const BuyWithCryptoModal = (props: Props) => {
                       data-testid={FREE_TX_CONVERED_TEST_ID}
                     >
                       {t('buy_with_crypto_modal.transaction_fee_covered', {
-                        free: (
+                        covered: (
                           <span className={styles.feeCoveredFree}>
-                            {t('buy_with_crypto_modal.free')}
+                            {t('buy_with_crypto_modal.covered_by_dao')}
                           </span>
                         )
                       })}

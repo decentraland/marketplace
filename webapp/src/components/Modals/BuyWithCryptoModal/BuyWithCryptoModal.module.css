@@ -6,8 +6,12 @@
   justify-content: center;
 }
 
+.buyWithCryptoModal .infoIconPopUp{
+  z-index: 9999;
+}
+
 .buyWithCryptoModal:global(.ui.tiny.modal) {
-  min-height: 730px;
+  min-height: 640px;
   display: flex !important;
   flex-direction: column;
 }
@@ -74,55 +78,22 @@
   font-size: 15px;
 }
 
-.dropdownContainer {
+.buyWithCryptoModal .dropdownContainer {
   display: flex;
   justify-content: space-between;
   color: var(--text);
 }
 
-.dropdownContainer :global(span) {
+.buyWithCryptoModal .dropdownContainer :global(span) {
   font-size: 14px;
 }
 
-.balanceContainer {
+.buyWithCryptoModal .balanceContainer {
   display: flex;
   justify-content: flex-end;
   font-size: 14px;
   color: var(--clear-divider);
   margin-left: auto;
-}
-
-.dropdown {
-  background: #43404a;
-  color: var(--background);
-  border-radius: 20px;
-  padding: 6px;
-  width: 190px;
-}
-
-.dropdown:global(.ui.dropdown .menu .item) {
-  display: flex;
-  align-items: center;
-}
-
-.dropdown:global(.ui.dropdown > .dropdown.icon) {
-  color: white;
-}
-
-.dropdown:global(.ui.dropdown > .text) {
-  color: var(--black);
-}
-
-.dropdown :global(.ui.avatar.image) {
-  width: 25px;
-  height: 25px;
-  margin-top: 0px;
-}
-
-.dropdown:global(.ui.dropdown > .text > .image) {
-  width: 25px;
-  height: 25px;
-  margin-top: 0px;
 }
 
 .buyWithCryptoModal .routeUnavailable,
@@ -131,36 +102,16 @@
   font-size: 14px;
 }
 
-.dropdown:global(.ui.dropdown > .dropdown.icon) {
+.buyWithCryptoModal .dropdown:global(.ui.dropdown > .dropdown.icon) {
   margin-left: auto;
   align-self: center;
   margin-right: -6px;
 }
 
-.dropdown:global(.ui.dropdown) {
+.buyWithCryptoModal .dropdown:global(.ui.dropdown) {
   display: flex;
   margin-top: 2px;
 }
-
-.token_dropdown:global(.ui.dropdown) {
-  width: 140px;
-}
-
-.token_dropdown:global(.ui.search.dropdown.active > input.search) {
-  padding-left: 40px;
-  height: 100%;
-}
-
-.token_dropdown:global(.ui.search.dropdown > input.search) {
-  padding-left: 40px;
-  height: 100%;
-}
-
-.token_dropdown:global(.ui.dropdown.scrolling .menu) {
-  width: 100% !important; /* semantic ui has auto!important; */
-}
-
-/* ///// */
 
 .buyWithCryptoModal .feeCovered {
   font-size: 12px;
@@ -202,11 +153,22 @@
   margin-top: 16px;
 }
 
+.buyWithCryptoModal .feeCostContainer {
+  display: flex;
+  align-items: center;
+}
+
 .buyWithCryptoModal .costContainer .itemCost img,
 .buyWithCryptoModal .totalContainer img {
   width: 24px;
   height: 24px;
   margin-right: 6px;
+}
+
+.buyWithCryptoModal .costContainer .itemCost img.informationTooltip {
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
 }
 
 .buyWithCryptoModal .costContainer .itemCost .fromAmountContainer {
@@ -256,8 +218,6 @@
   margin-left: 5px;
   font-size: 14px;
 }
-
-/* ///// */
 
 .buyWithCryptoModal .durationAndExchangeContainer {
   border: 1px solid #716b7c;
@@ -374,7 +334,7 @@
 .tokenDropdownContainer {
   display: flex;
   flex-direction: column;
-  margin-left: 24px;
+  margin-left: 16px;
 }
 
 .buyWithCryptoModal:global(.ui.modal > .actions) {
@@ -464,11 +424,11 @@
   flex-direction: column;
 }
 
-.dropdownContainer :global(span) {
+.buyWithCryptoModal .dropdownContainer :global(span) {
   font-size: 14px;
 }
 
-.dropdown {
+.buyWithCryptoModal .dropdown {
   background: #43404a;
   color: var(--white);
   border-radius: 8px;
@@ -476,34 +436,34 @@
   width: 190px;
 }
 
-.chainDropdown {
+.buyWithCryptoModal .chainDropdown {
   width: 167px;
 }
 
-.dropdown:global(.ui.dropdown .menu .item) {
+.buyWithCryptoModal .dropdown:global(.ui.dropdown .menu .item) {
   display: flex;
   align-items: center;
 }
 
-.dropdown:global(.ui.dropdown .menu .item) {
+.buyWithCryptoModal .dropdown:global(.ui.dropdown .menu .item) {
   display: flex;
   align-items: center;
 }
 
-.dropdown:global(.ui.dropdown > .text) {
+.buyWithCryptoModal .dropdown:global(.ui.dropdown > .text) {
   color: var(--black);
   font-size: 13px;
   line-height: 18px;
   font-weight: bold;
 }
 
-.dropdown :global(.ui.avatar.image) {
+.buyWithCryptoModal .dropdown :global(.ui.avatar.image) {
   width: 25px;
   height: 25px;
   margin-top: -3px;
 }
 
-.dropdown:global(.ui.dropdown > .text > .image) {
+.buyWithCryptoModal .dropdown:global(.ui.dropdown > .text > .image) {
   width: 25px;
   height: 25px;
   margin-top: -3px;
@@ -515,26 +475,27 @@
   font-size: 14px;
 }
 
-.dropdown:global(.ui.dropdown) {
+.buyWithCryptoModal .dropdown:global(.ui.dropdown) {
   display: flex;
   margin-top: 8px;
 }
 
-.tokenDropdown:global(.ui.search.dropdown.active > input.search) {
+.buyWithCryptoModal
+  .tokenDropdown:global(.ui.search.dropdown.active > input.search) {
   padding-left: 40px;
   height: 100%;
 }
 
-.tokenDropdown:global(.ui.search.dropdown > input.search) {
+.buyWithCryptoModal .tokenDropdown:global(.ui.search.dropdown > input.search) {
   padding-left: 40px;
   height: 100%;
 }
 
-.tokenDropdown:global(.ui.dropdown.scrolling .menu) {
+.buyWithCryptoModal .tokenDropdown:global(.ui.dropdown.scrolling .menu) {
   width: 100% !important; /* semantic ui has auto!important; */
 }
 
-.balanceSkeleton {
+.buyWithCryptoModal .balanceSkeleton {
   flex-shrink: 0;
   background: var(--dcl-pale-black, #43404a);
   margin-right: 16px;
@@ -547,6 +508,6 @@
   margin-left: 6px;
 }
 
-.balance {
+.buyWithCryptoModal .balance {
   margin-left: 6px;
 }
