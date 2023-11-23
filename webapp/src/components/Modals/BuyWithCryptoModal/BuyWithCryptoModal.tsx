@@ -815,6 +815,9 @@ export const BuyWithCryptoModal = (props: Props) => {
         setRoute(undefined)
         setRouteFailed(false)
         abortControllerRef.current = new AbortController()
+        analytics.track(events.CROSS_CHAIN_TOKEN_SELECTION, {
+          selectedToken
+        })
       } else {
         setSelectedChain(Number(selectedOption.chainId) as ChainId)
         const manaDestinyChain = providerTokens.find(
@@ -827,9 +830,13 @@ export const BuyWithCryptoModal = (props: Props) => {
         )
         setRoute(undefined)
         setRouteFailed(false)
+
+        analytics.track(events.CROSS_CHAIN_CHAIN_SELECTION, {
+          selectedChain
+        })
       }
     },
-    [providerTokens, selectedChain]
+    [analytics, providerTokens, selectedChain]
   )
 
   const renderModalNavigation = useCallback(() => {
