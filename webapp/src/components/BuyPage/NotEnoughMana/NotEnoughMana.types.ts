@@ -15,7 +15,6 @@ export type Props = {
   description: React.ReactNode
   onGetMana: typeof openBuyManaWithFiatModalRequest
   onBuyWithCard: (asset: Asset) => ReturnType<typeof openTransak>
-  onBuyWithAnotherToken?: () => void
 }
 
 export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onBuyWithCard'>

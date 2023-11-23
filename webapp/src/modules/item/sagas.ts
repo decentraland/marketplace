@@ -309,7 +309,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
           txRespose.wait
         )
         yield put(
-          buyItemCrossChainSuccess(item.chainId, tx.transactionHash, item)
+          buyItemCrossChainSuccess(route, item.chainId, tx.transactionHash, item)
         )
       }
     } catch (error) {

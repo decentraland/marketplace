@@ -29,10 +29,9 @@ const jestConfig = config => {
     '^react-native$': 'react-native-web',
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy'
   }
-  console.log('config: ', config)
   return config
 }
 
-overridedConfig.jest = jestConfig
+overridedConfig.jest = jestConfig // looks counter-intuitive, but it works
 
 module.exports = overridedConfig

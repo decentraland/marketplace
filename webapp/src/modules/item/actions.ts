@@ -121,11 +121,13 @@ export const buyItemCrossChainRequest = (item: Item, route: Route) =>
   action(BUY_ITEM_CROSS_CHAIN_REQUEST, { item, route })
 
 export const buyItemCrossChainSuccess = (
+  route: Route,
   chainId: ChainId,
   txHash: string,
   item: Item
 ) =>
   action(BUY_ITEM_CROSS_CHAIN_SUCCESS, {
+    route,
     item,
     txHash,
     ...buildTransactionWithReceiptPayload(chainId, txHash, {

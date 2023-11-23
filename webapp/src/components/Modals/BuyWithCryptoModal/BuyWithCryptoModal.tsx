@@ -87,7 +87,6 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // useStates
   const [providerChains, setProviderChains] = useState<ChainData[]>([])
-  console.log('providerChains: ', providerChains)
   const [providerTokens, setProviderTokens] = useState<Token[]>([])
   const [selectedChain, setSelectedChain] = useState(asset.chainId)
   const [selectedToken, setSelectedToken] = useState<Token>()
@@ -101,11 +100,11 @@ export const BuyWithCryptoModal = (props: Props) => {
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
 
-  // useMemos
-
   useEffect(() => {
-    crossChainProvider.init()
+    crossChainProvider.init() // init the provider on the mount
   }, [])
+
+  // useMemos
 
   // if the tx should be done through the provider
   const shouldUseCrossChainProvider = useMemo(
@@ -552,7 +551,6 @@ export const BuyWithCryptoModal = (props: Props) => {
   const onBuyWithCrypto = useCallback(async () => {
     if (route && crossChainProvider && crossChainProvider.isLibInitialized()) {
       onBuyItemThroughProvider(route)
-      // const axelarScanUrl = `https://axelarscan.io/gmp/${tx.transactionHash}`
     }
   }, [onBuyItemThroughProvider, route])
 

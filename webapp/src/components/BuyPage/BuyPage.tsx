@@ -59,9 +59,9 @@ const BuyPage = (props: Props) => {
                     order={order}
                     {...modalProps}
                   />
-                ) : (
+                ) : type === AssetType.ITEM ? (
                   <MintItemModal item={asset as Item} {...modalProps} />
-                )
+                ) : null
               }}
             </AssetProviderPage>
           )}

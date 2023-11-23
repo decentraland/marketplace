@@ -10,7 +10,6 @@ export type Props = {
   network: Network
   isBuyWithCardPage: boolean
   onSwitchNetwork: typeof switchNetworkRequest
-  onBuyWithAnotherToken?: () => void
 }
 
 export type MapStateProps = Pick<Props, 'isBuyWithCardPage'>

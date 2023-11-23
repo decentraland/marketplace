@@ -3,19 +3,8 @@
   width: 460px !important;
 }
 
-.card :global(.ui.button + .ui.button) {
-  /* Override semantic UI's width */
-  margin-left: 0;
-}
-
 .card:global(.ui.card > .content) {
   padding: 20px 24px 24px;
-}
-
-.card
-  :global(.ui.button:not(.icon)
-    > .icon:not(.button):not(.dropdown).ethereum.icon) {
-  margin-right: 2px;
 }
 
 .paragraph {
@@ -30,6 +19,7 @@
 .buttons {
   margin-top: 6px;
 }
+
 
 @media (max-width: 768px) {
   .card {

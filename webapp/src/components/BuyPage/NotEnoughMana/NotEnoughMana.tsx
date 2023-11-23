@@ -6,13 +6,7 @@ import { Props } from './NotEnoughMana.types'
 import styles from './NotEnoughMana.module.css'
 
 const NotEnoughMana = (props: Props) => {
-  const {
-    asset,
-    description,
-    onGetMana,
-    onBuyWithCard,
-    onBuyWithAnotherToken
-  } = props
+  const { asset, description, onGetMana, onBuyWithCard } = props
 
   return (
     <Card className={styles.card}>
@@ -38,12 +32,6 @@ const NotEnoughMana = (props: Props) => {
             <Icon name="credit card outline" />
             {t('asset_page.actions.buy_with_card')}
           </Button>
-          {onBuyWithAnotherToken ? (
-            <Button basic size="small" onClick={onBuyWithAnotherToken}>
-              <Icon name="ethereum" />
-              {t('asset_page.actions.buy_with_another_token')}
-            </Button>
-          ) : null}
         </div>
       </Card.Content>
     </Card>

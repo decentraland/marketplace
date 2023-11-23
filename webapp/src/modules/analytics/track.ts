@@ -279,6 +279,8 @@ track<BuyItemCrossChainSuccessAction>(
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   events.BUY_ITEM_CROSS_CHAIN,
   ({ payload }) => ({
+    fromToken: payload.route.route.params.fromToken,
+    fromChain: payload.route.route.params.fromChain,
     itemId: payload.item.itemId,
     contractAddress: payload.item.contractAddress,
     rarity: payload.item.rarity,

@@ -76,5 +76,5 @@ export const SEARCH_RESULT_CLICKED = 'Search Result Clicked'
 export const SEARCH_ALL = 'Search all results'
 
 // Buy Cross-chain
-export const ERROR_GETTING_ROUTE = 'Error getting Route'
 export const BUY_ITEM_CROSS_CHAIN = 'Buy Item Cross Chain'
+export const ERROR_GETTING_ROUTE = 'Error getting Route'
