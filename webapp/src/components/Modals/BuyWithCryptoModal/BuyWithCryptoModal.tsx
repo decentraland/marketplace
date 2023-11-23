@@ -28,8 +28,9 @@ import {
   ChainData,
   RouteResponse,
   Token,
-  crossChainProvider
-} from '../../../lib/xchain'
+  CrossChainProvider
+} from 'decentraland-transactions/dist/crossChain/types'
+import { AxelarProvider } from 'decentraland-transactions/dist/crossChain/AxelarProvider'
 import { AssetImage } from '../../AssetImage'
 import { isPriceTooLow } from '../../BuyPage/utils'
 import { CardPaymentsExplanation } from '../../BuyPage/CardPaymentsExplanation'
@@ -37,6 +38,7 @@ import { ManaToFiat } from '../../ManaToFiat'
 import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
 import { getMintItemStatus } from '../../../modules/item/selectors'
 import { NFT } from '../../../modules/nft/types'
+import { config } from '../../../config'
 import ChainAndTokenSelector from './ChainAndTokenSelector/ChainAndTokenSelector'
 import { formatPrice, getMANAToken, getShouldUseMetaTx, isToken } from './utils'
 import { Props } from './BuyWithCryptoModal.types'
@@ -58,6 +60,8 @@ const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
 
 export type ProviderChain = ChainData
 export type ProviderToken = Token
+
+const squidURL = config.get('SQUID_API_URL')
 
 export const BuyWithCryptoModal = (props: Props) => {
   const {
@@ -99,9 +103,14 @@ export const BuyWithCryptoModal = (props: Props) => {
   const [fromAmount, setFromAmount] = useState<string | undefined>(undefined)
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
+  const [crossChainProvider, setCrossChainProvider] = useState<
+    CrossChainProvider
+  >()
 
   useEffect(() => {
-    crossChainProvider.init() // init the provider on the mount
+    const provider = new AxelarProvider(squidURL)
+    provider.init() // init the provider on the mount
+    setCrossChainProvider(provider)
   }, [])
 
   // useMemos
@@ -254,7 +263,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         console.log('error: ', error)
       }
     })()
-  }, [wallet])
+  }, [crossChainProvider, wallet])
 
   // calculates Route for the selectedToken
   const calculateRoute = useCallback(async () => {
@@ -349,6 +358,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [
     analytics,
     asset,
+    crossChainProvider,
     destinyChainMANA,
     order,
     providerTokens,
@@ -360,7 +370,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   // when providerTokens are loaded and there's no selected token or the token selected if from another network
   useEffect(() => {
     if (
-      crossChainProvider.initialized &&
+      crossChainProvider?.isLibInitialized() &&
       ((!selectedToken && providerTokens.length) || // only run if not selectedToken, meaning the first render
         (selectedToken && selectedChain.toString() !== selectedToken.chainId)) // or if selectedToken is not from the selectedChain
     ) {
@@ -369,7 +379,13 @@ export const BuyWithCryptoModal = (props: Props) => {
       )
       setSelectedToken(MANAToken || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
     }
-  }, [calculateRoute, providerTokens, selectedChain, selectedToken])
+  }, [
+    calculateRoute,
+    crossChainProvider,
+    providerTokens,
+    selectedChain,
+    selectedToken
+  ])
 
   // fetch selected token balance & price
   useEffect(() => {
@@ -420,7 +436,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     return () => {
       cancel = true
     }
-  }, [selectedToken, selectedChain, wallet])
+  }, [selectedToken, selectedChain, wallet, crossChainProvider])
 
   // computes if the user can buy the item with the selected token
   useEffect(() => {
@@ -463,7 +479,7 @@ export const BuyWithCryptoModal = (props: Props) => {
               t.address.toLocaleLowerCase() ===
               destinyChainMANA.toLocaleLowerCase()
           )
-          if (providerMANA && selectedToken) {
+          if (providerMANA && selectedToken && crossChainProvider) {
             const fromAmountParams = {
               fromToken: selectedToken,
               toAmount: ethers.utils.formatEther(price),
@@ -482,6 +498,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     })()
   }, [
     asset,
+    crossChainProvider,
     order,
     price,
     providerTokens,
@@ -552,7 +569,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     if (route && crossChainProvider && crossChainProvider.isLibInitialized()) {
       onBuyItemThroughProvider(route)
     }
-  }, [onBuyItemThroughProvider, route])
+  }, [crossChainProvider, onBuyItemThroughProvider, route])
 
   // useCallbacks
 

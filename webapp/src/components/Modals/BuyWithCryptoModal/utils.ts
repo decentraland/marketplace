@@ -1,8 +1,11 @@
 import { ChainId, Network } from '@dcl/schemas'
+import {
+  ChainData,
+  Token
+} from 'decentraland-transactions/dist/crossChain/types'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { Asset } from '../../../modules/asset/types'
-import { ChainData, Token } from '../../../lib/xchain'
 
 export const getShouldUseMetaTx = (
   asset: Asset,

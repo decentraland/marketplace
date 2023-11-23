@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ChainData, Token } from '../../../../lib/xchain'
+import {
+  ChainData,
+  Token
+} from 'decentraland-transactions/dist/crossChain/types'
 import styles from './ChainAndTokenSelector.module.css'
 import { ChainId } from '@dcl/schemas'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'

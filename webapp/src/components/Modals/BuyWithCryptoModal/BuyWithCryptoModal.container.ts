@@ -3,6 +3,7 @@ import { Dispatch } from 'redux'
 import { Item, Network } from '@dcl/schemas'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getLoading as getLoadingAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
+import { Route } from 'decentraland-transactions/dist/crossChain/types'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
@@ -21,7 +22,6 @@ import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
 import { getLoading as getItemsLoading } from '../../../modules/item/selectors'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
-import { Route } from '../../../lib/xchain'
 import {
   BUY_ITEM_CROSS_CHAIN_REQUEST,
   BUY_ITEM_REQUEST,

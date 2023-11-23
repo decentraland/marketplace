@@ -26,7 +26,7 @@ import {
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
-import { crossChainProvider } from '../../lib/xchain'
+import { AxelarProvider } from 'decentraland-transactions/dist/crossChain/AxelarProvider'
 import { config } from '../../config'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
@@ -299,6 +299,9 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (provider) {
+        const crossChainProvider = new AxelarProvider(
+          config.get('SQUID_API_URL')
+        )
         const txRespose: ethers.providers.TransactionResponse = yield call(
           [crossChainProvider, 'executeRoute'],
           route,
@@ -309,7 +312,12 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
           txRespose.wait
         )
         yield put(
-          buyItemCrossChainSuccess(route, item.chainId, tx.transactionHash, item)
+          buyItemCrossChainSuccess(
+            route,
+            item.chainId,
+            tx.transactionHash,
+            item
+          )
         )
       }
     } catch (error) {
