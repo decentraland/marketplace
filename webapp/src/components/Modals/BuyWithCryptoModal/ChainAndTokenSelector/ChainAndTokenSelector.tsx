@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react'
+import { ChainId } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
+import { Close, Icon } from 'decentraland-ui'
 import {
   ChainData,
   Token
 } from 'decentraland-transactions/dist/crossChain/types'
 import styles from './ChainAndTokenSelector.module.css'
-import { ChainId } from '@dcl/schemas'
-import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
-import { Close, Icon } from 'decentraland-ui'
 
 export const CHAIN_AND_TOKEN_SELECTOR_DATA_TEST_ID = 'chain-and-token-selector'
 

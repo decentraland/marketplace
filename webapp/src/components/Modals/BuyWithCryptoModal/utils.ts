@@ -73,3 +73,30 @@ export function formatPrice(price: string | number, token: Token): number {
 
   return formattedPrice
 }
+
+// this are the default chains for the buy with crypto modal since we support buying with MANA on both chains
+// for L1 and L2 NFTs respectively
+export const DEFAULT_CHAINS = [
+  {
+    chainId: ChainId.MATIC_MAINNET.toString(),
+    networkName: 'Polygon',
+    nativeCurrency: {
+      name: 'MATIC',
+      symbol: 'MATIC',
+      decimals: 18,
+      icon:
+        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg'
+    }
+  },
+  {
+    chainId: ChainId.ETHEREUM_MAINNET.toString(),
+    networkName: 'Ethereum',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+      icon:
+        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
+    }
+  }
+] as ChainData[]

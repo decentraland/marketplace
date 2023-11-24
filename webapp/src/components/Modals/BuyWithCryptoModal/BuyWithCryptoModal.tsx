@@ -40,7 +40,13 @@ import { getMintItemStatus } from '../../../modules/item/selectors'
 import { NFT } from '../../../modules/nft/types'
 import { config } from '../../../config'
 import ChainAndTokenSelector from './ChainAndTokenSelector/ChainAndTokenSelector'
-import { formatPrice, getMANAToken, getShouldUseMetaTx, isToken } from './utils'
+import {
+  DEFAULT_CHAINS,
+  formatPrice,
+  getMANAToken,
+  getShouldUseMetaTx,
+  isToken
+} from './utils'
 import { Props } from './BuyWithCryptoModal.types'
 import styles from './BuyWithCryptoModal.module.css'
 
@@ -90,10 +96,14 @@ export const BuyWithCryptoModal = (props: Props) => {
   const abortControllerRef = useRef(new AbortController())
 
   // useStates
-  const [providerChains, setProviderChains] = useState<ChainData[]>([])
+  const [providerChains, setProviderChains] = useState<ChainData[]>(
+    DEFAULT_CHAINS
+  )
   const [providerTokens, setProviderTokens] = useState<Token[]>([])
   const [selectedChain, setSelectedChain] = useState(asset.chainId)
-  const [selectedToken, setSelectedToken] = useState<Token>()
+  const [selectedToken, setSelectedToken] = useState<Token>(
+    getMANAToken(asset.chainId)
+  )
   const [isFetchingBalance, setIsFetchingBalance] = useState(false)
   const [isFetchingRoute, setIsFetchingRoute] = useState(false)
   const [selectedTokenBalance, setSelectedTokenBalance] = useState<BigNumber>()
@@ -231,23 +241,12 @@ export const BuyWithCryptoModal = (props: Props) => {
             await crossChainProvider.init()
           }
           const supportedTokens = crossChainProvider.getSupportedTokens()
-          const supportedChains = crossChainProvider.getSupportedChains()
-          // if for any reasons Polygon is not in the supported chains, add it manually to support our main flow (buying Polygon NFTs with Polygon MANA)
-          if (
-            !supportedChains.find(c => +c.chainId === ChainId.MATIC_MAINNET)
-          ) {
-            supportedChains.push({
-              chainId: ChainId.MATIC_MAINNET.toString(),
-              networkName: 'Polygon',
-              nativeCurrency: {
-                name: 'MATIC',
-                symbol: 'MATIC',
-                decimals: 18,
-                icon:
-                  'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg'
-              }
-            } as ChainData)
-          }
+          const supportedChains = [
+            ...DEFAULT_CHAINS,
+            ...crossChainProvider
+              .getSupportedChains()
+              .filter(c => DEFAULT_CHAINS.every(dc => dc.chainId !== c.chainId))
+          ] // keep the defaults since we support MANA on them natively
           setProviderChains(
             supportedChains.filter(c =>
               CROSS_CHAIN_SUPPORTED_CHAINS.includes(+c.chainId)
@@ -835,10 +834,13 @@ export const BuyWithCryptoModal = (props: Props) => {
           t => t.symbol === 'MANA' && t.chainId === selectedOption.chainId
         )
         // set the selected token on the new chain selected to MANA or the first one found
-        setSelectedToken(
-          manaDestinyChain ||
-            providerTokens.find(t => t.chainId === selectedOption.chainId)
+        const selectedToken = providerTokens.find(
+          t => t.chainId === selectedOption.chainId
         )
+        const token = manaDestinyChain || selectedToken
+        if (token) {
+          setSelectedToken(token)
+        }
         setRoute(undefined)
         setRouteFailed(false)
 
@@ -924,170 +926,161 @@ export const BuyWithCryptoModal = (props: Props) => {
                 </div>
               </div>
 
-              {!providerTokens.length || !selectedToken ? (
-                <Loader inline active className={styles.mainLoader} />
-              ) : (
-                <div
-                  className={styles.payWithContainer}
-                  data-testid={PAY_WITH_DATA_TEST_ID}
-                >
-                  <div className={styles.dropdownContainer}>
-                    <div>
-                      <span>{t('buy_with_crypto_modal.pay_with')}</span>
-                      <div
-                        className={styles.tokenAndChainSelector}
-                        data-testid={CHAIN_SELECTOR_DATA_TEST_ID}
-                        onClick={() => setShowChainSelector(true)}
-                      >
-                        <img
-                          src={selectedProviderChain?.nativeCurrency.icon}
-                          alt={selectedProviderChain?.nativeCurrency.name}
-                        />
-                        <span className={styles.tokenAndChainSelectorName}>
-                          {' '}
-                          {selectedProviderChain?.networkName}{' '}
-                        </span>
-                        <Icon name="chevron down" />
-                      </div>
-                    </div>
-                    <div className={styles.tokenDropdownContainer}>
-                      <div
-                        className={classNames(
-                          styles.tokenAndChainSelector,
-                          styles.tokenDropdown
-                        )}
-                        data-testid={TOKEN_SELECTOR_DATA_TEST_ID}
-                        onClick={() => setShowTokenSelector(true)}
-                      >
-                        <img
-                          src={selectedToken.logoURI}
-                          alt={selectedToken.name}
-                        />
-                        <span className={styles.tokenAndChainSelectorName}>
-                          {selectedToken.symbol}{' '}
-                        </span>
-                        <div className={styles.balanceContainer}>
-                          {t('buy_with_crypto_modal.balance')}:{' '}
-                          {renderTokenBalance()}
-                        </div>
-                        <Icon name="chevron down" />
-                      </div>
+              <div
+                className={styles.payWithContainer}
+                data-testid={PAY_WITH_DATA_TEST_ID}
+              >
+                <div className={styles.dropdownContainer}>
+                  <div>
+                    <span>{t('buy_with_crypto_modal.pay_with')}</span>
+                    <div
+                      className={styles.tokenAndChainSelector}
+                      data-testid={CHAIN_SELECTOR_DATA_TEST_ID}
+                      onClick={() => setShowChainSelector(true)}
+                    >
+                      <img
+                        src={selectedProviderChain?.nativeCurrency.icon}
+                        alt={selectedProviderChain?.nativeCurrency.name}
+                      />
+                      <span className={styles.tokenAndChainSelectorName}>
+                        {' '}
+                        {selectedProviderChain?.networkName}{' '}
+                      </span>
+                      <Icon name="chevron down" />
                     </div>
                   </div>
-                  <div className={styles.costContainer}>
-                    {!!selectedToken ? (
-                      <>
-                        <div className={styles.itemCost}>
-                          <>
-                            <div className={styles.itemCostLabels}>
-                              {t('buy_with_crypto_modal.item_cost')}
-                            </div>
-                            <div className={styles.fromAmountContainer}>
-                              <div className={styles.fromAmountTokenContainer}>
-                                <img
-                                  src={selectedToken?.logoURI}
-                                  alt={selectedToken?.name}
-                                />
-                                {selectedToken.symbol === 'MANA' ? (
-                                  ethers.utils.formatEther(price)
-                                ) : !!fromAmount ? (
-                                  fromAmount
-                                ) : (
-                                  <span
-                                    className={classNames(
-                                      styles.skeleton,
-                                      styles.estimatedFeeSkeleton
-                                    )}
-                                  />
-                                )}
-                              </div>
-                              {selectedToken.usdPrice ? (
-                                fromAmount ||
-                                selectedToken.symbol === 'MANA' ? (
-                                  <span className={styles.fromAmountUSD}>
-                                    ≈{' '}
-                                    {!!route ? (
-                                      <>
-                                        $
-                                        {(
-                                          Number(fromAmount) *
-                                          selectedToken.usdPrice
-                                        ).toFixed(4)}
-                                      </>
-                                    ) : (
-                                      <ManaToFiat mana={price} digits={4} />
-                                    )}
-                                  </span>
-                                ) : null
-                              ) : null}
-                            </div>
-                          </>
-                        </div>
-
-                        {shouldUseCrossChainProvider ? (
-                          <div className={styles.itemCost}>
-                            <div className={styles.feeCostContainer}>
-                              {t('buy_with_crypto_modal.fee_cost')}
-                              <Popup
-                                content={t(
-                                  'best_buying_option.minting.minting_popup'
-                                )}
-                                style={{ zIndex: 3001 }}
-                                position="top center"
-                                className={styles.infoIconPopUp}
-                                trigger={
-                                  <img
-                                    src={infoIcon}
-                                    alt="info"
-                                    className={styles.informationTooltip}
-                                  />
-                                }
-                                on="hover"
+                  <div className={styles.tokenDropdownContainer}>
+                    <div
+                      className={classNames(
+                        styles.tokenAndChainSelector,
+                        styles.tokenDropdown
+                      )}
+                      data-testid={TOKEN_SELECTOR_DATA_TEST_ID}
+                      onClick={() => setShowTokenSelector(true)}
+                    >
+                      <img
+                        src={selectedToken.logoURI}
+                        alt={selectedToken.name}
+                      />
+                      <span className={styles.tokenAndChainSelectorName}>
+                        {selectedToken.symbol}{' '}
+                      </span>
+                      <div className={styles.balanceContainer}>
+                        {t('buy_with_crypto_modal.balance')}:{' '}
+                        {renderTokenBalance()}
+                      </div>
+                      <Icon name="chevron down" />
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.costContainer}>
+                  {!!selectedToken ? (
+                    <>
+                      <div className={styles.itemCost}>
+                        <>
+                          <div className={styles.itemCostLabels}>
+                            {t('buy_with_crypto_modal.item_cost')}
+                          </div>
+                          <div className={styles.fromAmountContainer}>
+                            <div className={styles.fromAmountTokenContainer}>
+                              <img
+                                src={selectedToken?.logoURI}
+                                alt={selectedToken?.name}
                               />
-                            </div>
-                            <div className={styles.fromAmountContainer}>
-                              {!!route && routeFeeCost ? (
-                                <div
-                                  className={styles.fromAmountTokenContainer}
-                                >
-                                  <img
-                                    src={
-                                      route.route.estimate.gasCosts[0].token
-                                        .logoURI
-                                    }
-                                    alt={
-                                      route.route.estimate.gasCosts[0].token
-                                        .name
-                                    }
-                                  />
-                                  {routeFeeCost.totalCost}
-                                </div>
+                              {selectedToken.symbol === 'MANA' ? (
+                                ethers.utils.formatEther(price)
+                              ) : !!fromAmount ? (
+                                fromAmount
                               ) : (
-                                <div
+                                <span
                                   className={classNames(
                                     styles.skeleton,
                                     styles.estimatedFeeSkeleton
                                   )}
                                 />
                               )}
-                              {!!routeFeeCost && routeFeeCost.token.usdPrice ? (
-                                <span className={styles.fromAmountUSD}>
-                                  ≈ $
-                                  {(
-                                    (Number(routeFeeCost.feeCost) +
-                                      Number(routeFeeCost.gasCost)) *
-                                    routeFeeCost.token.usdPrice
-                                  ).toFixed(4)}
-                                </span>
-                              ) : null}
                             </div>
+                            {fromAmount || selectedToken.symbol === 'MANA' ? (
+                              <span className={styles.fromAmountUSD}>
+                                ≈{' '}
+                                {!!route && selectedToken.usdPrice ? (
+                                  <>
+                                    $
+                                    {(
+                                      Number(fromAmount) *
+                                      selectedToken.usdPrice
+                                    ).toFixed(4)}
+                                  </>
+                                ) : (
+                                  <ManaToFiat mana={price} digits={4} />
+                                )}
+                              </span>
+                            ) : null}
                           </div>
-                        ) : null}
-                      </>
-                    ) : null}
-                  </div>
+                        </>
+                      </div>
+
+                      {shouldUseCrossChainProvider ? (
+                        <div className={styles.itemCost}>
+                          <div className={styles.feeCostContainer}>
+                            {t('buy_with_crypto_modal.fee_cost')}
+                            <Popup
+                              content={t(
+                                'best_buying_option.minting.minting_popup'
+                              )}
+                              style={{ zIndex: 3001 }}
+                              position="top center"
+                              className={styles.infoIconPopUp}
+                              trigger={
+                                <img
+                                  src={infoIcon}
+                                  alt="info"
+                                  className={styles.informationTooltip}
+                                />
+                              }
+                              on="hover"
+                            />
+                          </div>
+                          <div className={styles.fromAmountContainer}>
+                            {!!route && routeFeeCost ? (
+                              <div className={styles.fromAmountTokenContainer}>
+                                <img
+                                  src={
+                                    route.route.estimate.gasCosts[0].token
+                                      .logoURI
+                                  }
+                                  alt={
+                                    route.route.estimate.gasCosts[0].token.name
+                                  }
+                                />
+                                {routeFeeCost.totalCost}
+                              </div>
+                            ) : (
+                              <div
+                                className={classNames(
+                                  styles.skeleton,
+                                  styles.estimatedFeeSkeleton
+                                )}
+                              />
+                            )}
+                            {!!routeFeeCost && routeFeeCost.token.usdPrice ? (
+                              <span className={styles.fromAmountUSD}>
+                                ≈ $
+                                {(
+                                  (Number(routeFeeCost.feeCost) +
+                                    Number(routeFeeCost.gasCost)) *
+                                  routeFeeCost.token.usdPrice
+                                ).toFixed(4)}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      ) : null}
+                    </>
+                  ) : null}
                 </div>
-              )}
+              </div>
+
               <div className={styles.totalContainer}>
                 <div>
                   <span className={styles.total}>
