@@ -290,13 +290,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       let route: RouteResponse | undefined = undefined
       const fromAmountParams = {
         fromToken: selectedToken,
-        toAmount: ethers.utils.formatEther(
-          order
-            ? order.price
-            : !isNFT(asset) && +asset.price > 0
-            ? asset.price
-            : 1 //TODO: review this
-        ),
+        toAmount: ethers.utils.formatEther(price),
         toToken: providerMANA
       }
       const fromAmount = Number(
@@ -361,6 +355,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     crossChainProvider,
     destinyChainMANA,
     order,
+    price,
     providerTokens,
     selectedChain,
     selectedToken,
@@ -493,7 +488,6 @@ export const BuyWithCryptoModal = (props: Props) => {
           }
         }
         setCanBuyItem(canBuy)
-        // setCanBuyItem(balance > Number(fromAmount))
       }
     })()
   }, [

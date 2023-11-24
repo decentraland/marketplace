@@ -321,7 +321,6 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         )
       }
     } catch (error) {
-      console.log('error: ', error)
       yield put(
         buyItemCrossChainFailure(
           isErrorWithMessage(error) ? error.message : t('global.unknown_error')

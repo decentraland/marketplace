@@ -846,8 +846,8 @@
       "select_token": "Selecciona una moneda",
       "no_matches": "No hay coincidencias para {search}..."
     },
-    "price_too_low": "Las transacciones de MANA solo están libres de tarifa de gas si el artículo tiene al menos 1 MANA. Para obtener este artículo, cambia tu red a Polygon para pagar la tarifa del gas con MATIC. {learn_more}",
-    "remember_transaction_fee_covered": "Pague con Polygon MANA para que el DAO cubra las tarifas de gas (el artículo debe tener al menos 1 MANA).",
+    "price_too_low": "Las transacciones de MANA solo están libres de tarifa de gas si el artículo cuesta al menos 1 MANA. Para obtener este artículo, cambia tu red a Polygon para pagar la tarifa del gas con MATIC. {learn_more}",
+    "remember_transaction_fee_covered": "Pague con Polygon MANA para que el DAO cubra las tarifas de gas (el artículo debe costar al menos 1 MANA).",
     "learn_more": "Aprende más"
   },
   "partially_supported_network_card": {
