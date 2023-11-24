@@ -13,7 +13,11 @@ import {
   WearableCategory
 } from '@dcl/schemas'
 import { renderWithProviders } from '../../../utils/test'
-import { Route, crossChainProvider } from '../../../lib/xchain'
+import {
+  CrossChainProvider,
+  Route
+} from 'decentraland-transactions/dist/crossChain'
+import { AxelarProvider } from 'decentraland-transactions/dist/crossChain/AxelarProvider'
 import { getMinSaleValueInWei } from '../../BuyPage/utils'
 import { VendorName } from '../../../modules/vendor'
 import { NFT } from '../../../modules/nft/types'
@@ -471,21 +475,13 @@ const MOCKED_ORDER = {
   issuedId: '29'
 }
 
-jest.mock('../../../lib/xchain', () => {
+jest.mock('decentraland-transactions/dist/crossChain', () => {
   return {
-    CROSS_CHAIN_SUPPORTED_CHAINS: [137, 1],
-    crossChainProvider: {
-      init: jest.fn(),
-      initialized: true,
-      isLibInitialized: () => true,
-      getFromAmount: jest.fn(),
-      getMintNFTRoute: jest.fn(),
-      getBuyNFTRoute: jest.fn(),
-      getSupportedChains: () => MOCK_SUPPORTED_CHAIN,
-      getSupportedTokens: () => MOCKED_PROVIDER_TOKENS
-    }
+    CROSS_CHAIN_SUPPORTED_CHAINS: [137, 1]
   }
 })
+
+jest.mock('decentraland-transactions/dist/crossChain/AxelarProvider')
 
 async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
   const defaultProps: Props = {
@@ -522,7 +518,19 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
 
 describe('BuyWithCryptoModal', () => {
   let modalProps: Partial<Props>
+  let crossChainProvider: CrossChainProvider
   beforeEach(() => {
+    crossChainProvider = ({
+      init: jest.fn(),
+      initialized: true,
+      isLibInitialized: () => true,
+      getFromAmount: jest.fn(),
+      getMintNFTRoute: jest.fn(),
+      getBuyNFTRoute: jest.fn(),
+      getSupportedChains: () => MOCK_SUPPORTED_CHAIN,
+      getSupportedTokens: () => MOCKED_PROVIDER_TOKENS
+    } as unknown) as AxelarProvider
+    ;(AxelarProvider as jest.Mock).mockImplementation(() => crossChainProvider)
     modalProps = {
       onBuyItem: jest.fn(),
       onExecuteOrder: jest.fn(),
