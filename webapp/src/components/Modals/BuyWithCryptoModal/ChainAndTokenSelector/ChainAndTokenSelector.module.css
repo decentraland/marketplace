@@ -12,8 +12,8 @@
 }
 
 .chainAndTokenSelector .searchContainer :global(.dcl.close) {
-  top: 2px;
-  right: 2px;
+  top: 0 !important; /* these style are set by the modal, from here is not accesible through the `global` selector */
+  right: 0 !important;
   background: none;
 }
 
@@ -52,4 +52,9 @@
   position: absolute;
   margin-left: 12px;
   margin-top: 10px;
+}
+
+.chainAndTokenSelector :global(.ui.modal .dcl.close) {
+  top: 0;
+  right: 0;
 }

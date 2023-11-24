@@ -6,7 +6,7 @@
   justify-content: center;
 }
 
-.buyWithCryptoModal .infoIconPopUp{
+.buyWithCryptoModal .infoIconPopUp {
   z-index: 9999;
 }
 
@@ -510,4 +510,24 @@
 
 .buyWithCryptoModal .balance {
   margin-left: 6px;
+}
+
+@media (max-width: 767px) {
+  .buyWithCryptoModal {
+    height: auto;
+  }
+
+  .buyWithCryptoModal .dropdownContainer {
+    flex-direction: column;
+  }
+
+  .buyWithCryptoModal .tokenDropdownContainer {
+    align-self: flex-start;
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .buyWithCryptoModal:global(.ui.modal > .content) {
+    margin: 2px;
+  }
 }
