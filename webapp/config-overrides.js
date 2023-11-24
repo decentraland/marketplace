@@ -25,9 +25,8 @@ const jestConfig = config => {
     'node_modules/?!@0xsquid|eccrypto|libsodium-wrappers-sumo'
   ]
   config.moduleNameMapper = {
+    ...config.moduleNameMapper,
     '@dcl/single-sign-on-client': 'identity-obj-proxy',
-    '^react-native$': 'react-native-web',
-    '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy'
   }
   return config
 }
