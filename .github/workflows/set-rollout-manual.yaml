@@ -1,4 +1,4 @@
-name: Set rollout - Manual
+name: Set rollout by path - Manual
 
 on:
   workflow_dispatch:
@@ -7,30 +7,27 @@ on:
         description: "NPM Version of the release (@dcl/marketplace-site)"
         required: true
         default: ""
-      deploymentDomain:
+      deploymentEnvironment:
         type: "choice"
-        description: "Deployment domain"
+        description: "Deployment environment"
         required: true
-        default: ".zone"
+        default: "zone"
         options:
-          - .zone
-          - .today
-          - .org
+          - zone
+          - today
+          - org
       rolloutPercentage:
         description: "The percentage for this rollout"
         required: true
         default: "100"
 
 jobs:
-  set-manual-rollout:
+  set-manual-by-path-rollout:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./webapp
     steps:
       - uses: hmarr/debug-action@v2
       - name: Set Rollout
-        uses: decentraland/set-rollout-action@main
+        uses: decentraland/set-rollout-action@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,6 +40,7 @@ jobs:
           packageVersion: ${{ github.event.inputs.packageVersion }}
 
           # Rollout information
-          deploymentDomain: market.decentraland${{ github.event.inputs.deploymentDomain }}
+          deploymentPath: "marketplace"
+          deploymentEnvironment: ${{ github.event.inputs.deploymentEnvironment }}
           deploymentName: "_site"
           percentage: ${{ github.event.inputs.rolloutPercentage }}

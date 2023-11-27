@@ -36,7 +36,7 @@
   "DISCORD_URL": "https://dcl.gg/discord",
   "ENVIRONMENT": "development",
   "MIN_SALE_VALUE_IN_WEI": "1000000000000000000",
-  "EXPLORER_URL": "https://play.decentraland.zone",
+  "EXPLORER_URL": "https://decentraland.zone/play",
   "MARKETPLACE_URL": "https://decentraland.zone/marketplace",
   "PROFILE_URL": "https://decentraland.zone/profile",
   "SSO_URL": "https://id.decentraland.zone",
