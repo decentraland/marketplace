@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import compact from 'lodash/compact'
 import { ethers, BigNumber } from 'ethers'
@@ -453,7 +454,7 @@ export const BuyWithCryptoModal = (props: Props) => {
               wallet.networks[asset.network].mana >=
               +ethers.utils.formatEther(price)
           }
-        } else if (selectedTokenBalance) {
+        } else if (selectedTokenBalance && routeFeeCost) {
           const balance = parseFloat(
             ethers.utils.formatUnits(
               selectedTokenBalance,
@@ -470,7 +471,7 @@ export const BuyWithCryptoModal = (props: Props) => {
               t.address.toLocaleLowerCase() ===
               destinyChainMANA.toLocaleLowerCase()
           )
-          if (providerMANA && selectedToken && crossChainProvider) {
+          if (providerMANA && selectedToken && crossChainProvider && wallet) {
             const fromAmountParams = {
               fromToken: selectedToken,
               toAmount: ethers.utils.formatEther(price),
@@ -480,7 +481,25 @@ export const BuyWithCryptoModal = (props: Props) => {
               fromAmountParams
             )
             const fromAmount = Number(from).toFixed(6)
-            canBuy = balance > Number(fromAmount)
+            // fee is paid with same token selected
+            if (selectedToken.symbol === routeFeeCost.token.symbol) {
+              canBuy =
+                balance > Number(fromAmount) + Number(routeFeeCost.totalCost)
+            } else {
+              const networkProvider = await getNetworkProvider(
+                Number(routeFeeCost.token.chainId)
+              )
+              const provider = new ethers.providers.Web3Provider(
+                networkProvider
+              )
+              const balanceNativeTokenWei = await provider.getBalance(
+                wallet.address
+              )
+              const canPayForGas = balanceNativeTokenWei.gte(
+                ethers.utils.parseEther(routeFeeCost.totalCost)
+              )
+              canBuy = canPayForGas && balance > Number(fromAmount)
+            }
           }
         }
         setCanBuyItem(canBuy)
@@ -492,6 +511,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     order,
     price,
     providerTokens,
+    routeFeeCost,
     selectedChain,
     selectedToken,
     selectedTokenBalance,
@@ -886,8 +906,27 @@ export const BuyWithCryptoModal = (props: Props) => {
     'page'
   ]).join('_')
 
+  const location = useLocation()
+  const history = useHistory()
+
+  const handleOnClose = useCallback(() => {
+    const search = new URLSearchParams(location.search)
+    const hasModalQueryParam = search.get('buyWithCrypto')
+    if (hasModalQueryParam) {
+      search.delete('buyWithCrypto')
+      history.replace({
+        search: search.toString()
+      })
+    }
+    onClose()
+  }, [history, location.search, onClose])
+
   return (
-    <Modal size="tiny" onClose={onClose} className={styles.buyWithCryptoModal}>
+    <Modal
+      size="tiny"
+      onClose={handleOnClose}
+      className={styles.buyWithCryptoModal}
+    >
       {renderModalNavigation()}
       <Modal.Content>
         <>

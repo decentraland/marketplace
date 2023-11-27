@@ -1,6 +1,8 @@
 import { Dispatch } from 'redux'
 import { Order } from '@dcl/schemas'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { CallHistoryMethodAction } from 'connected-react-router'
 import { Asset, AssetType } from '../../../../modules/asset/types'
 import {
   ExecuteOrderWithCardRequestAction,
@@ -17,19 +19,29 @@ export type Props = {
   tokenId?: string
   buyWithCardClassName?: string
   isBuyCrossChainEnabled: boolean
+  wallet: Wallet | null
+  isConnecting: boolean
   onBuyWithCrypto: (asset: Asset, order?: Order | null) => void
   onExecuteOrderWithCard: typeof executeOrderWithCardRequest
   onBuyItemWithCard: typeof buyItemWithCardRequest
+  onRedirect: (path: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'isBuyCrossChainEnabled'>
+export type MapStateProps = Pick<
+  Props,
+  'isBuyCrossChainEnabled' | 'wallet' | 'isConnecting'
+>
 
 export type MapDispatchProps = Pick<
   Props,
-  'onExecuteOrderWithCard' | 'onBuyItemWithCard' | 'onBuyWithCrypto'
+  | 'onExecuteOrderWithCard'
+  | 'onBuyItemWithCard'
+  | 'onBuyWithCrypto'
+  | 'onRedirect'
 >
 export type MapDispatch = Dispatch<
   | ExecuteOrderWithCardRequestAction
   | BuyItemWithCardRequestAction
   | OpenModalAction
+  | CallHistoryMethodAction
 >

@@ -1,5 +1,5 @@
-import { memo, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { memo, useCallback, useMemo } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { Button, Icon, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -12,6 +12,8 @@ import styles from './BuyNFTButtons.module.css'
 import { Props } from './BuyNFTButtons.types'
 
 const BuyNFTButtons = ({
+  wallet,
+  isConnecting,
   asset,
   assetType,
   tokenId,
@@ -19,9 +21,16 @@ const BuyNFTButtons = ({
   isBuyCrossChainEnabled,
   onBuyWithCrypto,
   onExecuteOrderWithCard,
-  onBuyItemWithCard
+  onBuyItemWithCard,
+  onRedirect
 }: Props) => {
   const analytics = getAnalytics()
+  const location = useLocation()
+  const shouldOpenBuyWithCryptoModal = useMemo(() => {
+    const search = new URLSearchParams(location.search)
+    const shouldOpenModal = search.get('buyWithCrypto')
+    return shouldOpenModal
+  }, [location.search])
   const assetId = tokenId || asset.itemId
 
   const handleBuyWithCard = useCallback(
@@ -30,6 +39,17 @@ const BuyNFTButtons = ({
       !isNFT(asset) ? onBuyItemWithCard(asset) : onExecuteOrderWithCard(asset)
     },
     [analytics, onBuyItemWithCard, onExecuteOrderWithCard]
+  )
+
+  const handleBuyWithCrypto = useCallback(
+    order => {
+      if (!isConnecting && !wallet) {
+        onRedirect(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
+      } else {
+        onBuyWithCrypto(asset, order)
+      }
+    },
+    [asset, isConnecting, onBuyWithCrypto, onRedirect, location, wallet]
   )
 
   return (
@@ -41,11 +61,14 @@ const BuyNFTButtons = ({
       >
         {(asset, order) => {
           if (!asset) return null
+          if (shouldOpenBuyWithCryptoModal) {
+            onBuyWithCrypto(asset, order)
+          }
           return (
             <>
               {isBuyCrossChainEnabled ? (
                 <Button
-                  onClick={() => onBuyWithCrypto(asset, order)}
+                  onClick={() => handleBuyWithCrypto(order)}
                   primary
                   fluid
                 >
