@@ -22,7 +22,7 @@
   "MOON_PAY_API_KEY": "pk_live_3PEJQj5NyvQBdit7phd48cCyzDSZFGsg",
   "MOON_PAY_POLLING_DELAY": "6000",
   "MOON_PAY_WIDGET_URL": "https://buy.moonpay.io",
-  "BUILDER_URL": "https://decentraland.org/builder",
+  "BUILDER_URL": "https://builder.decentraland.org",
   "COINGECKO_API_URL": "https://api.coingecko.com/api/v3",
   "DOCS_URL": "https://docs.decentraland.org",
   "MARKETPLACE_ADAPTER_FEE_PER_MILLION": "25000",
