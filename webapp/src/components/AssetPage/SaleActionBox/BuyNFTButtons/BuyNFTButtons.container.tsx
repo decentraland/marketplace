@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { replace } from 'connected-react-router'
 import { Order } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
 import {
   MapDispatchProps,
   MapDispatch,
@@ -18,7 +19,9 @@ import BuyNFTButtons from './BuyNFTButtons'
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
   isConnecting: isConnecting(state),
-  isBuyCrossChainEnabled: getIsBuyCrossChainEnabled(state)
+  isBuyCrossChainEnabled: getIsBuyCrossChainEnabled(state),
+  isBuyingWithCryptoModalOpen: getOpenModals(state)['BuyNFTWithCryptoModal']
+    ?.open
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

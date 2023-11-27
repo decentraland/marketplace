@@ -19,6 +19,7 @@ const BuyNFTButtons = ({
   tokenId,
   buyWithCardClassName,
   isBuyCrossChainEnabled,
+  isBuyingWithCryptoModalOpen,
   onBuyWithCrypto,
   onExecuteOrderWithCard,
   onBuyItemWithCard,
@@ -43,13 +44,21 @@ const BuyNFTButtons = ({
 
   const handleBuyWithCrypto = useCallback(
     order => {
-      if (!isConnecting && !wallet) {
+      if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
         onRedirect(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
         onBuyWithCrypto(asset, order)
       }
     },
-    [asset, isConnecting, onBuyWithCrypto, onRedirect, location, wallet]
+    [
+      wallet,
+      asset,
+      isConnecting,
+      isBuyingWithCryptoModalOpen,
+      location.pathname,
+      onRedirect,
+      onBuyWithCrypto
+    ]
   )
 
   return (

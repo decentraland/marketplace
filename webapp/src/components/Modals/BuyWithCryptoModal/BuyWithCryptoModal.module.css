@@ -221,7 +221,7 @@
 
 .buyWithCryptoModal .durationAndExchangeContainer {
   border: 1px solid #716b7c;
-  margin-top: 24px;
+  margin: 24px 0;
   padding: 16px;
   border-radius: 6px;
   font-size: 12px;

@@ -861,7 +861,8 @@
       "no_matches": "No matches for {search}..."
     },
     "price_too_low": "MANA transactions are only gas fee free if the item is at least 1 MANA. To get this item, switch your network to Polygon to pay for the gas fee with MATIC. {learn_more}",
-    "remember_transaction_fee_covered": "Pay with Polygon MANA to have gas fees covered for you by the DAO (item must be at least 1 MANA).",
+    "remember_transaction_fee_covered": "Pay with Polygon MANA to have gas fees {covered} (item must be at least 1 MANA).",
+    "covered_for_you_by_dao": "covered for you by the DAO",
     "learn_more": "Learn More"
   },
   "partially_supported_network_card": {

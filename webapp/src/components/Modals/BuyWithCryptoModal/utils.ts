@@ -59,7 +59,7 @@ export function formatPrice(price: string | number, token: Token): number {
   let decimalsToShow: number
 
   // Show more decimals for smaller fractions of higher-value tokens like Ethereum
-  if (token.usdPrice && token.usdPrice < 1) {
+  if (token.usdPrice && token.usdPrice <= 1.5) {
     decimalsToShow = 4 // Show 4 decimals for tokens with prices less than 1 USD
   } else {
     decimalsToShow = 2 // Show 2 decimals for other tokens or higher-value fractions

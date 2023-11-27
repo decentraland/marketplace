@@ -218,13 +218,13 @@ export const BuyWithCryptoModal = (props: Props) => {
   const routeTotalUSDCost = useMemo(() => {
     if (route && routeFeeCost && fromAmount && selectedToken?.usdPrice) {
       const { feeCost, gasCost } = routeFeeCost
-      const tokenPrice = providerTokens.find(
+      const feeTokenUSDPrice = providerTokens.find(
         t => t.symbol === routeFeeCost.token.symbol
       )?.usdPrice
-      return (
-        tokenPrice! * (Number(gasCost) + Number(feeCost)) +
-        selectedToken.usdPrice * Number(fromAmount)
-      )
+      return feeTokenUSDPrice
+        ? feeTokenUSDPrice * (Number(gasCost) + Number(feeCost)) +
+            selectedToken.usdPrice * Number(fromAmount)
+        : undefined
     }
   }, [fromAmount, providerTokens, route, routeFeeCost, selectedToken.usdPrice])
 
@@ -932,15 +932,17 @@ export const BuyWithCryptoModal = (props: Props) => {
         <>
           {showChainSelector || showTokenSelector ? (
             <div>
-              {showChainSelector ? (
+              {showChainSelector && wallet ? (
                 <ChainAndTokenSelector
+                  wallet={wallet}
                   currentChain={selectedChain}
                   chains={providerChains}
                   onSelect={onTokenOrChainSelection}
                 />
               ) : null}
-              {showTokenSelector ? (
+              {showTokenSelector && wallet ? (
                 <ChainAndTokenSelector
+                  wallet={wallet}
                   currentChain={selectedChain}
                   tokens={providerTokens}
                   onSelect={onTokenOrChainSelection}
@@ -1099,7 +1101,10 @@ export const BuyWithCryptoModal = (props: Props) => {
                                 )}
                               />
                             )}
-                            {!!routeFeeCost ? (
+                            {!!routeFeeCost &&
+                            providerTokens.find(
+                              t => t.symbol === routeFeeCost.token.symbol
+                            )?.usdPrice ? (
                               <span className={styles.fromAmountUSD}>
                                 ≈ $
                                 {(
@@ -1197,7 +1202,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                       {shouldUseCrossChainProvider ? (
                         <>
                           {' '}
-                          {!!route
+                          {!!route && routeTotalUSDCost
                             ? `$${routeTotalUSDCost?.toFixed(6)}`
                             : null}{' '}
                         </>
@@ -1264,9 +1269,9 @@ export const BuyWithCryptoModal = (props: Props) => {
               !isPriceTooLow(price) ? (
                 <span className={styles.rememberFreeTxs}>
                   {t('buy_with_crypto_modal.remember_transaction_fee_covered', {
-                    free: (
+                    covered: (
                       <span className={styles.feeCoveredFree}>
-                        {t('buy_with_crypto_modal.free')}
+                        {t('buy_with_crypto_modal.covered_for_you_by_dao')}
                       </span>
                     )
                   })}

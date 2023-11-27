@@ -302,25 +302,23 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         const crossChainProvider = new AxelarProvider(
           config.get('SQUID_API_URL')
         )
-        const txRespose: ethers.providers.TransactionResponse = yield call(
+        const txRespose: ethers.providers.TransactionReceipt = yield call(
           [crossChainProvider, 'executeRoute'],
           route,
           provider
         )
 
-        const tx: ethers.providers.TransactionReceipt = yield call(
-          txRespose.wait
-        )
         yield put(
           buyItemCrossChainSuccess(
             route,
             item.chainId,
-            tx.transactionHash,
+            txRespose.transactionHash,
             item
           )
         )
       }
     } catch (error) {
+      console.log('error: ', error);
       yield put(
         buyItemCrossChainFailure(
           isErrorWithMessage(error) ? error.message : t('global.unknown_error')

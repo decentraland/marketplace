@@ -19,6 +19,7 @@ export type Props = {
   tokenId?: string
   buyWithCardClassName?: string
   isBuyCrossChainEnabled: boolean
+  isBuyingWithCryptoModalOpen: boolean
   wallet: Wallet | null
   isConnecting: boolean
   onBuyWithCrypto: (asset: Asset, order?: Order | null) => void
@@ -29,7 +30,10 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'isBuyCrossChainEnabled' | 'wallet' | 'isConnecting'
+  | 'isBuyCrossChainEnabled'
+  | 'wallet'
+  | 'isConnecting'
+  | 'isBuyingWithCryptoModalOpen'
 >
 
 export type MapDispatchProps = Pick<
