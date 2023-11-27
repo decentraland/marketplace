@@ -215,20 +215,17 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [route])
 
   const routeTotalUSDCost = useMemo(() => {
-    if (
-      route &&
-      routeFeeCost &&
-      routeFeeCost.token.usdPrice &&
-      fromAmount &&
-      selectedToken?.usdPrice
-    ) {
+    if (route && routeFeeCost && fromAmount && selectedToken?.usdPrice) {
       const { feeCost, gasCost } = routeFeeCost
+      const tokenPrice = providerTokens.find(
+        t => t.symbol === routeFeeCost.token.symbol
+      )?.usdPrice
       return (
-        routeFeeCost.token.usdPrice * (Number(gasCost) + Number(feeCost)) +
+        tokenPrice! * (Number(gasCost) + Number(feeCost)) +
         selectedToken.usdPrice * Number(fromAmount)
       )
     }
-  }, [fromAmount, route, routeFeeCost, selectedToken])
+  }, [fromAmount, providerTokens, route, routeFeeCost, selectedToken.usdPrice])
 
   // useEffects
 
@@ -1063,13 +1060,15 @@ export const BuyWithCryptoModal = (props: Props) => {
                                 )}
                               />
                             )}
-                            {!!routeFeeCost && routeFeeCost.token.usdPrice ? (
+                            {!!routeFeeCost ? (
                               <span className={styles.fromAmountUSD}>
                                 ≈ $
                                 {(
                                   (Number(routeFeeCost.feeCost) +
                                     Number(routeFeeCost.gasCost)) *
-                                  routeFeeCost.token.usdPrice
+                                  providerTokens.find(
+                                    t => t.symbol === routeFeeCost.token.symbol
+                                  )?.usdPrice!
                                 ).toFixed(4)}
                               </span>
                             ) : null}
