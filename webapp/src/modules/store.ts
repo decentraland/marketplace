@@ -19,10 +19,11 @@ import { getCurrentIdentity } from './identity/selectors'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { createMemoryHistory, createBrowserHistory, History } from 'history'
 
-export const createHistory = () =>
-  createBrowserHistory({
-    basename: config.get('BASE_NAME') ?? undefined
-  })
+const basename = /^decentraland.(zone|org|today)$/.test(window.location.host)
+  ? '/marketplace'
+  : undefined
+
+export const createHistory = () => createBrowserHistory({ basename })
 
 export function initStore(history: History) {
   const anyWindow = window as any

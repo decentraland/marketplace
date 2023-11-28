@@ -1,7 +1,6 @@
 {
   "NETWORK": "sepolia",
   "CHAIN_ID": "11155111",
-  "BASE_NAME": "/marketplace",
   "NFT_SERVER_URL": "https://nft-api.decentraland.zone/v1",
   "MARKETPLACE_SERVER_URL": "https://marketplace-api.decentraland.zone/v1",
   "BUILDER_SERVER_URL": "https://builder-api.decentraland.zone/v1",

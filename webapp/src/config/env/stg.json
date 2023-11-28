@@ -1,7 +1,6 @@
 {
   "NETWORK": "mainnet",
   "CHAIN_ID": "1",
-  "BASE_NAME": "/marketplace",
   "NFT_SERVER_URL": "https://nft-api.decentraland.today/v1",
   "MARKETPLACE_SERVER_URL": "https://marketplace-api.decentraland.today/v1",
   "BUILDER_SERVER_URL": "https://builder-api.decentraland.today/v1",
