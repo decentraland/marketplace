@@ -202,6 +202,10 @@
   cursor: pointer;
 }
 
+.buyWithCryptoModal .dropdownDisabled {
+  cursor: default;
+}
+
 .buyWithCryptoModal .tokenAndChainSelectorName {
   color: white;
   font-weight: bold;

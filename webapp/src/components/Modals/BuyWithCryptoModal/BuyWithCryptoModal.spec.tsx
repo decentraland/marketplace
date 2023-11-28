@@ -20,6 +20,7 @@ import {
 import { AxelarProvider } from 'decentraland-transactions/dist/crossChain/AxelarProvider'
 import { getMinSaleValueInWei } from '../../BuyPage/utils'
 import { VendorName } from '../../../modules/vendor'
+import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import { NFT } from '../../../modules/nft/types'
 import {
   BUY_NOW_BUTTON_TEST_ID,
@@ -36,6 +37,16 @@ import {
 import { Props } from './BuyWithCryptoModal.types'
 
 const mockBalanceOf = jest.fn()
+const mockWeb3ProviderGetBalance = jest.fn()
+
+jest.mock('../../../modules/vendor/decentraland/marketplace/api')
+jest.mock('decentraland-dapps/dist/lib/eth', () => {
+  const actualEth = jest.requireActual('decentraland-dapps/dist/lib/eth')
+  return {
+    ...actualEth,
+    getNetworkProvider: jest.fn()
+  }
+})
 
 jest.mock('ethers', () => {
   const actualEthers = jest.requireActual('ethers')
@@ -43,6 +54,12 @@ jest.mock('ethers', () => {
     ...actualEthers,
     ethers: {
       ...actualEthers.ethers,
+      providers: {
+        ...actualEthers.ethers.providers,
+        Web3Provider: function() {
+          return { getBalance: mockWeb3ProviderGetBalance }
+        }
+      },
       Contract: function() {
         return {
           balanceOf: mockBalanceOf
@@ -531,6 +548,7 @@ describe('BuyWithCryptoModal', () => {
       getSupportedTokens: () => MOCKED_PROVIDER_TOKENS
     } as unknown) as AxelarProvider
     ;(AxelarProvider as jest.Mock).mockImplementation(() => crossChainProvider)
+    marketplaceAPI.fetchWalletTokenBalances = jest.fn().mockResolvedValue([])
     modalProps = {
       onBuyItem: jest.fn(),
       onExecuteOrder: jest.fn(),
@@ -549,6 +567,9 @@ describe('BuyWithCryptoModal', () => {
         }
       } as Wallet
     }
+    mockWeb3ProviderGetBalance.mockResolvedValue(
+      BigNumber.from('1000000000000000000')
+    ) //  this if for the check if can pay gas
   })
 
   describe('and the user is connected to Ethereum network', () => {
@@ -678,26 +699,30 @@ describe('BuyWithCryptoModal', () => {
           ;(crossChainProvider.getMintNFTRoute as jest.Mock).mockResolvedValue(
             route
           )
+          ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
+            '0.438482'
+          ) // 0.43 USDC needed to buy the item
+          modalProps.onBuyItemThroughProvider = jest.fn()
+          mockBalanceOf.mockResolvedValue(BigNumber.from('2000000')) // user has 2 USDC in wei
+          // mockWeb3ProviderGetBalance.mockResolvedValue(
+          //   BigNumber.from('1000000000000000000')
+          // )
         })
         describe('and has enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('2000000')) // user has 2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
             modalProps.onBuyItemThroughProvider = jest.fn()
           })
           it('should render the buy now button and call the onBuyItemThroughProvider on the click', async () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             const buyNowButton = await findByTestId(BUY_NOW_BUTTON_TEST_ID)
@@ -717,21 +742,18 @@ describe('BuyWithCryptoModal', () => {
         describe('and does not have enough balance to buy it', () => {
           beforeEach(() => {
             mockBalanceOf.mockResolvedValueOnce(BigNumber.from('200000')) // user has 0.2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
           })
           it('should render the get mana and buy with card buttons', async () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(
@@ -761,24 +783,27 @@ describe('BuyWithCryptoModal', () => {
             ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
               '0.438482'
             ) // 0.43 USDC needed to buy the item
+            // mockWeb3ProviderGetBalance.mockResolvedValue(
+            //   BigNumber.from('1000000000000000000')
+            // ) //  this if for the check if can pay gas
           })
           it('should render the switch network button to send the tx', async () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             chainSelector.click()
 
-            const polygonNetworkOption = getByText('Polygon')
+            const polygonNetworkOption = await findByText('Polygon')
             polygonNetworkOption.click()
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(
@@ -798,19 +823,19 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             chainSelector.click()
 
-            const polygonNetworkOption = getByText('Polygon')
+            const polygonNetworkOption = await findByText('Polygon')
             polygonNetworkOption.click()
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(
@@ -1044,19 +1069,19 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             chainSelector.click()
 
-            const ethereumNetworkOption = getByText('Ethereum')
+            const ethereumNetworkOption = await findByText('Ethereum')
             ethereumNetworkOption.click()
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             const buyNowButton = await findByTestId(BUY_NOW_BUTTON_TEST_ID)
@@ -1083,19 +1108,19 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             chainSelector.click()
 
-            const ethereumNetworkOption = getByText('Ethereum')
+            const ethereumNetworkOption = await findByText('Ethereum')
             ethereumNetworkOption.click()
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(
@@ -1133,13 +1158,13 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             const switchNetworkButton = await findByTestId(
@@ -1167,19 +1192,19 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             chainSelector.click()
 
-            const ethereumNetworkOption = getByText('Ethereum')
+            const ethereumNetworkOption = await findByText('Ethereum')
             ethereumNetworkOption.click()
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(
@@ -1283,13 +1308,13 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             const switchNetworkButton = await findByTestId(
@@ -1319,13 +1344,13 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(
@@ -1360,13 +1385,13 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(
@@ -1386,13 +1411,13 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(
@@ -1549,19 +1574,19 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             chainSelector.click()
 
-            const ethereumNetworkOption = getByText('Ethereum')
+            const ethereumNetworkOption = await findByText('Ethereum')
             ethereumNetworkOption.click()
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             const switchNetworkButton = await findByTestId(
@@ -1590,19 +1615,19 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             chainSelector.click()
 
-            const ethereumNetworkOption = getByText('Ethereum')
+            const ethereumNetworkOption = await findByText('Ethereum')
             ethereumNetworkOption.click()
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(
@@ -1640,13 +1665,13 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             const buyNowButton = await findByTestId(BUY_NOW_BUTTON_TEST_ID)
@@ -1673,19 +1698,19 @@ describe('BuyWithCryptoModal', () => {
             const {
               getByTestId,
               findByTestId,
-              getByText
+              findByText
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             chainSelector.click()
 
-            const ethereumNetworkOption = getByText('Ethereum')
+            const ethereumNetworkOption = await findByText('Ethereum')
             ethereumNetworkOption.click()
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             tokenSelector.click()
 
-            const usdcTokenOption = getByText('USDC')
+            const usdcTokenOption = await findByText('USDC')
             usdcTokenOption.click()
 
             expect(

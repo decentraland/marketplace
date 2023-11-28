@@ -168,6 +168,10 @@ export const BuyWithCryptoModal = (props: Props) => {
     [asset, order]
   )
 
+  const canSelectChainAndToken = useMemo(() => {
+    return BigNumber.from(price).gt(BigNumber.from(0))
+  }, [price])
+
   // Compute if the price is too low for meta tx
   const hasLowPriceForMetaTx = useMemo(
     () => wallet?.chainId !== ChainId.MATIC_MAINNET && isPriceTooLow(price), // not connected to polygon AND has price < minimun for meta tx
@@ -472,15 +476,6 @@ export const BuyWithCryptoModal = (props: Props) => {
               destinyChainMANA.toLocaleLowerCase()
           )
           if (providerMANA && selectedToken && crossChainProvider && wallet) {
-            const fromAmountParams = {
-              fromToken: selectedToken,
-              toAmount: ethers.utils.formatEther(price),
-              toToken: providerMANA
-            }
-            const from = await crossChainProvider.getFromAmount(
-              fromAmountParams
-            )
-            const fromAmount = Number(from).toFixed(6)
             // fee is paid with same token selected
             if (selectedToken.symbol === routeFeeCost.token.symbol) {
               canBuy =
@@ -508,6 +503,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [
     asset,
     crossChainProvider,
+    fromAmount,
     order,
     price,
     providerTokens,
@@ -972,9 +968,14 @@ export const BuyWithCryptoModal = (props: Props) => {
                   <div>
                     <span>{t('buy_with_crypto_modal.pay_with')}</span>
                     <div
-                      className={styles.tokenAndChainSelector}
+                      className={classNames(
+                        styles.tokenAndChainSelector,
+                        !canSelectChainAndToken && styles.dropdownDisabled
+                      )}
                       data-testid={CHAIN_SELECTOR_DATA_TEST_ID}
-                      onClick={() => setShowChainSelector(true)}
+                      onClick={() => {
+                        canSelectChainAndToken && setShowChainSelector(true)
+                      }}
                     >
                       <img
                         src={selectedProviderChain?.nativeCurrency.icon}
@@ -984,17 +985,20 @@ export const BuyWithCryptoModal = (props: Props) => {
                         {' '}
                         {selectedProviderChain?.networkName}{' '}
                       </span>
-                      <Icon name="chevron down" />
+                      {canSelectChainAndToken && <Icon name="chevron down" />}
                     </div>
                   </div>
                   <div className={styles.tokenDropdownContainer}>
                     <div
                       className={classNames(
                         styles.tokenAndChainSelector,
-                        styles.tokenDropdown
+                        styles.tokenDropdown,
+                        !canSelectChainAndToken && styles.dropdownDisabled
                       )}
                       data-testid={TOKEN_SELECTOR_DATA_TEST_ID}
-                      onClick={() => setShowTokenSelector(true)}
+                      onClick={() => {
+                        canSelectChainAndToken && setShowTokenSelector(true)
+                      }}
                     >
                       <img
                         src={selectedToken.logoURI}
@@ -1007,7 +1011,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                         {t('buy_with_crypto_modal.balance')}:{' '}
                         {renderTokenBalance()}
                       </div>
-                      <Icon name="chevron down" />
+                      {canSelectChainAndToken && <Icon name="chevron down" />}
                     </div>
                   </div>
                 </div>
