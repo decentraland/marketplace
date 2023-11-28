@@ -75,20 +75,19 @@ const ChainAndTokenSelector = (props: Props) => {
   }, [currentChain, wallet.address])
 
   const filteredTokens = useMemo(() => {
-    const filtered = tokens
-      ?.filter(
-        token =>
-          token.symbol.toLowerCase().includes(search.toLowerCase()) &&
-          token.chainId === currentChain.toString()
-      )
-      .reverse()
+    const filtered = tokens?.filter(
+      token =>
+        token.symbol.toLowerCase().includes(search.toLowerCase()) &&
+        token.chainId === currentChain.toString()
+    )
     // this sortes the tokens by USD balance
-    const sortedByBalance = filtered?.sort((a, b) => {
+    filtered?.sort((a, b) => {
       const aQuote = balances[a.address.toLowerCase()]?.quote ?? '0'
       const bQuote = balances[b.address.toLowerCase()]?.quote ?? '0'
+      if (aQuote === bQuote) return 0
       return aQuote < bQuote ? 1 : -1
     })
-    return sortedByBalance
+    return filtered
   }, [tokens, search, currentChain, balances])
 
   return (
