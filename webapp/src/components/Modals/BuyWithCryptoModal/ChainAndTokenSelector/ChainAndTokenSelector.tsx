@@ -55,27 +55,33 @@ const ChainAndTokenSelector = (props: Props) => {
 
   useEffect(() => {
     const fetchBalances = async () => {
-      const balances = await marketplaceAPI.fetchWalletTokenBalances(
-        currentChain,
-        wallet.address
-      )
-      setIsFetchingBalances(false)
-      setBalances(
-        balances.reduce((acc, balance) => {
-          acc[balance.contract_address] = balance
-          return acc
-        }, {} as Record<string, Balance>)
-      )
+      try {
+        const balances = await marketplaceAPI.fetchWalletTokenBalances(
+          currentChain,
+          wallet.address
+        )
+        setIsFetchingBalances(false)
+        setBalances(
+          balances.reduce((acc, balance) => {
+            acc[balance.contract_address] = balance
+            return acc
+          }, {} as Record<string, Balance>)
+        )
+      } catch (error) {
+        setIsFetchingBalances(false)
+      }
     }
     fetchBalances()
   }, [currentChain, wallet.address])
 
   const filteredTokens = useMemo(() => {
-    const filtered = tokens?.filter(
-      token =>
-        token.symbol.toLowerCase().includes(search.toLowerCase()) &&
-        token.chainId === currentChain.toString()
-    )
+    const filtered = tokens
+      ?.filter(
+        token =>
+          token.symbol.toLowerCase().includes(search.toLowerCase()) &&
+          token.chainId === currentChain.toString()
+      )
+      .reverse()
     // this sortes the tokens by USD balance
     const sortedByBalance = filtered?.sort((a, b) => {
       const aQuote = balances[a.address.toLowerCase()]?.quote ?? '0'
