@@ -45,6 +45,7 @@ import {
   DEFAULT_CHAINS,
   estimateTransactionGas,
   formatPrice,
+  getDefaultChains,
   getMANAToken,
   getShouldUseMetaTx,
   isToken
@@ -99,7 +100,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // useStates
   const [providerChains, setProviderChains] = useState<ChainData[]>(
-    DEFAULT_CHAINS
+    getDefaultChains()
   )
   const [providerTokens, setProviderTokens] = useState<Token[]>([])
   const [selectedChain, setSelectedChain] = useState(asset.chainId)
@@ -319,8 +320,10 @@ export const BuyWithCryptoModal = (props: Props) => {
               .filter(c => DEFAULT_CHAINS.every(dc => dc.chainId !== c.chainId))
           ] // keep the defaults since we support MANA on them natively
           setProviderChains(
-            supportedChains.filter(c =>
-              CROSS_CHAIN_SUPPORTED_CHAINS.includes(+c.chainId)
+            supportedChains.filter(
+              c =>
+                CROSS_CHAIN_SUPPORTED_CHAINS.includes(+c.chainId) &&
+                getDefaultChains().find(t => t.chainId === c.chainId)
             )
           )
           setProviderTokens(
