@@ -1,11 +1,21 @@
-import { ChainId, Network } from '@dcl/schemas'
+import { ChainId, Network, Order } from '@dcl/schemas'
 import {
   ChainData,
   Token
 } from 'decentraland-transactions/dist/crossChain/types'
-import { ContractName, getContract } from 'decentraland-transactions'
+import {
+  ContractName,
+  getContract,
+  getContractName
+} from 'decentraland-transactions'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { Asset } from '../../../modules/asset/types'
+import { config } from '../../../config'
+import { Env } from '@dcl/ui-env'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
+import { BigNumber, ethers } from 'ethers'
+import { isNFT } from '../../../modules/asset/utils'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 
 export const getShouldUseMetaTx = (
   asset: Asset,
@@ -100,3 +110,69 @@ export const DEFAULT_CHAINS = [
     }
   }
 ] as ChainData[]
+
+export const TESTNET_DEFAULT_CHAINS = [
+  {
+    chainId: ChainId.MATIC_MUMBAI.toString(),
+    networkName: 'Polygon Mumbai',
+    nativeCurrency: {
+      name: 'MATIC',
+      symbol: 'MATIC',
+      decimals: 18,
+      icon:
+        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg'
+    }
+  },
+  {
+    chainId: ChainId.ETHEREUM_SEPOLIA.toString(),
+    networkName: 'Ethereum Sepolia',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18,
+      icon:
+        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
+    }
+  }
+] as ChainData[]
+
+export const getDefaultChains = () => {
+  if (config.is(Env.DEVELOPMENT)) {
+    return TESTNET_DEFAULT_CHAINS
+  }
+  return DEFAULT_CHAINS
+}
+
+export const estimateTransactionGas = async (
+  selectedChain: ChainId,
+  wallet: Wallet,
+  asset: Asset,
+  order?: Order
+) => {
+  const networkProvider = await getNetworkProvider(selectedChain)
+  const provider = new ethers.providers.Web3Provider(networkProvider)
+
+  let estimation: BigNumber | undefined
+  if (order && isNFT(asset)) {
+    const contractName = getContractName(order.marketplaceAddress)
+    const contract = getContract(contractName, order.chainId)
+    const c = new ethers.Contract(contract.address, contract.abi, provider)
+    estimation = await c.estimateGas.executeOrder(
+      asset.contractAddress,
+      asset.tokenId,
+      order.price,
+      { from: wallet.address }
+    )
+  } else if (!isNFT(asset)) {
+    const contract = getContract(ContractName.CollectionStore, asset.chainId)
+    const c = new ethers.Contract(contract.address, contract.abi, provider)
+    console.log('c: ', c)
+    estimation = await c.estimateGas.buy(
+      [
+        [asset.contractAddress, [asset.itemId], [asset.price], [wallet.address]]
+      ],
+      { from: wallet.address }
+    )
+  }
+  return estimation
+}

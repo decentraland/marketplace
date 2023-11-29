@@ -43,7 +43,7 @@ const BuyNFTButtons = ({
   )
 
   const handleBuyWithCrypto = useCallback(
-    order => {
+    (asset, order) => {
       if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
         onRedirect(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
@@ -52,7 +52,6 @@ const BuyNFTButtons = ({
     },
     [
       wallet,
-      asset,
       isConnecting,
       isBuyingWithCryptoModalOpen,
       location.pathname,
@@ -77,7 +76,7 @@ const BuyNFTButtons = ({
             <>
               {isBuyCrossChainEnabled ? (
                 <Button
-                  onClick={() => handleBuyWithCrypto(order)}
+                  onClick={() => handleBuyWithCrypto(asset, order)}
                   primary
                   fluid
                 >

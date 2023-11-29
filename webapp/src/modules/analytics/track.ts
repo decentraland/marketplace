@@ -271,7 +271,8 @@ track<BuyItemSuccessAction>(
     network: payload.item.network,
     chainId: payload.item.chainId,
     price: Number(ethers.utils.formatEther(payload.item.price)),
-    data: payload.item.data
+    data: payload.item.data,
+    txHash: payload.txHash
   })
 )
 
@@ -287,7 +288,8 @@ track<BuyItemCrossChainSuccessAction>(
     network: payload.item.network,
     chainId: payload.item.chainId,
     price: Number(ethers.utils.formatEther(payload.item.price)),
-    data: payload.item.data
+    data: payload.item.data,
+    txHash: payload.txHash
   })
 )
 
@@ -302,7 +304,8 @@ track<BuyItemWithCardSuccessAction>(
     chainId: payload.item.chainId,
     price: payload.purchase.nft.cryptoAmount,
     data: payload.item.data,
-    purchase: payload.purchase
+    purchase: payload.purchase,
+    txHash: payload.purchase.txHash
   })
 )
 

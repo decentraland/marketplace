@@ -43,6 +43,7 @@ import { config } from '../../../config'
 import ChainAndTokenSelector from './ChainAndTokenSelector/ChainAndTokenSelector'
 import {
   DEFAULT_CHAINS,
+  estimateTransactionGas,
   formatPrice,
   getMANAToken,
   getShouldUseMetaTx,
@@ -172,6 +173,72 @@ export const BuyWithCryptoModal = (props: Props) => {
     return BigNumber.from(price).gt(BigNumber.from(0))
   }, [price])
 
+  const [gasCost, setGasCost] = useState<{
+    total: string
+    token: Token | undefined
+    totalUSDPrice: number | undefined
+  }>()
+  const [isFetchingGasCost, setIsFetchingGasCost] = useState(false)
+
+  useEffect(() => {
+    const calculateGas = async () => {
+      if (wallet) {
+        try {
+          setIsFetchingGasCost(true)
+          const networkProvider = await getNetworkProvider(selectedChain)
+          const provider = new ethers.providers.Web3Provider(networkProvider)
+          const gasPrice: BigNumber = await provider.getGasPrice()
+          const estimation = await estimateTransactionGas(
+            selectedChain,
+            wallet,
+            asset,
+            order
+          )
+
+          if (estimation) {
+            const total = estimation.mul(gasPrice)
+            const nativeToken = providerTokens.find(
+              t => +t.chainId === selectedChain && t.address === NATIVE_TOKEN
+            )
+            const totalUSDPrice = nativeToken?.usdPrice
+              ? nativeToken.usdPrice * +ethers.utils.formatEther(total)
+              : undefined
+
+            setGasCost({
+              token: nativeToken,
+              total: ethers.utils.formatEther(total),
+              totalUSDPrice
+            })
+            setIsFetchingGasCost(false)
+          }
+        } catch (error) {
+          setIsFetchingGasCost(false)
+        }
+      }
+    }
+
+    if (
+      !shouldUseCrossChainProvider &&
+      ((wallet &&
+        getNetwork(wallet.chainId) === Network.MATIC &&
+        asset.network === Network.MATIC) ||
+        price === '0' ||
+        isPriceTooLow(price))
+    ) {
+      calculateGas()
+    } else {
+      setGasCost(undefined)
+    }
+  }, [
+    asset,
+    order,
+    price,
+    providerTokens,
+    selectedChain,
+    shouldUseCrossChainProvider,
+    wallet
+  ])
+
   // Compute if the price is too low for meta tx
   const hasLowPriceForMetaTx = useMemo(
     () => wallet?.chainId !== ChainId.MATIC_MAINNET && isPriceTooLow(price), // not connected to polygon AND has price < minimun for meta tx
@@ -180,6 +247,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // Compute the route fee cost
   const routeFeeCost = useMemo(() => {
+    console.log('route: ', route)
     if (route) {
       const {
         route: {
@@ -964,57 +1032,59 @@ export const BuyWithCryptoModal = (props: Props) => {
                 className={styles.payWithContainer}
                 data-testid={PAY_WITH_DATA_TEST_ID}
               >
-                <div className={styles.dropdownContainer}>
-                  <div>
-                    <span>{t('buy_with_crypto_modal.pay_with')}</span>
-                    <div
-                      className={classNames(
-                        styles.tokenAndChainSelector,
-                        !canSelectChainAndToken && styles.dropdownDisabled
-                      )}
-                      data-testid={CHAIN_SELECTOR_DATA_TEST_ID}
-                      onClick={() => {
-                        canSelectChainAndToken && setShowChainSelector(true)
-                      }}
-                    >
-                      <img
-                        src={selectedProviderChain?.nativeCurrency.icon}
-                        alt={selectedProviderChain?.nativeCurrency.name}
-                      />
-                      <span className={styles.tokenAndChainSelectorName}>
-                        {' '}
-                        {selectedProviderChain?.networkName}{' '}
-                      </span>
-                      {canSelectChainAndToken && <Icon name="chevron down" />}
-                    </div>
-                  </div>
-                  <div className={styles.tokenDropdownContainer}>
-                    <div
-                      className={classNames(
-                        styles.tokenAndChainSelector,
-                        styles.tokenDropdown,
-                        !canSelectChainAndToken && styles.dropdownDisabled
-                      )}
-                      data-testid={TOKEN_SELECTOR_DATA_TEST_ID}
-                      onClick={() => {
-                        canSelectChainAndToken && setShowTokenSelector(true)
-                      }}
-                    >
-                      <img
-                        src={selectedToken.logoURI}
-                        alt={selectedToken.name}
-                      />
-                      <span className={styles.tokenAndChainSelectorName}>
-                        {selectedToken.symbol}{' '}
-                      </span>
-                      <div className={styles.balanceContainer}>
-                        {t('buy_with_crypto_modal.balance')}:{' '}
-                        {renderTokenBalance()}
+                {canSelectChainAndToken ? (
+                  <div className={styles.dropdownContainer}>
+                    <div>
+                      <span>{t('buy_with_crypto_modal.pay_with')}</span>
+                      <div
+                        className={classNames(
+                          styles.tokenAndChainSelector,
+                          !canSelectChainAndToken && styles.dropdownDisabled
+                        )}
+                        data-testid={CHAIN_SELECTOR_DATA_TEST_ID}
+                        onClick={() => {
+                          canSelectChainAndToken && setShowChainSelector(true)
+                        }}
+                      >
+                        <img
+                          src={selectedProviderChain?.nativeCurrency.icon}
+                          alt={selectedProviderChain?.nativeCurrency.name}
+                        />
+                        <span className={styles.tokenAndChainSelectorName}>
+                          {' '}
+                          {selectedProviderChain?.networkName}{' '}
+                        </span>
+                        {canSelectChainAndToken && <Icon name="chevron down" />}
                       </div>
-                      {canSelectChainAndToken && <Icon name="chevron down" />}
+                    </div>
+                    <div className={styles.tokenDropdownContainer}>
+                      <div
+                        className={classNames(
+                          styles.tokenAndChainSelector,
+                          styles.tokenDropdown,
+                          !canSelectChainAndToken && styles.dropdownDisabled
+                        )}
+                        data-testid={TOKEN_SELECTOR_DATA_TEST_ID}
+                        onClick={() => {
+                          canSelectChainAndToken && setShowTokenSelector(true)
+                        }}
+                      >
+                        <img
+                          src={selectedToken.logoURI}
+                          alt={selectedToken.name}
+                        />
+                        <span className={styles.tokenAndChainSelectorName}>
+                          {selectedToken.symbol}{' '}
+                        </span>
+                        <div className={styles.balanceContainer}>
+                          {t('buy_with_crypto_modal.balance')}:{' '}
+                          {renderTokenBalance()}
+                        </div>
+                        {canSelectChainAndToken && <Icon name="chevron down" />}
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : null}
                 <div className={styles.costContainer}>
                   {!!selectedToken ? (
                     <>
@@ -1062,13 +1132,25 @@ export const BuyWithCryptoModal = (props: Props) => {
                         </>
                       </div>
 
-                      {shouldUseCrossChainProvider ? (
+                      {shouldUseCrossChainProvider ||
+                      !!gasCost ||
+                      isFetchingGasCost ? (
                         <div className={styles.itemCost}>
                           <div className={styles.feeCostContainer}>
                             {t('buy_with_crypto_modal.fee_cost')}
                             <Popup
                               content={t(
-                                'best_buying_option.minting.minting_popup'
+                                shouldUseCrossChainProvider &&
+                                  getNetwork(selectedChain) !== Network.MATIC
+                                  ? 'buy_with_crypto_modal.tooltip.cross_chain'
+                                  : 'buy_with_crypto_modal.tooltip.same_network',
+                                {
+                                  token:
+                                    getNetwork(selectedChain) ===
+                                    Network.ETHEREUM
+                                      ? 'ETH'
+                                      : 'MATIC'
+                                }
                               )}
                               style={{ zIndex: 3001 }}
                               position="top center"
@@ -1084,7 +1166,15 @@ export const BuyWithCryptoModal = (props: Props) => {
                             />
                           </div>
                           <div className={styles.fromAmountContainer}>
-                            {!!route && routeFeeCost ? (
+                            {gasCost && gasCost.token ? (
+                              <div className={styles.fromAmountTokenContainer}>
+                                <img
+                                  src={gasCost.token.logoURI}
+                                  alt={gasCost.token.name}
+                                />
+                                {formatPrice(gasCost.total, gasCost.token)}
+                              </div>
+                            ) : !!route && routeFeeCost ? (
                               <div className={styles.fromAmountTokenContainer}>
                                 <img
                                   src={
@@ -1105,10 +1195,14 @@ export const BuyWithCryptoModal = (props: Props) => {
                                 )}
                               />
                             )}
-                            {!!routeFeeCost &&
-                            providerTokens.find(
-                              t => t.symbol === routeFeeCost.token.symbol
-                            )?.usdPrice ? (
+                            {gasCost && gasCost.totalUSDPrice ? (
+                              <span className={styles.fromAmountUSD}>
+                                ≈ ${gasCost.totalUSDPrice.toFixed(4)}
+                              </span>
+                            ) : !!routeFeeCost &&
+                              providerTokens.find(
+                                t => t.symbol === routeFeeCost.token.symbol
+                              )?.usdPrice ? (
                               <span className={styles.fromAmountUSD}>
                                 ≈ $
                                 {(
@@ -1192,6 +1286,19 @@ export const BuyWithCryptoModal = (props: Props) => {
                         ) : null
                       ) : (
                         <>
+                          {!!gasCost && gasCost.token ? (
+                            <>
+                              <img
+                                src={gasCost.token.logoURI}
+                                alt={gasCost.token.name}
+                              />
+                              {formatPrice(
+                                Number(gasCost.total),
+                                gasCost.token
+                              )}
+                              <span> + </span>
+                            </>
+                          ) : null}
                           <img
                             src={selectedToken?.logoURI}
                             alt={selectedToken?.name}
@@ -1203,7 +1310,20 @@ export const BuyWithCryptoModal = (props: Props) => {
                   </div>
                   <div>
                     <span className={styles.fromAmountUSD}>
-                      {shouldUseCrossChainProvider ? (
+                      {!!gasCost &&
+                      gasCost.totalUSDPrice &&
+                      providerTokens.find(t => t.symbol === 'MANA') ? (
+                        <>
+                          {' '}
+                          $
+                          {(
+                            gasCost.totalUSDPrice +
+                            providerTokens.find(t => t.symbol === 'MANA')!
+                              .usdPrice! *
+                              Number(ethers.utils.formatEther(price))
+                          ).toFixed(4)}{' '}
+                        </>
+                      ) : shouldUseCrossChainProvider ? (
                         <>
                           {' '}
                           {!!route && routeTotalUSDCost
