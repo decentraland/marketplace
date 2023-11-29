@@ -17,11 +17,11 @@ import { getExpirationDateLabel } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
 import { isNFT } from '../../../modules/asset/utils'
 import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
+import { AssetType } from '../../../modules/asset/types'
 import mintingIcon from '../../../images/minting.png'
 import infoIcon from '../../../images/infoIcon.png'
 import clock from '../../../images/clock.png'
 import noListings from '../../../images/noListings.png'
-import { AssetType } from '../../../modules/asset/types'
 import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
@@ -272,9 +272,8 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             </div>
           </div>
           <BuyNFTButtons
+            asset={asset}
             assetType={AssetType.NFT}
-            contractAddress={asset.contractAddress}
-            network={asset.network}
             tokenId={listing.order.tokenId}
             buyWithCardClassName={styles.buyWithCardClassName}
           />

@@ -4,6 +4,7 @@ import {
   buildTransactionWithFromPayload,
   buildTransactionWithReceiptPayload
 } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { Route } from 'decentraland-transactions/dist/crossChain/types'
 import { action } from 'typesafe-actions'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'
@@ -110,6 +111,46 @@ export const buyItemFailure = (error: string) =>
 export type BuyItemRequestAction = ReturnType<typeof buyItemRequest>
 export type BuyItemSuccessAction = ReturnType<typeof buyItemSuccess>
 export type BuyItemFailureAction = ReturnType<typeof buyItemFailure>
+
+// Buy Item Cross Chain
+export const BUY_ITEM_CROSS_CHAIN_REQUEST = '[Request] Buy item cross-chain'
+export const BUY_ITEM_CROSS_CHAIN_SUCCESS = '[Success] Buy item cross-chain'
+export const BUY_ITEM_CROSS_CHAIN_FAILURE = '[Failure] Buy item cross-chain'
+
+export const buyItemCrossChainRequest = (item: Item, route: Route) =>
+  action(BUY_ITEM_CROSS_CHAIN_REQUEST, { item, route })
+
+export const buyItemCrossChainSuccess = (
+  route: Route,
+  chainId: ChainId,
+  txHash: string,
+  item: Item
+) =>
+  action(BUY_ITEM_CROSS_CHAIN_SUCCESS, {
+    route,
+    item,
+    txHash,
+    ...buildTransactionWithReceiptPayload(chainId, txHash, {
+      itemId: item.itemId,
+      contractAddress: item.contractAddress,
+      network: item.network,
+      name: getAssetName(item),
+      price: formatWeiMANA(item.price)
+    })
+  })
+
+export const buyItemCrossChainFailure = (error: string) =>
+  action(BUY_ITEM_CROSS_CHAIN_FAILURE, { error })
+
+export type BuyItemCrossChainRequestAction = ReturnType<
+  typeof buyItemCrossChainRequest
+>
+export type BuyItemCrossChainSuccessAction = ReturnType<
+  typeof buyItemCrossChainSuccess
+>
+export type BuyItemCrossChainFailureAction = ReturnType<
+  typeof buyItemCrossChainFailure
+>
 
 // Buy Item With Card
 export const BUY_ITEM_WITH_CARD_REQUEST = '[Request] Buy Item with Card'

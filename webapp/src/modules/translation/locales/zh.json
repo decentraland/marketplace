@@ -817,6 +817,47 @@
     "regions_where_operates": "Transak 经营的地区",
     "explanation": "银行卡支付由 {link_to_transak} 处理, 并适用于 {regions}。 支持信用卡和借记卡。"
   },
+  "buy_with_crypto_modal": {
+    "title": "确认您的购买",
+    "pay_with": "使用。。。支付",
+    "balance": "平衡",
+    "item_cost": "项目成本",
+    "fee_cost": "预计费用",
+    "buy_now": "立即购买",
+    "buy_with_card": "用卡购买",
+    "get_mana": "获取法力",
+    "not_enough_funds": "您的 {token} 中没有足够的资金来支付此商品。获取 MANA、使用不同的令牌支付或通过卡支付。",
+    "transaction_fee_covered": "使用 MANA 付款时，汽油费已{涵盖}。",
+    "covered_by_dao": "由 DAO 涵盖",
+    "free": "自由的",
+    "switch_network": "将网络切换到 {chain}",
+    "confirm_switch_network": "确认钱包中的网络切换",
+    "confirm_transaction": "确认您钱包中的交易",
+    "total": "全部的",
+    "route_unavailable": "目前无法使用 {token} 购买。获取 MANA、使用不同的令牌支付或通过卡支付。",
+    "exchange_rate": "汇率",
+    "durations": {
+      "transaction_duration": "交易时间",
+      "fast": "快约2秒",
+      "normal": "正常 约 20 秒",
+      "slow": "慢速 ≈ 1m"
+    },
+    "tooltip": {
+      "cross_chain": "预估费用包括网络费用和跨链购买费用，您必须直接用钱包支付。确保有 {token} 来覆盖它。",
+      "same_network": "预计费用包括您必须直接用钱包支付的网络费用。确保有 {token} 来覆盖它。"
+    },
+    "insufficient_funds": "您的 {token} 资金不足。尝试使用其他令牌支付或获取 MANA 或使用卡支付。",
+    "token_and_chain_selector": {
+      "available_chains": "可用链",
+      "select_chain": "选择链条",
+      "available_tokens": "{chain} 上的可用代币",
+      "select_token": "选择代币",
+      "no_matches": "没有匹配的{search}..."
+    },
+    "price_too_low": "仅当物品至少有 1 MANA 时，MANA 交易才免汽油费。要获得此项目，请将您的网络切换到 Polygon 以使用 MATIC 支付 Gas 费。 {learn_more}",
+    "remember_transaction_fee_covered": "使用 Polygon MANA 支付，DAO 会为您支付 Gas 费（项目必须至少为 1 MANA）。",
+    "learn_more": "了解更多"
+  },
   "partially_supported_network_card": {
     "content": "您已连接到 Polygon Network 以购买 <mana>1</mana> 以下的物品。 您的钱包中需要有 MATIC 来支付此次购买的交易费用。"
   },

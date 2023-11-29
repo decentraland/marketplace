@@ -1,7 +1,6 @@
 import { matchPath } from 'react-router-dom'
 import { getLocation } from 'connected-react-router'
 import { SagaIterator } from 'redux-saga'
-import { Item } from '@dcl/schemas'
 import { put, takeEvery } from '@redux-saga/core/effects'
 import {
   call,
@@ -12,7 +11,11 @@ import {
   select,
   take
 } from 'redux-saga/effects'
+import { ethers } from 'ethers'
+import { Item } from '@dcl/schemas'
+import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { ContractName, getContract } from 'decentraland-transactions'
+import { Provider } from 'decentraland-connect'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -23,6 +26,7 @@ import {
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
+import { AxelarProvider } from 'decentraland-transactions/dist/crossChain/AxelarProvider'
 import { config } from '../../config'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
@@ -66,7 +70,11 @@ import {
   fetchCollectionItemsSuccess,
   fetchCollectionItemsFailure,
   FETCH_COLLECTION_ITEMS_REQUEST,
-  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE
+  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
+  BuyItemCrossChainRequestAction,
+  BUY_ITEM_CROSS_CHAIN_REQUEST,
+  buyItemCrossChainSuccess,
+  buyItemCrossChainFailure
 } from './actions'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
@@ -94,6 +102,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   )
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
+  yield takeEvery(BUY_ITEM_CROSS_CHAIN_REQUEST, handleBuyItemCrossChain)
   yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
   yield takeEvery(SET_PURCHASE, handleSetItemPurchaseWithCard)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
@@ -271,6 +280,47 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     } catch (error) {
       yield put(
         buyItemFailure(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
+      )
+    }
+  }
+
+  function* handleBuyItemCrossChain(action: BuyItemCrossChainRequestAction) {
+    try {
+      const { item, route } = action.payload
+
+      const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
+
+      const provider: Provider | null = yield call(getConnectedProvider)
+
+      if (!wallet) {
+        throw new Error('A defined wallet is required to buy an item')
+      }
+
+      if (provider) {
+        const crossChainProvider = new AxelarProvider(
+          config.get('SQUID_API_URL')
+        )
+        const txRespose: ethers.providers.TransactionReceipt = yield call(
+          [crossChainProvider, 'executeRoute'],
+          route,
+          provider
+        )
+
+        yield put(
+          buyItemCrossChainSuccess(
+            route,
+            item.chainId,
+            txRespose.transactionHash,
+            item
+          )
+        )
+      }
+    } catch (error) {
+      console.log('error: ', error);
+      yield put(
+        buyItemCrossChainFailure(
           isErrorWithMessage(error) ? error.message : t('global.unknown_error')
         )
       )

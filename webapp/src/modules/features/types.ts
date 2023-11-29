@@ -18,5 +18,6 @@ export enum FeatureName {
   EMOTES_V2_FTU = 'emotes-2.0-ftu',
   NEW_NAVBAR_DROPDOWN = 'new-navbar-dropdown',
   SMART_WEARABLES_FTU = 'smart-wearables-ftu',
-  MARKETPLACE_SERVER = 'marketplace-server'
+  MARKETPLACE_SERVER = 'marketplace-server',
+  BUY_CROSS_CHAIN = 'buy-cross-chain'
 }

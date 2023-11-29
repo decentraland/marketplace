@@ -2,6 +2,9 @@
   "name": "@dcl/marketplace-site",
   "version": "0.0.0-development",
   "dependencies": {
+    "@0xsquid/sdk": "^2.8.4",
+    "@0xsquid/squid-types": "^0.1.29",
+    "@covalenthq/client-sdk": "^0.6.4",
     "@dcl/crypto": "^3.0.0",
     "@dcl/schemas": "^9.6.0",
     "@dcl/single-sign-on-client": "^0.1.0",
@@ -15,9 +18,10 @@
     "date-fns": "^2.23.0",
     "dcl-catalyst-client": "^21.2.0",
     "dcl-catalyst-commons": "^9.0.1",
+    "decentraland-connect": "^5.1.0",
     "decentraland-crypto-fetch": "^1.0.3",
-    "decentraland-dapps": "^16.17.3",
-    "decentraland-transactions": "^1.47.0",
+    "decentraland-dapps": "^16.18.0",
+    "decentraland-transactions": "^1.50.0",
     "decentraland-ui": "^4.27.10",
     "dotenv": "^10.0.0",
     "ethers": "^5.6.8",
@@ -117,10 +121,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "",
-  "jest": {
-    "moduleNameMapper": {
-      "@dcl/single-sign-on-client": "identity-obj-proxy"
-    }
-  }
+  "homepage": ""
 }

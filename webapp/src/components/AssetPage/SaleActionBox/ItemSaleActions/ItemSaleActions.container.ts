@@ -1,7 +1,9 @@
 import { connect } from 'react-redux'
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../../../modules/reducer'
 import { getWallet } from '../../../../modules/wallet/selectors'
-import { MapStateProps } from './ItemSaleActions.types'
+import { MapStateProps, OwnProps } from './ItemSaleActions.types'
+import { MapDispatch, MapDispatchProps } from './ItemSaleActions.types'
 import ItemSaleActions from './ItemSaleActions'
 
 const mapState = (state: RootState): MapStateProps => {
@@ -12,4 +14,16 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-export default connect(mapState)(ItemSaleActions)
+const mapDispatch = (
+  dispatch: MapDispatch,
+  ownProps: OwnProps
+): MapDispatchProps => ({
+  onBuyWithCrypto: () =>
+    dispatch(
+      openModal('MintNFTWithCryptoModal', {
+        asset: ownProps.item
+      })
+    )
+})
+
+export default connect(mapState, mapDispatch)(ItemSaleActions)

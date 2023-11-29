@@ -17,3 +17,7 @@ export { SaveToListModal } from './SaveToListModal'
 export { ShareListModal } from './ShareListModal'
 export { SmartWearableVideoShowcaseModal } from './SmartWearableVideoShowcaseModal'
 export { ExpiredListingsModal } from './ExpiredListingsModal'
+export {
+  BuyNFTWithCryptoModalContainer as BuyNFTWithCryptoModal,
+  MintNFTWithCryptoModalConatiner as MintNFTWithCryptoModal
+} from './BuyWithCryptoModal'
