@@ -182,7 +182,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   useEffect(() => {
     const calculateGas = async () => {
-      if (wallet) {
+      if (wallet && !gasCost) {
         try {
           setIsFetchingGasCost(true)
           const networkProvider = await getNetworkProvider(selectedChain)
@@ -231,6 +231,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     }
   }, [
     asset,
+    gasCost,
     order,
     price,
     providerTokens,
@@ -926,7 +927,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         setRouteFailed(false)
 
         analytics.track(events.CROSS_CHAIN_CHAIN_SELECTION, {
-          selectedChain
+          selectedChain: selectedOption.chainId
         })
       }
     },
@@ -1411,7 +1412,8 @@ export const BuyWithCryptoModal = (props: Props) => {
                   {t('buy_with_crypto_modal.price_too_low', {
                     learn_more: (
                       <a
-                        href="https://docs.decentraland.org"
+                        href="https://docs.decentraland.org/player/blockchain-integration/transactions-in-polygon/#why-do-i-have-to-cover-the-tra[…]ems-that-cost-less-than-1-mana
+                        "
                         target="_blank"
                         rel="noreferrer"
                       >
