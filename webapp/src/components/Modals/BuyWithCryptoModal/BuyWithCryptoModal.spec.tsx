@@ -35,9 +35,11 @@ import {
   PRICE_TOO_LOW_TEST_ID
 } from './BuyWithCryptoModal'
 import { Props } from './BuyWithCryptoModal.types'
+import { DEFAULT_CHAINS, TESTNET_DEFAULT_CHAINS } from './utils'
 
 const mockBalanceOf = jest.fn()
 const mockWeb3ProviderGetBalance = jest.fn()
+const mockConfigIs = jest.fn()
 
 jest.mock('../../../modules/vendor/decentraland/marketplace/api')
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
@@ -47,7 +49,16 @@ jest.mock('decentraland-dapps/dist/lib/eth', () => {
     getNetworkProvider: jest.fn()
   }
 })
-
+jest.mock('../../../config', () => {
+  const actualConfig = jest.requireActual('../../../config')
+  return {
+    ...actualConfig,
+    config: {
+      ...actualConfig.config,
+      is: () => mockConfigIs()
+    }
+  }
+})
 jest.mock('ethers', () => {
   const actualEthers = jest.requireActual('ethers')
   return {
@@ -368,34 +379,7 @@ const MOCKED_PROVIDER_TOKENS = [
   }
 ]
 
-const MOCK_SUPPORTED_CHAIN = [
-  {
-    networkIdentifier: 'Ethereum',
-    chainType: 'evm',
-    networkName: 'Ethereum',
-    chainId: '1',
-    nativeCurrency: {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
-    }
-  },
-  {
-    networkIdentifier: 'Polygon',
-    chainType: 'evm',
-    networkName: 'Polygon',
-    chainId: '137',
-    nativeCurrency: {
-      name: 'Polygon',
-      symbol: 'MATIC',
-      decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/polygon.svg'
-    }
-  }
-]
+const MOCK_SUPPORTED_CHAIN = [...TESTNET_DEFAULT_CHAINS, ...DEFAULT_CHAINS]
 
 const MOCKED_ITEM = {
   id: '0xffce00acc0d17eb01c3d2f9c3fcb3ab26519c562-0',
@@ -421,7 +405,7 @@ const MOCKED_ITEM = {
     }
   },
   network: Network.MATIC,
-  chainId: 137,
+  chainId: ChainId.MATIC_MAINNET,
   price: '22000000000000000000',
   createdAt: 1660274029,
   updatedAt: 1660677796,
@@ -548,6 +532,7 @@ describe('BuyWithCryptoModal', () => {
       getSupportedTokens: () => MOCKED_PROVIDER_TOKENS
     } as unknown) as AxelarProvider
     ;(AxelarProvider as jest.Mock).mockImplementation(() => crossChainProvider)
+    ;(mockConfigIs as jest.Mock).mockReturnValue(false) // so it returns prod  values
     marketplaceAPI.fetchWalletTokenBalances = jest.fn().mockResolvedValue([])
     modalProps = {
       onBuyItem: jest.fn(),
@@ -704,9 +689,6 @@ describe('BuyWithCryptoModal', () => {
           ) // 0.43 USDC needed to buy the item
           modalProps.onBuyItemThroughProvider = jest.fn()
           mockBalanceOf.mockResolvedValue(BigNumber.from('2000000')) // user has 2 USDC in wei
-          // mockWeb3ProviderGetBalance.mockResolvedValue(
-          //   BigNumber.from('1000000000000000000')
-          // )
         })
         describe('and has enough balance to buy it', () => {
           beforeEach(() => {
@@ -726,9 +708,7 @@ describe('BuyWithCryptoModal', () => {
             usdcTokenOption.click()
 
             const buyNowButton = await findByTestId(BUY_NOW_BUTTON_TEST_ID)
-
             expect(buyNowButton).toBeInTheDocument()
-
             buyNowButton.click()
 
             await waitFor(() =>
@@ -783,9 +763,6 @@ describe('BuyWithCryptoModal', () => {
             ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
               '0.438482'
             ) // 0.43 USDC needed to buy the item
-            // mockWeb3ProviderGetBalance.mockResolvedValue(
-            //   BigNumber.from('1000000000000000000')
-            // ) //  this if for the check if can pay gas
           })
           it('should render the switch network button to send the tx', async () => {
             const {
@@ -829,7 +806,7 @@ describe('BuyWithCryptoModal', () => {
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             chainSelector.click()
 
-            const polygonNetworkOption = await findByText('Polygon')
+            const polygonNetworkOption = await findByText(/Polygon/)
             polygonNetworkOption.click()
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
