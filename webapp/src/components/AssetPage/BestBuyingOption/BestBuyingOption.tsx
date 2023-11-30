@@ -89,16 +89,20 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                 )
                 .then(response => {
                   if (cancel) return
+                  setIsLoading(false)
                   setMostExpensiveBid(response.data[0])
                 })
-                .finally(() => !cancel && setIsLoading(false))
                 .catch(error => {
+                  if (!cancel) setIsLoading(false)
                   console.error(error)
                 })
+            } else {
+              if (cancel) return
+              setIsLoading(false)
             }
           })
-          .finally(() => !cancel && setIsLoading(false))
           .catch(error => {
+            if (!cancel) setIsLoading(false)
             console.error(error)
           })
       }

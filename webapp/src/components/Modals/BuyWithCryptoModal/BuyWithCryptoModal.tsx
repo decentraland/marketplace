@@ -249,7 +249,6 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // Compute the route fee cost
   const routeFeeCost = useMemo(() => {
-    console.log('route: ', route)
     if (route) {
       const {
         route: {
