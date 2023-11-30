@@ -33,14 +33,13 @@ import styles from './BestBuyingOption.module.css'
 
 const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const [buyOption, setBuyOption] = useState<BuyOptions | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [listing, setListing] = useState<{
     order: Order
     total: number
   } | null>(null)
   const [mostExpensiveBid, setMostExpensiveBid] = useState<Bid | null>(null)
   const history = useHistory()
-
   const location = useLocation()
 
   const handleViewOffers = () => {
@@ -57,9 +56,8 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
     if (asset && !isNFT(asset)) {
       if (asset.available > 0 && asset.isOnSale) {
         setBuyOption(BuyOptions.MINT)
-      } else {
-        setIsLoading(true)
-
+        setIsLoading(false)
+      } else if (!listing) {
         let params: OrderFilters = {
           contractAddress: asset.contractAddress,
           first: 1,
@@ -108,7 +106,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
     return () => {
       cancel = true
     }
-  }, [asset])
+  }, [asset, listing])
 
   const customClasses = {
     primaryButton: styles.primaryButton,

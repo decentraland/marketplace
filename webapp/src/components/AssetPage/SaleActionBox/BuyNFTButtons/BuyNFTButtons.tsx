@@ -1,6 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Button, Icon, Mana } from 'decentraland-ui'
+import { Button, Icon, Loader, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../../../modules/routing/locations'
@@ -68,8 +68,11 @@ const BuyNFTButtons = ({
         tokenId={tokenId}
       >
         {(asset, order) => {
-          if (!asset) return null
-          if (shouldOpenBuyWithCryptoModal) {
+          if (!asset)
+            return (
+              <Loader active size="medium" className={styles.loading_asset} />
+            )
+          if (asset && shouldOpenBuyWithCryptoModal) {
             onBuyWithCrypto(asset, order)
           }
           return (
