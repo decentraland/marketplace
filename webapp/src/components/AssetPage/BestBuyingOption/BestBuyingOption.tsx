@@ -112,7 +112,6 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
     buyWithCardClassName: styles.buyWithCardClassName
   }
 
-  console.log('isLoading: ', isLoading)
   return isLoading ? null : (
     <div
       data-testid="best-buying-option-container"
