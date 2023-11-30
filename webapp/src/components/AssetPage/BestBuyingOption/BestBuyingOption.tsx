@@ -52,7 +52,6 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   }
 
   useEffect(() => {
-    let cancel = false
     if (asset && !isNFT(asset)) {
       if (asset.available > 0 && asset.isOnSale) {
         setBuyOption(BuyOptions.MINT)
@@ -76,7 +75,6 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
           .fetchOrders(params, sortBy)
           .then(response => {
             if (response.data.length > 0) {
-              if (cancel) return
               setBuyOption(BuyOptions.BUY_LISTING)
               setListing({ order: response.data[0], total: response.total })
               bidAPI
@@ -88,27 +86,22 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                   '1'
                 )
                 .then(response => {
-                  if (cancel) return
                   setIsLoading(false)
                   setMostExpensiveBid(response.data[0])
                 })
                 .catch(error => {
-                  if (!cancel) setIsLoading(false)
                   console.error(error)
+                  setIsLoading(false)
                 })
             } else {
-              if (cancel) return
               setIsLoading(false)
             }
           })
           .catch(error => {
-            if (!cancel) setIsLoading(false)
             console.error(error)
+            setIsLoading(false)
           })
       }
-    }
-    return () => {
-      cancel = true
     }
   }, [asset, listing])
 
