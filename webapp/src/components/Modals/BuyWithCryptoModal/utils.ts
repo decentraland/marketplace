@@ -9,9 +9,9 @@ import {
   getContractName
 } from 'decentraland-transactions'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
+import { Env } from '@dcl/ui-env'
 import { Asset } from '../../../modules/asset/types'
 import { config } from '../../../config'
-import { Env } from '@dcl/ui-env'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { BigNumber, ethers } from 'ethers'
 import { isNFT } from '../../../modules/asset/utils'

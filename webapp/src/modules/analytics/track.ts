@@ -279,18 +279,30 @@ track<BuyItemSuccessAction>(
 track<BuyItemCrossChainSuccessAction>(
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   events.BUY_ITEM_CROSS_CHAIN,
-  ({ payload }) => ({
-    fromToken: payload.route.route.params.fromToken,
-    fromChain: payload.route.route.params.fromChain,
-    itemId: payload.item.itemId,
-    contractAddress: payload.item.contractAddress,
-    rarity: payload.item.rarity,
-    network: payload.item.network,
-    chainId: payload.item.chainId,
-    price: Number(ethers.utils.formatEther(payload.item.price)),
-    data: payload.item.data,
-    txHash: payload.txHash
-  })
+  ({ payload }) => {
+    const {
+      route: { route },
+      item,
+      txHash
+    } = payload
+    return {
+      fromAmount: ethers.utils.formatUnits(
+        route.estimate.fromAmount,
+        route.estimate.fromToken.decimals
+      ),
+      fromTokenName: route.estimate.fromToken.name,
+      fromToken: route.params.fromToken,
+      fromChain: route.params.fromChain,
+      itemId: item.itemId,
+      contractAddress: item.contractAddress,
+      rarity: item.rarity,
+      network: item.network,
+      chainId: item.chainId,
+      price: Number(ethers.utils.formatEther(item.price)),
+      data: item.data,
+      txHash
+    }
+  }
 )
 
 track<BuyItemWithCardSuccessAction>(
