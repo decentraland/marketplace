@@ -139,8 +139,11 @@ export const buyItemCrossChainSuccess = (
     })
   })
 
-export const buyItemCrossChainFailure = (error: string) =>
-  action(BUY_ITEM_CROSS_CHAIN_FAILURE, { error })
+export const buyItemCrossChainFailure = (
+  route: Route,
+  item: Item,
+  error: string
+) => action(BUY_ITEM_CROSS_CHAIN_FAILURE, { route, item, error })
 
 export type BuyItemCrossChainRequestAction = ReturnType<
   typeof buyItemCrossChainRequest

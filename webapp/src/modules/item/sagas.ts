@@ -287,9 +287,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   }
 
   function* handleBuyItemCrossChain(action: BuyItemCrossChainRequestAction) {
+    const { item, route } = action.payload
     try {
-      const { item, route } = action.payload
-
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
 
       const provider: Provider | null = yield call(getConnectedProvider)
@@ -318,9 +317,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         )
       }
     } catch (error) {
-      console.log('error: ', error);
       yield put(
         buyItemCrossChainFailure(
+          route,
+          item,
           isErrorWithMessage(error) ? error.message : t('global.unknown_error')
         )
       )
