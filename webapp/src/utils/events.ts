@@ -77,6 +77,9 @@ export const SEARCH_ALL = 'Search all results'
 
 // Buy Cross-chain
 export const BUY_ITEM_CROSS_CHAIN = 'Buy Item Cross Chain'
+export const BUY_ITEM_CROSS_CHAIN_ERROR = 'Buy Item Cross Chain Error'
+export const BUY_ITEM_CROSS_CHAIN_TRANSACTION_DENIED =
+  'Buy Item Cross Chain Transaction Denied'
 export const CROSS_CHAIN_TOKEN_SELECTION = 'Cross Chain token selection'
 export const CROSS_CHAIN_CHAIN_SELECTION = 'Cross Chain chain selection'
 export const ERROR_GETTING_ROUTE = 'Error getting Route'

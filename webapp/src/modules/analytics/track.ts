@@ -57,7 +57,9 @@ import {
   FetchItemsSuccessAction,
   FETCH_ITEMS_SUCCESS,
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
-  BuyItemCrossChainSuccessAction
+  BuyItemCrossChainSuccessAction,
+  BuyItemCrossChainFailureAction,
+  BUY_ITEM_CROSS_CHAIN_FAILURE
 } from '../item/actions'
 import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
 import { isParcel } from '../nft/utils'
@@ -104,6 +106,7 @@ import {
   FETCH_CREATORS_ACCOUNT_SUCCESS,
   FetchCreatorsAccountSuccessAction
 } from '../account/actions'
+import { isUserRejectedTransactionError } from '../transaction/utils'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -301,6 +304,54 @@ track<BuyItemCrossChainSuccessAction>(
       price: Number(ethers.utils.formatEther(item.price)),
       data: item.data,
       txHash
+    }
+  }
+)
+
+track<BuyItemCrossChainFailureAction>(
+  BUY_ITEM_CROSS_CHAIN_FAILURE,
+  ({ payload }) =>
+    isUserRejectedTransactionError(payload.error)
+      ? events.BUY_ITEM_CROSS_CHAIN_TRANSACTION_DENIED
+      : events.BUY_ITEM_CROSS_CHAIN_ERROR,
+  ({ payload }) => {
+    const {
+      route: { route },
+      item
+    } = payload
+    return {
+      fromAmount: ethers.utils.formatUnits(
+        route.estimate.fromAmount,
+        route.estimate.fromToken.decimals
+      ),
+      gasCosts: route.estimate.gasCosts[0]
+        ? ethers.utils.formatUnits(
+            route.estimate.gasCosts.reduce((acc, gasCost) => {
+              acc = acc.add(ethers.BigNumber.from(gasCost.amount))
+              return acc
+            }, ethers.BigNumber.from(0)),
+            route.estimate.gasCosts[0].token.decimals
+          )
+        : 0,
+      feeCosts: route.estimate.feeCosts[0]
+        ? ethers.utils.formatUnits(
+            route.estimate.feeCosts.reduce((acc, feeCost) => {
+              acc = acc.add(ethers.BigNumber.from(feeCost.amount))
+              return acc
+            }, ethers.BigNumber.from(0)),
+            route.estimate.feeCosts[0].token.decimals
+          )
+        : 0,
+      fromTokenName: route.estimate.fromToken.name,
+      fromToken: route.params.fromToken,
+      fromChain: route.params.fromChain,
+      itemId: item.itemId,
+      contractAddress: item.contractAddress,
+      rarity: item.rarity,
+      network: item.network,
+      chainId: item.chainId,
+      price: Number(ethers.utils.formatEther(item.price)),
+      data: item.data
     }
   }
 )
