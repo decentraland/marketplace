@@ -94,7 +94,7 @@ export function getUpsertRentalSuccessToast(
             ? t('toast.create_rental_success.body')
             : t('toast.update_rental_success.body')}
         </p>
-        <Button as={'a'} href={locations.nft(nft.contractAddress, nft.tokenId)}>
+        <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
           {t('toast.upsert_rental_success.show_listing')}
         </Button>
       </div>

@@ -24,7 +24,8 @@ import {
   getIsRentalPriceFilterChartEnabled,
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
-  getIsNewNavbarDropdownEnabled
+  getIsNewNavbarDropdownEnabled,
+  getIsBuyCrossChainEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -215,6 +216,11 @@ const waitForInitialLoadingSelectors = [
     name: 'navbar-dropdown',
     feature: FeatureName.NEW_NAVBAR_DROPDOWN,
     selector: getIsNewNavbarDropdownEnabled
+  },
+  {
+    name: 'buy-crosschain',
+    feature: FeatureName.BUY_CROSS_CHAIN,
+    selector: getIsBuyCrossChainEnabled
   }
 ]
 

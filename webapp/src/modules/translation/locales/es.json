@@ -813,6 +813,47 @@
     "regions_where_operates": "regiones donde opera Transak",
     "explanation": "{link_to_transak} procesa los pagos con tarjeta y están disponibles para las {regions}. Se admiten tanto tarjetas de crédito como de débito."
   },
+  "buy_with_crypto_modal": {
+    "title": "Confirma tu compra",
+    "pay_with": "Pagar con",
+    "balance": "Balance",
+    "item_cost": "Costo del item",
+    "fee_cost": "Tarifa estimada",
+    "buy_now": "Comprar ahora",
+    "buy_with_card": "Comprar con tarjeta",
+    "get_mana": "Comprar MANA",
+    "not_enough_funds": "No tienes fondos suficientes en {token} para pagar este artículo. Obtenga MANA, pague con un token diferente o pague con tarjeta.",
+    "transaction_fee_covered": "Las tarifas de gas están {covered} al pagar con MANA",
+    "covered_by_dao": "cubiertos por la DAO",
+    "free": "gratis",
+    "switch_network": "Cambiar Red a {chain}",
+    "confirm_switch_network": "Confirmar el cambio de red en tu Wallet",
+    "confirm_transaction": "Confirmar la transacción en tu Wallet",
+    "total": "Total",
+    "route_unavailable": "Comprar con {token} no está disponible en este momento. Obtenga MANA, pague con un token diferente o pague con tarjeta.",
+    "exchange_rate": "Exchange Rate",
+    "durations": {
+      "transaction_duration": "Duración de la transacción",
+      "fast": "Rápida ≈ 2s",
+      "normal": "Normal ≈ 20s",
+      "slow": "Lenta ≈ 1m"
+    },
+    "tooltip": {
+      "cross_chain": "La tarifa estimada incluye el costo de la red y la tarifa de compra entre cadenas que debe pagar directamente con su billetera. Asegúrate de tener {token} para cubrirlo.",
+      "same_network": "La tarifa estimada incluye el costo de la red que debes pagar directamente con tu billetera. Asegúrate de tener {token} para cubrirlo."
+    },
+    "insufficient_funds": "No tienes fondos suficientes en {token}. Intente pagar con otro token, obtenga MANA o pague con tarjeta.",
+    "token_and_chain_selector": {
+      "available_chains": "Redes disponibles",
+      "select_chain": "Selecciona una red",
+      "available_tokens": "Monedas disponibles en {chain}",
+      "select_token": "Selecciona una moneda",
+      "no_matches": "No hay coincidencias para {search}..."
+    },
+    "price_too_low": "Las transacciones de MANA solo están libres de tarifa de gas si el artículo cuesta al menos 1 MANA. Para obtener este artículo, cambia tu red a Polygon para pagar la tarifa del gas con MATIC. {learn_more}",
+    "remember_transaction_fee_covered": "Pague con Polygon MANA para que el DAO cubra las tarifas de gas (el artículo debe costar al menos 1 MANA).",
+    "learn_more": "Aprende más"
+  },
   "partially_supported_network_card": {
     "content": "Estás conectado a la red de Polygon para comprar artículos por debajo de <mana>1</mana>. Deberá tener MATIC en su billetera para cubrir la tarifa de transacción de esta compra."
   },

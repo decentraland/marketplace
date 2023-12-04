@@ -5,3 +5,7 @@
 .buy_with_card:global(.ui.button):hover {
   background-color: var(--superGrayHovered);
 }
+
+.loading_asset {
+  align-self: center;
+}

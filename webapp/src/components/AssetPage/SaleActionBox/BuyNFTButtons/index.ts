@@ -1,1 +1,1 @@
-export { default as BuyNFTButtons } from './BuyNFTButtons'
+export { default as BuyNFTButtons } from './BuyNFTButtons.container'

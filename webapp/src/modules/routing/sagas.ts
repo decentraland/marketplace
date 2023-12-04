@@ -34,6 +34,7 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { isLegacyOrder } from '../../lib/orders'
 import { AssetType } from '../asset/types'
 import {
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_SUCCESS,
   BuyItemSuccessAction,
   fetchItemRequest,
@@ -150,7 +151,7 @@ export function* routingSaga() {
   )
 
   yield takeEvery(
-    [EXECUTE_ORDER_SUCCESS, BUY_ITEM_SUCCESS],
+    [EXECUTE_ORDER_SUCCESS, BUY_ITEM_SUCCESS, BUY_ITEM_CROSS_CHAIN_SUCCESS],
     handleRedirectToSuccessPage
   )
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)

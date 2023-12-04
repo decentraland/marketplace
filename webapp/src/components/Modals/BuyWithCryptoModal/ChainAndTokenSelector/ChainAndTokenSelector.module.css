@@ -1,0 +1,92 @@
+.chainAndTokenSelector {
+  margin: 0 -32px;
+}
+
+.chainAndTokenSelector .listContainer {
+  display: flex;
+  flex-direction: column;
+  max-height: 432px;
+  overflow-y: auto;
+  margin-top: 8px;
+  padding: 0 32px;
+  padding-bottom: 16px;
+}
+
+.chainAndTokenSelector .searchContainer,
+.chainAndTokenSelector .title {
+  position: relative;
+  padding: 0 32px;
+}
+
+.chainAndTokenSelector .searchContainer :global(.dcl.close) {
+  top: 0 !important; /* these style are set by the modal, from here is not accesible through the `global` selector */
+  right: 0 !important;
+  background: none;
+}
+
+.chainAndTokenSelector .noResults {
+  padding-top: 8px;
+  display: flex;
+}
+
+.chainAndTokenSelector .listContainer img {
+  width: 36px;
+  height: 36px;
+  margin-right: 16px;
+}
+
+.chainAndTokenSelector .listContainer .rowItem {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.chainAndTokenSelector .searchInput {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+  background-color: #332f3a;
+  border: 1px solid white;
+  margin-bottom: 28px;
+  color: white;
+  padding-left: 40px;
+}
+
+.chainAndTokenSelector .searchIcon {
+  position: absolute;
+  margin-left: 12px;
+  margin-top: 10px;
+}
+
+.chainAndTokenSelector :global(.ui.modal .dcl.close) {
+  top: 0;
+  right: 0;
+}
+
+.chainAndTokenSelector .balance {
+  color: white;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.chainAndTokenSelector .tokenDataContainer {
+  display: flex;
+}
+
+.chainAndTokenSelector .tokenNameAndSymbolContainer {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+}
+
+.chainAndTokenSelector .tokenName {
+  color: #a3a3a3;
+  font-weight: normal;
+  text-transform: capitalize;
+  font-size: 12px;
+}

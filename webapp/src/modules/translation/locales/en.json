@@ -527,6 +527,8 @@
       "update_listing": "Update listing",
       "buy": "Buy",
       "buy_with_mana": "Buy with MANA",
+      "buy_with_another_token": "Use another Token",
+      "buy_with_crypto": "Buy with Crypto",
       "get_mana": "Get MANA",
       "buy_with_card": "Buy with card",
       "mint": "Mint",
@@ -825,13 +827,56 @@
     "regions_where_operates": "regions where Transak operates",
     "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
   },
+  "buy_with_crypto_modal": {
+    "title": "Confirm Your Purchase",
+    "pay_with": "Pay with",
+    "balance": "Balance",
+    "item_cost": "Item Cost",
+    "fee_cost": "Estimated Fee",
+    "buy_now": "Buy now",
+    "buy_with_card": "Buy with card",
+    "get_mana": "Get MANA",
+    "not_enough_funds": "You don't have enough funds in {token} to pay for this item. Get MANA, pay with a different token, or pay by card.",
+    "transaction_fee_covered": "Gas fees are {covered} when paying with MANA.",
+    "covered_by_dao": "covered by the DAO",
+    "free": "free",
+    "switch_network": "Switch Network to {chain}",
+    "confirm_switch_network": "Confirm Network Switch in Your Wallet",
+    "confirm_transaction": "Confirm Transaction in Your Wallet",
+    "total": "Total",
+    "route_unavailable": "Buying with {token} is not available at the moment. Get MANA, pay with a different token, or pay by card.",
+    "exchange_rate": "Exchange Rate",
+    "durations": {
+      "transaction_duration": "Transaction Duration",
+      "fast": "Fast ≈ 2s",
+      "normal": "Normal ≈ 20s",
+      "slow": "Slow ≈ 1m"
+    },
+    "tooltip": {
+      "cross_chain": "Estimated fee includes the network cost and the cross chain purchase fee that you have to pay directly with your wallet. Be sure to have {token} to cover it.",
+      "same_network": "Estimated fee includes the network cost that you have to pay directly with your wallet. Be sure to have {token} to cover it."
+    },
+    "insufficient_funds": "You don’t have enough funds in {token}. Try paying with other token or get MANA or pay with card.",
+    "token_and_chain_selector": {
+      "available_chains": "Available Chains",
+      "select_chain": "Select chain",
+      "available_tokens": "Available Tokens on {chain}",
+      "select_token": "Select Token",
+      "no_matches": "No matches for {search}..."
+    },
+    "price_too_low": "MANA transactions are only gas fee free if the item is at least 1 MANA. To get this item, switch your network to Polygon to pay for the gas fee with MATIC. {learn_more}",
+    "remember_transaction_fee_covered": "Pay with Polygon MANA to have gas fees {covered} (item must be at least 1 MANA).",
+    "covered_for_you_by_dao": "covered for you by the DAO",
+    "learn_more": "Learn More"
+  },
   "partially_supported_network_card": {
     "content": "You are connected to the Polygon Network for purchasing items below <mana>1</mana>. You will need to have MATIC in your wallet to cover the transaction fee for this purchase."
   },
   "price_too_low": {
     "minimum_price": "The minimun amount supported for costless transactions is {price}",
     "get_item_in_network": "In order to get this item you'll need to switch your network to {network} and then cover the transaction cost with {token}.",
-    "switch_network": "Switch to {network}"
+    "switch_network": "Switch to {network}",
+    "buy_with_another_token": "Use another Token"
   },
   "mint_with_mana_page": {
     "title": "Buying {name}",

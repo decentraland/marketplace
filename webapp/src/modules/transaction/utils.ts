@@ -30,9 +30,13 @@ export function isUserCanceled(error: string) {
 export function isUserDeniedSignatureError(error: string) {
   return (
     error.search(
-      /User (denied|rejected the) (transaction|message)( signature)?/
+      /User (denied|rejected) (transaction|message)( signature)?/
     ) !== -1
   )
+}
+
+export function isUserRejectedTransactionError(error: string) {
+  return error.search(/user rejected transaction/) !== -1
 }
 
 // TODO: This is a replacement for future `ErrorCode`s. Needs an overhaul on decentraland-dapps

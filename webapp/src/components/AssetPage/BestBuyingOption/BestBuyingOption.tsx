@@ -17,11 +17,11 @@ import { getExpirationDateLabel } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
 import { isNFT } from '../../../modules/asset/utils'
 import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
+import { AssetType } from '../../../modules/asset/types'
 import mintingIcon from '../../../images/minting.png'
 import infoIcon from '../../../images/infoIcon.png'
 import clock from '../../../images/clock.png'
 import noListings from '../../../images/noListings.png'
-import { AssetType } from '../../../modules/asset/types'
 import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
@@ -33,14 +33,13 @@ import styles from './BestBuyingOption.module.css'
 
 const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const [buyOption, setBuyOption] = useState<BuyOptions | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [listing, setListing] = useState<{
     order: Order
     total: number
   } | null>(null)
   const [mostExpensiveBid, setMostExpensiveBid] = useState<Bid | null>(null)
   const history = useHistory()
-
   const location = useLocation()
 
   const handleViewOffers = () => {
@@ -53,13 +52,11 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   }
 
   useEffect(() => {
-    let cancel = false
     if (asset && !isNFT(asset)) {
       if (asset.available > 0 && asset.isOnSale) {
         setBuyOption(BuyOptions.MINT)
-      } else {
-        setIsLoading(true)
-
+        setIsLoading(false)
+      } else if (!listing) {
         let params: OrderFilters = {
           contractAddress: asset.contractAddress,
           first: 1,
@@ -78,7 +75,6 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
           .fetchOrders(params, sortBy)
           .then(response => {
             if (response.data.length > 0) {
-              if (cancel) return
               setBuyOption(BuyOptions.BUY_LISTING)
               setListing({ order: response.data[0], total: response.total })
               bidAPI
@@ -90,25 +86,24 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                   '1'
                 )
                 .then(response => {
-                  if (cancel) return
+                  setIsLoading(false)
                   setMostExpensiveBid(response.data[0])
                 })
-                .finally(() => !cancel && setIsLoading(false))
                 .catch(error => {
                   console.error(error)
+                  setIsLoading(false)
                 })
+            } else {
+              setIsLoading(false)
             }
           })
-          .finally(() => !cancel && setIsLoading(false))
           .catch(error => {
             console.error(error)
+            setIsLoading(false)
           })
       }
     }
-    return () => {
-      cancel = true
-    }
-  }, [asset])
+  }, [asset, listing])
 
   const customClasses = {
     primaryButton: styles.primaryButton,
@@ -272,9 +267,8 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             </div>
           </div>
           <BuyNFTButtons
+            asset={asset}
             assetType={AssetType.NFT}
-            contractAddress={asset.contractAddress}
-            network={asset.network}
             tokenId={listing.order.tokenId}
             buyWithCardClassName={styles.buyWithCardClassName}
           />

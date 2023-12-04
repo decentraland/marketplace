@@ -216,3 +216,14 @@ export const getIsMarketplaceServerEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsBuyCrossChainEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.BUY_CROSS_CHAIN
+    )
+  }
+  return false
+}
