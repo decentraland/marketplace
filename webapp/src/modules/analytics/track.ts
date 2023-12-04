@@ -319,7 +319,7 @@ track<BuyItemCrossChainFailureAction>(
       route: { route },
       item
     } = payload
-    console.log({
+    return {
       fromAmount: ethers.utils.formatUnits(
         route.estimate.fromAmount,
         route.estimate.fromToken.decimals
@@ -342,22 +342,6 @@ track<BuyItemCrossChainFailureAction>(
             route.estimate.feeCosts[0].token.decimals
           )
         : 0,
-      fromTokenName: route.estimate.fromToken.name,
-      fromToken: route.params.fromToken,
-      fromChain: route.params.fromChain,
-      itemId: item.itemId,
-      contractAddress: item.contractAddress,
-      rarity: item.rarity,
-      network: item.network,
-      chainId: item.chainId,
-      price: Number(ethers.utils.formatEther(item.price)),
-      data: item.data
-    })
-    return {
-      fromAmount: ethers.utils.formatUnits(
-        route.estimate.fromAmount,
-        route.estimate.fromToken.decimals
-      ),
       fromTokenName: route.estimate.fromToken.name,
       fromToken: route.params.fromToken,
       fromChain: route.params.fromChain,
