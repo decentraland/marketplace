@@ -100,6 +100,7 @@
     "overview": "Overview",
     "mvmf": "Metaverse Music Festival",
     "land": "Land",
+    "names": "NAMEs",
     "collectibles": "Collectibles",
     "partners": "Partners",
     "my_assets": "My Assets",
@@ -1549,5 +1550,16 @@
   "atlas_updated_warning": {
     "info": "<strong>Map data may be outdated</strong>Find the most recent LAND details in the section below this map. Refreshing this page may update the information. If the problem persists, please contact our support team.",
     "fingerprint_missmatch": "The information of this LAND may not be updated. Please refresh the page to get the latest information. If the problem persists, please contact our support team."
+  },
+  "names_page": {
+    "title": "Claim your unique NAME",
+    "subtitle": "Become an official Decentraland citizen!",
+    "claim_a_name": "Claim a name",
+    "browse_names_being_resold": "Browse names being resold",
+    "manage_your_names": "Manage your names",
+    "name_label": "Name",
+    "name_placeholder": "Your name goes here",
+    "repeated_message": "This name is not available.",
+    "claim_button": "Claim"
   }
 }

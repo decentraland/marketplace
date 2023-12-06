@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import claimYourOwnNameImg from '../../images/claim-your-own-name.svg'
-import { builderUrl } from '../../lib/environment'
 import * as events from '../../utils/events'
+import { locations } from '../../modules/routing/locations'
 import { Mana } from '../Mana'
 import styles from './ClaimYourName.module.css'
 
@@ -37,9 +38,8 @@ const ClaimYourName = () => {
         <Button
           className={styles.btn}
           primary
-          fluid
-          as={'a'}
-          href={`${builderUrl}/claim-name`}
+          as={Link}
+          to={locations.mintName()}
           onClick={trackClick}
           // If the user does right click and opens in new tab, the onClick handler is not triggered.
           // By using onContextMenu, the event will be tracked this way too.

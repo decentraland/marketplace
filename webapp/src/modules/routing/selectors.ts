@@ -730,6 +730,8 @@ export const getPageName = createSelector<RootState, string, PageName>(
       return PageName.SETTINGS
     } else if (matchPath(pathname, locations.lands())) {
       return PageName.LANDS
+    } else if (matchPath(pathname, locations.names())) {
+      return PageName.NAMES
     } else if (matchPath(pathname, locations.collection())) {
       return PageName.COLLECTION
     } else if (matchPath(pathname, locations.browse())) {
