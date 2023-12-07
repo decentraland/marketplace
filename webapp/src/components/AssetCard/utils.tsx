@@ -7,7 +7,10 @@ import { getMinimumValueForFractionDigits } from '../../lib/mana'
 import { BrowseOptions, SortBy } from '../../modules/routing/types'
 import { Mana } from '../Mana'
 
-const formatter = Intl.NumberFormat('en', { notation: 'compact' })
+const formatter = Intl.NumberFormat('en', {
+  notation: 'compact',
+  maximumFractionDigits: 2
+})
 
 export function formatWeiToAssetCard(wei: string): string {
   const maximumFractionDigits = MAXIMUM_FRACTION_DIGITS
