@@ -144,12 +144,14 @@ const ChainAndTokenSelector = (props: Props) => {
                           .contract_decimals
                       )
                     ).toLocaleString()}{' '}
-                    <span className={styles.tokenName}>
-                      $
-                      {balances[
-                        token.address.toLocaleLowerCase()
-                      ].quote.toLocaleString()}
-                    </span>
+                    {balances[token.address.toLocaleLowerCase()].quote ? (
+                      <span className={styles.tokenName}>
+                        $
+                        {balances[
+                          token.address.toLocaleLowerCase()
+                        ].quote.toLocaleString()}
+                      </span>
+                    ) : null}
                   </>
                 ) : (
                   0
