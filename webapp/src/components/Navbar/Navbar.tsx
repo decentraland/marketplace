@@ -25,7 +25,7 @@ const Navbar = (props: Props) => {
   if (isNewNavbarDropdownEnabled) {
     props = {
       ...props,
-      rightMenu: <UserInformation />
+      rightMenu: <UserInformation identity={props.identity} withNotifications />
     }
   }
 

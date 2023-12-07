@@ -17,7 +17,7 @@ const mapState = (state: RootState): MapStateProps => ({
     isPending(tx.status)
   ),
   isNewNavbarDropdownEnabled: getIsNewNavbarDropdownEnabled(state),
-  identity: getCurrentIdentity(state)
+  identity: getCurrentIdentity(state) || undefined
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

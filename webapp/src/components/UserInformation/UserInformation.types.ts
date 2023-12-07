@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import { UserInformationComponentProps } from 'decentraland-ui'
+import { UserInformationProps } from 'decentraland-dapps/dist/containers/UserInformation/UserInformation.types'
 import { OpenLoginAction } from '../../modules/login/actions'
 
-export type Props = Partial<UserInformationComponentProps> & {
+export type Props = Partial<UserInformationProps> & {
   onClickMyAssets: () => void
   onClickMyLists: () => void
 }

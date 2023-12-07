@@ -10,7 +10,7 @@ export type Props = Partial<NavbarProps> & {
   enablePartialSupportAlert?: boolean
   onNavigate: (path: string) => void
   isNewNavbarDropdownEnabled: boolean
-  identity: AuthIdentity | null
+  identity?: AuthIdentity
 }
 
 export type OwnProps = Pick<Props, 'enablePartialSupportAlert'>
