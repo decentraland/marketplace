@@ -60,15 +60,15 @@ export const AssetTopbar = ({
     text => {
       if (shouldRenderSearchDropdown) {
         setSearchValueForDropdown(text)
-      } else if (text) {
-        // common search, when the dropdown is not opened
+      } else if (text && text !== search) {
+        // common search, when the dropdown is not opened and the input is different than the current search term
         onBrowse({
           search: text,
           section: category ? getSectionFromCategory(category) : section
         })
       }
     },
-    [category, onBrowse, section, shouldRenderSearchDropdown]
+    [category, onBrowse, search, section, shouldRenderSearchDropdown]
   )
   const [searchValue, setSearchValue] = useInput(search, handleInputChange, 500)
 
