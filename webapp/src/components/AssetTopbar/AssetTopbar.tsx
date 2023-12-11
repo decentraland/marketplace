@@ -10,7 +10,6 @@ import {
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { useInput } from '../../lib/input'
 import { getCountText } from './utils'
 import { SortBy } from '../../modules/routing/types'
 import { isCatalogView } from '../../modules/routing/utils'
@@ -58,6 +57,16 @@ export const AssetTopbar = ({
 
   const handleInputChange = useCallback(
     text => {
+      // if the user is typing, open the dropdown
+      if (!shouldRenderSearchDropdown && text) {
+        setShouldRenderSearchDropdown(true)
+      }
+      // if the user clears the input, reset the search
+      if (!text && text !== search) {
+        onBrowse({
+          search: ''
+        }) // triggers search with no search term
+      }
       if (shouldRenderSearchDropdown) {
         setSearchValueForDropdown(text)
       } else if (text && text !== search) {
@@ -70,12 +79,20 @@ export const AssetTopbar = ({
     },
     [category, onBrowse, search, section, shouldRenderSearchDropdown]
   )
-  const [searchValue, setSearchValue] = useInput(search, handleInputChange, 500)
+  const [searchValue, setSearchValue] = useState(search)
+  const handleDebouncedChange = useCallback(
+    text => {
+      setSearchValue(text)
+      const timeoutId = setTimeout(() => {
+        handleInputChange(text)
+      }, 500)
+      return () => clearTimeout(timeoutId)
+    },
+    [handleInputChange]
+  )
 
   const handleClearSearch = useCallback(() => {
-    setSearchValue({ target: { value: '' } } as React.ChangeEvent<
-      HTMLInputElement
-    >)
+    setSearchValue('')
     setSearchValueForDropdown('') // clears the input
 
     onBrowse({
@@ -205,7 +222,7 @@ export const AssetTopbar = ({
               placeholder={t('nft_filters.search')}
               kind="full"
               value={searchValue}
-              onChange={setSearchValue}
+              onChange={(_e, data) => handleDebouncedChange(data.value)}
               icon={<Icon name="search" className="searchIcon" />}
               iconPosition="left"
               onClick={handleFieldClick}
