@@ -10,7 +10,11 @@ jobs:
         working-directory: ./webapp
     steps:
       - uses: actions/checkout@master
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
       - name: Install
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       - name: Audit signatures
         run: npm audit signatures

@@ -25,7 +25,7 @@ const Navbar = (props: Props) => {
   if (isNewNavbarDropdownEnabled) {
     props = {
       ...props,
-      rightMenu: <UserInformation />
+      rightMenu: <UserInformation identity={props.identity} withNotifications />
     }
   }
 
@@ -45,6 +45,7 @@ const Navbar = (props: Props) => {
   return (
     <BaseNavbar
       {...props}
+      withNotifications
       activePage="marketplace"
       isFullscreen={props.isFullscreen}
       isSignIn={pathname === locations.signIn()}

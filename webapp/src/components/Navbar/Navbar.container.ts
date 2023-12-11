@@ -8,6 +8,7 @@ import { isConnected } from '../../modules/wallet/selectors'
 import { getIsNewNavbarDropdownEnabled } from '../../modules/features/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './Navbar.types'
 import Navbar from './Navbar'
+import { getCurrentIdentity } from '../../modules/identity/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
   isConnected: isConnected(state),
@@ -15,7 +16,8 @@ const mapState = (state: RootState): MapStateProps => ({
   hasPendingTransactions: getTransactions(state).some(tx =>
     isPending(tx.status)
   ),
-  isNewNavbarDropdownEnabled: getIsNewNavbarDropdownEnabled(state)
+  isNewNavbarDropdownEnabled: getIsNewNavbarDropdownEnabled(state),
+  identity: getCurrentIdentity(state) || undefined
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
