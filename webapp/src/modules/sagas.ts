@@ -42,7 +42,6 @@ import { favoritesSaga } from './favorites/sagas'
 import { loginSaga } from './login/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
-const profileSaga = createProfileSaga({ peerUrl })
 const lambdasClient = createLambdasClient({
   url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()
@@ -80,7 +79,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     itemSaga(getIdentity),
     nftSaga(getIdentity),
     orderSaga(),
-    profileSaga(),
+    createProfileSaga({ peerUrl, getIdentity })(),
     proximitySaga(),
     routingSaga(),
     tileSaga(),
