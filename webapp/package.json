@@ -89,7 +89,7 @@
     "start": "react-app-rewired --openssl-legacy-provider start",
     "prebuild": "node scripts/prebuild.js",
     "build": "CI=false react-scripts --openssl-legacy-provider build",
-    "test": "react-app-rewired --openssl-legacy-provider test",
+    "test": "react-app-rewired test",
     "test:coverage": "npm run test -- --coverage",
     "eject": "react-app-rewired eject",
     "lint": "tslint -p tsconfig.json",
@@ -105,7 +105,7 @@
     "semi": false
   },
   "engines": {
-    "node": "16.13.0"
+    "node": "18"
   },
   "browserslist": {
     "production": [
