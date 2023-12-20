@@ -16,10 +16,11 @@ jobs:
         working-directory: ./webapp
     steps:
       - uses: actions/checkout@master
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v1
+      - name: Use Node.js 18.x
+        uses: actions/setup-node
         with:
-          node-version: 16.x
+          node-version: 18.x
+          cache: "npm"
       - name: Set package.json version
         uses: menduz/oddish-action@master
         with:
@@ -27,7 +28,7 @@ jobs:
           deterministic-snapshot: true
           only-update-versions: true
       - name: Install
-        run: npm ci --legacy-peer-deps
+        run: npm install --legacy-peer-deps
       - name: Build
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
