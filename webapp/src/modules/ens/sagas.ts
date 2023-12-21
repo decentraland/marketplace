@@ -8,7 +8,6 @@ import { DCLController } from '../../contracts'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { DCLController__factory } from '../../contracts/factories/DCLController__factory'
 import { DCLRegistrar } from '../../contracts/DCLRegistrar'
-import { lists } from '../vendor/decentraland/lists/api'
 import {
   CLAIM_NAME_REQUEST,
   ClaimNameRequestAction,
