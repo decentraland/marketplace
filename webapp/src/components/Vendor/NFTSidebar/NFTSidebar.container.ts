@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
+
 import { RootState } from '../../../modules/reducer'
 import { browse } from '../../../modules/routing/actions'
 import {
@@ -22,8 +22,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onBrowse: options => dispatch(browse(options)),
-  onNavigate: path => dispatch(push(path))
+  onBrowse: options => dispatch(browse(options))
 })
 
 export default connect(mapState, mapDispatch)(NFTSidebar)
