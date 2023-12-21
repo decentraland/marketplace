@@ -33,7 +33,6 @@ import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
-import { ClaimYourName } from '../ClaimYourName'
 import { Props } from './AssetBrowse.types'
 import MapTopbar from './MapTopbar'
 import MapBrowse from './MapBrowse'
@@ -233,7 +232,6 @@ const AssetBrowse = (props: Props) => {
     case DecentralandSection.ENS:
       right = (
         <>
-          {!isAccountOrCurrentAccount && <ClaimYourName />}
           <AssetTopbar />
           <AssetList isManager={isCurrentAccount} />
         </>
