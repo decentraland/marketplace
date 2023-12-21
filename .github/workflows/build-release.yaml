@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: 18.x
           cache: "npm"
+          cache-dependency-path: webapp/package-lock.json
       - name: Set package.json version
         uses: menduz/oddish-action@master
         with:
