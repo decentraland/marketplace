@@ -21,3 +21,5 @@ export {
   BuyNFTWithCryptoModalContainer as BuyNFTWithCryptoModal,
   MintNFTWithCryptoModalConatiner as MintNFTWithCryptoModal
 } from './BuyWithCryptoModal'
+export { default as ClaimNameFatFingerModal } from './ClaimNameFatFingerModal'
+export { default as SetNameAsAliasModal } from './SetNameAsAliasModal'

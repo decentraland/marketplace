@@ -1,0 +1,30 @@
+.SetNameAsAliasModal.ui.modal .content .dcl.field,
+.SetNameAsAliasModal.ui.modal .actions {
+  margin-top: 30px;
+}
+
+.SetNameAsAliasModal.ui.modal .content .dcl.field .message {
+  margin-top: 10px;
+}
+
+.SetNameAsAliasModal.ui.modal .details {
+  text-align: center;
+}
+
+.SetNameAsAliasModal .card {
+  display: flex;
+  background-color: var(--card-on-modal);
+  padding: 60px;
+  border-radius: 16px;
+  margin-top: 16px;
+  font-size: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.SetNameAsAliasModal .card span {
+  padding: 0 12px;
+  border: 1px solid var(--secondary-text);
+  border-radius: 26px;
+  padding: 8px 16px;
+}

@@ -70,7 +70,8 @@
     "of": "of",
     "now": "now",
     "actions": "Actions",
-    "action_required": "Action required"
+    "action_required": "Action required",
+    "finish": "Finish"
   },
   "search_dropdown": {
     "recent": "Recent",
@@ -1182,6 +1183,11 @@
         },
         "try_again": "Try again"
       }
+    },
+    "claim_name_success": {
+      "title": "You gained access to a World!",
+      "body": "Build your personal space in the metaverse.",
+      "cta": "View my worlds"
     }
   },
   "maintainance": {
@@ -1483,7 +1489,9 @@
       "title": "All done!",
       "status": "Transaction confirmed",
       "view_item": "View my item",
-      "try_genesis_city": "Try it in Genesis city"
+      "try_genesis_city": "Try it in Genesis city",
+      "mint_more_names": "Mint more names",
+      "set_as_primary_name": "Set as Primary Name"
     },
     "error_state": {
       "title": "Oops",
@@ -1552,14 +1560,67 @@
     "fingerprint_missmatch": "The information of this LAND may not be updated. Please refresh the page to get the latest information. If the problem persists, please contact our support team."
   },
   "names_page": {
-    "title": "Claim your unique NAME",
-    "subtitle": "Become an official Decentraland citizen!",
+    "title": "Become a Decentraland citizen!",
+    "subtitle": "Claim your unique NAME",
     "claim_a_name": "Claim a name",
     "browse_names_being_resold": "Browse names being resold",
     "manage_your_names": "Manage your names",
     "name_label": "Name",
     "name_placeholder": "Your name goes here",
     "repeated_message": "This name is not available.",
-    "claim_button": "Claim"
+    "claim_button": "Claim",
+    "available": "Available Domain NAME",
+    "not_available": "NOT Available Domain NAME. But you can still get it, visit  {link}",
+    "marketplace": "Marketplace",
+    "name_cost": "Each NAME costs {mana} {network}",
+    "ethereum_mainnet_network": "Ethereum Mainnet Network",
+    "why_names": "Why NAMEs?",
+    "claim_name_fat_finger_modal": {
+      "title": "Please confirm your new name",
+      "description": "You have chosen {name}. Re-enter your name to confirm your selection.",
+      "ok_message": "Congratulations the name {name} is yours.",
+      "name_placeholder": "Your unique name",
+      "names_different": "Names do not match",
+      "authorization": {
+        "title_action": "purchase",
+        "action": "claim"
+      }
+    },
+    "your_name": "yourName",
+    "why": {
+      "stand_out": {
+        "title": "Stand out with one-of-a-kind alias for your avatar",
+        "description": "Say goodbye to those numbers at the end of your nickname."
+      },
+      "unlock": {
+        "title": "Unlock your own 3D personal space",
+        "description": "Gain access to your very own 3D space in the Metaverse. {link}"
+      },
+      "governance": {
+        "title": "Participate in Governance",
+        "description": "Each NAME grants you <b>100 Voting Power (VP)</b> to participate in DAO proposals. "
+      },
+      "get_url": {
+        "title": "Get your URL for your LAND",
+        "description": "Make it easy for visitors to find your LAND with a memorable URL like <b>https://name.dcl.eth</b>"
+      }
+    },
+    "ctas": {
+      "name_taken": {
+        "title": "Your NAME is already taken?",
+        "description": "No worries, you’ve always can visit our Marketplace",
+        "cta": "Browse names being resold"
+      },
+      "manage": {
+        "title": "Already got Decentraland NAMEs",
+        "cta": "Manage your names"
+      }
+    }
+  },
+  "set_name_as_alias_modal": {
+    "title": "Use NAME as Alias",
+    "description": "Your current alias will be updated immediately.",
+    "success_title": "All Done!",
+    "success_description": "Your alias has been updated"
   }
 }

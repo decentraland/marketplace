@@ -4,6 +4,7 @@ import { Item } from '@dcl/schemas'
 import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { builderUrl } from '../../lib/environment'
 import { config } from '../../config'
 import { getAssetName } from '../asset/utils'
 import { UpsertRentalOptType } from '../rental/types'
@@ -45,6 +46,23 @@ const ToastCTA = ({
       {description}
     </Button>
   )
+}
+
+export function getNameClaimSuccessToast(): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: t('toast.store_update_success.title'),
+    body: (
+      <div>
+        <p>{t('toast.claim_name_success.body')}</p>
+        <Button as="a" href={`${builderUrl}/worlds`}>
+          {t('toast.claim_name_success.cta')}
+        </Button>
+      </div>
+    ),
+    timeout: DEFAULT_TIMEOUT,
+    closable: true
+  }
 }
 
 export function getStoreUpdateSuccessToast(): Omit<Toast, 'id'> {

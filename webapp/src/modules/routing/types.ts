@@ -84,6 +84,7 @@ export enum PageName {
   SETTINGS,
   LANDS,
   NAMES,
+  MINT_NAME,
   COLLECTION,
   BROWSE,
   CAMPAIGN,

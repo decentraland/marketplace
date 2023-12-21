@@ -159,13 +159,6 @@ export const AssetTopbar = ({
     [onBrowse, onlyOnSale, onlyOnRent]
   )
 
-  useEffect(() => {
-    const option = sortByOptions.find(option => option.value === sortBy)
-    if (!option) {
-      onBrowse({ sortBy: sortByOptions[0].value })
-    }
-  }, [onBrowse, sortBy, sortByOptions])
-
   const sortByValue = sortByOptions.find(option => option.value === sortBy)
     ? sortBy
     : sortByOptions[0].value

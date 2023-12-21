@@ -1,181 +1,377 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, Field, Form, Popup, Row, Section } from 'decentraland-ui'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import classNames from 'classnames'
+import { Button, Close, Container, Field, Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import NetworkButton from 'decentraland-dapps/dist/containers/NetworkButton'
+import ClaimNameImage from '../../../images/claim-name.svg'
+import ClaimNameBanner from '../../../images/claim-name-banner.png'
+import StandOut from '../../../images/names/stand-out.svg'
+import Unlock from '../../../images/names/unlock.svg'
+import Governance from '../../../images/names/governance.svg'
+import GetURL from '../../../images/names/get-url.svg'
+import Chest from '../../../images/names/chest.png'
+import Passports from '../../../images/names/passports.png'
+import { lists } from '../../../modules/vendor/decentraland/lists/api'
+import { SortBy } from '../../../modules/routing/types'
+import {
+  MAX_NAME_SIZE,
+  isEnoughClaimMana,
+  isNameAvailable,
+  isNameValid
+} from '../../../modules/ens/utils'
 import { NavigationTab } from '../../Navigation/Navigation.types'
 import { builderUrl } from '../../../lib/environment'
 import { Navbar } from '../../Navbar'
 import { Footer } from '../../Footer'
 import { Navigation } from '../../Navigation'
+import { Mana } from '../../Mana'
 import { Props } from './MintNamePage.types'
 import styles from './MintNamePage.module.css'
-import {
-  MAX_NAME_SIZE,
-  PRICE,
-  hasNameMinLength,
-  isEnoughClaimMana,
-  isNameAvailable,
-  isNameValid
-} from '../../../modules/ens/utils'
-import { Mana } from '../../Mana'
-import { useInput } from '../../../lib/input'
-import { Network } from '@dcl/schemas'
+
+const PLACEHOLDER_WIDTH = '94px'
 
 const MintNamePage = (props: Props) => {
-  const { onBrowse, currentMana } = props
-  const [showMintFlow, setShowMintFlow] = useState(false)
-  const [isError, setIsError] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const PLACEHOLDER_NAME = t('names_page.your_name')
 
-  const handleNameChange = useCallback(async text => {
-    try {
-      console.log('checking if available')
-      console.log('text: ', text)
-      const isAvailable = await isNameAvailable(text)
-      console.log('isAvailable result: ', isAvailable)
-      setIsAvailable(isAvailable)
-    } catch (error) {
-      console.log('error: ', error)
-      setIsError(true)
-    }
-  }, [])
-
-  const [name, setName] = useInput('', handleNameChange, 1000)
-  console.log('name: ', name)
-
-  const [isAvailable, setIsAvailable] = useState(false)
-  console.log('isAvailable: ', isAvailable)
+  const { wallet, currentMana, onClaim, onBrowse } = props
+  const [isLoadingStatus, setIsLoadingStatus] = useState(false)
+  const [bannedNames, setBannedNames] = useState<string[]>()
+  const [isAvailable, setIsAvailable] = useState<boolean | undefined>(undefined)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    ;(async () => {})()
-  }, [name])
-
-  const handleClaim = useCallback(() => {
-    setIsLoading(true)
+    ;(async () => {
+      try {
+        const bannedNames = await lists.fetchBannedNames()
+        setBannedNames(bannedNames)
+      } catch (error) {}
+    })()
   }, [])
 
-  const isEnoughMana = useMemo(() => {
-    return currentMana && isEnoughClaimMana(currentMana)
-  }, [currentMana])
-  console.log('isEnoughMana: ', isEnoughMana)
+  const [name, setName] = useState(PLACEHOLDER_NAME)
 
-  const isValid = useMemo(() => {
-    return isNameValid(name)
-  }, [name])
+  const handleNameChange = useCallback(
+    async text => {
+      if (text.length <= MAX_NAME_SIZE) {
+        try {
+          if (bannedNames?.includes(text.toLocaleLowerCase())) {
+            setIsAvailable(undefined)
+            setIsLoadingStatus(false)
+          } else {
+            const isAvailable = await isNameAvailable(text)
+            setIsAvailable(isAvailable)
+            setIsLoadingStatus(false)
+          }
+        } catch (error) {
+          console.log('error: ', error)
+          setIsLoadingStatus(false)
+        }
+      }
+    },
+    [bannedNames]
+  )
 
-  const isDisabled = !isValid || !isAvailable || !isEnoughMana
+  const handleDebouncedChange = useCallback(
+    text => {
+      setName(text)
+      const timeoutId = setTimeout(() => {
+        if (debounceRef.current === timeoutId) {
+          handleNameChange(text)
+        }
+      }, 1000)
+      debounceRef.current = timeoutId
+      return () => clearTimeout(timeoutId)
+    },
+    [handleNameChange]
+  )
 
-  const renderMintFlow = useCallback(() => {
-    let message = ''
-    if (isError) {
-      message = t('names_page.error_message')
-    } else if (!isAvailable) {
-      message = t('names_page.repeated_message')
-    } else if (name.length <= 2) {
-      message = ''
-    } else if (!isValid) {
-      message = t('names_page.name_message')
+  useEffect(() => {
+    if (name !== PLACEHOLDER_NAME && name.length) {
+      setIsLoadingStatus(true)
     }
+  }, [PLACEHOLDER_NAME, name])
 
-    return (
-      <Form onSubmit={handleClaim}>
-        <Section className={name.length === MAX_NAME_SIZE ? 'red' : ''}>
-          <Field
-            label={t('names_page.name_label')}
-            value={name}
-            message={message}
-            placeholder={t('names_page.name_placeholder')}
-            action={`${name.length}/${MAX_NAME_SIZE}`}
-            error={
-              isError || (hasNameMinLength(name) && !isValid) || !isAvailable
-            }
-            onChange={(_event: React.ChangeEvent<HTMLInputElement>) =>
-              setName(_event)
-            }
-          />
-        </Section>
-        <Row className="actions">
-          <Button
-            className="cancel"
-            onClick={() => setShowMintFlow(false)}
-            type="button"
-          >
-            {t('global.cancel')}
-          </Button>
-          {!isLoading && !isEnoughMana ? (
-            <Popup
-              className="modal-tooltip"
-              content={t('claim_ens_page.not_enough_mana')}
-              position="top center"
-              trigger={
-                <div className="popup-button">
-                  <NetworkButton
-                    type="submit"
-                    primary
-                    disabled={isDisabled}
-                    loading={isLoading}
-                    network={Network.ETHEREUM}
-                  >
-                    {t('names_page.claim_button')}{' '}
-                    <Mana inline>{PRICE.toLocaleString()}</Mana>
-                  </NetworkButton>
-                </div>
-              }
-              hideOnScroll={true}
-              on="hover"
-              inverted
-            />
-          ) : (
-            <NetworkButton
-              type="submit"
-              primary
-              disabled={isDisabled}
-              loading={isLoading}
-              network={Network.ETHEREUM}
+  const handleClaim = useCallback(() => {
+    const isValid = isNameValid(name)
+    const isEnoughMana = wallet && currentMana && isEnoughClaimMana(currentMana)
+
+    if (!isValid || !isEnoughMana) return
+
+    onClaim(name)
+    // setIsLoading(true)
+  }, [currentMana, name, wallet, onClaim])
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const [inputWidth, setInputWidth] = useState(PLACEHOLDER_WIDTH)
+
+  const updateWidth = (value: string) => {
+    if (inputRef.current) {
+      // Use a temporary span to measure the width of the input's content
+      const tempSpan = document.createElement('span')
+      tempSpan.innerHTML = value
+      // Apply same font properties to the span
+      tempSpan.style.fontSize = getComputedStyle(inputRef.current).fontSize
+      tempSpan.style.fontFamily = getComputedStyle(inputRef.current).fontFamily
+      tempSpan.style.visibility = 'hidden' // Hide the span element
+      document.body.appendChild(tempSpan)
+      // Update the width state to the width of the content plus a little extra space
+      setInputWidth(`${tempSpan.offsetWidth + 2}px`)
+      document.body.removeChild(tempSpan) // Clean up
+    }
+  }
+
+  const [isInputFocus, setIsInputFocus] = useState(false)
+
+  const onFieldClick = useCallback(() => {
+    inputRef.current?.focus()
+    setIsInputFocus(true)
+  }, [])
+
+  const onFieldFocus = useCallback(() => {
+    const inputValue = inputRef.current?.value
+    if (inputValue === PLACEHOLDER_NAME) {
+      setName('')
+    }
+  }, [PLACEHOLDER_NAME])
+
+  const renderRemainingCharacters = useCallback(() => {
+    if (name !== PLACEHOLDER_NAME) {
+      return (
+        <span className={styles.remainingCharacters}>{`${MAX_NAME_SIZE -
+          name.length}/${MAX_NAME_SIZE}`}</span>
+      )
+    }
+  }, [PLACEHOLDER_NAME, name])
+
+  const onFieldChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.value.length <= MAX_NAME_SIZE) {
+        handleDebouncedChange(event.target.value)
+        updateWidth(event.target.value)
+      }
+    },
+    [handleDebouncedChange]
+  )
+
+  const cards = useMemo(() => {
+    return [
+      {
+        image: StandOut,
+        title: t('names_page.why.stand_out.title'),
+        description: t('names_page.why.stand_out.description'),
+        className: styles.standOut
+      },
+      {
+        image: Unlock,
+        title: t('names_page.why.unlock.title'),
+        description: t('names_page.why.unlock.description', {
+          link: (
+            <a
+              href="https://docs.decentraland.org/creator/worlds/about/"
+              className={styles.learnMore}
             >
-              {t('claim_ens_page.claim_button')}{' '}
-              <Mana inline>{PRICE.toLocaleString()}</Mana>
-            </NetworkButton>
-          )}
-        </Row>
-      </Form>
-    )
-  }, [
-    handleClaim,
-    isAvailable,
-    isDisabled,
-    isEnoughMana,
-    isError,
-    isLoading,
-    isValid,
-    name,
-    setName
-  ])
+              {t('global.learn_more')}
+            </a>
+          )
+        })
+      },
+      {
+        image: Governance,
+        title: t('names_page.why.governance.title'),
+        description: t('names_page.why.governance.description', {
+          b: (children: React.ReactChildren) => (
+            <b className={styles.voting}>{children}</b>
+          )
+        })
+      },
+      {
+        image: GetURL,
+        title: t('names_page.why.get_url.title'),
+        description: t('names_page.why.get_url.description', {
+          b: (children: React.ReactChildren) => (
+            <b className={styles.nameLink}>{children}</b>
+          )
+        })
+      }
+    ]
+  }, [])
 
   return (
     <div className={styles.mintNamePageContainer}>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.NAMES} />
       <div className={styles.mintNamePage}>
-        {showMintFlow ? (
-          renderMintFlow()
-        ) : (
-          <>
-            <h2>{t('names_page.title')}</h2>
-            <span>{t('names_page.subtitle')}</span>
-            <div className={styles.buttons}>
-              <Button primary onClick={() => setShowMintFlow(true)}>
+        <Container className={styles.mainContainer}>
+          <div className={classNames(styles.claimContainer, styles.card)}>
+            {isInputFocus ? (
+              <Close onClick={() => setIsInputFocus(false)} />
+            ) : null}
+            <div className={styles.imageContainer}>
+              <div className={styles.imagePassportContainer}>
+                <img
+                  className={classNames(
+                    !isInputFocus && styles.visible,
+                    styles.passportLogo
+                  )}
+                  src={ClaimNameImage}
+                  alt="Claim name"
+                />
+                <h2 className={classNames(isInputFocus && styles.fadeOut)}>
+                  {t('names_page.title')}
+                </h2>
+              </div>
+              <img
+                className={classNames(
+                  styles.banner,
+                  isInputFocus && styles.visible
+                )}
+                src={ClaimNameBanner}
+                alt="Banner"
+              />
+            </div>
+
+            <span className={styles.subtitle}>{t('names_page.subtitle')}</span>
+            <div className={styles.claimInput} onClick={onFieldClick}>
+              <Field
+                onClick={onFieldClick}
+                value={name}
+                placeholder={t('names_page.name_placeholder')}
+                action={`${name.length}/${MAX_NAME_SIZE}`}
+                children={
+                  <>
+                    <input
+                      ref={inputRef}
+                      value={name}
+                      style={{
+                        maxWidth: name.length ? inputWidth : '1px'
+                      }}
+                      onFocus={onFieldFocus}
+                      onChange={onFieldChange}
+                    />
+                    <span className={styles.inputSuffix}>.dcl.eth</span>
+                  </>
+                }
+              />
+              <div className={styles.remainingCharactersContainer}>
+                {isLoadingStatus ? <Loader active inline size="tiny" /> : null}
+                {renderRemainingCharacters()}
+              </div>
+              <Button primary onClick={handleClaim} disabled={!isAvailable}>
                 {t('names_page.claim_a_name')}
               </Button>
-              <Button onClick={() => onBrowse()}>
-                {t('names_page.browse_names_being_resold')}
-              </Button>
-              <Button inverted as={'a'} href={`${builderUrl}/claim-name`}>
-                {t('names_page.manage_your_names')}
-              </Button>
+              {name &&
+              name !== PLACEHOLDER_NAME &&
+              isAvailable !== undefined &&
+              !isLoadingStatus ? (
+                <div className={styles.availableContainer}>
+                  {isAvailable ? (
+                    <>
+                      <Icon name="check" />
+                      {t('names_page.available')}
+                    </>
+                  ) : (
+                    <>
+                      <Icon name="close" />
+
+                      {t('names_page.not_available', {
+                        link: (
+                          <div
+                            className={styles.marketplaceLinkContainer}
+                            onClick={() =>
+                              onBrowse({
+                                search: name,
+                                onlyOnSale: false,
+                                sortBy: SortBy.NEWEST
+                              })
+                            }
+                          >
+                            {t('names_page.marketplace')}
+                            <Icon name="external" />
+                          </div>
+                        )
+                      })}
+                    </>
+                  )}
+                </div>
+              ) : null}
             </div>
-          </>
-        )}
+
+            <span
+              className={classNames(
+                styles.nameCost,
+                isInputFocus && styles.fadeOut
+              )}
+            >
+              {t('names_page.name_cost', {
+                mana: (
+                  <>
+                    <Mana inline /> 100 MANA
+                  </>
+                ),
+                network: (
+                  <span className={styles.nameCostNetwork}>
+                    {t('names_page.ethereum_mainnet_network')}
+                  </span>
+                )
+              })}
+            </span>
+          </div>
+          <div className={styles.ctasContainer}>
+            <h2>{t('names_page.why_names')}</h2>
+            <div className={styles.cardsContainer}>
+              {cards.map((card, index) => (
+                <div key={index} className={styles.card}>
+                  <div
+                    className={classNames(
+                      styles.whyImgContainer,
+                      card.className
+                    )}
+                  >
+                    <img src={card.image} alt={card.title} />
+                  </div>
+                  <div className={styles.whyTextContainer}>
+                    <span>{card.title}</span>
+                    <p>{card.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className={styles.cardsContainer}>
+              <div className={styles.nameTakenCard}>
+                <div className={styles.buttons}>
+                  <div>
+                    <img src={Chest} alt="Chest" />
+                  </div>
+                  <div>
+                    <h3> {t('names_page.ctas.name_taken.title')}</h3>
+                    <span> {t('names_page.ctas.name_taken.description')}</span>
+                    <Button onClick={() => onBrowse()}>
+                      {t('names_page.browse_names_being_resold')}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.manageNames}>
+                <div className={styles.buttons}>
+                  <div>
+                    <img src={Passports} alt="passports" />
+                  </div>
+                  <div style={{ justifyContent: 'center' }}>
+                    <h3> {t('names_page.ctas.manage.title')}</h3>
+                    <Button
+                      inverted
+                      as={'a'}
+                      target="_blank"
+                      href={`${builderUrl}/claim-name`}
+                    >
+                      {t('names_page.manage_your_names')}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
       </div>
 
       <Footer isFullscreen />

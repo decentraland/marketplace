@@ -8,6 +8,7 @@ import { locations } from '../../modules/routing/locations'
 import { config } from '../../config'
 import { Footer } from '../Footer'
 import { AssetType } from '../../modules/asset/types'
+import { Section } from '../../modules/vendor/decentraland'
 import { AssetImage } from '../AssetImage'
 import { AssetProvider } from '../AssetProvider'
 import { Navbar } from '../Navbar'
@@ -18,7 +19,7 @@ import styles from './SuccessPage.module.css'
 const EXPLORER_URL = config.get('EXPLORER_URL', '')
 
 export function SuccessPage(props: Props) {
-  const { isLoading, mintedTokenId } = props
+  const { isLoading, mintedTokenId, onSetNameAsAlias } = props
   const search = new URLSearchParams(useLocation().search)
   const contractAddress = search.get('contractAddress')
   const tokenId = search.get('tokenId')
@@ -84,7 +85,9 @@ export function SuccessPage(props: Props) {
                     {t('success_page.success_state.status')}
                   </span>
                   <div className={styles.actionContainer}>
-                    {assetType === AssetType.ITEM && !isLoading && mintedTokenId ? (
+                    {assetType === AssetType.ITEM &&
+                    !isLoading &&
+                    mintedTokenId ? (
                       <AssetProvider
                         retry
                         type={AssetType.NFT}
@@ -104,18 +107,43 @@ export function SuccessPage(props: Props) {
                         )}
                       </AssetProvider>
                     ) : (
-                      <Button
-                        as={Link}
-                        className={styles.successButton}
-                        secondary
-                        to={
-                          assetType === AssetType.ITEM
-                            ? locations.item(contractAddress, tokenId)
-                            : locations.nft(contractAddress, tokenId)
-                        }
-                      >
-                        {t('success_page.success_state.view_item')}
-                      </Button>
+                      <>
+                        {asset.category === NFTCategory.ENS ? (
+                          <>
+                            <Button
+                              as={Link}
+                              className={styles.successButton}
+                              secondary
+                              to={locations.names({ section: Section.ENS })}
+                            >
+                              {t('success_page.success_state.mint_more_names')}
+                            </Button>
+                            <Button
+                              // as={Link}
+                              className={styles.successButton}
+                              primary
+                              onClick={() => onSetNameAsAlias(asset.name)}
+                            >
+                              {t(
+                                'success_page.success_state.set_as_primary_name'
+                              )}
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            as={Link}
+                            className={styles.successButton}
+                            secondary
+                            to={
+                              assetType === AssetType.ITEM
+                                ? locations.item(contractAddress, tokenId)
+                                : locations.nft(contractAddress, tokenId)
+                            }
+                          >
+                            {t('success_page.success_state.view_item')}
+                          </Button>
+                        )}
+                      </>
                     )}
 
                     {(asset.category === NFTCategory.WEARABLE ||

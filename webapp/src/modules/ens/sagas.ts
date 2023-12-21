@@ -3,9 +3,11 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { DCLController } from '../../contracts'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { DCLController__factory } from '../../contracts/factories/DCLController__factory'
+import { DCLRegistrar } from '../../contracts/DCLRegistrar'
 import { lists } from '../vendor/decentraland/lists/api'
 import {
   CLAIM_NAME_REQUEST,
@@ -18,7 +20,6 @@ import { ENS, ENSError } from './types'
 import { getDomainFromName } from './utils'
 import { config } from '../../config'
 import { getWallet } from '../wallet/selectors'
-import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { isErrorWithMessage } from '../../lib/error'
 
 export const CONTROLLER_V2_ADDRESS = config.get(
@@ -29,16 +30,6 @@ export const REGISTRAR_ADDRESS = config.get('REGISTRAR_CONTRACT_ADDRESS', '')
 
 export function* ensSaga() {
   yield takeEvery(CLAIM_NAME_REQUEST, handleClaimNameRequest)
-
-  function* fetchBannedDomains() {
-    try {
-      const bannedDomains: string[] = yield call([lists, 'fetchBannedNames'])
-      return bannedDomains
-    } catch (error) {
-      console.error('Failed to load banned domains', error)
-      return []
-    }
-  }
 
   function* handleClaimNameRequest(action: ClaimNameRequestAction) {
     const { name } = action.payload
@@ -52,7 +43,8 @@ export function* ensSaga() {
         CONTROLLER_V2_ADDRESS,
         signer
       )
-      const dclRegistrarContract = DCLRegistrar__factory.connect(
+      const dclRegistrarContract: DCLRegistrar = yield call(
+        [DCLRegistrar__factory, 'connect'],
         REGISTRAR_ADDRESS,
         signer
       )
@@ -81,9 +73,10 @@ export function* ensSaga() {
         nftOwnerAddress: wallet.address,
         subdomain: getDomainFromName(name),
         resolver: ethers.constants.AddressZero,
-        content: ethers.constants.AddressZero
+        content: ethers.constants.AddressZero,
+        contractAddress: dclRegistrarContract.address
       }
-      yield put(claimNameSuccess(ens, name))
+      yield put(claimNameSuccess(ens, name, transaction.hash))
       yield put(closeModal('ClaimNameFatFingerModal'))
     } catch (error) {
       const ensError: ENSError = {

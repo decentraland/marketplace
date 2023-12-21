@@ -1,3 +1,4 @@
 .namesPageContainer {
   display: flex;
+  flex-direction: column;
 }

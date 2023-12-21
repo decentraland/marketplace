@@ -28,6 +28,7 @@ import {
   getBuyNFTWithCardErrorToast,
   getDeleteListFailureToast,
   getDeleteListSuccessToast,
+  getNameClaimSuccessToast,
   getExecuteOrderFailureToast,
   getFetchAssetsFailureToast,
   getLandClaimedBackSuccessToast,
@@ -51,6 +52,7 @@ import {
 import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
 import { toastDispatchableActionsChannel } from './utils'
 import { DispatchableFromToastActions } from './types'
+import { CLAIM_NAME_SUCCESS } from '../ens/actions'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])
@@ -61,6 +63,7 @@ function* customToastSaga() {
 }
 
 function* successToastSagas() {
+  yield takeEvery(CLAIM_NAME_SUCCESS, handleClaimNameSuccess)
   yield takeEvery(UPDATE_STORE_SUCCESS, handleStoreUpdateSuccess)
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleRemoveRentalSuccess)
   yield takeEvery(CLAIM_ASSET_SUCCESS, handleClaimLandBackSuccess)
@@ -86,6 +89,10 @@ function* successToastSagas() {
     yield put(action)
     yield put(hideAllToasts())
   }
+}
+
+function* handleClaimNameSuccess() {
+  yield put(showToast(getNameClaimSuccessToast()))
 }
 
 function* handleStoreUpdateSuccess() {

@@ -20,6 +20,9 @@ export type ENS = {
   landId?: string
 
   worldStatus?: WorldStatus | null
+
+  /** Registrar contract address */
+  contractAddress: string
 }
 
 export type ENSError = {

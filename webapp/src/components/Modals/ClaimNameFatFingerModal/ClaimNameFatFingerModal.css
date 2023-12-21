@@ -1,0 +1,8 @@
+.ClaimNameFatFingerModal.ui.modal .content .dcl.field,
+.ClaimNameFatFingerModal.ui.modal .actions {
+  margin-top: 30px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .content .dcl.field .message {
+  margin-top: 10px;
+}
