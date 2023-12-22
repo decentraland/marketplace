@@ -41,5 +41,6 @@
   "SSO_URL": "https://id.decentraland.today",
   "SUBGRAPH_WORKER": "https://subgraph.decentraland.today",
   "SENTRY_DSN": "https://1dc401149e1c819b8477565c9cdd9b70@o4504361728212992.ingest.sentry.io/4505743351676928",
-  "SQUID_API_URL": "https://v2.api.squidrouter.com"
+  "SQUID_API_URL": "https://v2.api.squidrouter.com",
+  "AUTH_URL": "/auth"
 }
