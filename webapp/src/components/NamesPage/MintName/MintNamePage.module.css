@@ -302,7 +302,7 @@
 .mintNamePage .ctasContainer .card {
   background-color: #242129;
   height: 209px;
-  width: 305px;
+  min-width: 305px;
   padding: 0;
   overflow: hidden;
 }
@@ -350,4 +350,113 @@
 
 .mintNamePage .ctasContainer .whyImgContainer.standOut {
   align-items: flex-end;
+}
+
+@media (max-width: 768px) {
+  .mintNamePage .claimContainer {
+    height: 587px;
+    margin: 0;
+    padding: 12px;
+  }
+
+  .mintNamePage .mainContainer .imageContainer {
+    height: 222px;
+  }
+
+  .mintNamePage .mainContainer:global(.ui.container) {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 12px;
+  }
+
+  .mintNamePage .claimContainer h2 {
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .mintNamePage .claimContainer .subtitle {
+    font-size: 20px;
+  }
+
+  .mintNamePage .ctasContainer .cardsContainer {
+    width: 100%;
+    overflow-x: scroll;
+    padding: 0 16px;
+  }
+
+  .mintNamePage .ctasContainer .cardsContainer:last-of-type {
+    flex-direction: column;
+  }
+
+  .mintNamePage .nameTakenCard {
+    margin-right: 0;
+    margin-bottom: 16px;
+    justify-content: center;
+  }
+
+  .mintNamePage .nameTakenCard .buttons,
+  .mintNamePage .manageNames .buttons {
+    flex-direction: column;
+  }
+
+  .mintNamePage .manageNames .buttons,
+  .mintNamePage .nameTakenCard .buttons div {
+    align-items: center;
+  }
+
+  .mintNamePage .buttons > div + div {
+    margin-left: 0;
+  }
+
+  .mintNamePage .nameTakenCard .buttons div button {
+    margin-top: 28px;
+  }
+
+  .mintNamePage .claimInput {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .mintNamePage .claimContainer .remainingCharactersContainer {
+    right: 12px;
+    top: 6px;
+  }
+
+  .mintNamePage .claimContainer :global(.ui.primary.button) {
+    min-height: 48px;
+    border-radius: 6px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+  .mintNamePage .claimInput :global(.dcl.field.simple) {
+    min-height: 100%;
+  }
+
+  .mintNamePage .nameCost {
+    text-align: center;
+    margin-top: 72px;
+  }
+
+  .mintNamePage .mainContainer .claimContainer img.banner {
+    left: 0;
+    width: 340px;
+    height: 129px;
+    top: 50px;
+  }
+
+  .mintNamePage .mainContainer .ctasContainer .card {
+    margin-right: 20px;
+  }
+
+  .mintNamePage .manageNames {
+    justify-content: center;
+  }
+
+  .mintNamePage .buttons img {
+    padding-left: 0;
+  }
+
+  .mintNamePage .availableContainer {
+    top: 97px;
+  }
 }

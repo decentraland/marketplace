@@ -260,6 +260,7 @@ const MintNamePage = (props: Props) => {
                 {t('names_page.claim_a_name')}
               </Button>
               {name &&
+              isInputFocus &&
               name !== PLACEHOLDER_NAME &&
               isAvailable !== undefined &&
               !isLoadingStatus ? (
