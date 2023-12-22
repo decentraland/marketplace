@@ -1,5 +1,7 @@
 import { ethers } from 'ethers'
-import { getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { ChainId } from '@dcl/schemas'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
+import { getConfiguration } from 'decentraland-connect/dist/configuration'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { config } from '../../config'
 
@@ -20,10 +22,15 @@ export async function isNameAvailable(name: string): Promise<boolean> {
   if (!name) {
     return false
   }
-  const signer: ethers.Signer = await getSigner()
+  const chainId = Number(config.get('CHAIN_ID')) as ChainId
+  const networkProvider = await getNetworkProvider(chainId)
+  const configuration = getConfiguration()
+  const provider = networkProvider
+    ? new ethers.providers.Web3Provider(networkProvider)
+    : new ethers.providers.JsonRpcProvider(configuration.network.urls[chainId])
   const contractDCLRegistrar = DCLRegistrar__factory.connect(
     REGISTRAR_ADDRESS,
-    signer
+    provider
   )
   return contractDCLRegistrar.available(name)
 }
