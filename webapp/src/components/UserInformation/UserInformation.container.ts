@@ -8,16 +8,18 @@ import {
 import { RootState } from '../../modules/reducer'
 import { getTransactions } from '../../modules/transaction/selectors'
 import { locations } from '../../modules/routing/locations'
+import { openLogin } from '../../modules/login/actions'
+import { getIsAuthDappEnabled } from '../../modules/features/selectors'
 import {
   MapStateProps,
   MapDispatch,
   MapDispatchProps
 } from './UserInformation.types'
 import UserMenu from './UserInformation'
-import { openLogin } from '../../modules/login/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
+    isAuthDappEnabled: getIsAuthDappEnabled(state),
     isSignedIn: isConnected(state),
     isSigningIn: isConnecting(state),
     hasActivity: getTransactions(state).some(tx => isPending(tx.status))

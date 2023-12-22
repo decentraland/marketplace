@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react'
 import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
-
+import { config } from '../../config'
 import { locations } from '../../modules/routing/locations'
 import UserMenu from '../UserMenu'
 import UserInformation from '../UserInformation'
 import { Props } from './Navbar.types'
 import './Navbar.css'
-import { config } from '../../config'
 
 const Navbar = (props: Props) => {
   const {

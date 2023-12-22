@@ -16,6 +16,8 @@ import {
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isErrorWithMessage } from '../../lib/error'
+import { config } from '../../config'
+import { getIsAuthDappEnabled } from '../features/selectors'
 import { getEth } from '../wallet/utils'
 
 import {
@@ -26,8 +28,6 @@ import {
   generateIdentitySuccess
 } from './actions'
 import { IDENTITY_EXPIRATION_IN_MINUTES } from './utils'
-import { getIsAuthDappEnabled } from '../features/selectors'
-import { config } from '../../config'
 
 export function* identitySaga() {
   yield takeLatest(GENERATE_IDENTITY_REQUEST, handleGenerateIdentityRequest)
@@ -92,7 +92,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
       yield put(generateIdentitySuccess(address, identity))
     } else {
       window.location.replace(
-        `${config.get('AUTH_URL')}/login?redirectTo=${window.location.href}`
+        `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(window.location.href)}`
       )
     }
     return
