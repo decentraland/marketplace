@@ -302,7 +302,7 @@
 .mintNamePage .ctasContainer .card {
   background-color: #242129;
   height: 209px;
-  min-width: 305px;
+  width: 305px;
   padding: 0;
   overflow: hidden;
 }
@@ -458,5 +458,9 @@
 
   .mintNamePage .availableContainer {
     top: 97px;
+  }
+
+  .mintNamePage .ctasContainer .card {
+    min-width: 305px;
   }
 }
