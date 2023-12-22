@@ -32,7 +32,6 @@
 }
 
 .mintNamePage .buttons > div + div {
-  /* align-items: flex-start; */
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -350,6 +349,11 @@
 
 .mintNamePage .ctasContainer .whyImgContainer.standOut {
   align-items: flex-end;
+}
+
+.mintNamePage .warningIcon {
+  color: #ffa25a;
+  margin-right: 8px;
 }
 
 @media (max-width: 768px) {

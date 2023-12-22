@@ -14,6 +14,7 @@ import { lists } from '../../../modules/vendor/decentraland/lists/api'
 import { SortBy } from '../../../modules/routing/types'
 import {
   MAX_NAME_SIZE,
+  hasNameMinLength,
   isEnoughClaimMana,
   isNameAvailable,
   isNameValid
@@ -51,7 +52,7 @@ const MintNamePage = (props: Props) => {
 
   const handleNameChange = useCallback(
     async text => {
-      if (text.length <= MAX_NAME_SIZE) {
+      if (hasNameMinLength(text) && text.length <= MAX_NAME_SIZE) {
         try {
           if (bannedNames?.includes(text.toLocaleLowerCase())) {
             setIsAvailable(undefined)
@@ -85,7 +86,7 @@ const MintNamePage = (props: Props) => {
   )
 
   useEffect(() => {
-    if (name !== PLACEHOLDER_NAME && name.length) {
+    if (name !== PLACEHOLDER_NAME && name.length && hasNameMinLength(name)) {
       setIsLoadingStatus(true)
     }
   }, [PLACEHOLDER_NAME, name])
@@ -260,6 +261,7 @@ const MintNamePage = (props: Props) => {
                 {t('names_page.claim_a_name')}
               </Button>
               {name &&
+              hasNameMinLength(name) &&
               isInputFocus &&
               name !== PLACEHOLDER_NAME &&
               isAvailable !== undefined &&
@@ -273,7 +275,6 @@ const MintNamePage = (props: Props) => {
                   ) : (
                     <>
                       <Icon name="close" />
-
                       {t('names_page.not_available', {
                         link: (
                           <div
@@ -293,6 +294,14 @@ const MintNamePage = (props: Props) => {
                       })}
                     </>
                   )}
+                </div>
+              ) : name && !hasNameMinLength(name) ? (
+                <div className={styles.availableContainer}>
+                  <Icon
+                    className={styles.warningIcon}
+                    name="exclamation triangle"
+                  />
+                  {t('names_page.name_too_short')}
                 </div>
               ) : null}
             </div>
