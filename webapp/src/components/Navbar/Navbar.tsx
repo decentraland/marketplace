@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
-
+import { config } from '../../config'
 import { locations } from '../../modules/routing/locations'
 import UserMenu from '../UserMenu'
 import UserInformation from '../UserInformation'
@@ -12,7 +12,8 @@ const Navbar = (props: Props) => {
     location,
     onNavigate,
     isConnected,
-    isNewNavbarDropdownEnabled
+    isNewNavbarDropdownEnabled,
+    isAuthDappEnabled
   } = props
   const { pathname, search } = location
 
@@ -35,8 +36,14 @@ const Navbar = (props: Props) => {
     const redirectTo = !currentRedirectTo
       ? `${pathname}${search}`
       : currentRedirectTo
-    onNavigate(locations.signIn(redirectTo))
-  }, [onNavigate, pathname, search])
+    if (isAuthDappEnabled) {
+      window.location.replace(
+        `${config.get('AUTH_URL')}/login?redirectTo=${redirectTo}`
+      )
+    } else {
+      onNavigate(locations.signIn(redirectTo))
+    }
+  }, [onNavigate, pathname, search, isAuthDappEnabled])
 
   const handleOnClickAccount = useCallback(() => {
     onNavigate(locations.settings())

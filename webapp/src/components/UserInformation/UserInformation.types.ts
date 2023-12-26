@@ -6,11 +6,12 @@ import { OpenLoginAction } from '../../modules/login/actions'
 export type Props = Partial<UserInformationProps> & {
   onClickMyAssets: () => void
   onClickMyLists: () => void
+  isAuthDappEnabled: boolean
 }
 
 export type MapStateProps = Pick<
   Props,
-  'isSignedIn' | 'isSigningIn' | 'hasActivity'
+  'isSignedIn' | 'isSigningIn' | 'hasActivity' | 'isAuthDappEnabled'
 >
 export type MapDispatchProps = Pick<
   Props,

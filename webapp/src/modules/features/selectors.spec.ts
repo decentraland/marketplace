@@ -25,7 +25,8 @@ import {
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
   getIsNewNavbarDropdownEnabled,
-  getIsBuyCrossChainEnabled
+  getIsBuyCrossChainEnabled,
+  getIsAuthDappEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -221,10 +222,16 @@ const waitForInitialLoadingSelectors = [
     name: 'buy-crosschain',
     feature: FeatureName.BUY_CROSS_CHAIN,
     selector: getIsBuyCrossChainEnabled
+  },
+  {
+    name: 'auth-dapp',
+    feature: FeatureName.AUTH_DAPP,
+    selector: getIsAuthDappEnabled,
+    applicationName: ApplicationName.DAPPS
   }
 ]
 
-waitForInitialLoadingSelectors.forEach(({ name, feature, selector }) =>
+waitForInitialLoadingSelectors.forEach(({ name, feature, applicationName, selector }) =>
   describe(`when getting if the ${name} feature flag is enabled`, () => {
     describe('when the initial flags have not been yet loaded', () => {
       beforeEach(() => {
@@ -255,7 +262,7 @@ waitForInitialLoadingSelectors.forEach(({ name, feature, selector }) =>
           expect(isEnabled).toBe(false)
           expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
             state,
-            ApplicationName.MARKETPLACE,
+            applicationName || ApplicationName.MARKETPLACE,
             feature
           )
         })
@@ -272,7 +279,7 @@ waitForInitialLoadingSelectors.forEach(({ name, feature, selector }) =>
           expect(isEnabled).toBe(true)
           expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
             state,
-            ApplicationName.MARKETPLACE,
+            applicationName || ApplicationName.MARKETPLACE,
             feature
           )
         })
