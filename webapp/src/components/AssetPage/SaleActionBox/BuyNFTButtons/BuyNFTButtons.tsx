@@ -47,14 +47,16 @@ const BuyNFTButtons = ({
       if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
         onRedirect(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
+        analytics.track(events.CLICK_BUY_NFT_WITH_CRYPTO)
         onBuyWithCrypto(asset, order)
       }
     },
     [
-      wallet,
       isConnecting,
+      wallet,
       isBuyingWithCryptoModalOpen,
       location.pathname,
+      analytics,
       onRedirect,
       onBuyWithCrypto
     ]
