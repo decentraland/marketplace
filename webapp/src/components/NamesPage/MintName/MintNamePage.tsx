@@ -1,8 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import classNames from 'classnames'
-import { Button, Close, Container, Field, Icon, Loader } from 'decentraland-ui'
+import {
+  Button,
+  Close,
+  Container,
+  Field,
+  Icon,
+  Loader,
+  Popup
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import infoIcon from '../../../images/infoIcon.png'
 import ClaimNameImage from '../../../images/claim-name.svg'
 import ClaimNameBanner from '../../../images/claim-name-banner.png'
 import StandOut from '../../../images/names/stand-out.svg'
@@ -375,6 +384,30 @@ const MintNamePage = (props: Props) => {
                   </span>
                 )
               })}
+              <Popup
+                content={t('names_page.dao_tooltip', {
+                  link: (
+                    <a
+                      href="https://decentraland.zone/governance/proposal/?id=a3bdc100-9b34-11ed-ae61-5f6dd0bf8358"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t('global.learn_more')}
+                    </a>
+                  )
+                })}
+                position="top center"
+                hoverable
+                mouseLeaveDelay={500}
+                trigger={
+                  <img
+                    src={infoIcon}
+                    alt="info"
+                    className={styles.informationTooltip}
+                  />
+                }
+                on="hover"
+              />
             </span>
           </div>
           <div className={styles.ctasContainer}>

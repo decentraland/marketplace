@@ -1574,6 +1574,7 @@
     "marketplace": "Check the Marketplace to buy it now",
     "name_cost": "Each NAME costs {mana} {network}",
     "ethereum_mainnet_network": "Ethereum Mainnet Network",
+    "dao_tooltip": "All proceeds from NAME sales are redirected to the DAO treasury. {link}",
     "why_names": "Why NAMEs?",
     "name_too_short": "NAME Too Short: NAMEs must be at least 2 characters long.",
     "has_spaces": "Names can’t contain spaces.",

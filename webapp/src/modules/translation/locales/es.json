@@ -1561,6 +1561,7 @@
     "marketplace": "Marketplace",
     "name_cost": "Cada nombre cuesta {mana} {network}",
     "ethereum_mainnet_network": "Red Principal de Ethereum",
+    "dao_tooltip": "Todo lo generado por las ventas de Nombres es redirigido al tesoro de la DAO. {link}",
     "why_names": "Por qué Nombres?",
     "name_too_short": "Nombre demasiado corto: debe contener por lo menos 2 caracteres",
     "has_spaces": "Los Nombres no peuden contener espacios",

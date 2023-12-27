@@ -126,6 +126,16 @@
 .mintNamePage .nameCost {
   margin-top: 74px;
   transition: opacity 1s ease; /* Adjust the duration as needed */
+  position: relative;
+  margin-left: -14px;
+}
+
+.mintNamePage .mainContainer .claimContainer .nameCost img {
+  opacity: 1;
+  left: 100%;
+  top: 6px;
+  cursor: pointer;
+  margin-left: 4px;
 }
 
 .mintNamePage .nameCost :global(.dcl.mana .symbol) {
@@ -370,6 +380,11 @@
 .mintNamePage .warningIcon {
   color: #ffa25a;
   margin-right: 8px;
+}
+
+.mintNamePage .informationTooltip {
+  width: 14px;
+  height: 14px;
 }
 
 @media (max-width: 768px) {
