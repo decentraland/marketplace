@@ -1554,7 +1554,7 @@
   "names_page": {
     "title": "成为 Decentraland 公民！",
     "subtitle": "索取您的独特名称",
-    "claim_a_name": "索取名字",
+    "claim_a_name": "索赔名称",
     "browse_names_being_resold": "浏览正在转售的名称",
     "manage_your_names": "管理你的名字",
     "name_label": "姓名",
@@ -1566,7 +1566,10 @@
     "marketplace": "市场",
     "name_cost": "每个NAME 消耗 {mana} {network}",
     "ethereum_mainnet_network": "以太坊主网网络",
-    "why_names": "为什么是名字？",
+    "name_too_short": "名称太短：名称必须至少有 2 个字符长。",
+    "has_spaces": "名称不能包含空格。",
+    "name_too_long": "名称最多可包含 15 个字符。",
+    "invalid_characters": "名称不能包含任何非字母数字字符。",
     "claim_name_fat_finger_modal": {
       "title": "请确认您的新名称",
       "description": "您已选择{name}。重新输入您的姓名以确认您的选择。",

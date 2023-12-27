@@ -35,9 +35,13 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: space-between;
   text-align: start;
   margin-left: 38px;
+}
+
+.mintNamePage .buttons > div + div :global(.ui.button:hover) {
+  background-color: white;
+  color: black;
 }
 
 .mintNamePage .buttons img {
@@ -45,7 +49,7 @@
 }
 
 .mintNamePage .buttons :global(.button) {
-  margin-bottom: 12px;
+  margin-top: auto;
 }
 
 .mintNamePage .buttons :global(.ui.button + .ui.button) {
@@ -95,6 +99,8 @@
   margin-left: 4px;
   text-decoration: underline;
   font-weight: bold;
+  color: white;
+  display: flex;
 }
 
 .mintNamePage .marketplaceLinkContainer :global(.icon) {
@@ -118,8 +124,12 @@
 }
 
 .mintNamePage .nameCost {
-  margin-top: 54px;
+  margin-top: 74px;
   transition: opacity 1s ease; /* Adjust the duration as needed */
+}
+
+.mintNamePage .nameCost :global(.dcl.mana .symbol) {
+  padding: 0;
 }
 
 .mintNamePage .fadeOut {
@@ -202,7 +212,6 @@
   position: relative;
   display: flex;
   margin-top: 40px;
-  border: 1px solid var(--divider);
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
   height: 46px;
@@ -217,6 +226,10 @@
   display: flex;
   align-items: center;
   padding-left: 24px;
+  border: 1px solid var(--bluish-steel);
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-right: none;
 }
 
 .mintNamePage .claimContainer :global(.dcl.field .ui.input input::after) {
@@ -288,13 +301,14 @@
   margin-top: 40px;
 }
 
-.mintNamePage .ctasContainer h2 {
-  margin-bottom: 40px;
+.mintNamePage .ctasContainer h1 {
+  margin-bottom: 16px;
 }
 
 .mintNamePage .ctasContainer .cardsContainer {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-gap: 20px;
+  grid-auto-flow: column;
   margin-bottom: 52px;
 }
 
@@ -304,6 +318,8 @@
   width: 305px;
   padding: 0;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .mintNamePage .ctasContainer .card span {

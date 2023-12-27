@@ -8,7 +8,6 @@ import { locations } from '../../modules/routing/locations'
 import { config } from '../../config'
 import { Footer } from '../Footer'
 import { AssetType } from '../../modules/asset/types'
-import { Section } from '../../modules/vendor/decentraland'
 import { AssetImage } from '../AssetImage'
 import { AssetProvider } from '../AssetProvider'
 import { Navbar } from '../Navbar'
@@ -114,12 +113,11 @@ export function SuccessPage(props: Props) {
                               as={Link}
                               className={styles.successButton}
                               secondary
-                              to={locations.names({ section: Section.ENS })}
+                              to={locations.mintName()}
                             >
                               {t('success_page.success_state.mint_more_names')}
                             </Button>
                             <Button
-                              // as={Link}
                               className={styles.successButton}
                               primary
                               onClick={() => onSetNameAsAlias(asset.name)}

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { NFTCategory, Network } from '@dcl/schemas'
-import { ModalNavigation, Field, Button, Form } from 'decentraland-ui'
+import { ModalNavigation, Field, Button, Form, Icon } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
@@ -93,6 +93,10 @@ const ClaimNameFatFingerModal = ({
             }
             onChange={handleChangeName}
           />
+          <div className="capsWarning ">
+            <Icon name="info circle" />
+            {t('names_page.claim_name_fat_finger_modal.caps_warning')}
+          </div>
         </Modal.Content>
         <Modal.Actions>
           <Button

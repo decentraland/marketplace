@@ -7,10 +7,18 @@ import { BrowseOptions } from '../../../modules/routing/types'
 export type Props = {
   currentMana: number | undefined
   wallet: Wallet | null
+  isConnecting: boolean
   onBrowse: (options?: BrowseOptions) => void
   onClaim: (name: string) => void
+  onRedirect: (path: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'currentMana' | 'wallet'>
-export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClaim'>
+export type MapStateProps = Pick<
+  Props,
+  'currentMana' | 'wallet' | 'isConnecting'
+>
+export type MapDispatchProps = Pick<
+  Props,
+  'onBrowse' | 'onClaim' | 'onRedirect'
+>
 export type MapDispatch = Dispatch<CallHistoryMethodAction | OpenModalAction>

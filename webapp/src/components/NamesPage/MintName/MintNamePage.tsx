@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import { Button, Close, Container, Field, Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -14,11 +15,15 @@ import { lists } from '../../../modules/vendor/decentraland/lists/api'
 import { SortBy } from '../../../modules/routing/types'
 import {
   MAX_NAME_SIZE,
+  NameInvalidType,
+  getNameInvalidType,
   hasNameMinLength,
   isEnoughClaimMana,
   isNameAvailable,
   isNameValid
 } from '../../../modules/ens/utils'
+import { locations } from '../../../modules/routing/locations'
+import { Section } from '../../../modules/vendor/decentraland'
 import { NavigationTab } from '../../Navigation/Navigation.types'
 import { builderUrl } from '../../../lib/environment'
 import { Navbar } from '../../Navbar'
@@ -32,8 +37,15 @@ const PLACEHOLDER_WIDTH = '94px'
 
 const MintNamePage = (props: Props) => {
   const PLACEHOLDER_NAME = t('names_page.your_name')
-
-  const { wallet, currentMana, onClaim, onBrowse } = props
+  const {
+    wallet,
+    isConnecting,
+    currentMana,
+    onClaim,
+    onBrowse,
+    onRedirect
+  } = props
+  const location = useLocation()
   const [isLoadingStatus, setIsLoadingStatus] = useState(false)
   const [bannedNames, setBannedNames] = useState<string[]>()
   const [isAvailable, setIsAvailable] = useState<boolean | undefined>(undefined)
@@ -52,7 +64,7 @@ const MintNamePage = (props: Props) => {
 
   const handleNameChange = useCallback(
     async text => {
-      if (hasNameMinLength(text) && text.length <= MAX_NAME_SIZE) {
+      if (isNameValid(text) && hasNameMinLength(text)) {
         try {
           if (bannedNames?.includes(text.toLocaleLowerCase())) {
             setIsAvailable(undefined)
@@ -86,20 +98,40 @@ const MintNamePage = (props: Props) => {
   )
 
   useEffect(() => {
-    if (name !== PLACEHOLDER_NAME && name.length && hasNameMinLength(name)) {
+    if (
+      name !== PLACEHOLDER_NAME &&
+      name.length &&
+      hasNameMinLength(name) &&
+      isNameValid(name)
+    ) {
       setIsLoadingStatus(true)
+    } else if (!isNameValid(name)) {
+      // turn off loading if an invalid character is typed
+      setIsLoadingStatus(false)
     }
   }, [PLACEHOLDER_NAME, name])
 
   const handleClaim = useCallback(() => {
-    const isValid = isNameValid(name)
-    const isEnoughMana = wallet && currentMana && isEnoughClaimMana(currentMana)
+    if (!isConnecting && !wallet) {
+      onRedirect(locations.signIn(`${location.pathname}`))
+    } else {
+      const isValid = isNameValid(name)
+      const isEnoughMana =
+        wallet && currentMana && isEnoughClaimMana(currentMana)
 
-    if (!isValid || !isEnoughMana) return
+      if (!isValid || !isEnoughMana) return
 
-    onClaim(name)
-    // setIsLoading(true)
-  }, [currentMana, name, wallet, onClaim])
+      onClaim(name)
+    }
+  }, [
+    isConnecting,
+    wallet,
+    name,
+    currentMana,
+    onClaim,
+    onRedirect,
+    location.pathname
+  ])
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -138,18 +170,21 @@ const MintNamePage = (props: Props) => {
   const renderRemainingCharacters = useCallback(() => {
     if (name !== PLACEHOLDER_NAME) {
       return (
-        <span className={styles.remainingCharacters}>{`${MAX_NAME_SIZE -
-          name.length}/${MAX_NAME_SIZE}`}</span>
+        <span
+          className={styles.remainingCharacters}
+        >{`${name.length}/${MAX_NAME_SIZE}`}</span>
       )
     }
   }, [PLACEHOLDER_NAME, name])
 
+  const nameInvalidType = useMemo(() => {
+    return getNameInvalidType(name)
+  }, [name])
+
   const onFieldChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (event.target.value.length <= MAX_NAME_SIZE) {
-        handleDebouncedChange(event.target.value)
-        updateWidth(event.target.value)
-      }
+      handleDebouncedChange(event.target.value)
+      updateWidth(event.target.value)
     },
     [handleDebouncedChange]
   )
@@ -257,11 +292,16 @@ const MintNamePage = (props: Props) => {
                 {isLoadingStatus ? <Loader active inline size="tiny" /> : null}
                 {renderRemainingCharacters()}
               </div>
-              <Button primary onClick={handleClaim} disabled={!isAvailable}>
+              <Button
+                primary
+                onClick={handleClaim}
+                disabled={!isAvailable || nameInvalidType !== null}
+              >
                 {t('names_page.claim_a_name')}
               </Button>
               {name &&
               hasNameMinLength(name) &&
+              isNameValid(name) &&
               isInputFocus &&
               name !== PLACEHOLDER_NAME &&
               isAvailable !== undefined &&
@@ -277,31 +317,42 @@ const MintNamePage = (props: Props) => {
                       <Icon name="close" />
                       {t('names_page.not_available', {
                         link: (
-                          <div
+                          <a
                             className={styles.marketplaceLinkContainer}
-                            onClick={() =>
-                              onBrowse({
-                                search: name,
-                                onlyOnSale: false,
-                                sortBy: SortBy.NEWEST
-                              })
-                            }
+                            href={locations.names({
+                              search: name,
+                              onlyOnSale: false,
+                              sortBy: SortBy.NEWEST,
+                              section: Section.ENS
+                            })}
+                            target="_blank"
+                            rel="noopener noreferrer"
                           >
                             {t('names_page.marketplace')}
                             <Icon name="external" />
-                          </div>
+                          </a>
                         )
                       })}
                     </>
                   )}
                 </div>
-              ) : name && !hasNameMinLength(name) ? (
+              ) : name && (!hasNameMinLength(name) || !isNameValid(name)) ? (
                 <div className={styles.availableContainer}>
                   <Icon
                     className={styles.warningIcon}
-                    name="exclamation triangle"
+                    name={
+                      nameInvalidType === NameInvalidType.TOO_SHORT
+                        ? 'exclamation triangle'
+                        : 'close'
+                    }
                   />
-                  {t('names_page.name_too_short')}
+                  {nameInvalidType === NameInvalidType.TOO_SHORT
+                    ? t('names_page.name_too_short')
+                    : nameInvalidType === NameInvalidType.TOO_LONG
+                    ? t('names_page.name_too_long')
+                    : nameInvalidType === NameInvalidType.HAS_SPACES
+                    ? t('names_page.has_spaces')
+                    : t('names_page.invalid_characters')}
                 </div>
               ) : null}
             </div>
@@ -327,7 +378,7 @@ const MintNamePage = (props: Props) => {
             </span>
           </div>
           <div className={styles.ctasContainer}>
-            <h2>{t('names_page.why_names')}</h2>
+            <h1>{t('names_page.why_names')}</h1>
             <div className={styles.cardsContainer}>
               {cards.map((card, index) => (
                 <div key={index} className={styles.card}>
@@ -353,7 +404,7 @@ const MintNamePage = (props: Props) => {
                     <img src={Chest} alt="Chest" />
                   </div>
                   <div>
-                    <h3> {t('names_page.ctas.name_taken.title')}</h3>
+                    <h2> {t('names_page.ctas.name_taken.title')}</h2>
                     <span> {t('names_page.ctas.name_taken.description')}</span>
                     <Button onClick={() => onBrowse()}>
                       {t('names_page.browse_names_being_resold')}
@@ -367,7 +418,7 @@ const MintNamePage = (props: Props) => {
                     <img src={Passports} alt="passports" />
                   </div>
                   <div style={{ justifyContent: 'center' }}>
-                    <h3> {t('names_page.ctas.manage.title')}</h3>
+                    <h2> {t('names_page.ctas.manage.title')}</h2>
                     <Button
                       inverted
                       as={'a'}

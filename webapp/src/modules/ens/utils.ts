@@ -39,6 +39,27 @@ export function isNameValid(name: string): boolean {
   return nameRegex.test(name)
 }
 
+export enum NameInvalidType {
+  INVALID_CHARACTERS,
+  HAS_SPACES,
+  TOO_LONG,
+  TOO_SHORT
+}
+
+export function getNameInvalidType(name: string): NameInvalidType | null {
+  if (isNameValid(name)) {
+    return null
+  } else if (name.length > MAX_NAME_SIZE) {
+    return NameInvalidType.TOO_LONG
+  } else if (name.length < MIN_NAME_SIZE) {
+    return NameInvalidType.TOO_SHORT
+  }
+  const hasSpaces = /\s/.test(name)
+  return hasSpaces
+    ? NameInvalidType.HAS_SPACES
+    : NameInvalidType.INVALID_CHARACTERS
+}
+
 export function hasNameMinLength(name: string): boolean {
   return name.length >= MIN_NAME_SIZE
 }
