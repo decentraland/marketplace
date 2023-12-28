@@ -69,7 +69,8 @@
     "now": "ahora",
     "actions": "Acciones",
     "action_required": "Acción requerida",
-    "finish": "Terminar"
+    "finish": "Terminar",
+    "guest": "Invitado"
   },
   "search_dropdown": {
     "recent": "Reciente",
