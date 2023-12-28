@@ -69,7 +69,8 @@
     "now": "现在",
     "actions": "行动",
     "action_required": "需要采取的行动",
-    "finish": "结束"
+    "finish": "结束",
+    "guest": "客人"
   },
   "search_dropdown": {
     "recent": "最近的",

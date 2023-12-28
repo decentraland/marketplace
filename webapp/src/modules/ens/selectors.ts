@@ -24,21 +24,17 @@ export const isWaitingTxClaimName = createSelector<
 )
 
 export const getClaimNameStatus = (state: RootState) => {
-  console.log('here1')
   if (isLoadingType(getLoading(state), CLAIM_NAME_REQUEST)) {
     return AuthorizationStepStatus.WAITING
   }
-  console.log('here2')
 
   if (isWaitingTxClaimName(state)) {
     return AuthorizationStepStatus.PROCESSING
   }
-  console.log('here3')
 
   if (getError(state)) {
     return AuthorizationStepStatus.ERROR
   }
-  console.log('here4')
 
   return AuthorizationStepStatus.PENDING
 }

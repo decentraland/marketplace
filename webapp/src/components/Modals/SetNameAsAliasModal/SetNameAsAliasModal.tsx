@@ -1,6 +1,9 @@
-import { ModalNavigation, Button, Form, Icon } from 'decentraland-ui'
+import classNames from 'classnames'
+import { ModalNavigation, Button, Form, Icon, Profile } from 'decentraland-ui'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import VerifiedIcon from '../../../images/verified.svg'
+import UserIcon from '../../../images/user-circle.svg'
 import { Props } from './SetNameAsAliasModal.types'
 import './SetNameAsAliasModal.css'
 
@@ -16,6 +19,7 @@ const SetNameAsAliasModal = ({
     name === profile?.avatars[0].name &&
     profile?.avatars[0].hasClaimedName &&
     !isLoading
+
   return (
     <Modal
       name={name}
@@ -43,19 +47,47 @@ const SetNameAsAliasModal = ({
             />
           </div>
           <div className="card">
-            {profile ? (
-              successOnSetAlias ? (
-                <>
+            {profile && successOnSetAlias && address ? (
+              <div className="successContainer">
+                <Profile
+                  address={address}
+                  avatar={profile.avatars[0]}
+                  inline={false}
+                  size="massive"
+                  imageOnly
+                />
+                <div className="verified">
                   <span>{profile.avatars[0].name}</span>
-                </>
-              ) : (
-                <>
-                  <span>{profile.avatars[0].name}</span>
-                  <Icon name="chevron right" />
-                  <span>{name}</span>
-                </>
-              )
+                  <img src={VerifiedIcon} alt="verified icon" />
+                </div>
+              </div>
             ) : null}
+            <>
+              <div
+                className={classNames(
+                  profile?.avatars[0].hasClaimedName ? 'verified' : 'unverified'
+                )}
+              >
+                <span>
+                  {profile
+                    ? profile.avatars[0].hasClaimedName
+                      ? profile.avatars[0].name
+                      : `${profile.avatars[0].name}#${address?.slice(-4)}`
+                    : `${t('global.guest')}#4567`}
+                </span>
+                <img src={UserIcon} alt="user icon" />
+                {profile?.avatars[0].hasClaimedName ? (
+                  <img src={VerifiedIcon} alt="verified icon" />
+                ) : null}
+              </div>
+              <Icon name="chevron right" />
+              <Icon name="chevron right" />
+              <Icon name="chevron right" />
+              <div className="verified">
+                <span>{name}</span>
+                <img src={VerifiedIcon} alt="verified icon" />
+              </div>
+            </>
           </div>
         </Modal.Content>
         <Modal.Actions>

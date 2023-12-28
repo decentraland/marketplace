@@ -71,7 +71,8 @@
     "now": "now",
     "actions": "Actions",
     "action_required": "Action required",
-    "finish": "Finish"
+    "finish": "Finish",
+    "guest": "Guest"
   },
   "search_dropdown": {
     "recent": "Recent",
