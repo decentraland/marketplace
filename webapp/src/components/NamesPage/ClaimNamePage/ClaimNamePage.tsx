@@ -11,6 +11,8 @@ import {
   Popup
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import NetworkButton from 'decentraland-dapps/dist/containers/NetworkButton'
+import { Network } from '@dcl/schemas'
 import infoIcon from '../../../images/infoIcon.png'
 import ClaimNameImage from '../../../images/claim-name.svg'
 import ClaimNameBanner from '../../../images/claim-name-banner.png'
@@ -73,7 +75,9 @@ const ClaimNamePage = (props: Props) => {
 
   const handleNameChange = useCallback(
     async text => {
-      if (isNameValid(text) && hasNameMinLength(text)) {
+      const valid = isNameValid(text)
+      const minLength = hasNameMinLength(text)
+      if (valid && minLength) {
         try {
           if (bannedNames?.includes(text.toLocaleLowerCase())) {
             setIsAvailable(undefined)
@@ -307,13 +311,37 @@ const ClaimNamePage = (props: Props) => {
                 {isLoadingStatus ? <Loader active inline size="tiny" /> : null}
                 {renderRemainingCharacters()}
               </div>
-              <Button
-                primary
-                onClick={handleClaim}
-                disabled={!isAvailable || nameInvalidType !== null}
-              >
-                {t('names_page.claim_a_name')}
-              </Button>
+              {wallet && currentMana && isEnoughClaimMana(currentMana) ? (
+                <Button
+                  primary
+                  onClick={handleClaim}
+                  disabled={!isAvailable || nameInvalidType !== null}
+                >
+                  {t('names_page.claim_a_name')}
+                </Button>
+              ) : (
+                <Popup
+                  className="modal-tooltip"
+                  content={t('names_page.not_enough_mana')}
+                  position="top center"
+                  trigger={
+                    <div className="popup-button">
+                      <NetworkButton
+                        type="submit"
+                        primary
+                        disabled={true}
+                        network={Network.ETHEREUM}
+                      >
+                        {t('names_page.claim_a_name')}
+                      </NetworkButton>
+                    </div>
+                  }
+                  hideOnScroll={true}
+                  on="hover"
+                  inverted
+                />
+              )}
+
               {name &&
               hasNameMinLength(name) &&
               isNameValid(name) &&

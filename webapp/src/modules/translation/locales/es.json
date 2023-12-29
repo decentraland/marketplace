@@ -1568,6 +1568,7 @@
     "has_spaces": "Los Nombres no peuden contener espacios",
     "name_too_long": "Los Nombres pueden tener hasta 15 caracteres",
     "invalid_characters": "Los nombres no pueden contener caraceteres no alfa-numericos",
+    "not_enough_mana": "No tienes suficiente MANA para reclamar un nuevo nombre",
     "claim_name_fat_finger_modal": {
       "title": "Por favor confirmar tu nombre",
       "description": "Eelegiste {name}. Entra nuevamente el nombre para confirmar tu selección.",

@@ -1572,6 +1572,7 @@
     "has_spaces": "名称不能包含空格。",
     "name_too_long": "名称最多可包含 15 个字符。",
     "invalid_characters": "名称不能包含任何非字母数字字符。",
+    "not_enough_mana": "您没有足够的 MANA 来申请新名称",
     "claim_name_fat_finger_modal": {
       "title": "请确认您的新名称",
       "description": "您已选择{name}。重新输入您的姓名以确认您的选择。",

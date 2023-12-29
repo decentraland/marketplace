@@ -1581,6 +1581,7 @@
     "has_spaces": "Names can’t contain spaces.",
     "name_too_long": "NAMEs can contain up to 15 characters.",
     "invalid_characters": "Names can’t include any non-alphanumeric characters.",
+    "not_enough_mana": "You don't have enough MANA to claim a new name",
     "claim_name_fat_finger_modal": {
       "title": "Please confirm your new name",
       "description": "You have chosen {name}. Re-enter your name to confirm your selection.",
