@@ -9,7 +9,7 @@ export type Props = ModalProps & {
   isLoading: boolean
   address?: string
   metadata: {
-    originalName: string
+    name: string
   }
   onClaim: typeof claimNameRequest
   onClaimNameClear: typeof claimNameClear
