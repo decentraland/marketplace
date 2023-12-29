@@ -32,7 +32,7 @@ import { StatusPage } from '../BuyPage/StatusPage'
 import { ListPage } from '../ListPage'
 import { ProtectedRoute } from '../ProtectedRoute'
 import { ListsPage } from '../ListsPage'
-import { MintNamePage } from '../NamesPage/MintName'
+import { ClaimNamePage } from '../NamesPage/ClaimNamePage'
 import { Props } from './Routes.types'
 
 const Routes = ({ inMaintenance }: Props) => {
@@ -63,7 +63,7 @@ const Routes = ({ inMaintenance }: Props) => {
     <>
       <Switch>
         <Route exact path={locations.lands()} component={LandsPage} />
-        <Route exact path={locations.mintName()} component={MintNamePage} />
+        <Route exact path={locations.claimName()} component={ClaimNamePage} />
         <Route exact path={locations.names()} component={NamesPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
         <Route path={locations.campaign()} component={CampaignBrowserPage} />

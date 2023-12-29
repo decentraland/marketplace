@@ -1,37 +1,37 @@
-.mintNamePageContainer {
+.claimNamePageContainer {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.mintNamePageContainer .card {
+.claimNamePageContainer .card {
   background-color: var(--card);
   border-radius: 16px;
   padding: 24px;
   margin-top: 12px;
 }
 
-.mintNamePage {
+.claimNamePage {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex: 1;
 }
 
-.mintNamePage .card.claimContainer :global(.dcl.close) {
+.claimNamePage .card.claimContainer :global(.dcl.close) {
   position: absolute;
   background: none;
   right: 12px;
   top: 12px;
 }
 
-.mintNamePage .buttons {
+.claimNamePage .buttons {
   display: flex;
   height: 100%;
   padding: 46px 0;
 }
 
-.mintNamePage .buttons > div + div {
+.claimNamePage .buttons > div + div {
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -39,24 +39,24 @@
   margin-left: 38px;
 }
 
-.mintNamePage .buttons > div + div :global(.ui.button:hover) {
+.claimNamePage .buttons > div + div :global(.ui.button:hover) {
   background-color: white;
   color: black;
 }
 
-.mintNamePage .buttons img {
+.claimNamePage .buttons img {
   padding-left: 44px;
 }
 
-.mintNamePage .buttons :global(.button) {
+.claimNamePage .buttons :global(.button) {
   margin-top: auto;
 }
 
-.mintNamePage .buttons :global(.ui.button + .ui.button) {
+.claimNamePage .buttons :global(.ui.button + .ui.button) {
   margin-left: 0;
 }
 
-.mintNamePage .availableContainer {
+.claimNamePage .availableContainer {
   background-color: rgba(32, 17, 22, 0.75);
   padding: 16px;
   border-radius: 4px;
@@ -66,13 +66,13 @@
   width: 100%;
 }
 
-.mintNamePage .cardsContainer button,
-.mintNamePage .cardsContainer :global(.ui.button.inverted) {
+.claimNamePage .cardsContainer button,
+.claimNamePage .cardsContainer :global(.ui.button.inverted) {
   background-color: white;
   color: #161518;
 }
 
-.mintNamePage .nameTakenCard {
+.claimNamePage .nameTakenCard {
   display: flex;
   align-items: center;
   height: 250px;
@@ -82,7 +82,7 @@
   flex: 1;
 }
 
-.mintNamePage .manageNames {
+.claimNamePage .manageNames {
   display: flex;
   align-items: center;
   height: 250px;
@@ -91,11 +91,11 @@
   flex: 1;
 }
 
-.mintNamePage > div + div {
+.claimNamePage > div + div {
   display: flex;
 }
 
-.mintNamePage .marketplaceLinkContainer {
+.claimNamePage .marketplaceLinkContainer {
   margin-left: 4px;
   text-decoration: underline;
   font-weight: bold;
@@ -103,19 +103,19 @@
   display: flex;
 }
 
-.mintNamePage .marketplaceLinkContainer :global(.icon) {
+.claimNamePage .marketplaceLinkContainer :global(.icon) {
   margin-left: 4px;
 }
 
-.mintNamePage .availableContainer :global(.check.icon::before) {
+.claimNamePage .availableContainer :global(.check.icon::before) {
   color: #34ce76;
 }
 
-.mintNamePage .availableContainer :global(.close.icon::before) {
+.claimNamePage .availableContainer :global(.close.icon::before) {
   color: #ff2d55;
 }
 
-.mintNamePage .nameCostNetwork {
+.claimNamePage .nameCostNetwork {
   color: #a09ba8;
   font-size: 16px;
   font-style: normal;
@@ -123,14 +123,14 @@
   line-height: 24px;
 }
 
-.mintNamePage .nameCost {
+.claimNamePage .nameCost {
   margin-top: 74px;
   transition: opacity 1s ease; /* Adjust the duration as needed */
   position: relative;
   margin-left: -14px;
 }
 
-.mintNamePage .mainContainer .claimContainer .nameCost img {
+.claimNamePage .mainContainer .claimContainer .nameCost img {
   opacity: 1;
   left: 100%;
   top: 6px;
@@ -138,15 +138,15 @@
   margin-left: 4px;
 }
 
-.mintNamePage .nameCost :global(.dcl.mana .symbol) {
+.claimNamePage .nameCost :global(.dcl.mana .symbol) {
   padding: 0;
 }
 
-.mintNamePage .fadeOut {
+.claimNamePage .fadeOut {
   opacity: 0;
 }
 
-.mintNamePage .claimContainer {
+.claimNamePage .claimContainer {
   display: flex;
   flex-direction: column;
   border: 1px solid var(--divider);
@@ -165,23 +165,23 @@
   align-items: center;
 }
 
-.mintNamePage .mainContainer .claimContainer {
+.claimNamePage .mainContainer .claimContainer {
   position: relative;
 }
 
-.mintNamePage .mainContainer .imageContainer {
+.claimNamePage .mainContainer .imageContainer {
   position: relative;
   height: 192px;
   display: flex;
 }
 
-.mintNamePage .mainContainer .imagePassportContainer {
+.claimNamePage .mainContainer .imagePassportContainer {
   display: flex;
   flex-direction: column;
   margin-top: auto;
 }
 
-.mintNamePage .mainContainer .claimContainer img {
+.claimNamePage .mainContainer .claimContainer img {
   position: absolute;
   top: 0;
   left: calc(50% - 45px);
@@ -189,23 +189,23 @@
   transition: opacity 0.5s ease;
 }
 
-.mintNamePage .mainContainer .claimContainer img.banner {
+.claimNamePage .mainContainer .claimContainer img.banner {
   left: 90px;
 }
 
-.mintNamePage .claimContainer .banner {
+.claimNamePage .claimContainer .banner {
   height: 200px;
 }
 
-.mintNamePage .claimContainer img.visible {
+.claimNamePage .claimContainer img.visible {
   opacity: 1;
 }
 
-.mintNamePage .claimContainer .passportLogo {
+.claimNamePage .claimContainer .passportLogo {
   margin-top: 10px;
 }
 
-.mintNamePage .claimContainer h2 {
+.claimNamePage .claimContainer h2 {
   color: #fff;
   font-size: 48px;
   font-weight: 700;
@@ -213,12 +213,12 @@
   margin-bottom: 8px;
 }
 
-.mintNamePage .claimContainer .subtitle {
+.claimNamePage .claimContainer .subtitle {
   font-size: 24px;
   line-height: 36px;
 }
 
-.mintNamePage .claimInput {
+.claimNamePage .claimInput {
   position: relative;
   display: flex;
   margin-top: 40px;
@@ -228,11 +228,11 @@
   cursor: pointer;
 }
 
-.mintNamePage .claimInput :global(.ui.input) {
+.claimNamePage .claimInput :global(.ui.input) {
   align-items: baseline;
 }
 
-.mintNamePage .claimInput :global(.dcl.field.simple) {
+.claimNamePage .claimInput :global(.dcl.field.simple) {
   display: flex;
   align-items: center;
   padding-left: 24px;
@@ -242,7 +242,7 @@
   border-right: none;
 }
 
-.mintNamePage .claimContainer :global(.dcl.field .ui.input input::after) {
+.claimNamePage .claimContainer :global(.dcl.field .ui.input input::after) {
   content: '.dcl.eth';
   position: absolute;
   right: 0;
@@ -256,25 +256,25 @@
   pointer-events: none; /* Ignore pointer events */
 }
 
-.mintNamePage .claimContainer :global(.dcl.field .ui.input input) {
+.claimNamePage .claimContainer :global(.dcl.field .ui.input input) {
   border-bottom: 0;
   padding: 0;
 }
 
-.mintNamePage .claimContainer .remainingCharactersContainer {
+.claimNamePage .claimContainer .remainingCharactersContainer {
   position: absolute;
   right: 170px;
   top: 13px;
 }
 
-.mintNamePage
+.claimNamePage
   .claimContainer
   .remainingCharactersContainer
   :global(.ui.tiny.active.inline.loader) {
   margin-right: 12px;
 }
 
-.mintNamePage .claimContainer .remainingCharacters {
+.claimNamePage .claimContainer .remainingCharacters {
   color: #a09ba8;
   font-size: 12px;
   font-weight: 700;
@@ -283,46 +283,46 @@
   top: 13px;
 }
 
-.mintNamePage .claimContainer .inputSuffix {
+.claimNamePage .claimContainer .inputSuffix {
   color: #a09ba8;
   font-size: 16px;
   font-weight: 400;
   line-height: normal;
 }
 
-.mintNamePage .claimContainer :global(.ui.primary.button) {
+.claimNamePage .claimContainer :global(.ui.primary.button) {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.mintNamePage .claimContainer :global(.message) {
+.claimNamePage .claimContainer :global(.message) {
   display: none;
 }
 
-.mintNamePage .mainContainer {
+.claimNamePage .mainContainer {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.mintNamePage .ctasContainer {
+.claimNamePage .ctasContainer {
   text-align: center;
   width: 100%;
   margin-top: 40px;
 }
 
-.mintNamePage .ctasContainer h1 {
+.claimNamePage .ctasContainer h1 {
   margin-bottom: 16px;
 }
 
-.mintNamePage .ctasContainer .cardsContainer {
+.claimNamePage .ctasContainer .cardsContainer {
   display: grid;
   grid-gap: 20px;
   grid-auto-flow: column;
   margin-bottom: 52px;
 }
 
-.mintNamePage .ctasContainer .card {
+.claimNamePage .ctasContainer .card {
   background-color: #242129;
   height: 209px;
   width: 305px;
@@ -332,25 +332,25 @@
   flex-direction: column;
 }
 
-.mintNamePage .ctasContainer .card span {
+.claimNamePage .ctasContainer .card span {
   font-size: 16px;
   font-weight: 700;
 }
 
-.mintNamePage .ctasContainer .learnMore {
+.claimNamePage .ctasContainer .learnMore {
   color: #ffa25a;
 }
 
-.mintNamePage .ctasContainer .voting {
+.claimNamePage .ctasContainer .voting {
   color: #ecebed;
 }
 
-.mintNamePage .ctasContainer .nameLink {
+.claimNamePage .ctasContainer .nameLink {
   color: #ecebed;
   text-decoration: underline;
 }
 
-.mintNamePage .ctasContainer .card p {
+.claimNamePage .ctasContainer .card p {
   color: #a09ba8;
   font-size: 14px;
   font-style: normal;
@@ -359,7 +359,7 @@
   padding-top: 2px;
 }
 
-.mintNamePage .ctasContainer .whyImgContainer {
+.claimNamePage .ctasContainer .whyImgContainer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -367,135 +367,153 @@
   background-color: #2d2c2f;
 }
 
-.mintNamePage .ctasContainer .whyTextContainer {
+.claimNamePage .ctasContainer .whyTextContainer {
   height: 116px;
   text-align: left;
   padding: 16px 12px;
 }
 
-.mintNamePage .ctasContainer .whyImgContainer.standOut {
+.claimNamePage .ctasContainer .whyImgContainer.standOut {
   align-items: flex-end;
 }
 
-.mintNamePage .warningIcon {
+.claimNamePage .warningIcon {
   color: #ffa25a;
   margin-right: 8px;
 }
 
-.mintNamePage .informationTooltip {
+.claimNamePage .informationTooltip {
   width: 14px;
   height: 14px;
 }
 
 @media (max-width: 768px) {
-  .mintNamePage .claimContainer {
+  .claimNamePage .claimContainer {
     height: 587px;
     margin: 0;
     padding: 12px;
   }
 
-  .mintNamePage .mainContainer .imageContainer {
+  .claimNamePage .mainContainer .imageContainer {
     height: 222px;
   }
 
-  .mintNamePage .mainContainer:global(.ui.container) {
+  .claimNamePage .mainContainer:global(.ui.container) {
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 12px;
   }
 
-  .mintNamePage .claimContainer h2 {
+  .claimNamePage .claimContainer h2 {
     font-size: 30px;
     text-align: center;
   }
 
-  .mintNamePage .claimContainer .subtitle {
+  .claimNamePage .claimContainer .subtitle {
     font-size: 20px;
   }
 
-  .mintNamePage .ctasContainer .cardsContainer {
+  .claimNamePage .ctasContainer .cardsContainer {
     width: 100%;
     overflow-x: scroll;
     padding: 0 16px;
   }
 
-  .mintNamePage .ctasContainer .cardsContainer:last-of-type {
-    flex-direction: column;
+  .claimNamePage .ctasContainer .cardsContainer:last-of-type {
+    grid-auto-flow: row;
+    overflow: visible;
   }
 
-  .mintNamePage .nameTakenCard {
+  .claimNamePage .nameTakenCard {
     margin-right: 0;
     margin-bottom: 16px;
     justify-content: center;
+    height: unset;
+    padding: 0 12px;
   }
 
-  .mintNamePage .nameTakenCard .buttons,
-  .mintNamePage .manageNames .buttons {
+  .claimNamePage .nameTakenCard .buttons,
+  .claimNamePage .manageNames .buttons {
     flex-direction: column;
   }
 
-  .mintNamePage .manageNames .buttons,
-  .mintNamePage .nameTakenCard .buttons div {
+  .claimNamePage .manageNames .buttons,
+  .claimNamePage .nameTakenCard .buttons div {
     align-items: center;
   }
 
-  .mintNamePage .buttons > div + div {
+  .claimNamePage .buttons > div + div {
     margin-left: 0;
   }
 
-  .mintNamePage .nameTakenCard .buttons div button {
+  .claimNamePage .nameTakenCard .buttons div button {
     margin-top: 28px;
   }
 
-  .mintNamePage .claimInput {
+  .claimNamePage .claimInput {
     flex-direction: column;
     width: 100%;
   }
 
-  .mintNamePage .claimContainer .remainingCharactersContainer {
+  .claimNamePage .claimContainer .remainingCharactersContainer {
     right: 12px;
     top: 6px;
   }
 
-  .mintNamePage .claimContainer :global(.ui.primary.button) {
+  .claimNamePage .claimContainer :global(.ui.primary.button) {
     min-height: 48px;
     border-radius: 6px;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
   }
-  .mintNamePage .claimInput :global(.dcl.field.simple) {
+
+  .claimNamePage .claimInput :global(.dcl.field.simple) {
     min-height: 100%;
+    min-width: 100%;
+    border: 1px solid var(--bluish-steel);
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: none;
   }
 
-  .mintNamePage .nameCost {
+  .claimNamePage .nameCost {
     text-align: center;
     margin-top: 72px;
+    margin-left: 0;
   }
 
-  .mintNamePage .mainContainer .claimContainer img.banner {
+  .claimNamePage .mainContainer .claimContainer .nameCost img {
+    left: 92%;
+  }
+
+  .claimNamePage .mainContainer .claimContainer img.banner {
     left: 0;
     width: 340px;
     height: 129px;
     top: 50px;
   }
 
-  .mintNamePage .mainContainer .ctasContainer .card {
+  .claimNamePage .mainContainer .ctasContainer .card {
     margin-right: 20px;
   }
 
-  .mintNamePage .manageNames {
+  .claimNamePage .manageNames {
     justify-content: center;
+    height: unset;
+    padding: 0 12px;
   }
 
-  .mintNamePage .buttons img {
+  .claimNamePage .buttons img {
     padding-left: 0;
   }
 
-  .mintNamePage .availableContainer {
+  .claimNamePage .availableContainer {
     top: 97px;
   }
 
-  .mintNamePage .ctasContainer .card {
+  .claimNamePage .ctasContainer .card {
     min-width: 305px;
   }
 }

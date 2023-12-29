@@ -39,12 +39,12 @@ import { Navbar } from '../../Navbar'
 import { Footer } from '../../Footer'
 import { Navigation } from '../../Navigation'
 import { Mana } from '../../Mana'
-import { Props } from './MintNamePage.types'
-import styles from './MintNamePage.module.css'
+import { Props } from './ClaimNamePage.types'
+import styles from './ClaimNamePage.module.css'
 
 const PLACEHOLDER_WIDTH = '94px'
 
-const MintNamePage = (props: Props) => {
+const ClaimNamePage = (props: Props) => {
   const PLACEHOLDER_NAME = t('names_page.your_name')
   const {
     wallet,
@@ -107,16 +107,21 @@ const MintNamePage = (props: Props) => {
   )
 
   useEffect(() => {
+    let cancel = false
     if (
       name !== PLACEHOLDER_NAME &&
       name.length &&
       hasNameMinLength(name) &&
-      isNameValid(name)
+      isNameValid(name) &&
+      !cancel
     ) {
       setIsLoadingStatus(true)
-    } else if (!isNameValid(name)) {
+    } else if (!isNameValid(name) && !cancel) {
       // turn off loading if an invalid character is typed
       setIsLoadingStatus(false)
+    }
+    return () => {
+      cancel = true
     }
   }, [PLACEHOLDER_NAME, name])
 
@@ -146,6 +151,7 @@ const MintNamePage = (props: Props) => {
 
   const [inputWidth, setInputWidth] = useState(PLACEHOLDER_WIDTH)
 
+  // this fn is used to update the width of the input field so it has the suffix in the right place
   const updateWidth = (value: string) => {
     if (inputRef.current) {
       // Use a temporary span to measure the width of the input's content
@@ -242,10 +248,10 @@ const MintNamePage = (props: Props) => {
   }, [])
 
   return (
-    <div className={styles.mintNamePageContainer}>
+    <div className={styles.claimNamePageContainer}>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.NAMES} />
-      <div className={styles.mintNamePage}>
+      <div className={styles.claimNamePage}>
         <Container className={styles.mainContainer}>
           <div className={classNames(styles.claimContainer, styles.card)}>
             {isInputFocus ? (
@@ -473,4 +479,4 @@ const MintNamePage = (props: Props) => {
   )
 }
 
-export default React.memo(MintNamePage)
+export default React.memo(ClaimNamePage)

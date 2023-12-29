@@ -14,9 +14,9 @@ import {
   MapDispatch,
   MapDispatchProps,
   MapStateProps
-} from './MintNamePage.types'
+} from './ClaimNamePage.types'
 import { RootState } from '../../../modules/reducer'
-import MintNamePage from './MintNamePage'
+import ClaimNamePage from './ClaimNamePage'
 
 const mapState = (state: RootState): MapStateProps => ({
   currentMana: getMana(state, Network.ETHEREUM),
@@ -32,4 +32,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onRedirect: path => dispatch(replace(path))
 })
 
-export default connect(mapState, mapDispatch)(MintNamePage)
+export default connect(mapState, mapDispatch)(ClaimNamePage)

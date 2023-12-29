@@ -22,8 +22,8 @@ export const locations = {
     const params = getSearchParams(options)
     return params ? `/names/browse?${params.toString()}` : '/names/browse'
   },
-  mintName: () => {
-    return '/names/mint'
+  claimName: () => {
+    return '/names/claim'
   },
   collection: (contractAddress: string = ':contractAddress') =>
     `/collections/${contractAddress}`,

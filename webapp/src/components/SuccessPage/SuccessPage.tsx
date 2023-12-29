@@ -113,7 +113,7 @@ export function SuccessPage(props: Props) {
                               as={Link}
                               className={styles.successButton}
                               secondary
-                              to={locations.mintName()}
+                              to={locations.claimName()}
                             >
                               {t('success_page.success_state.mint_more_names')}
                             </Button>
