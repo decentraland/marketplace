@@ -62,32 +62,38 @@ const SetNameAsAliasModal = ({
                 </div>
               </div>
             ) : null}
-            <>
-              <div
-                className={classNames(
-                  profile?.avatars[0].hasClaimedName ? 'verified' : 'unverified'
-                )}
-              >
-                <span>
-                  {profile
-                    ? profile.avatars[0].hasClaimedName
-                      ? profile.avatars[0].name
-                      : `${profile.avatars[0].name}#${address?.slice(-4)}`
-                    : `${t('global.guest')}#4567`}
-                </span>
-                <img src={UserIcon} alt="user icon" />
-                {profile?.avatars[0].hasClaimedName ? (
+            {!successOnSetAlias ? (
+              <>
+                <div
+                  className={classNames(
+                    profile?.avatars[0].hasClaimedName
+                      ? 'verified'
+                      : 'unverified'
+                  )}
+                >
+                  <span>
+                    {profile
+                      ? profile.avatars[0].hasClaimedName
+                        ? profile.avatars[0].name
+                        : `${profile.avatars[0].name}#${address?.slice(-4)}`
+                      : `${t('global.guest')}#4567`}
+                  </span>
+
+                  {profile?.avatars[0].hasClaimedName ? (
+                    <img src={VerifiedIcon} alt="verified icon" />
+                  ) : (
+                    <img src={UserIcon} alt="user icon" />
+                  )}
+                </div>
+                <Icon name="chevron right" />
+                <Icon name="chevron right" />
+                <Icon name="chevron right" />
+                <div className="verified">
+                  <span>{name}</span>
                   <img src={VerifiedIcon} alt="verified icon" />
-                ) : null}
-              </div>
-              <Icon name="chevron right" />
-              <Icon name="chevron right" />
-              <Icon name="chevron right" />
-              <div className="verified">
-                <span>{name}</span>
-                <img src={VerifiedIcon} alt="verified icon" />
-              </div>
-            </>
+                </div>
+              </>
+            ) : null}
           </div>
         </Modal.Content>
         <Modal.Actions>
