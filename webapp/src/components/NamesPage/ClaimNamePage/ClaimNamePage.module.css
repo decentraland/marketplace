@@ -37,6 +37,7 @@
   height: 100%;
   text-align: start;
   margin-left: 38px;
+  justify-content: center;
 }
 
 .claimNamePage .buttons > div + div :global(.ui.button:hover) {
@@ -49,7 +50,7 @@
 }
 
 .claimNamePage .buttons :global(.button) {
-  margin-top: auto;
+  margin-top: 16px;
 }
 
 .claimNamePage .buttons :global(.ui.button + .ui.button) {
@@ -70,6 +71,7 @@
 .claimNamePage .cardsContainer :global(.ui.button.inverted) {
   background-color: white;
   color: #161518;
+  margin-top: 12px;
 }
 
 .claimNamePage .nameTakenCard {
