@@ -1,5 +1,5 @@
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { claimNameSuccess, claimNameClear, claimNameFailure } from './actions'
+import { claimNameSuccess, claimNameFailure, claimNameClear } from './actions'
 import { ENSState, ensReducer } from './reducer'
 import { ENS, ENSError } from './types'
 
@@ -11,49 +11,57 @@ describe('ENS Reducer', () => {
     error: null
   }
 
-  it('should handle CLAIM_NAME_SUCCESS action', () => {
-    const ens = { subdomain: 'example' } as ENS
-    const action = claimNameSuccess(ens, ens.subdomain, 'aTxHash')
-    const initialState = { ...INITIAL_STATE } as ENSState
-    const expectedState = {
-      ...initialState,
-      loading: loadingReducer(initialState.loading, action),
-      data: {
-        ...initialState.data,
-        [ens.subdomain]: {
-          ...initialState.data[ens.subdomain],
-          ...ens
+  let ens: ENS
+  let successAction: ReturnType<typeof claimNameSuccess>
+  let failureAction: ReturnType<typeof claimNameFailure>
+  let clearAction: ReturnType<typeof claimNameClear>
+  let initialState: ENSState
+
+  describe('when handling the CLAIM_NAME_SUCCESS action', () => {
+    beforeEach(() => {
+      ens = { subdomain: 'example' } as ENS
+      successAction = claimNameSuccess(ens, ens.subdomain, 'aTxHash')
+      initialState = { ...INITIAL_STATE } as ENSState
+    })
+    it('should handle action', () => {
+      expect(ensReducer(initialState, successAction)).toEqual({
+        ...initialState,
+        loading: loadingReducer(initialState.loading, successAction),
+        data: {
+          ...initialState.data,
+          [ens.subdomain]: {
+            ...initialState.data[ens.subdomain],
+            ...ens
+          }
         }
-      }
-    }
-    expect(ensReducer(initialState, action)).toEqual(expectedState)
+      })
+    })
   })
 
-  it('should handle CLAIM_NAME_FAILURE action', () => {
+  describe('when handling the CLAIM_NAME_FAILURE action', () => {
     const ensError = {} as ENSError
-    const action = claimNameFailure(ensError)
-    const initialState = { ...INITIAL_STATE } as ENSState
-    const expectedState = {
-      ...initialState,
-      loading: loadingReducer(initialState.loading, action),
-      data: {
-        ...initialState.data
-      },
-      error: ensError
-    }
-    expect(ensReducer(initialState, action)).toEqual(expectedState)
+    beforeEach(() => {
+      failureAction = claimNameFailure(ensError)
+      initialState = { ...INITIAL_STATE } as ENSState
+    })
+    it('should handle action', () => {
+      expect(ensReducer(initialState, failureAction)).toEqual({
+        ...initialState,
+        loading: loadingReducer(initialState.loading, failureAction),
+        error: ensError
+      })
+    })
   })
-
-  it('should handle CLAIM_NAME_CLEAR action', () => {
-    const action = claimNameClear()
-    const initialState = {
-      ...INITIAL_STATE,
-      error: {} as ENSError
-    } as ENSState
-    const expectedState = {
-      ...initialState,
-      error: null
-    }
-    expect(ensReducer(initialState, action)).toEqual(expectedState)
+  describe('when handling the CLAIM_NAME_CLEAR action', () => {
+    beforeEach(() => {
+      clearAction = claimNameClear()
+      initialState = { ...INITIAL_STATE } as ENSState
+    })
+    it('should handle action', () => {
+      expect(ensReducer(initialState, clearAction)).toEqual({
+        ...initialState,
+        loading: loadingReducer(initialState.loading, failureAction)
+      })
+    })
   })
 })

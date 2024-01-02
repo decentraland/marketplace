@@ -15,56 +15,81 @@ import {
 import { ENS, ENSError } from './types'
 
 describe('claimName actions', () => {
-  it('should create an action to request a name claim', () => {
-    const name = 'exampleName'
-    const expectedAction = {
-      type: CLAIM_NAME_REQUEST,
-      payload: { name }
-    }
-    expect(claimNameRequest(name)).toEqual(expectedAction)
+  let name: string
+  let subdomain: string
+  let address: string
+  let chainId: ChainId
+  let txHash: string
+  let ens: ENS
+  beforeEach(() => {
+    subdomain = 'example'
+    address = '0xExampleAddress'
+    chainId = ChainId.ETHEREUM_MAINNET // Replace with actual ChainId
+  })
+  describe('when handling the CLAIM_NAME_REQUEST action', () => {
+    beforeEach(() => {
+      name = 'exampleName'
+    })
+    it('should create an action to request a name claim', () => {
+      expect(claimNameRequest(name)).toEqual({
+        type: CLAIM_NAME_REQUEST,
+        payload: { name }
+      })
+    })
   })
 
-  it('should create an action when a name claim transaction is submitted', () => {
-    const subdomain = 'exampleSubdomain'
-    const address = '0xExampleAddress'
-    const chainId = ChainId.ETHEREUM_MAINNET // Replace with actual ChainId
-    const txHash = '0xExampleTxHash'
-    const expectedAction = {
-      type: CLAIM_NAME_TRANSACTION_SUBMITTED,
-      payload: {
-        ...buildTransactionPayload(chainId, txHash, { subdomain, address })
-      }
-    }
-    expect(
-      claimNameTransactionSubmitted(subdomain, address, chainId, txHash)
-    ).toEqual(expectedAction)
+  describe('when handling the CLAIM_NAME_TRANSACTION_SUBMITTED action', () => {
+    beforeEach(() => {
+      txHash = '0xExampleTxHash'
+      subdomain = 'exampleSubdomain'
+      address = '0xExampleAddress'
+      chainId = ChainId.ETHEREUM_MAINNET // Replace with actual ChainId
+    })
+    it('should create an action when a name claim transaction is submitted', () => {
+      expect(
+        claimNameTransactionSubmitted(subdomain, address, chainId, txHash)
+      ).toEqual({
+        type: CLAIM_NAME_TRANSACTION_SUBMITTED,
+        payload: {
+          ...buildTransactionPayload(chainId, txHash, { subdomain, address })
+        }
+      })
+    })
   })
 
-  it('should create an action for successful name claim', () => {
-    const ens = {} as ENS
-    const name = 'exampleName'
-    const txHash = ''
-    const expectedAction = {
-      type: CLAIM_NAME_SUCCESS,
-      payload: { ens, name, txHash }
-    }
-    expect(claimNameSuccess(ens, name, txHash)).toEqual(expectedAction)
+  describe('when handling the CLAIM_NAME_SUCCESS action', () => {
+    beforeEach(() => {
+      name = 'exampleName'
+      txHash = '0xExampleTxHash'
+      ens = {} as ENS
+    })
+    it('should create an action when a name claim is successful', () => {
+      expect(claimNameSuccess({} as ENS, name, txHash)).toEqual({
+        type: CLAIM_NAME_SUCCESS,
+        payload: { ens, name, txHash }
+      })
+    })
   })
 
-  it('should create an action for failed name claim', () => {
-    const error = {} as ENSError
-    const expectedAction = {
-      type: CLAIM_NAME_FAILURE,
-      payload: { error }
-    }
-    expect(claimNameFailure(error)).toEqual(expectedAction)
+  describe('when handling the CLAIM_NAME_FAILURE action', () => {
+    beforeEach(() => {
+      name = 'exampleName'
+    })
+    it('should create an action when a name claim fails', () => {
+      const error = {} as ENSError
+      expect(claimNameFailure(error)).toEqual({
+        type: CLAIM_NAME_FAILURE,
+        payload: { error }
+      })
+    })
   })
 
-  it('should create an action to clear name claim data', () => {
-    const expectedAction = {
-      type: CLAIM_NAME_CLEAR,
-      payload: undefined
-    }
-    expect(claimNameClear()).toEqual(expectedAction)
+  describe('when handling the CLAIM_NAME_CLEAR action', () => {
+    it('should create an action to clear name claim data', () => {
+      expect(claimNameClear()).toEqual({
+        type: CLAIM_NAME_CLEAR,
+        payload: undefined
+      })
+    })
   })
 })

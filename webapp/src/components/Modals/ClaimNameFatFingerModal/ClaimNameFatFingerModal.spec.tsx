@@ -26,7 +26,7 @@ describe('ClaimNameFatFingerModal', () => {
     jest.clearAllMocks()
   })
 
-  describe('before typing the correct name', () => {
+  describe('when there is no name typed', () => {
     it('should have the confirm button disabled', () => {
       const { getByText } = renderWithProviders(
         <ClaimNameFatFingerModal {...baseProps} />
@@ -37,7 +37,7 @@ describe('ClaimNameFatFingerModal', () => {
     })
   })
 
-  describe('after typing the wrong name', () => {
+  describe('when typing the wrong name', () => {
     it('should have the confirm button disabled and show error message', () => {
       const { getByRole, getByText } = renderWithProviders(
         <ClaimNameFatFingerModal {...baseProps} />
@@ -56,7 +56,7 @@ describe('ClaimNameFatFingerModal', () => {
     })
   })
 
-  describe('after typing the correct name', () => {
+  describe('when typing the correct name', () => {
     it('should call onClaim when claim button is clicked', async () => {
       const { getByRole, getByText } = renderWithProviders(
         <ClaimNameFatFingerModal
@@ -80,6 +80,17 @@ describe('ClaimNameFatFingerModal', () => {
       })
       fireEvent.click(claimButton)
       expect(onClaimMock).toHaveBeenCalledWith(name)
+    })
+  })
+
+  describe('while loading', () => {
+    it('should have the confirm button disabled', () => {
+      const { getByText } = renderWithProviders(
+        <ClaimNameFatFingerModal {...baseProps} isLoading />
+      )
+
+      const claimButton = getByText(t('global.confirm'))
+      expect(claimButton).toBeDisabled()
     })
   })
 

@@ -25,7 +25,7 @@ const mapState = (state: RootState): MapState => {
       getLoading(state),
       SET_PROFILE_AVATAR_ALIAS_REQUEST
     ),
-    address: getAddress(state),
+    address,
     profile
   }
 }

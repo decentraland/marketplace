@@ -18,7 +18,7 @@ import styles from './SuccessPage.module.css'
 const EXPLORER_URL = config.get('EXPLORER_URL', '')
 
 export function SuccessPage(props: Props) {
-  const { isLoading, mintedTokenId, onSetNameAsAlias } = props
+  const { isLoading, mintedTokenId, profile, onSetNameAsAlias } = props
   const search = new URLSearchParams(useLocation().search)
   const contractAddress = search.get('contractAddress')
   const tokenId = search.get('tokenId')
@@ -117,15 +117,17 @@ export function SuccessPage(props: Props) {
                             >
                               {t('success_page.success_state.mint_more_names')}
                             </Button>
-                            <Button
-                              className={styles.successButton}
-                              primary
-                              onClick={() => onSetNameAsAlias(asset.name)}
-                            >
-                              {t(
-                                'success_page.success_state.set_as_primary_name'
-                              )}
-                            </Button>
+                            {!!profile && (
+                              <Button
+                                className={styles.successButton}
+                                primary
+                                onClick={() => onSetNameAsAlias(asset.name)}
+                              >
+                                {t(
+                                  'success_page.success_state.set_as_primary_name'
+                                )}
+                              </Button>
+                            )}
                           </>
                         ) : (
                           <Button

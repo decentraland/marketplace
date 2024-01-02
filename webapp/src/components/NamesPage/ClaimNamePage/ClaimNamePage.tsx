@@ -11,8 +11,6 @@ import {
   Popup
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import NetworkButton from 'decentraland-dapps/dist/containers/NetworkButton'
-import { Network } from '@dcl/schemas'
 import infoIcon from '../../../images/infoIcon.png'
 import ClaimNameImage from '../../../images/claim-name.svg'
 import ClaimNameBanner from '../../../images/claim-name-banner.png'
@@ -81,12 +79,11 @@ const ClaimNamePage = (props: Props) => {
         try {
           if (bannedNames?.includes(text.toLocaleLowerCase())) {
             setIsAvailable(undefined)
-            setIsLoadingStatus(false)
           } else {
             const isAvailable = await isNameAvailable(text)
             setIsAvailable(isAvailable)
-            setIsLoadingStatus(false)
           }
+          setIsLoadingStatus(false)
         } catch (error) {
           console.log('error: ', error)
           setIsLoadingStatus(false)
@@ -104,8 +101,10 @@ const ClaimNamePage = (props: Props) => {
           handleNameChange(text)
         }
       }, 1000)
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current)
+      }
       debounceRef.current = timeoutId
-      return () => clearTimeout(timeoutId)
     },
     [handleNameChange]
   )
@@ -116,16 +115,12 @@ const ClaimNamePage = (props: Props) => {
       name !== PLACEHOLDER_NAME &&
       name.length &&
       hasNameMinLength(name) &&
-      isNameValid(name) &&
-      !cancel
+      isNameValid(name)
     ) {
       setIsLoadingStatus(true)
     } else if (!isNameValid(name) && !cancel) {
       // turn off loading if an invalid character is typed
       setIsLoadingStatus(false)
-    }
-    return () => {
-      cancel = true
     }
   }, [PLACEHOLDER_NAME, name])
 
@@ -311,38 +306,32 @@ const ClaimNamePage = (props: Props) => {
                 {isLoadingStatus ? <Loader active inline size="tiny" /> : null}
                 {renderRemainingCharacters()}
               </div>
-              {wallet && currentMana && isEnoughClaimMana(currentMana) ? (
-                <Button
-                  primary
-                  onClick={handleClaim}
-                  disabled={
-                    isLoadingStatus || !isAvailable || nameInvalidType !== null
-                  }
-                >
-                  {t('names_page.claim_a_name')}
-                </Button>
-              ) : (
-                <Popup
-                  className="modal-tooltip"
-                  content={t('names_page.not_enough_mana')}
-                  position="top center"
-                  trigger={
-                    <div className="popup-button">
-                      <NetworkButton
-                        type="submit"
-                        primary
-                        disabled={true}
-                        network={Network.ETHEREUM}
-                      >
-                        {t('names_page.claim_a_name')}
-                      </NetworkButton>
-                    </div>
-                  }
-                  hideOnScroll={true}
-                  on="hover"
-                  inverted
-                />
-              )}
+              <Popup
+                className="modal-tooltip"
+                content={t('names_page.not_enough_mana')}
+                position="top center"
+                trigger={
+                  <div className="popup-button">
+                    <Button
+                      primary
+                      onClick={handleClaim}
+                      disabled={
+                        !isAvailable ||
+                        nameInvalidType !== null ||
+                        (!!currentMana && !isEnoughClaimMana(currentMana))
+                      }
+                    >
+                      {t('names_page.claim_a_name')}
+                    </Button>
+                  </div>
+                }
+                disabled={
+                  !!wallet && !!currentMana && isEnoughClaimMana(currentMana)
+                }
+                hideOnScroll={true}
+                on="hover"
+                inverted
+              />
 
               {name &&
               hasNameMinLength(name) &&
@@ -350,6 +339,7 @@ const ClaimNamePage = (props: Props) => {
               isInputFocus &&
               name !== PLACEHOLDER_NAME &&
               isAvailable !== undefined &&
+              bannedNames !== undefined &&
               !isLoadingStatus ? (
                 <div className={styles.availableContainer}>
                   {isAvailable ? (

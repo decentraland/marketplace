@@ -1,4 +1,4 @@
-import { fireEvent } from '@testing-library/react'
+import { RenderResult, fireEvent } from '@testing-library/react'
 import { AvatarInfo, Profile } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { renderWithProviders } from '../../../utils/test'
@@ -32,33 +32,29 @@ describe('SetNameAsAliasModal', () => {
     isLoadingAuthorization: false
   }
 
-  describe('before the alias is set', () => {
+  describe('when the alias is not set yet', () => {
+    let screen: RenderResult
+    beforeEach(() => {
+      screen = renderWithProviders(<SetNameAsAliasModal {...mockProps} />)
+    })
     it('renders the modal with the base title', () => {
-      const { getByText } = renderWithProviders(
-        <SetNameAsAliasModal {...mockProps} />
-      )
+      const { getByText } = screen
       expect(getByText(t('set_name_as_alias_modal.title'))).toBeInTheDocument()
     })
     it('renders both names showing how it will be changed', () => {
-      const { getByText } = renderWithProviders(
-        <SetNameAsAliasModal {...mockProps} />
-      )
+      const { getByText } = screen
       expect(getByText(newName)).toBeInTheDocument()
       expect(
         getByText(`${previousName}#${mockProps.address.slice(-4)}`)
       ).toBeInTheDocument()
     })
     it('renders the correct actions', () => {
-      const { getByText } = renderWithProviders(
-        <SetNameAsAliasModal {...mockProps} />
-      )
+      const { getByText } = screen
       expect(getByText(t('global.cancel'))).toBeInTheDocument()
       expect(getByText(t('global.confirm'))).toBeInTheDocument()
     })
     it('clicking Confirm should call onSubmit', () => {
-      const { getByText } = renderWithProviders(
-        <SetNameAsAliasModal {...mockProps} />
-      )
+      const { getByText } = screen
       const confirmButton = getByText(t('global.confirm'))
       fireEvent.click(confirmButton)
       expect(mockProps.onSubmit).toHaveBeenCalledWith(
@@ -68,8 +64,9 @@ describe('SetNameAsAliasModal', () => {
     })
   })
 
-  describe('after the alias is set', () => {
+  describe('when the alias is set', () => {
     let updatedProfile: Profile
+    let screen: RenderResult
     beforeEach(() => {
       updatedProfile = {
         avatars: [
@@ -82,35 +79,32 @@ describe('SetNameAsAliasModal', () => {
           }
         ]
       } as Profile
-    })
-    it('renders the success title when the alias is set', () => {
-      const { getByText } = renderWithProviders(
+      screen = renderWithProviders(
         <SetNameAsAliasModal {...mockProps} profile={updatedProfile} />
       )
+    })
+    it('renders the success title when the alias is set', () => {
+      const { getByText } = screen
       expect(
         getByText(t('set_name_as_alias_modal.success_title'))
       ).toBeInTheDocument()
     })
     it('should render the new name and the checked icon', () => {
-      const { getAllByText, getByAltText } = renderWithProviders(
-        <SetNameAsAliasModal {...mockProps} profile={updatedProfile} />
-      )
+      const { getAllByText, getByAltText } = screen
       expect(getAllByText(newName).length).toBeGreaterThan(0)
       expect(getByAltText('verified icon')).toBeInTheDocument()
     })
     it('should render the Finish button', () => {
-      const { getByText } = renderWithProviders(
-        <SetNameAsAliasModal {...mockProps} profile={updatedProfile} />
-      )
+      const { getByText } = screen
       expect(getByText(t('global.finish'))).toBeInTheDocument()
     })
-    it('should call onClose when clicking the Finish button', () => {
-      const { getByText } = renderWithProviders(
-        <SetNameAsAliasModal {...mockProps} profile={updatedProfile} />
-      )
-      const finishButton = getByText(t('global.finish'))
-      fireEvent.click(finishButton)
-      expect(mockProps.onClose).toHaveBeenCalled()
+    describe('and the Finish button is clicked', () => {
+      it('should call onClose', () => {
+        const { getByText } = screen
+        const finishButton = getByText(t('global.finish'))
+        fireEvent.click(finishButton)
+        expect(mockProps.onClose).toHaveBeenCalled()
+      })
     })
   })
 
