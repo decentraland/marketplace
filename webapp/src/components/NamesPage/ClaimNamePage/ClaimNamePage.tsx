@@ -108,7 +108,6 @@ const ClaimNamePage = (props: Props) => {
   )
 
   useEffect(() => {
-    let cancel = false
     if (
       name !== PLACEHOLDER_NAME &&
       name.length &&
@@ -116,7 +115,7 @@ const ClaimNamePage = (props: Props) => {
       isNameValid(name)
     ) {
       setIsLoadingStatus(true)
-    } else if (!isNameValid(name) && !cancel) {
+    } else if (!isNameValid(name)) {
       // turn off loading if an invalid character is typed
       setIsLoadingStatus(false)
     }
@@ -327,7 +326,7 @@ const ClaimNamePage = (props: Props) => {
                     </div>
                   }
                   disabled={
-                    !!wallet && !!currentMana && isEnoughClaimMana(currentMana)
+                    !wallet || !currentMana || !isEnoughClaimMana(currentMana)
                   }
                   hideOnScroll={true}
                   on="hover"

@@ -102,31 +102,37 @@ describe('ENS Saga', () => {
       })
     })
 
-    it('should handle a failure in name claim', () => {
-      const error = new Error('Failed to claim name')
-      return expectSaga(ensSaga)
-        .provide([
-          [select(getWallet), mockWallet],
-          [call(getSigner), {}],
-          [
-            call(
-              [DCLController__factory, 'connect'],
-              CONTROLLER_V2_ADDRESS,
-              signer
-            ),
-            { register: () => Promise.reject(error) }
-          ],
-          [
-            call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer),
-            {
-              ...dclRegistrarContract,
-              getTokenId: () => mockTokenId
-            }
-          ]
-        ])
-        .put(claimNameFailure({ message: error.message }))
-        .dispatch(mockAction)
-        .silentRun()
+    describe('and the claim fails', () => {
+      it('should handle a failure in name claim', () => {
+        const error = new Error('Failed to claim name')
+        return expectSaga(ensSaga)
+          .provide([
+            [select(getWallet), mockWallet],
+            [call(getSigner), {}],
+            [
+              call(
+                [DCLController__factory, 'connect'],
+                CONTROLLER_V2_ADDRESS,
+                signer
+              ),
+              { register: () => Promise.reject(error) }
+            ],
+            [
+              call(
+                [DCLRegistrar__factory, 'connect'],
+                REGISTRAR_ADDRESS,
+                signer
+              ),
+              {
+                ...dclRegistrarContract,
+                getTokenId: () => mockTokenId
+              }
+            ]
+          ])
+          .put(claimNameFailure({ message: error.message }))
+          .dispatch(mockAction)
+          .silentRun()
+      })
     })
   })
 })

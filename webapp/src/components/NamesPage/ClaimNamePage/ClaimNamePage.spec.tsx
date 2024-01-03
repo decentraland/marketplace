@@ -18,8 +18,6 @@ describe('ClaimNamePage', () => {
   let onClaimMock: Props['onClaim']
   let onRedirectMock: Props['onRedirect']
 
-  beforeEach(() => {})
-
   const renderAndTypeText = async (text: string) => {
     const matchers = renderWithProviders(
       <ClaimNamePage
@@ -105,12 +103,39 @@ describe('ClaimNamePage', () => {
       beforeEach(() => {
         ;(isNameAvailable as jest.Mock).mockResolvedValue(true)
       })
-      fit('should have the claim name enabled and call the onClaim when clicking it', async () => {
-        const { getByText } = await renderAndTypeText(validName)
-        const claimButton = getByText(t('names_page.claim_a_name'))
-        await waitFor(() => expect(claimButton).not.toHaveAttribute('disabled'))
-        fireEvent.click(claimButton)
-        expect(onClaimMock).toHaveBeenCalledWith(validName)
+      describe('and has enough funds to claim the NAME', () => {
+        beforeEach(() => {
+          currentManaMock = 100
+          walletMock = {} as Wallet
+          onClaimMock = jest.fn()
+        })
+        it('should have the claim name enabled and call the onClaim when clicking it', async () => {
+          const { getByText } = await renderAndTypeText(validName)
+          const claimButton = getByText(t('names_page.claim_a_name'))
+          await waitFor(() =>
+            expect(claimButton).not.toHaveAttribute('disabled')
+          )
+          fireEvent.click(claimButton)
+          await waitFor(() =>
+            expect(onClaimMock).toHaveBeenCalledWith(validName)
+          )
+        })
+      })
+      describe('and does not have enough funds to claim the NAME', () => {
+        beforeEach(() => {
+          currentManaMock = 99 // 100 is the mana needed
+          walletMock = {} as Wallet
+          onClaimMock = jest.fn()
+        })
+        it('should have the claim name disabled and not call the onClaim when clicking it', async () => {
+          const { getByText } = await renderAndTypeText(validName)
+          const claimButton = getByText(t('names_page.claim_a_name'))
+          await waitFor(() => expect(claimButton).toHaveAttribute('disabled'))
+          fireEvent.click(claimButton)
+          await waitFor(() =>
+            expect(onClaimMock).not.toHaveBeenCalledWith(validName)
+          )
+        })
       })
     })
 

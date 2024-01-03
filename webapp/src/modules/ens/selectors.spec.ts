@@ -68,16 +68,31 @@ describe('ENS Selectors', () => {
   })
 
   describe('isWaitingTxClaimName', () => {
-    beforeEach(() => {
-      state.transaction.data = [
-        {
-          actionType: CLAIM_NAME_TRANSACTION_SUBMITTED,
-          from: state.wallet?.data?.address
-        } as Transaction
-      ]
+    describe('and it is waiting for transaction to claim a name', () => {
+      beforeEach(() => {
+        state.transaction.data = [
+          {
+            actionType: CLAIM_NAME_TRANSACTION_SUBMITTED,
+            from: state.wallet?.data?.address
+          } as Transaction
+        ]
+      })
+      it('should return true', () => {
+        expect(isWaitingTxClaimName(state)).toBe(true)
+      })
     })
-    it('should return true if waiting for a transaction to claim a name', () => {
-      expect(isWaitingTxClaimName(state)).toBe(true)
+    describe('and it is not waiting for transaction to claim a name', () => {
+      beforeEach(() => {
+        state.transaction.data = [
+          {
+            actionType: 'anotherTypeOfAction',
+            from: state.wallet?.data?.address
+          } as Transaction
+        ]
+      })
+      it('should return true', () => {
+        expect(isWaitingTxClaimName(state)).toBe(false)
+      })
     })
   })
 
@@ -118,7 +133,7 @@ describe('ENS Selectors', () => {
     })
 
     describe('and there is an error in the ENS state', () => {
-      it('should return ERROR ', () => {
+      it('should return ERROR', () => {
         state.ens.error = { message: 'An error occurred' }
         expect(getClaimNameStatus(state)).toBe(AuthorizationStepStatus.ERROR)
       })
