@@ -369,6 +369,10 @@
   background-color: #2d2c2f;
 }
 
+.claimNamePage .ctasContainer .whyImgContainer img {
+  height: 100%;
+}
+
 .claimNamePage .ctasContainer .whyTextContainer {
   height: 116px;
   text-align: left;

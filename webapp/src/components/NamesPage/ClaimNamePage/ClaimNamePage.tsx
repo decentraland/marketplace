@@ -14,10 +14,14 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import infoIcon from '../../../images/infoIcon.png'
 import ClaimNameImage from '../../../images/claim-name.svg'
 import ClaimNameBanner from '../../../images/claim-name-banner.png'
-import StandOut from '../../../images/names/stand-out.svg'
-import Unlock from '../../../images/names/unlock.svg'
-import Governance from '../../../images/names/governance.svg'
-import GetURL from '../../../images/names/get-url.svg'
+import CreateImg from '../../../images/names/create.png'
+import GovernanceImg from '../../../images/names/governance.png'
+import LandmarkImg from '../../../images/names/landmark.png'
+import OwnSpaceImg from '../../../images/names/own-space.png'
+// import StandOut from '../../../images/names/stand-out.svg'
+// import Unlock from '../../../images/names/unlock.svg'
+// import Governance from '../../../images/names/governance.svg'
+// import GetURL from '../../../images/names/get-url.svg'
 import Chest from '../../../images/names/chest.png'
 import Passports from '../../../images/names/passports.png'
 import { lists } from '../../../modules/vendor/decentraland/lists/api'
@@ -204,13 +208,13 @@ const ClaimNamePage = (props: Props) => {
   const cards = useMemo(() => {
     return [
       {
-        image: StandOut,
+        image: CreateImg,
         title: t('names_page.why.stand_out.title'),
         description: t('names_page.why.stand_out.description'),
         className: styles.standOut
       },
       {
-        image: Unlock,
+        image: OwnSpaceImg,
         title: t('names_page.why.unlock.title'),
         description: t('names_page.why.unlock.description', {
           link: (
@@ -224,7 +228,7 @@ const ClaimNamePage = (props: Props) => {
         })
       },
       {
-        image: Governance,
+        image: GovernanceImg,
         title: t('names_page.why.governance.title'),
         description: t('names_page.why.governance.description', {
           b: (children: React.ReactChildren) => (
@@ -233,7 +237,7 @@ const ClaimNamePage = (props: Props) => {
         })
       },
       {
-        image: GetURL,
+        image: LandmarkImg,
         title: t('names_page.why.get_url.title'),
         description: t('names_page.why.get_url.description', {
           b: (children: React.ReactChildren) => (
