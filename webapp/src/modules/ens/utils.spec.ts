@@ -49,72 +49,139 @@ describe('Name Management Tests', () => {
   })
 
   describe('isNameValid', () => {
-    it('should return true for a valid name', () => {
-      expect(isNameValid('validName123')).toBe(true)
+    let name: string
+    describe('when the name is valid', () => {
+      beforeEach(() => {
+        name = 'validName123'
+      })
+      it('should return true', () => {
+        expect(isNameValid(name)).toBe(true)
+      })
     })
 
-    it('should return false for a name that is too short', () => {
-      expect(isNameValid('a')).toBe(false)
+    describe('when the name is too short', () => {
+      beforeEach(() => {
+        name = 'a'
+      })
+      it('should return false', () => {
+        expect(isNameValid('a')).toBe(false)
+      })
     })
-
-    it('should return false for a name that is too long', () => {
-      expect(isNameValid('averylongnamethatiswaytoobig')).toBe(false)
+    describe('when the name is too long', () => {
+      beforeEach(() => {
+        name = 'averylongnamethatiswaytoobig'
+      })
+      it('should return false', () => {
+        expect(isNameValid('averylongnamethatiswaytoobig')).toBe(false)
+      })
     })
-
-    it('should return false for a name with invalid characters', () => {
-      expect(isNameValid('invalid#Name')).toBe(false)
+    describe('when the name has invalid characters', () => {
+      beforeEach(() => {
+        name = 'invalid#Name'
+      })
+      it('should return false', () => {
+        expect(isNameValid(name)).toBe(false)
+      })
     })
-
-    it('should return false for a name with spaces', () => {
-      expect(isNameValid('invalid name')).toBe(false)
+    describe('when the name has whitespaces', () => {
+      beforeEach(() => {
+        name = 'invalid name'
+      })
+      it('should return false', () => {
+        expect(isNameValid(name)).toBe(false)
+      })
     })
   })
 
   describe('getNameInvalidType', () => {
-    it('should return null for a valid name', () => {
-      expect(getNameInvalidType('validName')).toBeNull()
+    let name: string
+    describe('when the name is valid', () => {
+      beforeEach(() => {
+        name = 'validName'
+      })
+      it('should return null', () => {
+        expect(getNameInvalidType(name)).toBeNull()
+      })
     })
 
-    it('should return TOO_LONG for a name that is too long', () => {
-      expect(getNameInvalidType('averylongnamethatiswaytoobig')).toBe(
-        NameInvalidType.TOO_LONG
-      )
+    describe('when the name is too long', () => {
+      beforeEach(() => {
+        name = 'averylongnamethatiswaytoobig'
+      })
+      it('should return TOO_LONG', () => {
+        expect(getNameInvalidType(name)).toBe(NameInvalidType.TOO_LONG)
+      })
     })
 
-    it('should return TOO_SHORT for a name that is too short', () => {
-      expect(getNameInvalidType('a')).toBe(NameInvalidType.TOO_SHORT)
+    describe('when the name is too short', () => {
+      beforeEach(() => {
+        name = 'a'
+      })
+      it('should return TOO_SHORT', () => {
+        expect(getNameInvalidType(name)).toBe(NameInvalidType.TOO_SHORT)
+      })
     })
 
-    it('should return HAS_SPACES for a name with spaces', () => {
-      expect(getNameInvalidType('invalid name')).toBe(
-        NameInvalidType.HAS_SPACES
-      )
+    describe('when the name has spaces', () => {
+      beforeEach(() => {
+        name = 'invalid name'
+      })
+      it('should return HAS_SPACES', () => {
+        expect(getNameInvalidType(name)).toBe(NameInvalidType.HAS_SPACES)
+      })
     })
 
-    it('should return INVALID_CHARACTERS for a name with invalid characters', () => {
-      expect(getNameInvalidType('invalid#Name')).toBe(
-        NameInvalidType.INVALID_CHARACTERS
-      )
+    describe('when the name has invalid characters', () => {
+      beforeEach(() => {
+        name = 'invalid#Name'
+      })
+      it('should return INVALID_CHARACTERS', () => {
+        expect(getNameInvalidType(name)).toBe(
+          NameInvalidType.INVALID_CHARACTERS
+        )
+      })
     })
   })
 
   describe('hasNameMinLength', () => {
-    it('should return true for a name with length equal or above minimum', () => {
-      expect(hasNameMinLength('va')).toBe(true)
+    let name: string
+    describe('and the name has length equal or above minimum', () => {
+      beforeEach(() => {
+        name = 'va'
+      })
+      it('should return true', () => {
+        expect(hasNameMinLength(name)).toBe(true)
+      })
     })
 
-    it('should return false for a name with length below minimum', () => {
-      expect(hasNameMinLength('v')).toBe(false)
+    describe('and the name has length below the minimum', () => {
+      beforeEach(() => {
+        name = 'v'
+      })
+      it('should return false', () => {
+        expect(hasNameMinLength(name)).toBe(false)
+      })
     })
   })
 
   describe('isEnoughClaimMana', () => {
-    it('should return true for sufficient MANA', () => {
-      expect(isEnoughClaimMana(100)).toBe(true)
+    let mana: number
+    describe('and has sufficient MANA', () => {
+      beforeEach(() => {
+        mana = 100
+      })
+      it('should return true', () => {
+        expect(isEnoughClaimMana(mana)).toBe(true)
+      })
     })
 
-    it('should return false for insufficient MANA', () => {
-      expect(isEnoughClaimMana(99)).toBe(false)
+    describe('and has insufficient MANA', () => {
+      beforeEach(() => {
+        mana = 99
+      })
+      it('should return false', () => {
+        expect(isEnoughClaimMana(mana)).toBe(false)
+      })
     })
   })
 })
