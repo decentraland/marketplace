@@ -35,12 +35,10 @@ import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import { NavigationTab } from '../../Navigation/Navigation.types'
 import { builderUrl } from '../../../lib/environment'
-import { Navbar } from '../../Navbar'
-import { Footer } from '../../Footer'
-import { Navigation } from '../../Navigation'
 import { Mana } from '../../Mana'
 import { Props } from './ClaimNamePage.types'
 import styles from './ClaimNamePage.module.css'
+import { PageLayout } from '../../PageLayout'
 
 const PLACEHOLDER_WIDTH = '94px'
 
@@ -247,255 +245,260 @@ const ClaimNamePage = (props: Props) => {
   }, [])
 
   return (
-    <div className={styles.claimNamePageContainer}>
-      <Navbar isFullscreen />
-      <Navigation activeTab={NavigationTab.NAMES} />
-      <div className={styles.claimNamePage}>
-        <Container className={styles.mainContainer}>
-          <div className={classNames(styles.claimContainer, styles.card)}>
-            {isInputFocus ? (
-              <Close onClick={() => setIsInputFocus(false)} />
-            ) : null}
-            <div className={styles.imageContainer}>
-              <div className={styles.imagePassportContainer}>
+    <PageLayout activeTab={NavigationTab.NAMES}>
+      <div className={styles.claimNamePageContainer}>
+        <div className={styles.claimNamePage}>
+          <Container className={styles.mainContainer}>
+            <div className={classNames(styles.claimContainer, styles.card)}>
+              {isInputFocus ? (
+                <Close onClick={() => setIsInputFocus(false)} />
+              ) : null}
+              <div className={styles.imageContainer}>
+                <div className={styles.imagePassportContainer}>
+                  <img
+                    className={classNames(
+                      !isInputFocus && styles.visible,
+                      styles.passportLogo
+                    )}
+                    src={ClaimNameImage}
+                    alt="Claim name"
+                  />
+                  <h2 className={classNames(isInputFocus && styles.fadeOut)}>
+                    {t('names_page.title')}
+                  </h2>
+                </div>
                 <img
                   className={classNames(
-                    !isInputFocus && styles.visible,
-                    styles.passportLogo
+                    styles.banner,
+                    isInputFocus && styles.visible
                   )}
-                  src={ClaimNameImage}
-                  alt="Claim name"
+                  src={ClaimNameBanner}
+                  alt="Banner"
                 />
-                <h2 className={classNames(isInputFocus && styles.fadeOut)}>
-                  {t('names_page.title')}
-                </h2>
               </div>
-              <img
-                className={classNames(
-                  styles.banner,
-                  isInputFocus && styles.visible
-                )}
-                src={ClaimNameBanner}
-                alt="Banner"
-              />
-            </div>
 
-            <span className={styles.subtitle}>{t('names_page.subtitle')}</span>
-            <div className={styles.claimInput} onClick={onFieldClick}>
-              <Field
-                onClick={onFieldClick}
-                value={name}
-                placeholder={t('names_page.name_placeholder')}
-                action={`${name.length}/${MAX_NAME_SIZE}`}
-                children={
-                  <>
-                    <input
-                      ref={inputRef}
-                      value={name}
-                      style={{
-                        maxWidth: name.length ? inputWidth : '1px'
-                      }}
-                      onFocus={onFieldFocus}
-                      onChange={onFieldChange}
-                    />
-                    <span className={styles.inputSuffix}>.dcl.eth</span>
-                  </>
-                }
-              />
-              <div className={styles.remainingCharactersContainer}>
-                {isLoadingStatus ? <Loader active inline size="tiny" /> : null}
-                {renderRemainingCharacters()}
-              </div>
-              <Popup
-                className="modal-tooltip"
-                content={t('names_page.not_enough_mana')}
-                position="top center"
-                trigger={
-                  <div className="popup-button">
-                    <Button
-                      primary
-                      onClick={handleClaim}
-                      disabled={
-                        !isAvailable ||
-                        nameInvalidType !== null ||
-                        (!!currentMana && !isEnoughClaimMana(currentMana))
-                      }
-                    >
-                      {t('names_page.claim_a_name')}
-                    </Button>
+              <span className={styles.subtitle}>
+                {t('names_page.subtitle')}
+              </span>
+              <div className={styles.claimInput} onClick={onFieldClick}>
+                <Field
+                  onClick={onFieldClick}
+                  value={name}
+                  placeholder={t('names_page.name_placeholder')}
+                  action={`${name.length}/${MAX_NAME_SIZE}`}
+                  children={
+                    <>
+                      <input
+                        ref={inputRef}
+                        value={name}
+                        style={{
+                          maxWidth: name.length ? inputWidth : '1px'
+                        }}
+                        onFocus={onFieldFocus}
+                        onChange={onFieldChange}
+                      />
+                      <span className={styles.inputSuffix}>.dcl.eth</span>
+                    </>
+                  }
+                />
+                <div className={styles.remainingCharactersContainer}>
+                  {isLoadingStatus ? (
+                    <Loader active inline size="tiny" />
+                  ) : null}
+                  {renderRemainingCharacters()}
+                </div>
+                <Popup
+                  className="modal-tooltip"
+                  content={t('names_page.not_enough_mana')}
+                  position="top center"
+                  trigger={
+                    <div className="popup-button">
+                      <Button
+                        primary
+                        onClick={handleClaim}
+                        disabled={
+                          !isAvailable ||
+                          nameInvalidType !== null ||
+                          (!!currentMana && !isEnoughClaimMana(currentMana))
+                        }
+                      >
+                        {t('names_page.claim_a_name')}
+                      </Button>
+                    </div>
+                  }
+                  disabled={
+                    !!wallet && !!currentMana && isEnoughClaimMana(currentMana)
+                  }
+                  hideOnScroll={true}
+                  on="hover"
+                  inverted
+                />
+
+                {name &&
+                hasNameMinLength(name) &&
+                isNameValid(name) &&
+                isInputFocus &&
+                name !== PLACEHOLDER_NAME &&
+                isAvailable !== undefined &&
+                bannedNames !== undefined &&
+                !isLoadingStatus ? (
+                  <div className={styles.availableContainer}>
+                    {isAvailable ? (
+                      <>
+                        <Icon name="check" />
+                        {t('names_page.available')}
+                      </>
+                    ) : (
+                      <>
+                        <Icon name="close" />
+                        {t('names_page.not_available', {
+                          link: (
+                            <a
+                              className={styles.marketplaceLinkContainer}
+                              href={locations.names({
+                                search: name,
+                                onlyOnSale: false,
+                                sortBy: SortBy.NEWEST,
+                                section: Section.ENS
+                              })}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {t('names_page.marketplace')}
+                              <Icon name="external" />
+                            </a>
+                          )
+                        })}
+                      </>
+                    )}
                   </div>
-                }
-                disabled={
-                  !!wallet && !!currentMana && isEnoughClaimMana(currentMana)
-                }
-                hideOnScroll={true}
-                on="hover"
-                inverted
-              />
+                ) : name && (!hasNameMinLength(name) || !isNameValid(name)) ? (
+                  <div className={styles.availableContainer}>
+                    <Icon
+                      className={styles.warningIcon}
+                      name={
+                        nameInvalidType === NameInvalidType.TOO_SHORT
+                          ? 'exclamation triangle'
+                          : 'close'
+                      }
+                    />
+                    {nameInvalidType === NameInvalidType.TOO_SHORT
+                      ? t('names_page.name_too_short')
+                      : nameInvalidType === NameInvalidType.TOO_LONG
+                      ? t('names_page.name_too_long')
+                      : nameInvalidType === NameInvalidType.HAS_SPACES
+                      ? t('names_page.has_spaces')
+                      : t('names_page.invalid_characters')}
+                  </div>
+                ) : null}
+              </div>
 
-              {name &&
-              hasNameMinLength(name) &&
-              isNameValid(name) &&
-              isInputFocus &&
-              name !== PLACEHOLDER_NAME &&
-              isAvailable !== undefined &&
-              bannedNames !== undefined &&
-              !isLoadingStatus ? (
-                <div className={styles.availableContainer}>
-                  {isAvailable ? (
+              <span
+                className={classNames(
+                  styles.nameCost,
+                  isInputFocus && styles.fadeOut
+                )}
+              >
+                {t('names_page.name_cost', {
+                  mana: (
                     <>
-                      <Icon name="check" />
-                      {t('names_page.available')}
+                      <Mana inline /> 100 MANA
                     </>
-                  ) : (
-                    <>
-                      <Icon name="close" />
-                      {t('names_page.not_available', {
-                        link: (
-                          <a
-                            className={styles.marketplaceLinkContainer}
-                            href={locations.names({
-                              search: name,
-                              onlyOnSale: false,
-                              sortBy: SortBy.NEWEST,
-                              section: Section.ENS
-                            })}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {t('names_page.marketplace')}
-                            <Icon name="external" />
-                          </a>
-                        )
-                      })}
-                    </>
-                  )}
-                </div>
-              ) : name && (!hasNameMinLength(name) || !isNameValid(name)) ? (
-                <div className={styles.availableContainer}>
-                  <Icon
-                    className={styles.warningIcon}
-                    name={
-                      nameInvalidType === NameInvalidType.TOO_SHORT
-                        ? 'exclamation triangle'
-                        : 'close'
-                    }
-                  />
-                  {nameInvalidType === NameInvalidType.TOO_SHORT
-                    ? t('names_page.name_too_short')
-                    : nameInvalidType === NameInvalidType.TOO_LONG
-                    ? t('names_page.name_too_long')
-                    : nameInvalidType === NameInvalidType.HAS_SPACES
-                    ? t('names_page.has_spaces')
-                    : t('names_page.invalid_characters')}
-                </div>
-              ) : null}
-            </div>
-
-            <span
-              className={classNames(
-                styles.nameCost,
-                isInputFocus && styles.fadeOut
-              )}
-            >
-              {t('names_page.name_cost', {
-                mana: (
-                  <>
-                    <Mana inline /> 100 MANA
-                  </>
-                ),
-                network: (
-                  <span className={styles.nameCostNetwork}>
-                    {t('names_page.ethereum_mainnet_network')}
-                  </span>
-                )
-              })}
-              <Popup
-                content={t('names_page.dao_tooltip', {
-                  link: (
-                    <a
-                      href="https://decentraland.zone/governance/proposal/?id=a3bdc100-9b34-11ed-ae61-5f6dd0bf8358"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {t('global.learn_more')}
-                    </a>
+                  ),
+                  network: (
+                    <span className={styles.nameCostNetwork}>
+                      {t('names_page.ethereum_mainnet_network')}
+                    </span>
                   )
                 })}
-                position="top center"
-                hoverable
-                mouseLeaveDelay={500}
-                trigger={
-                  <img
-                    src={infoIcon}
-                    alt="info"
-                    className={styles.informationTooltip}
-                  />
-                }
-                on="hover"
-              />
-            </span>
-          </div>
-          <div className={styles.ctasContainer}>
-            <h1>{t('names_page.why_names')}</h1>
-            <div className={styles.cardsContainer}>
-              {cards.map((card, index) => (
-                <div key={index} className={styles.card}>
-                  <div
-                    className={classNames(
-                      styles.whyImgContainer,
-                      card.className
-                    )}
-                  >
-                    <img src={card.image} alt={card.title} />
-                  </div>
-                  <div className={styles.whyTextContainer}>
-                    <span>{card.title}</span>
-                    <p>{card.description}</p>
-                  </div>
-                </div>
-              ))}
+                <Popup
+                  content={t('names_page.dao_tooltip', {
+                    link: (
+                      <a
+                        href="https://decentraland.zone/governance/proposal/?id=a3bdc100-9b34-11ed-ae61-5f6dd0bf8358"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {t('global.learn_more')}
+                      </a>
+                    )
+                  })}
+                  position="top center"
+                  hoverable
+                  mouseLeaveDelay={500}
+                  trigger={
+                    <img
+                      src={infoIcon}
+                      alt="info"
+                      className={styles.informationTooltip}
+                    />
+                  }
+                  on="hover"
+                />
+              </span>
             </div>
-            <div className={styles.cardsContainer}>
-              <div className={styles.nameTakenCard}>
-                <div className={styles.buttons}>
-                  <div>
-                    <img src={Chest} alt="Chest" />
-                  </div>
-                  <div>
-                    <h2> {t('names_page.ctas.name_taken.title')}</h2>
-                    <span> {t('names_page.ctas.name_taken.description')}</span>
-                    <Button onClick={() => onBrowse()}>
-                      {t('names_page.browse_names_being_resold')}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              <div className={styles.manageNames}>
-                <div className={styles.buttons}>
-                  <div>
-                    <img src={Passports} alt="passports" />
-                  </div>
-                  <div style={{ justifyContent: 'center' }}>
-                    <h2> {t('names_page.ctas.manage.title')}</h2>
-                    <Button
-                      inverted
-                      as={'a'}
-                      target="_blank"
-                      href={`${builderUrl}/claim-name`}
+            <div className={styles.ctasContainer}>
+              <h1>{t('names_page.why_names')}</h1>
+              <div className={styles.cardsContainer}>
+                {cards.map((card, index) => (
+                  <div key={index} className={styles.card}>
+                    <div
+                      className={classNames(
+                        styles.whyImgContainer,
+                        card.className
+                      )}
                     >
-                      {t('names_page.manage_your_names')}
-                    </Button>
+                      <img src={card.image} alt={card.title} />
+                    </div>
+                    <div className={styles.whyTextContainer}>
+                      <span>{card.title}</span>
+                      <p>{card.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.cardsContainer}>
+                <div className={styles.nameTakenCard}>
+                  <div className={styles.buttons}>
+                    <div>
+                      <img src={Chest} alt="Chest" />
+                    </div>
+                    <div>
+                      <h2> {t('names_page.ctas.name_taken.title')}</h2>
+                      <span>
+                        {' '}
+                        {t('names_page.ctas.name_taken.description')}
+                      </span>
+                      <Button onClick={() => onBrowse()}>
+                        {t('names_page.browse_names_being_resold')}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.manageNames}>
+                  <div className={styles.buttons}>
+                    <div>
+                      <img src={Passports} alt="passports" />
+                    </div>
+                    <div style={{ justifyContent: 'center' }}>
+                      <h2> {t('names_page.ctas.manage.title')}</h2>
+                      <Button
+                        inverted
+                        as={'a'}
+                        target="_blank"
+                        href={`${builderUrl}/claim-name`}
+                      >
+                        {t('names_page.manage_your_names')}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Container>
+          </Container>
+        </div>
       </div>
-
-      <Footer isFullscreen />
-    </div>
+    </PageLayout>
   )
 }
 
