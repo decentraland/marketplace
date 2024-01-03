@@ -44,6 +44,8 @@ import { NFT } from '../nft/types'
 import { openModal } from '../modal/actions'
 import { fetchNFTsRequest, fetchNFTsSuccess } from '../nft/actions'
 import { getWallet } from '../wallet/selectors'
+import { ENS } from '../ens/types'
+import { claimNameSuccess } from '../ens/actions'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import {
   browse,
@@ -1317,6 +1319,30 @@ describe('handleRedirectToSuccessPage saga', () => {
         .run({ silenceTimeout: true })
     })
   })
+
+  describe('when handling the claim name success action', () => {
+    let ens: ENS
+    beforeEach(() => {
+      ens = {
+        subdomain: 'aSubdomain',
+        tokenId: 'aTokenId',
+        contractAddress: 'aContractAddress'
+      } as ENS
+      searchParams = {
+        txHash: 'txHash',
+        tokenId: ens.tokenId,
+        assetType: AssetType.NFT,
+        contractAddress: ens.contractAddress
+      }
+    })
+
+    it('should redirect to success page with the correct query params', () => {
+      return expectSaga(routingSaga)
+        .put(push(locations.success(searchParams)))
+        .dispatch(claimNameSuccess(ens, 'aName', searchParams.txHash))
+        .run({ silenceTimeout: true })
+    })
+  })
 })
 
 describe('when handling the connect wallet success action', () => {
@@ -1543,11 +1569,13 @@ describe.each([
 
   it('should redirect to the default activity location when redirectTo is not present', () => {
     const location = { search: '' }
-    return expectSaga(routingSaga)
-      .provide([[select(getLocation), location]])
-      //@ts-ignore
-      .dispatch(action(...args))
-      .put(push(locations.activity()))
-      .run()
+    return (
+      expectSaga(routingSaga)
+        .provide([[select(getLocation), location]])
+        //@ts-ignore
+        .dispatch(action(...args))
+        .put(push(locations.activity()))
+        .run()
+    )
   })
 })
