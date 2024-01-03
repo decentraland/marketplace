@@ -94,14 +94,16 @@ describe('ClaimNameFatFingerModal', () => {
     })
   })
 
-  it('should call onClose when modal is closed', () => {
-    const { getByText } = renderWithProviders(
-      <ClaimNameFatFingerModal {...baseProps} />
-    )
+  describe('when the modal is closed', () => {
+    it('should call onClose', () => {
+      const { getByText } = renderWithProviders(
+        <ClaimNameFatFingerModal {...baseProps} />
+      )
 
-    const closeButton = getByText(t('global.cancel'))
-    fireEvent.click(closeButton)
+      const closeButton = getByText(t('global.cancel'))
+      fireEvent.click(closeButton)
 
-    expect(onCloseMock).toHaveBeenCalled()
+      expect(onCloseMock).toHaveBeenCalled()
+    })
   })
 })

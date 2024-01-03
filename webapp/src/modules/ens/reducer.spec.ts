@@ -23,7 +23,7 @@ describe('ENS Reducer', () => {
       successAction = claimNameSuccess(ens, ens.subdomain, 'aTxHash')
       initialState = { ...INITIAL_STATE } as ENSState
     })
-    it('should handle action', () => {
+    it('should return an state with the loading action removed and the new ens subdomain added to the data', () => {
       expect(ensReducer(initialState, successAction)).toEqual({
         ...initialState,
         loading: loadingReducer(initialState.loading, successAction),
@@ -44,7 +44,7 @@ describe('ENS Reducer', () => {
       failureAction = claimNameFailure(ensError)
       initialState = { ...INITIAL_STATE } as ENSState
     })
-    it('should handle action', () => {
+    it('should return an state with the loading action removed and the error set', () => {
       expect(ensReducer(initialState, failureAction)).toEqual({
         ...initialState,
         loading: loadingReducer(initialState.loading, failureAction),
@@ -55,12 +55,13 @@ describe('ENS Reducer', () => {
   describe('when handling the CLAIM_NAME_CLEAR action', () => {
     beforeEach(() => {
       clearAction = claimNameClear()
-      initialState = { ...INITIAL_STATE } as ENSState
+      initialState = { ...INITIAL_STATE, error: {} as ENSError } as ENSState
     })
-    it('should handle action', () => {
+    it('should return a state with the error cleared', () => {
       expect(ensReducer(initialState, clearAction)).toEqual({
         ...initialState,
-        loading: loadingReducer(initialState.loading, failureAction)
+        loading: loadingReducer(initialState.loading, failureAction),
+        error: null
       })
     })
   })
