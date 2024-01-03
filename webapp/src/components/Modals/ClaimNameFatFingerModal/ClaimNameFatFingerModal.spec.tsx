@@ -37,7 +37,7 @@ describe('ClaimNameFatFingerModal', () => {
     })
   })
 
-  describe('when typing the wrong name', () => {
+  describe('when not typing the same name that is given by props', () => {
     it('should have the confirm button disabled and show error message', () => {
       const { getByRole, getByText } = renderWithProviders(
         <ClaimNameFatFingerModal {...baseProps} />
