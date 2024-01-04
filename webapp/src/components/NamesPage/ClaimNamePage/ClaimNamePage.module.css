@@ -1,0 +1,525 @@
+.claimNamePageContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.claimNamePageContainer .card {
+  background-color: var(--card);
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 12px;
+}
+
+.claimNamePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.claimNamePage .card.claimContainer :global(.dcl.close) {
+  position: absolute;
+  background: none;
+  right: 12px;
+  top: 12px;
+}
+
+.claimNamePage .buttons {
+  display: flex;
+  height: 100%;
+  padding: 46px 0;
+}
+
+.claimNamePage .buttons > div + div {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-align: start;
+  margin-left: 38px;
+  justify-content: center;
+}
+
+.claimNamePage .buttons > div + div :global(.ui.button:hover) {
+  background-color: white;
+  color: black;
+}
+
+.claimNamePage .buttons img {
+  padding-left: 44px;
+}
+
+.claimNamePage .buttons :global(.button) {
+  margin-top: 16px;
+}
+
+.claimNamePage .buttons :global(.ui.button + .ui.button) {
+  margin-left: 0;
+}
+
+.claimNamePage .availableContainer {
+  background-color: rgba(32, 17, 22, 0.75);
+  padding: 16px;
+  border-radius: 4px;
+  display: flex;
+  position: absolute;
+  top: 54px;
+  width: 100%;
+}
+
+.claimNamePage .cardsContainer button,
+.claimNamePage .cardsContainer :global(.ui.button.inverted) {
+  background-color: white;
+  color: #161518;
+  margin-top: 12px;
+}
+
+.claimNamePage .nameTakenCard {
+  display: flex;
+  align-items: center;
+  height: 250px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ff2d55 0%, #c640cd 100%);
+  margin-right: 19px;
+  flex: 1;
+}
+
+.claimNamePage .manageNames {
+  display: flex;
+  align-items: center;
+  height: 250px;
+  border-radius: 8px;
+  background: linear-gradient(244deg, #ff2d55 -11.67%, #ffbc5b 88.23%);
+  flex: 1;
+}
+
+.claimNamePage > div + div {
+  display: flex;
+}
+
+.claimNamePage .marketplaceLinkContainer {
+  margin-left: 4px;
+  text-decoration: underline;
+  font-weight: bold;
+  color: white;
+  display: flex;
+}
+
+.claimNamePage .marketplaceLinkContainer :global(.icon) {
+  margin-left: 4px;
+}
+
+.claimNamePage .availableContainer :global(.check.icon::before) {
+  color: #34ce76;
+}
+
+.claimNamePage .availableContainer :global(.close.icon::before) {
+  color: #ff2d55;
+}
+
+.claimNamePage .nameCostNetwork {
+  color: #a09ba8;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+.claimNamePage .nameCost {
+  margin-top: 74px;
+  transition: opacity 1s ease; /* Adjust the duration as needed */
+  position: relative;
+  margin-left: -14px;
+}
+
+.claimNamePage .mainContainer .claimContainer .nameCost img {
+  opacity: 1;
+  left: 100%;
+  top: 6px;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.claimNamePage .nameCost :global(.dcl.mana .symbol) {
+  padding: 0;
+}
+
+.claimNamePage .fadeOut {
+  opacity: 0;
+}
+
+.claimNamePage .claimContainer {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--divider);
+  margin-right: 16px;
+  border-radius: 16px;
+  border: 3px solid var(--DCL-Gradients-Highlight-stroke, #ffbc5b);
+  background: linear-gradient(
+    116deg,
+    rgba(255, 188, 91, 0.1) 0%,
+    rgba(255, 45, 85, 0.1) 50.52%,
+    rgba(198, 64, 205, 0.1) 100%
+  );
+  width: 100%;
+  height: 524px;
+  position: relative;
+  align-items: center;
+}
+
+.claimNamePage .mainContainer .claimContainer {
+  position: relative;
+}
+
+.claimNamePage .mainContainer .imageContainer {
+  position: relative;
+  height: 192px;
+  display: flex;
+}
+
+.claimNamePage .mainContainer .imagePassportContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+}
+
+.claimNamePage .mainContainer .claimContainer img {
+  position: absolute;
+  top: 0;
+  left: calc(50% - 45px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.claimNamePage .mainContainer .claimContainer img.banner {
+  left: 90px;
+}
+
+.claimNamePage .claimContainer .banner {
+  height: 200px;
+}
+
+.claimNamePage .claimContainer img.visible {
+  opacity: 1;
+}
+
+.claimNamePage .claimContainer .passportLogo {
+  margin-top: 10px;
+}
+
+.claimNamePage .claimContainer h2 {
+  color: #fff;
+  font-size: 48px;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 8px;
+}
+
+.claimNamePage .claimContainer .subtitle {
+  font-size: 24px;
+  line-height: 36px;
+}
+
+.claimNamePage .claimInput {
+  position: relative;
+  display: flex;
+  margin-top: 40px;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  height: 46px;
+  cursor: pointer;
+}
+
+.claimNamePage .claimInput :global(.ui.input) {
+  align-items: baseline;
+}
+
+.claimNamePage .claimInput :global(.dcl.field.simple) {
+  display: flex;
+  align-items: center;
+  padding-left: 24px;
+  border: 1px solid var(--bluish-steel);
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-right: none;
+}
+
+.claimNamePage .claimContainer :global(.dcl.field .ui.input input::after) {
+  content: '.dcl.eth';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  color: red; /* Suffix color */
+  background: white; /* Match input field background color */
+  padding: 0 12px; /* Suffix padding */
+  pointer-events: none; /* Ignore pointer events */
+}
+
+.claimNamePage .claimContainer :global(.dcl.field .ui.input input) {
+  border-bottom: 0;
+  padding: 0;
+}
+
+.claimNamePage .claimContainer .remainingCharactersContainer {
+  position: absolute;
+  right: 170px;
+  top: 13px;
+}
+
+.claimNamePage
+  .claimContainer
+  .remainingCharactersContainer
+  :global(.ui.tiny.active.inline.loader) {
+  margin-right: 12px;
+}
+
+.claimNamePage .claimContainer .remainingCharacters {
+  color: #a09ba8;
+  font-size: 12px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: normal;
+  top: 13px;
+}
+
+.claimNamePage .claimContainer .inputSuffix {
+  color: #a09ba8;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.claimNamePage .claimContainer :global(.ui.primary.button) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.claimNamePage .claimContainer :global(.message) {
+  display: none;
+}
+
+.claimNamePage .mainContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.claimNamePage .ctasContainer {
+  text-align: center;
+  width: 100%;
+  margin-top: 40px;
+}
+
+.claimNamePage .ctasContainer h1 {
+  margin-bottom: 16px;
+}
+
+.claimNamePage .ctasContainer .cardsContainer {
+  display: grid;
+  grid-gap: 20px;
+  grid-auto-flow: column;
+  margin-bottom: 52px;
+}
+
+.claimNamePage .ctasContainer .card {
+  background-color: #242129;
+  height: 209px;
+  width: 305px;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.claimNamePage .ctasContainer .card span {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.claimNamePage .ctasContainer .learnMore {
+  color: #ffa25a;
+}
+
+.claimNamePage .ctasContainer .voting {
+  color: #ecebed;
+}
+
+.claimNamePage .ctasContainer .nameLink {
+  color: #ecebed;
+  text-decoration: underline;
+}
+
+.claimNamePage .ctasContainer .card p {
+  color: #a09ba8;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  padding-top: 2px;
+}
+
+.claimNamePage .ctasContainer .whyImgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 103px;
+  background-color: #2d2c2f;
+}
+
+.claimNamePage .ctasContainer .whyImgContainer img {
+  height: 100%;
+}
+
+.claimNamePage .ctasContainer .whyTextContainer {
+  height: 116px;
+  text-align: left;
+  padding: 16px 12px;
+}
+
+.claimNamePage .ctasContainer .whyImgContainer.standOut {
+  align-items: flex-end;
+}
+
+.claimNamePage .warningIcon {
+  color: #ffa25a;
+  margin-right: 8px;
+}
+
+.claimNamePage .informationTooltip {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 768px) {
+  .claimNamePage .claimContainer {
+    height: 587px;
+    margin: 0;
+    padding: 12px;
+  }
+
+  .claimNamePage .mainContainer .imageContainer {
+    height: 222px;
+  }
+
+  .claimNamePage .mainContainer:global(.ui.container) {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 12px;
+  }
+
+  .claimNamePage .claimContainer h2 {
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .claimNamePage .claimContainer .subtitle {
+    font-size: 20px;
+  }
+
+  .claimNamePage .ctasContainer .cardsContainer {
+    width: 100%;
+    overflow-x: scroll;
+    padding: 0 16px;
+  }
+
+  .claimNamePage .ctasContainer .cardsContainer:last-of-type {
+    grid-auto-flow: row;
+    overflow: visible;
+  }
+
+  .claimNamePage .nameTakenCard {
+    margin-right: 0;
+    margin-bottom: 16px;
+    justify-content: center;
+    height: unset;
+    padding: 0 12px;
+  }
+
+  .claimNamePage .nameTakenCard .buttons,
+  .claimNamePage .manageNames .buttons {
+    flex-direction: column;
+  }
+
+  .claimNamePage .manageNames .buttons,
+  .claimNamePage .nameTakenCard .buttons div {
+    align-items: center;
+  }
+
+  .claimNamePage .buttons > div + div {
+    margin-left: 0;
+  }
+
+  .claimNamePage .nameTakenCard .buttons div button {
+    margin-top: 28px;
+  }
+
+  .claimNamePage .claimInput {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .claimNamePage .claimContainer .remainingCharactersContainer {
+    right: 12px;
+    top: 6px;
+  }
+
+  .claimNamePage .claimContainer :global(.ui.primary.button) {
+    min-height: 48px;
+    border-radius: 6px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+  }
+
+  .claimNamePage .claimInput :global(.dcl.field.simple) {
+    min-height: 100%;
+    min-width: 100%;
+    border: 1px solid var(--bluish-steel);
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: none;
+  }
+
+  .claimNamePage .nameCost {
+    text-align: center;
+    margin-top: 72px;
+    margin-left: 0;
+  }
+
+  .claimNamePage .mainContainer .claimContainer .nameCost img {
+    left: 92%;
+  }
+
+  .claimNamePage .mainContainer .claimContainer img.banner {
+    left: 0;
+    width: 340px;
+    height: 129px;
+    top: 50px;
+  }
+
+  .claimNamePage .mainContainer .ctasContainer .card {
+    margin-right: 20px;
+  }
+
+  .claimNamePage .manageNames {
+    justify-content: center;
+    height: unset;
+    padding: 0 12px;
+  }
+
+  .claimNamePage .buttons img {
+    padding-left: 0;
+  }
+
+  .claimNamePage .availableContainer {
+    top: 97px;
+  }
+
+  .claimNamePage .ctasContainer .card {
+    min-width: 305px;
+  }
+}

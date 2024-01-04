@@ -83,6 +83,8 @@ export enum PageName {
   SIGN_IN,
   SETTINGS,
   LANDS,
+  NAMES,
+  MINT_NAME,
   COLLECTION,
   BROWSE,
   CAMPAIGN,

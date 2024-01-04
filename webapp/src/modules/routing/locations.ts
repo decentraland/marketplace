@@ -18,6 +18,13 @@ export const locations = {
     const params = getSearchParams(options)
     return params ? `/lands?${params.toString()}` : '/lands'
   },
+  names: (options?: BrowseOptions) => {
+    const params = getSearchParams(options)
+    return params ? `/names/browse?${params.toString()}` : '/names/browse'
+  },
+  claimName: () => {
+    return '/names/claim'
+  },
   collection: (contractAddress: string = ':contractAddress') =>
     `/collections/${contractAddress}`,
   browse: (options?: BrowseOptions) => {

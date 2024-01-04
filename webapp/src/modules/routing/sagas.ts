@@ -131,6 +131,7 @@ import { getPage, getView } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { AssetStatusFilter } from '../../utils/filters'
 import { buildBrowseURL } from './utils'
+import { CLAIM_NAME_SUCCESS, ClaimNameSuccessAction } from '../ens/actions'
 
 export function* routingSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
@@ -151,7 +152,12 @@ export function* routingSaga() {
   )
 
   yield takeEvery(
-    [EXECUTE_ORDER_SUCCESS, BUY_ITEM_SUCCESS, BUY_ITEM_CROSS_CHAIN_SUCCESS],
+    [
+      EXECUTE_ORDER_SUCCESS,
+      BUY_ITEM_SUCCESS,
+      BUY_ITEM_CROSS_CHAIN_SUCCESS,
+      CLAIM_NAME_SUCCESS
+    ],
     handleRedirectToSuccessPage
   )
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
@@ -715,19 +721,33 @@ function* handleRedirectToActivity() {
 }
 
 function* handleRedirectToSuccessPage(
-  action: ExecuteOrderSuccessAction | BuyItemSuccessAction
+  action:
+    | ExecuteOrderSuccessAction
+    | BuyItemSuccessAction
+    | ClaimNameSuccessAction
 ) {
   const payload = action.payload
   yield put(
     push(
       locations.success({
         txHash: payload.txHash,
-        tokenId: 'item' in payload ? payload.item.itemId : payload.nft.tokenId,
+        tokenId:
+          'item' in payload
+            ? payload.item.itemId
+            : 'nft' in payload
+            ? payload.nft.tokenId
+            : 'ens' in payload
+            ? payload.ens.tokenId
+            : '',
         assetType: 'item' in payload ? AssetType.ITEM : AssetType.NFT,
         contractAddress:
           'item' in payload
             ? payload.item.contractAddress
-            : payload.nft.contractAddress
+            : 'nft' in payload
+            ? payload.nft.contractAddress
+            : 'ens' in payload
+            ? payload.ens.contractAddress
+            : ''
       })
     )
   )

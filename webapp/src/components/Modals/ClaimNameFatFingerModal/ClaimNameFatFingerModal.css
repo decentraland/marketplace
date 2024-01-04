@@ -1,0 +1,35 @@
+.ClaimNameFatFingerModal.ui.modal .content .dcl.field,
+.ClaimNameFatFingerModal.ui.modal .actions {
+  margin-top: 30px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .content .dcl.field .message {
+  margin-top: 10px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .dcl.field.error .ui.input > i.icon,
+.ClaimNameFatFingerModal.ui.modal .ui.form .dcl.field.error .ui.input > i.icon {
+  background-position: 0% 100%;
+}
+
+.ClaimNameFatFingerModal.ui.modal .ui.form .dcl.field .ui.input input {
+  border: 1px solid #fcfcfc;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .ui.form .dcl.field.error .ui.input input {
+  border: 1px solid var(--error);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .capsWarning {
+  border: 1px solid #716b7c;
+  padding: 12px 16px;
+  border-radius: 6px;
+  color: #a09ba8;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 17px;
+}

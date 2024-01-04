@@ -21,6 +21,7 @@ import { ActivityPage } from '../ActivityPage'
 import { HomePage } from '../HomePage'
 import { LegacyNFTPage } from '../LegacyNFTPage'
 import { LandsPage } from '../LandsPage'
+import { NamesPage } from '../NamesPage'
 import { CollectionPage } from '../CollectionPage'
 import { Navbar } from '../Navbar'
 import { ManageAssetPage } from '../ManageAssetPage'
@@ -31,6 +32,7 @@ import { StatusPage } from '../BuyPage/StatusPage'
 import { ListPage } from '../ListPage'
 import { ProtectedRoute } from '../ProtectedRoute'
 import { ListsPage } from '../ListsPage'
+import { ClaimNamePage } from '../NamesPage/ClaimNamePage'
 import { Props } from './Routes.types'
 
 const Routes = ({ inMaintenance }: Props) => {
@@ -61,6 +63,8 @@ const Routes = ({ inMaintenance }: Props) => {
     <>
       <Switch>
         <Route exact path={locations.lands()} component={LandsPage} />
+        <Route exact path={locations.claimName()} component={ClaimNamePage} />
+        <Route exact path={locations.names()} component={NamesPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
         <Route path={locations.campaign()} component={CampaignBrowserPage} />
         <Route

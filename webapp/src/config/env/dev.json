@@ -29,6 +29,8 @@
   "MAX_PRICE_INCREASE_PERCENTAGE": "15",
   "MANA_ADDRESS": "0x2a8fd99c19271f4f04b1b7b9c4f7cf264b626edb",
   "CONVERTER_ADDRESS": "0x2782eb28Dcb1eF4E7632273cd4e347e130Ce4646",
+  "REGISTRAR_CONTRACT_ADDRESS": "0x7518456ae93eb98f3e64571b689c626616bb7f30",
+  "CONTROLLER_V2_CONTRACT_ADDRESS": "0xd2046364317c21fa8d121d84185c39e6e910cf89",
   "CONVERTER_EXCHANGE": "uniswap_v2",
   "INTERCOM_APP_ID": "z0h94kay",
   "SEGMENT_API_KEY": "gMnkewUBzA6J879kAtMvp2WhohEk36uy",
@@ -42,5 +44,6 @@
   "SUBGRAPH_WORKER": "https://subgraph.decentraland.zone",
   "SENTRY_DSN": "https://1dc401149e1c819b8477565c9cdd9b70@o4504361728212992.ingest.sentry.io/4505743351676928",
   "SQUID_API_URL": "https://testnet.v2.api.squidrouter.com/",
+  "DCL_LISTS_SERVER": "https://dcl-lists.decentraland.zone",
   "AUTH_URL": "/auth"
 }

@@ -33,7 +33,6 @@ import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
-import { ClaimYourName } from '../ClaimYourName'
 import { Props } from './AssetBrowse.types'
 import MapTopbar from './MapTopbar'
 import MapBrowse from './MapBrowse'
@@ -233,7 +232,6 @@ const AssetBrowse = (props: Props) => {
     case DecentralandSection.ENS:
       right = (
         <>
-          {!isAccountOrCurrentAccount && <ClaimYourName />}
           <AssetTopbar />
           <AssetList isManager={isCurrentAccount} />
         </>
@@ -257,7 +255,6 @@ const AssetBrowse = (props: Props) => {
     Sections.decentraland.LAND,
     Sections.decentraland.WEARABLES,
     Sections.decentraland.EMOTES,
-    Sections.decentraland.ENS,
     Sections.decentraland.ON_SALE,
     Sections.decentraland.ON_RENT,
     Sections.decentraland.SALES,

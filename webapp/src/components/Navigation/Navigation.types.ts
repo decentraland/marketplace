@@ -9,6 +9,7 @@ export enum NavigationTab {
   OVERVIEW = 'overview',
   CAMPAIGN_BROWSER = 'campaign-browser',
   LANDS = 'lands',
+  NAMES = 'names',
   BROWSE = 'browse',
   COLLECTIBLES = 'collectibles',
   MY_STORE = 'my_store',

@@ -247,7 +247,7 @@ describe('when reducing the fetch NFTs success action', () => {
       'and the view is %s',
       (view: View) => {
         beforeEach(() => {
-          initialState = { ...initialState, lastTimestamp: 2 }
+          initialState = { ...initialState, lastTimestamp: 2, view }
           nftsFetchOptions = {
             ...nftsFetchOptions,
             view

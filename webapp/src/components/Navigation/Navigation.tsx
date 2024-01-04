@@ -83,6 +83,11 @@ const Navigation = (props: Props) => {
               {t('navigation.land')}
             </Tabs.Tab>
           </Link>
+          <Link to={locations.claimName()}>
+            <Tabs.Tab active={activeTab === NavigationTab.NAMES}>
+              {t('navigation.names')}
+            </Tabs.Tab>
+          </Link>
           <Link to={locations.defaultCurrentAccount()}>
             <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>
               {t('navigation.my_assets')}

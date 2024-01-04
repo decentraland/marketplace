@@ -40,8 +40,11 @@ import { transakSaga } from './transak/sagas'
 import { assetSaga } from './asset/sagas'
 import { favoritesSaga } from './favorites/sagas'
 import { loginSaga } from './login/sagas'
+import { ensSaga } from './ens/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
+const profileSaga = (getIdentity: () => AuthIdentity | undefined) =>
+  createProfileSaga({ getIdentity, peerUrl })
 const lambdasClient = createLambdasClient({
   url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()
@@ -79,7 +82,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     itemSaga(getIdentity),
     nftSaga(getIdentity),
     orderSaga(),
-    createProfileSaga({ peerUrl, getIdentity })(),
+    profileSaga(getIdentity)(),
     proximitySaga(),
     routingSaga(),
     tileSaga(),
@@ -109,6 +112,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     locationSaga(),
     transakSaga(),
     favoritesSaga(getIdentity),
-    loginSaga()
+    loginSaga(),
+    ensSaga()
   ])
 }

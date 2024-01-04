@@ -120,22 +120,25 @@ export function browseReducer(
       const nftIds = isLoadingMoreResults(state, page)
         ? [...state.nftIds, ...newNftIds]
         : newNftIds
-      switch (view) {
-        case View.MARKET:
-        case View.CURRENT_ACCOUNT:
-        case View.ACCOUNT: {
-          return {
-            ...state,
-            view,
-            page,
-            nftIds,
-            count: count,
-            lastTimestamp: timestamp
+      if (view === state.view) {
+        switch (view) {
+          case View.MARKET:
+          case View.CURRENT_ACCOUNT:
+          case View.ACCOUNT: {
+            return {
+              ...state,
+              view,
+              page,
+              nftIds,
+              count: count,
+              lastTimestamp: timestamp
+            }
           }
+          default:
+            return state
         }
-        default:
-          return state
       }
+      return state
     }
 
     case FETCH_NFTS_REQUEST:
@@ -147,7 +150,10 @@ export function browseReducer(
           : action.payload
 
       const isDifferentView = view !== state.view
-      if (isDifferentView) {
+      if (
+        isDifferentView &&
+        !(view === View.ATLAS && state.view === View.MARKET) // exception for atlas request on the view market, it should not override the nftIds
+      ) {
         return {
           ...state,
           [key]: [],

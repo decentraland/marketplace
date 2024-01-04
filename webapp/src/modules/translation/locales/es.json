@@ -68,7 +68,9 @@
     "of": "de",
     "now": "ahora",
     "actions": "Acciones",
-    "action_required": "Acción requerida"
+    "action_required": "Acción requerida",
+    "finish": "Terminar",
+    "guest": "Invitado"
   },
   "search_dropdown": {
     "recent": "Reciente",
@@ -98,6 +100,7 @@
     "overview": "Resumen",
     "mvmf": "Metaverse Music Festival",
     "land": "Land",
+    "names": "NAMEs",
     "collectibles": "Coleccionables",
     "partners": "Socios",
     "my_assets": "Mis Objetos",
@@ -1165,6 +1168,11 @@
         },
         "try_again": "Intentar de nuevo"
       }
+    },
+    "claim_name_success": {
+      "title": "Ganaste acceso a Worlds!",
+      "body": "Construí tu espacio personal en el metaverso.",
+      "cta": "Ver mis worlds"
     }
   },
   "maintainance": {
@@ -1469,7 +1477,9 @@
       "title": "Todo listo!",
       "status": "Transacción confirmada",
       "view_item": "Ver mi artículo",
-      "try_genesis_city": "Pruébalo en Genesis City"
+      "try_genesis_city": "Pruébalo en Genesis City",
+      "mint_more_names": "Acuñar más nombres",
+      "set_as_primary_name": "Elegir como nombre primario"
     },
     "error_state": {
       "title": "Ups",
@@ -1536,5 +1546,76 @@
   "atlas_updated_warning": {
     "info": "<strong>Los datos del mapa pueden estar desactualizados</strong>Encuentre los detalles de la LAND más recientes en la sección debajo de este mapa. Refrescar esta página puede actualizar la información. Si el problema persiste, comuníquese con nuestro equipo de soporte.",
     "fingerprint_missmatch": "La información de esta LAND puede no estar actualizada. Actualice la página para obtener la información más reciente. Si el problema persiste, comuníquese con nuestro equipo de soporte."
+  },
+  "names_page": {
+    "title": "Convertite en un ciudadano de Decentraland!",
+    "subtitle": "Obtené tu nombre único",
+    "claim_a_name": "Obtener nombre",
+    "browse_names_being_resold": "Buscar nombres siendo revendidos",
+    "manage_your_names": "Administrar tus nombres",
+    "name_label": "Nombre",
+    "name_placeholder": "Tu nombre va aquí",
+    "repeated_message": "Este nombre no está disponible.",
+    "claim_button": "Obtener",
+    "available": "Nombre disponible",
+    "not_available": "Nombre NO Disponible. Pero aún puedes conseguirlo, visita {link}",
+    "marketplace": "Marketplace",
+    "name_cost": "Cada nombre cuesta {mana} {network}",
+    "ethereum_mainnet_network": "Red Principal de Ethereum",
+    "dao_tooltip": "Todo lo generado por las ventas de Nombres es redirigido al tesoro de la DAO. {link}",
+    "why_names": "Por qué Nombres?",
+    "name_too_short": "Nombre demasiado corto: debe contener por lo menos 2 caracteres",
+    "has_spaces": "Los Nombres no peuden contener espacios",
+    "name_too_long": "Los Nombres pueden tener hasta 15 caracteres",
+    "invalid_characters": "Los nombres no pueden contener caraceteres no alfa-numericos",
+    "not_enough_mana": "No tienes suficiente MANA para reclamar un nuevo nombre",
+    "claim_name_fat_finger_modal": {
+      "title": "Por favor confirmar tu nombre",
+      "description": "Eelegiste {name}. Entra nuevamente el nombre para confirmar tu selección.",
+      "ok_message": "Felicitaciones, el nombre {name} es tuyo.",
+      "caps_warning": "La capitalización de los nombres no puede ser modificada una vez de adquirido el nombre.",
+      "name_placeholder": "Tu nombre único",
+      "names_different": "Nombres no coinciden",
+      "authorization": {
+        "title_action": "comprar",
+        "action": "obtener"
+      }
+    },
+    "your_name": "tuNombre",
+    "why": {
+      "stand_out": {
+        "title": "Destaca con un alias único para tu avatar",
+        "description": "Dile adiós a esos números al final de tu apodo."
+      },
+      "unlock": {
+        "title": "Desbloquea tu propio espacio personal 3D",
+        "description": "Obtén acceso a tu propio espacio 3D en el Metaverso. {link}"
+      },
+      "governance": {
+        "title": "Participar en la gobernanza",
+        "description": "Cada NOMBRE le otorga <b>100 poder de voto (VP)</b> para participar en propuestas DAO."
+      },
+      "get_url": {
+        "title": "Consigue la URL de tu LAND",
+        "description": "Facilite a los visitantes encontrar su TIERRA con una URL memorable como <b>https://name.dcl.eth</b>"
+      }
+    },
+    "ctas": {
+      "name_taken": {
+        "title": "Tu NOMBRE ya está en uso?",
+        "description": "No te preocupes, siempre puedes visitar nuestro Marketplace",
+        "cta": "Explorar nombres que se revenden"
+      },
+      "manage": {
+        "title": "Ya tengo Nombres de Decentraland",
+        "cta": "Gestiona tus nombres"
+      }
+    }
+  },
+  "set_name_as_alias_modal": {
+    "title": "Utilice NOMBRE como alias",
+    "description": "Su alias actual se actualizará inmediatamente.",
+    "success_title": "Todo listo!",
+    "success_description": "Tu alias fue actualizado"
   }
 }

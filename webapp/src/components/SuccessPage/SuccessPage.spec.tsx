@@ -1,5 +1,5 @@
 import { RenderResult } from '@testing-library/react'
-import { NFTCategory, Rarity } from '@dcl/schemas'
+import { NFTCategory, Profile, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   renderWithProviders,
@@ -22,20 +22,23 @@ jest.mock('react-router-dom', () => {
 
 jest.mock('lottie-react', () => () => <div>LOTTIE</div>)
 
-function renderSuccessPage(props: Partial<Props> = {}): RenderResult {
+function renderSuccessPage(
+  props: Partial<Props> = {},
+  preloadedNFTData?: Record<string, NFT>
+): RenderResult {
   return renderWithProviders(
     <SuccessPage isLoading={false} mintedTokenId={null} {...props} />,
     {
       preloadedState: {
         nft: {
-          data: {
+          data: preloadedNFTData || {
             'address-1': {
               data: {
                 wearable: {
                   rarity: Rarity.COMMON
                 }
               },
-              category: NFTCategory.WEARABLE,
+              category: NFTCategory.WEARABLE
             } as NFT
           },
           loading: [],
@@ -64,15 +67,83 @@ describe('when transaction is still loading', () => {
 })
 
 describe('when transaction finishes successfully', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     props = { isLoading: false }
-    screen = renderSuccessPage(props)
-    await waitForComponentToFinishLoading(screen)
   })
 
-  it('should render transaction confirmed message', () => {
-    expect(
-      screen.getByText(t('success_page.success_state.status'))
-    ).toBeInTheDocument()
+  describe('and its an ENS type of asset', () => {
+    describe('and the user has a profile set', () => {
+      beforeEach(async () => {
+        screen = renderSuccessPage(
+          {
+            ...props,
+            profile: {} as Profile
+          },
+          {
+            'address-1': {
+              data: {
+                ens: {
+                  subdomain: 'bondi'
+                }
+              },
+              category: NFTCategory.ENS
+            } as NFT
+          }
+        )
+        await waitForComponentToFinishLoading(screen)
+      })
+      it('should show the CTAs to mint more names and set as primary name', () => {
+        expect(
+          screen.getByText(t('success_page.success_state.mint_more_names'))
+        ).toBeInTheDocument()
+        expect(
+          screen.getByText(t('success_page.success_state.set_as_primary_name'))
+        ).toBeInTheDocument()
+      })
+    })
+    describe('and the user has not profile set yet', () => {
+      beforeEach(async () => {
+        screen = renderSuccessPage(
+          {
+            ...props,
+            profile: undefined
+          },
+          {
+            'address-1': {
+              data: {
+                ens: {
+                  subdomain: 'bondi'
+                }
+              },
+              category: NFTCategory.ENS
+            } as NFT
+          }
+        )
+        await waitForComponentToFinishLoading(screen)
+      })
+      it('should show the CTAs to mint more names only', () => {
+        expect(
+          screen.getByText(t('success_page.success_state.mint_more_names'))
+        ).toBeInTheDocument()
+        expect(
+          screen.queryByText(
+            t('success_page.success_state.set_as_primary_name')
+          )
+        ).not.toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('and its not an ENS type of asset', () => {
+    beforeEach(async () => {
+      props = { isLoading: false }
+      screen = renderSuccessPage(props)
+      await waitForComponentToFinishLoading(screen)
+    })
+    it('should render transaction confirmed message', () => {
+      expect(
+        screen.getByText(t('success_page.success_state.status'))
+      ).toBeInTheDocument()
+    })
   })
 })

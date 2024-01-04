@@ -44,7 +44,8 @@ import {
   getDeleteListFailureToast,
   getBulkPickItemSuccessToast,
   getBulkPickItemFailureToast,
-  getUpdateListSuccessToast
+  getUpdateListSuccessToast,
+  getNameClaimSuccessToast
 } from '../toast/toasts'
 import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
@@ -55,6 +56,8 @@ import {
 } from '../vendor/decentraland/favorites/types'
 import { toastSaga } from './sagas'
 import { toastDispatchableActionsChannel } from './utils'
+import { claimNameSuccess } from '../ens/actions'
+import { ENS } from '../ens/types'
 
 let nft: NFT
 let rental: RentalListing
@@ -300,6 +303,16 @@ describe('when handling a put into the toastDispatchableActionsChannel', () => {
     return expectSaga(toastSaga)
       .put(bulkPickUnpickRequest(item, [], []))
       .put(hideAllToasts())
+      .silentRun()
+  })
+})
+
+describe('when handling a success claiming actiono', () => {
+  it('should call the showToast', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .dispatch(claimNameSuccess({} as ENS, 'aNAME', '0xaHash'))
+      .put(showToast(getNameClaimSuccessToast()))
       .silentRun()
   })
 })

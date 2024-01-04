@@ -68,7 +68,9 @@
     "of": "的",
     "now": "现在",
     "actions": "行动",
-    "action_required": "需要采取的行动"
+    "action_required": "需要采取的行动",
+    "finish": "结束",
+    "guest": "客人"
   },
   "search_dropdown": {
     "recent": "最近的",
@@ -98,6 +100,7 @@
     "overview": "概述",
     "mvmf": "元界音乐节",
     "land": "土地",
+    "names": "姓名",
     "collectibles": "收藏品",
     "partners": "伙伴",
     "my_assets": "我的资产",
@@ -1170,6 +1173,11 @@
         },
         "try_again": "Try again"
       }
+    },
+    "claim_name_success": {
+      "title": "你获得了进入一个世界的机会",
+      "body": "在虚拟宇宙中建立您的个人空间。",
+      "cta": "查看我的世界"
     }
   },
   "maintainance": {
@@ -1474,7 +1482,9 @@
       "title": "全做完了！",
       "status": "交易确认",
       "view_item": "查看我的物品",
-      "try_genesis_city": "在创世纪尝试"
+      "try_genesis_city": "在创世纪尝试",
+      "mint_more_names": "铸造更多名字",
+      "set_as_primary_name": "设置为主名称"
     },
     "error_state": {
       "title": "糟糕",
@@ -1541,5 +1551,75 @@
   "atlas_updated_warning": {
     "info": "<strong>地图数据可能过时</strong>Find the moST在此地图下方的部分中的最新土地详细信息。刷新此页面可能会更新信息。如果问题仍然存在，请联系我们的支持团队。",
     "fingerprint_missmatch": "这片土地的信息可能不会更新。请刷新页面以获取最新信息。如果问题仍然存在，请联系我们的支持团队。"
+  },
+  "names_page": {
+    "title": "索取您的 Decentraland NAME",
+    "subtitle": "通过独特的名称、投票权和您自己的世界，充分发挥 Decentraland 公民身份的潜力！",
+    "claim_a_name": "索赔名称",
+    "browse_names_being_resold": "浏览正在转售的 NAME",
+    "manage_your_names": "管理您的姓名",
+    "name_label": "姓名",
+    "name_placeholder": "你的名字在这里",
+    "repeated_message": "这个名称不可用。",
+    "claim_button": "宣称",
+    "available": "姓名可用",
+    "not_available": "不可用的域名。但您仍然可以获得它，请访问{link}",
+    "marketplace": "查看市场上是否有售。",
+    "name_cost": "名字成本 {mana} {network}",
+    "ethereum_mainnet_network": "以太坊主网网络",
+    "dao_tooltip": "NAME 销售的所有收益都将转入 DAO 金库。{link}",
+    "why_names": "为什么要获取 NAME？",
+    "name_too_short": "名称太短：名称的长度必须至少为 2 个字符。",
+    "has_spaces": "NAME 不能包含空格。",
+    "name_too_long": "名称最多可包含 15 个字符。",
+    "invalid_characters": "名称只能包含字母数字字符。",
+    "not_enough_mana": "您没有足够的 MANA 来申请新名称",
+    "claim_name_fat_finger_modal": {
+      "title": "请确认您的新名称",
+      "description": "您已选择{name}。重新输入您的姓名以确认您的选择",
+      "ok_message": "恭喜您获得了名称 {name}。",
+      "name_placeholder": "你独特的名字",
+      "names_different": "姓名不匹配",
+      "authorization": {
+        "title_action": "购买",
+        "action": "宣称"
+      }
+    },
+    "your_name": "yourName",
+    "why": {
+      "stand_out": {
+        "title": "为您的头像设置一个独特的别名，让您脱颖而出",
+        "description": "使用末尾不带数字的用户名（例如 Genesis#1234）来拥有您在虚拟宇宙中的存在。"
+      },
+      "unlock": {
+        "title": "解锁你自己的世界",
+        "description": "在元宇宙中定制您自己的虚拟 3D 空间。举办活动、构建和实验。{link}"
+      },
+      "governance": {
+        "title": "参与治理",
+        "description": "塑造 Decentraland 的未来——在对 DAO 提案进行投票时，每个 NAME 都会授予您<b>100 投票权</b>。 {关联}"
+      },
+      "get_url": {
+        "title": "您的虚拟空间的专用 URL",
+        "description": "使用您的 LAND 或世界的独特且令人难忘的 URL 来引导访问者<b>https://name.dcl.eth</b>"
+      }
+    },
+    "ctas": {
+      "name_taken": {
+        "title": "您选择的NAME 已被认领吗？",
+        "description": "已领取的 NAME 可以在市场中出售 - 查看您想要的 NAME 是否可用。",
+        "cta": "浏览市场名称"
+      },
+      "manage": {
+        "title": "已有 Decentraland 名称",
+        "cta": "管理你的名字"
+      }
+    }
+  },
+  "set_name_as_alias_modal": {
+    "title": "使用 NAME 作为别名",
+    "description": "您当前的别名将立即更新。",
+    "success_title": "全做完了！",
+    "success_description": "您的用户名已更新"
   }
 }
