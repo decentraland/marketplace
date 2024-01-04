@@ -28,7 +28,7 @@
 .claimNamePage .buttons {
   display: flex;
   height: 100%;
-  padding: 46px 0;
+  padding: 36px 26px;
 }
 
 .claimNamePage .buttons > div + div {
@@ -326,7 +326,7 @@
 
 .claimNamePage .ctasContainer .card {
   background-color: #242129;
-  height: 209px;
+  height: 235px;
   width: 305px;
   padding: 0;
   overflow: hidden;
