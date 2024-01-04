@@ -1553,29 +1553,30 @@
     "fingerprint_missmatch": "这片土地的信息可能不会更新。请刷新页面以获取最新信息。如果问题仍然存在，请联系我们的支持团队。"
   },
   "names_page": {
-    "title": "成为 Decentraland 公民！",
-    "subtitle": "索取您的独特名称",
+    "title": "索取您的 Decentraland NAME",
+    "subtitle": "通过独特的名称、投票权和您自己的世界，充分发挥 Decentraland 公民身份的潜力！",
     "claim_a_name": "索赔名称",
-    "browse_names_being_resold": "浏览正在转售的名称",
-    "manage_your_names": "管理你的名字",
+    "browse_names_being_resold": "浏览正在转售的 NAME",
+    "manage_your_names": "管理您的姓名",
     "name_label": "姓名",
     "name_placeholder": "你的名字在这里",
     "repeated_message": "这个名称不可用。",
     "claim_button": "宣称",
-    "available": "可用域名",
+    "available": "姓名可用",
     "not_available": "不可用的域名。但您仍然可以获得它，请访问{link}",
-    "marketplace": "市场",
-    "name_cost": "每个NAME 消耗 {mana} {network}",
+    "marketplace": "查看市场上是否有售。",
+    "name_cost": "名字成本 {mana} {network}",
     "ethereum_mainnet_network": "以太坊主网网络",
     "dao_tooltip": "NAME 销售的所有收益都将转入 DAO 金库。{link}",
-    "name_too_short": "名称太短：名称必须至少有 2 个字符长。",
-    "has_spaces": "名称不能包含空格。",
+    "why_names": "为什么要获取 NAME？",
+    "name_too_short": "名称太短：名称的长度必须至少为 2 个字符。",
+    "has_spaces": "NAME 不能包含空格。",
     "name_too_long": "名称最多可包含 15 个字符。",
-    "invalid_characters": "名称不能包含任何非字母数字字符。",
+    "invalid_characters": "名称只能包含字母数字字符。",
     "not_enough_mana": "您没有足够的 MANA 来申请新名称",
     "claim_name_fat_finger_modal": {
       "title": "请确认您的新名称",
-      "description": "您已选择{name}。重新输入您的姓名以确认您的选择。",
+      "description": "您已选择{name}。重新输入您的姓名以确认您的选择",
       "ok_message": "恭喜您获得了名称 {name}。",
       "name_placeholder": "你独特的名字",
       "names_different": "姓名不匹配",
@@ -1587,30 +1588,30 @@
     "your_name": "yourName",
     "why": {
       "stand_out": {
-        "title": "为您的头像添加独一无二的别名，让您脱颖而出",
-        "description": "告别昵称末尾的那些数字。"
+        "title": "为您的头像设置一个独特的别名，让您脱颖而出",
+        "description": "使用末尾不带数字的用户名（例如 Genesis#1234）来拥有您在虚拟宇宙中的存在。"
       },
       "unlock": {
-        "title": "解锁您自己的3D个人空间",
-        "description": "访问 Metaverse 中您自己的 3D 空间。 {link}"
+        "title": "解锁你自己的世界",
+        "description": "在元宇宙中定制您自己的虚拟 3D 空间。举办活动、构建和实验。{link}"
       },
       "governance": {
         "title": "参与治理",
-        "description": "每个 NAME 都会授予您 <b>100 投票权 (VP)</b> 来参与 DAO 提案。"
+        "description": "塑造 Decentraland 的未来——在对 DAO 提案进行投票时，每个 NAME 都会授予您<b>100 投票权</b>。 {关联}"
       },
       "get_url": {
-        "title": "获取您的 LAND 的 URL",
-        "description": "通过 <b>https://name.dcl.eth</b> 等令人难忘的 URL，让访问者轻松找到您的 LAND"
+        "title": "您的虚拟空间的专用 URL",
+        "description": "使用您的 LAND 或世界的独特且令人难忘的 URL 来引导访问者<b>https://name.dcl.eth</b>"
       }
     },
     "ctas": {
       "name_taken": {
-        "title": "您的名字已被占用？",
-        "description": "不用担心，您随时可以访问我们的市场",
-        "cta": "浏览正在转售的名称"
+        "title": "您选择的NAME 已被认领吗？",
+        "description": "已领取的 NAME 可以在市场中出售 - 查看您想要的 NAME 是否可用。",
+        "cta": "浏览市场名称"
       },
       "manage": {
-        "title": "已获得 Decentraland 名称",
+        "title": "已有 Decentraland 名称",
         "cta": "管理你的名字"
       }
     }
@@ -1619,6 +1620,6 @@
     "title": "使用 NAME 作为别名",
     "description": "您当前的别名将立即更新。",
     "success_title": "全做完了！",
-    "success_description": "您的别名已更新"
+    "success_description": "您的用户名已更新"
   }
 }

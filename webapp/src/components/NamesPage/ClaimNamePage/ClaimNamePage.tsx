@@ -214,7 +214,7 @@ const ClaimNamePage = (props: Props) => {
         description: t('names_page.why.unlock.description', {
           link: (
             <a
-              href="https://docs.decentraland.org/creator/worlds/about/"
+              href="https://decentraland.org/blog/about-decentraland/decentraland-worlds-your-own-virtual-space"
               className={styles.learnMore}
             >
               {t('global.learn_more')}
@@ -228,6 +228,14 @@ const ClaimNamePage = (props: Props) => {
         description: t('names_page.why.governance.description', {
           b: (children: React.ReactChildren) => (
             <b className={styles.voting}>{children}</b>
+          ),
+          link: (
+            <a
+              href="https://docs.decentraland.org/player/general/dao/overview/what-is-the-dao"
+              className={styles.learnMore}
+            >
+              {t('global.learn_more')}
+            </a>
           )
         })
       },
@@ -318,7 +326,8 @@ const ClaimNamePage = (props: Props) => {
                         disabled={
                           !isAvailable ||
                           nameInvalidType !== null ||
-                          (!!currentMana && !isEnoughClaimMana(currentMana))
+                          (currentMana !== undefined &&
+                            !isEnoughClaimMana(currentMana))
                         }
                       >
                         {t('names_page.claim_a_name')}
@@ -326,7 +335,7 @@ const ClaimNamePage = (props: Props) => {
                     </div>
                   }
                   disabled={
-                    !wallet || !currentMana || !isEnoughClaimMana(currentMana)
+                    !!(wallet && currentMana && isEnoughClaimMana(currentMana))
                   }
                   hideOnScroll={true}
                   on="hover"
