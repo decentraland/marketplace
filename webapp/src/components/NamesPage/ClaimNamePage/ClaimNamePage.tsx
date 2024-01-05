@@ -504,7 +504,7 @@ const ClaimNamePage = (props: Props) => {
                           inverted
                           as={'a'}
                           target="_blank"
-                          href={`${builderUrl}/claim-name`}
+                          href={`${builderUrl}/names`}
                         >
                           {t('names_page.manage_your_names')}
                         </Button>
