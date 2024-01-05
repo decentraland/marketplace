@@ -5,11 +5,9 @@ import { AuthIdentity } from '@dcl/crypto'
 
 export type Props = Partial<NavbarProps> & {
   location: RouterLocation<unknown>
-  isConnected: boolean
   hasPendingTransactions: boolean
   enablePartialSupportAlert?: boolean
   onNavigate: (path: string) => void
-  isNewNavbarDropdownEnabled: boolean
   identity?: AuthIdentity
   isAuthDappEnabled: boolean
 }
@@ -20,8 +18,6 @@ export type MapStateProps = Pick<
   Props,
   | 'location'
   | 'hasPendingTransactions'
-  | 'isConnected'
-  | 'isNewNavbarDropdownEnabled'
   | 'identity'
   | 'isAuthDappEnabled'
 >
