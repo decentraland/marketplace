@@ -18,7 +18,7 @@
   flex: 1;
 }
 
-.claimNamePage .card.claimContainer :global(.dcl.close) {
+.claimNamePage .claimContainer :global(.dcl.close) {
   position: absolute;
   background: none;
   right: 12px;
@@ -296,6 +296,7 @@
 }
 
 .claimNamePage .claimContainer :global(.ui.primary.button) {
+  height: 100%;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
