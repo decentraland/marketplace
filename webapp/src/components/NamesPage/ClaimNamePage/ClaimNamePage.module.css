@@ -149,14 +149,12 @@
 }
 
 .claimNamePage .claimContainer {
+  border-radius: 16px;
+  padding: 24px;
+  margin-top: 12px;
   width: calc(100% - 6px);
-  border-radius: 14.482757568359375px;
-  background-color: linear-gradient(
-    116deg,
-    rgba(255, 188, 91, 0.1) 0%,
-    rgba(255, 45, 85, 0.1) 50.52%,
-    rgba(198, 64, 205, 0.1) 100%
-  );
+  background-image: url('../../../images/names/gradient-background.svg');
+  background-size: cover;
 
   display: flex;
   flex-direction: column;

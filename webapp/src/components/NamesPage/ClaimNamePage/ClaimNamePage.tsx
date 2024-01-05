@@ -259,7 +259,7 @@ const ClaimNamePage = (props: Props) => {
         <div className={styles.claimNamePage}>
           <Container className={styles.mainContainer}>
             <div className={styles.gradient}>
-              <div className={classNames(styles.claimContainer, styles.card)}>
+              <div className={classNames(styles.claimContainer)}>
                 {isInputFocus ? (
                   <Close onClick={() => setIsInputFocus(false)} />
                 ) : null}
