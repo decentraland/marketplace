@@ -16,7 +16,6 @@ export enum FeatureName {
   HANDS_CATEGORY = 'hands-category',
   EMOTES_V2 = 'emotes-2.0',
   EMOTES_V2_FTU = 'emotes-2.0-ftu',
-  NEW_NAVBAR_DROPDOWN = 'new-navbar-dropdown',
   SMART_WEARABLES_FTU = 'smart-wearables-ftu',
   MARKETPLACE_SERVER = 'marketplace-server',
   BUY_CROSS_CHAIN = 'buy-cross-chain',

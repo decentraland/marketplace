@@ -24,7 +24,6 @@ import {
   getIsRentalPriceFilterChartEnabled,
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
-  getIsNewNavbarDropdownEnabled,
   getIsBuyCrossChainEnabled,
   getIsAuthDappEnabled
 } from './selectors'
@@ -214,11 +213,6 @@ const waitForInitialLoadingSelectors = [
     selector: getIsEmotesV2FTUEnabled
   },
   {
-    name: 'navbar-dropdown',
-    feature: FeatureName.NEW_NAVBAR_DROPDOWN,
-    selector: getIsNewNavbarDropdownEnabled
-  },
-  {
     name: 'buy-crosschain',
     feature: FeatureName.BUY_CROSS_CHAIN,
     selector: getIsBuyCrossChainEnabled
@@ -231,59 +225,60 @@ const waitForInitialLoadingSelectors = [
   }
 ]
 
-waitForInitialLoadingSelectors.forEach(({ name, feature, applicationName, selector }) =>
-  describe(`when getting if the ${name} feature flag is enabled`, () => {
-    describe('when the initial flags have not been yet loaded', () => {
-      beforeEach(() => {
-        hasLoadedInitialFlagsMock.mockReturnValueOnce(false)
-      })
-
-      it('should return false', () => {
-        const isEnabled = selector(state)
-
-        expect(isEnabled).toBe(false)
-        expect(getIsFeatureEnabledMock).not.toHaveBeenCalled()
-      })
-    })
-
-    describe('when the initial flags have not been yet loaded', () => {
-      beforeEach(() => {
-        hasLoadedInitialFlagsMock.mockReturnValueOnce(true)
-      })
-
-      describe('when the feature is not enabled', () => {
+waitForInitialLoadingSelectors.forEach(
+  ({ name, feature, applicationName, selector }) =>
+    describe(`when getting if the ${name} feature flag is enabled`, () => {
+      describe('when the initial flags have not been yet loaded', () => {
         beforeEach(() => {
-          getIsFeatureEnabledMock.mockReturnValueOnce(false)
+          hasLoadedInitialFlagsMock.mockReturnValueOnce(false)
         })
 
         it('should return false', () => {
           const isEnabled = selector(state)
 
           expect(isEnabled).toBe(false)
-          expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
-            state,
-            applicationName || ApplicationName.MARKETPLACE,
-            feature
-          )
+          expect(getIsFeatureEnabledMock).not.toHaveBeenCalled()
         })
       })
 
-      describe('when the feature is enabled', () => {
+      describe('when the initial flags have not been yet loaded', () => {
         beforeEach(() => {
-          getIsFeatureEnabledMock.mockReturnValueOnce(true)
+          hasLoadedInitialFlagsMock.mockReturnValueOnce(true)
         })
 
-        it('should return true', () => {
-          const isEnabled = selector(state)
+        describe('when the feature is not enabled', () => {
+          beforeEach(() => {
+            getIsFeatureEnabledMock.mockReturnValueOnce(false)
+          })
 
-          expect(isEnabled).toBe(true)
-          expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
-            state,
-            applicationName || ApplicationName.MARKETPLACE,
-            feature
-          )
+          it('should return false', () => {
+            const isEnabled = selector(state)
+
+            expect(isEnabled).toBe(false)
+            expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
+              state,
+              applicationName || ApplicationName.MARKETPLACE,
+              feature
+            )
+          })
+        })
+
+        describe('when the feature is enabled', () => {
+          beforeEach(() => {
+            getIsFeatureEnabledMock.mockReturnValueOnce(true)
+          })
+
+          it('should return true', () => {
+            const isEnabled = selector(state)
+
+            expect(isEnabled).toBe(true)
+            expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
+              state,
+              applicationName || ApplicationName.MARKETPLACE,
+              feature
+            )
+          })
         })
       })
     })
-  })
 )
