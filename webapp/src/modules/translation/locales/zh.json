@@ -1601,7 +1601,7 @@
       },
       "get_url": {
         "title": "您的虚拟空间的专用 URL",
-        "description": "使用您的 LAND 或世界的独特且令人难忘的 URL 来引导访问者<b>https://name.dcl.eth</b>"
+        "description": "使用您的 LAND 的独特且令人难忘的 URL 引导访客<b>https://name.dcl.eth</b>"
       }
     },
     "ctas": {
