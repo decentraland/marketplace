@@ -19,5 +19,6 @@ export enum FeatureName {
   SMART_WEARABLES_FTU = 'smart-wearables-ftu',
   MARKETPLACE_SERVER = 'marketplace-server',
   BUY_CROSS_CHAIN = 'buy-cross-chain',
-  AUTH_DAPP = 'auth-dapp'
+  AUTH_DAPP = 'auth-dapp',
+  NAVBAR_V2 = 'navbar2_variant'
 }
