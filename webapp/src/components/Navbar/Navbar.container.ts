@@ -4,19 +4,16 @@ import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 
 import { RootState } from '../../modules/reducer'
 import { getTransactions } from '../../modules/transaction/selectors'
-import { isConnected } from '../../modules/wallet/selectors'
-import { getIsAuthDappEnabled, getIsNewNavbarDropdownEnabled } from '../../modules/features/selectors'
+import { getIsAuthDappEnabled } from '../../modules/features/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './Navbar.types'
 import Navbar from './Navbar'
 import { getCurrentIdentity } from '../../modules/identity/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
-  isConnected: isConnected(state),
   location: getLocation(state),
   hasPendingTransactions: getTransactions(state).some(tx =>
     isPending(tx.status)
   ),
-  isNewNavbarDropdownEnabled: getIsNewNavbarDropdownEnabled(state),
   identity: getCurrentIdentity(state) || undefined,
   isAuthDappEnabled: getIsAuthDappEnabled(state)
 })
