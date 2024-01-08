@@ -54,7 +54,6 @@ code {
 
 .ui.container {
   width: 100%;
-  max-width: 1360px !important;
 }
 
 .dcl.toast .toast-info .body .ui.basic.button.no-padding {

@@ -1,5 +1,7 @@
 import React, { useCallback } from 'react'
 import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
+import { Navbar2 as BaseNavbar2 } from 'decentraland-dapps/dist/containers'
+import { Navbar2Pages } from 'decentraland-ui/dist/components/Navbar2/Navbar2.types'
 import { config } from '../../config'
 import { locations } from '../../modules/routing/locations'
 import UserInformation from '../UserInformation'
@@ -7,17 +9,8 @@ import { Props } from './Navbar.types'
 import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const {
-    location,
-    onNavigate,
-    isAuthDappEnabled
-  } = props
+  const { location, onNavigate, isAuthDappEnabled, isNavbarV2Enabled } = props
   const { pathname, search } = location
-
-  props = {
-    ...props,
-    rightMenu: <UserInformation identity={props.identity} withNotifications />
-  }
 
   const handleOnSignIn = useCallback(() => {
     const searchParams = new URLSearchParams(search)
@@ -38,7 +31,17 @@ const Navbar = (props: Props) => {
     onNavigate(locations.settings())
   }, [onNavigate])
 
-  return (
+  return isNavbarV2Enabled ? (
+    <BaseNavbar2
+      {...props}
+      withNotifications
+      activePage={Navbar2Pages.MARKETPLACE}
+      hasActivity={props.hasPendingTransactions}
+      identity={props.identity}
+      onSignIn={handleOnSignIn}
+      onClickAccountSettings={handleOnClickAccount}
+    />
+  ) : (
     <BaseNavbar
       {...props}
       withNotifications
@@ -47,6 +50,9 @@ const Navbar = (props: Props) => {
       isSignIn={pathname === locations.signIn()}
       onSignIn={handleOnSignIn}
       onClickAccount={handleOnClickAccount}
+      rightMenu={
+        <UserInformation identity={props.identity} withNotifications />
+      }
     />
   )
 }
