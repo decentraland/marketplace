@@ -9,6 +9,10 @@ const overridedConfig = override(
       __dirname,
       'node_modules/decentraland-connect/node_modules/@walletconnect'
     ),
+    path.resolve(
+      __dirname,
+      'node_modules/decentraland-connect/node_modules/ethers'
+    ),
     path.resolve('node_modules/@metamask/utils/node_modules/superstruct'),
     path.resolve(__dirname, 'node_modules/@walletconnect'),
     path.resolve(__dirname, 'node_modules/@dcl/single-sign-on-client'),
@@ -26,7 +30,7 @@ const jestConfig = config => {
   ]
   config.moduleNameMapper = {
     ...config.moduleNameMapper,
-    '@dcl/single-sign-on-client': 'identity-obj-proxy',
+    '@dcl/single-sign-on-client': 'identity-obj-proxy'
   }
   return config
 }
