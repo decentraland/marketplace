@@ -15,9 +15,14 @@ const Navbar = (props: Props) => {
   const handleOnSignIn = useCallback(() => {
     const searchParams = new URLSearchParams(search)
     const currentRedirectTo = searchParams.get('redirectTo')
+    const basename = /^decentraland.(zone|org|today)$/.test(
+      window.location.host
+    )
+      ? '/marketplace'
+      : ''
     const redirectTo = !currentRedirectTo
-      ? `${pathname}${search}`
-      : currentRedirectTo
+      ? `${basename}${pathname}${search}`
+      : `${basename}${currentRedirectTo}`
     if (isAuthDappEnabled) {
       window.location.replace(
         `${config.get('AUTH_URL')}/login?redirectTo=${redirectTo}`

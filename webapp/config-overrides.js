@@ -16,7 +16,8 @@ const overridedConfig = override(
     path.resolve(__dirname, 'node_modules/@cosmjs'),
     path.resolve(__dirname, 'node_modules/cosmjs-types'),
     path.resolve(__dirname, 'node_modules/ethers-multicall-provide'),
-    path.resolve(__dirname, 'node_modules/@noble')
+    path.resolve(__dirname, 'node_modules/@noble'),
+    path.resolve(__dirname, 'node_modules/decentraland-connect/node_modules/ethers')
   ])
 )
 
