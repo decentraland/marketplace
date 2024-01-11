@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { default as SignIn } from 'decentraland-dapps/dist/containers/SignInPage'
 import { Page } from 'decentraland-ui'
 import { config } from '../../config'
@@ -9,17 +9,27 @@ import './SignInPage.css'
 
 const SignInPage = (props: Props) => {
   const { isAuthDappEnabled, isConnecting, isConnected } = props
-  useEffect(() => {
-    if (isAuthDappEnabled && !isConnected && !isConnecting) {
-      window.location.replace(`${config.get("AUTH_URL")}`)
+  const handleConnect = useCallback(() => {
+    if (!isConnected && !isConnecting) {
+      const params = new URLSearchParams(window.location.search)
+      const basename = /^decentraland.(zone|org|today)$/.test(
+        window.location.host
+      )
+        ? '/marketplace'
+        : ''
+      window.location.replace(
+        `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(
+          `${basename}${params.get('redirectTo') || '/'}`
+        )}`
+      )
     }
-  }, [isAuthDappEnabled, isConnected, isConnecting])
+  }, [])
 
   return (
     <>
       <Navbar isFullscreen />
       <Page className="SignInPage" isFullscreen>
-        <SignIn />
+        <SignIn onConnect={isAuthDappEnabled ? handleConnect : undefined} />
       </Page>
       <Footer isFullscreen />
     </>
