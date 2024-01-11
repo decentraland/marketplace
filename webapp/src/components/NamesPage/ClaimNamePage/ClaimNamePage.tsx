@@ -12,6 +12,7 @@ import {
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { config } from '../../../config'
 import infoIcon from '../../../images/infoIcon.png'
 import ClaimNameImage from '../../../images/claim-name.svg'
 import ClaimNameBanner from '../../../images/claim-name-banner.png'
@@ -40,6 +41,9 @@ import { Mana } from '../../Mana'
 import { Props } from './ClaimNamePage.types'
 import styles from './ClaimNamePage.module.css'
 import { PageLayout } from '../../PageLayout'
+
+export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')!
+const MARKETPLACE_URL = config.get('MARKETPLACE_URL', '')
 
 const PLACEHOLDER_WIDTH = '94px'
 
@@ -370,12 +374,12 @@ const ClaimNamePage = (props: Props) => {
                             link: (
                               <a
                                 className={styles.marketplaceLinkContainer}
-                                href={locations.names({
+                                href={`${MARKETPLACE_URL}${locations.names({
                                   search: name,
                                   onlyOnSale: false,
                                   sortBy: SortBy.NEWEST,
                                   section: Section.ENS
-                                })}
+                                })}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                               >
