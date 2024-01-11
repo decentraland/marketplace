@@ -38,7 +38,8 @@ code {
 .AssetBrowse .ui.container,
 .Navigation .ui.container,
 .dcl.navbar.fullscreen .ui.container,
-.dcl.footer.ui.container {
+.dcl.footer.ui.container,
+.dui-navbar2 > .ui.container {
   width: 100vw;
   box-sizing: border-box;
   max-width: 100% !important;
@@ -54,6 +55,7 @@ code {
 
 .ui.container {
   width: 100%;
+  max-width: 1360px !important;
 }
 
 .dcl.toast .toast-info .body .ui.basic.button.no-padding {
