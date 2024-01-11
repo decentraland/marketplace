@@ -38,11 +38,10 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { NavigationTab } from '../../Navigation/Navigation.types'
 import { builderUrl } from '../../../lib/environment'
 import { Mana } from '../../Mana'
+import { PageLayout } from '../../PageLayout'
 import { Props } from './ClaimNamePage.types'
 import styles from './ClaimNamePage.module.css'
-import { PageLayout } from '../../PageLayout'
 
-export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')!
 const MARKETPLACE_URL = config.get('MARKETPLACE_URL', '')
 
 const PLACEHOLDER_WIDTH = '94px'
