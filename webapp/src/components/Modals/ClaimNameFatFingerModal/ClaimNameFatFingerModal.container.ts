@@ -1,4 +1,6 @@
 import { connect } from 'react-redux'
+import { ChainId } from '@dcl/schemas'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
@@ -13,10 +15,13 @@ import {
 import {
   claimNameRequest,
   CLAIM_NAME_REQUEST,
-  claimNameClear
+  claimNameClear,
+  claimNameTransactionSubmitted
 } from '../../../modules/ens/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
+import { getWallet } from '../../../modules/wallet/selectors'
+import { getCurrentIdentity } from '../../../modules/identity/selectors'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -29,12 +34,21 @@ const mapState = (state: RootState): MapState => ({
     isLoadingType(getLoading(state), CLAIM_NAME_REQUEST) ||
     isWaitingTxClaimName(state),
   address: getAddress(state),
-  getContract: (query: Partial<Contract>) => getContract(state, query)
+  getContract: (query: Partial<Contract>) => getContract(state, query),
+  wallet: getWallet(state),
+  identity: (getCurrentIdentity(state) as AuthIdentity | null) ?? undefined
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onClaim: name => dispatch(claimNameRequest(name)),
-  onClaimNameClear: () => dispatch(claimNameClear())
+  onClaimNameClear: () => dispatch(claimNameClear()),
+  onClaimTxSubmitted: (
+    subdomain: string,
+    address: string,
+    chainId: ChainId,
+    txHash: string
+  ) =>
+    dispatch(claimNameTransactionSubmitted(subdomain, address, chainId, txHash))
 })
 
 export default connect(
@@ -45,7 +59,8 @@ export default connect(
     ClaimNameFatFingerModal,
     AuthorizedAction.CLAIM_NAME,
     {
-      title_action: 'names_page.claim_name_fat_finger_modal.authorization.title_action',
+      title_action:
+        'names_page.claim_name_fat_finger_modal.authorization.title_action',
       action: 'names_page.claim_name_fat_finger_modal.authorization.action'
     },
     getClaimNameStatus,

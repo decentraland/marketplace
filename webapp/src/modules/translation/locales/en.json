@@ -1587,6 +1587,18 @@
       "description": "You have chosen {name}. Re-enter your NAME to confirm your selection.",
       "ok_message": "Congratulations the name {name} is yours.",
       "caps_warning": "The capitalization of NAMEs cannot be modified once claimed.",
+      "paying_with": "Paying with",
+      "pay_methods": {
+        "crypto": {
+          "name": "Crypto",
+          "subtitle": "Ethereum Mainnet Network"
+        },
+        "fiat": {
+          "name": "FIAT",
+          "title": "Using Debit and Credit Cards",
+          "subtitle": "Price rate changes may change"
+        }
+      },
       "name_placeholder": "Your unique NAME",
       "names_different": "Names do not match",
       "authorization": {

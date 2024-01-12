@@ -13,7 +13,9 @@ import {
   ClaimNameRequestAction,
   claimNameSuccess,
   claimNameFailure,
-  claimNameTransactionSubmitted
+  claimNameTransactionSubmitted,
+  CLAIM_NAME_TRANSACTION_SUBMITTED,
+  ClaimNameTransactionSubmittedAction
 } from './actions'
 import { ENS, ENSError } from './types'
 import { getDomainFromName } from './utils'
@@ -29,6 +31,55 @@ export const REGISTRAR_ADDRESS = config.get('REGISTRAR_CONTRACT_ADDRESS', '')
 
 export function* ensSaga() {
   yield takeEvery(CLAIM_NAME_REQUEST, handleClaimNameRequest)
+  yield takeEvery(
+    CLAIM_NAME_TRANSACTION_SUBMITTED,
+    handleClaimNameSubmittedRequest
+  )
+
+  function* handleClaimNameSubmittedRequest(
+    action: ClaimNameTransactionSubmittedAction
+  ) {
+    const tx = Object.keys(action.payload)[0]
+    const {
+      hash,
+      payload: { subdomain },
+      from
+    } = action.payload[tx]
+
+    try {
+      yield call(waitForTx, hash)
+      const signer: ethers.Signer = yield call(getSigner)
+
+      const dclRegistrarContract: DCLRegistrar = yield call(
+        [DCLRegistrar__factory, 'connect'],
+        REGISTRAR_ADDRESS,
+        signer
+      )
+      const tokenId: BigNumber = yield call(
+        [dclRegistrarContract, 'getTokenId'],
+        subdomain
+      )
+      if (from) {
+        const ens: ENS = {
+          name: subdomain,
+          tokenId: tokenId.toString(),
+          ensOwnerAddress: from,
+          nftOwnerAddress: from,
+          subdomain: getDomainFromName(subdomain),
+          resolver: ethers.constants.AddressZero,
+          content: ethers.constants.AddressZero,
+          contractAddress: dclRegistrarContract.address
+        }
+        yield put(claimNameSuccess(ens, subdomain, hash))
+        yield put(closeModal('ClaimNameFatFingerModal'))
+      }
+    } catch (error) {
+      const ensError: ENSError = {
+        message: isErrorWithMessage(error) ? error.message : 'Unknown error'
+      }
+      yield put(claimNameFailure(ensError))
+    }
+  }
 
   function* handleClaimNameRequest(action: ClaimNameRequestAction) {
     const { name } = action.payload
@@ -42,11 +93,11 @@ export function* ensSaga() {
         CONTROLLER_V2_ADDRESS,
         signer
       )
-      const dclRegistrarContract: DCLRegistrar = yield call(
-        [DCLRegistrar__factory, 'connect'],
-        REGISTRAR_ADDRESS,
-        signer
-      )
+      // const dclRegistrarContract: DCLRegistrar = yield call(
+      //   [DCLRegistrar__factory, 'connect'],
+      //   REGISTRAR_ADDRESS,
+      //   signer
+      // )
       const transaction: ethers.ContractTransaction = yield call(
         [controllerContract, 'register'],
         name,
@@ -60,23 +111,23 @@ export function* ensSaga() {
           transaction.hash
         )
       )
-      yield call(waitForTx, transaction.hash)
-      const tokenId: BigNumber = yield call(
-        [dclRegistrarContract, 'getTokenId'],
-        name
-      )
-      const ens: ENS = {
-        name: name,
-        tokenId: tokenId.toString(),
-        ensOwnerAddress: wallet.address,
-        nftOwnerAddress: wallet.address,
-        subdomain: getDomainFromName(name),
-        resolver: ethers.constants.AddressZero,
-        content: ethers.constants.AddressZero,
-        contractAddress: dclRegistrarContract.address
-      }
-      yield put(claimNameSuccess(ens, name, transaction.hash))
-      yield put(closeModal('ClaimNameFatFingerModal'))
+      // yield call(waitForTx, transaction.hash)
+      // const tokenId: BigNumber = yield call(
+      //   [dclRegistrarContract, 'getTokenId'],
+      //   name
+      // )
+      // const ens: ENS = {
+      //   name: name,
+      //   tokenId: tokenId.toString(),
+      //   ensOwnerAddress: wallet.address,
+      //   nftOwnerAddress: wallet.address,
+      //   subdomain: getDomainFromName(name),
+      //   resolver: ethers.constants.AddressZero,
+      //   content: ethers.constants.AddressZero,
+      //   contractAddress: dclRegistrarContract.address
+      // }
+      // yield put(claimNameSuccess(ens, name, transaction.hash))
+      // yield put(closeModal('ClaimNameFatFingerModal'))
     } catch (error) {
       const ensError: ENSError = {
         message: isErrorWithMessage(error) ? error.message : 'Unknown error'
