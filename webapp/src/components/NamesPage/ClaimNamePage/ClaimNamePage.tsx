@@ -454,6 +454,14 @@ const ClaimNamePage = (props: Props) => {
                     }
                     on="hover"
                   />
+                  <div>
+                    {t('names_page.name_cost_fiat', {
+                      icon: <Icon name="credit card outline" />
+                    })}
+                    <span className={styles.cardsLabel}>
+                      {t('names_page.debit_and_credit_cards')}
+                    </span>
+                  </div>
                 </span>
               </div>
             </div>
@@ -477,7 +485,12 @@ const ClaimNamePage = (props: Props) => {
                   </div>
                 ))}
               </div>
-              <div className={classNames(styles.cardsContainer, styles.bottomContainer)}>
+              <div
+                className={classNames(
+                  styles.cardsContainer,
+                  styles.bottomContainer
+                )}
+              >
                 <div className={styles.nameTakenCard}>
                   <div className={styles.buttons}>
                     <div>

@@ -1574,6 +1574,8 @@
     "not_available": "Unavailable NAME. {link}",
     "marketplace": "See if it's on sale in the Marketplace.",
     "name_cost": "A NAME costs {mana} {network}",
+    "name_cost_fiat": "You can also pay using FIAT {icon}",
+    "debit_and_credit_cards": "Debit and Credit Cards",
     "ethereum_mainnet_network": "Ethereum Mainnet Network",
     "dao_tooltip": "All proceeds from NAME sales are redirected to the DAO treasury. {link}",
     "why_names": "Why get a NAME?",
@@ -1595,6 +1597,7 @@
         },
         "fiat": {
           "name": "FIAT",
+          "new": "new",
           "title": "Using Debit and Credit Cards",
           "subtitle": "Price rate changes may change"
         }

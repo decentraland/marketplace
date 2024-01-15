@@ -61,6 +61,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 .ClaimNameFatFingerModal.ui.modal .paymentMethod {
@@ -115,11 +116,18 @@
   background: #333039;
 }
 
+.ClaimNameFatFingerModal .baseGradient {
+  width: 475px;
+  height: 113px;
+  border-radius: 6px;
+  border: 1px solid #43404a;
+  margin-bottom: 11px;
+  border-radius: 14px;
+}
+
 .ClaimNameFatFingerModal .gradient {
   width: 475px;
   height: 113px;
-  margin-bottom: 11px;
-  border-radius: 14.482757568359375px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -149,4 +157,39 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+.ClaimNameFatFingerModal .newPaymentMethod {
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  color: #ffa25a;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.ClaimNameFatFingerModal .dcl.modal-navigation {
+  padding-top: 54px;
+}
+
+.ClaimNameFatFingerModal .dcl.modal-navigation-title {
+  font-size: 30px;
+}
+
+.ClaimNameFatFingerModal .content .details {
+  font-size: 16px;
+}
+
+.ClaimNameFatFingerModal.ui.modal
+  .ui.form
+  .dcl.field
+  .ui.input
+  input::placeholder {
+  color: #716b7c;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

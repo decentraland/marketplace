@@ -88,6 +88,7 @@ const ClaimNameFatFingerModal = ({
         const nftOptions = {
           extra: {
             item_info: {
+              // category: 'Claim Decentraland NAME',
               author: 'Decentraland',
               image_url: `${MARKETPLACE_SERVER_URL}/ens/generate?ens=${ENSName}&width=330&height=330`,
               ENSName,
@@ -219,7 +220,12 @@ const ClaimNameFatFingerModal = ({
                     'names_page.claim_name_fat_finger_modal.pay_methods.crypto.name'
                   )}
                 </span>
-                <div className="gradient">
+                <div
+                  className={classNames(
+                    'baseGradient',
+                    paymentMethod === PaymentMethod.CRYPTO && 'gradient'
+                  )}
+                >
                   <div
                     className={classNames(
                       paymentMethod === PaymentMethod.CRYPTO && 'selected',
@@ -245,7 +251,17 @@ const ClaimNameFatFingerModal = ({
                     'names_page.claim_name_fat_finger_modal.pay_methods.fiat.name'
                   )}
                 </span>
-                <div className="gradient">
+                <span className="newPaymentMethod">
+                  {t(
+                    'names_page.claim_name_fat_finger_modal.pay_methods.fiat.new'
+                  )}
+                </span>
+                <div
+                  className={classNames(
+                    'baseGradient',
+                    paymentMethod === PaymentMethod.FIAT && 'gradient'
+                  )}
+                >
                   <div
                     className={classNames(
                       paymentMethod === PaymentMethod.FIAT && 'selected',
