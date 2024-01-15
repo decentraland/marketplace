@@ -188,7 +188,7 @@ const ClaimNameFatFingerModal = ({
           <div className="details">
             <T
               id="names_page.claim_name_fat_finger_modal.description"
-              values={{ name: <strong>{ENSName}</strong> }}
+              values={{ name: <strong>{ENSName}</strong>, br: <br /> }}
             />
           </div>
           <Field

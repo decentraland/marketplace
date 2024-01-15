@@ -1,3 +1,7 @@
+.ClaimNameFatFingerModal.ui.small.modal {
+  width: 628px;
+}
+
 .ClaimNameFatFingerModal.ui.modal > .ui.form > .content,
 .ClaimNameFatFingerModal.ui.modal > .ui.form > .actions {
   margin-left: 70px;
@@ -117,7 +121,7 @@
 }
 
 .ClaimNameFatFingerModal .baseGradient {
-  width: 475px;
+  width: 385px;
   height: 113px;
   border-radius: 6px;
   border: 1px solid #43404a;
@@ -126,8 +130,8 @@
 }
 
 .ClaimNameFatFingerModal .gradient {
-  width: 475px;
-  height: 113px;
+  /* width: 475px; */
+  /* height: 113px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -180,6 +184,7 @@
 
 .ClaimNameFatFingerModal .content .details {
   font-size: 16px;
+  line-height: 22px;
 }
 
 .ClaimNameFatFingerModal.ui.modal

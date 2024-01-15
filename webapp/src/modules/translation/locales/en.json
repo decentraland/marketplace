@@ -1586,7 +1586,7 @@
     "not_enough_mana": "You don't have enough MANA to claim a new name",
     "claim_name_fat_finger_modal": {
       "title": "Please confirm your new name",
-      "description": "You have chosen {name}. Re-enter your NAME to confirm your selection.",
+      "description": "You have chosen {name}. {br} Re-enter your NAME to confirm your selection.",
       "ok_message": "Congratulations the name {name} is yours.",
       "caps_warning": "The capitalization of NAMEs cannot be modified once claimed.",
       "paying_with": "Paying with",
