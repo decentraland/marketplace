@@ -315,6 +315,10 @@
   align-items: flex-start;
 }
 
+.claimNamePage .mainContainer:global(.ui.container) {
+  width: 1280px;
+}
+
 .claimNamePage .ctasContainer {
   text-align: center;
   width: 100%;
