@@ -477,7 +477,7 @@ const ClaimNamePage = (props: Props) => {
                   </div>
                 ))}
               </div>
-              <div className={styles.cardsContainer}>
+              <div className={classNames(styles.cardsContainer, styles.bottomContainer)}>
                 <div className={styles.nameTakenCard}>
                   <div className={styles.buttons}>
                     <div>

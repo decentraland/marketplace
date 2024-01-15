@@ -27,6 +27,8 @@ export const CONTROLLER_V2_ADDRESS = config.get(
   ''
 )
 
+const isDev = config.is(Env.DEVELOPMENT)
+
 enum PaymentMethod {
   CRYPTO,
   FIAT
@@ -68,10 +70,10 @@ const ClaimNameFatFingerModal = ({
 
       const data = {
         address: wallet.address,
-        commodity: 'TTG', // will be MANA later on
+        commodity: isDev ? 'TTS' : 'MANA', // will be MANA later on
         commodity_amount: Number(PRICE),
-        network: 'goerli', // will be wallet.network
-        sc_address: '0x7a295430fe4ee6e3aebf53808ddf9bdc010d2d98', // will be CONTROLLER_V2_ADDRESS
+        network: isDev ? 'sepolia' : 'ethereum', // will be wallet.network
+        sc_address: CONTROLLER_V2_ADDRESS,
         sc_input_data
       }
 
