@@ -2,7 +2,10 @@ import { BigNumber, ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import {
+  TRANSACTION_ACTION_FLAG,
+  waitForTx
+} from 'decentraland-dapps/dist/modules/transaction/utils'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { DCLController } from '../../contracts'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
@@ -39,12 +42,13 @@ export function* ensSaga() {
   function* handleClaimNameSubmittedRequest(
     action: ClaimNameTransactionSubmittedAction
   ) {
-    const tx = Object.keys(action.payload)[0]
+    const data = action.payload[TRANSACTION_ACTION_FLAG]
     const {
       hash,
-      payload: { subdomain },
-      from
-    } = action.payload[tx]
+      payload: { subdomain, address }
+    } = data
+
+    const from = address
 
     try {
       yield call(waitForTx, hash)
