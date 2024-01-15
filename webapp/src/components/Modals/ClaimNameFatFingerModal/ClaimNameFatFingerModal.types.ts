@@ -15,6 +15,7 @@ import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
 
 export type Props = ModalProps & {
+  currentMana: number | undefined
   wallet: Wallet | null
   identity: AuthIdentity | undefined
   isLoading: boolean
@@ -30,7 +31,12 @@ export type Props = ModalProps & {
 
 export type MapState = Pick<
   Props,
-  'address' | 'getContract' | 'isLoading' | 'wallet' | 'identity'
+  | 'address'
+  | 'getContract'
+  | 'isLoading'
+  | 'wallet'
+  | 'identity'
+  | 'currentMana'
 >
 export type MapDispatchProps = Pick<
   Props,

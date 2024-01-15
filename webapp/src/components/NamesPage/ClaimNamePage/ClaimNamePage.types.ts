@@ -13,7 +13,6 @@ import {
 } from '../../../modules/ens/actions'
 
 export type Props = {
-  currentMana: number | undefined
   wallet: Wallet | null
   isConnecting: boolean
   identity: AuthIdentity | undefined
@@ -23,10 +22,7 @@ export type Props = {
   onRedirect: (path: string) => void
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'currentMana' | 'wallet' | 'isConnecting' | 'identity'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'isConnecting' | 'identity'>
 export type MapDispatchProps = Pick<
   Props,
   'onBrowse' | 'onClaim' | 'onRedirect' | 'onClaimTxSubmitted'

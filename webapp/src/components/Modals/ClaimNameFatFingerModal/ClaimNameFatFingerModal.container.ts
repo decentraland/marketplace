@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { ChainId } from '@dcl/schemas'
+import { ChainId, Network } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
@@ -20,7 +20,7 @@ import {
 } from '../../../modules/ens/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
-import { getWallet } from '../../../modules/wallet/selectors'
+import { getMana, getWallet } from '../../../modules/wallet/selectors'
 import { getCurrentIdentity } from '../../../modules/identity/selectors'
 import {
   MapDispatch,
@@ -30,6 +30,7 @@ import {
 import ClaimNameFatFingerModal from './ClaimNameFatFingerModal'
 
 const mapState = (state: RootState): MapState => ({
+  currentMana: getMana(state, Network.ETHEREUM),
   isLoading:
     isLoadingType(getLoading(state), CLAIM_NAME_REQUEST) ||
     isWaitingTxClaimName(state),

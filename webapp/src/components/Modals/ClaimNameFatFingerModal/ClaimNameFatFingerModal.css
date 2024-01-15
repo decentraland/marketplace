@@ -80,7 +80,6 @@
   align-items: left;
   background: #232129;
   z-index: 1;
-  cursor: pointer;
 }
 
 .ClaimNameFatFingerModal.ui.modal .ui.header.dcl.mana {
@@ -121,6 +120,7 @@
 }
 
 .ClaimNameFatFingerModal .baseGradient {
+  cursor: pointer;
   width: 385px;
   height: 113px;
   border-radius: 6px;
@@ -129,9 +129,11 @@
   border-radius: 14px;
 }
 
+.ClaimNameFatFingerModal .baseGradient.disabled {
+  cursor: not-allowed;
+}
+
 .ClaimNameFatFingerModal .gradient {
-  /* width: 475px; */
-  /* height: 113px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -197,4 +199,18 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+
+.ClaimNameFatFingerModal .modalTooltip {
+  z-index: 9999;
+}
+
+.ClaimNameFatFingerModal .popupButton {
+  display: flex;
+  flex: 1 0 auto;
+}
+
+.ClaimNameFatFingerModal .popupButton > .ui.button {
+  flex: 1 0 auto;
+  margin-left: 12px;
 }

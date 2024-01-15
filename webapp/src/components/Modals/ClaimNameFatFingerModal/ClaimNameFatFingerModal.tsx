@@ -1,10 +1,17 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { v4 as uuidv4 } from 'uuid'
 import WertWidget from '@wert-io/widget-initializer'
 import { Env } from '@dcl/ui-env'
 import { NFTCategory, Network } from '@dcl/schemas'
-import { ModalNavigation, Field, Button, Form, Icon } from 'decentraland-ui'
+import {
+  ModalNavigation,
+  Field,
+  Button,
+  Form,
+  Icon,
+  Popup
+} from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { getChainIdByNetwork, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
@@ -12,7 +19,11 @@ import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { config } from '../../../config'
 import { getContractNames } from '../../../modules/vendor'
-import { PRICE, PRICE_IN_WEI } from '../../../modules/ens/utils'
+import {
+  PRICE,
+  PRICE_IN_WEI,
+  isEnoughClaimMana
+} from '../../../modules/ens/utils'
 import {
   MARKETPLACE_SERVER_URL,
   marketplaceAPI
@@ -37,6 +48,7 @@ enum PaymentMethod {
 const ClaimNameFatFingerModal = ({
   name: modalName,
   wallet,
+  currentMana,
   identity,
   metadata: { name: ENSName },
   isLoading,
@@ -47,7 +59,11 @@ const ClaimNameFatFingerModal = ({
   onClose,
   onClaimTxSubmitted
 }: Props) => {
-  const [paymentMethod, setPaymentMethod] = useState(PaymentMethod.CRYPTO)
+  const [paymentMethod, setPaymentMethod] = useState(
+    !!(wallet && currentMana && isEnoughClaimMana(currentMana))
+      ? PaymentMethod.CRYPTO
+      : PaymentMethod.FIAT
+  )
   const [currentName, setCurrentName] = useState('')
 
   const handleClaimWithCard = useCallback(async () => {
@@ -177,6 +193,11 @@ const ClaimNameFatFingerModal = ({
   const areNamesDifferent = currentName !== ENSName
   const hasError = areNamesDifferent && currentName.length > 0
 
+  const canClaimWithCrypto = useMemo(
+    () => !!(wallet && currentMana && isEnoughClaimMana(currentMana)),
+    [currentMana, wallet]
+  )
+
   return (
     <Modal name={modalName} onClose={isLoading ? undefined : onClose}>
       <ModalNavigation
@@ -220,30 +241,46 @@ const ClaimNameFatFingerModal = ({
                     'names_page.claim_name_fat_finger_modal.pay_methods.crypto.name'
                   )}
                 </span>
-                <div
-                  className={classNames(
-                    'baseGradient',
-                    paymentMethod === PaymentMethod.CRYPTO && 'gradient'
-                  )}
-                >
-                  <div
-                    className={classNames(
-                      paymentMethod === PaymentMethod.CRYPTO && 'selected',
-                      'paymentMethod'
-                    )}
-                    onClick={() => setPaymentMethod(PaymentMethod.CRYPTO)}
-                  >
-                    <Mana />
-                    <div>
-                      <span>100 MANA</span>
-                      <span>
-                        {t(
-                          'names_page.claim_name_fat_finger_modal.pay_methods.crypto.subtitle'
+                <Popup
+                  style={{ zIndex: 9999999 }}
+                  className="modalTooltip"
+                  content={t('names_page.not_enough_mana')}
+                  position="top center"
+                  trigger={
+                    <div
+                      className={classNames(
+                        'baseGradient',
+                        !canClaimWithCrypto && 'disabled',
+                        paymentMethod === PaymentMethod.CRYPTO && 'gradient'
+                      )}
+                    >
+                      <div
+                        className={classNames(
+                          paymentMethod === PaymentMethod.CRYPTO && 'selected',
+                          'paymentMethod'
                         )}
-                      </span>
+                        onClick={() =>
+                          canClaimWithCrypto &&
+                          setPaymentMethod(PaymentMethod.CRYPTO)
+                        }
+                      >
+                        <Mana />
+                        <div>
+                          <span>100 MANA</span>
+                          <span>
+                            {t(
+                              'names_page.claim_name_fat_finger_modal.pay_methods.crypto.subtitle'
+                            )}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  }
+                  disabled={!!(wallet && canClaimWithCrypto)}
+                  hideOnScroll
+                  on="hover"
+                  inverted
+                />
               </div>
               <div className="paymentMethodContainer">
                 <span className="payWithTitle">
@@ -297,14 +334,36 @@ const ClaimNameFatFingerModal = ({
           >
             {t('global.cancel')}
           </Button>
-          <Button
-            primary
-            type="submit"
-            disabled={areNamesDifferent || isLoading}
-            loading={isLoading}
-          >
-            {t('global.confirm')}
-          </Button>
+          <Popup
+            style={{ zIndex: 9999999 }}
+            className="modalTooltip"
+            content={t('names_page.not_enough_mana')}
+            position="top center"
+            trigger={
+              <div className="popupButton">
+                <Button
+                  primary
+                  type="submit"
+                  disabled={
+                    areNamesDifferent ||
+                    isLoading ||
+                    (paymentMethod === PaymentMethod.CRYPTO &&
+                      !canClaimWithCrypto)
+                  }
+                  loading={isLoading}
+                >
+                  {t('global.confirm')}
+                </Button>
+              </div>
+            }
+            disabled={
+              !!(wallet && canClaimWithCrypto) ||
+              paymentMethod === PaymentMethod.FIAT
+            }
+            hideOnScroll={true}
+            on="hover"
+            inverted
+          />
         </Modal.Actions>
       </Form>
     </Modal>

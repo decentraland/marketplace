@@ -29,7 +29,6 @@ import {
   NameInvalidType,
   getNameInvalidType,
   hasNameMinLength,
-  isEnoughClaimMana,
   isNameAvailable,
   isNameValid
 } from '../../../modules/ens/utils'
@@ -48,14 +47,7 @@ const PLACEHOLDER_WIDTH = '94px'
 
 const ClaimNamePage = (props: Props) => {
   const PLACEHOLDER_NAME = t('names_page.your_name')
-  const {
-    wallet,
-    isConnecting,
-    currentMana,
-    onClaim,
-    onBrowse,
-    onRedirect
-  } = props
+  const { wallet, isConnecting, onClaim, onBrowse, onRedirect } = props
   const location = useLocation()
   const [isLoadingStatus, setIsLoadingStatus] = useState(false)
   const [bannedNames, setBannedNames] = useState<string[]>()
@@ -131,22 +123,12 @@ const ClaimNamePage = (props: Props) => {
       onRedirect(locations.signIn(`${location.pathname}`))
     } else {
       const isValid = isNameValid(name)
-      const isEnoughMana =
-        wallet && currentMana && isEnoughClaimMana(currentMana)
 
-      if (!isValid || !isEnoughMana) return
+      if (!isValid) return
 
       onClaim(name)
     }
-  }, [
-    isConnecting,
-    wallet,
-    name,
-    currentMana,
-    onClaim,
-    onRedirect,
-    location.pathname
-  ])
+  }, [isConnecting, wallet, name, onClaim, onRedirect, location.pathname])
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -320,37 +302,13 @@ const ClaimNamePage = (props: Props) => {
                     ) : null}
                     {renderRemainingCharacters()}
                   </div>
-                  <Popup
-                    className="modal-tooltip"
-                    content={t('names_page.not_enough_mana')}
-                    position="top center"
-                    trigger={
-                      <div className="popup-button">
-                        <Button
-                          primary
-                          onClick={handleClaim}
-                          disabled={
-                            !isAvailable ||
-                            nameInvalidType !== null ||
-                            (currentMana !== undefined &&
-                              !isEnoughClaimMana(currentMana))
-                          }
-                        >
-                          {t('names_page.claim_a_name')}
-                        </Button>
-                      </div>
-                    }
-                    disabled={
-                      !!(
-                        wallet &&
-                        currentMana &&
-                        isEnoughClaimMana(currentMana)
-                      )
-                    }
-                    hideOnScroll={true}
-                    on="hover"
-                    inverted
-                  />
+                  <Button
+                    primary
+                    onClick={handleClaim}
+                    disabled={!isAvailable || nameInvalidType !== null}
+                  >
+                    {t('names_page.claim_a_name')}
+                  </Button>
 
                   {name &&
                   hasNameMinLength(name) &&
