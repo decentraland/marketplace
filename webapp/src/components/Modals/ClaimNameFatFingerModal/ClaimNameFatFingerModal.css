@@ -71,9 +71,9 @@
 .ClaimNameFatFingerModal.ui.modal .paymentMethod {
   height: 109px;
   flex-shrink: 0;
-  border-radius: 11px;
+  border-radius: 6px;
   padding: 24px;
-  width: calc(100% - 4px);
+  width: calc(100% - 2px);
   display: flex;
   align-items: center;
   margin-top: 0;
@@ -126,7 +126,7 @@
   border-radius: 6px;
   border: 1px solid #43404a;
   margin-bottom: 11px;
-  border-radius: 14px;
+  /* border-radius: 14px; */
 }
 
 .ClaimNameFatFingerModal .baseGradient.disabled {

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
 import { v4 as uuidv4 } from 'uuid'
 import WertWidget from '@wert-io/widget-initializer'
@@ -38,6 +38,9 @@ export const CONTROLLER_V2_ADDRESS = config.get(
   ''
 )
 
+export const CRYPTO_PAYMENT_METHOD_DATA_TESTID = 'crypto-payment-method'
+export const FIAT_PAYMENT_METHOD_DATA_TESTID = 'fiat-payment-method'
+
 const isDev = config.is(Env.DEVELOPMENT)
 
 enum PaymentMethod {
@@ -59,11 +62,20 @@ const ClaimNameFatFingerModal = ({
   onClose,
   onClaimTxSubmitted
 }: Props) => {
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
+
   const [paymentMethod, setPaymentMethod] = useState(
     !!(wallet && currentMana && isEnoughClaimMana(currentMana))
       ? PaymentMethod.CRYPTO
       : PaymentMethod.FIAT
   )
+  console.log('paymentMethod: ', paymentMethod)
   const [currentName, setCurrentName] = useState('')
 
   const handleClaimWithCard = useCallback(async () => {
@@ -73,16 +85,19 @@ const ClaimNameFatFingerModal = ({
     )
 
     if (wallet && identity) {
+      console.log('here2')
       const signer = await getSigner()
       const factory = await DCLController__factory.connect(
         CONTROLLER_V2_ADDRESS,
         signer
       )
+      console.log('here3')
 
       const sc_input_data = factory.interface.encodeFunctionData('register', [
         ENSName,
         wallet.address
       ])
+      console.log('here4')
 
       const data = {
         address: wallet.address,
@@ -92,8 +107,10 @@ const ClaimNameFatFingerModal = ({
         sc_address: CONTROLLER_V2_ADDRESS,
         sc_input_data
       }
+      console.log('here5')
 
       if (identity) {
+        console.log('here6')
         const signature = await marketplaceAPI.signWertMessage(data, identity)
 
         const signedData = {
@@ -101,10 +118,12 @@ const ClaimNameFatFingerModal = ({
           signature
         }
 
+        console.log('here7')
+
         const nftOptions = {
           extra: {
             item_info: {
-              // category: 'Claim Decentraland NAME',
+              category: 'Decentraland NAME',
               author: 'Decentraland',
               image_url: `${MARKETPLACE_SERVER_URL}/ens/generate?ens=${ENSName}&width=330&height=330`,
               ENSName,
@@ -127,6 +146,7 @@ const ClaimNameFatFingerModal = ({
           ...nftOptions,
           listeners: {
             'payment-status': options => {
+              console.log('options: ', options)
               if (options.tx_id) {
                 onClaimTxSubmitted(
                   ENSName,
@@ -135,7 +155,6 @@ const ClaimNameFatFingerModal = ({
                   options.tx_id
                 )
               }
-              console.log('options: ', options)
             }
           }
         })
@@ -224,7 +243,13 @@ const ClaimNameFatFingerModal = ({
                 ? t('names_page.claim_name_fat_finger_modal.names_different')
                 : ''
             }
-            onChange={handleChangeName}
+            children={
+              <input
+                ref={inputRef}
+                value={currentName}
+                onChange={handleChangeName}
+              />
+            }
           />
           <div className="capsWarning ">
             <Icon name="info circle" />
@@ -248,6 +273,7 @@ const ClaimNameFatFingerModal = ({
                   position="top center"
                   trigger={
                     <div
+                      data-testid={CRYPTO_PAYMENT_METHOD_DATA_TESTID}
                       className={classNames(
                         'baseGradient',
                         !canClaimWithCrypto && 'disabled',
@@ -300,6 +326,7 @@ const ClaimNameFatFingerModal = ({
                   )}
                 >
                   <div
+                    data-testid={FIAT_PAYMENT_METHOD_DATA_TESTID}
                     className={classNames(
                       paymentMethod === PaymentMethod.FIAT && 'selected',
                       'paymentMethod'

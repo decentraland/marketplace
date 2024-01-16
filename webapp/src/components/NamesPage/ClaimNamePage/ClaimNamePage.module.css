@@ -153,7 +153,7 @@
 }
 
 .claimNamePage .claimContainer {
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 24px;
   margin-top: 12px;
   width: calc(100% - 6px);
@@ -457,6 +457,10 @@
   font-style: normal;
   font-weight: 500;
   line-height: 24px;
+}
+
+.claimNamePage .nameCost :global(i.icon.outline) {
+  margin: 0 8px;
 }
 
 @media (max-width: 768px) {

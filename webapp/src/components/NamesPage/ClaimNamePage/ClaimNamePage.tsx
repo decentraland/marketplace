@@ -124,11 +124,19 @@ const ClaimNamePage = (props: Props) => {
     } else {
       const isValid = isNameValid(name)
 
-      if (!isValid) return
+      if (!isValid || !isAvailable) return
 
       onClaim(name)
     }
-  }, [isConnecting, wallet, name, onClaim, onRedirect, location.pathname])
+  }, [
+    isConnecting,
+    wallet,
+    onRedirect,
+    location.pathname,
+    name,
+    isAvailable,
+    onClaim
+  ])
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -157,6 +165,15 @@ const ClaimNamePage = (props: Props) => {
     inputRef.current?.focus()
     setIsInputFocus(true)
   }, [])
+
+  const onFieldKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        handleClaim()
+      }
+    },
+    [handleClaim]
+  )
 
   const onFieldFocus = useCallback(() => {
     const inputValue = inputRef.current?.value
@@ -285,6 +302,7 @@ const ClaimNamePage = (props: Props) => {
                       <>
                         <input
                           ref={inputRef}
+                          onKeyDown={onFieldKeyDown}
                           value={name}
                           style={{
                             maxWidth: name.length ? inputWidth : '1px'
