@@ -104,7 +104,7 @@ const ClaimNameFatFingerModal = ({
         commodity: isDev ? 'TTS' : 'MANA', // will be MANA later on
         commodity_amount: Number(PRICE),
         network: isDev ? 'sepolia' : 'ethereum', // will be wallet.network
-        sc_address: CONTROLLER_V2_ADDRESS,
+        sc_address: '0x39421866645065c8d53e2d36906946f33465743d',
         sc_input_data
       }
       console.log('here5')
