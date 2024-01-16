@@ -21,7 +21,7 @@
 }
 
 .Slideshow .assets.full-width {
-  justify-content: center;
+  justify-content: space-between;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -183,7 +183,7 @@
     flex-direction: row;
     align-items: center;
   }
-  
+
   .Slideshow .ItemsSection {
     display: flex;
     align-items: center;
