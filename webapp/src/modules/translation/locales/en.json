@@ -1584,6 +1584,7 @@
     "name_too_long": "NAMEs can contain up to 15 characters.",
     "invalid_characters": "NAMEs can only contain alphanumeric characters.",
     "not_enough_mana": "You don't have enough MANA to claim a new name",
+    "fiat_payments_not_enabled": "FIAT payments are not enabled at the moment. Please try later.",
     "claim_name_fat_finger_modal": {
       "title": "Please confirm your new name",
       "description": "You have chosen {name}. {br} Re-enter your NAME to confirm your selection.",

@@ -22,6 +22,7 @@ import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
 import { getMana, getWallet } from '../../../modules/wallet/selectors'
 import { getCurrentIdentity } from '../../../modules/identity/selectors'
+import { getIsClaimingNamesWithFiatEnabled } from '../../../modules/features/selectors'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -37,7 +38,8 @@ const mapState = (state: RootState): MapState => ({
   address: getAddress(state),
   getContract: (query: Partial<Contract>) => getContract(state, query),
   wallet: getWallet(state),
-  identity: (getCurrentIdentity(state) as AuthIdentity | null) ?? undefined
+  identity: (getCurrentIdentity(state) as AuthIdentity | null) ?? undefined,
+  isClaimingNamesWithFiatEnabled: getIsClaimingNamesWithFiatEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

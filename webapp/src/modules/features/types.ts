@@ -20,4 +20,5 @@ export enum FeatureName {
   MARKETPLACE_SERVER = 'marketplace-server',
   BUY_CROSS_CHAIN = 'buy-cross-chain',
   AUTH_DAPP = 'auth-dapp',
+  CLAIM_NAMES_WITH_FIAT = 'names-fiat-payments'
 }

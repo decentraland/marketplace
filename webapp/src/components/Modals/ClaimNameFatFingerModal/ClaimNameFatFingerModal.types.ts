@@ -23,6 +23,7 @@ export type Props = ModalProps & {
   metadata: {
     name: string
   }
+  isClaimingNamesWithFiatEnabled: boolean
   onClaim: typeof claimNameRequest
   onClaimNameClear: typeof claimNameClear
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
@@ -37,6 +38,7 @@ export type MapState = Pick<
   | 'wallet'
   | 'identity'
   | 'currentMana'
+  | 'isClaimingNamesWithFiatEnabled'
 >
 export type MapDispatchProps = Pick<
   Props,

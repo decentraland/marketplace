@@ -55,6 +55,7 @@ const ClaimNameFatFingerModal = ({
   identity,
   metadata: { name: ENSName },
   isLoading,
+  isClaimingNamesWithFiatEnabled,
   onClaim,
   onAuthorizedAction,
   onClaimNameClear,
@@ -73,9 +74,10 @@ const ClaimNameFatFingerModal = ({
   const [paymentMethod, setPaymentMethod] = useState(
     !!(wallet && currentMana && isEnoughClaimMana(currentMana))
       ? PaymentMethod.CRYPTO
-      : PaymentMethod.FIAT
+      : isClaimingNamesWithFiatEnabled
+      ? PaymentMethod.FIAT
+      : PaymentMethod.CRYPTO
   )
-  console.log('paymentMethod: ', paymentMethod)
   const [currentName, setCurrentName] = useState('')
 
   const handleClaimWithCard = useCallback(async () => {
@@ -319,35 +321,52 @@ const ClaimNameFatFingerModal = ({
                     'names_page.claim_name_fat_finger_modal.pay_methods.fiat.new'
                   )}
                 </span>
-                <div
-                  className={classNames(
-                    'baseGradient',
-                    paymentMethod === PaymentMethod.FIAT && 'gradient'
-                  )}
-                >
-                  <div
-                    data-testid={FIAT_PAYMENT_METHOD_DATA_TESTID}
-                    className={classNames(
-                      paymentMethod === PaymentMethod.FIAT && 'selected',
-                      'paymentMethod'
-                    )}
-                    onClick={() => setPaymentMethod(PaymentMethod.FIAT)}
-                  >
-                    <Icon name="credit card outline" />
-                    <div>
-                      <span>
-                        {t(
-                          'names_page.claim_name_fat_finger_modal.pay_methods.fiat.title'
+                <Popup
+                  style={{ zIndex: 9999999 }}
+                  className="modalTooltip"
+                  content={t('names_page.fiat_payments_not_enabled')}
+                  position="top center"
+                  trigger={
+                    <div
+                      className={classNames(
+                        'baseGradient',
+                        paymentMethod === PaymentMethod.FIAT && 'gradient',
+                        !isClaimingNamesWithFiatEnabled && 'disabled'
+                      )}
+                    >
+                      <div
+                        data-testid={FIAT_PAYMENT_METHOD_DATA_TESTID}
+                        className={classNames(
+                          paymentMethod === PaymentMethod.FIAT && 'selected',
+                          'paymentMethod'
                         )}
-                      </span>
-                      <span>
-                        {t(
-                          'names_page.claim_name_fat_finger_modal.pay_methods.fiat.subtitle'
-                        )}
-                      </span>
+                        onClick={() =>
+                          isClaimingNamesWithFiatEnabled
+                            ? setPaymentMethod(PaymentMethod.FIAT)
+                            : null
+                        }
+                      >
+                        <Icon name="credit card outline" />
+                        <div>
+                          <span>
+                            {t(
+                              'names_page.claim_name_fat_finger_modal.pay_methods.fiat.title'
+                            )}
+                          </span>
+                          <span>
+                            {t(
+                              'names_page.claim_name_fat_finger_modal.pay_methods.fiat.subtitle'
+                            )}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  }
+                  disabled={isClaimingNamesWithFiatEnabled}
+                  hideOnScroll
+                  on="hover"
+                  inverted
+                />
               </div>
             </div>
           </div>
