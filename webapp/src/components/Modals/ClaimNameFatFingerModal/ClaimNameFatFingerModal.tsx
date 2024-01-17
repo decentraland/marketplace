@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import WertWidget from '@wert-io/widget-initializer'
 import { Env } from '@dcl/ui-env'
 import { NFTCategory, Network } from '@dcl/schemas'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
   ModalNavigation,
   Field,
@@ -63,6 +64,7 @@ const ClaimNameFatFingerModal = ({
   onClose,
   onClaimTxSubmitted
 }: Props) => {
+  const analytics = useMemo(() => getAnalytics(), [])
   const inputRef = useRef<HTMLInputElement>(null)
   const [isLoadingFIATWidget, setIsLoadingFIATWidget] = useState(false)
 
@@ -88,19 +90,16 @@ const ClaimNameFatFingerModal = ({
     )
 
     if (wallet && identity) {
-      console.log('here2')
       const signer = await getSigner()
       const factory = await DCLController__factory.connect(
         CONTROLLER_V2_ADDRESS,
         signer
       )
-      console.log('here3')
 
       const sc_input_data = factory.interface.encodeFunctionData('register', [
         ENSName,
         wallet.address
       ])
-      console.log('here4')
 
       const data = {
         address: wallet.address,
@@ -110,10 +109,8 @@ const ClaimNameFatFingerModal = ({
         sc_address: '0x39421866645065c8d53e2d36906946f33465743d',
         sc_input_data
       }
-      console.log('here5')
 
       if (identity) {
-        console.log('here6')
         const signature = await marketplaceAPI.signWertMessage(data, identity)
 
         const signedData = {
@@ -152,8 +149,12 @@ const ClaimNameFatFingerModal = ({
               setIsLoadingFIATWidget(false)
             },
             'payment-status': options => {
-              console.log('options: ', options)
               if (options.tx_id) {
+                analytics.track('Buy Name Success', {
+                  name: ENSName,
+                  payment_method: 'fiat',
+                  txHash: options.tx_id
+                })
                 onClaimTxSubmitted(
                   ENSName,
                   wallet.address,
@@ -168,9 +169,19 @@ const ClaimNameFatFingerModal = ({
         wertWidget.open()
       }
     }
-  }, [wallet, identity, ENSName, onClaimTxSubmitted])
+  }, [wallet, identity, ENSName, analytics, onClaimTxSubmitted])
+
+  const handleClaimWithCardClick = useCallback(() => {
+    return isClaimingNamesWithFiatEnabled
+      ? setPaymentMethod(PaymentMethod.FIAT)
+      : null
+  }, [isClaimingNamesWithFiatEnabled])
 
   const handleClaim = useCallback(() => {
+    analytics.track('Click checkout name', {
+      name: ENSName,
+      payment_method: paymentMethod === PaymentMethod.CRYPTO ? 'crypto' : 'fiat'
+    })
     if (paymentMethod === PaymentMethod.FIAT) {
       setIsLoadingFIATWidget(true)
       handleClaimWithCard()
@@ -202,6 +213,8 @@ const ClaimNameFatFingerModal = ({
       })
     }
   }, [
+    ENSName,
+    analytics,
     currentName,
     getContract,
     handleClaimWithCard,
@@ -345,11 +358,7 @@ const ClaimNameFatFingerModal = ({
                           paymentMethod === PaymentMethod.FIAT && 'selected',
                           'paymentMethod'
                         )}
-                        onClick={() =>
-                          isClaimingNamesWithFiatEnabled
-                            ? setPaymentMethod(PaymentMethod.FIAT)
-                            : null
-                        }
+                        onClick={handleClaimWithCardClick}
                       >
                         <Icon name="credit card outline" />
                         <div>

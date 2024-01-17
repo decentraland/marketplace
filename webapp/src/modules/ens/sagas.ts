@@ -97,11 +97,6 @@ export function* ensSaga() {
         CONTROLLER_V2_ADDRESS,
         signer
       )
-      // const dclRegistrarContract: DCLRegistrar = yield call(
-      //   [DCLRegistrar__factory, 'connect'],
-      //   REGISTRAR_ADDRESS,
-      //   signer
-      // )
       const transaction: ethers.ContractTransaction = yield call(
         [controllerContract, 'register'],
         name,
@@ -115,23 +110,6 @@ export function* ensSaga() {
           transaction.hash
         )
       )
-      // yield call(waitForTx, transaction.hash)
-      // const tokenId: BigNumber = yield call(
-      //   [dclRegistrarContract, 'getTokenId'],
-      //   name
-      // )
-      // const ens: ENS = {
-      //   name: name,
-      //   tokenId: tokenId.toString(),
-      //   ensOwnerAddress: wallet.address,
-      //   nftOwnerAddress: wallet.address,
-      //   subdomain: getDomainFromName(name),
-      //   resolver: ethers.constants.AddressZero,
-      //   content: ethers.constants.AddressZero,
-      //   contractAddress: dclRegistrarContract.address
-      // }
-      // yield put(claimNameSuccess(ens, name, transaction.hash))
-      // yield put(closeModal('ClaimNameFatFingerModal'))
     } catch (error) {
       const ensError: ENSError = {
         message: isErrorWithMessage(error) ? error.message : 'Unknown error'
