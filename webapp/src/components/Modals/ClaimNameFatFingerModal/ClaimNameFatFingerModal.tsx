@@ -64,6 +64,7 @@ const ClaimNameFatFingerModal = ({
   onClaimTxSubmitted
 }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
+  const [isLoadingFIATWidget, setIsLoadingFIATWidget] = useState(false)
 
   useEffect(() => {
     if (inputRef.current) {
@@ -147,6 +148,9 @@ const ClaimNameFatFingerModal = ({
           },
           ...nftOptions,
           listeners: {
+            loaded: () => {
+              setIsLoadingFIATWidget(false)
+            },
             'payment-status': options => {
               console.log('options: ', options)
               if (options.tx_id) {
@@ -168,6 +172,7 @@ const ClaimNameFatFingerModal = ({
 
   const handleClaim = useCallback(() => {
     if (paymentMethod === PaymentMethod.FIAT) {
+      setIsLoadingFIATWidget(true)
       handleClaimWithCard()
     } else {
       const mana = getContract({
@@ -396,7 +401,7 @@ const ClaimNameFatFingerModal = ({
                     (paymentMethod === PaymentMethod.CRYPTO &&
                       !canClaimWithCrypto)
                   }
-                  loading={isLoading}
+                  loading={isLoading || isLoadingFIATWidget}
                 >
                   {t('global.confirm')}
                 </Button>

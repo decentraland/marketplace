@@ -1,5 +1,10 @@
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { claimNameSuccess, claimNameFailure, claimNameClear } from './actions'
+import {
+  claimNameSuccess,
+  claimNameFailure,
+  claimNameClear,
+  claimNameRequest
+} from './actions'
 import { ENSState, ensReducer } from './reducer'
 import { ENS, ENSError } from './types'
 
@@ -12,11 +17,25 @@ describe('ENS Reducer', () => {
   }
 
   let ens: ENS
+  let requestAction: ReturnType<typeof claimNameRequest>
   let successAction: ReturnType<typeof claimNameSuccess>
   let failureAction: ReturnType<typeof claimNameFailure>
   let clearAction: ReturnType<typeof claimNameClear>
   let initialState: ENSState
 
+  describe('when handling the CLAIM_NAME_REQUEST action', () => {
+    beforeEach(() => {
+      ens = { subdomain: 'example' } as ENS
+      requestAction = claimNameRequest(ens.subdomain)
+      initialState = { ...INITIAL_STATE } as ENSState
+    })
+    it('should return an state with the loading action placed', () => {
+      expect(ensReducer(initialState, requestAction)).toEqual({
+        ...initialState,
+        loading: loadingReducer(initialState.loading, requestAction)
+      })
+    })
+  })
   describe('when handling the CLAIM_NAME_SUCCESS action', () => {
     beforeEach(() => {
       ens = { subdomain: 'example' } as ENS
