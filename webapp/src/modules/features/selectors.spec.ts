@@ -26,7 +26,6 @@ import {
   isLoadingFeatureFlags,
   getIsBuyCrossChainEnabled,
   getIsAuthDappEnabled,
-  getIsNavbarV2Enabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -224,12 +223,6 @@ const waitForInitialLoadingSelectors = [
     selector: getIsAuthDappEnabled,
     applicationName: ApplicationName.DAPPS
   },
-  {
-    name: 'navbar-v2',
-    feature: FeatureName.NAVBAR_V2,
-    selector: getIsNavbarV2Enabled,
-    applicationName: ApplicationName.DAPPS
-  }
 ]
 
 waitForInitialLoadingSelectors.forEach(
