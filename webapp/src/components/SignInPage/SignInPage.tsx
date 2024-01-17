@@ -27,7 +27,7 @@ const SignInPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Page className="SignInPage" isFullscreen>
         <SignIn onConnect={isAuthDappEnabled ? handleConnect : undefined} />
       </Page>

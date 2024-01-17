@@ -59,7 +59,7 @@ const CollectionPage = (props: Props) => {
 
   return (
     <div>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation />
       <Page className={styles.page}>
         {contractAddress ? (

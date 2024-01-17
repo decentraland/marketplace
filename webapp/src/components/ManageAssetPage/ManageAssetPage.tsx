@@ -72,7 +72,7 @@ export const ManageAssetPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation activeTab={NavigationTab.MY_STORE} />
       <Page>
         <ErrorBoundary>

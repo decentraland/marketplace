@@ -21,7 +21,7 @@ const BrowsePage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
       {isCampaignCollectiblesBannerEnabled ? <CampaignBanner><CampaignCollectiblesBanner /></CampaignBanner> : null}
       <AssetBrowse

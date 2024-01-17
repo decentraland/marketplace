@@ -24,7 +24,7 @@ const StatusPage = ({ type, purchase }: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Page className="StatusPage">
         <AssetProviderPage type={type}>
           {asset => {
