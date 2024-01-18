@@ -19,7 +19,9 @@ export function* proximitySaga() {
 function* handleFetchProximityRequest(_action: FetchProximityRequestAction) {
   try {
     const proximity: Record<string, Proximity> = yield call(async () => {
-      const resp = await fetch(process.env.PUBLIC_URL + '/proximity.json')
+      const resp = await fetch(
+        import.meta.env.VITE_BASE_URL + '/proximity.json'
+      )
       return resp.json()
     })
     yield put(fetchProximitySuccess(proximity))

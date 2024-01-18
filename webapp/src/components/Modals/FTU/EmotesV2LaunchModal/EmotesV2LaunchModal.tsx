@@ -43,7 +43,7 @@ export const EmotesV2LaunchModal = ({
           autoPlay
           loop
           className={styles.video}
-          src={`${process.env.PUBLIC_URL}/emotes-v2.mp4`}
+          src={`${import.meta.env.VITE_BASE_URL}/emotes-v2.mp4`}
           preload="auto"
           muted
         />
