@@ -6,20 +6,19 @@ import { RootState } from '../../modules/reducer'
 import { getTransactions } from '../../modules/transaction/selectors'
 import {
   getIsAuthDappEnabled,
-  getIsNavbarV2Enabled
 } from '../../modules/features/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './Navbar.types'
 import Navbar from './Navbar'
 import { getCurrentIdentity } from '../../modules/identity/selectors'
+import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 
 const mapState = (state: RootState): MapStateProps => ({
   location: getLocation(state),
-  hasPendingTransactions: getTransactions(state).some(tx =>
+  hasPendingTransactions: getTransactions(state).some((tx: { status: TransactionStatus | null }) =>
     isPending(tx.status)
   ),
   identity: getCurrentIdentity(state) || undefined,
   isAuthDappEnabled: getIsAuthDappEnabled(state),
-  isNavbarV2Enabled: getIsNavbarV2Enabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

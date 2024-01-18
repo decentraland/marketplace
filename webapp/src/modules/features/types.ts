@@ -20,5 +20,4 @@ export enum FeatureName {
   MARKETPLACE_SERVER = 'marketplace-server',
   BUY_CROSS_CHAIN = 'buy-cross-chain',
   AUTH_DAPP = 'auth-dapp',
-  NAVBAR_V2 = 'navbar2_variant'
 }

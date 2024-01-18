@@ -26,7 +26,7 @@ export function SuccessPage(props: Props) {
 
   return (
     <div className={styles.pageContainer}>
-      <Navbar isFullscreen />
+      <Navbar />
       <div className={styles.container}>
         {assetType && contractAddress && tokenId ? (
           <AssetProvider

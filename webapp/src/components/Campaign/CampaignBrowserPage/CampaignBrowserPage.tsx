@@ -34,7 +34,7 @@ const CampaignBrowserPage = (props: Props) => {
 
   return isCampaignBrowserEnabled ? (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
       {Object.values(contracts).length > 0 ? (
         <>

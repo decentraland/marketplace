@@ -21,7 +21,7 @@ const CancelSalePage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Page className="CancelSalePage">
         <Wallet>
           {wallet => (

@@ -37,7 +37,7 @@ const AccountPage = ({
 
   return (
     <div className="AccountPage">
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation
         activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined}
       />
