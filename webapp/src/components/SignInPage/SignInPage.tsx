@@ -11,7 +11,7 @@ const SignInPage = (props: Props) => {
   const { isAuthDappEnabled, isConnecting, isConnected } = props
   useEffect(() => {
     if (isAuthDappEnabled && !isConnected && !isConnecting) {
-      window.location.replace(`${config.get("AUTH_URL")}`)
+      window.location.replace(`${config.get('AUTH_URL')}`)
     }
   }, [isAuthDappEnabled, isConnected, isConnecting])
 

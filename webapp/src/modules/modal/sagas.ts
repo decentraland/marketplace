@@ -18,7 +18,10 @@ import {
   DELETE_LIST_SUCCESS,
   UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
-import { closeAllModals, openModal } from './actions'
+import {
+  closeAllModals,
+  openModal
+} from 'decentraland-dapps/dist/modules/modal/actions'
 
 export function* modalSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)

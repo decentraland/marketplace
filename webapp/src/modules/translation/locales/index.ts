@@ -1,4 +1,4 @@
-const en = require('./en.json')
-const es = require('./es.json')
-const zh = require('./zh.json')
+import en from './en.json'
+import es from './es.json'
+import zh from './zh.json'
 export { en, es, zh }
