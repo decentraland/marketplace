@@ -129,7 +129,7 @@ const SettingsPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation />
       <Page className="SettingsPage">
         {wallet ? (

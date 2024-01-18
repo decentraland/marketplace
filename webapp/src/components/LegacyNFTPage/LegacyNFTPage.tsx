@@ -37,7 +37,7 @@ const LegacyNFTPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Page className="LegacyNFTPage" isFullscreen>
         <Loader size="massive" active />
       </Page>

@@ -21,7 +21,7 @@ const TransferPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Page className="TransferPage">
         <Wallet>
           {wallet => (

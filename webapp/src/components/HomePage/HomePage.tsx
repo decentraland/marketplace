@@ -211,7 +211,7 @@ const HomePage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation activeTab={NavigationTab.OVERVIEW} />
       <ListsLaunchModal />
       <EmotesV2LaunchModal />

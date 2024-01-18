@@ -20,7 +20,7 @@ const SellPage = (props: Props) => {
   } = props
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Page className="SellPage">
         <Wallet>
           {wallet => (

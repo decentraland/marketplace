@@ -14,7 +14,7 @@ const LandsPage = (props: Props) => {
   const { isFullscreen } = props
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation activeTab={NavigationTab.LANDS} />
       <AssetBrowse
         vendor={VendorName.DECENTRALAND}
