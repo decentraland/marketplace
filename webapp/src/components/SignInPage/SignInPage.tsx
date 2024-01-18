@@ -23,7 +23,7 @@ const SignInPage = (props: Props) => {
         )}`
       )
     }
-  }, [])
+  }, [isConnected, isConnecting])
 
   return (
     <>
