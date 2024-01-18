@@ -2,12 +2,10 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import { useTimer } from './timer'
 
 const runTimerAutomaticallyOnce = () => {
-  ;((setTimeout as unknown) as jest.Mock).mockImplementationOnce(callback =>
-    callback()
-  )
+  ;((globalThis.setTimeout as unknown) as jest.Mock) = jest
+    .fn()
+    .mockImplementationOnce(callback => callback())
 }
-
-jest.useFakeTimers()
 
 describe('when initializing the hook', () => {
   it('should return isRunning as false', () => {

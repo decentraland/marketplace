@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
 
@@ -13,7 +13,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
 
     /* Linting */
     "strict": true,
@@ -21,6 +21,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", ".eslintrc.js", "vite.config.ts", "jest.config.ts", "scripts"],
+  "include": ["src", ".eslintrc.js", "vite.config.ts", "jest.config.ts"],
+  // "exclude": ["node_modules", "dist", "build", "coverage", "scripts", "vite.config.ts", "jest.config.ts", "**/*.spec.ts", "**/*.spec.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

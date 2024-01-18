@@ -3,13 +3,13 @@ import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfil
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import react from '@vitejs/plugin-react-swc'
 import rollupNodePolyFill from 'rollup-plugin-polyfill-node'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig, loadEnv, splitVendorChunkPlugin } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const envVariables = loadEnv(mode, process.cwd())
   return {
-    plugins: [react(), basicSsl()],
+    plugins: [react(), basicSsl(), splitVendorChunkPlugin()],
     // Required because the CatalystClient tries to access it
     define: {
       // eslint-disable-next-line @typescript-eslint/naming-convention

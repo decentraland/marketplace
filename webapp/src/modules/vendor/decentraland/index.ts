@@ -1,8 +1,8 @@
-import { BidService } from './BidService'
-import { ContractService } from './ContractService'
-import { NFTService } from './NFTService'
-import { OrderService } from './OrderService'
-import { AnalyticsService } from './AnalyticsService'
+// import { BidService } from './BidService'
+// import { ContractService } from './ContractService'
+// import { NFTService } from './NFTService'
+// import { OrderService } from './OrderService'
+// import { AnalyticsService } from './AnalyticsService'
 
 export const VendorName = 'decentraland' as const
 
@@ -20,13 +20,6 @@ export * from './BidService'
 export * from './ContractService'
 export * from './NFTService'
 export * from './OrderService'
+export * from './AnalyticsService'
 
 export * from './contracts'
-
-export const services = {
-  BidService,
-  ContractService,
-  NFTService,
-  OrderService,
-  AnalyticsService
-}

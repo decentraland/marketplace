@@ -17,7 +17,10 @@ const overridedConfig = override(
     path.resolve(__dirname, 'node_modules/cosmjs-types'),
     path.resolve(__dirname, 'node_modules/ethers-multicall-provide'),
     path.resolve(__dirname, 'node_modules/@noble'),
-    path.resolve(__dirname, 'node_modules/decentraland-connect/node_modules/ethers')
+    path.resolve(
+      __dirname,
+      'node_modules/decentraland-connect/node_modules/ethers'
+    )
   ])
 )
 
@@ -27,7 +30,7 @@ const jestConfig = config => {
   ]
   config.moduleNameMapper = {
     ...config.moduleNameMapper,
-    '@dcl/single-sign-on-client': 'identity-obj-proxy',
+    '@dcl/single-sign-on-client': 'identity-obj-proxy'
   }
   return config
 }
