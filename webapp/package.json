@@ -36,7 +36,6 @@
     "react-lazy-load-image-component": "^1.5.6",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.3.4",
-    "react-scripts": "^4.0.3",
     "react-virtualized-auto-sizer": "^1.0.9",
     "react-window": "^1.8.8",
     "react-window-infinite-loader": "^1.0.8",
