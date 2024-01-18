@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Back, Container, Loader } from 'decentraland-ui'
-// import { Icon } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react'
 import classNames from 'classnames'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
@@ -74,7 +74,7 @@ const AccountBanner = ({
                 </div>
                 {!isMobile() && (
                   <div>
-                    {/* <Icon
+                    <Icon
                       onClick={() => copyText(address, setHasCopied)}
                       aria-label="Copy address"
                       aria-hidden="false"
@@ -85,7 +85,7 @@ const AccountBanner = ({
                       <span className="profile-copied-text-desktop copied">
                         {t('account_page.copied')}
                       </span>
-                    )} */}
+                    )}
                   </div>
                 )}
               </div>
