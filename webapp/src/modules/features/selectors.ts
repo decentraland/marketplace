@@ -208,9 +208,7 @@ export const getIsMarketplaceServerEnabled = (state: RootState) => {
 }
 
 export const getIsBuyCrossChainEnabled = (state: RootState) => {
-  const hasLoadedInitialFlagsx = hasLoadedInitialFlags(state)
-  console.log('Has loaded initial feature flags?', hasLoadedInitialFlagsx)
-  if (hasLoadedInitialFlagsx) {
+  if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(
       state,
       ApplicationName.MARKETPLACE,
