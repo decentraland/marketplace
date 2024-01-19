@@ -21,6 +21,16 @@ export default defineConfig(({ command, mode }) => {
       },
       global: {}
     },
+    resolve: {
+      alias: {
+        // This Rollup aliases are extracted from @esbuild-plugins/node-modules-polyfill,
+        // see https://github.com/remorses/esbuild-plugins/blob/master/node-modules-polyfill/src/polyfills.ts
+        // process and buffer are excluded because already managed
+        // by node-globals-polyfill
+        util: 'rollup-plugin-node-polyfills/polyfills/util',
+        assert: 'rollup-plugin-node-polyfills/polyfills/assert'
+      }
+    },
     server: {
       https: true,
       proxy: {
