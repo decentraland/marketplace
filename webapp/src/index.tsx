@@ -8,7 +8,6 @@ import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
 
-// import './setup'
 import './modules/analytics/track'
 import './modules/analytics/sentry'
 
