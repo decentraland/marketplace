@@ -88,7 +88,7 @@ describe('when the share on twitter button is clicked', () => {
     expect(button).toBeInTheDocument()
     fireEvent.click(button)
 
-    jest.runOnlyPendingTimers()
+    jest.runAllTimers()
 
     expect(window.open).toHaveBeenCalledWith(twitterURL, '_blank')
   })

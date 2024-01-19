@@ -7,10 +7,11 @@ import { Route } from 'decentraland-transactions/dist/crossChain/types'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { isSwitchingNetwork } from 'decentraland-dapps/dist/modules/wallet/selectors'
-
 import { RootState } from '../../../modules/reducer'
-import { getWallet } from '../../../modules/wallet/selectors'
+import {
+  getWallet,
+  isSwitchingNetwork
+} from '../../../modules/wallet/selectors'
 import { getLoading as getLoadingOrders } from '../../../modules/order/selectors'
 import {
   EXECUTE_ORDER_REQUEST,

@@ -19,7 +19,6 @@ import {
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
@@ -42,6 +41,7 @@ import {
   executeOrderSuccess
 } from '../order/actions'
 import { NFT } from '../nft/types'
+import { openModal } from '../modal/actions'
 import { fetchNFTsRequest, fetchNFTsSuccess } from '../nft/actions'
 import { getWallet } from '../wallet/selectors'
 import { ENS } from '../ens/types'

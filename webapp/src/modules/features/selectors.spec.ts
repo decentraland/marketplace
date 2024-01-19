@@ -25,7 +25,7 @@ import {
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
   getIsBuyCrossChainEnabled,
-  getIsAuthDappEnabled
+  getIsAuthDappEnabled,
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -222,7 +222,7 @@ const waitForInitialLoadingSelectors = [
     feature: FeatureName.AUTH_DAPP,
     selector: getIsAuthDappEnabled,
     applicationName: ApplicationName.DAPPS
-  }
+  },
 ]
 
 waitForInitialLoadingSelectors.forEach(
@@ -237,10 +237,11 @@ waitForInitialLoadingSelectors.forEach(
           const isEnabled = selector(state)
 
           expect(isEnabled).toBe(false)
+          expect(getIsFeatureEnabledMock).not.toHaveBeenCalled()
         })
       })
 
-      describe('when the initial flags have been loaded', () => {
+      describe('when the initial flags have not been yet loaded', () => {
         beforeEach(() => {
           hasLoadedInitialFlagsMock.mockReturnValueOnce(true)
         })

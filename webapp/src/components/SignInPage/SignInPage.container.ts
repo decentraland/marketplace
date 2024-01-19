@@ -1,9 +1,6 @@
 import { connect } from 'react-redux'
-import {
-  isConnecting,
-  isConnected
-} from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { RootState } from '../../modules/reducer'
+import { isConnected, isConnecting } from '../../modules/wallet/selectors'
 import { getIsAuthDappEnabled } from '../../modules/features/selectors'
 import { MapStateProps } from './SignInPage.types'
 import SignInPage from './SignInPage'

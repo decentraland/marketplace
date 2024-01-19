@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-
 import { ConnectedRouter } from 'connected-react-router'
 import * as SingleSignOn from '@dcl/single-sign-on-client'
 import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
@@ -8,6 +7,7 @@ import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
 
+import './setup'
 import './modules/analytics/track'
 import './modules/analytics/sentry'
 

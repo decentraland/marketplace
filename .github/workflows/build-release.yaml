@@ -39,7 +39,7 @@ jobs:
       - name: Publish
         uses: menduz/oddish-action@master
         with:
-          cwd: ./webapp/dist
+          cwd: ./webapp/build
           deterministic-snapshot: true
           registry-url: "https://registry.npmjs.org"
           access: public
@@ -55,6 +55,6 @@ jobs:
           SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         with:
-          sourcemaps: ${{ github.workspace }}/webapp/dist
+          sourcemaps: ${{ github.workspace }}/webapp/build
           version: "${{ vars.SENTRY_RELEASE_PREFIX }}@${{ github.event.release.tag_name }}"
           url_prefix: "~"

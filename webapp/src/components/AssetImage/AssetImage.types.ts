@@ -13,14 +13,11 @@ import {
   FetchItemRequestAction,
   fetchItemRequest
 } from '../../modules/item/actions'
+import { OpenModalAction, openModal } from '../../modules/modal/actions'
 import {
   FetchSmartWearableVideoHashRequestAction,
   fetchSmartWearableVideoHashRequest
 } from '../../modules/asset/actions'
-import {
-  OpenModalAction,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
 
 export type Props = {
   asset: Asset

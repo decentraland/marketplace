@@ -1,11 +1,8 @@
 import { Bid, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules//wallet/types'
 import { Dispatch } from 'redux'
+import { openModal, OpenModalAction } from '../../../modules/modal/actions'
 import { NFT } from '../../../modules/nft/types'
-import {
-  OpenModalAction,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
 
 export type Props = {
   wallet: Wallet | null

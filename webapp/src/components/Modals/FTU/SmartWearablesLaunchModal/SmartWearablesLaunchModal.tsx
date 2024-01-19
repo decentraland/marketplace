@@ -70,7 +70,7 @@ export const SmartWearablesLaunchModal = ({
           autoPlay
           loop
           className={styles.video}
-          src={`${process.env.VITE_BASE_URL}/smart-wearables-ftu.mp4`}
+          src={`${process.env.PUBLIC_URL}/smart-wearables-ftu.mp4`}
           preload="auto"
           muted
         />

@@ -1,10 +1,5 @@
 import { RentalListing } from '@dcl/schemas'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
-import {
-  closeAllModals,
-  closeModal,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
 import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import { NFT } from '../nft/types'
@@ -25,6 +20,7 @@ import {
   UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
 import { UpsertRentalOptType } from '../rental/types'
+import { closeAllModals, closeModal, openModal } from './actions'
 import { modalSaga } from './sagas'
 
 describe.each([

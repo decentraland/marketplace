@@ -1,8 +1,8 @@
 import { call, takeEvery, put } from '@redux-saga/core/effects'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
+import { VendorFactory, VendorName } from '../vendor'
 import { rankingsAPI } from '../vendor/decentraland/rankings/api'
-import { AnalyticsService } from '../vendor/decentraland'
 import {
   fetchAnalyticsVolumeDataFailure,
   FetchAnalyticsDayDataRequestAction,
@@ -29,9 +29,9 @@ export function* handleFetchVolumeDataRequest(
   const { timeframe } = action.payload
 
   try {
-    const analyticsService = new AnalyticsService()
+    const { analyticsService } = VendorFactory.build(VendorName.DECENTRALAND)
     const volumeData: AnalyticsVolumeData = yield call(
-      [analyticsService, 'fetchVolumeData'],
+      [analyticsService, analyticsService!.fetchVolumeData],
       timeframe
     )
 

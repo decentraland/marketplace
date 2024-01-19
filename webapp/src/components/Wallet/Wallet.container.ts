@@ -1,8 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { RootState } from '../../modules/reducer'
-import { getWallet } from '../../modules/wallet/selectors'
+import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './Wallet.types'
 import Wallet from './Wallet'
 

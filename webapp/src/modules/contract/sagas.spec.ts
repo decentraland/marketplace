@@ -10,7 +10,7 @@ import {
   connectWalletSuccess
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getContractNames, VendorName } from '../vendor'
-import { ContractService } from '../vendor/decentraland'
+import { services as decentraland } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
 import { getAddress } from '../wallet/selectors'
 import {
@@ -46,7 +46,7 @@ describe('when handling the fetch contracts request', () => {
       const address = '0x123'
 
       mockGetContracts = jest
-        .spyOn(ContractService.prototype, 'getContracts')
+        .spyOn(decentraland.ContractService.prototype, 'getContracts')
         .mockResolvedValueOnce([])
 
       const contractNames = getContractNames()
@@ -275,7 +275,7 @@ describe('when handling the fetch contracts request', () => {
   describe('when the api call fails', () => {
     it('should put a failure action with the error', () => {
       mockGetContracts = jest
-        .spyOn(ContractService.prototype, 'getContracts')
+        .spyOn(decentraland.ContractService.prototype, 'getContracts')
         .mockRejectedValueOnce(new Error('some error'))
       return expectSaga(contractSaga)
         .provide([[select(getHasFetched), false]])

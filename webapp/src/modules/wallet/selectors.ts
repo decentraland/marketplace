@@ -8,6 +8,8 @@ import {
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { RootState } from '../reducer'
 
+export * from 'decentraland-dapps/dist/modules/wallet/selectors'
+
 export const getWallet = createSelector<
   RootState,
   Wallet | null,

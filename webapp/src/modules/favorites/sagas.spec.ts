@@ -5,11 +5,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { Item } from '@dcl/schemas'
 import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
-import {
-  CLOSE_MODAL,
-  closeModal,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
+import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
 import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import { ItemBrowseOptions } from '../item/types'

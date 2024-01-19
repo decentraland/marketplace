@@ -2,10 +2,6 @@ import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { RouteComponentProps } from 'react-router-dom'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import {
-  OpenModalAction,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
 import { GoBackAction } from '../../modules/routing/actions'
 import { List } from '../../modules/favorites/types'
 import {
@@ -14,6 +10,7 @@ import {
   deleteListStart,
   getListRequest
 } from '../../modules/favorites/actions'
+import { OpenModalAction, openModal } from '../../modules/modal/actions'
 
 type Params = { listId?: string }
 

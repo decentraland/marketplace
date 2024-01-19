@@ -8,7 +8,7 @@ import {
 } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
-import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
+import { closeAllModals } from '../modal/actions'
 import { config } from '../../config'
 import { isNFT } from '../asset/utils'
 import { OPEN_TRANSAK, OpenTransakAction } from './actions'

@@ -49,7 +49,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   const [mouseY, setMouseY] = useState(-1)
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
-  const timeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const timeout = useRef<NodeJS.Timer | null>(null)
 
   const selection = useMemo(
     () =>
