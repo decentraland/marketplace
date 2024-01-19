@@ -14,7 +14,7 @@ import {
   CloseModalAction,
   CLOSE_MODAL,
   openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
+} from '../modal/actions'
 import {
   FavoritesAPI,
   MARKETPLACE_FAVORITES_SERVER_URL

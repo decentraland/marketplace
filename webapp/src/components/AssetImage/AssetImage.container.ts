@@ -18,7 +18,7 @@ import { getData as getOrders } from '../../modules/order/selectors'
 import { isNFT } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
 import { fetchItemRequest } from '../../modules/item/actions'
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { openModal } from '../../modules/modal/actions'
 import { Asset } from '../../modules/asset/types'
 import { fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
 import {

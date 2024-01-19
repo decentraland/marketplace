@@ -1,15 +1,14 @@
 import { connect } from 'react-redux'
 import { replace } from 'connected-react-router'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 import { RootState } from '../../modules/reducer'
-import { getWallet } from '../../modules/wallet/selectors'
+import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import {
   getBidderBids,
   getSellerBids,
   getArchivedBidIds
 } from '../../modules/ui/nft/bid/selectors'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getLoading } from '../../modules/bid/selectors'
 import {
   fetchBidsByAddressRequest,

@@ -52,7 +52,6 @@ describe('AssetCard', () => {
     asset = {
       id: '0xContractAddress-itemId',
       name: 'assetName',
-      urn: '',
       thumbnail: 'assetThumbnail',
       url: 'assetUrl',
       category: NFTCategory.WEARABLE,

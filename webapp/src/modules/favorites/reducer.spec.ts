@@ -924,10 +924,6 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
         }
       })
 
-      afterEach(() => {
-        ;(Date.now as jest.Mock).mockReset()
-      })
-
       it('should return a state where the item is flagged as picked by the user, the created date set as now, the counter increased and the loading state cleared', () => {
         expect(
           favoritesReducer(

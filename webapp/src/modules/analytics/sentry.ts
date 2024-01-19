@@ -5,7 +5,7 @@ import { config } from '../../config'
 init({
   environment: config.get('ENVIRONMENT'),
   release: `${config.get('SENTRY_RELEASE_PREFIX', 'marketplace')}@${
-    process.env.VITE_REACT_APP_WEBSITE_VERSION
+    process.env.REACT_APP_WEBSITE_VERSION
   }`,
   dsn: config.get('SENTRY_DSN'),
   integrations: [new BrowserTracing(), new Replay()],

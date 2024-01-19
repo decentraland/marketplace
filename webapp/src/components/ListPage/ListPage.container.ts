@@ -1,8 +1,6 @@
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import {
   getError,
   getList,
@@ -14,7 +12,8 @@ import {
   getListRequest
 } from '../../modules/favorites/actions'
 import { RootState } from '../../modules/reducer'
-import { getWallet } from '../../modules/wallet/selectors'
+import { getWallet, isConnecting } from '../../modules/wallet/selectors'
+import { openModal } from '../../modules/modal/actions'
 import { locations } from '../../modules/routing/locations'
 import {
   MapStateProps,

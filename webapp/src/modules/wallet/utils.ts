@@ -6,12 +6,12 @@ import {
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import {
   GENERATE_IDENTITY_FAILURE,
   GENERATE_IDENTITY_SUCCESS
 } from '../identity/actions'
 import { config } from '../../config'
+import { isConnecting } from './selectors'
 
 export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
 

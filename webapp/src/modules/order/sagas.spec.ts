@@ -14,10 +14,6 @@ import {
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import {
-  closeModal,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
-import {
   ProviderType,
   Wallet
 } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -30,6 +26,7 @@ import {
   buyAssetWithCard,
   BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
 } from '../asset/utils'
+import { closeModal, openModal } from '../modal/actions'
 import { NFT } from '../nft/types'
 import { getData as getNFTs } from '../nft/selectors'
 import { getNFT } from '../nft/utils'
@@ -49,7 +46,10 @@ import {
   executeOrderWithCardSuccess
 } from './actions'
 import { orderSaga } from './sagas'
-import { fetchNFTRequest, FETCH_NFT_FAILURE } from '../nft/actions'
+import {
+  fetchNFTRequest,
+  FETCH_NFT_FAILURE
+} from '../nft/actions'
 
 let nft: NFT
 let order: Order

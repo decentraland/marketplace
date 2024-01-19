@@ -27,13 +27,7 @@ function renderSuccessPage(
   preloadedNFTData?: Record<string, NFT>
 ): RenderResult {
   return renderWithProviders(
-    <SuccessPage
-      profile={undefined}
-      onSetNameAsAlias={() => undefined}
-      isLoading={false}
-      mintedTokenId={null}
-      {...props}
-    />,
+    <SuccessPage isLoading={false} mintedTokenId={null} {...props} />,
     {
       preloadedState: {
         nft: {

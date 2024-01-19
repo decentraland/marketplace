@@ -36,7 +36,6 @@ describe('when fetch volume data success action is received', () => {
     const newState = analyticsReducer(
       {
         volumeData: null,
-        rankingsData: [],
         loading: [{ type: FETCH_ANALYTICS_VOLUME_DATA_REQUEST }],
         error: 'some error'
       },
@@ -53,7 +52,6 @@ describe('when fetch volume data failure action is received', () => {
     const newState = analyticsReducer(
       {
         volumeData: { sales: 1 } as AnalyticsVolumeData,
-        rankingsData: [],
         loading: [{ type: FETCH_ANALYTICS_VOLUME_DATA_REQUEST }],
         error: 'some error'
       },

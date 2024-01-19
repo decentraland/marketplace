@@ -124,7 +124,7 @@ export const MapTopbar = ({
           }
           on="click"
           className={styles.filtersPopup}
-          onClose={evt => evt.stopPropagation()}
+          onClose={(evt) => evt.stopPropagation()}
         />
         {mapToggle}
       </div>

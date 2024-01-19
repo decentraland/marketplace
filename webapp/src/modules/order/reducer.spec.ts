@@ -67,7 +67,6 @@ let rentalListing: RentalListing
 const purchase: NFTPurchase = {
   address: 'anAddress',
   id: 'anId',
-  paymentMethod: 'aPaymentMethod',
   network: Network.ETHEREUM,
   timestamp: 1671028355396,
   status: PurchaseStatus.PENDING,
@@ -85,7 +84,6 @@ const purchase: NFTPurchase = {
 beforeEach(() => {
   state = {
     data: {},
-    dataLegacy: {},
     loading: [],
     error: null
   }
@@ -121,7 +119,7 @@ requestActions.forEach(action => {
 
 const successActions = [
   createOrderSuccess(nft, Number(order.price), order.expiresAt, txHash),
-  executeOrderSuccess(txHash, nft),
+  executeOrderSuccess(),
   executeOrderWithCardSuccess(purchase, nft, txHash),
   cancelOrderSuccess(order, nft, txHash)
 ]

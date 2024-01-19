@@ -18,8 +18,6 @@ beforeEach(() => {
   rental = {
     id: 'a-rental-listing-id'
   } as RentalListing
-
-  signedFetchMock.mockReset()
 })
 
 describe('when refreshing the rental listings', () => {

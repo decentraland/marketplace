@@ -1,4 +1,3 @@
-import React from 'react'
 import { BigNumber, ethers } from 'ethers'
 import { MAXIMUM_FRACTION_DIGITS } from 'decentraland-dapps/dist/lib/mana'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'

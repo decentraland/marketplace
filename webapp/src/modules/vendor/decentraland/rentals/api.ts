@@ -1,3 +1,4 @@
+import { URLSearchParams } from 'url'
 import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   RentalListing,
@@ -10,7 +11,6 @@ import { objectToURLSearchParams } from './utils'
 
 export const SIGNATURES_SERVER_URL = config.get('SIGNATURES_SERVER_URL')!
 type ValueOf<T> = T[keyof T]
-
 
 class RentalsAPI extends BaseAPI {
   createRentalListing = async (
@@ -111,15 +111,10 @@ class RentalsAPI extends BaseAPI {
     }
   }
 
-  getRentalListingsPrices = async (
-    filters: RentalsListingsFilterBy
-  ): Promise<Record<string, number>> => {
+  getRentalListingsPrices = async (filters: RentalsListingsFilterBy): Promise<Record<string, number>> => {
     const queryParams = objectToURLSearchParams(filters)
     try {
-      const response = await this.request(
-        'get',
-        `/rental-listings/prices?${queryParams.toString()}`
-      )
+      const response = await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)
       return response
     } catch (error) {
       throw new Error((error as Error).message)
