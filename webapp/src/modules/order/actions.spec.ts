@@ -70,6 +70,7 @@ beforeEach(() => {
   error = 'anError'
   purchase = {
     address: 'anAddress',
+    paymentMethod: '',
     id: 'anId',
     network: Network.ETHEREUM,
     timestamp: 1671028355396,

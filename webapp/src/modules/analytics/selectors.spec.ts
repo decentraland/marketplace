@@ -7,6 +7,7 @@ let state: RootState
 beforeEach(() => {
   state = {
     analytics: {
+      rankingsData: [],
       volumeData: {
         creatorsEarnings: 1,
         creatorsEarningsUSD: 10,

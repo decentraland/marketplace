@@ -15,6 +15,7 @@ let bidService: BidService
 const expectedHash = '0xhash'
 beforeEach(() => {
   bidService = new BidService()
+  mockSendTransaction.mockReset()
 })
 
 describe('when placing a bid', () => {

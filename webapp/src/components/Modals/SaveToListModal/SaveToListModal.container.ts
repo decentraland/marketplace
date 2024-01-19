@@ -1,13 +1,15 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import {
+  closeModal,
+  openModal
+} from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../../modules/reducer'
 import { bulkPickUnpickRequest } from '../../../modules/favorites/actions'
 import { isLoadingBulkPicksUnpicks } from '../../../modules/favorites/selectors'
 import { getCurrentIdentity } from '../../../modules/identity/selectors'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
-import { openModal } from '../../../modules/modal/actions'
 import {
   MapDispatchProps,
   MapStateProps,

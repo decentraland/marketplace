@@ -275,9 +275,7 @@ export function isLandLocked(
 }
 
 async function delay(milliseconds: number) {
-  return await new Promise<void>(resolve =>
-    setTimeout(() => resolve(), milliseconds)
-  )
+  return await new Promise<void>(resolve => setTimeout(resolve, milliseconds))
 }
 
 export async function waitUntilRentalChangesStatus(

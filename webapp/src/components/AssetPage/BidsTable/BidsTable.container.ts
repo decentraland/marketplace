@@ -1,7 +1,8 @@
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { getLoading } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { connect } from 'react-redux'
 import { RootState } from '../../../modules/reducer'
-import { getAddress, getLoading } from '../../../modules/wallet/selectors'
+import { getAddress } from '../../../modules/wallet/selectors'
 import {
   ACCEPT_BID_REQUEST,
   acceptBidRequest
