@@ -50,7 +50,6 @@
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
-    "@rollup/plugin-inject": "^5.0.5",
     "@sentry/cli": "^2.20.5",
     "@swc/core": "^1.3.104",
     "@swc/jest": "^0.2.30",
@@ -98,6 +97,7 @@
   },
   "scripts": {
     "start": "vite",
+    "preview": "vite preview",
     "prebuild": "node scripts/prebuild.cjs",
     "build": "tsc && node --max_old_space_size=8192 ./node_modules/vite/bin/vite.js build",
     "test": "jest",

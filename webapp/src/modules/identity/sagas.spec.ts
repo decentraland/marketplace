@@ -46,7 +46,7 @@ describe('when handling the wallet connection success', () => {
     describe("and there's no identity", () => {
       beforeEach(() => {
         windowLocation = window.location
-        delete window.location
+        delete (window as any).location
         window.location = ({
           replace: jest.fn()
         } as any) as Location

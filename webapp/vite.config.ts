@@ -59,5 +59,5 @@ export default defineConfig(({ command, mode }) => {
       sourcemap: true
     },
     ...(command === 'build' ? { base: envVariables.VITE_BASE_URL } : undefined)
-  }
+  } as any
 })

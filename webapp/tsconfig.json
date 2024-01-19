@@ -8,11 +8,11 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
 
     /* Linting */
@@ -22,6 +22,5 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src", ".eslintrc.js", "vite.config.ts", "jest.config.ts"],
-  // "exclude": ["node_modules", "dist", "build", "coverage", "scripts", "vite.config.ts", "jest.config.ts", "**/*.spec.ts", "**/*.spec.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -114,7 +114,7 @@ describe('when upsert contracts action is received', () => {
 })
 
 describe('when the reset of the the has fetched flag is received', () => {
-  let hasFetched = false
+  let hasFetched: boolean
 
   describe('when has fetched was true', () => {
     beforeEach(() => {
@@ -127,7 +127,7 @@ describe('when the reset of the the has fetched flag is received', () => {
           loading: [],
           error: null,
           data: [],
-          hasFetched: true
+          hasFetched
         },
         resetHasFetched()
       )
@@ -151,7 +151,7 @@ describe('when the reset of the the has fetched flag is received', () => {
         loading: [],
         error: null,
         data: [],
-        hasFetched: false
+        hasFetched
       }
 
       const newState = contractReducer(state, resetHasFetched())
