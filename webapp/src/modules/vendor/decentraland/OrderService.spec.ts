@@ -95,7 +95,7 @@ describe("Decentraland's OrderService", () => {
 
     describe("when the market's contract doesn't exist for the order's chainId", () => {
       it('should reject into an exception', () => {
-        order.chainId = 234234
+        order.chainId = 234234 as ChainId
         return expect(
           orderService.execute(null, nft, order, fingerprint)
         ).rejects.toEqual(
@@ -225,7 +225,7 @@ describe("Decentraland's OrderService", () => {
 
     describe("when the market's contract doesn't exist for the NFT's chainId", () => {
       it('should reject into an exception', () => {
-        nft.chainId = 234234
+        nft.chainId = 234234 as ChainId
         return expect(
           orderService.create(null, nft, priceInEther, expiresAt)
         ).rejects.toEqual(
@@ -302,7 +302,7 @@ describe("Decentraland's OrderService", () => {
 
     describe("when the market's contract doesn't exist for the order's chainId", () => {
       it('should reject into an exception', () => {
-        order.chainId = 234234
+        order.chainId = 234234 as ChainId
         return expect(orderService.cancel(null, order)).rejects.toEqual(
           new Error(
             `Could not get a valid contract for Marketplace using chain ${order.chainId}`

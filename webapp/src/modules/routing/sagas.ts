@@ -30,6 +30,7 @@ import {
   CONNECT_WALLET_SUCCESS,
   ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { isLegacyOrder } from '../../lib/orders'
 import { AssetType } from '../asset/types'
@@ -125,7 +126,6 @@ import {
 } from '../bid/actions'
 import { getData } from '../event/selectors'
 import { getWallet } from '../wallet/selectors'
-import { openModal } from '../modal/actions'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import { getPage, getView } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'

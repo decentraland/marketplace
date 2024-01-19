@@ -9,8 +9,6 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 
-export * from 'decentraland-dapps/dist/modules/transaction/selectors'
-
 export const getTransactionsByType = (
   state: RootState,
   address: string,

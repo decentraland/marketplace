@@ -1,4 +1,5 @@
-import { Entity, EntityVersion } from 'dcl-catalyst-commons'
+import { Entity } from '@dcl/schemas'
+import { EntityVersion } from 'dcl-catalyst-commons'
 import { Store, StoreEntityMetadata } from './types'
 import {
   getPeerCoverUrl,
@@ -161,9 +162,7 @@ describe('when getting entity metadata from a store', () => {
     })
 
     it('should return entity metadata containing them as links', () => {
-      expect(getEntityMetadataFromStore(mockStore, 'owner')).toEqual(
-        mockMetadata
-      )
+      expect(getEntityMetadataFromStore(mockStore)).toEqual(mockMetadata)
     })
   })
 
@@ -188,9 +187,7 @@ describe('when getting entity metadata from a store', () => {
     })
 
     it('should return entity metadata with the file array with an entry', () => {
-      expect(getEntityMetadataFromStore(mockStore, 'owner')).toEqual(
-        mockMetadata
-      )
+      expect(getEntityMetadataFromStore(mockStore)).toEqual(mockMetadata)
     })
   })
 })

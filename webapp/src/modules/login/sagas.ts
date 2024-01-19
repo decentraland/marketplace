@@ -9,7 +9,7 @@ import {
   CloseModalAction,
   CLOSE_MODAL,
   closeModal
-} from '../modal/actions'
+} from 'decentraland-dapps/dist/modules/modal/actions'
 import { OpenLoginAction, OPEN_LOGIN } from './actions'
 import { getAddress } from '../wallet/selectors'
 

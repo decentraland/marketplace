@@ -1,6 +1,5 @@
 import { expectSaga } from 'redux-saga-test-plan'
-import { call } from 'redux-saga-test-plan/matchers'
-import { VendorFactory, VendorName } from '../vendor'
+import * as matchers from 'redux-saga-test-plan/matchers'
 import {
   fetchAnalyticsVolumeDataRequest,
   fetchAnalyticsVolumeDataSuccess,
@@ -8,14 +7,12 @@ import {
 } from './actions'
 import { analyticsSagas } from './sagas'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from './types'
+import { AnalyticsService } from '../vendor/decentraland'
 
 describe('when handling a fetch volume data request', () => {
   let timeframe: AnalyticsTimeframe
   let response: AnalyticsVolumeData
-  const options = {
-    vendor: VendorName.DECENTRALAND
-  }
-  const vendor = VendorFactory.build(options.vendor)
+
   beforeEach(() => {
     timeframe = AnalyticsTimeframe.WEEK
     response = {
@@ -33,18 +30,15 @@ describe('when handling a fetch volume data request', () => {
     it('should put a success action with the volume for the timeframe asked', () => {
       return expectSaga(analyticsSagas)
         .provide([
-          [call(VendorFactory.build, options.vendor), vendor],
           [
-            call(
-              [
-                vendor.analyticsService,
-                vendor.analyticsService!.fetchVolumeData
-              ],
-              timeframe
-            ),
-            response
+            matchers.call.fn(AnalyticsService.prototype.fetchVolumeData),
+            Promise.resolve(response)
           ]
         ])
+        .call.like({
+          fn: AnalyticsService.prototype.fetchVolumeData,
+          args: [timeframe]
+        })
         .put(fetchAnalyticsVolumeDataSuccess(response))
         .dispatch(fetchAnalyticsVolumeDataRequest(timeframe))
         .silentRun()
@@ -55,18 +49,15 @@ describe('when handling a fetch volume data request', () => {
     it('should put a failure action with the error', () => {
       return expectSaga(analyticsSagas)
         .provide([
-          [call(VendorFactory.build, options.vendor), vendor],
           [
-            call(
-              [
-                vendor.analyticsService,
-                vendor.analyticsService!.fetchVolumeData
-              ],
-              timeframe
-            ),
+            matchers.call.fn(AnalyticsService.prototype.fetchVolumeData),
             Promise.reject(new Error('some error'))
           ]
         ])
+        .call.like({
+          fn: AnalyticsService.prototype.fetchVolumeData,
+          args: [timeframe]
+        })
         .put(fetchAnalyticsVolumeDataFailure('some error'))
         .dispatch(fetchAnalyticsVolumeDataRequest(timeframe))
         .silentRun()
