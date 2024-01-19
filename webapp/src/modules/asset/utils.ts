@@ -8,7 +8,11 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
-import { CloseModalAction, CLOSE_MODAL, openModal } from '../modal/actions'
+import {
+  CloseModalAction,
+  CLOSE_MODAL,
+  openModal
+} from 'decentraland-dapps/dist/modules/modal/actions'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'

@@ -23,13 +23,13 @@ beforeEach(() => {
 
 describe('when getting the pagination hook', () => {
   let renderedHook: ReturnType<typeof renderHook>
-  let currentResult: UsePaginationResult
+  let currentResult: UsePaginationResult<string, string>
 
   describe('and the page size hook prop is not set', () => {
     describe('and there\'s no "first" parameter', () => {
       beforeEach(() => {
         renderedHook = renderHook(() => usePagination())
-        currentResult = renderedHook.result.current as UsePaginationResult
+        currentResult = renderedHook.result.current as UsePaginationResult<string, string>
       })
 
       it('should return the default page size in the "first" property', () => {
@@ -41,7 +41,7 @@ describe('when getting the pagination hook', () => {
       beforeEach(() => {
         useLocationMock.search = 'first=10'
         renderedHook = renderHook(() => usePagination())
-        currentResult = renderedHook.result.current as UsePaginationResult
+        currentResult = renderedHook.result.current as UsePaginationResult<string, string>
       })
 
       it('should return the value of the "first" parameter in the "first" property', () => {
@@ -59,7 +59,7 @@ describe('when getting the pagination hook', () => {
     describe('and there\'s no "first" parameter', () => {
       beforeEach(() => {
         renderedHook = renderHook(() => usePagination({ pageSize }))
-        currentResult = renderedHook.result.current as UsePaginationResult
+        currentResult = renderedHook.result.current as UsePaginationResult<string, string>
       })
 
       it('should return the page size as the "first" property', () => {
@@ -71,7 +71,7 @@ describe('when getting the pagination hook', () => {
       beforeEach(() => {
         useLocationMock.search = 'first=10'
         renderedHook = renderHook(() => usePagination())
-        currentResult = renderedHook.result.current as UsePaginationResult
+        currentResult = renderedHook.result.current as UsePaginationResult<string, string>
       })
 
       it('should return the value of the "first" parameter in the "first" property', () => {
@@ -95,7 +95,7 @@ describe('when getting the pagination hook', () => {
       useLocationMock.search =
         'page=1&first=10&offset=0&sortBy=createdAt&filter1=value1&filter2=value2'
       renderedHook = renderHook(() => usePagination())
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 
     it('should return the filters', () => {
@@ -110,7 +110,7 @@ describe('when getting the pagination hook', () => {
     beforeEach(() => {
       useLocationMock.search = 'sortBy=createdAt'
       renderedHook = renderHook(() => usePagination())
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 
     it('should return sortBy with the value of the parameter', () => {
@@ -122,7 +122,7 @@ describe('when getting the pagination hook', () => {
     beforeEach(() => {
       useLocationMock.search = ''
       renderedHook = renderHook(() => usePagination())
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 
     it('should return sortBy as undefined', () => {
@@ -134,7 +134,7 @@ describe('when getting the pagination hook', () => {
     beforeEach(() => {
       useLocationMock.search = 'filter=value&sortBy=createdAt'
       renderedHook = renderHook(() => usePagination())
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
       act(() => {
         currentResult.goToNextPage()
       })
@@ -151,7 +151,7 @@ describe('when getting the pagination hook', () => {
     beforeEach(() => {
       useLocationMock.search = 'filter=value&sortBy=createdAt'
       renderedHook = renderHook(() => usePagination())
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
       act(() => {
         currentResult.goToPage(4)
       })
@@ -168,7 +168,7 @@ describe('when getting the pagination hook', () => {
     beforeEach(() => {
       useLocationMock.search = 'filter=value&sortBy=createdAt'
       renderedHook = renderHook(() => usePagination())
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
       act(() => {
         currentResult.changeSorting('someSortProperty')
       })
@@ -186,7 +186,7 @@ describe('when getting the pagination hook', () => {
       useLocationMock.search =
         'filter=value&anotherFilter=someValue&sortBy=createdAt'
       renderedHook = renderHook(() => usePagination())
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 
     describe('and the flag to remove all the old filters is set', () => {
@@ -228,7 +228,7 @@ describe('when getting the pagination hook', () => {
       renderedHook = renderHook(() =>
         usePagination({ pageSize: 50, count: 101 })
       )
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 
     it('should compute the number of pages', () => {
@@ -242,7 +242,7 @@ describe('when getting the pagination hook', () => {
       renderedHook = renderHook(() =>
         usePagination({ pageSize: 50, count: 101 })
       )
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 
     it('should return hasMorePages as false', () => {
@@ -256,7 +256,7 @@ describe('when getting the pagination hook', () => {
       renderedHook = renderHook(() =>
         usePagination({ pageSize: 50, count: 101 })
       )
-      currentResult = renderedHook.result.current as UsePaginationResult
+      currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 
     it('should return hasMorePages as true', () => {

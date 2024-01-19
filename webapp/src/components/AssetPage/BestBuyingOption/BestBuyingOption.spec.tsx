@@ -33,6 +33,7 @@ const dateNowFn = Date.now
 describe('Best Buying Option', () => {
   let asset: Item = {
     contractAddress: '0xaddress',
+    urn: '',
     itemId: '1',
     id: '1',
     name: 'asset name',
@@ -106,7 +107,7 @@ describe('Best Buying Option', () => {
     it('should render the mint option', async () => {
       const reference: RefObject<HTMLDivElement> = React.createRef()
       const { getByText } = renderWithProviders(
-        <BestBuyingOption asset={asset} tableRef={reference} />
+        <BestBuyingOption onBuyWithCrypto={() => {}} asset={asset} tableRef={reference} />
       )
 
       expect(
@@ -117,7 +118,7 @@ describe('Best Buying Option', () => {
     it('should render the mint price', async () => {
       const reference: RefObject<HTMLDivElement> = React.createRef()
       const { getByText } = renderWithProviders(
-        <BestBuyingOption asset={asset} tableRef={reference} />
+        <BestBuyingOption onBuyWithCrypto={() => {}} asset={asset} tableRef={reference} />
       )
 
       const price = formatWeiMANA(asset.price)

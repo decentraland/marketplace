@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
+import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 import { RootState } from '../../modules/reducer'
 import { AssetType } from '../../modules/asset/types'
-import { isConnecting } from '../../modules/wallet/selectors'
 import { MapStateProps, OwnProps } from './AssetProviderPage.types'
 import AssetProviderPage from './AssetProviderPage'
 
