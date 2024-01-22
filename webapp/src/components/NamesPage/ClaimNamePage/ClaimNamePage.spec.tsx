@@ -13,7 +13,6 @@ jest.mock('../../../modules/ens/utils', () => ({
 
 describe('ClaimNamePage', () => {
   let walletMock: Wallet
-  let currentManaMock: number
   let onBrowseMock: Props['onBrowse']
   let onClaimMock: Props['onClaim']
   let onRedirectMock: Props['onRedirect']
@@ -21,7 +20,6 @@ describe('ClaimNamePage', () => {
   const renderAndTypeText = async (text: string) => {
     const matchers = renderWithProviders(
       <ClaimNamePage
-        currentMana={currentManaMock}
         wallet={walletMock}
         isConnecting={false}
         onClaim={onClaimMock}
@@ -105,7 +103,6 @@ describe('ClaimNamePage', () => {
       })
       describe('and has enough funds to claim the NAME', () => {
         beforeEach(() => {
-          currentManaMock = 100
           walletMock = {} as Wallet
           onClaimMock = jest.fn()
         })
@@ -123,7 +120,6 @@ describe('ClaimNamePage', () => {
       })
       describe('and does not have enough funds to claim the NAME', () => {
         beforeEach(() => {
-          currentManaMock = 99 // 100 is the mana needed
           walletMock = {} as Wallet
           onClaimMock = jest.fn()
         })

@@ -2,6 +2,7 @@ import { all } from 'redux-saga/effects'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
+import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
@@ -55,6 +56,10 @@ const contentClient = createContentClient({
 })
 
 const gatewaySaga = createGatewaySaga({
+  [FiatGateway.WERT]: {
+    marketplaceServerURL: config.get('MARKETPLACE_SERVER_URL'),
+    url: config.get('WERT_API_URL')
+  },
   [NetworkGatewayType.MOON_PAY]: {
     apiBaseUrl: config.get('MOON_PAY_API_URL'),
     apiKey: config.get('MOON_PAY_API_KEY'),

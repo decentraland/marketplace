@@ -25,10 +25,7 @@ import {
   PRICE_IN_WEI,
   isEnoughClaimMana
 } from '../../../modules/ens/utils'
-import {
-  MARKETPLACE_SERVER_URL,
-  marketplaceAPI
-} from '../../../modules/vendor/decentraland/marketplace/api'
+import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland/marketplace/api'
 import { DCLController__factory } from '../../../contracts/factories/DCLController__factory'
 import { Mana } from '../../Mana'
 import { Props } from './ClaimNameFatFingerModal.types'
