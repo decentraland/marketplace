@@ -11,10 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Use Node.js 18.x
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4.0.1
         with:
           node-version: 18.x
+          cache: "npm"
+          cache-dependency-path: webapp/package-lock.json
       - name: Install
-        run: npm ci --legacy-peer-deps
+        run: npm i --legacy-peer-deps
       - name: Audit signatures
         run: npm audit signatures

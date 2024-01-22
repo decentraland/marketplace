@@ -74,7 +74,6 @@
     "@types/redux-logger": "^3.0.9",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
-    "@vitejs/plugin-basic-ssl": "^1.0.2",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "css-mediaquery": "^0.1.2",
     "customize-cra": "^1.0.0",
