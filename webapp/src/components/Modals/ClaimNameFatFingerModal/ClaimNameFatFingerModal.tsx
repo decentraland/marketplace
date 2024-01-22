@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
 import { v4 as uuidv4 } from 'uuid'
-import WertWidget from '@wert-io/widget-initializer'
+import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { Env } from '@dcl/ui-env'
 import { NFTCategory, Network } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -53,7 +53,6 @@ const ClaimNameFatFingerModal = ({
   name: modalName,
   wallet,
   currentMana,
-  identity,
   metadata: { name: ENSName },
   isLoading,
   isClaimingNamesWithFiatEnabled,
@@ -62,7 +61,8 @@ const ClaimNameFatFingerModal = ({
   onClaimNameClear,
   getContract,
   onClose,
-  onClaimTxSubmitted
+  onClaimTxSubmitted,
+  onOpenFiatGateway
 }: Props) => {
   const analytics = useMemo(() => getAnalytics(), [])
   const inputRef = useRef<HTMLInputElement>(null)
@@ -84,12 +84,8 @@ const ClaimNameFatFingerModal = ({
   const [currentName, setCurrentName] = useState('')
 
   const handleClaimWithCard = useCallback(async () => {
-    const CONTROLLER_V2_ADDRESS = config.get(
-      'CONTROLLER_V2_CONTRACT_ADDRESS',
-      ''
-    )
-
-    if (wallet && identity) {
+    const wertURL = config.get('WERT_URL')
+    if (wallet) {
       const signer = await getSigner()
       const factory = await DCLController__factory.connect(
         CONTROLLER_V2_ADDRESS,
@@ -110,66 +106,51 @@ const ClaimNameFatFingerModal = ({
         sc_input_data
       }
 
-      if (identity) {
-        const signature = await marketplaceAPI.signWertMessage(data, identity)
-
-        const signedData = {
-          ...data,
-          signature
-        }
-
-        console.log('here7')
-
-        const nftOptions = {
-          extra: {
-            item_info: {
-              category: 'Decentraland NAME',
-              author: 'Decentraland',
-              image_url: `${MARKETPLACE_SERVER_URL}/ens/generate?ens=${ENSName}&width=330&height=330`,
-              ENSName,
-              seller: 'DCL Names'
-            }
+      const nftOptions = {
+        extra: {
+          item_info: {
+            category: 'Decentraland NAME',
+            author: 'Decentraland',
+            image_url: `${MARKETPLACE_SERVER_URL}/ens/generate?ens=${ENSName}&width=330&height=330`,
+            ENSName,
+            seller: 'DCL Names'
           }
         }
-
-        const wertWidget = new WertWidget({
-          ...signedData,
-          ...{
-            partner_id: '01HGFWXR5CQMYHYSR9KVTKWDT5', // your partner id
-            origin: config.is(Env.DEVELOPMENT)
-              ? 'https://sandbox.wert.io'
-              : 'https://widget.wert.io',
-            lang: 'en',
-            click_id: uuidv4(), // unique id of purchase in your system
-            widgetLayoutMode: 'Modal'
-          },
-          ...nftOptions,
-          listeners: {
-            loaded: () => {
-              setIsLoadingFIATWidget(false)
-            },
-            'payment-status': options => {
-              if (options.tx_id) {
-                analytics.track('Buy Name Success', {
-                  name: ENSName,
-                  payment_method: 'fiat',
-                  txHash: options.tx_id
-                })
-                onClaimTxSubmitted(
-                  ENSName,
-                  wallet.address,
-                  wallet.chainId,
-                  options.tx_id
-                )
-              }
-            }
-          }
-        })
-
-        wertWidget.open()
       }
+
+      onOpenFiatGateway(
+        FiatGateway.WERT,
+        {
+          ...data,
+          ...nftOptions,
+          partner_id: '01HGFWXR5CQMYHYSR9KVTKWDT5',
+          origin: wertURL,
+          lang: 'en',
+          click_id: uuidv4() // unique id of purchase in your system
+        },
+        {
+          onLoaded: () => {
+            setIsLoadingFIATWidget(false)
+          },
+          onSuccess: options => {
+            if ('tx_id' in options) {
+              analytics.track('Buy Name Success', {
+                name: ENSName,
+                payment_method: 'fiat',
+                txHash: options.tx_id
+              })
+              onClaimTxSubmitted(
+                ENSName,
+                wallet.address,
+                wallet.chainId,
+                options.tx_id as string
+              )
+            }
+          }
+        }
+      )
     }
-  }, [wallet, identity, ENSName, analytics, onClaimTxSubmitted])
+  }, [wallet, ENSName, analytics, onOpenFiatGateway, onClaimTxSubmitted])
 
   const handleClaimWithCardClick = useCallback(() => {
     return isClaimingNamesWithFiatEnabled

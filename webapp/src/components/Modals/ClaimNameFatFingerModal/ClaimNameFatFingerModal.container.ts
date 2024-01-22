@@ -1,10 +1,15 @@
 import { connect } from 'react-redux'
 import { ChainId, Network } from '@dcl/schemas'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { openFiatGatewayWidgetRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
+import {
+  FiatGateway,
+  FiatGatewayOptions,
+  FiatGatewayListeners
+} from 'decentraland-dapps/dist/modules/gateway/types'
 import { RootState } from '../../../modules/reducer'
 import {
   getClaimNameStatus,
@@ -21,7 +26,6 @@ import {
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
 import { getMana, getWallet } from '../../../modules/wallet/selectors'
-import { getCurrentIdentity } from '../../../modules/identity/selectors'
 import { getIsClaimingNamesWithFiatEnabled } from '../../../modules/features/selectors'
 import {
   MapDispatch,
@@ -38,13 +42,17 @@ const mapState = (state: RootState): MapState => ({
   address: getAddress(state),
   getContract: (query: Partial<Contract>) => getContract(state, query),
   wallet: getWallet(state),
-  identity: (getCurrentIdentity(state) as AuthIdentity | null) ?? undefined,
   isClaimingNamesWithFiatEnabled: getIsClaimingNamesWithFiatEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onClaim: name => dispatch(claimNameRequest(name)),
   onClaimNameClear: () => dispatch(claimNameClear()),
+  onOpenFiatGateway: (
+    gateway: FiatGateway,
+    options: FiatGatewayOptions,
+    listeners?: FiatGatewayListeners
+  ) => dispatch(openFiatGatewayWidgetRequest(gateway, options, listeners)),
   onClaimTxSubmitted: (
     subdomain: string,
     address: string,

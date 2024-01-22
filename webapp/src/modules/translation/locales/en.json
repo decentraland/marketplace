@@ -1642,7 +1642,7 @@
     }
   },
   "set_name_as_alias_modal": {
-    "title": "Use NAME as Alias",
+    "title": "Use NAME as Username",
     "description": "Your current username will be updated immediately.",
     "success_title": "All Done!",
     "success_description": "Your username has been updated"
