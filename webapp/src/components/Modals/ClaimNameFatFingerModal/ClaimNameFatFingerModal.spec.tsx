@@ -1,5 +1,4 @@
 import { ethers } from 'ethers'
-import WertWidget from '@wert-io/widget-initializer'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { fireEvent, waitFor } from '@testing-library/react'
@@ -7,19 +6,16 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { DCLController__factory } from '../../../contracts/factories/DCLController__factory'
 import { renderWithProviders } from '../../../utils/test'
-import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import ClaimNameFatFingerModal, {
   CRYPTO_PAYMENT_METHOD_DATA_TESTID
 } from './ClaimNameFatFingerModal'
 
 jest.mock('../../../modules/vendor/decentraland/marketplace/api')
-
 jest.mock('../../../contracts/factories/DCLController__factory')
 jest.mock('decentraland-dapps/dist/lib/eth', () => ({
   ...jest.requireActual('decentraland-dapps/dist/lib/eth'),
   getSigner: jest.fn()
 }))
-jest.mock('@wert-io/widget-initializer')
 
 const getSignerMock = getSigner as jest.MockedFunction<typeof getSigner>
 const signerMock = {
@@ -49,6 +45,7 @@ describe('ClaimNameFatFingerModal', () => {
     onClaimNameClear: onClaimNameClearMock,
     onAuthorizedAction: onAuthorizedActionMock,
     onCloseAuthorization: jest.fn(),
+    onOpenFiatGateway: jest.fn(),
     wallet: {} as Wallet,
     isLoadingAuthorization: false
   }
@@ -119,15 +116,8 @@ describe('ClaimNameFatFingerModal', () => {
       })
     })
     describe('and does not have enough MANA balance to pay', () => {
-      let widgetOpenFnMock: jest.Mock
-      let identity: AuthIdentity
       beforeEach(() => {
-        widgetOpenFnMock = jest.fn()
         currentMana = 0
-        ;(WertWidget as jest.Mock).mockImplementation(() => ({
-          open: widgetOpenFnMock
-        }))
-        identity = {} as AuthIdentity
         getSignerMock.mockResolvedValueOnce(
           (signerMock as unknown) as ethers.providers.JsonRpcSigner
         )
@@ -136,13 +126,11 @@ describe('ClaimNameFatFingerModal', () => {
             encodeFunctionData: jest.fn()
           }
         })
-        ;(marketplaceAPI.signWertMessage as jest.Mock).mockResolvedValueOnce({})
       })
-      it('should have MANA option disabled and open FIAT provider widget when claim button is clicked', async () => {
+      it('should have MANA option disabled and open FIAT gateway widget when claim button is clicked', async () => {
         const { getByRole, getByText, getByTestId } = renderWithProviders(
           <ClaimNameFatFingerModal
             {...baseProps}
-            identity={identity}
             currentMana={currentMana}
             getContract={jest.fn().mockResolvedValue({
               address: '0x0' // mana contract mock
@@ -169,7 +157,7 @@ describe('ClaimNameFatFingerModal', () => {
         expect(onClaimMock).not.toHaveBeenCalledWith(name)
 
         await waitFor(() => {
-          expect(widgetOpenFnMock).toHaveBeenCalled()
+          expect(baseProps.onOpenFiatGateway).toHaveBeenCalled()
         })
       })
     })

@@ -1,7 +1,6 @@
 import { ChainId } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
-import { Balance, WertMessage } from './types'
+import { Balance } from './types'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
 
@@ -23,32 +22,6 @@ export class MarketplaceAPI extends BaseAPI {
       `/${chainIdToChainName[chain]}/address/${wallet}/balance`
     )
     return balances
-  }
-
-  signWertMessage = async (
-    message: WertMessage,
-    identity: AuthIdentity
-  ): Promise<string> => {
-    const url = MARKETPLACE_SERVER_URL + '/wert/sign'
-    const response = await signedFetch(url, {
-      method: 'POST',
-      identity,
-      body: JSON.stringify(message),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    try {
-      const json = await response.json()
-      if (json.ok) {
-        return json.data
-      } else {
-        throw new Error(json.message)
-      }
-    } catch (error) {
-      console.log('error: ', error)
-      throw new Error((error as Error).message)
-    }
   }
 }
 
