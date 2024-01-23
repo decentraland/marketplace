@@ -6,6 +6,7 @@ import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
+import { createIdentitySaga } from 'decentraland-dapps/dist/modules/identity/sagas'
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
 import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
 import { locationSaga } from 'decentraland-dapps/dist/modules/location/sagas'
@@ -55,6 +56,10 @@ const contentClient = createContentClient({
   fetcher: createFetchComponent()
 })
 
+const newIdentitySaga = createIdentitySaga({
+  authURL: config.get('AUTH_URL')
+})
+
 const gatewaySaga = createGatewaySaga({
   [FiatGateway.WERT]: {
     marketplaceServerURL: config.get('MARKETPLACE_SERVER_URL'),
@@ -102,6 +107,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     collectionSaga(),
     storeSaga(contentClient),
     identitySaga(),
+    newIdentitySaga(),
     marketplaceAnalyticsSagas(),
     featuresSaga({
       polling: {
