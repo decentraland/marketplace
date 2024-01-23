@@ -73,7 +73,6 @@ export function* storeSaga(client: ContentClient) {
     payload: { store }
   }: UpdateStoreRequestAction) {
     try {
-      console.log('check redirect1')
       const identity: AuthIdentity = yield call(getIdentityOrRedirect)
 
       yield call(deployStoreEntity, client, identity, store)

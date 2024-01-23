@@ -6,6 +6,7 @@ import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 import { isErrorWithMessage } from '../../lib/error'
 import { ItemBrowseOptions } from '../item/types'
 import {
@@ -82,7 +83,6 @@ import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
 import { getData as getItemsData } from '../item/selectors'
 import { getIsMarketplaceServerEnabled } from '../features/selectors'
-import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 
 export function* favoritesSaga() {
   const API_OPTS = {
@@ -153,7 +153,6 @@ export function* favoritesSaga() {
     try {
       const address: ReturnType<typeof getAddress> = yield select(getAddress)
       // Force the user to have the signed identity
-      console.log('check redirect3')
       if (address) yield call(getIdentityOrRedirect)
 
       let items: Item[] = []
@@ -216,7 +215,6 @@ export function* favoritesSaga() {
 
     try {
       // Force the user to have the signed identity
-      console.log('check redirect4')
       yield call(getIdentityOrRedirect)
       let sortBy: ListsSortBy | undefined
       let sortDirection: SortDirection | undefined
@@ -282,7 +280,6 @@ export function* favoritesSaga() {
 
     try {
       // Force the user to have the signed identity
-      console.log('check redirect4')
       yield call(getIdentityOrRedirect)
       yield call([favoritesAPI, 'deleteList'], list.id)
       yield put(deleteListSuccess(list))
@@ -343,7 +340,6 @@ export function* favoritesSaga() {
     try {
       const { pathname } = yield select(getLocation)
       // Force the user to have the signed identity
-      console.log('check redirect4')
       yield call(getIdentityOrRedirect)
       const list: Awaited<ReturnType<
         typeof favoritesAPI.createList
@@ -395,7 +391,6 @@ export function* favoritesSaga() {
       }
 
       // Force the user to have the signed identity
-      console.log('check redirect5')
       yield call(getIdentityOrRedirect)
 
       yield put(openModal('SaveToListModal', { item }))
@@ -441,7 +436,6 @@ export function* favoritesSaga() {
 
     try {
       // Force the user to have the signed identity
-      console.log('check redirect7')
       yield call(getIdentityOrRedirect)
       const {
         pickedByUser

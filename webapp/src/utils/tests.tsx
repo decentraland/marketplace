@@ -13,7 +13,6 @@ import { GENERATE_IDENTITY_SUCCESS } from 'decentraland-dapps/dist/modules/ident
 import { createRootReducer, RootState } from '../modules/reducer'
 import * as locales from '../modules/translation/locales'
 import { ARCHIVE_BID, UNARCHIVE_BID } from '../modules/bid/actions'
-// import { GENERATE_IDENTITY_SUCCESS } from '../modules/identity/actions'
 import { SET_IS_TRYING_ON } from '../modules/ui/preview/actions'
 import { rootSaga } from '../modules/sagas'
 import { fetchTilesRequest } from '../modules/tile/actions'
