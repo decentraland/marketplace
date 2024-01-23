@@ -5,6 +5,7 @@ import {
   ContentClient
 } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { createFetchComponent } from '@well-known-components/fetch-component'
+import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { getAddress } from '../wallet/selectors'
@@ -120,7 +121,7 @@ describe('when handling the update of a store', () => {
     const identity = {} as AuthIdentity
     return expectSaga(storeSaga, mockClient)
       .provide([
-        [call(getIdentity), identity],
+        [call(getIdentityOrRedirect), identity],
         [select(getAddress), mockAddress],
         [call(deployStoreEntity, mockClient, identity, mockStore), {}]
       ])

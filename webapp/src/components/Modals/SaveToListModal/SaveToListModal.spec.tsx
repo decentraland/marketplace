@@ -1,7 +1,7 @@
 import { Item } from '@dcl/schemas'
 import { act } from 'react-dom/test-utils'
 import { fireEvent } from '@testing-library/react'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { FavoritesAPI } from '../../../modules/vendor/decentraland/favorites/api'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { renderWithProviders } from '../../../utils/test'
@@ -28,9 +28,9 @@ jest.mock('react-virtualized-auto-sizer', () => {
 function renderSaveToListModalModal(props: Partial<Props> = {}) {
   return renderWithProviders(
     <SaveToListModal
+      wallet={{} as Wallet}
       name={'A name'}
       metadata={{ item: { id: 'anItemId' } as Item }}
-      identity={{} as AuthIdentity}
       isSavingPicks={false}
       onCreateList={jest.fn()}
       onSavePicks={jest.fn()}

@@ -42,7 +42,8 @@ import { loginSaga } from './login/sagas'
 import { ensSaga } from './ens/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
-const profileSaga = () => createProfileSaga({ peerUrl })
+const profileSaga = () =>
+  createProfileSaga({ peerUrl, getIdentity: () => undefined }) // TODO, update profile Saga to read from LS
 const lambdasClient = createLambdasClient({
   url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()

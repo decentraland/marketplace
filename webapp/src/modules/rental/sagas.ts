@@ -13,10 +13,10 @@ import {
   getContract,
   Provider
 } from 'decentraland-transactions'
-import { getIdentity } from '@dcl/single-sign-on-client'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 import {
   CloseModalAction,
   CLOSE_MODAL
@@ -124,16 +124,17 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       target: ethers.constants.AddressZero // For now, all rent listing will be "public", for all addresses to use.
     }
 
-    console.log('check redirect2')
-    const identity: AuthIdentity = yield getIdentity(address)
+    const identity: AuthIdentity | null = yield call(getIdentityOrRedirect)
 
-    const rental: RentalListing = yield call(
-      [rentalsAPI, 'createRentalListing'],
-      rentalListingCreation,
-      identity
-    )
+    if (identity) {
+      const rental: RentalListing = yield call(
+        [rentalsAPI, 'createRentalListing'],
+        rentalListingCreation,
+        identity
+      )
 
-    yield put(upsertRentalSuccess(nft, rental, operationType))
+      yield put(upsertRentalSuccess(nft, rental, operationType))
+    }
   } catch (error) {
     yield put(
       upsertRentalFailure(

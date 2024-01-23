@@ -12,6 +12,7 @@ import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 import {
   ContractData,
   ContractName,
@@ -21,7 +22,6 @@ import { ethers } from 'ethers'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { delay, take } from 'redux-saga/effects'
-import { getCurrentIdentity } from '../identity/selectors'
 import { FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getCurrentNFT } from '../nft/selectors'
 import { NFT } from '../nft/types'
@@ -190,7 +190,7 @@ describe('when handling the request action to upsert a rental listing', () => {
               ),
               signature
             ],
-            [select(getCurrentIdentity), identity],
+            [call(getIdentityOrRedirect), identity],
             [
               call(
                 [rentalsAPI, 'createRentalListing'],
@@ -264,7 +264,7 @@ describe('when handling the request action to upsert a rental listing', () => {
               ),
               signature
             ],
-            [select(getCurrentIdentity), identity],
+            [call(getIdentityOrRedirect), identity],
             [
               call(
                 [rentalsAPI, 'createRentalListing'],
@@ -438,7 +438,7 @@ describe('when handling the request action to upsert a rental listing', () => {
               ),
               signatureWithWrongV
             ],
-            [select(getCurrentIdentity), identity],
+            [call(getIdentityOrRedirect), identity],
             [
               call(
                 [rentalsAPI, 'createRentalListing'],
