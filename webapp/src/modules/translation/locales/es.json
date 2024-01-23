@@ -1574,7 +1574,7 @@
     "fiat_payments_not_enabled": "Los pagos con FIAT no están disponibles en este momento. Por favor inténtelo más tarde.",
     "claim_name_fat_finger_modal": {
       "title": "Por favor confirmar tu nombre",
-      "description": "Eelegiste {name}. {br} Entra nuevamente el nombre para confirmar tu selección.",
+      "description": "Elegiste {name}. {br} Entra nuevamente el nombre para confirmar tu selección.",
       "ok_message": "Felicitaciones, el nombre {name} es tuyo.",
       "caps_warning": "La capitalización de los nombres no puede ser modificada una vez de adquirido el nombre.",
       "paying_with": "Pagando con",

@@ -1592,7 +1592,7 @@
           "name": "菲亚特",
           "new": "新的",
           "title": "使用借记卡和信用卡",
-          "subtitle": "价格变化可能会改变"
+          "subtitle": "价格可能会发生变化"
         }
       },
       "name_placeholder": "你独特的名字",
@@ -1634,7 +1634,7 @@
     }
   },
   "set_name_as_alias_modal": {
-    "title": "使用 NAME 作为别名",
+    "title": "使用 NAME 作为用户名",
     "description": "您当前的别名将立即更新。",
     "success_title": "全做完了！",
     "success_description": "您的用户名已更新"

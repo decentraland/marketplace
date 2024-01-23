@@ -51,7 +51,7 @@ const ClaimNameFatFingerModal = ({
   wallet,
   currentMana,
   metadata: { name: ENSName },
-  isLoading,
+  isLoading: isClaiming,
   isClaimingNamesWithFiatEnabled,
   onClaim,
   onAuthorizedAction,
@@ -149,11 +149,13 @@ const ClaimNameFatFingerModal = ({
     }
   }, [wallet, ENSName, analytics, onOpenFiatGateway, onClaimTxSubmitted])
 
+  const isLoading = useMemo(() => isClaiming || isLoadingFIATWidget, [])
+
   const handleClaimWithCardClick = useCallback(() => {
-    return isClaimingNamesWithFiatEnabled
+    return isClaimingNamesWithFiatEnabled && !isLoading
       ? setPaymentMethod(PaymentMethod.FIAT)
       : null
-  }, [isClaimingNamesWithFiatEnabled])
+  }, [isLoading, isClaimingNamesWithFiatEnabled])
 
   const handleClaim = useCallback(() => {
     analytics.track('Click checkout name', {
@@ -285,6 +287,7 @@ const ClaimNameFatFingerModal = ({
                         )}
                         onClick={() =>
                           canClaimWithCrypto &&
+                          !isLoading &&
                           setPaymentMethod(PaymentMethod.CRYPTO)
                         }
                       >

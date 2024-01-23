@@ -127,7 +127,7 @@ describe('ClaimNameFatFingerModal', () => {
           }
         })
       })
-      it('should have MANA option disabled and open FIAT gateway widget when claim button is clicked', async () => {
+      it('should not be able to buy with MANA', async () => {
         const { getByRole, getByText, getByTestId } = renderWithProviders(
           <ClaimNameFatFingerModal
             {...baseProps}
@@ -154,7 +154,34 @@ describe('ClaimNameFatFingerModal', () => {
         })
         expect(cryptoPaymentOption).toHaveClass('disabled')
         fireEvent.click(claimButton)
-        expect(onClaimMock).not.toHaveBeenCalledWith(name)
+
+        await waitFor(() => {
+          expect(onClaimMock).not.toHaveBeenCalledWith(name)
+        })
+      })
+      it('should open FIAT gateway widget when claim button is clicked', async () => {
+        const { getByRole, getByText } = renderWithProviders(
+          <ClaimNameFatFingerModal
+            {...baseProps}
+            currentMana={currentMana}
+            getContract={jest.fn().mockResolvedValue({
+              address: '0x0' // mana contract mock
+            })}
+            onAuthorizedAction={jest
+              .fn()
+              .mockImplementation(({ onAuthorized }: any) => {
+                onAuthorized()
+              })}
+          />
+        )
+
+        const inputField = getByRole('textbox')
+        await fireEvent.change(inputField, { target: { value: name } })
+        const claimButton = getByText(t('global.confirm'))
+        await waitFor(() => {
+          expect(claimButton).not.toBeDisabled()
+        })
+        fireEvent.click(claimButton)
 
         await waitFor(() => {
           expect(baseProps.onOpenFiatGateway).toHaveBeenCalled()
