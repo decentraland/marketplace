@@ -149,7 +149,10 @@ const ClaimNameFatFingerModal = ({
     }
   }, [wallet, ENSName, analytics, onOpenFiatGateway, onClaimTxSubmitted])
 
-  const isLoading = useMemo(() => isClaiming || isLoadingFIATWidget, [])
+  const isLoading = useMemo(() => isClaiming || isLoadingFIATWidget, [
+    isClaiming,
+    isLoadingFIATWidget
+  ])
 
   const handleClaimWithCardClick = useCallback(() => {
     return isClaimingNamesWithFiatEnabled && !isLoading

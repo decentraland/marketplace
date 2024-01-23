@@ -159,6 +159,18 @@ describe('ClaimNameFatFingerModal', () => {
           expect(onClaimMock).not.toHaveBeenCalledWith(name)
         })
       })
+    })
+    describe('when clicking the claim button', () => {
+      beforeEach(() => {
+        getSignerMock.mockResolvedValueOnce(
+          (signerMock as unknown) as ethers.providers.JsonRpcSigner
+        )
+        ;(DCLController__factory.connect as jest.Mock).mockResolvedValueOnce({
+          interface: {
+            encodeFunctionData: jest.fn()
+          }
+        })
+      })
       it('should open FIAT gateway widget when claim button is clicked', async () => {
         const { getByRole, getByText } = renderWithProviders(
           <ClaimNameFatFingerModal
