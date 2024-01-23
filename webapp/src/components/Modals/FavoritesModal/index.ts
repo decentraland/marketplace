@@ -1,2 +1,2 @@
-import FavoritesModal from './FavoritesModal.container'
+import FavoritesModal from './FavoritesModal'
 export { FavoritesModal }

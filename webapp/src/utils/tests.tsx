@@ -9,10 +9,11 @@ import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/r
 import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
 import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/actions'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
+import { GENERATE_IDENTITY_SUCCESS } from 'decentraland-dapps/dist/modules/identity/actions'
 import { createRootReducer, RootState } from '../modules/reducer'
 import * as locales from '../modules/translation/locales'
 import { ARCHIVE_BID, UNARCHIVE_BID } from '../modules/bid/actions'
-import { GENERATE_IDENTITY_SUCCESS } from '../modules/identity/actions'
+// import { GENERATE_IDENTITY_SUCCESS } from '../modules/identity/actions'
 import { SET_IS_TRYING_ON } from '../modules/ui/preview/actions'
 import { rootSaga } from '../modules/sagas'
 import { fetchTilesRequest } from '../modules/tile/actions'
@@ -49,7 +50,7 @@ export function initTestStore(preloadedState = {}) {
   const enhancer = compose(middleware)
   const store = createStore(rootReducer, preloadedState, enhancer)
 
-  sagasMiddleware.run(rootSaga, () => undefined)
+  sagasMiddleware.run(rootSaga)
   loadStorageMiddleware(store)
   store.dispatch(fetchTilesRequest())
 

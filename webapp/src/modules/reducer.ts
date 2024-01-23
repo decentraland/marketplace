@@ -11,7 +11,6 @@ import { toastReducer as toast } from 'decentraland-dapps/dist/modules/toast/red
 import { featuresReducer as features } from 'decentraland-dapps/dist/modules/features/reducer'
 import { modalReducer as modal } from 'decentraland-dapps/dist/modules/modal/reducer'
 import { gatewayReducer as gateway } from 'decentraland-dapps/dist/modules/gateway/reducer'
-
 import { accountReducer as account } from './account/reducer'
 import { bidReducer as bid } from './bid/reducer'
 import { itemReducer as item } from './item/reducer'
@@ -24,7 +23,6 @@ import { uiReducer as ui } from './ui/reducer'
 import { collectionReducer as collection } from './collection/reducer'
 import { storeReducer as store } from './store/reducer'
 import { saleReducer as sale } from './sale/reducer'
-import { identityReducer as identity } from './identity/reducer'
 import { analyticsReducer as analytics } from './analytics/reducer'
 import { rentalReducer as rental } from './rental/reducer'
 import { eventReducer as event } from './event/reducer'
@@ -57,7 +55,6 @@ export const createRootReducer = (history: History) =>
     collection,
     store,
     sale,
-    identity,
     analytics,
     features,
     event,

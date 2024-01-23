@@ -1,5 +1,4 @@
 import { all } from 'redux-saga/effects'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
@@ -14,7 +13,6 @@ import { createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClie
 import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { NetworkGatewayType } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
 import { createFetchComponent } from '@well-known-components/fetch-component'
-
 import { config } from '../config'
 import { peerUrl } from '../lib/environment'
 import { analyticsSagas as marketplaceAnalyticsSagas } from './analytics/sagas'
@@ -33,7 +31,6 @@ import { collectionSaga } from './collection/sagas'
 import { saleSaga } from './sale/sagas'
 import { accountSaga } from './account/sagas'
 import { storeSaga } from './store/sagas'
-import { identitySaga } from './identity/sagas'
 import { rentalSaga } from './rental/sagas'
 import { modalSaga } from './modal/sagas'
 import { eventSaga } from './event/sagas'
@@ -45,8 +42,7 @@ import { loginSaga } from './login/sagas'
 import { ensSaga } from './ens/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
-const profileSaga = (getIdentity: () => AuthIdentity | undefined) =>
-  createProfileSaga({ getIdentity, peerUrl })
+const profileSaga = () => createProfileSaga({ peerUrl })
 const lambdasClient = createLambdasClient({
   url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()
@@ -83,16 +79,16 @@ const gatewaySaga = createGatewaySaga({
   }
 })
 
-export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
+export function* rootSaga() {
   yield all([
     analyticsSaga(),
     assetSaga(),
     authorizationSaga(),
     bidSaga(),
-    itemSaga(getIdentity),
-    nftSaga(getIdentity),
+    itemSaga(),
+    nftSaga(),
     orderSaga(),
-    profileSaga(getIdentity)(),
+    profileSaga()(),
     proximitySaga(),
     routingSaga(),
     tileSaga(),
@@ -106,7 +102,6 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     accountSaga(lambdasClient),
     collectionSaga(),
     storeSaga(contentClient),
-    identitySaga(),
     newIdentitySaga(),
     marketplaceAnalyticsSagas(),
     featuresSaga({
@@ -122,8 +117,9 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     gatewaySaga(),
     locationSaga(),
     transakSaga(),
-    favoritesSaga(getIdentity),
+    favoritesSaga(),
     loginSaga(),
-    ensSaga()
+    ensSaga(),
+    newIdentitySaga()
   ])
 }

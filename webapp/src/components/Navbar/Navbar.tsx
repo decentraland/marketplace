@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { localStorageGetIdentity } from '@dcl/single-sign-on-client'
 import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
 import { NavbarPages } from 'decentraland-ui/dist/components/Navbar/Navbar.types'
 import { config } from '../../config'
@@ -7,7 +8,7 @@ import { Props } from './Navbar.types'
 import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const { location, onNavigate, isAuthDappEnabled } = props
+  const { wallet, location, onNavigate, isAuthDappEnabled } = props
   const { pathname, search } = location
 
   const handleOnSignIn = useCallback(() => {
@@ -40,7 +41,7 @@ const Navbar = (props: Props) => {
       withNotifications
       activePage={NavbarPages.MARKETPLACE}
       hasActivity={props.hasPendingTransactions}
-      identity={props.identity}
+      identity={wallet ? localStorageGetIdentity(wallet.address) : undefined}
       onSignIn={handleOnSignIn}
       onClickAccountSettings={handleOnClickAccount}
     />

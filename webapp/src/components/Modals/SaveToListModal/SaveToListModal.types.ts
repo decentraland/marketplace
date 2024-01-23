@@ -1,5 +1,5 @@
 import { Item } from '@dcl/schemas'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { OverrideCreateListTypes } from '../CreateOrEditListModal/CreateOrEditListModal.types'
@@ -15,14 +15,14 @@ export enum PickType {
 
 export type Props = Omit<ModalProps, 'metadata'> & {
   metadata: Metadata
-  identity: AuthIdentity | undefined
   isSavingPicks: boolean
+  wallet: Wallet | null
   onSavePicks: (picksFor: ListOfLists[], picksFrom: ListOfLists[]) => void
   onCreateList: (params: OverrideCreateListTypes) => void
   onFinishListCreation: () => void
 }
 
-export type MapStateProps = Pick<Props, 'identity' | 'isSavingPicks'>
+export type MapStateProps = Pick<Props, 'isSavingPicks' | 'wallet'>
 export type OwnProps = Pick<Props, 'metadata' | 'onClose'>
 export type MapDispatchProps = Pick<
   Props,

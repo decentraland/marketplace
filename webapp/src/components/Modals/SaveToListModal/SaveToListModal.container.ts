@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   closeModal,
   openModal
@@ -8,7 +7,7 @@ import {
 import { RootState } from '../../../modules/reducer'
 import { bulkPickUnpickRequest } from '../../../modules/favorites/actions'
 import { isLoadingBulkPicksUnpicks } from '../../../modules/favorites/selectors'
-import { getCurrentIdentity } from '../../../modules/identity/selectors'
+import { getWallet } from '../../../modules/wallet/selectors'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import {
   MapDispatchProps,
@@ -20,7 +19,7 @@ import { OverrideCreateListTypes } from '../CreateOrEditListModal/CreateOrEditLi
 
 const mapState = (state: RootState): MapStateProps => {
   return {
-    identity: (getCurrentIdentity(state) as AuthIdentity | null) ?? undefined,
+    wallet: getWallet(state),
     isSavingPicks: isLoadingBulkPicksUnpicks(state)
   }
 }

@@ -1,7 +1,6 @@
 import { getLocation, push } from 'connected-react-router'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { CatalogFilters, Item } from '@dcl/schemas'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   ConnectWalletSuccessAction,
   CONNECT_WALLET_FAILURE,
@@ -19,7 +18,6 @@ import {
   FavoritesAPI,
   MARKETPLACE_FAVORITES_SERVER_URL
 } from '../vendor/decentraland/favorites/api'
-import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
@@ -84,12 +82,12 @@ import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
 import { getData as getItemsData } from '../item/selectors'
 import { getIsMarketplaceServerEnabled } from '../features/selectors'
+import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 
-export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
+export function* favoritesSaga() {
   const API_OPTS = {
     retries: retryParams.attempts,
-    retryDelay: retryParams.delay,
-    identity: getIdentity
+    retryDelay: retryParams.delay
   }
   const favoritesAPI = new FavoritesAPI(
     MARKETPLACE_FAVORITES_SERVER_URL,
@@ -155,7 +153,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       const address: ReturnType<typeof getAddress> = yield select(getAddress)
       // Force the user to have the signed identity
-      if (address) yield call(getAccountIdentity)
+      console.log('check redirect3')
+      if (address) yield call(getIdentityOrRedirect)
 
       let items: Item[] = []
       const listId: string = yield select(getListId)
@@ -217,7 +216,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
     try {
       // Force the user to have the signed identity
-      yield call(getAccountIdentity)
+      console.log('check redirect4')
+      yield call(getIdentityOrRedirect)
       let sortBy: ListsSortBy | undefined
       let sortDirection: SortDirection | undefined
 
@@ -282,7 +282,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
     try {
       // Force the user to have the signed identity
-      yield call(getAccountIdentity)
+      console.log('check redirect4')
+      yield call(getIdentityOrRedirect)
       yield call([favoritesAPI, 'deleteList'], list.id)
       yield put(deleteListSuccess(list))
     } catch (error) {
@@ -342,7 +343,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       const { pathname } = yield select(getLocation)
       // Force the user to have the signed identity
-      yield call(getAccountIdentity)
+      console.log('check redirect4')
+      yield call(getIdentityOrRedirect)
       const list: Awaited<ReturnType<
         typeof favoritesAPI.createList
       >> = yield call([favoritesAPI, 'createList'], {
@@ -393,7 +395,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       // Force the user to have the signed identity
-      yield call(getAccountIdentity)
+      console.log('check redirect5')
+      yield call(getIdentityOrRedirect)
 
       yield put(openModal('SaveToListModal', { item }))
 
@@ -438,7 +441,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
     try {
       // Force the user to have the signed identity
-      yield call(getAccountIdentity)
+      console.log('check redirect7')
+      yield call(getIdentityOrRedirect)
       const {
         pickedByUser
       }: Awaited<ReturnType<typeof favoritesAPI.bulkPickUnpick>> = yield call(

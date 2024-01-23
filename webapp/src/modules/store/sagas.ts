@@ -6,7 +6,6 @@ import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { isErrorWithMessage } from '../../lib/error'
-import { getIdentity } from '../identity/utils'
 import {
   fetchStoreFailure,
   FetchStoreRequestAction,
@@ -24,6 +23,7 @@ import {
   getStoreFromEntity
 } from './utils'
 import { getIsLocalStoreDirty } from './selectors'
+import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 
 export function* storeSaga(client: ContentClient) {
   yield takeEvery(FETCH_STORE_REQUEST, handleFetchStoreRequest)
@@ -73,7 +73,8 @@ export function* storeSaga(client: ContentClient) {
     payload: { store }
   }: UpdateStoreRequestAction) {
     try {
-      const identity: AuthIdentity = yield call(getIdentity)
+      console.log('check redirect1')
+      const identity: AuthIdentity = yield call(getIdentityOrRedirect)
 
       yield call(deployStoreEntity, client, identity, store)
 

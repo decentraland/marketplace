@@ -42,11 +42,10 @@ import {
 } from './actions'
 import { NFT } from './types'
 
-export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
+export function* nftSaga() {
   const API_OPTS = {
     retries: retryParams.attempts,
-    retryDelay: retryParams.delay,
-    identity: getIdentity
+    retryDelay: retryParams.delay
   }
 
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)

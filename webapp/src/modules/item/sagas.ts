@@ -16,7 +16,6 @@ import { Item } from '@dcl/schemas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Provider } from 'decentraland-connect'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -82,11 +81,10 @@ import { getItem } from './utils'
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 export const CANCEL_FETCH_ITEMS = 'CANCEL_FETCH_ITEMS'
 
-export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
+export function* itemSaga() {
   const API_OPTS = {
     retries: retryParams.attempts,
-    retryDelay: retryParams.delay,
-    identity: getIdentity
+    retryDelay: retryParams.delay
   }
   const itemAPI = new ItemAPI(NFT_SERVER_URL, API_OPTS)
   const marketplaceServerCatalogAPI = new CatalogAPI(
