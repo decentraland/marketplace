@@ -35,8 +35,8 @@ import { upsertContracts } from '../contract/actions'
 import { getStubMaticCollectionContract } from '../contract/utils'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { getRentalById } from '../rental/selectors'
-import { retryParams } from '../vendor/decentraland/utils'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { retryParams } from '../vendor/decentraland/utils'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
 
@@ -71,7 +71,7 @@ describe('when handling the fetch NFTs request action', () => {
       }
       const error = 'someError'
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [select(getContracts), []],
           [
@@ -96,7 +96,7 @@ describe('when handling the fetch NFTs request action', () => {
       const vendor = VendorFactory.build(options.vendor, API_OPTS)
       const error = { message: 'someError' }
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [select(getContracts), []],
           [call(VendorFactory.build, options.vendor, API_OPTS), vendor],
@@ -129,7 +129,7 @@ describe('when handling the fetch NFTs request action', () => {
       const rentals = [{ id: 'aRentalId' }] as RentalListing[]
       const count = 1
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [call(VendorFactory.build, options.vendor, API_OPTS), vendor],
           [
@@ -170,7 +170,7 @@ describe('when handling the fetch NFT request action', () => {
       const order = { id: 'id' } as Order
       const rental = { id: 'id' } as RentalListing
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
@@ -207,7 +207,7 @@ describe('when handling the fetch NFT request action', () => {
       const tokenId = 'aTokenId'
       const error = `Couldn't find a valid vendor for contract ${contractAddress}`
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
@@ -232,7 +232,7 @@ describe('when handling the fetch NFT request action', () => {
       const tokenId = 'aTokenId'
       const error = `Couldn't find a valid vendor for contract ${contractAddress}`
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
@@ -262,7 +262,7 @@ describe('when handling the fetch NFT request action', () => {
       const vendor = VendorFactory.build(VendorName.DECENTRALAND, API_OPTS)
       const error = { message: 'someError' }
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
@@ -300,7 +300,7 @@ describe('when handling the fetch NFT request action', () => {
       const order = { id: 'anId' } as Order
       const rental = { id: 'aRentalId' } as RentalListing
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
@@ -337,7 +337,7 @@ describe('when handling the transfer NFT request action', () => {
       const address = 'anAddress'
       const error = 'someError'
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [call(VendorFactory.build, nft.vendor), throwError(new Error(error))]
         ])
@@ -355,7 +355,7 @@ describe('when handling the transfer NFT request action', () => {
       const address = 'anAddress'
       const error = 'A wallet is needed to perform a NFT transfer request'
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [
             call(VendorFactory.build, nft.vendor),
@@ -379,7 +379,7 @@ describe('when handling the transfer NFT request action', () => {
       const vendor = VendorFactory.build(nft.vendor)
       const error = { message: 'anError' }
 
-      return expectSaga(nftSaga)
+      return expectSaga(nftSaga, getIdentity)
         .provide([
           [call(VendorFactory.build, nft.vendor), vendor],
           [select(getWallet), wallet],
@@ -421,7 +421,7 @@ describe('when handling the transfer NFT request action', () => {
           } as RentalListing
         })
         it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
-          return expectSaga(nftSaga)
+          return expectSaga(nftSaga, getIdentity)
             .provide([
               [call(VendorFactory.build, nft.vendor), vendor],
               [select(getWallet), wallet],
@@ -448,7 +448,7 @@ describe('when handling the transfer NFT request action', () => {
           nft.openRentalId = null
         })
         it('should dispatch an action signaling the success of the action handling', () => {
-          return expectSaga(nftSaga)
+          return expectSaga(nftSaga, getIdentity)
             .provide([
               [call(VendorFactory.build, nft.vendor), vendor],
               [select(getWallet), wallet],
@@ -467,7 +467,7 @@ describe('when handling the transfer NFT request action', () => {
     })
     describe('and the transaction gets reverted', () => {
       it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
-        return expectSaga(nftSaga)
+        return expectSaga(nftSaga, getIdentity)
           .provide([
             [call(VendorFactory.build, nft.vendor), vendor],
             [select(getWallet), wallet],

@@ -1,5 +1,6 @@
 import { getLocation, push } from 'connected-react-router'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
+import { AuthIdentity } from '@dcl/crypto'
 import { CatalogFilters, Item } from '@dcl/schemas'
 import {
   ConnectWalletSuccessAction,
@@ -84,10 +85,11 @@ import { List } from './types'
 import { getData as getItemsData } from '../item/selectors'
 import { getIsMarketplaceServerEnabled } from '../features/selectors'
 
-export function* favoritesSaga() {
+export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
     retries: retryParams.attempts,
-    retryDelay: retryParams.delay
+    retryDelay: retryParams.delay,
+    identity: getIdentity
   }
   const favoritesAPI = new FavoritesAPI(
     MARKETPLACE_FAVORITES_SERVER_URL,

@@ -102,10 +102,12 @@ const nftPurchase: NFTPurchase = {
   }
 }
 
+const getIdentity = () => undefined
+
 describe('when handling the buy items request action', () => {
   describe("when there's no wallet loaded in the state", () => {
     it('should dispatch an action signaling the failure of the action handling', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([[select(getWallet), null]])
         .put(buyItemFailure('A defined wallet is required to buy an item'))
         .dispatch(buyItemRequest(item))
@@ -115,7 +117,7 @@ describe('when handling the buy items request action', () => {
 
   describe('when sending the meta transaction fails', () => {
     it('should dispatch an action signaling the failure of the action handling', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([
           [select(getWallet), wallet],
           [matchers.call.fn(sendTransaction), Promise.reject(anError)]
@@ -128,7 +130,7 @@ describe('when handling the buy items request action', () => {
 
   describe('when the meta transaction is sent succesfully', () => {
     it('should send a meta transaction to the collection store contract living in the chain provided by the item and dispatch the success action', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([
           [select(getWallet), wallet],
           [matchers.call.fn(sendTransaction), Promise.resolve(txHash)]
@@ -151,7 +153,7 @@ describe('when handling the buy items with card action', () => {
 
   describe('when the explanation modal has already been shown', () => {
     it('should open Transak widget', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([
           [
             call(
@@ -173,7 +175,7 @@ describe('when handling the buy items with card action', () => {
 
   describe('when the explanation modal is shown and the user closes it', () => {
     it('should not set the item in the local storage to show the modal again later', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([
           [
             call(
@@ -195,7 +197,7 @@ describe('when handling the buy items with card action', () => {
 
   describe('when opening Transak Widget fails', () => {
     it('should dispatch an action signaling the failure of the action handling', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([[call(buyAssetWithCard, item), Promise.reject(anError)]])
         .put(buyItemWithCardFailure(anError.message))
         .dispatch(buyItemWithCardRequest(item))
@@ -205,7 +207,7 @@ describe('when handling the buy items with card action', () => {
 
   describe('when Transak widget is opened succesfully', () => {
     it('should dispatch the success action', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([[call(buyAssetWithCard, item), Promise.resolve()]])
         .dispatch(buyItemWithCardRequest(item))
         .run({ silenceTimeout: true })
@@ -219,7 +221,7 @@ describe('when handling the buy items with card action', () => {
 describe('when handling the set purchase action', () => {
   describe('when it is a MANA purchase', () => {
     it('should not put any new action', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .dispatch(setPurchase(manaPurchase))
         .run({ silenceTimeout: true })
         .then(({ effects }) => {
@@ -231,7 +233,7 @@ describe('when handling the set purchase action', () => {
   describe('when it is an NFT purchase', () => {
     describe('when it is a secondary market purchase', () => {
       it('should not put any new action', () => {
-        return expectSaga(itemSaga)
+        return expectSaga(itemSaga, getIdentity)
           .dispatch(
             setPurchase({
               ...nftPurchase,
@@ -252,7 +254,7 @@ describe('when handling the set purchase action', () => {
 
     describe('when the purchase is incomplete', () => {
       it('should not put any new action', () => {
-        return expectSaga(itemSaga)
+        return expectSaga(itemSaga, getIdentity)
           .dispatch(setPurchase(nftPurchase))
           .run({ silenceTimeout: true })
           .then(({ effects }) => {
@@ -263,7 +265,7 @@ describe('when handling the set purchase action', () => {
 
     describe('when it is complete without a txHash', () => {
       it('should not put any new action', () => {
-        return expectSaga(itemSaga)
+        return expectSaga(itemSaga, getIdentity)
           .dispatch(
             setPurchase({
               ...nftPurchase,
@@ -283,7 +285,7 @@ describe('when handling the set purchase action', () => {
 
       describe('when the item does not yet exist in the store', () => {
         it('should put the action signaling the fetch item request', () => {
-          return expectSaga(itemSaga)
+          return expectSaga(itemSaga, getIdentity)
             .provide([
               [select(getItems), {}],
               [
@@ -309,7 +311,7 @@ describe('when handling the set purchase action', () => {
       describe('when the action of fetching the item has been dispatched', () => {
         describe('when the fetch item request fails', () => {
           it('should put an action signaling the failure of the buy item with card request', () => {
-            return expectSaga(itemSaga)
+            return expectSaga(itemSaga, getIdentity)
               .provide([
                 [select(getItems), {}],
                 [
@@ -339,7 +341,7 @@ describe('when handling the set purchase action', () => {
         const items = { anItemId: item }
 
         it('should put an action signaling the success of the buy item with card request', () => {
-          return expectSaga(itemSaga)
+          return expectSaga(itemSaga, getIdentity)
             .provide([
               [select(getItems), items],
               [call(getItem, contractAddress, itemId!, items), item]
@@ -369,7 +371,7 @@ describe('when handling the fetch collections items request action', () => {
     const fetchResult = { data: [item] }
 
     it('should dispatch a successful action with the fetched items', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([[matchers.call.fn(ItemAPI.prototype.get), fetchResult]])
         .call.like({
           fn: ItemAPI.prototype.get,
@@ -385,7 +387,7 @@ describe('when handling the fetch collections items request action', () => {
 
   describe('when the request fails', () => {
     it('should dispatch a failing action with the error and the options', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([
           [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]
         ])
@@ -432,7 +434,7 @@ describe('when handling the fetch items request action', () => {
           })
 
           it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
-            return expectSaga(itemSaga)
+            return expectSaga(itemSaga, getIdentity)
               .provide([
                 [
                   matchers.call.fn(
@@ -491,7 +493,7 @@ describe('when handling the fetch items request action', () => {
 
         describe('and there is no wallet connected', () => {
           it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
-            return expectSaga(itemSaga)
+            return expectSaga(itemSaga, getIdentity)
               .provide([
                 [
                   matchers.call.fn(
@@ -555,7 +557,7 @@ describe('when handling the fetch items request action', () => {
         pathname = locations.root()
       })
       it('should dispatch a successful action with the fetched items', () => {
-        return expectSaga(itemSaga)
+        return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
             [
@@ -583,7 +585,7 @@ describe('when handling the fetch items request action', () => {
 
   describe('when the request fails', () => {
     it('should dispatch a failing action with the error and the options', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([
           [select(getLocation), { pathname: '' }],
           [select(getWallet), undefined],
@@ -605,7 +607,7 @@ describe('when handling the fetch items request action', () => {
   describe('when handling the fetch item request action', () => {
     describe('when the request is successful', () => {
       it('should dispatch a successful action with the fetched items', () => {
-        return expectSaga(itemSaga)
+        return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(ItemAPI.prototype.getOne), item],
             [
@@ -622,7 +624,7 @@ describe('when handling the fetch items request action', () => {
 
     describe('when the request fails', () => {
       it('should dispatching a failing action with the contract address, the token id and the error message', () => {
-        return expectSaga(itemSaga)
+        return expectSaga(itemSaga, getIdentity)
           .provide([
             [
               matchers.call.fn(ItemAPI.prototype.getOne),
@@ -661,7 +663,7 @@ describe('when handling the fetch trending items request action', () => {
       })
 
       it('should dispatch a successful action with the fetched trending items', () => {
-        return expectSaga(itemSaga)
+        return expectSaga(itemSaga, getIdentity)
           .provide([
             [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
@@ -681,7 +683,7 @@ describe('when handling the fetch trending items request action', () => {
       const fetchResult = { data: [], total: 0 }
 
       it('should dispatch a successful action with the fetched trending items', () => {
-        return expectSaga(itemSaga)
+        return expectSaga(itemSaga, getIdentity)
           .provide([
             // [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
@@ -699,7 +701,7 @@ describe('when handling the fetch trending items request action', () => {
 
   describe('when the request fails', () => {
     it('should dispatch a failing action with the error and the options', () => {
-      return expectSaga(itemSaga)
+      return expectSaga(itemSaga, getIdentity)
         .provide([
           [
             matchers.call.fn(ItemAPI.prototype.getTrendings),

@@ -1,4 +1,5 @@
 import { all } from 'redux-saga/effects'
+import { AuthIdentity } from '@dcl/crypto'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
@@ -42,8 +43,7 @@ import { loginSaga } from './login/sagas'
 import { ensSaga } from './ens/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
-const profileSaga = () =>
-  createProfileSaga({ peerUrl, getIdentity: () => undefined }) // TODO, update profile Saga to read from LS
+
 const lambdasClient = createLambdasClient({
   url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()
@@ -80,16 +80,16 @@ const gatewaySaga = createGatewaySaga({
   }
 })
 
-export function* rootSaga() {
+export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
   yield all([
     analyticsSaga(),
     assetSaga(),
     authorizationSaga(),
     bidSaga(),
-    itemSaga(),
-    nftSaga(),
+    itemSaga(getIdentity),
+    nftSaga(getIdentity),
     orderSaga(),
-    profileSaga()(),
+    createProfileSaga({ peerUrl, getIdentity }),
     proximitySaga(),
     routingSaga(),
     tileSaga(),
@@ -118,7 +118,7 @@ export function* rootSaga() {
     gatewaySaga(),
     locationSaga(),
     transakSaga(),
-    favoritesSaga(),
+    favoritesSaga(getIdentity),
     loginSaga(),
     ensSaga(),
     newIdentitySaga()

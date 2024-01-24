@@ -1,3 +1,5 @@
+import { localStorageGetIdentity } from '@dcl/single-sign-on-client'
+import { getWallet } from './wallet/selectors'
 import { createMemoryHistory, createBrowserHistory, History } from 'history'
 import { applyMiddleware, compose, createStore } from 'redux'
 import createSagasMiddleware from 'redux-saga'
@@ -72,8 +74,14 @@ export function initStore(history: History) {
     (rootReducer as unknown) as ReturnType<typeof createRootReducer>,
     enhancer
   )
+  const getIdentity = () => {
+    const wallet = getWallet(store.getState() as RootState)
+    return wallet
+      ? localStorageGetIdentity(wallet.address) || undefined
+      : undefined
+  }
 
-  sagasMiddleware.run(rootSaga)
+  sagasMiddleware.run(rootSaga, getIdentity)
   loadStorageMiddleware(store)
 
   if (isDev) {
@@ -110,7 +118,13 @@ export function initTestStore(preloadedState = {}) {
   )
   const enhancer = compose(middleware)
   const store = createStore(rootReducer, preloadedState, enhancer)
-  sagasMiddleware.run(rootSaga)
+  const getIdentity = () => {
+    const wallet = getWallet(store.getState() as RootState)
+    return wallet
+      ? localStorageGetIdentity(wallet.address) || undefined
+      : undefined
+  }
+  sagasMiddleware.run(rootSaga, getIdentity)
   loadStorageMiddleware(store)
   store.dispatch(fetchTilesRequest())
 

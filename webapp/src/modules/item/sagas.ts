@@ -1,4 +1,5 @@
 import { matchPath } from 'react-router-dom'
+import { AuthIdentity } from '@dcl/crypto'
 import { getLocation } from 'connected-react-router'
 import { SagaIterator } from 'redux-saga'
 import { put, takeEvery } from '@redux-saga/core/effects'
@@ -81,10 +82,11 @@ import { getItem } from './utils'
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 export const CANCEL_FETCH_ITEMS = 'CANCEL_FETCH_ITEMS'
 
-export function* itemSaga() {
+export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
     retries: retryParams.attempts,
-    retryDelay: retryParams.delay
+    retryDelay: retryParams.delay,
+    identity: getIdentity
   }
   const itemAPI = new ItemAPI(NFT_SERVER_URL, API_OPTS)
   const marketplaceServerCatalogAPI = new CatalogAPI(

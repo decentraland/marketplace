@@ -1,4 +1,5 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
+import { AuthIdentity } from '@dcl/crypto'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
@@ -41,10 +42,11 @@ import {
 } from './actions'
 import { NFT } from './types'
 
-export function* nftSaga() {
+export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {
     retries: retryParams.attempts,
-    retryDelay: retryParams.delay
+    retryDelay: retryParams.delay,
+    identity: getIdentity
   }
 
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
