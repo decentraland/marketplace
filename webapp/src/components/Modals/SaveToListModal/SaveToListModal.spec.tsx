@@ -16,6 +16,10 @@ import {
 import SaveToListModal from './SaveToListModal'
 import { Props } from './SaveToListModal.types'
 
+jest.mock('@dcl/single-sign-on-client', () => ({
+  localStorageGetIdentity: jest.fn()
+}))
+
 jest.mock('react-virtualized-auto-sizer', () => {
   return {
     __esModule: true,

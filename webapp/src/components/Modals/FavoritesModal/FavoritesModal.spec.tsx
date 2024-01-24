@@ -5,6 +5,10 @@ import { renderWithProviders } from '../../../utils/test'
 import FavoritesModal from './FavoritesModal'
 import { Props } from './FavoritesModal.types'
 
+jest.mock('@dcl/single-sign-on-client', () => ({
+  localStorageGetIdentity: jest.fn()
+}))
+
 // Fixing warning: `NaN` is an invalid value for the `height` css style property.
 jest.mock('react-virtualized-auto-sizer', () => {
   return {
