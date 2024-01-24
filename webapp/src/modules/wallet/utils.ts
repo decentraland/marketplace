@@ -1,16 +1,14 @@
 import { ethers } from 'ethers'
-import { race, select, take } from 'redux-saga/effects'
+import { call, race, select, take } from 'redux-saga/effects'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   CONNECT_WALLET_FAILURE,
-  CONNECT_WALLET_SUCCESS
+  CONNECT_WALLET_SUCCESS,
+  ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import {
-  GENERATE_IDENTITY_FAILURE,
-  GENERATE_IDENTITY_SUCCESS
-} from 'decentraland-dapps/dist/modules/identity/actions'
 import { config } from '../../config'
 
 export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
@@ -53,17 +51,13 @@ export function formatBalance(balance: number) {
 
 export function* waitForWalletConnectionAndIdentityIfConnecting() {
   const isConnectingToWallet: boolean = yield select(isConnecting)
-  console.log('isConnectingToWallet: ', isConnectingToWallet);
   if (isConnectingToWallet) {
-    const { success } = yield race({
+    const { success }: { success: ConnectWalletSuccessAction } = yield race({
       success: take(CONNECT_WALLET_SUCCESS),
       failure: take(CONNECT_WALLET_FAILURE)
     })
     if (success) {
-      yield race({
-        success: take(GENERATE_IDENTITY_SUCCESS),
-        failure: take(GENERATE_IDENTITY_FAILURE)
-      })
+      yield call(getIdentityOrRedirect)
     }
   }
 }
