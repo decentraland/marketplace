@@ -8,6 +8,7 @@ import {
   race,
   spawn
 } from 'redux-saga/effects'
+import { ethers } from 'ethers'
 import { matchPath } from 'react-router-dom'
 import {
   push,
@@ -31,8 +32,11 @@ import {
   ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { isLegacyOrder } from '../../lib/orders'
+import { DCLRegistrar } from '../../contracts/DCLRegistrar'
 import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
@@ -130,8 +134,15 @@ import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import { getPage, getView } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { AssetStatusFilter } from '../../utils/filters'
+import {
+  CLAIM_NAME_SUCCESS,
+  CLAIM_NAME_TRANSACTION_SUBMITTED,
+  ClaimNameSuccessAction,
+  ClaimNameTransactionSubmittedAction
+} from '../ens/actions'
+import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
+import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { buildBrowseURL } from './utils'
-import { CLAIM_NAME_SUCCESS, ClaimNameSuccessAction } from '../ens/actions'
 
 export function* routingSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
@@ -159,6 +170,10 @@ export function* routingSaga() {
       CLAIM_NAME_SUCCESS
     ],
     handleRedirectToSuccessPage
+  )
+  yield takeEvery(
+    CLAIM_NAME_TRANSACTION_SUBMITTED,
+    handleRedirectClaimingNameToSuccessPage
   )
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
   yield takeEvery(FETCH_NFTS_SUCCESS, handleFetchOnSaleNFTsSuccess)
@@ -718,6 +733,30 @@ function* handleRedirectToActivity() {
   } else {
     yield put(push(locations.activity()))
   }
+}
+
+function* handleRedirectClaimingNameToSuccessPage(
+  action: ClaimNameTransactionSubmittedAction
+) {
+  const data = action.payload[TRANSACTION_ACTION_FLAG]
+  const signer: ethers.Signer = yield call(getSigner)
+  const dclRegistrarContract: DCLRegistrar = yield call(
+    [DCLRegistrar__factory, 'connect'],
+    REGISTRAR_ADDRESS,
+    signer
+  )
+  const contractAddress = dclRegistrarContract.address
+  yield put(
+    push(
+      locations.success({
+        txHash: data.hash,
+        assetType: AssetType.NFT,
+        tokenId: '',
+        contractAddress,
+        subdomain: data.payload.subdomain
+      })
+    )
+  )
 }
 
 function* handleRedirectToSuccessPage(

@@ -1,22 +1,21 @@
-import { Dispatch } from 'react'
+import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
+import {
+  OpenModalAction,
+  openModal
+} from 'decentraland-dapps/dist/modules/modal/actions'
 import { BrowseOptions } from '../../../modules/routing/types'
 
 export type Props = {
-  currentMana: number | undefined
   wallet: Wallet | null
   isConnecting: boolean
   onBrowse: (options?: BrowseOptions) => void
-  onClaim: (name: string) => void
+  onClaim: typeof openModal
   onRedirect: (path: string) => void
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'currentMana' | 'wallet' | 'isConnecting'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'isConnecting'>
 export type MapDispatchProps = Pick<
   Props,
   'onBrowse' | 'onClaim' | 'onRedirect'

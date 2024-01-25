@@ -1,3 +1,13 @@
+.ClaimNameFatFingerModal.ui.small.modal {
+  width: 628px;
+}
+
+.ClaimNameFatFingerModal.ui.modal > .ui.form > .content,
+.ClaimNameFatFingerModal.ui.modal > .ui.form > .actions {
+  margin-left: 70px;
+  margin-right: 70px;
+}
+
 .ClaimNameFatFingerModal.ui.modal .content .dcl.field,
 .ClaimNameFatFingerModal.ui.modal .actions {
   margin-top: 30px;
@@ -5,6 +15,10 @@
 
 .ClaimNameFatFingerModal.ui.modal .content .dcl.field .message {
   margin-top: 10px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .dcl.field.simple .message {
+  display: none;
 }
 
 .ClaimNameFatFingerModal.ui.modal .dcl.field.error .ui.input > i.icon,
@@ -32,4 +46,170 @@
   font-size: 14px;
   font-weight: 700;
   line-height: 17px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .payWithTitle {
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.ClaimNameFatFingerModal.ui.modal .payWith {
+  display: flex;
+  margin-top: 39px;
+  margin-bottom: 24px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .paymentMethodContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.ClaimNameFatFingerModal.ui.modal .paymentMethod {
+  height: 109px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  padding: 24px;
+  width: calc(100% - 2px);
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+  align-items: left;
+  background: #232129;
+  z-index: 1;
+}
+
+.ClaimNameFatFingerModal.ui.modal .ui.header.dcl.mana {
+  margin-top: -12px;
+  margin-right: 4px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .credit.card.outline.icon {
+  margin-bottom: 26px;
+  margin-right: 11px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .paymentMethod > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.ClaimNameFatFingerModal.ui.modal .paymentMethod > div > span:first-of-type {
+  color: white;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+  padding-top: 0;
+}
+
+.ClaimNameFatFingerModal.ui.modal .paymentMethod > div > span {
+  color: #a09ba8;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  padding-top: 2px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .paymentMethod.selected {
+  background: #333039;
+}
+
+.ClaimNameFatFingerModal .baseGradient {
+  cursor: pointer;
+  width: 385px;
+  height: 113px;
+  border-radius: 6px;
+  border: 1px solid #43404a;
+  margin-bottom: 11px;
+}
+
+.ClaimNameFatFingerModal .baseGradient.disabled {
+  cursor: not-allowed;
+}
+
+.ClaimNameFatFingerModal .gradient {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.ClaimNameFatFingerModal .gradient::before {
+  content: '';
+  position: absolute;
+  aspect-ratio: 1/1;
+  width: 130%;
+  background-image: radial-gradient(
+      100% 100% at 6% 9%,
+      #ffbc5bff 2%,
+      #ffffff00 73%
+    ),
+    linear-gradient(60deg, #ff2d55 18%, #c640cd 100%);
+  z-index: 0;
+  animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.ClaimNameFatFingerModal .newPaymentMethod {
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  color: #ffa25a;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.ClaimNameFatFingerModal .dcl.modal-navigation {
+  padding-top: 54px;
+}
+
+.ClaimNameFatFingerModal .dcl.modal-navigation-title {
+  font-size: 30px;
+}
+
+.ClaimNameFatFingerModal .content .details {
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.ClaimNameFatFingerModal.ui.modal
+  .ui.form
+  .dcl.field
+  .ui.input
+  input::placeholder {
+  color: #716b7c;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.ClaimNameFatFingerModal .modalTooltip {
+  z-index: 9999;
+}
+
+.ClaimNameFatFingerModal .popupButton {
+  display: flex;
+  flex: 1 0 auto;
+}
+
+.ClaimNameFatFingerModal .popupButton > .ui.button {
+  flex: 1 0 auto;
+  margin-left: 12px;
 }

@@ -10,7 +10,8 @@ import {
   CLAIM_NAME_SUCCESS,
   CLAIM_NAME_CLEAR,
   ClaimNameClearAction,
-  CLAIM_NAME_FAILURE
+  CLAIM_NAME_FAILURE,
+  CLAIM_NAME_REQUEST
 } from './actions'
 import { ENS, ENSError, Authorization } from './types'
 
@@ -40,6 +41,12 @@ export function ensReducer(
   action: ENSReducerAction
 ): ENSState {
   switch (action.type) {
+    case CLAIM_NAME_REQUEST: {
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action)
+      }
+    }
     case CLAIM_NAME_SUCCESS: {
       const { ens } = action.payload
       return {

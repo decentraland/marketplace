@@ -1566,6 +1566,8 @@
     "not_available": "不可用的域名。但您仍然可以获得它，请访问{link}",
     "marketplace": "查看市场上是否有售。",
     "name_cost": "名字成本 {mana} {network}",
+    "name_cost_fiat": "您还可以使用法定货币{icon}付款",
+    "debit_and_credit_cards": "借记卡和信用卡",
     "ethereum_mainnet_network": "以太坊主网网络",
     "dao_tooltip": "NAME 销售的所有收益都将转入 DAO 金库。{link}",
     "why_names": "为什么要获取 NAME？",
@@ -1574,10 +1576,25 @@
     "name_too_long": "名称最多可包含 15 个字符。",
     "invalid_characters": "名称只能包含字母数字字符。",
     "not_enough_mana": "您没有足够的 MANA 来申请新名称",
+    "fiat_payments_not_enabled": "目前不支持法定货币支付。请稍后再试",
     "claim_name_fat_finger_modal": {
       "title": "请确认您的新名称",
-      "description": "您已选择{name}。重新输入您的姓名以确认您的选择",
+      "description": "您已选择{name}。 {br}重新输入您的姓名以确认您的选择。",
       "ok_message": "恭喜您获得了名称 {name}。",
+      "caps_warning": "名称的大小写一旦声明就无法修改。",
+      "paying_with": "付款方式",
+      "pay_methods": {
+        "crypto": {
+          "name": "加密货币",
+          "subtitle": "以太坊主网网络"
+        },
+        "fiat": {
+          "name": "菲亚特",
+          "new": "新的",
+          "title": "使用借记卡和信用卡",
+          "subtitle": "价格可能会发生变化"
+        }
+      },
       "name_placeholder": "你独特的名字",
       "names_different": "姓名不匹配",
       "authorization": {
@@ -1617,7 +1634,7 @@
     }
   },
   "set_name_as_alias_modal": {
-    "title": "使用 NAME 作为别名",
+    "title": "使用 NAME 作为用户名",
     "description": "您当前的别名将立即更新。",
     "success_title": "全做完了！",
     "success_description": "您的用户名已更新"

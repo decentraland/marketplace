@@ -29,7 +29,6 @@ import {
   NameInvalidType,
   getNameInvalidType,
   hasNameMinLength,
-  isEnoughClaimMana,
   isNameAvailable,
   isNameValid
 } from '../../../modules/ens/utils'
@@ -48,14 +47,7 @@ const PLACEHOLDER_WIDTH = '94px'
 
 const ClaimNamePage = (props: Props) => {
   const PLACEHOLDER_NAME = t('names_page.your_name')
-  const {
-    wallet,
-    isConnecting,
-    currentMana,
-    onClaim,
-    onBrowse,
-    onRedirect
-  } = props
+  const { wallet, isConnecting, onClaim, onBrowse, onRedirect } = props
   const location = useLocation()
   const [isLoadingStatus, setIsLoadingStatus] = useState(false)
   const [bannedNames, setBannedNames] = useState<string[]>()
@@ -131,21 +123,19 @@ const ClaimNamePage = (props: Props) => {
       onRedirect(locations.signIn(`${location.pathname}`))
     } else {
       const isValid = isNameValid(name)
-      const isEnoughMana =
-        wallet && currentMana && isEnoughClaimMana(currentMana)
 
-      if (!isValid || !isEnoughMana) return
+      if (!isValid || !isAvailable) return
 
       onClaim(name)
     }
   }, [
     isConnecting,
     wallet,
-    name,
-    currentMana,
-    onClaim,
     onRedirect,
-    location.pathname
+    location.pathname,
+    name,
+    isAvailable,
+    onClaim
   ])
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -175,6 +165,15 @@ const ClaimNamePage = (props: Props) => {
     inputRef.current?.focus()
     setIsInputFocus(true)
   }, [])
+
+  const onFieldKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') {
+        handleClaim()
+      }
+    },
+    [handleClaim]
+  )
 
   const onFieldFocus = useCallback(() => {
     const inputValue = inputRef.current?.value
@@ -303,6 +302,7 @@ const ClaimNamePage = (props: Props) => {
                       <>
                         <input
                           ref={inputRef}
+                          onKeyDown={onFieldKeyDown}
                           value={name}
                           style={{
                             maxWidth: name.length ? inputWidth : '1px'
@@ -320,37 +320,13 @@ const ClaimNamePage = (props: Props) => {
                     ) : null}
                     {renderRemainingCharacters()}
                   </div>
-                  <Popup
-                    className="modal-tooltip"
-                    content={t('names_page.not_enough_mana')}
-                    position="top center"
-                    trigger={
-                      <div className="popup-button">
-                        <Button
-                          primary
-                          onClick={handleClaim}
-                          disabled={
-                            !isAvailable ||
-                            nameInvalidType !== null ||
-                            (currentMana !== undefined &&
-                              !isEnoughClaimMana(currentMana))
-                          }
-                        >
-                          {t('names_page.claim_a_name')}
-                        </Button>
-                      </div>
-                    }
-                    disabled={
-                      !!(
-                        wallet &&
-                        currentMana &&
-                        isEnoughClaimMana(currentMana)
-                      )
-                    }
-                    hideOnScroll={true}
-                    on="hover"
-                    inverted
-                  />
+                  <Button
+                    primary
+                    onClick={handleClaim}
+                    disabled={!isAvailable || nameInvalidType !== null}
+                  >
+                    {t('names_page.claim_a_name')}
+                  </Button>
 
                   {name &&
                   hasNameMinLength(name) &&
@@ -454,6 +430,14 @@ const ClaimNamePage = (props: Props) => {
                     }
                     on="hover"
                   />
+                  <div>
+                    {t('names_page.name_cost_fiat', {
+                      icon: <Icon name="credit card outline" />
+                    })}
+                    <span className={styles.cardsLabel}>
+                      {t('names_page.debit_and_credit_cards')}
+                    </span>
+                  </div>
                 </span>
               </div>
             </div>
@@ -477,7 +461,12 @@ const ClaimNamePage = (props: Props) => {
                   </div>
                 ))}
               </div>
-              <div className={styles.cardsContainer}>
+              <div
+                className={classNames(
+                  styles.cardsContainer,
+                  styles.bottomContainer
+                )}
+              >
                 <div className={styles.nameTakenCard}>
                   <div className={styles.buttons}>
                     <div>

@@ -1574,6 +1574,8 @@
     "not_available": "Unavailable NAME. {link}",
     "marketplace": "See if it's on sale in the Marketplace.",
     "name_cost": "A NAME costs {mana} {network}",
+    "name_cost_fiat": "You can also pay using FIAT {icon}",
+    "debit_and_credit_cards": "Debit and Credit Cards",
     "ethereum_mainnet_network": "Ethereum Mainnet Network",
     "dao_tooltip": "All proceeds from NAME sales are redirected to the DAO treasury. {link}",
     "why_names": "Why get a NAME?",
@@ -1582,11 +1584,25 @@
     "name_too_long": "NAMEs can contain up to 15 characters.",
     "invalid_characters": "NAMEs can only contain alphanumeric characters.",
     "not_enough_mana": "You don't have enough MANA to claim a new name",
+    "fiat_payments_not_enabled": "FIAT payments are not enabled at the moment. Please try later.",
     "claim_name_fat_finger_modal": {
       "title": "Please confirm your new name",
-      "description": "You have chosen {name}. Re-enter your NAME to confirm your selection.",
+      "description": "You have chosen {name}. {br} Re-enter your NAME to confirm your selection.",
       "ok_message": "Congratulations the name {name} is yours.",
       "caps_warning": "The capitalization of NAMEs cannot be modified once claimed.",
+      "paying_with": "Paying with",
+      "pay_methods": {
+        "crypto": {
+          "name": "Crypto",
+          "subtitle": "Ethereum Mainnet Network"
+        },
+        "fiat": {
+          "name": "FIAT",
+          "new": "new",
+          "title": "Using Debit and Credit Cards",
+          "subtitle": "Price rates may change"
+        }
+      },
       "name_placeholder": "Your unique NAME",
       "names_different": "Names do not match",
       "authorization": {
@@ -1626,7 +1642,7 @@
     }
   },
   "set_name_as_alias_modal": {
-    "title": "Use NAME as Alias",
+    "title": "Use NAME as Username",
     "description": "Your current username will be updated immediately.",
     "success_title": "All Done!",
     "success_description": "Your username has been updated"

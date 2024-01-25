@@ -25,7 +25,8 @@ import {
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
   getIsBuyCrossChainEnabled,
-  getIsAuthDappEnabled
+  getIsAuthDappEnabled,
+  getIsClaimingNamesWithFiatEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -222,6 +223,12 @@ const waitForInitialLoadingSelectors = [
     feature: FeatureName.AUTH_DAPP,
     selector: getIsAuthDappEnabled,
     applicationName: ApplicationName.DAPPS
+  },
+  {
+    name: 'claim-name-with-fiat',
+    feature: FeatureName.CLAIM_NAMES_WITH_FIAT,
+    selector: getIsClaimingNamesWithFiatEnabled,
+    applicationName: ApplicationName.MARKETPLACE
   }
 ]
 

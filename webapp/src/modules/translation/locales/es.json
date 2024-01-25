@@ -1561,6 +1561,8 @@
     "not_available": "Nombre NO Disponible. Pero aún puedes conseguirlo, visita {link}",
     "marketplace": "Marketplace",
     "name_cost": "Cada nombre cuesta {mana} {network}",
+    "name_cost_fiat": "También puedes pagar con FIAT {icon}",
+    "debit_and_credit_cards": "Tarjeta de débito y crédito",
     "ethereum_mainnet_network": "Red Principal de Ethereum",
     "dao_tooltip": "Todo lo generado por las ventas de Nombres es redirigido al tesoro de la DAO. {link}",
     "why_names": "Por qué Nombres?",
@@ -1569,11 +1571,25 @@
     "name_too_long": "Los Nombres pueden tener hasta 15 caracteres",
     "invalid_characters": "Los nombres no pueden contener caraceteres no alfa-numericos",
     "not_enough_mana": "No tienes suficiente MANA para reclamar un nuevo nombre",
+    "fiat_payments_not_enabled": "Los pagos con FIAT no están disponibles en este momento. Por favor inténtelo más tarde.",
     "claim_name_fat_finger_modal": {
       "title": "Por favor confirmar tu nombre",
-      "description": "Eelegiste {name}. Entra nuevamente el nombre para confirmar tu selección.",
+      "description": "Elegiste {name}. {br} Entra nuevamente el nombre para confirmar tu selección.",
       "ok_message": "Felicitaciones, el nombre {name} es tuyo.",
       "caps_warning": "La capitalización de los nombres no puede ser modificada una vez de adquirido el nombre.",
+      "paying_with": "Pagando con",
+      "pay_methods": {
+        "crypto": {
+          "name": "Crypto",
+          "subtitle": "Red de Ethereum Mainnet"
+        },
+        "fiat": {
+          "name": "FIAT",
+          "new": "Nuevo",
+          "title": "Usando tarjetas de débito y crédito",
+          "subtitle": "Las tasas de precios pueden variar"
+        }
+      },
       "name_placeholder": "Tu nombre único",
       "names_different": "Nombres no coinciden",
       "authorization": {

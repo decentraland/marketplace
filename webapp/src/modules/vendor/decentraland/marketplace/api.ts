@@ -6,7 +6,7 @@ import { retryParams } from '../utils'
 
 export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')!
 
-class MarketplaceAPI extends BaseAPI {
+export class MarketplaceAPI extends BaseAPI {
   fetchWalletTokenBalances = async (
     chain: ChainId,
     wallet: string

@@ -228,3 +228,14 @@ export const getIsAuthDappEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsClaimingNamesWithFiatEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.CLAIM_NAMES_WITH_FIAT
+    )
+  }
+  return false
+}
