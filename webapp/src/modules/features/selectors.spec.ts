@@ -26,7 +26,8 @@ import {
   isLoadingFeatureFlags,
   getIsBuyCrossChainEnabled,
   getIsAuthDappEnabled,
-  getIsClaimingNamesWithFiatEnabled
+  getIsClaimingNamesWithFiatEnabled,
+  getIsEnsAddressEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -229,6 +230,12 @@ const waitForInitialLoadingSelectors = [
     feature: FeatureName.CLAIM_NAMES_WITH_FIAT,
     selector: getIsClaimingNamesWithFiatEnabled,
     applicationName: ApplicationName.MARKETPLACE
+  },
+  {
+    name: 'ens-address',
+    feature: FeatureName.ENS_ADDRESS,
+    selector: getIsEnsAddressEnabled,
+    applicationName: ApplicationName.DAPPS
   }
 ]
 

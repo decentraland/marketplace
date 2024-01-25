@@ -1,7 +1,15 @@
-import React, { useState } from 'react'
-import { Page, Header, Form, Field, Button } from 'decentraland-ui'
+import React, { useCallback, useState } from 'react'
+import {
+  Page,
+  Header,
+  Form,
+  Field,
+  Button,
+  InputOnChangeData
+} from 'decentraland-ui'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { AddressField } from 'decentraland-dapps/dist/components/AddressField'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
@@ -14,10 +22,15 @@ import { Props } from './TransferPage.types'
 import './TransferPage.css'
 
 const TransferPage = (props: Props) => {
-  const { onNavigate, onTransfer, isTransferring } = props
+  const { onNavigate, onTransfer, isTransferring, isEnsAddressEnabled } = props
 
   const [address, setAddress] = useState('')
   const [isInvalidAddress, setIsInvalidAddress] = useState(false)
+
+  const handleChange = useCallback((_evt, data: InputOnChangeData) => {
+    setAddress(data.value)
+    setIsInvalidAddress(!data.value || !!data.error)
+  }, [])
 
   return (
     <>
@@ -70,26 +83,37 @@ const TransferPage = (props: Props) => {
                     <div className={subtitleClasses.join(' ')}>{subtitle}</div>
                     <Form onSubmit={() => onTransfer(nft, address)}>
                       <div className="form-fields">
-                        <Field
-                          type="address"
-                          error={isInvalidAddress}
-                          message={
-                            isInvalidAddress
-                              ? t('transfer_page.invalid_address')
-                              : undefined
-                          }
-                          label={t('transfer_page.recipient')}
-                          value={address}
-                          placeholder="0x..."
-                          disabled={!canTransfer}
-                          onChange={(_event, props) => {
-                            setAddress(props.value)
-                            const isValid =
-                              !props.value ||
-                              /^0x[a-fA-F0-9]{40}$/g.test(props.value)
-                            setIsInvalidAddress(!isValid)
-                          }}
-                        />
+                        {isEnsAddressEnabled ? (
+                          <AddressField
+                            type="address"
+                            error={isInvalidAddress}
+                            message={
+                              isInvalidAddress
+                                ? t('transfer_page.invalid_address')
+                                : undefined
+                            }
+                            label={t('transfer_page.recipient')}
+                            value={address}
+                            placeholder="0x..."
+                            disabled={!canTransfer}
+                            onChange={handleChange}
+                          />
+                        ) : (
+                          <Field
+                            type="address"
+                            error={isInvalidAddress}
+                            message={
+                              isInvalidAddress
+                                ? t('transfer_page.invalid_address')
+                                : undefined
+                            }
+                            label={t('transfer_page.recipient')}
+                            value={address}
+                            placeholder="0x..."
+                            disabled={!canTransfer}
+                            onChange={handleChange}
+                          />
+                        )}
                       </div>
                       {canTransfer ? (
                         <div className="warning">
