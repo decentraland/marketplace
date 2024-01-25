@@ -172,7 +172,7 @@ export function* routingSaga() {
     handleRedirectToSuccessPage
   )
   yield takeEvery(
-    [CLAIM_NAME_TRANSACTION_SUBMITTED],
+    CLAIM_NAME_TRANSACTION_SUBMITTED,
     handleRedirectClaimingNameToSuccessPage
   )
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
@@ -746,7 +746,6 @@ function* handleRedirectClaimingNameToSuccessPage(
     signer
   )
   const contractAddress = dclRegistrarContract.address
-  console.log('contractAddress: ', contractAddress);
   yield put(
     push(
       locations.success({

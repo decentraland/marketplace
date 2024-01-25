@@ -56,6 +56,32 @@ export function SuccessPage(props: Props) {
     )
   }
 
+  if (contractAddress && !tokenId && isLoading) {
+    // in this case, we asume the tokenId is getting trieved and it's waiting for the tx to be mined
+    return (
+      <div className={styles.pageContainer}>
+        <Navbar />
+        <div className={styles.container}>
+          <Header className={styles.title}>
+            {t('success_page.loading_state.title')}
+          </Header>
+
+          <div className={styles.statusInfo}>
+            <Loader size="small" inline active />
+            {t('success_page.loading_state.status')}
+          </div>
+          <span className={styles.description}>
+            {t('success_page.loading_state.description')}
+          </span>
+          <Button secondary as={Link} to={locations.activity()}>
+            {t('success_page.loading_state.progress_in_activity')}
+          </Button>
+        </div>
+        <Footer className={styles.footer} />
+      </div>
+    )
+  }
+
   return (
     <div className={styles.pageContainer}>
       <Navbar />
