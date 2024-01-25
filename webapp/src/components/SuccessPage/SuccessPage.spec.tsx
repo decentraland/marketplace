@@ -1,5 +1,6 @@
 import { RenderResult } from '@testing-library/react'
 import { NFTCategory, Profile, Rarity } from '@dcl/schemas'
+import { useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   renderWithProviders,
@@ -14,11 +15,11 @@ jest.mock('react-router-dom', () => {
   return {
     ...module,
     useHistory: jest.fn(),
-    useLocation: () => ({
-      search: '?txHash=txhash&tokenId=1&contractAddress=address&assetType=nft'
-    })
+    useLocation: jest.fn()
   }
 })
+
+let useLocationMock: { search: string; pathname: string }
 
 jest.mock('lottie-react', () => () => <div>LOTTIE</div>)
 
@@ -59,22 +60,71 @@ let props: Partial<Props>
 let screen: RenderResult
 
 describe('when transaction is still loading', () => {
-  beforeEach(async () => {
-    props = { isLoading: true }
-    screen = renderSuccessPage(props)
-    await waitForComponentToFinishLoading(screen)
+  describe('and its an ENS type of asset', () => {
+    beforeEach(async () => {
+      useLocationMock = {
+        search:
+          '?txHash=txhash&subdomain=bondi&contractAddress=address&assetType=nft',
+        pathname: '/v1/lists'
+      }
+      ;(useLocation as jest.Mock).mockReturnValue(useLocationMock)
+
+      screen = renderSuccessPage(
+        {
+          ...props,
+          isLoading: true
+        },
+        {
+          'address-1': {
+            data: {
+              ens: {
+                subdomain: 'bondi'
+              }
+            },
+            category: NFTCategory.ENS
+          } as NFT
+        }
+      )
+      await waitForComponentToFinishLoading(screen)
+    })
+    it('should show the loading states messages asset and the asset image of the ENS', () => {
+      expect(
+        screen.getByText(t('success_page.loading_state.title'))
+      ).toBeInTheDocument()
+      expect(
+        screen.getByText(t('success_page.loading_state.status'))
+      ).toBeInTheDocument()
+    })
   })
 
-  it('should render processing transaction message', () => {
-    expect(
-      screen.getByText(t('success_page.loading_state.status'))
-    ).toBeInTheDocument()
+  describe('and its another type of asset', () => {
+    beforeEach(async () => {
+      useLocationMock = {
+        search:
+          '?txHash=txhash&tokenId=1&contractAddress=address&assetType=nft',
+        pathname: '/v1/lists'
+      }
+      ;(useLocation as jest.Mock).mockReturnValue(useLocationMock)
+      props = { isLoading: true }
+      screen = renderSuccessPage(props)
+      await waitForComponentToFinishLoading(screen)
+    })
+    it('should render processing transaction message', () => {
+      expect(
+        screen.getByText(t('success_page.loading_state.status'))
+      ).toBeInTheDocument()
+    })
   })
 })
 
 describe('when transaction finishes successfully', () => {
   beforeEach(() => {
     props = { isLoading: false }
+    useLocationMock = {
+      search: '?txHash=txhash&tokenId=1&contractAddress=address&assetType=nft',
+      pathname: '/v1/lists'
+    }
+    ;(useLocation as jest.Mock).mockReturnValue(useLocationMock)
   })
 
   describe('and its an ENS type of asset', () => {

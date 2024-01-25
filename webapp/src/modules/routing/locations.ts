@@ -131,6 +131,7 @@ export const locations = {
     tokenId: string
     assetType: string
     contractAddress: string
+    subdomain?: string
   }) =>
     `/success${
       searchOptions ? `?${new URLSearchParams(searchOptions).toString()}` : ''
