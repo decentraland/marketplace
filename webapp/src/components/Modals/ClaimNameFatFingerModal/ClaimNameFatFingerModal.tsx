@@ -134,17 +134,21 @@ const ClaimNameFatFingerModal = ({
           },
           onPending: options => {
             if ('data' in options && 'tx_id' in options.data) {
-              analytics.track('Buy Name Success', {
-                name: ENSName,
-                payment_method: 'fiat',
-                txHash: options.data.tx_id
-              })
               onClaimTxSubmitted(
                 ENSName,
                 wallet.address,
                 wallet.chainId,
                 options.data.tx_id as string
               )
+            }
+          },
+          onSuccess: options => {
+            if ('data' in options && 'tx_id' in options.data) {
+              analytics.track('Buy Name Success', {
+                name: ENSName,
+                payment_method: 'fiat',
+                txHash: options.data.tx_id
+              })
             }
           }
         }
