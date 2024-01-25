@@ -7,7 +7,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { config } from '../../config'
 import { Footer } from '../Footer'
-import { AssetType } from '../../modules/asset/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 import { AssetImage } from '../AssetImage'
 import { AssetProvider } from '../AssetProvider'
 import { Navbar } from '../Navbar'
@@ -23,6 +23,38 @@ export function SuccessPage(props: Props) {
   const contractAddress = search.get('contractAddress')
   const tokenId = search.get('tokenId')
   const assetType = search.get('assetType')
+  const subdomain = search.get('subdomain')
+
+  // this is a workaround to show the NAME while the transaction is being mined
+  if (subdomain && isLoading) {
+    return (
+      <div className={styles.pageContainer}>
+        <Navbar />
+        <div className={styles.container}>
+          <Header className={styles.title}>
+            {t('success_page.loading_state.title')}
+          </Header>
+          <AssetImage
+            asset={{ category: 'ens', data: { ens: { subdomain } } } as Asset}
+            showMonospace
+            className={classNames(styles.assetImage, styles.loading)}
+          />
+
+          <div className={styles.statusInfo}>
+            <Loader size="small" inline active />
+            {t('success_page.loading_state.status')}
+          </div>
+          <span className={styles.description}>
+            {t('success_page.loading_state.description')}
+          </span>
+          <Button secondary as={Link} to={locations.activity()}>
+            {t('success_page.loading_state.progress_in_activity')}
+          </Button>
+        </div>
+        <Footer className={styles.footer} />
+      </div>
+    )
+  }
 
   return (
     <div className={styles.pageContainer}>

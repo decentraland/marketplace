@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { v4 as uuidv4 } from 'uuid'
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { Env } from '@dcl/ui-env'
-import { NFTCategory, Network } from '@dcl/schemas'
+import { ChainId, NFTCategory, Network } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
   ModalNavigation,
@@ -96,10 +96,13 @@ const ClaimNameFatFingerModal = ({
 
       const data = {
         address: wallet.address,
-        commodity: isDev ? 'TTS' : 'MANA', // will be MANA later on
+        commodity: isDev ? 'TTS' : 'MANA',
         commodity_amount: Number(PRICE),
-        network: isDev ? 'sepolia' : 'ethereum', // will be wallet.network
-        sc_address: '0x39421866645065c8d53e2d36906946f33465743d',
+        sc_address: config.get(
+          isDev && wallet.chainId === ChainId.ETHEREUM_SEPOLIA
+            ? 'CONTROLLER_V2_CONTRACT_ADDRESS_FIAT'
+            : 'CONTROLLER_V2_CONTRACT_ADDRESS'
+        ),
         sc_input_data
       }
 
@@ -129,18 +132,18 @@ const ClaimNameFatFingerModal = ({
           onLoaded: () => {
             setIsLoadingFIATWidget(false)
           },
-          onSuccess: options => {
-            if ('tx_id' in options) {
+          onPending: options => {
+            if ('data' in options && 'tx_id' in options.data) {
               analytics.track('Buy Name Success', {
                 name: ENSName,
                 payment_method: 'fiat',
-                txHash: options.tx_id
+                txHash: options.data.tx_id
               })
               onClaimTxSubmitted(
                 ENSName,
                 wallet.address,
                 wallet.chainId,
-                options.tx_id as string
+                options.data.tx_id as string
               )
             }
           }

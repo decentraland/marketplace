@@ -1,3 +1,13 @@
+import { expectSaga } from 'redux-saga-test-plan'
+import { call, select } from 'redux-saga/effects'
+import { BigNumber, ethers } from 'ethers'
+import {
+  getLocation,
+  LOCATION_CHANGE,
+  LocationChangeAction,
+  push,
+  RouterLocation
+} from 'connected-react-router'
 import {
   ChainId,
   EmotePlayMode,
@@ -9,18 +19,11 @@ import {
   Order,
   Rarity
 } from '@dcl/schemas'
-import {
-  getLocation,
-  LOCATION_CHANGE,
-  LocationChangeAction,
-  push,
-  RouterLocation
-} from 'connected-react-router'
-import { expectSaga } from 'redux-saga-test-plan'
-import { call, select } from 'redux-saga/effects'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
@@ -45,7 +48,8 @@ import { NFT } from '../nft/types'
 import { fetchNFTsRequest, fetchNFTsSuccess } from '../nft/actions'
 import { getWallet } from '../wallet/selectors'
 import { ENS } from '../ens/types'
-import { claimNameSuccess } from '../ens/actions'
+import { claimNameSuccess, claimNameTransactionSubmitted } from '../ens/actions'
+import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import {
   browse,
@@ -1577,5 +1581,55 @@ describe.each([
         .put(push(locations.activity()))
         .run()
     )
+  })
+})
+
+describe('when handling the claim name transaction submitted action', () => {
+  let subdomain: string, txHash: string, address: string
+  let chainId: ChainId
+  let signer: ethers.Signer
+  let searchParams: {
+    txHash: string
+    tokenId: string
+    assetType: AssetType
+    contractAddress: string
+    subdomain: string
+  }
+  let dclRegistrarContract: { address: string }
+  let mockTokenId: BigNumber
+
+  beforeEach(() => {
+    subdomain = 'aSubdomain'
+    txHash = 'txHash'
+    address = 'address'
+    dclRegistrarContract = { address: '0xAnAddress' }
+    searchParams = {
+      txHash,
+      assetType: AssetType.NFT,
+      tokenId: '',
+      contractAddress: dclRegistrarContract.address,
+      subdomain
+    }
+    signer = {} as ethers.Signer
+    mockTokenId = BigNumber.from(1)
+  })
+
+  it('should redirect to success page with the correct query params', () => {
+    return expectSaga(routingSaga)
+      .put(push(locations.success(searchParams)))
+      .provide([
+        [call(getSigner), {}],
+        [
+          call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer),
+          {
+            ...dclRegistrarContract,
+            getTokenId: () => mockTokenId
+          }
+        ]
+      ])
+      .dispatch(
+        claimNameTransactionSubmitted(subdomain, address, chainId, txHash)
+      )
+      .run({ silenceTimeout: true })
   })
 })
