@@ -323,7 +323,11 @@ const ClaimNamePage = (props: Props) => {
                   <Button
                     primary
                     onClick={handleClaim}
-                    disabled={!isAvailable || nameInvalidType !== null}
+                    disabled={
+                      !isAvailable ||
+                      nameInvalidType !== null ||
+                      isLoadingStatus
+                    }
                   >
                     {t('names_page.claim_a_name')}
                   </Button>
