@@ -123,7 +123,7 @@ const ClaimNameFatFingerModal = ({
         {
           ...data,
           ...nftOptions,
-          partner_id: '01HGFWXR5CQMYHYSR9KVTKWDT5',
+          partner_id: config.get('WERT_PARTNER_ID'),
           origin: wertURL,
           lang: 'en',
           click_id: uuidv4() // unique id of purchase in your system

@@ -47,5 +47,6 @@
   "SQUID_API_URL": "https://testnet.v2.api.squidrouter.com/",
   "DCL_LISTS_SERVER": "https://dcl-lists.decentraland.zone",
   "AUTH_URL": "/auth",
-  "WERT_URL": "https://sandbox.wert.io"
+  "WERT_URL": "https://sandbox.wert.io",
+  "WERT_PARTNER_ID": "01HGFWXR5CQMYHYSR9KVTKWDT5"
 }
