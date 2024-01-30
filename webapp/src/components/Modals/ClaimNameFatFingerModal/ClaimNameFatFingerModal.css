@@ -213,3 +213,45 @@
   flex: 1 0 auto;
   margin-left: 12px;
 }
+
+@media (max-width: 767px) {
+  .ClaimNameFatFingerModal.ui.modal > .ui.form > .content {
+    padding: 32px;
+    margin: 0;
+  }
+  .ClaimNameFatFingerModal.ui.modal > .ui.form > .content .dcl.field {
+    min-width: 100%;
+  }
+  .ClaimNameFatFingerModal.ui.modal .paymentMethodContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ClaimNameFatFingerModal.ui.modal .payWithTitle {
+    margin-bottom: 12px;
+  }
+
+  .ClaimNameFatFingerModal .baseGradient {
+    width: 100%;
+  }
+
+  .ClaimNameFatFingerModal.ui.modal > .ui.form > .actions {
+    margin: 0;
+    flex-direction: row;
+    padding: 32px;
+    margin-top: auto;
+  }
+
+  .ClaimNameFatFingerModal.ui.modal
+    > .ui.form
+    > .actions
+    > .ui.button:not(.primary),
+  .ClaimNameFatFingerModal.ui.modal .ui.button:not(.primary) {
+    margin: 0;
+  }
+
+  .ClaimNameFatFingerModal .ui.form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+}
