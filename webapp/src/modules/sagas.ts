@@ -53,10 +53,6 @@ const contentClient = createContentClient({
   fetcher: createFetchComponent()
 })
 
-const newIdentitySaga = createIdentitySaga({
-  authURL: config.get('AUTH_URL')
-})
-
 const gatewaySaga = createGatewaySaga({
   [FiatGateway.WERT]: {
     marketplaceServerURL: config.get('MARKETPLACE_SERVER_URL'),
@@ -103,7 +99,9 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     accountSaga(lambdasClient),
     collectionSaga(),
     storeSaga(contentClient),
-    newIdentitySaga(),
+    createIdentitySaga({
+      authURL: config.get('AUTH_URL')
+    }),
     marketplaceAnalyticsSagas(),
     featuresSaga({
       polling: {
@@ -120,7 +118,6 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     transakSaga(),
     favoritesSaga(getIdentity),
     loginSaga(),
-    ensSaga(),
-    newIdentitySaga()
+    ensSaga()
   ])
 }
