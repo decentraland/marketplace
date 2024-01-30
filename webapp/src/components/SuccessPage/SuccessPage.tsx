@@ -25,8 +25,8 @@ export function SuccessPage(props: Props) {
   const assetType = search.get('assetType')
   const subdomain = search.get('subdomain')
 
-  // this is a workaround to show the NAME while the transaction is being mined
-  if (subdomain && isLoading) {
+  // this is a workaround to show the NAME while the transaction is being mined or the tokenId getting retrieved.
+  if (subdomain && (isLoading || !tokenId)) {
     return (
       <div className={styles.pageContainer}>
         <Navbar />
