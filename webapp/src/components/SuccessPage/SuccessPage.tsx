@@ -82,9 +82,6 @@ export function SuccessPage(props: Props) {
     )
   }
 
-  console.log('assetType: ', assetType)
-  console.log('contractAddress: ', contractAddress)
-  console.log('tokenId: ', tokenId)
   return (
     <div className={styles.pageContainer}>
       <Navbar />
