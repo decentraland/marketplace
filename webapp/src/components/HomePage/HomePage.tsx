@@ -9,6 +9,7 @@ import { View } from '../../modules/ui/types'
 import { AssetType } from '../../modules/asset/types'
 import { HomepageView } from '../../modules/ui/asset/homepage/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
+import { AssetStatusFilter } from '../../utils/filters'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
@@ -76,11 +77,18 @@ const HomePage = (props: Props) => {
 
   const sort: Partial<Record<View, SortBy>> = useMemo(
     () => ({
-      [View.HOME_NEW_ITEMS]: SortBy.RECENTLY_LISTED,
+      [View.HOME_NEW_ITEMS]: SortBy.NEWEST,
       [View.HOME_SOLD_ITEMS]: SortBy.RECENTLY_SOLD,
       [View.HOME_WEARABLES]: SortBy.RECENTLY_LISTED,
       [View.HOME_LAND]: SortBy.RECENTLY_LISTED,
       [View.HOME_ENS]: SortBy.RECENTLY_LISTED
+    }),
+    []
+  )
+
+  const status: Partial<Record<View, AssetStatusFilter>> = useMemo(
+    () => ({
+      [View.HOME_NEW_ITEMS]: AssetStatusFilter.ON_SALE
     }),
     []
   )
@@ -105,6 +113,10 @@ const HomePage = (props: Props) => {
       } else {
         trackMessage = `View all ${section} section`
         browseOptions = { section, assetType, sortBy }
+      }
+
+      if (status[view]) {
+        browseOptions.status = status[view]
       }
 
       if (trackMessage && browseOptions) {
