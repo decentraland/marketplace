@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
-import { getConfiguration } from 'decentraland-connect/dist/configuration'
+import { getConfiguration } from 'decentraland-connect'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { config } from '../../config'
 
