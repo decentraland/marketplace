@@ -228,7 +228,7 @@ const AssetBrowse = (props: Props) => {
             <AssetTopbar />
           )}
           {isMap ? (
-            <MapBrowse showOwned />
+            <MapBrowse showOwned={showOwnedLandOnMap} />
           ) : (
             <AssetList isManager={isCurrentAccount} />
           )}
