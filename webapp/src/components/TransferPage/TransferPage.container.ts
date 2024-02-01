@@ -13,11 +13,9 @@ import {
   MapDispatch
 } from './TransferPage.types'
 import TransferPage from './TransferPage'
-import { getIsEnsAddressEnabled } from '../../modules/features/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
-  isTransferring: isLoadingType(getLoading(state), TRANSFER_NFT_REQUEST),
-  isEnsAddressEnabled: getIsEnsAddressEnabled(state)
+  isTransferring: isLoadingType(getLoading(state), TRANSFER_NFT_REQUEST)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

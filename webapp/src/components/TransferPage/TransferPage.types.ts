@@ -12,7 +12,10 @@ export type Props = {
   onNavigate: (path: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'isTransferring' | 'isEnsAddressEnabled'>
+export type MapStateProps = Pick<
+  Props,
+  'isTransferring' | 'isEnsAddressEnabled'
+>
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onTransfer'>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | TransferNFTRequestAction

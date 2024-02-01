@@ -33,7 +33,6 @@ export const PriceFilter = ({
   collection,
   emotePlayMode,
   rentalDays,
-  isRentalPriceFitlerChartEnabled,
   emoteHasGeometry,
   emoteHasSound,
   onChange
@@ -134,9 +133,6 @@ export const PriceFilter = ({
   const fetcher = useCallback(async () => {
     let data: Record<string, number> = {}
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
-      if (!isRentalPriceFitlerChartEnabled) {
-        return {}
-      }
       data = await rentalsAPI.getRentalListingsPrices(rentalPriceFetchFilters())
     } else {
       data = await nftAPI.fetchPrices(priceFetchFilters)
@@ -145,12 +141,7 @@ export const PriceFilter = ({
       acc[ethers.utils.formatEther(key)] = value
       return acc
     }, {} as Record<string, number>)
-  }, [
-    priceFetchFilters,
-    landStatus,
-    isRentalPriceFitlerChartEnabled,
-    rentalPriceFetchFilters
-  ])
+  }, [priceFetchFilters, landStatus, rentalPriceFetchFilters])
 
   return (
     <Box

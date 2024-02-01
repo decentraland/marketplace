@@ -18,7 +18,6 @@ const BuyNFTButtons = ({
   assetType,
   tokenId,
   buyWithCardClassName,
-  isBuyCrossChainEnabled,
   isBuyingWithCryptoModalOpen,
   onBuyWithCrypto,
   onExecuteOrderWithCard,
@@ -79,41 +78,14 @@ const BuyNFTButtons = ({
           }
           return (
             <>
-              {isBuyCrossChainEnabled ? (
-                <Button
-                  onClick={() => handleBuyWithCrypto(asset, order)}
-                  primary
-                  fluid
-                >
-                  <Mana
-                    showTooltip
-                    inline
-                    size="small"
-                    network={asset.network}
-                  />
-                  {t('asset_page.actions.buy_with_crypto')}
-                </Button>
-              ) : (
-                <Button
-                  as={Link}
-                  to={locations.buy(
-                    assetType,
-                    asset.contractAddress,
-                    assetId ?? undefined
-                  )}
-                  primary
-                  fluid
-                >
-                  <Mana
-                    showTooltip
-                    inline
-                    size="small"
-                    network={asset.network}
-                  />
-                  {t('asset_page.actions.buy_with_mana')}
-                </Button>
-              )}
-
+              <Button
+                onClick={() => handleBuyWithCrypto(asset, order)}
+                primary
+                fluid
+              >
+                <Mana showTooltip inline size="small" network={asset.network} />
+                {t('asset_page.actions.buy_with_crypto')}
+              </Button>
               <Button
                 className={`${styles.buy_with_card} ${buyWithCardClassName}`}
                 onClick={() => handleBuyWithCard(asset)}

@@ -75,111 +75,12 @@ export const getIsCampaignBrowserEnabled = (state: RootState) => {
   }
 }
 
-export const getIsPriceFilterEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.PRICE_FILTER
-    )
-  }
-  return false
-}
-
-export const getIsEstateSizeFilterEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.ESTATE_SIZE_FILTER
-    )
-  }
-  return false
-}
-
-export const getIsCreatorsFilterEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.CREATOR_FILTER
-    )
-  }
-  return false
-}
-
-export const getIsLocationFilterEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.LOCATION_FILTER
-    )
-  }
-  return false
-}
-
-export const getIsRentalPeriodFilterEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.RENTAL_PERIOD_FILTER
-    )
-  }
-  return false
-}
-
-export const getIsMapViewFiltersEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.MAP_VIEW_FILTERS
-    )
-  }
-  return false
-}
-
-export const getIsRentalPriceFilterChartEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.RENTAL_PRICE_FILTER_CHART
-    )
-  }
-  return false
-}
-
-export const getIsHandsCategoryEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.HANDS_CATEGORY
-    )
-  }
-  return false
-}
-
 export const getIsSmartWearablesFTUEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(
       state,
       ApplicationName.MARKETPLACE,
       FeatureName.SMART_WEARABLES_FTU
-    )
-  }
-  return false
-}
-
-export const getIsEmotesV2Enabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.EMOTES_V2
     )
   }
   return false
@@ -202,17 +103,6 @@ export const getIsMarketplaceServerEnabled = (state: RootState) => {
       state,
       ApplicationName.MARKETPLACE,
       FeatureName.MARKETPLACE_SERVER
-    )
-  }
-  return false
-}
-
-export const getIsBuyCrossChainEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.BUY_CROSS_CHAIN
     )
   }
   return false

@@ -9,13 +9,12 @@ export type Props = {
   showOwned?: boolean
   tiles: Record<string, AtlasTile>
   ownedLands: NFT[]
-  isMapViewFiltersEnabled?: boolean
   onBrowse: typeof browse
 }
 
 export type MapStateProps = Pick<
   Props,
-  'onlyOnSale' | 'onlyOnRent' | 'isMapViewFiltersEnabled' | 'tiles' | 'ownedLands'
+  'onlyOnSale' | 'onlyOnRent' | 'tiles' | 'ownedLands'
 >
 
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
