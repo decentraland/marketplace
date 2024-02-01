@@ -1,16 +1,13 @@
 import { ethers } from 'ethers'
 import { useEffect, useMemo, useState } from 'react'
 import { ChainId } from '@dcl/schemas'
+import type { ChainData, Token } from 'decentraland-transactions/crossChain'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Close, Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { marketplaceAPI } from '../../../../modules/vendor/decentraland/marketplace/api'
 import { Balance } from '../../../../modules/vendor/decentraland/marketplace/types'
-import {
-  ChainData,
-  Token
-} from 'decentraland-transactions/dist/crossChain/types'
 import styles from './ChainAndTokenSelector.module.css'
 
 export const CHAIN_AND_TOKEN_SELECTOR_DATA_TEST_ID = 'chain-and-token-selector'

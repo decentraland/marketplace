@@ -4,7 +4,7 @@ import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
-import { Route } from 'decentraland-transactions/dist/crossChain/types'
+import type { Route } from 'decentraland-transactions/crossChain'
 import { Asset } from '../../../modules/asset/types'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'

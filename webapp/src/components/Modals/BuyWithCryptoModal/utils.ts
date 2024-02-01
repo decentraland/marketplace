@@ -1,8 +1,5 @@
 import { ChainId, Network, Order } from '@dcl/schemas'
-import {
-  ChainData,
-  Token
-} from 'decentraland-transactions/dist/crossChain/types'
+import { ChainData, Token } from 'decentraland-transactions/crossChain'
 import {
   ContractName,
   getContract,

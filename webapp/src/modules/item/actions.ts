@@ -4,7 +4,7 @@ import {
   buildTransactionWithFromPayload,
   buildTransactionWithReceiptPayload
 } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { Route } from 'decentraland-transactions/dist/crossChain/types'
+import type { Route } from 'decentraland-transactions/crossChain'
 import { action } from 'typesafe-actions'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'

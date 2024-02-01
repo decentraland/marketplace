@@ -15,9 +15,9 @@ import {
 import { renderWithProviders } from '../../../utils/test'
 import {
   CrossChainProvider,
-  Route
-} from 'decentraland-transactions/dist/crossChain'
-import { AxelarProvider } from 'decentraland-transactions/dist/crossChain/AxelarProvider'
+  Route,
+  AxelarProvider
+} from 'decentraland-transactions/crossChain'
 import { getMinSaleValueInWei } from '../../BuyPage/utils'
 import { VendorName } from '../../../modules/vendor'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
@@ -77,6 +77,15 @@ jest.mock('ethers', () => {
         }
       }
     }
+  }
+})
+
+jest.mock('decentraland-transactions/crossChain', () => {
+  const original = jest.requireActual('decentraland-transactions/crossChain')
+  return {
+    ...original,
+    CROSS_CHAIN_SUPPORTED_CHAINS: [137, 1],
+    AxelarProvider: jest.fn()
   }
 })
 
@@ -475,14 +484,6 @@ const MOCKED_ORDER = {
   updatedAt: 1699962957000,
   issuedId: '29'
 }
-
-jest.mock('decentraland-transactions/dist/crossChain', () => {
-  return {
-    CROSS_CHAIN_SUPPORTED_CHAINS: [137, 1]
-  }
-})
-
-jest.mock('decentraland-transactions/dist/crossChain/AxelarProvider')
 
 async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
   const defaultProps: Props = {
