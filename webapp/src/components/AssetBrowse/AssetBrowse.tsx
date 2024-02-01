@@ -1,14 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { matchPath, useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
-import {
-  BackToTopButton,
-  Container,
-  Mobile,
-  NotMobile,
-  Page,
-  Tabs
-} from 'decentraland-ui'
+import { BackToTopButton, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -33,6 +26,7 @@ import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
+import MapTopbar from './MapTopbar'
 import { Props } from './AssetBrowse.types'
 import MapBrowse from './MapBrowse'
 import './AssetBrowse.css'
@@ -72,6 +66,7 @@ const AssetBrowse = (props: Props) => {
   )
   const isCurrentAccount = view === View.CURRENT_ACCOUNT
   const isAccountOrCurrentAccount = view === View.ACCOUNT || isCurrentAccount
+  const [showOwnedLandOnMap, setShowOwnedLandOnMap] = useState(true)
 
   // Kick things off
   useEffect(() => {
@@ -225,11 +220,10 @@ const AssetBrowse = (props: Props) => {
       right = (
         <>
           {isMap && isFullscreen ? (
-            <div className="blur-background">
-              <Container>
-                <AssetTopbar />
-              </Container>
-            </div>
+            <MapTopbar
+              showOwned={showOwnedLandOnMap}
+              onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
+            />
           ) : (
             <AssetTopbar />
           )}
