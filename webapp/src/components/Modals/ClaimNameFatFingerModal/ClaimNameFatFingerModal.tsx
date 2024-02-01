@@ -76,7 +76,7 @@ const ClaimNameFatFingerModal = ({
       ? PaymentMethod.CRYPTO
       : isClaimingNamesWithFiatEnabled
       ? PaymentMethod.FIAT
-      : PaymentMethod.CRYPTO
+      : undefined
   )
   const [currentName, setCurrentName] = useState('')
 

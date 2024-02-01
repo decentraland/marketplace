@@ -8,6 +8,15 @@
   margin-right: 70px;
 }
 
+.ClaimNameFatFingerModal.ui.modal .dcl.modal-navigation {
+  align-items: flex-start;
+  margin-left: 44px;
+}
+
+.ClaimNameFatFingerModal.ui.modal .dcl.modal-navigation-title {
+  text-align: left;
+}
+
 .ClaimNameFatFingerModal.ui.modal .content .dcl.field,
 .ClaimNameFatFingerModal.ui.modal .actions {
   margin-top: 30px;
