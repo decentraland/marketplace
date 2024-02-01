@@ -44,11 +44,6 @@ function renderAssetFilters(props: Partial<Props> = {}) {
       landStatus={LANDFilters.ALL_LAND}
       onBrowse={jest.fn()}
       values={{ section: Section.LAND }}
-      isPriceFilterEnabled
-      isEstateSizeFilterEnabled
-      isLocationFilterEnabled
-      isCreatorFiltersEnabled
-      isRentalPeriodFilterEnabled
       {...props}
     />
   )
@@ -72,8 +67,7 @@ describe('when in land section', () => {
   describe('and isPriceFilterEnabled FF is active', () => {
     it('should render price filter', async () => {
       const screen = renderAssetFilters({
-        section: Section.LAND,
-        isPriceFilterEnabled: true
+        section: Section.LAND
       })
       await waitForComponentToFinishLoading(screen)
       // TODO: Make barchart components accesible so we can access better the info ui#311
@@ -84,8 +78,7 @@ describe('when in land section', () => {
   describe('and isPriceFilterEnabled FF is off', () => {
     it('should not render price filter', async () => {
       const screen = renderAssetFilters({
-        section: Section.LAND,
-        isPriceFilterEnabled: false
+        section: Section.LAND
       })
       await waitForComponentToFinishLoading(screen)
       // TODO: Make barchart components accesible so we can access better the info ui#311
@@ -97,8 +90,7 @@ describe('when in land section', () => {
     describe('and isEstateSizeFilterEnabled FF is active', () => {
       it('should render estate size filter', async () => {
         const screen = renderAssetFilters({
-          section: Section.ESTATES,
-          isEstateSizeFilterEnabled: true
+          section: Section.ESTATES
         })
         await waitForComponentToFinishLoading(screen)
         // TODO: Make barchart components accesible so we can access better the info ui#311
@@ -111,8 +103,7 @@ describe('when in land section', () => {
     describe('and isEstateSizeFilterEnabled FF is off', () => {
       it('should not render estate size filter', async () => {
         const screen = renderAssetFilters({
-          section: Section.ESTATES,
-          isEstateSizeFilterEnabled: false
+          section: Section.ESTATES
         })
         await waitForComponentToFinishLoading(screen)
         // TODO: Make barchart components accesible so we can access better the info ui#311

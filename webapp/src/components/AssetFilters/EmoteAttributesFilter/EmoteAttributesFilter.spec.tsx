@@ -10,38 +10,21 @@ function renderEmoteAttributesFilter(props: Partial<Props> = {}) {
       emoteHasGeometry={false}
       emoteHasSound={false}
       emotePlayMode={[]}
-      isEmotesV2Enabled={false}
       {...props}
     />
   )
 }
 
-describe('when isEmotesV2Enabled is false', () => {
-  it("shouldn't render sound filter", () => {
-    const screen = renderEmoteAttributesFilter({ isEmotesV2Enabled: false })
-    expect(
-      screen.queryByText(t('nft_filters.emote_attributes.with_sound'))
-    ).not.toBeInTheDocument()
-  })
-
-  it("shouldn't render geometry filter", () => {
-    const screen = renderEmoteAttributesFilter({ isEmotesV2Enabled: false })
-    expect(
-      screen.queryByText(t('nft_filters.emote_attributes.with_props'))
-    ).not.toBeInTheDocument()
-  })
-})
-
-describe('when isEmotesV2Enabled is true', () => {
+describe('when rendering the emote attributes filter', () => {
   it('should render sound filter', () => {
-    const screen = renderEmoteAttributesFilter({ isEmotesV2Enabled: true })
+    const screen = renderEmoteAttributesFilter()
     expect(
       screen.getByText(t('nft_filters.emote_attributes.with_sound'))
     ).toBeInTheDocument()
   })
 
   it("shouldn't render geometry filter", () => {
-    const screen = renderEmoteAttributesFilter({ isEmotesV2Enabled: true })
+    const screen = renderEmoteAttributesFilter()
     expect(
       screen.getByText(t('nft_filters.emote_attributes.with_props'))
     ).toBeInTheDocument()
@@ -51,7 +34,6 @@ describe('when isEmotesV2Enabled is true', () => {
     it('should call onChange with emoteHasSound true', () => {
       const onChange = jest.fn()
       const screen = renderEmoteAttributesFilter({
-        isEmotesV2Enabled: true,
         onChange
       })
       screen.getByText(t('nft_filters.emote_attributes.with_sound')).click()
@@ -67,7 +49,6 @@ describe('when isEmotesV2Enabled is true', () => {
     it('should call onChange with emoteHasGeometry true', () => {
       const onChange = jest.fn()
       const screen = renderEmoteAttributesFilter({
-        isEmotesV2Enabled: true,
         onChange
       })
       screen.getByText(t('nft_filters.emote_attributes.with_props')).click()

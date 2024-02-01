@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { Button, Icon, Loader, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -31,7 +31,6 @@ const BuyNFTButtons = ({
     const shouldOpenModal = search.get('buyWithCrypto')
     return shouldOpenModal
   }, [location.search])
-  const assetId = tokenId || asset.itemId
 
   const handleBuyWithCard = useCallback(
     (asset: Asset) => {

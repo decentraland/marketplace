@@ -34,7 +34,6 @@ import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
 import { Props } from './AssetBrowse.types'
-import MapTopbar from './MapTopbar'
 import MapBrowse from './MapBrowse'
 import './AssetBrowse.css'
 
@@ -55,8 +54,7 @@ const AssetBrowse = (props: Props) => {
     onlySmart,
     viewInState,
     onlyOnRent,
-    visitedLocations,
-    isMapViewFiltersEnabled
+    visitedLocations
   } = props
 
   const location = useLocation()
@@ -74,7 +72,6 @@ const AssetBrowse = (props: Props) => {
   )
   const isCurrentAccount = view === View.CURRENT_ACCOUNT
   const isAccountOrCurrentAccount = view === View.ACCOUNT || isCurrentAccount
-  const [showOwnedLandOnMap, setShowOwnedLandOnMap] = useState(true)
 
   // Kick things off
   useEffect(() => {
@@ -185,19 +182,6 @@ const AssetBrowse = (props: Props) => {
 
   let right: ReactNode
 
-  const mapTopbar = isMapViewFiltersEnabled ? (
-    <MapTopbar
-      showOwned={showOwnedLandOnMap}
-      onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
-    />
-  ) : (
-    <div className="blur-background">
-      <Container>
-        <AssetTopbar />
-      </Container>
-    </div>
-  )
-
   switch (section) {
     case DecentralandSection.COLLECTIONS:
       right = <CollectionList creator={address ?? ''} />
@@ -240,9 +224,17 @@ const AssetBrowse = (props: Props) => {
     default:
       right = (
         <>
-          {isMap && isFullscreen ? mapTopbar : <AssetTopbar />}
+          {isMap && isFullscreen ? (
+            <div className="blur-background">
+              <Container>
+                <AssetTopbar />
+              </Container>
+            </div>
+          ) : (
+            <AssetTopbar />
+          )}
           {isMap ? (
-            <MapBrowse showOwned={showOwnedLandOnMap} />
+            <MapBrowse showOwned />
           ) : (
             <AssetList isManager={isCurrentAccount} />
           )}
