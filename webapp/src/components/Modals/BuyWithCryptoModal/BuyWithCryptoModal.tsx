@@ -29,9 +29,9 @@ import {
   ChainData,
   RouteResponse,
   Token,
-  CrossChainProvider
-} from 'decentraland-transactions'
-import { AxelarProvider } from 'decentraland-transactions'
+  CrossChainProvider,
+  AxelarProvider
+} from 'decentraland-transactions/crossChain'
 import { AssetImage } from '../../AssetImage'
 import { isPriceTooLow } from '../../BuyPage/utils'
 import { CardPaymentsExplanation } from '../../BuyPage/CardPaymentsExplanation'

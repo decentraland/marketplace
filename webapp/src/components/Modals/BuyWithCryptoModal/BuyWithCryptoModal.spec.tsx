@@ -17,7 +17,7 @@ import {
   CrossChainProvider,
   Route,
   AxelarProvider
-} from 'decentraland-transactions'
+} from 'decentraland-transactions/crossChain'
 import { getMinSaleValueInWei } from '../../BuyPage/utils'
 import { VendorName } from '../../../modules/vendor'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
@@ -80,8 +80,8 @@ jest.mock('ethers', () => {
   }
 })
 
-jest.mock('decentraland-transactions', () => {
-  const original = jest.requireActual('decentraland-transactions')
+jest.mock('decentraland-transactions/crossChain', () => {
+  const original = jest.requireActual('decentraland-transactions/crossChain')
   return {
     ...original,
     CROSS_CHAIN_SUPPORTED_CHAINS: [137, 1],
