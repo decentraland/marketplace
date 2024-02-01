@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { useEffect, useMemo, useState } from 'react'
 import { ChainId } from '@dcl/schemas'
-import { ChainData, Token } from 'decentraland-transactions'
+import type { ChainData, Token } from 'decentraland-transactions/crossChain'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Close, Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
