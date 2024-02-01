@@ -7,13 +7,13 @@ import {
   transferNFTRequest,
   TRANSFER_NFT_REQUEST
 } from '../../modules/nft/actions'
+import { getIsEnsAddressEnabled } from '../../modules/features/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
 } from './TransferPage.types'
 import TransferPage from './TransferPage'
-import { getIsEnsAddressEnabled } from '../../modules/features/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
   isTransferring: isLoadingType(getLoading(state), TRANSFER_NFT_REQUEST),

@@ -1,4 +1,4 @@
-import { EmotePlayMode } from "@dcl/schemas"
+import { EmotePlayMode } from '@dcl/schemas'
 
 export type Props = {
   emotePlayMode?: EmotePlayMode[]
@@ -9,8 +9,5 @@ export type Props = {
     emoteHasSound?: boolean
     emoteHasGeometry?: boolean
   }) => void
-  defaultCollapsed?: boolean,
-  isEmotesV2Enabled: boolean
+  defaultCollapsed?: boolean
 }
-
-export type MapStateProps = Pick<Props, 'isEmotesV2Enabled'>

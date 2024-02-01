@@ -10,21 +10,11 @@ import {
   getIsCampaignBrowserEnabled,
   getIsCampaignCollectionsBannerEnabled,
   getIsCampaignHomepageBannerEnabled,
-  getIsCreatorsFilterEnabled,
-  getIsEmotesV2Enabled,
-  getIsEstateSizeFilterEnabled,
-  getIsHandsCategoryEnabled,
   getIsEmotesV2FTUEnabled,
-  getIsLocationFilterEnabled,
   getIsMaintenanceEnabled,
-  getIsMapViewFiltersEnabled,
   getIsMarketplaceLaunchPopupEnabled,
-  getIsPriceFilterEnabled,
-  getIsRentalPeriodFilterEnabled,
-  getIsRentalPriceFilterChartEnabled,
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
-  getIsBuyCrossChainEnabled,
   getIsAuthDappEnabled,
   getIsClaimingNamesWithFiatEnabled,
   getIsEnsAddressEnabled
@@ -160,64 +150,14 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
 
 const waitForInitialLoadingSelectors = [
   {
-    name: 'IsPriceFilter',
-    feature: FeatureName.PRICE_FILTER,
-    selector: getIsPriceFilterEnabled
-  },
-  {
-    name: 'IsEstateSizeFilter',
-    feature: FeatureName.ESTATE_SIZE_FILTER,
-    selector: getIsEstateSizeFilterEnabled
-  },
-  {
-    name: 'IsCreatorsFilter',
-    feature: FeatureName.CREATOR_FILTER,
-    selector: getIsCreatorsFilterEnabled
-  },
-  {
-    name: 'IsLocationFilter',
-    feature: FeatureName.LOCATION_FILTER,
-    selector: getIsLocationFilterEnabled
-  },
-  {
-    name: 'IsRentalPeriodFilter',
-    feature: FeatureName.RENTAL_PERIOD_FILTER,
-    selector: getIsRentalPeriodFilterEnabled
-  },
-  {
-    name: 'IsMapViewFilters',
-    feature: FeatureName.MAP_VIEW_FILTERS,
-    selector: getIsMapViewFiltersEnabled
-  },
-  {
-    name: 'IsRentalPriceFilterChart',
-    feature: FeatureName.RENTAL_PRICE_FILTER_CHART,
-    selector: getIsRentalPriceFilterChartEnabled
-  },
-  {
-    name: 'IsHandsCategory',
-    feature: FeatureName.HANDS_CATEGORY,
-    selector: getIsHandsCategoryEnabled
-  },
-  {
     name: 'isSmartWearablesFTU',
     feature: FeatureName.SMART_WEARABLES_FTU,
     selector: getIsSmartWearablesFTUEnabled
   },
   {
-    name: 'isEmotesV2',
-    feature: FeatureName.EMOTES_V2,
-    selector: getIsEmotesV2Enabled
-  },
-  {
     name: 'isEmotesV2FTU',
     feature: FeatureName.EMOTES_V2_FTU,
     selector: getIsEmotesV2FTUEnabled
-  },
-  {
-    name: 'buy-crosschain',
-    feature: FeatureName.BUY_CROSS_CHAIN,
-    selector: getIsBuyCrossChainEnabled
   },
   {
     name: 'auth-dapp',

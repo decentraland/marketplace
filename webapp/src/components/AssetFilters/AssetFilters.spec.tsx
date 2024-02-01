@@ -44,11 +44,6 @@ function renderAssetFilters(props: Partial<Props> = {}) {
       landStatus={LANDFilters.ALL_LAND}
       onBrowse={jest.fn()}
       values={{ section: Section.LAND }}
-      isPriceFilterEnabled
-      isEstateSizeFilterEnabled
-      isLocationFilterEnabled
-      isCreatorFiltersEnabled
-      isRentalPeriodFilterEnabled
       {...props}
     />
   )
@@ -69,57 +64,25 @@ describe('when in land section', () => {
     ).toBeInTheDocument()
   })
 
-  describe('and isPriceFilterEnabled FF is active', () => {
-    it('should render price filter', async () => {
-      const screen = renderAssetFilters({
-        section: Section.LAND,
-        isPriceFilterEnabled: true
-      })
-      await waitForComponentToFinishLoading(screen)
-      // TODO: Make barchart components accesible so we can access better the info ui#311
-      expect(screen.getByText(t('filters.price'))).toBeInTheDocument()
+  it('should render price filter', async () => {
+    const screen = renderAssetFilters({
+      section: Section.LAND
     })
-  })
-
-  describe('and isPriceFilterEnabled FF is off', () => {
-    it('should not render price filter', async () => {
-      const screen = renderAssetFilters({
-        section: Section.LAND,
-        isPriceFilterEnabled: false
-      })
-      await waitForComponentToFinishLoading(screen)
-      // TODO: Make barchart components accesible so we can access better the info ui#311
-      expect(screen.queryByText(t('filters.price'))).not.toBeInTheDocument()
-    })
+    await waitForComponentToFinishLoading(screen)
+    // TODO: Make barchart components accessible so we can access better the info ui#311
+    expect(screen.getByText(t('filters.price'))).toBeInTheDocument()
   })
 
   describe('and section is estate', () => {
-    describe('and isEstateSizeFilterEnabled FF is active', () => {
-      it('should render estate size filter', async () => {
-        const screen = renderAssetFilters({
-          section: Section.ESTATES,
-          isEstateSizeFilterEnabled: true
-        })
-        await waitForComponentToFinishLoading(screen)
-        // TODO: Make barchart components accesible so we can access better the info ui#311
-        expect(
-          screen.getByText(t('filters.estate_size.label'))
-        ).toBeInTheDocument()
+    it('should render estate size filter', async () => {
+      const screen = renderAssetFilters({
+        section: Section.ESTATES
       })
-    })
-
-    describe('and isEstateSizeFilterEnabled FF is off', () => {
-      it('should not render estate size filter', async () => {
-        const screen = renderAssetFilters({
-          section: Section.ESTATES,
-          isEstateSizeFilterEnabled: false
-        })
-        await waitForComponentToFinishLoading(screen)
-        // TODO: Make barchart components accesible so we can access better the info ui#311
-        expect(
-          screen.queryByText(t('filters.estate_size.label'))
-        ).not.toBeInTheDocument()
-      })
+      await waitForComponentToFinishLoading(screen)
+      // TODO: Make barchart components accesible so we can access better the info ui#311
+      expect(
+        screen.getByText(t('filters.estate_size.label'))
+      ).toBeInTheDocument()
     })
   })
 })

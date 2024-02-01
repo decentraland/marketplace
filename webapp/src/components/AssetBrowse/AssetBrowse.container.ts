@@ -22,7 +22,6 @@ import {
   Props
 } from './AssetBrowse.types'
 import AssetBrowse from './AssetBrowse'
-import { getIsMapViewFiltersEnabled } from '../../modules/features/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   const isMap = isMapSet(getIsMap(state), getSection(state), getView(state))
@@ -36,7 +35,6 @@ const mapState = (state: RootState): MapStateProps => {
     viewInState: getView(state),
     onlySmart: getOnlySmart(state),
     onlyOnRent: getOnlyOnRent(state),
-    isMapViewFiltersEnabled: getIsMapViewFiltersEnabled(state),
     visitedLocations: getVisitedLocations(state)
   }
 }

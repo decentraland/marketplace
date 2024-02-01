@@ -61,12 +61,7 @@ export const AssetFilters = ({
   values,
   rentalDays,
   emoteHasSound,
-  emoteHasGeometry,
-  isPriceFilterEnabled,
-  isEstateSizeFilterEnabled,
-  isLocationFilterEnabled,
-  isCreatorFiltersEnabled,
-  isRentalPeriodFilterEnabled
+  emoteHasGeometry
 }: Props): JSX.Element | null => {
   const isInLandSection = isLandSection(section)
 
@@ -219,22 +214,19 @@ export const AssetFilters = ({
           landStatus={landStatus}
           onChange={handleLandStatusChange}
         />
-        {isPriceFilterEnabled ? (
-          <PriceFilter
-            onChange={(value, source) =>
-              handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
-                minPrice,
-                maxPrice
-              ])
-            }
-            minPrice={minPrice}
-            maxPrice={maxPrice}
-            values={values}
-          />
-        ) : null}
+        <PriceFilter
+          onChange={(value, source) =>
+            handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
+              minPrice,
+              maxPrice
+            ])
+          }
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          values={values}
+        />
 
-        {isEstateSizeFilterEnabled &&
-        section !== Sections.decentraland.PARCELS ? (
+        {section !== Sections.decentraland.PARCELS ? (
           <EstateSizeFilter
             landStatus={landStatus}
             values={values}
@@ -253,20 +245,17 @@ export const AssetFilters = ({
             {...locationFilters}
           />
         ) : null}
-        {isRentalPeriodFilterEnabled &&
-          landStatus === LANDFilters.ONLY_FOR_RENT && (
-            <RentalPeriodFilter
-              rentalDays={rentalDays}
-              onChange={handleRentalDaysChange}
-            />
-          )}
-        {isLocationFilterEnabled && (
-          <LocationFilter
-            {...locationFilters}
-            onAdjacentToRoadChange={handleAdjacentToRoadChange}
-            onDistanceToPlazaChange={handleDistanceToPlazaChange}
+        {landStatus === LANDFilters.ONLY_FOR_RENT && (
+          <RentalPeriodFilter
+            rentalDays={rentalDays}
+            onChange={handleRentalDaysChange}
           />
         )}
+        <LocationFilter
+          {...locationFilters}
+          onAdjacentToRoadChange={handleAdjacentToRoadChange}
+          onDistanceToPlazaChange={handleDistanceToPlazaChange}
+        />
       </div>
     )
   }
@@ -303,8 +292,7 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Status]}
         />
       ) : null}
-      {isPriceFilterEnabled &&
-      shouldRenderFilter(AssetFilter.Price) &&
+      {shouldRenderFilter(AssetFilter.Price) &&
       (isOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
       view !== View.ACCOUNT ? (
         <PriceFilter
@@ -320,8 +308,7 @@ export const AssetFilters = ({
           values={values}
         />
       ) : null}
-      {isCreatorFiltersEnabled &&
-      shouldRenderFilter(AssetFilter.Creators) &&
+      {shouldRenderFilter(AssetFilter.Creators) &&
       (!network || (network && network === Network.MATIC)) ? (
         <CreatorsFilter
           creators={creators}

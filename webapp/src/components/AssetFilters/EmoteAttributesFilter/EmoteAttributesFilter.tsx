@@ -12,8 +12,7 @@ export const EmoteAttributesFilter = ({
   emoteHasSound,
   emoteHasGeometry,
   onChange,
-  defaultCollapsed = false,
-  isEmotesV2Enabled
+  defaultCollapsed = false
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const emotePlayModeOptions = useMemo(() => {
@@ -74,12 +73,8 @@ export const EmoteAttributesFilter = ({
     emotePlayMode?.length === emotePlayModeOptions.length ||
     !emotePlayMode?.length
 
-  const title = isEmotesV2Enabled
-    ? t('nft_filters.emote_attributes.title')
-    : t('nft_filters.emote_attributes.play_mode')
-  const allTitle = isEmotesV2Enabled
-    ? t('nft_filters.emote_attributes.all_items')
-    : t('nft_filters.emote_attributes.all_play_modes')
+  const title = t('nft_filters.emote_attributes.title')
+  const allTitle = t('nft_filters.emote_attributes.all_items')
   const header = useMemo(
     () =>
       isMobileOrTablet ? (
@@ -106,14 +101,12 @@ export const EmoteAttributesFilter = ({
       collapsible
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
-      {isEmotesV2Enabled && (
-        <ArrayFilter
-          className="Filters"
-          options={emoteAttributesOptions}
-          onChange={handleEmoteAttributesChange}
-          values={emoteAttributes || []}
-        />
-      )}
+      <ArrayFilter
+        className="Filters"
+        options={emoteAttributesOptions}
+        onChange={handleEmoteAttributesChange}
+        values={emoteAttributes || []}
+      />
       <ArrayFilter
         className="Filters"
         options={emotePlayModeOptions}

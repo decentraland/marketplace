@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { Button, Icon, Loader, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -18,7 +18,6 @@ const BuyNFTButtons = ({
   assetType,
   tokenId,
   buyWithCardClassName,
-  isBuyCrossChainEnabled,
   isBuyingWithCryptoModalOpen,
   onBuyWithCrypto,
   onExecuteOrderWithCard,
@@ -32,7 +31,6 @@ const BuyNFTButtons = ({
     const shouldOpenModal = search.get('buyWithCrypto')
     return shouldOpenModal
   }, [location.search])
-  const assetId = tokenId || asset.itemId
 
   const handleBuyWithCard = useCallback(
     (asset: Asset) => {
@@ -79,41 +77,14 @@ const BuyNFTButtons = ({
           }
           return (
             <>
-              {isBuyCrossChainEnabled ? (
-                <Button
-                  onClick={() => handleBuyWithCrypto(asset, order)}
-                  primary
-                  fluid
-                >
-                  <Mana
-                    showTooltip
-                    inline
-                    size="small"
-                    network={asset.network}
-                  />
-                  {t('asset_page.actions.buy_with_crypto')}
-                </Button>
-              ) : (
-                <Button
-                  as={Link}
-                  to={locations.buy(
-                    assetType,
-                    asset.contractAddress,
-                    assetId ?? undefined
-                  )}
-                  primary
-                  fluid
-                >
-                  <Mana
-                    showTooltip
-                    inline
-                    size="small"
-                    network={asset.network}
-                  />
-                  {t('asset_page.actions.buy_with_mana')}
-                </Button>
-              )}
-
+              <Button
+                onClick={() => handleBuyWithCrypto(asset, order)}
+                primary
+                fluid
+              >
+                <Mana showTooltip inline size="small" network={asset.network} />
+                {t('asset_page.actions.buy_with_crypto')}
+              </Button>
               <Button
                 className={`${styles.buy_with_card} ${buyWithCardClassName}`}
                 onClick={() => handleBuyWithCard(asset)}

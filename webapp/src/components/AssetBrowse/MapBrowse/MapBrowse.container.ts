@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../../modules/reducer'
-import { getIsMapViewFiltersEnabled } from '../../../modules/features/selectors'
 import {
   getOnlyOnRent,
   getOnlyOnSale
@@ -16,8 +15,7 @@ const mapState = (state: RootState): MapStateProps => {
     tiles: getTiles(state),
     ownedLands: getWalletOwnedLands(state),
     onlyOnSale: getOnlyOnSale(state),
-    onlyOnRent: getOnlyOnRent(state),
-    isMapViewFiltersEnabled: getIsMapViewFiltersEnabled(state)
+    onlyOnRent: getOnlyOnRent(state)
   }
 }
 

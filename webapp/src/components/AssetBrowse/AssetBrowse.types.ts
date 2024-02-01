@@ -30,7 +30,6 @@ export type Props = {
   onlySmart?: boolean
   onlyOnRent?: boolean
   visitedLocations: RouterLocation<unknown>[]
-  isMapViewFiltersEnabled?: boolean
 }
 
 export type MapStateProps = Pick<
@@ -43,7 +42,6 @@ export type MapStateProps = Pick<
   | 'assetType'
   | 'onlySmart'
   | 'onlyOnRent'
-  | 'isMapViewFiltersEnabled'
   | 'visitedLocations'
 >
 export type MapDispatchProps = Pick<

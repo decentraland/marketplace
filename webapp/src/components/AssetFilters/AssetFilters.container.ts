@@ -26,13 +26,6 @@ import {
   getEmoteHasSound,
   getEmoteHasGeometry
 } from '../../modules/routing/selectors'
-import {
-  getIsCreatorsFilterEnabled,
-  getIsEstateSizeFilterEnabled,
-  getIsLocationFilterEnabled,
-  getIsPriceFilterEnabled,
-  getIsRentalPeriodFilterEnabled
-} from '../../modules/features/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { AssetStatusFilter } from '../../utils/filters'
 import { browse } from '../../modules/routing/actions'
@@ -114,12 +107,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     emoteHasGeometry:
       'emoteHasGeometry' in values
         ? values.emoteHasGeometry
-        : getEmoteHasGeometry(state),
-    isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state),
-    isPriceFilterEnabled: getIsPriceFilterEnabled(state),
-    isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),
-    isLocationFilterEnabled: getIsLocationFilterEnabled(state),
-    isRentalPeriodFilterEnabled: getIsRentalPeriodFilterEnabled(state)
+        : getEmoteHasGeometry(state)
   }
 }
 

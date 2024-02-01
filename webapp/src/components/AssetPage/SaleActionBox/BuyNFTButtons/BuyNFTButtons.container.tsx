@@ -13,14 +13,12 @@ import { executeOrderWithCardRequest } from '../../../../modules/order/actions'
 import { buyItemWithCardRequest } from '../../../../modules/item/actions'
 import { Asset } from '../../../../modules/asset/types'
 import { RootState } from '../../../../modules/reducer'
-import { getIsBuyCrossChainEnabled } from '../../../../modules/features/selectors'
 import { getWallet } from '../../../../modules/wallet/selectors'
 import BuyNFTButtons from './BuyNFTButtons'
 
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
   isConnecting: isConnecting(state),
-  isBuyCrossChainEnabled: getIsBuyCrossChainEnabled(state),
   isBuyingWithCryptoModalOpen: getOpenModals(state)['BuyNFTWithCryptoModal']
     ?.open
 })

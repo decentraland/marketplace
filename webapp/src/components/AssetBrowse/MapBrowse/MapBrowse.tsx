@@ -7,7 +7,6 @@ import { getNearestTile, Coord } from './utils'
 import { NFTCategory } from '@dcl/schemas'
 
 export function MapBrowse({
-  isMapViewFiltersEnabled,
   onlyOnRent,
   onlyOnSale,
   showOwned,
@@ -115,11 +114,11 @@ export function MapBrowse({
         minSize={4}
         withNavigation
         withPopup={!isMobileOrTable}
-        withMapColorsInfo={isMapViewFiltersEnabled}
-        withZoomControls={isMapViewFiltersEnabled}
-        showOnSale={isMapViewFiltersEnabled ? !!onlyOnSale : onlyOnSale}
-        showForRent={isMapViewFiltersEnabled ? !!onlyOnRent : undefined}
-        showOwned={isMapViewFiltersEnabled ? showOwned : undefined}
+        withMapColorsInfo
+        withZoomControls
+        showOnSale={!!onlyOnSale}
+        showForRent={!!onlyOnRent}
+        showOwned={showOwned}
       />
       <div className="fullscreen-button" onClick={handleSetFullscreen} />
     </div>
