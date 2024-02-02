@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { localStorageGetIdentity } from '@dcl/single-sign-on-client'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { FixedSizeList } from 'react-window'
@@ -40,11 +41,11 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 const SaveToListModal = (props: Props) => {
   const {
+    wallet,
     onClose,
     onSavePicks,
     onCreateList,
     isSavingPicks,
-    identity,
     onFinishListCreation,
     metadata: { item }
   } = props
@@ -129,9 +130,11 @@ const SaveToListModal = (props: Props) => {
     return new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
       retries: retryParams.attempts,
       retryDelay: retryParams.delay,
-      identity
+      identity: wallet
+        ? localStorageGetIdentity(wallet.address) || undefined
+        : undefined
     })
-  }, [identity])
+  }, [wallet])
 
   const fetchNextPage = useCallback(
     async (startIndex: number, stopIndex: number) => {

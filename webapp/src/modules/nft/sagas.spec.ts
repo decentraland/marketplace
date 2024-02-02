@@ -35,8 +35,8 @@ import { upsertContracts } from '../contract/actions'
 import { getStubMaticCollectionContract } from '../contract/utils'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { getRentalById } from '../rental/selectors'
-import { retryParams } from '../vendor/decentraland/utils'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { retryParams } from '../vendor/decentraland/utils'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
 

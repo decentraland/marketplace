@@ -16,13 +16,13 @@ import {
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 import {
   CloseModalAction,
   CLOSE_MODAL
 } from 'decentraland-dapps/dist/modules/modal/actions'
 import { ethers } from 'ethers'
 import { call, delay, put, select, take, takeEvery } from 'redux-saga/effects'
-import { getIdentity } from '../identity/utils'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
 import { getContract as getContractByQuery } from '../contract/selectors'
@@ -124,15 +124,17 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       target: ethers.constants.AddressZero // For now, all rent listing will be "public", for all addresses to use.
     }
 
-    const identity: AuthIdentity = yield getIdentity()
+    const identity: AuthIdentity | null = yield call(getIdentityOrRedirect)
 
-    const rental: RentalListing = yield call(
-      [rentalsAPI, 'createRentalListing'],
-      rentalListingCreation,
-      identity
-    )
+    if (identity) {
+      const rental: RentalListing = yield call(
+        [rentalsAPI, 'createRentalListing'],
+        rentalListingCreation,
+        identity
+      )
 
-    yield put(upsertRentalSuccess(nft, rental, operationType))
+      yield put(upsertRentalSuccess(nft, rental, operationType))
+    }
   } catch (error) {
     yield put(
       upsertRentalFailure(

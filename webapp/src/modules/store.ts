@@ -1,3 +1,6 @@
+import { localStorageGetIdentity } from '@dcl/single-sign-on-client'
+import { getWallet } from './wallet/selectors'
+import { createMemoryHistory, createBrowserHistory, History } from 'history'
 import { applyMiddleware, compose, createStore } from 'redux'
 import createSagasMiddleware from 'redux-saga'
 import { routerMiddleware } from 'connected-react-router'
@@ -15,9 +18,6 @@ import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
-import { getCurrentIdentity } from './identity/selectors'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { createMemoryHistory, createBrowserHistory, History } from 'history'
 
 const basename = /^decentraland.(zone|org|today)$/.test(window.location.host)
   ? '/marketplace'
@@ -75,10 +75,12 @@ export function initStore(history: History) {
     enhancer
   )
   const getIdentity = () => {
-    return (
-      (getCurrentIdentity(store.getState()) as AuthIdentity | null) ?? undefined
-    )
+    const wallet = getWallet(store.getState() as RootState)
+    return wallet
+      ? localStorageGetIdentity(wallet.address) || undefined
+      : undefined
   }
+
   sagasMiddleware.run(rootSaga, getIdentity)
   loadStorageMiddleware(store)
 
@@ -116,7 +118,13 @@ export function initTestStore(preloadedState = {}) {
   )
   const enhancer = compose(middleware)
   const store = createStore(rootReducer, preloadedState, enhancer)
-  sagasMiddleware.run(rootSaga, () => undefined)
+  const getIdentity = () => {
+    const wallet = getWallet(store.getState() as RootState)
+    return wallet
+      ? localStorageGetIdentity(wallet.address) || undefined
+      : undefined
+  }
+  sagasMiddleware.run(rootSaga, getIdentity)
   loadStorageMiddleware(store)
   store.dispatch(fetchTilesRequest())
 

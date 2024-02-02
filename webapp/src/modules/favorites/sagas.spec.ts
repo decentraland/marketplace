@@ -5,6 +5,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { Item } from '@dcl/schemas'
 import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { getIdentityOrRedirect } from 'decentraland-dapps/dist/modules/identity/sagas'
 import {
   CLOSE_MODAL,
   closeModal,
@@ -14,7 +15,6 @@ import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
-import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import {
   ListDetails,
@@ -121,7 +121,7 @@ describe('when handling the request for fetching favorited items', () => {
           [select(getListId), listId],
           [select(getAddress), address],
           [select(getIsMarketplaceServerEnabled), true],
-          [call(getAccountIdentity), Promise.reject(error)]
+          [call(getIdentityOrRedirect), Promise.reject(error)]
         ])
         .put(fetchFavoritedItemsFailure(error.message))
         .dispatch(fetchFavoritedItemsRequest(options))
@@ -137,7 +137,7 @@ describe('when handling the request for fetching favorited items', () => {
             [select(getListId), listId],
             [select(getAddress), address],
             [select(getIsMarketplaceServerEnabled), true],
-            [call(getAccountIdentity), Promise.resolve()],
+            [call(getIdentityOrRedirect), Promise.resolve()],
             [
               matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
               Promise.reject(error)
@@ -177,7 +177,7 @@ describe('when handling the request for fetching favorited items', () => {
                   [select(getListId), listId],
                   [select(getIsMarketplaceServerEnabled), isMarketplaceFFOn],
                   [select(getAddress), address],
-                  [call(getAccountIdentity), Promise.resolve()],
+                  [call(getIdentityOrRedirect), Promise.resolve()],
                   [
                     matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
                     Promise.resolve({ results: favoritedItemIds, total })
@@ -215,7 +215,7 @@ describe('when handling the request for fetching favorited items', () => {
                   [select(getListId), listId],
                   [select(getIsMarketplaceServerEnabled), isMarketplaceFFOn],
                   [select(getAddress), address],
-                  [call(getAccountIdentity), Promise.resolve()],
+                  [call(getIdentityOrRedirect), Promise.resolve()],
                   [
                     matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
                     Promise.resolve({ results: favoritedItemIds, total })
@@ -256,7 +256,7 @@ describe('when handling the request for fetching favorited items', () => {
                 [select(getListId), listId],
                 [select(getAddress), address],
                 [select(getIsMarketplaceServerEnabled), true],
-                [call(getAccountIdentity), Promise.resolve()],
+                [call(getIdentityOrRedirect), Promise.resolve()],
                 [
                   matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
                   Promise.resolve({ results: favoritedItemIds, total })
@@ -311,7 +311,7 @@ describe('when handling the request for fetching favorited items', () => {
               [select(getListId), listId],
               [select(getAddress), address],
               [select(getIsMarketplaceServerEnabled), true],
-              [call(getAccountIdentity), Promise.resolve()],
+              [call(getIdentityOrRedirect), Promise.resolve()],
               [
                 matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
                 { results: favoritedItemIds, total }
@@ -525,7 +525,7 @@ describe('when handling the request for fetching lists', () => {
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .provide([[call(getIdentityOrRedirect), Promise.reject(error)]])
         .put(fetchListsFailure(error.message))
         .dispatch(fetchListsRequest(options))
         .run({ silenceTimeout: true })
@@ -536,7 +536,7 @@ describe('when handling the request for fetching lists', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [call(getAccountIdentity), Promise.resolve()],
+          [call(getIdentityOrRedirect), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.getLists),
             Promise.reject(error)
@@ -576,7 +576,7 @@ describe('when handling the request for fetching lists', () => {
     it('should convert the sort by options and call the api with the sortBy and sortDirection options', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [call(getAccountIdentity), Promise.resolve()],
+          [call(getIdentityOrRedirect), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.getLists),
             Promise.reject(error)
@@ -613,7 +613,7 @@ describe('when handling the request for fetching lists', () => {
     it('should call the api with the skip option', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [call(getAccountIdentity), Promise.resolve()],
+          [call(getIdentityOrRedirect), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.getLists),
             Promise.reject(error)
@@ -674,7 +674,7 @@ describe('when handling the request for fetching lists', () => {
           it('should dispatch an action signaling the success of the handled action', () => {
             return expectSaga(favoritesSaga, getIdentity)
               .provide([
-                [call(getAccountIdentity), Promise.resolve()],
+                [call(getIdentityOrRedirect), Promise.resolve()],
                 [select(getIsMarketplaceServerEnabled), true],
                 [
                   matchers.call.fn(FavoritesAPI.prototype.getLists),
@@ -719,7 +719,7 @@ describe('when handling the request for fetching lists', () => {
           it('should dispatch an action signaling the success of the handled action', () => {
             return expectSaga(favoritesSaga, getIdentity)
               .provide([
-                [call(getAccountIdentity), Promise.resolve()],
+                [call(getIdentityOrRedirect), Promise.resolve()],
                 [select(getIsMarketplaceServerEnabled), true],
                 [
                   matchers.call.fn(FavoritesAPI.prototype.getLists),
@@ -761,7 +761,7 @@ describe('when handling the request for fetching lists', () => {
           it('should dispatch an action signaling the success of the handled action without fetching the catalog items', () => {
             return expectSaga(favoritesSaga, getIdentity)
               .provide([
-                [call(getAccountIdentity), Promise.resolve()],
+                [call(getIdentityOrRedirect), Promise.resolve()],
                 [
                   matchers.call.fn(FavoritesAPI.prototype.getLists),
                   Promise.resolve({ results: lists, total })
@@ -817,7 +817,7 @@ describe('when handling the request for fetching lists', () => {
         it('should dispatch an action signaling the success of the handled action', () => {
           return expectSaga(favoritesSaga, getIdentity)
             .provide([
-              [call(getAccountIdentity), Promise.resolve()],
+              [call(getIdentityOrRedirect), Promise.resolve()],
               [select(getIsMarketplaceServerEnabled), true],
               [
                 matchers.call.fn(FavoritesAPI.prototype.getLists),
@@ -865,7 +865,7 @@ describe('when handling the request for fetching lists', () => {
       it('should dispatch an action signaling the failure of the handled action', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
-            [call(getAccountIdentity), Promise.resolve()],
+            [call(getIdentityOrRedirect), Promise.resolve()],
             [select(getIsMarketplaceServerEnabled), true],
             [
               matchers.call.fn(FavoritesAPI.prototype.getLists),
@@ -964,7 +964,7 @@ describe('when handling the request for deleting a list', () => {
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .provide([[call(getIdentityOrRedirect), Promise.reject(error)]])
         .put(deleteListFailure(list, error.message))
         .dispatch(deleteListRequest(list))
         .run({ silenceTimeout: true })
@@ -975,7 +975,7 @@ describe('when handling the request for deleting a list', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [call(getAccountIdentity), Promise.resolve()],
+          [call(getIdentityOrRedirect), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.deleteList),
             Promise.reject(error)
@@ -995,7 +995,7 @@ describe('when handling the request for deleting a list', () => {
     it('should dispatch an action signaling the success of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [call(getAccountIdentity), Promise.resolve()],
+          [call(getIdentityOrRedirect), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.deleteList),
             Promise.resolve()
@@ -1260,7 +1260,7 @@ describe('when handling the request for creating a list', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [select(getLocation), { pathname: locations.lists() }],
-          [call(getAccountIdentity), Promise.reject(error)]
+          [call(getIdentityOrRedirect), Promise.reject(error)]
         ])
         .put(createListFailure(error.message))
         .dispatch(createListRequest(listToCreate))
@@ -1273,7 +1273,7 @@ describe('when handling the request for creating a list', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [select(getLocation), { pathname: locations.lists() }],
-          [call(getAccountIdentity), Promise.resolve()],
+          [call(getIdentityOrRedirect), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.createList),
             Promise.reject(error)
@@ -1295,7 +1295,7 @@ describe('when handling the request for creating a list', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
             [select(getLocation), { pathname: locations.lists() }],
-            [call(getAccountIdentity), Promise.resolve()],
+            [call(getIdentityOrRedirect), Promise.resolve()],
             [
               matchers.call.fn(FavoritesAPI.prototype.createList),
               Promise.resolve(returnedList)
@@ -1317,7 +1317,7 @@ describe('when handling the request for creating a list', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
             [select(getLocation), { pathname: locations.browse() }],
-            [call(getAccountIdentity), Promise.resolve()],
+            [call(getIdentityOrRedirect), Promise.resolve()],
             [
               matchers.call.fn(FavoritesAPI.prototype.createList),
               Promise.resolve(returnedList)
@@ -1367,7 +1367,7 @@ describe('when handling the request to start the picks and unpicks in bulk proce
             .provide([
               [select(getAddress), undefined],
               [take(CONNECT_WALLET_SUCCESS), {}],
-              [call(getAccountIdentity), Promise.resolve()]
+              [call(getIdentityOrRedirect), Promise.resolve()]
             ])
             .put(openModal('LoginModal'))
             .put(closeModal('LoginModal'))
@@ -1401,7 +1401,7 @@ describe('when handling the request to start the picks and unpicks in bulk proce
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [select(getAddress), address],
-          [call(getAccountIdentity), Promise.reject(error)]
+          [call(getIdentityOrRedirect), Promise.reject(error)]
         ])
         .put(bulkPickUnpickCancel(item, error.message))
         .dispatch(bulkPickUnpickStart(item))
@@ -1414,7 +1414,7 @@ describe('when handling the request to start the picks and unpicks in bulk proce
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [select(getAddress), address],
-          [call(getAccountIdentity), Promise.resolve()],
+          [call(getIdentityOrRedirect), Promise.resolve()],
           [take(BULK_PICK_SUCCESS), { payload: { list: newList } }]
         ])
         .put(openModal('SaveToListModal', { item }))
@@ -1431,7 +1431,7 @@ describe('when handling the request to start the picks and unpicks in bulk proce
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
             [select(getAddress), address],
-            [call(getAccountIdentity), Promise.resolve()],
+            [call(getIdentityOrRedirect), Promise.resolve()],
             [take(CREATE_LIST_SUCCESS), { payload: { list: newList } }],
             [select(getList, newList.id), newList],
             [put(bulkPickUnpickRequest(item, [newList], [])), undefined]
@@ -1449,7 +1449,7 @@ describe('when handling the request to start the picks and unpicks in bulk proce
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
             [select(getAddress), address],
-            [call(getAccountIdentity), Promise.resolve()],
+            [call(getIdentityOrRedirect), Promise.resolve()],
             [take(CLOSE_MODAL), {}],
             [put(bulkPickUnpickRequest(item, [newList], [])), undefined]
           ])
@@ -1486,7 +1486,7 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .provide([[call(getIdentityOrRedirect), Promise.reject(error)]])
         .put(bulkPickUnpickFailure(item, [fstList], [sndList], error.message))
         .dispatch(bulkPickUnpickRequest(item, [fstList], [sndList]))
         .run({ silenceTimeout: true })
@@ -1497,7 +1497,7 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [call(getAccountIdentity), Promise.resolve()],
+          [call(getIdentityOrRedirect), Promise.resolve()],
           [
             matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick),
             Promise.reject(error)
@@ -1517,7 +1517,7 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
     it('should dispatch an action signaling the success of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [call(getAccountIdentity), Promise.resolve()],
+          [call(getIdentityOrRedirect), Promise.resolve()],
           [select(isOwnerUnpickingFromCurrentList, [sndList]), true],
           [
             matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick),

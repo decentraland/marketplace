@@ -1,9 +1,13 @@
 import { waitForElementToBeRemoved } from '@testing-library/react'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { FavoritesAPI } from '../../../modules/vendor/decentraland/favorites'
 import { renderWithProviders } from '../../../utils/test'
 import FavoritesModal from './FavoritesModal'
 import { Props } from './FavoritesModal.types'
+
+jest.mock('@dcl/single-sign-on-client', () => ({
+  localStorageGetIdentity: jest.fn()
+}))
 
 // Fixing warning: `NaN` is an invalid value for the `height` css style property.
 jest.mock('react-virtualized-auto-sizer', () => {
@@ -17,14 +21,13 @@ jest.mock('react-virtualized-auto-sizer', () => {
 jest.mock('../../../modules/vendor/decentraland/favorites')
 
 const itemId = 'anItemId'
-const identity = {} as AuthIdentity
 
 function renderFavoritesModal(props: Partial<Props> = {}) {
   return renderWithProviders(
     <FavoritesModal
+      wallet={{} as Wallet}
       name={'A name'}
       metadata={{ itemId }}
-      identity={identity}
       onClose={jest.fn()}
       {...props}
     />,
