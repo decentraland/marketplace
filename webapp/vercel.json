@@ -4,7 +4,7 @@
   "routes": [
     { "handle": "filesystem" },
     { "src": "/auth", "dest": "https://decentraland.zone/auth" },
-    { "src": "/.*", "dest": "/index.html" },
+    { "src": "/.*", "dest": "/index.html" }
   ],
   "build": {
     "env": {
