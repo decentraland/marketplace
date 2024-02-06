@@ -9,27 +9,34 @@ import './SignInPage.css'
 
 const SignInPage = (props: Props) => {
   const { isAuthDappEnabled, isConnecting, isConnected } = props
+
   const handleConnect = useCallback(() => {
-    if (!isConnected && !isConnecting) {
-      const params = new URLSearchParams(window.location.search)
-      const basename = /^decentraland.(zone|org|today)$/.test(
-        window.location.host
-      )
-        ? '/marketplace'
-        : ''
-      window.location.replace(
-        `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(
-          `${basename}${params.get('redirectTo') || '/'}`
-        )}`
-      )
+    if (!isAuthDappEnabled) {
+      return
     }
-  }, [isConnected, isConnecting])
+
+    if (isConnected || isConnecting) {
+      return
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    const basename = /^decentraland.(zone|org|today)$/.test(
+      window.location.host
+    )
+      ? '/marketplace'
+      : ''
+    window.location.replace(
+      `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(
+        `${basename}${params.get('redirectTo') || '/'}`
+      )}`
+    )
+  }, [isAuthDappEnabled, isConnected, isConnecting])
 
   return (
     <>
       <Navbar />
       <Page className="SignInPage" isFullscreen>
-        <SignIn onConnect={isAuthDappEnabled ? handleConnect : undefined} />
+        <SignIn onConnect={handleConnect} />
       </Page>
       <Footer isFullscreen />
     </>
