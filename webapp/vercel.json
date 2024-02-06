@@ -3,7 +3,8 @@
   "name": "marketplace",
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/.*", "dest": "/index.html" }
+    { "src": "/.*", "dest": "/index.html" },
+    { "src": "/auth", "dest": "https://decentraland.zone/auth" }
   ],
   "build": {
     "env": {
@@ -13,9 +14,5 @@
   },
   "github": {
     "silent": true
-  },
-  "rewrites": [{
-    "source": "/auth",
-    "destination": "https://decentraland.zone/auth"
-  }]
+  }
 }
