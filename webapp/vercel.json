@@ -13,5 +13,9 @@
   },
   "github": {
     "silent": true
-  }
+  },
+  "rewrites": [{
+    "source": "/auth",
+    "destination": "https://decentraland.zone/auth"
+  }]
 }
