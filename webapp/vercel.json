@@ -1,11 +1,6 @@
 {
   "version": 2,
   "name": "marketplace",
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/auth", "dest": "https://decentraland.zone/auth" },
-    { "src": "/.*", "dest": "/index.html" }
-  ],
   "build": {
     "env": {
       "GEN_STATIC_LOCAL": "true",
@@ -14,5 +9,11 @@
   },
   "github": {
     "silent": true
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/auth/login",
+      "destination": "https://decentraland.zone/auth/login"
+    }
+  ]
 }
