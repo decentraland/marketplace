@@ -2,11 +2,9 @@ import { takeLatest, put, call, select } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import {
-  getIdentity,
-  storeIdentity,
-  clearIdentity,
   localStorageGetIdentity,
-  localStorageClearIdentity
+  localStorageClearIdentity,
+  localStorageStoreIdentity
 } from '@dcl/single-sign-on-client'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -58,7 +56,7 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
     )
 
     // Stores the identity into the SSO iframe.
-    yield call(storeIdentity, address, identity)
+    yield call(localStorageStoreIdentity, address, identity)
 
     yield put(generateIdentitySuccess(address, identity))
   } catch (error) {
@@ -92,14 +90,19 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
       yield put(generateIdentitySuccess(address, identity))
     } else {
       window.location.replace(
-        `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(window.location.href)}`
+        `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(
+          window.location.href
+        )}`
       )
     }
     return
   }
 
   // Obtains the identity from the SSO iframe.
-  const identity: AuthIdentity | null = yield call(getIdentity, address)
+  const identity: AuthIdentity | null = yield call(
+    localStorageGetIdentity,
+    address
+  )
 
   // If the identity was persisted in the iframe, store in in redux.
   // If not, generate a new one, which wil be stored in the iframe.
@@ -117,7 +120,7 @@ function* handleDisconnect(_action: DisconnectWalletAction) {
       localStorageClearIdentity(auxAddress)
     } else {
       // Clears the identity from the SSO iframe when the user disconnects the wallet.
-      yield call(clearIdentity, auxAddress)
+      yield call(localStorageClearIdentity, auxAddress)
     }
   }
 }
