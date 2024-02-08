@@ -1,4 +1,4 @@
-import { takeLatest, put, call, select } from 'redux-saga/effects'
+import { takeLatest, put, call } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import {
@@ -15,14 +15,12 @@ import {
 import { ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isErrorWithMessage } from '../../lib/error'
 import { config } from '../../config'
-import { getIsAuthDappEnabled } from '../features/selectors'
 import { getEth } from '../wallet/utils'
 
 import {
   GENERATE_IDENTITY_REQUEST,
   GenerateIdentityRequestAction,
   generateIdentityFailure,
-  generateIdentityRequest,
   generateIdentitySuccess
 } from './actions'
 import { IDENTITY_EXPIRATION_IN_MINUTES } from './utils'
@@ -82,45 +80,21 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
 
   yield call(setAuxAddress, address)
 
-  const isAuthDappEnabled: boolean = yield select(getIsAuthDappEnabled)
+  const identity: AuthIdentity | null = localStorageGetIdentity(address)
 
-  if (isAuthDappEnabled) {
-    const identity: AuthIdentity | null = localStorageGetIdentity(address)
-    if (identity) {
-      yield put(generateIdentitySuccess(address, identity))
-    } else {
-      window.location.replace(
-        `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(
-          window.location.href
-        )}`
-      )
-    }
-    return
-  }
-
-  // Obtains the identity from the SSO iframe.
-  const identity: AuthIdentity | null = yield call(
-    localStorageGetIdentity,
-    address
-  )
-
-  // If the identity was persisted in the iframe, store in in redux.
-  // If not, generate a new one, which wil be stored in the iframe.
-  if (!identity) {
-    yield put(generateIdentityRequest(address))
-  } else {
+  if (identity) {
     yield put(generateIdentitySuccess(address, identity))
+  } else {
+    window.location.replace(
+      `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(
+        window.location.href
+      )}`
+    )
   }
 }
 
 function* handleDisconnect(_action: DisconnectWalletAction) {
   if (auxAddress) {
-    const isAuthDappEnabled: boolean = yield select(getIsAuthDappEnabled)
-    if (isAuthDappEnabled) {
-      localStorageClearIdentity(auxAddress)
-    } else {
-      // Clears the identity from the SSO iframe when the user disconnects the wallet.
-      yield call(localStorageClearIdentity, auxAddress)
-    }
+    localStorageClearIdentity(auxAddress)
   }
 }

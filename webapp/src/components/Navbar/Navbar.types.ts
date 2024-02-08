@@ -9,17 +9,13 @@ export type Props = Partial<NavbarProps> & {
   enablePartialSupportAlert?: boolean
   onNavigate: (path: string) => void
   identity?: AuthIdentity
-  isAuthDappEnabled: boolean
 }
 
 export type OwnProps = Pick<Props, 'enablePartialSupportAlert'>
 
 export type MapStateProps = Pick<
   Props,
-  | 'location'
-  | 'hasPendingTransactions'
-  | 'identity'
-  | 'isAuthDappEnabled'
+  'location' | 'hasPendingTransactions' | 'identity'
 >
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

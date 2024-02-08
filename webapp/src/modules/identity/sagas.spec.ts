@@ -1,5 +1,5 @@
 import { expectSaga } from 'redux-saga-test-plan'
-import { call, select } from 'redux-saga/effects'
+import { call } from 'redux-saga/effects'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   connectWalletSuccess,
@@ -10,8 +10,7 @@ import {
   localStorageGetIdentity
 } from '@dcl/single-sign-on-client'
 import { identitySaga, setAuxAddress } from './sagas'
-import { generateIdentityRequest, generateIdentitySuccess } from './actions'
-import { getIsAuthDappEnabled } from '../features/selectors'
+import { generateIdentitySuccess } from './actions'
 import { AuthIdentity } from '@dcl/crypto'
 
 jest.mock('@dcl/single-sign-on-client', () => {
@@ -38,74 +37,38 @@ describe('when handling the wallet connection success', () => {
     } as Wallet
   })
 
-  describe('and the auth dapp is enabled', () => {
-    describe("and there's no identity", () => {
-      beforeEach(() => {
-        windowLocation = window.location
-        delete (window as any).location
-        window.location = ({
-          replace: jest.fn()
-        } as any) as Location
-      })
-      afterEach(() => {
-        window.location = windowLocation
-      })
-      it('should redirect to auth dapp', async () => {
-        await expectSaga(identitySaga)
-          .provide([
-            [call(localStorageGetIdentity, wallet.address), null],
-            [select(getIsAuthDappEnabled), true]
-          ])
-          .dispatch(connectWalletSuccess(wallet))
-          .run({ silenceTimeout: true })
-        expect(window.location.replace).toHaveBeenCalled()
-      })
+  describe("and there's no identity", () => {
+    beforeEach(() => {
+      windowLocation = window.location
+      delete (window as any).location
+      window.location = ({
+        replace: jest.fn()
+      } as any) as Location
     })
-
-    describe("and there's an identity", () => {
-      let identity: AuthIdentity
-
-      beforeEach(() => {
-        identity = {} as any
-        ;(localStorageGetIdentity as jest.Mock).mockReturnValue(identity)
-      })
-      it('should put an action to store the identity', () => {
-        return expectSaga(identitySaga)
-          .provide([[select(getIsAuthDappEnabled), true]])
-          .put(generateIdentitySuccess(wallet.address, identity))
-          .dispatch(connectWalletSuccess(wallet))
-          .run({ silenceTimeout: true })
-      })
+    afterEach(() => {
+      window.location = windowLocation
+    })
+    it('should redirect to auth dapp', async () => {
+      await expectSaga(identitySaga)
+        .provide([[call(localStorageGetIdentity, wallet.address), null]])
+        .dispatch(connectWalletSuccess(wallet))
+        .run({ silenceTimeout: true })
+      expect(window.location.replace).toHaveBeenCalled()
     })
   })
 
-  describe('and the auth dapp is not enabled', () => {
-    describe("and there's no identity", () => {
-      it('should put an action to generate the identity', () => {
-        return expectSaga(identitySaga)
-          .provide([
-            [call(localStorageGetIdentity, wallet.address), null],
-            [select(getIsAuthDappEnabled), false]
-          ])
-          .put(generateIdentityRequest(wallet.address))
-          .dispatch(connectWalletSuccess(wallet))
-          .run({ silenceTimeout: true })
-      })
+  describe("and there's an identity", () => {
+    let identity: AuthIdentity
+
+    beforeEach(() => {
+      identity = {} as any
+      ;(localStorageGetIdentity as jest.Mock).mockReturnValue(identity)
     })
-
-    describe("and there's an identity", () => {
-      it('should put an action to store the identity', () => {
-        const identity = {} as any
-
-        return expectSaga(identitySaga)
-          .provide([
-            [call(localStorageGetIdentity, wallet.address), identity],
-            [select(getIsAuthDappEnabled), false]
-          ])
-          .put(generateIdentitySuccess(wallet.address, identity))
-          .dispatch(connectWalletSuccess(wallet))
-          .run({ silenceTimeout: true })
-      })
+    it('should put an action to store the identity', () => {
+      return expectSaga(identitySaga)
+        .put(generateIdentitySuccess(wallet.address, identity))
+        .dispatch(connectWalletSuccess(wallet))
+        .run({ silenceTimeout: true })
     })
   })
 })
@@ -118,26 +81,12 @@ describe('when handling the disconnect', () => {
       setAuxAddress(address)
     })
 
-    describe('and the auth dapp is enabled', () => {
-      it('should call the sso client to clear the identity in the local storage', async () => {
-        await expectSaga(identitySaga)
-          .provide([[select(getIsAuthDappEnabled), true]])
-          .dispatch(disconnectWallet())
-          .run({ silenceTimeout: true })
+    it('should call the sso client to clear the identity in the local storage', async () => {
+      await expectSaga(identitySaga)
+        .dispatch(disconnectWallet())
+        .run({ silenceTimeout: true })
 
-        expect(localStorageClearIdentity).toHaveBeenCalledWith(address)
-      })
-    })
-
-    describe('and the auth dapp is not enabled', () => {
-      it('should call the sso client to clear the identity', async () => {
-        await expectSaga(identitySaga)
-          .provide([[select(getIsAuthDappEnabled), false]])
-          .dispatch(disconnectWallet())
-          .run({ silenceTimeout: true })
-
-        expect(localStorageClearIdentity).toHaveBeenCalledWith(address)
-      })
+      expect(localStorageClearIdentity).toHaveBeenCalledWith(address)
     })
   })
 
