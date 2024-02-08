@@ -7,7 +7,7 @@ import { Props } from './Navbar.types'
 import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const { location, onNavigate, isAuthDappEnabled } = props
+  const { location, onNavigate } = props
   const { pathname, search } = location
 
   const handleOnSignIn = useCallback(() => {
@@ -21,14 +21,11 @@ const Navbar = (props: Props) => {
     const redirectTo = !currentRedirectTo
       ? `${basename}${pathname}${search}`
       : `${basename}${currentRedirectTo}`
-    if (isAuthDappEnabled) {
-      window.location.replace(
-        `${config.get('AUTH_URL')}/login?redirectTo=${redirectTo}`
-      )
-    } else {
-      onNavigate(locations.signIn(redirectTo))
-    }
-  }, [onNavigate, pathname, search, isAuthDappEnabled])
+
+    window.location.replace(
+      `${config.get('AUTH_URL')}/login?redirectTo=${redirectTo}`
+    )
+  }, [pathname, search])
 
   const handleOnClickAccount = useCallback(() => {
     onNavigate(locations.settings())

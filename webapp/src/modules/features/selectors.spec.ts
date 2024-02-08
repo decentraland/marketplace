@@ -15,7 +15,6 @@ import {
   getIsMarketplaceLaunchPopupEnabled,
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
-  getIsAuthDappEnabled,
   getIsClaimingNamesWithFiatEnabled,
   getIsEnsAddressEnabled
 } from './selectors'
@@ -158,12 +157,6 @@ const waitForInitialLoadingSelectors = [
     name: 'isEmotesV2FTU',
     feature: FeatureName.EMOTES_V2_FTU,
     selector: getIsEmotesV2FTUEnabled
-  },
-  {
-    name: 'auth-dapp',
-    feature: FeatureName.AUTH_DAPP,
-    selector: getIsAuthDappEnabled,
-    applicationName: ApplicationName.DAPPS
   },
   {
     name: 'claim-name-with-fiat',
