@@ -6,8 +6,6 @@ import {
   disconnectWallet
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import {
-  getIdentity,
-  clearIdentity,
   localStorageClearIdentity,
   localStorageGetIdentity
 } from '@dcl/single-sign-on-client'
@@ -18,8 +16,6 @@ import { AuthIdentity } from '@dcl/crypto'
 
 jest.mock('@dcl/single-sign-on-client', () => {
   return {
-    getIdentity: jest.fn(),
-    clearIdentity: jest.fn(),
     localStorageClearIdentity: jest.fn(),
     localStorageGetIdentity: jest.fn(),
     localStorageStoreIdentity: jest.fn()
@@ -88,7 +84,7 @@ describe('when handling the wallet connection success', () => {
       it('should put an action to generate the identity', () => {
         return expectSaga(identitySaga)
           .provide([
-            [call(getIdentity, wallet.address), null],
+            [call(localStorageGetIdentity, wallet.address), null],
             [select(getIsAuthDappEnabled), false]
           ])
           .put(generateIdentityRequest(wallet.address))
@@ -103,7 +99,7 @@ describe('when handling the wallet connection success', () => {
 
         return expectSaga(identitySaga)
           .provide([
-            [call(getIdentity, wallet.address), identity],
+            [call(localStorageGetIdentity, wallet.address), identity],
             [select(getIsAuthDappEnabled), false]
           ])
           .put(generateIdentitySuccess(wallet.address, identity))
@@ -140,7 +136,7 @@ describe('when handling the disconnect', () => {
           .dispatch(disconnectWallet())
           .run({ silenceTimeout: true })
 
-        expect(clearIdentity).toHaveBeenCalledWith(address)
+        expect(localStorageClearIdentity).toHaveBeenCalledWith(address)
       })
     })
   })
@@ -155,7 +151,7 @@ describe('when handling the disconnect', () => {
         .dispatch(disconnectWallet())
         .run({ silenceTimeout: true })
 
-      expect(clearIdentity).not.toHaveBeenCalled()
+      expect(localStorageClearIdentity).not.toHaveBeenCalled()
     })
   })
 })
