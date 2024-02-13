@@ -1590,7 +1590,7 @@
           "subtitle": "Las tasas de precios pueden variar"
         }
       },
-      "name_placeholder": "Tu nombre único",
+      "name_placeholder": "Vuelve a escribir tu NOMBRE",
       "names_different": "Nombres no coinciden",
       "authorization": {
         "title_action": "comprar",
