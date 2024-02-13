@@ -1457,7 +1457,7 @@
   "claim_your_own_name": {
     "title": "CLAIM YOUR OWN NAME",
     "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
-    "btn": "Claim your name"
+    "btn": "Claim your NAME"
   },
   "create_or_edit_list_modal": {
     "create": {
@@ -1563,12 +1563,12 @@
   "names_page": {
     "title": "Claim your Decentraland NAME",
     "subtitle": "Activate the full potential of Decentraland citizenship with a unique NAME, Voting Power, & your own World!",
-    "claim_a_name": "Claim name",
+    "claim_a_name": "Claim NAME",
     "browse_names_being_resold": "Browse NAMEs being resold",
     "manage_your_names": "Manage your NAMEs",
     "name_label": "Name",
-    "name_placeholder": "Your name goes here",
-    "repeated_message": "This name is not available.",
+    "name_placeholder": "Your NAME goes here",
+    "repeated_message": "This NAME is not available.",
     "claim_button": "Claim",
     "available": "NAME available",
     "not_available": "Unavailable NAME. {link}",
@@ -1583,10 +1583,10 @@
     "has_spaces": "NAMEs can't contain spaces.",
     "name_too_long": "NAMEs can contain up to 15 characters.",
     "invalid_characters": "NAMEs can only contain alphanumeric characters.",
-    "not_enough_mana": "You don't have enough MANA to claim a new name",
+    "not_enough_mana": "You don't have enough MANA to claim a new NAME",
     "fiat_payments_not_enabled": "FIAT payments are not enabled at the moment. Please try later.",
     "claim_name_fat_finger_modal": {
-      "title": "Please confirm your new name",
+      "title": "Please confirm your new NAME",
       "description": "You have chosen {name}. {br} Re-enter your NAME to confirm your selection.",
       "ok_message": "Congratulations the name {name} is yours.",
       "caps_warning": "The capitalization of NAMEs cannot be modified once claimed.",
