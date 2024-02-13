@@ -1,18 +1,23 @@
-import { ChainId, Network, Order } from '@dcl/schemas'
-import { ChainData, Token } from 'decentraland-transactions/crossChain'
+import { ChainId, Item, NFT, Network, Order } from '@dcl/schemas'
+import { Env } from '@dcl/ui-env'
+import {
+  ChainData,
+  CrossChainProvider,
+  Route,
+  Token
+} from 'decentraland-transactions/crossChain'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   ContractName,
   getContract,
   getContractName
 } from 'decentraland-transactions'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
-import { Env } from '@dcl/ui-env'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { Asset } from '../../../modules/asset/types'
 import { config } from '../../../config'
-import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { BigNumber, ethers } from 'ethers'
 import { isNFT } from '../../../modules/asset/utils'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 
 export const getShouldUseMetaTx = (
   asset: Asset,
@@ -140,6 +145,97 @@ export const getDefaultChains = () => {
   return DEFAULT_CHAINS
 }
 
+export const getBuyNftRoute = (
+  crossChainProvider: CrossChainProvider,
+  baseRouteConfig: any,
+  order: Order
+): Promise<Route> =>
+  crossChainProvider.getBuyNFTRoute({
+    ...baseRouteConfig,
+    nft: {
+      collectionAddress: order.contractAddress,
+      tokenId: order.tokenId,
+      price: order.price
+    },
+    toAmount: order.price,
+    toChain: order.chainId
+  })
+
+export const getMintNFTRoute = (
+  crossChainProvider: CrossChainProvider,
+  baseRouteConfig: any,
+  asset: Item
+): Promise<Route> =>
+  crossChainProvider.getMintNFTRoute({
+    ...baseRouteConfig,
+    item: {
+      collectionAddress: asset.contractAddress,
+      itemId: asset.itemId,
+      price: asset.price
+    },
+    toAmount: asset.price,
+    toChain: asset.chainId
+  })
+
+// export const getMintingNameRoute = (crossChainProvider: CrossChainProvider, baseRouteConfig: any, name: string): Promise<Route> =>
+//   crossChainProvider.getRegisterNameRoute({
+//     ...baseRouteConfig,
+//     name
+//   })
+
+export const estimateNameMintingGas = async (
+  name: string,
+  selectedChain: ChainId,
+  ownerAddress: string
+) => {
+  const networkProvider = await getNetworkProvider(selectedChain)
+  const provider = new ethers.providers.Web3Provider(networkProvider)
+
+  const contract = getContract(ContractName.DCLRegistrar, selectedChain)
+  const c = new ethers.Contract(contract.address, contract.abi, provider)
+  const estimation = await c.estimateGas.register(ownerAddress, name)
+  return estimation
+}
+
+export const estimateNftPurchaseGas = async (
+  selectedChain: ChainId,
+  wallet: Wallet,
+  asset: NFT,
+  order: Order
+): Promise<ethers.BigNumber> => {
+  // TODO: should this be the one from the order instead of the selected one?
+  const networkProvider = await getNetworkProvider(selectedChain)
+  const provider = new ethers.providers.Web3Provider(networkProvider)
+
+  const contractName = getContractName(order.marketplaceAddress)
+  const contract = getContract(contractName, order.chainId)
+  const c = new ethers.Contract(contract.address, contract.abi, provider)
+  return c.estimateGas.executeOrder(
+    asset.contractAddress,
+    asset.tokenId,
+    order.price,
+    { from: wallet.address }
+  )
+}
+
+// TODO: new
+export const estimateItemMintingGas = async (
+  selectedChain: ChainId,
+  wallet: Wallet,
+  asset: Item
+): Promise<ethers.BigNumber> => {
+  const networkProvider = await getNetworkProvider(selectedChain)
+  const provider = new ethers.providers.Web3Provider(networkProvider)
+
+  const contract = getContract(ContractName.CollectionStore, asset.chainId)
+  const c = new ethers.Contract(contract.address, contract.abi, provider)
+  return c.estimateGas.buy(
+    [[asset.contractAddress, [asset.itemId], [asset.price], [wallet.address]]],
+    { from: wallet.address }
+  )
+}
+
+// @deprecated
 export const estimateTransactionGas = async (
   selectedChain: ChainId,
   wallet: Wallet,
@@ -163,7 +259,6 @@ export const estimateTransactionGas = async (
   } else if (!isNFT(asset)) {
     const contract = getContract(ContractName.CollectionStore, asset.chainId)
     const c = new ethers.Contract(contract.address, contract.abi, provider)
-    console.log('c: ', c)
     estimation = await c.estimateGas.buy(
       [
         [asset.contractAddress, [asset.itemId], [asset.price], [wallet.address]]

@@ -46,7 +46,14 @@ const mapState = (state: RootState): MapState => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onClaim: name => dispatch(claimNameRequest(name)),
+  // onClaim: name => dispatch(claimNameRequest(name)),
+  onBuyWithCrypto: (asset: Asset, order?: Order | null) =>
+    dispatch(
+      openModal('BuyNFTWithCryptoModal', {
+        asset,
+        order
+      })
+    ),
   onClaimNameClear: () => dispatch(claimNameClear()),
   onOpenFiatGateway: (
     gateway: FiatGateway,

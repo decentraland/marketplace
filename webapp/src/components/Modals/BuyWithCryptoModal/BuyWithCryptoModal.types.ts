@@ -16,6 +16,7 @@ import {
   executeOrderRequest,
   executeOrderWithCardRequest
 } from '../../../modules/order/actions'
+import { CrossChainRoute, GasCost } from './hooks'
 
 export type Props = Omit<ModalProps, 'metadata'> & {
   metadata: { asset: Asset; order?: Order }
@@ -54,3 +55,18 @@ export type MapDispatchProps = Pick<
   | 'onExecuteOrderWithCard'
   | 'onBuyItemWithCard'
 >
+
+// TODO: New types
+type NewProps = CrossChainRoute & GasCost & {
+  wallet: Wallet,
+  // TODO: Auth type?
+  // isLoadingAuthorization: boolean,
+  isSwitchingNetwork: boolean,
+  isBuyWithCardPage: boolean,
+  onSwitchNetwork: typeof switchNetworkRequest
+  onBuyNatively: () => unknown,
+  onBuyWithCard: () => unknown,
+  onBuyWithProvider: () => unknown,
+  onGetMana: typeof openBuyManaWithFiatModalRequest,
+  onClose: ModalProps['onClose']
+}

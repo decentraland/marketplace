@@ -1,10 +1,10 @@
-.buyWithCryptoModal .tokenDropdownContainer {
+/* .buyWithCryptoModal .tokenDropdownContainer {
   display: flex;
   flex: 1;
   flex-direction: column;
   align-self: flex-end;
   justify-content: center;
-}
+} */
 
 .buyWithCryptoModal .infoIconPopUp {
   z-index: 9999;
@@ -78,23 +78,23 @@
   font-size: 15px;
 }
 
-.buyWithCryptoModal .dropdownContainer {
+/* .buyWithCryptoModal .dropdownContainer {
   display: flex;
   justify-content: space-between;
   color: var(--text);
-}
+} */
 
 .buyWithCryptoModal .dropdownContainer :global(span) {
   font-size: 14px;
 }
 
-.buyWithCryptoModal .balanceContainer {
+/* .buyWithCryptoModal .balanceContainer {
   display: flex;
   justify-content: flex-end;
   font-size: 14px;
   color: var(--clear-divider);
   margin-left: auto;
-}
+} */
 
 .buyWithCryptoModal .routeUnavailable,
 .insufficientFunds {
@@ -113,7 +113,7 @@
   margin-top: 2px;
 }
 
-.buyWithCryptoModal .feeCovered {
+/* .buyWithCryptoModal .feeCovered {
   font-size: 12px;
   font-weight: 400;
   line-height: 18px;
@@ -125,7 +125,7 @@
 
 .buyWithCryptoModal .feeCoveredFree {
   color: #36d41d;
-}
+} */
 
 .buyWithCryptoModal :global(.dcl.modal-navigation-title) {
   font-weight: bold;
@@ -134,7 +134,7 @@
   line-height: 26px;
   margin-bottom: 40px;
 }
-
+/* 
 .buyWithCryptoModal .costContainer {
   margin-top: 12px;
 }
@@ -190,9 +190,9 @@
   color: #a09ba8;
   line-height: 18px;
   font-weight: 400;
-}
+} */
 
-.buyWithCryptoModal .tokenAndChainSelector {
+/* .buyWithCryptoModal .tokenAndChainSelector {
   display: flex;
   align-items: center;
   background: #43404a;
@@ -200,13 +200,13 @@
   border-radius: 6px;
   padding: 12px;
   cursor: pointer;
-}
+} */
 
-.buyWithCryptoModal .dropdownDisabled {
+/* .buyWithCryptoModal .dropdownDisabled {
   cursor: default;
-}
+} */
 
-.buyWithCryptoModal .tokenAndChainSelectorName {
+/* .buyWithCryptoModal .tokenAndChainSelectorName {
   color: white;
   font-weight: bold;
   margin-right: auto;
@@ -221,7 +221,7 @@
 .buyWithCryptoModal .tokenAndChainSelector :global(.chevron) {
   margin-left: 5px;
   font-size: 14px;
-}
+} */
 
 .buyWithCryptoModal .durationAndExchangeContainer {
   border: 1px solid #716b7c;
@@ -289,28 +289,28 @@
   margin-right: 12px;
 }
 
-@keyframes wave {
+/* @keyframes wave {
   0% {
     background-position: 200% 0;
   }
   100% {
     background-position: -200% 0;
   }
-}
+} */
 
-.buyWithCryptoModal .skeleton {
+/* .buyWithCryptoModal .skeleton {
   flex-shrink: 0;
   background: var(--dcl-pale-black, #43404a);
   background: linear-gradient(90deg, #43404a 25%, #63616d 50%, #43404a 75%);
   background-size: 200% 100%;
   animation: wave 1.5s infinite;
   border-radius: 4px;
-}
+} */
 
-.buyWithCryptoModal .estimatedFeeSkeleton {
+/* .buyWithCryptoModal .estimatedFeeSkeleton {
   width: 180px;
   height: 26px;
-}
+} */
 
 .buyWithCryptoModal .fromAmountUSDSkeleton {
   width: 90px;
@@ -335,11 +335,11 @@
   flex-direction: column;
 }
 
-.tokenDropdownContainer {
+/* .tokenDropdownContainer {
   display: flex;
   flex-direction: column;
   margin-left: 16px;
-}
+} */
 
 .buyWithCryptoModal:global(.ui.modal > .actions) {
   margin-top: auto;
@@ -379,18 +379,18 @@
   padding-bottom: 24px;
 }
 
-.buyWithCryptoModal .payWithContainer {
+/* .buyWithCryptoModal .payWithContainer {
   padding-bottom: 32px;
   border-bottom: 1px solid var(--dropdown);
-}
-
+} */
+/* 
 .buyWithCryptoModal .total {
   font-size: 32px;
   font-weight: 700;
   line-height: 26px;
-}
+} */
 
-.buyWithCryptoModal .totalPrice {
+/* .buyWithCryptoModal .totalPrice {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -415,9 +415,9 @@
   color: #a09ba8;
   margin: 0;
   margin-top: 4px;
-}
+} */
 
-.buyWithCryptoModal .totalContainer {
+/* .buyWithCryptoModal .totalContainer {
   display: flex;
   justify-content: space-between;
   margin-top: 24px;
@@ -426,7 +426,7 @@
 .buyWithCryptoModal .totalContainer > div {
   display: flex;
   flex-direction: column;
-}
+} */
 
 .buyWithCryptoModal .dropdownContainer :global(span) {
   font-size: 14px;
@@ -521,7 +521,7 @@
     height: auto;
   }
 
-  .buyWithCryptoModal .dropdownContainer {
+  /* .buyWithCryptoModal .dropdownContainer {
     flex-direction: column;
   }
 
@@ -529,7 +529,7 @@
     align-self: flex-start;
     margin-left: 0;
     width: 100%;
-  }
+  } */
 
   .buyWithCryptoModal:global(.ui.modal > .content) {
     margin: 2px;
