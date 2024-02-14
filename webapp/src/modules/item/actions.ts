@@ -94,9 +94,10 @@ export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
 
 export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
   action(BUY_ITEM_SUCCESS, {
+    chainId,
     item,
     txHash,
-    ...buildTransactionWithReceiptPayload(chainId, txHash, {
+    ...buildTransactionWithReceiptPayload(item.chainId, txHash, {
       itemId: item.itemId,
       contractAddress: item.contractAddress,
       network: item.network,

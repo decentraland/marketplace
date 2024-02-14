@@ -34,6 +34,7 @@ const Navbar = (props: Props) => {
   return (
     <BaseNavbar
       {...props}
+      withChainSelector
       withNotifications
       activePage={NavbarPages.MARKETPLACE}
       hasActivity={props.hasPendingTransactions}

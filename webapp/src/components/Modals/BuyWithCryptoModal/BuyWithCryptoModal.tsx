@@ -161,7 +161,9 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [asset, destinyChainMANA, selectedChain, selectedToken, wallet])
 
   const selectedProviderChain = useMemo(() => {
-    return providerChains.find(c => c.chainId === selectedChain.toString())
+    return providerChains.find(
+      c => c.chainId.toString() === selectedChain.toString()
+    )
   }, [providerChains, selectedChain])
 
   // the price of the order or the item
@@ -265,18 +267,20 @@ export const BuyWithCryptoModal = (props: Props) => {
       return {
         token,
         gasCostWei: totalGasCost,
-        gasCost: parseFloat(
+        gasCost: formatPrice(
           ethers.utils.formatUnits(
             totalGasCost,
             route.route.estimate.gasCosts[0].token.decimals
-          )
-        ).toFixed(6),
-        feeCost: parseFloat(
+          ),
+          route.route.estimate.gasCosts[0].token
+        ),
+        feeCost: formatPrice(
           ethers.utils.formatUnits(
             totalFeeCost,
             route.route.estimate.gasCosts[0].token.decimals
-          )
-        ).toFixed(6),
+          ),
+          route.route.estimate.gasCosts[0].token
+        ),
         feeCostWei: totalFeeCost,
         totalCost: parseFloat(
           ethers.utils.formatUnits(
@@ -444,7 +448,11 @@ export const BuyWithCryptoModal = (props: Props) => {
       const MANAToken = providerTokens.find(
         t => t.symbol === 'MANA' && selectedChain.toString() === t.chainId
       )
-      setSelectedToken(MANAToken || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
+      try {
+        setSelectedToken(MANAToken || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
+      } catch (error) {
+        setSelectedToken(providerTokens[0])
+      }
     }
   }, [
     calculateRoute,
@@ -473,7 +481,10 @@ export const BuyWithCryptoModal = (props: Props) => {
 
           // if native token
           if (selectedToken.address === NATIVE_TOKEN) {
-            const balanceWei = await provider.getBalance(wallet.address)
+            const balanceWei = await provider.send('eth_getBalance', [
+              wallet.address,
+              'latest'
+            ])
             setSelectedTokenBalance(balanceWei)
 
             return
@@ -831,7 +842,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         // it's paying with MANA but connected on Ethereum
         if (
           selectedToken.symbol === 'MANA' &&
-          wallet.network === Network.ETHEREUM
+          wallet.network !== Network.MATIC
         ) {
           return asset.network === Network.ETHEREUM // if it's buying a L1 NFT, render buy now
             ? renderBuyNowButton()
@@ -840,6 +851,13 @@ export const BuyWithCryptoModal = (props: Props) => {
             : renderBuyNowButton() // else, buy button
         }
         // for any other token, it needs to be connected on the selectedChain network
+
+        // if (wallet.network !== Network.MATIC) {
+        //   return renderBuyNowButton()
+        // }
+
+        console.log('selectedChain: ', selectedChain)
+        console.log('wallet.chainId: ', wallet.chainId)
         return selectedChain === wallet.chainId
           ? renderBuyNowButton()
           : renderSwitchNetworkButton()
@@ -1264,10 +1282,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                                   src={routeFeeCost.token.logoURI}
                                   alt={routeFeeCost.token.name}
                                 />
-                                {formatPrice(
-                                  routeFeeCost.totalCost,
-                                  routeFeeCost.token
-                                )}
+                                {routeFeeCost.totalCost}
                               </>
                             ) : (
                               <>
