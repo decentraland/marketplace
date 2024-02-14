@@ -696,10 +696,15 @@ function* deriveCurrentOptions(
       // for ENS, if the previous page had `onlyOnSale` as `undefined` like wearables or emotes, it defaults to `true`, otherwise use the current value
       newOptions = {
         ...newOptions,
-        assetType: AssetType.NFT,
-        onlyOnSale:
+        assetType: AssetType.NFT
+      }
+
+      // Only if the user is not in their own page, show ens on sale by default.
+      if (window.location.pathname !== locations.currentAccount()) {
+        newOptions.onlyOnSale =
           previous.onlyOnSale === undefined ? true : current.onlyOnSale
       }
+
       break
     }
     default: {
