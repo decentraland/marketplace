@@ -31,13 +31,13 @@ const WearablesFilters = [
 ]
 
 const EmotesFilters = [
-  ...WearablesFilters.filter(
-    filter =>
-      filter !== AssetFilter.BodyShape &&
-      filter !== AssetFilter.Network &&
-      filter !== AssetFilter.More &&
-      filter !== AssetFilter.OnlySmart
-  ),
+  AssetFilter.Rarity,
+  AssetFilter.Status,
+  AssetFilter.Price,
+  AssetFilter.Collection,
+  AssetFilter.Creators,
+  AssetFilter.OnSale,
+  AssetFilter.More,
   AssetFilter.PlayMode
 ]
 
