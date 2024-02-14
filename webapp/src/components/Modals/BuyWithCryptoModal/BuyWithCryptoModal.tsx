@@ -2,24 +2,17 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import compact from 'lodash/compact'
-import { ethers, BigNumber } from 'ethers'
-import { ChainId, Contract, Network } from '@dcl/schemas'
+import { ethers } from 'ethers'
+import { ChainId, Network } from '@dcl/schemas'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
-import {
-  ChainButton,
-  withAuthorizedAction
-} from 'decentraland-dapps/dist/containers'
+import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Button, Icon, Loader, ModalNavigation } from 'decentraland-ui'
 import { ContractName, getContract } from 'decentraland-transactions'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
-import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
-// import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-// import { Contract as DCLContract } from '../../../modules/vendor/services'
-// import { getContractNames } from '../../../modules/vendor'
-import { isNFT, isWearableOrEmote } from '../../../modules/asset/utils'
+import { isWearableOrEmote } from '../../../modules/asset/utils'
 import * as events from '../../../utils/events'
 import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -34,9 +27,6 @@ import { AssetImage } from '../../AssetImage'
 import { isPriceTooLow } from '../../BuyPage/utils'
 import { CardPaymentsExplanation } from '../../BuyPage/CardPaymentsExplanation'
 import { ManaToFiat } from '../../ManaToFiat'
-import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
-import { getMintItemStatus } from '../../../modules/item/selectors'
-// import { NFT } from '../../../modules/nft/types'
 import { config } from '../../../config'
 import ChainAndTokenSelector from './ChainAndTokenSelector/ChainAndTokenSelector'
 import {
@@ -48,11 +38,7 @@ import {
 } from './utils'
 import { Props } from './BuyWithCryptoModal.types'
 import styles from './BuyWithCryptoModal.module.css'
-import {
-  // useGasCost,
-  useShouldUseCrossChainProvider,
-  useTokenBalance
-} from './hooks'
+import { useShouldUseCrossChainProvider, useTokenBalance } from './hooks'
 import PaymentSelector from './PaymentSelector/PaymentSelector'
 import PurchaseTotal from './PurchaseTotal/PurchaseTotal'
 
@@ -63,8 +49,6 @@ export const GET_MANA_BUTTON_TEST_ID = 'get-mana-button'
 export const BUY_WITH_CARD_TEST_ID = 'buy-with-card-button'
 export const PRICE_TOO_LOW_TEST_ID = 'price-too-low-label'
 
-const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
-
 export type ProviderChain = ChainData
 export type ProviderToken = Token
 
@@ -72,23 +56,20 @@ const squidURL = config.get('SQUID_API_URL')
 
 export const BuyWithCryptoModal = (props: Props) => {
   const {
+    price,
     wallet,
-    metadata: { asset, order },
-    getContract: getContractProp,
+    metadata: { asset },
     isLoading,
     isLoadingBuyCrossChain,
     isLoadingAuthorization,
     isSwitchingNetwork,
     isBuyWithCardPage,
-    onAuthorizedAction,
     onSwitchNetwork,
+    onGetGasCost,
+    onGetCrossChainRoute,
     onBuyNatively,
     onBuyWithCard,
-    // onBuyItem: onBuyItemProp,
-    onBuyItemThroughProvider,
-    // onBuyItemWithCard,
-    // onExecuteOrder,
-    // onExecuteOrderWithCard,
+    onBuyCrossChain,
     onGetMana,
     onClose
   } = props
@@ -107,16 +88,34 @@ export const BuyWithCryptoModal = (props: Props) => {
   const [selectedToken, setSelectedToken] = useState<Token>(
     getMANAToken(asset.chainId)
   )
-  // const [isFetchingRoute, setIsFetchingRoute] = useState(false)
-  // const [route, setRoute] = useState<RouteResponse>()
-  // const [routeFailed, setRouteFailed] = useState(false)
   const [canBuyItem, setCanBuyItem] = useState<boolean | undefined>(undefined)
-  // const [fromAmount, setFromAmount] = useState<string | undefined>(undefined)
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
   const [crossChainProvider, setCrossChainProvider] = useState<
     CrossChainProvider
   >()
+
+  const { gasCost, isFetchingGasCost } = onGetGasCost(
+    selectedToken,
+    selectedChain,
+    wallet,
+    providerTokens
+  )
+
+  const {
+    route,
+    fromAmount,
+    routeFeeCost,
+    routeTotalUSDCost,
+    isFetchingRoute,
+    routeFailed
+  } = onGetCrossChainRoute(
+    selectedToken,
+    selectedChain,
+    providerTokens,
+    crossChainProvider,
+    wallet
+  )
 
   useEffect(() => {
     const provider = new AxelarProvider(squidURL)
@@ -129,7 +128,6 @@ export const BuyWithCryptoModal = (props: Props) => {
     tokenBalance: selectedTokenBalance
   } = useTokenBalance(selectedToken, selectedChain, wallet?.address)
 
-  // TODO: Remains here
   // if the tx should be done through the provider
   const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(
     selectedToken,
@@ -156,87 +154,11 @@ export const BuyWithCryptoModal = (props: Props) => {
     return providerChains.find(c => c.chainId === selectedChain.toString())
   }, [providerChains, selectedChain])
 
-  // the price of the order or the item
-  // TODO: this should come from the HOC
-  // const price = useMemo(
-  //   () => (order ? order.price : !isNFT(asset) ? asset.price : ''),
-  //   [asset, order]
-  // )
-
-  // The gas should be computed as a HOC or be outside of the component, as we want to compute the gas of items, nfts and minting a name.
-  // const { gasCost, isFetchingGasCost } = useGasCost(
-  //   asset,
-  //   order,
-  //   price,
-  //   providerTokens,
-  //   selectedChain,
-  //   shouldUseCrossChainProvider,
-  //   wallet
-  // )
-
   // Compute if the price is too low for meta tx
   const hasLowPriceForMetaTx = useMemo(
     () => wallet?.chainId !== ChainId.MATIC_MAINNET && isPriceTooLow(price), // not connected to polygon AND has price < minimun for meta tx
     [price, wallet?.chainId]
   )
-
-  // TODO: use in route hook
-  // Compute the route fee cost
-  // const routeFeeCost = useMemo(() => {
-  //   if (route) {
-  //     const {
-  //       route: {
-  //         estimate: { gasCosts, feeCosts }
-  //       }
-  //     } = route
-  //     const totalGasCost = gasCosts
-  //       .map(c => BigNumber.from(c.amount))
-  //       .reduce((a, b) => a.add(b), BigNumber.from(0))
-  //     const totalFeeCost = feeCosts
-  //       .map(c => BigNumber.from(c.amount))
-  //       .reduce((a, b) => a.add(b), BigNumber.from(0))
-  //     const token = gasCosts[0].token
-  //     return {
-  //       token,
-  //       gasCostWei: totalGasCost,
-  //       gasCost: parseFloat(
-  //         ethers.utils.formatUnits(
-  //           totalGasCost,
-  //           route.route.estimate.gasCosts[0].token.decimals
-  //         )
-  //       ).toFixed(6),
-  //       feeCost: parseFloat(
-  //         ethers.utils.formatUnits(
-  //           totalFeeCost,
-  //           route.route.estimate.gasCosts[0].token.decimals
-  //         )
-  //       ).toFixed(6),
-  //       feeCostWei: totalFeeCost,
-  //       totalCost: parseFloat(
-  //         ethers.utils.formatUnits(
-  //           totalGasCost.add(totalFeeCost),
-  //           token.decimals
-  //         )
-  //       ).toFixed(6)
-  //     }
-  //   }
-  // }, [route])
-
-  // TODO: move to route hook
-  // const routeTotalUSDCost = useMemo(() => {
-  //   if (route && routeFeeCost && fromAmount && selectedToken?.usdPrice) {
-  //     const { feeCost, gasCost } = routeFeeCost
-  //     const feeTokenUSDPrice = providerTokens.find(
-  //       t => t.symbol === routeFeeCost.token.symbol
-  //     )?.usdPrice
-  //     return feeTokenUSDPrice
-  //       ? feeTokenUSDPrice * (Number(gasCost) + Number(feeCost)) +
-  //           selectedToken.usdPrice * Number(fromAmount)
-  //       : undefined
-  //   }
-  // }, [fromAmount, providerTokens, route, routeFeeCost, selectedToken.usdPrice])
-
-  // useEffects
 
   // init lib if necessary and fetch chains & supported tokens
   useEffect(() => {
@@ -271,104 +193,6 @@ export const BuyWithCryptoModal = (props: Props) => {
       }
     })()
   }, [crossChainProvider, wallet])
-
-  // TODO: Receive route in this function.
-  // calculates Route for the selectedToken
-  // const calculateRoute = useCallback(async () => {
-  //   const abortController = abortControllerRef.current
-  //   const signal = abortController.signal
-
-  //   const providerMANA = providerTokens.find(
-  //     t =>
-  //       t.address.toLocaleLowerCase() === destinyChainMANA.toLocaleLowerCase()
-  //   )
-  //   if (
-  //     !crossChainProvider ||
-  //     !crossChainProvider.isLibInitialized() ||
-  //     !wallet ||
-  //     !selectedToken ||
-  //     !providerMANA
-  //   ) {
-  //     return
-  //   }
-  //   try {
-  //     setRoute(undefined)
-  //     setIsFetchingRoute(true)
-  //     setRouteFailed(false)
-  //     let route: RouteResponse | undefined = undefined
-  //     const fromAmountParams = {
-  //       fromToken: selectedToken,
-  //       toAmount: ethers.utils.formatEther(price),
-  //       toToken: providerMANA
-  //     }
-  //     const fromAmount = Number(
-  //       await crossChainProvider.getFromAmount(fromAmountParams)
-  //     ).toFixed(6)
-  //     setFromAmount(fromAmount)
-
-  //     const fromAmountWei = ethers.utils
-  //       .parseUnits(fromAmount.toString(), selectedToken.decimals)
-  //       .toString()
-
-  //     const baseRouteConfig = {
-  //       fromAddress: wallet.address,
-  //       fromAmount: fromAmountWei,
-  //       fromChain: selectedChain,
-  //       fromToken: selectedToken.address
-  //     }
-
-  //     if (order) {
-  //       // there's an order so it's buying an NFT
-  //       route = await crossChainProvider.getBuyNFTRoute({
-  //         ...baseRouteConfig,
-  //         nft: {
-  //           collectionAddress: order.contractAddress,
-  //           tokenId: order.tokenId,
-  //           price: order.price
-  //         },
-  //         toAmount: order.price,
-  //         toChain: order.chainId
-  //       })
-  //     } else if (!isNFT(asset)) {
-  //       // buying an item
-  //       route = await crossChainProvider.getMintNFTRoute({
-  //         ...baseRouteConfig,
-  //         item: {
-  //           collectionAddress: asset.contractAddress,
-  //           itemId: asset.itemId,
-  //           price: asset.price
-  //         },
-  //         toAmount: asset.price,
-  //         toChain: asset.chainId
-  //       })
-  //     }
-
-  //     if (route && !signal.aborted) {
-  //       setRoute(route)
-  //     }
-  //   } catch (error) {
-  //     console.error('Error while getting Route: ', error)
-  //     analytics.track(events.ERROR_GETTING_ROUTE, {
-  //       error,
-  //       selectedToken,
-  //       selectedChain
-  //     })
-  //     setRouteFailed(true)
-  //   } finally {
-  //     setIsFetchingRoute(false)
-  //   }
-  // }, [
-  //   analytics,
-  //   asset,
-  //   crossChainProvider,
-  //   destinyChainMANA,
-  //   order,
-  //   price,
-  //   providerTokens,
-  //   selectedChain,
-  //   selectedToken,
-  //   wallet
-  // ])
 
   // when providerTokens are loaded and there's no selected token or the token selected if from another network
   useEffect(() => {
@@ -461,7 +285,6 @@ export const BuyWithCryptoModal = (props: Props) => {
     asset,
     crossChainProvider,
     fromAmount,
-    order,
     price,
     providerTokens,
     routeFeeCost,
@@ -471,70 +294,51 @@ export const BuyWithCryptoModal = (props: Props) => {
     wallet
   ])
 
-  // TODO: Remove
-  // sets interval to refresh route within a certain amount of time
-  // useEffect(() => {
-  //   let interval: NodeJS.Timeout | undefined = undefined
-  //   if (route) {
-  //     // setRouteSetInterval(
-  //     interval = setInterval(() => {
-  //       setIsFetchingRoute(true)
-  //       calculateRoute()
-  //     }, ROUTE_FETCH_INTERVAL)
-  //     // )
-  //   }
-  //   return () => {
-  //     if (interval) {
-  //       clearInterval(interval)
-  //     }
-  //   }
-  // }, [calculateRoute, route])
-
   // TODO: This kind of needs to be removed, refactored or moved to the route fetching hook
   // when changing the selectedToken and it's not fetching route, trigger fetch route
-  useEffect(() => {
-    if (
-      selectedToken &&
-      !route &&
-      !isFetchingRoute &&
-      !useMetaTx &&
-      !routeFailed
-    ) {
-      const isBuyingL1WithOtherTokenThanEthereumMANA =
-        asset.chainId === ChainId.ETHEREUM_MAINNET &&
-        selectedToken.chainId !== ChainId.ETHEREUM_MAINNET.toString() &&
-        selectedToken.symbol !== 'MANA'
+  // useEffect(() => {
+  //   if (
+  //     selectedToken &&
+  //     !route &&
+  //     !isFetchingRoute &&
+  //     !useMetaTx &&
+  //     !routeFailed
+  //   ) {
+  //     const isBuyingL1WithOtherTokenThanEthereumMANA =
+  //       asset.chainId === ChainId.ETHEREUM_MAINNET &&
+  //       selectedToken.chainId !== ChainId.ETHEREUM_MAINNET.toString() &&
+  //       selectedToken.symbol !== 'MANA'
 
-      const isPayingWithOtherTokenThanMANA = selectedToken.symbol !== 'MANA'
-      const isPayingWithMANAButFromOtherChain =
-        selectedToken.symbol === 'MANA' &&
-        selectedToken.chainId !== asset.chainId.toString()
+  //     const isPayingWithOtherTokenThanMANA = selectedToken.symbol !== 'MANA'
+  //     const isPayingWithMANAButFromOtherChain =
+  //       selectedToken.symbol === 'MANA' &&
+  //       selectedToken.chainId !== asset.chainId.toString()
 
-      if (
-        isBuyingL1WithOtherTokenThanEthereumMANA ||
-        isPayingWithOtherTokenThanMANA ||
-        isPayingWithMANAButFromOtherChain
-      ) {
-        setIsFetchingRoute(true)
-        calculateRoute()
-      }
-    }
-  }, [
-    route,
-    useMetaTx,
-    routeFailed,
-    selectedToken,
-    isFetchingRoute,
-    selectedChain,
-    asset.chainId,
-    calculateRoute
-  ])
+  //     if (
+  //       isBuyingL1WithOtherTokenThanEthereumMANA ||
+  //       isPayingWithOtherTokenThanMANA ||
+  //       isPayingWithMANAButFromOtherChain
+  //     ) {
+  //       setIsFetchingRoute(true)
+  //       calculateRoute()
+  //     }
+  //   }
+  // }, [
+  //   route,
+  //   useMetaTx,
+  //   routeFailed,
+  //   selectedToken,
+  //   isFetchingRoute,
+  //   selectedChain,
+  //   asset.chainId,
+  //   calculateRoute
+  // ])
 
-  const onBuyWithCrypto = useCallback(async () => {
+  const handleCrossChainBuy = useCallback(async () => {
     if (route && crossChainProvider && crossChainProvider.isLibInitialized()) {
-      onBuyItemThroughProvider(route)
+      onBuyCrossChain(route)
     }
-  }, [crossChainProvider, onBuyItemThroughProvider, route])
+  }, [crossChainProvider, onBuyCrossChain, route])
 
   const renderSwitchNetworkButton = useCallback(() => {
     return (
@@ -562,77 +366,11 @@ export const BuyWithCryptoModal = (props: Props) => {
     )
   }, [isSwitchingNetwork, onSwitchNetwork, providerChains, selectedChain])
 
-  // TODO: move to its respective HOC (natively buy)
-  // const onBuyNFT = useCallback(() => {
-  //   if (order) {
-  //     const contractNames = getContractNames()
-
-  //     const mana = getContractProp({
-  //       name: contractNames.MANA,
-  //       network: asset.network
-  //     }) as DCLContract
-
-  //     const marketplace = getContractProp({
-  //       address: order?.marketplaceAddress,
-  //       network: asset.network
-  //     }) as DCLContract
-
-  //     onAuthorizedAction({
-  //       targetContractName: ContractName.MANAToken,
-  //       authorizationType: AuthorizationType.ALLOWANCE,
-  //       authorizedAddress: order.marketplaceAddress,
-  //       targetContract: mana as Contract,
-  //       authorizedContractLabel: marketplace.label || marketplace.name,
-  //       requiredAllowanceInWei: order.price,
-  //       onAuthorized: alreadyAuthorized =>
-  //         onExecuteOrder(order, asset as NFT, undefined, !alreadyAuthorized) // undefined as fingerprint
-  //     })
-  //   }
-  // }, [asset, order, getContractProp, onAuthorizedAction, onExecuteOrder])
-
-  // TODO: move to its respective HOC (natively buy)
-  // const onBuyItem = useCallback(() => {
-  //   if (!isNFT(asset)) {
-  //     const contractNames = getContractNames()
-
-  //     const mana = getContractProp({
-  //       name: contractNames.MANA,
-  //       network: asset.network
-  //     }) as DCLContract
-
-  //     const collectionStore = getContractProp({
-  //       name: contractNames.COLLECTION_STORE,
-  //       network: asset.network
-  //     }) as DCLContract
-
-  //     onAuthorizedAction({
-  //       targetContractName: ContractName.MANAToken,
-  //       authorizationType: AuthorizationType.ALLOWANCE,
-  //       authorizedAddress: collectionStore.address,
-  //       targetContract: mana as Contract,
-  //       authorizedContractLabel: collectionStore.label || collectionStore.name,
-  //       requiredAllowanceInWei: asset.price,
-  //       onAuthorized: () => onBuyItemProp(asset)
-  //     })
-  //   }
-  // }, [asset, getContractProp, onAuthorizedAction, onBuyItemProp])
-
-  // TODO: This is the method that replaces the one below
   const handleBuyWithCard = useCallback(() => {
     analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
     onBuyWithCard()
   }, [onBuyWithCard])
 
-  // const onBuyWithCard = useCallback(() => {
-  //   analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
-  //   return !isNFT(asset)
-  //     ? onBuyItemWithCard(asset)
-  //     : !!order
-  //     ? onExecuteOrderWithCard(asset)
-  //     : () => {}
-  // }, [analytics, asset, onBuyItemWithCard, onExecuteOrderWithCard, order])
-
-  // TODO: Extract to GetMANAButton
   const renderGetMANAButton = useCallback(() => {
     return (
       <>
@@ -672,14 +410,11 @@ export const BuyWithCryptoModal = (props: Props) => {
     onClose
   ])
 
-  // TODO BuyNowButton
   const renderBuyNowButton = useCallback(() => {
     let onClick =
       selectedToken?.symbol === 'MANA' && !route
-        ? !!order
-          ? onBuyNFT
-          : onBuyItem
-        : onBuyWithCrypto
+        ? onBuyNatively
+        : handleCrossChainBuy
 
     return (
       <>
@@ -710,19 +445,15 @@ export const BuyWithCryptoModal = (props: Props) => {
     )
   }, [
     route,
-    order,
     selectedToken,
     isFetchingRoute,
     isLoadingBuyCrossChain,
     isFetchingBalance,
     isLoading,
-    onBuyNFT,
-    onBuyItem,
-    onBuyWithCrypto
+    onBuyNatively,
+    handleCrossChainBuy
   ])
 
-  // TODO: This needs to be refactored
-  // TODO: Move to BuyButton component
   const renderMainActionButton = useCallback(() => {
     if (wallet && selectedToken && canBuyItem !== undefined) {
       if (canBuyItem) {
@@ -763,7 +494,6 @@ export const BuyWithCryptoModal = (props: Props) => {
     renderGetMANAButton
   ])
 
-  // TODO: Remains here
   const onTokenOrChainSelection = useCallback(
     (selectedOption: Token | ChainData) => {
       setShowChainSelector(false)
@@ -779,10 +509,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         ) as Token
         // reset all fields
         setSelectedToken(selectedToken)
-        setFromAmount(undefined)
         setCanBuyItem(undefined)
-        // setRoute(undefined)
-        // setRouteFailed(false)
         abortControllerRef.current = new AbortController()
         analytics.track(events.CROSS_CHAIN_TOKEN_SELECTION, {
           selectedToken
@@ -800,8 +527,6 @@ export const BuyWithCryptoModal = (props: Props) => {
         if (token) {
           setSelectedToken(token)
         }
-        // setRoute(undefined)
-        // setRouteFailed(false)
 
         analytics.track(events.CROSS_CHAIN_CHAIN_SELECTION, {
           selectedChain: selectedOption.chainId
@@ -811,7 +536,6 @@ export const BuyWithCryptoModal = (props: Props) => {
     [analytics, providerTokens, selectedChain]
   )
 
-  // TODO: Remains here
   const renderModalNavigation = useCallback(() => {
     if (showChainSelector || showTokenSelector) {
       return (
@@ -1073,29 +797,3 @@ export const BuyWithCryptoModal = (props: Props) => {
     </Modal>
   )
 }
-
-export const BuyNFTWithCryptoModal = React.memo(
-  withAuthorizedAction(
-    BuyWithCryptoModal,
-    AuthorizedAction.BUY,
-    {
-      action: 'buy_with_mana_page.authorization.action',
-      title_action: 'buy_with_mana_page.authorization.title_action'
-    },
-    getBuyItemStatus,
-    getError
-  )
-)
-
-export const MintNFTWithCryptoModal = React.memo(
-  withAuthorizedAction(
-    BuyWithCryptoModal,
-    AuthorizedAction.MINT,
-    {
-      action: 'mint_with_mana_page.authorization.action',
-      title_action: 'mint_with_mana_page.authorization.title_action'
-    },
-    getMintItemStatus,
-    getError
-  )
-)

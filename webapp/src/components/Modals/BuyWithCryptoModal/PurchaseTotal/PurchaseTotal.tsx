@@ -5,7 +5,7 @@ import { Route, Token } from 'decentraland-transactions/crossChain'
 import { isPriceTooLow } from '../../../BuyPage/utils'
 import { ManaToFiat } from '../../../ManaToFiat'
 import { formatPrice } from '../utils'
-import { GasCost, RouteFeeCost } from '../hooks'
+import { GasCostValues, RouteFeeCost } from '../hooks'
 import styles from './PurchaseTotal.module.css'
 
 export const FREE_TX_CONVERED_TEST_ID = 'free-tx-label'
@@ -20,7 +20,7 @@ export type Props = {
   routeFeeCost: RouteFeeCost | undefined
   fromAmount: string | undefined
   isLoading: boolean
-  gasCost: GasCost | undefined
+  gasCost: GasCostValues | undefined
   providerTokens: Token[]
   routeTotalUSDCost: number | undefined
 }

@@ -1,17 +1,40 @@
-import { useCallback } from 'react'
+import React, { useCallback } from 'react'
+import { Contract } from '@dcl/schemas'
+import { ContractName } from 'decentraland-transactions'
+import withAuthorizedAction from 'decentraland-dapps/dist/containers/withAuthorizedAction'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
+import { getContractNames } from '../../../../modules/vendor'
+import { Contract as DCLContract } from '../../../../modules/vendor/services'
+import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
+import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
+import { useBuyNftGasCost, useCrossChainBuyNftRoute } from '../hooks'
+import BuyWithCryptoModal from '../BuyWithCryptoModal.container'
+import { Props } from './BuyNFTWithCryptoModal.types'
 
-export const BuyNFTWithCryptoModal = (props: Props) => {
+const BuyNFTWithCryptoModalHOC = (props: Props) => {
+  const {
+    onClose,
+    isLoadingAuthorization,
+    getContract,
+    onAuthorizedAction,
+    onExecuteOrder,
+    onExecuteOrderCrossChain,
+    onExecuteOrderWithCard,
+    metadata: { nft, order }
+  } = props
+
   const onBuyNatively = useCallback(() => {
     const contractNames = getContractNames()
 
-    const mana = getContractProp({
+    const mana = getContract({
       name: contractNames.MANA,
-      network: asset.network
+      network: nft.network
     }) as DCLContract
 
-    const marketplace = getContractProp({
-      address: order?.marketplaceAddress,
-      network: asset.network
+    const marketplace = getContract({
+      address: order.marketplaceAddress,
+      network: nft.network
     }) as DCLContract
 
     onAuthorizedAction({
@@ -21,8 +44,68 @@ export const BuyNFTWithCryptoModal = (props: Props) => {
       targetContract: mana as Contract,
       authorizedContractLabel: marketplace.label || marketplace.name,
       requiredAllowanceInWei: order.price,
-      onAuthorized: alreadyAuthorized =>
-        onExecuteOrder(order, asset as NFT, undefined, !alreadyAuthorized) // undefined as fingerprint
+      onAuthorized: (alreadyAuthorized: boolean) =>
+        onExecuteOrder(order, nft, undefined, !alreadyAuthorized) // undefined as fingerprint
     })
-  }, [asset, order, getContractProp, onAuthorizedAction, onExecuteOrder])
+  }, [nft, order, getContract, onAuthorizedAction, onExecuteOrder])
+
+  const onBuyWithCard = useCallback(() => onExecuteOrderWithCard(nft), [nft])
+  const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
+    (
+      selectedToken,
+      selectedChain,
+      providerTokens,
+      crossChainProvider,
+      wallet
+    ) =>
+      useCrossChainBuyNftRoute(
+        order,
+        order.chainId,
+        selectedToken,
+        selectedChain,
+        providerTokens,
+        crossChainProvider,
+        wallet
+      ),
+    [order]
+  )
+  const onGetGasCost: OnGetGasCost = useCallback(
+    (selectedToken, selectedChain, wallet, providerTokens) =>
+      useBuyNftGasCost(
+        nft,
+        order,
+        selectedToken,
+        selectedChain,
+        wallet,
+        providerTokens
+      ),
+    [nft, order]
+  )
+
+  return (
+    <BuyWithCryptoModal
+      price={order.price}
+      onBuyNatively={onBuyNatively}
+      onBuyWithCard={onBuyWithCard}
+      onBuyCrossChain={onExecuteOrderCrossChain}
+      onGetGasCost={onGetGasCost}
+      isLoadingAuthorization={isLoadingAuthorization}
+      onGetCrossChainRoute={onGetCrossChainRoute}
+      metadata={{ asset: nft }}
+      onClose={onClose}
+    />
+  )
 }
+
+export const BuyNFTWithCryptoModal = React.memo(
+  withAuthorizedAction(
+    BuyNFTWithCryptoModalHOC,
+    AuthorizedAction.BUY,
+    {
+      action: 'buy_with_mana_page.authorization.action',
+      title_action: 'buy_with_mana_page.authorization.title_action'
+    },
+    getBuyItemStatus,
+    getError
+  )
+)

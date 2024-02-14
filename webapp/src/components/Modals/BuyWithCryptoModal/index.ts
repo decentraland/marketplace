@@ -1,4 +1,2 @@
-export {
-  BuyNFTWithCryptoModalContainer,
-  MintNFTWithCryptoModalConatiner
-} from './BuyWithCryptoModal.container'
+export * from './BuyNFTWithCryptoModal'
+export * from './MintNFTWithCryptoModal'

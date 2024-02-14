@@ -25,17 +25,18 @@ import { NFT } from '../../../modules/nft/types'
 import {
   BUY_NOW_BUTTON_TEST_ID,
   GET_MANA_BUTTON_TEST_ID,
-  PAY_WITH_DATA_TEST_ID,
-  TOKEN_SELECTOR_DATA_TEST_ID,
   BUY_WITH_CARD_TEST_ID,
-  CHAIN_SELECTOR_DATA_TEST_ID,
   SWITCH_NETWORK_BUTTON_TEST_ID,
-  FREE_TX_CONVERED_TEST_ID,
   BuyWithCryptoModal,
   PRICE_TOO_LOW_TEST_ID
 } from './BuyWithCryptoModal'
 import { Props } from './BuyWithCryptoModal.types'
 import { DEFAULT_CHAINS, TESTNET_DEFAULT_CHAINS } from './utils'
+import {
+  CHAIN_SELECTOR_DATA_TEST_ID,
+  PAY_WITH_DATA_TEST_ID,
+  TOKEN_SELECTOR_DATA_TEST_ID
+} from './PaymentSelector'
 
 const mockBalanceOf = jest.fn()
 const mockWeb3ProviderGetBalance = jest.fn()

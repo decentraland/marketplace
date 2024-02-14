@@ -9,7 +9,7 @@ import type { ChainData, Route, Token } from "decentraland-transactions/crossCha
 import { Icon, InfoTooltip } from "decentraland-ui"
 import { ManaToFiat } from "../../../ManaToFiat"
 import { formatPrice } from "../utils"
-import type { GasCost, RouteFeeCost } from "../hooks"
+import type { GasCostValues, RouteFeeCost } from "../hooks"
 import styles from "./PaymentSelector.module.css"
 
 export const PAY_WITH_DATA_TEST_ID = 'pay-with-container'
@@ -22,7 +22,7 @@ type Props = {
   amountInSelectedToken: string | undefined
   route: Route | undefined
   routeFeeCost: RouteFeeCost | undefined
-  gasCost: GasCost | undefined
+  gasCost: GasCostValues | undefined
   isFetchingGasCost: boolean
   providerTokens: Token[]
   selectedToken: Token
