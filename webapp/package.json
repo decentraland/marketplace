@@ -118,10 +118,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/decentraland/marketplace.git"
-  },
-  "overrides": {
-    "@walletconnect/ethereum-provider": "2.9.2",
-    "@walletconnect/core": "2.9.2",
-    "@walletconnect/keyvaluestorage": "1.0.0"
   }
 }
