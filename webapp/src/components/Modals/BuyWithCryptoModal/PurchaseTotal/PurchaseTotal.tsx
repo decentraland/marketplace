@@ -40,6 +40,8 @@ const PurchaseTotal = (props: Props) => {
     routeTotalUSDCost
   } = props
 
+  console.log('IsLoading', isLoading)
+
   return (
     <div className={styles.totalContainer}>
       <div>

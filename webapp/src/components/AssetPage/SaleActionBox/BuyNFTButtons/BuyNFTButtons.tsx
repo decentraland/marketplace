@@ -42,6 +42,7 @@ const BuyNFTButtons = ({
 
   const handleBuyWithCrypto = useCallback(
     (asset, order) => {
+      console.log('Handling buy with crypro', asset, order)
       if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
         onRedirect(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {

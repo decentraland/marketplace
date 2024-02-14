@@ -177,7 +177,6 @@ const useGasCost = (
     }
   }, [
     assetNetwork,
-    gasCost,
     estimateTransactionGas,
     price,
     providerTokens,

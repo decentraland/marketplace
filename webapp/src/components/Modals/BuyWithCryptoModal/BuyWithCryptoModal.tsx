@@ -596,6 +596,8 @@ export const BuyWithCryptoModal = (props: Props) => {
     setShowTokenSelector(true)
   }, [])
 
+  console.log({ isFetchingRoute, isFetchingGasCost })
+
   return (
     <Modal
       size="tiny"
