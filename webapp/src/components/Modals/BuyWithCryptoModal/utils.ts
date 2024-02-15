@@ -20,14 +20,14 @@ import { BigNumber, ethers } from 'ethers'
 import { isNFT } from '../../../modules/asset/utils'
 
 export const getShouldUseMetaTx = (
-  asset: Asset,
+  assetChainId: ChainId,
   selectedChain: ChainId,
   selectedTokenAddress: string,
   destinyChainMANA: string,
   connectedNetwork: Network
 ) => {
   return (
-    getNetwork(asset.chainId) === Network.MATIC &&
+    getNetwork(assetChainId) === Network.MATIC &&
     getNetwork(selectedChain) === Network.MATIC &&
     selectedTokenAddress.toLowerCase() === destinyChainMANA.toLowerCase() &&
     connectedNetwork === Network.ETHEREUM // only trigger meta tx if connected to Ethereum

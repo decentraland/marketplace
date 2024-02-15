@@ -15,7 +15,10 @@ import {
 import { NFT } from '../../../modules/nft/types'
 import * as events from '../../../utils/events'
 import { isPriceTooLow } from '../../BuyPage/utils'
-import { estimateTransactionGas as estimateMintingOrBuyingTransactionGas } from './utils'
+import {
+  estimateTransactionGas as estimateMintingOrBuyingTransactionGas,
+  getShouldUseMetaTx
+} from './utils'
 
 const NATIVE_TOKEN = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
 const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
@@ -63,9 +66,6 @@ export const useTokenBalance = (
       try {
         setIsFetchingBalance(true)
         if (
-          //TODO: Is it really required to have the cross chain provider?
-          // crossChainProvider &&
-          // crossChainProvider.isLibInitialized() &&
           selectedChain &&
           selectedToken &&
           selectedToken.symbol !== 'MANA' && // mana balance is already available in the wallet
@@ -104,7 +104,6 @@ export const useTokenBalance = (
     return () => {
       cancel = true
     }
-    // }, [selectedToken, selectedChain, wallet, crossChainProvider])
   }, [selectedToken, selectedChain, address])
 
   return { isFetchingBalance, tokenBalance: selectedTokenBalance }
@@ -156,8 +155,8 @@ const useGasCost = (
             total: ethers.utils.formatEther(total),
             totalUSDPrice
           })
-          setIsFetchingGasCost(false)
         }
+        setIsFetchingGasCost(false)
       } catch (error) {
         setIsFetchingGasCost(false)
       }
@@ -371,6 +370,10 @@ const useCrossChainRoute = (
   const [fromAmount, setFromAmount] = useState<string>()
   const [route, setRoute] = useState<Route>()
   const abortControllerRef = useRef(new AbortController())
+  const destinationChainMANA = useMemo(
+    () => getContract(ContractName.MANAToken, assetChainId).address,
+    [assetChainId]
+  )
 
   const calculateRoute = useCallback(async () => {
     const abortController = abortControllerRef.current
@@ -443,6 +446,20 @@ const useCrossChainRoute = (
     wallet
   ])
 
+  const useMetaTx = useMemo(() => {
+    return (
+      !!selectedToken &&
+      !!wallet &&
+      getShouldUseMetaTx(
+        assetChainId,
+        selectedChain,
+        selectedToken.address,
+        destinationChainMANA,
+        wallet.network
+      )
+    )
+  }, [destinationChainMANA, selectedChain, selectedToken, wallet])
+
   // Refresh the route every ROUTE_FETCH_INTERVAL
   useEffect(() => {
     let interval: NodeJS.Timeout | undefined = undefined
@@ -461,6 +478,44 @@ const useCrossChainRoute = (
       }
     }
   }, [calculateRoute, route])
+
+  // Refresh the route every time the selected token changes
+  useEffect(() => {
+    if (
+      selectedToken &&
+      !route &&
+      !isFetchingRoute &&
+      !useMetaTx &&
+      !routeFailed
+    ) {
+      const isBuyingL1WithOtherTokenThanEthereumMANA =
+        assetChainId === ChainId.ETHEREUM_MAINNET &&
+        selectedToken.chainId !== ChainId.ETHEREUM_MAINNET.toString() &&
+        selectedToken.symbol !== 'MANA'
+
+      const isPayingWithOtherTokenThanMANA = selectedToken.symbol !== 'MANA'
+      const isPayingWithMANAButFromOtherChain =
+        selectedToken.symbol === 'MANA' &&
+        selectedToken.chainId !== assetChainId.toString()
+
+      if (
+        isBuyingL1WithOtherTokenThanEthereumMANA ||
+        isPayingWithOtherTokenThanMANA ||
+        isPayingWithMANAButFromOtherChain
+      ) {
+        calculateRoute()
+      }
+    }
+  }, [
+    route,
+    useMetaTx,
+    routeFailed,
+    selectedToken,
+    isFetchingRoute,
+    selectedChain,
+    assetChainId,
+    calculateRoute
+  ])
 
   const routeFeeCost = useMemo(() => {
     if (route) {

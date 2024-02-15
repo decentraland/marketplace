@@ -141,7 +141,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       !!selectedToken &&
       !!wallet &&
       getShouldUseMetaTx(
-        asset,
+        asset.chainId,
         selectedChain,
         selectedToken.address,
         destinyChainMANA,
@@ -206,13 +206,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       )
       setSelectedToken(MANAToken || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
     }
-  }, [
-    // calculateRoute,
-    crossChainProvider,
-    providerTokens,
-    selectedChain,
-    selectedToken
-  ])
+  }, [crossChainProvider, providerTokens, selectedChain, selectedToken])
 
   // computes if the user can buy the item with the selected token
   useEffect(() => {
@@ -230,7 +224,6 @@ export const BuyWithCryptoModal = (props: Props) => {
             asset.network === Network.MATIC &&
             getNetwork(selectedChain) === Network.ETHEREUM
           ) {
-            // TODO: Asset network as prop
             canBuy =
               wallet.networks[Network.ETHEREUM].mana >=
               +ethers.utils.formatEther(price)
@@ -293,46 +286,6 @@ export const BuyWithCryptoModal = (props: Props) => {
     selectedTokenBalance,
     wallet
   ])
-
-  // TODO: This kind of needs to be removed, refactored or moved to the route fetching hook
-  // when changing the selectedToken and it's not fetching route, trigger fetch route
-  // useEffect(() => {
-  //   if (
-  //     selectedToken &&
-  //     !route &&
-  //     !isFetchingRoute &&
-  //     !useMetaTx &&
-  //     !routeFailed
-  //   ) {
-  //     const isBuyingL1WithOtherTokenThanEthereumMANA =
-  //       asset.chainId === ChainId.ETHEREUM_MAINNET &&
-  //       selectedToken.chainId !== ChainId.ETHEREUM_MAINNET.toString() &&
-  //       selectedToken.symbol !== 'MANA'
-
-  //     const isPayingWithOtherTokenThanMANA = selectedToken.symbol !== 'MANA'
-  //     const isPayingWithMANAButFromOtherChain =
-  //       selectedToken.symbol === 'MANA' &&
-  //       selectedToken.chainId !== asset.chainId.toString()
-
-  //     if (
-  //       isBuyingL1WithOtherTokenThanEthereumMANA ||
-  //       isPayingWithOtherTokenThanMANA ||
-  //       isPayingWithMANAButFromOtherChain
-  //     ) {
-  //       setIsFetchingRoute(true)
-  //       calculateRoute()
-  //     }
-  //   }
-  // }, [
-  //   route,
-  //   useMetaTx,
-  //   routeFailed,
-  //   selectedToken,
-  //   isFetchingRoute,
-  //   selectedChain,
-  //   asset.chainId,
-  //   calculateRoute
-  // ])
 
   const handleCrossChainBuy = useCallback(async () => {
     if (route && crossChainProvider && crossChainProvider.isLibInitialized()) {
@@ -596,8 +549,6 @@ export const BuyWithCryptoModal = (props: Props) => {
     setShowTokenSelector(true)
   }, [])
 
-  console.log({ isFetchingRoute, isFetchingGasCost })
-
   return (
     <Modal
       size="tiny"
@@ -668,7 +619,11 @@ export const BuyWithCryptoModal = (props: Props) => {
                 route={route}
                 routeFeeCost={routeFeeCost}
                 fromAmount={fromAmount}
-                isLoading={isFetchingRoute || isFetchingGasCost}
+                isLoading={
+                  isFetchingRoute ||
+                  isFetchingGasCost ||
+                  (shouldUseCrossChainProvider && !route)
+                }
                 gasCost={gasCost}
                 providerTokens={providerTokens}
                 routeTotalUSDCost={routeTotalUSDCost}
@@ -759,7 +714,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   })}
                 </span>
               ) : null}
-              {/* TODO: Why is it checking if it's a wearable or a emote? */}
+
               {canBuyItem === false && isWearableOrEmote(asset) ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {

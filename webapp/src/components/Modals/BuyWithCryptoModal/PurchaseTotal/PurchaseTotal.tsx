@@ -12,8 +12,7 @@ export const FREE_TX_CONVERED_TEST_ID = 'free-tx-label'
 
 export type Props = {
   price: string
-  // TODO: This shouldn't be optional
-  selectedToken?: Token
+  selectedToken: Token
   useMetaTx: boolean
   shouldUseCrossChainProvider: boolean
   route: Route | undefined
@@ -39,8 +38,6 @@ const PurchaseTotal = (props: Props) => {
     providerTokens,
     routeTotalUSDCost
   } = props
-
-  console.log('IsLoading', isLoading)
 
   return (
     <div className={styles.totalContainer}>
@@ -68,55 +65,44 @@ const PurchaseTotal = (props: Props) => {
           />
         ) : (
           <div>
-            {!!selectedToken ? (
-              shouldUseCrossChainProvider ? (
-                !!route && routeFeeCost ? (
-                  <>
-                    <img
-                      src={selectedToken?.logoURI}
-                      alt={selectedToken?.name}
-                    />
-                    {routeFeeCost?.token.symbol !== selectedToken.symbol &&
-                    fromAmount ? (
-                      <>
-                        {formatPrice(fromAmount, selectedToken)}
-                        <span> + </span>
-                        <img
-                          src={routeFeeCost.token.logoURI}
-                          alt={routeFeeCost.token.name}
-                        />
-                        {formatPrice(
-                          routeFeeCost.totalCost,
-                          routeFeeCost.token
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {formatPrice(
-                          Number(fromAmount) + Number(routeFeeCost.totalCost),
-                          selectedToken
-                        )}
-                      </>
-                    )}
-                  </>
-                ) : null
-              ) : (
+            {shouldUseCrossChainProvider ? (
+              !!route && routeFeeCost ? (
                 <>
-                  {!!gasCost && gasCost.token ? (
+                  <img src={selectedToken.logoURI} alt={selectedToken.name} />
+                  {routeFeeCost?.token.symbol !== selectedToken.symbol &&
+                  fromAmount ? (
                     <>
-                      <img
-                        src={gasCost.token.logoURI}
-                        alt={gasCost.token.name}
-                      />
-                      {formatPrice(Number(gasCost.total), gasCost.token)}
+                      {formatPrice(fromAmount, selectedToken)}
                       <span> + </span>
+                      <img
+                        src={routeFeeCost.token.logoURI}
+                        alt={routeFeeCost.token.name}
+                      />
+                      {formatPrice(routeFeeCost.totalCost, routeFeeCost.token)}
                     </>
-                  ) : null}
-                  <img src={selectedToken?.logoURI} alt={selectedToken?.name} />
-                  {ethers.utils.formatEther(price)}
+                  ) : (
+                    <>
+                      {formatPrice(
+                        Number(fromAmount) + Number(routeFeeCost.totalCost),
+                        selectedToken
+                      )}
+                    </>
+                  )}
                 </>
-              )
-            ) : null}
+              ) : null
+            ) : (
+              <>
+                {!!gasCost && gasCost.token ? (
+                  <>
+                    <img src={gasCost.token.logoURI} alt={gasCost.token.name} />
+                    {formatPrice(Number(gasCost.total), gasCost.token)}
+                    <span> + </span>
+                  </>
+                ) : null}
+                <img src={selectedToken?.logoURI} alt={selectedToken?.name} />
+                {ethers.utils.formatEther(price)}
+              </>
+            )}
           </div>
         )}
         <div>

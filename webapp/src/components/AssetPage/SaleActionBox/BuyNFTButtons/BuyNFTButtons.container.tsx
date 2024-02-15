@@ -20,8 +20,9 @@ import BuyNFTButtons from './BuyNFTButtons'
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
   isConnecting: isConnecting(state),
-  isBuyingWithCryptoModalOpen: getOpenModals(state)['BuyNFTWithCryptoModal']
-    ?.open
+  isBuyingWithCryptoModalOpen:
+    getOpenModals(state)['BuyNFTWithCryptoModal']?.open ||
+    getOpenModals(state)['MintNFTWithCryptoModal']?.open
 })
 
 const mapDispatch = (
@@ -33,7 +34,7 @@ const mapDispatch = (
     ownProps.assetType === AssetType.NFT
       ? dispatch(
           openModal('BuyNFTWithCryptoModal', {
-            asset,
+            nft: asset,
             order
           })
         )

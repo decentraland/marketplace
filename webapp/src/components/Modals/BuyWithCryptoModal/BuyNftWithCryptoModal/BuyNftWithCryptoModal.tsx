@@ -24,6 +24,9 @@ const BuyNFTWithCryptoModalHOC = (props: Props) => {
     metadata: { nft, order }
   } = props
 
+  console.log('NFT: ', nft)
+  console.log('Order: ', order)
+
   const onBuyNatively = useCallback(() => {
     const contractNames = getContractNames()
 
