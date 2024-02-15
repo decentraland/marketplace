@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ethers } from 'ethers'
+import { Network } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
@@ -483,7 +484,7 @@ const Transaction = (props: Props) => {
       const chainId = getChainIdByNetwork(network)
       const contract = getContract({
         name: getContractNames().MANA,
-        network: network
+        network: network as Network.ETHEREUM | Network.MATIC
       })
 
       const name = getNetworkMANADescription(network)

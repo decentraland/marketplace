@@ -29,7 +29,10 @@ import { Account, AccountMetrics, CreatorAccount } from './types'
 
 export type AccountState = {
   data: Record<string, Account>
-  metrics: Record<Network, Record<string, AccountMetrics>>
+  metrics: {
+    [Network.ETHEREUM]: Record<string, AccountMetrics>
+    [Network.MATIC]: Record<string, AccountMetrics>
+  }
   creators: {
     accounts: CreatorAccount[]
     search: string | null

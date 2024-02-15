@@ -8,8 +8,10 @@ import { sumAccountMetrics } from './utils'
 
 export const getState = (state: RootState) => state.account
 export const getData = (state: RootState) => getState(state).data
-export const getCreators = (state: RootState) => getState(state).creators.accounts
-export const getCreatorsSearchQuery = (state: RootState) => getState(state).creators.search
+export const getCreators = (state: RootState) =>
+  getState(state).creators.accounts
+export const getCreatorsSearchQuery = (state: RootState) =>
+  getState(state).creators.search
 export const getMetricsByNetworkByAddress = (state: RootState) =>
   getState(state).metrics
 export const getLoading = (state: RootState) => getState(state).loading
@@ -34,7 +36,10 @@ export const getMetricsByAddressByNetwork = createSelector(
       ...Object.keys(metrics.MATIC)
     ])
 
-    const res: Record<string, Record<Network, AccountMetrics>> = {}
+    const res: Record<
+      string,
+      { [Network.ETHEREUM]: AccountMetrics; [Network.MATIC]: AccountMetrics }
+    > = {}
 
     for (const address of addresses) {
       res[address] = {

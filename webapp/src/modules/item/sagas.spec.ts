@@ -65,7 +65,8 @@ const item = {
 } as Item
 
 const wallet = {
-  address: '0x32be343b94f860124dc4fee278fdcbd38c102d88'
+  address: '0x32be343b94f860124dc4fee278fdcbd38c102d88',
+  chainId: ChainId.MATIC_MAINNET
 }
 
 const txHash =
@@ -135,7 +136,7 @@ describe('when handling the buy items request action', () => {
           [select(getWallet), wallet],
           [matchers.call.fn(sendTransaction), Promise.resolve(txHash)]
         ])
-        .put(buyItemSuccess(item.chainId, txHash, item))
+        .put(buyItemSuccess(wallet.chainId, txHash, item))
         .dispatch(buyItemRequest(item))
         .run({ silenceTimeout: true })
     })
