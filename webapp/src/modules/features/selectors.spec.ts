@@ -16,7 +16,8 @@ import {
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
   getIsClaimingNamesWithFiatEnabled,
-  getIsEnsAddressEnabled
+  getIsEnsAddressEnabled,
+  getIsMintingNamesWithAxelarEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -169,6 +170,12 @@ const waitForInitialLoadingSelectors = [
     feature: FeatureName.ENS_ADDRESS,
     selector: getIsEnsAddressEnabled,
     applicationName: ApplicationName.DAPPS
+  },
+  {
+    name: 'minting-names-with-axelar',
+    feature: FeatureName.MINTING_NAMES_WITH_AXELAR,
+    selector: getIsMintingNamesWithAxelarEnabled,
+    applicationName: ApplicationName.MARKETPLACE
   }
 ]
 
