@@ -129,3 +129,14 @@ export const getIsEnsAddressEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsMintingNamesWithAxelarEnabled = (state: RootState) => {
+  return (
+    hasLoadedInitialFlags(state) &&
+    getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.MINTING_NAMES_WITH_AXELAR
+    )
+  )
+}

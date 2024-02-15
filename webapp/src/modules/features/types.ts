@@ -21,5 +21,6 @@ export enum FeatureName {
   BUY_CROSS_CHAIN = 'buy-cross-chain',
   AUTH_DAPP = 'auth-dapp',
   CLAIM_NAMES_WITH_FIAT = 'names-fiat-payments',
-  ENS_ADDRESS = 'ens-address'
+  ENS_ADDRESS = 'ens-address',
+  MINTING_NAMES_WITH_AXELAR = 'minting-names-with-axelar',
 }
