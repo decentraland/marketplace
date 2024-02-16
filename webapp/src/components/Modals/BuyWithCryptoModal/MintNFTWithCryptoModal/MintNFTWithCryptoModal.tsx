@@ -14,6 +14,7 @@ import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
 
 const MintNFTWithCryptoModalHOC = (props: Props) => {
   const {
+    name,
     metadata: { item },
     isLoadingAuthorization,
     getContract,
@@ -90,6 +91,7 @@ const MintNFTWithCryptoModalHOC = (props: Props) => {
       isLoadingAuthorization={isLoadingAuthorization}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset: item }}
+      name={name}
       onClose={onClose}
     />
   )

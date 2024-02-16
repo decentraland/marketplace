@@ -8,7 +8,7 @@ import { formatPrice } from '../utils'
 import { GasCostValues, RouteFeeCost } from '../hooks'
 import styles from './PurchaseTotal.module.css'
 
-export const FREE_TX_CONVERED_TEST_ID = 'free-tx-label'
+export const FREE_TX_COVERED_TEST_ID = 'free-tx-label'
 
 export type Props = {
   price: string
@@ -46,7 +46,7 @@ const PurchaseTotal = (props: Props) => {
         {useMetaTx && !isPriceTooLow(price) ? (
           <span
             className={styles.feeCovered}
-            data-testid={FREE_TX_CONVERED_TEST_ID}
+            data-testid={FREE_TX_COVERED_TEST_ID}
           >
             {t('buy_with_crypto_modal.transaction_fee_covered', {
               covered: (

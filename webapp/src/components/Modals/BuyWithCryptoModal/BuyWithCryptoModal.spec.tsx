@@ -1,12 +1,11 @@
 import { BigNumber } from 'ethers'
 import { Context as ResponsiveContext } from 'react-responsive'
-import { waitFor } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   BodyShape,
   ChainId,
   Item,
-  ListingStatus,
   NFTCategory,
   Network,
   Rarity,
@@ -19,9 +18,7 @@ import {
   AxelarProvider
 } from 'decentraland-transactions/crossChain'
 import { getMinSaleValueInWei } from '../../BuyPage/utils'
-import { VendorName } from '../../../modules/vendor'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
-import { NFT } from '../../../modules/nft/types'
 import {
   BUY_NOW_BUTTON_TEST_ID,
   GET_MANA_BUTTON_TEST_ID,
@@ -30,19 +27,48 @@ import {
   BuyWithCryptoModal,
   PRICE_TOO_LOW_TEST_ID
 } from './BuyWithCryptoModal'
-import { Props } from './BuyWithCryptoModal.types'
+import {
+  OnGetCrossChainRoute,
+  OnGetGasCost,
+  Props
+} from './BuyWithCryptoModal.types'
 import { DEFAULT_CHAINS, TESTNET_DEFAULT_CHAINS } from './utils'
 import {
   CHAIN_SELECTOR_DATA_TEST_ID,
   PAY_WITH_DATA_TEST_ID,
   TOKEN_SELECTOR_DATA_TEST_ID
 } from './PaymentSelector'
+import { useTokenBalance } from './hooks'
+import { FREE_TX_COVERED_TEST_ID } from './PurchaseTotal'
 
-const mockBalanceOf = jest.fn()
-const mockWeb3ProviderGetBalance = jest.fn()
 const mockConfigIs = jest.fn()
 
+const mockUseTokenBalance = (
+  isFetchingBalance: boolean,
+  tokenBalance: BigNumber
+) => {
+  const useTokenBalanceMock = useTokenBalance as jest.Mock<
+    ReturnType<typeof useTokenBalance>,
+    Parameters<typeof useTokenBalance>
+  >
+  useTokenBalanceMock.mockReset()
+  useTokenBalanceMock.mockReturnValue({
+    isFetchingBalance,
+    tokenBalance
+  })
+}
+
 jest.mock('../../../modules/vendor/decentraland/marketplace/api')
+jest.mock('./hooks', () => {
+  const module = jest.requireActual('./hooks')
+  return {
+    ...module,
+    useTokenBalance: jest.fn().mockReturnValue({
+      isFetchingBalance: false,
+      tokenBalance: BigNumber.from(10000000000000)
+    })
+  }
+})
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
   const actualEth = jest.requireActual('decentraland-dapps/dist/lib/eth')
   return {
@@ -60,27 +86,6 @@ jest.mock('../../../config', () => {
     }
   }
 })
-jest.mock('ethers', () => {
-  const actualEthers = jest.requireActual('ethers')
-  return {
-    ...actualEthers,
-    ethers: {
-      ...actualEthers.ethers,
-      providers: {
-        ...actualEthers.ethers.providers,
-        Web3Provider: function() {
-          return { getBalance: mockWeb3ProviderGetBalance }
-        }
-      },
-      Contract: function() {
-        return {
-          balanceOf: mockBalanceOf
-        }
-      }
-    }
-  }
-})
-
 jest.mock('decentraland-transactions/crossChain', () => {
   const original = jest.requireActual('decentraland-transactions/crossChain')
   return {
@@ -433,80 +438,36 @@ const MOCKED_ITEM = {
   }
 }
 
-const MOCKED_NFT = {
-  id:
-    '0x9412dcbecc58a924e9c93c42ca9d0430d5d6c4c6-105312291668557186697918027683670432318895095400549111254310977565',
-  tokenId: '105312291668557186697918027683670432318895095400549111254310977565',
-  contractAddress: '0x9412dcbecc58a924e9c93c42ca9d0430d5d6c4c6',
-  category: NFTCategory.WEARABLE,
-  activeOrderId:
-    '0x306a7497acdd4f8feabc692610fb0f0fc60926e8f042648a8cd84e990f159a8b',
-  openRentalId: null,
-  owner: '0xbb41547794847cea1966b12dd615db2094309a39',
-  name: 'PEDIGREE® FOSTERVERSE™ MUTTPACK',
-  image:
-    'https://peer.decentraland.org/lambdas/collections/contents/urn:decentraland:matic:collections-v2:0x9412dcbecc58a924e9c93c42ca9d0430d5d6c4c6:1/thumbnail',
-  url:
-    '/contracts/0x9412dcbecc58a924e9c93c42ca9d0430d5d6c4c6/tokens/105312291668557186697918027683670432318895095400549111254310977565',
-  data: {
-    wearable: {
-      bodyShapes: [BodyShape.MALE, BodyShape.FEMALE],
-      category: WearableCategory.UPPER_BODY,
-      description: '',
-      rarity: Rarity.UNCOMMON,
-      isSmart: false
-    }
-  },
-  issuedId: '29',
-  itemId: '1',
-  network: Network.MATIC,
-  chainId: ChainId.MATIC_MAINNET,
-  createdAt: 1674598717000,
-  updatedAt: 1699962957000,
-  soldAt: 0,
-  urn:
-    'urn:decentraland:matic:collections-v2:0x9412dcbecc58a924e9c93c42ca9d0430d5d6c4c6:1',
-  vendor: VendorName.DECENTRALAND
-}
-
-const MOCKED_ORDER = {
-  id: '0x306a7497acdd4f8feabc692610fb0f0fc60926e8f042648a8cd84e990f159a8b',
-  marketplaceAddress: '0x480a0f4e360e8964e68858dd231c2922f1df45ef',
-  contractAddress: '0x9412dcbecc58a924e9c93c42ca9d0430d5d6c4c6',
-  tokenId: '105312291668557186697918027683670432318895095400549111254310977565',
-  owner: '0xbb41547794847cea1966b12dd615db2094309a39',
-  buyer: null,
-  price: '10000000000000000',
-  status: ListingStatus.OPEN,
-  network: Network.MATIC,
-  chainId: ChainId.MATIC_MAINNET,
-  expiresAt: 1738422000,
-  createdAt: 1699962957000,
-  updatedAt: 1699962957000,
-  issuedId: '29'
-}
-
 async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
   const defaultProps: Props = {
+    name: 'A name',
     metadata: { asset: MOCKED_ITEM },
-    isLoading: false,
-    isBuyWithCardPage: false,
-    isLoadingAuthorization: false,
-    isLoadingBuyCrossChain: false,
-    isSwitchingNetwork: false,
+    price: MOCKED_ITEM.price,
     wallet: null,
-    name: 'BuyModal',
-    onClose: jest.fn(),
-    getContract: jest.fn(),
-    onAuthorizedAction: jest.fn(),
-    onBuyItem: jest.fn(),
-    onBuyItemThroughProvider: jest.fn(),
-    onBuyItemWithCard: jest.fn(),
-    onCloseAuthorization: jest.fn(),
-    onExecuteOrder: jest.fn(),
-    onExecuteOrderWithCard: jest.fn(),
+    isLoading: false,
+    isLoadingBuyCrossChain: false,
+    isLoadingAuthorization: false,
+    isSwitchingNetwork: false,
+    isBuyWithCardPage: false,
+    onGetCrossChainRoute: jest
+      .fn<ReturnType<OnGetCrossChainRoute>, Parameters<OnGetCrossChainRoute>>()
+      .mockReturnValue({
+        route: undefined,
+        fromAmount: undefined,
+        routeFeeCost: undefined,
+        routeTotalUSDCost: undefined,
+        isFetchingRoute: false,
+        routeFailed: false
+      }),
+    onGetGasCost: jest
+      .fn<ReturnType<OnGetGasCost>, Parameters<OnGetGasCost>>()
+      .mockReturnValue({ gasCost: undefined, isFetchingGasCost: false }),
+    onSwitchNetwork: jest.fn(),
+    onBuyNatively: jest.fn(),
+    onBuyWithCard: jest.fn(),
+    onBuyCrossChain: jest.fn(),
     onGetMana: jest.fn(),
-    onSwitchNetwork: jest.fn()
+    onClose: jest.fn()
   }
   const rendered = renderWithProviders(
     <ResponsiveContext.Provider value={{ width: 900 }}>
@@ -519,6 +480,42 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
   return rendered
 }
 
+const createOnGetCrossChainRouteMockForUSDC = (
+  route: Route,
+  chainId: ChainId,
+  fromAmount: string
+) => {
+  return jest
+    .fn<ReturnType<OnGetCrossChainRoute>, Parameters<OnGetCrossChainRoute>>()
+    .mockReturnValue({
+      route,
+      fromAmount,
+      routeFeeCost: {
+        token: {
+          type: 'evm' as any,
+          chainId: chainId.toString(),
+          address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+          name: 'USD Coin',
+          symbol: 'USDC',
+          decimals: 6,
+          logoURI:
+            'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdc.svg',
+          coingeckoId: 'usd-coin',
+          volatility: 0,
+          usdPrice: 1
+        },
+        gasCostWei: BigNumber.from(0),
+        gasCost: '0',
+        feeCost: '0',
+        feeCostWei: BigNumber.from(0),
+        totalCost: '0'
+      },
+      routeTotalUSDCost: 1000,
+      isFetchingRoute: false,
+      routeFailed: false
+    })
+}
+
 describe('BuyWithCryptoModal', () => {
   let modalProps: Partial<Props>
   let crossChainProvider: CrossChainProvider
@@ -527,9 +524,6 @@ describe('BuyWithCryptoModal', () => {
       init: jest.fn(),
       initialized: true,
       isLibInitialized: () => true,
-      getFromAmount: jest.fn(),
-      getMintNFTRoute: jest.fn(),
-      getBuyNFTRoute: jest.fn(),
       getSupportedChains: () => MOCK_SUPPORTED_CHAIN,
       getSupportedTokens: () => MOCKED_PROVIDER_TOKENS
     } as unknown) as AxelarProvider
@@ -537,12 +531,9 @@ describe('BuyWithCryptoModal', () => {
     ;(mockConfigIs as jest.Mock).mockReturnValue(false) // so it returns prod  values
     marketplaceAPI.fetchWalletTokenBalances = jest.fn().mockResolvedValue([])
     modalProps = {
-      onBuyItem: jest.fn(),
-      onExecuteOrder: jest.fn(),
+      onBuyNatively: jest.fn(),
+      onBuyCrossChain: jest.fn(),
       metadata: { asset: MOCKED_ITEM },
-      getContract: jest.fn().mockResolvedValue({
-        address: '0x0' // collection store mock
-      }),
       wallet: {
         networks: {
           [Network.ETHEREUM]: {
@@ -554,9 +545,6 @@ describe('BuyWithCryptoModal', () => {
         }
       } as Wallet
     }
-    mockWeb3ProviderGetBalance.mockResolvedValue(
-      BigNumber.from('1000000000000000000')
-    ) //  this if for the check if can pay gas
   })
 
   describe('and the user is connected to Ethereum network', () => {
@@ -568,7 +556,7 @@ describe('BuyWithCryptoModal', () => {
       } as Wallet
     })
 
-    describe('and tries to buy an Ethereum wearable', () => {
+    describe('and tries to buy an Ethereum asset', () => {
       beforeEach(() => {
         modalProps.metadata = {
           asset: {
@@ -580,14 +568,16 @@ describe('BuyWithCryptoModal', () => {
       })
 
       describe('and wants to pay with MANA', () => {
-        describe('and has enough MANA balance in Ethereum to buy the Item', () => {
+        describe('and has enough MANA balance in Ethereum to buy an asset', () => {
           beforeEach(() => {
             modalProps.metadata = {
               asset: {
+                ...MOCKED_ITEM,
                 ...(modalProps.metadata ? modalProps.metadata.asset : {}),
                 price: '10000000000000000'
               } as Item
             }
+            modalProps.price = '10000000000000000'
             modalProps.wallet = {
               ...modalProps.wallet,
               networks: {
@@ -599,61 +589,19 @@ describe('BuyWithCryptoModal', () => {
                 }
               }
             } as Wallet
-            modalProps.onAuthorizedAction = jest
-              .fn()
-              .mockImplementation(({ onAuthorized }: any) => {
-                onAuthorized()
-              })
           })
 
-          describe('and its trying to mint an item', () => {
-            beforeEach(() => {
-              modalProps.metadata = {
-                asset: {
-                  ...MOCKED_ITEM,
-                  ...(modalProps.metadata ? modalProps.metadata.asset : {})
-                }
-              }
-            })
-            it('should render the buy now button and call the onBuyItem on the click', async () => {
-              const { getByTestId } = await renderBuyWithCryptoModal(modalProps)
-              const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
-              expect(buyNowButton).toBeInTheDocument()
+          it('should render the buy now button and call the onBuyNatively on click', async () => {
+            const { getByTestId } = await renderBuyWithCryptoModal(modalProps)
+            const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
+            expect(buyNowButton).toBeInTheDocument()
 
-              buyNowButton.click()
-              expect(modalProps.onBuyItem).toHaveBeenCalledWith(
-                modalProps.metadata?.asset
-              )
-            })
-          })
-
-          describe('and its trying to buy an existing NFT', () => {
-            beforeEach(() => {
-              modalProps.metadata = {
-                asset: {
-                  ...MOCKED_NFT,
-                  ...(modalProps.metadata ? modalProps.metadata.asset : {})
-                } as NFT,
-                order: { ...MOCKED_ORDER, price: '10000000000000000' }
-              }
-            })
-            it('should render the buy now button and call the onExecuteOrder on the click', async () => {
-              const { getByTestId } = await renderBuyWithCryptoModal(modalProps)
-              const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
-              expect(buyNowButton).toBeInTheDocument()
-
-              buyNowButton.click()
-              expect(modalProps.onExecuteOrder).toHaveBeenCalledWith(
-                MOCKED_ORDER,
-                modalProps.metadata?.asset,
-                undefined,
-                true
-              )
-            })
+            fireEvent.click(buyNowButton)
+            expect(modalProps.onBuyNatively).toHaveBeenCalled()
           })
         })
 
-        describe('and does not have enough MANA balance in Ethereum to buy the Item', () => {
+        describe('and does not have enough MANA balance in Ethereum to buy the asset', () => {
           beforeEach(() => {
             ;(modalProps.metadata?.asset as Item).price = '10000000000000000' // 0.1 MANA
             modalProps.wallet = {
@@ -683,20 +631,19 @@ describe('BuyWithCryptoModal', () => {
           route = ({
             route: MOCKED_ROUTE
           } as unknown) as Route
-          ;(crossChainProvider.getMintNFTRoute as jest.Mock).mockResolvedValue(
-            route
-          )
-          ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
+            route,
+            ChainId.ETHEREUM_MAINNET,
             '0.438482'
-          ) // 0.43 USDC needed to buy the item
-          modalProps.onBuyItemThroughProvider = jest.fn()
-          mockBalanceOf.mockResolvedValue(BigNumber.from('2000000')) // user has 2 USDC in wei
+          )
         })
+
         describe('and has enough balance to buy it', () => {
           beforeEach(() => {
-            modalProps.onBuyItemThroughProvider = jest.fn()
+            mockUseTokenBalance(false, BigNumber.from('2000000')) // user has 2 USDC in wei
           })
-          it('should render the buy now button and call the onBuyItemThroughProvider on the click', async () => {
+
+          it('should render the buy now button and call the onBuyCrossChain on the click', async () => {
             const {
               getByTestId,
               findByTestId,
@@ -704,27 +651,26 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             const buyNowButton = await findByTestId(BUY_NOW_BUTTON_TEST_ID)
             expect(buyNowButton).toBeInTheDocument()
-            buyNowButton.click()
+            fireEvent.click(buyNowButton)
 
             await waitFor(() =>
-              expect(modalProps.onBuyItemThroughProvider).toHaveBeenCalledWith(
-                route
-              )
+              expect(modalProps.onBuyCrossChain).toHaveBeenCalledWith(route)
             )
           })
         })
 
         describe('and does not have enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('200000')) // user has 0.2 USDC in wei
+            mockUseTokenBalance(false, BigNumber.from('200000')) // user has 0.2 USDC in wei
           })
+
           it('should render the get mana and buy with card buttons', async () => {
             const {
               getByTestId,
@@ -733,10 +679,10 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(GET_MANA_BUTTON_TEST_ID)
@@ -754,18 +700,18 @@ describe('BuyWithCryptoModal', () => {
           route = ({
             route: MOCKED_ROUTE
           } as unknown) as Route
-          ;(crossChainProvider.getMintNFTRoute as jest.Mock).mockResolvedValue(
-            route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
+            route,
+            ChainId.MATIC_MAINNET,
+            '0.438482'
           )
         })
 
         describe('and has enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('2000000')) // user has 2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('2000000')) // user has 2 USDC in wei
           })
+
           it('should render the switch network button to send the tx', async () => {
             const {
               getByTestId,
@@ -774,16 +720,16 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
-            chainSelector.click()
+            fireEvent.click(chainSelector)
 
             const polygonNetworkOption = await findByText('Polygon')
-            polygonNetworkOption.click()
+            fireEvent.click(polygonNetworkOption)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
@@ -793,10 +739,7 @@ describe('BuyWithCryptoModal', () => {
 
         describe('and does not have enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('200000')) // user has 0.2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('200000')) // user has 0.2 USDC in wei
           })
           it('should render the get MANA and buy with card buttons', async () => {
             const {
@@ -806,16 +749,16 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
-            chainSelector.click()
+            fireEvent.click(chainSelector)
 
             const polygonNetworkOption = await findByText(/Polygon/)
-            polygonNetworkOption.click()
+            fireEvent.click(polygonNetworkOption)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(GET_MANA_BUTTON_TEST_ID)
@@ -828,7 +771,7 @@ describe('BuyWithCryptoModal', () => {
       })
     })
 
-    describe('and tries to buy a Polygon wearable', () => {
+    describe('and tries to buy a Polygon asset', () => {
       beforeEach(() => {
         modalProps.metadata = {
           asset: {
@@ -840,11 +783,9 @@ describe('BuyWithCryptoModal', () => {
       })
 
       describe('and wants to pay with MANA', () => {
-        describe('and it is an item suitable for a meta tx', () => {
+        describe('and it is an asset suitable for a meta tx', () => {
           beforeEach(() => {
-            ;(modalProps.metadata?.asset as Item).price = BigNumber.from(
-              getMinSaleValueInWei()
-            )
+            modalProps.price = BigNumber.from(getMinSaleValueInWei())
               .add(1)
               .toString()
           })
@@ -859,85 +800,26 @@ describe('BuyWithCryptoModal', () => {
                   }
                 }
               } as Wallet
-              modalProps.getContract = jest.fn().mockResolvedValue({
-                address: '0x0'
-              })
-              modalProps.onAuthorizedAction = jest
-                .fn()
-                .mockImplementation(({ onAuthorized }: any) => {
-                  onAuthorized()
-                })
+              modalProps.metadata = {
+                asset: {
+                  ...MOCKED_ITEM,
+                  ...(modalProps.metadata ? modalProps.metadata.asset : {})
+                }
+              }
             })
 
-            describe('and its trying to mint an item', () => {
-              beforeEach(() => {
-                modalProps.metadata = {
-                  asset: {
-                    ...MOCKED_ITEM,
-                    ...(modalProps.metadata ? modalProps.metadata.asset : {})
-                  }
-                }
-              })
+            it('should render the buy now button and free transaction label and call on onBuyNatively on click', async () => {
+              const { getByTestId } = await renderBuyWithCryptoModal(modalProps)
+              const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
 
-              it('should render the buy now button and free transaction label and call on onBuyItem on the click', async () => {
-                const { getByTestId } = await renderBuyWithCryptoModal(
-                  modalProps
-                )
-                const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
+              expect(buyNowButton).toBeInTheDocument()
+              expect(getByTestId(FREE_TX_COVERED_TEST_ID)).toBeInTheDocument()
 
-                expect(buyNowButton).toBeInTheDocument()
-                expect(
-                  getByTestId(FREE_TX_CONVERED_TEST_ID)
-                ).toBeInTheDocument()
+              fireEvent.click(buyNowButton)
 
-                buyNowButton.click()
-
-                await waitFor(() =>
-                  expect(modalProps.onBuyItem).toHaveBeenCalledWith(
-                    modalProps.metadata?.asset
-                  )
-                )
-              })
-            })
-
-            describe('and its trying to buy an existing NFT', () => {
-              beforeEach(() => {
-                modalProps.metadata = {
-                  asset: {
-                    ...MOCKED_NFT,
-                    ...(modalProps.metadata ? modalProps.metadata.asset : {})
-                  } as NFT,
-                  order: {
-                    ...MOCKED_ORDER,
-                    price: BigNumber.from(getMinSaleValueInWei())
-                      .add(1)
-                      .toString()
-                  }
-                }
-              })
-
-              it('should render the buy now button and free transaction label and call on onExecuteOrder on the click', async () => {
-                const { getByTestId } = await renderBuyWithCryptoModal(
-                  modalProps
-                )
-                const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
-
-                expect(buyNowButton).toBeInTheDocument()
-                expect(
-                  getByTestId(FREE_TX_CONVERED_TEST_ID)
-                ).toBeInTheDocument()
-
-                buyNowButton.click()
-
-                await waitFor(() =>
-                  expect(modalProps.onExecuteOrder).toHaveBeenCalledWith(
-                    modalProps.metadata?.order,
-                    modalProps.metadata?.asset,
-                    undefined,
-                    true
-                  )
-                )
-              })
+              await waitFor(() =>
+                expect(modalProps.onBuyNatively).toHaveBeenCalled()
+              )
             })
           })
 
@@ -966,9 +848,7 @@ describe('BuyWithCryptoModal', () => {
 
         describe('and it is an item not suitable for a meta tx', () => {
           beforeEach(() => {
-            ;(modalProps.metadata?.asset as Item).price = BigNumber.from(
-              getMinSaleValueInWei()
-            )
+            modalProps.price = BigNumber.from(getMinSaleValueInWei())
               .sub(1)
               .toString()
           })
@@ -995,7 +875,7 @@ describe('BuyWithCryptoModal', () => {
               expect(switchNetworkButton).toBeInTheDocument()
               expect(getByTestId(PRICE_TOO_LOW_TEST_ID)).toBeInTheDocument()
 
-              switchNetworkButton.click()
+              fireEvent.click(switchNetworkButton)
 
               await waitFor(() =>
                 expect(modalProps.onSwitchNetwork).toHaveBeenCalled()
@@ -1030,21 +910,19 @@ describe('BuyWithCryptoModal', () => {
           route = ({
             route: MOCKED_ROUTE
           } as unknown) as Route
-          ;(crossChainProvider.getMintNFTRoute as jest.Mock).mockResolvedValue(
-            route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
+            route,
+            ChainId.ETHEREUM_MAINNET,
+            '0.438482'
           )
-          modalProps.onBuyItemThroughProvider = jest.fn()
         })
 
         describe('and has enough token balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('2000000')) // user has 2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('2000000')) // user has 2 USDC in wei
           })
 
-          it('should render buy now button and call the onBuyItemThroughProvider', async () => {
+          it('should render buy now button and call the onBuyCrossChain', async () => {
             const {
               getByTestId,
               findByTestId,
@@ -1052,36 +930,30 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
-            chainSelector.click()
+            fireEvent.click(chainSelector)
 
             const ethereumNetworkOption = await findByText('Ethereum')
-            ethereumNetworkOption.click()
+            fireEvent.click(ethereumNetworkOption)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             const buyNowButton = await findByTestId(BUY_NOW_BUTTON_TEST_ID)
-
             expect(buyNowButton).toBeInTheDocument()
-            buyNowButton.click()
 
-            await waitFor(() =>
-              expect(modalProps.onBuyItemThroughProvider).toHaveBeenCalledWith(
-                route
-              )
-            )
+            fireEvent.click(buyNowButton)
+            await waitFor(() => {
+              expect(modalProps.onBuyCrossChain).toHaveBeenCalledWith(route)
+            })
           })
         })
 
         describe('and does not have enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('200000')) // user has 0.2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('200000')) // user has 0.2 USDC in wei
           })
           it('should render the get mana and buy with card buttons', async () => {
             const {
@@ -1091,16 +963,16 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
-            chainSelector.click()
+            fireEvent.click(chainSelector)
 
             const ethereumNetworkOption = await findByText('Ethereum')
-            ethereumNetworkOption.click()
+            fireEvent.click(ethereumNetworkOption)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(GET_MANA_BUTTON_TEST_ID)
@@ -1119,17 +991,16 @@ describe('BuyWithCryptoModal', () => {
           route = ({
             route: MOCKED_ROUTE
           } as unknown) as Route
-          ;(crossChainProvider.getMintNFTRoute as jest.Mock).mockResolvedValue(
-            route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
+            route,
+            ChainId.MATIC_MAINNET,
+            '0.438482'
           )
         })
 
         describe('and has enough token balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('2000000')) // user has 2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('2000000')) // user has 2 USDC in wei
             modalProps.onSwitchNetwork = jest.fn()
           })
 
@@ -1141,10 +1012,10 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             const switchNetworkButton = await findByTestId(
               SWITCH_NETWORK_BUTTON_TEST_ID
@@ -1152,7 +1023,7 @@ describe('BuyWithCryptoModal', () => {
 
             expect(switchNetworkButton).toBeInTheDocument()
 
-            switchNetworkButton.click()
+            fireEvent.click(switchNetworkButton)
 
             await waitFor(() =>
               expect(modalProps.onSwitchNetwork).toHaveBeenCalled()
@@ -1162,11 +1033,9 @@ describe('BuyWithCryptoModal', () => {
 
         describe('and does not have enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('200000')) // user has 0.2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('200000')) // user has 0.2 USDC in wei
           })
+
           it('should render the get mana and buy with card buttons', async () => {
             const {
               getByTestId,
@@ -1175,16 +1044,16 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
-            chainSelector.click()
+            fireEvent.click(chainSelector)
 
             const ethereumNetworkOption = await findByText('Ethereum')
-            ethereumNetworkOption.click()
+            fireEvent.click(ethereumNetworkOption)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(GET_MANA_BUTTON_TEST_ID)
@@ -1208,16 +1077,16 @@ describe('BuyWithCryptoModal', () => {
       } as Wallet
     })
 
-    describe('and tries to buy an Ethereum wearable', () => {
+    describe('and tries to buy an Ethereum asset', () => {
       beforeEach(() => {
         ;(modalProps.metadata?.asset as Item).network = Network.ETHEREUM
         ;(modalProps.metadata?.asset as Item).chainId = ChainId.ETHEREUM_MAINNET
       })
 
       describe('and wants to pay with MANA', () => {
-        describe('and has enough MANA balance in Ethereum to buy the Item', () => {
+        describe('and has enough MANA balance in Ethereum to buy the asset', () => {
           beforeEach(() => {
-            ;(modalProps.metadata?.asset as Item).price = '10000000000000000' // 0.1 MANA
+            modalProps.price = '10000000000000000' // 0.1 MANA
             modalProps.wallet = {
               ...modalProps.wallet,
               networks: {
@@ -1236,16 +1105,16 @@ describe('BuyWithCryptoModal', () => {
             )
             expect(switchNetworkButton).toBeInTheDocument()
 
-            switchNetworkButton.click()
+            fireEvent.click(switchNetworkButton)
             expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(
               ChainId.ETHEREUM_MAINNET
             )
           })
         })
 
-        describe('and does not have enough MANA balance in Ethereum to buy the Item', () => {
+        describe('and does not have enough MANA balance in Ethereum to buy the asset', () => {
           beforeEach(() => {
-            ;(modalProps.metadata?.asset as Item).price = '10000000000000000' // 0.1 MANA
+            modalProps.price = '10000000000000000' // 0.1 MANA
             modalProps.wallet = {
               ...modalProps.wallet,
               networks: {
@@ -1270,19 +1139,19 @@ describe('BuyWithCryptoModal', () => {
           route = ({
             route: MOCKED_ROUTE
           } as unknown) as Route
-          ;(crossChainProvider.getMintNFTRoute as jest.Mock).mockResolvedValue(
-            route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
+            route,
+            ChainId.ETHEREUM_MAINNET,
+            '0.438482'
           )
           modalProps.onSwitchNetwork = jest.fn()
         })
+
         describe('and has enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('2000000')) // user has 2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
-            modalProps.onBuyItemThroughProvider = jest.fn()
+            mockUseTokenBalance(false, BigNumber.from('2000000')) // user has 2 USDC in wei
           })
+
           it('should render the switch network button and call the onSwitchNetwork on the click', async () => {
             const {
               getByTestId,
@@ -1291,10 +1160,10 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             const switchNetworkButton = await findByTestId(
               SWITCH_NETWORK_BUTTON_TEST_ID
@@ -1302,7 +1171,7 @@ describe('BuyWithCryptoModal', () => {
 
             expect(switchNetworkButton).toBeInTheDocument()
 
-            switchNetworkButton.click()
+            fireEvent.click(switchNetworkButton)
 
             await waitFor(() =>
               expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(
@@ -1314,11 +1183,9 @@ describe('BuyWithCryptoModal', () => {
 
         describe('and does not have enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('200000')) // user has 0.2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('200000')) // user has .02 USDC in wei
           })
+
           it('should render the get mana and buy with card buttons', async () => {
             const {
               getByTestId,
@@ -1327,10 +1194,10 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(GET_MANA_BUTTON_TEST_ID)
@@ -1348,17 +1215,16 @@ describe('BuyWithCryptoModal', () => {
           route = ({
             route: MOCKED_ROUTE
           } as unknown) as Route
-          ;(crossChainProvider.getMintNFTRoute as jest.Mock).mockResolvedValue(
-            route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
+            route,
+            ChainId.ETHEREUM_MAINNET,
+            '0.438482'
           )
         })
 
         describe('and has enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('2000000')) // user has 2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('2000000')) // user has 2 USDC in wei
           })
           it('should render the switch network button to send the tx', async () => {
             const {
@@ -1368,10 +1234,10 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
@@ -1381,11 +1247,9 @@ describe('BuyWithCryptoModal', () => {
 
         describe('and does not have enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('200000')) // user has 0.2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('200000')) // user has 0.2 USDC in wei
           })
+
           it('should render the get MANA and buy with card buttons', async () => {
             const {
               getByTestId,
@@ -1394,10 +1258,10 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(GET_MANA_BUTTON_TEST_ID)
@@ -1427,82 +1291,32 @@ describe('BuyWithCryptoModal', () => {
                 }
               }
             } as Wallet
-            modalProps.getContract = jest.fn().mockResolvedValue({
-              address: '0x0'
-            })
-            modalProps.onAuthorizedAction = jest
-              .fn()
-              .mockImplementation(({ onAuthorized }: any) => {
-                onAuthorized()
-              })
+
+            modalProps.metadata = {
+              asset: {
+                ...MOCKED_ITEM,
+                ...(modalProps.metadata ? modalProps.metadata.asset : {})
+              }
+            }
           })
 
-          describe('and its trying to mint an item', () => {
-            beforeEach(() => {
-              modalProps.metadata = {
-                asset: {
-                  ...MOCKED_ITEM,
-                  ...(modalProps.metadata ? modalProps.metadata.asset : {})
-                }
-              }
-            })
+          it('should render the buy now button and call on onBuyNatively on the click', async () => {
+            const {
+              queryByTestId,
+              getByTestId
+            } = await renderBuyWithCryptoModal(modalProps)
+            const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
 
-            it('should render the buy now button and call on onBuyItem on the click', async () => {
-              const {
-                queryByTestId,
-                getByTestId
-              } = await renderBuyWithCryptoModal(modalProps)
-              const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
+            expect(buyNowButton).toBeInTheDocument()
+            expect(
+              queryByTestId(FREE_TX_COVERED_TEST_ID)
+            ).not.toBeInTheDocument() // do not show the free tx covered label
 
-              expect(buyNowButton).toBeInTheDocument()
-              expect(
-                queryByTestId(FREE_TX_CONVERED_TEST_ID)
-              ).not.toBeInTheDocument() // do not show the free tx covered label
+            fireEvent.click(buyNowButton)
 
-              buyNowButton.click()
-
-              await waitFor(() =>
-                expect(modalProps.onBuyItem).toHaveBeenCalledWith(
-                  modalProps.metadata?.asset
-                )
-              )
-            })
-          })
-
-          describe('and its trying to buy an existing NFT', () => {
-            beforeEach(() => {
-              modalProps.metadata = {
-                asset: {
-                  ...MOCKED_NFT,
-                  ...(modalProps.metadata ? modalProps.metadata.asset : {})
-                } as NFT,
-                order: { ...MOCKED_ORDER, price: '10000000000000000' }
-              }
-            })
-
-            it('should render the buy now button and call on onBuyItem on the click', async () => {
-              const {
-                queryByTestId,
-                getByTestId
-              } = await renderBuyWithCryptoModal(modalProps)
-              const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
-
-              expect(buyNowButton).toBeInTheDocument()
-              expect(
-                queryByTestId(FREE_TX_CONVERED_TEST_ID)
-              ).not.toBeInTheDocument() // do not show the free tx covered label
-
-              buyNowButton.click()
-
-              await waitFor(() =>
-                expect(modalProps.onExecuteOrder).toHaveBeenCalledWith(
-                  modalProps.metadata?.order,
-                  modalProps.metadata?.asset,
-                  undefined,
-                  true
-                )
-              )
-            })
+            await waitFor(() =>
+              expect(modalProps.onBuyNatively).toHaveBeenCalled()
+            )
           })
         })
 
@@ -1535,18 +1349,17 @@ describe('BuyWithCryptoModal', () => {
           route = ({
             route: MOCKED_ROUTE
           } as unknown) as Route
-          ;(crossChainProvider.getMintNFTRoute as jest.Mock).mockResolvedValue(
-            route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
+            route,
+            ChainId.ETHEREUM_MAINNET,
+            '0.438482'
           )
           modalProps.onSwitchNetwork = jest.fn()
         })
 
         describe('and has enough token balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('2000000')) // user has 2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('2000000')) // user has 2 USDC in wei
           })
 
           it('should render switch network button and call the onSwitchNetwork', async () => {
@@ -1557,23 +1370,23 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
-            chainSelector.click()
+            fireEvent.click(chainSelector)
 
             const ethereumNetworkOption = await findByText('Ethereum')
-            ethereumNetworkOption.click()
+            fireEvent.click(ethereumNetworkOption)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             const switchNetworkButton = await findByTestId(
               SWITCH_NETWORK_BUTTON_TEST_ID
             )
 
             expect(switchNetworkButton).toBeInTheDocument()
-            switchNetworkButton.click()
+            fireEvent.click(switchNetworkButton)
 
             await waitFor(() =>
               expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(
@@ -1585,11 +1398,9 @@ describe('BuyWithCryptoModal', () => {
 
         describe('and does not have enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('200000')) // user has 0.2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('200000')) // user has 0.2 USDC in wei
           })
+
           it('should render the get mana and buy with card buttons', async () => {
             const {
               getByTestId,
@@ -1598,16 +1409,16 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
-            chainSelector.click()
+            fireEvent.click(chainSelector)
 
             const ethereumNetworkOption = await findByText('Ethereum')
-            ethereumNetworkOption.click()
+            fireEvent.click(ethereumNetworkOption)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(GET_MANA_BUTTON_TEST_ID)
@@ -1626,21 +1437,19 @@ describe('BuyWithCryptoModal', () => {
           route = ({
             route: MOCKED_ROUTE
           } as unknown) as Route
-          ;(crossChainProvider.getMintNFTRoute as jest.Mock).mockResolvedValue(
-            route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
+            route,
+            ChainId.MATIC_MAINNET,
+            '0.438482'
           )
         })
 
         describe('and has enough token balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('2000000')) // user has 2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
-            modalProps.onBuyItemThroughProvider = jest.fn()
+            mockUseTokenBalance(false, BigNumber.from('2000000')) // user has 2 USDC in wei
           })
 
-          it('should render the buy now button and call the onBuyItemThroughProvider fn on click', async () => {
+          it('should render the buy now button and call the onBuyCrossChain fn on click', async () => {
             const {
               getByTestId,
               findByTestId,
@@ -1648,31 +1457,27 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             const buyNowButton = await findByTestId(BUY_NOW_BUTTON_TEST_ID)
 
             expect(buyNowButton).toBeInTheDocument()
-            buyNowButton.click()
+            fireEvent.click(buyNowButton)
 
             await waitFor(() =>
-              expect(modalProps.onBuyItemThroughProvider).toHaveBeenCalledWith(
-                route
-              )
+              expect(modalProps.onBuyCrossChain).toHaveBeenCalledWith(route)
             )
           })
         })
 
         describe('and does not have enough balance to buy it', () => {
           beforeEach(() => {
-            mockBalanceOf.mockResolvedValueOnce(BigNumber.from('200000')) // user has 0.2 USDC in wei
-            ;(crossChainProvider.getFromAmount as jest.Mock).mockResolvedValue(
-              '0.438482'
-            ) // 0.43 USDC needed to buy the item
+            mockUseTokenBalance(false, BigNumber.from('200000')) // user has 0.2 USDC in wei
           })
+
           it('should render the get mana and buy with card buttons', async () => {
             const {
               getByTestId,
@@ -1681,16 +1486,16 @@ describe('BuyWithCryptoModal', () => {
             } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
-            chainSelector.click()
+            fireEvent.click(chainSelector)
 
             const ethereumNetworkOption = await findByText('Ethereum')
-            ethereumNetworkOption.click()
+            fireEvent.click(ethereumNetworkOption)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
-            tokenSelector.click()
+            fireEvent.click(tokenSelector)
 
             const usdcTokenOption = await findByText('USDC')
-            usdcTokenOption.click()
+            fireEvent.click(usdcTokenOption)
 
             expect(
               await findByTestId(GET_MANA_BUTTON_TEST_ID)

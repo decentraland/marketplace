@@ -88,7 +88,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   const [selectedToken, setSelectedToken] = useState<Token>(
     getMANAToken(asset.chainId)
   )
-  const [canBuyItem, setCanBuyItem] = useState<boolean | undefined>(undefined)
+  const [canBuyAsset, setCanBuyAsset] = useState<boolean | undefined>(undefined)
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
   const [crossChainProvider, setCrossChainProvider] = useState<
@@ -271,7 +271,7 @@ export const BuyWithCryptoModal = (props: Props) => {
             }
           }
         }
-        setCanBuyItem(canBuy)
+        setCanBuyAsset(canBuy)
       }
     })()
   }, [
@@ -408,8 +408,8 @@ export const BuyWithCryptoModal = (props: Props) => {
   ])
 
   const renderMainActionButton = useCallback(() => {
-    if (wallet && selectedToken && canBuyItem !== undefined) {
-      if (canBuyItem) {
+    if (wallet && selectedToken && canBuyAsset !== undefined) {
+      if (canBuyAsset) {
         // it's paying with MANA but connected on Ethereum
         if (
           selectedToken.symbol === 'MANA' &&
@@ -436,7 +436,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [
     wallet,
     selectedToken,
-    canBuyItem,
+    canBuyAsset,
     route,
     asset,
     price,
@@ -462,7 +462,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         ) as Token
         // reset all fields
         setSelectedToken(selectedToken)
-        setCanBuyItem(undefined)
+        setCanBuyAsset(undefined)
         abortControllerRef.current = new AbortController()
         analytics.track(events.CROSS_CHAIN_TOKEN_SELECTION, {
           selectedToken
@@ -681,7 +681,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
               {selectedToken &&
               shouldUseCrossChainProvider &&
-              asset.network === Network.MATIC && // and it's buying a MATIC wearable
+              asset.network === Network.MATIC && // and it's buying a MATIC asset
               !isPriceTooLow(price) ? (
                 <span className={styles.rememberFreeTxs}>
                   {t('buy_with_crypto_modal.remember_transaction_fee_covered', {
@@ -714,8 +714,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   })}
                 </span>
               ) : null}
-
-              {canBuyItem === false && isWearableOrEmote(asset) ? (
+              {canBuyAsset === false && isWearableOrEmote(asset) ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
                     token: selectedToken?.symbol || 'MANA'

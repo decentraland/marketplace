@@ -31,7 +31,7 @@ export type OnGetCrossChainRoute = (
   wallet: Wallet | null
 ) => CrossChainRoute
 
-export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & {
+export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & Omit<ModalProps, 'metadata'> & {
     price: string,
     wallet: Wallet | null
     metadata: { asset: Asset }

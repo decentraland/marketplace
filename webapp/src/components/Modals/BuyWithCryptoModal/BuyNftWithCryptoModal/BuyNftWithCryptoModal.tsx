@@ -14,6 +14,7 @@ import { Props } from './BuyNFTWithCryptoModal.types'
 
 const BuyNFTWithCryptoModalHOC = (props: Props) => {
   const {
+    name,
     onClose,
     isLoadingAuthorization,
     getContract,
@@ -23,9 +24,6 @@ const BuyNFTWithCryptoModalHOC = (props: Props) => {
     onExecuteOrderWithCard,
     metadata: { nft, order }
   } = props
-
-  console.log('NFT: ', nft)
-  console.log('Order: ', order)
 
   const onBuyNatively = useCallback(() => {
     const contractNames = getContractNames()
@@ -95,6 +93,7 @@ const BuyNFTWithCryptoModalHOC = (props: Props) => {
       isLoadingAuthorization={isLoadingAuthorization}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset: nft }}
+      name={name}
       onClose={onClose}
     />
   )
