@@ -1603,7 +1603,7 @@
           "subtitle": "Price rates may change"
         }
       },
-      "name_placeholder": "Your unique NAME",
+      "name_placeholder": "Retype your NAME",
       "names_different": "Names do not match",
       "authorization": {
         "title_action": "purchase",
