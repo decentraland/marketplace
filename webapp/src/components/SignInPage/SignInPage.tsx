@@ -8,7 +8,8 @@ import { Props } from './SignInPage.types'
 import './SignInPage.css'
 
 const SignInPage = (props: Props) => {
-  const { isAuthDappEnabled, isConnecting, isConnected } = props
+  const { isConnecting, isConnected } = props
+
   const handleConnect = useCallback(() => {
     if (!isConnected && !isConnecting) {
       const params = new URLSearchParams(window.location.search)
@@ -29,7 +30,7 @@ const SignInPage = (props: Props) => {
     <>
       <Navbar />
       <Page className="SignInPage" isFullscreen>
-        <SignIn onConnect={isAuthDappEnabled ? handleConnect : undefined} />
+        <SignIn onConnect={handleConnect} />
       </Page>
       <Footer isFullscreen />
     </>

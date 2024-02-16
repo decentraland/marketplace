@@ -108,17 +108,6 @@ export const getIsMarketplaceServerEnabled = (state: RootState) => {
   return false
 }
 
-export const getIsAuthDappEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.DAPPS,
-      FeatureName.AUTH_DAPP
-    )
-  }
-  return false
-}
-
 export const getIsClaimingNamesWithFiatEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(
@@ -139,4 +128,15 @@ export const getIsEnsAddressEnabled = (state: RootState) => {
     )
   }
   return false
+}
+
+export const getIsMintingNamesWithAxelarEnabled = (state: RootState) => {
+  return (
+    hasLoadedInitialFlags(state) &&
+    getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.MINTING_NAMES_WITH_AXELAR
+    )
+  )
 }
