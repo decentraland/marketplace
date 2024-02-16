@@ -370,7 +370,7 @@ const useCrossChainRoute = (
   const [fromAmount, setFromAmount] = useState<string>()
   const [route, setRoute] = useState<Route>()
   const abortControllerRef = useRef(new AbortController())
-  const destinationChainMANA = useMemo(
+  const destinationChainMANAContractAddress = useMemo(
     () => getContract(ContractName.MANAToken, assetChainId).address,
     [assetChainId]
   )
@@ -378,11 +378,6 @@ const useCrossChainRoute = (
   const calculateRoute = useCallback(async () => {
     const abortController = abortControllerRef.current
     const signal = abortController.signal
-    const destinationChainMANAContractAddress = getContract(
-      ContractName.MANAToken,
-      assetChainId
-    ).address
-
     const providerMANA = providerTokens.find(
       t =>
         t.address.toLocaleLowerCase() ===
@@ -454,11 +449,16 @@ const useCrossChainRoute = (
         assetChainId,
         selectedChain,
         selectedToken.address,
-        destinationChainMANA,
+        destinationChainMANAContractAddress,
         wallet.network
       )
     )
-  }, [destinationChainMANA, selectedChain, selectedToken, wallet])
+  }, [
+    destinationChainMANAContractAddress,
+    selectedChain,
+    selectedToken,
+    wallet
+  ])
 
   // Refresh the route every ROUTE_FETCH_INTERVAL
   useEffect(() => {

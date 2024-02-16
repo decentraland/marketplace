@@ -75,8 +75,10 @@ export const BuyWithCryptoModal = (props: Props) => {
   } = props
 
   const analytics = getAnalytics()
-  const destinyChainMANA = getContract(ContractName.MANAToken, asset.chainId)
-    .address
+  const manaAddressOnAssetChain = getContract(
+    ContractName.MANAToken,
+    asset.chainId
+  ).address
   const abortControllerRef = useRef(new AbortController())
 
   // useStates
@@ -94,6 +96,18 @@ export const BuyWithCryptoModal = (props: Props) => {
   const [crossChainProvider, setCrossChainProvider] = useState<
     CrossChainProvider
   >()
+  const manaTokenOnSelectedChain: Token | undefined = useMemo(() => {
+    return providerTokens.find(
+      t => t.symbol === 'MANA' && t.chainId === selectedChain.toString()
+    )
+  }, [providerTokens, selectedChain])
+  const manaTokenOnAssetChain: Token | undefined = useMemo(() => {
+    return providerTokens.find(
+      t =>
+        t.address.toLocaleLowerCase() ===
+        manaAddressOnAssetChain.toLocaleLowerCase()
+    )
+  }, [providerTokens, manaAddressOnAssetChain])
 
   const { gasCost, isFetchingGasCost } = onGetGasCost(
     selectedToken,
@@ -144,11 +158,11 @@ export const BuyWithCryptoModal = (props: Props) => {
         asset.chainId,
         selectedChain,
         selectedToken.address,
-        destinyChainMANA,
+        manaAddressOnAssetChain,
         wallet.network
       )
     )
-  }, [asset, destinyChainMANA, selectedChain, selectedToken, wallet])
+  }, [asset, manaAddressOnAssetChain, selectedChain, selectedToken, wallet])
 
   const selectedProviderChain = useMemo(() => {
     return providerChains.find(c => c.chainId === selectedChain.toString())
@@ -201,12 +215,15 @@ export const BuyWithCryptoModal = (props: Props) => {
       ((!selectedToken && providerTokens.length) || // only run if not selectedToken, meaning the first render
         (selectedToken && selectedChain.toString() !== selectedToken.chainId)) // or if selectedToken is not from the selectedChain
     ) {
-      const MANAToken = providerTokens.find(
-        t => t.symbol === 'MANA' && selectedChain.toString() === t.chainId
-      )
-      setSelectedToken(MANAToken || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
+      setSelectedToken(manaTokenOnSelectedChain || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
     }
-  }, [crossChainProvider, providerTokens, selectedChain, selectedToken])
+  }, [
+    crossChainProvider,
+    providerTokens.length,
+    manaTokenOnSelectedChain,
+    selectedChain,
+    selectedToken
+  ])
 
   // computes if the user can buy the item with the selected token
   useEffect(() => {
@@ -239,17 +256,13 @@ export const BuyWithCryptoModal = (props: Props) => {
               selectedToken.decimals
             )
           )
-          const destinyChainMANA = getContract(
-            ContractName.MANAToken,
-            asset.chainId
-          ).address
 
-          const providerMANA = providerTokens.find(
-            t =>
-              t.address.toLocaleLowerCase() ===
-              destinyChainMANA.toLocaleLowerCase()
-          )
-          if (providerMANA && selectedToken && crossChainProvider && wallet) {
+          if (
+            manaTokenOnAssetChain &&
+            selectedToken &&
+            crossChainProvider &&
+            wallet
+          ) {
             // fee is paid with same token selected
             if (selectedToken.symbol === routeFeeCost.token.symbol) {
               canBuy =
@@ -625,7 +638,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   (shouldUseCrossChainProvider && !route)
                 }
                 gasCost={gasCost}
-                providerTokens={providerTokens}
+                manaTokenOnSelectedChain={manaTokenOnAssetChain}
                 routeTotalUSDCost={routeTotalUSDCost}
               />
 

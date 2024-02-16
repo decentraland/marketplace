@@ -20,7 +20,7 @@ export type Props = {
   fromAmount: string | undefined
   isLoading: boolean
   gasCost: GasCostValues | undefined
-  providerTokens: Token[]
+  manaTokenOnSelectedChain: Token | undefined
   routeTotalUSDCost: number | undefined
 }
 
@@ -35,7 +35,7 @@ const PurchaseTotal = (props: Props) => {
     selectedToken,
     fromAmount,
     gasCost,
-    providerTokens,
+    manaTokenOnSelectedChain,
     routeTotalUSDCost
   } = props
 
@@ -118,15 +118,17 @@ const PurchaseTotal = (props: Props) => {
             <span className={styles.fromAmountUSD}>
               {!!gasCost &&
               gasCost.totalUSDPrice &&
-              providerTokens.find(t => t.symbol === 'MANA') ? (
+              manaTokenOnSelectedChain ? (
                 <>
                   {' '}
                   $
-                  {(
-                    gasCost.totalUSDPrice +
-                    providerTokens.find(t => t.symbol === 'MANA')!.usdPrice! *
-                      Number(ethers.utils.formatEther(price))
-                  ).toFixed(4)}{' '}
+                  {manaTokenOnSelectedChain.usdPrice
+                    ? (
+                        gasCost.totalUSDPrice +
+                        manaTokenOnSelectedChain.usdPrice! *
+                          Number(ethers.utils.formatEther(price))
+                      ).toFixed(4)
+                    : 'Unknown'}{' '}
                 </>
               ) : shouldUseCrossChainProvider ? (
                 <>
