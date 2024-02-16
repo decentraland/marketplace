@@ -14,8 +14,8 @@ import {
   MapDispatchProps,
   MapStateProps,
   OwnProps
-} from './MintNFTWithCryptoModal.types'
-import { MintNFTWithCryptoModal } from './MintNFTWithCryptoModal'
+} from './MintNftWithCryptoModal.types'
+import { MintNftWithCryptoModal } from './MintNftWithCryptoModal'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -37,4 +37,4 @@ const mapDispatch = (
     dispatch
   )
 
-export default connect(mapState, mapDispatch)(MintNFTWithCryptoModal)
+export default connect(mapState, mapDispatch)(MintNftWithCryptoModal)

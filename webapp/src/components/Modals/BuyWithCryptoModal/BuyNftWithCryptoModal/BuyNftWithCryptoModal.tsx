@@ -10,9 +10,9 @@ import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
 import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
 import { useBuyNftGasCost, useCrossChainBuyNftRoute } from '../hooks'
 import BuyWithCryptoModal from '../BuyWithCryptoModal.container'
-import { Props } from './BuyNFTWithCryptoModal.types'
+import { Props } from './BuyNftWithCryptoModal.types'
 
-const BuyNFTWithCryptoModalHOC = (props: Props) => {
+const BuyNftWithCryptoModalHOC = (props: Props) => {
   const {
     name,
     onClose,
@@ -99,9 +99,9 @@ const BuyNFTWithCryptoModalHOC = (props: Props) => {
   )
 }
 
-export const BuyNFTWithCryptoModal = React.memo(
+export const BuyNftWithCryptoModal = React.memo(
   withAuthorizedAction(
-    BuyNFTWithCryptoModalHOC,
+    BuyNftWithCryptoModalHOC,
     AuthorizedAction.BUY,
     {
       action: 'buy_with_mana_page.authorization.action',

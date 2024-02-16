@@ -1,2 +1,2 @@
-import MintNFTWithCryptoModal from './MintNFTWithCryptoModal.container'
-export { MintNFTWithCryptoModal }
+import MintNftWithCryptoModal from './MintNftWithCryptoModal.container'
+export { MintNftWithCryptoModal }

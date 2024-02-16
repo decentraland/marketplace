@@ -14,8 +14,8 @@ import type {
   MapDispatchProps,
   MapStateProps,
   OwnProps
-} from './BuyNFTWithCryptoModal.types'
-import { BuyNFTWithCryptoModal } from './BuyNFTWithCryptoModal'
+} from './BuyNftWithCryptoModal.types'
+import { BuyNftWithCryptoModal } from './BuyNftWithCryptoModal'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -40,4 +40,4 @@ const mapDispatch = (
     dispatch
   )
 
-export default connect(mapState, mapDispatch)(BuyNFTWithCryptoModal)
+export default connect(mapState, mapDispatch)(BuyNftWithCryptoModal)

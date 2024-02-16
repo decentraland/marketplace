@@ -21,8 +21,8 @@ const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
   isConnecting: isConnecting(state),
   isBuyingWithCryptoModalOpen:
-    getOpenModals(state)['BuyNFTWithCryptoModal']?.open ||
-    getOpenModals(state)['MintNFTWithCryptoModal']?.open
+    getOpenModals(state)['BuyNftWithCryptoModal']?.open ||
+    getOpenModals(state)['MintNftWithCryptoModal']?.open
 })
 
 const mapDispatch = (
@@ -33,12 +33,12 @@ const mapDispatch = (
   onBuyWithCrypto: (asset: Asset, order?: Order | null) =>
     ownProps.assetType === AssetType.NFT
       ? dispatch(
-          openModal('BuyNFTWithCryptoModal', {
+          openModal('BuyNftWithCryptoModal', {
             nft: asset,
             order
           })
         )
-      : dispatch(openModal('MintNFTWithCryptoModal', { item: asset })),
+      : dispatch(openModal('MintNftWithCryptoModal', { item: asset })),
   onBuyItemWithCard: item => dispatch(buyItemWithCardRequest(item)),
   onRedirect: path => dispatch(replace(path))
 })

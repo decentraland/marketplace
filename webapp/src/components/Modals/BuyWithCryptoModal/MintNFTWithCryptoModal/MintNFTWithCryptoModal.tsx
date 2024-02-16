@@ -9,10 +9,10 @@ import { getContractNames } from '../../../../modules/vendor'
 import { getMintItemStatus, getError } from '../../../../modules/item/selectors'
 import { useCrossChainMintNftRoute, useMintingNftGasCost } from '../hooks'
 import BuyWithCryptoModal from '../BuyWithCryptoModal.container'
-import { Props } from './MintNFTWithCryptoModal.types'
+import { Props } from './MintNftWithCryptoModal.types'
 import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
 
-const MintNFTWithCryptoModalHOC = (props: Props) => {
+const MintNftWithCryptoModalHOC = (props: Props) => {
   const {
     name,
     metadata: { item },
@@ -97,9 +97,9 @@ const MintNFTWithCryptoModalHOC = (props: Props) => {
   )
 }
 
-export const MintNFTWithCryptoModal = React.memo(
+export const MintNftWithCryptoModal = React.memo(
   withAuthorizedAction(
-    MintNFTWithCryptoModalHOC,
+    MintNftWithCryptoModalHOC,
     AuthorizedAction.MINT,
     {
       action: 'mint_with_mana_page.authorization.action',

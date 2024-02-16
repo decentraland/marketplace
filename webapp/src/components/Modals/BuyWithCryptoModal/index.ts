@@ -1,2 +1,2 @@
-export * from './BuyNFTWithCryptoModal'
-export * from './MintNFTWithCryptoModal'
+export * from './BuyNftWithCryptoModal'
+export * from './MintNftWithCryptoModal'

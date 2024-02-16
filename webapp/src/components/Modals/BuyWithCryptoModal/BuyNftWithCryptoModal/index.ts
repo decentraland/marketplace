@@ -1,2 +1,2 @@
-import BuyNFTWithCryptoModal from './BuyNFTWithCryptoModal.container'
-export { BuyNFTWithCryptoModal }
+import BuyNftWithCryptoModal from './BuyNftWithCryptoModal.container'
+export { BuyNftWithCryptoModal }
