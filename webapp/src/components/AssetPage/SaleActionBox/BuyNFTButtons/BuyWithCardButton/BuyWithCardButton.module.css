@@ -1,0 +1,7 @@
+.buy_with_card:global(.ui.button) {
+  background-color: var(--superGray);
+}
+
+.buy_with_card:global(.ui.button):hover {
+  background-color: var(--superGrayHovered);
+}

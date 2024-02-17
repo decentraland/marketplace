@@ -89,9 +89,9 @@ export function* ensSaga() {
         }
 
         if (isCrossChain) {
-          yield put(claimNameSuccess(ens, subdomain, hash))
-        } else {
           yield put(claimNameCrossChainSuccess(ens, subdomain, hash))
+        } else {
+          yield put(claimNameSuccess(ens, subdomain, hash))
         }
         yield put(closeModal('ClaimNameFatFingerModal'))
       }

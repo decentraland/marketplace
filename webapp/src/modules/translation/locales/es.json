@@ -841,6 +841,13 @@
       "normal": "Normal ≈ 20s",
       "slow": "Lenta ≈ 1m"
     },
+    "asset_description": {
+      "ens": "Nombres de Decentraland",
+      "emotes": "Emotes de Decentraland",
+      "wearables": "Wearables de Decentraland",
+      "land": "Lands de decentraland",
+      "other": "Coleccionables de Decentraland"
+    },
     "tooltip": {
       "cross_chain": "La tarifa estimada incluye el costo de la red y la tarifa de compra entre cadenas que debe pagar directamente con su billetera. Asegúrate de tener {token} para cubrirlo.",
       "same_network": "La tarifa estimada incluye el costo de la red que debes pagar directamente con tu billetera. Asegúrate de tener {token} para cubrirlo."

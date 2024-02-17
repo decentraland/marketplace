@@ -43,7 +43,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & 
     onGetGasCost: OnGetGasCost
     onSwitchNetwork: typeof switchNetworkRequest
     onBuyNatively: () => unknown
-    onBuyWithCard: () => unknown
+    onBuyWithCard?: () => unknown
     onBuyCrossChain: (route: Route) => unknown
     onGetMana: typeof openBuyManaWithFiatModalRequest
     onClose: ModalProps['onClose']

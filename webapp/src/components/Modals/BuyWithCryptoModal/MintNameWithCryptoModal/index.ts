@@ -1,1 +1,2 @@
-export * from './MintNameWithCryptoModal.container'
+import MintNameWithCryptoModal from './MintNameWithCryptoModal.container'
+export { MintNameWithCryptoModal }

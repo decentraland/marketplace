@@ -333,8 +333,10 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [isSwitchingNetwork, onSwitchNetwork, providerChains, selectedChain])
 
   const handleBuyWithCard = useCallback(() => {
-    analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
-    onBuyWithCard()
+    if (onBuyWithCard) {
+      analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
+      onBuyWithCard()
+    }
   }, [onBuyWithCard])
 
   const renderGetMANAButton = useCallback(() => {
@@ -352,18 +354,20 @@ export const BuyWithCryptoModal = (props: Props) => {
         >
           {t('buy_with_crypto_modal.get_mana')}
         </Button>
-        <ChainButton
-          inverted
-          fluid
-          chainId={asset.chainId}
-          data-testid={BUY_WITH_CARD_TEST_ID}
-          disabled={isLoading || isLoadingAuthorization}
-          loading={isLoading || isLoadingAuthorization}
-          onClick={handleBuyWithCard}
-        >
-          <Icon name="credit card outline" />
-          {t(`buy_with_crypto_modal.buy_with_card`)}
-        </ChainButton>
+        {onBuyWithCard && (
+          <ChainButton
+            inverted
+            fluid
+            chainId={asset.chainId}
+            data-testid={BUY_WITH_CARD_TEST_ID}
+            disabled={isLoading || isLoadingAuthorization}
+            loading={isLoading || isLoadingAuthorization}
+            onClick={handleBuyWithCard}
+          >
+            <Icon name="credit card outline" />
+            {t(`buy_with_crypto_modal.buy_with_card`)}
+          </ChainButton>
+        )}
       </>
     )
   }, [
@@ -371,6 +375,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     isLoading,
     asset.chainId,
     isLoadingAuthorization,
+    onBuyWithCard,
     handleBuyWithCard,
     onGetMana,
     onClose
@@ -562,6 +567,30 @@ export const BuyWithCryptoModal = (props: Props) => {
     setShowTokenSelector(true)
   }, [])
 
+  const assetName = useMemo(() => {
+    return asset.data.ens ? (
+      <>
+        <strong>{asset.name}</strong>.dcl.eth
+      </>
+    ) : (
+      asset.name
+    )
+  }, [asset])
+
+  const assetDescription = useMemo(() => {
+    if (asset.data.ens) {
+      return t('buy_with_crypto_modal.asset_description.ens')
+    } else if (asset.data.emote) {
+      return t('buy_with_crypto_modal.asset_description.emotes')
+    } else if (asset.data.wearable) {
+      return t('buy_with_crypto_modal.asset_description.wearables')
+    } else if (asset.data.estate || asset.data.parcel) {
+      return t('buy_with_crypto_modal.asset_description.land')
+    } else {
+      return t('buy_with_crypto_modal.asset_description.other')
+    }
+  }, [asset])
+
   return (
     <Modal
       size="tiny"
@@ -594,7 +623,12 @@ export const BuyWithCryptoModal = (props: Props) => {
             <>
               <div className={styles.assetContainer}>
                 <AssetImage asset={asset} isSmall />
-                <span className={styles.assetName}>{asset.name}</span>
+                <div className={styles.assetDetails}>
+                  <span className={styles.assetName}>{assetName}</span>
+                  <span className={styles.assetDescription}>
+                    {assetDescription}
+                  </span>
+                </div>
                 <div className={styles.priceContainer}>
                   <Mana network={asset.network} inline withTooltip>
                     {formatWeiMANA(price)}
@@ -727,7 +761,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   })}
                 </span>
               ) : null}
-              {canBuyAsset === false && isWearableOrEmote(asset) ? (
+              {!canBuyAsset ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
                     token: selectedToken?.symbol || 'MANA'

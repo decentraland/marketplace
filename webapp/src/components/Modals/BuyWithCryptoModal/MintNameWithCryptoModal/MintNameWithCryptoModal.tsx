@@ -40,6 +40,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   } = props
 
   const onBuyNatively = useCallback(() => {
+    console.log('Executing on buy natively')
     const contractNames = getContractNames()
 
     const mana = getContract({
@@ -66,7 +67,6 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     })
   }, [name, getContract, onAuthorizedAction, onClaimName])
 
-  // const onBuyWithCard = useCallback(() => onBuyItemWithCard(item), [item])
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
     (
       selectedToken,
@@ -87,6 +87,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
       ),
     [name]
   )
+
   const onGetGasCost: OnGetGasCost = useCallback(
     (selectedToken, selectedChain, wallet, providerTokens) =>
       useNameMintingGasCost(
@@ -99,12 +100,12 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     [name]
   )
 
-  // Emulate a NFT for the item to be minted so it can be shown in the modal
+  // Emulates a NFT for the item to be minted so it can be shown in the modal
   const asset: NFT = useMemo(
     () => ({
       chainId: getChainIdByNetwork(Network.ETHEREUM),
       network: Network.ETHEREUM,
-      name: 'Name',
+      name,
       data: {
         ens: { subdomain: name }
       },
@@ -134,7 +135,6 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
       isBuyingAsset={isClaimingName}
       isBuyingCrossChain={isClaimingNameCrossChain}
       onBuyNatively={onBuyNatively}
-      onBuyWithCard={() => console.log('Buy with card?')}
       onBuyCrossChain={onClaimNameCrossChain}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}

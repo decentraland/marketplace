@@ -855,6 +855,13 @@
       "normal": "Normal ≈ 20s",
       "slow": "Slow ≈ 1m"
     },
+    "asset_description": {
+      "ens": "Decentraland NAMEs",
+      "emotes": "Decentraland Emotes",
+      "wearables": "Decentraland Wearables",
+      "land": "Decentraland Lands",
+      "other": "Decentraland Collectibles"
+    },
     "tooltip": {
       "cross_chain": "Estimated fee includes the network cost and the cross chain purchase fee that you have to pay directly with your wallet. Be sure to have {token} to cover it.",
       "same_network": "Estimated fee includes the network cost that you have to pay directly with your wallet. Be sure to have {token} to cover it."

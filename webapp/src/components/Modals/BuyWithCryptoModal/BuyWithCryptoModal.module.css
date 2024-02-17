@@ -38,8 +38,18 @@
   padding-bottom: 24px;
 }
 
-.buyWithCryptoModal .assetContainer .assetName {
+.assetName {
   margin-right: 12px;
+}
+
+.assetDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.assetDescription {
+  color: #a09ba8;
 }
 
 .buyWithCryptoModal .priceContainer {
@@ -343,7 +353,7 @@
 
 @media (max-width: 767px) {
   .buyWithCryptoModal {
-    height: auto;
+    height: 100%;
   }
 
   .buyWithCryptoModal:global(.ui.modal > .content) {
