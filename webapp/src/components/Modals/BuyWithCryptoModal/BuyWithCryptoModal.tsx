@@ -60,7 +60,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     wallet,
     metadata: { asset },
     isLoading,
-    isLoadingBuyCrossChain,
+    isBuyingCrossChain,
     isLoadingAuthorization,
     isSwitchingNetwork,
     isBuyWithCardPage,
@@ -391,17 +391,17 @@ export const BuyWithCryptoModal = (props: Props) => {
           disabled={
             (selectedToken?.symbol !== 'MANA' && !route) ||
             isFetchingRoute ||
-            isLoadingBuyCrossChain
+            isBuyingCrossChain
           }
           loading={isFetchingBalance || isLoading}
           onClick={onClick}
         >
           <>
-            {isLoadingBuyCrossChain || isFetchingRoute ? (
+            {isBuyingCrossChain || isFetchingRoute ? (
               <Loader inline active size="tiny" />
             ) : null}
             {!isFetchingRoute // if fetching route, just render the Loader
-              ? isLoadingBuyCrossChain
+              ? isBuyingCrossChain
                 ? t('buy_with_crypto_modal.confirm_transaction')
                 : t('buy_with_crypto_modal.buy_now')
               : null}
@@ -413,7 +413,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     route,
     selectedToken,
     isFetchingRoute,
-    isLoadingBuyCrossChain,
+    isBuyingCrossChain,
     isFetchingBalance,
     isLoading,
     onBuyNatively,

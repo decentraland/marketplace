@@ -15,6 +15,8 @@ import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
 const MintNftWithCryptoModalHOC = (props: Props) => {
   const {
     name,
+    isBuyingItemNatively,
+    isBuyingItemCrossChain,
     metadata: { item },
     isLoadingAuthorization,
     getContract,
@@ -84,11 +86,13 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
   return (
     <BuyWithCryptoModal
       price={item.price}
+      isBuyingAsset={isBuyingItemNatively}
       onBuyNatively={onBuyNatively}
       onBuyWithCard={onBuyWithCard}
       onBuyCrossChain={onBuyItemCrossChain}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}
+      isBuyingCrossChain={isBuyingItemCrossChain}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset: item }}
       name={name}

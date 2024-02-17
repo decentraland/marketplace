@@ -12,7 +12,6 @@ export type MapStateProps = Pick<
   Props,
   | 'wallet'
   | 'isLoading'
-  | 'isLoadingBuyCrossChain'
   | 'isBuyWithCardPage'
   | 'isSwitchingNetwork'
 >
@@ -36,7 +35,8 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & 
     wallet: Wallet | null
     metadata: { asset: Asset }
     isLoading: boolean
-    isLoadingBuyCrossChain: boolean
+    isBuyingAsset: boolean,
+    isBuyingCrossChain: boolean
     isSwitchingNetwork: boolean
     isBuyWithCardPage: boolean
     onGetCrossChainRoute: OnGetCrossChainRoute
@@ -52,6 +52,8 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & 
 export type OwnProps = Pick<
   Props,
   | 'price'
+  | 'isBuyingCrossChain'
+  | 'isBuyingAsset'
   | 'metadata'
   | 'onBuyNatively'
   | 'onBuyWithCard'

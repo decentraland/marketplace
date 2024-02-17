@@ -17,6 +17,7 @@ import * as events from '../../../utils/events'
 import { isPriceTooLow } from '../../BuyPage/utils'
 import {
   estimateTransactionGas as estimateMintingOrBuyingTransactionGas,
+  estimateNameMintingGas,
   getShouldUseMetaTx
 } from './utils'
 
@@ -121,7 +122,6 @@ export type GasCost = {
 }
 
 const useGasCost = (
-  price: string,
   assetNetwork: Network,
   providerTokens: Token[],
   selectedChain: ChainId,
@@ -164,11 +164,11 @@ const useGasCost = (
 
     if (
       !shouldUseCrossChainProvider &&
-      ((wallet &&
-        getNetwork(wallet.chainId) === Network.MATIC &&
-        assetNetwork === Network.MATIC) ||
-        price === '0' ||
-        isPriceTooLow(price))
+      wallet &&
+      getNetwork(wallet.chainId) === assetNetwork
+      // TODO: Why is this restriction here? Should we move it to the hook that uses this one?
+      // getNetwork(wallet.chainId) === Network.MATIC &&
+      // assetNetwork === Network.MATIC) ||
     ) {
       calculateGas()
     } else {
@@ -177,7 +177,6 @@ const useGasCost = (
   }, [
     assetNetwork,
     estimateTransactionGas,
-    price,
     providerTokens,
     selectedChain,
     shouldUseCrossChainProvider,
@@ -206,8 +205,14 @@ export const useMintingNftGasCost = (
     selectedChain,
     item.network
   )
+  if (item.price === '0' || isPriceTooLow(item.price)) {
+    return {
+      gasCost: undefined,
+      isFetchingGasCost: false
+    }
+  }
+
   return useGasCost(
-    item.price,
     item.network,
     providerTokens,
     selectedChain,
@@ -242,9 +247,46 @@ export const useBuyNftGasCost = (
     selectedChain,
     order.network
   )
+
+  if (order.price === '0' || isPriceTooLow(order.price)) {
+    return {
+      gasCost: undefined,
+      isFetchingGasCost: false
+    }
+  }
+
   return useGasCost(
-    order.price,
     order.network,
+    providerTokens,
+    selectedChain,
+    shouldUseCrossChainProvider,
+    wallet,
+    estimateGas
+  )
+}
+
+export const useNameMintingGasCost = (
+  name: string,
+  selectedToken: Token,
+  selectedChain: ChainId,
+  wallet: Wallet | null,
+  providerTokens: Token[]
+) => {
+  const estimateGas = useCallback(
+    () =>
+      wallet?.address
+        ? estimateNameMintingGas(name, selectedChain, wallet?.address)
+        : Promise.resolve(undefined),
+    [name, selectedChain, wallet?.address]
+  )
+  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(
+    selectedToken,
+    selectedChain,
+    Network.ETHEREUM
+  )
+
+  return useGasCost(
+    Network.ETHEREUM,
     providerTokens,
     selectedChain,
     shouldUseCrossChainProvider,
@@ -331,6 +373,41 @@ export const useCrossChainBuyNftRoute = (
   )
 }
 
+export const useCrossChainNameMintingRoute = (
+  name: string,
+  price: string,
+  assetChainId: ChainId,
+  selectedToken: Token,
+  selectedChain: ChainId,
+  providerTokens: Token[],
+  crossChain: CrossChainProvider | undefined,
+  wallet: Wallet | null
+) => {
+  const getMintingNameRoute = useCallback(
+    (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
+      crossChainProvider.getRegisterNameRoute({
+        name,
+        fromAddress,
+        fromAmount,
+        fromChain,
+        fromToken,
+        toAmount: price,
+        toChain: assetChainId
+      }),
+    [name, assetChainId, price]
+  )
+  return useCrossChainRoute(
+    price,
+    assetChainId,
+    selectedToken,
+    selectedChain,
+    providerTokens,
+    crossChain,
+    wallet,
+    getMintingNameRoute
+  )
+}
+
 export type RouteFeeCost = {
   token: Token
   gasCostWei: BigNumber
@@ -362,7 +439,7 @@ const useCrossChainRoute = (
     fromAmount: string,
     fromChain: ChainId,
     fromToken: string,
-    crossChainProvider: CrossChainProvider | undefined
+    crossChainProvider: CrossChainProvider
   ) => Promise<Route>
 ): CrossChainRoute => {
   const [isFetchingRoute, setIsFetchingRoute] = useState(false)

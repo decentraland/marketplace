@@ -9,13 +9,15 @@ import type { getContract } from '../../../../modules/contract/selectors'
 
 export type Props = WithAuthorizedActionProps & Omit<ModalProps, 'metadata'> &  {
   metadata: { nft: NFT, order: Order }
+  isExecutingOrder: boolean
+  isExecutingOrderCrossChain: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
   onExecuteOrderCrossChain: (route: Route) => unknown
   onExecuteOrderWithCard: typeof executeOrderWithCardRequest
 }
 
-export type MapStateProps = Pick<Props, 'getContract'>
+export type MapStateProps = Pick<Props, 'getContract' | 'isExecutingOrder' | 'isExecutingOrderCrossChain'>
 export type MapDispatchProps = Pick<
 Props,
 'onExecuteOrder' | 'onExecuteOrderCrossChain' | 'onExecuteOrderWithCard'

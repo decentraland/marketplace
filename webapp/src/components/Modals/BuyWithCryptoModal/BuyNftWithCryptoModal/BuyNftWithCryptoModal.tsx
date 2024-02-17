@@ -15,6 +15,8 @@ import { Props } from './BuyNftWithCryptoModal.types'
 const BuyNftWithCryptoModalHOC = (props: Props) => {
   const {
     name,
+    isExecutingOrder,
+    isExecutingOrderCrossChain,
     onClose,
     isLoadingAuthorization,
     getContract,
@@ -86,6 +88,8 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   return (
     <BuyWithCryptoModal
       price={order.price}
+      isBuyingAsset={isExecutingOrder}
+      isBuyingCrossChain={isExecutingOrderCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyWithCard={onBuyWithCard}
       onBuyCrossChain={onExecuteOrderCrossChain}
