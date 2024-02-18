@@ -31,17 +31,14 @@ export const useShouldUseCrossChainProvider = (
 ) => {
   return useMemo(
     () =>
-      selectedToken &&
       !(
-        (
-          (selectedToken.symbol === 'MANA' &&
-            getNetwork(selectedChain) === Network.MATIC &&
-            assetNetwork === Network.MATIC) || // MANA selected and it's sending the tx from MATIC
-          (selectedToken.symbol === 'MANA' &&
-            getNetwork(selectedChain) === Network.ETHEREUM &&
-            assetNetwork === Network.ETHEREUM)
-        ) // MANA selected and it's connected to ETH and buying a L1 NFT
-      ),
+        (selectedToken.symbol === 'MANA' &&
+          getNetwork(selectedChain) === Network.MATIC &&
+          assetNetwork === Network.MATIC) || // MANA selected and it's sending the tx from MATIC
+        (selectedToken.symbol === 'MANA' &&
+          getNetwork(selectedChain) === Network.ETHEREUM &&
+          assetNetwork === Network.ETHEREUM)
+      ), // MANA selected and it's connected to ETH and buying a L1 NFT
     [assetNetwork, selectedChain, selectedToken]
   )
 }
@@ -166,9 +163,6 @@ const useGasCost = (
       !shouldUseCrossChainProvider &&
       wallet &&
       getNetwork(wallet.chainId) === assetNetwork
-      // TODO: Why is this restriction here? Should we move it to the hook that uses this one?
-      // getNetwork(wallet.chainId) === Network.MATIC &&
-      // assetNetwork === Network.MATIC) ||
     ) {
       calculateGas()
     } else {
