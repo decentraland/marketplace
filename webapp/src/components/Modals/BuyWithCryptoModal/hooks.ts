@@ -458,7 +458,6 @@ const useCrossChainRoute = (
       !crossChainProvider ||
       !crossChainProvider.isLibInitialized() ||
       !wallet ||
-      !selectedToken ||
       !providerMANA
     ) {
       return
@@ -514,7 +513,6 @@ const useCrossChainRoute = (
 
   const useMetaTx = useMemo(() => {
     return (
-      !!selectedToken &&
       !!wallet &&
       getShouldUseMetaTx(
         assetChainId,
@@ -552,13 +550,7 @@ const useCrossChainRoute = (
 
   // Refresh the route every time the selected token changes
   useEffect(() => {
-    if (
-      selectedToken &&
-      !route &&
-      !isFetchingRoute &&
-      !useMetaTx &&
-      !routeFailed
-    ) {
+    if (!route && !isFetchingRoute && !useMetaTx && !routeFailed) {
       const isBuyingL1WithOtherTokenThanEthereumMANA =
         assetChainId === ChainId.ETHEREUM_MAINNET &&
         selectedToken.chainId !== ChainId.ETHEREUM_MAINNET.toString() &&
