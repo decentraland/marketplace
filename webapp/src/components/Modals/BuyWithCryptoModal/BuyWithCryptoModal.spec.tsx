@@ -1481,7 +1481,7 @@ describe('BuyWithCryptoModal', () => {
               }
             })
 
-            it('should render the buy now button and call on onBuyItem on the click', async () => {
+            it('should render the buy now button and call on onExecuteOrder on the click', async () => {
               const {
                 queryByTestId,
                 getByTestId

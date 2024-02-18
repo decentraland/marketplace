@@ -837,34 +837,36 @@ export const BuyWithCryptoModal = (props: Props) => {
   ])
 
   const renderMainActionButton = useCallback(() => {
+    // has a selected token and canBuyItem was computed
     if (wallet && selectedToken && canBuyItem !== undefined) {
-      if (canBuyItem) {
-        // it's paying with MANA but connected on Ethereum
-        if (
-          selectedToken.symbol === 'MANA' &&
-          wallet.network !== Network.MATIC
-        ) {
-          return asset.network === Network.ETHEREUM // if it's buying a L1 NFT, render buy now
-            ? renderBuyNowButton()
-            : isPriceTooLow(price) // if it's too low for a meta tx, render switch button
-            ? renderSwitchNetworkButton()
-            : renderBuyNowButton() // else, buy button
-        }
-        // for any other token, it needs to be connected on the selectedChain network
+      // if can't buy Get Mana and Buy With Card buttons
+      if (!canBuyItem) {
+        return renderGetMANAButton()
+      }
 
-        // if (wallet.network !== Network.MATIC) {
-        //   return renderBuyNowButton()
-        // }
-
-        console.log('selectedChain: ', selectedChain)
-        console.log('wallet.chainId: ', wallet.chainId)
+      // for any token other than MANA, it user needs to be connected on the destiny chain
+      if (selectedToken.symbol !== 'MANA') {
         return selectedChain === wallet.chainId
           ? renderBuyNowButton()
           : renderSwitchNetworkButton()
-      } else {
-        // can't buy Get Mana and Buy With Card buttons
-        return renderGetMANAButton()
       }
+
+      // for L1 NFTs
+      if (asset.network === Network.ETHEREUM) {
+        // if tries to buy with ETH MANA and connected to other network, should switch to ETH network to pay directly
+        return selectedToken.symbol === 'MANA' &&
+          wallet.network !== Network.ETHEREUM &&
+          selectedChain === ChainId.ETHEREUM_MAINNET
+          ? renderSwitchNetworkButton()
+          : renderBuyNowButton()
+      }
+
+      // for L2 NFTs paying with MANA, if the price is too low, render switch button, else buy now
+      return wallet.network !== Network.MATIC
+        ? isPriceTooLow(price)
+          ? renderSwitchNetworkButton()
+          : renderBuyNowButton()
+        : renderBuyNowButton()
     } else if (!route && routeFailed) {
       // can't buy Get Mana and Buy With Card buttons
       return renderGetMANAButton()
