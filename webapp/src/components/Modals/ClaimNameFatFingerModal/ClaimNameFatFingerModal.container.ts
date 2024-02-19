@@ -46,8 +46,7 @@ const mapState = (state: RootState): MapState => ({
   address: getAddress(state),
   getContract: (query: Partial<Contract>) => getContract(state, query),
   wallet: getWallet(state),
-  isClaimingNamesWithAxelarEnabled:
-    getIsMintingNamesWithAxelarEnabled(state) && false,
+  isClaimingNamesWithAxelarEnabled: getIsMintingNamesWithAxelarEnabled(state),
   isClaimingNamesWithFiatEnabled: getIsClaimingNamesWithFiatEnabled(state)
 })
 

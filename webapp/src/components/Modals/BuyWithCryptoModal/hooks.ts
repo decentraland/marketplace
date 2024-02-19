@@ -273,6 +273,7 @@ export const useNameMintingGasCost = (
         : Promise.resolve(undefined),
     [name, selectedChain, wallet?.address]
   )
+
   const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(
     selectedToken,
     selectedChain,

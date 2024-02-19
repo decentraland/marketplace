@@ -1,19 +1,59 @@
 import { ChainId, Network } from '@dcl/schemas'
+import { BigNumber, ethers } from 'ethers'
 import { renderHook } from '@testing-library/react-hooks'
-import type { Token } from 'decentraland-transactions/crossChain'
-import type { Wallet } from 'decentraland-dapps/dist/modules/wallet'
+import { NATIVE_TOKEN, Token } from 'decentraland-transactions/crossChain'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import { useShouldUseCrossChainProvider, useNameMintingGasCost } from './hooks'
+import { estimateNameMintingGas } from './utils'
+import { waitFor } from '@testing-library/react'
+
+jest.mock('ethers', () => ({
+  ...jest.requireActual('ethers'),
+  ethers: {
+    ...jest.requireActual('ethers').ethers,
+    providers: {
+      Web3Provider: function() {
+        return {
+          getGasPrice: () => Promise.resolve(BigNumber.from(4))
+        }
+      }
+    }
+  }
+}))
+
+jest.mock('./utils', () => {
+  return {
+    ...jest.requireActual('./utils'),
+    estimateNameMintingGas: jest.fn()
+  }
+})
+
+jest.mock('decentraland-dapps/dist/lib', () => {
+  return {
+    ...jest.requireActual('./utils'),
+    getNetworkProvider: () =>
+      Promise.resolve({
+        name: 'aProvider'
+      })
+  }
+})
 
 describe('when using the should use cross chain provider hook', () => {
   let selectedToken: Token
 
   describe('and the selected token is not mana', () => {
-    beforeEach(() => {  
-      selectedToken = { symbol: 'ETH', address: '0x1'} as Token
+    beforeEach(() => {
+      selectedToken = { symbol: 'ETH', address: '0x1' } as Token
     })
 
     it('should return true', () => {
-      const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, ChainId.MATIC_MAINNET, Network.ETHEREUM))
+      const { result } = renderHook(() =>
+        useShouldUseCrossChainProvider(
+          selectedToken,
+          ChainId.MATIC_MAINNET,
+          Network.ETHEREUM
+        )
+      )
       expect(result.current).toBe(true)
     })
   })
@@ -22,7 +62,7 @@ describe('when using the should use cross chain provider hook', () => {
     let assetNetwork: Network
 
     beforeEach(() => {
-      selectedToken = { symbol: 'MANA', address: '0x1'} as Token
+      selectedToken = { symbol: 'MANA', address: '0x1' } as Token
     })
 
     describe('and the asset network is not ethereum and the network for the selected chain is ethereum', () => {
@@ -31,7 +71,13 @@ describe('when using the should use cross chain provider hook', () => {
       })
 
       it('should return true', () => {
-        const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, ChainId.ETHEREUM_MAINNET, assetNetwork))
+        const { result } = renderHook(() =>
+          useShouldUseCrossChainProvider(
+            selectedToken,
+            ChainId.ETHEREUM_MAINNET,
+            assetNetwork
+          )
+        )
         expect(result.current).toBe(true)
       })
     })
@@ -42,14 +88,20 @@ describe('when using the should use cross chain provider hook', () => {
       })
 
       it('should return true', () => {
-        const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, ChainId.ETHEREUM_MAINNET, assetNetwork))
+        const { result } = renderHook(() =>
+          useShouldUseCrossChainProvider(
+            selectedToken,
+            ChainId.ETHEREUM_MAINNET,
+            assetNetwork
+          )
+        )
         expect(result.current).toBe(true)
       })
     })
 
     describe('and the asset network is ethereum', () => {
       let selectedChain: ChainId
-      
+
       beforeEach(() => {
         assetNetwork = Network.ETHEREUM
       })
@@ -60,7 +112,13 @@ describe('when using the should use cross chain provider hook', () => {
         })
 
         it('should return true', () => {
-          const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, selectedChain, assetNetwork))
+          const { result } = renderHook(() =>
+            useShouldUseCrossChainProvider(
+              selectedToken,
+              selectedChain,
+              assetNetwork
+            )
+          )
           expect(result.current).toBe(true)
         })
       })
@@ -71,7 +129,13 @@ describe('when using the should use cross chain provider hook', () => {
         })
 
         it('should return false', () => {
-          const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, selectedChain, assetNetwork))
+          const { result } = renderHook(() =>
+            useShouldUseCrossChainProvider(
+              selectedToken,
+              selectedChain,
+              assetNetwork
+            )
+          )
           expect(result.current).toBe(false)
         })
       })
@@ -79,7 +143,7 @@ describe('when using the should use cross chain provider hook', () => {
 
     describe('and the asset network is matic', () => {
       let selectedChain: ChainId
-      
+
       beforeEach(() => {
         assetNetwork = Network.MATIC
       })
@@ -90,7 +154,13 @@ describe('when using the should use cross chain provider hook', () => {
         })
 
         it('should return true', () => {
-          const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, selectedChain, assetNetwork))
+          const { result } = renderHook(() =>
+            useShouldUseCrossChainProvider(
+              selectedToken,
+              selectedChain,
+              assetNetwork
+            )
+          )
           expect(result.current).toBe(true)
         })
       })
@@ -101,7 +171,13 @@ describe('when using the should use cross chain provider hook', () => {
         })
 
         it('should return false', () => {
-          const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, selectedChain, assetNetwork))
+          const { result } = renderHook(() =>
+            useShouldUseCrossChainProvider(
+              selectedToken,
+              selectedChain,
+              assetNetwork
+            )
+          )
           expect(result.current).toBe(false)
         })
       })
@@ -116,9 +192,9 @@ describe('when using the name minting as cost hook', () => {
   let wallet: Wallet | null
   let providerTokens: Token[]
 
-  describe('and there\'s no wallet set', () => {
+  describe("and there's no wallet set", () => {
     beforeEach(() => {
-      selectedToken = { symbol: 'MANA', address: '0x1'} as Token
+      selectedToken = { symbol: 'MANA', address: '0x1' } as Token
       name = 'name'
       selectedChain = ChainId.ETHEREUM_MAINNET
       providerTokens = []
@@ -126,15 +202,23 @@ describe('when using the name minting as cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() => useNameMintingGasCost(name, selectedToken, selectedChain, wallet, providerTokens))
+      const { result } = renderHook(() =>
+        useNameMintingGasCost(
+          name,
+          selectedToken,
+          selectedChain,
+          wallet,
+          providerTokens
+        )
+      )
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
   })
 
-  describe('and the wallet\'s network is not the same as the asset\'s one', () => {
+  describe("and the wallet's network is not the same as the asset's one", () => {
     beforeEach(() => {
-      selectedToken = { symbol: 'MANA', address: '0x1'} as Token
+      selectedToken = { symbol: 'MANA', address: '0x1' } as Token
       name = 'name'
       selectedChain = ChainId.ETHEREUM_MAINNET
       providerTokens = []
@@ -145,7 +229,15 @@ describe('when using the name minting as cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() => useNameMintingGasCost(name, selectedToken, selectedChain, wallet, providerTokens))
+      const { result } = renderHook(() =>
+        useNameMintingGasCost(
+          name,
+          selectedToken,
+          selectedChain,
+          wallet,
+          providerTokens
+        )
+      )
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -153,7 +245,7 @@ describe('when using the name minting as cost hook', () => {
 
   describe('and combination of selected tokens and chains results in the need of using a cross chain provider', () => {
     beforeEach(() => {
-      selectedToken = { symbol: 'MANA', address: '0x1'} as Token
+      selectedToken = { symbol: 'MANA', address: '0x1' } as Token
       name = 'name'
       selectedChain = ChainId.MATIC_MAINNET
       providerTokens = []
@@ -164,9 +256,91 @@ describe('when using the name minting as cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() => useNameMintingGasCost(name, selectedToken, selectedChain, wallet, providerTokens))
+      const { result } = renderHook(() =>
+        useNameMintingGasCost(
+          name,
+          selectedToken,
+          selectedChain,
+          wallet,
+          providerTokens
+        )
+      )
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
+    })
+  })
+
+  describe('and all parameters are set to get the gas', () => {
+    beforeEach(() => {
+      selectedToken = {
+        symbol: 'MANA',
+        address: NATIVE_TOKEN,
+        chainId: ChainId.ETHEREUM_MAINNET.toString(),
+        usdPrice: 10
+      } as Token
+      name = 'name'
+      selectedChain = ChainId.ETHEREUM_MAINNET
+      providerTokens = [selectedToken]
+      wallet = {
+        address: '0x1',
+        chainId: ChainId.ETHEREUM_MAINNET,
+        network: Network.ETHEREUM
+      } as Wallet
+    })
+
+    describe('and the transactions gas estimation fails', () => {
+      beforeEach(() => {
+        ;(estimateNameMintingGas as jest.Mock<
+          ReturnType<typeof estimateNameMintingGas>,
+          Parameters<typeof estimateNameMintingGas>
+        >).mockRejectedValueOnce(undefined)
+      })
+
+      it('should return an undefined cost and the loading flag as false', async () => {
+        const { result } = renderHook(() =>
+          useNameMintingGasCost(
+            name,
+            selectedToken,
+            selectedChain,
+            wallet,
+            providerTokens
+          )
+        )
+        await waitFor(() => {
+          expect(result.current.isFetchingGasCost).toBe(false)
+        })
+        expect(result.current.gasCost).toBe(undefined)
+      })
+    })
+
+    describe('and the transactions gas estimation is successful', () => {
+      beforeEach(() => {
+        ;(estimateNameMintingGas as jest.Mock<
+          ReturnType<typeof estimateNameMintingGas>,
+          Parameters<typeof estimateNameMintingGas>
+        >).mockResolvedValueOnce(BigNumber.from('4000000000000000000'))
+      })
+
+      it('should return a total gas cost of 16, a USD gas cost of 160, the native token and the loading flag as false', async () => {
+        const { result } = renderHook(() =>
+          useNameMintingGasCost(
+            name,
+            selectedToken,
+            selectedChain,
+            wallet,
+            providerTokens
+          )
+        )
+
+        await waitFor(() => {
+          expect(result.current.isFetchingGasCost).toBe(false)
+        })
+        expect(result.current.gasCost?.total).toEqual(
+          ethers.utils.formatEther(BigNumber.from('16000000000000000000'))
+        )
+        expect(result.current.gasCost?.token).toEqual(selectedToken)
+        expect(result.current.gasCost?.totalUSDPrice).toEqual(160)
+      })
     })
   })
 })
