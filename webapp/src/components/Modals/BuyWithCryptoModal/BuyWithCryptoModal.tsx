@@ -161,7 +161,9 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [asset, destinyChainMANA, selectedChain, selectedToken, wallet])
 
   const selectedProviderChain = useMemo(() => {
-    return providerChains.find(c => c.chainId === selectedChain.toString())
+    return providerChains.find(
+      c => c.chainId.toString() === selectedChain.toString()
+    )
   }, [providerChains, selectedChain])
 
   // the price of the order or the item
@@ -196,7 +198,7 @@ export const BuyWithCryptoModal = (props: Props) => {
             order
           )
 
-          if (estimation) {
+          if (estimation && providerTokens.length) {
             const total = estimation.mul(gasPrice)
             const nativeToken = providerTokens.find(
               t => +t.chainId === selectedChain && t.address === NATIVE_TOKEN
@@ -265,18 +267,20 @@ export const BuyWithCryptoModal = (props: Props) => {
       return {
         token,
         gasCostWei: totalGasCost,
-        gasCost: parseFloat(
+        gasCost: formatPrice(
           ethers.utils.formatUnits(
             totalGasCost,
             route.route.estimate.gasCosts[0].token.decimals
-          )
-        ).toFixed(6),
-        feeCost: parseFloat(
+          ),
+          route.route.estimate.gasCosts[0].token
+        ),
+        feeCost: formatPrice(
           ethers.utils.formatUnits(
             totalFeeCost,
             route.route.estimate.gasCosts[0].token.decimals
-          )
-        ).toFixed(6),
+          ),
+          route.route.estimate.gasCosts[0].token
+        ),
         feeCostWei: totalFeeCost,
         totalCost: parseFloat(
           ethers.utils.formatUnits(
@@ -444,7 +448,11 @@ export const BuyWithCryptoModal = (props: Props) => {
       const MANAToken = providerTokens.find(
         t => t.symbol === 'MANA' && selectedChain.toString() === t.chainId
       )
-      setSelectedToken(MANAToken || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
+      try {
+        setSelectedToken(MANAToken || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
+      } catch (error) {
+        setSelectedToken(providerTokens[0])
+      }
     }
   }, [
     calculateRoute,
@@ -473,7 +481,10 @@ export const BuyWithCryptoModal = (props: Props) => {
 
           // if native token
           if (selectedToken.address === NATIVE_TOKEN) {
-            const balanceWei = await provider.getBalance(wallet.address)
+            const balanceWei = await provider.send('eth_getBalance', [
+              wallet.address,
+              'latest'
+            ])
             setSelectedTokenBalance(balanceWei)
 
             return
@@ -826,27 +837,43 @@ export const BuyWithCryptoModal = (props: Props) => {
   ])
 
   const renderMainActionButton = useCallback(() => {
+    // has a selected token and canBuyItem was computed
     if (wallet && selectedToken && canBuyItem !== undefined) {
-      if (canBuyItem) {
-        // it's paying with MANA but connected on Ethereum
-        if (
-          selectedToken.symbol === 'MANA' &&
-          wallet.network === Network.ETHEREUM
-        ) {
-          return asset.network === Network.ETHEREUM // if it's buying a L1 NFT, render buy now
-            ? renderBuyNowButton()
-            : isPriceTooLow(price) // if it's too low for a meta tx, render switch button
-            ? renderSwitchNetworkButton()
-            : renderBuyNowButton() // else, buy button
-        }
-        // for any other token, it needs to be connected on the selectedChain network
+      // if can't buy Get Mana and Buy With Card buttons
+      if (!canBuyItem) {
+        return renderGetMANAButton()
+      }
+
+      // for any token other than MANA, it user needs to be connected on the origin chain
+      if (selectedToken.symbol !== 'MANA') {
         return selectedChain === wallet.chainId
           ? renderBuyNowButton()
           : renderSwitchNetworkButton()
-      } else {
-        // can't buy Get Mana and Buy With Card buttons
-        return renderGetMANAButton()
       }
+
+      // for L1 NFTs
+      if (asset.network === Network.ETHEREUM) {
+        // if tries to buy with ETH MANA and connected to other network, should switch to ETH network to pay directly
+        return selectedToken.symbol === 'MANA' &&
+          wallet.network !== Network.ETHEREUM &&
+          getNetwork(selectedChain) === Network.ETHEREUM
+          ? renderSwitchNetworkButton()
+          : renderBuyNowButton()
+      }
+
+      // for L2 NFTs paying with MANA
+
+      // And connected to MATIC, should render the buy now button otherwise check if a meta tx is available
+      if (getNetwork(selectedChain) === Network.MATIC) {
+        return wallet.network === Network.MATIC
+          ? renderBuyNowButton()
+          : isPriceTooLow(price)
+          ? renderSwitchNetworkButton() // switch to MATIC to pay for the gas
+          : renderBuyNowButton()
+      }
+
+      // can buy it with MANA from other chain through the provider
+      return renderBuyNowButton()
     } else if (!route && routeFailed) {
       // can't buy Get Mana and Buy With Card buttons
       return renderGetMANAButton()
@@ -868,7 +895,10 @@ export const BuyWithCryptoModal = (props: Props) => {
   const renderTokenBalance = useCallback(() => {
     let balance
     if (selectedToken && selectedToken.symbol === 'MANA') {
-      balance = wallet?.networks[getNetwork(selectedChain)]?.mana.toFixed(2)
+      balance =
+        wallet?.networks[
+          (getNetwork(selectedChain) as Network.ETHEREUM) || Network.MATIC
+        ]?.mana.toFixed(2) ?? 0
     } else if (selectedToken && selectedTokenBalance) {
       balance = Number(
         ethers.utils.formatUnits(selectedTokenBalance, selectedToken.decimals)
@@ -1264,10 +1294,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                                   src={routeFeeCost.token.logoURI}
                                   alt={routeFeeCost.token.name}
                                 />
-                                {formatPrice(
-                                  routeFeeCost.totalCost,
-                                  routeFeeCost.token
-                                )}
+                                {routeFeeCost.totalCost}
                               </>
                             ) : (
                               <>

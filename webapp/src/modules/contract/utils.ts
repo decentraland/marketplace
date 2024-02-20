@@ -44,7 +44,7 @@ export function getAuthorizationKey({
 export const STUB_MATIC_COLLECTION_CONTRACT_NAME =
   'Stub Matic Collection Contract Name'
 
-export function getStubMaticCollectionContract(address: string) {
+export function getStubMaticCollectionContract(address: string): Contract {
   return {
     address: address.toLowerCase(),
     category: NFTCategory.WEARABLE,
@@ -62,7 +62,10 @@ export function isStubMaticCollectionContract(contract: Contract) {
   )
 }
 
-export function getContractByParams(contracts: Contract[], query: Partial<Contract>) {
+export function getContractByParams(
+  contracts: Contract[],
+  query: Partial<Contract>
+) {
   const found = contracts.find(contract =>
     Object.keys(query).every(
       key =>

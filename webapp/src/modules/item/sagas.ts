@@ -276,7 +276,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
           ])
       )
 
-      yield put(buyItemSuccess(item.chainId, txHash, item))
+      yield put(buyItemSuccess(wallet.chainId, txHash, item))
     } catch (error) {
       yield put(
         buyItemFailure(

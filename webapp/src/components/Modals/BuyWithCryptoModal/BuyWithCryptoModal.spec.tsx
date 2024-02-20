@@ -9,6 +9,7 @@ import {
   ListingStatus,
   NFTCategory,
   Network,
+  Order,
   Rarity,
   WearableCategory
 } from '@dcl/schemas'
@@ -36,6 +37,7 @@ import {
 } from './BuyWithCryptoModal'
 import { Props } from './BuyWithCryptoModal.types'
 import { DEFAULT_CHAINS, TESTNET_DEFAULT_CHAINS } from './utils'
+import { Asset } from '../../../modules/asset/types'
 
 const mockBalanceOf = jest.fn()
 const mockWeb3ProviderGetBalance = jest.fn()
@@ -390,7 +392,7 @@ const MOCKED_PROVIDER_TOKENS = [
 
 const MOCK_SUPPORTED_CHAIN = [...TESTNET_DEFAULT_CHAINS, ...DEFAULT_CHAINS]
 
-const MOCKED_ITEM = {
+const MOCKED_ITEM: Asset = {
   id: '0xffce00acc0d17eb01c3d2f9c3fcb3ab26519c562-0',
   beneficiary: '0x6240b908f4880da265c2e55d5ca644b50a4cb0d4',
   itemId: '0',
@@ -468,7 +470,7 @@ const MOCKED_NFT = {
   vendor: VendorName.DECENTRALAND
 }
 
-const MOCKED_ORDER = {
+const MOCKED_ORDER: Order = {
   id: '0x306a7497acdd4f8feabc692610fb0f0fc60926e8f042648a8cd84e990f159a8b',
   marketplaceAddress: '0x480a0f4e360e8964e68858dd231c2922f1df45ef',
   contractAddress: '0x9412dcbecc58a924e9c93c42ca9d0430d5d6c4c6',
@@ -538,7 +540,7 @@ describe('BuyWithCryptoModal', () => {
     modalProps = {
       onBuyItem: jest.fn(),
       onExecuteOrder: jest.fn(),
-      metadata: { asset: MOCKED_ITEM },
+      metadata: { asset: MOCKED_ITEM as Asset },
       getContract: jest.fn().mockResolvedValue({
         address: '0x0' // collection store mock
       }),
@@ -1479,7 +1481,7 @@ describe('BuyWithCryptoModal', () => {
               }
             })
 
-            it('should render the buy now button and call on onBuyItem on the click', async () => {
+            it('should render the buy now button and call on onExecuteOrder on the click', async () => {
               const {
                 queryByTestId,
                 getByTestId

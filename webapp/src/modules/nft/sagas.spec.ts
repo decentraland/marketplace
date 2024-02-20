@@ -178,7 +178,10 @@ describe('when handling the fetch NFT request action', () => {
             select(getContract, { address: contractAddress.toLowerCase() }),
             null
           ],
-          [call(VendorFactory.build, contract.vendor, API_OPTS), vendor],
+          [
+            call(VendorFactory.build, contract.vendor as VendorName, API_OPTS),
+            vendor
+          ],
           [
             call(
               [vendor.nftService, 'fetchOne'],

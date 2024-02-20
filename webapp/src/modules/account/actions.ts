@@ -13,7 +13,10 @@ export const fetchAccountMetricsRequest = (filters: AccountMetricsFilters) =>
   action(FETCH_ACCOUNT_METRICS_REQUEST, { filters })
 export const fetchAccountMetricsSuccess = (
   filters: AccountMetricsFilters,
-  accountMetrics: Record<Network, AccountMetrics[]>
+  accountMetrics: {
+    [Network.ETHEREUM]: AccountMetrics[]
+    [Network.MATIC]: AccountMetrics[]
+  }
 ) => action(FETCH_ACCOUNT_METRICS_SUCCESS, { filters, accountMetrics })
 export const fetchAccountMetricsFailure = (
   filters: AccountMetricsFilters,

@@ -17,7 +17,7 @@ export const NetworkFilter = ({
 }: NetworkFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const networkOptions = useMemo(() => {
-    const options = Object.values(Network).filter(
+    const options = [Network.ETHEREUM, Network.MATIC].filter(
       value => typeof value === 'string'
     ) as Network[]
     return [

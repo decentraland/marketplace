@@ -23,4 +23,5 @@ export enum FeatureName {
   CLAIM_NAMES_WITH_FIAT = 'names-fiat-payments',
   ENS_ADDRESS = 'ens-address',
   MINTING_NAMES_WITH_AXELAR = 'minting-names-with-axelar',
+  CHAIN_SELECTOR = 'chain-selector'
 }

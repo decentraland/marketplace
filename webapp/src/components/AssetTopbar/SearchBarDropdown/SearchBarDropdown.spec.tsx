@@ -11,7 +11,7 @@ import { catalogAPI } from '../../../modules/vendor/decentraland/catalog/api'
 import { renderWithProviders } from '../../../utils/test'
 import { getAssetUrl } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
-import { AssetType } from '../../../modules/asset/types'
+import { Asset, AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { VendorName } from '../../../modules/vendor'
 import { SortBy } from '../../../modules/routing/types'
@@ -205,7 +205,7 @@ describe('SearchBarDropdown', () => {
           await waitFor(async () => {
             expect(within(container).getByRole('link')).toHaveAttribute(
               'href',
-              getAssetUrl(MOCKED_ITEM)
+              getAssetUrl(MOCKED_ITEM as Asset)
             )
           })
         })
