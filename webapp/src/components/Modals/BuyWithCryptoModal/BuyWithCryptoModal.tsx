@@ -198,7 +198,7 @@ export const BuyWithCryptoModal = (props: Props) => {
             order
           )
 
-          if (estimation) {
+          if (estimation && providerTokens.length) {
             const total = estimation.mul(gasPrice)
             const nativeToken = providerTokens.find(
               t => +t.chainId === selectedChain && t.address === NATIVE_TOKEN
@@ -844,7 +844,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         return renderGetMANAButton()
       }
 
-      // for any token other than MANA, it user needs to be connected on the destiny chain
+      // for any token other than MANA, it user needs to be connected on the origin chain
       if (selectedToken.symbol !== 'MANA') {
         return selectedChain === wallet.chainId
           ? renderBuyNowButton()
@@ -856,17 +856,24 @@ export const BuyWithCryptoModal = (props: Props) => {
         // if tries to buy with ETH MANA and connected to other network, should switch to ETH network to pay directly
         return selectedToken.symbol === 'MANA' &&
           wallet.network !== Network.ETHEREUM &&
-          selectedChain === ChainId.ETHEREUM_MAINNET
+          getNetwork(selectedChain) === Network.ETHEREUM
           ? renderSwitchNetworkButton()
           : renderBuyNowButton()
       }
 
-      // for L2 NFTs paying with MANA, if the price is too low, render switch button, else buy now
-      return wallet.network !== Network.MATIC
-        ? isPriceTooLow(price)
-          ? renderSwitchNetworkButton()
+      // for L2 NFTs paying with MANA
+
+      // And connected to MATIC, should render the buy now button otherwise check if a meta tx is available
+      if (getNetwork(selectedChain) === Network.MATIC) {
+        return wallet.network === Network.MATIC
+          ? renderBuyNowButton()
+          : isPriceTooLow(price)
+          ? renderSwitchNetworkButton() // switch to MATIC to pay for the gas
           : renderBuyNowButton()
-        : renderBuyNowButton()
+      }
+
+      // can buy it with MANA from other chain through the provider
+      return renderBuyNowButton()
     } else if (!route && routeFailed) {
       // can't buy Get Mana and Buy With Card buttons
       return renderGetMANAButton()
@@ -888,9 +895,10 @@ export const BuyWithCryptoModal = (props: Props) => {
   const renderTokenBalance = useCallback(() => {
     let balance
     if (selectedToken && selectedToken.symbol === 'MANA') {
-      balance = wallet?.networks[
-        (getNetwork(selectedChain) as Network.ETHEREUM) || Network.MATIC
-      ]?.mana.toFixed(2) ?? 0
+      balance =
+        wallet?.networks[
+          (getNetwork(selectedChain) as Network.ETHEREUM) || Network.MATIC
+        ]?.mana.toFixed(2) ?? 0
     } else if (selectedToken && selectedTokenBalance) {
       balance = Number(
         ethers.utils.formatUnits(selectedTokenBalance, selectedToken.decimals)

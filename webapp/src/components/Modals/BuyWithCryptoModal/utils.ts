@@ -218,7 +218,6 @@ export const estimateTransactionGas = async (
   } else if (!isNFT(asset)) {
     const contract = getContract(ContractName.CollectionStore, asset.chainId)
     const c = new ethers.Contract(contract.address, contract.abi, provider)
-    console.log('c: ', c)
     estimation = await c.estimateGas.buy(
       [
         [asset.contractAddress, [asset.itemId], [asset.price], [wallet.address]]

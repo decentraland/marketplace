@@ -20,11 +20,12 @@
 
 .chainAndTokenSelector .searchContainer :global(.dcl.close) {
   top: 0 !important; /* these style are set by the modal, from here is not accesible through the `global` selector */
-  right: 0 !important;
+  right: 32px !important;
   background: none;
 }
 
 .chainAndTokenSelector .noResults {
+  padding: 0 32px;
   padding-top: 8px;
   display: flex;
 }
