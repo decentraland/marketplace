@@ -1,10 +1,10 @@
-import { useCallback, useMemo } from "react"
-import { ethers } from "ethers"
-import classNames from "classnames"
-import { Network } from "@dcl/schemas"
-import { ChainId, getNetwork } from "@dcl/schemas/dist/dapps/chain-id"
-import { t } from "decentraland-dapps/dist/modules/translation"
-import { Wallet } from "decentraland-dapps/dist/modules/wallet/types"
+import { useCallback, useMemo } from 'react'
+import { ethers } from 'ethers'
+import classNames from 'classnames'
+import { Network } from '@dcl/schemas'
+import { ChainId, getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
+import { t } from 'decentraland-dapps/dist/modules/translation'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import type { ChainData, Route, Token } from "decentraland-transactions/crossChain"
 import { Icon, InfoTooltip } from "decentraland-ui"
 import { ManaToFiat } from "../../../ManaToFiat"
@@ -36,7 +36,24 @@ type Props = {
 }
 
 const PaymentSelector = (props: Props) => {
-  const { price, shouldUseCrossChainProvider, route, gasCost, isFetchingGasCost, routeFeeCost, selectedToken, selectedChain, amountInSelectedToken, selectedProviderChain, providerTokens, wallet, selectedTokenBalance, isFetchingBalance, onShowChainSelector, onShowTokenSelector } = props
+  const {
+    price,
+    shouldUseCrossChainProvider,
+    route,
+    gasCost,
+    isFetchingGasCost,
+    routeFeeCost,
+    selectedToken,
+    selectedChain,
+    amountInSelectedToken,
+    selectedProviderChain,
+    providerTokens,
+    wallet,
+    selectedTokenBalance,
+    isFetchingBalance,
+    onShowChainSelector,
+    onShowTokenSelector
+  } = props
 
   const canSelectChainAndToken = useMemo(() => {
     return BigInt(price) > BigInt(0)
@@ -149,7 +166,8 @@ const PaymentSelector = (props: Props) => {
                         <>
                           $
                           {(
-                            Number(amountInSelectedToken) * selectedToken.usdPrice
+                            Number(amountInSelectedToken) *
+                            selectedToken.usdPrice
                           ).toFixed(4)}
                         </>
                       ) : (
@@ -165,7 +183,8 @@ const PaymentSelector = (props: Props) => {
               <div className={styles.itemCost}>
                 <div className={styles.feeCostContainer}>
                   {t('buy_with_crypto_modal.fee_cost')}
-                  <InfoTooltip content={t(
+                  <InfoTooltip
+                    content={t(
                       shouldUseCrossChainProvider &&
                         getNetwork(selectedChain) !== Network.MATIC
                         ? 'buy_with_crypto_modal.tooltip.cross_chain'
@@ -179,7 +198,7 @@ const PaymentSelector = (props: Props) => {
                     )}
                     style={{ zIndex: 3001 }}
                     position="top center"
-                     />
+                  />
                 </div>
                 <div className={styles.fromAmountContainer}>
                   {gasCost && gasCost.token ? (
