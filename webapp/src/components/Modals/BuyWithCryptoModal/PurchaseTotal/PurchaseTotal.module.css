@@ -1,0 +1,86 @@
+.totalContainer img {
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+}
+
+.totalContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.totalContainer > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.total {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.feeCovered {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0px;
+  text-align: left;
+  color: #a09ba8;
+  margin-top: 12px;
+}
+
+.feeCoveredFree {
+  color: #36d41d;
+}
+
+.totalPrice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.totalPrice div {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.totalPrice > div > span {
+  margin: 0 12px;
+}
+
+.totalPrice .fromAmountUSD {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 26px;
+  color: #a09ba8;
+  margin: 0;
+  margin-top: 4px;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton {
+  flex-shrink: 0;
+  background: var(--dcl-pale-black, #43404a);
+  background: linear-gradient(90deg, #43404a 25%, #63616d 50%, #43404a 75%);
+  background-size: 200% 100%;
+  animation: wave 1.5s infinite;
+  border-radius: 4px;
+}
+
+.estimatedFeeSkeleton {
+  width: 180px;
+  height: 26px;
+}

@@ -1,3 +1,2 @@
-import BestBuyingOption from './BestBuyingOption.container'
-
+import BestBuyingOption from './BestBuyingOption'
 export { BestBuyingOption }

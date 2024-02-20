@@ -1,0 +1,181 @@
+.payWithContainer {
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--dropdown);
+}
+
+.dropdownContainer {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text);
+  margin-top: 16px;
+  padding-bottom: 24px;
+}
+
+.dropdownContainer :global(span) {
+  font-size: 14px;
+}
+
+.dropdownDisabled {
+  cursor: default;
+}
+
+.tokenAndChainSelector {
+  display: flex;
+  align-items: center;
+  background: #43404a;
+  margin-top: 8px;
+  border-radius: 6px;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.tokenAndChainSelector :global(.chevron) {
+  margin-left: 5px;
+  font-size: 14px;
+}
+
+.tokenAndChainSelectorName {
+  color: white;
+  font-weight: bold;
+  margin-right: auto;
+}
+
+.tokenAndChainSelector img {
+  margin-right: 12px;
+  width: 25px;
+  height: 25px;
+}
+
+.balanceContainer {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 14px;
+  color: var(--clear-divider);
+  margin-left: auto;
+}
+
+.balanceContainer .balance {
+  margin-left: 6px;
+}
+
+.tokenDropdownContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-self: flex-end;
+  justify-content: center;
+  margin-left: 16px;
+}
+
+.tokenDropdown:global(.ui.search.dropdown.active > input.search) {
+  padding-left: 40px;
+  height: 100%;
+}
+
+.tokenDropdown:global(.ui.search.dropdown > input.search) {
+  padding-left: 40px;
+  height: 100%;
+}
+
+.tokenDropdown:global(.ui.dropdown.scrolling .menu) {
+  width: 100% !important; /* semantic ui has auto!important; */
+}
+
+.costContainer {
+  margin-top: 12px;
+}
+
+.costContainer .itemCostLabels {
+  display: flex;
+  flex-direction: column;
+}
+
+.costContainer .itemCost {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  margin-top: 16px;
+}
+
+.feeCostContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.costContainer .itemCost img,
+.totalContainer img {
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+}
+
+.costContainer .itemCost img.informationTooltip {
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
+}
+
+.costContainer .itemCost .fromAmountContainer {
+  display: flex;
+  align-items: center;
+}
+
+.costContainer .itemCost .fromAmountTokenContainer {
+  display: flex;
+  align-items: center;
+  margin-right: 4px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 26px;
+}
+
+.costContainer .itemCost .fromAmountUSD {
+  font-size: 16px;
+  color: #a09ba8;
+  line-height: 18px;
+  font-weight: 400;
+}
+
+.fromAmountUSDSkeleton {
+  width: 90px;
+  height: 18px;
+  margin-top: 2px;
+}
+
+@keyframes wave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton {
+  flex-shrink: 0;
+  background: var(--dcl-pale-black, #43404a);
+  background: linear-gradient(90deg, #43404a 25%, #63616d 50%, #43404a 75%);
+  background-size: 200% 100%;
+  animation: wave 1.5s infinite;
+  border-radius: 4px;
+}
+
+.estimatedFeeSkeleton {
+  width: 180px;
+  height: 26px;
+}
+
+@media (max-width: 767px) {
+  .buyWithCryptoModal .dropdownContainer {
+    flex-direction: column;
+  }
+
+  .buyWithCryptoModal .tokenDropdownContainer {
+    align-self: flex-start;
+    margin-left: 0;
+    width: 100%;
+  }
+}

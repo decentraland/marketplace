@@ -1,11 +1,3 @@
-.buyWithCryptoModal .tokenDropdownContainer {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-self: flex-end;
-  justify-content: center;
-}
-
 .buyWithCryptoModal .infoIconPopUp {
   z-index: 9999;
 }
@@ -78,22 +70,8 @@
   font-size: 15px;
 }
 
-.buyWithCryptoModal .dropdownContainer {
-  display: flex;
-  justify-content: space-between;
-  color: var(--text);
-}
-
 .buyWithCryptoModal .dropdownContainer :global(span) {
   font-size: 14px;
-}
-
-.buyWithCryptoModal .balanceContainer {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 14px;
-  color: var(--clear-divider);
-  margin-left: auto;
 }
 
 .buyWithCryptoModal .routeUnavailable,
@@ -113,16 +91,6 @@
   margin-top: 2px;
 }
 
-.buyWithCryptoModal .feeCovered {
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 18px;
-  letter-spacing: 0px;
-  text-align: left;
-  color: #a09ba8;
-  margin-top: 12px;
-}
-
 .buyWithCryptoModal .feeCoveredFree {
   color: #36d41d;
 }
@@ -133,94 +101,6 @@
   font-weight: 700;
   line-height: 26px;
   margin-bottom: 40px;
-}
-
-.buyWithCryptoModal .costContainer {
-  margin-top: 12px;
-}
-
-.buyWithCryptoModal .costContainer .itemCostLabels {
-  display: flex;
-  flex-direction: column;
-}
-
-.buyWithCryptoModal .costContainer .itemCost {
-  display: flex;
-  justify-content: space-between;
-  font-size: 16px;
-  line-height: 26px;
-  font-weight: 400;
-  margin-top: 16px;
-}
-
-.buyWithCryptoModal .feeCostContainer {
-  display: flex;
-  align-items: center;
-}
-
-.buyWithCryptoModal .costContainer .itemCost img,
-.buyWithCryptoModal .totalContainer img {
-  width: 24px;
-  height: 24px;
-  margin-right: 6px;
-}
-
-.buyWithCryptoModal .costContainer .itemCost img.informationTooltip {
-  width: 14px;
-  height: 14px;
-  margin-left: 6px;
-}
-
-.buyWithCryptoModal .costContainer .itemCost .fromAmountContainer {
-  display: flex;
-  align-items: center;
-}
-
-.buyWithCryptoModal .costContainer .itemCost .fromAmountTokenContainer {
-  display: flex;
-  align-items: center;
-  margin-right: 4px;
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 26px;
-}
-
-.buyWithCryptoModal .costContainer .itemCost .fromAmountUSD {
-  font-size: 16px;
-  color: #a09ba8;
-  line-height: 18px;
-  font-weight: 400;
-}
-
-.buyWithCryptoModal .tokenAndChainSelector {
-  display: flex;
-  align-items: center;
-  background: #43404a;
-  margin-top: 8px;
-  border-radius: 6px;
-  padding: 12px;
-  cursor: pointer;
-}
-
-.buyWithCryptoModal .dropdownDisabled {
-  cursor: default;
-}
-
-.buyWithCryptoModal .tokenAndChainSelectorName {
-  color: white;
-  font-weight: bold;
-  margin-right: auto;
-}
-
-.buyWithCryptoModal .tokenAndChainSelector img {
-  margin-right: 12px;
-  width: 25px;
-  height: 25px;
-}
-
-.buyWithCryptoModal .tokenAndChainSelector :global(.chevron) {
-  margin-left: 5px;
-  font-size: 14px;
 }
 
 .buyWithCryptoModal .durationAndExchangeContainer {
@@ -335,12 +215,6 @@
   flex-direction: column;
 }
 
-.tokenDropdownContainer {
-  display: flex;
-  flex-direction: column;
-  margin-left: 16px;
-}
-
 .buyWithCryptoModal:global(.ui.modal > .actions) {
   margin-top: auto;
 }
@@ -377,55 +251,6 @@
   color: var(--text);
   margin-top: 16px;
   padding-bottom: 24px;
-}
-
-.buyWithCryptoModal .payWithContainer {
-  padding-bottom: 32px;
-  border-bottom: 1px solid var(--dropdown);
-}
-
-.buyWithCryptoModal .total {
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 26px;
-}
-
-.buyWithCryptoModal .totalPrice {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.buyWithCryptoModal .totalPrice div {
-  display: flex;
-  align-items: center;
-  font-size: 24px;
-  font-weight: 700;
-  line-height: 26px;
-}
-
-.buyWithCryptoModal .totalPrice > div > span {
-  margin: 0 12px;
-}
-
-.buyWithCryptoModal .totalPrice .fromAmountUSD {
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 26px;
-  color: #a09ba8;
-  margin: 0;
-  margin-top: 4px;
-}
-
-.buyWithCryptoModal .totalContainer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 24px;
-}
-
-.buyWithCryptoModal .totalContainer > div {
-  display: flex;
-  flex-direction: column;
 }
 
 .buyWithCryptoModal .dropdownContainer :global(span) {
@@ -519,16 +344,6 @@
 @media (max-width: 767px) {
   .buyWithCryptoModal {
     height: auto;
-  }
-
-  .buyWithCryptoModal .dropdownContainer {
-    flex-direction: column;
-  }
-
-  .buyWithCryptoModal .tokenDropdownContainer {
-    align-self: flex-start;
-    margin-left: 0;
-    width: 100%;
   }
 
   .buyWithCryptoModal:global(.ui.modal > .content) {

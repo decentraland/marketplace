@@ -1,28 +1,33 @@
-import { ChainId, Network, Order } from '@dcl/schemas'
-import { ChainData, Token } from 'decentraland-transactions/crossChain'
+import { ChainId, Item, Network, Order } from '@dcl/schemas'
+import { Env } from '@dcl/ui-env'
+import {
+  ChainData,
+  CrossChainProvider,
+  Route,
+  Token
+} from 'decentraland-transactions/crossChain'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   ContractName,
   getContract,
   getContractName
 } from 'decentraland-transactions'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
-import { Env } from '@dcl/ui-env'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { Asset } from '../../../modules/asset/types'
 import { config } from '../../../config'
-import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { BigNumber, ethers } from 'ethers'
 import { isNFT } from '../../../modules/asset/utils'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 
 export const getShouldUseMetaTx = (
-  asset: Asset,
+  assetChainId: ChainId,
   selectedChain: ChainId,
   selectedTokenAddress: string,
   destinyChainMANA: string,
   connectedNetwork: Network
 ) => {
   return (
-    getNetwork(asset.chainId) === Network.MATIC &&
+    getNetwork(assetChainId) === Network.MATIC &&
     getNetwork(selectedChain) === Network.MATIC &&
     selectedTokenAddress.toLowerCase() === destinyChainMANA.toLowerCase() &&
     connectedNetwork === Network.ETHEREUM // only trigger meta tx if connected to Ethereum
@@ -194,6 +199,38 @@ export const getDefaultChains = () => {
   }
   return DEFAULT_CHAINS
 }
+
+export const getBuyNftRoute = (
+  crossChainProvider: CrossChainProvider,
+  baseRouteConfig: any,
+  order: Order
+): Promise<Route> =>
+  crossChainProvider.getBuyNFTRoute({
+    ...baseRouteConfig,
+    nft: {
+      collectionAddress: order.contractAddress,
+      tokenId: order.tokenId,
+      price: order.price
+    },
+    toAmount: order.price,
+    toChain: order.chainId
+  })
+
+export const getMintNFTRoute = (
+  crossChainProvider: CrossChainProvider,
+  baseRouteConfig: any,
+  asset: Item
+): Promise<Route> =>
+  crossChainProvider.getMintNFTRoute({
+    ...baseRouteConfig,
+    item: {
+      collectionAddress: asset.contractAddress,
+      itemId: asset.itemId,
+      price: asset.price
+    },
+    toAmount: asset.price,
+    toChain: asset.chainId
+  })
 
 export const estimateTransactionGas = async (
   selectedChain: ChainId,

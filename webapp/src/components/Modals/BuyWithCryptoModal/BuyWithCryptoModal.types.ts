@@ -1,56 +1,61 @@
-import { Order } from '@dcl/schemas'
+import { ChainId } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import type { CrossChainProvider, Route, Token } from 'decentraland-transactions/crossChain'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
-import type { Route } from 'decentraland-transactions/crossChain'
 import { Asset } from '../../../modules/asset/types'
-import { Contract } from '../../../modules/vendor/services'
-import { getContract } from '../../../modules/contract/selectors'
-import {
-  buyItemRequest,
-  buyItemWithCardRequest
-} from '../../../modules/item/actions'
-import {
-  executeOrderRequest,
-  executeOrderWithCardRequest
-} from '../../../modules/order/actions'
+import { CrossChainRoute, GasCost } from './hooks'
 
-export type Props = Omit<ModalProps, 'metadata'> & {
-  metadata: { asset: Asset; order?: Order }
-  wallet: Wallet | null
-  isLoading: boolean
-  isLoadingBuyCrossChain: boolean
-  isBuyWithCardPage: boolean
-  isSwitchingNetwork: boolean
-  getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
-  onSwitchNetwork: typeof switchNetworkRequest
-  onBuyItem: typeof buyItemRequest
-  onBuyItemWithCard: typeof buyItemWithCardRequest
-  onBuyItemThroughProvider: (route: Route) => void
-  onExecuteOrder: typeof executeOrderRequest
-  onExecuteOrderWithCard: typeof executeOrderWithCardRequest
-  onGetMana: typeof openBuyManaWithFiatModalRequest
-} & WithAuthorizedActionProps
-
-export type OwnProps = Pick<Props, 'metadata'>
 export type MapStateProps = Pick<
   Props,
   | 'wallet'
-  | 'getContract'
   | 'isLoading'
   | 'isLoadingBuyCrossChain'
   | 'isBuyWithCardPage'
   | 'isSwitchingNetwork'
 >
-export type MapDispatchProps = Pick<
+export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork'>
+export type OnGetGasCost = (
+  selectedToken: Token,
+  selectedChain: ChainId,
+  wallet: Wallet | null,
+  providerTokens: Token[]
+) => GasCost
+export type OnGetCrossChainRoute = (
+  selectedToken: Token,
+  selectedChain: ChainId,
+  providerTokens: Token[],
+  crossChainProvider: CrossChainProvider | undefined,
+  wallet: Wallet | null
+) => CrossChainRoute
+
+export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & Omit<ModalProps, 'metadata'> & {
+    price: string,
+    wallet: Wallet | null
+    metadata: { asset: Asset }
+    isLoading: boolean
+    isLoadingBuyCrossChain: boolean
+    isSwitchingNetwork: boolean
+    isBuyWithCardPage: boolean
+    onGetCrossChainRoute: OnGetCrossChainRoute
+    onGetGasCost: OnGetGasCost
+    onSwitchNetwork: typeof switchNetworkRequest
+    onBuyNatively: () => unknown
+    onBuyWithCard: () => unknown
+    onBuyCrossChain: (route: Route) => unknown
+    onGetMana: typeof openBuyManaWithFiatModalRequest
+    onClose: ModalProps['onClose']
+  }
+
+export type OwnProps = Pick<
   Props,
-  | 'onGetMana'
-  | 'onSwitchNetwork'
-  | 'onBuyItemThroughProvider'
-  | 'onBuyItem'
-  | 'onExecuteOrder'
-  | 'onExecuteOrderWithCard'
-  | 'onBuyItemWithCard'
+  | 'price'
+  | 'metadata'
+  | 'onBuyNatively'
+  | 'onBuyWithCard'
+  | 'onBuyCrossChain'
+  | 'onClose'
+  | 'onGetGasCost'
 >

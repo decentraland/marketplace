@@ -20,7 +20,7 @@ const mapDispatch = (
 ): MapDispatchProps => ({
   onBuyWithCrypto: () =>
     dispatch(
-      openModal('MintNFTWithCryptoModal', {
+      openModal('MintNftWithCryptoModal', {
         asset: ownProps.item
       })
     )

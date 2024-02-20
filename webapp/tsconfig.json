@@ -13,6 +13,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "allowImportingTsExtensions": true,
+    "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
 
     /* Linting */

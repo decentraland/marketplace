@@ -27,6 +27,11 @@ export type Props = {
   onRedirect: (path: string) => void
 }
 
+export type OwnProps = Pick<
+  Props,
+  'asset' | 'assetType' | 'tokenId' | 'buyWithCardClassName'
+>
+
 export type MapStateProps = Pick<
   Props,
   'wallet' | 'isConnecting' | 'isBuyingWithCryptoModalOpen'

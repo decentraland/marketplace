@@ -7,11 +7,12 @@ import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import {
   MapDispatchProps,
   MapDispatch,
-  MapStateProps
+  MapStateProps,
+  OwnProps
 } from './BuyNFTButtons.types'
 import { executeOrderWithCardRequest } from '../../../../modules/order/actions'
 import { buyItemWithCardRequest } from '../../../../modules/item/actions'
-import { Asset } from '../../../../modules/asset/types'
+import { Asset, AssetType } from '../../../../modules/asset/types'
 import { RootState } from '../../../../modules/reducer'
 import { getWallet } from '../../../../modules/wallet/selectors'
 import BuyNFTButtons from './BuyNFTButtons'
@@ -19,19 +20,25 @@ import BuyNFTButtons from './BuyNFTButtons'
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
   isConnecting: isConnecting(state),
-  isBuyingWithCryptoModalOpen: getOpenModals(state)['BuyNFTWithCryptoModal']
-    ?.open
+  isBuyingWithCryptoModalOpen:
+    getOpenModals(state)['BuyNftWithCryptoModal']?.open ||
+    getOpenModals(state)['MintNftWithCryptoModal']?.open
 })
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+const mapDispatch = (
+  dispatch: MapDispatch,
+  ownProps: OwnProps
+): MapDispatchProps => ({
   onExecuteOrderWithCard: nft => dispatch(executeOrderWithCardRequest(nft)),
   onBuyWithCrypto: (asset: Asset, order?: Order | null) =>
-    dispatch(
-      openModal('BuyNFTWithCryptoModal', {
-        asset,
-        order
-      })
-    ),
+    ownProps.assetType === AssetType.NFT
+      ? dispatch(
+          openModal('BuyNftWithCryptoModal', {
+            nft: asset,
+            order
+          })
+        )
+      : dispatch(openModal('MintNftWithCryptoModal', { item: asset })),
   onBuyItemWithCard: item => dispatch(buyItemWithCardRequest(item)),
   onRedirect: path => dispatch(replace(path))
 })
