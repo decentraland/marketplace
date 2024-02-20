@@ -452,6 +452,7 @@ const useCrossChainRoute = (
   )
 
   const calculateRoute = useCallback(async () => {
+    abortControllerRef.current = new AbortController()
     const abortController = abortControllerRef.current
     const signal = abortController.signal
     const providerMANA = providerTokens.find(
@@ -555,7 +556,11 @@ const useCrossChainRoute = (
 
   // Refresh the route every time the selected token changes
   useEffect(() => {
-    if (!route && !isFetchingRoute && !useMetaTx && !routeFailed) {
+    // Abort previous request
+    const abortController = abortControllerRef.current
+    abortController.abort()
+
+    if (!useMetaTx) {
       const isBuyingL1WithOtherTokenThanEthereumMANA =
         assetChainId === ChainId.ETHEREUM_MAINNET &&
         selectedToken.chainId !== ChainId.ETHEREUM_MAINNET.toString() &&
@@ -575,11 +580,8 @@ const useCrossChainRoute = (
       }
     }
   }, [
-    route,
     useMetaTx,
-    routeFailed,
     selectedToken,
-    isFetchingRoute,
     selectedChain,
     assetChainId,
     calculateRoute
