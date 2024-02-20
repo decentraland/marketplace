@@ -90,7 +90,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   const [selectedToken, setSelectedToken] = useState<Token>(
     getMANAToken(asset.chainId)
   )
-  const [canBuyAsset, setCanBuyAsset] = useState<boolean | undefined>(undefined)
+  const [canBuyAsset, setCanBuyAsset] = useState<boolean | undefined>()
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
   const [crossChainProvider, setCrossChainProvider] = useState<
