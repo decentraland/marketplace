@@ -165,7 +165,9 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [asset, manaAddressOnAssetChain, selectedChain, selectedToken, wallet])
 
   const selectedProviderChain = useMemo(() => {
-    return providerChains.find(c => c.chainId === selectedChain.toString())
+    return providerChains.find(
+      c => c.chainId.toString() === selectedChain.toString()
+    )
   }, [providerChains, selectedChain])
 
   // Compute if the price is too low for meta tx
@@ -215,7 +217,13 @@ export const BuyWithCryptoModal = (props: Props) => {
       ((!selectedToken && providerTokens.length) || // only run if not selectedToken, meaning the first render
         (selectedToken && selectedChain.toString() !== selectedToken.chainId)) // or if selectedToken is not from the selectedChain
     ) {
-      setSelectedToken(manaTokenOnSelectedChain || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
+      try {
+        setSelectedToken(
+          manaTokenOnSelectedChain || getMANAToken(selectedChain)
+        ) // if it's not in the providerTokens, create the object manually with the right conectract address
+      } catch (error) {
+        setSelectedToken(providerTokens[0])
+      }
     }
   }, [
     crossChainProvider,
@@ -421,27 +429,43 @@ export const BuyWithCryptoModal = (props: Props) => {
   ])
 
   const renderMainActionButton = useCallback(() => {
+    // has a selected token and canBuyAsset was computed
     if (wallet && selectedToken && canBuyAsset !== undefined) {
-      if (canBuyAsset) {
-        // it's paying with MANA but connected on Ethereum
-        if (
-          selectedToken.symbol === 'MANA' &&
-          wallet.network === Network.ETHEREUM
-        ) {
-          return asset.network === Network.ETHEREUM // if it's buying a L1 NFT, render buy now
-            ? renderBuyNowButton()
-            : isPriceTooLow(price) // if it's too low for a meta tx, render switch button
-            ? renderSwitchNetworkButton()
-            : renderBuyNowButton() // else, buy button
-        }
-        // for any other token, it needs to be connected on the selectedChain network
+      // if can't buy Get Mana and Buy With Card buttons
+      if (!canBuyAsset) {
+        return renderGetMANAButton()
+      }
+
+      // for any token other than MANA, it user needs to be connected on the origin chain
+      if (selectedToken.symbol !== 'MANA') {
         return selectedChain === wallet.chainId
           ? renderBuyNowButton()
           : renderSwitchNetworkButton()
-      } else {
-        // can't buy Get Mana and Buy With Card buttons
-        return renderGetMANAButton()
       }
+
+      // for L1 NFTs
+      if (asset.network === Network.ETHEREUM) {
+        // if tries to buy with ETH MANA and connected to other network, should switch to ETH network to pay directly
+        return selectedToken.symbol === 'MANA' &&
+          wallet.network !== Network.ETHEREUM &&
+          getNetwork(selectedChain) === Network.ETHEREUM
+          ? renderSwitchNetworkButton()
+          : renderBuyNowButton()
+      }
+
+      // for L2 NFTs paying with MANA
+
+      // And connected to MATIC, should render the buy now button otherwise check if a meta tx is available
+      if (getNetwork(selectedChain) === Network.MATIC) {
+        return wallet.network === Network.MATIC
+          ? renderBuyNowButton()
+          : isPriceTooLow(price)
+          ? renderSwitchNetworkButton() // switch to MATIC to pay for the gas
+          : renderBuyNowButton()
+      }
+
+      // can buy it with MANA from other chain through the provider
+      return renderBuyNowButton()
     } else if (!route && routeFailed) {
       // can't buy Get Mana and Buy With Card buttons
       return renderGetMANAButton()

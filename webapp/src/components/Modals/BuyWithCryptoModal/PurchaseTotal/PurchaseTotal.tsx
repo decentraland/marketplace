@@ -78,7 +78,7 @@ const PurchaseTotal = (props: Props) => {
                         src={routeFeeCost.token.logoURI}
                         alt={routeFeeCost.token.name}
                       />
-                      {formatPrice(routeFeeCost.totalCost, routeFeeCost.token)}
+                      {routeFeeCost.totalCost}
                     </>
                   ) : (
                     <>

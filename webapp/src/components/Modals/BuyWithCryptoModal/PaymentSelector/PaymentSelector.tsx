@@ -62,7 +62,10 @@ const PaymentSelector = (props: Props) => {
   const renderTokenBalance = useCallback(() => {
     let balance
     if (selectedToken && selectedToken.symbol === 'MANA') {
-      balance = wallet?.networks[getNetwork(selectedChain)]?.mana.toFixed(2)
+      balance =
+        wallet?.networks[
+          (getNetwork(selectedChain) as Network.ETHEREUM) || Network.MATIC
+        ]?.mana.toFixed(2) ?? 0
     } else if (selectedToken && selectedTokenBalance) {
       balance = Number(
         ethers.utils.formatUnits(selectedTokenBalance, selectedToken.decimals)
