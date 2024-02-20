@@ -81,14 +81,6 @@
   width: 100% !important; /* semantic ui has auto!important; */
 }
 
-/* .tokenDropdownContainer {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-self: flex-end;
-  justify-content: center;
-} */
-
 .costContainer {
   margin-top: 12px;
 }

@@ -1,6 +1,7 @@
 import {
   NFT,
   NFTCategory,
+  Network,
   PeriodCreation,
   RentalListing,
   RentalListingCreation,
@@ -115,7 +116,7 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       chainId: nft.chainId,
       contractAddress: nft.contractAddress,
       tokenId: nft.tokenId,
-      network: nft.network,
+      network: nft.network as Network.ETHEREUM,
       expiration: expiresAt,
       rentalContractAddress: rentalsContract.address,
       nonces,

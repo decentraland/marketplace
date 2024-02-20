@@ -198,7 +198,7 @@ describe('when handling the request action to upsert a rental listing', () => {
                   chainId: nft.chainId,
                   contractAddress: nft.contractAddress,
                   tokenId: nft.tokenId,
-                  network: nft.network,
+                  network: nft.network as Network.ETHEREUM,
                   expiration,
                   rentalContractAddress:
                     '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
@@ -272,7 +272,7 @@ describe('when handling the request action to upsert a rental listing', () => {
                   chainId: nft.chainId,
                   contractAddress: nft.contractAddress,
                   tokenId: nft.tokenId,
-                  network: nft.network,
+                  network: nft.network as Network.ETHEREUM,
                   expiration,
                   rentalContractAddress:
                     '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
@@ -446,7 +446,7 @@ describe('when handling the request action to upsert a rental listing', () => {
                   chainId: nft.chainId,
                   contractAddress: nft.contractAddress,
                   tokenId: nft.tokenId,
-                  network: nft.network,
+                  network: nft.network as Network.ETHEREUM,
                   expiration,
                   rentalContractAddress:
                     '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',

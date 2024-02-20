@@ -140,3 +140,14 @@ export const getIsMintingNamesWithAxelarEnabled = (state: RootState) => {
     )
   )
 }
+
+export const getIsChainSelectorEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.CHAIN_SELECTOR
+    )
+  }
+  return false
+}

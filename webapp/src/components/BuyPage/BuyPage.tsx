@@ -21,7 +21,7 @@ const BuyPage = (props: Props) => {
 
   const isInsufficientMANA = (
     wallet: Wallet,
-    network: Network,
+    network: Network.ETHEREUM | Network.MATIC,
     price: string
   ) => wallet.networks[network].mana < +ethers.utils.formatEther(price)
 

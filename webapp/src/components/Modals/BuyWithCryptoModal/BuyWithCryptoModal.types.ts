@@ -1,3 +1,4 @@
+import { ChainId } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import type { CrossChainProvider, Route, Token } from 'decentraland-transactions/crossChain'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
@@ -6,7 +7,6 @@ import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/act
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import { Asset } from '../../../modules/asset/types'
 import { CrossChainRoute, GasCost } from './hooks'
-import { ChainId } from '@dcl/schemas'
 
 export type MapStateProps = Pick<
   Props,

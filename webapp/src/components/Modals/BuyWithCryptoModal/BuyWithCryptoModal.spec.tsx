@@ -40,6 +40,7 @@ import {
 } from './PaymentSelector'
 import { useTokenBalance } from './hooks'
 import { FREE_TX_COVERED_TEST_ID } from './PurchaseTotal'
+import { Asset } from '../../../modules/asset/types'
 
 const mockConfigIs = jest.fn()
 
@@ -396,7 +397,7 @@ const MOCKED_PROVIDER_TOKENS = [
 
 const MOCK_SUPPORTED_CHAIN = [...TESTNET_DEFAULT_CHAINS, ...DEFAULT_CHAINS]
 
-const MOCKED_ITEM = {
+const MOCKED_ITEM: Asset = {
   id: '0xffce00acc0d17eb01c3d2f9c3fcb3ab26519c562-0',
   beneficiary: '0x6240b908f4880da265c2e55d5ca644b50a4cb0d4',
   itemId: '0',
@@ -442,7 +443,7 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
   const defaultProps: Props = {
     name: 'A name',
     metadata: { asset: MOCKED_ITEM },
-    price: MOCKED_ITEM.price,
+    price: (MOCKED_ITEM as Item).price,
     wallet: null,
     isLoading: false,
     isBuyingAsset: false,

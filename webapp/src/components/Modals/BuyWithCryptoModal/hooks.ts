@@ -18,6 +18,7 @@ import { isPriceTooLow } from '../../BuyPage/utils'
 import {
   estimateTransactionGas as estimateMintingOrBuyingTransactionGas,
   estimateNameMintingGas,
+  formatPrice,
   getShouldUseMetaTx
 } from './utils'
 
@@ -74,7 +75,10 @@ export const useTokenBalance = (
 
           // if native token
           if (selectedToken.address === NATIVE_TOKEN) {
-            const balanceWei = await provider.getBalance(address)
+            const balanceWei = await provider.send('eth_getBalance', [
+              address,
+              'latest'
+            ])
             setSelectedTokenBalance(balanceWei)
 
             return
@@ -138,7 +142,7 @@ const useGasCost = (
         const gasPrice: BigNumber = await provider.getGasPrice()
         const estimation = await estimateTransactionGas()
 
-        if (estimation) {
+        if (estimation && providerTokens.length) {
           const total = estimation.mul(gasPrice)
           const nativeToken = providerTokens.find(
             t => +t.chainId === selectedChain && t.address === NATIVE_TOKEN
@@ -598,18 +602,20 @@ const useCrossChainRoute = (
       return {
         token,
         gasCostWei: totalGasCost,
-        gasCost: parseFloat(
+        gasCost: formatPrice(
           ethers.utils.formatUnits(
             totalGasCost,
             route.route.estimate.gasCosts[0].token.decimals
-          )
-        ).toFixed(6),
-        feeCost: parseFloat(
+          ),
+          route.route.estimate.gasCosts[0].token
+        ).toString(),
+        feeCost: formatPrice(
           ethers.utils.formatUnits(
             totalFeeCost,
             route.route.estimate.gasCosts[0].token.decimals
-          )
-        ).toFixed(6),
+          ),
+          route.route.estimate.gasCosts[0].token
+        ).toString(),
         feeCostWei: totalFeeCost,
         totalCost: parseFloat(
           ethers.utils.formatUnits(

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { NFTCategory, Network } from '@dcl/schemas'
+import { Contract, NFTCategory, Network } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
@@ -48,7 +48,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
       network: Network.ETHEREUM
     }) as DCLContract
 
-    const manaContract = {
+    const manaContract: Contract = {
       name: ContractName.MANAToken,
       address: mana.address,
       chainId: getChainIdByNetwork(Network.ETHEREUM),

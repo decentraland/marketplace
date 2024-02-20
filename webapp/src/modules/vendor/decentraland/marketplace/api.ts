@@ -15,7 +15,12 @@ export class MarketplaceAPI extends BaseAPI {
       [ChainId.ETHEREUM_MAINNET]: 'eth-mainnet',
       [ChainId.ETHEREUM_SEPOLIA]: 'eth-sepolia',
       [ChainId.MATIC_MAINNET]: 'matic-mainnet',
-      [ChainId.MATIC_MUMBAI]: 'matic-mumbai'
+      [ChainId.MATIC_MUMBAI]: 'matic-mumbai',
+      [ChainId.BSC_MAINNET]: 'bsc-mainnet',
+      [ChainId.AVALANCHE_MAINNET]: 'avalanche-mainnet',
+      [ChainId.OPTIMISM_MAINNET]: 'optimism-mainnet',
+      [ChainId.ARBITRUM_MAINNET]: 'arbitrum-mainnet',
+      [ChainId.FANTOM_MAINNET]: 'fantom-mainnet'
     } as Record<ChainId, string>
     const balances = await this.request(
       'get',

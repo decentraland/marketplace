@@ -7,7 +7,7 @@ import { Props } from './Navbar.types'
 import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const { location, onNavigate } = props
+  const { location, onNavigate, isChainSelectorEnabled } = props
   const { pathname, search } = location
 
   const handleOnSignIn = useCallback(() => {
@@ -34,6 +34,7 @@ const Navbar = (props: Props) => {
   return (
     <BaseNavbar
       {...props}
+      withChainSelector={isChainSelectorEnabled}
       withNotifications
       activePage={NavbarPages.MARKETPLACE}
       hasActivity={props.hasPendingTransactions}

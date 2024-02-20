@@ -1,16 +1,16 @@
+import { useCallback, useMemo } from 'react'
 import { ethers } from 'ethers'
+import classNames from 'classnames'
 import { Network } from '@dcl/schemas'
 import { ChainId, getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
-import { useCallback, useMemo } from 'react'
-import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { ChainData, Route, Token } from 'decentraland-transactions/crossChain'
-import { Icon, InfoTooltip } from 'decentraland-ui'
-import { ManaToFiat } from '../../../ManaToFiat'
-import { formatPrice } from '../utils'
-import { GasCostValues, RouteFeeCost } from '../hooks'
-import styles from './PaymentSelector.module.css'
+import type { ChainData, Route, Token } from "decentraland-transactions/crossChain"
+import { Icon, InfoTooltip } from "decentraland-ui"
+import { ManaToFiat } from "../../../ManaToFiat"
+import { formatPrice } from "../utils"
+import type { GasCostValues, RouteFeeCost } from "../hooks"
+import styles from "./PaymentSelector.module.css"
 
 export const PAY_WITH_DATA_TEST_ID = 'pay-with-container'
 export const CHAIN_SELECTOR_DATA_TEST_ID = 'chain-selector'
@@ -62,7 +62,10 @@ const PaymentSelector = (props: Props) => {
   const renderTokenBalance = useCallback(() => {
     let balance
     if (selectedToken && selectedToken.symbol === 'MANA') {
-      balance = wallet?.networks[getNetwork(selectedChain)]?.mana.toFixed(2)
+      balance =
+        wallet?.networks[
+          (getNetwork(selectedChain) as Network.ETHEREUM) || Network.MATIC
+        ]?.mana.toFixed(2) ?? 0
     } else if (selectedToken && selectedTokenBalance) {
       balance = Number(
         ethers.utils.formatUnits(selectedTokenBalance, selectedToken.decimals)

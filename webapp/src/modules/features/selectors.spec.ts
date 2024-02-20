@@ -17,7 +17,8 @@ import {
   isLoadingFeatureFlags,
   getIsClaimingNamesWithFiatEnabled,
   getIsEnsAddressEnabled,
-  getIsMintingNamesWithAxelarEnabled
+  getIsMintingNamesWithAxelarEnabled,
+  getIsChainSelectorEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -176,7 +177,13 @@ const waitForInitialLoadingSelectors = [
     feature: FeatureName.MINTING_NAMES_WITH_AXELAR,
     selector: getIsMintingNamesWithAxelarEnabled,
     applicationName: ApplicationName.MARKETPLACE
-  }
+  },
+  {
+    name: 'chain-selector',
+    feature: FeatureName.CHAIN_SELECTOR,
+    selector: getIsChainSelectorEnabled,
+    applicationName: ApplicationName.MARKETPLACE
+  },
 ]
 
 waitForInitialLoadingSelectors.forEach(

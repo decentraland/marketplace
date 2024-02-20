@@ -29,7 +29,7 @@ export const getAddress = (state: RootState) => {
  */
 export const getMana = (
   state: RootState,
-  network: Network
+  network: Network.ETHEREUM | Network.MATIC
 ): number | undefined => {
   return getNetworks(state)?.[network].mana
 }
