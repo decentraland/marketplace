@@ -3,6 +3,7 @@ import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../../modules/reducer'
 import { getMana, getWallet } from '../../../modules/wallet/selectors'
 import { getNFTBids } from '../../../modules/ui/nft/bid/selectors'
+import { Network } from '@dcl/schemas'
 import {
   OwnProps,
   MapStateProps,
@@ -15,10 +16,14 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const wallet = getWallet(state)
   return {
     wallet,
-    currentMana: getMana(state, ownProps.nft.network),
+    currentMana:
+      ownProps.nft.network === Network.ETHEREUM ||
+      ownProps.nft.network === Network.MATIC
+        ? getMana(state, ownProps.nft.network)
+        : undefined,
     userHasAlreadyBidsOnNft: wallet
       ? getNFTBids(state).some(bid => bid.bidder === wallet.address)
-      : false,
+      : false
   }
 }
 

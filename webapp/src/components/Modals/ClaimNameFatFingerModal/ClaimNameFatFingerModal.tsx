@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { v4 as uuidv4 } from 'uuid'
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { Env } from '@dcl/ui-env'
-import { ChainId, NFTCategory, Network } from '@dcl/schemas'
+import { ChainId, Contract, NFTCategory, Network } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
   ModalNavigation,
@@ -183,7 +183,7 @@ const ClaimNameFatFingerModal = ({
 
       if (!mana) return
 
-      const manaContract = {
+      const manaContract: Contract = {
         name: ContractName.MANAToken,
         address: mana.address,
         chainId: getChainIdByNetwork(Network.ETHEREUM),

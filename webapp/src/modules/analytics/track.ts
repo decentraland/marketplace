@@ -275,7 +275,8 @@ track<BuyItemSuccessAction>(
     chainId: payload.item.chainId,
     price: Number(ethers.utils.formatEther(payload.item.price)),
     data: payload.item.data,
-    txHash: payload.txHash
+    txHash: payload.txHash,
+    fromChainId: payload.chainId
   })
 )
 

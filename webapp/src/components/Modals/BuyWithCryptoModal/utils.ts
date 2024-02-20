@@ -110,6 +110,61 @@ export const DEFAULT_CHAINS = [
       icon:
         'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
     }
+  },
+  {
+    chainId: ChainId.OPTIMISM_MAINNET.toString(),
+    networkName: 'Optimism',
+    nativeCurrency: {
+      name: 'Optimism',
+      symbol: 'ETH',
+      decimals: 18,
+      icon:
+        'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/optimism.svg'
+    }
+  },
+  {
+    chainId: ChainId.ARBITRUM_MAINNET.toString(),
+    networkName: 'Arbitrum',
+    nativeCurrency: {
+      name: 'Arbitrum',
+      symbol: 'ETH',
+      decimals: 18,
+      icon:
+        'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/arbitrum.svg'
+    }
+  },
+  {
+    chainId: ChainId.AVALANCHE_MAINNET.toString(),
+    networkName: 'Avalanche',
+    nativeCurrency: {
+      name: 'Avalanche',
+      symbol: 'AVAX',
+      decimals: 18,
+      icon:
+        'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/avalanche.svg'
+    }
+  },
+  {
+    chainId: ChainId.BSC_MAINNET,
+    networkName: 'BNB Chain',
+    nativeCurrency: {
+      name: 'BNB',
+      symbol: 'BNB',
+      decimals: 18,
+      icon:
+        'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/binance.svg'
+    }
+  },
+  {
+    chainId: ChainId.FANTOM_MAINNET,
+    networkName: 'Fantom',
+    nativeCurrency: {
+      name: 'FTM',
+      symbol: 'FTM',
+      decimals: 18,
+      icon:
+        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/ftm.svg'
+    }
   }
 ] as ChainData[]
 
