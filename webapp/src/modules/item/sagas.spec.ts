@@ -18,7 +18,6 @@ import {
 } from 'decentraland-dapps/dist/modules/modal/actions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { locations } from '../routing/locations'
-import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { ItemAPI } from '../vendor/decentraland/item/api'
@@ -617,7 +616,6 @@ describe('when handling the fetch items request action', () => {
             ]
           ])
           .put(fetchItemSuccess(item))
-          .put(fetchSmartWearableRequiredPermissionsRequest(item))
           .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
           .run({ silenceTimeout: true })
       })
