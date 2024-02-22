@@ -28,8 +28,8 @@ export const CONTROLLER_V2_ADDRESS = config.get(
 const MintNameWithCryptoModalHOC = (props: Props) => {
   const {
     name: modalName,
-    isClaimingName,
-    isClaimingNameCrossChain,
+    isMintingName,
+    isMintingNameCrossChain,
     metadata: { name },
     isLoadingAuthorization,
     getContract,
@@ -137,8 +137,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   return (
     <BuyWithCryptoModal
       price={PRICE_IN_WEI}
-      isBuyingAsset={isClaimingName}
-      isBuyingCrossChain={isClaimingNameCrossChain}
+      isBuyingAsset={isMintingName}
+      isBuyingCrossChain={isMintingNameCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyCrossChain={onClaimNameCrossChain}
       onGetGasCost={onGetGasCost}

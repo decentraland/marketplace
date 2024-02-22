@@ -17,7 +17,7 @@ import {
   isLoadingFeatureFlags,
   getIsClaimingNamesWithFiatEnabled,
   getIsEnsAddressEnabled,
-  getIsMintingNamesWithAxelarEnabled,
+  getIsMintingNamesCrossChainEnabled,
   getIsChainSelectorEnabled
 } from './selectors'
 import { FeatureName } from './types'
@@ -175,7 +175,7 @@ const waitForInitialLoadingSelectors = [
   {
     name: 'minting-names-with-axelar',
     feature: FeatureName.MINTING_NAMES_WITH_AXELAR,
-    selector: getIsMintingNamesWithAxelarEnabled,
+    selector: getIsMintingNamesCrossChainEnabled,
     applicationName: ApplicationName.MARKETPLACE
   },
   {
@@ -183,7 +183,7 @@ const waitForInitialLoadingSelectors = [
     feature: FeatureName.CHAIN_SELECTOR,
     selector: getIsChainSelectorEnabled,
     applicationName: ApplicationName.MARKETPLACE
-  },
+  }
 ]
 
 waitForInitialLoadingSelectors.forEach(

@@ -1,8 +1,8 @@
 import { action } from 'typesafe-actions'
 import { ChainId } from '@dcl/schemas'
+import { Route } from 'decentraland-transactions/crossChain'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ENS, ENSError } from './types'
-import { Route } from 'decentraland-transactions/crossChain'
 
 // Claim a new name
 export const CLAIM_NAME_REQUEST = '[Request] Claim Name'

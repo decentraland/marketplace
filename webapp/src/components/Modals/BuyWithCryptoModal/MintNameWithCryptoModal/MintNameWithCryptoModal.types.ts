@@ -7,15 +7,15 @@ import { claimNameRequest } from '../../../../modules/ens/actions'
 
 export type Props = WithAuthorizedActionProps & Omit<ModalProps, 'metadata'> & {
   metadata: { name: string }
-  isClaimingName: boolean
-  isClaimingNameCrossChain: boolean
+  isMintingName: boolean
+  isMintingNameCrossChain: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onClaimName: typeof claimNameRequest
   onOpenFatFingerModal: () => unknown
   onClaimNameCrossChain: (route: Route) => unknown
 }
 
-export type MapStateProps = Pick<Props, 'getContract' | 'isClaimingName' | 'isClaimingNameCrossChain'>
+export type MapStateProps = Pick<Props, 'getContract' | 'isMintingName' | 'isMintingNameCrossChain'>
 export type MapDispatchProps = Pick<
   Props,
   'onClaimName' | 'onClaimNameCrossChain' | 'onOpenFatFingerModal'

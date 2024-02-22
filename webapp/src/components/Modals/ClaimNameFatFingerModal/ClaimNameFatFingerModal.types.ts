@@ -30,7 +30,7 @@ export type Props = Omit<ModalProps, 'metadata'> & {
     name: string
     autoComplete?: boolean
   }
-  isClaimingNamesWithAxelarEnabled: boolean
+  isClaimingNamesCrossChainEnabled: boolean
   isClaimingNamesWithFiatEnabled: boolean
   onClaim: typeof claimNameRequest
   onBuyWithCrypto: typeof openModal
@@ -47,7 +47,7 @@ export type MapState = Pick<
   | 'isLoading'
   | 'wallet'
   | 'currentMana'
-  | 'isClaimingNamesWithAxelarEnabled'
+  | 'isClaimingNamesCrossChainEnabled'
   | 'isClaimingNamesWithFiatEnabled'
 >
 export type MapDispatchProps = Pick<

@@ -55,7 +55,7 @@ const ClaimNameFatFingerModal = ({
   metadata: { name: ENSName, autoComplete },
   isLoading: isClaiming,
   isClaimingNamesWithFiatEnabled,
-  isClaimingNamesWithAxelarEnabled,
+  isClaimingNamesCrossChainEnabled,
   onClaim,
   onBuyWithCrypto,
   onAuthorizedAction,
@@ -243,7 +243,7 @@ const ClaimNameFatFingerModal = ({
         onClose={isLoading ? undefined : onClose}
       />
       <Form
-        onSubmit={!isClaimingNamesWithAxelarEnabled ? handleClaim : undefined}
+        onSubmit={!isClaimingNamesCrossChainEnabled ? handleClaim : undefined}
       >
         <Modal.Content>
           <div className="details">
@@ -276,7 +276,7 @@ const ClaimNameFatFingerModal = ({
             <Icon name="info circle" />
             {t('names_page.claim_name_fat_finger_modal.caps_warning')}
           </div>
-          {!isClaimingNamesWithAxelarEnabled ? (
+          {!isClaimingNamesCrossChainEnabled ? (
             <div>
               <span className="payWith payWithTitle">
                 {t('names_page.claim_name_fat_finger_modal.paying_with')}
@@ -392,10 +392,10 @@ const ClaimNameFatFingerModal = ({
         </Modal.Content>
         <Modal.Actions
           className={classNames(
-            isClaimingNamesWithAxelarEnabled && 'modalActions'
+            isClaimingNamesCrossChainEnabled && 'modalActions'
           )}
         >
-          {isClaimingNamesWithAxelarEnabled ? (
+          {isClaimingNamesCrossChainEnabled ? (
             <>
               <BuyWithCryptoButton
                 assetNetwork={Network.ETHEREUM}

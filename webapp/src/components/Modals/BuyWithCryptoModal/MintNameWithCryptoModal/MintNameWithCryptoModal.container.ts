@@ -24,8 +24,8 @@ import { MintNameWithCryptoModal } from './MintNameWithCryptoModal'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
-    isClaimingName: isLoadingType(getLoading(state), CLAIM_NAME_REQUEST),
-    isClaimingNameCrossChain: isLoadingType(
+    isMintingName: isLoadingType(getLoading(state), CLAIM_NAME_REQUEST),
+    isMintingNameCrossChain: isLoadingType(
       getLoading(state),
       CLAIM_NAME_CROSS_CHAIN_REQUEST
     ),

@@ -130,7 +130,7 @@ export const getIsEnsAddressEnabled = (state: RootState) => {
   return false
 }
 
-export const getIsMintingNamesWithAxelarEnabled = (state: RootState) => {
+export const getIsMintingNamesCrossChainEnabled = (state: RootState) => {
   return (
     hasLoadedInitialFlags(state) &&
     getIsFeatureEnabled(

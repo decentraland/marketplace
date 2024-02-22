@@ -29,7 +29,7 @@ import { getContract } from '../../../modules/contract/selectors'
 import { getMana, getWallet } from '../../../modules/wallet/selectors'
 import {
   getIsClaimingNamesWithFiatEnabled,
-  getIsMintingNamesWithAxelarEnabled
+  getIsMintingNamesCrossChainEnabled
 } from '../../../modules/features/selectors'
 import {
   MapDispatch,
@@ -46,7 +46,7 @@ const mapState = (state: RootState): MapState => ({
   address: getAddress(state),
   getContract: (query: Partial<Contract>) => getContract(state, query),
   wallet: getWallet(state),
-  isClaimingNamesWithAxelarEnabled: getIsMintingNamesWithAxelarEnabled(state),
+  isClaimingNamesCrossChainEnabled: getIsMintingNamesCrossChainEnabled(state),
   isClaimingNamesWithFiatEnabled: getIsClaimingNamesWithFiatEnabled(state)
 })
 
