@@ -18,6 +18,7 @@ import {
 } from 'decentraland-dapps/dist/modules/modal/actions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { locations } from '../routing/locations'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { ItemAPI } from '../vendor/decentraland/item/api'
@@ -606,18 +607,55 @@ describe('when handling the fetch items request action', () => {
 
   describe('when handling the fetch item request action', () => {
     describe('when the request is successful', () => {
-      it('should dispatch a successful action with the fetched items', () => {
-        return expectSaga(itemSaga, getIdentity)
-          .provide([
-            [matchers.call.fn(ItemAPI.prototype.getOne), item],
-            [
-              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
-              undefined
-            ]
-          ])
-          .put(fetchItemSuccess(item))
-          .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
-          .run({ silenceTimeout: true })
+      describe('and it is a regular item', () => {
+        it('should dispatch a successful action with the fetched items', () => {
+          return expectSaga(itemSaga, getIdentity)
+            .provide([
+              [matchers.call.fn(ItemAPI.prototype.getOne), item],
+              [
+                matchers.call.fn(
+                  waitForWalletConnectionAndIdentityIfConnecting
+                ),
+                undefined
+              ]
+            ])
+            .put(fetchItemSuccess(item))
+            .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and it is a smart wearable', () => {
+        let smartWearable: Item
+        beforeEach(() => {
+          smartWearable = {
+            ...item,
+            data: {
+              ...item.data,
+              wearable: {
+                isSmart: true,
+              }
+            },
+            urn: 'someUrn'
+          } as Item
+        })
+
+        it('should dispatch a successful action with the fetched items', () => {
+          return expectSaga(itemSaga, getIdentity)
+            .provide([
+              [matchers.call.fn(ItemAPI.prototype.getOne), smartWearable],
+              [
+                matchers.call.fn(
+                  waitForWalletConnectionAndIdentityIfConnecting
+                ),
+                undefined
+              ]
+            ])
+            .put(fetchItemSuccess(smartWearable))
+            .put(fetchSmartWearableRequiredPermissionsRequest(smartWearable))
+            .dispatch(fetchItemRequest(smartWearable.contractAddress, smartWearable.itemId))
+            .run({ silenceTimeout: true })
+        })
       })
     })
 
