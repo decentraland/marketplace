@@ -17,6 +17,23 @@ import styles from './SuccessPage.module.css'
 
 const EXPLORER_URL = config.get('EXPLORER_URL', '')
 
+const SuccessPageLoadingStateDescription = () => {
+  return (
+    <div className={styles.view_progress}>
+      <Icon inverted color="grey" name="info circle" />
+      <div>
+        {t('success_page.loading_state.description', {
+          br: () => <br />,
+          highlight: (text: string) => (
+            <span className={styles.highlighted}>{text}</span>
+          ),
+          link: (text: string) => <Link to={locations.activity()}>{text}</Link>
+        })}
+      </div>
+    </div>
+  )
+}
+
 export function SuccessPage(props: Props) {
   const { isLoading, mintedTokenId, profile, onSetNameAsAlias } = props
   const search = new URLSearchParams(useLocation().search)
@@ -32,7 +49,7 @@ export function SuccessPage(props: Props) {
         <Navbar />
         <div className={styles.container}>
           <Header className={styles.title}>
-            {t('success_page.loading_state.title')}
+            {t('success_page.loading_state.subdomain.title')}
           </Header>
           <AssetImage
             asset={{ category: 'ens', data: { ens: { subdomain } } } as Asset}
@@ -44,12 +61,7 @@ export function SuccessPage(props: Props) {
             <Loader size="small" inline active />
             {t('success_page.loading_state.status')}
           </div>
-          <span className={styles.description}>
-            {t('success_page.loading_state.description')}
-          </span>
-          <Button secondary as={Link} to={locations.activity()}>
-            {t('success_page.loading_state.progress_in_activity')}
-          </Button>
+          <SuccessPageLoadingStateDescription />
         </div>
         <Footer className={styles.footer} />
       </div>
@@ -63,19 +75,14 @@ export function SuccessPage(props: Props) {
         <Navbar />
         <div className={styles.container}>
           <Header className={styles.title}>
-            {t('success_page.loading_state.title')}
+            {t('success_page.loading_state.item.title')}
           </Header>
 
           <div className={styles.statusInfo}>
             <Loader size="small" inline active />
             {t('success_page.loading_state.status')}
           </div>
-          <span className={styles.description}>
-            {t('success_page.loading_state.description')}
-          </span>
-          <Button secondary as={Link} to={locations.activity()}>
-            {t('success_page.loading_state.progress_in_activity')}
-          </Button>
+          <SuccessPageLoadingStateDescription />
         </div>
         <Footer className={styles.footer} />
       </div>
@@ -103,7 +110,7 @@ export function SuccessPage(props: Props) {
                 return (
                   <>
                     <Header className={styles.title}>
-                      {t('success_page.loading_state.title')}
+                      {t('success_page.loading_state.item.title')}
                     </Header>
                     <AssetImage
                       asset={asset}
@@ -114,12 +121,7 @@ export function SuccessPage(props: Props) {
                       <Loader size="small" inline active />
                       {t('success_page.loading_state.status')}
                     </div>
-                    <span className={styles.description}>
-                      {t('success_page.loading_state.description')}
-                    </span>
-                    <Button secondary as={Link} to={locations.activity()}>
-                      {t('success_page.loading_state.progress_in_activity')}
-                    </Button>
+                    <SuccessPageLoadingStateDescription />
                   </>
                 )
               }

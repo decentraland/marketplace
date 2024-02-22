@@ -1475,10 +1475,14 @@
   },
   "success_page": {
     "loading_state": {
-      "title": "Tu artículo está en camino!",
-      "status": "Transacción en procesamiento",
-      "description": "Esta transacción puede tomarse unos momentos.",
-      "progress_in_activity": "Ver el progreso en página de actividad"
+      "item": {
+        "title": "Tu artículo está en camino!"
+      },
+      "subdomain": {
+        "title": "Tu nombre está en camino!"
+      },
+      "description": "La transacción puede tardar hasta <highlight>3 minutos</highlight> en ser procesada.<br></br>Puedes seguir su progreso en <link>la página de actividad</link>.",
+      "status": "Transacción en procesamiento"
     },
     "success_state": {
       "title": "Todo listo!",

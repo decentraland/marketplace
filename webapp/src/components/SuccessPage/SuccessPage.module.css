@@ -33,13 +33,13 @@
 }
 
 .statusInfo.success {
-  color: #34CE76;
+  color: #34ce76;
   font-weight: 500;
 }
 
 :global(i.icon).checkIcon {
   font-size: 28px;
-  color: #34CE76;
+  color: #34ce76;
 }
 
 .assetImage {
@@ -104,6 +104,24 @@
   font-size: 14px;
   line-height: 24px;
   margin: 0;
+}
+
+.view_progress {
+  width: auto;
+  background-color: #232128;
+  color: var(--secondary-text);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 4px;
+  gap: 8px;
+  padding: 12px 16px 12px 16px;
+  font-weight: 600;
+  size: 14px;
+}
+
+.highlighted {
+  color: var(--text);
 }
 
 .errorContainer::before {
