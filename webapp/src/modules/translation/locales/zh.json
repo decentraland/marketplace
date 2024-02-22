@@ -1480,10 +1480,15 @@
   },
   "success_page": {
     "loading_state": {
+      "item": {
+        "title": "您的物品正在路上！"
+      },
+      "subdomain": {
+        "title": "你的名字正在路上！"
+      },
+      "description": "处理该交易最多可能需要<highlight>3 分钟</highlight>。<br></br>您还可以在<link>活动</link>中跟踪其进度。",
       "title": "您的物品正在路上！",
-      "status": "处理交易",
-      "description": "这笔交易可能需要一些时间.",
-      "progress_in_activity": "查看活动进度"
+      "status": "处理交易"
     },
     "success_state": {
       "title": "全做完了！",
@@ -1491,7 +1496,8 @@
       "view_item": "查看我的物品",
       "try_genesis_city": "在创世纪尝试",
       "mint_more_names": "铸造更多名字",
-      "set_as_primary_name": "设置为主名称"
+      "set_as_primary_name": "设置为主名称",
+      "manage_names": "管理我的名字"
     },
     "error_state": {
       "title": "糟糕",

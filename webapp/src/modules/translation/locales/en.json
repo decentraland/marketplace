@@ -1488,10 +1488,14 @@
   },
   "success_page": {
     "loading_state": {
-      "title": "Your item is on its way!",
-      "status": "Processing transaction",
-      "description": "This transaction may take a few moments.",
-      "progress_in_activity": "View Progress in activity"
+      "item": {
+        "title": "Your item is on its way!"
+      },
+      "subdomain": {
+        "title": "Your NAME is on its way!"
+      },
+      "description": "The transaction can take up to <highlight>3 minutes</highlight> to be processed.<br></br>You can also track its progress in <link>Activity</link>.",
+      "status": "Processing transaction"
     },
     "success_state": {
       "title": "All done!",
@@ -1499,7 +1503,8 @@
       "view_item": "View my item",
       "try_genesis_city": "Try it in Genesis city",
       "mint_more_names": "Mint more names",
-      "set_as_primary_name": "Set as Primary Name"
+      "set_as_primary_name": "Set as Primary Name",
+      "manage_names": "MANAGE MY NAMEs"
     },
     "error_state": {
       "title": "Oops",

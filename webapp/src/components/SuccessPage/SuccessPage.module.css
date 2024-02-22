@@ -33,13 +33,13 @@
 }
 
 .statusInfo.success {
-  color: #34CE76;
+  color: #34ce76;
   font-weight: 500;
 }
 
 :global(i.icon).checkIcon {
   font-size: 28px;
-  color: #34CE76;
+  color: #34ce76;
 }
 
 .assetImage {
@@ -104,6 +104,53 @@
   font-size: 14px;
   line-height: 24px;
   margin: 0;
+}
+
+.viewProgress {
+  width: auto;
+  background-color: #232128;
+  color: var(--secondary-text);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 4px;
+  gap: 8px;
+  padding: 12px 16px 12px 16px;
+  font-weight: 600;
+  size: 14px;
+}
+
+.highlighted {
+  color: var(--text);
+}
+
+.ensActions {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.manageNames {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.manageNamesIcon {
+  height: 22px;
+  width: 22px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url(../../images/manage_names.webp);
+}
+
+.primaryEnsActions {
+  display: flex;
+  flex-direction: row;
+  gap: 11px;
 }
 
 .errorContainer::before {

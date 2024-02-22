@@ -135,8 +135,10 @@ import { getPage, getView } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { AssetStatusFilter } from '../../utils/filters'
 import {
+  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
   CLAIM_NAME_SUCCESS,
   CLAIM_NAME_TRANSACTION_SUBMITTED,
+  ClaimNameCrossChainSuccessAction,
   ClaimNameSuccessAction,
   ClaimNameTransactionSubmittedAction
 } from '../ens/actions'
@@ -167,7 +169,8 @@ export function* routingSaga() {
       EXECUTE_ORDER_SUCCESS,
       BUY_ITEM_SUCCESS,
       BUY_ITEM_CROSS_CHAIN_SUCCESS,
-      CLAIM_NAME_SUCCESS
+      CLAIM_NAME_SUCCESS,
+      CLAIM_NAME_CROSS_CHAIN_SUCCESS
     ],
     handleRedirectToSuccessPage
   )
@@ -769,6 +772,7 @@ function* handleRedirectToSuccessPage(
     | ExecuteOrderSuccessAction
     | BuyItemSuccessAction
     | ClaimNameSuccessAction
+    | ClaimNameCrossChainSuccessAction
 ) {
   const payload = action.payload
   yield put(

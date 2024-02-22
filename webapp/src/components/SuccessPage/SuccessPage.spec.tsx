@@ -87,9 +87,10 @@ describe('when transaction is still loading', () => {
       )
       await waitForComponentToFinishLoading(screen)
     })
+
     it('should show the loading states messages asset and the asset image of the ENS', () => {
       expect(
-        screen.getByText(t('success_page.loading_state.title'))
+        screen.getByText(t('success_page.loading_state.subdomain.title'))
       ).toBeInTheDocument()
       expect(
         screen.getByText(t('success_page.loading_state.status'))
@@ -148,15 +149,19 @@ describe('when transaction finishes successfully', () => {
         )
         await waitForComponentToFinishLoading(screen)
       })
-      it('should show the CTAs to mint more names and set as primary name', () => {
+      it('should show the CTAs to mint more names, set as primary name and manage names', () => {
         expect(
           screen.getByText(t('success_page.success_state.mint_more_names'))
         ).toBeInTheDocument()
         expect(
           screen.getByText(t('success_page.success_state.set_as_primary_name'))
         ).toBeInTheDocument()
+        expect(
+          screen.getByText(t('success_page.success_state.manage_names'))
+        ).toBeInTheDocument()
       })
     })
+
     describe('and the user has not profile set yet', () => {
       beforeEach(async () => {
         screen = renderSuccessPage(
@@ -185,6 +190,9 @@ describe('when transaction finishes successfully', () => {
           screen.queryByText(
             t('success_page.success_state.set_as_primary_name')
           )
+        ).not.toBeInTheDocument()
+        expect(
+          screen.queryByText(t('success_page.success_state.manage_names'))
         ).not.toBeInTheDocument()
       })
     })
