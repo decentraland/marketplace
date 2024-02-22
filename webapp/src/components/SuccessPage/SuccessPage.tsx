@@ -1,7 +1,6 @@
-import { useCallback } from 'react'
 import classNames from 'classnames'
 import Lottie from 'lottie-react'
-import { Link, useLocation, useHistory } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Button, Header, Icon, Loader } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -21,7 +20,7 @@ const BUILDER_URL = config.get('BUILDER_URL', '')
 
 const SuccessPageLoadingStateDescription = () => {
   return (
-    <div className={styles.view_progress}>
+    <div className={styles.viewProgress}>
       <Icon inverted color="grey" name="info circle" />
       <div>
         {t('success_page.loading_state.description', {
@@ -204,7 +203,14 @@ export function SuccessPage(props: Props) {
                                   as={'a'}
                                   href={BUILDER_URL + '/names'}
                                 >
-                                  {t('success_page.success_state.manage_names')}
+                                  <div className={styles.manageNames}>
+                                    <div
+                                      className={styles.manageNamesIcon}
+                                    ></div>
+                                    {t(
+                                      'success_page.success_state.manage_names'
+                                    )}
+                                  </div>
                                 </Button>
                               </div>
                             )}

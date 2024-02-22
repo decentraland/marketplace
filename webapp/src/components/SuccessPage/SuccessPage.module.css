@@ -106,7 +106,7 @@
   margin: 0;
 }
 
-.view_progress {
+.viewProgress {
   width: auto;
   background-color: #232128;
   color: var(--secondary-text);
@@ -128,6 +128,23 @@
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+
+.manageNames {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.manageNamesIcon {
+  height: 22px;
+  width: 22px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url(../../images/manage_names.webp);
 }
 
 .primaryEnsActions {
