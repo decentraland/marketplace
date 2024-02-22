@@ -1,6 +1,7 @@
+import { useCallback } from 'react'
 import classNames from 'classnames'
 import Lottie from 'lottie-react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useHistory } from 'react-router-dom'
 import { Button, Header, Icon, Loader } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -16,6 +17,7 @@ import successAnimation from './successAnimation.json'
 import styles from './SuccessPage.module.css'
 
 const EXPLORER_URL = config.get('EXPLORER_URL', '')
+const BUILDER_URL = config.get('BUILDER_URL', '')
 
 const SuccessPageLoadingStateDescription = () => {
   return (
@@ -168,27 +170,45 @@ export function SuccessPage(props: Props) {
                     ) : (
                       <>
                         {asset.category === NFTCategory.ENS ? (
-                          <>
-                            <Button
-                              as={Link}
-                              className={styles.successButton}
-                              secondary
-                              to={locations.claimName()}
-                            >
-                              {t('success_page.success_state.mint_more_names')}
-                            </Button>
-                            {!!profile && (
+                          <div className={styles.ensActions}>
+                            <div className={styles.primaryEnsActions}>
                               <Button
+                                as={Link}
                                 className={styles.successButton}
-                                primary
-                                onClick={() => onSetNameAsAlias(asset.name)}
+                                secondary
+                                to={locations.claimName()}
                               >
                                 {t(
-                                  'success_page.success_state.set_as_primary_name'
+                                  'success_page.success_state.mint_more_names'
                                 )}
                               </Button>
+                              {!!profile && (
+                                <>
+                                  <Button
+                                    className={styles.successButton}
+                                    primary
+                                    onClick={() => onSetNameAsAlias(asset.name)}
+                                  >
+                                    {t(
+                                      'success_page.success_state.set_as_primary_name'
+                                    )}
+                                  </Button>
+                                </>
+                              )}
+                            </div>
+                            {!!profile && (
+                              <div>
+                                <Button
+                                  inverted
+                                  fluid
+                                  as={'a'}
+                                  href={BUILDER_URL + '/names'}
+                                >
+                                  {t('success_page.success_state.manage_names')}
+                                </Button>
+                              </div>
                             )}
-                          </>
+                          </div>
                         ) : (
                           <Button
                             as={Link}

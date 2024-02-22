@@ -1503,7 +1503,8 @@
       "view_item": "View my item",
       "try_genesis_city": "Try it in Genesis city",
       "mint_more_names": "Mint more names",
-      "set_as_primary_name": "Set as Primary Name"
+      "set_as_primary_name": "Set as Primary Name",
+      "manage_names": "MANAGE MY NAMEs"
     },
     "error_state": {
       "title": "Oops",

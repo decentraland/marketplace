@@ -124,6 +124,18 @@
   color: var(--text);
 }
 
+.ensActions {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.primaryEnsActions {
+  display: flex;
+  flex-direction: row;
+  gap: 11px;
+}
+
 .errorContainer::before {
   content: '';
   width: 86px;
