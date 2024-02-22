@@ -96,6 +96,7 @@ export function SuccessPage(props: Props) {
       <div className={styles.container}>
         {assetType && contractAddress && tokenId ? (
           <AssetProvider
+            retry
             type={assetType as AssetType}
             contractAddress={contractAddress}
             tokenId={tokenId}
