@@ -14,9 +14,9 @@ import {
 } from 'decentraland-transactions/crossChain'
 import { NFT } from '../../../modules/nft/types'
 import * as events from '../../../utils/events'
-import { isPriceTooLow } from '../../BuyPage/utils'
 import {
   estimateTransactionGas as estimateMintingOrBuyingTransactionGas,
+  estimateNameMintingGas,
   formatPrice,
   getShouldUseMetaTx
 } from './utils'
@@ -31,17 +31,14 @@ export const useShouldUseCrossChainProvider = (
 ) => {
   return useMemo(
     () =>
-      selectedToken &&
       !(
-        (
-          (selectedToken.symbol === 'MANA' &&
-            getNetwork(selectedChain) === Network.MATIC &&
-            assetNetwork === Network.MATIC) || // MANA selected and it's sending the tx from MATIC
-          (selectedToken.symbol === 'MANA' &&
-            getNetwork(selectedChain) === Network.ETHEREUM &&
-            assetNetwork === Network.ETHEREUM)
-        ) // MANA selected and it's connected to ETH and buying a L1 NFT
-      ),
+        (selectedToken.symbol === 'MANA' &&
+          getNetwork(selectedChain) === Network.MATIC &&
+          assetNetwork === Network.MATIC) || // MANA selected and it's sending the tx from MATIC
+        (selectedToken.symbol === 'MANA' &&
+          getNetwork(selectedChain) === Network.ETHEREUM &&
+          assetNetwork === Network.ETHEREUM)
+      ), // MANA selected and it's connected to ETH and buying a L1 NFT
     [assetNetwork, selectedChain, selectedToken]
   )
 }
@@ -125,7 +122,6 @@ export type GasCost = {
 }
 
 const useGasCost = (
-  price: string,
   assetNetwork: Network,
   providerTokens: Token[],
   selectedChain: ChainId,
@@ -168,11 +164,8 @@ const useGasCost = (
 
     if (
       !shouldUseCrossChainProvider &&
-      ((wallet &&
-        getNetwork(wallet.chainId) === Network.MATIC &&
-        assetNetwork === Network.MATIC) ||
-        price === '0' ||
-        isPriceTooLow(price))
+      wallet &&
+      getNetwork(wallet.chainId) === assetNetwork
     ) {
       calculateGas()
     } else {
@@ -181,7 +174,6 @@ const useGasCost = (
   }, [
     assetNetwork,
     estimateTransactionGas,
-    price,
     providerTokens,
     selectedChain,
     shouldUseCrossChainProvider,
@@ -210,8 +202,8 @@ export const useMintingNftGasCost = (
     selectedChain,
     item.network
   )
+
   return useGasCost(
-    item.price,
     item.network,
     providerTokens,
     selectedChain,
@@ -246,9 +238,40 @@ export const useBuyNftGasCost = (
     selectedChain,
     order.network
   )
+
   return useGasCost(
-    order.price,
     order.network,
+    providerTokens,
+    selectedChain,
+    shouldUseCrossChainProvider,
+    wallet,
+    estimateGas
+  )
+}
+
+export const useNameMintingGasCost = (
+  name: string,
+  selectedToken: Token,
+  selectedChain: ChainId,
+  wallet: Wallet | null,
+  providerTokens: Token[]
+) => {
+  const estimateGas = useCallback(
+    () =>
+      wallet?.address
+        ? estimateNameMintingGas(name, selectedChain, wallet?.address)
+        : Promise.resolve(undefined),
+    [name, selectedChain, wallet?.address]
+  )
+
+  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(
+    selectedToken,
+    selectedChain,
+    Network.ETHEREUM
+  )
+
+  return useGasCost(
+    Network.ETHEREUM,
     providerTokens,
     selectedChain,
     shouldUseCrossChainProvider,
@@ -335,6 +358,41 @@ export const useCrossChainBuyNftRoute = (
   )
 }
 
+export const useCrossChainNameMintingRoute = (
+  name: string,
+  price: string,
+  assetChainId: ChainId,
+  selectedToken: Token,
+  selectedChain: ChainId,
+  providerTokens: Token[],
+  crossChain: CrossChainProvider | undefined,
+  wallet: Wallet | null
+) => {
+  const getMintingNameRoute = useCallback(
+    (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
+      crossChainProvider.getRegisterNameRoute({
+        name,
+        fromAddress,
+        fromAmount,
+        fromChain,
+        fromToken,
+        toAmount: price,
+        toChain: assetChainId
+      }),
+    [name, assetChainId, price]
+  )
+  return useCrossChainRoute(
+    price,
+    assetChainId,
+    selectedToken,
+    selectedChain,
+    providerTokens,
+    crossChain,
+    wallet,
+    getMintingNameRoute
+  )
+}
+
 export type RouteFeeCost = {
   token: Token
   gasCostWei: BigNumber
@@ -366,7 +424,7 @@ const useCrossChainRoute = (
     fromAmount: string,
     fromChain: ChainId,
     fromToken: string,
-    crossChainProvider: CrossChainProvider | undefined
+    crossChainProvider: CrossChainProvider
   ) => Promise<Route>
 ): CrossChainRoute => {
   const [isFetchingRoute, setIsFetchingRoute] = useState(false)
@@ -380,6 +438,7 @@ const useCrossChainRoute = (
   )
 
   const calculateRoute = useCallback(async () => {
+    abortControllerRef.current = new AbortController()
     const abortController = abortControllerRef.current
     const signal = abortController.signal
     const providerMANA = providerTokens.find(
@@ -391,7 +450,6 @@ const useCrossChainRoute = (
       !crossChainProvider ||
       !crossChainProvider.isLibInitialized() ||
       !wallet ||
-      !selectedToken ||
       !providerMANA
     ) {
       return
@@ -447,7 +505,6 @@ const useCrossChainRoute = (
 
   const useMetaTx = useMemo(() => {
     return (
-      !!selectedToken &&
       !!wallet &&
       getShouldUseMetaTx(
         assetChainId,
@@ -485,13 +542,11 @@ const useCrossChainRoute = (
 
   // Refresh the route every time the selected token changes
   useEffect(() => {
-    if (
-      selectedToken &&
-      !route &&
-      !isFetchingRoute &&
-      !useMetaTx &&
-      !routeFailed
-    ) {
+    // Abort previous request
+    const abortController = abortControllerRef.current
+    abortController.abort()
+
+    if (!useMetaTx) {
       const isBuyingL1WithOtherTokenThanEthereumMANA =
         assetChainId === ChainId.ETHEREUM_MAINNET &&
         selectedToken.chainId !== ChainId.ETHEREUM_MAINNET.toString() &&
@@ -510,16 +565,7 @@ const useCrossChainRoute = (
         calculateRoute()
       }
     }
-  }, [
-    route,
-    useMetaTx,
-    routeFailed,
-    selectedToken,
-    isFetchingRoute,
-    selectedChain,
-    assetChainId,
-    calculateRoute
-  ])
+  }, [useMetaTx, selectedToken, selectedChain, assetChainId, calculateRoute])
 
   const routeFeeCost = useMemo(() => {
     if (route) {

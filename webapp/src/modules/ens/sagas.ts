@@ -1,16 +1,24 @@
 import { BigNumber, ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
-import { getSigner } from 'decentraland-dapps/dist/lib/eth'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import {
+  getConnectedProvider,
+  getSigner
+} from 'decentraland-dapps/dist/lib/eth'
+import { Provider, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   TRANSACTION_ACTION_FLAG,
   waitForTx
 } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { AxelarProvider } from 'decentraland-transactions/crossChain'
+import { t } from 'decentraland-dapps/dist/modules/translation'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { DCLController } from '../../contracts'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { DCLController__factory } from '../../contracts/factories/DCLController__factory'
 import { DCLRegistrar } from '../../contracts/DCLRegistrar'
+import { isErrorWithMessage } from '../../lib/error'
+import { config } from '../../config'
+import { getWallet } from '../wallet/selectors'
 import {
   CLAIM_NAME_REQUEST,
   ClaimNameRequestAction,
@@ -18,13 +26,14 @@ import {
   claimNameFailure,
   claimNameTransactionSubmitted,
   CLAIM_NAME_TRANSACTION_SUBMITTED,
-  ClaimNameTransactionSubmittedAction
+  ClaimNameTransactionSubmittedAction,
+  ClaimNameCrossChainRequestAction,
+  CLAIM_NAME_CROSS_CHAIN_REQUEST,
+  claimNameCrossChainFailure,
+  claimNameCrossChainSuccess
 } from './actions'
 import { ENS, ENSError } from './types'
 import { getDomainFromName } from './utils'
-import { config } from '../../config'
-import { getWallet } from '../wallet/selectors'
-import { isErrorWithMessage } from '../../lib/error'
 
 export const CONTROLLER_V2_ADDRESS = config.get(
   'CONTROLLER_V2_CONTRACT_ADDRESS',
@@ -38,6 +47,10 @@ export function* ensSaga() {
     CLAIM_NAME_TRANSACTION_SUBMITTED,
     handleClaimNameSubmittedRequest
   )
+  yield takeEvery(
+    CLAIM_NAME_CROSS_CHAIN_REQUEST,
+    handleClaimNameCrossChainRequest
+  )
 
   function* handleClaimNameSubmittedRequest(
     action: ClaimNameTransactionSubmittedAction
@@ -45,7 +58,7 @@ export function* ensSaga() {
     const data = action.payload[TRANSACTION_ACTION_FLAG]
     const {
       hash,
-      payload: { subdomain, address }
+      payload: { subdomain, address, isCrossChain }
     } = data
 
     const from = address
@@ -74,7 +87,12 @@ export function* ensSaga() {
           content: ethers.constants.AddressZero,
           contractAddress: dclRegistrarContract.address
         }
-        yield put(claimNameSuccess(ens, subdomain, hash))
+
+        if (isCrossChain) {
+          yield put(claimNameCrossChainSuccess(ens, subdomain, hash))
+        } else {
+          yield put(claimNameSuccess(ens, subdomain, hash))
+        }
         yield put(closeModal('ClaimNameFatFingerModal'))
       }
     } catch (error) {
@@ -115,6 +133,50 @@ export function* ensSaga() {
         message: isErrorWithMessage(error) ? error.message : 'Unknown error'
       }
       yield put(claimNameFailure(ensError))
+    }
+  }
+
+  function* handleClaimNameCrossChainRequest(
+    action: ClaimNameCrossChainRequestAction
+  ) {
+    const { name, chainId, route } = action.payload
+    try {
+      const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
+
+      const provider: Provider | null = yield call(getConnectedProvider)
+
+      if (!wallet) {
+        throw new Error('A defined wallet is required to buy an item')
+      }
+
+      if (provider) {
+        const crossChainProvider = new AxelarProvider(
+          config.get('SQUID_API_URL')
+        )
+        const txRespose: ethers.providers.TransactionReceipt = yield call(
+          [crossChainProvider, 'executeRoute'],
+          route,
+          provider
+        )
+
+        yield put(
+          claimNameTransactionSubmitted(
+            name,
+            wallet.address,
+            chainId,
+            txRespose.transactionHash,
+            true
+          )
+        )
+      }
+    } catch (error) {
+      yield put(
+        claimNameCrossChainFailure(
+          route,
+          name,
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
+      )
     }
   }
 }

@@ -264,3 +264,17 @@ export const estimateTransactionGas = async (
   }
   return estimation
 }
+
+export const estimateNameMintingGas = async (
+  name: string,
+  selectedChain: ChainId,
+  ownerAddress: string
+) => {
+  const networkProvider = await getNetworkProvider(selectedChain)
+  const provider = new ethers.providers.Web3Provider(networkProvider)
+
+  const contract = getContract(ContractName.DCLRegistrar, selectedChain)
+  const c = new ethers.Contract(contract.address, contract.abi, provider)
+  const estimation = await c.estimateGas.register(ownerAddress, name)
+  return estimation
+}

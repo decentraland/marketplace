@@ -845,6 +845,13 @@
       "normal": "正常 约 20 秒",
       "slow": "慢速 ≈ 1m"
     },
+    "asset_description": {
+      "ens": "Decentraland 名称",
+      "emotes": "Decentraland 表情",
+      "wearables": "Decentraland 可穿戴设备",
+      "land": "Decentraland 土地",
+      "other": "Decentraland 收藏品"
+    },
     "tooltip": {
       "cross_chain": "预估费用包括网络费用和跨链购买费用，您必须直接用钱包支付。确保有 {token} 来覆盖它。",
       "same_network": "预计费用包括您必须直接用钱包支付的网络费用。确保有 {token} 来覆盖它。"

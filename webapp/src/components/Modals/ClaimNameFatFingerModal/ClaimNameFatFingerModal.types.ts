@@ -7,6 +7,10 @@ import {
   openFiatGatewayWidgetRequest
 } from 'decentraland-dapps/dist/modules/gateway/actions'
 import {
+  OpenModalAction,
+  openModal
+} from 'decentraland-dapps/dist/modules/modal'
+import {
   ClaimNameClearAction,
   ClaimNameRequestAction,
   ClaimNameTransactionSubmittedAction,
@@ -17,16 +21,19 @@ import {
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
 
-export type Props = ModalProps & {
+export type Props = Omit<ModalProps, 'metadata'> & {
   currentMana: number | undefined
   wallet: Wallet | null
   isLoading: boolean
   address?: string
   metadata: {
     name: string
+    autoComplete?: boolean
   }
+  isClaimingNamesCrossChainEnabled: boolean
   isClaimingNamesWithFiatEnabled: boolean
   onClaim: typeof claimNameRequest
+  onBuyWithCrypto: typeof openModal
   onClaimNameClear: typeof claimNameClear
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onClaimTxSubmitted: typeof claimNameTransactionSubmitted
@@ -40,15 +47,21 @@ export type MapState = Pick<
   | 'isLoading'
   | 'wallet'
   | 'currentMana'
+  | 'isClaimingNamesCrossChainEnabled'
   | 'isClaimingNamesWithFiatEnabled'
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onClaim' | 'onClaimNameClear' | 'onClaimTxSubmitted' | 'onOpenFiatGateway'
+  | 'onClaim'
+  | 'onClaimNameClear'
+  | 'onClaimTxSubmitted'
+  | 'onOpenFiatGateway'
+  | 'onBuyWithCrypto'
 >
 export type MapDispatch = Dispatch<
   | ClaimNameRequestAction
   | ClaimNameClearAction
   | ClaimNameTransactionSubmittedAction
   | OpenFiatGatewayWidgetRequestAction
+  | OpenModalAction
 >

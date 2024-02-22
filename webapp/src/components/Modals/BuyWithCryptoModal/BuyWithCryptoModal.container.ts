@@ -10,31 +10,22 @@ import { isSwitchingNetwork } from 'decentraland-dapps/dist/modules/wallet/selec
 
 import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
-import { getLoading as getLoadingOrders } from '../../../modules/order/selectors'
-import { EXECUTE_ORDER_REQUEST } from '../../../modules/order/actions'
 import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
-import { getLoading as getItemsLoading } from '../../../modules/item/selectors'
 import {
-  BUY_ITEM_CROSS_CHAIN_REQUEST,
-  BUY_ITEM_REQUEST
-} from '../../../modules/item/actions'
-import { MapDispatchProps, MapStateProps } from './BuyWithCryptoModal.types'
+  MapDispatchProps,
+  MapStateProps,
+  OwnProps
+} from './BuyWithCryptoModal.types'
 import { BuyWithCryptoModal } from './BuyWithCryptoModal'
 
-const mapState = (state: RootState): MapStateProps => {
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
     wallet: getWallet(state),
     isLoading:
       isLoadingType(
         getLoadingAuthorizations(state),
         FETCH_AUTHORIZATIONS_REQUEST
-      ) ||
-      isLoadingType(getLoadingOrders(state), EXECUTE_ORDER_REQUEST) ||
-      isLoadingType(getItemsLoading(state), BUY_ITEM_REQUEST),
-    isLoadingBuyCrossChain: isLoadingType(
-      getItemsLoading(state),
-      BUY_ITEM_CROSS_CHAIN_REQUEST
-    ),
+      ) || ownProps.isBuyingAsset,
     isSwitchingNetwork: isSwitchingNetwork(state),
     isBuyWithCardPage: getIsBuyWithCardPage(state)
   }

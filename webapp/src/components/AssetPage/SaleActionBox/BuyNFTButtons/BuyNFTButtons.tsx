@@ -1,7 +1,6 @@
 import { memo, useCallback, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Button, Icon, Loader, Mana } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Loader } from 'decentraland-ui'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../../../modules/routing/locations'
 import { isNFT } from '../../../../modules/asset/utils'
@@ -10,6 +9,8 @@ import { AssetProvider } from '../../../AssetProvider'
 import * as events from '../../../../utils/events'
 import styles from './BuyNFTButtons.module.css'
 import { Props } from './BuyNFTButtons.types'
+import { BuyWithCardButton } from './BuyWithCardButton'
+import { BuyWithCryptoButton } from './BuyWithCryptoButton'
 
 const BuyNFTButtons = ({
   wallet,
@@ -77,22 +78,14 @@ const BuyNFTButtons = ({
           }
           return (
             <>
-              <Button
+              <BuyWithCryptoButton
+                assetNetwork={asset.network}
                 onClick={() => handleBuyWithCrypto(asset, order)}
-                primary
-                fluid
-              >
-                <Mana showTooltip inline size="small" network={asset.network} />
-                {t('asset_page.actions.buy_with_crypto')}
-              </Button>
-              <Button
-                className={`${styles.buy_with_card} ${buyWithCardClassName}`}
+              />
+              <BuyWithCardButton
+                className={buyWithCardClassName}
                 onClick={() => handleBuyWithCard(asset)}
-                fluid
-              >
-                <Icon name="credit card outline" />
-                {t('asset_page.actions.buy_with_card')}
-              </Button>
+              />
             </>
           )
         }}

@@ -28,11 +28,14 @@ describe('ClaimNameFatFingerModal', () => {
   const name = 'aNAME'
   const onCloseMock = jest.fn()
   const onClaimMock = jest.fn()
+  const onBuyWithCryptoMock = jest.fn()
   const onClaimNameClearMock = jest.fn()
   const onAuthorizedActionMock = jest.fn()
   const onClaimTxSubmittedMock = jest.fn()
   const baseProps = {
     currentMana: 0,
+    isClaimingNamesCrossChainEnabled: false,
+    onBuyWithCrypto: onBuyWithCryptoMock,
     identity: {} as AuthIdentity,
     onClaimTxSubmitted: onClaimTxSubmittedMock,
     isClaimingNamesWithFiatEnabled: true,

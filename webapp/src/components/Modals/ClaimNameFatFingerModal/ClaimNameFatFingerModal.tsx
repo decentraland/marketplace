@@ -18,6 +18,8 @@ import { getChainIdByNetwork, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { BuyWithCryptoButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
+import { BuyWithCardButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons/BuyWithCardButton'
 import { config } from '../../../config'
 import { getContractNames } from '../../../modules/vendor'
 import {
@@ -50,10 +52,12 @@ const ClaimNameFatFingerModal = ({
   name: modalName,
   wallet,
   currentMana,
-  metadata: { name: ENSName },
+  metadata: { name: ENSName, autoComplete },
   isLoading: isClaiming,
   isClaimingNamesWithFiatEnabled,
+  isClaimingNamesCrossChainEnabled,
   onClaim,
+  onBuyWithCrypto,
   onAuthorizedAction,
   onClaimNameClear,
   getContract,
@@ -78,9 +82,10 @@ const ClaimNameFatFingerModal = ({
       ? PaymentMethod.FIAT
       : undefined
   )
-  const [currentName, setCurrentName] = useState('')
+  const [currentName, setCurrentName] = useState(autoComplete ? ENSName : '')
 
   const handleClaimWithCard = useCallback(async () => {
+    setIsLoadingFIATWidget(true)
     const wertURL = config.get('WERT_URL')
     if (wallet) {
       const signer = await getSigner()
@@ -219,6 +224,10 @@ const ClaimNameFatFingerModal = ({
     setCurrentName(name.replace(/\s/g, ''))
   }
 
+  const handleOnBuyWithCrypto = useCallback(() => {
+    onBuyWithCrypto(currentName)
+  }, [currentName])
+
   const areNamesDifferent = currentName !== ENSName
   const hasError = areNamesDifferent && currentName.length > 0
 
@@ -233,7 +242,9 @@ const ClaimNameFatFingerModal = ({
         title={t('names_page.claim_name_fat_finger_modal.title')}
         onClose={isLoading ? undefined : onClose}
       />
-      <Form onSubmit={handleClaim}>
+      <Form
+        onSubmit={!isClaimingNamesCrossChainEnabled ? handleClaim : undefined}
+      >
         <Modal.Content>
           <div className="details">
             <T
@@ -265,156 +276,179 @@ const ClaimNameFatFingerModal = ({
             <Icon name="info circle" />
             {t('names_page.claim_name_fat_finger_modal.caps_warning')}
           </div>
-          <div>
-            <span className="payWith payWithTitle">
-              {t('names_page.claim_name_fat_finger_modal.paying_with')}
-            </span>
+          {!isClaimingNamesCrossChainEnabled ? (
             <div>
-              <div className="paymentMethodContainer">
-                <span className="payWithTitle">
-                  {t(
-                    'names_page.claim_name_fat_finger_modal.pay_methods.crypto.name'
-                  )}
-                </span>
-                <Popup
-                  style={{ zIndex: 9999999 }}
-                  className="modalTooltip"
-                  content={t('names_page.not_enough_mana')}
-                  position="top center"
-                  trigger={
-                    <div
-                      data-testid={CRYPTO_PAYMENT_METHOD_DATA_TESTID}
-                      className={classNames(
-                        'baseGradient',
-                        !canClaimWithCrypto && 'disabled',
-                        paymentMethod === PaymentMethod.CRYPTO && 'gradient'
-                      )}
-                    >
+              <span className="payWith payWithTitle">
+                {t('names_page.claim_name_fat_finger_modal.paying_with')}
+              </span>
+              <div>
+                <div className="paymentMethodContainer">
+                  <span className="payWithTitle">
+                    {t(
+                      'names_page.claim_name_fat_finger_modal.pay_methods.crypto.name'
+                    )}
+                  </span>
+                  <Popup
+                    style={{ zIndex: 9999999 }}
+                    className="modalTooltip"
+                    content={t('names_page.not_enough_mana')}
+                    position="top center"
+                    trigger={
                       <div
+                        data-testid={CRYPTO_PAYMENT_METHOD_DATA_TESTID}
                         className={classNames(
-                          paymentMethod === PaymentMethod.CRYPTO && 'selected',
-                          'paymentMethod'
+                          'baseGradient',
+                          !canClaimWithCrypto && 'disabled',
+                          paymentMethod === PaymentMethod.CRYPTO && 'gradient'
                         )}
-                        onClick={() =>
-                          canClaimWithCrypto &&
-                          !isLoading &&
-                          setPaymentMethod(PaymentMethod.CRYPTO)
-                        }
                       >
-                        <Mana />
-                        <div>
-                          <span>100 MANA</span>
-                          <span>
-                            {t(
-                              'names_page.claim_name_fat_finger_modal.pay_methods.crypto.subtitle'
-                            )}
-                          </span>
+                        <div
+                          className={classNames(
+                            paymentMethod === PaymentMethod.CRYPTO &&
+                              'selected',
+                            'paymentMethod'
+                          )}
+                          onClick={() =>
+                            canClaimWithCrypto &&
+                            !isLoading &&
+                            setPaymentMethod(PaymentMethod.CRYPTO)
+                          }
+                        >
+                          <Mana />
+                          <div>
+                            <span>100 MANA</span>
+                            <span>
+                              {t(
+                                'names_page.claim_name_fat_finger_modal.pay_methods.crypto.subtitle'
+                              )}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  }
-                  disabled={!!(wallet && canClaimWithCrypto)}
-                  hideOnScroll
-                  on="hover"
-                  inverted
-                />
-              </div>
-              <div className="paymentMethodContainer">
-                <span className="payWithTitle">
-                  {t(
-                    'names_page.claim_name_fat_finger_modal.pay_methods.fiat.name'
-                  )}
-                </span>
-                <span className="newPaymentMethod">
-                  {t(
-                    'names_page.claim_name_fat_finger_modal.pay_methods.fiat.new'
-                  )}
-                </span>
-                <Popup
-                  style={{ zIndex: 9999999 }}
-                  className="modalTooltip"
-                  content={t('names_page.fiat_payments_not_enabled')}
-                  position="top center"
-                  trigger={
-                    <div
-                      className={classNames(
-                        'baseGradient',
-                        paymentMethod === PaymentMethod.FIAT && 'gradient',
-                        !isClaimingNamesWithFiatEnabled && 'disabled'
-                      )}
-                    >
+                    }
+                    disabled={!!(wallet && canClaimWithCrypto)}
+                    hideOnScroll
+                    on="hover"
+                    inverted
+                  />
+                </div>
+                <div className="paymentMethodContainer">
+                  <span className="payWithTitle">
+                    {t(
+                      'names_page.claim_name_fat_finger_modal.pay_methods.fiat.name'
+                    )}
+                  </span>
+                  <span className="newPaymentMethod">
+                    {t(
+                      'names_page.claim_name_fat_finger_modal.pay_methods.fiat.new'
+                    )}
+                  </span>
+                  <Popup
+                    style={{ zIndex: 9999999 }}
+                    className="modalTooltip"
+                    content={t('names_page.fiat_payments_not_enabled')}
+                    position="top center"
+                    trigger={
                       <div
-                        data-testid={FIAT_PAYMENT_METHOD_DATA_TESTID}
                         className={classNames(
-                          paymentMethod === PaymentMethod.FIAT && 'selected',
-                          'paymentMethod'
+                          'baseGradient',
+                          paymentMethod === PaymentMethod.FIAT && 'gradient',
+                          !isClaimingNamesWithFiatEnabled && 'disabled'
                         )}
-                        onClick={handleClaimWithCardClick}
                       >
-                        <Icon name="credit card outline" />
-                        <div>
-                          <span>
-                            {t(
-                              'names_page.claim_name_fat_finger_modal.pay_methods.fiat.title'
-                            )}
-                          </span>
-                          <span>
-                            {t(
-                              'names_page.claim_name_fat_finger_modal.pay_methods.fiat.subtitle'
-                            )}
-                          </span>
+                        <div
+                          data-testid={FIAT_PAYMENT_METHOD_DATA_TESTID}
+                          className={classNames(
+                            paymentMethod === PaymentMethod.FIAT && 'selected',
+                            'paymentMethod'
+                          )}
+                          onClick={handleClaimWithCardClick}
+                        >
+                          <Icon name="credit card outline" />
+                          <div>
+                            <span>
+                              {t(
+                                'names_page.claim_name_fat_finger_modal.pay_methods.fiat.title'
+                              )}
+                            </span>
+                            <span>
+                              {t(
+                                'names_page.claim_name_fat_finger_modal.pay_methods.fiat.subtitle'
+                              )}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  }
-                  disabled={isClaimingNamesWithFiatEnabled}
-                  hideOnScroll
-                  on="hover"
-                  inverted
-                />
+                    }
+                    disabled={isClaimingNamesWithFiatEnabled}
+                    hideOnScroll
+                    on="hover"
+                    inverted
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
         </Modal.Content>
-        <Modal.Actions>
-          <Button
-            secondary
-            onClick={onClose}
-            disabled={isLoading}
-            type="button"
-          >
-            {t('global.cancel')}
-          </Button>
-          <Popup
-            style={{ zIndex: 9999999 }}
-            className="modalTooltip"
-            content={t('names_page.not_enough_mana')}
-            position="top center"
-            trigger={
-              <div className="popupButton">
-                <Button
-                  primary
-                  type="submit"
-                  disabled={
-                    areNamesDifferent ||
-                    isLoading ||
-                    (paymentMethod === PaymentMethod.CRYPTO &&
-                      !canClaimWithCrypto)
-                  }
-                  loading={isLoading || isLoadingFIATWidget}
-                >
-                  {t('global.confirm')}
-                </Button>
-              </div>
-            }
-            disabled={
-              !!(wallet && canClaimWithCrypto) ||
-              paymentMethod === PaymentMethod.FIAT
-            }
-            hideOnScroll={true}
-            on="hover"
-            inverted
-          />
+        <Modal.Actions
+          className={classNames(
+            isClaimingNamesCrossChainEnabled && 'modalActions'
+          )}
+        >
+          {isClaimingNamesCrossChainEnabled ? (
+            <>
+              <BuyWithCryptoButton
+                assetNetwork={Network.ETHEREUM}
+                onClick={handleOnBuyWithCrypto}
+                disabled={isLoading || areNamesDifferent}
+              />
+              <BuyWithCardButton
+                onClick={handleClaimWithCard}
+                disabled={isLoading || isLoadingFIATWidget || areNamesDifferent}
+              />
+            </>
+          ) : (
+            <>
+              <Button
+                secondary
+                onClick={onClose}
+                disabled={isLoading}
+                type="button"
+              >
+                {t('global.cancel')}
+              </Button>
+              <Popup
+                style={{ zIndex: 9999999 }}
+                className="modalTooltip"
+                content={t('names_page.not_enough_mana')}
+                position="top center"
+                trigger={
+                  <div className="popupButton">
+                    <Button
+                      primary
+                      type="submit"
+                      disabled={
+                        areNamesDifferent ||
+                        isLoading ||
+                        (paymentMethod === PaymentMethod.CRYPTO &&
+                          !canClaimWithCrypto)
+                      }
+                      loading={isLoading || isLoadingFIATWidget}
+                    >
+                      {t('global.confirm')}
+                    </Button>
+                  </div>
+                }
+                disabled={
+                  !!(wallet && canClaimWithCrypto) ||
+                  paymentMethod === PaymentMethod.FIAT
+                }
+                hideOnScroll={true}
+                on="hover"
+                inverted
+              />
+            </>
+          )}
         </Modal.Actions>
       </Form>
     </Modal>

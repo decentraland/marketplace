@@ -1,5 +1,6 @@
 import { action } from 'typesafe-actions'
 import { ChainId } from '@dcl/schemas'
+import { Route } from 'decentraland-transactions/crossChain'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ENS, ENSError } from './types'
 
@@ -17,10 +18,15 @@ export const claimNameTransactionSubmitted = (
   subdomain: string,
   address: string,
   chainId: ChainId,
-  txHash: string
+  txHash: string,
+  isCrossChain?: boolean
 ) =>
   action(CLAIM_NAME_TRANSACTION_SUBMITTED, {
-    ...buildTransactionPayload(chainId, txHash, { subdomain, address })
+    ...buildTransactionPayload(chainId, txHash, {
+      subdomain,
+      address,
+      isCrossChain
+    })
   })
 
 export const claimNameSuccess = (ens: ENS, name: string, txHash: string) =>
@@ -41,3 +47,42 @@ export type ClaimNameTransactionSubmittedAction = ReturnType<
   typeof claimNameTransactionSubmitted
 >
 export type ClaimNameClearAction = ReturnType<typeof claimNameClear>
+
+// Mint name cross chain
+export const CLAIM_NAME_CROSS_CHAIN_REQUEST = '[Request] Claim name cross-chain'
+export const CLAIM_NAME_CROSS_CHAIN_SUCCESS = '[Success] Claim name cross-chain'
+export const CLAIM_NAME_CROSS_CHAIN_FAILURE = '[Failure] Claim name cross-chain'
+
+export const claimNameCrossChainRequest = (
+  name: string,
+  chainId: ChainId,
+  route: Route
+) => action(CLAIM_NAME_CROSS_CHAIN_REQUEST, { name, chainId, route })
+
+export const claimNameCrossChainSuccess = (
+  ens: ENS,
+  name: string,
+  txHash: string
+) =>
+  action(CLAIM_NAME_CROSS_CHAIN_SUCCESS, {
+    ens,
+    name,
+    txHash
+  })
+
+export const claimNameCrossChainFailure = (
+  route: Route,
+  name: string,
+  error: string
+) => action(CLAIM_NAME_CROSS_CHAIN_FAILURE, { route, name, error })
+
+export type ClaimNameCrossChainRequestAction = ReturnType<
+  typeof claimNameCrossChainRequest
+>
+export type ClaimNameCrossChainSuccessAction = ReturnType<
+  typeof claimNameCrossChainSuccess
+>
+
+export type ClaimNameCrossChainFailureAction = ReturnType<
+  typeof claimNameCrossChainFailure
+>

@@ -5,6 +5,7 @@ import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthori
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { openFiatGatewayWidgetRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
+import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import {
   FiatGateway,
   FiatGatewayOptions,
@@ -26,7 +27,10 @@ import {
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
 import { getMana, getWallet } from '../../../modules/wallet/selectors'
-import { getIsClaimingNamesWithFiatEnabled } from '../../../modules/features/selectors'
+import {
+  getIsClaimingNamesWithFiatEnabled,
+  getIsMintingNamesCrossChainEnabled
+} from '../../../modules/features/selectors'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -42,12 +46,15 @@ const mapState = (state: RootState): MapState => ({
   address: getAddress(state),
   getContract: (query: Partial<Contract>) => getContract(state, query),
   wallet: getWallet(state),
+  isClaimingNamesCrossChainEnabled: getIsMintingNamesCrossChainEnabled(state),
   isClaimingNamesWithFiatEnabled: getIsClaimingNamesWithFiatEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onClaim: name => dispatch(claimNameRequest(name)),
   onClaimNameClear: () => dispatch(claimNameClear()),
+  onBuyWithCrypto: (name: string) =>
+    dispatch(openModal('MintNameWithCryptoModal', { name })),
   onOpenFiatGateway: (
     gateway: FiatGateway,
     options: FiatGatewayOptions,

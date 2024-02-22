@@ -3,23 +3,21 @@ import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/Moda
 import type { Route } from 'decentraland-transactions/crossChain'
 import { Contract } from '../../../../modules/vendor/services'
 import { getContract } from '../../../../modules/contract/selectors'
-import {
-  buyItemRequest,
-  buyItemWithCardRequest
-} from '../../../../modules/item/actions'
+import { claimNameRequest } from '../../../../modules/ens/actions'
 
-export type Props = WithAuthorizedActionProps & ModalProps &  {
-  isBuyingItemNatively: boolean
-  isBuyingItemCrossChain: boolean
+export type Props = WithAuthorizedActionProps & Omit<ModalProps, 'metadata'> & {
+  metadata: { name: string }
+  isMintingName: boolean
+  isMintingNameCrossChain: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
-  onBuyItem: typeof buyItemRequest
-  onBuyItemCrossChain: (route: Route) => unknown
-  onBuyWithCard: typeof buyItemWithCardRequest
+  onClaimName: typeof claimNameRequest
+  onOpenFatFingerModal: () => unknown
+  onClaimNameCrossChain: (route: Route) => unknown
 }
 
-export type MapStateProps = Pick<Props, 'getContract' | 'isBuyingItemNatively' | 'isBuyingItemCrossChain'>
+export type MapStateProps = Pick<Props, 'getContract' | 'isMintingName' | 'isMintingNameCrossChain'>
 export type MapDispatchProps = Pick<
   Props,
-  'onBuyItem' | 'onBuyItemCrossChain' | 'onBuyWithCard'
+  'onClaimName' | 'onClaimNameCrossChain' | 'onOpenFatFingerModal'
 >
 export type OwnProps = Pick<Props, 'metadata'>
