@@ -14,7 +14,6 @@ import {
 } from 'decentraland-transactions/crossChain'
 import { NFT } from '../../../modules/nft/types'
 import * as events from '../../../utils/events'
-import { isPriceTooLow } from '../../BuyPage/utils'
 import {
   estimateTransactionGas as estimateMintingOrBuyingTransactionGas,
   estimateNameMintingGas,
@@ -203,12 +202,6 @@ export const useMintingNftGasCost = (
     selectedChain,
     item.network
   )
-  if (item.price === '0' || isPriceTooLow(item.price)) {
-    return {
-      gasCost: undefined,
-      isFetchingGasCost: false
-    }
-  }
 
   return useGasCost(
     item.network,
@@ -245,13 +238,6 @@ export const useBuyNftGasCost = (
     selectedChain,
     order.network
   )
-
-  if (order.price === '0' || isPriceTooLow(order.price)) {
-    return {
-      gasCost: undefined,
-      isFetchingGasCost: false
-    }
-  }
 
   return useGasCost(
     order.network,
@@ -579,13 +565,7 @@ const useCrossChainRoute = (
         calculateRoute()
       }
     }
-  }, [
-    useMetaTx,
-    selectedToken,
-    selectedChain,
-    assetChainId,
-    calculateRoute
-  ])
+  }, [useMetaTx, selectedToken, selectedChain, assetChainId, calculateRoute])
 
   const routeFeeCost = useMemo(() => {
     if (route) {
