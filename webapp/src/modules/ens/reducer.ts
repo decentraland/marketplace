@@ -82,6 +82,7 @@ export function ensReducer(
     case CLAIM_NAME_CROSS_CHAIN_FAILURE: {
       return {
         ...state,
+        loading: loadingReducer(state.loading, action),
         error: { message: action.payload.error }
       }
     }

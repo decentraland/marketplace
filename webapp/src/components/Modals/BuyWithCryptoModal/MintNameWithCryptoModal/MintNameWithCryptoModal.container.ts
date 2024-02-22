@@ -3,6 +3,7 @@ import { Network } from '@dcl/schemas'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
+import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib'
 import type { RootState } from '../../../../modules/reducer'
 import { getContract } from '../../../../modules/contract/selectors'
@@ -38,6 +39,7 @@ const mapDispatch = (
 ): MapDispatchProps =>
   bindActionCreators(
     {
+      onOpenFatFingerModal: () => openModal('ClaimNameFatFingerModal', { name: ownProps.metadata.name }),
       onClaimName: claimNameRequest,
       onClaimNameCrossChain: (route: Route) =>
         claimNameCrossChainRequest(

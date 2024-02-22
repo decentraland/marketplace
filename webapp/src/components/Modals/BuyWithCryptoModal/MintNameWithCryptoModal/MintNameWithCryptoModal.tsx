@@ -36,11 +36,11 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     onAuthorizedAction,
     onClaimName,
     onClaimNameCrossChain,
+    onOpenFatFingerModal,
     onClose
   } = props
 
   const onBuyNatively = useCallback(() => {
-    console.log('Executing on buy natively')
     const contractNames = getContractNames()
 
     const mana = getContract({
@@ -100,6 +100,11 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     [name]
   )
 
+  const onGoBack = useCallback(() => {
+    onClose()
+    onOpenFatFingerModal()
+  }, [])
+
   // Emulates a NFT for the item to be minted so it can be shown in the modal
   const asset: NFT = useMemo(
     () => ({
@@ -141,6 +146,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset }}
       name={modalName}
+      onGoBack={onGoBack}
       onClose={onClose}
     />
   )

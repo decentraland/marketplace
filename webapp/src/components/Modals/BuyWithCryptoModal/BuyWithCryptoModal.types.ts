@@ -43,6 +43,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & 
     onGetGasCost: OnGetGasCost
     onSwitchNetwork: typeof switchNetworkRequest
     onBuyNatively: () => unknown
+    onGoBack?: () => unknown
     onBuyWithCard?: () => unknown
     onBuyCrossChain: (route: Route) => unknown
     onGetMana: typeof openBuyManaWithFiatModalRequest
@@ -60,4 +61,5 @@ export type OwnProps = Pick<
   | 'onBuyCrossChain'
   | 'onClose'
   | 'onGetGasCost'
+  | 'onGoBack'
 >

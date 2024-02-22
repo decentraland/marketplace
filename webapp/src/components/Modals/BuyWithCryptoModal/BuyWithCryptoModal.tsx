@@ -71,7 +71,8 @@ export const BuyWithCryptoModal = (props: Props) => {
     onBuyWithCard,
     onBuyCrossChain,
     onGetMana,
-    onClose
+    onClose,
+    onGoBack
   } = props
 
   const analytics = getAnalytics()
@@ -553,6 +554,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           name: asset.name,
           b: (children: React.ReactChildren) => <b>{children}</b>
         })}
+        onBack={onGoBack}
         onClose={onClose}
       />
     )
@@ -785,7 +787,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   })}
                 </span>
               ) : null}
-              {!canBuyAsset ? (
+              {!canBuyAsset && !isFetchingBalance && !isFetchingRoute ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
                     token: selectedToken?.symbol || 'MANA'

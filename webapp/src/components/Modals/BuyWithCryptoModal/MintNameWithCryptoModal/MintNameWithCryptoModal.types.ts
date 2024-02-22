@@ -11,12 +11,13 @@ export type Props = WithAuthorizedActionProps & Omit<ModalProps, 'metadata'> & {
   isClaimingNameCrossChain: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onClaimName: typeof claimNameRequest
+  onOpenFatFingerModal: () => unknown
   onClaimNameCrossChain: (route: Route) => unknown
 }
 
 export type MapStateProps = Pick<Props, 'getContract' | 'isClaimingName' | 'isClaimingNameCrossChain'>
 export type MapDispatchProps = Pick<
   Props,
-  'onClaimName' | 'onClaimNameCrossChain'
+  'onClaimName' | 'onClaimNameCrossChain' | 'onOpenFatFingerModal'
 >
 export type OwnProps = Pick<Props, 'metadata'>
