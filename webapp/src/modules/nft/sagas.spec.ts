@@ -195,7 +195,6 @@ describe('when handling the fetch NFT request action', () => {
         .put(upsertContracts([contract]))
         .put(fetchNFTSuccess(nft, order, rental))
         .dispatch(fetchNFTRequest(contractAddress, tokenId))
-        .put(fetchSmartWearableRequiredPermissionsRequest(nft))
         .run({ silenceTimeout: true })
     })
   })
@@ -291,42 +290,87 @@ describe('when handling the fetch NFT request action', () => {
   })
 
   describe("when the NFT's fetch request is successful", () => {
-    it('should dispatch an action signaling the success of the action handling', () => {
-      const contractAddress = 'anAddress'
-      const contract = {
-        vendor: VendorName.DECENTRALAND,
-        address: contractAddress
-      }
-      const tokenId = 'aTokenId'
-      const vendor = VendorFactory.build(VendorName.DECENTRALAND, API_OPTS)
-      const nft = { category: NFTCategory.WEARABLE } as NFT
-      const order = { id: 'anId' } as Order
-      const rental = { id: 'aRentalId' } as RentalListing
+    describe('and it is a regular nft', () => {
+      it('should dispatch an action signaling the success of the action handling', () => {
+        const contractAddress = 'anAddress'
+        const contract = {
+          vendor: VendorName.DECENTRALAND,
+          address: contractAddress
+        }
+        const tokenId = 'aTokenId'
+        const vendor = VendorFactory.build(VendorName.DECENTRALAND, API_OPTS)
+        const nft = { category: NFTCategory.WEARABLE } as NFT
+        const order = { id: 'anId' } as Order
+        const rental = { id: 'aRentalId' } as RentalListing
 
-      return expectSaga(nftSaga, getIdentity)
-        .provide([
-          [select(getLoading), []],
-          [select(getContracts), []],
-          [
-            select(getContract, { address: contractAddress.toLowerCase() }),
-            contract
-          ],
-          [call(VendorFactory.build, contract.vendor, API_OPTS), vendor],
-          [
-            call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
+        return expectSaga(nftSaga, getIdentity)
+          .provide([
+            [select(getLoading), []],
+            [select(getContracts), []],
+            [
+              select(getContract, { address: contractAddress.toLowerCase() }),
+              contract
+            ],
+            [call(VendorFactory.build, contract.vendor, API_OPTS), vendor],
+            [
+              call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
+                rentalStatus: [RentalStatus.EXECUTED]
+              }),
+              Promise.resolve([nft, order, rental])
+            ]
+          ])
+          .put(fetchNFTSuccess(nft, order, rental))
+          .dispatch(
+            fetchNFTRequest(contractAddress, tokenId, {
               rentalStatus: [RentalStatus.EXECUTED]
-            }),
-            Promise.resolve([nft, order, rental])
-          ]
-        ])
-        .put(fetchNFTSuccess(nft, order, rental))
-        .put(fetchSmartWearableRequiredPermissionsRequest(nft))
-        .dispatch(
-          fetchNFTRequest(contractAddress, tokenId, {
-            rentalStatus: [RentalStatus.EXECUTED]
-          })
-        )
-        .run({ silenceTimeout: true })
+            })
+          )
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and it is a smart wearable', () => {
+      it('should dispatch an action signaling the success of the action handling', () => {
+        const contractAddress = 'anAddress'
+        const contract = {
+          vendor: VendorName.DECENTRALAND,
+          address: contractAddress
+        }
+        const tokenId = 'aTokenId'
+        const vendor = VendorFactory.build(VendorName.DECENTRALAND, API_OPTS)
+        const nft = {
+          category: NFTCategory.WEARABLE,
+          data: { wearable: { isSmart: true } },
+          urn: 'someUrn'
+        } as NFT
+        const order = { id: 'anId' } as Order
+        const rental = { id: 'aRentalId' } as RentalListing
+
+        return expectSaga(nftSaga, getIdentity)
+          .provide([
+            [select(getLoading), []],
+            [select(getContracts), []],
+            [
+              select(getContract, { address: contractAddress.toLowerCase() }),
+              contract
+            ],
+            [call(VendorFactory.build, contract.vendor, API_OPTS), vendor],
+            [
+              call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
+                rentalStatus: [RentalStatus.EXECUTED]
+              }),
+              Promise.resolve([nft, order, rental])
+            ]
+          ])
+          .put(fetchNFTSuccess(nft, order, rental))
+          .put(fetchSmartWearableRequiredPermissionsRequest(nft))
+          .dispatch(
+            fetchNFTRequest(contractAddress, tokenId, {
+              rentalStatus: [RentalStatus.EXECUTED]
+            })
+          )
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })

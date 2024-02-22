@@ -159,7 +159,9 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
       )
 
       yield put(fetchNFTSuccess(nft as NFT, order, rental))
-      yield put(fetchSmartWearableRequiredPermissionsRequest(nft as NFT))
+      if (nft.data?.wearable?.isSmart && nft.urn) {
+        yield put(fetchSmartWearableRequiredPermissionsRequest(nft as NFT))
+      }
     } catch (error) {
       yield put(
         fetchNFTFailure(contractAddress, tokenId, (error as Error).message)

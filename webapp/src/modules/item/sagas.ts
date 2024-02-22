@@ -238,7 +238,9 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         tokenId
       )
       yield put(fetchItemSuccess(item))
-      yield put(fetchSmartWearableRequiredPermissionsRequest(item))
+      if (item.data?.wearable?.isSmart && item.urn) {
+        yield put(fetchSmartWearableRequiredPermissionsRequest(item))
+      }
     } catch (error) {
       yield put(
         fetchItemFailure(
