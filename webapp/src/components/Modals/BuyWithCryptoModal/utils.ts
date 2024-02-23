@@ -67,14 +67,21 @@ function truncateToDecimals(num: number, dec = 2) {
 }
 
 export function formatPrice(price: string | number, token: Token): number {
-  // Determine the number of decimals based on the USD price
-  let decimalsToShow: number
+  // Convert price to a number if it's a string
+  const numericPrice = typeof price === 'string' ? parseFloat(price) : price
 
-  // Show more decimals for smaller fractions of higher-value tokens like Ethereum
-  if (token.usdPrice && token.usdPrice <= 1.5) {
-    decimalsToShow = 4 // Show 4 decimals for tokens with prices less than 1 USD
+  // Determine the minimum number of decimals to show based on the value
+  let decimalsToShow: number
+  if (token.usdPrice && token.usdPrice >= 1.5) {
+    decimalsToShow = 4 // For tokens priced over $1.5, show up to 4 decimals
   } else {
-    decimalsToShow = 2 // Show 2 decimals for other tokens or higher-value fractions
+    decimalsToShow = 2 // Default to 2 decimals
+  }
+
+  // Ensure small values are displayed with at least two significant digits
+  if (numericPrice !== 0 && numericPrice < 0.01) {
+    const significantDigits = Math.ceil(-Math.log10(numericPrice)) + 1
+    decimalsToShow = Math.max(decimalsToShow, significantDigits)
   }
 
   // Format the price using toFixed to round and limit the number of decimals

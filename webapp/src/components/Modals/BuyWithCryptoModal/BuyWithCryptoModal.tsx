@@ -91,6 +91,9 @@ export const BuyWithCryptoModal = (props: Props) => {
     getMANAToken(asset.chainId)
   )
   const [canBuyAsset, setCanBuyAsset] = useState<boolean | undefined>()
+  const [insufficientToken, setInsufficientToken] = useState<
+    Token | undefined
+  >()
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
   const [crossChainProvider, setCrossChainProvider] = useState<
@@ -275,6 +278,9 @@ export const BuyWithCryptoModal = (props: Props) => {
             if (selectedToken.symbol === routeFeeCost.token.symbol) {
               canBuy =
                 balance > Number(fromAmount) + Number(routeFeeCost.totalCost)
+              if (!canBuy) {
+                setInsufficientToken(selectedToken)
+              }
             } else {
               const networkProvider = await getNetworkProvider(
                 Number(routeFeeCost.token.chainId)
@@ -289,6 +295,11 @@ export const BuyWithCryptoModal = (props: Props) => {
                 ethers.utils.parseEther(routeFeeCost.totalCost)
               )
               canBuy = canPayForGas && balance > Number(fromAmount)
+              if (!canBuy) {
+                setInsufficientToken(
+                  !canPayForGas ? routeFeeCost.token : selectedToken
+                )
+              }
             }
           }
         }
@@ -789,7 +800,7 @@ export const BuyWithCryptoModal = (props: Props) => {
               {!canBuyAsset && !isFetchingBalance && !isFetchingRoute ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
-                    token: selectedToken?.symbol || 'MANA'
+                    token: insufficientToken?.symbol || 'MANA'
                   })}
                 </span>
               ) : null}
