@@ -143,8 +143,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   return (
     <BuyWithCryptoModal
       price={PRICE_IN_WEI}
-      isBuyingAsset={isMintingName}
-      isBuyingCrossChain={isMintingNameCrossChain}
+      isBuyingAsset={isMintingName || isMintingNameCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyCrossChain={onClaimNameCrossChain}
       onGetGasCost={onGetGasCost}

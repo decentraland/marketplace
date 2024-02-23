@@ -7,9 +7,8 @@ import { isPriceTooLow } from '../../../BuyPage/utils'
 import { ManaToFiat } from '../../../ManaToFiat'
 import { formatPrice } from '../utils'
 import { GasCostValues, RouteFeeCost } from '../hooks'
+import { FREE_TX_COVERED_TEST_ID } from './constants'
 import styles from './PurchaseTotal.module.css'
-
-export const FREE_TX_COVERED_TEST_ID = 'free-tx-label'
 
 export type Props = {
   price: string
