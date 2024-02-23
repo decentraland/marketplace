@@ -37,6 +37,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     onClaimName,
     onClaimNameCrossChain,
     onOpenFatFingerModal,
+    onCloseFatFingerModal,
     onClose
   } = props
 
@@ -103,7 +104,12 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   const onGoBack = useCallback(() => {
     onClose()
     onOpenFatFingerModal()
-  }, [])
+  }, [onOpenFatFingerModal, onClose])
+
+  const onCloseModal = useCallback(() => {
+    onCloseFatFingerModal()
+    return onClose()
+  }, [onClose])
 
   // Emulates a NFT for the item to be minted so it can be shown in the modal
   const asset: NFT = useMemo(
@@ -147,7 +153,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
       metadata={{ asset }}
       name={modalName}
       onGoBack={onGoBack}
-      onClose={onClose}
+      onClose={onCloseModal}
     />
   )
 }

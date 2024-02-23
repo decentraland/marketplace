@@ -91,11 +91,6 @@
   z-index: 1;
 }
 
-.ClaimNameFatFingerModal.ui.modal .ui.header.dcl.mana {
-  margin-top: -12px;
-  margin-right: 4px;
-}
-
 .ClaimNameFatFingerModal.ui.modal .paymentMethod .credit.card.outline.icon {
   margin-bottom: 26px;
   margin-right: 11px;

@@ -853,8 +853,8 @@
       "other": "Decentraland 收藏品"
     },
     "tooltip": {
-      "cross_chain": "预估费用包括网络费用和跨链购买费用，您必须直接用钱包支付。确保有 {token} 来覆盖它。",
-      "same_network": "预计费用包括您必须直接用钱包支付的网络费用。确保有 {token} 来覆盖它。"
+      "cross_chain": "预估费用包括网络费用和跨链购买费用，您必须直接用钱包支付。",
+      "same_network": "预计费用包括您必须直接用钱包支付的网络费用。"
     },
     "insufficient_funds": "您的 {token} 资金不足。尝试使用其他令牌支付或获取 MANA 或使用卡支付。",
     "token_and_chain_selector": {

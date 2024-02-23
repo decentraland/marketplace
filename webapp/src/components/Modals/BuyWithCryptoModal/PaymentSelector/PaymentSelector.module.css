@@ -169,11 +169,11 @@
 }
 
 @media (max-width: 767px) {
-  .buyWithCryptoModal .dropdownContainer {
+  .dropdownContainer {
     flex-direction: column;
   }
 
-  .buyWithCryptoModal .tokenDropdownContainer {
+  .tokenDropdownContainer {
     align-self: flex-start;
     margin-left: 0;
     width: 100%;

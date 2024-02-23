@@ -5,12 +5,12 @@ import { Network } from '@dcl/schemas'
 import { ChainId, getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import type { ChainData, Route, Token } from "decentraland-transactions/crossChain"
-import { Icon, InfoTooltip } from "decentraland-ui"
-import { ManaToFiat } from "../../../ManaToFiat"
-import { formatPrice } from "../utils"
-import type { GasCostValues, RouteFeeCost } from "../hooks"
-import styles from "./PaymentSelector.module.css"
+import { ChainData, Route, Token } from 'decentraland-transactions/crossChain'
+import { Icon, InfoTooltip, Popup } from 'decentraland-ui'
+import { ManaToFiat } from '../../../ManaToFiat'
+import { formatPrice } from '../utils'
+import { GasCostValues, RouteFeeCost } from '../hooks'
+import styles from './PaymentSelector.module.css'
 
 export const PAY_WITH_DATA_TEST_ID = 'pay-with-container'
 export const CHAIN_SELECTOR_DATA_TEST_ID = 'chain-selector'
@@ -145,9 +145,17 @@ const PaymentSelector = (props: Props) => {
                 </div>
                 <div className={styles.fromAmountContainer}>
                   <div className={styles.fromAmountTokenContainer}>
-                    <img
-                      src={selectedToken?.logoURI}
-                      alt={selectedToken?.name}
+                    <Popup
+                      content={selectedToken.name}
+                      style={{ zIndex: 3001 }}
+                      on="hover"
+                      position="top center"
+                      trigger={
+                        <img
+                          src={selectedToken.logoURI}
+                          alt={selectedToken.name}
+                        />
+                      }
                     />
                     {selectedToken.symbol === 'MANA' ? (
                       ethers.utils.formatEther(price)
@@ -191,13 +199,7 @@ const PaymentSelector = (props: Props) => {
                       shouldUseCrossChainProvider &&
                         getNetwork(selectedChain) !== Network.MATIC
                         ? 'buy_with_crypto_modal.tooltip.cross_chain'
-                        : 'buy_with_crypto_modal.tooltip.same_network',
-                      {
-                        token:
-                          getNetwork(selectedChain) === Network.ETHEREUM
-                            ? 'ETH'
-                            : 'MATIC'
-                      }
+                        : 'buy_with_crypto_modal.tooltip.same_network'
                     )}
                     style={{ zIndex: 3001 }}
                     position="top center"
@@ -206,17 +208,33 @@ const PaymentSelector = (props: Props) => {
                 <div className={styles.fromAmountContainer}>
                   {gasCost && gasCost.token ? (
                     <div className={styles.fromAmountTokenContainer}>
-                      <img
-                        src={gasCost.token.logoURI}
-                        alt={gasCost.token.name}
+                      <Popup
+                        content={gasCost.token.name}
+                        style={{ zIndex: 3001 }}
+                        on="hover"
+                        position="top center"
+                        trigger={
+                          <img
+                            src={gasCost.token.logoURI}
+                            alt={gasCost.token.name}
+                          />
+                        }
                       />
                       {formatPrice(gasCost.total, gasCost.token)}
                     </div>
                   ) : !!route && routeFeeCost ? (
                     <div className={styles.fromAmountTokenContainer}>
-                      <img
-                        src={route.route.estimate.gasCosts[0].token.logoURI}
-                        alt={route.route.estimate.gasCosts[0].token.name}
+                      <Popup
+                        content={route.route.estimate.gasCosts[0].token.name}
+                        style={{ zIndex: 3001 }}
+                        on="hover"
+                        position="top center"
+                        trigger={
+                          <img
+                            src={route.route.estimate.gasCosts[0].token.logoURI}
+                            alt={route.route.estimate.gasCosts[0].token.name}
+                          />
+                        }
                       />
                       {routeFeeCost.totalCost}
                     </div>

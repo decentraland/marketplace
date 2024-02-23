@@ -5,7 +5,6 @@ import compact from 'lodash/compact'
 import { ethers } from 'ethers'
 import { ChainId, Network } from '@dcl/schemas'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
-import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Button, Icon, Loader, ModalNavigation } from 'decentraland-ui'
 import { ContractName, getContract } from 'decentraland-transactions'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
@@ -364,10 +363,9 @@ export const BuyWithCryptoModal = (props: Props) => {
           {t('buy_with_crypto_modal.get_mana')}
         </Button>
         {onBuyWithCard && (
-          <ChainButton
+          <Button
             inverted
             fluid
-            chainId={asset.chainId}
             data-testid={BUY_WITH_CARD_TEST_ID}
             disabled={isLoading || isLoadingAuthorization}
             loading={isLoading || isLoadingAuthorization}
@@ -375,7 +373,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           >
             <Icon name="credit card outline" />
             {t(`buy_with_crypto_modal.buy_with_card`)}
-          </ChainButton>
+          </Button>
         )}
       </>
     )
@@ -405,7 +403,8 @@ export const BuyWithCryptoModal = (props: Props) => {
           disabled={
             (selectedToken?.symbol !== 'MANA' && !route) ||
             isFetchingRoute ||
-            isBuyingCrossChain
+            isBuyingCrossChain ||
+            isLoading
           }
           loading={isFetchingBalance || isLoading}
           onClick={onClick}
