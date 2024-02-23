@@ -863,8 +863,8 @@
       "other": "Decentraland Collectibles"
     },
     "tooltip": {
-      "cross_chain": "Estimated fee includes the network cost and the cross chain purchase fee that you have to pay directly with your wallet. Be sure to have {token} to cover it.",
-      "same_network": "Estimated fee includes the network cost that you have to pay directly with your wallet. Be sure to have {token} to cover it."
+      "cross_chain": "Estimated fee includes the network cost and the cross chain purchase fee that you have to pay directly with your wallet.",
+      "same_network": "Estimated fee includes the network cost that you have to pay directly with your wallet."
     },
     "insufficient_funds": "You don’t have enough funds in {token}. Try paying with other token or get MANA or pay with card.",
     "token_and_chain_selector": {
