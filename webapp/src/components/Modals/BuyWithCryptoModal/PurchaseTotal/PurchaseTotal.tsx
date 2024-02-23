@@ -1,6 +1,5 @@
 import classNames from 'classnames'
 import { ethers } from 'ethers'
-import { Popup } from 'decentraland-ui/dist/components/Popup/Popup'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { Route, Token } from 'decentraland-transactions/crossChain'
 import { isPriceTooLow } from '../../../BuyPage/utils'
@@ -8,6 +7,7 @@ import { ManaToFiat } from '../../../ManaToFiat'
 import { formatPrice } from '../utils'
 import { GasCostValues, RouteFeeCost } from '../hooks'
 import { FREE_TX_COVERED_TEST_ID } from './constants'
+import { TokenIcon } from '../TokenIcon'
 import styles from './PurchaseTotal.module.css'
 
 export type Props = {
@@ -68,34 +68,18 @@ const PurchaseTotal = (props: Props) => {
             {shouldUseCrossChainProvider ? (
               !!route && routeFeeCost ? (
                 <>
-                  <Popup
-                    content={selectedToken.name}
-                    style={{ zIndex: 3001 }}
-                    on="hover"
-                    position="top center"
-                    trigger={
-                      <img
-                        src={selectedToken.logoURI}
-                        alt={selectedToken.name}
-                      />
-                    }
+                  <TokenIcon
+                    src={selectedToken.logoURI}
+                    name={selectedToken.name}
                   />
                   {routeFeeCost?.token.symbol !== selectedToken.symbol &&
                   fromAmount ? (
                     <>
                       {formatPrice(fromAmount, selectedToken)}
                       <span> + </span>
-                      <Popup
-                        content={routeFeeCost.token.name}
-                        style={{ zIndex: 3001 }}
-                        on="hover"
-                        position="top center"
-                        trigger={
-                          <img
-                            src={routeFeeCost.token.logoURI}
-                            alt={routeFeeCost.token.name}
-                          />
-                        }
+                      <TokenIcon
+                        src={routeFeeCost.token.logoURI}
+                        name={routeFeeCost.token.name}
                       />
                       {routeFeeCost.totalCost}
                     </>
@@ -113,30 +97,17 @@ const PurchaseTotal = (props: Props) => {
               <>
                 {!!gasCost && gasCost.token ? (
                   <>
-                    <Popup
-                      content={gasCost.token.name}
-                      style={{ zIndex: 3001 }}
-                      on="hover"
-                      position="top center"
-                      trigger={
-                        <img
-                          src={gasCost.token.logoURI}
-                          alt={gasCost.token.name}
-                        />
-                      }
+                    <TokenIcon
+                      src={gasCost.token.logoURI}
+                      name={gasCost.token.name}
                     />
                     {formatPrice(Number(gasCost.total), gasCost.token)}
                     <span> + </span>
                   </>
                 ) : null}
-                <Popup
-                  content={selectedToken.name}
-                  style={{ zIndex: 3001 }}
-                  on="hover"
-                  position="top center"
-                  trigger={
-                    <img src={selectedToken.logoURI} alt={selectedToken.name} />
-                  }
+                <TokenIcon
+                  src={selectedToken.logoURI}
+                  name={selectedToken.name}
                 />
                 {ethers.utils.formatEther(price)}
               </>
