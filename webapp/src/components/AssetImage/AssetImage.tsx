@@ -35,6 +35,7 @@ import { getEthereumItemUrn } from './utils'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import AvailableForMintPopup from './AvailableForMintPopup'
 import './AssetImage.css'
+import { EnsImage } from './EnsImage/EnsImage'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -76,7 +77,6 @@ const AssetImage = (props: Props) => {
     hasPopup,
     zoom,
     isSmall,
-    showMonospace,
     avatar,
     wearableController,
     isTryingOn,
@@ -628,15 +628,14 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.ENS: {
       let name = ens!.subdomain
-      let classes = ['ens-subdomain']
+      // let classes = ['ens-subdomain']
       if (isSmall) {
         name = name.slice(0, 2)
-        classes.push('small')
+        // classes.push('small')
       }
       return (
-        <div className={classes.join(' ')}>
-          <div className="name">{name}</div>
-          {showMonospace ? <div className="monospace">{name}</div> : null}
+        <div className={classNames(isSmall && 'small', 'ens')}>
+          <EnsImage onlyLogo={isSmall} name={name} />
           {hasBadges && children}
         </div>
       )
@@ -772,8 +771,7 @@ AssetImage.defaultProps = {
   isDraggable: false,
   withNavigation: false,
   zoom: 0.5,
-  isSmall: false,
-  showMonospace: false
+  isSmall: false
 }
 
 export default React.memo(AssetImageWrapper)
