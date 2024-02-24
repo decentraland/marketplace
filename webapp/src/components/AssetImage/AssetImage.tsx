@@ -34,8 +34,8 @@ import { JumpIn } from '../AssetPage/JumpIn'
 import { getEthereumItemUrn } from './utils'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import AvailableForMintPopup from './AvailableForMintPopup'
+import { EnsImage } from './EnsImage'
 import './AssetImage.css'
-import { EnsImage } from './EnsImage/EnsImage'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -628,11 +628,6 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.ENS: {
       let name = ens!.subdomain
-      // let classes = ['ens-subdomain']
-      if (isSmall) {
-        name = name.slice(0, 2)
-        // classes.push('small')
-      }
       return (
         <div className={classNames(isSmall && 'small', 'ens')}>
           <EnsImage onlyLogo={isSmall} name={name} />
