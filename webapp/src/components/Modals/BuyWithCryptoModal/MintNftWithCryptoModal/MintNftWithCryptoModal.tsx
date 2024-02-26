@@ -3,10 +3,12 @@ import { Contract } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
 import { getContractNames } from '../../../../modules/vendor'
 import { getMintItemStatus, getError } from '../../../../modules/item/selectors'
+import * as events from '../../../../utils/events'
 import { useCrossChainMintNftRoute, useMintingNftGasCost } from '../hooks'
 import BuyWithCryptoModal from '../BuyWithCryptoModal.container'
 import { Props } from './MintNftWithCryptoModal.types'
@@ -51,7 +53,11 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
     })
   }, [item, getContract, onAuthorizedAction, onBuyItem])
 
-  const onBuyWithCard = useCallback(() => onBuyItemWithCard(item), [item])
+  const onBuyWithCard = useCallback(() => {
+    getAnalytics().track(events.CLICK_BUY_NFT_WITH_CARD)
+    onBuyItemWithCard(item)
+  }, [item])
+
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
     (
       selectedToken,
