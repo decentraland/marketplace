@@ -20,6 +20,10 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
+import {
+  SET_PROFILE_AVATAR_ALIAS_SUCCESS,
+  SetProfileAvatarAliasSuccessAction
+} from 'decentraland-dapps/dist/modules/profile'
 import { capitalize } from '../../lib/text'
 import {
   CREATE_ORDER_SUCCESS,
@@ -113,10 +117,6 @@ import {
   ClaimNameCrossChainSuccessAction,
   ClaimNameSuccessAction
 } from '../ens/actions'
-import {
-  SET_PROFILE_AVATAR_ALIAS_SUCCESS,
-  SetProfileAvatarAliasSuccessAction
-} from 'decentraland-dapps/dist/modules/profile'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,

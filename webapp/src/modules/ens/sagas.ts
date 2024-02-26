@@ -1,5 +1,7 @@
 import { BigNumber, ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { ChainId } from '@dcl/schemas'
+import { ContractName, getContract } from 'decentraland-transactions'
 import {
   getConnectedProvider,
   getSigner
@@ -134,8 +136,11 @@ export function* ensSaga() {
           wallet.address,
           wallet.chainId,
           transaction.hash,
-          'mana',
-          'ethereum'
+          getContract(
+            ContractName.MANAToken,
+            ChainId.ETHEREUM_MAINNET
+          ).address.toLowerCase(),
+          ChainId.ETHEREUM_MAINNET.toString()
         )
       )
     } catch (error) {
@@ -176,7 +181,7 @@ export function* ensSaga() {
             chainId,
             txRespose.transactionHash,
             route.route.params.fromToken,
-            route.route.params.fromChain,
+            route.route.params.fromChain.toString(),
             true
           )
         )
