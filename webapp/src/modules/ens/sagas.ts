@@ -58,7 +58,7 @@ export function* ensSaga() {
     const data = action.payload[TRANSACTION_ACTION_FLAG]
     const {
       hash,
-      payload: { subdomain, address, route, isCrossChain }
+      payload: { subdomain, address, route }
     } = data
 
     const from = address
@@ -88,7 +88,7 @@ export function* ensSaga() {
           contractAddress: dclRegistrarContract.address
         }
 
-        if (isCrossChain) {
+        if (route) {
           yield put(claimNameCrossChainSuccess(ens, subdomain, hash, route))
         } else {
           yield put(claimNameSuccess(ens, subdomain, hash))
