@@ -223,9 +223,9 @@ const PaymentSelector = (props: Props) => {
                       )}
                     />
                   )}
-                  {gasCost && gasCost.totalUSDPrice ? (
+                  {gasCost && gasCost.totalUSDPrice && gasCost.token ? (
                     <span className={styles.fromAmountUSD}>
-                      ≈ ${gasCost.totalUSDPrice.toFixed(4)}
+                      ≈ ${formatPrice(gasCost.totalUSDPrice, gasCost.token)}
                     </span>
                   ) : !!routeFeeCost &&
                     providerTokens.find(

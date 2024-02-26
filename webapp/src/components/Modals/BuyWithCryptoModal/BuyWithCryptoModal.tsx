@@ -343,7 +343,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         ) : (
           t('buy_with_crypto_modal.switch_network', {
             chain: providerChains.find(
-              c => c.chainId === selectedChain.toString()
+              c => c.chainId.toString() === selectedChain.toString()
             )?.networkName
           })
         )}
