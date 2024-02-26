@@ -1,7 +1,5 @@
 import { BigNumber, ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
-import { ChainId } from '@dcl/schemas'
-import { ContractName, getContract } from 'decentraland-transactions'
 import {
   getConnectedProvider,
   getSigner
@@ -60,7 +58,7 @@ export function* ensSaga() {
     const data = action.payload[TRANSACTION_ACTION_FLAG]
     const {
       hash,
-      payload: { subdomain, address, fromToken, fromChain, isCrossChain }
+      payload: { subdomain, address, route, isCrossChain }
     } = data
 
     const from = address
@@ -91,15 +89,7 @@ export function* ensSaga() {
         }
 
         if (isCrossChain) {
-          yield put(
-            claimNameCrossChainSuccess(
-              ens,
-              subdomain,
-              hash,
-              fromToken,
-              fromChain
-            )
-          )
+          yield put(claimNameCrossChainSuccess(ens, subdomain, hash, route))
         } else {
           yield put(claimNameSuccess(ens, subdomain, hash))
         }
@@ -135,12 +125,7 @@ export function* ensSaga() {
           name,
           wallet.address,
           wallet.chainId,
-          transaction.hash,
-          getContract(
-            ContractName.MANAToken,
-            ChainId.ETHEREUM_MAINNET
-          ).address.toLowerCase(),
-          ChainId.ETHEREUM_MAINNET.toString()
+          transaction.hash
         )
       )
     } catch (error) {
@@ -179,10 +164,7 @@ export function* ensSaga() {
             name,
             wallet.address,
             chainId,
-            txRespose.transactionHash,
-            route.route.params.fromToken,
-            route.route.params.fromChain.toString(),
-            true
+            txRespose.transactionHash
           )
         )
       }

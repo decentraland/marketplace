@@ -1,10 +1,6 @@
 import { connect } from 'react-redux'
 import { ChainId, Network } from '@dcl/schemas'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
-import {
-  ContractName,
-  getContract as getDCLContract
-} from 'decentraland-transactions'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
@@ -70,19 +66,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
     chainId: ChainId,
     txHash: string
   ) =>
-    dispatch(
-      claimNameTransactionSubmitted(
-        subdomain,
-        address,
-        chainId,
-        txHash,
-        getDCLContract(
-          ContractName.MANAToken,
-          ChainId.ETHEREUM_MAINNET
-        ).address.toLowerCase(),
-        ChainId.ETHEREUM_MAINNET.toString()
-      )
-    )
+    dispatch(claimNameTransactionSubmitted(subdomain, address, chainId, txHash))
 })
 
 export default connect(

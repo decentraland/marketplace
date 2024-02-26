@@ -21,6 +21,7 @@ describe('claimName actions', () => {
   let chainId: ChainId
   let txHash: string
   let ens: ENS
+
   beforeEach(() => {
     subdomain = 'example'
     address = '0xExampleAddress'

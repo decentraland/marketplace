@@ -345,9 +345,9 @@ track<ClaimNameCrossChainSuccessAction>(
     return {
       name: payload.ens.name,
       payment_method: 'crypto',
-      crossChain: true,
-      fromToken: payload.fromToken,
-      fromChain: payload.fromChain,
+      fromTokenName: payload.route.route.estimate.fromToken.name,
+      fromToken: payload.route.route.params.fromToken,
+      fromChain: payload.route.route.params.fromChain,
       txHash: payload.txHash
     }
   }
