@@ -21,6 +21,7 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { BuyWithCryptoButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { BuyWithCardButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons/BuyWithCardButton'
 import { config } from '../../../config'
+import * as events from '../../../utils/events'
 import { getContractNames } from '../../../modules/vendor'
 import {
   PRICE,
@@ -85,6 +86,11 @@ const ClaimNameFatFingerModal = ({
   const [currentName, setCurrentName] = useState(autoComplete ? ENSName : '')
 
   const handleClaimWithCard = useCallback(async () => {
+    analytics.track(events.CLICK_CHECKOUT_NAME, {
+      name: ENSName,
+      payment_method: 'fiat'
+    })
+
     setIsLoadingFIATWidget(true)
     const wertURL = config.get('WERT_URL')
     if (wallet) {
@@ -149,7 +155,7 @@ const ClaimNameFatFingerModal = ({
           },
           onSuccess: options => {
             if ('data' in options && 'tx_id' in options.data) {
-              analytics.track('Buy Name Success', {
+              analytics.track(events.BUY_NAME_SUCCESS, {
                 name: ENSName,
                 payment_method: 'fiat',
                 txHash: options.data.tx_id
@@ -173,14 +179,15 @@ const ClaimNameFatFingerModal = ({
   }, [isLoading, isClaimingNamesWithFiatEnabled])
 
   const handleClaim = useCallback(() => {
-    analytics.track('Click checkout name', {
-      name: ENSName,
-      payment_method: paymentMethod === PaymentMethod.CRYPTO ? 'crypto' : 'fiat'
-    })
     if (paymentMethod === PaymentMethod.FIAT) {
       setIsLoadingFIATWidget(true)
       handleClaimWithCard()
     } else {
+      analytics.track(events.CLICK_CHECKOUT_NAME, {
+        name: ENSName,
+        payment_method: 'crypto'
+      })
+
       const mana = getContract({
         name: getContractNames().MANA,
         network: Network.ETHEREUM
@@ -225,6 +232,11 @@ const ClaimNameFatFingerModal = ({
   }
 
   const handleOnBuyWithCrypto = useCallback(() => {
+    analytics.track(events.CLICK_CHECKOUT_NAME, {
+      name: ENSName,
+      payment_method: 'crypto'
+    })
+
     onBuyWithCrypto(currentName)
   }, [currentName])
 

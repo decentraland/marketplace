@@ -2,11 +2,13 @@ import React, { useCallback } from 'react'
 import { Contract } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import withAuthorizedAction from 'decentraland-dapps/dist/containers/withAuthorizedAction'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
 import { getContractNames } from '../../../../modules/vendor'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
 import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
+import * as events from '../../../../utils/events'
 import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
 import { useBuyNftGasCost, useCrossChainBuyNftRoute } from '../hooks'
 import BuyWithCryptoModal from '../BuyWithCryptoModal.container'
@@ -52,7 +54,11 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     })
   }, [nft, order, getContract, onAuthorizedAction, onExecuteOrder])
 
-  const onBuyWithCard = useCallback(() => onExecuteOrderWithCard(nft), [nft])
+  const onBuyWithCard = useCallback(() => {
+    getAnalytics().track(events.CLICK_BUY_NFT_WITH_CARD)
+    onExecuteOrderWithCard(nft)
+  }, [nft])
+
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
     (
       selectedToken,
