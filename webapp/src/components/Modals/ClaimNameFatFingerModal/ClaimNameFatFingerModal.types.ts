@@ -1,5 +1,4 @@
 import { Dispatch } from 'redux'
-import { ChainId } from '@dcl/schemas'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
@@ -16,7 +15,8 @@ import {
   ClaimNameRequestAction,
   ClaimNameTransactionSubmittedAction,
   claimNameClear,
-  claimNameRequest
+  claimNameRequest,
+  claimNameTransactionSubmitted
 } from '../../../modules/ens/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
@@ -36,12 +36,7 @@ export type Props = Omit<ModalProps, 'metadata'> & {
   onBuyWithCrypto: typeof openModal
   onClaimNameClear: typeof claimNameClear
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
-  onClaimTxSubmitted: (
-    subdomain: string,
-    address: string,
-    chainId: ChainId,
-    txHash: string
-  ) => unknown
+  onClaimTxSubmitted: typeof claimNameTransactionSubmitted
   onOpenFiatGateway: typeof openFiatGatewayWidgetRequest
 } & WithAuthorizedActionProps
 
