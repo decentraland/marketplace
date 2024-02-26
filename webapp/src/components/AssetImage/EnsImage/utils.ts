@@ -61,8 +61,15 @@ export async function drawImage(
   ctx.moveTo(borderRadius, 0)
   ctx.lineTo(width - borderRadius, 0)
   ctx.quadraticCurveTo(width, 0, width, borderRadius)
-  ctx.lineTo(width, height)
-  ctx.lineTo(0, height)
+  if (onlyLogo) {
+    ctx.lineTo(width, height - borderRadius)
+    ctx.quadraticCurveTo(width, height, width - borderRadius, height)
+    ctx.lineTo(borderRadius, height)
+    ctx.quadraticCurveTo(0, height, 0, height - borderRadius)
+  } else {
+    ctx.lineTo(width, height)
+    ctx.lineTo(0, height)
+  }
   ctx.lineTo(0, borderRadius)
   ctx.quadraticCurveTo(0, 0, borderRadius, 0)
   ctx.closePath()
