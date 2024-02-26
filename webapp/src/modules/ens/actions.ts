@@ -19,12 +19,16 @@ export const claimNameTransactionSubmitted = (
   address: string,
   chainId: ChainId,
   txHash: string,
+  fromToken: string,
+  fromChain: string,
   isCrossChain?: boolean
 ) =>
   action(CLAIM_NAME_TRANSACTION_SUBMITTED, {
     ...buildTransactionPayload(chainId, txHash, {
       subdomain,
       address,
+      fromToken,
+      fromChain,
       isCrossChain
     })
   })
@@ -62,12 +66,16 @@ export const claimNameCrossChainRequest = (
 export const claimNameCrossChainSuccess = (
   ens: ENS,
   name: string,
-  txHash: string
+  txHash: string,
+  fromToken: string,
+  fromChain: string
 ) =>
   action(CLAIM_NAME_CROSS_CHAIN_SUCCESS, {
     ens,
     name,
-    txHash
+    txHash,
+    fromToken,
+    fromChain
   })
 
 export const claimNameCrossChainFailure = (

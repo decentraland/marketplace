@@ -353,7 +353,6 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const handleBuyWithCard = useCallback(() => {
     if (onBuyWithCard) {
-      analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
       onBuyWithCard()
     }
   }, [onBuyWithCard])

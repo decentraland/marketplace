@@ -14,6 +14,7 @@ import { Navbar } from '../Navbar'
 import { Props } from './SuccessPage.types'
 import successAnimation from './successAnimation.json'
 import styles from './SuccessPage.module.css'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 
 const EXPLORER_URL = config.get('EXPLORER_URL', '')
 const BUILDER_URL = config.get('BUILDER_URL', '')

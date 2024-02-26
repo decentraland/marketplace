@@ -107,6 +107,16 @@ import {
   FetchCreatorsAccountSuccessAction
 } from '../account/actions'
 import { isUserRejectedTransactionError } from '../transaction/utils'
+import {
+  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+  CLAIM_NAME_SUCCESS,
+  ClaimNameCrossChainSuccessAction,
+  ClaimNameSuccessAction
+} from '../ens/actions'
+import {
+  SET_PROFILE_AVATAR_ALIAS_SUCCESS,
+  SetProfileAvatarAliasSuccessAction
+} from 'decentraland-dapps/dist/modules/profile'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -305,6 +315,40 @@ track<BuyItemCrossChainSuccessAction>(
       price: Number(ethers.utils.formatEther(item.price)),
       data: item.data,
       txHash
+    }
+  }
+)
+
+track<ClaimNameSuccessAction>(
+  CLAIM_NAME_SUCCESS,
+  events.BUY_NAME_SUCCESS,
+  ({ payload }) => ({
+    name: payload.ens.name,
+    payment_method: 'crypto',
+    crossChain: false,
+    txHash: payload.txHash
+  })
+)
+
+track<SetProfileAvatarAliasSuccessAction>(
+  SET_PROFILE_AVATAR_ALIAS_SUCCESS,
+  events.SET_AVATAR_NAME,
+  ({ payload }) => ({
+    alias: payload.alias
+  })
+)
+
+track<ClaimNameCrossChainSuccessAction>(
+  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+  events.BUY_NAME_SUCCESS,
+  ({ payload }) => {
+    return {
+      name: payload.ens.name,
+      payment_method: 'crypto',
+      crossChain: true,
+      fromToken: payload.fromToken,
+      fromChain: payload.fromChain,
+      txHash: payload.txHash
     }
   }
 )

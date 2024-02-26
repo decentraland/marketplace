@@ -58,7 +58,7 @@ export function* ensSaga() {
     const data = action.payload[TRANSACTION_ACTION_FLAG]
     const {
       hash,
-      payload: { subdomain, address, isCrossChain }
+      payload: { subdomain, address, fromToken, fromChain, isCrossChain }
     } = data
 
     const from = address
@@ -89,7 +89,15 @@ export function* ensSaga() {
         }
 
         if (isCrossChain) {
-          yield put(claimNameCrossChainSuccess(ens, subdomain, hash))
+          yield put(
+            claimNameCrossChainSuccess(
+              ens,
+              subdomain,
+              hash,
+              fromToken,
+              fromChain
+            )
+          )
         } else {
           yield put(claimNameSuccess(ens, subdomain, hash))
         }
@@ -125,7 +133,9 @@ export function* ensSaga() {
           name,
           wallet.address,
           wallet.chainId,
-          transaction.hash
+          transaction.hash,
+          'mana',
+          'ethereum'
         )
       )
     } catch (error) {
@@ -165,6 +175,8 @@ export function* ensSaga() {
             wallet.address,
             chainId,
             txRespose.transactionHash,
+            route.route.params.fromToken,
+            route.route.params.fromChain,
             true
           )
         )
