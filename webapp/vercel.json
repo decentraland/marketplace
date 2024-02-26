@@ -12,8 +12,8 @@
   },
   "rewrites": [
     {
-      "source": "/auth",
-      "destination": "https://decentraland.zone/auth"
+      "source": "/auth/:match*",
+      "destination": "https://decentraland.zone/auth/:match*"
     }
   ]
 }
