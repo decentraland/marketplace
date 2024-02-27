@@ -56,11 +56,11 @@ const ChainAndTokenSelector = (props: Props) => {
         const balances = await marketplaceAPI.fetchWalletTokenBalances(
           currentChain,
           wallet.address
-        )
+          )
         setIsFetchingBalances(false)
         setBalances(
           balances.reduce((acc, balance) => {
-            acc[balance.contract_address] = balance
+            acc[balance.contract_ticker_symbol] = balance
             return acc
           }, {} as Record<string, Balance>)
         )
@@ -79,16 +79,8 @@ const ChainAndTokenSelector = (props: Props) => {
     )
     // this sortes the tokens by USD balance
     filtered?.sort((a, b) => {
-      // MATIC has a different address in the balances array than in the tokens array
-      let tokenBalanceAddressA = a.address.toLocaleLowerCase()
-      let tokenBalanceAddressB = b.address.toLocaleLowerCase()
-      if (a.name === 'MATIC') {
-        tokenBalanceAddressA = '0x0000000000000000000000000000000000001010'
-      }else if (b.name === 'MATIC') {
-        tokenBalanceAddressB = '0x0000000000000000000000000000000000001010'
-      }
-      const aQuote = balances[tokenBalanceAddressA]?.quote ?? '0'
-      const bQuote = balances[tokenBalanceAddressB]?.quote ?? '0'
+      const aQuote = balances[a.symbol]?.quote ?? '0'
+      const bQuote = balances[b.symbol]?.quote ?? '0'
       if (aQuote === bQuote) return 0
       return aQuote < bQuote ? 1 : -1
     })
@@ -126,10 +118,6 @@ const ChainAndTokenSelector = (props: Props) => {
             </div>
           ))}
           {filteredTokens?.map(token => {
-            let tokenBalanceAddress = token.address.toLocaleLowerCase()
-            if (token.name === 'MATIC') {
-              tokenBalanceAddress = '0x0000000000000000000000000000000000001010'
-            }
             return (
               <div
                 key={`${token.symbol}-${token.address}`}
@@ -144,20 +132,20 @@ const ChainAndTokenSelector = (props: Props) => {
                   </div>
                 </div>
                 <span className={styles.balance}>
-                  {!!balances[tokenBalanceAddress] ? (
+                  {!!balances[token.symbol] ? (
                     <>
                       {Number(
                         ethers.utils.formatUnits(
-                          balances[tokenBalanceAddress]
+                          balances[token.symbol]
                             .balance as string,
-                          balances[tokenBalanceAddress]
+                          balances[token.symbol]
                             .contract_decimals
                         )
                       ).toFixed(5)}{' '}
-                      {balances[tokenBalanceAddress].quote ? (
+                      {balances[token.symbol].quote ? (
                         <span className={styles.tokenName}>
                           $
-                          {balances[tokenBalanceAddress].quote.toLocaleString()}
+                          {balances[token.symbol].quote.toLocaleString()}
                         </span>
                       ) : null}
                     </>
