@@ -297,6 +297,7 @@ track<BuyItemCrossChainSuccessAction>(
     const {
       route: { route },
       item,
+      order,
       txHash
     } = payload
     return {
@@ -312,7 +313,7 @@ track<BuyItemCrossChainSuccessAction>(
       rarity: item.rarity,
       network: item.network,
       chainId: item.chainId,
-      price: Number(ethers.utils.formatEther(item.price)),
+      price: Number(ethers.utils.formatEther(order?.price ?? item.price)),
       data: item.data,
       txHash
     }
@@ -363,7 +364,8 @@ track<BuyItemCrossChainFailureAction>(
   ({ payload }) => {
     const {
       route: { route },
-      item
+      item,
+      price
     } = payload
     return {
       fromAmount: ethers.utils.formatUnits(
@@ -396,7 +398,7 @@ track<BuyItemCrossChainFailureAction>(
       rarity: item.rarity,
       network: item.network,
       chainId: item.chainId,
-      price: Number(ethers.utils.formatEther(item.price)),
+      price: Number(ethers.utils.formatEther(price)),
       data: item.data
     }
   }

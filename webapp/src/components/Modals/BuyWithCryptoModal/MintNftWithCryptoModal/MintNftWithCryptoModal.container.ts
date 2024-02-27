@@ -1,4 +1,3 @@
-import { Item } from '@dcl/schemas'
 import { Dispatch, bindActionCreators } from 'redux'
 import { Route } from 'decentraland-transactions/crossChain'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
@@ -43,7 +42,7 @@ const mapDispatch = (
     {
       onBuyItem: buyItemRequest,
       onBuyItemCrossChain: (route: Route) =>
-        buyItemCrossChainRequest(ownProps.metadata.item as Item, route),
+        buyItemCrossChainRequest(ownProps.metadata.item, route),
       onBuyWithCard: buyItemWithCardRequest
     },
     dispatch

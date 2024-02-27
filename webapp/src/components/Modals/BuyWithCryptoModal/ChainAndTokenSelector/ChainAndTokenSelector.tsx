@@ -79,8 +79,16 @@ const ChainAndTokenSelector = (props: Props) => {
     )
     // this sortes the tokens by USD balance
     filtered?.sort((a, b) => {
-      const aQuote = balances[a.address.toLowerCase()]?.quote ?? '0'
-      const bQuote = balances[b.address.toLowerCase()]?.quote ?? '0'
+      // MATIC has a different address in the balances array than in the tokens array
+      let tokenBalanceAddressA = a.address.toLocaleLowerCase()
+      let tokenBalanceAddressB = b.address.toLocaleLowerCase()
+      if (a.name === 'MATIC') {
+        tokenBalanceAddressA = '0x0000000000000000000000000000000000001010'
+      }else if (b.name === 'MATIC') {
+        tokenBalanceAddressB = '0x0000000000000000000000000000000000001010'
+      }
+      const aQuote = balances[tokenBalanceAddressA]?.quote ?? '0'
+      const bQuote = balances[tokenBalanceAddressB]?.quote ?? '0'
       if (aQuote === bQuote) return 0
       return aQuote < bQuote ? 1 : -1
     })
@@ -117,45 +125,50 @@ const ChainAndTokenSelector = (props: Props) => {
               <span>{chain.networkName}</span>
             </div>
           ))}
-          {filteredTokens?.map(token => (
-            <div
-              key={`${token.symbol}-${token.address}`}
-              className={styles.rowItem}
-              onClick={() => onSelect(token)}
-            >
-              <div className={styles.tokenDataContainer}>
-                <img src={token.logoURI} alt={token.symbol} />
-                <div className={styles.tokenNameAndSymbolContainer}>
-                  <span>{token.symbol}</span>
-                  <span className={styles.tokenName}>{token.name}</span>
+          {filteredTokens?.map(token => {
+            let tokenBalanceAddress = token.address.toLocaleLowerCase()
+            if (token.name === 'MATIC') {
+              tokenBalanceAddress = '0x0000000000000000000000000000000000001010'
+            }
+            const balance = balances[tokenBalanceAddress]
+            return (
+              <div
+                key={`${token.symbol}-${token.address}`}
+                className={styles.rowItem}
+                onClick={() => onSelect(token)}
+              >
+                <div className={styles.tokenDataContainer}>
+                  <img src={token.logoURI} alt={token.symbol} />
+                  <div className={styles.tokenNameAndSymbolContainer}>
+                    <span>{token.symbol}</span>
+                    <span className={styles.tokenName}>{token.name}</span>
+                  </div>
                 </div>
+                <span className={styles.balance}>
+                  {!!balances[tokenBalanceAddress] ? (
+                    <>
+                      {Number(
+                        ethers.utils.formatUnits(
+                          balances[tokenBalanceAddress]
+                            .balance as string,
+                          balances[tokenBalanceAddress]
+                            .contract_decimals
+                        )
+                      ).toFixed(5)}{' '}
+                      {balances[tokenBalanceAddress].quote ? (
+                        <span className={styles.tokenName}>
+                          $
+                          {balances[tokenBalanceAddress].quote.toLocaleString()}
+                        </span>
+                      ) : null}
+                    </>
+                  ) : (
+                    0
+                  )}
+                </span>
               </div>
-              <span className={styles.balance}>
-                {!!balances[token.address.toLocaleLowerCase()] ? (
-                  <>
-                    {Number(
-                      ethers.utils.formatUnits(
-                        balances[token.address.toLocaleLowerCase()]
-                          .balance as string,
-                        balances[token.address.toLocaleLowerCase()]
-                          .contract_decimals
-                      )
-                    ).toLocaleString()}{' '}
-                    {balances[token.address.toLocaleLowerCase()].quote ? (
-                      <span className={styles.tokenName}>
-                        $
-                        {balances[
-                          token.address.toLocaleLowerCase()
-                        ].quote.toLocaleString()}
-                      </span>
-                    ) : null}
-                  </>
-                ) : (
-                  0
-                )}
-              </span>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 

@@ -1,4 +1,4 @@
-import { ChainId, Item, ItemFilters } from '@dcl/schemas'
+import { ChainId, Item, ItemFilters, Order } from '@dcl/schemas'
 import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   buildTransactionWithFromPayload,
@@ -118,33 +118,36 @@ export const BUY_ITEM_CROSS_CHAIN_REQUEST = '[Request] Buy item cross-chain'
 export const BUY_ITEM_CROSS_CHAIN_SUCCESS = '[Success] Buy item cross-chain'
 export const BUY_ITEM_CROSS_CHAIN_FAILURE = '[Failure] Buy item cross-chain'
 
-export const buyItemCrossChainRequest = (item: Item, route: Route) =>
-  action(BUY_ITEM_CROSS_CHAIN_REQUEST, { item, route })
+export const buyItemCrossChainRequest = (item: Item, route: Route, order?: Order) =>
+  action(BUY_ITEM_CROSS_CHAIN_REQUEST, { item, route, order })
 
 export const buyItemCrossChainSuccess = (
   route: Route,
   chainId: ChainId,
   txHash: string,
-  item: Item
+  item: Item,
+  order?: Order
 ) =>
   action(BUY_ITEM_CROSS_CHAIN_SUCCESS, {
     route,
     item,
     txHash,
+    order,
     ...buildTransactionWithReceiptPayload(chainId, txHash, {
       itemId: item.itemId,
       contractAddress: item.contractAddress,
       network: item.network,
       name: getAssetName(item),
-      price: formatWeiMANA(item.price)
+      price: formatWeiMANA(order?.price ?? item.price)
     })
   })
 
 export const buyItemCrossChainFailure = (
   route: Route,
   item: Item,
+  price: string,
   error: string
-) => action(BUY_ITEM_CROSS_CHAIN_FAILURE, { route, item, error })
+) => action(BUY_ITEM_CROSS_CHAIN_FAILURE, { route, item, price, error })
 
 export type BuyItemCrossChainRequestAction = ReturnType<
   typeof buyItemCrossChainRequest
