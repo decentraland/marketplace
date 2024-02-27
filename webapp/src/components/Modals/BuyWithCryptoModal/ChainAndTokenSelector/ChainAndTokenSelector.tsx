@@ -130,7 +130,6 @@ const ChainAndTokenSelector = (props: Props) => {
             if (token.name === 'MATIC') {
               tokenBalanceAddress = '0x0000000000000000000000000000000000001010'
             }
-            const balance = balances[tokenBalanceAddress].balance
             return (
               <div
                 key={`${token.symbol}-${token.address}`}
@@ -149,7 +148,8 @@ const ChainAndTokenSelector = (props: Props) => {
                     <>
                       {Number(
                         ethers.utils.formatUnits(
-                          balance as string,
+                          balances[tokenBalanceAddress]
+                            .balance as string,
                           balances[tokenBalanceAddress]
                             .contract_decimals
                         )
