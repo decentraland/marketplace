@@ -289,7 +289,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   }
 
   function* handleBuyItemCrossChain(action: BuyItemCrossChainRequestAction) {
-    const { item, route } = action.payload
+    const { item, route, order } = action.payload
     try {
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
 
@@ -314,7 +314,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
             route,
             item.chainId,
             txRespose.transactionHash,
-            item
+            item,
+            order
           )
         )
       }
@@ -323,6 +324,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         buyItemCrossChainFailure(
           route,
           item,
+          order?.price || item.price,
           isErrorWithMessage(error) ? error.message : t('global.unknown_error')
         )
       )

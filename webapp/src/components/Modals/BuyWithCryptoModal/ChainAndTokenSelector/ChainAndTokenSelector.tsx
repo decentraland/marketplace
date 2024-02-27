@@ -56,11 +56,11 @@ const ChainAndTokenSelector = (props: Props) => {
         const balances = await marketplaceAPI.fetchWalletTokenBalances(
           currentChain,
           wallet.address
-        )
+          )
         setIsFetchingBalances(false)
         setBalances(
           balances.reduce((acc, balance) => {
-            acc[balance.contract_address] = balance
+            acc[balance.contract_ticker_symbol] = balance
             return acc
           }, {} as Record<string, Balance>)
         )
@@ -79,8 +79,8 @@ const ChainAndTokenSelector = (props: Props) => {
     )
     // this sortes the tokens by USD balance
     filtered?.sort((a, b) => {
-      const aQuote = balances[a.address.toLowerCase()]?.quote ?? '0'
-      const bQuote = balances[b.address.toLowerCase()]?.quote ?? '0'
+      const aQuote = balances[a.symbol]?.quote ?? '0'
+      const bQuote = balances[b.symbol]?.quote ?? '0'
       if (aQuote === bQuote) return 0
       return aQuote < bQuote ? 1 : -1
     })
@@ -117,45 +117,45 @@ const ChainAndTokenSelector = (props: Props) => {
               <span>{chain.networkName}</span>
             </div>
           ))}
-          {filteredTokens?.map(token => (
-            <div
-              key={`${token.symbol}-${token.address}`}
-              className={styles.rowItem}
-              onClick={() => onSelect(token)}
-            >
-              <div className={styles.tokenDataContainer}>
-                <img src={token.logoURI} alt={token.symbol} />
-                <div className={styles.tokenNameAndSymbolContainer}>
-                  <span>{token.symbol}</span>
-                  <span className={styles.tokenName}>{token.name}</span>
+          {filteredTokens?.map(token => {
+            return (
+              <div
+                key={`${token.symbol}-${token.address}`}
+                className={styles.rowItem}
+                onClick={() => onSelect(token)}
+              >
+                <div className={styles.tokenDataContainer}>
+                  <img src={token.logoURI} alt={token.symbol} />
+                  <div className={styles.tokenNameAndSymbolContainer}>
+                    <span>{token.symbol}</span>
+                    <span className={styles.tokenName}>{token.name}</span>
+                  </div>
                 </div>
+                <span className={styles.balance}>
+                  {!!balances[token.symbol] ? (
+                    <>
+                      {Number(
+                        ethers.utils.formatUnits(
+                          balances[token.symbol]
+                            .balance as string,
+                          balances[token.symbol]
+                            .contract_decimals
+                        )
+                      ).toFixed(5)}{' '}
+                      {balances[token.symbol].quote ? (
+                        <span className={styles.tokenName}>
+                          $
+                          {balances[token.symbol].quote.toLocaleString()}
+                        </span>
+                      ) : null}
+                    </>
+                  ) : (
+                    0
+                  )}
+                </span>
               </div>
-              <span className={styles.balance}>
-                {!!balances[token.address.toLocaleLowerCase()] ? (
-                  <>
-                    {Number(
-                      ethers.utils.formatUnits(
-                        balances[token.address.toLocaleLowerCase()]
-                          .balance as string,
-                        balances[token.address.toLocaleLowerCase()]
-                          .contract_decimals
-                      )
-                    ).toLocaleString()}{' '}
-                    {balances[token.address.toLocaleLowerCase()].quote ? (
-                      <span className={styles.tokenName}>
-                        $
-                        {balances[
-                          token.address.toLocaleLowerCase()
-                        ].quote.toLocaleString()}
-                      </span>
-                    ) : null}
-                  </>
-                ) : (
-                  0
-                )}
-              </span>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 

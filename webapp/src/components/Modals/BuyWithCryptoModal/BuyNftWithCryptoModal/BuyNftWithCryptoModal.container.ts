@@ -39,7 +39,8 @@ const mapDispatch = (
       onExecuteOrderCrossChain: (route: Route) =>
         buyItemCrossChainRequest(
           (ownProps.metadata.nft as unknown) as Item,
-          route
+          route,
+          ownProps.metadata.order
         ),
       onExecuteOrderWithCard: executeOrderWithCardRequest
     },
