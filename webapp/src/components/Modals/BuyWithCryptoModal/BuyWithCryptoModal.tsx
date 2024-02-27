@@ -225,7 +225,10 @@ export const BuyWithCryptoModal = (props: Props) => {
           manaTokenOnSelectedChain || getMANAToken(selectedChain)
         ) // if it's not in the providerTokens, create the object manually with the right conectract address
       } catch (error) {
-        setSelectedToken(providerTokens[0])
+        const selectedChainTokens = providerTokens.filter(
+          t => t.chainId === selectedChain.toString()
+        )
+        setSelectedToken(selectedChainTokens[0])
       }
     }
   }, [
@@ -796,7 +799,9 @@ export const BuyWithCryptoModal = (props: Props) => {
                   })}
                 </span>
               ) : null}
-              {!canBuyAsset && !isFetchingBalance && !isFetchingRoute ? (
+              {canBuyAsset === false &&
+              !isFetchingBalance &&
+              !isFetchingRoute ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
                     token: insufficientToken?.symbol || 'MANA'
