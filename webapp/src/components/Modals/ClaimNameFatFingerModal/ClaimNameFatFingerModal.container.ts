@@ -14,19 +14,11 @@ import {
 import { RootState } from '../../../modules/reducer'
 import {
   getClaimNameStatus,
-  getLoading,
   isWaitingTxClaimName,
   getErrorMessage
 } from '../../../modules/ens/selectors'
-import {
-  claimNameRequest,
-  CLAIM_NAME_REQUEST,
-  claimNameClear,
-  claimNameTransactionSubmitted
-} from '../../../modules/ens/actions'
-import { Contract } from '../../../modules/vendor/services'
-import { getContract } from '../../../modules/contract/selectors'
-import { getMana, getWallet } from '../../../modules/wallet/selectors'
+import { claimNameTransactionSubmitted } from '../../../modules/ens/actions'
+import { getWallet } from '../../../modules/wallet/selectors'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -35,18 +27,11 @@ import {
 import ClaimNameFatFingerModal from './ClaimNameFatFingerModal'
 
 const mapState = (state: RootState): MapState => ({
-  currentMana: getMana(state, Network.ETHEREUM),
-  isLoading:
-    isLoadingType(getLoading(state), CLAIM_NAME_REQUEST) ||
-    isWaitingTxClaimName(state),
-  address: getAddress(state),
-  getContract: (query: Partial<Contract>) => getContract(state, query),
+  isClaimingName: isWaitingTxClaimName(state),
   wallet: getWallet(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onClaim: name => dispatch(claimNameRequest(name)),
-  onClaimNameClear: () => dispatch(claimNameClear()),
   onBuyWithCrypto: (name: string) =>
     dispatch(openModal('MintNameWithCryptoModal', { name })),
   onOpenFiatGateway: (

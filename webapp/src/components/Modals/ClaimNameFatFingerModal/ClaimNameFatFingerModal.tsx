@@ -32,7 +32,7 @@ const ClaimNameFatFingerModal = ({
   name: modalName,
   wallet,
   metadata: { name: ENSName, autoComplete },
-  isLoading: isClaiming,
+  isClaimingName,
   onBuyWithCrypto,
   onClose,
   onClaimTxSubmitted,
@@ -41,6 +41,7 @@ const ClaimNameFatFingerModal = ({
   const analytics = useMemo(() => getAnalytics(), [])
   const inputRef = useRef<HTMLInputElement>(null)
   const [isLoadingFIATWidget, setIsLoadingFIATWidget] = useState(false)
+  const isLoading = isClaimingName || isLoadingFIATWidget
 
   useEffect(() => {
     if (inputRef.current) {
@@ -113,7 +114,7 @@ const ClaimNameFatFingerModal = ({
               onClaimTxSubmitted(
                 ENSName,
                 wallet.address,
-                wallet.chainId,
+                isDev ? ChainId.ETHEREUM_SEPOLIA : ChainId.ETHEREUM_MAINNET,
                 options.data.tx_id as string
               )
             }
@@ -131,11 +132,6 @@ const ClaimNameFatFingerModal = ({
       )
     }
   }, [wallet, ENSName, analytics, onOpenFiatGateway, onClaimTxSubmitted])
-
-  const isLoading = useMemo(() => isClaiming || isLoadingFIATWidget, [
-    isClaiming,
-    isLoadingFIATWidget
-  ])
 
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value
