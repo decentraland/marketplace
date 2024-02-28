@@ -92,13 +92,12 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
   return (
     <BuyWithCryptoModal
       price={item.price}
-      isBuyingAsset={isBuyingItemNatively}
+      isBuyingAsset={isBuyingItemNatively || isBuyingItemCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyWithCard={onBuyWithCard}
       onBuyCrossChain={onBuyItemCrossChain}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}
-      isBuyingCrossChain={isBuyingItemCrossChain}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset: item }}
       name={name}

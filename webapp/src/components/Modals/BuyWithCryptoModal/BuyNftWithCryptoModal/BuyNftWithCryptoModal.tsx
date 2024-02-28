@@ -94,8 +94,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   return (
     <BuyWithCryptoModal
       price={order.price}
-      isBuyingAsset={isExecutingOrder}
-      isBuyingCrossChain={isExecutingOrderCrossChain}
+      isBuyingAsset={isExecutingOrder || isExecutingOrderCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyWithCard={onBuyWithCard}
       onBuyCrossChain={onExecuteOrderCrossChain}
