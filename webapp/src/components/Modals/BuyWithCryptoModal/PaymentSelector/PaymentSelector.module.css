@@ -16,17 +16,21 @@
 }
 
 .dropdownDisabled {
-  cursor: default;
+  cursor: not-allowed;
+  background: #43404acd;
+}
+
+.dropdownEnabled {
+  background: #43404a;
+  cursor: pointer;
 }
 
 .tokenAndChainSelector {
   display: flex;
   align-items: center;
-  background: #43404a;
   margin-top: 8px;
   border-radius: 6px;
   padding: 12px;
-  cursor: pointer;
 }
 
 .tokenAndChainSelector :global(.chevron) {

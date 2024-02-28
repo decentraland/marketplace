@@ -11,15 +11,17 @@ import { ManaToFiat } from '../../../ManaToFiat'
 import { formatPrice } from '../utils'
 import { TokenIcon } from '../TokenIcon'
 import { GasCostValues, RouteFeeCost } from '../hooks'
+import {
+  CHAIN_SELECTOR_DATA_TEST_ID,
+  PAY_WITH_DATA_TEST_ID,
+  TOKEN_SELECTOR_DATA_TEST_ID
+} from './constants'
 import styles from './PaymentSelector.module.css'
-
-export const PAY_WITH_DATA_TEST_ID = 'pay-with-container'
-export const CHAIN_SELECTOR_DATA_TEST_ID = 'chain-selector'
-export const TOKEN_SELECTOR_DATA_TEST_ID = 'token-selector'
 
 type Props = {
   price: string
   shouldUseCrossChainProvider: boolean
+  isBuyingAsset: boolean
   amountInSelectedToken: string | undefined
   route: Route | undefined
   routeFeeCost: RouteFeeCost | undefined
@@ -43,6 +45,7 @@ const PaymentSelector = (props: Props) => {
     route,
     gasCost,
     isFetchingGasCost,
+    isBuyingAsset,
     routeFeeCost,
     selectedToken,
     selectedChain,
@@ -98,10 +101,10 @@ const PaymentSelector = (props: Props) => {
             <div
               className={classNames(
                 styles.tokenAndChainSelector,
-                !canSelectChainAndToken && styles.dropdownDisabled
+                isBuyingAsset ? styles.dropdownDisabled : styles.dropdownEnabled
               )}
               data-testid={CHAIN_SELECTOR_DATA_TEST_ID}
-              onClick={onShowChainSelector}
+              onClick={!isBuyingAsset ? onShowChainSelector : undefined}
             >
               <img
                 src={selectedProviderChain?.nativeCurrency.icon}
@@ -111,7 +114,7 @@ const PaymentSelector = (props: Props) => {
                 {' '}
                 {selectedProviderChain?.networkName}{' '}
               </span>
-              <Icon name="chevron down" />
+              {!isBuyingAsset && <Icon name="chevron down" />}
             </div>
           </div>
           <div className={styles.tokenDropdownContainer}>
@@ -119,10 +122,10 @@ const PaymentSelector = (props: Props) => {
               className={classNames(
                 styles.tokenAndChainSelector,
                 styles.tokenDropdown,
-                !canSelectChainAndToken && styles.dropdownDisabled
+                isBuyingAsset ? styles.dropdownDisabled : styles.dropdownEnabled
               )}
               data-testid={TOKEN_SELECTOR_DATA_TEST_ID}
-              onClick={onShowTokenSelector}
+              onClick={!isBuyingAsset ? onShowTokenSelector : undefined}
             >
               <img src={selectedToken.logoURI} alt={selectedToken.name} />
               <span className={styles.tokenAndChainSelectorName}>
@@ -131,7 +134,7 @@ const PaymentSelector = (props: Props) => {
               <div className={styles.balanceContainer}>
                 {t('buy_with_crypto_modal.balance')}: {renderTokenBalance()}
               </div>
-              {canSelectChainAndToken && <Icon name="chevron down" />}
+              {!isBuyingAsset && <Icon name="chevron down" />}
             </div>
           </div>
         </div>
