@@ -401,10 +401,11 @@ export const BuyWithCryptoModal = (props: Props) => {
   ])
 
   const renderBuyNowButton = useCallback(() => {
-    let onClick =
-      selectedToken?.symbol === 'MANA' && !route
-        ? onBuyNatively
-        : handleCrossChainBuy
+    // if L1 asset and paying with ETH MANA
+    // or if L2 asset and paying with MATIC MANA => native buy
+    const onClick = shouldUseCrossChainProvider
+      ? handleCrossChainBuy
+      : onBuyNatively
 
     return (
       <>
@@ -442,7 +443,8 @@ export const BuyWithCryptoModal = (props: Props) => {
     isLoadingAuthorization,
     isFetchingBalance,
     onBuyNatively,
-    handleCrossChainBuy
+    handleCrossChainBuy,
+    shouldUseCrossChainProvider
   ])
 
   const renderMainActionButton = useCallback(() => {
