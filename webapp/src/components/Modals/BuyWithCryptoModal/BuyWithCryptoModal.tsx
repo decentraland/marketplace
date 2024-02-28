@@ -403,7 +403,8 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const renderBuyNowButton = useCallback(() => {
     let onClick =
-      selectedToken?.symbol === 'MANA' && !route
+      selectedToken?.symbol === 'MANA' &&
+      selectedChain === ChainId.MATIC_MAINNET
         ? onBuyNatively
         : handleCrossChainBuy
 
