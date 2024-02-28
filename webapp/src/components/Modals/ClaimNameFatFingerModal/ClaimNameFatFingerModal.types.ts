@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import {
   OpenFiatGatewayWidgetRequestAction,
   openFiatGatewayWidgetRequest
@@ -27,7 +26,7 @@ export type Props = Omit<ModalProps, 'metadata'> & {
   onBuyWithCrypto: typeof openModal
   onClaimTxSubmitted: typeof claimNameTransactionSubmitted
   onOpenFiatGateway: typeof openFiatGatewayWidgetRequest
-} & WithAuthorizedActionProps
+}
 
 export type MapState = Pick<Props, 'isClaimingName' | 'wallet'>
 export type MapDispatchProps = Pick<

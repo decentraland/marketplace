@@ -1,9 +1,5 @@
 import { connect } from 'react-redux'
-import { ChainId, Network } from '@dcl/schemas'
-import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
-import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { ChainId } from '@dcl/schemas'
 import { openFiatGatewayWidgetRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import {
@@ -12,11 +8,7 @@ import {
   FiatGatewayListeners
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import { RootState } from '../../../modules/reducer'
-import {
-  getClaimNameStatus,
-  isWaitingTxClaimName,
-  getErrorMessage
-} from '../../../modules/ens/selectors'
+import { isWaitingTxClaimName } from '../../../modules/ens/selectors'
 import { claimNameTransactionSubmitted } from '../../../modules/ens/actions'
 import { getWallet } from '../../../modules/wallet/selectors'
 import {
@@ -48,19 +40,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
     dispatch(claimNameTransactionSubmitted(subdomain, address, chainId, txHash))
 })
 
-export default connect(
-  mapState,
-  mapDispatch
-)(
-  withAuthorizedAction(
-    ClaimNameFatFingerModal,
-    AuthorizedAction.CLAIM_NAME,
-    {
-      title_action:
-        'names_page.claim_name_fat_finger_modal.authorization.title_action',
-      action: 'names_page.claim_name_fat_finger_modal.authorization.action'
-    },
-    getClaimNameStatus,
-    getErrorMessage
-  )
-)
+export default connect(mapState, mapDispatch)(ClaimNameFatFingerModal)

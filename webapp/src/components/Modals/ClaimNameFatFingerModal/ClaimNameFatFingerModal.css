@@ -218,13 +218,13 @@
   margin-left: 12px;
 }
 
-.ClaimNameFatFingerModal .modalActions {
+.ClaimNameFatFingerModal .actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.ClaimNameFatFingerModal .modalActions.actions .ui.button + .ui.button {
+.ClaimNameFatFingerModal .actions .ui.button + .ui.button {
   margin: unset;
 }
 
@@ -246,10 +246,6 @@
 
   .ClaimNameFatFingerModal .baseGradient {
     width: 100%;
-  }
-
-  .ClaimNameFatFingerModal.ui.modal > .ui.form > .actions:not(.modalActions) {
-    flex-direction: column;
   }
 
   .ClaimNameFatFingerModal.ui.modal > .ui.form > .actions {

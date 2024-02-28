@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { Env } from '@dcl/ui-env'
-import { ChainId, Network } from '@dcl/schemas'
+import { ChainId } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { ModalNavigation, Field, Icon } from 'decentraland-ui'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
@@ -56,7 +56,6 @@ const ClaimNameFatFingerModal = ({
       name: ENSName,
       payment_method: 'fiat'
     })
-
     setIsLoadingFIATWidget(true)
     const wertURL = config.get('WERT_URL')
     if (wallet) {
@@ -76,7 +75,7 @@ const ClaimNameFatFingerModal = ({
         commodity: isDev ? 'TTS' : 'MANA',
         commodity_amount: Number(PRICE),
         sc_address: config.get(
-          isDev && wallet.chainId === ChainId.ETHEREUM_SEPOLIA
+          isDev
             ? 'CONTROLLER_V2_CONTRACT_ADDRESS_FIAT'
             : 'CONTROLLER_V2_CONTRACT_ADDRESS'
         ),
@@ -183,18 +182,19 @@ const ClaimNameFatFingerModal = ({
             />
           }
         />
-        <div className="capsWarning ">
+        <div className="capsWarning">
           <Icon name="info circle" />
           {t('names_page.claim_name_fat_finger_modal.caps_warning')}
         </div>
       </Modal.Content>
-      <Modal.Actions className={'modalActions'}>
+      <Modal.Actions>
         <BuyWithCryptoButton
-          assetNetwork={Network.ETHEREUM}
+          data-testid={CRYPTO_PAYMENT_METHOD_DATA_TESTID}
           onClick={handleOnBuyWithCrypto}
           disabled={isLoading || areNamesDifferent}
         />
         <BuyWithCardButton
+          data-testid={FIAT_PAYMENT_METHOD_DATA_TESTID}
           onClick={handleClaimWithCard}
           disabled={isLoading || isLoadingFIATWidget || areNamesDifferent}
         />
