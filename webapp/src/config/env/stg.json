@@ -43,7 +43,7 @@
   "PROFILE_URL": "https://decentraland.today/profile",
   "SUBGRAPH_WORKER": "https://subgraph.decentraland.today",
   "SENTRY_DSN": "https://1dc401149e1c819b8477565c9cdd9b70@o4504361728212992.ingest.sentry.io/4505743351676928",
-  "SQUID_API_URL": "https://v2.api.squidrouter.com",
+  "SQUID_API_URL": "https://apiplus.squidrouter.com/api",
   "DCL_LISTS_SERVER": "https://dcl-lists.decentraland.org",
   "AUTH_URL": "/auth",
   "WERT_URL": "https://widget.wert.io",
