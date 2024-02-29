@@ -108,17 +108,6 @@ export const getIsMarketplaceServerEnabled = (state: RootState) => {
   return false
 }
 
-export const getIsClaimingNamesWithFiatEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.CLAIM_NAMES_WITH_FIAT
-    )
-  }
-  return false
-}
-
 export const getIsEnsAddressEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(
@@ -128,17 +117,6 @@ export const getIsEnsAddressEnabled = (state: RootState) => {
     )
   }
   return false
-}
-
-export const getIsMintingNamesCrossChainEnabled = (state: RootState) => {
-  return (
-    hasLoadedInitialFlags(state) &&
-    getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.MINTING_NAMES_WITH_AXELAR
-    )
-  )
 }
 
 export const getIsChainSelectorEnabled = (state: RootState) => {

@@ -1,14 +1,16 @@
 import { ethers } from 'ethers'
+import { ChainId } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { fireEvent, waitFor } from '@testing-library/react'
+import { fireEvent, cleanup } from '@testing-library/react'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { DCLController__factory } from '../../../contracts/factories/DCLController__factory'
 import { renderWithProviders } from '../../../utils/test'
 import ClaimNameFatFingerModal, {
-  CRYPTO_PAYMENT_METHOD_DATA_TESTID
+  CRYPTO_PAYMENT_METHOD_DATA_TESTID,
+  FIAT_PAYMENT_METHOD_DATA_TESTID
 } from './ClaimNameFatFingerModal'
+import { Props } from './ClaimNameFatFingerModal.types'
 
 jest.mock('../../../modules/vendor/decentraland/marketplace/api')
 jest.mock('../../../contracts/factories/DCLController__factory')
@@ -23,62 +25,45 @@ const signerMock = {
   _signTypedData: jest.fn()
 }
 
-describe('ClaimNameFatFingerModal', () => {
-  let currentMana: number
-  const name = 'aNAME'
-  const onCloseMock = jest.fn()
-  const onClaimMock = jest.fn()
-  const onBuyWithCryptoMock = jest.fn()
-  const onClaimNameClearMock = jest.fn()
-  const onAuthorizedActionMock = jest.fn()
-  const onClaimTxSubmittedMock = jest.fn()
-  const baseProps = {
-    currentMana: 0,
-    isClaimingNamesCrossChainEnabled: false,
-    onBuyWithCrypto: onBuyWithCryptoMock,
-    identity: {} as AuthIdentity,
-    onClaimTxSubmitted: onClaimTxSubmittedMock,
-    isClaimingNamesWithFiatEnabled: true,
-    metadata: { name },
-    isLoading: false,
-    name: 'Modal',
-    onClose: onCloseMock,
-    getContract: jest.fn(),
-    onClaim: onClaimMock,
-    onClaimNameClear: onClaimNameClearMock,
-    onAuthorizedAction: onAuthorizedActionMock,
-    onCloseAuthorization: jest.fn(),
-    onOpenFiatGateway: jest.fn(),
-    wallet: {} as Wallet,
-    isLoadingAuthorization: false
-  }
+const renderClaimFatFingerModal = (props: Partial<Props> = {}) =>
+  renderWithProviders(
+    <ClaimNameFatFingerModal
+      onBuyWithCrypto={jest.fn()}
+      onClaimTxSubmitted={jest.fn()}
+      metadata={{ name: 'aNAME' }}
+      isClaimingName={false}
+      name={'Modal'}
+      onClose={jest.fn()}
+      onOpenFiatGateway={jest.fn()}
+      wallet={{} as Wallet}
+      {...props}
+    />
+  )
 
+describe('ClaimNameFatFingerModal', () => {
   afterEach(() => {
     jest.clearAllMocks()
+    cleanup()
   })
 
   describe('when there is no name typed', () => {
-    it('should have the confirm button disabled', () => {
-      const { getByText } = renderWithProviders(
-        <ClaimNameFatFingerModal {...baseProps} />
-      )
+    it('should have the buy with crypto and card buttons disabled', () => {
+      const { getByTestId } = renderClaimFatFingerModal()
 
-      const claimButton = getByText(t('global.confirm'))
-      expect(claimButton).toBeDisabled()
+      expect(getByTestId(CRYPTO_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
+      expect(getByTestId(FIAT_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
     })
   })
 
   describe('when not typing the same name that is given by props', () => {
-    it('should have the confirm button disabled and show error message', () => {
-      const { getByRole, getByText } = renderWithProviders(
-        <ClaimNameFatFingerModal {...baseProps} />
-      )
+    it('should have the confirm button disabled and show and error message', () => {
+      const { getByRole, getByText, getByTestId } = renderClaimFatFingerModal()
 
       const inputField = getByRole('textbox')
       fireEvent.change(inputField, { target: { value: 'wrongName' } })
 
-      const claimButton = getByText(t('global.confirm'))
-      expect(claimButton).toBeDisabled()
+      expect(getByTestId(CRYPTO_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
+      expect(getByTestId(FIAT_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
 
       const errorMessage = getByText(
         t('names_page.claim_name_fat_finger_modal.names_different')
@@ -88,144 +73,108 @@ describe('ClaimNameFatFingerModal', () => {
   })
 
   describe('when typing the correct name', () => {
-    describe('and has enough MANA balance to pay', () => {
-      beforeEach(() => {
-        currentMana = 100
-      })
-      it('should call onClaim when claim button is clicked', async () => {
-        const { getByRole, getByText } = renderWithProviders(
-          <ClaimNameFatFingerModal
-            {...baseProps}
-            currentMana={currentMana}
-            getContract={jest.fn().mockResolvedValue({
-              address: '0x0' // mana contract mock
-            })}
-            onAuthorizedAction={jest
-              .fn()
-              .mockImplementation(({ onAuthorized }: any) => {
-                onAuthorized()
-              })}
-          />
-        )
+    let renderedModal: ReturnType<typeof renderClaimFatFingerModal>
+    const name = 'aName'
+    const address = '0x1'
+    let onBuyWithCrypto: jest.Mock
+    let onOpenFiatGateway: jest.Mock
+    let onClaimTxSubmitted: jest.Mock
 
-        const inputField = getByRole('textbox')
-        await fireEvent.change(inputField, { target: { value: name } })
-        const claimButton = getByText(t('global.confirm'))
-        await waitFor(() => {
-          expect(claimButton).not.toBeDisabled()
-        })
-        fireEvent.click(claimButton)
-        expect(onClaimMock).toHaveBeenCalledWith(name)
+    beforeEach(() => {
+      onBuyWithCrypto = jest.fn()
+      onOpenFiatGateway = jest.fn()
+      onClaimTxSubmitted = jest.fn()
+      renderedModal = renderClaimFatFingerModal({
+        metadata: { name },
+        wallet: {
+          address,
+          chainId: ChainId.ETHEREUM_SEPOLIA
+        } as Wallet,
+        onBuyWithCrypto,
+        onOpenFiatGateway,
+        onClaimTxSubmitted
+      })
+      const inputField = renderedModal.getByRole('textbox')
+      fireEvent.change(inputField, { target: { value: name } })
+    })
+
+    describe('and clicking the buy with crypto button', () => {
+      beforeEach(() => {
+        const { getByTestId } = renderedModal
+        fireEvent.click(getByTestId(CRYPTO_PAYMENT_METHOD_DATA_TESTID))
+      })
+
+      it('should call the onBuyWithCrypto method prop', () => {
+        expect(onBuyWithCrypto).toHaveBeenCalled()
       })
     })
-    describe('and does not have enough MANA balance to pay', () => {
+
+    describe('and clicking the buy with card button', () => {
+      let encodeFunctionMock: jest.Mock
+
       beforeEach(() => {
-        currentMana = 0
+        encodeFunctionMock = jest.fn()
         getSignerMock.mockResolvedValueOnce(
           (signerMock as unknown) as ethers.providers.JsonRpcSigner
         )
         ;(DCLController__factory.connect as jest.Mock).mockResolvedValueOnce({
           interface: {
-            encodeFunctionData: jest.fn()
+            encodeFunctionData: encodeFunctionMock
           }
         })
+
+        const { getByTestId } = renderedModal
+        fireEvent.click(getByTestId(FIAT_PAYMENT_METHOD_DATA_TESTID))
       })
-      it('should not be able to buy with MANA', async () => {
-        const { getByRole, getByText, getByTestId } = renderWithProviders(
-          <ClaimNameFatFingerModal
-            {...baseProps}
-            currentMana={currentMana}
-            getContract={jest.fn().mockResolvedValue({
-              address: '0x0' // mana contract mock
-            })}
-            onAuthorizedAction={jest
-              .fn()
-              .mockImplementation(({ onAuthorized }: any) => {
-                onAuthorized()
-              })}
-          />
-        )
 
-        const cryptoPaymentOption = getByTestId(
-          CRYPTO_PAYMENT_METHOD_DATA_TESTID
-        )
-        const inputField = getByRole('textbox')
-        await fireEvent.change(inputField, { target: { value: name } })
-        const claimButton = getByText(t('global.confirm'))
-        await waitFor(() => {
-          expect(claimButton).not.toBeDisabled()
-        })
-        expect(cryptoPaymentOption).toHaveClass('disabled')
-        fireEvent.click(claimButton)
-
-        await waitFor(() => {
-          expect(onClaimMock).not.toHaveBeenCalledWith(name)
-        })
+      it('should open the FIAT gateway widget', () => {
+        expect(onOpenFiatGateway).toHaveBeenCalled()
       })
-    })
-    describe('when clicking the claim button', () => {
-      beforeEach(() => {
-        getSignerMock.mockResolvedValueOnce(
-          (signerMock as unknown) as ethers.providers.JsonRpcSigner
-        )
-        ;(DCLController__factory.connect as jest.Mock).mockResolvedValueOnce({
-          interface: {
-            encodeFunctionData: jest.fn()
-          }
-        })
+
+      it('should perform the buy operation with the chosen name and wallet address', () => {
+        expect(encodeFunctionMock).toHaveBeenCalledWith('register', [
+          name,
+          address
+        ])
       })
-      it('should open FIAT gateway widget when claim button is clicked', async () => {
-        const { getByRole, getByText } = renderWithProviders(
-          <ClaimNameFatFingerModal
-            {...baseProps}
-            currentMana={currentMana}
-            getContract={jest.fn().mockResolvedValue({
-              address: '0x0' // mana contract mock
-            })}
-            onAuthorizedAction={jest
-              .fn()
-              .mockImplementation(({ onAuthorized }: any) => {
-                onAuthorized()
-              })}
-          />
-        )
 
-        const inputField = getByRole('textbox')
-        await fireEvent.change(inputField, { target: { value: name } })
-        const claimButton = getByText(t('global.confirm'))
-        await waitFor(() => {
-          expect(claimButton).not.toBeDisabled()
+      describe('when the buy operation is pending', () => {
+        const txId = 'aTxId'
+
+        beforeEach(() => {
+          onOpenFiatGateway.mock.calls[0][2].onPending({
+            data: { tx_id: txId }
+          })
         })
-        fireEvent.click(claimButton)
 
-        await waitFor(() => {
-          expect(baseProps.onOpenFiatGateway).toHaveBeenCalled()
+        it('should call the onClaimTxSubmitted method prop with the transaction data', () => {
+          expect(onClaimTxSubmitted).toHaveBeenCalledWith(
+            name,
+            address,
+            ChainId.ETHEREUM_SEPOLIA,
+            txId
+          )
         })
       })
     })
   })
 
-  describe('while loading', () => {
-    it('should have the confirm button disabled', () => {
-      const { getByText } = renderWithProviders(
-        <ClaimNameFatFingerModal {...baseProps} isLoading />
-      )
+  describe('while the name is being claimed', () => {
+    let renderedModal: ReturnType<typeof renderClaimFatFingerModal>
 
-      const claimButton = getByText(t('global.confirm'))
-      expect(claimButton).toBeDisabled()
+    beforeEach(() => {
+      renderedModal = renderClaimFatFingerModal({ isClaimingName: true })
     })
-  })
 
-  describe('when the modal is closed', () => {
-    it('should call onClose', () => {
-      const { getByText } = renderWithProviders(
-        <ClaimNameFatFingerModal {...baseProps} />
-      )
+    it('should have the input field disabled', () => {
+      expect(renderedModal.getByRole('textbox')).toBeDisabled()
+    })
 
-      const closeButton = getByText(t('global.cancel'))
-      fireEvent.click(closeButton)
+    it('should have the buy with crypto and fiat buttons disabled', () => {
+      const { getByTestId } = renderedModal
 
-      expect(onCloseMock).toHaveBeenCalled()
+      expect(getByTestId(CRYPTO_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
+      expect(getByTestId(FIAT_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
     })
   })
 })

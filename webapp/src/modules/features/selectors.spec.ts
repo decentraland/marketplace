@@ -15,9 +15,7 @@ import {
   getIsMarketplaceLaunchPopupEnabled,
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
-  getIsClaimingNamesWithFiatEnabled,
   getIsEnsAddressEnabled,
-  getIsMintingNamesCrossChainEnabled,
   getIsChainSelectorEnabled
 } from './selectors'
 import { FeatureName } from './types'
@@ -161,22 +159,10 @@ const waitForInitialLoadingSelectors = [
     selector: getIsEmotesV2FTUEnabled
   },
   {
-    name: 'claim-name-with-fiat',
-    feature: FeatureName.CLAIM_NAMES_WITH_FIAT,
-    selector: getIsClaimingNamesWithFiatEnabled,
-    applicationName: ApplicationName.MARKETPLACE
-  },
-  {
     name: 'ens-address',
     feature: FeatureName.ENS_ADDRESS,
     selector: getIsEnsAddressEnabled,
     applicationName: ApplicationName.DAPPS
-  },
-  {
-    name: 'minting-names-with-axelar',
-    feature: FeatureName.MINTING_NAMES_WITH_AXELAR,
-    selector: getIsMintingNamesCrossChainEnabled,
-    applicationName: ApplicationName.MARKETPLACE
   },
   {
     name: 'chain-selector',
