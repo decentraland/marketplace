@@ -164,6 +164,7 @@ const useGasCost = (
     if (
       !shouldUseCrossChainProvider &&
       wallet &&
+      nativeChainToken &&
       getNetwork(wallet.chainId) === assetNetwork
     ) {
       calculateGas()

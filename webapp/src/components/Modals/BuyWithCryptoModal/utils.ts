@@ -222,7 +222,7 @@ export const estimateBuyNftGas = async (
   wallet: Wallet,
   asset: NFT,
   order: Order
-) => {
+): Promise<BigNumber> => {
   const networkProvider = await getNetworkProvider(selectedChain)
   const provider = new ethers.providers.Web3Provider(networkProvider)
 
@@ -241,12 +241,10 @@ export const estimateNameMintingGas = async (
   name: string,
   selectedChain: ChainId,
   ownerAddress: string
-) => {
+): Promise<BigNumber> => {
   const networkProvider = await getNetworkProvider(selectedChain)
   const provider = new ethers.providers.Web3Provider(networkProvider)
-
-  const contract = getContract(ContractName.DCLRegistrar, selectedChain)
+  const contract = getContract(ContractName.DCLControllerV2, selectedChain)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
-  const estimation = await c.estimateGas.register(ownerAddress, name)
-  return estimation
+  return c.estimateGas.register(name, ownerAddress)
 }
