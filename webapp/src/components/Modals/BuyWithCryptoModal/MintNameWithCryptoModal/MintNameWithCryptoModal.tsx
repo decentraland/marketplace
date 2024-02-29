@@ -90,14 +90,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   )
 
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, selectedChain, wallet, providerTokens) =>
-      useNameMintingGasCost(
-        name,
-        selectedToken,
-        selectedChain,
-        wallet,
-        providerTokens
-      ),
+    (selectedToken, chainNativeToken, wallet) =>
+      useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet),
     [name]
   )
 

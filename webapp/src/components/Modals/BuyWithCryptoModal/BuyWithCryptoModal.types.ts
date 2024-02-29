@@ -17,9 +17,8 @@ export type MapStateProps = Pick<
 export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork'>
 export type OnGetGasCost = (
   selectedToken: Token,
-  selectedChain: ChainId,
-  wallet: Wallet | null,
-  providerTokens: Token[]
+  nativeChainToken: Token | undefined,
+  wallet: Wallet | null
 ) => GasCost
 export type OnGetCrossChainRoute = (
   selectedToken: Token,

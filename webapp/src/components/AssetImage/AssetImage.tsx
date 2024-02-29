@@ -677,7 +677,13 @@ const AssetImageWrapper = (props: Props) => {
   } = props
 
   useEffect(() => {
-    if (!item && isNFT(asset) && asset.itemId) {
+    if (
+      !item &&
+      isNFT(asset) &&
+      asset.itemId &&
+      (asset.category === NFTCategory.WEARABLE ||
+        asset.category === NFTCategory.EMOTE)
+    ) {
       onFetchItem(asset.contractAddress, asset.itemId)
     }
   }, [asset, item, onFetchItem])
