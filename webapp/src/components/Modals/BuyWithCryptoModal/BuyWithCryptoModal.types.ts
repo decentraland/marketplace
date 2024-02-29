@@ -11,7 +11,6 @@ import { CrossChainRoute, GasCost } from './hooks'
 export type MapStateProps = Pick<
   Props,
   | 'wallet'
-  | 'isLoading'
   | 'isBuyWithCardPage'
   | 'isSwitchingNetwork'
 >
@@ -34,9 +33,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & 
     price: string,
     wallet: Wallet | null
     metadata: { asset: Asset }
-    isLoading: boolean
     isBuyingAsset: boolean,
-    isBuyingCrossChain: boolean
     isSwitchingNetwork: boolean
     isBuyWithCardPage: boolean
     onGetCrossChainRoute: OnGetCrossChainRoute
@@ -53,7 +50,6 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & 
 export type OwnProps = Pick<
   Props,
   | 'price'
-  | 'isBuyingCrossChain'
   | 'isBuyingAsset'
   | 'metadata'
   | 'onBuyNatively'

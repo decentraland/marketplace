@@ -1,5 +1,6 @@
 import { ChainId } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { Route } from 'decentraland-transactions/crossChain'
 import {
   CLAIM_NAME_REQUEST,
   claimNameRequest,
@@ -21,6 +22,8 @@ describe('claimName actions', () => {
   let chainId: ChainId
   let txHash: string
   let ens: ENS
+  let route: Route
+
   beforeEach(() => {
     subdomain = 'example'
     address = '0xExampleAddress'
@@ -43,15 +46,26 @@ describe('claimName actions', () => {
       txHash = '0xExampleTxHash'
       subdomain = 'exampleSubdomain'
       address = '0xExampleAddress'
+      route = {} as Route
       chainId = ChainId.ETHEREUM_MAINNET // Replace with actual ChainId
     })
     it('should create an action when a name claim transaction is submitted', () => {
       expect(
-        claimNameTransactionSubmitted(subdomain, address, chainId, txHash)
+        claimNameTransactionSubmitted(
+          subdomain,
+          address,
+          chainId,
+          txHash,
+          route
+        )
       ).toEqual({
         type: CLAIM_NAME_TRANSACTION_SUBMITTED,
         payload: {
-          ...buildTransactionPayload(chainId, txHash, { subdomain, address })
+          ...buildTransactionPayload(chainId, txHash, {
+            subdomain,
+            address,
+            route
+          })
         }
       })
     })

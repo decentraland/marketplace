@@ -38,8 +38,8 @@ import {
 import { Props } from './BuyWithCryptoModal.types'
 import styles from './BuyWithCryptoModal.module.css'
 import { useShouldUseCrossChainProvider, useTokenBalance } from './hooks'
-import PaymentSelector from './PaymentSelector/PaymentSelector'
-import PurchaseTotal from './PurchaseTotal/PurchaseTotal'
+import PaymentSelector from './PaymentSelector'
+import PurchaseTotal from './PurchaseTotal'
 
 export const CANCEL_DATA_TEST_ID = 'confirm-buy-with-crypto-modal-cancel'
 export const BUY_NOW_BUTTON_TEST_ID = 'buy-now-button'
@@ -58,8 +58,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     price,
     wallet,
     metadata: { asset },
-    isLoading,
-    isBuyingCrossChain,
+    isBuyingAsset,
     isLoadingAuthorization,
     isSwitchingNetwork,
     isBuyWithCardPage,
@@ -225,7 +224,10 @@ export const BuyWithCryptoModal = (props: Props) => {
           manaTokenOnSelectedChain || getMANAToken(selectedChain)
         ) // if it's not in the providerTokens, create the object manually with the right conectract address
       } catch (error) {
-        setSelectedToken(providerTokens[0])
+        const selectedChainTokens = providerTokens.filter(
+          t => t.chainId === selectedChain.toString()
+        )
+        setSelectedToken(selectedChainTokens[0])
       }
     }
   }, [
@@ -353,7 +355,6 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const handleBuyWithCard = useCallback(() => {
     if (onBuyWithCard) {
-      analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
       onBuyWithCard()
     }
   }, [onBuyWithCard])
@@ -365,7 +366,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           fluid
           primary
           data-testid={GET_MANA_BUTTON_TEST_ID}
-          loading={isFetchingBalance || isLoading}
+          loading={isFetchingBalance || isBuyingAsset}
           onClick={() => {
             onGetMana()
             onClose()
@@ -378,8 +379,8 @@ export const BuyWithCryptoModal = (props: Props) => {
             inverted
             fluid
             data-testid={BUY_WITH_CARD_TEST_ID}
-            disabled={isLoading || isLoadingAuthorization}
-            loading={isLoading || isLoadingAuthorization}
+            disabled={isBuyingAsset}
+            loading={isBuyingAsset}
             onClick={handleBuyWithCard}
           >
             <Icon name="credit card outline" />
@@ -390,7 +391,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     )
   }, [
     isFetchingBalance,
-    isLoading,
+    isBuyingAsset,
     asset.chainId,
     isLoadingAuthorization,
     onBuyWithCard,
@@ -400,10 +401,11 @@ export const BuyWithCryptoModal = (props: Props) => {
   ])
 
   const renderBuyNowButton = useCallback(() => {
-    let onClick =
-      selectedToken?.symbol === 'MANA' && !route
-        ? onBuyNatively
-        : handleCrossChainBuy
+    // if L1 asset and paying with ETH MANA
+    // or if L2 asset and paying with MATIC MANA => native buy
+    const onClick = shouldUseCrossChainProvider
+      ? handleCrossChainBuy
+      : onBuyNatively
 
     return (
       <>
@@ -414,18 +416,18 @@ export const BuyWithCryptoModal = (props: Props) => {
           disabled={
             (selectedToken?.symbol !== 'MANA' && !route) ||
             isFetchingRoute ||
-            isBuyingCrossChain ||
-            isLoading
+            isBuyingAsset ||
+            isLoadingAuthorization
           }
-          loading={isFetchingBalance || isLoading}
+          loading={isFetchingBalance || isLoadingAuthorization}
           onClick={onClick}
         >
           <>
-            {isBuyingCrossChain || isFetchingRoute ? (
+            {isBuyingAsset || isFetchingRoute ? (
               <Loader inline active size="tiny" />
             ) : null}
             {!isFetchingRoute // if fetching route, just render the Loader
-              ? isBuyingCrossChain
+              ? isBuyingAsset
                 ? t('buy_with_crypto_modal.confirm_transaction')
                 : t('buy_with_crypto_modal.buy_now')
               : null}
@@ -437,11 +439,12 @@ export const BuyWithCryptoModal = (props: Props) => {
     route,
     selectedToken,
     isFetchingRoute,
-    isBuyingCrossChain,
+    isBuyingAsset,
+    isLoadingAuthorization,
     isFetchingBalance,
-    isLoading,
     onBuyNatively,
-    handleCrossChainBuy
+    handleCrossChainBuy,
+    shouldUseCrossChainProvider
   ])
 
   const renderMainActionButton = useCallback(() => {
@@ -564,11 +567,11 @@ export const BuyWithCryptoModal = (props: Props) => {
           name: asset.name,
           b: (children: React.ReactChildren) => <b>{children}</b>
         })}
-        onBack={onGoBack}
-        onClose={onClose}
+        onBack={!isBuyingAsset ? onGoBack : undefined}
+        onClose={!isBuyingAsset ? onClose : undefined}
       />
     )
-  }, [asset.name, onClose, showChainSelector, showTokenSelector])
+  }, [asset.name, onClose, showChainSelector, showTokenSelector, isBuyingAsset])
 
   const translationPageDescriptorId = compact([
     'mint',
@@ -678,6 +681,7 @@ export const BuyWithCryptoModal = (props: Props) => {
               <PaymentSelector
                 price={price}
                 wallet={wallet}
+                isBuyingAsset={isBuyingAsset}
                 providerTokens={providerTokens}
                 selectedToken={selectedToken}
                 selectedChain={selectedChain}
@@ -797,7 +801,9 @@ export const BuyWithCryptoModal = (props: Props) => {
                   })}
                 </span>
               ) : null}
-              {!canBuyAsset && !isFetchingBalance && !isFetchingRoute ? (
+              {canBuyAsset === false &&
+              !isFetchingBalance &&
+              !isFetchingRoute ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
                     token: insufficientToken?.symbol || 'MANA'

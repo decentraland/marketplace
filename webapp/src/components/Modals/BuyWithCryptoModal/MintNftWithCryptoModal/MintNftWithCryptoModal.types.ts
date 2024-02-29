@@ -1,3 +1,4 @@
+import { Item } from '@dcl/schemas'
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import type { Route } from 'decentraland-transactions/crossChain'
@@ -8,7 +9,8 @@ import {
   buyItemWithCardRequest
 } from '../../../../modules/item/actions'
 
-export type Props = WithAuthorizedActionProps & ModalProps &  {
+export type Props = WithAuthorizedActionProps & Omit<ModalProps, 'metadata'> &  {
+  metadata: { item: Item }
   isBuyingItemNatively: boolean
   isBuyingItemCrossChain: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>

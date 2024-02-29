@@ -57,6 +57,11 @@ export const PICK_ITEM = 'Pick Item'
 export const UNPICK_ITEM = 'Unpick Item'
 export const UNDO_UNPICK_ITEM = 'Undo unpick Item'
 
+// Names
+export const BUY_NAME_SUCCESS = 'Buy Name Success'
+export const SET_AVATAR_NAME = 'Set Avatar Name'
+export const CLICK_CHECKOUT_NAME = 'Click checkout name'
+
 export const CLICK_CLAIM_NEW_NAME = 'Click Claim New Name'
 export const BULK_PICK = 'Bulk Pick'
 

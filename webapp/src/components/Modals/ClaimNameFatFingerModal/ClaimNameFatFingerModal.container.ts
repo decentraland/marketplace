@@ -1,9 +1,5 @@
 import { connect } from 'react-redux'
-import { ChainId, Network } from '@dcl/schemas'
-import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
-import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { ChainId } from '@dcl/schemas'
 import { openFiatGatewayWidgetRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import {
@@ -12,25 +8,9 @@ import {
   FiatGatewayListeners
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import { RootState } from '../../../modules/reducer'
-import {
-  getClaimNameStatus,
-  getLoading,
-  isWaitingTxClaimName,
-  getErrorMessage
-} from '../../../modules/ens/selectors'
-import {
-  claimNameRequest,
-  CLAIM_NAME_REQUEST,
-  claimNameClear,
-  claimNameTransactionSubmitted
-} from '../../../modules/ens/actions'
-import { Contract } from '../../../modules/vendor/services'
-import { getContract } from '../../../modules/contract/selectors'
-import { getMana, getWallet } from '../../../modules/wallet/selectors'
-import {
-  getIsClaimingNamesWithFiatEnabled,
-  getIsMintingNamesCrossChainEnabled
-} from '../../../modules/features/selectors'
+import { isWaitingTxClaimName } from '../../../modules/ens/selectors'
+import { claimNameTransactionSubmitted } from '../../../modules/ens/actions'
+import { getWallet } from '../../../modules/wallet/selectors'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -39,20 +19,11 @@ import {
 import ClaimNameFatFingerModal from './ClaimNameFatFingerModal'
 
 const mapState = (state: RootState): MapState => ({
-  currentMana: getMana(state, Network.ETHEREUM),
-  isLoading:
-    isLoadingType(getLoading(state), CLAIM_NAME_REQUEST) ||
-    isWaitingTxClaimName(state),
-  address: getAddress(state),
-  getContract: (query: Partial<Contract>) => getContract(state, query),
-  wallet: getWallet(state),
-  isClaimingNamesCrossChainEnabled: getIsMintingNamesCrossChainEnabled(state),
-  isClaimingNamesWithFiatEnabled: getIsClaimingNamesWithFiatEnabled(state)
+  isClaimingName: isWaitingTxClaimName(state),
+  wallet: getWallet(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onClaim: name => dispatch(claimNameRequest(name)),
-  onClaimNameClear: () => dispatch(claimNameClear()),
   onBuyWithCrypto: (name: string) =>
     dispatch(openModal('MintNameWithCryptoModal', { name })),
   onOpenFiatGateway: (
@@ -69,19 +40,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
     dispatch(claimNameTransactionSubmitted(subdomain, address, chainId, txHash))
 })
 
-export default connect(
-  mapState,
-  mapDispatch
-)(
-  withAuthorizedAction(
-    ClaimNameFatFingerModal,
-    AuthorizedAction.CLAIM_NAME,
-    {
-      title_action:
-        'names_page.claim_name_fat_finger_modal.authorization.title_action',
-      action: 'names_page.claim_name_fat_finger_modal.authorization.action'
-    },
-    getClaimNameStatus,
-    getErrorMessage
-  )
-)
+export default connect(mapState, mapDispatch)(ClaimNameFatFingerModal)
