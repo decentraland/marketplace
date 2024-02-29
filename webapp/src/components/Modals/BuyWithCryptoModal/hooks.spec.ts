@@ -73,11 +73,7 @@ describe('when using the should use cross chain provider hook', () => {
 
     it('should return true', () => {
       const { result } = renderHook(() =>
-        useShouldUseCrossChainProvider(
-          selectedToken,
-          ChainId.MATIC_MAINNET,
-          Network.ETHEREUM
-        )
+        useShouldUseCrossChainProvider(selectedToken, Network.ETHEREUM)
       )
       expect(result.current).toBe(true)
     })
