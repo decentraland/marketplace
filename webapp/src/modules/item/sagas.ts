@@ -309,7 +309,6 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       let status: StatusResponse | undefined
       const crossChainProvider = new AxelarProvider(config.get('SQUID_API_URL'))
       const destinationChain = Number(route.route.params.toChain) as ChainId
-      console.log('destinationChain: ', destinationChain)
       while (!status || !status?.toChain?.transactionId) {
         // wrapping in try-catch since it throws an error if the tx is not found (the first seconds after triggering it)
         try {
