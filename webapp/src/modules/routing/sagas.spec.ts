@@ -14,6 +14,7 @@ import {
   GenderFilterOption,
   Item,
   ItemSortBy,
+  ListingStatus,
   NFTCategory,
   Network,
   Order,
@@ -29,6 +30,7 @@ import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import {
+  buyItemCrossChainSuccess,
   buyItemSuccess,
   fetchItemsRequest,
   fetchTrendingItemsRequest
@@ -65,6 +67,7 @@ import {
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
 import { locations } from './locations'
+import { Route } from 'decentraland-transactions/crossChain'
 
 beforeEach(() => {
   jest.spyOn(Date, 'now').mockReturnValue(100)
@@ -1275,6 +1278,7 @@ describe('handleRedirectToSuccessPage saga', () => {
     tokenId: string
     assetType: AssetType
     contractAddress: string
+    isCrossChain?: string
   }
 
   describe('when handling the execute order success action', () => {
@@ -1345,6 +1349,86 @@ describe('handleRedirectToSuccessPage saga', () => {
         .put(push(locations.success(searchParams)))
         .dispatch(claimNameSuccess(ens, 'aName', searchParams.txHash))
         .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when handling the buy item cross chain success action', () => {
+    let route: Route
+    let order: Order
+    let item: Item
+    beforeEach(() => {
+      route = {
+        route: {
+          params: {
+            fromChain: '1',
+            toChain: '137'
+          }
+        }
+      } as Route
+      item = ({
+        id: 'anItemId',
+        contractAddress: 'aContractAddress',
+        itemId: 'aTokenId',
+        price: '100000000'
+      } as unknown) as Item
+    })
+
+    describe('and its buying an existing NFT', () => {
+      beforeEach(() => {
+        order = {
+          id: 'anOrderId',
+          status: ListingStatus.OPEN,
+          price: '10',
+          tokenId: 'aTokenId',
+          contractAddress: 'aContractAddress'
+        } as Order
+        searchParams = {
+          txHash: 'txHash',
+          tokenId: order.tokenId,
+          assetType: AssetType.NFT,
+          contractAddress: item.contractAddress,
+          isCrossChain: 'true'
+        }
+      })
+      it('should redirect to success page with the correct query params', () => {
+        return expectSaga(routingSaga)
+          .put(push(locations.success(searchParams)))
+          .dispatch(
+            buyItemCrossChainSuccess(
+              route,
+              ChainId.ETHEREUM_MAINNET,
+              searchParams.txHash,
+              item,
+              order
+            )
+          )
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and its minting an NFT', () => {
+      beforeEach(() => {
+        searchParams = {
+          txHash: 'txHash',
+          tokenId: item.itemId,
+          assetType: AssetType.ITEM,
+          contractAddress: item.contractAddress,
+          isCrossChain: 'true'
+        }
+      })
+      it('should redirect to success page with the correct query params', () => {
+        return expectSaga(routingSaga)
+          .put(push(locations.success(searchParams)))
+          .dispatch(
+            buyItemCrossChainSuccess(
+              route,
+              ChainId.ETHEREUM_MAINNET,
+              searchParams.txHash,
+              item
+            )
+          )
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })
