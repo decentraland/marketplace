@@ -9,9 +9,7 @@ import {
   CLAIM_NAME_SUCCESS,
   claimNameSuccess,
   CLAIM_NAME_FAILURE,
-  claimNameFailure,
-  CLAIM_NAME_CLEAR,
-  claimNameClear
+  claimNameFailure
 } from './actions'
 import { ENS, ENSError } from './types'
 
@@ -94,15 +92,6 @@ describe('claimName actions', () => {
       expect(claimNameFailure(error)).toEqual({
         type: CLAIM_NAME_FAILURE,
         payload: { error }
-      })
-    })
-  })
-
-  describe('when handling the CLAIM_NAME_CLEAR action', () => {
-    it('should create an action to clear name claim data', () => {
-      expect(claimNameClear()).toEqual({
-        type: CLAIM_NAME_CLEAR,
-        payload: undefined
       })
     })
   })
