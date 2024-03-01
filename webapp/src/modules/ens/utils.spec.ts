@@ -3,7 +3,6 @@ import {
   isNameValid,
   getNameInvalidType,
   hasNameMinLength,
-  isEnoughClaimMana,
   NameInvalidType
 } from './utils'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
@@ -160,27 +159,6 @@ describe('Name Management Tests', () => {
       })
       it('should return false', () => {
         expect(hasNameMinLength(name)).toBe(false)
-      })
-    })
-  })
-
-  describe('isEnoughClaimMana', () => {
-    let mana: number
-    describe('and has sufficient MANA', () => {
-      beforeEach(() => {
-        mana = 100
-      })
-      it('should return true', () => {
-        expect(isEnoughClaimMana(mana)).toBe(true)
-      })
-    })
-
-    describe('and has insufficient MANA', () => {
-      beforeEach(() => {
-        mana = 99
-      })
-      it('should return false', () => {
-        expect(isEnoughClaimMana(mana)).toBe(false)
       })
     })
   })
