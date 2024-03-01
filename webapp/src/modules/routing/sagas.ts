@@ -41,6 +41,7 @@ import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_SUCCESS,
+  BuyItemCrossChainSuccessAction,
   BuyItemSuccessAction,
   fetchItemRequest,
   fetchItemsRequest,
@@ -771,32 +772,44 @@ function* handleRedirectToSuccessPage(
   action:
     | ExecuteOrderSuccessAction
     | BuyItemSuccessAction
+    | BuyItemCrossChainSuccessAction
     | ClaimNameSuccessAction
     | ClaimNameCrossChainSuccessAction
 ) {
   const payload = action.payload
-  yield put(
-    push(
-      locations.success({
-        txHash: payload.txHash,
-        tokenId:
-          'item' in payload
-            ? payload.item.itemId
-            : 'nft' in payload
-            ? payload.nft.tokenId
-            : 'ens' in payload
-            ? payload.ens.tokenId
-            : '',
-        assetType: 'item' in payload ? AssetType.ITEM : AssetType.NFT,
-        contractAddress:
-          'item' in payload
-            ? payload.item.contractAddress
-            : 'nft' in payload
-            ? payload.nft.contractAddress
-            : 'ens' in payload
-            ? payload.ens.contractAddress
-            : ''
-      })
-    )
-  )
+  const isCrossChainAction =
+    'route' in payload &&
+    payload.route.route.params.fromChain !== payload.route.route.params.toChain // it's cross chain only if the fromChain is different from the toChain
+  const successParams = {
+    txHash: payload.txHash,
+    tokenId:
+      'order' in payload && payload.order?.tokenId
+        ? payload.order.tokenId
+        : 'item' in payload
+        ? payload.item.itemId
+        : 'nft' in payload
+        ? payload.nft.tokenId
+        : 'ens' in payload
+        ? payload.ens.tokenId
+        : '',
+    assetType: isCrossChainAction
+      ? 'order' in payload && !!payload.order // if cross chain check for the order object
+        ? AssetType.NFT
+        : AssetType.ITEM
+      : 'item' in payload // for the rest of the action, check for the item object
+      ? AssetType.ITEM
+      : AssetType.NFT,
+    contractAddress:
+      'item' in payload
+        ? payload.item.contractAddress
+        : 'nft' in payload
+        ? payload.nft.contractAddress
+        : 'ens' in payload
+        ? payload.ens.contractAddress
+        : '',
+    ...(isCrossChainAction
+      ? { isCrossChain: isCrossChainAction.toString() }
+      : {})
+  }
+  yield put(push(locations.success(successParams)))
 }

@@ -1,18 +1,19 @@
 import { matchPath } from 'react-router-dom'
-import { getLocation } from 'connected-react-router'
+import { getLocation, push } from 'connected-react-router'
 import { SagaIterator } from 'redux-saga'
 import { put, takeEvery } from '@redux-saga/core/effects'
 import {
   call,
   cancel,
   cancelled,
+  delay,
   fork,
   race,
   select,
   take
 } from 'redux-saga/effects'
 import { ethers } from 'ethers'
-import { Item } from '@dcl/schemas'
+import { ChainId, Item } from '@dcl/schemas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Provider } from 'decentraland-connect'
@@ -26,7 +27,10 @@ import {
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
-import { AxelarProvider } from 'decentraland-transactions/crossChain'
+import {
+  AxelarProvider,
+  StatusResponse
+} from 'decentraland-transactions/crossChain'
 import { config } from '../../config'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
@@ -74,9 +78,13 @@ import {
   BuyItemCrossChainRequestAction,
   BUY_ITEM_CROSS_CHAIN_REQUEST,
   buyItemCrossChainSuccess,
-  buyItemCrossChainFailure
+  buyItemCrossChainFailure,
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
+  BuyItemCrossChainSuccessAction,
+  trackCrossChainTx
 } from './actions'
 import { getData as getItems } from './selectors'
+import { AssetType } from '../asset/types'
 import { getItem } from './utils'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
@@ -103,6 +111,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(BUY_ITEM_CROSS_CHAIN_REQUEST, handleBuyItemCrossChain)
+  yield takeEvery(BUY_ITEM_CROSS_CHAIN_SUCCESS, handleBuyItemCrossChainSuccess)
   yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
   yield takeEvery(SET_PURCHASE, handleSetItemPurchaseWithCard)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
@@ -288,6 +297,53 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     }
   }
 
+  function* handleBuyItemCrossChainSuccess(
+    action: BuyItemCrossChainSuccessAction
+  ) {
+    const { route, item, order, txHash } = action.payload
+    // if it's an actual cross-chain interaction, we need to get the tx hash in the destination chain
+    if (
+      route.requestId &&
+      route.route.params.fromChain !== route.route.params.toChain
+    ) {
+      let status: StatusResponse | undefined
+      const crossChainProvider = new AxelarProvider(config.get('SQUID_API_URL'))
+      const destinationChain = Number(route.route.params.toChain) as ChainId
+      while (!status || !status?.toChain?.transactionId) {
+        // wrapping in try-catch since it throws an error if the tx is not found (the first seconds after triggering it)
+        try {
+          status = yield call(
+            [crossChainProvider, 'getStatus'],
+            route.requestId,
+            txHash
+          )
+        } catch (error) {
+          console.error('error: ', error)
+        }
+        yield delay(1000)
+      }
+      if (status?.toChain?.transactionId) {
+        yield put(
+          trackCrossChainTx(destinationChain, status?.toChain?.transactionId)
+        )
+        yield put(
+          push(
+            locations.success({
+              txHash,
+              destinationTxHash: status?.toChain?.transactionId,
+              tokenId: item.itemId,
+              assetType: order ? AssetType.NFT : AssetType.ITEM,
+              contractAddress: order
+                ? order.contractAddress
+                : item.contractAddress,
+              isCrossChain: ('route' in action.payload).toString()
+            })
+          )
+        )
+      }
+    }
+  }
+
   function* handleBuyItemCrossChain(action: BuyItemCrossChainRequestAction) {
     const { item, route, order } = action.payload
     try {
@@ -303,7 +359,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         const crossChainProvider = new AxelarProvider(
           config.get('SQUID_API_URL')
         )
-        const txRespose: ethers.providers.TransactionReceipt = yield call(
+        const txResponse: ethers.providers.TransactionReceipt = yield call(
           [crossChainProvider, 'executeRoute'],
           route,
           provider
@@ -312,8 +368,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         yield put(
           buyItemCrossChainSuccess(
             route,
-            item.chainId,
-            txRespose.transactionHash,
+            Number(route.route.params.fromChain),
+            txResponse.transactionHash,
             item,
             order
           )

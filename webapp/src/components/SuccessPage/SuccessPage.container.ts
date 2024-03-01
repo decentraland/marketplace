@@ -14,12 +14,22 @@ import { SuccessPage } from './SuccessPage'
 
 const mapState = (state: RootState): MapStateProps => {
   const search = new URLSearchParams(getSearch(state))
+  const isCrossChain = search.get('isCrossChain') === 'true'
   const transaction = getTransaction(state, search.get('txHash') || '')
+  const destinationTx = isCrossChain
+    ? getTransaction(state, search.get('destinationTxHash') || '')
+    : null
   const address = getAddress(state)
+  const isLoadingTx = Boolean(
+    transaction && transaction.status !== TransactionStatus.CONFIRMED
+  )
+  const isDestinationTxLoading = Boolean(
+    destinationTx && destinationTx.status !== TransactionStatus.CONFIRMED
+  )
   return {
-    isLoading: Boolean(
-      transaction && transaction.status !== TransactionStatus.CONFIRMED
-    ),
+    isLoading: isCrossChain
+      ? isLoadingTx || isDestinationTxLoading
+      : isLoadingTx,
     mintedTokenId: getTokenIdFromLogs(
       ChainId.MATIC_MUMBAI,
       transaction?.receipt?.logs
