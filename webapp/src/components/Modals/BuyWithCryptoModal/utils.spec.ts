@@ -1,4 +1,4 @@
-import { Token } from 'decentraland-transactions/crossChain'
+import type { Token } from 'decentraland-transactions/crossChain'
 import { formatPrice } from './utils'
 
 let token: Token

@@ -1,6 +1,6 @@
 import { ChainId, Item, Network, Order } from '@dcl/schemas'
 import { Env } from '@dcl/ui-env'
-import {
+import type {
   ChainData,
   CrossChainProvider,
   Route,

@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'
 import { ChainId } from '@dcl/schemas'
-import { Route } from 'decentraland-transactions/crossChain'
+import type { Route } from 'decentraland-transactions/crossChain'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ENS, ENSError } from './types'
 

@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { ethers } from 'ethers'
 import { t } from 'decentraland-dapps/dist/modules/translation'
-import { Route, Token } from 'decentraland-transactions/crossChain'
+import type { Route, Token } from 'decentraland-transactions/crossChain'
 import { isPriceTooLow } from '../../../BuyPage/utils'
 import { ManaToFiat } from '../../../ManaToFiat'
 import { formatPrice } from '../utils'

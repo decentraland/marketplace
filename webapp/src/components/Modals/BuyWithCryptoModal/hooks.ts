@@ -6,7 +6,7 @@ import { getNetworkProvider } from 'decentraland-dapps/dist/lib'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
-import {
+import type {
   CrossChainProvider,
   Route,
   RouteResponse,
