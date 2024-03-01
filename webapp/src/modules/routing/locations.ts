@@ -132,6 +132,8 @@ export const locations = {
     assetType: string
     contractAddress: string
     subdomain?: string
+    isCrossChain?: string
+    destinationTxHash?: string
   }) =>
     `/success${
       searchOptions ? `?${new URLSearchParams(searchOptions).toString()}` : ''
