@@ -15,13 +15,7 @@ import { isWearableOrEmote } from '../../../modules/asset/utils'
 import * as events from '../../../utils/events'
 import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'
-import {
-  CROSS_CHAIN_SUPPORTED_CHAINS,
-  ChainData,
-  Token,
-  CrossChainProvider,
-  AxelarProvider
-} from 'decentraland-transactions/crossChain'
+import type { ChainData, Token, CrossChainProvider } from 'decentraland-transactions/crossChain'
 import { AssetImage } from '../../AssetImage'
 import { isPriceTooLow } from '../../BuyPage/utils'
 import { CardPaymentsExplanation } from '../../BuyPage/CardPaymentsExplanation'
@@ -72,6 +66,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     onGoBack
   } = props
 
+  const crossChainSupportedChains = useRef<ChainId[]>([])
   const analytics = getAnalytics()
   const manaAddressOnAssetChain = getContract(
     ContractName.MANAToken,
@@ -146,9 +141,15 @@ export const BuyWithCryptoModal = (props: Props) => {
   )
 
   useEffect(() => {
-    const provider = new AxelarProvider(squidURL)
-    provider.init() // init the provider on the mount
-    setCrossChainProvider(provider)
+    const initializeCrossChainProvider = async () => {
+      const { AxelarProvider, CROSS_CHAIN_SUPPORTED_CHAINS } = await import('decentraland-transactions/crossChain')
+      const provider = new AxelarProvider(squidURL)
+      crossChainSupportedChains.current = CROSS_CHAIN_SUPPORTED_CHAINS
+      await provider.init() // init the provider on the mount
+      setCrossChainProvider(provider)
+    }
+
+    initializeCrossChainProvider()
   }, [])
 
   const {
@@ -202,13 +203,13 @@ export const BuyWithCryptoModal = (props: Props) => {
           setProviderChains(
             supportedChains.filter(
               c =>
-                CROSS_CHAIN_SUPPORTED_CHAINS.includes(+c.chainId) &&
-                defaultChains.find(t => t.chainId === c.chainId)
+              crossChainSupportedChains.current.includes(+c.chainId) &&
+              defaultChains.find(t => t.chainId === c.chainId)
             )
           )
           setProviderTokens(
             supportedTokens.filter(t =>
-              CROSS_CHAIN_SUPPORTED_CHAINS.includes(+t.chainId)
+              crossChainSupportedChains.current.includes(+t.chainId)
             )
           )
         }

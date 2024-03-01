@@ -1,5 +1,5 @@
 import { Dispatch, bindActionCreators } from 'redux'
-import { Route } from 'decentraland-transactions/crossChain'
+import type { Route } from 'decentraland-transactions/crossChain'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
 import { connect } from 'react-redux'
 import { RootState } from '../../../../modules/reducer'

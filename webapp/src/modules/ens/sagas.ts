@@ -9,7 +9,6 @@ import {
   TRANSACTION_ACTION_FLAG,
   waitForTx
 } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { AxelarProvider } from 'decentraland-transactions/crossChain'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { DCLController } from '../../contracts'
@@ -150,6 +149,11 @@ export function* ensSaga() {
       }
 
       if (provider) {
+        const crossChainModule = import('decentraland-transactions/crossChain')
+        const {
+          AxelarProvider
+        }: Awaited<typeof crossChainModule> = yield crossChainModule
+
         const crossChainProvider = new AxelarProvider(
           config.get('SQUID_API_URL')
         )

@@ -27,10 +27,7 @@ import {
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
-import {
-  AxelarProvider,
-  StatusResponse
-} from 'decentraland-transactions/crossChain'
+import type { StatusResponse } from 'decentraland-transactions/crossChain'
 import { config } from '../../config'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
@@ -307,6 +304,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       route.route.params.fromChain !== route.route.params.toChain
     ) {
       let status: StatusResponse | undefined
+      const crossChainModule = import('decentraland-transactions/crossChain')
+      const {
+        AxelarProvider
+      }: Awaited<typeof crossChainModule> = yield crossChainModule
       const crossChainProvider = new AxelarProvider(config.get('SQUID_API_URL'))
       const destinationChain = Number(route.route.params.toChain) as ChainId
       while (!status || !status?.toChain?.transactionId) {
@@ -356,6 +357,11 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (provider) {
+        const crossChainModule = import('decentraland-transactions/crossChain')
+        const {
+          AxelarProvider
+        }: Awaited<typeof crossChainModule> = yield crossChainModule
+
         const crossChainProvider = new AxelarProvider(
           config.get('SQUID_API_URL')
         )

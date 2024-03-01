@@ -1,7 +1,7 @@
 import { ChainId, Network, Order, Item } from '@dcl/schemas'
 import { BigNumber, ethers } from 'ethers'
 import { Env } from '@dcl/ui-env'
-import { ChainData, Token } from 'decentraland-transactions/crossChain'
+import type { ChainData, Token } from 'decentraland-transactions/crossChain'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   ContractName,
