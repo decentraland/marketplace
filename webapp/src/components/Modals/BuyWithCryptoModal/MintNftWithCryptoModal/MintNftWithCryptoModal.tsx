@@ -78,14 +78,8 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
     [item]
   )
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, selectedChain, wallet, providerTokens) =>
-      useMintingNftGasCost(
-        item,
-        selectedToken,
-        selectedChain,
-        wallet,
-        providerTokens
-      ),
+    (selectedToken, chainNativeToken, wallet) =>
+      useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet),
     [item]
   )
 

@@ -23,7 +23,6 @@ import { ManaToFiat } from '../../ManaToFiat'
 import { config } from '../../../config'
 import ChainAndTokenSelector from './ChainAndTokenSelector/ChainAndTokenSelector'
 import {
-  DEFAULT_CHAINS,
   getDefaultChains,
   getMANAToken,
   getShouldUseMetaTx,
@@ -106,11 +105,24 @@ export const BuyWithCryptoModal = (props: Props) => {
     )
   }, [providerTokens, manaAddressOnAssetChain])
 
+  const selectedProviderChain = useMemo(() => {
+    return providerChains.find(
+      c => c.chainId.toString() === selectedChain.toString()
+    )
+  }, [providerChains, selectedChain])
+
+  const chainNativeToken = useMemo(() => {
+    return providerTokens.find(
+      t =>
+        +t.chainId === selectedChain &&
+        t.symbol === selectedProviderChain?.nativeCurrency.symbol
+    )
+  }, [selectedChain, selectedProviderChain, providerTokens])
+
   const { gasCost, isFetchingGasCost } = onGetGasCost(
     selectedToken,
-    selectedChain,
-    wallet,
-    providerTokens
+    chainNativeToken,
+    wallet
   )
 
   const {
@@ -148,7 +160,6 @@ export const BuyWithCryptoModal = (props: Props) => {
   // if the tx should be done through the provider
   const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(
     selectedToken,
-    selectedChain,
     asset.network
   )
 
@@ -167,15 +178,9 @@ export const BuyWithCryptoModal = (props: Props) => {
     )
   }, [asset, manaAddressOnAssetChain, selectedChain, selectedToken, wallet])
 
-  const selectedProviderChain = useMemo(() => {
-    return providerChains.find(
-      c => c.chainId.toString() === selectedChain.toString()
-    )
-  }, [providerChains, selectedChain])
-
   // Compute if the price is too low for meta tx
   const hasLowPriceForMetaTx = useMemo(
-    () => wallet?.chainId !== ChainId.MATIC_MAINNET && isPriceTooLow(price), // not connected to polygon AND has price < minimun for meta tx
+    () => wallet?.chainId !== ChainId.MATIC_MAINNET && isPriceTooLow(price), // not connected to polygon AND has price < minimum for meta tx
     [price, wallet?.chainId]
   )
 
@@ -187,18 +192,19 @@ export const BuyWithCryptoModal = (props: Props) => {
           if (!crossChainProvider.isLibInitialized()) {
             await crossChainProvider.init()
           }
+          const defaultChains = getDefaultChains()
           const supportedTokens = crossChainProvider.getSupportedTokens()
           const supportedChains = [
-            ...DEFAULT_CHAINS,
+            ...defaultChains,
             ...crossChainProvider
               .getSupportedChains()
-              .filter(c => DEFAULT_CHAINS.every(dc => dc.chainId !== c.chainId))
+              .filter(c => defaultChains.every(dc => dc.chainId !== c.chainId))
           ] // keep the defaults since we support MANA on them natively
           setProviderChains(
             supportedChains.filter(
               c =>
               crossChainSupportedChains.current.includes(+c.chainId) &&
-                getDefaultChains().find(t => t.chainId === c.chainId)
+              defaultChains.find(t => t.chainId === c.chainId)
             )
           )
           setProviderTokens(
@@ -345,14 +351,17 @@ export const BuyWithCryptoModal = (props: Props) => {
           </>
         ) : (
           t('buy_with_crypto_modal.switch_network', {
-            chain: providerChains.find(
-              c => c.chainId === selectedChain.toString()
-            )?.networkName
+            chain: selectedProviderChain?.networkName
           })
         )}
       </Button>
     )
-  }, [isSwitchingNetwork, onSwitchNetwork, providerChains, selectedChain])
+  }, [
+    isSwitchingNetwork,
+    onSwitchNetwork,
+    selectedProviderChain,
+    selectedChain
+  ])
 
   const handleBuyWithCard = useCallback(() => {
     if (onBuyWithCard) {
