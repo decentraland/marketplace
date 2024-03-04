@@ -1,6 +1,6 @@
 import { ChainId } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { Route } from 'decentraland-transactions/crossChain'
+import type { Route } from 'decentraland-transactions/crossChain'
 import {
   CLAIM_NAME_REQUEST,
   claimNameRequest,

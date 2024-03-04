@@ -1,7 +1,7 @@
-import { getLocation } from 'connected-react-router'
+import { getLocation, push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { call, select, take } from 'redux-saga/effects'
+import { call, delay, select, take } from 'redux-saga/effects'
 import { ChainId, Item, Network, Rarity } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
@@ -48,14 +48,22 @@ import {
   fetchCollectionItemsRequest,
   fetchCollectionItemsSuccess,
   fetchCollectionItemsFailure,
-  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE
+  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
+  buyItemCrossChainSuccess,
+  trackCrossChainTx
 } from './actions'
+import {
+  AxelarProvider,
+  RouteResponse,
+  StatusResponse
+} from 'decentraland-transactions/crossChain'
 import { CANCEL_FETCH_ITEMS, itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 import { ItemBrowseOptions } from './types'
 import { getIsMarketplaceServerEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
+import { AssetType } from '../asset/types'
 
 const item = {
   itemId: 'anItemId',
@@ -633,7 +641,7 @@ describe('when handling the fetch items request action', () => {
             data: {
               ...item.data,
               wearable: {
-                isSmart: true,
+                isSmart: true
               }
             },
             urn: 'someUrn'
@@ -653,7 +661,12 @@ describe('when handling the fetch items request action', () => {
             ])
             .put(fetchItemSuccess(smartWearable))
             .put(fetchSmartWearableRequiredPermissionsRequest(smartWearable))
-            .dispatch(fetchItemRequest(smartWearable.contractAddress, smartWearable.itemId))
+            .dispatch(
+              fetchItemRequest(
+                smartWearable.contractAddress,
+                smartWearable.itemId
+              )
+            )
             .run({ silenceTimeout: true })
         })
       })
@@ -751,6 +764,66 @@ describe('when handling the fetch trending items request action', () => {
         ])
         .put(fetchTrendingItemsFailure(anError.message))
         .dispatch(fetchTrendingItemsRequest())
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the buy item cross chain success action', () => {
+  let route: RouteResponse
+  let chainId: ChainId
+  let txHash: string
+  let statusResponse: StatusResponse
+  beforeEach(() => {
+    chainId = ChainId.ETHEREUM_MAINNET
+    txHash = 'aHash'
+  })
+  describe('and its an actual cross chain purchase', () => {
+    beforeEach(() => {
+      route = {
+        requestId: 'aRequestId',
+        route: {
+          params: {
+            fromChain: ChainId.ETHEREUM_MAINNET.toString(),
+            toChain: ChainId.MATIC_MAINNET.toString()
+          }
+        }
+      } as RouteResponse
+      statusResponse = {
+        status: 'success',
+        toChain: {
+          transactionId: 'destinationChainTx'
+        }
+      } as StatusResponse
+    })
+    it('should get the status of the transaction and put the trackCrossChainTx action alongisde the put location success', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([
+          [
+            matchers.call.fn(AxelarProvider.prototype.getStatus),
+            statusResponse
+          ],
+          [delay(1000), void 0]
+        ])
+        .put(
+          trackCrossChainTx(
+            parseInt(route.route.params.toChain) as ChainId,
+            statusResponse.toChain!.transactionId
+          )
+        )
+        .put(
+          push(
+            locations.success({
+              txHash,
+              destinationTxHash: statusResponse.toChain?.transactionId,
+              tokenId: item.itemId,
+              assetType: AssetType.ITEM,
+              contractAddress: item.contractAddress,
+              isCrossChain: 'true'
+            })
+          )
+        )
+        .dispatch(buyItemCrossChainSuccess(route, chainId, txHash, item))
         .run({ silenceTimeout: true })
     })
   })
