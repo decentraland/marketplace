@@ -1,5 +1,4 @@
 import { ChainId } from '@dcl/schemas'
-import { AnyAction } from 'redux'
 import { Route } from 'decentraland-transactions/crossChain'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
@@ -15,7 +14,7 @@ import {
   claimNameCrossChainFailure
 } from './actions'
 import { ENSState, ensReducer } from './reducer'
-import { ENS, ENSError } from './types'
+import { ENS } from './types'
 
 describe('ENS Reducer', () => {
   const INITIAL_STATE = {
@@ -26,7 +25,6 @@ describe('ENS Reducer', () => {
   }
 
   let ens: ENS
-  let failureAction: ReturnType<typeof claimNameFailure>
   let initialState: ENSState
 
   beforeEach(() => {
