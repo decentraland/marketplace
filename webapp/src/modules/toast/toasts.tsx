@@ -352,3 +352,34 @@ export function getBulkPickItemFailureToast(
     icon: <Icon size="big" name="exclamation circle" />
   }
 }
+
+export function getCrossChainTransactionSuccessToast(
+  txLink: string
+): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: '',
+    body: (
+      <div>
+        <p>
+          {t('toast.cross_chain_tx.body', {
+            br: () => <br />,
+            highlight: (text: string) => <span>{text}</span>,
+            link: (text: string) => (
+              <Link to={locations.activity()}>{text}</Link>
+            )
+          })}
+        </p>
+        <Button as="a" href={locations.activity()} target="_blank">
+          {t('navigation.activity')}
+          <Icon style={{ marginLeft: 6 }} name="clock outline" />
+        </Button>
+        <Button as="a" href={txLink} target="_blank">
+          {t('toast.cross_chain_tx.view_transaction')}
+          <Icon style={{ marginLeft: 6 }} name="external" />
+        </Button>
+      </div>
+    ),
+    closable: false
+  }
+}

@@ -1185,6 +1185,10 @@
       "title": "你获得了进入一个世界的机会",
       "body": "在虚拟宇宙中建立您的个人空间。",
       "cta": "查看我的世界"
+    },
+    "cross_chain_tx": {
+      "body": "处理该交易最多可能需要 <highlight>3 分钟</highlight>。<br></br>您还可以在以下链接中跟踪其进度：",
+      "view_transaction": "查看交易"
     }
   },
   "maintainance": {

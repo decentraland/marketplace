@@ -64,6 +64,8 @@ import { ItemBrowseOptions } from './types'
 import { getIsMarketplaceServerEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { AssetType } from '../asset/types'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
+import { getCrossChainTransactionSuccessToast } from '../toast/toasts'
 
 const item = {
   itemId: 'anItemId',
@@ -796,7 +798,7 @@ describe('when handling the buy item cross chain success action', () => {
         }
       } as StatusResponse
     })
-    it('should get the status of the transaction and put the trackCrossChainTx action alongisde the put location success', () => {
+    it('should get the status of the transaction and put the trackCrossChainTx action, put location success and put the cross chain success toast', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [
@@ -809,6 +811,13 @@ describe('when handling the buy item cross chain success action', () => {
           trackCrossChainTx(
             parseInt(route.route.params.toChain) as ChainId,
             statusResponse.toChain!.transactionId
+          )
+        )
+        .put(
+          showToast(
+            getCrossChainTransactionSuccessToast(
+              AxelarProvider.getTxLink(txHash)
+            )
           )
         )
         .put(

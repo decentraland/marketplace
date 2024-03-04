@@ -1180,6 +1180,10 @@
       "title": "Ganaste acceso a Worlds!",
       "body": "Construí tu espacio personal en el metaverso.",
       "cta": "Ver mis worlds"
+    },
+    "cross_chain_tx": {
+      "body": "La transacción puede tardar hasta <highlight>3 miuntos</highlight> para ser procesada.<br></br>Puedes seguir su progreso en los siguientes enlaces:",
+      "view_transaction": "Ver transacción"
     }
   },
   "maintainance": {
