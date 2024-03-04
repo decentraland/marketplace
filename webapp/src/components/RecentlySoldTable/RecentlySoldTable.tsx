@@ -403,7 +403,7 @@ const RecentlySoldTable = (props: Props) => {
                       to={asset.url}
                       onClick={() => handleOnLinkClick(asset.id)}
                     >
-                      <AssetImage asset={asset} showMonospace isSmall />
+                      <AssetImage asset={asset} isSmall />
                     </Link>
                     <div className="sale-item-name-container">
                       <Link
@@ -483,7 +483,7 @@ const RecentlySoldTable = (props: Props) => {
                     to={asset.url}
                     onClick={() => handleOnLinkClick(asset.id)}
                   >
-                    <AssetImage asset={asset} showMonospace isSmall />
+                    <AssetImage asset={asset} isSmall />
                   </Link>
                   <div className="rankings-item-data">
                     <Link

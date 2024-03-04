@@ -15,7 +15,7 @@ import { Props } from './ENSDetail.types'
 const ENSDetail = ({ nft }: Props) => (
   <BaseDetail
     asset={nft}
-    assetImage={<AssetImage asset={nft} showMonospace />}
+    assetImage={<AssetImage asset={nft} />}
     isOnSale={!!nft.activeOrderId}
     badges={<Badge color="#37333d">{t('global.ens')}</Badge>}
     left={<Owner asset={nft} />}

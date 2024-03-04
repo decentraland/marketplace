@@ -33,18 +33,18 @@
   height: 100%;
 }
 
-.AssetImage .ens-subdomain {
+.AssetImage .ens {
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   font-size: 28px;
   height: 100%;
-  background-image: url('../../images/logo_dark.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: #37333d;
-  color: white;
-  flex-direction: column;
+}
+
+.AssetImage .ens canvas {
+  height: 100%;
+  width: 100%;
 }
 
 .AssetImage .ens-subdomain .name {

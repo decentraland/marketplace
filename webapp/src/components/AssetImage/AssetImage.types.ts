@@ -32,7 +32,6 @@ export type Props = {
   hasPopup?: boolean
   zoom?: number
   isSmall?: boolean
-  showMonospace?: boolean
   avatar?: Avatar
   wearableController?: IPreviewController | null
   isTryingOn: boolean

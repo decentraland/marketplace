@@ -46,6 +46,16 @@ if (!globalThis.fetch) {
   globalThis.Response = Response as any
 }
 
+global.FontFace = function() {
+  return {
+    load: () => Promise.resolve()
+  }
+} as any
+;(document as any).fonts = {
+  ...document.fonts,
+  add: () => Promise.resolve()
+} as any
+
 setCurrentLocale(
   'en',
   mergeTranslations(flatten(dappsEn) as any, flatten(locales.en))

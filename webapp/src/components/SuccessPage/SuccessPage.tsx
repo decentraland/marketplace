@@ -54,7 +54,6 @@ export function SuccessPage(props: Props) {
           </Header>
           <AssetImage
             asset={{ category: 'ens', data: { ens: { subdomain } } } as Asset}
-            showMonospace
             className={classNames(styles.assetImage, styles.loading)}
           />
 
