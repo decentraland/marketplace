@@ -1522,12 +1522,6 @@
     "go_to_my_assets": "Ir a mis Objetos",
     "do_not_show_again": "No me muestres esto de nuevo"
   },
-  "emotes_v2_ftu": {
-    "title": "Los emotes 2.0 están disponibles! 🟢",
-    "subtitle": "<b>Los emotes ahora ofrecen más que movimiento!</b><br></br>Mejore la forma en que se expresa en Decentraland con emotes con accesorios y sonidos para una experiencia más inmersiva.",
-    "action": "Explorar emotes con accesorios y sonidos",
-    "img_alt": "Emotes 2.0"
-  },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
     "edit_list": "Editar lista",

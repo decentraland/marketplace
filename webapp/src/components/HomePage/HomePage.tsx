@@ -20,7 +20,6 @@ import { CampaignBanner } from '../Campaign/CampaignBanner'
 import { Slideshow } from './Slideshow'
 import { RankingsTable } from '../RankingsTable'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
-import EmotesV2LaunchModal from '../Modals/FTU/EmotesV2LaunchModal'
 import { SmartWearablesLaunchModal } from '../Modals/FTU/SmartWearablesLaunchModal'
 import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
 import { Props } from './HomePage.types'
@@ -226,7 +225,6 @@ const HomePage = (props: Props) => {
       <Navbar />
       <Navigation activeTab={NavigationTab.OVERVIEW} />
       <ListsLaunchModal />
-      <EmotesV2LaunchModal />
       <SmartWearablesLaunchModal />
       {isCampaignHomepageBannerEnabled ? (
         <CampaignBanner>
