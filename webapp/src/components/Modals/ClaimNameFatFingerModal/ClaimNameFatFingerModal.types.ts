@@ -10,7 +10,6 @@ import {
   openModal
 } from 'decentraland-dapps/dist/modules/modal'
 import {
-  ClaimNameClearAction,
   ClaimNameRequestAction,
   ClaimNameTransactionSubmittedAction,
   claimNameTransactionSubmitted
@@ -35,7 +34,6 @@ export type MapDispatchProps = Pick<
 >
 export type MapDispatch = Dispatch<
   | ClaimNameRequestAction
-  | ClaimNameClearAction
   | ClaimNameTransactionSubmittedAction
   | OpenFiatGatewayWidgetRequestAction
   | OpenModalAction
