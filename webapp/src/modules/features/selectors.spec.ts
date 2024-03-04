@@ -14,7 +14,6 @@ import {
   getIsMarketplaceLaunchPopupEnabled,
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
-  getIsEnsAddressEnabled,
   getIsChainSelectorEnabled
 } from './selectors'
 import { FeatureName } from './types'
@@ -151,12 +150,6 @@ const waitForInitialLoadingSelectors = [
     name: 'isSmartWearablesFTU',
     feature: FeatureName.SMART_WEARABLES_FTU,
     selector: getIsSmartWearablesFTUEnabled
-  },
-  {
-    name: 'ens-address',
-    feature: FeatureName.ENS_ADDRESS,
-    selector: getIsEnsAddressEnabled,
-    applicationName: ApplicationName.DAPPS
   },
   {
     name: 'chain-selector',

@@ -6,6 +6,5 @@ export enum FeatureName {
   CAMPAIGN_BROWSER = 'campaign-browser',
   SMART_WEARABLES_FTU = 'smart-wearables-ftu',
   MARKETPLACE_SERVER = 'marketplace-server',
-  ENS_ADDRESS = 'ens-address',
   CHAIN_SELECTOR = 'chain-selector'
 }

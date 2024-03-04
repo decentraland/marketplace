@@ -97,17 +97,6 @@ export const getIsMarketplaceServerEnabled = (state: RootState) => {
   return false
 }
 
-export const getIsEnsAddressEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.DAPPS,
-      FeatureName.ENS_ADDRESS
-    )
-  }
-  return false
-}
-
 export const getIsChainSelectorEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(
