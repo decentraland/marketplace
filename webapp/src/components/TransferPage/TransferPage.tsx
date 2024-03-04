@@ -1,12 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import {
-  Page,
-  Header,
-  Form,
-  Field,
-  Button,
-  InputOnChangeData
-} from 'decentraland-ui'
+import { Page, Header, Form, Button, InputOnChangeData } from 'decentraland-ui'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AddressField } from 'decentraland-dapps/dist/components/AddressField'
