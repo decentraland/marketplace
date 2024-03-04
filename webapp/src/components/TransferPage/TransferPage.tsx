@@ -22,7 +22,7 @@ import { Props } from './TransferPage.types'
 import './TransferPage.css'
 
 const TransferPage = (props: Props) => {
-  const { onNavigate, onTransfer, isTransferring, isEnsAddressEnabled } = props
+  const { onNavigate, onTransfer, isTransferring } = props
 
   const [address, setAddress] = useState('')
   const [isInvalidAddress, setIsInvalidAddress] = useState(false)
@@ -83,37 +83,20 @@ const TransferPage = (props: Props) => {
                     <div className={subtitleClasses.join(' ')}>{subtitle}</div>
                     <Form onSubmit={() => onTransfer(nft, address)}>
                       <div className="form-fields">
-                        {isEnsAddressEnabled ? (
-                          <AddressField
-                            type="address"
-                            error={isInvalidAddress}
-                            message={
-                              isInvalidAddress
-                                ? t('transfer_page.invalid_address')
-                                : undefined
-                            }
-                            label={t('transfer_page.recipient')}
-                            value={address}
-                            placeholder="0x..."
-                            disabled={!canTransfer}
-                            onChange={handleChange}
-                          />
-                        ) : (
-                          <Field
-                            type="address"
-                            error={isInvalidAddress}
-                            message={
-                              isInvalidAddress
-                                ? t('transfer_page.invalid_address')
-                                : undefined
-                            }
-                            label={t('transfer_page.recipient')}
-                            value={address}
-                            placeholder="0x..."
-                            disabled={!canTransfer}
-                            onChange={handleChange}
-                          />
-                        )}
+                        <AddressField
+                          type="address"
+                          error={isInvalidAddress}
+                          message={
+                            isInvalidAddress
+                              ? t('transfer_page.invalid_address')
+                              : undefined
+                          }
+                          label={t('transfer_page.recipient')}
+                          value={address}
+                          placeholder="0x..."
+                          disabled={!canTransfer}
+                          onChange={handleChange}
+                        />
                       </div>
                       {canTransfer ? (
                         <div className="warning">
