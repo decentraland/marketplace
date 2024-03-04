@@ -15,7 +15,6 @@ import {
   getIsMarketplaceLaunchPopupEnabled,
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
-  getIsEnsAddressEnabled,
   getIsChainSelectorEnabled
 } from './selectors'
 import { FeatureName } from './types'
@@ -157,12 +156,6 @@ const waitForInitialLoadingSelectors = [
     name: 'isEmotesV2FTU',
     feature: FeatureName.EMOTES_V2_FTU,
     selector: getIsEmotesV2FTUEnabled
-  },
-  {
-    name: 'ens-address',
-    feature: FeatureName.ENS_ADDRESS,
-    selector: getIsEnsAddressEnabled,
-    applicationName: ApplicationName.DAPPS
   },
   {
     name: 'chain-selector',
