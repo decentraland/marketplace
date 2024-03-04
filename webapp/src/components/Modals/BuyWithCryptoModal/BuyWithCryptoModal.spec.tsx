@@ -527,7 +527,7 @@ describe('BuyWithCryptoModal', () => {
       getSupportedChains: () => MOCK_SUPPORTED_CHAIN,
       getSupportedTokens: () => MOCKED_PROVIDER_TOKENS
     } as unknown) as AxelarProvider
-    ;(AxelarProvider as jest.Mock).mockImplementation(() => crossChainProvider)
+    ;(AxelarProvider as unknown as jest.Mock).mockImplementation(() => crossChainProvider)
     ;(mockConfigIs as jest.Mock).mockReturnValue(false) // so it returns prod  values
     marketplaceAPI.fetchWalletTokenBalances = jest.fn().mockResolvedValue([])
     modalProps = {
