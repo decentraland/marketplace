@@ -10,7 +10,6 @@ import {
   getIsCampaignBrowserEnabled,
   getIsCampaignCollectionsBannerEnabled,
   getIsCampaignHomepageBannerEnabled,
-  getIsEmotesV2FTUEnabled,
   getIsMaintenanceEnabled,
   getIsMarketplaceLaunchPopupEnabled,
   getIsSmartWearablesFTUEnabled,
@@ -153,9 +152,16 @@ const waitForInitialLoadingSelectors = [
     selector: getIsSmartWearablesFTUEnabled
   },
   {
+<<<<<<< HEAD
     name: 'isEmotesV2FTU',
     feature: FeatureName.EMOTES_V2_FTU,
     selector: getIsEmotesV2FTUEnabled
+=======
+    name: 'ens-address',
+    feature: FeatureName.ENS_ADDRESS,
+    selector: getIsEnsAddressEnabled,
+    applicationName: ApplicationName.DAPPS
+>>>>>>> 9a45633513c047b7ed6bd054cc7edc8fd65d0d58
   },
   {
     name: 'chain-selector',
