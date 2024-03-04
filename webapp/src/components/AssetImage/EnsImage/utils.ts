@@ -103,7 +103,9 @@ export async function drawImage(
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
       const dclEthYPosition = nameYPosition + 30 // Position "DCL.ETH" below the name
+      ctx.globalAlpha = 0.7
       ctx.fillText('DCL.ETH', width / 2, dclEthYPosition)
+      ctx.globalAlpha = 1
     } catch (e) {
       console.error('Error loading fonts', e)
     }
@@ -117,6 +119,9 @@ export async function drawImage(
     const logoYPosition = onlyLogo
       ? height / 2 - logoHeight / 2
       : nameYPosition - logoHeight - 25 // Adjust space above the name
+    if (!onlyLogo) {
+      ctx.globalAlpha = 0.5
+    }
     ctx.drawImage(
       await promiseOfALogo,
       logoXPosition,
@@ -124,6 +129,7 @@ export async function drawImage(
       logoWidth,
       logoHeight
     )
+    ctx.globalAlpha = 1
   } catch (e) {
     console.error('Error loading logo', e)
   }
