@@ -27,10 +27,7 @@ import {
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
-import {
-  AxelarProvider,
-  StatusResponse
-} from 'decentraland-transactions/crossChain'
+import { StatusResponse } from 'decentraland-transactions/crossChain'
 import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { getCrossChainTransactionSuccessToast } from '../toast/toasts'
 import { config } from '../../config'
@@ -369,6 +366,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (provider) {
+        const crossChainModule = import('decentraland-transactions/crossChain')
+        const {
+          AxelarProvider
+        }: Awaited<typeof crossChainModule> = yield crossChainModule
         const crossChainProvider = new AxelarProvider(
           config.get('SQUID_API_URL')
         )
