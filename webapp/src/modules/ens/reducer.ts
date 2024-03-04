@@ -8,8 +8,6 @@ import {
   ClaimNameFailureAction,
   ClaimNameSuccessAction,
   CLAIM_NAME_SUCCESS,
-  CLAIM_NAME_CLEAR,
-  ClaimNameClearAction,
   CLAIM_NAME_FAILURE,
   CLAIM_NAME_REQUEST,
   ClaimNameCrossChainRequestAction,
@@ -35,12 +33,15 @@ const INITIAL_STATE: ENSState = {
   error: null
 }
 
+const isENSError = (error: any): error is ENSError => {
+  return error && error.message !== undefined
+}
+
 export type ENSReducerAction =
   | FetchTransactionSuccessAction
   | ClaimNameRequestAction
   | ClaimNameFailureAction
   | ClaimNameSuccessAction
-  | ClaimNameClearAction
   | ClaimNameCrossChainRequestAction
   | ClaimNameCrossChainSuccessAction
   | ClaimNameCrossChainFailureAction
@@ -72,24 +73,16 @@ export function ensReducer(
         }
       }
     }
+
+    case CLAIM_NAME_CROSS_CHAIN_FAILURE:
     case CLAIM_NAME_FAILURE: {
+      const error = isENSError(action.payload.error)
+        ? action.payload.error
+        : { message: action.payload.error }
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
-        error: { ...action.payload.error }
-      }
-    }
-    case CLAIM_NAME_CROSS_CHAIN_FAILURE: {
-      return {
-        ...state,
-        loading: loadingReducer(state.loading, action),
-        error: { message: action.payload.error }
-      }
-    }
-    case CLAIM_NAME_CLEAR: {
-      return {
-        ...state,
-        error: null
+        error
       }
     }
 

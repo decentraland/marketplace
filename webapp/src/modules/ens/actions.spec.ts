@@ -10,8 +10,12 @@ import {
   claimNameSuccess,
   CLAIM_NAME_FAILURE,
   claimNameFailure,
-  CLAIM_NAME_CLEAR,
-  claimNameClear
+  claimNameCrossChainRequest,
+  claimNameCrossChainSuccess,
+  claimNameCrossChainFailure,
+  CLAIM_NAME_CROSS_CHAIN_REQUEST,
+  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+  CLAIM_NAME_CROSS_CHAIN_FAILURE
 } from './actions'
 import { ENS, ENSError } from './types'
 
@@ -29,10 +33,12 @@ describe('claimName actions', () => {
     address = '0xExampleAddress'
     chainId = ChainId.ETHEREUM_MAINNET // Replace with actual ChainId
   })
-  describe('when handling the CLAIM_NAME_REQUEST action', () => {
+
+  describe('when executing the claim name request action creator', () => {
     beforeEach(() => {
       name = 'exampleName'
     })
+
     it('should create an action to request a name claim', () => {
       expect(claimNameRequest(name)).toEqual({
         type: CLAIM_NAME_REQUEST,
@@ -41,7 +47,22 @@ describe('claimName actions', () => {
     })
   })
 
-  describe('when handling the CLAIM_NAME_TRANSACTION_SUBMITTED action', () => {
+  describe('when executing the claim name cross chain request action creator', () => {
+    beforeEach(() => {
+      name = 'exampleName'
+      chainId = ChainId.ETHEREUM_MAINNET
+      route = {} as Route
+    })
+
+    it('should create an action to request a cross chain name claim', () => {
+      expect(claimNameCrossChainRequest(name, chainId, route)).toEqual({
+        type: CLAIM_NAME_CROSS_CHAIN_REQUEST,
+        payload: { name, chainId, route }
+      })
+    })
+  })
+
+  describe('when executing the claim name transaction submitted action creator', () => {
     beforeEach(() => {
       txHash = '0xExampleTxHash'
       subdomain = 'exampleSubdomain'
@@ -49,7 +70,8 @@ describe('claimName actions', () => {
       route = {} as Route
       chainId = ChainId.ETHEREUM_MAINNET // Replace with actual ChainId
     })
-    it('should create an action when a name claim transaction is submitted', () => {
+
+    it('should create an action to signal that a name claim transaction is submitted', () => {
       expect(
         claimNameTransactionSubmitted(
           subdomain,
@@ -71,13 +93,14 @@ describe('claimName actions', () => {
     })
   })
 
-  describe('when handling the CLAIM_NAME_SUCCESS action', () => {
+  describe('when executing the claim name success action creator', () => {
     beforeEach(() => {
       name = 'exampleName'
       txHash = '0xExampleTxHash'
       ens = {} as ENS
     })
-    it('should create an action when a name claim is successful', () => {
+
+    it('should create an action to signal that a name claim is successful', () => {
       expect(claimNameSuccess({} as ENS, name, txHash)).toEqual({
         type: CLAIM_NAME_SUCCESS,
         payload: { ens, name, txHash }
@@ -85,12 +108,33 @@ describe('claimName actions', () => {
     })
   })
 
-  describe('when handling the CLAIM_NAME_FAILURE action', () => {
+  describe('when executing the claim name cross chain action creator', () => {
     beforeEach(() => {
       name = 'exampleName'
+      txHash = '0xExampleTxHash'
+      ens = {} as ENS
+      route = {} as Route
     })
-    it('should create an action when a name claim fails', () => {
-      const error = {} as ENSError
+
+    it('should create an action to signal that a cross chain name claim is successful', () => {
+      expect(
+        claimNameCrossChainSuccess({} as ENS, name, txHash, route)
+      ).toEqual({
+        type: CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+        payload: { ens, name, txHash, route }
+      })
+    })
+  })
+
+  describe('when executing the claim name failure action creator', () => {
+    let error: ENSError
+
+    beforeEach(() => {
+      name = 'exampleName'
+      error = {} as ENSError
+    })
+
+    it('should create an action to signal a name claim failure', () => {
       expect(claimNameFailure(error)).toEqual({
         type: CLAIM_NAME_FAILURE,
         payload: { error }
@@ -98,11 +142,20 @@ describe('claimName actions', () => {
     })
   })
 
-  describe('when handling the CLAIM_NAME_CLEAR action', () => {
-    it('should create an action to clear name claim data', () => {
-      expect(claimNameClear()).toEqual({
-        type: CLAIM_NAME_CLEAR,
-        payload: undefined
+  describe('when executing the claim name cross chain failure action creator', () => {
+    let error: string
+
+    beforeEach(() => {
+      error = 'anError'
+      name = 'exampleName'
+      ens = {} as ENS
+      route = {} as Route
+    })
+
+    it('should create an action to signal a name claim failure', () => {
+      expect(claimNameCrossChainFailure(route, name, error)).toEqual({
+        type: CLAIM_NAME_CROSS_CHAIN_FAILURE,
+        payload: { error, name, route }
       })
     })
   })

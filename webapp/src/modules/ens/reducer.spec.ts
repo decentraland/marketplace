@@ -1,12 +1,20 @@
+import { ChainId } from '@dcl/schemas'
+import { Route } from 'decentraland-transactions/crossChain'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   claimNameSuccess,
   claimNameFailure,
-  claimNameClear,
-  claimNameRequest
+  claimNameRequest,
+  claimNameCrossChainRequest,
+  claimNameCrossChainSuccess,
+  CLAIM_NAME_REQUEST,
+  CLAIM_NAME_CROSS_CHAIN_REQUEST,
+  CLAIM_NAME_FAILURE,
+  CLAIM_NAME_CROSS_CHAIN_FAILURE,
+  claimNameCrossChainFailure
 } from './actions'
 import { ENSState, ensReducer } from './reducer'
-import { ENS, ENSError } from './types'
+import { ENS } from './types'
 
 describe('ENS Reducer', () => {
   const INITIAL_STATE = {
@@ -17,71 +25,115 @@ describe('ENS Reducer', () => {
   }
 
   let ens: ENS
-  let requestAction: ReturnType<typeof claimNameRequest>
-  let successAction: ReturnType<typeof claimNameSuccess>
-  let failureAction: ReturnType<typeof claimNameFailure>
-  let clearAction: ReturnType<typeof claimNameClear>
   let initialState: ENSState
 
-  describe('when handling the CLAIM_NAME_REQUEST action', () => {
-    beforeEach(() => {
-      ens = { subdomain: 'example' } as ENS
-      requestAction = claimNameRequest(ens.subdomain)
-      initialState = { ...INITIAL_STATE } as ENSState
-    })
-    it('should return an state with the loading action placed', () => {
-      expect(ensReducer(initialState, requestAction)).toEqual({
-        ...initialState,
-        loading: loadingReducer(initialState.loading, requestAction)
-      })
-    })
+  beforeEach(() => {
+    ens = { subdomain: 'example' } as ENS
   })
-  describe('when handling the CLAIM_NAME_SUCCESS action', () => {
+
+  const requestActions = [
+    claimNameRequest('example'),
+    claimNameCrossChainRequest('example', ChainId.ETHEREUM_MAINNET, {} as Route)
+  ]
+
+  describe.each(requestActions)('when reducing the "$type" action', action => {
+    initialState = { ...INITIAL_STATE } as ENSState
+
     beforeEach(() => {
-      ens = { subdomain: 'example' } as ENS
-      successAction = claimNameSuccess(ens, ens.subdomain, 'aTxHash')
-      initialState = { ...INITIAL_STATE } as ENSState
+      initialState = {
+        ...INITIAL_STATE,
+        loading: []
+      }
     })
-    it('should return an state with the loading action removed and the new ens subdomain added to the data', () => {
-      expect(ensReducer(initialState, successAction)).toEqual({
+
+    it('should return a state with the loading set', () => {
+      expect(ensReducer(initialState, action)).toEqual({
         ...initialState,
-        loading: loadingReducer(initialState.loading, successAction),
-        data: {
-          ...initialState.data,
-          [ens.subdomain]: {
-            ...initialState.data[ens.subdomain],
-            ...ens
-          }
-        }
+        loading: loadingReducer(initialState.loading, action)
       })
     })
   })
 
-  describe('when handling the CLAIM_NAME_FAILURE action', () => {
-    const ensError = {} as ENSError
-    beforeEach(() => {
-      failureAction = claimNameFailure(ensError)
-      initialState = { ...INITIAL_STATE } as ENSState
-    })
-    it('should return an state with the loading action removed and the error set', () => {
-      expect(ensReducer(initialState, failureAction)).toEqual({
-        ...initialState,
-        loading: loadingReducer(initialState.loading, failureAction),
-        error: ensError
+  describe.each([
+    [
+      CLAIM_NAME_REQUEST,
+      claimNameRequest('example'),
+      claimNameSuccess({ subdomain: 'example' } as ENS, 'example', 'aTxHash')
+    ],
+    [
+      CLAIM_NAME_CROSS_CHAIN_REQUEST,
+      claimNameCrossChainRequest(
+        'example',
+        ChainId.ETHEREUM_MAINNET,
+        {} as Route
+      ),
+      claimNameCrossChainSuccess(
+        { subdomain: 'example' } as ENS,
+        'example',
+        'aTxHash',
+        {} as Route
+      )
+    ]
+  ])(
+    'when reducing the "%s" action',
+    (_action, requestAction, successAction) => {
+      beforeEach(() => {
+        initialState = {
+          ...INITIAL_STATE,
+          loading: [requestAction]
+        } as ENSState
       })
-    })
-  })
-  describe('when handling the CLAIM_NAME_CLEAR action', () => {
-    beforeEach(() => {
-      clearAction = claimNameClear()
-      initialState = { ...INITIAL_STATE, error: {} as ENSError } as ENSState
-    })
-    it('should return a state with the error cleared', () => {
-      expect(ensReducer(initialState, clearAction)).toEqual({
-        ...initialState,
-        loading: loadingReducer(initialState.loading, failureAction),
-        error: null
+
+      it('should return an state with the loading action removed and the new ens subdomain added to the data', () => {
+        expect(ensReducer(initialState, successAction)).toEqual({
+          ...initialState,
+          loading: loadingReducer(initialState.loading, successAction),
+          data: {
+            ...initialState.data,
+            [ens.subdomain]: {
+              ...initialState.data[ens.subdomain],
+              ...ens
+            }
+          }
+        })
       })
-    })
-  })
+    }
+  )
+
+  describe.each([
+    [
+      CLAIM_NAME_FAILURE,
+      claimNameRequest('example'),
+      claimNameFailure({ message: 'An error' }),
+      'An error'
+    ],
+    [
+      CLAIM_NAME_CROSS_CHAIN_FAILURE,
+      claimNameCrossChainRequest(
+        'example',
+        ChainId.ETHEREUM_MAINNET,
+        {} as Route
+      ),
+      claimNameCrossChainFailure({} as Route, 'example', 'An error'),
+      'An error'
+    ]
+  ])(
+    'when handling the "$s" action',
+    (_action, requestAction, failureAction, expectedError) => {
+      beforeEach(() => {
+        initialState = {
+          ...INITIAL_STATE,
+          loading: [requestAction]
+        } as ENSState
+      })
+
+      it('should return an state with the loading action removed and the error set', () => {
+        expect(ensReducer(initialState, failureAction)).toEqual({
+          ...initialState,
+          loading: loadingReducer(initialState.loading, failureAction),
+          error: { message: expectedError }
+        })
+      })
+    }
+  )
 })

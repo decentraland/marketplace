@@ -63,10 +63,3 @@ export function getNameInvalidType(name: string): NameInvalidType | null {
 export function hasNameMinLength(name: string): boolean {
   return name.length >= MIN_NAME_SIZE
 }
-
-export function isEnoughClaimMana(mana: number) {
-  // 100 is the minimum amount of MANA the user needs to claim a new Name
-  // We're checking against this instead of 0 when checking the allowance too because
-  // we do not yet support the double transaction needed to set the user's allowance to 0 first and then bump it up to wichever number
-  return mana >= 100
-}

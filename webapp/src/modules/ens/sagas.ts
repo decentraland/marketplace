@@ -145,33 +145,34 @@ export function* ensSaga() {
       const provider: Provider | null = yield call(getConnectedProvider)
 
       if (!wallet) {
-        throw new Error('A defined wallet is required to buy an item')
+        throw new Error('A wallet is required to claim a name')
       }
 
-      if (provider) {
-        const crossChainModule = import('decentraland-transactions/crossChain')
-        const {
-          AxelarProvider
-        }: Awaited<typeof crossChainModule> = yield crossChainModule
-
-        const crossChainProvider = new AxelarProvider(
-          config.get('SQUID_API_URL')
-        )
-        const txRespose: ethers.providers.TransactionReceipt = yield call(
-          [crossChainProvider, 'executeRoute'],
-          route,
-          provider
-        )
-
-        yield put(
-          claimNameTransactionSubmitted(
-            name,
-            wallet.address,
-            chainId,
-            txRespose.transactionHash
-          )
-        )
+      if (!provider) {
+        throw new Error('A connected provider is required claim a name')
       }
+
+      const crossChainModule = import('decentraland-transactions/crossChain')
+      const {
+        AxelarProvider
+      }: Awaited<typeof crossChainModule> = yield crossChainModule
+
+      const crossChainProvider = new AxelarProvider(config.get('SQUID_API_URL'))
+      const txResponse: ethers.providers.TransactionReceipt = yield call(
+        [crossChainProvider, 'executeRoute'],
+        route,
+        provider
+      )
+
+      yield put(
+        claimNameTransactionSubmitted(
+          name,
+          wallet.address,
+          chainId,
+          txResponse.transactionHash,
+          route
+        )
+      )
     } catch (error) {
       yield put(
         claimNameCrossChainFailure(
