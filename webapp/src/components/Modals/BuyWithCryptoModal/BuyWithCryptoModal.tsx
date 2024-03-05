@@ -378,7 +378,9 @@ export const BuyWithCryptoModal = (props: Props) => {
           data-testid={GET_MANA_BUTTON_TEST_ID}
           loading={isFetchingBalance || isBuyingAsset}
           onClick={() => {
-            onGetMana()
+            // onGetMana()
+            console.log("Getting MANA")
+            handleCrossChainBuy()
             onClose()
           }}
         >
@@ -405,6 +407,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     asset.chainId,
     isLoadingAuthorization,
     onBuyWithCard,
+    handleCrossChainBuy,
     handleBuyWithCard,
     onGetMana,
     onClose

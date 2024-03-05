@@ -806,10 +806,7 @@ function* handleRedirectToSuccessPage(
         ? payload.nft.contractAddress
         : 'ens' in payload
         ? payload.ens.contractAddress
-        : '',
-    ...(isCrossChainAction
-      ? { isCrossChain: isCrossChainAction.toString() }
-      : {})
+        : ''
   }
   yield put(push(locations.success(successParams)))
 }

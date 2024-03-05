@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { Loader, Icon } from 'decentraland-ui'
 import { Network } from '@dcl/schemas'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  isPending,
-  getTransactionHref
-} from 'decentraland-dapps/dist/modules/transaction/utils'
-import {
-  TransactionStatus,
-  Transaction
-} from 'decentraland-dapps/dist/modules/transaction/types'
+import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { formatDistanceToNow } from '../../../../lib/date'
 import { getAssetUrl } from '../../../../modules/asset/utils'
 import { AssetImage } from '../../../AssetImage'
@@ -21,26 +15,9 @@ import { Mana } from '../../../Mana'
 import { Props } from './TransactionDetail.types'
 import './TransactionDetail.css'
 
-const getHref = (tx: Transaction) => {
-  if (tx.status === null) {
-    return
-  }
-  return getTransactionHref({ txHash: tx.replacedBy || tx.hash }, tx.chainId)
-}
-
 const TransactionDetail = (props: Props) => {
-  const { asset, text, tx, isCrossChain = false } = props
-  const [txLink, setTxLink] = useState(getHref(tx))
-  useEffect(() => {
-    ;(async () => {
-      if (isCrossChain) {
-        const { AxelarProvider } = await import(
-          'decentraland-transactions/crossChain'
-        )
-        setTxLink(await AxelarProvider.getTxLink(tx.hash))
-      }
-    })()
-  })
+  const { asset, text, tx } = props
+
   return (
     <Row className="TransactionDetail">
       <Column align="left" grow={true}>
@@ -69,7 +46,7 @@ const TransactionDetail = (props: Props) => {
       </Column>
       <Column align="right">
         <a
-          href={txLink}
+          href={tx.url}
           className={tx.status ? 'status ' + tx.status : 'status'}
           target="_blank"
           rel="noopener noreferrer"
