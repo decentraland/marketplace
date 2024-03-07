@@ -1,5 +1,4 @@
 import { ChainId, Item, Order, RentalListing } from '@dcl/schemas'
-import { Route } from 'decentraland-transactions/crossChain'
 import {
   hideAllToasts,
   showToast
