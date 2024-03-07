@@ -113,11 +113,6 @@
     "pre-commit:fix:prettier": "prettier --config .prettierrc.json --write",
     "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json"
   },
-  "prettier": {
-    "printWidth": 80,
-    "singleQuote": true,
-    "semi": false
-  },
   "engines": {
     "node": "18"
   },
