@@ -1,0 +1,35 @@
+.creatorRowContainer {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.creatorRowContainer :global(.dcl.avatar-face.tiny.inline) {
+  width: 30px;
+  height: 30px;
+}
+
+.itemDataContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.itemName {
+  font-weight: bold;
+  color: white;
+}
+
+.creator {
+  margin-top: 2px;
+  color: #a09ba8;
+}
+
+.creatorRowContainer .owner {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.creatorRowContainer :global(.Profile.avatar.huge.inline .dcl.avatar-face.tiny.inline) {
+  margin-right: 16px;
+}

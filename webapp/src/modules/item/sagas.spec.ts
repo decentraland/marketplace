@@ -1,8 +1,9 @@
-import { getLocation } from 'connected-react-router'
+import { getLocation, push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { call, select, take } from 'redux-saga/effects'
+import { call, delay, select, take } from 'redux-saga/effects'
 import { ChainId, Item, Network, Rarity } from '@dcl/schemas'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
@@ -11,18 +12,22 @@ import {
   NFTPurchase,
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
+import {
+  closeModal,
+  openModal
+} from 'decentraland-dapps/dist/modules/modal/actions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { locations } from '../routing/locations'
+import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
-import { closeModal, openModal } from '../modal/actions'
 import {
   buyAssetWithCard,
   BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
 } from '../asset/utils'
-import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
+import { waitForWalletConnectionAndIdentityIfConnecting } from '../wallet/utils'
 import {
   buyItemRequest,
   buyItemFailure,
@@ -43,13 +48,24 @@ import {
   fetchCollectionItemsRequest,
   fetchCollectionItemsSuccess,
   fetchCollectionItemsFailure,
-  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE
+  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
+  buyItemCrossChainSuccess,
+  trackCrossChainTx
 } from './actions'
-import { itemSaga } from './sagas'
+import {
+  AxelarProvider,
+  RouteResponse,
+  StatusResponse
+} from 'decentraland-transactions/crossChain'
+import { CANCEL_FETCH_ITEMS, itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 import { ItemBrowseOptions } from './types'
-import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { getIsMarketplaceServerEnabled } from '../features/selectors'
+import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
+import { AssetType } from '../asset/types'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
+import { getCrossChainTransactionSuccessToast } from '../toast/toasts'
 
 const item = {
   itemId: 'anItemId',
@@ -59,7 +75,8 @@ const item = {
 } as Item
 
 const wallet = {
-  address: '0x32be343b94f860124dc4fee278fdcbd38c102d88'
+  address: '0x32be343b94f860124dc4fee278fdcbd38c102d88',
+  chainId: ChainId.MATIC_MAINNET
 }
 
 const txHash =
@@ -129,7 +146,7 @@ describe('when handling the buy items request action', () => {
           [select(getWallet), wallet],
           [matchers.call.fn(sendTransaction), Promise.resolve(txHash)]
         ])
-        .put(buyItemSuccess(item.chainId, txHash, item))
+        .put(buyItemSuccess(wallet.chainId, txHash, item))
         .dispatch(buyItemRequest(item))
         .run({ silenceTimeout: true })
     })
@@ -416,60 +433,132 @@ describe('when handling the fetch items request action', () => {
         pathname = locations.browse()
       })
       describe('and there is an ongoing fetch item request', () => {
+        let wallet: Wallet | undefined
         let originalBrowseOptions = itemBrowseOptions
         let newBrowseOptions: ItemBrowseOptions = {
           ...itemBrowseOptions,
           filters: { ...itemBrowseOptions.filters, rarities: [Rarity.COMMON] }
         }
-        it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
-          return expectSaga(itemSaga, getIdentity)
-            .provide([
-              [
-                matchers.call.fn(waitForWalletConnectionIfConnecting),
-                undefined
-              ],
-              [select(getLocation), { pathname }],
-              {
-                call(effect, next) {
-                  if (
-                    effect.fn === CatalogAPI.prototype.get &&
-                    effect.args[0] === originalBrowseOptions.filters
-                  ) {
-                    // Add a setTimeout so it gives time to get it cancelled
-                    return new Promise(() => {})
+        describe('and there is a wallet connected', () => {
+          beforeEach(() => {
+            wallet = {} as Wallet
+          })
+
+          it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [
+                  matchers.call.fn(
+                    waitForWalletConnectionAndIdentityIfConnecting
+                  ),
+                  undefined
+                ],
+                [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
+                [select(getWallet), wallet],
+                [select(getIsMarketplaceServerEnabled), true],
+                [select(getLocation), { pathname }],
+                {
+                  call(effect, next) {
+                    if (
+                      effect.fn === CatalogAPI.prototype.get &&
+                      effect.args[0] === originalBrowseOptions.filters
+                    ) {
+                      // Add a setTimeout so it gives time to get it cancelled
+                      return new Promise(() => {})
+                    }
+                    if (
+                      effect.fn === CatalogAPI.prototype.get &&
+                      effect.args[0] === newBrowseOptions.filters
+                    ) {
+                      // Mock without timeout
+                      return fetchResult
+                    }
+                    return next()
                   }
-                  if (
-                    effect.fn === CatalogAPI.prototype.get &&
-                    effect.args[0] === newBrowseOptions.filters
-                  ) {
-                    // Mock without timeout
-                    return fetchResult
-                  }
-                  return next()
                 }
-              }
-            ])
-            .call.like({
-              fn: CatalogAPI.prototype.get,
-              args: [newBrowseOptions.filters]
-            })
-            .put(
-              fetchItemsFailure(
-                FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
-                originalBrowseOptions
+              ])
+              .call.like({
+                fn: CatalogAPI.prototype.get,
+                args: [newBrowseOptions.filters]
+              })
+              .put(
+                fetchItemsFailure(
+                  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
+                  originalBrowseOptions
+                )
               )
-            )
-            .put(
-              fetchItemsSuccess(
-                fetchResult.data,
-                fetchResult.total,
-                newBrowseOptions,
-                nowTimestamp
+              .put(
+                fetchItemsSuccess(
+                  fetchResult.data,
+                  fetchResult.total,
+                  newBrowseOptions,
+                  nowTimestamp
+                )
               )
-            )
-            .dispatch(fetchItemsRequest(originalBrowseOptions))
-            .dispatch(fetchItemsRequest(newBrowseOptions))
-            .run({ silenceTimeout: true })
+              .dispatch(fetchItemsRequest(originalBrowseOptions))
+              .dispatch({ type: CANCEL_FETCH_ITEMS })
+              .dispatch(fetchItemsRequest(newBrowseOptions))
+              .run({ silenceTimeout: true })
+          })
+        })
+
+        describe('and there is no wallet connected', () => {
+          it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [
+                  matchers.call.fn(
+                    waitForWalletConnectionAndIdentityIfConnecting
+                  ),
+                  undefined
+                ],
+                [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
+                [select(getWallet), wallet],
+                [select(getIsMarketplaceServerEnabled), true],
+                [select(getLocation), { pathname }],
+                {
+                  call(effect, next) {
+                    if (
+                      effect.fn === CatalogAPI.prototype.get &&
+                      effect.args[0] === originalBrowseOptions.filters
+                    ) {
+                      // Add a setTimeout so it gives time to get it cancelled
+                      return new Promise(() => {})
+                    }
+                    if (
+                      effect.fn === CatalogAPI.prototype.get &&
+                      effect.args[0] === newBrowseOptions.filters
+                    ) {
+                      // Mock without timeout
+                      return fetchResult
+                    }
+                    return next()
+                  }
+                }
+              ])
+              .call.like({
+                fn: CatalogAPI.prototype.get,
+                args: [newBrowseOptions.filters]
+              })
+              .put(
+                fetchItemsFailure(
+                  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
+                  originalBrowseOptions
+                )
+              )
+              .put(
+                fetchItemsSuccess(
+                  fetchResult.data,
+                  fetchResult.total,
+                  newBrowseOptions,
+                  nowTimestamp
+                )
+              )
+              .dispatch(fetchItemsRequest(originalBrowseOptions))
+              .dispatch({ type: CANCEL_FETCH_ITEMS })
+              .dispatch(fetchItemsRequest(newBrowseOptions))
+              .run({ silenceTimeout: true })
+          })
         })
       })
     })
@@ -482,8 +571,14 @@ describe('when handling the fetch items request action', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined],
-            [select(getLocation), { pathname }]
+            [
+              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+              undefined
+            ],
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
+            [select(getWallet), undefined],
+            [select(getLocation), { pathname }],
+            [select(getIsMarketplaceServerEnabled), false]
           ])
           .put(
             fetchItemsSuccess(
@@ -504,8 +599,15 @@ describe('when handling the fetch items request action', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [select(getLocation), { pathname: '' }],
+          [select(getWallet), undefined],
+          [select(getIsMarketplaceServerEnabled), true],
+          [select(getWallet), undefined],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
-          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+          [
+            matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+            undefined
+          ],
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined]
         ])
         .put(fetchItemsFailure(anError.message, itemBrowseOptions))
         .dispatch(fetchItemsRequest(itemBrowseOptions))
@@ -515,16 +617,60 @@ describe('when handling the fetch items request action', () => {
 
   describe('when handling the fetch item request action', () => {
     describe('when the request is successful', () => {
-      it('should dispatch a successful action with the fetched items', () => {
-        return expectSaga(itemSaga, getIdentity)
-          .provide([
-            [matchers.call.fn(ItemAPI.prototype.getOne), item],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
-          ])
-          .put(fetchItemSuccess(item))
-          .put(fetchSmartWearableRequiredPermissionsRequest(item))
-          .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
-          .run({ silenceTimeout: true })
+      describe('and it is a regular item', () => {
+        it('should dispatch a successful action with the fetched items', () => {
+          return expectSaga(itemSaga, getIdentity)
+            .provide([
+              [matchers.call.fn(ItemAPI.prototype.getOne), item],
+              [
+                matchers.call.fn(
+                  waitForWalletConnectionAndIdentityIfConnecting
+                ),
+                undefined
+              ]
+            ])
+            .put(fetchItemSuccess(item))
+            .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
+            .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and it is a smart wearable', () => {
+        let smartWearable: Item
+        beforeEach(() => {
+          smartWearable = {
+            ...item,
+            data: {
+              ...item.data,
+              wearable: {
+                isSmart: true
+              }
+            },
+            urn: 'someUrn'
+          } as Item
+        })
+
+        it('should dispatch a successful action with the fetched items', () => {
+          return expectSaga(itemSaga, getIdentity)
+            .provide([
+              [matchers.call.fn(ItemAPI.prototype.getOne), smartWearable],
+              [
+                matchers.call.fn(
+                  waitForWalletConnectionAndIdentityIfConnecting
+                ),
+                undefined
+              ]
+            ])
+            .put(fetchItemSuccess(smartWearable))
+            .put(fetchSmartWearableRequiredPermissionsRequest(smartWearable))
+            .dispatch(
+              fetchItemRequest(
+                smartWearable.contractAddress,
+                smartWearable.itemId
+              )
+            )
+            .run({ silenceTimeout: true })
+        })
       })
     })
 
@@ -536,7 +682,10 @@ describe('when handling the fetch items request action', () => {
               matchers.call.fn(ItemAPI.prototype.getOne),
               Promise.reject(anError)
             ],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+            [
+              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+              undefined
+            ]
           ])
           .put(
             fetchItemFailure(item.contractAddress, item.itemId, anError.message)
@@ -568,9 +717,13 @@ describe('when handling the fetch trending items request action', () => {
       it('should dispatch a successful action with the fetched trending items', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
+            [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+            [
+              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+              undefined
+            ]
           ])
           .put(fetchTrendingItemsSuccess(fetchResult.data))
           .dispatch(fetchTrendingItemsRequest())
@@ -584,8 +737,12 @@ describe('when handling the fetch trending items request action', () => {
       it('should dispatch a successful action with the fetched trending items', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
+            // [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
-            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+            [
+              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+              undefined
+            ]
           ])
           .put(fetchTrendingItemsSuccess(fetchResult.data))
           .dispatch(fetchTrendingItemsRequest())
@@ -602,10 +759,80 @@ describe('when handling the fetch trending items request action', () => {
             matchers.call.fn(ItemAPI.prototype.getTrendings),
             Promise.reject(anError)
           ],
-          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+          [
+            matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
+            undefined
+          ]
         ])
         .put(fetchTrendingItemsFailure(anError.message))
         .dispatch(fetchTrendingItemsRequest())
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the buy item cross chain success action', () => {
+  let route: RouteResponse
+  let chainId: ChainId
+  let txHash: string
+  let statusResponse: StatusResponse
+  beforeEach(() => {
+    chainId = ChainId.ETHEREUM_MAINNET
+    txHash = 'aHash'
+  })
+  describe('and its an actual cross chain purchase', () => {
+    beforeEach(() => {
+      route = {
+        requestId: 'aRequestId',
+        route: {
+          params: {
+            fromChain: ChainId.ETHEREUM_MAINNET.toString(),
+            toChain: ChainId.MATIC_MAINNET.toString()
+          }
+        }
+      } as RouteResponse
+      statusResponse = {
+        status: 'success',
+        toChain: {
+          transactionId: 'destinationChainTx'
+        }
+      } as StatusResponse
+    })
+    it('should get the status of the transaction and put the trackCrossChainTx action, put location success and put the cross chain success toast', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([
+          [
+            matchers.call.fn(AxelarProvider.prototype.getStatus),
+            statusResponse
+          ],
+          [delay(1000), void 0]
+        ])
+        .put(
+          trackCrossChainTx(
+            parseInt(route.route.params.toChain) as ChainId,
+            statusResponse.toChain!.transactionId
+          )
+        )
+        .put(
+          showToast(
+            getCrossChainTransactionSuccessToast(
+              AxelarProvider.getTxLink(txHash)
+            )
+          )
+        )
+        .put(
+          push(
+            locations.success({
+              txHash,
+              destinationTxHash: statusResponse.toChain?.transactionId,
+              tokenId: item.itemId,
+              assetType: AssetType.ITEM,
+              contractAddress: item.contractAddress,
+              isCrossChain: 'true'
+            })
+          )
+        )
+        .dispatch(buyItemCrossChainSuccess(route, chainId, txHash, item))
         .run({ silenceTimeout: true })
     })
   })

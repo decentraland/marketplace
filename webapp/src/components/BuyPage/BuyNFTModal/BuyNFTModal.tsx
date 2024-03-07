@@ -20,11 +20,12 @@ import { getContractNames } from '../../../modules/vendor'
 import * as events from '../../../utils/events'
 import { AssetType } from '../../../modules/asset/types'
 import { Contract as DCLContract } from '../../../modules/vendor/services'
+import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
 import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
 import { AssetProviderPage } from '../../AssetProviderPage'
-import { getBuyItemStatus, getError } from '../../../modules/order/selectors'
+import ErrorBanner from '../../ErrorBanner'
 import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
@@ -51,7 +52,11 @@ const BuyNFTModal = (props: Props) => {
     onClearOrderErrors
   } = props
 
-  const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
+  const [
+    fingerprint,
+    isFingerprintLoading,
+    contractFingerprint
+  ] = useFingerprint(nft)
   const analytics = getAnalytics()
 
   const handleExecuteOrder = useCallback(
@@ -121,7 +126,9 @@ const BuyNFTModal = (props: Props) => {
     !order ||
     isOwner ||
     (hasInsufficientMANA && !isBuyWithCardPage) ||
-    (!fingerprint && nft.category === NFTCategory.ESTATE)
+    (!fingerprint && nft.category === NFTCategory.ESTATE) ||
+    isFingerprintLoading ||
+    contractFingerprint !== fingerprint
 
   const name = <Name asset={nft} />
 
@@ -140,12 +147,6 @@ const BuyNFTModal = (props: Props) => {
     subtitle = (
       <T id={`${translationPageDescriptorId}.not_for_sale`} values={{ name }} />
     )
-  } else if (
-    !fingerprint &&
-    nft.category === NFTCategory.ESTATE &&
-    !isFingerprintLoading
-  ) {
-    subtitle = <T id={`${translationPageDescriptorId}.no_fingerprint`} />
   } else if (isOwner) {
     subtitle = (
       <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
@@ -202,6 +203,9 @@ const BuyNFTModal = (props: Props) => {
         <PriceTooLow chainId={nft.chainId} network={nft.network} />
       ) : null}
       <PartiallySupportedNetworkCard asset={nft} />
+      {!isFingerprintLoading && contractFingerprint !== fingerprint ? (
+        <ErrorBanner info={t('atlas_updated_warning.fingerprint_missmatch')} />
+      ) : null}
       <div
         className={classNames('buttons', isWearableOrEmote(nft) && 'with-mana')}
       >

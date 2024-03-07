@@ -8,8 +8,6 @@ import {
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { RootState } from '../reducer'
 
-export * from 'decentraland-dapps/dist/modules/wallet/selectors'
-
 export const getWallet = createSelector<
   RootState,
   Wallet | null,
@@ -31,7 +29,7 @@ export const getAddress = (state: RootState) => {
  */
 export const getMana = (
   state: RootState,
-  network: Network
+  network: Network.ETHEREUM | Network.MATIC
 ): number | undefined => {
   return getNetworks(state)?.[network].mana
 }

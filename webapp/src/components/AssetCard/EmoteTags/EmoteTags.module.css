@@ -1,5 +1,11 @@
 .EmoteTags {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.EmoteTags .badges {
+  display: flex;
 }
 
 .EmoteTags .PlayModeSmallBadge {
@@ -13,14 +19,21 @@
   margin-left: 10px;
 }
 
+.EmoteTags .sound {
+  background-color: #37333d;
+  padding: 4px 6px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
 .EmoteTags .PlayModeSmallBadge .PlayIcon {
   height: 15px;
   background-position: center;
   background-repeat: no-repeat;
   width: 19px;
-  /* filter obtained using https://isotropic.co/tool/hex-color-to-css-filter/ */
-  filter: invert(99%) sepia(4%) saturate(57%) hue-rotate(228deg)
-    brightness(117%) contrast(100%);
+  filter: brightness(0) invert(1);
+  background-size: cover;
 }
 
 .EmoteTags .PlayModeSmallBadge .PlayOnce {

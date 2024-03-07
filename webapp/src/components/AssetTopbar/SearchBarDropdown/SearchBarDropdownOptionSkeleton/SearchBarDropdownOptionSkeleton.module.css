@@ -1,0 +1,58 @@
+@keyframes wave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeletonContainer {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.skeletonDataContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.assetImageSkeleton {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+
+  background: var(--dcl-pale-black, #43404a);
+  margin-right: 16px;
+  background: linear-gradient(90deg, #43404a 25%, #63616d 50%, #43404a 75%);
+  background-size: 200% 100%;
+  animation: wave 1.5s infinite;
+}
+
+.assetImageSkeleton.rectangle {
+  border-radius: 5px;
+}
+
+.assetImageSkeleton.circle {
+  border-radius: 35px;
+}
+
+.itemNameSkeleton {
+  width: 105px;
+  height: 17px;
+  background: var(--dcl-pale-black, #43404a);
+  margin-bottom: 6px;
+  background: linear-gradient(90deg, #43404a 25%, #63616d 50%, #43404a 75%);
+  background-size: 200% 100%;
+  animation: wave 1.5s infinite;
+}
+
+.creatorSkeleton {
+  width: 126px;
+  height: 7px;
+  background: var(--dcl-pale-black, #43404a);
+  background: linear-gradient(90deg, #43404a 25%, #63616d 50%, #43404a 75%);
+  background-size: 200% 100%;
+  animation: wave 1.5s infinite;
+}

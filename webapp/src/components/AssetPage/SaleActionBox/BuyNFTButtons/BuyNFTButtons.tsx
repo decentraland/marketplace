@@ -1,52 +1,95 @@
-import { memo, useCallback } from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Icon, Mana } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { memo, useCallback, useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
+import { Loader } from 'decentraland-ui'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-
 import { locations } from '../../../../modules/routing/locations'
+import { isNFT } from '../../../../modules/asset/utils'
+import { Asset } from '../../../../modules/asset/types'
+import { AssetProvider } from '../../../AssetProvider'
 import * as events from '../../../../utils/events'
 import styles from './BuyNFTButtons.module.css'
 import { Props } from './BuyNFTButtons.types'
+import { BuyWithCardButton } from './BuyWithCardButton'
+import { BuyWithCryptoButton } from './BuyWithCryptoButton'
 
 const BuyNFTButtons = ({
+  wallet,
+  isConnecting,
+  asset,
   assetType,
-  contractAddress,
-  network,
   tokenId,
-  itemId,
-  buyWithCardClassName
+  buyWithCardClassName,
+  isBuyingWithCryptoModalOpen,
+  onBuyWithCrypto,
+  onExecuteOrderWithCard,
+  onBuyItemWithCard,
+  onRedirect
 }: Props) => {
-  const assetId = tokenId || itemId
-
   const analytics = getAnalytics()
+  const location = useLocation()
+  const shouldOpenBuyWithCryptoModal = useMemo(() => {
+    const search = new URLSearchParams(location.search)
+    const shouldOpenModal = search.get('buyWithCrypto')
+    return shouldOpenModal
+  }, [location.search])
 
-  const handleBuyWithCard = useCallback(() => {
-    analytics.track(events.CLICK_GO_TO_BUY_NFT_WITH_CARD)
-  }, [analytics])
+  const handleBuyWithCard = useCallback(
+    (asset: Asset) => {
+      analytics.track(events.CLICK_GO_TO_BUY_NFT_WITH_CARD)
+      !isNFT(asset) ? onBuyItemWithCard(asset) : onExecuteOrderWithCard(asset)
+    },
+    [analytics, onBuyItemWithCard, onExecuteOrderWithCard]
+  )
+
+  const handleBuyWithCrypto = useCallback(
+    (asset, order) => {
+      if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
+        onRedirect(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
+      } else {
+        analytics.track(events.CLICK_BUY_NFT_WITH_CRYPTO)
+        onBuyWithCrypto(asset, order)
+      }
+    },
+    [
+      isConnecting,
+      wallet,
+      isBuyingWithCryptoModalOpen,
+      location.pathname,
+      analytics,
+      onRedirect,
+      onBuyWithCrypto
+    ]
+  )
 
   return (
     <>
-      <Button
-        as={Link}
-        to={locations.buy(assetType, contractAddress, assetId)}
-        primary
-        fluid
+      <AssetProvider
+        type={assetType}
+        contractAddress={asset.contractAddress}
+        tokenId={tokenId}
       >
-        <Mana showTooltip inline size="small" network={network} />
-        {t('asset_page.actions.buy_with_mana')}
-      </Button>
-
-      <Button
-        as={Link}
-        className={`${styles.buy_with_card} ${buyWithCardClassName}`}
-        to={locations.buyWithCard(assetType, contractAddress, assetId)}
-        onClick={handleBuyWithCard}
-        fluid
-      >
-        <Icon name="credit card outline" />
-        {t('asset_page.actions.buy_with_card')}
-      </Button>
+        {(asset, order) => {
+          if (!asset)
+            return (
+              <Loader active size="medium" className={styles.loading_asset} />
+            )
+          if (asset && shouldOpenBuyWithCryptoModal) {
+            onBuyWithCrypto(asset, order)
+          }
+          return (
+            <>
+              <BuyWithCryptoButton
+                assetNetwork={asset.network}
+                onClick={() => handleBuyWithCrypto(asset, order)}
+              />
+              <BuyWithCardButton
+                className={buyWithCardClassName}
+                onClick={() => handleBuyWithCard(asset)}
+              />
+            </>
+          )
+        }}
+      </AssetProvider>
     </>
   )
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ethers } from 'ethers'
+import { Network } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
@@ -23,6 +24,7 @@ import {
   EXECUTE_ORDER_WITH_CARD_SUCCESS
 } from '../../../modules/order/actions'
 import {
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_SUCCESS,
   BUY_ITEM_WITH_CARD_SUCCESS
 } from '../../../modules/item/actions'
@@ -168,6 +170,7 @@ const Transaction = (props: Props) => {
       )
     }
     case BUY_ITEM_SUCCESS:
+    case BUY_ITEM_CROSS_CHAIN_SUCCESS:
     case EXECUTE_ORDER_TRANSACTION_SUBMITTED:
     case BUY_ITEM_WITH_CARD_SUCCESS:
     case EXECUTE_ORDER_WITH_CARD_SUCCESS: {
@@ -216,6 +219,7 @@ const Transaction = (props: Props) => {
                 />
               }
               tx={tx}
+              isCrossChain={tx.actionType === BUY_ITEM_CROSS_CHAIN_SUCCESS}
             />
           )}
         </AssetProvider>
@@ -481,7 +485,7 @@ const Transaction = (props: Props) => {
       const chainId = getChainIdByNetwork(network)
       const contract = getContract({
         name: getContractNames().MANA,
-        network: network
+        network: network as Network.ETHEREUM | Network.MATIC
       })
 
       const name = getNetworkMANADescription(network)

@@ -74,6 +74,8 @@ export type BrowseOptions = {
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
+  emoteHasSound?: boolean
+  emoteHasGeometry?: boolean
 }
 
 export enum PageName {
@@ -81,6 +83,8 @@ export enum PageName {
   SIGN_IN,
   SETTINGS,
   LANDS,
+  NAMES,
+  MINT_NAME,
   COLLECTION,
   BROWSE,
   CAMPAIGN,

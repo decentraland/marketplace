@@ -190,7 +190,6 @@ const AssetCard = (props: Props) => {
               }`}
               asset={asset}
               showOrderListedTag={showListedTag}
-              showMonospace
             />
             {!isNFT(asset) && !isMobile ? (
               <FavoritesCounter

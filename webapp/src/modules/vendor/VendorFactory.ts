@@ -1,12 +1,11 @@
 import { BaseClientConfig } from 'decentraland-dapps/dist/lib/BaseClient'
-import { services as decentraland } from './decentraland'
 import {
   ContractService,
   NFTService,
   OrderService,
   BidService,
   AnalyticsService
-} from './services'
+} from './decentraland'
 import { VendorName } from './types'
 
 export class VendorFactory {
@@ -18,11 +17,11 @@ export class VendorFactory {
       case VendorName.DECENTRALAND:
         return new Vendor<VendorName.DECENTRALAND>(
           vendor,
-          new decentraland.ContractService(),
-          new decentraland.NFTService(config),
-          new decentraland.OrderService(),
-          new decentraland.BidService(),
-          new decentraland.AnalyticsService()
+          new ContractService(),
+          new NFTService(config),
+          new OrderService(),
+          new BidService(),
+          new AnalyticsService()
         )
       default:
         throw new Error(`Invalid vendor "${vendor}"`)
@@ -34,9 +33,9 @@ export class Vendor<V extends VendorName> {
   constructor(
     public type: V,
     public contractService: ContractService,
-    public nftService: NFTService<V>,
-    public orderService: OrderService<V>,
-    public bidService?: BidService<V>,
+    public nftService: NFTService,
+    public orderService: OrderService,
+    public bidService?: BidService,
     public analyticsService?: AnalyticsService
   ) {}
 }

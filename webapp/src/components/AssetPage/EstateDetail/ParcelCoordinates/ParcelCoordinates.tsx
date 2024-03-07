@@ -11,12 +11,12 @@ import { Props } from './ParcelCoordinates.types'
 import styles from './ParcelCoordinates.module.css'
 
 const ParcelCoordinates = (props: Props) => {
-  const { parcelCoordinates } = props
+  const { parcelCoordinates, total } = props
 
   return (
     <div className={styles.ParcelCoordinates}>
       <Header sub>{t('parcel_coordinates.title')}</Header>
-      <Collapsible collapsedHeight={60}>
+      <Collapsible collapsedHeight={35}>
         <Row className={styles.coordinates}>
           {parcelCoordinates.map((parcel, index) => (
             <Link
@@ -30,6 +30,14 @@ const ParcelCoordinates = (props: Props) => {
               />
             </Link>
           ))}
+          {parcelCoordinates.length < total ? (
+            <span className={styles.moreText}>
+              {t('parcel_coordinates.and_more', {
+                amount: total - parcelCoordinates.length,
+                strong: (text: string) => <strong>{text}</strong>
+              })}
+            </span>
+          ) : null}
         </Row>
       </Collapsible>
     </div>

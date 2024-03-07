@@ -1,30 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { Loader, ModalNavigation } from 'decentraland-ui'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
-import { getSmartWearableVideoShowcase } from '../../../lib/asset'
 import { VIDEO_TEST_ID } from './constants'
 import { Props } from './SmartWearableVideoShowcaseModal.types'
 import styles from './SmartWearableVideoShowcaseModal.module.css'
 
 const SmartWearableVideoShowcaseModal = (props: Props) => {
   const {
-    metadata: { asset },
+    metadata: { videoHash },
     onClose
   } = props
-  const [videoSrc, setVideoSrc] = useState<string | undefined>(undefined)
-
-  const fetchVideoSrc = useCallback(async () => {
-    if (!asset?.urn) return
-
-    const videoHash = await getSmartWearableVideoShowcase(asset)
-    if (videoHash) setVideoSrc(builderAPI.contentUrl(videoHash))
-  }, [asset])
-
-  useEffect(() => {
-    fetchVideoSrc()
-  }, [fetchVideoSrc])
 
   return (
     <Modal size="tiny" className={styles.modal} onClose={onClose} open>
@@ -33,9 +20,9 @@ const SmartWearableVideoShowcaseModal = (props: Props) => {
         onClose={onClose}
       />
       <Modal.Content className={styles.content}>
-        {videoSrc ? (
+        {videoHash ? (
           <video
-            src={videoSrc}
+            src={builderAPI.contentUrl(videoHash)}
             className={styles.video}
             autoPlay
             controls

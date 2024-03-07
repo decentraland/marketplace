@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
 import { matchPath, useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
-import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
+import { BackToTopButton, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -26,10 +26,8 @@ import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
-import { ClaimYourName } from '../ClaimYourName'
-import { BackToTopButton } from '../BackToTopButton'
-import { Props } from './AssetBrowse.types'
 import MapTopbar from './MapTopbar'
+import { Props } from './AssetBrowse.types'
 import MapBrowse from './MapBrowse'
 import './AssetBrowse.css'
 
@@ -50,8 +48,7 @@ const AssetBrowse = (props: Props) => {
     onlySmart,
     viewInState,
     onlyOnRent,
-    visitedLocations,
-    isMapViewFiltersEnabled
+    visitedLocations
   } = props
 
   const location = useLocation()
@@ -180,19 +177,6 @@ const AssetBrowse = (props: Props) => {
 
   let right: ReactNode
 
-  const mapTopbar = isMapViewFiltersEnabled ? (
-    <MapTopbar
-      showOwned={showOwnedLandOnMap}
-      onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
-    />
-  ) : (
-    <div className="blur-background">
-      <Container>
-        <AssetTopbar />
-      </Container>
-    </div>
-  )
-
   switch (section) {
     case DecentralandSection.COLLECTIONS:
       right = <CollectionList creator={address ?? ''} />
@@ -227,7 +211,6 @@ const AssetBrowse = (props: Props) => {
     case DecentralandSection.ENS:
       right = (
         <>
-          {!isAccountOrCurrentAccount && <ClaimYourName />}
           <AssetTopbar />
           <AssetList isManager={isCurrentAccount} />
         </>
@@ -236,7 +219,14 @@ const AssetBrowse = (props: Props) => {
     default:
       right = (
         <>
-          {isMap && isFullscreen ? mapTopbar : <AssetTopbar />}
+          {isMap && isFullscreen ? (
+            <MapTopbar
+              showOwned={showOwnedLandOnMap}
+              onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
+            />
+          ) : (
+            <AssetTopbar />
+          )}
           {isMap ? (
             <MapBrowse showOwned={showOwnedLandOnMap} />
           ) : (
@@ -251,7 +241,6 @@ const AssetBrowse = (props: Props) => {
     Sections.decentraland.LAND,
     Sections.decentraland.WEARABLES,
     Sections.decentraland.EMOTES,
-    Sections.decentraland.ENS,
     Sections.decentraland.ON_SALE,
     Sections.decentraland.ON_RENT,
     Sections.decentraland.SALES,
@@ -270,7 +259,7 @@ const AssetBrowse = (props: Props) => {
                   key={key}
                   active={section === value}
                   onClick={
-                    section === Sections.decentraland.COLLECTIONS
+                    value === Sections.decentraland.COLLECTIONS
                       ? () =>
                           changeFilter(
                             'section',

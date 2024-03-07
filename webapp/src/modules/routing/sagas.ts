@@ -8,6 +8,7 @@ import {
   race,
   spawn
 } from 'redux-saga/effects'
+import { ethers } from 'ethers'
 import { matchPath } from 'react-router-dom'
 import {
   push,
@@ -30,11 +31,17 @@ import {
   CONNECT_WALLET_SUCCESS,
   ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { isLegacyOrder } from '../../lib/orders'
+import { DCLRegistrar } from '../../contracts/DCLRegistrar'
 import { AssetType } from '../asset/types'
 import {
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_SUCCESS,
+  BuyItemCrossChainSuccessAction,
   BuyItemSuccessAction,
   fetchItemRequest,
   fetchItemsRequest,
@@ -124,11 +131,20 @@ import {
 } from '../bid/actions'
 import { getData } from '../event/selectors'
 import { getWallet } from '../wallet/selectors'
-import { openModal } from '../modal/actions'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import { getPage, getView } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { AssetStatusFilter } from '../../utils/filters'
+import {
+  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+  CLAIM_NAME_SUCCESS,
+  CLAIM_NAME_TRANSACTION_SUBMITTED,
+  ClaimNameCrossChainSuccessAction,
+  ClaimNameSuccessAction,
+  ClaimNameTransactionSubmittedAction
+} from '../ens/actions'
+import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
+import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -150,8 +166,18 @@ export function* routingSaga() {
   )
 
   yield takeEvery(
-    [EXECUTE_ORDER_SUCCESS, BUY_ITEM_SUCCESS],
+    [
+      EXECUTE_ORDER_SUCCESS,
+      BUY_ITEM_SUCCESS,
+      BUY_ITEM_CROSS_CHAIN_SUCCESS,
+      CLAIM_NAME_SUCCESS,
+      CLAIM_NAME_CROSS_CHAIN_SUCCESS
+    ],
     handleRedirectToSuccessPage
+  )
+  yield takeEvery(
+    CLAIM_NAME_TRANSACTION_SUBMITTED,
+    handleRedirectClaimingNameToSuccessPage
   )
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
   yield takeEvery(FETCH_NFTS_SUCCESS, handleFetchOnSaleNFTsSuccess)
@@ -249,7 +275,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     maxPrice,
     creators,
     network,
-    status
+    status,
+    emoteHasGeometry,
+    emoteHasSound
   } = options
 
   const address =
@@ -368,6 +396,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               minPrice,
               maxPrice,
               network,
+              emoteHasGeometry,
+              emoteHasSound,
               ...statusParameters
             }
           })
@@ -670,10 +700,15 @@ function* deriveCurrentOptions(
       // for ENS, if the previous page had `onlyOnSale` as `undefined` like wearables or emotes, it defaults to `true`, otherwise use the current value
       newOptions = {
         ...newOptions,
-        assetType: AssetType.NFT,
-        onlyOnSale:
+        assetType: AssetType.NFT
+      }
+
+      // Only if the user is not in their own page, show ens on sale by default.
+      if (window.location.pathname !== locations.currentAccount()) {
+        newOptions.onlyOnSale =
           previous.onlyOnSale === undefined ? true : current.onlyOnSale
       }
+
       break
     }
     default: {
@@ -709,21 +744,72 @@ function* handleRedirectToActivity() {
   }
 }
 
-function* handleRedirectToSuccessPage(
-  action: ExecuteOrderSuccessAction | BuyItemSuccessAction
+function* handleRedirectClaimingNameToSuccessPage(
+  action: ClaimNameTransactionSubmittedAction
 ) {
-  const payload = action.payload
+  const data = action.payload[TRANSACTION_ACTION_FLAG]
+  const signer: ethers.Signer = yield call(getSigner)
+  const dclRegistrarContract: DCLRegistrar = yield call(
+    [DCLRegistrar__factory, 'connect'],
+    REGISTRAR_ADDRESS,
+    signer
+  )
+  const contractAddress = dclRegistrarContract.address
   yield put(
     push(
       locations.success({
-        txHash: payload.txHash,
-        tokenId: 'item' in payload ? payload.item.itemId : payload.nft.tokenId,
-        assetType: 'item' in payload ? AssetType.ITEM : AssetType.NFT,
-        contractAddress:
-          'item' in payload
-            ? payload.item.contractAddress
-            : payload.nft.contractAddress
+        txHash: data.hash,
+        assetType: AssetType.NFT,
+        tokenId: '',
+        contractAddress,
+        subdomain: data.payload.subdomain
       })
     )
   )
+}
+
+function* handleRedirectToSuccessPage(
+  action:
+    | ExecuteOrderSuccessAction
+    | BuyItemSuccessAction
+    | BuyItemCrossChainSuccessAction
+    | ClaimNameSuccessAction
+    | ClaimNameCrossChainSuccessAction
+) {
+  const payload = action.payload
+  const isCrossChainAction =
+    'route' in payload &&
+    payload.route.route.params.fromChain !== payload.route.route.params.toChain // it's cross chain only if the fromChain is different from the toChain
+  const successParams = {
+    txHash: payload.txHash,
+    tokenId:
+      'order' in payload && payload.order?.tokenId
+        ? payload.order.tokenId
+        : 'item' in payload
+        ? payload.item.itemId
+        : 'nft' in payload
+        ? payload.nft.tokenId
+        : 'ens' in payload
+        ? payload.ens.tokenId
+        : '',
+    assetType: isCrossChainAction
+      ? 'order' in payload && !!payload.order // if cross chain check for the order object
+        ? AssetType.NFT
+        : AssetType.ITEM
+      : 'item' in payload // for the rest of the action, check for the item object
+      ? AssetType.ITEM
+      : AssetType.NFT,
+    contractAddress:
+      'item' in payload
+        ? payload.item.contractAddress
+        : 'nft' in payload
+        ? payload.nft.contractAddress
+        : 'ens' in payload
+        ? payload.ens.contractAddress
+        : '',
+    ...(isCrossChainAction
+      ? { isCrossChain: isCrossChainAction.toString() }
+      : {})
+  }
+  yield put(push(locations.success(successParams)))
 }

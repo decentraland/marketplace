@@ -12,6 +12,7 @@ export const INIT_PREVIEW = 'Init Preview'
 export const BUY_ITEM = 'Buy Item'
 export const BUY_ITEM_WITH_CARD = 'Buy Item With Card'
 export const CLICK_BUY_NFT_WITH_CARD = 'Click on Buy NFT With Card'
+export const CLICK_BUY_NFT_WITH_CRYPTO = 'Click on Buy NFT With Crypto'
 export const CANCEL_BUY_NFT_WITH_CARD = 'Cancel Buy NFT With Card'
 export const CLICK_GO_TO_BUY_NFT_WITH_CARD = 'Click on go to Buy NFT With Card'
 export const OPEN_BUY_MANA_MODAL = 'Open BUY MANA modal'
@@ -56,6 +57,11 @@ export const PICK_ITEM = 'Pick Item'
 export const UNPICK_ITEM = 'Unpick Item'
 export const UNDO_UNPICK_ITEM = 'Undo unpick Item'
 
+// Names
+export const BUY_NAME_SUCCESS = 'Buy Name Success'
+export const SET_AVATAR_NAME = 'Set Avatar Name'
+export const CLICK_CHECKOUT_NAME = 'Click checkout name'
+
 export const CLICK_CLAIM_NEW_NAME = 'Click Claim New Name'
 export const BULK_PICK = 'Bulk Pick'
 
@@ -69,3 +75,17 @@ export enum SHARE_LIST_TYPE {
   COPY_LINK = 'Copy link',
   TWITTER = 'Twitter'
 }
+
+// Search bar component
+export const SEARCH_RESULT = 'Search Result'
+export const SEARCH_RESULT_CLICKED = 'Search Result Clicked'
+export const SEARCH_ALL = 'Search all results'
+
+// Buy Cross-chain
+export const BUY_ITEM_CROSS_CHAIN = 'Buy Item Cross Chain'
+export const BUY_ITEM_CROSS_CHAIN_ERROR = 'Buy Item Cross Chain Error'
+export const BUY_ITEM_CROSS_CHAIN_TRANSACTION_DENIED =
+  'Buy Item Cross Chain Transaction Denied'
+export const CROSS_CHAIN_TOKEN_SELECTION = 'Cross Chain token selection'
+export const CROSS_CHAIN_CHAIN_SELECTION = 'Cross Chain chain selection'
+export const ERROR_GETTING_ROUTE = 'Error getting Route'

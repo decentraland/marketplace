@@ -32,6 +32,8 @@ export type Props = Partial<AtlasProps> & {
   showOwned?: boolean
   withMapColorsInfo?: boolean
   withZoomControls?: boolean
+  lastUpdated?: Date
+  lastAtlasModifiedDate: Date | null
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onNavigate: (path: string) => void
   children?: React.ReactNode
@@ -39,7 +41,7 @@ export type Props = Partial<AtlasProps> & {
 
 export type MapStateProps = Pick<
   Props,
-  'tiles' | 'nfts' | 'nftsOnRent' | 'tilesByEstateId' | 'getContract'
+  'tiles' | 'nfts' | 'nftsOnRent' | 'tilesByEstateId' | 'getContract' | 'lastAtlasModifiedDate'
 >
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

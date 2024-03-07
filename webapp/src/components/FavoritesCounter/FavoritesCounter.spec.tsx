@@ -39,6 +39,7 @@ describe('FavoritesCounter', () => {
     item = {
       id: 'itemId',
       name: '',
+      urn: '',
       thumbnail: '',
       url: '',
       category: NFTCategory.WEARABLE,

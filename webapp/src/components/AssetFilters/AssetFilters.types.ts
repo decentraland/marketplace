@@ -37,19 +37,14 @@ export type Props = {
   vendor?: VendorName
   view?: View
   rentalDays?: number[]
-  defaultCollapsed?: Record<AssetFilter, boolean>
+  defaultCollapsed?: Partial<Record<AssetFilter, boolean>>
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
+  emoteHasSound?: boolean
+  emoteHasGeometry?: boolean
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
-
-  // feature flags
-  isCreatorFiltersEnabled: boolean
-  isPriceFilterEnabled: boolean
-  isEstateSizeFilterEnabled: boolean
-  isLocationFilterEnabled: boolean
-  isRentalPeriodFilterEnabled: boolean
 }
 
 export type MapStateProps = Pick<
@@ -77,11 +72,8 @@ export type MapStateProps = Pick<
   | 'minDistanceToPlaza'
   | 'maxDistanceToPlaza'
   | 'adjacentToRoad'
-  | 'isCreatorFiltersEnabled'
-  | 'isPriceFilterEnabled'
-  | 'isEstateSizeFilterEnabled'
-  | 'isLocationFilterEnabled'
-  | 'isRentalPeriodFilterEnabled'
+  | 'emoteHasGeometry'
+  | 'emoteHasSound'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

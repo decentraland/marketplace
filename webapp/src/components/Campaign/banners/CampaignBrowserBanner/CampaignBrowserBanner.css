@@ -1,31 +1,25 @@
 .CampaignBrowserBanner {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: url(../pride-banner.png);
+  background-image: url(../banner.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 260px;
-  padding: 16px 48px;
-  text-align: center;
-  gap: 100px;
 }
 
-.CampaignBrowserBanner .logo-container {
-  display: flex;
-  flex-direction: column;
+.CampaignBrowserBanner .banner-container {
+  display: grid;
+  grid-template-columns: 400px 1fr 400px;
   align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  font-weight: 600;
+  justify-content: center;
+  text-align: center;
+  gap: 40px;
 }
 
 .CampaignBrowserBanner .ui.header {
   color: white;
   margin-bottom: 8px;
   font-size: 34px;
-  line-height: 26px;
+  line-height: 36px;
   font-weight: 800;
   margin-bottom: 10px;
   text-transform: uppercase;
@@ -34,54 +28,84 @@
 }
 
 .CampaignBrowserBanner .event-banner-logo {
-  width: 320px;
+  width: 100%;
+  padding: 40px;
+  padding-right: 0;
+}
+
+.CampaignBrowserBanner .event-banner-icon {
+  max-width: 100%;
+  padding: 40px;
+  padding-left: 0;
 }
 
 .CampaignBrowserBanner p {
-  text-align: justify;
+  text-align: start;
   overflow-wrap: break-word;
   font-size: 19px;
-  font-weight: 700;
-  word-spacing: -1px;
+  font-weight: 400;
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .CampaignBrowserBanner .copy {
-  flex: 0 1 auto;
-  margin-right: 20px;
   max-width: 700px;
-  display: flex;
-  flex-direction: column;
+  padding: 40px 0;
 }
 
-.CampaignBrowserBanner .ui.primary.button.event-banner-browse-button {
-  background-color: #fd98ff;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
-}
+@media (max-width: 1200px) {
+  .CampaignBrowserBanner .banner-container {
+    grid-template-columns: 250px 1fr 250px;
+  }
 
-.CampaignBrowserBanner .event-banner-pink {
-  color: #fd98ff;
-  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+  .CampaignBrowserBanner .copy {
+    font-size: 26px;
+    line-height: 28px;
+  }
 }
 
 @media (max-width: 768px) {
   .CampaignBrowserBanner {
-    background-image: url(../pride-banner-mobile.png);
+    background-image: url(../banner_mobile.png);
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+
+  .CampaignBrowserBanner .banner-container {
     height: auto;
-    padding: 40px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding-right: 0;
   }
   .CampaignBrowserBanner .event-banner-logo {
-    width: 250px;
+    width: 100%;
+    padding: 0;
   }
+  .CampaignBrowserBanner .event-banner-icon {
+    display: none;
+  }
+  .CampaignBrowserBanner .event-banner-vertical-icon {
+    width: 100%;
+    height: 100%;
+  }
+
+  .CampaignBrowserBanner .event-banner-vertical-icon::before {
+    content: '';
+    background: url('../wearables_vertical.png');
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
   .CampaignBrowserBanner .copy {
     margin-right: 0px;
   }
   .CampaignBrowserBanner .ui.header {
     font-size: 20px;
     text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: 24px;
   }
   .CampaignBrowserBanner p {
     font-size: 15px;
@@ -89,3 +113,4 @@
     text-align: start;
   }
 }
+

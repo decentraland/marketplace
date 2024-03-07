@@ -10,12 +10,14 @@ jobs:
         working-directory: ./webapp
     steps:
       - uses: actions/checkout@master
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v1
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4.0.1
         with:
-          node-version: 16.x
+          node-version: 18.x
+          cache: "npm"
+          cache-dependency-path: webapp/package-lock.json
       - name: Install
-        run: npm ci --legacy-peer-deps
+        run: npm install --legacy-peer-deps
       - name: Test
         run: npm run test:coverage
       - name: report coverage

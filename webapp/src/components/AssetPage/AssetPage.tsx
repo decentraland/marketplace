@@ -23,7 +23,7 @@ const AssetPage = ({ type }: Props) => {
   )
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar  />
       <Navigation />
       <Page className="AssetPage">
         <ErrorBoundary>

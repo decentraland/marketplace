@@ -4,9 +4,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
 import { AssetType } from '../../../../modules/asset/types'
 import { BuyNFTButtons } from '../BuyNFTButtons'
-
-import styles from './ItemSaleActions.module.css'
 import { Props } from './ItemSaleActions.types'
+import styles from './ItemSaleActions.module.css'
 
 const ItemSaleActions = ({ item, wallet, customClassnames }: Props) => {
   const isOwner = wallet?.address === item.creator
@@ -47,10 +46,8 @@ const ItemSaleActions = ({ item, wallet, customClassnames }: Props) => {
       ) : (
         canBuy && (
           <BuyNFTButtons
+            asset={item}
             assetType={AssetType.ITEM}
-            contractAddress={item.contractAddress}
-            network={item.network}
-            itemId={item.itemId}
             buyWithCardClassName={customClassnames?.buyWithCardClassName}
           />
         )

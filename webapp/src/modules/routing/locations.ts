@@ -18,6 +18,13 @@ export const locations = {
     const params = getSearchParams(options)
     return params ? `/lands?${params.toString()}` : '/lands'
   },
+  names: (options?: BrowseOptions) => {
+    const params = getSearchParams(options)
+    return params ? `/names/browse?${params.toString()}` : '/names/browse'
+  },
+  claimName: () => {
+    return '/names/claim'
+  },
   collection: (contractAddress: string = ':contractAddress') =>
     `/collections/${contractAddress}`,
   browse: (options?: BrowseOptions) => {
@@ -124,6 +131,9 @@ export const locations = {
     tokenId: string
     assetType: string
     contractAddress: string
+    subdomain?: string
+    isCrossChain?: string
+    destinationTxHash?: string
   }) =>
     `/success${
       searchOptions ? `?${new URLSearchParams(searchOptions).toString()}` : ''

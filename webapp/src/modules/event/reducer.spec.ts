@@ -60,7 +60,7 @@ describe('when reducing the successful action of fetching an event addresses by 
 
   const initialState = {
     ...INITIAL_STATE,
-    data: { evnet1: ['0x1', '0x2'] },
+    data: { event1: ['0x1', '0x2'] },
     loading: loadingReducer([], requestAction)
   }
 

@@ -1,0 +1,83 @@
+.SetNameAsAliasModal.ui.modal .content .dcl.field,
+.SetNameAsAliasModal.ui.modal .actions {
+  margin-top: 30px;
+}
+
+.SetNameAsAliasModal.ui.modal .content .dcl.field .message {
+  margin-top: 10px;
+}
+
+.SetNameAsAliasModal.ui.modal .details {
+  text-align: center;
+}
+
+.SetNameAsAliasModal .card {
+  display: flex;
+  background-color: var(--card-on-modal);
+  padding: 60px;
+  border-radius: 16px;
+  margin-top: 16px;
+  font-size: 24px;
+  align-items: center;
+  justify-content: center;
+}
+
+.SetNameAsAliasModal .card div {
+  padding: 0 12px;
+  border-radius: 26px;
+  align-items: center;
+  display: flex;
+  padding: 8px 16px;
+}
+
+.SetNameAsAliasModal .card span .verified img,
+.SetNameAsAliasModal .card span .unverified img {
+  margin-left: 6px;
+}
+
+.SetNameAsAliasModal .card div.verified {
+  height: 37px;
+  font-weight: bold;
+  font-size: 18px;
+  background: linear-gradient(116deg, #ffbc5b 0%, #ff2d55 50.52%, #c640cd 100%);
+}
+
+.SetNameAsAliasModal .card div.unverified {
+  height: 37px;
+  font-weight: bold;
+  font-size: 18px;
+  background-color: #fcfcfc;
+  color: black;
+}
+
+.SetNameAsAliasModal .card div.verified span,
+.SetNameAsAliasModal .card div.unverified span {
+  margin-right: 6px;
+}
+
+.SetNameAsAliasModal .chevron.right:first-of-type {
+  color: #56555a;
+  margin-left: 6px;
+}
+
+.SetNameAsAliasModal .chevron.right:nth-of-type(2) {
+  color: #949396;
+}
+
+.SetNameAsAliasModal .chevron.right:last-of-type {
+  margin-right: 2px;
+}
+
+.SetNameAsAliasModal .successContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.SetNameAsAliasModal .successContainer .Profile.massive .dcl.avatar-face,
+.Profile.massive .dcl.logo {
+  height: 110px;
+  width: 110px;
+  border-radius: 60px;
+  margin-bottom: 20px;
+}

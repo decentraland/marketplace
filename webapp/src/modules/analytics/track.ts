@@ -20,6 +20,10 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
+import {
+  SET_PROFILE_AVATAR_ALIAS_SUCCESS,
+  SetProfileAvatarAliasSuccessAction
+} from 'decentraland-dapps/dist/modules/profile'
 import { capitalize } from '../../lib/text'
 import {
   CREATE_ORDER_SUCCESS,
@@ -55,7 +59,11 @@ import {
   BUY_ITEM_SUCCESS,
   BUY_ITEM_WITH_CARD_SUCCESS,
   FetchItemsSuccessAction,
-  FETCH_ITEMS_SUCCESS
+  FETCH_ITEMS_SUCCESS,
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
+  BuyItemCrossChainSuccessAction,
+  BuyItemCrossChainFailureAction,
+  BUY_ITEM_CROSS_CHAIN_FAILURE
 } from '../item/actions'
 import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
 import { isParcel } from '../nft/utils'
@@ -98,6 +106,17 @@ import {
   UpdateListSuccessAction
 } from '../favorites/actions'
 import { getCategoryInfo } from '../../utils/category'
+import {
+  FETCH_CREATORS_ACCOUNT_SUCCESS,
+  FetchCreatorsAccountSuccessAction
+} from '../account/actions'
+import { isUserRejectedTransactionError } from '../transaction/utils'
+import {
+  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+  CLAIM_NAME_SUCCESS,
+  ClaimNameCrossChainSuccessAction,
+  ClaimNameSuccessAction
+} from '../ens/actions'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -265,8 +284,124 @@ track<BuyItemSuccessAction>(
     network: payload.item.network,
     chainId: payload.item.chainId,
     price: Number(ethers.utils.formatEther(payload.item.price)),
-    data: payload.item.data
+    data: payload.item.data,
+    txHash: payload.txHash,
+    fromChainId: payload.chainId
   })
+)
+
+track<BuyItemCrossChainSuccessAction>(
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
+  events.BUY_ITEM_CROSS_CHAIN,
+  ({ payload }) => {
+    const {
+      route: { route },
+      item,
+      order,
+      txHash
+    } = payload
+    return {
+      fromAmount: ethers.utils.formatUnits(
+        route.estimate.fromAmount,
+        route.estimate.fromToken.decimals
+      ),
+      fromTokenName: route.estimate.fromToken.name,
+      fromToken: route.params.fromToken,
+      fromChain: route.params.fromChain,
+      itemId: item.itemId,
+      contractAddress: item.contractAddress,
+      rarity: item.rarity,
+      network: item.network,
+      chainId: item.chainId,
+      price: Number(ethers.utils.formatEther(order?.price ?? item.price)),
+      data: item.data,
+      txHash
+    }
+  }
+)
+
+track<ClaimNameSuccessAction>(
+  CLAIM_NAME_SUCCESS,
+  events.BUY_NAME_SUCCESS,
+  ({ payload }) => ({
+    name: payload.ens.name,
+    payment_method: 'crypto',
+    crossChain: false,
+    txHash: payload.txHash
+  })
+)
+
+track<SetProfileAvatarAliasSuccessAction>(
+  SET_PROFILE_AVATAR_ALIAS_SUCCESS,
+  events.SET_AVATAR_NAME,
+  ({ payload }) => ({
+    alias: payload.alias
+  })
+)
+
+track<ClaimNameCrossChainSuccessAction>(
+  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+  events.BUY_NAME_SUCCESS,
+  ({ payload }) => {
+    return {
+      name: payload.ens.name,
+      payment_method: 'crypto',
+      crossChain: true,
+      fromTokenName: payload.route.route.estimate.fromToken.name,
+      fromToken: payload.route.route.params.fromToken,
+      fromChain: payload.route.route.params.fromChain,
+      txHash: payload.txHash
+    }
+  }
+)
+
+track<BuyItemCrossChainFailureAction>(
+  BUY_ITEM_CROSS_CHAIN_FAILURE,
+  ({ payload }) =>
+    isUserRejectedTransactionError(payload.error)
+      ? events.BUY_ITEM_CROSS_CHAIN_TRANSACTION_DENIED
+      : events.BUY_ITEM_CROSS_CHAIN_ERROR,
+  ({ payload }) => {
+    const {
+      route: { route },
+      item,
+      price
+    } = payload
+    return {
+      fromAmount: ethers.utils.formatUnits(
+        route.estimate.fromAmount,
+        route.estimate.fromToken.decimals
+      ),
+      gasCosts: route.estimate.gasCosts[0]
+        ? ethers.utils.formatUnits(
+            route.estimate.gasCosts.reduce((acc, gasCost) => {
+              acc = acc.add(ethers.BigNumber.from(gasCost.amount))
+              return acc
+            }, ethers.BigNumber.from(0)),
+            route.estimate.gasCosts[0].token.decimals
+          )
+        : 0,
+      feeCosts: route.estimate.feeCosts[0]
+        ? ethers.utils.formatUnits(
+            route.estimate.feeCosts.reduce((acc, feeCost) => {
+              acc = acc.add(ethers.BigNumber.from(feeCost.amount))
+              return acc
+            }, ethers.BigNumber.from(0)),
+            route.estimate.feeCosts[0].token.decimals
+          )
+        : 0,
+      fromTokenName: route.estimate.fromToken.name,
+      fromToken: route.params.fromToken,
+      fromChain: route.params.fromChain,
+      itemId: item.itemId,
+      contractAddress: item.contractAddress,
+      rarity: item.rarity,
+      network: item.network,
+      chainId: item.chainId,
+      price: Number(ethers.utils.formatEther(price)),
+      data: item.data
+    }
+  }
 )
 
 track<BuyItemWithCardSuccessAction>(
@@ -280,7 +415,8 @@ track<BuyItemWithCardSuccessAction>(
     chainId: payload.item.chainId,
     price: payload.purchase.nft.cryptoAmount,
     data: payload.item.data,
-    purchase: payload.purchase
+    purchase: payload.purchase,
+    txHash: payload.purchase.txHash
   })
 )
 
@@ -427,5 +563,16 @@ track<DeleteListFailureAction>(
   ({ payload: { list, error } }) => ({
     list,
     error
+  })
+)
+
+track<FetchCreatorsAccountSuccessAction>(
+  FETCH_CREATORS_ACCOUNT_SUCCESS,
+  events.SEARCH_RESULT,
+  ({ payload: { creatorAccounts, search, searchUUID } }) => ({
+    tab: 'creators',
+    searchTerm: search,
+    searchUUID,
+    creators: creatorAccounts.map(creator => creator.address)
   })
 )

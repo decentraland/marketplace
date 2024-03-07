@@ -6,6 +6,8 @@ import {
   Rarity,
   WearableGender
 } from '@dcl/schemas'
+import { SmartWearableFilter } from 'decentraland-ui'
+import { RarityFilter } from 'decentraland-dapps/dist/containers/RarityFilter'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { isLandSection } from '../../modules/ui/utils'
 import { AssetStatusFilter } from '../../utils/filters'
@@ -16,8 +18,6 @@ import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
 import EstateSizeFilter from './EstateSizeFilter'
 import CreatorsFilter from './CreatorsFilter'
-import { RarityFilter } from './RarityFilter'
-import { OnlySmartFilter } from './OnlySmartFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
 import { CollectionFilter } from './CollectionFilter'
@@ -25,7 +25,7 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { RentalPeriodFilter } from './RentalPeriodFilter'
 import { MoreFilters } from './MoreFilters'
-import { EmotePlayModeFilter } from './EmotePlayModeFilter'
+import { EmoteAttributesFilter } from './EmoteAttributesFilter'
 import { LocationFilter } from './LocationFilter'
 import {
   AssetFilter,
@@ -60,11 +60,8 @@ export const AssetFilters = ({
   adjacentToRoad,
   values,
   rentalDays,
-  isPriceFilterEnabled,
-  isEstateSizeFilterEnabled,
-  isLocationFilterEnabled,
-  isCreatorFiltersEnabled,
-  isRentalPeriodFilterEnabled
+  emoteHasSound,
+  emoteHasGeometry
 }: Props): JSX.Element | null => {
   const isInLandSection = isLandSection(section)
 
@@ -128,9 +125,17 @@ export const AssetFilters = ({
     [onBrowse]
   )
 
-  const handleEmotePlayModeChange = useCallback(
-    (value: EmotePlayMode[]) => {
-      onBrowse({ emotePlayMode: value })
+  const handleEmoteAttributesChange = useCallback(
+    (value: {
+      emotePlayMode?: EmotePlayMode[]
+      emoteHasSound?: boolean
+      emoteHasGeometry?: boolean
+    }) => {
+      onBrowse({
+        emotePlayMode: value.emotePlayMode,
+        emoteHasSound: value.emoteHasSound,
+        emoteHasGeometry: value.emoteHasGeometry
+      })
     },
     [onBrowse]
   )
@@ -209,22 +214,19 @@ export const AssetFilters = ({
           landStatus={landStatus}
           onChange={handleLandStatusChange}
         />
-        {isPriceFilterEnabled ? (
-          <PriceFilter
-            onChange={(value, source) =>
-              handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
-                minPrice,
-                maxPrice
-              ])
-            }
-            minPrice={minPrice}
-            maxPrice={maxPrice}
-            values={values}
-          />
-        ) : null}
+        <PriceFilter
+          onChange={(value, source) =>
+            handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
+              minPrice,
+              maxPrice
+            ])
+          }
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          values={values}
+        />
 
-        {isEstateSizeFilterEnabled &&
-        section !== Sections.decentraland.PARCELS ? (
+        {section !== Sections.decentraland.PARCELS ? (
           <EstateSizeFilter
             landStatus={landStatus}
             values={values}
@@ -243,35 +245,41 @@ export const AssetFilters = ({
             {...locationFilters}
           />
         ) : null}
-        {isRentalPeriodFilterEnabled &&
-          landStatus === LANDFilters.ONLY_FOR_RENT && (
-            <RentalPeriodFilter
-              rentalDays={rentalDays}
-              onChange={handleRentalDaysChange}
-            />
-          )}
-        {isLocationFilterEnabled && (
-          <LocationFilter
-            {...locationFilters}
-            onAdjacentToRoadChange={handleAdjacentToRoadChange}
-            onDistanceToPlazaChange={handleDistanceToPlazaChange}
+        {landStatus === LANDFilters.ONLY_FOR_RENT && (
+          <RentalPeriodFilter
+            rentalDays={rentalDays}
+            onChange={handleRentalDaysChange}
           />
         )}
+        <LocationFilter
+          {...locationFilters}
+          onAdjacentToRoadChange={handleAdjacentToRoadChange}
+          onDistanceToPlazaChange={handleDistanceToPlazaChange}
+        />
       </div>
     )
   }
 
   return (
     <Menu className="filters-sidebar">
+      {shouldRenderFilter(AssetFilter.PlayMode) && (
+        <EmoteAttributesFilter
+          onChange={handleEmoteAttributesChange}
+          emotePlayMode={emotePlayMode}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
+          emoteHasSound={emoteHasSound}
+          emoteHasGeometry={emoteHasGeometry}
+        />
+      )}
       {shouldRenderFilter(AssetFilter.OnlySmart) ? (
-        <OnlySmartFilter
+        <SmartWearableFilter
           isOnlySmart={isOnlySmart}
           onChange={handleOnlySmartChange}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.OnlySmart]}
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.Rarity) ? (
         <RarityFilter
+          className="filters-sidebar-box"
           onChange={handleRarityChange}
           rarities={rarities}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
@@ -284,8 +292,7 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Status]}
         />
       ) : null}
-      {isPriceFilterEnabled &&
-      shouldRenderFilter(AssetFilter.Price) &&
+      {shouldRenderFilter(AssetFilter.Price) &&
       (isOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
       view !== View.ACCOUNT ? (
         <PriceFilter
@@ -301,8 +308,7 @@ export const AssetFilters = ({
           values={values}
         />
       ) : null}
-      {isCreatorFiltersEnabled &&
-      shouldRenderFilter(AssetFilter.Creators) &&
+      {shouldRenderFilter(AssetFilter.Creators) &&
       (!network || (network && network === Network.MATIC)) ? (
         <CreatorsFilter
           creators={creators}
@@ -318,14 +324,6 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Collection]}
         />
       ) : null}
-
-      {shouldRenderFilter(AssetFilter.PlayMode) && (
-        <EmotePlayModeFilter
-          onChange={handleEmotePlayModeChange}
-          emotePlayMode={emotePlayMode}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
-        />
-      )}
       {shouldRenderFilter(AssetFilter.Network) &&
         status !== AssetStatusFilter.ONLY_MINTING && (
           <NetworkFilter

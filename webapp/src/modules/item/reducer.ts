@@ -50,7 +50,13 @@ import {
   FetchCollectionItemsSuccessAction,
   FetchCollectionItemsFailureAction,
   FETCH_COLLECTION_ITEMS_REQUEST,
-  FETCH_COLLECTION_ITEMS_FAILURE
+  FETCH_COLLECTION_ITEMS_FAILURE,
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
+  BUY_ITEM_CROSS_CHAIN_REQUEST,
+  BuyItemCrossChainRequestAction,
+  BuyItemCrossChainFailureAction,
+  BuyItemCrossChainSuccessAction,
+  BUY_ITEM_CROSS_CHAIN_FAILURE
 } from './actions'
 
 export type ItemState = {
@@ -88,6 +94,9 @@ type ItemReducerAction =
   | FetchCollectionItemsRequestAction
   | FetchCollectionItemsSuccessAction
   | FetchCollectionItemsFailureAction
+  | BuyItemCrossChainRequestAction
+  | BuyItemCrossChainFailureAction
+  | BuyItemCrossChainSuccessAction
 
 export function itemReducer(
   state = INITIAL_STATE,
@@ -96,6 +105,8 @@ export function itemReducer(
   switch (action.type) {
     case BUY_ITEM_REQUEST:
     case BUY_ITEM_SUCCESS:
+    case BUY_ITEM_CROSS_CHAIN_REQUEST:
+    case BUY_ITEM_CROSS_CHAIN_SUCCESS:
     case BUY_ITEM_WITH_CARD_REQUEST:
     case BUY_ITEM_WITH_CARD_SUCCESS:
     case FETCH_ITEMS_REQUEST:
@@ -143,6 +154,7 @@ export function itemReducer(
     }
 
     case BUY_ITEM_FAILURE:
+    case BUY_ITEM_CROSS_CHAIN_FAILURE:
     case BUY_ITEM_WITH_CARD_FAILURE:
     case FETCH_COLLECTION_ITEMS_FAILURE:
     case FETCH_ITEMS_FAILURE:

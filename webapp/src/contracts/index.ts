@@ -5,6 +5,7 @@ export type { Converter } from "./Converter";
 export type { ERC721 } from "./ERC721";
 export type { EstateRegistry } from "./EstateRegistry";
 export type { MarketplaceAdapter } from "./MarketplaceAdapter";
+export type { DCLController } from "./DCLController";
 export * as factories from "./factories";
 export { Converter__factory } from "./factories/Converter__factory";
 export { ERC721__factory } from "./factories/ERC721__factory";

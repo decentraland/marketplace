@@ -8,7 +8,7 @@ import {
   connectWalletFailure,
   connectWalletSuccess
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { formatBalance, waitForWalletConnectionIfConnecting } from './utils'
+import { formatBalance, waitForWalletConnectionAndIdentityIfConnecting } from './utils'
 
 describe('when formatting the balance', () => {
   describe('and the number is 0', () => {
@@ -33,7 +33,7 @@ describe('when formatting the balance', () => {
 describe('when waiting for the wallet to connect', () => {
   describe('and the wallet is connecting to later reject', () => {
     it('should finish waiting after the wallet finished connecting', () => {
-      return expectSaga(waitForWalletConnectionIfConnecting)
+      return expectSaga(waitForWalletConnectionAndIdentityIfConnecting)
         .provide([[select(isConnecting), true]])
         .take(CONNECT_WALLET_FAILURE)
         .dispatch(connectWalletFailure('error'))
@@ -43,7 +43,7 @@ describe('when waiting for the wallet to connect', () => {
 
   describe('and the wallet is connecting to later resolve', () => {
     it('should finish waiting after the wallet finishes connecting', () => {
-      return expectSaga(waitForWalletConnectionIfConnecting)
+      return expectSaga(waitForWalletConnectionAndIdentityIfConnecting)
         .provide([[select(isConnecting), true]])
         .take(CONNECT_WALLET_SUCCESS)
         .dispatch(connectWalletSuccess({} as Wallet))
@@ -53,7 +53,7 @@ describe('when waiting for the wallet to connect', () => {
 
   describe('and the wallet is not connecting', () => {
     it('should finish without waiting for the wallet to connect', () => {
-      return expectSaga(waitForWalletConnectionIfConnecting)
+      return expectSaga(waitForWalletConnectionAndIdentityIfConnecting)
         .provide([[select(isConnecting), false]])
         .run()
     })

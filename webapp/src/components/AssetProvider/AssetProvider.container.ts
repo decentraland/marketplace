@@ -2,9 +2,9 @@ import { connect } from 'react-redux'
 import { Network } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
+import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
-import { isConnecting } from '../../modules/wallet/selectors'
 import {
   fetchNFTRequest,
   FETCH_NFT_REQUEST,
@@ -25,7 +25,10 @@ import {
   getError as getItemsError,
   getData as getItems
 } from '../../modules/item/selectors'
-import { isFetchingRequiredPermissions } from '../../modules/asset/selectors'
+import {
+  isFetchingRequiredPermissions,
+  isFetchingVideoHash
+} from '../../modules/asset/selectors'
 import { getData as getOrders } from '../../modules/order/selectors'
 import { getNFT } from '../../modules/nft/utils'
 import { getItem } from '../../modules/item/utils'
@@ -101,7 +104,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     order,
     isLoading: !asset
       ? isLoading
-      : isFetchingRequiredPermissions(state, asset.id),
+      : isFetchingRequiredPermissions(state, asset.id) ||
+        isFetchingVideoHash(state, asset.id),
     isLoadingFeatureFlags: isLoadingType(
       getIsLoadingFeatureFlags(state),
       FETCH_APPLICATION_FEATURES_REQUEST

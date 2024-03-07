@@ -9,5 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
-  "homepage": ""
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/decentraland/marketplace.git"
+  }
 }

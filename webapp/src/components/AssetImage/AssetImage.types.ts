@@ -13,7 +13,14 @@ import {
   FetchItemRequestAction,
   fetchItemRequest
 } from '../../modules/item/actions'
-import { OpenModalAction, openModal } from '../../modules/modal/actions'
+import {
+  FetchSmartWearableVideoHashRequestAction,
+  fetchSmartWearableVideoHashRequest
+} from '../../modules/asset/actions'
+import {
+  OpenModalAction,
+  openModal
+} from 'decentraland-dapps/dist/modules/modal/actions'
 
 export type Props = {
   asset: Asset
@@ -21,10 +28,10 @@ export type Props = {
   className?: string
   isDraggable?: boolean
   withNavigation?: boolean
+  showUpdatedDateWarning?: boolean
   hasPopup?: boolean
   zoom?: number
   isSmall?: boolean
-  showMonospace?: boolean
   avatar?: Avatar
   wearableController?: IPreviewController | null
   isTryingOn: boolean
@@ -34,12 +41,16 @@ export type Props = {
   onSetWearablePreviewController: typeof setWearablePreviewController
   onFetchItem: typeof fetchItemRequest
   onPlaySmartWearableVideoShowcase: (
-    asset: Asset
+    videoHash: string
   ) => ReturnType<typeof openModal>
+  onFetchSmartWearableVideoHash: typeof fetchSmartWearableVideoHashRequest
   children?: React.ReactNode
   hasBadges?: boolean
   item: Item | null
   wallet: Wallet | null
+  videoHash?: string
+  isLoadingVideoHash?: boolean
+  hasFetchedVideoHash?: boolean
 }
 
 export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>
@@ -49,7 +60,9 @@ export enum ControlOptionAction {
   ZOOM_OUT,
   PLAY_EMOTE,
   STOP_EMOTE,
-  PLAY_SMART_WEARABLE_VIDEO_SHOWCASE
+  PLAY_SMART_WEARABLE_VIDEO_SHOWCASE,
+  ENABLE_SOUND,
+  DISABLE_SOUND
 }
 
 export type MapStateProps = Pick<
@@ -61,6 +74,9 @@ export type MapStateProps = Pick<
   | 'isPlayingEmote'
   | 'item'
   | 'wallet'
+  | 'videoHash'
+  | 'isLoadingVideoHash'
+  | 'hasFetchedVideoHash'
 >
 export type MapDispatchProps = Pick<
   Props,
@@ -68,12 +84,14 @@ export type MapDispatchProps = Pick<
   | 'onSetWearablePreviewController'
   | 'onFetchItem'
   | 'onPlaySmartWearableVideoShowcase'
+  | 'onFetchSmartWearableVideoHash'
 >
 export type MapDispatch = Dispatch<
   | SetIsTryingOnAction
   | SetWearablePreviewControllerAction
   | FetchItemRequestAction
   | OpenModalAction
+  | FetchSmartWearableVideoHashRequestAction
 >
 
 export type AvailableForMintPopupType = {

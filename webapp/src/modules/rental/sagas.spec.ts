@@ -11,6 +11,7 @@ import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import {
   ContractData,
   ContractName,
@@ -21,7 +22,6 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { delay, take } from 'redux-saga/effects'
 import { getCurrentIdentity } from '../identity/selectors'
-import { closeModal } from '../modal/actions'
 import { FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getCurrentNFT } from '../nft/selectors'
 import { NFT } from '../nft/types'
@@ -198,7 +198,7 @@ describe('when handling the request action to upsert a rental listing', () => {
                   chainId: nft.chainId,
                   contractAddress: nft.contractAddress,
                   tokenId: nft.tokenId,
-                  network: nft.network,
+                  network: nft.network as Network.ETHEREUM,
                   expiration,
                   rentalContractAddress:
                     '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
@@ -272,7 +272,7 @@ describe('when handling the request action to upsert a rental listing', () => {
                   chainId: nft.chainId,
                   contractAddress: nft.contractAddress,
                   tokenId: nft.tokenId,
-                  network: nft.network,
+                  network: nft.network as Network.ETHEREUM,
                   expiration,
                   rentalContractAddress:
                     '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
@@ -446,7 +446,7 @@ describe('when handling the request action to upsert a rental listing', () => {
                   chainId: nft.chainId,
                   contractAddress: nft.contractAddress,
                   tokenId: nft.tokenId,
-                  network: nft.network,
+                  network: nft.network as Network.ETHEREUM,
                   expiration,
                   rentalContractAddress:
                     '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',

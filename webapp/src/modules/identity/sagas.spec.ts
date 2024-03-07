@@ -5,14 +5,19 @@ import {
   connectWalletSuccess,
   disconnectWallet
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { getIdentity, clearIdentity } from '@dcl/single-sign-on-client'
+import {
+  localStorageClearIdentity,
+  localStorageGetIdentity
+} from '@dcl/single-sign-on-client'
 import { identitySaga, setAuxAddress } from './sagas'
-import { generateIdentityRequest, generateIdentitySuccess } from './actions'
+import { generateIdentitySuccess } from './actions'
+import { AuthIdentity } from '@dcl/crypto'
 
 jest.mock('@dcl/single-sign-on-client', () => {
   return {
-    getIdentity: jest.fn(),
-    clearIdentity: jest.fn()
+    localStorageClearIdentity: jest.fn(),
+    localStorageGetIdentity: jest.fn(),
+    localStorageStoreIdentity: jest.fn()
   }
 })
 
@@ -24,6 +29,7 @@ beforeEach(() => {
 
 describe('when handling the wallet connection success', () => {
   let wallet: Wallet
+  let windowLocation: Location
 
   beforeEach(() => {
     wallet = {
@@ -32,21 +38,34 @@ describe('when handling the wallet connection success', () => {
   })
 
   describe("and there's no identity", () => {
-    it('should put an action to generate the identity', () => {
-      return expectSaga(identitySaga)
-        .provide([[call(getIdentity, wallet.address), null]])
-        .put(generateIdentityRequest(wallet.address))
+    beforeEach(() => {
+      windowLocation = window.location
+      delete (window as any).location
+      window.location = ({
+        replace: jest.fn()
+      } as any) as Location
+    })
+    afterEach(() => {
+      window.location = windowLocation
+    })
+    it('should redirect to auth dapp', async () => {
+      await expectSaga(identitySaga)
+        .provide([[call(localStorageGetIdentity, wallet.address), null]])
         .dispatch(connectWalletSuccess(wallet))
         .run({ silenceTimeout: true })
+      expect(window.location.replace).toHaveBeenCalled()
     })
   })
 
   describe("and there's an identity", () => {
-    it('should put an action to store the identity', () => {
-      const identity = {} as any
+    let identity: AuthIdentity
 
+    beforeEach(() => {
+      identity = {} as any
+      ;(localStorageGetIdentity as jest.Mock).mockReturnValue(identity)
+    })
+    it('should put an action to store the identity', () => {
       return expectSaga(identitySaga)
-        .provide([[call(getIdentity, wallet.address), identity]])
         .put(generateIdentitySuccess(wallet.address, identity))
         .dispatch(connectWalletSuccess(wallet))
         .run({ silenceTimeout: true })
@@ -62,12 +81,12 @@ describe('when handling the disconnect', () => {
       setAuxAddress(address)
     })
 
-    it('should call the sso client to clear the identity', async () => {
+    it('should call the sso client to clear the identity in the local storage', async () => {
       await expectSaga(identitySaga)
         .dispatch(disconnectWallet())
         .run({ silenceTimeout: true })
 
-      expect(clearIdentity).toHaveBeenCalledWith(address)
+      expect(localStorageClearIdentity).toHaveBeenCalledWith(address)
     })
   })
 
@@ -81,7 +100,7 @@ describe('when handling the disconnect', () => {
         .dispatch(disconnectWallet())
         .run({ silenceTimeout: true })
 
-      expect(clearIdentity).not.toHaveBeenCalled()
+      expect(localStorageClearIdentity).not.toHaveBeenCalled()
     })
   })
 })

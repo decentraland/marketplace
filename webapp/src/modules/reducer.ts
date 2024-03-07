@@ -31,6 +31,7 @@ import { eventReducer as event } from './event/reducer'
 import { contractReducer as contract } from './contract/reducer'
 import { favoritesReducer as favorites } from './favorites/reducer'
 import { assetReducer as asset } from './asset/reducer'
+import { ensReducer as ens } from './ens/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
@@ -63,7 +64,8 @@ export const createRootReducer = (history: History) =>
     modal,
     contract,
     gateway,
-    favorites
+    favorites,
+    ens
   })
 
 export type RootState = ReturnType<ReturnType<typeof createRootReducer>>

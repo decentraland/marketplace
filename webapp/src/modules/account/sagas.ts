@@ -48,7 +48,7 @@ export function* accountSaga(catalystLambdasClient: LambdasClient) {
   function* handleFetchCreatorsAccountsRequest(
     action: FetchCreatorsAccountRequestAction
   ): any {
-    const { search } = action.payload
+    const { search, searchUUID } = action.payload
 
     const previousSearch: string | null = yield select(getCreatorsSearchQuery)
     if (previousSearch === search) {
@@ -97,7 +97,9 @@ export function* accountSaga(catalystLambdasClient: LambdasClient) {
         Profile[],
         AccountResponse
       ] = yield all([
-        call([catalystLambdasClient, 'getAvatarsDetailsByPost'], {ids: Array.from(addresses)}),
+        call([catalystLambdasClient, 'getAvatarsDetailsByPost'], {
+          ids: Array.from(addresses)
+        }),
         search
           ? call([accountAPI, 'fetch'], {
               address: Array.from(addresses),
@@ -114,7 +116,7 @@ export function* accountSaga(catalystLambdasClient: LambdasClient) {
         creators.forEach(creator => enhanceCreatorName(creator, ens, search))
       }
 
-      yield put(fetchCreatorsAccountSuccess(search, creators))
+      yield put(fetchCreatorsAccountSuccess(search, creators, searchUUID))
     } catch (error) {
       yield put(
         fetchCreatorsAccountFailure(

@@ -10,20 +10,11 @@ import {
   getIsCampaignBrowserEnabled,
   getIsCampaignCollectionsBannerEnabled,
   getIsCampaignHomepageBannerEnabled,
-  getIsCreatorsFilterEnabled,
-  getIsEstateSizeFilterEnabled,
-  getIsHandsCategoryEnabled,
-  getIsHandsCategoryFTUEnabled,
-  getIsLocationFilterEnabled,
   getIsMaintenanceEnabled,
-  getIsMapViewFiltersEnabled,
   getIsMarketplaceLaunchPopupEnabled,
-  getIsPriceFilterEnabled,
-  getIsProfileEnabled,
-  getIsRentalPeriodFilterEnabled,
-  getIsRentalPriceFilterChartEnabled,
   getIsSmartWearablesFTUEnabled,
-  isLoadingFeatureFlags
+  isLoadingFeatureFlags,
+  getIsChainSelectorEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -156,65 +147,20 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
 
 const waitForInitialLoadingSelectors = [
   {
-    name: 'IsPriceFilter',
-    feature: FeatureName.PRICE_FILTER,
-    selector: getIsPriceFilterEnabled
-  },
-  {
-    name: 'IsEstateSizeFilter',
-    feature: FeatureName.ESTATE_SIZE_FILTER,
-    selector: getIsEstateSizeFilterEnabled
-  },
-  {
-    name: 'IsCreatorsFilter',
-    feature: FeatureName.CREATOR_FILTER,
-    selector: getIsCreatorsFilterEnabled
-  },
-  {
-    name: 'IsLocationFilter',
-    feature: FeatureName.LOCATION_FILTER,
-    selector: getIsLocationFilterEnabled
-  },
-  {
-    name: 'IsRentalPeriodFilter',
-    feature: FeatureName.RENTAL_PERIOD_FILTER,
-    selector: getIsRentalPeriodFilterEnabled
-  },
-  {
-    name: 'IsMapViewFilters',
-    feature: FeatureName.MAP_VIEW_FILTERS,
-    selector: getIsMapViewFiltersEnabled
-  },
-  {
-    name: 'IsRentalPriceFilterChart',
-    feature: FeatureName.RENTAL_PRICE_FILTER_CHART,
-    selector: getIsRentalPriceFilterChartEnabled
-  },
-  {
-    name: 'IsProfile',
-    app: ApplicationName.DAPPS,
-    feature: FeatureName.PROFILE,
-    selector: getIsProfileEnabled
-  },
-  {
-    name: 'IsHandsCategory',
-    feature: FeatureName.HANDS_CATEGORY,
-    selector: getIsHandsCategoryEnabled
-  },
-  {
-    name: 'IsHandsCategoryFTU',
-    feature: FeatureName.HANDS_CATEGORY_FTU,
-    selector: getIsHandsCategoryFTUEnabled
-  },
-  {
     name: 'isSmartWearablesFTU',
     feature: FeatureName.SMART_WEARABLES_FTU,
     selector: getIsSmartWearablesFTUEnabled
+  },
+  {
+    name: 'chain-selector',
+    feature: FeatureName.CHAIN_SELECTOR,
+    selector: getIsChainSelectorEnabled,
+    applicationName: ApplicationName.MARKETPLACE
   }
 ]
 
 waitForInitialLoadingSelectors.forEach(
-  ({ name, app = ApplicationName.MARKETPLACE, feature, selector }) =>
+  ({ name, feature, applicationName, selector }) =>
     describe(`when getting if the ${name} feature flag is enabled`, () => {
       describe('when the initial flags have not been yet loaded', () => {
         beforeEach(() => {
@@ -225,11 +171,10 @@ waitForInitialLoadingSelectors.forEach(
           const isEnabled = selector(state)
 
           expect(isEnabled).toBe(false)
-          expect(getIsFeatureEnabledMock).not.toHaveBeenCalled()
         })
       })
 
-      describe('when the initial flags have not been yet loaded', () => {
+      describe('when the initial flags have been loaded', () => {
         beforeEach(() => {
           hasLoadedInitialFlagsMock.mockReturnValueOnce(true)
         })
@@ -245,7 +190,7 @@ waitForInitialLoadingSelectors.forEach(
             expect(isEnabled).toBe(false)
             expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
               state,
-              app,
+              applicationName || ApplicationName.MARKETPLACE,
               feature
             )
           })
@@ -262,7 +207,7 @@ waitForInitialLoadingSelectors.forEach(
             expect(isEnabled).toBe(true)
             expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(
               state,
-              app,
+              applicationName || ApplicationName.MARKETPLACE,
               feature
             )
           })

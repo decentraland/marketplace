@@ -36,3 +36,4 @@ If you want to regenerate the contract typings in `webapp/src/contracts` do the 
 ```
 npm run generate-contracts
 ```
+

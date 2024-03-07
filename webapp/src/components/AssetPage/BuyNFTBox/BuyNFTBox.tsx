@@ -158,9 +158,8 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
           </>
         ) : !isOrderExpired ? (
           <BuyNFTButtons
+            asset={nft}
             assetType={AssetType.NFT}
-            contractAddress={nft.contractAddress}
-            network={nft.network}
             tokenId={nft.tokenId}
             buyWithCardClassName={styles.buyWithCardClassName}
           />

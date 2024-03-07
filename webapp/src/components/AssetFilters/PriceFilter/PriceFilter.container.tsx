@@ -16,12 +16,13 @@ import {
   getMinEstateSize,
   getMaxEstateSize,
   getAdjacentToRoad,
-  getRentalDays
+  getRentalDays,
+  getEmoteHasGeometry,
+  getEmoteHasSound
 } from '../../../modules/routing/selectors'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import { getCategoryFromSection } from '../../../modules/routing/search'
 import { Section } from '../../../modules/vendor/routing/types'
-import { getIsRentalPriceFilterChartEnabled } from '../../../modules/features/selectors'
 import { MapStateProps, OwnProps } from './PriceFilter.types'
 import { PriceFilter } from './PriceFilter'
 
@@ -76,7 +77,12 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
         : getMaxEstateSize(state),
     rentalDays:
       'rentalDays' in values ? values.rentalDays : getRentalDays(state),
-    isRentalPriceFitlerChartEnabled: getIsRentalPriceFilterChartEnabled(state)
+    emoteHasGeometry:
+      'emoteHasGeometry' in values
+        ? values.emoteHasGeometry
+        : getEmoteHasGeometry(state),
+    emoteHasSound:
+      'emoteHasSound' in values ? values.emoteHasSound : getEmoteHasSound(state)
   }
 }
 

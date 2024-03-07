@@ -2,5 +2,5 @@ import { createTranslationSaga } from 'decentraland-dapps/dist/modules/translati
 import * as translations from './locales'
 
 export const translationSaga = createTranslationSaga({
-  translations
+  translations: translations as any
 })

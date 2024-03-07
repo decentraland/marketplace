@@ -1,6 +1,7 @@
 import {
   NFT,
   NFTCategory,
+  Network,
   PeriodCreation,
   RentalListing,
   RentalListingCreation,
@@ -16,6 +17,10 @@ import {
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import {
+  CloseModalAction,
+  CLOSE_MODAL
+} from 'decentraland-dapps/dist/modules/modal/actions'
 import { ethers } from 'ethers'
 import { call, delay, put, select, take, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
@@ -23,7 +28,6 @@ import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
 import { getContract as getContractByQuery } from '../contract/selectors'
 import { getFingerprint } from '../nft/estate/utils'
-import { CloseModalAction, CLOSE_MODAL } from '../modal/actions'
 import { addressEquals } from '../wallet/utils'
 import { fetchNFTRequest, FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getCurrentNFT } from '../nft/selectors'
@@ -112,7 +116,7 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       chainId: nft.chainId,
       contractAddress: nft.contractAddress,
       tokenId: nft.tokenId,
-      network: nft.network,
+      network: nft.network as Network.ETHEREUM,
       expiration: expiresAt,
       rentalContractAddress: rentalsContract.address,
       nonces,

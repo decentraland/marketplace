@@ -1,9 +1,13 @@
 import { useCallback, useMemo } from 'react'
-import { Box, CheckboxProps, Checkbox } from 'decentraland-ui'
+import {
+  Box,
+  CheckboxProps,
+  Checkbox,
+  SmartWearableFilter
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useTabletAndBelowMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { NFTCategory } from '@dcl/schemas'
-import { OnlySmartFilterContent } from '../OnlySmartFilter'
 import './MoreFilters.css'
 
 export type MoreFiltersProps = {
@@ -77,7 +81,7 @@ export const MoreFilters = ({
           />
         ) : null}
         {showOnlySmartFilter && (
-          <OnlySmartFilterContent
+          <SmartWearableFilter
             data-testid="only-smart-filter"
             isOnlySmart={isOnlySmart}
             onChange={onOnlySmartChange}

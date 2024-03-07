@@ -1,10 +1,6 @@
-import { Tile } from '../../../Atlas/Atlas.types'
-
 export type Props = {
-  estateId: string
-  parcelCoordinates: Tile[]
+  parcelCoordinates: { x: number; y: number }[]
+  total: number
 }
-
-export type OwnProps = Pick<Props, 'estateId'>
 
 export type MapStateProps = Pick<Props, 'parcelCoordinates'>

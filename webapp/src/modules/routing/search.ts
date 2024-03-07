@@ -16,7 +16,7 @@ import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { isCatalogView, isCatalogViewWithStatusFilter } from './utils'
 
-const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
+export const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
 export function getDefaultOptionsByView(
   view?: View,
@@ -184,6 +184,14 @@ export function getSearchParams(options?: BrowseOptions) {
         params.append('rentalDays', rentalDay.toString())
       }
     }
+
+    if (options.emoteHasSound) {
+      params.set('emoteHasSound', 'true')
+    }
+
+    if (options.emoteHasGeometry) {
+      params.set('emoteHasGeometry', 'true')
+    }
   }
   return params
 }
@@ -263,7 +271,7 @@ export function getMarketAssetTypeFromCategory(category: NFTCategory) {
 export function getSearchSection(category: WearableCategory | EmoteCategory) {
   for (const section of Object.values(Section)) {
     const sectionCategory = Object.values(EmoteCategory).includes(
-      category as EmoteCategory
+      category.toLocaleLowerCase() as EmoteCategory //@TODO: Remove toLowerCase() when the indexer save them as lowercase
     )
       ? getSearchEmoteCategory(section)
       : getSearchWearableCategory(section)

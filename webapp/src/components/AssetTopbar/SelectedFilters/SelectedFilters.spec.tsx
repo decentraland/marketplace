@@ -1,8 +1,11 @@
-import { Network, Rarity } from '@dcl/schemas'
 import { render, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { Network, Rarity } from '@dcl/schemas'
 import { SelectedFilters } from './SelectedFilters'
 import { Props } from './SelectedFilters.types'
+import { getCollectionByAddress } from './utils'
+
+jest.mock('./utils')
 
 function renderSelectedFilters(props: Partial<Props> = {}) {
   return render(
@@ -99,5 +102,43 @@ describe.each([
     const pill = getByTestId(`pill-${id}`)
     await userEvent.click(within(pill).getByRole('button'))
     expect(onBrowseMock).toHaveBeenCalledWith(resettedOptions)
+  })
+})
+
+describe('collections filter', () => {
+  let contract1: string
+  let contract2: string
+  let collectionsData: Record<string, string>[]
+
+  beforeEach(() => {
+    contract1 = '0xanAddress'
+    contract2 = '0xanotherAddress'
+    collectionsData = [
+      { contractAddress: contract1 },
+      { contractAddress: contract2 }
+    ]
+    ;(getCollectionByAddress as jest.Mock).mockResolvedValueOnce(
+      collectionsData[0]
+    )
+    ;(getCollectionByAddress as jest.Mock).mockResolvedValueOnce(
+      collectionsData[1]
+    )
+  })
+
+  test.only('should render pill for each collection selected', async () => {
+    const { findByTestId } = renderSelectedFilters({
+      browseOptions: { contracts: [contract1, contract2] }
+    })
+
+    expect(
+      await findByTestId(
+        `pill-collection-${collectionsData[0].contractAddress}`
+      )
+    ).toBeInTheDocument()
+    expect(
+      await findByTestId(
+        `pill-collection-${collectionsData[1].contractAddress}`
+      )
+    ).toBeInTheDocument()
   })
 })

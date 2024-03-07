@@ -33,6 +33,7 @@ const dateNowFn = Date.now
 describe('Best Buying Option', () => {
   let asset: Item = {
     contractAddress: '0xaddress',
+    urn: '',
     itemId: '1',
     id: '1',
     name: 'asset name',
@@ -142,14 +143,16 @@ describe('Best Buying Option', () => {
 
     it('should render the listing option', async () => {
       const reference: RefObject<HTMLDivElement> = React.createRef()
-      const { getByText, findByTestId } = renderWithProviders(
+      const { findByTestId, findByText } = renderWithProviders(
         <BestBuyingOption asset={asset} tableRef={reference} />
       )
 
       await findByTestId('best-buying-option-container')
 
       expect(
-        getByText(t('best_buying_option.buy_listing.title'), { exact: false })
+        await findByText(t('best_buying_option.buy_listing.title'), {
+          exact: false
+        })
       ).toBeInTheDocument()
     })
 

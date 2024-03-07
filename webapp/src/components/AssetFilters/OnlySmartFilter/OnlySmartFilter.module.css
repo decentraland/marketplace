@@ -1,9 +1,0 @@
-.onlySmartFilterSection {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.onlySmartFilterSection :global(.SmartBadge:not(.clickable))  {
-  cursor: initial;
-}

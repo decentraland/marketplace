@@ -1,17 +1,23 @@
 {
   "version": 2,
   "name": "marketplace",
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/.*", "dest": "/index.html" }
-  ],
   "build": {
     "env": {
       "GEN_STATIC_LOCAL": "true",
-      "REACT_APP_DCL_DEFAULT_ENV": "dev"
+      "VITE_REACT_APP_DCL_DEFAULT_ENV": "dev"
     }
   },
   "github": {
     "silent": true
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/auth/:match*",
+      "destination": "https://decentraland.zone/auth/:match*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ]
 }

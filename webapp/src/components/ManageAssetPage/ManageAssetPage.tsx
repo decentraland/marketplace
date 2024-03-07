@@ -72,7 +72,7 @@ export const ManageAssetPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation activeTab={NavigationTab.MY_STORE} />
       <Page>
         <ErrorBoundary>
@@ -80,7 +80,7 @@ export const ManageAssetPage = (props: Props) => {
             <AssetProvider type={AssetType.NFT} rentalStatus={rentalStatus}>
               {(asset, order, rental, isLoading) => (
                 <>
-                  <Back className="back" absolute onClick={onBack} />
+                  <Back className="back" absolute onClick={() => onBack()} />
                   {isLoading ? <Loading /> : null}
                   {!isLoading && !asset ? <NotFound /> : null}
                   {!isLoading &&

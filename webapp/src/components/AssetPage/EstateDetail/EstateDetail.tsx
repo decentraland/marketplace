@@ -45,6 +45,7 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
             isDraggable
             withNavigation
             hasPopup
+            showUpdatedDateWarning
           />
           {estate.size === 0 && (
             <div className="dissolved-wrapper">
@@ -81,7 +82,12 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
       below={
         <>
           <BidList nft={nft} />
-          {estate.size > 0 && <ParcelCoordinates estateId={nft.tokenId} />}
+          {estate.size > 0 && (
+            <ParcelCoordinates
+              parcelCoordinates={nft.data.estate?.parcels || []}
+              total={nft.data.estate?.size || 0}
+            />
+          )}
           <TransactionHistory asset={nft} />
           <RentalHistory asset={nft} />
         </>

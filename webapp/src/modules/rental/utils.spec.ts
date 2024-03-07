@@ -35,6 +35,7 @@ jest.useFakeTimers()
 jest.mock('decentraland-dapps/dist/lib/eth')
 jest.mock('./contract')
 jest.mock('../vendor/decentraland/rentals/api')
+;((globalThis.setTimeout as unknown) as jest.Mock) = jest.fn()
 
 const runTimerAutomaticallyOnce = () => {
   ;((setTimeout as unknown) as jest.Mock).mockImplementationOnce(callback =>

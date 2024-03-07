@@ -33,7 +33,8 @@ export const PriceFilter = ({
   collection,
   emotePlayMode,
   rentalDays,
-  isRentalPriceFitlerChartEnabled,
+  emoteHasGeometry,
+  emoteHasSound,
   onChange
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
@@ -52,7 +53,9 @@ export const PriceFilter = ({
       minDistanceToPlaza: minDistanceToPlaza || undefined,
       maxDistanceToPlaza: maxDistanceToPlaza || undefined,
       maxEstateSize,
-      minEstateSize
+      minEstateSize,
+      emoteHasGeometry,
+      emoteHasSound
     }
   }, [
     adjacentToRoad,
@@ -67,7 +70,9 @@ export const PriceFilter = ({
     minEstateSize,
     network,
     rarities,
-    section
+    section,
+    emoteHasGeometry,
+    emoteHasSound
   ])
 
   const rentalPriceFetchFilters = useCallback(
@@ -128,9 +133,6 @@ export const PriceFilter = ({
   const fetcher = useCallback(async () => {
     let data: Record<string, number> = {}
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
-      if (!isRentalPriceFitlerChartEnabled) {
-        return {}
-      }
       data = await rentalsAPI.getRentalListingsPrices(rentalPriceFetchFilters())
     } else {
       data = await nftAPI.fetchPrices(priceFetchFilters)
@@ -139,12 +141,7 @@ export const PriceFilter = ({
       acc[ethers.utils.formatEther(key)] = value
       return acc
     }, {} as Record<string, number>)
-  }, [
-    priceFetchFilters,
-    landStatus,
-    isRentalPriceFitlerChartEnabled,
-    rentalPriceFetchFilters
-  ])
+  }, [priceFetchFilters, landStatus, rentalPriceFetchFilters])
 
   return (
     <Box

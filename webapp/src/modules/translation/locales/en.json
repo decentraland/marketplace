@@ -70,7 +70,17 @@
     "of": "of",
     "now": "now",
     "actions": "Actions",
-    "action_required": "Action required"
+    "action_required": "Action required",
+    "finish": "Finish",
+    "guest": "Guest"
+  },
+  "search_dropdown": {
+    "recent": "Recent",
+    "creators": "Creators",
+    "collections": "Collections",
+    "see_all_wearables": "See all wearable results",
+    "see_all_emotes": "See all emote results",
+    "no_results": "Try a different word"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -92,6 +102,7 @@
     "overview": "Overview",
     "mvmf": "Metaverse Music Festival",
     "land": "Land",
+    "names": "NAMEs",
     "collectibles": "Collectibles",
     "partners": "Partners",
     "my_assets": "My Assets",
@@ -361,6 +372,10 @@
     "empty_search": {
       "title": "No results for \"{search}\".",
       "action": "Check for any typos or spelling errors, or try a different search term."
+    },
+    "empty_campaign": {
+      "title": "Creators haven't added their items here yet. In the meantime, check out the community's creations in the 'Collectibles' tab to find something you like.",
+      "action": "<collectiblesLink>Go to Collectibles</collectiblesLink>"
     }
   },
   "nft_filters": {
@@ -376,9 +391,13 @@
     "search_land": "Search Land...",
     "gender": "Gender",
     "smart_wearables": "Smart Wearables",
-    "emote_play_mode": {
-      "title": "Play Mode",
-      "all_items": "All Play Modes"
+    "emote_attributes": {
+      "title": "Emote features",
+      "play_mode": "Play Mode",
+      "all_play_modes": "All Play Modes",
+      "all_items": "All emotes",
+      "with_sound": "with sound",
+      "with_props": "with props"
     },
     "body_shapes": {
       "title": "Body Shape",
@@ -511,6 +530,8 @@
       "update_listing": "Update listing",
       "buy": "Buy",
       "buy_with_mana": "Buy with MANA",
+      "buy_with_another_token": "Use another Token",
+      "buy_with_crypto": "Buy with Crypto",
       "get_mana": "Get MANA",
       "buy_with_card": "Buy with card",
       "mint": "Mint",
@@ -725,7 +746,9 @@
     "play_mode": {
       "simple": "Play once",
       "loop": "Play loop"
-    }
+    },
+    "sound": "Sound",
+    "props": "Props"
   },
   "smart_wearable": {
     "play_showcase": "Play showcase video",
@@ -807,13 +830,63 @@
     "regions_where_operates": "regions where Transak operates",
     "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
   },
+  "buy_with_crypto_modal": {
+    "title": "Confirm Your Purchase",
+    "pay_with": "Pay with",
+    "balance": "Balance",
+    "item_cost": "Item Cost",
+    "fee_cost": "Estimated Fee",
+    "buy_now": "Buy now",
+    "buy_with_card": "Buy with card",
+    "get_mana": "Get MANA",
+    "not_enough_funds": "You don't have enough funds in {token} to pay for this item. Get MANA, pay with a different token, or pay by card.",
+    "transaction_fee_covered": "Gas fees are {covered} when paying with MANA.",
+    "covered_by_dao": "covered by the DAO",
+    "free": "free",
+    "switch_network": "Switch Network to {chain}",
+    "confirm_switch_network": "Confirm Network Switch in Your Wallet",
+    "confirm_transaction": "Confirm Transaction in Your Wallet",
+    "total": "Total",
+    "route_unavailable": "Buying with {token} is not available at the moment. Get MANA, pay with a different token, or pay by card.",
+    "exchange_rate": "Exchange Rate",
+    "durations": {
+      "transaction_duration": "Transaction Duration",
+      "fast": "Fast ≈ 2s",
+      "normal": "Normal ≈ 20s",
+      "slow": "Slow ≈ 1m"
+    },
+    "asset_description": {
+      "ens": "Decentraland NAMEs",
+      "emotes": "Decentraland Emotes",
+      "wearables": "Decentraland Wearables",
+      "land": "Decentraland Lands",
+      "other": "Decentraland Collectibles"
+    },
+    "tooltip": {
+      "cross_chain": "Estimated fee includes the network cost and the cross chain purchase fee that you have to pay directly with your wallet.",
+      "same_network": "Estimated fee includes the network cost that you have to pay directly with your wallet."
+    },
+    "insufficient_funds": "You don’t have enough funds in {token}. Try paying with other token or get MANA or pay with card.",
+    "token_and_chain_selector": {
+      "available_chains": "Available Chains",
+      "select_chain": "Select chain",
+      "available_tokens": "Available Tokens on {chain}",
+      "select_token": "Select Token",
+      "no_matches": "No matches for {search}..."
+    },
+    "price_too_low": "MANA transactions are only gas fee free if the item is at least 1 MANA. To get this item, switch your network to Polygon to pay for the gas fee with MATIC. {learn_more}",
+    "remember_transaction_fee_covered": "Pay with Polygon MANA to have gas fees {covered} (item must be at least 1 MANA).",
+    "covered_for_you_by_dao": "covered for you by the DAO",
+    "learn_more": "Learn More"
+  },
   "partially_supported_network_card": {
     "content": "You are connected to the Polygon Network for purchasing items below <mana>1</mana>. You will need to have MATIC in your wallet to cover the transaction fee for this purchase."
   },
   "price_too_low": {
     "minimum_price": "The minimun amount supported for costless transactions is {price}",
     "get_item_in_network": "In order to get this item you'll need to switch your network to {network} and then cover the transaction cost with {token}.",
-    "switch_network": "Switch to {network}"
+    "switch_network": "Switch to {network}",
+    "buy_with_another_token": "Use another Token"
   },
   "mint_with_mana_page": {
     "title": "Buying {name}",
@@ -997,7 +1070,8 @@
   "parcel_coordinates": {
     "title": "Parcels",
     "show_more": "SHOW MORE",
-    "show_less": "SHOW LESS"
+    "show_less": "SHOW LESS",
+    "and_more": "and <strong>{amount}</strong> more..."
   },
   "price_change_notice": {
     "message": "The price may fluctuate due to market changes"
@@ -1117,6 +1191,15 @@
         },
         "try_again": "Try again"
       }
+    },
+    "claim_name_success": {
+      "title": "You gained access to a World!",
+      "body": "Build your personal space in the metaverse.",
+      "cta": "View my worlds"
+    },
+    "cross_chain_tx": {
+      "body": "The transaction can take up to <highlight>3 minutes</highlight> to be processed.<br></br>You can also track its progress in the links below:",
+      "view_transaction": "View transaction"
     }
   },
   "maintainance": {
@@ -1282,32 +1365,23 @@
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
   "campaign": {
-    "tab": "PRIDE23",
-    "badge": "PRIDE23",
-    "event_tag": "PRIDE23",
-    "event_hashtag": "#MetaversePride23"
+    "tab": "DCLMF23",
+    "badge": "DCLMF23",
+    "event_tag": "DCLMF23",
+    "event_hashtag": "#DCLMF23"
   },
   "event_campaign": {
     "homepage": {
-      "title": "Prepare the Perfect Pride Look!",
-      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
-      "subtitle_mobile": "Show your Pride in Decentraland with prismatic Wearables & Emotes made by the community—find everything you need in one place.",
-      "cta": "Browse Pride Items",
-      "dates": "JUNE 27-29",
-      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+      "title": "Get Ready for Decentraland Music Festival!",
+      "subtitle": "3 Days Of Immersive Musical Experience & Digitally-Native Performances Are Coming To Decentraland Nov 16-18. Get Ready With The Latest Festival Wearables & Emotes From DCL's Community Creators."
     },
     "collectibles": {
-      "title": "Prepare the Perfect Pride Look!",
-      "subtitle": "Show your Pride in Decentraland during {event_hashtag} with prismatic Wearables & Emotes that celebrate Inclusivity and Diversity in the metaverse—find everything you need in one place.",
-      "cta": "Browse Pride Items",
-      "cta_mobile": "Browse",
-      "dates": "JUNE 27-29",
-      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+      "title": "Get Ready for Decentraland Music Festival!",
+      "subtitle": "3 Days Of Immersive Musical Experience & Digitally-Native Performances Are Coming To Decentraland Nov 16-18. Get Ready With The Latest Festival Wearables & Emotes From DCL's Community Creators."
     },
     "campaign_browser": {
-      "title": "Metaverse Pride Essentials",
-      "subtitle": "Celebrate Inclusivity & Diversity during {event_hashtag} Prepare the perfect Pride parade look with vibrant Wearables & Emotes from the DCL community.",
-      "slogan": "CELEBRATE DIVERSITY AND INCLUSIVITY IN THE METAVERSE"
+      "title": "Decentraland Music Festival Essentials",
+      "subtitle": "From Crowd Surfing Emotes to Glowing Wearables, Find All The Festival Items You Need For #DCLMF23 Right Here"
     }
   },
   "asset_card": {
@@ -1394,7 +1468,7 @@
   "claim_your_own_name": {
     "title": "CLAIM YOUR OWN NAME",
     "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
-    "btn": "Claim your name"
+    "btn": "Claim your NAME"
   },
   "create_or_edit_list_modal": {
     "create": {
@@ -1418,16 +1492,23 @@
   },
   "success_page": {
     "loading_state": {
-      "title": "Your item is on its way!",
-      "status": "Processing transaction",
-      "description": "This transaction may take a few moments.",
-      "progress_in_activity": "View Progress in activity"
+      "item": {
+        "title": "Your item is on its way!"
+      },
+      "subdomain": {
+        "title": "Your NAME is on its way!"
+      },
+      "description": "The transaction can take up to <highlight>3 minutes</highlight> to be processed.<br></br>You can also track its progress in <link>Activity</link>.",
+      "status": "Processing transaction"
     },
     "success_state": {
       "title": "All done!",
       "status": "Transaction confirmed",
       "view_item": "View my item",
-      "try_genesis_city": "Try it in Genesis city"
+      "try_genesis_city": "Try it in Genesis city",
+      "mint_more_names": "Mint more names",
+      "set_as_primary_name": "Set as Primary Name",
+      "manage_names": "MANAGE MY NAMEs"
     },
     "error_state": {
       "title": "Oops",
@@ -1453,12 +1534,6 @@
     "description": "Please go to My Assets and review your listings <br></br> as some of them have to be updated",
     "go_to_my_assets": "Go to My Assets",
     "do_not_show_again": "Don't show me this again"
-  },
-  "hands_category_ftu": {
-    "title": "Now you can buy Hands wearables!",
-    "subtitle": "Discover the new Hands wearables in marketplace!",
-    "action": "Discover amazing hands wearables",
-    "img_alt": "New hands category"
   },
   "list_card": {
     "item_count": "{count} {count, plural, one {item} other {items}}",
@@ -1490,5 +1565,96 @@
     "title": "Smart Wearables are now live! 🟢",
     "description": "<b>Unlock the world of Portable Experiences you can own in the form of Smart Wearables.</b> Experience Decentraland like never before with Wearables that give you new abilities (like flying!) or add an extra layer of content, visible only to you, overlaid on Decentraland scenes.",
     "explore_collectibles": "Browse Smart Wearables"
+  },
+  "atlas_updated_warning": {
+    "info": "<strong>Map data may be outdated</strong>Find the most recent LAND details in the section below this map. Refreshing this page may update the information. If the problem persists, please contact our support team.",
+    "fingerprint_missmatch": "The information of this LAND may not be updated. Please refresh the page to get the latest information. If the problem persists, please contact our support team."
+  },
+  "names_page": {
+    "title": "Claim your Decentraland NAME",
+    "subtitle": "Activate the full potential of Decentraland citizenship with a unique NAME, Voting Power, & your own World!",
+    "claim_a_name": "Claim NAME",
+    "browse_names_being_resold": "Browse NAMEs being resold",
+    "manage_your_names": "Manage your NAMEs",
+    "name_label": "Name",
+    "name_placeholder": "Your NAME goes here",
+    "repeated_message": "This NAME is not available.",
+    "claim_button": "Claim",
+    "available": "NAME available",
+    "not_available": "Unavailable NAME. {link}",
+    "marketplace": "See if it's on sale in the Marketplace.",
+    "name_cost": "A NAME costs {mana} {network}",
+    "name_cost_fiat": "You can also pay using FIAT {icon}",
+    "debit_and_credit_cards": "Debit and Credit Cards",
+    "ethereum_mainnet_network": "Ethereum Mainnet Network",
+    "dao_tooltip": "All proceeds from NAME sales are redirected to the DAO treasury. {link}",
+    "why_names": "Why get a NAME?",
+    "name_too_short": "NAME too short: NAMEs must be at least 2 characters long.",
+    "has_spaces": "NAMEs can't contain spaces.",
+    "name_too_long": "NAMEs can contain up to 15 characters.",
+    "invalid_characters": "NAMEs can only contain alphanumeric characters.",
+    "not_enough_mana": "You don't have enough MANA to claim a new NAME",
+    "fiat_payments_not_enabled": "FIAT payments are not enabled at the moment. Please try later.",
+    "claim_name_fat_finger_modal": {
+      "title": "Please confirm your new NAME",
+      "description": "You have chosen {name}. {br} Re-enter your NAME to confirm your selection.",
+      "ok_message": "Congratulations the name {name} is yours.",
+      "caps_warning": "The capitalization of NAMEs cannot be modified once claimed.",
+      "paying_with": "Paying with",
+      "pay_methods": {
+        "crypto": {
+          "name": "Crypto",
+          "subtitle": "Ethereum Mainnet Network"
+        },
+        "fiat": {
+          "name": "FIAT",
+          "new": "new",
+          "title": "Using Debit and Credit Cards",
+          "subtitle": "Price rates may change"
+        }
+      },
+      "name_placeholder": "Your unique NAME",
+      "names_different": "Names do not match",
+      "authorization": {
+        "title_action": "purchase",
+        "action": "claim"
+      }
+    },
+    "your_name": "yourName",
+    "why": {
+      "stand_out": {
+        "title": "Stand out with a unique alias for your avatar",
+        "description": "Own your presence in the metaverse with a username free from numbers on the end (e.g. Genesis#1234)."
+      },
+      "unlock": {
+        "title": "Unlock your own World",
+        "description": "Customize your own virtual 3D space in the metaverse. Host events, build, and experiment. {link}"
+      },
+      "governance": {
+        "title": "Participate in Governance",
+        "description": "Shape the future of Decentraland—each NAME grants you <b>100 Voting Power</b> when voting on DAO proposals. {link}"
+      },
+      "get_url": {
+        "title": "A dedicated URL for your virtual spaces",
+        "description": "Guide visitors with an exclusive, memorable URL for your LAND or Worlds <b>https://name.dcl.eth</b>"
+      }
+    },
+    "ctas": {
+      "name_taken": {
+        "title": "Has your chosen NAME already been claimed?",
+        "description": "Claimed NAMEs can be sold in the Marketplace—see if the NAME you want is available.",
+        "cta": "Browse Marketplace NAMEs"
+      },
+      "manage": {
+        "title": "Already have Decentraland NAMEs",
+        "cta": "Manage your names"
+      }
+    }
+  },
+  "set_name_as_alias_modal": {
+    "title": "Use NAME as Username",
+    "description": "Your current username will be updated immediately.",
+    "success_title": "All Done!",
+    "success_description": "Your username has been updated"
   }
 }

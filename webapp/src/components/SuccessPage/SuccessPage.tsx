@@ -7,7 +7,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { config } from '../../config'
 import { Footer } from '../Footer'
-import { AssetType } from '../../modules/asset/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 import { AssetImage } from '../AssetImage'
 import { AssetProvider } from '../AssetProvider'
 import { Navbar } from '../Navbar'
@@ -16,20 +16,86 @@ import successAnimation from './successAnimation.json'
 import styles from './SuccessPage.module.css'
 
 const EXPLORER_URL = config.get('EXPLORER_URL', '')
+const BUILDER_URL = config.get('BUILDER_URL', '')
+
+const SuccessPageLoadingStateDescription = () => {
+  return (
+    <div className={styles.viewProgress}>
+      <Icon inverted color="grey" name="info circle" />
+      <div>
+        {t('success_page.loading_state.description', {
+          br: () => <br />,
+          highlight: (text: string) => (
+            <span className={styles.highlighted}>{text}</span>
+          ),
+          link: (text: string) => <Link to={locations.activity()}>{text}</Link>
+        })}
+      </div>
+    </div>
+  )
+}
 
 export function SuccessPage(props: Props) {
-  const { isLoading, mintedTokenId } = props
+  const { isLoading, mintedTokenId, profile, onSetNameAsAlias } = props
   const search = new URLSearchParams(useLocation().search)
   const contractAddress = search.get('contractAddress')
   const tokenId = search.get('tokenId')
   const assetType = search.get('assetType')
+  const subdomain = search.get('subdomain')
+
+  // this is a workaround to show the NAME while the transaction is being mined or the tokenId getting retrieved.
+  if (subdomain && (isLoading || !tokenId)) {
+    return (
+      <div className={styles.pageContainer}>
+        <Navbar />
+        <div className={styles.container}>
+          <Header className={styles.title}>
+            {t('success_page.loading_state.subdomain.title')}
+          </Header>
+          <AssetImage
+            asset={{ category: 'ens', data: { ens: { subdomain } } } as Asset}
+            className={classNames(styles.assetImage, styles.loading)}
+          />
+
+          <div className={styles.statusInfo}>
+            <Loader size="small" inline active />
+            {t('success_page.loading_state.status')}
+          </div>
+          <SuccessPageLoadingStateDescription />
+        </div>
+        <Footer className={styles.footer} />
+      </div>
+    )
+  }
+
+  if (contractAddress && !tokenId && isLoading) {
+    // in this case, we asume the tokenId is getting trieved and it's waiting for the tx to be mined
+    return (
+      <div className={styles.pageContainer}>
+        <Navbar />
+        <div className={styles.container}>
+          <Header className={styles.title}>
+            {t('success_page.loading_state.item.title')}
+          </Header>
+
+          <div className={styles.statusInfo}>
+            <Loader size="small" inline active />
+            {t('success_page.loading_state.status')}
+          </div>
+          <SuccessPageLoadingStateDescription />
+        </div>
+        <Footer className={styles.footer} />
+      </div>
+    )
+  }
 
   return (
     <div className={styles.pageContainer}>
-      <Navbar isFullscreen />
+      <Navbar />
       <div className={styles.container}>
         {assetType && contractAddress && tokenId ? (
           <AssetProvider
+            retry
             type={assetType as AssetType}
             contractAddress={contractAddress}
             tokenId={tokenId}
@@ -45,7 +111,7 @@ export function SuccessPage(props: Props) {
                 return (
                   <>
                     <Header className={styles.title}>
-                      {t('success_page.loading_state.title')}
+                      {t('success_page.loading_state.item.title')}
                     </Header>
                     <AssetImage
                       asset={asset}
@@ -56,12 +122,7 @@ export function SuccessPage(props: Props) {
                       <Loader size="small" inline active />
                       {t('success_page.loading_state.status')}
                     </div>
-                    <span className={styles.description}>
-                      {t('success_page.loading_state.description')}
-                    </span>
-                    <Button secondary as={Link} to={locations.activity()}>
-                      {t('success_page.loading_state.progress_in_activity')}
-                    </Button>
+                    <SuccessPageLoadingStateDescription />
                   </>
                 )
               }
@@ -84,7 +145,9 @@ export function SuccessPage(props: Props) {
                     {t('success_page.success_state.status')}
                   </span>
                   <div className={styles.actionContainer}>
-                    {assetType === AssetType.ITEM && !isLoading && mintedTokenId ? (
+                    {assetType === AssetType.ITEM &&
+                    !isLoading &&
+                    mintedTokenId ? (
                       <AssetProvider
                         retry
                         type={AssetType.NFT}
@@ -104,18 +167,69 @@ export function SuccessPage(props: Props) {
                         )}
                       </AssetProvider>
                     ) : (
-                      <Button
-                        as={Link}
-                        className={styles.successButton}
-                        secondary
-                        to={
-                          assetType === AssetType.ITEM
-                            ? locations.item(contractAddress, tokenId)
-                            : locations.nft(contractAddress, tokenId)
-                        }
-                      >
-                        {t('success_page.success_state.view_item')}
-                      </Button>
+                      <>
+                        {asset.category === NFTCategory.ENS ? (
+                          <div className={styles.ensActions}>
+                            <div className={styles.primaryEnsActions}>
+                              <Button
+                                as={Link}
+                                className={styles.successButton}
+                                secondary
+                                to={locations.claimName()}
+                              >
+                                {t(
+                                  'success_page.success_state.mint_more_names'
+                                )}
+                              </Button>
+                              {!!profile && (
+                                <>
+                                  <Button
+                                    className={styles.successButton}
+                                    primary
+                                    onClick={() => onSetNameAsAlias(asset.name)}
+                                  >
+                                    {t(
+                                      'success_page.success_state.set_as_primary_name'
+                                    )}
+                                  </Button>
+                                </>
+                              )}
+                            </div>
+                            {!!profile && (
+                              <div>
+                                <Button
+                                  inverted
+                                  fluid
+                                  as={'a'}
+                                  href={BUILDER_URL + '/names'}
+                                >
+                                  <div className={styles.manageNames}>
+                                    <div
+                                      className={styles.manageNamesIcon}
+                                    ></div>
+                                    {t(
+                                      'success_page.success_state.manage_names'
+                                    )}
+                                  </div>
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <Button
+                            as={Link}
+                            className={styles.successButton}
+                            secondary
+                            to={
+                              assetType === AssetType.ITEM
+                                ? locations.item(contractAddress, tokenId)
+                                : locations.nft(contractAddress, tokenId)
+                            }
+                          >
+                            {t('success_page.success_state.view_item')}
+                          </Button>
+                        )}
+                      </>
                     )}
 
                     {(asset.category === NFTCategory.WEARABLE ||

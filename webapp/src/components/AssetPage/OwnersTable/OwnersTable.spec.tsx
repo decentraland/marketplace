@@ -20,6 +20,7 @@ jest.mock('decentraland-dapps/dist/containers', () => {
 describe('Owners Table', () => {
   let asset: Item = {
     contractAddress: '0xaddress',
+    urn: '',
     itemId: '1',
     id: '1',
     name: 'asset name',

@@ -16,7 +16,11 @@
   gap: 14px;
 }
 
-.YourOffer .bottomInformationPadding {
+.YourOffer .information {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   padding: 0px 26px 15px 26px;
 }
 
@@ -74,6 +78,9 @@
   align-items: center;
   display: flex;
   flex-direction: row;
+}
+
+.YourOffer .dates {
   justify-content: space-between;
 }
 
@@ -89,4 +96,14 @@
 .YourOffer .texts {
   display: flex;
   font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .YourOffer .information {
+    gap: 15px;
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: unset;
+  }
 }

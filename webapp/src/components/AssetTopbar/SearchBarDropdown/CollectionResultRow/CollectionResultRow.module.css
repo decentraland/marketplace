@@ -1,0 +1,51 @@
+.collectionRowContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 8px;
+  flex: 1;
+}
+
+.collectionRowContainer:last-of-type {
+  margin-bottom: 0;
+}
+
+.collectionRowContainer:hover {
+  background-color: var(--dropdown-hover);
+}
+
+.itemDataContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.collectionName {
+  font-weight: bold;
+  color: white;
+}
+
+.creator {
+  margin-top: 2px;
+  color: #a09ba8;
+}
+
+.image {
+  width: 48px;
+  height: 48px;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.collectionRowContainer .image {
+  width: 30px;
+  height: 30px;
+  margin-right: 16px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .itemDataContainer {
+    padding-right: 12px;
+  }
+}

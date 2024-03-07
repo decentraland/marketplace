@@ -1,9 +1,10 @@
-import { ChainId, Item, ItemFilters } from '@dcl/schemas'
+import { ChainId, Item, ItemFilters, Order } from '@dcl/schemas'
 import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   buildTransactionWithFromPayload,
   buildTransactionWithReceiptPayload
 } from 'decentraland-dapps/dist/modules/transaction/utils'
+import type { Route } from 'decentraland-transactions/crossChain'
 import { action } from 'typesafe-actions'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'
@@ -93,9 +94,10 @@ export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
 
 export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
   action(BUY_ITEM_SUCCESS, {
+    chainId,
     item,
     txHash,
-    ...buildTransactionWithReceiptPayload(chainId, txHash, {
+    ...buildTransactionWithReceiptPayload(item.chainId, txHash, {
       itemId: item.itemId,
       contractAddress: item.contractAddress,
       network: item.network,
@@ -110,6 +112,61 @@ export const buyItemFailure = (error: string) =>
 export type BuyItemRequestAction = ReturnType<typeof buyItemRequest>
 export type BuyItemSuccessAction = ReturnType<typeof buyItemSuccess>
 export type BuyItemFailureAction = ReturnType<typeof buyItemFailure>
+
+// Buy Item Cross Chain
+export const TRACK_CROSS_CHAIN_TX_REQUEST = '[Request] Track Buy item cross-chain tx'
+export const BUY_ITEM_CROSS_CHAIN_REQUEST = '[Request] Buy item cross-chain'
+export const BUY_ITEM_CROSS_CHAIN_SUCCESS = '[Success] Buy item cross-chain'
+export const BUY_ITEM_CROSS_CHAIN_FAILURE = '[Failure] Buy item cross-chain'
+
+export const buyItemCrossChainRequest = (item: Item, route: Route, order?: Order) =>
+  action(BUY_ITEM_CROSS_CHAIN_REQUEST, { item, route, order })
+
+export const buyItemCrossChainSuccess = (
+  route: Route,
+  chainId: ChainId,
+  txHash: string,
+  item: Item,
+  order?: Order
+) =>
+  action(BUY_ITEM_CROSS_CHAIN_SUCCESS, {
+    route,
+    item,
+    txHash,
+    order,
+    ...buildTransactionWithReceiptPayload(chainId, txHash, {
+      itemId: item.itemId,
+      contractAddress: item.contractAddress,
+      network: item.network,
+      name: getAssetName(item),
+      price: formatWeiMANA(order?.price ?? item.price)
+    })
+  })
+
+  export const trackCrossChainTx = (
+  chainId: ChainId,
+  txHash: string,
+) =>
+  action(TRACK_CROSS_CHAIN_TX_REQUEST, {
+    ...buildTransactionWithReceiptPayload(chainId, txHash )
+  })
+
+export const buyItemCrossChainFailure = (
+  route: Route,
+  item: Item,
+  price: string,
+  error: string
+) => action(BUY_ITEM_CROSS_CHAIN_FAILURE, { route, item, price, error })
+
+export type BuyItemCrossChainRequestAction = ReturnType<
+  typeof buyItemCrossChainRequest
+>
+export type BuyItemCrossChainSuccessAction = ReturnType<
+  typeof buyItemCrossChainSuccess
+>
+export type BuyItemCrossChainFailureAction = ReturnType<
+  typeof buyItemCrossChainFailure
+>
 
 // Buy Item With Card
 export const BUY_ITEM_WITH_CARD_REQUEST = '[Request] Buy Item with Card'

@@ -25,15 +25,16 @@ import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
 import { isLegacyOrder } from '../../lib/orders'
+import { config } from '../../config'
 import { Atlas } from '../Atlas'
 import ListedBadge from '../ListedBadge'
-import { config } from '../../config'
 import { Coordinate } from '../Coordinate'
 import WarningBadge from '../WarningBadge'
 import { JumpIn } from '../AssetPage/JumpIn'
 import { getEthereumItemUrn } from './utils'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import AvailableForMintPopup from './AvailableForMintPopup'
+import { EnsImage } from './EnsImage'
 import './AssetImage.css'
 
 // 1x1 transparent pixel
@@ -76,18 +77,22 @@ const AssetImage = (props: Props) => {
     hasPopup,
     zoom,
     isSmall,
-    showMonospace,
     avatar,
     wearableController,
     isTryingOn,
     isPlayingEmote,
+    showUpdatedDateWarning,
     onSetIsTryingOn,
     onSetWearablePreviewController,
     onPlaySmartWearableVideoShowcase,
+    onFetchSmartWearableVideoHash,
     children,
     hasBadges,
     item,
-    wallet
+    wallet,
+    videoHash,
+    isLoadingVideoHash,
+    hasFetchedVideoHash
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -95,6 +100,8 @@ const AssetImage = (props: Props) => {
     isDraggable
   )
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
+  const [isSoundEnabled, setIsSoundEnabled] = useState(false)
+  const [hasSound, setHasSound] = useState<boolean | undefined>(undefined)
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
@@ -104,6 +111,7 @@ const AssetImage = (props: Props) => {
       )
     }
   }, [asset.category, wearableController, onSetWearablePreviewController])
+
   const handleError = useCallback(error => {
     console.warn(error)
     setWearablePreviewError(true)
@@ -128,9 +136,10 @@ const AssetImage = (props: Props) => {
       if (
         ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE &&
         asset &&
-        asset.data.wearable?.isSmart
+        asset.data.wearable?.isSmart &&
+        videoHash
       ) {
-        return onPlaySmartWearableVideoShowcase(asset)
+        return onPlaySmartWearableVideoShowcase(videoHash)
       }
 
       if (wearableController) {
@@ -151,13 +160,40 @@ const AssetImage = (props: Props) => {
             await wearableController.emote.stop()
             break
           }
+          case ControlOptionAction.ENABLE_SOUND: {
+            await wearableController.emote.enableSound()
+            break
+          }
+          case ControlOptionAction.DISABLE_SOUND: {
+            await wearableController.emote.disableSound()
+            break
+          }
           default:
             break
         }
       }
     },
-    [wearableController, onPlaySmartWearableVideoShowcase, asset]
+    [asset, videoHash, wearableController, onPlaySmartWearableVideoShowcase]
   )
+
+  useEffect(() => {
+    if (
+      asset.category === NFTCategory.EMOTE &&
+      wearableController &&
+      isDraggable &&
+      !isLoadingWearablePreview
+    ) {
+      wearableController.emote?.hasSound().then(sound => {
+        setHasSound(sound)
+      })
+    }
+  }, [
+    wearableController,
+    asset.category,
+    isDraggable,
+    hasSound,
+    isLoadingWearablePreview
+  ])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
@@ -185,12 +221,25 @@ const AssetImage = (props: Props) => {
   // This effect is here just to track on which mode the preview is initialized, that's why it has an empty dependency array, so this is triggered once on mount
   useEffect(() => {
     const isPreview = asset.category === NFTCategory.WEARABLE && isDraggable
+
     if (!isTracked && isPreview) {
       getAnalytics().track(events.INIT_PREVIEW, {
         mode: isTryingOn ? 'avatar' : 'wearable'
       })
       setIsTracked(true)
     }
+
+    if (
+      isPreview &&
+      asset.data.wearable?.isSmart &&
+      asset.urn &&
+      videoHash === undefined &&
+      !isLoadingVideoHash &&
+      !hasFetchedVideoHash
+    ) {
+      onFetchSmartWearableVideoHash(asset)
+    }
+
     return () => {
       if (asset.category === NFTCategory.EMOTE && wearableController) {
         onSetWearablePreviewController(null)
@@ -215,6 +264,9 @@ const AssetImage = (props: Props) => {
           showForRent={false}
           showOnSale={false}
           showOwned={false}
+          lastUpdated={
+            showUpdatedDateWarning ? new Date(asset.updatedAt) : undefined
+          }
         >
           {hasBadges && children}
         </Atlas>
@@ -236,6 +288,9 @@ const AssetImage = (props: Props) => {
           showOnSale={false}
           showOwned={false}
           isEstate
+          lastUpdated={
+            showUpdatedDateWarning ? new Date(asset.updatedAt) : undefined
+          }
         >
           {hasBadges && children}
         </Atlas>
@@ -332,7 +387,7 @@ const AssetImage = (props: Props) => {
                   size="large"
                 />
               </Center>
-            ) : asset.data.wearable?.isSmart && asset.urn ? (
+            ) : asset.data.wearable?.isSmart && asset.urn && videoHash ? (
               <div className="play-control">
                 <Button
                   className="play-button"
@@ -480,6 +535,23 @@ const AssetImage = (props: Props) => {
                 : t('wearable_preview.play_emote')}
             </span>
           </Button>
+          {hasSound && (
+            <Button
+              className={classNames('sound-button', {
+                enabled: isSoundEnabled
+              })}
+              size="small"
+              aria-label="enable sound"
+              onClick={() => {
+                handleControlActionChange(
+                  isSoundEnabled
+                    ? ControlOptionAction.DISABLE_SOUND
+                    : ControlOptionAction.ENABLE_SOUND
+                )
+                setIsSoundEnabled(!isSoundEnabled)
+              }}
+            />
+          )}
         </div>
       )
 
@@ -556,15 +628,9 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.ENS: {
       let name = ens!.subdomain
-      let classes = ['ens-subdomain']
-      if (isSmall) {
-        name = name.slice(0, 2)
-        classes.push('small')
-      }
       return (
-        <div className={classes.join(' ')}>
-          <div className="name">{name}</div>
-          {showMonospace ? <div className="monospace">{name}</div> : null}
+        <div className={classNames(isSmall && 'small', 'ens')}>
+          <EnsImage onlyLogo={isSmall} name={name} />
           {hasBadges && children}
         </div>
       )
@@ -605,7 +671,13 @@ const AssetImageWrapper = (props: Props) => {
   } = props
 
   useEffect(() => {
-    if (!item && isNFT(asset) && asset.itemId) {
+    if (
+      !item &&
+      isNFT(asset) &&
+      asset.itemId &&
+      (asset.category === NFTCategory.WEARABLE ||
+        asset.category === NFTCategory.EMOTE)
+    ) {
       onFetchItem(asset.contractAddress, asset.itemId)
     }
   }, [asset, item, onFetchItem])
@@ -666,8 +738,8 @@ const AssetImageWrapper = (props: Props) => {
         <AssetImage
           asset={asset}
           item={item}
-          onFetchItem={onFetchItem}
           wallet={wallet}
+          onFetchItem={onFetchItem}
           {...rest}
         >
           <div className="badges">
@@ -700,8 +772,7 @@ AssetImage.defaultProps = {
   isDraggable: false,
   withNavigation: false,
   zoom: 0.5,
-  isSmall: false,
-  showMonospace: false
+  isSmall: false
 }
 
 export default React.memo(AssetImageWrapper)

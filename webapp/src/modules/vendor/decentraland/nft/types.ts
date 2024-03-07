@@ -38,6 +38,8 @@ export type NFTsFetchFilters = {
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
   rentalDays?: number[]
+  emoteHasGeometry?: boolean
+  emoteHasSound?: boolean
 }
 
 export type NFTResult = {
@@ -52,7 +54,6 @@ export type NFTResponse = {
 }
 
 export type NFTData = BaseNFT['data']
-
 
 export enum OwnersSortBy {
   ISSUED_ID = 'issuedId'

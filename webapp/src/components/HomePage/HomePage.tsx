@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Page } from 'decentraland-ui'
+import { BackToTopButton, Page } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../modules/routing/locations'
@@ -9,6 +9,7 @@ import { View } from '../../modules/ui/types'
 import { AssetType } from '../../modules/asset/types'
 import { HomepageView } from '../../modules/ui/asset/homepage/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
+import { AssetStatusFilter } from '../../utils/filters'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
@@ -18,9 +19,7 @@ import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
 import { CampaignBanner } from '../Campaign/CampaignBanner'
 import { Slideshow } from './Slideshow'
 import { RankingsTable } from '../RankingsTable'
-import { BackToTopButton } from '../BackToTopButton'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
-import HandsCategoryLaunchModal from '../Modals/FTU/HandsCategoryLaunchModal'
 import { SmartWearablesLaunchModal } from '../Modals/FTU/SmartWearablesLaunchModal'
 import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
 import { Props } from './HomePage.types'
@@ -77,11 +76,18 @@ const HomePage = (props: Props) => {
 
   const sort: Partial<Record<View, SortBy>> = useMemo(
     () => ({
-      [View.HOME_NEW_ITEMS]: SortBy.RECENTLY_LISTED,
+      [View.HOME_NEW_ITEMS]: SortBy.NEWEST,
       [View.HOME_SOLD_ITEMS]: SortBy.RECENTLY_SOLD,
       [View.HOME_WEARABLES]: SortBy.RECENTLY_LISTED,
       [View.HOME_LAND]: SortBy.RECENTLY_LISTED,
       [View.HOME_ENS]: SortBy.RECENTLY_LISTED
+    }),
+    []
+  )
+
+  const status: Partial<Record<View, AssetStatusFilter>> = useMemo(
+    () => ({
+      [View.HOME_NEW_ITEMS]: AssetStatusFilter.ON_SALE
     }),
     []
   )
@@ -106,6 +112,10 @@ const HomePage = (props: Props) => {
       } else {
         trackMessage = `View all ${section} section`
         browseOptions = { section, assetType, sortBy }
+      }
+
+      if (status[view]) {
+        browseOptions.status = status[view]
       }
 
       if (trackMessage && browseOptions) {
@@ -212,10 +222,9 @@ const HomePage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation activeTab={NavigationTab.OVERVIEW} />
       <ListsLaunchModal />
-      <HandsCategoryLaunchModal />
       <SmartWearablesLaunchModal />
       {isCampaignHomepageBannerEnabled ? (
         <CampaignBanner>

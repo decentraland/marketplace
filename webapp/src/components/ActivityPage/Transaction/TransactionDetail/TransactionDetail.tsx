@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Loader, Icon } from 'decentraland-ui'
 import { Network } from '@dcl/schemas'
@@ -29,7 +29,18 @@ const getHref = (tx: Transaction) => {
 }
 
 const TransactionDetail = (props: Props) => {
-  const { asset, text, tx } = props
+  const { asset, text, tx, isCrossChain = false } = props
+  const [txLink, setTxLink] = useState(getHref(tx))
+  useEffect(() => {
+    ;(async () => {
+      if (isCrossChain) {
+        const { AxelarProvider } = await import(
+          'decentraland-transactions/crossChain'
+        )
+        setTxLink(await AxelarProvider.getTxLink(tx.hash))
+      }
+    })()
+  })
   return (
     <Row className="TransactionDetail">
       <Column align="left" grow={true}>
@@ -58,7 +69,7 @@ const TransactionDetail = (props: Props) => {
       </Column>
       <Column align="right">
         <a
-          href={getHref(tx)}
+          href={txLink}
           className={tx.status ? 'status ' + tx.status : 'status'}
           target="_blank"
           rel="noopener noreferrer"

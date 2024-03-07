@@ -30,8 +30,7 @@ import {
 } from './sagas'
 import { getCreators, getCreatorsSearchQuery } from './selectors'
 import { CreatorAccount } from './types'
-import { fromProfilesToCreators } from './utils'
-
+import { enhanceCreatorName, fromProfilesToCreators } from './utils'
 
 let account: Account
 let filters: AccountFilters
@@ -66,7 +65,10 @@ beforeEach(() => {
   }
 })
 
-const lambdasClient = createLambdasClient({ url: 'aMockedURL', fetcher: createFetchComponent()  })
+const lambdasClient = createLambdasClient({
+  url: 'aMockedURL',
+  fetcher: createFetchComponent()
+})
 
 describe('when handling the request to fetch account metrics', () => {
   describe('when a call to the accountApi fails', () => {
@@ -239,7 +241,9 @@ describe('when handling the request to fetch creators accounts', () => {
             [select(getCreatorsSearchQuery), null],
             [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
             [
-              call([lambdasClient, 'getAvatarsDetailsByPost'], { ids: addresses }),
+              call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                ids: addresses
+              }),
               Promise.reject(new Error(error))
             ]
           ])
@@ -274,7 +278,12 @@ describe('when handling the request to fetch creators accounts', () => {
           .provide([
             [select(getCreatorsSearchQuery), null],
             [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
-            [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
+            [
+              call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                ids: addresses
+              }),
+              profiles
+            ]
           ])
           .put(
             fetchCreatorsAccountSuccess(
@@ -326,7 +335,12 @@ describe('when handling the request to fetch creators accounts', () => {
             .provide([
               [select(getCreatorsSearchQuery), search],
               [select(getCreators), creatorAccounts],
-              [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
+              [
+                call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                  ids: addresses
+                }),
+                profiles
+              ]
             ])
             .put(fetchCreatorsAccountSuccess(search, creatorAccounts))
             .dispatch(fetchCreatorsAccountRequest(search))
@@ -335,9 +349,14 @@ describe('when handling the request to fetch creators accounts', () => {
       })
       describe('and the term is different than the last search', () => {
         let total: number
+        let creators: CreatorAccount[]
         describe('and there are more results than the max requests allowed', () => {
           beforeEach(() => {
+            creators = fromProfilesToCreators(profiles, accounts)
             total = MAX_ENS_SEARCH_REQUESTS * DEFAULT_FIRST_VALUE + 1
+            creators.forEach(creator =>
+              enhanceCreatorName(creator, nftResults, search)
+            )
           })
           it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
             return expectSaga(accountSaga, lambdasClient)
@@ -357,22 +376,27 @@ describe('when handling the request to fetch creators accounts', () => {
                   call([accountAPI, accountAPI.fetch], filters),
                   { data: accounts }
                 ],
-                [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
+                [
+                  call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                    ids: addresses
+                  }),
+                  profiles
+                ]
               ])
-              .put(
-                fetchCreatorsAccountSuccess(
-                  search,
-                  fromProfilesToCreators(profiles, accounts)
-                )
-              )
+              .put(fetchCreatorsAccountSuccess(search, creators))
               .dispatch(fetchCreatorsAccountRequest(search))
               .silentRun()
           })
         })
         describe('and there are less results than the max requests allowed', () => {
           const REQUESTS_UNTIL_FILLED = 3
+          let creators: CreatorAccount[]
           beforeEach(() => {
+            creators = fromProfilesToCreators(profiles, accounts)
             total = nftResults.length * REQUESTS_UNTIL_FILLED
+            creators.forEach(creator =>
+              enhanceCreatorName(creator, nftResults, search)
+            )
           })
           it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
             return expectSaga(accountSaga, lambdasClient)
@@ -396,14 +420,14 @@ describe('when handling the request to fetch creators accounts', () => {
                   call([accountAPI, accountAPI.fetch], filters),
                   { data: accounts }
                 ],
-                [call([lambdasClient, 'getAvatarsDetailsByPost'], {ids: addresses}), profiles]
+                [
+                  call([lambdasClient, 'getAvatarsDetailsByPost'], {
+                    ids: addresses
+                  }),
+                  profiles
+                ]
               ])
-              .put(
-                fetchCreatorsAccountSuccess(
-                  search,
-                  fromProfilesToCreators(profiles, accounts)
-                )
-              )
+              .put(fetchCreatorsAccountSuccess(search, creators))
               .dispatch(fetchCreatorsAccountRequest(search))
               .silentRun()
           })

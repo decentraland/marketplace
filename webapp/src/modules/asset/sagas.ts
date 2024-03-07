@@ -12,13 +12,20 @@ import { locations } from '../routing/locations'
 import { buyItemWithCardFailure } from '../item/actions'
 import { executeOrderWithCardFailure } from '../order/actions'
 import { AssetType } from './types'
-import { getSmartWearableRequiredPermissions } from '../../lib/asset'
+import {
+  getSmartWearableRequiredPermissions,
+  getSmartWearableVideoShowcase
+} from '../../lib/asset'
 import { isErrorWithMessage } from '../../lib/error'
 import {
   FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
+  FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST,
   FetchSmartWearableRequiredPermissionsRequestAction,
+  FetchSmartWearableVideoHashRequestAction,
   fetchSmartWearableRequiredPermissionsFailure,
-  fetchSmartWearableRequiredPermissionsSuccess
+  fetchSmartWearableRequiredPermissionsSuccess,
+  fetchSmartWearableVideoHashFailure,
+  fetchSmartWearableVideoHashSuccess
 } from './actions'
 
 export const failStatuses = [
@@ -31,7 +38,11 @@ export function* assetSaga() {
   yield takeEvery(SET_PURCHASE, handleSetAssetPurchaseWithCard)
   yield takeEvery(
     FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
-    handleFetchAssetSuccess
+    handleFetchSmartWearableRequiredPermissionsRequest
+  )
+  yield takeEvery(
+    FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST,
+    handleFetchSmartWearableVideoHashRequest
   )
 }
 
@@ -83,7 +94,7 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
   }
 }
 
-function* handleFetchAssetSuccess(
+function* handleFetchSmartWearableRequiredPermissionsRequest(
   action: FetchSmartWearableRequiredPermissionsRequestAction
 ) {
   const { asset } = action.payload
@@ -105,6 +116,33 @@ function* handleFetchAssetSuccess(
   } catch (error) {
     yield put(
       fetchSmartWearableRequiredPermissionsFailure(
+        asset,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
+  }
+}
+
+function* handleFetchSmartWearableVideoHashRequest(
+  action: FetchSmartWearableVideoHashRequestAction
+) {
+  const { asset } = action.payload
+  let videoHash: string | undefined
+
+  try {
+    const {
+      urn,
+      data: { wearable }
+    } = asset
+
+    if (wearable?.isSmart && urn) {
+      videoHash = yield call(getSmartWearableVideoShowcase, asset)
+    }
+
+    yield put(fetchSmartWearableVideoHashSuccess(asset, videoHash))
+  } catch (error) {
+    yield put(
+      fetchSmartWearableVideoHashFailure(
         asset,
         isErrorWithMessage(error) ? error.message : t('global.unknown_error')
       )

@@ -4,6 +4,7 @@ import { Item } from '@dcl/schemas'
 import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { builderUrl } from '../../lib/environment'
 import { config } from '../../config'
 import { getAssetName } from '../asset/utils'
 import { UpsertRentalOptType } from '../rental/types'
@@ -45,6 +46,23 @@ const ToastCTA = ({
       {description}
     </Button>
   )
+}
+
+export function getNameClaimSuccessToast(): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: t('toast.store_update_success.title'),
+    body: (
+      <div>
+        <p>{t('toast.claim_name_success.body')}</p>
+        <Button as="a" href={`${builderUrl}/worlds`}>
+          {t('toast.claim_name_success.cta')}
+        </Button>
+      </div>
+    ),
+    timeout: DEFAULT_TIMEOUT,
+    closable: true
+  }
 }
 
 export function getStoreUpdateSuccessToast(): Omit<Toast, 'id'> {
@@ -94,7 +112,7 @@ export function getUpsertRentalSuccessToast(
             ? t('toast.create_rental_success.body')
             : t('toast.update_rental_success.body')}
         </p>
-        <Button as={'a'} href={locations.nft(nft.contractAddress, nft.tokenId)}>
+        <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
           {t('toast.upsert_rental_success.show_listing')}
         </Button>
       </div>
@@ -332,5 +350,36 @@ export function getBulkPickItemFailureToast(
     closable: true,
     timeout: DEFAULT_TIMEOUT,
     icon: <Icon size="big" name="exclamation circle" />
+  }
+}
+
+export function getCrossChainTransactionSuccessToast(
+  txLink: string
+): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: '',
+    body: (
+      <div>
+        <p>
+          {t('toast.cross_chain_tx.body', {
+            br: () => <br />,
+            highlight: (text: string) => <span>{text}</span>,
+            link: (text: string) => (
+              <Link to={locations.activity()}>{text}</Link>
+            )
+          })}
+        </p>
+        <Button as="a" href={locations.activity()} target="_blank">
+          {t('navigation.activity')}
+          <Icon style={{ marginLeft: 6 }} name="clock outline" />
+        </Button>
+        <Button as="a" href={txLink} target="_blank">
+          {t('toast.cross_chain_tx.view_transaction')}
+          <Icon style={{ marginLeft: 6 }} name="external" />
+        </Button>
+      </div>
+    ),
+    closable: false
   }
 }

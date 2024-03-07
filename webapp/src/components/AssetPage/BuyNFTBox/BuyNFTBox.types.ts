@@ -10,4 +10,5 @@ export type Props = {
   wallet: Wallet | null
 }
 
+export type OwnProps = Pick<Props, 'nft'>
 export type MapStateProps = Pick<Props, 'address' | 'order' | 'wallet'>

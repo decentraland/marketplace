@@ -18,7 +18,7 @@ const BidPage = (props: Props) => {
   } = props
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Page className="BidPage">
         <Wallet>
           {wallet => (

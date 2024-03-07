@@ -63,7 +63,7 @@ const ActivityPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar />
       <Navigation activeTab={NavigationTab.ACTIVITY} />
       <Page className="ActivityPage">{content}</Page>
       <Modal size="tiny" open={showConfirmation}>

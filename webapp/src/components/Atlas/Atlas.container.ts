@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { getTiles, getTilesByEstateId } from '../../modules/tile/selectors'
+import { getLastModifiedDate, getTiles, getTilesByEstateId } from '../../modules/tile/selectors'
 import { getOnRentNFTsByLessor } from '../../modules/ui/browse/selectors'
 import { RootState } from '../../modules/reducer'
 import { getWalletNFTs } from '../../modules/nft/selectors'
@@ -19,6 +19,7 @@ const mapState = (state: RootState): MapStateProps => {
     nfts: getWalletNFTs(state),
     nftsOnRent,
     tilesByEstateId: getTilesByEstateId(state),
+    lastAtlasModifiedDate: getLastModifiedDate(state),
     getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }

@@ -8,36 +8,56 @@ import {
 } from './actions'
 
 const anErrorMessage = 'An error'
+let eventTag: string
+let additionalTags: string[]
 
 describe('when creating the action to signal the start of the events request', () => {
-  let tag: string
   beforeEach(() => {
-    tag = 'a tag'
+    eventTag = 'eventTag'
   })
-  it('should return an object representing the action', () => {
-    expect(fetchEventRequest(tag)).toEqual({
-      type: FETCH_EVENT_REQUEST,
-      meta: undefined,
-      payload: {
-        tag
-      }
+
+  describe('and there are not additional searchTags', () => {
+    it('should return an object representing the action', () => {
+      expect(fetchEventRequest(eventTag)).toEqual({
+        type: FETCH_EVENT_REQUEST,
+        meta: undefined,
+        payload: {
+          eventTag,
+          additionalSearchTags: []
+        }
+      })
+    })
+  })
+
+  describe('and there are additional search tags', () => {
+    beforeEach(() => {
+      additionalTags = ['tag1', 'tag2']
+    })
+    it('should return an object representing the action', () => {
+      expect(fetchEventRequest(eventTag, additionalTags)).toEqual({
+        type: FETCH_EVENT_REQUEST,
+        meta: undefined,
+        payload: {
+          eventTag,
+          additionalSearchTags: additionalTags
+        }
+      })
     })
   })
 })
 
 describe('when creating the action to signal a success in the events request', () => {
-  let tag: string
   let contracts: string[]
   beforeEach(() => {
-    tag = 'a tag'
+    eventTag = 'a tag'
     contracts = ['0x1', '0x2']
   })
 
   it('should return an object representing the action', () => {
-    expect(fetchEventSuccess(tag, contracts)).toEqual({
+    expect(fetchEventSuccess(eventTag, contracts)).toEqual({
       type: FETCH_EVENT_SUCCESS,
       meta: undefined,
-      payload: { tag, contracts }
+      payload: { eventTag, contracts }
     })
   })
 })

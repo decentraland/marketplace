@@ -2,6 +2,7 @@ export enum Section {
   ALL = 'all',
 
   LAND = 'land',
+  NAMES = 'names',
   PARCELS = 'parcels',
   ESTATES = 'estates',
   WEARABLES = 'wearables',

@@ -2,9 +2,11 @@ import { all } from 'redux-saga/effects'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
+import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
+import { createIdentitySaga } from 'decentraland-dapps/dist/modules/identity/sagas'
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
 import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
 import { locationSaga } from 'decentraland-dapps/dist/modules/location/sagas'
@@ -39,16 +41,30 @@ import { contractSaga } from './contract/sagas'
 import { transakSaga } from './transak/sagas'
 import { assetSaga } from './asset/sagas'
 import { favoritesSaga } from './favorites/sagas'
+import { loginSaga } from './login/sagas'
+import { ensSaga } from './ens/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
-const profileSaga = createProfileSaga({ peerUrl })
+const profileSaga = (getIdentity: () => AuthIdentity | undefined) =>
+  createProfileSaga({ getIdentity, peerUrl })
 const lambdasClient = createLambdasClient({
   url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()
 })
-const contentClient = createContentClient({ url: `${peerUrl}/content`, fetcher: createFetchComponent() })
+const contentClient = createContentClient({
+  url: `${peerUrl}/content`,
+  fetcher: createFetchComponent()
+})
+
+const newIdentitySaga = createIdentitySaga({
+  authURL: config.get('AUTH_URL')
+})
 
 const gatewaySaga = createGatewaySaga({
+  [FiatGateway.WERT]: {
+    marketplaceServerURL: config.get('MARKETPLACE_SERVER_URL'),
+    url: config.get('WERT_API_URL')
+  },
   [NetworkGatewayType.MOON_PAY]: {
     apiBaseUrl: config.get('MOON_PAY_API_URL'),
     apiKey: config.get('MOON_PAY_API_KEY'),
@@ -76,7 +92,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     itemSaga(getIdentity),
     nftSaga(getIdentity),
     orderSaga(),
-    profileSaga(),
+    profileSaga(getIdentity)(),
     proximitySaga(),
     routingSaga(),
     tileSaga(),
@@ -91,14 +107,11 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     collectionSaga(),
     storeSaga(contentClient),
     identitySaga(),
+    newIdentitySaga(),
     marketplaceAnalyticsSagas(),
     featuresSaga({
       polling: {
-        apps: [
-          ApplicationName.MARKETPLACE,
-          ApplicationName.BUILDER,
-          ApplicationName.DAPPS
-        ],
+        apps: [ApplicationName.MARKETPLACE, ApplicationName.DAPPS],
         delay: 60000 /** 60 seconds */
       }
     }),
@@ -109,6 +122,8 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     gatewaySaga(),
     locationSaga(),
     transakSaga(),
-    favoritesSaga(getIdentity)
+    favoritesSaga(getIdentity),
+    loginSaga(),
+    ensSaga()
   ])
 }

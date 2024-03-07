@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { ethers } from 'ethers'
-import { Contract } from '@dcl/schemas'
+import { Contract, NFTCategory } from '@dcl/schemas'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
@@ -26,6 +26,7 @@ import { getBidStatus, getError } from '../../../modules/bid/selectors'
 import { ManaField } from '../../ManaField'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Mana } from '../../Mana'
+import ErrorBanner from '../../ErrorBanner'
 import { Props } from './BidModal.types'
 import './BidModal.css'
 
@@ -44,7 +45,7 @@ const BidModal = (props: Props) => {
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
 
-  const [fingerprint, isLoading] = useFingerprint(nft)
+  const [fingerprint, isLoadingFingerprint, contractFingerprint] = useFingerprint(nft)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
@@ -105,8 +106,10 @@ const BidModal = (props: Props) => {
     isInvalidPrice ||
     isInvalidDate ||
     hasInsufficientMANA ||
-    isLoading ||
-    isPlacingBid
+    isLoadingFingerprint ||
+    isPlacingBid ||
+    (!fingerprint && nft.category === NFTCategory.ESTATE) ||
+    contractFingerprint !== fingerprint
 
   return (
     <AssetAction asset={nft}>
@@ -161,11 +164,14 @@ const BidModal = (props: Props) => {
               error={isInvalidDate}
               message={isInvalidDate ? t('bid_page.invalid_date') : undefined}
             />
+            {!isLoadingFingerprint && contractFingerprint !== fingerprint ? (
+              <ErrorBanner info={t('atlas_updated_warning.fingerprint_missmatch')} />
+            ) : null}
           </div>
           <div className="buttons">
             <Button
               as="div"
-              disabled={isLoading || isPlacingBid}
+              disabled={isLoadingFingerprint || isPlacingBid}
               onClick={() =>
                 onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
               }

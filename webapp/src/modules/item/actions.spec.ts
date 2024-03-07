@@ -111,9 +111,10 @@ describe('when creating the action to signal a successful item request', () => {
       type: BUY_ITEM_SUCCESS,
       meta: undefined,
       payload: {
+        chainId,
         item,
         txHash,
-        ...buildTransactionWithReceiptPayload(chainId, txHash, {
+        ...buildTransactionWithReceiptPayload(item.chainId, txHash, {
           itemId: item.itemId,
           contractAddress: item.contractAddress,
           network: item.network,

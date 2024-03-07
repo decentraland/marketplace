@@ -24,3 +24,7 @@
 .TransferPage .form-fields {
   width: 420px;
 }
+
+.TransferPage .dui-address-field__address {
+  bottom: 58px;
+}

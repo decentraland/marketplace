@@ -34,6 +34,8 @@ export type Props = {
   maxEstateSize?: string
   rentalDays?: number[]
   isRentalPriceFitlerChartEnabled?: boolean
+  emoteHasGeometry?: boolean
+  emoteHasSound?: boolean
 }
 
 export type MapStateProps = Pick<
@@ -55,6 +57,8 @@ export type MapStateProps = Pick<
   | 'maxDistanceToPlaza'
   | 'rentalDays'
   | 'isRentalPriceFitlerChartEnabled'
+  | 'emoteHasGeometry'
+  | 'emoteHasSound'
 >
 
 export type OwnProps = Pick<Props, 'values'>

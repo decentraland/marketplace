@@ -9,8 +9,6 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 
-export * from 'decentraland-dapps/dist/modules/transaction/selectors'
-
 export const getTransactionsByType = (
   state: RootState,
   address: string,
@@ -43,4 +41,12 @@ export const getPendingAuthorizationTransactions = createSelector<
       (transaction.actionType === GRANT_TOKEN_SUCCESS ||
         transaction.actionType === REVOKE_TOKEN_SUCCESS)
   )
+)
+
+export const getPendingTransactions = createSelector<
+  RootState,
+  Transaction[],
+  Transaction[]
+>(getTransactions, transactions =>
+  transactions.filter(transaction => isPending(transaction.status))
 )

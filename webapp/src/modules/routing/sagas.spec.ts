@@ -1,14 +1,6 @@
-import {
-  ChainId,
-  EmotePlayMode,
-  GenderFilterOption,
-  Item,
-  ItemSortBy,
-  NFTCategory,
-  Network,
-  Order,
-  Rarity
-} from '@dcl/schemas'
+import { expectSaga } from 'redux-saga-test-plan'
+import { call, select } from 'redux-saga/effects'
+import { BigNumber, ethers } from 'ethers'
 import {
   getLocation,
   LOCATION_CHANGE,
@@ -16,15 +8,29 @@ import {
   push,
   RouterLocation
 } from 'connected-react-router'
-import { expectSaga } from 'redux-saga-test-plan'
-import { call, select } from 'redux-saga/effects'
+import {
+  ChainId,
+  EmotePlayMode,
+  GenderFilterOption,
+  Item,
+  ItemSortBy,
+  ListingStatus,
+  NFTCategory,
+  Network,
+  Order,
+  Rarity
+} from '@dcl/schemas'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import {
+  buyItemCrossChainSuccess,
   buyItemSuccess,
   fetchItemsRequest,
   fetchTrendingItemsRequest
@@ -41,9 +47,11 @@ import {
   executeOrderSuccess
 } from '../order/actions'
 import { NFT } from '../nft/types'
-import { openModal } from '../modal/actions'
 import { fetchNFTsRequest, fetchNFTsSuccess } from '../nft/actions'
 import { getWallet } from '../wallet/selectors'
+import { ENS } from '../ens/types'
+import { claimNameSuccess, claimNameTransactionSubmitted } from '../ens/actions'
+import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import {
   browse,
@@ -59,6 +67,7 @@ import {
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
 import { locations } from './locations'
+import { Route } from 'decentraland-transactions/crossChain'
 
 beforeEach(() => {
   jest.spyOn(Date, 'now').mockReturnValue(100)
@@ -273,7 +282,9 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         emotePlayMode: undefined,
         minPrice: undefined,
         maxPrice: undefined,
-        network: undefined
+        network: undefined,
+        emoteHasGeometry: undefined,
+        emoteHasSound: undefined
       }
     }
 
@@ -351,7 +362,9 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
           emotePlayMode: undefined,
           minPrice: undefined,
           maxPrice: undefined,
-          network: undefined
+          network: undefined,
+          emoteHasGeometry: undefined,
+          emoteHasSound: undefined
         }
       }
       it('should fetch assets with the correct skip size', () => {
@@ -402,7 +415,9 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
             emotePlayMode: undefined,
             minPrice: undefined,
             maxPrice: undefined,
-            network: undefined
+            network: undefined,
+            emoteHasGeometry: undefined,
+            emoteHasSound: undefined
           }
         }
         it('should fetch assets with the correct skip size', () => {
@@ -1263,6 +1278,7 @@ describe('handleRedirectToSuccessPage saga', () => {
     tokenId: string
     assetType: AssetType
     contractAddress: string
+    isCrossChain?: string
   }
 
   describe('when handling the execute order success action', () => {
@@ -1309,6 +1325,110 @@ describe('handleRedirectToSuccessPage saga', () => {
           } as Item)
         )
         .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when handling the claim name success action', () => {
+    let ens: ENS
+    beforeEach(() => {
+      ens = {
+        subdomain: 'aSubdomain',
+        tokenId: 'aTokenId',
+        contractAddress: 'aContractAddress'
+      } as ENS
+      searchParams = {
+        txHash: 'txHash',
+        tokenId: ens.tokenId,
+        assetType: AssetType.NFT,
+        contractAddress: ens.contractAddress
+      }
+    })
+
+    it('should redirect to success page with the correct query params', () => {
+      return expectSaga(routingSaga)
+        .put(push(locations.success(searchParams)))
+        .dispatch(claimNameSuccess(ens, 'aName', searchParams.txHash))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when handling the buy item cross chain success action', () => {
+    let route: Route
+    let order: Order
+    let item: Item
+    beforeEach(() => {
+      route = {
+        route: {
+          params: {
+            fromChain: '1',
+            toChain: '137'
+          }
+        }
+      } as Route
+      item = ({
+        id: 'anItemId',
+        contractAddress: 'aContractAddress',
+        itemId: 'aTokenId',
+        price: '100000000'
+      } as unknown) as Item
+    })
+
+    describe('and its buying an existing NFT', () => {
+      beforeEach(() => {
+        order = {
+          id: 'anOrderId',
+          status: ListingStatus.OPEN,
+          price: '10',
+          tokenId: 'aTokenId',
+          contractAddress: 'aContractAddress'
+        } as Order
+        searchParams = {
+          txHash: 'txHash',
+          tokenId: order.tokenId,
+          assetType: AssetType.NFT,
+          contractAddress: item.contractAddress,
+          isCrossChain: 'true'
+        }
+      })
+      it('should redirect to success page with the correct query params', () => {
+        return expectSaga(routingSaga)
+          .put(push(locations.success(searchParams)))
+          .dispatch(
+            buyItemCrossChainSuccess(
+              route,
+              ChainId.ETHEREUM_MAINNET,
+              searchParams.txHash,
+              item,
+              order
+            )
+          )
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and its minting an NFT', () => {
+      beforeEach(() => {
+        searchParams = {
+          txHash: 'txHash',
+          tokenId: item.itemId,
+          assetType: AssetType.ITEM,
+          contractAddress: item.contractAddress,
+          isCrossChain: 'true'
+        }
+      })
+      it('should redirect to success page with the correct query params', () => {
+        return expectSaga(routingSaga)
+          .put(push(locations.success(searchParams)))
+          .dispatch(
+            buyItemCrossChainSuccess(
+              route,
+              ChainId.ETHEREUM_MAINNET,
+              searchParams.txHash,
+              item
+            )
+          )
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })
@@ -1537,11 +1657,63 @@ describe.each([
 
   it('should redirect to the default activity location when redirectTo is not present', () => {
     const location = { search: '' }
+    return (
+      expectSaga(routingSaga)
+        .provide([[select(getLocation), location]])
+        //@ts-ignore
+        .dispatch(action(...args))
+        .put(push(locations.activity()))
+        .run()
+    )
+  })
+})
+
+describe('when handling the claim name transaction submitted action', () => {
+  let subdomain: string, txHash: string, address: string
+  let chainId: ChainId
+  let signer: ethers.Signer
+  let searchParams: {
+    txHash: string
+    tokenId: string
+    assetType: AssetType
+    contractAddress: string
+    subdomain: string
+  }
+  let dclRegistrarContract: { address: string }
+  let mockTokenId: BigNumber
+
+  beforeEach(() => {
+    subdomain = 'aSubdomain'
+    txHash = 'txHash'
+    address = 'address'
+    dclRegistrarContract = { address: '0xAnAddress' }
+    searchParams = {
+      txHash,
+      assetType: AssetType.NFT,
+      tokenId: '',
+      contractAddress: dclRegistrarContract.address,
+      subdomain
+    }
+    signer = {} as ethers.Signer
+    mockTokenId = BigNumber.from(1)
+  })
+
+  it('should redirect to success page with the correct query params', () => {
     return expectSaga(routingSaga)
-      .provide([[select(getLocation), location]])
-      //@ts-ignore
-      .dispatch(action(...args))
-      .put(push(locations.activity()))
-      .run()
+      .put(push(locations.success(searchParams)))
+      .provide([
+        [call(getSigner), {}],
+        [
+          call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer),
+          {
+            ...dclRegistrarContract,
+            getTokenId: () => mockTokenId
+          }
+        ]
+      ])
+      .dispatch(
+        claimNameTransactionSubmitted(subdomain, address, chainId, txHash)
+      )
+      .run({ silenceTimeout: true })
   })
 })

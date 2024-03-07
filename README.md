@@ -13,6 +13,7 @@ The Marketplace is a React static site. Its code can be found under the [/webapp
 It can be found under [/indexer](https://github.com/decentraland/marketplace/tree/master/indexer).
 
 ## How to contribute
+
 Contributing to the Marketplace is easy, you just need to go through the following process:
 1. Look for issues in the [Issues tab](https://github.com/decentraland/marketplace/issues) or create a new one with the proposed changes. We classify issues with the “Enhancement”, “Bug” or “Good first issue” tags. Feel free to check one of those first. 
 2. Contact team members via the GitHub issue or use the [Code Contribution Discord channel](https://discord.com/channels/417796904760639509/761599704756256778). It’s important to at least check on the issue status before starting.

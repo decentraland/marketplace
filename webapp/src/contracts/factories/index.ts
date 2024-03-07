@@ -5,3 +5,5 @@ export { Converter__factory } from "./Converter__factory";
 export { ERC721__factory } from "./ERC721__factory";
 export { EstateRegistry__factory } from "./EstateRegistry__factory";
 export { MarketplaceAdapter__factory } from "./MarketplaceAdapter__factory";
+export { DCLController__factory } from "./DCLController__factory";
+export { DCLRegistrar__factory } from "./DCLRegistrar__factory";

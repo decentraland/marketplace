@@ -9,3 +9,14 @@ describe('when getting the content url by a given hash', () => {
     )
   })
 })
+
+describe('when getting the url for collections published and using a search term', () => {
+  const searchTerm = 'aSearchTerm'
+  const limit = 5
+
+  it('should return the url', async () => {
+    expect(builderAPI.publishedCollectionURL(searchTerm, limit)).toBe(
+      `/collections?is_published=true&status=approved&q=${searchTerm}&limit=${limit}`
+    )
+  })
+})
