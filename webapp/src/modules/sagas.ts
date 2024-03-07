@@ -83,6 +83,13 @@ const gatewaySaga = createGatewaySaga({
   }
 })
 
+const getCrossChainProvider = async () => {
+  const { AxelarProvider } = await import(
+    'decentraland-transactions/crossChain'
+  )
+  return AxelarProvider
+}
+
 export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
   yield all([
     analyticsSaga(),
@@ -97,7 +104,11 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     routingSaga(),
     tileSaga(),
     toastSaga(),
-    transactionSaga(),
+    transactionSaga({
+      crossChainProviderUrl: config.get('SQUID_API_URL'),
+      crossChainProviderRetryDelay: Number(config.get('SQUID_RETRY_DELAY')),
+      getCrossChainProvider
+    }),
     translationSaga(),
     uiSaga(),
     walletSaga(),

@@ -12,7 +12,6 @@ import {
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
 import {
-  BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_WITH_CARD_FAILURE,
   FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
   FETCH_ITEMS_FAILURE,
@@ -36,8 +35,7 @@ import {
   getListingRemoveSuccessToast,
   getStoreUpdateSuccessToast,
   getUpdateListSuccessToast,
-  getUpsertRentalSuccessToast,
-  getCrossChainTransactionSuccessToast
+  getUpsertRentalSuccessToast
 } from './toasts'
 import {
   DeleteListSuccessAction,
@@ -55,10 +53,6 @@ import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
 import { toastDispatchableActionsChannel } from './utils'
 import { DispatchableFromToastActions } from './types'
 import { CLAIM_NAME_SUCCESS } from '../ens/actions'
-import {
-  FetchCrossChainTransactionSuccessAction,
-  takeEverySuccessfulTx
-} from 'decentraland-dapps/dist/modules/transaction'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])
@@ -88,10 +82,6 @@ function* successToastSagas() {
   )
   yield takeEvery(BULK_PICK_SUCCESS, handleBulkPickUnpickSuccess)
   yield takeEvery(BULK_PICK_FAILURE, handleBulkPickUnpickFailure)
-  yield takeEverySuccessfulTx(
-    BUY_ITEM_CROSS_CHAIN_SUCCESS,
-    handleBuyItemCrossChainSuccess
-  )
 
   function* handleToastTryAgainActionChannel(
     action: DispatchableFromToastActions
@@ -99,16 +89,6 @@ function* successToastSagas() {
     yield put(action)
     yield put(hideAllToasts())
   }
-}
-
-function* handleBuyItemCrossChainSuccess(
-  action: FetchCrossChainTransactionSuccessAction
-) {
-  yield put(
-    showToast(
-      getCrossChainTransactionSuccessToast(action.payload.transaction.url)
-    )
-  )
 }
 
 function* handleClaimNameSuccess() {

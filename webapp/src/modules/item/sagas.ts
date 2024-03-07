@@ -300,23 +300,18 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       if (provider) {
-        // const crossChainModule = import('decentraland-transactions/crossChain')
-        // const {
-        //   AxelarProvider
-        // }: Awaited<typeof crossChainModule> = yield crossChainModule
-        // const crossChainProvider = new AxelarProvider(
-        //   config.get('SQUID_API_URL')
-        // )
-        // const txResponse: ethers.providers.TransactionReceipt = yield call(
-        //   [crossChainProvider, 'executeRoute'],
-        //   route,
-        //   provider
-        // )
-
-        const txResponse = {
-          transactionHash:
-            '0xb9a292e404356349aced4a44a6d82f30507b945963dc98cdc3374d656989db0f'
-        }
+        const crossChainModule = import('decentraland-transactions/crossChain')
+        const {
+          AxelarProvider
+        }: Awaited<typeof crossChainModule> = yield crossChainModule
+        const crossChainProvider = new AxelarProvider(
+          config.get('SQUID_API_URL')
+        )
+        const txResponse: ethers.providers.TransactionReceipt = yield call(
+          [crossChainProvider, 'executeRoute'],
+          route,
+          provider
+        )
 
         yield put(
           buyItemCrossChainSuccess(
