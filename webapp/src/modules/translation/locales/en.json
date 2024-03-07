@@ -1508,7 +1508,9 @@
       "try_genesis_city": "Try it in Genesis city",
       "mint_more_names": "Mint more names",
       "set_as_primary_name": "Set as Primary Name",
-      "manage_names": "MANAGE MY NAMEs"
+      "manage_names": "MANAGE MY NAMEs",
+      "manage_land": "Manage LAND",
+      "start_building": "Start building"
     },
     "error_state": {
       "title": "Oops",

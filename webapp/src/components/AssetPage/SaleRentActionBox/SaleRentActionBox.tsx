@@ -42,7 +42,9 @@ const SaleRentActionBox = ({
   rental,
   userHasAlreadyBidsOnNft,
   currentMana,
-  onRent
+  isCrossChainLandEnabled,
+  onRent,
+  onBuyWithCrypto
 }: Props) => {
   const isMobileView = isMobile()
   const isRentalOpen = isRentalListingOpen(rental)
@@ -283,20 +285,31 @@ const SaleRentActionBox = ({
                 ) : null}
                 <div className={styles.saleButtons}>
                   {order ? (
-                    <Button
-                      as={Link}
-                      to={locations.buy(
-                        AssetType.NFT,
-                        nft.contractAddress,
-                        nft.tokenId
-                      )}
-                      disabled={!hasEnoughManaToBuy}
-                      className={styles.buy}
-                      primary
-                      fluid
-                    >
-                      {t('asset_page.actions.buy')}
-                    </Button>
+                    isCrossChainLandEnabled ? (
+                      <Button
+                        onClick={() => onBuyWithCrypto()}
+                        className={styles.buy}
+                        primary
+                        fluid
+                      >
+                        {t('asset_page.actions.buy_with_crypto')}
+                      </Button>
+                    ) : (
+                      <Button
+                        as={Link}
+                        to={locations.buy(
+                          AssetType.NFT,
+                          nft.contractAddress,
+                          nft.tokenId
+                        )}
+                        disabled={!hasEnoughManaToBuy}
+                        className={styles.buy}
+                        primary
+                        fluid
+                      >
+                        {t('asset_page.actions.buy')}
+                      </Button>
+                    )
                   ) : null}
                   {canBid ? (
                     <Popup
@@ -328,7 +341,10 @@ const SaleRentActionBox = ({
                     />
                   ) : null}
                 </div>
-                {order && wallet && !hasEnoughManaToBuy ? (
+                {order &&
+                wallet &&
+                !hasEnoughManaToBuy &&
+                !isCrossChainLandEnabled ? (
                   <div className={styles.notEnoughMana}>
                     {t('asset_page.sales_rent_action_box.not_enough_mana')}
                   </div>

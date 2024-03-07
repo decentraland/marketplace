@@ -215,6 +215,33 @@ export function SuccessPage(props: Props) {
                               </div>
                             )}
                           </div>
+                        ) : asset.category === NFTCategory.PARCEL ||
+                          asset.category === NFTCategory.ESTATE ? (
+                          <div className={styles.ensActions}>
+                            <div className={styles.primaryEnsActions}>
+                              <Button
+                                as={Link}
+                                className={styles.successButton}
+                                secondary
+                                to={locations.nft(contractAddress, tokenId)}
+                              >
+                                {t('success_page.success_state.manage_land')}
+                              </Button>
+                              {!!profile && (
+                                <>
+                                  <Button
+                                    className={styles.successButton}
+                                    primary
+                                    href={BUILDER_URL + '/scenes'}
+                                  >
+                                    {t(
+                                      'success_page.success_state.start_building'
+                                    )}
+                                  </Button>
+                                </>
+                              )}
+                            </div>
+                          </div>
                         ) : (
                           <Button
                             as={Link}

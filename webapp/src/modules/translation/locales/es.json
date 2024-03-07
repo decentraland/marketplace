@@ -1495,7 +1495,9 @@
       "try_genesis_city": "Pruébalo en Genesis City",
       "mint_more_names": "Acuñar más nombres",
       "set_as_primary_name": "Elegir como nombre primario",
-      "manage_names": "Administrar mis nombres"
+      "manage_names": "Administrar mis nombres",
+      "manage_land": "Administrar LAND",
+      "start_building": "Comenzar a construir"
     },
     "error_state": {
       "title": "Ups",
