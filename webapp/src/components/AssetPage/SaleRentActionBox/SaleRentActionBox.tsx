@@ -26,6 +26,7 @@ import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { LinkedProfile } from '../../LinkedProfile'
+import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
@@ -286,14 +287,7 @@ const SaleRentActionBox = ({
                 <div className={styles.saleButtons}>
                   {order ? (
                     isCrossChainLandEnabled ? (
-                      <Button
-                        onClick={() => onBuyWithCrypto()}
-                        className={styles.buy}
-                        primary
-                        fluid
-                      >
-                        {t('asset_page.actions.buy_with_crypto')}
-                      </Button>
+                      <BuyWithCryptoButton onClick={() => onBuyWithCrypto()} />
                     ) : (
                       <Button
                         as={Link}
