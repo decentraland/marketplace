@@ -241,34 +241,27 @@ track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, events.BUY_ITEM, ({ payload }) => 
   fromChainId: payload.chainId
 }))
 
-track<BuyItemCrossChainSuccessAction>(
-  BUY_ITEM_CROSS_CHAIN_SUCCESS,
-  events.BUY_ITEM_CROSS_CHAIN,
-  ({ payload }) => {
-    const {
-      route: { route },
-      item,
-      order,
-      txHash
-    } = payload
-    return {
-      fromAmount: ethers.utils.formatUnits(
-        route.estimate.fromAmount,
-        route.estimate.fromToken.decimals
-      ),
-      fromTokenName: route.estimate.fromToken.name,
-      fromToken: route.params.fromToken,
-      fromChain: route.params.fromChain,
-      itemId: item.itemId,
-      contractAddress: item.contractAddress,
-      rarity: item.rarity,
-      network: item.network,
-      chainId: item.chainId,
-      price: Number(ethers.utils.formatEther(order?.price ?? item.price)),
-      data: item.data,
-      txHash,
-      category: item.category
-    }
+track<BuyItemCrossChainSuccessAction>(BUY_ITEM_CROSS_CHAIN_SUCCESS, events.BUY_ITEM_CROSS_CHAIN, ({ payload }) => {
+  const {
+    route: { route },
+    item,
+    order,
+    txHash
+  } = payload
+  return {
+    fromAmount: ethers.utils.formatUnits(route.estimate.fromAmount, route.estimate.fromToken.decimals),
+    fromTokenName: route.estimate.fromToken.name,
+    fromToken: route.params.fromToken,
+    fromChain: route.params.fromChain,
+    itemId: item.itemId,
+    contractAddress: item.contractAddress,
+    rarity: item.rarity,
+    network: item.network,
+    chainId: item.chainId,
+    price: Number(ethers.utils.formatEther(order?.price ?? item.price)),
+    data: item.data,
+    txHash,
+    category: item.category
   }
 })
 

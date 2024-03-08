@@ -72,11 +72,7 @@ export const getIsChainSelectorEnabled = (state: RootState) => {
 
 export const getIsLandCrossChainEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.CROSS_CHAIN_LANDS
-    )
+    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CROSS_CHAIN_LANDS)
   }
   return false
 }
