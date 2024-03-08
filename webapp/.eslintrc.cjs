@@ -2,7 +2,8 @@
 module.exports = {
   extends: ['@dcl/eslint-config/dapps'],
   parserOptions: {
-    project: ['tsconfig.json']
+    project: ['tsconfig.json'],
+    tsconfigRootDir: __dirname
   },
   overrides: [
     {
@@ -11,10 +12,12 @@ module.exports = {
         ['prettier/prettier']: [
           'error',
           {
-            printWidth: 80,
-            singleQuote: true,
             semi: false,
-            trailingComma: 'none'
+            singleQuote: true,
+            printWidth: 140,
+            tabWidth: 2,
+            trailingComma: 'none',
+            arrowParens: 'avoid'
           }
         ]
       }

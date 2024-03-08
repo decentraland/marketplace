@@ -20,8 +20,9 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": ["vite/client", "jest", "node"],
   },
-  "include": ["src", ".eslintrc.js", "vite.config.ts", "jest.config.ts"],
+  "include": ["src", ".eslintrc.js", "vite.config.ts", "jest.config.ts", ".eslintrc.cjs"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
