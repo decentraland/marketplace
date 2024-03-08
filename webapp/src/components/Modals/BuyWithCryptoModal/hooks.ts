@@ -240,7 +240,8 @@ export const useCrossChainBuyNftRoute = (
   selectedChain: ChainId,
   providerTokens: Token[],
   crossChainProvider: CrossChainProvider | undefined,
-  wallet: Wallet | null
+  wallet: Wallet | null,
+  slippage: number,
 ): CrossChainRoute => {
   const getBuyNftRoute = useCallback(
     (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
@@ -255,7 +256,8 @@ export const useCrossChainBuyNftRoute = (
           collectionAddress: order.contractAddress,
           tokenId: order.tokenId,
           price: order.price
-        }
+        },
+        slippage
       }),
     [order]
   )

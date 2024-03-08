@@ -26,7 +26,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     onExecuteOrder,
     onExecuteOrderCrossChain,
     onExecuteOrderWithCard,
-    metadata: { nft, order }
+    metadata: { nft, order, slippage = 1 }
   } = props
 
   const onBuyNatively = useCallback(() => {
@@ -60,7 +60,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
     (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
-      useCrossChainBuyNftRoute(order, order.chainId, selectedToken, selectedChain, providerTokens, crossChainProvider, wallet),
+      useCrossChainBuyNftRoute(order, order.chainId, selectedToken, selectedChain, providerTokens, crossChainProvider, wallet, slippage),
     [order]
   )
   const onGetGasCost: OnGetGasCost = useCallback(

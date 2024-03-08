@@ -38,7 +38,7 @@ export default class Popup extends React.PureComponent<Props> {
 
         <Section className="owner">
           <Header sub>{t('atlas.owner')}</Header>
-          <Profile address={tile.owner || ethers.constants.AddressZero} debounce={500} />
+          <Profile address={tile.owner || ethers.constants.AddressZero} debounce={500} as={'div'} />
         </Section>
 
         {tile.price || tile.rentalPricePerDay ? (

@@ -83,7 +83,7 @@ const PaymentSelector = (props: Props) => {
             >
               <img src={selectedProviderChain?.nativeCurrency.icon} alt={selectedProviderChain?.nativeCurrency.name} />
               <span className={styles.tokenAndChainSelectorName}> {selectedProviderChain?.networkName} </span>
-              {!isBuyingAsset && <Icon name="chevron down" />}
+              {<Icon name="chevron down" />}
             </div>
           </div>
           <div className={styles.tokenDropdownContainer}>

@@ -9,7 +9,7 @@ import type { getContract } from '../../../../modules/contract/selectors'
 
 export type Props = WithAuthorizedActionProps &
   Omit<ModalProps, 'metadata'> & {
-    metadata: { nft: NFT; order: Order }
+    metadata: { nft: NFT; order: Order; slippage?: number }
     isExecutingOrder: boolean
     isExecutingOrderCrossChain: boolean
     getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>

@@ -26,6 +26,7 @@ import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { LinkedProfile } from '../../LinkedProfile'
+import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
@@ -35,7 +36,17 @@ enum View {
   RENT
 }
 
-const SaleRentActionBox = ({ nft, wallet, order, rental, userHasAlreadyBidsOnNft, currentMana, onRent }: Props) => {
+const SaleRentActionBox = ({
+  nft,
+  wallet,
+  order,
+  rental,
+  userHasAlreadyBidsOnNft,
+  currentMana,
+  isCrossChainLandEnabled,
+  onRent,
+  onBuyWithCrypto
+}: Props) => {
   const isMobileView = isMobile()
   const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
@@ -220,16 +231,20 @@ const SaleRentActionBox = ({ nft, wallet, order, rental, userHasAlreadyBidsOnNft
                 ) : null}
                 <div className={styles.saleButtons}>
                   {order ? (
-                    <Button
-                      as={Link}
-                      to={locations.buy(AssetType.NFT, nft.contractAddress, nft.tokenId)}
-                      disabled={!hasEnoughManaToBuy}
-                      className={styles.buy}
-                      primary
-                      fluid
-                    >
-                      {t('asset_page.actions.buy')}
-                    </Button>
+                    isCrossChainLandEnabled ? (
+                      <BuyWithCryptoButton onClick={onBuyWithCrypto} />
+                    ) : (
+                      <Button
+                        as={Link}
+                        to={locations.buy(AssetType.NFT, nft.contractAddress, nft.tokenId)}
+                        disabled={!hasEnoughManaToBuy}
+                        className={styles.buy}
+                        primary
+                        fluid
+                      >
+                        {t('asset_page.actions.buy')}
+                      </Button>
+                    )
                   ) : null}
                   {canBid ? (
                     <Popup
@@ -258,7 +273,7 @@ const SaleRentActionBox = ({ nft, wallet, order, rental, userHasAlreadyBidsOnNft
                     />
                   ) : null}
                 </div>
-                {order && wallet && !hasEnoughManaToBuy ? (
+                {order && wallet && !hasEnoughManaToBuy && !isCrossChainLandEnabled ? (
                   <div className={styles.notEnoughMana}>{t('asset_page.sales_rent_action_box.not_enough_mana')}</div>
                 ) : null}
               </>
