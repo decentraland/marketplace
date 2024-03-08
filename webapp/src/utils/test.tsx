@@ -12,6 +12,7 @@ import { RootState } from '../modules/reducer'
 import { initTestStore } from '../modules/store'
 import * as locales from '../modules/translation/locales'
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 const allTranslations = mergeTranslations(flatten(en), flatten(locales.en) as any)
 
 export function renderWithProviders(
