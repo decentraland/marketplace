@@ -3,12 +3,7 @@ import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { GenderFilterOption, WearableGender } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import './BodyShapeFilter.css'
-import {
-  AVAILABLE_FOR_FEMALE,
-  AVAILABLE_FOR_MALE,
-  getBodyShapeValue,
-  getGenderFilterLabel
-} from '../../../utils/filters'
+import { AVAILABLE_FOR_FEMALE, AVAILABLE_FOR_MALE, getBodyShapeValue, getGenderFilterLabel } from '../../../utils/filters'
 
 export type BodyShapeFilterProps = {
   bodyShapes?: (GenderFilterOption | WearableGender)[]
@@ -16,11 +11,7 @@ export type BodyShapeFilterProps = {
   defaultCollapsed?: boolean
 }
 
-export const BodyShapeFilter = ({
-  bodyShapes,
-  onChange,
-  defaultCollapsed = false
-}: BodyShapeFilterProps) => {
+export const BodyShapeFilter = ({ bodyShapes, onChange, defaultCollapsed = false }: BodyShapeFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const genderOptions = useMemo(() => {
     return [
@@ -59,14 +50,8 @@ export const BodyShapeFilter = ({
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">
-            {t('nft_filters.body_shapes.title')}
-          </span>
-          <span className="box-filter-value">
-            {value
-              ? t(getGenderFilterLabel(bodyShapes))
-              : t('nft_filters.body_shapes.all_items')}
-          </span>
+          <span className="box-filter-name">{t('nft_filters.body_shapes.title')}</span>
+          <span className="box-filter-value">{value ? t(getGenderFilterLabel(bodyShapes)) : t('nft_filters.body_shapes.all_items')}</span>
         </div>
       ) : (
         t('nft_filters.body_shapes.title')

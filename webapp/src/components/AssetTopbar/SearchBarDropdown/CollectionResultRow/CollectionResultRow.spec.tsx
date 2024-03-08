@@ -19,26 +19,18 @@ describe('CollectionResultRow', () => {
   }
 
   test('renders without crashing', () => {
-    const { getByTestId } = renderWithProviders(
-      <CollectionResultRow {...defaultProps} />
-    )
+    const { getByTestId } = renderWithProviders(<CollectionResultRow {...defaultProps} />)
     expect(getByTestId(defaultProps['data-testid'])).toBeInTheDocument()
   })
 
   test('renders collection name correctly', () => {
-    const { getByText } = renderWithProviders(
-      <CollectionResultRow {...defaultProps} />
-    )
+    const { getByText } = renderWithProviders(<CollectionResultRow {...defaultProps} />)
     expect(getByText('My Collection')).toBeInTheDocument()
   })
 
   test('renders creator profile correctly', () => {
-    const { getByText } = renderWithProviders(
-      <CollectionResultRow {...defaultProps} />
-    )
-    expect(
-      getByText(mockCollection.eth_address.slice(0, 6))
-    ).toBeInTheDocument() // shows only the first 6 characters
+    const { getByText } = renderWithProviders(<CollectionResultRow {...defaultProps} />)
+    expect(getByText(mockCollection.eth_address.slice(0, 6))).toBeInTheDocument() // shows only the first 6 characters
   })
 
   test('calls onClick when container is clicked', () => {

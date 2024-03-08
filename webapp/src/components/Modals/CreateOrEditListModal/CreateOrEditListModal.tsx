@@ -1,14 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
-import {
-  Button,
-  Checkbox,
-  Field,
-  Message,
-  ModalNavigation,
-  TextAreaField
-} from 'decentraland-ui'
+import { Button, Checkbox, Field, Message, ModalNavigation, TextAreaField } from 'decentraland-ui'
 import { InfoTooltip } from '../../InfoTooltip'
 import styles from './CreateOrEditListModal.module.css'
 import { Props } from './CreateOrEditListModal.types'
@@ -17,67 +10,31 @@ const MAX_NAME_LENGTH = 32
 const MAX_DESCRIPTION_LENGTH = 100
 const DUPLICATED_ERROR = 'There is already a list with the same name'
 export const CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID = 'create-or-edit-list-name'
-export const CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID =
-  'create-or-edit-list-description'
-export const CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID =
-  'create-or-edit-list-private'
-export const CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID =
-  'create-or-edit-list-cancel-button'
-export const CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID =
-  'create-or-edit-list-accept-button'
+export const CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID = 'create-or-edit-list-description'
+export const CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID = 'create-or-edit-list-private'
+export const CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID = 'create-or-edit-list-cancel-button'
+export const CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID = 'create-or-edit-list-accept-button'
 
-const CreateOrEditListModal = ({
-  onClose,
-  isLoading,
-  onCreateList,
-  onEditList,
-  metadata,
-  error
-}: Props) => {
+const CreateOrEditListModal = ({ onClose, isLoading, onCreateList, onEditList, metadata, error }: Props) => {
   const list = metadata?.list
 
   const [name, setName] = useState(list?.name ?? '')
   const [description, setDescription] = useState(list?.description ?? '')
   const [isPrivate, setIsPrivate] = useState(list?.isPrivate ?? false)
   const [showMaxLengthNameInfo, setShowMaxLengthNameInfo] = useState(false)
-  const [
-    showMaxLengthDescriptionInfo,
-    setShowMaxLengthDescriptionInfo
-  ] = useState(false)
+  const [showMaxLengthDescriptionInfo, setShowMaxLengthDescriptionInfo] = useState(false)
 
   const handleCreateOrEditList = useCallback(
-    () =>
-      list
-        ? onEditList(list.id, { name, description, isPrivate })
-        : onCreateList({ name, description, isPrivate }),
+    () => (list ? onEditList(list.id, { name, description, isPrivate }) : onCreateList({ name, description, isPrivate })),
     [list, onEditList, name, description, isPrivate, onCreateList]
   )
-  const handleNameChange = useCallback(
-    (_event, props) => setName(props.value),
-    [setName]
-  )
-  const handleDescriptionChange = useCallback(
-    (_event, props) => setDescription(props.value),
-    [setDescription]
-  )
-  const handleIsOPrivateChange = useCallback(
-    (_event, props) => setIsPrivate(props.checked),
-    [setIsPrivate]
-  )
-  const handleNameFocus = useCallback(() => setShowMaxLengthNameInfo(true), [
-    setShowMaxLengthNameInfo
-  ])
-  const handleNameBlur = useCallback(() => setShowMaxLengthNameInfo(false), [
-    setShowMaxLengthNameInfo
-  ])
-  const handleDescriptionFocus = useCallback(
-    () => setShowMaxLengthDescriptionInfo(true),
-    [setShowMaxLengthDescriptionInfo]
-  )
-  const handleDescriptionBlur = useCallback(
-    () => setShowMaxLengthDescriptionInfo(false),
-    [setShowMaxLengthDescriptionInfo]
-  )
+  const handleNameChange = useCallback((_event, props) => setName(props.value), [setName])
+  const handleDescriptionChange = useCallback((_event, props) => setDescription(props.value), [setDescription])
+  const handleIsOPrivateChange = useCallback((_event, props) => setIsPrivate(props.checked), [setIsPrivate])
+  const handleNameFocus = useCallback(() => setShowMaxLengthNameInfo(true), [setShowMaxLengthNameInfo])
+  const handleNameBlur = useCallback(() => setShowMaxLengthNameInfo(false), [setShowMaxLengthNameInfo])
+  const handleDescriptionFocus = useCallback(() => setShowMaxLengthDescriptionInfo(true), [setShowMaxLengthDescriptionInfo])
+  const handleDescriptionBlur = useCallback(() => setShowMaxLengthDescriptionInfo(false), [setShowMaxLengthDescriptionInfo])
   const handleClose = useCallback(() => {
     if (!isLoading) {
       onClose()
@@ -85,20 +42,12 @@ const CreateOrEditListModal = ({
   }, [isLoading, onClose])
 
   const isNameDuplicatedError = error?.includes(DUPLICATED_ERROR)
-  const listChanged = list
-    ? name !== list.name ||
-      description !== list.description ||
-      isPrivate !== list.isPrivate
-    : false
+  const listChanged = list ? name !== list.name || description !== list.description || isPrivate !== list.isPrivate : false
 
   return (
     <Modal size="tiny" className={styles.modal} onClose={handleClose}>
       <ModalNavigation
-        title={
-          list
-            ? t('create_or_edit_list_modal.edit.title')
-            : t('create_or_edit_list_modal.create.title')
-        }
+        title={list ? t('create_or_edit_list_modal.edit.title') : t('create_or_edit_list_modal.create.title')}
         onClose={handleClose}
       />
       <Modal.Content className={styles.content}>
@@ -151,13 +100,8 @@ const CreateOrEditListModal = ({
           checked={isPrivate}
           label={
             <label>
-              {list
-                ? t('create_or_edit_list_modal.edit.private')
-                : t('create_or_edit_list_modal.create.private')}
-              <InfoTooltip
-                className={styles.privatePopup}
-                content={t('create_or_edit_list_modal.info.private')}
-              />
+              {list ? t('create_or_edit_list_modal.edit.private') : t('create_or_edit_list_modal.create.private')}
+              <InfoTooltip className={styles.privatePopup} content={t('create_or_edit_list_modal.info.private')} />
             </label>
           }
           data-testid={CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID}
@@ -165,15 +109,7 @@ const CreateOrEditListModal = ({
           className={styles.checkbox}
           onChange={handleIsOPrivateChange}
         />
-        {error && !isNameDuplicatedError ? (
-          <Message
-            error
-            size="tiny"
-            visible
-            content={error}
-            header={t('global.error')}
-          />
-        ) : null}
+        {error && !isNameDuplicatedError ? <Message error size="tiny" visible content={error} header={t('global.error')} /> : null}
       </Modal.Content>
       <Modal.Actions>
         <Button
@@ -186,12 +122,7 @@ const CreateOrEditListModal = ({
         >
           {list ? t('global.save') : t('global.create')}
         </Button>
-        <Button
-          onClick={handleClose}
-          data-testid={CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID}
-          disabled={isLoading}
-          fluid
-        >
+        <Button onClick={handleClose} data-testid={CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID} disabled={isLoading} fluid>
           {t('global.cancel')}
         </Button>
       </Modal.Actions>

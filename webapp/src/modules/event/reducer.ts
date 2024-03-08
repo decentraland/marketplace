@@ -1,7 +1,4 @@
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchEventFailureAction,
   FetchEventRequestAction,
@@ -23,15 +20,9 @@ export const INITIAL_STATE: EventState = {
   error: null
 }
 
-type EventReducerAction =
-  | FetchEventRequestAction
-  | FetchEventSuccessAction
-  | FetchEventFailureAction
+type EventReducerAction = FetchEventRequestAction | FetchEventSuccessAction | FetchEventFailureAction
 
-export function eventReducer(
-  state = INITIAL_STATE,
-  action: EventReducerAction
-): EventState {
+export function eventReducer(state = INITIAL_STATE, action: EventReducerAction): EventState {
   switch (action.type) {
     case FETCH_EVENT_REQUEST:
       return {

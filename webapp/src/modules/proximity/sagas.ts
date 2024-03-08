@@ -24,11 +24,7 @@ function* handleFetchProximityRequest(_action: FetchProximityRequestAction) {
     })
     yield put(fetchProximitySuccess(proximity))
   } catch (error) {
-    yield put(
-      fetchProximityFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(fetchProximityFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }
 

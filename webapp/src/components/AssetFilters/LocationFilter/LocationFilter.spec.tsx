@@ -1,36 +1,20 @@
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  DISTANCE_TO_PLAZA_MAX,
-  DISTANCE_TO_PLAZA_MIN,
-  LocationFilter,
-  LocationFilterProps
-} from './LocationFilter'
+import { DISTANCE_TO_PLAZA_MAX, DISTANCE_TO_PLAZA_MIN, LocationFilter, LocationFilterProps } from './LocationFilter'
 
 function renderLocationFilter(props: Partial<LocationFilterProps> = {}) {
-  return render(
-    <LocationFilter
-      adjacentToRoad={false}
-      onAdjacentToRoadChange={jest.fn()}
-      onDistanceToPlazaChange={jest.fn()}
-      {...props}
-    />
-  )
+  return render(<LocationFilter adjacentToRoad={false} onAdjacentToRoadChange={jest.fn()} onDistanceToPlazaChange={jest.fn()} {...props} />)
 }
 describe('LocationFilter', () => {
   test('should render adjacent to road toggle', () => {
     const { getByRole } = renderLocationFilter()
-    expect(
-      getByRole('checkbox', { name: t('nft_filters.adjacent_to_road') })
-    ).toBeInTheDocument()
+    expect(getByRole('checkbox', { name: t('nft_filters.adjacent_to_road') })).toBeInTheDocument()
   })
 
   test('should render near a plaza toggle', () => {
     const { getByRole } = renderLocationFilter()
-    expect(
-      getByRole('checkbox', { name: t('nft_filters.distance_to_plaza.title') })
-    ).toBeInTheDocument()
+    expect(getByRole('checkbox', { name: t('nft_filters.distance_to_plaza.title') })).toBeInTheDocument()
   })
 
   test('should call onAdjacentToRoadChange callback when toggle changes', async () => {
@@ -50,10 +34,7 @@ describe('LocationFilter', () => {
     await userEvent.click(getByTestId('near-to-plaza-toggle'))
     const minAsString = DISTANCE_TO_PLAZA_MIN.toString()
     const maxAsString = DISTANCE_TO_PLAZA_MAX.toString()
-    expect(onDistanceToPlazaChangeMock).toHaveBeenCalledWith([
-      minAsString,
-      maxAsString
-    ])
+    expect(onDistanceToPlazaChangeMock).toHaveBeenCalledWith([minAsString, maxAsString])
   })
 
   test('should show distance slider when minDistanceToPlaza and maxDistanceToPlaza are defined', () => {

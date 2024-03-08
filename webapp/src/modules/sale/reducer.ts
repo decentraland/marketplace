@@ -1,8 +1,5 @@
 import { Sale } from '@dcl/schemas'
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchSalesFailureAction,
   FetchSalesRequestAction,
@@ -26,15 +23,9 @@ export const INITIAL_STATE: SaleState = {
   error: null
 }
 
-type SaleReducerAction =
-  | FetchSalesRequestAction
-  | FetchSalesSuccessAction
-  | FetchSalesFailureAction
+type SaleReducerAction = FetchSalesRequestAction | FetchSalesSuccessAction | FetchSalesFailureAction
 
-export function saleReducer(
-  state = INITIAL_STATE,
-  action: SaleReducerAction
-): SaleState {
+export function saleReducer(state = INITIAL_STATE, action: SaleReducerAction): SaleState {
   switch (action.type) {
     case FETCH_SALES_REQUEST:
       return {
@@ -47,10 +38,13 @@ export function saleReducer(
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
-        data: sales.reduce((acc, sale) => {
-          acc[sale.id] = sale
-          return acc
-        }, {} as Record<string, Sale>),
+        data: sales.reduce(
+          (acc, sale) => {
+            acc[sale.id] = sale
+            return acc
+          },
+          {} as Record<string, Sale>
+        ),
         count
       }
     case FETCH_SALES_FAILURE:

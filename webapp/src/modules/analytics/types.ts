@@ -1,10 +1,4 @@
-import {
-  AnalyticsDayData,
-  Account,
-  Item,
-  Rarity,
-  WearableCategory
-} from '@dcl/schemas'
+import { AnalyticsDayData, Account, Item, Rarity, WearableCategory } from '@dcl/schemas'
 
 export type AnalyticsVolumeData = Pick<AnalyticsDayData, 'sales'> & {
   volume: number

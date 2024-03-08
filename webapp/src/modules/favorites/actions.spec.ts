@@ -1,12 +1,7 @@
 import { Item, Network } from '@dcl/schemas'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
-import {
-  ListDetails,
-  ListOfLists,
-  Permission,
-  UpdateOrCreateList
-} from '../vendor/decentraland/favorites/types'
+import { ListDetails, ListOfLists, Permission, UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import {
   fetchFavoritedItemsFailure,
   fetchFavoritedItemsRequest,
@@ -136,9 +131,7 @@ describe('when creating the action to signal the start of the fetch favorited it
 
 describe('when creating the action to signal a successful fetch favorited items request', () => {
   it('should return an object representing the action', () => {
-    expect(
-      fetchFavoritedItemsSuccess([item], createdAt, total, {}, 0, true)
-    ).toEqual({
+    expect(fetchFavoritedItemsSuccess([item], createdAt, total, {}, 0, true)).toEqual({
       type: FETCH_FAVORITED_ITEMS_SUCCESS,
       meta: undefined,
       payload: {
@@ -185,9 +178,7 @@ describe('when creating the action to signal a failure in the fetch lists reques
 
 describe('when creating the action to signal a successful fetch lists request', () => {
   it('should return an object representing the action', () => {
-    expect(
-      fetchListsSuccess([listOfLists], [item], total, listsBrowseOptions)
-    ).toEqual({
+    expect(fetchListsSuccess([listOfLists], [item], total, listsBrowseOptions)).toEqual({
       type: FETCH_LISTS_SUCCESS,
       meta: undefined,
       payload: {
@@ -358,27 +349,23 @@ describe('when creating the action to signal the start of the bulk item pick-unp
 
 describe('when creating the action to signal a successful bulk item pick-unpick request', () => {
   it('should return an object representing the action', () => {
-    expect(bulkPickUnpickSuccess(item, [listOfLists], [], true, false)).toEqual(
-      {
-        type: BULK_PICK_SUCCESS,
-        meta: undefined,
-        payload: {
-          item,
-          pickedFor: [listOfLists],
-          unpickedFrom: [],
-          isPickedByUser: true,
-          ownerRemovedFromCurrentList: false
-        }
+    expect(bulkPickUnpickSuccess(item, [listOfLists], [], true, false)).toEqual({
+      type: BULK_PICK_SUCCESS,
+      meta: undefined,
+      payload: {
+        item,
+        pickedFor: [listOfLists],
+        unpickedFrom: [],
+        isPickedByUser: true,
+        ownerRemovedFromCurrentList: false
       }
-    )
+    })
   })
 })
 
 describe('when creating the action to signal a failure in the bulk item pick-unpick request', () => {
   it('should return an object representing the action', () => {
-    expect(
-      bulkPickUnpickFailure(item, [listOfLists], [], anErrorMessage)
-    ).toEqual({
+    expect(bulkPickUnpickFailure(item, [listOfLists], [], anErrorMessage)).toEqual({
       type: BULK_PICK_FAILURE,
       meta: undefined,
       payload: {

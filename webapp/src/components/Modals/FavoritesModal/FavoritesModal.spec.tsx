@@ -20,20 +20,11 @@ const itemId = 'anItemId'
 const identity = {} as AuthIdentity
 
 function renderFavoritesModal(props: Partial<Props> = {}) {
-  return renderWithProviders(
-    <FavoritesModal
-      name={'A name'}
-      metadata={{ itemId }}
-      identity={identity}
-      onClose={jest.fn()}
-      {...props}
-    />,
-    {
-      preloadedState: {
-        modal: {}
-      }
+  return renderWithProviders(<FavoritesModal name={'A name'} metadata={{ itemId }} identity={identity} onClose={jest.fn()} {...props} />, {
+    preloadedState: {
+      modal: {}
     }
-  )
+  })
 }
 
 describe('when loading the component', () => {
@@ -41,10 +32,7 @@ describe('when loading the component', () => {
     addresses: string[]
     total: number
   }
-  let apiFetchPromiseResolve: (value: {
-    addresses: string[]
-    total: number
-  }) => void
+  let apiFetchPromiseResolve: (value: { addresses: string[]; total: number }) => void
   let apiFetchPromiseReject: (error: Error) => void
 
   beforeEach(() => {
@@ -56,9 +44,7 @@ describe('when loading the component', () => {
       apiFetchPromiseReject = reject
     })
 
-    jest
-      .spyOn(FavoritesAPI.prototype, 'getWhoFavoritedAnItem')
-      .mockReturnValue(apiFetchPromise)
+    jest.spyOn(FavoritesAPI.prototype, 'getWhoFavoritedAnItem').mockReturnValue(apiFetchPromise)
   })
 
   describe('and there are favorites for the item id', () => {
@@ -69,19 +55,11 @@ describe('when loading the component', () => {
     it('should fetch the first batch of favorites showing the loader in the process and not show the empty component', async () => {
       const { getByTestId, queryByText } = renderFavoritesModal()
 
-      expect(FavoritesAPI.prototype.getWhoFavoritedAnItem).toHaveBeenCalledWith(
-        itemId,
-        100,
-        0
-      )
+      expect(FavoritesAPI.prototype.getWhoFavoritedAnItem).toHaveBeenCalledWith(itemId, 100, 0)
       apiFetchPromiseResolve(apiResponse)
 
-      await waitForElementToBeRemoved(() =>
-        getByTestId('favorites-modal-loader')
-      )
-      expect(
-        queryByText('Users have not saved this item')
-      ).not.toBeInTheDocument()
+      await waitForElementToBeRemoved(() => getByTestId('favorites-modal-loader'))
+      expect(queryByText('Users have not saved this item')).not.toBeInTheDocument()
     })
   })
 
@@ -92,15 +70,9 @@ describe('when loading the component', () => {
 
     it('should fetch the first batch of favorites showing the loader in the process and then show the empty component', async () => {
       const { getByTestId, getByText } = renderFavoritesModal()
-      expect(FavoritesAPI.prototype.getWhoFavoritedAnItem).toHaveBeenCalledWith(
-        itemId,
-        100,
-        0
-      )
+      expect(FavoritesAPI.prototype.getWhoFavoritedAnItem).toHaveBeenCalledWith(itemId, 100, 0)
       apiFetchPromiseResolve(apiResponse)
-      await waitForElementToBeRemoved(() =>
-        getByTestId('favorites-modal-loader')
-      )
+      await waitForElementToBeRemoved(() => getByTestId('favorites-modal-loader'))
       expect(getByText('Users have not saved this item')).toBeInTheDocument()
     })
   })
@@ -109,9 +81,7 @@ describe('when loading the component', () => {
     it('should remove the loader and show an error message', async () => {
       const { getByTestId, getByText } = renderFavoritesModal()
       apiFetchPromiseReject(new Error('An error'))
-      await waitForElementToBeRemoved(() =>
-        getByTestId('favorites-modal-loader')
-      )
+      await waitForElementToBeRemoved(() => getByTestId('favorites-modal-loader'))
       expect(getByText('An error')).toBeInTheDocument()
     })
   })

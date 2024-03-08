@@ -13,22 +13,10 @@ import { Props } from './ListsPage.types'
 import styles from './ListsPage.module.css'
 import { LOADER_TEST_ID, ERROR_TEST_ID, CREATE_LIST_TEST_ID } from './constants'
 
-const ListsPage = ({
-  count,
-  lists,
-  isLoading,
-  error,
-  onFetchLists,
-  onCreateList
-}: Props) => {
+const ListsPage = ({ count, lists, isLoading, error, onFetchLists, onCreateList }: Props) => {
   const { page, first, sortBy, goToNextPage, changeSorting } = usePagination()
   const selectedSortBy = useMemo(
-    () =>
-      getParameter<ListsBrowseSortBy>(
-        Object.values(ListsBrowseSortBy),
-        sortBy,
-        ListsBrowseSortBy.RECENTLY_UPDATED
-      ),
+    () => getParameter<ListsBrowseSortBy>(Object.values(ListsBrowseSortBy), sortBy, ListsBrowseSortBy.RECENTLY_UPDATED),
     [sortBy]
   )
 
@@ -65,10 +53,7 @@ const ListsPage = ({
     fetchLists()
   }, [fetchLists])
 
-  const handleSortChange = useCallback(
-    (_e, data) => changeSorting(data.value),
-    [changeSorting]
-  )
+  const handleSortChange = useCallback((_e, data) => changeSorting(data.value), [changeSorting])
 
   const hasMorePages = lists.length < (count ?? 0)
 
@@ -81,9 +66,7 @@ const ListsPage = ({
         {!error && (
           <>
             <div className={styles.subHeader}>
-              <div className={styles.left}>
-                {count ? t('lists_page.subtitle', { count }) : null}
-              </div>
+              <div className={styles.left}>{count ? t('lists_page.subtitle', { count }) : null}</div>
               <div className={styles.right}>
                 <span className={styles.sortBy}>{t('filters.sort_by')}</span>
                 <Dropdown
@@ -113,13 +96,7 @@ const ListsPage = ({
                   onChange={handleSortChange}
                   className={styles.customDropdown}
                 />
-                <Button
-                  size="small"
-                  primary
-                  className={styles.createList}
-                  onClick={onCreateList}
-                  data-testid={CREATE_LIST_TEST_ID}
-                >
+                <Button size="small" primary className={styles.createList} onClick={onCreateList} data-testid={CREATE_LIST_TEST_ID}>
                   <Icon name="plus" className={styles.icon} />
                   {t('lists_page.create_list')}
                 </Button>
@@ -129,12 +106,7 @@ const ListsPage = ({
               <>
                 <div className={styles.overlay} />
                 <div className={styles.transparentOverlay}>
-                  <Loader
-                    active
-                    className={styles.loader}
-                    data-testid={LOADER_TEST_ID}
-                    size="massive"
-                  />
+                  <Loader active className={styles.loader} data-testid={LOADER_TEST_ID} size="massive" />
                 </div>
               </>
             ) : (
@@ -144,13 +116,7 @@ const ListsPage = ({
                     <ListCard key={`${list.id}-${index}`} list={list} />
                   ))}
                 </div>
-                <InfiniteScroll
-                  page={page}
-                  hasMorePages={hasMorePages}
-                  onLoadMore={goToNextPage}
-                  isLoading={isLoading}
-                  maxScrollPages={3}
-                >
+                <InfiniteScroll page={page} hasMorePages={hasMorePages} onLoadMore={goToNextPage} isLoading={isLoading} maxScrollPages={3}>
                   {null}
                 </InfiniteScroll>
               </>

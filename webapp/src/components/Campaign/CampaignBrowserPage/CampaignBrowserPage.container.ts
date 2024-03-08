@@ -1,12 +1,7 @@
 import { connect } from 'react-redux'
 import { getIsCampaignBrowserEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
-import {
-  getIsFullscreen,
-  getAssetType,
-  getSection,
-  getVendor
-} from '../../../modules/routing/selectors'
+import { getIsFullscreen, getAssetType, getSection, getVendor } from '../../../modules/routing/selectors'
 import { fetchEventRequest } from '../../../modules/event/actions'
 import { getData as getContracts } from '../../../modules/event/selectors'
 import { MapStateProps, MapDispatch } from './CampaignBrowserPage.types'

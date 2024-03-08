@@ -2,8 +2,7 @@ import { NFTCategory, ChainId, Network } from '@dcl/schemas'
 import { getContract, ContractName as CN } from 'decentraland-transactions'
 import { Network as AppNetwork } from '../../contract/types'
 
-export const LEGACY_MARKETPLACE_MAINNET_CONTRACT =
-  '0xb3bca6f5052c7e24726b44da7403b56a8a1b98f8'
+export const LEGACY_MARKETPLACE_MAINNET_CONTRACT = '0xb3bca6f5052c7e24726b44da7403b56a8a1b98f8'
 
 export enum ContractName {
   MANA = 'MANA',
@@ -679,16 +678,7 @@ const localContracts = {
 }
 
 export const contracts = {
-  [AppNetwork.GOERLI]: [
-    ...localContracts[AppNetwork.GOERLI],
-    ...nftServerReplicatedMarketplaceContracts[AppNetwork.GOERLI]
-  ],
-  [AppNetwork.MAINNET]: [
-    ...localContracts[AppNetwork.MAINNET],
-    ...nftServerReplicatedMarketplaceContracts[AppNetwork.MAINNET]
-  ],
-  [AppNetwork.SEPOLIA]: [
-    ...localContracts[AppNetwork.SEPOLIA],
-    ...nftServerReplicatedMarketplaceContracts[AppNetwork.SEPOLIA]
-  ]
+  [AppNetwork.GOERLI]: [...localContracts[AppNetwork.GOERLI], ...nftServerReplicatedMarketplaceContracts[AppNetwork.GOERLI]],
+  [AppNetwork.MAINNET]: [...localContracts[AppNetwork.MAINNET], ...nftServerReplicatedMarketplaceContracts[AppNetwork.MAINNET]],
+  [AppNetwork.SEPOLIA]: [...localContracts[AppNetwork.SEPOLIA], ...nftServerReplicatedMarketplaceContracts[AppNetwork.SEPOLIA]]
 }

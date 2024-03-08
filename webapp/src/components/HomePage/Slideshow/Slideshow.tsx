@@ -1,13 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import classNames from 'classnames'
-import {
-  HeaderMenu,
-  Header,
-  Button,
-  Loader,
-  Empty,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { HeaderMenu, Header, Button, Loader, Empty, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Asset } from '../../../modules/asset/types'
@@ -39,9 +32,7 @@ const Slideshow = (props: Props) => {
   const pageSize = isMobileOrTablet ? assets.length : DEFAULT_PAGE_SIZE
   const [showArrows, setShowArrows] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
-  const [assetsToRender, setAssetsToRender] = useState(
-    isMobileOrTablet ? assets : assets.slice(0, pageSize)
-  )
+  const [assetsToRender, setAssetsToRender] = useState(isMobileOrTablet ? assets : assets.slice(0, pageSize))
 
   const totalPages = useMemo(
     () => (isMobileOrTablet ? 1 : Math.ceil(assets.length / pageSize)),
@@ -70,14 +61,7 @@ const Slideshow = (props: Props) => {
   )
 
   const renderNfts = useCallback(
-    () =>
-      assetsToRender.map(asset => (
-        <AssetCard
-          key={asset.id}
-          asset={asset}
-          onClick={() => handleOnAssetCardClick(asset)}
-        />
-      )),
+    () => assetsToRender.map(asset => <AssetCard key={asset.id} asset={asset} onClick={() => handleOnAssetCardClick(asset)} />),
     [assetsToRender, handleOnAssetCardClick]
   )
 
@@ -88,9 +72,7 @@ const Slideshow = (props: Props) => {
   )
 
   const handleOnNextPage = () => {
-    setCurrentPage(
-      currentPage + 1 > totalPages ? INITIAL_PAGE : currentPage + 1
-    )
+    setCurrentPage(currentPage + 1 > totalPages ? INITIAL_PAGE : currentPage + 1)
   }
 
   const handleOnPreviousPage = () => {
@@ -98,17 +80,12 @@ const Slideshow = (props: Props) => {
   }
 
   const onMouseEnter = useCallback(() => setShowArrows(true), [])
-  const onMouseLeave = useCallback(
-    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      const contained =
-        event.relatedTarget instanceof Node &&
-        slideRef.current?.contains(event.relatedTarget as Node)
-      if (!contained) {
-        setShowArrows(false)
-      }
-    },
-    []
-  )
+  const onMouseLeave = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const contained = event.relatedTarget instanceof Node && slideRef.current?.contains(event.relatedTarget)
+    if (!contained) {
+      setShowArrows(false)
+    }
+  }, [])
 
   const viewAllButton = () => (
     <Button basic onClick={onViewAll}>
@@ -127,22 +104,18 @@ const Slideshow = (props: Props) => {
             <Header sub={isSubHeader}>{title}</Header>
             <Header sub>{subtitle}</Header>
             {hasItemsSection ? (
-              <ItemsSection
-                view={view}
-                viewAllButton={viewAllButton()}
-                onChangeItemSection={onChangeItemSection!}
-              />
+              <ItemsSection view={view} viewAllButton={viewAllButton()} onChangeItemSection={onChangeItemSection!} />
             ) : null}
           </div>
         </HeaderMenu.Left>
-        {!hasItemsSection ? (
-          <HeaderMenu.Right>{viewAllButton()}</HeaderMenu.Right>
-        ) : null}
+        {!hasItemsSection ? <HeaderMenu.Right>{viewAllButton()}</HeaderMenu.Right> : null}
       </HeaderMenu>
       <div className="assets-container">
-        <div className={classNames("assets", {
-          "full-width": assetsToRender.length === pageSize
-        })}>
+        <div
+          className={classNames('assets', {
+            'full-width': assetsToRender.length === pageSize
+          })}
+        >
           {isLoading ? (
             assets.length === 0 ? (
               <Loader active size="massive" />
@@ -155,32 +128,16 @@ const Slideshow = (props: Props) => {
             renderEmptyState()
           )}
         </div>
-        <div
-          className="arrow-container arrow-container-left"
-          {...showArrowsHandlers}
-        >
-          {showArrows && totalPages > 1 &&  (
-            <Button
-              circular
-              secondary
-              className="arrow-back"
-              onClick={handleOnPreviousPage}
-            >
+        <div className="arrow-container arrow-container-left" {...showArrowsHandlers}>
+          {showArrows && totalPages > 1 && (
+            <Button circular secondary className="arrow-back" onClick={handleOnPreviousPage}>
               <i className="caret back" />
             </Button>
           )}
         </div>
-        <div
-          className="arrow-container arrow-container-right"
-          {...showArrowsHandlers}
-        >
+        <div className="arrow-container arrow-container-right" {...showArrowsHandlers}>
           {showArrows && totalPages > 1 && (
-            <Button
-              circular
-              secondary
-              className="arrow-forward"
-              onClick={handleOnNextPage}
-            >
+            <Button circular secondary className="arrow-forward" onClick={handleOnNextPage}>
               <i className="caret" />
             </Button>
           )}
@@ -189,16 +146,8 @@ const Slideshow = (props: Props) => {
       {totalPages > 1 ? (
         <div className="page-indicators-container">
           {Array.from({ length: totalPages }).map((_, index) => (
-            <div
-              key={index}
-              className="page-indicator-container"
-              onClick={() => setCurrentPage(index + 1)}
-            >
-              <div
-                className={`page-indicator ${
-                  currentPage === index + 1 ? 'active' : ''
-                }`}
-              />
+            <div key={index} className="page-indicator-container" onClick={() => setCurrentPage(index + 1)}>
+              <div className={`page-indicator ${currentPage === index + 1 ? 'active' : ''}`} />
             </div>
           ))}
         </div>

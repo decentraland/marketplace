@@ -1,13 +1,7 @@
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { BigNumber, ethers } from 'ethers'
-import {
-  getLocation,
-  LOCATION_CHANGE,
-  LocationChangeAction,
-  push,
-  RouterLocation
-} from 'connected-react-router'
+import { getLocation, LOCATION_CHANGE, LocationChangeAction, push, RouterLocation } from 'connected-react-router'
 import {
   ChainId,
   EmotePlayMode,
@@ -29,23 +23,14 @@ import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
-import {
-  buyItemCrossChainSuccess,
-  buyItemSuccess,
-  fetchItemsRequest,
-  fetchTrendingItemsRequest
-} from '../item/actions'
+import { buyItemCrossChainSuccess, buyItemSuccess, fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import { getPage, getView } from '../ui/browse/selectors'
 import { MAX_QUERY_SIZE, PAGE_SIZE } from '../vendor/api'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
-import {
-  cancelOrderSuccess,
-  createOrderSuccess,
-  executeOrderSuccess
-} from '../order/actions'
+import { cancelOrderSuccess, createOrderSuccess, executeOrderSuccess } from '../order/actions'
 import { NFT } from '../nft/types'
 import { fetchNFTsRequest, fetchNFTsSuccess } from '../nft/actions'
 import { getWallet } from '../wallet/selectors'
@@ -53,17 +38,9 @@ import { ENS } from '../ens/types'
 import { claimNameSuccess, claimNameTransactionSubmitted } from '../ens/actions'
 import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
-import {
-  browse,
-  clearFilters,
-  fetchAssetsFromRoute as fetchAssetsFromRouteAction
-} from './actions'
+import { browse, clearFilters, fetchAssetsFromRoute as fetchAssetsFromRouteAction } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
-import {
-  getCurrentBrowseOptions,
-  getLatestVisitedLocation,
-  getSection
-} from './selectors'
+import { getCurrentBrowseOptions, getLatestVisitedLocation, getSection } from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
 import { locations } from './locations'
@@ -126,10 +103,7 @@ describe('when handling the clear filters request action', () => {
           [select(getCurrentBrowseOptions), browseOptions],
           [select(getLocation), { pathname }],
           [select(getEventData), {}],
-          [
-            call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-            Promise.resolve()
-          ]
+          [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
         ])
         .put(push(buildBrowseURL(pathname, browseOptionsWithoutFilters)))
         .dispatch(clearFilters())
@@ -144,10 +118,7 @@ describe('when handling the clear filters request action', () => {
           [select(getCurrentBrowseOptions), browseOptions],
           [select(getLocation), { pathname }],
           [select(getEventData), {}],
-          [
-            call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-            Promise.resolve()
-          ]
+          [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
         ])
         .put(push(buildBrowseURL(pathname, browseOptionsWithoutFilters)))
         .dispatch(clearFilters())
@@ -171,10 +142,7 @@ describe('when handling the clear filters request action', () => {
               [select(getPage), 1],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
             ])
             .put(
               push(
@@ -207,10 +175,7 @@ describe('when handling the clear filters request action', () => {
               [select(getPage), 1],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
             ])
             .put(
               push(
@@ -370,10 +335,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       it('should fetch assets with the correct skip size', () => {
         return expectSaga(routingSaga)
           .provide([
-            [
-              select(getCurrentBrowseOptions),
-              { ...browseOptions, section: Section.WEARABLES_TRENDING }
-            ],
+            [select(getCurrentBrowseOptions), { ...browseOptions, section: Section.WEARABLES_TRENDING }],
             [select(getPage), pageInState],
             [select(getSection), Section.WEARABLES_TRENDING]
           ])
@@ -423,10 +385,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         it('should fetch assets with the correct skip size', () => {
           return expectSaga(routingSaga)
             .provide([
-              [
-                select(getCurrentBrowseOptions),
-                { ...browseOptions, section: Section.WEARABLES_TRENDING }
-              ],
+              [select(getCurrentBrowseOptions), { ...browseOptions, section: Section.WEARABLES_TRENDING }],
               [select(getPage), undefined],
               [select(getSection), Section.WEARABLES_TRENDING]
             ])
@@ -490,10 +449,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -518,10 +474,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -546,10 +499,7 @@ describe('when handling the browse action', () => {
             [select(getLocation), { pathname }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -574,10 +524,7 @@ describe('when handling the browse action', () => {
             [select(getLocation), { pathname }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -613,10 +560,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -641,10 +585,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -675,10 +616,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -702,10 +640,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -729,10 +664,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -757,10 +689,7 @@ describe('when handling the browse action', () => {
             [select(getLocation), { pathname }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -796,10 +725,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -824,10 +750,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -852,10 +775,7 @@ describe('when handling the browse action', () => {
             [select(getLocation), { pathname }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -880,10 +800,7 @@ describe('when handling the browse action', () => {
             [select(getLocation), { pathname }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -919,10 +836,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -947,10 +861,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -981,10 +892,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -1008,10 +916,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -1035,10 +940,7 @@ describe('when handling the browse action', () => {
               [select(getLocation), { pathname }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -1063,10 +965,7 @@ describe('when handling the browse action', () => {
             [select(getLocation), { pathname }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -1168,9 +1067,7 @@ describe('when handling the browse action', () => {
 })
 
 describe('when handling the location change action', () => {
-  let browseOptions: BrowseOptions,
-    location: RouterLocation<unknown>,
-    locationChangeAction: LocationChangeAction<unknown>
+  let browseOptions: BrowseOptions, location: RouterLocation<unknown>, locationChangeAction: LocationChangeAction<unknown>
   beforeEach(() => {
     browseOptions = {
       view: View.MARKET,
@@ -1365,12 +1262,12 @@ describe('handleRedirectToSuccessPage saga', () => {
           }
         }
       } as Route
-      item = ({
+      item = {
         id: 'anItemId',
         contractAddress: 'aContractAddress',
         itemId: 'aTokenId',
         price: '100000000'
-      } as unknown) as Item
+      } as unknown as Item
     })
 
     describe('and its buying an existing NFT', () => {
@@ -1393,15 +1290,7 @@ describe('handleRedirectToSuccessPage saga', () => {
       it('should redirect to success page with the correct query params', () => {
         return expectSaga(routingSaga)
           .put(push(locations.success(searchParams)))
-          .dispatch(
-            buyItemCrossChainSuccess(
-              route,
-              ChainId.ETHEREUM_MAINNET,
-              searchParams.txHash,
-              item,
-              order
-            )
-          )
+          .dispatch(buyItemCrossChainSuccess(route, ChainId.ETHEREUM_MAINNET, searchParams.txHash, item, order))
           .run({ silenceTimeout: true })
       })
     })
@@ -1419,14 +1308,7 @@ describe('handleRedirectToSuccessPage saga', () => {
       it('should redirect to success page with the correct query params', () => {
         return expectSaga(routingSaga)
           .put(push(locations.success(searchParams)))
-          .dispatch(
-            buyItemCrossChainSuccess(
-              route,
-              ChainId.ETHEREUM_MAINNET,
-              searchParams.txHash,
-              item
-            )
-          )
+          .dispatch(buyItemCrossChainSuccess(route, ChainId.ETHEREUM_MAINNET, searchParams.txHash, item))
           .run({ silenceTimeout: true })
       })
     })
@@ -1530,9 +1412,7 @@ describe('when handling the fetch nfts success action', () => {
     })
     describe('and the are some legacy orders among those NFTs and do not belong to the wallet connected', () => {
       beforeEach(() => {
-        orders = [
-          { expiresAt: Date.now(), owner: 'some other address' } as Order
-        ]
+        orders = [{ expiresAt: Date.now(), owner: 'some other address' } as Order]
       })
       it('should not open the ExpiresListingsModal', () => {
         return expectSaga(routingSaga)
@@ -1633,13 +1513,7 @@ describe('when handling the fetch nfts success action', () => {
 
 describe.each([
   ['CREATE_ORDER_SUCCESS', createOrderSuccess, {} as NFT, 123, 123, ''],
-  [
-    'CANCEL_ORDER_SUCCESS',
-    cancelOrderSuccess,
-    { price: '1000000000000' } as Order,
-    {} as NFT,
-    ''
-  ]
+  ['CANCEL_ORDER_SUCCESS', cancelOrderSuccess, { price: '1000000000000' } as Order, {} as NFT, '']
 ])('%s action', (_name, action, ...args) => {
   it('should redirect to the location when redirectTo is present', () => {
     const redirectTo = '/account?section=on_sale'
@@ -1711,9 +1585,7 @@ describe('when handling the claim name transaction submitted action', () => {
           }
         ]
       ])
-      .dispatch(
-        claimNameTransactionSubmitted(subdomain, address, chainId, txHash)
-      )
+      .dispatch(claimNameTransactionSubmitted(subdomain, address, chainId, txHash))
       .run({ silenceTimeout: true })
   })
 })

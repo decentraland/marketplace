@@ -27,12 +27,8 @@ export const EstateSizeFilter = ({
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">
-            {t('filters.estate_size.label')}
-          </span>
-          <span className="box-filter-value">
-            {getPriceLabel(minPrice, maxPrice, network)}
-          </span>
+          <span className="box-filter-name">{t('filters.estate_size.label')}</span>
+          <span className="box-filter-value">{getPriceLabel(minPrice, maxPrice, network)}</span>
         </div>
       ) : (
         t('filters.estate_size.label')
@@ -49,14 +45,7 @@ export const EstateSizeFilter = ({
       minDistanceToPlaza: Number(minDistanceToPlaza) || undefined,
       maxDistanceToPlaza: Number(maxDistanceToPlaza) || undefined
     }),
-    [
-      adjacentToRoad,
-      landStatus,
-      minDistanceToPlaza,
-      maxDistanceToPlaza,
-      maxPrice,
-      minPrice
-    ]
+    [adjacentToRoad, landStatus, minDistanceToPlaza, maxDistanceToPlaza, maxPrice, minPrice]
   )
 
   const fetcher = useCallback(async () => {

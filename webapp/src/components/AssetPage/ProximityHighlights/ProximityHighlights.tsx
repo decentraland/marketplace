@@ -11,27 +11,16 @@ import './ProximityHighlights.css'
 
 const ProximityHighlights = (props: Props) => {
   const { nft, proximities } = props
-  const proximity = useProximity(
-    nft as NFT<VendorName.DECENTRALAND>,
-    proximities
-  )
+  const proximity = useProximity(nft as NFT<VendorName.DECENTRALAND>, proximities)
 
   return proximity ? (
     <div className="ProximityHighlights">
       <Highlights>
         {proximity?.plaza !== undefined ? (
-          <Highlight
-            icon={<div className="plaza" />}
-            name={t('asset_page.plaza')}
-            description={getDistanceText(proximity?.plaza)}
-          />
+          <Highlight icon={<div className="plaza" />} name={t('asset_page.plaza')} description={getDistanceText(proximity?.plaza)} />
         ) : null}
         {proximity?.road !== undefined ? (
-          <Highlight
-            icon={<div className="road" />}
-            name={t('asset_page.road')}
-            description={getDistanceText(proximity?.road)}
-          />
+          <Highlight icon={<div className="road" />} name={t('asset_page.road')} description={getDistanceText(proximity?.road)} />
         ) : null}
         {proximity?.district !== undefined ? (
           <Highlight

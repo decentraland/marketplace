@@ -2,21 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { FixedSizeList } from 'react-window'
-import {
-  Button,
-  Checkbox,
-  Icon,
-  Loader,
-  Message,
-  ModalNavigation
-} from 'decentraland-ui'
+import { Button, Checkbox, Icon, Loader, Message, ModalNavigation } from 'decentraland-ui'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  FavoritesAPI,
-  MARKETPLACE_FAVORITES_SERVER_URL,
-  ListOfLists
-} from '../../../modules/vendor/decentraland/favorites'
+import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL, ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { CreateListParameters } from '../../../modules/favorites/types'
 import * as events from '../../../utils/events'
@@ -92,10 +81,7 @@ const SaveToListModal = (props: Props) => {
     onSavePicks(picks.pickFor, picks.unpickFrom)
   }, [onSavePicks, picks.pickFor, picks.unpickFrom])
 
-  const handleClose = useCallback(
-    () => (!isLoadingLists ? onClose() : undefined),
-    [isLoadingLists, onClose]
-  )
+  const handleClose = useCallback(() => (!isLoadingLists ? onClose() : undefined), [isLoadingLists, onClose])
 
   const addOrRemovePick = useCallback(
     (list: ListOfLists, type: PickType) => {
@@ -148,9 +134,7 @@ const SaveToListModal = (props: Props) => {
           total: result.total
         })
       } catch (error) {
-        setError(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
+        setError(isErrorWithMessage(error) ? error.message : t('global.unknown_error'))
       } finally {
         setIsLoadingLists(false)
       }
@@ -188,9 +172,7 @@ const SaveToListModal = (props: Props) => {
           onFinishListCreation()
         })
         .catch(error => {
-          const errorMessage = isErrorWithMessage(error)
-            ? error.message
-            : t('global.unknown_error')
+          const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
           onCreateList({
             isLoading: false,
             onCreateList: createListFunction,
@@ -211,10 +193,8 @@ const SaveToListModal = (props: Props) => {
   const Row = useCallback(
     ({ index, style }: { index: number; style: object }) => {
       const isPicked =
-        (lists.data[index]?.isItemInList &&
-          !picks.unpickFrom.includes(lists.data[index])) ||
-        (!lists.data[index]?.isItemInList &&
-          picks.pickFor.includes(lists.data[index]))
+        (lists.data[index]?.isItemInList && !picks.unpickFrom.includes(lists.data[index])) ||
+        (!lists.data[index]?.isItemInList && picks.pickFor.includes(lists.data[index]))
       return (
         <div style={style} tabIndex={0}>
           {isItemLoaded(index) ? (
@@ -228,10 +208,7 @@ const SaveToListModal = (props: Props) => {
                   onChange={() => handlePickItem(index)}
                 />
                 <div className={styles.listInfo}>
-                  <div
-                    className={styles.name}
-                    data-testid={LIST_NAME + lists.data[index].id}
-                  >
+                  <div className={styles.name} data-testid={LIST_NAME + lists.data[index].id}>
                     {lists.data[index].name}
                   </div>
                   <div data-testid={LIST_ITEMS_COUNT + lists.data[index].id}>
@@ -242,13 +219,7 @@ const SaveToListModal = (props: Props) => {
                 </div>
               </div>
               <div className={styles.right}>
-                {lists.data[index].isPrivate ? (
-                  <PrivateTag
-                    data-testid={LIST_PRIVATE + lists.data[index].id}
-                  />
-                ) : (
-                  undefined
-                )}
+                {lists.data[index].isPrivate ? <PrivateTag data-testid={LIST_PRIVATE + lists.data[index].id} /> : undefined}
               </div>
             </div>
           ) : (
@@ -257,14 +228,7 @@ const SaveToListModal = (props: Props) => {
         </div>
       )
     },
-    [
-      lists.data,
-      picks.unpickFrom,
-      picks.pickFor,
-      isItemLoaded,
-      isSavingPicks,
-      handlePickItem
-    ]
+    [lists.data, picks.unpickFrom, picks.pickFor, isItemLoaded, isSavingPicks, handlePickItem]
   )
 
   useEffect(() => {
@@ -273,23 +237,14 @@ const SaveToListModal = (props: Props) => {
   }, [])
 
   // Makes the modal dynamic in size.
-  const desktopHeight =
-    lists.data.length * ITEM_HEIGHT > 500
-      ? 500
-      : lists.data.length * ITEM_HEIGHT
+  const desktopHeight = lists.data.length * ITEM_HEIGHT > 500 ? 500 : lists.data.length * ITEM_HEIGHT
 
   return (
     <Modal size="tiny" onClose={handleClose}>
-      <ModalNavigation
-        title={t('save_to_list_modal.title')}
-        onClose={handleClose}
-      />
+      <ModalNavigation title={t('save_to_list_modal.title')} onClose={handleClose} />
       <Modal.Content>
         {isLoadingLists && lists.data.length === 0 ? (
-          <div
-            data-testid={LISTS_LOADER_DATA_TEST_ID}
-            className={styles.loading}
-          >
+          <div data-testid={LISTS_LOADER_DATA_TEST_ID} className={styles.loading}>
             <Loader inline size="medium" active />
             <span>{t('global.loading')}...</span>
           </div>
@@ -298,17 +253,10 @@ const SaveToListModal = (props: Props) => {
           {lists.data.length !== 0 ? (
             <>
               <div className={styles.separator}></div>
-              <div
-                className={styles.favoritesList}
-                style={{ height: desktopHeight }}
-              >
+              <div className={styles.favoritesList} style={{ height: desktopHeight }}>
                 <AutoSizer>
                   {({ height, width }) => (
-                    <InfiniteLoader
-                      isItemLoaded={isItemLoaded}
-                      itemCount={lists.total}
-                      loadMoreItems={fetchNextPage}
-                    >
+                    <InfiniteLoader isItemLoaded={isItemLoaded} itemCount={lists.total} loadMoreItems={fetchNextPage}>
                       {({ onItemsRendered, ref }) => (
                         <FixedSizeList
                           itemCount={lists.total}
@@ -327,15 +275,7 @@ const SaveToListModal = (props: Props) => {
               </div>
             </>
           ) : null}
-          {error ? (
-            <Message
-              error
-              size="tiny"
-              visible
-              content={error}
-              header={t('global.error')}
-            />
-          ) : null}
+          {error ? <Message error size="tiny" visible content={error} header={t('global.error')} /> : null}
         </>
       </Modal.Content>
       <Modal.Actions className={styles.actions}>

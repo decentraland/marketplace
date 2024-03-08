@@ -5,29 +5,19 @@ import { Props } from './EmoteAttributesFilter.types'
 
 function renderEmoteAttributesFilter(props: Partial<Props> = {}) {
   return renderWithProviders(
-    <EmoteAttributesFilter
-      onChange={jest.fn()}
-      emoteHasGeometry={false}
-      emoteHasSound={false}
-      emotePlayMode={[]}
-      {...props}
-    />
+    <EmoteAttributesFilter onChange={jest.fn()} emoteHasGeometry={false} emoteHasSound={false} emotePlayMode={[]} {...props} />
   )
 }
 
 describe('when rendering the emote attributes filter', () => {
   it('should render sound filter', () => {
     const screen = renderEmoteAttributesFilter()
-    expect(
-      screen.getByText(t('nft_filters.emote_attributes.with_sound'))
-    ).toBeInTheDocument()
+    expect(screen.getByText(t('nft_filters.emote_attributes.with_sound'))).toBeInTheDocument()
   })
 
   it("shouldn't render geometry filter", () => {
     const screen = renderEmoteAttributesFilter()
-    expect(
-      screen.getByText(t('nft_filters.emote_attributes.with_props'))
-    ).toBeInTheDocument()
+    expect(screen.getByText(t('nft_filters.emote_attributes.with_props'))).toBeInTheDocument()
   })
 
   describe('when sound filter is clicked', () => {

@@ -19,18 +19,10 @@ describe('ClaimNamePage', () => {
 
   const renderAndTypeText = async (text: string) => {
     const matchers = renderWithProviders(
-      <ClaimNamePage
-        wallet={walletMock}
-        isConnecting={false}
-        onClaim={onClaimMock}
-        onBrowse={onBrowseMock}
-        onRedirect={onRedirectMock}
-      />
+      <ClaimNamePage wallet={walletMock} isConnecting={false} onClaim={onClaimMock} onBrowse={onBrowseMock} onRedirect={onRedirectMock} />
     )
     const { getByDisplayValue, getByText } = matchers
-    const nameInput = getByDisplayValue(
-      t('names_page.your_name')
-    ) as HTMLInputElement
+    const nameInput = getByDisplayValue(t('names_page.your_name')) as HTMLInputElement
     fireEvent.change(nameInput, { target: { value: text } })
 
     await waitFor(() => {
@@ -52,9 +44,7 @@ describe('ClaimNamePage', () => {
       it('should have the claim name disabled and show the proper warning message', async () => {
         const { getByText } = await renderAndTypeText(invalidName)
 
-        expect(
-          getByText(t('names_page.invalid_characters'))
-        ).toBeInTheDocument()
+        expect(getByText(t('names_page.invalid_characters'))).toBeInTheDocument()
       })
     })
     describe('and the name has a space', () => {
@@ -109,13 +99,9 @@ describe('ClaimNamePage', () => {
         it('should have the claim name enabled and call the onClaim when clicking it', async () => {
           const { getByText } = await renderAndTypeText(validName)
           const claimButton = getByText(t('names_page.claim_a_name'))
-          await waitFor(() =>
-            expect(claimButton).not.toHaveAttribute('disabled')
-          )
+          await waitFor(() => expect(claimButton).not.toHaveAttribute('disabled'))
           fireEvent.click(claimButton)
-          await waitFor(() =>
-            expect(onClaimMock).toHaveBeenCalledWith(validName)
-          )
+          await waitFor(() => expect(onClaimMock).toHaveBeenCalledWith(validName))
         })
       })
       describe('and does not have enough funds to claim the NAME', () => {
@@ -128,9 +114,7 @@ describe('ClaimNamePage', () => {
           const claimButton = getByText(t('names_page.claim_a_name'))
           await waitFor(() => expect(claimButton).toHaveAttribute('disabled'))
           fireEvent.click(claimButton)
-          await waitFor(() =>
-            expect(onClaimMock).not.toHaveBeenCalledWith(validName)
-          )
+          await waitFor(() => expect(onClaimMock).not.toHaveBeenCalledWith(validName))
         })
       })
     })
@@ -142,11 +126,7 @@ describe('ClaimNamePage', () => {
       it('should have the claim name disabled', async () => {
         const { getByText } = await renderAndTypeText(validName)
 
-        await waitFor(() =>
-          expect(getByText(t('names_page.claim_a_name'))).toHaveAttribute(
-            'disabled'
-          )
-        )
+        await waitFor(() => expect(getByText(t('names_page.claim_a_name'))).toHaveAttribute('disabled'))
       })
     })
   })

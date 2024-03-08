@@ -12,8 +12,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onUpdate: bid =>
-    dispatch(push(locations.bid(bid.contractAddress, bid.tokenId))),
+  onUpdate: bid => dispatch(push(locations.bid(bid.contractAddress, bid.tokenId))),
   onCancel: bid => dispatch(cancelBidRequest(bid))
 })
 

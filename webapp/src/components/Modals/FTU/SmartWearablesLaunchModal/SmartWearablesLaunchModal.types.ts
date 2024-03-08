@@ -3,7 +3,4 @@ export type Props = {
   isSmartWearablesFTUEnabled: boolean
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'isSmartWearablesFTUEnabled' | 'isLoadingFeatureFlags'
->
+export type MapStateProps = Pick<Props, 'isSmartWearablesFTUEnabled' | 'isLoadingFeatureFlags'>

@@ -1,26 +1,10 @@
-import {
-  NFT,
-  NFTCategory,
-  Network,
-  PeriodCreation,
-  RentalListing,
-  RentalListingCreation,
-  RentalStatus
-} from '@dcl/schemas'
+import { NFT, NFTCategory, Network, PeriodCreation, RentalListing, RentalListingCreation, RentalStatus } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
-import {
-  ContractData,
-  ContractName,
-  getContract,
-  Provider
-} from 'decentraland-transactions'
+import { ContractData, ContractName, getContract, Provider } from 'decentraland-transactions'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
-import {
-  CloseModalAction,
-  CLOSE_MODAL
-} from 'decentraland-dapps/dist/modules/modal/actions'
+import { CloseModalAction, CLOSE_MODAL } from 'decentraland-dapps/dist/modules/modal/actions'
 import { ethers } from 'ethers'
 import { call, delay, put, select, take, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
@@ -53,23 +37,14 @@ import {
   acceptRentalListingFailure,
   acceptRentalListingTransactionSubmitted
 } from './actions'
-import {
-  daysByPeriod,
-  generateECDSASignatureWithValidV,
-  getNonces,
-  getSignature,
-  waitUntilRentalChangesStatus
-} from './utils'
+import { daysByPeriod, generateECDSASignatureWithValidV, getNonces, getSignature, waitUntilRentalChangesStatus } from './utils'
 
 export function* rentalSaga() {
   yield takeEvery(UPSERT_RENTAL_REQUEST, handleCreateOrEditRentalRequest)
   yield takeEvery(CLAIM_ASSET_REQUEST, handleClaimLandRequest)
   yield takeEvery(CLOSE_MODAL, handleModalClose)
   yield takeEvery(REMOVE_RENTAL_REQUEST, handleRemoveRentalRequest)
-  yield takeEvery(
-    ACCEPT_RENTAL_LISTING_REQUEST,
-    handleAcceptRentalListingRequest
-  )
+  yield takeEvery(ACCEPT_RENTAL_LISTING_REQUEST, handleAcceptRentalListingRequest)
 }
 
 function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
@@ -87,30 +62,13 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       throw new Error(`Invalid address`)
     }
 
-    const nonces: string[] = yield call(
-      getNonces,
-      nft.chainId,
-      nft.contractAddress,
-      nft.tokenId,
-      address
-    )
+    const nonces: string[] = yield call(getNonces, nft.chainId, nft.contractAddress, nft.tokenId, address)
 
-    let signature: string = yield call(
-      getSignature,
-      nft.chainId,
-      nft.contractAddress,
-      nft.tokenId,
-      nonces,
-      periods,
-      expiresAt
-    )
+    let signature: string = yield call(getSignature, nft.chainId, nft.contractAddress, nft.tokenId, nonces, periods, expiresAt)
 
     signature = yield call(generateECDSASignatureWithValidV, signature)
 
-    const rentalsContract: ContractData = getContract(
-      ContractName.Rentals,
-      nft.chainId
-    )
+    const rentalsContract: ContractData = getContract(ContractName.Rentals, nft.chainId)
 
     const rentalListingCreation: RentalListingCreation = {
       chainId: nft.chainId,
@@ -127,23 +85,11 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
 
     const identity: AuthIdentity = yield getIdentity()
 
-    const rental: RentalListing = yield call(
-      [rentalsAPI, 'createRentalListing'],
-      rentalListingCreation,
-      identity
-    )
+    const rental: RentalListing = yield call([rentalsAPI, 'createRentalListing'], rentalListingCreation, identity)
 
     yield put(upsertRentalSuccess(nft, rental, operationType))
   } catch (error) {
-    yield put(
-      upsertRentalFailure(
-        nft,
-        pricePerDay,
-        action.payload.periods,
-        expiresAt,
-        (error as Error).message
-      )
-    )
+    yield put(upsertRentalFailure(nft, pricePerDay, action.payload.periods, expiresAt, (error as Error).message))
   }
 }
 
@@ -161,26 +107,16 @@ function* handleClaimLandRequest(action: ClaimAssetRequestAction) {
       throw new Error('An address is required to claim LAND')
     }
 
-    const rentalsContract: ContractData = yield call(
-      getContract,
-      ContractName.Rentals,
-      nft.chainId
-    )
+    const rentalsContract: ContractData = yield call(getContract, ContractName.Rentals, nft.chainId)
 
     const txHash: string = yield call(
-      sendTransaction as (
-        contract: ContractData,
-        contractMethodName: string,
-        ...contractArguments: any[]
-      ) => Promise<string>,
+      sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
       rentalsContract,
       'claim(address[],uint256[])',
       [nft.contractAddress],
       [nft.tokenId]
     )
-    yield put(
-      claimAssetTransactionSubmitted(nft, txHash, rentalsContract.address)
-    )
+    yield put(claimAssetTransactionSubmitted(nft, txHash, rentalsContract.address))
     yield call(waitForTx, txHash)
     yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED)
     let hasAssetBack = addressEquals(nft.owner, rental.lessor!)
@@ -198,10 +134,7 @@ function* handleClaimLandRequest(action: ClaimAssetRequestAction) {
 }
 
 function* handleModalClose(action: CloseModalAction) {
-  if (
-    action.payload.name === 'ClaimLandModal' ||
-    action.payload.name === 'RemoveRentalModal'
-  ) {
+  if (action.payload.name === 'ClaimLandModal' || action.payload.name === 'RemoveRentalModal') {
     yield put(clearRentalErrors())
   }
 }
@@ -224,18 +157,10 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
       throw new Error('An address is required to remove a rental')
     }
 
-    const rentalsContract: ContractData = yield call(
-      getContract,
-      ContractName.Rentals,
-      nft.chainId
-    )
+    const rentalsContract: ContractData = yield call(getContract, ContractName.Rentals, nft.chainId)
 
     const txHash: string = yield call(
-      sendTransaction as (
-        contract: ContractData,
-        contractMethodName: string,
-        ...contractArguments: any[]
-      ) => Promise<string>,
+      sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
       rentalsContract,
       'bumpAssetIndex(address,uint256)',
       nft.contractAddress,
@@ -250,9 +175,7 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
   }
 }
 
-function* handleAcceptRentalListingRequest(
-  action: AcceptRentalListingRequestAction
-) {
+function* handleAcceptRentalListingRequest(action: AcceptRentalListingRequestAction) {
   const { nft, rental, periodIndexChosen, addressOperator } = action.payload
 
   try {
@@ -270,11 +193,7 @@ function* handleAcceptRentalListingRequest(
       throw new Error('An address is required to remove a rental')
     }
 
-    const rentalsContract: ContractData = yield call(
-      getContract,
-      ContractName.Rentals,
-      nft.chainId
-    )
+    const rentalsContract: ContractData = yield call(getContract, ContractName.Rentals, nft.chainId)
 
     // the contract expects these as arrays of values
     const [pricePerDay, maxDays, minDays] = rental.periods.reduce(
@@ -287,10 +206,7 @@ function* handleAcceptRentalListingRequest(
       [[], [], []] as [string[], number[], number[]]
     )
 
-    const signature: string = yield call(
-      generateECDSASignatureWithValidV,
-      rental.signature
-    )
+    const signature: string = yield call(generateECDSASignatureWithValidV, rental.signature)
 
     const listing = {
       signer: rental.lessor,
@@ -307,52 +223,26 @@ function* handleAcceptRentalListingRequest(
 
     let fingerprint = ethers.utils.randomBytes(32).map(() => 0)
     if (nft.category === NFTCategory.ESTATE) {
-      const estateContract: ReturnType<typeof getContractByQuery> = yield select(
-        getContractByQuery,
-        {
-          category: NFTCategory.ESTATE
-        }
-      )
+      const estateContract: ReturnType<typeof getContractByQuery> = yield select(getContractByQuery, {
+        category: NFTCategory.ESTATE
+      })
       if (estateContract) {
         fingerprint = yield call(getFingerprint, nft.tokenId, estateContract)
       }
     }
 
-    const txParams = [
-      Object.values(listing),
-      addressOperator,
-      periodIndexChosen,
-      rental.periods[periodIndexChosen].maxDays,
-      fingerprint
-    ]
+    const txParams = [Object.values(listing), addressOperator, periodIndexChosen, rental.periods[periodIndexChosen].maxDays, fingerprint]
 
     const txHash: string = yield call(
-      sendTransaction as (
-        contract: ContractData,
-        contractMethodName: string,
-        ...contractArguments: any[]
-      ) => Promise<string>,
+      sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
       rentalsContract,
       'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
       ...txParams
     )
-    yield put(
-      acceptRentalListingTransactionSubmitted(
-        nft,
-        rental,
-        txHash,
-        periodIndexChosen
-      )
-    )
+    yield put(acceptRentalListingTransactionSubmitted(nft, rental, txHash, periodIndexChosen))
     yield call(waitForTx, txHash)
-    const rentalListingUpdated: RentalListing = yield call(
-      waitUntilRentalChangesStatus,
-      nft,
-      RentalStatus.EXECUTED
-    )
-    yield put(
-      acceptRentalListingSuccess(nft, rentalListingUpdated, periodIndexChosen)
-    )
+    const rentalListingUpdated: RentalListing = yield call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED)
+    yield put(acceptRentalListingSuccess(nft, rentalListingUpdated, periodIndexChosen))
   } catch (error) {
     yield put(acceptRentalListingFailure((error as Error).message))
   }

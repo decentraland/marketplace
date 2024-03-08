@@ -1,8 +1,4 @@
-import {
-  getSigner,
-  getConnectedProvider,
-  getNetworkProvider
-} from 'decentraland-dapps/dist/lib/eth'
+import { getSigner, getConnectedProvider, getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { EstateRegistry__factory } from '../../../contracts'
 import { Contract } from '../../vendor/services'
 import { NFT } from '../types'
@@ -23,11 +19,7 @@ export const getCenter = (selection: { x: number; y: number }[]) => {
   return [x, y]
 }
 
-export async function generateFingerprint(
-  estateId: string,
-  parcels: { x: number; y: number }[],
-  landContract: Contract
-) {
+export async function generateFingerprint(estateId: string, parcels: { x: number; y: number }[], landContract: Contract) {
   const provider = await getNetworkProvider(landContract.chainId)
   const contract = new ethers.Contract(
     landContract.address,
@@ -54,32 +46,19 @@ export async function generateFingerprint(
     estateTokenIds.push(await contract.encodeTokenId(parcel.x, parcel.y))
   }
 
-  let fingerprint = BigInt(
-    ethers.utils.solidityKeccak256(
-      ['string', 'uint256'],
-      ['estateId', estateId]
-    )
-  )
+  let fingerprint = BigInt(ethers.utils.solidityKeccak256(['string', 'uint256'], ['estateId', estateId]))
 
   for (const tokenId of estateTokenIds) {
-    fingerprint ^= BigInt(
-      ethers.utils.solidityKeccak256(['uint256'], [tokenId])
-    )
+    fingerprint ^= BigInt(ethers.utils.solidityKeccak256(['uint256'], [tokenId]))
   }
 
   return ethers.utils.hexlify(fingerprint)
 }
 
-export async function getFingerprint(
-  estateId: string,
-  estateContract: Contract
-) {
+export async function getFingerprint(estateId: string, estateContract: Contract) {
   const provider = await getConnectedProvider()
   if (provider) {
-    const estateRegistry = EstateRegistry__factory.connect(
-      estateContract.address,
-      await getSigner()
-    )
+    const estateRegistry = EstateRegistry__factory.connect(estateContract.address, await getSigner())
     return estateRegistry.getFingerprint(estateId)
   }
 }

@@ -25,9 +25,12 @@ export const AssetTypeFilter = ({ assetType, onChange }: Props): JSX.Element => 
     ]
   }, [])
 
-  const handleAssetTypeChange = useCallback((type: string) => {
-    onChange(type as AssetType)
-  }, [onChange])
+  const handleAssetTypeChange = useCallback(
+    (type: string) => {
+      onChange(type as AssetType)
+    },
+    [onChange]
+  )
 
   const header = useMemo(
     () =>
@@ -43,18 +46,8 @@ export const AssetTypeFilter = ({ assetType, onChange }: Props): JSX.Element => 
   )
 
   return (
-    <Box
-      header={header}
-      className="filters-sidebar-box asset-type-filter"
-      collapsible
-      defaultCollapsed={true}
-    >
-      <SelectFilter
-        name=""
-        value={assetType || ''}
-        options={assetTypeOptions}
-        onChange={handleAssetTypeChange}
-      />
+    <Box header={header} className="filters-sidebar-box asset-type-filter" collapsible defaultCollapsed={true}>
+      <SelectFilter name="" value={assetType || ''} options={assetTypeOptions} onChange={handleAssetTypeChange} />
     </Box>
   )
 }

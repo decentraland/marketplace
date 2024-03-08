@@ -1,7 +1,4 @@
-import {
-  getCurrentLocale,
-  t
-} from 'decentraland-dapps/dist/modules/translation/utils'
+import { getCurrentLocale, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import formatDistanceToNowI18N from 'date-fns/formatDistanceToNow'
 import en from 'date-fns/locale/en-US'
 import es from 'date-fns/locale/es'
@@ -25,12 +22,9 @@ export function getExpirationDateLabel(date: number | Date) {
   const expiresAtLabel =
     date.getTime() >= futureDate.getTime()
       ? t('best_buying_option.buy_listing.never_expires')
-      : `${t('best_buying_option.buy_listing.expires')} ${formatDistanceToNow(
-          date,
-          {
-            addSuffix: true
-          }
-        )}`
+      : `${t('best_buying_option.buy_listing.expires')} ${formatDistanceToNow(date, {
+          addSuffix: true
+        })}`
   return expiresAtLabel
 }
 
@@ -54,7 +48,5 @@ export function formatDistanceToNow(
 export function getDateAndMonthName(date: number | Date) {
   const locale = locales[getCurrentLocale().locale]
 
-  return `${format(new Date(date), 'LLLL', { locale: locale })} ${new Date(
-    date
-  ).getDate()}`
+  return `${format(new Date(date), 'LLLL', { locale: locale })} ${new Date(date).getDate()}`
 }

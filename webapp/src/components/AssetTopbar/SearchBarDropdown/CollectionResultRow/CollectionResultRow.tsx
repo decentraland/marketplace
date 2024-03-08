@@ -9,17 +9,9 @@ type CollectionResultRowProps = {
   'data-testid'?: string
 }
 
-const CollectionResultRow = ({
-  collection,
-  onClick,
-  'data-testid': dataTestId
-}: CollectionResultRowProps) => {
+const CollectionResultRow = ({ collection, onClick, 'data-testid': dataTestId }: CollectionResultRowProps) => {
   return (
-    <div
-      className={styles.collectionRowContainer}
-      onClick={onClick}
-      data-testid={dataTestId}
-    >
+    <div className={styles.collectionRowContainer} onClick={onClick} data-testid={dataTestId}>
       <div className={styles.image}>
         <CollectionImage contractAddress={collection.contract_address} />
       </div>

@@ -7,18 +7,10 @@ import { Props } from './EmoteAttributesFilter.types'
 const WITH_SOUND_VALUE = 'sound'
 const WITH_GEOMETRY_VALUE = 'geometry'
 
-export const EmoteAttributesFilter = ({
-  emotePlayMode,
-  emoteHasSound,
-  emoteHasGeometry,
-  onChange,
-  defaultCollapsed = false
-}: Props) => {
+export const EmoteAttributesFilter = ({ emotePlayMode, emoteHasSound, emoteHasGeometry, onChange, defaultCollapsed = false }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const emotePlayModeOptions = useMemo(() => {
-    const options = Object.values(EmotePlayMode).filter(
-      value => typeof value === 'string'
-    ) as EmotePlayMode[]
+    const options = Object.values(EmotePlayMode).filter(value => typeof value === 'string') as EmotePlayMode[]
     return options.map(playMode => ({
       value: playMode,
       text: t(`emote.play_mode.${playMode}`)
@@ -69,9 +61,7 @@ export const EmoteAttributesFilter = ({
     [emotePlayMode, onChange]
   )
 
-  const areAllItemsSelected =
-    emotePlayMode?.length === emotePlayModeOptions.length ||
-    !emotePlayMode?.length
+  const areAllItemsSelected = emotePlayMode?.length === emotePlayModeOptions.length || !emotePlayMode?.length
 
   const title = t('nft_filters.emote_attributes.title')
   const allTitle = t('nft_filters.emote_attributes.all_items')
@@ -81,11 +71,7 @@ export const EmoteAttributesFilter = ({
         <div className="mobile-box-header">
           <span className="box-filter-name">{title}</span>
           <span className="box-filter-value">
-            {areAllItemsSelected
-              ? allTitle
-              : emotePlayMode
-                  .map(mode => t(`emote.play_mode.${mode}`))
-                  .join(', ')}
+            {areAllItemsSelected ? allTitle : emotePlayMode.map(mode => t(`emote.play_mode.${mode}`)).join(', ')}
           </span>
         </div>
       ) : (
@@ -107,12 +93,7 @@ export const EmoteAttributesFilter = ({
         onChange={handleEmoteAttributesChange}
         values={emoteAttributes || []}
       />
-      <ArrayFilter
-        className="Filters"
-        options={emotePlayModeOptions}
-        onChange={handlePlayModeChange}
-        values={emotePlayMode || []}
-      />
+      <ArrayFilter className="Filters" options={emotePlayModeOptions} onChange={handlePlayModeChange} values={emotePlayMode || []} />
     </Box>
   )
 }

@@ -13,11 +13,5 @@ export type Props = {
   onFetchStore: (address: string) => void
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'store' | 'canSubmit' | 'address' | 'isLoading' | 'isSaving' | 'error'
->
-export type MapDispatchProps = Pick<
-  Props,
-  'onChange' | 'onRevert' | 'onSave' | 'onFetchStore'
->
+export type MapStateProps = Pick<Props, 'store' | 'canSubmit' | 'address' | 'isLoading' | 'isSaving' | 'error'>
+export type MapDispatchProps = Pick<Props, 'onChange' | 'onRevert' | 'onSave' | 'onFetchStore'>

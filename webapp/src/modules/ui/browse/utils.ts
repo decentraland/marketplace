@@ -1,10 +1,4 @@
-import {
-  ChainId,
-  Item,
-  ListingStatus,
-  NFTCategory,
-  Network
-} from '@dcl/schemas'
+import { ChainId, Item, ListingStatus, NFTCategory, Network } from '@dcl/schemas'
 import { FavoritesData } from '../../favorites/types'
 import { BrowseUIState } from './reducer'
 import { LegacyOrderFragment } from '../../order/types'
@@ -17,9 +11,7 @@ export function orderById(ids: string[], items: Item[]) {
   return ids.map(id => itemsById[id])
 }
 
-export const byFavoriteCreatedAtAsc = (
-  favoritedItems: Record<string, FavoritesData>
-) => (a: Item, b: Item) => {
+export const byFavoriteCreatedAtAsc = (favoritedItems: Record<string, FavoritesData>) => (a: Item, b: Item) => {
   const favoriteACreatedAt = favoritedItems[a.id]?.createdAt ?? 0
   const favoriteBCreatedAt = favoritedItems[b.id]?.createdAt ?? 0
   if (favoriteACreatedAt < favoriteBCreatedAt) {
@@ -34,9 +26,7 @@ export const isLoadingMoreResults = (state: BrowseUIState, page?: number) => {
   return !!state.page && !!page && page > state.page
 }
 
-export function legacyOrderToOnSaleElement(
-  legacyOrder: LegacyOrderFragment
-): OnSaleElement {
+export function legacyOrderToOnSaleElement(legacyOrder: LegacyOrderFragment): OnSaleElement {
   return [
     {
       category: NFTCategory.PARCEL,

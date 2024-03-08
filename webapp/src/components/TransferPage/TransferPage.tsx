@@ -42,29 +42,14 @@ const TransferPage = (props: Props) => {
                   isDisabled = true
                   canTransfer = false
                   subtitleClasses.push('error')
-                  subtitle = (
-                    <T
-                      id="transfer_page.for_sale"
-                      values={{ name: <b>{name}</b> }}
-                    />
-                  )
+                  subtitle = <T id="transfer_page.for_sale" values={{ name: <b>{name}</b> }} />
                 } else if (!isOwnedBy(nft, wallet)) {
                   isDisabled = true
                   canTransfer = false
                   subtitleClasses.push('error')
-                  subtitle = (
-                    <T
-                      id="transfer_page.invalid_owner"
-                      values={{ name: <b>{name}</b> }}
-                    />
-                  )
+                  subtitle = <T id="transfer_page.invalid_owner" values={{ name: <b>{name}</b> }} />
                 } else {
-                  subtitle = (
-                    <T
-                      id="transfer_page.subtitle"
-                      values={{ name: <b>{name}</b> }}
-                    />
-                  )
+                  subtitle = <T id="transfer_page.subtitle" values={{ name: <b>{name}</b> }} />
                 }
                 return (
                   <AssetAction asset={nft}>
@@ -79,11 +64,7 @@ const TransferPage = (props: Props) => {
                         <AddressField
                           type="address"
                           error={isInvalidAddress}
-                          message={
-                            isInvalidAddress
-                              ? t('transfer_page.invalid_address')
-                              : undefined
-                          }
+                          message={isInvalidAddress ? t('transfer_page.invalid_address') : undefined}
                           label={t('transfer_page.recipient')}
                           value={address}
                           placeholder="0x..."
@@ -93,31 +74,18 @@ const TransferPage = (props: Props) => {
                       </div>
                       {canTransfer ? (
                         <div className="warning">
-                          <T
-                            id="transfer_page.warning"
-                            values={{ br: <br /> }}
-                          />
+                          <T id="transfer_page.warning" values={{ br: <br /> }} />
                         </div>
                       ) : null}
                       <div className="buttons">
                         <Button
                           as="div"
                           disabled={isTransferring}
-                          onClick={() =>
-                            onNavigate(
-                              locations.nft(nft.contractAddress, nft.tokenId)
-                            )
-                          }
+                          onClick={() => onNavigate(locations.nft(nft.contractAddress, nft.tokenId))}
                         >
                           {t('global.cancel')}
                         </Button>
-                        <ChainButton
-                          type="submit"
-                          primary
-                          loading={isTransferring}
-                          disabled={isDisabled}
-                          chainId={nft.chainId}
-                        >
+                        <ChainButton type="submit" primary loading={isTransferring} disabled={isDisabled} chainId={nft.chainId}>
                           {t('transfer_page.submit')}
                         </ChainButton>
                       </div>

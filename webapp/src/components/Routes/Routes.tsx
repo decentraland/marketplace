@@ -37,15 +37,9 @@ import { Props } from './Routes.types'
 
 const Routes = ({ inMaintenance }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
-  const renderItemAssetPage = useCallback(
-    () => <AssetPage type={AssetType.ITEM} />,
-    []
-  )
+  const renderItemAssetPage = useCallback(() => <AssetPage type={AssetType.ITEM} />, [])
 
-  const renderNFTAssetPage = useCallback(
-    () => <AssetPage type={AssetType.NFT} />,
-    []
-  )
+  const renderNFTAssetPage = useCallback(() => <AssetPage type={AssetType.NFT} />, [])
 
   if (inMaintenance) {
     return (
@@ -67,83 +61,41 @@ const Routes = ({ inMaintenance }: Props) => {
         <Route exact path={locations.names()} component={NamesPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
         <Route path={locations.campaign()} component={CampaignBrowserPage} />
-        <Route
-          exact
-          path={locations.currentAccount()}
-          component={AccountPage}
-        />
+        <Route exact path={locations.currentAccount()} component={AccountPage} />
         <Route exact path={locations.account()} component={AccountPage} />
         <ProtectedRoute exact path={locations.lists()} component={ListsPage} />
         <Route exact path={locations.list()} component={ListPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
         <ProtectedRoute exact path={locations.sell()} component={SellPage} />
         <ProtectedRoute exact path={locations.bid()} component={BidPage} />
-        <ProtectedRoute
-          exact
-          path={locations.cancel()}
-          component={CancelSalePage}
-        />
-        <ProtectedRoute
-          exact
-          path={locations.transfer()}
-          component={TransferPage}
-        />
+        <ProtectedRoute exact path={locations.cancel()} component={CancelSalePage} />
+        <ProtectedRoute exact path={locations.transfer()} component={TransferPage} />
         <Route exact path={locations.collection()} component={CollectionPage} />
-        <ProtectedRoute
-          exact
-          path={locations.manage()}
-          component={ManageAssetPage}
-        />
-        <ProtectedRoute
-          exact
-          path={locations.buy(AssetType.NFT)}
-          component={() => <BuyPage type={AssetType.NFT} />}
-        />
-        <ProtectedRoute
-          exact
-          path={locations.buy(AssetType.ITEM)}
-          component={() => <BuyPage type={AssetType.ITEM} />}
-        />
+        <ProtectedRoute exact path={locations.manage()} component={ManageAssetPage} />
+        <ProtectedRoute exact path={locations.buy(AssetType.NFT)} component={() => <BuyPage type={AssetType.NFT} />} />
+        <ProtectedRoute exact path={locations.buy(AssetType.ITEM)} component={() => <BuyPage type={AssetType.ITEM} />} />
         <Route
           exact
           path={locations.buyStatusPage(AssetType.NFT)}
-          component={(props: RouteComponentProps) => (
-            <StatusPage {...props} type={AssetType.NFT} />
-          )}
+          component={(props: RouteComponentProps) => <StatusPage {...props} type={AssetType.NFT} />}
         />
         <Route
           exact
           path={locations.buyStatusPage(AssetType.ITEM)}
-          component={(props: RouteComponentProps) => (
-            <StatusPage {...props} type={AssetType.ITEM} />
-          )}
+          component={(props: RouteComponentProps) => <StatusPage {...props} type={AssetType.ITEM} />}
         />
         <Route exact path={locations.nft()} component={renderNFTAssetPage} />
         <Route exact path={locations.item()} component={renderItemAssetPage} />
-        <ProtectedRoute
-          exact
-          path={locations.settings()}
-          component={SettingsPage}
-        />
-        <ProtectedRoute
-          exact
-          path={locations.activity()}
-          component={ActivityPage}
-        />
+        <ProtectedRoute exact path={locations.settings()} component={SettingsPage} />
+        <ProtectedRoute exact path={locations.activity()} component={ActivityPage} />
         <Route exact path={locations.root()} component={HomePage} />
         <Route exact path={locations.parcel()} component={LegacyNFTPage} />
         <Route exact path={locations.estate()} component={LegacyNFTPage} />
         <Route exact path={locations.success()} component={SuccessPage} />
-        <Redirect
-          from="/browse"
-          to={locations.browse() + window.location.search}
-          push
-        />
+        <Redirect from="/browse" to={locations.browse() + window.location.search} push />
         <Redirect to={locations.root()} />
       </Switch>
-      {APP_ID ? (
-        <Intercom appId={APP_ID} settings={{ alignment: 'right' }} />
-      ) : null}
+      {APP_ID ? <Intercom appId={APP_ID} settings={{ alignment: 'right' }} /> : null}
     </>
   )
 }

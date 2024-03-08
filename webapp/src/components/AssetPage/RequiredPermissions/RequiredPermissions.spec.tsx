@@ -52,13 +52,7 @@ describe('when the permissions were fetched and the array is not empty', () => {
   it('should render them as badges', () => {
     const { getByText } = renderRequiredPermissions({ requiredPermissions })
     requiredPermissions.forEach(requiredPermission => {
-      expect(
-        getByText(
-          t(
-            `smart_wearable.required_permission.${requiredPermission.toLowerCase()}`
-          )
-        )
-      ).toBeInTheDocument()
+      expect(getByText(t(`smart_wearable.required_permission.${requiredPermission.toLowerCase()}`))).toBeInTheDocument()
     })
   })
 })

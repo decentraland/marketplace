@@ -1,8 +1,5 @@
 import { AuthIdentity } from '@dcl/crypto'
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   GenerateIdentityRequestAction,
   GenerateIdentitySuccessAction,
@@ -24,15 +21,9 @@ export const INITIAL_STATE: IdentityState = {
   error: null
 }
 
-export type IdentityReducerAction =
-  | GenerateIdentityRequestAction
-  | GenerateIdentitySuccessAction
-  | GenerateIdentityFailureAction
+export type IdentityReducerAction = GenerateIdentityRequestAction | GenerateIdentitySuccessAction | GenerateIdentityFailureAction
 
-export function identityReducer(
-  state: IdentityState = INITIAL_STATE,
-  action: IdentityReducerAction
-): IdentityState {
+export function identityReducer(state: IdentityState = INITIAL_STATE, action: IdentityReducerAction): IdentityState {
   switch (action.type) {
     case GENERATE_IDENTITY_REQUEST: {
       return {

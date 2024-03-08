@@ -1,9 +1,5 @@
 import { Item, RentalListing, RentalStatus } from '@dcl/schemas'
-import {
-  ContractData,
-  ContractName,
-  getContract
-} from 'decentraland-transactions'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
@@ -29,17 +25,13 @@ describe("when getting the asset's url", () => {
 
     describe('and the user is a manager of the asset', () => {
       it('should return the location path of the management page', () => {
-        expect(getAssetUrl(asset, true)).toEqual(
-          locations.manage(asset.contractAddress, (asset as NFT).tokenId)
-        )
+        expect(getAssetUrl(asset, true)).toEqual(locations.manage(asset.contractAddress, (asset as NFT).tokenId))
       })
     })
 
     describe('and the user is not a manager of the asset', () => {
       it("should return the location path of the token's page", () => {
-        expect(getAssetUrl(asset, false)).toEqual(
-          locations.nft(asset.contractAddress, (asset as NFT).tokenId)
-        )
+        expect(getAssetUrl(asset, false)).toEqual(locations.nft(asset.contractAddress, (asset as NFT).tokenId))
       })
     })
   })
@@ -51,17 +43,13 @@ describe("when getting the asset's url", () => {
 
     describe('and the user is a manager of the asset', () => {
       it("should return the location path of the item's page", () => {
-        expect(getAssetUrl(asset, true)).toEqual(
-          locations.item(asset.contractAddress, (asset as Item).itemId)
-        )
+        expect(getAssetUrl(asset, true)).toEqual(locations.item(asset.contractAddress, (asset as Item).itemId))
       })
     })
 
     describe('and the user is not a manager of the asset', () => {
       it("should return the location path of the item's page", () => {
-        expect(getAssetUrl(asset, false)).toEqual(
-          locations.item(asset.contractAddress, (asset as Item).itemId)
-        )
+        expect(getAssetUrl(asset, false)).toEqual(locations.item(asset.contractAddress, (asset as Item).itemId))
       })
     })
   })
@@ -142,10 +130,7 @@ describe('when getting the asset owner', () => {
         } as RentalListing
       })
       describe('and the logged user is the rental lessor the asset is in the rentals contract', () => {
-        const rentalsContract: ContractData = getContract(
-          ContractName.Rentals,
-          1
-        )
+        const rentalsContract: ContractData = getContract(ContractName.Rentals, 1)
         beforeEach(() => {
           asset = {
             openRentalId: null,
@@ -235,10 +220,7 @@ describe('when getting the asset owner', () => {
       })
 
       describe('and the logged user is not the asset owner since it is still in the rentals contract because it hasnt been claimed yet', () => {
-        const rentalsContract: ContractData = getContract(
-          ContractName.Rentals,
-          1
-        )
+        const rentalsContract: ContractData = getContract(ContractName.Rentals, 1)
         beforeEach(() => {
           asset = {
             openRentalId: null,
@@ -262,9 +244,7 @@ describe('when mapping the asset', () => {
   let asset: Asset | null
   let itemMappers: { [key in 'wearable' | 'emote']: (...args: any[]) => void }
   let nftMappers: {
-    [key in 'wearable' | 'emote' | 'parcel' | 'estate' | 'ens']: (
-      ...args: any[]
-    ) => void
+    [key in 'wearable' | 'emote' | 'parcel' | 'estate' | 'ens']: (...args: any[]) => void
   }
   let fallback: (...args: any) => void
 
@@ -300,9 +280,7 @@ describe('when mapping the asset', () => {
       asset = { data: {}, tokenId: 'tokenId' } as NFT
     })
 
-    describe.each(['wearable', 'emote', 'parcel', 'estate', 'ens'] as Array<
-      keyof typeof nftMappers
-    >)('and is a %s', category => {
+    describe.each(['wearable', 'emote', 'parcel', 'estate', 'ens'] as Array<keyof typeof nftMappers>)('and is a %s', category => {
       beforeEach(() => {
         asset = { ...asset, data: { [category]: {} } } as NFT
       })
@@ -319,18 +297,15 @@ describe('when mapping the asset', () => {
       asset = { data: {}, itemId: 'itemId' } as Item
     })
 
-    describe.each(['wearable', 'emote'] as Array<keyof typeof itemMappers>)(
-      'and is a %s',
-      category => {
-        beforeEach(() => {
-          asset = { ...asset, data: { [category]: {} } } as Item
-        })
+    describe.each(['wearable', 'emote'] as Array<keyof typeof itemMappers>)('and is a %s', category => {
+      beforeEach(() => {
+        asset = { ...asset, data: { [category]: {} } } as Item
+      })
 
-        it(`should return the result of calling the ${category} mapper`, () => {
-          mapAsset(asset, itemMappers, nftMappers, fallback)
-          expect(itemMappers[category]).toHaveBeenCalled()
-        })
-      }
-    )
+      it(`should return the result of calling the ${category} mapper`, () => {
+        mapAsset(asset, itemMappers, nftMappers, fallback)
+        expect(itemMappers[category]).toHaveBeenCalled()
+      })
+    })
   })
 })

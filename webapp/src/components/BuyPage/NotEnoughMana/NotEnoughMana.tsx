@@ -13,19 +13,8 @@ const NotEnoughMana = (props: Props) => {
       <Card.Content>
         <div className={styles.paragraph}>{description}</div>
         <div className={styles.buttons}>
-          <Button
-            basic
-            size="small"
-            onClick={() => onGetMana()}
-            className={styles.getMana}
-          >
-            <Mana
-              showTooltip
-              inline
-              size="small"
-              network={asset.network}
-              primary
-            />
+          <Button basic size="small" onClick={() => onGetMana()} className={styles.getMana}>
+            <Mana showTooltip inline size="small" network={asset.network} primary />
             {t('asset_page.actions.get_mana')}
           </Button>
           <Button basic size="small" onClick={() => onBuyWithCard(asset)}>

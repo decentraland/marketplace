@@ -1,22 +1,11 @@
-import {
-  ChainId,
-  Network,
-  NFTCategory,
-  PeriodCreation,
-  RentalListing,
-  RentalStatus
-} from '@dcl/schemas'
+import { ChainId, Network, NFTCategory, PeriodCreation, RentalListing, RentalStatus } from '@dcl/schemas'
 import { call, select } from '@redux-saga/core/effects'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import {
-  ContractData,
-  ContractName,
-  getContract
-} from 'decentraland-transactions'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { ethers } from 'ethers'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
@@ -128,24 +117,8 @@ describe('when handling the request action to upsert a rental listing', () => {
     it('should throw an "Invalid address" error', () => {
       return expectSaga(rentalSaga)
         .provide([[select(getAddress), undefined]])
-        .put(
-          upsertRentalFailure(
-            nft,
-            100,
-            [PeriodOption.ONE_WEEK],
-            1234567,
-            'Invalid address'
-          )
-        )
-        .dispatch(
-          upsertRentalRequest(
-            nft,
-            100,
-            [PeriodOption.ONE_WEEK],
-            1234567,
-            UpsertRentalOptType.INSERT
-          )
-        )
+        .put(upsertRentalFailure(nft, 100, [PeriodOption.ONE_WEEK], 1234567, 'Invalid address'))
+        .dispatch(upsertRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], 1234567, UpsertRentalOptType.INSERT))
         .run({ silenceTimeout: true })
     })
   })
@@ -168,28 +141,8 @@ describe('when handling the request action to upsert a rental listing', () => {
         return expectSaga(rentalSaga)
           .provide([
             [select(getAddress), signerAddress],
-            [
-              call(
-                getNonces,
-                nft.chainId,
-                nft.contractAddress,
-                nft.tokenId,
-                signerAddress
-              ),
-              nonces
-            ],
-            [
-              call(
-                getSignature,
-                nft.chainId,
-                nft.contractAddress,
-                nft.tokenId,
-                nonces,
-                periods,
-                expiration
-              ),
-              signature
-            ],
+            [call(getNonces, nft.chainId, nft.contractAddress, nft.tokenId, signerAddress), nonces],
+            [call(getSignature, nft.chainId, nft.contractAddress, nft.tokenId, nonces, periods, expiration), signature],
             [select(getCurrentIdentity), identity],
             [
               call(
@@ -200,8 +153,7 @@ describe('when handling the request action to upsert a rental listing', () => {
                   tokenId: nft.tokenId,
                   network: nft.network as Network.ETHEREUM,
                   expiration,
-                  rentalContractAddress:
-                    '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
+                  rentalContractAddress: '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
                   nonces,
                   periods,
                   signature,
@@ -213,15 +165,7 @@ describe('when handling the request action to upsert a rental listing', () => {
             ]
           ])
           .put(upsertRentalSuccess(nft, rental, UpsertRentalOptType.INSERT))
-          .dispatch(
-            upsertRentalRequest(
-              nft,
-              100,
-              [PeriodOption.ONE_WEEK],
-              expiration,
-              UpsertRentalOptType.INSERT
-            )
-          )
+          .dispatch(upsertRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration, UpsertRentalOptType.INSERT))
           .run({ silenceTimeout: true })
       })
     })
@@ -242,28 +186,8 @@ describe('when handling the request action to upsert a rental listing', () => {
         return expectSaga(rentalSaga)
           .provide([
             [select(getAddress), signerAddress],
-            [
-              call(
-                getNonces,
-                nft.chainId,
-                nft.contractAddress,
-                nft.tokenId,
-                signerAddress
-              ),
-              nonces
-            ],
-            [
-              call(
-                getSignature,
-                nft.chainId,
-                nft.contractAddress,
-                nft.tokenId,
-                nonces,
-                periods,
-                expiration
-              ),
-              signature
-            ],
+            [call(getNonces, nft.chainId, nft.contractAddress, nft.tokenId, signerAddress), nonces],
+            [call(getSignature, nft.chainId, nft.contractAddress, nft.tokenId, nonces, periods, expiration), signature],
             [select(getCurrentIdentity), identity],
             [
               call(
@@ -274,8 +198,7 @@ describe('when handling the request action to upsert a rental listing', () => {
                   tokenId: nft.tokenId,
                   network: nft.network as Network.ETHEREUM,
                   expiration,
-                  rentalContractAddress:
-                    '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
+                  rentalContractAddress: '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
                   nonces,
                   periods,
                   signature,
@@ -287,15 +210,7 @@ describe('when handling the request action to upsert a rental listing', () => {
             ]
           ])
           .put(upsertRentalSuccess(nft, rental, UpsertRentalOptType.EDIT))
-          .dispatch(
-            upsertRentalRequest(
-              nft,
-              100,
-              [PeriodOption.ONE_WEEK],
-              expiration,
-              UpsertRentalOptType.EDIT
-            )
-          )
+          .dispatch(upsertRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration, UpsertRentalOptType.EDIT))
           .run({ silenceTimeout: true })
       })
     })
@@ -306,35 +221,10 @@ describe('when handling the request action to upsert a rental listing', () => {
         return expectSaga(rentalSaga)
           .provide([
             [select(getAddress), signerAddress],
-            [
-              call(
-                getNonces,
-                nft.chainId,
-                nft.contractAddress,
-                nft.tokenId,
-                signerAddress
-              ),
-              throwError(new Error('Could not get provider'))
-            ]
+            [call(getNonces, nft.chainId, nft.contractAddress, nft.tokenId, signerAddress), throwError(new Error('Could not get provider'))]
           ])
-          .put(
-            upsertRentalFailure(
-              nft,
-              100,
-              [PeriodOption.ONE_WEEK],
-              1234567,
-              'Could not get provider'
-            )
-          )
-          .dispatch(
-            upsertRentalRequest(
-              nft,
-              100,
-              [PeriodOption.ONE_WEEK],
-              expiration,
-              UpsertRentalOptType.INSERT
-            )
-          )
+          .put(upsertRentalFailure(nft, 100, [PeriodOption.ONE_WEEK], 1234567, 'Could not get provider'))
+          .dispatch(upsertRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration, UpsertRentalOptType.INSERT))
           .run({ silenceTimeout: true })
       })
     })
@@ -353,47 +243,14 @@ describe('when handling the request action to upsert a rental listing', () => {
         return expectSaga(rentalSaga)
           .provide([
             [select(getAddress), signerAddress],
+            [call(getNonces, nft.chainId, nft.contractAddress, nft.tokenId, signerAddress), nonces],
             [
-              call(
-                getNonces,
-                nft.chainId,
-                nft.contractAddress,
-                nft.tokenId,
-                signerAddress
-              ),
-              nonces
-            ],
-            [
-              call(
-                getSignature,
-                nft.chainId,
-                nft.contractAddress,
-                nft.tokenId,
-                nonces,
-                periods,
-                expiration
-              ),
+              call(getSignature, nft.chainId, nft.contractAddress, nft.tokenId, nonces, periods, expiration),
               throwError(new Error('Could not get provider'))
             ]
           ])
-          .put(
-            upsertRentalFailure(
-              nft,
-              100,
-              [PeriodOption.ONE_WEEK],
-              1234567,
-              'Could not get provider'
-            )
-          )
-          .dispatch(
-            upsertRentalRequest(
-              nft,
-              100,
-              [PeriodOption.ONE_WEEK],
-              expiration,
-              UpsertRentalOptType.INSERT
-            )
-          )
+          .put(upsertRentalFailure(nft, 100, [PeriodOption.ONE_WEEK], 1234567, 'Could not get provider'))
+          .dispatch(upsertRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration, UpsertRentalOptType.INSERT))
           .run({ silenceTimeout: true })
       })
     })
@@ -416,28 +273,8 @@ describe('when handling the request action to upsert a rental listing', () => {
         return expectSaga(rentalSaga)
           .provide([
             [select(getAddress), signerAddress],
-            [
-              call(
-                getNonces,
-                nft.chainId,
-                nft.contractAddress,
-                nft.tokenId,
-                signerAddress
-              ),
-              nonces
-            ],
-            [
-              call(
-                getSignature,
-                nft.chainId,
-                nft.contractAddress,
-                nft.tokenId,
-                nonces,
-                periods,
-                expiration
-              ),
-              signatureWithWrongV
-            ],
+            [call(getNonces, nft.chainId, nft.contractAddress, nft.tokenId, signerAddress), nonces],
+            [call(getSignature, nft.chainId, nft.contractAddress, nft.tokenId, nonces, periods, expiration), signatureWithWrongV],
             [select(getCurrentIdentity), identity],
             [
               call(
@@ -448,8 +285,7 @@ describe('when handling the request action to upsert a rental listing', () => {
                   tokenId: nft.tokenId,
                   network: nft.network as Network.ETHEREUM,
                   expiration,
-                  rentalContractAddress:
-                    '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
+                  rentalContractAddress: '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
                   nonces,
                   periods,
                   signature: fixedSignature,
@@ -461,15 +297,7 @@ describe('when handling the request action to upsert a rental listing', () => {
             ]
           ])
           .put(upsertRentalSuccess(nft, rental, UpsertRentalOptType.INSERT))
-          .dispatch(
-            upsertRentalRequest(
-              nft,
-              100,
-              [PeriodOption.ONE_WEEK],
-              expiration,
-              UpsertRentalOptType.INSERT
-            )
-          )
+          .dispatch(upsertRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration, UpsertRentalOptType.INSERT))
           .run({ silenceTimeout: true })
       })
     })
@@ -518,10 +346,7 @@ describe('when handling the request action to claim a LAND', () => {
         .provide([
           [call(getConnectedProvider), {}],
           [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-          [
-            call(getContract, ContractName.Rentals, nft.chainId),
-            throwError(new Error('anError'))
-          ]
+          [call(getContract, ContractName.Rentals, nft.chainId), throwError(new Error('anError'))]
         ])
         .put(claimAssetFailure('anError'))
         .dispatch(claimAssetRequest(nft, rental))
@@ -535,17 +360,10 @@ describe('when handling the request action to claim a LAND', () => {
         .provide([
           [call(getConnectedProvider), {}],
           [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-          [
-            call(getContract, ContractName.Rentals, nft.chainId),
-            rentalContract
-          ],
+          [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
           [
             call(
-              sendTransaction as (
-                contract: ContractData,
-                contractMethodName: string,
-                ...contractArguments: any[]
-              ) => Promise<string>,
+              sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
               rentalContract,
               'claim(address[],uint256[])',
               [nft.contractAddress],
@@ -569,17 +387,10 @@ describe('when handling the request action to claim a LAND', () => {
           .provide([
             [call(getConnectedProvider), {}],
             [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-            [
-              call(getContract, ContractName.Rentals, nft.chainId),
-              rentalContract
-            ],
+            [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
             [
               call(
-                sendTransaction as (
-                  contract: ContractData,
-                  contractMethodName: string,
-                  ...contractArguments: any[]
-                ) => Promise<string>,
+                sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
                 rentalContract,
                 'claim(address[],uint256[])',
                 [nft.contractAddress],
@@ -588,10 +399,7 @@ describe('when handling the request action to claim a LAND', () => {
               Promise.resolve(txHash)
             ],
             [call(waitForTx, txHash), Promise.resolve()],
-            [
-              call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED),
-              Promise.resolve()
-            ],
+            [call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED), Promise.resolve()],
             [select(getCurrentNFT), { ...nft, owner: rental.lessor }],
             [take(FETCH_NFT_SUCCESS), {}],
             [delay(5000), void 0]
@@ -608,17 +416,10 @@ describe('when handling the request action to claim a LAND', () => {
           .provide([
             [call(getConnectedProvider), {}],
             [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-            [
-              call(getContract, ContractName.Rentals, nft.chainId),
-              rentalContract
-            ],
+            [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
             [
               call(
-                sendTransaction as (
-                  contract: ContractData,
-                  contractMethodName: string,
-                  ...contractArguments: any[]
-                ) => Promise<string>,
+                sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
                 rentalContract,
                 'claim(address[],uint256[])',
                 [nft.contractAddress],
@@ -628,9 +429,7 @@ describe('when handling the request action to claim a LAND', () => {
             ],
             [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
           ])
-          .put(
-            claimAssetTransactionSubmitted(nft, txHash, rentalContract.address)
-          )
+          .put(claimAssetTransactionSubmitted(nft, txHash, rentalContract.address))
           .put(claimAssetFailure('anError'))
           .dispatch(claimAssetRequest(nft, rental))
           .silentRun()
@@ -670,19 +469,8 @@ describe('when handling the request action to accept a rental', () => {
     it('should put a accept rental listing failure action with the error', () => {
       return expectSaga(rentalSaga)
         .provide([[call(getConnectedProvider), null]])
-        .put(
-          acceptRentalListingFailure(
-            'The provided NFT does not have an open rental'
-          )
-        )
-        .dispatch(
-          acceptRentalListingRequest(
-            nft,
-            rental,
-            periodIndexChosen,
-            addressOperator
-          )
-        )
+        .put(acceptRentalListingFailure('The provided NFT does not have an open rental'))
+        .dispatch(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator))
         .silentRun()
     })
   })
@@ -691,19 +479,8 @@ describe('when handling the request action to accept a rental', () => {
     it('should put a accept rental failure action with the error', () => {
       return expectSaga(rentalSaga)
         .provide([[call(getConnectedProvider), null]])
-        .put(
-          acceptRentalListingFailure(
-            'A provider is required to remove a rental'
-          )
-        )
-        .dispatch(
-          acceptRentalListingRequest(
-            nft,
-            rental,
-            periodIndexChosen,
-            addressOperator
-          )
-        )
+        .put(acceptRentalListingFailure('A provider is required to remove a rental'))
+        .dispatch(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator))
         .silentRun()
     })
   })
@@ -715,19 +492,8 @@ describe('when handling the request action to accept a rental', () => {
           [call(getConnectedProvider), {}],
           [select(getAddress), undefined]
         ])
-        .put(
-          acceptRentalListingFailure(
-            'An address is required to remove a rental'
-          )
-        )
-        .dispatch(
-          acceptRentalListingRequest(
-            nft,
-            rental,
-            periodIndexChosen,
-            addressOperator
-          )
-        )
+        .put(acceptRentalListingFailure('An address is required to remove a rental'))
+        .dispatch(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator))
         .silentRun()
     })
   })
@@ -738,20 +504,10 @@ describe('when handling the request action to accept a rental', () => {
         .provide([
           [call(getConnectedProvider), {}],
           [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-          [
-            call(getContract, ContractName.Rentals, nft.chainId),
-            throwError(new Error('anError'))
-          ]
+          [call(getContract, ContractName.Rentals, nft.chainId), throwError(new Error('anError'))]
         ])
         .put(acceptRentalListingFailure('anError'))
-        .dispatch(
-          acceptRentalListingRequest(
-            nft,
-            rental,
-            periodIndexChosen,
-            addressOperator
-          )
-        )
+        .dispatch(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator))
         .silentRun()
     })
   })
@@ -762,17 +518,10 @@ describe('when handling the request action to accept a rental', () => {
         .provide([
           [call(getConnectedProvider), {}],
           [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-          [
-            call(getContract, ContractName.Rentals, nft.chainId),
-            rentalContract
-          ],
+          [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
           [
             call(
-              sendTransaction as (
-                contract: ContractData,
-                contractMethodName: string,
-                ...contractArguments: any[]
-              ) => Promise<string>,
+              sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
               rentalContract,
               'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
               [
@@ -796,14 +545,7 @@ describe('when handling the request action to accept a rental', () => {
           ]
         ])
         .put(acceptRentalListingFailure('anError'))
-        .dispatch(
-          acceptRentalListingRequest(
-            nft,
-            rental,
-            periodIndexChosen,
-            addressOperator
-          )
-        )
+        .dispatch(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator))
         .silentRun()
     })
   })
@@ -822,17 +564,10 @@ describe('when handling the request action to accept a rental', () => {
         .provide([
           [call(getConnectedProvider), {}],
           [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-          [
-            call(getContract, ContractName.Rentals, nft.chainId),
-            rentalContract
-          ],
+          [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
           [
             call(
-              sendTransaction as (
-                contract: ContractData,
-                contractMethodName: string,
-                ...contractArguments: any[]
-              ) => Promise<string>,
+              sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
               rentalContract,
               'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
               [
@@ -855,34 +590,11 @@ describe('when handling the request action to accept a rental', () => {
             Promise.resolve(txHash)
           ],
           [call(waitForTx, txHash), Promise.resolve()],
-          [
-            call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED),
-            Promise.resolve(updatedRentalListing)
-          ]
+          [call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED), Promise.resolve(updatedRentalListing)]
         ])
-        .dispatch(
-          acceptRentalListingRequest(
-            nft,
-            rental,
-            periodIndexChosen,
-            addressOperator
-          )
-        )
-        .put(
-          acceptRentalListingTransactionSubmitted(
-            nft,
-            rental,
-            txHash,
-            periodIndexChosen
-          )
-        )
-        .put(
-          acceptRentalListingSuccess(
-            nft,
-            updatedRentalListing,
-            periodIndexChosen
-          )
-        )
+        .dispatch(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator))
+        .put(acceptRentalListingTransactionSubmitted(nft, rental, txHash, periodIndexChosen))
+        .put(acceptRentalListingSuccess(nft, updatedRentalListing, periodIndexChosen))
         .silentRun()
     })
   })
@@ -900,17 +612,10 @@ describe('when handling the request action to accept a rental', () => {
           .provide([
             [call(getConnectedProvider), {}],
             [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-            [
-              call(getContract, ContractName.Rentals, nft.chainId),
-              rentalContract
-            ],
+            [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
             [
               call(
-                sendTransaction as (
-                  contract: ContractData,
-                  contractMethodName: string,
-                  ...contractArguments: any[]
-                ) => Promise<string>,
+                sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
                 rentalContract,
                 'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
                 [
@@ -933,34 +638,11 @@ describe('when handling the request action to accept a rental', () => {
               Promise.resolve(txHash)
             ],
             [call(waitForTx, txHash), Promise.resolve()],
-            [
-              call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED),
-              Promise.resolve(updatedRentalListing)
-            ]
+            [call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED), Promise.resolve(updatedRentalListing)]
           ])
-          .dispatch(
-            acceptRentalListingRequest(
-              nft,
-              rental,
-              periodIndexChosen,
-              addressOperator
-            )
-          )
-          .put(
-            acceptRentalListingTransactionSubmitted(
-              nft,
-              rental,
-              txHash,
-              periodIndexChosen
-            )
-          )
-          .put(
-            acceptRentalListingSuccess(
-              nft,
-              updatedRentalListing,
-              periodIndexChosen
-            )
-          )
+          .dispatch(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator))
+          .put(acceptRentalListingTransactionSubmitted(nft, rental, txHash, periodIndexChosen))
+          .put(acceptRentalListingSuccess(nft, updatedRentalListing, periodIndexChosen))
           .silentRun()
       })
     })
@@ -971,21 +653,11 @@ describe('when handling the request action to accept a rental', () => {
           expectSaga(rentalSaga)
             .provide([
               [call(getConnectedProvider), {}],
-              [
-                select(getAddress),
-                '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'
-              ],
-              [
-                call(getContract, ContractName.Rentals, nft.chainId),
-                rentalContract
-              ],
+              [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+              [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
               [
                 call(
-                  sendTransaction as (
-                    contract: ContractData,
-                    contractMethodName: string,
-                    ...contractArguments: any[]
-                  ) => Promise<string>,
+                  sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
                   rentalContract,
                   'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
                   [
@@ -1011,14 +683,7 @@ describe('when handling the request action to accept a rental', () => {
             ])
             // .put(accept(nft, txHash))
             .put(acceptRentalListingFailure('anError'))
-            .dispatch(
-              acceptRentalListingRequest(
-                nft,
-                rental,
-                periodIndexChosen,
-                addressOperator
-              )
-            )
+            .dispatch(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator))
             .silentRun()
         )
       })
@@ -1053,9 +718,7 @@ describe('when handling the request action to remove a rental', () => {
     it('should put a remove rental failure action with the error', () => {
       return expectSaga(rentalSaga)
         .provide([[call(getConnectedProvider), null]])
-        .put(
-          removeRentalFailure('The provided NFT does not have an open rental')
-        )
+        .put(removeRentalFailure('The provided NFT does not have an open rental'))
         .dispatch(removeRentalRequest(nft))
         .silentRun()
     })
@@ -1090,10 +753,7 @@ describe('when handling the request action to remove a rental', () => {
         .provide([
           [call(getConnectedProvider), {}],
           [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-          [
-            call(getContract, ContractName.Rentals, nft.chainId),
-            throwError(new Error('anError'))
-          ]
+          [call(getContract, ContractName.Rentals, nft.chainId), throwError(new Error('anError'))]
         ])
         .put(removeRentalFailure('anError'))
         .dispatch(removeRentalRequest(nft))
@@ -1107,17 +767,10 @@ describe('when handling the request action to remove a rental', () => {
         .provide([
           [call(getConnectedProvider), {}],
           [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-          [
-            call(getContract, ContractName.Rentals, nft.chainId),
-            rentalContract
-          ],
+          [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
           [
             call(
-              sendTransaction as (
-                contract: ContractData,
-                contractMethodName: string,
-                ...contractArguments: any[]
-              ) => Promise<string>,
+              sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
               rentalContract,
               'bumpAssetIndex(address,uint256)',
               nft.contractAddress,
@@ -1141,17 +794,10 @@ describe('when handling the request action to remove a rental', () => {
           .provide([
             [call(getConnectedProvider), {}],
             [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-            [
-              call(getContract, ContractName.Rentals, nft.chainId),
-              rentalContract
-            ],
+            [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
             [
               call(
-                sendTransaction as (
-                  contract: ContractData,
-                  contractMethodName: string,
-                  ...contractArguments: any[]
-                ) => Promise<string>,
+                sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
                 rentalContract,
                 'bumpAssetIndex(address,uint256)',
                 nft.contractAddress,
@@ -1178,17 +824,10 @@ describe('when handling the request action to remove a rental', () => {
           .provide([
             [call(getConnectedProvider), {}],
             [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
-            [
-              call(getContract, ContractName.Rentals, nft.chainId),
-              rentalContract
-            ],
+            [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
             [
               call(
-                sendTransaction as (
-                  contract: ContractData,
-                  contractMethodName: string,
-                  ...contractArguments: any[]
-                ) => Promise<string>,
+                sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
                 rentalContract,
                 'bumpAssetIndex(address,uint256)',
                 nft.contractAddress,
@@ -1209,18 +848,12 @@ describe('when handling the request action to remove a rental', () => {
 
 describe('when handling the action to close the claim LAND modal', () => {
   it('should put the action to clear the rental errors', () => {
-    return expectSaga(rentalSaga)
-      .put(clearRentalErrors())
-      .dispatch(closeModal('ClaimLandModal'))
-      .silentRun()
+    return expectSaga(rentalSaga).put(clearRentalErrors()).dispatch(closeModal('ClaimLandModal')).silentRun()
   })
 })
 
 describe('when handling the action to close the remove rental modal', () => {
   it('should put the action to clear the rental errors', () => {
-    return expectSaga(rentalSaga)
-      .put(clearRentalErrors())
-      .dispatch(closeModal('RemoveRentalModal'))
-      .silentRun()
+    return expectSaga(rentalSaga).put(clearRentalErrors()).dispatch(closeModal('RemoveRentalModal')).silentRun()
   })
 })

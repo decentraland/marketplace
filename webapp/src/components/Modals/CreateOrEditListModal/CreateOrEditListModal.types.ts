@@ -15,12 +15,7 @@ export type Props = Omit<ModalProps, 'metadata'> & {
 }
 
 export type OwnProps = Pick<Props, 'metadata' | 'onClose'>
-export type MapDispatchProps = Pick<
-  Props,
-  'onCreateList' | 'onEditList' | 'onClose'
->
+export type MapDispatchProps = Pick<Props, 'onCreateList' | 'onEditList' | 'onClose'>
 export type MapStateProps = Pick<Props, 'isLoading' | 'error'>
 
-export type OverrideCreateListTypes = Partial<
-  Pick<Props, 'isLoading' | 'error' | 'onCreateList'>
->
+export type OverrideCreateListTypes = Partial<Pick<Props, 'isLoading' | 'error' | 'onCreateList'>>

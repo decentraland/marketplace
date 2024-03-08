@@ -1,3 +1,3 @@
-import AssetFilters  from './AssetFilters.container'
+import AssetFilters from './AssetFilters.container'
 
-export { AssetFilters };
+export { AssetFilters }

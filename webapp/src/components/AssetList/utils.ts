@@ -5,19 +5,16 @@ function matchAppRoute<T extends Record<string, string>>(path: string, route: st
   return matchPath<T>(path, { path: route, strict: true, exact: true })
 }
 
-export function getLastVisitedElementId(
-  currentLocation: string,
-  lastVisitedLocation: string
-) {
+export function getLastVisitedElementId(currentLocation: string, lastVisitedLocation: string) {
   const matchLands = matchAppRoute(currentLocation, locations.lands())
   const matchCollectibles = matchAppRoute(currentLocation, locations.browse())
-  const previousMatchNfts = matchAppRoute<{contractAddress: string; tokenId: string}>(lastVisitedLocation, locations.nft())
+  const previousMatchNfts = matchAppRoute<{ contractAddress: string; tokenId: string }>(lastVisitedLocation, locations.nft())
 
   if ((matchLands && previousMatchNfts) || (matchCollectibles && previousMatchNfts)) {
     return `${previousMatchNfts.params.contractAddress}-${previousMatchNfts.params.tokenId}`
   }
 
-  const previousMatchItems =  matchAppRoute<{ contractAddress: string; itemId: string }>(lastVisitedLocation, locations.item())
+  const previousMatchItems = matchAppRoute<{ contractAddress: string; itemId: string }>(lastVisitedLocation, locations.item())
 
   if (matchCollectibles && previousMatchItems) {
     return `${previousMatchItems.params.contractAddress}-${previousMatchItems.params.itemId}`

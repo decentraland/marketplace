@@ -11,12 +11,7 @@ const BidList = (props: Props) => {
 
   // this is because when you change from one nft detail to another you would still see the previous nft bids
   const filteredBids = useMemo(
-    () =>
-      bids.filter(
-        bid =>
-          bid.contractAddress === nft.contractAddress &&
-          bid.tokenId === nft.tokenId
-      ),
+    () => bids.filter(bid => bid.contractAddress === nft.contractAddress && bid.tokenId === nft.tokenId),
     [nft, bids]
   )
 

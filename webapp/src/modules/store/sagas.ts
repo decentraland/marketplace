@@ -18,11 +18,7 @@ import {
   UPDATE_STORE_REQUEST,
   revertLocalStore
 } from './actions'
-import {
-  deployStoreEntity,
-  fetchStoreEntity,
-  getStoreFromEntity
-} from './utils'
+import { deployStoreEntity, fetchStoreEntity, getStoreFromEntity } from './utils'
 import { getIsLocalStoreDirty } from './selectors'
 
 export function* storeSaga(client: ContentClient) {
@@ -30,9 +26,7 @@ export function* storeSaga(client: ContentClient) {
   yield takeEvery(UPDATE_STORE_REQUEST, handleUpdateStoreRequest)
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
 
-  function* handleLocationChange({
-    payload: { location }
-  }: LocationChangeAction) {
+  function* handleLocationChange({ payload: { location } }: LocationChangeAction) {
     const isLocalStoreDirty: boolean = yield select(getIsLocalStoreDirty)
     if (!isLocalStoreDirty) {
       return
@@ -45,33 +39,17 @@ export function* storeSaga(client: ContentClient) {
     }
   }
 
-  function* handleFetchStoreRequest({
-    payload: { address }
-  }: FetchStoreRequestAction) {
+  function* handleFetchStoreRequest({ payload: { address } }: FetchStoreRequestAction) {
     try {
-      const storeEntity: Entity | null = yield call(
-        fetchStoreEntity,
-        client,
-        address
-      )
+      const storeEntity: Entity | null = yield call(fetchStoreEntity, client, address)
 
-      yield put(
-        fetchStoreSuccess(
-          storeEntity ? getStoreFromEntity(storeEntity) : undefined
-        )
-      )
+      yield put(fetchStoreSuccess(storeEntity ? getStoreFromEntity(storeEntity) : undefined))
     } catch (error) {
-      yield put(
-        fetchStoreFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(fetchStoreFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 
-  function* handleUpdateStoreRequest({
-    payload: { store }
-  }: UpdateStoreRequestAction) {
+  function* handleUpdateStoreRequest({ payload: { store } }: UpdateStoreRequestAction) {
     try {
       const identity: AuthIdentity = yield call(getIdentity)
 
@@ -79,11 +57,7 @@ export function* storeSaga(client: ContentClient) {
 
       yield put(updateStoreSuccess(store))
     } catch (error) {
-      yield put(
-        updateStoreFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(updateStoreFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 }

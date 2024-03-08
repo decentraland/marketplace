@@ -1,12 +1,7 @@
 import { Dispatch } from 'redux'
 import { RouterLocation } from 'connected-react-router'
 import { VendorName } from '../../modules/vendor/types'
-import {
-  browse,
-  BrowseAction,
-  clearFilters,
-  ClearFiltersAction
-} from '../../modules/routing/actions'
+import { browse, BrowseAction, clearFilters, ClearFiltersAction } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
 import { Asset, AssetType } from '../../modules/asset/types'
 
@@ -28,16 +23,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  | 'vendor'
-  | 'section'
-  | 'assets'
-  | 'page'
-  | 'count'
-  | 'isLoading'
-  | 'assetType'
-  | 'search'
-  | 'hasFiltersEnabled'
-  | 'visitedLocations'
+  'vendor' | 'section' | 'assets' | 'page' | 'count' | 'isLoading' | 'assetType' | 'search' | 'hasFiltersEnabled' | 'visitedLocations'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
 export type MapDispatch = Dispatch<BrowseAction | ClearFiltersAction>

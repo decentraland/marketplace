@@ -5,20 +5,18 @@ import { Contract } from '../../../../modules/vendor/services'
 import { getContract } from '../../../../modules/contract/selectors'
 import { claimNameRequest } from '../../../../modules/ens/actions'
 
-export type Props = WithAuthorizedActionProps & Omit<ModalProps, 'metadata'> & {
-  metadata: { name: string }
-  isMintingName: boolean
-  isMintingNameCrossChain: boolean
-  getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
-  onClaimName: typeof claimNameRequest
-  onOpenFatFingerModal: () => unknown
-  onCloseFatFingerModal: () => unknown
-  onClaimNameCrossChain: (route: Route) => unknown
-}
+export type Props = WithAuthorizedActionProps &
+  Omit<ModalProps, 'metadata'> & {
+    metadata: { name: string }
+    isMintingName: boolean
+    isMintingNameCrossChain: boolean
+    getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
+    onClaimName: typeof claimNameRequest
+    onOpenFatFingerModal: () => unknown
+    onCloseFatFingerModal: () => unknown
+    onClaimNameCrossChain: (route: Route) => unknown
+  }
 
 export type MapStateProps = Pick<Props, 'getContract' | 'isMintingName' | 'isMintingNameCrossChain'>
-export type MapDispatchProps = Pick<
-  Props,
-  'onClaimName' | 'onClaimNameCrossChain' | 'onOpenFatFingerModal' | 'onCloseFatFingerModal'
->
+export type MapDispatchProps = Pick<Props, 'onClaimName' | 'onClaimNameCrossChain' | 'onOpenFatFingerModal' | 'onCloseFatFingerModal'>
 export type OwnProps = Pick<Props, 'metadata'>

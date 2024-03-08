@@ -1,10 +1,7 @@
 import { browse as browseAction } from '../../../modules/routing/actions'
 import { LANDFilters } from './types'
 
-export function browseRentedLAND(
-  browse: typeof browseAction,
-  filter: LANDFilters
-): void {
+export function browseRentedLAND(browse: typeof browseAction, filter: LANDFilters): void {
   switch (filter) {
     case LANDFilters.ALL_LAND:
       browse({ onlyOnSale: undefined, onlyOnRent: undefined })

@@ -19,28 +19,14 @@ describe('Table content', () => {
 
   describe('Empty table', () => {
     it('should render the empty table message', async () => {
-      const { getByText } = renderWithProviders(
-        <TableContent
-          data={[]}
-          isLoading={false}
-          empty={() => <div>empty table</div>}
-          total={0}
-        />
-      )
+      const { getByText } = renderWithProviders(<TableContent data={[]} isLoading={false} empty={() => <div>empty table</div>} total={0} />)
       expect(getByText('empty table')).toBeInTheDocument()
     })
   })
 
   describe('Should render the table correctly', () => {
     it('should render the table', async () => {
-      const screen = renderWithProviders(
-        <TableContent
-          data={data}
-          isLoading={false}
-          empty={() => <div>empty table</div>}
-          total={0}
-        />
-      )
+      const screen = renderWithProviders(<TableContent data={data} isLoading={false} empty={() => <div>empty table</div>} total={0} />)
 
       const { getByTestId } = screen
 
@@ -48,14 +34,7 @@ describe('Table content', () => {
     })
 
     it('should render the headers', async () => {
-      const screen = renderWithProviders(
-        <TableContent
-          data={data}
-          isLoading={false}
-          empty={() => <div>empty table</div>}
-          total={0}
-        />
-      )
+      const screen = renderWithProviders(<TableContent data={data} isLoading={false} empty={() => <div>empty table</div>} total={0} />)
 
       const { getByText } = screen
 
@@ -64,14 +43,7 @@ describe('Table content', () => {
     })
 
     it('should render the content', async () => {
-      const screen = renderWithProviders(
-        <TableContent
-          data={data}
-          isLoading={false}
-          empty={() => <div>empty table</div>}
-          total={0}
-        />
-      )
+      const screen = renderWithProviders(<TableContent data={data} isLoading={false} empty={() => <div>empty table</div>} total={0} />)
 
       const { getByText } = screen
 
@@ -84,14 +56,7 @@ describe('Table content', () => {
 
   describe('Should render the loader if its loading', () => {
     it('should render the loader', async () => {
-      const screen = renderWithProviders(
-        <TableContent
-          data={data}
-          isLoading={true}
-          empty={() => <div>empty table</div>}
-          total={0}
-        />
-      )
+      const screen = renderWithProviders(<TableContent data={data} isLoading={true} empty={() => <div>empty table</div>} total={0} />)
 
       expect(screen.getByTestId('loader')).toBeInTheDocument()
     })
@@ -106,13 +71,7 @@ describe('Table content', () => {
         })
 
         const screen = renderWithProviders(
-          <TableContent
-            data={data}
-            isLoading={false}
-            empty={() => <div>empty table</div>}
-            total={data.length}
-            totalPages={2}
-          />
+          <TableContent data={data} isLoading={false} empty={() => <div>empty table</div>} total={data.length} totalPages={2} />
         )
 
         const { getByRole } = screen
@@ -127,13 +86,7 @@ describe('Table content', () => {
     describe('Should not have pagination', () => {
       it('should not render pagination as there is no need', async () => {
         const screen = renderWithProviders(
-          <TableContent
-            data={data}
-            isLoading={false}
-            empty={() => <div>empty table</div>}
-            total={data.length}
-            totalPages={1}
-          />
+          <TableContent data={data} isLoading={false} empty={() => <div>empty table</div>} total={data.length} totalPages={1} />
         )
 
         const { queryByRole } = screen

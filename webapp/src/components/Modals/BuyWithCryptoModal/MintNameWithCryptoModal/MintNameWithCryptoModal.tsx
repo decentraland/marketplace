@@ -7,23 +7,16 @@ import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { PRICE_IN_WEI } from '../../../../modules/ens/utils'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
-import { getContractNames } from '../../../../modules/vendor'
-import {
-  getClaimNameStatus,
-  getErrorMessage
-} from '../../../../modules/ens/selectors'
+import { getContractNames, VendorName } from '../../../../modules/vendor'
+import { getClaimNameStatus, getErrorMessage } from '../../../../modules/ens/selectors'
 import { config } from '../../../../config'
-import { VendorName } from '../../../../modules/vendor'
 import { NFT } from '../../../../modules/nft/types'
 import { useCrossChainNameMintingRoute, useNameMintingGasCost } from '../hooks'
 import BuyWithCryptoModal from '../BuyWithCryptoModal.container'
 import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
 import { Props } from './MintNameWithCryptoModal.types'
 
-export const CONTROLLER_V2_ADDRESS = config.get(
-  'CONTROLLER_V2_CONTRACT_ADDRESS',
-  ''
-)
+export const CONTROLLER_V2_ADDRESS = config.get('CONTROLLER_V2_CONTRACT_ADDRESS', '')
 
 const MintNameWithCryptoModalHOC = (props: Props) => {
   const {
@@ -69,13 +62,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   }, [name, getContract, onAuthorizedAction, onClaimName])
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
-    (
-      selectedToken,
-      selectedChain,
-      providerTokens,
-      crossChainProvider,
-      wallet
-    ) =>
+    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
       useCrossChainNameMintingRoute(
         name,
         PRICE_IN_WEI,
@@ -90,8 +77,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   )
 
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, chainNativeToken, wallet) =>
-      useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet),
+    (selectedToken, chainNativeToken, wallet) => useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet),
     [name]
   )
 
@@ -157,8 +143,7 @@ export const MintNameWithCryptoModal = React.memo(
     AuthorizedAction.CLAIM_NAME,
     {
       action: 'names_page.claim_name_fat_finger_modal.authorization.action',
-      title_action:
-        'names_page.claim_name_fat_finger_modal.authorization.title_action'
+      title_action: 'names_page.claim_name_fat_finger_modal.authorization.title_action'
     },
     getClaimNameStatus,
     getErrorMessage

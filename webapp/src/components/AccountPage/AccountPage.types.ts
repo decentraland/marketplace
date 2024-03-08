@@ -16,15 +16,7 @@ export type Props = {
   onRedirect: (path: string) => void
 } & RouteComponentProps<Params>
 
-export type MapStateProps = Pick<
-  Props,
-  | 'addressInUrl'
-  | 'vendor'
-  | 'wallet'
-  | 'isConnecting'
-  | 'isFullscreen'
-  | 'viewAsGuest'
->
+export type MapStateProps = Pick<Props, 'addressInUrl' | 'vendor' | 'wallet' | 'isConnecting' | 'isFullscreen' | 'viewAsGuest'>
 export type MapDispatchProps = Pick<Props, 'onRedirect'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>
 export type OwnProps = RouteComponentProps<Params>

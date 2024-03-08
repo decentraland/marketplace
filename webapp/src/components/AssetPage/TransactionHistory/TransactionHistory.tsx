@@ -41,7 +41,7 @@ const TransactionHistory = (props: Props) => {
     let cancel = false
     if (!isAssetNull) {
       setIsLoading(true)
-      let params: Record<string, string | number> = {
+      const params: Record<string, string | number> = {
         contractAddress: assetContractAddress!,
         first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE
@@ -67,17 +67,7 @@ const TransactionHistory = (props: Props) => {
     return () => {
       cancel = true
     }
-  }, [
-    assetContractAddress,
-    assetTokenId,
-    assetItemId,
-    setIsLoading,
-    setSales,
-    page,
-    isAssetNull,
-    isAssetNFT,
-    isMobileOrTablet
-  ])
+  }, [assetContractAddress, assetTokenId, assetItemId, setIsLoading, setSales, page, isAssetNull, isAssetNFT, isMobileOrTablet])
 
   return sales.length > 0 ? (
     <div className="TransactionHistory">

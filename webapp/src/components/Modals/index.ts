@@ -17,10 +17,6 @@ export { SaveToListModal } from './SaveToListModal'
 export { ShareListModal } from './ShareListModal'
 export { SmartWearableVideoShowcaseModal } from './SmartWearableVideoShowcaseModal'
 export { ExpiredListingsModal } from './ExpiredListingsModal'
-export {
-  BuyNftWithCryptoModal,
-  MintNftWithCryptoModal,
-  MintNameWithCryptoModal
-} from './BuyWithCryptoModal'
+export { BuyNftWithCryptoModal, MintNftWithCryptoModal, MintNameWithCryptoModal } from './BuyWithCryptoModal'
 export { default as ClaimNameFatFingerModal } from './ClaimNameFatFingerModal'
 export { default as SetNameAsAliasModal } from './SetNameAsAliasModal'

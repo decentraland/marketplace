@@ -4,11 +4,7 @@ import { call } from 'redux-saga-test-plan/matchers'
 import { fetchCollectionItemsRequest } from '../item/actions'
 import { getItemsByContractAddress } from '../item/selectors'
 import { collectionAPI } from '../vendor/decentraland'
-import {
-  fetchCollectionsFailure,
-  fetchCollectionsRequest,
-  fetchCollectionsSuccess
-} from './actions'
+import { fetchCollectionsFailure, fetchCollectionsRequest, fetchCollectionsSuccess } from './actions'
 import { collectionSaga } from './sagas'
 
 describe('when handling a fetch collections request', () => {
@@ -20,12 +16,7 @@ describe('when handling a fetch collections request', () => {
           contractAddress: 'some contract address'
         }
         return expectSaga(collectionSaga)
-          .provide([
-            [
-              call([collectionAPI, collectionAPI.fetch], filters),
-              { data: [], total: 100 }
-            ]
-          ])
+          .provide([[call([collectionAPI, collectionAPI.fetch], filters), { data: [], total: 100 }]])
           .put(fetchCollectionsSuccess([], 100))
           .dispatch(fetchCollectionsRequest(filters))
           .silentRun()
@@ -39,12 +30,7 @@ describe('when handling a fetch collections request', () => {
           contractAddress: 'some contract address'
         }
         return expectSaga(collectionSaga)
-          .provide([
-            [
-              call([collectionAPI, collectionAPI.fetch], filters),
-              Promise.reject(new Error('some error'))
-            ]
-          ])
+          .provide([[call([collectionAPI, collectionAPI.fetch], filters), Promise.reject(new Error('some error'))]])
           .put(fetchCollectionsFailure('some error'))
           .dispatch(fetchCollectionsRequest(filters))
           .silentRun()

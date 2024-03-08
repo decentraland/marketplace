@@ -36,16 +36,11 @@ import { AssetFilters } from './AssetFilters'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps
-  const section =
-    'section' in values ? (values.section as Section) : getSection(state)
-  const contracts =
-    'contracts' in values ? values.contracts || [] : getContracts(state)
-  const creators =
-    'creators' in values ? values.creators || [] : getCreators(state)
-  const onlyOnSale =
-    'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
-  const onlyOnRent =
-    'onlyOnRent' in values ? values.onlyOnRent : getOnlyOnRent(state)
+  const section = 'section' in values ? (values.section as Section) : getSection(state)
+  const contracts = 'contracts' in values ? values.contracts || [] : getContracts(state)
+  const creators = 'creators' in values ? values.creators || [] : getCreators(state)
+  const onlyOnSale = 'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
+  const onlyOnRent = 'onlyOnRent' in values ? values.onlyOnRent : getOnlyOnRent(state)
   let landStatus = LANDFilters.ALL_LAND
 
   if (onlyOnRent && !onlyOnSale) {
@@ -57,27 +52,14 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
     minPrice: 'minPrice' in values ? values.minPrice || '' : getMinPrice(state),
     maxPrice: 'maxPrice' in values ? values.maxPrice || '' : getMaxPrice(state),
-    minEstateSize:
-      'minEstateSize' in values
-        ? values.minEstateSize || ''
-        : getMinEstateSize(state),
-    maxEstateSize:
-      'maxEstateSize' in values
-        ? values.maxEstateSize || ''
-        : getMaxEstateSize(state),
+    minEstateSize: 'minEstateSize' in values ? values.minEstateSize || '' : getMinEstateSize(state),
+    maxEstateSize: 'maxEstateSize' in values ? values.maxEstateSize || '' : getMaxEstateSize(state),
     rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
-    status:
-      'status' in values
-        ? values.status
-        : (getStatus(state) as AssetStatusFilter),
+    status: 'status' in values ? values.status : (getStatus(state) as AssetStatusFilter),
     network: 'network' in values ? values.network : getNetwork(state),
-    bodyShapes:
-      'wearableGenders' in values
-        ? values.wearableGenders
-        : getWearableGenders(state),
+    bodyShapes: 'wearableGenders' in values ? values.wearableGenders : getWearableGenders(state),
     category: section ? getCategoryFromSection(section) : undefined,
-    isOnlySmart:
-      'onlySmart' in values ? !!values.onlySmart : getOnlySmart(state),
+    isOnlySmart: 'onlySmart' in values ? !!values.onlySmart : getOnlySmart(state),
     isOnSale: onlyOnSale,
     emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
     assetType: getAssetType(state),
@@ -86,40 +68,18 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     landStatus,
     view: getView(state),
     section,
-    rentalDays:
-      'rentalDays' in values ? values.rentalDays : getRentalDays(state),
-    minDistanceToPlaza:
-      'minDistanceToPlaza' in values
-        ? values.minDistanceToPlaza
-        : getMinDistanceToPlaza(state),
-    maxDistanceToPlaza:
-      'maxDistanceToPlaza' in values
-        ? values.maxDistanceToPlaza
-        : getMaxDistanceToPlaza(state),
-    adjacentToRoad:
-      'adjacentToRoad' in values
-        ? values.adjacentToRoad
-        : getAdjacentToRoad(state),
-    emoteHasSound:
-      'emoteHasSound' in values
-        ? values.emoteHasSound
-        : getEmoteHasSound(state),
-    emoteHasGeometry:
-      'emoteHasGeometry' in values
-        ? values.emoteHasGeometry
-        : getEmoteHasGeometry(state)
+    rentalDays: 'rentalDays' in values ? values.rentalDays : getRentalDays(state),
+    minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
+    maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
+    adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
+    emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : getEmoteHasSound(state),
+    emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : getEmoteHasGeometry(state)
   }
 }
 
-const mapDispatch = (
-  dispatch: Dispatch,
-  ownProps: OwnProps
-): MapDispatchProps => {
+const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => {
   return {
-    onBrowse: options =>
-      ownProps.onFilterChange
-        ? ownProps.onFilterChange(options)
-        : dispatch(browse(options))
+    onBrowse: options => (ownProps.onFilterChange ? ownProps.onFilterChange(options) : dispatch(browse(options)))
   }
 }
 

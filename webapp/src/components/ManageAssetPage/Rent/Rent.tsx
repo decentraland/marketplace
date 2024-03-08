@@ -48,25 +48,17 @@ export const Rent = (props: Props) => {
   } = props
   const assetText = isParcel(nft) ? t('global.parcel') : t('global.estate')
 
-  const handleOnCreateOrEdit = useCallback(
-    () => onCreateOrEditRent(nft, rental),
-    [nft, onCreateOrEditRent, rental]
-  )
+  const handleOnCreateOrEdit = useCallback(() => onCreateOrEditRent(nft, rental), [nft, onCreateOrEditRent, rental])
   const claimingBackLandTransactionLink = claimingBackLandTransaction
     ? getTransactionHref(
         {
-          txHash:
-            claimingBackLandTransaction.replacedBy ||
-            claimingBackLandTransaction.hash
+          txHash: claimingBackLandTransaction.replacedBy || claimingBackLandTransaction.hash
         },
         claimingBackLandTransaction.chainId
       )
     : ''
 
-  const rentalEndDate: Date | null = useMemo(
-    () => (rental && rental.startedAt ? getRentalEndDate(rental) : null),
-    [rental]
-  )
+  const rentalEndDate: Date | null = useMemo(() => (rental && rental.startedAt ? getRentalEndDate(rental) : null), [rental])
 
   const rentalEnded = useMemo(() => rental && hasRentalEnded(rental), [rental])
 
@@ -80,16 +72,12 @@ export const Rent = (props: Props) => {
         : null,
     [rental]
   )
-  const canBeClaimedBack =
-    wallet && rental && canBeClaimed(wallet.address, rental, nft)
+  const canBeClaimedBack = wallet && rental && canBeClaimed(wallet.address, rental, nft)
 
   const rentButton = useMemo(() => {
     if (!rental || (isRentalListingCancelled(rental) && !canBeClaimedBack)) {
       return (
-        <Button
-          className={styles.actionButtonRounded}
-          onClick={handleOnCreateOrEdit}
-        >
+        <Button className={styles.actionButtonRounded} onClick={handleOnCreateOrEdit}>
           {t('manage_asset_page.rent.list_for_rent')}
         </Button>
       )
@@ -108,11 +96,7 @@ export const Rent = (props: Props) => {
               : t('manage_asset_page.rent.rent_title')}
           </h1>
           {rental && isRentalListingOpen(rental) ? (
-            <Button
-              className={styles.actionButton}
-              as={Link}
-              to={locations.nft(nft.contractAddress, nft.tokenId)}
-            >
+            <Button className={styles.actionButton} as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
               {t('manage_asset_page.rent.view_listing')}
             </Button>
           ) : null}
@@ -136,12 +120,7 @@ export const Rent = (props: Props) => {
                       month: 'long',
                       day: 'numeric'
                     }),
-                    tenant: (
-                      <LinkedProfile
-                        className={styles.rentedBy}
-                        address={rental.tenant!}
-                      />
-                    )
+                    tenant: <LinkedProfile className={styles.rentedBy} address={rental.tenant!} />
                   }}
                 />
               </div>
@@ -175,38 +154,25 @@ export const Rent = (props: Props) => {
                       <T
                         id="manage_asset_page.rent.rent_end"
                         values={{
-                          tenant: (
-                            <LinkedProfile
-                              className={styles.rentedBy}
-                              address={rental.tenant}
-                            />
-                          ),
+                          tenant: <LinkedProfile className={styles.rentedBy} address={rental.tenant} />,
                           asset: assetText
                         }}
                       />
                     ) : (
                       t('manage_asset_page.rent.unclaimed_message', {
-                        asset: isLand(nft)
-                          ? t('global.the_parcel')
-                          : t('global.the_estate')
+                        asset: isLand(nft) ? t('global.the_parcel') : t('global.the_estate')
                       })
                     )}
                   </div>
                   <div className={styles.activeRentActions}>
                     <div>
-                      <Button
-                        className={styles.actionButton}
-                        onClick={onClaimLand}
-                      >
+                      <Button className={styles.actionButton} onClick={onClaimLand}>
                         {t('manage_asset_page.rent.claim_asset', {
                           asset: assetText
                         })}
                       </Button>
                       {!isRentalListingOpen(rental) && (
-                        <Button
-                          className={styles.actionButton}
-                          onClick={handleOnCreateOrEdit}
-                        >
+                        <Button className={styles.actionButton} onClick={handleOnCreateOrEdit}>
                           {t('manage_asset_page.rent.list_for_rent_again')}
                         </Button>
                       )}
@@ -217,27 +183,12 @@ export const Rent = (props: Props) => {
             </div>
           ) : null}
           {!isClaimingBackLandTransactionPending &&
-          (isRentalListingOpen(rental) ||
-            (!canBeClaimedBack && !isRentalListingCancelled(rental))) ? (
+          (isRentalListingOpen(rental) || (!canBeClaimedBack && !isRentalListingCancelled(rental))) ? (
             <div className={styles.summary}>
-              <div
-                className={classNames(
-                  styles.column,
-                  styles.notShrink,
-                  styles.priceColumn
-                )}
-              >
-                <div className={styles.columnHeader}>
-                  {t('manage_asset_page.rent.price')}
-                </div>
+              <div className={classNames(styles.column, styles.notShrink, styles.priceColumn)}>
+                <div className={styles.columnHeader}>{t('manage_asset_page.rent.price')}</div>
                 <div className={styles.columnContent}>
-                  <Mana
-                    showTooltip
-                    withTooltip
-                    size={'medium'}
-                    className={styles.price}
-                    network={rental.network}
-                  >
+                  <Mana showTooltip withTooltip size={'medium'} className={styles.price} network={rental.network}>
                     {formatWeiMANA(getMaxPriceOfPeriods(rental))}
                   </Mana>
                   <span>/{t('global.day')}</span>
@@ -246,61 +197,33 @@ export const Rent = (props: Props) => {
               {isRentalListingOpen(rental) ? (
                 <>
                   <div className={classNames(styles.column, styles.notShrink)}>
-                    <div className={styles.columnHeader}>
-                      {t('manage_asset_page.rent.expiration_date')}
-                    </div>
-                    <div className={styles.columnContent}>
-                      {intlFormat(rental.expiration)}
-                    </div>
+                    <div className={styles.columnHeader}>{t('manage_asset_page.rent.expiration_date')}</div>
+                    <div className={styles.columnContent}>{intlFormat(rental.expiration)}</div>
                   </div>
                   <div className={styles.column}>
-                    <div className={styles.columnHeader}>
-                      {t('manage_asset_page.rent.rent_periods')}
-                    </div>
+                    <div className={styles.columnHeader}>{t('manage_asset_page.rent.rent_periods')}</div>
                     <div className={styles.columnContent}>{rentalPeriods}</div>
                   </div>
                 </>
               ) : isRentalListingExecuted(rental) ? (
                 <>
-                  <div
-                    className={classNames(
-                      styles.column,
-                      styles.shrinkAndExpand
-                    )}
-                  >
-                    <div className={styles.columnHeader}>
-                      {t('manage_asset_page.rent.start_date')}
-                    </div>
+                  <div className={classNames(styles.column, styles.shrinkAndExpand)}>
+                    <div className={styles.columnHeader}>{t('manage_asset_page.rent.start_date')}</div>
                     <div className={styles.columnContent}>
                       {formatDistance(rental.startedAt!, new Date(), {
                         addSuffix: true
                       })}
                     </div>
-                    <div
-                      className={classNames(styles.columnContent, styles.date)}
-                    >
-                      ({intlFormat(rental.startedAt!)})
-                    </div>
+                    <div className={classNames(styles.columnContent, styles.date)}>({intlFormat(rental.startedAt!)})</div>
                   </div>
-                  <div
-                    className={classNames(
-                      styles.column,
-                      styles.shrinkAndExpand
-                    )}
-                  >
-                    <div className={styles.columnHeader}>
-                      {t('manage_asset_page.rent.end_date')}
-                    </div>
+                  <div className={classNames(styles.column, styles.shrinkAndExpand)}>
+                    <div className={styles.columnHeader}>{t('manage_asset_page.rent.end_date')}</div>
                     <div className={styles.columnContent}>
                       {formatDistance(rentalEndDate!, new Date(), {
                         addSuffix: true
                       })}
                     </div>
-                    <div
-                      className={classNames(styles.columnContent, styles.date)}
-                    >
-                      ({intlFormat(rentalEndDate!)})
-                    </div>
+                    <div className={classNames(styles.columnContent, styles.date)}>({intlFormat(rentalEndDate!)})</div>
                   </div>
                 </>
               ) : null}

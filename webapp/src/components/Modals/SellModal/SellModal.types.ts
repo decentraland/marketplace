@@ -1,25 +1,14 @@
 import { Order } from '@dcl/schemas'
 import { Dispatch } from 'redux'
-import {
-  fetchAuthorizationsRequest,
-  FetchAuthorizationsRequestAction
-} from 'decentraland-dapps/dist/modules/authorization/actions'
+import { fetchAuthorizationsRequest, FetchAuthorizationsRequestAction } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 
-import {
-  upsertContracts,
-  UpsertContractsAction
-} from '../../../modules/contract/actions'
+import { upsertContracts, UpsertContractsAction } from '../../../modules/contract/actions'
 import { getContract } from '../../../modules/contract/selectors'
 import { NFT } from '../../../modules/nft/types'
-import {
-  cancelOrderRequest,
-  CancelOrderRequestAction,
-  createOrderRequest,
-  CreateOrderRequestAction
-} from '../../../modules/order/actions'
+import { cancelOrderRequest, CancelOrderRequestAction, createOrderRequest, CreateOrderRequestAction } from '../../../modules/order/actions'
 import { Contract } from '../../../modules/vendor/services'
 
 export type Metadata = {
@@ -46,26 +35,11 @@ export type OwnProps = Pick<Props, 'metadata'>
 
 export type MapStateProps = Pick<
   Props,
-  | 'authorizations'
-  | 'wallet'
-  | 'isCreatingOrder'
-  | 'error'
-  | 'getContract'
-  | 'isAuthorizing'
-  | 'isCancelling'
+  'authorizations' | 'wallet' | 'isCreatingOrder' | 'error' | 'getContract' | 'isAuthorizing' | 'isCancelling'
 >
 
-export type MapDispatchProps = Pick<
-  Props,
-  | 'onCreateOrder'
-  | 'onFetchAuthorizations'
-  | 'onUpsertContracts'
-  | 'onCancelOrder'
->
+export type MapDispatchProps = Pick<Props, 'onCreateOrder' | 'onFetchAuthorizations' | 'onUpsertContracts' | 'onCancelOrder'>
 
 export type MapDispatch = Dispatch<
-  | CreateOrderRequestAction
-  | FetchAuthorizationsRequestAction
-  | UpsertContractsAction
-  | CancelOrderRequestAction
+  CreateOrderRequestAction | FetchAuthorizationsRequestAction | UpsertContractsAction | CancelOrderRequestAction
 >

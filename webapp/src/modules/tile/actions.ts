@@ -8,8 +8,7 @@ export const FETCH_TILES_FAILURE = '[Failure] Fetch Tiles'
 export const fetchTilesRequest = () => action(FETCH_TILES_REQUEST)
 export const fetchTilesSuccess = (tiles: Record<string, AtlasTile>, lastModified: Date) =>
   action(FETCH_TILES_SUCCESS, { tiles, lastModified })
-export const fetchTilesFailure = (error: string) =>
-  action(FETCH_TILES_FAILURE, { error })
+export const fetchTilesFailure = (error: string) => action(FETCH_TILES_FAILURE, { error })
 
 export type FetchTilesRequestAction = ReturnType<typeof fetchTilesRequest>
 export type FetchTilesSuccessAction = ReturnType<typeof fetchTilesSuccess>

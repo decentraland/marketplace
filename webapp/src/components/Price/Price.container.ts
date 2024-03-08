@@ -9,7 +9,7 @@ const mapState = (state: RootState, { asset }: OwnProps): MapStateProps => {
   let price: string | undefined
 
   if ('price' in asset) {
-    price = (asset as Item).price
+    price = asset.price
   }
 
   if ('activeOrderId' in asset) {

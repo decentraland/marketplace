@@ -30,9 +30,7 @@ describe('when getting an enum value from a string', () => {
     })
 
     it('should return the default value', () => {
-      expect(getParameter(enumValues, value, defaultValue)).toEqual(
-        defaultValue
-      )
+      expect(getParameter(enumValues, value, defaultValue)).toEqual(defaultValue)
     })
   })
 
@@ -42,9 +40,7 @@ describe('when getting an enum value from a string', () => {
     })
 
     it('should return the default value', () => {
-      expect(getParameter(enumValues, value, defaultValue)).toEqual(
-        defaultValue
-      )
+      expect(getParameter(enumValues, value, defaultValue)).toEqual(defaultValue)
     })
   })
 
@@ -54,9 +50,7 @@ describe('when getting an enum value from a string', () => {
     })
 
     it('should return the default value', () => {
-      expect(getParameter(enumValues, value, defaultValue)).toEqual(
-        defaultValue
-      )
+      expect(getParameter(enumValues, value, defaultValue)).toEqual(defaultValue)
     })
   })
 })

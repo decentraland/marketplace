@@ -17,13 +17,7 @@ import { Props } from './CampaignBrowserPage.types'
 import './CampaignBrowserPage.css'
 
 const CampaignBrowserPage = (props: Props) => {
-  const {
-    isFullscreen,
-    section,
-    contracts,
-    onFetchEventContracts,
-    isCampaignBrowserEnabled
-  } = props
+  const { isFullscreen, section, contracts, onFetchEventContracts, isCampaignBrowserEnabled } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
   useEffect(() => {

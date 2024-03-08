@@ -26,13 +26,7 @@ import { Props } from './HomePage.types'
 import './HomePage.css'
 
 const HomePage = (props: Props) => {
-  const {
-    homepage,
-    homepageLoading,
-    onNavigate,
-    onFetchAssetsFromRoute,
-    isCampaignHomepageBannerEnabled
-  } = props
+  const { homepage, homepageLoading, onNavigate, onFetchAssetsFromRoute, isCampaignHomepageBannerEnabled } = props
 
   const vendor = VendorName.DECENTRALAND
 
@@ -119,9 +113,7 @@ const HomePage = (props: Props) => {
       }
 
       if (trackMessage && browseOptions) {
-        getAnalytics().track(
-          fromEmptyState ? `${trackMessage} '(from empty state)'` : trackMessage
-        )
+        getAnalytics().track(fromEmptyState ? `${trackMessage} '(from empty state)'` : trackMessage)
         onNavigate(locations.browse(browseOptions))
       }
     },
@@ -144,28 +136,19 @@ const HomePage = (props: Props) => {
 
   const sectionsEmptyMessages: Partial<Record<View, string>> = useMemo(
     () => ({
-      [View.HOME_TRENDING_ITEMS]: t(
-        'home_page.home_trending_items_empty_message',
-        {
-          br: <br />,
-          try_again_link: (
-            <div
-              className="empty-state-action-button"
-              onClick={() => fetchAssetsForView(View.HOME_TRENDING_ITEMS)}
-            >
-              {t('home_page.home_trending_items_try_again')}
-            </div>
-          ),
-          explore_all_link: (
-            <div
-              className="empty-state-action-button"
-              onClick={() => handleViewAll(View.HOME_TRENDING_ITEMS)}
-            >
-              {t('home_page.home_trending_items_explore_all_wearables')}
-            </div>
-          )
-        }
-      )
+      [View.HOME_TRENDING_ITEMS]: t('home_page.home_trending_items_empty_message', {
+        br: <br />,
+        try_again_link: (
+          <div className="empty-state-action-button" onClick={() => fetchAssetsForView(View.HOME_TRENDING_ITEMS)}>
+            {t('home_page.home_trending_items_try_again')}
+          </div>
+        ),
+        explore_all_link: (
+          <div className="empty-state-action-button" onClick={() => handleViewAll(View.HOME_TRENDING_ITEMS)}>
+            {t('home_page.home_trending_items_explore_all_wearables')}
+          </div>
+        )
+      })
     }),
     [fetchAssetsForView, handleViewAll]
   )
@@ -187,8 +170,7 @@ const HomePage = (props: Props) => {
   }, [fetchAssetsForView])
 
   const renderSlideshow = (view: HomepageView) => {
-    const hasItemsSection =
-      view === View.HOME_NEW_ITEMS || view === View.HOME_WEARABLES
+    const hasItemsSection = view === View.HOME_NEW_ITEMS || view === View.HOME_WEARABLES
 
     return (
       <Slideshow
@@ -202,21 +184,14 @@ const HomePage = (props: Props) => {
         hasItemsSection={hasItemsSection}
         isLoading={homepageLoading[view]}
         onViewAll={() => handleViewAll(view)}
-        onChangeItemSection={
-          hasItemsSection ? handleOnChangeItemSection : undefined
-        }
+        onChangeItemSection={hasItemsSection ? handleOnChangeItemSection : undefined}
       />
     )
   }
 
-  const homepageWithoutLatestSales = Object.keys(homepage).filter(
-    view => view !== View.HOME_SOLD_ITEMS
-  )
+  const homepageWithoutLatestSales = Object.keys(homepage).filter(view => view !== View.HOME_SOLD_ITEMS)
   // trending and newest sections
-  const firstViewsSection = homepageWithoutLatestSales.splice(
-    0,
-    2
-  ) as HomepageView[]
+  const firstViewsSection = homepageWithoutLatestSales.splice(0, 2) as HomepageView[]
   // rest of the sections
   const secondViewsSection = homepageWithoutLatestSales as HomepageView[]
 

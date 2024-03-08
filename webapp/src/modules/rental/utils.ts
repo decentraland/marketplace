@@ -1,19 +1,9 @@
 import { BigNumber, ethers } from 'ethers'
 import add from 'date-fns/add'
-import {
-  ChainId,
-  PeriodCreation,
-  RentalListing,
-  RentalListingPeriod,
-  RentalStatus
-} from '@dcl/schemas'
+import { ChainId, PeriodCreation, RentalListing, RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
-import {
-  ContractData,
-  ContractName,
-  getContract
-} from 'decentraland-transactions'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
 import { VendorName } from '../vendor'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
@@ -33,12 +23,13 @@ export const daysByPeriod: Record<PeriodOption, number> = {
   [PeriodOption.ONE_YEAR]: 365
 }
 
-export const periodsByDays = (Object.keys(
-  daysByPeriod
-) as PeriodOption[]).reduce((acc, period) => {
-  acc[daysByPeriod[period]] = period
-  return acc
-}, {} as Record<number, PeriodOption>)
+export const periodsByDays = (Object.keys(daysByPeriod) as PeriodOption[]).reduce(
+  (acc, period) => {
+    acc[daysByPeriod[period]] = period
+    return acc
+  },
+  {} as Record<number, PeriodOption>
+)
 
 export async function getSignature(
   chainId: ChainId,
@@ -51,10 +42,7 @@ export async function getSignature(
   const signer = (await getSigner()) as ethers.providers.JsonRpcSigner
   const address = await signer.getAddress()
 
-  const rentalsContract: ContractData = getContract(
-    ContractName.Rentals,
-    chainId
-  )
+  const rentalsContract: ContractData = getContract(ContractName.Rentals, chainId)
 
   const domain: TypedDataDomain = {
     name: rentalsContract.name,
@@ -94,18 +82,9 @@ export async function getSignature(
   return signature
 }
 
-export async function getAssetNonce(
-  chainId: ChainId,
-  contractAddress: string,
-  tokenId: string,
-  signerAddress: string
-) {
+export async function getAssetNonce(chainId: ChainId, contractAddress: string, tokenId: string, signerAddress: string) {
   const rentals = await getRentalsContractInstance(chainId)
-  const nonce: BigNumber = await rentals.getAssetIndex(
-    contractAddress,
-    tokenId,
-    signerAddress
-  )
+  const nonce: BigNumber = await rentals.getAssetIndex(contractAddress, tokenId, signerAddress)
   return nonce.toString()
 }
 
@@ -121,12 +100,7 @@ export async function getContractNonce(chainId: ChainId) {
   return nonce.toString()
 }
 
-export async function getNonces(
-  chainId: ChainId,
-  contractAddress: string,
-  tokenId: string,
-  signerAddress: string
-) {
+export async function getNonces(chainId: ChainId, contractAddress: string, tokenId: string, signerAddress: string) {
   return Promise.all([
     getContractNonce(chainId),
     getSignerNonce(chainId, signerAddress),
@@ -138,14 +112,9 @@ export function getOpenRentalId(asset: Asset | null): string | null {
   return (asset as NFT | null)?.openRentalId ?? null
 }
 
-export function getMaxPriceOfPeriods<
-  T extends { periods: RentalListing['periods'] }
->(rental: T): string {
+export function getMaxPriceOfPeriods<T extends { periods: RentalListing['periods'] }>(rental: T): string {
   return rental.periods.reduce(
-    (maxPeriodPrice, period) =>
-      BigNumber.from(maxPeriodPrice).gte(period.pricePerDay)
-        ? maxPeriodPrice
-        : period.pricePerDay,
+    (maxPeriodPrice, period) => (BigNumber.from(maxPeriodPrice).gte(period.pricePerDay) ? maxPeriodPrice : period.pricePerDay),
     '0'
   )
 }
@@ -155,12 +124,8 @@ export function getMaxPriceOfPeriods<
  * @throws Will throw if the rental hasn't started yet.
  * @param rental - A rental listing.
  */
-export function getRentalChosenPeriod(
-  rental: RentalListing
-): RentalListingPeriod {
-  const rentalPeriod = rental.periods.find(
-    period => period.maxDays === rental.rentedDays
-  )
+export function getRentalChosenPeriod(rental: RentalListing): RentalListingPeriod {
+  const rentalPeriod = rental.periods.find(period => period.maxDays === rental.rentedDays)
   if (!rentalPeriod) {
     throw Error('Rental period was not found')
   }
@@ -175,9 +140,7 @@ export function getRentalChosenPeriod(
  * @returns the end date of the rental or null if the rental has not started.
  */
 export function getRentalEndDate(rental: RentalListing): Date | null {
-  return rental.startedAt && rental.rentedDays
-    ? add(rental.startedAt, { days: rental.rentedDays })
-    : null
+  return rental.startedAt && rental.rentedDays ? add(rental.startedAt, { days: rental.rentedDays }) : null
 }
 
 /**
@@ -210,9 +173,7 @@ export function isRentalListingCancelled(rental: RentalListing | null) {
 export function canCreateANewRental(rental: RentalListing | null) {
   return (
     rental === null ||
-    (rental !== null &&
-      (isRentalListingCancelled(rental) ||
-        (isRentalListingExecuted(rental) && hasRentalEnded(rental))))
+    (rental !== null && (isRentalListingCancelled(rental) || (isRentalListingExecuted(rental) && hasRentalEnded(rental))))
   )
 }
 
@@ -232,25 +193,15 @@ export function hasRentalEnded(rental: RentalListing): boolean {
  * @returns true if the rental if the Rental has status `EXECUTED` and the rental ended or if the Rental has status `OPEN` OR `CANCELLED`
  * but the rental contract is still owning the NFT from a past rental
  */
-export function canBeClaimed(
-  userAddress: string,
-  rental: RentalListing,
-  asset: Asset
-): boolean {
+export function canBeClaimed(userAddress: string, rental: RentalListing, asset: Asset): boolean {
   if (addressEquals(userAddress, (asset as NFT).owner)) {
     return false // the user is the owner, there's nothing to be claimed
   }
   if (rental.status === RentalStatus.EXECUTED) {
     const endDate = getRentalEndDate(rental)
     return endDate ? endDate.getTime() <= Date.now() : false
-  } else if (
-    (isRentalListingOpen(rental) || isRentalListingCancelled(rental)) &&
-    userAddress === rental.lessor
-  ) {
-    const rentalsContract: ContractData = getContract(
-      ContractName.Rentals,
-      (asset as NFT).chainId
-    )
+  } else if ((isRentalListingOpen(rental) || isRentalListingCancelled(rental)) && userAddress === rental.lessor) {
+    const rentalsContract: ContractData = getContract(ContractName.Rentals, (asset as NFT).chainId)
     // can only be claimed from the contract address
     // this avoids the case where the asset was transfer with an open rental
     return addressEquals(rentalsContract.address, (asset as NFT).owner)
@@ -263,25 +214,15 @@ export function canBeClaimed(
  * @param rental - A rental listing.
  * @returns true if the rental if the Rental has status `EXECUTED` or if the Rental can be claimed.
  */
-export function isLandLocked(
-  userAddress: string,
-  rental: RentalListing,
-  asset: Asset
-) {
-  return (
-    rental.status === RentalStatus.EXECUTED ||
-    canBeClaimed(userAddress, rental, asset)
-  )
+export function isLandLocked(userAddress: string, rental: RentalListing, asset: Asset) {
+  return rental.status === RentalStatus.EXECUTED || canBeClaimed(userAddress, rental, asset)
 }
 
 async function delay(milliseconds: number) {
   return await new Promise<void>(resolve => setTimeout(resolve, milliseconds))
 }
 
-export async function waitUntilRentalChangesStatus(
-  nft: NFT<VendorName>,
-  status: RentalStatus
-) {
+export async function waitUntilRentalChangesStatus(nft: NFT<VendorName>, status: RentalStatus) {
   let hasChanged = false
   let listing: RentalListing
   while (!hasChanged) {
@@ -318,8 +259,5 @@ function hasECDSASignatureAValidV(signature: string): boolean {
  */
 export function generateECDSASignatureWithValidV(signature: string): string {
   const isSignatureVValid = hasECDSASignatureAValidV(signature)
-  return isSignatureVValid
-    ? signature
-    : signature.slice(0, -2) +
-        (getLastECDSASignatureByte(signature) + 27).toString(16)
+  return isSignatureVValid ? signature : signature.slice(0, -2) + (getLastECDSASignatureByte(signature) + 27).toString(16)
 }

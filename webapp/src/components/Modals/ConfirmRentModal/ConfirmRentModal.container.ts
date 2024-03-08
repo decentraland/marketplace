@@ -4,17 +4,9 @@ import { Contract } from '@dcl/schemas'
 import { RootState } from '../../../modules/reducer'
 import { acceptRentalListingRequest, clearRentalErrors } from '../../../modules/rental/actions'
 import { getWallet } from '../../../modules/wallet/selectors'
-import {
-  isSubmittingTransaction,
-  getError,
-  isAcceptingRental
-} from '../../../modules/rental/selectors'
+import { isSubmittingTransaction, getError, isAcceptingRental } from '../../../modules/rental/selectors'
 import { getContract } from '../../../modules/contract/selectors'
-import {
-  MapDispatchProps,
-  MapStateProps,
-  OwnProps
-} from './ConfirmRentModal.types'
+import { MapDispatchProps, MapStateProps, OwnProps } from './ConfirmRentModal.types'
 import ConfirmRentModal from './ConfirmRentModal'
 
 const mapState = (state: RootState): MapStateProps => {
@@ -27,19 +19,11 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (
-  dispatch: Dispatch,
-  ownProps: OwnProps
-): MapDispatchProps => {
+const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => {
   return {
     onSubmitTransaction: (addressOperator: string) =>
       dispatch(
-        acceptRentalListingRequest(
-          ownProps.metadata.nft,
-          ownProps.metadata.rental,
-          ownProps.metadata.selectedPeriodIndex,
-          addressOperator
-        )
+        acceptRentalListingRequest(ownProps.metadata.nft, ownProps.metadata.rental, ownProps.metadata.selectedPeriodIndex, addressOperator)
       ),
     onClearRentalErrors: () => dispatch(clearRentalErrors())
   }

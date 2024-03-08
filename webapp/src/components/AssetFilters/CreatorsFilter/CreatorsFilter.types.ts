@@ -1,8 +1,5 @@
 import { Dispatch } from 'redux'
-import {
-  fetchCreatorsAccountRequest,
-  FetchCreatorsAccountRequestAction
-} from '../../../modules/account/actions'
+import { fetchCreatorsAccountRequest, FetchCreatorsAccountRequestAction } from '../../../modules/account/actions'
 import { CreatorAccount } from '../../../modules/account/types'
 
 export type Props = {

@@ -10,16 +10,10 @@ export type NetworkFilterProps = {
   defaultCollapsed?: boolean
 }
 
-export const NetworkFilter = ({
-  network,
-  onChange,
-  defaultCollapsed = false
-}: NetworkFilterProps) => {
+export const NetworkFilter = ({ network, onChange, defaultCollapsed = false }: NetworkFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const networkOptions = useMemo(() => {
-    const options = [Network.ETHEREUM, Network.MATIC].filter(
-      value => typeof value === 'string'
-    ) as Network[]
+    const options = [Network.ETHEREUM, Network.MATIC].filter(value => typeof value === 'string')
     return [
       {
         value: undefined,
@@ -32,22 +26,14 @@ export const NetworkFilter = ({
     ]
   }, [])
 
-  const handleChange = useCallback((_, { value }) => onChange(value), [
-    onChange
-  ])
+  const handleChange = useCallback((_, { value }) => onChange(value), [onChange])
 
   const header = useMemo(
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">
-            {t('nft_filters.network.title')}
-          </span>
-          <span className="box-filter-value">
-            {network
-              ? t(`networks.${network.toLowerCase()}`)
-              : t('nft_filters.network.all_items')}
-          </span>
+          <span className="box-filter-name">{t('nft_filters.network.title')}</span>
+          <span className="box-filter-value">{network ? t(`networks.${network.toLowerCase()}`) : t('nft_filters.network.all_items')}</span>
         </div>
       ) : (
         t('nft_filters.network.title')
@@ -56,12 +42,7 @@ export const NetworkFilter = ({
   )
 
   return (
-    <Box
-      header={header}
-      className="filters-sidebar-box network-filter"
-      collapsible
-      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
-    >
+    <Box header={header} className="filters-sidebar-box network-filter" collapsible defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
       <div className="network-options filters-radio-group">
         {networkOptions.map(option => (
           <Radio

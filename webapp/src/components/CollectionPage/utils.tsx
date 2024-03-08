@@ -7,21 +7,14 @@ import AssetCell from '../OnSaleOrRentList/AssetCell'
 import { DataTableType } from '../Table/TableContent/TableContent.types'
 import styles from './CollectionPage.module.css'
 
-export const formatDataToTable = (
-  rentals?: Item[],
-  isCollectionOwner: boolean = false,
-  isMobile = false
-): DataTableType[] => {
-  const builderCollectionUrl = (contractAddress: string) =>
-    getBuilderCollectionDetailUrl(contractAddress)
+export const formatDataToTable = (rentals?: Item[], isCollectionOwner: boolean = false, isMobile = false): DataTableType[] => {
+  const builderCollectionUrl = (contractAddress: string) => getBuilderCollectionDetailUrl(contractAddress)
 
   const getItemCategoryText = (item: Item) => {
     switch (item.category) {
       case NFTCategory.EMOTE:
       case NFTCategory.WEARABLE:
-        return t(
-          `${item.category}.category.${item.data[item.category]?.category}`
-        )
+        return t(`${item.category}.category.${item.data[item.category]?.category}`)
       default:
         return t(`global.${item.category}`)
     }
@@ -44,8 +37,7 @@ export const formatDataToTable = (
             [t('global.stock')]: (
               <>
                 {' '}
-                {item.available.toLocaleString()}/
-                {Rarity.getMaxSupply(item.rarity).toLocaleString()}
+                {item.available.toLocaleString()}/{Rarity.getMaxSupply(item.rarity).toLocaleString()}
               </>
             )
           }),
@@ -60,22 +52,10 @@ export const formatDataToTable = (
         if (isCollectionOwner) {
           value[''] = (
             <div className={styles.ellipsis}>
-              <Dropdown
-                className={styles.ellipsis}
-                icon="ellipsis horizontal"
-                direction="left"
-              >
+              <Dropdown className={styles.ellipsis} icon="ellipsis horizontal" direction="left">
                 <Dropdown.Menu>
-                  <Dropdown.Item
-                    text={t('collection_page.edit_price')}
-                    as="a"
-                    href={builderCollectionUrl}
-                  />
-                  <Dropdown.Item
-                    text={t('collection_page.mint_item')}
-                    as="a"
-                    href={builderCollectionUrl}
-                  />
+                  <Dropdown.Item text={t('collection_page.edit_price')} as="a" href={builderCollectionUrl} />
+                  <Dropdown.Item text={t('collection_page.mint_item')} as="a" href={builderCollectionUrl} />
                 </Dropdown.Menu>
               </Dropdown>
             </div>

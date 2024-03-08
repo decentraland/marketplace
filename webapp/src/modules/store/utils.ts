@@ -7,14 +7,11 @@ import { EntityContentItemReference } from 'dcl-catalyst-commons'
 import { LinkType, Store, StoreEntityMetadata } from './types'
 import { peerUrl } from '../../lib/environment'
 
-export const getPeerCoverUrl = (hash: string) =>
-  `${peerUrl}/content/contents/${hash}`
+export const getPeerCoverUrl = (hash: string) => `${peerUrl}/content/contents/${hash}`
 
-export const getStoreUrn = (address: string) =>
-  `urn:decentraland:off-chain:marketplace-stores:${address}`
+export const getStoreUrn = (address: string) => `urn:decentraland:off-chain:marketplace-stores:${address}`
 
-export const getPrefixedCoverName = (coverName: string) =>
-  coverName.startsWith('cover/') ? coverName : `cover/${coverName}`
+export const getPrefixedCoverName = (coverName: string) => (coverName.startsWith('cover/') ? coverName : `cover/${coverName}`)
 
 export const getEmptyStore = (props: Partial<Store> = {}): Store => ({
   owner: '',
@@ -43,18 +40,14 @@ export const getStoreFromEntity = (entity: Entity): Store => {
 
   const image = metadata.images.find(image => image.name === 'cover')
 
-  const reference =
-    image && content
-      ? content.find((cont: any) => cont.file === image.file)
-      : undefined
+  const reference = image && content ? content.find((cont: any) => cont.file === image.file) : undefined
 
   if (reference) {
     cover = getPeerCoverUrl(reference.hash)
     coverName = reference.file
   }
 
-  const getLink = (type: LinkType) =>
-    metadata.links.find(link => link.name === type)?.url || ''
+  const getLink = (type: LinkType) => metadata.links.find(link => link.name === type)?.url || ''
 
   return {
     cover,
@@ -68,9 +61,7 @@ export const getStoreFromEntity = (entity: Entity): Store => {
   }
 }
 
-export const getEntityMetadataFromStore = (
-  store: Store
-): StoreEntityMetadata => {
+export const getEntityMetadataFromStore = (store: Store): StoreEntityMetadata => {
   const links: StoreEntityMetadata['links'] = []
 
   const pushLink = (type: LinkType) => {
@@ -118,20 +109,13 @@ export const getEntityMetadataFilesFromStore = async (store: Store) => {
 
 // Requests
 
-export const fetchStoreEntity = async (
-  client: ContentClient,
-  address: string
-): Promise<Entity | null> => {
+export const fetchStoreEntity = async (client: ContentClient, address: string): Promise<Entity | null> => {
   const urn = getStoreUrn(address)
   const entities = await client.fetchEntitiesByPointers([urn])
   return entities.length === 0 ? null : entities[0]
 }
 
-export const deployStoreEntity = async (
-  client: ContentClient,
-  identity: AuthIdentity,
-  store: Store
-) => {
+export const deployStoreEntity = async (client: ContentClient, identity: AuthIdentity, store: Store) => {
   const { owner } = store
   const metadata = getEntityMetadataFromStore(store)
   const files = await getEntityMetadataFilesFromStore(store)

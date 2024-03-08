@@ -6,31 +6,24 @@ import { TextEncoder, TextDecoder } from 'util'
 import path from 'path'
 import { config } from 'dotenv'
 import flatten from 'flat'
-import {
-  mergeTranslations,
-  setCurrentLocale
-} from 'decentraland-dapps/dist/modules/translation/utils'
+import { mergeTranslations, setCurrentLocale } from 'decentraland-dapps/dist/modules/translation/utils'
 import fetch, { Request, Response } from 'node-fetch'
 import { en as dappsEn } from 'decentraland-dapps/dist/modules/translation/defaults'
 import * as locales from '../modules/translation/locales'
 
 jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
-  const module = jest.requireActual(
-    'decentraland-dapps/dist/modules/translation/utils'
-  )
+  const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
   return {
     ...module,
-    T: ({ id, values }: typeof module['T']) => module.t(id, values)
+    T: ({ id, values }: (typeof module)['T']) => module.t(id, values)
   }
 })
 
 jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
-  const module = jest.requireActual(
-    'decentraland-dapps/dist/modules/translation/utils'
-  )
+  const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
   return {
     ...module,
-    T: ({ id, values }: typeof module['T']) => module.t(id, values)
+    T: ({ id, values }: (typeof module)['T']) => module.t(id, values)
   }
 })
 
@@ -46,7 +39,7 @@ if (!globalThis.fetch) {
   globalThis.Response = Response as any
 }
 
-global.FontFace = function() {
+global.FontFace = function () {
   return {
     load: () => Promise.resolve()
   }
@@ -56,7 +49,4 @@ global.FontFace = function() {
   add: () => Promise.resolve()
 } as any
 
-setCurrentLocale(
-  'en',
-  mergeTranslations(flatten(dappsEn) as any, flatten(locales.en))
-)
+setCurrentLocale('en', mergeTranslations(flatten(dappsEn), flatten(locales.en)))

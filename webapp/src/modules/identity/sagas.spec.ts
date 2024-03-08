@@ -1,14 +1,8 @@
 import { expectSaga } from 'redux-saga-test-plan'
 import { call } from 'redux-saga/effects'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import {
-  connectWalletSuccess,
-  disconnectWallet
-} from 'decentraland-dapps/dist/modules/wallet/actions'
-import {
-  localStorageClearIdentity,
-  localStorageGetIdentity
-} from '@dcl/single-sign-on-client'
+import { connectWalletSuccess, disconnectWallet } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { localStorageClearIdentity, localStorageGetIdentity } from '@dcl/single-sign-on-client'
 import { identitySaga, setAuxAddress } from './sagas'
 import { generateIdentitySuccess } from './actions'
 import { AuthIdentity } from '@dcl/crypto'
@@ -41,9 +35,9 @@ describe('when handling the wallet connection success', () => {
     beforeEach(() => {
       windowLocation = window.location
       delete (window as any).location
-      window.location = ({
+      window.location = {
         replace: jest.fn()
-      } as any) as Location
+      } as any as Location
     })
     afterEach(() => {
       window.location = windowLocation
@@ -82,9 +76,7 @@ describe('when handling the disconnect', () => {
     })
 
     it('should call the sso client to clear the identity in the local storage', async () => {
-      await expectSaga(identitySaga)
-        .dispatch(disconnectWallet())
-        .run({ silenceTimeout: true })
+      await expectSaga(identitySaga).dispatch(disconnectWallet()).run({ silenceTimeout: true })
 
       expect(localStorageClearIdentity).toHaveBeenCalledWith(address)
     })
@@ -96,9 +88,7 @@ describe('when handling the disconnect', () => {
     })
 
     it('should not call the sso client to clear the identity', async () => {
-      await expectSaga(identitySaga)
-        .dispatch(disconnectWallet())
-        .run({ silenceTimeout: true })
+      await expectSaga(identitySaga).dispatch(disconnectWallet()).run({ silenceTimeout: true })
 
       expect(localStorageClearIdentity).not.toHaveBeenCalled()
     })

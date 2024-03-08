@@ -58,43 +58,32 @@ describe('when rendering the ListCard with a list with no items', () => {
   })
 
   it('should show the "no items" preview', () => {
-    expect(
-      renderedModal.getByTestId(EMPTY_PREVIEW_DATA_TEST_ID)
-    ).toBeInTheDocument()
+    expect(renderedModal.getByTestId(EMPTY_PREVIEW_DATA_TEST_ID)).toBeInTheDocument()
   })
 })
 
-describe.each([1, 2, 3, 4])(
-  'when rendering the ListCard with %i items',
-  count => {
-    beforeEach(() => {
-      renderedModal = renderListCard({
-        items: Array.from({ length: count }, (_v, i) => ({
-          ...item,
-          id: `item-${i}`
-        }))
-      })
+describe.each([1, 2, 3, 4])('when rendering the ListCard with %i items', count => {
+  beforeEach(() => {
+    renderedModal = renderListCard({
+      items: Array.from({ length: count }, (_v, i) => ({
+        ...item,
+        id: `item-${i}`
+      }))
     })
+  })
 
-    it(`should show the grid preview with the grid class "grid-${count}"`, () => {
-      expect(renderedModal.getByTestId(GRID_PREVIEW_DATA_TEST_ID)).toHaveClass(
-        `grid-${count}`
-      )
-    })
+  it(`should show the grid preview with the grid class "grid-${count}"`, () => {
+    expect(renderedModal.getByTestId(GRID_PREVIEW_DATA_TEST_ID)).toHaveClass(`grid-${count}`)
+  })
 
-    it('should render an image for each item', () => {
-      expect(
-        renderedModal.getByTestId(GRID_PREVIEW_DATA_TEST_ID).childElementCount
-      ).toBe(count)
-    })
+  it('should render an image for each item', () => {
+    expect(renderedModal.getByTestId(GRID_PREVIEW_DATA_TEST_ID).childElementCount).toBe(count)
+  })
 
-    it('should not show the "no items" preview', () => {
-      expect(
-        renderedModal.queryByTestId(EMPTY_PREVIEW_DATA_TEST_ID)
-      ).not.toBeInTheDocument()
-    })
-  }
-)
+  it('should not show the "no items" preview', () => {
+    expect(renderedModal.queryByTestId(EMPTY_PREVIEW_DATA_TEST_ID)).not.toBeInTheDocument()
+  })
+})
 
 describe('when rendering the ListCard', () => {
   let list: List
@@ -108,15 +97,11 @@ describe('when rendering the ListCard', () => {
   })
 
   it('should render the list name', () => {
-    expect(renderedModal.getByTestId(LIST_NAME_DATA_TEST_ID)).toHaveTextContent(
-      list.name
-    )
+    expect(renderedModal.getByTestId(LIST_NAME_DATA_TEST_ID)).toHaveTextContent(list.name)
   })
 
   it('should render the amount of items', () => {
-    expect(
-      renderedModal.getByTestId(ITEM_COUNT_DATA_TEST_ID)
-    ).toHaveTextContent(`${list.itemsCount} items`)
+    expect(renderedModal.getByTestId(ITEM_COUNT_DATA_TEST_ID)).toHaveTextContent(`${list.itemsCount} items`)
   })
 })
 
@@ -150,9 +135,7 @@ describe('when rendering the ListCard with a public list', () => {
   })
 
   it('should not render the private tag', () => {
-    expect(
-      renderedModal.queryByTestId(PRIVATE_DATA_TEST_ID)
-    ).not.toBeInTheDocument()
+    expect(renderedModal.queryByTestId(PRIVATE_DATA_TEST_ID)).not.toBeInTheDocument()
   })
 })
 
@@ -207,9 +190,7 @@ describe('when the list being rendered is the wishlist', () => {
   })
 
   it('should not show the dropdown with the actions', () => {
-    expect(
-      renderedModal.queryByTestId(ACTIONS_DATA_TEST_ID)
-    ).not.toBeInTheDocument()
+    expect(renderedModal.queryByTestId(ACTIONS_DATA_TEST_ID)).not.toBeInTheDocument()
   })
 })
 
@@ -227,9 +208,7 @@ describe('when rendering the ListCard', () => {
       })
 
       it('should render the actions', () => {
-        expect(
-          renderedModal.getByTestId(EDIT_LIST_DATA_TEST_ID)
-        ).toBeInTheDocument()
+        expect(renderedModal.getByTestId(EDIT_LIST_DATA_TEST_ID)).toBeInTheDocument()
       })
     })
 
@@ -276,9 +255,7 @@ describe('when rendering the ListCard', () => {
       })
 
       it('should render the actions', () => {
-        expect(
-          renderedModal.getByTestId(EDIT_LIST_DATA_TEST_ID)
-        ).toBeInTheDocument()
+        expect(renderedModal.getByTestId(EDIT_LIST_DATA_TEST_ID)).toBeInTheDocument()
       })
     })
   })

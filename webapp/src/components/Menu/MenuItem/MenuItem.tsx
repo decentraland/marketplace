@@ -7,16 +7,7 @@ import { Props } from './MenuItem.types'
 import './MenuItem.css'
 
 const MenuItem = <T extends unknown>(props: Props<T>) => {
-  const {
-    className = '',
-    value,
-    currentValue,
-    subtitle,
-    image,
-    nestedLevel,
-    withCaret,
-    onClick
-  } = props
+  const { className = '', value, currentValue, subtitle, image, nestedLevel, withCaret, onClick } = props
 
   const handleOnClick = useCallback(() => {
     onClick(value)
@@ -37,12 +28,7 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
   })
 
   return (
-    <li
-      className={containerClass}
-      onClick={handleOnClick}
-      tabIndex={0}
-      onKeyDown={handleOnKeyDown}
-    >
+    <li className={containerClass} onClick={handleOnClick} tabIndex={0} onKeyDown={handleOnKeyDown}>
       {image && <Image alt={image} src={image} width="25" circular />}
 
       <div className="content">

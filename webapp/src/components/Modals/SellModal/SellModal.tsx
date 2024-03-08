@@ -1,13 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  Button,
-  Field,
-  Loader,
-  Mana,
-  Message,
-  ModalNavigation
-} from 'decentraland-ui'
+import { Button, Field, Loader, Mana, Message, ModalNavigation } from 'decentraland-ui'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
@@ -16,19 +9,13 @@ import isValid from 'date-fns/isValid'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  AuthorizationType,
-  Authorization as Authorizations
-} from 'decentraland-dapps/dist/modules/authorization/types'
+import { AuthorizationType, Authorization as Authorizations } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ChainButton, Modal } from 'decentraland-dapps/dist/containers'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
-import {
-  getDefaultExpirationDate,
-  INPUT_FORMAT
-} from '../../../modules/order/utils'
+import { getDefaultExpirationDate, INPUT_FORMAT } from '../../../modules/order/utils'
 import { ManaField } from '../../ManaField'
 import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
@@ -67,9 +54,7 @@ const SellModal = ({
 
   const isUpdate = order !== null
 
-  const [price, setPrice] = useState<string>(
-    isUpdate ? ethers.utils.formatEther(order!.price) : ''
-  )
+  const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
 
   const [expiresAt, setExpiresAt] = useState(() => {
     let exp = order?.expiresAt
@@ -90,8 +75,7 @@ const SellModal = ({
 
   const parsedValueToConfirm = parseFloat(price).toString()
 
-  const isConfirmDisabled =
-    parsedValueToConfirm !== confirmedInput || isCreatingOrder
+  const isConfirmDisabled = parsedValueToConfirm !== confirmedInput || isCreatingOrder
 
   const contractNames = getContractNames()
 
@@ -105,19 +89,14 @@ const SellModal = ({
     authorizedAddress: marketplace!.address,
     contractAddress: nft.contractAddress,
     contractName:
-      (nft.category === NFTCategory.WEARABLE ||
-        nft.category === NFTCategory.EMOTE) &&
-      nft.network === Network.MATIC
+      (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC
         ? ContractName.ERC721CollectionV2
         : ContractName.ERC721,
     chainId: nft.chainId,
     type: AuthorizationType.APPROVAL
   }
 
-  const [isLoadingAuthorizations, isAuthorized] = useAuthorization(
-    authorization,
-    onFetchAuthorizations
-  )
+  const [isLoadingAuthorizations, isAuthorized] = useAuthorization(authorization, onFetchAuthorizations)
 
   if (!wallet) {
     return null
@@ -139,21 +118,11 @@ const SellModal = ({
     }
   }
 
-  const handleCreateOrder = () =>
-    onCreateOrder(
-      nft,
-      parseMANANumber(price),
-      new Date(`${expiresAt} 00:00:00`).getTime()
-    )
+  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime())
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
-  const isInvalidPrice =
-    parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
-  const isDisabledSell =
-    !orderService.canSell() ||
-    !isOwnedBy(nft, wallet) ||
-    isInvalidPrice ||
-    isInvalidDate
+  const isInvalidPrice = parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
+  const isDisabledSell = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate
 
   const handleBackOrCancel = () => {
     if (isUpdate) {
@@ -207,9 +176,7 @@ const SellModal = ({
             label={t('sell_page.expiration_date')}
             type="date"
             value={expiresAt}
-            onChange={(_event, props) =>
-              setExpiresAt(props.value || getDefaultExpirationDate())
-            }
+            onChange={(_event, props) => setExpiresAt(props.value || getDefaultExpirationDate())}
             error={isInvalidDate}
             message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
           />
@@ -220,12 +187,7 @@ const SellModal = ({
           <Button as="div" onClick={handleBackOrCancel}>
             {isUpdate ? t('cancel_sale_page.title') : t('global.cancel')}
           </Button>
-          <ChainButton
-            onClick={() => setStep(StepperValues.CONFIRM_INPUT)}
-            primary
-            disabled={isDisabledSell}
-            chainId={nft.chainId}
-          >
+          <ChainButton onClick={() => setStep(StepperValues.CONFIRM_INPUT)} primary disabled={isDisabledSell} chainId={nft.chainId}>
             {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
           </ChainButton>
         </Modal.Actions>
@@ -236,11 +198,7 @@ const SellModal = ({
         <ModalNavigation
           title={t('sell_page.confirm.title')}
           onClose={isCreatingOrder ? undefined : onClose}
-          onBack={
-            isCreatingOrder
-              ? undefined
-              : () => setStep(StepperValues.SELL_MODAL)
-          }
+          onBack={isCreatingOrder ? undefined : () => setStep(StepperValues.SELL_MODAL)}
         />
       ),
       description: null,
@@ -286,15 +244,7 @@ const SellModal = ({
               setConfirmedInput(props.value)
             }}
           />
-          {error && (
-            <Message
-              error
-              size="tiny"
-              visible
-              content={error}
-              header={t('global.error')}
-            />
-          )}
+          {error && <Message error size="tiny" visible content={error} header={t('global.error')} />}
         </div>
       ),
       actions: (
@@ -308,13 +258,7 @@ const SellModal = ({
           >
             {t('global.cancel')}
           </Button>
-          <Button
-            type="submit"
-            primary
-            disabled={isConfirmDisabled}
-            loading={isCreatingOrder}
-            onClick={handleOnConfirm}
-          >
+          <Button type="submit" primary disabled={isConfirmDisabled} loading={isCreatingOrder} onClick={handleOnConfirm}>
             {t('global.proceed')}
           </Button>
         </Modal.Actions>
@@ -336,9 +280,7 @@ const SellModal = ({
             values={{
               contract: contract?.name,
               token: token?.name,
-              settings_link: (
-                <Link to={locations.settings()}>{t('global.settings')}</Link>
-              ),
+              settings_link: <Link to={locations.settings()}>{t('global.settings')}</Link>,
               br: (
                 <>
                   <br />
@@ -349,19 +291,10 @@ const SellModal = ({
           />
         </Modal.Description>
       ),
-      content: (
-        <Authorization
-          key={authorization.authorizedAddress}
-          authorization={authorization}
-        />
-      ),
+      content: <Authorization key={authorization.authorizedAddress} authorization={authorization} />,
       actions: (
         <Modal.Actions className={styles.AuthorizationModalActions}>
-          <Button
-            onClick={onClose}
-            className={styles.AuthorizationModalButtons}
-            disabled={isAuthorizing || isCreatingOrder}
-          >
+          <Button onClick={onClose} className={styles.AuthorizationModalButtons} disabled={isAuthorizing || isCreatingOrder}>
             {t('global.cancel')}
           </Button>
           <Button
@@ -381,9 +314,7 @@ const SellModal = ({
         <ModalNavigation
           title={t('sell_page.confirm.title')}
           onClose={onClose}
-          onBack={
-            isCancelling ? undefined : () => setStep(StepperValues.SELL_MODAL)
-          }
+          onBack={isCancelling ? undefined : () => setStep(StepperValues.SELL_MODAL)}
         />
       ),
       description: null,
@@ -409,13 +340,7 @@ const SellModal = ({
           <Button disabled={isCancelling} onClick={onClose}>
             {t('global.cancel')}
           </Button>
-          <Button
-            type="submit"
-            primary
-            disabled={isCancelling}
-            loading={isCancelling}
-            onClick={() => onCancelOrder(order!, nft)}
-          >
+          <Button type="submit" primary disabled={isCancelling} loading={isCancelling} onClick={() => onCancelOrder(order!, nft)}>
             {t('global.proceed')}
           </Button>
         </Modal.Actions>
@@ -424,12 +349,7 @@ const SellModal = ({
   }
 
   return (
-    <Modal
-      className={styles.modal}
-      size="small"
-      name={'SellModal'}
-      onClose={onClose}
-    >
+    <Modal className={styles.modal} size="small" name={'SellModal'} onClose={onClose}>
       {Stepper[step].navigation}
       {Stepper[step].description}
       {Stepper[step].content}

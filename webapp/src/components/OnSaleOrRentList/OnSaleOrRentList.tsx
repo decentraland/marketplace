@@ -1,24 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { ChainId } from '@dcl/schemas'
-import {
-  Table,
-  Loader,
-  TextFilter,
-  Dropdown,
-  Pagination,
-  NotMobile
-} from 'decentraland-ui'
-import {
-  AuthorizationType,
-  Authorization as Authorizations
-} from 'decentraland-dapps/dist/modules/authorization/types'
+import { Table, Loader, TextFilter, Dropdown, Pagination, NotMobile } from 'decentraland-ui'
+import { AuthorizationType, Authorization as Authorizations } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ContractName } from 'decentraland-transactions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  OnSaleOrRentType,
-  Props,
-  isOnSaleListElementProps
-} from './OnSaleOrRentList.types'
+import { OnSaleOrRentType, Props, isOnSaleListElementProps } from './OnSaleOrRentList.types'
 import { SortBy } from '../../modules/routing/types'
 import { useProcessedElements } from './utils'
 import OnSaleListElement from './OnSaleListElement'
@@ -31,26 +17,15 @@ import { Props as OnRentListElementProps } from './OnRentListElement/OnRentListE
 
 const ROWS_PER_PAGE = 12
 
-const OnSaleOrRentList = ({
-  elements,
-  isLoading,
-  onSaleOrRentType,
-  onFetchAuthorizations,
-  onRevoke,
-  wallet
-}: Props) => {
-  const [authorization, setAuthorization] = useState<Authorizations | null>(
-    null
-  )
+const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType, onFetchAuthorizations, onRevoke, wallet }: Props) => {
+  const [authorization, setAuthorization] = useState<Authorizations | null>(null)
   useEffect(() => {
     if (elements && elements.length) {
       const legacyMarketplaceOrder = (elements as any).find(
         (el: OnSaleListElementProps | OnRentListElementProps) =>
-          isOnSaleListElementProps(el) &&
-          el.order &&
-          el.order.marketplaceAddress === LEGACY_MARKETPLACE_MAINNET_CONTRACT
+          isOnSaleListElementProps(el) && el.order && el.order.marketplaceAddress === LEGACY_MARKETPLACE_MAINNET_CONTRACT
       )
-      if (!!legacyMarketplaceOrder) {
+      if (legacyMarketplaceOrder) {
         const authorization: Authorizations = {
           address: wallet?.address || '',
           authorizedAddress: LEGACY_MARKETPLACE_MAINNET_CONTRACT,
@@ -64,10 +39,7 @@ const OnSaleOrRentList = ({
     }
   }, [elements, wallet?.address])
 
-  const [, isAuthorized] = useAuthorization(
-    authorization,
-    onFetchAuthorizations
-  )
+  const [, isAuthorized] = useAuthorization(authorization, onFetchAuthorizations)
 
   const showRents = onSaleOrRentType === OnSaleOrRentType.RENT
   const perPage = useRef(ROWS_PER_PAGE)
@@ -80,13 +52,7 @@ const OnSaleOrRentList = ({
   const [sort, setSort] = useState(SortBy.NEWEST)
   const [page, setPage] = useState(1)
 
-  const processedElements = useProcessedElements(
-    elements,
-    search,
-    sort,
-    page,
-    perPage.current
-  )
+  const processedElements = useProcessedElements(elements, search, sort, page, perPage.current)
 
   const showPagination = processedElements.total / perPage.current > 1
 
@@ -108,12 +74,7 @@ const OnSaleOrRentList = ({
     <div className="onSaleOrRentTable">
       <div className="filters">
         <div className="search">{searchNode}</div>
-        <Dropdown
-          direction="left"
-          value={sort}
-          options={sortOptions.current}
-          onChange={(_, data) => setSort(data.value as any)}
-        />
+        <Dropdown direction="left" value={sort} options={sortOptions.current} onChange={(_, data) => setSort(data.value as any)} />
       </div>
       {isLoading ? (
         <>
@@ -133,16 +94,10 @@ const OnSaleOrRentList = ({
                     <span>{t('global.type')}</span>
                   </Table.HeaderCell>
                   <Table.HeaderCell>
-                    <span>
-                      {showRents ? t('global.status') : t('global.sale_type')}
-                    </span>
+                    <span>{showRents ? t('global.status') : t('global.sale_type')}</span>
                   </Table.HeaderCell>
                   <Table.HeaderCell>
-                    <span>
-                      {showRents
-                        ? t('global.rent_price')
-                        : t('global.sell_price')}
-                    </span>
+                    <span>{showRents ? t('global.rent_price') : t('global.sell_price')}</span>
                   </Table.HeaderCell>
                   <Table.HeaderCell className="actions">
                     <span>{t('global.actions')}</span>
@@ -153,18 +108,10 @@ const OnSaleOrRentList = ({
             <Table.Body>
               {processedElements.paginated.map(element =>
                 showRents && element.nft && element.rental ? (
-                  <OnRentListElement
-                    key={`n-${element.nft.id}`}
-                    nft={element.nft}
-                    rental={element.rental}
-                  />
+                  <OnRentListElement key={`n-${element.nft.id}`} nft={element.nft} rental={element.rental} />
                 ) : (
                   <OnSaleListElement
-                    key={
-                      element.item
-                        ? `i-${element.item.id}`
-                        : `n-${element.nft!.id}`
-                    }
+                    key={element.item ? `i-${element.item.id}` : `n-${element.nft!.id}`}
                     authorization={authorization}
                     isAuthorized={isAuthorized}
                     onRevoke={onRevoke}
@@ -174,15 +121,11 @@ const OnSaleOrRentList = ({
               )}
             </Table.Body>
           </Table>
-          {processedElements.total === 0 && (
-            <div className="empty">{t('global.no_results')}</div>
-          )}
+          {processedElements.total === 0 && <div className="empty">{t('global.no_results')}</div>}
           {showPagination && (
             <div className="pagination">
               <Pagination
-                totalPages={Math.ceil(
-                  processedElements.total / perPage.current
-                )}
+                totalPages={Math.ceil(processedElements.total / perPage.current)}
                 activePage={page}
                 onPageChange={(_, data) => setPage(Number(data.activePage))}
               />

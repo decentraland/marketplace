@@ -5,12 +5,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { Link } from 'react-router-dom'
 import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
-import {
-  getAssetName,
-  getAssetUrl,
-  isNFT,
-  isCatalogItem
-} from '../../modules/asset/utils'
+import { getAssetName, getAssetUrl, isNFT, isCatalogItem } from '../../modules/asset/utils'
 import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
@@ -34,13 +29,7 @@ import { formatWeiToAssetCard, getCatalogCardInformation } from './utils'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
 
-const RentalPrice = ({
-  asset,
-  rentalPricePerDay
-}: {
-  asset: Asset
-  rentalPricePerDay: string
-}) => {
+const RentalPrice = ({ asset, rentalPricePerDay }: { asset: Asset; rentalPricePerDay: string }) => {
   return (
     <>
       <Mana className="rental-price" network={asset.network} inline>
@@ -60,10 +49,7 @@ const RentalChip = ({
   isClaimingBackLandTransactionPending: boolean
   rental: RentalListing | null
 }) => {
-  const rentalEndDate: Date | null = useMemo(
-    () => (rental ? getRentalEndDate(rental) : null),
-    [rental]
-  )
+  const rentalEndDate: Date | null = useMemo(() => (rental ? getRentalEndDate(rental) : null), [rental])
   const rentalHasEnded = rental ? hasRentalEnded(rental) : false
 
   return (
@@ -108,10 +94,7 @@ const AssetCard = (props: Props) => {
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
-  const rentalPricePerDay: string | null = useMemo(
-    () => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null),
-    [rental]
-  )
+  const rentalPricePerDay: string | null = useMemo(() => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null), [rental])
 
   const catalogItemInformation = useMemo(() => {
     if (!isNFT(asset) && isCatalogItem(asset)) {
@@ -124,31 +107,21 @@ const AssetCard = (props: Props) => {
   }, [appliedFilters, asset, sortBy])
 
   const renderCatalogItemInformation = useCallback(() => {
-    const isAvailableForMint =
-      !isNFT(asset) && asset.isOnSale && asset.available > 0
-    const notForSale =
-      !isAvailableForMint && !isNFT(asset) && !asset.minListingPrice
+    const isAvailableForMint = !isNFT(asset) && asset.isOnSale && asset.available > 0
+    const notForSale = !isAvailableForMint && !isNFT(asset) && !asset.minListingPrice
 
     return catalogItemInformation ? (
       <div className="CatalogItemInformation">
         <span className={`extraInformation ${notForSale ? 'NotForSale' : ''}`}>
           <span>{catalogItemInformation.action}</span>
-          {catalogItemInformation.actionIcon && (
-            <img
-              src={catalogItemInformation.actionIcon}
-              alt="mint"
-              className="mintIcon"
-            />
-          )}
+          {catalogItemInformation.actionIcon && <img src={catalogItemInformation.actionIcon} alt="mint" className="mintIcon" />}
         </span>
 
         {catalogItemInformation.price ? (
           <div className="PriceInMana">
             <Mana size="large" network={asset.network} className="PriceInMana">
               {catalogItemInformation.price?.includes('-')
-                ? `${formatWeiToAssetCard(
-                    catalogItemInformation.price.split(' - ')[0]
-                  )} - ${formatWeiToAssetCard(
+                ? `${formatWeiToAssetCard(catalogItemInformation.price.split(' - ')[0])} - ${formatWeiToAssetCard(
                     catalogItemInformation.price.split(' - ')[1]
                   )}`
                 : formatWeiToAssetCard(catalogItemInformation.price)}
@@ -159,11 +132,7 @@ const AssetCard = (props: Props) => {
             count: (asset as Item).owners
           })}`
         )}
-        {catalogItemInformation.extraInformation && (
-          <span className="extraInformation">
-            {catalogItemInformation.extraInformation}
-          </span>
-        )}
+        {catalogItemInformation.extraInformation && <span className="extraInformation">{catalogItemInformation.extraInformation}</span>}
       </div>
     ) : null
   }, [asset, catalogItemInformation])
@@ -176,79 +145,48 @@ const AssetCard = (props: Props) => {
         as={Link}
         to={getAssetUrl(asset, isManager && isLand(asset))}
         onClick={onClick}
-        id={`${asset.contractAddress}-${
-          'tokenId' in asset ? asset.tokenId : asset.itemId
-        }`}
+        id={`${asset.contractAddress}-${'tokenId' in asset ? asset.tokenId : asset.itemId}`}
       >
         {inView ? (
           <>
             <AssetImage
-              className={`AssetImage ${
-                isCatalogItem(asset) ? 'catalog' : 'remove-margin'
-              } ${
-                !!catalogItemInformation?.extraInformation ? 'expandable' : ''
+              className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : 'remove-margin'} ${
+                catalogItemInformation?.extraInformation ? 'expandable' : ''
               }`}
               asset={asset}
               showOrderListedTag={showListedTag}
             />
-            {!isNFT(asset) && !isMobile ? (
-              <FavoritesCounter
-                className="FavoritesCounterBubble"
-                item={asset}
-              />
-            ) : null}
+            {!isNFT(asset) && !isMobile ? <FavoritesCounter className="FavoritesCounterBubble" item={asset} /> : null}
             {showRentalBubble ? (
-              <RentalChip
-                asset={asset}
-                isClaimingBackLandTransactionPending={
-                  isClaimingBackLandTransactionPending
-                }
-                rental={rental}
-              />
+              <RentalChip asset={asset} isClaimingBackLandTransactionPending={isClaimingBackLandTransactionPending} rental={rental} />
             ) : null}
             <Card.Content
               data-testid="asset-card-content"
-              className={`${isCatalogItem(asset) ? 'catalog' : ''} ${
-                !!catalogItemInformation?.extraInformation ? 'expandable' : ''
-              }`}
+              className={`${isCatalogItem(asset) ? 'catalog' : ''} ${catalogItemInformation?.extraInformation ? 'expandable' : ''}`}
             >
               <Card.Header>
-                <div
-                  className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}
-                >
+                <div className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}>
                   <span className={'textOverflow'}>{title}</span>
-                  {!isNFT(asset) &&
-                    isCatalogItem(asset) &&
-                    asset.network === Network.MATIC && (
-                      <span className="creator">
-                        <Profile address={asset.creator} textOnly />
-                      </span>
-                    )}
+                  {!isNFT(asset) && isCatalogItem(asset) && asset.network === Network.MATIC && (
+                    <span className="creator">
+                      <Profile address={asset.creator} textOnly />
+                    </span>
+                  )}
                 </div>
                 {!isCatalogItem(asset) && price ? (
                   <Mana network={asset.network} inline>
                     {formatWeiToAssetCard(price)}
                   </Mana>
                 ) : rentalPricePerDay ? (
-                  <RentalPrice
-                    asset={asset}
-                    rentalPricePerDay={rentalPricePerDay}
-                  />
+                  <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
                 ) : null}
               </Card.Header>
               <div className="sub-header">
-                {!isCatalogItem(asset) && (
-                  <Card.Meta className="card-meta">
-                    {t(`networks.${asset.network.toLowerCase()}`)}
-                  </Card.Meta>
-                )}
+                {!isCatalogItem(asset) && <Card.Meta className="card-meta">{t(`networks.${asset.network.toLowerCase()}`)}</Card.Meta>}
 
                 {rentalPricePerDay && price ? (
                   <div>
-                    <RentalPrice
-                      asset={asset}
-                      rentalPricePerDay={rentalPricePerDay}
-                    />
+                    <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
                   </div>
                 ) : null}
               </div>

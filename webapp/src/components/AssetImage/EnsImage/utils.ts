@@ -9,19 +9,14 @@ const gradientColors = [
   { min: 11, max: 15, colors: ['#FF9EB1', '#FF2D55'] } // Red gradient for name length 11-15 (max length)
 ]
 
-const fontFile = new FontFace(
-  'Inter',
-  'url(https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7W0Q5nw.woff2)'
-)
+const fontFile = new FontFace('Inter', 'url(https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7W0Q5nw.woff2)')
 
 document.fonts.add(fontFile)
 const promiseOfLoadedFont = fontFile.load()
 
 function getGradientColors(nameLength: number) {
   // Find the gradient that matches the length of the name
-  const matchingGradient = gradientColors.find(
-    gradient => nameLength >= gradient.min && nameLength <= gradient.max
-  )
+  const matchingGradient = gradientColors.find(gradient => nameLength >= gradient.min && nameLength <= gradient.max)
   // Return the colors if found, or default colors if no match
   return matchingGradient ? matchingGradient.colors : ['#000000', '#FFFFFF'] // Default to black and white if no match
 }
@@ -34,13 +29,7 @@ const promiseOfALogo = new Promise<HTMLImageElement>((resolve, reject) => {
   img.onerror = reject
 })
 
-export async function drawImage(
-  canvas: HTMLCanvasElement,
-  name: string,
-  width: number,
-  height: number,
-  onlyLogo?: boolean
-): Promise<void> {
+export async function drawImage(canvas: HTMLCanvasElement, name: string, width: number, height: number, onlyLogo?: boolean): Promise<void> {
   // Create a canvas and get the context
   const ctx = canvas.getContext('2d')
 
@@ -116,19 +105,11 @@ export async function drawImage(
     const logoWidth = onlyLogo ? width * 0.8 : 40 // LOGO WIDTH
     const logoHeight = onlyLogo ? height * 0.8 : 40 // LOGO HEIGHT
     const logoXPosition = width / 2 - logoWidth / 2 // Center the logo
-    const logoYPosition = onlyLogo
-      ? height / 2 - logoHeight / 2
-      : nameYPosition - logoHeight - 25 // Adjust space above the name
+    const logoYPosition = onlyLogo ? height / 2 - logoHeight / 2 : nameYPosition - logoHeight - 25 // Adjust space above the name
     if (!onlyLogo) {
       ctx.globalAlpha = 0.5
     }
-    ctx.drawImage(
-      await promiseOfALogo,
-      logoXPosition,
-      logoYPosition,
-      logoWidth,
-      logoHeight
-    )
+    ctx.drawImage(await promiseOfALogo, logoXPosition, logoYPosition, logoWidth, logoHeight)
     ctx.globalAlpha = 1
   } catch (e) {
     console.error('Error loading logo', e)

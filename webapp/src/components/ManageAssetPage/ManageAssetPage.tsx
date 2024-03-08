@@ -1,16 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import {
-  Back,
-  Button,
-  Footer,
-  Loader,
-  Mobile,
-  Narrow,
-  NotMobile,
-  Page,
-  Section
-} from 'decentraland-ui'
+import { Back, Button, Footer, Loader, Mobile, Narrow, NotMobile, Page, Section } from 'decentraland-ui'
 import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../modules/asset/types'
@@ -57,18 +47,11 @@ export const ManageAssetPage = (props: Props) => {
 
   const handleOpenInBuilder = useCallback((asset: NFT) => {
     window.location.replace(
-      `${builderUrl}/land/${
-        asset.category === NFTCategory.ESTATE
-          ? `${asset.tokenId}`
-          : `${asset.data.parcel?.x},${asset.data.parcel?.y}`
-      }`
+      `${builderUrl}/land/${asset.category === NFTCategory.ESTATE ? `${asset.tokenId}` : `${asset.data.parcel?.x},${asset.data.parcel?.y}`}`
     )
   }, [])
 
-  const rentalStatus = useMemo(
-    () => [RentalStatus.EXECUTED, RentalStatus.OPEN, RentalStatus.CANCELLED],
-    []
-  )
+  const rentalStatus = useMemo(() => [RentalStatus.EXECUTED, RentalStatus.OPEN, RentalStatus.CANCELLED], [])
 
   return (
     <>
@@ -83,10 +66,7 @@ export const ManageAssetPage = (props: Props) => {
                   <Back className="back" absolute onClick={() => onBack()} />
                   {isLoading ? <Loading /> : null}
                   {!isLoading && !asset ? <NotFound /> : null}
-                  {!isLoading &&
-                  asset &&
-                  wallet &&
-                  isOwnedBy(asset, wallet, rental ?? undefined) ? (
+                  {!isLoading && asset && wallet && isOwnedBy(asset, wallet, rental ?? undefined) ? (
                     <>
                       <Narrow className={styles.mainRow}>
                         <NotMobile>
@@ -94,36 +74,18 @@ export const ManageAssetPage = (props: Props) => {
                             {asset && !isLoading ? (
                               <>
                                 <Map asset={asset} />
-                                <LandLockedPopup
-                                  asset={asset}
-                                  rental={rental}
-                                  userAddress={wallet.address}
-                                >
+                                <LandLockedPopup asset={asset} rental={rental} userAddress={wallet.address}>
                                   <Button
                                     className={styles.builderButton}
                                     primary
-                                    disabled={
-                                      rental !== null &&
-                                      isLandLocked(
-                                        wallet.address,
-                                        rental,
-                                        asset
-                                      )
-                                    }
+                                    disabled={rental !== null && isLandLocked(wallet.address, rental, asset)}
                                     onClick={() => handleOpenInBuilder(asset)}
                                   >
                                     {t('manage_asset_page.open_in_builder')}
                                   </Button>
                                 </LandLockedPopup>
-                                <Highlights
-                                  className={styles.highlights}
-                                  nft={asset as NFT}
-                                />
-                                <DetailsBox
-                                  asset={asset as NFT}
-                                  rental={rental}
-                                  className={styles.details}
-                                />
+                                <Highlights className={styles.highlights} nft={asset} />
+                                <DetailsBox asset={asset} rental={rental} className={styles.details} />
                               </>
                             ) : null}
                           </Column>
@@ -131,37 +93,15 @@ export const ManageAssetPage = (props: Props) => {
                             {asset && !isLoading ? (
                               <>
                                 <section className={styles.assetDescription}>
-                                  <div
-                                    className={styles.assetDescriptionHeader}
-                                  >
-                                    <h1
-                                      className={styles.assetDescriptionTitle}
-                                    >
-                                      {asset?.name}
-                                    </h1>
-                                    <div
-                                      className={styles.assetDescriptionOptions}
-                                    >
-                                      <LandLockedPopup
-                                        asset={asset}
-                                        rental={rental}
-                                        userAddress={wallet.address}
-                                      >
+                                  <div className={styles.assetDescriptionHeader}>
+                                    <h1 className={styles.assetDescriptionTitle}>{asset?.name}</h1>
+                                    <div className={styles.assetDescriptionOptions}>
+                                      <LandLockedPopup asset={asset} rental={rental} userAddress={wallet.address}>
                                         <Button
                                           className={styles.transfer}
                                           as={Link}
-                                          disabled={
-                                            rental !== null &&
-                                            isLandLocked(
-                                              wallet.address,
-                                              rental,
-                                              asset
-                                            )
-                                          }
-                                          to={locations.transfer(
-                                            asset.contractAddress,
-                                            asset.tokenId
-                                          )}
+                                          disabled={rental !== null && isLandLocked(wallet.address, rental, asset)}
+                                          to={locations.transfer(asset.contractAddress, asset.tokenId)}
                                           fluid
                                         >
                                           {t('manage_asset_page.transfer')}
@@ -170,16 +110,10 @@ export const ManageAssetPage = (props: Props) => {
                                     </div>
                                   </div>
                                   <p className={styles.assetDescriptionContent}>
-                                    {asset?.data.estate?.description ||
-                                      asset?.data.parcel?.description}
+                                    {asset?.data.estate?.description || asset?.data.parcel?.description}
                                   </p>
                                 </section>
-                                <Sell
-                                  nft={asset}
-                                  rental={rental}
-                                  order={order}
-                                  userAddress={wallet.address}
-                                />
+                                <Sell nft={asset} rental={rental} order={order} userAddress={wallet.address} />
                                 <Rent nft={asset} rental={rental} />
                               </>
                             ) : null}
@@ -190,72 +124,32 @@ export const ManageAssetPage = (props: Props) => {
                             {asset && !isLoading ? (
                               <>
                                 <Map asset={asset} />
-                                <LandLockedPopup
-                                  asset={asset}
-                                  rental={rental}
-                                  userAddress={wallet.address}
-                                >
+                                <LandLockedPopup asset={asset} rental={rental} userAddress={wallet.address}>
                                   <Button
                                     className={styles.builderButton}
                                     primary
-                                    disabled={
-                                      rental !== null &&
-                                      isLandLocked(
-                                        wallet.address,
-                                        rental,
-                                        asset
-                                      )
-                                    }
+                                    disabled={rental !== null && isLandLocked(wallet.address, rental, asset)}
                                     onClick={() => handleOpenInBuilder(asset)}
                                   >
                                     {t('manage_asset_page.open_in_builder')}
                                   </Button>
                                 </LandLockedPopup>
-                                <Highlights
-                                  className={styles.highlights}
-                                  nft={asset as NFT}
-                                />
-                                <DetailsBox
-                                  asset={asset as NFT}
-                                  rental={rental}
-                                  className={styles.details}
-                                />
+                                <Highlights className={styles.highlights} nft={asset} />
+                                <DetailsBox asset={asset} rental={rental} className={styles.details} />
                               </>
                             ) : null}
                             {asset && !isLoading ? (
                               <>
                                 <section className={styles.assetDescription}>
-                                  <div
-                                    className={styles.assetDescriptionHeader}
-                                  >
-                                    <h1
-                                      className={styles.assetDescriptionTitle}
-                                    >
-                                      {asset?.name}
-                                    </h1>
-                                    <div
-                                      className={styles.assetDescriptionOptions}
-                                    >
-                                      <LandLockedPopup
-                                        asset={asset}
-                                        rental={rental}
-                                        userAddress={wallet.address}
-                                      >
+                                  <div className={styles.assetDescriptionHeader}>
+                                    <h1 className={styles.assetDescriptionTitle}>{asset?.name}</h1>
+                                    <div className={styles.assetDescriptionOptions}>
+                                      <LandLockedPopup asset={asset} rental={rental} userAddress={wallet.address}>
                                         <Button
                                           className={styles.transfer}
                                           as={Link}
-                                          disabled={
-                                            rental !== null &&
-                                            isLandLocked(
-                                              wallet.address,
-                                              rental,
-                                              asset
-                                            )
-                                          }
-                                          to={locations.transfer(
-                                            asset.contractAddress,
-                                            asset.tokenId
-                                          )}
+                                          disabled={rental !== null && isLandLocked(wallet.address, rental, asset)}
+                                          to={locations.transfer(asset.contractAddress, asset.tokenId)}
                                           fluid
                                         >
                                           {t('manage_asset_page.transfer')}
@@ -264,16 +158,10 @@ export const ManageAssetPage = (props: Props) => {
                                     </div>
                                   </div>
                                   <p className={styles.assetDescriptionContent}>
-                                    {asset?.data.estate?.description ||
-                                      asset?.data.parcel?.description}
+                                    {asset?.data.estate?.description || asset?.data.parcel?.description}
                                   </p>
                                 </section>
-                                <Sell
-                                  nft={asset}
-                                  rental={rental}
-                                  order={order}
-                                  userAddress={wallet.address}
-                                />
+                                <Sell nft={asset} rental={rental} order={order} userAddress={wallet.address} />
                                 <Rent nft={asset} rental={rental} />
                               </>
                             ) : null}

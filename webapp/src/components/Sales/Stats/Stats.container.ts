@@ -2,14 +2,10 @@ import { connect } from 'react-redux'
 import { RootState } from '../../../modules/reducer'
 import { MapStateProps, MapDispatchProps } from './Stats.types'
 import Stats from './Stats'
-import { getMetricsByAddress } from '../../../modules/account/selectors'
+import { getMetricsByAddress, getLoading } from '../../../modules/account/selectors'
 import { getAddress } from '../../../modules/wallet/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { getLoading } from '../../../modules/account/selectors'
-import {
-  fetchAccountMetricsRequest,
-  FETCH_ACCOUNT_METRICS_REQUEST
-} from '../../../modules/account/actions'
+import { fetchAccountMetricsRequest, FETCH_ACCOUNT_METRICS_REQUEST } from '../../../modules/account/actions'
 import { Dispatch } from 'redux'
 
 const getEmptyMetrics = (address: string) => ({
@@ -25,10 +21,7 @@ const mapState = (state: RootState): MapStateProps => {
   const address = getAddress(state)!
   const metrics = getMetricsByAddress(state)[address]
   const emptyMetrics = getEmptyMetrics(address)
-  const isLoading = isLoadingType(
-    getLoading(state),
-    FETCH_ACCOUNT_METRICS_REQUEST
-  )
+  const isLoading = isLoadingType(getLoading(state), FETCH_ACCOUNT_METRICS_REQUEST)
 
   return {
     address,

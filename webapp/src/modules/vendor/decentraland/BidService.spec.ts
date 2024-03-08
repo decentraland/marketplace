@@ -7,9 +7,7 @@ import { BidService } from './BidService'
 
 jest.mock('decentraland-dapps/dist/modules/wallet/utils')
 
-const mockSendTransaction = sendTransaction as jest.MockedFunction<
-  typeof sendTransaction
->
+const mockSendTransaction = sendTransaction as jest.MockedFunction<typeof sendTransaction>
 
 let bidService: BidService
 const expectedHash = '0xhash'
@@ -21,58 +19,36 @@ beforeEach(() => {
 describe('when placing a bid', () => {
   describe('when the wallet is not connected', () => {
     it('should throw an error signaling that the wallet is not available', async () => {
-      await expect(bidService.place(null, {} as NFT, 0, 0)).rejects.toThrow(
-        'Invalid address. Wallet must be connected.'
-      )
+      await expect(bidService.place(null, {} as NFT, 0, 0)).rejects.toThrow('Invalid address. Wallet must be connected.')
     })
   })
   describe('when the nft.network is ETHEREUM', () => {
     it('should send an Ethereum transaction to the Bid contract', async () => {
       mockSendTransaction.mockResolvedValueOnce(expectedHash)
-      const hash = await bidService.place(
-        {} as Wallet,
-        { network: Network.ETHEREUM, chainId: ChainId.ETHEREUM_MAINNET } as NFT,
-        0,
-        0
-      )
+      const hash = await bidService.place({} as Wallet, { network: Network.ETHEREUM, chainId: ChainId.ETHEREUM_MAINNET } as NFT, 0, 0)
       const callParameters = mockSendTransaction.mock.calls[0]
 
       expect(hash).toBe(expectedHash)
-      expect(callParameters[0]).toBe(
-        getContract(ContractName.Bid, ChainId.ETHEREUM_MAINNET)
-      )
-      expect(callParameters[1]).toBe(
-        'placeBid(address,uint256,uint256,uint256)'
-      )
+      expect(callParameters[0]).toBe(getContract(ContractName.Bid, ChainId.ETHEREUM_MAINNET))
+      expect(callParameters[1]).toBe('placeBid(address,uint256,uint256,uint256)')
     })
   })
   describe('when the nft.network is MATIC', () => {
     it('should send an Polygon transaction to the BidV2 contract', async () => {
       mockSendTransaction.mockResolvedValueOnce(expectedHash)
-      const hash = await bidService.place(
-        {} as Wallet,
-        { network: Network.MATIC, chainId: ChainId.MATIC_MAINNET } as NFT,
-        0,
-        0
-      )
+      const hash = await bidService.place({} as Wallet, { network: Network.MATIC, chainId: ChainId.MATIC_MAINNET } as NFT, 0, 0)
       const callParameters = mockSendTransaction.mock.calls[0]
 
       expect(hash).toBe(expectedHash)
-      expect(callParameters[0]).toBe(
-        getContract(ContractName.BidV2, ChainId.MATIC_MAINNET)
-      )
-      expect(callParameters[1]).toBe(
-        'placeBid(address,uint256,uint256,uint256)'
-      )
+      expect(callParameters[0]).toBe(getContract(ContractName.BidV2, ChainId.MATIC_MAINNET))
+      expect(callParameters[1]).toBe('placeBid(address,uint256,uint256,uint256)')
     })
   })
 })
 describe('when accepting a bid', () => {
   describe('when the wallet is not connected', () => {
     it('should throw an error signaling that the wallet is not available', async () => {
-      await expect(bidService.accept(null, {} as Bid)).rejects.toThrow(
-        'Invalid address. Wallet must be connected.'
-      )
+      await expect(bidService.accept(null, {} as Bid)).rejects.toThrow('Invalid address. Wallet must be connected.')
     })
   })
   describe('when the wallet is connected', () => {
@@ -95,9 +71,7 @@ describe('when accepting a bid', () => {
           ...getContract(ContractName.ERC721, ChainId.ETHEREUM_MAINNET),
           address: contractAddress
         })
-        expect(callParameters[1]).toBe(
-          'safeTransferFrom(address,address,uint256,bytes)'
-        )
+        expect(callParameters[1]).toBe('safeTransferFrom(address,address,uint256,bytes)')
       })
     })
     describe('when the bid.network is MATIC', () => {
@@ -115,15 +89,10 @@ describe('when accepting a bid', () => {
 
         expect(hash).toBe(expectedHash)
         expect(callParameters[0]).toEqual({
-          ...getContract(
-            ContractName.ERC721CollectionV2,
-            ChainId.MATIC_MAINNET
-          ),
+          ...getContract(ContractName.ERC721CollectionV2, ChainId.MATIC_MAINNET),
           address: contractAddress
         })
-        expect(callParameters[1]).toBe(
-          'safeTransferFrom(address,address,uint256,bytes)'
-        )
+        expect(callParameters[1]).toBe('safeTransferFrom(address,address,uint256,bytes)')
       })
     })
   })
@@ -132,9 +101,7 @@ describe('when accepting a bid', () => {
 describe('when canceling a bid', () => {
   describe('when the wallet is not connected', () => {
     it('should throw an error signaling that the wallet is not available', async () => {
-      await expect(bidService.cancel(null, {} as Bid)).rejects.toThrow(
-        'Invalid address. Wallet must be connected.'
-      )
+      await expect(bidService.cancel(null, {} as Bid)).rejects.toThrow('Invalid address. Wallet must be connected.')
     })
   })
   describe('when the wallet is connected', () => {
@@ -151,9 +118,7 @@ describe('when canceling a bid', () => {
         const callParameters = mockSendTransaction.mock.calls[0]
 
         expect(hash).toBe(expectedHash)
-        expect(callParameters[0]).toBe(
-          getContract(ContractName.Bid, ChainId.ETHEREUM_MAINNET)
-        )
+        expect(callParameters[0]).toBe(getContract(ContractName.Bid, ChainId.ETHEREUM_MAINNET))
         expect(callParameters[1]).toBe('cancelBid(address,uint256)')
       })
     })
@@ -170,9 +135,7 @@ describe('when canceling a bid', () => {
         const callParameters = mockSendTransaction.mock.calls[0]
 
         expect(hash).toBe(expectedHash)
-        expect(callParameters[0]).toBe(
-          getContract(ContractName.BidV2, ChainId.MATIC_MAINNET)
-        )
+        expect(callParameters[0]).toBe(getContract(ContractName.BidV2, ChainId.MATIC_MAINNET))
         expect(callParameters[1]).toBe('cancelBid(address,uint256)')
       })
     })

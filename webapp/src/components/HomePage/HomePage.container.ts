@@ -2,10 +2,7 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
 import { fetchAssetsFromRoute } from '../../modules/routing/actions'
-import {
-  getHomepage,
-  getHomepageLoading
-} from '../../modules/ui/asset/homepage/selectors'
+import { getHomepage, getHomepageLoading } from '../../modules/ui/asset/homepage/selectors'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './HomePage.types'
 import HomePage from './HomePage'
 import { getIsCampaignHomepageBannerEnabled } from '../../modules/features/selectors'

@@ -98,9 +98,7 @@ describe('when the nft is an estate', () => {
         ]
       }
     }
-    ;(useSelector as jest.Mock).mockImplementation((callback: Function) =>
-      callback(appData)
-    )
+    ;(useSelector as jest.Mock).mockImplementation((callback: Function) => callback(appData))
 
     fingerprint = '0x123123'
     contractFingerprint = '0x456456'

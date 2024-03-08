@@ -22,12 +22,7 @@ import { CardPaymentsExplanation } from '../../BuyPage/CardPaymentsExplanation'
 import { ManaToFiat } from '../../ManaToFiat'
 import { config } from '../../../config'
 import ChainAndTokenSelector from './ChainAndTokenSelector/ChainAndTokenSelector'
-import {
-  getDefaultChains,
-  getMANAToken,
-  getShouldUseMetaTx,
-  isToken
-} from './utils'
+import { getDefaultChains, getMANAToken, getShouldUseMetaTx, isToken } from './utils'
 import { Props } from './BuyWithCryptoModal.types'
 import styles from './BuyWithCryptoModal.module.css'
 import { useShouldUseCrossChainProvider, useTokenBalance } from './hooks'
@@ -68,71 +63,37 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const crossChainSupportedChains = useRef<ChainId[]>([])
   const analytics = getAnalytics()
-  const manaAddressOnAssetChain = getContract(
-    ContractName.MANAToken,
-    asset.chainId
-  ).address
+  const manaAddressOnAssetChain = getContract(ContractName.MANAToken, asset.chainId).address
   const abortControllerRef = useRef(new AbortController())
 
   // useStates
-  const [providerChains, setProviderChains] = useState<ChainData[]>(
-    getDefaultChains()
-  )
+  const [providerChains, setProviderChains] = useState<ChainData[]>(getDefaultChains())
   const [providerTokens, setProviderTokens] = useState<Token[]>([])
   const [selectedChain, setSelectedChain] = useState(asset.chainId)
-  const [selectedToken, setSelectedToken] = useState<Token>(
-    getMANAToken(asset.chainId)
-  )
+  const [selectedToken, setSelectedToken] = useState<Token>(getMANAToken(asset.chainId))
   const [canBuyAsset, setCanBuyAsset] = useState<boolean | undefined>()
-  const [insufficientToken, setInsufficientToken] = useState<
-    Token | undefined
-  >()
+  const [insufficientToken, setInsufficientToken] = useState<Token | undefined>()
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
-  const [crossChainProvider, setCrossChainProvider] = useState<
-    CrossChainProvider
-  >()
+  const [crossChainProvider, setCrossChainProvider] = useState<CrossChainProvider>()
   const manaTokenOnSelectedChain: Token | undefined = useMemo(() => {
-    return providerTokens.find(
-      t => t.symbol === 'MANA' && t.chainId === selectedChain.toString()
-    )
+    return providerTokens.find(t => t.symbol === 'MANA' && t.chainId === selectedChain.toString())
   }, [providerTokens, selectedChain])
   const manaTokenOnAssetChain: Token | undefined = useMemo(() => {
-    return providerTokens.find(
-      t =>
-        t.address.toLocaleLowerCase() ===
-        manaAddressOnAssetChain.toLocaleLowerCase()
-    )
+    return providerTokens.find(t => t.address.toLocaleLowerCase() === manaAddressOnAssetChain.toLocaleLowerCase())
   }, [providerTokens, manaAddressOnAssetChain])
 
   const selectedProviderChain = useMemo(() => {
-    return providerChains.find(
-      c => c.chainId.toString() === selectedChain.toString()
-    )
+    return providerChains.find(c => c.chainId.toString() === selectedChain.toString())
   }, [providerChains, selectedChain])
 
   const chainNativeToken = useMemo(() => {
-    return providerTokens.find(
-      t =>
-        +t.chainId === selectedChain &&
-        t.symbol === selectedProviderChain?.nativeCurrency.symbol
-    )
+    return providerTokens.find(t => +t.chainId === selectedChain && t.symbol === selectedProviderChain?.nativeCurrency.symbol)
   }, [selectedChain, selectedProviderChain, providerTokens])
 
-  const { gasCost, isFetchingGasCost } = onGetGasCost(
-    selectedToken,
-    chainNativeToken,
-    wallet
-  )
+  const { gasCost, isFetchingGasCost } = onGetGasCost(selectedToken, chainNativeToken, wallet)
 
-  const {
-    route,
-    fromAmount,
-    routeFeeCost,
-    routeTotalUSDCost,
-    isFetchingRoute,
-    routeFailed
-  } = onGetCrossChainRoute(
+  const { route, fromAmount, routeFeeCost, routeTotalUSDCost, isFetchingRoute, routeFailed } = onGetCrossChainRoute(
     selectedToken,
     selectedChain,
     providerTokens,
@@ -152,29 +113,17 @@ export const BuyWithCryptoModal = (props: Props) => {
     initializeCrossChainProvider()
   }, [])
 
-  const {
-    isFetchingBalance,
-    tokenBalance: selectedTokenBalance
-  } = useTokenBalance(selectedToken, selectedChain, wallet?.address)
+  const { isFetchingBalance, tokenBalance: selectedTokenBalance } = useTokenBalance(selectedToken, selectedChain, wallet?.address)
 
   // if the tx should be done through the provider
-  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(
-    selectedToken,
-    asset.network
-  )
+  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(selectedToken, asset.network)
 
   // Compute if the process should use a meta tx (connected in ETH and buying a L2 NFT)
   const useMetaTx = useMemo(() => {
     return (
       !!selectedToken &&
       !!wallet &&
-      getShouldUseMetaTx(
-        asset.chainId,
-        selectedChain,
-        selectedToken.address,
-        manaAddressOnAssetChain,
-        wallet.network
-      )
+      getShouldUseMetaTx(asset.chainId, selectedChain, selectedToken.address, manaAddressOnAssetChain, wallet.network)
     )
   }, [asset, manaAddressOnAssetChain, selectedChain, selectedToken, wallet])
 
@@ -196,22 +145,14 @@ export const BuyWithCryptoModal = (props: Props) => {
           const supportedTokens = crossChainProvider.getSupportedTokens()
           const supportedChains = [
             ...defaultChains,
-            ...crossChainProvider
-              .getSupportedChains()
-              .filter(c => defaultChains.every(dc => dc.chainId !== c.chainId))
+            ...crossChainProvider.getSupportedChains().filter(c => defaultChains.every(dc => dc.chainId !== c.chainId))
           ] // keep the defaults since we support MANA on them natively
           setProviderChains(
             supportedChains.filter(
-              c =>
-              crossChainSupportedChains.current.includes(+c.chainId) &&
-              defaultChains.find(t => t.chainId === c.chainId)
+              c => crossChainSupportedChains.current.includes(+c.chainId) && defaultChains.find(t => t.chainId === c.chainId)
             )
           )
-          setProviderTokens(
-            supportedTokens.filter(t =>
-              crossChainSupportedChains.current.includes(+t.chainId)
-            )
-          )
+          setProviderTokens(supportedTokens.filter(t => crossChainSupportedChains.current.includes(+t.chainId)))
         }
       } catch (error) {
         console.log('error: ', error)
@@ -227,23 +168,13 @@ export const BuyWithCryptoModal = (props: Props) => {
         (selectedToken && selectedChain.toString() !== selectedToken.chainId)) // or if selectedToken is not from the selectedChain
     ) {
       try {
-        setSelectedToken(
-          manaTokenOnSelectedChain || getMANAToken(selectedChain)
-        ) // if it's not in the providerTokens, create the object manually with the right conectract address
+        setSelectedToken(manaTokenOnSelectedChain || getMANAToken(selectedChain)) // if it's not in the providerTokens, create the object manually with the right conectract address
       } catch (error) {
-        const selectedChainTokens = providerTokens.filter(
-          t => t.chainId === selectedChain.toString()
-        )
+        const selectedChainTokens = providerTokens.filter(t => t.chainId === selectedChain.toString())
         setSelectedToken(selectedChainTokens[0])
       }
     }
-  }, [
-    crossChainProvider,
-    providerTokens.length,
-    manaTokenOnSelectedChain,
-    selectedChain,
-    selectedToken
-  ])
+  }, [crossChainProvider, providerTokens.length, manaTokenOnSelectedChain, selectedChain, selectedToken])
 
   // computes if the user can buy the item with the selected token
   useEffect(() => {
@@ -257,57 +188,29 @@ export const BuyWithCryptoModal = (props: Props) => {
         let canBuy
         if (selectedToken.symbol === 'MANA' && wallet) {
           // wants to buy a L2 item with ETH MANA (through the provider)
-          if (
-            asset.network === Network.MATIC &&
-            getNetwork(selectedChain) === Network.ETHEREUM
-          ) {
-            canBuy =
-              wallet.networks[Network.ETHEREUM].mana >=
-              +ethers.utils.formatEther(price)
+          if (asset.network === Network.MATIC && getNetwork(selectedChain) === Network.ETHEREUM) {
+            canBuy = wallet.networks[Network.ETHEREUM].mana >= +ethers.utils.formatEther(price)
           } else {
-            canBuy =
-              wallet.networks[asset.network].mana >=
-              +ethers.utils.formatEther(price)
+            canBuy = wallet.networks[asset.network].mana >= +ethers.utils.formatEther(price)
           }
         } else if (selectedTokenBalance && routeFeeCost) {
-          const balance = parseFloat(
-            ethers.utils.formatUnits(
-              selectedTokenBalance,
-              selectedToken.decimals
-            )
-          )
+          const balance = parseFloat(ethers.utils.formatUnits(selectedTokenBalance, selectedToken.decimals))
 
-          if (
-            manaTokenOnAssetChain &&
-            selectedToken &&
-            crossChainProvider &&
-            wallet
-          ) {
+          if (manaTokenOnAssetChain && selectedToken && crossChainProvider && wallet) {
             // fee is paid with same token selected
             if (selectedToken.symbol === routeFeeCost.token.symbol) {
-              canBuy =
-                balance > Number(fromAmount) + Number(routeFeeCost.totalCost)
+              canBuy = balance > Number(fromAmount) + Number(routeFeeCost.totalCost)
               if (!canBuy) {
                 setInsufficientToken(selectedToken)
               }
             } else {
-              const networkProvider = await getNetworkProvider(
-                Number(routeFeeCost.token.chainId)
-              )
-              const provider = new ethers.providers.Web3Provider(
-                networkProvider
-              )
-              const balanceNativeTokenWei = await provider.getBalance(
-                wallet.address
-              )
-              const canPayForGas = balanceNativeTokenWei.gte(
-                ethers.utils.parseEther(routeFeeCost.totalCost)
-              )
+              const networkProvider = await getNetworkProvider(Number(routeFeeCost.token.chainId))
+              const provider = new ethers.providers.Web3Provider(networkProvider)
+              const balanceNativeTokenWei = await provider.getBalance(wallet.address)
+              const canPayForGas = balanceNativeTokenWei.gte(ethers.utils.parseEther(routeFeeCost.totalCost))
               canBuy = canPayForGas && balance > Number(fromAmount)
               if (!canBuy) {
-                setInsufficientToken(
-                  !canPayForGas ? routeFeeCost.token : selectedToken
-                )
+                setInsufficientToken(!canPayForGas ? routeFeeCost.token : selectedToken)
               }
             }
           }
@@ -356,12 +259,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         )}
       </Button>
     )
-  }, [
-    isSwitchingNetwork,
-    onSwitchNetwork,
-    selectedProviderChain,
-    selectedChain
-  ])
+  }, [isSwitchingNetwork, onSwitchNetwork, selectedProviderChain, selectedChain])
 
   const handleBuyWithCard = useCallback(() => {
     if (onBuyWithCard) {
@@ -399,23 +297,12 @@ export const BuyWithCryptoModal = (props: Props) => {
         )}
       </>
     )
-  }, [
-    isFetchingBalance,
-    isBuyingAsset,
-    asset.chainId,
-    isLoadingAuthorization,
-    onBuyWithCard,
-    handleBuyWithCard,
-    onGetMana,
-    onClose
-  ])
+  }, [isFetchingBalance, isBuyingAsset, asset.chainId, isLoadingAuthorization, onBuyWithCard, handleBuyWithCard, onGetMana, onClose])
 
   const renderBuyNowButton = useCallback(() => {
     // if L1 asset and paying with ETH MANA
     // or if L2 asset and paying with MATIC MANA => native buy
-    const onClick = shouldUseCrossChainProvider
-      ? handleCrossChainBuy
-      : onBuyNatively
+    const onClick = shouldUseCrossChainProvider ? handleCrossChainBuy : onBuyNatively
 
     return (
       <>
@@ -423,19 +310,12 @@ export const BuyWithCryptoModal = (props: Props) => {
           fluid
           primary
           data-testid={BUY_NOW_BUTTON_TEST_ID}
-          disabled={
-            (selectedToken?.symbol !== 'MANA' && !route) ||
-            isFetchingRoute ||
-            isBuyingAsset ||
-            isLoadingAuthorization
-          }
+          disabled={(selectedToken?.symbol !== 'MANA' && !route) || isFetchingRoute || isBuyingAsset || isLoadingAuthorization}
           loading={isFetchingBalance || isLoadingAuthorization}
           onClick={onClick}
         >
           <>
-            {isBuyingAsset || isFetchingRoute ? (
-              <Loader inline active size="tiny" />
-            ) : null}
+            {isBuyingAsset || isFetchingRoute ? <Loader inline active size="tiny" /> : null}
             {!isFetchingRoute // if fetching route, just render the Loader
               ? isBuyingAsset
                 ? t('buy_with_crypto_modal.confirm_transaction')
@@ -467,17 +347,13 @@ export const BuyWithCryptoModal = (props: Props) => {
 
       // for any token other than MANA, it user needs to be connected on the origin chain
       if (selectedToken.symbol !== 'MANA') {
-        return selectedChain === wallet.chainId
-          ? renderBuyNowButton()
-          : renderSwitchNetworkButton()
+        return selectedChain === wallet.chainId ? renderBuyNowButton() : renderSwitchNetworkButton()
       }
 
       // for L1 NFTs
       if (asset.network === Network.ETHEREUM) {
         // if tries to buy with ETH MANA and connected to other network, should switch to ETH network to pay directly
-        return selectedToken.symbol === 'MANA' &&
-          wallet.network !== Network.ETHEREUM &&
-          getNetwork(selectedChain) === Network.ETHEREUM
+        return selectedToken.symbol === 'MANA' && wallet.network !== Network.ETHEREUM && getNetwork(selectedChain) === Network.ETHEREUM
           ? renderSwitchNetworkButton()
           : renderBuyNowButton()
       }
@@ -489,8 +365,8 @@ export const BuyWithCryptoModal = (props: Props) => {
         return wallet.network === Network.MATIC
           ? renderBuyNowButton()
           : isPriceTooLow(price)
-          ? renderSwitchNetworkButton() // switch to MATIC to pay for the gas
-          : renderBuyNowButton()
+            ? renderSwitchNetworkButton() // switch to MATIC to pay for the gas
+            : renderBuyNowButton()
       }
 
       // can buy it with MANA from other chain through the provider
@@ -522,9 +398,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         abortControllerRef.current.abort()
 
         const selectedToken = providerTokens.find(
-          t =>
-            t.address === selectedOption.address &&
-            t.chainId === selectedChain.toString()
+          t => t.address === selectedOption.address && t.chainId === selectedChain.toString()
         ) as Token
         // reset all fields
         setSelectedToken(selectedToken)
@@ -535,13 +409,9 @@ export const BuyWithCryptoModal = (props: Props) => {
         })
       } else {
         setSelectedChain(Number(selectedOption.chainId) as ChainId)
-        const manaDestinyChain = providerTokens.find(
-          t => t.symbol === 'MANA' && t.chainId === selectedOption.chainId
-        )
+        const manaDestinyChain = providerTokens.find(t => t.symbol === 'MANA' && t.chainId === selectedOption.chainId)
         // set the selected token on the new chain selected to MANA or the first one found
-        const selectedToken = providerTokens.find(
-          t => t.chainId === selectedOption.chainId
-        )
+        const selectedToken = providerTokens.find(t => t.chainId === selectedOption.chainId)
         const token = manaDestinyChain || selectedToken
         if (token) {
           setSelectedToken(token)
@@ -559,11 +429,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     if (showChainSelector || showTokenSelector) {
       return (
         <ModalNavigation
-          title={t(
-            `buy_with_crypto_modal.token_and_chain_selector.select_${
-              showChainSelector ? 'chain' : 'token'
-            }`
-          )}
+          title={t(`buy_with_crypto_modal.token_and_chain_selector.select_${showChainSelector ? 'chain' : 'token'}`)}
           onBack={() => {
             setShowChainSelector(false)
             setShowTokenSelector(false)
@@ -585,11 +451,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const translationPageDescriptorId = compact([
     'mint',
-    isWearableOrEmote(asset)
-      ? isBuyWithCardPage
-        ? 'with_card'
-        : 'with_mana'
-      : null,
+    isWearableOrEmote(asset) ? (isBuyWithCardPage ? 'with_card' : 'with_mana') : null,
     'page'
   ]).join('_')
 
@@ -641,11 +503,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [asset])
 
   return (
-    <Modal
-      size="tiny"
-      onClose={handleOnClose}
-      className={styles.buyWithCryptoModal}
-    >
+    <Modal size="tiny" onClose={handleOnClose} className={styles.buyWithCryptoModal}>
       {renderModalNavigation()}
       <Modal.Content>
         <>
@@ -674,9 +532,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                 <AssetImage asset={asset} isSmall />
                 <div className={styles.assetDetails}>
                   <span className={styles.assetName}>{assetName}</span>
-                  <span className={styles.assetDescription}>
-                    {assetDescription}
-                  </span>
+                  <span className={styles.assetDescription}>{assetDescription}</span>
                 </div>
                 <div className={styles.priceContainer}>
                   <Mana network={asset.network} inline withTooltip>
@@ -716,11 +572,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                 route={route}
                 routeFeeCost={routeFeeCost}
                 fromAmount={fromAmount}
-                isLoading={
-                  isFetchingRoute ||
-                  isFetchingGasCost ||
-                  (shouldUseCrossChainProvider && !route)
-                }
+                isLoading={isFetchingRoute || isFetchingGasCost || (shouldUseCrossChainProvider && !route)}
                 gasCost={gasCost}
                 manaTokenOnSelectedChain={manaTokenOnAssetChain}
                 routeTotalUSDCost={routeTotalUSDCost}
@@ -730,10 +582,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                 <div className={styles.durationAndExchangeContainer}>
                   <div>
                     <span>
-                      <Icon name="clock outline" />{' '}
-                      {t(
-                        'buy_with_crypto_modal.durations.transaction_duration'
-                      )}{' '}
+                      <Icon name="clock outline" /> {t('buy_with_crypto_modal.durations.transaction_duration')}{' '}
                     </span>
                     {route ? (
                       t(
@@ -741,17 +590,12 @@ export const BuyWithCryptoModal = (props: Props) => {
                           route.route.estimate.estimatedRouteDuration === 0
                             ? 'fast'
                             : route.route.estimate.estimatedRouteDuration === 20
-                            ? 'normal'
-                            : 'slow'
+                              ? 'normal'
+                              : 'slow'
                         }`
                       )
                     ) : (
-                      <span
-                        className={classNames(
-                          styles.skeleton,
-                          styles.fromAmountUSDSkeleton
-                        )}
-                      />
+                      <span className={classNames(styles.skeleton, styles.fromAmountUSDSkeleton)} />
                     )}
                   </div>
                   <div className={styles.exchangeContainer}>
@@ -761,16 +605,10 @@ export const BuyWithCryptoModal = (props: Props) => {
                     </div>
                     {route && selectedToken ? (
                       <>
-                        1 {selectedToken.symbol} ={' '}
-                        {route.route.estimate.exchangeRate?.slice(0, 7)} MANA
+                        1 {selectedToken.symbol} = {route.route.estimate.exchangeRate?.slice(0, 7)} MANA
                       </>
                     ) : (
-                      <span
-                        className={classNames(
-                          styles.skeleton,
-                          styles.fromAmountUSDSkeleton
-                        )}
-                      />
+                      <span className={classNames(styles.skeleton, styles.fromAmountUSDSkeleton)} />
                     )}
                   </div>
                 </div>
@@ -782,20 +620,13 @@ export const BuyWithCryptoModal = (props: Props) => {
               !isPriceTooLow(price) ? (
                 <span className={styles.rememberFreeTxs}>
                   {t('buy_with_crypto_modal.remember_transaction_fee_covered', {
-                    covered: (
-                      <span className={styles.feeCoveredFree}>
-                        {t('buy_with_crypto_modal.covered_for_you_by_dao')}
-                      </span>
-                    )
+                    covered: <span className={styles.feeCoveredFree}>{t('buy_with_crypto_modal.covered_for_you_by_dao')}</span>
                   })}
                 </span>
               ) : null}
 
               {hasLowPriceForMetaTx && !isBuyWithCardPage && useMetaTx ? (
-                <span
-                  className={styles.warning}
-                  data-testid={PRICE_TOO_LOW_TEST_ID}
-                >
+                <span className={styles.warning} data-testid={PRICE_TOO_LOW_TEST_ID}>
                   {' '}
                   {t('buy_with_crypto_modal.price_too_low', {
                     learn_more: (
@@ -811,9 +642,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   })}
                 </span>
               ) : null}
-              {canBuyAsset === false &&
-              !isFetchingBalance &&
-              !isFetchingRoute ? (
+              {canBuyAsset === false && !isFetchingBalance && !isFetchingRoute ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
                     token: insufficientToken?.symbol || 'MANA'
@@ -834,18 +663,9 @@ export const BuyWithCryptoModal = (props: Props) => {
       </Modal.Content>
       {showChainSelector || showTokenSelector ? null : (
         <Modal.Actions>
-          <div
-            className={classNames(
-              styles.buttons,
-              isWearableOrEmote(asset) && 'with-mana'
-            )}
-          >
-            {renderMainActionButton()}
-          </div>
+          <div className={classNames(styles.buttons, isWearableOrEmote(asset) && 'with-mana')}>{renderMainActionButton()}</div>
           {isWearableOrEmote(asset) && isBuyWithCardPage ? (
-            <CardPaymentsExplanation
-              translationPageDescriptorId={translationPageDescriptorId}
-            />
+            <CardPaymentsExplanation translationPageDescriptorId={translationPageDescriptorId} />
           ) : null}
         </Modal.Actions>
       )}

@@ -2,16 +2,8 @@ import { takeEvery, call, put } from 'redux-saga/effects'
 import { RentalStatus } from '@dcl/schemas'
 import { AxiosResponse } from 'axios'
 import { atlasAPI } from '../../modules/vendor/decentraland'
-import {
-  FETCH_TILES_REQUEST,
-  FetchTilesRequestAction,
-  fetchTilesSuccess,
-  fetchTilesFailure
-} from './actions'
-import {
-  ConnectWalletSuccessAction,
-  CONNECT_WALLET_SUCCESS
-} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { FETCH_TILES_REQUEST, FetchTilesRequestAction, fetchTilesSuccess, fetchTilesFailure } from './actions'
+import { ConnectWalletSuccessAction, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { fetchNFTsRequest } from '../nft/actions'
@@ -33,11 +25,7 @@ function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
     const lastModified = response.headers['last-modified']
     yield put(fetchTilesSuccess(tiles, new Date(lastModified)))
   } catch (error) {
-    yield put(
-      fetchTilesFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(fetchTilesFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }
 
@@ -53,11 +41,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
       },
       filters: {
         isLand: true,
-        rentalStatus: [
-          RentalStatus.OPEN,
-          RentalStatus.CANCELLED,
-          RentalStatus.EXECUTED
-        ]
+        rentalStatus: [RentalStatus.OPEN, RentalStatus.CANCELLED, RentalStatus.EXECUTED]
       }
     })
   )

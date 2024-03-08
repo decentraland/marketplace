@@ -19,11 +19,7 @@ const RankingCollectorRow = ({ entity }: Props) => {
         <div>
           <div className="rankings-collector-data">
             <Link to={locations.account(collectorAddress)}>
-              <LinkedProfile
-                address={collectorAddress}
-                inline={false}
-                size="large"
-              />
+              <LinkedProfile address={collectorAddress} inline={false} size="large" />
             </Link>
             <span className="rankings-collector-items-collected">
               {t('home_page.analytics.rankings.collectors.collected_items', {
@@ -43,10 +39,7 @@ const RankingCollectorRow = ({ entity }: Props) => {
                   </>
                 )}
               </span>
-              <div
-                className="arrow-container"
-                onClick={() => setExpanded(!expanded)}
-              >
+              <div className="arrow-container" onClick={() => setExpanded(!expanded)}>
                 <span> {t(`global.${expanded ? 'less' : 'more'}`)} </span>
                 <i className={`caret back ${expanded ? 'up' : ''}`} />
               </div>
@@ -57,19 +50,11 @@ const RankingCollectorRow = ({ entity }: Props) => {
           <div>
             <div className="rankings-collector-more-data-container">
               <div>
-                <span>
-                  {t(
-                    'home_page.analytics.rankings.collectors.unique_items_bought'
-                  )}
-                </span>
+                <span>{t('home_page.analytics.rankings.collectors.unique_items_bought')}</span>
                 {entity.uniqueAndMythicItems}
               </div>
               <div>
-                <span>
-                  {t(
-                    'home_page.analytics.rankings.collectors.creators_supported'
-                  )}
-                </span>
+                <span>{t('home_page.analytics.rankings.collectors.creators_supported')}</span>
                 {entity.creatorsSupported}
               </div>
             </div>
@@ -89,11 +74,7 @@ const RankingCollectorRow = ({ entity }: Props) => {
           <>
             <Table.Cell width={4}>
               <div className="rankings-collector-cell">
-                <LinkedProfile
-                  address={collectorAddress}
-                  inline={false}
-                  size="large"
-                />
+                <LinkedProfile address={collectorAddress} inline={false} size="large" />
               </div>
             </Table.Cell>
             <Table.Cell width={2}>{entity.purchases}</Table.Cell>

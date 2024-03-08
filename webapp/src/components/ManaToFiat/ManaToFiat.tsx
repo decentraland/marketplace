@@ -22,18 +22,15 @@ const ManaToFiat = (props: Props) => {
             usd > ONE_TRILLION.value
               ? ONE_TRILLION
               : usd > ONE_BILLION.value
-              ? ONE_BILLION
-              : usd > ONE_MILLION.value
-              ? ONE_MILLION
-              : { value: 1, displayValue: '' }
+                ? ONE_BILLION
+                : usd > ONE_MILLION.value
+                  ? ONE_MILLION
+                  : { value: 1, displayValue: '' }
           if (cancel) return
           setFiatValue(
-            `$${(+(+usd / divider.value).toFixed(digits)).toLocaleString(
-              undefined,
-              {
-                maximumFractionDigits: digits
-              }
-            )}${divider.displayValue}`
+            `$${(+(+usd / divider.value).toFixed(digits)).toLocaleString(undefined, {
+              maximumFractionDigits: digits
+            })}${divider.displayValue}`
           )
         })
         .catch()

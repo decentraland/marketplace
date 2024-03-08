@@ -9,12 +9,7 @@ import {
 import { getAddress } from '../wallet/selectors'
 import { config } from '../../config'
 import { getCurrentIdentity } from './selectors'
-import {
-  generateIdentityRequest,
-  GenerateIdentitySuccessAction,
-  GENERATE_IDENTITY_FAILURE,
-  GENERATE_IDENTITY_SUCCESS
-} from './actions'
+import { generateIdentityRequest, GenerateIdentitySuccessAction, GENERATE_IDENTITY_FAILURE, GENERATE_IDENTITY_SUCCESS } from './actions'
 
 const ONE_MONTH_IN_MINUTES = 31 * 24 * 60
 
@@ -51,9 +46,7 @@ export function* getIdentity(): Generator<any, AuthIdentity, any> {
     throw new Error(IDENTITY_ERROR)
   }
 
-  const identity: ReturnType<typeof getCurrentIdentity> = yield select(
-    getCurrentIdentity
-  )
+  const identity: ReturnType<typeof getCurrentIdentity> = yield select(getCurrentIdentity)
 
   if (identity) {
     return identity

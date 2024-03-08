@@ -4,15 +4,7 @@ import { Props } from './TableContianer.types'
 import './TableContainer.css'
 
 const TableContainer = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const {
-    children,
-    tabsList,
-    activeTab,
-    handleTabChange,
-    sortbyList,
-    handleSortByChange,
-    sortBy
-  } = props
+  const { children, tabsList, activeTab, handleTabChange, sortbyList, handleSortByChange, sortBy } = props
 
   return (
     <div className={'tableContainer'} ref={ref}>

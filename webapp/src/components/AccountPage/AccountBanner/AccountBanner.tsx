@@ -18,13 +18,7 @@ import copyText from '../../../lib/copyText'
 
 import './AccountBanner.css'
 
-const AccountBanner = ({
-  address,
-  store,
-  isLoading,
-  onBack,
-  onFetchStore
-}: Props) => {
+const AccountBanner = ({ address, store, isLoading, onBack, onFetchStore }: Props) => {
   const [hasCopiedAddress, setHasCopied] = useTimer(1200)
 
   const [openExternalLinkModal, setOpenExternalLinkModal] = useState<string>()
@@ -35,12 +29,7 @@ const AccountBanner = ({
 
   const renderLink = (type: LinkType) =>
     store?.[type] &&
-    getIsValidLink(type, store[type]) && (
-      <div
-        className={classNames('icon', type)}
-        onClick={() => setOpenExternalLinkModal(store[type])}
-      />
-    )
+    getIsValidLink(type, store[type]) && <div className={classNames('icon', type)} onClick={() => setOpenExternalLinkModal(store[type])} />
 
   return (
     <>
@@ -49,9 +38,7 @@ const AccountBanner = ({
           <Loader size="massive" active />
         ) : (
           <>
-            {store?.cover && (
-              <img className="cover" src={store.cover} alt="cover" />
-            )}
+            {store?.cover && <img className="cover" src={store.cover} alt="cover" />}
             <Container>
               <div className="cover-top">
                 <Back onClick={onBack} />
@@ -69,9 +56,7 @@ const AccountBanner = ({
                 <Profile address={address} textOnly inline={false} />
               </div>
               <div className="profile-address">
-                <div className="profile-address-hash">
-                  {shortenAddress(address)}
-                </div>
+                <div className="profile-address-hash">{shortenAddress(address)}</div>
                 {!isMobile() && (
                   <div>
                     <Icon
@@ -81,46 +66,27 @@ const AccountBanner = ({
                       className="copy"
                       name="copy outline"
                     />
-                    {hasCopiedAddress && (
-                      <span className="profile-copied-text-desktop copied">
-                        {t('account_page.copied')}
-                      </span>
-                    )}
+                    {hasCopiedAddress && <span className="profile-copied-text-desktop copied">{t('account_page.copied')}</span>}
                   </div>
                 )}
               </div>
               {isMobile() && (
                 <div className="profile-copy-text-mobile">
-                  <div
-                    role="button"
-                    aria-label="copy"
-                    onClick={() => copyText(address, setHasCopied)}
-                  >
+                  <div role="button" aria-label="copy" onClick={() => copyText(address, setHasCopied)}>
                     {hasCopiedAddress ? (
-                      <span className="copied">
-                        {t('account_page.copied_capitalized')}
-                      </span>
+                      <span className="copied">{t('account_page.copied_capitalized')}</span>
                     ) : (
-                      <span className="copy">
-                        {t('account_page.copy_address')}
-                      </span>
+                      <span className="copy">{t('account_page.copy_address')}</span>
                     )}
                   </div>
                 </div>
               )}
-              {store?.description && (
-                <div className="description">{store.description}</div>
-              )}
+              {store?.description && <div className="description">{store.description}</div>}
             </Column>
           </>
         )}
       </PageHeader>
-      {openExternalLinkModal && (
-        <ExternalLinkModal
-          link={openExternalLinkModal}
-          onClose={() => setOpenExternalLinkModal(undefined)}
-        />
-      )}
+      {openExternalLinkModal && <ExternalLinkModal link={openExternalLinkModal} onClose={() => setOpenExternalLinkModal(undefined)} />}
     </>
   )
 }

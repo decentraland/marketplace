@@ -124,17 +124,14 @@ describe('when reducing the action that signals the request of the fetch of crea
 describe('when reducing the action that signals the successful fetch of creators accounts ', () => {
   let result: AccountState
   let search: string
-  let creatorsAccounts = [{} as CreatorAccount]
+  const creatorsAccounts = [{} as CreatorAccount]
 
   beforeEach(() => {
     search = 'aSearchTerm'
     state.loading = [{ type: FETCH_CREATORS_ACCOUNT_REQUEST }]
     state.error = 'some error'
 
-    result = accountReducer(
-      state,
-      fetchCreatorsAccountSuccess(search, creatorsAccounts)
-    )
+    result = accountReducer(state, fetchCreatorsAccountSuccess(search, creatorsAccounts))
   })
 
   it('should return a state where the received account creators are stored in the creators state', () => {
@@ -157,10 +154,7 @@ describe('when reducing the action that signals the failed fetch of creators acc
   beforeEach(() => {
     search = 'aSearchTerm'
     state.loading = [{ type: FETCH_CREATORS_ACCOUNT_REQUEST }]
-    result = accountReducer(
-      state,
-      fetchCreatorsAccountFailure(search, 'some error')
-    )
+    result = accountReducer(state, fetchCreatorsAccountFailure(search, 'some error'))
   })
 
   it('should return a state where the error is set', () => {

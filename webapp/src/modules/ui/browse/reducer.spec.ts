@@ -35,9 +35,7 @@ describe('when reducing the action of setting a view', () => {
 
   describe('and the payload view is the same as the state current one', () => {
     it('should return the same state', () => {
-      expect(browseReducer(initialState, setView(View.MARKET))).toEqual(
-        initialState
-      )
+      expect(browseReducer(initialState, setView(View.MARKET))).toEqual(initialState)
     })
   })
 
@@ -63,20 +61,16 @@ describe('when reducing the browse action', () => {
 
   describe('when the view is set in the browser options', () => {
     it('should clear the nftIds array in the state', () => {
-      expect(browseReducer(initialState, browse({ view: View.LISTS }))).toEqual(
-        {
-          ...initialState,
-          nftIds: []
-        }
-      )
+      expect(browseReducer(initialState, browse({ view: View.LISTS }))).toEqual({
+        ...initialState,
+        nftIds: []
+      })
     })
   })
 
   describe('when the view is not set in the browser options', () => {
     it('should keep the nftIds', () => {
-      expect(browseReducer(initialState, browse({ view: undefined }))).toEqual(
-        initialState
-      )
+      expect(browseReducer(initialState, browse({ view: undefined }))).toEqual(initialState)
     })
   })
 })
@@ -104,97 +98,84 @@ const fetchRequestActions: [
   ]
 ]
 
-describe.each(fetchRequestActions)(
-  'when reducing the request action of %s',
-  (_, { action, assetType }) => {
-    let initialState: BrowseUIState = {
-      ...INITIAL_STATE,
-      page: 1,
-      [`${assetType}Ids`]: assetIds,
-      count: assetIds.length
-    }
+describe.each(fetchRequestActions)('when reducing the request action of %s', (_, { action, assetType }) => {
+  let initialState: BrowseUIState = {
+    ...INITIAL_STATE,
+    page: 1,
+    [`${assetType}Ids`]: assetIds,
+    count: assetIds.length
+  }
 
-    let fetchOptions: NFTsFetchOptions & ItemBrowseOptions = {
-      vendor: VendorName.DECENTRALAND,
-      params: { first: 10, skip: 0 },
-      view: View.MARKET
-    }
+  let fetchOptions: NFTsFetchOptions & ItemBrowseOptions = {
+    vendor: VendorName.DECENTRALAND,
+    params: { first: 10, skip: 0 },
+    view: View.MARKET
+  }
 
-    describe('when the view is atlas', () => {
+  describe('when the view is atlas', () => {
+    beforeEach(() => {
+      fetchOptions = {
+        ...fetchOptions,
+        view: View.ATLAS
+      }
+      initialState = {
+        ...initialState,
+        view: View.ATLAS
+      }
+    })
+
+    it('should return the state as it was before', () => {
+      expect(browseReducer(initialState, action(fetchOptions))).toEqual(initialState)
+    })
+  })
+
+  const views = {
+    [AssetType.NFT]: [View.MARKET, View.ACCOUNT, View.CURRENT_ACCOUNT],
+    [AssetType.ITEM]: [View.MARKET, View.ACCOUNT, View.CURRENT_ACCOUNT, View.LISTS]
+  }
+
+  describe.each(views[assetType])('when it is loading more AND view is %s', view => {
+    beforeEach(() => {
+      fetchOptions = {
+        ...fetchOptions,
+        view,
+        page: 2
+      }
+    })
+
+    describe('and it is the same view', () => {
       beforeEach(() => {
-        fetchOptions = {
-          ...fetchOptions,
-          view: View.ATLAS
-        }
         initialState = {
           ...initialState,
-          view: View.ATLAS
+          view
         }
       })
-
-      it('should return the state as it was before', () => {
-        expect(browseReducer(initialState, action(fetchOptions))).toEqual(
-          initialState
-        )
+      it(`should keep the ${assetType} ids and clear the count`, () => {
+        expect(browseReducer(initialState, action(fetchOptions))).toEqual({
+          ...initialState,
+          count: undefined
+        })
       })
     })
 
-    const views = {
-      [AssetType.NFT]: [View.MARKET, View.ACCOUNT, View.CURRENT_ACCOUNT],
-      [AssetType.ITEM]: [
-        View.MARKET,
-        View.ACCOUNT,
-        View.CURRENT_ACCOUNT,
-        View.LISTS
-      ]
-    }
+    describe('and it is a different view', () => {
+      beforeEach(() => {
+        fetchOptions = {
+          ...fetchOptions,
+          view: 'another view' as View
+        }
+      })
 
-    describe.each(views[assetType])(
-      'when it is loading more AND view is %s',
-      view => {
-        beforeEach(() => {
-          fetchOptions = {
-            ...fetchOptions,
-            view,
-            page: 2
-          }
+      it(`should clear the ${assetType} ids and count`, () => {
+        expect(browseReducer(initialState, action(fetchOptions))).toEqual({
+          ...initialState,
+          [`${assetType}Ids`]: [],
+          count: undefined
         })
-
-        describe('and it is the same view', () => {
-          beforeEach(() => {
-            initialState = {
-              ...initialState,
-              view
-            }
-          })
-          it(`should keep the ${assetType} ids and clear the count`, () => {
-            expect(browseReducer(initialState, action(fetchOptions))).toEqual({
-              ...initialState,
-              count: undefined
-            })
-          })
-        })
-
-        describe('and it is a different view', () => {
-          beforeEach(() => {
-            fetchOptions = {
-              ...fetchOptions,
-              view: 'another view' as View
-            }
-          })
-
-          it(`should clear the ${assetType} ids and count`, () => {
-            expect(browseReducer(initialState, action(fetchOptions))).toEqual({
-              ...initialState,
-              [`${assetType}Ids`]: [],
-              count: undefined
-            })
-          })
-        })
-      }
-    )
-  }
-)
+      })
+    })
+  })
+})
 
 describe('when reducing the fetch NFTs success action', () => {
   let initialState: BrowseUIState = { ...INITIAL_STATE }
@@ -225,12 +206,7 @@ describe('when reducing the fetch NFTs success action', () => {
     })
 
     it('should return the state as it was before', () => {
-      expect(
-        browseReducer(
-          initialState,
-          fetchNFTsSuccess(nftsFetchOptions, nfts, [], [], [], 1, 1)
-        )
-      ).toEqual(initialState)
+      expect(browseReducer(initialState, fetchNFTsSuccess(nftsFetchOptions, nfts, [], [], [], 1, 1))).toEqual(initialState)
     })
   })
 
@@ -243,41 +219,25 @@ describe('when reducing the fetch NFTs success action', () => {
       timestamp = 3
     })
 
-    describe.each([View.MARKET, View.CURRENT_ACCOUNT, View.ACCOUNT])(
-      'and the view is %s',
-      (view: View) => {
-        beforeEach(() => {
-          initialState = { ...initialState, lastTimestamp: 2, view }
-          nftsFetchOptions = {
-            ...nftsFetchOptions,
-            view
-          }
-        })
+    describe.each([View.MARKET, View.CURRENT_ACCOUNT, View.ACCOUNT])('and the view is %s', (view: View) => {
+      beforeEach(() => {
+        initialState = { ...initialState, lastTimestamp: 2, view }
+        nftsFetchOptions = {
+          ...nftsFetchOptions,
+          view
+        }
+      })
 
-        it('should return the state with the view, the nft ids, the count and the last timestamp that comes in the action payload', () => {
-          expect(
-            browseReducer(
-              initialState,
-              fetchNFTsSuccess(
-                nftsFetchOptions,
-                nfts,
-                [],
-                [],
-                [],
-                count,
-                timestamp
-              )
-            )
-          ).toEqual({
-            ...initialState,
-            view,
-            nftIds: [nft.id],
-            count,
-            lastTimestamp: timestamp
-          })
+      it('should return the state with the view, the nft ids, the count and the last timestamp that comes in the action payload', () => {
+        expect(browseReducer(initialState, fetchNFTsSuccess(nftsFetchOptions, nfts, [], [], [], count, timestamp))).toEqual({
+          ...initialState,
+          view,
+          nftIds: [nft.id],
+          count,
+          lastTimestamp: timestamp
         })
-      }
-    )
+      })
+    })
 
     describe('and is loading more results', () => {
       let view: View
@@ -300,20 +260,7 @@ describe('when reducing the fetch NFTs success action', () => {
       })
 
       it('should return the state with the nft ids concatenated with the previous ones, the count, the last timestamp that comes in the action payload and increment the page', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchNFTsSuccess(
-              nftsFetchOptions,
-              nfts,
-              [],
-              [],
-              [],
-              count,
-              timestamp
-            )
-          )
-        ).toEqual({
+        expect(browseReducer(initialState, fetchNFTsSuccess(nftsFetchOptions, nfts, [], [], [], count, timestamp))).toEqual({
           ...initialState,
           nftIds: [...initialState.nftIds, nft.id],
           count,
@@ -339,20 +286,7 @@ describe('when reducing the fetch NFTs success action', () => {
       })
 
       it('should return the previous state', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchNFTsSuccess(
-              nftsFetchOptions,
-              nfts,
-              [],
-              [],
-              [],
-              count,
-              timestamp
-            )
-          )
-        ).toEqual(initialState)
+        expect(browseReducer(initialState, fetchNFTsSuccess(nftsFetchOptions, nfts, [], [], [], count, timestamp))).toEqual(initialState)
       })
     })
   })
@@ -384,18 +318,7 @@ describe('when reducing the success action of fetching favorited items', () => {
     })
 
     it('should return the state as it was before', () => {
-      expect(
-        browseReducer(
-          initialState,
-          fetchFavoritedItemsSuccess(
-            items,
-            {},
-            1,
-            browseOptions,
-            actionTimestamp
-          )
-        )
-      ).toEqual(initialState)
+      expect(browseReducer(initialState, fetchFavoritedItemsSuccess(items, {}, 1, browseOptions, actionTimestamp))).toEqual(initialState)
     })
   })
 
@@ -413,18 +336,7 @@ describe('when reducing the success action of fetching favorited items', () => {
       })
 
       it('should return a state overwriting the ids and the total of the favorited items', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchFavoritedItemsSuccess(
-              items,
-              {},
-              total,
-              browseOptions,
-              actionTimestamp
-            )
-          )
-        ).toEqual({
+        expect(browseReducer(initialState, fetchFavoritedItemsSuccess(items, {}, total, browseOptions, actionTimestamp))).toEqual({
           ...initialState,
           itemIds: items.map(item => item.id),
           page: 1,
@@ -441,18 +353,7 @@ describe('when reducing the success action of fetching favorited items', () => {
       })
 
       it('should return a state where the ids are appended to the new ones and the total of the favorited items and the page updated', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchFavoritedItemsSuccess(
-              items,
-              {},
-              total,
-              browseOptions,
-              actionTimestamp
-            )
-          )
-        ).toEqual({
+        expect(browseReducer(initialState, fetchFavoritedItemsSuccess(items, {}, total, browseOptions, actionTimestamp))).toEqual({
           ...initialState,
           itemIds: [...initialState.itemIds, ...items.map(item => item.id)],
           page: browseOptions.page,
@@ -468,18 +369,7 @@ describe('when reducing the success action of fetching favorited items', () => {
       })
 
       it('should return a state overwriting the ids and the total of the favorited items', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchFavoritedItemsSuccess(
-              items,
-              {},
-              total,
-              browseOptions,
-              actionTimestamp
-            )
-          )
-        ).toEqual({
+        expect(browseReducer(initialState, fetchFavoritedItemsSuccess(items, {}, total, browseOptions, actionTimestamp))).toEqual({
           ...initialState,
           itemIds: items.map(item => item.id),
           page: 1,
@@ -496,19 +386,7 @@ describe('when reducing the success action of fetching favorited items', () => {
       })
 
       it('should return a state where the ids are appended to the new ones and the total of the favorited items updated', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchFavoritedItemsSuccess(
-              items,
-              {},
-              total,
-              browseOptions,
-              actionTimestamp,
-              true
-            )
-          )
-        ).toEqual({
+        expect(browseReducer(initialState, fetchFavoritedItemsSuccess(items, {}, total, browseOptions, actionTimestamp, true))).toEqual({
           ...initialState,
           itemIds: [...initialState.itemIds, ...items.map(item => item.id)],
           count: total
@@ -542,12 +420,7 @@ describe('when reducing the fetch items success action', () => {
     })
 
     it('should return the state as it was before', () => {
-      expect(
-        browseReducer(
-          initialState,
-          fetchItemsSuccess(items, items.length, itemsBrowserOptions, 1)
-        )
-      ).toEqual(initialState)
+      expect(browseReducer(initialState, fetchItemsSuccess(items, items.length, itemsBrowserOptions, 1))).toEqual(initialState)
     })
   })
 
@@ -560,33 +433,25 @@ describe('when reducing the fetch items success action', () => {
       timestamp = 3
     })
 
-    describe.each([View.MARKET, View.CURRENT_ACCOUNT, View.ACCOUNT])(
-      'and the view is %s',
-      view => {
-        beforeEach(() => {
-          initialState = { ...initialState, lastTimestamp: 2 }
-          itemsBrowserOptions = {
-            ...itemsBrowserOptions,
-            view
-          }
-        })
+    describe.each([View.MARKET, View.CURRENT_ACCOUNT, View.ACCOUNT])('and the view is %s', view => {
+      beforeEach(() => {
+        initialState = { ...initialState, lastTimestamp: 2 }
+        itemsBrowserOptions = {
+          ...itemsBrowserOptions,
+          view
+        }
+      })
 
-        it('should return the state with the view, the item ids, the count and the last timestamp that comes in the action payload', () => {
-          expect(
-            browseReducer(
-              initialState,
-              fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
-            )
-          ).toEqual({
-            ...initialState,
-            view,
-            itemIds: [item.id],
-            count,
-            lastTimestamp: timestamp
-          })
+      it('should return the state with the view, the item ids, the count and the last timestamp that comes in the action payload', () => {
+        expect(browseReducer(initialState, fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp))).toEqual({
+          ...initialState,
+          view,
+          itemIds: [item.id],
+          count,
+          lastTimestamp: timestamp
         })
-      }
-    )
+      })
+    })
 
     describe('and is loading more results', () => {
       let view: View
@@ -617,12 +482,7 @@ describe('when reducing the fetch items success action', () => {
         })
 
         it('should return the state with the item ids concatenated with the previous ones, page and the last timestamp that comes in the action payload', () => {
-          expect(
-            browseReducer(
-              initialState,
-              fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
-            )
-          ).toEqual({
+          expect(browseReducer(initialState, fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp))).toEqual({
             ...initialState,
             itemIds: [...initialState.itemIds, item.id],
             lastTimestamp: timestamp,
@@ -641,12 +501,7 @@ describe('when reducing the fetch items success action', () => {
         })
 
         it('should return the state with the item ids concatenated with the previous ones, and the count and last timestamp that comes in the action payload', () => {
-          expect(
-            browseReducer(
-              initialState,
-              fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
-            )
-          ).toEqual({
+          expect(browseReducer(initialState, fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp))).toEqual({
             ...initialState,
             itemIds: [...initialState.itemIds, item.id],
             count,
@@ -669,12 +524,7 @@ describe('when reducing the fetch items success action', () => {
       })
 
       it('should return the previous state', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
-          )
-        ).toEqual(initialState)
+        expect(browseReducer(initialState, fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp))).toEqual(initialState)
       })
     })
   })
@@ -712,12 +562,7 @@ describe('when reducing the action of the success of getting the lists', () => {
     })
 
     it('should return a state with its count set and the list ids of the new lists appended to the existent ones', () => {
-      expect(
-        browseReducer(
-          initialState,
-          fetchListsSuccess(lists, [], total, browseOptions)
-        )
-      ).toEqual({
+      expect(browseReducer(initialState, fetchListsSuccess(lists, [], total, browseOptions))).toEqual({
         ...initialState,
         listIds: ['aListId', 'anotherListId'],
         page: 2,
@@ -743,12 +588,7 @@ describe('when reducing the action of the success of getting the lists', () => {
     })
 
     it('should return a state with its count set and the list ids of the new lists', () => {
-      expect(
-        browseReducer(
-          initialState,
-          fetchListsSuccess(lists, [], total, browseOptions)
-        )
-      ).toEqual({
+      expect(browseReducer(initialState, fetchListsSuccess(lists, [], total, browseOptions))).toEqual({
         ...initialState,
         listIds: ['anotherListId'],
         page: 1,
@@ -775,9 +615,7 @@ describe('when reducing the action of the request of getting the lists', () => {
     })
 
     it('should return a state with the list ids cleared', () => {
-      expect(
-        browseReducer(initialState, fetchListsRequest({ page, first: 1 }))
-      ).toEqual({
+      expect(browseReducer(initialState, fetchListsRequest({ page, first: 1 }))).toEqual({
         ...initialState,
         listIds: []
       })
@@ -790,9 +628,7 @@ describe('when reducing the action of the request of getting the lists', () => {
     })
 
     it('should return the state unchanged', () => {
-      expect(
-        browseReducer(initialState, fetchListsRequest({ page, first: 1 }))
-      ).toEqual(initialState)
+      expect(browseReducer(initialState, fetchListsRequest({ page, first: 1 }))).toEqual(initialState)
     })
   })
 })
@@ -853,16 +689,7 @@ describe('when reducing the action of the success of an item picking and unpicki
 
       it('should return the state unchanged', () => {
         expect(
-          browseReducer(
-            initialState,
-            bulkPickUnpickSuccess(
-              item,
-              pickedFor,
-              unpickedFrom,
-              pickedByUser,
-              ownerRemovedFromCurrentList
-            )
-          )
+          browseReducer(initialState, bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, pickedByUser, ownerRemovedFromCurrentList))
         ).toEqual({ ...INITIAL_STATE })
       })
     })
@@ -874,16 +701,7 @@ describe('when reducing the action of the success of an item picking and unpicki
 
       it('should return a state with the count decreased by one', () => {
         expect(
-          browseReducer(
-            initialState,
-            bulkPickUnpickSuccess(
-              item,
-              pickedFor,
-              unpickedFrom,
-              pickedByUser,
-              ownerRemovedFromCurrentList
-            )
-          )
+          browseReducer(initialState, bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, pickedByUser, ownerRemovedFromCurrentList))
         ).toEqual({ ...INITIAL_STATE, count: 0 })
       })
     })
@@ -897,16 +715,7 @@ describe('when reducing the action of the success of an item picking and unpicki
 
     it('should return the state unchanged', () => {
       expect(
-        browseReducer(
-          initialState,
-          bulkPickUnpickSuccess(
-            item,
-            pickedFor,
-            unpickedFrom,
-            pickedByUser,
-            ownerRemovedFromCurrentList
-          )
-        )
+        browseReducer(initialState, bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, pickedByUser, ownerRemovedFromCurrentList))
       ).toEqual({ ...INITIAL_STATE, count: 1 })
     })
   })
@@ -930,12 +739,7 @@ describe('when reducing the action of requesting favorited items', () => {
     })
 
     it('should return the state unchanged', () => {
-      expect(
-        browseReducer(
-          initialState,
-          fetchFavoritedItemsRequest(browseOptions, forceLoadMore)
-        )
-      ).toEqual(initialState)
+      expect(browseReducer(initialState, fetchFavoritedItemsRequest(browseOptions, forceLoadMore))).toEqual(initialState)
     })
   })
 
@@ -950,12 +754,10 @@ describe('when reducing the action of requesting favorited items', () => {
       })
 
       it('should return the state with the itemIds cleared', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchFavoritedItemsRequest(browseOptions, forceLoadMore)
-          )
-        ).toEqual({ ...initialState, itemIds: [] })
+        expect(browseReducer(initialState, fetchFavoritedItemsRequest(browseOptions, forceLoadMore))).toEqual({
+          ...initialState,
+          itemIds: []
+        })
       })
     })
 
@@ -968,12 +770,7 @@ describe('when reducing the action of requesting favorited items', () => {
       })
 
       it('should return the state without changes', () => {
-        expect(
-          browseReducer(
-            initialState,
-            fetchFavoritedItemsRequest(browseOptions, forceLoadMore)
-          )
-        ).toEqual(initialState)
+        expect(browseReducer(initialState, fetchFavoritedItemsRequest(browseOptions, forceLoadMore))).toEqual(initialState)
       })
     })
   })

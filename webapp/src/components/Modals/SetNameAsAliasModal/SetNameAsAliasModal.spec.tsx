@@ -15,9 +15,9 @@ describe('SetNameAsAliasModal', () => {
         {
           name: previousName,
           hasClaimedName: false,
-          avatar: ({
+          avatar: {
             snapshots: []
-          } as unknown) as AvatarInfo
+          } as unknown as AvatarInfo
         }
       ]
     } as Profile,
@@ -44,9 +44,7 @@ describe('SetNameAsAliasModal', () => {
     it('renders both names showing how it will be changed', () => {
       const { getByText } = screen
       expect(getByText(newName)).toBeInTheDocument()
-      expect(
-        getByText(`${previousName}#${mockProps.address.slice(-4)}`)
-      ).toBeInTheDocument()
+      expect(getByText(`${previousName}#${mockProps.address.slice(-4)}`)).toBeInTheDocument()
     })
     it('renders the correct actions', () => {
       const { getByText } = screen
@@ -57,10 +55,7 @@ describe('SetNameAsAliasModal', () => {
       const { getByText } = screen
       const confirmButton = getByText(t('global.confirm'))
       fireEvent.click(confirmButton)
-      expect(mockProps.onSubmit).toHaveBeenCalledWith(
-        mockProps.address,
-        newName
-      )
+      expect(mockProps.onSubmit).toHaveBeenCalledWith(mockProps.address, newName)
     })
   })
 
@@ -73,21 +68,17 @@ describe('SetNameAsAliasModal', () => {
           {
             name: newName,
             hasClaimedName: true,
-            avatar: ({
+            avatar: {
               snapshots: []
-            } as unknown) as AvatarInfo
+            } as unknown as AvatarInfo
           }
         ]
       } as Profile
-      screen = renderWithProviders(
-        <SetNameAsAliasModal {...mockProps} profile={updatedProfile} />
-      )
+      screen = renderWithProviders(<SetNameAsAliasModal {...mockProps} profile={updatedProfile} />)
     })
     it('renders the success title when the alias is set', () => {
       const { getByText } = screen
-      expect(
-        getByText(t('set_name_as_alias_modal.success_title'))
-      ).toBeInTheDocument()
+      expect(getByText(t('set_name_as_alias_modal.success_title'))).toBeInTheDocument()
     })
     it('should render the new name and the checked icon', () => {
       const { getAllByText, getByAltText } = screen
@@ -110,9 +101,7 @@ describe('SetNameAsAliasModal', () => {
 
   describe('when the user has no profile yet', () => {
     it('should render the guest name', () => {
-      const { getByText } = renderWithProviders(
-        <SetNameAsAliasModal {...mockProps} profile={undefined} />
-      )
+      const { getByText } = renderWithProviders(<SetNameAsAliasModal {...mockProps} profile={undefined} />)
       expect(getByText(`${t('global.guest')}#4567`)).toBeInTheDocument()
     })
   })

@@ -55,9 +55,7 @@ describe('when loading the component', () => {
 
   describe('and the list fetching fails', () => {
     beforeEach(async () => {
-      jest
-        .spyOn(FavoritesAPI.prototype, 'getLists')
-        .mockRejectedValueOnce(new Error('An error'))
+      jest.spyOn(FavoritesAPI.prototype, 'getLists').mockRejectedValueOnce(new Error('An error'))
       await act(async () => {
         renderedModal = renderSaveToListModalModal({ metadata: { item } })
       })
@@ -121,9 +119,7 @@ describe('when loading the component', () => {
     it('should show the lists checked if the item is the list', () => {
       const { getByTestId } = renderedModal
       expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeChecked()
-      expect(
-        getByTestId(LIST_CHECKBOX + lists[1].id).children[0]
-      ).not.toBeChecked()
+      expect(getByTestId(LIST_CHECKBOX + lists[1].id).children[0]).not.toBeChecked()
     })
   })
 })

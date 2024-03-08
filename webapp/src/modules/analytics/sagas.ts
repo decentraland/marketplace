@@ -16,50 +16,29 @@ import {
 import { AnalyticsVolumeData, RankingEntity } from './types'
 
 export function* analyticsSagas() {
-  yield takeEvery(
-    FETCH_ANALYTICS_VOLUME_DATA_REQUEST,
-    handleFetchVolumeDataRequest
-  )
+  yield takeEvery(FETCH_ANALYTICS_VOLUME_DATA_REQUEST, handleFetchVolumeDataRequest)
   yield takeEvery(FETCH_RANKINGS_REQUEST, handleFetchRankingsRequest)
 }
 
-export function* handleFetchVolumeDataRequest(
-  action: FetchAnalyticsDayDataRequestAction
-) {
+export function* handleFetchVolumeDataRequest(action: FetchAnalyticsDayDataRequestAction) {
   const { timeframe } = action.payload
 
   try {
     const analyticsService = new AnalyticsService()
-    const volumeData: AnalyticsVolumeData = yield call(
-      [analyticsService, 'fetchVolumeData'],
-      timeframe
-    )
+    const volumeData: AnalyticsVolumeData = yield call([analyticsService, 'fetchVolumeData'], timeframe)
 
     yield put(fetchAnalyticsVolumeDataSuccess(volumeData))
   } catch (error) {
-    yield put(
-      fetchAnalyticsVolumeDataFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(fetchAnalyticsVolumeDataFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }
 
 function* handleFetchRankingsRequest(action: FetchRankingsRequestAction) {
   const { entity, filters, timeframe } = action.payload
   try {
-    const { data }: { data: RankingEntity[] } = yield call(
-      [rankingsAPI, 'fetch'],
-      entity,
-      timeframe,
-      filters
-    )
+    const { data }: { data: RankingEntity[] } = yield call([rankingsAPI, 'fetch'], entity, timeframe, filters)
     yield put(fetchRankingsSuccess(data))
   } catch (error) {
-    yield put(
-      fetchRankingsFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(fetchRankingsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }

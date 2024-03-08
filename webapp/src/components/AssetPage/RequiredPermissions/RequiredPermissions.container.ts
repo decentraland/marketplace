@@ -1,19 +1,10 @@
 import { connect } from 'react-redux'
-import {
-  getAssetData,
-  getRequiredPermissions,
-  isFetchingRequiredPermissions
-} from '../../../modules/asset/selectors'
+import { getAssetData, getRequiredPermissions, isFetchingRequiredPermissions } from '../../../modules/asset/selectors'
 import { RootState } from '../../../modules/reducer'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../../../modules/asset/actions'
 import { Asset } from '../../../modules/asset/types'
 import RequiredPermissions from './RequiredPermissions'
-import {
-  OwnProps,
-  MapStateProps,
-  MapDispatchProps,
-  MapDispatch
-} from './RequiredPermissions.types'
+import { OwnProps, MapStateProps, MapDispatchProps, MapDispatch } from './RequiredPermissions.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { id } = ownProps.asset
@@ -26,8 +17,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 }
 
 const mapDispatchProps = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchRequiredPermissions: (asset: Asset) =>
-    dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
+  onFetchRequiredPermissions: (asset: Asset) => dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
 })
 
 export default connect(mapState, mapDispatchProps)(RequiredPermissions)

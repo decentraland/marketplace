@@ -16,16 +16,9 @@ export enum NFTSortBy {
   MIN_RENTAL_PRICE = 'min_rental_price'
 }
 
-export type Data<V extends VendorName> = V extends VendorName.DECENTRALAND
-  ? DecentralandData
-  : V extends void
-  ? DecentralandData
-  : never
+export type Data<V extends VendorName> = V extends VendorName.DECENTRALAND ? DecentralandData : V extends void ? DecentralandData : never
 
-export type NFT<V extends VendorName = VendorName.DECENTRALAND> = Omit<
-  BaseNFT,
-  'category' | 'data'
-> & {
+export type NFT<V extends VendorName = VendorName.DECENTRALAND> = Omit<BaseNFT, 'category' | 'data'> & {
   category: NFTCategory | 'art'
   vendor: VendorName
   data: Data<V>

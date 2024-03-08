@@ -3,11 +3,7 @@ import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/act
 import { RootState } from '../../../modules/reducer'
 import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
 import PriceTooLow from './PriceTooLow'
-import {
-  MapDispatchProps,
-  MapDispatch,
-  MapStateProps
-} from './PriceTooLow.types'
+import { MapDispatchProps, MapDispatch, MapStateProps } from './PriceTooLow.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   isBuyWithCardPage: getIsBuyWithCardPage(state)

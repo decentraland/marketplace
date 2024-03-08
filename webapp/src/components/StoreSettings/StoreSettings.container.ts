@@ -5,12 +5,7 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { RootState } from '../../modules/reducer'
 import { MapStateProps, MapDispatchProps } from './StoreSettings.types'
 import StoreSettings from './StoreSettings'
-import {
-  getStoresByOwner,
-  getLocalStore,
-  getLoading as getStoreLoading,
-  getError
-} from '../../modules/store/selectors'
+import { getStoresByOwner, getLocalStore, getLoading as getStoreLoading, getError } from '../../modules/store/selectors'
 import { Store } from '../../modules/store/types'
 import {
   fetchStoreRequest,
@@ -24,7 +19,7 @@ import { getEmptyStore } from '../../modules/store/utils'
 
 const mapState = (state: RootState): MapStateProps => {
   const address = getAddress(state)!
-  const savedStore = getStoresByOwner(state)[address!]
+  const savedStore = getStoresByOwner(state)[address]
   const emptyStore = getEmptyStore({ owner: address })
   const localStore = getLocalStore(state)
   const baseStore = savedStore || emptyStore

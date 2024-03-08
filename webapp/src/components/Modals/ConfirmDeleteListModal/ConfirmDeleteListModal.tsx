@@ -11,10 +11,7 @@ const ConfirmDeleteListModal = (props: Props) => {
   const { isLoading, onConfirm, onClose, metadata } = props
   const { list } = metadata
 
-  const handleClose = useMemo(() => (!isLoading ? onClose : undefined), [
-    isLoading,
-    onClose
-  ])
+  const handleClose = useMemo(() => (!isLoading ? onClose : undefined), [isLoading, onClose])
 
   return (
     <Modal size="tiny" onClose={handleClose}>
@@ -27,20 +24,10 @@ const ConfirmDeleteListModal = (props: Props) => {
       />
       <Modal.Content>{t('confirm_delete_list_modal.message')}</Modal.Content>
       <Modal.Actions>
-        <Button
-          data-testid={CANCEL_DATA_TEST_ID}
-          disabled={isLoading}
-          onClick={onClose}
-        >
+        <Button data-testid={CANCEL_DATA_TEST_ID} disabled={isLoading} onClick={onClose}>
           {t('global.cancel')}
         </Button>
-        <Button
-          primary
-          data-testid={CONFIRM_DATA_TEST_ID}
-          loading={isLoading}
-          disabled={isLoading}
-          onClick={onConfirm}
-        >
+        <Button primary data-testid={CONFIRM_DATA_TEST_ID} loading={isLoading} disabled={isLoading} onClick={onConfirm}>
           <Icon name="trash alternate outline" />
           {t('confirm_delete_list_modal.confirm')}
         </Button>

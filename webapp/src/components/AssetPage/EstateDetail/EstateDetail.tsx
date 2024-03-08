@@ -49,9 +49,7 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
           />
           {estate.size === 0 && (
             <div className="dissolved-wrapper">
-              <div className="dissolved-notice">
-                {t('estate_detail.dissolved')}
-              </div>
+              <div className="dissolved-notice">{t('estate_detail.dissolved')}</div>
             </div>
           )}
         </>
@@ -82,12 +80,7 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
       below={
         <>
           <BidList nft={nft} />
-          {estate.size > 0 && (
-            <ParcelCoordinates
-              parcelCoordinates={nft.data.estate?.parcels || []}
-              total={nft.data.estate?.size || 0}
-            />
-          )}
+          {estate.size > 0 && <ParcelCoordinates parcelCoordinates={nft.data.estate?.parcels || []} total={nft.data.estate?.size || 0} />}
           <TransactionHistory asset={nft} />
           <RentalHistory asset={nft} />
         </>

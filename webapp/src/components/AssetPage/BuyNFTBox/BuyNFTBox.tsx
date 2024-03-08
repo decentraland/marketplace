@@ -10,11 +10,7 @@ import makeOffer from '../../../images/makeOffer.png'
 import { locations } from '../../../modules/routing/locations'
 import { bidAPI } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
-import {
-  getIsLegacyOrderExpired,
-  getIsOrderExpired,
-  isLegacyOrder
-} from '../../../lib/orders'
+import { getIsLegacyOrderExpired, getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { ManaToFiat } from '../../ManaToFiat'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
@@ -31,15 +27,7 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
     let cancel = false
     if (!isOwner && nft) {
       bidAPI
-        .fetchByNFT(
-          nft.contractAddress,
-          nft.tokenId,
-          null,
-          undefined,
-          FIRST,
-          undefined,
-          address
-        )
+        .fetchByNFT(nft.contractAddress, nft.tokenId, null, undefined, FIRST, undefined, address)
         .then(response => {
           if (response.total === 0 && !cancel) setCanBid(true)
         })
@@ -67,17 +55,10 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
         <div className={styles.informationContainer}>
           <div className={styles.columnListing}>
-            <span className={styles.informationTitle}>
-              {t('best_buying_option.minting.price').toUpperCase()}
-            </span>
+            <span className={styles.informationTitle}>{t('best_buying_option.minting.price').toUpperCase()}</span>
             <div className={`${styles.containerRow} ${styles.centerItems}`}>
               <div className={styles.informationBold}>
-                <Mana
-                  withTooltip
-                  size="large"
-                  network={nft.network}
-                  className={styles.informationBold}
-                >
+                <Mana withTooltip size="large" network={nft.network} className={styles.informationBold}>
                   {formatWeiToAssetCard(order.price)}
                 </Mana>
               </div>
@@ -92,12 +73,8 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
           </div>
 
           <div className={styles.columnListing}>
-            <span className={styles.informationTitle}>
-              {t('best_buying_option.buy_listing.issue_number').toUpperCase()}
-            </span>
-            <div className={`${styles.containerRow} ${styles.issueNumber}`}>
-              #{order.issuedId}
-            </div>
+            <span className={styles.informationTitle}>{t('best_buying_option.buy_listing.issue_number').toUpperCase()}</span>
+            <div className={`${styles.containerRow} ${styles.issueNumber}`}>#{order.issuedId}</div>
           </div>
         </div>
         {isOwner ? (
@@ -105,10 +82,7 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
             {isLegacyOrder(order) ? (
               <div className={styles.expirationMessage}>
                 <div className={styles.warningIconContainer}>
-                  <Icon
-                    name="exclamation triangle"
-                    className={styles.warningExpiration}
-                  />
+                  <Icon name="exclamation triangle" className={styles.warningExpiration} />
                 </div>
                 <span>
                   {getIsLegacyOrderExpired(order.expiresAt)
@@ -119,62 +93,33 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
                 </span>
               </div>
             ) : null}
-            {!isLegacyOrder(order) ||
-            (isLegacyOrder(order) &&
-              !getIsLegacyOrderExpired(order.expiresAt)) ? (
+            {!isLegacyOrder(order) || (isLegacyOrder(order) && !getIsLegacyOrderExpired(order.expiresAt)) ? (
               <Button
                 as={Link}
                 to={locations.sell(nft.contractAddress, nft.tokenId)}
                 fluid
-                {...(isLegacyOrder(order)
-                  ? { inverted: true }
-                  : { primary: true })}
+                {...(isLegacyOrder(order) ? { inverted: true } : { primary: true })}
               >
-                {isLegacyOrder(order)
-                  ? t('asset_page.actions.update_listing')
-                  : t('asset_page.actions.update')}
+                {isLegacyOrder(order) ? t('asset_page.actions.update_listing') : t('asset_page.actions.update')}
               </Button>
             ) : null}
 
             {isLegacyOrder(order) ? (
-              <Button
-                as={Link}
-                to={locations.cancel(nft.contractAddress, nft.tokenId)}
-                fluid
-                primary
-              >
+              <Button as={Link} to={locations.cancel(nft.contractAddress, nft.tokenId)} fluid primary>
                 {t('asset_page.actions.terminate_listing')}
               </Button>
             ) : (
-              <Button
-                as={Link}
-                to={locations.cancel(nft.contractAddress, nft.tokenId)}
-                fluid
-                inverted
-              >
+              <Button as={Link} to={locations.cancel(nft.contractAddress, nft.tokenId)} fluid inverted>
                 {t('asset_page.actions.cancel_sale')}
               </Button>
             )}
           </>
         ) : !isOrderExpired ? (
-          <BuyNFTButtons
-            asset={nft}
-            assetType={AssetType.NFT}
-            tokenId={nft.tokenId}
-            buyWithCardClassName={styles.buyWithCardClassName}
-          />
+          <BuyNFTButtons asset={nft} assetType={AssetType.NFT} tokenId={nft.tokenId} buyWithCardClassName={styles.buyWithCardClassName} />
         ) : null}
         {canBid && !isOwner && (
-          <Button
-            inverted
-            className={styles.makeOfferButton}
-            as={Link}
-            to={locations.bid(nft.contractAddress, nft.tokenId)}
-          >
-            <img
-              src={makeOffer}
-              alt={t('best_buying_option.buy_listing.make_offer')}
-            />
+          <Button inverted className={styles.makeOfferButton} as={Link} to={locations.bid(nft.contractAddress, nft.tokenId)}>
+            <img src={makeOffer} alt={t('best_buying_option.buy_listing.make_offer')} />
             &nbsp;
             {t('best_buying_option.buy_listing.make_offer')}
           </Button>
@@ -193,21 +138,11 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
     if (!nft) return null
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
-        <Button
-          as={Link}
-          to={locations.sell(nft.contractAddress, nft.tokenId)}
-          primary
-          fluid
-        >
+        <Button as={Link} to={locations.sell(nft.contractAddress, nft.tokenId)} primary fluid>
           {t('asset_page.actions.sell')}
         </Button>
         {!order ? (
-          <Button
-            inverted
-            as={Link}
-            to={locations.transfer(nft.contractAddress, nft.tokenId)}
-            fluid
-          >
+          <Button inverted as={Link} to={locations.transfer(nft.contractAddress, nft.tokenId)} fluid>
             {t('asset_page.actions.transfer')}
           </Button>
         ) : null}
@@ -217,53 +152,31 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
 
   return (
     <div className={styles.BuyNFTBox}>
-      {!!order
+      {order
         ? renderHasListing()
         : isOwner
-        ? renderOwnerAndNoListingOptions()
-        : nft && (
-            <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
-              <div className={styles.informationContainer}>
-                <div className={styles.columnListing}>
-                  <span className={styles.informationTitle}>
-                    {t('best_buying_option.minting.price').toUpperCase()}
-                  </span>
-                  <div
-                    className={`${styles.containerRow} ${styles.issueNumber}`}
-                  >
-                    {t('asset_card.not_for_sale')}
+          ? renderOwnerAndNoListingOptions()
+          : nft && (
+              <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
+                <div className={styles.informationContainer}>
+                  <div className={styles.columnListing}>
+                    <span className={styles.informationTitle}>{t('best_buying_option.minting.price').toUpperCase()}</span>
+                    <div className={`${styles.containerRow} ${styles.issueNumber}`}>{t('asset_card.not_for_sale')}</div>
+                  </div>
+                  <div className={styles.columnListing}>
+                    <span className={styles.informationTitle}>{t('best_buying_option.buy_listing.issue_number').toUpperCase()}</span>
+                    <div className={`${styles.containerRow} ${styles.issueNumber}`}>#{nft.issuedId}</div>
                   </div>
                 </div>
-                <div className={styles.columnListing}>
-                  <span className={styles.informationTitle}>
-                    {t(
-                      'best_buying_option.buy_listing.issue_number'
-                    ).toUpperCase()}
-                  </span>
-                  <div
-                    className={`${styles.containerRow} ${styles.issueNumber}`}
-                  >
-                    #{nft.issuedId}
-                  </div>
-                </div>
+                {!isOwner && canBid && (
+                  <Button inverted className={styles.makeOfferButton} as={Link} to={locations.bid(nft.contractAddress, nft.tokenId)}>
+                    <img src={makeOffer} alt={t('best_buying_option.buy_listing.make_offer')} />
+                    &nbsp;
+                    {t('best_buying_option.buy_listing.make_offer')}
+                  </Button>
+                )}
               </div>
-              {!isOwner && canBid && (
-                <Button
-                  inverted
-                  className={styles.makeOfferButton}
-                  as={Link}
-                  to={locations.bid(nft.contractAddress, nft.tokenId)}
-                >
-                  <img
-                    src={makeOffer}
-                    alt={t('best_buying_option.buy_listing.make_offer')}
-                  />
-                  &nbsp;
-                  {t('best_buying_option.buy_listing.make_offer')}
-                </Button>
-              )}
-            </div>
-          )}
+            )}
     </div>
   )
 }

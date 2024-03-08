@@ -1,28 +1,19 @@
 import { takeLatest, put, call } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
-import {
-  localStorageGetIdentity,
-  localStorageClearIdentity,
-  localStorageStoreIdentity
-} from '@dcl/single-sign-on-client'
+import { localStorageGetIdentity, localStorageClearIdentity, localStorageStoreIdentity } from '@dcl/single-sign-on-client'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   CONNECT_WALLET_SUCCESS,
   DISCONNECT_WALLET,
-  DisconnectWalletAction
+  DisconnectWalletAction,
+  ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isErrorWithMessage } from '../../lib/error'
 import { config } from '../../config'
 import { getEth } from '../wallet/utils'
 
-import {
-  GENERATE_IDENTITY_REQUEST,
-  GenerateIdentityRequestAction,
-  generateIdentityFailure,
-  generateIdentitySuccess
-} from './actions'
+import { GENERATE_IDENTITY_REQUEST, GenerateIdentityRequestAction, generateIdentityFailure, generateIdentitySuccess } from './actions'
 import { IDENTITY_EXPIRATION_IN_MINUTES } from './utils'
 
 export function* identitySaga() {
@@ -46,11 +37,8 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
 
     const signer = eth.getSigner()
 
-    const identity: AuthIdentity = yield Authenticator.initializeAuthChain(
-      address,
-      payload,
-      IDENTITY_EXPIRATION_IN_MINUTES,
-      message => signer.signMessage(message)
+    const identity: AuthIdentity = yield Authenticator.initializeAuthChain(address, payload, IDENTITY_EXPIRATION_IN_MINUTES, message =>
+      signer.signMessage(message)
     )
 
     // Stores the identity into the SSO iframe.
@@ -58,12 +46,7 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
 
     yield put(generateIdentitySuccess(address, identity))
   } catch (error) {
-    yield put(
-      generateIdentityFailure(
-        address,
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(generateIdentityFailure(address, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }
 
@@ -85,11 +68,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
   if (identity) {
     yield put(generateIdentitySuccess(address, identity))
   } else {
-    window.location.replace(
-      `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(
-        window.location.href
-      )}`
-    )
+    window.location.replace(`${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(window.location.href)}`)
   }
 }
 

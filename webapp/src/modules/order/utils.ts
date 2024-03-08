@@ -7,9 +7,7 @@ import { Asset } from '../asset/types'
 export const DEFAULT_EXPIRATION_IN_DAYS = 30
 export const INPUT_FORMAT = 'yyyy-MM-dd'
 export const getDefaultExpirationDate = (date = Date.now()): string =>
-  convertDateToDateInputValue(
-    addDays(new Date(date), DEFAULT_EXPIRATION_IN_DAYS)
-  )
+  convertDateToDateInputValue(addDays(new Date(date), DEFAULT_EXPIRATION_IN_DAYS))
 
 export const convertDateToDateInputValue = (date: Date): string => {
   return dateFnsFormat(date, INPUT_FORMAT)
@@ -19,10 +17,7 @@ export function isExpired(expiresAt: string) {
   return parseInt(expiresAt, 10) < Date.now()
 }
 
-export function getActiveOrder(
-  asset: Asset | null,
-  orders: Record<string, Order>
-) {
+export function getActiveOrder(asset: Asset | null, orders: Record<string, Order>) {
   if (
     asset &&
     'activeOrderId' in asset &&

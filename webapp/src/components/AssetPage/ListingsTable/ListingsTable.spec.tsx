@@ -1,13 +1,5 @@
 import { waitFor } from '@testing-library/react'
-import {
-  ChainId,
-  Item,
-  ListingStatus,
-  Network,
-  NFTCategory,
-  Order,
-  Rarity
-} from '@dcl/schemas'
+import { ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -28,7 +20,7 @@ jest.mock('decentraland-dapps/dist/containers', () => {
 })
 
 describe('Listings Table', () => {
-  let asset: Item = {
+  const asset: Item = {
     contractAddress: '0xaddress',
     urn: '',
     itemId: '1',
@@ -59,7 +51,7 @@ describe('Listings Table', () => {
     firstListedAt: null
   }
 
-  let ownersResponse: OwnersResponse = {
+  const ownersResponse: OwnersResponse = {
     issuedId: 1,
     ownerId: '0x92712b730b9a474f99a47bb8b1750190d5959a2b',
     orderStatus: 'open',
@@ -67,7 +59,7 @@ describe('Listings Table', () => {
     tokenId: '1'
   }
 
-  let orderResponse: Order = {
+  const orderResponse: Order = {
     id: '1',
     marketplaceAddress: '0xmarketplace',
     contractAddress: '0xaddress',
@@ -101,9 +93,7 @@ describe('Listings Table', () => {
     })
 
     it('should render the empty table message', async () => {
-      const { getByText, findByTestId } = renderWithProviders(
-        <ListingsTable asset={asset} />
-      )
+      const { getByText, findByTestId } = renderWithProviders(<ListingsTable asset={asset} />)
 
       const loader = await findByTestId('loader')
 
@@ -111,9 +101,7 @@ describe('Listings Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(
-        getByText(t('listings_table.there_are_no_listings'))
-      ).toBeInTheDocument()
+      expect(getByText(t('listings_table.there_are_no_listings'))).toBeInTheDocument()
     })
   })
 

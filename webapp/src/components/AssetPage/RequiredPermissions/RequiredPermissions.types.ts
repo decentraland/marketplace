@@ -11,11 +11,6 @@ export type Props = {
 }
 
 export type OwnProps = Pick<Props, 'asset'>
-export type MapStateProps = Pick<
-  Props,
-  'requiredPermissions' | 'isLoading' | 'hasFetched'
->
+export type MapStateProps = Pick<Props, 'requiredPermissions' | 'isLoading' | 'hasFetched'>
 export type MapDispatchProps = Pick<Props, 'onFetchRequiredPermissions'>
-export type MapDispatch = Dispatch<
-  FetchSmartWearableRequiredPermissionsRequestAction
->
+export type MapDispatch = Dispatch<FetchSmartWearableRequiredPermissionsRequestAction>

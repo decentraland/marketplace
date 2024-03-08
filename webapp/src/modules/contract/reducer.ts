@@ -1,7 +1,4 @@
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { config } from '../../config'
 import { contracts } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
@@ -47,10 +44,7 @@ type ContractReducerAction =
   | UpsertContractsAction
   | ResetHasFetchedAction
 
-export function contractReducer(
-  state = INITIAL_STATE,
-  action: ContractReducerAction
-): ContractState {
+export function contractReducer(state = INITIAL_STATE, action: ContractReducerAction): ContractState {
   switch (action.type) {
     case FETCH_CONTRACTS_REQUEST: {
       return {

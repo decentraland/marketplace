@@ -1,31 +1,14 @@
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { config } from '../../../../config'
 import { FavoritedItems } from '../../../favorites/types'
-import {
-  BulkPickUnpickResponse,
-  ListDetails,
-  ListOfLists,
-  ListsOptions,
-  PicksOptions,
-  UpdateOrCreateList
-} from './types'
+import { BulkPickUnpickResponse, ListDetails, ListOfLists, ListsOptions, PicksOptions, UpdateOrCreateList } from './types'
 
-export const DEFAULT_FAVORITES_LIST_ID = config.get(
-  'DEFAULT_FAVORITES_LIST_ID'
-)!
+export const DEFAULT_FAVORITES_LIST_ID = config.get('DEFAULT_FAVORITES_LIST_ID')
 
-export const MARKETPLACE_FAVORITES_SERVER_URL = config.get(
-  'MARKETPLACE_FAVORITES_SERVER_URL'
-)!
+export const MARKETPLACE_FAVORITES_SERVER_URL = config.get('MARKETPLACE_FAVORITES_SERVER_URL')
 
 export class FavoritesAPI extends BaseClient {
-  private buildPaginationParameters({
-    first,
-    skip
-  }: {
-    first?: number
-    skip?: number
-  }): URLSearchParams {
+  private buildPaginationParameters({ first, skip }: { first?: number; skip?: number }): URLSearchParams {
     const queryParams = new URLSearchParams()
     if (first !== undefined) {
       queryParams.append('limit', first.toString())
@@ -57,16 +40,10 @@ export class FavoritesAPI extends BaseClient {
       queryParams.append('itemId', options.itemId)
     }
 
-    return (
-      '/v1/lists' + (queryParams.toString() && `?${queryParams.toString()}`)
-    )
+    return '/v1/lists' + (queryParams.toString() && `?${queryParams.toString()}`)
   }
 
-  async getWhoFavoritedAnItem(
-    itemId: string,
-    limit: number,
-    offset: number
-  ): Promise<{ addresses: string[]; total: number }> {
+  async getWhoFavoritedAnItem(itemId: string, limit: number, offset: number): Promise<{ addresses: string[]; total: number }> {
     const { results, total } = await this.fetch<{
       results: { userAddress: string }[]
       total: number
@@ -98,9 +75,7 @@ export class FavoritesAPI extends BaseClient {
     )
   }
 
-  async getLists(
-    options: ListsOptions = {}
-  ): Promise<{ results: ListOfLists[]; total: number }> {
+  async getLists(options: ListsOptions = {}): Promise<{ results: ListOfLists[]; total: number }> {
     return this.fetch(this.buildListsUrl(options))
   }
 
@@ -151,11 +126,7 @@ export class FavoritesAPI extends BaseClient {
     })
   }
 
-  async bulkPickUnpick(
-    itemId: string,
-    pickedFor: string[],
-    unpickedFrom: string[]
-  ): Promise<BulkPickUnpickResponse> {
+  async bulkPickUnpick(itemId: string, pickedFor: string[], unpickedFrom: string[]): Promise<BulkPickUnpickResponse> {
     return this.fetch(`/v1/picks/${itemId}`, {
       method: 'POST',
       body: JSON.stringify({

@@ -1,15 +1,14 @@
 import { NFTCategory, NFTFilters, RentalStatus } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { NFTsFetchParams } from '../../../nft/types'
-import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
+import { NFTsFetchFilters, NFTResponse, NFTResult, OwnersFilters, OwnersResponse } from './types'
 import { ATLAS_SERVER_URL } from '../land'
 import { FetchOneOptions } from '../../types'
 import { getNFTSortBy } from '../../../routing/search'
 import { AssetType } from '../../../asset/types'
 import { config } from '../../../../config'
-import { OwnersFilters, OwnersResponse } from './types'
 
-export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
+export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')
 
 export enum PriceFilterExtraOption {
   LAND = 'land'
@@ -23,35 +22,21 @@ export type PriceFilters = Omit<NFTsFetchFilters, 'category'> & {
 
 export type EstateSizeFilters = Pick<
   NFTFilters,
-  | 'isOnSale'
-  | 'adjacentToRoad'
-  | 'minDistanceToPlaza'
-  | 'maxDistanceToPlaza'
-  | 'minPrice'
-  | 'maxPrice'
+  'isOnSale' | 'adjacentToRoad' | 'minDistanceToPlaza' | 'maxDistanceToPlaza' | 'minPrice' | 'maxPrice'
 >
 
 export class NFTAuthAPI extends BaseClient {
-  async get(
-    params: NFTsFetchParams,
-    filters?: NFTsFetchFilters
-  ): Promise<NFTResponse> {
+  async get(params: NFTsFetchParams, filters?: NFTsFetchFilters): Promise<NFTResponse> {
     const queryParams = this.buildNFTQueryString(params, filters)
     return this.fetch(`/v1/nfts?${queryParams}`)
   }
 
-  async fetchOne(
-    contractAddress: string,
-    tokenId: string,
-    options?: FetchOneOptions
-  ): Promise<NFTResult> {
+  async fetchOne(contractAddress: string, tokenId: string, options?: FetchOneOptions): Promise<NFTResult> {
     const queryParams = new URLSearchParams()
     queryParams.append('contractAddress', contractAddress)
     queryParams.append('tokenId', tokenId)
     if (options) {
-      Object.entries(options).forEach(([key, value]) =>
-        queryParams.append(key, value as any)
-      )
+      Object.entries(options).forEach(([key, value]) => queryParams.append(key, value as any))
     }
     const response: NFTResponse = await this.fetch(`/v1/nfts?${queryParams}`)
 
@@ -64,19 +49,14 @@ export class NFTAuthAPI extends BaseClient {
 
   async fetchTokenId(x: number, y: number) {
     try {
-      const { id } = await fetch(
-        `${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`
-      ).then(resp => resp.json())
+      const { id } = await fetch(`${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`).then(resp => resp.json())
       return id
     } catch (error) {
       return null
     }
   }
 
-  private appendNFTFiltersToQueryParams(
-    queryParams: URLSearchParams,
-    filters: NFTsFetchFilters
-  ): void {
+  private appendNFTFiltersToQueryParams(queryParams: URLSearchParams, filters: NFTsFetchFilters): void {
     if (filters.rarities) {
       for (const rarity of filters.rarities) {
         queryParams.append('itemRarity', rarity)
@@ -120,16 +100,12 @@ export class NFTAuthAPI extends BaseClient {
     }
 
     if (filters.rentalStatus) {
-      const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus)
-        ? [filters.rentalStatus]
-        : filters.rentalStatus
+      const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus) ? [filters.rentalStatus] : filters.rentalStatus
       statuses.forEach(status => queryParams.append('rentalStatus', status))
     }
 
     if (filters.creator) {
-      const creators = Array.isArray(filters.creator)
-        ? filters.creator
-        : [filters.creator]
+      const creators = Array.isArray(filters.creator) ? filters.creator : [filters.creator]
       creators.forEach(creator => queryParams.append('creator', creator))
     }
 
@@ -172,10 +148,7 @@ export class NFTAuthAPI extends BaseClient {
     }
   }
 
-  private buildNFTQueryString(
-    params: NFTsFetchParams,
-    filters?: NFTsFetchFilters
-  ): string {
+  private buildNFTQueryString(params: NFTsFetchParams, filters?: NFTsFetchFilters): string {
     const queryParams = new URLSearchParams()
     queryParams.append('first', params.first.toString())
     queryParams.append('skip', params.skip.toString())
@@ -204,9 +177,7 @@ export class NFTAuthAPI extends BaseClient {
     return queryParams.toString()
   }
 
-  async getOwners(
-    params: OwnersFilters
-  ): Promise<{ data: OwnersResponse[]; total: number }> {
+  async getOwners(params: OwnersFilters): Promise<{ data: OwnersResponse[]; total: number }> {
     const queryParams = this.buildGetOwnersParams(params)
     return this.fetch(`/v1/owners?${queryParams}`)
   }
@@ -216,7 +187,7 @@ export class NFTAuthAPI extends BaseClient {
 
     const entries = Object.entries(filters)
 
-    for (let [key, value] of entries) {
+    for (const [key, value] of entries) {
       queryParams.append(key, value.toString())
     }
 

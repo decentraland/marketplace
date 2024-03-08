@@ -6,18 +6,7 @@ import { Props } from './SelectFilter.types'
 import './SelectFilter.css'
 
 const SelectFilter = (props: Props) => {
-  const {
-    name,
-    options,
-    fetchOptions,
-    fetchOptionFromValue,
-    value,
-    clearable,
-    onChange,
-    disabled = false,
-    placeholder,
-    className
-  } = props
+  const { name, options, fetchOptions, fetchOptionFromValue, value, clearable, onChange, disabled = false, placeholder, className } = props
 
   const [providedOptions, setProvidedOptions] = useState(options)
   const [search, setSearch] = useState('')
@@ -31,11 +20,7 @@ const SelectFilter = (props: Props) => {
   // If the option is not found, the value will be changed to the first option.
   useEffect(() => {
     async function tryFetchOptionFromValue() {
-      if (
-        !value ||
-        !fetchOptionFromValue ||
-        providedOptions.some(option => option.value === value)
-      ) {
+      if (!value || !fetchOptionFromValue || providedOptions.some(option => option.value === value)) {
         return
       }
 
@@ -113,25 +98,13 @@ const SelectFilter = (props: Props) => {
         fluid
         selectOnBlur={false}
         noResultsMessage={
-          search.length > 0 &&
-          !isTyping &&
-          !isLoading &&
-          providedOptions.length === 0
+          search.length > 0 && !isTyping && !isLoading && providedOptions.length === 0
             ? t('filters.no_results')
             : t('filters.type_to_search')
         }
         loading={isLoading}
         placeholder={placeholder}
-        icon={
-          fetchOptions ? (
-            <Icon
-              name="search"
-              className={classNames(isLoading && 'search-loading')}
-            />
-          ) : (
-            <Icon name="dropdown" />
-          )
-        }
+        icon={fetchOptions ? <Icon name="search" className={classNames(isLoading && 'search-loading')} /> : <Icon name="dropdown" />}
         onChange={(_event, data) => {
           onChange(data.value as string)
 

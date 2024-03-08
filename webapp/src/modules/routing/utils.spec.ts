@@ -2,18 +2,11 @@ import { AssetStatusFilter } from '../../utils/filters'
 import { Section } from '../vendor/decentraland/routing'
 import { getPersistedIsMapProperty } from '../ui/utils'
 import { View } from '../ui/types'
-import {
-  CATALOG_VIEWS,
-  getClearedBrowseOptions,
-  isCatalogView,
-  isMapSet
-} from './utils'
+import { CATALOG_VIEWS, getClearedBrowseOptions, isCatalogView, isMapSet } from './utils'
 import { BrowseOptions } from './types'
 jest.mock('../ui/utils')
 
-const mockedGetPersistedIsMapProperty = (getPersistedIsMapProperty as unknown) as jest.MockedFunction<
-  typeof getPersistedIsMapProperty
->
+const mockedGetPersistedIsMapProperty = getPersistedIsMapProperty as unknown as jest.MockedFunction<typeof getPersistedIsMapProperty>
 
 describe('when checking if the map is set', () => {
   let isMap: boolean | undefined

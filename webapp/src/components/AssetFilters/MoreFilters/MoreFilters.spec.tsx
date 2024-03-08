@@ -8,22 +8,14 @@ jest.mock('decentraland-ui/dist/components/Media', () => ({
 }))
 
 function renderMoreFilters(props: Partial<MoreFiltersProps> = {}) {
-  return renderWithProviders(
-    <MoreFilters
-      onOnlySmartChange={jest.fn()}
-      onSaleChange={jest.fn()}
-      {...props}
-    />
-  )
+  return renderWithProviders(<MoreFilters onOnlySmartChange={jest.fn()} onSaleChange={jest.fn()} {...props} />)
 }
 
 describe('MoreFilters', () => {
   let useTabletAndBelowMediaQueryMock: jest.MockedFunction<typeof useTabletAndBelowMediaQuery>
 
   beforeEach(() => {
-    useTabletAndBelowMediaQueryMock = useTabletAndBelowMediaQuery as jest.MockedFunction<
-      typeof useTabletAndBelowMediaQuery
-    >
+    useTabletAndBelowMediaQueryMock = useTabletAndBelowMediaQuery as jest.MockedFunction<typeof useTabletAndBelowMediaQuery>
   })
 
   describe('when the isOnSale filter is visible', () => {

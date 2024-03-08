@@ -1,18 +1,11 @@
 import { NFTCategory, RentalStatus } from '@dcl/schemas'
-import {
-  getCategoryFromSection,
-  getSearchEmoteCategory,
-  getSearchWearableCategory
-} from '../routing/search'
+import { getCategoryFromSection, getSearchEmoteCategory, getSearchWearableCategory } from '../routing/search'
 import { BrowseOptions } from '../routing/types'
 import { Sections } from './routing/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, Disabled } from './types'
 
-export function getFilters(
-  vendor: VendorName,
-  options: BrowseOptions
-): NFTsFetchFilters {
+export function getFilters(vendor: VendorName, options: BrowseOptions): NFTsFetchFilters {
   const { section, address } = options
 
   switch (vendor) {
@@ -20,22 +13,14 @@ export function getFilters(
       const currentSection = Sections[VendorName.DECENTRALAND]
 
       const isLand = section === currentSection.LAND
-      const isParcelsOrEstates =
-        section === currentSection.PARCELS || section === currentSection.ESTATES
+      const isParcelsOrEstates = section === currentSection.PARCELS || section === currentSection.ESTATES
       const isWearableHead = section === currentSection.WEARABLES_HEAD
-      const isWearableAccessory =
-        section === currentSection.WEARABLES_ACCESSORIES
+      const isWearableAccessory = section === currentSection.WEARABLES_ACCESSORIES
 
       const category = getCategoryFromSection(section!)
-      const wearableCategory =
-        !isWearableAccessory && category === NFTCategory.WEARABLE
-          ? getSearchWearableCategory(section!)
-          : undefined
+      const wearableCategory = !isWearableAccessory && category === NFTCategory.WEARABLE ? getSearchWearableCategory(section!) : undefined
 
-      const emoteCategory =
-        category === NFTCategory.EMOTE
-          ? getSearchEmoteCategory(section!)
-          : undefined
+      const emoteCategory = category === NFTCategory.EMOTE ? getSearchEmoteCategory(section!) : undefined
 
       const {
         rarities,
@@ -68,10 +53,7 @@ export function getFilters(
         creator: creators,
         network,
         emotePlayMode,
-        rentalStatus:
-          (isLand || isParcelsOrEstates) && address
-            ? [RentalStatus.OPEN, RentalStatus.EXECUTED]
-            : undefined,
+        rentalStatus: (isLand || isParcelsOrEstates) && address ? [RentalStatus.OPEN, RentalStatus.EXECUTED] : undefined,
         minPrice,
         maxPrice,
         minEstateSize,
@@ -107,7 +89,5 @@ export function isPartner(vendor: string) {
 export function getPartners(): VendorName[] {
   const disabledVendors = Object.values(Disabled)
 
-  return Object.values(VendorName).filter(
-    vendor => isPartner(vendor) && !disabledVendors.includes(vendor)
-  )
+  return Object.values(VendorName).filter(vendor => isPartner(vendor) && !disabledVendors.includes(vendor))
 }

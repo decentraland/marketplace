@@ -18,31 +18,21 @@ import {
 
 export function* collectionSaga() {
   yield takeEvery(FETCH_COLLECTIONS_REQUEST, handleFetchCollectionsRequest)
-  yield takeEvery(
-    FETCH_SINGLE_COLLECTION_REQUEST,
-    handleFetchSingleCollectionRequest
-  )
+  yield takeEvery(FETCH_SINGLE_COLLECTION_REQUEST, handleFetchSingleCollectionRequest)
 }
 
-export function* handleFetchCollectionsRequest(
-  action: FetchCollectionsRequestAction
-) {
+export function* handleFetchCollectionsRequest(action: FetchCollectionsRequestAction) {
   const { filters, shouldFetchItems } = action.payload
 
   try {
-    const { data: collections, total }: CollectionResponse = yield call(
-      [collectionAPI, collectionAPI.fetch],
-      filters
-    )
+    const { data: collections, total }: CollectionResponse = yield call([collectionAPI, collectionAPI.fetch], filters)
 
     yield put(fetchCollectionsSuccess(collections, total))
 
     if (shouldFetchItems) {
-      const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(
-        getItemsByContractAddress
-      )
+      const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(getItemsByContractAddress)
 
-      for (let collection of collections) {
+      for (const collection of collections) {
         const items = itemsByContractAddress[collection.contractAddress]
 
         if (!items || items.length !== collection.size) {
@@ -56,40 +46,25 @@ export function* handleFetchCollectionsRequest(
       }
     }
   } catch (error) {
-    yield put(
-      fetchCollectionsFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(fetchCollectionsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }
 
-export function* handleFetchSingleCollectionRequest(
-  action: FetchSingleCollectionRequestAction
-) {
+export function* handleFetchSingleCollectionRequest(action: FetchSingleCollectionRequestAction) {
   const { contractAddress, shouldFetchItems } = action.payload
 
   try {
-    const { data: collections }: CollectionResponse = yield call(
-      [collectionAPI, collectionAPI.fetch],
-      { contractAddress }
-    )
+    const { data: collections }: CollectionResponse = yield call([collectionAPI, collectionAPI.fetch], { contractAddress })
 
     if (collections.length === 0) {
-      yield put(
-        fetchSingleCollectionFailure(
-          `Could not get Collection "${contractAddress}"`
-        )
-      )
+      yield put(fetchSingleCollectionFailure(`Could not get Collection "${contractAddress}"`))
       return
     }
 
     const [collection] = collections
 
     if (shouldFetchItems) {
-      const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(
-        getItemsByContractAddress
-      )
+      const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(getItemsByContractAddress)
 
       const items = itemsByContractAddress[collection.contractAddress]
 
@@ -104,10 +79,6 @@ export function* handleFetchSingleCollectionRequest(
     }
     yield put(fetchSingleCollectionSuccess(collection))
   } catch (error) {
-    yield put(
-      fetchSingleCollectionFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(fetchSingleCollectionFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }

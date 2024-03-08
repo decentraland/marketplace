@@ -5,12 +5,7 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { AuthorizationStepStatus } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
-import {
-  BUY_ITEM_REQUEST,
-  FETCH_COLLECTION_ITEMS_REQUEST,
-  FETCH_ITEM_REQUEST,
-  FetchCollectionItemsRequestAction
-} from './actions'
+import { BUY_ITEM_REQUEST, FETCH_COLLECTION_ITEMS_REQUEST, FETCH_ITEM_REQUEST, FetchCollectionItemsRequestAction } from './actions'
 
 export const getState = (state: RootState) => state.item
 export const getData = (state: RootState) => getState(state).data
@@ -29,35 +24,19 @@ export const getMintItemStatus = (state: RootState) => {
   return AuthorizationStepStatus.PENDING
 }
 
-export const isFetchingItem = (
-  state: RootState,
-  contractAddress: string,
-  tokenId: string
-) =>
+export const isFetchingItem = (state: RootState, contractAddress: string, tokenId: string) =>
   getLoading(state).find(
-    action =>
-      action.type === FETCH_ITEM_REQUEST &&
-      action.payload.contractAddress === contractAddress &&
-      action.payload.tokenId === tokenId
+    action => action.type === FETCH_ITEM_REQUEST && action.payload.contractAddress === contractAddress && action.payload.tokenId === tokenId
   ) !== undefined
 
-export const isFetchingItemsOfCollection = (
-  state: RootState,
-  contractAddress: string
-) =>
+export const isFetchingItemsOfCollection = (state: RootState, contractAddress: string) =>
   getLoading(state).find(
     action =>
       action.type === FETCH_COLLECTION_ITEMS_REQUEST &&
-      (action as FetchCollectionItemsRequestAction).payload?.contractAddresses?.includes(
-        contractAddress
-      )
+      (action as FetchCollectionItemsRequestAction).payload?.contractAddresses?.includes(contractAddress)
   ) !== undefined
 
-export const getItems = createSelector<
-  RootState,
-  ReturnType<typeof getData>,
-  Item[]
->(getData, itemsById => Object.values(itemsById))
+export const getItems = createSelector<RootState, ReturnType<typeof getData>, Item[]>(getData, itemsById => Object.values(itemsById))
 
 const ItemDetailMatchSelector = createMatchSelector<
   RootState,
@@ -67,26 +46,24 @@ const ItemDetailMatchSelector = createMatchSelector<
   }
 >(locations.item(':contractAddress', ':tokenId'))
 
-export const getContractAddress = createSelector<
-  RootState,
-  ReturnType<typeof ItemDetailMatchSelector>,
-  string | null
->(
+export const getContractAddress = createSelector<RootState, ReturnType<typeof ItemDetailMatchSelector>, string | null>(
   ItemDetailMatchSelector,
   match => match?.params.contractAddress.toLowerCase() || null
 )
 
-export const getTokenId = createSelector<
-  RootState,
-  ReturnType<typeof ItemDetailMatchSelector>,
-  string | null
->(ItemDetailMatchSelector, match => match?.params.tokenId || null)
+export const getTokenId = createSelector<RootState, ReturnType<typeof ItemDetailMatchSelector>, string | null>(
+  ItemDetailMatchSelector,
+  match => match?.params.tokenId || null
+)
 
 export const getItemsByContractAddress = createSelector(getItems, items =>
-  items.reduce((acc, item) => {
-    const { contractAddress } = item
-    if (!acc[contractAddress]) acc[contractAddress] = []
-    acc[contractAddress].push(item)
-    return acc
-  }, {} as Record<string, Item[]>)
+  items.reduce(
+    (acc, item) => {
+      const { contractAddress } = item
+      if (!acc[contractAddress]) acc[contractAddress] = []
+      acc[contractAddress].push(item)
+      return acc
+    },
+    {} as Record<string, Item[]>
+  )
 )

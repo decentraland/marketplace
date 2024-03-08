@@ -1,6 +1,6 @@
 import { config } from '../../../config'
 
-export const SUBGRAPH_WORKER = config.get('SUBGRAPH_WORKER')!
+export const SUBGRAPH_WORKER = config.get('SUBGRAPH_WORKER')
 
 export class SubgraphService {
   async fetch<T>(subgraph: string, query: string): Promise<T | undefined> {

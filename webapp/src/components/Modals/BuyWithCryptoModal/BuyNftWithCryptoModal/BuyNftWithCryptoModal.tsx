@@ -49,8 +49,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       targetContract: mana as Contract,
       authorizedContractLabel: marketplace.label || marketplace.name,
       requiredAllowanceInWei: order.price,
-      onAuthorized: (alreadyAuthorized: boolean) =>
-        onExecuteOrder(order, nft, undefined, !alreadyAuthorized) // undefined as fingerprint
+      onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, undefined, !alreadyAuthorized) // undefined as fingerprint
     })
   }, [nft, order, getContract, onAuthorizedAction, onExecuteOrder])
 
@@ -60,27 +59,12 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   }, [nft])
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
-    (
-      selectedToken,
-      selectedChain,
-      providerTokens,
-      crossChainProvider,
-      wallet
-    ) =>
-      useCrossChainBuyNftRoute(
-        order,
-        order.chainId,
-        selectedToken,
-        selectedChain,
-        providerTokens,
-        crossChainProvider,
-        wallet
-      ),
+    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
+      useCrossChainBuyNftRoute(order, order.chainId, selectedToken, selectedChain, providerTokens, crossChainProvider, wallet),
     [order]
   )
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, chainNativeToken, wallet) =>
-      useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet),
+    (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet),
     [nft, order]
   )
 

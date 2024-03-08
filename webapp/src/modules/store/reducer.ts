@@ -1,7 +1,4 @@
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchStoreFailureAction,
   FetchStoreRequestAction,
@@ -46,10 +43,7 @@ type StoreReducerAction =
   | FetchStoreSuccessAction
   | FetchStoreFailureAction
 
-export function storeReducer(
-  state = INITIAL_STATE,
-  action: StoreReducerAction
-): StoreState {
+export function storeReducer(state = INITIAL_STATE, action: StoreReducerAction): StoreState {
   switch (action.type) {
     case FETCH_STORE_REQUEST:
     case UPDATE_STORE_REQUEST: {

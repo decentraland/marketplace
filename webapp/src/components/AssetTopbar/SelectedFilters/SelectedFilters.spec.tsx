@@ -8,15 +8,7 @@ import { getCollectionByAddress } from './utils'
 jest.mock('./utils')
 
 function renderSelectedFilters(props: Partial<Props> = {}) {
-  return render(
-    <SelectedFilters
-      isLandSection={false}
-      category={undefined}
-      browseOptions={{}}
-      onBrowse={jest.fn()}
-      {...props}
-    />
-  )
+  return render(<SelectedFilters isLandSection={false} category={undefined} browseOptions={{}} onBrowse={jest.fn()} {...props} />)
 }
 
 describe('rarities filter', () => {
@@ -72,21 +64,13 @@ describe.each([
   ['onlySmart', { onlySmart: true }, { onlySmart: undefined }],
   ['onlyOnSale', { onlyOnSale: false }, { onlyOnSale: true }],
   ['adjacentToRoad', { adjacentToRoad: true }, { adjacentToRoad: undefined }],
-  [
-    'price',
-    { minPrice: '10', maxPrice: '100' },
-    { minPrice: undefined, maxPrice: undefined }
-  ],
+  ['price', { minPrice: '10', maxPrice: '100' }, { minPrice: undefined, maxPrice: undefined }],
   [
     'distanceToPlaza',
     { minDistanceToPlaza: '2', maxDistanceToPlaza: '10' },
     { minDistanceToPlaza: undefined, maxDistanceToPlaza: undefined }
   ],
-  [
-    'estateSize',
-    { minEstateSize: '1', maxEstateSize: '5' },
-    { minEstateSize: undefined, maxEstateSize: undefined }
-  ]
+  ['estateSize', { minEstateSize: '1', maxEstateSize: '5' }, { minEstateSize: undefined, maxEstateSize: undefined }]
 ])('%s filter', (id, browseOptions, resettedOptions) => {
   test(`should render ${id} filter pill`, () => {
     const { getByTestId } = renderSelectedFilters({ browseOptions })
@@ -113,16 +97,9 @@ describe('collections filter', () => {
   beforeEach(() => {
     contract1 = '0xanAddress'
     contract2 = '0xanotherAddress'
-    collectionsData = [
-      { contractAddress: contract1 },
-      { contractAddress: contract2 }
-    ]
-    ;(getCollectionByAddress as jest.Mock).mockResolvedValueOnce(
-      collectionsData[0]
-    )
-    ;(getCollectionByAddress as jest.Mock).mockResolvedValueOnce(
-      collectionsData[1]
-    )
+    collectionsData = [{ contractAddress: contract1 }, { contractAddress: contract2 }]
+    ;(getCollectionByAddress as jest.Mock).mockResolvedValueOnce(collectionsData[0])
+    ;(getCollectionByAddress as jest.Mock).mockResolvedValueOnce(collectionsData[1])
   })
 
   test.only('should render pill for each collection selected', async () => {
@@ -130,15 +107,7 @@ describe('collections filter', () => {
       browseOptions: { contracts: [contract1, contract2] }
     })
 
-    expect(
-      await findByTestId(
-        `pill-collection-${collectionsData[0].contractAddress}`
-      )
-    ).toBeInTheDocument()
-    expect(
-      await findByTestId(
-        `pill-collection-${collectionsData[1].contractAddress}`
-      )
-    ).toBeInTheDocument()
+    expect(await findByTestId(`pill-collection-${collectionsData[0].contractAddress}`)).toBeInTheDocument()
+    expect(await findByTestId(`pill-collection-${collectionsData[1].contractAddress}`)).toBeInTheDocument()
   })
 })

@@ -4,11 +4,7 @@ import { getIsCampaignBrowserEnabled } from '../../modules/features/selectors'
 import { getIsFullscreen } from '../../modules/routing/selectors'
 import { RootState } from '../../modules/reducer'
 import { clearFilters } from '../../modules/routing/actions'
-import {
-  MapDispatch,
-  MapDispatchProps,
-  MapStateProps
-} from './Navigation.types'
+import { MapDispatch, MapDispatchProps, MapStateProps } from './Navigation.types'
 import Navigation from './Navigation'
 
 const mapState = (state: RootState): MapStateProps => ({

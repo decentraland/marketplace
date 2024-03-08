@@ -17,12 +17,7 @@ const PriceTooLow = (props: Props) => {
   const price = <Price network={network} price={getMinSaleValueInWei()!} />
 
   return (
-    <Card
-      className={classNames(
-        styles.card,
-        isBuyWithCardPage ? styles.buyWithCard : undefined
-      )}
-    >
+    <Card className={classNames(styles.card, isBuyWithCardPage ? styles.buyWithCard : undefined)}>
       <Card.Content>
         <div className={styles.paragraph}>
           <T id="price_too_low.minimum_price" values={{ price }} />
@@ -34,12 +29,7 @@ const PriceTooLow = (props: Props) => {
         </div>
         <div className={isBuyWithCardPage ? undefined : 'buttons'}>
           {!isBuyWithCardPage ? (
-            <Button
-              basic
-              size="small"
-              onClick={() => onSwitchNetwork(chainId)}
-              className={styles.switchNetwork}
-            >
+            <Button basic size="small" onClick={() => onSwitchNetwork(chainId)} className={styles.switchNetwork}>
               {t('price_too_low.switch_network', { network: humanNetwork })}
             </Button>
           ) : null}

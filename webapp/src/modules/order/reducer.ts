@@ -1,8 +1,5 @@
 import { Order } from '@dcl/schemas'
-import {
-  LoadingState,
-  loadingReducer
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchNFTsRequestAction,
   FetchNFTsSuccessAction,
@@ -13,10 +10,7 @@ import {
   FetchNFTSuccessAction,
   FETCH_NFT_SUCCESS
 } from '../nft/actions'
-import {
-  AcceptRentalListingSuccessAction,
-  ACCEPT_RENTAL_LISTING_SUCCESS
-} from '../rental/actions'
+import { AcceptRentalListingSuccessAction, ACCEPT_RENTAL_LISTING_SUCCESS } from '../rental/actions'
 import {
   CancelOrderFailureAction,
   CancelOrderRequestAction,
@@ -90,10 +84,7 @@ type OrderReducerAction =
   | FetchLegacyOrdersSuccessAction
   | FetchLegacyOrdersFailureAction
 
-export function orderReducer(
-  state: OrderState = INITIAL_STATE,
-  action: OrderReducerAction
-): OrderState {
+export function orderReducer(state: OrderState = INITIAL_STATE, action: OrderReducerAction): OrderState {
   switch (action.type) {
     case CREATE_ORDER_REQUEST:
     case EXECUTE_ORDER_REQUEST:
@@ -121,10 +112,13 @@ export function orderReducer(
         ...state,
         data: {
           ...state.data,
-          ...action.payload.orders.reduce((obj, order) => {
-            obj[order.id] = order
-            return obj
-          }, {} as Record<string, Order>)
+          ...action.payload.orders.reduce(
+            (obj, order) => {
+              obj[order.id] = order
+              return obj
+            },
+            {} as Record<string, Order>
+          )
         },
         loading: loadingReducer(state.loading, action),
         error: null
@@ -162,11 +156,7 @@ export function orderReducer(
         ...state,
         data: Object.fromEntries(
           Object.entries(state.data).filter(
-            ([_key, value]) =>
-              !(
-                value.contractAddress === rental.contractAddress &&
-                value.tokenId === rental.tokenId
-              )
+            ([_key, value]) => !(value.contractAddress === rental.contractAddress && value.tokenId === rental.tokenId)
           )
         )
       }
@@ -179,10 +169,13 @@ export function orderReducer(
         ...state,
         dataLegacy: {
           ...state.dataLegacy,
-          ...orders.reduce((obj, order) => {
-            obj[order.id] = order
-            return obj
-          }, {} as Record<string, LegacyOrderFragment>)
+          ...orders.reduce(
+            (obj, order) => {
+              obj[order.id] = order
+              return obj
+            },
+            {} as Record<string, LegacyOrderFragment>
+          )
         },
         loading: loadingReducer(state.loading, action)
       }

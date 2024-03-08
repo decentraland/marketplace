@@ -5,16 +5,9 @@ import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 import { RootState } from '../../modules/reducer'
 import { getWallet } from '../../modules/wallet/selectors'
-import {
-  getBidderBids,
-  getSellerBids,
-  getArchivedBidIds
-} from '../../modules/ui/nft/bid/selectors'
+import { getBidderBids, getSellerBids, getArchivedBidIds } from '../../modules/ui/nft/bid/selectors'
 import { getLoading } from '../../modules/bid/selectors'
-import {
-  fetchBidsByAddressRequest,
-  FETCH_BIDS_BY_ADDRESS_REQUEST
-} from '../../modules/bid/actions'
+import { fetchBidsByAddressRequest, FETCH_BIDS_BY_ADDRESS_REQUEST } from '../../modules/bid/actions'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './Bids.types'
 import Bids from './Bids'
 

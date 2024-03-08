@@ -11,13 +11,9 @@ class AccountAPI extends BaseAPI {
   }
 
   fetchOne = async (address: string): Promise<Account> => {
-    const { data }: AccountResponse = await this.request(
-      'get',
-      '/collections',
-      {
-        address
-      }
-    )
+    const { data }: AccountResponse = await this.request('get', '/collections', {
+      address
+    })
 
     if (data.length === 0) {
       throw new Error('Not found')

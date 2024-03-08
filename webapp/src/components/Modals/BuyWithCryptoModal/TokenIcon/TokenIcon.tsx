@@ -11,9 +11,7 @@ export const TokenIcon = (props: Props) => {
       style={{ zIndex: 3001 }}
       on="hover"
       position="top center"
-      trigger={
-        <img height={24} width={24} src={src ?? noTokenImage} alt={name} />
-      }
+      trigger={<img height={24} width={24} src={src ?? noTokenImage} alt={name} />}
     />
   )
 }

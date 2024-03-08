@@ -16,9 +16,7 @@ export const Availability = (props: Props) => {
         <span>
           /
           {Rarity.getMaxSupply(
-            asset.category === NFTCategory.WEARABLE
-              ? asset.data.wearable!.rarity
-              : asset.data.emote!.rarity
+            asset.category === NFTCategory.WEARABLE ? asset.data.wearable!.rarity : asset.data.emote!.rarity
           ).toLocaleString()}
         </span>
       </Info>

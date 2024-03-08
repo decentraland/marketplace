@@ -1,15 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import {
-  Modal,
-  Button,
-  ModalNavigation,
-  Loader,
-  Message
-} from 'decentraland-ui'
-import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
+import { Modal, Button, ModalNavigation, Loader, Message } from 'decentraland-ui'
+import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { TransactionLink } from 'decentraland-dapps/dist/containers'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -39,7 +30,7 @@ const AuthorizationStep = (props: Props) => {
   const rentalContractData = getContract(ContractName.Rentals, nft.chainId)
   const authorization: Authorization = useMemo(
     () => ({
-      address: address!,
+      address: address,
       authorizedAddress: rentalContractData.address,
       contractAddress: nft.contractAddress,
       contractName: ContractName.ERC721,
@@ -60,9 +51,7 @@ const AuthorizationStep = (props: Props) => {
   }, [setShowError, onCancel])
 
   const handleOnInfo = useCallback(() => {
-    window.location.href = `${config.get(
-      'DOCS_URL'
-    )}/player/market/rentals/#list-land-for-rent`
+    window.location.href = `${config.get('DOCS_URL')}/player/market/rentals/#list-land-for-rent`
   }, [])
 
   // Effects
@@ -102,11 +91,7 @@ const AuthorizationStep = (props: Props) => {
                 values={{
                   assetType: t(`global.${nft.category}`),
                   link: (
-                    <TransactionLink
-                      address={rentalContractData.address}
-                      txHash=""
-                      chainId={rentalContractData.chainId}
-                    >
+                    <TransactionLink address={rentalContractData.address} txHash="" chainId={rentalContractData.chainId}>
                       {t('rental_modal.authorization_step.notice_link')}
                     </TransactionLink>
                   )
@@ -119,26 +104,14 @@ const AuthorizationStep = (props: Props) => {
               </p>
               <ul>
                 <li>
-                  <b>
-                    {t(
-                      'rental_modal.authorization_step.notice_line_two_option_one_title'
-                    )}
-                  </b>
+                  <b>{t('rental_modal.authorization_step.notice_line_two_option_one_title')}</b>
                   :&nbsp;
-                  {t(
-                    'rental_modal.authorization_step.notice_line_two_option_one_text'
-                  )}
+                  {t('rental_modal.authorization_step.notice_line_two_option_one_text')}
                 </li>
                 <li>
-                  <b>
-                    {t(
-                      'rental_modal.authorization_step.notice_line_two_option_two_title'
-                    )}
-                  </b>
+                  <b>{t('rental_modal.authorization_step.notice_line_two_option_two_title')}</b>
                   :&nbsp;
-                  {t(
-                    'rental_modal.authorization_step.notice_line_two_option_two_text'
-                  )}
+                  {t('rental_modal.authorization_step.notice_line_two_option_two_text')}
                 </li>
               </ul>
             </div>
@@ -147,37 +120,18 @@ const AuthorizationStep = (props: Props) => {
           <Modal.Actions className={styles.actions}>
             {isConfirmingAuthorization ? (
               <div className={styles.confirmTransaction}>
-                <Loader
-                  active
-                  size="small"
-                  className={styles.confirmTransactionLoader}
-                />
+                <Loader active size="small" className={styles.confirmTransactionLoader} />
                 <p>{t('rental_modal.authorization_step.confirm')}</p>
               </div>
             ) : (
-              <Button
-                primary
-                fluid
-                loading={isLoading}
-                onClick={handleSubmit}
-                disabled={isLoading}
-              >
+              <Button primary fluid loading={isLoading} onClick={handleSubmit} disabled={isLoading}>
                 {t('global.proceed')}
               </Button>
             )}
             <Button fluid onClick={handleCancel} disabled={isLoading}>
               {t('global.cancel')}
             </Button>
-            {showError && (
-              <Message
-                className={styles.errorMessage}
-                error
-                size="tiny"
-                visible
-                content={error}
-                header={t('global.error')}
-              />
-            )}
+            {showError && <Message className={styles.errorMessage} error size="tiny" visible content={error} header={t('global.error')} />}
           </Modal.Actions>
         </>
       )}

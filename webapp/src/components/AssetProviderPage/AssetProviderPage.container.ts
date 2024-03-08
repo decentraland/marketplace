@@ -12,8 +12,4 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = () => ({})
 
-export default connect(mapState, mapDispatch)(AssetProviderPage) as <
-  T extends AssetType = AssetType
->(
-  props: OwnProps<T>
-) => JSX.Element
+export default connect(mapState, mapDispatch)(AssetProviderPage) as <T extends AssetType = AssetType>(props: OwnProps<T>) => JSX.Element

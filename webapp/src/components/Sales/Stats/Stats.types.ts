@@ -11,12 +11,6 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  | 'address'
-  | 'totalEarnings'
-  | 'ethereumEarned'
-  | 'isLoading'
-  | 'maticEarned'
-  | 'totalSales'
-  | 'royalties'
+  'address' | 'totalEarnings' | 'ethereumEarned' | 'isLoading' | 'maticEarned' | 'totalSales' | 'royalties'
 >
 export type MapDispatchProps = Pick<Props, 'onFetchMetrics'>

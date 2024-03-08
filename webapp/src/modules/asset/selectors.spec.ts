@@ -1,8 +1,5 @@
 import { RootState } from '../reducer'
-import {
-  fetchSmartWearableRequiredPermissionsRequest,
-  fetchSmartWearableVideoHashRequest
-} from './actions'
+import { fetchSmartWearableRequiredPermissionsRequest, fetchSmartWearableVideoHashRequest } from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
   getAssetData,
@@ -117,9 +114,7 @@ describe('when getting if the required permissions are being fetched', () => {
 
   describe('and it is being fetched', () => {
     beforeEach(() => {
-      state.asset.loading.push(
-        fetchSmartWearableRequiredPermissionsRequest({ id } as Asset)
-      )
+      state.asset.loading.push(fetchSmartWearableRequiredPermissionsRequest({ id } as Asset))
     })
 
     it('should return true', () => {
@@ -162,9 +157,7 @@ describe('when getting if the video hash is being fetched', () => {
 
   describe('and it is being fetched', () => {
     beforeEach(() => {
-      state.asset.loading.push(
-        fetchSmartWearableVideoHashRequest({ id } as Asset)
-      )
+      state.asset.loading.push(fetchSmartWearableVideoHashRequest({ id } as Asset))
     })
 
     it('should return true', () => {
@@ -196,9 +189,7 @@ describe('when getting the required permissions of an asset', () => {
     })
 
     it('should return the them ', () => {
-      expect(getRequiredPermissions(state, id)).toEqual(
-        state.asset.data[id].requiredPermissions
-      )
+      expect(getRequiredPermissions(state, id)).toEqual(state.asset.data[id].requiredPermissions)
     })
   })
 })

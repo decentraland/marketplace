@@ -29,23 +29,17 @@ describe('CreatorsResultItemRow', () => {
   }
 
   test('renders without crashing', () => {
-    const { getByRole } = renderWithProviders(
-      <CreatorsResultItemRow {...defaultProps} />
-    )
+    const { getByRole } = renderWithProviders(<CreatorsResultItemRow {...defaultProps} />)
     expect(getByRole('link')).toBeInTheDocument()
   })
 
   test('renders creator name correctly', () => {
-    const { getByText } = renderWithProviders(
-      <CreatorsResultItemRow {...defaultProps} />
-    )
+    const { getByText } = renderWithProviders(<CreatorsResultItemRow {...defaultProps} />)
     expect(getByText('John Doe')).toBeInTheDocument()
   })
 
   test('calls onClick when container is clicked', () => {
-    const { getByRole } = renderWithProviders(
-      <CreatorsResultItemRow {...defaultProps} />
-    )
+    const { getByRole } = renderWithProviders(<CreatorsResultItemRow {...defaultProps} />)
     expect(getByRole('link')).toHaveAttribute(
       'href',
       locations.account(defaultProps.creator.address, {

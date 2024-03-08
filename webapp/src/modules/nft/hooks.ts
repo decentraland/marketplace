@@ -12,12 +12,8 @@ export const useFingerprint = (nft: NFT | null) => {
   const [contractFingerprint, setContractFingerprint] = useState<string>()
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingContract, setIsLoadingContract] = useState(false)
-  const estate = useSelector((state: RootState) =>
-    getContract(state, { category: NFTCategory.ESTATE })
-  )
-  const landContract = useSelector((state: RootState) =>
-    getContract(state, { category: NFTCategory.PARCEL })
-  )
+  const estate = useSelector((state: RootState) => getContract(state, { category: NFTCategory.ESTATE }))
+  const landContract = useSelector((state: RootState) => getContract(state, { category: NFTCategory.PARCEL }))
   const tilesByEstateId = useSelector(getTilesByEstateId)
 
   useEffect(() => {
@@ -31,45 +27,22 @@ export const useFingerprint = (nft: NFT | null) => {
           if (parcels.length) {
             setIsLoading(true)
             generateFingerprint(nft.tokenId, parcels, landContract!)
-              .then((result) => setFingerprint(result))
+              .then(result => setFingerprint(result))
               .finally(() => setIsLoading(false))
-              .catch(error =>
-                console.error(
-                  `Error generating fingerprint for nft ${nft.tokenId}`,
-                  error
-                )
-              )
-          }                                                                                                                 
+              .catch(error => console.error(`Error generating fingerprint for nft ${nft.tokenId}`, error))
+          }
           setIsLoadingContract(true)
           getFingerprint(nft.tokenId, estate)
             .then(result => setContractFingerprint(result))
             .finally(() => setIsLoadingContract(false))
-            .catch(error =>
-              console.error(
-                `Error getting fingerprint for nft ${nft.tokenId}`,
-                error
-              )
-            )
+            .catch(error => console.error(`Error getting fingerprint for nft ${nft.tokenId}`, error))
           break
         }
         default:
           break
       }
     }
-  }, [
-    estate,
-    nft,
-    landContract,
-    tilesByEstateId,
-    setFingerprint,
-    setIsLoading,
-    setIsLoadingContract,
-    setContractFingerprint
-  ])
+  }, [estate, nft, landContract, tilesByEstateId, setFingerprint, setIsLoading, setIsLoadingContract, setContractFingerprint])
 
-  return [
-    fingerprint,
-    isLoading || isLoadingContract,
-    contractFingerprint
-  ] as const
+  return [fingerprint, isLoading || isLoadingContract, contractFingerprint] as const
 }

@@ -5,10 +5,7 @@ import { RentalStatus } from '@dcl/schemas'
 import { isParcel } from '../../../modules/nft/utils'
 import { Icon, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  hasRentalEnded,
-  isRentalListingExecuted
-} from '../../../modules/rental/utils'
+import { hasRentalEnded, isRentalListingExecuted } from '../../../modules/rental/utils'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Mana } from '../../Mana'
@@ -16,24 +13,16 @@ import AssetCell from '../AssetCell'
 import { Props } from './OnRentListElement.types'
 import './OnRentListElement.css'
 
-const OnRentListElement = ({
-  nft,
-  rental,
-  isClaimingBackLandTransactionPending
-}: Props) => {
-  const category = nft!.category
+const OnRentListElement = ({ nft, rental, isClaimingBackLandTransactionPending }: Props) => {
+  const category = nft.category
   const { startedAt, rentedDays } = rental
   const startDate = startedAt ? new Date(startedAt) : null
-  const endDate =
-    startDate && rentedDays ? add(startDate, { days: rentedDays }) : null
+  const endDate = startDate && rentedDays ? add(startDate, { days: rentedDays }) : null
   return (
     <>
       <Mobile>
         <div className="mobile-row">
-          <AssetCell
-            asset={nft}
-            link={locations.manage(nft.contractAddress, nft.tokenId)}
-          />
+          <AssetCell asset={nft} link={locations.manage(nft.contractAddress, nft.tokenId)} />
           <Mana showTooltip network={nft.network} inline>
             {formatWeiMANA(rental.periods[0].pricePerDay)}
           </Mana>
@@ -42,10 +31,7 @@ const OnRentListElement = ({
       <NotMobile>
         <Table.Row>
           <Table.Cell>
-            <AssetCell
-              asset={nft}
-              link={locations.manage(nft.contractAddress, nft.tokenId)}
-            />
+            <AssetCell asset={nft} link={locations.manage(nft.contractAddress, nft.tokenId)} />
           </Table.Cell>
           <Table.Cell>{t(`global.${category}`)}</Table.Cell>
           <Table.Cell>

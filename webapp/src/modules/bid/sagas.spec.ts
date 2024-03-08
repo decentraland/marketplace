@@ -12,12 +12,7 @@ import { getRentalById } from '../rental/selectors'
 import { NFT } from '../nft/types'
 import { Contract } from '../vendor/services'
 import { getCurrentNFT } from '../nft/selectors'
-import {
-  acceptBidFailure,
-  acceptBidtransactionSubmitted,
-  acceptBidRequest,
-  acceptBidSuccess
-} from './actions'
+import { acceptBidFailure, acceptBidtransactionSubmitted, acceptBidRequest, acceptBidSuccess } from './actions'
 import { bidSaga } from './sagas'
 
 describe('when handling the accepting a bid action', () => {
@@ -35,15 +30,8 @@ describe('when handling the accepting a bid action', () => {
       } as Bid
 
       return expectSaga(bidSaga)
-        .provide([
-          [select(getContract, { address: bid.contractAddress }), undefined]
-        ])
-        .put(
-          acceptBidFailure(
-            bid,
-            `Couldn't find a valid vendor for contract ${bid.contractAddress}`
-          )
-        )
+        .provide([[select(getContract, { address: bid.contractAddress }), undefined]])
+        .put(acceptBidFailure(bid, `Couldn't find a valid vendor for contract ${bid.contractAddress}`))
         .dispatch(acceptBidRequest(bid))
         .run({ silenceTimeout: true })
     })
@@ -65,10 +53,7 @@ describe('when handling the accepting a bid action', () => {
         .provide([
           [select(getContract, { address: bid.contractAddress }), contract],
           [select(getWallet), wallet],
-          [
-            call(VendorFactory.build, contract.vendor),
-            throwError(new Error(error))
-          ]
+          [call(VendorFactory.build, contract.vendor), throwError(new Error(error))]
         ])
         .put(acceptBidFailure(bid, error))
         .dispatch(acceptBidRequest(bid))
@@ -92,10 +77,7 @@ describe('when handling the accepting a bid action', () => {
           [select(getContract, { address: bid.contractAddress }), contract],
           [call(VendorFactory.build, contract.vendor), vendor],
           [select(getWallet), wallet],
-          [
-            call([vendor.bidService!, 'accept'], wallet, bid),
-            Promise.reject(error)
-          ]
+          [call([vendor.bidService!, 'accept'], wallet, bid), Promise.reject(error)]
         ])
         .put(acceptBidFailure(bid, error.message))
         .dispatch(acceptBidRequest(bid))
@@ -147,15 +129,9 @@ describe('when handling the accepting a bid action', () => {
               [select(getWallet), wallet],
               [select(getCurrentNFT), nft],
               [select(getRentalById, nft.openRentalId!), rental],
-              [
-                call([vendor.bidService!, 'accept'], wallet, bid),
-                Promise.resolve(txHash)
-              ],
+              [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
               [call(waitForTx, txHash), Promise.resolve()],
-              [
-                call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
-                Promise.resolve()
-              ]
+              [call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED), Promise.resolve()]
             ])
             .put(acceptBidSuccess(bid))
             .put(acceptBidtransactionSubmitted(bid, txHash))
@@ -175,10 +151,7 @@ describe('when handling the accepting a bid action', () => {
               [call(VendorFactory.build, contract.vendor!), vendor],
               [select(getWallet), wallet],
               [select(getCurrentNFT), nft],
-              [
-                call([vendor.bidService!, 'accept'], wallet, bid),
-                Promise.resolve(txHash)
-              ],
+              [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
               [call(waitForTx, txHash), Promise.resolve()]
             ])
             .put(acceptBidSuccess(bid))
@@ -196,10 +169,7 @@ describe('when handling the accepting a bid action', () => {
             [call(VendorFactory.build, contract.vendor!), vendor],
             [select(getWallet), wallet],
             [select(getCurrentNFT), nft],
-            [
-              call([vendor.bidService!, 'accept'], wallet, bid),
-              Promise.resolve(txHash)
-            ],
+            [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
             [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
           ])
           .put(acceptBidFailure(bid, 'anError'))

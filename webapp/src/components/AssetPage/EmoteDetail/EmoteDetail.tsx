@@ -90,31 +90,15 @@ const EmoteDetail = ({ nft }: Props) => {
           <div>
             <Title asset={nft} />
             <div className={styles.badges}>
-              <RarityBadge
-                rarity={emote.rarity}
-                assetType={AssetType.NFT}
-                category={NFTCategory.EMOTE}
-              />
+              <RarityBadge rarity={emote.rarity} assetType={AssetType.NFT} category={NFTCategory.EMOTE} />
               <IconBadge
                 icon={loop ? 'play-loop' : 'play-once'}
                 text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
                 href={emoteBadgeHref}
               />
               <CampaignBadge contract={nft.contractAddress} />
-              {emote.hasSound && (
-                <IconBadge
-                  icon="sound"
-                  text={t('emote.sound')}
-                  href={emoteSoundHref}
-                />
-              )}
-              {emote.hasGeometry && (
-                <IconBadge
-                  icon="props"
-                  text={t('emote.props')}
-                  href={emoteGeometryHref}
-                />
-              )}
+              {emote.hasSound && <IconBadge icon="sound" text={t('emote.sound')} href={emoteSoundHref} />}
+              {emote.hasGeometry && <IconBadge icon="props" text={t('emote.props')} href={emoteGeometryHref} />}
             </div>
           </div>
           <Description text={emote.description} />

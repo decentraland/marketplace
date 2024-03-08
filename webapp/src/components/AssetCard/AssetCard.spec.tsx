@@ -1,13 +1,6 @@
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils'
 import { screen } from '@testing-library/react'
-import {
-  BodyShape,
-  ChainId,
-  Network,
-  NFTCategory,
-  Rarity,
-  WearableCategory
-} from '@dcl/schemas'
+import { BodyShape, ChainId, Network, NFTCategory, Rarity, WearableCategory } from '@dcl/schemas'
 import { Asset } from '../../modules/asset/types'
 import { INITIAL_STATE } from '../../modules/favorites/reducer'
 import { SortBy } from '../../modules/routing/types'

@@ -1,13 +1,7 @@
 import { Entity } from '@dcl/schemas'
 import { EntityVersion } from 'dcl-catalyst-commons'
 import { Store, StoreEntityMetadata } from './types'
-import {
-  getPeerCoverUrl,
-  getStoreUrn,
-  getEntityMetadataFromStore,
-  getStoreFromEntity,
-  getEntityMetadataFilesFromStore
-} from './utils'
+import { getPeerCoverUrl, getStoreUrn, getEntityMetadataFromStore, getStoreFromEntity, getEntityMetadataFilesFromStore } from './utils'
 
 global.fetch = jest.fn()
 const mockFetch = fetch as jest.MockedFunction<typeof fetch>
@@ -215,9 +209,7 @@ describe('when getting entity files from store', () => {
 
     it('should return a map with an entry with the store coverName as key', async () => {
       const result = await getEntityMetadataFilesFromStore(mockStore)
-      expect(result).toEqual(
-        new Map<string, Buffer>([['some-cover-name', expect.anything()]])
-      )
+      expect(result).toEqual(new Map<string, Buffer>([['some-cover-name', expect.anything()]]))
     })
   })
 })

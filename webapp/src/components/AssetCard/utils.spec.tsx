@@ -2,17 +2,10 @@ import { BigNumber, ethers } from 'ethers'
 import { CatalogSortBy, Item } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { BrowseOptions, SortBy } from '../../modules/routing/types'
-import {
-  getAlsoAvailableForMintingText,
-  getAssetListingsRangeInfoText,
-  getCatalogCardInformation,
-  getListingsRangePrice
-} from './utils'
+import { getAlsoAvailableForMintingText, getAssetListingsRangeInfoText, getCatalogCardInformation, getListingsRangePrice } from './utils'
 import mintingIcon from '../../images/minting.png'
 
-const applyRange = (
-  appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice' | 'sortBy'>
-) => {
+const applyRange = (appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice' | 'sortBy'>) => {
   return (appliedFilters = {
     ...appliedFilters,
     minPrice: '100',
@@ -145,9 +138,7 @@ describe('AssetCard utils', () => {
             beforeEach(() => {
               asset = {
                 ...asset,
-                price: BigNumber.from(
-                  ethers.utils.parseUnits(appliedFilters.minPrice as string)
-                )
+                price: BigNumber.from(ethers.utils.parseUnits(appliedFilters.minPrice as string))
                   .sub(BigNumber.from(1))
                   .toString()
               }
@@ -166,9 +157,7 @@ describe('AssetCard utils', () => {
             beforeEach(() => {
               asset = {
                 ...asset,
-                price: BigNumber.from(
-                  ethers.utils.parseUnits(appliedFilters.maxPrice as string)
-                )
+                price: BigNumber.from(ethers.utils.parseUnits(appliedFilters.maxPrice as string))
                   .add(BigNumber.from(1))
                   .toString()
               }
@@ -262,9 +251,7 @@ describe('AssetCard utils', () => {
             beforeEach(() => {
               asset = {
                 ...asset,
-                maxListingPrice: BigNumber.from(asset.price)
-                  .sub(1)
-                  .toString()
+                maxListingPrice: BigNumber.from(asset.price).sub(1).toString()
               }
             })
             it('should show most expensive in range title, no icon, the minting price and the listings range in the extra section', () => {
@@ -281,9 +268,7 @@ describe('AssetCard utils', () => {
             beforeEach(() => {
               asset = {
                 ...asset,
-                maxListingPrice: BigNumber.from(asset.price)
-                  .add(1)
-                  .toString()
+                maxListingPrice: BigNumber.from(asset.price).add(1).toString()
               }
             })
             it('should show "Most Expensive" title, no icon, the max listing price and the listings range in the extra section', () => {
@@ -301,9 +286,7 @@ describe('AssetCard utils', () => {
           beforeEach(() => {
             asset = {
               ...asset,
-              price: BigNumber.from(
-                ethers.utils.parseUnits(appliedFilters.maxPrice as string)
-              )
+              price: BigNumber.from(ethers.utils.parseUnits(appliedFilters.maxPrice as string))
                 .add(1)
                 .toString()
             }
@@ -333,11 +316,7 @@ describe('AssetCard utils', () => {
     })
 
     describe.each(
-      Object.values(CatalogSortBy).filter(
-        sortBy =>
-          sortBy !== CatalogSortBy.CHEAPEST &&
-          sortBy !== CatalogSortBy.MOST_EXPENSIVE
-      )
+      Object.values(CatalogSortBy).filter(sortBy => sortBy !== CatalogSortBy.CHEAPEST && sortBy !== CatalogSortBy.MOST_EXPENSIVE)
     )('when sorting by %s', sort => {
       beforeEach(() => {
         asset = {
@@ -350,7 +329,7 @@ describe('AssetCard utils', () => {
           maxListingPrice: '100'
         } as Item
         appliedFilters = {
-          sortBy: (sort as unknown) as SortBy
+          sortBy: sort as unknown as SortBy
         }
       })
       describe('and there is only mint available', () => {
@@ -441,9 +420,7 @@ describe('AssetCard utils', () => {
             beforeEach(() => {
               asset = {
                 ...asset,
-                price: BigNumber.from(
-                  ethers.utils.parseUnits(appliedFilters.maxPrice as string)
-                )
+                price: BigNumber.from(ethers.utils.parseUnits(appliedFilters.maxPrice as string))
                   .sub(1)
                   .toString()
               }
@@ -462,9 +439,7 @@ describe('AssetCard utils', () => {
             beforeEach(() => {
               asset = {
                 ...asset,
-                price: BigNumber.from(
-                  ethers.utils.parseUnits(appliedFilters.minPrice as string)
-                )
+                price: BigNumber.from(ethers.utils.parseUnits(appliedFilters.minPrice as string))
                   .sub(1)
                   .toString()
               }
@@ -483,9 +458,7 @@ describe('AssetCard utils', () => {
             beforeEach(() => {
               asset = {
                 ...asset,
-                price: BigNumber.from(
-                  ethers.utils.parseUnits(appliedFilters.maxPrice as string)
-                )
+                price: BigNumber.from(ethers.utils.parseUnits(appliedFilters.maxPrice as string))
                   .add(1)
                   .toString()
               }

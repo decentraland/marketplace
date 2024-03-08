@@ -1,10 +1,4 @@
-import {
-  isNameAvailable,
-  isNameValid,
-  getNameInvalidType,
-  hasNameMinLength,
-  NameInvalidType
-} from './utils'
+import { isNameAvailable, isNameValid, getNameInvalidType, hasNameMinLength, NameInvalidType } from './utils'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 
 jest.mock('../../contracts/factories/DCLRegistrar__factory')
@@ -135,9 +129,7 @@ describe('Name Management Tests', () => {
         name = 'invalid#Name'
       })
       it('should return INVALID_CHARACTERS', () => {
-        expect(getNameInvalidType(name)).toBe(
-          NameInvalidType.INVALID_CHARACTERS
-        )
+        expect(getNameInvalidType(name)).toBe(NameInvalidType.INVALID_CHARACTERS)
       })
     })
   })

@@ -5,20 +5,12 @@ import { ContractName } from 'decentraland-transactions'
 import { fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import {
-  changeAccount,
-  connectWalletSuccess
-} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { changeAccount, connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getContractNames, VendorName } from '../vendor'
 import { ContractService } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
 import { getAddress } from '../wallet/selectors'
-import {
-  fetchContractsFailure,
-  fetchContractsRequest,
-  fetchContractsSuccess,
-  resetHasFetched
-} from './actions'
+import { fetchContractsFailure, fetchContractsRequest, fetchContractsSuccess, resetHasFetched } from './actions'
 import { contractSaga } from './sagas'
 import { getContract, getContracts, getHasFetched } from './selectors'
 
@@ -45,9 +37,7 @@ describe('when handling the fetch contracts request', () => {
     it('should put a success action with contracts and put a request for authorizations without the one that is already stored', () => {
       const address = '0x123'
 
-      mockGetContracts = jest
-        .spyOn(ContractService.prototype, 'getContracts')
-        .mockResolvedValueOnce([])
+      mockGetContracts = jest.spyOn(ContractService.prototype, 'getContracts').mockResolvedValueOnce([])
 
       const contractNames = getContractNames()
 
@@ -274,9 +264,7 @@ describe('when handling the fetch contracts request', () => {
 
   describe('when the api call fails', () => {
     it('should put a failure action with the error', () => {
-      mockGetContracts = jest
-        .spyOn(ContractService.prototype, 'getContracts')
-        .mockRejectedValueOnce(new Error('some error'))
+      mockGetContracts = jest.spyOn(ContractService.prototype, 'getContracts').mockRejectedValueOnce(new Error('some error'))
       return expectSaga(contractSaga)
         .provide([[select(getHasFetched), false]])
         .put(fetchContractsFailure('some error'))

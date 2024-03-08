@@ -16,13 +16,7 @@ const EmoteTags = (props: Props) => {
     <div className={classNames([styles.EmoteTags, 'tags'])}>
       <div className={styles.badges}>
         {rarity ? (
-          <RarityBadge
-            size="small"
-            rarity={rarity}
-            assetType={AssetType.NFT}
-            category={NFTCategory.EMOTE}
-            withTooltip={false}
-          />
+          <RarityBadge size="small" rarity={rarity} assetType={AssetType.NFT} category={NFTCategory.EMOTE} withTooltip={false} />
         ) : null}
         {loop !== undefined ? (
           <Popup
@@ -30,12 +24,7 @@ const EmoteTags = (props: Props) => {
             content={<T id={`emote.play_mode.${loop ? 'loop' : 'simple'}`} />}
             trigger={
               <div className={styles.PlayModeSmallBadge}>
-                <span
-                  className={classNames(
-                    styles.PlayIcon,
-                    loop ? styles.PlayLoop : styles.PlayOnce
-                  )}
-                ></span>
+                <span className={classNames(styles.PlayIcon, loop ? styles.PlayLoop : styles.PlayOnce)}></span>
               </div>
             }
           />

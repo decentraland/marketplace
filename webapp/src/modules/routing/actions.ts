@@ -14,8 +14,7 @@ export type BrowseAction = ReturnType<typeof browse>
 
 export const FETCH_ASSETS_FROM_ROUTE = 'Fetch assets from route'
 
-export const fetchAssetsFromRoute = (options: BrowseOptions) =>
-  action(FETCH_ASSETS_FROM_ROUTE, { options })
+export const fetchAssetsFromRoute = (options: BrowseOptions) => action(FETCH_ASSETS_FROM_ROUTE, { options })
 
 export type FetchAssetsFromRouteAction = ReturnType<typeof fetchAssetsFromRoute>
 
@@ -35,7 +34,6 @@ export const GO_BACK = 'Go back'
  * @param defaultLocation location to which the router will navigate in case there is no more back history.
  * defaults to root.
  */
-export const goBack = (defaultLocation?: string) =>
-  action(GO_BACK, { defaultLocation })
+export const goBack = (defaultLocation?: string) => action(GO_BACK, { defaultLocation })
 
 export type GoBackAction = ReturnType<typeof goBack>

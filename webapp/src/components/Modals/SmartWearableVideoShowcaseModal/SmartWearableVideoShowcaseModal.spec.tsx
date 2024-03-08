@@ -17,12 +17,7 @@ let videoHash: string
 
 function renderSmartWearableVideoShowcaseModal(props: Partial<Props> = {}) {
   return renderWithProviders(
-    <SmartWearableVideoShowcaseModal
-      name="SmartWearableVideoShowcaseModal"
-      metadata={{ videoHash }}
-      onClose={jest.fn()}
-      {...props}
-    />
+    <SmartWearableVideoShowcaseModal name="SmartWearableVideoShowcaseModal" metadata={{ videoHash }} onClose={jest.fn()} {...props} />
   )
 }
 
@@ -36,9 +31,7 @@ describe('when the modal is rendered', () => {
 
   it('should render the title and share buttons', () => {
     const { getByText } = renderedModal
-    expect(
-      getByText(t('smart_wearable_video_showcase_modal.title'))
-    ).toBeInTheDocument()
+    expect(getByText(t('smart_wearable_video_showcase_modal.title'))).toBeInTheDocument()
   })
 
   it('should render the video with the src taken from the props', async () => {

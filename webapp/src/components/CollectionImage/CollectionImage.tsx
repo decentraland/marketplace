@@ -13,8 +13,7 @@ const CollectionImage = ({ contractAddress }: Props) => {
     <div className="CollectionImage">
       <CollectionProvider contractAddress={contractAddress} withItems>
         {({ items, isLoading }) => {
-          const renderRow = (items: Item[]) =>
-            items.map((item, index) => <AssetImage key={index} asset={item} />)
+          const renderRow = (items: Item[]) => items.map((item, index) => <AssetImage key={index} asset={item} />)
 
           if (isLoading || !items) {
             return (
@@ -35,13 +34,7 @@ const CollectionImage = ({ contractAddress }: Props) => {
           return (
             <>
               {row1.length > 0 ? (
-                <div
-                  className={classNames(
-                    'item-row',
-                    items?.length === 2 && 'full-width-image'
-                  )}
-                  style={rowHeight}
-                >
+                <div className={classNames('item-row', items?.length === 2 && 'full-width-image')} style={rowHeight}>
                   {renderRow(row1)}
                 </div>
               ) : null}

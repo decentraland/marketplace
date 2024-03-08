@@ -11,11 +11,7 @@ type LandStatusFilterProps = {
   defaultCollapsed?: boolean
 }
 
-export const LandStatusFilter = ({
-  landStatus,
-  onChange,
-  defaultCollapsed = false
-}: LandStatusFilterProps): JSX.Element => {
+export const LandStatusFilter = ({ landStatus, onChange, defaultCollapsed = false }: LandStatusFilterProps): JSX.Element => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const landStatusFilterOptions = [
     {
@@ -44,9 +40,7 @@ export const LandStatusFilter = ({
       isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">{t('filters.status')}</span>
-          <span className="box-filter-value">
-            {getLandLabel({ landStatus })}
-          </span>
+          <span className="box-filter-value">{getLandLabel({ landStatus })}</span>
         </div>
       ) : (
         t('filters.status')

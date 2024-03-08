@@ -7,16 +7,7 @@ export const EnsImage = ({ name, className, onlyLogo }: Props) => {
 
   useEffect(() => {
     const resizeListener = () => {
-      requestAnimationFrame(
-        () =>
-          ref.current &&
-          drawImage(
-            ref.current,
-            name,
-            ref.current.offsetWidth,
-            ref.current.offsetHeight
-          )
-      )
+      requestAnimationFrame(() => ref.current && drawImage(ref.current, name, ref.current.offsetWidth, ref.current.offsetHeight))
     }
     window.addEventListener('resize', resizeListener)
     return () => {
@@ -25,24 +16,8 @@ export const EnsImage = ({ name, className, onlyLogo }: Props) => {
   }, [name])
 
   useEffect(() => {
-    requestAnimationFrame(
-      () =>
-        ref.current &&
-        drawImage(
-          ref.current,
-          name,
-          ref.current.offsetWidth,
-          ref.current.offsetHeight,
-          onlyLogo
-        )
-    )
+    requestAnimationFrame(() => ref.current && drawImage(ref.current, name, ref.current.offsetWidth, ref.current.offsetHeight, onlyLogo))
   }, [name])
 
-  return (
-    <canvas
-      style={{ height: '100%', width: '100%' }}
-      ref={ref}
-      className={className}
-    />
-  )
+  return <canvas style={{ height: '100%', width: '100%' }} ref={ref} className={className} />
 }

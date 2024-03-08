@@ -1,16 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import {
-  HeaderMenu,
-  Header,
-  NotMobile,
-  Table,
-  Loader,
-  Tabs,
-  Dropdown,
-  DropdownProps,
-  Mobile
-} from 'decentraland-ui'
+import { HeaderMenu, Header, NotMobile, Table, Loader, Tabs, Dropdown, DropdownProps, Mobile } from 'decentraland-ui'
 import { EmoteCategory, Rarity, WearableCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -43,19 +33,11 @@ const RankingsTable = (props: Props) => {
 
   const history = useHistory()
   const location = useLocation()
-  const parsedURL = location.hash.includes(TABS_PREFIX)
-    ? parseURLHash(location.hash)
-    : null
+  const parsedURL = location.hash.includes(TABS_PREFIX) ? parseURLHash(location.hash) : null
 
-  const [currentEntity, setCurrentEntity] = useState(
-    parsedURL ? parsedURL.entity : RankingEntities.WEARABLES
-  )
-  const [currentTimeframe, setCurrentTimeframe] = useState(
-    parsedURL ? parsedURL.timeframe : AnalyticsTimeframe.WEEK
-  )
-  const [currentFilters, setCurrentFilters] = useState<RankingsFilters>(
-    parsedURL ? { sortBy: parsedURL.sortBy } : INITIAL_FILTERS
-  )
+  const [currentEntity, setCurrentEntity] = useState(parsedURL ? parsedURL.entity : RankingEntities.WEARABLES)
+  const [currentTimeframe, setCurrentTimeframe] = useState(parsedURL ? parsedURL.timeframe : AnalyticsTimeframe.WEEK)
+  const [currentFilters, setCurrentFilters] = useState<RankingsFilters>(parsedURL ? { sortBy: parsedURL.sortBy } : INITIAL_FILTERS)
   const rankingsSectionRef = useRef<HTMLDivElement>(null)
 
   useScrollSectionIntoView(rankingsSectionRef, TABS_PREFIX)
@@ -64,21 +46,20 @@ const RankingsTable = (props: Props) => {
     onFetchRankings(currentEntity, currentTimeframe, currentFilters)
   }, [onFetchRankings, currentTimeframe, currentEntity, currentFilters])
 
-  const registerHandleFilterChange = (filterName: keyof RankingsFilters) => (
-    _event: React.SyntheticEvent<HTMLElement, Event>,
-    { value }: DropdownProps
-  ) => {
-    setCurrentFilters({
-      ...currentFilters,
-      [filterName]: value !== ALL_FILTER ? value : undefined
-    })
-    if (filterName === 'sortBy') {
-      history.replace({
-        pathname: location.pathname,
-        hash: `${TABS_PREFIX}${currentEntity}-${currentTimeframe}-${value}`
+  const registerHandleFilterChange =
+    (filterName: keyof RankingsFilters) =>
+    (_event: React.SyntheticEvent<HTMLElement, Event>, { value }: DropdownProps) => {
+      setCurrentFilters({
+        ...currentFilters,
+        [filterName]: value !== ALL_FILTER ? value : undefined
       })
+      if (filterName === 'sortBy') {
+        history.replace({
+          pathname: location.pathname,
+          hash: `${TABS_PREFIX}${currentEntity}-${currentTimeframe}-${value}`
+        })
+      }
     }
-  }
 
   const handleTabChange = (entity: RankingEntities) => {
     setCurrentEntity(entity)
@@ -103,20 +84,13 @@ const RankingsTable = (props: Props) => {
         <Tabs isFullscreen>
           <Tabs.Left>
             {Object.values(RankingEntities).map(entity => (
-              <Tabs.Tab
-                key={entity}
-                active={currentEntity === entity}
-                onClick={() => handleTabChange(entity)}
-              >
-                <div id={entity}>
-                  {t(`home_page.analytics.rankings.${entity}.tab_title`)}
-                </div>
+              <Tabs.Tab key={entity} active={currentEntity === entity} onClick={() => handleTabChange(entity)}>
+                <div id={entity}>{t(`home_page.analytics.rankings.${entity}.tab_title`)}</div>
               </Tabs.Tab>
             ))}
           </Tabs.Left>
         </Tabs>
-        {(currentEntity === RankingEntities.WEARABLES ||
-          currentEntity === RankingEntities.EMOTES) && (
+        {(currentEntity === RankingEntities.WEARABLES || currentEntity === RankingEntities.EMOTES) && (
           <>
             <Dropdown
               defaultValue={ALL_FILTER}
@@ -124,23 +98,13 @@ const RankingsTable = (props: Props) => {
               direction="right"
               options={[
                 ALL_FILTER,
-                ...Object.values(
-                  currentEntity === RankingEntities.EMOTES
-                    ? EmoteCategory.schema.enum
-                    : WearableCategory.schema.enum
-                )
+                ...Object.values(currentEntity === RankingEntities.EMOTES ? EmoteCategory.schema.enum : WearableCategory.schema.enum)
               ].map(category => ({
                 value: category as string,
                 text:
                   category === ALL_FILTER
                     ? t('home_page.analytics.rankings.all_categories')
-                    : t(
-                        `${
-                          currentEntity === RankingEntities.EMOTES
-                            ? 'emote'
-                            : 'wearable'
-                        }.category.${category}`
-                      )
+                    : t(`${currentEntity === RankingEntities.EMOTES ? 'emote' : 'wearable'}.category.${category}`)
               }))}
               onChange={registerHandleFilterChange('category')}
             />
@@ -148,15 +112,10 @@ const RankingsTable = (props: Props) => {
               defaultValue={ALL_FILTER}
               value={currentFilters.rarity || ALL_FILTER}
               direction="right"
-              options={[ALL_FILTER, ...Object.values(Rarity.schema.enum)].map(
-                rarity => ({
-                  value: rarity as string,
-                  text:
-                    rarity === ALL_FILTER
-                      ? t('home_page.analytics.rankings.all_rarities')
-                      : t(`rarity.${rarity}`)
-                })
-              )}
+              options={[ALL_FILTER, ...Object.values(Rarity.schema.enum)].map(rarity => ({
+                value: rarity as string,
+                text: rarity === ALL_FILTER ? t('home_page.analytics.rankings.all_rarities') : t(`rarity.${rarity}`)
+              }))}
               onChange={registerHandleFilterChange('rarity')}
             />
           </>
@@ -176,10 +135,7 @@ const RankingsTable = (props: Props) => {
           value: entity as string,
           text: t(`home_page.analytics.rankings.${entity}.tab_title`)
         }))}
-        onChange={(
-          _event: React.SyntheticEvent<HTMLElement, Event>,
-          { value }: DropdownProps
-        ) => handleTabChange(value as RankingEntities)}
+        onChange={(_event: React.SyntheticEvent<HTMLElement, Event>, { value }: DropdownProps) => handleTabChange(value as RankingEntities)}
       />
     )
   }
@@ -188,8 +144,7 @@ const RankingsTable = (props: Props) => {
     switch (currentEntity) {
       case RankingEntities.EMOTES:
       case RankingEntities.WEARABLES:
-        const label =
-          currentEntity === RankingEntities.EMOTES ? 'emotes' : 'wearables'
+        const label = currentEntity === RankingEntities.EMOTES ? 'emotes' : 'wearables'
         return (
           <Table.Header>
             <Table.Row>
@@ -212,18 +167,12 @@ const RankingsTable = (props: Props) => {
                   <span>{t('home_page.analytics.rankings.rarity')}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span>
-                    {t(`home_page.analytics.rankings.${label}.items_sold`)}
-                  </span>
+                  <span>{t(`home_page.analytics.rankings.${label}.items_sold`)}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <span>
                     {t('home_page.analytics.rankings.total_volume')}
-                    <InfoTooltip
-                      content={t(
-                        'home_page.analytics.rankings.total_volume_tooltip'
-                      )}
-                    />
+                    <InfoTooltip content={t('home_page.analytics.rankings.total_volume_tooltip')} />
                   </span>
                 </Table.HeaderCell>
               </NotMobile>
@@ -240,49 +189,29 @@ const RankingsTable = (props: Props) => {
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   {' '}
-                  <span>
-                    {t('home_page.analytics.rankings.total_volume_sales')}
-                  </span>
+                  <span>{t('home_page.analytics.rankings.total_volume_sales')}</span>
                 </Table.HeaderCell>
               </Mobile>
               <NotMobile>
                 <Table.HeaderCell>
+                  <span>{t('home_page.analytics.rankings.creators.creator')}</span>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <span>{t('home_page.analytics.rankings.creators.collections')}</span>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <span>{t('home_page.analytics.rankings.creators.items_sold')}</span>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
                   <span>
-                    {t('home_page.analytics.rankings.creators.creator')}
+                    {t('home_page.analytics.rankings.creators.unique_collectors')}
+                    <InfoTooltip content={t('home_page.analytics.rankings.creators.unique_collectors_tooltip')} />
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <span>
-                    {t('home_page.analytics.rankings.creators.collections')}
-                  </span>
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  <span>
-                    {t('home_page.analytics.rankings.creators.items_sold')}
-                  </span>
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  <span>
-                    {t(
-                      'home_page.analytics.rankings.creators.unique_collectors'
-                    )}
-                    <InfoTooltip
-                      content={t(
-                        'home_page.analytics.rankings.creators.unique_collectors_tooltip'
-                      )}
-                    />
-                  </span>
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  <span>
-                    {t(
-                      'home_page.analytics.rankings.creators.total_volume_sales'
-                    )}
-                    <InfoTooltip
-                      content={t(
-                        'home_page.analytics.rankings.creators.total_volume_sales_tooltip'
-                      )}
-                    />
+                    {t('home_page.analytics.rankings.creators.total_volume_sales')}
+                    <InfoTooltip content={t('home_page.analytics.rankings.creators.total_volume_sales_tooltip')} />
                   </span>
                 </Table.HeaderCell>
               </NotMobile>
@@ -295,59 +224,35 @@ const RankingsTable = (props: Props) => {
             <Table.Row>
               <Mobile>
                 <Table.HeaderCell>
-                  <span>
-                    {t('home_page.analytics.rankings.collectors.collector')}
-                  </span>
+                  <span>{t('home_page.analytics.rankings.collectors.collector')}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <span>
-                    {t('home_page.analytics.rankings.collectors.total_spent')}
-                  </span>
+                  <span>{t('home_page.analytics.rankings.collectors.total_spent')}</span>
                 </Table.HeaderCell>
               </Mobile>
               <NotMobile>
                 <Table.HeaderCell>
+                  <span>{t('home_page.analytics.rankings.collectors.collector')}</span>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <span>{t('home_page.analytics.rankings.collectors.items_bought')}</span>
+                </Table.HeaderCell>
+                <Table.HeaderCell>
                   <span>
-                    {t('home_page.analytics.rankings.collectors.collector')}
+                    {t('home_page.analytics.rankings.collectors.creators_supported')}
+                    <InfoTooltip content={t('home_page.analytics.rankings.collectors.creators_supported_tooltip')} />
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <span>
-                    {t('home_page.analytics.rankings.collectors.items_bought')}
-                  </span>
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  <span>
-                    {t(
-                      'home_page.analytics.rankings.collectors.creators_supported'
-                    )}
-                    <InfoTooltip
-                      content={t(
-                        'home_page.analytics.rankings.collectors.creators_supported_tooltip'
-                      )}
-                    />
-                  </span>
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  <span>
-                    {t(
-                      'home_page.analytics.rankings.collectors.unique_items_bought'
-                    )}
-                    <InfoTooltip
-                      content={t(
-                        'home_page.analytics.rankings.collectors.unique_items_bought_tooltip'
-                      )}
-                    />
+                    {t('home_page.analytics.rankings.collectors.unique_items_bought')}
+                    <InfoTooltip content={t('home_page.analytics.rankings.collectors.unique_items_bought_tooltip')} />
                   </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <span>
                     {t('home_page.analytics.rankings.collectors.total_spent')}
-                    <InfoTooltip
-                      content={t(
-                        'home_page.analytics.rankings.collectors.total_spent_tooltip'
-                      )}
-                    />
+                    <InfoTooltip content={t('home_page.analytics.rankings.collectors.total_spent_tooltip')} />
                   </span>
                 </Table.HeaderCell>
               </NotMobile>
@@ -360,15 +265,12 @@ const RankingsTable = (props: Props) => {
   }
 
   const renderMobileTableHeader = () => {
-    const label =
-      currentEntity === RankingEntities.EMOTES ? 'emotes' : 'wearables'
+    const label = currentEntity === RankingEntities.EMOTES ? 'emotes' : 'wearables'
     let header = <span>{t(`home_page.analytics.rankings.${label}.item`)}</span>
     if (currentEntity === RankingEntities.CREATORS) {
       header = <span>{t('home_page.analytics.rankings.creators.creator')}</span>
     } else if (currentEntity === RankingEntities.COLLECTORS) {
-      header = (
-        <span>{t('home_page.analytics.rankings.collectors.collector')}</span>
-      )
+      header = <span>{t('home_page.analytics.rankings.collectors.collector')}</span>
     }
     return (
       <div className="table-header">
@@ -381,18 +283,13 @@ const RankingsTable = (props: Props) => {
   const renderEmptyState = () => {
     return (
       <div className="empty-state-container">
-        <span className="empty-state-title">
-          {t('home_page.analytics.rankings.no_results_title')}
-        </span>
+        <span className="empty-state-title">{t('home_page.analytics.rankings.no_results_title')}</span>
         <span className="empty-state-subtitle">
           <T
             id="home_page.analytics.rankings.no_results_action"
             values={{
               link: (
-                <div
-                  className="empty-state-action-button"
-                  onClick={() => setCurrentFilters(INITIAL_FILTERS)}
-                >
+                <div className="empty-state-action-button" onClick={() => setCurrentFilters(INITIAL_FILTERS)}>
                   {t('home_page.analytics.rankings.clear_filters')}
                 </div>
               )
@@ -411,31 +308,13 @@ const RankingsTable = (props: Props) => {
     switch (currentEntity) {
       case RankingEntities.EMOTES:
       case RankingEntities.WEARABLES:
-        content = (data as ItemRank[]).map(entity => (
-          <RankingItemRow
-            key={entity.id}
-            entity={entity}
-            isLoading={isLoading}
-          />
-        ))
+        content = (data as ItemRank[]).map(entity => <RankingItemRow key={entity.id} entity={entity} isLoading={isLoading} />)
         break
       case RankingEntities.CREATORS:
-        content = (data as CreatorRank[])?.map(entity => (
-          <RankingCreatorRow
-            key={entity.id}
-            entity={entity}
-            isLoading={isLoading}
-          />
-        ))
+        content = (data as CreatorRank[])?.map(entity => <RankingCreatorRow key={entity.id} entity={entity} isLoading={isLoading} />)
         break
       case RankingEntities.COLLECTORS:
-        content = (data as CollectorRank[])?.map(entity => (
-          <RankingCollectorRow
-            key={entity.id}
-            entity={entity}
-            isLoading={isLoading}
-          />
-        ))
+        content = (data as CollectorRank[])?.map(entity => <RankingCollectorRow key={entity.id} entity={entity} isLoading={isLoading} />)
         break
     }
 
@@ -462,9 +341,7 @@ const RankingsTable = (props: Props) => {
       <HeaderMenu>
         <HeaderMenu.Left>
           <Header>{t('home_page.analytics.rankings.title')}</Header>
-          <span className="subtitle">
-            {t('home_page.analytics.rankings.subtitle')}
-          </span>
+          <span className="subtitle">{t('home_page.analytics.rankings.subtitle')}</span>
         </HeaderMenu.Left>
         <HeaderMenu.Right>
           <Dropdown
@@ -477,23 +354,14 @@ const RankingsTable = (props: Props) => {
             }))}
             onChange={registerHandleFilterChange('sortBy')}
           />
-          <TimeframeSelector
-            value={currentTimeframe}
-            onChange={handleTimeframeSelectorChange}
-          />
+          <TimeframeSelector value={currentTimeframe} onChange={handleTimeframeSelectorChange} />
         </HeaderMenu.Right>
       </HeaderMenu>
       <div className="rankings-card">
         <NotMobile>{renderTableTabs()}</NotMobile>
         <Mobile>{renderEntityDropdown()}</Mobile>
 
-        {isLoading ? (
-          <Loader active size="large" />
-        ) : data && data.length > 0 ? (
-          renderTableContent()
-        ) : (
-          renderEmptyState()
-        )}
+        {isLoading ? <Loader active size="large" /> : data && data.length > 0 ? renderTableContent() : renderEmptyState()}
       </div>
     </div>
   )

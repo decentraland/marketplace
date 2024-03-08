@@ -1,7 +1,7 @@
-import React from "react"
+import React from 'react'
 import './CampaignBanner.css'
 
-const CampaignBanner: React.FC = (props) => {
+const CampaignBanner: React.FC = props => {
   return <div className="CampaignBanner">{props.children}</div>
 }
 

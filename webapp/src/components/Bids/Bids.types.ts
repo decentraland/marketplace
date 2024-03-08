@@ -2,10 +2,7 @@ import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { Bid } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import {
-  fetchBidsByAddressRequest,
-  FetchBidsByAddressRequestAction
-} from '../../modules/bid/actions'
+import { fetchBidsByAddressRequest, FetchBidsByAddressRequestAction } from '../../modules/bid/actions'
 
 export type Props = {
   wallet: Wallet | null
@@ -18,16 +15,6 @@ export type Props = {
   onFetchBids: typeof fetchBidsByAddressRequest
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'wallet'
-  | 'sellerBids'
-  | 'bidderBids'
-  | 'archivedBidIds'
-  | 'isConnecting'
-  | 'isLoading'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'sellerBids' | 'bidderBids' | 'archivedBidIds' | 'isConnecting' | 'isLoading'>
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onFetchBids'>
-export type MapDispatch = Dispatch<
-  CallHistoryMethodAction | FetchBidsByAddressRequestAction
->
+export type MapDispatch = Dispatch<CallHistoryMethodAction | FetchBidsByAddressRequestAction>

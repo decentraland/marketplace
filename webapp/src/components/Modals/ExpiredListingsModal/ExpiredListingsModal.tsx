@@ -1,13 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Modal,
-  Button,
-  ModalNavigation,
-  useTabletAndBelowMediaQuery,
-  Icon
-} from 'decentraland-ui'
+import { Modal, Button, ModalNavigation, useTabletAndBelowMediaQuery, Icon } from 'decentraland-ui'
 import * as decentraland from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../../../modules/ui/utils'
@@ -26,9 +20,7 @@ export const ExpiredListingsModal = () => {
   const isTabletOrBelow = useTabletAndBelowMediaQuery()
   const [isOpen, setIsOpen] = useState<boolean>(true)
   useEffect(() => {
-    setIsOpen(
-      !localStorage.getItem(EXPIRED_LISTINGS_MODAL_KEY) && !isTabletOrBelow
-    )
+    setIsOpen(!localStorage.getItem(EXPIRED_LISTINGS_MODAL_KEY) && !isTabletOrBelow)
   }, [isTabletOrBelow])
 
   return (
@@ -39,16 +31,10 @@ export const ExpiredListingsModal = () => {
       onClose={onClose}
       dimmer={{ className: styles.dimmerRemover }}
     >
-      <ModalNavigation
-        title={t('expired_listings_modal.title')}
-        onClose={onClose}
-      />
+      <ModalNavigation title={t('expired_listings_modal.title')} onClose={onClose} />
       <Modal.Content className={styles.content}>
         <div className={styles.warningIconContainer}>
-          <Icon
-            name="exclamation triangle"
-            className={styles.warningExpiration}
-          />
+          <Icon name="exclamation triangle" className={styles.warningExpiration} />
         </div>
         <Modal.Description>
           <div className={styles.modalDescription}>

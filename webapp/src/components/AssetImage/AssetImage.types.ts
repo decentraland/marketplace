@@ -9,18 +9,9 @@ import {
   SetWearablePreviewControllerAction
 } from '../../modules/ui/preview/actions'
 import { Asset } from '../../modules/asset/types'
-import {
-  FetchItemRequestAction,
-  fetchItemRequest
-} from '../../modules/item/actions'
-import {
-  FetchSmartWearableVideoHashRequestAction,
-  fetchSmartWearableVideoHashRequest
-} from '../../modules/asset/actions'
-import {
-  OpenModalAction,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
+import { FetchItemRequestAction, fetchItemRequest } from '../../modules/item/actions'
+import { FetchSmartWearableVideoHashRequestAction, fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
+import { OpenModalAction, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 
 export type Props = {
   asset: Asset
@@ -40,9 +31,7 @@ export type Props = {
   onSetIsTryingOn: typeof setIsTryingOn
   onSetWearablePreviewController: typeof setWearablePreviewController
   onFetchItem: typeof fetchItemRequest
-  onPlaySmartWearableVideoShowcase: (
-    videoHash: string
-  ) => ReturnType<typeof openModal>
+  onPlaySmartWearableVideoShowcase: (videoHash: string) => ReturnType<typeof openModal>
   onFetchSmartWearableVideoHash: typeof fetchSmartWearableVideoHashRequest
   children?: React.ReactNode
   hasBadges?: boolean

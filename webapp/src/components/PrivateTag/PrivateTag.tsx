@@ -6,10 +6,7 @@ import styles from './PrivateTag.module.css'
 
 const PrivateTag = (props: Props) => {
   return (
-    <div
-      className={classnames(styles.private, props.className)}
-      data-testid={props['data-testid']}
-    >
+    <div className={classnames(styles.private, props.className)} data-testid={props['data-testid']}>
       <div className={styles.icon}></div>
       {t('list_card.private')}
     </div>

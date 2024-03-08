@@ -35,8 +35,7 @@ const mapState = (state: RootState): MapStateProps => {
     search: getSearch(state),
     isLoading:
       assetType === AssetType.ITEM
-        ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) ||
-          isLoadingFavoritedItems(state)
+        ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) || isLoadingFavoritedItems(state)
         : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
     hasFiltersEnabled: hasFiltersEnabled(state),
     visitedLocations: getVisitedLocations(state)

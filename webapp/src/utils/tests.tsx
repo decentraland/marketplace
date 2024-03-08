@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import createSagasMiddleware from 'redux-saga'
-import { createMemoryHistory } from 'history'
+import { createMemoryHistory, createBrowserHistory } from 'history'
 import { Provider } from 'react-redux'
 import { applyMiddleware, compose, createStore, Store } from 'redux'
 import { ConnectedRouter, routerMiddleware } from 'connected-react-router'
@@ -17,7 +17,7 @@ import { SET_IS_TRYING_ON } from '../modules/ui/preview/actions'
 import { rootSaga } from '../modules/sagas'
 import { fetchTilesRequest } from '../modules/tile/actions'
 
-export const history = require('history').createBrowserHistory()
+export const history = createBrowserHistory()
 
 export function initTestStore(preloadedState = {}) {
   const rootReducer = storageReducerWrapper(createRootReducer(history))
@@ -30,22 +30,11 @@ export function initTestStore(preloadedState = {}) {
       ['ui', 'preview', 'isTryingOn'],
       ['identity', 'data']
     ], // array of paths from state to be persisted (optional)
-    actions: [
-      CLEAR_TRANSACTIONS,
-      ARCHIVE_BID,
-      UNARCHIVE_BID,
-      GENERATE_IDENTITY_SUCCESS,
-      SET_IS_TRYING_ON
-    ], // array of actions types that will trigger a SAVE (optional)
+    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, GENERATE_IDENTITY_SUCCESS, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   })
 
-  const middleware = applyMiddleware(
-    sagasMiddleware,
-    routerMiddleware(history),
-    transactionMiddleware,
-    storageMiddleware
-  )
+  const middleware = applyMiddleware(sagasMiddleware, routerMiddleware(history), transactionMiddleware, storageMiddleware)
   const enhancer = compose(middleware)
   const store = createStore(rootReducer, preloadedState, enhancer)
 
@@ -56,10 +45,7 @@ export function initTestStore(preloadedState = {}) {
   return store
 }
 
-export function renderWithProviders(
-  component: JSX.Element,
-  { preloadedState, store }: { preloadedState?: RootState; store?: Store } = {}
-) {
+export function renderWithProviders(component: JSX.Element, { preloadedState, store }: { preloadedState?: RootState; store?: Store } = {}) {
   const initializedStore =
     store ||
     initTestStore({

@@ -6,10 +6,7 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { DCLController__factory } from '../../../contracts/factories/DCLController__factory'
 import { renderWithProviders } from '../../../utils/test'
-import ClaimNameFatFingerModal, {
-  CRYPTO_PAYMENT_METHOD_DATA_TESTID,
-  FIAT_PAYMENT_METHOD_DATA_TESTID
-} from './ClaimNameFatFingerModal'
+import ClaimNameFatFingerModal, { CRYPTO_PAYMENT_METHOD_DATA_TESTID, FIAT_PAYMENT_METHOD_DATA_TESTID } from './ClaimNameFatFingerModal'
 import { Props } from './ClaimNameFatFingerModal.types'
 
 jest.mock('../../../modules/vendor/decentraland/marketplace/api')
@@ -65,9 +62,7 @@ describe('ClaimNameFatFingerModal', () => {
       expect(getByTestId(CRYPTO_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
       expect(getByTestId(FIAT_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
 
-      const errorMessage = getByText(
-        t('names_page.claim_name_fat_finger_modal.names_different')
-      )
+      const errorMessage = getByText(t('names_page.claim_name_fat_finger_modal.names_different'))
       expect(errorMessage).toBeInTheDocument()
     })
   })
@@ -114,9 +109,7 @@ describe('ClaimNameFatFingerModal', () => {
 
       beforeEach(() => {
         encodeFunctionMock = jest.fn()
-        getSignerMock.mockResolvedValueOnce(
-          (signerMock as unknown) as ethers.providers.JsonRpcSigner
-        )
+        getSignerMock.mockResolvedValueOnce(signerMock as unknown as ethers.providers.JsonRpcSigner)
         ;(DCLController__factory.connect as jest.Mock).mockResolvedValueOnce({
           interface: {
             encodeFunctionData: encodeFunctionMock
@@ -132,10 +125,7 @@ describe('ClaimNameFatFingerModal', () => {
       })
 
       it('should perform the buy operation with the chosen name and wallet address', () => {
-        expect(encodeFunctionMock).toHaveBeenCalledWith('register', [
-          name,
-          address
-        ])
+        expect(encodeFunctionMock).toHaveBeenCalledWith('register', [name, address])
       })
 
       describe('when the buy operation is pending', () => {
@@ -148,12 +138,7 @@ describe('ClaimNameFatFingerModal', () => {
         })
 
         it('should call the onClaimTxSubmitted method prop with the transaction data', () => {
-          expect(onClaimTxSubmitted).toHaveBeenCalledWith(
-            name,
-            address,
-            ChainId.ETHEREUM_SEPOLIA,
-            txId
-          )
+          expect(onClaimTxSubmitted).toHaveBeenCalledWith(name, address, ChainId.ETHEREUM_SEPOLIA, txId)
         })
       })
     })
