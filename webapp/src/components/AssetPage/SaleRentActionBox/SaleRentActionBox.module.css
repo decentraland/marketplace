@@ -102,11 +102,11 @@
 
 .saleButtons {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
-.buy + .fullWidth > .bid {
-  margin-left: 8px !important;
+.fullWidth > .bid {
+  margin-top: 8px !important;
 }
 
 .bid {

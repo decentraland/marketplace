@@ -79,7 +79,6 @@ const BuyNFTButtons = ({
           return (
             <>
               <BuyWithCryptoButton
-                assetNetwork={asset.network}
                 onClick={() => handleBuyWithCrypto(asset, order)}
               />
               <BuyWithCardButton

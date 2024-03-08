@@ -315,7 +315,8 @@ track<BuyItemCrossChainSuccessAction>(
       chainId: item.chainId,
       price: Number(ethers.utils.formatEther(order?.price ?? item.price)),
       data: item.data,
-      txHash
+      txHash,
+      category: item.category
     }
   }
 )

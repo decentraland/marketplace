@@ -46,6 +46,7 @@ export default class Popup extends React.PureComponent<Props> {
           <Profile
             address={tile.owner || ethers.constants.AddressZero}
             debounce={500}
+            as={'div'}
           />
         </Section>
 

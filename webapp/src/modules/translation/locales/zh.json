@@ -1501,7 +1501,9 @@
       "try_genesis_city": "在创世纪尝试",
       "mint_more_names": "铸造更多名字",
       "set_as_primary_name": "设置为主名称",
-      "manage_names": "管理我的名字"
+      "manage_names": "管理我的名字",
+      "manage_land": "管理土地",
+      "start_building": "开始建造"
     },
     "error_state": {
       "title": "糟糕",
