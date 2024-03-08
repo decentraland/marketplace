@@ -111,7 +111,8 @@
     "fix:code": "npm run check:code -- --fix",
     "pre-commit:fix:code": "eslint -c .eslintrc.cjs --fix",
     "pre-commit:fix:prettier": "prettier --config .prettierrc.json --write",
-    "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json"
+    "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json",
+    "prepare": "husky || true"
   },
   "engines": {
     "node": "18"
