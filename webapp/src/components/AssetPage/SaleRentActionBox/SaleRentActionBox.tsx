@@ -287,7 +287,7 @@ const SaleRentActionBox = ({
                 <div className={styles.saleButtons}>
                   {order ? (
                     isCrossChainLandEnabled ? (
-                      <BuyWithCryptoButton onClick={() => onBuyWithCrypto()} />
+                      <BuyWithCryptoButton onClick={onBuyWithCrypto} />
                     ) : (
                       <Button
                         as={Link}
