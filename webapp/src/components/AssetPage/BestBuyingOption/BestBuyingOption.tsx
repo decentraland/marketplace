@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Bid, BidSortBy, Item, ListingStatus, Network, Order, OrderFilters, OrderSortBy, Rarity } from '@dcl/schemas'
+import { Bid, BidSortBy, ListingStatus, Network, Order, OrderFilters, OrderSortBy, Rarity } from '@dcl/schemas'
 import { Button, Popup } from 'decentraland-ui'
 import { getExpirationDateLabel } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'

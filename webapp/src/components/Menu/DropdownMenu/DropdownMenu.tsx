@@ -36,7 +36,7 @@ const DropdownMenu = <T extends unknown>(props: Props<T>) => {
         className={classNames({ open: isDropdownOpen })}
       />
       <ul className="submenu">
-        {values.includes(currentValue) && isDropdownOpen
+        {currentValue && values.includes(currentValue) && isDropdownOpen
           ? values
               .slice(1)
               .map((value, index) => (

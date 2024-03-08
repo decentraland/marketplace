@@ -12,7 +12,7 @@ import { RootState } from '../modules/reducer'
 import { initTestStore } from '../modules/store'
 import * as locales from '../modules/translation/locales'
 
-const allTranslations = mergeTranslations(flatten(en), flatten(locales.en))
+const allTranslations = mergeTranslations(flatten(en), flatten(locales.en) as any)
 
 export function renderWithProviders(
   component: JSX.Element,

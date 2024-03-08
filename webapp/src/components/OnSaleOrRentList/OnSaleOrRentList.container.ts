@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { fetchAuthorizationsRequest, revokeTokenRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
