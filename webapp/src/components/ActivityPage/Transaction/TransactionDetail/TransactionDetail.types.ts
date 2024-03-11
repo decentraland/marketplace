@@ -6,7 +6,6 @@ export type Props = {
   asset?: Asset | null
   text: React.ReactNode
   tx: Transaction
-  isCrossChain?: boolean
 }
 
 export type MapStateProps = {}

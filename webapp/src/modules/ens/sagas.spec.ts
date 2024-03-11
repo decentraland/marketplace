@@ -6,7 +6,7 @@ import { call, select } from 'redux-saga/effects'
 import { ethers, BigNumber } from 'ethers'
 import { Route, AxelarProvider } from 'decentraland-transactions/crossChain'
 import { getSigner, getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import { TRANSACTION_ACTION_FLAG, waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { ensSaga } from './sagas'
@@ -16,7 +16,6 @@ import {
   claimNameFailure,
   claimNameTransactionSubmitted,
   claimNameRequest,
-  CLAIM_NAME_TRANSACTION_SUBMITTED,
   claimNameCrossChainRequest,
   claimNameCrossChainFailure,
   claimNameCrossChainSuccess
@@ -219,19 +218,7 @@ describe('ENS Saga', () => {
       mockTransaction = {
         hash: '0xTransactionHash'
       } as ethers.ContractTransaction
-      mockAction = {
-        type: CLAIM_NAME_TRANSACTION_SUBMITTED,
-        payload: {
-          [TRANSACTION_ACTION_FLAG]: {
-            chainId: mockWallet.chainId,
-            hash: mockTransaction.hash,
-            payload: {
-              address: mockWallet.address,
-              subdomain: mockName
-            }
-          }
-        }
-      }
+      mockAction = claimNameTransactionSubmitted(mockName, mockWallet.address, ChainId.ARBITRUM_MAINNET, mockTransaction.hash)
       mockTokenId = BigNumber.from(1)
       dclRegistrarContract = { address: '0xAnAddress' }
       mockENS = {

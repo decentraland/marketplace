@@ -1,10 +1,13 @@
 import { all, takeEvery, put } from 'redux-saga/effects'
 import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
 import { showToast, hideAllToasts } from 'decentraland-dapps/dist/modules/toast/actions'
+import { TRANSACTION_ACTION_FLAG, getTransactionHref } from 'decentraland-dapps/dist/modules/transaction'
 import { UPDATE_STORE_SUCCESS } from '../store/actions'
 import { CLAIM_ASSET_SUCCESS, REMOVE_RENTAL_SUCCESS, UpsertRentalSuccessAction, UPSERT_RENTAL_SUCCESS } from '../rental/actions'
 import {
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_WITH_CARD_FAILURE,
+  BuyItemCrossChainSuccessAction,
   FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
   FETCH_ITEMS_FAILURE,
   FetchItemsFailureAction
@@ -23,7 +26,8 @@ import {
   getListingRemoveSuccessToast,
   getStoreUpdateSuccessToast,
   getUpdateListSuccessToast,
-  getUpsertRentalSuccessToast
+  getUpsertRentalSuccessToast,
+  getCrossChainTransactionSuccessToast
 } from './toasts'
 import {
   DeleteListSuccessAction,
@@ -67,6 +71,7 @@ function* successToastSagas() {
   yield takeEvery(toastDispatchableActionsChannel, handleToastTryAgainActionChannel)
   yield takeEvery(BULK_PICK_SUCCESS, handleBulkPickUnpickSuccess)
   yield takeEvery(BULK_PICK_FAILURE, handleBulkPickUnpickFailure)
+  yield takeEvery(BUY_ITEM_CROSS_CHAIN_SUCCESS, handleBuyItemCrossChainSuccess)
 
   function* handleToastTryAgainActionChannel(action: DispatchableFromToastActions) {
     yield put(action)
@@ -134,4 +139,17 @@ function* handleBulkPickUnpickFailure(action: BulkPickUnpickFailureAction) {
   const { item, pickedFor, unpickedFrom } = action.payload
   yield put(hideAllToasts())
   yield put(showToast(getBulkPickItemFailureToast(item, pickedFor, unpickedFrom), 'bottom center'))
+}
+
+function* handleBuyItemCrossChainSuccess(action: BuyItemCrossChainSuccessAction) {
+  yield put(
+    showToast(
+      getCrossChainTransactionSuccessToast(
+        getTransactionHref({
+          txHash: action.payload[TRANSACTION_ACTION_FLAG].hash,
+          crossChainProviderType: action.payload[TRANSACTION_ACTION_FLAG].crossChainProviderType
+        })
+      )
+    )
+  )
 }

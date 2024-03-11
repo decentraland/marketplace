@@ -1283,10 +1283,10 @@ describe('handleRedirectToSuccessPage saga', () => {
           txHash: 'txHash',
           tokenId: order.tokenId,
           assetType: AssetType.NFT,
-          contractAddress: item.contractAddress,
-          isCrossChain: 'true'
+          contractAddress: item.contractAddress
         }
       })
+
       it('should redirect to success page with the correct query params', () => {
         return expectSaga(routingSaga)
           .put(push(locations.success(searchParams)))
@@ -1301,10 +1301,10 @@ describe('handleRedirectToSuccessPage saga', () => {
           txHash: 'txHash',
           tokenId: item.itemId,
           assetType: AssetType.ITEM,
-          contractAddress: item.contractAddress,
-          isCrossChain: 'true'
+          contractAddress: item.contractAddress
         }
       })
+
       it('should redirect to success page with the correct query params', () => {
         return expectSaga(routingSaga)
           .put(push(locations.success(searchParams)))

@@ -5,7 +5,7 @@ import { push, getLocation, goBack, LOCATION_CHANGE, replace, LocationChangeActi
 import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { isLegacyOrder } from '../../lib/orders'
@@ -653,8 +653,7 @@ function* handleRedirectToSuccessPage(
           ? payload.nft.contractAddress
           : 'ens' in payload
             ? payload.ens.contractAddress
-            : '',
-    ...(isCrossChainAction ? { isCrossChain: isCrossChainAction.toString() } : {})
+            : ''
   }
   yield put(push(locations.success(successParams)))
 }

@@ -1,6 +1,7 @@
-import { Item, Order, RentalListing } from '@dcl/schemas'
+import { ChainId, Item, Order, RentalListing } from '@dcl/schemas'
 import { hideAllToasts, showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
+import { CrossChainProviderType, getTransactionHref } from 'decentraland-dapps/dist/modules/transaction'
 import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import {
@@ -11,7 +12,7 @@ import {
   deleteListSuccess,
   updateListSuccess
 } from '../favorites/actions'
-import { FetchItemsFailureAction, buyItemWithCardFailure, fetchItemsFailure } from '../item/actions'
+import { FetchItemsFailureAction, buyItemCrossChainSuccess, buyItemWithCardFailure, fetchItemsFailure } from '../item/actions'
 import { NFT, NFTsFetchOptions } from '../nft/types'
 import { executeOrderFailure, executeOrderWithCardFailure } from '../order/actions'
 import { claimAssetSuccess, removeRentalSuccess, upsertRentalSuccess } from '../rental/actions'
@@ -31,7 +32,8 @@ import {
   getBulkPickItemSuccessToast,
   getBulkPickItemFailureToast,
   getUpdateListSuccessToast,
-  getNameClaimSuccessToast
+  getNameClaimSuccessToast,
+  getCrossChainTransactionSuccessToast
 } from '../toast/toasts'
 import { ItemBrowseOptions } from '../item/types'
 import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
@@ -269,12 +271,44 @@ describe('when handling a put into the toastDispatchableActionsChannel', () => {
   })
 })
 
-describe('when handling a success claiming actiono', () => {
+describe('when handling a success claiming action', () => {
   it('should call the showToast', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
       .dispatch(claimNameSuccess({} as ENS, 'aNAME', '0xaHash'))
       .put(showToast(getNameClaimSuccessToast()))
+      .silentRun()
+  })
+})
+
+describe('when handling a successful cross chain item purchase', () => {
+  let action: ReturnType<typeof buyItemCrossChainSuccess>
+  let actionLink: string
+
+  beforeEach(() => {
+    const txHash = '0xHash'
+    const crossChainProviderType = CrossChainProviderType.SQUID
+
+    action = buyItemCrossChainSuccess(
+      {
+        route: { params: { toChain: ChainId.MATIC_MAINNET } },
+        requestId: 'aRequestId'
+      } as any,
+      ChainId.ETHEREUM_MAINNET,
+      txHash,
+      { name: 'aName', price: '1000000000000' } as Item
+    )
+    actionLink = getTransactionHref({
+      txHash,
+      crossChainProviderType
+    })
+  })
+
+  it('should put the showToast action with the cross chain toast', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .dispatch(action)
+      .put(showToast(getCrossChainTransactionSuccessToast(actionLink)))
       .silentRun()
   })
 })

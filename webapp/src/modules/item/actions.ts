@@ -1,6 +1,10 @@
 import { ChainId, Item, ItemFilters, Order } from '@dcl/schemas'
 import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
-import { buildTransactionWithFromPayload, buildTransactionWithReceiptPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import {
+  buildCrossChainTransactionFromPayload,
+  buildTransactionWithFromPayload,
+  buildTransactionWithReceiptPayload
+} from 'decentraland-dapps/dist/modules/transaction/utils'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { action } from 'typesafe-actions'
 import { formatWeiMANA } from '../../lib/mana'
@@ -86,7 +90,6 @@ export type BuyItemSuccessAction = ReturnType<typeof buyItemSuccess>
 export type BuyItemFailureAction = ReturnType<typeof buyItemFailure>
 
 // Buy Item Cross Chain
-export const TRACK_CROSS_CHAIN_TX_REQUEST = '[Request] Track Buy item cross-chain tx'
 export const BUY_ITEM_CROSS_CHAIN_REQUEST = '[Request] Buy item cross-chain'
 export const BUY_ITEM_CROSS_CHAIN_SUCCESS = '[Success] Buy item cross-chain'
 export const BUY_ITEM_CROSS_CHAIN_FAILURE = '[Failure] Buy item cross-chain'
@@ -100,18 +103,13 @@ export const buyItemCrossChainSuccess = (route: Route, chainId: ChainId, txHash:
     item,
     txHash,
     order,
-    ...buildTransactionWithReceiptPayload(chainId, txHash, {
+    ...buildCrossChainTransactionFromPayload(chainId, Number(route.route.params.toChain) as ChainId, txHash, route.requestId ?? 'Unknown', {
       itemId: item.itemId,
       contractAddress: item.contractAddress,
       network: item.network,
       name: getAssetName(item),
       price: formatWeiMANA(order?.price ?? item.price)
     })
-  })
-
-export const trackCrossChainTx = (chainId: ChainId, txHash: string) =>
-  action(TRACK_CROSS_CHAIN_TX_REQUEST, {
-    ...buildTransactionWithReceiptPayload(chainId, txHash)
   })
 
 export const buyItemCrossChainFailure = (route: Route, item: Item, price: string, error: string) =>

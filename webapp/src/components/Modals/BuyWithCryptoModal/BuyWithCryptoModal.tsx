@@ -153,6 +153,7 @@ export const BuyWithCryptoModal = (props: Props) => {
             )
           )
           setProviderTokens(supportedTokens.filter(t => crossChainSupportedChains.current.includes(+t.chainId)))
+          setProviderTokens(supportedTokens.filter(t => crossChainSupportedChains.current.includes(+t.chainId)))
         }
       } catch (error) {
         console.log('error: ', error)
