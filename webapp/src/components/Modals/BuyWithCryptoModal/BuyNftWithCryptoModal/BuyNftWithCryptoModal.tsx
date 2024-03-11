@@ -73,12 +73,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       price={order.price}
       isBuyingAsset={isExecutingOrder || isExecutingOrderCrossChain}
       onBuyNatively={onBuyNatively}
-      onBuyWithCard={
-        nft.category === NFTCategory.ESTATE ||
-        nft.category === NFTCategory.PARCEL
-          ? undefined
-          : onBuyWithCard
-      }
+      onBuyWithCard={nft.category === NFTCategory.ESTATE || nft.category === NFTCategory.PARCEL ? undefined : onBuyWithCard}
       onBuyCrossChain={onExecuteOrderCrossChain}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}

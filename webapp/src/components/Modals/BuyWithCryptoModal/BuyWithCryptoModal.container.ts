@@ -7,11 +7,7 @@ import { isSwitchingNetwork } from 'decentraland-dapps/dist/modules/wallet/selec
 import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
 import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
-import {
-  MapDispatchProps,
-  MapStateProps,
-  OwnProps
-} from './BuyWithCryptoModal.types'
+import { MapDispatchProps, MapStateProps, OwnProps } from './BuyWithCryptoModal.types'
 import { BuyWithCryptoModal } from './BuyWithCryptoModal'
 
 const mapState = (state: RootState): MapStateProps => {
@@ -22,12 +18,8 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (
-  dispatch: Dispatch,
-  ownProps: OwnProps
-): MapDispatchProps => ({
-  onGetMana: () =>
-    dispatch(openBuyManaWithFiatModalRequest(ownProps.metadata.asset.network)),
+const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => ({
+  onGetMana: () => dispatch(openBuyManaWithFiatModalRequest(ownProps.metadata.asset.network)),
   onSwitchNetwork: chainId => dispatch(switchNetworkRequest(chainId))
 })
 
