@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Contract } from '@dcl/schemas'
+import { Contract, NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import withAuthorizedAction from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
@@ -90,7 +90,12 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       price={order.price}
       isBuyingAsset={isExecutingOrder || isExecutingOrderCrossChain}
       onBuyNatively={onBuyNatively}
-      onBuyWithCard={onBuyWithCard}
+      onBuyWithCard={
+        nft.category === NFTCategory.ESTATE ||
+        nft.category === NFTCategory.PARCEL
+          ? undefined
+          : onBuyWithCard
+      }
       onBuyCrossChain={onExecuteOrderCrossChain}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}
