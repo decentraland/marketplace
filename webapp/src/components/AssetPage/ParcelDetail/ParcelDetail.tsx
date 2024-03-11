@@ -31,15 +31,7 @@ const ParcelDetail = ({ nft, order, rental }: Props) => {
     <BaseDetail
       asset={nft}
       rental={rental ?? undefined}
-      assetImage={
-        <AssetImage
-          asset={nft}
-          isDraggable
-          withNavigation
-          hasPopup
-          showUpdatedDateWarning
-        />
-      }
+      assetImage={<AssetImage asset={nft} isDraggable withNavigation hasPopup showUpdatedDateWarning />}
       showDetails={isLand(nft)}
       isOnSale={!!nft.activeOrderId}
       badges={
@@ -64,10 +56,7 @@ const ParcelDetail = ({ nft, order, rental }: Props) => {
                 id="asset_page.part_of_estate"
                 values={{
                   estate_name: (
-                    <Link
-                      title={parcel.estate!.name}
-                      to={locations.nft(nft.owner, parcel.estate!.tokenId)}
-                    >
+                    <Link title={parcel.estate!.name} to={locations.nft(nft.owner, parcel.estate!.tokenId)}>
                       {parcel.estate!.name}
                     </Link>
                   )

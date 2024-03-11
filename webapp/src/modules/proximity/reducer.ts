@@ -1,7 +1,4 @@
-import {
-  LoadingState,
-  loadingReducer
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchProximityRequestAction,
   FetchProximitySuccessAction,
@@ -24,15 +21,9 @@ const INITIAL_STATE: ProximityState = {
   error: null
 }
 
-type ProximityReducerAction =
-  | FetchProximityRequestAction
-  | FetchProximitySuccessAction
-  | FetchProximityFailureAction
+type ProximityReducerAction = FetchProximityRequestAction | FetchProximitySuccessAction | FetchProximityFailureAction
 
-export function proximityReducer(
-  state = INITIAL_STATE,
-  action: ProximityReducerAction
-) {
+export function proximityReducer(state = INITIAL_STATE, action: ProximityReducerAction) {
   switch (action.type) {
     case FETCH_PROXIMITY_REQUEST: {
       return {

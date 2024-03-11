@@ -1,0 +1,22 @@
+name: Lint
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./webapp
+    steps:
+      - uses: actions/checkout@master
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4.0.1
+        with:
+          node-version: 18.x
+          cache: "npm"
+          cache-dependency-path: webapp/package-lock.json
+      - name: Install
+        run: npm install --legacy-peer-deps
+      - name: Lint
+        run: npm run lint

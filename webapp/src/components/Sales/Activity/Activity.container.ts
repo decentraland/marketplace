@@ -4,19 +4,9 @@ import { Item, Sale, SaleType } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { NFT } from '../../../modules/nft/types'
 import { RootState } from '../../../modules/reducer'
-import {
-  getSales,
-  getCount,
-  getLoading as getSaleLoading
-} from '../../../modules/sale/selectors'
-import {
-  getData as getItemsData,
-  getLoading as getItemLoading
-} from '../../../modules/item/selectors'
-import {
-  getData as getNftData,
-  getLoading as getNftLoading
-} from '../../../modules/nft/selectors'
+import { getSales, getCount, getLoading as getSaleLoading } from '../../../modules/sale/selectors'
+import { getData as getItemsData, getLoading as getItemLoading } from '../../../modules/item/selectors'
+import { getData as getNftData, getLoading as getNftLoading } from '../../../modules/nft/selectors'
 import { FETCH_SALES_REQUEST } from '../../../modules/sale/actions'
 import { FETCH_ITEM_REQUEST } from '../../../modules/item/actions'
 import { FETCH_NFT_REQUEST } from '../../../modules/nft/actions'
@@ -26,25 +16,24 @@ import { Asset } from '../../../modules/asset/types'
 import { MapStateProps, MapDispatchProps } from './Activity.types'
 import Activity from './Activity'
 
-const getAssets = (
-  sales: Sale[],
-  items: Record<string, Item>,
-  nfts: Record<string, NFT>
-) =>
-  sales.reduce((acc, sale) => {
-    const { contractAddress, itemId, tokenId, type } = sale
+const getAssets = (sales: Sale[], items: Record<string, Item>, nfts: Record<string, NFT>) =>
+  sales.reduce(
+    (acc, sale) => {
+      const { contractAddress, itemId, tokenId, type } = sale
 
-    const item = items[`${contractAddress}-${itemId}`]
-    const nft = nfts[`${contractAddress}-${tokenId}`]
+      const item = items[`${contractAddress}-${itemId}`]
+      const nft = nfts[`${contractAddress}-${tokenId}`]
 
-    if (type === SaleType.MINT && item) {
-      acc[sale.id] = item
-    } else if (nft) {
-      acc[sale.id] = nft
-    }
+      if (type === SaleType.MINT && item) {
+        acc[sale.id] = item
+      } else if (nft) {
+        acc[sale.id] = nft
+      }
 
-    return acc
-  }, {} as Record<string, Asset>)
+      return acc
+    },
+    {} as Record<string, Asset>
+  )
 
 const getIsLoading = (state: RootState) =>
   isLoadingType(getSaleLoading(state), FETCH_SALES_REQUEST) ||

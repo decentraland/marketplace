@@ -1,10 +1,6 @@
 import { RentalListing } from '@dcl/schemas'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
-import {
-  closeAllModals,
-  closeModal,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
+import { closeAllModals, closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import { NFT } from '../nft/types'
@@ -38,10 +34,7 @@ describe.each([
   UPDATE_LIST_SUCCESS
 ])('when handling the success action of the %s action', actionType => {
   it('should put the action to close all modals', () => {
-    return expectSaga(modalSaga)
-      .put(closeAllModals())
-      .dispatch({ type: actionType })
-      .silentRun()
+    return expectSaga(modalSaga).put(closeAllModals()).dispatch({ type: actionType }).silentRun()
   })
 })
 
@@ -55,10 +48,7 @@ describe('when handling the success action of the claim LAND', () => {
   })
 
   it('should put the action to close all modals', () => {
-    return expectSaga(modalSaga)
-      .put(closeAllModals())
-      .dispatch(claimAssetSuccess(nft, rental))
-      .silentRun()
+    return expectSaga(modalSaga).put(closeAllModals()).dispatch(claimAssetSuccess(nft, rental)).silentRun()
   })
 })
 

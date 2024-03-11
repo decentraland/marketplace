@@ -3,18 +3,8 @@ import { BigNumber, ethers } from 'ethers'
 import { renderHook } from '@testing-library/react-hooks'
 import { NATIVE_TOKEN, Token } from 'decentraland-transactions/crossChain'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
-import {
-  useShouldUseCrossChainProvider,
-  useNameMintingGasCost,
-  useTokenBalance,
-  useBuyNftGasCost,
-  useMintingNftGasCost
-} from './hooks'
-import {
-  estimateBuyNftGas,
-  estimateMintNftGas,
-  estimateNameMintingGas
-} from './utils'
+import { useShouldUseCrossChainProvider, useNameMintingGasCost, useTokenBalance, useBuyNftGasCost, useMintingNftGasCost } from './hooks'
+import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas } from './utils'
 import { waitFor } from '@testing-library/react'
 import { NFT } from '../../../modules/nft/types'
 
@@ -22,7 +12,7 @@ jest.mock('ethers', () => ({
   ...jest.requireActual('ethers'),
   ethers: {
     ...jest.requireActual('ethers').ethers,
-    Contract: function(address: string, abi: string[], provider: any) {
+    Contract: function (address: string, abi: string[], provider: any) {
       return {
         address,
         abi,
@@ -31,13 +21,10 @@ jest.mock('ethers', () => ({
       }
     },
     providers: {
-      Web3Provider: function() {
+      Web3Provider: function () {
         return {
           getGasPrice: () => Promise.resolve(BigNumber.from(4)),
-          send: (method: string) =>
-            method === 'eth_getBalance'
-              ? Promise.resolve(BigNumber.from(3231))
-              : Promise.resolve(undefined)
+          send: (method: string) => (method === 'eth_getBalance' ? Promise.resolve(BigNumber.from(3231)) : Promise.resolve(undefined))
         }
       }
     }
@@ -72,9 +59,7 @@ describe('when using the should use cross chain provider hook', () => {
     })
 
     it('should return true', () => {
-      const { result } = renderHook(() =>
-        useShouldUseCrossChainProvider(selectedToken, Network.ETHEREUM)
-      )
+      const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, Network.ETHEREUM))
       expect(result.current).toBe(true)
     })
   })
@@ -92,9 +77,7 @@ describe('when using the should use cross chain provider hook', () => {
       })
 
       it('should return true', () => {
-        const { result } = renderHook(() =>
-          useShouldUseCrossChainProvider(selectedToken, assetNetwork)
-        )
+        const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, assetNetwork))
         expect(result.current).toBe(true)
       })
     })
@@ -105,9 +88,7 @@ describe('when using the should use cross chain provider hook', () => {
       })
 
       it('should return true', () => {
-        const { result } = renderHook(() =>
-          useShouldUseCrossChainProvider(selectedToken, assetNetwork)
-        )
+        const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, assetNetwork))
         expect(result.current).toBe(true)
       })
     })
@@ -126,9 +107,7 @@ describe('when using the should use cross chain provider hook', () => {
         })
 
         it('should return true', () => {
-          const { result } = renderHook(() =>
-            useShouldUseCrossChainProvider(selectedToken, assetNetwork)
-          )
+          const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, assetNetwork))
           expect(result.current).toBe(true)
         })
       })
@@ -142,9 +121,7 @@ describe('when using the should use cross chain provider hook', () => {
         })
 
         it('should return false', () => {
-          const { result } = renderHook(() =>
-            useShouldUseCrossChainProvider(selectedToken, assetNetwork)
-          )
+          const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, assetNetwork))
           expect(result.current).toBe(false)
         })
       })
@@ -164,9 +141,7 @@ describe('when using the should use cross chain provider hook', () => {
         })
 
         it('should return true', () => {
-          const { result } = renderHook(() =>
-            useShouldUseCrossChainProvider(selectedToken, assetNetwork)
-          )
+          const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, assetNetwork))
           expect(result.current).toBe(true)
         })
       })
@@ -180,9 +155,7 @@ describe('when using the should use cross chain provider hook', () => {
         })
 
         it('should return false', () => {
-          const { result } = renderHook(() =>
-            useShouldUseCrossChainProvider(selectedToken, assetNetwork)
-          )
+          const { result } = renderHook(() => useShouldUseCrossChainProvider(selectedToken, assetNetwork))
           expect(result.current).toBe(false)
         })
       })
@@ -217,9 +190,7 @@ describe('when using the name minting gas cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() =>
-        useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet)
-      )
+      const { result } = renderHook(() => useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet))
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -239,9 +210,7 @@ describe('when using the name minting gas cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() =>
-        useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet)
-      )
+      const { result } = renderHook(() => useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet))
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -261,9 +230,7 @@ describe('when using the name minting gas cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() =>
-        useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet)
-      )
+      const { result } = renderHook(() => useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet))
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -286,16 +253,13 @@ describe('when using the name minting gas cost hook', () => {
 
     describe('and the transactions gas estimation fails', () => {
       beforeEach(() => {
-        ;(estimateNameMintingGas as jest.Mock<
-          ReturnType<typeof estimateNameMintingGas>,
-          Parameters<typeof estimateNameMintingGas>
-        >).mockRejectedValueOnce(undefined)
+        ;(
+          estimateNameMintingGas as jest.Mock<ReturnType<typeof estimateNameMintingGas>, Parameters<typeof estimateNameMintingGas>>
+        ).mockRejectedValueOnce(undefined)
       })
 
       it('should return an undefined cost and the loading flag as false', async () => {
-        const { result } = renderHook(() =>
-          useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet)
-        )
+        const { result } = renderHook(() => useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet))
         await waitFor(() => {
           expect(result.current.isFetchingGasCost).toBe(false)
         })
@@ -305,23 +269,18 @@ describe('when using the name minting gas cost hook', () => {
 
     describe('and the transactions gas estimation is successful', () => {
       beforeEach(() => {
-        ;(estimateNameMintingGas as jest.Mock<
-          ReturnType<typeof estimateNameMintingGas>,
-          Parameters<typeof estimateNameMintingGas>
-        >).mockResolvedValueOnce(BigNumber.from('4000000000000000000'))
+        ;(
+          estimateNameMintingGas as jest.Mock<ReturnType<typeof estimateNameMintingGas>, Parameters<typeof estimateNameMintingGas>>
+        ).mockResolvedValueOnce(BigNumber.from('4000000000000000000'))
       })
 
       it('should return a total gas cost of 16, a USD gas cost of 160, the native token and the loading flag as false', async () => {
-        const { result } = renderHook(() =>
-          useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet)
-        )
+        const { result } = renderHook(() => useNameMintingGasCost(name, selectedToken, chainNativeToken, wallet))
 
         await waitFor(() => {
           expect(result.current.isFetchingGasCost).toBe(false)
         })
-        expect(result.current.gasCost?.total).toEqual(
-          ethers.utils.formatEther(BigNumber.from('16000000000000000000'))
-        )
+        expect(result.current.gasCost?.total).toEqual(ethers.utils.formatEther(BigNumber.from('16000000000000000000')))
         expect(result.current.gasCost?.token).toEqual(chainNativeToken)
         expect(result.current.gasCost?.totalUSDPrice).toEqual(160)
       })
@@ -366,9 +325,7 @@ describe('when using the buy nft gas cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() =>
-        useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet)
-      )
+      const { result } = renderHook(() => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet))
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -388,9 +345,7 @@ describe('when using the buy nft gas cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() =>
-        useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet)
-      )
+      const { result } = renderHook(() => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet))
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -410,9 +365,7 @@ describe('when using the buy nft gas cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() =>
-        useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet)
-      )
+      const { result } = renderHook(() => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet))
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -435,16 +388,13 @@ describe('when using the buy nft gas cost hook', () => {
 
     describe('and the transactions gas estimation fails', () => {
       beforeEach(() => {
-        ;(estimateBuyNftGas as jest.Mock<
-          ReturnType<typeof estimateBuyNftGas>,
-          Parameters<typeof estimateBuyNftGas>
-        >).mockRejectedValueOnce(undefined)
+        ;(estimateBuyNftGas as jest.Mock<ReturnType<typeof estimateBuyNftGas>, Parameters<typeof estimateBuyNftGas>>).mockRejectedValueOnce(
+          undefined
+        )
       })
 
       it('should return an undefined cost and the loading flag as false', async () => {
-        const { result } = renderHook(() =>
-          useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet)
-        )
+        const { result } = renderHook(() => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet))
         await waitFor(() => {
           expect(result.current.isFetchingGasCost).toBe(false)
         })
@@ -454,23 +404,18 @@ describe('when using the buy nft gas cost hook', () => {
 
     describe('and the transactions gas estimation is successful', () => {
       beforeEach(() => {
-        ;(estimateBuyNftGas as jest.Mock<
-          ReturnType<typeof estimateBuyNftGas>,
-          Parameters<typeof estimateBuyNftGas>
-        >).mockResolvedValueOnce(BigNumber.from('4000000000000000000'))
+        ;(estimateBuyNftGas as jest.Mock<ReturnType<typeof estimateBuyNftGas>, Parameters<typeof estimateBuyNftGas>>).mockResolvedValueOnce(
+          BigNumber.from('4000000000000000000')
+        )
       })
 
       it('should return a total gas cost of 16, a USD gas cost of 160, the native token and the loading flag as false', async () => {
-        const { result } = renderHook(() =>
-          useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet)
-        )
+        const { result } = renderHook(() => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet))
 
         await waitFor(() => {
           expect(result.current.isFetchingGasCost).toBe(false)
         })
-        expect(result.current.gasCost?.total).toEqual(
-          ethers.utils.formatEther(BigNumber.from('16000000000000000000'))
-        )
+        expect(result.current.gasCost?.total).toEqual(ethers.utils.formatEther(BigNumber.from('16000000000000000000')))
         expect(result.current.gasCost?.token).toEqual(chainNativeToken)
         expect(result.current.gasCost?.totalUSDPrice).toEqual(160)
       })
@@ -511,9 +456,7 @@ describe('when using the minting nft gas cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() =>
-        useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet)
-      )
+      const { result } = renderHook(() => useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet))
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -533,9 +476,7 @@ describe('when using the minting nft gas cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() =>
-        useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet)
-      )
+      const { result } = renderHook(() => useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet))
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -555,9 +496,7 @@ describe('when using the minting nft gas cost hook', () => {
     })
 
     it('should return an undefined cost and the loading flag as false', () => {
-      const { result } = renderHook(() =>
-        useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet)
-      )
+      const { result } = renderHook(() => useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet))
       expect(result.current.gasCost).toBe(undefined)
       expect(result.current.isFetchingGasCost).toBe(false)
     })
@@ -580,16 +519,13 @@ describe('when using the minting nft gas cost hook', () => {
 
     describe('and the transactions gas estimation fails', () => {
       beforeEach(() => {
-        ;(estimateMintNftGas as jest.Mock<
-          ReturnType<typeof estimateMintNftGas>,
-          Parameters<typeof estimateMintNftGas>
-        >).mockRejectedValueOnce(undefined)
+        ;(
+          estimateMintNftGas as jest.Mock<ReturnType<typeof estimateMintNftGas>, Parameters<typeof estimateMintNftGas>>
+        ).mockRejectedValueOnce(undefined)
       })
 
       it('should return an undefined cost and the loading flag as false', async () => {
-        const { result } = renderHook(() =>
-          useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet)
-        )
+        const { result } = renderHook(() => useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet))
         await waitFor(() => {
           expect(result.current.isFetchingGasCost).toBe(false)
         })
@@ -599,23 +535,18 @@ describe('when using the minting nft gas cost hook', () => {
 
     describe('and the transactions gas estimation is successful', () => {
       beforeEach(() => {
-        ;(estimateMintNftGas as jest.Mock<
-          ReturnType<typeof estimateMintNftGas>,
-          Parameters<typeof estimateMintNftGas>
-        >).mockResolvedValueOnce(BigNumber.from('4000000000000000000'))
+        ;(
+          estimateMintNftGas as jest.Mock<ReturnType<typeof estimateMintNftGas>, Parameters<typeof estimateMintNftGas>>
+        ).mockResolvedValueOnce(BigNumber.from('4000000000000000000'))
       })
 
       it('should return a total gas cost of 16, a USD gas cost of 160, the native token and the loading flag as false', async () => {
-        const { result } = renderHook(() =>
-          useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet)
-        )
+        const { result } = renderHook(() => useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet))
 
         await waitFor(() => {
           expect(result.current.isFetchingGasCost).toBe(false)
         })
-        expect(result.current.gasCost?.total).toEqual(
-          ethers.utils.formatEther(BigNumber.from('16000000000000000000'))
-        )
+        expect(result.current.gasCost?.total).toEqual(ethers.utils.formatEther(BigNumber.from('16000000000000000000')))
         expect(result.current.gasCost?.token).toEqual(chainNativeToken)
         expect(result.current.gasCost?.totalUSDPrice).toEqual(160)
       })
@@ -639,9 +570,7 @@ describe('when using the use token balance hook', () => {
     })
 
     it('should return an undefined token balance and the loading flag as false', async () => {
-      const { result } = renderHook(() =>
-        useTokenBalance(selectedToken, selectedChainId, address)
-      )
+      const { result } = renderHook(() => useTokenBalance(selectedToken, selectedChainId, address))
       await waitFor(() => {
         expect(result.current.isFetchingBalance).toBe(false)
       })
@@ -661,9 +590,7 @@ describe('when using the use token balance hook', () => {
     })
 
     it('should return an undefined balance and the loading flag as false', async () => {
-      const { result } = renderHook(() =>
-        useTokenBalance(selectedToken, selectedChainId, address)
-      )
+      const { result } = renderHook(() => useTokenBalance(selectedToken, selectedChainId, address))
       await waitFor(() => {
         expect(result.current.isFetchingBalance).toBe(false)
       })
@@ -683,9 +610,7 @@ describe('when using the use token balance hook', () => {
     })
 
     it('should return the balance of the native token and the loading flag as false', async () => {
-      const { result } = renderHook(() =>
-        useTokenBalance(selectedToken, selectedChainId, address)
-      )
+      const { result } = renderHook(() => useTokenBalance(selectedToken, selectedChainId, address))
 
       await waitFor(() => {
         expect(result.current.isFetchingBalance).toBe(false)
@@ -706,9 +631,7 @@ describe('when using the use token balance hook', () => {
     })
 
     it('should return the balance of the selected token and the loading flag as false', async () => {
-      const { result } = renderHook(() =>
-        useTokenBalance(selectedToken, selectedChainId, address)
-      )
+      const { result } = renderHook(() => useTokenBalance(selectedToken, selectedChainId, address))
 
       await waitFor(() => {
         expect(result.current.isFetchingBalance).toBe(false)

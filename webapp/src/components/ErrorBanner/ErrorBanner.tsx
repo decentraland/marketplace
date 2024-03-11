@@ -9,9 +9,7 @@ export default function ErrorBanner({ info, className }: Props) {
       <div className={styles.icon}>
         <Icon name="exclamation triangle" />
       </div>
-      <span className={styles.info}>
-        {info}
-      </span>
+      <span className={styles.info}>{info}</span>
     </div>
   )
 }

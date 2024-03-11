@@ -72,9 +72,7 @@ describe('when getting a rental by id', () => {
 describe('when getting if a LAND is being claimed', () => {
   describe('and the LAND is being claimed', () => {
     beforeEach(() => {
-      rootState.rental.loading = [
-        claimAssetRequest({} as NFT, {} as RentalListing)
-      ]
+      rootState.rental.loading = [claimAssetRequest({} as NFT, {} as RentalListing)]
     })
 
     it('should return true', () => {
@@ -137,38 +135,38 @@ describe('when getting if the transaction is being submitted', () => {
   })
 })
 
-describe("when getting a rental confirmation status", () => {
-  describe("and there is a transaction submitting", () => {
+describe('when getting a rental confirmation status', () => {
+  describe('and there is a transaction submitting', () => {
     beforeEach(() => {
       rootState.rental.isSubmittingTransaction = true
     })
-    
+
     it('should return an authorization status WAITING', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.WAITING)
     })
   })
 
-  describe("and there is a rental being accepted", () => {
+  describe('and there is a rental being accepted', () => {
     beforeEach(() => {
       rootState.rental.loading = [acceptRentalListingRequest({} as NFT, {} as RentalListing, 0, '')]
     })
-    
+
     it('should return an authorization status PROCESSING', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.PROCESSING)
     })
   })
 
-  describe("and there is an error", () => {
+  describe('and there is an error', () => {
     beforeEach(() => {
       rootState.rental.error = 'error'
     })
-    
+
     it('should return an authorization status ERROR', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.ERROR)
     })
   })
 
-  describe("and there is no error and no transaction is being processed", () => {
+  describe('and there is no error and no transaction is being processed', () => {
     it('should return an authorization status PENDING', () => {
       expect(getRentConfirmationStatus(rootState)).toEqual(AuthorizationStepStatus.PENDING)
     })

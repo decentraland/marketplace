@@ -29,14 +29,7 @@ const TransactionDetail = (props: Props) => {
               <AssetImage asset={asset} isSmall />
             </Link>
           ) : (
-            <Mana
-              showTooltip
-              network={
-                tx.chainId
-                  ? getChainConfiguration(tx.chainId).network
-                  : Network.ETHEREUM
-              }
-            />
+            <Mana showTooltip network={tx.chainId ? getChainConfiguration(tx.chainId).network : Network.ETHEREUM} />
           )}
         </div>
         <div className="text">
@@ -45,25 +38,15 @@ const TransactionDetail = (props: Props) => {
         </div>
       </Column>
       <Column align="right">
-        <a
-          href={tx.url}
-          className={tx.status ? 'status ' + tx.status : 'status'}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href={tx.url} className={tx.status ? 'status ' + tx.status : 'status'} target="_blank" rel="noopener noreferrer">
           <div className="description">{tx.status || t('global.loading')}</div>
           {isPending(tx.status) ? (
             <div className="spinner">
               <Loader active size="mini" />
             </div>
           ) : null}
-          {tx.status === TransactionStatus.REVERTED ? (
-            <Icon name="warning sign" />
-          ) : null}
-          {tx.status === TransactionStatus.CONFIRMED ||
-          tx.status === TransactionStatus.REPLACED ? (
-            <Icon name="check" />
-          ) : null}
+          {tx.status === TransactionStatus.REVERTED ? <Icon name="warning sign" /> : null}
+          {tx.status === TransactionStatus.CONFIRMED || tx.status === TransactionStatus.REPLACED ? <Icon name="check" /> : null}
         </a>
       </Column>
     </Row>

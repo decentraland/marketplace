@@ -9,11 +9,7 @@ const CampaignBrowserBanner: React.FC = () => {
   return (
     <div className="CampaignBrowserBanner">
       <div className="banner-container">
-        <img
-          src={logo}
-          alt={t('campaign.event_hashtag')}
-          className="event-banner-logo"
-        />
+        <img src={logo} alt={t('campaign.event_hashtag')} className="event-banner-logo" />
         <div className="copy">
           <Header>{t('event_campaign.campaign_browser.title')}</Header>
           <p>
@@ -23,11 +19,7 @@ const CampaignBrowserBanner: React.FC = () => {
             })}
           </p>
         </div>
-        <img
-          src={wearableIcon}
-          alt={t('campaign.event_hashtag')}
-          className="event-banner-icon"
-        />
+        <img src={wearableIcon} alt={t('campaign.event_hashtag')} className="event-banner-icon" />
       </div>
       <Mobile>
         <div className="event-banner-vertical-icon" />

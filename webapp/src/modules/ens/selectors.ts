@@ -8,19 +8,12 @@ import { CLAIM_NAME_REQUEST, CLAIM_NAME_TRANSACTION_SUBMITTED } from './actions'
 
 export const getState = (state: RootState) => state.ens
 export const getData = (state: RootState) => getState(state).data
-export const getAuthorizations = (state: RootState) =>
-  getState(state).authorizations
+export const getAuthorizations = (state: RootState) => getState(state).authorizations
 export const getError = (state: RootState) => getState(state).error
 export const getLoading = (state: RootState) => getState(state).loading
 
-export const isWaitingTxClaimName = createSelector<
-  RootState,
-  Transaction[],
-  boolean
->(getPendingTransactions, transactions =>
-  transactions.some(
-    transaction => CLAIM_NAME_TRANSACTION_SUBMITTED === transaction.actionType
-  )
+export const isWaitingTxClaimName = createSelector<RootState, Transaction[], boolean>(getPendingTransactions, transactions =>
+  transactions.some(transaction => CLAIM_NAME_TRANSACTION_SUBMITTED === transaction.actionType)
 )
 
 export const getClaimNameStatus = (state: RootState) => {

@@ -36,10 +36,7 @@ export type BaseList = {
   previewOfItemIds: string[]
 }
 
-export type ListOfLists = Pick<
-  BaseList,
-  'id' | 'name' | 'isPrivate' | 'previewOfItemIds'
-> & {
+export type ListOfLists = Pick<BaseList, 'id' | 'name' | 'isPrivate' | 'previewOfItemIds'> & {
   itemsCount: number
   isItemInList?: boolean
 }

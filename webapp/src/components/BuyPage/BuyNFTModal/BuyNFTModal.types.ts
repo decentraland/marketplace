@@ -29,14 +29,6 @@ export type Props = {
   onClearOrderErrors: typeof clearOrderErrors
 } & WithAuthorizedActionProps
 
-export type MapStateProps = Pick<
-  Props,
-  'isLoading' | 'getContract' | 'isBuyWithCardPage'
->
-export type MapDispatchProps = Pick<
-  Props,
-  'onExecuteOrder' | 'onExecuteOrderWithCard' | 'onClearOrderErrors'
->
-export type MapDispatch = Dispatch<
-  ExecuteOrderRequestAction | ExecuteOrderWithCardRequestAction | ClearOrderErrorsAction
->
+export type MapStateProps = Pick<Props, 'isLoading' | 'getContract' | 'isBuyWithCardPage'>
+export type MapDispatchProps = Pick<Props, 'onExecuteOrder' | 'onExecuteOrderWithCard' | 'onClearOrderErrors'>
+export type MapDispatch = Dispatch<ExecuteOrderRequestAction | ExecuteOrderWithCardRequestAction | ClearOrderErrorsAction>

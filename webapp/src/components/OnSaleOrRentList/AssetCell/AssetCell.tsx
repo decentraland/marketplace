@@ -24,8 +24,8 @@ const AssetCell = ({ asset, link: linkProp }: Props) => {
   const link = linkProp
     ? linkProp
     : 'tokenId' in asset
-    ? locations.nft(asset.contractAddress, asset.tokenId)
-    : locations.item(asset.contractAddress, asset.itemId!)
+      ? locations.nft(asset.contractAddress, asset.tokenId)
+      : locations.item(asset.contractAddress, asset.itemId)
 
   return (
     <Link to={link}>

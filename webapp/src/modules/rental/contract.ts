@@ -11,10 +11,6 @@ export async function getRentalsContractInstance(chainId: ChainId) {
     throw new Error('Could not get connected provider')
   }
   const { address, abi } = getContract(ContractName.Rentals, chainId)
-  const instance = new ethers.Contract(
-    address,
-    abi,
-    new ethers.providers.Web3Provider(provider)
-  )
+  const instance = new ethers.Contract(address, abi, new ethers.providers.Web3Provider(provider))
   return instance
 }

@@ -9,28 +9,14 @@ const TABLE_SIBLINGS_RANGE_MOBILE = 0
 const TABLE_SIBLINGS_RANGE_DESKTOP = 1
 
 const TableContent = (props: Props) => {
-  const {
-    empty,
-    data,
-    isLoading,
-    totalPages,
-    activePage = 1,
-    setPage,
-    total,
-    rowsPerPage = ROWS_PER_PAGE,
-    hasHeaders = false
-  } = props
+  const { empty, data, isLoading, totalPages, activePage = 1, setPage, total, rowsPerPage = ROWS_PER_PAGE, hasHeaders = false } = props
 
   const isMobile = useMobileMediaQuery()
   const headers = data.length > 0 ? Object.keys(data[0]) : null
   const hasPagination = totalPages && totalPages > 1
 
   return (
-    <div
-      className={`TableContent ${!hasPagination ? 'radiusEnding' : ''} ${
-        !hasHeaders ? 'emptyHeaders' : ''
-      }`}
-    >
+    <div className={`TableContent ${!hasPagination ? 'radiusEnding' : ''} ${!hasHeaders ? 'emptyHeaders' : ''}`}>
       {isLoading ? (
         <div className={'emptyTable'}>
           <Loader active data-testid="loader" />
@@ -66,21 +52,14 @@ const TableContent = (props: Props) => {
       )}
       {hasPagination && total ? (
         <div className="pagination">
-          {`${t('global.showing')} ${(activePage - 1) * rowsPerPage +
-            1}-${Math.min(activePage * rowsPerPage, total)}  ${t(
+          {`${t('global.showing')} ${(activePage - 1) * rowsPerPage + 1}-${Math.min(activePage * rowsPerPage, total)}  ${t(
             'global.of'
           )} ${total}`}
           <Pagination
-            siblingRange={
-              isMobile
-                ? TABLE_SIBLINGS_RANGE_MOBILE
-                : TABLE_SIBLINGS_RANGE_DESKTOP
-            }
+            siblingRange={isMobile ? TABLE_SIBLINGS_RANGE_MOBILE : TABLE_SIBLINGS_RANGE_DESKTOP}
             activePage={activePage}
             totalPages={totalPages}
-            onPageChange={(_event, props) =>
-              setPage && setPage(+props.activePage!)
-            }
+            onPageChange={(_event, props) => setPage && setPage(+props.activePage!)}
             firstItem={null}
             lastItem={null}
           />

@@ -64,14 +64,7 @@ const BidsTable = (props: Props) => {
     if (nft) {
       setIsLoading(true)
       bidAPI
-        .fetchByNFT(
-          nft.contractAddress,
-          nft.tokenId,
-          null,
-          sortBy,
-          ROWS_PER_PAGE.toString(),
-          ((page - 1) * ROWS_PER_PAGE).toString()
-        )
+        .fetchByNFT(nft.contractAddress, nft.tokenId, null, sortBy, ROWS_PER_PAGE.toString(), ((page - 1) * ROWS_PER_PAGE).toString())
         .then(response => {
           if (cancel) return
           setTotal(response.total)
@@ -145,16 +138,11 @@ const BidsTable = (props: Props) => {
                   </>
                 }
                 onConfirm={() => {
-                  showConfirmationModal.bid &&
-                    onAccept(showConfirmationModal.bid)
+                  showConfirmationModal.bid && onAccept(showConfirmationModal.bid)
                 }}
-                valueToConfirm={ethers.utils.formatEther(
-                  showConfirmationModal.bid.price
-                )}
+                valueToConfirm={ethers.utils.formatEther(showConfirmationModal.bid.price)}
                 network={nft.network}
-                onCancel={() =>
-                  setShowConfirmationModal({ display: false, bid: null })
-                }
+                onCancel={() => setShowConfirmationModal({ display: false, bid: null })}
                 loading={isAcceptingBid}
                 disabled={isAcceptingBid}
               />

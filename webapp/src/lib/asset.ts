@@ -13,16 +13,12 @@ const getContentClient = () =>
     fetcher: createFetchComponent()
   })
 
-export const getSmartWearableSceneContent = async (
-  urn: string
-): Promise<Record<string, unknown> | undefined> => {
+export const getSmartWearableSceneContent = async (urn: string): Promise<Record<string, unknown> | undefined> => {
   const contentClient = getContentClient()
   const wearableEntity = await contentClient.fetchEntitiesByPointers([urn])
 
   if (wearableEntity.length > 0) {
-    const scene = wearableEntity[0].content?.find(entity =>
-      entity.file.endsWith(SCENE_PATH)
-    )
+    const scene = wearableEntity[0].content?.find(entity => entity.file.endsWith(SCENE_PATH))
 
     if (scene) {
       const wearableScene = await contentClient.downloadContent(scene.hash)
@@ -34,18 +30,12 @@ export const getSmartWearableSceneContent = async (
   }
 }
 
-export const getSmartWearableRequiredPermissions = async (
-  urn: string
-): Promise<string[]> => {
+export const getSmartWearableRequiredPermissions = async (urn: string): Promise<string[]> => {
   const wearableSceneContent = await getSmartWearableSceneContent(urn)
-  return wearableSceneContent
-    ? (wearableSceneContent.requiredPermissions as string[])
-    : []
+  return wearableSceneContent ? (wearableSceneContent.requiredPermissions as string[]) : []
 }
 
-export const getSmartWearableVideoShowcase = async (
-  asset: Asset
-): Promise<string | undefined> => {
+export const getSmartWearableVideoShowcase = async (asset: Asset): Promise<string | undefined> => {
   try {
     const { contractAddress, itemId } = asset
 
@@ -53,9 +43,7 @@ export const getSmartWearableVideoShowcase = async (
 
     const contents = await builderAPI.fetchItemContent(contractAddress, itemId)
 
-    const videoContentKey = Object.keys(contents).find(key =>
-      key.endsWith(VIDEO_PATH)
-    )
+    const videoContentKey = Object.keys(contents).find(key => key.endsWith(VIDEO_PATH))
 
     return videoContentKey ? contents[videoContentKey] : undefined
   } catch (error) {

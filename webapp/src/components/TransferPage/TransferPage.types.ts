@@ -1,9 +1,6 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import {
-  transferNFTRequest,
-  TransferNFTRequestAction
-} from '../../modules/nft/actions'
+import { transferNFTRequest, TransferNFTRequestAction } from '../../modules/nft/actions'
 
 export type Props = {
   onTransfer: typeof transferNFTRequest
@@ -13,6 +10,4 @@ export type Props = {
 
 export type MapStateProps = Pick<Props, 'isTransferring'>
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onTransfer'>
-export type MapDispatch = Dispatch<
-  CallHistoryMethodAction | TransferNFTRequestAction
->
+export type MapDispatch = Dispatch<CallHistoryMethodAction | TransferNFTRequestAction>

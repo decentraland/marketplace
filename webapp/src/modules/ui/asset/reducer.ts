@@ -1,8 +1,5 @@
 import { combineReducers } from 'redux'
-import {
-  homepageReducer as homepage,
-  HomepageUIState
-} from './homepage/reducer'
+import { homepageReducer as homepage, HomepageUIState } from './homepage/reducer'
 
 export type AssetUIState = {
   homepage: HomepageUIState

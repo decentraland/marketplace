@@ -1,7 +1,7 @@
-import { AssetType } from "../../../../modules/asset/types";
-import { View } from "../../../../modules/ui/types";
-import { isLandSection } from "../../../../modules/ui/utils";
-import { Section, Sections } from "../../../../modules/vendor/routing/types";
+import { AssetType } from '../../../../modules/asset/types'
+import { View } from '../../../../modules/ui/types'
+import { isLandSection } from '../../../../modules/ui/utils'
+import { Section, Sections } from '../../../../modules/vendor/routing/types'
 
 export function getAvailableSections(view?: View, section?: Section, assetType?: AssetType) {
   if (view === View.ACCOUNT && assetType === AssetType.ITEM) {

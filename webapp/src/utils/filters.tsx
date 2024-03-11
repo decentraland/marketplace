@@ -1,9 +1,4 @@
-import {
-  GenderFilterOption,
-  Network,
-  NFTCategory,
-  WearableGender
-} from '@dcl/schemas'
+import { GenderFilterOption, Network, NFTCategory, WearableGender } from '@dcl/schemas'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana } from '../components/Mana'
@@ -19,11 +14,7 @@ export enum AssetStatusFilter {
 export const AVAILABLE_FOR_MALE = 'AVAILABLE_FOR_MALE'
 export const AVAILABLE_FOR_FEMALE = 'AVAILABLE_FOR_FEMALE'
 
-export function getPriceLabel(
-  minPrice?: string,
-  maxPrice?: string,
-  network: Network = Network.ETHEREUM
-) {
+export function getPriceLabel(minPrice?: string, maxPrice?: string, network: Network = Network.ETHEREUM) {
   const priceFormatter = Intl.NumberFormat('en', { notation: 'compact' })
   const manaTranslator = () => (
     <Mana
@@ -89,19 +80,14 @@ export function getNetwork(network?: Network, category?: NFTCategory) {
     return network
   }
 
-  if (
-    category &&
-    [NFTCategory.WEARABLE, NFTCategory.EMOTE].includes(category)
-  ) {
+  if (category && [NFTCategory.WEARABLE, NFTCategory.EMOTE].includes(category)) {
     return Network.MATIC
   }
 
   return Network.ETHEREUM
 }
 
-export function getBodyShapeValue(
-  bodyShapes: (WearableGender | GenderFilterOption)[] | undefined
-): string | undefined {
+export function getBodyShapeValue(bodyShapes: (WearableGender | GenderFilterOption)[] | undefined): string | undefined {
   if (bodyShapes?.length === 0) {
     return undefined
   }
@@ -121,9 +107,7 @@ export function getBodyShapeValue(
   return undefined
 }
 
-export function getGenderFilterLabel(
-  bodyShapes: (WearableGender | GenderFilterOption)[] | undefined
-): string {
+export function getGenderFilterLabel(bodyShapes: (WearableGender | GenderFilterOption)[] | undefined): string {
   const bodyShape = getBodyShapeValue(bodyShapes)
 
   if (!bodyShape) {

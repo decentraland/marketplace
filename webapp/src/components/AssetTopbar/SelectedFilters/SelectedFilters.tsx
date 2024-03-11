@@ -6,11 +6,11 @@ import {
   getGenderFilterLabel,
   getLandLabel,
   getNetwork,
-  getPriceLabel
+  getPriceLabel,
+  AssetStatusFilter
 } from '../../../utils/filters'
 import { CreatorAccount } from '../../../modules/account/types'
 import ProfilesCache from '../../../lib/profiles'
-import { AssetStatusFilter } from '../../../utils/filters'
 import { profileToCreatorAccount } from '../../AssetFilters/CreatorsFilter/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { Pill } from './Pill/Pill'
@@ -18,12 +18,7 @@ import { Props } from './SelectedFilters.types'
 import { getCollectionByAddress } from './utils'
 import styles from './SelectedFilters.module.css'
 
-export const SelectedFilters = ({
-  browseOptions,
-  isLandSection,
-  category,
-  onBrowse
-}: Props) => {
+export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrowse }: Props) => {
   const {
     rarities,
     network,
@@ -47,13 +42,9 @@ export const SelectedFilters = ({
     emoteHasSound,
     emoteHasGeometry
   } = browseOptions
-  const [collections, setCollections] = useState<Record<string, string>[] | []>(
-    []
-  )
+  const [collections, setCollections] = useState<Record<string, string>[] | []>([])
 
-  const [selectedCreators, setSelectedCreators] = useState<
-    Pick<CreatorAccount, 'address' | 'name'>[]
-  >()
+  const [selectedCreators, setSelectedCreators] = useState<Pick<CreatorAccount, 'address' | 'name'>[]>()
 
   useEffect(() => {
     const fetchData = async (contract: string) => {
@@ -91,10 +82,7 @@ export const SelectedFilters = ({
     [minPrice, maxPrice, network, category]
   )
 
-  const estateSizeLabel = useMemo(
-    () => getEstateSizeLabel(minEstateSize, maxEstateSize),
-    [minEstateSize, maxEstateSize]
-  )
+  const estateSizeLabel = useMemo(() => getEstateSizeLabel(minEstateSize, maxEstateSize), [minEstateSize, maxEstateSize])
 
   const landStatusLabel = useMemo(() => {
     if (isLandSection && (onlyOnSale || onlyOnRent)) {
@@ -178,9 +166,7 @@ export const SelectedFilters = ({
   const handleDeleteRentalDays = useCallback(
     removeDays => {
       onBrowse({
-        rentalDays: rentalDays?.filter(
-          day => removeDays.toString() !== day.toString()
-        )
+        rentalDays: rentalDays?.filter(day => removeDays.toString() !== day.toString())
       })
     },
     [onBrowse, rentalDays]
@@ -197,41 +183,14 @@ export const SelectedFilters = ({
   return (
     <div className={styles.pillContainer}>
       {emoteHasSound ? (
-        <Pill
-          label={t('nft_filters.emote_attributes.with_sound')}
-          id="emoteHasSound"
-          onDelete={handleDeleteEmoteHasSound}
-        />
+        <Pill label={t('nft_filters.emote_attributes.with_sound')} id="emoteHasSound" onDelete={handleDeleteEmoteHasSound} />
       ) : null}
       {emoteHasGeometry ? (
-        <Pill
-          label={t('nft_filters.emote_attributes.with_props')}
-          id="emoteHasGeomtry"
-          onDelete={handleDeleteEmoteHasGeometry}
-        />
+        <Pill label={t('nft_filters.emote_attributes.with_props')} id="emoteHasGeomtry" onDelete={handleDeleteEmoteHasGeometry} />
       ) : null}
-      {rarities?.map(rarity => (
-        <Pill
-          key={rarity}
-          label={rarity}
-          id={rarity}
-          onDelete={handleDeleteRarity}
-        />
-      ))}
-      {network ? (
-        <Pill
-          label={t(`networks.${network.toLowerCase()}`)}
-          id="network"
-          onDelete={handleDeleteNetwork}
-        />
-      ) : null}
-      {onlySmart ? (
-        <Pill
-          label={t('nft_filters.only_smart.selected')}
-          id="onlySmart"
-          onDelete={handleDeleteOnlySmart}
-        />
-      ) : null}
+      {rarities?.map(rarity => <Pill key={rarity} label={rarity} id={rarity} onDelete={handleDeleteRarity} />)}
+      {network ? <Pill label={t(`networks.${network.toLowerCase()}`)} id="network" onDelete={handleDeleteNetwork} /> : null}
+      {onlySmart ? <Pill label={t('nft_filters.only_smart.selected')} id="onlySmart" onDelete={handleDeleteOnlySmart} /> : null}
       {collections.length
         ? collections.map(collection => (
             <Pill
@@ -244,65 +203,22 @@ export const SelectedFilters = ({
         : null}
       {selectedCreators?.length
         ? selectedCreators.map(creator => (
-            <Pill
-              key={creator.address}
-              label={creator.name}
-              id={creator.address}
-              onDelete={() => handleDeleteCreator(creator.address)}
-            />
+            <Pill key={creator.address} label={creator.name} id={creator.address} onDelete={() => handleDeleteCreator(creator.address)} />
           ))
         : null}
       {wearableGenders?.length ? (
-        <Pill
-          label={t(getGenderFilterLabel(wearableGenders))}
-          id="wearable_genders"
-          onDelete={handleDeleteGender}
-        />
+        <Pill label={t(getGenderFilterLabel(wearableGenders))} id="wearable_genders" onDelete={handleDeleteGender} />
       ) : null}
       {!onlyOnSale && !isLandSection && assetType !== AssetType.ITEM ? ( // TODO UNIFIED: CHECK THIS
-        <Pill
-          label={t('nft_filters.not_on_sale')}
-          id="onlyOnSale"
-          onDelete={handleDeleteOnlySale}
-        />
+        <Pill label={t('nft_filters.not_on_sale')} id="onlyOnSale" onDelete={handleDeleteOnlySale} />
       ) : null}
       {emotePlayMode?.map(playMode => (
-        <Pill
-          key={playMode}
-          label={t(`emote.play_mode.${playMode}`)}
-          onDelete={handleDeleteEmotePlayMode}
-          id={playMode}
-        />
+        <Pill key={playMode} label={t(`emote.play_mode.${playMode}`)} onDelete={handleDeleteEmotePlayMode} id={playMode} />
       ))}
-      {minPrice || maxPrice ? (
-        <Pill
-          label={priceLabel}
-          className={styles.pricePill}
-          onDelete={handleDeletePrice}
-          id="price"
-        />
-      ) : null}
-      {minEstateSize || maxEstateSize ? (
-        <Pill
-          label={estateSizeLabel}
-          onDelete={handleDeleteEstateSize}
-          id="estateSize"
-        />
-      ) : null}
-      {isLandSection && landStatusLabel ? (
-        <Pill
-          label={landStatusLabel}
-          onDelete={handleDeleteLandStatus}
-          id="land_filter"
-        />
-      ) : null}
-      {adjacentToRoad ? (
-        <Pill
-          label={t('nft_filters.adjacent_to_road')}
-          onDelete={handleDeleteAdjacentToRoad}
-          id="adjacentToRoad"
-        />
-      ) : null}
+      {minPrice || maxPrice ? <Pill label={priceLabel} className={styles.pricePill} onDelete={handleDeletePrice} id="price" /> : null}
+      {minEstateSize || maxEstateSize ? <Pill label={estateSizeLabel} onDelete={handleDeleteEstateSize} id="estateSize" /> : null}
+      {isLandSection && landStatusLabel ? <Pill label={landStatusLabel} onDelete={handleDeleteLandStatus} id="land_filter" /> : null}
+      {adjacentToRoad ? <Pill label={t('nft_filters.adjacent_to_road')} onDelete={handleDeleteAdjacentToRoad} id="adjacentToRoad" /> : null}
       {minDistanceToPlaza || maxDistanceToPlaza ? (
         <Pill
           label={t('nft_filters.distance_to_plaza.selection', {
@@ -324,12 +240,7 @@ export const SelectedFilters = ({
           ))
         : null}
       {status && status !== AssetStatusFilter.ON_SALE ? (
-        <Pill
-          key={status}
-          label={t(`nft_filters.status.${status}`)}
-          onDelete={handleDeleteStatus}
-          id={status.toString()}
-        />
+        <Pill key={status} label={t(`nft_filters.status.${status}`)} onDelete={handleDeleteStatus} id={status.toString()} />
       ) : null}
     </div>
   )

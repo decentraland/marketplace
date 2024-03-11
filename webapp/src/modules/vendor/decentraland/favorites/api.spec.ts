@@ -2,12 +2,7 @@ import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { FavoritedItems, List } from '../../../favorites/types'
 import { ItemFilters } from '../item/types'
 import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from './api'
-import {
-  ListDetails,
-  ListOfLists,
-  Permission,
-  UpdateOrCreateList
-} from './types'
+import { ListDetails, ListOfLists, Permission, UpdateOrCreateList } from './types'
 
 let itemId: string
 let identity: AuthIdentity
@@ -42,9 +37,7 @@ describe('when getting the items picked in a list', () => {
 
     it('should resolve the favorited item ids and the total favorited', async () => {
       const expectedUrl = `/v1/lists/${listId}/picks`
-      await expect(favoritesAPI.getPicksByList(listId, filters)).resolves.toBe(
-        data
-      )
+      await expect(favoritesAPI.getPicksByList(listId, filters)).resolves.toBe(data)
       expect(fetchMock).toHaveBeenCalledWith(expectedUrl)
     })
   })
@@ -60,9 +53,7 @@ describe('when getting the items picked in a list', () => {
 
     it('should resolve the favorited item ids and the total favorited', async () => {
       const expectedUrl = `/v1/lists/${listId}/picks?limit=${filters.first}&offset=${filters.skip}`
-      await expect(favoritesAPI.getPicksByList(listId, filters)).resolves.toBe(
-        data
-      )
+      await expect(favoritesAPI.getPicksByList(listId, filters)).resolves.toBe(data)
       expect(fetchMock).toHaveBeenCalledWith(expectedUrl)
     })
   })
@@ -81,12 +72,8 @@ describe('when getting who favorited an item', () => {
     })
 
     it('should resolve with the addresses of the users who favorited the item and the total of them', () => {
-      return expect(
-        favoritesAPI.getWhoFavoritedAnItem(itemId, 0, 10)
-      ).resolves.toEqual({
-        addresses: data.results.map(
-          (pick: { userAddress: string }) => pick.userAddress
-        ),
+      return expect(favoritesAPI.getWhoFavoritedAnItem(itemId, 0, 10)).resolves.toEqual({
+        addresses: data.results.map((pick: { userAddress: string }) => pick.userAddress),
         total: data.total
       })
     })
@@ -138,36 +125,31 @@ describe('when getting the lists', () => {
     ['sortBy', 'name', 'sortBy'],
     ['sortDirection', 'asc', 'sortDirection'],
     ['itemId', 'anItemId', 'itemId']
-  ])(
-    'when the request is made with the %s parameter',
-    (parameter, value, expectedParameter) => {
-      let response: { results: ListOfLists[]; total: number }
-      beforeEach(async () => {
-        response = {
-          results: [
-            {
-              id: 'aListId',
-              name: 'aName',
-              itemsCount: 1,
-              isPrivate: true,
-              previewOfItemIds: ['anItemId']
-            }
-          ],
-          total: 1
-        }
-        fetchMock.mockResolvedValueOnce(response)
-        await favoritesAPI.getLists({
-          [parameter]: value
-        })
+  ])('when the request is made with the %s parameter', (parameter, value, expectedParameter) => {
+    let response: { results: ListOfLists[]; total: number }
+    beforeEach(async () => {
+      response = {
+        results: [
+          {
+            id: 'aListId',
+            name: 'aName',
+            itemsCount: 1,
+            isPrivate: true,
+            previewOfItemIds: ['anItemId']
+          }
+        ],
+        total: 1
+      }
+      fetchMock.mockResolvedValueOnce(response)
+      await favoritesAPI.getLists({
+        [parameter]: value
       })
+    })
 
-      it(`should have called the API with the query parameter ${parameter} with its value`, () => {
-        expect(fetchMock).toHaveBeenCalledWith(
-          expect.stringContaining(`${expectedParameter}=${value}`)
-        )
-      })
-    }
-  )
+    it(`should have called the API with the query parameter ${parameter} with its value`, () => {
+      expect(fetchMock).toHaveBeenCalledWith(expect.stringContaining(`${expectedParameter}=${value}`))
+    })
+  })
 })
 
 describe('when deleting a list', () => {
@@ -194,9 +176,7 @@ describe('when deleting a list', () => {
     })
 
     it('should resolve', () => {
-      return expect(favoritesAPI.deleteList('aListId')).resolves.toEqual(
-        response
-      )
+      return expect(favoritesAPI.deleteList('aListId')).resolves.toEqual(response)
     })
   })
 })
@@ -257,9 +237,7 @@ describe('when updating a list', () => {
     })
 
     it('should reject with the request error', () => {
-      return expect(favoritesAPI.updateList('aListId', {})).rejects.toEqual(
-        error
-      )
+      return expect(favoritesAPI.updateList('aListId', {})).rejects.toEqual(error)
     })
   })
 

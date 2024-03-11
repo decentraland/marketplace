@@ -16,8 +16,7 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
-  onPlaceBid: (nft, price, expiresAt, fingerprint) =>
-    dispatch(placeBidRequest(nft, price, expiresAt, fingerprint)),
+  onPlaceBid: (nft, price, expiresAt, fingerprint) => dispatch(placeBidRequest(nft, price, expiresAt, fingerprint)),
   onClearBidError: () => dispatch(clearBidError())
 })
 

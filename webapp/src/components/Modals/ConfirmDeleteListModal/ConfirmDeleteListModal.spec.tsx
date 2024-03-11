@@ -1,9 +1,6 @@
 import { fireEvent } from '@testing-library/react'
 import { renderWithProviders } from '../../../utils/test'
-import ConfirmDeleteListModal, {
-  CANCEL_DATA_TEST_ID,
-  CONFIRM_DATA_TEST_ID
-} from './ConfirmDeleteListModal'
+import ConfirmDeleteListModal, { CANCEL_DATA_TEST_ID, CONFIRM_DATA_TEST_ID } from './ConfirmDeleteListModal'
 import { Props } from './ConfirmDeleteListModal.types'
 
 function renderConfirmListModal(props: Partial<Props> = {}) {

@@ -1,8 +1,5 @@
 import { connect } from 'react-redux'
-import {
-  MapDispatch,
-  MapDispatchProps
-} from './BuyWithCardExplanationModal.types'
+import { MapDispatch, MapDispatchProps } from './BuyWithCardExplanationModal.types'
 import BuyWithCardExplanationModal from './BuyWithCardExplanationModal'
 import { openTransak } from '../../../modules/transak/actions'
 import { Asset } from '../../../modules/asset/types'

@@ -1,22 +1,14 @@
 import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
-import {
-  RentalListing,
-  RentalListingCreation,
-  RentalsListingsFilterBy
-} from '@dcl/schemas'
+import { RentalListing, RentalListingCreation, RentalsListingsFilterBy } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { config } from '../../../../config'
 import { objectToURLSearchParams } from './utils'
 
-export const SIGNATURES_SERVER_URL = config.get('SIGNATURES_SERVER_URL')!
+export const SIGNATURES_SERVER_URL = config.get('SIGNATURES_SERVER_URL')
 type ValueOf<T> = T[keyof T]
 
-
 class RentalsAPI extends BaseAPI {
-  createRentalListing = async (
-    listing: RentalListingCreation,
-    identity: AuthIdentity
-  ): Promise<RentalListing> => {
+  createRentalListing = async (listing: RentalListingCreation, identity: AuthIdentity): Promise<RentalListing> => {
     const url = SIGNATURES_SERVER_URL + `/rentals-listings`
     const response = await signedFetch(url, {
       method: 'POST',
@@ -45,9 +37,7 @@ class RentalsAPI extends BaseAPI {
     })
 
     if (!response.ok) {
-      throw new Error(
-        'The signature server responded without a 2XX status code.'
-      )
+      throw new Error('The signature server responded without a 2XX status code.')
     }
 
     try {
@@ -70,33 +60,20 @@ class RentalsAPI extends BaseAPI {
   }> => {
     const UrlSearchParams = URLSearchParams ?? window.URLSearchParams
     const urlSearchParams = new UrlSearchParams()
-    ;(Object.keys(params) as Array<keyof typeof params>).forEach(
-      parameterName => {
-        if (Array.isArray(params[parameterName])) {
-          ;(params[parameterName] as ValueOf<typeof params>[]).forEach(
-            parameterValue => {
-              urlSearchParams.append(
-                parameterName,
-                (parameterValue ?? '').toString()
-              )
-            }
-          )
-        } else {
-          urlSearchParams.append(
-            parameterName,
-            (params[parameterName] ?? '').toString()
-          )
-        }
+    ;(Object.keys(params) as Array<keyof typeof params>).forEach(parameterName => {
+      if (Array.isArray(params[parameterName])) {
+        ;(params[parameterName] as ValueOf<typeof params>[]).forEach(parameterValue => {
+          urlSearchParams.append(parameterName, (parameterValue ?? '').toString())
+        })
+      } else {
+        urlSearchParams.append(parameterName, (params[parameterName] ?? '').toString())
       }
-    )
-    const url =
-      SIGNATURES_SERVER_URL + `/rentals-listings?` + urlSearchParams.toString()
+    })
+    const url = SIGNATURES_SERVER_URL + `/rentals-listings?` + urlSearchParams.toString()
     const response = await signedFetch(url)
 
     if (!response.ok) {
-      throw new Error(
-        'The signature server responded without a 2XX status code.'
-      )
+      throw new Error('The signature server responded without a 2XX status code.')
     }
 
     try {
@@ -111,15 +88,10 @@ class RentalsAPI extends BaseAPI {
     }
   }
 
-  getRentalListingsPrices = async (
-    filters: RentalsListingsFilterBy
-  ): Promise<Record<string, number>> => {
+  getRentalListingsPrices = async (filters: RentalsListingsFilterBy): Promise<Record<string, number>> => {
     const queryParams = objectToURLSearchParams(filters)
     try {
-      const response = await this.request(
-        'get',
-        `/rental-listings/prices?${queryParams.toString()}`
-      )
+      const response = await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)
       return response
     } catch (error) {
       throw new Error((error as Error).message)

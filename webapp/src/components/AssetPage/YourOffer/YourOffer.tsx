@@ -26,29 +26,16 @@ const Price = (props: { bid: Bid }) => {
         {t('offers_table.offer').toUpperCase()}&nbsp;
         <Popup
           content={
-            bid.network === Network.MATIC
-              ? t('best_buying_option.minting.polygon_mana')
-              : t('best_buying_option.minting.ethereum_mana')
+            bid.network === Network.MATIC ? t('best_buying_option.minting.polygon_mana') : t('best_buying_option.minting.ethereum_mana')
           }
           position="top center"
-          trigger={
-            <img
-              src={infoIcon}
-              alt="info"
-              className={styles.informationTooltip}
-            />
-          }
+          trigger={<img src={infoIcon} alt="info" className={styles.informationTooltip} />}
           on="hover"
         />
       </span>
       <div className={styles.row}>
         <div className={styles.informationBold}>
-          <Mana
-            withTooltip
-            size="large"
-            network={bid.network}
-            className={styles.informationBold}
-          >
+          <Mana withTooltip size="large" network={bid.network} className={styles.informationBold}>
             {formatWeiMANA(bid.price)}
           </Mana>
         </div>
@@ -69,9 +56,7 @@ const PublishDate = (props: { bid: Bid }) => {
   return (
     <div className={`${styles.column} ${styles.center}`}>
       <img src={calendar} alt="calendar" className={styles.calendar} />
-      <span className={styles.texts}>
-        {t('offers_table.date_published').toUpperCase()}
-      </span>
+      <span className={styles.texts}>{t('offers_table.date_published').toUpperCase()}</span>
 
       {formatDistanceToNow(+bid.createdAt, {
         addSuffix: true
@@ -85,9 +70,7 @@ const ExpirationDate = (props: { bid: Bid }) => {
   return (
     <div className={`${styles.column} ${styles.center}`}>
       <img src={expiration} alt="expiration" className={styles.calendar} />
-      <span className={styles.texts}>
-        {t('offers_table.expiration_date').toUpperCase()}
-      </span>
+      <span className={styles.texts}>{t('offers_table.expiration_date').toUpperCase()}</span>
 
       {formatDistanceToNow(+bid.expiresAt, {
         addSuffix: true
@@ -105,15 +88,7 @@ const YourOffer = (props: Props) => {
   useEffect(() => {
     if (nft && address) {
       bidAPI
-        .fetchByNFT(
-          nft.contractAddress,
-          nft.tokenId,
-          null,
-          undefined,
-          FIRST,
-          undefined,
-          address
-        )
+        .fetchByNFT(nft.contractAddress, nft.tokenId, null, undefined, FIRST, undefined, address)
         .then(response => {
           setBid(response.data[0])
         })
@@ -126,11 +101,7 @@ const YourOffer = (props: Props) => {
   return bid ? (
     <div className={styles.YourOffer}>
       <span className={styles.title}>
-        <img
-          src={iconListings}
-          alt={t('offers_table.your_offer')}
-          className={styles.offerIcon}
-        />
+        <img src={iconListings} alt={t('offers_table.your_offer')} className={styles.offerIcon} />
         {t('offers_table.your_offer')}
       </span>
 
@@ -150,20 +121,10 @@ const YourOffer = (props: Props) => {
         )}
 
         <div className={styles.actionsContainer}>
-          <Button
-            inverted
-            fluid
-            className={styles.actions}
-            onClick={() => onCancel(bid)}
-          >
+          <Button inverted fluid className={styles.actions} onClick={() => onCancel(bid)}>
             {t('offers_table.remove')}
           </Button>
-          <Button
-            primary
-            fluid
-            className={styles.actions}
-            onClick={() => onUpdate(bid)}
-          >
+          <Button primary fluid className={styles.actions} onClick={() => onUpdate(bid)}>
             {t('global.update')}
           </Button>
         </div>

@@ -16,13 +16,7 @@ import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
 
 const Navigation = (props: Props) => {
-  const {
-    activeTab,
-    isFullscreen,
-    isCampaignBrowserEnabled,
-    onOpenBuyManaWithFiatModal,
-    onClearFilters
-  } = props
+  const { activeTab, isFullscreen, isCampaignBrowserEnabled, onOpenBuyManaWithFiatModal, onClearFilters } = props
   const analytics = getAnalytics()
   const isMobile = useMobileMediaQuery()
 
@@ -44,9 +38,7 @@ const Navigation = (props: Props) => {
       <Tabs isFullscreen={isFullscreen}>
         <Tabs.Left>
           <Link to={locations.root()}>
-            <Tabs.Tab active={activeTab === NavigationTab.OVERVIEW}>
-              {t('navigation.overview')}
-            </Tabs.Tab>
+            <Tabs.Tab active={activeTab === NavigationTab.OVERVIEW}>{t('navigation.overview')}</Tabs.Tab>
           </Link>
           {isCampaignBrowserEnabled ? (
             <Link
@@ -70,49 +62,30 @@ const Navigation = (props: Props) => {
               </Tabs.Tab>
             </Link>
           ) : null}
-          <Link
-            to={locations.browse(browseDefaultOptions)}
-            onClick={onClearFilters}
-          >
-            <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>
-              {t('navigation.collectibles')}
-            </Tabs.Tab>
+          <Link to={locations.browse(browseDefaultOptions)} onClick={onClearFilters}>
+            <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>{t('navigation.collectibles')}</Tabs.Tab>
           </Link>
           <Link to={locations.lands()}>
-            <Tabs.Tab active={activeTab === NavigationTab.LANDS}>
-              {t('navigation.land')}
-            </Tabs.Tab>
+            <Tabs.Tab active={activeTab === NavigationTab.LANDS}>{t('navigation.land')}</Tabs.Tab>
           </Link>
           <Link to={locations.claimName()}>
-            <Tabs.Tab active={activeTab === NavigationTab.NAMES}>
-              {t('navigation.names')}
-            </Tabs.Tab>
+            <Tabs.Tab active={activeTab === NavigationTab.NAMES}>{t('navigation.names')}</Tabs.Tab>
           </Link>
           <Link to={locations.defaultCurrentAccount()}>
-            <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>
-              {t('navigation.my_assets')}
-            </Tabs.Tab>
+            <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>{t('navigation.my_assets')}</Tabs.Tab>
           </Link>
           <Link to={locations.lists()}>
-            <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>
-              {t('navigation.my_lists')}
-            </Tabs.Tab>
+            <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>{t('navigation.my_lists')}</Tabs.Tab>
           </Link>
           <Mobile>
             <Link to={locations.activity()}>
-              <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>
-                {t('navigation.activity')}
-              </Tabs.Tab>
+              <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>{t('navigation.activity')}</Tabs.Tab>
             </Link>
           </Mobile>
         </Tabs.Left>
         {!isMobile ? (
           <Tabs.Right>
-            <Button
-              inverted
-              onClick={handleOpenBuyManaWithFiatModal}
-              size="small"
-            >
+            <Button inverted onClick={handleOpenBuyManaWithFiatModal} size="small">
               {t('navigation.buy_mana_with_fiat')}
             </Button>
           </Tabs.Right>

@@ -28,10 +28,7 @@ export async function isNameAvailable(name: string): Promise<boolean> {
   const provider = networkProvider
     ? new ethers.providers.Web3Provider(networkProvider)
     : new ethers.providers.JsonRpcProvider(configuration.network.urls[chainId])
-  const contractDCLRegistrar = DCLRegistrar__factory.connect(
-    REGISTRAR_ADDRESS,
-    provider
-  )
+  const contractDCLRegistrar = DCLRegistrar__factory.connect(REGISTRAR_ADDRESS, provider)
   return contractDCLRegistrar.available(name)
 }
 
@@ -55,9 +52,7 @@ export function getNameInvalidType(name: string): NameInvalidType | null {
     return NameInvalidType.TOO_SHORT
   }
   const hasSpaces = /\s/.test(name)
-  return hasSpaces
-    ? NameInvalidType.HAS_SPACES
-    : NameInvalidType.INVALID_CHARACTERS
+  return hasSpaces ? NameInvalidType.HAS_SPACES : NameInvalidType.INVALID_CHARACTERS
 }
 
 export function hasNameMinLength(name: string): boolean {

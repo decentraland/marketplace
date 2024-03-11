@@ -14,12 +14,7 @@ type CollectionFilterProps = {
   defaultCollapsed?: boolean
 }
 
-export const CollectionFilter = ({
-  collection,
-  onlyOnSale,
-  onChange,
-  defaultCollapsed = false
-}: CollectionFilterProps): JSX.Element => {
+export const CollectionFilter = ({ collection, onlyOnSale, onChange, defaultCollapsed = false }: CollectionFilterProps): JSX.Element => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const [savedCollectionInfo, setSavedCollectionInfo] = useState<{
     text: string
@@ -59,10 +54,7 @@ export const CollectionFilter = ({
   const handleFetchOptionsFromValue = useCallback(
     async (value: string) => {
       try {
-        if (
-          value === savedCollectionInfo?.value &&
-          onlyOnSale === savedCollectionInfo.onlyOnSale
-        ) {
+        if (value === savedCollectionInfo?.value && onlyOnSale === savedCollectionInfo.onlyOnSale) {
           return {
             text: savedCollectionInfo.text,
             value: savedCollectionInfo.value
@@ -111,13 +103,9 @@ export const CollectionFilter = ({
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">
-            {t('nft_filters.collection.title')}
-          </span>
+          <span className="box-filter-name">{t('nft_filters.collection.title')}</span>
           <span className="box-filter-value">
-            {savedCollectionInfo?.text
-              ? savedCollectionInfo.text
-              : t('nft_filters.collection.all_items')}
+            {savedCollectionInfo?.text ? savedCollectionInfo.text : t('nft_filters.collection.all_items')}
           </span>
         </div>
       ) : (
@@ -127,12 +115,7 @@ export const CollectionFilter = ({
   )
 
   return (
-    <Box
-      header={header}
-      collapsible
-      className="filters-sidebar-box"
-      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
-    >
+    <Box header={header} collapsible className="filters-sidebar-box" defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
       <SelectFilter
         name=""
         value={collection || ''}

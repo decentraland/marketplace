@@ -1,23 +1,12 @@
-import {
-  GrantTokenRequestAction,
-  RevokeTokenRequestAction
-} from 'decentraland-dapps/dist/modules/authorization/actions'
+import { GrantTokenRequestAction, RevokeTokenRequestAction } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 
-export function hasTransactionPending(
-  transactions: Transaction[],
-  authorizedAddress: string,
-  contractAddress: string
-) {
+export function hasTransactionPending(transactions: Transaction[], authorizedAddress: string, contractAddress: string) {
   return transactions.some((transaction: any) => {
-    const { authorization } = transaction.payload as
-      | GrantTokenRequestAction['payload']
-      | RevokeTokenRequestAction['payload']
+    const { authorization } = transaction.payload as GrantTokenRequestAction['payload'] | RevokeTokenRequestAction['payload']
     return (
-      authorization.authorizedAddress.toLowerCase() ===
-        authorizedAddress.toLowerCase() &&
-      authorization.contractAddress.toLowerCase() ===
-        contractAddress.toLowerCase()
+      authorization.authorizedAddress.toLowerCase() === authorizedAddress.toLowerCase() &&
+      authorization.contractAddress.toLowerCase() === contractAddress.toLowerCase()
     )
   })
 }
@@ -28,11 +17,7 @@ export function isUserCanceled(error: string) {
 }
 
 export function isUserDeniedSignatureError(error: string) {
-  return (
-    error.search(
-      /User (denied|rejected) (transaction|message)( signature)?/
-    ) !== -1
-  )
+  return error.search(/User (denied|rejected) (transaction|message)( signature)?/) !== -1
 }
 
 export function isUserRejectedTransactionError(error: string) {

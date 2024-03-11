@@ -22,48 +22,27 @@ const Actions = (props: Props) => {
   const isENSName = !!data.ens
 
   const canSell = orderService.canSell()
-  const canBid =
-    !isOwner &&
-    isBiddable &&
-    (!wallet || !bids.some(bid => bid.bidder === wallet.address))
+  const canBid = !isOwner && isBiddable && (!wallet || !bids.some(bid => bid.bidder === wallet.address))
 
   return (
     <div className={styles.container}>
       {order ? (
         isOwner && canSell ? (
           <>
-            <Button
-              as={Link}
-              to={locations.sell(contractAddress, tokenId)}
-              primary
-              fluid
-            >
+            <Button as={Link} to={locations.sell(contractAddress, tokenId)} primary fluid>
               {t('asset_page.actions.update')}
             </Button>
-            <Button
-              as={Link}
-              to={locations.cancel(contractAddress, tokenId)}
-              fluid
-            >
+            <Button as={Link} to={locations.cancel(contractAddress, tokenId)} fluid>
               {t('asset_page.actions.cancel_sale')}
             </Button>
           </>
         ) : !isOwner ? (
           <>
-            <Button
-              as={Link}
-              to={locations.buy(AssetType.NFT, contractAddress, tokenId)}
-              primary
-              fluid
-            >
+            <Button as={Link} to={locations.buy(AssetType.NFT, contractAddress, tokenId)} primary fluid>
               {t('asset_page.actions.buy')}
             </Button>
             {canBid ? (
-              <Button
-                as={Link}
-                to={locations.bid(contractAddress, tokenId)}
-                fluid
-              >
+              <Button as={Link} to={locations.bid(contractAddress, tokenId)} fluid>
                 {t('asset_page.actions.bid')}
               </Button>
             ) : null}
@@ -74,12 +53,7 @@ const Actions = (props: Props) => {
           </Button>
         )
       ) : isOwner && canSell ? (
-        <Button
-          as={Link}
-          to={locations.sell(contractAddress, tokenId)}
-          primary
-          fluid
-        >
+        <Button as={Link} to={locations.sell(contractAddress, tokenId)} primary fluid>
           {t('asset_page.actions.sell')}
         </Button>
       ) : isOwner && !canSell ? (
@@ -87,21 +61,12 @@ const Actions = (props: Props) => {
           {t('asset_page.actions.sell')}
         </Button>
       ) : canBid ? (
-        <Button
-          as={Link}
-          to={locations.bid(contractAddress, tokenId)}
-          primary
-          fluid
-        >
+        <Button as={Link} to={locations.bid(contractAddress, tokenId)} primary fluid>
           {t('asset_page.actions.bid')}
         </Button>
       ) : null}
       {isOwner && !order ? (
-        <Button
-          as={Link}
-          to={locations.transfer(contractAddress, tokenId)}
-          fluid
-        >
+        <Button as={Link} to={locations.transfer(contractAddress, tokenId)} fluid>
           {t('asset_page.actions.transfer')}
         </Button>
       ) : null}

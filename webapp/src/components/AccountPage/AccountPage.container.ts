@@ -3,18 +3,9 @@ import { replace } from 'connected-react-router'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 import { RootState } from '../../modules/reducer'
-import {
-  getIsFullscreen,
-  getVendor,
-  getViewAsGuest
-} from '../../modules/routing/selectors'
+import { getIsFullscreen, getVendor, getViewAsGuest } from '../../modules/routing/selectors'
 import { getWallet } from '../../modules/wallet/selectors'
-import {
-  MapStateProps,
-  MapDispatch,
-  MapDispatchProps,
-  OwnProps
-} from './AccountPage.types'
+import { MapStateProps, MapDispatch, MapDispatchProps, OwnProps } from './AccountPage.types'
 import AccountPage from './AccountPage'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {

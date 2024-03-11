@@ -12,11 +12,7 @@ const JumpIn = (props: Props) => {
 
   return (
     <Badge className={classNames([styles.JumpIn, className])} color="#ff2d55">
-      <a
-        href={buildExplorerUrl(x, y)}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a href={buildExplorerUrl(x, y)} target="_blank" rel="noopener noreferrer">
         {!compact ? t('asset_page.jump_in') : null}
         <i
           className={classNames(styles.jumpInIcon, {

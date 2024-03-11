@@ -22,11 +22,6 @@ export type Props = {
 }
 
 export type OwnProps = Pick<Props, 'authorization'>
-export type MapStateProps = Pick<
-  Props,
-  'authorizations' | 'pendingTransactions' | 'isLoading' | 'getContract'
->
+export type MapStateProps = Pick<Props, 'authorizations' | 'pendingTransactions' | 'isLoading' | 'getContract'>
 export type MapDispatchProps = Pick<Props, 'onGrant' | 'onRevoke'>
-export type MapDispatch = Dispatch<
-  GrantTokenRequestAction | RevokeTokenRequestAction
->
+export type MapDispatch = Dispatch<GrantTokenRequestAction | RevokeTokenRequestAction>

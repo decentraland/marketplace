@@ -17,13 +17,10 @@ import { EmoteDetail } from './EmoteDetail'
 import './AssetPage.css'
 
 const AssetPage = ({ type }: Props) => {
-  const renderItemDetail = useCallback(
-    (item: Item) => <ItemDetail item={item} />,
-    []
-  )
+  const renderItemDetail = useCallback((item: Item) => <ItemDetail item={item} />, [])
   return (
     <>
-      <Navbar  />
+      <Navbar />
       <Navigation />
       <Page className="AssetPage">
         <ErrorBoundary>
@@ -40,20 +37,8 @@ const AssetPage = ({ type }: Props) => {
                       },
                       {
                         ens: nft => <ENSDetail nft={nft} />,
-                        estate: nft => (
-                          <EstateDetail
-                            nft={nft}
-                            order={order}
-                            rental={rental}
-                          />
-                        ),
-                        parcel: nft => (
-                          <ParcelDetail
-                            nft={nft}
-                            order={order}
-                            rental={rental}
-                          />
-                        ),
+                        estate: nft => <EstateDetail nft={nft} order={order} rental={rental} />,
+                        parcel: nft => <ParcelDetail nft={nft} order={order} rental={rental} />,
                         wearable: nft => <WearableDetail nft={nft} />,
                         emote: nft => <EmoteDetail nft={nft} />
                       },

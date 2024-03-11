@@ -6,10 +6,7 @@ import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { Contract, Item } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import {
-  ChainButton,
-  withAuthorizedAction
-} from 'decentraland-dapps/dist/containers'
+import { ChainButton, withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { ContractName } from 'decentraland-transactions'
@@ -80,7 +77,7 @@ const MintItemModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    if (!!item) {
+    if (item) {
       onClearItemErrors()
       onAuthorizedAction({
         targetContractName: ContractName.MANAToken,
@@ -104,18 +101,13 @@ const MintItemModal = (props: Props) => {
     collectionStore.label
   ])
 
-  const isDisabled =
-    !item.price || isOwner || (hasInsufficientMANA && !isBuyWithCardPage)
+  const isDisabled = !item.price || isOwner || (hasInsufficientMANA && !isBuyWithCardPage)
 
   const name = <Name asset={item} />
 
   const translationPageDescriptorId = compact([
     'mint',
-    isWearableOrEmote(item)
-      ? isBuyWithCardPage
-        ? 'with_card'
-        : 'with_mana'
-      : null,
+    isWearableOrEmote(item) ? (isBuyWithCardPage ? 'with_card' : 'with_mana') : null,
     'page'
   ]).join('_')
 
@@ -141,9 +133,7 @@ const MintItemModal = (props: Props) => {
       />
     )
   } else if (isOwner) {
-    subtitle = (
-      <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
-    )
+    subtitle = <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
   } else if (hasInsufficientMANA && !isBuyWithCardPage) {
     const description = (
       <T
@@ -154,11 +144,7 @@ const MintItemModal = (props: Props) => {
         }}
       />
     )
-    subtitle = isWearableOrEmote(item) ? (
-      <NotEnoughMana asset={item} description={description} />
-    ) : (
-      description
-    )
+    subtitle = isWearableOrEmote(item) ? <NotEnoughMana asset={item} description={description} /> : description
   } else {
     subtitle = isWearableOrEmote(item) ? (
       <div className="subtitle-wrapper">
@@ -187,29 +173,14 @@ const MintItemModal = (props: Props) => {
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
       <AssetProviderPage type={AssetType.ITEM}>
         {(asset: Item) => {
-          return asset.price !== item.price ? (
-            <PriceHasChanged asset={item} newPrice={asset.price} />
-          ) : null
+          return asset.price !== item.price ? <PriceHasChanged asset={item} newPrice={asset.price} /> : null
         }}
       </AssetProviderPage>
-      {hasLowPrice && !isBuyWithCardPage ? (
-        <PriceTooLow chainId={item.chainId} network={item.network} />
-      ) : null}
+      {hasLowPrice && !isBuyWithCardPage ? <PriceTooLow chainId={item.chainId} network={item.network} /> : null}
       <PartiallySupportedNetworkCard asset={item} />
-      <div
-        className={classNames(
-          'buttons',
-          isWearableOrEmote(item) && 'with-mana'
-        )}
-      >
-        <Button
-          as={Link}
-          to={locations.item(item.contractAddress, item.itemId)}
-          onClick={handleCancel}
-        >
-          {!isBuyWithCardPage && (hasLowPrice || hasInsufficientMANA)
-            ? t('global.go_back')
-            : t('global.cancel')}
+      <div className={classNames('buttons', isWearableOrEmote(item) && 'with-mana')}>
+        <Button as={Link} to={locations.item(item.contractAddress, item.itemId)} onClick={handleCancel}>
+          {!isBuyWithCardPage && (hasLowPrice || hasInsufficientMANA) ? t('global.go_back') : t('global.cancel')}
         </Button>
         {(!hasInsufficientMANA && !hasLowPrice) || isBuyWithCardPage ? (
           <ChainButton
@@ -231,9 +202,7 @@ const MintItemModal = (props: Props) => {
         ) : null}
       </div>
       {isWearableOrEmote(item) && isBuyWithCardPage ? (
-        <CardPaymentsExplanation
-          translationPageDescriptorId={translationPageDescriptorId}
-        />
+        <CardPaymentsExplanation translationPageDescriptorId={translationPageDescriptorId} />
       ) : null}
     </AssetAction>
   )

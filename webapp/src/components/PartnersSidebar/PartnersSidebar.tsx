@@ -16,12 +16,7 @@ const PartnersSidebar = (props: Props) => {
       <Header sub>{t('partners_page.partners')}</Header>
       <Menu>
         {getPartners().map(vendor => (
-          <MenuItem
-            key={vendor}
-            value={vendor}
-            image={`/${vendor}.png`}
-            onClick={onMenuItemClick}
-          />
+          <MenuItem key={vendor} value={vendor} image={`/${vendor}.png`} onClick={onMenuItemClick} />
         ))}
       </Menu>
     </div>

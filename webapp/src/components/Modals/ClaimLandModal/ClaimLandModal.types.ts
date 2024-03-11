@@ -16,8 +16,5 @@ export type Props = Omit<ModalProps, 'metadata'> & {
 }
 
 export type OwnProps = Pick<Props, 'metadata'>
-export type MapStateProps = Pick<
-  Props,
-  'isTransactionBeingConfirmed' | 'isSubmittingTransaction' | 'error'
->
+export type MapStateProps = Pick<Props, 'isTransactionBeingConfirmed' | 'isSubmittingTransaction' | 'error'>
 export type MapDispatchProps = Pick<Props, 'onSubmitTransaction'>

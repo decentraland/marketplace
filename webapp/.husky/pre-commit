@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+cd ./webapp
+
+FILES=$(git diff --cached --name-only --relative=webapp --diff-filter=ACMR | sed 's| |\\ |g' | { grep -E '(js|ts|tsx|json|yml|md|html|css)$' || true; })
+
+if [ -z "$FILES" ]; then
+    exit 0
+fi
+
+TS_FILES=$(git diff --cached --name-only --relative=webapp --diff-filter=ACMR | sed 's| |\\ |g' | { grep -E '(js|ts|tsx)$' || true; })
+
+if [[ ! -z "$TS_FILES" ]];then
+    echo "Running lints"
+    npm run pre-commit:fix:code -- $TS_FILES
+fi

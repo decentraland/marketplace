@@ -24,7 +24,4 @@ export type Props = Omit<ModalProps, 'metadata'> & {
 
 export type MapStateProps = Pick<Props, 'identity' | 'isSavingPicks'>
 export type OwnProps = Pick<Props, 'metadata' | 'onClose'>
-export type MapDispatchProps = Pick<
-  Props,
-  'onSavePicks' | 'onCreateList' | 'onFinishListCreation'
->
+export type MapDispatchProps = Pick<Props, 'onSavePicks' | 'onCreateList' | 'onFinishListCreation'>

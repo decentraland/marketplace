@@ -1,10 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { put, select, takeEvery } from 'redux-saga/effects'
-import {
-  BULK_PICK_SUCCESS,
-  BulkPickUnpickSuccessAction,
-  fetchFavoritedItemsRequest
-} from '../../favorites/actions'
+import { BULK_PICK_SUCCESS, BulkPickUnpickSuccessAction, fetchFavoritedItemsRequest } from '../../favorites/actions'
 import { PAGE_SIZE } from '../../vendor/api'
 import { getPageNumber } from '../../routing/selectors'
 import { isOwnerUnpickingFromCurrentList } from '../../favorites/selectors'
@@ -25,10 +21,7 @@ function* handleBulkPickSuccess(action: BulkPickUnpickSuccessAction) {
   const favoritedAssets: Item[] = yield select(getItemsPickedByUserOrCreator)
   const totalFavoritedAssets: number = yield select(getCount)
 
-  if (
-    favoritedAssets.length < totalFavoritedAssets &&
-    isOwnerUnpickingFromListInView
-  ) {
+  if (favoritedAssets.length < totalFavoritedAssets && isOwnerUnpickingFromListInView) {
     yield put(
       fetchFavoritedItemsRequest(
         {

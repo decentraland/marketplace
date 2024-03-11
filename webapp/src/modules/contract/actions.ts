@@ -12,25 +12,17 @@ export const fetchContractsSuccess = (contracts: Contract[]) =>
   action(FETCH_CONTRACTS_SUCCESS, {
     contracts
   })
-export const fetchContractsFailure = (error: string) =>
-  action(FETCH_CONTRACTS_FAILURE, { error })
+export const fetchContractsFailure = (error: string) => action(FETCH_CONTRACTS_FAILURE, { error })
 
-export type FetchContractsRequestAction = ReturnType<
-  typeof fetchContractsRequest
->
-export type FetchContractsSuccessAction = ReturnType<
-  typeof fetchContractsSuccess
->
-export type FetchContractsFailureAction = ReturnType<
-  typeof fetchContractsFailure
->
+export type FetchContractsRequestAction = ReturnType<typeof fetchContractsRequest>
+export type FetchContractsSuccessAction = ReturnType<typeof fetchContractsSuccess>
+export type FetchContractsFailureAction = ReturnType<typeof fetchContractsFailure>
 
 // UPSERT CONTRACTS
 
 export const UPSERT_CONTRACTS = 'Upsert contracts'
 
-export const upsertContracts = (contracts: Contract[]) =>
-  action(UPSERT_CONTRACTS, { contracts })
+export const upsertContracts = (contracts: Contract[]) => action(UPSERT_CONTRACTS, { contracts })
 
 export type UpsertContractsAction = ReturnType<typeof upsertContracts>
 

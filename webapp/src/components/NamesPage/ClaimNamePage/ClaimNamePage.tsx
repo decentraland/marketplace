@@ -1,16 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import classNames from 'classnames'
-import {
-  Button,
-  Close,
-  Container,
-  Field,
-  Icon,
-  Loader,
-  Popup,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { Button, Close, Container, Field, Icon, Loader, Popup, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { config } from '../../../config'
 import infoIcon from '../../../images/infoIcon.png'
@@ -105,12 +96,7 @@ const ClaimNamePage = (props: Props) => {
   )
 
   useEffect(() => {
-    if (
-      name !== PLACEHOLDER_NAME &&
-      name.length &&
-      hasNameMinLength(name) &&
-      isNameValid(name)
-    ) {
+    if (name !== PLACEHOLDER_NAME && name.length && hasNameMinLength(name) && isNameValid(name)) {
       setIsLoadingStatus(true)
     } else if (!isNameValid(name)) {
       // turn off loading if an invalid character is typed
@@ -128,15 +114,7 @@ const ClaimNamePage = (props: Props) => {
 
       onClaim(name)
     }
-  }, [
-    isConnecting,
-    wallet,
-    onRedirect,
-    location.pathname,
-    name,
-    isAvailable,
-    onClaim
-  ])
+  }, [isConnecting, wallet, onRedirect, location.pathname, name, isAvailable, onClaim])
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -184,11 +162,7 @@ const ClaimNamePage = (props: Props) => {
 
   const renderRemainingCharacters = useCallback(() => {
     if (name !== PLACEHOLDER_NAME) {
-      return (
-        <span
-          className={styles.remainingCharacters}
-        >{`${name.length}/${MAX_NAME_SIZE}`}</span>
-      )
+      return <span className={styles.remainingCharacters}>{`${name.length}/${MAX_NAME_SIZE}`}</span>
     }
   }, [PLACEHOLDER_NAME, name])
 
@@ -230,14 +204,9 @@ const ClaimNamePage = (props: Props) => {
         image: GovernanceImg,
         title: t('names_page.why.governance.title'),
         description: t('names_page.why.governance.description', {
-          b: (children: React.ReactChildren) => (
-            <b className={styles.voting}>{children}</b>
-          ),
+          b: (children: React.ReactChildren) => <b className={styles.voting}>{children}</b>,
           link: (
-            <a
-              href="https://docs.decentraland.org/player/general/dao/overview/what-is-the-dao"
-              className={styles.learnMore}
-            >
+            <a href="https://docs.decentraland.org/player/general/dao/overview/what-is-the-dao" className={styles.learnMore}>
               {t('global.learn_more')}
             </a>
           )
@@ -247,9 +216,7 @@ const ClaimNamePage = (props: Props) => {
         image: LandmarkImg,
         title: t('names_page.why.get_url.title'),
         description: t('names_page.why.get_url.description', {
-          b: (children: React.ReactChildren) => (
-            <b className={styles.nameLink}>{children}</b>
-          )
+          b: (children: React.ReactChildren) => <b className={styles.nameLink}>{children}</b>
         })
       }
     ]
@@ -262,36 +229,20 @@ const ClaimNamePage = (props: Props) => {
           <Container className={styles.mainContainer}>
             <div className={styles.gradient}>
               <div className={classNames(styles.claimContainer)}>
-                {isInputFocus ? (
-                  <Close onClick={() => setIsInputFocus(false)} />
-                ) : null}
+                {isInputFocus ? <Close onClick={() => setIsInputFocus(false)} /> : null}
                 <div className={styles.imageContainer}>
                   <div className={styles.imagePassportContainer}>
                     <img
-                      className={classNames(
-                        !isInputFocus && styles.visible,
-                        styles.passportLogo
-                      )}
+                      className={classNames(!isInputFocus && styles.visible, styles.passportLogo)}
                       src={ClaimNameImage}
                       alt="Claim name"
                     />
-                    <h2 className={classNames(isInputFocus && styles.fadeOut)}>
-                      {t('names_page.title')}
-                    </h2>
+                    <h2 className={classNames(isInputFocus && styles.fadeOut)}>{t('names_page.title')}</h2>
                   </div>
-                  <img
-                    className={classNames(
-                      styles.banner,
-                      isInputFocus && styles.visible
-                    )}
-                    src={ClaimNameBanner}
-                    alt="Banner"
-                  />
+                  <img className={classNames(styles.banner, isInputFocus && styles.visible)} src={ClaimNameBanner} alt="Banner" />
                 </div>
 
-                <span className={styles.subtitle}>
-                  {t('names_page.subtitle')}
-                </span>
+                <span className={styles.subtitle}>{t('names_page.subtitle')}</span>
                 <div className={styles.claimInput} onClick={onFieldClick}>
                   <Field
                     onClick={onFieldClick}
@@ -315,20 +266,10 @@ const ClaimNamePage = (props: Props) => {
                     }
                   />
                   <div className={styles.remainingCharactersContainer}>
-                    {isLoadingStatus ? (
-                      <Loader active inline size="tiny" />
-                    ) : null}
+                    {isLoadingStatus ? <Loader active inline size="tiny" /> : null}
                     {renderRemainingCharacters()}
                   </div>
-                  <Button
-                    primary
-                    onClick={handleClaim}
-                    disabled={
-                      !isAvailable ||
-                      nameInvalidType !== null ||
-                      isLoadingStatus
-                    }
-                  >
+                  <Button primary onClick={handleClaim} disabled={!isAvailable || nameInvalidType !== null || isLoadingStatus}>
                     {t('names_page.claim_a_name')}
                   </Button>
 
@@ -370,45 +311,31 @@ const ClaimNamePage = (props: Props) => {
                         </>
                       )}
                     </div>
-                  ) : name &&
-                    (!hasNameMinLength(name) || !isNameValid(name)) ? (
+                  ) : name && (!hasNameMinLength(name) || !isNameValid(name)) ? (
                     <div className={styles.availableContainer}>
                       <Icon
                         className={styles.warningIcon}
-                        name={
-                          nameInvalidType === NameInvalidType.TOO_SHORT
-                            ? 'exclamation triangle'
-                            : 'close'
-                        }
+                        name={nameInvalidType === NameInvalidType.TOO_SHORT ? 'exclamation triangle' : 'close'}
                       />
                       {nameInvalidType === NameInvalidType.TOO_SHORT
                         ? t('names_page.name_too_short')
                         : nameInvalidType === NameInvalidType.TOO_LONG
-                        ? t('names_page.name_too_long')
-                        : nameInvalidType === NameInvalidType.HAS_SPACES
-                        ? t('names_page.has_spaces')
-                        : t('names_page.invalid_characters')}
+                          ? t('names_page.name_too_long')
+                          : nameInvalidType === NameInvalidType.HAS_SPACES
+                            ? t('names_page.has_spaces')
+                            : t('names_page.invalid_characters')}
                     </div>
                   ) : null}
                 </div>
 
-                <span
-                  className={classNames(
-                    styles.nameCost,
-                    isInputFocus && styles.fadeOut
-                  )}
-                >
+                <span className={classNames(styles.nameCost, isInputFocus && styles.fadeOut)}>
                   {t('names_page.name_cost', {
                     mana: (
                       <>
                         <Mana inline /> 100 MANA
                       </>
                     ),
-                    network: (
-                      <span className={styles.nameCostNetwork}>
-                        {t('names_page.ethereum_mainnet_network')}
-                      </span>
-                    )
+                    network: <span className={styles.nameCostNetwork}>{t('names_page.ethereum_mainnet_network')}</span>
                   })}
                   <Popup
                     content={t('names_page.dao_tooltip', {
@@ -425,22 +352,14 @@ const ClaimNamePage = (props: Props) => {
                     position="top center"
                     hoverable
                     mouseLeaveDelay={500}
-                    trigger={
-                      <img
-                        src={infoIcon}
-                        alt="info"
-                        className={styles.informationTooltip}
-                      />
-                    }
+                    trigger={<img src={infoIcon} alt="info" className={styles.informationTooltip} />}
                     on="hover"
                   />
                   <div>
                     {t('names_page.name_cost_fiat', {
                       icon: <Icon name="credit card outline" />
                     })}
-                    <span className={styles.cardsLabel}>
-                      {t('names_page.debit_and_credit_cards')}
-                    </span>
+                    <span className={styles.cardsLabel}>{t('names_page.debit_and_credit_cards')}</span>
                   </div>
                 </span>
               </div>
@@ -450,12 +369,7 @@ const ClaimNamePage = (props: Props) => {
               <div className={styles.cardsContainer}>
                 {cards.map((card, index) => (
                   <div key={index} className={styles.card}>
-                    <div
-                      className={classNames(
-                        styles.whyImgContainer,
-                        card.className
-                      )}
-                    >
+                    <div className={classNames(styles.whyImgContainer, card.className)}>
                       <img src={card.image} alt={card.title} />
                     </div>
                     <div className={styles.whyTextContainer}>
@@ -465,12 +379,7 @@ const ClaimNamePage = (props: Props) => {
                   </div>
                 ))}
               </div>
-              <div
-                className={classNames(
-                  styles.cardsContainer,
-                  styles.bottomContainer
-                )}
-              >
+              <div className={classNames(styles.cardsContainer, styles.bottomContainer)}>
                 <div className={styles.nameTakenCard}>
                   <div className={styles.buttons}>
                     <div>
@@ -478,13 +387,8 @@ const ClaimNamePage = (props: Props) => {
                     </div>
                     <div>
                       <h2> {t('names_page.ctas.name_taken.title')}</h2>
-                      <span>
-                        {' '}
-                        {t('names_page.ctas.name_taken.description')}
-                      </span>
-                      <Button onClick={() => onBrowse()}>
-                        {t('names_page.browse_names_being_resold')}
-                      </Button>
+                      <span> {t('names_page.ctas.name_taken.description')}</span>
+                      <Button onClick={() => onBrowse()}>{t('names_page.browse_names_being_resold')}</Button>
                     </div>
                   </div>
                 </div>
@@ -496,12 +400,7 @@ const ClaimNamePage = (props: Props) => {
                       </div>
                       <div style={{ justifyContent: 'center' }}>
                         <h2> {t('names_page.ctas.manage.title')}</h2>
-                        <Button
-                          inverted
-                          as={'a'}
-                          target="_blank"
-                          href={`${builderUrl}/names`}
-                        >
+                        <Button inverted as={'a'} target="_blank" href={`${builderUrl}/names`}>
                           {t('names_page.manage_your_names')}
                         </Button>
                       </div>

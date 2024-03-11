@@ -27,14 +27,7 @@ describe('when creating the action to signal the start of the accept rental list
     addressOperator = '0xaddress'
   })
   it('should return an object representing the action', () => {
-    expect(
-      acceptRentalListingRequest(
-        nft,
-        rental,
-        periodIndexChosen,
-        addressOperator
-      )
-    ).toEqual({
+    expect(acceptRentalListingRequest(nft, rental, periodIndexChosen, addressOperator)).toEqual({
       type: ACCEPT_RENTAL_LISTING_REQUEST,
       meta: undefined,
       payload: {
@@ -94,14 +87,7 @@ describe('when creating the action to signal the submission of the accept rental
   })
 
   it('should return an object representing the action', () => {
-    expect(
-      acceptRentalListingTransactionSubmitted(
-        nft,
-        rental,
-        txHash,
-        periodIndexChosen
-      )
-    ).toEqual({
+    expect(acceptRentalListingTransactionSubmitted(nft, rental, txHash, periodIndexChosen)).toEqual({
       type: ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
       meta: undefined,
       payload: buildTransactionPayload(nft.chainId, txHash, {

@@ -92,8 +92,7 @@ describe('when getting the pagination hook', () => {
 
   describe('and there are some filters', () => {
     beforeEach(() => {
-      useLocationMock.search =
-        'page=1&first=10&offset=0&sortBy=createdAt&filter1=value1&filter2=value2'
+      useLocationMock.search = 'page=1&first=10&offset=0&sortBy=createdAt&filter1=value1&filter2=value2'
       renderedHook = renderHook(() => usePagination())
       currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
@@ -141,9 +140,7 @@ describe('when getting the pagination hook', () => {
     })
 
     it('should push the next page into the history with the current parameters', () => {
-      expect(historyPushMock).toHaveBeenCalledWith(
-        '/v1/lists?filter=value&sortBy=createdAt&page=2'
-      )
+      expect(historyPushMock).toHaveBeenCalledWith('/v1/lists?filter=value&sortBy=createdAt&page=2')
     })
   })
 
@@ -158,9 +155,7 @@ describe('when getting the pagination hook', () => {
     })
 
     it('should push the desired page into the history with the current parameters', () => {
-      expect(historyPushMock).toHaveBeenCalledWith(
-        '/v1/lists?filter=value&sortBy=createdAt&page=4'
-      )
+      expect(historyPushMock).toHaveBeenCalledWith('/v1/lists?filter=value&sortBy=createdAt&page=4')
     })
   })
 
@@ -175,16 +170,13 @@ describe('when getting the pagination hook', () => {
     })
 
     it('should push the first page into the history with the changed sorting parameter and the current filters', () => {
-      expect(historyPushMock).toHaveBeenCalledWith(
-        '/v1/lists?filter=value&sortBy=someSortProperty&page=1'
-      )
+      expect(historyPushMock).toHaveBeenCalledWith('/v1/lists?filter=value&sortBy=someSortProperty&page=1')
     })
   })
 
   describe('and using the changeFilter function', () => {
     beforeEach(() => {
-      useLocationMock.search =
-        'filter=value&anotherFilter=someValue&sortBy=createdAt'
+      useLocationMock.search = 'filter=value&anotherFilter=someValue&sortBy=createdAt'
       renderedHook = renderHook(() => usePagination())
       currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
@@ -199,9 +191,7 @@ describe('when getting the pagination hook', () => {
       })
 
       it('should push the first page into the history only with the new filter and the current sorting', () => {
-        expect(historyPushMock).toHaveBeenCalledWith(
-          '/v1/lists?page=1&sortBy=createdAt&filter=newValue'
-        )
+        expect(historyPushMock).toHaveBeenCalledWith('/v1/lists?page=1&sortBy=createdAt&filter=newValue')
       })
     })
 
@@ -215,9 +205,7 @@ describe('when getting the pagination hook', () => {
       })
 
       it('should push the first page into the history with the changed filter and the current sorting', () => {
-        expect(historyPushMock).toHaveBeenCalledWith(
-          '/v1/lists?filter=newValue&anotherFilter=someValue&sortBy=createdAt&page=1'
-        )
+        expect(historyPushMock).toHaveBeenCalledWith('/v1/lists?filter=newValue&anotherFilter=someValue&sortBy=createdAt&page=1')
       })
     })
   })
@@ -225,9 +213,7 @@ describe('when getting the pagination hook', () => {
   describe('and the count option is set', () => {
     beforeEach(() => {
       useLocationMock.search = 'page=1'
-      renderedHook = renderHook(() =>
-        usePagination({ pageSize: 50, count: 101 })
-      )
+      renderedHook = renderHook(() => usePagination({ pageSize: 50, count: 101 }))
       currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 
@@ -239,9 +225,7 @@ describe('when getting the pagination hook', () => {
   describe("and there's no more pages left", () => {
     beforeEach(() => {
       useLocationMock.search = 'page=3'
-      renderedHook = renderHook(() =>
-        usePagination({ pageSize: 50, count: 101 })
-      )
+      renderedHook = renderHook(() => usePagination({ pageSize: 50, count: 101 }))
       currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 
@@ -253,9 +237,7 @@ describe('when getting the pagination hook', () => {
   describe('and there are more pages left', () => {
     beforeEach(() => {
       useLocationMock.search = 'page=1'
-      renderedHook = renderHook(() =>
-        usePagination({ pageSize: 50, count: 101 })
-      )
+      renderedHook = renderHook(() => usePagination({ pageSize: 50, count: 101 }))
       currentResult = renderedHook.result.current as UsePaginationResult<string, string>
     })
 

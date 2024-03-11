@@ -1,14 +1,6 @@
 import { RentalListing } from '@dcl/schemas'
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
-import {
-  FetchNFTsSuccessAction,
-  FetchNFTSuccessAction,
-  FETCH_NFTS_SUCCESS,
-  FETCH_NFT_SUCCESS
-} from '../nft/actions'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { FetchNFTsSuccessAction, FetchNFTSuccessAction, FETCH_NFTS_SUCCESS, FETCH_NFT_SUCCESS } from '../nft/actions'
 import {
   ClaimAssetFailureAction,
   ClaimAssetRequestAction,
@@ -78,10 +70,7 @@ type RentalReducerAction =
   | AcceptRentalListingSuccessAction
   | AcceptRentalListingTransactionSubmitted
 
-export function rentalReducer(
-  state = INITIAL_STATE,
-  action: RentalReducerAction
-): RentalState {
+export function rentalReducer(state = INITIAL_STATE, action: RentalReducerAction): RentalState {
   switch (action.type) {
     case REMOVE_RENTAL_TRANSACTION_SUBMITTED:
     case ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED:
@@ -175,9 +164,7 @@ export function rentalReducer(
         ...state,
         data: {
           ...state.data,
-          ...Object.fromEntries(
-            action.payload.rentals.map(rental => [rental.id, rental])
-          )
+          ...Object.fromEntries(action.payload.rentals.map(rental => [rental.id, rental]))
         }
       }
     }

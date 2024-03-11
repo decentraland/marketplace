@@ -5,10 +5,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { ethers, BigNumber } from 'ethers'
 import { Route, AxelarProvider } from 'decentraland-transactions/crossChain'
-import {
-  getSigner,
-  getConnectedProvider
-} from 'decentraland-dapps/dist/lib/eth'
+import { getSigner, getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
@@ -74,43 +71,20 @@ describe('ENS Saga', () => {
             [select(getWallet), mockWallet],
             [call(getSigner), signer],
             [
-              call(
-                [DCLController__factory, 'connect'],
-                CONTROLLER_V2_ADDRESS,
-                signer
-              ),
+              call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer),
               { register: () => Promise.resolve(mockTransaction) }
             ],
             [
-              call(
-                [DCLRegistrar__factory, 'connect'],
-                REGISTRAR_ADDRESS,
-                signer
-              ),
+              call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer),
               {
                 ...dclRegistrarContract,
                 getTokenId: () => mockTokenId
               }
             ],
             [call(waitForTx, mockTransaction.hash), null],
-            [
-              claimNameTransactionSubmitted(
-                mockName,
-                mockWallet.address,
-                mockWallet.chainId,
-                mockTransaction.hash
-              ),
-              undefined
-            ]
+            [claimNameTransactionSubmitted(mockName, mockWallet.address, mockWallet.chainId, mockTransaction.hash), undefined]
           ])
-          .put(
-            claimNameTransactionSubmitted(
-              mockName,
-              mockWallet.address,
-              mockWallet.chainId,
-              mockTransaction.hash
-            )
-          )
+          .put(claimNameTransactionSubmitted(mockName, mockWallet.address, mockWallet.chainId, mockTransaction.hash))
           .put(closeModal('ClaimNameFatFingerModal'))
           .dispatch(claimNameRequest(mockName))
           .silentRun()
@@ -124,14 +98,7 @@ describe('ENS Saga', () => {
           .provide([
             [select(getWallet), mockWallet],
             [call(getSigner), {}],
-            [
-              call(
-                [DCLController__factory, 'connect'],
-                CONTROLLER_V2_ADDRESS,
-                signer
-              ),
-              { register: () => Promise.reject(error) }
-            ]
+            [call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer), { register: () => Promise.reject(error) }]
           ])
           .put(claimNameFailure({ message: error.message }))
           .dispatch(mockAction)
@@ -152,13 +119,7 @@ describe('ENS Saga', () => {
       it('should put a claim cross chain name failure action', () => {
         return expectSaga(ensSaga)
           .provide([[select(getWallet), null]])
-          .put(
-            claimNameCrossChainFailure(
-              route,
-              mockName,
-              'A wallet is required to claim a name'
-            )
-          )
+          .put(claimNameCrossChainFailure(route, mockName, 'A wallet is required to claim a name'))
           .dispatch(claimNameCrossChainRequest(mockName, chainId, route))
           .silentRun()
       })
@@ -171,13 +132,7 @@ describe('ENS Saga', () => {
             [select(getWallet), { address: '0xWalletAddress' }],
             [call(getConnectedProvider), null]
           ])
-          .put(
-            claimNameCrossChainFailure(
-              route,
-              mockName,
-              'A connected provider is required claim a name'
-            )
-          )
+          .put(claimNameCrossChainFailure(route, mockName, 'A connected provider is required claim a name'))
           .dispatch(claimNameCrossChainRequest(mockName, chainId, route))
           .silentRun()
       })
@@ -204,18 +159,9 @@ describe('ENS Saga', () => {
           .provide([
             [select(getWallet), mockWallet],
             [call(getConnectedProvider), Promise.resolve(provider)],
+            [matchers.call.fn(AxelarProvider.prototype.executeRoute), Promise.resolve(mockTransaction)],
             [
-              matchers.call.fn(AxelarProvider.prototype.executeRoute),
-              Promise.resolve(mockTransaction)
-            ],
-            [
-              claimNameTransactionSubmitted(
-                mockName,
-                mockWallet.address,
-                mockWallet.chainId,
-                mockTransaction.transactionHash,
-                route
-              ),
+              claimNameTransactionSubmitted(mockName, mockWallet.address, mockWallet.chainId, mockTransaction.transactionHash, route),
               undefined
             ]
           ])
@@ -223,15 +169,7 @@ describe('ENS Saga', () => {
             fn: AxelarProvider.prototype.executeRoute,
             args: [route, provider]
           })
-          .put(
-            claimNameTransactionSubmitted(
-              mockName,
-              mockWallet.address,
-              mockWallet.chainId,
-              mockTransaction.transactionHash,
-              route
-            )
-          )
+          .put(claimNameTransactionSubmitted(mockName, mockWallet.address, mockWallet.chainId, mockTransaction.transactionHash, route))
           .dispatch(claimNameCrossChainRequest(mockName, chainId, route))
           .silentRun()
       })
@@ -255,10 +193,7 @@ describe('ENS Saga', () => {
           .provide([
             [select(getWallet), mockWallet],
             [call(getConnectedProvider), Promise.resolve(provider)],
-            [
-              matchers.call.fn(AxelarProvider.prototype.executeRoute),
-              Promise.reject(error)
-            ]
+            [matchers.call.fn(AxelarProvider.prototype.executeRoute), Promise.reject(error)]
           ])
           .put(claimNameCrossChainFailure(route, mockName, error.message))
           .dispatch(claimNameCrossChainRequest(mockName, chainId, route))
@@ -283,12 +218,7 @@ describe('ENS Saga', () => {
       mockTransaction = {
         hash: '0xTransactionHash'
       } as ethers.ContractTransaction
-      mockAction = claimNameTransactionSubmitted(
-        mockName,
-        mockWallet.address,
-        ChainId.ARBITRUM_MAINNET,
-        mockTransaction.hash
-      )
+      mockAction = claimNameTransactionSubmitted(mockName, mockWallet.address, ChainId.ARBITRUM_MAINNET, mockTransaction.hash)
       mockTokenId = BigNumber.from(1)
       dclRegistrarContract = { address: '0xAnAddress' }
       mockENS = {
@@ -311,11 +241,7 @@ describe('ENS Saga', () => {
             .provide([
               [call(waitForTx, mockTransaction.hash), null],
               [
-                call(
-                  [DCLRegistrar__factory, 'connect'],
-                  REGISTRAR_ADDRESS,
-                  signer
-                ),
+                call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer),
                 {
                   ...dclRegistrarContract,
                   getTokenId: () => mockTokenId
@@ -324,24 +250,13 @@ describe('ENS Saga', () => {
               [select(getWallet), mockWallet],
               [call(getSigner), signer],
               [
-                call(
-                  [DCLController__factory, 'connect'],
-                  CONTROLLER_V2_ADDRESS,
-                  signer
-                ),
+                call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer),
                 { register: () => Promise.resolve(mockTransaction) }
               ]
             ])
             .put(claimNameSuccess(mockENS, mockName, mockTransaction.hash))
             .put(closeModal('ClaimNameFatFingerModal'))
-            .dispatch(
-              claimNameTransactionSubmitted(
-                mockName,
-                mockWallet.address,
-                mockWallet.chainId,
-                mockTransaction.hash
-              )
-            )
+            .dispatch(claimNameTransactionSubmitted(mockName, mockWallet.address, mockWallet.chainId, mockTransaction.hash))
             .silentRun()
         })
       })
@@ -358,11 +273,7 @@ describe('ENS Saga', () => {
             .provide([
               [call(waitForTx, mockTransaction.hash), null],
               [
-                call(
-                  [DCLRegistrar__factory, 'connect'],
-                  REGISTRAR_ADDRESS,
-                  signer
-                ),
+                call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer),
                 {
                   ...dclRegistrarContract,
                   getTokenId: () => mockTokenId
@@ -371,32 +282,13 @@ describe('ENS Saga', () => {
               [select(getWallet), mockWallet],
               [call(getSigner), signer],
               [
-                call(
-                  [DCLController__factory, 'connect'],
-                  CONTROLLER_V2_ADDRESS,
-                  signer
-                ),
+                call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer),
                 { register: () => Promise.resolve(mockTransaction) }
               ]
             ])
-            .put(
-              claimNameCrossChainSuccess(
-                mockENS,
-                mockName,
-                mockTransaction.hash,
-                route
-              )
-            )
+            .put(claimNameCrossChainSuccess(mockENS, mockName, mockTransaction.hash, route))
             .put(closeModal('ClaimNameFatFingerModal'))
-            .dispatch(
-              claimNameTransactionSubmitted(
-                mockName,
-                mockWallet.address,
-                mockWallet.chainId,
-                mockTransaction.hash,
-                route
-              )
-            )
+            .dispatch(claimNameTransactionSubmitted(mockName, mockWallet.address, mockWallet.chainId, mockTransaction.hash, route))
             .silentRun()
         })
       })
@@ -410,14 +302,7 @@ describe('ENS Saga', () => {
             [select(getWallet), mockWallet],
             [call(waitForTx, mockTransaction.hash), null],
             [call(getSigner), {}],
-            [
-              call(
-                [DCLRegistrar__factory, 'connect'],
-                REGISTRAR_ADDRESS,
-                signer
-              ),
-              { getTokenId: () => Promise.reject(error) }
-            ]
+            [call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer), { getTokenId: () => Promise.reject(error) }]
           ])
           .put(claimNameFailure({ message: error.message }))
           .dispatch(mockAction)

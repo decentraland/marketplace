@@ -7,11 +7,7 @@ import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { Sections } from '../../modules/vendor/routing/types'
 import { BrowseOptions } from '../../modules/routing/types'
-import {
-  getPersistedIsMapProperty,
-  isAccountView,
-  isListsSection
-} from '../../modules/ui/utils'
+import { getPersistedIsMapProperty, isAccountView, isListsSection } from '../../modules/ui/utils'
 import { usePagination } from '../../lib/pagination'
 import { locations } from '../../modules/routing/locations'
 import { AccountSidebar } from '../AccountSidebar'
@@ -83,12 +79,7 @@ const AssetBrowse = (props: Props) => {
   const isMapPropertyPersisted = getPersistedIsMapProperty()
 
   useEffect(() => {
-    if (
-      section === DecentralandSection.LAND &&
-      !isAccountView(view) &&
-      isMapPropertyPersisted === false &&
-      isMap
-    ) {
+    if (section === DecentralandSection.LAND && !isAccountView(view) && isMapPropertyPersisted === false && isMap) {
       // To prevent the map view from being displayed when the user clicks on the Land navigation tab.
       // We set the has fetched variable to false so it has to browse back to the list view.
       setHasFetched(false)
@@ -96,11 +87,7 @@ const AssetBrowse = (props: Props) => {
   }, [section, view, isMap, isMapPropertyPersisted])
 
   useEffect(() => {
-    if (
-      viewInState === view &&
-      !hasFetched &&
-      section !== DecentralandSection.COLLECTIONS
-    ) {
+    if (viewInState === view && !hasFetched && section !== DecentralandSection.COLLECTIONS) {
       // Options used to fetch the assets.
       const browseOpts: BrowseOptions = {
         vendor,
@@ -115,23 +102,14 @@ const AssetBrowse = (props: Props) => {
       // Function used to fetch the assets.
       let fetchAssetsFn: (opts: BrowseOptions) => void = onFetchAssetsFromRoute
 
-      if (
-        section === DecentralandSection.LAND &&
-        !isAccountView(view) &&
-        isMapPropertyPersisted === false
-      ) {
-        const previousPageIsLandDetail = !!matchPath(
-          visitedLocations[1]?.pathname,
-          { path: locations.nft(), strict: true, exact: true }
-        )
+      if (section === DecentralandSection.LAND && !isAccountView(view) && isMapPropertyPersisted === false) {
+        const previousPageIsLandDetail = !!matchPath(visitedLocations[1]?.pathname, { path: locations.nft(), strict: true, exact: true })
         // Update the browser options to match the ones persisted.
         browseOpts.isMap = isMap
         browseOpts.isFullscreen = isFullscreen
         browseOpts.onlyOnSale =
           (!onlyOnSale && onlyOnRent === false && !previousPageIsLandDetail) ||
-          (onlyOnSale === undefined &&
-            onlyOnRent === undefined &&
-            !previousPageIsLandDetail) ||
+          (onlyOnSale === undefined && onlyOnRent === undefined && !previousPageIsLandDetail) ||
           onlyOnSale
 
         // We also set the fetch function as onBrowse because we need the url to be updated.
@@ -164,10 +142,7 @@ const AssetBrowse = (props: Props) => {
     <>
       <NotMobile>
         {isAccountOrCurrentAccount ? (
-          <AccountSidebar
-            address={address!}
-            isCurrentAccount={isCurrentAccount}
-          />
+          <AccountSidebar address={address!} isCurrentAccount={isCurrentAccount} />
         ) : (
           <NFTSidebar section={section} sections={sections} />
         )}
@@ -182,22 +157,10 @@ const AssetBrowse = (props: Props) => {
       right = <CollectionList creator={address ?? ''} />
       break
     case DecentralandSection.ON_SALE:
-      right = (
-        <OnSaleList
-          address={address}
-          isCurrentAccount={isCurrentAccount}
-          onSaleOrRentType={OnSaleOrRentType.SALE}
-        />
-      )
+      right = <OnSaleList address={address} isCurrentAccount={isCurrentAccount} onSaleOrRentType={OnSaleOrRentType.SALE} />
       break
     case DecentralandSection.ON_RENT:
-      right = (
-        <OnSaleList
-          address={address}
-          isCurrentAccount={isCurrentAccount}
-          onSaleOrRentType={OnSaleOrRentType.RENT}
-        />
-      )
+      right = <OnSaleList address={address} isCurrentAccount={isCurrentAccount} onSaleOrRentType={OnSaleOrRentType.RENT} />
       break
     case DecentralandSection.SALES:
       right = <Sales />
@@ -220,18 +183,11 @@ const AssetBrowse = (props: Props) => {
       right = (
         <>
           {isMap && isFullscreen ? (
-            <MapTopbar
-              showOwned={showOwnedLandOnMap}
-              onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
-            />
+            <MapTopbar showOwned={showOwnedLandOnMap} onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)} />
           ) : (
             <AssetTopbar />
           )}
-          {isMap ? (
-            <MapBrowse showOwned={showOwnedLandOnMap} />
-          ) : (
-            <AssetList isManager={isCurrentAccount} />
-          )}
+          {isMap ? <MapBrowse showOwned={showOwnedLandOnMap} /> : <AssetList isManager={isCurrentAccount} />}
         </>
       )
   }
@@ -260,12 +216,7 @@ const AssetBrowse = (props: Props) => {
                   active={section === value}
                   onClick={
                     value === Sections.decentraland.COLLECTIONS
-                      ? () =>
-                          changeFilter(
-                            'section',
-                            Sections.decentraland.COLLECTIONS,
-                            { clearOldFilters: true }
-                          )
+                      ? () => changeFilter('section', Sections.decentraland.COLLECTIONS, { clearOldFilters: true })
                       : () => onBrowse({ section: value })
                   }
                 >
@@ -276,10 +227,7 @@ const AssetBrowse = (props: Props) => {
           </Tabs>
         </Mobile>
       ) : null}
-      <Page
-        className={classNames('AssetBrowse', isMap && 'is-map')}
-        isFullscreen={isFullscreen}
-      >
+      <Page className={classNames('AssetBrowse', isMap && 'is-map')} isFullscreen={isFullscreen}>
         <Row>
           {!isFullscreen && left && (
             <Column align="left" className="sidebar">

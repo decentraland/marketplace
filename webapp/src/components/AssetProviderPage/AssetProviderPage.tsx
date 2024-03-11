@@ -24,10 +24,7 @@ export const NotFound = () => (
 const AssetProviderPage = (props: Props) => {
   const { type, isConnecting, children, fullWidth = false } = props
   const rentalStatuses: RentalStatus[] | undefined = useMemo(
-    () =>
-      type === AssetType.NFT
-        ? [RentalStatus.OPEN, RentalStatus.EXECUTED, RentalStatus.CANCELLED]
-        : undefined,
+    () => (type === AssetType.NFT ? [RentalStatus.OPEN, RentalStatus.EXECUTED, RentalStatus.CANCELLED] : undefined),
     [type]
   )
 

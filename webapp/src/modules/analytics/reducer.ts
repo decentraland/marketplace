@@ -1,7 +1,4 @@
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchAnalyticsDayDataRequestAction,
   FetchAnalyticsDayDataSuccessAction,
@@ -40,10 +37,7 @@ type AnalyticsReducerAction =
   | FetchRankingsSuccessAction
   | FetchRankingsFailureAction
 
-export function analyticsReducer(
-  state = INITIAL_STATE,
-  action: AnalyticsReducerAction
-): AnalyticsState {
+export function analyticsReducer(state = INITIAL_STATE, action: AnalyticsReducerAction): AnalyticsState {
   switch (action.type) {
     case FETCH_ANALYTICS_VOLUME_DATA_REQUEST:
       return {

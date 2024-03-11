@@ -33,19 +33,13 @@ import { VendorName } from '../vendor/types'
 import { getRentalById } from '../rental/selectors'
 import { NFT } from '../nft/types'
 import { getCurrentNFT } from '../nft/selectors'
-import {
-  isRentalListingOpen,
-  waitUntilRentalChangesStatus
-} from '../rental/utils'
+import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
 
 export function* bidSaga() {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)
   yield takeEvery(ACCEPT_BID_REQUEST, handleAcceptBidRequest)
   yield takeEvery(CANCEL_BID_REQUEST, handleCancelBidRequest)
-  yield takeEvery(
-    FETCH_BIDS_BY_ADDRESS_REQUEST,
-    handleFetchBidsByAddressRequest
-  )
+  yield takeEvery(FETCH_BIDS_BY_ADDRESS_REQUEST, handleFetchBidsByAddressRequest)
   yield takeEvery(FETCH_BIDS_BY_NFT_REQUEST, handleFetchBidsByNFTRequest)
 }
 
@@ -55,30 +49,10 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
     const { bidService } = VendorFactory.build(nft.vendor)
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(() =>
-      bidService!.place(wallet, nft, price, expiresAt, fingerprint)
-    )
-    yield put(
-      placeBidSuccess(
-        nft,
-        price,
-        expiresAt,
-        nft.chainId,
-        txHash,
-        wallet!.address,
-        fingerprint
-      )
-    )
+    const txHash: string = yield call(() => bidService!.place(wallet, nft, price, expiresAt, fingerprint))
+    yield put(placeBidSuccess(nft, price, expiresAt, nft.chainId, txHash, wallet!.address, fingerprint))
   } catch (error) {
-    yield put(
-      placeBidFailure(
-        nft,
-        price,
-        expiresAt,
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error'),
-        fingerprint
-      )
-    )
+    yield put(placeBidFailure(nft, price, expiresAt, isErrorWithMessage(error) ? error.message : t('global.unknown_error'), fingerprint))
   }
 }
 
@@ -95,25 +69,15 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
           : `Couldn't find a valid vendor for contract ${bid.contractAddress}`
       )
     }
-    const vendor: Vendor<VendorName> = yield call(
-      VendorFactory.build,
-      contract.vendor
-    )
+    const vendor: Vendor<VendorName> = yield call(VendorFactory.build, contract.vendor)
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(
-      [vendor.bidService!, 'accept'],
-      wallet,
-      bid
-    )
+    const txHash: string = yield call([vendor.bidService!, 'accept'], wallet, bid)
     yield put(acceptBidtransactionSubmitted(bid, txHash))
     const nft: NFT | null = yield select(getCurrentNFT)
     if (nft?.openRentalId) {
       yield call(waitForTx, txHash)
-      const rental: RentalListing | null = yield select(
-        getRentalById,
-        nft.openRentalId
-      )
+      const rental: RentalListing | null = yield select(getRentalById, nft.openRentalId)
       if (isRentalListingOpen(rental)) {
         yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
       }
@@ -121,12 +85,7 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
 
     yield put(acceptBidSuccess(bid))
   } catch (error) {
-    yield put(
-      acceptBidFailure(
-        bid,
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(acceptBidFailure(bid, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }
 
@@ -137,9 +96,7 @@ function* handleCancelBidRequest(action: CancelBidRequestAction) {
       address: bid.contractAddress
     })
     if (!contract || !contract.vendor) {
-      throw new Error(
-        `Couldn't find a valid vendor for contract ${contract?.address}`
-      )
+      throw new Error(`Couldn't find a valid vendor for contract ${contract?.address}`)
     }
     const { bidService } = VendorFactory.build(contract.vendor)
 
@@ -148,18 +105,11 @@ function* handleCancelBidRequest(action: CancelBidRequestAction) {
 
     yield put(cancelBidSuccess(bid, txHash))
   } catch (error) {
-    yield put(
-      cancelBidFailure(
-        bid,
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(cancelBidFailure(bid, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }
 
-function* handleFetchBidsByAddressRequest(
-  action: FetchBidsByAddressRequestAction
-) {
+function* handleFetchBidsByAddressRequest(action: FetchBidsByAddressRequestAction) {
   const { address } = action.payload
   try {
     let sellerBids: Bid[] = []
@@ -171,24 +121,14 @@ function* handleFetchBidsByAddressRequest(
         continue
       }
 
-      const bids: [Bid[], Bid[]] = yield call(() =>
-        Promise.all([
-          bidService.fetchBySeller(address),
-          bidService.fetchByBidder(address)
-        ])
-      )
+      const bids: [Bid[], Bid[]] = yield call(() => Promise.all([bidService.fetchBySeller(address), bidService.fetchByBidder(address)]))
       sellerBids = sellerBids.concat(bids[0])
       bidderBids = bidderBids.concat(bids[1])
     }
 
     yield put(fetchBidsByAddressSuccess(address, sellerBids, bidderBids))
   } catch (error) {
-    yield put(
-      fetchBidsByAddressFailure(
-        address,
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(fetchBidsByAddressFailure(address, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }
 
@@ -201,11 +141,6 @@ function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
 
     yield put(fetchBidsByNFTSuccess(nft, bids))
   } catch (error) {
-    yield put(
-      fetchBidsByNFTFailure(
-        nft,
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(fetchBidsByNFTFailure(nft, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }

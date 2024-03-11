@@ -7,12 +7,7 @@ describe('when ordering items by the creation date of their favorites', () => {
   let favoritedItems: Record<string, FavoritesData>
 
   beforeEach(() => {
-    items = [
-      { id: '1' } as Item,
-      { id: '2' } as Item,
-      { id: '3' } as Item,
-      { id: '4' } as Item
-    ]
+    items = [{ id: '1' } as Item, { id: '2' } as Item, { id: '3' } as Item, { id: '4' } as Item]
     favoritedItems = {
       '1': { createdAt: 0, count: 0 },
       '2': { createdAt: 1, count: 0 },

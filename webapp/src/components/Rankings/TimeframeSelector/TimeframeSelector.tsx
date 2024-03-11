@@ -11,25 +11,13 @@ const TimeframeSelector = (props: Props) => {
 
   return (
     <div className="TimeframeSelector">
-      <Button
-        className={value === AnalyticsTimeframe.WEEK ? 'active' : ''}
-        basic
-        onClick={() => onChange(AnalyticsTimeframe.WEEK)}
-      >
+      <Button className={value === AnalyticsTimeframe.WEEK ? 'active' : ''} basic onClick={() => onChange(AnalyticsTimeframe.WEEK)}>
         {t('home_page.analytics.volume.seven_days')}
       </Button>
-      <Button
-        className={value === AnalyticsTimeframe.MONTH ? 'active' : ''}
-        basic
-        onClick={() => onChange(AnalyticsTimeframe.MONTH)}
-      >
+      <Button className={value === AnalyticsTimeframe.MONTH ? 'active' : ''} basic onClick={() => onChange(AnalyticsTimeframe.MONTH)}>
         {t('home_page.analytics.volume.thirty_days')}
       </Button>
-      <Button
-        className={value === AnalyticsTimeframe.ALL ? 'active' : ''}
-        basic
-        onClick={() => onChange(AnalyticsTimeframe.ALL)}
-      >
+      <Button className={value === AnalyticsTimeframe.ALL ? 'active' : ''} basic onClick={() => onChange(AnalyticsTimeframe.ALL)}>
         {t('home_page.analytics.volume.all')}
       </Button>
     </div>

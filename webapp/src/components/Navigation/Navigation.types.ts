@@ -1,8 +1,5 @@
 import { Dispatch } from 'redux'
-import {
-  openBuyManaWithFiatModalRequest,
-  OpenBuyManaWithFiatModalRequestAction
-} from 'decentraland-dapps/dist/modules/gateway/actions'
+import { openBuyManaWithFiatModalRequest, OpenBuyManaWithFiatModalRequestAction } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { clearFilters, ClearFiltersAction } from '../../modules/routing/actions'
 
 export enum NavigationTab {
@@ -22,21 +19,11 @@ export type Props = {
   isFullScreen?: boolean
   activeTab?: NavigationTab
   isFullscreen?: boolean
-  onOpenBuyManaWithFiatModal: () => ReturnType<
-    typeof openBuyManaWithFiatModalRequest
-  >
+  onOpenBuyManaWithFiatModal: () => ReturnType<typeof openBuyManaWithFiatModalRequest>
   onClearFilters: typeof clearFilters
 }
 
-export type MapDispatch = Dispatch<
-  OpenBuyManaWithFiatModalRequestAction | ClearFiltersAction
->
+export type MapDispatch = Dispatch<OpenBuyManaWithFiatModalRequestAction | ClearFiltersAction>
 
-export type MapStateProps = Pick<
-  Props,
-  'isCampaignBrowserEnabled' | 'isFullScreen'
->
-export type MapDispatchProps = Pick<
-  Props,
-  'onOpenBuyManaWithFiatModal' | 'onClearFilters'
->
+export type MapStateProps = Pick<Props, 'isCampaignBrowserEnabled' | 'isFullScreen'>
+export type MapDispatchProps = Pick<Props, 'onOpenBuyManaWithFiatModal' | 'onClearFilters'>

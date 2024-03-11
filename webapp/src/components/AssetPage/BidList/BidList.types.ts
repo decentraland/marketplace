@@ -1,10 +1,7 @@
 import { Dispatch } from 'redux'
 import { Bid } from '@dcl/schemas'
 import { NFT } from '../../../modules/nft/types'
-import {
-  fetchBidsByNFTRequest,
-  FetchBidsByNFTRequestAction
-} from '../../../modules/bid/actions'
+import { fetchBidsByNFTRequest, FetchBidsByNFTRequestAction } from '../../../modules/bid/actions'
 
 export type Props = {
   nft: NFT

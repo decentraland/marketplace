@@ -1,16 +1,6 @@
 import { RouterState } from 'connected-react-router'
-import {
-  ChainId,
-  Item,
-  NFTCategory,
-  Order,
-  RentalListing,
-  RentalStatus
-} from '@dcl/schemas'
-import {
-  Transaction,
-  TransactionStatus
-} from 'decentraland-dapps/dist/modules/transaction/types'
+import { ChainId, Item, NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../../nft/types'
 import { RootState } from '../../reducer'
@@ -235,28 +225,19 @@ describe('when getting the NFTs on rent by lessor', () => {
 
 describe('when getting the NFTs on rent by tenant', () => {
   it('should get all the NFTs rented by the given tenant', () => {
-    expect(getOnRentNFTsByTenant(rootState, address)).toEqual([
-      [nftWithExecutedRentByTenant, rentalExecutedByTenant]
-    ])
+    expect(getOnRentNFTsByTenant(rootState, address)).toEqual([[nftWithExecutedRentByTenant, rentalExecutedByTenant]])
   })
 })
 
 describe('when getting all owned land', () => {
   it('should return all owned lands', () => {
-    expect(getWalletOwnedLands(rootState)).toEqual([
-      nftWithLandCategory,
-      nftWithOpenRent,
-      nftWithExecutedRentByLessor
-    ])
+    expect(getWalletOwnedLands(rootState)).toEqual([nftWithLandCategory, nftWithOpenRent, nftWithExecutedRentByLessor])
   })
 })
 
 describe('when getting the Elements on sale of the ui browse state', () => {
   it('should retrieve the NFTs on sale of the ui browse state', () => {
-    expect(getOnSaleElements(rootState)).toStrictEqual([
-      itemOnSale,
-      [nftOnSale, order]
-    ])
+    expect(getOnSaleElements(rootState)).toStrictEqual([itemOnSale, [nftOnSale, order]])
   })
 })
 
@@ -272,7 +253,7 @@ describe('when getting if the claiming back transaction is pending', () => {
   beforeEach(() => {
     nft = { id: '567', tokenId, contractAddress, chainId } as NFT
 
-    state = ({
+    state = {
       wallet: {
         data: {
           address: null
@@ -281,7 +262,7 @@ describe('when getting if the claiming back transaction is pending', () => {
       transaction: {
         data: [] as Transaction[]
       }
-    } as unknown) as RootState
+    } as unknown as RootState
   })
 
   describe('and there is no address', () => {
@@ -350,9 +331,7 @@ describe('when getting if the claiming back transaction is pending', () => {
       })
 
       it(`should return ${element.expectedResult}`, () => {
-        expect(isClaimingBackLandTransactionPending(state, nft)).toBe(
-          element.expectedResult
-        )
+        expect(isClaimingBackLandTransactionPending(state, nft)).toBe(element.expectedResult)
       })
     })
   })
@@ -407,12 +386,7 @@ describe('when getting the user favorited items of the ui browse state', () => {
     describe('and is the owner of the list', () => {
       it('should retrieve the items that were favorited by them', () => {
         expect(
-          getItemsPickedByUserOrCreator.resultFunc(
-            favoritedItems,
-            [item, itemOnSale],
-            list,
-            { address: list.userAddress } as Wallet
-          )
+          getItemsPickedByUserOrCreator.resultFunc(favoritedItems, [item, itemOnSale], list, { address: list.userAddress } as Wallet)
         ).toEqual([item])
       })
     })
@@ -420,12 +394,7 @@ describe('when getting the user favorited items of the ui browse state', () => {
     describe('and is not the owner of the list', () => {
       it('should retrieve the items that were favorited by the owner of the list', () => {
         expect(
-          getItemsPickedByUserOrCreator.resultFunc(
-            favoritedItems,
-            [item, itemOnSale],
-            list,
-            { address: '0xanotherAddress' } as Wallet
-          )
+          getItemsPickedByUserOrCreator.resultFunc(favoritedItems, [item, itemOnSale], list, { address: '0xanotherAddress' } as Wallet)
         ).toEqual([item, itemOnSale])
       })
     })
@@ -433,14 +402,7 @@ describe('when getting the user favorited items of the ui browse state', () => {
 
   describe('and the user is not logged in', () => {
     it('should retrieve the items that were favorited by owner of the list', () => {
-      expect(
-        getItemsPickedByUserOrCreator.resultFunc(
-          favoritedItems,
-          [item, itemOnSale],
-          list,
-          null
-        )
-      ).toEqual([item, itemOnSale])
+      expect(getItemsPickedByUserOrCreator.resultFunc(favoritedItems, [item, itemOnSale], list, null)).toEqual([item, itemOnSale])
     })
   })
 })
@@ -465,9 +427,7 @@ describe('when getting the browse assets', () => {
       })
 
       it('should return all browsable items picked by the user', () => {
-        expect(getBrowseAssets(rootState, section, assetType)).toStrictEqual([
-          item
-        ])
+        expect(getBrowseAssets(rootState, section, assetType)).toStrictEqual([item])
       })
     })
 
@@ -477,10 +437,7 @@ describe('when getting the browse assets', () => {
       })
 
       it('should return all the browsable items', () => {
-        expect(getBrowseAssets(rootState, section, assetType)).toStrictEqual([
-          item,
-          itemOnSale
-        ])
+        expect(getBrowseAssets(rootState, section, assetType)).toStrictEqual([item, itemOnSale])
       })
     })
   })

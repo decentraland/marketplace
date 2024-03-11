@@ -7,55 +7,27 @@ import UserIcon from '../../../images/user-circle.svg'
 import { Props } from './SetNameAsAliasModal.types'
 import './SetNameAsAliasModal.css'
 
-const SetNameAsAliasModal = ({
-  address,
-  profile,
-  metadata: { name },
-  isLoading,
-  onSubmit,
-  onClose
-}: Props) => {
-  const successOnSetAlias =
-    name === profile?.avatars[0].name &&
-    profile?.avatars[0].hasClaimedName &&
-    !isLoading
+const SetNameAsAliasModal = ({ address, profile, metadata: { name }, isLoading, onSubmit, onClose }: Props) => {
+  const successOnSetAlias = name === profile?.avatars[0].name && profile?.avatars[0].hasClaimedName && !isLoading
 
   return (
-    <Modal
-      name={name}
-      onClose={isLoading ? undefined : onClose}
-      className="SetNameAsAliasModal"
-    >
+    <Modal name={name} onClose={isLoading ? undefined : onClose} className="SetNameAsAliasModal">
       <ModalNavigation
-        title={
-          successOnSetAlias
-            ? t('set_name_as_alias_modal.success_title')
-            : t('set_name_as_alias_modal.title')
-        }
+        title={successOnSetAlias ? t('set_name_as_alias_modal.success_title') : t('set_name_as_alias_modal.title')}
         onClose={isLoading ? undefined : onClose}
       />
       <Form onSubmit={() => !!address && onSubmit(address, name)}>
         <Modal.Content>
           <div className="details">
             <T
-              id={
-                successOnSetAlias
-                  ? 'set_name_as_alias_modal.success_description'
-                  : 'set_name_as_alias_modal.description'
-              }
+              id={successOnSetAlias ? 'set_name_as_alias_modal.success_description' : 'set_name_as_alias_modal.description'}
               values={{ name: <strong>{name}</strong> }}
             />
           </div>
           <div className="card">
             {profile && successOnSetAlias && address ? (
               <div className="successContainer">
-                <Profile
-                  address={address}
-                  avatar={profile.avatars[0]}
-                  inline={false}
-                  size="massive"
-                  imageOnly
-                />
+                <Profile address={address} avatar={profile.avatars[0]} inline={false} size="massive" imageOnly />
                 <div className="verified">
                   <span>{profile.avatars[0].name}</span>
                   <img src={VerifiedIcon} alt="verified icon" />
@@ -64,13 +36,7 @@ const SetNameAsAliasModal = ({
             ) : null}
             {!successOnSetAlias ? (
               <>
-                <div
-                  className={classNames(
-                    profile?.avatars[0].hasClaimedName
-                      ? 'verified'
-                      : 'unverified'
-                  )}
-                >
+                <div className={classNames(profile?.avatars[0].hasClaimedName ? 'verified' : 'unverified')}>
                   <span>
                     {profile
                       ? profile.avatars[0].hasClaimedName
@@ -105,12 +71,7 @@ const SetNameAsAliasModal = ({
             </>
           ) : (
             <>
-              <Button
-                secondary
-                onClick={onClose}
-                disabled={isLoading}
-                type="button"
-              >
+              <Button secondary onClick={onClose} disabled={isLoading} type="button">
                 {t('global.cancel')}
               </Button>
               <Button primary type="submit" loading={isLoading}>

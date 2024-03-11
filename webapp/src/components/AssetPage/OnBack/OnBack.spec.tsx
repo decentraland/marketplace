@@ -13,22 +13,19 @@ const BASE_DETAIL_TOP_HEADER = 'top-header'
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
 
 function renderOnBack(props: Partial<OnBackProps> = {}) {
-  return renderWithProviders(
-    <OnBack asset={props.asset || ({} as Asset)} onBack={jest.fn()} />,
-    {
-      preloadedState: {
-        favorites: {
-          ...INITIAL_STATE,
-          data: {
-            items: {
-              '0xContractAddress-itemId': { pickedByUser: false, count: 35 }
-            },
-            lists: {}
-          }
+  return renderWithProviders(<OnBack asset={props.asset || ({} as Asset)} onBack={jest.fn()} />, {
+    preloadedState: {
+      favorites: {
+        ...INITIAL_STATE,
+        data: {
+          items: {
+            '0xContractAddress-itemId': { pickedByUser: false, count: 35 }
+          },
+          lists: {}
         }
       }
     }
-  )
+  })
 }
 
 describe('OnBack', () => {
@@ -37,9 +34,7 @@ describe('OnBack', () => {
 
   beforeEach(() => {
     asset = { id: '0xContractAddress-itemId', name: 'Asset Name' } as Asset
-    useMobileMediaQueryMock = useMobileMediaQuery as jest.MockedFunction<
-      typeof useMobileMediaQuery
-    >
+    useMobileMediaQueryMock = useMobileMediaQuery as jest.MockedFunction<typeof useMobileMediaQuery>
   })
 
   describe('when the dispositive is not mobile', () => {
@@ -51,11 +46,7 @@ describe('OnBack', () => {
       const { getByTestId } = renderOnBack({
         asset
       })
-      expect(
-        within(
-          getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()
-        ).queryByTestId(FAVORITES_COUNTER_TEST_ID)
-      ).toBeNull()
+      expect(within(getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()).queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
     })
   })
 
@@ -69,11 +60,7 @@ describe('OnBack', () => {
         const { getByTestId } = renderOnBack({
           asset
         })
-        expect(
-          within(
-            getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()
-          ).queryByTestId(FAVORITES_COUNTER_TEST_ID)
-        ).toBeNull()
+        expect(within(getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()).queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
       })
     })
 
@@ -107,9 +94,7 @@ describe('OnBack', () => {
           })
           expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
           expect(
-            within(
-              getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()
-            ).queryByTestId(FAVORITES_COUNTER_TEST_ID)
+            within(getByTestId(BASE_DETAIL_TOP_HEADER) ?? new HTMLElement()).queryByTestId(FAVORITES_COUNTER_TEST_ID)
           ).toBeInTheDocument()
         })
       })

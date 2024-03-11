@@ -25,12 +25,7 @@ const TextFilter = (props: Props) => {
         </Header>
       ) : null}
       <div className="text-input">
-        <input
-          ref={inputRef}
-          value={text}
-          onChange={setText}
-          placeholder={placeholder}
-        />
+        <input ref={inputRef} value={text} onChange={setText} placeholder={placeholder} />
       </div>
     </div>
   )

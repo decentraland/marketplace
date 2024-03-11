@@ -15,32 +15,16 @@ import { AssetType } from '../asset/types'
 import { Section } from '../vendor/decentraland'
 import { View } from '../ui/types'
 import { List } from '../favorites/types'
-import {
-  ListOfLists,
-  UpdateOrCreateList
-} from '../vendor/decentraland/favorites/types'
+import { ListOfLists, UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { SortBy } from '../routing/types'
 import { VendorName } from '../vendor'
 import { toastDispatchableActionsChannel } from './utils'
-import {
-  BulkPickUnpickMessageType,
-  BulkPickUnpickSuccessOrFailureType,
-  DispatchableFromToastActions
-} from './types'
+import { BulkPickUnpickMessageType, BulkPickUnpickSuccessOrFailureType, DispatchableFromToastActions } from './types'
 
 const DEFAULT_TIMEOUT = 6000
 
-const ToastCTA = ({
-  action,
-  description
-}: {
-  action: DispatchableFromToastActions
-  description: string
-}) => {
-  const onClick = useCallback(
-    () => toastDispatchableActionsChannel.put(action),
-    [action]
-  )
+const ToastCTA = ({ action, description }: { action: DispatchableFromToastActions; description: string }) => {
+  const onClick = useCallback(() => toastDispatchableActionsChannel.put(action), [action])
   return (
     <Button as="a" className="no-padding" basic onClick={onClick}>
       {description}
@@ -95,23 +79,13 @@ export function getListingRemoveSuccessToast(): Omit<Toast, 'id'> {
   }
 }
 
-export function getUpsertRentalSuccessToast(
-  nft: NFT,
-  type: UpsertRentalOptType
-): Omit<Toast, 'id'> {
+export function getUpsertRentalSuccessToast(nft: NFT, type: UpsertRentalOptType): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
-    title:
-      type === UpsertRentalOptType.INSERT
-        ? t('toast.create_rental_success.title')
-        : t('toast.update_rental_success.title'),
+    title: type === UpsertRentalOptType.INSERT ? t('toast.create_rental_success.title') : t('toast.update_rental_success.title'),
     body: (
       <div>
-        <p>
-          {type === UpsertRentalOptType.INSERT
-            ? t('toast.create_rental_success.body')
-            : t('toast.update_rental_success.body')}
-        </p>
+        <p>{type === UpsertRentalOptType.INSERT ? t('toast.create_rental_success.body') : t('toast.update_rental_success.body')}</p>
         <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
           {t('toast.upsert_rental_success.show_listing')}
         </Button>
@@ -146,9 +120,7 @@ export function getExecuteOrderFailureToast(): Omit<Toast, 'id'> {
     body: (
       <p>
         {t('toast.meta_transaction_failure.body', {
-          discord_link: (
-            <a href={config.get('DISCORD_URL')}>{t('global.discord_server')}</a>
-          ),
+          discord_link: <a href={config.get('DISCORD_URL')}>{t('global.discord_server')}</a>,
           br: <br />
         })}
       </p>
@@ -165,11 +137,7 @@ export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
       error: error.toLowerCase()
     }),
     body: t('toast.fetch_assets_failure.body', {
-      reload_page: (
-        <a href={window.location.href}>
-          {t('toast.fetch_assets_failure.reload_page')}
-        </a>
-      )
+      reload_page: <a href={window.location.href}>{t('toast.fetch_assets_failure.reload_page')}</a>
     }),
     icon: <Icon size="big" name="exclamation circle" />,
     closable: true,
@@ -177,9 +145,7 @@ export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
   }
 }
 
-export function getUpdateListSuccessToast(
-  list: UpdateOrCreateList
-): Omit<Toast, 'id'> {
+export function getUpdateListSuccessToast(list: UpdateOrCreateList): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
     title: t('toast.update_list_success.title'),
@@ -271,11 +237,7 @@ function buildBulkPickItemBodyMessage(
   )
 }
 
-export function getBulkPickItemSuccessToast(
-  item: Item,
-  pickedFor: ListOfLists[],
-  unpickedFrom: ListOfLists[]
-): Omit<Toast, 'id'> {
+export function getBulkPickItemSuccessToast(item: Item, pickedFor: ListOfLists[], unpickedFrom: ListOfLists[]): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
     title: t('toast.bulk_pick.success.title'),
@@ -283,27 +245,14 @@ export function getBulkPickItemSuccessToast(
       <div className="list-flow-toast">
         <p>
           {pickedFor.length > 0
-            ? buildBulkPickItemBodyMessage(
-                BulkPickUnpickMessageType.ADD,
-                BulkPickUnpickSuccessOrFailureType.SUCCESS,
-                item,
-                pickedFor
-              )
+            ? buildBulkPickItemBodyMessage(BulkPickUnpickMessageType.ADD, BulkPickUnpickSuccessOrFailureType.SUCCESS, item, pickedFor)
             : undefined}
           {pickedFor.length > 0 && unpickedFrom.length > 0 ? ' ' : undefined}
           {unpickedFrom.length > 0
-            ? buildBulkPickItemBodyMessage(
-                BulkPickUnpickMessageType.REMOVE,
-                BulkPickUnpickSuccessOrFailureType.SUCCESS,
-                item,
-                unpickedFrom
-              )
+            ? buildBulkPickItemBodyMessage(BulkPickUnpickMessageType.REMOVE, BulkPickUnpickSuccessOrFailureType.SUCCESS, item, unpickedFrom)
             : undefined}
         </p>
-        <ToastCTA
-          action={bulkPickUnpickRequest(item, unpickedFrom, pickedFor)}
-          description={t('toast.bulk_pick.success.undo')}
-        />
+        <ToastCTA action={bulkPickUnpickRequest(item, unpickedFrom, pickedFor)} description={t('toast.bulk_pick.success.undo')} />
       </div>
     ),
     closable: true,
@@ -312,11 +261,7 @@ export function getBulkPickItemSuccessToast(
   }
 }
 
-export function getBulkPickItemFailureToast(
-  item: Item,
-  pickedFor: ListOfLists[],
-  unpickedFrom: ListOfLists[]
-): Omit<Toast, 'id'> {
+export function getBulkPickItemFailureToast(item: Item, pickedFor: ListOfLists[], unpickedFrom: ListOfLists[]): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,
     title: t('toast.bulk_pick.failure.title'),
@@ -324,27 +269,14 @@ export function getBulkPickItemFailureToast(
       <div className="list-flow-toast">
         <p>
           {pickedFor.length > 0
-            ? buildBulkPickItemBodyMessage(
-                BulkPickUnpickMessageType.ADD,
-                BulkPickUnpickSuccessOrFailureType.FAILURE,
-                item,
-                pickedFor
-              )
+            ? buildBulkPickItemBodyMessage(BulkPickUnpickMessageType.ADD, BulkPickUnpickSuccessOrFailureType.FAILURE, item, pickedFor)
             : undefined}
           {pickedFor.length > 0 && unpickedFrom.length > 0 ? ' ' : undefined}
           {unpickedFrom.length > 0
-            ? buildBulkPickItemBodyMessage(
-                BulkPickUnpickMessageType.REMOVE,
-                BulkPickUnpickSuccessOrFailureType.FAILURE,
-                item,
-                unpickedFrom
-              )
+            ? buildBulkPickItemBodyMessage(BulkPickUnpickMessageType.REMOVE, BulkPickUnpickSuccessOrFailureType.FAILURE, item, unpickedFrom)
             : undefined}
         </p>
-        <ToastCTA
-          action={bulkPickUnpickRequest(item, pickedFor, unpickedFrom)}
-          description={t('toast.bulk_pick.failure.try_again')}
-        />
+        <ToastCTA action={bulkPickUnpickRequest(item, pickedFor, unpickedFrom)} description={t('toast.bulk_pick.failure.try_again')} />
       </div>
     ),
     closable: true,
@@ -353,9 +285,7 @@ export function getBulkPickItemFailureToast(
   }
 }
 
-export function getCrossChainTransactionSuccessToast(
-  txLink: string
-): Omit<Toast, 'id'> {
+export function getCrossChainTransactionSuccessToast(txLink: string): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
     title: '',
@@ -365,9 +295,7 @@ export function getCrossChainTransactionSuccessToast(
           {t('toast.cross_chain_tx.body', {
             br: () => <br />,
             highlight: (text: string) => <span>{text}</span>,
-            link: (text: string) => (
-              <Link to={locations.activity()}>{text}</Link>
-            )
+            link: (text: string) => <Link to={locations.activity()}>{text}</Link>
           })}
         </p>
         <Button as="a" href={locations.activity()} target="_blank">

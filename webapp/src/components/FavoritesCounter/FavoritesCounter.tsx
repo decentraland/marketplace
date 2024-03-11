@@ -10,16 +10,7 @@ import styles from './FavoritesCounter.module.css'
 const formatter = Intl.NumberFormat('en', { notation: 'compact' })
 
 const FavoritesCounter = (props: Props) => {
-  const {
-    className,
-    count,
-    isPickedByUser,
-    isCollapsed = false,
-    item,
-    isLoading,
-    onClick,
-    onCounterClick
-  } = props
+  const { className, count, isPickedByUser, isCollapsed = false, item, isLoading, onClick, onCounterClick } = props
 
   const handleOnCounterClick = useCallback(() => {
     getAnalytics().track(events.OPEN_FAVORITES_MODAL, {
@@ -58,34 +49,18 @@ const FavoritesCounter = (props: Props) => {
 
   return (
     <div
-      className={classNames(
-        styles.FavoritesCounter,
-        className,
-        isCollapsed && styles.Collapsed
-      )}
-      aria-label={
-        isPickedByUser
-          ? t('favorites_counter.unpick_label')
-          : t('favorites_counter.pick_label')
-      }
+      className={classNames(styles.FavoritesCounter, className, isCollapsed && styles.Collapsed)}
+      aria-label={isPickedByUser ? t('favorites_counter.unpick_label') : t('favorites_counter.pick_label')}
       role="button"
       data-testid="favorites-counter"
     >
       {isCollapsed ? counter : null}
-      <div
-        className={styles.bubble}
-        onClick={handleClick}
-        data-testid="favorites-counter-bubble"
-      >
+      <div className={styles.bubble} onClick={handleClick} data-testid="favorites-counter-bubble">
         <span className={styles.iconContainer}>
           {isLoading ? (
             <Loader active inline size="tiny" className={styles.loader} />
           ) : (
-            <Icon
-              size="large"
-              fitted={isCollapsed}
-              name={isPickedByUser ? 'bookmark' : 'bookmark outline'}
-            />
+            <Icon size="large" fitted={isCollapsed} name={isPickedByUser ? 'bookmark' : 'bookmark outline'} />
           )}
         </span>
         {!isCollapsed ? counter : null}

@@ -6,12 +6,7 @@ import CurrentAccountSidebar from './CurrentAccountSidebar'
 import OtherAccountSidebar from './OtherAccountSidebar'
 import './AccountSidebar.css'
 
-const AccountSidebar = ({
-  address,
-  section,
-  isCurrentAccount,
-  onBrowse
-}: Props) => {
+const AccountSidebar = ({ address, section, isCurrentAccount, onBrowse }: Props) => {
   const handleOnBrowse = useCallback(
     (vendor: VendorName, section: string, assetType?: AssetType) => {
       onBrowse({ vendor, section, address, assetType })

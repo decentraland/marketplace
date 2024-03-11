@@ -9,23 +9,11 @@ type Props = {
   onDelete: (id: string) => void
 }
 
-export const Pill = ({
-  id,
-  label,
-  className,
-  onDelete
-}: Props): JSX.Element => {
+export const Pill = ({ id, label, className, onDelete }: Props): JSX.Element => {
   return (
-    <div
-      className={classNames(styles.pill, className)}
-      data-testid={`pill-${id}`}
-    >
+    <div className={classNames(styles.pill, className)} data-testid={`pill-${id}`}>
       {label}
-      <button
-        onClick={onDelete.bind(null, id)}
-        data-testid="b"
-        className={styles.deleteBtn}
-      >
+      <button onClick={onDelete.bind(null, id)} data-testid="b" className={styles.deleteBtn}>
         <Icon name="times" />
       </button>
     </div>

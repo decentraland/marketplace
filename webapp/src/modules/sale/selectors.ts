@@ -8,10 +8,6 @@ export const getCount = (state: RootState) => getState(state).count
 export const getLoading = (state: RootState) => getState(state).loading
 export const getError = (state: RootState) => getState(state).error
 
-export const getSales = createSelector<
-  RootState,
-  ReturnType<typeof getData>,
-  Sale[]
->(getData, data => {
+export const getSales = createSelector<RootState, ReturnType<typeof getData>, Sale[]>(getData, data => {
   return Object.values(data)
 })

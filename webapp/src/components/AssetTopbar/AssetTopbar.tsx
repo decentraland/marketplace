@@ -1,28 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { NFTCategory } from '@dcl/schemas'
 import classNames from 'classnames'
-import {
-  Close,
-  Dropdown,
-  DropdownProps,
-  Field,
-  Icon,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { Close, Dropdown, DropdownProps, Field, Icon, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getCountText } from './utils'
 import { SortBy } from '../../modules/routing/types'
 import { isCatalogView } from '../../modules/routing/utils'
-import {
-  getCategoryFromSection,
-  getSectionFromCategory
-} from '../../modules/routing/search'
-import {
-  isAccountView,
-  isLandSection,
-  isListsSection,
-  persistIsMapProperty
-} from '../../modules/ui/utils'
+import { getCategoryFromSection, getSectionFromCategory } from '../../modules/routing/search'
+import { isAccountView, isLandSection, isListsSection, persistIsMapProperty } from '../../modules/ui/utils'
 import { View } from '../../modules/ui/types'
 import trash from '../../images/trash.png'
 import { Chip } from '../Chip'
@@ -51,9 +36,7 @@ export const AssetTopbar = ({
   const searchBarFieldRef = useRef<HTMLDivElement>(null)
   const category = section ? getCategoryFromSection(section) : undefined
   const [searchValueForDropdown, setSearchValueForDropdown] = useState(search)
-  const [shouldRenderSearchDropdown, setShouldRenderSearchDropdown] = useState(
-    false
-  )
+  const [shouldRenderSearchDropdown, setShouldRenderSearchDropdown] = useState(false)
 
   const handleInputChange = useCallback(
     text => {
@@ -101,13 +84,7 @@ export const AssetTopbar = ({
   }, [onBrowse, setSearchValue])
 
   const handleSearch = useCallback(
-    ({
-      value,
-      contractAddresses
-    }: {
-      value?: string
-      contractAddresses?: string[]
-    }) => {
+    ({ value, contractAddresses }: { value?: string; contractAddresses?: string[] }) => {
       if (contractAddresses && contractAddresses.length) {
         onBrowse({
           contracts: contractAddresses,
@@ -150,18 +127,13 @@ export const AssetTopbar = ({
         isFullscreen: isMap,
         search: '',
         // Forces the onlyOnSale property in the defined cases so the users can see LAND on sale.
-        onlyOnSale:
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
-          onlyOnSale
+        onlyOnSale: (!onlyOnSale && onlyOnRent === false) || (onlyOnSale === undefined && onlyOnRent === undefined) || onlyOnSale
       })
     },
     [onBrowse, onlyOnSale, onlyOnRent]
   )
 
-  const sortByValue = sortByOptions.find(option => option.value === sortBy)
-    ? sortBy
-    : sortByOptions[0].value
+  const sortByValue = sortByOptions.find(option => option.value === sortBy) ? sortBy : sortByOptions[0].value
 
   useEffect(() => {
     // when the category changes, close the dropdown
@@ -171,9 +143,7 @@ export const AssetTopbar = ({
   const handleFieldClick = useCallback(() => {
     // opens the dropdown on the field focus
     setShouldRenderSearchDropdown(
-      (category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE) &&
-        view !== View.CURRENT_ACCOUNT &&
-        view !== View.ACCOUNT
+      (category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE) && view !== View.CURRENT_ACCOUNT && view !== View.ACCOUNT
     )
   }, [category, view])
 
@@ -194,12 +164,7 @@ export const AssetTopbar = ({
         onClickOutside={handleSearchBarDropdownClickOutside}
       />
     )
-  }, [
-    category,
-    handleSearch,
-    handleSearchBarDropdownClickOutside,
-    searchValueForDropdown
-  ])
+  }, [category, handleSearch, handleSearchBarDropdownClickOutside, searchValueForDropdown])
 
   return (
     <div className={styles.assetTopbar} ref={searchBarFieldRef}>
@@ -225,21 +190,9 @@ export const AssetTopbar = ({
         )}
         {shouldRenderSearchDropdown && renderSearch()}
         {isLandSection(section) && !isAccountView(view!) && (
-          <div
-            className={classNames(styles.mapToggle, { [styles.map]: isMap })}
-          >
-            <Chip
-              className="grid"
-              icon="table"
-              isActive={!isMap}
-              onClick={handleIsMapChange.bind(null, false)}
-            />
-            <Chip
-              className="atlas"
-              icon="map marker alternate"
-              isActive={isMap}
-              onClick={handleIsMapChange.bind(null, true)}
-            />
+          <div className={classNames(styles.mapToggle, { [styles.map]: isMap })}>
+            <Chip className="grid" icon="table" isActive={!isMap} onClick={handleIsMapChange.bind(null, false)} />
+            <Chip className="atlas" icon="map marker alternate" isActive={isMap} onClick={handleIsMapChange.bind(null, true)} />
           </div>
         )}
       </div>
@@ -250,15 +203,10 @@ export const AssetTopbar = ({
               <div className={styles.countContainer}>
                 <p className={styles.countText}>
                   {count && isCatalogView(view)
-                    ? t(
+                    ? t(search ? 'nft_filters.query_results' : 'nft_filters.results', {
+                        count: count.toLocaleString(),
                         search
-                          ? 'nft_filters.query_results'
-                          : 'nft_filters.results',
-                        {
-                          count: count.toLocaleString(),
-                          search
-                        }
-                      )
+                      })
                     : getCountText(count, search)}
                 </p>
               </div>
@@ -266,19 +214,10 @@ export const AssetTopbar = ({
           ) : null}
           {!isListsSection(section) ? (
             <div className={styles.rightOptionsContainer}>
-              <Dropdown
-                direction="left"
-                value={sortByValue}
-                options={sortByOptions}
-                onChange={handleOrderByDropdownChange}
-              />
+              <Dropdown direction="left" value={sortByValue} options={sortByOptions} onChange={handleOrderByDropdownChange} />
               {isMobile ? (
                 <i
-                  className={classNames(
-                    styles.openFilters,
-                    styles.openFiltersWrapper,
-                    hasFiltersEnabled && styles.active
-                  )}
+                  className={classNames(styles.openFilters, styles.openFiltersWrapper, hasFiltersEnabled && styles.active)}
                   onClick={onOpenFiltersModal}
                 />
               ) : null}

@@ -1,11 +1,7 @@
 import * as contentClient from 'dcl-catalyst-client/dist/client/ContentClient'
 import { builderAPI } from '../modules/vendor/decentraland/builder/api'
 import { Asset } from '../modules/asset/types'
-import {
-  getSmartWearableRequiredPermissions,
-  getSmartWearableSceneContent,
-  getSmartWearableVideoShowcase
-} from './asset'
+import { getSmartWearableRequiredPermissions, getSmartWearableSceneContent, getSmartWearableVideoShowcase } from './asset'
 
 jest.mock('../modules/vendor/decentraland/builder/api', () => ({
   builderAPI: {
@@ -54,9 +50,7 @@ describe('when getting a smart wearable scene content', () => {
   describe('and the smart wearable does not have a valid entity', () => {
     beforeEach(() => {
       clientMock.mockReturnValueOnce({
-        fetchEntitiesByPointers: jest
-          .fn()
-          .mockResolvedValueOnce([{ id: 'anId' }])
+        fetchEntitiesByPointers: jest.fn().mockResolvedValueOnce([{ id: 'anId' }])
       })
     })
 
@@ -74,9 +68,7 @@ describe('when getting a smart wearable scene content', () => {
     })
 
     it('should return a scene content json', async () => {
-      expect(await getSmartWearableSceneContent(anSWUrn)).toStrictEqual(
-        SWSceneContent
-      )
+      expect(await getSmartWearableSceneContent(anSWUrn)).toStrictEqual(SWSceneContent)
     })
   })
 })
@@ -93,9 +85,7 @@ describe('when getting a smart wearable required permissions', () => {
     })
 
     it('should return an empty array', async () => {
-      expect(await getSmartWearableRequiredPermissions(anSWUrn)).toStrictEqual(
-        []
-      )
+      expect(await getSmartWearableRequiredPermissions(anSWUrn)).toStrictEqual([])
     })
   })
 
@@ -108,9 +98,7 @@ describe('when getting a smart wearable required permissions', () => {
     })
 
     it('should return an array with the required permission', async () => {
-      expect(await getSmartWearableRequiredPermissions(anSWUrn)).toStrictEqual(
-        SWSceneContent.requiredPermissions
-      )
+      expect(await getSmartWearableRequiredPermissions(anSWUrn)).toStrictEqual(SWSceneContent.requiredPermissions)
     })
   })
 })
@@ -158,9 +146,7 @@ describe('when getting a smart wearable video showcase', () => {
     })
 
     it('should return the video hash', async () => {
-      expect(await getSmartWearableVideoShowcase(smartWearable)).toBe(
-        'aVideoHash'
-      )
+      expect(await getSmartWearableVideoShowcase(smartWearable)).toBe('aVideoHash')
     })
   })
 })

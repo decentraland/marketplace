@@ -27,20 +27,10 @@ export type Props = {
   isAcceptingBid: boolean
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'archivedBidIds' | 'wallet' | 'isAcceptingBid'
->
-export type MapDispatchProps = Pick<
-  Props,
-  'onUpdate' | 'onCancel' | 'onArchive' | 'onUnarchive' | 'onAccept'
->
+export type MapStateProps = Pick<Props, 'archivedBidIds' | 'wallet' | 'isAcceptingBid'>
+export type MapDispatchProps = Pick<Props, 'onUpdate' | 'onCancel' | 'onArchive' | 'onUnarchive' | 'onAccept'>
 export type MapDispatch = Dispatch<
-  | CallHistoryMethodAction
-  | CancelBidRequestAction
-  | ArchiveBidAction
-  | UnarchiveBidAction
-  | AcceptBidRequestAction
+  CallHistoryMethodAction | CancelBidRequestAction | ArchiveBidAction | UnarchiveBidAction | AcceptBidRequestAction
 >
 
 export type OwnProps = Pick<Props, 'bid' | 'isArchivable' | 'hasImage'>

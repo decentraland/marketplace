@@ -1,9 +1,4 @@
-import {
-  Item,
-  ItemSortBy,
-  CatalogSortBy,
-  ItemFilters as ItemFiltersSchema
-} from '@dcl/schemas'
+import { Item, ItemSortBy, CatalogSortBy, ItemFilters as ItemFiltersSchema } from '@dcl/schemas'
 
 export type ItemFilters = Omit<ItemFiltersSchema, 'sortBy'> & {
   sortBy?: ItemSortBy | CatalogSortBy

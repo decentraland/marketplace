@@ -27,11 +27,6 @@ export type Props = {
   onClearItemErrors: typeof clearItemErrors
 } & WithAuthorizedActionProps
 
-export type MapStateProps = Pick<
-  Props,
-  'isLoading' | 'isBuyWithCardPage' | 'getContract'
->
+export type MapStateProps = Pick<Props, 'isLoading' | 'isBuyWithCardPage' | 'getContract'>
 export type MapDispatchProps = Pick<Props, 'onBuyItem' | 'onBuyItemWithCard' | 'onClearItemErrors'>
-export type MapDispatch = Dispatch<
-  BuyItemRequestAction | BuyItemWithCardRequestAction | ClearItemErrorsAction
->
+export type MapDispatch = Dispatch<BuyItemRequestAction | BuyItemWithCardRequestAction | ClearItemErrorsAction>

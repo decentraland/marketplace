@@ -16,10 +16,7 @@ const CoverPicker = ({ src, onChange }: Props) => {
           <Empty>
             <div className="cover-image-container">
               <div className="watermelon" />
-              <button
-                className="add-cover"
-                onClick={() => inputRef.current?.click()}
-              >
+              <button className="add-cover" onClick={() => inputRef.current?.click()}>
                 {t('store_settings.add_cover_picture')}
               </button>
             </div>
@@ -27,11 +24,7 @@ const CoverPicker = ({ src, onChange }: Props) => {
         )}
         {src && (
           <div className="buttons">
-            <Button
-              circular
-              icon="camera"
-              onClick={() => inputRef.current?.click()}
-            />
+            <Button circular icon="camera" onClick={() => inputRef.current?.click()} />
             <Button
               circular
               icon="cancel"

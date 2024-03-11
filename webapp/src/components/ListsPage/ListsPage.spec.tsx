@@ -8,15 +8,7 @@ import { Props } from './ListsPage.types'
 
 function renderListsPage(props: Partial<Props> = {}) {
   return renderWithProviders(
-    <ListsPage
-      isLoading={false}
-      lists={[]}
-      count={0}
-      error={null}
-      onFetchLists={jest.fn()}
-      onCreateList={jest.fn()}
-      {...props}
-    />
+    <ListsPage isLoading={false} lists={[]} count={0} error={null} onFetchLists={jest.fn()} onCreateList={jest.fn()} {...props} />
   )
 }
 
@@ -32,7 +24,7 @@ beforeEach(() => {
         name: 'aListName',
         itemsCount: 1,
         previewOfItemIds: []
-      } as List)
+      }) as List
   )
 })
 
@@ -80,8 +72,6 @@ describe('when rendering the ListsPage with 5 lists', () => {
   })
 
   it('should show the list of lists', () => {
-    expect(
-      renderedPage.getByText(t('lists_page.subtitle', { count }))
-    ).toBeInTheDocument()
+    expect(renderedPage.getByText(t('lists_page.subtitle', { count }))).toBeInTheDocument()
   })
 })

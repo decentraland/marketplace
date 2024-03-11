@@ -14,9 +14,7 @@ const ROWS_PER_PAGE = 12
 const RentalHistory = (props: Props) => {
   const { asset } = props
 
-  const tabList = [
-    { value: 'rental_history', displayValue: t('rental_history.title') }
-  ]
+  const tabList = [{ value: 'rental_history', displayValue: t('rental_history.title') }]
 
   const [rentals, setRentals] = useState<DataTableType[]>([])
   const [page, setPage] = useState(1)

@@ -1,5 +1,5 @@
 export type Coord = {
-  x: number,
+  x: number
   y: number
 }
 
@@ -9,13 +9,13 @@ function getDistanceBetween(position1: Coord, position2: Coord) {
 
 export function getNearestTile(currentPosition: Coord, coords: Array<Coord> = []) {
   if (!coords.length) {
-    return undefined;
+    return undefined
   }
 
   let nearestCoord: Coord = coords[0]
   let nearestDistance = getDistanceBetween(currentPosition, { x: nearestCoord.x, y: nearestCoord.y })
 
-  coords.forEach((tile) => {
+  coords.forEach(tile => {
     const tileDistance = getDistanceBetween(currentPosition, { x: tile.x, y: tile.y })
     if (tileDistance < nearestDistance) {
       nearestDistance = tileDistance
@@ -23,5 +23,5 @@ export function getNearestTile(currentPosition: Coord, coords: Array<Coord> = []
     }
   })
 
-  return nearestCoord;
+  return nearestCoord
 }

@@ -18,10 +18,7 @@ import { DCLController__factory } from '../../../contracts/factories/DCLControll
 import { Props } from './ClaimNameFatFingerModal.types'
 import './ClaimNameFatFingerModal.css'
 
-export const CONTROLLER_V2_ADDRESS = config.get(
-  'CONTROLLER_V2_CONTRACT_ADDRESS',
-  ''
-)
+export const CONTROLLER_V2_ADDRESS = config.get('CONTROLLER_V2_CONTRACT_ADDRESS', '')
 
 export const CRYPTO_PAYMENT_METHOD_DATA_TESTID = 'crypto-payment-method'
 export const FIAT_PAYMENT_METHOD_DATA_TESTID = 'fiat-payment-method'
@@ -60,25 +57,15 @@ const ClaimNameFatFingerModal = ({
     const wertURL = config.get('WERT_URL')
     if (wallet) {
       const signer = await getSigner()
-      const factory = await DCLController__factory.connect(
-        CONTROLLER_V2_ADDRESS,
-        signer
-      )
+      const factory = await DCLController__factory.connect(CONTROLLER_V2_ADDRESS, signer)
 
-      const sc_input_data = factory.interface.encodeFunctionData('register', [
-        ENSName,
-        wallet.address
-      ])
+      const sc_input_data = factory.interface.encodeFunctionData('register', [ENSName, wallet.address])
 
       const data = {
         address: wallet.address,
         commodity: isDev ? 'TTS' : 'MANA',
         commodity_amount: Number(PRICE),
-        sc_address: config.get(
-          isDev
-            ? 'CONTROLLER_V2_CONTRACT_ADDRESS_FIAT'
-            : 'CONTROLLER_V2_CONTRACT_ADDRESS'
-        ),
+        sc_address: config.get(isDev ? 'CONTROLLER_V2_CONTRACT_ADDRESS_FIAT' : 'CONTROLLER_V2_CONTRACT_ADDRESS'),
         sc_input_data
       }
 
@@ -110,12 +97,7 @@ const ClaimNameFatFingerModal = ({
           },
           onPending: options => {
             if ('data' in options && 'tx_id' in options.data) {
-              onClaimTxSubmitted(
-                ENSName,
-                wallet.address,
-                isDev ? ChainId.ETHEREUM_SEPOLIA : ChainId.ETHEREUM_MAINNET,
-                options.data.tx_id as string
-              )
+              onClaimTxSubmitted(ENSName, wallet.address, isDev ? ChainId.ETHEREUM_SEPOLIA : ChainId.ETHEREUM_MAINNET, options.data.tx_id)
             }
           },
           onSuccess: options => {
@@ -151,36 +133,18 @@ const ClaimNameFatFingerModal = ({
 
   return (
     <Modal name={modalName} onClose={isLoading ? undefined : onClose}>
-      <ModalNavigation
-        title={t('names_page.claim_name_fat_finger_modal.title')}
-        onClose={isLoading ? undefined : onClose}
-      />
+      <ModalNavigation title={t('names_page.claim_name_fat_finger_modal.title')} onClose={isLoading ? undefined : onClose} />
       <Modal.Content>
         <div className="details">
-          <T
-            id="names_page.claim_name_fat_finger_modal.description"
-            values={{ name: <strong>{ENSName}</strong>, br: <br /> }}
-          />
+          <T id="names_page.claim_name_fat_finger_modal.description" values={{ name: <strong>{ENSName}</strong>, br: <br /> }} />
         </div>
         <Field
-          placeholder={t(
-            'names_page.claim_name_fat_finger_modal.name_placeholder'
-          )}
+          placeholder={t('names_page.claim_name_fat_finger_modal.name_placeholder')}
           value={currentName}
           error={hasError}
           disabled={isLoading}
-          message={
-            hasError
-              ? t('names_page.claim_name_fat_finger_modal.names_different')
-              : ''
-          }
-          children={
-            <input
-              ref={inputRef}
-              value={currentName}
-              onChange={handleChangeName}
-            />
-          }
+          message={hasError ? t('names_page.claim_name_fat_finger_modal.names_different') : ''}
+          children={<input ref={inputRef} value={currentName} onChange={handleChangeName} />}
         />
         <div className="capsWarning">
           <Icon name="info circle" />

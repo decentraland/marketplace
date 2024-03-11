@@ -1,9 +1,6 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Section } from '../../modules/vendor/decentraland'
-import {
-  renderWithProviders,
-  waitForComponentToFinishLoading
-} from '../../utils/test'
+import { renderWithProviders, waitForComponentToFinishLoading } from '../../utils/test'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { AssetFilters } from './AssetFilters'
 import { Props } from './AssetFilters.types'
@@ -19,9 +16,7 @@ jest.mock('../../modules/vendor/decentraland/nft/api', () => {
   }
 })
 jest.mock('../../modules/vendor/decentraland/rentals/api', () => {
-  const module = jest.requireActual(
-    '../../modules/vendor/decentraland/rentals/api'
-  )
+  const module = jest.requireActual('../../modules/vendor/decentraland/rentals/api')
   return {
     ...module,
     rentalsAPI: {
@@ -53,15 +48,9 @@ describe('when in land section', () => {
   it('should render land status filter', async () => {
     const screen = renderAssetFilters({ section: Section.LAND })
     await waitForComponentToFinishLoading(screen)
-    expect(
-      screen.getByRole('radio', { name: t('nft_land_filters.all_land') })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('radio', { name: t('nft_land_filters.only_for_sale') })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('radio', { name: t('nft_land_filters.only_for_rent') })
-    ).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: t('nft_land_filters.all_land') })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: t('nft_land_filters.only_for_sale') })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: t('nft_land_filters.only_for_rent') })).toBeInTheDocument()
   })
 
   it('should render price filter', async () => {
@@ -80,9 +69,7 @@ describe('when in land section', () => {
       })
       await waitForComponentToFinishLoading(screen)
       // TODO: Make barchart components accesible so we can access better the info ui#311
-      expect(
-        screen.getByText(t('filters.estate_size.label'))
-      ).toBeInTheDocument()
+      expect(screen.getByText(t('filters.estate_size.label'))).toBeInTheDocument()
     })
   })
 })

@@ -50,41 +50,21 @@ const BuyNFTButtons = ({
         onBuyWithCrypto(asset, order)
       }
     },
-    [
-      isConnecting,
-      wallet,
-      isBuyingWithCryptoModalOpen,
-      location.pathname,
-      analytics,
-      onRedirect,
-      onBuyWithCrypto
-    ]
+    [isConnecting, wallet, isBuyingWithCryptoModalOpen, location.pathname, analytics, onRedirect, onBuyWithCrypto]
   )
 
   return (
     <>
-      <AssetProvider
-        type={assetType}
-        contractAddress={asset.contractAddress}
-        tokenId={tokenId}
-      >
+      <AssetProvider type={assetType} contractAddress={asset.contractAddress} tokenId={tokenId}>
         {(asset, order) => {
-          if (!asset)
-            return (
-              <Loader active size="medium" className={styles.loading_asset} />
-            )
+          if (!asset) return <Loader active size="medium" className={styles.loading_asset} />
           if (asset && shouldOpenBuyWithCryptoModal) {
             onBuyWithCrypto(asset, order)
           }
           return (
             <>
-              <BuyWithCryptoButton
-                onClick={() => handleBuyWithCrypto(asset, order)}
-              />
-              <BuyWithCardButton
-                className={buyWithCardClassName}
-                onClick={() => handleBuyWithCard(asset)}
-              />
+              <BuyWithCryptoButton onClick={() => handleBuyWithCrypto(asset, order)} />
+              <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset)} />
             </>
           )
         }}

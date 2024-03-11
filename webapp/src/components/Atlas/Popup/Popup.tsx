@@ -26,28 +26,19 @@ export default class Popup extends React.PureComponent<Props> {
 
     return (
       <div
-        className={`AtlasPopup ${position} ${
-          tile.owner ? 'has-owner' : 'no-owner'
-        }`}
+        className={`AtlasPopup ${position} ${tile.owner ? 'has-owner' : 'no-owner'}`}
         style={{ top: y, left: x, opacity: visible ? 1 : 0 }}
       >
         <Section className="land-name">
           <Row className="name-row">
-            <span className="name">
-              {tile.name ||
-                (!isEstate ? t('global.parcel') : t('global.estate'))}
-            </span>
+            <span className="name">{tile.name || (!isEstate ? t('global.parcel') : t('global.estate'))}</span>
             <Coordinate className="coordinates" x={tile.x} y={tile.y} />
           </Row>
         </Section>
 
         <Section className="owner">
           <Header sub>{t('atlas.owner')}</Header>
-          <Profile
-            address={tile.owner || ethers.constants.AddressZero}
-            debounce={500}
-            as={'div'}
-          />
+          <Profile address={tile.owner || ethers.constants.AddressZero} debounce={500} as={'div'} />
         </Section>
 
         {tile.price || tile.rentalPricePerDay ? (

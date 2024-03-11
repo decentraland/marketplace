@@ -6,39 +6,23 @@ import { getNetworkProvider } from 'decentraland-dapps/dist/lib'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
-import type {
-  CrossChainProvider,
-  Route,
-  RouteResponse,
-  Token
-} from 'decentraland-transactions/crossChain'
+import type { CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
 import { NFT } from '../../../modules/nft/types'
 import * as events from '../../../utils/events'
-import {
-  estimateBuyNftGas,
-  estimateMintNftGas,
-  estimateNameMintingGas,
-  formatPrice,
-  getShouldUseMetaTx
-} from './utils'
+import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas, formatPrice, getShouldUseMetaTx } from './utils'
 
 export const NATIVE_TOKEN = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
 const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
 
-export const useShouldUseCrossChainProvider = (
-  selectedToken: Token,
-  assetNetwork: Network
-) => {
+export const useShouldUseCrossChainProvider = (selectedToken: Token, assetNetwork: Network) => {
   return useMemo(
     () =>
       !(
         (selectedToken.symbol === 'MANA' &&
-          getNetwork(parseInt(selectedToken.chainId) as ChainId) ===
-            Network.MATIC &&
+          getNetwork(parseInt(selectedToken.chainId) as ChainId) === Network.MATIC &&
           assetNetwork === Network.MATIC) || // MANA selected and it's sending the tx from MATIC
         (selectedToken.symbol === 'MANA' &&
-          getNetwork(parseInt(selectedToken.chainId) as ChainId) ===
-            Network.ETHEREUM &&
+          getNetwork(parseInt(selectedToken.chainId) as ChainId) === Network.ETHEREUM &&
           assetNetwork === Network.ETHEREUM)
       ), // MANA selected and it's connected to ETH and buying a L1 NFT
     [assetNetwork, selectedToken]
@@ -51,11 +35,7 @@ export type TokenBalance = {
 }
 
 // Retrieves the token balance for the selected token in the selected chain for the user's address
-export const useTokenBalance = (
-  selectedToken: Token,
-  selectedChain: ChainId,
-  address: string | undefined | null
-): TokenBalance => {
+export const useTokenBalance = (selectedToken: Token, selectedChain: ChainId, address: string | undefined | null): TokenBalance => {
   const [isFetchingBalance, setIsFetchingBalance] = useState(false)
   const [selectedTokenBalance, setSelectedTokenBalance] = useState<BigNumber>()
 
@@ -74,10 +54,7 @@ export const useTokenBalance = (
 
           // if native token
           if (selectedToken.address === NATIVE_TOKEN) {
-            const balanceWei = await provider.send('eth_getBalance', [
-              address,
-              'latest'
-            ])
+            const balanceWei = await provider.send('eth_getBalance', [address, 'latest'])
 
             if (!cancel) {
               setSelectedTokenBalance(balanceWei)
@@ -145,9 +122,7 @@ const useGasCost = (
 
         if (estimation) {
           const total = estimation.mul(gasPrice)
-          const totalUSDPrice = nativeChainToken?.usdPrice
-            ? nativeChainToken.usdPrice * +ethers.utils.formatEther(total)
-            : undefined
+          const totalUSDPrice = nativeChainToken?.usdPrice ? nativeChainToken.usdPrice * +ethers.utils.formatEther(total) : undefined
 
           setGasCost({
             token: nativeChainToken,
@@ -161,24 +136,12 @@ const useGasCost = (
       }
     }
 
-    if (
-      !shouldUseCrossChainProvider &&
-      wallet &&
-      nativeChainToken &&
-      getNetwork(wallet.chainId) === assetNetwork
-    ) {
+    if (!shouldUseCrossChainProvider && wallet && nativeChainToken && getNetwork(wallet.chainId) === assetNetwork) {
       calculateGas()
     } else {
       setGasCost(undefined)
     }
-  }, [
-    assetNetwork,
-    estimateTransactionGas,
-    nativeChainToken,
-    selectedChain,
-    shouldUseCrossChainProvider,
-    wallet
-  ])
+  }, [assetNetwork, estimateTransactionGas, nativeChainToken, selectedChain, shouldUseCrossChainProvider, wallet])
 
   return { gasCost, isFetchingGasCost }
 }
@@ -192,25 +155,12 @@ export const useMintingNftGasCost = (
   const chainId = parseInt(selectedToken.chainId) as ChainId
 
   const estimateGas = useCallback(
-    () =>
-      wallet
-        ? estimateMintNftGas(chainId, wallet, item)
-        : Promise.resolve(undefined),
+    () => (wallet ? estimateMintNftGas(chainId, wallet, item) : Promise.resolve(undefined)),
     [chainId, wallet, item]
   )
-  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(
-    selectedToken,
-    item.network
-  )
+  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(selectedToken, item.network)
 
-  return useGasCost(
-    item.network,
-    chainNativeToken,
-    chainId,
-    shouldUseCrossChainProvider,
-    wallet,
-    estimateGas
-  )
+  return useGasCost(item.network, chainNativeToken, chainId, shouldUseCrossChainProvider, wallet, estimateGas)
 }
 
 export const useBuyNftGasCost = (
@@ -223,56 +173,25 @@ export const useBuyNftGasCost = (
   const chainId = parseInt(selectedToken.chainId) as ChainId
 
   const estimateGas = useCallback(
-    () =>
-      wallet
-        ? estimateBuyNftGas(chainId, wallet, nft, order)
-        : Promise.resolve(undefined),
+    () => (wallet ? estimateBuyNftGas(chainId, wallet, nft, order) : Promise.resolve(undefined)),
     [chainId, wallet, order]
   )
-  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(
-    selectedToken,
-    order.network
-  )
+  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(selectedToken, order.network)
 
-  return useGasCost(
-    order.network,
-    chainNativeToken,
-    chainId,
-    shouldUseCrossChainProvider,
-    wallet,
-    estimateGas
-  )
+  return useGasCost(order.network, chainNativeToken, chainId, shouldUseCrossChainProvider, wallet, estimateGas)
 }
 
-export const useNameMintingGasCost = (
-  name: string,
-  selectedToken: Token,
-  chainNativeToken: Token | undefined,
-  wallet: Wallet | null
-) => {
+export const useNameMintingGasCost = (name: string, selectedToken: Token, chainNativeToken: Token | undefined, wallet: Wallet | null) => {
   const chainId = parseInt(selectedToken.chainId) as ChainId
 
   const estimateGas = useCallback(
-    () =>
-      wallet?.address
-        ? estimateNameMintingGas(name, chainId, wallet?.address)
-        : Promise.resolve(undefined),
+    () => (wallet?.address ? estimateNameMintingGas(name, chainId, wallet?.address) : Promise.resolve(undefined)),
     [name, chainId, wallet?.address]
   )
 
-  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(
-    selectedToken,
-    Network.ETHEREUM
-  )
+  const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(selectedToken, Network.ETHEREUM)
 
-  return useGasCost(
-    Network.ETHEREUM,
-    chainNativeToken,
-    chainId,
-    shouldUseCrossChainProvider,
-    wallet,
-    estimateGas
-  )
+  return useGasCost(Network.ETHEREUM, chainNativeToken, chainId, shouldUseCrossChainProvider, wallet, estimateGas)
 }
 
 export const useCrossChainMintNftRoute = (
@@ -322,7 +241,7 @@ export const useCrossChainBuyNftRoute = (
   providerTokens: Token[],
   crossChainProvider: CrossChainProvider | undefined,
   wallet: Wallet | null,
-  slippage: number,
+  slippage: number
 ): CrossChainRoute => {
   const getBuyNftRoute = useCallback(
     (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
@@ -378,16 +297,7 @@ export const useCrossChainNameMintingRoute = (
       }),
     [name, assetChainId, price]
   )
-  return useCrossChainRoute(
-    price,
-    assetChainId,
-    selectedToken,
-    selectedChain,
-    providerTokens,
-    crossChain,
-    wallet,
-    getMintingNameRoute
-  )
+  return useCrossChainRoute(price, assetChainId, selectedToken, selectedChain, providerTokens, crossChain, wallet, getMintingNameRoute)
 }
 
 export type RouteFeeCost = {
@@ -429,26 +339,14 @@ const useCrossChainRoute = (
   const [fromAmount, setFromAmount] = useState<string>()
   const [route, setRoute] = useState<Route>()
   const abortControllerRef = useRef(new AbortController())
-  const destinationChainMANAContractAddress = useMemo(
-    () => getContract(ContractName.MANAToken, assetChainId).address,
-    [assetChainId]
-  )
+  const destinationChainMANAContractAddress = useMemo(() => getContract(ContractName.MANAToken, assetChainId).address, [assetChainId])
 
   const calculateRoute = useCallback(async () => {
     abortControllerRef.current = new AbortController()
     const abortController = abortControllerRef.current
     const signal = abortController.signal
-    const providerMANA = providerTokens.find(
-      t =>
-        t.address.toLocaleLowerCase() ===
-        destinationChainMANAContractAddress.toLocaleLowerCase()
-    )
-    if (
-      !crossChainProvider ||
-      !crossChainProvider.isLibInitialized() ||
-      !wallet ||
-      !providerMANA
-    ) {
+    const providerMANA = providerTokens.find(t => t.address.toLocaleLowerCase() === destinationChainMANAContractAddress.toLocaleLowerCase())
+    if (!crossChainProvider || !crossChainProvider.isLibInitialized() || !wallet || !providerMANA) {
       return
     }
     try {
@@ -460,14 +358,10 @@ const useCrossChainRoute = (
         toAmount: ethers.utils.formatEther(price),
         toToken: providerMANA
       }
-      const fromAmount = Number(
-        await crossChainProvider.getFromAmount(fromAmountParams)
-      ).toFixed(6)
+      const fromAmount = Number(await crossChainProvider.getFromAmount(fromAmountParams)).toFixed(6)
       setFromAmount(fromAmount)
 
-      const fromAmountWei = ethers.utils
-        .parseUnits(fromAmount.toString(), selectedToken.decimals)
-        .toString()
+      const fromAmountWei = ethers.utils.parseUnits(fromAmount.toString(), selectedToken.decimals).toString()
 
       const route: RouteResponse | undefined = await getRoute(
         wallet.address,
@@ -491,32 +385,14 @@ const useCrossChainRoute = (
     } finally {
       setIsFetchingRoute(false)
     }
-  }, [
-    crossChainProvider,
-    price,
-    providerTokens,
-    selectedChain,
-    selectedToken,
-    wallet
-  ])
+  }, [crossChainProvider, price, providerTokens, selectedChain, selectedToken, wallet])
 
   const useMetaTx = useMemo(() => {
     return (
       !!wallet &&
-      getShouldUseMetaTx(
-        assetChainId,
-        selectedChain,
-        selectedToken.address,
-        destinationChainMANAContractAddress,
-        wallet.network
-      )
+      getShouldUseMetaTx(assetChainId, selectedChain, selectedToken.address, destinationChainMANAContractAddress, wallet.network)
     )
-  }, [
-    destinationChainMANAContractAddress,
-    selectedChain,
-    selectedToken,
-    wallet
-  ])
+  }, [destinationChainMANAContractAddress, selectedChain, selectedToken, wallet])
 
   // Refresh the route every ROUTE_FETCH_INTERVAL
   useEffect(() => {
@@ -550,15 +426,9 @@ const useCrossChainRoute = (
         selectedToken.symbol !== 'MANA'
 
       const isPayingWithOtherTokenThanMANA = selectedToken.symbol !== 'MANA'
-      const isPayingWithMANAButFromOtherChain =
-        selectedToken.symbol === 'MANA' &&
-        selectedToken.chainId !== assetChainId.toString()
+      const isPayingWithMANAButFromOtherChain = selectedToken.symbol === 'MANA' && selectedToken.chainId !== assetChainId.toString()
 
-      if (
-        isBuyingL1WithOtherTokenThanEthereumMANA ||
-        isPayingWithOtherTokenThanMANA ||
-        isPayingWithMANAButFromOtherChain
-      ) {
+      if (isBuyingL1WithOtherTokenThanEthereumMANA || isPayingWithOtherTokenThanMANA || isPayingWithMANAButFromOtherChain) {
         calculateRoute()
       }
     }
@@ -571,37 +441,22 @@ const useCrossChainRoute = (
           estimate: { gasCosts, feeCosts }
         }
       } = route
-      const totalGasCost = gasCosts
-        .map(c => BigNumber.from(c.amount))
-        .reduce((a, b) => a.add(b), BigNumber.from(0))
-      const totalFeeCost = feeCosts
-        .map(c => BigNumber.from(c.amount))
-        .reduce((a, b) => a.add(b), BigNumber.from(0))
+      const totalGasCost = gasCosts.map(c => BigNumber.from(c.amount)).reduce((a, b) => a.add(b), BigNumber.from(0))
+      const totalFeeCost = feeCosts.map(c => BigNumber.from(c.amount)).reduce((a, b) => a.add(b), BigNumber.from(0))
       const token = gasCosts[0].token
       return {
         token,
         gasCostWei: totalGasCost,
         gasCost: formatPrice(
-          ethers.utils.formatUnits(
-            totalGasCost,
-            route.route.estimate.gasCosts[0].token.decimals
-          ),
+          ethers.utils.formatUnits(totalGasCost, route.route.estimate.gasCosts[0].token.decimals),
           route.route.estimate.gasCosts[0].token
         ).toString(),
         feeCost: formatPrice(
-          ethers.utils.formatUnits(
-            totalFeeCost,
-            route.route.estimate.gasCosts[0].token.decimals
-          ),
+          ethers.utils.formatUnits(totalFeeCost, route.route.estimate.gasCosts[0].token.decimals),
           route.route.estimate.gasCosts[0].token
         ).toString(),
         feeCostWei: totalFeeCost,
-        totalCost: parseFloat(
-          ethers.utils.formatUnits(
-            totalGasCost.add(totalFeeCost),
-            token.decimals
-          )
-        ).toFixed(6)
+        totalCost: parseFloat(ethers.utils.formatUnits(totalGasCost.add(totalFeeCost), token.decimals)).toFixed(6)
       }
     }
   }, [route])
@@ -609,12 +464,9 @@ const useCrossChainRoute = (
   const routeTotalUSDCost = useMemo(() => {
     if (route && routeFeeCost && fromAmount && selectedToken?.usdPrice) {
       const { feeCost, gasCost } = routeFeeCost
-      const feeTokenUSDPrice = providerTokens.find(
-        t => t.symbol === routeFeeCost.token.symbol
-      )?.usdPrice
+      const feeTokenUSDPrice = providerTokens.find(t => t.symbol === routeFeeCost.token.symbol)?.usdPrice
       return feeTokenUSDPrice
-        ? feeTokenUSDPrice * (Number(gasCost) + Number(feeCost)) +
-            selectedToken.usdPrice * Number(fromAmount)
+        ? feeTokenUSDPrice * (Number(gasCost) + Number(feeCost)) + selectedToken.usdPrice * Number(fromAmount)
         : undefined
     }
   }, [fromAmount, providerTokens, route, routeFeeCost, selectedToken.usdPrice])

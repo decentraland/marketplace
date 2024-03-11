@@ -45,8 +45,7 @@ import { loginSaga } from './login/sagas'
 import { ensSaga } from './ens/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
-const profileSaga = (getIdentity: () => AuthIdentity | undefined) =>
-  createProfileSaga({ getIdentity, peerUrl })
+const profileSaga = (getIdentity: () => AuthIdentity | undefined) => createProfileSaga({ getIdentity, peerUrl })
 const lambdasClient = createLambdasClient({
   url: `${peerUrl}/lambdas`,
   fetcher: createFetchComponent()
@@ -84,9 +83,7 @@ const gatewaySaga = createGatewaySaga({
 })
 
 const getCrossChainProvider = async () => {
-  const { AxelarProvider } = await import(
-    'decentraland-transactions/crossChain'
-  )
+  const { AxelarProvider } = await import('decentraland-transactions/crossChain')
   return AxelarProvider
 }
 

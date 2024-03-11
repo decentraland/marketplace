@@ -10,10 +10,7 @@ describe('when fetching bids by seller', () => {
 
     await bidAPI.fetchBySeller('0x123')
 
-    expect(bidAPI.request).toHaveBeenCalledWith(
-      'get',
-      '/bids?seller=0x123&status=open&first=1000'
-    )
+    expect(bidAPI.request).toHaveBeenCalledWith('get', '/bids?seller=0x123&status=open&first=1000')
   })
 })
 
@@ -23,10 +20,7 @@ describe('when fetching bids by bidder', () => {
 
     await bidAPI.fetchByBidder('0x123')
 
-    expect(bidAPI.request).toHaveBeenCalledWith(
-      'get',
-      '/bids?bidder=0x123&status=open&first=1000'
-    )
+    expect(bidAPI.request).toHaveBeenCalledWith('get', '/bids?bidder=0x123&status=open&first=1000')
   })
 })
 
@@ -36,9 +30,6 @@ describe('when fetching bids by nft', () => {
 
     await bidAPI.fetchByNFT('0x123', '123')
 
-    expect(bidAPI.request).toHaveBeenCalledWith(
-      'get',
-      '/bids?contractAddress=0x123&tokenId=123&status=open&first=1000&skip=0'
-    )
+    expect(bidAPI.request).toHaveBeenCalledWith('get', '/bids?contractAddress=0x123&tokenId=123&status=open&first=1000&skip=0')
   })
 })

@@ -16,6 +16,8 @@ jobs:
           node-version: 18.x
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
+      - name: Upgrade npm
+        run: npm i -g npm
       - name: Install
         run: npm i --legacy-peer-deps
       - name: Audit signatures

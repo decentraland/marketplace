@@ -9,11 +9,7 @@ import { getAssetPrice, isNFT } from '../../modules/asset/utils'
 import { locations } from '../../modules/routing/locations'
 import { getOpenRentalId } from '../../modules/rental/utils'
 import { getRentalById } from '../../modules/rental/selectors'
-import {
-  getPageName,
-  getSortBy,
-  getWearablesUrlParams
-} from '../../modules/routing/selectors'
+import { getPageName, getSortBy, getWearablesUrlParams } from '../../modules/routing/selectors'
 import { PageName } from '../../modules/routing/types'
 import { MapStateProps, OwnProps, MapDispatchProps } from './AssetCard.types'
 import AssetCard from './AssetCard'
@@ -29,21 +25,14 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   }
 
   const openRentalId = getOpenRentalId(asset)
-  let rentalOfNFT: RentalListing | null = openRentalId
-    ? getRentalById(state, openRentalId)
-    : null
+  const rentalOfNFT: RentalListing | null = openRentalId ? getRentalById(state, openRentalId) : null
 
   const { minPrice, maxPrice } = getWearablesUrlParams(state)
 
   return {
     price,
-    showListedTag:
-      pageName === PageName.ACCOUNT &&
-      Boolean(price) &&
-      getLocation(state).pathname !== locations.root(),
-    isClaimingBackLandTransactionPending: isNFT(asset)
-      ? isClaimingBackLandTransactionPending(state, asset)
-      : false,
+    showListedTag: pageName === PageName.ACCOUNT && Boolean(price) && getLocation(state).pathname !== locations.root(),
+    isClaimingBackLandTransactionPending: isNFT(asset) ? isClaimingBackLandTransactionPending(state, asset) : false,
     rental: rentalOfNFT,
     showRentalChip: rentalOfNFT !== null && pageName === PageName.ACCOUNT,
     sortBy: getSortBy(state),

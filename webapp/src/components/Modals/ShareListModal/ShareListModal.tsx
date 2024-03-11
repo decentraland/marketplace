@@ -52,9 +52,7 @@ const ShareListModal = (props: Props) => {
 
   const handleShareOnTwitter = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      const url = `${twitterLink}${encodeURIComponent(
-        `${t('share_list_modal.twitter_message')}${MARKETPLACE_URL}${listLink}`
-      )}`
+      const url = `${twitterLink}${encodeURIComponent(`${t('share_list_modal.twitter_message')}${MARKETPLACE_URL}${listLink}`)}`
       getAnalytics().track(events.SHARE_LIST, {
         list,
         url,
@@ -74,18 +72,13 @@ const ShareListModal = (props: Props) => {
 
   return (
     <Modal size="tiny" className={styles.modal} onClose={handleClose}>
-      <ModalNavigation
-        title={t('share_list_modal.title')}
-        onClose={handleClose}
-      />
+      <ModalNavigation title={t('share_list_modal.title')} onClose={handleClose} />
       <Modal.Content className={styles.content}>
         <ListCard list={list} viewOnly />
       </Modal.Content>
       <Modal.Actions className={styles.actions}>
         <Button primary fluid onClick={handleCopyLink}>
-          {hasCopiedAddress
-            ? t('share_list_modal.copied')
-            : t('share_list_modal.copy_link')}
+          {hasCopiedAddress ? t('share_list_modal.copied') : t('share_list_modal.copy_link')}
         </Button>
         <Button fluid inverted onClick={handleShareOnTwitter}>
           <Icon name="twitter" />

@@ -1,10 +1,5 @@
 import { RouterLocation } from 'connected-react-router'
-import {
-  EmotePlayMode,
-  GenderFilterOption,
-  Network,
-  Rarity
-} from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor'
@@ -50,12 +45,7 @@ describe('when getting the latest visited location', () => {
       } as RouterLocation<unknown>
     })
     it('should return the location', () => {
-      expect(
-        getLatestVisitedLocation.resultFunc([
-          { ...prevLocation, pathname: 'an oldest location' },
-          prevLocation
-        ])
-      ).toBe(prevLocation)
+      expect(getLatestVisitedLocation.resultFunc([{ ...prevLocation, pathname: 'an oldest location' }, prevLocation])).toBe(prevLocation)
     })
   })
 })
@@ -72,17 +62,13 @@ describe('when getting if the are filters set', () => {
 
   describe('when the creator filter is set', () => {
     it('should return true', () => {
-      expect(hasFiltersEnabled.resultFunc({ creators: ['anAddress'] })).toBe(
-        true
-      )
+      expect(hasFiltersEnabled.resultFunc({ creators: ['anAddress'] })).toBe(true)
     })
   })
 
   describe('when the network filter is set', () => {
     it('should return true', () => {
-      expect(
-        hasFiltersEnabled.resultFunc({ network: 'aNetwork' as Network })
-      ).toBe(true)
+      expect(hasFiltersEnabled.resultFunc({ network: 'aNetwork' as Network })).toBe(true)
     })
   })
 
@@ -98,25 +84,19 @@ describe('when getting if the are filters set', () => {
 
   describe('when the rarities filter is set', () => {
     it('should return true', () => {
-      expect(hasFiltersEnabled.resultFunc({ rarities: [Rarity.COMMON] })).toBe(
-        true
-      )
+      expect(hasFiltersEnabled.resultFunc({ rarities: [Rarity.COMMON] })).toBe(true)
     })
   })
 
   describe('when the contracts filter is set', () => {
     it('should return true', () => {
-      expect(hasFiltersEnabled.resultFunc({ contracts: ['0x.....'] })).toBe(
-        true
-      )
+      expect(hasFiltersEnabled.resultFunc({ contracts: ['0x.....'] })).toBe(true)
     })
   })
 
   describe('when the playmode filter is set', () => {
     it('should return true', () => {
-      expect(
-        hasFiltersEnabled.resultFunc({ emotePlayMode: [EmotePlayMode.LOOP] })
-      ).toBe(true)
+      expect(hasFiltersEnabled.resultFunc({ emotePlayMode: [EmotePlayMode.LOOP] })).toBe(true)
     })
   })
 
@@ -167,19 +147,18 @@ describe('when getting if the are filters set', () => {
       })
     })
 
-    describe.each([
-      [AssetStatusFilter.NOT_FOR_SALE],
-      [AssetStatusFilter.ONLY_LISTING],
-      [AssetStatusFilter.ONLY_MINTING]
-    ])('and the status is %s', status => {
-      it('should return true', () => {
-        expect(
-          hasFiltersEnabled.resultFunc({
-            status
-          })
-        ).toBe(true)
-      })
-    })
+    describe.each([[AssetStatusFilter.NOT_FOR_SALE], [AssetStatusFilter.ONLY_LISTING], [AssetStatusFilter.ONLY_MINTING]])(
+      'and the status is %s',
+      status => {
+        it('should return true', () => {
+          expect(
+            hasFiltersEnabled.resultFunc({
+              status
+            })
+          ).toBe(true)
+        })
+      }
+    )
   })
 
   describe('and it is the lists section', () => {
@@ -202,106 +181,62 @@ describe('when getting if the are filters set', () => {
 describe('when getting the section', () => {
   describe("when there's no section URL param and the location is related to lands", () => {
     it("should return the decentraland's LAND section", () => {
-      expect(
-        getSection.resultFunc('', locations.lands(), VendorName.DECENTRALAND)
-      ).toBe(Sections.decentraland.LAND)
+      expect(getSection.resultFunc('', locations.lands(), VendorName.DECENTRALAND)).toBe(Sections.decentraland.LAND)
     })
   })
 
   describe("when there's no section URL param, the vendor is Decentraland and the pathname is browse", () => {
     it("should return the decentraland's WEARABLES section", () => {
-      expect(
-        getSection.resultFunc('', locations.browse(), VendorName.DECENTRALAND)
-      ).toBe(Sections.decentraland.WEARABLES)
+      expect(getSection.resultFunc('', locations.browse(), VendorName.DECENTRALAND)).toBe(Sections.decentraland.WEARABLES)
     })
   })
 
   describe('when the section URL param is ALL, the vendor is Decentraland and the pathname is browse', () => {
     it("should return the decentraland's WEARABLES section", () => {
-      expect(
-        getSection.resultFunc(
-          'section=all',
-          locations.browse(),
-          VendorName.DECENTRALAND
-        )
-      ).toBe(Sections.decentraland.WEARABLES)
+      expect(getSection.resultFunc('section=all', locations.browse(), VendorName.DECENTRALAND)).toBe(Sections.decentraland.WEARABLES)
     })
   })
 
   describe("when there's no section URL param, the vendor is Decentraland and the pathname is not browse but account", () => {
     it("should return the decentraland's ALL section", () => {
-      expect(
-        getSection.resultFunc('', locations.account(), VendorName.DECENTRALAND)
-      ).toBe(Sections.decentraland.ALL)
+      expect(getSection.resultFunc('', locations.account(), VendorName.DECENTRALAND)).toBe(Sections.decentraland.ALL)
     })
   })
 
   describe('when the section URL param is ALL, the vendor is Decentraland and the pathname is not browse but account', () => {
     it("should return the decentraland's ALL section", () => {
-      expect(
-        getSection.resultFunc(
-          'section=all',
-          locations.account(),
-          VendorName.DECENTRALAND
-        )
-      ).toBe(Sections.decentraland.ALL)
+      expect(getSection.resultFunc('section=all', locations.account(), VendorName.DECENTRALAND)).toBe(Sections.decentraland.ALL)
     })
   })
 
   describe('when the section URL param exists in the vendor', () => {
     it("should return the vendor's section", () => {
-      expect(
-        getSection.resultFunc(
-          'section=land',
-          locations.lands(),
-          VendorName.DECENTRALAND
-        )
-      ).toBe(Sections.decentraland.LAND)
+      expect(getSection.resultFunc('section=land', locations.lands(), VendorName.DECENTRALAND)).toBe(Sections.decentraland.LAND)
     })
   })
 })
 
 describe("when there's no assetType URL param and the vendor is DECENTRALAND and the location is in browse", () => {
   it('should return ITEM as the assetType', () => {
-    expect(
-      getAssetType.resultFunc('', locations.browse(), VendorName.DECENTRALAND)
-    ).toBe(AssetType.ITEM)
+    expect(getAssetType.resultFunc('', locations.browse(), VendorName.DECENTRALAND)).toBe(AssetType.ITEM)
   })
 })
 
 describe("when there's assetType URL param, the assetType is not NFT or ITEM and the vendor is DECENTRALAND but the location is not in browse", () => {
   it('should return NFT as the assetType', () => {
-    expect(
-      getAssetType.resultFunc(
-        'assetType=something',
-        locations.lands(),
-        VendorName.DECENTRALAND
-      )
-    ).toBe(AssetType.NFT)
+    expect(getAssetType.resultFunc('assetType=something', locations.lands(), VendorName.DECENTRALAND)).toBe(AssetType.NFT)
   })
 })
 
 describe("when there's assetType URL param, the assetType is not NFT or ITEM and the vendor is DECENTRALAND and the location is in browse", () => {
   it('should return CATALOG_ITEM as the assetType', () => {
-    expect(
-      getAssetType.resultFunc(
-        'assetType=something',
-        locations.browse(),
-        VendorName.DECENTRALAND
-      )
-    ).toBe(AssetType.ITEM)
+    expect(getAssetType.resultFunc('assetType=something', locations.browse(), VendorName.DECENTRALAND)).toBe(AssetType.ITEM)
   })
 })
 
 describe("when there's assetType URL param and the assetType is NFT", () => {
   it('should return NFT as the assetType', () => {
-    expect(
-      getAssetType.resultFunc(
-        'assetType=nft',
-        locations.browse(),
-        VendorName.DECENTRALAND
-      )
-    ).toBe(AssetType.NFT)
+    expect(getAssetType.resultFunc('assetType=nft', locations.browse(), VendorName.DECENTRALAND)).toBe(AssetType.NFT)
   })
 })
 
@@ -536,9 +471,7 @@ describe('when getting if the SortBy parameter is set', () => {
         url = ''
       })
       it('should return RECENTLY_LISTED as the default value', () => {
-        expect(getSortBy.resultFunc(url, view, section)).toBe(
-          SortBy.RECENTLY_LISTED
-        )
+        expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.RECENTLY_LISTED)
       })
     })
   })
@@ -615,9 +548,7 @@ describe('when getting if it should filter for guests', () => {
 describe('when getting if the page name', () => {
   describe('and the page is not one of the known ones', () => {
     it('should throw an error', () => {
-      expect(() => getPageName.resultFunc('/unknown')).toThrowError(
-        'Unknown page'
-      )
+      expect(() => getPageName.resultFunc('/unknown')).toThrowError('Unknown page')
     })
   })
 
@@ -640,14 +571,8 @@ describe('when getting if the page name', () => {
     [locations.estate('anId'), PageName.ESTATE_DETAIL],
     [locations.buy(AssetType.NFT, 'anAddress', 'anId'), PageName.BUY_NFT],
     [locations.buy(AssetType.ITEM, 'anAddress', 'anId'), PageName.BUY_ITEM],
-    [
-      locations.buyStatusPage(AssetType.NFT, 'anAddress', 'anId'),
-      PageName.BUY_NFT_STATUS
-    ],
-    [
-      locations.buyStatusPage(AssetType.ITEM, 'anAddress', 'anId'),
-      PageName.BUY_ITEM_STATUS
-    ],
+    [locations.buyStatusPage(AssetType.NFT, 'anAddress', 'anId'), PageName.BUY_NFT_STATUS],
+    [locations.buyStatusPage(AssetType.ITEM, 'anAddress', 'anId'), PageName.BUY_ITEM_STATUS],
     [locations.cancel('anAddress', 'anId'), PageName.CANCEL_NFT_SALE],
     [locations.transfer('anAddress', 'anId'), PageName.TRANSFER_NFT],
     [locations.bid('anAddress', 'anId'), PageName.BID_NFT],
@@ -686,9 +611,7 @@ describe('when getting the Sort By options', () => {
         status = AssetStatusFilter.ON_SALE
       })
       it('should return the base sort options array', () => {
-        expect(getSortByOptions.resultFunc(true, true, status)).toEqual(
-          baseSortByOptions
-        )
+        expect(getSortByOptions.resultFunc(true, true, status)).toEqual(baseSortByOptions)
       })
     })
     describe('and the status is ONLY_MINTING', () => {
@@ -696,9 +619,7 @@ describe('when getting the Sort By options', () => {
         status = AssetStatusFilter.ONLY_MINTING
       })
       it('should return the base sort options array', () => {
-        expect(getSortByOptions.resultFunc(true, true, status)).toEqual(
-          baseSortByOptions
-        )
+        expect(getSortByOptions.resultFunc(true, true, status)).toEqual(baseSortByOptions)
       })
     })
     describe('and the status is ONLY_LISTING', () => {
@@ -706,9 +627,7 @@ describe('when getting the Sort By options', () => {
         status = AssetStatusFilter.ONLY_LISTING
       })
       it('should return the base sort options', () => {
-        expect(getSortByOptions.resultFunc(true, true, status)).toEqual(
-          baseSortByOptions
-        )
+        expect(getSortByOptions.resultFunc(true, true, status)).toEqual(baseSortByOptions)
       })
     })
     describe('and the status is NOT_FOR_SALE', () => {
@@ -716,9 +635,7 @@ describe('when getting the Sort By options', () => {
         status = AssetStatusFilter.NOT_FOR_SALE
       })
       it('should return an array with just the newest option', () => {
-        expect(getSortByOptions.resultFunc(true, true, status)).toEqual([
-          getAllSortByOptions()[SortBy.NEWEST]
-        ])
+        expect(getSortByOptions.resultFunc(true, true, status)).toEqual([getAllSortByOptions()[SortBy.NEWEST]])
       })
     })
   })

@@ -32,20 +32,10 @@ const CancelSalePage = (props: Props) => {
                 const name = getAssetName(nft)
                 if (!order) {
                   isDisabled = true
-                  subtitle = (
-                    <T
-                      id="cancel_sale_page.not_for_sale"
-                      values={{ name: <b>{name}</b> }}
-                    />
-                  )
+                  subtitle = <T id="cancel_sale_page.not_for_sale" values={{ name: <b>{name}</b> }} />
                 } else if (order.owner !== wallet.address) {
                   isDisabled = true
-                  subtitle = (
-                    <T
-                      id="cancel_sale_page.invalid_owner"
-                      values={{ name: <b>{name}</b> }}
-                    />
-                  )
+                  subtitle = <T id="cancel_sale_page.invalid_owner" values={{ name: <b>{name}</b> }} />
                 } else {
                   subtitle = (
                     <T
@@ -66,15 +56,7 @@ const CancelSalePage = (props: Props) => {
                     <Header size="large">{t('cancel_sale_page.title')}</Header>
                     <div className="subtitle">{subtitle}</div>
                     <div className="buttons">
-                      <Button
-                        onClick={() =>
-                          onNavigate(
-                            locations.nft(nft.contractAddress, nft.tokenId)
-                          )
-                        }
-                      >
-                        {t('global.cancel')}
-                      </Button>
+                      <Button onClick={() => onNavigate(locations.nft(nft.contractAddress, nft.tokenId))}>{t('global.cancel')}</Button>
                       <ChainButton
                         primary
                         loading={isLoading}

@@ -2,21 +2,9 @@ import { BigNumber } from 'ethers'
 import { Context as ResponsiveContext } from 'react-responsive'
 import { fireEvent, waitFor } from '@testing-library/react'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import {
-  BodyShape,
-  ChainId,
-  Item,
-  NFTCategory,
-  Network,
-  Rarity,
-  WearableCategory
-} from '@dcl/schemas'
+import { BodyShape, ChainId, Item, NFTCategory, Network, Rarity, WearableCategory } from '@dcl/schemas'
 import { renderWithProviders } from '../../../utils/test'
-import {
-  CrossChainProvider,
-  Route,
-  AxelarProvider
-} from 'decentraland-transactions/crossChain'
+import { CrossChainProvider, Route, AxelarProvider } from 'decentraland-transactions/crossChain'
 import { getMinSaleValueInWei } from '../../BuyPage/utils'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import {
@@ -27,31 +15,17 @@ import {
   BuyWithCryptoModal,
   PRICE_TOO_LOW_TEST_ID
 } from './BuyWithCryptoModal'
-import {
-  OnGetCrossChainRoute,
-  OnGetGasCost,
-  Props
-} from './BuyWithCryptoModal.types'
+import { OnGetCrossChainRoute, OnGetGasCost, Props } from './BuyWithCryptoModal.types'
 import { DEFAULT_CHAINS, TESTNET_DEFAULT_CHAINS } from './utils'
-import {
-  CHAIN_SELECTOR_DATA_TEST_ID,
-  PAY_WITH_DATA_TEST_ID,
-  TOKEN_SELECTOR_DATA_TEST_ID
-} from './PaymentSelector'
+import { CHAIN_SELECTOR_DATA_TEST_ID, PAY_WITH_DATA_TEST_ID, TOKEN_SELECTOR_DATA_TEST_ID } from './PaymentSelector'
 import { useTokenBalance } from './hooks'
 import { FREE_TX_COVERED_TEST_ID } from './PurchaseTotal'
 import { Asset } from '../../../modules/asset/types'
 
 const mockConfigIs = jest.fn()
 
-const mockUseTokenBalance = (
-  isFetchingBalance: boolean,
-  tokenBalance: BigNumber
-) => {
-  const useTokenBalanceMock = useTokenBalance as jest.Mock<
-    ReturnType<typeof useTokenBalance>,
-    Parameters<typeof useTokenBalance>
-  >
+const mockUseTokenBalance = (isFetchingBalance: boolean, tokenBalance: BigNumber) => {
+  const useTokenBalanceMock = useTokenBalance as jest.Mock<ReturnType<typeof useTokenBalance>, Parameters<typeof useTokenBalance>>
   useTokenBalanceMock.mockReset()
   useTokenBalanceMock.mockReturnValue({
     isFetchingBalance,
@@ -109,14 +83,8 @@ const MOCKED_ROUTE = {
           fee: 0.0497,
           liquidity: 79263097000000,
           poolId: '0x9CEff2F5138fC59eB925d270b8A7A9C02a1810f2',
-          tokenAddresses: [
-            '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-            '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619'
-          ],
-          path: [
-            '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
-            '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619'
-          ],
+          tokenAddresses: ['0xc2132d05d31c914a87c6611c10748aeb04b58e8f', '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619'],
+          path: ['0xc2132d05d31c914a87c6611c10748aeb04b58e8f', '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619'],
           slippage: 0.03,
           custom: {
             poolFees: [438]
@@ -132,8 +100,7 @@ const MOCKED_ROUTE = {
           name: 'Tether USD',
           symbol: 'USDT',
           decimals: 6,
-          logoURI:
-            'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdt.svg',
+          logoURI: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdt.svg',
           coingeckoId: 'tether',
           usdPrice: 1
         },
@@ -144,8 +111,7 @@ const MOCKED_ROUTE = {
           name: 'Wrapped Ether',
           symbol: 'WETH',
           decimals: 18,
-          logoURI:
-            'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/weth.svg',
+          logoURI: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/weth.svg',
           coingeckoId: 'weth',
           usdPrice: 1988.98
         },
@@ -168,14 +134,8 @@ const MOCKED_ROUTE = {
           fee: 0.3,
           liquidity: 7411681011700,
           poolId: '0xc48AE82ca34C63887b975F20ABA91a38f2a900B8',
-          tokenAddresses: [
-            '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
-            '0xa1c57f48f0deb89f569dfbe6e2b7f46d33606fd4'
-          ],
-          path: [
-            '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619',
-            '0xa1c57f48f0deb89f569dfbe6e2b7f46d33606fd4'
-          ],
+          tokenAddresses: ['0x7ceb23fd6bc0add59e62ac25578270cff1b9f619', '0xa1c57f48f0deb89f569dfbe6e2b7f46d33606fd4'],
+          path: ['0x7ceb23fd6bc0add59e62ac25578270cff1b9f619', '0xa1c57f48f0deb89f569dfbe6e2b7f46d33606fd4'],
           slippage: 0.05,
           target: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506'
         },
@@ -188,8 +148,7 @@ const MOCKED_ROUTE = {
           name: 'Wrapped Ether',
           symbol: 'WETH',
           decimals: 18,
-          logoURI:
-            'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/weth.svg',
+          logoURI: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/weth.svg',
           coingeckoId: 'weth',
           usdPrice: 1988.98
         },
@@ -200,8 +159,7 @@ const MOCKED_ROUTE = {
           symbol: 'MANA',
           decimals: 18,
           chainId: '137',
-          logoURI:
-            'https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png?1550108745',
+          logoURI: 'https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png?1550108745',
           coingeckoId: 'decentraland',
           usdPrice: 0.409929
         },
@@ -230,8 +188,7 @@ const MOCKED_ROUTE = {
       name: 'Tether USD',
       symbol: 'USDT',
       decimals: 6,
-      logoURI:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdt.svg',
+      logoURI: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdt.svg',
       coingeckoId: 'tether'
     },
     toToken: {
@@ -241,8 +198,7 @@ const MOCKED_ROUTE = {
       symbol: 'MANA',
       decimals: 18,
       chainId: '137',
-      logoURI:
-        'https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png?1550108745',
+      logoURI: 'https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png?1550108745',
       coingeckoId: 'decentraland'
     },
     isBoostSupported: false,
@@ -257,8 +213,7 @@ const MOCKED_ROUTE = {
           name: 'MATIC',
           symbol: 'MATIC',
           decimals: 18,
-          logoURI:
-            'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/polygon.svg',
+          logoURI: 'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/polygon.svg',
           coingeckoId: 'matic-network',
           subGraphId: 'wmatic-wei',
           usdPrice: 0.786562
@@ -346,8 +301,7 @@ const MOCKED_PROVIDER_TOKENS = [
     name: 'Decentraland',
     symbol: 'MANA',
     decimals: 18,
-    logoURI:
-      'https://assets.coingecko.com/coins/images/878/thumb/decentraland-mana.png?1550108745',
+    logoURI: 'https://assets.coingecko.com/coins/images/878/thumb/decentraland-mana.png?1550108745',
     coingeckoId: 'decentraland',
     volatility: 3,
     usdPrice: 0.432695
@@ -359,8 +313,7 @@ const MOCKED_PROVIDER_TOKENS = [
     symbol: 'MANA',
     decimals: 18,
     chainId: '137',
-    logoURI:
-      'https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png?1550108745',
+    logoURI: 'https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png?1550108745',
     coingeckoId: 'decentraland',
     volatility: 3,
     usdPrice: 0.43206
@@ -372,8 +325,7 @@ const MOCKED_PROVIDER_TOKENS = [
     name: 'USD Coin',
     symbol: 'USDC',
     decimals: 6,
-    logoURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdc.svg',
+    logoURI: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdc.svg',
     coingeckoId: 'usd-coin',
     volatility: 0,
     usdPrice: 1
@@ -385,8 +337,7 @@ const MOCKED_PROVIDER_TOKENS = [
     name: 'USDCoin',
     symbol: 'USDC',
     decimals: 6,
-    logoURI:
-      'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdc.svg',
+    logoURI: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdc.svg',
     coingeckoId: 'usd-coin',
     axelarNetworkSymbol: 'USDC',
     subGraphId: 'uusdc',
@@ -432,8 +383,7 @@ const MOCKED_ITEM: Asset = {
   minListingPrice: null,
   listings: 0,
   owners: null,
-  urn:
-    'urn:decentraland:matic:collections-v2:0xffce00acc0d17eb01c3d2f9c3fcb3ab26519c562:0',
+  urn: 'urn:decentraland:matic:collections-v2:0xffce00acc0d17eb01c3d2f9c3fcb3ab26519c562:0',
   picks: {
     count: 0
   }
@@ -449,16 +399,14 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
     isLoadingAuthorization: false,
     isSwitchingNetwork: false,
     isBuyWithCardPage: false,
-    onGetCrossChainRoute: jest
-      .fn<ReturnType<OnGetCrossChainRoute>, Parameters<OnGetCrossChainRoute>>()
-      .mockReturnValue({
-        route: undefined,
-        fromAmount: undefined,
-        routeFeeCost: undefined,
-        routeTotalUSDCost: undefined,
-        isFetchingRoute: false,
-        routeFailed: false
-      }),
+    onGetCrossChainRoute: jest.fn<ReturnType<OnGetCrossChainRoute>, Parameters<OnGetCrossChainRoute>>().mockReturnValue({
+      route: undefined,
+      fromAmount: undefined,
+      routeFeeCost: undefined,
+      routeTotalUSDCost: undefined,
+      isFetchingRoute: false,
+      routeFailed: false
+    }),
     onGetGasCost: jest
       .fn<ReturnType<OnGetGasCost>, Parameters<OnGetGasCost>>()
       .mockReturnValue({ gasCost: undefined, isFetchingGasCost: false }),
@@ -480,55 +428,48 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
   return rendered
 }
 
-const createOnGetCrossChainRouteMockForUSDC = (
-  route: Route,
-  chainId: ChainId,
-  fromAmount: string
-) => {
-  return jest
-    .fn<ReturnType<OnGetCrossChainRoute>, Parameters<OnGetCrossChainRoute>>()
-    .mockReturnValue({
-      route,
-      fromAmount,
-      routeFeeCost: {
-        token: {
-          type: 'evm' as any,
-          chainId: chainId.toString(),
-          address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
-          name: 'USD Coin',
-          symbol: 'USDC',
-          decimals: 6,
-          logoURI:
-            'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdc.svg',
-          coingeckoId: 'usd-coin',
-          volatility: 0,
-          usdPrice: 1
-        },
-        gasCostWei: BigNumber.from(0),
-        gasCost: '0',
-        feeCost: '0',
-        feeCostWei: BigNumber.from(0),
-        totalCost: '0'
+const createOnGetCrossChainRouteMockForUSDC = (route: Route, chainId: ChainId, fromAmount: string) => {
+  return jest.fn<ReturnType<OnGetCrossChainRoute>, Parameters<OnGetCrossChainRoute>>().mockReturnValue({
+    route,
+    fromAmount,
+    routeFeeCost: {
+      token: {
+        type: 'evm' as any,
+        chainId: chainId.toString(),
+        address: '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',
+        name: 'USD Coin',
+        symbol: 'USDC',
+        decimals: 6,
+        logoURI: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/usdc.svg',
+        coingeckoId: 'usd-coin',
+        volatility: 0,
+        usdPrice: 1
       },
-      routeTotalUSDCost: 1000,
-      isFetchingRoute: false,
-      routeFailed: false
-    })
+      gasCostWei: BigNumber.from(0),
+      gasCost: '0',
+      feeCost: '0',
+      feeCostWei: BigNumber.from(0),
+      totalCost: '0'
+    },
+    routeTotalUSDCost: 1000,
+    isFetchingRoute: false,
+    routeFailed: false
+  })
 }
 
 describe('BuyWithCryptoModal', () => {
   let modalProps: Partial<Props>
   let crossChainProvider: CrossChainProvider
   beforeEach(() => {
-    crossChainProvider = ({
+    crossChainProvider = {
       init: jest.fn(),
       initialized: true,
       isLibInitialized: () => true,
       getSupportedChains: () => MOCK_SUPPORTED_CHAIN,
       getSupportedTokens: () => MOCKED_PROVIDER_TOKENS
-    } as unknown) as AxelarProvider
+    } as unknown as AxelarProvider
     ;(AxelarProvider as unknown as jest.Mock).mockImplementation(() => crossChainProvider)
-    ;(mockConfigIs as jest.Mock).mockReturnValue(false) // so it returns prod  values
+    mockConfigIs.mockReturnValue(false) // so it returns prod  values
     marketplaceAPI.fetchWalletTokenBalances = jest.fn().mockResolvedValue([])
     modalProps = {
       onBuyNatively: jest.fn(),
@@ -628,14 +569,10 @@ describe('BuyWithCryptoModal', () => {
       describe('and tries to pay with another Ethereum token', () => {
         let route: Route
         beforeEach(() => {
-          route = ({
+          route = {
             route: MOCKED_ROUTE
-          } as unknown) as Route
-          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
-            route,
-            ChainId.ETHEREUM_MAINNET,
-            '0.438482'
-          )
+          } as unknown as Route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(route, ChainId.ETHEREUM_MAINNET, '0.438482')
         })
 
         describe('and has enough balance to buy it', () => {
@@ -644,11 +581,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the buy now button and call the onBuyCrossChain on the click', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(tokenSelector)
@@ -660,9 +593,7 @@ describe('BuyWithCryptoModal', () => {
             expect(buyNowButton).toBeInTheDocument()
             fireEvent.click(buyNowButton)
 
-            await waitFor(() =>
-              expect(modalProps.onBuyCrossChain).toHaveBeenCalledWith(route)
-            )
+            await waitFor(() => expect(modalProps.onBuyCrossChain).toHaveBeenCalledWith(route))
           })
         })
 
@@ -672,11 +603,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the get mana and buy with card buttons', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(tokenSelector)
@@ -684,12 +611,8 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(GET_MANA_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
-            expect(
-              await findByTestId(BUY_WITH_CARD_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(GET_MANA_BUTTON_TEST_ID)).toBeInTheDocument()
+            expect(await findByTestId(BUY_WITH_CARD_TEST_ID)).toBeInTheDocument()
           })
         })
       })
@@ -697,14 +620,10 @@ describe('BuyWithCryptoModal', () => {
       describe('and tries to pay with another chain token', () => {
         let route: Route
         beforeEach(() => {
-          route = ({
+          route = {
             route: MOCKED_ROUTE
-          } as unknown) as Route
-          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
-            route,
-            ChainId.MATIC_MAINNET,
-            '0.438482'
-          )
+          } as unknown as Route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(route, ChainId.MATIC_MAINNET, '0.438482')
         })
 
         describe('and has enough balance to buy it', () => {
@@ -713,11 +632,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the switch network button to send the tx', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(chainSelector)
@@ -731,9 +646,7 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)).toBeInTheDocument()
           })
         })
 
@@ -742,11 +655,7 @@ describe('BuyWithCryptoModal', () => {
             mockUseTokenBalance(false, BigNumber.from('200000')) // user has 0.2 USDC in wei
           })
           it('should render the get MANA and buy with card buttons', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(chainSelector)
@@ -760,12 +669,8 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(GET_MANA_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
-            expect(
-              await findByTestId(BUY_WITH_CARD_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(GET_MANA_BUTTON_TEST_ID)).toBeInTheDocument()
+            expect(await findByTestId(BUY_WITH_CARD_TEST_ID)).toBeInTheDocument()
           })
         })
       })
@@ -785,9 +690,7 @@ describe('BuyWithCryptoModal', () => {
       describe('and wants to pay with MANA', () => {
         describe('and it is an asset suitable for a meta tx', () => {
           beforeEach(() => {
-            modalProps.price = BigNumber.from(getMinSaleValueInWei())
-              .add(1)
-              .toString()
+            modalProps.price = BigNumber.from(getMinSaleValueInWei()).add(1).toString()
           })
 
           describe('and has enough balance to buy it with MANA', () => {
@@ -817,9 +720,7 @@ describe('BuyWithCryptoModal', () => {
 
               fireEvent.click(buyNowButton)
 
-              await waitFor(() =>
-                expect(modalProps.onBuyNatively).toHaveBeenCalled()
-              )
+              await waitFor(() => expect(modalProps.onBuyNatively).toHaveBeenCalled())
             })
           })
 
@@ -848,9 +749,7 @@ describe('BuyWithCryptoModal', () => {
 
         describe('and it is an item not suitable for a meta tx', () => {
           beforeEach(() => {
-            modalProps.price = BigNumber.from(getMinSaleValueInWei())
-              .sub(1)
-              .toString()
+            modalProps.price = BigNumber.from(getMinSaleValueInWei()).sub(1).toString()
           })
 
           describe('and has enough balance to buy it with MANA', () => {
@@ -868,18 +767,14 @@ describe('BuyWithCryptoModal', () => {
 
             it('should render the switch network button and label saying it not free due to the low price and call on onSwitchNetwork on the click', async () => {
               const { getByTestId } = await renderBuyWithCryptoModal(modalProps)
-              const switchNetworkButton = getByTestId(
-                SWITCH_NETWORK_BUTTON_TEST_ID
-              )
+              const switchNetworkButton = getByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
 
               expect(switchNetworkButton).toBeInTheDocument()
               expect(getByTestId(PRICE_TOO_LOW_TEST_ID)).toBeInTheDocument()
 
               fireEvent.click(switchNetworkButton)
 
-              await waitFor(() =>
-                expect(modalProps.onSwitchNetwork).toHaveBeenCalled()
-              )
+              await waitFor(() => expect(modalProps.onSwitchNetwork).toHaveBeenCalled())
             })
           })
 
@@ -907,14 +802,10 @@ describe('BuyWithCryptoModal', () => {
       describe('and wants to pay with another Ethereum token', () => {
         let route: Route
         beforeEach(() => {
-          route = ({
+          route = {
             route: MOCKED_ROUTE
-          } as unknown) as Route
-          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
-            route,
-            ChainId.ETHEREUM_MAINNET,
-            '0.438482'
-          )
+          } as unknown as Route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(route, ChainId.ETHEREUM_MAINNET, '0.438482')
         })
 
         describe('and has enough token balance to buy it', () => {
@@ -923,11 +814,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render buy now button and call the onBuyCrossChain', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(chainSelector)
@@ -956,11 +843,7 @@ describe('BuyWithCryptoModal', () => {
             mockUseTokenBalance(false, BigNumber.from('200000')) // user has 0.2 USDC in wei
           })
           it('should render the get mana and buy with card buttons', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(chainSelector)
@@ -974,13 +857,9 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(GET_MANA_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(GET_MANA_BUTTON_TEST_ID)).toBeInTheDocument()
 
-            expect(
-              await findByTestId(BUY_WITH_CARD_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(BUY_WITH_CARD_TEST_ID)).toBeInTheDocument()
           })
         })
       })
@@ -988,14 +867,10 @@ describe('BuyWithCryptoModal', () => {
       describe('and wants to pay with another Polygon token', () => {
         let route: Route
         beforeEach(() => {
-          route = ({
+          route = {
             route: MOCKED_ROUTE
-          } as unknown) as Route
-          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
-            route,
-            ChainId.MATIC_MAINNET,
-            '0.438482'
-          )
+          } as unknown as Route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(route, ChainId.MATIC_MAINNET, '0.438482')
         })
 
         describe('and has enough token balance to buy it', () => {
@@ -1005,11 +880,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the switch network button and call the onSwitchNetwork fn on click', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(tokenSelector)
@@ -1017,17 +888,13 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            const switchNetworkButton = await findByTestId(
-              SWITCH_NETWORK_BUTTON_TEST_ID
-            )
+            const switchNetworkButton = await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
 
             expect(switchNetworkButton).toBeInTheDocument()
 
             fireEvent.click(switchNetworkButton)
 
-            await waitFor(() =>
-              expect(modalProps.onSwitchNetwork).toHaveBeenCalled()
-            )
+            await waitFor(() => expect(modalProps.onSwitchNetwork).toHaveBeenCalled())
           })
         })
 
@@ -1037,11 +904,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the get mana and buy with card buttons', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(chainSelector)
@@ -1055,13 +918,9 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(GET_MANA_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(GET_MANA_BUTTON_TEST_ID)).toBeInTheDocument()
 
-            expect(
-              await findByTestId(BUY_WITH_CARD_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(BUY_WITH_CARD_TEST_ID)).toBeInTheDocument()
           })
         })
       })
@@ -1100,15 +959,11 @@ describe('BuyWithCryptoModal', () => {
 
           it('should render the switch network button and call the onSwitchNetwork callback on the click', async () => {
             const { getByTestId } = await renderBuyWithCryptoModal(modalProps)
-            const switchNetworkButton = getByTestId(
-              SWITCH_NETWORK_BUTTON_TEST_ID
-            )
+            const switchNetworkButton = getByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
             expect(switchNetworkButton).toBeInTheDocument()
 
             fireEvent.click(switchNetworkButton)
-            expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(
-              ChainId.ETHEREUM_MAINNET
-            )
+            expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(ChainId.ETHEREUM_MAINNET)
           })
         })
 
@@ -1136,14 +991,10 @@ describe('BuyWithCryptoModal', () => {
       describe('and tries to pay with another Ethereum token', () => {
         let route: Route
         beforeEach(() => {
-          route = ({
+          route = {
             route: MOCKED_ROUTE
-          } as unknown) as Route
-          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
-            route,
-            ChainId.ETHEREUM_MAINNET,
-            '0.438482'
-          )
+          } as unknown as Route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(route, ChainId.ETHEREUM_MAINNET, '0.438482')
           modalProps.onSwitchNetwork = jest.fn()
         })
 
@@ -1153,11 +1004,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the switch network button and call the onSwitchNetwork on the click', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(tokenSelector)
@@ -1165,19 +1012,13 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            const switchNetworkButton = await findByTestId(
-              SWITCH_NETWORK_BUTTON_TEST_ID
-            )
+            const switchNetworkButton = await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
 
             expect(switchNetworkButton).toBeInTheDocument()
 
             fireEvent.click(switchNetworkButton)
 
-            await waitFor(() =>
-              expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(
-                ChainId.ETHEREUM_MAINNET
-              )
-            )
+            await waitFor(() => expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(ChainId.ETHEREUM_MAINNET))
           })
         })
 
@@ -1187,11 +1028,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the get mana and buy with card buttons', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(tokenSelector)
@@ -1199,12 +1036,8 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(GET_MANA_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
-            expect(
-              await findByTestId(BUY_WITH_CARD_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(GET_MANA_BUTTON_TEST_ID)).toBeInTheDocument()
+            expect(await findByTestId(BUY_WITH_CARD_TEST_ID)).toBeInTheDocument()
           })
         })
       })
@@ -1212,14 +1045,10 @@ describe('BuyWithCryptoModal', () => {
       describe('and tries to pay with another chain token', () => {
         let route: Route
         beforeEach(() => {
-          route = ({
+          route = {
             route: MOCKED_ROUTE
-          } as unknown) as Route
-          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
-            route,
-            ChainId.ETHEREUM_MAINNET,
-            '0.438482'
-          )
+          } as unknown as Route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(route, ChainId.ETHEREUM_MAINNET, '0.438482')
         })
 
         describe('and has enough balance to buy it', () => {
@@ -1227,11 +1056,7 @@ describe('BuyWithCryptoModal', () => {
             mockUseTokenBalance(false, BigNumber.from('2000000')) // user has 2 USDC in wei
           })
           it('should render the switch network button to send the tx', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(tokenSelector)
@@ -1239,9 +1064,7 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)).toBeInTheDocument()
           })
         })
 
@@ -1251,11 +1074,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the get MANA and buy with card buttons', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(tokenSelector)
@@ -1263,12 +1082,8 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(GET_MANA_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
-            expect(
-              await findByTestId(BUY_WITH_CARD_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(GET_MANA_BUTTON_TEST_ID)).toBeInTheDocument()
+            expect(await findByTestId(BUY_WITH_CARD_TEST_ID)).toBeInTheDocument()
           })
         })
       })
@@ -1301,22 +1116,15 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the buy now button and call on onBuyNatively on the click', async () => {
-            const {
-              queryByTestId,
-              getByTestId
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { queryByTestId, getByTestId } = await renderBuyWithCryptoModal(modalProps)
             const buyNowButton = getByTestId(BUY_NOW_BUTTON_TEST_ID)
 
             expect(buyNowButton).toBeInTheDocument()
-            expect(
-              queryByTestId(FREE_TX_COVERED_TEST_ID)
-            ).not.toBeInTheDocument() // do not show the free tx covered label
+            expect(queryByTestId(FREE_TX_COVERED_TEST_ID)).not.toBeInTheDocument() // do not show the free tx covered label
 
             fireEvent.click(buyNowButton)
 
-            await waitFor(() =>
-              expect(modalProps.onBuyNatively).toHaveBeenCalled()
-            )
+            await waitFor(() => expect(modalProps.onBuyNatively).toHaveBeenCalled())
           })
         })
 
@@ -1346,14 +1154,10 @@ describe('BuyWithCryptoModal', () => {
       describe('and wants to pay with another Ethereum token', () => {
         let route: Route
         beforeEach(() => {
-          route = ({
+          route = {
             route: MOCKED_ROUTE
-          } as unknown) as Route
-          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
-            route,
-            ChainId.ETHEREUM_MAINNET,
-            '0.438482'
-          )
+          } as unknown as Route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(route, ChainId.ETHEREUM_MAINNET, '0.438482')
           modalProps.onSwitchNetwork = jest.fn()
         })
 
@@ -1363,11 +1167,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render switch network button and call the onSwitchNetwork', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(chainSelector)
@@ -1381,18 +1181,12 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            const switchNetworkButton = await findByTestId(
-              SWITCH_NETWORK_BUTTON_TEST_ID
-            )
+            const switchNetworkButton = await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
 
             expect(switchNetworkButton).toBeInTheDocument()
             fireEvent.click(switchNetworkButton)
 
-            await waitFor(() =>
-              expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(
-                ChainId.ETHEREUM_MAINNET
-              )
-            )
+            await waitFor(() => expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(ChainId.ETHEREUM_MAINNET))
           })
         })
 
@@ -1402,11 +1196,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the get mana and buy with card buttons', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(chainSelector)
@@ -1420,13 +1210,9 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(GET_MANA_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(GET_MANA_BUTTON_TEST_ID)).toBeInTheDocument()
 
-            expect(
-              await findByTestId(BUY_WITH_CARD_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(BUY_WITH_CARD_TEST_ID)).toBeInTheDocument()
           })
         })
       })
@@ -1434,14 +1220,10 @@ describe('BuyWithCryptoModal', () => {
       describe('and wants to pay with another Polygon token', () => {
         let route: Route
         beforeEach(() => {
-          route = ({
+          route = {
             route: MOCKED_ROUTE
-          } as unknown) as Route
-          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(
-            route,
-            ChainId.MATIC_MAINNET,
-            '0.438482'
-          )
+          } as unknown as Route
+          modalProps.onGetCrossChainRoute = createOnGetCrossChainRouteMockForUSDC(route, ChainId.MATIC_MAINNET, '0.438482')
         })
 
         describe('and has enough token balance to buy it', () => {
@@ -1450,11 +1232,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the buy now button and call the onBuyCrossChain fn on click', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const tokenSelector = getByTestId(TOKEN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(tokenSelector)
@@ -1467,9 +1245,7 @@ describe('BuyWithCryptoModal', () => {
             expect(buyNowButton).toBeInTheDocument()
             fireEvent.click(buyNowButton)
 
-            await waitFor(() =>
-              expect(modalProps.onBuyCrossChain).toHaveBeenCalledWith(route)
-            )
+            await waitFor(() => expect(modalProps.onBuyCrossChain).toHaveBeenCalledWith(route))
           })
         })
 
@@ -1479,11 +1255,7 @@ describe('BuyWithCryptoModal', () => {
           })
 
           it('should render the get mana and buy with card buttons', async () => {
-            const {
-              getByTestId,
-              findByTestId,
-              findByText
-            } = await renderBuyWithCryptoModal(modalProps)
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
 
             const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
             fireEvent.click(chainSelector)
@@ -1497,13 +1269,9 @@ describe('BuyWithCryptoModal', () => {
             const usdcTokenOption = await findByText('USDC')
             fireEvent.click(usdcTokenOption)
 
-            expect(
-              await findByTestId(GET_MANA_BUTTON_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(GET_MANA_BUTTON_TEST_ID)).toBeInTheDocument()
 
-            expect(
-              await findByTestId(BUY_WITH_CARD_TEST_ID)
-            ).toBeInTheDocument()
+            expect(await findByTestId(BUY_WITH_CARD_TEST_ID)).toBeInTheDocument()
           })
         })
       })

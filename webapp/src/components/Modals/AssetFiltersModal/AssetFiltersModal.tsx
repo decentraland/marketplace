@@ -48,36 +48,19 @@ const AssetFiltersModal = (props: Props) => {
   return (
     <Modal open className={styles.assetFiltersModal}>
       <Modal.Header className={styles.modalHeader}>
-        <Button
-          basic
-          className="clear-filters-modal"
-          onClick={handleClearFilters}
-        >
+        <Button basic className="clear-filters-modal" onClick={handleClearFilters}>
           {t('filters.reset')}
         </Button>
         <h3 className={styles.modalTitle}>Filters</h3>
-        <Button
-          basic
-          className={styles.closeButton}
-          onClick={evt => onClose && onClose(evt, {})}
-        />
+        <Button basic className={styles.closeButton} onClick={evt => onClose && onClose(evt, {})} />
       </Modal.Header>
       <Modal.Content>
-        {view === View.ACCOUNT ? (
-          <AssetTypeFilter
-            onChange={handleAssetTypeChange}
-            assetType={filters.assetType || assetType}
-          />
-        ) : null}
+        {view === View.ACCOUNT ? <AssetTypeFilter onChange={handleAssetTypeChange} assetType={filters.assetType || assetType} /> : null}
         <CategoryFilter onChange={handleSectionChange} values={filters} />
         <AssetFilters onFilterChange={handleFilterChange} values={filters} />
       </Modal.Content>
       <Modal.Actions className={styles.modalFooter}>
-        <Button
-          className={styles.applyFilters}
-          primary
-          onClick={handleApplyFilters}
-        >
+        <Button className={styles.applyFilters} primary onClick={handleApplyFilters}>
           {t('filters.apply')}
         </Button>
       </Modal.Actions>

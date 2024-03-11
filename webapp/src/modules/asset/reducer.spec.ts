@@ -31,10 +31,7 @@ const notSmartWearableAsset = {
 
 const anErrorMessage = 'An error'
 
-const requestActions = [
-  fetchSmartWearableRequiredPermissionsRequest(asset),
-  fetchSmartWearableRequiredPermissionsRequest(asset)
-]
+const requestActions = [fetchSmartWearableRequiredPermissionsRequest(asset), fetchSmartWearableRequiredPermissionsRequest(asset)]
 
 requestActions.forEach(action => {
   describe(`when reducing the "${action.type}" action`, () => {
@@ -117,21 +114,18 @@ describe.each([
     fetchSmartWearableVideoHashSuccess(asset, 'videoHash'),
     { videoHash: 'videoHash' }
   ]
-])(
-  'when reducing the %s action',
-  (_action, requestAction, successAction, expectedData) => {
-    const initialState = {
-      ...INITIAL_STATE,
-      data: { anotherId: { requiredPermissions: [] } },
-      loading: loadingReducer([], requestAction)
-    }
-
-    it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
-      expect(assetReducer(initialState, successAction)).toEqual({
-        ...INITIAL_STATE,
-        loading: [],
-        data: { ...initialState.data, [asset.id]: expectedData }
-      })
-    })
+])('when reducing the %s action', (_action, requestAction, successAction, expectedData) => {
+  const initialState = {
+    ...INITIAL_STATE,
+    data: { anotherId: { requiredPermissions: [] } },
+    loading: loadingReducer([], requestAction)
   }
-)
+
+  it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
+    expect(assetReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: { ...initialState.data, [asset.id]: expectedData }
+    })
+  })
+})

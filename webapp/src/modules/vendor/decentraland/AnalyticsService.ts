@@ -16,17 +16,11 @@ export class AnalyticsService implements AnalyticsServiceInterface {
     return {
       sales: data.sales,
       volume: parseFloat(utils.formatEther(data.volume)),
-      volumeUSD: await this.tokenConverter.marketMANAToUSD(
-        parseFloat(utils.formatEther(data.volume))
-      ),
+      volumeUSD: await this.tokenConverter.marketMANAToUSD(parseFloat(utils.formatEther(data.volume))),
       creatorsEarnings: parseFloat(utils.formatEther(data.creatorsEarnings)),
-      creatorsEarningsUSD: await this.tokenConverter.marketMANAToUSD(
-        parseFloat(utils.formatEther(data.creatorsEarnings))
-      ),
+      creatorsEarningsUSD: await this.tokenConverter.marketMANAToUSD(parseFloat(utils.formatEther(data.creatorsEarnings))),
       daoEarnings: parseFloat(utils.formatEther(data.daoEarnings)),
-      daoEarningsUSD: await this.tokenConverter.marketMANAToUSD(
-        parseFloat(utils.formatEther(data.daoEarnings))
-      )
+      daoEarningsUSD: await this.tokenConverter.marketMANAToUSD(parseFloat(utils.formatEther(data.daoEarnings)))
     }
   }
 }

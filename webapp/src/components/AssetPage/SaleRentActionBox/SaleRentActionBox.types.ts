@@ -17,12 +17,6 @@ export type Props = {
 }
 
 export type OwnProps = Pick<Props, 'nft' | 'rental' | 'order'>
-export type MapStateProps = Pick<
-  Props,
-  | 'wallet'
-  | 'userHasAlreadyBidsOnNft'
-  | 'currentMana'
-  | 'isCrossChainLandEnabled'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'userHasAlreadyBidsOnNft' | 'currentMana' | 'isCrossChainLandEnabled'>
 export type MapDispatchProps = Pick<Props, 'onRent' | 'onBuyWithCrypto'>
 export type MapDispatch = Dispatch<OpenModalAction>

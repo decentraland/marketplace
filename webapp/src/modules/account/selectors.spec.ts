@@ -81,9 +81,7 @@ describe('when getting account metrics by address by network', () => {
       }
     }
 
-    expect(
-      getMetricsByAddressByNetwork.resultFunc(metricsByNetworkByAddress)
-    ).toEqual({
+    expect(getMetricsByAddressByNetwork.resultFunc(metricsByNetworkByAddress)).toEqual({
       address1: {
         [Network.ETHEREUM]: metrics1,
         [Network.MATIC]: metrics3
@@ -107,17 +105,15 @@ describe('when getting aggregated metrics by address', () => {
       },
       address2: {
         [Network.ETHEREUM]: metrics2,
-        [Network.MATIC]: (undefined as unknown) as AccountMetrics
+        [Network.MATIC]: undefined as unknown as AccountMetrics
       },
       address3: {
-        [Network.ETHEREUM]: (undefined as unknown) as AccountMetrics,
+        [Network.ETHEREUM]: undefined as unknown as AccountMetrics,
         [Network.MATIC]: metrics4
       }
     }
 
-    expect(
-      getAggregatedMetricsByAddress.resultFunc(metricsByAddressByNetwork)
-    ).toEqual({
+    expect(getAggregatedMetricsByAddress.resultFunc(metricsByAddressByNetwork)).toEqual({
       address1: sumAccountMetrics(metrics1, metrics3),
       address2: metrics2,
       address3: metrics4
@@ -134,10 +130,10 @@ describe('when getting metrics by address', () => {
       },
       address2: {
         [Network.ETHEREUM]: metrics2,
-        [Network.MATIC]: (undefined as unknown) as AccountMetrics
+        [Network.MATIC]: undefined as unknown as AccountMetrics
       },
       address3: {
-        [Network.ETHEREUM]: (undefined as unknown) as AccountMetrics,
+        [Network.ETHEREUM]: undefined as unknown as AccountMetrics,
         [Network.MATIC]: metrics4
       }
     }
@@ -148,12 +144,7 @@ describe('when getting metrics by address', () => {
       address3: metrics4
     }
 
-    expect(
-      getMetricsByAddress.resultFunc(
-        metricsByAddressByNetwork,
-        aggregatedMetricsByAddress
-      )
-    ).toEqual({
+    expect(getMetricsByAddress.resultFunc(metricsByAddressByNetwork, aggregatedMetricsByAddress)).toEqual({
       address1: {
         [Network.ETHEREUM]: metrics1,
         [Network.MATIC]: metrics3,

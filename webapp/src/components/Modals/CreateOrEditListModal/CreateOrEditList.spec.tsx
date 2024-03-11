@@ -36,41 +36,29 @@ describe('when the create list procedure is loading', () => {
   beforeEach(() => {
     renderedModal = renderCreateListModal({ isLoading: true })
     // Write something into the field so the accept button doesn't get disabled
-    fireEvent.change(
-      renderedModal.getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID)
-        .children[0],
-      {
-        target: { value: 'aValue' }
-      }
-    )
+    fireEvent.change(renderedModal.getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0], {
+      target: { value: 'aValue' }
+    })
   })
 
   it('should render the name input as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0]
-    ).toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0]).toHaveAttribute('disabled')
   })
 
   it('should render the description input as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID)
-    ).toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID)).toHaveAttribute('disabled')
   })
 
   it('should render the checkbox input as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID).children[0]
-    ).toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID).children[0]).toHaveAttribute('disabled')
   })
 
   it('should render the accept button as disabled and loading', () => {
     const { getByTestId } = renderedModal
-    const acceptButton = getByTestId(
-      CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID
-    )
+    const acceptButton = getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
 
     expect(acceptButton).toHaveAttribute('disabled')
     expect(acceptButton).toHaveClass('loading')
@@ -78,9 +66,7 @@ describe('when the create list procedure is loading', () => {
 
   it('should render the cancel button as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID)
-    ).toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID)).toHaveAttribute('disabled')
   })
 })
 
@@ -90,41 +76,29 @@ describe('when the create list procedure is not loading', () => {
   beforeEach(() => {
     renderedModal = renderCreateListModal({ isLoading: false })
     // Write something into the field so the accept button doesn't get disabled
-    fireEvent.change(
-      renderedModal.getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID)
-        .children[0],
-      {
-        target: { value: 'aValue' }
-      }
-    )
+    fireEvent.change(renderedModal.getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0], {
+      target: { value: 'aValue' }
+    })
   })
 
   it('should render the name input as not disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0]
-    ).not.toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0]).not.toHaveAttribute('disabled')
   })
 
   it('should render the description input as not disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID)
-    ).not.toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID)).not.toHaveAttribute('disabled')
   })
 
   it('should render the checkbox input as not disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID).children[0]
-    ).not.toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID).children[0]).not.toHaveAttribute('disabled')
   })
 
   it('should render the accept button as not disabled nor loading', () => {
     const { getByTestId } = renderedModal
-    const acceptButton = getByTestId(
-      CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID
-    )
+    const acceptButton = getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
 
     expect(acceptButton).not.toHaveClass('loading')
     expect(acceptButton).not.toHaveAttribute('disabled')
@@ -132,9 +106,7 @@ describe('when the create list procedure is not loading', () => {
 
   it('should render the cancel button as not disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID)
-    ).not.toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID)).not.toHaveAttribute('disabled')
   })
 })
 
@@ -186,15 +158,10 @@ describe('when clicking the accept button', () => {
         metadata: { list }
       })
       const { getByTestId } = renderedModal
-      fireEvent.change(
-        getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0],
-        {
-          target: { value: 'anotherListName' }
-        }
-      )
-      fireEvent.click(
-        getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
-      )
+      fireEvent.change(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0], {
+        target: { value: 'anotherListName' }
+      })
+      fireEvent.click(getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID))
     })
 
     it('should call the onEditList prop function with the input values', () => {
@@ -210,24 +177,14 @@ describe('when clicking the accept button', () => {
     beforeEach(() => {
       renderedModal = renderCreateListModal({ onCreateList, onEditList })
       const { getByTestId } = renderedModal
-      fireEvent.change(
-        getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0],
-        {
-          target: { value: name }
-        }
-      )
-      fireEvent.change(
-        getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID),
-        {
-          target: { value: description }
-        }
-      )
-      fireEvent.click(
-        getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID).children[0]
-      )
-      fireEvent.click(
-        getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
-      )
+      fireEvent.change(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0], {
+        target: { value: name }
+      })
+      fireEvent.change(getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID), {
+        target: { value: description }
+      })
+      fireEvent.click(getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID).children[0])
+      fireEvent.click(getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID))
     })
 
     it('should call the onCreateList prop function with the input values', () => {
@@ -249,9 +206,7 @@ describe('when the name input is empty', () => {
 
   it('should render the accept button as disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
-    ).toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).toHaveAttribute('disabled')
   })
 })
 
@@ -264,12 +219,8 @@ describe('when the name input is focused', () => {
 
   it('should render the max length info message', () => {
     const { getByTestId } = renderedModal
-    fireEvent.focusIn(
-      getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0]
-    )
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).nextSibling
-    ).toHaveTextContent('List names can contain up to 32 characters')
+    fireEvent.focusIn(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0])
+    expect(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).nextSibling).toHaveTextContent('List names can contain up to 32 characters')
   })
 })
 
@@ -282,15 +233,11 @@ describe('when the name input is blurred', () => {
 
   it('should not render the max length info message', () => {
     const { getByTestId } = renderedModal
-    fireEvent.focusIn(
-      getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0]
+    fireEvent.focusIn(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0])
+    fireEvent.focusOut(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0])
+    expect(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).nextSibling).not.toHaveTextContent(
+      'List names can contain up to 32 characters'
     )
-    fireEvent.focusOut(
-      getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0]
-    )
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).nextSibling
-    ).not.toHaveTextContent('List names can contain up to 32 characters')
   })
 })
 
@@ -304,9 +251,9 @@ describe('when the description input is focused', () => {
   it('should render the max length info message', () => {
     const { getByTestId } = renderedModal
     fireEvent.focusIn(getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID))
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID).nextSibling
-    ).toHaveTextContent('List descriptions can contain up to 100 characters')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID).nextSibling).toHaveTextContent(
+      'List descriptions can contain up to 100 characters'
+    )
   })
 })
 
@@ -320,12 +267,8 @@ describe('when the description input is blurred', () => {
   it('should not render the max length info message', () => {
     const { getByTestId } = renderedModal
     fireEvent.focusIn(getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID))
-    fireEvent.focusOut(
-      getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID)
-    )
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID).nextSibling
-    ).not.toHaveTextContent(
+    fireEvent.focusOut(getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID))
+    expect(getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID).nextSibling).not.toHaveTextContent(
       'List descriptions can contain up to 100 characters'
     )
   })
@@ -342,9 +285,7 @@ describe('when error is a duplicated name error', () => {
 
   it('should render the name input with an error message', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).nextSibling
-    ).toHaveTextContent(
+    expect(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).nextSibling).toHaveTextContent(
       'This name is already in use for another of your lists. Choose a different name.'
     )
   })
@@ -358,9 +299,7 @@ describe('when the list name is not set', () => {
 
   it('should render the accept button disabled', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
-    ).toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).toHaveAttribute('disabled')
   })
 })
 
@@ -385,43 +324,31 @@ describe('when the component is rendered with a list', () => {
 
   it('should populate the name input with the list name', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0]
-    ).toHaveValue(list.name)
+    expect(getByTestId(CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID).children[0]).toHaveValue(list.name)
   })
 
   it('should populate the description input with the list description', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID)
-    ).toHaveTextContent(list.description ?? '')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_DESCRIPTION_DATA_TEST_ID)).toHaveTextContent(list.description ?? '')
   })
 
   it('should populate the checkbox input with the list isPrivate value', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID).children[0]
-    ).toHaveAttribute('checked')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID).children[0]).toHaveAttribute('checked')
   })
 
   it('should render the confirm button as "Save"', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
-    ).toHaveTextContent('Save')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).toHaveTextContent('Save')
   })
 
   it('should render the checkbox label with the edit message', () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID)
-    ).toHaveTextContent(t('create_or_edit_list_modal.edit.private'))
+    expect(getByTestId(CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID)).toHaveTextContent(t('create_or_edit_list_modal.edit.private'))
   })
 
   it("should render the accept button disabled as the list's properties didn't change", () => {
     const { getByTestId } = renderedModal
-    expect(
-      getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)
-    ).toHaveAttribute('disabled')
+    expect(getByTestId(CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID)).toHaveAttribute('disabled')
   })
 })

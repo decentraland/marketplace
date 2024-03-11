@@ -2,12 +2,7 @@ import { Item, Network } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
-import {
-  ListDetails,
-  ListOfLists,
-  Permission,
-  UpdateOrCreateList
-} from '../vendor/decentraland/favorites/types'
+import { ListDetails, ListOfLists, Permission, UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   BulkPickUnpickCancelAction,
@@ -181,28 +176,25 @@ const failureActions = [
   }
 ]
 
-describe.each(failureActions)(
-  `when reducing the "$failure.type" action`,
-  ({ request, failure }) => {
-    let initialState: FavoritesState
+describe.each(failureActions)(`when reducing the "$failure.type" action`, ({ request, failure }) => {
+  let initialState: FavoritesState
 
-    beforeEach(() => {
-      initialState = {
-        ...INITIAL_STATE,
-        error: null,
-        loading: loadingReducer([], request)
-      }
-    })
+  beforeEach(() => {
+    initialState = {
+      ...INITIAL_STATE,
+      error: null,
+      loading: loadingReducer([], request)
+    }
+  })
 
-    it('should return a state with the error set and the loading state cleared', () => {
-      expect(favoritesReducer(initialState, failure)).toEqual({
-        ...INITIAL_STATE,
-        error,
-        loading: []
-      })
+  it('should return a state with the error set and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, failure)).toEqual({
+      ...INITIAL_STATE,
+      error,
+      loading: []
     })
-  }
-)
+  })
+})
 
 describe('when reducing the action of canceling a bulk pick/unpick item process', () => {
   let requestAction: BulkPickUnpickStartAction
@@ -269,12 +261,7 @@ describe('when reducing the successful action of fetching an item', () => {
 
 describe('when reducing the successful action of fetching items', () => {
   it('should return a state with the  picks stats', () => {
-    expect(
-      favoritesReducer(
-        initialState,
-        fetchItemsSuccess([item], 1, {}, Date.now())
-      )
-    ).toEqual({
+    expect(favoritesReducer(initialState, fetchItemsSuccess([item], 1, {}, Date.now()))).toEqual({
       ...initialState,
       data: {
         ...initialState.data,
@@ -297,13 +284,7 @@ describe('when reducing the successful action of fetching the favorited items', 
   beforeEach(() => {
     total = 2
     requestAction = fetchFavoritedItemsRequest(itemBrowseOptions)
-    successAction = fetchFavoritedItemsSuccess(
-      [{ ...item, picks: { pickedByUser: true, count: 2 } }],
-      createdAt,
-      total,
-      {},
-      Date.now()
-    )
+    successAction = fetchFavoritedItemsSuccess([{ ...item, picks: { pickedByUser: true, count: 2 } }], createdAt, total, {}, Date.now())
 
     initialState = {
       ...initialState,
@@ -368,12 +349,7 @@ describe('when reducing the successful action of fetching lists', () => {
     }
     total = 2
     requestAction = fetchListsRequest(listsBrowseOptions)
-    successAction = fetchListsSuccess(
-      [newList],
-      [item],
-      total,
-      listsBrowseOptions
-    )
+    successAction = fetchListsSuccess([newList], [item], total, listsBrowseOptions)
 
     initialState = {
       ...initialState,
@@ -726,18 +702,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
       })
 
       it('should return a state where the item is flagged as not picked by the user, the created date set as undefined, the counter decreased and the loading state cleared', () => {
-        expect(
-          favoritesReducer(
-            initialState,
-            bulkPickUnpickSuccess(
-              item,
-              [listOfLists],
-              [],
-              false,
-              ownerRemovedFromCurrentList
-            )
-          )
-        ).toEqual({
+        expect(favoritesReducer(initialState, bulkPickUnpickSuccess(item, [listOfLists], [], false, ownerRemovedFromCurrentList))).toEqual({
           ...INITIAL_STATE,
           data: {
             ...INITIAL_STATE.data,
@@ -774,18 +739,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
       })
 
       it("should return a state where the item favorite data hasn't changed and the loading state cleared", () => {
-        expect(
-          favoritesReducer(
-            initialState,
-            bulkPickUnpickSuccess(
-              item,
-              [listOfLists],
-              [],
-              true,
-              ownerRemovedFromCurrentList
-            )
-          )
-        ).toEqual({
+        expect(favoritesReducer(initialState, bulkPickUnpickSuccess(item, [listOfLists], [], true, ownerRemovedFromCurrentList))).toEqual({
           ...INITIAL_STATE,
           data: {
             ...INITIAL_STATE.data,
@@ -817,18 +771,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
       })
 
       it('should return a state where the item is flagged as not picked by the user, the created date set as undefined, the counter decreased and the loading state cleared', () => {
-        expect(
-          favoritesReducer(
-            initialState,
-            bulkPickUnpickSuccess(
-              item,
-              [listOfLists],
-              [],
-              true,
-              ownerRemovedFromCurrentList
-            )
-          )
-        ).toEqual({
+        expect(favoritesReducer(initialState, bulkPickUnpickSuccess(item, [listOfLists], [], true, ownerRemovedFromCurrentList))).toEqual({
           ...INITIAL_STATE,
           data: {
             ...INITIAL_STATE.data,
@@ -871,18 +814,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
       })
 
       it('should return a state where the item is flagged as not picked by the user, the created date set as undefined, the counter decreased and the loading state cleared', () => {
-        expect(
-          favoritesReducer(
-            initialState,
-            bulkPickUnpickSuccess(
-              item,
-              [listOfLists],
-              [],
-              false,
-              ownerRemovedFromCurrentList
-            )
-          )
-        ).toEqual({
+        expect(favoritesReducer(initialState, bulkPickUnpickSuccess(item, [listOfLists], [], false, ownerRemovedFromCurrentList))).toEqual({
           ...INITIAL_STATE,
           data: {
             ...INITIAL_STATE.data,
@@ -929,18 +861,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
       })
 
       it('should return a state where the item is flagged as picked by the user, the created date set as now, the counter increased and the loading state cleared', () => {
-        expect(
-          favoritesReducer(
-            initialState,
-            bulkPickUnpickSuccess(
-              item,
-              [listOfLists],
-              [],
-              true,
-              ownerRemovedFromCurrentList
-            )
-          )
-        ).toEqual({
+        expect(favoritesReducer(initialState, bulkPickUnpickSuccess(item, [listOfLists], [], true, ownerRemovedFromCurrentList))).toEqual({
           ...INITIAL_STATE,
           data: {
             ...INITIAL_STATE.data,
@@ -977,18 +898,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
       })
 
       it("should return an estate where the pick didn't change at all and the loading state cleared", () => {
-        expect(
-          favoritesReducer(
-            initialState,
-            bulkPickUnpickSuccess(
-              item,
-              [listOfLists],
-              [],
-              true,
-              ownerRemovedFromCurrentList
-            )
-          )
-        ).toEqual({
+        expect(favoritesReducer(initialState, bulkPickUnpickSuccess(item, [listOfLists], [], true, ownerRemovedFromCurrentList))).toEqual({
           ...initialState,
           loading: []
         })
@@ -1037,18 +947,7 @@ describe('when reducing the successful action of bulk picking and unpicking', ()
     })
 
     it('should decrease or increase the item count in the lists accordingly and remove the loading state', () => {
-      expect(
-        favoritesReducer(
-          initialState,
-          bulkPickUnpickSuccess(
-            item,
-            [aListOfLists],
-            [anotherListOfLists],
-            true,
-            false
-          )
-        )
-      ).toEqual({
+      expect(favoritesReducer(initialState, bulkPickUnpickSuccess(item, [aListOfLists], [anotherListOfLists], true, false))).toEqual({
         ...initialState,
         data: {
           ...initialState.data,

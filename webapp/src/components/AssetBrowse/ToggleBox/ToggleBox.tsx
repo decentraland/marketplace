@@ -10,13 +10,7 @@ const ToggleBox = (props: Props) => {
   const isMobile = useMobileMediaQuery()
 
   return (
-    <Box
-      header={props.header}
-      className={className}
-      childrenClassName={
-        direction && direction === 'row' ? styles.flex : undefined
-      }
-    >
+    <Box header={props.header} className={className} childrenClassName={direction && direction === 'row' ? styles.flex : undefined}>
       {items.map((item, index) => (
         <div
           key={index}
@@ -30,9 +24,7 @@ const ToggleBox = (props: Props) => {
           {item.icon}
           <div>
             <div className={styles.title}>{item.title}</div>
-            {isMobile && direction === 'row' ? null : (
-              <div className={styles.description}>{item.description}</div>
-            )}
+            {isMobile && direction === 'row' ? null : <div className={styles.description}>{item.description}</div>}
           </div>
         </div>
       ))}

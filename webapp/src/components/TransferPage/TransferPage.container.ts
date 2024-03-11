@@ -3,15 +3,8 @@ import { push } from 'connected-react-router'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../../modules/reducer'
 import { getLoading } from '../../modules/nft/selectors'
-import {
-  transferNFTRequest,
-  TRANSFER_NFT_REQUEST
-} from '../../modules/nft/actions'
-import {
-  MapStateProps,
-  MapDispatchProps,
-  MapDispatch
-} from './TransferPage.types'
+import { transferNFTRequest, TRANSFER_NFT_REQUEST } from '../../modules/nft/actions'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './TransferPage.types'
 import TransferPage from './TransferPage'
 
 const mapState = (state: RootState): MapStateProps => ({

@@ -6,22 +6,12 @@ import { Coordinate } from 'recharts/types/util/types'
 import { getNearestTile, Coord } from './utils'
 import { NFTCategory } from '@dcl/schemas'
 
-export function MapBrowse({
-  onlyOnRent,
-  onlyOnSale,
-  showOwned,
-  tiles,
-  ownedLands,
-  onBrowse
-}: Props) {
+export function MapBrowse({ onlyOnRent, onlyOnSale, showOwned, tiles, ownedLands, onBrowse }: Props) {
   const isMobileOrTable = useTabletAndBelowMediaQuery()
   const [x, setX] = useState<number>()
   const [y, setY] = useState<number>()
 
-  const handleSetFullscreen = useCallback(
-    () => onBrowse({ isMap: true, isFullscreen: true }),
-    [onBrowse]
-  )
+  const handleSetFullscreen = useCallback(() => onBrowse({ isMap: true, isFullscreen: true }), [onBrowse])
 
   const tilesForRent = useMemo(
     () =>

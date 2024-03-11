@@ -1,11 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import {
-  EmotePlayMode,
-  GenderFilterOption,
-  Network,
-  Rarity,
-  WearableGender
-} from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
 import { SmartWearableFilter } from 'decentraland-ui'
 import { RarityFilter } from 'decentraland-dapps/dist/containers/RarityFilter'
 import { getSectionFromCategory } from '../../modules/routing/search'
@@ -27,11 +21,7 @@ import { RentalPeriodFilter } from './RentalPeriodFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmoteAttributesFilter } from './EmoteAttributesFilter'
 import { LocationFilter } from './LocationFilter'
-import {
-  AssetFilter,
-  filtersBySection,
-  trackBarChartComponentChange
-} from './utils'
+import { AssetFilter, filtersBySection, trackBarChartComponentChange } from './utils'
 import { StatusFilter } from './StatusFilter'
 import './AssetFilters.css'
 
@@ -65,18 +55,10 @@ export const AssetFilters = ({
 }: Props): JSX.Element | null => {
   const isInLandSection = isLandSection(section)
 
-  const handleBrowseParamChange = useCallback(
-    (options: BrowseOptions) => onBrowse(options),
-    [onBrowse]
-  )
+  const handleBrowseParamChange = useCallback((options: BrowseOptions) => onBrowse(options), [onBrowse])
 
   const handleRangeFilterChange = useCallback(
-    (
-      filterNames: [string, string],
-      value: [string, string],
-      source,
-      prevValues: [string, string]
-    ) => {
+    (filterNames: [string, string], value: [string, string], source, prevValues: [string, string]) => {
       const [filterMinName, filterMaxName] = filterNames
       const [minValue, maxValue] = value
       onBrowse({ [filterMinName]: minValue, [filterMaxName]: maxValue })
@@ -116,21 +98,13 @@ export const AssetFilters = ({
   const handleOnSaleChange = useCallback(
     (value: boolean) => {
       // when toggling off the on sale filter, we need to reset the sortBy to avoid invalid combinations with the on sale sort options
-      onBrowse(
-        value
-          ? { onlyOnSale: value }
-          : { onlyOnSale: value, sortBy: SortBy.NEWEST }
-      )
+      onBrowse(value ? { onlyOnSale: value } : { onlyOnSale: value, sortBy: SortBy.NEWEST })
     },
     [onBrowse]
   )
 
   const handleEmoteAttributesChange = useCallback(
-    (value: {
-      emotePlayMode?: EmotePlayMode[]
-      emoteHasSound?: boolean
-      emoteHasGeometry?: boolean
-    }) => {
+    (value: { emotePlayMode?: EmotePlayMode[]; emoteHasSound?: boolean; emoteHasGeometry?: boolean }) => {
       onBrowse({
         emotePlayMode: value.emotePlayMode,
         emoteHasSound: value.emoteHasSound,
@@ -199,9 +173,7 @@ export const AssetFilters = ({
   const shouldRenderFilter = useCallback(
     (filter: AssetFilter) => {
       // /lands page won't have any category, we fallback to the section, that will be Section.LAND
-      const parentSection = category
-        ? getSectionFromCategory(category)
-        : section
+      const parentSection = category ? getSectionFromCategory(category) : section
       return filtersBySection[parentSection!]?.includes(filter)
     },
     [category, section]
@@ -210,17 +182,9 @@ export const AssetFilters = ({
   if (isInLandSection) {
     return (
       <div className="filters-sidebar">
-        <LandStatusFilter
-          landStatus={landStatus}
-          onChange={handleLandStatusChange}
-        />
+        <LandStatusFilter landStatus={landStatus} onChange={handleLandStatusChange} />
         <PriceFilter
-          onChange={(value, source) =>
-            handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
-              minPrice,
-              maxPrice
-            ])
-          }
+          onChange={(value, source) => handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [minPrice, maxPrice])}
           minPrice={minPrice}
           maxPrice={maxPrice}
           values={values}
@@ -235,22 +199,12 @@ export const AssetFilters = ({
             minPrice={minPrice}
             maxPrice={maxPrice}
             onChange={(values, source) =>
-              handleRangeFilterChange(
-                ['minEstateSize', 'maxEstateSize'],
-                values,
-                source,
-                [minEstateSize, maxEstateSize]
-              )
+              handleRangeFilterChange(['minEstateSize', 'maxEstateSize'], values, source, [minEstateSize, maxEstateSize])
             }
             {...locationFilters}
           />
         ) : null}
-        {landStatus === LANDFilters.ONLY_FOR_RENT && (
-          <RentalPeriodFilter
-            rentalDays={rentalDays}
-            onChange={handleRentalDaysChange}
-          />
-        )}
+        {landStatus === LANDFilters.ONLY_FOR_RENT && <RentalPeriodFilter rentalDays={rentalDays} onChange={handleRentalDaysChange} />}
         <LocationFilter
           {...locationFilters}
           onAdjacentToRoadChange={handleAdjacentToRoadChange}
@@ -272,10 +226,7 @@ export const AssetFilters = ({
         />
       )}
       {shouldRenderFilter(AssetFilter.OnlySmart) ? (
-        <SmartWearableFilter
-          isOnlySmart={isOnlySmart}
-          onChange={handleOnlySmartChange}
-        />
+        <SmartWearableFilter isOnlySmart={isOnlySmart} onChange={handleOnlySmartChange} />
       ) : null}
       {shouldRenderFilter(AssetFilter.Rarity) ? (
         <RarityFilter
@@ -286,35 +237,21 @@ export const AssetFilters = ({
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.Status) && view === View.MARKET ? (
-        <StatusFilter
-          onChange={handleBrowseParamChange}
-          status={status}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Status]}
-        />
+        <StatusFilter onChange={handleBrowseParamChange} status={status} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Status]} />
       ) : null}
       {shouldRenderFilter(AssetFilter.Price) &&
       (isOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
       view !== View.ACCOUNT ? (
         <PriceFilter
-          onChange={(value, source) =>
-            handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
-              minPrice,
-              maxPrice
-            ])
-          }
+          onChange={(value, source) => handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [minPrice, maxPrice])}
           minPrice={minPrice}
           maxPrice={maxPrice}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Price]}
           values={values}
         />
       ) : null}
-      {shouldRenderFilter(AssetFilter.Creators) &&
-      (!network || (network && network === Network.MATIC)) ? (
-        <CreatorsFilter
-          creators={creators}
-          onChange={handleCreatorsChange}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Creators]}
-        />
+      {shouldRenderFilter(AssetFilter.Creators) && (!network || (network && network === Network.MATIC)) ? (
+        <CreatorsFilter creators={creators} onChange={handleCreatorsChange} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Creators]} />
       ) : null}
       {shouldRenderFilter(AssetFilter.Collection) ? (
         <CollectionFilter
@@ -324,14 +261,9 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Collection]}
         />
       ) : null}
-      {shouldRenderFilter(AssetFilter.Network) &&
-        status !== AssetStatusFilter.ONLY_MINTING && (
-          <NetworkFilter
-            onChange={handleNetworkChange}
-            network={network}
-            defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
-          />
-        )}
+      {shouldRenderFilter(AssetFilter.Network) && status !== AssetStatusFilter.ONLY_MINTING && (
+        <NetworkFilter onChange={handleNetworkChange} network={network} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]} />
+      )}
       {shouldRenderFilter(AssetFilter.BodyShape) && (
         <BodyShapeFilter
           onChange={handleBodyShapeChange}

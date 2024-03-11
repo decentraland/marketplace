@@ -1,9 +1,6 @@
 import isEqual from 'lodash/isEqual'
 import { Item } from '@dcl/schemas'
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FETCH_FAVORITED_ITEMS_SUCCESS,
   FETCH_LISTS_SUCCESS,
@@ -98,10 +95,7 @@ type ItemReducerAction =
   | BuyItemCrossChainFailureAction
   | BuyItemCrossChainSuccessAction
 
-export function itemReducer(
-  state = INITIAL_STATE,
-  action: ItemReducerAction
-): ItemState {
+export function itemReducer(state = INITIAL_STATE, action: ItemReducerAction): ItemState {
   switch (action.type) {
     case BUY_ITEM_REQUEST:
     case BUY_ITEM_SUCCESS:
@@ -130,12 +124,15 @@ export function itemReducer(
         loading: loadingReducer(state.loading, action),
         data: {
           ...state.data,
-          ...items.reduce((obj, item) => {
-            if (!state.data[item.id] || !isEqual(state.data[item.id], item)) {
-              obj[item.id] = { ...state.data[item.id], ...item }
-            }
-            return obj
-          }, {} as Record<string, Item>)
+          ...items.reduce(
+            (obj, item) => {
+              if (!state.data[item.id] || !isEqual(state.data[item.id], item)) {
+                obj[item.id] = { ...state.data[item.id], ...item }
+              }
+              return obj
+            },
+            {} as Record<string, Item>
+          )
         },
         error: null
       }

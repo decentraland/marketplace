@@ -5,13 +5,7 @@ import { getLoading } from '../../modules/bid/selectors'
 import { RootState } from '../../modules/reducer'
 import { getArchivedBidIds } from '../../modules/ui/nft/bid/selectors'
 import { locations } from '../../modules/routing/locations'
-import {
-  cancelBidRequest,
-  archiveBid,
-  unarchiveBid,
-  acceptBidRequest,
-  ACCEPT_BID_REQUEST
-} from '../../modules/bid/actions'
+import { cancelBidRequest, archiveBid, unarchiveBid, acceptBidRequest, ACCEPT_BID_REQUEST } from '../../modules/bid/actions'
 import { getWallet } from '../../modules/wallet/selectors'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './Bid.types'
 import Bid from './Bid'
@@ -23,8 +17,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onUpdate: bid =>
-    dispatch(push(locations.bid(bid.contractAddress, bid.tokenId))),
+  onUpdate: bid => dispatch(push(locations.bid(bid.contractAddress, bid.tokenId))),
   onCancel: bid => dispatch(cancelBidRequest(bid)),
   onArchive: bid => dispatch(archiveBid(bid)),
   onUnarchive: bid => dispatch(unarchiveBid(bid)),

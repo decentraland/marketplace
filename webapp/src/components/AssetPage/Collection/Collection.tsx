@@ -27,9 +27,7 @@ const Collection = (props: Props) => {
         let name = collection.name
         if (asset.network === Network.ETHEREUM) {
           const networkContracts = contracts[network]
-          const contract = networkContracts.find(
-            contract => contract.address === asset.contractAddress
-          )
+          const contract = networkContracts.find(contract => contract.address === asset.contractAddress)
           name = contract?.name || name
         }
 

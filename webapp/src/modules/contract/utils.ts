@@ -5,10 +5,7 @@ import { NFT } from '../nft/types'
 import { VendorName } from '../vendor'
 import { Contract } from '../vendor/services'
 
-export function upsertContracts(
-  storedContracts: Contract[],
-  newContracts: Contract[]
-) {
+export function upsertContracts(storedContracts: Contract[], newContracts: Contract[]) {
   const contractsByAddressAndChain = storedContracts.reduce(
     (map, contract) => map.set(getContractKey(contract), { ...contract }),
     new Map<string, Contract>()
@@ -32,17 +29,11 @@ export function getContractKeyFromNFT(nft: NFT) {
   return `${nft.contractAddress.toLowerCase()}-${nft.chainId}`
 }
 
-export function getAuthorizationKey({
-  address,
-  authorizedAddress,
-  contractAddress,
-  chainId
-}: Authorization) {
+export function getAuthorizationKey({ address, authorizedAddress, contractAddress, chainId }: Authorization) {
   return `${address}-${authorizedAddress}-${contractAddress}-${chainId}`
 }
 
-export const STUB_MATIC_COLLECTION_CONTRACT_NAME =
-  'Stub Matic Collection Contract Name'
+export const STUB_MATIC_COLLECTION_CONTRACT_NAME = 'Stub Matic Collection Contract Name'
 
 export function getStubMaticCollectionContract(address: string): Contract {
   return {
@@ -56,21 +47,13 @@ export function getStubMaticCollectionContract(address: string): Contract {
 }
 
 export function isStubMaticCollectionContract(contract: Contract) {
-  return (
-    contract.name === STUB_MATIC_COLLECTION_CONTRACT_NAME &&
-    contract.network === Network.MATIC
-  )
+  return contract.name === STUB_MATIC_COLLECTION_CONTRACT_NAME && contract.network === Network.MATIC
 }
 
-export function getContractByParams(
-  contracts: Contract[],
-  query: Partial<Contract>
-) {
+export function getContractByParams(contracts: Contract[], query: Partial<Contract>) {
   const found = contracts.find(contract =>
     Object.keys(query).every(
-      key =>
-        query[key as keyof Contract]?.toString().toLowerCase() ===
-        contract[key as keyof Contract]?.toString().toLowerCase()
+      key => query[key as keyof Contract]?.toString().toLowerCase() === contract[key as keyof Contract]?.toString().toLowerCase()
     )
   )
 

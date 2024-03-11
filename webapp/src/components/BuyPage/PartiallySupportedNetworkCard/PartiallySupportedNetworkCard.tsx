@@ -10,9 +10,7 @@ import styles from './PartiallySupportedNetworkCard.module.css'
 export const PartiallySupportedNetworkCard = ({ asset }: Props) => (
   <ChainProvider>
     {({ chainId }) =>
-      chainId &&
-      asset.network === Network.MATIC &&
-      getNetwork(chainId) === Network.MATIC ? (
+      chainId && asset.network === Network.MATIC && getNetwork(chainId) === Network.MATIC ? (
         <Card className={styles.card}>
           <Card.Content>
             <p>

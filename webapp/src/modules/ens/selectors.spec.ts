@@ -126,9 +126,7 @@ describe('ENS Selectors', () => {
             from: state.wallet?.data?.address
           } as Transaction
         ]
-        expect(getClaimNameStatus(state)).toBe(
-          AuthorizationStepStatus.PROCESSING
-        )
+        expect(getClaimNameStatus(state)).toBe(AuthorizationStepStatus.PROCESSING)
       })
     })
 

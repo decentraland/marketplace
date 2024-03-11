@@ -1,13 +1,5 @@
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
-import {
-  FETCH_ITEM_SUCCESS,
-  FETCH_ITEMS_SUCCESS,
-  FetchItemsSuccessAction,
-  FetchItemSuccessAction
-} from '../item/actions'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { FETCH_ITEM_SUCCESS, FETCH_ITEMS_SUCCESS, FetchItemsSuccessAction, FetchItemSuccessAction } from '../item/actions'
 import { ListDetails } from '../vendor/decentraland/favorites/types'
 import {
   FETCH_FAVORITED_ITEMS_REQUEST,
@@ -56,10 +48,10 @@ import {
   BULK_PICK_CANCEL,
   BulkPickUnpickStartAction,
   BulkPickUnpickCancelAction,
-  BULK_PICK_START
+  BULK_PICK_START,
+  GET_LIST_REQUEST
 } from './actions'
 import { FavoritesData, List } from './types'
-import { GET_LIST_REQUEST } from './actions'
 
 export type FavoritesState = {
   data: {
@@ -104,10 +96,7 @@ type FavoritesReducerAction =
   | BulkPickUnpickCancelAction
   | CreateListClearAction
 
-export function favoritesReducer(
-  state = INITIAL_STATE,
-  action: FavoritesReducerAction
-): FavoritesState {
+export function favoritesReducer(state = INITIAL_STATE, action: FavoritesReducerAction): FavoritesState {
   switch (action.type) {
     case FETCH_LISTS_REQUEST:
     case GET_LIST_REQUEST:
@@ -137,10 +126,7 @@ export function favoritesReducer(
           ...state.data,
           items: {
             ...state.data.items,
-            [item.id]:
-              state.data.items[item.id] && item.picks
-                ? { ...state.data.items[item.id], ...item.picks }
-                : item.picks
+            [item.id]: state.data.items[item.id] && item.picks ? { ...state.data.items[item.id], ...item.picks } : item.picks
           }
         }
       }
@@ -244,13 +230,7 @@ export function favoritesReducer(
     }
 
     case BULK_PICK_SUCCESS: {
-      const {
-        isPickedByUser,
-        ownerRemovedFromCurrentList,
-        pickedFor,
-        unpickedFrom,
-        item
-      } = action.payload
+      const { isPickedByUser, ownerRemovedFromCurrentList, pickedFor, unpickedFrom, item } = action.payload
 
       const wasPickedBefore = state.data.items[item.id]?.pickedByUser ?? false
       const isNowPicked = isPickedByUser && !ownerRemovedFromCurrentList
@@ -265,18 +245,10 @@ export function favoritesReducer(
         createdAt = Date.now()
       }
       const pickedLists = pickedFor
-        .map(list =>
-          state.data.lists[list.id]
-            ? { ...state.data.lists[list.id], itemsCount: list.itemsCount + 1 }
-            : undefined
-        )
+        .map(list => (state.data.lists[list.id] ? { ...state.data.lists[list.id], itemsCount: list.itemsCount + 1 } : undefined))
         .filter(Boolean) as List[]
       const unpickedLists = unpickedFrom
-        .map(list =>
-          state.data.lists[list.id]
-            ? { ...state.data.lists[list.id], itemsCount: list.itemsCount - 1 }
-            : undefined
-        )
+        .map(list => (state.data.lists[list.id] ? { ...state.data.lists[list.id], itemsCount: list.itemsCount - 1 } : undefined))
         .filter(Boolean) as List[]
 
       return {
@@ -313,9 +285,7 @@ export function favoritesReducer(
             ...state.data.lists,
             [list.id]: {
               ...state.data.lists[list.id],
-              itemsCount: Object.hasOwn(list, 'itemsCount')
-                ? (list as ListDetails).itemsCount
-                : state.data.lists[list.id]?.itemsCount ?? 0,
+              itemsCount: Object.hasOwn(list, 'itemsCount') ? (list as ListDetails).itemsCount : state.data.lists[list.id]?.itemsCount ?? 0,
               ...list
             }
           }

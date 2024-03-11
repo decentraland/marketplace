@@ -1,5 +1,5 @@
 export enum Network {
   GOERLI = 'goerli',
   MAINNET = 'mainnet',
-  SEPOLIA = 'sepolia'  
+  SEPOLIA = 'sepolia'
 }

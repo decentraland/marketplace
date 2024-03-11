@@ -1,7 +1,4 @@
-import {
-  LoadingState,
-  loadingReducer
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { FetchTransactionSuccessAction } from 'decentraland-dapps/dist/modules/transaction/actions'
 import {
   ClaimNameRequestAction,
@@ -46,10 +43,7 @@ export type ENSReducerAction =
   | ClaimNameCrossChainSuccessAction
   | ClaimNameCrossChainFailureAction
 
-export function ensReducer(
-  state: ENSState = INITIAL_STATE,
-  action: ENSReducerAction
-): ENSState {
+export function ensReducer(state: ENSState = INITIAL_STATE, action: ENSReducerAction): ENSState {
   switch (action.type) {
     case CLAIM_NAME_CROSS_CHAIN_REQUEST:
     case CLAIM_NAME_REQUEST: {
@@ -76,9 +70,7 @@ export function ensReducer(
 
     case CLAIM_NAME_CROSS_CHAIN_FAILURE:
     case CLAIM_NAME_FAILURE: {
-      const error = isENSError(action.payload.error)
-        ? action.payload.error
-        : { message: action.payload.error }
+      const error = isENSError(action.payload.error) ? action.payload.error : { message: action.payload.error }
       return {
         ...state,
         loading: loadingReducer(state.loading, action),

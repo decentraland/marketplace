@@ -3,15 +3,8 @@ import { goBack, push } from 'connected-react-router'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../../modules/reducer'
 import { getLoading } from '../../modules/order/selectors'
-import {
-  cancelOrderRequest,
-  CANCEL_ORDER_REQUEST
-} from '../../modules/order/actions'
-import {
-  MapStateProps,
-  MapDispatchProps,
-  MapDispatch
-} from './CancelSalePage.types'
+import { cancelOrderRequest, CANCEL_ORDER_REQUEST } from '../../modules/order/actions'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './CancelSalePage.types'
 import CancelSalePage from './CancelSalePage'
 
 const mapState = (state: RootState): MapStateProps => ({

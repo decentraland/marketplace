@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from 'decentraland-ui'
-import {
-  nftAPI,
-  OwnersFilters,
-  OwnersSortBy
-} from '../../../modules/vendor/decentraland'
+import { nftAPI, OwnersFilters, OwnersSortBy } from '../../../modules/vendor/decentraland'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import emptyOwners from '../../../images/emptyOwners.png'
 import { TableContent } from '../../Table/TableContent'
@@ -29,7 +25,7 @@ const OwnersTable = (props: Props) => {
   useEffect(() => {
     if (asset && asset.itemId) {
       setIsLoading(true)
-      let params: OwnersFilters = {
+      const params: OwnersFilters = {
         contractAddress: asset.contractAddress,
         itemId: asset.itemId,
         first: ROWS_PER_PAGE,

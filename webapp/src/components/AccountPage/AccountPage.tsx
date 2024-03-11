@@ -14,17 +14,8 @@ import { Props } from './AccountPage.types'
 import AccountBanner from './AccountBanner'
 import './AccountPage.css'
 
-const AccountPage = ({
-  addressInUrl,
-  vendor,
-  wallet,
-  isConnecting,
-  isFullscreen,
-  viewAsGuest,
-  onRedirect
-}: Props) => {
-  const isCurrentAccount =
-    (!addressInUrl || wallet?.address === addressInUrl) && !viewAsGuest
+const AccountPage = ({ addressInUrl, vendor, wallet, isConnecting, isFullscreen, viewAsGuest, onRedirect }: Props) => {
+  const isCurrentAccount = (!addressInUrl || wallet?.address === addressInUrl) && !viewAsGuest
   const { pathname, search } = useLocation()
 
   // Redirect to signIn if trying to access current account without a wallet
@@ -38,9 +29,7 @@ const AccountPage = ({
   return (
     <div className="AccountPage">
       <Navbar />
-      <Navigation
-        activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined}
-      />
+      <Navigation activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined} />
       <AddressProvider input={addressInUrl || wallet?.address || ''}>
         {({ address, isLoading, error }) => (
           <>
@@ -57,11 +46,7 @@ const AccountPage = ({
             ) : address ? (
               <>
                 {!isCurrentAccount ? <AccountBanner address={address} /> : null}
-                <AssetBrowse
-                  vendor={vendor}
-                  address={address}
-                  view={isCurrentAccount ? View.CURRENT_ACCOUNT : View.ACCOUNT}
-                />
+                <AssetBrowse vendor={vendor} address={address} view={isCurrentAccount ? View.CURRENT_ACCOUNT : View.ACCOUNT} />
               </>
             ) : null}
           </>

@@ -5,11 +5,7 @@ import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modu
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
-import {
-  fetchNFTRequest,
-  FETCH_NFT_REQUEST,
-  clearNFTErrors
-} from '../../modules/nft/actions'
+import { fetchNFTRequest, FETCH_NFT_REQUEST, clearNFTErrors } from '../../modules/nft/actions'
 import { clearItemErrors, fetchItemRequest } from '../../modules/item/actions'
 import {
   getContractAddress as getNFTContractAddress,
@@ -25,10 +21,7 @@ import {
   getError as getItemsError,
   getData as getItems
 } from '../../modules/item/selectors'
-import {
-  isFetchingRequiredPermissions,
-  isFetchingVideoHash
-} from '../../modules/asset/selectors'
+import { isFetchingRequiredPermissions, isFetchingVideoHash } from '../../modules/asset/selectors'
 import { getData as getOrders } from '../../modules/order/selectors'
 import { getNFT } from '../../modules/nft/utils'
 import { getItem } from '../../modules/item/utils'
@@ -39,12 +32,7 @@ import { getOpenRentalId } from '../../modules/rental/utils'
 import { FetchOneOptions } from '../../modules/vendor'
 import { getContract } from '../../modules/contract/selectors'
 import { ContractName } from '../../modules/vendor/decentraland'
-import {
-  MapDispatch,
-  MapDispatchProps,
-  MapStateProps,
-  OwnProps
-} from './AssetProvider.types'
+import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './AssetProvider.types'
 import AssetProvider from './AssetProvider'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
@@ -91,10 +79,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     network: Network.ETHEREUM
   })
 
-  const isLandOrEstate =
-    !!contractAddress &&
-    (contractAddress === landContract?.address ||
-      contractAddress === estateContract?.address)
+  const isLandOrEstate = !!contractAddress && (contractAddress === landContract?.address || contractAddress === estateContract?.address)
 
   return {
     tokenId,
@@ -102,31 +87,18 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     asset,
     rental,
     order,
-    isLoading: !asset
-      ? isLoading
-      : isFetchingRequiredPermissions(state, asset.id) ||
-        isFetchingVideoHash(state, asset.id),
-    isLoadingFeatureFlags: isLoadingType(
-      getIsLoadingFeatureFlags(state),
-      FETCH_APPLICATION_FEATURES_REQUEST
-    ),
+    isLoading: !asset ? isLoading : isFetchingRequiredPermissions(state, asset.id) || isFetchingVideoHash(state, asset.id),
+    isLoadingFeatureFlags: isLoadingType(getIsLoadingFeatureFlags(state), FETCH_APPLICATION_FEATURES_REQUEST),
     isLandOrEstate,
     error,
     isConnecting: isConnecting(state)
   }
 }
 
-const mapDispatch = (
-  dispatch: MapDispatch,
-  ownProps: OwnProps
-): MapDispatchProps => ({
-  onFetchNFT: (
-    contractAddress: string,
-    tokenId: string,
-    options?: FetchOneOptions
-  ) => dispatch(fetchNFTRequest(contractAddress, tokenId, options)),
-  onFetchItem: (contractAddress: string, tokenId: string) =>
-    dispatch(fetchItemRequest(contractAddress, tokenId)),
+const mapDispatch = (dispatch: MapDispatch, ownProps: OwnProps): MapDispatchProps => ({
+  onFetchNFT: (contractAddress: string, tokenId: string, options?: FetchOneOptions) =>
+    dispatch(fetchNFTRequest(contractAddress, tokenId, options)),
+  onFetchItem: (contractAddress: string, tokenId: string) => dispatch(fetchItemRequest(contractAddress, tokenId)),
   onClearErrors: () => {
     if (ownProps.type === AssetType.ITEM) {
       return dispatch(clearItemErrors())
@@ -136,18 +108,12 @@ const mapDispatch = (
   }
 })
 
-const mergeProps = (
-  stateProps: MapStateProps,
-  dispatchProps: MapDispatchProps,
-  ownProps: OwnProps
-) => ({
+const mergeProps = (stateProps: MapStateProps, dispatchProps: MapDispatchProps, ownProps: OwnProps) => ({
   ...stateProps,
   ...dispatchProps,
   ...ownProps
 })
 
-export default connect(mapState, mapDispatch, mergeProps)(AssetProvider) as <
-  T extends AssetType = AssetType
->(
+export default connect(mapState, mapDispatch, mergeProps)(AssetProvider) as <T extends AssetType = AssetType>(
   props: OwnProps<T>
 ) => JSX.Element

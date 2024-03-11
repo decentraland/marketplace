@@ -12,10 +12,7 @@ export type Props = {
   onBrowse: typeof browse
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'onlyOnSale' | 'onlyOnRent' | 'tiles' | 'ownedLands'
->
+export type MapStateProps = Pick<Props, 'onlyOnSale' | 'onlyOnRent' | 'tiles' | 'ownedLands'>
 
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
 

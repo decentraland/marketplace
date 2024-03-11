@@ -12,9 +12,7 @@ import './VendorMenu.css'
 const VendorMenu = (props: Props) => {
   const { count, currentVendor, address, vendor, section, onClick } = props
 
-  const [isCurrentVendor, setIsCurrentVendor] = useState(
-    currentVendor === vendor
-  )
+  const [isCurrentVendor, setIsCurrentVendor] = useState(currentVendor === vendor)
   const [isOpen, setIsOpen] = useState(isCurrentVendor)
   const [currentCount, setCurrentCount] = useState(count)
 
@@ -50,14 +48,14 @@ const VendorMenu = (props: Props) => {
     currentCount === undefined
       ? '...'
       : currentCount === 0
-      ? t('vendor_menu.no_assets')
-      : currentCount < getMaxQuerySize(vendor)
-      ? t('vendor_menu.assets_count', {
-          count: currentCount.toLocaleString()
-        })
-      : t('vendor_menu.more_than_assets_count', {
-          count: currentCount.toLocaleString()
-        })
+        ? t('vendor_menu.no_assets')
+        : currentCount < getMaxQuerySize(vendor)
+          ? t('vendor_menu.assets_count', {
+              count: currentCount.toLocaleString()
+            })
+          : t('vendor_menu.more_than_assets_count', {
+              count: currentCount.toLocaleString()
+            })
 
   const className = ['VendorMenu']
   if (isCurrentVendor) {
@@ -70,20 +68,8 @@ const VendorMenu = (props: Props) => {
   return (
     <div className={className.join(' ')}>
       <Menu>
-        <MenuItem
-          className="vendor-menu-item"
-          value={vendor}
-          subtitle={subtitle}
-          image={`/${vendor}.png`}
-          onClick={handleToggleOpen}
-        />
-        {isOpen ? (
-          <NFTSections
-            vendor={vendor}
-            section={isCurrentVendor ? section : undefined}
-            onSectionClick={onClick}
-          />
-        ) : null}
+        <MenuItem className="vendor-menu-item" value={vendor} subtitle={subtitle} image={`/${vendor}.png`} onClick={handleToggleOpen} />
+        {isOpen ? <NFTSections vendor={vendor} section={isCurrentVendor ? section : undefined} onSectionClick={onClick} /> : null}
       </Menu>
     </div>
   )

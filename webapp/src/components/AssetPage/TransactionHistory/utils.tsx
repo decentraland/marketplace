@@ -18,21 +18,14 @@ const formatEventDate = (updatedAt: number) => {
     : formatDistanceToNow(newUpdatedAt, { addSuffix: true })
 }
 
-export const formatDataToTable = (
-  sales: Sale[],
-  isMobile = false
-): DataTableType[] => {
+export const formatDataToTable = (sales: Sale[], isMobile = false): DataTableType[] => {
   return sales?.map((sale: Sale) => {
     const value: DataTableType = {
       ...(!isMobile && {
-        [t('transaction_history.from')]: (
-          <LinkedProfile address={sale.seller} className="linkedProfile" />
-        )
+        [t('transaction_history.from')]: <LinkedProfile address={sale.seller} className="linkedProfile" />
       }),
       ...(!isMobile && {
-        [t('transaction_history.to')]: (
-          <LinkedProfile address={sale.buyer} className="linkedProfile" />
-        )
+        [t('transaction_history.to')]: <LinkedProfile address={sale.buyer} className="linkedProfile" />
       }),
       [t('transaction_history.type')]: t(`global.${sale.type}`),
       [t('transaction_history.when')]: formatEventDate(sale.timestamp),

@@ -27,19 +27,12 @@ export type Props = {
 
 export type MapStateProps = Pick<Props, 'elements' | 'isLoading' | 'wallet'>
 
-export type OwnProps = Pick<
-  Props,
-  'onSaleOrRentType' | 'address' | 'isCurrentAccount'
->
+export type OwnProps = Pick<Props, 'onSaleOrRentType' | 'address' | 'isCurrentAccount'>
 
-export function isOnSaleListElementProps(
-  element: OnSaleListElementProps | OnRentListElementProps
-): element is OnSaleListElementProps {
+export function isOnSaleListElementProps(element: OnSaleListElementProps | OnRentListElementProps): element is OnSaleListElementProps {
   return 'order' in element
 }
 
 export type MapDispatchProps = Pick<Props, 'onFetchAuthorizations' | 'onRevoke'>
 
-export type MapDispatch = Dispatch<
-  FetchAuthorizationsRequestAction | RevokeTokenRequestAction
->
+export type MapDispatch = Dispatch<FetchAuthorizationsRequestAction | RevokeTokenRequestAction>

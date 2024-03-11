@@ -13,12 +13,5 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  | 'vendor'
-  | 'isFullscreen'
-  | 'assetType'
-  | 'section'
-  | 'isCampaignCollectiblesBannerEnabled'
-  | 'contracts'
+  'vendor' | 'isFullscreen' | 'assetType' | 'section' | 'isCampaignCollectiblesBannerEnabled' | 'contracts'
 >
-export type MapDispatchProps = {}
-export type MapDispatch = {}

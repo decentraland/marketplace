@@ -3,17 +3,12 @@ import { ethers } from 'ethers'
 import { Contract, NFTCategory } from '@dcl/schemas'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
+import { withAuthorizedAction, ChainButton } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { ContractName } from 'decentraland-transactions'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import { ChainButton } from 'decentraland-dapps/dist/containers'
-import {
-  getRentalEndDate,
-  hasRentalEnded,
-  isRentalListingExecuted
-} from '../../../modules/rental/utils'
+import { getRentalEndDate, hasRentalEnded, isRentalListingExecuted } from '../../../modules/rental/utils'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { parseMANANumber } from '../../../lib/mana'
 import { AssetAction } from '../../AssetAction'
@@ -31,16 +26,7 @@ import { Props } from './BidModal.types'
 import './BidModal.css'
 
 const BidModal = (props: Props) => {
-  const {
-    nft,
-    rental,
-    wallet,
-    onNavigate,
-    onPlaceBid,
-    isPlacingBid,
-    isLoadingAuthorization,
-    getContract
-  } = props
+  const { nft, rental, wallet, onNavigate, onPlaceBid, isPlacingBid, isLoadingAuthorization, getContract } = props
 
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
@@ -50,13 +36,7 @@ const BidModal = (props: Props) => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
   const handlePlaceBid = useCallback(
-    () =>
-      onPlaceBid(
-        nft,
-        parseMANANumber(price),
-        +new Date(`${expiresAt} 00:00:00`),
-        fingerprint
-      ),
+    () => onPlaceBid(nft, parseMANANumber(price), +new Date(`${expiresAt} 00:00:00`), fingerprint),
     [nft, price, expiresAt, fingerprint, onPlaceBid]
   )
 
@@ -96,10 +76,7 @@ const BidModal = (props: Props) => {
 
   const isInvalidPrice = parseMANANumber(price) <= 0
   const isInvalidDate = +new Date(`${expiresAt} 00:00:00`) < Date.now()
-  const hasInsufficientMANA =
-    !!price &&
-    !!wallet &&
-    parseMANANumber(price) > wallet.networks[nft.network].mana
+  const hasInsufficientMANA = !!price && !!wallet && parseMANANumber(price) > wallet.networks[nft.network].mana
 
   const isDisabled =
     isOwnedBy(nft, wallet) ||
@@ -123,10 +100,7 @@ const BidModal = (props: Props) => {
             }}
           />
         </p>
-        {isLand(nft) &&
-        rental &&
-        isRentalListingExecuted(rental) &&
-        !hasRentalEnded(rental) ? (
+        {isLand(nft) && rental && isRentalListingExecuted(rental) && !hasRentalEnded(rental) ? (
           <div className="rentalMessage">
             <T
               id="bid_page.rental_executed"
@@ -149,18 +123,14 @@ const BidModal = (props: Props) => {
               onChange={(_event, props) => {
                 setPrice(toFixedMANAValue(props.value))
               }}
-              message={
-                hasInsufficientMANA ? t('bid_page.not_enougn_mana') : undefined
-              }
+              message={hasInsufficientMANA ? t('bid_page.not_enougn_mana') : undefined}
             />
             <Field
               network={nft.network}
               label={t('bid_page.expiration_date')}
               type="date"
               value={expiresAt}
-              onChange={(_event, props) =>
-                setExpiresAt(props.value || getDefaultExpirationDate())
-              }
+              onChange={(_event, props) => setExpiresAt(props.value || getDefaultExpirationDate())}
               error={isInvalidDate}
               message={isInvalidDate ? t('bid_page.invalid_date') : undefined}
             />
@@ -172,19 +142,11 @@ const BidModal = (props: Props) => {
             <Button
               as="div"
               disabled={isLoadingFingerprint || isPlacingBid}
-              onClick={() =>
-                onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
-              }
+              onClick={() => onNavigate(locations.nft(nft.contractAddress, nft.tokenId))}
             >
               {t('global.cancel')}
             </Button>
-            <ChainButton
-              type="submit"
-              primary
-              loading={isPlacingBid}
-              disabled={isDisabled}
-              chainId={nft.chainId}
-            >
+            <ChainButton type="submit" primary loading={isPlacingBid} disabled={isDisabled} chainId={nft.chainId}>
               {t('bid_page.submit')}
             </ChainButton>
           </div>

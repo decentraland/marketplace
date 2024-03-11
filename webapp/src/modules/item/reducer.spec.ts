@@ -1,9 +1,6 @@
 import { ChainId, Item, Network } from '@dcl/schemas'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import {
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { View } from '../ui/types'
@@ -205,12 +202,7 @@ describe('when reducing the successful action of fetching items', () => {
       newItemData = {
         minPrice: '1234'
       } as Item
-      successAction = fetchItemsSuccess(
-        [{ ...item, ...newItemData }],
-        1,
-        itemBrowseOptions,
-        223423423
-      )
+      successAction = fetchItemsSuccess([{ ...item, ...newItemData }], 1, itemBrowseOptions, 223423423)
       initialState = {
         ...INITIAL_STATE,
         data: { anotherId: anotherItem, [item.id]: item },
@@ -228,37 +220,15 @@ describe('when reducing the successful action of fetching items', () => {
 })
 
 describe.each([
-  [
-    FETCH_COLLECTION_ITEMS_SUCCESS,
-    fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }),
-    fetchCollectionItemsSuccess([item])
-  ],
+  [FETCH_COLLECTION_ITEMS_SUCCESS, fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }), fetchCollectionItemsSuccess([item])],
   [GET_LIST_SUCCESS, getListRequest(item.id), getListSuccess(list, [item])],
-  [
-    FETCH_LISTS_SUCCESS,
-    fetchListsRequest(listsBrowseOptions),
-    fetchListsSuccess([list], [item], 1, listsBrowseOptions)
-  ],
-  [
-    FETCH_ITEM_SUCCESS,
-    fetchItemRequest(item.contractAddress, item.itemId),
-    fetchItemSuccess(item)
-  ],
-  [
-    FETCH_TRENDING_ITEMS_SUCCESS,
-    fetchTrendingItemsRequest(trendingItemsBatchSize),
-    fetchTrendingItemsSuccess([item])
-  ],
+  [FETCH_LISTS_SUCCESS, fetchListsRequest(listsBrowseOptions), fetchListsSuccess([list], [item], 1, listsBrowseOptions)],
+  [FETCH_ITEM_SUCCESS, fetchItemRequest(item.contractAddress, item.itemId), fetchItemSuccess(item)],
+  [FETCH_TRENDING_ITEMS_SUCCESS, fetchTrendingItemsRequest(trendingItemsBatchSize), fetchTrendingItemsSuccess([item])],
   [
     FETCH_FAVORITED_ITEMS_SUCCESS,
     fetchFavoritedItemsRequest({}),
-    fetchFavoritedItemsSuccess(
-      [item],
-      { [item.id]: Date.now() },
-      1,
-      {},
-      Date.now()
-    )
+    fetchFavoritedItemsSuccess([item], { [item.id]: Date.now() }, 1, {}, Date.now())
   ]
 ])('when reducing the %s action', (_action, requestAction, successAction) => {
   const initialState = {
@@ -349,8 +319,6 @@ describe('when reducing a clear item errors action', () => {
   })
 
   it('should set the error field as null', () => {
-    expect(itemReducer(state, clearItemErrors())).toEqual(
-      expect.objectContaining({ error: null })
-    )
+    expect(itemReducer(state, clearItemErrors())).toEqual(expect.objectContaining({ error: null }))
   })
 })

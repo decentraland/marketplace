@@ -5,24 +5,14 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { Item } from '@dcl/schemas'
 import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
-import {
-  CLOSE_MODAL,
-  closeModal,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
+import { CLOSE_MODAL, closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { ItemAPI } from '../vendor/decentraland/item/api'
-import {
-  ListDetails,
-  ListOfLists,
-  ListsSortBy,
-  Permission,
-  UpdateOrCreateList
-} from '../vendor/decentraland/favorites/types'
+import { ListDetails, ListOfLists, ListsSortBy, Permission, UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
@@ -61,20 +51,9 @@ import {
   updateListSuccess
 } from './actions'
 import { favoritesSaga } from './sagas'
-import {
-  getList,
-  getListId,
-  isOwnerUnpickingFromCurrentList
-} from './selectors'
+import { getList, getListId, isOwnerUnpickingFromCurrentList } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
-import {
-  CreateListParameters,
-  FavoritedItems,
-  List,
-  ListsBrowseOptions,
-  ListsBrowseSortBy,
-  UpdateListParameters
-} from './types'
+import { CreateListParameters, FavoritedItems, List, ListsBrowseOptions, ListsBrowseSortBy, UpdateListParameters } from './types'
 
 let item: Item
 let address: string
@@ -138,10 +117,7 @@ describe('when handling the request for fetching favorited items', () => {
             [select(getAddress), address],
             [select(getIsMarketplaceServerEnabled), true],
             [call(getAccountIdentity), Promise.resolve()],
-            [
-              matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-              Promise.reject(error)
-            ]
+            [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), Promise.reject(error)]
           ])
           .call.like({
             fn: FavoritesAPI.prototype.getPicksByList,
@@ -178,14 +154,8 @@ describe('when handling the request for fetching favorited items', () => {
                   [select(getIsMarketplaceServerEnabled), isMarketplaceFFOn],
                   [select(getAddress), address],
                   [call(getAccountIdentity), Promise.resolve()],
-                  [
-                    matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-                    Promise.resolve({ results: favoritedItemIds, total })
-                  ],
-                  [
-                    matchers.call.fn(CatalogAPI.prototype.get),
-                    Promise.reject(error)
-                  ]
+                  [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), Promise.resolve({ results: favoritedItemIds, total })],
+                  [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(error)]
                 ])
                 .call.like({
                   fn: CatalogAPI.prototype.get,
@@ -216,14 +186,8 @@ describe('when handling the request for fetching favorited items', () => {
                   [select(getIsMarketplaceServerEnabled), isMarketplaceFFOn],
                   [select(getAddress), address],
                   [call(getAccountIdentity), Promise.resolve()],
-                  [
-                    matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-                    Promise.resolve({ results: favoritedItemIds, total })
-                  ],
-                  [
-                    matchers.call.fn(CatalogAPI.prototype.get),
-                    Promise.reject(error)
-                  ]
+                  [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), Promise.resolve({ results: favoritedItemIds, total })],
+                  [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(error)]
                 ])
                 .call.like({
                   fn: CatalogAPI.prototype.get,
@@ -257,14 +221,8 @@ describe('when handling the request for fetching favorited items', () => {
                 [select(getAddress), address],
                 [select(getIsMarketplaceServerEnabled), true],
                 [call(getAccountIdentity), Promise.resolve()],
-                [
-                  matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-                  Promise.resolve({ results: favoritedItemIds, total })
-                ],
-                [
-                  matchers.call.fn(CatalogAPI.prototype.get),
-                  Promise.resolve({ data: [item] })
-                ]
+                [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), Promise.resolve({ results: favoritedItemIds, total })],
+                [matchers.call.fn(CatalogAPI.prototype.get), Promise.resolve({ data: [item] })]
               ])
               .call.like({
                 fn: FavoritesAPI.prototype.getPicksByList,
@@ -312,10 +270,7 @@ describe('when handling the request for fetching favorited items', () => {
               [select(getAddress), address],
               [select(getIsMarketplaceServerEnabled), true],
               [call(getAccountIdentity), Promise.resolve()],
-              [
-                matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-                { results: favoritedItemIds, total }
-              ]
+              [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), { results: favoritedItemIds, total }]
             ])
             .call.like({
               fn: FavoritesAPI.prototype.getPicksByList,
@@ -352,10 +307,7 @@ describe('when handling the request for fetching favorited items', () => {
             [select(getListId), listId],
             [select(getAddress), null],
             [select(getIsMarketplaceServerEnabled), true],
-            [
-              matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-              Promise.reject(error)
-            ]
+            [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), Promise.reject(error)]
           ])
           .call.like({
             fn: FavoritesAPI.prototype.getPicksByList,
@@ -386,14 +338,8 @@ describe('when handling the request for fetching favorited items', () => {
                 [select(getListId), listId],
                 [select(getAddress), null],
                 [select(getIsMarketplaceServerEnabled), true],
-                [
-                  matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-                  Promise.resolve({ results: favoritedItemIds, total })
-                ],
-                [
-                  matchers.call.fn(CatalogAPI.prototype.get),
-                  Promise.reject(error)
-                ]
+                [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), Promise.resolve({ results: favoritedItemIds, total })],
+                [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(error)]
               ])
               .call.like({
                 fn: CatalogAPI.prototype.get,
@@ -425,14 +371,8 @@ describe('when handling the request for fetching favorited items', () => {
                 [select(getListId), listId],
                 [select(getAddress), null],
                 [select(getIsMarketplaceServerEnabled), true],
-                [
-                  matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-                  Promise.resolve({ results: favoritedItemIds, total })
-                ],
-                [
-                  matchers.call.fn(CatalogAPI.prototype.get),
-                  Promise.resolve({ data: [item] })
-                ]
+                [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), Promise.resolve({ results: favoritedItemIds, total })],
+                [matchers.call.fn(CatalogAPI.prototype.get), Promise.resolve({ data: [item] })]
               ])
               .call.like({
                 fn: FavoritesAPI.prototype.getPicksByList,
@@ -479,10 +419,7 @@ describe('when handling the request for fetching favorited items', () => {
               [select(getListId), listId],
               [select(getAddress), null],
               [select(getIsMarketplaceServerEnabled), true],
-              [
-                matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-                { results: favoritedItemIds, total }
-              ]
+              [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), { results: favoritedItemIds, total }]
             ])
             .call.like({
               fn: FavoritesAPI.prototype.getPicksByList,
@@ -537,10 +474,7 @@ describe('when handling the request for fetching lists', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.getLists),
-            Promise.reject(error)
-          ]
+          [matchers.call.fn(FavoritesAPI.prototype.getLists), Promise.reject(error)]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.getLists,
@@ -577,17 +511,8 @@ describe('when handling the request for fetching lists', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.getLists),
-            Promise.reject(error)
-          ],
-          [
-            call(
-              convertListsBrowseSortByIntoApiSortBy,
-              options.sortBy ?? ListsBrowseSortBy.NAME_ASC
-            ),
-            convertedSortBy
-          ]
+          [matchers.call.fn(FavoritesAPI.prototype.getLists), Promise.reject(error)],
+          [call(convertListsBrowseSortByIntoApiSortBy, options.sortBy ?? ListsBrowseSortBy.NAME_ASC), convertedSortBy]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.getLists,
@@ -614,10 +539,7 @@ describe('when handling the request for fetching lists', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.getLists),
-            Promise.reject(error)
-          ]
+          [matchers.call.fn(FavoritesAPI.prototype.getLists), Promise.reject(error)]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.getLists,
@@ -664,10 +586,7 @@ describe('when handling the request for fetching lists', () => {
         let items: Item[]
 
         beforeEach(() => {
-          items = [
-            { id: 'anItemId', name: 'anItemName' } as Item,
-            { id: 'anotherItemId', name: 'anotherItemName' } as Item
-          ]
+          items = [{ id: 'anItemId', name: 'anItemName' } as Item, { id: 'anotherItemId', name: 'anotherItemName' } as Item]
         })
 
         describe('and there are no items in the state', () => {
@@ -676,15 +595,9 @@ describe('when handling the request for fetching lists', () => {
               .provide([
                 [call(getAccountIdentity), Promise.resolve()],
                 [select(getIsMarketplaceServerEnabled), true],
-                [
-                  matchers.call.fn(FavoritesAPI.prototype.getLists),
-                  Promise.resolve({ results: lists, total })
-                ],
+                [matchers.call.fn(FavoritesAPI.prototype.getLists), Promise.resolve({ results: lists, total })],
                 [select(getItemsData), {}],
-                [
-                  matchers.call.fn(CatalogAPI.prototype.get),
-                  Promise.resolve({ data: items })
-                ]
+                [matchers.call.fn(CatalogAPI.prototype.get), Promise.resolve({ data: items })]
               ])
               .call.like({
                 fn: FavoritesAPI.prototype.getLists,
@@ -702,10 +615,7 @@ describe('when handling the request for fetching lists', () => {
                 args: [
                   {
                     first: 2,
-                    ids: [
-                      ...lists[0].previewOfItemIds,
-                      ...lists[1].previewOfItemIds
-                    ]
+                    ids: [...lists[0].previewOfItemIds, ...lists[1].previewOfItemIds]
                   }
                 ]
               })
@@ -721,15 +631,9 @@ describe('when handling the request for fetching lists', () => {
               .provide([
                 [call(getAccountIdentity), Promise.resolve()],
                 [select(getIsMarketplaceServerEnabled), true],
-                [
-                  matchers.call.fn(FavoritesAPI.prototype.getLists),
-                  Promise.resolve({ results: lists, total })
-                ],
+                [matchers.call.fn(FavoritesAPI.prototype.getLists), Promise.resolve({ results: lists, total })],
                 [select(getItemsData), { anItemId: items[0] }],
-                [
-                  matchers.call.fn(CatalogAPI.prototype.get),
-                  Promise.resolve({ data: [items[1]] })
-                ]
+                [matchers.call.fn(CatalogAPI.prototype.get), Promise.resolve({ data: [items[1]] })]
               ])
               .call.like({
                 fn: FavoritesAPI.prototype.getLists,
@@ -762,14 +666,8 @@ describe('when handling the request for fetching lists', () => {
             return expectSaga(favoritesSaga, getIdentity)
               .provide([
                 [call(getAccountIdentity), Promise.resolve()],
-                [
-                  matchers.call.fn(FavoritesAPI.prototype.getLists),
-                  Promise.resolve({ results: lists, total })
-                ],
-                [
-                  select(getItemsData),
-                  { [items[0].id]: items[0], [items[1].id]: items[1] }
-                ]
+                [matchers.call.fn(FavoritesAPI.prototype.getLists), Promise.resolve({ results: lists, total })],
+                [select(getItemsData), { [items[0].id]: items[0], [items[1].id]: items[1] }]
               ])
               .call.like({
                 fn: FavoritesAPI.prototype.getLists,
@@ -808,10 +706,7 @@ describe('when handling the request for fetching lists', () => {
               previewOfItemIds: ['anotherItemId']
             }
           ]
-          items = [
-            { id: 'anItemId', name: 'anItemName' } as Item,
-            { id: 'anotherItemId', name: 'anotherItemName' } as Item
-          ]
+          items = [{ id: 'anItemId', name: 'anItemName' } as Item, { id: 'anotherItemId', name: 'anotherItemName' } as Item]
         })
 
         it('should dispatch an action signaling the success of the handled action', () => {
@@ -819,15 +714,9 @@ describe('when handling the request for fetching lists', () => {
             .provide([
               [call(getAccountIdentity), Promise.resolve()],
               [select(getIsMarketplaceServerEnabled), true],
-              [
-                matchers.call.fn(FavoritesAPI.prototype.getLists),
-                Promise.resolve({ results: lists, total })
-              ],
+              [matchers.call.fn(FavoritesAPI.prototype.getLists), Promise.resolve({ results: lists, total })],
               [select(getItemsData), {}],
-              [
-                matchers.call.fn(CatalogAPI.prototype.get),
-                Promise.resolve({ data: items })
-              ]
+              [matchers.call.fn(CatalogAPI.prototype.get), Promise.resolve({ data: items })]
             ])
             .call.like({
               fn: FavoritesAPI.prototype.getLists,
@@ -845,12 +734,7 @@ describe('when handling the request for fetching lists', () => {
               args: [
                 {
                   first: 2,
-                  ids: Array.from(
-                    new Set([
-                      ...lists[0].previewOfItemIds,
-                      ...lists[1].previewOfItemIds
-                    ])
-                  )
+                  ids: Array.from(new Set([...lists[0].previewOfItemIds, ...lists[1].previewOfItemIds]))
                 }
               ]
             })
@@ -867,10 +751,7 @@ describe('when handling the request for fetching lists', () => {
           .provide([
             [call(getAccountIdentity), Promise.resolve()],
             [select(getIsMarketplaceServerEnabled), true],
-            [
-              matchers.call.fn(FavoritesAPI.prototype.getLists),
-              Promise.resolve({ results: lists, total })
-            ],
+            [matchers.call.fn(FavoritesAPI.prototype.getLists), Promise.resolve({ results: lists, total })],
             [select(getItemsData), {}],
             [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(error)]
           ])
@@ -890,10 +771,7 @@ describe('when handling the request for fetching lists', () => {
             args: [
               {
                 first: 2,
-                ids: [
-                  ...lists[0].previewOfItemIds,
-                  ...lists[1].previewOfItemIds
-                ]
+                ids: [...lists[0].previewOfItemIds, ...lists[1].previewOfItemIds]
               }
             ]
           })
@@ -976,10 +854,7 @@ describe('when handling the request for deleting a list', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.deleteList),
-            Promise.reject(error)
-          ]
+          [matchers.call.fn(FavoritesAPI.prototype.deleteList), Promise.reject(error)]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.deleteList,
@@ -996,10 +871,7 @@ describe('when handling the request for deleting a list', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.deleteList),
-            Promise.resolve()
-          ],
+          [matchers.call.fn(FavoritesAPI.prototype.deleteList), Promise.resolve()],
           [select(getLocation), { pathname: locations.lists() }]
         ])
         .call.like({
@@ -1061,12 +933,7 @@ describe('when handling the request for getting a list', () => {
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [
-            matchers.call.fn(FavoritesAPI.prototype.getList),
-            Promise.reject(error)
-          ]
-        ])
+        .provide([[matchers.call.fn(FavoritesAPI.prototype.getList), Promise.reject(error)]])
         .call.like({
           fn: FavoritesAPI.prototype.getList,
           args: [list.id]
@@ -1093,16 +960,10 @@ describe('when handling the request for getting a list', () => {
       it('should dispatch an action signaling the success of the handled action with the received list and items', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
-            [
-              matchers.call.fn(FavoritesAPI.prototype.getList),
-              Promise.resolve(list)
-            ],
+            [matchers.call.fn(FavoritesAPI.prototype.getList), Promise.resolve(list)],
             [select(getIsMarketplaceServerEnabled), true],
             [select(getItemsData), {}],
-            [
-              matchers.call.fn(CatalogAPI.prototype.get),
-              Promise.resolve({ data: items })
-            ]
+            [matchers.call.fn(CatalogAPI.prototype.get), Promise.resolve({ data: items })]
           ])
           .call.like({
             fn: FavoritesAPI.prototype.getList,
@@ -1138,16 +999,10 @@ describe('when handling the request for getting a list', () => {
       it('should dispatch an action signaling the success of the handled action with the received list and the items that are not in the state', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
-            [
-              matchers.call.fn(FavoritesAPI.prototype.getList),
-              Promise.resolve(list)
-            ],
+            [matchers.call.fn(FavoritesAPI.prototype.getList), Promise.resolve(list)],
             [select(getIsMarketplaceServerEnabled), true],
             [select(getItemsData), { anotherItemId: {} }],
-            [
-              matchers.call.fn(CatalogAPI.prototype.get),
-              Promise.resolve({ data: items })
-            ]
+            [matchers.call.fn(CatalogAPI.prototype.get), Promise.resolve({ data: items })]
           ])
           .call.like({
             fn: FavoritesAPI.prototype.getList,
@@ -1196,12 +1051,7 @@ describe('when handling the request for updating a list', () => {
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [
-            matchers.call.fn(FavoritesAPI.prototype.updateList),
-            Promise.reject(error)
-          ]
-        ])
+        .provide([[matchers.call.fn(FavoritesAPI.prototype.updateList), Promise.reject(error)]])
         .call.like({
           fn: FavoritesAPI.prototype.updateList,
           args: [updatedList.id, listToUpdate]
@@ -1215,12 +1065,7 @@ describe('when handling the request for updating a list', () => {
   describe('and the call to the favorites api succeeds', () => {
     it('should dispatch an action signaling the success of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [
-            matchers.call.fn(FavoritesAPI.prototype.updateList),
-            Promise.resolve(updatedList)
-          ]
-        ])
+        .provide([[matchers.call.fn(FavoritesAPI.prototype.updateList), Promise.resolve(updatedList)]])
         .call.like({
           fn: FavoritesAPI.prototype.updateList,
           args: [updatedList.id, listToUpdate]
@@ -1274,10 +1119,7 @@ describe('when handling the request for creating a list', () => {
         .provide([
           [select(getLocation), { pathname: locations.lists() }],
           [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.createList),
-            Promise.reject(error)
-          ]
+          [matchers.call.fn(FavoritesAPI.prototype.createList), Promise.reject(error)]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.createList,
@@ -1296,10 +1138,7 @@ describe('when handling the request for creating a list', () => {
           .provide([
             [select(getLocation), { pathname: locations.lists() }],
             [call(getAccountIdentity), Promise.resolve()],
-            [
-              matchers.call.fn(FavoritesAPI.prototype.createList),
-              Promise.resolve(returnedList)
-            ]
+            [matchers.call.fn(FavoritesAPI.prototype.createList), Promise.resolve(returnedList)]
           ])
           .call.like({
             fn: FavoritesAPI.prototype.createList,
@@ -1318,10 +1157,7 @@ describe('when handling the request for creating a list', () => {
           .provide([
             [select(getLocation), { pathname: locations.browse() }],
             [call(getAccountIdentity), Promise.resolve()],
-            [
-              matchers.call.fn(FavoritesAPI.prototype.createList),
-              Promise.resolve(returnedList)
-            ]
+            [matchers.call.fn(FavoritesAPI.prototype.createList), Promise.resolve(returnedList)]
           ])
           .call.like({
             fn: FavoritesAPI.prototype.createList,
@@ -1498,10 +1334,7 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
           [call(getAccountIdentity), Promise.resolve()],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick),
-            Promise.reject(error)
-          ]
+          [matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick), Promise.reject(error)]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.bulkPickUnpick,
@@ -1519,10 +1352,7 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
         .provide([
           [call(getAccountIdentity), Promise.resolve()],
           [select(isOwnerUnpickingFromCurrentList, [sndList]), true],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick),
-            Promise.resolve({ pickedByUser: true })
-          ]
+          [matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick), Promise.resolve({ pickedByUser: true })]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.bulkPickUnpick,

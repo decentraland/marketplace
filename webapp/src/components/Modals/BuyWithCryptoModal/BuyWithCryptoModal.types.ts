@@ -8,18 +8,9 @@ import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/Moda
 import { Asset } from '../../../modules/asset/types'
 import { CrossChainRoute, GasCost } from './hooks'
 
-export type MapStateProps = Pick<
-  Props,
-  | 'wallet'
-  | 'isBuyWithCardPage'
-  | 'isSwitchingNetwork'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork'>
 export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork'>
-export type OnGetGasCost = (
-  selectedToken: Token,
-  nativeChainToken: Token | undefined,
-  wallet: Wallet | null
-) => GasCost
+export type OnGetGasCost = (selectedToken: Token, nativeChainToken: Token | undefined, wallet: Wallet | null) => GasCost
 export type OnGetCrossChainRoute = (
   selectedToken: Token,
   selectedChain: ChainId,
@@ -28,11 +19,12 @@ export type OnGetCrossChainRoute = (
   wallet: Wallet | null
 ) => CrossChainRoute
 
-export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & Omit<ModalProps, 'metadata'> & {
-    price: string,
+export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> &
+  Omit<ModalProps, 'metadata'> & {
+    price: string
     wallet: Wallet | null
     metadata: { asset: Asset }
-    isBuyingAsset: boolean,
+    isBuyingAsset: boolean
     isSwitchingNetwork: boolean
     isBuyWithCardPage: boolean
     onGetCrossChainRoute: OnGetCrossChainRoute
@@ -48,13 +40,5 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> & 
 
 export type OwnProps = Pick<
   Props,
-  | 'price'
-  | 'isBuyingAsset'
-  | 'metadata'
-  | 'onBuyNatively'
-  | 'onBuyWithCard'
-  | 'onBuyCrossChain'
-  | 'onClose'
-  | 'onGetGasCost'
-  | 'onGoBack'
+  'price' | 'isBuyingAsset' | 'metadata' | 'onBuyNatively' | 'onBuyWithCard' | 'onBuyCrossChain' | 'onClose' | 'onGetGasCost' | 'onGoBack'
 >

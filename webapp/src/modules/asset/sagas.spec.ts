@@ -3,10 +3,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { Network } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
-import {
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
@@ -24,10 +21,7 @@ import {
   fetchSmartWearableVideoHashRequest,
   fetchSmartWearableVideoHashSuccess
 } from './actions'
-import {
-  getSmartWearableRequiredPermissions,
-  getSmartWearableVideoShowcase
-} from '../../lib/asset'
+import { getSmartWearableRequiredPermissions, getSmartWearableVideoShowcase } from '../../lib/asset'
 
 import util from 'util'
 util.inspect.defaultOptions.depth = null
@@ -37,13 +31,7 @@ const mockTokenId = 'aTokenId'
 const mockTradeType = TradeType.PRIMARY
 
 const mockPathname = (assetType: AssetType = AssetType.ITEM) =>
-  new URL(
-    `${window.origin}${locations.buyWithCard(
-      assetType,
-      mockContractAddress,
-      mockTokenId
-    )}`
-  ).pathname
+  new URL(`${window.origin}${locations.buyWithCard(assetType, mockContractAddress, mockTokenId)}`).pathname
 
 const mockNFTPurchase: NFTPurchase = {
   address: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
@@ -76,15 +64,7 @@ describe('when handling the set purchase action', () => {
               }
             ]
           ])
-          .put(
-            push(
-              locations.buyStatusPage(
-                AssetType.ITEM,
-                mockContractAddress,
-                mockTokenId
-              )
-            )
-          )
+          .put(push(locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId)))
           .dispatch(setPurchase(mockNFTPurchase))
           .run({ silenceTimeout: true })
       })
@@ -97,23 +77,11 @@ describe('when handling the set purchase action', () => {
             [
               select(getLocation),
               {
-                pathname: locations.buyStatusPage(
-                  AssetType.ITEM,
-                  mockContractAddress,
-                  mockTokenId
-                )
+                pathname: locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId)
               }
             ]
           ])
-          .put(
-            push(
-              locations.buyStatusPage(
-                AssetType.ITEM,
-                mockContractAddress,
-                mockTokenId
-              )
-            )
-          )
+          .put(push(locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId)))
           .dispatch(setPurchase(mockNFTPurchase))
           .run({ silenceTimeout: true })
       })
@@ -158,11 +126,7 @@ describe('when handling the set purchase action', () => {
     })
   })
 
-  describe.each([
-    PurchaseStatus.FAILED,
-    PurchaseStatus.CANCELLED,
-    PurchaseStatus.REFUNDED
-  ])(
+  describe.each([PurchaseStatus.FAILED, PurchaseStatus.CANCELLED, PurchaseStatus.REFUNDED])(
     'when the purchase of an item has a status %s',
     (status: PurchaseStatus) => {
       it('should dispatch an action signaling the failure of the item', () => {
@@ -176,72 +140,53 @@ describe('when handling the set purchase action', () => {
             ]
           ])
           .put(buyItemWithCardFailure(t('global.unknown_error')))
-          .put(
-            push(
-              locations.buyWithCard(
-                AssetType.ITEM,
-                mockContractAddress,
-                mockTokenId
-              )
-            )
-          )
+          .put(push(locations.buyWithCard(AssetType.ITEM, mockContractAddress, mockTokenId)))
           .dispatch(setPurchase({ ...mockNFTPurchase, status }))
           .run({ silenceTimeout: true })
       })
     }
   )
 
-  describe.each(failStatuses)(
-    'when the purchase of an nft has a status %s',
-    status => {
-      it('should dispatch an action signaling the failure of the nft', () => {
-        return expectSaga(assetSaga)
-          .provide([
-            [
-              select(getLocation),
-              {
-                pathname: mockPathname(AssetType.NFT)
-              }
-            ]
-          ])
-          .put(executeOrderWithCardFailure(t('global.unknown_error')))
-          .put(
-            push(
-              locations.buyWithCard(
-                AssetType.NFT,
-                mockContractAddress,
-                mockTokenId
-              )
-            )
-          )
-          .dispatch(
-            setPurchase({
-              ...mockNFTPurchase,
-              status,
-              nft: {
-                ...mockNFTPurchase.nft,
-                tokenId: mockTokenId,
-                itemId: undefined,
-                tradeType: TradeType.SECONDARY
-              }
-            })
-          )
-          .run({ silenceTimeout: true })
-      })
-    }
-  )
+  describe.each(failStatuses)('when the purchase of an nft has a status %s', status => {
+    it('should dispatch an action signaling the failure of the nft', () => {
+      return expectSaga(assetSaga)
+        .provide([
+          [
+            select(getLocation),
+            {
+              pathname: mockPathname(AssetType.NFT)
+            }
+          ]
+        ])
+        .put(executeOrderWithCardFailure(t('global.unknown_error')))
+        .put(push(locations.buyWithCard(AssetType.NFT, mockContractAddress, mockTokenId)))
+        .dispatch(
+          setPurchase({
+            ...mockNFTPurchase,
+            status,
+            nft: {
+              ...mockNFTPurchase.nft,
+              tokenId: mockTokenId,
+              itemId: undefined,
+              tradeType: TradeType.SECONDARY
+            }
+          })
+        )
+        .run({ silenceTimeout: true })
+    })
+  })
 })
 
 describe('when handling the fetch smart wearable required permissions request action', () => {
   let asset: Asset
 
   beforeEach(() => {
-    asset = ({
+    asset = {
       id: 'anId',
       name: 'aName',
       description: 'aDescription',
       data: {}
-    } as unknown) as Asset
+    } as unknown as Asset
   })
 
   describe('when the asset is not smart wearable', () => {
@@ -291,15 +236,8 @@ describe('when handling the fetch smart wearable required permissions request ac
       const anErrorMessage = 'An error'
       it('should dispatch an action signaling the failure of the request', () => {
         return expectSaga(assetSaga)
-          .provide([
-            [
-              call(getSmartWearableRequiredPermissions, urn),
-              Promise.reject(new Error(anErrorMessage))
-            ]
-          ])
-          .put(
-            fetchSmartWearableRequiredPermissionsFailure(asset, anErrorMessage)
-          )
+          .provide([[call(getSmartWearableRequiredPermissions, urn), Promise.reject(new Error(anErrorMessage))]])
+          .put(fetchSmartWearableRequiredPermissionsFailure(asset, anErrorMessage))
           .dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
           .run({ silenceTimeout: true })
       })
@@ -321,12 +259,12 @@ describe('when handling the fetch smart wearable video hash request action', () 
   let asset: Asset
 
   beforeEach(() => {
-    asset = ({
+    asset = {
       id: 'anId',
       name: 'aName',
       description: 'aDescription',
       data: {}
-    } as unknown) as Asset
+    } as unknown as Asset
   })
 
   describe('when the asset is not smart wearable', () => {
@@ -376,12 +314,7 @@ describe('when handling the fetch smart wearable video hash request action', () 
       const anErrorMessage = 'An error'
       it('should dispatch an action signaling the failure of the request', () => {
         return expectSaga(assetSaga)
-          .provide([
-            [
-              call(getSmartWearableVideoShowcase, asset),
-              Promise.reject(new Error(anErrorMessage))
-            ]
-          ])
+          .provide([[call(getSmartWearableVideoShowcase, asset), Promise.reject(new Error(anErrorMessage))]])
           .put(fetchSmartWearableVideoHashFailure(asset, anErrorMessage))
           .dispatch(fetchSmartWearableVideoHashRequest(asset))
           .run({ silenceTimeout: true })

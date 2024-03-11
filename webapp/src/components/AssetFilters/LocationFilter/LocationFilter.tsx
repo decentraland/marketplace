@@ -1,17 +1,11 @@
 import { useCallback, useMemo } from 'react'
-import {
-  Box,
-  CheckboxProps,
-  Checkbox,
-  useTabletAndBelowMediaQuery,
-  SliderField
-} from 'decentraland-ui'
+import { Box, CheckboxProps, Checkbox, useTabletAndBelowMediaQuery, SliderField } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import styles from './LocationFilter.module.css'
 import classNames from 'classnames'
 
-export const DISTANCE_TO_PLAZA_MIN = 1;
-export const DISTANCE_TO_PLAZA_MAX = 10;
+export const DISTANCE_TO_PLAZA_MIN = 1
+export const DISTANCE_TO_PLAZA_MAX = 10
 
 export type LocationFilterProps = {
   adjacentToRoad?: boolean
@@ -48,7 +42,7 @@ export const LocationFilter = ({
 
   const handleToggleDistanceFilter = useCallback(
     (_evt, props: CheckboxProps) => {
-      if (!!props.checked) {
+      if (props.checked) {
         onDistanceToPlazaChange([DISTANCE_TO_PLAZA_MIN.toString(), DISTANCE_TO_PLAZA_MAX.toString()])
       } else {
         onDistanceToPlazaChange(['', ''])
@@ -62,15 +56,13 @@ export const LocationFilter = ({
       return t('nft_filters.all_locations')
     }
 
-    let locationTexts = []
+    const locationTexts = []
     if (adjacentToRoad) {
       locationTexts.push(t('nft_filters.adjacent_to_road'))
     }
 
     if (minDistanceToPlaza || maxDistanceToPlaza) {
-      locationTexts.push(
-        t('nft_filters.distance_to_plaza.title')
-      )
+      locationTexts.push(t('nft_filters.distance_to_plaza.title'))
     }
 
     return locationTexts.join(', ')
@@ -94,7 +86,7 @@ export const LocationFilter = ({
   return (
     <Box
       header={header}
-      className={classNames("filters-sidebar-box", styles.locationContainer)}
+      className={classNames('filters-sidebar-box', styles.locationContainer)}
       collapsible
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
@@ -122,16 +114,8 @@ export const LocationFilter = ({
           max={DISTANCE_TO_PLAZA_MAX}
           onChange={handleDistanceToPlazaChange}
           step={1}
-          valueFrom={
-            minDistanceToPlaza
-              ? Number.parseFloat(minDistanceToPlaza)
-              : undefined
-          }
-          valueTo={
-            maxDistanceToPlaza
-              ? Number.parseFloat(maxDistanceToPlaza)
-              : undefined
-          }
+          valueFrom={minDistanceToPlaza ? Number.parseFloat(minDistanceToPlaza) : undefined}
+          valueTo={maxDistanceToPlaza ? Number.parseFloat(maxDistanceToPlaza) : undefined}
           range
           header=""
           label={t('nft_filters.distance_to_plaza.subtitle')}

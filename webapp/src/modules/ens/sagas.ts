@@ -1,9 +1,6 @@
 import { BigNumber, ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
-import {
-  getConnectedProvider,
-  getSigner
-} from 'decentraland-dapps/dist/lib/eth'
+import { getConnectedProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Provider, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
@@ -32,26 +29,15 @@ import {
 import { ENS, ENSError } from './types'
 import { getDomainFromName } from './utils'
 
-export const CONTROLLER_V2_ADDRESS = config.get(
-  'CONTROLLER_V2_CONTRACT_ADDRESS',
-  ''
-)
+export const CONTROLLER_V2_ADDRESS = config.get('CONTROLLER_V2_CONTRACT_ADDRESS', '')
 export const REGISTRAR_ADDRESS = config.get('REGISTRAR_CONTRACT_ADDRESS', '')
 
 export function* ensSaga() {
   yield takeEvery(CLAIM_NAME_REQUEST, handleClaimNameRequest)
-  yield takeEvery(
-    CLAIM_NAME_TRANSACTION_SUBMITTED,
-    handleClaimNameSubmittedRequest
-  )
-  yield takeEvery(
-    CLAIM_NAME_CROSS_CHAIN_REQUEST,
-    handleClaimNameCrossChainRequest
-  )
+  yield takeEvery(CLAIM_NAME_TRANSACTION_SUBMITTED, handleClaimNameSubmittedRequest)
+  yield takeEvery(CLAIM_NAME_CROSS_CHAIN_REQUEST, handleClaimNameCrossChainRequest)
 
-  function* handleClaimNameSubmittedRequest(
-    action: ClaimNameTransactionSubmittedAction
-  ) {
+  function* handleClaimNameSubmittedRequest(action: ClaimNameTransactionSubmittedAction) {
     const data = action.payload[TRANSACTION_ACTION_FLAG]
     const {
       hash,
@@ -64,15 +50,8 @@ export function* ensSaga() {
       yield call(waitForTx, hash)
       const signer: ethers.Signer = yield call(getSigner)
 
-      const dclRegistrarContract: DCLRegistrar = yield call(
-        [DCLRegistrar__factory, 'connect'],
-        REGISTRAR_ADDRESS,
-        signer
-      )
-      const tokenId: BigNumber = yield call(
-        [dclRegistrarContract, 'getTokenId'],
-        subdomain
-      )
+      const dclRegistrarContract: DCLRegistrar = yield call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer)
+      const tokenId: BigNumber = yield call([dclRegistrarContract, 'getTokenId'], subdomain)
       if (from) {
         const ens: ENS = {
           name: subdomain,
@@ -107,24 +86,9 @@ export function* ensSaga() {
       const signer: ethers.Signer = yield call(getSigner)
       const from = wallet.address
 
-      const controllerContract: DCLController = yield call(
-        [DCLController__factory, 'connect'],
-        CONTROLLER_V2_ADDRESS,
-        signer
-      )
-      const transaction: ethers.ContractTransaction = yield call(
-        [controllerContract, 'register'],
-        name,
-        from
-      )
-      yield put(
-        claimNameTransactionSubmitted(
-          name,
-          wallet.address,
-          wallet.chainId,
-          transaction.hash
-        )
-      )
+      const controllerContract: DCLController = yield call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer)
+      const transaction: ethers.ContractTransaction = yield call([controllerContract, 'register'], name, from)
+      yield put(claimNameTransactionSubmitted(name, wallet.address, wallet.chainId, transaction.hash))
     } catch (error) {
       const ensError: ENSError = {
         message: isErrorWithMessage(error) ? error.message : 'Unknown error'
@@ -133,9 +97,7 @@ export function* ensSaga() {
     }
   }
 
-  function* handleClaimNameCrossChainRequest(
-    action: ClaimNameCrossChainRequestAction
-  ) {
+  function* handleClaimNameCrossChainRequest(action: ClaimNameCrossChainRequestAction) {
     const { name, chainId, route } = action.payload
     try {
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
@@ -151,34 +113,14 @@ export function* ensSaga() {
       }
 
       const crossChainModule = import('decentraland-transactions/crossChain')
-      const {
-        AxelarProvider
-      }: Awaited<typeof crossChainModule> = yield crossChainModule
+      const { AxelarProvider }: Awaited<typeof crossChainModule> = yield crossChainModule
 
       const crossChainProvider = new AxelarProvider(config.get('SQUID_API_URL'))
-      const txResponse: ethers.providers.TransactionReceipt = yield call(
-        [crossChainProvider, 'executeRoute'],
-        route,
-        provider
-      )
+      const txResponse: ethers.providers.TransactionReceipt = yield call([crossChainProvider, 'executeRoute'], route, provider)
 
-      yield put(
-        claimNameTransactionSubmitted(
-          name,
-          wallet.address,
-          chainId,
-          txResponse.transactionHash,
-          route
-        )
-      )
+      yield put(claimNameTransactionSubmitted(name, wallet.address, chainId, txResponse.transactionHash, route))
     } catch (error) {
-      yield put(
-        claimNameCrossChainFailure(
-          route,
-          name,
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(claimNameCrossChainFailure(route, name, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 }

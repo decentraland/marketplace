@@ -26,9 +26,7 @@ export const CreatorsFilter = ({
   const [searchTerm, setSearchTerm] = useState('')
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedCreators, setSelectedCreators] = useState<Creator[]>(
-    creators?.length && fetchedCreators
-      ? fetchedCreators.filter(creator => creators.includes(creator.address))
-      : []
+    creators?.length && fetchedCreators ? fetchedCreators.filter(creator => creators.includes(creator.address)) : []
   )
 
   useEffect(() => {
@@ -46,10 +44,7 @@ export const CreatorsFilter = ({
   const handleCreatorsChange = useCallback(
     (value: string) => {
       const creator = fetchedCreators.find(creator => creator.address === value)
-      if (
-        creator &&
-        !selectedCreators.find(c => c.address === creator.address)
-      ) {
+      if (creator && !selectedCreators.find(c => c.address === creator.address)) {
         const newCreators = [...selectedCreators, creator]
         setSelectedCreators(newCreators)
         onChange(newCreators.map(creator => creator.address))
@@ -83,9 +78,7 @@ export const CreatorsFilter = ({
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">
-            {t('nft_filters.creators.title')}
-          </span>
+          <span className="box-filter-name">{t('nft_filters.creators.title')}</span>
           <span className="box-filter-value">
             {isFetchingNames ? (
               <Loader inline size="mini" />
@@ -107,9 +100,7 @@ export const CreatorsFilter = ({
 
   const handleDeleteCreator = useCallback(
     (creatorAddressToDelete: string) => {
-      const updatedArray = selectedCreators.filter(
-        creator => creator.address !== creatorAddressToDelete
-      )
+      const updatedArray = selectedCreators.filter(creator => creator.address !== creatorAddressToDelete)
       setSelectedCreators(updatedArray)
       onChange(updatedArray.map(creator => creator.address))
     },
@@ -121,10 +112,7 @@ export const CreatorsFilter = ({
   // tracks the click outside the main div and close suggestions if needed
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownContainerRef.current &&
-        !dropdownContainerRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownContainerRef.current && !dropdownContainerRef.current.contains(event.target as Node)) {
         setShowSuggestions(false)
       }
     }
@@ -157,16 +145,8 @@ export const CreatorsFilter = ({
   }, [clearAndShowSuggestions])
 
   return (
-    <Box
-      header={header}
-      collapsible
-      className="CreatorsFilter filters-sidebar-box"
-      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
-    >
-      <div
-        ref={dropdownContainerRef}
-        className="creators-filter-dropdown-container"
-      >
+    <Box header={header} collapsible className="CreatorsFilter filters-sidebar-box" defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
+      <div ref={dropdownContainerRef} className="creators-filter-dropdown-container">
         <input
           className="creators-filter-dropdown"
           placeholder={t('nft_filters.creators.search')}
@@ -177,30 +157,16 @@ export const CreatorsFilter = ({
         {isLoading ? (
           <Loader active size={'small'} />
         ) : searchTerm ? (
-          <i
-            aria-hidden="true"
-            className="search icon clear"
-            onClick={handleClearSearchInput}
-          ></i>
+          <i aria-hidden="true" className="search icon clear" onClick={handleClearSearchInput}></i>
         ) : (
           <i aria-hidden="true" className="search icon"></i>
         )}
         {showSuggestions && !isLoading ? (
           <div className="menu">
-            {!searchTerm ? (
-              <div className="header">
-                {t('nft_filters.creators.dropdown_header')}{' '}
-              </div>
-            ) : null}
-            {searchTerm && !fetchedCreators.length ? (
-              <div className="item no-results">{t('filters.no_results')}</div>
-            ) : null}
+            {!searchTerm ? <div className="header">{t('nft_filters.creators.dropdown_header')} </div> : null}
+            {searchTerm && !fetchedCreators.length ? <div className="item no-results">{t('filters.no_results')}</div> : null}
             {fetchedCreators.map(creator => (
-              <div
-                key={creator.address}
-                className="item"
-                onClick={() => handleCreatorsChange(creator.address)}
-              >
+              <div key={creator.address} className="item" onClick={() => handleCreatorsChange(creator.address)}>
                 {creator.name}
               </div>
             ))}
@@ -209,12 +175,7 @@ export const CreatorsFilter = ({
       </div>
       <div className="pill-container">
         {selectedCreators.map(creator => (
-          <Pill
-            id={creator.address}
-            key={creator.address}
-            label={creator.name}
-            onDelete={() => handleDeleteCreator(creator.address)}
-          />
+          <Pill id={creator.address} key={creator.address} label={creator.name} onDelete={() => handleDeleteCreator(creator.address)} />
         ))}
       </div>
     </Box>

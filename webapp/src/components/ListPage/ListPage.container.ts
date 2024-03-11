@@ -3,25 +3,12 @@ import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import {
-  getError,
-  getList,
-  getLoading
-} from '../../modules/favorites/selectors'
-import {
-  GET_LIST_REQUEST,
-  deleteListStart,
-  getListRequest
-} from '../../modules/favorites/actions'
+import { getError, getList, getLoading } from '../../modules/favorites/selectors'
+import { GET_LIST_REQUEST, deleteListStart, getListRequest } from '../../modules/favorites/actions'
 import { RootState } from '../../modules/reducer'
 import { getWallet } from '../../modules/wallet/selectors'
 import { locations } from '../../modules/routing/locations'
-import {
-  MapStateProps,
-  MapDispatch,
-  MapDispatchProps,
-  OwnProps
-} from './ListPage.types'
+import { MapStateProps, MapDispatch, MapDispatchProps, OwnProps } from './ListPage.types'
 import ListPage from './ListPage'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {

@@ -16,4 +16,4 @@ export const View = {
 } as const
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- Intentionally naming the variable the same as the type
-export type View = typeof View[keyof typeof View]
+export type View = (typeof View)[keyof typeof View]

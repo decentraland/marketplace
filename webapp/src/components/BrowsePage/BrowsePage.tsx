@@ -23,7 +23,11 @@ const BrowsePage = (props: Props) => {
     <>
       <Navbar />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
-      {isCampaignCollectiblesBannerEnabled ? <CampaignBanner><CampaignCollectiblesBanner /></CampaignBanner> : null}
+      {isCampaignCollectiblesBannerEnabled ? (
+        <CampaignBanner>
+          <CampaignCollectiblesBanner />
+        </CampaignBanner>
+      ) : null}
       <AssetBrowse
         vendor={vendor}
         isFullscreen={Boolean(isFullscreen)}

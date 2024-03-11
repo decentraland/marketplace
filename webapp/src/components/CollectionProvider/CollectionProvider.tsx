@@ -18,12 +18,7 @@ const CollectionProvider = ({
       onFetchCollection()
     }
 
-    if (
-      !isLoadingCollectionItems &&
-      collection &&
-      withItems &&
-      (!items || items.length !== collection.size)
-    ) {
+    if (!isLoadingCollectionItems && collection && withItems && (!items || items.length !== collection.size)) {
       onFetchCollectionItems(collection)
     }
   }, [

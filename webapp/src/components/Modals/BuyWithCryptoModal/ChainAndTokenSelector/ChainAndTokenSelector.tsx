@@ -25,26 +25,19 @@ const ChainAndTokenSelector = (props: Props) => {
   const { currentChain, chains, tokens, onSelect, wallet } = props
   const title = useMemo(
     () =>
-      t(
-        `buy_with_crypto_modal.token_and_chain_selector.available_${
-          !!chains ? 'chains' : 'tokens'
-        }`,
-        {
-          chain: (
-            <>
-              {' '}
-              <b> {getNetwork(currentChain)}</b>
-            </>
-          )
-        }
-      ),
+      t(`buy_with_crypto_modal.token_and_chain_selector.available_${chains ? 'chains' : 'tokens'}`, {
+        chain: (
+          <>
+            {' '}
+            <b> {getNetwork(currentChain)}</b>
+          </>
+        )
+      }),
     [chains, currentChain]
   )
 
   const filteredChains = useMemo(() => {
-    return chains?.filter(chain =>
-      chain.networkName.toLowerCase().includes(search.toLowerCase())
-    )
+    return chains?.filter(chain => chain.networkName.toLowerCase().includes(search.toLowerCase()))
   }, [chains, search])
 
   const [balances, setBalances] = useState<Record<string, Balance>>({})
@@ -53,16 +46,16 @@ const ChainAndTokenSelector = (props: Props) => {
   useEffect(() => {
     const fetchBalances = async () => {
       try {
-        const balances = await marketplaceAPI.fetchWalletTokenBalances(
-          currentChain,
-          wallet.address
-          )
+        const balances = await marketplaceAPI.fetchWalletTokenBalances(currentChain, wallet.address)
         setIsFetchingBalances(false)
         setBalances(
-          balances.reduce((acc, balance) => {
-            acc[balance.contract_ticker_symbol] = balance
-            return acc
-          }, {} as Record<string, Balance>)
+          balances.reduce(
+            (acc, balance) => {
+              acc[balance.contract_ticker_symbol] = balance
+              return acc
+            },
+            {} as Record<string, Balance>
+          )
         )
       } catch (error) {
         setIsFetchingBalances(false)
@@ -73,9 +66,7 @@ const ChainAndTokenSelector = (props: Props) => {
 
   const filteredTokens = useMemo(() => {
     const filtered = tokens?.filter(
-      token =>
-        token.symbol.toLowerCase().includes(search.toLowerCase()) &&
-        token.chainId === currentChain.toString()
+      token => token.symbol.toLowerCase().includes(search.toLowerCase()) && token.chainId === currentChain.toString()
     )
     // this sortes the tokens by USD balance
     filtered?.sort((a, b) => {
@@ -88,18 +79,10 @@ const ChainAndTokenSelector = (props: Props) => {
   }, [tokens, search, currentChain, balances])
 
   return (
-    <div
-      className={styles.chainAndTokenSelector}
-      data-testid={CHAIN_AND_TOKEN_SELECTOR_DATA_TEST_ID}
-    >
+    <div className={styles.chainAndTokenSelector} data-testid={CHAIN_AND_TOKEN_SELECTOR_DATA_TEST_ID}>
       <div className={styles.searchContainer}>
         <Icon name="search" className={styles.searchIcon} />
-        <input
-          className={styles.searchInput}
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder={t('global.search')}
-        />
+        <input className={styles.searchInput} value={search} onChange={e => setSearch(e.target.value)} placeholder={t('global.search')} />
         {search ? <Close onClick={() => setSearch('')} /> : null}
       </div>
       <span className={styles.title}>{title}</span>
@@ -108,22 +91,14 @@ const ChainAndTokenSelector = (props: Props) => {
       ) : (
         <div className={styles.listContainer}>
           {filteredChains?.map(chain => (
-            <div
-              key={chain.chainId}
-              className={styles.rowItem}
-              onClick={() => onSelect(chain)}
-            >
+            <div key={chain.chainId} className={styles.rowItem} onClick={() => onSelect(chain)}>
               <img src={chain.nativeCurrency.icon} alt={chain.networkName} />
               <span>{chain.networkName}</span>
             </div>
           ))}
           {filteredTokens?.map(token => {
             return (
-              <div
-                key={`${token.symbol}-${token.address}`}
-                className={styles.rowItem}
-                onClick={() => onSelect(token)}
-              >
+              <div key={`${token.symbol}-${token.address}`} className={styles.rowItem} onClick={() => onSelect(token)}>
                 <div className={styles.tokenDataContainer}>
                   <img src={token.logoURI} alt={token.symbol} />
                   <div className={styles.tokenNameAndSymbolContainer}>
@@ -132,21 +107,13 @@ const ChainAndTokenSelector = (props: Props) => {
                   </div>
                 </div>
                 <span className={styles.balance}>
-                  {!!balances[token.symbol] ? (
+                  {balances[token.symbol] ? (
                     <>
                       {Number(
-                        ethers.utils.formatUnits(
-                          balances[token.symbol]
-                            .balance as string,
-                          balances[token.symbol]
-                            .contract_decimals
-                        )
+                        ethers.utils.formatUnits(balances[token.symbol].balance as string, balances[token.symbol].contract_decimals)
                       ).toFixed(5)}{' '}
                       {balances[token.symbol].quote ? (
-                        <span className={styles.tokenName}>
-                          $
-                          {balances[token.symbol].quote.toLocaleString()}
-                        </span>
+                        <span className={styles.tokenName}>${balances[token.symbol].quote.toLocaleString()}</span>
                       ) : null}
                     </>
                   ) : (

@@ -6,11 +6,7 @@ import { getWallet } from '../../../modules/wallet/selectors'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import { BrowseOptions } from '../../../modules/routing/types'
-import {
-  MapDispatch,
-  MapDispatchProps,
-  MapStateProps
-} from './ClaimNamePage.types'
+import { MapDispatch, MapDispatchProps, MapStateProps } from './ClaimNamePage.types'
 import { RootState } from '../../../modules/reducer'
 import ClaimNamePage from './ClaimNamePage'
 
@@ -20,10 +16,8 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onBrowse: (options?: BrowseOptions) =>
-    dispatch(push(locations.names({ ...options, section: Section.ENS }))),
-  onClaim: (name: string) =>
-    dispatch(openModal('ClaimNameFatFingerModal', { name })),
+  onBrowse: (options?: BrowseOptions) => dispatch(push(locations.names({ ...options, section: Section.ENS }))),
+  onClaim: (name: string) => dispatch(openModal('ClaimNameFatFingerModal', { name })),
   onRedirect: path => dispatch(replace(path))
 })
 

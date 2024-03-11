@@ -15,20 +15,11 @@ const Description = (props: Props) => {
     <div className={styles.Description}>
       <Header sub>{t('asset_page.description')}</Header>
       <div className={styles.descriptionText} id="text-container">
-        {text
-          ? hasMoreLines && !showMore
-            ? `${text.substring(0, MAX_LENGTH)}...`
-            : text
-          : t('asset_page.no_description')}
+        {text ? (hasMoreLines && !showMore ? `${text.substring(0, MAX_LENGTH)}...` : text) : t('asset_page.no_description')}
       </div>
       {hasMoreLines ? (
-        <span
-          onClick={() => setShowMore(prevState => !prevState)}
-          className={styles.readMore}
-        >
-          {showMore
-            ? t('asset_page.read_less').toLocaleUpperCase()
-            : t('asset_page.read_more').toLocaleUpperCase()}
+        <span onClick={() => setShowMore(prevState => !prevState)} className={styles.readMore}>
+          {showMore ? t('asset_page.read_less').toLocaleUpperCase() : t('asset_page.read_more').toLocaleUpperCase()}
         </span>
       ) : null}
     </div>

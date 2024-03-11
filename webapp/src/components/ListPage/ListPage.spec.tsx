@@ -31,7 +31,7 @@ jest.mock('../LinkedProfile', () => {
 })
 
 const listId = 'aListId'
-let list: List = {
+const list: List = {
   id: listId,
   name: 'aListName',
   description: 'aListDescription',
@@ -104,9 +104,7 @@ describe('when rendering the ListPage with a loaded list', () => {
     })
 
     it('should transform the date into something like: "dd time ago"', () => {
-      expect(renderedPage.getByTestId(UPDATED_AT_TEST_ID)).toHaveTextContent(
-        '1 day ago'
-      )
+      expect(renderedPage.getByTestId(UPDATED_AT_TEST_ID)).toHaveTextContent('1 day ago')
     })
   })
 
@@ -116,9 +114,7 @@ describe('when rendering the ListPage with a loaded list', () => {
     })
 
     it('should show the private badge', () => {
-      expect(
-        renderedPage.getByTestId(PRIVATE_BADGE_TEST_ID)
-      ).toBeInTheDocument()
+      expect(renderedPage.getByTestId(PRIVATE_BADGE_TEST_ID)).toBeInTheDocument()
     })
 
     it('should disable the share list button', () => {
@@ -137,27 +133,19 @@ describe('when rendering the ListPage with a loaded list', () => {
       })
 
       it('should enable the share list button', () => {
-        expect(
-          renderedPage.getByTestId(SHARE_LIST_BUTTON_TEST_ID)
-        ).toBeEnabled()
+        expect(renderedPage.getByTestId(SHARE_LIST_BUTTON_TEST_ID)).toBeEnabled()
       })
 
       it('should show the go back button', () => {
-        expect(
-          renderedPage.getByTestId(GO_BACK_BUTTON_TEST_ID)
-        ).toBeInTheDocument()
+        expect(renderedPage.getByTestId(GO_BACK_BUTTON_TEST_ID)).toBeInTheDocument()
       })
 
       it('should show the edit button', () => {
-        expect(
-          renderedPage.getByTestId(EDIT_LIST_BUTTON_TEST_ID)
-        ).toBeInTheDocument()
+        expect(renderedPage.getByTestId(EDIT_LIST_BUTTON_TEST_ID)).toBeInTheDocument()
       })
 
       it('should show the delete button', () => {
-        expect(
-          renderedPage.getByTestId(DELETE_LIST_BUTTON_TEST_ID)
-        ).toBeInTheDocument()
+        expect(renderedPage.getByTestId(DELETE_LIST_BUTTON_TEST_ID)).toBeInTheDocument()
       })
     })
 
@@ -199,21 +187,15 @@ describe('when rendering the ListPage with a loaded list', () => {
     })
 
     it('should disable the dropdown to edit and delete the list', () => {
-      expect(
-        renderedPage.getByTestId(MORE_OPTIONS_DROPDOWN_TEST_ID)
-      ).toHaveClass('disabled')
+      expect(renderedPage.getByTestId(MORE_OPTIONS_DROPDOWN_TEST_ID)).toHaveClass('disabled')
     })
 
     it('should disable the dropdown item to edit the list', () => {
-      expect(renderedPage.getByTestId(EDIT_LIST_BUTTON_TEST_ID)).toHaveClass(
-        'disabled'
-      )
+      expect(renderedPage.getByTestId(EDIT_LIST_BUTTON_TEST_ID)).toHaveClass('disabled')
     })
 
     it('should disable the dropdown item to delete the list', () => {
-      expect(renderedPage.getByTestId(DELETE_LIST_BUTTON_TEST_ID)).toHaveClass(
-        'disabled'
-      )
+      expect(renderedPage.getByTestId(DELETE_LIST_BUTTON_TEST_ID)).toHaveClass('disabled')
     })
   })
 })
@@ -233,15 +215,9 @@ describe('when rendering the ListPage with an empty list', () => {
 
       it('should render the empty list message', () => {
         expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
-        expect(
-          renderedPage.getByText(t('list_page.empty.owner.title'))
-        ).toBeInTheDocument()
-        expect(
-          renderedPage.getByText(t('list_page.empty.owner.subtitle'))
-        ).toBeInTheDocument()
-        expect(
-          renderedPage.getByTestId(EMPTY_LIST_ACTION_TEST_ID)
-        ).toBeInTheDocument()
+        expect(renderedPage.getByText(t('list_page.empty.owner.title'))).toBeInTheDocument()
+        expect(renderedPage.getByText(t('list_page.empty.owner.subtitle'))).toBeInTheDocument()
+        expect(renderedPage.getByTestId(EMPTY_LIST_ACTION_TEST_ID)).toBeInTheDocument()
       })
     })
 
@@ -259,12 +235,8 @@ describe('when rendering the ListPage with an empty list', () => {
 
       it('should render the empty list message', () => {
         expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
-        expect(
-          renderedPage.getByText(t('list_page.empty.public.title'))
-        ).toBeInTheDocument()
-        expect(
-          renderedPage.getByText(t('list_page.empty.public.subtitle'))
-        ).toBeInTheDocument()
+        expect(renderedPage.getByText(t('list_page.empty.public.title'))).toBeInTheDocument()
+        expect(renderedPage.getByText(t('list_page.empty.public.subtitle'))).toBeInTheDocument()
         expect(renderedPage.queryByTestId(EMPTY_LIST_ACTION_TEST_ID)).toBeNull()
       })
     })
@@ -283,12 +255,8 @@ describe('when rendering the ListPage with an empty list', () => {
 
       it('should render the empty list message', () => {
         expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
-        expect(
-          renderedPage.getByText(t('list_page.empty.public.title'))
-        ).toBeInTheDocument()
-        expect(
-          renderedPage.getByText(t('list_page.empty.public.subtitle'))
-        ).toBeInTheDocument()
+        expect(renderedPage.getByText(t('list_page.empty.public.title'))).toBeInTheDocument()
+        expect(renderedPage.getByText(t('list_page.empty.public.subtitle'))).toBeInTheDocument()
         expect(renderedPage.queryByTestId(EMPTY_LIST_ACTION_TEST_ID)).toBeNull()
       })
     })
@@ -307,15 +275,9 @@ describe('when rendering the ListPage with an empty list', () => {
 
     it('should render the correct empty list message with the action button', () => {
       expect(renderedPage.getByTestId(EMPTY_LIST_TEST_ID)).toBeInTheDocument()
-      expect(
-        renderedPage.getByText(t('list_page.empty.owner.title'))
-      ).toBeInTheDocument()
-      expect(
-        renderedPage.getByText(t('list_page.empty.owner.subtitle'))
-      ).toBeInTheDocument()
-      expect(
-        renderedPage.getByTestId(EMPTY_LIST_ACTION_TEST_ID)
-      ).toBeInTheDocument()
+      expect(renderedPage.getByText(t('list_page.empty.owner.title'))).toBeInTheDocument()
+      expect(renderedPage.getByText(t('list_page.empty.owner.subtitle'))).toBeInTheDocument()
+      expect(renderedPage.getByTestId(EMPTY_LIST_ACTION_TEST_ID)).toBeInTheDocument()
     })
   })
 })
@@ -381,16 +343,10 @@ describe("when the list doesn't exist", () => {
   })
 
   it('should show the error message', () => {
-    expect(
-      renderedPage.getByTestId(ERROR_CONTAINER_TEST_ID)
-    ).toBeInTheDocument()
+    expect(renderedPage.getByTestId(ERROR_CONTAINER_TEST_ID)).toBeInTheDocument()
 
-    expect(
-      renderedPage.getByText(t('list_page.error.not_found.title'))
-    ).toBeInTheDocument()
-    expect(
-      renderedPage.getByText(t('list_page.error.not_found.subtitle'))
-    ).toBeInTheDocument()
+    expect(renderedPage.getByText(t('list_page.error.not_found.title'))).toBeInTheDocument()
+    expect(renderedPage.getByText(t('list_page.error.not_found.subtitle'))).toBeInTheDocument()
   })
 })
 
@@ -401,19 +357,11 @@ describe('when the list retrieval fails', () => {
       error: 'Could not retrieve the list from the server.'
     })
 
-    expect(
-      renderedPage.getByTestId(ERROR_CONTAINER_TEST_ID)
-    ).toBeInTheDocument()
+    expect(renderedPage.getByTestId(ERROR_CONTAINER_TEST_ID)).toBeInTheDocument()
 
-    expect(
-      renderedPage.getByText(t('list_page.error.could_not_load.title'))
-    ).toBeInTheDocument()
-    expect(
-      renderedPage.getByText(t('list_page.error.could_not_load.subtitle'))
-    ).toBeInTheDocument()
-    expect(
-      renderedPage.getByText(t('list_page.error.could_not_load.action'))
-    ).toBeInTheDocument()
+    expect(renderedPage.getByText(t('list_page.error.could_not_load.title'))).toBeInTheDocument()
+    expect(renderedPage.getByText(t('list_page.error.could_not_load.subtitle'))).toBeInTheDocument()
+    expect(renderedPage.getByText(t('list_page.error.could_not_load.action'))).toBeInTheDocument()
   })
 
   describe('when clicking the action button', () => {
@@ -429,9 +377,7 @@ describe('when the list retrieval fails', () => {
     })
 
     it('should call the onFetchList prop callback', () => {
-      fireEvent.click(
-        renderedPage.getByTestId(COULD_NOT_LOAD_LIST_ACTION_TEST_ID)
-      )
+      fireEvent.click(renderedPage.getByTestId(COULD_NOT_LOAD_LIST_ACTION_TEST_ID))
       expect(onFetchList).toHaveBeenCalledWith(listId)
     })
   })

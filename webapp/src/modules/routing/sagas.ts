@@ -1,36 +1,9 @@
-import {
-  takeEvery,
-  put,
-  select,
-  call,
-  take,
-  delay,
-  race,
-  spawn
-} from 'redux-saga/effects'
+import { takeEvery, put, select, call, take, delay, race, spawn } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { matchPath } from 'react-router-dom'
-import {
-  push,
-  getLocation,
-  goBack,
-  LOCATION_CHANGE,
-  replace,
-  LocationChangeAction
-} from 'connected-react-router'
-import {
-  CatalogFilters,
-  CatalogSortBy,
-  NFTCategory,
-  RentalStatus,
-  Sale,
-  SaleSortBy,
-  SaleType
-} from '@dcl/schemas'
-import {
-  CONNECT_WALLET_SUCCESS,
-  ConnectWalletSuccessAction
-} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { push, getLocation, goBack, LOCATION_CHANGE, replace, LocationChangeAction } from 'connected-react-router'
+import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
+import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
@@ -59,23 +32,16 @@ import {
   getMinPrice,
   getStatus,
   getEmotePlayMode,
-  getLatestVisitedLocation
+  getLatestVisitedLocation,
+  getRarities,
+  getWearableGenders,
+  getContracts,
+  getSearch
 } from '../routing/selectors'
-import {
-  fetchNFTRequest,
-  fetchNFTsRequest,
-  FetchNFTsSuccessAction,
-  FETCH_NFTS_SUCCESS,
-  TRANSFER_NFT_SUCCESS
-} from '../nft/actions'
+import { fetchNFTRequest, fetchNFTsRequest, FetchNFTsSuccessAction, FETCH_NFTS_SUCCESS, TRANSFER_NFT_SUCCESS } from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
-import {
-  MAX_PAGE,
-  PAGE_SIZE,
-  getMaxQuerySize,
-  MAX_QUERY_SIZE
-} from '../vendor/api'
+import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize, MAX_QUERY_SIZE } from '../vendor/api'
 import { locations } from './locations'
 import {
   getCategoryFromSection,
@@ -86,12 +52,6 @@ import {
   getAssetOrderBy,
   getCatalogSortBy
 } from './search'
-import {
-  getRarities,
-  getWearableGenders,
-  getContracts,
-  getSearch
-} from './selectors'
 import {
   BROWSE,
   BrowseAction,
@@ -104,31 +64,11 @@ import {
 } from './actions'
 import { BrowseOptions, Sections } from './types'
 import { Section } from '../vendor/decentraland'
-import {
-  getClearedBrowseOptions,
-  isCatalogView,
-  rentalFilters,
-  SALES_PER_PAGE,
-  sellFilters
-} from './utils'
-import {
-  FetchSalesFailureAction,
-  fetchSalesRequest,
-  FETCH_SALES_FAILURE,
-  FETCH_SALES_SUCCESS
-} from '../sale/actions'
+import { getClearedBrowseOptions, isCatalogView, rentalFilters, SALES_PER_PAGE, sellFilters, buildBrowseURL } from './utils'
+import { FetchSalesFailureAction, fetchSalesRequest, FETCH_SALES_FAILURE, FETCH_SALES_SUCCESS } from '../sale/actions'
 import { getSales } from '../sale/selectors'
-import {
-  CANCEL_ORDER_SUCCESS,
-  CREATE_ORDER_SUCCESS,
-  EXECUTE_ORDER_SUCCESS,
-  ExecuteOrderSuccessAction
-} from '../order/actions'
-import {
-  ACCEPT_BID_SUCCESS,
-  CANCEL_BID_SUCCESS,
-  PLACE_BID_SUCCESS
-} from '../bid/actions'
+import { CANCEL_ORDER_SUCCESS, CREATE_ORDER_SUCCESS, EXECUTE_ORDER_SUCCESS, ExecuteOrderSuccessAction } from '../order/actions'
+import { ACCEPT_BID_SUCCESS, CANCEL_BID_SUCCESS, PLACE_BID_SUCCESS } from '../bid/actions'
 import { getData } from '../event/selectors'
 import { getWallet } from '../wallet/selectors'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
@@ -145,7 +85,6 @@ import {
 } from '../ens/actions'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { REGISTRAR_ADDRESS } from '../ens/sagas'
-import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
@@ -154,44 +93,23 @@ export function* routingSaga() {
   yield takeEvery(CLEAR_FILTERS, handleClearFilters)
   yield takeEvery(GO_BACK, handleGoBack)
   yield takeEvery(
-    [
-      CREATE_ORDER_SUCCESS,
-      CANCEL_ORDER_SUCCESS,
-      PLACE_BID_SUCCESS,
-      ACCEPT_BID_SUCCESS,
-      CANCEL_BID_SUCCESS,
-      TRANSFER_NFT_SUCCESS
-    ],
+    [CREATE_ORDER_SUCCESS, CANCEL_ORDER_SUCCESS, PLACE_BID_SUCCESS, ACCEPT_BID_SUCCESS, CANCEL_BID_SUCCESS, TRANSFER_NFT_SUCCESS],
     handleRedirectToActivity
   )
 
   yield takeEvery(
-    [
-      EXECUTE_ORDER_SUCCESS,
-      BUY_ITEM_SUCCESS,
-      BUY_ITEM_CROSS_CHAIN_SUCCESS,
-      CLAIM_NAME_SUCCESS,
-      CLAIM_NAME_CROSS_CHAIN_SUCCESS
-    ],
+    [EXECUTE_ORDER_SUCCESS, BUY_ITEM_SUCCESS, BUY_ITEM_CROSS_CHAIN_SUCCESS, CLAIM_NAME_SUCCESS, CLAIM_NAME_CROSS_CHAIN_SUCCESS],
     handleRedirectToSuccessPage
   )
-  yield takeEvery(
-    CLAIM_NAME_TRANSACTION_SUBMITTED,
-    handleRedirectClaimingNameToSuccessPage
-  )
+  yield takeEvery(CLAIM_NAME_TRANSACTION_SUBMITTED, handleRedirectClaimingNameToSuccessPage)
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
   yield takeEvery(FETCH_NFTS_SUCCESS, handleFetchOnSaleNFTsSuccess)
 }
 
 function* handleLocationChange(action: LocationChangeAction) {
   // Re-triggers fetchAssetsFromRoute action when the user goes back
-  if (
-    action.payload.action === 'POP' &&
-    matchPath(action.payload.location.pathname, { path: locations.browse() })
-  ) {
-    const latestVisitedLocation: ReturnType<typeof getLocation> = yield select(
-      getLatestVisitedLocation
-    )
+  if (action.payload.action === 'POP' && matchPath(action.payload.location.pathname, { path: locations.browse() })) {
+    const latestVisitedLocation: ReturnType<typeof getLocation> = yield select(getLatestVisitedLocation)
     const isComingFromBrowse = !!matchPath(latestVisitedLocation?.pathname, {
       path: locations.browse()
     })
@@ -203,10 +121,7 @@ function* handleLocationChange(action: LocationChangeAction) {
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
-  const newOptions: BrowseOptions = yield call(
-    getNewBrowseOptions,
-    action.payload.options
-  )
+  const newOptions: BrowseOptions = yield call(getNewBrowseOptions, action.payload.options)
   yield call(fetchAssetsFromRoute, newOptions)
 }
 
@@ -219,23 +134,15 @@ function* handleClearFilters() {
 }
 
 export function* handleBrowse(action: BrowseAction) {
-  const options: BrowseOptions = yield call(
-    getNewBrowseOptions,
-    action.payload.options
-  )
+  const options: BrowseOptions = yield call(getNewBrowseOptions, action.payload.options)
 
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
   const eventsContracts: Record<string, string[]> = yield select(getData)
-  const isAnEventRoute = Object.keys(eventsContracts).includes(
-    pathname.slice(1)
-  )
+  const isAnEventRoute = Object.keys(eventsContracts).includes(pathname.slice(1))
   yield call(fetchAssetsFromRoute, {
     ...options,
     ...(isAnEventRoute && {
-      contracts:
-        options.contracts && options.contracts.length > 0
-          ? options.contracts
-          : eventsContracts[pathname.slice(1)]
+      contracts: options.contracts && options.contracts.length > 0 ? options.contracts : eventsContracts[pathname.slice(1)]
     })
   })
   yield put(push(buildBrowseURL(pathname, options)))
@@ -280,8 +187,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     emoteHasSound
   } = options
 
-  const address =
-    options.address || ((yield select(getCurrentLocationAddress)) as string)
+  const address = options.address || ((yield select(getCurrentLocationAddress)) as string)
 
   if (isMap) {
     yield put(setView(view))
@@ -299,18 +205,13 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     case Section.STORE_SETTINGS:
       break
     case Section.ON_SALE:
-      yield handleFetchOnSale(
-        Array.isArray(address) ? address[0] : address,
-        options.view!
-      )
+      yield handleFetchOnSale(Array.isArray(address) ? address[0] : address, options.view!)
       break
     case Section.ON_RENT:
       yield handleFetchOnRent(
         options.view!,
         [RentalStatus.OPEN, RentalStatus.EXECUTED],
-        View.ACCOUNT
-          ? { tenant }
-          : { ownerAddress: Array.isArray(address) ? address[0] : address }
+        View.ACCOUNT ? { tenant } : { ownerAddress: Array.isArray(address) ? address[0] : address }
       )
       break
     case Section.WEARABLES_TRENDING:
@@ -339,33 +240,20 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       )
       break
     default:
-      const isWearableHead =
-        section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
-      const isWearableAccessory =
-        section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
+      const isWearableHead = section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
+      const isWearableAccessory = section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
 
-      const wearableCategory = !isWearableAccessory
-        ? getSearchWearableCategory(section)
-        : undefined
+      const wearableCategory = !isWearableAccessory ? getSearchWearableCategory(section) : undefined
 
-      const emoteCategory =
-        category === NFTCategory.EMOTE
-          ? getSearchEmoteCategory(section)
-          : undefined
+      const emoteCategory = category === NFTCategory.EMOTE ? getSearchEmoteCategory(section) : undefined
 
       const { rarities, wearableGenders, emotePlayMode } = options
 
       const statusParameters: Partial<Omit<CatalogFilters, 'sortBy'>> = {
         ...(status === AssetStatusFilter.ON_SALE ? { isOnSale: true } : {}),
-        ...(status === AssetStatusFilter.NOT_FOR_SALE
-          ? { isOnSale: false }
-          : {}),
-        ...(status === AssetStatusFilter.ONLY_LISTING
-          ? { onlyListing: true }
-          : {}),
-        ...(status === AssetStatusFilter.ONLY_MINTING
-          ? { onlyMinting: true }
-          : {})
+        ...(status === AssetStatusFilter.NOT_FOR_SALE ? { isOnSale: false } : {}),
+        ...(status === AssetStatusFilter.ONLY_LISTING ? { onlyListing: true } : {}),
+        ...(status === AssetStatusFilter.ONLY_MINTING ? { onlyMinting: true } : {})
       }
       if (isItems) {
         yield put(
@@ -428,15 +316,11 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   }
 }
 
-export function* getNewBrowseOptions(
-  current: BrowseOptions
-): Generator<unknown, BrowseOptions, any> {
+export function* getNewBrowseOptions(current: BrowseOptions): Generator<unknown, BrowseOptions, any> {
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
-  const section: Section = current.section
-    ? current.section
-    : yield select(getSection)
+  const section: Section = current.section ? current.section : yield select(getSection)
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
@@ -469,10 +353,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
   } = action
 
   const view: View = yield select(getView)
-  const hasShownTheExpiredListingsModalBefore: string | null = yield call(
-    [localStorage, 'getItem'],
-    EXPIRED_LISTINGS_MODAL_KEY
-  )
+  const hasShownTheExpiredListingsModalBefore: string | null = yield call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY)
 
   if (hasShownTheExpiredListingsModalBefore !== 'true') {
     yield handleFetchNFTsOnSale(address, view)
@@ -494,11 +375,7 @@ function* handleFetchOnSaleNFTsSuccess(action: FetchNFTsSuccessAction) {
     wallet?.address === options.params.address &&
     options.params.onlyOnSale
   ) {
-    if (
-      orders.some(
-        order => isLegacyOrder(order) && order.owner === wallet.address
-      )
-    ) {
+    if (orders.some(order => isLegacyOrder(order) && order.owner === wallet.address)) {
       yield put(openModal('ExpiredListingsModal'))
     }
   }
@@ -529,11 +406,7 @@ function* handleFetchNFTsOnSale(address: string, view: View) {
   )
 }
 
-function* handleFetchOnRent(
-  view: View,
-  rentalStatus: RentalStatus[],
-  options: { ownerAddress?: string; tenant?: string }
-) {
+function* handleFetchOnRent(view: View, rentalStatus: RentalStatus[], options: { ownerAddress?: string; tenant?: string }) {
   const { ownerAddress: address, tenant } = options
 
   yield put(
@@ -609,10 +482,7 @@ function* handleFetchSales({
 }
 
 // TODO: Consider moving this should live to each vendor
-function* deriveCurrentOptions(
-  previous: BrowseOptions,
-  current: BrowseOptions
-) {
+function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) {
   let newOptions: BrowseOptions = {
     ...current,
     assetType: current.assetType || previous.assetType,
@@ -623,35 +493,21 @@ function* deriveCurrentOptions(
 
   newOptions = {
     ...newOptions,
-    onlyOnRent: current.hasOwnProperty('onlyOnRent')
-      ? current.onlyOnRent
-      : previous.onlyOnRent,
+    onlyOnRent: current.hasOwnProperty('onlyOnRent') ? current.onlyOnRent : previous.onlyOnRent,
     onlyOnSale:
-      current.assetType === AssetType.ITEM
-        ? undefined
-        : current.hasOwnProperty('onlyOnSale')
-        ? current.onlyOnSale
-        : previous.onlyOnSale
+      current.assetType === AssetType.ITEM ? undefined : current.hasOwnProperty('onlyOnSale') ? current.onlyOnSale : previous.onlyOnSale
   }
 
   // Checks if the sorting categories are correctly set for the onlyOnRental and the onlyOnSell filters
-  const previousSortExistsAndIsNotARentalSort =
-    previous.sortBy && !rentalFilters.includes(previous.sortBy)
-  const previousSortExistsAndIsNotASellSort =
-    previous.sortBy && !sellFilters.includes(previous.sortBy)
-  const newSortExistsAndIsNotARentalSort =
-    current.sortBy && !rentalFilters.includes(current.sortBy)
-  const newSortExistsAndIsNotASellSort =
-    current.sortBy && !sellFilters.includes(current.sortBy)
+  const previousSortExistsAndIsNotARentalSort = previous.sortBy && !rentalFilters.includes(previous.sortBy)
+  const previousSortExistsAndIsNotASellSort = previous.sortBy && !sellFilters.includes(previous.sortBy)
+  const newSortExistsAndIsNotARentalSort = current.sortBy && !rentalFilters.includes(current.sortBy)
+  const newSortExistsAndIsNotASellSort = current.sortBy && !sellFilters.includes(current.sortBy)
 
   const hasWrongRentalFilter =
-    newOptions.onlyOnRent &&
-    (newSortExistsAndIsNotARentalSort ||
-      (!current.sortBy && previousSortExistsAndIsNotARentalSort))
+    newOptions.onlyOnRent && (newSortExistsAndIsNotARentalSort || (!current.sortBy && previousSortExistsAndIsNotARentalSort))
   const hasWrongSellFilter =
-    newOptions.onlyOnSale &&
-    (newSortExistsAndIsNotASellSort ||
-      (!current.sortBy && previousSortExistsAndIsNotASellSort))
+    newOptions.onlyOnSale && (newSortExistsAndIsNotASellSort || (!current.sortBy && previousSortExistsAndIsNotASellSort))
 
   if (hasWrongRentalFilter || hasWrongSellFilter) {
     newOptions.sortBy = undefined
@@ -705,8 +561,7 @@ function* deriveCurrentOptions(
 
       // Only if the user is not in their own page, show ens on sale by default.
       if (window.location.pathname !== locations.currentAccount()) {
-        newOptions.onlyOnSale =
-          previous.onlyOnSale === undefined ? true : current.onlyOnSale
+        newOptions.onlyOnSale = previous.onlyOnSale === undefined ? true : current.onlyOnSale
       }
 
       break
@@ -744,16 +599,10 @@ function* handleRedirectToActivity() {
   }
 }
 
-function* handleRedirectClaimingNameToSuccessPage(
-  action: ClaimNameTransactionSubmittedAction
-) {
+function* handleRedirectClaimingNameToSuccessPage(action: ClaimNameTransactionSubmittedAction) {
   const data = action.payload[TRANSACTION_ACTION_FLAG]
   const signer: ethers.Signer = yield call(getSigner)
-  const dclRegistrarContract: DCLRegistrar = yield call(
-    [DCLRegistrar__factory, 'connect'],
-    REGISTRAR_ADDRESS,
-    signer
-  )
+  const dclRegistrarContract: DCLRegistrar = yield call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer)
   const contractAddress = dclRegistrarContract.address
   yield put(
     push(
@@ -777,36 +626,34 @@ function* handleRedirectToSuccessPage(
     | ClaimNameCrossChainSuccessAction
 ) {
   const payload = action.payload
-  const isCrossChainAction =
-    'route' in payload &&
-    payload.route.route.params.fromChain !== payload.route.route.params.toChain // it's cross chain only if the fromChain is different from the toChain
+  const isCrossChainAction = 'route' in payload && payload.route.route.params.fromChain !== payload.route.route.params.toChain // it's cross chain only if the fromChain is different from the toChain
   const successParams = {
     txHash: payload.txHash,
     tokenId:
       'order' in payload && payload.order?.tokenId
         ? payload.order.tokenId
         : 'item' in payload
-        ? payload.item.itemId
-        : 'nft' in payload
-        ? payload.nft.tokenId
-        : 'ens' in payload
-        ? payload.ens.tokenId
-        : '',
+          ? payload.item.itemId
+          : 'nft' in payload
+            ? payload.nft.tokenId
+            : 'ens' in payload
+              ? payload.ens.tokenId
+              : '',
     assetType: isCrossChainAction
       ? 'order' in payload && !!payload.order // if cross chain check for the order object
         ? AssetType.NFT
         : AssetType.ITEM
       : 'item' in payload // for the rest of the action, check for the item object
-      ? AssetType.ITEM
-      : AssetType.NFT,
+        ? AssetType.ITEM
+        : AssetType.NFT,
     contractAddress:
       'item' in payload
         ? payload.item.contractAddress
         : 'nft' in payload
-        ? payload.nft.contractAddress
-        : 'ens' in payload
-        ? payload.ens.contractAddress
-        : ''
+          ? payload.nft.contractAddress
+          : 'ens' in payload
+            ? payload.ens.contractAddress
+            : ''
   }
   yield put(push(locations.success(successParams)))
 }

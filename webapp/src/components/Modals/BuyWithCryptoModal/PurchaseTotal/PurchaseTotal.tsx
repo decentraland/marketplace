@@ -44,52 +44,31 @@ const PurchaseTotal = (props: Props) => {
       <div>
         <span className={styles.total}>{t('buy_with_crypto_modal.total')}</span>
         {useMetaTx && !isPriceTooLow(price) ? (
-          <span
-            className={styles.feeCovered}
-            data-testid={FREE_TX_COVERED_TEST_ID}
-          >
+          <span className={styles.feeCovered} data-testid={FREE_TX_COVERED_TEST_ID}>
             {t('buy_with_crypto_modal.transaction_fee_covered', {
-              covered: (
-                <span className={styles.feeCoveredFree}>
-                  {t('buy_with_crypto_modal.covered_by_dao')}
-                </span>
-              )
+              covered: <span className={styles.feeCoveredFree}>{t('buy_with_crypto_modal.covered_by_dao')}</span>
             })}
           </span>
         ) : null}
       </div>
       <div className={styles.totalPrice}>
         {isLoading ? (
-          <span
-            className={classNames(styles.skeleton, styles.estimatedFeeSkeleton)}
-          />
+          <span className={classNames(styles.skeleton, styles.estimatedFeeSkeleton)} />
         ) : (
           <div>
             {shouldUseCrossChainProvider ? (
               !!route && routeFeeCost ? (
                 <>
-                  <TokenIcon
-                    src={selectedToken.logoURI}
-                    name={selectedToken.name}
-                  />
-                  {routeFeeCost?.token.symbol !== selectedToken.symbol &&
-                  fromAmount ? (
+                  <TokenIcon src={selectedToken.logoURI} name={selectedToken.name} />
+                  {routeFeeCost?.token.symbol !== selectedToken.symbol && fromAmount ? (
                     <>
                       {formatPrice(fromAmount, selectedToken)}
                       <span> + </span>
-                      <TokenIcon
-                        src={routeFeeCost.token.logoURI}
-                        name={routeFeeCost.token.name}
-                      />
+                      <TokenIcon src={routeFeeCost.token.logoURI} name={routeFeeCost.token.name} />
                       {routeFeeCost.totalCost}
                     </>
                   ) : (
-                    <>
-                      {formatPrice(
-                        Number(fromAmount) + Number(routeFeeCost.totalCost),
-                        selectedToken
-                      )}
-                    </>
+                    <>{formatPrice(Number(fromAmount) + Number(routeFeeCost.totalCost), selectedToken)}</>
                   )}
                 </>
               ) : null
@@ -97,18 +76,12 @@ const PurchaseTotal = (props: Props) => {
               <>
                 {!!gasCost && gasCost.token ? (
                   <>
-                    <TokenIcon
-                      src={gasCost.token.logoURI}
-                      name={gasCost.token.name}
-                    />
+                    <TokenIcon src={gasCost.token.logoURI} name={gasCost.token.name} />
                     {formatPrice(Number(gasCost.total), gasCost.token)}
                     <span> + </span>
                   </>
                 ) : null}
-                <TokenIcon
-                  src={selectedToken.logoURI}
-                  name={selectedToken.name}
-                />
+                <TokenIcon src={selectedToken.logoURI} name={selectedToken.name} />
                 {ethers.utils.formatEther(price)}
               </>
             )}
@@ -116,36 +89,19 @@ const PurchaseTotal = (props: Props) => {
         )}
         <div>
           {isLoading ? (
-            <span
-              className={classNames(
-                styles.skeleton,
-                styles.estimatedFeeSkeleton,
-                styles.fromAmountUSD
-              )}
-            />
+            <span className={classNames(styles.skeleton, styles.estimatedFeeSkeleton, styles.fromAmountUSD)} />
           ) : (
             <span className={styles.fromAmountUSD}>
-              {!!gasCost &&
-              gasCost.totalUSDPrice &&
-              manaTokenOnSelectedChain ? (
+              {!!gasCost && gasCost.totalUSDPrice && manaTokenOnSelectedChain ? (
                 <>
                   {' '}
                   $
                   {manaTokenOnSelectedChain.usdPrice
-                    ? (
-                        gasCost.totalUSDPrice +
-                        manaTokenOnSelectedChain.usdPrice! *
-                          Number(ethers.utils.formatEther(price))
-                      ).toFixed(4)
+                    ? (gasCost.totalUSDPrice + manaTokenOnSelectedChain.usdPrice * Number(ethers.utils.formatEther(price))).toFixed(4)
                     : 'Unknown'}{' '}
                 </>
               ) : shouldUseCrossChainProvider ? (
-                <>
-                  {' '}
-                  {!!route && routeTotalUSDCost
-                    ? `$${routeTotalUSDCost?.toFixed(6)}`
-                    : null}{' '}
-                </>
+                <> {!!route && routeTotalUSDCost ? `$${routeTotalUSDCost?.toFixed(6)}` : null} </>
               ) : (
                 <ManaToFiat mana={price} digits={4} />
               )}

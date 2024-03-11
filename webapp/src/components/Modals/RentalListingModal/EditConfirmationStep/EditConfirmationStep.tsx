@@ -22,10 +22,7 @@ const EditConfirmationStep = (props: Props) => {
 
   const [hasTriggeredStepOne, setHasTriggeredStepOne] = useState(false)
   const [isStepOneCompleted, setIsStepOneCompleted] = useState(false)
-  const isLoading =
-    isSubmittingRemoveTransaction ||
-    isRemoveTransactionBeingConfirmed ||
-    isSigning
+  const isLoading = isSubmittingRemoveTransaction || isRemoveTransactionBeingConfirmed || isSigning
 
   useEffect(() => {
     if (isRemoveTransactionBeingConfirmed) {
@@ -34,29 +31,15 @@ const EditConfirmationStep = (props: Props) => {
   }, [isRemoveTransactionBeingConfirmed, isSubmittingRemoveTransaction])
 
   useEffect(() => {
-    if (
-      hasTriggeredStepOne &&
-      !isRemoveTransactionBeingConfirmed &&
-      !isSubmittingRemoveTransaction
-    ) {
+    if (hasTriggeredStepOne && !isRemoveTransactionBeingConfirmed && !isSubmittingRemoveTransaction) {
       setIsStepOneCompleted(true)
     }
-  }, [
-    hasTriggeredStepOne,
-    isRemoveTransactionBeingConfirmed,
-    isSubmittingRemoveTransaction
-  ])
+  }, [hasTriggeredStepOne, isRemoveTransactionBeingConfirmed, isSubmittingRemoveTransaction])
 
   const handleRemove = useCallback(() => onRemove(nft), [nft, onRemove])
 
   const handlePublishNewInfo = useCallback(() => {
-    onEdit(
-      nft,
-      pricePerDay,
-      periods,
-      Number(new Date(expiresAt)),
-      UpsertRentalOptType.EDIT
-    )
+    onEdit(nft, pricePerDay, periods, Number(new Date(expiresAt)), UpsertRentalOptType.EDIT)
   }, [onEdit, nft, pricePerDay, periods, expiresAt])
 
   return (
@@ -67,22 +50,14 @@ const EditConfirmationStep = (props: Props) => {
       />
       <Modal.Content>
         <div className={styles.notice}>
-          <p>
-            {t('rental_modal.confirmation_edit_step.notice_line_one')}&nbsp;
-          </p>
+          <p>{t('rental_modal.confirmation_edit_step.notice_line_one')}&nbsp;</p>
           <div className={styles.noticeBlock}>
             <div className={styles.actionContainer}>
               <div className={styles.actionContainerText}>
                 <span className={styles.step}>1</span>
                 <div>
-                  <span>
-                    {t('rental_modal.confirmation_edit_step.action_one_title')}
-                  </span>
-                  <span className={styles.stepSubtitle}>
-                    {t(
-                      'rental_modal.confirmation_edit_step.action_one_subtitle'
-                    )}
-                  </span>
+                  <span>{t('rental_modal.confirmation_edit_step.action_one_title')}</span>
+                  <span className={styles.stepSubtitle}>{t('rental_modal.confirmation_edit_step.action_one_subtitle')}</span>
                 </div>
               </div>
               {!isStepOneCompleted ? (
@@ -90,15 +65,8 @@ const EditConfirmationStep = (props: Props) => {
                   primary
                   size="small"
                   onClick={handleRemove}
-                  loading={
-                    isSubmittingRemoveTransaction ||
-                    isRemoveTransactionBeingConfirmed
-                  }
-                  disabled={
-                    isStepOneCompleted ||
-                    isSubmittingRemoveTransaction ||
-                    isRemoveTransactionBeingConfirmed
-                  }
+                  loading={isSubmittingRemoveTransaction || isRemoveTransactionBeingConfirmed}
+                  disabled={isStepOneCompleted || isSubmittingRemoveTransaction || isRemoveTransactionBeingConfirmed}
                 >
                   {t('rental_modal.confirmation_edit_step.confirm')}
                 </Button>
@@ -115,9 +83,7 @@ const EditConfirmationStep = (props: Props) => {
               <div className={styles.actionContainerText}>
                 <span className={styles.step}>2</span>
                 <div>
-                  <span>
-                    {t('rental_modal.confirmation_edit_step.action_two_title')}
-                  </span>
+                  <span>{t('rental_modal.confirmation_edit_step.action_two_title')}</span>
                 </div>
               </div>
               <Button
@@ -135,13 +101,7 @@ const EditConfirmationStep = (props: Props) => {
       </Modal.Content>
       {error && (
         <Modal.Content>
-          <Message
-            error
-            size="tiny"
-            visible
-            content={error}
-            header={t('global.error')}
-          />
+          <Message error size="tiny" visible content={error} header={t('global.error')} />
         </Modal.Content>
       )}
     </>

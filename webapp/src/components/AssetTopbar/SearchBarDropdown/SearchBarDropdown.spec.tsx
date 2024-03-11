@@ -1,11 +1,5 @@
 import { Context as ResponsiveContext } from 'react-responsive'
-import {
-  BodyShape,
-  NFTCategory,
-  Network,
-  Rarity,
-  WearableCategory
-} from '@dcl/schemas'
+import { BodyShape, NFTCategory, Network, Rarity, WearableCategory } from '@dcl/schemas'
 import { fireEvent, waitFor, within } from '@testing-library/react'
 import { catalogAPI } from '../../../modules/vendor/decentraland/catalog/api'
 import { renderWithProviders } from '../../../utils/test'
@@ -17,10 +11,7 @@ import { VendorName } from '../../../modules/vendor'
 import { SortBy } from '../../../modules/routing/types'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
 import { SearchBarDropdownProps } from './SearchBarDropdown.types'
-import {
-  LOCAL_STORAGE_RECENT_SEARCHES_KEY,
-  SearchBarDropdown
-} from './SearchBarDropdown'
+import { LOCAL_STORAGE_RECENT_SEARCHES_KEY, SearchBarDropdown } from './SearchBarDropdown'
 import {
   COLLECTION_ROW_DATA_TEST_ID,
   NO_RESULTS_DATA_TEST_ID,
@@ -78,13 +69,11 @@ const MOCKED_COLLECTION = {
   minters: ['0x214ffc0f0103735728dc66b61a22e4f163e275ae'],
   is_approved: true,
   reviewed_at: '2022-07-11T19:46:43.000Z',
-  forum_link:
-    'https://forum.decentraland.org/t/collection-flock-fits-fuego-created-by-blocked-is-ready-for-review/12886',
+  forum_link: 'https://forum.decentraland.org/t/collection-flock-fits-fuego-created-by-blocked-is-ready-for-review/12886',
   lock: '2022-07-04T04:24:42.510Z',
   forum_id: 51917,
   item_count: '1',
-  urn:
-    'urn:decentraland:matic:collections-v2:0x1682e68c0fc58716e24949ae72f6ca331dedf21b'
+  urn: 'urn:decentraland:matic:collections-v2:0x1682e68c0fc58716e24949ae72f6ca331dedf21b'
 }
 
 const MOCKED_CREATOR = {
@@ -128,16 +117,13 @@ const MOCKED_ITEM = {
   minListingPrice: null,
   listings: 0,
   owners: null,
-  urn:
-    'urn:decentraland:matic:collections-v2:0xffce00acc0d17eb01c3d2f9c3fcb3ab26519c562:0',
+  urn: 'urn:decentraland:matic:collections-v2:0xffce00acc0d17eb01c3d2f9c3fcb3ab26519c562:0',
   picks: {
     count: 0
   }
 }
 
-function renderSearchDropBarDropdown(
-  props: Partial<SearchBarDropdownProps> = {}
-) {
+function renderSearchDropBarDropdown(props: Partial<SearchBarDropdownProps> = {}) {
   const defaultProps: SearchBarDropdownProps = {
     searchTerm: '',
     category: NFTCategory.WEARABLE,
@@ -203,10 +189,7 @@ describe('SearchBarDropdown', () => {
         it('should have the correct asset url in the result rendered', async () => {
           const { container } = renderSearchDropBarDropdown(props)
           await waitFor(async () => {
-            expect(within(container).getByRole('link')).toHaveAttribute(
-              'href',
-              getAssetUrl(MOCKED_ITEM as Asset)
-            )
+            expect(within(container).getByRole('link')).toHaveAttribute('href', getAssetUrl(MOCKED_ITEM as Asset))
           })
         })
 
@@ -215,18 +198,14 @@ describe('SearchBarDropdown', () => {
           await waitFor(async () => {
             const link = within(container).getByRole('link')
             await fireEvent.click(link)
-            expect(
-              localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)
-            ).toBe(JSON.stringify([MOCKED_ITEM]))
+            expect(localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)).toBe(JSON.stringify([MOCKED_ITEM]))
           })
         })
 
         it('should render the see all button', async () => {
           const { getByTestId } = renderSearchDropBarDropdown(props)
           await waitFor(async () => {
-            expect(
-              getByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)
-            ).toBeInTheDocument()
+            expect(getByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)).toBeInTheDocument()
           })
         })
 
@@ -237,7 +216,7 @@ describe('SearchBarDropdown', () => {
             onSearch
           })
           await waitFor(async () => {
-            let button = getByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)
+            const button = getByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)
             await fireEvent.click(button)
             expect(onSearch).toHaveBeenCalledWith({
               value: props.searchTerm
@@ -277,9 +256,7 @@ describe('SearchBarDropdown', () => {
     })
 
     describe('and the user is searching for creators', () => {
-      const renderAndSelectCreatorsTab = async (
-        props: Partial<SearchBarDropdownProps> = {}
-      ) => {
+      const renderAndSelectCreatorsTab = async (props: Partial<SearchBarDropdownProps> = {}) => {
         const render = renderSearchDropBarDropdown(props)
         await waitFor(() => {
           const creatorsTab = render.getByText('Creators')
@@ -340,18 +317,14 @@ describe('SearchBarDropdown', () => {
           await waitFor(async () => {
             const link = within(container).getByRole('link')
             await fireEvent.click(link)
-            expect(
-              localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)
-            ).toBe(JSON.stringify([MOCKED_CREATOR]))
+            expect(localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)).toBe(JSON.stringify([MOCKED_CREATOR]))
           })
         })
 
         it('should not render the see all button', async () => {
           const { queryByTestId } = await renderAndSelectCreatorsTab(props)
           await waitFor(async () => {
-            expect(
-              queryByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)
-            ).not.toBeInTheDocument()
+            expect(queryByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)).not.toBeInTheDocument()
           })
         })
       })
@@ -373,9 +346,7 @@ describe('SearchBarDropdown', () => {
     })
 
     describe('and the user is searching for collections', () => {
-      const renderAndSelectCollectionsTab = async (
-        props: Partial<SearchBarDropdownProps> = {}
-      ) => {
+      const renderAndSelectCollectionsTab = async (props: Partial<SearchBarDropdownProps> = {}) => {
         const render = renderSearchDropBarDropdown(props)
         await waitFor(() => {
           const creatorsTab = render.getByText('Collections')
@@ -390,9 +361,7 @@ describe('SearchBarDropdown', () => {
 
       describe('and there are results', () => {
         beforeEach(() => {
-          ;(builderAPI.fetchPublishedCollectionsBySearchTerm as jest.Mock).mockResolvedValue(
-            [MOCKED_COLLECTION]
-          )
+          ;(builderAPI.fetchPublishedCollectionsBySearchTerm as jest.Mock).mockResolvedValue([MOCKED_COLLECTION])
           ;(catalogAPI.get as jest.Mock).mockResolvedValue({
             data: []
           })
@@ -413,9 +382,7 @@ describe('SearchBarDropdown', () => {
             onSearch
           })
           await waitFor(async () => {
-            const collectionRow = within(container).getByTestId(
-              `${COLLECTION_ROW_DATA_TEST_ID}-${MOCKED_COLLECTION.name}`
-            )
+            const collectionRow = within(container).getByTestId(`${COLLECTION_ROW_DATA_TEST_ID}-${MOCKED_COLLECTION.name}`)
             await fireEvent.click(collectionRow)
             expect(onSearch).toHaveBeenCalledWith({
               contractAddresses: [MOCKED_COLLECTION.contract_address]
@@ -431,13 +398,9 @@ describe('SearchBarDropdown', () => {
               onSearch
             })
             await waitFor(async () => {
-              const collectionRow = within(container).getByTestId(
-                `${COLLECTION_ROW_DATA_TEST_ID}-${MOCKED_COLLECTION.name}`
-              )
+              const collectionRow = within(container).getByTestId(`${COLLECTION_ROW_DATA_TEST_ID}-${MOCKED_COLLECTION.name}`)
               await fireEvent.click(collectionRow)
-              expect(
-                localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)
-              ).toBe(JSON.stringify([MOCKED_COLLECTION]))
+              expect(localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)).toBe(JSON.stringify([MOCKED_COLLECTION]))
             })
           })
         })
@@ -445,9 +408,7 @@ describe('SearchBarDropdown', () => {
         it('should not render the see all button', async () => {
           const { queryByTestId } = await renderAndSelectCollectionsTab(props)
           await waitFor(async () => {
-            expect(
-              queryByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)
-            ).not.toBeInTheDocument()
+            expect(queryByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)).not.toBeInTheDocument()
           })
         })
 

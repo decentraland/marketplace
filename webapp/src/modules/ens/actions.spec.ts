@@ -72,15 +72,7 @@ describe('claimName actions', () => {
     })
 
     it('should create an action to signal that a name claim transaction is submitted', () => {
-      expect(
-        claimNameTransactionSubmitted(
-          subdomain,
-          address,
-          chainId,
-          txHash,
-          route
-        )
-      ).toEqual({
+      expect(claimNameTransactionSubmitted(subdomain, address, chainId, txHash, route)).toEqual({
         type: CLAIM_NAME_TRANSACTION_SUBMITTED,
         payload: {
           ...buildTransactionPayload(chainId, txHash, {
@@ -117,9 +109,7 @@ describe('claimName actions', () => {
     })
 
     it('should create an action to signal that a cross chain name claim is successful', () => {
-      expect(
-        claimNameCrossChainSuccess({} as ENS, name, txHash, route)
-      ).toEqual({
+      expect(claimNameCrossChainSuccess({} as ENS, name, txHash, route)).toEqual({
         type: CLAIM_NAME_CROSS_CHAIN_SUCCESS,
         payload: { ens, name, txHash, route }
       })

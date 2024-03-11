@@ -1,11 +1,4 @@
-import {
-  EmotePlayMode,
-  GenderFilterOption,
-  Network,
-  NFTCategory,
-  Rarity,
-  WearableGender
-} from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../../modules/asset/types'
 import { BrowseOptions } from '../../modules/routing/types'

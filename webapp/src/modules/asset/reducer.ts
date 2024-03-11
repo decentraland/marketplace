@@ -1,7 +1,4 @@
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchSmartWearableRequiredPermissionsFailureAction,
   FetchSmartWearableRequiredPermissionsRequestAction,
@@ -38,10 +35,7 @@ type AssetReducerAction =
   | FetchSmartWearableRequiredPermissionsSuccessAction
   | FetchSmartWearableVideoHashSuccessAction
 
-export function assetReducer(
-  state = INITIAL_STATE,
-  action: AssetReducerAction
-): AssetState {
+export function assetReducer(state = INITIAL_STATE, action: AssetReducerAction): AssetState {
   switch (action.type) {
     case FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST:
     case FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST: {

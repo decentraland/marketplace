@@ -1,9 +1,6 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../../modules/reducer'
-import {
-  getOnlyOnRent,
-  getOnlyOnSale
-} from '../../../modules/routing/selectors'
+import { getOnlyOnRent, getOnlyOnSale } from '../../../modules/routing/selectors'
 import { browse } from '../../../modules/routing/actions'
 import { getTiles } from '../../../modules/tile/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './MapBrowse.types'

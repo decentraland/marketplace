@@ -39,9 +39,7 @@ describe('when creating the action to signal a success in the smart wearable req
   const requiredPermissions = ['aPermission']
 
   it('should return an object representing the action', () => {
-    expect(
-      fetchSmartWearableRequiredPermissionsSuccess(asset, requiredPermissions)
-    ).toEqual({
+    expect(fetchSmartWearableRequiredPermissionsSuccess(asset, requiredPermissions)).toEqual({
       type: FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_SUCCESS,
       meta: undefined,
       payload: { asset, requiredPermissions }
@@ -51,9 +49,7 @@ describe('when creating the action to signal a success in the smart wearable req
 
 describe('when creating the action to signal a failure smart wearable required permissions request', () => {
   it('should return an object representing the action', () => {
-    expect(
-      fetchSmartWearableRequiredPermissionsFailure(asset, anErrorMessage)
-    ).toEqual({
+    expect(fetchSmartWearableRequiredPermissionsFailure(asset, anErrorMessage)).toEqual({
       type: FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_FAILURE,
       meta: undefined,
       payload: { asset, error: anErrorMessage }

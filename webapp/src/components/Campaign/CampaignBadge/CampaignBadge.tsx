@@ -40,9 +40,7 @@ const CampaignBadge = ({ contract, isCampaignBrowserEnabled }: Props) => {
     })()
   }, [contract, isCampaignBrowserEnabled])
 
-  return showBadge ? (
-    <IconBadge text={t(`campaign.badge`)} icon="sparkles" href={href} />
-  ) : null
+  return showBadge ? <IconBadge text={t(`campaign.badge`)} icon="sparkles" href={href} /> : null
 }
 
 export default React.memo(CampaignBadge)

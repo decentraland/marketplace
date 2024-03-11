@@ -31,7 +31,7 @@ const ListingsTable = (props: Props) => {
     if (asset) {
       setIsLoading(true)
 
-      let params: OrderFilters = {
+      const params: OrderFilters = {
         contractAddress: asset.contractAddress,
         first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE,
@@ -51,9 +51,7 @@ const ListingsTable = (props: Props) => {
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
           setOrders(
             formatDataToTable(
-              isNFT(asset)
-                ? response.data.filter(order => order.tokenId !== asset.tokenId)
-                : response.data,
+              isNFT(asset) ? response.data.filter(order => order.tokenId !== asset.tokenId) : response.data,
               isMobileOrTablet
             )
           )

@@ -11,9 +11,7 @@ beforeEach(() => {
 describe('when reducing action of setting the wearable preview', () => {
   it('should return a state with the created wearable preview', () => {
     const controller = { scene: {}, emote: {} } as IPreviewController
-    expect(
-      previewReducer(state, setWearablePreviewController(controller))
-    ).toEqual({
+    expect(previewReducer(state, setWearablePreviewController(controller))).toEqual({
       ...INITIAL_STATE,
       wearablePreviewController: controller
     })

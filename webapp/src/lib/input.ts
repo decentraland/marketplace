@@ -2,19 +2,12 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 
 let timeout: NodeJS.Timeout | null = null
 
-export const useInput = (
-  value: string,
-  onChange: (newValue: string) => void,
-  ms = 500
-) => {
+export const useInput = (value: string, onChange: (newValue: string) => void, ms = 500) => {
   const [text, setText] = useState(value)
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => setText(event.target.value),
-    [setText]
-  )
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => setText(event.target.value), [setText])
 
   // flag to skip debounce
-  let skip = useRef(false)
+  const skip = useRef(false)
 
   // when value is changed from outside (controlled prop)
   // should update internal value and skip debounce

@@ -1,15 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Link, Redirect, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
-import {
-  Back,
-  Button,
-  Dropdown,
-  Header,
-  Icon,
-  Loader,
-  Popup
-} from 'decentraland-ui'
+import { Back, Button, Dropdown, Header, Icon, Loader, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { formatDistanceToNow } from '../../lib/date'
@@ -46,19 +38,7 @@ import {
 const LIST_NOT_FOUND = 'list was not found'
 
 const ListPage = (props: Props) => {
-  const {
-    isConnecting,
-    wallet,
-    listId,
-    list,
-    isLoading,
-    error,
-    onFetchList,
-    onBack,
-    onEditList,
-    onDeleteList,
-    onShareList
-  } = props
+  const { isConnecting, wallet, listId, list, isLoading, error, onFetchList, onBack, onEditList, onDeleteList, onShareList } = props
   const hasFetchedOnce = useRef(false)
   const { pathname, search } = useLocation()
 
@@ -81,11 +61,7 @@ const ListPage = (props: Props) => {
   )
 
   const isPublicView = useMemo(
-    () =>
-      !wallet ||
-      (list &&
-        wallet.address !== list.userAddress &&
-        list.id !== DEFAULT_FAVORITES_LIST_ID),
+    () => !wallet || (list && wallet.address !== list.userAddress && list.id !== DEFAULT_FAVORITES_LIST_ID),
     [wallet, list]
   )
 
@@ -104,28 +80,12 @@ const ListPage = (props: Props) => {
     const isNotFound = error?.includes(LIST_NOT_FOUND)
     const errorType = isNotFound ? 'not_found' : 'could_not_load'
     return (
-      <div
-        className={styles.errorContainer}
-        data-testid={ERROR_CONTAINER_TEST_ID}
-      >
-        <div
-          className={classNames(
-            styles.errorImage,
-            isNotFound ? styles.notFoundImage : styles.couldNotLoadImage
-          )}
-        ></div>
-        <h1 className={styles.errorTitle}>
-          {t(`list_page.error.${errorType}.title`)}
-        </h1>
-        <p className={styles.errorSubtitle}>
-          {t(`list_page.error.${errorType}.subtitle`)}
-        </p>
+      <div className={styles.errorContainer} data-testid={ERROR_CONTAINER_TEST_ID}>
+        <div className={classNames(styles.errorImage, isNotFound ? styles.notFoundImage : styles.couldNotLoadImage)}></div>
+        <h1 className={styles.errorTitle}>{t(`list_page.error.${errorType}.title`)}</h1>
+        <p className={styles.errorSubtitle}>{t(`list_page.error.${errorType}.subtitle`)}</p>
         {!isNotFound && (
-          <Button
-            primary
-            data-testid={COULD_NOT_LOAD_LIST_ACTION_TEST_ID}
-            onClick={handleFetchList}
-          >
+          <Button primary data-testid={COULD_NOT_LOAD_LIST_ACTION_TEST_ID} onClick={handleFetchList}>
             {t(`list_page.error.${errorType}.action`)}
           </Button>
         )}
@@ -147,9 +107,7 @@ const ListPage = (props: Props) => {
 
   return (
     <PageLayout activeTab={isPublicView ? undefined : NavigationTab.MY_LISTS}>
-      {isLoading || isConnecting ? (
-        <Loader active size="massive" data-testid={LOADER_TEST_ID} />
-      ) : null}
+      {isLoading || isConnecting ? <Loader active size="massive" data-testid={LOADER_TEST_ID} /> : null}
       {!isLoading && !isConnecting && listId && list && !error ? (
         <div data-testid={LIST_CONTAINER_TEST_ID} className={styles.container}>
           <Header className={styles.header} size="large">
@@ -160,12 +118,7 @@ const ListPage = (props: Props) => {
             ) : null}
             <div className={styles.nameContainer}>
               {list.name}
-              {list.isPrivate && (
-                <PrivateTag
-                  data-testid={PRIVATE_BADGE_TEST_ID}
-                  className={styles.privateBadge}
-                />
-              )}
+              {list.isPrivate && <PrivateTag data-testid={PRIVATE_BADGE_TEST_ID} className={styles.privateBadge} />}
             </div>
             {!isPublicView ? (
               <div className={styles.actions}>
@@ -175,10 +128,7 @@ const ListPage = (props: Props) => {
                   trigger={
                     <span>
                       <Button
-                        className={classNames(
-                          styles.iconContainer,
-                          styles.share
-                        )}
+                        className={classNames(styles.iconContainer, styles.share)}
                         inverted
                         compact
                         onClick={handleShareList}
@@ -233,12 +183,7 @@ const ListPage = (props: Props) => {
             <div className={styles.subHeaderLeft}>
               <span className={styles.description}>{list.description}</span>
               {isPublicView && list.userAddress && (
-                <LinkedProfile
-                  data-testid={'linked-profile'}
-                  size="large"
-                  address={list.userAddress}
-                  className={styles.owner}
-                />
+                <LinkedProfile data-testid={'linked-profile'} size="large" address={list.userAddress} className={styles.owner} />
               )}
             </div>
             {list.updatedAt ? (
@@ -251,16 +196,9 @@ const ListPage = (props: Props) => {
               </div>
             ) : null}
           </Header>
-          <div
-            data-testid={ASSET_BROWSE_TEST_ID}
-            className={styles.assetBrowseContainer}
-          >
+          <div data-testid={ASSET_BROWSE_TEST_ID} className={styles.assetBrowseContainer}>
             {list.itemsCount ? (
-              <AssetBrowse
-                view={View.LISTS}
-                section={Section.LISTS}
-                vendor={VendorName.DECENTRALAND}
-              />
+              <AssetBrowse view={View.LISTS} section={Section.LISTS} vendor={VendorName.DECENTRALAND} />
             ) : (
               <div className={styles.empty} data-testid={EMPTY_LIST_TEST_ID}>
                 <div className={styles.emptyLogo}></div>
@@ -268,12 +206,7 @@ const ListPage = (props: Props) => {
                 <p>{t(`list_page.empty.${privacyView}.subtitle`)}</p>
                 {!isPublicView && (
                   <div className={styles.emptyActions}>
-                    <Button
-                      primary
-                      as={Link}
-                      to={locations.browse()}
-                      data-testid={EMPTY_LIST_ACTION_TEST_ID}
-                    >
+                    <Button primary as={Link} to={locations.browse()} data-testid={EMPTY_LIST_ACTION_TEST_ID}>
                       {t(`list_page.empty.${privacyView}.action`)}
                     </Button>
                   </div>

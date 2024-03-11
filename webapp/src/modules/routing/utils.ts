@@ -2,11 +2,7 @@ import { NFTCategory } from '@dcl/schemas'
 import { BrowseOptions, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
 import { AssetStatusFilter } from '../../utils/filters'
-import {
-  getPersistedIsMapProperty,
-  isAccountView,
-  isLandSection
-} from '../ui/utils'
+import { getPersistedIsMapProperty, isAccountView, isLandSection } from '../ui/utils'
 import { omit, reset } from '../../lib/utils'
 import { View } from '../ui/types'
 import { getCategoryFromSection, getSearchParams } from './search'
@@ -49,25 +45,16 @@ export function isCatalogViewWithStatusFilter(view: View | undefined) {
   return view && view === View.MARKET
 }
 
-export function isCatalogViewAndSection(
-  view: View | undefined,
-  section: Section | undefined
-) {
+export function isCatalogViewAndSection(view: View | undefined, section: Section | undefined) {
   return (
     view &&
     CATALOG_VIEWS.includes(view) &&
     section &&
-    [getCategoryFromSection(section)].some(
-      category =>
-        category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE
-    )
+    [getCategoryFromSection(section)].some(category => category === NFTCategory.EMOTE || category === NFTCategory.WEARABLE)
   )
 }
 
-export function buildBrowseURL(
-  pathname: string,
-  browseOptions: BrowseOptions
-): string {
+export function buildBrowseURL(pathname: string, browseOptions: BrowseOptions): string {
   let params: URLSearchParams | undefined
   if (browseOptions.section === Section.ON_SALE) {
     params = getSearchParams({ section: Section.ON_SALE })
@@ -78,27 +65,18 @@ export function buildBrowseURL(
   return params ? `${pathname}?${params.toString()}` : pathname
 }
 
-export function isMapSet(
-  isMap: boolean | undefined,
-  section: Section,
-  view: View | undefined
-): boolean {
+export function isMapSet(isMap: boolean | undefined, section: Section, view: View | undefined): boolean {
   const isMapPropertyPersisted = getPersistedIsMapProperty()
 
   return (
     isMap ??
-    (section === Section.LAND &&
-    (view === undefined || (view && !isAccountView(view))) &&
-    isMapPropertyPersisted !== null
-      ? isMapPropertyPersisted!
+    (section === Section.LAND && (view === undefined || (view && !isAccountView(view))) && isMapPropertyPersisted !== null
+      ? isMapPropertyPersisted
       : false)
   )
 }
 
-export function getClearedBrowseOptions(
-  browseOptions: BrowseOptions,
-  fillWithUndefined = false
-): BrowseOptions {
+export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUndefined = false): BrowseOptions {
   const keys = [
     'rarities',
     'wearableGenders',
@@ -126,9 +104,7 @@ export function getClearedBrowseOptions(
     'emoteHasGeometry'
   ]
 
-  const clearedBrowseOptions = fillWithUndefined
-    ? reset(browseOptions, keys)
-    : omit(browseOptions, keys)
+  const clearedBrowseOptions = fillWithUndefined ? reset(browseOptions, keys) : omit(browseOptions, keys)
 
   // The status as only on sale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
   if (

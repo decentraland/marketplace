@@ -8,10 +8,7 @@ import Sell from './Sell'
 
 const mapState = (_state: RootState): MapStateProps => ({})
 
-const mapDispatch = (
-  dispatch: Dispatch,
-  ownProps: OwnProps
-): MapDispatchProps => ({
+const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => ({
   // TODO: @Rentals, add the mapDispatch that opens the sell modal once implemented
   onEditOrder: () =>
     dispatch(

@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Modal,
-  Button,
-  ModalNavigation,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { Modal, Button, ModalNavigation, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { Section } from '../../../../modules/vendor/decentraland'
 import { AssetType } from '../../../../modules/asset/types'
@@ -17,10 +12,7 @@ import styles from './SmartWearablesLaunchModal.module.css'
 
 const SMARTS_WEARABLES_PROMO_POPUP_KEY = 'smart-wearables-intro-popup-key'
 
-export const SmartWearablesLaunchModal = ({
-  isSmartWearablesFTUEnabled,
-  isLoadingFeatureFlags
-}: Props) => {
+export const SmartWearablesLaunchModal = ({ isSmartWearablesFTUEnabled, isLoadingFeatureFlags }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const isTabletOrBelow = useTabletAndBelowMediaQuery()
 
@@ -35,11 +27,7 @@ export const SmartWearablesLaunchModal = ({
 
   const onLearnMore = useCallback(() => {
     markAsSeen()
-    window.open(
-      'https://decentraland.org/blog/announcements/smart-wearables-and-portable-experiences',
-      '_blank',
-      'noopener noreferrer'
-    )
+    window.open('https://decentraland.org/blog/announcements/smart-wearables-and-portable-experiences', '_blank', 'noopener noreferrer')
   }, [markAsSeen])
 
   useEffect(() => {
@@ -61,19 +49,9 @@ export const SmartWearablesLaunchModal = ({
       onClose={onClose}
       dimmer={{ className: styles.dimmerRemover }}
     >
-      <ModalNavigation
-        title={t('smart_wearables_ftu_modal.title')}
-        onClose={onClose}
-      />
+      <ModalNavigation title={t('smart_wearables_ftu_modal.title')} onClose={onClose} />
       <Modal.Content className={styles.content}>
-        <video
-          autoPlay
-          loop
-          className={styles.video}
-          src={`${process.env.VITE_BASE_URL}/smart-wearables-ftu.mp4`}
-          preload="auto"
-          muted
-        />
+        <video autoPlay loop className={styles.video} src={`${process.env.VITE_BASE_URL}/smart-wearables-ftu.mp4`} preload="auto" muted />
         <Modal.Description>
           <div className={styles.description}>
             {t('smart_wearables_ftu_modal.description', {

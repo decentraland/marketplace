@@ -1,16 +1,8 @@
 import { Dispatch } from 'redux'
 import React from 'react'
 import { Order, RentalListing, RentalStatus } from '@dcl/schemas'
-import {
-  ClearNFTErrorsAction,
-  fetchNFTRequest,
-  FetchNFTRequestAction
-} from '../../modules/nft/actions'
-import {
-  ClearItemErrorsAction,
-  fetchItemRequest,
-  FetchItemRequestAction
-} from '../../modules/item/actions'
+import { ClearNFTErrorsAction, fetchNFTRequest, FetchNFTRequestAction } from '../../modules/nft/actions'
+import { ClearItemErrorsAction, fetchItemRequest, FetchItemRequestAction } from '../../modules/item/actions'
 import { Asset, AssetType } from '../../modules/asset/types'
 
 export type Props<T extends AssetType = AssetType> = {
@@ -30,12 +22,7 @@ export type Props<T extends AssetType = AssetType> = {
   onFetchNFT: typeof fetchNFTRequest
   onFetchItem: typeof fetchItemRequest
   onClearErrors: () => void
-  children: (
-    asset: Asset<T> | null,
-    order: Order | null,
-    rental: RentalListing | null,
-    isLoading: boolean
-  ) => React.ReactNode | null
+  children: (asset: Asset<T> | null, order: Order | null, rental: RentalListing | null, isLoading: boolean) => React.ReactNode | null
 }
 
 export type MapStateProps = Pick<
@@ -51,18 +38,7 @@ export type MapStateProps = Pick<
   | 'error'
   | 'isConnecting'
 >
-export type MapDispatchProps = Pick<
-  Props,
-  'onFetchNFT' | 'onFetchItem' | 'onClearErrors'
->
-export type MapDispatch = Dispatch<
-  | FetchNFTRequestAction
-  | FetchItemRequestAction
-  | ClearNFTErrorsAction
-  | ClearItemErrorsAction
->
-export type OwnProps<T extends AssetType = AssetType> = Pick<
-  Props<T>,
-  'type' | 'children' | 'rentalStatus' | 'retry'
-> &
+export type MapDispatchProps = Pick<Props, 'onFetchNFT' | 'onFetchItem' | 'onClearErrors'>
+export type MapDispatch = Dispatch<FetchNFTRequestAction | FetchItemRequestAction | ClearNFTErrorsAction | ClearItemErrorsAction>
+export type OwnProps<T extends AssetType = AssetType> = Pick<Props<T>, 'type' | 'children' | 'rentalStatus' | 'retry'> &
   Partial<Pick<Props<T>, 'contractAddress' | 'tokenId'>>

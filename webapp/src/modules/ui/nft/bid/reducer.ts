@@ -23,16 +23,9 @@ const INITIAL_STATE: BidUIState = {
   nft: []
 }
 
-type UIReducerAction =
-  | FetchBidsByAddressSuccessAction
-  | FetchBidsByNFTSuccessAction
-  | ArchiveBidAction
-  | UnarchiveBidAction
+type UIReducerAction = FetchBidsByAddressSuccessAction | FetchBidsByNFTSuccessAction | ArchiveBidAction | UnarchiveBidAction
 
-export function bidReducer(
-  state: BidUIState = INITIAL_STATE,
-  action: UIReducerAction
-) {
+export function bidReducer(state: BidUIState = INITIAL_STATE, action: UIReducerAction) {
   switch (action.type) {
     case FETCH_BIDS_BY_ADDRESS_SUCCESS: {
       const { sellerBids, bidderBids } = action.payload

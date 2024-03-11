@@ -24,12 +24,5 @@ export type Props = Omit<ModalProps, 'metadata'> & {
 } & WithAuthorizedActionProps
 
 export type OwnProps = Pick<Props, 'metadata'>
-export type MapStateProps = Pick<
-  Props,
-  | 'wallet'
-  | 'isTransactionBeingConfirmed'
-  | 'isSubmittingTransaction'
-  | 'error'
-  | 'getContract'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'isTransactionBeingConfirmed' | 'isSubmittingTransaction' | 'error' | 'getContract'>
 export type MapDispatchProps = Pick<Props, 'onSubmitTransaction' | 'onClearRentalErrors'>

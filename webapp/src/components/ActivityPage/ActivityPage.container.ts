@@ -4,11 +4,7 @@ import { clearTransactions } from 'decentraland-dapps/dist/modules/transaction/a
 import { RootState } from '../../modules/reducer'
 import { getAddress } from '../../modules/wallet/selectors'
 import { getTransactions } from '../../modules/transaction/selectors'
-import {
-  MapStateProps,
-  MapDispatchProps,
-  MapDispatch
-} from './ActivityPage.types'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './ActivityPage.types'
 import ActivityPage from './ActivityPage'
 
 const mapState = (state: RootState): MapStateProps => ({

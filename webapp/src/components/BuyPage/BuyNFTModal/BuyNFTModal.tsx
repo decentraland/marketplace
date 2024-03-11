@@ -5,10 +5,7 @@ import { Link } from 'react-router-dom'
 import { Contract, NFTCategory } from '@dcl/schemas'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  ChainButton,
-  withAuthorizedAction
-} from 'decentraland-dapps/dist/containers'
+import { ChainButton, withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { ContractName } from 'decentraland-transactions'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
@@ -52,11 +49,7 @@ const BuyNFTModal = (props: Props) => {
     onClearOrderErrors
   } = props
 
-  const [
-    fingerprint,
-    isFingerprintLoading,
-    contractFingerprint
-  ] = useFingerprint(nft)
+  const [fingerprint, isFingerprintLoading, contractFingerprint] = useFingerprint(nft)
   const analytics = getAnalytics()
 
   const handleExecuteOrder = useCallback(
@@ -68,15 +61,7 @@ const BuyNFTModal = (props: Props) => {
 
       !!order && onExecuteOrder(order, nft, fingerprint, !alreadyAuthorized)
     },
-    [
-      isBuyWithCardPage,
-      onExecuteOrderWithCard,
-      onExecuteOrder,
-      order,
-      nft,
-      fingerprint,
-      analytics
-    ]
+    [isBuyWithCardPage, onExecuteOrderWithCard, onExecuteOrder, order, nft, fingerprint, analytics]
   )
 
   const handleCancel = useCallback(() => {
@@ -100,7 +85,7 @@ const BuyNFTModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    if (!!order) {
+    if (order) {
       onClearOrderErrors()
       onAuthorizedAction({
         targetContractName: ContractName.MANAToken,
@@ -112,15 +97,7 @@ const BuyNFTModal = (props: Props) => {
         onAuthorized: handleExecuteOrder
       })
     }
-  }, [
-    handleExecuteOrder,
-    onAuthorizedAction,
-    onClearOrderErrors,
-    isBuyWithCardPage,
-    order,
-    mana,
-    marketplace
-  ])
+  }, [handleExecuteOrder, onAuthorizedAction, onClearOrderErrors, isBuyWithCardPage, order, mana, marketplace])
 
   const isDisabled =
     !order ||
@@ -134,23 +111,15 @@ const BuyNFTModal = (props: Props) => {
 
   const translationPageDescriptorId = compact([
     'buy',
-    isWearableOrEmote(nft)
-      ? isBuyWithCardPage
-        ? 'with_card'
-        : 'with_mana'
-      : null,
+    isWearableOrEmote(nft) ? (isBuyWithCardPage ? 'with_card' : 'with_mana') : null,
     'page'
   ]).join('_')
 
   let subtitle = null
   if (!order) {
-    subtitle = (
-      <T id={`${translationPageDescriptorId}.not_for_sale`} values={{ name }} />
-    )
+    subtitle = <T id={`${translationPageDescriptorId}.not_for_sale`} values={{ name }} />
   } else if (isOwner) {
-    subtitle = (
-      <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
-    )
+    subtitle = <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
   } else if (hasInsufficientMANA && !isBuyWithCardPage) {
     const description = (
       <T
@@ -161,11 +130,7 @@ const BuyNFTModal = (props: Props) => {
         }}
       />
     )
-    subtitle = isWearableOrEmote(nft) ? (
-      <NotEnoughMana asset={nft} description={description} />
-    ) : (
-      description
-    )
+    subtitle = isWearableOrEmote(nft) ? <NotEnoughMana asset={nft} description={description} /> : description
   } else {
     subtitle = isWearableOrEmote(nft) ? (
       <div className="subtitle-wrapper">
@@ -194,29 +159,17 @@ const BuyNFTModal = (props: Props) => {
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
       <AssetProviderPage type={AssetType.NFT}>
         {(asset, newOrder) => {
-          return newOrder && order && newOrder.price !== order.price ? (
-            <PriceHasChanged asset={asset} newPrice={newOrder.price} />
-          ) : null
+          return newOrder && order && newOrder.price !== order.price ? <PriceHasChanged asset={asset} newPrice={newOrder.price} /> : null
         }}
       </AssetProviderPage>
-      {hasLowPrice && !isBuyWithCardPage ? (
-        <PriceTooLow chainId={nft.chainId} network={nft.network} />
-      ) : null}
+      {hasLowPrice && !isBuyWithCardPage ? <PriceTooLow chainId={nft.chainId} network={nft.network} /> : null}
       <PartiallySupportedNetworkCard asset={nft} />
       {!isFingerprintLoading && contractFingerprint !== fingerprint ? (
         <ErrorBanner info={t('atlas_updated_warning.fingerprint_missmatch')} />
       ) : null}
-      <div
-        className={classNames('buttons', isWearableOrEmote(nft) && 'with-mana')}
-      >
-        <Button
-          as={Link}
-          to={locations.nft(nft.contractAddress, nft.tokenId)}
-          onClick={handleCancel}
-        >
-          {!isBuyWithCardPage && (hasLowPrice || hasInsufficientMANA)
-            ? t('global.go_back')
-            : t('global.cancel')}
+      <div className={classNames('buttons', isWearableOrEmote(nft) && 'with-mana')}>
+        <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)} onClick={handleCancel}>
+          {!isBuyWithCardPage && (hasLowPrice || hasInsufficientMANA) ? t('global.go_back') : t('global.cancel')}
         </Button>
         {(!hasInsufficientMANA && !hasLowPrice) || isBuyWithCardPage ? (
           <ChainButton
@@ -238,9 +191,7 @@ const BuyNFTModal = (props: Props) => {
         ) : null}
       </div>
       {isWearableOrEmote(nft) && isBuyWithCardPage ? (
-        <CardPaymentsExplanation
-          translationPageDescriptorId={translationPageDescriptorId}
-        />
+        <CardPaymentsExplanation translationPageDescriptorId={translationPageDescriptorId} />
       ) : null}
     </AssetAction>
   )

@@ -3,29 +3,15 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import { Props } from './InfiniteScroll.types'
 
-export function InfiniteScroll({
-  page,
-  hasMorePages,
-  isLoading,
-  children,
-  maxScrollPages,
-  onLoadMore
-}: Props) {
+export function InfiniteScroll({ page, hasMorePages, isLoading, children, maxScrollPages, onLoadMore }: Props) {
   const [scrollPage, setScrollPage] = useState(0)
-  const [showLoadMoreButton, setShowLoadMoreButton] = useState(
-    maxScrollPages === 0
-  )
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(maxScrollPages === 0)
 
   const onScroll = useCallback(() => {
     const scrollTop = document.documentElement.scrollTop
     const scrollHeight = document.documentElement.scrollHeight
     const clientHeight = document.documentElement.clientHeight
-    if (
-      !isLoading &&
-      scrollTop + clientHeight >= scrollHeight &&
-      hasMorePages &&
-      (!maxScrollPages || scrollPage < maxScrollPages)
-    ) {
+    if (!isLoading && scrollTop + clientHeight >= scrollHeight && hasMorePages && (!maxScrollPages || scrollPage < maxScrollPages)) {
       setScrollPage(scrollPage + 1)
       onLoadMore(page + 1)
     }

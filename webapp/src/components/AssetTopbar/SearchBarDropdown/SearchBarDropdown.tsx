@@ -32,9 +32,7 @@ function isCreatorRecentSearch(search: RecentSearch): search is CreatorAccount {
   return 'collections' in search
 }
 
-function isCollectionRecentSearch(
-  search: RecentSearch
-): search is BuilderCollectionAttributes {
+function isCollectionRecentSearch(search: RecentSearch): search is BuilderCollectionAttributes {
   return 'contract_address' in search
 }
 
@@ -73,17 +71,9 @@ export const SearchBarDropdown = ({
 
   const handleSaveToLocalStorage = useCallback(
     (selection: RecentSearch) => {
-      if (
-        !recentSearches.some(
-          recentSearch =>
-            JSON.stringify(recentSearch) === JSON.stringify(selection)
-        )
-      ) {
+      if (!recentSearches.some(recentSearch => JSON.stringify(recentSearch) === JSON.stringify(selection))) {
         const withNewSelection = [...recentSearches, selection]
-        localStorage.setItem(
-          LOCAL_STORAGE_RECENT_SEARCHES_KEY,
-          JSON.stringify(withNewSelection)
-        )
+        localStorage.setItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY, JSON.stringify(withNewSelection))
         setRecentSearches(withNewSelection)
       }
     },
@@ -92,23 +82,15 @@ export const SearchBarDropdown = ({
 
   const handleRemoveRecentSearch = useCallback(
     (item: RecentSearch) => {
-      const newRecentSearches = recentSearches.filter(
-        recentSearch => recentSearch !== item
-      )
-      localStorage.setItem(
-        LOCAL_STORAGE_RECENT_SEARCHES_KEY,
-        JSON.stringify(newRecentSearches)
-      )
+      const newRecentSearches = recentSearches.filter(recentSearch => recentSearch !== item)
+      localStorage.setItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY, JSON.stringify(newRecentSearches))
       setRecentSearches(newRecentSearches)
     },
     [recentSearches]
   )
 
   const handleSeeAll = useCallback(() => {
-    if (
-      currentSearchTab === SearchTab.EMOTES ||
-      currentSearchTab === SearchTab.WEARABLES
-    ) {
+    if (currentSearchTab === SearchTab.EMOTES || currentSearchTab === SearchTab.WEARABLES) {
       onSearch({ value: searchTerm })
       getAnalytics().track(events.SEARCH_ALL, {
         tab: currentSearchTab,
@@ -116,9 +98,7 @@ export const SearchBarDropdown = ({
         searchUUID: uuidv5(searchTerm, UUID_NAMESPACE)
       })
     } else if (currentSearchTab === SearchTab.COLLECTIONS) {
-      const contractAddresses = (results as BuilderCollectionAttributes[]).map(
-        collection => collection.contract_address
-      )
+      const contractAddresses = (results as BuilderCollectionAttributes[]).map(collection => collection.contract_address)
       onSearch({ contractAddresses, value: '' })
       getAnalytics().track(events.SEARCH_ALL, {
         tab: currentSearchTab,
@@ -148,10 +128,7 @@ export const SearchBarDropdown = ({
     let cancel = false
     if (searchTerm) {
       const searchUUID = uuidv5(searchTerm, UUID_NAMESPACE)
-      if (
-        currentSearchTab === SearchTab.EMOTES ||
-        currentSearchTab === SearchTab.WEARABLES
-      ) {
+      if (currentSearchTab === SearchTab.EMOTES || currentSearchTab === SearchTab.WEARABLES) {
         setIsLoading(true)
         catalogAPI
           .get({
@@ -195,9 +172,7 @@ export const SearchBarDropdown = ({
               tab: currentSearchTab,
               searchTerm,
               searchUUID,
-              collections: response.map(
-                collection => collection.contract_address
-              )
+              collections: response.map(collection => collection.contract_address)
             })
           })
           .finally(() => !cancel && setIsLoading(false))
@@ -209,22 +184,12 @@ export const SearchBarDropdown = ({
         cancel = true
       }
     }
-  }, [
-    category,
-    currentSearchTab,
-    searchTerm,
-    isSearchingEmotes,
-    isSearchingWearables,
-    onFetchCreators
-  ])
+  }, [category, currentSearchTab, searchTerm, isSearchingEmotes, isSearchingWearables, onFetchCreators])
 
   // tracks the click outside the main div and close suggestions if needed
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownContainerRef.current &&
-        !dropdownContainerRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownContainerRef.current && !dropdownContainerRef.current.contains(event.target as Node)) {
         onClickOutside(event)
       }
     }
@@ -257,41 +222,22 @@ export const SearchBarDropdown = ({
                 data-testid={`${COLLECTIBLE_DATA_TEST_ID}-${item.name}`}
                 key={item.id}
                 item={item}
-                onClick={collectible =>
-                  onCollectibleResultClick(collectible, index)
-                }
+                onClick={collectible => onCollectibleResultClick(collectible, index)}
               />
             ))}
-            <Button
-              className={styles.seeAllButton}
-              inverted
-              fluid
-              onClick={handleSeeAll}
-              data-testid={SEE_ALL_COLLECTIBLES_DATA_TEST_ID}
-            >
+            <Button className={styles.seeAllButton} inverted fluid onClick={handleSeeAll} data-testid={SEE_ALL_COLLECTIBLES_DATA_TEST_ID}>
               <Icon name="search" className="searchIcon" />
-              {isSearchingEmotes
-                ? t('search_dropdown.see_all_emotes')
-                : t('search_dropdown.see_all_wearables')}
+              {isSearchingEmotes ? t('search_dropdown.see_all_emotes') : t('search_dropdown.see_all_wearables')}
             </Button>
           </>
         ) : !isLoading ? (
-          <span
-            className={styles.searchEmpty}
-            data-testid={NO_RESULTS_DATA_TEST_ID}
-          >
+          <span className={styles.searchEmpty} data-testid={NO_RESULTS_DATA_TEST_ID}>
             {t('search_dropdown.no_results')}
           </span>
         ) : null}
       </>
     )
-  }, [
-    handleSeeAll,
-    isLoading,
-    isSearchingEmotes,
-    onCollectibleResultClick,
-    results
-  ])
+  }, [handleSeeAll, isLoading, isSearchingEmotes, onCollectibleResultClick, results])
 
   const onCreatorsResultClick = useCallback(
     (creator, index) => {
@@ -309,19 +255,11 @@ export const SearchBarDropdown = ({
   const renderCreatorsSearch = useCallback(() => {
     return (
       <>
-        {fetchedCreators
-          .slice(0, MAX_AMOUNT_OF_RESULTS)
-          .map((creator, index) => (
-            <CreatorResultItemRow
-              key={creator.address}
-              creator={creator}
-              onClick={creator => onCreatorsResultClick(creator, index)}
-            />
-          ))}
+        {fetchedCreators.slice(0, MAX_AMOUNT_OF_RESULTS).map((creator, index) => (
+          <CreatorResultItemRow key={creator.address} creator={creator} onClick={creator => onCreatorsResultClick(creator, index)} />
+        ))}
         {fetchedCreators.length === 0 && !isLoadingCreators ? (
-          <span className={styles.searchEmpty}>
-            {t('search_dropdown.no_results')}
-          </span>
+          <span className={styles.searchEmpty}>{t('search_dropdown.no_results')}</span>
         ) : null}
       </>
     )
@@ -352,11 +290,7 @@ export const SearchBarDropdown = ({
             data-testid={`${COLLECTION_ROW_DATA_TEST_ID}-${collection.name}`}
           />
         ))}
-        {results.length === 0 && !isLoadingCreators ? (
-          <span className={styles.searchEmpty}>
-            {t('search_dropdown.no_results')}
-          </span>
-        ) : null}
+        {results.length === 0 && !isLoadingCreators ? <span className={styles.searchEmpty}>{t('search_dropdown.no_results')}</span> : null}
       </>
     )
   }, [isLoadingCreators, onCollectionResultClick, results])
@@ -366,31 +300,18 @@ export const SearchBarDropdown = ({
       case SearchTab.COLLECTIONS:
       case SearchTab.WEARABLES:
       case SearchTab.EMOTES:
-        return [...Array(5).keys()].map(index => (
-          <SearchBarDropdownOptionSkeleton key={index} />
-        ))
+        return [...Array(5).keys()].map(index => <SearchBarDropdownOptionSkeleton key={index} />)
 
       default:
-        return [...Array(5).keys()].map(index => (
-          <SearchBarDropdownOptionSkeleton
-            key={index}
-            lines={1}
-            shape="circle"
-          />
-        ))
+        return [...Array(5).keys()].map(index => <SearchBarDropdownOptionSkeleton key={index} lines={1} shape="circle" />)
     }
   }, [currentSearchTab])
 
   const renderRecentContent = useCallback(() => {
     if (recentSearches.length) {
       return (
-        <div
-          className={styles.recentSearchesContainer}
-          data-testid={RECENT_SEARCHES_DATA_TEST_ID}
-        >
-          <div className={styles.recentSearchesTitle}>
-            {t('search_dropdown.recent')}
-          </div>
+        <div className={styles.recentSearchesContainer} data-testid={RECENT_SEARCHES_DATA_TEST_ID}>
+          <div className={styles.recentSearchesTitle}>{t('search_dropdown.recent')}</div>
           {[...recentSearches]
             .reverse()
             .slice(0, MAX_RECENT_RESULTS)
@@ -398,11 +319,7 @@ export const SearchBarDropdown = ({
               <div className={styles.recentSearchContainer} key={index}>
                 {isCollectionRecentSearch(recentSearch) ? (
                   <>
-                    <img
-                      src={clock}
-                      alt="clock"
-                      className={styles.recentIcon}
-                    />
+                    <img src={clock} alt="clock" className={styles.recentIcon} />
                     <CollectionResultRow
                       key={recentSearch.contract_address}
                       collection={recentSearch}
@@ -415,28 +332,13 @@ export const SearchBarDropdown = ({
                   </>
                 ) : isCreatorRecentSearch(recentSearch) ? (
                   <>
-                    <img
-                      src={clock}
-                      alt="clock"
-                      className={styles.recentIcon}
-                    />
-                    <CreatorResultItemRow
-                      key={recentSearch.address}
-                      creator={recentSearch}
-                      onClick={handleSaveToLocalStorage}
-                    />
+                    <img src={clock} alt="clock" className={styles.recentIcon} />
+                    <CreatorResultItemRow key={recentSearch.address} creator={recentSearch} onClick={handleSaveToLocalStorage} />
                   </>
                 ) : isItemRecentSearch(recentSearch) ? (
                   <>
-                    <img
-                      src={clock}
-                      alt="clock"
-                      className={styles.recentIcon}
-                    />
-                    <CollectibleResultItemRow
-                      item={recentSearch}
-                      onClick={handleSaveToLocalStorage}
-                    />
+                    <img src={clock} alt="clock" className={styles.recentIcon} />
+                    <CollectibleResultItemRow item={recentSearch} onClick={handleSaveToLocalStorage} />
                   </>
                 ) : null}
                 <Close onClick={() => handleRemoveRecentSearch(recentSearch)} />
@@ -445,12 +347,7 @@ export const SearchBarDropdown = ({
         </div>
       )
     }
-  }, [
-    handleRemoveRecentSearch,
-    handleSaveToLocalStorage,
-    onSearch,
-    recentSearches
-  ])
+  }, [handleRemoveRecentSearch, handleSaveToLocalStorage, onSearch, recentSearches])
 
   const renderContent = useCallback(() => {
     if (isLoading || isLoadingCreators) {
@@ -489,29 +386,15 @@ export const SearchBarDropdown = ({
       <div className={styles.tabsContainer}>
         <Tabs>
           <Tabs.Tab
-            active={
-              isSearchingWearables
-                ? currentSearchTab === SearchTab.WEARABLES
-                : currentSearchTab === SearchTab.EMOTES
-            }
-            onClick={() =>
-              handleTabChange(
-                isSearchingWearables ? SearchTab.WEARABLES : SearchTab.EMOTES
-              )
-            }
+            active={isSearchingWearables ? currentSearchTab === SearchTab.WEARABLES : currentSearchTab === SearchTab.EMOTES}
+            onClick={() => handleTabChange(isSearchingWearables ? SearchTab.WEARABLES : SearchTab.EMOTES)}
           >
             {isSearchingWearables ? t('menu.wearables') : t('menu.emotes')}
           </Tabs.Tab>
-          <Tabs.Tab
-            active={currentSearchTab === SearchTab.CREATORS}
-            onClick={() => handleTabChange(SearchTab.CREATORS)}
-          >
+          <Tabs.Tab active={currentSearchTab === SearchTab.CREATORS} onClick={() => handleTabChange(SearchTab.CREATORS)}>
             {t('search_dropdown.creators')}
           </Tabs.Tab>
-          <Tabs.Tab
-            active={currentSearchTab === SearchTab.COLLECTIONS}
-            onClick={() => handleTabChange(SearchTab.COLLECTIONS)}
-          >
+          <Tabs.Tab active={currentSearchTab === SearchTab.COLLECTIONS} onClick={() => handleTabChange(SearchTab.COLLECTIONS)}>
             {t('search_dropdown.collections')}
           </Tabs.Tab>
         </Tabs>
@@ -520,11 +403,7 @@ export const SearchBarDropdown = ({
   }, [currentSearchTab, handleTabChange, isSearchingWearables])
 
   return recentSearches.length || searchTerm ? (
-    <div
-      className={styles.searchBarDropdown}
-      ref={dropdownContainerRef}
-      data-testid="search-bar-dropdown"
-    >
+    <div className={styles.searchBarDropdown} ref={dropdownContainerRef} data-testid="search-bar-dropdown">
       {searchTerm ? (
         <>
           {renderTabs()}

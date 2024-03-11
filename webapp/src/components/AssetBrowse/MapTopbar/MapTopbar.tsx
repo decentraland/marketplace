@@ -1,26 +1,13 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import {
-  Button,
-  CheckboxProps,
-  Container,
-  Popup,
-  Radio,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { Button, CheckboxProps, Container, Popup, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { persistIsMapProperty } from '../../../modules/ui/utils'
 import { Chip } from '../../Chip'
 import { Props } from './MapTopbar.types'
 import styles from './MapTopbar.module.css'
 
-export const MapTopbar = ({
-  onlyOnSale,
-  onlyOnRent,
-  showOwned,
-  onBrowse,
-  onShowOwnedChange
-}: Props): JSX.Element | null => {
+export const MapTopbar = ({ onlyOnSale, onlyOnRent, showOwned, onBrowse, onShowOwnedChange }: Props): JSX.Element | null => {
   const isMobileOrTable = useTabletAndBelowMediaQuery()
 
   const handleIsMapChange = useCallback(
@@ -32,10 +19,7 @@ export const MapTopbar = ({
         isFullscreen: isMap,
         search: '',
         // Forces the onlyOnSale property in the defined cases so the users can see LAND on sale.
-        onlyOnSale:
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
-          onlyOnSale
+        onlyOnSale: (!onlyOnSale && onlyOnRent === false) || (onlyOnSale === undefined && onlyOnRent === undefined) || onlyOnSale
       })
     },
     [onBrowse, onlyOnSale, onlyOnRent]
@@ -66,18 +50,8 @@ export const MapTopbar = ({
 
   const mapToggle = (
     <div className={styles.mapToggle}>
-      <Chip
-        className="grid"
-        icon="table"
-        isActive={false}
-        onClick={handleIsMapChange.bind(null, false)}
-      />
-      <Chip
-        className="atlas"
-        icon="map marker alternate"
-        isActive
-        onClick={handleIsMapChange.bind(null, true)}
-      />
+      <Chip className="grid" icon="table" isActive={false} onClick={handleIsMapChange.bind(null, false)} />
+      <Chip className="atlas" icon="map marker alternate" isActive onClick={handleIsMapChange.bind(null, true)} />
     </div>
   )
 
@@ -114,11 +88,7 @@ export const MapTopbar = ({
           content={<div className={styles.filtersMobile}>{filters}</div>}
           position="bottom right"
           trigger={
-            <Button
-              primary
-              className={styles.filtersButton}
-              aria-label="filters"
-            >
+            <Button primary className={styles.filtersButton} aria-label="filters">
               <span aria-label="filters-icon" className={styles.filtersIcon} />
             </Button>
           }

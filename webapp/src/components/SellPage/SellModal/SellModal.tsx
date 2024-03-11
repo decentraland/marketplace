@@ -9,17 +9,11 @@ import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  ChainButton,
-  withAuthorizedAction
-} from 'decentraland-dapps/dist/containers'
+import { ChainButton, withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { parseMANANumber } from '../../../lib/mana'
-import {
-  INPUT_FORMAT,
-  getDefaultExpirationDate
-} from '../../../modules/order/utils'
+import { INPUT_FORMAT, getDefaultExpirationDate } from '../../../modules/order/utils'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { getContractNames } from '../../../modules/vendor'
@@ -35,23 +29,11 @@ import { Props } from './SellModal.types'
 import { showPriceBelowMarketValueWarning } from './utils'
 
 const SellModal = (props: Props) => {
-  const {
-    nft,
-    order,
-    wallet,
-    isLoading,
-    isCreatingOrder,
-    getContract,
-    onGoBack,
-    onCreateOrder,
-    onAuthorizedAction,
-    onClearOrderErrors
-  } = props
+  const { nft, order, wallet, isLoading, isCreatingOrder, getContract, onGoBack, onCreateOrder, onAuthorizedAction, onClearOrderErrors } =
+    props
 
   const isUpdate = order !== null
-  const [price, setPrice] = useState<string>(
-    isUpdate ? ethers.utils.formatEther(order!.price) : ''
-  )
+  const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
 
   const [expiresAt, setExpiresAt] = useState(() => {
     let exp = order?.expiresAt
@@ -84,11 +66,7 @@ const SellModal = (props: Props) => {
         try {
           const provider = await getNetworkProvider(nftContract.chainId)
 
-          const erc721 = new ethers.Contract(
-            nftContract.address,
-            ERC721ABI,
-            new ethers.providers.Web3Provider(provider)
-          )
+          const erc721 = new ethers.Contract(nftContract.address, ERC721ABI, new ethers.providers.Web3Provider(provider))
 
           const name = await erc721.name()
           setTargetContractLabel(name)
@@ -116,12 +94,7 @@ const SellModal = (props: Props) => {
     return null
   }
 
-  const handleCreateOrder = () =>
-    onCreateOrder(
-      nft,
-      parseMANANumber(price),
-      new Date(`${expiresAt} 00:00:00`).getTime()
-    )
+  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime())
 
   const handleSubmit = () => {
     onClearOrderErrors()
@@ -131,13 +104,10 @@ const SellModal = (props: Props) => {
       authorizedContractLabel: marketplace?.label || marketplace.name,
       targetContract: nftContract as Contract,
       targetContractName:
-        (nft.category === NFTCategory.WEARABLE ||
-          nft.category === NFTCategory.EMOTE) &&
-        nft.network === Network.MATIC
+        (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC
           ? ContractName.ERC721CollectionV2
           : ContractName.ERC721,
-      targetContractLabel:
-        targetContractLabel || nftContract.label || nftContract.name,
+      targetContractLabel: targetContractLabel || nftContract.label || nftContract.name,
       onAuthorized: handleCreateOrder,
       tokenId: nft.tokenId
     })
@@ -146,19 +116,12 @@ const SellModal = (props: Props) => {
   const { orderService } = VendorFactory.build(nft.vendor)
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
-  const isInvalidPrice =
-    parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
-  const isDisabled =
-    !orderService.canSell() ||
-    !isOwnedBy(nft, wallet) ||
-    isInvalidPrice ||
-    isInvalidDate
+  const isInvalidPrice = parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
+  const isDisabled = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate
 
   return (
     <AssetAction asset={nft}>
-      <Header size="large">
-        {t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}
-      </Header>
+      <Header size="large">{t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}</Header>
       <p className="subtitle">
         <T
           id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
@@ -186,9 +149,7 @@ const SellModal = (props: Props) => {
             label={t('sell_page.expiration_date')}
             type="date"
             value={expiresAt}
-            onChange={(_event, props) =>
-              setExpiresAt(props.value || getDefaultExpirationDate())
-            }
+            onChange={(_event, props) => setExpiresAt(props.value || getDefaultExpirationDate())}
             error={isInvalidDate}
             message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
           />
@@ -197,13 +158,7 @@ const SellModal = (props: Props) => {
           <Button as="div" onClick={onGoBack}>
             {t('global.cancel')}
           </Button>
-          <ChainButton
-            type="submit"
-            primary
-            disabled={isDisabled || isLoading}
-            loading={isLoading}
-            chainId={nft.chainId}
-          >
+          <ChainButton type="submit" primary disabled={isDisabled || isLoading} loading={isLoading} chainId={nft.chainId}>
             {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
           </ChainButton>
         </div>

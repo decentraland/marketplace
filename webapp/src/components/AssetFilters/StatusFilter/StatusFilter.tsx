@@ -12,11 +12,7 @@ export type StatusFilterFilterProps = {
   defaultCollapsed?: boolean
 }
 
-export const StatusFilter = ({
-  status,
-  onChange,
-  defaultCollapsed = false
-}: StatusFilterFilterProps) => {
+export const StatusFilter = ({ status, onChange, defaultCollapsed = false }: StatusFilterFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const statusOptions = useMemo(
     () =>
@@ -42,14 +38,8 @@ export const StatusFilter = ({
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">
-            {t('nft_filters.status.title')}
-          </span>
-          <span className="box-filter-value">
-            {status
-              ? t(`nft_filters.status.${status}`)
-              : t('nft_filters.status.on_sale')}
-          </span>
+          <span className="box-filter-name">{t('nft_filters.status.title')}</span>
+          <span className="box-filter-value">{status ? t(`nft_filters.status.${status}`) : t('nft_filters.status.on_sale')}</span>
         </div>
       ) : (
         t('nft_filters.status.title')
@@ -74,9 +64,7 @@ export const StatusFilter = ({
               <label>
                 {option.text}
                 {option.value !== AssetStatusFilter.NOT_FOR_SALE ? (
-                  <InfoTooltip
-                    content={t(`nft_filters.status.${option.value}_tooltip`)}
-                  />
+                  <InfoTooltip content={t(`nft_filters.status.${option.value}_tooltip`)} />
                 ) : null}
               </label>
             }

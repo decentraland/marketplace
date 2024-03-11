@@ -1,17 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import {
-  HeaderMenu,
-  Header,
-  NotMobile,
-  Table,
-  Loader,
-  Mana,
-  Tabs,
-  Dropdown,
-  DropdownProps,
-  Mobile
-} from 'decentraland-ui'
+import { HeaderMenu, Header, NotMobile, Table, Loader, Mana, Tabs, Dropdown, DropdownProps, Mobile } from 'decentraland-ui'
 import { Item, NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -39,18 +28,11 @@ const RecentlySoldTable = (props: Props) => {
   const recentlySoldCardRef = useRef<HTMLDivElement>(null)
   const [currentCategory, setCurrentyCategory] = useState(NFTCategory.WEARABLE)
 
-  useScrollSectionIntoView(
-    recentlySoldCardRef,
-    TABS_PREFIX,
-    setCurrentyCategory
-  )
+  useScrollSectionIntoView(recentlySoldCardRef, TABS_PREFIX, setCurrentyCategory)
 
   useEffect(() => {
     onFetchRecentSales({
-      categories:
-        currentCategory === NFTCategory.PARCEL
-          ? [NFTCategory.ESTATE, NFTCategory.PARCEL]
-          : [currentCategory],
+      categories: currentCategory === NFTCategory.PARCEL ? [NFTCategory.ESTATE, NFTCategory.PARCEL] : [currentCategory],
       first: TABLE_SIZE,
       sortBy: SaleSortBy.RECENTLY_SOLD
     })
@@ -78,12 +60,7 @@ const RecentlySoldTable = (props: Props) => {
       <div className="recently-sold-card-tabs" ref={recentlySoldCardRef}>
         <Tabs isFullscreen>
           <Tabs.Left>
-            {Object.values([
-              NFTCategory.WEARABLE,
-              NFTCategory.PARCEL,
-              NFTCategory.EMOTE,
-              NFTCategory.ENS
-            ]).map(category => (
+            {Object.values([NFTCategory.WEARABLE, NFTCategory.PARCEL, NFTCategory.EMOTE, NFTCategory.ENS]).map(category => (
               <Tabs.Tab
                 key={category as string}
                 active={currentCategory === category}
@@ -110,19 +87,11 @@ const RecentlySoldTable = (props: Props) => {
         defaultValue={NFTCategory.WEARABLE}
         value={currentCategory}
         direction="right"
-        options={[
-          NFTCategory.WEARABLE,
-          NFTCategory.PARCEL,
-          NFTCategory.EMOTE,
-          NFTCategory.ENS
-        ].map(category => ({
+        options={[NFTCategory.WEARABLE, NFTCategory.PARCEL, NFTCategory.EMOTE, NFTCategory.ENS].map(category => ({
           value: category as string,
           text: t(`home_page.recently_sold.tabs.${category}`)
         }))}
-        onChange={(
-          _event: React.SyntheticEvent<HTMLElement, Event>,
-          { value }: DropdownProps
-        ) => handleTabChange(value as NFTCategory)}
+        onChange={(_event: React.SyntheticEvent<HTMLElement, Event>, { value }: DropdownProps) => handleTabChange(value as NFTCategory)}
       />
     )
   }
@@ -134,28 +103,12 @@ const RecentlySoldTable = (props: Props) => {
         return (
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>
-                {t(
-                  `global.${
-                    currentCategory === NFTCategory.WEARABLE ? 'item' : 'emote'
-                  }`
-                )}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.seller')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.buyer')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.type')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.time')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.price')}
-              </Table.HeaderCell>
+              <Table.HeaderCell>{t(`global.${currentCategory === NFTCategory.WEARABLE ? 'item' : 'emote'}`)}</Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.seller')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.buyer')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.type')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.time')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.price')}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
         )
@@ -165,27 +118,13 @@ const RecentlySoldTable = (props: Props) => {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                {t(
-                  `home_page.recently_sold.tabs.${
-                    currentCategory === NFTCategory.PARCEL ? 'parcel' : 'ens'
-                  }`
-                )}
+                {t(`home_page.recently_sold.tabs.${currentCategory === NFTCategory.PARCEL ? 'parcel' : 'ens'}`)}
               </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.seller')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.buyer')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.type')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.time')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.price')}
-              </Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.seller')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.buyer')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.type')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.time')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('home_page.recently_sold.wearables.price')}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
         )
@@ -198,19 +137,8 @@ const RecentlySoldTable = (props: Props) => {
     let header = <span>{t('global.item')}</span>
     if (currentCategory === NFTCategory.EMOTE) {
       header = <span>{t(`global.emote`)}</span>
-    } else if (
-      currentCategory === NFTCategory.PARCEL ||
-      currentCategory === NFTCategory.ENS
-    ) {
-      header = (
-        <span>
-          {t(
-            `global.${
-              currentCategory === NFTCategory.PARCEL ? 'parcel' : 'ens'
-            }`
-          )}
-        </span>
-      )
+    } else if (currentCategory === NFTCategory.PARCEL || currentCategory === NFTCategory.ENS) {
+      header = <span>{t(`global.${currentCategory === NFTCategory.PARCEL ? 'parcel' : 'ens'}`)}</span>
     }
     return (
       <div className="table-header">
@@ -231,17 +159,11 @@ const RecentlySoldTable = (props: Props) => {
               <>
                 <div>
                   <div className="sale-item-data">
-                    <Link
-                      to={item.url}
-                      onClick={() => handleOnLinkClick(item.id)}
-                    >
+                    <Link to={item.url} onClick={() => handleOnLinkClick(item.id)}>
                       <AssetImage asset={item} isSmall />
                     </Link>
                     <div className="sale-item-name-container">
-                      <Link
-                        to={item.url}
-                        onClick={() => handleOnLinkClick(item.id)}
-                      >
+                      <Link to={item.url} onClick={() => handleOnLinkClick(item.id)}>
                         {item.name}
                       </Link>
                       <span className="recently-sold-sale-info">
@@ -276,26 +198,12 @@ const RecentlySoldTable = (props: Props) => {
                     {item ? (
                       <>
                         <div>
-                          <span>
-                            {t('home_page.recently_sold.wearables.seller')}
-                          </span>
-                          <LinkedProfile
-                            className="account-link"
-                            address={sale.seller}
-                            textOnly
-                            inline={false}
-                          />
+                          <span>{t('home_page.recently_sold.wearables.seller')}</span>
+                          <LinkedProfile className="account-link" address={sale.seller} textOnly inline={false} />
                         </div>
                         <div>
-                          <span>
-                            {t('home_page.recently_sold.wearables.buyer')}
-                          </span>
-                          <LinkedProfile
-                            className="account-link"
-                            address={sale.buyer}
-                            textOnly
-                            inline={false}
-                          />
+                          <span>{t('home_page.recently_sold.wearables.buyer')}</span>
+                          <LinkedProfile className="account-link" address={sale.buyer} textOnly inline={false} />
                         </div>
                       </>
                     ) : null}
@@ -310,19 +218,12 @@ const RecentlySoldTable = (props: Props) => {
             <Table.Cell width={4}>
               {item ? (
                 <div className="recently-sold-item-cell">
-                  <Link
-                    className="recently-sold-item-cell-thumbnail"
-                    to={item.url}
-                    onClick={() => handleOnLinkClick(item.id)}
-                  >
+                  <Link className="recently-sold-item-cell-thumbnail" to={item.url} onClick={() => handleOnLinkClick(item.id)}>
                     <AssetImage asset={item} isSmall />
                   </Link>
 
                   <div className="sale-item-data">
-                    <Link
-                      to={item.url}
-                      onClick={() => handleOnLinkClick(item.id)}
-                    >
+                    <Link to={item.url} onClick={() => handleOnLinkClick(item.id)}>
                       {item.name}
                     </Link>
 
@@ -332,11 +233,7 @@ const RecentlySoldTable = (props: Props) => {
                         values={{
                           creator: (
                             <span className="rankings-item-data-creator">
-                              <LinkedProfile
-                                address={item.creator}
-                                textOnly
-                                inline={false}
-                              />
+                              <LinkedProfile address={item.creator} textOnly inline={false} />
                             </span>
                           )
                         }}
@@ -349,20 +246,10 @@ const RecentlySoldTable = (props: Props) => {
               ) : null}
             </Table.Cell>
             <Table.Cell width={2}>
-              <LinkedProfile
-                className="account-link"
-                address={sale.seller}
-                textOnly
-                inline={false}
-              />
+              <LinkedProfile className="account-link" address={sale.seller} textOnly inline={false} />
             </Table.Cell>
             <Table.Cell width={2}>
-              <LinkedProfile
-                className="account-link"
-                address={sale.buyer}
-                textOnly
-                inline={false}
-              />
+              <LinkedProfile className="account-link" address={sale.buyer} textOnly inline={false} />
             </Table.Cell>
             <Table.Cell width={1}>{t(`global.${sale.type}`)}</Table.Cell>
             <Table.Cell width={2}>
@@ -384,11 +271,7 @@ const RecentlySoldTable = (props: Props) => {
     )
   }
 
-  const soldParcelOrENSRow = (
-    sale: Sale,
-    asset: NFT<VendorName.DECENTRALAND> | null,
-    isLoading: boolean
-  ) => {
+  const soldParcelOrENSRow = (sale: Sale, asset: NFT<VendorName.DECENTRALAND> | null, isLoading: boolean) => {
     return (
       <>
         <Mobile>
@@ -399,17 +282,11 @@ const RecentlySoldTable = (props: Props) => {
               <>
                 <div>
                   <div className="sale-item-data">
-                    <Link
-                      to={asset.url}
-                      onClick={() => handleOnLinkClick(asset.id)}
-                    >
+                    <Link to={asset.url} onClick={() => handleOnLinkClick(asset.id)}>
                       <AssetImage asset={asset} isSmall />
                     </Link>
                     <div className="sale-item-name-container">
-                      <Link
-                        to={asset.url}
-                        onClick={() => handleOnLinkClick(asset.id)}
-                      >
+                      <Link to={asset.url} onClick={() => handleOnLinkClick(asset.id)}>
                         {asset.name}
                       </Link>
                       <span className="recently-sold-sale-info">
@@ -444,26 +321,12 @@ const RecentlySoldTable = (props: Props) => {
                     {asset ? (
                       <>
                         <div>
-                          <span>
-                            {t('home_page.recently_sold.wearables.seller')}
-                          </span>
-                          <LinkedProfile
-                            className="account-link"
-                            address={sale.seller}
-                            textOnly
-                            inline={false}
-                          />
+                          <span>{t('home_page.recently_sold.wearables.seller')}</span>
+                          <LinkedProfile className="account-link" address={sale.seller} textOnly inline={false} />
                         </div>
                         <div>
-                          <span>
-                            {t('home_page.recently_sold.wearables.buyer')}
-                          </span>
-                          <LinkedProfile
-                            className="account-link"
-                            address={sale.buyer}
-                            textOnly
-                            inline={false}
-                          />
+                          <span>{t('home_page.recently_sold.wearables.buyer')}</span>
+                          <LinkedProfile className="account-link" address={sale.buyer} textOnly inline={false} />
                         </div>
                       </>
                     ) : null}
@@ -478,18 +341,11 @@ const RecentlySoldTable = (props: Props) => {
             <Table.Cell width={4}>
               {asset ? (
                 <div className="recently-sold-item-cell">
-                  <Link
-                    className="recently-sold-item-cell-thumbnail"
-                    to={asset.url}
-                    onClick={() => handleOnLinkClick(asset.id)}
-                  >
+                  <Link className="recently-sold-item-cell-thumbnail" to={asset.url} onClick={() => handleOnLinkClick(asset.id)}>
                     <AssetImage asset={asset} isSmall />
                   </Link>
                   <div className="rankings-item-data">
-                    <Link
-                      to={asset.url}
-                      onClick={() => handleOnLinkClick(asset.id)}
-                    >
+                    <Link to={asset.url} onClick={() => handleOnLinkClick(asset.id)}>
                       {asset.name}
                     </Link>
                   </div>
@@ -499,20 +355,10 @@ const RecentlySoldTable = (props: Props) => {
               ) : null}
             </Table.Cell>
             <Table.Cell width={2}>
-              <LinkedProfile
-                className="account-link"
-                address={sale.seller}
-                textOnly
-                inline={false}
-              />
+              <LinkedProfile className="account-link" address={sale.seller} textOnly inline={false} />
             </Table.Cell>
             <Table.Cell width={2}>
-              <LinkedProfile
-                className="account-link"
-                address={sale.buyer}
-                textOnly
-                inline={false}
-              />
+              <LinkedProfile className="account-link" address={sale.buyer} textOnly inline={false} />
             </Table.Cell>
             <Table.Cell width={1}>{t(`global.${sale.type}`)}</Table.Cell>
             <Table.Cell width={2}>
@@ -543,30 +389,16 @@ const RecentlySoldTable = (props: Props) => {
       case NFTCategory.WEARABLE:
       case NFTCategory.EMOTE:
         content = data.map(sale => (
-          <AssetProvider
-            key={sale.id}
-            type={AssetType.ITEM}
-            contractAddress={sale.contractAddress}
-            tokenId={sale.itemId}
-          >
-            {(item, _order, _rental, isLoading) =>
-              soldItemRow(sale, item, isLoading)
-            }
+          <AssetProvider key={sale.id} type={AssetType.ITEM} contractAddress={sale.contractAddress} tokenId={sale.itemId}>
+            {(item, _order, _rental, isLoading) => soldItemRow(sale, item, isLoading)}
           </AssetProvider>
         ))
         break
       case NFTCategory.ENS:
       case NFTCategory.PARCEL:
         content = data.map(sale => (
-          <AssetProvider
-            key={sale.id}
-            type={AssetType.NFT}
-            contractAddress={sale.contractAddress}
-            tokenId={sale.tokenId}
-          >
-            {(asset, _order, _rental, isLoading) =>
-              soldParcelOrENSRow(sale, asset, isLoading)
-            }
+          <AssetProvider key={sale.id} type={AssetType.NFT} contractAddress={sale.contractAddress} tokenId={sale.tokenId}>
+            {(asset, _order, _rental, isLoading) => soldParcelOrENSRow(sale, asset, isLoading)}
           </AssetProvider>
         ))
         break

@@ -1,8 +1,5 @@
 import { Bid } from '@dcl/schemas'
-import {
-  LoadingState,
-  loadingReducer
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { toBidObject } from './utils'
 import {
   FetchBidsByAddressRequestAction,

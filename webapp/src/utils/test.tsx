@@ -12,17 +12,12 @@ import { RootState } from '../modules/reducer'
 import { initTestStore } from '../modules/store'
 import * as locales from '../modules/translation/locales'
 
-const allTranslations = mergeTranslations(
-  flatten(en) as any,
-  flatten(locales.en)
-)
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+const allTranslations = mergeTranslations(flatten(en), flatten(locales.en) as any)
 
 export function renderWithProviders(
   component: JSX.Element,
-  {
-    preloadedState,
-    store
-  }: { preloadedState?: Partial<RootState>; store?: Store } = {}
+  { preloadedState, store }: { preloadedState?: Partial<RootState>; store?: Store } = {}
 ) {
   const initializedStore =
     store ||
@@ -53,11 +48,7 @@ export function renderWithProviders(
 
 export async function waitForComponentToFinishLoading(screen: RenderResult) {
   // TODO: Make loader accessible so we can get the info without using the container ui#310
-  await waitFor(() =>
-    expect(
-      screen.container.getElementsByClassName('loader-container').length
-    ).toEqual(0)
-  )
+  await waitFor(() => expect(screen.container.getElementsByClassName('loader-container').length).toEqual(0))
 }
 
 export function createMatchMedia(width: number) {

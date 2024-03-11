@@ -1,7 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
-import { ItemFilters } from './types'
-import { ItemResponse } from './types'
+import { ItemFilters, ItemResponse } from './types'
 
 export const DEFAULT_TRENDING_PAGE_SIZE = 20
 
@@ -20,9 +19,7 @@ export class ItemAPI extends BaseClient {
       contractAddresses: [contractAddress],
       itemId
     })
-    const response: ItemResponse = await this.fetch(
-      `/v1/items?${queryParams.toString()}`
-    )
+    const response: ItemResponse = await this.fetch(`/v1/items?${queryParams.toString()}`)
 
     if (response.data.length === 0) {
       throw new Error('Not found')
@@ -51,9 +48,7 @@ export class ItemAPI extends BaseClient {
     }
 
     if (filters.creator) {
-      let creators = Array.isArray(filters.creator)
-        ? filters.creator
-        : [filters.creator]
+      const creators = Array.isArray(filters.creator) ? filters.creator : [filters.creator]
       creators.forEach(creator => queryParams.append('creator', creator))
     }
 
@@ -103,9 +98,7 @@ export class ItemAPI extends BaseClient {
       filters.ids.forEach(id => queryParams.append('id', id))
     }
     if (filters.contractAddresses) {
-      filters.contractAddresses.forEach(contract =>
-        queryParams.append('contractAddress', contract)
-      )
+      filters.contractAddresses.forEach(contract => queryParams.append('contractAddress', contract))
     }
     if (filters.itemId) {
       queryParams.append('itemId', filters.itemId)

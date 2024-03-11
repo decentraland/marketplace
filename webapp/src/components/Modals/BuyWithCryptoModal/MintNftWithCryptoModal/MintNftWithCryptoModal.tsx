@@ -59,27 +59,12 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
   }, [item])
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
-    (
-      selectedToken,
-      selectedChain,
-      providerTokens,
-      crossChainProvider,
-      wallet
-    ) =>
-      useCrossChainMintNftRoute(
-        item,
-        item.chainId,
-        selectedToken,
-        selectedChain,
-        providerTokens,
-        crossChainProvider,
-        wallet
-      ),
+    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
+      useCrossChainMintNftRoute(item, item.chainId, selectedToken, selectedChain, providerTokens, crossChainProvider, wallet),
     [item]
   )
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, chainNativeToken, wallet) =>
-      useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet),
+    (selectedToken, chainNativeToken, wallet) => useMintingNftGasCost(item, selectedToken, chainNativeToken, wallet),
     [item]
   )
 

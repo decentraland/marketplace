@@ -24,12 +24,8 @@ const ActivityPage = (props: Props) => {
     setShowConfirmation(false)
   }, [address, onClearHistory])
 
-  const handleConfirm = useCallback(() => setShowConfirmation(true), [
-    setShowConfirmation
-  ])
-  const handleCancel = useCallback(() => setShowConfirmation(false), [
-    setShowConfirmation
-  ])
+  const handleConfirm = useCallback(() => setShowConfirmation(true), [setShowConfirmation])
+  const handleCancel = useCallback(() => setShowConfirmation(false), [setShowConfirmation])
 
   let content = null
 
@@ -52,11 +48,7 @@ const ActivityPage = (props: Props) => {
             </Button>
           </Column>
         </Row>
-        <div className="transactions">
-          {transactions
-            .map(tx => <Transaction tx={tx} key={tx.hash} />)
-            .reverse()}
-        </div>
+        <div className="transactions">{transactions.map(tx => <Transaction tx={tx} key={tx.hash} />).reverse()}</div>
       </>
     )
   }
@@ -67,12 +59,8 @@ const ActivityPage = (props: Props) => {
       <Navigation activeTab={NavigationTab.ACTIVITY} />
       <Page className="ActivityPage">{content}</Page>
       <Modal size="tiny" open={showConfirmation}>
-        <Modal.Header>
-          {t('activity_page.clear_history_modal.title')}
-        </Modal.Header>
-        <Modal.Content>
-          {t('activity_page.clear_history_modal.text')}
-        </Modal.Content>
+        <Modal.Header>{t('activity_page.clear_history_modal.title')}</Modal.Header>
+        <Modal.Content>{t('activity_page.clear_history_modal.text')}</Modal.Content>
         <Modal.Actions>
           <Button onClick={handleCancel}>{t('global.cancel')}</Button>
           <Button primary onClick={handleClear}>

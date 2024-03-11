@@ -1,10 +1,7 @@
 import { Item } from '@dcl/schemas'
 import { match } from 'react-router-dom'
 import { RootState } from '../reducer'
-import {
-  DEFAULT_FAVORITES_LIST_ID,
-  ListOfLists
-} from '../vendor/decentraland/favorites'
+import { DEFAULT_FAVORITES_LIST_ID, ListOfLists } from '../vendor/decentraland/favorites'
 import { locations } from '../routing/locations'
 import { INITIAL_STATE } from './reducer'
 import {
@@ -120,18 +117,14 @@ describe('when getting the loading state of the state', () => {
 
 describe('when getting the favorites data by item id', () => {
   it('should return the favorites data state for the given item id', () => {
-    expect(getFavoritesDataByItemId(state, 'item1')).toEqual(
-      state.favorites.data.items.item1
-    )
+    expect(getFavoritesDataByItemId(state, 'item1')).toEqual(state.favorites.data.items.item1)
   })
 })
 
 describe('when getting the if an item is picked by user', () => {
   describe('and the data is already in the store', () => {
     it('should return the a boolean with the value', () => {
-      expect(getIsPickedByUser(state, 'item1')).toEqual(
-        state.favorites.data.items.item1?.pickedByUser
-      )
+      expect(getIsPickedByUser(state, 'item1')).toEqual(state.favorites.data.items.item1?.pickedByUser)
     })
   })
 
@@ -145,9 +138,7 @@ describe('when getting the if an item is picked by user', () => {
 describe('when getting the count of favorites an item has', () => {
   describe('and the data is already in the store', () => {
     it('should return the numeric value representing the count', () => {
-      expect(getCount(state, 'item1')).toEqual(
-        state.favorites.data.items.item1?.count
-      )
+      expect(getCount(state, 'item1')).toEqual(state.favorites.data.items.item1?.count)
     })
   })
 
@@ -217,9 +208,7 @@ describe('when getting if an item is being bulk picked or unpicked', () => {
 
   describe(`and it isn't not being bulk picked or unpicked`, () => {
     beforeEach(() => {
-      state.favorites.loading = [
-        bulkPickUnpickRequest({ id: '0xaddress-anotherItemId' } as Item, [], [])
-      ]
+      state.favorites.loading = [bulkPickUnpickRequest({ id: '0xaddress-anotherItemId' } as Item, [], [])]
     })
 
     it('should return false', () => {
@@ -253,9 +242,7 @@ describe('when getting a list by id', () => {
 
   describe('and the list is loaded in the state', () => {
     it('should return the list', () => {
-      expect(getList(state, 'listId')).toEqual(
-        state.favorites.data.lists['listId']
-      )
+      expect(getList(state, 'listId')).toEqual(state.favorites.data.lists['listId'])
     })
   })
 })
@@ -312,10 +299,7 @@ describe('when getting if the lists are being loaded', () => {
 
 describe('when getting the preview loading items', () => {
   it('should get the items in the preview when they exist in the items state', () => {
-    expect(getPreviewListItems(state, 'listId')).toEqual([
-      state.item.data.item1,
-      state.item.data.item2
-    ])
+    expect(getPreviewListItems(state, 'listId')).toEqual([state.item.data.item1, state.item.data.item2])
   })
 })
 
@@ -459,9 +443,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
         })
 
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
-            false
-          )
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
         })
       })
 
@@ -471,9 +453,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
         })
 
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
-            false
-          )
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
         })
       })
     })
@@ -485,8 +465,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
           wallet: {
             ...state.wallet,
             data: {
-              address:
-                state.favorites.data.lists[unpickedFrom[0].id].userAddress ?? ''
+              address: state.favorites.data.lists[unpickedFrom[0].id].userAddress ?? ''
             } as any
           }
         }
@@ -498,9 +477,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
         })
 
         it('should return true', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
-            true
-          )
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(true)
         })
       })
 
@@ -510,9 +487,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
         })
 
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
-            false
-          )
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
         })
       })
     })
@@ -557,9 +532,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
         })
 
         it('should return true', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
-            true
-          )
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(true)
         })
       })
 
@@ -569,9 +542,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
         })
 
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
-            false
-          )
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
         })
       })
     })
@@ -583,8 +554,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
           wallet: {
             ...state.wallet,
             data: {
-              address:
-                state.favorites.data.lists[unpickedFrom[0].id].userAddress ?? ''
+              address: state.favorites.data.lists[unpickedFrom[0].id].userAddress ?? ''
             } as any
           }
         }
@@ -596,9 +566,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
         })
 
         it('should return true', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
-            true
-          )
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(true)
         })
       })
 
@@ -608,9 +576,7 @@ describe('when getting if the owner of the current list is unpicking an item fro
         })
 
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(
-            false
-          )
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
         })
       })
     })

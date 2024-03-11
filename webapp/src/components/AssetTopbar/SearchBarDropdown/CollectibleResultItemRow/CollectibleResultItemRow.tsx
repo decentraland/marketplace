@@ -10,10 +10,7 @@ type CollectibleResultItemRowProps = {
   onClick: (item: Item) => void
 }
 
-const CollectibleResultItemRow = ({
-  item,
-  onClick
-}: CollectibleResultItemRowProps) => {
+const CollectibleResultItemRow = ({ item, onClick }: CollectibleResultItemRowProps) => {
   return (
     <Link to={getAssetUrl(item)} onClick={() => onClick(item)}>
       <div className={styles.collectibleItemRowContainer}>

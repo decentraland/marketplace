@@ -3,22 +3,19 @@
  * @param obj
  * @param keys
  */
-export function omit(
-  obj: Record<string, unknown>,
-  keys: string[]
-): Record<string, unknown> {
+export function omit(obj: Record<string, unknown>, keys: string[]): Record<string, unknown> {
   const newKeys = Object.keys(obj).filter(key => !keys.includes(key))
   return pick(obj, newKeys)
 }
 
-export function reset(
-  obj: Record<string, unknown>,
-  keys: string[]
-): Record<string, unknown> {
-  return keys.reduce((newObj, key) => ({
-    ...newObj,
-    [key]: undefined
-  }), obj)
+export function reset(obj: Record<string, unknown>, keys: string[]): Record<string, unknown> {
+  return keys.reduce(
+    (newObj, key) => ({
+      ...newObj,
+      [key]: undefined
+    }),
+    obj
+  )
 }
 
 /**
@@ -26,10 +23,7 @@ export function reset(
  * @param obj
  * @param keys
  */
-export function pick(
-  obj: Record<string, unknown>,
-  keys: string[]
-): Record<string, unknown> {
+export function pick(obj: Record<string, unknown>, keys: string[]): Record<string, unknown> {
   const result = {} as Record<string, unknown>
 
   for (const key of keys) {

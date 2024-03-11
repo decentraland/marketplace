@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Modal,
-  Button,
-  ModalNavigation,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { Modal, Button, ModalNavigation, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import * as decentraland from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
@@ -17,10 +12,7 @@ import styles from './ListsLaunchModal.module.css'
 
 const LISTS_PROMO_POPUP_KEY = 'lists-intro-popup-key'
 
-export const ListsLaunchModal = ({
-  isListsLaunchPopupEnabled,
-  isLoadingFeatureFlags
-}: Props) => {
+export const ListsLaunchModal = ({ isListsLaunchPopupEnabled, isLoadingFeatureFlags }: Props) => {
   const onClose = useCallback(() => {
     localStorage.setItem(LISTS_PROMO_POPUP_KEY, 'true')
     setIsOpen(false)
@@ -36,22 +28,11 @@ export const ListsLaunchModal = ({
   const isTabletOrBelow = useTabletAndBelowMediaQuery()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   useEffect(() => {
-    setIsOpen(
-      !localStorage.getItem(LISTS_PROMO_POPUP_KEY) &&
-        hasLoadedInitialFlags &&
-        isListsLaunchPopupEnabled &&
-        !isTabletOrBelow
-    )
+    setIsOpen(!localStorage.getItem(LISTS_PROMO_POPUP_KEY) && hasLoadedInitialFlags && isListsLaunchPopupEnabled && !isTabletOrBelow)
   }, [hasLoadedInitialFlags, isListsLaunchPopupEnabled, isTabletOrBelow])
 
   return (
-    <Modal
-      className={styles.ListsLaunchModal}
-      open={isOpen}
-      size={'small'}
-      onClose={onClose}
-      dimmer={{ className: styles.dimmerRemover }}
-    >
+    <Modal className={styles.ListsLaunchModal} open={isOpen} size={'small'} onClose={onClose} dimmer={{ className: styles.dimmerRemover }}>
       <ModalNavigation title={t('lists_ftu.title')} onClose={onClose} />
       <Modal.Content className={styles.content}>
         <div className={styles.listsLogo}></div>
@@ -81,14 +62,7 @@ export const ListsLaunchModal = ({
         >
           {t('lists_ftu.explore_collectibles')}
         </Button>
-        <Button
-          as={Link}
-          inverted
-          to={locations.lists()}
-          onClick={onClose}
-          fluid
-          primary
-        >
+        <Button as={Link} inverted to={locations.lists()} onClick={onClose} fluid primary>
           {t('lists_ftu.view_my_lists')}
         </Button>
       </Modal.Actions>

@@ -16,22 +16,14 @@ export const formatDataToTable = (
 ): DataTableType[] => {
   return bids.reduce((accumulator: DataTableType[], bid: Bid) => {
     const value: DataTableType = {
-      [t('offers_table.from')]: (
-        <LinkedProfile
-          className={styles.linkedProfileRow}
-          address={bid.bidder}
-        />
-      ),
+      [t('offers_table.from')]: <LinkedProfile className={styles.linkedProfileRow} address={bid.bidder} />,
       ...(!isMobile && {
         [t('offers_table.published_date')]: getDateAndMonthName(bid.createdAt)
       }),
       ...(!isMobile && {
-        [t('offers_table.expiration_date')]: formatDistanceToNow(
-          +bid.expiresAt,
-          {
-            addSuffix: true
-          }
-        )
+        [t('offers_table.expiration_date')]: formatDistanceToNow(+bid.expiresAt, {
+          addSuffix: true
+        })
       }),
       [t('listings_table.offer')]: (
         <div className={styles.viewListingContainer}>
@@ -45,11 +37,7 @@ export const formatDataToTable = (
             {')'}
           </div>
           {address === bid.seller ? (
-            <Button
-              primary
-              onClick={() => setShowConfirmationModal(bid)}
-              size="small"
-            >
+            <Button primary onClick={() => setShowConfirmationModal(bid)} size="small">
               {t('offers_table.accept')}
             </Button>
           ) : null}

@@ -11,22 +11,11 @@ import { Mana } from '../../../Mana'
 import { Props } from './PeriodsDropdown.types'
 import styles from './PeriodsDropdown.module.css'
 
-const Trigger = ({
-  value,
-  periods
-}: {
-  value: number | undefined
-  periods: RentalListingPeriod[]
-}) => {
+const Trigger = ({ value, periods }: { value: number | undefined; periods: RentalListingPeriod[] }) => {
   const period = value !== undefined ? periods[value] : undefined
   const pricePerRent = period
-    ? ethers.BigNumber.from(period.pricePerDay)
-        .mul(period.maxDays)
-        .toString()
-    : ethers.BigNumber.from(periods[0].pricePerDay)
-        .mul(periods[0].maxDays)
-        .toString()
-
+    ? ethers.BigNumber.from(period.pricePerDay).mul(period.maxDays).toString()
+    : ethers.BigNumber.from(periods[0].pricePerDay).mul(periods[0].maxDays).toString()
 
   return (
     <div className={period ? styles.trigger : styles.triggerPlaceholder}>
@@ -53,9 +42,7 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
   const options: DropdownItemProps[] = useMemo(
     () =>
       periods.map((period, index) => {
-        const pricePerRent = ethers.BigNumber.from(period.pricePerDay)
-          .mul(period.maxDays)
-          .toString()
+        const pricePerRent = ethers.BigNumber.from(period.pricePerDay).mul(period.maxDays).toString()
         const startDate = new Date()
         const endDate = add(startDate, { days: period.maxDays })
         return {
@@ -87,11 +74,7 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
   return (
     <Dropdown
       className={classNames(styles.periodDropdown, className)}
-      trigger={
-        value !== undefined || isOpenDropdown ? (
-          <Trigger value={value} periods={periods} />
-        ) : null
-      }
+      trigger={value !== undefined || isOpenDropdown ? <Trigger value={value} periods={periods} /> : null}
       onClick={() => setIsOpenDropdown(prevState => !prevState)}
       value={value}
       placeholder={t('asset_page.sales_rent_action_box.select_period')}

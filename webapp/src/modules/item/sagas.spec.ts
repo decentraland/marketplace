@@ -7,15 +7,8 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import {
-  ManaPurchase,
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
-import {
-  closeModal,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
+import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { locations } from '../routing/locations'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
@@ -23,10 +16,7 @@ import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
-import {
-  buyAssetWithCard,
-  BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-} from '../asset/utils'
+import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 import { waitForWalletConnectionAndIdentityIfConnecting } from '../wallet/utils'
 import {
   buyItemRequest,
@@ -69,8 +59,7 @@ const wallet = {
   chainId: ChainId.MATIC_MAINNET
 }
 
-const txHash =
-  '0x9fc518261399c1bd236997706347f8b117a061cef5518073b1c3eefd5efbff84'
+const txHash = '0x9fc518261399c1bd236997706347f8b117a061cef5518073b1c3eefd5efbff84'
 
 const anError = new Error('An error occured')
 
@@ -155,15 +144,7 @@ describe('when handling the buy items with card action', () => {
   describe('when the explanation modal has already been shown', () => {
     it('should open Transak widget', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([
-          [
-            call(
-              [localStorage, 'getItem'],
-              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-            ),
-            null
-          ]
-        ])
+        .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
         .put(openModal('BuyWithCardExplanationModal', { asset: item }))
         .dispatch(buyItemWithCardRequest(item))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
@@ -177,15 +158,7 @@ describe('when handling the buy items with card action', () => {
   describe('when the explanation modal is shown and the user closes it', () => {
     it('should not set the item in the local storage to show the modal again later', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([
-          [
-            call(
-              [localStorage, 'getItem'],
-              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-            ),
-            null
-          ]
-        ])
+        .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
         .put(openModal('BuyWithCardExplanationModal', { asset: item }))
         .dispatch(buyItemWithCardRequest(item))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
@@ -289,10 +262,7 @@ describe('when handling the set purchase action', () => {
           return expectSaga(itemSaga, getIdentity)
             .provide([
               [select(getItems), {}],
-              [
-                matchers.put(fetchItemRequest(contractAddress, itemId!)),
-                undefined
-              ]
+              [matchers.put(fetchItemRequest(contractAddress, itemId!)), undefined]
             ])
             .put(fetchItemRequest(contractAddress, itemId!))
             .dispatch(
@@ -315,14 +285,8 @@ describe('when handling the set purchase action', () => {
             return expectSaga(itemSaga, getIdentity)
               .provide([
                 [select(getItems), {}],
-                [
-                  matchers.put(fetchItemRequest(contractAddress, itemId!)),
-                  undefined
-                ],
-                [
-                  take(FETCH_ITEM_FAILURE),
-                  { payload: { error: anError.message } }
-                ]
+                [matchers.put(fetchItemRequest(contractAddress, itemId!)), undefined],
+                [take(FETCH_ITEM_FAILURE), { payload: { error: anError.message } }]
               ])
               .put(fetchItemRequest(contractAddress, itemId!))
               .put(buyItemWithCardFailure(anError.message))
@@ -379,9 +343,7 @@ describe('when handling the fetch collections items request action', () => {
           args: [{ first: 10, contractAddresses: [] }]
         })
         .put(fetchCollectionItemsSuccess(fetchResult.data))
-        .dispatch(
-          fetchCollectionItemsRequest({ contractAddresses: [], first: 10 })
-        )
+        .dispatch(fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }))
         .run({ silenceTimeout: true })
     })
   })
@@ -389,13 +351,9 @@ describe('when handling the fetch collections items request action', () => {
   describe('when the request fails', () => {
     it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([
-          [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]
-        ])
+        .provide([[matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]])
         .put(fetchCollectionItemsFailure(anError.message))
-        .dispatch(
-          fetchCollectionItemsRequest({ contractAddresses: [], first: 10 })
-        )
+        .dispatch(fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }))
         .run({ silenceTimeout: true })
     })
   })
@@ -409,9 +367,7 @@ describe('when handling the fetch items request action', () => {
     const fetchResult = { data: [item], total: 1 }
 
     beforeEach(() => {
-      dateNowSpy = jest
-        .spyOn(Date, 'now')
-        .mockImplementation(() => nowTimestamp)
+      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => nowTimestamp)
     })
 
     afterEach(() => {
@@ -424,8 +380,8 @@ describe('when handling the fetch items request action', () => {
       })
       describe('and there is an ongoing fetch item request', () => {
         let wallet: Wallet | undefined
-        let originalBrowseOptions = itemBrowseOptions
-        let newBrowseOptions: ItemBrowseOptions = {
+        const originalBrowseOptions = itemBrowseOptions
+        const newBrowseOptions: ItemBrowseOptions = {
           ...itemBrowseOptions,
           filters: { ...itemBrowseOptions.filters, rarities: [Rarity.COMMON] }
         }
@@ -437,29 +393,18 @@ describe('when handling the fetch items request action', () => {
           it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
             return expectSaga(itemSaga, getIdentity)
               .provide([
-                [
-                  matchers.call.fn(
-                    waitForWalletConnectionAndIdentityIfConnecting
-                  ),
-                  undefined
-                ],
+                [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
                 [select(getIsMarketplaceServerEnabled), true],
                 [select(getLocation), { pathname }],
                 {
                   call(effect, next) {
-                    if (
-                      effect.fn === CatalogAPI.prototype.get &&
-                      effect.args[0] === originalBrowseOptions.filters
-                    ) {
+                    if (effect.fn === CatalogAPI.prototype.get && effect.args[0] === originalBrowseOptions.filters) {
                       // Add a setTimeout so it gives time to get it cancelled
                       return new Promise(() => {})
                     }
-                    if (
-                      effect.fn === CatalogAPI.prototype.get &&
-                      effect.args[0] === newBrowseOptions.filters
-                    ) {
+                    if (effect.fn === CatalogAPI.prototype.get && effect.args[0] === newBrowseOptions.filters) {
                       // Mock without timeout
                       return fetchResult
                     }
@@ -471,20 +416,8 @@ describe('when handling the fetch items request action', () => {
                 fn: CatalogAPI.prototype.get,
                 args: [newBrowseOptions.filters]
               })
-              .put(
-                fetchItemsFailure(
-                  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
-                  originalBrowseOptions
-                )
-              )
-              .put(
-                fetchItemsSuccess(
-                  fetchResult.data,
-                  fetchResult.total,
-                  newBrowseOptions,
-                  nowTimestamp
-                )
-              )
+              .put(fetchItemsFailure(FETCH_ITEMS_CANCELLED_ERROR_MESSAGE, originalBrowseOptions))
+              .put(fetchItemsSuccess(fetchResult.data, fetchResult.total, newBrowseOptions, nowTimestamp))
               .dispatch(fetchItemsRequest(originalBrowseOptions))
               .dispatch({ type: CANCEL_FETCH_ITEMS })
               .dispatch(fetchItemsRequest(newBrowseOptions))
@@ -496,29 +429,18 @@ describe('when handling the fetch items request action', () => {
           it('should dispatch a successful action with the fetched items and cancel the ongoing one', () => {
             return expectSaga(itemSaga, getIdentity)
               .provide([
-                [
-                  matchers.call.fn(
-                    waitForWalletConnectionAndIdentityIfConnecting
-                  ),
-                  undefined
-                ],
+                [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
                 [select(getIsMarketplaceServerEnabled), true],
                 [select(getLocation), { pathname }],
                 {
                   call(effect, next) {
-                    if (
-                      effect.fn === CatalogAPI.prototype.get &&
-                      effect.args[0] === originalBrowseOptions.filters
-                    ) {
+                    if (effect.fn === CatalogAPI.prototype.get && effect.args[0] === originalBrowseOptions.filters) {
                       // Add a setTimeout so it gives time to get it cancelled
                       return new Promise(() => {})
                     }
-                    if (
-                      effect.fn === CatalogAPI.prototype.get &&
-                      effect.args[0] === newBrowseOptions.filters
-                    ) {
+                    if (effect.fn === CatalogAPI.prototype.get && effect.args[0] === newBrowseOptions.filters) {
                       // Mock without timeout
                       return fetchResult
                     }
@@ -530,20 +452,8 @@ describe('when handling the fetch items request action', () => {
                 fn: CatalogAPI.prototype.get,
                 args: [newBrowseOptions.filters]
               })
-              .put(
-                fetchItemsFailure(
-                  FETCH_ITEMS_CANCELLED_ERROR_MESSAGE,
-                  originalBrowseOptions
-                )
-              )
-              .put(
-                fetchItemsSuccess(
-                  fetchResult.data,
-                  fetchResult.total,
-                  newBrowseOptions,
-                  nowTimestamp
-                )
-              )
+              .put(fetchItemsFailure(FETCH_ITEMS_CANCELLED_ERROR_MESSAGE, originalBrowseOptions))
+              .put(fetchItemsSuccess(fetchResult.data, fetchResult.total, newBrowseOptions, nowTimestamp))
               .dispatch(fetchItemsRequest(originalBrowseOptions))
               .dispatch({ type: CANCEL_FETCH_ITEMS })
               .dispatch(fetchItemsRequest(newBrowseOptions))
@@ -561,23 +471,13 @@ describe('when handling the fetch items request action', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-            [
-              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
-              undefined
-            ],
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
             [select(getWallet), undefined],
             [select(getLocation), { pathname }],
             [select(getIsMarketplaceServerEnabled), false]
           ])
-          .put(
-            fetchItemsSuccess(
-              fetchResult.data,
-              fetchResult.total,
-              itemBrowseOptions,
-              nowTimestamp
-            )
-          )
+          .put(fetchItemsSuccess(fetchResult.data, fetchResult.total, itemBrowseOptions, nowTimestamp))
           .dispatch(fetchItemsRequest(itemBrowseOptions))
           .run({ silenceTimeout: true })
       })
@@ -593,10 +493,7 @@ describe('when handling the fetch items request action', () => {
           [select(getIsMarketplaceServerEnabled), true],
           [select(getWallet), undefined],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
-          [
-            matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
-            undefined
-          ],
+          [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined]
         ])
         .put(fetchItemsFailure(anError.message, itemBrowseOptions))
@@ -612,12 +509,7 @@ describe('when handling the fetch items request action', () => {
           return expectSaga(itemSaga, getIdentity)
             .provide([
               [matchers.call.fn(ItemAPI.prototype.getOne), item],
-              [
-                matchers.call.fn(
-                  waitForWalletConnectionAndIdentityIfConnecting
-                ),
-                undefined
-              ]
+              [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
             ])
             .put(fetchItemSuccess(item))
             .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
@@ -644,21 +536,11 @@ describe('when handling the fetch items request action', () => {
           return expectSaga(itemSaga, getIdentity)
             .provide([
               [matchers.call.fn(ItemAPI.prototype.getOne), smartWearable],
-              [
-                matchers.call.fn(
-                  waitForWalletConnectionAndIdentityIfConnecting
-                ),
-                undefined
-              ]
+              [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
             ])
             .put(fetchItemSuccess(smartWearable))
             .put(fetchSmartWearableRequiredPermissionsRequest(smartWearable))
-            .dispatch(
-              fetchItemRequest(
-                smartWearable.contractAddress,
-                smartWearable.itemId
-              )
-            )
+            .dispatch(fetchItemRequest(smartWearable.contractAddress, smartWearable.itemId))
             .run({ silenceTimeout: true })
         })
       })
@@ -668,18 +550,10 @@ describe('when handling the fetch items request action', () => {
       it('should dispatching a failing action with the contract address, the token id and the error message', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
-            [
-              matchers.call.fn(ItemAPI.prototype.getOne),
-              Promise.reject(anError)
-            ],
-            [
-              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
-              undefined
-            ]
+            [matchers.call.fn(ItemAPI.prototype.getOne), Promise.reject(anError)],
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
           ])
-          .put(
-            fetchItemFailure(item.contractAddress, item.itemId, anError.message)
-          )
+          .put(fetchItemFailure(item.contractAddress, item.itemId, anError.message))
           .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
           .run({ silenceTimeout: true })
       })
@@ -695,9 +569,7 @@ describe('when handling the fetch trending items request action', () => {
       const fetchResult = { data: [item], total: 1 }
 
       beforeEach(() => {
-        dateNowSpy = jest
-          .spyOn(Date, 'now')
-          .mockImplementation(() => nowTimestamp)
+        dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => nowTimestamp)
       })
 
       afterEach(() => {
@@ -710,10 +582,7 @@ describe('when handling the fetch trending items request action', () => {
             [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
-            [
-              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
-              undefined
-            ]
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
           ])
           .put(fetchTrendingItemsSuccess(fetchResult.data))
           .dispatch(fetchTrendingItemsRequest())
@@ -729,10 +598,7 @@ describe('when handling the fetch trending items request action', () => {
           .provide([
             // [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
-            [
-              matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
-              undefined
-            ]
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
           ])
           .put(fetchTrendingItemsSuccess(fetchResult.data))
           .dispatch(fetchTrendingItemsRequest())
@@ -745,14 +611,8 @@ describe('when handling the fetch trending items request action', () => {
     it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
-          [
-            matchers.call.fn(ItemAPI.prototype.getTrendings),
-            Promise.reject(anError)
-          ],
-          [
-            matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting),
-            undefined
-          ]
+          [matchers.call.fn(ItemAPI.prototype.getTrendings), Promise.reject(anError)],
+          [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
         ])
         .put(fetchTrendingItemsFailure(anError.message))
         .dispatch(fetchTrendingItemsRequest())

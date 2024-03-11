@@ -1,10 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import {
-  Box,
-  CheckboxProps,
-  Checkbox,
-  SmartWearableFilter
-} from 'decentraland-ui'
+import { Box, CheckboxProps, Checkbox, SmartWearableFilter } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useTabletAndBelowMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { NFTCategory } from '@dcl/schemas'
@@ -40,9 +35,7 @@ export const MoreFilters = ({
 
   const filterText = useMemo(() => {
     const values: string[] = []
-    values.push(
-      isOnSale ? t('nft_filters.for_sale') : t('nft_filters.not_on_sale')
-    )
+    values.push(isOnSale ? t('nft_filters.for_sale') : t('nft_filters.not_on_sale'))
     if (isOnlySmart && showOnlySmartFilter) {
       values.push(t('nft_filters.only_smart.selected'))
     }
@@ -53,9 +46,7 @@ export const MoreFilters = ({
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">
-            {t('nft_filters.more_filters')}
-          </span>
+          <span className="box-filter-name">{t('nft_filters.more_filters')}</span>
           <span className="box-filter-value">{filterText}</span>
         </div>
       ) : (
@@ -65,27 +56,13 @@ export const MoreFilters = ({
   )
 
   return isOnSale !== undefined || showOnlySmartFilter ? (
-    <Box
-      header={header}
-      className="filters-sidebar-box"
-      collapsible
-      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
-    >
+    <Box header={header} className="filters-sidebar-box" collapsible defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
       <div className="more-filters-section">
         {isOnSale !== undefined ? (
-          <Checkbox
-            label={t('nft_filters.on_sale')}
-            toggle
-            checked={isOnSale}
-            onChange={handleOnSaleChange}
-          />
+          <Checkbox label={t('nft_filters.on_sale')} toggle checked={isOnSale} onChange={handleOnSaleChange} />
         ) : null}
         {showOnlySmartFilter && (
-          <SmartWearableFilter
-            data-testid="only-smart-filter"
-            isOnlySmart={isOnlySmart}
-            onChange={onOnlySmartChange}
-          />
+          <SmartWearableFilter data-testid="only-smart-filter" isOnlySmart={isOnlySmart} onChange={onOnlySmartChange} />
         )}
       </div>
     </Box>

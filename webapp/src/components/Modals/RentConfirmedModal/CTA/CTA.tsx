@@ -10,9 +10,7 @@ const CTA = ({ to, name, isDisabledOnMobile }: Props) => {
       <div className={classNames(styles[name], styles.icon)} />
       <div className={styles.ctaTextContainer}>
         <span>{t(`rental_modal.rent_confirmed_step.${name}.title`)}</span>
-        <span className={styles.ctaSubtitle}>
-          {t(`rental_modal.rent_confirmed_step.${name}.subtitle`)}
-        </span>
+        <span className={styles.ctaSubtitle}>{t(`rental_modal.rent_confirmed_step.${name}.subtitle`)}</span>
         {isDisabledOnMobile && (
           <span className={styles.ctaSubtitleMobile}>
             <i className={styles.infoIcon} />
@@ -26,12 +24,7 @@ const CTA = ({ to, name, isDisabledOnMobile }: Props) => {
   return isDisabledOnMobile ? (
     <div className={styles.mobileAvailabilityContainer}>{renderContent()}</div>
   ) : (
-    <a
-      className={styles.ctaContainer}
-      href={to}
-      target="_blank"
-      rel="noreferrer"
-    >
+    <a className={styles.ctaContainer} href={to} target="_blank" rel="noreferrer">
       {renderContent()}
     </a>
   )

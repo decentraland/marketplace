@@ -12,9 +12,7 @@ import { getIsChainSelectorEnabled } from '../../modules/features/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
   location: getLocation(state),
-  hasPendingTransactions: getTransactions(
-    state
-  ).some((tx: { status: TransactionStatus | null }) => isPending(tx.status)),
+  hasPendingTransactions: getTransactions(state).some((tx: { status: TransactionStatus | null }) => isPending(tx.status)),
   identity: getCurrentIdentity(state) || undefined,
   isChainSelectorEnabled: getIsChainSelectorEnabled(state)
 })

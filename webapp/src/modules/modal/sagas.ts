@@ -2,7 +2,7 @@ import { LOCATION_CHANGE } from 'connected-react-router'
 import { delay, put, select, takeEvery } from 'redux-saga/effects'
 import { ModalState } from 'decentraland-dapps/dist/modules/modal/reducer'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
-import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { closeModal, closeAllModals, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import {
   CLAIM_ASSET_SUCCESS,
   UPSERT_RENTAL_SUCCESS,
@@ -18,10 +18,6 @@ import {
   DELETE_LIST_SUCCESS,
   UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
-import {
-  closeAllModals,
-  openModal
-} from 'decentraland-dapps/dist/modules/modal/actions'
 
 export function* modalSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
@@ -39,10 +35,7 @@ export function* modalSaga() {
     handleCloseAllModals
   )
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleCloseRemoveRentalModal)
-  yield takeEvery(
-    ACCEPT_RENTAL_LISTING_SUCCESS,
-    handleOpenRentConfirmationModal
-  )
+  yield takeEvery(ACCEPT_RENTAL_LISTING_SUCCESS, handleOpenRentConfirmationModal)
 }
 
 function* handleLocationChange() {
@@ -65,9 +58,7 @@ function* handleCloseRemoveRentalModal() {
   }
 }
 
-function* handleOpenRentConfirmationModal(
-  action: AcceptRentalListingSuccessAction
-) {
+function* handleOpenRentConfirmationModal(action: AcceptRentalListingSuccessAction) {
   const { rental, periodIndexChosen } = action.payload
   yield put(closeModal('ConfirmRentModal'))
   yield put(

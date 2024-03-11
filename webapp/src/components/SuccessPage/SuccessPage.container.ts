@@ -16,22 +16,16 @@ const mapState = (state: RootState): MapStateProps => {
   const search = new URLSearchParams(getSearch(state))
   const transaction = getTransaction(state, search.get('txHash') || '')
   const address = getAddress(state)
-  const isLoadingTx = Boolean(
-    transaction && transaction.status !== TransactionStatus.CONFIRMED
-  )
+  const isLoadingTx = Boolean(transaction && transaction.status !== TransactionStatus.CONFIRMED)
   return {
     isLoading: isLoadingTx,
-    mintedTokenId: getTokenIdFromLogs(
-      ChainId.MATIC_MUMBAI,
-      transaction?.receipt?.logs
-    ),
-    profile: !!address ? getProfileOfAddress(state, address) : undefined
+    mintedTokenId: getTokenIdFromLogs(ChainId.MATIC_MUMBAI, transaction?.receipt?.logs),
+    profile: address ? getProfileOfAddress(state, address) : undefined
   }
 }
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
-  onSetNameAsAlias: (name: string) =>
-    dispatch(openModal('SetNameAsAliasModal', { name }))
+  onSetNameAsAlias: (name: string) => dispatch(openModal('SetNameAsAliasModal', { name }))
 })
 
 export default connect(mapState, mapDispatch)(SuccessPage)

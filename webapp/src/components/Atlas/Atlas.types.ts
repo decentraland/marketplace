@@ -39,9 +39,6 @@ export type Props = Partial<AtlasProps> & {
   children?: React.ReactNode
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'tiles' | 'nfts' | 'nftsOnRent' | 'tilesByEstateId' | 'getContract' | 'lastAtlasModifiedDate'
->
+export type MapStateProps = Pick<Props, 'tiles' | 'nfts' | 'nftsOnRent' | 'tilesByEstateId' | 'getContract' | 'lastAtlasModifiedDate'>
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

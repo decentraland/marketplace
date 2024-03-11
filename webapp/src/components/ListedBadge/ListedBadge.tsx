@@ -7,10 +7,7 @@ type Props = {
 }
 
 const ListedBadge = ({ className }: Props) => (
-  <Badge
-    className={classNames(styles.badge, className)}
-    color={Color.SUMMER_RED}
-  >
+  <Badge className={classNames(styles.badge, className)} color={Color.SUMMER_RED}>
     <Icon className={styles.icon} name="tag" />
   </Badge>
 )

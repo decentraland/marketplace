@@ -11,24 +11,11 @@ import ListedBadge from '../ListedBadge'
 import { Props } from './CollectionList.types'
 import styles from './CollectionList.module.css'
 
-const CollectionList = ({
-  collections,
-  count,
-  creator,
-  isLoading,
-  onFetchCollections
-}: Props) => {
-  const {
-    page,
-    first,
-    offset,
-    pages,
-    sortBy,
-    filters,
-    goToPage,
-    changeSorting,
-    changeFilter
-  } = usePagination<keyof CollectionFilters, CollectionSortBy>({
+const CollectionList = ({ collections, count, creator, isLoading, onFetchCollections }: Props) => {
+  const { page, first, offset, pages, sortBy, filters, goToPage, changeSorting, changeFilter } = usePagination<
+    keyof CollectionFilters,
+    CollectionSortBy
+  >({
     pageSize: COLLECTIONS_PER_PAGE,
     count
   })
@@ -48,8 +35,7 @@ const CollectionList = ({
         first,
         skip: offset,
         creator,
-        sortBy:
-          (sortBy as CollectionSortBy | undefined) ?? CollectionSortBy.NEWEST,
+        sortBy: (sortBy as CollectionSortBy | undefined) ?? CollectionSortBy.NEWEST,
         search: filters.search ?? undefined
       },
       true
@@ -98,22 +84,13 @@ const CollectionList = ({
             <div className={styles.empty}>{t('global.no_results')}</div>
           ) : (
             collections.map(collection => (
-              <Card
-                key={collection.contractAddress}
-                className={styles.card}
-                fluid
-              >
-                <Link
-                  className={styles.link}
-                  to={locations.collection(collection.contractAddress)}
-                >
+              <Card key={collection.contractAddress} className={styles.card} fluid>
+                <Link className={styles.link} to={locations.collection(collection.contractAddress)}>
                   <Card.Content className={styles.cardContent}>
                     <div className={styles.detailsContainer}>
                       <div className={styles.detailsLeft}>
                         <div className={styles.image}>
-                          <CollectionImage
-                            contractAddress={collection.contractAddress}
-                          />
+                          <CollectionImage contractAddress={collection.contractAddress} />
                         </div>
                       </div>
                       <div className={styles.detailsRight}>
@@ -125,9 +102,7 @@ const CollectionList = ({
                         </div>
                       </div>
                     </div>
-                    {collection.isOnSale && (
-                      <ListedBadge className={styles.listedBadge} />
-                    )}
+                    {collection.isOnSale && <ListedBadge className={styles.listedBadge} />}
                   </Card.Content>
                 </Link>
               </Card>

@@ -1,22 +1,9 @@
 import { Item } from '@dcl/schemas'
 import { AuthorizationStepStatus } from 'decentraland-ui'
 import { RootState } from '../reducer'
-import {
-  buyItemRequest,
-  fetchCollectionItemsRequest,
-  fetchItemRequest,
-  fetchItemsRequest
-} from './actions'
+import { buyItemRequest, fetchCollectionItemsRequest, fetchItemRequest, fetchItemsRequest } from './actions'
 import { INITIAL_STATE } from './reducer'
-import {
-  getData,
-  getError,
-  getLoading,
-  getMintItemStatus,
-  getState,
-  isFetchingItem,
-  isFetchingItemsOfCollection
-} from './selectors'
+import { getData, getError, getLoading, getMintItemStatus, getState, isFetchingItem, isFetchingItemsOfCollection } from './selectors'
 
 let state: RootState
 
@@ -132,9 +119,7 @@ describe('when getting if the items of a collection are being fetched', () => {
 
   describe("and they're being fetched", () => {
     beforeEach(() => {
-      state.item.loading.push(
-        fetchCollectionItemsRequest({ contractAddresses: [contractAddress] })
-      )
+      state.item.loading.push(fetchCollectionItemsRequest({ contractAddresses: [contractAddress] }))
     })
 
     it('should return true', () => {

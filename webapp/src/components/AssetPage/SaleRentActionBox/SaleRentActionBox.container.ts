@@ -5,12 +5,7 @@ import { RootState } from '../../../modules/reducer'
 import { getIsLandCrossChainEnabled } from '../../../modules/features/selectors'
 import { getMana, getWallet } from '../../../modules/wallet/selectors'
 import { getNFTBids } from '../../../modules/ui/nft/bid/selectors'
-import {
-  OwnProps,
-  MapStateProps,
-  MapDispatchProps,
-  MapDispatch
-} from './SaleRentActionBox.types'
+import { OwnProps, MapStateProps, MapDispatchProps, MapDispatch } from './SaleRentActionBox.types'
 import SaleRentActionBox from './SaleRentActionBox'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
@@ -18,21 +13,15 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
     wallet,
     currentMana:
-      ownProps.nft.network === Network.ETHEREUM ||
-      ownProps.nft.network === Network.MATIC
+      ownProps.nft.network === Network.ETHEREUM || ownProps.nft.network === Network.MATIC
         ? getMana(state, ownProps.nft.network)
         : undefined,
-    userHasAlreadyBidsOnNft: wallet
-      ? getNFTBids(state).some(bid => bid.bidder === wallet.address)
-      : false,
+    userHasAlreadyBidsOnNft: wallet ? getNFTBids(state).some(bid => bid.bidder === wallet.address) : false,
     isCrossChainLandEnabled: getIsLandCrossChainEnabled(state)
   }
 }
 
-const mapDispatch = (
-  dispatch: MapDispatch,
-  ownProps: OwnProps
-): MapDispatchProps => ({
+const mapDispatch = (dispatch: MapDispatch, ownProps: OwnProps): MapDispatchProps => ({
   onBuyWithCrypto: () =>
     dispatch(
       openModal('BuyNftWithCryptoModal', {

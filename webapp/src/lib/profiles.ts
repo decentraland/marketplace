@@ -18,10 +18,8 @@ class ProfilesCache {
       return this.cache[addressesString]
     }
 
-    this.cache[addressesString] = 
-      this.client.getAvatarsDetailsByPost({ ids: address })
-      .then((profiles) => profiles as any) // "as any" so that no need to map types (prior versions returned any)
-    
+    this.cache[addressesString] = this.client.getAvatarsDetailsByPost({ ids: address }).then(profiles => profiles as any) // "as any" so that no need to map types (prior versions returned any)
+
     return this.cache[addressesString]
   }
 }

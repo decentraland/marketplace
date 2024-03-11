@@ -13,15 +13,9 @@ const SignInPage = (props: Props) => {
   const handleConnect = useCallback(() => {
     if (!isConnected && !isConnecting) {
       const params = new URLSearchParams(window.location.search)
-      const basename = /^decentraland.(zone|org|today)$/.test(
-        window.location.host
-      )
-        ? '/marketplace'
-        : ''
+      const basename = /^decentraland.(zone|org|today)$/.test(window.location.host) ? '/marketplace' : ''
       window.location.replace(
-        `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(
-          `${basename}${params.get('redirectTo') || '/'}`
-        )}`
+        `${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(`${basename}${params.get('redirectTo') || '/'}`)}`
       )
     }
   }, [isConnected, isConnecting])

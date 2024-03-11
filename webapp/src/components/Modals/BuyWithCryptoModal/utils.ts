@@ -3,11 +3,7 @@ import { BigNumber, ethers } from 'ethers'
 import { Env } from '@dcl/ui-env'
 import type { ChainData, Token } from 'decentraland-transactions/crossChain'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import {
-  ContractName,
-  getContract,
-  getContractName
-} from 'decentraland-transactions'
+import { ContractName, getContract, getContractName } from 'decentraland-transactions'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { config } from '../../../config'
@@ -45,8 +41,7 @@ export function getMANAToken(chainId: ChainId) {
     name: MANAContract.name,
     symbol: 'MANA',
     decimals: 18,
-    logoURI:
-      'https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png',
+    logoURI: 'https://assets.coingecko.com/coins/images/878/small/decentraland-mana.png',
     coingeckoId: '', // not necessary
     subGraphId: '', // won't be used since we'll send the metatx or transaction directly
     subGraphOnly: false,
@@ -79,10 +74,7 @@ export function formatPrice(price: string | number, token: Token): number {
   }
 
   // Format the price using toFixed to round and limit the number of decimals
-  const formattedPrice = truncateToDecimals(
-    typeof price === 'string' ? Number(price) : price,
-    decimalsToShow
-  )
+  const formattedPrice = truncateToDecimals(typeof price === 'string' ? Number(price) : price, decimalsToShow)
 
   return formattedPrice
 }
@@ -97,8 +89,7 @@ export const DEFAULT_CHAINS = [
       name: 'MATIC',
       symbol: 'MATIC',
       decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg'
+      icon: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg'
     }
   },
   {
@@ -108,8 +99,7 @@ export const DEFAULT_CHAINS = [
       name: 'Ethereum',
       symbol: 'ETH',
       decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
+      icon: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
     }
   },
   {
@@ -119,8 +109,7 @@ export const DEFAULT_CHAINS = [
       name: 'Optimism',
       symbol: 'ETH',
       decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/optimism.svg'
+      icon: 'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/optimism.svg'
     }
   },
   {
@@ -130,8 +119,7 @@ export const DEFAULT_CHAINS = [
       name: 'Arbitrum',
       symbol: 'ETH',
       decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/arbitrum.svg'
+      icon: 'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/arbitrum.svg'
     }
   },
   {
@@ -141,8 +129,7 @@ export const DEFAULT_CHAINS = [
       name: 'Avalanche',
       symbol: 'AVAX',
       decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/avalanche.svg'
+      icon: 'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/avalanche.svg'
     }
   },
   {
@@ -152,8 +139,7 @@ export const DEFAULT_CHAINS = [
       name: 'BNB',
       symbol: 'BNB',
       decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/binance.svg'
+      icon: 'https://raw.githubusercontent.com/axelarnetwork/axelar-docs/main/public/images/chains/binance.svg'
     }
   },
   {
@@ -163,8 +149,7 @@ export const DEFAULT_CHAINS = [
       name: 'FTM',
       symbol: 'FTM',
       decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/ftm.svg'
+      icon: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/ftm.svg'
     }
   }
 ] as ChainData[]
@@ -177,8 +162,7 @@ export const TESTNET_DEFAULT_CHAINS = [
       name: 'MATIC',
       symbol: 'MATIC',
       decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg'
+      icon: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/matic.svg'
     }
   },
   {
@@ -188,8 +172,7 @@ export const TESTNET_DEFAULT_CHAINS = [
       name: 'Ethereum',
       symbol: 'ETH',
       decimals: 18,
-      icon:
-        'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
+      icon: 'https://raw.githubusercontent.com/0xsquid/assets/main/images/tokens/eth.svg'
     }
   }
 ] as ChainData[]
@@ -201,47 +184,26 @@ export const getDefaultChains = () => {
   return DEFAULT_CHAINS
 }
 
-export const estimateMintNftGas = async (
-  selectedChain: ChainId,
-  wallet: Wallet,
-  asset: Item
-): Promise<BigNumber> => {
+export const estimateMintNftGas = async (selectedChain: ChainId, wallet: Wallet, asset: Item): Promise<BigNumber> => {
   const networkProvider = await getNetworkProvider(selectedChain)
   const provider = new ethers.providers.Web3Provider(networkProvider)
 
   const contract = getContract(ContractName.CollectionStore, asset.chainId)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
-  return c.estimateGas.buy(
-    [[asset.contractAddress, [asset.itemId], [asset.price], [wallet.address]]],
-    { from: wallet.address }
-  )
+  return c.estimateGas.buy([[asset.contractAddress, [asset.itemId], [asset.price], [wallet.address]]], { from: wallet.address })
 }
 
-export const estimateBuyNftGas = async (
-  selectedChain: ChainId,
-  wallet: Wallet,
-  asset: NFT,
-  order: Order
-): Promise<BigNumber> => {
+export const estimateBuyNftGas = async (selectedChain: ChainId, wallet: Wallet, asset: NFT, order: Order): Promise<BigNumber> => {
   const networkProvider = await getNetworkProvider(selectedChain)
   const provider = new ethers.providers.Web3Provider(networkProvider)
 
   const contractName = getContractName(order.marketplaceAddress)
   const contract = getContract(contractName, order.chainId)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
-  return c.estimateGas.executeOrder(
-    asset.contractAddress,
-    asset.tokenId,
-    order.price,
-    { from: wallet.address }
-  )
+  return c.estimateGas.executeOrder(asset.contractAddress, asset.tokenId, order.price, { from: wallet.address })
 }
 
-export const estimateNameMintingGas = async (
-  name: string,
-  selectedChain: ChainId,
-  ownerAddress: string
-): Promise<BigNumber> => {
+export const estimateNameMintingGas = async (name: string, selectedChain: ChainId, ownerAddress: string): Promise<BigNumber> => {
   const networkProvider = await getNetworkProvider(selectedChain)
   const provider = new ethers.providers.Web3Provider(networkProvider)
   const contract = getContract(ContractName.DCLControllerV2, selectedChain)

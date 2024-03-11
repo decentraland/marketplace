@@ -18,7 +18,7 @@ jest.mock('decentraland-dapps/dist/containers', () => {
 })
 
 describe('Owners Table', () => {
-  let asset: Item = {
+  const asset: Item = {
     contractAddress: '0xaddress',
     urn: '',
     itemId: '1',
@@ -48,7 +48,7 @@ describe('Owners Table', () => {
     chainId: ChainId.ETHEREUM_GOERLI,
     firstListedAt: null
   }
-  let ownersResponse: OwnersResponse = {
+  const ownersResponse: OwnersResponse = {
     issuedId: 1,
     ownerId: ownerIdMock,
     orderStatus: 'open',
@@ -69,9 +69,7 @@ describe('Owners Table', () => {
     })
 
     it('should render the empty table message', async () => {
-      const { getByText, findByTestId } = renderWithProviders(
-        <OwnersTable asset={asset} />
-      )
+      const { getByText, findByTestId } = renderWithProviders(<OwnersTable asset={asset} />)
 
       const loader = await findByTestId('loader')
 
@@ -79,9 +77,7 @@ describe('Owners Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(
-        getByText(t('owners_table.there_are_no_owners'))
-      ).toBeInTheDocument()
+      expect(getByText(t('owners_table.there_are_no_owners'))).toBeInTheDocument()
     })
   })
 

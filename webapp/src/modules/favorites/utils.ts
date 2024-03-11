@@ -2,9 +2,7 @@ import { SortDirection } from '../routing/types'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import { ListsBrowseSortBy } from './types'
 
-export function convertListsBrowseSortByIntoApiSortBy(
-  sortBy: ListsBrowseSortBy
-): { sortBy: ListsSortBy; sortDirection: SortDirection } {
+export function convertListsBrowseSortByIntoApiSortBy(sortBy: ListsBrowseSortBy): { sortBy: ListsSortBy; sortDirection: SortDirection } {
   switch (sortBy) {
     case ListsBrowseSortBy.NAME_ASC:
       return { sortBy: ListsSortBy.NAME, sortDirection: SortDirection.ASC }

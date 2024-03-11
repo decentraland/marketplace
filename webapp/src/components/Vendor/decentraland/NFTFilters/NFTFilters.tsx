@@ -1,16 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {
-  Radio,
-  CheckboxProps,
-  Button,
-  Header,
-  Dropdown,
-  DropdownProps,
-  Responsive,
-  Modal,
-  Icon,
-  NotMobile
-} from 'decentraland-ui'
+import { Radio, CheckboxProps, Button, Header, Dropdown, DropdownProps, Responsive, Modal, Icon, NotMobile } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
@@ -21,11 +10,7 @@ import { NFTSidebar } from '../../NFTSidebar'
 import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { AssetType } from '../../../../modules/asset/types'
-import {
-  isAccountView,
-  isLandSection,
-  persistIsMapProperty
-} from '../../../../modules/ui/utils'
+import { isAccountView, isLandSection, persistIsMapProperty } from '../../../../modules/ui/utils'
 import { View } from '../../../../modules/ui/types'
 import { ToggleBox } from '../../../AssetBrowse/ToggleBox'
 import { LANDFilters } from '../types'
@@ -90,8 +75,7 @@ const NFTFilters = (props: Props) => {
     { value: AssetType.NFT, text: t('filters.nft') }
   ]
 
-  const shouldShowOnSaleFilter =
-    (section && !isLandSection(section!)) || !section
+  const shouldShowOnSaleFilter = (section && !isLandSection(section)) || !section
 
   if (onlyOnSale) {
     orderByDropdownOptions.unshift({
@@ -108,11 +92,7 @@ const NFTFilters = (props: Props) => {
     })
   }
 
-  const sortBy = orderByDropdownOptions.find(
-    option => option.value === props.sortBy
-  )
-    ? props.sortBy
-    : orderByDropdownOptions[0].value
+  const sortBy = orderByDropdownOptions.find(option => option.value === props.sortBy) ? props.sortBy : orderByDropdownOptions[0].value
 
   let currentLANDStatus: LANDFilters
   if (onlyOnRent && !onlyOnSale) {
@@ -150,10 +130,7 @@ const NFTFilters = (props: Props) => {
         isFullscreen: isMap,
         search: '',
         // Forces the onlyOnSale property in the defined cases so the users can see LAND on sale.
-        onlyOnSale:
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
-          onlyOnSale
+        onlyOnSale: (!onlyOnSale && onlyOnRent === false) || (onlyOnSale === undefined && onlyOnRent === undefined) || onlyOnSale
       })
     },
     [onBrowse, onlyOnSale, onlyOnRent]
@@ -189,79 +166,49 @@ const NFTFilters = (props: Props) => {
     [search, onBrowse]
   )
 
-  useEffect(
-    () =>
-      setShowFiltersMenu(
-        category === NFTCategory.WEARABLE || category === NFTCategory.EMOTE
-      ),
-    [category, setShowFiltersMenu]
-  )
+  useEffect(() => setShowFiltersMenu(category === NFTCategory.WEARABLE || category === NFTCategory.EMOTE), [category, setShowFiltersMenu])
 
   const searchPlaceholder = isMap
     ? t('nft_filters.search_land')
     : count === undefined
-    ? t('global.loading') + '...'
-    : t('nft_filters.search', {
-        suffix:
-          count < MAX_QUERY_SIZE
-            ? t('nft_filters.results', {
-                count: count.toLocaleString()
-              })
-            : t('nft_filters.more_than_results', {
-                count: count.toLocaleString()
-              })
-      })
+      ? t('global.loading') + '...'
+      : t('nft_filters.search', {
+          suffix:
+            count < MAX_QUERY_SIZE
+              ? t('nft_filters.results', {
+                  count: count.toLocaleString()
+                })
+              : t('nft_filters.more_than_results', {
+                  count: count.toLocaleString()
+                })
+        })
 
-  const toggleBoxI18nKey =
-    view && isAccountView(view) ? 'account_page' : 'browse_page'
+  const toggleBoxI18nKey = view && isAccountView(view) ? 'account_page' : 'browse_page'
 
   return (
     <div className="NFTFilters">
       <div className="topbar">
         {isMap ? (
           <>
-            <TextFilter
-              value={search}
-              placeholder={searchPlaceholder}
-              onChange={handleSearch}
-            />
-            <Responsive
-              minWidth={Responsive.onlyTablet.minWidth}
-              className="topbar-filter"
-            >
+            <TextFilter value={search} placeholder={searchPlaceholder} onChange={handleSearch} />
+            <Responsive minWidth={Responsive.onlyTablet.minWidth} className="topbar-filter">
               {shouldShowOnSaleFilter ? (
-                <Radio
-                  toggle
-                  checked={onlyOnSale}
-                  onChange={handleOnlyOnSaleChange}
-                  label={t('nft_filters.on_sale')}
-                />
+                <Radio toggle checked={onlyOnSale} onChange={handleOnlyOnSaleChange} label={t('nft_filters.on_sale')} />
               ) : null}
             </Responsive>
           </>
         ) : (
           <>
-            <TextFilter
-              value={search}
-              placeholder={searchPlaceholder}
-              onChange={handleSearch}
-            />
+            <TextFilter value={search} placeholder={searchPlaceholder} onChange={handleSearch} />
             <NotMobile>
               {hasFiltersEnabled && (
                 <div className="clear-filters" onClick={onClearFilters}>
-                  <Icon
-                    aria-label="Clear filters"
-                    aria-hidden="false"
-                    name="close"
-                  />
+                  <Icon aria-label="Clear filters" aria-hidden="false" name="close" />
                   <span>{t('filters.clear')}</span>
                 </div>
               )}
             </NotMobile>
-            <Responsive
-              minWidth={Responsive.onlyTablet.minWidth}
-              className="topbar-filter"
-            >
+            <Responsive minWidth={Responsive.onlyTablet.minWidth} className="topbar-filter">
               {view === View.CURRENT_ACCOUNT ? (
                 <Dropdown
                   direction="left"
@@ -279,51 +226,26 @@ const NFTFilters = (props: Props) => {
                 onChange={handleOrderByDropdownChange}
               />
             </Responsive>
-            <Responsive
-              minWidth={Responsive.onlyTablet.minWidth}
-              className="topbar-filter"
-            >
+            <Responsive minWidth={Responsive.onlyTablet.minWidth} className="topbar-filter">
               {shouldShowOnSaleFilter ? (
-                <Radio
-                  toggle
-                  checked={onlyOnSale}
-                  onChange={handleOnlyOnSaleChange}
-                  label={t('nft_filters.on_sale')}
-                />
+                <Radio toggle checked={onlyOnSale} onChange={handleOnlyOnSaleChange} label={t('nft_filters.on_sale')} />
               ) : null}
             </Responsive>
           </>
         )}
 
         <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
-          <div
-            className="open-filters-wrapper"
-            onClick={() => setShowFiltersModal(!showFiltersModal)}
-          >
+          <div className="open-filters-wrapper" onClick={() => setShowFiltersModal(!showFiltersModal)}>
             <div className="label">{t('nft_filters.filter')}</div>
-            <div
-              className={`open-filters ${
-                showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
-              }`}
-            />
+            <div className={`open-filters ${showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''}`} />
           </div>
         </Responsive>
 
         {isLandSection(section) && !isAccountView(view!) ? (
           <div className="topbar-filter">
             <div className="toggle-map">
-              <Chip
-                className="grid"
-                icon="table"
-                isActive={!isMap}
-                onClick={() => handleIsMapChange(false)}
-              />
-              <Chip
-                className="atlas"
-                icon="map marker alternate"
-                isActive={isMap}
-                onClick={() => handleIsMapChange(true)}
-              />
+              <Chip className="grid" icon="table" isActive={!isMap} onClick={() => handleIsMapChange(false)} />
+              <Chip className="atlas" icon="map marker alternate" isActive={isMap} onClick={() => handleIsMapChange(true)} />
             </div>
           </div>
         ) : null}
@@ -354,21 +276,13 @@ const NFTFilters = (props: Props) => {
         </>
       ) : null}
 
-      <Modal
-        className="FiltersModal"
-        open={showFiltersModal}
-        onClose={() => setShowFiltersModal(false)}
-      >
+      <Modal className="FiltersModal" open={showFiltersModal} onClose={() => setShowFiltersModal(false)}>
         <Modal.Header>{t('nft_filters.filter')}</Modal.Header>
         <Modal.Content>
           {hasFiltersEnabled && (
             <div className="filter-row">
               <div className="clear-filters-modal" onClick={onClearFilters}>
-                <Icon
-                  aria-label="Clear filters"
-                  aria-hidden="false"
-                  name="close"
-                />
+                <Icon aria-label="Clear filters" aria-hidden="false" name="close" />
                 <span>{t('filters.clear')}</span>
               </div>
             </div>
@@ -377,51 +291,28 @@ const NFTFilters = (props: Props) => {
             <>
               <div className="filter-row">
                 <Header sub>{t('filters.type')}</Header>
-                <Dropdown
-                  direction="left"
-                  value={assetType}
-                  options={typeDropdownOptions}
-                  onChange={handleTypeByDropdownChange}
-                />
+                <Dropdown direction="left" value={assetType} options={typeDropdownOptions} onChange={handleTypeByDropdownChange} />
               </div>
             </>
           ) : null}
           <div className="filter-row">
             <Header sub>{t('nft_filters.order_by')}</Header>
-            <Dropdown
-              direction="left"
-              value={sortBy}
-              options={orderByDropdownOptions}
-              onChange={handleOrderByDropdownChange}
-            />
+            <Dropdown direction="left" value={sortBy} options={orderByDropdownOptions} onChange={handleOrderByDropdownChange} />
           </div>
           {section && isLandSection(section) ? (
             <div className="filter-row">
               <Header sub>{t('filters.status')}</Header>
-              <Dropdown
-                direction="left"
-                value={currentLANDStatus}
-                options={landStatusDropdown}
-                onChange={handleStatusByDropdownChange}
-              />
+              <Dropdown direction="left" value={currentLANDStatus} options={landStatusDropdown} onChange={handleStatusByDropdownChange} />
             </div>
           ) : null}
           {shouldShowOnSaleFilter ? (
             <div className="filter-row">
               <Header sub>{t('nft_filters.on_sale')}</Header>
-              <Radio
-                toggle
-                checked={onlyOnSale}
-                onChange={handleOnlyOnSaleChange}
-              />
+              <Radio toggle checked={onlyOnSale} onChange={handleOnlyOnSaleChange} />
             </div>
           ) : null}
           <NFTSidebar />
-          <Button
-            className="apply-filters"
-            primary
-            onClick={() => setShowFiltersModal(false)}
-          >
+          <Button className="apply-filters" primary onClick={() => setShowFiltersModal(false)}>
             {t('global.apply')}
           </Button>
         </Modal.Content>

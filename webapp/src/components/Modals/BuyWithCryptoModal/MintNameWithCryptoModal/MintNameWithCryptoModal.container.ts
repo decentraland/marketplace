@@ -15,39 +15,25 @@ import {
   claimNameCrossChainRequest,
   claimNameRequest
 } from '../../../../modules/ens/actions'
-import type {
-  MapDispatchProps,
-  MapStateProps,
-  OwnProps
-} from './MintNameWithCryptoModal.types'
+import type { MapDispatchProps, MapStateProps, OwnProps } from './MintNameWithCryptoModal.types'
 import { MintNameWithCryptoModal } from './MintNameWithCryptoModal'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
     isMintingName: isLoadingType(getLoading(state), CLAIM_NAME_REQUEST),
-    isMintingNameCrossChain: isLoadingType(
-      getLoading(state),
-      CLAIM_NAME_CROSS_CHAIN_REQUEST
-    ),
+    isMintingNameCrossChain: isLoadingType(getLoading(state), CLAIM_NAME_CROSS_CHAIN_REQUEST),
     getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }
 
-const mapDispatch = (
-  dispatch: Dispatch,
-  ownProps: OwnProps
-): MapDispatchProps =>
+const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps =>
   bindActionCreators(
     {
       onCloseFatFingerModal: () => closeModal('ClaimNameFatFingerModal'),
       onOpenFatFingerModal: () => openModal('ClaimNameFatFingerModal', { name: ownProps.metadata.name }),
       onClaimName: claimNameRequest,
       onClaimNameCrossChain: (route: Route) =>
-        claimNameCrossChainRequest(
-          ownProps.metadata.name,
-          getChainIdByNetwork(Network.ETHEREUM),
-          route
-        )
+        claimNameCrossChainRequest(ownProps.metadata.name, getChainIdByNetwork(Network.ETHEREUM), route)
     },
     dispatch
   )

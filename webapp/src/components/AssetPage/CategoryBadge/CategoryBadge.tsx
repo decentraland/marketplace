@@ -8,9 +8,7 @@ import { BrowseOptions } from '../../../modules/routing/types'
 import { Props } from './CategoryBadge.types'
 
 const CategoryBadge = ({ category, assetType }: Props) => {
-  const isEmote = Object.values(EmoteCategory).includes(
-    category as EmoteCategory
-  )
+  const isEmote = Object.values(EmoteCategory).includes(category as EmoteCategory)
   const section = getSearchSection(category)
 
   const href = useMemo(() => {
@@ -25,19 +23,11 @@ const CategoryBadge = ({ category, assetType }: Props) => {
   // TODO: we have to handle these types of errors and report them somewhere
   useEffect(() => {
     if (!section) {
-      throw new Error(
-        `Invalid ${isEmote ? 'emote' : 'wearable'} category ${category}`
-      )
+      throw new Error(`Invalid ${isEmote ? 'emote' : 'wearable'} category ${category}`)
     }
   }, [section, category, isEmote])
 
-  return (
-    <IconBadge
-      icon={isEmote ? undefined : category}
-      text={t(`${isEmote ? 'emote' : 'wearable'}.category.${category}`)}
-      href={href}
-    />
-  )
+  return <IconBadge icon={isEmote ? undefined : category} text={t(`${isEmote ? 'emote' : 'wearable'}.category.${category}`)} href={href} />
 }
 
 export default React.memo(CategoryBadge)

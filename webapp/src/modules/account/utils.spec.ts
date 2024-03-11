@@ -1,11 +1,7 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Account, Avatar, Profile } from '@dcl/schemas'
 import { NFTResult } from '../vendor/decentraland'
-import {
-  enhanceCreatorName,
-  fromProfilesToCreators,
-  sumAccountMetrics
-} from './utils'
+import { enhanceCreatorName, fromProfilesToCreators, sumAccountMetrics } from './utils'
 import { CreatorAccount } from './types'
 
 describe('when summing account metrics', () => {
@@ -60,9 +56,7 @@ describe('when transforming profiles and accounts objects to creators entities',
       }
     ]
     collectionsAmount = 3
-    accounts = [
-      { address: ethAddress, collections: collectionsAmount } as Account
-    ]
+    accounts = [{ address: ethAddress, collections: collectionsAmount } as Account]
   })
   it('should return an creator account with the values from the profile and account', () => {
     expect(fromProfilesToCreators(profiles, accounts)).toEqual([
@@ -101,9 +95,7 @@ describe('when enhancing creator name', () => {
     })
     it('should enhance the name and add the profile name at the end', () => {
       enhanceCreatorName(creator, ens, search)
-      expect(creator.name).toEqual(
-        `aName (${t('global.currently')} anotherName)`
-      )
+      expect(creator.name).toEqual(`aName (${t('global.currently')} anotherName)`)
     })
   })
   describe('when the creator name contains the search', () => {

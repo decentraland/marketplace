@@ -25,9 +25,7 @@ const SuccessPageLoadingStateDescription = () => {
       <div>
         {t('success_page.loading_state.description', {
           br: () => <br />,
-          highlight: (text: string) => (
-            <span className={styles.highlighted}>{text}</span>
-          ),
+          highlight: (text: string) => <span className={styles.highlighted}>{text}</span>,
           link: (text: string) => <Link to={locations.activity()}>{text}</Link>
         })}
       </div>
@@ -49,9 +47,7 @@ export function SuccessPage(props: Props) {
       <div className={styles.pageContainer}>
         <Navbar />
         <div className={styles.container}>
-          <Header className={styles.title}>
-            {t('success_page.loading_state.subdomain.title')}
-          </Header>
+          <Header className={styles.title}>{t('success_page.loading_state.subdomain.title')}</Header>
           <AssetImage
             asset={{ category: 'ens', data: { ens: { subdomain } } } as Asset}
             className={classNames(styles.assetImage, styles.loading)}
@@ -74,9 +70,7 @@ export function SuccessPage(props: Props) {
       <div className={styles.pageContainer}>
         <Navbar />
         <div className={styles.container}>
-          <Header className={styles.title}>
-            {t('success_page.loading_state.item.title')}
-          </Header>
+          <Header className={styles.title}>{t('success_page.loading_state.item.title')}</Header>
 
           <div className={styles.statusInfo}>
             <Loader size="small" inline active />
@@ -94,30 +88,17 @@ export function SuccessPage(props: Props) {
       <Navbar />
       <div className={styles.container}>
         {assetType && contractAddress && tokenId ? (
-          <AssetProvider
-            retry
-            type={assetType as AssetType}
-            contractAddress={contractAddress}
-            tokenId={tokenId}
-          >
+          <AssetProvider retry type={assetType as AssetType} contractAddress={contractAddress} tokenId={tokenId}>
             {asset => {
               if (!asset) {
-                return (
-                  <Loader data-testid="asset-loader" size="massive" active />
-                )
+                return <Loader data-testid="asset-loader" size="massive" active />
               }
 
               if (isLoading) {
                 return (
                   <>
-                    <Header className={styles.title}>
-                      {t('success_page.loading_state.item.title')}
-                    </Header>
-                    <AssetImage
-                      asset={asset}
-                      isSmall
-                      className={classNames(styles.assetImage, styles.loading)}
-                    />
+                    <Header className={styles.title}>{t('success_page.loading_state.item.title')}</Header>
+                    <AssetImage asset={asset} isSmall className={classNames(styles.assetImage, styles.loading)} />
                     <div className={styles.statusInfo}>
                       <Loader size="small" inline active />
                       {t('success_page.loading_state.status')}
@@ -129,31 +110,16 @@ export function SuccessPage(props: Props) {
 
               return (
                 <>
-                  <Lottie
-                    animationData={successAnimation}
-                    loop={1}
-                    className={styles.animation}
-                  />
-                  <Header className={styles.title}>
-                    {t('success_page.success_state.title')}
-                  </Header>
+                  <Lottie animationData={successAnimation} loop={1} className={styles.animation} />
+                  <Header className={styles.title}>{t('success_page.success_state.title')}</Header>
                   <AssetImage asset={asset} className={styles.assetImage} />
-                  <span
-                    className={classNames(styles.statusInfo, styles.success)}
-                  >
+                  <span className={classNames(styles.statusInfo, styles.success)}>
                     <Icon name="check circle" className={styles.checkIcon} />
                     {t('success_page.success_state.status')}
                   </span>
                   <div className={styles.actionContainer}>
-                    {assetType === AssetType.ITEM &&
-                    !isLoading &&
-                    mintedTokenId ? (
-                      <AssetProvider
-                        retry
-                        type={AssetType.NFT}
-                        contractAddress={contractAddress}
-                        tokenId={mintedTokenId.toString()}
-                      >
+                    {assetType === AssetType.ITEM && !isLoading && mintedTokenId ? (
+                      <AssetProvider retry type={AssetType.NFT} contractAddress={contractAddress} tokenId={mintedTokenId.toString()}>
                         {asset => (
                           <Button
                             as={Link}
@@ -171,72 +137,38 @@ export function SuccessPage(props: Props) {
                         {asset.category === NFTCategory.ENS ? (
                           <div className={styles.ensActions}>
                             <div className={styles.primaryEnsActions}>
-                              <Button
-                                as={Link}
-                                className={styles.successButton}
-                                secondary
-                                to={locations.claimName()}
-                              >
-                                {t(
-                                  'success_page.success_state.mint_more_names'
-                                )}
+                              <Button as={Link} className={styles.successButton} secondary to={locations.claimName()}>
+                                {t('success_page.success_state.mint_more_names')}
                               </Button>
                               {!!profile && (
                                 <>
-                                  <Button
-                                    className={styles.successButton}
-                                    primary
-                                    onClick={() => onSetNameAsAlias(asset.name)}
-                                  >
-                                    {t(
-                                      'success_page.success_state.set_as_primary_name'
-                                    )}
+                                  <Button className={styles.successButton} primary onClick={() => onSetNameAsAlias(asset.name)}>
+                                    {t('success_page.success_state.set_as_primary_name')}
                                   </Button>
                                 </>
                               )}
                             </div>
                             {!!profile && (
                               <div>
-                                <Button
-                                  inverted
-                                  fluid
-                                  as={'a'}
-                                  href={BUILDER_URL + '/names'}
-                                >
+                                <Button inverted fluid as={'a'} href={BUILDER_URL + '/names'}>
                                   <div className={styles.manageNames}>
-                                    <div
-                                      className={styles.manageNamesIcon}
-                                    ></div>
-                                    {t(
-                                      'success_page.success_state.manage_names'
-                                    )}
+                                    <div className={styles.manageNamesIcon}></div>
+                                    {t('success_page.success_state.manage_names')}
                                   </div>
                                 </Button>
                               </div>
                             )}
                           </div>
-                        ) : asset.category === NFTCategory.PARCEL ||
-                          asset.category === NFTCategory.ESTATE ? (
+                        ) : asset.category === NFTCategory.PARCEL || asset.category === NFTCategory.ESTATE ? (
                           <div className={styles.ensActions}>
                             <div className={styles.primaryEnsActions}>
-                              <Button
-                                as={Link}
-                                className={styles.successButton}
-                                secondary
-                                to={locations.nft(contractAddress, tokenId)}
-                              >
+                              <Button as={Link} className={styles.successButton} secondary to={locations.nft(contractAddress, tokenId)}>
                                 {t('success_page.success_state.manage_land')}
                               </Button>
                               {!!profile && (
                                 <>
-                                  <Button
-                                    className={styles.successButton}
-                                    primary
-                                    href={BUILDER_URL + '/scenes'}
-                                  >
-                                    {t(
-                                      'success_page.success_state.start_building'
-                                    )}
+                                  <Button className={styles.successButton} primary href={BUILDER_URL + '/scenes'}>
+                                    {t('success_page.success_state.start_building')}
                                   </Button>
                                 </>
                               )}
@@ -259,15 +191,8 @@ export function SuccessPage(props: Props) {
                       </>
                     )}
 
-                    {(asset.category === NFTCategory.WEARABLE ||
-                      asset.category === NFTCategory.EMOTE) && (
-                      <Button
-                        className={styles.successButton}
-                        primary
-                        as="a"
-                        href={EXPLORER_URL}
-                        target="_blank"
-                      >
+                    {(asset.category === NFTCategory.WEARABLE || asset.category === NFTCategory.EMOTE) && (
+                      <Button className={styles.successButton} primary as="a" href={EXPLORER_URL} target="_blank">
                         {t('success_page.success_state.try_genesis_city')}
                       </Button>
                     )}
@@ -279,12 +204,8 @@ export function SuccessPage(props: Props) {
         ) : (
           <div className={styles.errorContainer}>
             <div className={styles.errorInfo}>
-              <h1 className={styles.errorTitle}>
-                {t('success_page.error_state.title')}
-              </h1>
-              <p className={styles.errorDescription}>
-                {t('success_page.error_state.description')}
-              </p>
+              <h1 className={styles.errorTitle}>{t('success_page.error_state.title')}</h1>
+              <p className={styles.errorDescription}>{t('success_page.error_state.description')}</p>
             </div>
             <Button as={Link} primary to={locations.activity()}>
               {t('success_page.error_state.go_to_activity')}

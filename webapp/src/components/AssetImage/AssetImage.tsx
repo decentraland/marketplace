@@ -2,25 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
 import { Env } from '@dcl/ui-env'
-import {
-  BodyShape,
-  NFTCategory,
-  Network,
-  PreviewEmote,
-  PreviewType,
-  Rarity
-} from '@dcl/schemas'
+import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewType, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import {
-  Badge,
-  Button,
-  Center,
-  Icon,
-  Loader,
-  Popup,
-  WearablePreview
-} from 'decentraland-ui'
+import { Badge, Button, Center, Icon, Loader, Popup, WearablePreview } from 'decentraland-ui'
 import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import * as events from '../../utils/events'
@@ -38,22 +23,20 @@ import { EnsImage } from './EnsImage'
 import './AssetImage.css'
 
 // 1x1 transparent pixel
-const PIXEL =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
+const PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
 const DEFAULT_COLOR = 'bbbbbb'
 
 type Color = { r: number; g: number; b: number }
 type WrappedColor = { color: Color }
 
-const valueToHex = (value: number) =>
-  ('00' + Math.min(255, (value * 255) | 0).toString(16)).slice(-2)
+const valueToHex = (value: number) => ('00' + Math.min(255, (value * 255) | 0).toString(16)).slice(-2)
 
 const colorToHex = (color: Color): string => {
   if (isColor(color)) {
     return valueToHex(color.r) + valueToHex(color.g) + valueToHex(color.b)
   }
-  const maybeWrapped = (color as unknown) as Partial<WrappedColor>
+  const maybeWrapped = color as unknown as Partial<WrappedColor>
   if (isWrapped(maybeWrapped)) {
     return colorToHex(maybeWrapped.color!)
   }
@@ -62,12 +45,9 @@ const colorToHex = (color: Color): string => {
 }
 
 // sometimes the color come from the catalyst wrapped in an extra "color": { } object
-const isWrapped = (maybeWrapped: Partial<WrappedColor>) =>
-  maybeWrapped.color && isColor(maybeWrapped.color)
+const isWrapped = (maybeWrapped: Partial<WrappedColor>) => maybeWrapped.color && isColor(maybeWrapped.color)
 const isColor = (maybeColor: Partial<Color>) =>
-  typeof maybeColor.r === 'number' &&
-  typeof maybeColor.g === 'number' &&
-  typeof maybeColor.b === 'number'
+  typeof maybeColor.r === 'number' && typeof maybeColor.g === 'number' && typeof maybeColor.b === 'number'
 
 const AssetImage = (props: Props) => {
   const {
@@ -96,9 +76,7 @@ const AssetImage = (props: Props) => {
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
-  const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(
-    isDraggable
-  )
+  const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(isDraggable)
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
   const [isSoundEnabled, setIsSoundEnabled] = useState(false)
   const [hasSound, setHasSound] = useState<boolean | undefined>(undefined)
@@ -106,9 +84,7 @@ const AssetImage = (props: Props) => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
     if (asset.category === NFTCategory.EMOTE && !wearableController) {
-      onSetWearablePreviewController(
-        WearablePreview.createController('wearable-preview')
-      )
+      onSetWearablePreviewController(WearablePreview.createController('wearable-preview'))
     }
   }, [asset.category, wearableController, onSetWearablePreviewController])
 
@@ -133,12 +109,7 @@ const AssetImage = (props: Props) => {
     async (action: ControlOptionAction) => {
       const ZOOM_DELTA = 0.03
 
-      if (
-        ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE &&
-        asset &&
-        asset.data.wearable?.isSmart &&
-        videoHash
-      ) {
+      if (ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE && asset && asset.data.wearable?.isSmart && videoHash) {
         return onPlaySmartWearableVideoShowcase(videoHash)
       }
 
@@ -177,44 +148,23 @@ const AssetImage = (props: Props) => {
   )
 
   useEffect(() => {
-    if (
-      asset.category === NFTCategory.EMOTE &&
-      wearableController &&
-      isDraggable &&
-      !isLoadingWearablePreview
-    ) {
+    if (asset.category === NFTCategory.EMOTE && wearableController && isDraggable && !isLoadingWearablePreview) {
       wearableController.emote?.hasSound().then(sound => {
         setHasSound(sound)
       })
     }
-  }, [
-    wearableController,
-    asset.category,
-    isDraggable,
-    hasSound,
-    isLoadingWearablePreview
-  ])
+  }, [wearableController, asset.category, isDraggable, hasSound, isLoadingWearablePreview])
 
-  const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
-    estate
-  ])
+  const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [estate])
 
   const [isTracked, setIsTracked] = useState(false)
 
   const isAvailableForMint =
-    isNFT(asset) &&
-    (item?.category === NFTCategory.WEARABLE ||
-      item?.category === NFTCategory.EMOTE) &&
-    item.available > 0 &&
-    item.isOnSale
+    isNFT(asset) && (item?.category === NFTCategory.WEARABLE || item?.category === NFTCategory.EMOTE) && item.available > 0 && item.isOnSale
 
   // pick a random emote
   const previewEmote = useMemo(() => {
-    const poses = [
-      PreviewEmote.FASHION,
-      PreviewEmote.FASHION_2,
-      PreviewEmote.FASHION_3
-    ]
+    const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
     return isTryingOn ? poses[(Math.random() * poses.length) | 0] : undefined
   }, [isTryingOn])
 
@@ -229,14 +179,7 @@ const AssetImage = (props: Props) => {
       setIsTracked(true)
     }
 
-    if (
-      isPreview &&
-      asset.data.wearable?.isSmart &&
-      asset.urn &&
-      videoHash === undefined &&
-      !isLoadingVideoHash &&
-      !hasFetchedVideoHash
-    ) {
+    if (isPreview && asset.data.wearable?.isSmart && asset.urn && videoHash === undefined && !isLoadingVideoHash && !hasFetchedVideoHash) {
       onFetchSmartWearableVideoHash(asset)
     }
 
@@ -264,9 +207,7 @@ const AssetImage = (props: Props) => {
           showForRent={false}
           showOnSale={false}
           showOwned={false}
-          lastUpdated={
-            showUpdatedDateWarning ? new Date(asset.updatedAt) : undefined
-          }
+          lastUpdated={showUpdatedDateWarning ? new Date(asset.updatedAt) : undefined}
         >
           {hasBadges && children}
         </Atlas>
@@ -288,9 +229,7 @@ const AssetImage = (props: Props) => {
           showOnSale={false}
           showOwned={false}
           isEstate
-          lastUpdated={
-            showUpdatedDateWarning ? new Date(asset.updatedAt) : undefined
-          }
+          lastUpdated={showUpdatedDateWarning ? new Date(asset.updatedAt) : undefined}
         >
           {hasBadges && children}
         </Atlas>
@@ -315,26 +254,18 @@ const AssetImage = (props: Props) => {
           hair = colorToHex(avatar.avatar.hair.color)
         }
 
-        const hasRepresentation = avatar
-          ? wearable &&
-            wearable.bodyShapes.some(shape =>
-              avatar.avatar.bodyShape.includes(shape)
-            )
-          : true
+        const hasRepresentation = avatar ? wearable && wearable.bodyShapes.some(shape => avatar.avatar.bodyShape.includes(shape)) : true
 
         const missingBodyShape =
           hasRepresentation || !avatar
             ? null
             : avatar.avatar.bodyShape.includes(BodyShape.MALE)
-            ? t('wearable_preview.missing_representation_error.male')
-            : t('wearable_preview.missing_representation_error.female')
+              ? t('wearable_preview.missing_representation_error.male')
+              : t('wearable_preview.missing_representation_error.female')
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
 
-        const ethereumUrn =
-          !isNFT(asset) && asset.network === Network.ETHEREUM
-            ? getEthereumItemUrn(asset)
-            : ''
+        const ethereumUrn = !isNFT(asset) && asset.network === Network.ETHEREUM ? getEthereumItemUrn(asset) : ''
 
         const wearablePreviewProps =
           !isNFT(asset) && asset.network === Network.ETHEREUM
@@ -354,13 +285,7 @@ const AssetImage = (props: Props) => {
         wearablePreview = (
           <>
             <WearablePreview
-              profile={
-                isTryingOnEnabled
-                  ? avatar
-                    ? avatar.ethAddress
-                    : 'default'
-                  : undefined
-              }
+              profile={isTryingOnEnabled ? (avatar ? avatar.ethAddress : 'default') : undefined}
               skin={skin}
               hair={hair}
               emote={isTryingOnEnabled ? previewEmote : undefined}
@@ -381,22 +306,14 @@ const AssetImage = (props: Props) => {
             ) : null}
             {isLoadingWearablePreview ? (
               <Center>
-                <Loader
-                  className="wearable-preview-loader"
-                  active
-                  size="large"
-                />
+                <Loader className="wearable-preview-loader" active size="large" />
               </Center>
             ) : asset.data.wearable?.isSmart && asset.urn && videoHash ? (
               <div className="play-control">
                 <Button
                   className="play-button"
                   size="small"
-                  onClick={() =>
-                    handleControlActionChange(
-                      ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE
-                    )
-                  }
+                  onClick={() => handleControlActionChange(ControlOptionAction.PLAY_SMART_WEARABLE_VIDEO_SHOWCASE)}
                 >
                   <Icon name="video" />
                   <span>{t('smart_wearable.play_showcase')}</span>
@@ -404,12 +321,7 @@ const AssetImage = (props: Props) => {
               </div>
             ) : null}
             <Popup
-              content={
-                <T
-                  id="wearable_preview.missing_representation_error.message"
-                  values={{ bodyShape: <b>{missingBodyShape}</b> }}
-                />
-              }
+              content={<T id="wearable_preview.missing_representation_error.message" values={{ bodyShape: <b>{missingBodyShape}</b> }} />}
               trigger={
                 <div className="preview-toggle-wrapper">
                   <Popup
@@ -418,13 +330,9 @@ const AssetImage = (props: Props) => {
                     trigger={
                       <Button
                         size="small"
-                        className={classNames(
-                          'preview-toggle',
-                          'preview-toggle-wearable',
-                          {
-                            'is-active': !isTryingOnEnabled
-                          }
-                        )}
+                        className={classNames('preview-toggle', 'preview-toggle-wearable', {
+                          'is-active': !isTryingOnEnabled
+                        })}
                         onClick={handleShowWearable}
                       />
                     }
@@ -436,14 +344,10 @@ const AssetImage = (props: Props) => {
                     trigger={
                       <Button
                         size="small"
-                        className={classNames(
-                          'preview-toggle',
-                          'preview-toggle-avatar',
-                          {
-                            'is-active': isTryingOnEnabled,
-                            'is-disabled': !hasRepresentation
-                          }
-                        )}
+                        className={classNames('preview-toggle', 'preview-toggle-avatar', {
+                          'is-active': isTryingOnEnabled,
+                          'is-disabled': !hasRepresentation
+                        })}
                         onClick={hasRepresentation ? handleTryOut : undefined}
                       />
                     }
@@ -459,9 +363,7 @@ const AssetImage = (props: Props) => {
       }
       const [light, dark] = Rarity.getGradient(wearable!.rarity)
       const backgroundImage = `radial-gradient(${light}, ${dark})`
-      const classes =
-        'rarity-background ' +
-        (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
+      const classes = 'rarity-background ' + (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
       const showWearablePreview = !!wearablePreview && !wearablePreviewError
       return (
         <div
@@ -470,15 +372,7 @@ const AssetImage = (props: Props) => {
             backgroundImage
           }}
         >
-          {showWearablePreview ? (
-            wearablePreview
-          ) : (
-            <img
-              alt={getAssetName(asset)}
-              className="image"
-              src={getAssetImage(asset)}
-            />
-          )}
+          {showWearablePreview ? wearablePreview : <img alt={getAssetName(asset)} className="image" src={getAssetImage(asset)} />}
           {hasBadges && children}
         </div>
       )
@@ -498,18 +392,14 @@ const AssetImage = (props: Props) => {
           <Button
             animated={false}
             className="zoom-control zoom-in-control"
-            onClick={() =>
-              handleControlActionChange(ControlOptionAction.ZOOM_IN)
-            }
+            onClick={() => handleControlActionChange(ControlOptionAction.ZOOM_IN)}
           >
             <Icon name="plus" />
           </Button>
           <Button
             animated={false}
             className="zoom-control zoom-out-control"
-            onClick={() =>
-              handleControlActionChange(ControlOptionAction.ZOOM_OUT)
-            }
+            onClick={() => handleControlActionChange(ControlOptionAction.ZOOM_OUT)}
           >
             <Icon name="minus" />
           </Button>
@@ -520,20 +410,10 @@ const AssetImage = (props: Props) => {
           <Button
             className="play-button"
             size="small"
-            onClick={() =>
-              handleControlActionChange(
-                isPlayingEmote
-                  ? ControlOptionAction.STOP_EMOTE
-                  : ControlOptionAction.PLAY_EMOTE
-              )
-            }
+            onClick={() => handleControlActionChange(isPlayingEmote ? ControlOptionAction.STOP_EMOTE : ControlOptionAction.PLAY_EMOTE)}
           >
             {isPlayingEmote ? <Icon name="stop" /> : <Icon name="play" />}
-            <span>
-              {isPlayingEmote
-                ? t('wearable_preview.stop_emote')
-                : t('wearable_preview.play_emote')}
-            </span>
+            <span>{isPlayingEmote ? t('wearable_preview.stop_emote') : t('wearable_preview.play_emote')}</span>
           </Button>
           {hasSound && (
             <Button
@@ -543,11 +423,7 @@ const AssetImage = (props: Props) => {
               size="small"
               aria-label="enable sound"
               onClick={() => {
-                handleControlActionChange(
-                  isSoundEnabled
-                    ? ControlOptionAction.DISABLE_SOUND
-                    : ControlOptionAction.ENABLE_SOUND
-                )
+                handleControlActionChange(isSoundEnabled ? ControlOptionAction.DISABLE_SOUND : ControlOptionAction.ENABLE_SOUND)
                 setIsSoundEnabled(!isSoundEnabled)
               }}
             />
@@ -584,11 +460,7 @@ const AssetImage = (props: Props) => {
             ) : null}
             {isLoadingWearablePreview ? (
               <Center>
-                <Loader
-                  className="wearable-preview-loader"
-                  active
-                  size="large"
-                />
+                <Loader className="wearable-preview-loader" active size="large" />
               </Center>
             ) : (
               <>
@@ -601,9 +473,7 @@ const AssetImage = (props: Props) => {
       }
       const [light, dark] = Rarity.getGradient(emote!.rarity)
       const backgroundImage = `radial-gradient(${light}, ${dark})`
-      const classes =
-        'rarity-background ' +
-        (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
+      const classes = 'rarity-background ' + (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
       const showWearablePreview = !!wearablePreview && !wearablePreviewError
       return (
         <div
@@ -612,22 +482,14 @@ const AssetImage = (props: Props) => {
             backgroundImage
           }}
         >
-          {showWearablePreview ? (
-            wearablePreview
-          ) : (
-            <img
-              alt={getAssetName(asset)}
-              className="image"
-              src={getAssetImage(asset)}
-            />
-          )}
+          {showWearablePreview ? wearablePreview : <img alt={getAssetName(asset)} className="image" src={getAssetImage(asset)} />}
           {hasBadges && children}
         </div>
       )
     }
 
     case NFTCategory.ENS: {
-      let name = ens!.subdomain
+      const name = ens!.subdomain
       return (
         <div className={classNames(isSmall && 'small', 'ens')}>
           <EnsImage onlyLogo={isSmall} name={name} />
@@ -659,25 +521,10 @@ const AssetImage = (props: Props) => {
 
 // the purpose of this wrapper is to make the div always be square, by using a 1x1 transparent pixel
 const AssetImageWrapper = (props: Props) => {
-  const {
-    asset,
-    className,
-    showOrderListedTag,
-    item,
-    onFetchItem,
-    order,
-    wallet,
-    ...rest
-  } = props
+  const { asset, className, showOrderListedTag, item, onFetchItem, order, wallet, ...rest } = props
 
   useEffect(() => {
-    if (
-      !item &&
-      isNFT(asset) &&
-      asset.itemId &&
-      (asset.category === NFTCategory.WEARABLE ||
-        asset.category === NFTCategory.EMOTE)
-    ) {
+    if (!item && isNFT(asset) && asset.itemId && (asset.category === NFTCategory.WEARABLE || asset.category === NFTCategory.EMOTE)) {
       onFetchItem(asset.contractAddress, asset.itemId)
     }
   }, [asset, item, onFetchItem])
@@ -685,8 +532,7 @@ const AssetImageWrapper = (props: Props) => {
   const isAvailableForMint = useMemo(
     () =>
       isNFT(asset) &&
-      (item?.category === NFTCategory.WEARABLE ||
-        item?.category === NFTCategory.EMOTE) &&
+      (item?.category === NFTCategory.WEARABLE || item?.category === NFTCategory.EMOTE) &&
       item.available > 0 &&
       item.isOnSale,
     [asset, item]
@@ -725,23 +571,11 @@ const AssetImageWrapper = (props: Props) => {
       <div className="image-wrapper">
         {showOrderListedTag || !!order ? (
           <>
-            {showOrderListedTag ? (
-              <ListedBadge className="listed-badge" />
-            ) : null}
-            {!!order &&
-            wallet?.address === order.owner &&
-            isLegacyOrder(order) ? (
-              <WarningBadge />
-            ) : null}
+            {showOrderListedTag ? <ListedBadge className="listed-badge" /> : null}
+            {!!order && wallet?.address === order.owner && isLegacyOrder(order) ? <WarningBadge /> : null}
           </>
         ) : null}
-        <AssetImage
-          asset={asset}
-          item={item}
-          wallet={wallet}
-          onFetchItem={onFetchItem}
-          {...rest}
-        >
+        <AssetImage asset={asset} item={item} wallet={wallet} onFetchItem={onFetchItem} {...rest}>
           <div className="badges">
             {coordinates ? (
               <>
@@ -752,11 +586,7 @@ const AssetImageWrapper = (props: Props) => {
                     </Badge>
                   </>
                 ) : (
-                  <Coordinate
-                    className="coordinates"
-                    x={coordinates.x}
-                    y={coordinates.y}
-                  />
+                  <Coordinate className="coordinates" x={coordinates.x} y={coordinates.y} />
                 )}
                 <JumpIn compact x={coordinates.x} y={coordinates.y} />
               </>
