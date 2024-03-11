@@ -44,6 +44,7 @@
   "SUBGRAPH_WORKER": "https://subgraph.decentraland.zone",
   "SENTRY_DSN": "https://1dc401149e1c819b8477565c9cdd9b70@o4504361728212992.ingest.sentry.io/4505743351676928",
   "SQUID_API_URL": "https://testnet.v2.api.squidrouter.com/",
+  "SQUID_RETRY_DELAY": "2000",
   "DCL_LISTS_SERVER": "https://dcl-lists.decentraland.zone",
   "AUTH_URL": "/auth",
   "WERT_URL": "https://sandbox.wert.io",

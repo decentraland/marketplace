@@ -5,10 +5,8 @@ import {
   getSigner
 } from 'decentraland-dapps/dist/lib/eth'
 import { Provider, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import {
-  TRANSACTION_ACTION_FLAG,
-  waitForTx
-} from 'decentraland-dapps/dist/modules/transaction/utils'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { DCLController } from '../../contracts'

@@ -1,8 +1,9 @@
 import { ChainId, Item, ItemFilters, Order } from '@dcl/schemas'
 import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
+  buildCrossChainTransactionFromPayload,
   buildTransactionWithFromPayload,
-  buildTransactionWithReceiptPayload
+  buildTransactionWithReceiptPayload,
 } from 'decentraland-dapps/dist/modules/transaction/utils'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { action } from 'typesafe-actions'
@@ -24,7 +25,7 @@ export const fetchItemsSuccess = (
   items: Item[],
   total: number,
   options: ItemBrowseOptions,
-  timestamp: number
+  timestamp: number,
 ) => action(FETCH_ITEMS_SUCCESS, { items, total, options, timestamp })
 
 export const fetchItemsFailure = (error: string, options: ItemBrowseOptions) =>
@@ -66,7 +67,7 @@ export const FETCH_COLLECTION_ITEMS_SUCCESS = '[Success] Fetch Collection Items'
 export const FETCH_COLLECTION_ITEMS_FAILURE = '[Failure] Fetch Collection Items'
 
 export const fetchCollectionItemsRequest = (
-  options: Pick<ItemFilters, 'first' | 'contractAddresses'>
+  options: Pick<ItemFilters, 'first' | 'contractAddresses'>,
 ) => action(FETCH_COLLECTION_ITEMS_REQUEST, options)
 
 export const fetchCollectionItemsSuccess = (items: Item[]) =>
@@ -102,8 +103,8 @@ export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
       contractAddress: item.contractAddress,
       network: item.network,
       name: getAssetName(item),
-      price: formatWeiMANA(item.price)
-    })
+      price: formatWeiMANA(item.price),
+    }),
   })
 
 export const buyItemFailure = (error: string) =>
@@ -114,48 +115,48 @@ export type BuyItemSuccessAction = ReturnType<typeof buyItemSuccess>
 export type BuyItemFailureAction = ReturnType<typeof buyItemFailure>
 
 // Buy Item Cross Chain
-export const TRACK_CROSS_CHAIN_TX_REQUEST = '[Request] Track Buy item cross-chain tx'
 export const BUY_ITEM_CROSS_CHAIN_REQUEST = '[Request] Buy item cross-chain'
 export const BUY_ITEM_CROSS_CHAIN_SUCCESS = '[Success] Buy item cross-chain'
 export const BUY_ITEM_CROSS_CHAIN_FAILURE = '[Failure] Buy item cross-chain'
 
-export const buyItemCrossChainRequest = (item: Item, route: Route, order?: Order) =>
-  action(BUY_ITEM_CROSS_CHAIN_REQUEST, { item, route, order })
+export const buyItemCrossChainRequest = (
+  item: Item,
+  route: Route,
+  order?: Order,
+) => action(BUY_ITEM_CROSS_CHAIN_REQUEST, { item, route, order })
 
 export const buyItemCrossChainSuccess = (
   route: Route,
   chainId: ChainId,
   txHash: string,
   item: Item,
-  order?: Order
+  order?: Order,
 ) =>
   action(BUY_ITEM_CROSS_CHAIN_SUCCESS, {
     route,
     item,
     txHash,
     order,
-    ...buildTransactionWithReceiptPayload(chainId, txHash, {
-      itemId: item.itemId,
-      contractAddress: item.contractAddress,
-      network: item.network,
-      name: getAssetName(item),
-      price: formatWeiMANA(order?.price ?? item.price)
-    })
-  })
-
-  export const trackCrossChainTx = (
-  chainId: ChainId,
-  txHash: string,
-) =>
-  action(TRACK_CROSS_CHAIN_TX_REQUEST, {
-    ...buildTransactionWithReceiptPayload(chainId, txHash )
+    ...buildCrossChainTransactionFromPayload(
+      chainId,
+      Number(route.route.params.toChain) as ChainId,
+      txHash,
+      route.requestId ?? 'Unknown',
+      {
+        itemId: item.itemId,
+        contractAddress: item.contractAddress,
+        network: item.network,
+        name: getAssetName(item),
+        price: formatWeiMANA(order?.price ?? item.price),
+      },
+    ),
   })
 
 export const buyItemCrossChainFailure = (
   route: Route,
   item: Item,
   price: string,
-  error: string
+  error: string,
 ) => action(BUY_ITEM_CROSS_CHAIN_FAILURE, { route, item, price, error })
 
 export type BuyItemCrossChainRequestAction = ReturnType<
@@ -179,7 +180,7 @@ export const buyItemWithCardSuccess = (
   chainId: ChainId,
   txHash: string,
   item: Item,
-  purchase: NFTPurchase
+  purchase: NFTPurchase,
 ) =>
   action(BUY_ITEM_WITH_CARD_SUCCESS, {
     item,
@@ -189,8 +190,8 @@ export const buyItemWithCardSuccess = (
       contractAddress: item.contractAddress,
       network: item.network,
       name: getAssetName(item),
-      price: purchase.nft.cryptoAmount.toString()
-    })
+      price: purchase.nft.cryptoAmount.toString(),
+    }),
   })
 export const buyItemWithCardFailure = (error: string) =>
   action(BUY_ITEM_WITH_CARD_FAILURE, { error })
@@ -218,7 +219,7 @@ export const fetchItemSuccess = (item: Item) =>
 export const fetchItemFailure = (
   contractAddress: string,
   tokenId: string,
-  error: string
+  error: string,
 ) => action(FETCH_ITEM_FAILURE, { contractAddress, tokenId, error })
 
 export type FetchItemRequestAction = ReturnType<typeof fetchItemRequest>

@@ -219,7 +219,6 @@ const Transaction = (props: Props) => {
                 />
               }
               tx={tx}
-              isCrossChain={tx.actionType === BUY_ITEM_CROSS_CHAIN_SUCCESS}
             />
           )}
         </AssetProvider>
