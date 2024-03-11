@@ -310,7 +310,7 @@ export const BuyWithCryptoModal = (props: Props) => {
               canBuy = canPayForGas && balance > Number(fromAmount)
               if (!canBuy) {
                 setInsufficientToken(
-                  !canPayForGas ? routeFeeCost.token : selectedToken,
+                  balance < Number(fromAmount) ? selectedToken : routeFeeCost.token
                 )
               }
             }
@@ -536,6 +536,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         abortControllerRef.current = new AbortController()
         analytics.track(events.CROSS_CHAIN_TOKEN_SELECTION, {
           selectedToken,
+          category: asset.category
         })
       } else {
         setSelectedChain(Number(selectedOption.chainId) as ChainId)
