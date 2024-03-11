@@ -211,7 +211,7 @@ export const BuyWithCryptoModal = (props: Props) => {
               const canPayForGas = balanceNativeTokenWei.gte(ethers.utils.parseEther(routeFeeCost.totalCost))
               canBuy = canPayForGas && balance > Number(fromAmount)
               if (!canBuy) {
-                setInsufficientToken(!canPayForGas ? routeFeeCost.token : selectedToken)
+                setInsufficientToken(balance < Number(fromAmount) ? selectedToken : routeFeeCost.token)
               }
             }
           }
@@ -406,7 +406,8 @@ export const BuyWithCryptoModal = (props: Props) => {
         setCanBuyAsset(undefined)
         abortControllerRef.current = new AbortController()
         analytics.track(events.CROSS_CHAIN_TOKEN_SELECTION, {
-          selectedToken
+          selectedToken,
+          category: asset.category
         })
       } else {
         setSelectedChain(Number(selectedOption.chainId) as ChainId)

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { Network } from '@dcl/schemas'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { isSwitchingNetwork } from 'decentraland-dapps/dist/modules/wallet/selectors'
@@ -8,7 +7,11 @@ import { isSwitchingNetwork } from 'decentraland-dapps/dist/modules/wallet/selec
 import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
 import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
-import { MapDispatchProps, MapStateProps } from './BuyWithCryptoModal.types'
+import {
+  MapDispatchProps,
+  MapStateProps,
+  OwnProps
+} from './BuyWithCryptoModal.types'
 import { BuyWithCryptoModal } from './BuyWithCryptoModal'
 
 const mapState = (state: RootState): MapStateProps => {
@@ -19,8 +22,12 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
-  onGetMana: () => dispatch(openBuyManaWithFiatModalRequest(Network.MATIC)),
+const mapDispatch = (
+  dispatch: Dispatch,
+  ownProps: OwnProps
+): MapDispatchProps => ({
+  onGetMana: () =>
+    dispatch(openBuyManaWithFiatModalRequest(ownProps.metadata.asset.network)),
   onSwitchNetwork: chainId => dispatch(switchNetworkRequest(chainId))
 })
 
