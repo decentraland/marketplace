@@ -8,22 +8,6 @@ module.exports = {
   plugins: ['react-hooks'],
   overrides: [
     {
-      files: ['*.js', '*.ts', '*.tsx'],
-      rules: {
-        ['prettier/prettier']: [
-          'error',
-          {
-            semi: false,
-            singleQuote: true,
-            printWidth: 140,
-            tabWidth: 2,
-            trailingComma: 'none',
-            arrowParens: 'avoid'
-          }
-        ]
-      }
-    },
-    {
       files: ['*.ts', '*.tsx', '*.cjs'],
       extends: ['plugin:@typescript-eslint/recommended', 'plugin:@typescript-eslint/recommended-requiring-type-checking', 'prettier'],
       rules: {
