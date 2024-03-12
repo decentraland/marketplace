@@ -24,7 +24,6 @@ module.exports = {
         '@typescript-eslint/ban-types': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/ban-types
         '@typescript-eslint/unbound-method': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/unbound-method
         '@typescript-eslint/ban-ts-comment': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/ban-ts-comment
-        'no-prototype-builtins': 'off', // TODO: migrate code progressively to remove this line. https://eslint.org/docs/rules/no-prototype-builtins
         '@typescript-eslint/no-unsafe-assignment': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-assignment/
         '@typescript-eslint/no-unsafe-call': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-call/
         '@typescript-eslint/no-unsafe-member-access': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-member-access/
