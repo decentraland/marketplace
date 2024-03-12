@@ -55,6 +55,7 @@ describe('when loading the component', () => {
     it('should fetch the first batch of favorites showing the loader in the process and not show the empty component', async () => {
       const { getByTestId, queryByText } = renderFavoritesModal()
 
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(FavoritesAPI.prototype.getWhoFavoritedAnItem).toHaveBeenCalledWith(itemId, 100, 0)
       apiFetchPromiseResolve(apiResponse)
 
@@ -70,6 +71,7 @@ describe('when loading the component', () => {
 
     it('should fetch the first batch of favorites showing the loader in the process and then show the empty component', async () => {
       const { getByTestId, getByText } = renderFavoritesModal()
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(FavoritesAPI.prototype.getWhoFavoritedAnItem).toHaveBeenCalledWith(itemId, 100, 0)
       apiFetchPromiseResolve(apiResponse)
       await waitForElementToBeRemoved(() => getByTestId('favorites-modal-loader'))

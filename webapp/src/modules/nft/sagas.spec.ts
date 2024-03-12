@@ -68,7 +68,7 @@ describe('when handling the fetch NFTs request action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [select(getContracts), []],
-          [call(VendorFactory.build, options.vendor, API_OPTS), throwError(new Error(error))]
+          [call([VendorFactory, 'build'], options.vendor, API_OPTS), throwError(new Error(error))]
         ])
         .put(fetchNFTsFailure(options, error, timestamp))
         .dispatch(fetchNFTsRequest(options))
@@ -90,7 +90,7 @@ describe('when handling the fetch NFTs request action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [select(getContracts), []],
-          [call(VendorFactory.build, options.vendor, API_OPTS), vendor],
+          [call([VendorFactory, 'build'], options.vendor, API_OPTS), vendor],
           [matchers.call.fn(vendor.nftService.fetch), Promise.reject(error)]
         ])
         .put(fetchNFTsFailure(options, error.message, timestamp))
@@ -122,7 +122,7 @@ describe('when handling the fetch NFTs request action', () => {
 
       return expectSaga(nftSaga, getIdentity)
         .provide([
-          [call(VendorFactory.build, options.vendor, API_OPTS), vendor],
+          [call([VendorFactory, 'build'], options.vendor, API_OPTS), vendor],
           [
             call([vendor.nftService, 'fetch'], { ...DEFAULT_BASE_NFT_PARAMS, ...options.params }, options.filters),
             [nfts, accounts, orders, rentals, count]
@@ -152,7 +152,7 @@ describe('when handling the fetch NFT request action', () => {
           [select(getLoading), []],
           [select(getContracts), []],
           [select(getContract, { address: contractAddress.toLowerCase() }), null],
-          [call(VendorFactory.build, contract.vendor as VendorName, API_OPTS), vendor],
+          [call([VendorFactory, 'build'], contract.vendor as VendorName, API_OPTS), vendor],
           [call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, undefined), Promise.resolve([nft, order, rental])]
         ])
         .put(upsertContracts([contract]))
@@ -199,7 +199,7 @@ describe('when handling the fetch NFT request action', () => {
           [select(getLoading), []],
           [select(getContracts), []],
           [select(getContract, { address: contractAddress.toLowerCase() }), contract],
-          [call(VendorFactory.build, contract.vendor, API_OPTS), throwError(new Error(error))]
+          [call([VendorFactory, 'build'], contract.vendor, API_OPTS), throwError(new Error(error))]
         ])
         .put(fetchNFTFailure(contractAddress, tokenId, error))
         .dispatch(fetchNFTRequest(contractAddress, tokenId))
@@ -223,7 +223,7 @@ describe('when handling the fetch NFT request action', () => {
           [select(getLoading), []],
           [select(getContracts), []],
           [select(getContract, { address: contractAddress.toLowerCase() }), contract],
-          [call(VendorFactory.build, contract.vendor, API_OPTS), vendor],
+          [call([VendorFactory, 'build'], contract.vendor, API_OPTS), vendor],
           [call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, undefined), Promise.reject(error)]
         ])
         .put(fetchNFTFailure(contractAddress, tokenId, error.message))
@@ -251,7 +251,7 @@ describe('when handling the fetch NFT request action', () => {
             [select(getLoading), []],
             [select(getContracts), []],
             [select(getContract, { address: contractAddress.toLowerCase() }), contract],
-            [call(VendorFactory.build, contract.vendor, API_OPTS), vendor],
+            [call([VendorFactory, 'build'], contract.vendor, API_OPTS), vendor],
             [
               call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
                 rentalStatus: [RentalStatus.EXECUTED]
@@ -291,7 +291,7 @@ describe('when handling the fetch NFT request action', () => {
             [select(getLoading), []],
             [select(getContracts), []],
             [select(getContract, { address: contractAddress.toLowerCase() }), contract],
-            [call(VendorFactory.build, contract.vendor, API_OPTS), vendor],
+            [call([VendorFactory, 'build'], contract.vendor, API_OPTS), vendor],
             [
               call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
                 rentalStatus: [RentalStatus.EXECUTED]
@@ -322,7 +322,7 @@ describe('when handling the transfer NFT request action', () => {
       const error = 'someError'
 
       return expectSaga(nftSaga, getIdentity)
-        .provide([[call(VendorFactory.build, nft.vendor), throwError(new Error(error))]])
+        .provide([[call([VendorFactory, 'build'], nft.vendor), throwError(new Error(error))]])
         .put(transferNFTFailure(nft, address, error))
         .dispatch(transferNFTRequest(nft, address))
         .run({ silenceTimeout: true })
@@ -339,7 +339,7 @@ describe('when handling the transfer NFT request action', () => {
 
       return expectSaga(nftSaga, getIdentity)
         .provide([
-          [call(VendorFactory.build, nft.vendor), VendorFactory.build(nft.vendor)],
+          [call([VendorFactory, 'build'], nft.vendor), VendorFactory.build(nft.vendor)],
           [select(getWallet), null]
         ])
         .put(transferNFTFailure(nft, address, error))
@@ -360,7 +360,7 @@ describe('when handling the transfer NFT request action', () => {
 
       return expectSaga(nftSaga, getIdentity)
         .provide([
-          [call(VendorFactory.build, nft.vendor), vendor],
+          [call([VendorFactory, 'build'], nft.vendor), vendor],
           [select(getWallet), wallet],
           [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.reject(error)]
         ])
@@ -399,7 +399,7 @@ describe('when handling the transfer NFT request action', () => {
         it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
           return expectSaga(nftSaga, getIdentity)
             .provide([
-              [call(VendorFactory.build, nft.vendor), vendor],
+              [call([VendorFactory, 'build'], nft.vendor), vendor],
               [select(getWallet), wallet],
               [select(getRentalById, nft.openRentalId!), rental],
               [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.resolve(txHash)],
@@ -420,7 +420,7 @@ describe('when handling the transfer NFT request action', () => {
         it('should dispatch an action signaling the success of the action handling', () => {
           return expectSaga(nftSaga, getIdentity)
             .provide([
-              [call(VendorFactory.build, nft.vendor), vendor],
+              [call([VendorFactory, 'build'], nft.vendor), vendor],
               [select(getWallet), wallet],
               [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.resolve(txHash)],
               [call(waitForTx, txHash), Promise.resolve()]
@@ -436,7 +436,7 @@ describe('when handling the transfer NFT request action', () => {
       it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
         return expectSaga(nftSaga, getIdentity)
           .provide([
-            [call(VendorFactory.build, nft.vendor), vendor],
+            [call([VendorFactory, 'build'], nft.vendor), vendor],
             [select(getWallet), wallet],
             [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.resolve(txHash)],
             [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
