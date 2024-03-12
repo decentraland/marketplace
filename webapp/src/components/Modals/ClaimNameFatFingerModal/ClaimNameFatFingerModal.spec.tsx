@@ -110,7 +110,7 @@ describe('ClaimNameFatFingerModal', () => {
       beforeEach(() => {
         encodeFunctionMock = jest.fn()
         getSignerMock.mockResolvedValueOnce(signerMock as unknown as ethers.providers.JsonRpcSigner)
-        ;(DCLController__factory.connect as jest.Mock).mockResolvedValueOnce({
+        ;(DCLController__factory.connect as jest.Mock).mockReturnValueOnce({
           interface: {
             encodeFunctionData: encodeFunctionMock
           }
