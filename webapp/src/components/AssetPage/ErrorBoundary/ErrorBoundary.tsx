@@ -1,9 +1,9 @@
-import React from 'react'
+import { Component } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Center } from 'decentraland-ui'
 import { State } from './ErrorBoundary.types'
 
-export default class ErrorBoundary extends React.Component<unknown, State> {
+export default class ErrorBoundary extends Component<unknown, State> {
   constructor(props: unknown) {
     super(props)
     this.state = { hasError: false }
