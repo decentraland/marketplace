@@ -647,7 +647,8 @@ export const BuyWithCryptoModal = (props: Props) => {
               {canBuyAsset === false && !isFetchingBalance && !isFetchingRoute ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
-                    token: insufficientToken?.symbol || 'MANA'
+                    token: insufficientToken?.symbol || 'MANA',
+                    card: (text: string) => onBuyWithCard ? <span>{text}</span> : undefined
                   })}
                 </span>
               ) : null}
