@@ -26,7 +26,6 @@ module.exports = {
         '@typescript-eslint/no-unsafe-argument': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-argument/
         '@typescript-eslint/no-explicit-any': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-explicit-any
         '@typescript-eslint/no-non-null-assertion': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-non-null-assertion
-        '@typescript-eslint/await-thenable': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/await-thenable
         'import/order': 'off', // TODO: migrate code progressively to remove this line.
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-non-null-asserted-optional-chain
         '@typescript-eslint/no-unsafe-enum-comparison': 'off'
