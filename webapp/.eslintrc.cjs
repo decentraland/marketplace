@@ -13,7 +13,6 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-unsafe-declaration-merging': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-declaration-merging
         '@typescript-eslint/no-redundant-type-constituents': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-redundant-type-constituents
-        '@typescript-eslint/require-await': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/require-await
         '@typescript-eslint/no-floating-promises': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-floating-promises
         '@typescript-eslint/no-unsafe-return': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-return
         '@typescript-eslint/naming-convention': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/naming-convention/

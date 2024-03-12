@@ -54,9 +54,9 @@ describe('when loading the component', () => {
   })
 
   describe('and the list fetching fails', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       jest.spyOn(FavoritesAPI.prototype, 'getLists').mockRejectedValueOnce(new Error('An error'))
-      await act(async () => {
+      act(() => {
         renderedModal = renderSaveToListModalModal({ metadata: { item } })
       })
     })
@@ -70,7 +70,7 @@ describe('when loading the component', () => {
   describe('and the list fetching succeeds', () => {
     let lists: ListOfLists[]
 
-    beforeEach(async () => {
+    beforeEach(() => {
       lists = [
         {
           id: 'aListId',
@@ -94,7 +94,7 @@ describe('when loading the component', () => {
         results: lists,
         total: 2
       })
-      await act(async () => {
+      act(() => {
         renderedModal = renderSaveToListModalModal({ metadata: { item } })
       })
     })
@@ -127,13 +127,13 @@ describe('when loading the component', () => {
 describe('when clicking on the create list button', () => {
   let onCreateList: jest.Mock
 
-  beforeEach(async () => {
+  beforeEach(() => {
     onCreateList = jest.fn()
     jest.spyOn(FavoritesAPI.prototype, 'getLists').mockResolvedValueOnce({
       results: [],
       total: 0
     })
-    await act(async () => {
+    act(() => {
       renderedModal = renderSaveToListModalModal({ onCreateList })
     })
   })
@@ -149,7 +149,7 @@ describe('when clicking on the create list button', () => {
 
 describe('when saving the picks', () => {
   let lists: ListOfLists[]
-  beforeEach(async () => {
+  beforeEach(() => {
     lists = [
       {
         id: 'aListId',
@@ -165,7 +165,7 @@ describe('when saving the picks', () => {
       total: 1
     })
 
-    await act(async () => {
+    act(() => {
       renderedModal = renderSaveToListModalModal({ isSavingPicks: true })
     })
   })

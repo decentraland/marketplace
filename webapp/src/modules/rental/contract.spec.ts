@@ -21,7 +21,7 @@ describe('when getting a rental contract instance', () => {
     })
   })
   describe('and the provider is connected', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       getConnectedProviderMock.mockResolvedValueOnce(providerMock)
     })
     it('should return an instance', () => {

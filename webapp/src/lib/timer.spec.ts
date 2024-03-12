@@ -20,7 +20,7 @@ describe('when the timer is running', () => {
   })
 
   describe("and the timer hasn't finished", () => {
-    it('should return isRunning as true', async () => {
+    it('should return isRunning as true', () => {
       const { result } = renderHook(() => useTimer(1200))
       const [, startTimer] = result.current
 
@@ -35,7 +35,7 @@ describe('when the timer is running', () => {
   })
 
   describe('and the timer finishes', () => {
-    it('should return isRunning as false', async () => {
+    it('should return isRunning as false', () => {
       runTimerAutomaticallyOnce()
       const { result } = renderHook(() => useTimer(1200))
       const [, startTimer] = result.current

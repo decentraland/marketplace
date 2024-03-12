@@ -1,5 +1,5 @@
 import { Bid, ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity } from '@dcl/schemas'
-import React, { RefObject } from 'react'
+import { createRef, RefObject } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import * as bidAPI from '../../../modules/vendor/decentraland/bid/api'
@@ -95,15 +95,15 @@ describe('Best Buying Option', () => {
   })
 
   describe('Mint option', () => {
-    it('should render the mint option', async () => {
-      const reference: RefObject<HTMLDivElement> = React.createRef()
+    it('should render the mint option', () => {
+      const reference: RefObject<HTMLDivElement> = createRef()
       const { getByText } = renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
 
       expect(getByText(t('best_buying_option.minting.title'))).toBeInTheDocument()
     })
 
-    it('should render the mint price', async () => {
-      const reference: RefObject<HTMLDivElement> = React.createRef()
+    it('should render the mint price', () => {
+      const reference: RefObject<HTMLDivElement> = createRef()
       const { getByText } = renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
 
       const price = formatWeiMANA(asset.price)
@@ -127,7 +127,7 @@ describe('Best Buying Option', () => {
     })
 
     it('should render the listing option', async () => {
-      const reference: RefObject<HTMLDivElement> = React.createRef()
+      const reference: RefObject<HTMLDivElement> = createRef()
       const { findByTestId, findByText } = renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
 
       await findByTestId('best-buying-option-container')
@@ -140,7 +140,7 @@ describe('Best Buying Option', () => {
     })
 
     it('should render the listing price and de highest offer for that NFT', async () => {
-      const reference: RefObject<HTMLDivElement> = React.createRef()
+      const reference: RefObject<HTMLDivElement> = createRef()
       const { getByText, findByTestId } = renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
 
       await findByTestId('best-buying-option-container')
@@ -168,7 +168,7 @@ describe('Best Buying Option', () => {
     })
 
     it('should render no options available', async () => {
-      const reference: RefObject<HTMLDivElement> = React.createRef()
+      const reference: RefObject<HTMLDivElement> = createRef()
       const { getByText, findByTestId } = renderWithProviders(<BestBuyingOption asset={asset} tableRef={reference} />)
 
       await findByTestId('best-buying-option-container')

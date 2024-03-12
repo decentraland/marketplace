@@ -235,7 +235,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     wallet
   ])
 
-  const handleCrossChainBuy = useCallback(async () => {
+  const handleCrossChainBuy = useCallback(() => {
     if (route && crossChainProvider && crossChainProvider.isLibInitialized()) {
       onBuyCrossChain(route)
     }
