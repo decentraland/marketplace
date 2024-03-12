@@ -866,7 +866,7 @@
       "cross_chain": "Estimated fee includes the network cost and the cross chain purchase fee that you have to pay directly with your wallet.",
       "same_network": "Estimated fee includes the network cost that you have to pay directly with your wallet."
     },
-    "insufficient_funds": "You don’t have enough funds in {token}. Try paying with other token or get MANA<card> or pay with card</card>.",
+    "insufficient_funds": "You don’t have enough funds in {token} to pay for this item. Get MANA, pay with a different token<card>, or pay by card</card>.",
     "token_and_chain_selector": {
       "available_chains": "Available Chains",
       "select_chain": "Select chain",

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { Env } from '@dcl/ui-env'
-import { ChainId } from '@dcl/schemas'
+import { ChainId, NFTCategory } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { ModalNavigation, Field, Icon } from 'decentraland-ui'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
@@ -12,6 +12,7 @@ import { BuyWithCryptoButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons
 import { BuyWithCardButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons/BuyWithCardButton'
 import { config } from '../../../config'
 import * as events from '../../../utils/events'
+import { Asset } from '../../../modules/asset/types'
 import { PRICE } from '../../../modules/ens/utils'
 import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland/marketplace/api'
 import { DCLController__factory } from '../../../contracts/factories/DCLController__factory'
@@ -153,6 +154,7 @@ const ClaimNameFatFingerModal = ({
       </Modal.Content>
       <Modal.Actions>
         <BuyWithCryptoButton
+          asset={{ category: NFTCategory.ENS } as Asset}
           data-testid={CRYPTO_PAYMENT_METHOD_DATA_TESTID}
           onClick={handleOnBuyWithCrypto}
           disabled={isLoading || areNamesDifferent}
