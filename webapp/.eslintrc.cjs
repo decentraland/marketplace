@@ -33,7 +33,6 @@ module.exports = {
         '@typescript-eslint/no-non-null-assertion': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-non-null-assertion
         '@typescript-eslint/await-thenable': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/await-thenable
         '@typescript-eslint/no-unnecessary-type-constraint': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unnecessary-type-constraint
-        '@typescript-eslint/no-misused-promises': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-misused-promises
         'import/order': 'off', // TODO: migrate code progressively to remove this line.
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-non-null-asserted-optional-chain
         '@typescript-eslint/no-unsafe-enum-comparison': 'off'
