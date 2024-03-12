@@ -73,6 +73,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   const [selectedToken, setSelectedToken] = useState<Token>(getMANAToken(asset.chainId))
   const [canBuyAsset, setCanBuyAsset] = useState<boolean | undefined>()
   const [insufficientToken, setInsufficientToken] = useState<Token | undefined>()
+  console.log('insufficientToken: ', insufficientToken);
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
   const [crossChainProvider, setCrossChainProvider] = useState<CrossChainProvider>()
@@ -193,6 +194,9 @@ export const BuyWithCryptoModal = (props: Props) => {
             canBuy = wallet.networks[Network.ETHEREUM].mana >= +ethers.utils.formatEther(price)
           } else {
             canBuy = wallet.networks[asset.network].mana >= +ethers.utils.formatEther(price)
+          }
+          if (!canBuy) {
+            setInsufficientToken(selectedToken)
           }
         } else if (selectedTokenBalance && routeFeeCost) {
           const balance = parseFloat(ethers.utils.formatUnits(selectedTokenBalance, selectedToken.decimals))
