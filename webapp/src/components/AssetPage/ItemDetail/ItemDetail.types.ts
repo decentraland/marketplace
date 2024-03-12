@@ -13,6 +13,3 @@ export enum SmartWearableRequiredPermission {
 export type Props = {
   item: Item
 }
-
-export type MapDispatchProps = {}
-export type MapDispatch = {}

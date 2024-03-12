@@ -9,7 +9,5 @@ export type Props = {
   position: 'left' | 'right'
 }
 
-export type MapStateProps = {}
-export type MapDispatchProps = {}
 export type MapDispatch = Dispatch
 export type OwnProps = Pick<Props, 'x' | 'y' | 'visible' | 'tile'>

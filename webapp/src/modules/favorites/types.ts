@@ -29,8 +29,6 @@ export type List = {
   previewOfItemIds?: string[]
 }
 
-export type ListBrowseOptions = {}
-
 export enum ListsBrowseSortBy {
   NAME_ASC = 'name_asc',
   NAME_DESC = 'name_desc',

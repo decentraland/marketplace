@@ -17,7 +17,6 @@ module.exports = {
         '@typescript-eslint/explicit-module-boundary-types': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/explicit-module-boundary-types
         '@typescript-eslint/restrict-template-expressions': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/restrict-template-expressions
         '@typescript-eslint/no-base-to-string': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-base-to-string
-        '@typescript-eslint/ban-types': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/ban-types
         '@typescript-eslint/unbound-method': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/unbound-method
         '@typescript-eslint/ban-ts-comment': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/ban-ts-comment
         '@typescript-eslint/no-unsafe-assignment': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-assignment/

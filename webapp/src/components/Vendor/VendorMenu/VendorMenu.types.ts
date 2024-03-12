@@ -12,5 +12,3 @@ export type Props = {
 }
 
 export type MapStateProps = Pick<Props, 'contracts' | 'count' | 'currentVendor'>
-export type MapDispatchProps = {}
-export type MapDispatch = {}
