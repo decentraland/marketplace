@@ -78,14 +78,9 @@ export class TokenConverter {
       }
       const ongoingPromise = coinTickersPromiseCache[coinId][usdTicker]
       if (!ongoingPromise) {
-        coinTickersPromiseCache[coinId][usdTicker] = new Promise<CoinTickers>(async (res, rej) => {
-          try {
-            const response = await window.fetch(`${this.apiURL}/coins/decentraland/tickers?exchange_ids=${this.converterExchange}`)
-            res(response.json())
-          } catch (error) {
-            rej(error)
-          }
-        })
+        coinTickersPromiseCache[coinId][usdTicker] = window
+          .fetch(`${this.apiURL}/coins/decentraland/tickers?exchange_ids=${this.converterExchange}`)
+          .then(response => response.json() as Promise<CoinTickers>)
       }
       const coinTickers = await coinTickersPromiseCache[coinId][usdTicker]
       coinTickersCache[coinId][usdTicker] = coinTickers.tickers[0].converted_last[usdTicker]

@@ -31,7 +31,6 @@ module.exports = {
         '@typescript-eslint/no-unsafe-argument': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-argument/
         '@typescript-eslint/no-explicit-any': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-explicit-any
         '@typescript-eslint/no-non-null-assertion': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-non-null-assertion
-        'no-async-promise-executor': 'off', // TODO: migrate code progressively to remove this line. https://eslint.org/docs/rules/no-async-promise-executor
         '@typescript-eslint/await-thenable': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/await-thenable
         '@typescript-eslint/no-unnecessary-type-constraint': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unnecessary-type-constraint
         '@typescript-eslint/no-misused-promises': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-misused-promises
