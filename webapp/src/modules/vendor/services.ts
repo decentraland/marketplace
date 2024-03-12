@@ -31,6 +31,7 @@ export interface NFTService<V extends VendorName> {
   ) => Promise<readonly [NFT<V>, Order | null, RentalListing | null]>
   transfer: (wallet: Wallet | null, toAddress: string, nft: NFT<V>) => Promise<string>
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class NFTService<V> {}
 
 export interface OrderService<V extends VendorName> {
@@ -40,6 +41,7 @@ export interface OrderService<V extends VendorName> {
   cancel: (wallet: Wallet | null, order: Order) => Promise<string>
   canSell(): boolean
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class OrderService<V> {}
 
 export interface BidService<V extends VendorName> {
@@ -50,6 +52,7 @@ export interface BidService<V extends VendorName> {
   accept: (wallet: Wallet | null, bid: Bid) => Promise<string>
   cancel: (wallet: Wallet | null, bid: Bid) => Promise<string>
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export class BidService<V> {}
 
 export interface ContractService {

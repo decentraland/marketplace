@@ -35,13 +35,13 @@ describe('when the nft is not an estate', () => {
 
   it('should return contractFingerprint as undefined', () => {
     const { result } = renderHook(() => useFingerprint(nft))
-    const [_contract, _isLoading, contractFingerprint] = result.current
+    const [, , contractFingerprint] = result.current
     expect(contractFingerprint).toBe(undefined)
   })
 
   it('should return loading as false', () => {
     const { result } = renderHook(() => useFingerprint(nft))
-    const [_contract, isLoading] = result.current
+    const [, isLoading] = result.current
     expect(isLoading).toBe(false)
   })
 })

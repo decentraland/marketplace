@@ -17,7 +17,6 @@ module.exports = {
         '@typescript-eslint/no-floating-promises': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-floating-promises
         '@typescript-eslint/no-unsafe-return': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-return
         '@typescript-eslint/naming-convention': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/naming-convention/
-        '@typescript-eslint/no-unused-vars': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unused-vars
         '@typescript-eslint/no-unnecessary-type-assertion': 'error', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unnecessary-type-assertion
         '@typescript-eslint/explicit-module-boundary-types': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/explicit-module-boundary-types
         '@typescript-eslint/restrict-template-expressions': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/restrict-template-expressions
