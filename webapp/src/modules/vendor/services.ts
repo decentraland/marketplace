@@ -16,7 +16,6 @@ export type Contract = Omit<BaseContract, 'category'> & {
 export interface AnalyticsService {
   fetchVolumeData: (timeframe: AnalyticsTimeframe) => Promise<AnalyticsVolumeData>
 }
-export class AnalyticsService {}
 
 export interface NFTService<V extends VendorName> {
   fetch: (
@@ -31,9 +30,6 @@ export interface NFTService<V extends VendorName> {
   ) => Promise<readonly [NFT<V>, Order | null, RentalListing | null]>
   transfer: (wallet: Wallet | null, toAddress: string, nft: NFT<V>) => Promise<string>
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class NFTService<V> {}
-
 export interface OrderService<V extends VendorName> {
   fetchOrders: (params: OrderFilters, sortBy: OrderSortBy) => Promise<OrderResponse>
   create: (wallet: Wallet | null, nft: NFT<V>, price: number, expiresAt: number) => Promise<string>
@@ -41,9 +37,6 @@ export interface OrderService<V extends VendorName> {
   cancel: (wallet: Wallet | null, order: Order) => Promise<string>
   canSell(): boolean
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class OrderService<V> {}
-
 export interface BidService<V extends VendorName> {
   fetchBySeller: (seller: string) => Promise<Bid[]>
   fetchByBidder: (bidder: string) => Promise<Bid[]>
@@ -52,11 +45,8 @@ export interface BidService<V extends VendorName> {
   accept: (wallet: Wallet | null, bid: Bid) => Promise<string>
   cancel: (wallet: Wallet | null, bid: Bid) => Promise<string>
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export class BidService<V> {}
 
 export interface ContractService {
   getContracts(): Promise<Contract[]>
   getTransferType: (address: string) => TransferType
 }
-export class ContractService {}

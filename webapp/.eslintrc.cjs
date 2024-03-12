@@ -11,7 +11,6 @@ module.exports = {
       files: ['*.ts', '*.tsx', '*.cjs'],
       extends: ['plugin:@typescript-eslint/recommended', 'plugin:@typescript-eslint/recommended-requiring-type-checking', 'prettier'],
       rules: {
-        '@typescript-eslint/no-unsafe-declaration-merging': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-declaration-merging
         '@typescript-eslint/no-redundant-type-constituents': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-redundant-type-constituents
         '@typescript-eslint/no-floating-promises': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-floating-promises
         '@typescript-eslint/no-unsafe-return': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-return
