@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { MenuItem } from '../../Menu/MenuItem'
 import { Props } from './DropdownMenu.types'
 
-const DropdownMenu = <T extends unknown>(props: Props<T>) => {
+const DropdownMenu = <T,>(props: Props<T>) => {
   const { values, currentValue, onMenuItemClick } = props
   const [isDropdownOpen, setIsDropdownOpen] = useState(currentValue && values.includes(currentValue))
 
