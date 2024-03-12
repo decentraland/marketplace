@@ -7,6 +7,10 @@ import { objectToURLSearchParams } from './utils'
 export const SIGNATURES_SERVER_URL = config.get('SIGNATURES_SERVER_URL')
 type ValueOf<T> = T[keyof T]
 
+const isPrimitive = (value: any): value is string | number | boolean => {
+  return value !== undefined && value !== null && (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean')
+}
+
 class RentalsAPI extends BaseAPI {
   createRentalListing = async (listing: RentalListingCreation, identity: AuthIdentity): Promise<RentalListing> => {
     const url = SIGNATURES_SERVER_URL + `/rentals-listings`
@@ -61,12 +65,13 @@ class RentalsAPI extends BaseAPI {
     const UrlSearchParams = URLSearchParams ?? window.URLSearchParams
     const urlSearchParams = new UrlSearchParams()
     ;(Object.keys(params) as Array<keyof typeof params>).forEach(parameterName => {
-      if (Array.isArray(params[parameterName])) {
-        ;(params[parameterName] as ValueOf<typeof params>[]).forEach(parameterValue => {
-          urlSearchParams.append(parameterName, (parameterValue ?? '').toString())
+      const parameter = params[parameterName]
+      if (Array.isArray(parameter)) {
+        ;(parameter as ValueOf<typeof params>[]).filter(isPrimitive).forEach(parameterValue => {
+          urlSearchParams.append(parameterName, parameterValue.toString())
         })
-      } else {
-        urlSearchParams.append(parameterName, (params[parameterName] ?? '').toString())
+      } else if (isPrimitive(parameter)) {
+        urlSearchParams.append(parameterName, parameter.toString())
       }
     })
     const url = SIGNATURES_SERVER_URL + `/rentals-listings?` + urlSearchParams.toString()
