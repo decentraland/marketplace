@@ -27,7 +27,7 @@ export function pick(obj: Record<string, unknown>, keys: string[]): Record<strin
   const result = {} as Record<string, unknown>
 
   for (const key of keys) {
-    if (obj.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
       result[key] = obj[key]
     }
   }

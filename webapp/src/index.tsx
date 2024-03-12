@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom'
+import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 
 import { ConnectedRouter } from 'connected-react-router'
@@ -22,7 +22,7 @@ import './index.css'
 const history = createHistory()
 const store = initStore(history)
 
-async function main() {
+function main() {
   const component = (
     <Provider store={store}>
       <TranslationProvider locales={Object.keys(locales)}>
@@ -40,7 +40,7 @@ async function main() {
     </Provider>
   )
 
-  ReactDOM.render(component, document.getElementById('root'))
+  render(component, document.getElementById('root'))
 }
 
 main()

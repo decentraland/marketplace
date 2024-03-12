@@ -179,59 +179,61 @@ describe('SearchBarDropdown', () => {
           })
         })
 
-        it('should render the results', async () => {
+        it('should render the results', () => {
           const { getByText } = renderSearchDropBarDropdown(props)
-          await waitFor(() => {
+
+          return waitFor(() => {
             expect(getByText(MOCKED_ITEM.name)).toBeInTheDocument()
           })
         })
 
-        it('should have the correct asset url in the result rendered', async () => {
+        it('should have the correct asset url in the result rendered', () => {
           const { container } = renderSearchDropBarDropdown(props)
-          await waitFor(async () => {
+
+          return waitFor(() => {
             expect(within(container).getByRole('link')).toHaveAttribute('href', getAssetUrl(MOCKED_ITEM as Asset))
           })
         })
 
-        it('should save the result in the recent searches on the click event', async () => {
+        it('should save the result in the recent searches on the click event', () => {
           const { container } = renderSearchDropBarDropdown(props)
-          await waitFor(async () => {
+          return waitFor(() => {
             const link = within(container).getByRole('link')
-            await fireEvent.click(link)
+            fireEvent.click(link)
             expect(localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)).toBe(JSON.stringify([MOCKED_ITEM]))
           })
         })
 
-        it('should render the see all button', async () => {
+        it('should render the see all button', () => {
           const { getByTestId } = renderSearchDropBarDropdown(props)
-          await waitFor(async () => {
+          return waitFor(() => {
             expect(getByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)).toBeInTheDocument()
           })
         })
 
-        it('should call the onSearch handler when clicking the see all button', async () => {
+        it('should call the onSearch handler when clicking the see all button', () => {
           const onSearch = jest.fn()
           const { getByTestId } = renderSearchDropBarDropdown({
             ...props,
             onSearch
           })
-          await waitFor(async () => {
+          return waitFor(() => {
             const button = getByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)
-            await fireEvent.click(button)
+            fireEvent.click(button)
             expect(onSearch).toHaveBeenCalledWith({
               value: props.searchTerm
             })
           })
         })
 
-        it('should call the onSearch handler when hitting enter', async () => {
+        it('should call the onSearch handler when hitting enter', () => {
           const onSearch = jest.fn()
           renderSearchDropBarDropdown({
             ...props,
             onSearch
           })
-          await waitFor(async () => {
-            await fireEvent.keyDown(document, { key: 'Enter' })
+          return waitFor(() => {
+            fireEvent.keyDown(document, { key: 'Enter' })
             expect(onSearch).toHaveBeenCalledWith({
               value: props.searchTerm
             })
@@ -245,10 +247,11 @@ describe('SearchBarDropdown', () => {
             data: []
           })
         })
-        it('should render the no results text', async () => {
+
+        it('should render the no results text', () => {
           const { getByTestId } = renderSearchDropBarDropdown(props)
 
-          await waitFor(async () => {
+          return waitFor(() => {
             expect(getByTestId(NO_RESULTS_DATA_TEST_ID)).toBeInTheDocument()
           })
         })
@@ -294,7 +297,8 @@ describe('SearchBarDropdown', () => {
             ...props,
             onSearch
           })
-          await waitFor(async () => {
+
+          await waitFor(() => {
             expect(within(container).getByRole('link')).toHaveAttribute(
               'href',
               locations.account(MOCKED_CREATOR.address, {
@@ -314,16 +318,18 @@ describe('SearchBarDropdown', () => {
             ...props,
             onSearch
           })
-          await waitFor(async () => {
+
+          await waitFor(() => {
             const link = within(container).getByRole('link')
-            await fireEvent.click(link)
+            fireEvent.click(link)
             expect(localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)).toBe(JSON.stringify([MOCKED_CREATOR]))
           })
         })
 
         it('should not render the see all button', async () => {
           const { queryByTestId } = await renderAndSelectCreatorsTab(props)
-          await waitFor(async () => {
+
+          await waitFor(() => {
             expect(queryByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)).not.toBeInTheDocument()
           })
         })
@@ -335,10 +341,11 @@ describe('SearchBarDropdown', () => {
             data: []
           })
         })
-        it('should render the no results text', async () => {
+
+        it('should render the no results text', () => {
           const { getByTestId } = renderSearchDropBarDropdown(props)
 
-          await waitFor(async () => {
+          return waitFor(() => {
             expect(getByTestId(NO_RESULTS_DATA_TEST_ID)).toBeInTheDocument()
           })
         })
@@ -381,9 +388,10 @@ describe('SearchBarDropdown', () => {
             ...props,
             onSearch
           })
-          await waitFor(async () => {
+
+          await waitFor(() => {
             const collectionRow = within(container).getByTestId(`${COLLECTION_ROW_DATA_TEST_ID}-${MOCKED_COLLECTION.name}`)
-            await fireEvent.click(collectionRow)
+            fireEvent.click(collectionRow)
             expect(onSearch).toHaveBeenCalledWith({
               contractAddresses: [MOCKED_COLLECTION.contract_address]
             })
@@ -397,9 +405,10 @@ describe('SearchBarDropdown', () => {
               ...props,
               onSearch
             })
-            await waitFor(async () => {
+
+            await waitFor(() => {
               const collectionRow = within(container).getByTestId(`${COLLECTION_ROW_DATA_TEST_ID}-${MOCKED_COLLECTION.name}`)
-              await fireEvent.click(collectionRow)
+              fireEvent.click(collectionRow)
               expect(localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY)).toBe(JSON.stringify([MOCKED_COLLECTION]))
             })
           })
@@ -407,7 +416,8 @@ describe('SearchBarDropdown', () => {
 
         it('should not render the see all button', async () => {
           const { queryByTestId } = await renderAndSelectCollectionsTab(props)
-          await waitFor(async () => {
+
+          await waitFor(() => {
             expect(queryByTestId(SEE_ALL_COLLECTIBLES_DATA_TEST_ID)).not.toBeInTheDocument()
           })
         })
@@ -418,8 +428,9 @@ describe('SearchBarDropdown', () => {
             ...props,
             onSearch
           })
-          await waitFor(async () => {
-            await fireEvent.keyDown(document, { key: 'Enter' })
+
+          return waitFor(() => {
+            fireEvent.keyDown(document, { key: 'Enter' })
             expect(onSearch).toHaveBeenCalledWith({
               contractAddresses: [MOCKED_COLLECTION.contract_address],
               value: ''
@@ -434,10 +445,11 @@ describe('SearchBarDropdown', () => {
             data: []
           })
         })
-        it('should render the no results text', async () => {
+
+        it('should render the no results text', () => {
           const { getByTestId } = renderSearchDropBarDropdown(props)
 
-          await waitFor(async () => {
+          return waitFor(() => {
             expect(getByTestId(NO_RESULTS_DATA_TEST_ID)).toBeInTheDocument()
           })
         })

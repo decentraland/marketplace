@@ -176,7 +176,7 @@ describe('FavoritesCounter', () => {
     })
 
     describe('and the counter has no favorites', () => {
-      it('should have the non clickable class', async () => {
+      it('should have the non clickable class', () => {
         const { getByTestId } = renderFavoritesCounter({
           onCounterClick,
           count: 0,
@@ -197,7 +197,7 @@ describe('FavoritesCounter', () => {
     })
 
     describe('and the counter has favorites', () => {
-      it('should not have the non clickable class', async () => {
+      it('should not have the non clickable class', () => {
         const { getByTestId } = renderFavoritesCounter({
           onCounterClick,
           count: 1000,
@@ -218,7 +218,7 @@ describe('FavoritesCounter', () => {
     })
 
     describe('and the item picking or unpicking process is being loaded', () => {
-      it('should have the non clickable class', async () => {
+      it('should have the non clickable class', () => {
         const { getByTestId } = renderFavoritesCounter({
           onCounterClick,
           count: 0,

@@ -70,7 +70,7 @@ describe('when the share on twitter button is clicked', () => {
     jest.useRealTimers()
   })
 
-  it('should open a new page with a twitter message', async () => {
+  it('should open a new page with a twitter message', () => {
     jest.spyOn(window, 'open').mockImplementation(() => null)
     const dclUrl = 'https://decentraland.zone/marketplace'
     const locationsUrl = '/lists/aListId?assetType=item&section=lists&vendor=decentraland&page=1&sortBy=newest'

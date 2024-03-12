@@ -12,7 +12,7 @@ describe('when getting the url for collections published and using a search term
   const searchTerm = 'aSearchTerm'
   const limit = 5
 
-  it('should return the url', async () => {
+  it('should return the url', () => {
     expect(builderAPI.publishedCollectionURL(searchTerm, limit)).toBe(
       `/collections?is_published=true&status=approved&q=${searchTerm}&limit=${limit}`
     )

@@ -494,9 +494,13 @@ function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) 
 
   newOptions = {
     ...newOptions,
-    onlyOnRent: current.hasOwnProperty('onlyOnRent') ? current.onlyOnRent : previous.onlyOnRent,
+    onlyOnRent: Object.prototype.hasOwnProperty.call(current, 'onlyOnRent') ? current.onlyOnRent : previous.onlyOnRent,
     onlyOnSale:
-      current.assetType === AssetType.ITEM ? undefined : current.hasOwnProperty('onlyOnSale') ? current.onlyOnSale : previous.onlyOnSale
+      current.assetType === AssetType.ITEM
+        ? undefined
+        : Object.prototype.hasOwnProperty.call(current, 'onlyOnSale')
+          ? current.onlyOnSale
+          : previous.onlyOnSale
   }
 
   // Checks if the sorting categories are correctly set for the onlyOnRental and the onlyOnSell filters
