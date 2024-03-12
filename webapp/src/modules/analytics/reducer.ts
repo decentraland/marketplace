@@ -39,12 +39,13 @@ type AnalyticsReducerAction =
 
 export function analyticsReducer(state = INITIAL_STATE, action: AnalyticsReducerAction): AnalyticsState {
   switch (action.type) {
-    case FETCH_ANALYTICS_VOLUME_DATA_REQUEST:
+    case FETCH_ANALYTICS_VOLUME_DATA_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
-    case FETCH_ANALYTICS_VOLUME_DATA_SUCCESS:
+    }
+    case FETCH_ANALYTICS_VOLUME_DATA_SUCCESS: {
       const { analyticsVolumeData } = action.payload
       return {
         ...state,
@@ -52,13 +53,15 @@ export function analyticsReducer(state = INITIAL_STATE, action: AnalyticsReducer
         error: null,
         volumeData: analyticsVolumeData
       }
-    case FETCH_ANALYTICS_VOLUME_DATA_FAILURE:
+    }
+    case FETCH_ANALYTICS_VOLUME_DATA_FAILURE: {
       const { error } = action.payload
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error
       }
+    }
     case FETCH_RANKINGS_REQUEST: {
       return {
         ...state,

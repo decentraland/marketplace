@@ -17,7 +17,6 @@ module.exports = {
         '@typescript-eslint/no-floating-promises': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-floating-promises
         '@typescript-eslint/no-unsafe-return': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-return
         '@typescript-eslint/naming-convention': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/naming-convention/
-        '@typescript-eslint/no-unused-vars': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unused-vars
         '@typescript-eslint/no-unnecessary-type-assertion': 'error', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unnecessary-type-assertion
         '@typescript-eslint/explicit-module-boundary-types': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/explicit-module-boundary-types
         '@typescript-eslint/restrict-template-expressions': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/restrict-template-expressions
@@ -26,7 +25,6 @@ module.exports = {
         '@typescript-eslint/unbound-method': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/unbound-method
         '@typescript-eslint/ban-ts-comment': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/ban-ts-comment
         'no-prototype-builtins': 'off', // TODO: migrate code progressively to remove this line. https://eslint.org/docs/rules/no-prototype-builtins
-        'no-case-declarations': 'off', // TODO: migrate code progressively to remove this line. https://eslint.org/docs/rules/no-case-declarations
         '@typescript-eslint/no-unsafe-assignment': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-assignment/
         '@typescript-eslint/no-unsafe-call': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-call/
         '@typescript-eslint/no-unsafe-member-access': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-member-access/
@@ -37,9 +35,7 @@ module.exports = {
         '@typescript-eslint/await-thenable': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/await-thenable
         '@typescript-eslint/no-unnecessary-type-constraint': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unnecessary-type-constraint
         '@typescript-eslint/no-misused-promises': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-misused-promises
-        'require-yield': 'off', // TODO: migrate code progressively to remove this line. https://eslint.org/docs/rules/require-yield
         'import/order': 'off', // TODO: migrate code progressively to remove this line.
-        'no-empty': 'off', // TODO: migrate code progressively to remove this line. https://eslint.org/docs/rules/no-empty
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-non-null-asserted-optional-chain
         '@typescript-eslint/no-unsafe-enum-comparison': 'off'
       },

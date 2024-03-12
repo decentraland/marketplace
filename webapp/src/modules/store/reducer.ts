@@ -88,12 +88,13 @@ export function storeReducer(state = INITIAL_STATE, action: StoreReducerAction):
         error
       }
     }
-    case UPDATE_LOCAL_STORE:
+    case UPDATE_LOCAL_STORE: {
       const { store } = action.payload
       return {
         ...state,
         localStore: store
       }
+    }
     case REVERT_LOCAL_STORE: {
       const { address } = action.payload
       const previous = state.data[address]

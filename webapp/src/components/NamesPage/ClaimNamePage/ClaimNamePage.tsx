@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import { Button, Close, Container, Field, Icon, Loader, Popup, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { isErrorWithMessage } from 'decentraland-dapps/dist/lib'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { config } from '../../../config'
 import infoIcon from '../../../images/infoIcon.png'
@@ -51,7 +52,9 @@ const ClaimNamePage = (props: Props) => {
       try {
         const bannedNames = await lists.fetchBannedNames()
         setBannedNames(bannedNames)
-      } catch (error) {}
+      } catch (error) {
+        console.error('Error fetching banned names', isErrorWithMessage(error) ? error.message : 'Unknown error')
+      }
     })()
   }, [])
 

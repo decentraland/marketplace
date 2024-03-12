@@ -107,7 +107,6 @@
     "build": "tsc && node --max_old_space_size=8192 ./node_modules/vite/bin/vite.js build",
     "test": "jest",
     "test:coverage": "npm run test -- --coverage",
-    "lint": "eslint -c .eslintrc.cjs --ext .ts src",
     "check:code": "eslint -c .eslintrc.cjs src",
     "fix:code": "npm run check:code -- --fix",
     "pre-commit:fix:code": "eslint -c .eslintrc.cjs --fix",

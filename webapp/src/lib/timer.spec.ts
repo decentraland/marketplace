@@ -22,7 +22,7 @@ describe('when the timer is running', () => {
   describe("and the timer hasn't finished", () => {
     it('should return isRunning as true', async () => {
       const { result } = renderHook(() => useTimer(1200))
-      const [_, startTimer] = result.current
+      const [, startTimer] = result.current
 
       act(() => {
         startTimer()
@@ -38,7 +38,7 @@ describe('when the timer is running', () => {
     it('should return isRunning as false', async () => {
       runTimerAutomaticallyOnce()
       const { result } = renderHook(() => useTimer(1200))
-      const [_, startTimer] = result.current
+      const [, startTimer] = result.current
 
       act(() => {
         startTimer()
@@ -53,7 +53,7 @@ describe('when the timer is running', () => {
   describe('and the timer is re-started', () => {
     it('should re-start the timeout procedure', () => {
       const { result } = renderHook(() => useTimer(1200))
-      const [_, startTimer] = result.current
+      const [, startTimer] = result.current
 
       act(() => {
         startTimer()

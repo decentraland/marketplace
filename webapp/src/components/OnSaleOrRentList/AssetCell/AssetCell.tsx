@@ -11,14 +11,17 @@ const AssetCell = ({ asset, link: linkProp }: Props) => {
   let subtitle: string | undefined
 
   switch (asset.category) {
-    case NFTCategory.ESTATE:
+    case NFTCategory.ESTATE: {
       subtitle = t('global.parcel_count', {
         count: asset.data.estate!.parcels.length
       })
       break
-    case NFTCategory.PARCEL:
+    }
+    case NFTCategory.PARCEL: {
       const { x, y } = asset.data.parcel!
       subtitle = `${x},${y}`
+      break
+    }
   }
 
   const link = linkProp

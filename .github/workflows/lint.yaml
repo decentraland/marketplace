@@ -19,4 +19,4 @@ jobs:
       - name: Install
         run: npm install --legacy-peer-deps
       - name: Lint
-        run: npm run lint
+        run: npm run check:code

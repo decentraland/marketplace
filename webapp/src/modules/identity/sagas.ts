@@ -74,6 +74,6 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
 
 function* handleDisconnect(_action: DisconnectWalletAction) {
   if (auxAddress) {
-    localStorageClearIdentity(auxAddress)
+    yield localStorageClearIdentity(auxAddress)
   }
 }
