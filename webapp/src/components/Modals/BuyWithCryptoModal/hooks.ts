@@ -431,7 +431,7 @@ const useCrossChainRoute = (
       if (isBuyingL1WithOtherTokenThanEthereumMANA || isPayingWithOtherTokenThanMANA || isPayingWithMANAButFromOtherChain) {
         calculateRoute()
       }
-    } 
+    }
     setRouteFailed(false)
   }, [useMetaTx, selectedToken, selectedChain, assetChainId, calculateRoute])
 
