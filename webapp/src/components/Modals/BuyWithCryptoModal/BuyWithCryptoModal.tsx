@@ -194,6 +194,9 @@ export const BuyWithCryptoModal = (props: Props) => {
           } else {
             canBuy = wallet.networks[asset.network].mana >= +ethers.utils.formatEther(price)
           }
+          if (!canBuy) {
+            setInsufficientToken(selectedToken)
+          }
         } else if (selectedTokenBalance && routeFeeCost) {
           const balance = parseFloat(ethers.utils.formatUnits(selectedTokenBalance, selectedToken.decimals))
 
@@ -647,7 +650,8 @@ export const BuyWithCryptoModal = (props: Props) => {
               {canBuyAsset === false && !isFetchingBalance && !isFetchingRoute ? (
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
-                    token: insufficientToken?.symbol || 'MANA'
+                    token: insufficientToken?.symbol || 'MANA',
+                    card: (text: string) => onBuyWithCard ? <span>{text}</span> : undefined
                   })}
                 </span>
               ) : null}
