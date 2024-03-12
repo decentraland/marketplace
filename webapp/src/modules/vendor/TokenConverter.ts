@@ -77,7 +77,7 @@ export class TokenConverter {
         coinTickersPromiseCache[coinId] = {}
       }
       const ongoingPromise = coinTickersPromiseCache[coinId][usdTicker]
-      if (ongoingPromise !== undefined) {
+      if (ongoingPromise === undefined) {
         coinTickersPromiseCache[coinId][usdTicker] = window
           .fetch(`${this.apiURL}/coins/decentraland/tickers?exchange_ids=${this.converterExchange}`)
           .then(response => response.json() as Promise<CoinTickers>)
