@@ -39,7 +39,6 @@ module.exports = {
         '@typescript-eslint/no-misused-promises': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-misused-promises
         'require-yield': 'off', // TODO: migrate code progressively to remove this line. https://eslint.org/docs/rules/require-yield
         'import/order': 'off', // TODO: migrate code progressively to remove this line.
-        'no-empty': 'off', // TODO: migrate code progressively to remove this line. https://eslint.org/docs/rules/no-empty
         '@typescript-eslint/no-non-null-asserted-optional-chain': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-non-null-asserted-optional-chain
         '@typescript-eslint/no-unsafe-enum-comparison': 'off'
       },
