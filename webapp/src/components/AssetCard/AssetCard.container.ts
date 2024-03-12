@@ -11,7 +11,7 @@ import { getOpenRentalId } from '../../modules/rental/utils'
 import { getRentalById } from '../../modules/rental/selectors'
 import { getPageName, getSortBy, getWearablesUrlParams } from '../../modules/routing/selectors'
 import { PageName } from '../../modules/routing/types'
-import { MapStateProps, OwnProps, MapDispatchProps } from './AssetCard.types'
+import { MapStateProps, OwnProps } from './AssetCard.types'
 import AssetCard from './AssetCard'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
@@ -43,6 +43,4 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   }
 }
 
-const mapDispatch = (): MapDispatchProps => ({})
-
-export default connect(mapState, mapDispatch)(AssetCard)
+export default connect(mapState)(AssetCard)
