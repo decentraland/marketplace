@@ -27,12 +27,13 @@ type SaleReducerAction = FetchSalesRequestAction | FetchSalesSuccessAction | Fet
 
 export function saleReducer(state = INITIAL_STATE, action: SaleReducerAction): SaleState {
   switch (action.type) {
-    case FETCH_SALES_REQUEST:
+    case FETCH_SALES_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
-    case FETCH_SALES_SUCCESS:
+    }
+    case FETCH_SALES_SUCCESS: {
       const { sales, count } = action.payload
       return {
         ...state,
@@ -47,13 +48,15 @@ export function saleReducer(state = INITIAL_STATE, action: SaleReducerAction): S
         ),
         count
       }
-    case FETCH_SALES_FAILURE:
+    }
+    case FETCH_SALES_FAILURE: {
       const { error } = action.payload
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error
       }
+    }
     default:
       return state
   }

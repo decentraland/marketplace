@@ -74,14 +74,14 @@ export function browseReducer(state: BrowseUIState = INITIAL_STATE, action: UIRe
       }
     }
 
-    case BULK_PICK_SUCCESS:
+    case BULK_PICK_SUCCESS: {
       const { ownerRemovedFromCurrentList } = action.payload
 
       return {
         ...state,
         count: state.count !== undefined && ownerRemovedFromCurrentList ? --state.count : state.count
       }
-
+    }
     case BROWSE: {
       const { view } = action.payload.options
       return {
@@ -168,7 +168,7 @@ export function browseReducer(state: BrowseUIState = INITIAL_STATE, action: UIRe
         itemIds: isLoadingMoreResults(state, action.payload.options.page) ? state.itemIds : []
       }
 
-    case FETCH_FAVORITED_ITEMS_SUCCESS:
+    case FETCH_FAVORITED_ITEMS_SUCCESS: {
       const {
         timestamp,
         options: { page },
@@ -189,7 +189,7 @@ export function browseReducer(state: BrowseUIState = INITIAL_STATE, action: UIRe
         page: forceLoadMore ? state.page : page,
         count: total
       }
-
+    }
     case FETCH_ITEMS_SUCCESS: {
       const {
         timestamp,

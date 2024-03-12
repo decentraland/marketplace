@@ -239,7 +239,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         })
       )
       break
-    default:
+    default: {
       const isWearableHead = section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
       const isWearableAccessory = section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
 
@@ -313,6 +313,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           })
         )
       }
+    }
   }
 }
 

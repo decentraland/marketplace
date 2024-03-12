@@ -40,13 +40,13 @@ type CollectionReducerAction =
 export function collectionReducer(state = INITIAL_STATE, action: CollectionReducerAction): CollectionState {
   switch (action.type) {
     case FETCH_COLLECTIONS_REQUEST:
-    case FETCH_SINGLE_COLLECTION_REQUEST:
+    case FETCH_SINGLE_COLLECTION_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
-
-    case FETCH_COLLECTIONS_SUCCESS:
+    }
+    case FETCH_COLLECTIONS_SUCCESS: {
       const { collections, count } = action.payload
 
       return {
@@ -62,8 +62,8 @@ export function collectionReducer(state = INITIAL_STATE, action: CollectionReduc
         ),
         count
       }
-
-    case FETCH_SINGLE_COLLECTION_SUCCESS:
+    }
+    case FETCH_SINGLE_COLLECTION_SUCCESS: {
       const { collection } = action.payload
 
       return {
@@ -72,9 +72,9 @@ export function collectionReducer(state = INITIAL_STATE, action: CollectionReduc
         error: null,
         data: { ...state.data, [collection.urn]: collection }
       }
-
+    }
     case FETCH_COLLECTIONS_FAILURE:
-    case FETCH_SINGLE_COLLECTION_FAILURE:
+    case FETCH_SINGLE_COLLECTION_FAILURE: {
       const { error } = action.payload
 
       return {
@@ -82,6 +82,7 @@ export function collectionReducer(state = INITIAL_STATE, action: CollectionReduc
         loading: loadingReducer(state.loading, action),
         error
       }
+    }
     default:
       return state
   }

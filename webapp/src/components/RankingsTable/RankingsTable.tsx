@@ -143,7 +143,7 @@ const RankingsTable = (props: Props) => {
   const getTableHeader = () => {
     switch (currentEntity) {
       case RankingEntities.EMOTES:
-      case RankingEntities.WEARABLES:
+      case RankingEntities.WEARABLES: {
         const label = currentEntity === RankingEntities.EMOTES ? 'emotes' : 'wearables'
         return (
           <Table.Header>
@@ -179,6 +179,7 @@ const RankingsTable = (props: Props) => {
             </Table.Row>
           </Table.Header>
         )
+      }
       case RankingEntities.CREATORS:
         return (
           <Table.Header>

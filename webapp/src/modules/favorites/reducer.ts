@@ -132,7 +132,7 @@ export function favoritesReducer(state = INITIAL_STATE, action: FavoritesReducer
       }
     }
 
-    case FETCH_ITEMS_SUCCESS:
+    case FETCH_ITEMS_SUCCESS: {
       const { items } = action.payload
 
       return {
@@ -158,7 +158,7 @@ export function favoritesReducer(state = INITIAL_STATE, action: FavoritesReducer
         },
         loading: loadingReducer(state.loading, action)
       }
-
+    }
     case FETCH_FAVORITED_ITEMS_SUCCESS: {
       const { items, createdAt } = action.payload
 

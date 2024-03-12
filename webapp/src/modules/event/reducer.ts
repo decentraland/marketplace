@@ -24,12 +24,13 @@ type EventReducerAction = FetchEventRequestAction | FetchEventSuccessAction | Fe
 
 export function eventReducer(state = INITIAL_STATE, action: EventReducerAction): EventState {
   switch (action.type) {
-    case FETCH_EVENT_REQUEST:
+    case FETCH_EVENT_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
-    case FETCH_EVENT_SUCCESS:
+    }
+    case FETCH_EVENT_SUCCESS: {
       const { eventTag, contracts } = action.payload
       return {
         ...state,
@@ -40,13 +41,15 @@ export function eventReducer(state = INITIAL_STATE, action: EventReducerAction):
           [eventTag]: contracts
         }
       }
-    case FETCH_EVENT_FAILURE:
+    }
+    case FETCH_EVENT_FAILURE: {
       const { error } = action.payload
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error
       }
+    }
     default:
       return state
   }
