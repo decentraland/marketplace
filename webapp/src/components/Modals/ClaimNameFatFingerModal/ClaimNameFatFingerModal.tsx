@@ -58,7 +58,7 @@ const ClaimNameFatFingerModal = ({
     const wertURL = config.get('WERT_URL')
     if (wallet) {
       const signer = await getSigner()
-      const factory = await DCLController__factory.connect(CONTROLLER_V2_ADDRESS, signer)
+      const factory = DCLController__factory.connect(CONTROLLER_V2_ADDRESS, signer)
 
       const sc_input_data = factory.interface.encodeFunctionData('register', [ENSName, wallet.address])
 

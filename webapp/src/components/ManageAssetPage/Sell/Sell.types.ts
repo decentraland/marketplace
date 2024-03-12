@@ -12,8 +12,5 @@ export type Props = {
   onListForSale: () => void
 }
 
-export type MapStateProps = {}
-
 export type MapDispatchProps = Pick<Props, 'onEditOrder' | 'onListForSale'>
-
 export type OwnProps = Pick<Props, 'nft' | 'order' | 'className' | 'rental'>

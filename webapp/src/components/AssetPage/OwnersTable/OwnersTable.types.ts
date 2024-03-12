@@ -5,9 +5,6 @@ export type Props = {
   orderDirection?: OrderDirection
 }
 
-export type MapStateProps = {}
-export type MapDispatchProps = {}
-
 export enum OrderDirection {
   ASC = 'asc',
   DESC = 'desc'

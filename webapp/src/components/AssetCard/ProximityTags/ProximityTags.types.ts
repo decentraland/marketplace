@@ -8,5 +8,4 @@ export type Props = {
 }
 
 export type MapStateProps = Pick<Props, 'proximities'>
-export type MapDispatchProps = {}
 export type MapDispatch = Dispatch

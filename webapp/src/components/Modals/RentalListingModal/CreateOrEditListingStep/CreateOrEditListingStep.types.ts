@@ -12,7 +12,5 @@ export type Props = {
   isListForRentAgain: boolean | null
 }
 
-export type MapStateProps = {}
-export type MapDispatchProps = {}
 export type MapDispatch = Dispatch
 export type OwnProps = Pick<Props, 'nft' | 'onCreate' | 'onRemove' | 'onCancel'>

@@ -7,6 +7,3 @@ export type Props = {
   text: React.ReactNode
   tx: Transaction
 }
-
-export type MapStateProps = {}
-export type MapDispatchProps = {}

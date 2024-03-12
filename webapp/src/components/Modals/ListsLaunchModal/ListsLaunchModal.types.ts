@@ -4,4 +4,3 @@ export type Props = {
 }
 
 export type MapStateProps = Pick<Props, 'isListsLaunchPopupEnabled' | 'isLoadingFeatureFlags'>
-export type MapDispatchProps = {}
