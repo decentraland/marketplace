@@ -232,7 +232,7 @@ const SaleRentActionBox = ({
                 <div className={styles.saleButtons}>
                   {order ? (
                     isCrossChainLandEnabled ? (
-                      <BuyWithCryptoButton onClick={onBuyWithCrypto} />
+                      <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} />
                     ) : (
                       <Button
                         as={Link}

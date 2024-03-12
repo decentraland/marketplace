@@ -852,7 +852,7 @@
       "cross_chain": "La tarifa estimada incluye el costo de la red y la tarifa de compra entre cadenas que debe pagar directamente con su billetera.",
       "same_network": "La tarifa estimada incluye el costo de la red que debes pagar directamente con tu billetera."
     },
-    "insufficient_funds": "No tienes fondos suficientes en {token}. Intente pagar con otro token, obtenga MANA<card> o pague con tarjeta</card>.",
+    "insufficient_funds": "No tienes fondos suficientes en {token} para pagar este Item. Obtenga MANA, intente pagar con otro token<card> o pague con tarjeta</card>.",
     "token_and_chain_selector": {
       "available_chains": "Redes disponibles",
       "select_chain": "Selecciona una red",

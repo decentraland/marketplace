@@ -432,6 +432,7 @@ const useCrossChainRoute = (
         calculateRoute()
       }
     }
+    setRouteFailed(false)
   }, [useMetaTx, selectedToken, selectedChain, assetChainId, calculateRoute])
 
   const routeFeeCost = useMemo(() => {
