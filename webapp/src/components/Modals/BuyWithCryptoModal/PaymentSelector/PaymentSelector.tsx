@@ -34,6 +34,11 @@ type Props = {
   onShowTokenSelector: () => unknown
 }
 
+const getUsdRouteCost = (routeFeeCost: RouteFeeCost, tokens: Token[]): string => {
+  const usdPrice = tokens.find(t => t.symbol === routeFeeCost.token.symbol)?.usdPrice
+  return usdPrice ? ((Number(routeFeeCost.feeCost) + Number(routeFeeCost.gasCost)) * usdPrice).toFixed(4) : 'Unknown'
+}
+
 const PaymentSelector = (props: Props) => {
   const {
     price,
@@ -168,13 +173,7 @@ const PaymentSelector = (props: Props) => {
                   {gasCost && gasCost.totalUSDPrice ? (
                     <span className={styles.fromAmountUSD}>≈ ${gasCost.totalUSDPrice.toFixed(4)}</span>
                   ) : !!routeFeeCost && providerTokens.find(t => t.symbol === routeFeeCost.token.symbol)?.usdPrice ? (
-                    <span className={styles.fromAmountUSD}>
-                      ≈ $
-                      {(
-                        (Number(routeFeeCost.feeCost) + Number(routeFeeCost.gasCost)) *
-                        providerTokens.find(t => t.symbol === routeFeeCost.token.symbol)?.usdPrice!
-                      ).toFixed(4)}
-                    </span>
+                    <span className={styles.fromAmountUSD}>≈ ${getUsdRouteCost(routeFeeCost, providerTokens)}</span>
                   ) : null}
                 </div>
               </div>
