@@ -75,6 +75,8 @@ const PaymentSelector = (props: Props) => {
     return !isFetchingBalance ? <span className={styles.balance}>{balance}</span> : <div className={styles.balanceSkeleton} />
   }, [wallet, isFetchingBalance, selectedChain, selectedToken, selectedTokenBalance])
 
+  const usdRouteFeeCost = useMemo(() => routeFeeCost && getUsdRouteCost(routeFeeCost, providerTokens), [routeFeeCost, providerTokens])
+
   return (
     <div className={styles.payWithContainer} data-testid={PAY_WITH_DATA_TEST_ID}>
       {canSelectChainAndToken ? (
@@ -172,8 +174,8 @@ const PaymentSelector = (props: Props) => {
                   )}
                   {gasCost && gasCost.totalUSDPrice ? (
                     <span className={styles.fromAmountUSD}>≈ ${gasCost.totalUSDPrice.toFixed(4)}</span>
-                  ) : !!routeFeeCost && providerTokens.find(t => t.symbol === routeFeeCost.token.symbol)?.usdPrice ? (
-                    <span className={styles.fromAmountUSD}>≈ ${getUsdRouteCost(routeFeeCost, providerTokens)}</span>
+                  ) : usdRouteFeeCost ? (
+                    <span className={styles.fromAmountUSD}>≈ ${usdRouteFeeCost}</span>
                   ) : null}
                 </div>
               </div>
