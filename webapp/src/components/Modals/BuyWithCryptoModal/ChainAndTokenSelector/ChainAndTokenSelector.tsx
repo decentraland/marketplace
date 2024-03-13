@@ -61,7 +61,7 @@ const ChainAndTokenSelector = (props: Props) => {
         setIsFetchingBalances(false)
       }
     }
-    fetchBalances()
+    void fetchBalances()
   }, [currentChain, wallet.address])
 
   const filteredTokens = useMemo(() => {

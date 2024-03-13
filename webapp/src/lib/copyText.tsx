@@ -1,5 +1,5 @@
-const copyText = (text: string, onCopy: () => void) => {
-  navigator.clipboard.writeText(text)
+const copyText = async (text: string, onCopy: () => void) => {
+  await navigator.clipboard.writeText(text)
   onCopy()
 }
 

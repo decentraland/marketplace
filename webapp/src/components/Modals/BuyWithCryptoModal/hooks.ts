@@ -42,7 +42,7 @@ export const useTokenBalance = (selectedToken: Token, selectedChain: ChainId, ad
   // fetch selected token balance & price
   useEffect(() => {
     let cancel = false
-    ;(async () => {
+    void (async () => {
       try {
         setIsFetchingBalance(true)
         if (
@@ -137,7 +137,7 @@ const useGasCost = (
     }
 
     if (!shouldUseCrossChainProvider && wallet && nativeChainToken && getNetwork(wallet.chainId) === assetNetwork) {
-      calculateGas()
+      void calculateGas()
     } else {
       setGasCost(undefined)
     }
@@ -403,7 +403,7 @@ const useCrossChainRoute = (
       }
 
       interval = setInterval(() => {
-        calculateRoute()
+        return calculateRoute()
       }, ROUTE_FETCH_INTERVAL)
     }
     return () => {
@@ -429,7 +429,7 @@ const useCrossChainRoute = (
       const isPayingWithMANAButFromOtherChain = selectedToken.symbol === 'MANA' && selectedToken.chainId !== assetChainId.toString()
 
       if (isBuyingL1WithOtherTokenThanEthereumMANA || isPayingWithOtherTokenThanMANA || isPayingWithMANAButFromOtherChain) {
-        calculateRoute()
+        void calculateRoute()
       }
     }
     setRouteFailed(false)

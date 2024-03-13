@@ -27,7 +27,7 @@ const CampaignBadge = ({ contract, isCampaignBrowserEnabled }: Props) => {
   }, [contracts])
 
   useEffect(() => {
-    ;(async () => {
+    void (async () => {
       try {
         if (isCampaignBrowserEnabled) {
           const addresses = await builderAPI.fetchAddressesByTag([CAMPAIGN_TAG])

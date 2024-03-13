@@ -47,34 +47,34 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
   const [selectedCreators, setSelectedCreators] = useState<Pick<CreatorAccount, 'address' | 'name'>[]>()
 
   useEffect(() => {
-    const fetchData = async (contract: string) => {
-      const collection = await getCollectionByAddress(contract)
-      return collection
-    }
+    const getCollections = async () => {
+      if (contracts?.length) {
+        const collections = await Promise.all(contracts.map(contract => getCollectionByAddress(contract)))
 
-    if (contracts?.length) {
-      const promises = contracts.map(contract => fetchData(contract))
-      Promise.all(promises).then(collections => {
         setCollections(
           collections.map(collection => ({
             address: collection.contractAddress,
             name: collection.name
           }))
         )
-      })
-    } else if (!contracts?.length) {
-      setCollections([])
+      } else if (!contracts?.length) {
+        setCollections([])
+      }
     }
+
+    void getCollections()
   }, [contracts, onlyOnSale])
 
   useEffect(() => {
-    if (creators?.length) {
-      ProfilesCache.fetchProfile(creators).then(profiles => {
+    const getCreators = async () => {
+      if (creators?.length) {
+        const profiles = await ProfilesCache.fetchProfile(creators)
         setSelectedCreators(profileToCreatorAccount(profiles))
-      })
-    } else if (!creators?.length) {
-      setSelectedCreators([])
+      } else if (!creators?.length) {
+        setSelectedCreators([])
+      }
     }
+    void getCreators()
   }, [creators])
 
   const priceLabel = useMemo(

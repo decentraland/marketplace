@@ -232,7 +232,7 @@ const SaveToListModal = (props: Props) => {
   )
 
   useEffect(() => {
-    fetchNextPage(0, 24)
+    void fetchNextPage(0, 24)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
