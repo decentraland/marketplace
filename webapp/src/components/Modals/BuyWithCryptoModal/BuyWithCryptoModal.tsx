@@ -89,7 +89,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const chainNativeToken = useMemo(() => {
     return providerTokens.find(
-      t => +t.chainId.toString() === selectedChain.toString() && t.symbol === selectedProviderChain?.nativeCurrency.symbol
+      t => t.chainId.toString() === selectedChain.toString() && t.symbol === selectedProviderChain?.nativeCurrency.symbol
     )
   }, [selectedChain, selectedProviderChain, providerTokens])
 
