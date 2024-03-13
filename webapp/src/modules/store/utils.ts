@@ -4,8 +4,9 @@ import { ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { DeploymentPreparationData, buildEntity } from 'dcl-catalyst-client/dist/client/utils/DeploymentBuilder'
 import { BuildEntityWithoutFilesOptions } from 'dcl-catalyst-client/dist/client/types'
 import { EntityContentItemReference } from 'dcl-catalyst-commons'
-import { LinkType, Store, StoreEntityMetadata } from './types'
 import { peerUrl } from '../../lib/environment'
+import { convertToOutputString } from '../../utils/output'
+import { LinkType, Store, StoreEntityMetadata } from './types'
 
 export const getPeerCoverUrl = (hash: string) => `${peerUrl}/content/contents/${hash}`
 
@@ -157,6 +158,6 @@ export const getIsValidLink = (type: LinkType, link: string) => {
     case LinkType.DISCORD:
       return link.startsWith(linkStartsWith.discord)
     default:
-      throw new Error(`Invalid LinkType '${type}'`)
+      throw new Error(`Invalid LinkType '${convertToOutputString(type)}'`)
   }
 }

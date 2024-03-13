@@ -71,7 +71,7 @@ class NFTAPI extends BaseAPI {
       queryParams.append('assetType', filters.assetType)
     }
     try {
-      const { data } = await this.request('get', `/prices?${queryParams}`)
+      const { data } = await this.request('get', `/prices?${queryParams.toString()}`)
       return data
     } catch (error) {
       return {}

@@ -6,7 +6,7 @@ import classNames from 'classnames'
 import { Props } from './MenuItem.types'
 import './MenuItem.css'
 
-const MenuItem = <T,>(props: Props<T>) => {
+const MenuItem = <T extends string | number>(props: Props<T>) => {
   const { className = '', value, currentValue, subtitle, image, nestedLevel, withCaret, onClick } = props
 
   const handleOnClick = useCallback(() => {

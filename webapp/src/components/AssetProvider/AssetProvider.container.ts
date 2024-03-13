@@ -32,6 +32,7 @@ import { getOpenRentalId } from '../../modules/rental/utils'
 import { FetchOneOptions } from '../../modules/vendor'
 import { getContract } from '../../modules/contract/selectors'
 import { ContractName } from '../../modules/vendor/decentraland'
+import { convertToOutputString } from '../../utils/output'
 import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './AssetProvider.types'
 import AssetProvider from './AssetProvider'
 
@@ -63,7 +64,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       break
     }
     default:
-      throw new Error(`Invalid Asset type ${ownProps.type}`)
+      throw new Error(`Invalid Asset type ${convertToOutputString(ownProps.type)}`)
   }
   const order = getActiveOrder(asset, orders)
   const openRentalId = getOpenRentalId(asset)

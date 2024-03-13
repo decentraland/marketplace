@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { AssetType } from '../../modules/asset/types'
+import { convertToOutputString } from '../../utils/output'
 import { Props } from './AssetProvider.types'
 
 const AssetProvider = (props: Props) => {
@@ -61,7 +62,7 @@ const AssetProvider = (props: Props) => {
           setHasFetchedOnce(true)
           break
         default:
-          throw new Error(`Invalid Asset type ${type}`)
+          throw new Error(`Invalid Asset type ${convertToOutputString(type)}`)
       }
     }
   }, [

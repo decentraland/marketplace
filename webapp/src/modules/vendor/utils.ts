@@ -1,6 +1,7 @@
 import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { getCategoryFromSection, getSearchEmoteCategory, getSearchWearableCategory } from '../routing/search'
 import { BrowseOptions } from '../routing/types'
+import { convertToOutputString } from '../../utils/output'
 import { Sections } from './routing/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, Disabled } from './types'
@@ -74,7 +75,7 @@ export function getOriginURL(vendor: VendorName) {
     case VendorName.DECENTRALAND:
       return 'https://market.decentraland.org'
     default:
-      throw new Error(`Base URL for ${vendor} not implemented`)
+      throw new Error(`Base URL for ${convertToOutputString(vendor)} not implemented`)
   }
 }
 

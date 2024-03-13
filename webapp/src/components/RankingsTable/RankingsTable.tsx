@@ -13,6 +13,7 @@ import {
   RankingsSortBy
 } from '../../modules/analytics/types'
 import { useScrollSectionIntoView } from '../../modules/ui/utils'
+import { convertToOutputString } from '../../utils/output'
 import { TimeframeSelector } from '../Rankings/TimeframeSelector'
 import { InfoTooltip } from '../InfoTooltip'
 import { Props } from './RankingsTable.types'
@@ -56,7 +57,7 @@ const RankingsTable = (props: Props) => {
       if (filterName === 'sortBy') {
         history.replace({
           pathname: location.pathname,
-          hash: `${TABS_PREFIX}${currentEntity}-${currentTimeframe}-${value}`
+          hash: `${TABS_PREFIX}${currentEntity}-${currentTimeframe}-${convertToOutputString(value)}`
         })
       }
     }
@@ -104,7 +105,7 @@ const RankingsTable = (props: Props) => {
                 text:
                   category === ALL_FILTER
                     ? t('home_page.analytics.rankings.all_categories')
-                    : t(`${currentEntity === RankingEntities.EMOTES ? 'emote' : 'wearable'}.category.${category}`)
+                    : t(`${currentEntity === RankingEntities.EMOTES ? 'emote' : 'wearable'}.category.${convertToOutputString(category)}`)
               }))}
               onChange={registerHandleFilterChange('category')}
             />
@@ -114,7 +115,7 @@ const RankingsTable = (props: Props) => {
               direction="right"
               options={[ALL_FILTER, ...Object.values(Rarity.schema.enum)].map(rarity => ({
                 value: rarity as string,
-                text: rarity === ALL_FILTER ? t('home_page.analytics.rankings.all_rarities') : t(`rarity.${rarity}`)
+                text: rarity === ALL_FILTER ? t('home_page.analytics.rankings.all_rarities') : t(`rarity.${convertToOutputString(rarity)}`)
               }))}
               onChange={registerHandleFilterChange('rarity')}
             />

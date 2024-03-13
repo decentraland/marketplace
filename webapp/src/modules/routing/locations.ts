@@ -1,4 +1,5 @@
 import { CAMPAIGN_TAG } from '../../components/Campaign/config'
+import { convertToOutputString } from '../../utils/output'
 import { AssetType } from '../asset/types'
 import { View } from '../ui/types'
 import { Section } from '../vendor/decentraland'
@@ -107,6 +108,6 @@ function getResource(type: AssetType) {
     case AssetType.ITEM:
       return 'items'
     default:
-      throw new Error(`Invalid type ${type}`)
+      throw new Error(`Invalid type ${convertToOutputString(type)}`)
   }
 }

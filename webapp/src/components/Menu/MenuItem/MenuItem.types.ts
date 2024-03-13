@@ -1,4 +1,4 @@
-export type Props<T = string> = {
+export type Props<T extends string | number = string> = {
   className?: string
   value: T
   currentValue?: T

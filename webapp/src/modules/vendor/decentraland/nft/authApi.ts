@@ -38,7 +38,7 @@ export class NFTAuthAPI extends BaseClient {
     if (options) {
       Object.entries(options).forEach(([key, value]) => queryParams.append(key, value as any))
     }
-    const response: NFTResponse = await this.fetch(`/v1/nfts?${queryParams}`)
+    const response: NFTResponse = await this.fetch(`/v1/nfts?${queryParams.toString()}`)
 
     if (response.data.length === 0) {
       throw new Error('Not found')
