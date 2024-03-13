@@ -25,7 +25,8 @@ export function usePagination<T extends string = string, S extends string = stri
   options?: PaginationOptions
 ): UsePaginationResult<T, S> {
   const { search, pathname } = useLocation()
-  const { push } = useHistory()
+  const history = useHistory()
+  const push = history.push.bind(history)
   const pageSize = useMemo(() => options?.pageSize?.toString() ?? PAGE_SIZE.toString(), [options?.pageSize])
   const filters: Record<T, string | null> = useMemo(() => {
     const params = new URLSearchParams(search)

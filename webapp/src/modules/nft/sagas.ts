@@ -56,7 +56,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
     }
 
     try {
-      const vendor: Vendor<VendorName> = yield call(VendorFactory.build, vendorName, API_OPTS)
+      const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], vendorName, API_OPTS)
 
       const [nfts, accounts, orders, rentals, count]: AwaitFn<typeof vendor.nftService.fetch> = yield call(
         [vendor.nftService, 'fetch'],
@@ -112,7 +112,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
         throw new Error(`Couldn't find a valid vendor for contract ${contract?.address}`)
       }
 
-      const vendor: Vendor<VendorName> = yield call(VendorFactory.build, contract.vendor, API_OPTS)
+      const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], contract.vendor, API_OPTS)
 
       const [nft, order, rental]: AwaitFn<typeof vendor.nftService.fetchOne> = yield call(
         [vendor.nftService, 'fetchOne'],
@@ -133,7 +133,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
     const { nft, address } = action.payload
     try {
-      const vendor: Vendor<VendorName> = yield call(VendorFactory.build, nft.vendor)
+      const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], nft.vendor)
 
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
       if (!wallet) {

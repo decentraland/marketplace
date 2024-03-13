@@ -53,7 +53,7 @@ describe('when handling the accepting a bid action', () => {
         .provide([
           [select(getContract, { address: bid.contractAddress }), contract],
           [select(getWallet), wallet],
-          [call(VendorFactory.build, contract.vendor), throwError(new Error(error))]
+          [call([VendorFactory, 'build'], contract.vendor), throwError(new Error(error))]
         ])
         .put(acceptBidFailure(bid, error))
         .dispatch(acceptBidRequest(bid))
@@ -75,7 +75,7 @@ describe('when handling the accepting a bid action', () => {
       return expectSaga(bidSaga)
         .provide([
           [select(getContract, { address: bid.contractAddress }), contract],
-          [call(VendorFactory.build, contract.vendor), vendor],
+          [call([VendorFactory, 'build'], contract.vendor), vendor],
           [select(getWallet), wallet],
           [call([vendor.bidService!, 'accept'], wallet, bid), Promise.reject(error)]
         ])
@@ -125,7 +125,7 @@ describe('when handling the accepting a bid action', () => {
           return expectSaga(bidSaga)
             .provide([
               [select(getContract, { address: bid.contractAddress }), contract],
-              [call(VendorFactory.build, contract.vendor!), vendor],
+              [call([VendorFactory, 'build'], contract.vendor!), vendor],
               [select(getWallet), wallet],
               [select(getCurrentNFT), nft],
               [select(getRentalById, nft.openRentalId!), rental],
@@ -148,7 +148,7 @@ describe('when handling the accepting a bid action', () => {
           return expectSaga(bidSaga)
             .provide([
               [select(getContract, { address: bid.contractAddress }), contract],
-              [call(VendorFactory.build, contract.vendor!), vendor],
+              [call([VendorFactory, 'build'], contract.vendor!), vendor],
               [select(getWallet), wallet],
               [select(getCurrentNFT), nft],
               [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
@@ -166,7 +166,7 @@ describe('when handling the accepting a bid action', () => {
         return expectSaga(bidSaga)
           .provide([
             [select(getContract, { address: bid.contractAddress }), contract],
-            [call(VendorFactory.build, contract.vendor!), vendor],
+            [call([VendorFactory, 'build'], contract.vendor!), vendor],
             [select(getWallet), wallet],
             [select(getCurrentNFT), nft],
             [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],

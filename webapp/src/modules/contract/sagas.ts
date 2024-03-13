@@ -36,7 +36,7 @@ export function* handleFetchContractsRequest() {
 
     for (const vendor of vendors) {
       const { contractService } = vendor
-      const moreContracts: Contract[] = yield call([contractService, contractService.getContracts])
+      const moreContracts: Contract[] = yield call([contractService, 'getContracts'])
       contracts = [...contracts, ...moreContracts]
     }
     yield put(fetchContractsSuccess(contracts))

@@ -1,4 +1,5 @@
 import { BaseClientConfig } from 'decentraland-dapps/dist/lib/BaseClient'
+import { convertToOutputString } from '../../utils/output'
 import { ContractService, NFTService, OrderService, BidService, AnalyticsService } from './decentraland'
 import { VendorName } from './types'
 
@@ -15,7 +16,7 @@ export class VendorFactory {
           new AnalyticsService()
         )
       default:
-        throw new Error(`Invalid vendor "${vendor}"`)
+        throw new Error(`Invalid vendor "${convertToOutputString(vendor)}"`)
     }
   }
 }

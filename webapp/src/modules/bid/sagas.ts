@@ -69,7 +69,7 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
           : `Couldn't find a valid vendor for contract ${bid.contractAddress}`
       )
     }
-    const vendor: Vendor<VendorName> = yield call(VendorFactory.build, contract.vendor)
+    const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], contract.vendor)
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call([vendor.bidService!, 'accept'], wallet, bid)

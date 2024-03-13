@@ -75,7 +75,7 @@ export function initStore(history: History) {
 
   if (isDev) {
     const _window = window as any
-    _window.getState = store.getState
+    _window.getState = store.getState.bind(store)
   }
 
   // fetch tiles
