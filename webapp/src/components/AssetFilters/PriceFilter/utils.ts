@@ -2,6 +2,7 @@ import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import { getCategoryFromSection, getSearchEmoteCategory, getSearchWearableCategory } from '../../../modules/routing/search'
 import { PriceFilterExtraOption, PriceFilters, Section } from '../../../modules/vendor/decentraland'
+import { isOfEnumType } from '../../../utils/enums'
 
 const LAND_MAX_PRICE_ALLOWED = ethers.BigNumber.from('1000000000000000000000000000') // 1B
 
@@ -11,21 +12,21 @@ const WEARABLES_MAX_PRICE_ALLOWED = ethers.BigNumber.from('100000000000000000000
 
 export const getChartUpperBound = (section: string) => {
   let upperBound = WEARABLES_MAX_PRICE_ALLOWED
-  switch (section) {
-    case Section.LAND:
-    case Section.ESTATES:
-    case Section.PARCELS:
-      upperBound = LAND_MAX_PRICE_ALLOWED
-      break
-    case Section.ENS:
-      upperBound = ENS_MAX_PRICE_ALLOWED
-      break
-
-    default:
-      upperBound = WEARABLES_MAX_PRICE_ALLOWED
-      break
+  if (isOfEnumType(section, Section)) {
+    switch (section) {
+      case Section.LAND:
+      case Section.ESTATES:
+      case Section.PARCELS:
+        upperBound = LAND_MAX_PRICE_ALLOWED
+        break
+      case Section.ENS:
+        upperBound = ENS_MAX_PRICE_ALLOWED
+        break
+      default:
+        upperBound = WEARABLES_MAX_PRICE_ALLOWED
+        break
+    }
   }
-
   return upperBound
 }
 

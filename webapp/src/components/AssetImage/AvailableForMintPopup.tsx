@@ -41,7 +41,7 @@ const AvailableForMintPopup = ({ price, stock, rarity, contractAddress, itemId, 
           </span>
           <div className="containerRow">
             <div className="informationBold">
-              <Mana withTooltip size="large" network={network as Network} className="informationBold">
+              <Mana withTooltip size="large" network={network} className="informationBold">
                 {formatWeiToAssetCard(price)}
               </Mana>
             </div>

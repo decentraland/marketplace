@@ -16,8 +16,8 @@ export const StatusFilter = ({ status, onChange, defaultCollapsed = false }: Sta
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const statusOptions = useMemo(
     () =>
-      Object.keys(AssetStatusFilter).map(opt => ({
-        value: opt.toLocaleLowerCase(),
+      Object.values(AssetStatusFilter).map(opt => ({
+        value: opt,
         text: t(`nft_filters.status.${opt.toLocaleLowerCase()}`)
       })),
     []
