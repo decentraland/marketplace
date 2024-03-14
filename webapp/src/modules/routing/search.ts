@@ -5,6 +5,7 @@ import { Section } from '../vendor/decentraland'
 import { NFTSortBy } from '../nft/types'
 import { isAccountView, isLandSection } from '../ui/utils'
 import { AssetStatusFilter } from '../../utils/filters'
+import { isOfEnumType } from '../../utils/enums'
 import { AssetType } from '../asset/types'
 import { isCatalogView, isCatalogViewWithStatusFilter } from './utils'
 
@@ -161,7 +162,11 @@ export function getSearchParams(options?: BrowseOptions) {
   return params
 }
 
-export function getCategoryFromSection(section: string) {
+export function getCategoryFromSection(section: string): NFTCategory | undefined {
+  if (!isOfEnumType(section, Section)) {
+    return undefined
+  }
+
   switch (section) {
     case Section.PARCELS:
       return NFTCategory.PARCEL
@@ -246,7 +251,11 @@ export function getSearchSection(category: WearableCategory | EmoteCategory) {
   }
 }
 
-export function getSearchWearableCategory(section: string) {
+export function getSearchWearableCategory(section: string): WearableCategory | undefined {
+  if (!isOfEnumType(section, Section)) {
+    return undefined
+  }
+
   switch (section) {
     case Section.WEARABLES_EYEBROWS:
       return WearableCategory.EYEBROWS
@@ -285,7 +294,11 @@ export function getSearchWearableCategory(section: string) {
   }
 }
 
-export function getSearchEmoteCategory(section: string) {
+export function getSearchEmoteCategory(section: string): EmoteCategory | undefined {
+  if (!isOfEnumType(section, Section)) {
+    return undefined
+  }
+
   switch (section) {
     case Section.EMOTES_DANCE:
       return EmoteCategory.DANCE

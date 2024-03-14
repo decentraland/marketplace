@@ -6,6 +6,7 @@ import { BuildEntityWithoutFilesOptions } from 'dcl-catalyst-client/dist/client/
 import { EntityContentItemReference } from 'dcl-catalyst-commons'
 import { peerUrl } from '../../lib/environment'
 import { convertToOutputString } from '../../utils/output'
+import { isOfEnumType } from '../../utils/enums'
 import { LinkType, Store, StoreEntityMetadata } from './types'
 
 export const getPeerCoverUrl = (hash: string) => `${peerUrl}/content/contents/${hash}`
@@ -48,7 +49,7 @@ export const getStoreFromEntity = (entity: Entity): Store => {
     coverName = reference.file
   }
 
-  const getLink = (type: LinkType) => metadata.links.find(link => link.name === type)?.url || ''
+  const getLink = (type: LinkType) => metadata.links.find(link => isOfEnumType(link.name, LinkType) && link.name === type)?.url || ''
 
   return {
     cover,

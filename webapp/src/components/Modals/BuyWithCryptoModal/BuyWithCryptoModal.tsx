@@ -88,7 +88,9 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [providerChains, selectedChain])
 
   const chainNativeToken = useMemo(() => {
-    return providerTokens.find(t => +t.chainId === selectedChain && t.symbol === selectedProviderChain?.nativeCurrency.symbol)
+    return providerTokens.find(
+      t => t.chainId.toString() === selectedChain.toString() && t.symbol === selectedProviderChain?.nativeCurrency.symbol
+    )
   }, [selectedChain, selectedProviderChain, providerTokens])
 
   const { gasCost, isFetchingGasCost } = onGetGasCost(selectedToken, chainNativeToken, wallet)

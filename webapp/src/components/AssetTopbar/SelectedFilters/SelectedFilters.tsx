@@ -93,7 +93,7 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
 
   const handleDeleteRarity = useCallback(
     (rarity: string) => {
-      onBrowse({ rarities: rarities?.filter((r: Rarity) => r !== rarity) })
+      onBrowse({ rarities: rarities?.filter((r: Rarity) => r !== (rarity as Rarity)) })
     },
     [onBrowse, rarities]
   )

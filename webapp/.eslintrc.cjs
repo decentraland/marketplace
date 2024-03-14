@@ -21,9 +21,7 @@ module.exports = {
         '@typescript-eslint/no-unsafe-member-access': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-member-access/
         '@typescript-eslint/no-unsafe-argument': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-argument/
         '@typescript-eslint/no-explicit-any': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-explicit-any
-        '@typescript-eslint/no-non-null-assertion': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-non-null-assertion
-        'import/order': 'off', // TODO: migrate code progressively to remove this line.
-        '@typescript-eslint/no-unsafe-enum-comparison': 'off'
+        'import/order': 'off' // TODO: migrate code progressively to remove this line.
       },
       parserOptions: {
         project: ['./tsconfig.json']

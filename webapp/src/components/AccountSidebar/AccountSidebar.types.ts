@@ -1,8 +1,9 @@
 import { Dispatch } from 'redux'
 import { browse, BrowseAction } from '../../modules/routing/actions'
+import { Section } from '../../modules/vendor/decentraland'
 
 export type Props = {
-  section: string
+  section: Section
   address: string
   isCurrentAccount?: boolean
   onBrowse: typeof browse

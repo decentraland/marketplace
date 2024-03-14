@@ -6,6 +6,7 @@ import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { config } from '../../config'
+import { isOfEnumType } from '../../utils/enums'
 import { Footer } from '../Footer'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { AssetImage } from '../AssetImage'
@@ -38,7 +39,7 @@ export function SuccessPage(props: Props) {
   const search = new URLSearchParams(useLocation().search)
   const contractAddress = search.get('contractAddress')
   const tokenId = search.get('tokenId')
-  const assetType = search.get('assetType')
+  const assetType = isOfEnumType(search.get('assetType'), AssetType) ? (search.get('assetType') as AssetType) : null
   const subdomain = search.get('subdomain')
 
   // this is a workaround to show the NAME while the transaction is being mined or the tokenId getting retrieved.

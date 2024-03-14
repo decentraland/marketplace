@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dispatch } from 'redux'
-import { Avatar, IPreviewController, Item, Order, Rarity } from '@dcl/schemas'
+import { Avatar, IPreviewController, Item, Order, Rarity, Network } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   setIsTryingOn,
@@ -89,5 +89,5 @@ export type AvailableForMintPopupType = {
   rarity: Rarity
   contractAddress: string
   itemId: string
-  network: string
+  network: Network
 }

@@ -62,7 +62,7 @@ import {
   GO_BACK,
   GoBackAction
 } from './actions'
-import { BrowseOptions, Sections } from './types'
+import { BrowseOptions } from './types'
 import { Section } from '../vendor/decentraland'
 import { getClearedBrowseOptions, isCatalogView, rentalFilters, SALES_PER_PAGE, sellFilters, buildBrowseURL } from './utils'
 import { FetchSalesFailureAction, fetchSalesRequest, FETCH_SALES_FAILURE, FETCH_SALES_SUCCESS } from '../sale/actions'
@@ -83,6 +83,7 @@ import {
   ClaimNameSuccessAction,
   ClaimNameTransactionSubmittedAction
 } from '../ens/actions'
+import { isOfEnumType } from '../../utils/enums'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { REGISTRAR_ADDRESS } from '../ens/sagas'
 
@@ -168,7 +169,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const view = options.view!
   const vendor = options.vendor!
   const page = options.page!
-  const section = options.section!
+  const section = options.section && isOfEnumType(options.section, Section) ? options.section : undefined
   const sortBy = options.sortBy!
   const {
     search,
@@ -193,7 +194,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     yield put(setView(view))
   }
 
-  const category = getCategoryFromSection(section)
+  const category = section ? getCategoryFromSection(section) : undefined
 
   const currentPageInState: number = yield select(getPage)
   const offset = currentPageInState && currentPageInState < page ? page - 1 : 0
@@ -240,12 +241,12 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       )
       break
     default: {
-      const isWearableHead = section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
-      const isWearableAccessory = section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
+      const isWearableHead = section === Section.WEARABLES_HEAD
+      const isWearableAccessory = section === Section.WEARABLES_ACCESSORIES
 
-      const wearableCategory = !isWearableAccessory ? getSearchWearableCategory(section) : undefined
+      const wearableCategory = !isWearableAccessory && section ? getSearchWearableCategory(section) : undefined
 
-      const emoteCategory = category === NFTCategory.EMOTE ? getSearchEmoteCategory(section) : undefined
+      const emoteCategory = category === NFTCategory.EMOTE && section ? getSearchEmoteCategory(section) : undefined
 
       const { rarities, wearableGenders, emotePlayMode } = options
 

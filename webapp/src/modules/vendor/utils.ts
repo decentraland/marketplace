@@ -18,7 +18,7 @@ export function getFilters(vendor: VendorName, options: BrowseOptions): NFTsFetc
       const isWearableHead = section === currentSection.WEARABLES_HEAD
       const isWearableAccessory = section === currentSection.WEARABLES_ACCESSORIES
 
-      const category = getCategoryFromSection(section!)
+      const category = section ? getCategoryFromSection(section) : undefined
       const wearableCategory = !isWearableAccessory && category === NFTCategory.WEARABLE ? getSearchWearableCategory(section!) : undefined
 
       const emoteCategory = category === NFTCategory.EMOTE ? getSearchEmoteCategory(section!) : undefined
@@ -79,7 +79,7 @@ export function getOriginURL(vendor: VendorName) {
   }
 }
 
-export function isVendor(vendor: string) {
+export function isVendor(vendor: string): vendor is VendorName {
   return Object.values(VendorName).includes(vendor as VendorName)
 }
 
