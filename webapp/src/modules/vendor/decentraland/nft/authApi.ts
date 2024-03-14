@@ -36,7 +36,7 @@ export class NFTAuthAPI extends BaseClient {
     queryParams.append('contractAddress', contractAddress)
     queryParams.append('tokenId', tokenId)
     if (options) {
-      Object.entries(options).forEach(([key, value]) => queryParams.append(key, value as any))
+      Object.entries(options).forEach(([key, value]) => queryParams.append(key, value.toString()))
     }
     const response: NFTResponse = await this.fetch(`/v1/nfts?${queryParams.toString()}`)
 

@@ -4,7 +4,7 @@ import { NFT } from '../../modules/nft/types'
 import { SortBy } from '../../modules/routing/types'
 import { Props as SaleElement } from './OnSaleListElement/OnSaleListElement.types'
 
-type Element = SaleElement & { rental?: RentalListing }
+export type Element = SaleElement & { rental?: RentalListing }
 
 export const useProcessedElements = (elems: Element[], search: string, sortBy: SortBy, page: number, perPage: number) => {
   const filtered = useMemo(() => filterByName(elems, search), [elems, search])

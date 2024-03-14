@@ -74,7 +74,7 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType, onFetchAuthor
     <div className="onSaleOrRentTable">
       <div className="filters">
         <div className="search">{searchNode}</div>
-        <Dropdown direction="left" value={sort} options={sortOptions.current} onChange={(_, data) => setSort(data.value as any)} />
+        <Dropdown direction="left" value={sort} options={sortOptions.current} onChange={(_, data) => setSort(data.value as SortBy)} />
       </div>
       {isLoading ? (
         <>

@@ -2,7 +2,7 @@ import { render } from '@testing-library/react'
 import createSagasMiddleware from 'redux-saga'
 import { createMemoryHistory, createBrowserHistory } from 'history'
 import { Provider } from 'react-redux'
-import { applyMiddleware, compose, createStore, Store } from 'redux'
+import { applyMiddleware, compose, createStore, Store, Middleware } from 'redux'
 import { ConnectedRouter, routerMiddleware } from 'connected-react-router'
 import { createStorageMiddleware } from 'decentraland-dapps/dist/modules/storage/middleware'
 import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/reducer'
@@ -32,7 +32,7 @@ export function initTestStore(preloadedState = {}) {
     ], // array of paths from state to be persisted (optional)
     actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, GENERATE_IDENTITY_SUCCESS, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
-  })
+  }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
 
   const middleware = applyMiddleware(sagasMiddleware, routerMiddleware(history), transactionMiddleware, storageMiddleware)
   const enhancer = compose(middleware)

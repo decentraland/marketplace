@@ -1,4 +1,4 @@
-import { applyMiddleware, compose, createStore } from 'redux'
+import { applyMiddleware, compose, createStore, Middleware } from 'redux'
 import createSagasMiddleware from 'redux-saga'
 import { routerMiddleware } from 'connected-react-router'
 import { createLogger } from 'redux-logger'
@@ -28,7 +28,7 @@ export function initStore(history: History) {
 
   const isDev = config.is(Env.DEVELOPMENT)
 
-  const composeEnhancers =
+  const composeEnhancers = (
     isDev && anyWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
       ? anyWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
           stateSanitizer: (state: RootState) => {
@@ -37,6 +37,7 @@ export function initStore(history: History) {
           }
         })
       : compose
+  ) as typeof compose
 
   const rootReducer = storageReducerWrapper(createRootReducer(history))
 
@@ -54,7 +55,7 @@ export function initStore(history: History) {
     ], // array of paths from state to be persisted (optional)
     actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
-  })
+  }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
   const analyticsMiddleware = createAnalyticsMiddleware(config.get('SEGMENT_API_KEY'))
 
   const middleware = applyMiddleware(
@@ -97,7 +98,7 @@ export function initTestStore(preloadedState = {}) {
     ], // array of paths from state to be persisted (optional)
     actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
-  })
+  }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
 
   const middleware = applyMiddleware(sagasMiddleware, routerMiddleware(testHistory), transactionMiddleware, storageMiddleware)
   const enhancer = compose(middleware)

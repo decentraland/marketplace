@@ -12,7 +12,7 @@ const shouldRenderSection = (section: Section, sections: Section[]) => {
 
 const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
   const handleOnSectionClick = useCallback(
-    newSection => {
+    (newSection: Section) => {
       if (section !== newSection) {
         onSectionClick(newSection)
       }

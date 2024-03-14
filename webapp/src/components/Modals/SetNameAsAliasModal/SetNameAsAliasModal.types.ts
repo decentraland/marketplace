@@ -4,7 +4,7 @@ import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/Moda
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { setProfileAvatarAliasRequest } from 'decentraland-dapps/dist/modules/profile/actions'
 
-export type Props = ModalProps & {
+export type Props = Omit<ModalProps, 'metadata'> & {
   isLoading: boolean
   address?: string
   profile: Profile | undefined
