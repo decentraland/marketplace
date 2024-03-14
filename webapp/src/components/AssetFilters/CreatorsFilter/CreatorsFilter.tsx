@@ -30,15 +30,17 @@ export const CreatorsFilter = ({
   )
 
   useEffect(() => {
-    if (creators?.length) {
-      setIsFetchingNames(true)
-      ProfilesCache.fetchProfile(creators).then(profiles => {
+    const fetchCreators = async () => {
+      if (creators?.length) {
+        setIsFetchingNames(true)
+        const profiles = await ProfilesCache.fetchProfile(creators)
         setSelectedCreators(profileToCreatorAccount(profiles))
         setIsFetchingNames(false)
-      })
-    } else if (!creators?.length) {
-      setSelectedCreators([])
+      } else if (!creators?.length) {
+        setSelectedCreators([])
+      }
     }
+    void fetchCreators()
   }, [creators])
 
   const handleCreatorsChange = useCallback(

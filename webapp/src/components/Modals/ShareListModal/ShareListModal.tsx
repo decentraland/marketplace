@@ -40,14 +40,14 @@ const ShareListModal = (props: Props) => {
     onClose()
   }, [onClose])
 
-  const handleCopyLink = useCallback(() => {
+  const handleCopyLink = useCallback(async () => {
     const url = `${MARKETPLACE_URL}${listLink}`
     getAnalytics().track(events.SHARE_LIST, {
       list,
       url,
       type: events.SHARE_LIST_TYPE.COPY_LINK
     })
-    copyText(url, setHasCopied)
+    await copyText(url, setHasCopied)
   }, [list, listLink, setHasCopied])
 
   const handleShareOnTwitter = useCallback(

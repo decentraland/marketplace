@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Back, Container, Loader } from 'decentraland-ui'
 import { Icon } from 'semantic-ui-react'
 import classNames from 'classnames'
@@ -20,8 +20,8 @@ import './AccountBanner.css'
 
 const AccountBanner = ({ address, store, isLoading, onBack, onFetchStore }: Props) => {
   const [hasCopiedAddress, setHasCopied] = useTimer(1200)
-
   const [openExternalLinkModal, setOpenExternalLinkModal] = useState<string>()
+  const handleCopy = useCallback(() => copyText(address, setHasCopied), [address, setHasCopied])
 
   useEffect(() => {
     onFetchStore(address)
@@ -59,20 +59,14 @@ const AccountBanner = ({ address, store, isLoading, onBack, onFetchStore }: Prop
                 <div className="profile-address-hash">{shortenAddress(address)}</div>
                 {!isMobile() && (
                   <div>
-                    <Icon
-                      onClick={() => copyText(address, setHasCopied)}
-                      aria-label="Copy address"
-                      aria-hidden="false"
-                      className="copy"
-                      name="copy outline"
-                    />
+                    <Icon onClick={handleCopy} aria-label="Copy address" aria-hidden="false" className="copy" name="copy outline" />
                     {hasCopiedAddress && <span className="profile-copied-text-desktop copied">{t('account_page.copied')}</span>}
                   </div>
                 )}
               </div>
               {isMobile() && (
                 <div className="profile-copy-text-mobile">
-                  <div role="button" aria-label="copy" onClick={() => copyText(address, setHasCopied)}>
+                  <div role="button" aria-label="copy" onClick={handleCopy}>
                     {hasCopiedAddress ? (
                       <span className="copied">{t('account_page.copied_capitalized')}</span>
                     ) : (

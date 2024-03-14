@@ -175,13 +175,14 @@ describe('when getting rental listings prices', () => {
   })
 
   describe('when request finished with errors', () => {
-    const errorMessage = 'somwthing went wrong'
+    const errorMessage = 'something went wrong'
 
     beforeEach(() => {
       jest.spyOn(rentalsAPI, 'request').mockRejectedValueOnce(new Error(errorMessage))
     })
+
     it('should return error message', () => {
-      expect(
+      return expect(
         rentalsAPI.getRentalListingsPrices({
           category: RentalsListingsFilterByCategory.PARCEL
         })

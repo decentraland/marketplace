@@ -80,7 +80,7 @@ const FavoritesModal = ({ metadata: { itemId }, identity, onClose }: Props) => {
   )
 
   useEffect(() => {
-    fetchNextPage(0, 100)
+    void fetchNextPage(0, 100)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

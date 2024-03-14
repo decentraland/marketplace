@@ -112,7 +112,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       setCrossChainProvider(provider)
     }
 
-    initializeCrossChainProvider()
+    void initializeCrossChainProvider()
   }, [])
 
   const { isFetchingBalance, tokenBalance: selectedTokenBalance } = useTokenBalance(selectedToken, selectedChain, wallet?.address)
@@ -137,7 +137,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // init lib if necessary and fetch chains & supported tokens
   useEffect(() => {
-    ;(async () => {
+    void (async () => {
       try {
         if (crossChainProvider) {
           if (!crossChainProvider.isLibInitialized()) {
@@ -181,7 +181,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // computes if the user can buy the item with the selected token
   useEffect(() => {
-    ;(async () => {
+    void (async () => {
       if (
         selectedToken &&
         ((selectedToken.symbol === 'MANA' && !!wallet) ||

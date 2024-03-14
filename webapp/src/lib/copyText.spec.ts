@@ -20,8 +20,8 @@ describe('when calling the copy text function', () => {
     writeTextSpy = jest.spyOn(navigator.clipboard, 'writeText')
   })
 
-  it('should write the text to the clipboard and execute the onCopy callback', () => {
-    copyText('someText', onCopyMock)
+  it('should write the text to the clipboard and execute the onCopy callback', async () => {
+    await copyText('someText', onCopyMock)
     expect(onCopyMock).toHaveBeenCalled()
     expect(writeTextSpy).toHaveBeenCalledWith('someText')
   })

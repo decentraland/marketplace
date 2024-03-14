@@ -75,7 +75,7 @@ const SellModal = (props: Props) => {
         }
       }
 
-      fetchContractName()
+      void fetchContractName()
     }
   }, [nftContract])
 

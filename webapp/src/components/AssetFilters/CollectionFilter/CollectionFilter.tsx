@@ -90,13 +90,14 @@ export const CollectionFilter = ({ collection, onlyOnSale, onChange, defaultColl
   )
 
   useEffect(() => {
-    if (collection && collection !== savedCollectionInfo?.value) {
-      handleFetchOptionsFromValue(collection)
+    const setCollectionInfo = async () => {
+      if (collection && collection !== savedCollectionInfo?.value) {
+        await handleFetchOptionsFromValue(collection)
+      } else if (!collection) {
+        setSavedCollectionInfo(null)
+      }
     }
-
-    if (!collection) {
-      setSavedCollectionInfo(null)
-    }
+    void setCollectionInfo()
   }, [collection, savedCollectionInfo, handleFetchOptionsFromValue])
 
   const header = useMemo(

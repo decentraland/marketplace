@@ -148,11 +148,13 @@ const AssetImage = (props: Props) => {
   )
 
   useEffect(() => {
-    if (asset.category === NFTCategory.EMOTE && wearableController && isDraggable && !isLoadingWearablePreview) {
-      wearableController.emote?.hasSound().then(sound => {
+    const getHasSound = async () => {
+      if (asset.category === NFTCategory.EMOTE && wearableController && isDraggable && !isLoadingWearablePreview) {
+        const sound = await wearableController.emote?.hasSound()
         setHasSound(sound)
-      })
+      }
     }
+    void getHasSound
   }, [wearableController, asset.category, isDraggable, hasSound, isLoadingWearablePreview])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [estate])
@@ -422,8 +424,8 @@ const AssetImage = (props: Props) => {
               })}
               size="small"
               aria-label="enable sound"
-              onClick={() => {
-                handleControlActionChange(isSoundEnabled ? ControlOptionAction.DISABLE_SOUND : ControlOptionAction.ENABLE_SOUND)
+              onClick={async () => {
+                await handleControlActionChange(isSoundEnabled ? ControlOptionAction.DISABLE_SOUND : ControlOptionAction.ENABLE_SOUND)
                 setIsSoundEnabled(!isSoundEnabled)
               }}
             />

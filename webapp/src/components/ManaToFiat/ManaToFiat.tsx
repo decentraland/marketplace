@@ -13,30 +13,29 @@ const ManaToFiat = (props: Props) => {
 
   useEffect(() => {
     let cancel = false
-    try {
-      const value = parseFloat(utils.formatEther(mana))
-      new TokenConverter()
-        .marketMANAToUSD(value)
-        .then(usd => {
-          const divider =
-            usd > ONE_TRILLION.value
-              ? ONE_TRILLION
-              : usd > ONE_BILLION.value
-                ? ONE_BILLION
-                : usd > ONE_MILLION.value
-                  ? ONE_MILLION
-                  : { value: 1, displayValue: '' }
-          if (cancel) return
-          setFiatValue(
-            `$${(+(+usd / divider.value).toFixed(digits)).toLocaleString(undefined, {
-              maximumFractionDigits: digits
-            })}${divider.displayValue}`
-          )
-        })
-        .catch()
-    } catch (error) {
-      // do nothing
+    const computeFiatValue = async () => {
+      try {
+        const value = parseFloat(utils.formatEther(mana))
+        const usd = await new TokenConverter().marketMANAToUSD(value)
+        const divider =
+          usd > ONE_TRILLION.value
+            ? ONE_TRILLION
+            : usd > ONE_BILLION.value
+              ? ONE_BILLION
+              : usd > ONE_MILLION.value
+                ? ONE_MILLION
+                : { value: 1, displayValue: '' }
+        if (cancel) return
+        setFiatValue(
+          `$${(+(+usd / divider.value).toFixed(digits)).toLocaleString(undefined, {
+            maximumFractionDigits: digits
+          })}${divider.displayValue}`
+        )
+      } catch (error) {
+        // do nothing
+      }
     }
+    void computeFiatValue()
     return () => {
       cancel = true
     }
