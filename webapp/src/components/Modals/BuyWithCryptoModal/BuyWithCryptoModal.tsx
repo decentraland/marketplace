@@ -137,11 +137,11 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // init lib if necessary and fetch chains & supported tokens
   useEffect(() => {
-    void (() => {
+    void (async () => {
       try {
         if (crossChainProvider) {
           if (!crossChainProvider.isLibInitialized()) {
-            crossChainProvider.init()
+            await crossChainProvider.init()
           }
           const defaultChains = getDefaultChains()
           const supportedTokens = crossChainProvider.getSupportedTokens()
