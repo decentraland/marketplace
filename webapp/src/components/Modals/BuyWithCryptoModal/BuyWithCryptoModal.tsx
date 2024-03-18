@@ -137,11 +137,11 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // init lib if necessary and fetch chains & supported tokens
   useEffect(() => {
-    void (async () => {
+    void (() => {
       try {
         if (crossChainProvider) {
           if (!crossChainProvider.isLibInitialized()) {
-            await crossChainProvider.init()
+            crossChainProvider.init()
           }
           const defaultChains = getDefaultChains()
           const supportedTokens = crossChainProvider.getSupportedTokens()
@@ -653,6 +653,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
                     token: insufficientToken?.symbol || 'MANA',
+                    orPayWithOtherToken: (text: string) => (!onBuyWithCard ? <span>{text}</span> : undefined),
                     card: (text: string) => (onBuyWithCard ? <span>{text}</span> : undefined)
                   })}
                 </span>

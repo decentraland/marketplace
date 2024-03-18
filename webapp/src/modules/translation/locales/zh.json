@@ -856,7 +856,7 @@
       "cross_chain": "预估费用包括网络费用和跨链购买费用，您必须直接用钱包支付。",
       "same_network": "预计费用包括您必须直接用钱包支付的网络费用。"
     },
-    "insufficient_funds": "您的 {token} 中没有足够的资金来支付此商品。获取 MANA，使用不同的令牌支付<card>，或通过卡支付</card>。",
+    "insufficient_funds": "您的 {token} 中没有足够的资金来支付此商品。获取 MANA、<orPayWithOtherToken> 或 </orPayWithOtherToken> 使用不同的令牌<card> 付款，或通过卡付款</card>。",
     "token_and_chain_selector": {
       "available_chains": "可用链",
       "select_chain": "选择链条",
