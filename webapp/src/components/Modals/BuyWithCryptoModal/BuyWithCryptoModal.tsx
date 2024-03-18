@@ -653,6 +653,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
                     token: insufficientToken?.symbol || 'MANA',
+                    orPayWithOtherToken: (text: string) => (!onBuyWithCard ? <span>{text}</span> : undefined),
                     card: (text: string) => (onBuyWithCard ? <span>{text}</span> : undefined)
                   })}
                 </span>
