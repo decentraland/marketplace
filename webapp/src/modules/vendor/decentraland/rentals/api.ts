@@ -25,7 +25,7 @@ class RentalsAPI extends BaseAPI {
     try {
       const json = await response.json()
       if (json.ok) {
-        return json.data
+        return json.data as RentalListing
       } else {
         throw new Error(json.message)
       }
@@ -47,7 +47,7 @@ class RentalsAPI extends BaseAPI {
     try {
       const json = await response.json()
       if (json.ok) {
-        return json.data
+        return json.data as RentalListing
       } else {
         throw new Error(json.message)
       }
@@ -84,7 +84,10 @@ class RentalsAPI extends BaseAPI {
     try {
       const json = await response.json()
       if (json.ok) {
-        return json.data
+        return json.data as {
+          results: RentalListing[]
+          total: number
+        }
       } else {
         throw new Error(json.message)
       }
@@ -96,7 +99,7 @@ class RentalsAPI extends BaseAPI {
   getRentalListingsPrices = async (filters: RentalsListingsFilterBy): Promise<Record<string, number>> => {
     const queryParams = objectToURLSearchParams(filters)
     try {
-      const response = await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)
+      const response: Record<string, number> = await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)
       return response
     } catch (error) {
       throw new Error((error as Error).message)

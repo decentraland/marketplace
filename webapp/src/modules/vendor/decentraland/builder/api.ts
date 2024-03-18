@@ -7,7 +7,7 @@ export const BUILDER_SERVER_URL = config.get('BUILDER_SERVER_URL')
 
 class BuilderAPI extends BaseAPI {
   fetchAddressesByTag = async (tags: string[]): Promise<AddressesByTagResponse> => {
-    return this.request('get', `/addresses?${tags.map(tag => `tag=${tag}`).join('&')}`)
+    return this.request('get', `/addresses?${tags.map(tag => `tag=${tag}`).join('&')}`) as Promise<AddressesByTagResponse>
   }
 
   publishedCollectionURL(searchTerm: string, limit: number) {
@@ -21,7 +21,7 @@ class BuilderAPI extends BaseAPI {
     searchTerm: string
     limit: number
   }): Promise<BuilderCollectionAttributes[]> {
-    return this.request('get', this.publishedCollectionURL(searchTerm, limit))
+    return this.request('get', this.publishedCollectionURL(searchTerm, limit)) as Promise<BuilderCollectionAttributes[]>
   }
 
   contentUrl(hash: string) {
@@ -29,7 +29,7 @@ class BuilderAPI extends BaseAPI {
   }
 
   fetchItemContent = async (collectionAddress: string, itemId: string): Promise<Record<string, string>> => {
-    return this.request('get', `/items/${collectionAddress}/${itemId}/contents`)
+    return this.request('get', `/items/${collectionAddress}/${itemId}/contents`) as Promise<Record<string, string>>
   }
 }
 

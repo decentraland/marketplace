@@ -20,9 +20,9 @@ jest.mock('react-virtualized-auto-sizer', () => {
   return {
     __esModule: true,
     default: ({ children }: { children: any }) => {
-      return children({ width: 100, height: 100 })
+      return children({ width: 100, height: 100 }) as unknown
     }
-  }
+  } as unknown
 })
 
 function renderSaveToListModalModal(props: Partial<Props> = {}) {

@@ -101,7 +101,7 @@ import {
   ClaimNameSuccessAction
 } from '../ens/actions'
 
-function track<T extends PayloadAction<string, any>>(
+function track<T extends PayloadAction<string, unknown>>(
   actionType: string,
   eventName: string | ((action: T) => string),
   getPayload = (action: T) => action.payload

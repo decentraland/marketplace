@@ -42,14 +42,14 @@ jest.mock('./hooks', () => {
       isFetchingBalance: false,
       tokenBalance: BigNumber.from(10000000000000)
     })
-  }
+  } as unknown
 })
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
   const actualEth = jest.requireActual('decentraland-dapps/dist/lib/eth')
   return {
     ...actualEth,
     getNetworkProvider: jest.fn()
-  }
+  } as unknown
 })
 jest.mock('../../../config', () => {
   const actualConfig = jest.requireActual('../../../config')
@@ -57,9 +57,9 @@ jest.mock('../../../config', () => {
     ...actualConfig,
     config: {
       ...actualConfig.config,
-      is: () => mockConfigIs()
+      is: () => mockConfigIs() as unknown
     }
-  }
+  } as unknown
 })
 jest.mock('decentraland-transactions/crossChain', () => {
   const original = jest.requireActual('decentraland-transactions/crossChain')
@@ -67,7 +67,7 @@ jest.mock('decentraland-transactions/crossChain', () => {
     ...original,
     CROSS_CHAIN_SUPPORTED_CHAINS: [137, 1],
     AxelarProvider: jest.fn()
-  }
+  } as unknown
 })
 
 const MOCKED_ROUTE = {

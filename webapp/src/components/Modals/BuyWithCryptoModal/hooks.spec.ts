@@ -8,28 +8,32 @@ import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas } from '.
 import { waitFor } from '@testing-library/react'
 import { NFT } from '../../../modules/nft/types'
 
-jest.mock('ethers', () => ({
-  ...jest.requireActual('ethers'),
-  ethers: {
-    ...jest.requireActual('ethers').ethers,
-    Contract: function (address: string, abi: string[], provider: any) {
-      return {
-        address,
-        abi,
-        provider,
-        balanceOf: () => Promise.resolve(BigNumber.from(3232))
-      }
-    },
-    providers: {
-      Web3Provider: function () {
-        return {
-          getGasPrice: () => Promise.resolve(BigNumber.from(4)),
-          send: (method: string) => (method === 'eth_getBalance' ? Promise.resolve(BigNumber.from(3231)) : Promise.resolve(undefined))
+jest.mock(
+  'ethers',
+  () =>
+    ({
+      ...jest.requireActual('ethers'),
+      ethers: {
+        ...jest.requireActual('ethers').ethers,
+        Contract: function (address: string, abi: string[], provider: any) {
+          return {
+            address,
+            abi,
+            provider,
+            balanceOf: () => Promise.resolve(BigNumber.from(3232))
+          }
+        },
+        providers: {
+          Web3Provider: function () {
+            return {
+              getGasPrice: () => Promise.resolve(BigNumber.from(4)),
+              send: (method: string) => (method === 'eth_getBalance' ? Promise.resolve(BigNumber.from(3231)) : Promise.resolve(undefined))
+            }
+          }
         }
       }
-    }
-  }
-}))
+    }) as unknown
+)
 
 jest.mock('./utils', () => {
   return {
@@ -37,7 +41,7 @@ jest.mock('./utils', () => {
     estimateNameMintingGas: jest.fn(),
     estimateMintNftGas: jest.fn(),
     estimateBuyNftGas: jest.fn()
-  }
+  } as unknown
 })
 
 jest.mock('decentraland-dapps/dist/lib', () => {
@@ -47,7 +51,7 @@ jest.mock('decentraland-dapps/dist/lib', () => {
       Promise.resolve({
         name: 'aProvider'
       })
-  }
+  } as unknown
 })
 
 describe('when using the should use cross chain provider hook', () => {

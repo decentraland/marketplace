@@ -217,7 +217,7 @@ export const useCrossChainMintNftRoute = (
           itemId: item.itemId,
           price: item.price
         }
-      }),
+      }) as Promise<RouteResponse>,
     [item]
   )
 
@@ -258,7 +258,7 @@ export const useCrossChainBuyNftRoute = (
           price: order.price
         },
         slippage
-      }),
+      }) as Promise<RouteResponse>,
     [order]
   )
 
@@ -294,7 +294,7 @@ export const useCrossChainNameMintingRoute = (
         fromToken,
         toAmount: price,
         toChain: assetChainId
-      }),
+      }) as Promise<RouteResponse>,
     [name, assetChainId, price]
   )
   return useCrossChainRoute(price, assetChainId, selectedToken, selectedChain, providerTokens, crossChain, wallet, getMintingNameRoute)

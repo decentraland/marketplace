@@ -51,7 +51,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const setLand = useCallback(
-    (lands, nft, color = Color.SUMMER_RED) => {
+    (lands: Map<string, ReturnType<Layer>>, nft, color = Color.SUMMER_RED) => {
       if (nft.vendor === VendorName.DECENTRALAND) {
         switch (nft.category) {
           case NFTCategory.PARCEL: {
@@ -174,7 +174,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
             category: NFTCategory.PARCEL
           })
           const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
-          land && onNavigate(locations.nft(land.address, tokenId))
+          land && onNavigate(locations.nft(land.address, tokenId ?? undefined))
         } catch (error) {
           const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
           console.warn(`Couldn't fetch parcel ${tile.x},${tile.y}: ${errorMessage}`)

@@ -14,7 +14,7 @@ jest.mock('decentraland-dapps/dist/containers', () => {
   return {
     ...module,
     Profile: () => <div>{ownerIdMock}</div>
-  }
+  } as unknown
 })
 
 describe('Owners Table', () => {

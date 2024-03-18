@@ -12,7 +12,7 @@ export function getTokenIdFromLogs(chainId: ChainId, logs?: Log[]): BigNumber | 
     try {
       const parsedLog = collectionInterface.parseLog(log)
       if (parsedLog.name === 'Issue') {
-        return parsedLog.args._tokenId
+        return parsedLog.args._tokenId as BigNumber
       }
     } catch (e) {
       // Ignore log

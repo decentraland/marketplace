@@ -28,10 +28,14 @@ import {
   isClaimingBackLandTransactionPending
 } from './selectors'
 
-jest.mock('../../favorites/selectors', () => ({
-  ...jest.requireActual('../../favorites/selectors'),
-  getListId: jest.fn()
-}))
+jest.mock(
+  '../../favorites/selectors',
+  () =>
+    ({
+      ...jest.requireActual('../../favorites/selectors'),
+      getListId: jest.fn()
+    }) as unknown
+)
 
 let rootState: RootState
 let item: Item
