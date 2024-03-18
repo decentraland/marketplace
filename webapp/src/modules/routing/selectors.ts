@@ -15,13 +15,7 @@ import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { isLandSection, isListsSection } from '../ui/utils'
-import {
-  getDefaultOptionsByView,
-  getURLParamArray,
-  getURLParam,
-  getURLParamArray_nonStandard,
-  SEARCH_ARRAY_PARAM_SEPARATOR
-} from './search'
+import { getDefaultOptionsByView, getURLParamArray, getURLParam, getURLParamArrayNonStandard, SEARCH_ARRAY_PARAM_SEPARATOR } from './search'
 import { BrowseOptions, PageName, SortBy, SortByOption } from './types'
 import { locations } from './locations'
 
@@ -235,11 +229,11 @@ export const getIsFullscreen = createSelector<RootState, string, boolean | undef
 )
 
 export const getRarities = createSelector<RootState, string, Rarity[]>(getRouterSearch, search =>
-  getURLParamArray_nonStandard<Rarity>(search, 'rarities', Object.values(Rarity).filter(value => typeof value === 'string') as string[])
+  getURLParamArrayNonStandard<Rarity>(search, 'rarities', Object.values(Rarity).filter(value => typeof value === 'string') as string[])
 )
 
 export const getWearableGenders = createSelector<RootState, string, GenderFilterOption[]>(getRouterSearch, search =>
-  getURLParamArray_nonStandard<GenderFilterOption>(search, 'genders', Object.values(GenderFilterOption))
+  getURLParamArrayNonStandard<GenderFilterOption>(search, 'genders', Object.values(GenderFilterOption))
 )
 
 export const getContracts = createSelector<RootState, string, string[]>(
