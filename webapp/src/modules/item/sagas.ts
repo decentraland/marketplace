@@ -91,7 +91,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
   // to avoid race conditions, just one fetch items request is handled at once in the browse page
   function* takeLatestByPath(actionType: string, path: string): SagaIterator {
-    let task: Task<any> | undefined
+    let task: Task<unknown> | undefined
 
     while (true) {
       const action: FetchItemsRequestAction = yield take(actionType)
