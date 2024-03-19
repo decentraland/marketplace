@@ -14,7 +14,7 @@ export default class ManaField extends PureComponent<Props> {
     }
     let mana: string | null = null
     try {
-      if (Number(value) > 0) {
+      if (value !== undefined && Number(value) > 0) {
         mana = ethers.utils.parseEther(value).toString()
       }
     } catch (error) {

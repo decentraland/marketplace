@@ -1,14 +1,17 @@
-export function objectToURLSearchParams(params: Record<string, any> = {}) {
+export function objectToURLSearchParams(params: Record<string, string | number | boolean | string[] | number[] | boolean[]> = {}) {
   const queryParams = new URLSearchParams()
-  Object.keys(params).forEach(key => {
-    if (Array.isArray(params[key])) {
-      params[key].forEach((arrayParam: string) => {
-        queryParams.append(key, arrayParam.toString())
-      })
-    } else if (params[key] !== undefined) {
-      queryParams.append(key, params[key])
-    }
-  })
+  Object.entries(params)
+    .filter(([_key, value]) => Array.isArray(value) || typeof value === 'string' || typeof value === 'boolean' || typeof value === 'number')
+    .forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        const arrayValues = value.filter(nestedValue => nestedValue !== undefined && nestedValue !== null && !Array.isArray(nestedValue))
+        arrayValues.forEach(arrayParam => {
+          queryParams.append(key, arrayParam.toString())
+        })
+      } else if (value !== undefined || value !== null) {
+        queryParams.append(key, value.toString())
+      }
+    })
 
   return queryParams
 }

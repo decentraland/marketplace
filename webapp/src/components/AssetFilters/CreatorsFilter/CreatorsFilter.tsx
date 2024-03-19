@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Loader, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import ProfilesCache from '../../../lib/profiles'
@@ -131,7 +131,7 @@ export const CreatorsFilter = ({
   }, [onFetchCreators])
 
   const handleSearchInputChange = useCallback(
-    e => {
+    (e: ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value
       if (!value) {
         clearAndShowSuggestions()

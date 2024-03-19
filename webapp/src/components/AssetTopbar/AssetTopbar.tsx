@@ -149,7 +149,7 @@ export const AssetTopbar = ({
 
   const handleSearchBarDropdownClickOutside = useCallback((event: MouseEvent) => {
     // when clicking outside the dropdown, close it
-    const containsClick = searchBarFieldRef.current?.contains(event.target)
+    const containsClick = searchBarFieldRef.current?.contains(event.target as Node | null)
     if (!containsClick) {
       setShouldRenderSearchDropdown(false)
     }
