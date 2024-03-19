@@ -43,6 +43,7 @@ import { toastSaga } from './sagas'
 import { toastDispatchableActionsChannel } from './utils'
 import { claimNameSuccess } from '../ens/actions'
 import { ENS } from '../ens/types'
+import { RouteResponse } from 'decentraland-transactions/crossChain'
 
 let nft: NFT
 let rental: RentalListing
@@ -293,7 +294,7 @@ describe('when handling a successful cross chain item purchase', () => {
       {
         route: { params: { toChain: ChainId.MATIC_MAINNET } },
         requestId: 'aRequestId'
-      } as any,
+      } as unknown as RouteResponse,
       ChainId.ETHEREUM_MAINNET,
       txHash,
       { name: 'aName', price: '1000000000000' } as Item

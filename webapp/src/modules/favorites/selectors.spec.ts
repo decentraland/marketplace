@@ -1,5 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { match } from 'react-router-dom'
+import { getDefaultState } from '../../tests/defaultStore'
 import { RootState } from '../reducer'
 import { DEFAULT_FAVORITES_LIST_ID, ListOfLists } from '../vendor/decentraland/favorites'
 import { locations } from '../routing/locations'
@@ -35,11 +36,14 @@ import {
   updateListRequest
 } from './actions'
 import { List } from './types'
+import { WalletState } from 'decentraland-dapps/dist/modules/wallet'
 
 let state: RootState
 
 beforeEach(() => {
+  const defaultState = getDefaultState()
   state = {
+    ...defaultState,
     favorites: {
       ...INITIAL_STATE,
       data: {
@@ -50,8 +54,14 @@ beforeEach(() => {
             pickedByUser: false,
             count: 18
           },
-          item2: {},
-          item3: {}
+          item2: {
+            pickedByUser: false,
+            count: 0
+          },
+          item3: {
+            pickedByUser: false,
+            count: 0
+          }
         },
         lists: {
           ...INITIAL_STATE.data.lists,
@@ -59,8 +69,8 @@ beforeEach(() => {
             id: 'listId',
             name: 'aListName',
             description: 'aListDescription',
-            ownerAddress: 'anOwnerAddress',
-            previewOfItemIds: ['item1', 'item2', 'item3']
+            previewOfItemIds: ['item1', 'item2', 'item3'],
+            itemsCount: 3
           }
         }
       },
@@ -68,21 +78,23 @@ beforeEach(() => {
       loading: []
     },
     item: {
+      ...defaultState.item,
       data: {
         item1: {
           id: 'item1'
-        },
+        } as Item,
         item2: {
           id: 'item2'
-        }
+        } as Item
       }
     },
     wallet: {
+      ...defaultState.wallet,
       data: {
         address: 'anAddress'
       }
-    }
-  } as any
+    } as WalletState
+  }
 })
 
 describe("when getting the favorites' state", () => {

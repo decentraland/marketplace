@@ -99,6 +99,7 @@ const RankingsTable = (props: Props) => {
               direction="right"
               options={[
                 ALL_FILTER,
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 ...Object.values(currentEntity === RankingEntities.EMOTES ? EmoteCategory.schema.enum : WearableCategory.schema.enum)
               ].map(category => ({
                 value: category as string,
@@ -113,6 +114,7 @@ const RankingsTable = (props: Props) => {
               defaultValue={ALL_FILTER}
               value={currentFilters.rarity || ALL_FILTER}
               direction="right"
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               options={[ALL_FILTER, ...Object.values(Rarity.schema.enum)].map(rarity => ({
                 value: rarity as string,
                 text: rarity === ALL_FILTER ? t('home_page.analytics.rankings.all_rarities') : t(`rarity.${convertToOutputString(rarity)}`)

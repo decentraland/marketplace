@@ -1,5 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { AuthorizationStepStatus } from 'decentraland-ui'
+import { getDefaultState } from '../../tests/defaultStore'
 import { RootState } from '../reducer'
 import { buyItemRequest, fetchCollectionItemsRequest, fetchItemRequest, fetchItemsRequest } from './actions'
 import { INITIAL_STATE } from './reducer'
@@ -8,7 +9,9 @@ import { getData, getError, getLoading, getMintItemStatus, getState, isFetchingI
 let state: RootState
 
 beforeEach(() => {
+  const defaultState = getDefaultState()
   state = {
+    ...defaultState,
     item: {
       ...INITIAL_STATE,
       data: {
@@ -17,7 +20,7 @@ beforeEach(() => {
       error: 'anError',
       loading: []
     }
-  } as any
+  }
 })
 
 describe("when getting the item's state", () => {

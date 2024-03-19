@@ -1,4 +1,4 @@
-import { ethers } from 'ethers'
+import { ethers, BigNumber } from 'ethers'
 import { Bid } from '@dcl/schemas'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -10,7 +10,7 @@ export async function isInsufficientMANA(bid: Bid) {
     const provider = await getNetworkProvider(bid.chainId)
     const contract = getContract(ContractName.MANAToken, bid.chainId)
     const mana = new ethers.Contract(contract.address, contract.abi, new ethers.providers.Web3Provider(provider))
-    const balanceRaw = await mana.balanceOf(bid.bidder)
+    const balanceRaw: BigNumber = await mana.balanceOf(bid.bidder)
     const balance = parseFloat(ethers.utils.formatEther(balanceRaw))
     const price = parseFloat(ethers.utils.formatEther(bid.price))
 

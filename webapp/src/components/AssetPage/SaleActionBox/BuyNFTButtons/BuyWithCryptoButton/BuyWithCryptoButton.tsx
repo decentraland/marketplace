@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { NFTCategory, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
-import { Button, Mana } from 'decentraland-ui'
+import { Button, ButtonProps, Mana } from 'decentraland-ui'
 import * as events from '../../../../../utils/events'
 import { isNFT } from '../../../../../modules/asset/utils'
 import { Props } from './BuyWithCryptoButton.types'
@@ -11,7 +11,7 @@ export const BuyWithCryptoButton = (props: Props) => {
   const { asset, onClick, ...rest } = props
 
   const handleOnClick = useCallback(
-    (e, data) => {
+    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
       const isClaimingName = isNFT(asset) && asset.category === NFTCategory.ENS && !asset.tokenId
       const isMint = !!asset.itemId || isClaimingName
       getAnalytics().track(events.BUY_WITH_CRYPTO, {

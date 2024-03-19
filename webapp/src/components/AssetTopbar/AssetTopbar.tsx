@@ -39,7 +39,7 @@ export const AssetTopbar = ({
   const [shouldRenderSearchDropdown, setShouldRenderSearchDropdown] = useState(false)
 
   const handleInputChange = useCallback(
-    text => {
+    (text: string) => {
       // if the user is typing, open the dropdown
       if (!shouldRenderSearchDropdown && text) {
         setShouldRenderSearchDropdown(true)
@@ -64,7 +64,7 @@ export const AssetTopbar = ({
   )
   const [searchValue, setSearchValue] = useState(search)
   const handleDebouncedChange = useCallback(
-    text => {
+    (text: string) => {
       setSearchValue(text)
       const timeoutId = setTimeout(() => {
         handleInputChange(text)
@@ -147,9 +147,9 @@ export const AssetTopbar = ({
     )
   }, [category, view])
 
-  const handleSearchBarDropdownClickOutside = useCallback(event => {
+  const handleSearchBarDropdownClickOutside = useCallback((event: MouseEvent) => {
     // when clicking outside the dropdown, close it
-    const containsClick = searchBarFieldRef.current?.contains(event.target)
+    const containsClick = searchBarFieldRef.current?.contains(event.target as Node | null)
     if (!containsClick) {
       setShouldRenderSearchDropdown(false)
     }

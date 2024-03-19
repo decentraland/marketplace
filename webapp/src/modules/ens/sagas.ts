@@ -1,5 +1,6 @@
 import { BigNumber, ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
+import type { Route } from 'decentraland-transactions/crossChain'
 import { getConnectedProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Provider, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
@@ -32,13 +33,17 @@ import { getDomainFromName } from './utils'
 export const CONTROLLER_V2_ADDRESS = config.get('CONTROLLER_V2_CONTRACT_ADDRESS', '')
 export const REGISTRAR_ADDRESS = config.get('REGISTRAR_CONTRACT_ADDRESS', '')
 
+type ClaimNameTransaction = Omit<ClaimNameTransactionSubmittedAction['payload'][TRANSACTION_ACTION_FLAG], 'payload'> & {
+  payload: { subdomain: string; address: string; route?: Route }
+}
+
 export function* ensSaga() {
   yield takeEvery(CLAIM_NAME_REQUEST, handleClaimNameRequest)
   yield takeEvery(CLAIM_NAME_TRANSACTION_SUBMITTED, handleClaimNameSubmittedRequest)
   yield takeEvery(CLAIM_NAME_CROSS_CHAIN_REQUEST, handleClaimNameCrossChainRequest)
 
   function* handleClaimNameSubmittedRequest(action: ClaimNameTransactionSubmittedAction) {
-    const data = action.payload[TRANSACTION_ACTION_FLAG]
+    const data: ClaimNameTransaction = action.payload[TRANSACTION_ACTION_FLAG]
     const {
       hash,
       payload: { subdomain, address, route }

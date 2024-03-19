@@ -61,7 +61,7 @@ const ClaimNamePage = (props: Props) => {
   const [name, setName] = useState(PLACEHOLDER_NAME)
 
   const handleNameChange = useCallback(
-    async text => {
+    async (text: string) => {
       const valid = isNameValid(text)
       const minLength = hasNameMinLength(text)
       if (valid && minLength) {
@@ -83,7 +83,7 @@ const ClaimNamePage = (props: Props) => {
   )
 
   const handleDebouncedChange = useCallback(
-    text => {
+    (text: string) => {
       setName(text)
       const timeoutId = setTimeout(() => {
         if (debounceRef.current === timeoutId) {

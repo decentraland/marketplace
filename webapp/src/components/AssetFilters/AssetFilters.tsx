@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
 import { SmartWearableFilter } from 'decentraland-ui'
+import { BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
 import { RarityFilter } from 'decentraland-dapps/dist/containers/RarityFilter'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { isLandSection } from '../../modules/ui/utils'
@@ -58,7 +59,7 @@ export const AssetFilters = ({
   const handleBrowseParamChange = useCallback((options: BrowseOptions) => onBrowse(options), [onBrowse])
 
   const handleRangeFilterChange = useCallback(
-    (filterNames: [string, string], value: [string, string], source, prevValues: [string, string]) => {
+    (filterNames: [string, string], value: [string, string], source: BarChartSource, prevValues: [string, string]) => {
       const [filterMinName, filterMaxName] = filterNames
       const [minValue, maxValue] = value
       onBrowse({ [filterMinName]: minValue, [filterMaxName]: maxValue })

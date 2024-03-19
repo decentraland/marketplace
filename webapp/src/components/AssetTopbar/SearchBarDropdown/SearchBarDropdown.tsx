@@ -66,7 +66,7 @@ export const SearchBarDropdown = ({
     category === NFTCategory.WEARABLE ? SearchTab.WEARABLES : SearchTab.EMOTES
   )
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>(
-    JSON.parse(localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY) || '[]')
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_RECENT_SEARCHES_KEY) || '[]') as RecentSearch[]
   )
 
   const handleSaveToLocalStorage = useCallback(
@@ -200,7 +200,7 @@ export const SearchBarDropdown = ({
   }, [onClickOutside])
 
   const onCollectibleResultClick = useCallback(
-    (collectible, index) => {
+    (collectible: Item, index: number) => {
       handleSaveToLocalStorage(collectible)
       getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
         searchTerm,
@@ -240,7 +240,7 @@ export const SearchBarDropdown = ({
   }, [handleSeeAll, isLoading, isSearchingEmotes, onCollectibleResultClick, results])
 
   const onCreatorsResultClick = useCallback(
-    (creator, index) => {
+    (creator: CreatorAccount, index: number) => {
       handleSaveToLocalStorage(creator)
       getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
         searchTerm,
@@ -266,7 +266,7 @@ export const SearchBarDropdown = ({
   }, [fetchedCreators, isLoadingCreators, onCreatorsResultClick])
 
   const onCollectionResultClick = useCallback(
-    (collection, index) => {
+    (collection: BuilderCollectionAttributes, index: number) => {
       onSearch({ contractAddresses: [collection.contract_address] })
       handleSaveToLocalStorage(collection)
       getAnalytics().track(events.SEARCH_RESULT_CLICKED, {

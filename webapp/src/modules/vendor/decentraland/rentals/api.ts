@@ -11,6 +11,8 @@ const isPrimitive = (value: any): value is string | number | boolean => {
   return value !== undefined && value !== null && (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean')
 }
 
+type RentalsListingResponse<T> = { ok: boolean; message?: string; data: T }
+
 class RentalsAPI extends BaseAPI {
   createRentalListing = async (listing: RentalListingCreation, identity: AuthIdentity): Promise<RentalListing> => {
     const url = SIGNATURES_SERVER_URL + `/rentals-listings`
@@ -22,15 +24,11 @@ class RentalsAPI extends BaseAPI {
         'Content-Type': 'application/json'
       }
     })
-    try {
-      const json = await response.json()
-      if (json.ok) {
-        return json.data
-      } else {
-        throw new Error(json.message)
-      }
-    } catch (error) {
-      throw new Error((error as Error).message)
+    const json = (await response.json()) as RentalsListingResponse<RentalListing>
+    if (json.ok) {
+      return json.data
+    } else {
+      throw new Error(json.message)
     }
   }
 
@@ -44,15 +42,11 @@ class RentalsAPI extends BaseAPI {
       throw new Error('The signature server responded without a 2XX status code.')
     }
 
-    try {
-      const json = await response.json()
-      if (json.ok) {
-        return json.data
-      } else {
-        throw new Error(json.message)
-      }
-    } catch (error) {
-      throw new Error((error as Error).message)
+    const json = (await response.json()) as RentalsListingResponse<RentalListing>
+    if (json.ok) {
+      return json.data
+    } else {
+      throw new Error(json.message)
     }
   }
 
@@ -81,26 +75,21 @@ class RentalsAPI extends BaseAPI {
       throw new Error('The signature server responded without a 2XX status code.')
     }
 
-    try {
-      const json = await response.json()
-      if (json.ok) {
-        return json.data
-      } else {
-        throw new Error(json.message)
-      }
-    } catch (error) {
-      throw new Error((error as Error).message)
+    const json = (await response.json()) as RentalsListingResponse<{
+      results: RentalListing[]
+      total: number
+    }>
+    if (json.ok) {
+      return json.data
+    } else {
+      throw new Error(json.message)
     }
   }
 
-  getRentalListingsPrices = async (filters: RentalsListingsFilterBy): Promise<Record<string, number>> => {
+  getRentalListingsPrices = async (filters: Omit<RentalsListingsFilterBy, 'periods'>): Promise<Record<string, number>> => {
     const queryParams = objectToURLSearchParams(filters)
-    try {
-      const response = await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)
-      return response
-    } catch (error) {
-      throw new Error((error as Error).message)
-    }
+    const response = await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)
+    return response
   }
 }
 

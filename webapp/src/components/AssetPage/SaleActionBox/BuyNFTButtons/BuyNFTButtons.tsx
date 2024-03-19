@@ -1,3 +1,4 @@
+import { Order } from '@dcl/schemas'
 import { memo, useCallback, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Loader } from 'decentraland-ui'
@@ -42,7 +43,7 @@ const BuyNFTButtons = ({
   )
 
   const handleBuyWithCrypto = useCallback(
-    (asset, order) => {
+    (asset: Asset, order: Order | null) => {
       if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
         onRedirect(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
