@@ -1,19 +1,28 @@
+import { getDefaultState } from '../../tests/defaultStore'
+import { RootState } from '../reducer'
+
 import { INITIAL_STATE } from './reducer'
 import { getData, getError, getLoading, getState } from './selectors'
 
 const eventTag = 'MVMF22'
 const eventContracts = ['0x1', '0x2']
 
-const state = {
-  event: {
-    ...INITIAL_STATE,
-    data: {
-      [eventTag]: eventContracts
-    },
-    error: 'anError',
-    loading: []
+let state: RootState
+
+beforeEach(() => {
+  const defaultState = getDefaultState()
+  state = {
+    ...defaultState,
+    event: {
+      ...INITIAL_STATE,
+      data: {
+        [eventTag]: eventContracts
+      },
+      error: 'anError',
+      loading: []
+    }
   }
-} as any
+})
 
 describe("when getting the events's state", () => {
   it('should return the state', () => {

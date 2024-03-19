@@ -34,7 +34,7 @@ export const LocationFilter = ({
   )
 
   const handleDistanceToPlazaChange = useCallback(
-    (_evt, data) => {
+    (_evt, data: [number, number]) => {
       onDistanceToPlazaChange(data)
     },
     [onDistanceToPlazaChange]

@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
+import type { Provider } from 'decentraland-connect'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { getRentalsContractInstance } from './contract'
 
@@ -9,7 +10,7 @@ const getConnectedProviderMock = getConnectedProvider as jest.MockedFunction<typ
 
 const providerMock = {
   send: jest.fn()
-} as unknown as any
+} as unknown as Provider
 
 describe('when getting a rental contract instance', () => {
   describe('and the provider is not connected', () => {

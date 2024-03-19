@@ -28,7 +28,7 @@ const LegacyNFTPage = (props: Props) => {
         nftAPI
           .fetchTokenId(Number(x), Number(y))
           .then(tokenId => {
-            history.replace(locations.nft(land.address, tokenId))
+            history.replace(locations.nft(land.address, tokenId ?? undefined))
           })
           .catch(() => history.replace(locations.root()))
       }

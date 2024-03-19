@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react'
 import classNames from 'classnames'
-import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { PeriodOption } from '../../../modules/rental/types'
 import { daysByPeriod } from '../../../modules/rental/utils'
@@ -14,11 +14,10 @@ export type RentalPeriodFilterProps = {
 
 export const RentalPeriodFilter = ({ onChange, rentalDays = [], defaultCollapsed = false }: RentalPeriodFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
-
   const handleRentalDaysChange = useCallback(
-    (_evt, { checked, value }) => {
+    (_evt, { checked, value }: CheckboxProps) => {
       if (checked) {
-        onChange([...rentalDays, value])
+        onChange([...rentalDays, Number(value)])
       } else {
         onChange(rentalDays.filter(period => period !== value))
       }

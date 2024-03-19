@@ -53,7 +53,7 @@ class NFTAPI extends BaseAPI {
     return response.data[0]
   }
 
-  async fetchTokenId(x: number, y: number) {
+  async fetchTokenId(x: number, y: number): Promise<string | null> {
     try {
       const { id } = await fetch(`${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`).then(resp => resp.json())
       return id

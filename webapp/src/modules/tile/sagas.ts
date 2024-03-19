@@ -22,7 +22,7 @@ function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
       data: Record<string, AtlasTile>
     }> = yield call(atlasAPI.fetchTiles)
     const tiles = response.data.data
-    const lastModified = response.headers['last-modified']
+    const lastModified = response.headers['last-modified'] as string
     yield put(fetchTilesSuccess(tiles, new Date(lastModified)))
   } catch (error) {
     yield put(fetchTilesFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import './NetworkFilter.css'
@@ -26,7 +26,7 @@ export const NetworkFilter = ({ network, onChange, defaultCollapsed = false }: N
     ]
   }, [])
 
-  const handleChange = useCallback((_, { value }) => onChange(value), [onChange])
+  const handleChange = useCallback((_, { value }: CheckboxProps) => onChange(value as Network), [onChange])
 
   const header = useMemo(
     () =>
