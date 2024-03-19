@@ -20,7 +20,7 @@ export const Inventory = ({
 
   useEffect(() => {
     let cancel = false
-    ;(async () => {
+    void (async () => {
       try {
         setIsLoading(true)
         const data = await fetcher()

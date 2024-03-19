@@ -88,7 +88,9 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [providerChains, selectedChain])
 
   const chainNativeToken = useMemo(() => {
-    return providerTokens.find(t => +t.chainId === selectedChain && t.symbol === selectedProviderChain?.nativeCurrency.symbol)
+    return providerTokens.find(
+      t => t.chainId.toString() === selectedChain.toString() && t.symbol === selectedProviderChain?.nativeCurrency.symbol
+    )
   }, [selectedChain, selectedProviderChain, providerTokens])
 
   const { gasCost, isFetchingGasCost } = onGetGasCost(selectedToken, chainNativeToken, wallet)
@@ -110,7 +112,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       setCrossChainProvider(provider)
     }
 
-    initializeCrossChainProvider()
+    void initializeCrossChainProvider()
   }, [])
 
   const { isFetchingBalance, tokenBalance: selectedTokenBalance } = useTokenBalance(selectedToken, selectedChain, wallet?.address)
@@ -135,7 +137,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // init lib if necessary and fetch chains & supported tokens
   useEffect(() => {
-    ;(async () => {
+    void (async () => {
       try {
         if (crossChainProvider) {
           if (!crossChainProvider.isLibInitialized()) {
@@ -179,7 +181,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // computes if the user can buy the item with the selected token
   useEffect(() => {
-    ;(async () => {
+    void (async () => {
       if (
         selectedToken &&
         ((selectedToken.symbol === 'MANA' && !!wallet) ||
@@ -651,6 +653,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                 <span className={styles.warning}>
                   {t('buy_with_crypto_modal.insufficient_funds', {
                     token: insufficientToken?.symbol || 'MANA',
+                    orPayWithOtherToken: (text: string) => (!onBuyWithCard ? <span>{text}</span> : undefined),
                     card: (text: string) => (onBuyWithCard ? <span>{text}</span> : undefined)
                   })}
                 </span>

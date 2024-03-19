@@ -48,7 +48,7 @@ const ClaimNamePage = (props: Props) => {
   const isMobileOrTable = useTabletAndBelowMediaQuery()
 
   useEffect(() => {
-    ;(async () => {
+    void (async () => {
       try {
         const bannedNames = await lists.fetchBannedNames()
         setBannedNames(bannedNames)
@@ -87,7 +87,7 @@ const ClaimNamePage = (props: Props) => {
       setName(text)
       const timeoutId = setTimeout(() => {
         if (debounceRef.current === timeoutId) {
-          handleNameChange(text)
+          return handleNameChange(text)
         }
       }, 1000)
       if (debounceRef.current) {

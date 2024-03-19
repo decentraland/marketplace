@@ -59,7 +59,7 @@ function* handleSetWearablePreviewController(action: SetWearablePreviewControlle
     try {
       while (true) {
         try {
-          const event: string = yield take(emotesChannel)
+          const event: PreviewEmoteEventType = yield take(emotesChannel)
           switch (event) {
             case PreviewEmoteEventType.ANIMATION_PLAY:
               yield put(setEmotePlaying(true))

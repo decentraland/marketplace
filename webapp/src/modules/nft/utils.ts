@@ -20,11 +20,11 @@ export function getNFT(contractAddress: string | null, tokenId: string | null, n
 
 export const getBodyShapeUrn = (bodyShape: string) => `urn:decentraland:off-chain:base-avatars:${bodyShape}`
 
-export function isGender(bodyShapes: BodyShape[], gender: BodyShape) {
+export function isGender(bodyShapes: (BodyShape | string)[], gender: BodyShape): boolean {
   if (bodyShapes.length !== 1) {
     return false
   }
-  return bodyShapes[0] === gender || getBodyShapeUrn(bodyShapes[0]) === gender
+  return bodyShapes[0] === gender.toString() || getBodyShapeUrn(bodyShapes[0]) === gender.toString()
 }
 
 export function isUnisex(bodyShapes: BodyShape[]) {

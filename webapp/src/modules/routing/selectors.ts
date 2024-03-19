@@ -4,6 +4,7 @@ import { getSearch as getRouterSearch, getLocation } from 'connected-react-route
 import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetStatusFilter } from '../../utils/filters'
+import { isOfEnumType } from '../../utils/enums'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor/types'
@@ -14,13 +15,7 @@ import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { isLandSection, isListsSection } from '../ui/utils'
-import {
-  getDefaultOptionsByView,
-  getURLParamArray,
-  getURLParam,
-  getURLParamArray_nonStandard,
-  SEARCH_ARRAY_PARAM_SEPARATOR
-} from './search'
+import { getDefaultOptionsByView, getURLParamArray, getURLParam, getURLParamArrayNonStandard, SEARCH_ARRAY_PARAM_SEPARATOR } from './search'
 import { BrowseOptions, PageName, SortBy, SortByOption } from './types'
 import { locations } from './locations'
 
@@ -53,7 +48,11 @@ export const getSection = createSelector<RootState, string, ReturnType<typeof ge
       return Sections.decentraland.LAND
     }
 
-    if ((!section || section === Sections[vendor].ALL) && pathname === locations.browse() && vendor === VendorName.DECENTRALAND) {
+    if (
+      (!section || (isOfEnumType(section, Sections[vendor]) && section === Sections[vendor].ALL)) &&
+      pathname === locations.browse() &&
+      vendor === VendorName.DECENTRALAND
+    ) {
       return Sections.decentraland.WEARABLES
     }
 
@@ -146,7 +145,7 @@ export const getSortByOptions = createSelector<RootState, boolean | undefined, b
   (onlyOnRent, onlyOnSale, status) => {
     const SORT_BY_MAP = getAllSortByOptions()
     let orderByDropdownOptions: SortByOption[] = []
-    if (status) {
+    if (status && isOfEnumType(status, AssetStatusFilter)) {
       const baseFilters = [
         SORT_BY_MAP[SortBy.NEWEST],
         SORT_BY_MAP[SortBy.RECENTLY_LISTED],
@@ -230,11 +229,11 @@ export const getIsFullscreen = createSelector<RootState, string, boolean | undef
 )
 
 export const getRarities = createSelector<RootState, string, Rarity[]>(getRouterSearch, search =>
-  getURLParamArray_nonStandard<Rarity>(search, 'rarities', Object.values(Rarity).filter(value => typeof value === 'string') as string[])
+  getURLParamArrayNonStandard<Rarity>(search, 'rarities', Object.values(Rarity).filter(value => typeof value === 'string') as string[])
 )
 
 export const getWearableGenders = createSelector<RootState, string, GenderFilterOption[]>(getRouterSearch, search =>
-  getURLParamArray_nonStandard<GenderFilterOption>(search, 'genders', Object.values(GenderFilterOption))
+  getURLParamArrayNonStandard<GenderFilterOption>(search, 'genders', Object.values(GenderFilterOption))
 )
 
 export const getContracts = createSelector<RootState, string, string[]>(

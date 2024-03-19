@@ -24,8 +24,9 @@ describe('when getting a rental contract instance', () => {
     beforeEach(() => {
       getConnectedProviderMock.mockResolvedValueOnce(providerMock)
     })
+
     it('should return an instance', () => {
-      expect(getRentalsContractInstance(ChainId.ETHEREUM_GOERLI)).resolves.toBeInstanceOf(ethers.Contract)
+      return expect(getRentalsContractInstance(ChainId.ETHEREUM_GOERLI)).resolves.toBeInstanceOf(ethers.Contract)
     })
   })
 })

@@ -37,7 +37,7 @@ const SelectFilter = (props: Props) => {
       }
     }
 
-    tryFetchOptionFromValue()
+    void tryFetchOptionFromValue()
   }, [fetchOptionFromValue, providedOptions, value, onChange])
 
   // The component will fetch the options from the backend depending on the search input.

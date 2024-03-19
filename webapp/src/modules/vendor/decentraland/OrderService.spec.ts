@@ -46,7 +46,7 @@ describe("Decentraland's OrderService", () => {
       })
 
       it('should reject into an exception', () => {
-        expect(orderService.fetchOrders(params, sortBy)).rejects.toBe(aBasicErrorMessage)
+        return expect(orderService.fetchOrders(params, sortBy)).rejects.toBe(aBasicErrorMessage)
       })
     })
 
@@ -58,7 +58,7 @@ describe("Decentraland's OrderService", () => {
       })
 
       it('should reject into an exception', () => {
-        expect(orderService.fetchOrders(params, sortBy)).resolves.toEqual(orders)
+        return expect(orderService.fetchOrders(params, sortBy)).resolves.toEqual(orders)
       })
     })
   })
