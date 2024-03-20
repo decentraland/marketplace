@@ -3,12 +3,8 @@ import { ethers } from 'ethers'
 import { matchPath } from 'react-router-dom'
 import { push, getLocation, goBack, LOCATION_CHANGE, replace, LocationChangeAction } from 'connected-react-router'
 import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
-import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { isLegacyOrder } from '../../lib/orders'
 import { DCLRegistrar } from '../../contracts/DCLRegistrar'
 import { AssetType } from '../asset/types'
 import {
@@ -38,7 +34,7 @@ import {
   getContracts,
   getSearch
 } from '../routing/selectors'
-import { fetchNFTRequest, fetchNFTsRequest, FetchNFTsSuccessAction, FETCH_NFTS_SUCCESS, TRANSFER_NFT_SUCCESS } from '../nft/actions'
+import { fetchNFTRequest, fetchNFTsRequest, TRANSFER_NFT_SUCCESS } from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
 import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize, MAX_QUERY_SIZE } from '../vendor/api'
@@ -70,9 +66,7 @@ import { getSales } from '../sale/selectors'
 import { CANCEL_ORDER_SUCCESS, CREATE_ORDER_SUCCESS, EXECUTE_ORDER_SUCCESS, ExecuteOrderSuccessAction } from '../order/actions'
 import { ACCEPT_BID_SUCCESS, CANCEL_BID_SUCCESS, PLACE_BID_SUCCESS } from '../bid/actions'
 import { getData } from '../event/selectors'
-import { getWallet } from '../wallet/selectors'
-import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
-import { getPage, getView } from '../ui/browse/selectors'
+import { getPage } from '../ui/browse/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { AssetStatusFilter } from '../../utils/filters'
 import {
@@ -103,8 +97,6 @@ export function* routingSaga() {
     handleRedirectToSuccessPage
   )
   yield takeEvery(CLAIM_NAME_TRANSACTION_SUBMITTED, handleRedirectClaimingNameToSuccessPage)
-  yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
-  yield takeEvery(FETCH_NFTS_SUCCESS, handleFetchOnSaleNFTsSuccess)
 }
 
 function* handleLocationChange(action: LocationChangeAction) {
@@ -344,42 +336,6 @@ export function* getNewBrowseOptions(current: BrowseOptions): Generator<unknown,
     ...current,
     view,
     vendor
-  }
-}
-
-function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
-  const {
-    payload: {
-      wallet: { address }
-    }
-  } = action
-
-  const view: View = yield select(getView)
-  const hasShownTheExpiredListingsModalBefore: string | null = yield call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY)
-
-  if (hasShownTheExpiredListingsModalBefore !== 'true') {
-    yield handleFetchNFTsOnSale(address, view)
-  }
-}
-
-function* handleFetchOnSaleNFTsSuccess(action: FetchNFTsSuccessAction) {
-  const wallet: Wallet = yield select(getWallet)
-  const {
-    payload: { options, orders }
-  } = action
-
-  const view: View = yield select(getView)
-
-  if (
-    wallet &&
-    view !== View.CURRENT_ACCOUNT &&
-    options.params &&
-    wallet?.address === options.params.address &&
-    options.params.onlyOnSale
-  ) {
-    if (orders.some(order => isLegacyOrder(order) && order.owner === wallet.address)) {
-      yield put(openModal('ExpiredListingsModal'))
-    }
   }
 }
 

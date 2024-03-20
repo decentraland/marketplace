@@ -9,6 +9,7 @@ import * as decentraland from '../../modules/vendor/decentraland'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor'
 import { SortBy } from '../../modules/routing/types'
+import { Section } from '../../modules/vendor/decentraland'
 import { AssetType } from '../../modules/asset/types'
 import * as events from '../../utils/events'
 import { CAMPAING_TAB_ANIMATION_ENABLED } from '../Campaign/config'
@@ -65,7 +66,7 @@ const Navigation = (props: Props) => {
           <Link to={locations.browse(browseDefaultOptions)} onClick={onClearFilters}>
             <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>{t('navigation.collectibles')}</Tabs.Tab>
           </Link>
-          <Link to={locations.lands()}>
+          <Link to={locations.lands({ section: Section.LAND, assetType: AssetType.NFT })}>
             <Tabs.Tab active={activeTab === NavigationTab.LANDS}>{t('navigation.land')}</Tabs.Tab>
           </Link>
           <Link to={locations.claimName()}>
