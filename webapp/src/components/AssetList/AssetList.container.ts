@@ -4,7 +4,6 @@ import { RootState } from '../../modules/reducer'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import { browse, clearFilters } from '../../modules/routing/actions'
 import { getBrowseAssets, getCount, getView } from '../../modules/ui/browse/selectors'
-import { View } from '../../modules/ui/types'
 import {
   getVendor,
   getPageNumber,
@@ -29,7 +28,6 @@ const mapState = (state: RootState): MapStateProps => {
   const view = getView(state)
   const loadingState = getLoadingNFTs(state).filter(loading => loading.payload.options.view === view)
   const assets = getBrowseAssets(state, section, assetType)
-  const loadingStateFilteredByView = loadingState.filter(ls => ls.payload.options.view === View.MARKET)
   return {
     vendor: getVendor(state),
     assetType,
@@ -41,7 +39,7 @@ const mapState = (state: RootState): MapStateProps => {
     isLoading:
       assetType === AssetType.ITEM
         ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) || isLoadingFavoritedItems(state)
-        : isLoadingType(loadingStateFilteredByView, FETCH_NFTS_REQUEST),
+        : isLoadingType(loadingState, FETCH_NFTS_REQUEST),
     hasFiltersEnabled: hasFiltersEnabled(state),
     visitedLocations: getVisitedLocations(state)
   }
