@@ -523,7 +523,10 @@ describe('when handling the connect wallet success action', () => {
             .provide([
               [select(getView), view],
               [select(getWallet), wallet],
-              [matchers.call.fn(VendorFactory.build), Promise.resolve({ nftService: { fetch: () => Promise.resolve([, , orders]) } })]
+              [
+                matchers.call.fn(VendorFactory.build),
+                Promise.resolve({ nftService: { fetch: () => Promise.resolve([undefined, undefined, orders]) } })
+              ]
             ])
             .put(openModal('ExpiredListingsModal'))
             .dispatch(connectWalletSuccess({ address } as Wallet))
@@ -539,7 +542,10 @@ describe('when handling the connect wallet success action', () => {
             .provide([
               [select(getView), view],
               [select(getWallet), wallet],
-              [matchers.call.fn(VendorFactory.build), Promise.resolve({ nftService: { fetch: () => Promise.resolve([, , orders]) } })]
+              [
+                matchers.call.fn(VendorFactory.build),
+                Promise.resolve({ nftService: { fetch: () => Promise.resolve([undefined, undefined, orders]) } })
+              ]
             ])
             .not.put(openModal('ExpiredListingsModal'))
             .dispatch(connectWalletSuccess({ address } as Wallet))
@@ -553,7 +559,10 @@ describe('when handling the connect wallet success action', () => {
             .provide([
               [select(getView), view],
               [select(getWallet), wallet],
-              [matchers.call.fn(VendorFactory.build), Promise.resolve({ nftService: { fetch: () => Promise.resolve([, , orders]) } })]
+              [
+                matchers.call.fn(VendorFactory.build),
+                Promise.resolve({ nftService: { fetch: () => Promise.resolve([undefined, undefined, orders]) } })
+              ]
             ])
             .not.put(openModal('ExpiredListingsModal'))
             .dispatch(connectWalletSuccess({ address } as Wallet))
