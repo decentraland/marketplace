@@ -14,8 +14,7 @@ export default defineConfig(({ command, mode }) => {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       'process.env': {
         // eslint-disable-next-line @typescript-eslint/naming-convention
-        VITE_DCL_DEFAULT_ENV:
-          envVariables.VITE_DCL_DEFAULT_ENV,
+        VITE_DCL_DEFAULT_ENV: envVariables.VITE_DCL_DEFAULT_ENV,
         VITE_BASE_URL: envVariables.VITE_BASE_URL
       },
       global: {}
@@ -69,5 +68,5 @@ export default defineConfig(({ command, mode }) => {
       sourcemap: true
     },
     ...(command === 'build' ? { base: envVariables.VITE_BASE_URL } : undefined)
-  } as any
+  } as unknown
 })
