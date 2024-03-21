@@ -4,10 +4,13 @@ import { ErrorCode } from 'decentraland-transactions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { openModal } from 'decentraland-dapps/dist/modules/modal'
+import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction, Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getContract, getContracts } from '../contract/selectors'
+import { isLegacyOrder } from '../../lib/orders'
 import { VendorName } from '../vendor/types'
 import { AwaitFn } from '../types'
 import { getContractKey, getContractKeyFromNFT, getStubMaticCollectionContract } from '../contract/utils'
@@ -17,6 +20,10 @@ import { upsertContracts } from '../contract/actions'
 import { Contract } from '../vendor/services'
 import { retryParams } from '../vendor/decentraland/utils'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
+import { View } from '../ui/types'
+import { getView } from '../ui/browse/selectors'
+import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
+import { MAX_QUERY_SIZE } from '../vendor/api'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -45,6 +52,37 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
   yield takeEvery(FETCH_NFT_REQUEST, handleFetchNFTRequest)
   yield takeEvery(TRANSFER_NFT_REQUEST, handleTransferNFTRequest)
+  yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
+
+  function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
+    const {
+      payload: {
+        wallet: { address }
+      }
+    } = action
+    const view: View = yield select(getView)
+    const wallet: Wallet = yield select(getWallet)
+    const hasShownTheExpiredListingsModalBefore: string | null = yield call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY)
+
+    if (hasShownTheExpiredListingsModalBefore !== 'true') {
+      const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], VendorName.DECENTRALAND, API_OPTS)
+      const [, , orders]: AwaitFn<typeof vendor.nftService.fetch> = yield call(
+        [vendor.nftService, 'fetch'],
+        {
+          first: MAX_QUERY_SIZE,
+          skip: 0,
+          onlyOnSale: true,
+          address
+        },
+        {}
+      )
+      if (wallet && view !== View.CURRENT_ACCOUNT) {
+        if (orders.some(order => isLegacyOrder(order) && order.owner === wallet.address)) {
+          yield put(openModal('ExpiredListingsModal'))
+        }
+      }
+    }
+  }
 
   function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
     const { options, timestamp } = action.payload
