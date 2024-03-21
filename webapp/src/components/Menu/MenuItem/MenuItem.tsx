@@ -14,7 +14,7 @@ const MenuItem = <T extends string | number>(props: Props<T>) => {
   }, [value, onClick])
 
   const handleOnKeyDown = useCallback(
-    event => {
+    (event: React.KeyboardEvent<HTMLLIElement>) => {
       if (event.keyCode === 13) {
         handleOnClick()
       }

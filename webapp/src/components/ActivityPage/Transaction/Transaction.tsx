@@ -81,7 +81,13 @@ const Transaction = (props: Props) => {
       )
     }
     case CREATE_ORDER_SUCCESS: {
-      const { tokenId, contractAddress, network, name, price } = tx.payload
+      const { tokenId, contractAddress, network, name, price } = tx.payload as {
+        tokenId: string
+        contractAddress: string
+        network: Network
+        name: string
+        price: number
+      }
       return (
         <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -91,7 +97,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.create_order"
                   values={{
-                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{name}</Link>,
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{name}</Link>,
                     price: (
                       <Mana showTooltip network={network} inline>
                         {price.toLocaleString()}
@@ -107,7 +113,13 @@ const Transaction = (props: Props) => {
       )
     }
     case CANCEL_ORDER_SUCCESS: {
-      const { tokenId, contractAddress, network, name, price } = tx.payload
+      const { tokenId, contractAddress, network, name, price } = tx.payload as {
+        tokenId: string
+        contractAddress: string
+        network: Network
+        name: string
+        price: number
+      }
       return (
         <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -117,7 +129,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.cancel_order"
                   values={{
-                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{name}</Link>,
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{name}</Link>,
                     price: (
                       <Mana showTooltip network={network} inline>
                         {price.toLocaleString()}
@@ -137,7 +149,14 @@ const Transaction = (props: Props) => {
     case EXECUTE_ORDER_TRANSACTION_SUBMITTED:
     case BUY_ITEM_WITH_CARD_SUCCESS:
     case EXECUTE_ORDER_WITH_CARD_SUCCESS: {
-      const { tokenId, itemId, contractAddress, network, name, price } = tx.payload
+      const { tokenId, itemId, contractAddress, network, name, price } = tx.payload as {
+        tokenId: string
+        itemId: string
+        contractAddress: string
+        network: Network
+        name: string
+        price: number
+      }
 
       let assetTokenId: string
       let type: AssetType
@@ -145,11 +164,11 @@ const Transaction = (props: Props) => {
       if (itemId) {
         type = AssetType.ITEM
         assetTokenId = itemId
-        url = locations.item(contractAddress as string, assetTokenId)
+        url = locations.item(contractAddress, assetTokenId)
       } else {
         type = AssetType.NFT
         assetTokenId = tokenId
-        url = locations.nft(contractAddress as string, assetTokenId)
+        url = locations.nft(contractAddress, assetTokenId)
       }
 
       return (
@@ -203,7 +222,7 @@ const Transaction = (props: Props) => {
       )
     }
     case PLACE_BID_SUCCESS: {
-      const { tokenId, contractAddress, price } = tx.payload
+      const { tokenId, contractAddress, price } = tx.payload as { tokenId: string; contractAddress: string; price: number }
 
       return (
         <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
@@ -214,7 +233,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.place_bid"
                   values={{
-                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{nft ? getAssetName(nft) : ''}</Link>,
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
                     price: (
                       <Mana showTooltip network={nft?.network} inline>
                         {price.toLocaleString()}
@@ -230,7 +249,7 @@ const Transaction = (props: Props) => {
       )
     }
     case ACCEPT_BID_TRANSACTION_SUBMITTED: {
-      const { tokenId, contractAddress, price } = tx.payload
+      const { tokenId, contractAddress, price } = tx.payload as { tokenId: string; contractAddress: string; price: number }
       return (
         <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -240,7 +259,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.accept_bid"
                   values={{
-                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{nft ? getAssetName(nft) : ''}</Link>,
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
                     price: (
                       <Mana showTooltip inline network={nft?.network}>
                         {price.toLocaleString()}
@@ -256,7 +275,7 @@ const Transaction = (props: Props) => {
       )
     }
     case CANCEL_BID_SUCCESS: {
-      const { tokenId, contractAddress, price } = tx.payload
+      const { tokenId, contractAddress, price } = tx.payload as { tokenId: string; contractAddress: string; price: number }
       return (
         <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -266,7 +285,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.cancel_bid"
                   values={{
-                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{nft ? getAssetName(nft) : ''}</Link>,
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
                     price: (
                       <Mana showTooltip inline network={nft?.network}>
                         {price.toLocaleString()}

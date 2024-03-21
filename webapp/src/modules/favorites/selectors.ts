@@ -1,3 +1,4 @@
+import { AnyAction } from 'redux'
 import { createMatchSelector } from 'connected-react-router'
 import { createSelector } from 'reselect'
 import { Item } from '@dcl/schemas'
@@ -14,8 +15,11 @@ import {
   CREATE_LIST_REQUEST,
   DELETE_LIST_REQUEST,
   BULK_PICK_REQUEST,
-  UPDATE_LIST_REQUEST
+  UPDATE_LIST_REQUEST,
+  BulkPickUnpickRequestAction
 } from './actions'
+
+const isBulkPickRequestAction = (action: AnyAction): action is BulkPickUnpickRequestAction => action.type === BULK_PICK_REQUEST
 
 export const getState = (state: RootState) => state.favorites
 export const getData = (state: RootState) => getState(state).data
@@ -50,7 +54,7 @@ export const getListId = createSelector<RootState, ReturnType<typeof listMatchSe
 )
 
 export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
-  getLoading(state).some(({ type, payload }) => BULK_PICK_REQUEST === type && payload.item.id === itemId)
+  getLoading(state).some(action => isBulkPickRequestAction(action) && action.payload.item.id === itemId)
 
 export const getList = (state: RootState, id: string): List | null => getLists(state)[id] ?? null
 

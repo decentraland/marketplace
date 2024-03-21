@@ -42,7 +42,7 @@ export const getStoreFromEntity = (entity: Entity): Store => {
 
   const image = metadata.images.find(image => image.name === 'cover')
 
-  const reference = image && content ? content.find((cont: any) => cont.file === image.file) : undefined
+  const reference = image && content ? content.find((cont: EntityContentItemReference) => cont.file === image.file) : undefined
 
   if (reference) {
     cover = getPeerCoverUrl(reference.hash)

@@ -101,7 +101,7 @@ const SaveToListModal = (props: Props) => {
   )
 
   const handlePickItem = useCallback(
-    index => {
+    (index: number) => {
       if (lists.data[index].isItemInList) {
         addOrRemovePick(lists.data[index], PickType.UNPICK_FROM)
       } else {

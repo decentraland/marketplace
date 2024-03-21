@@ -6,24 +6,16 @@ import { TextEncoder, TextDecoder } from 'util'
 import path from 'path'
 import { config } from 'dotenv'
 import flatten from 'flat'
-import { mergeTranslations, setCurrentLocale } from 'decentraland-dapps/dist/modules/translation/utils'
+import utilsModule, { mergeTranslations, setCurrentLocale } from 'decentraland-dapps/dist/modules/translation/utils'
 import fetch, { Request, Response } from 'node-fetch'
 import { en as dappsEn } from 'decentraland-dapps/dist/modules/translation/defaults'
 import * as locales from '../modules/translation/locales'
 
 jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
-  const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
+  const module = jest.requireActual<typeof utilsModule>('decentraland-dapps/dist/modules/translation/utils')
   return {
     ...module,
-    T: ({ id, values }: (typeof module)['T']) => module.t(id, values)
-  }
-})
-
-jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
-  const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
-  return {
-    ...module,
-    T: ({ id, values }: (typeof module)['T']) => module.t(id, values)
+    T: ({ id, values }: { id: string; values?: any }) => module.t(id, values)
   }
 })
 
@@ -44,7 +36,7 @@ global.FontFace = function () {
     load: () => Promise.resolve()
   }
 } as any
-;(document as any).fonts = {
+;(document as { fonts: typeof document.fonts }).fonts = {
   ...document.fonts,
   add: () => Promise.resolve()
 } as any

@@ -177,7 +177,7 @@ describe('when getting a signature', () => {
 describe('when getting the contract index', () => {
   beforeEach(() => {
     getRentalsContractInstanceMock.mockResolvedValueOnce(rentalsMock)
-    rentalsMock.getContractIndex.mockResolvedValueOnce(BigNumber.from(0))
+    ;(rentalsMock.getContractIndex as jest.Mock).mockResolvedValueOnce(BigNumber.from(0))
   })
   it('should return the contract nonce and use the right chain id to the instance helper', async () => {
     await expect(getContractNonce(ChainId.ETHEREUM_GOERLI)).resolves.toBe('0')
@@ -189,7 +189,7 @@ describe('when getting the contract index', () => {
 describe('when getting the asset nonce', () => {
   beforeEach(() => {
     getRentalsContractInstanceMock.mockResolvedValueOnce(rentalsMock)
-    rentalsMock.getAssetIndex.mockResolvedValueOnce(BigNumber.from(0))
+    ;(rentalsMock.getAssetIndex as jest.Mock).mockResolvedValueOnce(BigNumber.from(0))
   })
   it('should return the asset nonce and use the correct chain id, contract address, token id and signer address', async () => {
     await expect(
@@ -212,7 +212,7 @@ describe('when getting the asset nonce', () => {
 describe('when getting the signer nonce', () => {
   beforeEach(() => {
     getRentalsContractInstanceMock.mockResolvedValueOnce(rentalsMock)
-    rentalsMock.getSignerIndex.mockResolvedValueOnce(BigNumber.from(0))
+    ;(rentalsMock.getSignerIndex as jest.Mock).mockResolvedValueOnce(BigNumber.from(0))
   })
   it('should return the signer nonce and use the correct chain id and signer address', async () => {
     await expect(getSignerNonce(ChainId.ETHEREUM_GOERLI, '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98')).resolves.toBe('0')
@@ -224,9 +224,9 @@ describe('when getting the signer nonce', () => {
 describe('when getting all the nonces', () => {
   beforeEach(() => {
     getRentalsContractInstanceMock.mockResolvedValue(rentalsMock)
-    rentalsMock.getContractIndex.mockResolvedValueOnce(BigNumber.from(0))
-    rentalsMock.getSignerIndex.mockResolvedValueOnce(BigNumber.from(1))
-    rentalsMock.getAssetIndex.mockResolvedValueOnce(BigNumber.from(2))
+    ;(rentalsMock.getContractIndex as jest.Mock).mockResolvedValueOnce(BigNumber.from(0))
+    ;(rentalsMock.getSignerIndex as jest.Mock).mockResolvedValueOnce(BigNumber.from(1))
+    ;(rentalsMock.getAssetIndex as jest.Mock).mockResolvedValueOnce(BigNumber.from(2))
   })
   afterEach(() => {
     getRentalsContractInstanceMock.mockReset()

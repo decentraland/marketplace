@@ -108,7 +108,7 @@ describe("Decentraland's OrderService", () => {
           await orderService.execute(null, nft, order, fingerprint)
           expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
-          const firstParameter = (walletUtils.sendTransaction as jest.Mock).mock.calls[0][0] as ContractData
+          const firstParameter = ((walletUtils.sendTransaction as jest.Mock).mock.calls[0] as unknown[])[0] as ContractData
           expect(firstParameter.chainId).toBe(order.chainId)
           expect(firstParameter.name).toBe('Decentraland Marketplace')
         })
@@ -155,7 +155,7 @@ describe("Decentraland's OrderService", () => {
           await orderService.execute(null, nft, order, fingerprint)
           expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
-          const firstParameter = (walletUtils.sendTransaction as jest.Mock).mock.calls[0][0] as ContractData
+          const firstParameter = ((walletUtils.sendTransaction as jest.Mock).mock.calls[0] as unknown[])[0] as ContractData
           expect(firstParameter.chainId).toBe(order.chainId)
           expect(firstParameter.name).toBe('Decentraland Marketplace')
         })
@@ -211,7 +211,7 @@ describe("Decentraland's OrderService", () => {
         await orderService.create(null, nft, priceInEther, expiresAt)
         expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
-        const firstParameter = (walletUtils.sendTransaction as jest.Mock).mock.calls[0][0] as ContractData
+        const firstParameter = ((walletUtils.sendTransaction as jest.Mock).mock.calls[0] as unknown[])[0] as ContractData
         expect(firstParameter.chainId).toBe(nft.chainId)
         expect(firstParameter.name).toBe('Decentraland Marketplace')
       })
@@ -275,7 +275,7 @@ describe("Decentraland's OrderService", () => {
         await orderService.cancel(null, order)
         expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
-        const firstParameter = (walletUtils.sendTransaction as jest.Mock).mock.calls[0][0] as ContractData
+        const firstParameter = ((walletUtils.sendTransaction as jest.Mock).mock.calls[0] as unknown[])[0] as ContractData
         expect(firstParameter.chainId).toBe(order.chainId)
         expect(firstParameter.name).toBe('Decentraland Marketplace')
       })

@@ -1,2 +1,2 @@
 import { Buffer } from 'buffer/'
-;(globalThis as any).Buffer = Buffer
+;(globalThis as unknown as { Buffer: typeof Buffer }).Buffer = Buffer

@@ -233,7 +233,7 @@ function* handleFetchTransactionSuccess(action: FetchTransactionSuccessAction) {
   const { transaction } = action.payload
 
   if (transaction.actionType === GRANT_TOKEN_SUCCESS) {
-    const authorization: Authorization = transaction.payload.authorization
+    const authorization: Authorization = (transaction.payload as { authorization: Authorization }).authorization
     yield put(fetchAuthorizationsRequest([authorization]))
   }
 }

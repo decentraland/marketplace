@@ -204,7 +204,7 @@ export const useCrossChainMintNftRoute = (
   wallet: Wallet | null
 ) => {
   const getMintNFTRoute = useCallback(
-    (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
+    (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) =>
       crossChainProvider.getMintNFTRoute({
         fromAddress,
         fromAmount,
@@ -244,7 +244,7 @@ export const useCrossChainBuyNftRoute = (
   slippage: number
 ): CrossChainRoute => {
   const getBuyNftRoute = useCallback(
-    (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
+    (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) =>
       crossChainProvider.getBuyNFTRoute({
         fromAddress,
         fromAmount,
@@ -285,7 +285,7 @@ export const useCrossChainNameMintingRoute = (
   wallet: Wallet | null
 ) => {
   const getMintingNameRoute = useCallback(
-    (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
+    (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) =>
       crossChainProvider.getRegisterNameRoute({
         name,
         fromAddress,
