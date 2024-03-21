@@ -54,8 +54,8 @@ export const formatDataToTable = (rentals?: Item[], isCollectionOwner: boolean =
             <div className={styles.ellipsis}>
               <Dropdown className={styles.ellipsis} icon="ellipsis horizontal" direction="left">
                 <Dropdown.Menu>
-                  <Dropdown.Item text={t('collection_page.edit_price')} as="a" href={builderCollectionUrl} />
-                  <Dropdown.Item text={t('collection_page.mint_item')} as="a" href={builderCollectionUrl} />
+                  <Dropdown.Item text={t('collection_page.edit_price')} as="a" href={builderCollectionUrl(item.contractAddress)} />
+                  <Dropdown.Item text={t('collection_page.mint_item')} as="a" href={builderCollectionUrl(item.contractAddress)} />
                 </Dropdown.Menu>
               </Dropdown>
             </div>

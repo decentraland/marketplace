@@ -188,7 +188,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     emoteHasSound
   } = options
 
-  const address = options.address || ((yield select(getCurrentLocationAddress)) as string)
+  const address: string | string[] = options.address || ((yield select(getCurrentLocationAddress)) as string)
 
   if (isMap) {
     yield put(setView(view))
@@ -206,7 +206,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     case Section.STORE_SETTINGS:
       break
     case Section.ON_SALE:
-      yield handleFetchOnSale(Array.isArray(address) ? address[0] : address, options.view!)
+      yield handleFetchOnSale(Array.isArray(address) ? (address[0] as string) : address, options.view!)
       break
     case Section.ON_RENT:
       yield handleFetchOnRent(

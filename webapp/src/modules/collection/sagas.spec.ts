@@ -1,3 +1,4 @@
+import { Collection } from '@dcl/schemas'
 import { select } from '@redux-saga/core/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call } from 'redux-saga-test-plan/matchers'
@@ -77,7 +78,7 @@ describe('when handling a fetch collections request', () => {
               }
             ]
           ])
-          .put(fetchCollectionsSuccess(collections as any, 100))
+          .put(fetchCollectionsSuccess(collections as Collection[], 100))
           // Fetches items for contract address 2 because sizes are different
           .put(
             fetchCollectionItemsRequest({

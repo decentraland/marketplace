@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Button, Dropdown, Header, Icon, Loader } from 'decentraland-ui'
+import { Button, Dropdown, DropdownProps, Header, Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { usePagination } from '../../lib/pagination'
 import { ListsBrowseSortBy } from '../../modules/favorites/types'
@@ -53,7 +53,10 @@ const ListsPage = ({ count, lists, isLoading, error, onFetchLists, onCreateList 
     fetchLists()
   }, [fetchLists])
 
-  const handleSortChange = useCallback((_e, data) => changeSorting(data.value), [changeSorting])
+  const handleSortChange = useCallback(
+    (_e: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => changeSorting(data.value?.toString() ?? ''),
+    [changeSorting]
+  )
 
   const hasMorePages = lists.length < (count ?? 0)
 

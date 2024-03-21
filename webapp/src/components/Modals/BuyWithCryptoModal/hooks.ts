@@ -54,7 +54,7 @@ export const useTokenBalance = (selectedToken: Token, selectedChain: ChainId, ad
 
           // if native token
           if (selectedToken.address === NATIVE_TOKEN) {
-            const balanceWei = await provider.send('eth_getBalance', [address, 'latest'])
+            const balanceWei = (await provider.send('eth_getBalance', [address, 'latest'])) as BigNumber
 
             if (!cancel) {
               setSelectedTokenBalance(balanceWei)

@@ -203,8 +203,8 @@ describe('when getting entity files from store', () => {
       }
 
       mockFetch.mockResolvedValueOnce({
-        arrayBuffer: () => Promise.resolve([])
-      } as any)
+        arrayBuffer: () => Promise.resolve(new ArrayBuffer(4))
+      } as Response)
     })
 
     it('should return a map with an entry with the store coverName as key', async () => {

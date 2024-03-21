@@ -50,7 +50,7 @@ export const getListId = createSelector<RootState, ReturnType<typeof listMatchSe
 )
 
 export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
-  getLoading(state).some(({ type, payload }) => [BULK_PICK_REQUEST].includes(type) && payload.item.id === itemId)
+  getLoading(state).some(({ type, payload }) => BULK_PICK_REQUEST === type && payload.item.id === itemId)
 
 export const getList = (state: RootState, id: string): List | null => getLists(state)[id] ?? null
 

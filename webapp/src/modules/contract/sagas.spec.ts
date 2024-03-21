@@ -6,6 +6,7 @@ import { fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/auth
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { changeAccount, connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getContractNames, VendorName } from '../vendor'
 import { ContractService } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
@@ -278,7 +279,7 @@ describe('when handling an account change', () => {
   it('should put a reset has fetched action', () => {
     return expectSaga(contractSaga)
       .put(resetHasFetched())
-      .dispatch(changeAccount({} as any))
+      .dispatch(changeAccount({} as Wallet))
       .silentRun()
   })
 })
@@ -287,7 +288,7 @@ describe('when handling an account connect success', () => {
   it('should put a reset has fetched action', () => {
     return expectSaga(contractSaga)
       .put(resetHasFetched())
-      .dispatch(connectWalletSuccess({} as any))
+      .dispatch(connectWalletSuccess({} as Wallet))
       .silentRun()
   })
 })

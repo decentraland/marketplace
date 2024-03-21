@@ -1,3 +1,4 @@
+import { Collection } from '@dcl/schemas'
 import { fetchCollectionsFailure, fetchCollectionsRequest, fetchCollectionsSuccess, FETCH_COLLECTIONS_REQUEST } from './actions'
 import { collectionReducer, INITIAL_STATE } from './reducer'
 
@@ -28,7 +29,7 @@ describe('when fetch collection success action is received', () => {
         error: 'some error',
         data: {}
       },
-      fetchCollectionsSuccess([{ urn: 'some urn' }] as any[], 1)
+      fetchCollectionsSuccess([{ urn: 'some urn' }] as Collection[], 1)
     )
     expect(newState.loading.length).toBe(0)
     expect(newState.data).toStrictEqual({ ['some urn']: { urn: 'some urn' } })

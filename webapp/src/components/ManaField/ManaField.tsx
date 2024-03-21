@@ -1,11 +1,11 @@
-import React from 'react'
+import { PureComponent } from 'react'
 import { ethers } from 'ethers'
 import { Field, Mana } from 'decentraland-ui'
 import { Props } from './ManaField.types'
 import './ManaField.css'
 import { ManaToFiat } from '../ManaToFiat'
 
-export default class ManaField extends React.PureComponent<Props> {
+export default class ManaField extends PureComponent<Props> {
   render() {
     const { className, network, value, ...rest } = this.props
     let classes = `ManaField ${network}`
@@ -14,7 +14,7 @@ export default class ManaField extends React.PureComponent<Props> {
     }
     let mana: string | null = null
     try {
-      if (Number(value) > 0) {
+      if (value !== undefined && Number(value) > 0) {
         mana = ethers.utils.parseEther(value).toString()
       }
     } catch (error) {

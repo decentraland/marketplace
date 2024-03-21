@@ -1,7 +1,17 @@
 import React, { useCallback, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
-import { Button, Checkbox, Field, Message, ModalNavigation, TextAreaField } from 'decentraland-ui'
+import {
+  Button,
+  Checkbox,
+  CheckboxProps,
+  Field,
+  InputOnChangeData,
+  Message,
+  ModalNavigation,
+  TextAreaField,
+  TextAreaProps
+} from 'decentraland-ui'
 import { InfoTooltip } from '../../InfoTooltip'
 import styles from './CreateOrEditListModal.module.css'
 import { Props } from './CreateOrEditListModal.types'
@@ -28,9 +38,9 @@ const CreateOrEditListModal = ({ onClose, isLoading, onCreateList, onEditList, m
     () => (list ? onEditList(list.id, { name, description, isPrivate }) : onCreateList({ name, description, isPrivate })),
     [list, onEditList, name, description, isPrivate, onCreateList]
   )
-  const handleNameChange = useCallback((_event, props) => setName(props.value), [setName])
-  const handleDescriptionChange = useCallback((_event, props) => setDescription(props.value), [setDescription])
-  const handleIsOPrivateChange = useCallback((_event, props) => setIsPrivate(props.checked), [setIsPrivate])
+  const handleNameChange = useCallback((_event, props: InputOnChangeData) => setName(props.value), [setName])
+  const handleDescriptionChange = useCallback((_event, props: TextAreaProps) => setDescription(props.value as string), [setDescription])
+  const handleIsOPrivateChange = useCallback((_event, props: CheckboxProps) => setIsPrivate(Boolean(props.checked)), [setIsPrivate])
   const handleNameFocus = useCallback(() => setShowMaxLengthNameInfo(true), [setShowMaxLengthNameInfo])
   const handleNameBlur = useCallback(() => setShowMaxLengthNameInfo(false), [setShowMaxLengthNameInfo])
   const handleDescriptionFocus = useCallback(() => setShowMaxLengthDescriptionInfo(true), [setShowMaxLengthDescriptionInfo])

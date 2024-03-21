@@ -68,7 +68,7 @@ const SellModal = (props: Props) => {
 
           const erc721 = new ethers.Contract(nftContract.address, ERC721ABI, new ethers.providers.Web3Provider(provider))
 
-          const name = await erc721.name()
+          const name = (await erc721.name()) as string
           setTargetContractLabel(name)
         } catch (e) {
           console.warn('Could not fetch contract name')

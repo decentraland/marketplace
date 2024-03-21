@@ -91,7 +91,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.create_order"
                   values={{
-                    name: <Link to={locations.nft(contractAddress, tokenId)}>{name}</Link>,
+                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{name}</Link>,
                     price: (
                       <Mana showTooltip network={network} inline>
                         {price.toLocaleString()}
@@ -117,7 +117,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.cancel_order"
                   values={{
-                    name: <Link to={locations.nft(contractAddress, tokenId)}>{name}</Link>,
+                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{name}</Link>,
                     price: (
                       <Mana showTooltip network={network} inline>
                         {price.toLocaleString()}
@@ -145,11 +145,11 @@ const Transaction = (props: Props) => {
       if (itemId) {
         type = AssetType.ITEM
         assetTokenId = itemId
-        url = locations.item(contractAddress, assetTokenId)
+        url = locations.item(contractAddress as string, assetTokenId)
       } else {
         type = AssetType.NFT
         assetTokenId = tokenId
-        url = locations.nft(contractAddress, assetTokenId)
+        url = locations.nft(contractAddress as string, assetTokenId)
       }
 
       return (
@@ -187,9 +187,9 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.transfer"
                   values={{
-                    name: <Link to={locations.nft(contractAddress, tokenId)}>{name}</Link>,
+                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{name}</Link>,
                     address: (
-                      <Link to={locations.account(address)}>
+                      <Link to={locations.account(address as string)}>
                         <Profile address={address} />
                       </Link>
                     )
@@ -214,7 +214,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.place_bid"
                   values={{
-                    name: <Link to={locations.nft(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
+                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{nft ? getAssetName(nft) : ''}</Link>,
                     price: (
                       <Mana showTooltip network={nft?.network} inline>
                         {price.toLocaleString()}
@@ -240,7 +240,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.accept_bid"
                   values={{
-                    name: <Link to={locations.nft(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
+                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{nft ? getAssetName(nft) : ''}</Link>,
                     price: (
                       <Mana showTooltip inline network={nft?.network}>
                         {price.toLocaleString()}
@@ -266,7 +266,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.cancel_bid"
                   values={{
-                    name: <Link to={locations.nft(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
+                    name: <Link to={locations.nft(contractAddress as string, tokenId as string)}>{nft ? getAssetName(nft) : ''}</Link>,
                     price: (
                       <Mana showTooltip inline network={nft?.network}>
                         {price.toLocaleString()}
@@ -293,7 +293,7 @@ const Transaction = (props: Props) => {
                   id="transaction.detail.claim_asset"
                   values={{
                     asset: nft ? (isParcel(nft) ? t('global.the_parcel') : t('global.the_estate')) : '',
-                    name: <Link to={locations.manage(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
+                    name: <Link to={locations.manage(contractAddress as string, tokenId as string)}>{nft ? getAssetName(nft) : ''}</Link>,
                     contract: (
                       <TransactionLink chainId={chainId} address={rentalContractAddress} txHash="">
                         {t('transaction.rental.contract')}
@@ -319,7 +319,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.remove_rental"
                   values={{
-                    name: <Link to={locations.manage(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>
+                    name: <Link to={locations.manage(contractAddress as string, tokenId as string)}>{nft ? getAssetName(nft) : ''}</Link>
                   }}
                 />
               }
@@ -340,11 +340,11 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.accept_rental"
                   values={{
-                    name: <Link to={locations.manage(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
+                    name: <Link to={locations.manage(contractAddress as string, tokenId as string)}>{nft ? getAssetName(nft) : ''}</Link>,
                     pricePerDay: (
                       <Mana showTooltip network={nft?.network} inline>
                         {/* As this there might be already registered transactions and the price information is new, consider it optional */}
-                        {pricePerDay ? ethers.utils.formatEther(pricePerDay) : '0'}
+                        {pricePerDay ? ethers.utils.formatEther(pricePerDay as string) : '0'}
                       </Mana>
                     ),
                     duration: <span>{duration}</span>

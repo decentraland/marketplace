@@ -1,6 +1,6 @@
 import { matchPath } from 'react-router-dom'
 import { getLocation } from 'connected-react-router'
-import { SagaIterator } from 'redux-saga'
+import { SagaIterator, Task } from 'redux-saga'
 import { put, takeEvery } from '@redux-saga/core/effects'
 import { call, cancel, cancelled, fork, race, select, take } from 'redux-saga/effects'
 import { ethers } from 'ethers'
@@ -91,7 +91,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
   // to avoid race conditions, just one fetch items request is handled at once in the browse page
   function* takeLatestByPath(actionType: string, path: string): SagaIterator {
-    let task
+    let task: Task<unknown> | undefined
 
     while (true) {
       const action: FetchItemsRequestAction = yield take(actionType)
