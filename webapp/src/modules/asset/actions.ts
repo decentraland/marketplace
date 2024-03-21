@@ -41,3 +41,9 @@ export const fetchSmartWearableVideoHashFailure = (asset: Asset, error: string) 
 export type FetchSmartWearableVideoHashRequestAction = ReturnType<typeof fetchSmartWearableVideoHashRequest>
 export type FetchSmartWearableVideoHashSuccessAction = ReturnType<typeof fetchSmartWearableVideoHashSuccess>
 export type FetchSmartWearableVideoHashFailureAction = ReturnType<typeof fetchSmartWearableVideoHashFailure>
+
+// Clear error
+export const CLEAR_ASSET_ERROR = '[Clear error] Assets'
+export const clearAssetError = () => action(CLEAR_ASSET_ERROR)
+
+export type ClearAssetError = ReturnType<typeof clearAssetError>

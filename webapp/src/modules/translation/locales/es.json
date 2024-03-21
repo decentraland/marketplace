@@ -740,6 +740,7 @@
   "smart_wearable": {
     "play_showcase": "Reproducir vista previa",
     "required_permission": {
+      "error_title": "Error cargando permisos",
       "title": "Esta vestimenta inteligente requiere {count, plural, one {el siguiente permiso} other {los siguientes permisos}}",
       "tooltip_info": "Para usar esta vestimenta interactiva, debe otorgarle los siguientes permisos para experimentar el efecto completo de la misma. {learn_more}",
       "allow_to_move_player_inside_scene": "Mover jugador",

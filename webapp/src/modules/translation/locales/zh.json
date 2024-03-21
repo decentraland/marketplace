@@ -743,6 +743,7 @@
   "smart_wearable": {
     "play_showcase": "播放展示视频",
     "required_permission": {
+      "error_title": "加载权限时出错",
       "title": "此可穿戴设备需要以下 {count,plural, one {permission} other {permissions}}",
       "tooltip_info": "要使用该穿戴设备，您必须授予其以下权限才能体验该穿戴设备的全部效果。{learn_more}",
       "allow_to_move_player_inside_scene": "移动玩家",

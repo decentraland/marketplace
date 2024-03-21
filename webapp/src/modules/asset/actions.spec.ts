@@ -11,7 +11,9 @@ import {
   FETCH_SMART_WEARABLE_VIDEO_HASH_SUCCESS,
   fetchSmartWearableVideoHashFailure,
   fetchSmartWearableVideoHashRequest,
-  fetchSmartWearableVideoHashSuccess
+  fetchSmartWearableVideoHashSuccess,
+  clearAssetError,
+  CLEAR_ASSET_ERROR
 } from './actions'
 import { Asset } from './types'
 
@@ -85,6 +87,16 @@ describe('when creating the action to signal a failure smart wearable video hash
       type: FETCH_SMART_WEARABLE_VIDEO_HASH_FAILURE,
       meta: undefined,
       payload: { asset, error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to signal the clearing of errors', () => {
+  it('should return an object representing the action', () => {
+    expect(clearAssetError()).toEqual({
+      type: CLEAR_ASSET_ERROR,
+      meta: undefined,
+      payload: undefined
     })
   })
 })

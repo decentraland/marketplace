@@ -753,6 +753,7 @@
   "smart_wearable": {
     "play_showcase": "Play showcase video",
     "required_permission": {
+      "error_title": "Error loading permissions",
       "title": "This wearable requires the following {count, plural, one {permission} other {permissions}}",
       "tooltip_info": "To use this Wearable, you must grant it the following permissions to experience the Wearable's full effect. {learn_more}",
       "allow_to_move_player_inside_scene": "Move player",
