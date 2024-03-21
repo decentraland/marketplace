@@ -20,7 +20,7 @@ export class MarketplaceAPI extends BaseAPI {
       [ChainId.FANTOM_MAINNET]: 'fantom-mainnet'
     } as Record<ChainId, string>
     const balances = await this.request('get', `/${chainIdToChainName[chain]}/address/${wallet}/balance`)
-    return balances
+    return balances as Balance[]
   }
 }
 

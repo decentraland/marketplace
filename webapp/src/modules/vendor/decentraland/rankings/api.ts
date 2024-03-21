@@ -8,7 +8,7 @@ const DEFAULT_REQUEST_SIZE = 5
 class RankingsAPI extends BaseAPI {
   fetch = async (entity: RankingEntities, timeframe: AnalyticsTimeframe, filters: RankingsFilters = {}): Promise<RankingEntity> => {
     const queryParams = this.buildItemsQueryString(filters)
-    return this.request('get', `/rankings/${entity}/${timeframe}?${queryParams}`)
+    return this.request('get', `/rankings/${entity}/${timeframe}?${queryParams}`) as Promise<RankingEntity>
   }
 
   private buildItemsQueryString(filters: RankingsFilters & { first?: string }): string {

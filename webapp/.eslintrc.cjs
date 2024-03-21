@@ -11,7 +11,6 @@ module.exports = {
       files: ['*.ts', '*.tsx', '*.cjs'],
       extends: ['plugin:@typescript-eslint/recommended', 'plugin:@typescript-eslint/recommended-requiring-type-checking', 'prettier'],
       rules: {
-        '@typescript-eslint/no-unsafe-return': 'off', // TODO: migrate code progressively to remove this line. https://typescript-eslint.io/rules/no-unsafe-return
         '@typescript-eslint/naming-convention': [
           'error',
           {

@@ -33,7 +33,7 @@ jest.mock('../vendor/decentraland/rentals/api')
 ;(globalThis.setTimeout as unknown as jest.Mock) = jest.fn()
 
 const runTimerAutomaticallyOnce = () => {
-  ;(setTimeout as unknown as jest.Mock).mockImplementationOnce(callback => callback())
+  ;(setTimeout as unknown as jest.Mock).mockImplementationOnce(callback => callback() as void)
 }
 
 const getSignerMock = getSigner as jest.MockedFunction<typeof getSigner>

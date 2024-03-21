@@ -26,7 +26,7 @@ class OrderAPI extends BaseAPI {
   async fetchOrders(params: OrderFilters, sortBy: OrderSortBy): Promise<OrderResponse> {
     const queryParams = this.buildOrdersQueryString(params, sortBy)
 
-    return this.request('get', `/orders?${queryParams}`)
+    return this.request('get', `/orders?${queryParams}`) as Promise<OrderResponse>
   }
 }
 

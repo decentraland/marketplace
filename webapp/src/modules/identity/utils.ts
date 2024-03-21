@@ -40,7 +40,8 @@ export function* getIdentity(): Generator<any, AuthIdentity, any> {
     })
 
     if (success) {
-      return yield call(getIdentity)
+      const identity: AuthIdentity = yield call(getIdentity)
+      return identity
     }
 
     throw new Error(IDENTITY_ERROR)
@@ -60,7 +61,8 @@ export function* getIdentity(): Generator<any, AuthIdentity, any> {
   })
 
   if (success) {
-    return yield call(getIdentity)
+    const identity: AuthIdentity = yield call(getIdentity)
+    return identity
   } else {
     throw new Error(IDENTITY_ERROR)
   }

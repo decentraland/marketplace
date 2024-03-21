@@ -25,7 +25,7 @@ export const getSmartWearableSceneContent = async (urn: string): Promise<Record<
 
       const enc = new TextDecoder('utf-8')
       const data = new Uint8Array(wearableScene)
-      return JSON.parse(enc.decode(data))
+      return JSON.parse(enc.decode(data)) as Record<string, unknown>
     }
   }
 }

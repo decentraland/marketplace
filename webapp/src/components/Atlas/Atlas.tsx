@@ -51,7 +51,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const setLand = useCallback(
-    (lands, nft, color = Color.SUMMER_RED) => {
+    (lands: Map<string, ReturnType<Layer>>, nft, color = Color.SUMMER_RED) => {
       if (nft.vendor === VendorName.DECENTRALAND) {
         switch (nft.category) {
           case NFTCategory.PARCEL: {

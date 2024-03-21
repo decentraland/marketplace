@@ -36,7 +36,9 @@ export class NFTAuthAPI extends BaseClient {
     queryParams.append('contractAddress', contractAddress)
     queryParams.append('tokenId', tokenId)
     if (options) {
-      Object.entries(options).forEach(([key, value]) => queryParams.append(key, value.toString()))
+      Object.entries(options).forEach(([key, value]) =>
+        Array.isArray(value) ? value.forEach(aValue => queryParams.append(key, aValue)) : queryParams.append(key, value)
+      )
     }
     const response: NFTResponse = await this.fetch(`/v1/nfts?${queryParams.toString()}`)
 
@@ -50,7 +52,7 @@ export class NFTAuthAPI extends BaseClient {
   async fetchTokenId(x: number, y: number) {
     try {
       const { id } = await fetch(`${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`).then(resp => resp.json())
-      return id
+      return id as string
     } catch (error) {
       return null
     }

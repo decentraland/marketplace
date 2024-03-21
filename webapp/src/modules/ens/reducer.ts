@@ -31,7 +31,7 @@ const INITIAL_STATE: ENSState = {
 }
 
 const isENSError = (error: any): error is ENSError => {
-  return error && error.message !== undefined
+  return !!(error && error.message !== undefined)
 }
 
 export type ENSReducerAction =

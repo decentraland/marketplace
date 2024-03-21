@@ -7,7 +7,7 @@ import { AccountResponse } from './types'
 class AccountAPI extends BaseAPI {
   fetch = async (filters: AccountFilters = {}): Promise<AccountResponse> => {
     const queryParams = this.buildAccountsQueryString(filters)
-    return this.request('get', `/accounts?${queryParams}`)
+    return this.request('get', `/accounts?${queryParams}`) as Promise<AccountResponse>
   }
 
   fetchOne = async (address: string): Promise<Account> => {

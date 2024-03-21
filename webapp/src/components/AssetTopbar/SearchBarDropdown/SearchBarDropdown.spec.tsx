@@ -24,7 +24,7 @@ jest.mock('decentraland-dapps/dist/containers/Profile', () => {
   return {
     __esModule: true,
     default: () => <div>Profile</div>
-  }
+  } as unknown
 })
 jest.mock('../../../modules/vendor/decentraland/catalog/api')
 jest.mock('../../../modules/vendor/decentraland/builder/api')
@@ -35,7 +35,7 @@ const mockLocalStorage = () =>
 
     return {
       getItem(key: string) {
-        return store[key]
+        return store[key] as string
       },
 
       setItem(key: string, value: string) {

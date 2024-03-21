@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { Env } from '@dcl/ui-env'
@@ -36,7 +36,7 @@ const ClaimNameFatFingerModal = ({
   onClaimTxSubmitted,
   onOpenFiatGateway
 }: Props) => {
-  const analytics = useMemo(() => getAnalytics(), [])
+  const analytics = getAnalytics()
   const inputRef = useRef<HTMLInputElement>(null)
   const [isLoadingFIATWidget, setIsLoadingFIATWidget] = useState(false)
   const isLoading = isClaimingName || isLoadingFIATWidget

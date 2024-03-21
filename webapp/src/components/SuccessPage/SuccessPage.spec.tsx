@@ -13,7 +13,7 @@ jest.mock('react-router-dom', () => {
     ...module,
     useHistory: jest.fn(),
     useLocation: jest.fn()
-  }
+  } as unknown
 })
 
 let useLocationMock: { search: string; pathname: string }
