@@ -137,9 +137,15 @@ describe('ClaimNameFatFingerModal', () => {
         const txId = 'aTxId'
 
         beforeEach(() => {
-          ;((onOpenFiatGateway.mock.calls[0] as unknown[])[2] as FiatGatewayListeners).onPending({
-            data: { tx_id: txId }
-          })
+          const mockedCall = (onOpenFiatGateway.mock.calls[0] as unknown[])[2] as FiatGatewayListeners
+
+          if (mockedCall.onPending) {
+            mockedCall.onPending({
+              data: { tx_id: txId }
+            } as unknown as Parameters<typeof mockedCall.onPending>[0])
+          } else {
+            throw new Error('onPending not defined')
+          }
         })
 
         it('should call the onClaimTxSubmitted method prop with the transaction data', () => {

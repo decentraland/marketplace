@@ -75,7 +75,7 @@ export function getEstateSizeLabel(min?: string, max?: string) {
   })
 }
 
-export function getNetwork(network?: Network, category?: NFTCategory) {
+export function getNetwork(network?: Network, category?: NFTCategory): Network {
   if (network) {
     return network
   }
