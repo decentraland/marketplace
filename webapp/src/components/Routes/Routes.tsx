@@ -11,7 +11,6 @@ import { ActivityPage } from '../ActivityPage'
 import { AssetPage } from '../AssetPage'
 import { BidPage } from '../BidPage'
 import { BrowsePage } from '../BrowsePage'
-import { BuyPage } from '../BuyPage'
 import { StatusPage } from '../BuyPage/StatusPage'
 import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
 import { CancelSalePage } from '../CancelSalePage'
@@ -71,8 +70,6 @@ const Routes = ({ inMaintenance }: Props) => {
         <ProtectedRoute exact path={locations.transfer()} component={TransferPage} />
         <Route exact path={locations.collection()} component={CollectionPage} />
         <ProtectedRoute exact path={locations.manage()} component={ManageAssetPage} />
-        <ProtectedRoute exact path={locations.buy(AssetType.NFT)} component={() => <BuyPage type={AssetType.NFT} />} />
-        <ProtectedRoute exact path={locations.buy(AssetType.ITEM)} component={() => <BuyPage type={AssetType.ITEM} />} />
         <Route
           exact
           path={locations.buyStatusPage(AssetType.NFT)}

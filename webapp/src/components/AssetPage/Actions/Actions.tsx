@@ -38,13 +38,7 @@ const Actions = (props: Props) => {
           </>
         ) : !isOwner ? (
           <>
-            {nft.category === NFTCategory.ENS ? (
-              <BuyWithCryptoButton asset={nft} onClick={() => onBuyWithCrypto} />
-            ) : (
-              <Button as={Link} to={locations.buy(AssetType.NFT, contractAddress, tokenId)} primary fluid>
-                {t('asset_page.actions.buy')}
-              </Button>
-            )}
+            <BuyWithCryptoButton asset={nft} onClick={() => onBuyWithCrypto} />
             {canBid ? (
               <Button as={Link} to={locations.bid(contractAddress, tokenId)} fluid>
                 {t('asset_page.actions.bid')}

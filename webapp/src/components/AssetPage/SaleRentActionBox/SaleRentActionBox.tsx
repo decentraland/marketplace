@@ -9,7 +9,6 @@ import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Popup } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
 import { formatWeiMANA } from '../../../lib/mana'
-import { AssetType } from '../../../modules/asset/types'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { isPartOfEstate } from '../../../modules/nft/utils'
 import {
@@ -230,22 +229,7 @@ const SaleRentActionBox = ({
                   </Button>
                 ) : null}
                 <div className={styles.saleButtons}>
-                  {order ? (
-                    isCrossChainLandEnabled ? (
-                      <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} />
-                    ) : (
-                      <Button
-                        as={Link}
-                        to={locations.buy(AssetType.NFT, nft.contractAddress, nft.tokenId)}
-                        disabled={!hasEnoughManaToBuy}
-                        className={styles.buy}
-                        primary
-                        fluid
-                      >
-                        {t('asset_page.actions.buy')}
-                      </Button>
-                    )
-                  ) : null}
+                  {order ? <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} /> : null}
                   {canBid ? (
                     <Popup
                       content={t('asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid')}
