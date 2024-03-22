@@ -6,10 +6,14 @@ import { MAX_NAME_SIZE, isNameAvailable } from '../../../modules/ens/utils'
 import { Props } from './ClaimNamePage.types'
 import ClaimNamePage from './ClaimNamePage'
 
-jest.mock('../../../modules/ens/utils', () => ({
-  ...jest.requireActual('../../../modules/ens/utils'),
-  isNameAvailable: jest.fn()
-}))
+jest.mock(
+  '../../../modules/ens/utils',
+  () =>
+    ({
+      ...jest.requireActual('../../../modules/ens/utils'),
+      isNameAvailable: jest.fn()
+    }) as unknown
+)
 
 describe('ClaimNamePage', () => {
   let walletMock: Wallet

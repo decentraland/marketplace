@@ -19,7 +19,7 @@ export class SubgraphService {
       }
 
       const data = await response.json()
-      return data
+      return data as T
     } catch (error) {
       console.error(error)
     }

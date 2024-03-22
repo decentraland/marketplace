@@ -6,11 +6,28 @@ import { Props } from './RequiredPermissions.types'
 import styles from './RequiredPermissions.module.css'
 
 const RequiredPermissions = (props: Props) => {
-  const { asset, isLoading, hasFetched, requiredPermissions, onFetchRequiredPermissions } = props
+  const { asset, isLoading, hasFetched, requiredPermissions, error, onFetchRequiredPermissions, onClearError } = props
 
   useEffect(() => {
-    if (requiredPermissions.length === 0 && !isLoading && !hasFetched) onFetchRequiredPermissions(asset)
-  }, [asset, isLoading, hasFetched, onFetchRequiredPermissions, requiredPermissions.length])
+    if (requiredPermissions.length === 0 && !isLoading && !hasFetched && !error) onFetchRequiredPermissions(asset)
+
+    return () => {
+      if (error) {
+        onClearError()
+      }
+    }
+  }, [asset, isLoading, hasFetched, onFetchRequiredPermissions, onClearError, error, requiredPermissions.length])
+
+  if (error) {
+    return (
+      <Stats title="" className={styles.RequiredPermissions}>
+        <Header sub className={styles.title}>
+          {t('smart_wearable.required_permission.error_title')}
+        </Header>
+        <div className={styles.container}>{error}</div>
+      </Stats>
+    )
+  }
 
   return requiredPermissions.length > 0 ? (
     <Stats title="" className={styles.RequiredPermissions}>

@@ -7,15 +7,23 @@ import { generateFingerprint, getFingerprint } from './estate/utils'
 import { useFingerprint } from './hooks'
 import { NFT } from './types'
 
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useSelector: jest.fn()
-}))
+jest.mock(
+  'react-redux',
+  () =>
+    ({
+      ...jest.requireActual('react-redux'),
+      useSelector: jest.fn()
+    }) as unknown
+)
 
-jest.mock('./estate/utils', () => ({
-  generateFingerprint: jest.fn(),
-  getFingerprint: jest.fn()
-}))
+jest.mock(
+  './estate/utils',
+  () =>
+    ({
+      generateFingerprint: jest.fn(),
+      getFingerprint: jest.fn()
+    }) as unknown
+)
 
 let nft: NFT
 

@@ -16,7 +16,7 @@ jest.mock('decentraland-dapps/dist/containers', () => {
   return {
     ...module,
     Profile: () => <div></div>
-  }
+  } as unknown
 })
 
 describe('Listings Table', () => {

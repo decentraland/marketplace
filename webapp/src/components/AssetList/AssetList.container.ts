@@ -3,7 +3,7 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { RootState } from '../../modules/reducer'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import { browse, clearFilters } from '../../modules/routing/actions'
-import { getBrowseAssets, getCount } from '../../modules/ui/browse/selectors'
+import { getBrowseAssets, getCount, getView } from '../../modules/ui/browse/selectors'
 import {
   getVendor,
   getPageNumber,
@@ -13,11 +13,11 @@ import {
   hasFiltersEnabled,
   getVisitedLocations
 } from '../../modules/routing/selectors'
-import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import { isLoadingFavoritedItems } from '../../modules/favorites/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { AssetType } from '../../modules/asset/types'
+import { isLoadingNftsByView } from '../../modules/nft/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
 import AssetList from './AssetList'
 
@@ -25,18 +25,21 @@ const mapState = (state: RootState): MapStateProps => {
   const section = getSection(state)
   const page = getPageNumber(state)
   const assetType = getAssetType(state)
+  const view = getView(state)
+  const loadingState = isLoadingNftsByView(state, view)
+  const assets = getBrowseAssets(state, section, assetType)
   return {
     vendor: getVendor(state),
     assetType,
     section: getSection(state),
-    assets: getBrowseAssets(state, section, assetType),
+    assets,
     page,
     count: getCount(state),
     search: getSearch(state),
     isLoading:
       assetType === AssetType.ITEM
         ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) || isLoadingFavoritedItems(state)
-        : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
+        : isLoadingType(loadingState, FETCH_NFTS_REQUEST),
     hasFiltersEnabled: hasFiltersEnabled(state),
     visitedLocations: getVisitedLocations(state)
   }

@@ -31,12 +31,12 @@ export type EstateSizeFilters = Pick<
 class NFTAPI extends BaseAPI {
   fetchEstateSizes = async (filters: EstateSizeFilters): Promise<Record<string, number>> => {
     const { data } = await this.request('get', `/stats/estate/size`, filters)
-    return data
+    return data as Record<string, number>
   }
 
   fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters): Promise<NFTResponse> => {
     const queryParams = this.buildNFTQueryString(params, filters)
-    return this.request('get', `/nfts?${queryParams}`)
+    return this.request('get', `/nfts?${queryParams}`) as Promise<NFTResponse>
   }
 
   async fetchOne(contractAddress: string, tokenId: string, options?: FetchOneOptions): Promise<NFTResult> {
@@ -56,7 +56,7 @@ class NFTAPI extends BaseAPI {
   async fetchTokenId(x: number, y: number): Promise<string | null> {
     try {
       const { id } = await fetch(`${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`).then(resp => resp.json())
-      return id
+      return id as string
     } catch (error) {
       return null
     }
@@ -72,7 +72,7 @@ class NFTAPI extends BaseAPI {
     }
     try {
       const { data } = await this.request('get', `/prices?${queryParams.toString()}`)
-      return data
+      return data as string
     } catch (error) {
       return {}
     }
@@ -225,7 +225,7 @@ class NFTAPI extends BaseAPI {
 
   async getOwners(params: OwnersFilters): Promise<{ data: OwnersResponse[]; total: number }> {
     const queryParams = this.buildGetOwnersParams(params)
-    return this.request('get', `/owners?${queryParams}`)
+    return this.request('get', `/owners?${queryParams}`) as Promise<{ data: OwnersResponse[]; total: number }>
   }
 
   private buildGetOwnersParams(filters: OwnersFilters): string {

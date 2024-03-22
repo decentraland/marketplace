@@ -7,7 +7,7 @@ import { SaleResponse } from './types'
 class SaleAPI extends BaseAPI {
   fetch = async (filters: SaleFilters = {}): Promise<SaleResponse> => {
     const queryParams = this.buildSalesQueryString(filters)
-    return this.request('get', `/sales?${queryParams}`)
+    return this.request('get', `/sales?${queryParams}`) as Promise<SaleResponse>
   }
 
   private buildSalesQueryString(filters: SaleFilters): string {

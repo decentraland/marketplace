@@ -2,6 +2,7 @@ import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_SUCCESS,
   FETCH_SMART_WEARABLE_VIDEO_HASH_SUCCESS,
+  clearAssetError,
   fetchSmartWearableRequiredPermissionsFailure,
   fetchSmartWearableRequiredPermissionsRequest,
   fetchSmartWearableRequiredPermissionsSuccess,
@@ -126,6 +127,20 @@ describe.each([
       ...INITIAL_STATE,
       loading: [],
       data: { ...initialState.data, [asset.id]: expectedData }
+    })
+  })
+})
+
+describe('when reducing the CLEAR_ASSET_ERROR action', () => {
+  it('should return a state with the error cleared', () => {
+    const initialState = {
+      ...INITIAL_STATE,
+      error: anErrorMessage
+    }
+
+    expect(assetReducer(initialState, clearAssetError())).toEqual({
+      ...initialState,
+      error: null
     })
   })
 })

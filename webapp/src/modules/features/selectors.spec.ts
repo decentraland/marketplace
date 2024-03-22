@@ -23,7 +23,7 @@ jest.mock('decentraland-dapps/dist/modules/features/selectors', () => {
     ...originalModule,
     getIsFeatureEnabled: jest.fn(),
     hasLoadedInitialFlags: jest.fn()
-  }
+  } as unknown
 })
 
 let state: RootState

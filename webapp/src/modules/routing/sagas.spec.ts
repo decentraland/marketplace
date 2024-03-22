@@ -15,9 +15,6 @@ import {
   Rarity
 } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
-import { connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
@@ -25,19 +22,16 @@ import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { buyItemCrossChainSuccess, buyItemSuccess, fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
-import { getPage, getView } from '../ui/browse/selectors'
-import { MAX_QUERY_SIZE, PAGE_SIZE } from '../vendor/api'
+import { getPage } from '../ui/browse/selectors'
+import { PAGE_SIZE } from '../vendor/api'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
 import { cancelOrderSuccess, createOrderSuccess, executeOrderSuccess } from '../order/actions'
 import { NFT } from '../nft/types'
-import { fetchNFTsRequest, fetchNFTsSuccess } from '../nft/actions'
-import { getWallet } from '../wallet/selectors'
 import { ENS } from '../ens/types'
 import { claimNameSuccess, claimNameTransactionSubmitted } from '../ens/actions'
 import { REGISTRAR_ADDRESS } from '../ens/sagas'
-import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import { browse, clearFilters, fetchAssetsFromRoute as fetchAssetsFromRouteAction } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import { getCurrentBrowseOptions, getLatestVisitedLocation, getSection } from './selectors'
@@ -1311,202 +1305,6 @@ describe('handleRedirectToSuccessPage saga', () => {
           .dispatch(buyItemCrossChainSuccess(route, ChainId.ETHEREUM_MAINNET, searchParams.txHash, item))
           .run({ silenceTimeout: true })
       })
-    })
-  })
-})
-
-describe('when handling the connect wallet success action', () => {
-  const address = '0x...'
-  describe('and the message has been shown before and stored in the LocalStorage', () => {
-    it('it should not fetch the wallet nfts on sale', () => {
-      return expectSaga(routingSaga)
-        .provide([
-          [select(getView), View.MARKET],
-          [call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY), 'true']
-        ])
-        .not.put(
-          fetchNFTsRequest({
-            view: View.MARKET,
-            vendor: VendorName.DECENTRALAND,
-            params: {
-              first: MAX_QUERY_SIZE,
-              skip: 0,
-              onlyOnSale: true,
-              address
-            }
-          })
-        )
-        .dispatch(connectWalletSuccess({ address } as Wallet))
-        .run({ silenceTimeout: true })
-    })
-  })
-  describe('and the message has not been shown before and thus not stored in the LocalStorage', () => {
-    it('it should fetch the wallet nfts on sale', () => {
-      return expectSaga(routingSaga)
-        .provide([[select(getView), View.MARKET]])
-        .put(
-          fetchNFTsRequest({
-            view: View.MARKET,
-            vendor: VendorName.DECENTRALAND,
-            params: {
-              first: MAX_QUERY_SIZE,
-              skip: 0,
-              onlyOnSale: true,
-              address
-            }
-          })
-        )
-        .dispatch(connectWalletSuccess({ address } as Wallet))
-        .run({ silenceTimeout: true })
-    })
-  })
-})
-
-describe('when handling the fetch nfts success action', () => {
-  let view: View
-  let wallet: Wallet
-  let orders: Order[]
-  const address = '0x...'
-  beforeEach(() => {
-    wallet = {
-      address
-    } as Wallet
-  })
-  describe('and the view is not the current account', () => {
-    beforeEach(() => {
-      view = View.MARKET
-    })
-    describe('and the are some legacy orders among those NFTs and belong to the wallet connected', () => {
-      beforeEach(() => {
-        orders = [{ expiresAt: Date.now(), owner: wallet.address } as Order]
-      })
-      it('should open the ExpiresListingsModal', () => {
-        return expectSaga(routingSaga)
-          .provide([
-            [select(getView), view],
-            [select(getWallet), wallet]
-          ])
-          .put(openModal('ExpiredListingsModal'))
-          .dispatch(
-            fetchNFTsSuccess(
-              {
-                params: {
-                  onlyOnSale: true,
-                  first: 1000,
-                  skip: 0,
-                  address: wallet.address
-                },
-                view,
-                vendor: VendorName.DECENTRALAND
-              },
-              [],
-              [],
-              orders,
-              [],
-              1,
-              Date.now()
-            )
-          )
-          .run({ silenceTimeout: true })
-      })
-    })
-    describe('and the are some legacy orders among those NFTs and do not belong to the wallet connected', () => {
-      beforeEach(() => {
-        orders = [{ expiresAt: Date.now(), owner: 'some other address' } as Order]
-      })
-      it('should not open the ExpiresListingsModal', () => {
-        return expectSaga(routingSaga)
-          .provide([
-            [select(getView), view],
-            [select(getWallet), wallet]
-          ])
-          .not.put(openModal('ExpiredListingsModal'))
-          .dispatch(
-            fetchNFTsSuccess(
-              {
-                params: {
-                  onlyOnSale: true,
-                  first: 1000,
-                  skip: 0,
-                  address: wallet.address
-                },
-                view,
-                vendor: VendorName.DECENTRALAND
-              },
-              [],
-              [],
-              orders,
-              [],
-              1,
-              Date.now()
-            )
-          )
-          .run({ silenceTimeout: true })
-      })
-    })
-    describe('and the are no legacy orders among those NFTs', () => {
-      const orders = [{ expiresAt: Math.round(Date.now() / 1000) } as Order]
-      it('should open the ExpiresListingsModal', () => {
-        return expectSaga(routingSaga)
-          .provide([
-            [select(getView), view],
-            [select(getWallet), wallet]
-          ])
-          .not.put(openModal('ExpiredListingsModal'))
-          .dispatch(
-            fetchNFTsSuccess(
-              {
-                params: {
-                  onlyOnSale: true,
-                  first: 1000,
-                  skip: 0,
-                  address: wallet.address
-                },
-                view,
-                vendor: VendorName.DECENTRALAND
-              },
-              [],
-              [],
-              orders,
-              [],
-              1,
-              Date.now()
-            )
-          )
-          .run({ silenceTimeout: true })
-      })
-    })
-  })
-
-  describe('and the view is the current account', () => {
-    it('should not open the ExpiresListingsModal', () => {
-      return expectSaga(routingSaga)
-        .provide([
-          [select(getView), view],
-          [select(getWallet), wallet]
-        ])
-        .not.put(openModal('ExpiredListingsModal'))
-        .dispatch(
-          fetchNFTsSuccess(
-            {
-              params: {
-                onlyOnSale: true,
-                first: 1000,
-                skip: 0,
-                address: wallet.address
-              },
-              view,
-              vendor: VendorName.DECENTRALAND
-            },
-            [],
-            [],
-            [],
-            [],
-            1,
-            Date.now()
-          )
-        )
-        .run({ silenceTimeout: true })
     })
   })
 })

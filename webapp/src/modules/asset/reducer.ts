@@ -11,7 +11,9 @@ import {
   FETCH_SMART_WEARABLE_VIDEO_HASH_SUCCESS,
   FetchSmartWearableVideoHashFailureAction,
   FetchSmartWearableVideoHashRequestAction,
-  FetchSmartWearableVideoHashSuccessAction
+  FetchSmartWearableVideoHashSuccessAction,
+  ClearAssetError,
+  CLEAR_ASSET_ERROR
 } from './actions'
 import { AssetData } from './types'
 
@@ -34,6 +36,7 @@ type AssetReducerAction =
   | FetchSmartWearableVideoHashRequestAction
   | FetchSmartWearableRequiredPermissionsSuccessAction
   | FetchSmartWearableVideoHashSuccessAction
+  | ClearAssetError
 
 export function assetReducer(state = INITIAL_STATE, action: AssetReducerAction): AssetState {
   switch (action.type) {
@@ -81,6 +84,13 @@ export function assetReducer(state = INITIAL_STATE, action: AssetReducerAction):
         ...state,
         loading: loadingReducer(state.loading, action),
         error
+      }
+    }
+
+    case CLEAR_ASSET_ERROR: {
+      return {
+        ...state,
+        error: null
       }
     }
 

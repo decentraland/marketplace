@@ -12,10 +12,14 @@ import { Props } from './ClaimNameFatFingerModal.types'
 
 jest.mock('../../../modules/vendor/decentraland/marketplace/api')
 jest.mock('../../../contracts/factories/DCLController__factory')
-jest.mock('decentraland-dapps/dist/lib/eth', () => ({
-  ...jest.requireActual('decentraland-dapps/dist/lib/eth'),
-  getSigner: jest.fn()
-}))
+jest.mock(
+  'decentraland-dapps/dist/lib/eth',
+  () =>
+    ({
+      ...jest.requireActual('decentraland-dapps/dist/lib/eth'),
+      getSigner: jest.fn()
+    }) as unknown
+)
 
 const getSignerMock = getSigner as jest.MockedFunction<typeof getSigner>
 const signerMock = {

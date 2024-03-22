@@ -13,7 +13,7 @@ jest.mock('../../modules/vendor/decentraland/nft/api', () => {
       fetchPrices: () => ({}),
       fetchEstateSizes: () => ({})
     }
-  }
+  } as unknown
 })
 jest.mock('../../modules/vendor/decentraland/rentals/api', () => {
   const module = jest.requireActual('../../modules/vendor/decentraland/rentals/api')
@@ -22,7 +22,7 @@ jest.mock('../../modules/vendor/decentraland/rentals/api', () => {
     rentalsAPI: {
       getRentalListingsPrices: () => ({})
     }
-  }
+  } as unknown
 })
 
 function renderAssetFilters(props: Partial<Props> = {}) {

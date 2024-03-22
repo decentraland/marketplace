@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
-import { getAssetData, getRequiredPermissions, isFetchingRequiredPermissions } from '../../../modules/asset/selectors'
+import { getAssetData, getError, getRequiredPermissions, isFetchingRequiredPermissions } from '../../../modules/asset/selectors'
 import { RootState } from '../../../modules/reducer'
-import { fetchSmartWearableRequiredPermissionsRequest } from '../../../modules/asset/actions'
+import { clearAssetError, fetchSmartWearableRequiredPermissionsRequest } from '../../../modules/asset/actions'
 import { Asset } from '../../../modules/asset/types'
 import RequiredPermissions from './RequiredPermissions'
 import { OwnProps, MapStateProps, MapDispatchProps, MapDispatch } from './RequiredPermissions.types'
@@ -12,11 +12,13 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
     isLoading: isFetchingRequiredPermissions(state, id),
     hasFetched: 'requiredPermissions' in getAssetData(state, id),
+    error: getError(state) ?? undefined,
     requiredPermissions: getRequiredPermissions(state, id)
   }
 }
 
 const mapDispatchProps = (dispatch: MapDispatch): MapDispatchProps => ({
+  onClearError: () => dispatch(clearAssetError()),
   onFetchRequiredPermissions: (asset: Asset) => dispatch(fetchSmartWearableRequiredPermissionsRequest(asset))
 })
 
