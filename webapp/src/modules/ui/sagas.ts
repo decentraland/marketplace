@@ -32,7 +32,9 @@ function createWearablePreviewChannel(controller: IPreviewController) {
       emit(type)
     }
 
-    const handleEvent = (type: string) => {
+    const handleEvent = (
+      type: PreviewEmoteEventType.ANIMATION_PLAY | PreviewEmoteEventType.ANIMATION_PAUSE | PreviewEmoteEventType.ANIMATION_END
+    ) => {
       return controller.emote.events.on(type, () => eventEmit(type))
     }
 
