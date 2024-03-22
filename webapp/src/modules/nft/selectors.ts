@@ -26,7 +26,7 @@ const nftDetailMatchSelector = createMatchSelector<
 const isFetchNftsRequestAction = (action: AnyAction): action is FetchNFTsRequestAction => action.type === FETCH_NFTS_REQUEST
 
 export const isLoadingNftsByView = (state: RootState, view: View | undefined) =>
-  getLoading(state).filter((action: AnyAction) => (isFetchNftsRequestAction(action) ? action.payload?.options?.view === view : false))
+  getLoading(state).filter((action: AnyAction) => isFetchNftsRequestAction(action) && action.payload?.options?.view === view)
 
 export const getContractAddress = createSelector<RootState, ReturnType<typeof nftDetailMatchSelector>, string | null>(
   nftDetailMatchSelector,
