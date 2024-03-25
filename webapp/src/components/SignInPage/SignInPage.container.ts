@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { isConnecting, isConnected } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { RootState } from '../../modules/reducer'
-import { MapStateProps } from './SignInPage.types'
 import SignInPage from './SignInPage'
+import { MapStateProps } from './SignInPage.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

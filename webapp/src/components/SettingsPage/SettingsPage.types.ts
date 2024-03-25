@@ -1,10 +1,10 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { Dispatch } from 'redux'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
-import { Contract } from '../../modules/vendor/services'
-import { getContract } from '../../modules/contract/selectors'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { fetchContractsRequest, FetchContractsRequestAction } from '../../modules/contract/actions'
+import { getContract } from '../../modules/contract/selectors'
+import { Contract } from '../../modules/vendor/services'
 
 export type Props = {
   wallet: Wallet | null

@@ -1,6 +1,6 @@
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getAddress as getAddressFromUrl } from '../../../modules/account/selectors'
 import { RootState } from '../../../modules/reducer'
 import { goBack } from '../../../modules/routing/actions'

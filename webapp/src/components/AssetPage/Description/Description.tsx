@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header } from 'decentraland-ui'
 import { Props } from './Description.types'
 import styles from './Description.module.css'
 

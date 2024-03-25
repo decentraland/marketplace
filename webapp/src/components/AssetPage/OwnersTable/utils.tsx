@@ -1,7 +1,7 @@
+import { Link } from 'react-router-dom'
 import { ListingStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon } from 'decentraland-ui'
-import { Link } from 'react-router-dom'
 import { Asset } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
 import { OwnersResponse } from '../../../modules/vendor/decentraland'

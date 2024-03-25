@@ -3,7 +3,6 @@ import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types
 import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
-import { View } from '../ui/types'
 import {
   FETCH_FAVORITED_ITEMS_SUCCESS,
   FETCH_LISTS_SUCCESS,
@@ -16,6 +15,7 @@ import {
   getListSuccess
 } from '../favorites/actions'
 import { ListsBrowseOptions } from '../favorites/types'
+import { View } from '../ui/types'
 import { ListDetails, Permission } from '../vendor/decentraland/favorites'
 import {
   buyItemFailure,

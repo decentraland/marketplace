@@ -2,15 +2,14 @@ import { getLocation, push } from 'connected-react-router'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { locations } from '../routing/locations'
-import { buyItemWithCardFailure } from '../item/actions'
-import { executeOrderWithCardFailure } from '../order/actions'
-import { AssetType } from './types'
 import { getSmartWearableRequiredPermissions, getSmartWearableVideoShowcase } from '../../lib/asset'
 import { isErrorWithMessage } from '../../lib/error'
+import { buyItemWithCardFailure } from '../item/actions'
+import { executeOrderWithCardFailure } from '../order/actions'
+import { locations } from '../routing/locations'
 import {
   FETCH_SMART_WEARABLE_REQUIRED_PERMISSIONS_REQUEST,
   FETCH_SMART_WEARABLE_VIDEO_HASH_REQUEST,
@@ -21,6 +20,7 @@ import {
   fetchSmartWearableVideoHashFailure,
   fetchSmartWearableVideoHashSuccess
 } from './actions'
+import { AssetType } from './types'
 
 export const failStatuses = [PurchaseStatus.CANCELLED, PurchaseStatus.FAILED, PurchaseStatus.REFUNDED]
 

@@ -1,13 +1,13 @@
-import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
-import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { expectSaga } from 'redux-saga-test-plan'
 import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_SUCCESS,
   connectWalletFailure,
   connectWalletSuccess
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { formatBalance, waitForWalletConnectionAndIdentityIfConnecting } from './utils'
 
 describe('when formatting the balance', () => {

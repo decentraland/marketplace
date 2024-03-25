@@ -1,13 +1,13 @@
-import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
 import { Item } from '@dcl/schemas'
-import { getPageNumber } from '../../routing/selectors'
 import { FETCH_FAVORITED_ITEMS_REQUEST, bulkPickUnpickSuccess, fetchFavoritedItemsRequest } from '../../favorites/actions'
 import { isOwnerUnpickingFromCurrentList } from '../../favorites/selectors'
+import { getPageNumber } from '../../routing/selectors'
 import { PAGE_SIZE } from '../../vendor/api'
-import { getCount, getItemsPickedByUserOrCreator } from './selectors'
-import { browseSaga } from './sagas'
 import { ListOfLists } from '../../vendor/decentraland/favorites'
+import { browseSaga } from './sagas'
+import { getCount, getItemsPickedByUserOrCreator } from './selectors'
 
 describe('when handling the success action of a bulk item pick and unpick', () => {
   let list: ListOfLists

@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import { Item } from '@dcl/schemas'
 import { Profile } from 'decentraland-dapps/dist/containers'
-import { AssetImage } from '../../../AssetImage/'
 import { getAssetUrl } from '../../../../modules/asset/utils'
+import { AssetImage } from '../../../AssetImage/'
 import styles from './CollectibleResultItemRow.module.css'
 
 type CollectibleResultItemRowProps = {

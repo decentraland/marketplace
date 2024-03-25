@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
-import { MapStateProps } from './Expiration.types'
-import Expiration from './Expiration'
-import { RootState } from '../../../modules/reducer'
 import { getCurrentOrder } from '../../../modules/order/selectors'
+import { RootState } from '../../../modules/reducer'
+import Expiration from './Expiration'
+import { MapStateProps } from './Expiration.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   order: getCurrentOrder(state) || undefined

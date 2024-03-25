@@ -1,13 +1,14 @@
-import { BigNumber } from 'ethers'
 import { Context as ResponsiveContext } from 'react-responsive'
 import { fireEvent, waitFor } from '@testing-library/react'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { BigNumber } from 'ethers'
 import { BodyShape, ChainId, Item, NFTCategory, Network, Rarity, WearableCategory } from '@dcl/schemas'
-import { renderWithProviders } from '../../../utils/test'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { CrossChainProvider, Route, AxelarProvider } from 'decentraland-transactions/crossChain'
-import { getMinSaleValueInWei } from '../../BuyPage/utils'
-import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import * as configModule from '../../../config'
+import { Asset } from '../../../modules/asset/types'
+import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
+import { renderWithProviders } from '../../../utils/test'
+import { getMinSaleValueInWei } from '../../BuyPage/utils'
 import {
   BUY_NOW_BUTTON_TEST_ID,
   GET_MANA_BUTTON_TEST_ID,
@@ -16,12 +17,11 @@ import {
   BuyWithCryptoModal,
   PRICE_TOO_LOW_TEST_ID
 } from './BuyWithCryptoModal'
-import { OnGetCrossChainRoute, OnGetGasCost, Props } from './BuyWithCryptoModal.types'
-import { DEFAULT_CHAINS, TESTNET_DEFAULT_CHAINS } from './utils'
-import { CHAIN_SELECTOR_DATA_TEST_ID, PAY_WITH_DATA_TEST_ID, TOKEN_SELECTOR_DATA_TEST_ID } from './PaymentSelector'
 import { useTokenBalance } from './hooks'
+import { CHAIN_SELECTOR_DATA_TEST_ID, PAY_WITH_DATA_TEST_ID, TOKEN_SELECTOR_DATA_TEST_ID } from './PaymentSelector'
 import { FREE_TX_COVERED_TEST_ID } from './PurchaseTotal'
-import { Asset } from '../../../modules/asset/types'
+import { DEFAULT_CHAINS, TESTNET_DEFAULT_CHAINS } from './utils'
+import { OnGetCrossChainRoute, OnGetGasCost, Props } from './BuyWithCryptoModal.types'
 
 const mockConfigIs = jest.fn()
 

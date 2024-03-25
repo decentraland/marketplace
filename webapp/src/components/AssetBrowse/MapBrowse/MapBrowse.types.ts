@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 import { AtlasTile } from 'decentraland-ui'
-import { browse, BrowseAction } from '../../../modules/routing/actions'
 import { NFT } from '../../../modules/nft/types'
+import { browse, BrowseAction } from '../../../modules/routing/actions'
 
 export type Props = {
   onlyOnSale?: boolean

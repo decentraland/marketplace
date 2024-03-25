@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
 import Profile from 'decentraland-dapps/dist/containers/Profile'
-import { locations } from '../../../../modules/routing/locations'
 import { CreatorAccount } from '../../../../modules/account/types'
 import { AssetType } from '../../../../modules/asset/types'
-import { Section } from '../../../../modules/vendor/decentraland'
+import { locations } from '../../../../modules/routing/locations'
 import { SortBy } from '../../../../modules/routing/types'
 import { VendorName } from '../../../../modules/vendor'
+import { Section } from '../../../../modules/vendor/decentraland'
 import styles from './CreatorResultRow.module.css'
 
 type CreatorResultRowProps = {

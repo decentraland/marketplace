@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react'
-import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { GenderFilterOption, WearableGender } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import './BodyShapeFilter.css'
+import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { AVAILABLE_FOR_FEMALE, AVAILABLE_FOR_MALE, getBodyShapeValue, getGenderFilterLabel } from '../../../utils/filters'
+import './BodyShapeFilter.css'
 
 export type BodyShapeFilterProps = {
   bodyShapes?: (GenderFilterOption | WearableGender)[]

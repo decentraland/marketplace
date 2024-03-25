@@ -3,8 +3,8 @@ import { Dispatch } from 'redux'
 import { RootState } from '../../../modules/reducer'
 import { claimAssetRequest } from '../../../modules/rental/actions'
 import { isClaimingAsset, isSubmittingTransaction, getError } from '../../../modules/rental/selectors'
-import { MapDispatchProps, MapStateProps, OwnProps } from './ClaimLandModal.types'
 import ClaimLandModal from './ClaimLandModal'
+import { MapDispatchProps, MapStateProps, OwnProps } from './ClaimLandModal.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

@@ -1,14 +1,14 @@
 import { useCallback, useMemo } from 'react'
-import classNames from 'classnames'
 import { Link } from 'react-router-dom'
-import intlFormat from 'date-fns/intlFormat'
+import classNames from 'classnames'
 import formatDistance from 'date-fns/formatDistance'
+import intlFormat from 'date-fns/intlFormat'
 import { RentalListingPeriod } from '@dcl/schemas'
-import { Button } from 'decentraland-ui'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getTransactionHref } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
-import { locations } from '../../../modules/routing/locations'
+import { isLand, isParcel } from '../../../modules/nft/utils'
 import {
   canBeClaimed,
   getMaxPriceOfPeriods,
@@ -18,12 +18,12 @@ import {
   isRentalListingCancelled,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
-import { isLand, isParcel } from '../../../modules/nft/utils'
+import { locations } from '../../../modules/routing/locations'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Mana } from '../../Mana'
 import { IconButton } from '../IconButton'
-import styles from './Rent.module.css'
 import { Props } from './Rent.types'
+import styles from './Rent.module.css'
 
 const sortPeriods = (a: RentalListingPeriod, b: RentalListingPeriod) => {
   if (a.minDays > b.minDays) {

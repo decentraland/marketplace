@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Network } from '@dcl/schemas'
-import { RootState } from '../../../modules/reducer'
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { getIsLandCrossChainEnabled } from '../../../modules/features/selectors'
-import { getMana, getWallet } from '../../../modules/wallet/selectors'
+import { RootState } from '../../../modules/reducer'
 import { getNFTBids } from '../../../modules/ui/nft/bid/selectors'
-import { OwnProps, MapStateProps, MapDispatchProps, MapDispatch } from './SaleRentActionBox.types'
+import { getMana, getWallet } from '../../../modules/wallet/selectors'
 import SaleRentActionBox from './SaleRentActionBox'
+import { OwnProps, MapStateProps, MapDispatchProps, MapDispatch } from './SaleRentActionBox.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const wallet = getWallet(state)

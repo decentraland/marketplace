@@ -1,8 +1,8 @@
+import { ethers } from 'ethers'
 import { getSigner, getConnectedProvider, getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { EstateRegistry__factory } from '../../../contracts'
 import { Contract } from '../../vendor/services'
 import { NFT } from '../types'
-import { ethers } from 'ethers'
 
 export const getSelection = (estate: NFT['data']['estate']) => {
   return estate!.parcels.map(pair => ({

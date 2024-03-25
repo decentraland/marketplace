@@ -1,10 +1,10 @@
 import { ChainId, Item, ListingStatus, NFTCategory, Network } from '@dcl/schemas'
-import { FavoritesData } from '../../favorites/types'
-import { BrowseUIState } from './reducer'
-import { LegacyOrderFragment } from '../../order/types'
-import { OnSaleElement } from './types'
-import { VendorName } from '../../vendor'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { FavoritesData } from '../../favorites/types'
+import { LegacyOrderFragment } from '../../order/types'
+import { VendorName } from '../../vendor'
+import { BrowseUIState } from './reducer'
+import { OnSaleElement } from './types'
 
 export function orderById(ids: string[], items: Item[]) {
   const itemsById = Object.fromEntries(items.map(item => [item.id, item]))

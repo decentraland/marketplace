@@ -8,6 +8,7 @@ import {
   fetchFavoritedItemsRequest,
   fetchListsRequest
 } from '../../favorites/actions'
+import { List, ListsBrowseOptions } from '../../favorites/types'
 import { fetchItemsRequest, fetchItemsSuccess } from '../../item/actions'
 import { ItemBrowseOptions } from '../../item/types'
 import { fetchNFTsRequest, fetchNFTsSuccess } from '../../nft/actions'
@@ -15,7 +16,6 @@ import { NFT, NFTsFetchOptions } from '../../nft/types'
 import { browse } from '../../routing/actions'
 import { VendorName } from '../../vendor'
 import { Section } from '../../vendor/decentraland'
-import { List, ListsBrowseOptions } from '../../favorites/types'
 import { ListOfLists } from '../../vendor/decentraland/favorites/types'
 import { setView } from '../actions'
 import { View } from '../types'

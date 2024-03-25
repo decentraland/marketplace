@@ -1,8 +1,8 @@
 import { utils } from 'ethers'
-import { analyticsAPI } from './analytics/api'
-import { TokenConverter } from '../TokenConverter'
-import { AnalyticsService as AnalyticsServiceInterface } from '../services'
 import { AnalyticsTimeframe } from '../../analytics/types'
+import { AnalyticsService as AnalyticsServiceInterface } from '../services'
+import { TokenConverter } from '../TokenConverter'
+import { analyticsAPI } from './analytics/api'
 
 export class AnalyticsService implements AnalyticsServiceInterface {
   private tokenConverter: TokenConverter

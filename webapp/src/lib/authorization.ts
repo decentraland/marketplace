@@ -1,13 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
   getData as getAuthorizations,
   isLoading as getLoadingAuthorizations
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
+import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ContractName } from 'decentraland-transactions'
-
 import { Contract } from '../modules/vendor/services'
 
 export function isAuthorized(authorization: Authorization, authorizations: Authorization[]) {

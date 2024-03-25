@@ -1,6 +1,6 @@
 import React from 'react'
-import { Header, Mobile } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header, Mobile } from 'decentraland-ui'
 import logo from '../logo.png'
 import wearableIcon from '../wearables.png'
 import './CampaignBrowserBanner.css'

@@ -1,13 +1,13 @@
 import { Network, Order, RentalListing } from '@dcl/schemas'
-import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
-import { acceptRentalListingSuccess } from '../rental/actions'
-import { NFT, NFTsFetchOptions, NFTsFetchParams } from '../nft/types'
 import { fetchNFTRequest, fetchNFTsFailure, fetchNFTsRequest, fetchNFTsSuccess, fetchNFTSuccess } from '../nft/actions'
-import { VendorName } from '../vendor'
+import { NFT, NFTsFetchOptions, NFTsFetchParams } from '../nft/types'
+import { acceptRentalListingSuccess } from '../rental/actions'
 import { View } from '../ui/types'
+import { VendorName } from '../vendor'
 import {
   cancelOrderFailure,
   cancelOrderRequest,

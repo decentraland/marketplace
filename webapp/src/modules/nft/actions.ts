@@ -2,10 +2,9 @@ import { action } from 'typesafe-actions'
 import { Order, RentalListing } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
-
-import { SortDirection } from '../routing/types'
 import { Account } from '../account/types'
 import { getAssetName } from '../asset/utils'
+import { SortDirection } from '../routing/types'
 import { FetchOneOptions } from '../vendor'
 import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
 

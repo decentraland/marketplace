@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { Loader, HeaderMenu, Header, Button } from 'decentraland-ui'
 import { useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { Loader, HeaderMenu, Header, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { Bid } from '../Bid'
 import { Props } from './Bids.types'

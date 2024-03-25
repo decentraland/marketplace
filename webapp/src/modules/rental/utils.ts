@@ -1,17 +1,17 @@
-import { BigNumber, ethers } from 'ethers'
-import add from 'date-fns/add'
-import { ChainId, PeriodCreation, RentalListing, RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer'
+import add from 'date-fns/add'
+import { BigNumber, ethers } from 'ethers'
+import { ChainId, PeriodCreation, RentalListing, RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
+import { Asset } from '../asset/types'
+import { NFT } from '../nft/types'
 import { VendorName } from '../vendor'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { addressEquals } from '../wallet/utils'
-import { Asset } from '../asset/types'
-import { NFT } from '../nft/types'
-import { PeriodOption } from './types'
 import { getRentalsContractInstance } from './contract'
+import { PeriodOption } from './types'
 
 export const daysByPeriod: Record<PeriodOption, number> = {
   [PeriodOption.ONE_DAY]: 1,

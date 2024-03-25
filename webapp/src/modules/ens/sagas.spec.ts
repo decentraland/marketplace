@@ -1,15 +1,18 @@
-import { ChainId } from '@dcl/schemas'
-import * as matchers from 'redux-saga-test-plan/matchers'
-import { Provider } from 'decentraland-connect'
-import { expectSaga } from 'redux-saga-test-plan'
-import { call, select } from 'redux-saga/effects'
 import { ethers, BigNumber } from 'ethers'
-import { Route, AxelarProvider } from 'decentraland-transactions/crossChain'
+import { call, select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
+import * as matchers from 'redux-saga-test-plan/matchers'
+import { ChainId } from '@dcl/schemas'
 import { getSigner, getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { ensSaga } from './sagas'
+import { Route, AxelarProvider } from 'decentraland-transactions/crossChain'
+import { Provider } from 'decentraland-connect'
+import { config } from '../../config'
+import { DCLRegistrar__factory } from '../../contracts/factories'
+import { DCLController__factory } from '../../contracts/factories/DCLController__factory'
+import { getWallet } from '../wallet/selectors'
 import {
   CLAIM_NAME_REQUEST,
   claimNameSuccess,
@@ -20,12 +23,9 @@ import {
   claimNameCrossChainFailure,
   claimNameCrossChainSuccess
 } from './actions'
-import { getWallet } from '../wallet/selectors'
-import { DCLController__factory } from '../../contracts/factories/DCLController__factory'
-import { DCLRegistrar__factory } from '../../contracts/factories'
-import { config } from '../../config'
-import { getDomainFromName } from './utils'
+import { ensSaga } from './sagas'
 import { ENS } from './types'
+import { getDomainFromName } from './utils'
 
 export const REGISTRAR_ADDRESS = config.get('REGISTRAR_CONTRACT_ADDRESS', '')
 const CONTROLLER_V2_ADDRESS = config.get('CONTROLLER_V2_CONTRACT_ADDRESS', '')

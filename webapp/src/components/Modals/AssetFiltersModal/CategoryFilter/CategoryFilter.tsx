@@ -1,6 +1,6 @@
+import { useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { useMemo } from 'react'
 import NFTSectionsMenuItems from '../../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { getAvailableSections } from './utils'
 import { Props } from './CategoryFilter.types'

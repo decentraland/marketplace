@@ -1,6 +1,6 @@
 import React from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Loader, ModalNavigation } from 'decentraland-ui'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
 import { VIDEO_TEST_ID } from './constants'

@@ -1,12 +1,12 @@
-import { Entity } from '@dcl/schemas'
-import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import { ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
-import { DeploymentPreparationData, buildEntity } from 'dcl-catalyst-client/dist/client/utils/DeploymentBuilder'
 import { BuildEntityWithoutFilesOptions } from 'dcl-catalyst-client/dist/client/types'
+import { DeploymentPreparationData, buildEntity } from 'dcl-catalyst-client/dist/client/utils/DeploymentBuilder'
 import { EntityContentItemReference } from 'dcl-catalyst-commons'
+import { Authenticator, AuthIdentity } from '@dcl/crypto'
+import { Entity } from '@dcl/schemas'
 import { peerUrl } from '../../lib/environment'
-import { convertToOutputString } from '../../utils/output'
 import { isOfEnumType } from '../../utils/enums'
+import { convertToOutputString } from '../../utils/output'
 import { LinkType, Store, StoreEntityMetadata } from './types'
 
 export const getPeerCoverUrl = (hash: string) => `${peerUrl}/content/contents/${hash}`

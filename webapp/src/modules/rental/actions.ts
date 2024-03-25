@@ -1,6 +1,6 @@
+import { action } from 'typesafe-actions'
 import { RentalListing } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { action } from 'typesafe-actions'
 import { NFT } from '../nft/types'
 import { PeriodOption, UpsertRentalOptType } from './types'
 

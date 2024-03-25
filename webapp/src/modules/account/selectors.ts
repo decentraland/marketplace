@@ -1,5 +1,5 @@
-import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
+import { createSelector } from 'reselect'
 import { Network } from '@dcl/schemas'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'

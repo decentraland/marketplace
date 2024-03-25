@@ -1,9 +1,9 @@
 import { NFTCategory, RentalStatus } from '@dcl/schemas'
+import { convertToOutputString } from '../../utils/output'
 import { getCategoryFromSection, getSearchEmoteCategory, getSearchWearableCategory } from '../routing/search'
 import { BrowseOptions } from '../routing/types'
-import { convertToOutputString } from '../../utils/output'
-import { Sections } from './routing/types'
 import { NFTsFetchFilters } from './nft/types'
+import { Sections } from './routing/types'
 import { VendorName, Disabled } from './types'
 
 export function getFilters(vendor: VendorName, options: BrowseOptions): NFTsFetchFilters {

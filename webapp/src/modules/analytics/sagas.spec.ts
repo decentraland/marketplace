@@ -1,9 +1,9 @@
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
+import { AnalyticsService } from '../vendor/decentraland'
 import { fetchAnalyticsVolumeDataRequest, fetchAnalyticsVolumeDataSuccess, fetchAnalyticsVolumeDataFailure } from './actions'
 import { analyticsSagas } from './sagas'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from './types'
-import { AnalyticsService } from '../vendor/decentraland'
 
 describe('when handling a fetch volume data request', () => {
   let timeframe: AnalyticsTimeframe

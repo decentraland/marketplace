@@ -1,13 +1,13 @@
 import { ethers } from 'ethers'
 import { Network, Order, OrderFilters, OrderSortBy } from '@dcl/schemas'
-import { ContractName, getContract, getContractName } from 'decentraland-transactions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { ContractName, getContract, getContractName } from 'decentraland-transactions'
 import { fromMillisecondsToSeconds } from '../../../lib/time'
 import { NFT } from '../../nft/types'
-import { orderAPI } from './order/api'
-import { VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
+import { VendorName } from '../types'
+import { orderAPI } from './order/api'
 import { OrderResponse } from './order/types'
 
 export class OrderService implements OrderServiceInterface<VendorName.DECENTRALAND> {

@@ -1,6 +1,9 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import ProfilesCache from '../../../lib/profiles'
+import { CreatorAccount } from '../../../modules/account/types'
+import { AssetType } from '../../../modules/asset/types'
 import {
   getEstateSizeLabel,
   getGenderFilterLabel,
@@ -9,13 +12,10 @@ import {
   getPriceLabel,
   AssetStatusFilter
 } from '../../../utils/filters'
-import { CreatorAccount } from '../../../modules/account/types'
-import ProfilesCache from '../../../lib/profiles'
 import { profileToCreatorAccount } from '../../AssetFilters/CreatorsFilter/utils'
-import { AssetType } from '../../../modules/asset/types'
 import { Pill } from './Pill/Pill'
-import { Props } from './SelectedFilters.types'
 import { getCollectionByAddress } from './utils'
+import { Props } from './SelectedFilters.types'
 import styles from './SelectedFilters.module.css'
 
 export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrowse }: Props) => {

@@ -1,10 +1,9 @@
 import { connect } from 'react-redux'
-
+import { getIsCampaignCollectionsBannerEnabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import { getIsFullscreen, getAssetType, getSection, getVendor, getContracts } from '../../modules/routing/selectors'
-import { MapStateProps } from './BrowsePage.types'
 import BrowsePage from './BrowsePage'
-import { getIsCampaignCollectionsBannerEnabled } from '../../modules/features/selectors'
+import { MapStateProps } from './BrowsePage.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   vendor: getVendor(state),

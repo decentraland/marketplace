@@ -1,6 +1,6 @@
 import { RentalListing } from '@dcl/schemas'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { AuthorizationStepStatus } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../reducer'
 import { ACCEPT_RENTAL_LISTING_REQUEST, CLAIM_ASSET_REQUEST, REMOVE_RENTAL_REQUEST } from './actions'
 

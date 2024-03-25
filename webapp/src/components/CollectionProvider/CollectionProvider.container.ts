@@ -1,7 +1,7 @@
-import { Collection } from '@dcl/schemas'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
+import { Collection } from '@dcl/schemas'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { fetchSingleCollectionRequest, FETCH_COLLECTIONS_REQUEST } from '../../modules/collection/actions'
 import {
   getLoading,

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect'
-import { TileState } from './reducer'
-import { RootState } from '../reducer'
 import { Tile } from '../../components/Atlas/Atlas.types'
+import { RootState } from '../reducer'
+import { TileState } from './reducer'
 
 export const getState = (state: RootState) => state.tile
 export const getTiles = (state: RootState) => getState(state).data

@@ -3,9 +3,9 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { RootState } from '../../../../modules/reducer'
 import { upsertRentalRequest, UPSERT_RENTAL_REQUEST, removeRentalRequest } from '../../../../modules/rental/actions'
 import { getLoading as getRentalLoading, getError, isRemovingRental, isSubmittingTransaction } from '../../../../modules/rental/selectors'
-import { MapStateProps, MapDispatchProps, MapDispatch, OwnProps } from './EditConfirmationStep.types'
-import ConfirmationStep from './EditConfirmationStep'
 import { UpsertRentalOptType } from '../../../../modules/rental/types'
+import ConfirmationStep from './EditConfirmationStep'
+import { MapStateProps, MapDispatchProps, MapDispatch, OwnProps } from './EditConfirmationStep.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   isSigning: isLoadingType(getRentalLoading(state), UPSERT_RENTAL_REQUEST),

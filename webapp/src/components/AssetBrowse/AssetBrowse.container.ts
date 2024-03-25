@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../modules/reducer'
-import { setView } from '../../modules/ui/actions'
 import { browse, fetchAssetsFromRoute } from '../../modules/routing/actions'
 import {
   getIsMap,
@@ -12,10 +11,11 @@ import {
   getIsFullscreen,
   getVisitedLocations
 } from '../../modules/routing/selectors'
-import { getView } from '../../modules/ui/browse/selectors'
 import { isMapSet } from '../../modules/routing/utils'
-import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps, Props } from './AssetBrowse.types'
+import { setView } from '../../modules/ui/actions'
+import { getView } from '../../modules/ui/browse/selectors'
 import AssetBrowse from './AssetBrowse'
+import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps, Props } from './AssetBrowse.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const isMap = isMapSet(getIsMap(state), getSection(state), getView(state))

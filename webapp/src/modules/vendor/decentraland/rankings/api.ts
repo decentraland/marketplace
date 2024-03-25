@@ -1,6 +1,6 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { NFT_SERVER_URL } from '../nft'
 import { AnalyticsTimeframe, RankingEntities, RankingEntity, RankingsFilters } from '../../../analytics/types'
+import { NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 
 const DEFAULT_REQUEST_SIZE = 5

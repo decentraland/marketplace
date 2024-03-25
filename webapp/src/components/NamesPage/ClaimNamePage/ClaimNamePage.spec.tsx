@@ -1,10 +1,10 @@
 import { fireEvent, waitFor } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { renderWithProviders } from '../../../utils/test'
 import { MAX_NAME_SIZE, isNameAvailable } from '../../../modules/ens/utils'
-import { Props } from './ClaimNamePage.types'
+import { renderWithProviders } from '../../../utils/test'
 import ClaimNamePage from './ClaimNamePage'
+import { Props } from './ClaimNamePage.types'
 
 jest.mock(
   '../../../modules/ens/utils',

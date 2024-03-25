@@ -1,21 +1,17 @@
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-
 import { ConnectedRouter } from 'connected-react-router'
-import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
+import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
 import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
-import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
-
-import './modules/analytics/track'
-import './modules/analytics/sentry'
-
-import { ScrollToTop } from './components/ScrollToTop'
-import * as locales from './modules/translation/locales'
-import { initStore, createHistory } from './modules/store'
-import { Routes } from './components/Routes'
+import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
 import * as modals from './components/Modals'
-
+import { Routes } from './components/Routes'
+import { ScrollToTop } from './components/ScrollToTop'
+import './modules/analytics/sentry'
+import './modules/analytics/track'
+import { initStore, createHistory } from './modules/store'
+import * as locales from './modules/translation/locales'
 import './themes'
 import './index.css'
 

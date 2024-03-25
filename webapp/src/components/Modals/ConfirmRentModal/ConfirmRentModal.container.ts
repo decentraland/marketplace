@@ -1,13 +1,13 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { Contract } from '@dcl/schemas'
+import { getContract } from '../../../modules/contract/selectors'
 import { RootState } from '../../../modules/reducer'
 import { acceptRentalListingRequest, clearRentalErrors } from '../../../modules/rental/actions'
-import { getWallet } from '../../../modules/wallet/selectors'
 import { isSubmittingTransaction, getError, isAcceptingRental } from '../../../modules/rental/selectors'
-import { getContract } from '../../../modules/contract/selectors'
-import { MapDispatchProps, MapStateProps, OwnProps } from './ConfirmRentModal.types'
+import { getWallet } from '../../../modules/wallet/selectors'
 import ConfirmRentModal from './ConfirmRentModal'
+import { MapDispatchProps, MapStateProps, OwnProps } from './ConfirmRentModal.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

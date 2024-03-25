@@ -1,9 +1,9 @@
-import { Dispatch } from 'redux'
 import { RouterLocation } from 'connected-react-router'
-import { VendorName } from '../../modules/vendor/types'
+import { Dispatch } from 'redux'
+import { Asset, AssetType } from '../../modules/asset/types'
 import { browse, BrowseAction, clearFilters, ClearFiltersAction } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
-import { Asset, AssetType } from '../../modules/asset/types'
+import { VendorName } from '../../modules/vendor/types'
 
 export type Props = {
   vendor: VendorName

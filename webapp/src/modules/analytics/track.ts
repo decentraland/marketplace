@@ -1,6 +1,17 @@
-import { PayloadAction } from 'typesafe-actions'
 import { ethers } from 'ethers'
+import { PayloadAction } from 'typesafe-actions'
+import { NFTCategory } from '@dcl/schemas'
 import { EventName, GetPayload } from 'decentraland-dapps/dist/modules/analytics/types'
+import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
+import {
+  GrantTokenSuccessAction,
+  GRANT_TOKEN_SUCCESS,
+  RevokeTokenSuccessAction,
+  REVOKE_TOKEN_SUCCESS
+} from 'decentraland-dapps/dist/modules/authorization/actions'
+import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
+import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { SET_PROFILE_AVATAR_ALIAS_SUCCESS, SetProfileAvatarAliasSuccessAction } from 'decentraland-dapps/dist/modules/profile'
 import {
   FETCH_TRANSACTION_FAILURE,
   FIX_REVERTED_TRANSACTION,
@@ -9,27 +20,11 @@ import {
   FixRevertedTransactionAction,
   ReplaceTransactionSuccessAction
 } from 'decentraland-dapps/dist/modules/transaction/actions'
-import {
-  GrantTokenSuccessAction,
-  GRANT_TOKEN_SUCCESS,
-  RevokeTokenSuccessAction,
-  REVOKE_TOKEN_SUCCESS
-} from 'decentraland-dapps/dist/modules/authorization/actions'
 import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
-import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { SET_PROFILE_AVATAR_ALIAS_SUCCESS, SetProfileAvatarAliasSuccessAction } from 'decentraland-dapps/dist/modules/profile'
 import { capitalize } from '../../lib/text'
-import {
-  CREATE_ORDER_SUCCESS,
-  CANCEL_ORDER_SUCCESS,
-  EXECUTE_ORDER_TRANSACTION_SUBMITTED,
-  CreateOrderSuccessAction,
-  CancelOrderSuccessAction,
-  ExecuteOrderTransactionSubmittedAction,
-  ExecuteOrderWithCardSuccessAction,
-  EXECUTE_ORDER_WITH_CARD_SUCCESS
-} from '../order/actions'
-import { TRANSFER_NFT_TRANSACTION_SUBMITTED, TransferNFTSuccessAction, FETCH_NFTS_SUCCESS, FetchNFTsSuccessAction } from '../nft/actions'
+import { getCategoryInfo } from '../../utils/category'
+import * as events from '../../utils/events'
+import { FETCH_CREATORS_ACCOUNT_SUCCESS, FetchCreatorsAccountSuccessAction } from '../account/actions'
 import {
   PLACE_BID_SUCCESS,
   ACCEPT_BID_TRANSACTION_SUBMITTED,
@@ -43,32 +38,11 @@ import {
   AcceptBidTransactionSubmittedAction
 } from '../bid/actions'
 import {
-  BuyItemSuccessAction,
-  BuyItemWithCardSuccessAction,
-  BUY_ITEM_SUCCESS,
-  BUY_ITEM_WITH_CARD_SUCCESS,
-  FetchItemsSuccessAction,
-  FETCH_ITEMS_SUCCESS,
-  BUY_ITEM_CROSS_CHAIN_SUCCESS,
-  BuyItemCrossChainSuccessAction,
-  BuyItemCrossChainFailureAction,
-  BUY_ITEM_CROSS_CHAIN_FAILURE
-} from '../item/actions'
-import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
-import { isParcel } from '../nft/utils'
-import {
-  AcceptRentalListingSuccessAction,
-  ACCEPT_RENTAL_LISTING_SUCCESS,
-  ClaimAssetSuccessAction,
-  CLAIM_ASSET_SUCCESS,
-  UpsertRentalSuccessAction,
-  UPSERT_RENTAL_SUCCESS
-} from '../rental/actions'
-import { UpsertRentalOptType } from '../rental/types'
-import { NFTCategory } from '@dcl/schemas'
-import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
-import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
-import * as events from '../../utils/events'
+  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+  CLAIM_NAME_SUCCESS,
+  ClaimNameCrossChainSuccessAction,
+  ClaimNameSuccessAction
+} from '../ens/actions'
 import {
   CREATE_LIST_FAILURE,
   CREATE_LIST_SUCCESS,
@@ -91,15 +65,41 @@ import {
   UpdateListFailureAction,
   UpdateListSuccessAction
 } from '../favorites/actions'
-import { getCategoryInfo } from '../../utils/category'
-import { FETCH_CREATORS_ACCOUNT_SUCCESS, FetchCreatorsAccountSuccessAction } from '../account/actions'
-import { isUserRejectedTransactionError } from '../transaction/utils'
 import {
-  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
-  CLAIM_NAME_SUCCESS,
-  ClaimNameCrossChainSuccessAction,
-  ClaimNameSuccessAction
-} from '../ens/actions'
+  BuyItemSuccessAction,
+  BuyItemWithCardSuccessAction,
+  BUY_ITEM_SUCCESS,
+  BUY_ITEM_WITH_CARD_SUCCESS,
+  FetchItemsSuccessAction,
+  FETCH_ITEMS_SUCCESS,
+  BUY_ITEM_CROSS_CHAIN_SUCCESS,
+  BuyItemCrossChainSuccessAction,
+  BuyItemCrossChainFailureAction,
+  BUY_ITEM_CROSS_CHAIN_FAILURE
+} from '../item/actions'
+import { TRANSFER_NFT_TRANSACTION_SUBMITTED, TransferNFTSuccessAction, FETCH_NFTS_SUCCESS, FetchNFTsSuccessAction } from '../nft/actions'
+import { isParcel } from '../nft/utils'
+import {
+  CREATE_ORDER_SUCCESS,
+  CANCEL_ORDER_SUCCESS,
+  EXECUTE_ORDER_TRANSACTION_SUBMITTED,
+  CreateOrderSuccessAction,
+  CancelOrderSuccessAction,
+  ExecuteOrderTransactionSubmittedAction,
+  ExecuteOrderWithCardSuccessAction,
+  EXECUTE_ORDER_WITH_CARD_SUCCESS
+} from '../order/actions'
+import {
+  AcceptRentalListingSuccessAction,
+  ACCEPT_RENTAL_LISTING_SUCCESS,
+  ClaimAssetSuccessAction,
+  CLAIM_ASSET_SUCCESS,
+  UpsertRentalSuccessAction,
+  UPSERT_RENTAL_SUCCESS
+} from '../rental/actions'
+import { UpsertRentalOptType } from '../rental/types'
+import { isUserRejectedTransactionError } from '../transaction/utils'
+import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
 
 function track<T extends PayloadAction<string, unknown>>(
   actionType: string,

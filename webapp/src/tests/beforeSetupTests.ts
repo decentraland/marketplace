@@ -2,14 +2,13 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import { TextEncoder, TextDecoder } from 'util'
 import path from 'path'
+import { TextEncoder, TextDecoder } from 'util'
 import { config } from 'dotenv'
 import flatten from 'flat'
-import * as translationUtils from 'decentraland-dapps/dist/modules/translation/utils'
-
 import fetch, { Request, Response } from 'node-fetch'
 import { en as dappsEn } from 'decentraland-dapps/dist/modules/translation/defaults'
+import * as translationUtils from 'decentraland-dapps/dist/modules/translation/utils'
 import * as locales from '../modules/translation/locales'
 
 jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {

@@ -1,11 +1,11 @@
-import { expectSaga } from 'redux-saga-test-plan'
 import { call } from 'redux-saga/effects'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { connectWalletSuccess, disconnectWallet } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { localStorageClearIdentity, localStorageGetIdentity } from '@dcl/single-sign-on-client'
-import { identitySaga, setAuxAddress } from './sagas'
-import { generateIdentitySuccess } from './actions'
+import { expectSaga } from 'redux-saga-test-plan'
 import { AuthIdentity } from '@dcl/crypto'
+import { localStorageClearIdentity, localStorageGetIdentity } from '@dcl/single-sign-on-client'
+import { connectWalletSuccess, disconnectWallet } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { generateIdentitySuccess } from './actions'
+import { identitySaga, setAuxAddress } from './sagas'
 
 jest.mock('@dcl/single-sign-on-client', () => {
   return {

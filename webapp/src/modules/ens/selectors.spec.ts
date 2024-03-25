@@ -1,6 +1,7 @@
 import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 import { AuthorizationStepStatus } from 'decentraland-ui'
 import { RootState } from '../reducer'
+import { CLAIM_NAME_REQUEST, CLAIM_NAME_TRANSACTION_SUBMITTED } from './actions'
 import {
   getState,
   getData,
@@ -11,7 +12,6 @@ import {
   getClaimNameStatus,
   getErrorMessage
 } from './selectors'
-import { CLAIM_NAME_REQUEST, CLAIM_NAME_TRANSACTION_SUBMITTED } from './actions'
 
 let state: RootState
 

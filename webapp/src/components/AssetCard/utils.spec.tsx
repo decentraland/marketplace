@@ -1,9 +1,9 @@
 import { BigNumber, ethers } from 'ethers'
 import { CatalogSortBy, Item } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import mintingIcon from '../../images/minting.png'
 import { BrowseOptions, SortBy } from '../../modules/routing/types'
 import { getAlsoAvailableForMintingText, getAssetListingsRangeInfoText, getCatalogCardInformation, getListingsRangePrice } from './utils'
-import mintingIcon from '../../images/minting.png'
 
 const applyRange = (appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice' | 'sortBy'>) => {
   return (appliedFilters = {

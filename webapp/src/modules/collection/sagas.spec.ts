@@ -1,7 +1,7 @@
-import { Collection } from '@dcl/schemas'
 import { select } from '@redux-saga/core/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call } from 'redux-saga-test-plan/matchers'
+import { Collection } from '@dcl/schemas'
 import { fetchCollectionItemsRequest } from '../item/actions'
 import { getItemsByContractAddress } from '../item/selectors'
 import { collectionAPI } from '../vendor/decentraland'

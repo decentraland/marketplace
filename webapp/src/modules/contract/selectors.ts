@@ -1,7 +1,7 @@
-import { createSelectorCreator, defaultMemoize } from 'reselect'
 import isEqual from 'lodash/isEqual'
-import { Contract } from '../vendor/services'
+import { createSelectorCreator, defaultMemoize } from 'reselect'
 import { RootState } from '../reducer'
+import { Contract } from '../vendor/services'
 import { getContractByParams } from './utils'
 
 export const getState = (state: RootState) => state.contract

@@ -1,7 +1,7 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { Dispatch } from 'redux'
 import { OpenModalAction, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { BrowseOptions } from '../../../modules/routing/types'
 
 export type Props = {

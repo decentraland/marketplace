@@ -1,6 +1,6 @@
-import { RootState } from '../reducer'
 import { getIsFeatureEnabled, getLoading, hasLoadedInitialFlags } from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
+import { RootState } from '../reducer'
 import { FeatureName } from './types'
 
 export const isLoadingFeatureFlags = (state: RootState) => {

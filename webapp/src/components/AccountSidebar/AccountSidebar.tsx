@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 import { AssetType } from '../../modules/asset/types'
 import { VendorName } from '../../modules/vendor/types'
-import { Props } from './AccountSidebar.types'
 import CurrentAccountSidebar from './CurrentAccountSidebar'
 import OtherAccountSidebar from './OtherAccountSidebar'
+import { Props } from './AccountSidebar.types'
 import './AccountSidebar.css'
 
 const AccountSidebar = ({ address, section, isCurrentAccount, onBrowse }: Props) => {

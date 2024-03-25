@@ -1,5 +1,5 @@
-import { Collection, CollectionFilters } from '@dcl/schemas'
 import { action } from 'typesafe-actions'
+import { Collection, CollectionFilters } from '@dcl/schemas'
 
 // FETCH COLLECTIONS
 

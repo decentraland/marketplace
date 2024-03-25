@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from 'react'
-import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { getLandLabel } from '../../../utils/filters'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import './LandStatusFilter.css'
-import { getLandLabel } from '../../../utils/filters'
 
 type LandStatusFilterProps = {
   landStatus: LANDFilters

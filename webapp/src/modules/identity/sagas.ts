@@ -1,5 +1,5 @@
-import { takeLatest, put, call } from 'redux-saga/effects'
 import { ethers } from 'ethers'
+import { takeLatest, put, call } from 'redux-saga/effects'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import { localStorageGetIdentity, localStorageClearIdentity, localStorageStoreIdentity } from '@dcl/single-sign-on-client'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -9,10 +9,9 @@ import {
   DisconnectWalletAction,
   ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { isErrorWithMessage } from '../../lib/error'
 import { config } from '../../config'
+import { isErrorWithMessage } from '../../lib/error'
 import { getEth } from '../wallet/utils'
-
 import { GENERATE_IDENTITY_REQUEST, GenerateIdentityRequestAction, generateIdentityFailure, generateIdentitySuccess } from './actions'
 import { IDENTITY_EXPIRATION_IN_MINUTES } from './utils'
 

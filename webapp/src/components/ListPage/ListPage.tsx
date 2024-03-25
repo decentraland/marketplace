@@ -1,23 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Link, Redirect, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
-import { Back, Button, Dropdown, Header, Icon, Loader, Popup } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Back, Button, Dropdown, Header, Icon, Loader, Popup } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../lib/date'
 import { locations } from '../../modules/routing/locations'
-import { Section } from '../../modules/vendor/decentraland'
-import { VendorName } from '../../modules/vendor'
 import { View } from '../../modules/ui/types'
+import { VendorName } from '../../modules/vendor'
+import { Section } from '../../modules/vendor/decentraland'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
 import * as events from '../../utils/events'
-import { NavigationTab } from '../Navigation/Navigation.types'
 import { AssetBrowse } from '../AssetBrowse'
-import { PageLayout } from '../PageLayout'
 import { LinkedProfile } from '../LinkedProfile'
+import { NavigationTab } from '../Navigation/Navigation.types'
+import { PageLayout } from '../PageLayout'
 import { PrivateTag } from '../PrivateTag'
-import { Props } from './ListPage.types'
-import styles from './ListPage.module.css'
 import {
   ERROR_CONTAINER_TEST_ID,
   COULD_NOT_LOAD_LIST_ACTION_TEST_ID,
@@ -34,6 +32,8 @@ import {
   EMPTY_LIST_ACTION_TEST_ID,
   MORE_OPTIONS_DROPDOWN_TEST_ID
 } from './constants'
+import { Props } from './ListPage.types'
+import styles from './ListPage.module.css'
 
 const LIST_NOT_FOUND = 'list was not found'
 

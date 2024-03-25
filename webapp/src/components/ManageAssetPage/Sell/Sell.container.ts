@@ -1,9 +1,8 @@
-import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-
-import { MapDispatchProps, OwnProps } from './Sell.types'
 import Sell from './Sell'
+import { MapDispatchProps, OwnProps } from './Sell.types'
 
 const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => ({
   // TODO: @Rentals, add the mapDispatch that opens the sell modal once implemented

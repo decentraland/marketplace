@@ -1,6 +1,6 @@
+import { ethers } from 'ethers'
 import { Account, Profile } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ethers } from 'ethers'
 import { NFTResult } from '../vendor/decentraland'
 import { AccountMetrics, CreatorAccount } from './types'
 

@@ -1,10 +1,10 @@
+import { createSelector } from 'reselect'
+import { GRANT_TOKEN_SUCCESS, REVOKE_TOKEN_SUCCESS } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { getData } from 'decentraland-dapps/dist/modules/transaction/selectors'
 import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
-import { RootState } from '../reducer'
-import { createSelector } from 'reselect'
-import { getAddress } from '../wallet/selectors'
-import { GRANT_TOKEN_SUCCESS, REVOKE_TOKEN_SUCCESS } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { RootState } from '../reducer'
+import { getAddress } from '../wallet/selectors'
 
 export const getTransactionsByType = (state: RootState, address: string, type: string): Transaction[] =>
   getData(state).filter(tx => tx.from.toLowerCase() === address && tx.actionType === type)

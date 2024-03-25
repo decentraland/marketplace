@@ -1,12 +1,11 @@
-import { Bid, ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity } from '@dcl/schemas'
 import { createRef, RefObject } from 'react'
+import { Bid, ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { formatWeiMANA } from '../../../lib/mana'
 import * as bidAPI from '../../../modules/vendor/decentraland/bid/api'
 import * as orderAPI from '../../../modules/vendor/decentraland/order/api'
 import { renderWithProviders } from '../../../utils/tests'
 import BestBuyingOption from './BestBuyingOption'
-import { formatWeiMANA } from '../../../lib/mana'
 
 jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('../../../modules/vendor/decentraland/order/api')

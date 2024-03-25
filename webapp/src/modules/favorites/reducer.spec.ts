@@ -1,9 +1,9 @@
 import { Item, Network } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import { ListDetails, ListOfLists, Permission, UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
-import { fetchItemSuccess, fetchItemsSuccess } from '../item/actions'
 import {
   BulkPickUnpickCancelAction,
   BulkPickUnpickStartAction,

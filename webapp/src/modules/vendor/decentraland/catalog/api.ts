@@ -1,5 +1,5 @@
-import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { Item, CatalogFilters } from '@dcl/schemas'
+import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 

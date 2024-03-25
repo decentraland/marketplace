@@ -1,9 +1,9 @@
-import { AnyAction } from 'redux'
-import { Collection } from '@dcl/schemas'
 import { createMatchSelector } from 'connected-react-router'
+import { AnyAction } from 'redux'
 import { createSelector } from 'reselect'
-import { locations } from '../routing/locations'
+import { Collection } from '@dcl/schemas'
 import { RootState } from '../reducer'
+import { locations } from '../routing/locations'
 import {
   FETCH_COLLECTIONS_REQUEST,
   FETCH_SINGLE_COLLECTION_REQUEST,

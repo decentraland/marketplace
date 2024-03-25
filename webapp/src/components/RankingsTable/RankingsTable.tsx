@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { HeaderMenu, Header, NotMobile, Table, Loader, Tabs, Dropdown, DropdownProps, Mobile } from 'decentraland-ui'
 import { EmoteCategory, Rarity, WearableCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { HeaderMenu, Header, NotMobile, Table, Loader, Tabs, Dropdown, DropdownProps, Mobile } from 'decentraland-ui'
 import {
   AnalyticsTimeframe,
   CollectorRank,
@@ -14,14 +14,14 @@ import {
 } from '../../modules/analytics/types'
 import { useScrollSectionIntoView } from '../../modules/ui/utils'
 import { convertToOutputString } from '../../utils/output'
-import { TimeframeSelector } from '../Rankings/TimeframeSelector'
 import { InfoTooltip } from '../InfoTooltip'
-import { Props } from './RankingsTable.types'
-import './RankingsTable.css'
+import { TimeframeSelector } from '../Rankings/TimeframeSelector'
+import { RankingCollectorRow } from './RankingCollectorRow'
+import { RankingCreatorRow } from './RankingCreatorRow'
 import { RankingItemRow } from './RankingItemRow'
 import { parseURLHash } from './utils'
-import { RankingCreatorRow } from './RankingCreatorRow'
-import { RankingCollectorRow } from './RankingCollectorRow'
+import { Props } from './RankingsTable.types'
+import './RankingsTable.css'
 
 const ALL_FILTER = 'all'
 const INITIAL_FILTERS = {

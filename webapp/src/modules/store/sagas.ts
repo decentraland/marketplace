@@ -1,10 +1,10 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { LocationChangeAction, LOCATION_CHANGE } from 'connected-react-router'
-import { Entity } from '@dcl/schemas'
-import { AuthIdentity } from '@dcl/crypto'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { AuthIdentity } from '@dcl/crypto'
+import { Entity } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isErrorWithMessage } from '../../lib/error'
 import { getIdentity } from '../identity/utils'
 import {
@@ -18,8 +18,8 @@ import {
   UPDATE_STORE_REQUEST,
   revertLocalStore
 } from './actions'
-import { deployStoreEntity, fetchStoreEntity, getStoreFromEntity } from './utils'
 import { getIsLocalStoreDirty } from './selectors'
+import { deployStoreEntity, fetchStoreEntity, getStoreFromEntity } from './utils'
 
 export function* storeSaga(client: ContentClient) {
   yield takeEvery(FETCH_STORE_REQUEST, handleFetchStoreRequest)

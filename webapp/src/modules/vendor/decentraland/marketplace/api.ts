@@ -1,8 +1,8 @@
 import { ChainId } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { Balance } from './types'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
+import { Balance } from './types'
 
 export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')
 

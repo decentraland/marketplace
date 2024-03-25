@@ -1,13 +1,12 @@
 import React from 'react'
-
-import { VendorName } from '../../modules/vendor/types'
 import { View } from '../../modules/ui/types'
-import { NavigationTab } from '../Navigation/Navigation.types'
 import { Section } from '../../modules/vendor/decentraland'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
-import { Navigation } from '../Navigation'
+import { VendorName } from '../../modules/vendor/types'
 import { AssetBrowse } from '../AssetBrowse'
+import { Footer } from '../Footer'
+import { Navbar } from '../Navbar'
+import { Navigation } from '../Navigation'
+import { NavigationTab } from '../Navigation/Navigation.types'
 import { Props } from './LandsPage.types'
 
 const LandsPage = (props: Props) => {

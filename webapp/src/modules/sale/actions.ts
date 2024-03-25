@@ -1,5 +1,5 @@
-import { Sale, SaleFilters } from '@dcl/schemas'
 import { action } from 'typesafe-actions'
+import { Sale, SaleFilters } from '@dcl/schemas'
 
 export const FETCH_SALES_REQUEST = '[Request] Fetch sales'
 export const FETCH_SALES_SUCCESS = '[Success] Fetch sales'

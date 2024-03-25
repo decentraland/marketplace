@@ -1,10 +1,10 @@
 import React, { ReactNode, useEffect } from 'react'
-import { Icon, Loader } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { formatWeiMANA } from '../../../lib/mana'
-import { Props } from './Stats.types'
-import { Mana } from '../../Mana'
 import { Network } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Icon, Loader } from 'decentraland-ui'
+import { formatWeiMANA } from '../../../lib/mana'
+import { Mana } from '../../Mana'
+import { Props } from './Stats.types'
 import './Stats.css'
 
 const Stats = ({ address, totalSales, totalEarnings, ethereumEarned, maticEarned, royalties, isLoading, onFetchMetrics }: Props) => {

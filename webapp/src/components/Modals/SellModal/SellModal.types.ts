@@ -1,10 +1,9 @@
-import { Order } from '@dcl/schemas'
 import { Dispatch } from 'redux'
+import { Order } from '@dcl/schemas'
 import { fetchAuthorizationsRequest, FetchAuthorizationsRequestAction } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
-
 import { upsertContracts, UpsertContractsAction } from '../../../modules/contract/actions'
 import { getContract } from '../../../modules/contract/selectors'
 import { NFT } from '../../../modules/nft/types'

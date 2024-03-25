@@ -1,6 +1,6 @@
 import * as contentClient from 'dcl-catalyst-client/dist/client/ContentClient'
-import { builderAPI } from '../modules/vendor/decentraland/builder/api'
 import { Asset } from '../modules/asset/types'
+import { builderAPI } from '../modules/vendor/decentraland/builder/api'
 import { getSmartWearableRequiredPermissions, getSmartWearableSceneContent, getSmartWearableVideoShowcase } from './asset'
 
 jest.mock('../modules/vendor/decentraland/builder/api', () => ({

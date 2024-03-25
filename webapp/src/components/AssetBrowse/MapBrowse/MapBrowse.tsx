@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Coordinate } from 'recharts/types/util/types'
+import { NFTCategory } from '@dcl/schemas'
 import { useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Atlas } from '../../Atlas'
-import { Props } from './MapBrowse.types'
-import { Coordinate } from 'recharts/types/util/types'
 import { getNearestTile, Coord } from './utils'
-import { NFTCategory } from '@dcl/schemas'
+import { Props } from './MapBrowse.types'
 
 export function MapBrowse({ onlyOnRent, onlyOnSale, showOwned, tiles, ownedLands, onBrowse }: Props) {
   const isMobileOrTable = useTabletAndBelowMediaQuery()

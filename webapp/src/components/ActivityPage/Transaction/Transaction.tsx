@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { ethers } from 'ethers'
 import { Network } from '@dcl/schemas'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import {
@@ -13,27 +12,27 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { ADD_MANA_PURCHASE_AS_TRANSACTION } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { ManaPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { gatewaysNames } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
 import { getNetworkMANADescription } from 'decentraland-ui/dist/lib/network'
-
+import { AssetType } from '../../../modules/asset/types'
 import { getAssetName } from '../../../modules/asset/utils'
+import { PLACE_BID_SUCCESS, ACCEPT_BID_TRANSACTION_SUBMITTED, CANCEL_BID_SUCCESS } from '../../../modules/bid/actions'
+import { BUY_ITEM_CROSS_CHAIN_SUCCESS, BUY_ITEM_SUCCESS, BUY_ITEM_WITH_CARD_SUCCESS } from '../../../modules/item/actions'
+import { TRANSFER_NFT_TRANSACTION_SUBMITTED } from '../../../modules/nft/actions'
+import { isParcel } from '../../../modules/nft/utils'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
   EXECUTE_ORDER_TRANSACTION_SUBMITTED,
   EXECUTE_ORDER_WITH_CARD_SUCCESS
 } from '../../../modules/order/actions'
-import { BUY_ITEM_CROSS_CHAIN_SUCCESS, BUY_ITEM_SUCCESS, BUY_ITEM_WITH_CARD_SUCCESS } from '../../../modules/item/actions'
-import { TRANSFER_NFT_TRANSACTION_SUBMITTED } from '../../../modules/nft/actions'
-import { PLACE_BID_SUCCESS, ACCEPT_BID_TRANSACTION_SUBMITTED, CANCEL_BID_SUCCESS } from '../../../modules/bid/actions'
-import { locations } from '../../../modules/routing/locations'
 import {
   ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
   CLAIM_ASSET_TRANSACTION_SUBMITTED,
   REMOVE_RENTAL_TRANSACTION_SUBMITTED
 } from '../../../modules/rental/actions'
-import { AssetType } from '../../../modules/asset/types'
-import { isParcel } from '../../../modules/nft/utils'
+import { locations } from '../../../modules/routing/locations'
 import { getContractNames } from '../../../modules/vendor'
 import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'

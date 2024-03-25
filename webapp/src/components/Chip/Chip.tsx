@@ -1,9 +1,7 @@
 import * as React from 'react'
-import { Icon } from 'decentraland-ui'
 import classNames from 'classnames'
-
+import { Icon } from 'decentraland-ui'
 import { Props } from './Chip.types'
-
 import './Chip.css'
 
 const Chip = (props: Props) => {

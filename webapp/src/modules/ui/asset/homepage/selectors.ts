@@ -1,18 +1,17 @@
 import { AnyAction } from 'redux'
 import { createSelector } from 'reselect'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
-
-import { NFTState } from '../../../nft/reducer'
-import { ItemState } from '../../../item/reducer'
-import { FETCH_NFTS_REQUEST, FetchNFTsRequestAction } from '../../../nft/actions'
-import { FETCH_ITEMS_REQUEST, FETCH_TRENDING_ITEMS_REQUEST, FetchItemsRequestAction } from '../../../item/actions'
-import { getData as getNFTData, getLoading as getNFTLoading } from '../../../nft/selectors'
-import { getData as getItemData, getLoading as getItemLoading } from '../../../item/selectors'
 import { Asset } from '../../../asset/types'
+import { FETCH_ITEMS_REQUEST, FETCH_TRENDING_ITEMS_REQUEST, FetchItemsRequestAction } from '../../../item/actions'
+import { ItemState } from '../../../item/reducer'
+import { getData as getItemData, getLoading as getItemLoading } from '../../../item/selectors'
+import { FETCH_NFTS_REQUEST, FetchNFTsRequestAction } from '../../../nft/actions'
+import { NFTState } from '../../../nft/reducer'
+import { getData as getNFTData, getLoading as getNFTLoading } from '../../../nft/selectors'
 import { RootState } from '../../../reducer'
 import { View } from '../../types'
-import { HomepageView } from './types'
 import { HomepageUIState } from './reducer'
+import { HomepageView } from './types'
 
 const isFetchNftsRequestAction = (action: AnyAction): action is FetchNFTsRequestAction => action.type === FETCH_NFTS_REQUEST
 const isFetchItemsRequestAction = (action: AnyAction): action is FetchItemsRequestAction => action.type === FETCH_ITEMS_REQUEST

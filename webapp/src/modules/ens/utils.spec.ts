@@ -1,5 +1,5 @@
-import { isNameAvailable, isNameValid, getNameInvalidType, hasNameMinLength, NameInvalidType } from './utils'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
+import { isNameAvailable, isNameValid, getNameInvalidType, hasNameMinLength, NameInvalidType } from './utils'
 
 jest.mock('../../contracts/factories/DCLRegistrar__factory')
 

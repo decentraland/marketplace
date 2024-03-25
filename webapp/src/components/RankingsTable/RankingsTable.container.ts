@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { RootState } from '../../modules/reducer'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './RankingsTable.types'
-import { getRankingsData, getLoading } from '../../modules/analytics/selectors'
 import { fetchRankingsRequest, FETCH_RANKINGS_REQUEST } from '../../modules/analytics/actions'
+import { getRankingsData, getLoading } from '../../modules/analytics/selectors'
+import { RootState } from '../../modules/reducer'
 import RankingsTable from './RankingsTable'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './RankingsTable.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const data = getRankingsData(state)

@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Stats } from 'decentraland-ui'
+import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
 import { BrowseOptions } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'
-import { AssetType } from '../../../modules/asset/types'
 import { Props } from './Owner.types'
-
 import './Owner.css'
 
 const Owner = (props: Props) => {

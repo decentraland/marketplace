@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
-import { Button, Icon, ModalNavigation } from 'decentraland-ui'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Icon, ModalNavigation } from 'decentraland-ui'
 import { Props } from './ConfirmDeleteListModal.types'
 
 export const CANCEL_DATA_TEST_ID = 'confirm-delete-list-modal-cancel'

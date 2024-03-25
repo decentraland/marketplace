@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 import { Order, RentalListing } from '@dcl/schemas'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../../../modules/nft/types'
 
 export type Props = {

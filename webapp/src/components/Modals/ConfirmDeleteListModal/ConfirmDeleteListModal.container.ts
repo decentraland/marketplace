@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
-import { RootState } from '../../../modules/reducer'
 import { deleteListRequest } from '../../../modules/favorites/actions'
 import { isLoadingDeleteList } from '../../../modules/favorites/selectors'
-import { MapDispatchProps, MapStateProps, OwnProps } from './ConfirmDeleteListModal.types'
+import { RootState } from '../../../modules/reducer'
 import ConfirmDeleteListModal from './ConfirmDeleteListModal'
+import { MapDispatchProps, MapStateProps, OwnProps } from './ConfirmDeleteListModal.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

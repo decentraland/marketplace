@@ -1,5 +1,5 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
+import { Dispatch } from 'redux'
 import { cancelOrderRequest, CancelOrderRequestAction } from '../../modules/order/actions'
 
 export type Props = {

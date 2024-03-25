@@ -1,11 +1,11 @@
-import { Dispatch } from 'redux'
 import { RouterLocation } from 'connected-react-router'
-import { View } from '../../modules/ui/types'
-import { VendorName } from '../../modules/vendor/types'
-import { setView, SetViewAction } from '../../modules/ui/actions'
-import { browse, BrowseAction, fetchAssetsFromRoute, FetchAssetsFromRouteAction } from '../../modules/routing/actions'
-import { Section } from '../../modules/vendor/routing/types'
+import { Dispatch } from 'redux'
 import { AssetType } from '../../modules/asset/types'
+import { browse, BrowseAction, fetchAssetsFromRoute, FetchAssetsFromRouteAction } from '../../modules/routing/actions'
+import { setView, SetViewAction } from '../../modules/ui/actions'
+import { View } from '../../modules/ui/types'
+import { Section } from '../../modules/vendor/routing/types'
+import { VendorName } from '../../modules/vendor/types'
 
 export type Props = {
   vendor: VendorName

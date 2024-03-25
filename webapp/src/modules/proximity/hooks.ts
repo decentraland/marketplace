@@ -1,9 +1,9 @@
-import { NFTCategory } from '@dcl/schemas'
 import { useMemo } from 'react'
+import { NFTCategory } from '@dcl/schemas'
 import { NFT } from '../nft/types'
 import { VendorName } from '../vendor/types'
-import { getParcelProximity, getEstateProximity } from './utils'
 import { Proximity } from './types'
+import { getParcelProximity, getEstateProximity } from './utils'
 
 export const useProximity = (nft: NFT<VendorName.DECENTRALAND>, proximities: Record<string, Proximity>) =>
   useMemo(() => {

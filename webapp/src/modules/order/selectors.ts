@@ -1,13 +1,13 @@
 import { createSelector } from 'reselect'
 import { Order } from '@dcl/schemas'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { AuthorizationStepStatus } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getCurrentNFT } from '../nft/selectors'
-import { RootState } from '../reducer'
 import { NFT } from '../nft/types'
+import { RootState } from '../reducer'
+import { CREATE_ORDER_REQUEST, EXECUTE_ORDER_REQUEST } from './actions'
 import { OrderState } from './reducer'
 import { getActiveOrder } from './utils'
-import { CREATE_ORDER_REQUEST, EXECUTE_ORDER_REQUEST } from './actions'
 
 export const getState = (state: RootState) => state.order
 export const getData = (state: RootState) => getState(state).data

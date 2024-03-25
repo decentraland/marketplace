@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
-import { useFingerprint } from '../../../modules/nft/hooks'
+import { Button, Popup } from 'decentraland-ui'
 import { isInsufficientMANA, checkFingerprint } from '../../../modules/bid/utils'
+import { useFingerprint } from '../../../modules/nft/hooks'
 import { isLandLocked } from '../../../modules/rental/utils'
 import { LandLockedPopup } from '../../LandLockedPopup'
 import { Props } from './AcceptButton.types'

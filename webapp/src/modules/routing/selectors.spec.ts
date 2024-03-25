@@ -2,11 +2,11 @@ import { RouterLocation } from 'connected-react-router'
 import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
+import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/routing/types'
-import { View } from '../ui/types'
-import { PageName, Sections, SortBy } from './types'
 import { locations } from './locations'
+import { SEARCH_ARRAY_PARAM_SEPARATOR } from './search'
 import {
   getAllSortByOptions,
   getAssetType,
@@ -28,7 +28,7 @@ import {
   getLatestVisitedLocation,
   getContracts
 } from './selectors'
-import { SEARCH_ARRAY_PARAM_SEPARATOR } from './search'
+import { PageName, Sections, SortBy } from './types'
 
 describe('when getting the latest visited location', () => {
   describe('and there is no previous location', () => {

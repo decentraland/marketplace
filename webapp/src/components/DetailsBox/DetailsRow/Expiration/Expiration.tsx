@@ -1,5 +1,4 @@
 import { memo } from 'react'
-
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from '../DetailsRow.types'

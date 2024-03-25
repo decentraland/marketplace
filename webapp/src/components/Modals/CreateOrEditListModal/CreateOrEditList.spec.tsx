@@ -1,8 +1,7 @@
 import { fireEvent } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { renderWithProviders } from '../../../utils/test'
 import { List } from '../../../modules/favorites/types'
-import { Props } from './CreateOrEditListModal.types'
+import { renderWithProviders } from '../../../utils/test'
 import CreateOrEditListModal, {
   CREATE_OR_EDIT_LIST_ACCEPT_BUTTON_DATA_TEST_ID,
   CREATE_OR_EDIT_LIST_CANCEL_BUTTON_DATA_TEST_ID,
@@ -10,6 +9,7 @@ import CreateOrEditListModal, {
   CREATE_OR_EDIT_LIST_NAME_DATA_TEST_ID,
   CREATE_OR_EDIT_LIST_PRIVATE_DATA_TEST_ID
 } from './CreateOrEditListModal'
+import { Props } from './CreateOrEditListModal.types'
 
 function renderCreateListModal(props: Partial<Props> = {}) {
   return renderWithProviders(

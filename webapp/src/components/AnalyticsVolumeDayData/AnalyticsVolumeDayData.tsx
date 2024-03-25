@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import CountUp from 'react-countup'
-import { HeaderMenu, Header, Stats, Icon, Loader, Mana, Popup, SemanticICONS, NotMobile, Mobile } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { HeaderMenu, Header, Stats, Icon, Loader, Mana, Popup, SemanticICONS, NotMobile, Mobile } from 'decentraland-ui'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from '../../modules/analytics/types'
 import { TimeframeSelector } from '../Rankings/TimeframeSelector'
-import { Props } from './AnalyticsVolumeDayData.types'
 import { formatAnalyticsVolume, formatDailySales } from './utils'
+import { Props } from './AnalyticsVolumeDayData.types'
 import './AnalyticsVolumeDayData.css'
 
 const StatSections = [

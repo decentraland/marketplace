@@ -1,9 +1,9 @@
-import { renderWithProviders } from '../../../../utils/test'
-import { locations } from '../../../../modules/routing/locations'
 import { AssetType } from '../../../../modules/asset/types'
-import { Section } from '../../../../modules/vendor/decentraland'
-import { VendorName } from '../../../../modules/vendor'
+import { locations } from '../../../../modules/routing/locations'
 import { SortBy } from '../../../../modules/routing/types'
+import { VendorName } from '../../../../modules/vendor'
+import { Section } from '../../../../modules/vendor/decentraland'
+import { renderWithProviders } from '../../../../utils/test'
 import CreatorsResultItemRow from './CreatorResultRow'
 
 jest.mock('decentraland-dapps/dist/containers/Profile', () => {

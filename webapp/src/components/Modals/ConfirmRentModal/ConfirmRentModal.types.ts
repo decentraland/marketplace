@@ -1,9 +1,9 @@
 import { Contract, RentalListing } from '@dcl/schemas'
+import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
-import { NFT } from '../../../modules/nft/types'
-import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { getContract } from '../../../modules/contract/selectors'
+import { NFT } from '../../../modules/nft/types'
 import { clearRentalErrors } from '../../../modules/rental/actions'
 
 export type Metadata = {

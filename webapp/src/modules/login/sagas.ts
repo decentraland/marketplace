@@ -1,8 +1,8 @@
-import { ConnectWalletSuccessAction, CONNECT_WALLET_SUCCESS, CONNECT_WALLET_FAILURE } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { openModal, CloseModalAction, CLOSE_MODAL, closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { OpenLoginAction, OPEN_LOGIN } from './actions'
+import { ConnectWalletSuccessAction, CONNECT_WALLET_SUCCESS, CONNECT_WALLET_FAILURE } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getAddress } from '../wallet/selectors'
+import { OpenLoginAction, OPEN_LOGIN } from './actions'
 
 function* handleOpenLoginModal(_action: OpenLoginAction) {
   const address: string = yield select(getAddress)

@@ -1,5 +1,4 @@
 import { useMemo, memo } from 'react'
-
 import { Link } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'

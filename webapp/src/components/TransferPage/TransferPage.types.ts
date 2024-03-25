@@ -1,5 +1,5 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
+import { Dispatch } from 'redux'
 import { transferNFTRequest, TransferNFTRequestAction } from '../../modules/nft/actions'
 
 export type Props = {

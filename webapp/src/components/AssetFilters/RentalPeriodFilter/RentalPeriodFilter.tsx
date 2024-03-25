@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import classNames from 'classnames'
-import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { PeriodOption } from '../../../modules/rental/types'
 import { daysByPeriod } from '../../../modules/rental/utils'
 import styles from './RentalPeriodFilter.module.css'

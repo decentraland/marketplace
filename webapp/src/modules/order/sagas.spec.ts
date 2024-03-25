@@ -1,18 +1,19 @@
+import { call, select, take } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
+import { throwError } from 'redux-saga-test-plan/providers'
 import { ChainId, Network, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
-import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ProviderType, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ErrorCode } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
-import { expectSaga } from 'redux-saga-test-plan'
-import { throwError } from 'redux-saga-test-plan/providers'
-import { call, select, take } from 'redux-saga/effects'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
-import { NFT } from '../nft/types'
+import { fetchNFTRequest, FETCH_NFT_FAILURE } from '../nft/actions'
 import { getData as getNFTs } from '../nft/selectors'
+import { NFT } from '../nft/types'
 import { getNFT } from '../nft/utils'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
@@ -30,7 +31,6 @@ import {
   executeOrderWithCardSuccess
 } from './actions'
 import { orderSaga } from './sagas'
-import { fetchNFTRequest, FETCH_NFT_FAILURE } from '../nft/actions'
 
 let nft: NFT
 let order: Order

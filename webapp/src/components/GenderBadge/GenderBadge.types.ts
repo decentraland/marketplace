@@ -1,6 +1,6 @@
 import { BodyShape } from '@dcl/schemas'
-import { Section } from '../../modules/vendor/decentraland'
 import { AssetType } from '../../modules/asset/types'
+import { Section } from '../../modules/vendor/decentraland'
 
 export type Props = {
   bodyShapes: BodyShape[]

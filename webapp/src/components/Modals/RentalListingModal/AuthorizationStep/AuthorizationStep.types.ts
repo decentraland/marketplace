@@ -1,10 +1,10 @@
+import { Dispatch } from 'redux'
 import {
   fetchAuthorizationsRequest,
   FetchAuthorizationsRequestAction,
   grantTokenRequest,
   GrantTokenRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { Dispatch } from 'redux'
 import { NFT } from '../../../../modules/nft/types'
 
 export type Props = {

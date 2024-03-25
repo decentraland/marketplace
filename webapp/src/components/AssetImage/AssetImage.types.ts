@@ -1,17 +1,17 @@
 import React from 'react'
 import { Dispatch } from 'redux'
 import { Avatar, IPreviewController, Item, Order, Rarity, Network } from '@dcl/schemas'
+import { OpenModalAction, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { FetchSmartWearableVideoHashRequestAction, fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
+import { Asset } from '../../modules/asset/types'
+import { FetchItemRequestAction, fetchItemRequest } from '../../modules/item/actions'
 import {
   setIsTryingOn,
   SetIsTryingOnAction,
   setWearablePreviewController,
   SetWearablePreviewControllerAction
 } from '../../modules/ui/preview/actions'
-import { Asset } from '../../modules/asset/types'
-import { FetchItemRequestAction, fetchItemRequest } from '../../modules/item/actions'
-import { FetchSmartWearableVideoHashRequestAction, fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
-import { OpenModalAction, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 
 export type Props = {
   asset: Asset

@@ -1,5 +1,5 @@
-import { Network, NFTCategory } from '@dcl/schemas'
 import { call, takeEvery, put, select } from '@redux-saga/core/effects'
+import { Network, NFTCategory } from '@dcl/schemas'
 import { fetchAuthorizationsRequest, GRANT_TOKEN_SUCCESS } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'

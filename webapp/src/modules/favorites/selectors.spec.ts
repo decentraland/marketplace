@@ -1,9 +1,18 @@
-import { Item } from '@dcl/schemas'
 import { match } from 'react-router-dom'
+import { Item } from '@dcl/schemas'
+import { WalletState } from 'decentraland-dapps/dist/modules/wallet'
 import { getDefaultState } from '../../tests/defaultStore'
 import { RootState } from '../reducer'
-import { DEFAULT_FAVORITES_LIST_ID, ListOfLists } from '../vendor/decentraland/favorites'
 import { locations } from '../routing/locations'
+import { DEFAULT_FAVORITES_LIST_ID, ListOfLists } from '../vendor/decentraland/favorites'
+import {
+  bulkPickUnpickRequest,
+  createListRequest,
+  deleteListRequest,
+  fetchFavoritedItemsRequest,
+  fetchListsRequest,
+  updateListRequest
+} from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
   getCount,
@@ -27,16 +36,7 @@ import {
   isLoadingDeleteList,
   isOwnerUnpickingFromCurrentList
 } from './selectors'
-import {
-  bulkPickUnpickRequest,
-  createListRequest,
-  deleteListRequest,
-  fetchFavoritedItemsRequest,
-  fetchListsRequest,
-  updateListRequest
-} from './actions'
 import { List } from './types'
-import { WalletState } from 'decentraland-dapps/dist/modules/wallet'
 
 let state: RootState
 

@@ -6,10 +6,10 @@ import {
   CONNECT_WALLET_FAILURE,
   ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { getAddress } from '../wallet/selectors'
 import { config } from '../../config'
-import { getCurrentIdentity } from './selectors'
+import { getAddress } from '../wallet/selectors'
 import { generateIdentityRequest, GenerateIdentitySuccessAction, GENERATE_IDENTITY_FAILURE, GENERATE_IDENTITY_SUCCESS } from './actions'
+import { getCurrentIdentity } from './selectors'
 
 const ONE_MONTH_IN_MINUTES = 31 * 24 * 60
 

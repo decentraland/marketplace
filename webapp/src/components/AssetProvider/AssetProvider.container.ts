@@ -1,19 +1,13 @@
 import { connect } from 'react-redux'
 import { Network } from '@dcl/schemas'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { isFetchingRequiredPermissions, isFetchingVideoHash } from '../../modules/asset/selectors'
+import { Asset, AssetType } from '../../modules/asset/types'
+import { getContract } from '../../modules/contract/selectors'
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
-import { RootState } from '../../modules/reducer'
-import { fetchNFTRequest, FETCH_NFT_REQUEST, clearNFTErrors } from '../../modules/nft/actions'
 import { clearItemErrors, fetchItemRequest } from '../../modules/item/actions'
-import {
-  getContractAddress as getNFTContractAddress,
-  getTokenId as getNFTTokenId,
-  getLoading as getNFTLoading,
-  getError as getNFTError,
-  getData as getNFTs
-} from '../../modules/nft/selectors'
 import {
   getContractAddress as getItemContractAddress,
   getTokenId as getItemTokenId,
@@ -21,20 +15,26 @@ import {
   getError as getItemsError,
   getData as getItems
 } from '../../modules/item/selectors'
-import { isFetchingRequiredPermissions, isFetchingVideoHash } from '../../modules/asset/selectors'
-import { getData as getOrders } from '../../modules/order/selectors'
-import { getNFT } from '../../modules/nft/utils'
 import { getItem } from '../../modules/item/utils'
+import { fetchNFTRequest, FETCH_NFT_REQUEST, clearNFTErrors } from '../../modules/nft/actions'
+import {
+  getContractAddress as getNFTContractAddress,
+  getTokenId as getNFTTokenId,
+  getLoading as getNFTLoading,
+  getError as getNFTError,
+  getData as getNFTs
+} from '../../modules/nft/selectors'
+import { getNFT } from '../../modules/nft/utils'
+import { getData as getOrders } from '../../modules/order/selectors'
 import { getActiveOrder } from '../../modules/order/utils'
-import { Asset, AssetType } from '../../modules/asset/types'
+import { RootState } from '../../modules/reducer'
 import { getRentalById } from '../../modules/rental/selectors'
 import { getOpenRentalId } from '../../modules/rental/utils'
 import { FetchOneOptions } from '../../modules/vendor'
-import { getContract } from '../../modules/contract/selectors'
 import { ContractName } from '../../modules/vendor/decentraland'
 import { convertToOutputString } from '../../utils/output'
-import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './AssetProvider.types'
 import AssetProvider from './AssetProvider'
+import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './AssetProvider.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   let contractAddress = ownProps.contractAddress

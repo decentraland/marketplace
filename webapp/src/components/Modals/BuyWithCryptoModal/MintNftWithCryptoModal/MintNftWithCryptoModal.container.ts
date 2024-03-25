@@ -1,8 +1,8 @@
-import { Dispatch, bindActionCreators } from 'redux'
-import type { Route } from 'decentraland-transactions/crossChain'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
 import { connect } from 'react-redux'
-import { RootState } from '../../../../modules/reducer'
+import { Dispatch, bindActionCreators } from 'redux'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
+import type { Route } from 'decentraland-transactions/crossChain'
+import { getContract } from '../../../../modules/contract/selectors'
 import {
   BUY_ITEM_CROSS_CHAIN_REQUEST,
   BUY_ITEM_REQUEST,
@@ -10,11 +10,11 @@ import {
   buyItemRequest,
   buyItemWithCardRequest
 } from '../../../../modules/item/actions'
-import { getContract } from '../../../../modules/contract/selectors'
-import { Contract } from '../../../../modules/vendor/services'
 import { getLoading as getItemsLoading } from '../../../../modules/item/selectors'
-import { MapDispatchProps, MapStateProps, OwnProps } from './MintNftWithCryptoModal.types'
+import { RootState } from '../../../../modules/reducer'
+import { Contract } from '../../../../modules/vendor/services'
 import { MintNftWithCryptoModal } from './MintNftWithCryptoModal'
+import { MapDispatchProps, MapStateProps, OwnProps } from './MintNftWithCryptoModal.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Card, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Props } from './PriceChangeNotice.types'
+import { Card, Icon } from 'decentraland-ui'
 import { isAccountView } from '../../../modules/ui/utils'
+import { Props } from './PriceChangeNotice.types'
 import './PriceChangeNotice.css'
 
 const PRICE_CHANGE_NOTICE_KEY = 'price-change-notice'

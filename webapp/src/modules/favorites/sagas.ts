@@ -1,20 +1,22 @@
 import { getLocation, push } from 'connected-react-router'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { CatalogFilters, Item } from '@dcl/schemas'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { ConnectWalletSuccessAction, CONNECT_WALLET_FAILURE, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { isErrorWithMessage } from '../../lib/error'
-import { ItemBrowseOptions } from '../item/types'
 import { closeModal, CloseModalAction, CLOSE_MODAL, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from '../vendor/decentraland/favorites/api'
+import { ConnectWalletSuccessAction, CONNECT_WALLET_FAILURE, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { isErrorWithMessage } from '../../lib/error'
+import { getIsMarketplaceServerEnabled } from '../features/selectors'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
-import { CatalogAPI } from '../vendor/decentraland/catalog/api'
-import { retryParams } from '../vendor/decentraland/utils'
-import { getAddress } from '../wallet/selectors'
-import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from '../vendor/decentraland'
+import { getData as getItemsData } from '../item/selectors'
+import { ItemBrowseOptions } from '../item/types'
 import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
+import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from '../vendor/decentraland'
+import { CatalogAPI } from '../vendor/decentraland/catalog/api'
+import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from '../vendor/decentraland/favorites/api'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
+import { retryParams } from '../vendor/decentraland/utils'
+import { getAddress } from '../wallet/selectors'
 import {
   fetchFavoritedItemsFailure,
   FetchFavoritedItemsRequestAction,
@@ -64,10 +66,8 @@ import {
   BULK_PICK_FAILURE
 } from './actions'
 import { getList, getListId, isOwnerUnpickingFromCurrentList } from './selectors'
-import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 import { List } from './types'
-import { getData as getItemsData } from '../item/selectors'
-import { getIsMarketplaceServerEnabled } from '../features/selectors'
+import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   const API_OPTS = {

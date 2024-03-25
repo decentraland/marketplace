@@ -1,19 +1,17 @@
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
-import { Card, Dropdown, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { locations } from '../../../modules/routing/locations'
-import { DEFAULT_FAVORITES_LIST_ID } from '../../../modules/vendor/decentraland/favorites/api'
+import { Card, Dropdown, Icon } from 'decentraland-ui'
 import { AssetType } from '../../../modules/asset/types'
-import { Section } from '../../../modules/vendor/decentraland'
+import { locations } from '../../../modules/routing/locations'
+import { SortBy } from '../../../modules/routing/types'
 import { View } from '../../../modules/ui/types'
 import { VendorName } from '../../../modules/vendor'
-import { SortBy } from '../../../modules/routing/types'
+import { Section } from '../../../modules/vendor/decentraland'
+import { DEFAULT_FAVORITES_LIST_ID } from '../../../modules/vendor/decentraland/favorites/api'
 import { AssetImage } from '../../AssetImage'
 import { PrivateTag } from '../../PrivateTag'
-import { Props } from './ListCard.types'
-import styles from './ListCard.module.css'
 import {
   ACTIONS_DATA_TEST_ID,
   DELETE_LIST_DATA_TEST_ID,
@@ -24,6 +22,8 @@ import {
   LIST_NAME_DATA_TEST_ID,
   PRIVATE_DATA_TEST_ID
 } from './constants'
+import { Props } from './ListCard.types'
+import styles from './ListCard.module.css'
 
 const ListCard = (props: Props) => {
   const { list, items, onDeleteList, onEditList, viewOnly = false } = props

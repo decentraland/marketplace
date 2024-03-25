@@ -1,7 +1,7 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction, RouterLocation } from 'connected-react-router'
-import { NavbarProps } from 'decentraland-ui/dist/components/Navbar/Navbar.types'
+import { Dispatch } from 'redux'
 import { AuthIdentity } from '@dcl/crypto'
+import { NavbarProps } from 'decentraland-ui/dist/components/Navbar/Navbar.types'
 
 export type Props = Partial<NavbarProps> & {
   location: RouterLocation<unknown>

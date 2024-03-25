@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Button, Dropdown, DropdownProps, Header, Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Dropdown, DropdownProps, Header, Icon, Loader } from 'decentraland-ui'
+import { getParameter } from '../../lib/enum'
 import { usePagination } from '../../lib/pagination'
 import { ListsBrowseSortBy } from '../../modules/favorites/types'
 import { PAGE_SIZE } from '../../modules/vendor/api'
-import { getParameter } from '../../lib/enum'
 import { InfiniteScroll } from '../InfiniteScroll'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
+import { LOADER_TEST_ID, ERROR_TEST_ID, CREATE_LIST_TEST_ID } from './constants'
 import { ListCard } from './ListCard'
 import { Props } from './ListsPage.types'
 import styles from './ListsPage.module.css'
-import { LOADER_TEST_ID, ERROR_TEST_ID, CREATE_LIST_TEST_ID } from './constants'
 
 const ListsPage = ({ count, lists, isLoading, error, onFetchLists, onCreateList }: Props) => {
   const { page, first, sortBy, goToNextPage, changeSorting } = usePagination()

@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
-import { Box, CheckboxProps, Checkbox, SmartWearableFilter } from 'decentraland-ui'
+import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useTabletAndBelowMediaQuery } from 'decentraland-ui/dist/components/Media'
-import { NFTCategory } from '@dcl/schemas'
+import { Box, CheckboxProps, Checkbox, SmartWearableFilter } from 'decentraland-ui'
 import './MoreFilters.css'
 
 export type MoreFiltersProps = {

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Button,
   Checkbox,
@@ -13,8 +13,8 @@ import {
   TextAreaProps
 } from 'decentraland-ui'
 import { InfoTooltip } from '../../InfoTooltip'
-import styles from './CreateOrEditListModal.module.css'
 import { Props } from './CreateOrEditListModal.types'
+import styles from './CreateOrEditListModal.module.css'
 
 const MAX_NAME_LENGTH = 32
 const MAX_DESCRIPTION_LENGTH = 100

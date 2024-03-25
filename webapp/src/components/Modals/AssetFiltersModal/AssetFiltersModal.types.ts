@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux'
 import { ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
+import { AssetType } from '../../../modules/asset/types'
 import { BrowseAction, ClearFiltersAction } from '../../../modules/routing/actions'
 import { BrowseOptions } from '../../../modules/routing/types'
 import { View } from '../../../modules/ui/types'
-import { AssetType } from '../../../modules/asset/types'
 
 export type Props = ModalProps & {
   hasFiltersEnabled: boolean

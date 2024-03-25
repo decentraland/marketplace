@@ -1,7 +1,7 @@
 import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { VendorName } from '../../../modules/vendor'
 import { NFT } from '../../../modules/nft/types'
+import { VendorName } from '../../../modules/vendor'
 
 export type Props = {
   nft: NFT<VendorName.DECENTRALAND> | null

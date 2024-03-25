@@ -1,7 +1,7 @@
-import { expectSaga } from 'redux-saga-test-plan'
 import { call } from 'redux-saga/effects'
-import { fetchEventFailure, fetchEventRequest, fetchEventSuccess } from './actions'
+import { expectSaga } from 'redux-saga-test-plan'
 import { builderAPI } from '../vendor/decentraland/builder/api'
+import { fetchEventFailure, fetchEventRequest, fetchEventSuccess } from './actions'
 import { eventSaga } from './sagas'
 
 const anError = new Error('An error occured')

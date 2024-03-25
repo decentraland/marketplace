@@ -1,14 +1,14 @@
+import { createMatchSelector } from 'connected-react-router'
 import { AnyAction } from 'redux'
 import { createSelector } from 'reselect'
-import { createMatchSelector } from 'connected-react-router'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
+import { locations } from '../routing/locations'
 import { View } from '../ui/types'
+import { FETCH_NFTS_REQUEST, FetchNFTsRequestAction } from './actions'
 import { NFTState } from './reducer'
 import { NFT } from './types'
 import { getNFT } from './utils'
-import { FETCH_NFTS_REQUEST, FetchNFTsRequestAction } from './actions'
 
 export const getState = (state: RootState) => state.nft
 export const getData = (state: RootState) => getState(state).data

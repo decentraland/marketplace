@@ -1,16 +1,16 @@
 import React, { useCallback, useState } from 'react'
-import { Button, Modal } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AssetFilters } from '../../AssetFilters'
-import { Props } from './AssetFiltersModal.types'
-import styles from './AssetFiltersModal.module.css'
-import { BrowseOptions } from '../../../modules/routing/types'
+import { Button, Modal } from 'decentraland-ui'
 import { AssetType } from '../../../modules/asset/types'
-import { Section } from '../../../modules/vendor/routing/types'
-import { View } from '../../../modules/ui/types'
+import { BrowseOptions } from '../../../modules/routing/types'
 import { getClearedBrowseOptions } from '../../../modules/routing/utils'
+import { View } from '../../../modules/ui/types'
+import { Section } from '../../../modules/vendor/routing/types'
+import { AssetFilters } from '../../AssetFilters'
 import { AssetTypeFilter } from './AssetTypeFilter'
 import { CategoryFilter } from './CategoryFilter'
+import { Props } from './AssetFiltersModal.types'
+import styles from './AssetFiltersModal.module.css'
 
 const AssetFiltersModal = (props: Props) => {
   const [filters, setFilters] = useState<BrowseOptions>({})

@@ -1,9 +1,8 @@
 import { connect } from 'react-redux'
-
 import { RootState } from '../../../modules/reducer'
 import { getView } from '../../../modules/ui/browse/selectors'
-import { MapStateProps } from './PriceChangeNotice.types'
 import PriceChangeNotice from './PriceChangeNotice'
+import { MapStateProps } from './PriceChangeNotice.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   view: getView(state)

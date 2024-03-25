@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux'
 import { Bid } from '@dcl/schemas'
-import { VendorName } from '../../../modules/vendor'
-import { NFT } from '../../../modules/nft/types'
 import { AcceptBidRequestAction } from '../../../modules/bid/actions'
+import { NFT } from '../../../modules/nft/types'
+import { VendorName } from '../../../modules/vendor'
 
 export type Props = {
   nft: NFT<VendorName.DECENTRALAND> | null

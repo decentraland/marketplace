@@ -1,5 +1,5 @@
-import { AccountFilters as AccountMetricsFilters, Network } from '@dcl/schemas'
 import { action } from 'typesafe-actions'
+import { AccountFilters as AccountMetricsFilters, Network } from '@dcl/schemas'
 import { AccountMetrics, CreatorAccount } from './types'
 
 // Fetch account metrics

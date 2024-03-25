@@ -1,6 +1,5 @@
 import React from 'react'
 import classNames from 'classnames'
-
 import { Props } from './Row.types'
 import './Row.css'
 

@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
-import { Box, CheckboxProps, Checkbox, useTabletAndBelowMediaQuery, SliderField } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import styles from './LocationFilter.module.css'
 import classNames from 'classnames'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, CheckboxProps, Checkbox, useTabletAndBelowMediaQuery, SliderField } from 'decentraland-ui'
+import styles from './LocationFilter.module.css'
 
 export const DISTANCE_TO_PLAZA_MIN = 1
 export const DISTANCE_TO_PLAZA_MAX = 10

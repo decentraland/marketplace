@@ -1,8 +1,8 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
+import { Dispatch } from 'redux'
+import { getContract } from '../../modules/contract/selectors'
 import { clearOrderErrors, ClearOrderErrorsAction, createOrderRequest, CreateOrderRequestAction } from '../../modules/order/actions'
 import { Contract } from '../../modules/vendor/services'
-import { getContract } from '../../modules/contract/selectors'
 
 export type Props = {
   isLoading: boolean
