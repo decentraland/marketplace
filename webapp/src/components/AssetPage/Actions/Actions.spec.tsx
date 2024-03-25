@@ -44,7 +44,7 @@ describe('Actions Component', () => {
     beforeEach(() => {
       order = {} as Order
     })
-    describe('and its owner and can sell', () => {
+    describe('and it is owner and can sell', () => {
       beforeEach(() => {
         nft.owner = address
         wallet.address = nft.owner
