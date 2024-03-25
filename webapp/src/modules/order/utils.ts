@@ -1,6 +1,6 @@
-import { Order, OrderFilters } from '@dcl/schemas'
 import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
+import { Order, OrderFilters } from '@dcl/schemas'
 import { getIsOrderExpired } from '../../lib/orders'
 import { Asset } from '../asset/types'
 

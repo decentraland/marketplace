@@ -1,16 +1,16 @@
 import React from 'react'
-import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header } from 'decentraland-ui'
+import { usePagination } from '../../../lib/pagination'
 import { BrowseOptions, Sections } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { VendorName } from '../../../modules/vendor/types'
-import { usePagination } from '../../../lib/pagination'
-import { Menu } from '../../Menu'
 import { AssetFilters } from '../../AssetFilters'
-import { MenuItem } from '../../Menu/MenuItem'
-import { Props } from './CurrentAccountSidebar.types'
-import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { AssetFilter } from '../../AssetFilters/utils'
+import { Menu } from '../../Menu'
+import { MenuItem } from '../../Menu/MenuItem'
+import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
+import { Props } from './CurrentAccountSidebar.types'
 
 const decentraland = VendorName.DECENTRALAND
 

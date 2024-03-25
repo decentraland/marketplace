@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Modal, ModalNavigation } from 'decentraland-ui'
 import * as events from '../../../utils/events'
-import styles from './BuyWithCardExplanationModal.module.css'
 import { Props } from './BuyWithCardExplanationModal.types'
+import styles from './BuyWithCardExplanationModal.module.css'
 
 const BuyWithCardExplanationModal = ({ metadata: { asset }, onContinue, onClose }: Props) => {
   const analytics = getAnalytics()

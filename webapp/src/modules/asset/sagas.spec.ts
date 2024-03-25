@@ -1,18 +1,18 @@
+import util from 'util'
 import { getLocation, push } from 'connected-react-router'
-import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
 import { Network } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
-import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
+import { getSmartWearableRequiredPermissions, getSmartWearableVideoShowcase } from '../../lib/asset'
 import { buyItemWithCardFailure } from '../item/actions'
-import { locations } from '../routing/locations'
-import { assetSaga, failStatuses } from './sagas'
-import { Asset, AssetType } from './types'
-import { executeOrderWithCardFailure } from '../order/actions'
 import { NFT } from '../nft/types'
+import { executeOrderWithCardFailure } from '../order/actions'
+import { locations } from '../routing/locations'
 import {
   fetchSmartWearableRequiredPermissionsFailure,
   fetchSmartWearableRequiredPermissionsRequest,
@@ -21,9 +21,9 @@ import {
   fetchSmartWearableVideoHashRequest,
   fetchSmartWearableVideoHashSuccess
 } from './actions'
-import { getSmartWearableRequiredPermissions, getSmartWearableVideoShowcase } from '../../lib/asset'
+import { assetSaga, failStatuses } from './sagas'
+import { Asset, AssetType } from './types'
 
-import util from 'util'
 util.inspect.defaultOptions.depth = null
 
 const mockContractAddress = 'a-contract-address'

@@ -1,5 +1,5 @@
-import { GenderFilterOption, Network, NFTCategory, WearableGender } from '@dcl/schemas'
 import classNames from 'classnames'
+import { GenderFilterOption, Network, NFTCategory, WearableGender } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana } from '../components/Mana'
 import { LANDFilters } from '../components/Vendor/decentraland/types'

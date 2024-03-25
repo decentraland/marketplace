@@ -1,9 +1,9 @@
-import { Item } from '@dcl/schemas'
 import { act } from 'react-dom/test-utils'
 import { fireEvent } from '@testing-library/react'
+import { Item } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { FavoritesAPI } from '../../../modules/vendor/decentraland/favorites/api'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
+import { FavoritesAPI } from '../../../modules/vendor/decentraland/favorites/api'
 import { renderWithProviders } from '../../../utils/test'
 import {
   CREATE_LIST_BUTTON_DATA_TEST_ID,

@@ -1,5 +1,5 @@
-import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { createFetchComponent } from '@well-known-components/fetch-component'
+import { createContentClient } from 'dcl-catalyst-client/dist/client/ContentClient'
 import { Asset } from '../modules/asset/types'
 import { builderAPI } from '../modules/vendor/decentraland/builder/api'
 import { peerUrl } from './environment'

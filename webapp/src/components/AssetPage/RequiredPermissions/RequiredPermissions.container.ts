@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
-import { getAssetData, getError, getRequiredPermissions, isFetchingRequiredPermissions } from '../../../modules/asset/selectors'
-import { RootState } from '../../../modules/reducer'
 import { clearAssetError, fetchSmartWearableRequiredPermissionsRequest } from '../../../modules/asset/actions'
+import { getAssetData, getError, getRequiredPermissions, isFetchingRequiredPermissions } from '../../../modules/asset/selectors'
 import { Asset } from '../../../modules/asset/types'
+import { RootState } from '../../../modules/reducer'
 import RequiredPermissions from './RequiredPermissions'
 import { OwnProps, MapStateProps, MapDispatchProps, MapDispatch } from './RequiredPermissions.types'
 

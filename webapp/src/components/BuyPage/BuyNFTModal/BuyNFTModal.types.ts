@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux'
 import { Order } from '@dcl/schemas'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { getContract } from '../../../modules/contract/selectors'
 import { NFT } from '../../../modules/nft/types'
 import {
   clearOrderErrors,
@@ -12,7 +13,6 @@ import {
   ExecuteOrderWithCardRequestAction
 } from '../../../modules/order/actions'
 import { Contract } from '../../../modules/vendor/services'
-import { getContract } from '../../../modules/contract/selectors'
 
 export type Props = {
   nft: NFT

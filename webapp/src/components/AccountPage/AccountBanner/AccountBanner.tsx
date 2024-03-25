@@ -1,21 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Back, Container, Loader } from 'decentraland-ui'
-import { Icon } from 'semantic-ui-react'
 import classNames from 'classnames'
+import { Icon } from 'semantic-ui-react'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
-import { PageHeader } from '../../PageHeader'
-import { Column } from '../../Layout/Column'
-import { Props } from './AccountBanner.types'
+import { Back, Container, Loader } from 'decentraland-ui'
+import copyText from '../../../lib/copyText'
 import { useTimer } from '../../../lib/timer'
-import { getIsValidLink } from '../../../modules/store/utils'
 import { LinkType } from '../../../modules/store/types'
+import { getIsValidLink } from '../../../modules/store/utils'
 import { shortenAddress } from '../../../modules/wallet/utils'
 import ExternalLinkModal from '../../ExternalLinkModal'
-import copyText from '../../../lib/copyText'
-
+import { Column } from '../../Layout/Column'
+import { PageHeader } from '../../PageHeader'
+import { Props } from './AccountBanner.types'
 import './AccountBanner.css'
 
 const AccountBanner = ({ address, store, isLoading, onBack, onFetchStore }: Props) => {

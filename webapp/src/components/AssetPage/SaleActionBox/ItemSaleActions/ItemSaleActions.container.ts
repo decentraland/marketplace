@@ -2,8 +2,8 @@ import { connect } from 'react-redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../../../modules/reducer'
 import { getWallet } from '../../../../modules/wallet/selectors'
-import { MapStateProps, OwnProps, MapDispatch, MapDispatchProps } from './ItemSaleActions.types'
 import ItemSaleActions from './ItemSaleActions'
+import { MapStateProps, OwnProps, MapDispatch, MapDispatchProps } from './ItemSaleActions.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)

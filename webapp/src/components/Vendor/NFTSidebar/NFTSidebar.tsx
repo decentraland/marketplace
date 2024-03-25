@@ -1,8 +1,7 @@
 import React, { useCallback } from 'react'
-
-import { Sections } from '../../../modules/vendor/routing/types'
-import { Section as DecentralandSection } from '../../../modules/vendor/decentraland/routing/types'
 import { getMarketAssetTypeFromCategory, getCategoryFromSection } from '../../../modules/routing/search'
+import { Section as DecentralandSection } from '../../../modules/vendor/decentraland/routing/types'
+import { Sections } from '../../../modules/vendor/routing/types'
 import { VendorName } from '../../../modules/vendor/types'
 import { NFTSidebar as DecentralandNFTSidebar } from '../decentraland/NFTSidebar'
 import { Props } from './NFTSidebar.types'

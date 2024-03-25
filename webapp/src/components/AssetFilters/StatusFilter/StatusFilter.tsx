@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react'
-import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AssetStatusFilter } from '../../../utils/filters'
+import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { BrowseOptions } from '../../../modules/routing/types'
+import { AssetStatusFilter } from '../../../utils/filters'
 import { InfoTooltip } from '../../InfoTooltip'
 import './StatusFilter.css'
 

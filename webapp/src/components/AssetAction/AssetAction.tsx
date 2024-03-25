@@ -1,10 +1,9 @@
 import React from 'react'
-
 import { Back } from 'decentraland-ui'
 import { getAssetUrl } from '../../modules/asset/utils'
 import { AssetImage } from '../AssetImage'
-import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
+import { Row } from '../Layout/Row'
 import { Props } from './AssetAction.types'
 import './AssetAction.css'
 

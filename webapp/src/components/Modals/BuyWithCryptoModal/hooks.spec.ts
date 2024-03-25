@@ -1,12 +1,12 @@
-import { ChainId, Network, Order, Item } from '@dcl/schemas'
-import ethersModule, { BigNumber, ethers } from 'ethers'
+import { waitFor } from '@testing-library/react'
 import { renderHook } from '@testing-library/react-hooks'
-import { NATIVE_TOKEN, Token } from 'decentraland-transactions/crossChain'
+import ethersModule, { BigNumber, ethers } from 'ethers'
+import { ChainId, Network, Order, Item } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
+import { NATIVE_TOKEN, Token } from 'decentraland-transactions/crossChain'
+import { NFT } from '../../../modules/nft/types'
 import { useShouldUseCrossChainProvider, useNameMintingGasCost, useTokenBalance, useBuyNftGasCost, useMintingNftGasCost } from './hooks'
 import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas } from './utils'
-import { waitFor } from '@testing-library/react'
-import { NFT } from '../../../modules/nft/types'
 
 jest.mock(
   'ethers',

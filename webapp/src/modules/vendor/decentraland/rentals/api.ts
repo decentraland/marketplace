@@ -1,6 +1,6 @@
-import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
 import { RentalListing, RentalListingCreation, RentalsListingsFilterBy } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
+import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
 import { config } from '../../../../config'
 import { objectToURLSearchParams } from './utils'
 

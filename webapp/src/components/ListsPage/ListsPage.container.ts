@@ -1,12 +1,12 @@
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { fetchListsRequest } from '../../modules/favorites/actions'
+import { isLoadingLists, getError } from '../../modules/favorites/selectors'
 import { RootState } from '../../modules/reducer'
 import { getBrowseLists, getCount } from '../../modules/ui/browse/selectors'
-import { isLoadingLists, getError } from '../../modules/favorites/selectors'
-import { fetchListsRequest } from '../../modules/favorites/actions'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './ListsPage.types'
 import ListsPage from './ListsPage'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './ListsPage.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

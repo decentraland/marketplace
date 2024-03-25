@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Modal, Button, ModalNavigation, Message, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Modal, Button, ModalNavigation, Message, Icon } from 'decentraland-ui'
+import { UpsertRentalOptType } from '../../../../modules/rental/types'
 import { Props } from './EditConfirmationStep.types'
 import styles from './EditConfirmationStep.module.css'
-import { UpsertRentalOptType } from '../../../../modules/rental/types'
 
 const EditConfirmationStep = (props: Props) => {
   const {

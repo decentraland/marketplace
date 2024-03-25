@@ -1,11 +1,11 @@
+import { CallHistoryMethodAction } from 'connected-react-router'
 import { Dispatch } from 'redux'
 import { Order } from '@dcl/schemas'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { CallHistoryMethodAction } from 'connected-react-router'
 import { Asset, AssetType } from '../../../../modules/asset/types'
-import { ExecuteOrderWithCardRequestAction, executeOrderWithCardRequest } from '../../../../modules/order/actions'
 import { BuyItemWithCardRequestAction, buyItemWithCardRequest } from '../../../../modules/item/actions'
+import { ExecuteOrderWithCardRequestAction, executeOrderWithCardRequest } from '../../../../modules/order/actions'
 
 export type Props = {
   asset: Asset

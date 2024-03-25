@@ -1,16 +1,15 @@
 import React, { useCallback, useState } from 'react'
-import { Page, Header, Button, Modal } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
-import { Navigation } from '../Navigation'
-import { Row } from '../Layout/Row'
-import { Column } from '../Layout/Column'
-import { Navbar } from '../Navbar'
+import { Page, Header, Button, Modal } from 'decentraland-ui'
 import { Footer } from '../Footer'
+import { Column } from '../Layout/Column'
+import { Row } from '../Layout/Row'
+import { Navbar } from '../Navbar'
+import { Navigation } from '../Navigation'
+import { NavigationTab } from '../Navigation/Navigation.types'
 import { Transaction } from './Transaction'
 import { Props } from './ActivityPage.types'
 import './ActivityPage.css'
-import { NavigationTab } from '../Navigation/Navigation.types'
 
 const ActivityPage = (props: Props) => {
   const { address, transactions, onClearHistory } = props

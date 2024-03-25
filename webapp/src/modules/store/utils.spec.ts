@@ -1,5 +1,5 @@
-import { Entity } from '@dcl/schemas'
 import { EntityVersion } from 'dcl-catalyst-commons'
+import { Entity } from '@dcl/schemas'
 import { Store, StoreEntityMetadata } from './types'
 import { getPeerCoverUrl, getStoreUrn, getEntityMetadataFromStore, getStoreFromEntity, getEntityMetadataFilesFromStore } from './utils'
 

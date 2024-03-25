@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { NFTCategory, Network } from '@dcl/schemas'
-import { t } from 'decentraland-dapps/dist/modules/translation'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
+import { t } from 'decentraland-dapps/dist/modules/translation'
 import { Button, ButtonProps, Mana } from 'decentraland-ui'
-import * as events from '../../../../../utils/events'
 import { isNFT } from '../../../../../modules/asset/utils'
+import * as events from '../../../../../utils/events'
 import { Props } from './BuyWithCryptoButton.types'
 
 export const BuyWithCryptoButton = (props: Props) => {

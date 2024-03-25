@@ -1,8 +1,16 @@
-import { RentalListing } from '@dcl/schemas'
-import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
-import { closeAllModals, closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
+import { RentalListing } from '@dcl/schemas'
+import { closeAllModals, closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
+import {
+  BULK_PICK_FAILURE,
+  BULK_PICK_SUCCESS,
+  CREATE_LIST_SUCCESS,
+  DELETE_LIST_FAILURE,
+  DELETE_LIST_SUCCESS,
+  UPDATE_LIST_SUCCESS
+} from '../favorites/actions'
 import { NFT } from '../nft/types'
 import {
   claimAssetSuccess,
@@ -12,14 +20,6 @@ import {
   CLAIM_ASSET_SUCCESS,
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
-import {
-  BULK_PICK_FAILURE,
-  BULK_PICK_SUCCESS,
-  CREATE_LIST_SUCCESS,
-  DELETE_LIST_FAILURE,
-  DELETE_LIST_SUCCESS,
-  UPDATE_LIST_SUCCESS
-} from '../favorites/actions'
 import { UpsertRentalOptType } from '../rental/types'
 import { modalSaga } from './sagas'
 

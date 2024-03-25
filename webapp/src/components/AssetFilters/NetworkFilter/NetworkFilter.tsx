@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
-import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import './NetworkFilter.css'
 
 export type NetworkFilterProps = {

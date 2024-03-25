@@ -1,5 +1,5 @@
-import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { Network } from '@dcl/schemas'
+import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { Asset } from '../../../modules/asset/types'
 import { getAssetName } from '../../../modules/asset/utils'
 import { INITIAL_STATE } from '../../../modules/favorites/reducer'

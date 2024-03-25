@@ -1,6 +1,6 @@
 import { ChainId } from '@dcl/schemas'
-import { Route } from 'decentraland-transactions/crossChain'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { Route } from 'decentraland-transactions/crossChain'
 import {
   claimNameSuccess,
   claimNameFailure,

@@ -1,14 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Icon, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Icon, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
+import { formatWeiMANA } from '../../../lib/mana'
 import { getIsLegacyOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { locations } from '../../../modules/routing/locations'
 import { LEGACY_MARKETPLACE_MAINNET_CONTRACT, Section } from '../../../modules/vendor/decentraland'
 import { Mana } from '../../Mana'
-import { formatWeiMANA } from '../../../lib/mana'
-import { Props } from './OnSaleListElement.types'
 import AssetCell from '../AssetCell'
+import { Props } from './OnSaleListElement.types'
 import './OnSaleListElement.css'
 
 const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRevoke }: Props) => {

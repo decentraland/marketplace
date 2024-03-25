@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { RootState } from '../../../modules/reducer'
-import { getAddress } from '../../../modules/wallet/selectors'
-import { locations } from '../../../modules/routing/locations'
 import { cancelBidRequest } from '../../../modules/bid/actions'
-import { MapStateProps, MapDispatchProps, MapDispatch } from './YourOffer.types'
+import { RootState } from '../../../modules/reducer'
+import { locations } from '../../../modules/routing/locations'
+import { getAddress } from '../../../modules/wallet/selectors'
 import YourOffer from './YourOffer'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './YourOffer.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   address: getAddress(state)

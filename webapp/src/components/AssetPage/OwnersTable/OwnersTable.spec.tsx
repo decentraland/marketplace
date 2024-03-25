@@ -1,5 +1,5 @@
-import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { waitFor } from '@testing-library/react'
+import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { OwnersResponse } from '../../../modules/vendor/decentraland'
 import * as nftAPI from '../../../modules/vendor/decentraland/nft/api'

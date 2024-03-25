@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
-import { openTransak, OpenTransakAction } from '../../../modules/transak/actions'
 import { Asset } from '../../../modules/asset/types'
+import { openTransak, OpenTransakAction } from '../../../modules/transak/actions'
 
 export type Metadata = {
   asset: Asset

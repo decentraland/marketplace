@@ -3,8 +3,8 @@ import { push } from 'connected-react-router'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { RootState } from '../../modules/reducer'
 import { getWallet } from '../../modules/wallet/selectors'
-import { MapStateProps, MapDispatchProps, MapDispatch } from './Wallet.types'
 import Wallet from './Wallet'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './Wallet.types'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

@@ -1,11 +1,11 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Box, Loader, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, Loader, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import ProfilesCache from '../../../lib/profiles'
 import { Pill } from '../../AssetTopbar/SelectedFilters/Pill/Pill'
 import { InfoTooltip } from '../../InfoTooltip'
-import { Props } from './CreatorsFilter.types'
 import { profileToCreatorAccount } from './utils'
+import { Props } from './CreatorsFilter.types'
 import './CreatorsFilter.css'
 
 export type Creator = {

@@ -1,5 +1,5 @@
-import { Contract } from '../vendor/services'
 import { action } from 'typesafe-actions'
+import { Contract } from '../vendor/services'
 
 // FETCH CONTRACTS
 

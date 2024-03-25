@@ -1,6 +1,6 @@
 import React from 'react'
-import { Loader, Pagination, Table, useMobileMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Loader, Pagination, Table, useMobileMediaQuery } from 'decentraland-ui'
 import { ROWS_PER_PAGE } from '../../AssetPage/OwnersTable/OwnersTable'
 import { Props } from './TableContent.types'
 import './TableContent.css'

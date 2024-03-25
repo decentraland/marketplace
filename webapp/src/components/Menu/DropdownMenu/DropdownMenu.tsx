@@ -1,6 +1,5 @@
-import classNames from 'classnames'
 import React, { useCallback, useEffect, useState } from 'react'
-
+import classNames from 'classnames'
 import { MenuItem } from '../../Menu/MenuItem'
 import { Props } from './DropdownMenu.types'
 

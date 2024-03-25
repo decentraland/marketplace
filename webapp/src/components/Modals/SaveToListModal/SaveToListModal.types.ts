@@ -1,6 +1,6 @@
 import { Item } from '@dcl/schemas'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { OverrideCreateListTypes } from '../CreateOrEditListModal/CreateOrEditListModal.types'
 

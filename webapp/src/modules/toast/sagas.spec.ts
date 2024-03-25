@@ -1,9 +1,12 @@
+import { select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
 import { ChainId, Item, Order, RentalListing } from '@dcl/schemas'
 import { hideAllToasts, showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
 import { CrossChainProviderType, getTransactionHref } from 'decentraland-dapps/dist/modules/transaction'
-import { expectSaga } from 'redux-saga-test-plan'
-import { select } from 'redux-saga/effects'
+import { RouteResponse } from 'decentraland-transactions/crossChain'
+import { claimNameSuccess } from '../ens/actions'
+import { ENS } from '../ens/types'
 import {
   bulkPickUnpickFailure,
   bulkPickUnpickRequest,
@@ -12,7 +15,10 @@ import {
   deleteListSuccess,
   updateListSuccess
 } from '../favorites/actions'
+import { List } from '../favorites/types'
 import { FetchItemsFailureAction, buyItemCrossChainSuccess, buyItemWithCardFailure, fetchItemsFailure } from '../item/actions'
+import { ItemBrowseOptions } from '../item/types'
+import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 import { NFT, NFTsFetchOptions } from '../nft/types'
 import { executeOrderFailure, executeOrderWithCardFailure } from '../order/actions'
 import { claimAssetSuccess, removeRentalSuccess, upsertRentalSuccess } from '../rental/actions'
@@ -35,15 +41,9 @@ import {
   getNameClaimSuccessToast,
   getCrossChainTransactionSuccessToast
 } from '../toast/toasts'
-import { ItemBrowseOptions } from '../item/types'
-import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
-import { List } from '../favorites/types'
 import { ListOfLists, UpdateOrCreateList } from '../vendor/decentraland/favorites/types'
 import { toastSaga } from './sagas'
 import { toastDispatchableActionsChannel } from './utils'
-import { claimNameSuccess } from '../ens/actions'
-import { ENS } from '../ens/types'
-import { RouteResponse } from 'decentraland-transactions/crossChain'
 
 let nft: NFT
 let rental: RentalListing

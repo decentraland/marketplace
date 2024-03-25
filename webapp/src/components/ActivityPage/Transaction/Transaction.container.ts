@@ -1,10 +1,9 @@
 import { connect } from 'react-redux'
-
-import { RootState } from '../../../modules/reducer'
 import { getContract } from '../../../modules/contract/selectors'
+import { RootState } from '../../../modules/reducer'
 import { Contract } from '../../../modules/vendor/services'
-import { MapStateProps } from './Transaction.types'
 import Transaction from './Transaction'
+import { MapStateProps } from './Transaction.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   getContract: (query: Partial<Contract>) => getContract(state, query)

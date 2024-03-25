@@ -1,14 +1,14 @@
 import { NFTCategory, NFTFilters, RentalStatus } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
+import { config } from '../../../../config'
+import { AssetType } from '../../../asset/types'
 import { NFTsFetchParams } from '../../../nft/types'
-import { NFTsFetchFilters, NFTResponse, NFTResult, OwnersFilters, OwnersResponse } from './types'
-import { ATLAS_SERVER_URL } from '../land'
+import { getNFTSortBy } from '../../../routing/search'
 import { Contract } from '../../services'
 import { FetchOneOptions, VendorName } from '../../types'
-import { getNFTSortBy } from '../../../routing/search'
-import { AssetType } from '../../../asset/types'
-import { config } from '../../../../config'
+import { ATLAS_SERVER_URL } from '../land'
 import { retryParams } from '../utils'
+import { NFTsFetchFilters, NFTResponse, NFTResult, OwnersFilters, OwnersResponse } from './types'
 
 export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')

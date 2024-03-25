@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
-import { RootState } from '../../../modules/reducer'
 import { createListClear, createListRequest, updateListRequest } from '../../../modules/favorites/actions'
 import { isLoadingCreateList, getError, isLoadingUpdateList } from '../../../modules/favorites/selectors'
 import { CreateListParameters } from '../../../modules/favorites/types'
-import { MapDispatchProps, MapStateProps, OwnProps } from './CreateOrEditListModal.types'
+import { RootState } from '../../../modules/reducer'
 import CreateListModal from './CreateOrEditListModal'
+import { MapDispatchProps, MapStateProps, OwnProps } from './CreateOrEditListModal.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {

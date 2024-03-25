@@ -1,12 +1,27 @@
-import { takeEvery, put, select, call, take, delay, race, spawn } from 'redux-saga/effects'
-import { ethers } from 'ethers'
 import { matchPath } from 'react-router-dom'
 import { push, getLocation, goBack, LOCATION_CHANGE, replace, LocationChangeAction } from 'connected-react-router'
+import { ethers } from 'ethers'
+import { takeEvery, put, select, call, take, delay, race, spawn } from 'redux-saga/effects'
 import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
-import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { DCLRegistrar } from '../../contracts/DCLRegistrar'
+import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
+import { isOfEnumType } from '../../utils/enums'
+import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
+import { ACCEPT_BID_SUCCESS, CANCEL_BID_SUCCESS, PLACE_BID_SUCCESS } from '../bid/actions'
+import {
+  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+  CLAIM_NAME_SUCCESS,
+  CLAIM_NAME_TRANSACTION_SUBMITTED,
+  ClaimNameCrossChainSuccessAction,
+  ClaimNameSuccessAction,
+  ClaimNameTransactionSubmittedAction
+} from '../ens/actions'
+import { REGISTRAR_ADDRESS } from '../ens/sagas'
+import { getData } from '../event/selectors'
+import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import {
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_SUCCESS,
@@ -16,8 +31,8 @@ import {
   fetchItemsRequest,
   fetchTrendingItemsRequest
 } from '../item/actions'
-import { VendorName } from '../vendor/types'
-import { View } from '../ui/types'
+import { fetchNFTRequest, fetchNFTsRequest, TRANSFER_NFT_SUCCESS } from '../nft/actions'
+import { CANCEL_ORDER_SUCCESS, CREATE_ORDER_SUCCESS, EXECUTE_ORDER_SUCCESS, ExecuteOrderSuccessAction } from '../order/actions'
 import {
   getNetwork,
   getOnlySmart,
@@ -34,20 +49,15 @@ import {
   getContracts,
   getSearch
 } from '../routing/selectors'
-import { fetchNFTRequest, fetchNFTsRequest, TRANSFER_NFT_SUCCESS } from '../nft/actions'
+import { FetchSalesFailureAction, fetchSalesRequest, FETCH_SALES_FAILURE, FETCH_SALES_SUCCESS } from '../sale/actions'
+import { getSales } from '../sale/selectors'
 import { setView } from '../ui/actions'
-import { getFilters } from '../vendor/utils'
+import { getPage } from '../ui/browse/selectors'
+import { View } from '../ui/types'
 import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize, MAX_QUERY_SIZE } from '../vendor/api'
-import { locations } from './locations'
-import {
-  getCategoryFromSection,
-  getDefaultOptionsByView,
-  getSearchWearableCategory,
-  getSearchEmoteCategory,
-  getItemSortBy,
-  getAssetOrderBy,
-  getCatalogSortBy
-} from './search'
+import { Section } from '../vendor/decentraland'
+import { VendorName } from '../vendor/types'
+import { getFilters } from '../vendor/utils'
 import {
   BROWSE,
   BrowseAction,
@@ -58,28 +68,18 @@ import {
   GO_BACK,
   GoBackAction
 } from './actions'
-import { BrowseOptions } from './types'
-import { Section } from '../vendor/decentraland'
-import { getClearedBrowseOptions, isCatalogView, rentalFilters, SALES_PER_PAGE, sellFilters, buildBrowseURL } from './utils'
-import { FetchSalesFailureAction, fetchSalesRequest, FETCH_SALES_FAILURE, FETCH_SALES_SUCCESS } from '../sale/actions'
-import { getSales } from '../sale/selectors'
-import { CANCEL_ORDER_SUCCESS, CREATE_ORDER_SUCCESS, EXECUTE_ORDER_SUCCESS, ExecuteOrderSuccessAction } from '../order/actions'
-import { ACCEPT_BID_SUCCESS, CANCEL_BID_SUCCESS, PLACE_BID_SUCCESS } from '../bid/actions'
-import { getData } from '../event/selectors'
-import { getPage } from '../ui/browse/selectors'
-import { fetchFavoritedItemsRequest } from '../favorites/actions'
-import { AssetStatusFilter } from '../../utils/filters'
+import { locations } from './locations'
 import {
-  CLAIM_NAME_CROSS_CHAIN_SUCCESS,
-  CLAIM_NAME_SUCCESS,
-  CLAIM_NAME_TRANSACTION_SUBMITTED,
-  ClaimNameCrossChainSuccessAction,
-  ClaimNameSuccessAction,
-  ClaimNameTransactionSubmittedAction
-} from '../ens/actions'
-import { isOfEnumType } from '../../utils/enums'
-import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
-import { REGISTRAR_ADDRESS } from '../ens/sagas'
+  getCategoryFromSection,
+  getDefaultOptionsByView,
+  getSearchWearableCategory,
+  getSearchEmoteCategory,
+  getItemSortBy,
+  getAssetOrderBy,
+  getCatalogSortBy
+} from './search'
+import { BrowseOptions } from './types'
+import { getClearedBrowseOptions, isCatalogView, rentalFilters, SALES_PER_PAGE, sellFilters, buildBrowseURL } from './utils'
 
 export function* routingSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)

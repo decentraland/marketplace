@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
-import { RootState } from '../../../modules/reducer'
 import { getProximities } from '../../../modules/proximity/selectors'
-import { MapStateProps } from './ProximityTags.types'
+import { RootState } from '../../../modules/reducer'
 import ProximityTags from './ProximityTags'
+import { MapStateProps } from './ProximityTags.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   proximities: getProximities(state)

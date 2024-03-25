@@ -1,13 +1,13 @@
 import React from 'react'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import { ModalNavigation, Close, useMobileMediaQuery } from 'decentraland-ui'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ModalNavigation, Close, useMobileMediaQuery } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
+import CTA from './CTA/CTA'
 import { Props } from './RentConfirmedModal.types'
 import styles from './RentConfirmedModal.module.css'
-import CTA from './CTA/CTA'
 
 const RentConfirmedModal = ({ metadata: { rental, periodIndexChosen }, onClose }: Props) => {
   const period = rental.periods[periodIndexChosen]

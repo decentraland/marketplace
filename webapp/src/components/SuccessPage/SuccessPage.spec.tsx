@@ -1,9 +1,9 @@
+import { useLocation } from 'react-router-dom'
 import { RenderResult } from '@testing-library/react'
 import { NFTCategory, Profile, Rarity } from '@dcl/schemas'
-import { useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { renderWithProviders, waitForComponentToFinishLoading } from '../../utils/test'
 import { NFT } from '../../modules/nft/types'
+import { renderWithProviders, waitForComponentToFinishLoading } from '../../utils/test'
 import { SuccessPage } from './SuccessPage'
 import { Props } from './SuccessPage.types'
 

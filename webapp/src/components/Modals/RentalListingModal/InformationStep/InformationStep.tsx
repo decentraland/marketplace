@@ -1,6 +1,6 @@
 import React from 'react'
-import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { Props } from './InformationStep.types'
 import styles from './InformationStep.module.css'
 

@@ -1,11 +1,10 @@
 import React from 'react'
-import { Loader } from 'decentraland-ui'
-import { Item } from '@dcl/schemas'
-import { Props } from './CollectionImage.types'
-import { AssetImage } from '../AssetImage'
 import classNames from 'classnames'
+import { Item } from '@dcl/schemas'
+import { Loader } from 'decentraland-ui'
+import { AssetImage } from '../AssetImage'
 import CollectionProvider from '../CollectionProvider'
-
+import { Props } from './CollectionImage.types'
 import './CollectionImage.css'
 
 const CollectionImage = ({ contractAddress }: Props) => {

@@ -1,9 +1,9 @@
 import { EmotePlayMode, GenderFilterOption, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
 import { Network } from '@dcl/schemas/dist/dapps/network'
-import { LANDFilters } from '../../Vendor/decentraland/types'
+import { BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
 import { AssetType } from '../../../modules/asset/types'
 import { BrowseOptions } from '../../../modules/routing/types'
-import { BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
+import { LANDFilters } from '../../Vendor/decentraland/types'
 
 export type Props = {
   section: string

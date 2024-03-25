@@ -4,10 +4,10 @@ import { t } from 'decentraland-dapps/dist/modules/translation'
 import type { Route, Token } from 'decentraland-transactions/crossChain'
 import { isPriceTooLow } from '../../../BuyPage/utils'
 import { ManaToFiat } from '../../../ManaToFiat'
-import { formatPrice } from '../utils'
 import { GasCostValues, RouteFeeCost } from '../hooks'
-import { FREE_TX_COVERED_TEST_ID } from './constants'
 import { TokenIcon } from '../TokenIcon'
+import { formatPrice } from '../utils'
+import { FREE_TX_COVERED_TEST_ID } from './constants'
 import styles from './PurchaseTotal.module.css'
 
 export type Props = {

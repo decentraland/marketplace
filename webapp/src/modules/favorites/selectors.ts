@@ -1,14 +1,13 @@
-import { AnyAction } from 'redux'
 import { createMatchSelector } from 'connected-react-router'
+import { AnyAction } from 'redux'
 import { createSelector } from 'reselect'
 import { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { DEFAULT_FAVORITES_LIST_ID, ListOfLists } from '../vendor/decentraland/favorites'
+import { getData as getItems } from '../item/selectors'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
-import { getData as getItems } from '../item/selectors'
-import { FavoritesData, List } from './types'
+import { DEFAULT_FAVORITES_LIST_ID, ListOfLists } from '../vendor/decentraland/favorites'
 import {
   FETCH_FAVORITED_ITEMS_REQUEST,
   FETCH_LISTS_REQUEST,
@@ -18,6 +17,7 @@ import {
   UPDATE_LIST_REQUEST,
   BulkPickUnpickRequestAction
 } from './actions'
+import { FavoritesData, List } from './types'
 
 const isBulkPickRequestAction = (action: AnyAction): action is BulkPickUnpickRequestAction => action.type === BULK_PICK_REQUEST
 

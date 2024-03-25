@@ -1,5 +1,5 @@
-import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
+import { NFTCategory } from '@dcl/schemas'
 import { getCategoryFromSection, getSearchEmoteCategory, getSearchWearableCategory } from '../../../modules/routing/search'
 import { PriceFilterExtraOption, PriceFilters, Section } from '../../../modules/vendor/decentraland'
 import { isOfEnumType } from '../../../utils/enums'

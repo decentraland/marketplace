@@ -1,5 +1,5 @@
-import { Button, Icon } from 'decentraland-ui'
 import classNames from 'classnames'
+import { Button, Icon } from 'decentraland-ui'
 import { Props } from './IconButton.types'
 import styles from './IconButton.module.css'
 

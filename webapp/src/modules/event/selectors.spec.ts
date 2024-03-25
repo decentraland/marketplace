@@ -1,6 +1,5 @@
 import { getDefaultState } from '../../tests/defaultStore'
 import { RootState } from '../reducer'
-
 import { INITIAL_STATE } from './reducer'
 import { getData, getError, getLoading, getState } from './selectors'
 

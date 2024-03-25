@@ -2,8 +2,8 @@ import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { getConfiguration } from 'decentraland-connect'
-import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { config } from '../../config'
+import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 
 const REGISTRAR_ADDRESS = config.get('REGISTRAR_CONTRACT_ADDRESS', '')
 

@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { ethers } from 'ethers'
-import { Row, Section, Header, HeaderSubheader } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Row, Section, Header, HeaderSubheader } from 'decentraland-ui'
+import { formatWeiMANA } from '../../../lib/mana'
 import { Coordinate } from '../../Coordinate'
 import { Mana } from '../../Mana'
 import { Props } from './Popup.types'
 import './Popup.css'
-import { formatWeiMANA } from '../../../lib/mana'
 
 export default class Popup extends React.PureComponent<Props> {
   subPriceHeader() {

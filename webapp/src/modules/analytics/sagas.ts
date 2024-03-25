@@ -1,8 +1,8 @@
 import { call, takeEvery, put } from '@redux-saga/core/effects'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
-import { rankingsAPI } from '../vendor/decentraland/rankings/api'
 import { AnalyticsService } from '../vendor/decentraland'
+import { rankingsAPI } from '../vendor/decentraland/rankings/api'
 import {
   fetchAnalyticsVolumeDataFailure,
   FetchAnalyticsDayDataRequestAction,

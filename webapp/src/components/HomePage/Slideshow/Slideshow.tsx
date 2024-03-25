@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import classNames from 'classnames'
-import { HeaderMenu, Header, Button, Loader, Empty, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { HeaderMenu, Header, Button, Loader, Empty, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Asset } from '../../../modules/asset/types'
 import * as events from '../../../utils/events'
 import { AssetCard } from '../../AssetCard'
-import { Props } from './Slideshow.types'
 import ItemsSection from './ItemsSection'
+import { Props } from './Slideshow.types'
 import './Slideshow.css'
 
 const DEFAULT_PAGE_SIZE = 5

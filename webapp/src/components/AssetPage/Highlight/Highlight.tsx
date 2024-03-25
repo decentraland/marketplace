@@ -1,7 +1,6 @@
 import React from 'react'
-
-import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
+import { Row } from '../../Layout/Row'
 import { Props } from './Highlight.types'
 import './Highlight.css'
 

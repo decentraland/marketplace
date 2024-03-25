@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal, Button, ModalNavigation, useTabletAndBelowMediaQuery, Icon } from 'decentraland-ui'
-import * as decentraland from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../../../modules/ui/utils'
+import * as decentraland from '../../../modules/vendor/decentraland'
 import styles from './ExpiredListingsModal.module.css'
 
 export const ExpiredListingsModal = () => {

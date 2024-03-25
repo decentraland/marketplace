@@ -1,6 +1,6 @@
 import classNames from 'classnames'
-import styles from './SearchBarDropdownOptionSkeleton.module.css'
 import { SKELETONS_DATA_TEST_ID } from '../constants'
+import styles from './SearchBarDropdownOptionSkeleton.module.css'
 
 type SearchBarDropdownOptionSkeletonProps = {
   shape?: 'rect' | 'circle'

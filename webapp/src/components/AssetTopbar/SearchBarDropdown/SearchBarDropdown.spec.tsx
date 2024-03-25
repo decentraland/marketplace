@@ -1,17 +1,15 @@
 import { Context as ResponsiveContext } from 'react-responsive'
-import { BodyShape, NFTCategory, Network, Rarity, WearableCategory } from '@dcl/schemas'
 import { fireEvent, waitFor, within } from '@testing-library/react'
-import { catalogAPI } from '../../../modules/vendor/decentraland/catalog/api'
-import { renderWithProviders } from '../../../utils/test'
+import { BodyShape, NFTCategory, Network, Rarity, WearableCategory } from '@dcl/schemas'
+import { Asset, AssetType } from '../../../modules/asset/types'
 import { getAssetUrl } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
-import { Asset, AssetType } from '../../../modules/asset/types'
-import { Section } from '../../../modules/vendor/decentraland'
-import { VendorName } from '../../../modules/vendor'
 import { SortBy } from '../../../modules/routing/types'
+import { VendorName } from '../../../modules/vendor'
+import { Section } from '../../../modules/vendor/decentraland'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
-import { SearchBarDropdownProps } from './SearchBarDropdown.types'
-import { LOCAL_STORAGE_RECENT_SEARCHES_KEY, SearchBarDropdown } from './SearchBarDropdown'
+import { catalogAPI } from '../../../modules/vendor/decentraland/catalog/api'
+import { renderWithProviders } from '../../../utils/test'
 import {
   COLLECTION_ROW_DATA_TEST_ID,
   NO_RESULTS_DATA_TEST_ID,
@@ -19,6 +17,8 @@ import {
   SEE_ALL_COLLECTIBLES_DATA_TEST_ID,
   SKELETONS_DATA_TEST_ID
 } from './constants'
+import { LOCAL_STORAGE_RECENT_SEARCHES_KEY, SearchBarDropdown } from './SearchBarDropdown'
+import { SearchBarDropdownProps } from './SearchBarDropdown.types'
 
 jest.mock('decentraland-dapps/dist/containers/Profile', () => {
   return {

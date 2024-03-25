@@ -1,5 +1,4 @@
 import { memo } from 'react'
-
 import { NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isNFT } from '../../../../modules/asset/utils'

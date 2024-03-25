@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import InfiniteLoader from 'react-window-infinite-loader'
 import { FixedSizeList } from 'react-window'
-import { Button, Checkbox, Icon, Loader, Message, ModalNavigation } from 'decentraland-ui'
+import InfiniteLoader from 'react-window-infinite-loader'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Checkbox, Icon, Loader, Message, ModalNavigation } from 'decentraland-ui'
+import { isErrorWithMessage } from '../../../lib/error'
+import { CreateListParameters } from '../../../modules/favorites/types'
 import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL, ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
-import { CreateListParameters } from '../../../modules/favorites/types'
 import * as events from '../../../utils/events'
-import { isErrorWithMessage } from '../../../lib/error'
 import { PrivateTag } from '../../PrivateTag'
 import {
   CREATE_LIST_BUTTON_DATA_TEST_ID,
@@ -25,7 +26,6 @@ import {
 } from './constants'
 import { PickType, Props } from './SaveToListModal.types'
 import styles from './SaveToListModal.module.css'
-import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 const SaveToListModal = (props: Props) => {
   const {

@@ -1,10 +1,10 @@
 import { Item, RentalListing, RentalStatus } from '@dcl/schemas'
-import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
-import { getAssetUrl, isOwnedBy, mapAsset } from './utils'
 import { Asset } from './types'
+import { getAssetUrl, isOwnedBy, mapAsset } from './utils'
 
 let asset: Asset
 let wallet: Wallet

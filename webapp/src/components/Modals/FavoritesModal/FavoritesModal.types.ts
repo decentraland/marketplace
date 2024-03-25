@@ -1,5 +1,5 @@
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 
 export type Metadata = {
   itemId: string

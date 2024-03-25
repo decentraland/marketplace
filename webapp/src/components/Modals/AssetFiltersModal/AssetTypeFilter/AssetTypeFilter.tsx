@@ -1,6 +1,6 @@
+import { useCallback, useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { useCallback, useMemo } from 'react'
 import { AssetType } from '../../../../modules/asset/types'
 import { SelectFilter } from '../../../Vendor/NFTFilters/SelectFilter'
 import './AssetTypeFilter.css'

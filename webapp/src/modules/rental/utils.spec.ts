@@ -1,10 +1,11 @@
-import { RentalListing, RentalListingPeriod, RentalStatus, ChainId } from '@dcl/schemas'
 import { BigNumber, ethers } from 'ethers'
+import { RentalListing, RentalListingPeriod, RentalStatus, ChainId } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { Asset } from '../asset/types'
-import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { NFT } from '../nft/types'
+import { rentalsAPI } from '../vendor/decentraland/rentals/api'
+import { getRentalsContractInstance } from './contract'
 import {
   getAssetNonce,
   getContractNonce,
@@ -24,7 +25,6 @@ import {
   waitUntilRentalChangesStatus,
   generateECDSASignatureWithValidV
 } from './utils'
-import { getRentalsContractInstance } from './contract'
 
 jest.useFakeTimers()
 jest.mock('decentraland-dapps/dist/lib/eth')

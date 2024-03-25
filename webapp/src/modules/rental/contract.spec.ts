@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
-import type { Provider } from 'decentraland-connect'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import type { Provider } from 'decentraland-connect'
 import { getRentalsContractInstance } from './contract'
 
 jest.mock('decentraland-dapps/dist/lib/eth')

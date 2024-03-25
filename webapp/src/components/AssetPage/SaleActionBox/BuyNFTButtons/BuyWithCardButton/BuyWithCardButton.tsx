@@ -1,8 +1,8 @@
-import { Icon, Button } from 'decentraland-ui'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation'
-import styles from './BuyWithCardButton.module.css'
+import { Icon, Button } from 'decentraland-ui'
 import { Props } from './BuyWithCardButton.types'
+import styles from './BuyWithCardButton.module.css'
 
 export const BuyWithCardButton = (props: Props) => {
   const { className, ...otherProps } = props

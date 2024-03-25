@@ -1,9 +1,9 @@
 import { AssetStatusFilter } from '../../utils/filters'
-import { Section } from '../vendor/decentraland/routing'
-import { getPersistedIsMapProperty } from '../ui/utils'
 import { View } from '../ui/types'
-import { CATALOG_VIEWS, getClearedBrowseOptions, isCatalogView, isMapSet } from './utils'
+import { getPersistedIsMapProperty } from '../ui/utils'
+import { Section } from '../vendor/decentraland/routing'
 import { BrowseOptions } from './types'
+import { CATALOG_VIEWS, getClearedBrowseOptions, isCatalogView, isMapSet } from './utils'
 jest.mock('../ui/utils')
 
 const mockedGetPersistedIsMapProperty = getPersistedIsMapProperty as unknown as jest.MockedFunction<typeof getPersistedIsMapProperty>

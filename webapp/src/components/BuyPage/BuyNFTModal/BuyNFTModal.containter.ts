@@ -1,15 +1,15 @@
 import { connect } from 'react-redux'
+import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { getLoading as getLoadingAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { RootState } from '../../../modules/reducer'
+import { getContract } from '../../../modules/contract/selectors'
 import { executeOrderRequest, executeOrderWithCardRequest, EXECUTE_ORDER_REQUEST, clearOrderErrors } from '../../../modules/order/actions'
 import { getLoading as getLoadingOrders } from '../../../modules/order/selectors'
-import { getContract } from '../../../modules/contract/selectors'
-import { Contract } from '../../../modules/vendor/services'
+import { RootState } from '../../../modules/reducer'
 import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
-import { MapStateProps, MapDispatchProps, MapDispatch } from './BuyNFTModal.types'
+import { Contract } from '../../../modules/vendor/services'
 import BuyNFTModal from './BuyNFTModal'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './BuyNFTModal.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   isLoading:

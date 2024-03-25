@@ -1,10 +1,10 @@
 import { waitFor } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { renderWithProviders } from '../../../utils/test'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
-import { Props } from './SmartWearableVideoShowcaseModal.types'
-import SmartWearableVideoShowcaseModal from './SmartWearableVideoShowcaseModal'
+import { renderWithProviders } from '../../../utils/test'
 import { VIDEO_TEST_ID } from './constants'
+import SmartWearableVideoShowcaseModal from './SmartWearableVideoShowcaseModal'
+import { Props } from './SmartWearableVideoShowcaseModal.types'
 
 jest.mock('../../../lib/asset')
 

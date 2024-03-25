@@ -1,10 +1,10 @@
 import { RentalListing } from '@dcl/schemas'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
-import { NFT } from '../../../modules/nft/types'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { clearBidError, placeBidRequest } from '../../../modules/bid/actions'
-import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
+import { NFT } from '../../../modules/nft/types'
+import { Contract } from '../../../modules/vendor/services'
 
 export type Props = {
   nft: NFT

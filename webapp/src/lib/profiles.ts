@@ -1,7 +1,7 @@
-import { Profile } from '@dcl/schemas'
-import { LambdasClient, createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
-import { peerUrl } from './environment'
 import { createFetchComponent } from '@well-known-components/fetch-component'
+import { LambdasClient, createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClient'
+import { Profile } from '@dcl/schemas'
+import { peerUrl } from './environment'
 
 class ProfilesCache {
   cache: Record<string, Promise<Profile[]>>

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
-import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { UpsertRentalOptType } from '../../../../modules/rental/types'
 import { daysByPeriod } from '../../../../modules/rental/utils'
 import { Mana } from '../../../Mana'

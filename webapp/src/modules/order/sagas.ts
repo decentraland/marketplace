@@ -1,21 +1,23 @@
 import { put, call, takeEvery, select, race, take } from 'redux-saga/effects'
 import { ListingStatus, RentalListing, RentalStatus } from '@dcl/schemas'
+import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
+import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ErrorCode } from 'decentraland-transactions'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
-import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
-import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
-import { getWallet } from '../wallet/selectors'
-import { Vendor, VendorFactory } from '../vendor/VendorFactory'
-import { getRentalById } from '../rental/selectors'
-import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
 import { buyAssetWithCard } from '../asset/utils'
-import { VendorName } from '../vendor'
+import { FetchNFTFailureAction, fetchNFTRequest, FetchNFTSuccessAction, FETCH_NFT_FAILURE, FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getData as getNFTs } from '../nft/selectors'
 import { getNFT } from '../nft/utils'
+import { getRentalById } from '../rental/selectors'
+import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
+import { VendorName } from '../vendor'
+import SubgraphService from '../vendor/decentraland/SubgraphService'
+import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { getWallet } from '../wallet/selectors'
 import {
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
@@ -40,10 +42,8 @@ import {
   fetchOrdersRequest,
   fetchOrdersFailure
 } from './actions'
-import { FetchNFTFailureAction, fetchNFTRequest, FetchNFTSuccessAction, FETCH_NFT_FAILURE, FETCH_NFT_SUCCESS } from '../nft/actions'
-import SubgraphService from '../vendor/decentraland/SubgraphService'
-import { getSubgraphOrdersQuery } from './utils'
 import { LegacyOrderFragment } from './types'
+import { getSubgraphOrdersQuery } from './utils'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)

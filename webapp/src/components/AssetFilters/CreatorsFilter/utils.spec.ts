@@ -1,6 +1,6 @@
 import { Avatar, Profile } from '@dcl/schemas'
-import { profileToCreatorAccount } from './utils'
 import { Creator } from './CreatorsFilter'
+import { profileToCreatorAccount } from './utils'
 
 describe('profileToCreatorAccount', () => {
   let profiles: Profile[]

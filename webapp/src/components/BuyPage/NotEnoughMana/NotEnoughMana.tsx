@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Card, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Card, Icon } from 'decentraland-ui'
 import { Mana } from '../../Mana'
 import { Props } from './NotEnoughMana.types'
 import styles from './NotEnoughMana.module.css'

@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
-import { DataTableType } from '../../Table/TableContent/TableContent.types'
-
 import TableContainer from '../../Table/TableContainer'
 import { TableContent } from '../../Table/TableContent'
+import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
 import { Props } from './RentalHistory.types'
 

@@ -1,5 +1,5 @@
-import { RentalListing } from '@dcl/schemas'
 import { Dispatch } from 'redux'
+import { RentalListing } from '@dcl/schemas'
 import { NFT } from '../../../../modules/nft/types'
 import {
   upsertRentalRequest,

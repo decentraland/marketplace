@@ -1,5 +1,5 @@
-import { Collection, Item } from '@dcl/schemas'
 import { ReactNode } from 'react'
+import { Collection, Item } from '@dcl/schemas'
 
 export type Props = {
   contractAddress: string

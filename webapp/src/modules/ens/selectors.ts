@@ -2,8 +2,8 @@ import { createSelector } from 'reselect'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 import { AuthorizationStepStatus } from 'decentraland-ui'
-import { getPendingTransactions } from '../transaction/selectors'
 import { RootState } from '../reducer'
+import { getPendingTransactions } from '../transaction/selectors'
 import { CLAIM_NAME_REQUEST, CLAIM_NAME_TRANSACTION_SUBMITTED } from './actions'
 
 export const getState = (state: RootState) => state.ens

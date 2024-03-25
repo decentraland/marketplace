@@ -1,7 +1,7 @@
-import { ChainId } from '@dcl/schemas'
 import { Log } from '@ethersproject/providers'
-import { ContractName, getContract } from 'decentraland-transactions'
 import { BigNumber, ethers } from 'ethers'
+import { ChainId } from '@dcl/schemas'
+import { ContractName, getContract } from 'decentraland-transactions'
 
 export function getTokenIdFromLogs(chainId: ChainId, logs?: Log[]): BigNumber | null {
   if (!logs) return null

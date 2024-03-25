@@ -1,22 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { v5 as uuidv5 } from 'uuid'
-import { Button, Close, Icon } from 'decentraland-ui'
-import { Tabs } from 'decentraland-ui/dist'
 import { Item, NFTCategory } from '@dcl/schemas'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import * as events from '../../../utils/events'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Tabs } from 'decentraland-ui/dist'
+import { Button, Close, Icon } from 'decentraland-ui'
 import clock from '../../../images/clock.png'
-import { catalogAPI } from '../../../modules/vendor/decentraland/catalog/api'
-import { BuilderCollectionAttributes } from '../../../modules/vendor/decentraland/builder/types'
 import { CreatorAccount } from '../../../modules/account/types'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
-import SearchBarDropdownOptionSkeleton from './SearchBarDropdownOptionSkeleton/SearchBarDropdownOptionSkeleton'
-import { SearchBarDropdownProps, SearchTab } from './SearchBarDropdown.types'
-import CreatorResultItemRow from './CreatorResultRow/CreatorResultRow'
-import CollectionResultRow from './CollectionResultRow/CollectionResultRow'
+import { BuilderCollectionAttributes } from '../../../modules/vendor/decentraland/builder/types'
+import { catalogAPI } from '../../../modules/vendor/decentraland/catalog/api'
+import * as events from '../../../utils/events'
 import CollectibleResultItemRow from './CollectibleResultItemRow/CollectibleResultItemRow'
-import styles from './SearchBarDropdown.module.css'
+import CollectionResultRow from './CollectionResultRow/CollectionResultRow'
 import {
   COLLECTIBLE_DATA_TEST_ID,
   COLLECTION_ROW_DATA_TEST_ID,
@@ -24,6 +20,10 @@ import {
   RECENT_SEARCHES_DATA_TEST_ID,
   SEE_ALL_COLLECTIBLES_DATA_TEST_ID
 } from './constants'
+import CreatorResultItemRow from './CreatorResultRow/CreatorResultRow'
+import SearchBarDropdownOptionSkeleton from './SearchBarDropdownOptionSkeleton/SearchBarDropdownOptionSkeleton'
+import { SearchBarDropdownProps, SearchTab } from './SearchBarDropdown.types'
+import styles from './SearchBarDropdown.module.css'
 
 type Results = Item[] | BuilderCollectionAttributes[]
 type RecentSearch = CreatorAccount | BuilderCollectionAttributes | Item

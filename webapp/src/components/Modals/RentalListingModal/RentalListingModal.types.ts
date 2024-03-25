@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux'
 import { RentalListing } from '@dcl/schemas'
-import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import { NFT } from '../../../modules/nft/types'
 
 export type RentalModalMetadata = {

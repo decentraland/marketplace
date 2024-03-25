@@ -1,10 +1,9 @@
 import { fireEvent } from '@testing-library/react'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { renderWithProviders } from '../../utils/test'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { List } from '../../modules/favorites/types'
 import { DEFAULT_FAVORITES_LIST_ID } from '../../modules/vendor/decentraland/favorites'
-import ListPage from './ListPage'
+import { renderWithProviders } from '../../utils/test'
 import {
   LOADER_TEST_ID,
   EMPTY_LIST_TEST_ID,
@@ -21,6 +20,7 @@ import {
   EMPTY_LIST_ACTION_TEST_ID,
   MORE_OPTIONS_DROPDOWN_TEST_ID
 } from './constants'
+import ListPage from './ListPage'
 import { Props } from './ListPage.types'
 
 // This is to avoid errors with the canvas

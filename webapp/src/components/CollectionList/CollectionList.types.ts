@@ -1,5 +1,5 @@
-import { Collection } from '@dcl/schemas'
 import { Dispatch } from 'redux'
+import { Collection } from '@dcl/schemas'
 import { fetchCollectionsRequest, FetchCollectionsRequestAction } from '../../modules/collection/actions'
 
 export type Props = {

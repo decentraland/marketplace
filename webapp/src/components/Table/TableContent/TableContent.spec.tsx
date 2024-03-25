@@ -1,8 +1,8 @@
-import { renderWithProviders } from '../../../utils/tests'
-import { DataTableType } from './TableContent.types'
-import TableContent from './TableContent'
 import { within } from '@testing-library/react'
+import { renderWithProviders } from '../../../utils/tests'
 import { ROWS_PER_PAGE } from '../../AssetPage/OwnersTable/OwnersTable'
+import TableContent from './TableContent'
+import { DataTableType } from './TableContent.types'
 
 describe('Table content', () => {
   let data: DataTableType[] = [

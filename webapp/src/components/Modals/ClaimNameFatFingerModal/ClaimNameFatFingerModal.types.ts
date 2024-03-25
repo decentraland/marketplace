@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux'
-import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { OpenFiatGatewayWidgetRequestAction, openFiatGatewayWidgetRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { OpenModalAction, openModal } from 'decentraland-dapps/dist/modules/modal'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import { ClaimNameRequestAction, ClaimNameTransactionSubmittedAction, claimNameTransactionSubmitted } from '../../../modules/ens/actions'
 
 export type Props = Omit<ModalProps, 'metadata'> & {

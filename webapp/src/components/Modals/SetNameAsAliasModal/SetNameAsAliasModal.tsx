@@ -1,9 +1,9 @@
 import classNames from 'classnames'
-import { ModalNavigation, Button, Form, Icon, Profile } from 'decentraland-ui'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import VerifiedIcon from '../../../images/verified.svg'
+import { ModalNavigation, Button, Form, Icon, Profile } from 'decentraland-ui'
 import UserIcon from '../../../images/user-circle.svg'
+import VerifiedIcon from '../../../images/verified.svg'
 import { Props } from './SetNameAsAliasModal.types'
 import './SetNameAsAliasModal.css'
 

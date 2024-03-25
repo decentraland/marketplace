@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { SelectFilter } from '../../Vendor/NFTFilters/SelectFilter'
 import { collectionAPI } from '../../../modules/vendor/decentraland'
+import { SelectFilter } from '../../Vendor/NFTFilters/SelectFilter'
 import './CollectionFilter.css'
 
 const ALL_FILTER_OPTION = 'ALL'

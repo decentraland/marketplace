@@ -1,8 +1,16 @@
-import { Bid, RentalListing, RentalStatus } from '@dcl/schemas'
 import { takeEvery, put, select, call } from 'redux-saga/effects'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Bid, RentalListing, RentalStatus } from '@dcl/schemas'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
+import { getContract } from '../contract/selectors'
+import { getCurrentNFT } from '../nft/selectors'
+import { NFT } from '../nft/types'
+import { getRentalById } from '../rental/selectors'
+import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
+import { VendorName } from '../vendor/types'
+import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { getWallet } from '../wallet/selectors'
 import {
   PLACE_BID_REQUEST,
   PlaceBidRequestAction,
@@ -26,14 +34,6 @@ import {
   fetchBidsByNFTFailure,
   acceptBidtransactionSubmitted
 } from './actions'
-import { getWallet } from '../wallet/selectors'
-import { Vendor, VendorFactory } from '../vendor/VendorFactory'
-import { getContract } from '../contract/selectors'
-import { VendorName } from '../vendor/types'
-import { getRentalById } from '../rental/selectors'
-import { NFT } from '../nft/types'
-import { getCurrentNFT } from '../nft/selectors'
-import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
 
 export function* bidSaga() {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)

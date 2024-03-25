@@ -1,12 +1,12 @@
 import { NFTCategory, NFTFilters, RentalStatus } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
-import { NFTsFetchParams } from '../../../nft/types'
-import { NFTsFetchFilters, NFTResponse, NFTResult, OwnersFilters, OwnersResponse } from './types'
-import { ATLAS_SERVER_URL } from '../land'
-import { FetchOneOptions } from '../../types'
-import { getNFTSortBy } from '../../../routing/search'
-import { AssetType } from '../../../asset/types'
 import { config } from '../../../../config'
+import { AssetType } from '../../../asset/types'
+import { NFTsFetchParams } from '../../../nft/types'
+import { getNFTSortBy } from '../../../routing/search'
+import { FetchOneOptions } from '../../types'
+import { ATLAS_SERVER_URL } from '../land'
+import { NFTsFetchFilters, NFTResponse, NFTResult, OwnersFilters, OwnersResponse } from './types'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')
 

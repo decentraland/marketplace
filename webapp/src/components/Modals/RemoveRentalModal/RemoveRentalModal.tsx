@@ -1,8 +1,8 @@
 import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { SubmitTransactionModal } from '../SubmitTransactionModal'
 import { Props } from './RemoveRentalModal.types'
 import styles from './RemoveRentalModal.module.css'
-import { SubmitTransactionModal } from '../SubmitTransactionModal'
 
 const RemoveRentalModal = ({ ...props }: Props) => {
   return (

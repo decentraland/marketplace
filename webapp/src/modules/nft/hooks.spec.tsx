@@ -1,6 +1,6 @@
+import { useSelector } from 'react-redux'
 import { renderHook } from '@testing-library/react-hooks'
 import { ChainId, NFTCategory, Network } from '@dcl/schemas'
-import { useSelector } from 'react-redux'
 import { RootState } from '../reducer'
 import { VendorName } from '../vendor'
 import { generateFingerprint, getFingerprint } from './estate/utils'

@@ -1,7 +1,7 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { AddressesByTagResponse, BuilderCollectionAttributes } from './types'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
+import { AddressesByTagResponse, BuilderCollectionAttributes } from './types'
 
 export const BUILDER_SERVER_URL = config.get('BUILDER_SERVER_URL')
 

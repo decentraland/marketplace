@@ -1,8 +1,7 @@
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
-import styles from './CTA.module.css'
 import { Props } from './CTA.types'
+import styles from './CTA.module.css'
 
 const CTA = ({ to, name, isDisabledOnMobile }: Props) => {
   const renderContent = () => (

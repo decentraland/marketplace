@@ -2,14 +2,14 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { RentalListing } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { NFT } from '../../../modules/nft/types'
 import { RootState } from '../../../modules/reducer'
 import { isClaimingBackLandTransactionPending, getLastTransactionForClaimingBackLand } from '../../../modules/ui/browse/selectors'
-import { getWallet } from '../../../modules/wallet/selectors'
-import { MapStateProps, MapDispatchProps, OwnProps } from './Rent.types'
-import { RentalModalMetadata } from '../../Modals/RentalListingModal/RentalListingModal.types'
 import { VendorName } from '../../../modules/vendor'
-import { NFT } from '../../../modules/nft/types'
+import { getWallet } from '../../../modules/wallet/selectors'
+import { RentalModalMetadata } from '../../Modals/RentalListingModal/RentalListingModal.types'
 import { Rent } from './Rent'
+import { MapStateProps, MapDispatchProps, OwnProps } from './Rent.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   wallet: getWallet(state),

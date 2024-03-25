@@ -1,6 +1,6 @@
 import React from 'react'
-import { Card } from 'decentraland-ui'
 import { T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Card } from 'decentraland-ui'
 import { Price } from '../Price'
 import { Props } from './PriceHasChanged.types'
 import styles from './PriceHasChanged.module.css'

@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
-import { Asset } from '../../../modules/asset/types'
 import { ClearAssetError, FetchSmartWearableRequiredPermissionsRequestAction } from '../../../modules/asset/actions'
+import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
   asset: Asset

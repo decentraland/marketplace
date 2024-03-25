@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { RootState } from '../../../modules/reducer'
 import { fetchCreatorsAccountRequest, FETCH_CREATORS_ACCOUNT_REQUEST } from '../../../modules/account/actions'
 import { getCreators, getLoading } from '../../../modules/account/selectors'
-import { MapDispatch, MapDispatchProps, MapStateProps } from './CreatorsFilter.types'
+import { RootState } from '../../../modules/reducer'
 import { CreatorsFilter } from './CreatorsFilter'
+import { MapDispatch, MapDispatchProps, MapStateProps } from './CreatorsFilter.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   fetchedCreators: getCreators(state),

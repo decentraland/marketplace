@@ -1,11 +1,11 @@
 import { NFTCategory } from '@dcl/schemas'
-import { BrowseOptions, SortBy } from './types'
-import { Section } from '../vendor/decentraland'
-import { AssetStatusFilter } from '../../utils/filters'
-import { getPersistedIsMapProperty, isAccountView, isLandSection } from '../ui/utils'
 import { omit, reset } from '../../lib/utils'
+import { AssetStatusFilter } from '../../utils/filters'
 import { View } from '../ui/types'
+import { getPersistedIsMapProperty, isAccountView, isLandSection } from '../ui/utils'
+import { Section } from '../vendor/decentraland'
 import { getCategoryFromSection, getSearchParams } from './search'
+import { BrowseOptions, SortBy } from './types'
 
 export const rentalFilters = [
   SortBy.NAME,

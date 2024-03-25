@@ -1,11 +1,11 @@
 import { ethers } from 'ethers'
 import { race, select, take } from 'redux-saga/effects'
-import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
-import { CONNECT_WALLET_FAILURE, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { CONNECT_WALLET_FAILURE, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { GENERATE_IDENTITY_FAILURE, GENERATE_IDENTITY_SUCCESS } from '../identity/actions'
+import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { config } from '../../config'
+import { GENERATE_IDENTITY_FAILURE, GENERATE_IDENTITY_SUCCESS } from '../identity/actions'
 
 export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
 

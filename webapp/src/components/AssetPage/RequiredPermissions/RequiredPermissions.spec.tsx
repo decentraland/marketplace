@@ -1,8 +1,8 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { renderWithProviders } from '../../../utils/test'
 import { Asset } from '../../../modules/asset/types'
-import { Props } from './RequiredPermissions.types'
+import { renderWithProviders } from '../../../utils/test'
 import RequiredPermissions from './RequiredPermissions'
+import { Props } from './RequiredPermissions.types'
 
 const asset: Asset = {
   id: '1'

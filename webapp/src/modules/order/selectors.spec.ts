@@ -1,9 +1,9 @@
 import { Order } from '@dcl/schemas'
-import { AuthorizationStepStatus } from 'decentraland-ui'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { createOrderRequest, executeOrderRequest } from './actions'
+import { AuthorizationStepStatus } from 'decentraland-ui'
 import { NFT } from '../nft/types'
 import { RootState } from '../reducer'
+import { createOrderRequest, executeOrderRequest } from './actions'
 import { getBuyItemStatus, getSellItemStatus } from './selectors'
 
 let rootState: RootState

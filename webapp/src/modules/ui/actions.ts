@@ -1,5 +1,4 @@
 import { action } from 'typesafe-actions'
-
 import { View } from './types'
 
 // Set View
