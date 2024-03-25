@@ -1,4 +1,4 @@
-import React from 'react'
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -76,4 +76,4 @@ const Actions = (props: Props) => {
   )
 }
 
-export default React.memo(Actions)
+export default memo(Actions)
