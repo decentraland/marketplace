@@ -21,7 +21,7 @@ export const getSmartWearableSceneContent = async (urn: string): Promise<Record<
     const scene = wearableEntity[0].content?.find(entity => entity.file.endsWith(SCENE_PATH))
 
     if (scene) {
-      const wearableScene = await contentClient.downloadContent(scene.hash)
+      const wearableScene = await contentClient.downloadContent(scene.hash, { avoidChecks: true })
 
       const enc = new TextDecoder('utf-8')
       const data = new Uint8Array(wearableScene)
