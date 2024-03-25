@@ -2,3 +2,12 @@
   padding-left: 24px;
   padding-right: 24px;
 }
+
+.estateInfo {
+  font-size: 17px;
+  max-width: 270px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
