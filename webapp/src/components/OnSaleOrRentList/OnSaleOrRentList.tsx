@@ -21,11 +21,11 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType, onFetchAuthor
   const [authorization, setAuthorization] = useState<Authorizations | null>(null)
   useEffect(() => {
     if (elements && elements.length) {
-      const legacyMarketplaceOrder = (elements as any).find(
+      const legacyMarketplaceOrder = elements.find(
         (el: OnSaleListElementProps | OnRentListElementProps) =>
           isOnSaleListElementProps(el) && el.order && el.order.marketplaceAddress === LEGACY_MARKETPLACE_MAINNET_CONTRACT
       )
-      if (legacyMarketplaceOrder) {
+      if (legacyMarketplaceOrder && legacyMarketplaceOrder.nft?.contractAddress) {
         const authorization: Authorizations = {
           address: wallet?.address || '',
           authorizedAddress: LEGACY_MARKETPLACE_MAINNET_CONTRACT,

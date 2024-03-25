@@ -36,15 +36,6 @@ const getItems = createSelector<RootState, BrowseUIState, ItemState['data'], Ite
   browse.itemIds.map(id => itemsById[id])
 )
 
-// export const getCatalogItems = createSelector<
-//   RootState,
-//   BrowseUIState,
-//   CatalogState['data'],
-//   CatalogItem[]
-// >(getState, getCatalogData, (browse, catalogsById) =>
-//   browse.catalogIds.map(id => catalogsById[id])
-// )
-
 export const getOnSaleItems = createSelector<RootState, ReturnType<typeof getAddress>, ReturnType<typeof getItemData>, Item[]>(
   getAddress,
   getItemData,
@@ -150,14 +141,19 @@ export const getLastTransactionForClaimingBackLand = (state: RootState, nft: NFT
 
   if (!userAddress) return null
 
-  const transactionsClaimedLand = getTransactionsByType(state, userAddress, CLAIM_ASSET_TRANSACTION_SUBMITTED)
+  const transactionsClaimedLand = getTransactionsByType(state, userAddress, CLAIM_ASSET_TRANSACTION_SUBMITTED) as (Omit<
+    Transaction,
+    'payload'
+  > & {
+    payload: { tokenId: string; contractAddress: string }
+  })[]
 
   const transactions = transactionsClaimedLand
     .filter(
-      element =>
-        element.chainId === nft.chainId &&
-        element.payload.tokenId === nft.tokenId &&
-        element.payload.contractAddress === nft.contractAddress
+      transaction =>
+        transaction.chainId === nft.chainId &&
+        transaction.payload.tokenId === nft.tokenId &&
+        transaction.payload.contractAddress === nft.contractAddress
     )
     .sort((a, b) => {
       if (a.timestamp > b.timestamp) return -1

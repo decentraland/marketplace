@@ -562,7 +562,7 @@ function* handleRedirectToActivity() {
 }
 
 function* handleRedirectClaimingNameToSuccessPage(action: ClaimNameTransactionSubmittedAction) {
-  const data = action.payload[TRANSACTION_ACTION_FLAG]
+  const data = action.payload[TRANSACTION_ACTION_FLAG] as { hash: string; payload: { subdomain: string } }
   const signer: ethers.Signer = yield call(getSigner)
   const dclRegistrarContract: DCLRegistrar = yield call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer)
   const contractAddress = dclRegistrarContract.address

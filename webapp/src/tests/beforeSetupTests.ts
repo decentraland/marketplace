@@ -13,11 +13,11 @@ import { en as dappsEn } from 'decentraland-dapps/dist/modules/translation/defau
 import * as locales from '../modules/translation/locales'
 
 jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
-  const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
+  const module = jest.requireActual<typeof translationUtils>('decentraland-dapps/dist/modules/translation/utils')
   return {
     ...module,
-    T: ({ id, values }: (typeof module)['T']) => module.t(id, values) as string
-  } as typeof translationUtils
+    T: ({ id, values }: { id: string; values?: any }) => module.t(id, values)
+  }
 })
 
 config({ path: path.resolve(process.cwd(), '.env.example') })
@@ -37,7 +37,7 @@ global.FontFace = function () {
     load: () => Promise.resolve()
   }
 } as any
-;(document as any).fonts = {
+;(document as { fonts: typeof document.fonts }).fonts = {
   ...document.fonts,
   add: () => Promise.resolve()
 } as any

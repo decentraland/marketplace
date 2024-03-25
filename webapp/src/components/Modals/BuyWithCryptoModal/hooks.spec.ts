@@ -1,5 +1,5 @@
 import { ChainId, Network, Order, Item } from '@dcl/schemas'
-import { BigNumber, ethers } from 'ethers'
+import ethersModule, { BigNumber, ethers } from 'ethers'
 import { renderHook } from '@testing-library/react-hooks'
 import { NATIVE_TOKEN, Token } from 'decentraland-transactions/crossChain'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
@@ -14,7 +14,7 @@ jest.mock(
     ({
       ...jest.requireActual('ethers'),
       ethers: {
-        ...jest.requireActual('ethers').ethers,
+        ...jest.requireActual<typeof ethersModule>('ethers').ethers,
         Contract: function (address: string, abi: string[], provider: any) {
           return {
             address,

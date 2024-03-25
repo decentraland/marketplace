@@ -1,4 +1,4 @@
-import { applyMiddleware, compose, createStore, Middleware } from 'redux'
+import { Action, applyMiddleware, compose, createStore, Middleware } from 'redux'
 import createSagasMiddleware from 'redux-saga'
 import { routerMiddleware } from 'connected-react-router'
 import { createLogger } from 'redux-logger'
@@ -24,7 +24,7 @@ const basename = /^decentraland.(zone|org|today)$/.test(window.location.host) ? 
 export const createHistory = () => createBrowserHistory({ basename })
 
 export function initStore(history: History) {
-  const anyWindow = window as any
+  const anyWindow = window as unknown as Window & { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any; getState: any }
 
   const isDev = config.is(Env.DEVELOPMENT)
 
@@ -44,7 +44,7 @@ export function initStore(history: History) {
   const sagasMiddleware = createSagasMiddleware()
   const loggerMiddleware = createLogger({
     collapsed: () => true,
-    predicate: (_: any, action) => (isDev || action.type.includes('Failure')) as boolean
+    predicate: (_: any, action: Action<string>) => isDev || action.type.includes('Failure')
   })
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
@@ -75,8 +75,7 @@ export function initStore(history: History) {
   loadStorageMiddleware(store)
 
   if (isDev) {
-    const _window = window as any
-    _window.getState = store.getState.bind(store)
+    anyWindow.getState = store.getState.bind(store)
   }
 
   // fetch tiles

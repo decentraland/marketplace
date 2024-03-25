@@ -13,11 +13,11 @@ import {
   hasFiltersEnabled,
   getVisitedLocations
 } from '../../modules/routing/selectors'
-import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import { isLoadingFavoritedItems } from '../../modules/favorites/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { AssetType } from '../../modules/asset/types'
+import { isLoadingNftsByView } from '../../modules/nft/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
 import AssetList from './AssetList'
 
@@ -26,7 +26,7 @@ const mapState = (state: RootState): MapStateProps => {
   const page = getPageNumber(state)
   const assetType = getAssetType(state)
   const view = getView(state)
-  const loadingState = getLoadingNFTs(state).filter(loading => loading.payload.options.view === view)
+  const loadingState = isLoadingNftsByView(state, view)
   const assets = getBrowseAssets(state, section, assetType)
   return {
     vendor: getVendor(state),

@@ -7,6 +7,7 @@ import { renderWithProviders } from '../../../utils/test'
 import { CrossChainProvider, Route, AxelarProvider } from 'decentraland-transactions/crossChain'
 import { getMinSaleValueInWei } from '../../BuyPage/utils'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
+import * as configModule from '../../../config'
 import {
   BUY_NOW_BUTTON_TEST_ID,
   GET_MANA_BUTTON_TEST_ID,
@@ -52,7 +53,7 @@ jest.mock('decentraland-dapps/dist/lib/eth', () => {
   } as unknown
 })
 jest.mock('../../../config', () => {
-  const actualConfig = jest.requireActual('../../../config')
+  const actualConfig = jest.requireActual<typeof configModule>('../../../config')
   return {
     ...actualConfig,
     config: {

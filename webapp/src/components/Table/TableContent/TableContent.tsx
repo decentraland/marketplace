@@ -31,7 +31,7 @@ const TableContent = (props: Props) => {
                 </Table.HeaderCell>
               ))}
             </Table.Row>
-            {data?.map((data: any, index) => (
+            {data?.map((data, index) => (
               <Table.Row key={index}>
                 {headers.map((header: string) => (
                   <Table.Cell

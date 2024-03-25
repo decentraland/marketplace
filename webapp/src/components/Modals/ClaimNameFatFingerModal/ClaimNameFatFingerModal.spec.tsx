@@ -4,6 +4,7 @@ import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { fireEvent, cleanup } from '@testing-library/react'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { FiatGatewayListeners } from 'decentraland-dapps/dist/modules/gateway/types'
 import { DCLController__factory } from '../../../contracts/factories/DCLController__factory'
 import { renderWithProviders } from '../../../utils/test'
 import ClaimNameFatFingerModal, { CRYPTO_PAYMENT_METHOD_DATA_TESTID, FIAT_PAYMENT_METHOD_DATA_TESTID } from './ClaimNameFatFingerModal'
@@ -136,9 +137,15 @@ describe('ClaimNameFatFingerModal', () => {
         const txId = 'aTxId'
 
         beforeEach(() => {
-          onOpenFiatGateway.mock.calls[0][2].onPending({
-            data: { tx_id: txId }
-          })
+          const mockedCall = (onOpenFiatGateway.mock.calls[0] as unknown[])[2] as FiatGatewayListeners
+
+          if (mockedCall.onPending) {
+            mockedCall.onPending({
+              data: { tx_id: txId }
+            } as unknown as Parameters<typeof mockedCall.onPending>[0])
+          } else {
+            throw new Error('onPending not defined')
+          }
         })
 
         it('should call the onClaimTxSubmitted method prop with the transaction data', () => {

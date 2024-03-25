@@ -3,8 +3,8 @@ import { useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import compact from 'lodash/compact'
 import { ethers } from 'ethers'
-import { ChainId, Network } from '@dcl/schemas'
-import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
+import { Network } from '@dcl/schemas'
+import { getNetwork, ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { Button, Icon, Loader, ModalNavigation } from 'decentraland-ui'
 import { ContractName, getContract } from 'decentraland-transactions'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
@@ -131,7 +131,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // Compute if the price is too low for meta tx
   const hasLowPriceForMetaTx = useMemo(
-    () => wallet?.chainId !== ChainId.MATIC_MAINNET && isPriceTooLow(price), // not connected to polygon AND has price < minimum for meta tx
+    () => (wallet?.chainId as ChainId) !== ChainId.MATIC_MAINNET && isPriceTooLow(price), // not connected to polygon AND has price < minimum for meta tx
     [price, wallet?.chainId]
   )
 
@@ -359,7 +359,9 @@ export const BuyWithCryptoModal = (props: Props) => {
       // for L1 NFTs
       if (asset.network === Network.ETHEREUM) {
         // if tries to buy with ETH MANA and connected to other network, should switch to ETH network to pay directly
-        return selectedToken.symbol === 'MANA' && wallet.network !== Network.ETHEREUM && getNetwork(selectedChain) === Network.ETHEREUM
+        return selectedToken.symbol === 'MANA' &&
+          (wallet.network as Network) !== Network.ETHEREUM &&
+          getNetwork(selectedChain) === Network.ETHEREUM
           ? renderSwitchNetworkButton()
           : renderBuyNowButton()
       }
@@ -368,7 +370,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
       // And connected to MATIC, should render the buy now button otherwise check if a meta tx is available
       if (getNetwork(selectedChain) === Network.MATIC) {
-        return wallet.network === Network.MATIC
+        return (wallet.network as Network) === Network.MATIC
           ? renderBuyNowButton()
           : isPriceTooLow(price)
             ? renderSwitchNetworkButton() // switch to MATIC to pay for the gas

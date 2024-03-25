@@ -28,22 +28,17 @@ function* handleConnectWalletSuccess(_action: ConnectWalletSuccessAction) {
 
 function createWearablePreviewChannel(controller: IPreviewController) {
   return eventChannel(emit => {
-    const eventEmit = (type: string) => {
-      emit(type)
-    }
-
-    const handleEvent = (type: string) => {
-      controller.emote.events.on(type, () => eventEmit(type))
-    }
-
-    handleEvent(PreviewEmoteEventType.ANIMATION_PLAY)
-    handleEvent(PreviewEmoteEventType.ANIMATION_PAUSE)
-    handleEvent(PreviewEmoteEventType.ANIMATION_END)
+    const handleAnimationPlay = () => emit(PreviewEmoteEventType.ANIMATION_PLAY)
+    const handleAnimationPause = () => emit(PreviewEmoteEventType.ANIMATION_PAUSE)
+    const handleAnimationEnd = () => emit(PreviewEmoteEventType.ANIMATION_END)
+    controller.emote.events.on(PreviewEmoteEventType.ANIMATION_PLAY, handleAnimationPlay)
+    controller.emote.events.on(PreviewEmoteEventType.ANIMATION_PAUSE, handleAnimationPause)
+    controller.emote.events.on(PreviewEmoteEventType.ANIMATION_END, handleAnimationEnd)
 
     const unsubscribe = () => {
-      controller.emote.events.off(PreviewEmoteEventType.ANIMATION_PLAY, eventEmit)
-      controller.emote.events.off(PreviewEmoteEventType.ANIMATION_PAUSE, eventEmit)
-      controller.emote.events.off(PreviewEmoteEventType.ANIMATION_END, eventEmit)
+      controller.emote.events.off(PreviewEmoteEventType.ANIMATION_PLAY, handleAnimationPlay)
+      controller.emote.events.off(PreviewEmoteEventType.ANIMATION_PAUSE, handleAnimationPause)
+      controller.emote.events.off(PreviewEmoteEventType.ANIMATION_END, handleAnimationEnd)
     }
 
     return unsubscribe

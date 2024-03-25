@@ -164,7 +164,7 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
   }, [onBrowse])
 
   const handleDeleteRentalDays = useCallback(
-    removeDays => {
+    (removeDays: string) => {
       onBrowse({
         rentalDays: rentalDays?.filter(day => removeDays.toString() !== day.toString())
       })

@@ -2,7 +2,7 @@ import { GrantTokenRequestAction, RevokeTokenRequestAction } from 'decentraland-
 import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 
 export function hasTransactionPending(transactions: Transaction[], authorizedAddress: string, contractAddress: string) {
-  return transactions.some((transaction: any) => {
+  return transactions.some((transaction: Transaction) => {
     const { authorization } = transaction.payload as GrantTokenRequestAction['payload'] | RevokeTokenRequestAction['payload']
     return (
       authorization.authorizedAddress.toLowerCase() === authorizedAddress.toLowerCase() &&

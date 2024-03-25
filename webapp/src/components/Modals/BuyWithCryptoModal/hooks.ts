@@ -204,7 +204,7 @@ export const useCrossChainMintNftRoute = (
   wallet: Wallet | null
 ) => {
   const getMintNFTRoute = useCallback(
-    (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
+    (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) =>
       crossChainProvider.getMintNFTRoute({
         fromAddress,
         fromAmount,
@@ -217,7 +217,7 @@ export const useCrossChainMintNftRoute = (
           itemId: item.itemId,
           price: item.price
         }
-      }) as Promise<RouteResponse>,
+      }),
     [item]
   )
 
@@ -244,7 +244,7 @@ export const useCrossChainBuyNftRoute = (
   slippage: number
 ): CrossChainRoute => {
   const getBuyNftRoute = useCallback(
-    (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
+    (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) =>
       crossChainProvider.getBuyNFTRoute({
         fromAddress,
         fromAmount,
@@ -258,7 +258,7 @@ export const useCrossChainBuyNftRoute = (
           price: order.price
         },
         slippage
-      }) as Promise<RouteResponse>,
+      }),
     [order]
   )
 
@@ -285,7 +285,7 @@ export const useCrossChainNameMintingRoute = (
   wallet: Wallet | null
 ) => {
   const getMintingNameRoute = useCallback(
-    (fromAddress, fromAmount, fromChain, fromToken, crossChainProvider) =>
+    (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) =>
       crossChainProvider.getRegisterNameRoute({
         name,
         fromAddress,
@@ -294,7 +294,7 @@ export const useCrossChainNameMintingRoute = (
         fromToken,
         toAmount: price,
         toChain: assetChainId
-      }) as Promise<RouteResponse>,
+      }),
     [name, assetChainId, price]
   )
   return useCrossChainRoute(price, assetChainId, selectedToken, selectedChain, providerTokens, crossChain, wallet, getMintingNameRoute)

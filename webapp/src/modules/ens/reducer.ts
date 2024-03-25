@@ -30,8 +30,8 @@ const INITIAL_STATE: ENSState = {
   error: null
 }
 
-const isENSError = (error: any): error is ENSError => {
-  return !!(error && error.message !== undefined)
+const isENSError = (error: unknown): error is ENSError => {
+  return error !== undefined && error !== null && typeof error === 'object' && 'message' in error
 }
 
 export type ENSReducerAction =

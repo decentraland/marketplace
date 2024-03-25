@@ -1,11 +1,14 @@
+import { AnyAction } from 'redux'
 import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
+import { View } from '../ui/types'
 import { NFTState } from './reducer'
 import { NFT } from './types'
 import { getNFT } from './utils'
+import { FETCH_NFTS_REQUEST, FetchNFTsRequestAction } from './actions'
 
 export const getState = (state: RootState) => state.nft
 export const getData = (state: RootState) => getState(state).data
@@ -19,6 +22,11 @@ const nftDetailMatchSelector = createMatchSelector<
     tokenId: string
   }
 >(locations.nft(':contractAddress', ':tokenId'))
+
+const isFetchNftsRequestAction = (action: AnyAction): action is FetchNFTsRequestAction => action.type === FETCH_NFTS_REQUEST
+
+export const isLoadingNftsByView = (state: RootState, view: View | undefined) =>
+  getLoading(state).filter((action: AnyAction) => isFetchNftsRequestAction(action) && action.payload?.options?.view === view)
 
 export const getContractAddress = createSelector<RootState, ReturnType<typeof nftDetailMatchSelector>, string | null>(
   nftDetailMatchSelector,

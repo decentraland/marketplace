@@ -33,7 +33,7 @@ describe('FavoritesCounter', () => {
   beforeEach(() => {
     getAnalyticsMock.mockReturnValue({
       track: jest.fn()
-    })
+    } as unknown as ReturnType<typeof getAnalytics>)
     item = {
       id: 'itemId',
       name: '',
