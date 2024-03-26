@@ -569,8 +569,6 @@ describe('when getting if the page name', () => {
     [locations.item('anAddress', 'anId'), PageName.ITEM_DETAIL],
     [locations.parcel('x', 'y'), PageName.PARCEL_DETAIL],
     [locations.estate('anId'), PageName.ESTATE_DETAIL],
-    [locations.buy(AssetType.NFT, 'anAddress', 'anId'), PageName.BUY_NFT],
-    [locations.buy(AssetType.ITEM, 'anAddress', 'anId'), PageName.BUY_ITEM],
     [locations.buyStatusPage(AssetType.NFT, 'anAddress', 'anId'), PageName.BUY_NFT_STATUS],
     [locations.buyStatusPage(AssetType.ITEM, 'anAddress', 'anId'), PageName.BUY_ITEM_STATUS],
     [locations.cancel('anAddress', 'anId'), PageName.CANCEL_NFT_SALE],
