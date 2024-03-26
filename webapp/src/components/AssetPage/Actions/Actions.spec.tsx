@@ -1,11 +1,11 @@
 import { Bid, Order } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
-import Actions from './Actions'
-import { Props } from './Actions.types'
 import { NFT } from '../../../modules/nft/types'
 import { VendorName } from '../../../modules/vendor'
 import { renderWithProviders } from '../../../utils/test'
+import Actions from './Actions'
+import { Props } from './Actions.types'
 
 describe('Actions Component', () => {
   let props: Props

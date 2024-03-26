@@ -1,13 +1,13 @@
 import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
+import { Button } from 'decentraland-ui'
+import { builderUrl } from '../../../lib/environment'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
+import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { Props } from './Actions.types'
-import { builderUrl } from '../../../lib/environment'
 import styles from './Actions.module.css'
 
 const Actions = (props: Props) => {
