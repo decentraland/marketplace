@@ -21,6 +21,7 @@ export const DetailsBox = (props: Props) => {
         <Info title={t('details_box.network')}>
           <span>{asset.network}</span>
         </Info>
+
         <Availability asset={asset} />
         <Expiration asset={asset} order={order} rental={rental} />
         {owner ? (

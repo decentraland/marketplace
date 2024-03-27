@@ -1,17 +1,17 @@
-import React from 'react'
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
-import { AssetType } from '../../../modules/asset/types'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
+import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { Props } from './Actions.types'
 import styles from './Actions.module.css'
 
 const Actions = (props: Props) => {
-  const { wallet, nft, order, bids, onLeavingSite } = props
+  const { wallet, nft, order, bids, onLeavingSite, onBuyWithCrypto } = props
   const { contractAddress, tokenId, data } = nft
 
   const { bidService, orderService } = VendorFactory.build(nft.vendor)
@@ -37,9 +37,7 @@ const Actions = (props: Props) => {
           </>
         ) : !isOwner ? (
           <>
-            <Button as={Link} to={locations.buy(AssetType.NFT, contractAddress, tokenId)} primary fluid>
-              {t('asset_page.actions.buy')}
-            </Button>
+            <BuyWithCryptoButton asset={nft} onClick={() => onBuyWithCrypto} />
             {canBid ? (
               <Button as={Link} to={locations.bid(contractAddress, tokenId)} fluid>
                 {t('asset_page.actions.bid')}
@@ -78,4 +76,4 @@ const Actions = (props: Props) => {
   )
 }
 
-export default React.memo(Actions)
+export default memo(Actions)

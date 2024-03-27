@@ -1,18 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { NFTCategory } from '@dcl/schemas'
-import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isLand } from '../../../modules/nft/utils'
-import { locations } from '../../../modules/routing/locations'
 import { AssetImage } from '../../AssetImage'
 import { Coordinate } from '../../Coordinate'
-import { Network } from '../../Network'
-import Price from '../../Price'
-import { Actions } from '../Actions'
 import BaseDetail from '../BaseDetail'
 import { BidList } from '../BidList'
 import { Description } from '../Description'
-import Expiration from '../Expiration'
 import { JumpIn } from '../JumpIn'
 import { Owner } from '../Owner'
 import { ProximityHighlights } from '../ProximityHighlights'
@@ -20,12 +12,10 @@ import { RentalHistory } from '../RentalHistory'
 import { SaleRentActionBox } from '../SaleRentActionBox'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './ParcelDetail.types'
-import styles from './ParcelDetail.module.css'
 
 const ParcelDetail = ({ nft, order, rental }: Props) => {
   const parcel = nft.data.parcel!
   const { x, y } = parcel
-  const isPartOfEstate = nft.category === NFTCategory.PARCEL && parcel.estate
 
   return (
     <BaseDetail
@@ -48,28 +38,7 @@ const ParcelDetail = ({ nft, order, rental }: Props) => {
         </>
       }
       actions={<SaleRentActionBox order={order} nft={nft} rental={rental} />}
-      box={
-        <>
-          {isPartOfEstate && (
-            <div className={styles.estateInfo}>
-              <T
-                id="asset_page.part_of_estate"
-                values={{
-                  estate_name: (
-                    <Link title={parcel.estate!.name} to={locations.nft(nft.owner, parcel.estate!.tokenId)}>
-                      {parcel.estate!.name}
-                    </Link>
-                  )
-                }}
-              />
-            </div>
-          )}
-          <Price asset={nft} />
-          <Network asset={nft} />
-          <Actions nft={nft} />
-          <Expiration />
-        </>
-      }
+      box={<></>}
       below={
         <>
           <BidList nft={nft} />

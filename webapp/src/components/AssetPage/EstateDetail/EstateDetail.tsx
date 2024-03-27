@@ -2,15 +2,10 @@ import React from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Badge } from 'decentraland-ui'
-import { isLand } from '../../../modules/nft/utils'
 import { AssetImage } from '../../AssetImage'
-import { Network } from '../../Network'
-import Price from '../../Price'
-import { Actions } from '../Actions'
 import BaseDetail from '../BaseDetail'
 import { BidList } from '../BidList'
 import { Description } from '../Description'
-import Expiration from '../Expiration'
 import { JumpIn } from '../JumpIn'
 import { Owner } from '../Owner'
 import { ProximityHighlights } from '../ProximityHighlights'
@@ -36,7 +31,7 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
       className="EstateDetail"
       asset={nft}
       rental={rental ?? undefined}
-      showDetails={isLand(nft)}
+      showDetails
       assetImage={
         <>
           <AssetImage
@@ -69,14 +64,7 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
           <ProximityHighlights nft={nft} />
         </>
       }
-      box={
-        <>
-          <Price asset={nft} />
-          <Network asset={nft} />
-          {estate.size > 0 && <Actions nft={nft} />}
-          <Expiration />
-        </>
-      }
+      box={<></>}
       below={
         <>
           <BidList nft={nft} />

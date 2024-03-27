@@ -556,10 +556,6 @@ export const getPageName = createSelector<RootState, string, PageName>(getPathNa
     return PageName.HOME
   } else if (matchPath(pathname, buildExactMatchProps(locations.manage('anAddress', 'anId')))) {
     return PageName.MANAGE_NFT
-  } else if (matchPath(pathname, buildExactMatchProps(locations.buy(AssetType.NFT)))) {
-    return PageName.BUY_NFT
-  } else if (matchPath(pathname, buildExactMatchProps(locations.buy(AssetType.ITEM)))) {
-    return PageName.BUY_ITEM
   } else if (matchPath(pathname, buildExactMatchProps(locations.buyStatusPage(AssetType.NFT)))) {
     return PageName.BUY_NFT_STATUS
   } else if (matchPath(pathname, locations.buyStatusPage(AssetType.ITEM))) {
