@@ -14,7 +14,7 @@ class BidAPI extends BaseAPI {
     sortBy && queryParams.append('sortBy', sortBy.toString())
     bidder && queryParams.append('bidder', bidder)
     try {
-      const response: { data: Bid[]; total: number } = await this.request('get', `/bids?${queryParams.toString()}`)
+      const response = (await this.request('get', `/bids?${queryParams.toString()}`)) as { data: Bid[]; total: number }
       return response
     } catch (error) {
       return { data: [], total: 0 }

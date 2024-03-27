@@ -25,7 +25,7 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
   const address = action.payload.address.toLowerCase()
 
   try {
-    const eth: ethers.providers.Web3Provider = yield call(getEth)
+    const eth: ethers.providers.Web3Provider = (yield call(getEth)) as Awaited<ReturnType<typeof getEth>>
     const account = ethers.Wallet.createRandom()
 
     const payload = {
@@ -36,9 +36,9 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
 
     const signer = eth.getSigner()
 
-    const identity: AuthIdentity = yield Authenticator.initializeAuthChain(address, payload, IDENTITY_EXPIRATION_IN_MINUTES, message =>
+    const identity: AuthIdentity = (yield Authenticator.initializeAuthChain(address, payload, IDENTITY_EXPIRATION_IN_MINUTES, message =>
       signer.signMessage(message)
-    )
+    )) as Awaited<ReturnType<typeof Authenticator.initializeAuthChain>>
 
     // Stores the identity into the SSO iframe.
     yield call(localStorageStoreIdentity, address, identity)

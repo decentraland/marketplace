@@ -46,7 +46,7 @@ const AssetList = (props: Props) => {
   }, [])
 
   const handleLoadMore = useCallback(
-    newPage => {
+    (newPage: number) => {
       onBrowse({ page: newPage })
       getAnalytics().track(events.LOAD_MORE, { page: newPage })
     },

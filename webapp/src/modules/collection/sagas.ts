@@ -25,12 +25,14 @@ export function* handleFetchCollectionsRequest(action: FetchCollectionsRequestAc
   const { filters, shouldFetchItems } = action.payload
 
   try {
-    const { data: collections, total }: CollectionResponse = yield call([collectionAPI, collectionAPI.fetch], filters)
+    const { data: collections, total }: CollectionResponse = (yield call([collectionAPI, collectionAPI.fetch], filters)) as Awaited<
+      ReturnType<typeof collectionAPI.fetch>
+    >
 
     yield put(fetchCollectionsSuccess(collections, total))
 
     if (shouldFetchItems) {
-      const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(getItemsByContractAddress)
+      const itemsByContractAddress = (yield select(getItemsByContractAddress)) as ReturnType<typeof getItemsByContractAddress>
 
       for (const collection of collections) {
         const items = itemsByContractAddress[collection.contractAddress]
@@ -54,7 +56,9 @@ export function* handleFetchSingleCollectionRequest(action: FetchSingleCollectio
   const { contractAddress, shouldFetchItems } = action.payload
 
   try {
-    const { data: collections }: CollectionResponse = yield call([collectionAPI, collectionAPI.fetch], { contractAddress })
+    const { data: collections } = (yield call([collectionAPI, collectionAPI.fetch], { contractAddress })) as Awaited<
+      ReturnType<typeof collectionAPI.fetch>
+    >
 
     if (collections.length === 0) {
       yield put(fetchSingleCollectionFailure(`Could not get Collection "${contractAddress}"`))
@@ -64,7 +68,7 @@ export function* handleFetchSingleCollectionRequest(action: FetchSingleCollectio
     const [collection] = collections
 
     if (shouldFetchItems) {
-      const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(getItemsByContractAddress)
+      const itemsByContractAddress = (yield select(getItemsByContractAddress)) as ReturnType<typeof getItemsByContractAddress>
 
       const items = itemsByContractAddress[collection.contractAddress]
 

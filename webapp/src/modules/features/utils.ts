@@ -3,7 +3,7 @@ import { FETCH_APPLICATION_FEATURES_FAILURE, FETCH_APPLICATION_FEATURES_SUCCESS 
 import { isLoadingFeatureFlags } from 'decentraland-dapps/dist/modules/features/selectors'
 
 export function* waitForFeatureFlagsToBeLoaded() {
-  const isFetchingFeatureFlags: boolean = yield select(isLoadingFeatureFlags)
+  const isFetchingFeatureFlags = (yield select(isLoadingFeatureFlags)) as ReturnType<typeof isLoadingFeatureFlags>
   if (isFetchingFeatureFlags) {
     yield race({
       success: take(FETCH_APPLICATION_FEATURES_SUCCESS),

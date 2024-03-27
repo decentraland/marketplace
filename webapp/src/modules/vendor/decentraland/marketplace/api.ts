@@ -19,8 +19,7 @@ export class MarketplaceAPI extends BaseAPI {
       [ChainId.ARBITRUM_MAINNET]: 'arbitrum-mainnet',
       [ChainId.FANTOM_MAINNET]: 'fantom-mainnet'
     } as Record<ChainId, string>
-    const balances = await this.request('get', `/${chainIdToChainName[chain]}/address/${wallet}/balance`)
-    return balances as Balance[]
+    return this.request('get', `/${chainIdToChainName[chain]}/address/${wallet}/balance`) as Promise<Balance[]>
   }
 }
 
