@@ -84,19 +84,19 @@ export async function getSignature(
 
 export async function getAssetNonce(chainId: ChainId, contractAddress: string, tokenId: string, signerAddress: string) {
   const rentals = await getRentalsContractInstance(chainId)
-  const nonce: BigNumber = await rentals.getAssetIndex(contractAddress, tokenId, signerAddress)
+  const nonce = (await rentals.getAssetIndex(contractAddress, tokenId, signerAddress)) as BigNumber
   return nonce.toString()
 }
 
 export async function getSignerNonce(chainId: ChainId, signerAddress: string) {
   const rentals = await getRentalsContractInstance(chainId)
-  const nonce: BigNumber = await rentals.getSignerIndex(signerAddress)
+  const nonce = (await rentals.getSignerIndex(signerAddress)) as BigNumber
   return nonce.toString()
 }
 
 export async function getContractNonce(chainId: ChainId) {
   const rentals = await getRentalsContractInstance(chainId)
-  const nonce: BigNumber = await rentals.getContractIndex()
+  const nonce = (await rentals.getContractIndex()) as BigNumber
   return nonce.toString()
 }
 

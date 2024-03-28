@@ -53,10 +53,14 @@ export function* ensSaga() {
 
     try {
       yield call(waitForTx, hash)
-      const signer: ethers.Signer = yield call(getSigner)
+      const signer: ethers.Signer = (yield call(getSigner)) as Awaited<ReturnType<typeof getSigner>>
 
-      const dclRegistrarContract: DCLRegistrar = yield call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer)
-      const tokenId: BigNumber = yield call([dclRegistrarContract, 'getTokenId'], subdomain)
+      const dclRegistrarContract: DCLRegistrar = (yield call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer)) as Awaited<
+        ReturnType<typeof DCLRegistrar__factory.connect>
+      >
+      const tokenId: BigNumber = (yield call([dclRegistrarContract, 'getTokenId'], subdomain)) as Awaited<
+        ReturnType<typeof dclRegistrarContract.getTokenId>
+      >
       if (from) {
         const ens: ENS = {
           name: subdomain,
@@ -87,12 +91,20 @@ export function* ensSaga() {
   function* handleClaimNameRequest(action: ClaimNameRequestAction) {
     const { name } = action.payload
     try {
-      const wallet: Wallet = yield select(getWallet)
-      const signer: ethers.Signer = yield call(getSigner)
-      const from = wallet.address
+      const wallet: Wallet | null = (yield select(getWallet)) as Awaited<ReturnType<typeof getWallet>>
+      const signer: ethers.Signer = (yield call(getSigner)) as Awaited<ReturnType<typeof getSigner>>
 
-      const controllerContract: DCLController = yield call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer)
-      const transaction: ethers.ContractTransaction = yield call([controllerContract, 'register'], name, from)
+      if (!wallet) {
+        throw new Error('A wallet is required to claim a name')
+      }
+
+      const from = wallet.address
+      const controllerContract: DCLController = (yield call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer)) as Awaited<
+        ReturnType<typeof DCLController__factory.connect>
+      >
+      const transaction: ethers.ContractTransaction = (yield call([controllerContract, 'register'], name, from)) as Awaited<
+        ReturnType<typeof controllerContract.register>
+      >
       yield put(claimNameTransactionSubmitted(name, wallet.address, wallet.chainId, transaction.hash))
     } catch (error) {
       const ensError: ENSError = {
@@ -105,9 +117,9 @@ export function* ensSaga() {
   function* handleClaimNameCrossChainRequest(action: ClaimNameCrossChainRequestAction) {
     const { name, chainId, route } = action.payload
     try {
-      const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
+      const wallet: ReturnType<typeof getWallet> = (yield select(getWallet)) as Awaited<ReturnType<typeof getWallet>>
 
-      const provider: Provider | null = yield call(getConnectedProvider)
+      const provider: Provider | null = (yield call(getConnectedProvider)) as Awaited<ReturnType<typeof getConnectedProvider>>
 
       if (!wallet) {
         throw new Error('A wallet is required to claim a name')
@@ -118,10 +130,14 @@ export function* ensSaga() {
       }
 
       const crossChainModule = import('decentraland-transactions/crossChain')
-      const { AxelarProvider }: Awaited<typeof crossChainModule> = yield crossChainModule
+      const { AxelarProvider }: Awaited<typeof crossChainModule> = (yield crossChainModule) as Awaited<typeof crossChainModule>
 
       const crossChainProvider = new AxelarProvider(config.get('SQUID_API_URL'))
-      const txResponse: ethers.providers.TransactionReceipt = yield call([crossChainProvider, 'executeRoute'], route, provider)
+      const txResponse: ethers.providers.TransactionReceipt = (yield call(
+        [crossChainProvider, 'executeRoute'],
+        route,
+        provider
+      )) as Awaited<ReturnType<typeof crossChainProvider.executeRoute>>
 
       yield put(claimNameTransactionSubmitted(name, wallet.address, chainId, txResponse.transactionHash, route))
     } catch (error) {

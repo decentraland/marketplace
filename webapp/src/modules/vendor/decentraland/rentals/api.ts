@@ -89,7 +89,7 @@ class RentalsAPI extends BaseAPI {
   getRentalListingsPrices = async (filters: Omit<RentalsListingsFilterBy, 'periods'>): Promise<Record<string, number>> => {
     const queryParams = objectToURLSearchParams(filters)
     try {
-      const response: Record<string, number> = await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)
+      const response = (await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)) as Record<string, number>
       return response
     } catch (error) {
       throw new Error((error as Error).message)

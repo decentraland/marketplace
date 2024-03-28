@@ -1,6 +1,5 @@
 import { matchPath } from 'react-router-dom'
 import { push, getLocation, goBack, LOCATION_CHANGE, replace, LocationChangeAction } from 'connected-react-router'
-import { ethers } from 'ethers'
 import { takeEvery, put, select, call, take, delay, race, spawn } from 'redux-saga/effects'
 import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
@@ -49,7 +48,13 @@ import {
   getContracts,
   getSearch
 } from '../routing/selectors'
-import { FetchSalesFailureAction, fetchSalesRequest, FETCH_SALES_FAILURE, FETCH_SALES_SUCCESS } from '../sale/actions'
+import {
+  FetchSalesFailureAction,
+  fetchSalesRequest,
+  FETCH_SALES_FAILURE,
+  FETCH_SALES_SUCCESS,
+  FetchSalesSuccessAction
+} from '../sale/actions'
 import { getSales } from '../sale/selectors'
 import { setView } from '../ui/actions'
 import { getPage } from '../ui/browse/selectors'
@@ -102,35 +107,35 @@ export function* routingSaga() {
 function* handleLocationChange(action: LocationChangeAction) {
   // Re-triggers fetchAssetsFromRoute action when the user goes back
   if (action.payload.action === 'POP' && matchPath(action.payload.location.pathname, { path: locations.browse() })) {
-    const latestVisitedLocation: ReturnType<typeof getLocation> = yield select(getLatestVisitedLocation)
+    const latestVisitedLocation = (yield select(getLatestVisitedLocation)) as ReturnType<typeof getLocation>
     const isComingFromBrowse = !!matchPath(latestVisitedLocation?.pathname, {
       path: locations.browse()
     })
     if (isComingFromBrowse) {
-      const options: BrowseOptions = yield select(getCurrentBrowseOptions)
+      const options = (yield select(getCurrentBrowseOptions)) as ReturnType<typeof getCurrentBrowseOptions>
       yield put(fetchAssetsFromRouteAction(options))
     }
   }
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
-  const newOptions: BrowseOptions = yield call(getNewBrowseOptions, action.payload.options)
+  const newOptions = (yield call(getNewBrowseOptions, action.payload.options)) as BrowseOptions
   yield call(fetchAssetsFromRoute, newOptions)
 }
 
 function* handleClearFilters() {
-  const browseOptions: BrowseOptions = yield select(getCurrentBrowseOptions)
-  const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
+  const browseOptions = (yield select(getCurrentBrowseOptions)) as ReturnType<typeof getCurrentBrowseOptions>
+  const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
   const clearedBrowseOptions = getClearedBrowseOptions(browseOptions)
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)
   yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))
 }
 
 export function* handleBrowse(action: BrowseAction) {
-  const options: BrowseOptions = yield call(getNewBrowseOptions, action.payload.options)
+  const options = (yield call(getNewBrowseOptions, action.payload.options)) as BrowseOptions
 
-  const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-  const eventsContracts: Record<string, string[]> = yield select(getData)
+  const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
+  const eventsContracts = (yield select(getData)) as Record<string, string[]>
   const isAnEventRoute = Object.keys(eventsContracts).includes(pathname.slice(1))
   yield call(fetchAssetsFromRoute, {
     ...options,
@@ -146,10 +151,10 @@ function* handleGoBack(action: GoBackAction) {
 
   yield put(goBack())
 
-  const { timeout }: { timeout?: boolean } = yield race({
+  const { timeout }: { timeout?: boolean } = (yield race({
     changed: take(LOCATION_CHANGE),
     timeout: delay(250)
-  })
+  })) as { changed: LocationChangeAction; timeout: boolean }
 
   if (timeout) {
     yield put(replace(defaultLocation || locations.root()))
@@ -188,7 +193,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const category = section ? getCategoryFromSection(section) : undefined
 
-  const currentPageInState: number = yield select(getPage)
+  const currentPageInState: number | undefined = (yield select(getPage)) as ReturnType<typeof getPage>
   const offset = currentPageInState && currentPageInState < page ? page - 1 : 0
   const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
@@ -204,7 +209,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       yield handleFetchOnRent(
         options.view!,
         [RentalStatus.OPEN, RentalStatus.EXECUTED],
-        View.ACCOUNT ? { tenant } : { ownerAddress: Array.isArray(address) ? address[0] : address }
+        View.ACCOUNT ? { tenant } : { ownerAddress: Array.isArray(address) ? (address[0] as string) : address }
       )
       break
     case Section.WEARABLES_TRENDING:
@@ -217,7 +222,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       break
     case Section.SALES:
       yield spawn(handleFetchSales, {
-        address: Array.isArray(address) ? address[0] : address,
+        address: Array.isArray(address) ? (address[0] as string) : address,
         page,
         pageSize: SALES_PER_PAGE
       })
@@ -311,10 +316,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 }
 
 export function* getNewBrowseOptions(current: BrowseOptions): Generator<unknown, BrowseOptions, any> {
-  let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
-  current = yield deriveCurrentOptions(previous, current)
+  let previous = (yield select(getCurrentBrowseOptions)) as ReturnType<typeof getCurrentBrowseOptions>
+  current = (yield deriveCurrentOptions(previous, current)) as BrowseOptions
   const view = deriveView(previous, current)
-  const section: Section = current.section ? current.section : yield select(getSection)
+  const section: Section = current.section ? (current.section as Section) : ((yield select(getSection)) as ReturnType<typeof getSection>)
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
@@ -407,16 +412,19 @@ function* handleFetchSales({
     })
   )
 
-  const result: { failure: FetchSalesFailureAction } = yield race({
+  const result = (yield race({
     success: take(FETCH_SALES_SUCCESS),
     failure: take(FETCH_SALES_FAILURE)
-  })
+  })) as {
+    success: FetchSalesSuccessAction
+    failure: FetchSalesFailureAction
+  }
 
   if (result.failure) {
     return
   }
 
-  const sales: ReturnType<typeof getSales> = yield select(getSales)
+  const sales = (yield select(getSales)) as ReturnType<typeof getSales>
 
   const { itemSales, tokenSales } = sales.reduce(
     (acc: { itemSales: Sale[]; tokenSales: Sale[] }, sale) => {
@@ -484,15 +492,15 @@ function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) 
       // Category specific logic to keep filters if the category doesn't change
       if (prevCategory && prevCategory === nextCategory) {
         newOptions = {
-          rarities: yield select(getRarities),
-          wearableGenders: yield select(getWearableGenders),
-          search: yield select(getSearch),
-          network: yield select(getNetwork),
-          contracts: yield select(getContracts),
-          onlySmart: yield select(getOnlySmart),
-          maxPrice: yield select(getMaxPrice),
-          minPrice: yield select(getMinPrice),
-          status: yield select(getStatus),
+          rarities: (yield select(getRarities)) as ReturnType<typeof getRarities>,
+          wearableGenders: (yield select(getWearableGenders)) as ReturnType<typeof getWearableGenders>,
+          search: (yield select(getSearch)) as ReturnType<typeof getSearch>,
+          network: (yield select(getNetwork)) as ReturnType<typeof getNetwork>,
+          contracts: (yield select(getContracts)) as ReturnType<typeof getContracts>,
+          onlySmart: (yield select(getOnlySmart)) as ReturnType<typeof getOnlySmart>,
+          maxPrice: (yield select(getMaxPrice)) as ReturnType<typeof getMaxPrice>,
+          minPrice: (yield select(getMinPrice)) as ReturnType<typeof getMinPrice>,
+          status: (yield select(getStatus)) as ReturnType<typeof getStatus>,
           ...newOptions
         }
       }
@@ -504,11 +512,11 @@ function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) 
       // Category specific logic to keep filters if the category doesn't change
       if (prevCategory && prevCategory === nextCategory) {
         newOptions = {
-          rarities: yield select(getRarities),
-          maxPrice: yield select(getMaxPrice),
-          minPrice: yield select(getMinPrice),
-          status: yield select(getStatus),
-          emotePlayMode: yield select(getEmotePlayMode),
+          rarities: (yield select(getRarities)) as ReturnType<typeof getRarities>,
+          maxPrice: (yield select(getMaxPrice)) as ReturnType<typeof getMaxPrice>,
+          minPrice: (yield select(getMinPrice)) as ReturnType<typeof getMinPrice>,
+          status: (yield select(getStatus)) as ReturnType<typeof getStatus>,
+          emotePlayMode: (yield select(getEmotePlayMode)) as ReturnType<typeof getEmotePlayMode>,
           ...newOptions
         }
       }
@@ -552,7 +560,7 @@ function shouldResetOptions(previous: BrowseOptions, current: BrowseOptions) {
 }
 
 function* handleRedirectToActivity() {
-  const location: ReturnType<typeof getLocation> = yield select(getLocation)
+  const location = (yield select(getLocation)) as ReturnType<typeof getLocation>
   const redirectTo = new URLSearchParams(location.search).get('redirectTo')
   if (redirectTo) {
     yield put(push(decodeURIComponent(redirectTo)))
@@ -563,8 +571,10 @@ function* handleRedirectToActivity() {
 
 function* handleRedirectClaimingNameToSuccessPage(action: ClaimNameTransactionSubmittedAction) {
   const data = action.payload[TRANSACTION_ACTION_FLAG] as { hash: string; payload: { subdomain: string } }
-  const signer: ethers.Signer = yield call(getSigner)
-  const dclRegistrarContract: DCLRegistrar = yield call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer)
+  const signer = (yield call(getSigner)) as Awaited<ReturnType<typeof getSigner>>
+  const dclRegistrarContract: DCLRegistrar = (yield call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer)) as Awaited<
+    ReturnType<typeof DCLRegistrar__factory.connect>
+  >
   const contractAddress = dclRegistrarContract.address
   yield put(
     push(

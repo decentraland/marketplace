@@ -1,7 +1,6 @@
 import { LOCATION_CHANGE } from 'connected-react-router'
 import { delay, put, select, takeEvery } from 'redux-saga/effects'
 import { closeModal, closeAllModals, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { ModalState } from 'decentraland-dapps/dist/modules/modal/reducer'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
 import {
   BULK_PICK_FAILURE,
@@ -39,7 +38,7 @@ export function* modalSaga() {
 }
 
 function* handleLocationChange() {
-  const openModals: ModalState = yield select(getOpenModals)
+  const openModals = (yield select(getOpenModals)) as ReturnType<typeof getOpenModals>
   if (Object.keys(openModals).length > 0) {
     yield delay(100)
     yield handleCloseAllModals()
@@ -51,7 +50,7 @@ function* handleCloseAllModals() {
 }
 
 function* handleCloseRemoveRentalModal() {
-  const openModals: ModalState = yield select(getOpenModals)
+  const openModals = (yield select(getOpenModals)) as ReturnType<typeof getOpenModals>
   if (openModals['RemoveRentalModal']) {
     // if it's confirming the removal, we close all modals. Otherwise, it's in the upsert and we don't want to close modals.
     yield put(closeAllModals())

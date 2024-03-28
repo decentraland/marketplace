@@ -30,8 +30,8 @@ export type EstateSizeFilters = Pick<
 
 class NFTAPI extends BaseAPI {
   fetchEstateSizes = async (filters: EstateSizeFilters): Promise<Record<string, number>> => {
-    const { data } = await this.request('get', `/stats/estate/size`, filters)
-    return data as Record<string, number>
+    const { data } = (await this.request('get', `/stats/estate/size`, filters)) as { data: Record<string, number> }
+    return data
   }
 
   fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters): Promise<NFTResponse> => {
@@ -40,11 +40,11 @@ class NFTAPI extends BaseAPI {
   }
 
   async fetchOne(contractAddress: string, tokenId: string, options?: FetchOneOptions): Promise<NFTResult> {
-    const response: NFTResponse = await this.request('get', '/nfts', {
+    const response = (await this.request('get', '/nfts', {
       contractAddress,
       tokenId,
       ...options
-    })
+    })) as NFTResponse
 
     if (response.data.length === 0) {
       throw new Error('Not found')
@@ -55,8 +55,8 @@ class NFTAPI extends BaseAPI {
 
   async fetchTokenId(x: number, y: number): Promise<string | null> {
     try {
-      const { id } = await fetch(`${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`).then(resp => resp.json())
-      return id as string
+      const { id } = (await fetch(`${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`).then(resp => resp.json())) as { id: string }
+      return id
     } catch (error) {
       return null
     }
@@ -71,8 +71,8 @@ class NFTAPI extends BaseAPI {
       queryParams.append('assetType', filters.assetType)
     }
     try {
-      const { data } = await this.request('get', `/prices?${queryParams.toString()}`)
-      return data as string
+      const { data } = (await this.request('get', `/prices?${queryParams.toString()}`)) as { data: string }
+      return data
     } catch (error) {
       return {}
     }
@@ -80,10 +80,10 @@ class NFTAPI extends BaseAPI {
 
   async fetchContracts(): Promise<Contract[]> {
     try {
-      const response: {
+      const response = (await this.request('get', '/contracts', { first: 0 })) as {
         data: Omit<Contract, 'vendor'>[]
         total: number
-      } = await this.request('get', '/contracts', { first: 0 })
+      }
       const contracts: Contract[] = response.data.map(contractWithoutVendor => ({
         ...contractWithoutVendor,
         vendor: VendorName.DECENTRALAND

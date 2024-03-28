@@ -66,7 +66,6 @@ import {
   BULK_PICK_FAILURE
 } from './actions'
 import { getList, getListId, isOwnerUnpickingFromCurrentList } from './selectors'
-import { List } from './types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
@@ -92,7 +91,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery([BULK_PICK_SUCCESS, BULK_PICK_FAILURE], handleBulkPickSuccessOrFailure)
 
   function* getCatalogAPI() {
-    const isMarketplaceServerEnabled: boolean = yield select(getIsMarketplaceServerEnabled)
+    const isMarketplaceServerEnabled = (yield select(getIsMarketplaceServerEnabled)) as ReturnType<typeof getIsMarketplaceServerEnabled>
     return isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
   }
 
@@ -100,7 +99,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     let previewItems: Item[] = []
 
     if (previewListsItemIds.length > 0) {
-      const items: ReturnType<typeof getItemsData> = yield select(getItemsData)
+      const items = (yield select(getItemsData)) as ReturnType<typeof getItemsData>
       previewListsItemIds = previewListsItemIds.filter(itemId => !items[itemId])
 
       if (previewListsItemIds.length > 0) {
@@ -109,8 +108,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           ids: previewListsItemIds
         }
 
-        const api: CatalogAPI = yield call(getCatalogAPI)
-        const result: { data: Item[] } = yield call([api, 'get'], itemFilters)
+        const api = (yield call(getCatalogAPI)) as CatalogAPI
+        const result = (yield call([api, 'get'], itemFilters)) as Awaited<ReturnType<typeof api.get>>
         previewItems = result.data
       }
     }
@@ -121,17 +120,19 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleFetchFavoritedItemsRequest(action: FetchFavoritedItemsRequestAction) {
     const { filters } = action.payload.options
     try {
-      const address: ReturnType<typeof getAddress> = yield select(getAddress)
+      const address = (yield select(getAddress)) as ReturnType<typeof getAddress>
       // Force the user to have the signed identity
       if (address) yield call(getAccountIdentity)
 
       let items: Item[] = []
-      const listId: string = yield select(getListId)
-      const { results, total }: Awaited<ReturnType<typeof favoritesAPI.getPicksByList>> = yield call(
-        [favoritesAPI, 'getPicksByList'],
-        listId,
-        filters
-      )
+      const listId: string | null = (yield select(getListId)) as ReturnType<typeof getListId>
+      if (!listId) {
+        throw new Error('List id not found')
+      }
+
+      const { results, total } = (yield call([favoritesAPI, 'getPicksByList'], listId, filters)) as Awaited<
+        ReturnType<typeof favoritesAPI.getPicksByList>
+      >
       const createdAt = Object.fromEntries(results.map(favoritedItem => [favoritedItem.itemId, favoritedItem.createdAt]))
       const ids = results.map(({ itemId }) => itemId)
       const optionsFilters = {
@@ -143,10 +144,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         filters: optionsFilters
       }
 
-      const api: CatalogAPI = yield call(getCatalogAPI)
+      const api = (yield call(getCatalogAPI)) as CatalogAPI
 
       if (results.length > 0) {
-        const result: { data: Item[] } = yield call([api, 'get'], optionsFilters)
+        const result = (yield call([api, 'get'], optionsFilters)) as Awaited<ReturnType<typeof api.get>>
         items = result.data
       }
 
@@ -166,23 +167,22 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       let sortDirection: SortDirection | undefined
 
       if (options.sortBy) {
-        const sortValues: {
-          sortBy: ListsSortBy
-          sortDirection: SortDirection
-        } = yield call(convertListsBrowseSortByIntoApiSortBy, options.sortBy)
+        const sortValues = (yield call(convertListsBrowseSortByIntoApiSortBy, options.sortBy)) as ReturnType<
+          typeof convertListsBrowseSortByIntoApiSortBy
+        >
         sortBy = sortValues.sortBy
         sortDirection = sortValues.sortDirection
       }
 
-      const { results, total }: Awaited<ReturnType<typeof favoritesAPI.getLists>> = yield call([favoritesAPI, 'getLists'], {
+      const { results, total } = (yield call([favoritesAPI, 'getLists'], {
         first: options.first,
         skip: options.skip ?? (options.page - 1) * options.first,
         sortBy,
         sortDirection
-      })
+      })) as Awaited<ReturnType<typeof favoritesAPI.getLists>>
 
       const previewListsItemIds = Array.from(new Set(results.flatMap(list => list.previewOfItemIds)))
-      const previewItems: Item[] = yield call(fetchPreviewItems, previewListsItemIds)
+      const previewItems: Item[] = (yield call(fetchPreviewItems, previewListsItemIds)) as Item[]
 
       yield put(fetchListsSuccess(results, previewItems, total, options))
     } catch (error) {
@@ -200,7 +200,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   }
 
   function* handleDeleteListSuccess() {
-    const { pathname } = yield select(getLocation)
+    const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
     if (pathname !== locations.lists()) yield put(push(locations.lists()))
   }
 
@@ -221,11 +221,11 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { id } = action.payload
 
     try {
-      const list: Awaited<ReturnType<typeof favoritesAPI.getList>> = yield call([favoritesAPI, 'getList'], id)
+      const list = (yield call([favoritesAPI, 'getList'], id)) as Awaited<ReturnType<typeof favoritesAPI.getList>>
 
       const { previewOfItemIds } = list
 
-      const previewItems: Item[] = yield call(fetchPreviewItems, previewOfItemIds)
+      const previewItems: Item[] = (yield call(fetchPreviewItems, previewOfItemIds)) as Item[]
 
       yield put(getListSuccess(list, previewItems))
     } catch (error) {
@@ -237,7 +237,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     const { id, updatedList } = action.payload
 
     try {
-      const list: Awaited<ReturnType<typeof favoritesAPI.updateList>> = yield call([favoritesAPI, 'updateList'], id, updatedList)
+      const list = (yield call([favoritesAPI, 'updateList'], id, updatedList)) as Awaited<ReturnType<typeof favoritesAPI.updateList>>
       yield put(updateListSuccess(list))
     } catch (error) {
       yield put(updateListFailure(id, isErrorWithMessage(error) ? error.message : 'Unknown error'))
@@ -247,14 +247,14 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleCreateListRequest(action: CreateListRequestAction) {
     const { name, isPrivate, description } = action.payload
     try {
-      const { pathname } = yield select(getLocation)
+      const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
-      const list: Awaited<ReturnType<typeof favoritesAPI.createList>> = yield call([favoritesAPI, 'createList'], {
+      const list = (yield call([favoritesAPI, 'createList'], {
         name,
         isPrivate,
         description
-      })
+      })) as Awaited<ReturnType<typeof favoritesAPI.createList>>
       yield put(createListSuccess(list))
       if (pathname === locations.lists()) {
         yield put(push(locations.list(list.id)))
@@ -267,23 +267,20 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleBulkPickStart(action: BulkPickUnpickStartAction) {
     const { item } = action.payload
     try {
-      const address: string = yield select(getAddress)
+      const address = (yield select(getAddress)) as ReturnType<typeof getAddress>
 
       if (!address) {
         yield put(openModal('LoginModal'))
 
-        const {
-          success,
-          close
-        }: {
-          success: ConnectWalletSuccessAction
-          failure: ConnectWalletSuccessAction
-          close: CloseModalAction
-        } = yield race({
+        const { success, close } = (yield race({
           success: take(CONNECT_WALLET_SUCCESS),
           failure: take(CONNECT_WALLET_FAILURE),
           close: take(CLOSE_MODAL)
-        })
+        })) as {
+          success: ConnectWalletSuccessAction
+          failure: ConnectWalletSuccessAction
+          close: CloseModalAction
+        }
 
         if (close) {
           yield put(bulkPickUnpickCancel(item))
@@ -298,23 +295,25 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
       yield put(openModal('SaveToListModal', { item }))
 
-      const {
-        listCreationSuccess
-      }: {
-        listCreationSuccess: CreateListSuccessAction
-        picksInBulkRequest: BulkPickUnpickRequestAction
-        modalClosed: CloseModalAction
-      } = yield race({
+      const { listCreationSuccess } = (yield race({
         listCreationSuccess: take(CREATE_LIST_SUCCESS),
         picksInBulkRequest: take(BULK_PICK_REQUEST),
         modalClosed: take(CLOSE_MODAL)
-      })
+      })) as {
+        listCreationSuccess: CreateListSuccessAction
+        picksInBulkRequest: BulkPickUnpickRequestAction
+        modalClosed: CloseModalAction
+      }
 
       if (listCreationSuccess) {
         yield put(closeModal('SaveToListModal'))
 
         const { list: newList } = listCreationSuccess.payload
-        const list: List = yield select(getList, newList.id)
+        const list = (yield select(getList, newList.id)) as ReturnType<typeof getList>
+
+        if (!list) {
+          throw new Error('List not found')
+        }
 
         const pickedList = {
           ...list,
@@ -335,16 +334,15 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
-      const { pickedByUser }: Awaited<ReturnType<typeof favoritesAPI.bulkPickUnpick>> = yield call(
+      const { pickedByUser } = (yield call(
         [favoritesAPI, 'bulkPickUnpick'],
         item.id,
         pickedFor.map(list => list.id),
         unpickedFrom.map(list => list.id)
-      )
-      const isOwnerUnpickingFromListInView: ReturnType<typeof isOwnerUnpickingFromCurrentList> = yield select(
-        isOwnerUnpickingFromCurrentList,
-        unpickedFrom
-      )
+      )) as Awaited<ReturnType<typeof favoritesAPI.bulkPickUnpick>>
+      const isOwnerUnpickingFromListInView = (yield select(isOwnerUnpickingFromCurrentList, unpickedFrom)) as ReturnType<
+        typeof isOwnerUnpickingFromCurrentList
+      >
 
       yield put(bulkPickUnpickSuccess(item, pickedFor, unpickedFrom, pickedByUser, isOwnerUnpickingFromListInView))
     } catch (error) {

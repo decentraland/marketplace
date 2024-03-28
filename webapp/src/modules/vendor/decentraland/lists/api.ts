@@ -5,7 +5,7 @@ export const DCL_LISTS_URL = config.get('DCL_LISTS_SERVER', '')
 
 export class DclListsAPI extends BaseAPI {
   public async fetchBannedNames(): Promise<string[]> {
-    const response: { data: string[] } = await this.request('POST', '/banned-names')
+    const response = (await this.request('POST', '/banned-names')) as { data: string[] }
     return response.data
   }
 }

@@ -25,7 +25,7 @@ export function* contractSaga() {
 
 export function* handleFetchContractsRequest() {
   try {
-    const hasFetched: boolean = yield select(getHasFetched)
+    const hasFetched: boolean = (yield select(getHasFetched)) as Awaited<ReturnType<typeof getHasFetched>>
 
     if (hasFetched) {
       throw new Error('Contracts have already been fetched')
@@ -36,7 +36,9 @@ export function* handleFetchContractsRequest() {
 
     for (const vendor of vendors) {
       const { contractService } = vendor
-      const moreContracts: Contract[] = yield call([contractService, 'getContracts'])
+      const moreContracts: Contract[] = (yield call([contractService, 'getContracts'])) as Awaited<
+        ReturnType<typeof contractService.getContracts>
+      >
       contracts = [...contracts, ...moreContracts]
     }
     yield put(fetchContractsSuccess(contracts))
@@ -46,8 +48,8 @@ export function* handleFetchContractsRequest() {
 }
 
 export function* handleFetchContractsSuccess() {
-  const contracts: Contract[] = yield select(getContracts)
-  const address: string | undefined = yield select(getAddress)
+  const contracts: Contract[] = (yield select(getContracts)) as Awaited<ReturnType<typeof getContracts>>
+  const address: string | undefined = (yield select(getAddress)) as Awaited<ReturnType<typeof getAddress>>
 
   if (!address) {
     console.warn('Not fetching authorizations because the user is not connected')
@@ -56,121 +58,135 @@ export function* handleFetchContractsSuccess() {
 
   const contractNames = getContractNames()
 
-  const marketplaceEthereum: Contract = yield select(getContract, {
+  const marketplaceEthereum: Contract | null = (yield select(getContract, {
     name: contractNames.MARKETPLACE,
     network: Network.ETHEREUM
-  })
+  })) as ReturnType<typeof getContract>
 
-  const marketplaceMatic: Contract = yield select(getContract, {
+  const marketplaceMatic: Contract | null = (yield select(getContract, {
     name: contractNames.MARKETPLACE,
     network: Network.MATIC
-  })
+  })) as ReturnType<typeof getContract>
 
-  const legacyMarketplaceMatic: Contract = yield select(getContract, {
+  const legacyMarketplaceMatic: Contract | null = (yield select(getContract, {
     name: contractNames.LEGACY_MARKETPLACE,
     network: Network.MATIC
-  })
+  })) as ReturnType<typeof getContract>
 
-  const bidsEthereum: Contract = yield select(getContract, {
+  const bidsEthereum: Contract | null = (yield select(getContract, {
     name: contractNames.BIDS,
     network: Network.ETHEREUM
-  })
+  })) as ReturnType<typeof getContract>
 
-  const bidsMatic: Contract = yield select(getContract, {
+  const bidsMatic: Contract | null = (yield select(getContract, {
     name: contractNames.BIDS,
     network: Network.MATIC
-  })
+  })) as ReturnType<typeof getContract>
 
-  const manaEthereum: Contract = yield select(getContract, {
+  const manaEthereum: Contract | null = (yield select(getContract, {
     name: contractNames.MANA,
     network: Network.ETHEREUM
-  })
+  })) as ReturnType<typeof getContract>
 
-  const manaMatic: Contract = yield select(getContract, {
+  const manaMatic: Contract | null = (yield select(getContract, {
     name: contractNames.MANA,
     network: Network.MATIC
-  })
+  })) as ReturnType<typeof getContract>
 
-  const collectionStore: Contract = yield select(getContract, {
+  const collectionStore: Contract | null = (yield select(getContract, {
     name: contractNames.COLLECTION_STORE,
     network: Network.MATIC
-  })
+  })) as ReturnType<typeof getContract>
 
-  const rentals: Contract = yield select(getContract, {
+  const rentals: Contract | null = (yield select(getContract, {
     name: contractNames.RENTALS,
     network: Network.ETHEREUM
-  })
+  })) as ReturnType<typeof getContract>
 
   let authorizations: Authorization[] = []
 
-  authorizations.push({
-    address,
-    authorizedAddress: marketplaceEthereum.address,
-    contractAddress: manaEthereum.address,
-    contractName: ContractName.MANAToken,
-    chainId: manaEthereum.chainId,
-    type: AuthorizationType.ALLOWANCE
-  })
+  if (marketplaceEthereum && manaEthereum) {
+    authorizations.push({
+      address,
+      authorizedAddress: marketplaceEthereum.address,
+      contractAddress: manaEthereum.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaEthereum.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
 
-  authorizations.push({
-    address,
-    authorizedAddress: marketplaceMatic.address,
-    contractAddress: manaMatic.address,
-    contractName: ContractName.MANAToken,
-    chainId: manaMatic.chainId,
-    type: AuthorizationType.ALLOWANCE
-  })
+  if (marketplaceMatic && manaMatic) {
+    authorizations.push({
+      address,
+      authorizedAddress: marketplaceMatic.address,
+      contractAddress: manaMatic.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaMatic.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
 
-  authorizations.push({
-    address,
-    authorizedAddress: legacyMarketplaceMatic.address,
-    contractAddress: manaMatic.address,
-    contractName: ContractName.MANAToken,
-    chainId: manaMatic.chainId,
-    type: AuthorizationType.ALLOWANCE
-  })
+  if (legacyMarketplaceMatic && manaMatic) {
+    authorizations.push({
+      address,
+      authorizedAddress: legacyMarketplaceMatic.address,
+      contractAddress: manaMatic.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaMatic.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
 
-  authorizations.push({
-    address,
-    authorizedAddress: bidsEthereum.address,
-    contractAddress: manaEthereum.address,
-    contractName: ContractName.MANAToken,
-    chainId: manaEthereum.chainId,
-    type: AuthorizationType.ALLOWANCE
-  })
+  if (bidsEthereum && manaEthereum) {
+    authorizations.push({
+      address,
+      authorizedAddress: bidsEthereum.address,
+      contractAddress: manaEthereum.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaEthereum.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
 
-  authorizations.push({
-    address,
-    authorizedAddress: bidsMatic.address,
-    contractAddress: manaMatic.address,
-    contractName: ContractName.MANAToken,
-    chainId: manaMatic.chainId,
-    type: AuthorizationType.ALLOWANCE
-  })
+  if (bidsMatic && manaMatic) {
+    authorizations.push({
+      address,
+      authorizedAddress: bidsMatic.address,
+      contractAddress: manaMatic.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaMatic.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
 
-  authorizations.push({
-    address,
-    authorizedAddress: collectionStore.address,
-    contractAddress: manaMatic.address,
-    contractName: ContractName.MANAToken,
-    chainId: manaMatic.chainId,
-    type: AuthorizationType.ALLOWANCE
-  })
+  if (collectionStore && manaMatic) {
+    authorizations.push({
+      address,
+      authorizedAddress: collectionStore.address,
+      contractAddress: manaMatic.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaMatic.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
 
-  authorizations.push({
-    address,
-    authorizedAddress: rentals.address,
-    contractAddress: manaEthereum.address,
-    contractName: ContractName.MANAToken,
-    chainId: manaEthereum.chainId,
-    type: AuthorizationType.ALLOWANCE
-  })
+  if (rentals && manaEthereum) {
+    authorizations.push({
+      address,
+      authorizedAddress: rentals.address,
+      contractAddress: manaEthereum.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaEthereum.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
 
   for (const contract of contracts.filter(c => c.category !== null)) {
     // If the contract is a partner we might need to use a different contract name. See PR #680
-    const marketplace: Contract = contract.network === Network.MATIC ? marketplaceMatic : marketplaceEthereum
+    const marketplace: Contract | null = contract.network === Network.MATIC ? marketplaceMatic : marketplaceEthereum
 
-    if (contract.category === NFTCategory.WEARABLE || contract.category === NFTCategory.EMOTE) {
+    if ((contract.category === NFTCategory.WEARABLE || contract.category === NFTCategory.EMOTE) && marketplace) {
       // just add the authorizations for the contracts that are not already in the array
       if (!authorizations.some(authorization => authorization.contractAddress === contract.address)) {
         authorizations.push({
@@ -182,7 +198,7 @@ export function* handleFetchContractsSuccess() {
           type: AuthorizationType.APPROVAL
         })
       }
-    } else {
+    } else if (marketplace) {
       authorizations.push({
         address,
         authorizedAddress: marketplace.address,
@@ -194,7 +210,7 @@ export function* handleFetchContractsSuccess() {
     }
 
     // add authorizations for the rentals contract for the land and estate registries
-    if (contract.category === NFTCategory.PARCEL || contract.category === NFTCategory.ESTATE) {
+    if ((contract.category === NFTCategory.PARCEL || contract.category === NFTCategory.ESTATE) && rentals) {
       authorizations.push({
         address,
         authorizedAddress: rentals.address,
@@ -209,7 +225,7 @@ export function* handleFetchContractsSuccess() {
   // Remove the authorizations that are already in the state.
   // This prevents authorizations from being duplicated in the state, as well
   // as preventing unnecessary extra calls.
-  const storeAuthorizations: Authorization[] = yield select(getAuthorizations)
+  const storeAuthorizations: Authorization[] = (yield select(getAuthorizations)) as ReturnType<typeof getAuthorizations>
 
   const storeAuthorizationsMap = storeAuthorizations.reduce(
     (map, authorization) => map.set(getAuthorizationKey(authorization), authorization),

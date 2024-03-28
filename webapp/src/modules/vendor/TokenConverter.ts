@@ -57,7 +57,7 @@ export class TokenConverter {
 
     if (!pricesCache[coinId][ethAmount]) {
       const response = await window.fetch(`${this.apiURL}/coins/${coinId}/tickers?exchange_ids=${exchange}`)
-      const coinTickers: CoinTickers = await response.json()
+      const coinTickers = (await response.json()) as CoinTickers
       const ticker = coinTickers.tickers[0]
 
       pricesCache[coinId][ethAmount] = ethAmount / ticker.converted_last.eth

@@ -3,7 +3,7 @@ import { BuildEntityWithoutFilesOptions } from 'dcl-catalyst-client/dist/client/
 import { DeploymentPreparationData, buildEntity } from 'dcl-catalyst-client/dist/client/utils/DeploymentBuilder'
 import { EntityContentItemReference } from 'dcl-catalyst-commons'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
-import { Entity } from '@dcl/schemas'
+import { Entity, EntityType } from '@dcl/schemas'
 import { peerUrl } from '../../lib/environment'
 import { isOfEnumType } from '../../utils/enums'
 import { convertToOutputString } from '../../utils/output'
@@ -30,7 +30,7 @@ export const getEmptyStore = (props: Partial<Store> = {}): Store => ({
 // Mappings
 
 export const getStoreFromEntity = (entity: Entity): Store => {
-  const metadata: StoreEntityMetadata | undefined = entity.metadata
+  const metadata = entity.metadata as StoreEntityMetadata | undefined
   const content: EntityContentItemReference[] | undefined = entity.content
 
   if (!metadata) {
@@ -123,7 +123,7 @@ export const deployStoreEntity = async (client: ContentClient, identity: AuthIde
   const files = await getEntityMetadataFilesFromStore(store)
 
   const options: BuildEntityWithoutFilesOptions = {
-    type: 'store' as any,
+    type: EntityType.STORE,
     pointers: [getStoreUrn(owner)],
     metadata,
     timestamp: Date.now()

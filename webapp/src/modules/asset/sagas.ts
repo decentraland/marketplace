@@ -34,7 +34,7 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
   const { purchase } = action.payload
   if (isNFTPurchase(purchase)) {
     const { nft, status } = purchase
-    const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
+    const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
 
     const { tradeType, contractAddress, tokenId, itemId } = nft
     const assetType: AssetType = tradeType === TradeType.PRIMARY ? AssetType.ITEM : AssetType.NFT
@@ -69,7 +69,9 @@ function* handleFetchSmartWearableRequiredPermissionsRequest(action: FetchSmartW
     } = asset
 
     if (wearable?.isSmart && urn) {
-      requiredPermissions = yield call(getSmartWearableRequiredPermissions, urn)
+      requiredPermissions = (yield call(getSmartWearableRequiredPermissions, urn)) as Awaited<
+        ReturnType<typeof getSmartWearableRequiredPermissions>
+      >
     }
 
     yield put(fetchSmartWearableRequiredPermissionsSuccess(asset, requiredPermissions))
@@ -89,7 +91,7 @@ function* handleFetchSmartWearableVideoHashRequest(action: FetchSmartWearableVid
     } = asset
 
     if (wearable?.isSmart && urn) {
-      videoHash = yield call(getSmartWearableVideoShowcase, asset)
+      videoHash = (yield call(getSmartWearableVideoShowcase, asset)) as Awaited<ReturnType<typeof getSmartWearableVideoShowcase>>
     }
 
     yield put(fetchSmartWearableVideoHashSuccess(asset, videoHash))

@@ -136,7 +136,10 @@ export const getAllSortByOptions = () => ({
   }
 })
 
-export const getStatus = createSelector<RootState, string, string>(getRouterSearch, search => getURLParam(search, 'status') || '')
+export const getStatus = createSelector<RootState, string, AssetStatusFilter>(
+  getRouterSearch,
+  search => getURLParamArray<AssetStatusFilter>(search, 'status', Object.values(AssetStatusFilter))[0]
+)
 
 export const getSortByOptions = createSelector<RootState, boolean | undefined, boolean | undefined, string, SortByOption[]>(
   getOnlyOnRent,

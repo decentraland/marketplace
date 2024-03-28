@@ -1,9 +1,9 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
-import { RentalListing, RentalStatus } from '@dcl/schemas'
+import { RentalStatus } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction, Wallet } from 'decentraland-dapps/dist/modules/wallet'
+import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ErrorCode } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
@@ -22,7 +22,7 @@ import { MAX_QUERY_SIZE } from '../vendor/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { Contract } from '../vendor/services'
 import { VendorName } from '../vendor/types'
-import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
 import {
   DEFAULT_BASE_NFT_PARAMS,
@@ -60,13 +60,15 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
         wallet: { address }
       }
     } = action
-    const view: View = yield select(getView)
-    const wallet: Wallet = yield select(getWallet)
-    const hasShownTheExpiredListingsModalBefore: string | null = yield call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY)
+    const view = (yield select(getView)) as ReturnType<typeof getView>
+    const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+    const hasShownTheExpiredListingsModalBefore = (yield call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY)) as ReturnType<
+      typeof localStorage.getItem
+    >
 
     if (hasShownTheExpiredListingsModalBefore !== 'true') {
-      const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], VendorName.DECENTRALAND, API_OPTS)
-      const [, , orders]: AwaitFn<typeof vendor.nftService.fetch> = yield call(
+      const vendor = (yield call([VendorFactory, 'build'], VendorName.DECENTRALAND, API_OPTS)) as ReturnType<typeof VendorFactory.build>
+      const [, , orders] = (yield call(
         [vendor.nftService, 'fetch'],
         {
           first: MAX_QUERY_SIZE,
@@ -75,7 +77,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
           address
         },
         {}
-      )
+      )) as Awaited<ReturnType<typeof vendor.nftService.fetch>>
       if (wallet && view !== View.CURRENT_ACCOUNT) {
         if (orders.some(order => isLegacyOrder(order) && order.owner === wallet.address)) {
           yield put(openModal('ExpiredListingsModal'))
@@ -94,15 +96,13 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
     }
 
     try {
-      const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], vendorName, API_OPTS)
+      const vendor = (yield call([VendorFactory, 'build'], vendorName, API_OPTS)) as ReturnType<typeof VendorFactory.build>
 
-      const [nfts, accounts, orders, rentals, count]: AwaitFn<typeof vendor.nftService.fetch> = yield call(
-        [vendor.nftService, 'fetch'],
-        params,
-        filters
-      )
+      const [nfts, accounts, orders, rentals, count] = (yield call([vendor.nftService, 'fetch'], params, filters)) as Awaited<
+        ReturnType<typeof vendor.nftService.fetch>
+      >
 
-      const contracts: Contract[] = yield select(getContracts)
+      const contracts = (yield select(getContracts)) as ReturnType<typeof getContracts>
 
       const contractKeys = new Set(contracts.map(getContractKey))
 
@@ -133,9 +133,9 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
     const { contractAddress, tokenId, options } = action.payload
 
     try {
-      let contract: ReturnType<typeof getContract> = yield select(getContract, {
+      let contract = (yield select(getContract, {
         address: contractAddress.toLowerCase()
-      })
+      })) as ReturnType<typeof getContract>
 
       // If the contract is not present in the state, it means that it is a wearable/emote.
       // In this case, a stub contract is created and added to the state so it can be used
@@ -150,14 +150,11 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
         throw new Error(`Couldn't find a valid vendor for contract ${contract?.address}`)
       }
 
-      const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], contract.vendor, API_OPTS)
+      const vendor = (yield call([VendorFactory, 'build'], contract.vendor, API_OPTS)) as ReturnType<typeof VendorFactory.build>
 
-      const [nft, order, rental]: AwaitFn<typeof vendor.nftService.fetchOne> = yield call(
-        [vendor.nftService, 'fetchOne'],
-        contractAddress,
-        tokenId,
-        options
-      )
+      const [nft, order, rental] = (yield call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, options)) as AwaitFn<
+        typeof vendor.nftService.fetchOne
+      >
 
       yield put(fetchNFTSuccess(nft as NFT, order, rental))
       if (nft.data?.wearable?.isSmart && nft.urn) {
@@ -171,18 +168,20 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
     const { nft, address } = action.payload
     try {
-      const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], nft.vendor)
+      const vendor = (yield call([VendorFactory, 'build'], nft.vendor)) as ReturnType<typeof VendorFactory.build>
 
-      const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
+      const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       if (!wallet) {
         throw new Error('A wallet is needed to perform a NFT transfer request')
       }
 
-      const txHash: string = yield call([vendor.nftService, 'transfer'], wallet, address, nft)
+      const txHash = (yield call([vendor.nftService, 'transfer'], wallet, address, nft)) as Awaited<
+        ReturnType<typeof vendor.nftService.transfer>
+      >
       yield put(transferNFTransactionSubmitted(nft, address, txHash))
       if (nft?.openRentalId) {
         yield call(waitForTx, txHash)
-        const rental: RentalListing | null = yield select(getRentalById, nft.openRentalId)
+        const rental = (yield select(getRentalById, nft.openRentalId)) as ReturnType<typeof getRentalById>
         if (isRentalListingOpen(rental)) {
           yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
         }

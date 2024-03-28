@@ -29,25 +29,25 @@ const IDENTITY_ERROR = 'Could not get identity'
 // If the wallet is not connected it will try to connect
 // If the identity is invalid or has not been generated. It will try to generate it
 export function* getIdentity(): Generator<any, AuthIdentity, any> {
-  const address: ReturnType<typeof getAddress> = yield select(getAddress)
+  const address = (yield select(getAddress)) as ReturnType<typeof getAddress>
 
   if (!address) {
     yield put(connectWalletRequest())
 
-    const { success }: { success: ConnectWalletSuccessAction } = yield race({
+    const { success } = (yield race({
       success: take(CONNECT_WALLET_SUCCESS),
       failure: take(CONNECT_WALLET_FAILURE)
-    })
+    })) as { success: ConnectWalletSuccessAction }
 
     if (success) {
-      const identity: AuthIdentity = yield call(getIdentity)
+      const identity = (yield call(getIdentity)) as AuthIdentity
       return identity
     }
 
     throw new Error(IDENTITY_ERROR)
   }
 
-  const identity: ReturnType<typeof getCurrentIdentity> = yield select(getCurrentIdentity)
+  const identity = (yield select(getCurrentIdentity)) as ReturnType<typeof getCurrentIdentity>
 
   if (identity) {
     return identity
@@ -55,13 +55,13 @@ export function* getIdentity(): Generator<any, AuthIdentity, any> {
 
   yield put(generateIdentityRequest(address))
 
-  const { success }: { success: GenerateIdentitySuccessAction } = yield race({
+  const { success } = (yield race({
     success: take(GENERATE_IDENTITY_SUCCESS),
     failure: take(GENERATE_IDENTITY_FAILURE)
-  })
+  })) as { success: GenerateIdentitySuccessAction }
 
   if (success) {
-    const identity: AuthIdentity = yield call(getIdentity)
+    const identity = (yield call(getIdentity)) as AuthIdentity
     return identity
   } else {
     throw new Error(IDENTITY_ERROR)
