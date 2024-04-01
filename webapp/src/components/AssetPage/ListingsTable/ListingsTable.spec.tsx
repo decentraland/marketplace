@@ -1,5 +1,6 @@
 import { waitFor } from '@testing-library/react'
 import { ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity } from '@dcl/schemas'
+import * as containersModule from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -12,7 +13,7 @@ import ListingsTable from './ListingsTable'
 jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('../../../modules/vendor/decentraland/order/api')
 jest.mock('decentraland-dapps/dist/containers', () => {
-  const module = jest.requireActual('decentraland-dapps/dist/containers')
+  const module = jest.requireActual<typeof containersModule>('decentraland-dapps/dist/containers')
   return {
     ...module,
     Profile: () => <div></div>
