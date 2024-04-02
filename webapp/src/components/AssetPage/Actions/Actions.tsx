@@ -37,7 +37,7 @@ const Actions = (props: Props) => {
           </>
         ) : !isOwner ? (
           <>
-            <BuyWithCryptoButton asset={nft} onClick={() => onBuyWithCrypto} />
+            <BuyWithCryptoButton asset={nft} onClick={() => onBuyWithCrypto(order)} />
             {canBid ? (
               <Button as={Link} to={locations.bid(contractAddress, tokenId)} fluid>
                 {t('asset_page.actions.bid')}
