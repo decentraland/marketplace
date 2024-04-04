@@ -116,9 +116,9 @@ const RankingsTable = (props: Props) => {
               direction="right"
               // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               options={[ALL_FILTER, ...Rarity.getRarities()]
-                .filter(rarity => isExoticRarityEnabled || rarity !== Rarity.EXOTIC)
+                .filter(rarity => isExoticRarityEnabled || (rarity as Rarity) !== Rarity.EXOTIC)
                 .map(rarity => ({
-                  value: rarity as string,
+                  value: rarity,
                   text:
                     rarity === ALL_FILTER ? t('home_page.analytics.rankings.all_rarities') : t(`rarity.${convertToOutputString(rarity)}`)
                 }))}
