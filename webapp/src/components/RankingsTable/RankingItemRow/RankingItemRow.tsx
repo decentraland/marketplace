@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Item, NFTCategory } from '@dcl/schemas'
+import { Item } from '@dcl/schemas'
+import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
@@ -14,7 +15,6 @@ import { AssetImage } from '../../AssetImage'
 import { AssetProvider } from '../../AssetProvider'
 import { LinkedProfile } from '../../LinkedProfile'
 import { ManaToFiat } from '../../ManaToFiat'
-import RarityBadge from '../../RarityBadge'
 import { Props } from './RankingItemRow.types'
 import './RankingItemRow.css'
 
@@ -58,13 +58,7 @@ const RankingItemRow = ({ entity }: Props) => {
                   </span>
                   {item ? (
                     <div className="rankings-item-badge-container">
-                      <RarityBadge
-                        size="small"
-                        rarity={item.rarity}
-                        assetType={AssetType.NFT}
-                        category={NFTCategory.WEARABLE}
-                        withTooltip={false}
-                      />
+                      <RarityBadge size="small" rarity={item.rarity} withTooltip={false} />
                     </div>
                   ) : null}
                 </div>
@@ -151,11 +145,7 @@ const RankingItemRow = ({ entity }: Props) => {
             : t(`emote.category.${item.data.emote!.category}`)
           : null}
       </Table.Cell>
-      <Table.Cell width={2}>
-        {item ? (
-          <RarityBadge size="small" rarity={item.rarity} assetType={AssetType.NFT} category={NFTCategory.WEARABLE} withTooltip={false} />
-        ) : null}
-      </Table.Cell>
+      <Table.Cell width={2}>{item ? <RarityBadge size="small" rarity={item.rarity} withTooltip={false} /> : null}</Table.Cell>
       <Table.Cell width={2}>{item ? entity.sales : null}</Table.Cell>
       <Table.Cell>
         {item ? (

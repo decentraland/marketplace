@@ -94,7 +94,6 @@ const RankingsTable = (props: Props) => {
         {(currentEntity === RankingEntities.WEARABLES || currentEntity === RankingEntities.EMOTES) && (
           <>
             <Dropdown
-              defaultValue={ALL_FILTER}
               value={currentFilters.category || ALL_FILTER}
               direction="right"
               options={[
@@ -111,7 +110,6 @@ const RankingsTable = (props: Props) => {
               onChange={registerHandleFilterChange('category')}
             />
             <Dropdown
-              defaultValue={ALL_FILTER}
               value={currentFilters.rarity || ALL_FILTER}
               direction="right"
               // eslint-disable-next-line @typescript-eslint/no-unsafe-argument

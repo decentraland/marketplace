@@ -683,20 +683,12 @@
   "rarity": {
     "unique": "独特",
     "mythic": "神话",
+    "exotic": "异国情调",
     "legendary": "传奇",
     "epic": "史诗",
     "rare": "稀有",
     "uncommon": "罕见",
     "common": "常见"
-  },
-  "rarity_tooltip": {
-    "unique": "像圣杯一样：独一无二",
-    "mythic": "给幸运的人：最多10个",
-    "legendary": "限量供应：最多100个",
-    "epic": "最大供应量：1000个",
-    "rare": "最大供应量：5000个",
-    "uncommon": "最大供应量：10,000个",
-    "common": "最大供应量：100,000个"
   },
   "wearable": {
     "category": {

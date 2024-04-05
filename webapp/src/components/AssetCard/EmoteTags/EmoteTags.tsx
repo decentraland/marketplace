@@ -1,10 +1,8 @@
 import classNames from 'classnames'
-import { NFTCategory } from '@dcl/schemas'
+import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Popup } from 'decentraland-ui'
 import soundSrc from '../../../images/emotes/sound.svg'
-import { AssetType } from '../../../modules/asset/types'
-import RarityBadge from '../../RarityBadge'
 import { Props } from './EmoteTags.types'
 import styles from './EmoteTags.module.css'
 
@@ -15,9 +13,7 @@ const EmoteTags = (props: Props) => {
   return (
     <div className={classNames([styles.EmoteTags, 'tags'])}>
       <div className={styles.badges}>
-        {rarity ? (
-          <RarityBadge size="small" rarity={rarity} assetType={AssetType.NFT} category={NFTCategory.EMOTE} withTooltip={false} />
-        ) : null}
+        {rarity ? <RarityBadge size="small" rarity={rarity} withTooltip={false} /> : null}
         {loop !== undefined ? (
           <Popup
             position="top center"
