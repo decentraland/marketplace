@@ -23,7 +23,7 @@ describe('when reducing the successful action of fetching trending items', () =>
     home_trending_items: [item.id]
   }
 
-  it('should return a state with the the loaded items plus the fetched trending items and the loading state cleared', () => {
+  it('should return a state with the loaded items plus the fetched trending items and the loading state cleared', () => {
     expect(homepageReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       home_trending_items: [anotherItem.id]

@@ -187,7 +187,7 @@ describe('when reducing the successful action of fetching items', () => {
   }
 
   describe('and the fetched items are not in the state', () => {
-    it('should return a state with the the loaded items and the loading state cleared', () => {
+    it('should return a state with the loaded items and the loading state cleared', () => {
       expect(itemReducer(initialState, successAction)).toEqual({
         ...INITIAL_STATE,
         loading: [],
@@ -237,7 +237,7 @@ describe.each([
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
+  it('should return a state with the loaded items with the fetched item and the loading state cleared', () => {
     expect(itemReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
@@ -299,7 +299,7 @@ describe('when reducing the successful action of fetching trending items', () =>
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the the loaded items plus the fetched trending items and the loading state cleared', () => {
+  it('should return a state with the loaded items plus the fetched trending items and the loading state cleared', () => {
     expect(itemReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
