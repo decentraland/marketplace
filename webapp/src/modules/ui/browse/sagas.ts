@@ -19,7 +19,7 @@ function* handleBulkPickSuccess(action: BulkPickUnpickSuccessAction) {
     unpickedFrom
   )) as ReturnType<typeof isOwnerUnpickingFromCurrentList>
   const favoritedAssets: Item[] = (yield select(getItemsPickedByUserOrCreator)) as ReturnType<typeof getItemsPickedByUserOrCreator>
-  const totalFavoritedAssets: number | undefined = ((yield select(getCount)) as ReturnType<typeof getCount>) ?? 0
+  const totalFavoritedAssets: number = ((yield select(getCount)) as ReturnType<typeof getCount>) ?? 0
 
   if (favoritedAssets.length < totalFavoritedAssets && isOwnerUnpickingFromListInView) {
     yield put(
