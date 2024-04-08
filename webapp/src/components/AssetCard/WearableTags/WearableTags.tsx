@@ -1,11 +1,10 @@
-import { NFTCategory } from '@dcl/schemas'
+import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { isCatalogItem, isNFT } from '../../../modules/asset/utils'
 import { Section } from '../../../modules/vendor/decentraland'
 import SmartBadge from '../../AssetPage/SmartBadge'
 import GenderBadge from '../../GenderBadge/GenderBadge'
-import RarityBadge from '../../RarityBadge'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
 
@@ -15,7 +14,7 @@ const WearableTags = (props: Props) => {
 
   return (
     <div className="WearableTags tags">
-      <RarityBadge size="small" rarity={rarity} assetType={AssetType.NFT} category={NFTCategory.EMOTE} withTooltip={false} />
+      <RarityBadge size="small" rarity={rarity} withTooltip={false} />
       {!isCatalogItem(asset) && <div className={'icon ' + category} title={t(`wearable.category.${category}`)} />}
       {!isCatalogItem(asset) && (
         <GenderBadge bodyShapes={bodyShapes} assetType={AssetType.NFT} withText={false} section={Section.WEARABLES} />

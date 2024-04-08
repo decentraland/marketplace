@@ -249,6 +249,7 @@ enum WearableRarity @entity {
   legendary
   mythic
   unique
+  exotic
 }
 
 enum WearableBodyShape @entity {

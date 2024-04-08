@@ -2,6 +2,7 @@ import React, { useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { BodyShape, EmotePlayMode, NFTCategory, Network } from '@dcl/schemas'
+import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getRequiredPermissions } from '../../../modules/asset/selectors'
 import { AssetType } from '../../../modules/asset/types'
@@ -11,7 +12,6 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import GenderBadge from '../../GenderBadge'
-import RarityBadge from '../../RarityBadge'
 import { BestBuyingOption } from '../BestBuyingOption'
 import CategoryBadge from '../CategoryBadge'
 import Collection from '../Collection'
@@ -93,7 +93,7 @@ const ItemDetail = ({ item }: Props) => {
           <div>
             <Title asset={item} />
             <div className={styles.badges}>
-              <RarityBadge rarity={item.rarity} assetType={AssetType.ITEM} category={NFTCategory.WEARABLE} size="small" />
+              <RarityBadge rarity={item.rarity} size="small" withTooltip />
               {category && (
                 <CategoryBadge
                   category={item.data.emote ? item.data.emote.category : item.data.wearable!.category}

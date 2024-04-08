@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react'
-import { EmotePlayMode, NFTCategory, OrderSortBy } from '@dcl/schemas'
+import { EmotePlayMode, OrderSortBy } from '@dcl/schemas'
+import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
-import RarityBadge from '../../RarityBadge'
 import TableContainer from '../../Table/TableContainer'
 import { BidsTable } from '../BidsTable'
 import { BuyNFTBox } from '../BuyNFTBox'
@@ -90,7 +90,7 @@ const EmoteDetail = ({ nft }: Props) => {
           <div>
             <Title asset={nft} />
             <div className={styles.badges}>
-              <RarityBadge rarity={emote.rarity} assetType={AssetType.NFT} category={NFTCategory.EMOTE} />
+              <RarityBadge rarity={emote.rarity} size="medium" withTooltip />
               <IconBadge
                 icon={loop ? 'play-loop' : 'play-once'}
                 text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}

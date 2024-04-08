@@ -30,7 +30,7 @@ const INITIAL_FILTERS = {
 const TABS_PREFIX = '#rankings-'
 
 const RankingsTable = (props: Props) => {
-  const { isLoading, onFetchRankings, data } = props
+  const { isLoading, isExoticRarityEnabled, onFetchRankings, data } = props
 
   const history = useHistory()
   const location = useLocation()
@@ -94,7 +94,6 @@ const RankingsTable = (props: Props) => {
         {(currentEntity === RankingEntities.WEARABLES || currentEntity === RankingEntities.EMOTES) && (
           <>
             <Dropdown
-              defaultValue={ALL_FILTER}
               value={currentFilters.category || ALL_FILTER}
               direction="right"
               options={[
@@ -111,14 +110,16 @@ const RankingsTable = (props: Props) => {
               onChange={registerHandleFilterChange('category')}
             />
             <Dropdown
-              defaultValue={ALL_FILTER}
               value={currentFilters.rarity || ALL_FILTER}
               direction="right"
               // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-              options={[ALL_FILTER, ...Object.values(Rarity.schema.enum)].map(rarity => ({
-                value: rarity as string,
-                text: rarity === ALL_FILTER ? t('home_page.analytics.rankings.all_rarities') : t(`rarity.${convertToOutputString(rarity)}`)
-              }))}
+              options={[ALL_FILTER, ...Rarity.getRarities()]
+                .filter(rarity => isExoticRarityEnabled || (rarity as Rarity) !== Rarity.EXOTIC)
+                .map(rarity => ({
+                  value: rarity,
+                  text:
+                    rarity === ALL_FILTER ? t('home_page.analytics.rankings.all_rarities') : t(`rarity.${convertToOutputString(rarity)}`)
+                }))}
               onChange={registerHandleFilterChange('rarity')}
             />
           </>

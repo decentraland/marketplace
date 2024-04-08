@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { NFTCategory, OrderSortBy } from '@dcl/schemas'
+import { OrderSortBy } from '@dcl/schemas'
+import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import GenderBadge from '../../GenderBadge'
-import RarityBadge from '../../RarityBadge'
 import TableContainer from '../../Table/TableContainer'
 import { BidsTable } from '../BidsTable'
 import { BuyNFTBox } from '../BuyNFTBox'
@@ -69,7 +69,7 @@ const WearableDetail = ({ nft }: Props) => {
           <div className={styles.wearableBadgesContainer}>
             <Title asset={nft} />
             <div className={styles.badges}>
-              <RarityBadge rarity={wearable.rarity} assetType={AssetType.NFT} category={NFTCategory.WEARABLE} />
+              <RarityBadge rarity={wearable.rarity} withTooltip size="medium" />
               <CategoryBadge category={wearable.category} assetType={AssetType.NFT} />
               <GenderBadge bodyShapes={wearable.bodyShapes} assetType={AssetType.NFT} section={Section.WEARABLES} />
               {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
