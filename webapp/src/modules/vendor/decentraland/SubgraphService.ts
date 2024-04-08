@@ -18,8 +18,8 @@ export class SubgraphService {
         throw new Error('Network response was not ok.')
       }
 
-      const data = await response.json()
-      return data as T
+      const data = (await response.json()) as T
+      return data
     } catch (error) {
       console.error(error)
     }

@@ -10,7 +10,7 @@ export async function isInsufficientMANA(bid: Bid) {
     const provider = await getNetworkProvider(bid.chainId)
     const contract = getContract(ContractName.MANAToken, bid.chainId)
     const mana = new ethers.Contract(contract.address, contract.abi, new ethers.providers.Web3Provider(provider))
-    const balanceRaw: BigNumber = await mana.balanceOf(bid.bidder)
+    const balanceRaw = (await mana.balanceOf(bid.bidder)) as BigNumber
     const balance = parseFloat(ethers.utils.formatEther(balanceRaw))
     const price = parseFloat(ethers.utils.formatEther(bid.price))
 

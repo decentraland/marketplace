@@ -1,5 +1,5 @@
 import { put, call, takeEvery, select, race, take } from 'redux-saga/effects'
-import { ListingStatus, RentalListing, RentalStatus } from '@dcl/schemas'
+import { ListingStatus, RentalStatus } from '@dcl/schemas'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
@@ -14,9 +14,8 @@ import { getData as getNFTs } from '../nft/selectors'
 import { getNFT } from '../nft/utils'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
-import { VendorName } from '../vendor'
 import SubgraphService from '../vendor/decentraland/SubgraphService'
-import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
 import {
   CREATE_ORDER_REQUEST,
@@ -66,11 +65,11 @@ function* handleFetchLegacyOrdersRequest(action: FetchLegacyOrdersRequestAction)
   try {
     const query = getSubgraphOrdersQuery({ ...filters, owner: address })
 
-    const response: { data: { orders: LegacyOrderFragment[] } } = yield call(
+    const response = (yield call(
       [SubgraphService, 'fetch'],
       'marketplace-legacy', // @TODO: put this nicer
       query
-    )
+    )) as { data: { orders: LegacyOrderFragment[] } }
     yield put(fetchOrdersSuccess(response.data.orders))
   } catch (error) {
     const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
@@ -88,8 +87,8 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
   try {
     const { orderService } = VendorFactory.build(nft.vendor)
 
-    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(() => orderService.create(wallet, nft, price, expiresAt))
+    const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+    const txHash = (yield call([orderService, 'create'], wallet, nft, price, expiresAt)) as Awaited<ReturnType<typeof orderService.create>>
     yield put(createOrderSuccess(nft, price, expiresAt, txHash))
   } catch (error) {
     const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
@@ -109,15 +108,17 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     if (nft.contractAddress !== order.contractAddress || nft.tokenId !== order.tokenId) {
       throw new Error('The order does not match the NFT')
     }
-    const { orderService }: Vendor<VendorName> = yield call([VendorFactory, 'build'], nft.vendor)
+    const { orderService } = (yield call([VendorFactory, 'build'], nft.vendor)) as ReturnType<typeof VendorFactory.build>
 
-    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call([orderService, 'execute'], wallet, nft, order, fingerprint)
+    const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+    const txHash = (yield call([orderService, 'execute'], wallet, nft, order, fingerprint)) as Awaited<
+      ReturnType<typeof orderService.execute>
+    >
 
     yield put(executeOrderTransactionSubmitted(order, nft, txHash))
     if (nft.openRentalId) {
       yield call(waitForTx, txHash)
-      const rental: RentalListing = yield select(getRentalById, nft.openRentalId)
+      const rental = (yield select(getRentalById, nft.openRentalId)) as ReturnType<typeof getRentalById>
       if (isRentalListingOpen(rental)) {
         yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
       }
@@ -155,22 +156,19 @@ function* handleSetNftPurchaseWithCard(action: SetPurchaseAction) {
         nft: { contractAddress, tokenId }
       } = purchase
 
-      const nfts: ReturnType<typeof getNFTs> = yield select(getNFTs)
-      let nft: ReturnType<typeof getNFT> = yield call(getNFT, contractAddress, tokenId, nfts)
+      const nfts = (yield select(getNFTs)) as ReturnType<typeof getNFTs>
+      let nft = (yield call(getNFT, contractAddress, tokenId, nfts)) as ReturnType<typeof getNFT>
 
       if (!nft) {
         yield put(fetchNFTRequest(contractAddress, tokenId))
 
-        const {
-          success,
-          failure
-        }: {
-          success: FetchNFTSuccessAction
-          failure: FetchNFTFailureAction
-        } = yield race({
+        const { success, failure } = (yield race({
           success: take(FETCH_NFT_SUCCESS),
           failure: take(FETCH_NFT_FAILURE)
-        })
+        })) as {
+          success: FetchNFTSuccessAction
+          failure: FetchNFTFailureAction
+        }
 
         if (failure) throw new Error(failure.payload.error)
 
@@ -192,8 +190,8 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
     }
     const { orderService } = VendorFactory.build(nft.vendor)
 
-    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(() => orderService.cancel(wallet, order))
+    const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+    const txHash = (yield call([orderService, 'cancel'], wallet, order)) as Awaited<ReturnType<typeof orderService.cancel>>
     yield put(cancelOrderSuccess(order, nft, txHash))
   } catch (error) {
     const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')

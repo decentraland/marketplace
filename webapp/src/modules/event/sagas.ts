@@ -12,7 +12,9 @@ export function* handleFetchEventRequest(action: FetchEventRequestAction) {
   const { eventTag, additionalSearchTags } = action.payload
 
   try {
-    const addresses: string[] = yield call([builderAPI, builderAPI.fetchAddressesByTag], [eventTag, ...additionalSearchTags])
+    const addresses = (yield call([builderAPI, builderAPI.fetchAddressesByTag], [eventTag, ...additionalSearchTags])) as Awaited<
+      ReturnType<typeof builderAPI.fetchAddressesByTag>
+    >
 
     yield put(fetchEventSuccess(eventTag, addresses))
   } catch (error) {

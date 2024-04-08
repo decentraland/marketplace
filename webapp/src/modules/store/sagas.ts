@@ -27,21 +27,21 @@ export function* storeSaga(client: ContentClient) {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
 
   function* handleLocationChange({ payload: { location } }: LocationChangeAction) {
-    const isLocalStoreDirty: boolean = yield select(getIsLocalStoreDirty)
+    const isLocalStoreDirty = (yield select(getIsLocalStoreDirty)) as ReturnType<typeof getIsLocalStoreDirty>
     if (!isLocalStoreDirty) {
       return
     }
 
-    const address: string = yield select(getAddress)
+    const address = (yield select(getAddress)) as ReturnType<typeof getAddress>
     const allowed = ['section=store_settings&', 'viewAsGuest=true']
-    if (!allowed.some(value => location.search.includes(value))) {
+    if (!allowed.some(value => location.search.includes(value)) && address) {
       yield put(revertLocalStore(address))
     }
   }
 
   function* handleFetchStoreRequest({ payload: { address } }: FetchStoreRequestAction) {
     try {
-      const storeEntity: Entity | null = yield call(fetchStoreEntity, client, address)
+      const storeEntity: Entity | null = (yield call(fetchStoreEntity, client, address)) as Awaited<ReturnType<typeof fetchStoreEntity>>
 
       yield put(fetchStoreSuccess(storeEntity ? getStoreFromEntity(storeEntity) : undefined))
     } catch (error) {
@@ -51,7 +51,7 @@ export function* storeSaga(client: ContentClient) {
 
   function* handleUpdateStoreRequest({ payload: { store } }: UpdateStoreRequestAction) {
     try {
-      const identity: AuthIdentity = yield call(getIdentity)
+      const identity = (yield call(getIdentity)) as AuthIdentity
 
       yield call(deployStoreEntity, client, identity, store)
 

@@ -13,13 +13,13 @@ export function* browseSaga() {
 function* handleBulkPickSuccess(action: BulkPickUnpickSuccessAction) {
   const { unpickedFrom } = action.payload
 
-  const currentPage: number = yield select(getPageNumber)
-  const isOwnerUnpickingFromListInView: ReturnType<typeof isOwnerUnpickingFromCurrentList> = yield select(
+  const currentPage: number = (yield select(getPageNumber)) as ReturnType<typeof getPageNumber>
+  const isOwnerUnpickingFromListInView: ReturnType<typeof isOwnerUnpickingFromCurrentList> = (yield select(
     isOwnerUnpickingFromCurrentList,
     unpickedFrom
-  )
-  const favoritedAssets: Item[] = yield select(getItemsPickedByUserOrCreator)
-  const totalFavoritedAssets: number = yield select(getCount)
+  )) as ReturnType<typeof isOwnerUnpickingFromCurrentList>
+  const favoritedAssets: Item[] = (yield select(getItemsPickedByUserOrCreator)) as ReturnType<typeof getItemsPickedByUserOrCreator>
+  const totalFavoritedAssets: number = ((yield select(getCount)) as ReturnType<typeof getCount>) ?? 0
 
   if (favoritedAssets.length < totalFavoritedAssets && isOwnerUnpickingFromListInView) {
     yield put(

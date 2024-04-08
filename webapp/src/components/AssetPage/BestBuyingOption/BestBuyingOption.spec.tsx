@@ -1,5 +1,6 @@
 import { createRef, RefObject } from 'react'
 import { Bid, ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity } from '@dcl/schemas'
+import * as containersModule from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import * as bidAPI from '../../../modules/vendor/decentraland/bid/api'
@@ -11,7 +12,7 @@ jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('../../../modules/vendor/decentraland/order/api')
 jest.mock('../../../modules/vendor/decentraland/bid/api')
 jest.mock('decentraland-dapps/dist/containers', () => {
-  const module = jest.requireActual('decentraland-dapps/dist/containers')
+  const module = jest.requireActual<typeof containersModule>('decentraland-dapps/dist/containers')
   return {
     ...module,
     Profile: () => <div></div>

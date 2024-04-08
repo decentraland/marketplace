@@ -11,9 +11,9 @@ class CollectionAPI extends BaseAPI {
   }
 
   fetchOne = async (collectionUrn: string): Promise<Collection> => {
-    const { data }: CollectionResponse = await this.request('get', '/collections', {
+    const { data } = (await this.request('get', '/collections', {
       urn: collectionUrn
-    })
+    })) as CollectionResponse
 
     if (data.length === 0) {
       throw new Error('Not found')

@@ -1,5 +1,6 @@
 import { waitFor } from '@testing-library/react'
 import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import * as containersModule from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { OwnersResponse } from '../../../modules/vendor/decentraland'
 import * as nftAPI from '../../../modules/vendor/decentraland/nft/api'
@@ -10,7 +11,7 @@ const ownerIdMock = '0x92712b730b9a474f99a47bb8b1750190d5959a2b'
 
 jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('decentraland-dapps/dist/containers', () => {
-  const module = jest.requireActual('decentraland-dapps/dist/containers')
+  const module = jest.requireActual<typeof containersModule>('decentraland-dapps/dist/containers')
   return {
     ...module,
     Profile: () => <div>{ownerIdMock}</div>

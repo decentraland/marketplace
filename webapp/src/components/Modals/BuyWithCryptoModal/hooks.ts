@@ -66,7 +66,7 @@ export const useTokenBalance = (selectedToken: Token, selectedChain: ChainId, ad
               ['function balanceOf(address owner) view returns (uint256)'],
               provider
             )
-            const balance: BigNumber = await tokenContract.balanceOf(address)
+            const balance = (await tokenContract.balanceOf(address)) as BigNumber
 
             if (!cancel) {
               setSelectedTokenBalance(balance)

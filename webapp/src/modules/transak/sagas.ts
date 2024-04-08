@@ -36,9 +36,10 @@ function* handleOpenTransak(action: OpenTransakAction) {
     widgetWidth: isMobile() ? undefined : '450px' // To avoid fixing the width of the widget in mobile
   }
 
-  const address: string = yield select(getAddress)
+  const address: string | undefined = (yield select(getAddress)) as ReturnType<typeof getAddress>
 
   yield put(closeAllModals())
-
-  new Transak(transakConfig, customizationOptions).openWidget(address, Network.MATIC)
+  if (address) {
+    new Transak(transakConfig, customizationOptions).openWidget(address, Network.MATIC)
+  }
 }

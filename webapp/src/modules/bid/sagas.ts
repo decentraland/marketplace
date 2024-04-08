@@ -1,15 +1,14 @@
-import { takeEvery, put, select, call } from 'redux-saga/effects'
-import { Bid, RentalListing, RentalStatus } from '@dcl/schemas'
+import { takeEvery, put, select, call, all } from 'redux-saga/effects'
+import { Bid, RentalStatus } from '@dcl/schemas'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { getContract } from '../contract/selectors'
 import { getCurrentNFT } from '../nft/selectors'
-import { NFT } from '../nft/types'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
 import { VendorName } from '../vendor/types'
-import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
 import {
   PLACE_BID_REQUEST,
@@ -47,10 +46,19 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
   const { nft, price, expiresAt, fingerprint } = action.payload
   try {
     const { bidService } = VendorFactory.build(nft.vendor)
+    const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
 
-    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(() => bidService!.place(wallet, nft, price, expiresAt, fingerprint))
-    yield put(placeBidSuccess(nft, price, expiresAt, nft.chainId, txHash, wallet!.address, fingerprint))
+    if (!wallet) {
+      throw new Error("Can't place a bid without a wallet")
+    }
+    if (!bidService) {
+      throw new Error("Couldn't find a valid bid service for vendor")
+    }
+
+    const txHash = (yield call([bidService, 'place'], wallet, nft, price, expiresAt, fingerprint)) as Awaited<
+      ReturnType<typeof bidService.place>
+    >
+    yield put(placeBidSuccess(nft, price, expiresAt, nft.chainId, txHash, wallet.address, fingerprint))
   } catch (error) {
     yield put(placeBidFailure(nft, price, expiresAt, isErrorWithMessage(error) ? error.message : t('global.unknown_error'), fingerprint))
   }
@@ -59,9 +67,9 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
 function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
   const { bid } = action.payload
   try {
-    const contract: ReturnType<typeof getContract> = yield select(getContract, {
+    const contract = (yield select(getContract, {
       address: bid.contractAddress
-    })
+    })) as ReturnType<typeof getContract>
     if (!contract || !contract.vendor) {
       throw new Error(
         contract
@@ -69,15 +77,18 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
           : `Couldn't find a valid vendor for contract ${bid.contractAddress}`
       )
     }
-    const vendor: Vendor<VendorName> = yield call([VendorFactory, 'build'], contract.vendor)
+    const vendor = (yield call([VendorFactory, 'build'], contract.vendor)) as ReturnType<typeof VendorFactory.build>
+    if (!vendor.bidService) {
+      throw new Error("Couldn't find a valid bid service for vendor")
+    }
 
-    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call([vendor.bidService!, 'accept'], wallet, bid)
+    const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+    const txHash = (yield call([vendor.bidService, 'accept'], wallet, bid)) as Awaited<ReturnType<typeof vendor.bidService.accept>>
     yield put(acceptBidtransactionSubmitted(bid, txHash))
-    const nft: NFT | null = yield select(getCurrentNFT)
+    const nft = (yield select(getCurrentNFT)) as ReturnType<typeof getCurrentNFT>
     if (nft?.openRentalId) {
       yield call(waitForTx, txHash)
-      const rental: RentalListing | null = yield select(getRentalById, nft.openRentalId)
+      const rental = (yield select(getRentalById, nft.openRentalId)) as ReturnType<typeof getRentalById>
       if (isRentalListingOpen(rental)) {
         yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
       }
@@ -92,16 +103,20 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
 function* handleCancelBidRequest(action: CancelBidRequestAction) {
   const { bid } = action.payload
   try {
-    const contract: ReturnType<typeof getContract> = yield select(getContract, {
+    const contract = (yield select(getContract, {
       address: bid.contractAddress
-    })
+    })) as ReturnType<typeof getContract>
+
     if (!contract || !contract.vendor) {
       throw new Error(`Couldn't find a valid vendor for contract ${contract?.address}`)
     }
     const { bidService } = VendorFactory.build(contract.vendor)
+    if (!bidService) {
+      throw new Error("Couldn't find a valid bid service for vendor")
+    }
 
-    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(() => bidService!.cancel(wallet, bid))
+    const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+    const txHash = (yield call([bidService, 'cancel'], wallet, bid)) as Awaited<ReturnType<typeof bidService.cancel>>
 
     yield put(cancelBidSuccess(bid, txHash))
   } catch (error) {
@@ -121,7 +136,10 @@ function* handleFetchBidsByAddressRequest(action: FetchBidsByAddressRequestActio
         continue
       }
 
-      const bids: [Bid[], Bid[]] = yield call(() => Promise.all([bidService.fetchBySeller(address), bidService.fetchByBidder(address)]))
+      const bids = (yield all([call([bidService, 'fetchBySeller'], address), call([bidService, 'fetchByBidder'], address)])) as [
+        Awaited<ReturnType<typeof bidService.fetchBySeller>>,
+        Awaited<ReturnType<typeof bidService.fetchByBidder>>
+      ]
       sellerBids = sellerBids.concat(bids[0])
       bidderBids = bidderBids.concat(bids[1])
     }
@@ -136,8 +154,11 @@ function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
   const { nft } = action.payload
   try {
     const { bidService } = VendorFactory.build(nft.vendor)
+    if (!bidService) {
+      throw new Error("Couldn't find a valid bid service for vendor")
+    }
 
-    const bids: Bid[] = yield call(() => bidService!.fetchByNFT(nft))
+    const bids = (yield call([bidService, 'fetchByNFT'], nft)) as Awaited<ReturnType<typeof bidService.fetchByNFT>>
 
     yield put(fetchBidsByNFTSuccess(nft, bids))
   } catch (error) {

@@ -14,7 +14,7 @@ export function* uiSaga() {
 }
 
 function* handleConnectWalletSuccess(_action: ConnectWalletSuccessAction) {
-  const location: ReturnType<typeof getLocation> = yield select(getLocation)
+  const location = (yield select(getLocation)) as ReturnType<typeof getLocation>
   const { pathname, search } = location
   if (pathname === locations.signIn()) {
     const redirectTo = new URLSearchParams(search).get('redirectTo')
@@ -54,7 +54,7 @@ function* handleSetWearablePreviewController(action: SetWearablePreviewControlle
     try {
       while (true) {
         try {
-          const event: PreviewEmoteEventType = yield take(emotesChannel)
+          const event = (yield take(emotesChannel)) as PreviewEmoteEventType
           switch (event) {
             case PreviewEmoteEventType.ANIMATION_PLAY:
               yield put(setEmotePlaying(true))
