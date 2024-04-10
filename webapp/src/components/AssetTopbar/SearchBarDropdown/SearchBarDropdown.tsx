@@ -128,7 +128,7 @@ export const SearchBarDropdown = ({
     let cancel = false
     if (searchTerm) {
       const searchUUID = uuidv5(searchTerm, UUID_NAMESPACE)
-      const anonId = getAnalytics()?.user()?.anonymousId() || ''
+      const anonId = getAnalytics()?.user()?.anonymousId?.() || ''
       if (currentSearchTab === SearchTab.EMOTES || currentSearchTab === SearchTab.WEARABLES) {
         setIsLoading(true)
         catalogAPI
