@@ -2,16 +2,12 @@ import { spawn, SpawnOptions } from 'child_process'
 
 enum Network {
   MAINNET = 'mainnet',
-  ROPSTEN = 'ropsten',
-  GOERLI = 'goerli',
   SEPOLIA = 'sepolia',
   TEMP = 'temp'
 }
 
 const graphByNetwork: Record<Network, string> = {
   [Network.MAINNET]: process.env.GRAPH_NAME || 'decentraland/marketplace',
-  [Network.ROPSTEN]: process.env.GRAPH_NAME || 'decentraland/marketplace-ropsten',
-  [Network.GOERLI]:  process.env.GRAPH_NAME || 'decentraland/marketplace-goerli',
   [Network.SEPOLIA]:  process.env.GRAPH_NAME || 'marketplace-sepolia',
   [Network.TEMP]:  process.env.GRAPH_NAME || 'decentraland/marketplace-temp'
 }
@@ -68,7 +64,7 @@ async function run(command: string, args: string[], options?: SpawnOptions) {
 // Args -------------------------------------------------------------
 
 function getNetwork() {
-  let network: Network
+  let network: Network | undefined
   for (let i = 0; i < process.argv.length; i++) {
     if (process.argv[i] === '--network') {
       network = process.argv[i + 1] as Network

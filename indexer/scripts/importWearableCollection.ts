@@ -8,7 +8,8 @@ enum RarityId {
   EPIC = 'epic',
   LENGENDARY = 'legendary',
   MYTHIC = 'mythic',
-  UNIQUE = 'unique'
+  UNIQUE = 'unique',
+  EXOTIC = 'exotic'
 }
 type Wearable = {
   id: string
