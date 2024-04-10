@@ -1,12 +1,14 @@
 import { Item, CatalogFilters } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
-import { NFT_SERVER_URL } from '../nft'
+import { MARKETPLACE_SERVER_URL } from '../marketplace/api'
 import { retryParams } from '../utils'
 
 export class CatalogAPI extends BaseClient {
-  async get(filters: CatalogFilters = {}): Promise<{ data: Item[] }> {
+  async get(filters: CatalogFilters = {}, headers?: Record<string, string>): Promise<{ data: Item[] }> {
     const queryParams = this.buildItemsQueryString(filters)
-    return this.fetch(`/v1/catalog?${queryParams}`)
+    return this.fetch(`/v1/catalog?${queryParams}`, {
+      headers
+    })
   }
 
   private buildItemsQueryString(filters: CatalogFilters): string {
@@ -145,7 +147,7 @@ export class CatalogAPI extends BaseClient {
   }
 }
 
-export const catalogAPI = new CatalogAPI(NFT_SERVER_URL, {
+export const catalogAPI = new CatalogAPI(MARKETPLACE_SERVER_URL, {
   retries: retryParams.attempts,
   retryDelay: retryParams.delay
 })
