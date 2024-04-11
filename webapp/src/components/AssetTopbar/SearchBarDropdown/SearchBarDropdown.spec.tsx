@@ -1,6 +1,7 @@
 import { Context as ResponsiveContext } from 'react-responsive'
 import { fireEvent, waitFor, within } from '@testing-library/react'
 import { BodyShape, NFTCategory, Network, Rarity, WearableCategory } from '@dcl/schemas'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Asset, AssetType } from '../../../modules/asset/types'
 import { getAssetUrl } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -20,6 +21,7 @@ import {
 import { LOCAL_STORAGE_RECENT_SEARCHES_KEY, SearchBarDropdown } from './SearchBarDropdown'
 import { SearchBarDropdownProps } from './SearchBarDropdown.types'
 
+jest.mock('decentraland-dapps/dist/modules/analytics/utils')
 jest.mock('decentraland-dapps/dist/containers/Profile', () => {
   return {
     __esModule: true,
@@ -28,6 +30,8 @@ jest.mock('decentraland-dapps/dist/containers/Profile', () => {
 })
 jest.mock('../../../modules/vendor/decentraland/catalog/api')
 jest.mock('../../../modules/vendor/decentraland/builder/api')
+
+const getAnalyticsMock = getAnalytics as jest.Mock
 
 const mockLocalStorage = () =>
   (() => {
@@ -139,6 +143,16 @@ function renderSearchDropBarDropdown(props: Partial<SearchBarDropdownProps> = {}
     </ResponsiveContext.Provider>
   )
 }
+
+beforeEach(() => {
+  getAnalyticsMock.mockReturnValue({
+    page: jest.fn(),
+    track: jest.fn(),
+    user: () => ({
+      anonymousId: () => 'anAnonymousId'
+    })
+  })
+})
 
 describe('SearchBarDropdown', () => {
   describe('when providing a search term', () => {

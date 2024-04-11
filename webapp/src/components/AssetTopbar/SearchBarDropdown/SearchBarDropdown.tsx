@@ -128,14 +128,21 @@ export const SearchBarDropdown = ({
     let cancel = false
     if (searchTerm) {
       const searchUUID = uuidv5(searchTerm, UUID_NAMESPACE)
+      const anonId = getAnalytics()?.user()?.anonymousId?.() || ''
       if (currentSearchTab === SearchTab.EMOTES || currentSearchTab === SearchTab.WEARABLES) {
         setIsLoading(true)
         catalogAPI
-          .get({
-            search: searchTerm,
-            category: category,
-            first: MAX_AMOUNT_OF_RESULTS
-          })
+          .get(
+            {
+              search: searchTerm,
+              category: category,
+              first: MAX_AMOUNT_OF_RESULTS
+            },
+            {
+              'x-search-uuid': searchUUID,
+              'x-anonymous-id': anonId
+            }
+          )
           .then(response => {
             if (!cancel) {
               setResults(response.data)
