@@ -115,7 +115,7 @@
     "prepare": "cd .. && husky webapp/.husky"
   },
   "engines": {
-    "node": "18"
+    "node": "20"
   },
   "homepage": "",
   "repository": {
