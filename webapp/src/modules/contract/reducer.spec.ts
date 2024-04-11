@@ -67,7 +67,7 @@ describe('when upsert contracts action is received', () => {
       const contract = {
         address: 'address',
         name: 'some name',
-        chainId: ChainId.MATIC_MUMBAI
+        chainId: ChainId.MATIC_AMOY
       } as Contract
 
       const newContract = {
@@ -93,7 +93,7 @@ describe('when upsert contracts action is received', () => {
     it('should insert it into the store', () => {
       const newContract = {
         address: 'address',
-        chainId: ChainId.MATIC_MUMBAI,
+        chainId: ChainId.MATIC_AMOY,
         name: 'some other name'
       } as Contract
 

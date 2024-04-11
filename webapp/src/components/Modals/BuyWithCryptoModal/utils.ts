@@ -156,8 +156,8 @@ export const DEFAULT_CHAINS = [
 
 export const TESTNET_DEFAULT_CHAINS = [
   {
-    chainId: ChainId.MATIC_MUMBAI.toString(),
-    networkName: 'Polygon Mumbai',
+    chainId: ChainId.MATIC_AMOY.toString(),
+    networkName: 'Polygon Amoy',
     nativeCurrency: {
       name: 'MATIC',
       symbol: 'MATIC',

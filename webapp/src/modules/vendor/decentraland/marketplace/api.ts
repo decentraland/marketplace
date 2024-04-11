@@ -12,7 +12,7 @@ export class MarketplaceAPI extends BaseAPI {
       [ChainId.ETHEREUM_MAINNET]: 'eth-mainnet',
       [ChainId.ETHEREUM_SEPOLIA]: 'eth-sepolia',
       [ChainId.MATIC_MAINNET]: 'matic-mainnet',
-      [ChainId.MATIC_MUMBAI]: 'matic-mumbai',
+      [ChainId.MATIC_AMOY]: 'matic-amoy',
       [ChainId.BSC_MAINNET]: 'bsc-mainnet',
       [ChainId.AVALANCHE_MAINNET]: 'avalanche-mainnet',
       [ChainId.OPTIMISM_MAINNET]: 'optimism-mainnet',

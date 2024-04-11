@@ -38,7 +38,7 @@ describe('when calling upsertContracts', () => {
     describe('and newContracts has a contract', () => {
       describe('and that contract has an upper cased address', () => {
         beforeEach(() => {
-          newContracts = [{ address: 'ADDRESS', chainId: ChainId.MATIC_MUMBAI } as Contract]
+          newContracts = [{ address: 'ADDRESS', chainId: ChainId.MATIC_AMOY } as Contract]
         })
 
         it('should return an array with the new contract with its address lower cased', () => {
@@ -58,7 +58,7 @@ describe('when calling upsertContracts', () => {
       storedContracts = [
         {
           address: 'address',
-          chainId: ChainId.MATIC_MUMBAI,
+          chainId: ChainId.MATIC_AMOY,
           name: 'name'
         } as Contract
       ]
@@ -79,7 +79,7 @@ describe('when calling upsertContracts', () => {
         newContracts = [
           {
             address: 'ADDRESS',
-            chainId: ChainId.MATIC_MUMBAI,
+            chainId: ChainId.MATIC_AMOY,
             name: 'name'
           } as Contract
         ]
@@ -95,7 +95,7 @@ describe('when calling upsertContracts', () => {
         newContracts = [
           {
             address: 'other address',
-            chainId: ChainId.MATIC_MUMBAI,
+            chainId: ChainId.MATIC_AMOY,
             name: 'name'
           } as Contract
         ]
@@ -127,7 +127,7 @@ describe('when calling upsertContracts', () => {
         newContracts = [
           {
             address: 'ADDRESS',
-            chainId: ChainId.MATIC_MUMBAI,
+            chainId: ChainId.MATIC_AMOY,
             name: 'different name'
           } as Contract
         ]
@@ -145,9 +145,9 @@ describe('when calling getContractKey', () => {
     expect(
       getContractKey({
         address: 'address',
-        chainId: ChainId.MATIC_MUMBAI
+        chainId: ChainId.MATIC_AMOY
       } as Contract)
-    ).toEqual('address-80001')
+    ).toEqual('address-80002')
   })
 })
 
@@ -156,9 +156,9 @@ describe('when calling getContractKeyFromNFT', () => {
     expect(
       getContractKeyFromNFT({
         contractAddress: 'address',
-        chainId: ChainId.MATIC_MUMBAI
+        chainId: ChainId.MATIC_AMOY
       } as NFT)
-    ).toEqual('address-80001')
+    ).toEqual('address-80002')
   })
 })
 
@@ -169,9 +169,9 @@ describe('when calling getAuthorizationKey', () => {
         address: 'address',
         authorizedAddress: 'authorizedAddress',
         contractAddress: 'contractAddress',
-        chainId: ChainId.MATIC_MUMBAI
+        chainId: ChainId.MATIC_AMOY
       } as Authorization)
-    ).toEqual('address-authorizedAddress-contractAddress-80001')
+    ).toEqual('address-authorizedAddress-contractAddress-80002')
   })
 })
 

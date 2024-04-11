@@ -117,7 +117,7 @@ describe('when handling the fetch NFTs request action', () => {
         {
           id: 'anID',
           contractAddress: 'aContractAddress',
-          chainId: ChainId.MATIC_MUMBAI
+          chainId: ChainId.MATIC_AMOY
         }
       ] as NFT[]
       const accounts = [{ address: 'someAddress' }] as Account[]

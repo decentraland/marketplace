@@ -19,7 +19,7 @@ const mapState = (state: RootState): MapStateProps => {
   const isLoadingTx = Boolean(transaction && transaction.status !== TransactionStatus.CONFIRMED)
   return {
     isLoading: isLoadingTx,
-    mintedTokenId: getTokenIdFromLogs(ChainId.MATIC_MUMBAI, transaction?.receipt?.logs),
+    mintedTokenId: getTokenIdFromLogs(ChainId.MATIC_AMOY, transaction?.receipt?.logs),
     profile: address ? getProfileOfAddress(state, address) : undefined
   }
 }
