@@ -69,7 +69,7 @@ describe('AssetCard', () => {
         } as Asset['data']['wearable']
       },
       network: Network.MATIC,
-      chainId: ChainId.MATIC_MUMBAI,
+      chainId: ChainId.MATIC_AMOY,
       firstListedAt: null
     }
   })

@@ -484,20 +484,20 @@ const localContracts = {
     },
     {
       name: ContractName.MANA,
-      address: getContract(CN.MANAToken, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.MANAToken, ChainId.MATIC_AMOY).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
-      chainId: ChainId.MATIC_MUMBAI
+      chainId: ChainId.MATIC_AMOY
     },
     {
       name: ContractName.MARKETPLACE,
-      address: getContract(CN.MarketplaceV2, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.MarketplaceV2, ChainId.MATIC_AMOY).address,
       label: 'MarketplaceV2',
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
-      chainId: ChainId.MATIC_MUMBAI
+      chainId: ChainId.MATIC_AMOY
     },
     {
       name: ContractName.LEGACY_MARKETPLACE,
@@ -506,23 +506,23 @@ const localContracts = {
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
-      chainId: ChainId.MATIC_MUMBAI
+      chainId: ChainId.MATIC_AMOY
     },
     {
       name: CN.CollectionStore,
-      address: getContract(CN.CollectionStore, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.CollectionStore, ChainId.MATIC_AMOY).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
-      chainId: ChainId.MATIC_MUMBAI
+      chainId: ChainId.MATIC_AMOY
     },
     {
       name: ContractName.BIDS,
-      address: getContract(CN.BidV2, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.BidV2, ChainId.MATIC_AMOY).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
-      chainId: ChainId.MATIC_MUMBAI
+      chainId: ChainId.MATIC_AMOY
     }
   ],
   [AppNetwork.GOERLI]: [

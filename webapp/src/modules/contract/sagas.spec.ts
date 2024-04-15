@@ -54,7 +54,7 @@ describe('when handling the fetch contracts request', () => {
       const marketplaceMatic: Contract = {
         address: 'marketplaceMaticAddress',
         category: null,
-        chainId: ChainId.MATIC_MUMBAI,
+        chainId: ChainId.MATIC_AMOY,
         name: contractNames.MARKETPLACE,
         network: Network.MATIC,
         vendor: VendorName.DECENTRALAND
@@ -81,7 +81,7 @@ describe('when handling the fetch contracts request', () => {
       const bidsMatic: Contract = {
         address: 'bidsEthereumAddress',
         category: null,
-        chainId: ChainId.MATIC_MUMBAI,
+        chainId: ChainId.MATIC_AMOY,
         name: contractNames.BIDS,
         network: Network.MATIC,
         vendor: VendorName.DECENTRALAND
@@ -99,7 +99,7 @@ describe('when handling the fetch contracts request', () => {
       const manaMatic: Contract = {
         address: 'manaMaticAddress',
         category: null,
-        chainId: ChainId.MATIC_MUMBAI,
+        chainId: ChainId.MATIC_AMOY,
         name: contractNames.MANA,
         network: Network.MATIC,
         vendor: VendorName.DECENTRALAND
@@ -108,7 +108,7 @@ describe('when handling the fetch contracts request', () => {
       const collectionStore: Contract = {
         address: 'collectionStoreAddress',
         category: null,
-        chainId: ChainId.MATIC_MUMBAI,
+        chainId: ChainId.MATIC_AMOY,
         name: contractNames.COLLECTION_STORE,
         network: Network.MATIC,
         vendor: VendorName.DECENTRALAND
@@ -221,7 +221,7 @@ describe('when handling the fetch contracts request', () => {
               authorizedAddress: marketplaceMatic.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
-              chainId: ChainId.MATIC_MUMBAI,
+              chainId: ChainId.MATIC_AMOY,
               type: AuthorizationType.ALLOWANCE
             },
             {
@@ -229,7 +229,7 @@ describe('when handling the fetch contracts request', () => {
               authorizedAddress: legacyMarketplace.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
-              chainId: ChainId.MATIC_MUMBAI,
+              chainId: ChainId.MATIC_AMOY,
               type: AuthorizationType.ALLOWANCE
             },
             {
@@ -245,7 +245,7 @@ describe('when handling the fetch contracts request', () => {
               authorizedAddress: bidsEthereum.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
-              chainId: ChainId.MATIC_MUMBAI,
+              chainId: ChainId.MATIC_AMOY,
               type: AuthorizationType.ALLOWANCE
             },
             {
@@ -253,7 +253,7 @@ describe('when handling the fetch contracts request', () => {
               authorizedAddress: collectionStore.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
-              chainId: ChainId.MATIC_MUMBAI,
+              chainId: ChainId.MATIC_AMOY,
               type: AuthorizationType.ALLOWANCE
             }
           ])
