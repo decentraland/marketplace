@@ -1,9 +1,10 @@
 import React, { useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { BodyShape, EmotePlayMode, NFTCategory, Network } from '@dcl/schemas'
+import { BodyShape, EmotePlayMode, NFTCategory, Network, Wearable } from '@dcl/schemas'
 import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Icon, Popup } from 'decentraland-ui'
 import { getRequiredPermissions } from '../../../modules/asset/selectors'
 import { AssetType } from '../../../modules/asset/types'
 import { RootState } from '../../../modules/reducer'
@@ -118,6 +119,19 @@ const ItemDetail = ({ item }: Props) => {
               )}
               {item.category === NFTCategory.WEARABLE && item.data.wearable!.isSmart && <SmartBadge assetType={AssetType.ITEM} />}
 
+              {item.category === NFTCategory.WEARABLE && (item.entity?.metadata as Wearable)?.data?.blockVrmExport && (
+                <Popup
+                  on="hover"
+                  content={t('global.block_vrm_tooltip')}
+                  position="top center"
+                  trigger={
+                    <span className={styles.vrmBadge}>
+                      <Icon name="ban" />
+                      {t('global.block_vrm')}
+                    </span>
+                  }
+                />
+              )}
               <CampaignBadge contract={item.contractAddress} />
             </div>
           </div>

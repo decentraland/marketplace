@@ -4,7 +4,7 @@ import { getLocation } from 'connected-react-router'
 import { ethers } from 'ethers'
 import { SagaIterator, Task } from 'redux-saga'
 import { call, cancel, cancelled, fork, race, select, take } from 'redux-saga/effects'
-import { Item } from '@dcl/schemas'
+import { Entity } from '@dcl/schemas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
@@ -25,6 +25,7 @@ import { isCatalogView } from '../routing/utils'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { ItemAPI } from '../vendor/decentraland/item/api'
+import { peerAPI } from '../vendor/decentraland/peer/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getWallet } from '../wallet/selectors'
 import { waitForWalletConnectionAndIdentityIfConnecting } from '../wallet/utils'
@@ -65,6 +66,7 @@ import {
   buyItemCrossChainFailure
 } from './actions'
 import { getData as getItems } from './selectors'
+import { Item } from './types'
 import { getItem } from './utils'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')
@@ -172,6 +174,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       yield call(waitForWalletConnectionAndIdentityIfConnecting)
       const item: Item = yield call([itemAPI, 'getOne'], contractAddress, tokenId)
+      const entity: Entity | null = yield call([peerAPI, 'fetchItemByUrn'], item.urn)
+      if (entity) {
+        item.entity = entity
+      }
       yield put(fetchItemSuccess(item))
       if (item.data?.wearable?.isSmart && item.urn) {
         yield put(fetchSmartWearableRequiredPermissionsRequest(item))

@@ -1,4 +1,4 @@
-import { Item } from '@dcl/schemas'
+import { Item } from '../../../modules/item/types'
 
 export enum SmartWearableRequiredPermission {
   MOVE_PLAYER = 'move_player',

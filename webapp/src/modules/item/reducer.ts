@@ -1,5 +1,4 @@
 import isEqual from 'lodash/isEqual'
-import { Item } from '@dcl/schemas'
 import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FETCH_FAVORITED_ITEMS_SUCCESS,
@@ -55,6 +54,7 @@ import {
   BuyItemCrossChainSuccessAction,
   BUY_ITEM_CROSS_CHAIN_FAILURE
 } from './actions'
+import { Item } from './types'
 
 export type ItemState = {
   data: Record<string, Item>

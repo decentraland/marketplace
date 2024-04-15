@@ -22,14 +22,14 @@ export const NotFound = () => (
 )
 
 const AssetProviderPage = (props: Props) => {
-  const { type, isConnecting, children, fullWidth = false } = props
+  const { type, isConnecting, children, fullWidth = false, withEntity } = props
   const rentalStatuses: RentalStatus[] | undefined = useMemo(
     () => (type === AssetType.NFT ? [RentalStatus.OPEN, RentalStatus.EXECUTED, RentalStatus.CANCELLED] : undefined),
     [type]
   )
 
   return (
-    <AssetProvider type={type} rentalStatus={rentalStatuses}>
+    <AssetProvider type={type} rentalStatus={rentalStatuses} withEntity={withEntity}>
       {(asset, order, rental, isAssetLoading) => {
         const isLoading = isConnecting || isAssetLoading
 

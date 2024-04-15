@@ -19,6 +19,7 @@ export type Props<T extends AssetType = AssetType> = {
   isLandOrEstate: boolean
   retry?: boolean
   error: string | null
+  withEntity?: boolean
   onFetchNFT: typeof fetchNFTRequest
   onFetchItem: typeof fetchItemRequest
   onClearErrors: () => void
@@ -40,5 +41,5 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<Props, 'onFetchNFT' | 'onFetchItem' | 'onClearErrors'>
 export type MapDispatch = Dispatch<FetchNFTRequestAction | FetchItemRequestAction | ClearNFTErrorsAction | ClearItemErrorsAction>
-export type OwnProps<T extends AssetType = AssetType> = Pick<Props<T>, 'type' | 'children' | 'rentalStatus' | 'retry'> &
+export type OwnProps<T extends AssetType = AssetType> = Pick<Props<T>, 'type' | 'children' | 'rentalStatus' | 'retry' | 'withEntity'> &
   Partial<Pick<Props<T>, 'contractAddress' | 'tokenId'>>

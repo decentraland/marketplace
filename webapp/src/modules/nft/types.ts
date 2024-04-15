@@ -1,4 +1,4 @@
-import { NFT as BaseNFT, NFTCategory } from '@dcl/schemas'
+import { NFT as BaseNFT, Entity, NFTCategory } from '@dcl/schemas'
 import { SortDirection } from '../routing/types'
 import { View } from '../ui/types'
 import { NFTData as DecentralandData } from '../vendor/decentraland/nft/types'
@@ -22,6 +22,7 @@ export type NFT<V extends VendorName = VendorName.DECENTRALAND> = Omit<BaseNFT, 
   category: NFTCategory | 'art'
   vendor: VendorName
   data: Data<V>
+  entity?: Entity
 }
 
 export type NFTsFetchParams = {
