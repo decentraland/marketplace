@@ -63,13 +63,19 @@ export const AssetTopbar = ({
     [category, onBrowse, search, section, shouldRenderSearchDropdown]
   )
   const [searchValue, setSearchValue] = useState(search)
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const handleDebouncedChange = useCallback(
     (text: string) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+
       setSearchValue(text)
-      const timeoutId = setTimeout(() => {
+
+      timeoutRef.current = setTimeout(() => {
         handleInputChange(text)
       }, 500)
-      return () => clearTimeout(timeoutId)
     },
     [handleInputChange]
   )
