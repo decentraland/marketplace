@@ -2,7 +2,7 @@ import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
-import { ChainId, NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import { ChainId, Entity, EntityType, NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet'
@@ -19,6 +19,7 @@ import { View } from '../ui/types'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import { Vendor, VendorFactory, VendorName } from '../vendor'
 import { MAX_QUERY_SIZE } from '../vendor/api'
+import { PeerAPI } from '../vendor/decentraland/peer/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -44,6 +45,15 @@ const API_OPTS = {
   retries: retryParams.attempts,
   retryDelay: retryParams.delay,
   identity: getIdentity
+}
+
+const entity: Entity = {
+  id: 'id',
+  content: [],
+  pointers: [],
+  timestamp: 123123,
+  type: EntityType.WEARABLE,
+  version: 'v1'
 }
 
 describe('when handling the fetch NFTs request action', () => {
@@ -247,7 +257,7 @@ describe('when handling the fetch NFT request action', () => {
         }
         const tokenId = 'aTokenId'
         const vendor = VendorFactory.build(VendorName.DECENTRALAND, API_OPTS)
-        const nft = { category: NFTCategory.WEARABLE } as NFT
+        const nft = { category: NFTCategory.WEARABLE, urn: 'urn' } as NFT
         const order = { id: 'anId' } as Order
         const rental = { id: 'aRentalId' } as RentalListing
 
@@ -262,9 +272,10 @@ describe('when handling the fetch NFT request action', () => {
                 rentalStatus: [RentalStatus.EXECUTED]
               }),
               Promise.resolve([nft, order, rental])
-            ]
+            ],
+            [matchers.call.fn(PeerAPI.prototype.fetchItemByUrn), entity]
           ])
-          .put(fetchNFTSuccess(nft, order, rental))
+          .put(fetchNFTSuccess({ ...nft, entity }, order, rental))
           .dispatch(
             fetchNFTRequest(contractAddress, tokenId, {
               rentalStatus: [RentalStatus.EXECUTED]
@@ -302,9 +313,10 @@ describe('when handling the fetch NFT request action', () => {
                 rentalStatus: [RentalStatus.EXECUTED]
               }),
               Promise.resolve([nft, order, rental])
-            ]
+            ],
+            [matchers.call.fn(PeerAPI.prototype.fetchItemByUrn), entity]
           ])
-          .put(fetchNFTSuccess(nft, order, rental))
+          .put(fetchNFTSuccess({ ...nft, entity }, order, rental))
           .put(fetchSmartWearableRequiredPermissionsRequest(nft))
           .dispatch(
             fetchNFTRequest(contractAddress, tokenId, {
