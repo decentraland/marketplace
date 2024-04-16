@@ -1,8 +1,7 @@
-import { CatalogFilters, CatalogSortBy, ItemSortBy } from '@dcl/schemas'
+import { CatalogFilters, CatalogSortBy, ItemSortBy, Item as BaseItem, Entity } from '@dcl/schemas'
 import { View } from '../ui/types'
 import { ItemFilters } from '../vendor/decentraland/item/types'
 import { Section } from '../vendor/routing/types'
-
 export type ItemBrowseOptions = {
   view?: View
   page?: number
@@ -11,4 +10,8 @@ export type ItemBrowseOptions = {
       sortBy?: ItemSortBy | CatalogSortBy
     }
   section?: Section
+}
+
+export type Item = BaseItem & {
+  entity?: Entity
 }

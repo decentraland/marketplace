@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { OrderSortBy } from '@dcl/schemas'
+import { OrderSortBy, Wearable } from '@dcl/schemas'
 import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Icon, Popup } from 'decentraland-ui'
 import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
@@ -74,6 +75,19 @@ const WearableDetail = ({ nft }: Props) => {
               <GenderBadge bodyShapes={wearable.bodyShapes} assetType={AssetType.NFT} section={Section.WEARABLES} />
               {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
               <CampaignBadge contract={nft.contractAddress} />
+              {(nft.entity?.metadata as Wearable)?.data?.blockVrmExport && (
+                <Popup
+                  on="hover"
+                  content={t('global.block_vrm_tooltip')}
+                  position="top center"
+                  trigger={
+                    <span className={styles.vrmBadge}>
+                      <Icon name="ban" />
+                      {t('global.block_vrm')}
+                    </span>
+                  }
+                />
+              )}
             </div>
           </div>
           <Description text={wearable.description} />

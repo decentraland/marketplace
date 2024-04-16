@@ -1,4 +1,4 @@
-import { Item } from '@dcl/schemas'
+import { Item } from '../item/types'
 import { NFT } from '../nft/types'
 
 export enum AssetType {

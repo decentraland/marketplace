@@ -2,7 +2,7 @@ import { getLocation } from 'connected-react-router'
 import { call, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { ChainId, Item, Network, Rarity } from '@dcl/schemas'
+import { ChainId, Entity, EntityType, Item, Network, Rarity } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
@@ -18,6 +18,7 @@ import { locations } from '../routing/locations'
 import { View } from '../ui/types'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { ItemAPI } from '../vendor/decentraland/item/api'
+import { PeerAPI } from '../vendor/decentraland/peer/api'
 import { getWallet } from '../wallet/selectors'
 import { waitForWalletConnectionAndIdentityIfConnecting } from '../wallet/utils'
 import {
@@ -90,6 +91,15 @@ const nftPurchase: NFTPurchase = {
     tradeType: TradeType.PRIMARY,
     cryptoAmount: 10
   }
+}
+
+const entity: Entity = {
+  id: 'id',
+  content: [],
+  pointers: [],
+  timestamp: 123123,
+  type: EntityType.WEARABLE,
+  version: 'v1'
 }
 
 const getIdentity = () => undefined
@@ -509,9 +519,10 @@ describe('when handling the fetch items request action', () => {
           return expectSaga(itemSaga, getIdentity)
             .provide([
               [matchers.call.fn(ItemAPI.prototype.getOne), item],
+              [matchers.call.fn(PeerAPI.prototype.fetchItemByUrn), entity],
               [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
             ])
-            .put(fetchItemSuccess(item))
+            .put(fetchItemSuccess({ ...item, entity }))
             .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
             .run({ silenceTimeout: true })
         })
@@ -536,9 +547,10 @@ describe('when handling the fetch items request action', () => {
           return expectSaga(itemSaga, getIdentity)
             .provide([
               [matchers.call.fn(ItemAPI.prototype.getOne), smartWearable],
+              [matchers.call.fn(PeerAPI.prototype.fetchItemByUrn), entity],
               [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
             ])
-            .put(fetchItemSuccess(smartWearable))
+            .put(fetchItemSuccess({ ...smartWearable, entity }))
             .put(fetchSmartWearableRequiredPermissionsRequest(smartWearable))
             .dispatch(fetchItemRequest(smartWearable.contractAddress, smartWearable.itemId))
             .run({ silenceTimeout: true })

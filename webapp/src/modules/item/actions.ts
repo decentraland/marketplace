@@ -1,5 +1,5 @@
 import { action } from 'typesafe-actions'
-import { ChainId, Item, ItemFilters, Order } from '@dcl/schemas'
+import { ChainId, ItemFilters, Order } from '@dcl/schemas'
 import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   buildCrossChainTransactionFromPayload,
@@ -9,7 +9,7 @@ import {
 import type { Route } from 'decentraland-transactions/crossChain'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'
-import { ItemBrowseOptions } from './types'
+import { ItemBrowseOptions, Item } from './types'
 
 // Fetch Items
 

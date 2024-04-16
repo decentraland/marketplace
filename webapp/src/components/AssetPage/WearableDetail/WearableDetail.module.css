@@ -46,6 +46,17 @@
   margin-bottom: 18px;
 }
 
+.WearableDetail .vrmBadge {
+  background: #FF743933;
+  color: #FF7439;
+  padding: 3px 6px;
+  height: 24px;
+  font-size: 13px;
+  display: flex;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
 @media (max-width: 768px) {
   .WearableDetail .wearableInformationContainer {
     gap: 16px;

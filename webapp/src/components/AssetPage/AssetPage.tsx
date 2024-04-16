@@ -26,7 +26,7 @@ const AssetPage = ({ type }: Props) => {
         <ErrorBoundary>
           <Section>
             <Column>
-              <AssetProviderPage type={type} fullWidth>
+              <AssetProviderPage type={type} fullWidth withEntity>
                 {(asset, order, rental) => (
                   <div className="asset-container">
                     {mapAsset<React.ReactNode>(

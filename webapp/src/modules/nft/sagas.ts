@@ -1,5 +1,5 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
-import { RentalStatus } from '@dcl/schemas'
+import { Entity, RentalStatus } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -19,6 +19,7 @@ import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { EXPIRED_LISTINGS_MODAL_KEY } from '../ui/utils'
 import { MAX_QUERY_SIZE } from '../vendor/api'
+import { peerAPI } from '../vendor/decentraland/peer/api'
 import { retryParams } from '../vendor/decentraland/utils'
 import { Contract } from '../vendor/services'
 import { VendorName } from '../vendor/types'
@@ -155,6 +156,13 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
       const [nft, order, rental] = (yield call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, options)) as AwaitFn<
         typeof vendor.nftService.fetchOne
       >
+
+      if (nft.urn) {
+        const entity: Entity | null = yield call([peerAPI, 'fetchItemByUrn'], nft.urn)
+        if (entity) {
+          nft.entity = entity
+        }
+      }
 
       yield put(fetchNFTSuccess(nft as NFT, order, rental))
       if (nft.data?.wearable?.isSmart && nft.urn) {

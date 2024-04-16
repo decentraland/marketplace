@@ -10,6 +10,7 @@ const AssetProvider = (props: Props) => {
     order,
     rental,
     isLoading,
+    withEntity,
     children,
     onFetchNFT,
     onFetchItem,
@@ -47,7 +48,7 @@ const AssetProvider = (props: Props) => {
   }, [contractAddress, tokenId])
 
   useEffect(() => {
-    if (contractAddress && tokenId && asset === null && !isLoading && !hasFetchedOnce && !isConnecting) {
+    if (contractAddress && tokenId && (asset === null || (!asset.entity && withEntity)) && !isLoading && !hasFetchedOnce && !isConnecting) {
       switch (type) {
         case AssetType.NFT:
           if (hasLoadedInitialFlags) {
@@ -71,6 +72,7 @@ const AssetProvider = (props: Props) => {
     hasFetchedOnce,
     tokenId,
     type,
+    withEntity,
     onFetchNFT,
     onFetchItem,
     rentalStatus,
