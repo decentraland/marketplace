@@ -67,6 +67,7 @@
   font-size: 13px;
   display: flex;
   border-radius: 5px;
+  text-transform: uppercase;
 }
 
 @media (max-width: 1000px) {

@@ -48,14 +48,7 @@ const AssetProvider = (props: Props) => {
   }, [contractAddress, tokenId])
 
   useEffect(() => {
-    if (
-      contractAddress &&
-      tokenId &&
-      (asset === null || (asset.entity === null && withEntity)) &&
-      !isLoading &&
-      !hasFetchedOnce &&
-      !isConnecting
-    ) {
+    if (contractAddress && tokenId && (asset === null || (!asset.entity && withEntity)) && !isLoading && !hasFetchedOnce && !isConnecting) {
       switch (type) {
         case AssetType.NFT:
           if (hasLoadedInitialFlags) {

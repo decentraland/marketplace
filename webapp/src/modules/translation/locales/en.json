@@ -73,7 +73,7 @@
     "action_required": "Action required",
     "finish": "Finish",
     "guest": "Guest",
-    "block_vrm": "VRM",
+    "block_vrm": "Export",
     "block_vrm_tooltip": "This Item doesn’t allow VRM export"
   },
   "search_dropdown": {
