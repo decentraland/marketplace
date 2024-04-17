@@ -5,6 +5,7 @@ import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthori
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
 import { ContractName } from 'decentraland-transactions'
+import { useFingerprint } from '../../../../modules/nft/hooks'
 import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
 import { getContractNames } from '../../../../modules/vendor'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
@@ -29,6 +30,8 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     metadata: { nft, order, slippage = 1 }
   } = props
 
+  const [fingerprint] = useFingerprint(nft)
+
   const onBuyNatively = useCallback(() => {
     const contractNames = getContractNames()
 
@@ -49,9 +52,9 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       targetContract: mana as Contract,
       authorizedContractLabel: marketplace.label || marketplace.name,
       requiredAllowanceInWei: order.price,
-      onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, undefined, !alreadyAuthorized) // undefined as fingerprint
+      onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, fingerprint, !alreadyAuthorized) // undefined as fingerprint
     })
-  }, [nft, order, getContract, onAuthorizedAction, onExecuteOrder])
+  }, [nft, order, fingerprint, getContract, onAuthorizedAction, onExecuteOrder])
 
   const onBuyWithCard = useCallback(() => {
     getAnalytics().track(events.CLICK_BUY_NFT_WITH_CARD)
@@ -64,8 +67,8 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     [order]
   )
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet),
-    [nft, order]
+    (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet, fingerprint),
+    [nft, order, fingerprint]
   )
 
   return (

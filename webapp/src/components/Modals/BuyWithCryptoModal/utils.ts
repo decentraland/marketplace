@@ -193,14 +193,22 @@ export const estimateMintNftGas = async (selectedChain: ChainId, wallet: Wallet,
   return c.estimateGas.buy([[asset.contractAddress, [asset.itemId], [asset.price], [wallet.address]]], { from: wallet.address })
 }
 
-export const estimateBuyNftGas = async (selectedChain: ChainId, wallet: Wallet, asset: NFT, order: Order): Promise<BigNumber> => {
+export const estimateBuyNftGas = async (
+  selectedChain: ChainId,
+  wallet: Wallet,
+  asset: NFT,
+  order: Order,
+  fingerprint?: string
+): Promise<BigNumber> => {
   const networkProvider = await getNetworkProvider(selectedChain)
   const provider = new ethers.providers.Web3Provider(networkProvider)
 
   const contractName = getContractName(order.marketplaceAddress)
   const contract = getContract(contractName, order.chainId)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
-  return c.estimateGas.executeOrder(asset.contractAddress, asset.tokenId, order.price, { from: wallet.address })
+  return fingerprint
+    ? c.estimateGas.safeExecuteOrder(asset.contractAddress, asset.tokenId, order.price, fingerprint, { from: wallet.address })
+    : c.estimateGas.executeOrder(asset.contractAddress, asset.tokenId, order.price, { from: wallet.address })
 }
 
 export const estimateNameMintingGas = async (name: string, selectedChain: ChainId, ownerAddress: string): Promise<BigNumber> => {

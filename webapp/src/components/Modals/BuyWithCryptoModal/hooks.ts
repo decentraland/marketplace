@@ -168,13 +168,17 @@ export const useBuyNftGasCost = (
   order: Order,
   selectedToken: Token,
   chainNativeToken: Token | undefined,
-  wallet: Wallet | null
+  wallet: Wallet | null,
+  fingerprint?: string
 ): GasCost => {
   const chainId = parseInt(selectedToken.chainId) as ChainId
 
   const estimateGas = useCallback(
-    () => (wallet ? estimateBuyNftGas(chainId, wallet, nft, order) : Promise.resolve(undefined)),
-    [chainId, wallet, order]
+    () =>
+      wallet && (!nft.data.estate || (!!nft.data.estate && !!fingerprint))
+        ? estimateBuyNftGas(chainId, wallet, nft, order, fingerprint)
+        : Promise.resolve(undefined),
+    [chainId, wallet, order, nft, fingerprint]
   )
   const shouldUseCrossChainProvider = useShouldUseCrossChainProvider(selectedToken, order.network)
 
