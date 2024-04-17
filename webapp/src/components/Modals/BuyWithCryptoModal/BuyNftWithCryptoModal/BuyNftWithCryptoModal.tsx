@@ -67,8 +67,8 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     [order]
   )
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet),
-    [nft, order]
+    (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet, fingerprint),
+    [nft, order, fingerprint]
   )
 
   return (

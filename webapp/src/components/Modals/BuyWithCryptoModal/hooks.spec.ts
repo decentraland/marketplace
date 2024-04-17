@@ -301,7 +301,8 @@ describe('when using the buy nft gas cost hook', () => {
 
   beforeEach(() => {
     nft = {
-      id: 'aNftId'
+      id: 'aNftId',
+      data: {}
     } as NFT
     order = {
       id: 'anOrderId',

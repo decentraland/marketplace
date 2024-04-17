@@ -7,7 +7,6 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import type { CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract } from 'decentraland-transactions'
-import { useFingerprint } from '../../../modules/nft/hooks'
 import { NFT } from '../../../modules/nft/types'
 import * as events from '../../../utils/events'
 import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas, formatPrice, getShouldUseMetaTx } from './utils'
@@ -169,11 +168,11 @@ export const useBuyNftGasCost = (
   order: Order,
   selectedToken: Token,
   chainNativeToken: Token | undefined,
-  wallet: Wallet | null
+  wallet: Wallet | null,
+  fingerprint?: string
 ): GasCost => {
   const chainId = parseInt(selectedToken.chainId) as ChainId
 
-  const [fingerprint] = useFingerprint(nft)
   const estimateGas = useCallback(
     () =>
       wallet && (!nft.data.estate || (!!nft.data.estate && !!fingerprint))
