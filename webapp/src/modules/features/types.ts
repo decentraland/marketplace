@@ -7,6 +7,5 @@ export enum FeatureName {
   SMART_WEARABLES_FTU = 'smart-wearables-ftu',
   MARKETPLACE_SERVER = 'marketplace-server',
   CHAIN_SELECTOR = 'chain-selector',
-  CROSS_CHAIN_LANDS = 'cross-chain-lands',
-  EXOTIC_RARITY = 'exotic-rarity'
+  CROSS_CHAIN_LANDS = 'cross-chain-lands'
 }
