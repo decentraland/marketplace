@@ -76,10 +76,3 @@ export const getIsLandCrossChainEnabled = (state: RootState) => {
   }
   return false
 }
-
-export const getIsExoticRarityEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.EXOTIC_RARITY)
-  }
-  return false
-}
