@@ -12,8 +12,8 @@ import { config } from '../../../config'
 import { DCLController__factory } from '../../../contracts/factories/DCLController__factory'
 import { Asset } from '../../../modules/asset/types'
 import { PRICE } from '../../../modules/ens/utils'
-import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland/marketplace/api'
 import * as events from '../../../utils/events'
+import { drawImage } from '../../AssetImage/EnsImage/utils'
 import { BuyWithCardButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons/BuyWithCardButton'
 import { BuyWithCryptoButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
 import { Props } from './ClaimNameFatFingerModal.types'
@@ -62,6 +62,13 @@ const ClaimNameFatFingerModal = ({
 
       const sc_input_data = factory.interface.encodeFunctionData('register', [ENSName, wallet.address])
 
+      // Generate the image that will be loaded by the Wert modal
+      const temporaryCanvas = document.createElement('canvas')
+      temporaryCanvas.width = 330
+      temporaryCanvas.height = 330
+      await drawImage(temporaryCanvas, ENSName, 330, 330)
+      const dataUrl = temporaryCanvas.toDataURL()
+
       const data = {
         address: wallet.address,
         commodity: isDev ? 'TTS' : 'MANA',
@@ -75,7 +82,7 @@ const ClaimNameFatFingerModal = ({
           item_info: {
             category: 'Decentraland NAME',
             author: 'Decentraland',
-            image_url: `${MARKETPLACE_SERVER_URL}/ens/generate?ens=${ENSName}&width=330&height=330`,
+            image_url: dataUrl,
             ENSName,
             seller: 'DCL Names'
           }

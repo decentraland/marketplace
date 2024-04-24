@@ -12,6 +12,9 @@ import { Props } from './ClaimNameFatFingerModal.types'
 
 jest.mock('../../../modules/vendor/decentraland/marketplace/api')
 jest.mock('../../../contracts/factories/DCLController__factory')
+jest.mock('../../AssetImage/EnsImage/utils', () => ({
+  drawImage: jest.fn()
+}))
 jest.mock(
   'decentraland-dapps/dist/lib/eth',
   () =>
