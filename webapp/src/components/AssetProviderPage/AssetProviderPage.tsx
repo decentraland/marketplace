@@ -16,7 +16,7 @@ const Loading = ({ fullWidth }: { fullWidth: boolean }) => (
 
 // Exporting to reuse in the BuyPage as a quick fix
 export const NotFound = () => (
-  <div className={styles.center}>
+  <div className={classNames(styles.center, styles.fullWidth)}>
     <p className="secondary-text">{t('global.not_found')}&hellip;</p>
   </div>
 )
