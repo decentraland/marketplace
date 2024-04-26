@@ -8,10 +8,9 @@ import { locations } from '../../../modules/routing/locations'
 import { BrowseOptions, Sections } from '../../../modules/routing/types'
 import { AssetImage } from '../../AssetImage'
 import { AssetProviderPage } from '../../AssetProviderPage'
-import { Footer } from '../../Footer'
 import { Column } from '../../Layout/Column'
 import { Row } from '../../Layout/Row'
-import { Navbar } from '../../Navbar'
+import { PageLayout } from '../../PageLayout'
 import { Props } from './StatusPage.types'
 import './StatusPage.css'
 
@@ -23,8 +22,7 @@ const StatusPage = ({ type, purchase }: Props) => {
   const { status } = purchase
 
   return (
-    <>
-      <Navbar />
+    <PageLayout>
       <Page className="StatusPage">
         <AssetProviderPage type={type}>
           {asset => {
@@ -65,8 +63,7 @@ const StatusPage = ({ type, purchase }: Props) => {
           }}
         </AssetProviderPage>
       </Page>
-      <Footer />
-    </>
+    </PageLayout>
   )
 }
 

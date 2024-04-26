@@ -2,8 +2,7 @@ import React from 'react'
 import { Page } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
 import { AssetProviderPage } from '../AssetProviderPage'
-import { Footer } from '../Footer'
-import { Navbar } from '../Navbar'
+import { PageLayout } from '../PageLayout'
 import { Wallet } from '../Wallet'
 import { SellModal } from './SellModal'
 import { Props } from './SellPage.types'
@@ -12,8 +11,7 @@ import './SellPage.css'
 const SellPage = (props: Props) => {
   const { isLoading, isCreatingOrder, onGoBack, getContract, onCreateOrder, onClearOrderErrors } = props
   return (
-    <>
-      <Navbar />
+    <PageLayout>
       <Page className="SellPage">
         <Wallet>
           {wallet => (
@@ -35,8 +33,7 @@ const SellPage = (props: Props) => {
           )}
         </Wallet>
       </Page>
-      <Footer />
-    </>
+    </PageLayout>
   )
 }
 

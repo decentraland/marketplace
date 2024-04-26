@@ -2,8 +2,7 @@ import React from 'react'
 import { Page } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
 import { AssetProviderPage } from '../AssetProviderPage'
-import { Footer } from '../Footer'
-import { Navbar } from '../Navbar'
+import { PageLayout } from '../PageLayout'
 import { Wallet } from '../Wallet'
 import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
@@ -11,8 +10,7 @@ import { Props } from './BidPage.types'
 const BidPage = (props: Props) => {
   const { onNavigate, onPlaceBid, isPlacingBid, onClearBidError, getContract } = props
   return (
-    <>
-      <Navbar />
+    <PageLayout>
       <Page className="BidPage">
         <Wallet>
           {wallet => (
@@ -33,8 +31,7 @@ const BidPage = (props: Props) => {
           )}
         </Wallet>
       </Page>
-      <Footer />
-    </>
+    </PageLayout>
   )
 }
 

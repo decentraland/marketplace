@@ -15,7 +15,6 @@ import { StatusPage } from '../BuyPage/StatusPage'
 import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
 import { CancelSalePage } from '../CancelSalePage'
 import { CollectionPage } from '../CollectionPage'
-import { Footer } from '../Footer'
 import { HomePage } from '../HomePage'
 import { LandsPage } from '../LandsPage'
 import { LegacyNFTPage } from '../LegacyNFTPage'
@@ -24,7 +23,7 @@ import { ListsPage } from '../ListsPage'
 import { ManageAssetPage } from '../ManageAssetPage'
 import { NamesPage } from '../NamesPage'
 import { ClaimNamePage } from '../NamesPage/ClaimNamePage'
-import { Navbar } from '../Navbar'
+import { PageLayout } from '../PageLayout'
 import { ProtectedRoute } from '../ProtectedRoute'
 import { SellPage } from '../SellPage'
 import { SettingsPage } from '../SettingsPage'
@@ -41,13 +40,11 @@ const Routes = ({ inMaintenance }: Props) => {
 
   if (inMaintenance) {
     return (
-      <>
-        <Navbar />
+      <PageLayout hideNavigation>
         <Page>
           <Center>🚧 {t('maintainance.notice')} 🚧</Center>
         </Page>
-        <Footer />
-      </>
+      </PageLayout>
     )
   }
 

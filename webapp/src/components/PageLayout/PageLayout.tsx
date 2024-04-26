@@ -6,11 +6,11 @@ import { Navigation } from '../Navigation'
 import { Props } from './PageLayout.types'
 import styles from './PageLayout.module.css'
 
-const PageLayout = ({ children, activeTab, className }: Props) => {
+const PageLayout = ({ children, activeTab, className, hideNavigation }: Props) => {
   return (
     <div className={classNames(styles.page, className)}>
       <Navbar className={styles.navbar} />
-      <Navigation activeTab={activeTab} />
+      {!hideNavigation && <Navigation activeTab={activeTab} />}
       <div className={styles.content}>{children}</div>
       <Footer className={styles.footer} />
     </div>

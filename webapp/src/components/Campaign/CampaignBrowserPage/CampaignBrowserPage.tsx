@@ -5,10 +5,8 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { VendorName } from '../../../modules/vendor/types'
 import { isVendor } from '../../../modules/vendor/utils'
 import { AssetBrowse } from '../../AssetBrowse'
-import { Footer } from '../../Footer'
-import { Navbar } from '../../Navbar'
-import { Navigation } from '../../Navigation'
 import { NavigationTab } from '../../Navigation/Navigation.types'
+import { PageLayout } from '../../PageLayout'
 import { CampaignBrowserBanner } from '../banners/CampaignBrowserBanner'
 import { CampaignBanner } from '../CampaignBanner'
 import { ADDITIONAL_CAMPAIGN_BROWSE_TAGS, CAMPAIGN_TAG } from '../config'
@@ -26,9 +24,7 @@ const CampaignBrowserPage = (props: Props) => {
   const activeTab = NavigationTab.CAMPAIGN_BROWSER
 
   return isCampaignBrowserEnabled ? (
-    <>
-      <Navbar />
-      <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
+    <PageLayout activeTab={activeTab}>
       {Object.values(contracts).length > 0 ? (
         <>
           <CampaignBanner>
@@ -48,8 +44,7 @@ const CampaignBrowserPage = (props: Props) => {
           <Loader size="big" active inline />
         </div>
       )}
-      <Footer isFullscreen={isFullscreen} />
-    </>
+    </PageLayout>
   ) : null
 }
 

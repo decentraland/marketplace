@@ -5,8 +5,7 @@ import { locations } from '../../modules/routing/locations'
 import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { VendorName } from '../../modules/vendor/types'
 import { VendorFactory } from '../../modules/vendor/VendorFactory'
-import { Footer } from '../Footer'
-import { Navbar } from '../Navbar'
+import { PageLayout } from '../PageLayout'
 import { Props } from './LegacyNFTPage.types'
 
 const LegacyNFTPage = (props: Props) => {
@@ -35,13 +34,11 @@ const LegacyNFTPage = (props: Props) => {
   }, [contractService, params, history, getContract])
 
   return (
-    <>
-      <Navbar />
+    <PageLayout>
       <Page className="LegacyNFTPage" isFullscreen>
         <Loader size="massive" active />
       </Page>
-      <Footer isFullscreen />
-    </>
+    </PageLayout>
   )
 }
 

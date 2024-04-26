@@ -5,11 +5,9 @@ import { Back, Column, Page, Row, Section, Header, Badge, Icon, Color, Button, L
 import { formatWeiMANA } from '../../lib/mana'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import CollectionProvider from '../CollectionProvider'
-import { Footer } from '../Footer'
 import { Mana } from '../Mana'
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
 import AssetCell from '../OnSaleOrRentList/AssetCell'
+import { PageLayout } from '../PageLayout'
 import TableContainer from '../Table/TableContainer'
 import { TableContent } from '../Table/TableContent'
 import { formatDataToTable } from './utils'
@@ -45,9 +43,7 @@ const CollectionPage = (props: Props) => {
   )
 
   return (
-    <div>
-      <Navbar />
-      <Navigation />
+    <PageLayout>
       <Page className={styles.page}>
         {contractAddress ? (
           <CollectionProvider contractAddress={contractAddress} withItems>
@@ -142,8 +138,7 @@ const CollectionPage = (props: Props) => {
           <div>{t('collection_page.no_collection')}</div>
         )}
       </Page>
-      <Footer />
-    </div>
+    </PageLayout>
   )
 }
 
