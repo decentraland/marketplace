@@ -23,16 +23,16 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => {
     <>
       <Menu>
         <Header sub>{t('account_sidebar.assets')}</Header>
+        <NFTSectionsMenuItems
+          sections={[WEARABLES, EMOTES, ENS, LAND]}
+          section={section as Section}
+          onSectionClick={section => onBrowse(decentraland, section)}
+        />
         <MenuItem
           key={COLLECTIONS}
           value={COLLECTIONS}
           currentValue={section}
           onClick={section => changeFilter('section', section, { clearOldFilters: true })}
-        />
-        <NFTSectionsMenuItems
-          sections={[LAND, WEARABLES, EMOTES, ENS]}
-          section={section as Section}
-          onSectionClick={section => onBrowse(decentraland, section)}
         />
       </Menu>
       <Menu>

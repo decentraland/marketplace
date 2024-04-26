@@ -40,7 +40,7 @@ export const locations = {
   },
   defaultCurrentAccount: function () {
     return this.currentAccount({
-      section: Section.COLLECTIONS
+      section: Section.WEARABLES
     })
   },
   lists: () => '/lists',

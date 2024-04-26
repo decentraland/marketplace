@@ -24,16 +24,6 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
       {sections.includes(Section.ALL) && (
         <MenuItem key={Section.ALL} value={Section.ALL} currentValue={section} onClick={handleOnSectionClick} />
       )}
-      {shouldRenderSection(Section.LAND, sections) && (
-        <>
-          <MenuItem key={Section.LAND} value={Section.LAND} currentValue={section} onClick={handleOnSectionClick} />
-          {isLandSection(section)
-            ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
-                <MenuItem key={menuSection} value={menuSection} currentValue={section} onClick={handleOnSectionClick} nestedLevel={1} />
-              ))
-            : null}
-        </>
-      )}
       {shouldRenderSection(Section.WEARABLES, sections) && (
         <>
           <MenuItem value={Section.WEARABLES} currentValue={section} onClick={handleOnSectionClick} />
@@ -134,6 +124,16 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
         </>
       )}
       {shouldRenderSection(Section.ENS, sections) && <MenuItem value={Section.ENS} currentValue={section} onClick={handleOnSectionClick} />}
+      {shouldRenderSection(Section.LAND, sections) && (
+        <>
+          <MenuItem key={Section.LAND} value={Section.LAND} currentValue={section} onClick={handleOnSectionClick} />
+          {isLandSection(section)
+            ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
+                <MenuItem key={menuSection} value={menuSection} currentValue={section} onClick={handleOnSectionClick} nestedLevel={1} />
+              ))
+            : null}
+        </>
+      )}
     </>
   )
 }
