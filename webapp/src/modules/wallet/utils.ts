@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import { race, select, take } from 'redux-saga/effects'
+import { delay, race, select, take } from 'redux-saga/effects'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import {
   CONNECT_WALLET_FAILURE,
@@ -13,6 +13,7 @@ import { config } from '../../config'
 import { GENERATE_IDENTITY_FAILURE, GENERATE_IDENTITY_SUCCESS } from '../identity/actions'
 
 export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
+const WAIT_FOR_WALLET_CONNECTION_TIMEOUT = 10000
 
 export function shortenAddress(address: string) {
   if (address) {
@@ -47,10 +48,12 @@ export function formatBalance(balance: number) {
 export function* waitForWalletConnectionAndIdentityIfConnecting() {
   const isConnectingToWallet = (yield select(isConnecting)) as ReturnType<typeof isConnecting>
   if (isConnectingToWallet) {
-    const { success } = (yield race({
+    const { success, timeout } = (yield race({
       success: take(CONNECT_WALLET_SUCCESS),
-      failure: take(CONNECT_WALLET_FAILURE)
-    })) as { success: ConnectWalletSuccessAction; failure: ConnectWalletFailureAction }
+      failure: take(CONNECT_WALLET_FAILURE),
+      timeout: delay(WAIT_FOR_WALLET_CONNECTION_TIMEOUT) // 10 seconds timeout
+    })) as { success: ConnectWalletSuccessAction; failure: ConnectWalletFailureAction; timeout: any }
+    console.log('timeout: ', timeout)
     if (success) {
       yield race({
         success: take(GENERATE_IDENTITY_SUCCESS),
