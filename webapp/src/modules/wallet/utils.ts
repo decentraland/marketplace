@@ -48,12 +48,11 @@ export function formatBalance(balance: number) {
 export function* waitForWalletConnectionAndIdentityIfConnecting() {
   const isConnectingToWallet = (yield select(isConnecting)) as ReturnType<typeof isConnecting>
   if (isConnectingToWallet) {
-    const { success, timeout } = (yield race({
+    const { success } = (yield race({
       success: take(CONNECT_WALLET_SUCCESS),
       failure: take(CONNECT_WALLET_FAILURE),
       timeout: delay(WAIT_FOR_WALLET_CONNECTION_TIMEOUT) // 10 seconds timeout
-    })) as { success: ConnectWalletSuccessAction; failure: ConnectWalletFailureAction; timeout: any }
-    console.log('timeout: ', timeout)
+    })) as { success: ConnectWalletSuccessAction; failure: ConnectWalletFailureAction }
     if (success) {
       yield race({
         success: take(GENERATE_IDENTITY_SUCCESS),
