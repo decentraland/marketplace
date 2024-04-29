@@ -13,7 +13,7 @@ import { config } from '../../config'
 import { GENERATE_IDENTITY_FAILURE, GENERATE_IDENTITY_SUCCESS } from '../identity/actions'
 
 export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
-const WAIT_FOR_WALLET_CONNECTION_TIMEOUT = 10000
+export const WAIT_FOR_WALLET_CONNECTION_TIMEOUT = 10000 // 10 seconds timeout
 
 export function shortenAddress(address: string) {
   if (address) {
@@ -51,7 +51,7 @@ export function* waitForWalletConnectionAndIdentityIfConnecting() {
     const { success } = (yield race({
       success: take(CONNECT_WALLET_SUCCESS),
       failure: take(CONNECT_WALLET_FAILURE),
-      timeout: delay(WAIT_FOR_WALLET_CONNECTION_TIMEOUT) // 10 seconds timeout
+      timeout: delay(WAIT_FOR_WALLET_CONNECTION_TIMEOUT)
     })) as { success: ConnectWalletSuccessAction; failure: ConnectWalletFailureAction }
     if (success) {
       yield race({
