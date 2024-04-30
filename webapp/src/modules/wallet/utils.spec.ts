@@ -64,9 +64,8 @@ describe('when waiting for the wallet to connect', () => {
       return expectSaga(waitForWalletConnectionAndIdentityIfConnecting)
         .provide([
           [select(isConnecting), true],
-          [delay(WAIT_FOR_WALLET_CONNECTION_TIMEOUT + 1), void 0]
+          [delay(WAIT_FOR_WALLET_CONNECTION_TIMEOUT), void 0]
         ])
-        .delay(WAIT_FOR_WALLET_CONNECTION_TIMEOUT + 1) // Simulate a delay longer than the timeout
         .run()
     })
   })
