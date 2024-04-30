@@ -1,4 +1,4 @@
-import { select } from 'redux-saga/effects'
+import { delay, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import {
   CONNECT_WALLET_FAILURE,
@@ -8,7 +8,7 @@ import {
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { formatBalance, waitForWalletConnectionAndIdentityIfConnecting } from './utils'
+import { WAIT_FOR_WALLET_CONNECTION_TIMEOUT, formatBalance, waitForWalletConnectionAndIdentityIfConnecting } from './utils'
 
 describe('when formatting the balance', () => {
   describe('and the number is 0', () => {
@@ -55,6 +55,17 @@ describe('when waiting for the wallet to connect', () => {
     it('should finish without waiting for the wallet to connect', () => {
       return expectSaga(waitForWalletConnectionAndIdentityIfConnecting)
         .provide([[select(isConnecting), false]])
+        .run()
+    })
+  })
+
+  describe('and the wallet connection times out', () => {
+    it('should finish waiting after the timeout', () => {
+      return expectSaga(waitForWalletConnectionAndIdentityIfConnecting)
+        .provide([
+          [select(isConnecting), true],
+          [delay(WAIT_FOR_WALLET_CONNECTION_TIMEOUT), void 0]
+        ])
         .run()
     })
   })
