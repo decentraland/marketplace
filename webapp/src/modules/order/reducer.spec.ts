@@ -145,7 +145,7 @@ describe('when reducing the successful action of fetching nfts', () => {
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the the loaded orders and the loading state cleared', () => {
+  it('should return a state with the loaded orders and the loading state cleared', () => {
     expect(orderReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
@@ -205,7 +205,7 @@ describe('when reducing the successful action of fetching an nft', () => {
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the the loaded orders plus the fetched order and the loading state cleared', () => {
+  it('should return a state with the loaded orders plus the fetched order and the loading state cleared', () => {
     expect(orderReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],

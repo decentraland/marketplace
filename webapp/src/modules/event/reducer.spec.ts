@@ -60,7 +60,7 @@ describe('when reducing the successful action of fetching an event addresses by 
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the the loaded events and the loading state cleared', () => {
+  it('should return a state with the loaded events and the loading state cleared', () => {
     expect(eventReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],

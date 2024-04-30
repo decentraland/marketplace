@@ -486,7 +486,7 @@ describe('when reducing the successful action of getting a list', () => {
       }
     })
 
-    it('should return an state with the the new list overwriting the old one and the loading state cleared', () => {
+    it('should return an state with the new list overwriting the old one and the loading state cleared', () => {
       expect(favoritesReducer(initialState, successAction)).toEqual({
         ...INITIAL_STATE,
         loading: [],
@@ -501,7 +501,7 @@ describe('when reducing the successful action of getting a list', () => {
   })
 
   describe("and the list doesn't exist in the state", () => {
-    it('should return a state with the the new list and the loading state cleared', () => {
+    it('should return a state with the new list and the loading state cleared', () => {
       expect(favoritesReducer(initialState, successAction)).toEqual({
         ...INITIAL_STATE,
         loading: [],
@@ -515,7 +515,7 @@ describe('when reducing the successful action of getting a list', () => {
     })
   })
 
-  it('should return a state with the the new list and the loading state cleared', () => {
+  it('should return a state with the new list and the loading state cleared', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
@@ -576,7 +576,7 @@ describe('when reducing the successful action of updating a list', () => {
     }
   })
 
-  it('should return a state with the the updated list and the loading state cleared', () => {
+  it('should return a state with the updated list and the loading state cleared', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
@@ -621,7 +621,7 @@ describe('when reducing the successful action of creating a list', () => {
     }
   })
 
-  it('should return a state with the the updated list and the loading state cleared', () => {
+  it('should return a state with the updated list and the loading state cleared', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
@@ -659,7 +659,7 @@ describe('when reducing the clear action of creating a list', () => {
     }
   })
 
-  it('should return a state with the the updated list and the loading state cleared', () => {
+  it('should return a state with the updated list and the loading state cleared', () => {
     expect(favoritesReducer(initialState, clearAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],

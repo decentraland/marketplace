@@ -122,7 +122,7 @@ describe.each([
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the the loaded items with the fetched item and the loading state cleared', () => {
+  it('should return a state with the loaded items with the fetched item and the loading state cleared', () => {
     expect(assetReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
