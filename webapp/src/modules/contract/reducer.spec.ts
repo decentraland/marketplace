@@ -112,7 +112,7 @@ describe('when upsert contracts action is received', () => {
   })
 })
 
-describe('when the reset of the the has fetched flag is received', () => {
+describe('when the reset of the has fetched flag is received', () => {
   let hasFetched: boolean
 
   describe('when has fetched was true', () => {
