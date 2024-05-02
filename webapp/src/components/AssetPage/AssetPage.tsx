@@ -3,9 +3,7 @@ import { Item } from '@dcl/schemas'
 import { Page, Section, Column } from 'decentraland-ui'
 import { mapAsset } from '../../modules/asset/utils'
 import { AssetProviderPage } from '../AssetProviderPage'
-import { Footer } from '../Footer'
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
+import { PageLayout } from '../PageLayout'
 import { EmoteDetail } from './EmoteDetail'
 import { ENSDetail } from './ENSDetail'
 import { ErrorBoundary } from './ErrorBoundary'
@@ -19,9 +17,7 @@ import './AssetPage.css'
 const AssetPage = ({ type }: Props) => {
   const renderItemDetail = useCallback((item: Item) => <ItemDetail item={item} />, [])
   return (
-    <>
-      <Navbar />
-      <Navigation />
+    <PageLayout>
       <Page className="AssetPage">
         <ErrorBoundary>
           <Section>
@@ -51,8 +47,7 @@ const AssetPage = ({ type }: Props) => {
           </Section>
         </ErrorBoundary>
       </Page>
-      <Footer />
-    </>
+    </PageLayout>
   )
 }
 

@@ -6,10 +6,8 @@ import { isVendor } from '../../modules/vendor/utils'
 import { AssetBrowse } from '../AssetBrowse'
 import { CampaignCollectiblesBanner } from '../Campaign/banners/CampaignCollectiblesBanner'
 import { CampaignBanner } from '../Campaign/CampaignBanner'
-import { Footer } from '../Footer'
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
+import { PageLayout } from '../PageLayout'
 import { Props } from './BrowsePage.types'
 
 const BrowsePage = (props: Props) => {
@@ -19,9 +17,7 @@ const BrowsePage = (props: Props) => {
   const activeTab = NavigationTab.COLLECTIBLES
 
   return (
-    <>
-      <Navbar />
-      <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
+    <PageLayout activeTab={activeTab}>
       {isCampaignCollectiblesBannerEnabled ? (
         <CampaignBanner>
           <CampaignCollectiblesBanner />
@@ -35,8 +31,7 @@ const BrowsePage = (props: Props) => {
         sections={[Section.WEARABLES, Section.EMOTES]}
         contracts={contracts}
       />
-      <Footer isFullscreen={isFullscreen} />
-    </>
+    </PageLayout>
   )
 }
 

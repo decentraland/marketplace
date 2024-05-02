@@ -13,12 +13,10 @@ import { AssetStatusFilter } from '../../utils/filters'
 import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
 import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
 import { CampaignBanner } from '../Campaign/CampaignBanner'
-import { Footer } from '../Footer'
 import { SmartWearablesLaunchModal } from '../Modals/FTU/SmartWearablesLaunchModal'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
+import { PageLayout } from '../PageLayout'
 import { RankingsTable } from '../RankingsTable'
 import { RecentlySoldTable } from '../RecentlySoldTable'
 import { Slideshow } from './Slideshow'
@@ -196,9 +194,7 @@ const HomePage = (props: Props) => {
   const secondViewsSection = homepageWithoutLatestSales as HomepageView[]
 
   return (
-    <>
-      <Navbar />
-      <Navigation activeTab={NavigationTab.OVERVIEW} />
+    <PageLayout activeTab={NavigationTab.OVERVIEW}>
       <ListsLaunchModal />
       <SmartWearablesLaunchModal />
       {isCampaignHomepageBannerEnabled ? (
@@ -213,9 +209,8 @@ const HomePage = (props: Props) => {
         {secondViewsSection.map(renderSlideshow)}
         <RecentlySoldTable />
       </Page>
-      <Footer />
       <BackToTopButton />
-    </>
+    </PageLayout>
   )
 }
 

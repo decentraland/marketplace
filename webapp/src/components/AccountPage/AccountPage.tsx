@@ -6,15 +6,13 @@ import { Page, Loader, Center } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { View } from '../../modules/ui/types'
 import { AssetBrowse } from '../AssetBrowse'
-import { Footer } from '../Footer'
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
+import { PageLayout } from '../PageLayout'
 import AccountBanner from './AccountBanner'
 import { Props } from './AccountPage.types'
 import './AccountPage.css'
 
-const AccountPage = ({ addressInUrl, vendor, wallet, isConnecting, isFullscreen, viewAsGuest, onRedirect }: Props) => {
+const AccountPage = ({ addressInUrl, vendor, wallet, isConnecting, viewAsGuest, onRedirect }: Props) => {
   const isCurrentAccount = (!addressInUrl || wallet?.address === addressInUrl) && !viewAsGuest
   const { pathname, search } = useLocation()
 
@@ -27,9 +25,7 @@ const AccountPage = ({ addressInUrl, vendor, wallet, isConnecting, isFullscreen,
   }, [addressInUrl, isConnecting, wallet, onRedirect])
 
   return (
-    <div className="AccountPage">
-      <Navbar />
-      <Navigation activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined} />
+    <PageLayout className="AccountPage" activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined}>
       <AddressProvider input={addressInUrl || wallet?.address || ''}>
         {({ address, isLoading, error }) => (
           <>
@@ -52,8 +48,7 @@ const AccountPage = ({ addressInUrl, vendor, wallet, isConnecting, isFullscreen,
           </>
         )}
       </AddressProvider>
-      <Footer isFullscreen={isFullscreen} />
-    </div>
+    </PageLayout>
   )
 }
 

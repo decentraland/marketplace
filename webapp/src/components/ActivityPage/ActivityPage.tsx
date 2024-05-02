@@ -1,12 +1,10 @@
 import React, { useCallback, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Header, Button, Modal } from 'decentraland-ui'
-import { Footer } from '../Footer'
 import { Column } from '../Layout/Column'
 import { Row } from '../Layout/Row'
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
+import { PageLayout } from '../PageLayout'
 import { Transaction } from './Transaction'
 import { Props } from './ActivityPage.types'
 import './ActivityPage.css'
@@ -53,9 +51,7 @@ const ActivityPage = (props: Props) => {
   }
 
   return (
-    <>
-      <Navbar />
-      <Navigation activeTab={NavigationTab.ACTIVITY} />
+    <PageLayout activeTab={NavigationTab.ACTIVITY}>
       <Page className="ActivityPage">{content}</Page>
       <Modal size="tiny" open={showConfirmation}>
         <Modal.Header>{t('activity_page.clear_history_modal.title')}</Modal.Header>
@@ -67,8 +63,7 @@ const ActivityPage = (props: Props) => {
           </Button>
         </Modal.Actions>
       </Modal>
-      <Footer />
-    </>
+    </PageLayout>
   )
 }
 

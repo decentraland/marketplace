@@ -10,8 +10,7 @@ import { locations } from '../../modules/routing/locations'
 import { isOfEnumType } from '../../utils/enums'
 import { AssetImage } from '../AssetImage'
 import { AssetProvider } from '../AssetProvider'
-import { Footer } from '../Footer'
-import { Navbar } from '../Navbar'
+import { PageLayout } from '../PageLayout'
 import successAnimation from './successAnimation.json'
 import { Props } from './SuccessPage.types'
 import styles from './SuccessPage.module.css'
@@ -45,8 +44,7 @@ export function SuccessPage(props: Props) {
   // this is a workaround to show the NAME while the transaction is being mined or the tokenId getting retrieved.
   if (subdomain && (isLoading || !tokenId)) {
     return (
-      <div className={styles.pageContainer}>
-        <Navbar />
+      <PageLayout className={styles.pageContainer}>
         <div className={styles.container}>
           <Header className={styles.title}>{t('success_page.loading_state.subdomain.title')}</Header>
           <AssetImage
@@ -60,16 +58,14 @@ export function SuccessPage(props: Props) {
           </div>
           <SuccessPageLoadingStateDescription />
         </div>
-        <Footer className={styles.footer} />
-      </div>
+      </PageLayout>
     )
   }
 
   if (contractAddress && !tokenId && isLoading) {
     // in this case, we asume the tokenId is getting trieved and it's waiting for the tx to be mined
     return (
-      <div className={styles.pageContainer}>
-        <Navbar />
+      <PageLayout className={styles.pageContainer}>
         <div className={styles.container}>
           <Header className={styles.title}>{t('success_page.loading_state.item.title')}</Header>
 
@@ -79,14 +75,12 @@ export function SuccessPage(props: Props) {
           </div>
           <SuccessPageLoadingStateDescription />
         </div>
-        <Footer className={styles.footer} />
-      </div>
+      </PageLayout>
     )
   }
 
   return (
-    <div className={styles.pageContainer}>
-      <Navbar />
+    <PageLayout className={styles.pageContainer}>
       <div className={styles.container}>
         {assetType && contractAddress && tokenId ? (
           <AssetProvider retry type={assetType as AssetType} contractAddress={contractAddress} tokenId={tokenId}>
@@ -214,7 +208,6 @@ export function SuccessPage(props: Props) {
           </div>
         )}
       </div>
-      <Footer className={styles.footer} />
-    </div>
+    </PageLayout>
   )
 }

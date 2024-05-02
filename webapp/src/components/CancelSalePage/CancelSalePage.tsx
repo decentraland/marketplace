@@ -8,9 +8,8 @@ import { getAssetName } from '../../modules/asset/utils'
 import { locations } from '../../modules/routing/locations'
 import { AssetAction } from '../AssetAction'
 import { AssetProviderPage } from '../AssetProviderPage'
-import { Footer } from '../Footer'
 import { Mana } from '../Mana'
-import { Navbar } from '../Navbar'
+import { PageLayout } from '../PageLayout'
 import { Wallet } from '../Wallet'
 import { Props } from './CancelSalePage.types'
 import './CancelSalePage.css'
@@ -19,8 +18,7 @@ const CancelSalePage = (props: Props) => {
   const { isLoading, onNavigate, onCancelOrder } = props
 
   return (
-    <>
-      <Navbar />
+    <PageLayout>
       <Page className="CancelSalePage">
         <Wallet>
           {wallet => (
@@ -73,8 +71,7 @@ const CancelSalePage = (props: Props) => {
           )}
         </Wallet>
       </Page>
-      <Footer />
-    </>
+    </PageLayout>
   )
 }
 

@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Back, Button, Footer, Loader, Mobile, Narrow, NotMobile, Page, Section } from 'decentraland-ui'
+import { Back, Button, Loader, Mobile, Narrow, NotMobile, Page, Section } from 'decentraland-ui'
 import { builderUrl } from '../../lib/environment'
 import { AssetType } from '../../modules/asset/types'
 import { isOwnedBy } from '../../modules/asset/utils'
@@ -14,9 +14,8 @@ import { AssetProvider } from '../AssetProvider'
 import { DetailsBox } from '../DetailsBox'
 import { LandLockedPopup } from '../LandLockedPopup'
 import { Column } from '../Layout/Column'
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
+import { PageLayout } from '../PageLayout'
 import { Highlights } from './Highlights'
 import { Map } from './Map'
 import { Rent } from './Rent'
@@ -54,9 +53,7 @@ export const ManageAssetPage = (props: Props) => {
   const rentalStatus = useMemo(() => [RentalStatus.EXECUTED, RentalStatus.OPEN, RentalStatus.CANCELLED], [])
 
   return (
-    <>
-      <Navbar />
-      <Navigation activeTab={NavigationTab.MY_STORE} />
+    <PageLayout activeTab={NavigationTab.MY_STORE}>
       <Page>
         <ErrorBoundary>
           <Section className={styles.main}>
@@ -178,7 +175,6 @@ export const ManageAssetPage = (props: Props) => {
           </Section>
         </ErrorBoundary>
       </Page>
-      <Footer />
-    </>
+    </PageLayout>
   )
 }

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Network, NFTCategory } from '@dcl/schemas'
-import { Footer } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -10,8 +9,7 @@ import copyText from '../../lib/copyText'
 import { useTimer } from '../../lib/timer'
 import { getContractNames } from '../../modules/vendor'
 import { shortenAddress } from '../../modules/wallet/utils'
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
+import { PageLayout } from '../PageLayout'
 import { Authorization } from './Authorization'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
@@ -117,9 +115,7 @@ const SettingsPage = (props: Props) => {
   })
 
   return (
-    <>
-      <Navbar />
-      <Navigation />
+    <PageLayout>
       <Page className="SettingsPage">
         {wallet ? (
           <Grid>
@@ -265,8 +261,7 @@ const SettingsPage = (props: Props) => {
           </Grid>
         ) : null}
       </Page>
-      <Footer />
-    </>
+    </PageLayout>
   )
 }
 
