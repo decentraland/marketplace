@@ -9,6 +9,7 @@ import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import GenderBadge from '../../GenderBadge'
 import TableContainer from '../../Table/TableContainer'
+import { AssetUtility } from '../AssetUtility'
 import { BidsTable } from '../BidsTable'
 import { BuyNFTBox } from '../BuyNFTBox'
 import CategoryBadge from '../CategoryBadge'
@@ -21,6 +22,7 @@ import { RequiredPermissions } from '../RequiredPermissions'
 import SmartBadge from '../SmartBadge'
 import Title from '../Title'
 import { TransactionHistory } from '../TransactionHistory'
+import { UtilityBadge } from '../UtilityBadge'
 import { YourOffer } from '../YourOffer'
 import { Props } from './WearableDetail.types'
 import styles from './WearableDetail.module.css'
@@ -74,6 +76,7 @@ const WearableDetail = ({ nft }: Props) => {
               <CategoryBadge category={wearable.category} assetType={AssetType.NFT} />
               <GenderBadge bodyShapes={wearable.bodyShapes} assetType={AssetType.NFT} section={Section.WEARABLES} />
               {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
+              {nft.utility ? <UtilityBadge /> : null}
               <CampaignBadge contract={nft.contractAddress} />
               {(nft.entity?.metadata as Wearable)?.data?.blockVrmExport && (
                 <Popup
@@ -90,7 +93,16 @@ const WearableDetail = ({ nft }: Props) => {
               )}
             </div>
           </div>
-          <Description text={wearable.description} />
+          <div className={styles.attributesRow}>
+            <div className={styles.attributesColumn}>
+              <Description text={wearable.description} />
+            </div>
+            {nft.utility ? (
+              <div className={styles.attributesColumn}>
+                <AssetUtility utility={nft.utility} />
+              </div>
+            ) : null}
+          </div>
           {wearable.isSmart ? <RequiredPermissions asset={nft} /> : null}
           <div className={styles.wearableOwnerAndCollectionContainer}>
             <Owner asset={nft} />

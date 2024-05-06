@@ -48,6 +48,18 @@
   gap: 30px;
 }
 
+.ItemDetail .attributesRow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.ItemDetail .attributesColumn {
+  flex-basis: 100%;
+}
+
 .ItemDetail .basicRow {
   display: flex;
   flex-direction: row;
@@ -60,8 +72,8 @@
 }
 
 .ItemDetail .vrmBadge {
-  background: #FF743933;
-  color: #FF7439;
+  background: #ff743933;
+  color: #ff7439;
   padding: 3px 6px;
   height: 24px;
   font-size: 13px;
@@ -88,6 +100,11 @@
 }
 
 @media (max-width: 768px) {
+  .ItemDetail .attributesRow {
+    display: flex;
+    flex-direction: column;
+  }
+
   .ItemDetail .assetImageContainer {
     height: 400px;
   }
@@ -105,7 +122,7 @@
   .ItemDetail .basicRow :global(.dcl.stats) {
     width: 100%;
   }
-  
+
   .ItemDetail .basicRow {
     flex-direction: column;
   }

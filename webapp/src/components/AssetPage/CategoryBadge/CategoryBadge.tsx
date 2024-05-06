@@ -1,10 +1,10 @@
 import React, { useMemo, useEffect } from 'react'
-import { EmoteCategory } from '@dcl/schemas'
+import { EmoteCategory, WearableCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { getSearchSection } from '../../../modules/routing/search'
 import { BrowseOptions } from '../../../modules/routing/types'
-import IconBadge from '../IconBadge'
+import IconBadge from '../LinkedIconBadge'
 import { Props } from './CategoryBadge.types'
 
 const CategoryBadge = ({ category, assetType }: Props) => {
@@ -27,7 +27,13 @@ const CategoryBadge = ({ category, assetType }: Props) => {
     }
   }, [section, category, isEmote])
 
-  return <IconBadge icon={isEmote ? undefined : category} text={t(`${isEmote ? 'emote' : 'wearable'}.category.${category}`)} href={href} />
+  return (
+    <IconBadge
+      icon={isEmote ? undefined : (category as WearableCategory)}
+      text={t(`${isEmote ? 'emote' : 'wearable'}.category.${category}`)}
+      href={href}
+    />
+  )
 }
 
 export default React.memo(CategoryBadge)

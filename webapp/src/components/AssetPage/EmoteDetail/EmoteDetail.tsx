@@ -8,16 +8,18 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import TableContainer from '../../Table/TableContainer'
+import { AssetUtility } from '../AssetUtility'
 import { BidsTable } from '../BidsTable'
 import { BuyNFTBox } from '../BuyNFTBox'
 import Collection from '../Collection'
 import { Description } from '../Description'
-import IconBadge from '../IconBadge'
+import IconBadge from '../LinkedIconBadge'
 import { ListingsTable } from '../ListingsTable'
 import OnBack from '../OnBack'
 import { Owner } from '../Owner'
 import Title from '../Title'
 import { TransactionHistory } from '../TransactionHistory'
+import { UtilityBadge } from '../UtilityBadge'
 import { YourOffer } from '../YourOffer'
 import { Props } from './EmoteDetail.types'
 import styles from './EmoteDetail.module.css'
@@ -96,12 +98,22 @@ const EmoteDetail = ({ nft }: Props) => {
                 text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
                 href={emoteBadgeHref}
               />
+              {nft.utility ? <UtilityBadge /> : null}
               <CampaignBadge contract={nft.contractAddress} />
               {emote.hasSound && <IconBadge icon="sound" text={t('emote.sound')} href={emoteSoundHref} />}
               {emote.hasGeometry && <IconBadge icon="props" text={t('emote.props')} href={emoteGeometryHref} />}
             </div>
           </div>
-          <Description text={emote.description} />
+          <div className={styles.attributesRow}>
+            <div className={styles.attributesColumn}>
+              <Description text={emote.description} />
+            </div>
+            {nft.utility ? (
+              <div className={styles.attributesColumn}>
+                <AssetUtility utility={nft.utility} />
+              </div>
+            ) : null}
+          </div>
           <div className={styles.emoteOwnerAndCollectionContainer}>
             <Owner asset={nft} />
             <Collection asset={nft} />
