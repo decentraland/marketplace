@@ -9,6 +9,7 @@ import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import GenderBadge from '../../GenderBadge'
 import TableContainer from '../../Table/TableContainer'
+import { AssetUtility } from '../AssetUtility'
 import { BidsTable } from '../BidsTable'
 import { BuyNFTBox } from '../BuyNFTBox'
 import CategoryBadge from '../CategoryBadge'
@@ -22,7 +23,6 @@ import SmartBadge from '../SmartBadge'
 import Title from '../Title'
 import { TransactionHistory } from '../TransactionHistory'
 import { UtilityBadge } from '../UtilityBadge'
-import { WearableUtility } from '../WearableUtility'
 import { YourOffer } from '../YourOffer'
 import { Props } from './WearableDetail.types'
 import styles from './WearableDetail.module.css'
@@ -99,7 +99,7 @@ const WearableDetail = ({ nft }: Props) => {
             </div>
             {nft.utility ? (
               <div className={styles.attributesColumn}>
-                <WearableUtility utility={nft.utility} />
+                <AssetUtility utility={nft.utility} />
               </div>
             ) : null}
           </div>

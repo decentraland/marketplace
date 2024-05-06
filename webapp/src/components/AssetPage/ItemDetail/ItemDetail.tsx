@@ -13,6 +13,7 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import GenderBadge from '../../GenderBadge'
+import { AssetUtility } from '../AssetUtility'
 import { BestBuyingOption } from '../BestBuyingOption'
 import CategoryBadge from '../CategoryBadge'
 import Collection from '../Collection'
@@ -26,7 +27,6 @@ import SmartBadge from '../SmartBadge'
 import Title from '../Title'
 import { TransactionHistory } from '../TransactionHistory'
 import { UtilityBadge } from '../UtilityBadge'
-import { WearableUtility } from '../WearableUtility'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
@@ -145,7 +145,7 @@ const ItemDetail = ({ item }: Props) => {
             </div>
             {item.utility ? (
               <div className={styles.attributesColumn}>
-                <WearableUtility utility={item.utility} />
+                <AssetUtility utility={item.utility} />
               </div>
             ) : null}
           </div>

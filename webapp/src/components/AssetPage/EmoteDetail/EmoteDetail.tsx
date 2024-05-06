@@ -8,6 +8,7 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import TableContainer from '../../Table/TableContainer'
+import { AssetUtility } from '../AssetUtility'
 import { BidsTable } from '../BidsTable'
 import { BuyNFTBox } from '../BuyNFTBox'
 import Collection from '../Collection'
@@ -19,7 +20,6 @@ import { Owner } from '../Owner'
 import Title from '../Title'
 import { TransactionHistory } from '../TransactionHistory'
 import { UtilityBadge } from '../UtilityBadge'
-import { WearableUtility } from '../WearableUtility'
 import { YourOffer } from '../YourOffer'
 import { Props } from './EmoteDetail.types'
 import styles from './EmoteDetail.module.css'
@@ -110,7 +110,7 @@ const EmoteDetail = ({ nft }: Props) => {
             </div>
             {nft.utility ? (
               <div className={styles.attributesColumn}>
-                <WearableUtility utility={nft.utility} />
+                <AssetUtility utility={nft.utility} />
               </div>
             ) : null}
           </div>
