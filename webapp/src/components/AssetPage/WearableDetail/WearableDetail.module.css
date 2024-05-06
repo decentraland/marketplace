@@ -47,8 +47,8 @@
 }
 
 .WearableDetail .vrmBadge {
-  background: #FF743933;
-  color: #FF7439;
+  background: #ff743933;
+  color: #ff7439;
   padding: 3px 6px;
   height: 24px;
   font-size: 13px;
@@ -57,7 +57,23 @@
   text-transform: uppercase;
 }
 
+.WearableDetail .attributesRow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.WearableDetail .attributesColumn {
+  flex-basis: 100%;
+}
+
 @media (max-width: 768px) {
+  .WearableDetail .attributesRow {
+    flex-direction: column;
+  }
+
   .WearableDetail .wearableInformationContainer {
     gap: 16px;
   }

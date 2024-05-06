@@ -72,7 +72,8 @@
     "finish": "Terminar",
     "guest": "Invitado",
     "block_vrm": "Exportar",
-    "block_vrm_tooltip": "Este artículo no permite la exportación de VRM"
+    "block_vrm_tooltip": "Este artículo no permite la exportación de VRM",
+    "utility": "Utilidad"
   },
   "search_dropdown": {
     "recent": "Reciente",

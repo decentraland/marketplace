@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { getSearchSection } from '../../../modules/routing/search'
 import { BrowseOptions } from '../../../modules/routing/types'
-import IconBadge from '../IconBadge'
+import IconBadge from '../LinkedIconBadge'
 import { Props } from './CategoryBadge.types'
 
 const CategoryBadge = ({ category, assetType }: Props) => {

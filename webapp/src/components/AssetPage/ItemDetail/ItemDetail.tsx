@@ -17,7 +17,7 @@ import { BestBuyingOption } from '../BestBuyingOption'
 import CategoryBadge from '../CategoryBadge'
 import Collection from '../Collection'
 import { Description } from '../Description'
-import IconBadge from '../IconBadge'
+import IconBadge from '../LinkedIconBadge'
 import ListingsTableContainer from '../ListingsTableContainer/ListingsTableContainer'
 import OnBack from '../OnBack'
 import { Owner } from '../Owner'
@@ -25,6 +25,8 @@ import { RequiredPermissions } from '../RequiredPermissions'
 import SmartBadge from '../SmartBadge'
 import Title from '../Title'
 import { TransactionHistory } from '../TransactionHistory'
+import { UtilityBadge } from '../UtilityBadge'
+import { WearableUtility } from '../WearableUtility'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
@@ -132,11 +134,21 @@ const ItemDetail = ({ item }: Props) => {
                   }
                 />
               )}
+              {item.utility && <UtilityBadge />}
               <CampaignBadge contract={item.contractAddress} />
             </div>
           </div>
 
-          <Description text={description} />
+          <div className={styles.attributesRow}>
+            <div className={styles.attributesColumn}>
+              <Description text={description} />
+            </div>
+            {item.utility ? (
+              <div className={styles.attributesColumn}>
+                <WearableUtility utility={item.utility} />
+              </div>
+            ) : null}
+          </div>
           <div
             className={
               item.available > 0 && item.isOnSale

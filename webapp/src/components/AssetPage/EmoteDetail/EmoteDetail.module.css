@@ -48,7 +48,23 @@
   color: var(--secondary-text);
 }
 
+.EmoteDetail .attributesRow {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.EmoteDetail .attributesColumn {
+  flex-basis: 100%;
+}
+
 @media (max-width: 768px) {
+  .EmoteDetail .attributesRow {
+    flex-direction: column;
+  }
+
   .EmoteDetail .wearableInformationContainer {
     flex-direction: column;
   }
