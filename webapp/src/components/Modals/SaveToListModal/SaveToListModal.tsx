@@ -8,7 +8,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Checkbox, Icon, Loader, Message, ModalNavigation } from 'decentraland-ui'
 import { isErrorWithMessage } from '../../../lib/error'
 import { CreateListParameters } from '../../../modules/favorites/types'
-import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL, ListOfLists } from '../../../modules/vendor/decentraland/favorites'
+import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland'
+import { FavoritesAPI, ListOfLists } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import * as events from '../../../utils/events'
 import { PrivateTag } from '../../PrivateTag'
@@ -112,7 +113,7 @@ const SaveToListModal = (props: Props) => {
   )
 
   const favoritesAPI = useMemo(() => {
-    return new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
+    return new FavoritesAPI(MARKETPLACE_SERVER_URL, {
       retries: retryParams.attempts,
       retryDelay: retryParams.delay,
       identity

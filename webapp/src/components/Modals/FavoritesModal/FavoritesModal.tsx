@@ -6,7 +6,8 @@ import { Modal } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ModalNavigation, Message, useMobileMediaQuery, Empty, Loader } from 'decentraland-ui'
 import { isErrorWithMessage } from '../../../lib/error'
-import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from '../../../modules/vendor/decentraland/favorites'
+import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland'
+import { FavoritesAPI } from '../../../modules/vendor/decentraland/favorites'
 import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './FavoritesModal.types'
@@ -27,7 +28,7 @@ const FavoritesModal = ({ metadata: { itemId }, identity, onClose }: Props) => {
   const isMobile = useMobileMediaQuery()
 
   const favoritesAPI = useMemo(() => {
-    return new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
+    return new FavoritesAPI(MARKETPLACE_SERVER_URL, {
       retries: retryParams.attempts,
       retryDelay: retryParams.delay,
       identity

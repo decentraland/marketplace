@@ -1,7 +1,8 @@
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { FavoritedItems, List } from '../../../favorites/types'
 import { ItemFilters } from '../item/types'
-import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from './api'
+import { MARKETPLACE_SERVER_URL } from '../nft'
+import { FavoritesAPI } from './api'
 import { ListDetails, ListOfLists, Permission, UpdateOrCreateList } from './types'
 
 let itemId: string
@@ -12,7 +13,7 @@ let fetchMock: jest.SpyInstance
 beforeEach(() => {
   itemId = 'an-item-id'
   identity = {} as AuthIdentity
-  favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
+  favoritesAPI = new FavoritesAPI(MARKETPLACE_SERVER_URL, {
     identity
   })
   fetchMock = jest.spyOn(favoritesAPI as any, 'fetch')
