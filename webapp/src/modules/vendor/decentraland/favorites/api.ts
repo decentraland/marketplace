@@ -5,8 +5,6 @@ import { BulkPickUnpickResponse, ListDetails, ListOfLists, ListsOptions, PicksOp
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get('DEFAULT_FAVORITES_LIST_ID')
 
-export const MARKETPLACE_FAVORITES_SERVER_URL = config.get('MARKETPLACE_FAVORITES_SERVER_URL')
-
 export class FavoritesAPI extends BaseClient {
   private buildPaginationParameters({ first, skip }: { first?: number; skip?: number }): URLSearchParams {
     const queryParams = new URLSearchParams()

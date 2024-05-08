@@ -13,7 +13,7 @@ import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from '../vendor/decentraland'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
-import { FavoritesAPI, MARKETPLACE_FAVORITES_SERVER_URL } from '../vendor/decentraland/favorites/api'
+import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
 import { retryParams } from '../vendor/decentraland/utils'
 import { getAddress } from '../wallet/selectors'
@@ -74,7 +74,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     retryDelay: retryParams.delay,
     identity: getIdentity
   }
-  const favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, API_OPTS)
+  const favoritesAPI = new FavoritesAPI(MARKETPLACE_SERVER_URL, API_OPTS)
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
   const marketplaceServerCatalogAPI = new CatalogAPI(MARKETPLACE_SERVER_URL, API_OPTS)
 
