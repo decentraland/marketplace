@@ -93,6 +93,7 @@ const WearableDetail = ({ nft }: Props) => {
               )}
             </div>
           </div>
+          {wearable.isSmart ? <RequiredPermissions asset={nft} /> : null}
           <div className={styles.attributesRow}>
             <div className={styles.attributesColumn}>
               <Description text={wearable.description} />
@@ -103,10 +104,13 @@ const WearableDetail = ({ nft }: Props) => {
               </div>
             ) : null}
           </div>
-          {wearable.isSmart ? <RequiredPermissions asset={nft} /> : null}
-          <div className={styles.wearableOwnerAndCollectionContainer}>
-            <Owner asset={nft} />
-            <Collection asset={nft} />
+          <div className={styles.attributesRow}>
+            <div className={styles.attributesColumn}>
+              <Owner asset={nft} />
+            </div>
+            <div className={styles.attributesColumn}>
+              <Collection asset={nft} />
+            </div>
           </div>
         </div>
         <div className={styles.actionsContainer}>

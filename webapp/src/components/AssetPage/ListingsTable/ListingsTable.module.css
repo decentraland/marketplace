@@ -82,8 +82,10 @@
   .linkedProfileRow {
     margin-left: unset;
   }
-  .viewListingContainer {
+  .viewListingContainer :global(.ui.small.inverted.button) {
     margin-right: 0;
+    min-width: auto;
+    border: none;
   }
   .manaField {
     flex-wrap: wrap;
