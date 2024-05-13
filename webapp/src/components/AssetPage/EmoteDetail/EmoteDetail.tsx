@@ -114,9 +114,13 @@ const EmoteDetail = ({ nft }: Props) => {
               </div>
             ) : null}
           </div>
-          <div className={styles.emoteOwnerAndCollectionContainer}>
-            <Owner asset={nft} />
-            <Collection asset={nft} />
+          <div className={styles.attributesRow}>
+            <div className={styles.attributesColumn}>
+              <Owner asset={nft} />
+            </div>
+            <div className={styles.attributesColumn}>
+              <Collection asset={nft} />
+            </div>
           </div>
         </div>
         <div className={styles.actionsContainer}>

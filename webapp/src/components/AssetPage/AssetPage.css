@@ -16,6 +16,10 @@
 }
 
 @media (max-width: 768px) {
+  .AssetPage {
+    margin-top: 0px;
+  }
+
   .AssetPage .backText {
     margin-top: -20px;
   }

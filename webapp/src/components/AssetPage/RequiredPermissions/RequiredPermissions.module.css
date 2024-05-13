@@ -1,7 +1,3 @@
-.RequiredPermissions {
-  margin: 24px 0 24px;
-}
-
 .RequiredPermissions .title {
   display: flex;
   flex-direction: row;
@@ -33,10 +29,4 @@
   display: inline-block;
   margin-left: 4px;
   cursor: pointer;
-}
-
-@media (max-width: 768px) {
-  .RequiredPermissions {
-    margin: 0 0 24px;
-  }
 }

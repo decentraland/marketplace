@@ -539,8 +539,9 @@ const AssetImageWrapper = (props: Props) => {
       item.isOnSale,
     [asset, item]
   )
+  const isOwnerOfNFT = isNFT(asset) && wallet?.address === asset.owner
 
-  let classes = `AssetImage ${isAvailableForMint ? 'hasMintAvailable' : ''}`
+  let classes = `AssetImage ${isAvailableForMint && !isOwnerOfNFT ? 'hasMintAvailable' : ''}`
   if (className) {
     classes += ' ' + className
   }

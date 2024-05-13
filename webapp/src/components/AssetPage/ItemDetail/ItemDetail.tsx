@@ -149,6 +149,12 @@ const ItemDetail = ({ item }: Props) => {
               </div>
             ) : null}
           </div>
+          <div className={styles.attributesRow}>
+            <div className={styles.attributesColumn}>{item.network === Network.MATIC ? <Owner asset={item} /> : null}</div>
+            <div className={styles.attributesColumn}>
+              <Collection asset={item} />
+            </div>
+          </div>
           <div
             className={
               item.available > 0 && item.isOnSale
@@ -156,10 +162,6 @@ const ItemDetail = ({ item }: Props) => {
                 : styles.itemDetailBottomContainer
             }
           >
-            <div className={styles.basicRow}>
-              {item.network === Network.MATIC ? <Owner asset={item} /> : null}
-              <Collection asset={item} />
-            </div>
             {item.data.wearable?.isSmart && <RequiredPermissions asset={item} />}
             <BestBuyingOption asset={item} tableRef={tableRef} />
           </div>
