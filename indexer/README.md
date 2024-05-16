@@ -23,7 +23,7 @@ If a new collection in Ethereum is added you will need to add it as following
 npx ts-node scripts/importWearableCollection.ts --collection ../../wearable-api/data/collections/{collection_name}/index.json > src/data/wearables/{collection_name}.ts
 ```
 
-checkout the docs <https://thegraph.com/docs/quick-start>
+checkout the docs https://thegraph.com/docs/quick-start
 
 ### Queries
 
