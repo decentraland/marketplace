@@ -123,6 +123,7 @@ track<ExecuteOrderTransactionSubmittedAction>(
     price: payload.order.price,
     seller: payload.order.owner,
     buyer: payload.order.buyer,
+    hasUtility: Boolean(payload.nft.utility && payload.nft.utility.length > 0),
     ...getCategoryInfo(payload.nft)
   })
 )
@@ -135,6 +136,7 @@ track<ExecuteOrderWithCardSuccessAction>(
     nft: payload.nft.id,
     price: payload.purchase.nft.cryptoAmount,
     seller: payload.nft.owner,
+    hasUtility: Boolean(payload.nft.utility && payload.nft.utility.length > 0),
     buyer: payload.purchase.address
   })
 )
@@ -235,6 +237,7 @@ track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, events.BUY_ITEM, ({ payload }) => 
   rarity: payload.item.rarity,
   network: payload.item.network,
   chainId: payload.item.chainId,
+  hasUtility: Boolean(payload.item.utility && payload.item.utility.length > 0),
   price: Number(ethers.utils.formatEther(payload.item.price)),
   data: payload.item.data,
   txHash: payload.txHash,
@@ -258,6 +261,7 @@ track<BuyItemCrossChainSuccessAction>(BUY_ITEM_CROSS_CHAIN_SUCCESS, events.BUY_I
     rarity: item.rarity,
     network: item.network,
     chainId: item.chainId,
+    hasUtility: Boolean(item.utility && item.utility.length > 0),
     price: Number(ethers.utils.formatEther(order?.price ?? item.price)),
     data: item.data,
     txHash,
@@ -326,6 +330,7 @@ track<BuyItemCrossChainFailureAction>(
       rarity: item.rarity,
       network: item.network,
       chainId: item.chainId,
+      hasUtility: Boolean(item.utility && item.utility.length > 0),
       price: Number(ethers.utils.formatEther(price)),
       data: item.data
     }
@@ -340,6 +345,7 @@ track<BuyItemWithCardSuccessAction>(BUY_ITEM_WITH_CARD_SUCCESS, events.BUY_ITEM_
   chainId: payload.item.chainId,
   price: payload.purchase.nft.cryptoAmount,
   data: payload.item.data,
+  hasUtility: Boolean(payload.item.utility && payload.item.utility.length > 0),
   purchase: payload.purchase,
   txHash: payload.purchase.txHash
 }))
