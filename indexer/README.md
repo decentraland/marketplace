@@ -6,8 +6,7 @@
 | Mainnet      | Satsuma         | https://subgraph.satsuma-prod.com/decentraland/marketplace/playground          | QmXPFoaeZjJrukrFRFLh1RheK2PWF1hAb6K3kYbHvqffZK | Qmc9dMhcgUqH77cTtDfnXduxMfavrKjX2SSDBhiwWpEvKx |
 | Mainnet Temp | Hosted Services | https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-temp     | QmPdVPhDvK3bs8cmUeFeMAYRYky6yqYE9jYwpcMdi4QCdB | QmPT9v6EsqqCA8BzrYtArJL54mVgfH81FzFTX2gLv9XcSp |
 | Sepolia      | Graph Studio    | https://api.studio.thegraph.com/query/49472/marketplace-sepolia/version/latest | QmVvJsoaTLi5HVfdUaLTsKcbvxB3ZE2ksZH9ENh8EoStaE | QmTu8KKidkfRaCCvEHdBnWhRfLRLwPmhHpfRFxTk2wPAzN |
-| Goerli       | Hosted Services | https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli   | QmcWhGQxQ3gnkqPNhx4mTZti3jcKjp7vo8JenreUqytzF8 | QmS2GCuAkzH2kNDYe2pA9HkRTPLpC5DpbXRqhQW93exZEM |
-| Goerli       | Satsuma         | https://subgraph.satsuma-prod.com/decentraland/marketplace-goerli/playground   | QmcWhGQxQ3gnkqPNhx4mTZti3jcKjp7vo8JenreUqytzF8 | QmS2GCuAkzH2kNDYe2pA9HkRTPLpC5DpbXRqhQW93exZEM |
+| Sepolia      | Satsuma         | https://subgraph.satsuma-prod.com/decentraland/marketplace-sepolia/playground  | QmdY3w9t5Su2K1j2mETTEQnY4C5AWfr9qd6ki2NR8iHSXm |
 
 Using [The Graph](https://thegraph.com) and [Satsuma](https://www.satsuma.xyz/)
 
@@ -24,7 +23,7 @@ If a new collection in Ethereum is added you will need to add it as following
 npx ts-node scripts/importWearableCollection.ts --collection ../../wearable-api/data/collections/{collection_name}/index.json > src/data/wearables/{collection_name}.ts
 ```
 
-checkout the docs https://thegraph.com/docs/quick-start
+checkout the docs <https://thegraph.com/docs/quick-start>
 
 ### Queries
 
