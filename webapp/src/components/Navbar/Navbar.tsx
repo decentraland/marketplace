@@ -32,7 +32,7 @@ const Navbar = (props: Props) => {
       hasActivity={props.hasPendingTransactions}
       identity={props.identity}
       onSignIn={handleOnSignIn}
-      onClickAccountSettings={handleOnClickAccount}
+      onClickMarketplaceAuthorization={handleOnClickAccount}
     />
   )
 }
