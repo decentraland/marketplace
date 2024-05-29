@@ -11,6 +11,11 @@
   right: 0;
 }
 
+.AccountBanner .profile-name a {
+  color: white;
+  text-decoration: underline;
+}
+
 .AccountBanner .cover-top {
   display: flex;
   justify-content: space-between;
