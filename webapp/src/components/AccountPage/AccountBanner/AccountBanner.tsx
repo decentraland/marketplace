@@ -5,6 +5,7 @@ import { Profile } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Back, Container, Loader } from 'decentraland-ui'
+import { config } from '../../../config'
 import copyText from '../../../lib/copyText'
 import { useTimer } from '../../../lib/timer'
 import { LinkType } from '../../../modules/store/types'
@@ -15,6 +16,8 @@ import { Column } from '../../Layout/Column'
 import { PageHeader } from '../../PageHeader'
 import { Props } from './AccountBanner.types'
 import './AccountBanner.css'
+
+const PROFILE_URL = config.get('PROFILE_URL')
 
 const AccountBanner = ({ address, store, isLoading, onBack, onFetchStore }: Props) => {
   const [hasCopiedAddress, setHasCopied] = useTimer(1200)
@@ -51,7 +54,9 @@ const AccountBanner = ({ address, store, isLoading, onBack, onFetchStore }: Prop
             <Column>
               <Profile address={address} imageOnly inline={false} size="huge" />
               <div className="profile-name">
-                <Profile address={address} textOnly inline={false} />
+                <a href={`${PROFILE_URL}/accounts/${address}`} target="_blank">
+                  <Profile address={address} textOnly inline={false} />
+                </a>
               </div>
               <div className="profile-address">
                 <div className="profile-address-hash">{shortenAddress(address)}</div>
