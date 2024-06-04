@@ -6,7 +6,7 @@ import { SortBy } from '../../../modules/routing/types'
 import { VendorName } from '../../../modules/vendor'
 import * as decentraland from '../../../modules/vendor/decentraland'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
-import IconBadge from '../../AssetPage/IconBadge'
+import IconBadge from '../../AssetPage/LinkedIconBadge'
 import { CAMPAIGN_TAG } from '../config'
 import { Props } from './CampaignBadge.types'
 

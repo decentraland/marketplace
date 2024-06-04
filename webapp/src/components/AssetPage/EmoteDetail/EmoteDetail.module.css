@@ -23,14 +23,15 @@
 
 .EmoteDetail .badges {
   margin-top: 8px;
-  margin-bottom: 15px;
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .EmoteDetail .wearableInformation {
   display: flex;
+  gap: 15px;
   flex-direction: column;
   flex: 1;
   justify-content: space-between;
@@ -48,7 +49,36 @@
   color: var(--secondary-text);
 }
 
+.EmoteDetail .attributesRow {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.EmoteDetail .attributesColumn {
+  flex-basis: 100%;
+}
+
 @media (max-width: 768px) {
+  .EmoteDetail .attributesRow {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .EmoteDetail :global(.dcl.stats) {
+    margin: 0px;
+    width: 100%;
+  }
+  .EmoteDetail :global(.dcl.tabs.fullscreen) {
+    padding-left: 21px;
+    margin: 0;
+    border-bottom: 1px solid var(--divider);
+  }
+  .EmoteDetail :global(.filtertabsContainer .dcl.tab) {
+    height: unset;
+    margin-bottom: 22px;
+  }
   .EmoteDetail .wearableInformationContainer {
     flex-direction: column;
   }
@@ -64,14 +94,6 @@
   }
   .EmoteDetail .actionsContainer {
     width: 100%;
-  }
-  .EmoteDetail .badges {
-    margin-bottom: 18px;
-  }
-  .EmoteDetail .emoteOwnerAndCollectionContainer {
-    margin-top: 18px;
-    display: flex;
-    flex-direction: column;
   }
   .EmoteDetail .assetImageContainer :global(.AssetImage .rarity-background) {
     border-radius: 12px;

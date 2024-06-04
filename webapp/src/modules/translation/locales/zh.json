@@ -72,7 +72,8 @@
     "finish": "结束",
     "guest": "客人",
     "block_vrm": "出口",
-    "block_vrm_tooltip": "此项目不允许VRM导出"
+    "block_vrm_tooltip": "此项目不允许VRM导出",
+    "utility": "公用事业"
   },
   "search_dropdown": {
     "recent": "最近的",

@@ -1,0 +1,9 @@
+.main :global(.ui.sub.header) {
+  font-weight: 600;
+}
+
+.main .content {
+  font-size: 14px;
+  line-height: 26px;
+  letter-spacing: 0.2px;
+}

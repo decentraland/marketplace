@@ -19,6 +19,7 @@
 .WearableDetail .badges {
   margin-top: 8px;
   display: flex;
+  align-items: center;
   gap: 8px;
   flex-wrap: wrap;
 }
@@ -27,6 +28,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  gap: 15px;
   justify-content: space-between;
 }
 
@@ -42,13 +44,9 @@
   color: var(--secondary-text);
 }
 
-.WearableDetail .wearableBadgesContainer {
-  margin-bottom: 18px;
-}
-
 .WearableDetail .vrmBadge {
-  background: #FF743933;
-  color: #FF7439;
+  background: #ff743933;
+  color: #ff7439;
   padding: 3px 6px;
   height: 24px;
   font-size: 13px;
@@ -57,7 +55,28 @@
   text-transform: uppercase;
 }
 
+.WearableDetail .attributesRow {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.WearableDetail .attributesColumn {
+  flex-basis: 100%;
+}
+
 @media (max-width: 768px) {
+  .WearableDetail :global(.dcl.stats) {
+    margin: 0px;
+  }
+
+  .WearableDetail .attributesRow {
+    flex-direction: column;
+    gap: 20px;
+  }
+
   .WearableDetail .wearableInformationContainer {
     gap: 16px;
   }
@@ -80,19 +99,6 @@
 
   .WearableDetail .wearableInformationContainer {
     flex-direction: column;
-  }
-  .WearableDetail .wearableBadgesContainer {
-    margin-bottom: 18px;
-  }
-
-  .WearableDetail .wearableOwnerAndCollectionContainer {
-    margin-top: 18px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .WearableDetail .wearableOwnerAndCollectionContainer :global(.dcl.stats) {
-    margin-bottom: 16px;
   }
 
   .WearableDetail :global(.dcl.tabs.fullscreen) {

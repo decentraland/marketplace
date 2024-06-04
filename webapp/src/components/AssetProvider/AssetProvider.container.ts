@@ -88,7 +88,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     asset,
     rental,
     order,
-    isLoading: !asset ? isLoading : isFetchingRequiredPermissions(state, asset.id) || isFetchingVideoHash(state, asset.id),
+    isLoading:
+      isLoading || !!(asset && isFetchingRequiredPermissions(state, asset.id)) || !!(asset && isFetchingVideoHash(state, asset.id)),
     isLoadingFeatureFlags: isLoadingType(getIsLoadingFeatureFlags(state), FETCH_APPLICATION_FEATURES_REQUEST),
     isLandOrEstate,
     error,

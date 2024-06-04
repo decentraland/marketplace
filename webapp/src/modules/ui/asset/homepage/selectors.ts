@@ -5,6 +5,7 @@ import { Asset } from '../../../asset/types'
 import { FETCH_ITEMS_REQUEST, FETCH_TRENDING_ITEMS_REQUEST, FetchItemsRequestAction } from '../../../item/actions'
 import { ItemState } from '../../../item/reducer'
 import { getData as getItemData, getLoading as getItemLoading } from '../../../item/selectors'
+import { Item } from '../../../item/types'
 import { FETCH_NFTS_REQUEST, FetchNFTsRequestAction } from '../../../nft/actions'
 import { NFTState } from '../../../nft/reducer'
 import { getData as getNFTData, getLoading as getNFTLoading } from '../../../nft/selectors'
@@ -27,9 +28,15 @@ export const getHomepage = createSelector<RootState, HomepageUIState, NFTState['
   (homepage, nftsById, itemsById) => {
     const result: Record<string, Asset[]> = {}
 
+    const mapper: { [key in View]?: Record<string, Item> } = {
+      [View.HOME_TRENDING_ITEMS]: itemsById,
+      [View.HOME_NEW_ITEMS]: itemsById,
+      [View.HOME_SOLD_ITEMS]: itemsById
+    }
+
     let view: HomepageView
     for (view in homepage) {
-      result[view] = homepage[view].map(id => nftsById[id] || itemsById[id])
+      result[view] = homepage[view].map(id => mapper[view]?.[id] || itemsById[id] || nftsById[id])
     }
 
     return result as Record<HomepageView, Asset[]>

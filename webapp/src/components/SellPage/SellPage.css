@@ -33,7 +33,7 @@
   }
 
   .SellPage .AssetAction > .Row .buttons {
-    margin-bottom: 200px;
+    gap: 15px;
   }
 
   .SellPage .AssetAction > .Row .ui.button + .ui.button {

@@ -74,7 +74,8 @@
     "finish": "Finish",
     "guest": "Guest",
     "block_vrm": "Export",
-    "block_vrm_tooltip": "This Item doesn’t allow VRM export"
+    "block_vrm_tooltip": "This Item doesn't allow VRM export",
+    "utility": "Utility"
   },
   "search_dropdown": {
     "recent": "Recent",

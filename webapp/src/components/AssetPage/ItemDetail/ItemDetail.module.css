@@ -22,6 +22,7 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .ItemDetail .itemDetailBottomContainer {
@@ -48,11 +49,16 @@
   gap: 30px;
 }
 
-.ItemDetail .basicRow {
+.ItemDetail .attributesRow {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
+  gap: 30px;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.ItemDetail .attributesColumn {
+  flex-basis: 100%;
 }
 
 .ItemDetail :global(.ui.button + .ui.button) {
@@ -60,8 +66,8 @@
 }
 
 .ItemDetail .vrmBadge {
-  background: #FF743933;
-  color: #FF7439;
+  background: #ff743933;
+  color: #ff7439;
   padding: 3px 6px;
   height: 24px;
   font-size: 13px;
@@ -82,12 +88,22 @@
     width: 100%;
   }
 
-  .ItemDetail :global(.dcl.stats + .dcl.stats) {
-    width: 100%;
+  .ItemDetail :global(.dcl.stats) {
+    margin: 0px;
   }
 }
 
 @media (max-width: 768px) {
+  .itemDetailBottomContainer {
+    margin-top: 20px;
+  }
+
+  .ItemDetail .attributesRow {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
   .ItemDetail .assetImageContainer {
     height: 400px;
   }
@@ -102,12 +118,8 @@
     margin-bottom: 0;
   }
 
-  .ItemDetail .basicRow :global(.dcl.stats) {
+  .ItemDetail .attributesColumn :global(.dcl.stats) {
     width: 100%;
-  }
-  
-  .ItemDetail .basicRow {
-    flex-direction: column;
   }
 
   .ItemDetail :global(.dcl.tabs) {
