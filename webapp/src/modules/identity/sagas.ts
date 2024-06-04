@@ -5,8 +5,8 @@ import { localStorageGetIdentity, localStorageClearIdentity, localStorageStoreId
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   CONNECT_WALLET_SUCCESS,
-  DISCONNECT_WALLET,
-  DisconnectWalletAction,
+  DISCONNECT_WALLET_SUCCESS,
+  DisconnectWalletSuccessAction,
   ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { config } from '../../config'
@@ -18,7 +18,7 @@ import { IDENTITY_EXPIRATION_IN_MINUTES } from './utils'
 export function* identitySaga() {
   yield takeLatest(GENERATE_IDENTITY_REQUEST, handleGenerateIdentityRequest)
   yield takeLatest(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
-  yield takeLatest(DISCONNECT_WALLET, handleDisconnect)
+  yield takeLatest(DISCONNECT_WALLET_SUCCESS, handleDisconnect)
 }
 
 function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
@@ -71,7 +71,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
   }
 }
 
-function* handleDisconnect(_action: DisconnectWalletAction) {
+function* handleDisconnect(_action: DisconnectWalletSuccessAction) {
   if (auxAddress) {
     yield localStorageClearIdentity(auxAddress)
   }
