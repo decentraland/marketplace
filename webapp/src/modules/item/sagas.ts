@@ -1,9 +1,9 @@
 import { matchPath } from 'react-router-dom'
 import { put, takeEvery } from '@redux-saga/core/effects'
-import { getLocation } from 'connected-react-router'
 import { ethers } from 'ethers'
+import { History } from 'history'
 import { SagaIterator, Task } from 'redux-saga'
-import { call, cancel, cancelled, fork, race, select, take } from 'redux-saga/effects'
+import { call, cancel, cancelled, fork, race, select, take, getContext } from 'redux-saga/effects'
 import { Entity } from '@dcl/schemas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
@@ -94,10 +94,11 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   // to avoid race conditions, just one fetch items request is handled at once in the browse page
   function* takeLatestByPath(actionType: string, path: string): SagaIterator {
     let task: Task<unknown> | undefined
+    const history: History = yield getContext('history')
 
     while (true) {
       const action: FetchItemsRequestAction = yield take(actionType)
-      const { pathname: currentPathname }: ReturnType<typeof getLocation> = yield select(getLocation)
+      const { pathname: currentPathname } = history.location
 
       // if we have a task running in the browse path, we cancel the previous one
       if (matchPath(currentPathname, { path }) && task && task.isRunning()) {

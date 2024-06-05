@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Header, Button } from 'decentraland-ui'
@@ -15,7 +16,8 @@ import { Props } from './CancelSalePage.types'
 import './CancelSalePage.css'
 
 const CancelSalePage = (props: Props) => {
-  const { isLoading, onNavigate, onCancelOrder } = props
+  const { isLoading, onCancelOrder } = props
+  const history = useHistory()
 
   return (
     <PageLayout>
@@ -53,7 +55,7 @@ const CancelSalePage = (props: Props) => {
                     <Header size="large">{t('cancel_sale_page.title')}</Header>
                     <div className="subtitle">{subtitle}</div>
                     <div className="buttons">
-                      <Button onClick={() => onNavigate(locations.nft(nft.contractAddress, nft.tokenId))}>{t('global.cancel')}</Button>
+                      <Button onClick={() => history.push(locations.nft(nft.contractAddress, nft.tokenId))}>{t('global.cancel')}</Button>
                       <ChainButton
                         primary
                         loading={isLoading}

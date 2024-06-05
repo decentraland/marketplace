@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import classNames from 'classnames'
 import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -18,7 +19,6 @@ const getCoords = (x: number | string, y: number | string) => `${x},${y}`
 const Atlas: React.FC<Props> = (props: Props) => {
   const {
     tiles,
-    onNavigate,
     isEstate,
     withNavigation,
     nfts,
@@ -36,6 +36,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
     lastUpdated
   } = props
 
+  const history = useHistory()
   const [showPopup, setShowPopup] = useState(false)
   const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false)
   const [hoveredTile, setHoveredTile] = useState<Tile | null>(null)
@@ -167,21 +168,21 @@ const Atlas: React.FC<Props> = (props: Props) => {
         const estates = getContract({
           category: NFTCategory.ESTATE
         })
-        estates && onNavigate(locations.nft(estates.address, tile.estate_id))
+        estates && history.push(locations.nft(estates.address, tile.estate_id))
       } else {
         try {
           const land = getContract({
             category: NFTCategory.PARCEL
           })
           const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
-          land && onNavigate(locations.nft(land.address, tokenId ?? undefined))
+          land && history.push(locations.nft(land.address, tokenId ?? undefined))
         } catch (error) {
           const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
           console.warn(`Couldn't fetch parcel ${tile.x},${tile.y}: ${errorMessage}`)
         }
       }
     },
-    [withNavigation, tiles, getContract, onNavigate]
+    [withNavigation, tiles, getContract]
   )
 
   const handleHover = useCallback(

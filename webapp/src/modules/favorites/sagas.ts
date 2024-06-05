@@ -1,5 +1,5 @@
-import { getLocation, push } from 'connected-react-router'
-import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
+import { History } from 'history'
+import { call, getContext, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { CatalogFilters, Item } from '@dcl/schemas'
 import { closeModal, CloseModalAction, CLOSE_MODAL, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { ConnectWalletSuccessAction, CONNECT_WALLET_FAILURE, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
@@ -200,8 +200,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   }
 
   function* handleDeleteListSuccess() {
-    const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
-    if (pathname !== locations.lists()) yield put(push(locations.lists()))
+    const history: History = yield getContext('history')
+    const { pathname } = history.location
+    if (pathname !== locations.lists()) history.push(locations.lists())
   }
 
   function* handleDeleteListRequest(action: DeleteListRequestAction) {
@@ -246,8 +247,9 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleCreateListRequest(action: CreateListRequestAction) {
     const { name, isPrivate, description } = action.payload
+    const history: History = yield getContext('history')
     try {
-      const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
+      const { pathname } = history.location
       // Force the user to have the signed identity
       yield call(getAccountIdentity)
       const list = (yield call([favoritesAPI, 'createList'], {
@@ -257,7 +259,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       })) as Awaited<ReturnType<typeof favoritesAPI.createList>>
       yield put(createListSuccess(list))
       if (pathname === locations.lists()) {
-        yield put(push(locations.list(list.id)))
+        history.push(locations.list(list.id))
       }
     } catch (error) {
       yield put(createListFailure(isErrorWithMessage(error) ? error.message : 'Unknown error'))

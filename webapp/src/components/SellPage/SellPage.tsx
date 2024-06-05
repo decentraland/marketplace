@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Page } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
 import { AssetProviderPage } from '../AssetProviderPage'
@@ -9,7 +10,11 @@ import { Props } from './SellPage.types'
 import './SellPage.css'
 
 const SellPage = (props: Props) => {
-  const { isLoading, isCreatingOrder, onGoBack, getContract, onCreateOrder, onClearOrderErrors } = props
+  const { isLoading, isCreatingOrder, getContract, onCreateOrder, onClearOrderErrors } = props
+  const history = useHistory()
+  const onGoBack = useCallback(() => {
+    history.goBack()
+  }, [history])
   return (
     <PageLayout>
       <Page className="SellPage">

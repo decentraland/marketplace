@@ -1,6 +1,6 @@
-import { push, getLocation } from 'connected-react-router'
+import { History } from 'history'
 import { eventChannel } from 'redux-saga'
-import { takeEvery, put, select, take, spawn } from 'redux-saga/effects'
+import { takeEvery, put, take, spawn, getContext } from 'redux-saga/effects'
 import { IPreviewController, PreviewEmoteEventType } from '@dcl/schemas'
 import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { locations } from '../routing/locations'
@@ -14,14 +14,15 @@ export function* uiSaga() {
 }
 
 function* handleConnectWalletSuccess(_action: ConnectWalletSuccessAction) {
-  const location = (yield select(getLocation)) as ReturnType<typeof getLocation>
+  const history: History = yield getContext('history')
+  const location = history.location
   const { pathname, search } = location
   if (pathname === locations.signIn()) {
     const redirectTo = new URLSearchParams(search).get('redirectTo')
     if (redirectTo) {
-      yield put(push(decodeURIComponent(redirectTo)))
+      history.push(decodeURIComponent(redirectTo))
     } else {
-      yield put(push(locations.defaultCurrentAccount()))
+      history.push(locations.defaultCurrentAccount())
     }
   }
 }

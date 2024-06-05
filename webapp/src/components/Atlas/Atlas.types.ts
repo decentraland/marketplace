@@ -1,6 +1,4 @@
 import React from 'react'
-import { CallHistoryMethodAction } from 'connected-react-router'
-import { Dispatch } from 'redux'
 import { RentalListing } from '@dcl/schemas'
 import { AtlasTile, AtlasProps } from 'decentraland-ui'
 import { getContract } from '../../modules/contract/selectors'
@@ -35,10 +33,7 @@ export type Props = Partial<AtlasProps> & {
   lastUpdated?: Date
   lastAtlasModifiedDate: Date | null
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
-  onNavigate: (path: string) => void
   children?: React.ReactNode
 }
 
 export type MapStateProps = Pick<Props, 'tiles' | 'nfts' | 'nftsOnRent' | 'tilesByEstateId' | 'getContract' | 'lastAtlasModifiedDate'>
-export type MapDispatchProps = Pick<Props, 'onNavigate'>
-export type MapDispatch = Dispatch<CallHistoryMethodAction>

@@ -1,5 +1,4 @@
-import { getLocation, push } from 'connected-react-router'
-import { call, put, select, take } from 'redux-saga/effects'
+import { call, getContext, put, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
@@ -58,6 +57,7 @@ import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 let item: Item
 let address: string
 let error: Error
+let pushMock: jest.Mock
 
 const getIdentity = () => undefined
 
@@ -65,6 +65,7 @@ beforeEach(() => {
   error = new Error('error')
   item = { id: 'anAddress-itemId', itemId: 'itemId' } as Item
   address = '0xb549b2442b2bd0a53795bc5cdcbfe0caf7aca9f8'
+  pushMock = jest.fn()
 })
 
 describe('when handling the request for fetching favorited items', () => {
@@ -872,7 +873,7 @@ describe('when handling the request for deleting a list', () => {
         .provide([
           [call(getAccountIdentity), Promise.resolve()],
           [matchers.call.fn(FavoritesAPI.prototype.deleteList), Promise.resolve()],
-          [select(getLocation), { pathname: locations.lists() }]
+          [getContext('history'), { location: { pathname: locations.lists() } }]
         ])
         .call.like({
           fn: FavoritesAPI.prototype.deleteList,
@@ -894,20 +895,24 @@ describe('when handling the success deletion of a list', () => {
   describe('and the user performed the action from the list detail page', () => {
     it('should dispatch an action to redirect the user to the My Lists tab', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([[select(getLocation), { pathname: locations.list(list.id) }]])
-        .put(push(locations.lists()))
+        .provide([[getContext('history'), { location: { pathname: locations.list(list.id) }, push: pushMock }]])
         .dispatch(deleteListSuccess(list))
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(locations.lists())
+        })
     })
   })
 
   describe('and the user performed the action from the My Lists tab', () => {
     it('should not dispatch the action signaling the redirection', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([[select(getLocation), { pathname: locations.lists() }]])
-        .not.put(push(locations.lists()))
+        .provide([[getContext('history'), { location: { pathname: locations.lists(), push: pushMock } }]])
         .dispatch(deleteListSuccess(list))
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).not.toHaveBeenCalled()
+        })
     })
   })
 })
@@ -1104,7 +1109,7 @@ describe('when handling the request for creating a list', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [select(getLocation), { pathname: locations.lists() }],
+          [getContext('history'), { location: { pathname: locations.lists() } }],
           [call(getAccountIdentity), Promise.reject(error)]
         ])
         .put(createListFailure(error.message))
@@ -1117,7 +1122,7 @@ describe('when handling the request for creating a list', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [select(getLocation), { pathname: locations.lists() }],
+          [getContext('history'), { location: { pathname: locations.lists() } }],
           [call(getAccountIdentity), Promise.resolve()],
           [matchers.call.fn(FavoritesAPI.prototype.createList), Promise.reject(error)]
         ])
@@ -1136,7 +1141,7 @@ describe('when handling the request for creating a list', () => {
       it('should dispatch an action signaling the success of the handled action and a push to the created list page', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
-            [select(getLocation), { pathname: locations.lists() }],
+            [getContext('history'), { location: { pathname: locations.lists() }, push: pushMock }],
             [call(getAccountIdentity), Promise.resolve()],
             [matchers.call.fn(FavoritesAPI.prototype.createList), Promise.resolve(returnedList)]
           ])
@@ -1145,9 +1150,11 @@ describe('when handling the request for creating a list', () => {
             args: [listToCreate]
           })
           .put(createListSuccess(returnedList))
-          .put(push(locations.list(returnedList.id)))
           .dispatch(createListRequest(listToCreate))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(locations.list(returnedList.id))
+          })
       })
     })
 
@@ -1155,7 +1162,7 @@ describe('when handling the request for creating a list', () => {
       it('should dispatch an action signaling the success of the handled action without a push to the created list page', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
-            [select(getLocation), { pathname: locations.browse() }],
+            [getContext('history'), { location: { pathname: locations.browse() } }],
             [call(getAccountIdentity), Promise.resolve()],
             [matchers.call.fn(FavoritesAPI.prototype.createList), Promise.resolve(returnedList)]
           ])
@@ -1164,9 +1171,11 @@ describe('when handling the request for creating a list', () => {
             args: [listToCreate]
           })
           .put(createListSuccess(returnedList))
-          .not.put(push(locations.list(returnedList.id)))
           .dispatch(createListRequest(listToCreate))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).not.toHaveBeenCalled()
+          })
       })
     })
   })

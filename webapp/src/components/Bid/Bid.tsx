@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { ethers } from 'ethers'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Loader, Stats, Button } from 'decentraland-ui'
@@ -20,8 +20,8 @@ import { Props } from './Bid.types'
 import './Bid.css'
 
 const Bid = (props: Props) => {
-  const { bid, wallet, archivedBidIds, onAccept, onArchive, onUnarchive, onCancel, onUpdate, isArchivable, hasImage, isAcceptingBid } =
-    props
+  const { bid, wallet, archivedBidIds, onAccept, onArchive, onUnarchive, onCancel, isArchivable, hasImage, isAcceptingBid } = props
+  const history = useHistory()
 
   const isArchived = archivedBidIds.includes(bid.id)
   const isBidder = !!wallet && addressEquals(wallet.address, bid.bidder)
@@ -67,7 +67,7 @@ const Bid = (props: Props) => {
               <div className="actions">
                 {isBidder ? (
                   <>
-                    <Button primary onClick={() => onUpdate(bid)}>
+                    <Button primary onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
                       {t('global.update')}
                     </Button>
                     <Button onClick={() => onCancel(bid)}>{t('global.cancel')}</Button>

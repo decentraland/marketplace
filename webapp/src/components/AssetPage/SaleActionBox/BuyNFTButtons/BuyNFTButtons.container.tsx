@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { replace } from 'connected-react-router'
 import { Order } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
@@ -29,8 +28,7 @@ const mapDispatch = (dispatch: MapDispatch, ownProps: OwnProps): MapDispatchProp
           })
         )
       : dispatch(openModal('MintNftWithCryptoModal', { item: asset })),
-  onBuyItemWithCard: item => dispatch(buyItemWithCardRequest(item)),
-  onRedirect: path => dispatch(replace(path))
+  onBuyItemWithCard: item => dispatch(buyItemWithCardRequest(item))
 })
 
 export default connect(mapState, mapDispatch)(BuyNFTButtons)

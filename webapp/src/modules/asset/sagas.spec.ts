@@ -1,6 +1,5 @@
 import util from 'util'
-import { getLocation, push } from 'connected-react-router'
-import { call, select } from 'redux-saga/effects'
+import { call, getContext } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { Network } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
@@ -55,49 +54,40 @@ describe('when handling the set purchase action', () => {
   describe('when an NFT has been purchased and it is in status pending', () => {
     describe('and the user still waiting for the purchase in the same page', () => {
       it('should dispatch a push to the history with the location of the buy status page', () => {
+        const pushMock = jest.fn()
         return expectSaga(assetSaga)
-          .provide([
-            [
-              select(getLocation),
-              {
-                pathname: mockPathname()
-              }
-            ]
-          ])
-          .put(push(locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId)))
+          .provide([[getContext('history'), { location: { pathname: mockPathname() }, push: pushMock }]])
           .dispatch(setPurchase(mockNFTPurchase))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId))
+          })
       })
     })
 
     describe('and the user was redirected to the processing page and the purchase changed it status', () => {
       it('should dispatch a push to the history with the location of the buy status page', () => {
+        const pushMock = jest.fn()
         return expectSaga(assetSaga)
           .provide([
             [
-              select(getLocation),
-              {
-                pathname: locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId)
-              }
+              getContext('history'),
+              { location: { pathname: locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId) }, push: pushMock }
             ]
           ])
-          .put(push(locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId)))
           .dispatch(setPurchase(mockNFTPurchase))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId))
+          })
       })
     })
 
     describe('and the user was exploring collectibles', () => {
       it('should not dispatch a push to the history with the location of the buy status page', () => {
+        const pushMock = jest.fn()
         return expectSaga(assetSaga)
-          .provide([
-            [
-              select(getLocation),
-              {
-                pathname: locations.browse()
-              }
-            ]
-          ])
+          .provide([[getContext('history'), { location: { pathname: locations.browse() }, push: pushMock }]])
           .dispatch(setPurchase(mockNFTPurchase))
           .run({ silenceTimeout: true })
           .then(({ effects }) => {
@@ -109,14 +99,8 @@ describe('when handling the set purchase action', () => {
     describe('and the tx hash has not yet been setted', () => {
       it('should not dispatch a push to the history with the location of the buy status page', () => {
         return expectSaga(assetSaga)
-          .provide([
-            [
-              select(getLocation),
-              {
-                pathname: locations.browse()
-              }
-            ]
-          ])
+          .provide([[getContext('history'), { location: { pathname: locations.browse() } }]])
+
           .dispatch(setPurchase({ ...mockNFTPurchase, txHash: null }))
           .run({ silenceTimeout: true })
           .then(({ effects }) => {
@@ -130,36 +114,26 @@ describe('when handling the set purchase action', () => {
     'when the purchase of an item has a status %s',
     (status: PurchaseStatus) => {
       it('should dispatch an action signaling the failure of the item', () => {
+        const pushMock = jest.fn()
         return expectSaga(assetSaga)
-          .provide([
-            [
-              select(getLocation),
-              {
-                pathname: mockPathname()
-              }
-            ]
-          ])
+          .provide([[getContext('history'), { location: { pathname: mockPathname() }, push: pushMock }]])
+
           .put(buyItemWithCardFailure(t('global.unknown_error')))
-          .put(push(locations.buyWithCard(AssetType.ITEM, mockContractAddress, mockTokenId)))
           .dispatch(setPurchase({ ...mockNFTPurchase, status }))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(locations.buyWithCard(AssetType.ITEM, mockContractAddress, mockTokenId))
+          })
       })
     }
   )
 
   describe.each(failStatuses)('when the purchase of an nft has a status %s', status => {
     it('should dispatch an action signaling the failure of the nft', () => {
+      const pushMock = jest.fn()
       return expectSaga(assetSaga)
-        .provide([
-          [
-            select(getLocation),
-            {
-              pathname: mockPathname(AssetType.NFT)
-            }
-          ]
-        ])
+        .provide([[getContext('history'), { location: { pathname: mockPathname(AssetType.NFT) }, push: pushMock }]])
         .put(executeOrderWithCardFailure(t('global.unknown_error')))
-        .put(push(locations.buyWithCard(AssetType.NFT, mockContractAddress, mockTokenId)))
         .dispatch(
           setPurchase({
             ...mockNFTPurchase,
@@ -173,6 +147,9 @@ describe('when handling the set purchase action', () => {
           })
         )
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(locations.buyWithCard(AssetType.NFT, mockContractAddress, mockTokenId))
+        })
     })
   })
 })
