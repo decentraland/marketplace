@@ -17,14 +17,10 @@ jest.mock(
 
 describe('ClaimNamePage', () => {
   let walletMock: Wallet
-  let onBrowseMock: Props['onBrowse']
   let onClaimMock: Props['onClaim']
-  let onRedirectMock: Props['onRedirect']
 
   const renderAndTypeText = async (text: string) => {
-    const matchers = renderWithProviders(
-      <ClaimNamePage wallet={walletMock} isConnecting={false} onClaim={onClaimMock} onBrowse={onBrowseMock} onRedirect={onRedirectMock} />
-    )
+    const matchers = renderWithProviders(<ClaimNamePage wallet={walletMock} isConnecting={false} onClaim={onClaimMock} />)
     const { getByDisplayValue, getByText } = matchers
     const nameInput = getByDisplayValue(t('names_page.your_name')) as HTMLInputElement
     fireEvent.change(nameInput, { target: { value: text } })

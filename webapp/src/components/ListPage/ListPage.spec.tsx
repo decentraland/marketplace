@@ -46,7 +46,6 @@ function renderListPage(props: Partial<Props> = {}) {
       wallet={{ address: list.userAddress } as Wallet}
       listId={listId}
       list={list}
-      onBack={jest.fn()}
       onFetchList={jest.fn()}
       onDeleteList={jest.fn()}
       onEditList={jest.fn()}
