@@ -1,6 +1,7 @@
 import { matchPath } from 'react-router-dom'
-import { push, getLocation, goBack, LOCATION_CHANGE, replace, LocationChangeAction } from 'connected-react-router'
-import { takeEvery, put, select, call, take, delay, race, spawn } from 'redux-saga/effects'
+import { getLocation, LOCATION_CHANGE, LocationChangeAction } from 'connected-react-router'
+import { History } from 'history'
+import { takeEvery, put, select, call, take, delay, race, spawn, getContext } from 'redux-saga/effects'
 import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
@@ -124,17 +125,19 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
 }
 
 function* handleClearFilters() {
+  const history: History = yield getContext('history')
   const browseOptions = (yield select(getCurrentBrowseOptions)) as ReturnType<typeof getCurrentBrowseOptions>
-  const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
+  const { pathname } = history.location
   const clearedBrowseOptions = getClearedBrowseOptions(browseOptions)
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)
-  yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))
+  history.push(buildBrowseURL(pathname, clearedBrowseOptions))
 }
 
 export function* handleBrowse(action: BrowseAction) {
+  const history: History = yield getContext('history')
   const options = (yield call(getNewBrowseOptions, action.payload.options)) as BrowseOptions
 
-  const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
+  const { pathname } = history.location
   const eventsContracts = (yield select(getData)) as Record<string, string[]>
   const isAnEventRoute = Object.keys(eventsContracts).includes(pathname.slice(1))
   yield call(fetchAssetsFromRoute, {
@@ -143,13 +146,14 @@ export function* handleBrowse(action: BrowseAction) {
       contracts: options.contracts && options.contracts.length > 0 ? options.contracts : eventsContracts[pathname.slice(1)]
     })
   })
-  yield put(push(buildBrowseURL(pathname, options)))
+  history.push(buildBrowseURL(pathname, options))
 }
 
 function* handleGoBack(action: GoBackAction) {
+  const history: History = yield getContext('history')
   const { defaultLocation } = action.payload
 
-  yield put(goBack())
+  history.goBack()
 
   const { timeout }: { timeout?: boolean } = (yield race({
     changed: take(LOCATION_CHANGE),
@@ -157,7 +161,7 @@ function* handleGoBack(action: GoBackAction) {
   })) as { changed: LocationChangeAction; timeout: boolean }
 
   if (timeout) {
-    yield put(replace(defaultLocation || locations.root()))
+    history.replace(defaultLocation || locations.root())
   }
 }
 
@@ -560,32 +564,32 @@ function shouldResetOptions(previous: BrowseOptions, current: BrowseOptions) {
 }
 
 function* handleRedirectToActivity() {
-  const location = (yield select(getLocation)) as ReturnType<typeof getLocation>
+  const history: History = yield getContext('history')
+  const location = history.location
   const redirectTo = new URLSearchParams(location.search).get('redirectTo')
   if (redirectTo) {
-    yield put(push(decodeURIComponent(redirectTo)))
+    history.push(decodeURIComponent(redirectTo))
   } else {
-    yield put(push(locations.activity()))
+    history.push(locations.activity())
   }
 }
 
 function* handleRedirectClaimingNameToSuccessPage(action: ClaimNameTransactionSubmittedAction) {
+  const history: History = yield getContext('history')
   const data = action.payload[TRANSACTION_ACTION_FLAG] as { hash: string; payload: { subdomain: string } }
   const signer = (yield call(getSigner)) as Awaited<ReturnType<typeof getSigner>>
   const dclRegistrarContract: DCLRegistrar = (yield call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer)) as Awaited<
     ReturnType<typeof DCLRegistrar__factory.connect>
   >
   const contractAddress = dclRegistrarContract.address
-  yield put(
-    push(
-      locations.success({
-        txHash: data.hash,
-        assetType: AssetType.NFT,
-        tokenId: '',
-        contractAddress,
-        subdomain: data.payload.subdomain
-      })
-    )
+  history.push(
+    locations.success({
+      txHash: data.hash,
+      assetType: AssetType.NFT,
+      tokenId: '',
+      contractAddress,
+      subdomain: data.payload.subdomain
+    })
   )
 }
 
@@ -597,6 +601,7 @@ function* handleRedirectToSuccessPage(
     | ClaimNameSuccessAction
     | ClaimNameCrossChainSuccessAction
 ) {
+  const history: History = yield getContext('history')
   const payload = action.payload
   const isCrossChainAction = 'route' in payload && payload.route.route.params.fromChain !== payload.route.route.params.toChain // it's cross chain only if the fromChain is different from the toChain
   const successParams = {
@@ -627,5 +632,5 @@ function* handleRedirectToSuccessPage(
             ? payload.ens.contractAddress
             : ''
   }
-  yield put(push(locations.success(successParams)))
+  history.push(locations.success(successParams))
 }

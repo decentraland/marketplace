@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Loader, HeaderMenu, Header, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
@@ -8,8 +8,8 @@ import { Props } from './Bids.types'
 import './Bids.css'
 
 const Bids = (props: Props) => {
-  const { wallet, isConnecting, isLoading, bidderBids, sellerBids, archivedBidIds, onNavigate, onFetchBids } = props
-
+  const { wallet, isConnecting, isLoading, bidderBids, sellerBids, archivedBidIds, onFetchBids } = props
+  const history = useHistory()
   const [showArchived, setShowArchivedSeller] = useState(false)
   const { pathname, search } = useLocation()
 
@@ -18,9 +18,9 @@ const Bids = (props: Props) => {
   // Redirect to signIn if trying to access current account without a wallet
   useEffect(() => {
     if (!isConnecting && !wallet) {
-      onNavigate(locations.signIn(`${pathname}${search}`))
+      history.replace(locations.signIn(`${pathname}${search}`))
     }
-  }, [isConnecting, wallet, onNavigate, pathname, search])
+  }, [isConnecting, wallet, history, pathname, search])
 
   useEffect(() => {
     if (wallet) {

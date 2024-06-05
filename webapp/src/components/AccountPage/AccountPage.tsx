@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { AddressProvider } from 'decentraland-dapps/dist/containers/AddressProvider'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Loader, Center } from 'decentraland-ui'
@@ -12,17 +12,18 @@ import AccountBanner from './AccountBanner'
 import { Props } from './AccountPage.types'
 import './AccountPage.css'
 
-const AccountPage = ({ addressInUrl, vendor, wallet, isConnecting, viewAsGuest, onRedirect }: Props) => {
+const AccountPage = ({ addressInUrl, vendor, wallet, isConnecting, viewAsGuest }: Props) => {
   const isCurrentAccount = (!addressInUrl || wallet?.address === addressInUrl) && !viewAsGuest
   const { pathname, search } = useLocation()
+  const history = useHistory()
 
   // Redirect to signIn if trying to access current account without a wallet
   useEffect(() => {
     if (!addressInUrl && !isConnecting && !wallet) {
-      onRedirect(locations.signIn(`${pathname}${search}`))
+      history.replace(locations.signIn(`${pathname}${search}`))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [addressInUrl, isConnecting, wallet, onRedirect])
+  }, [addressInUrl, isConnecting, wallet, history])
 
   return (
     <PageLayout className="AccountPage" activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined}>

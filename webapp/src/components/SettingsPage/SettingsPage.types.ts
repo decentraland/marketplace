@@ -1,4 +1,3 @@
-import { CallHistoryMethodAction } from 'connected-react-router'
 import { Dispatch } from 'redux'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -14,7 +13,6 @@ export type Props = {
   isConnecting: boolean
   hasFetchedContracts: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
-  onNavigate: (path: string) => void
   onFetchContracts: typeof fetchContractsRequest
 }
 
@@ -22,5 +20,5 @@ export type MapStateProps = Pick<
   Props,
   'wallet' | 'authorizations' | 'isLoading' | 'isConnecting' | 'hasError' | 'getContract' | 'hasFetchedContracts'
 >
-export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onFetchContracts'>
-export type MapDispatch = Dispatch<CallHistoryMethodAction | FetchContractsRequestAction>
+export type MapDispatchProps = Pick<Props, 'onFetchContracts'>
+export type MapDispatch = Dispatch<FetchContractsRequestAction>

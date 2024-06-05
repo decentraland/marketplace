@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
 import { NavbarPages } from 'decentraland-ui/dist/components/Navbar/Navbar.types'
 import { config } from '../../config'
@@ -7,8 +8,9 @@ import { Props } from './Navbar.types'
 import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const { location, onNavigate, isChainSelectorEnabled } = props
-  const { pathname, search } = location
+  const { isChainSelectorEnabled } = props
+  const { pathname, search } = useLocation()
+  const history = useHistory()
 
   const handleOnSignIn = useCallback(() => {
     const searchParams = new URLSearchParams(search)
@@ -20,8 +22,8 @@ const Navbar = (props: Props) => {
   }, [pathname, search])
 
   const handleOnClickAccount = useCallback(() => {
-    onNavigate(locations.settings())
-  }, [onNavigate])
+    history.push(locations.settings())
+  }, [history])
 
   return (
     <BaseNavbar

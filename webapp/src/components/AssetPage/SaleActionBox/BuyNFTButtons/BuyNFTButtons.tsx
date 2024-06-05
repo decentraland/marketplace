@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { Order } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Loader } from 'decentraland-ui'
@@ -23,8 +23,7 @@ const BuyNFTButtons = ({
   isBuyingWithCryptoModalOpen,
   onBuyWithCrypto,
   onExecuteOrderWithCard,
-  onBuyItemWithCard,
-  onRedirect
+  onBuyItemWithCard
 }: Props) => {
   const analytics = getAnalytics()
   const location = useLocation()
@@ -33,6 +32,7 @@ const BuyNFTButtons = ({
     const shouldOpenModal = search.get('buyWithCrypto')
     return shouldOpenModal
   }, [location.search])
+  const history = useHistory()
 
   const handleBuyWithCard = useCallback(
     (asset: Asset) => {
@@ -45,13 +45,13 @@ const BuyNFTButtons = ({
   const handleBuyWithCrypto = useCallback(
     (asset: Asset, order: Order | null) => {
       if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
-        onRedirect(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
+        history.replace(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
         analytics.track(events.CLICK_BUY_NFT_WITH_CRYPTO)
         onBuyWithCrypto(asset, order)
       }
     },
-    [isConnecting, wallet, isBuyingWithCryptoModalOpen, location.pathname, analytics, onRedirect, onBuyWithCrypto]
+    [isConnecting, wallet, isBuyingWithCryptoModalOpen, location.pathname, analytics, history, onBuyWithCrypto]
   )
 
   return (

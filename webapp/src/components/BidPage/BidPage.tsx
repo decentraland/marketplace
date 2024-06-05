@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import { Page } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
 import { AssetProviderPage } from '../AssetProviderPage'
@@ -8,7 +9,16 @@ import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
 
 const BidPage = (props: Props) => {
-  const { onNavigate, onPlaceBid, isPlacingBid, onClearBidError, getContract } = props
+  const { onPlaceBid, isPlacingBid, onClearBidError, getContract } = props
+  const history = useHistory()
+
+  const onNavigate = useCallback(
+    (pathname: string) => {
+      history.push(pathname)
+    },
+    [history]
+  )
+
   return (
     <PageLayout>
       <Page className="BidPage">

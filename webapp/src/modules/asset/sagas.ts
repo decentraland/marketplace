@@ -1,5 +1,5 @@
-import { getLocation, push } from 'connected-react-router'
-import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { History } from 'history'
+import { call, getContext, put, takeEvery } from 'redux-saga/effects'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
@@ -32,9 +32,11 @@ export function* assetSaga() {
 
 function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
   const { purchase } = action.payload
+  const history: History = yield getContext('history')
+
   if (isNFTPurchase(purchase)) {
     const { nft, status } = purchase
-    const { pathname } = (yield select(getLocation)) as ReturnType<typeof getLocation>
+    const { pathname } = history.location
 
     const { tradeType, contractAddress, tokenId, itemId } = nft
     const assetType: AssetType = tradeType === TradeType.PRIMARY ? AssetType.ITEM : AssetType.NFT
@@ -44,13 +46,13 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
     const shouldRedirect = [new URL(`${window.origin}${buyWithCardPathname}`).pathname, statusPagePathname].includes(pathname)
 
     if (shouldRedirect && [PurchaseStatus.PENDING, PurchaseStatus.COMPLETE].includes(status)) {
-      yield put(push(statusPagePathname))
+      history.push(statusPagePathname)
     }
 
     if (failStatuses.includes(status)) {
       const failureAction = assetType === AssetType.NFT ? executeOrderWithCardFailure : buyItemWithCardFailure
 
-      if (shouldRedirect) yield put(push(buyWithCardPathname))
+      if (shouldRedirect) history.push(buyWithCardPathname)
 
       // TODO (buy nfts with card): is there a way to get the reason of the failure?
       yield put(failureAction(t('global.unknown_error')))

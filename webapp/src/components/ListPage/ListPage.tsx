@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { Link, Redirect, useLocation } from 'react-router-dom'
+import { Link, Redirect, useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -38,9 +38,10 @@ import styles from './ListPage.module.css'
 const LIST_NOT_FOUND = 'list was not found'
 
 const ListPage = (props: Props) => {
-  const { isConnecting, wallet, listId, list, isLoading, error, onFetchList, onBack, onEditList, onDeleteList, onShareList } = props
+  const { isConnecting, wallet, listId, list, isLoading, error, onFetchList, onEditList, onDeleteList, onShareList } = props
   const hasFetchedOnce = useRef(false)
   const { pathname, search } = useLocation()
+  const history = useHistory()
 
   const fetchList = useCallback(() => {
     if (listId && !isLoading && !hasFetchedOnce.current) {
@@ -113,7 +114,7 @@ const ListPage = (props: Props) => {
           <Header className={styles.header} size="large">
             {!isPublicView || list.id === DEFAULT_FAVORITES_LIST_ID ? (
               <span data-testid={GO_BACK_BUTTON_TEST_ID}>
-                <Back onClick={onBack} />
+                <Back onClick={() => history.push(locations.lists())} />
               </span>
             ) : null}
             <div className={styles.nameContainer}>

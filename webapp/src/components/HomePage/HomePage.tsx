@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
+import { useHistory } from 'react-router-dom'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { BackToTopButton, Page } from 'decentraland-ui'
@@ -24,8 +25,8 @@ import { Props } from './HomePage.types'
 import './HomePage.css'
 
 const HomePage = (props: Props) => {
-  const { homepage, homepageLoading, onNavigate, onFetchAssetsFromRoute, isCampaignHomepageBannerEnabled } = props
-
+  const { homepage, homepageLoading, onFetchAssetsFromRoute, isCampaignHomepageBannerEnabled } = props
+  const history = useHistory()
   const vendor = VendorName.DECENTRALAND
 
   const sections: Partial<Record<View, Section>> = useMemo(
@@ -94,7 +95,7 @@ const HomePage = (props: Props) => {
       let browseOptions: BrowseOptions = {}
 
       if (Section.LAND === section) {
-        onNavigate(locations.lands())
+        history.push(locations.lands())
       } else if (Section.WEARABLES_TRENDING === section) {
         trackMessage = 'Explore all trending wearables'
         browseOptions = {
@@ -112,10 +113,10 @@ const HomePage = (props: Props) => {
 
       if (trackMessage && browseOptions) {
         getAnalytics().track(fromEmptyState ? `${trackMessage} '(from empty state)'` : trackMessage)
-        onNavigate(locations.browse(browseOptions))
+        history.push(locations.browse(browseOptions))
       }
     },
-    [assetTypes, sort, sections, onNavigate]
+    [assetTypes, sort, sections, history]
   )
 
   const fetchAssetsForView = useCallback(

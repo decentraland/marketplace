@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
 import { getIsCampaignHomepageBannerEnabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import { fetchAssetsFromRoute } from '../../modules/routing/actions'
@@ -14,7 +13,6 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path)),
   onFetchAssetsFromRoute: options => dispatch(fetchAssetsFromRoute(options))
 })
 

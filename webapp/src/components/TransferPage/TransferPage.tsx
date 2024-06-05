@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { AddressField } from 'decentraland-dapps/dist/components/AddressField'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -15,7 +16,8 @@ import { Props } from './TransferPage.types'
 import './TransferPage.css'
 
 const TransferPage = (props: Props) => {
-  const { onNavigate, onTransfer, isTransferring } = props
+  const { onTransfer, isTransferring } = props
+  const history = useHistory()
 
   const [address, setAddress] = useState('')
   const [isInvalidAddress, setIsInvalidAddress] = useState(false)
@@ -79,7 +81,7 @@ const TransferPage = (props: Props) => {
                       <Button
                         as="div"
                         disabled={isTransferring}
-                        onClick={() => onNavigate(locations.nft(nft.contractAddress, nft.tokenId))}
+                        onClick={() => history.push(locations.nft(nft.contractAddress, nft.tokenId))}
                       >
                         {t('global.cancel')}
                       </Button>

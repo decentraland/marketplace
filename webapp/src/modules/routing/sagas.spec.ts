@@ -1,6 +1,6 @@
-import { getLocation, LOCATION_CHANGE, LocationChangeAction, push, RouterLocation } from 'connected-react-router'
+import { LOCATION_CHANGE, LocationChangeAction, RouterLocation } from 'connected-react-router'
 import { BigNumber, ethers } from 'ethers'
-import { call, select } from 'redux-saga/effects'
+import { call, getContext, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import {
   ChainId,
@@ -40,8 +40,11 @@ import { getCurrentBrowseOptions, getLatestVisitedLocation, getSection } from '.
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
 
+let pushMock: jest.Mock
+
 beforeEach(() => {
   jest.spyOn(Date, 'now').mockReturnValue(100)
+  pushMock = jest.fn()
 })
 
 afterEach(() => {
@@ -95,13 +98,15 @@ describe('when handling the clear filters request action', () => {
       return expectSaga(routingSaga)
         .provide([
           [select(getCurrentBrowseOptions), browseOptions],
-          [select(getLocation), { pathname }],
+          [getContext('history'), { location: { pathname }, push: pushMock }],
           [select(getEventData), {}],
           [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
         ])
-        .put(push(buildBrowseURL(pathname, browseOptionsWithoutFilters)))
         .dispatch(clearFilters())
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, browseOptionsWithoutFilters))
+        })
     })
   })
 
@@ -110,13 +115,15 @@ describe('when handling the clear filters request action', () => {
       return expectSaga(routingSaga)
         .provide([
           [select(getCurrentBrowseOptions), browseOptions],
-          [select(getLocation), { pathname }],
+          [getContext('history'), { location: { pathname }, push: pushMock }],
           [select(getEventData), {}],
           [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
         ])
-        .put(push(buildBrowseURL(pathname, browseOptionsWithoutFilters)))
         .dispatch(clearFilters())
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, browseOptionsWithoutFilters))
+        })
     })
 
     describe('and it is not the LAND section', () => {
@@ -134,12 +141,14 @@ describe('when handling the clear filters request action', () => {
                 }
               ],
               [select(getPage), 1],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
             ])
-            .put(
-              push(
+            .dispatch(clearFilters())
+            .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(
                 buildBrowseURL(pathname, {
                   ...browseOptionsWithoutFilters,
                   section: Section.COLLECTIONS,
@@ -147,9 +156,7 @@ describe('when handling the clear filters request action', () => {
                   status: AssetStatusFilter.ON_SALE
                 })
               )
-            )
-            .dispatch(clearFilters())
-            .run({ silenceTimeout: true })
+            })
         })
       })
       describe('and the asset type is NFT', () => {
@@ -167,12 +174,14 @@ describe('when handling the clear filters request action', () => {
                 }
               ],
               [select(getPage), 1],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
             ])
-            .put(
-              push(
+            .dispatch(clearFilters())
+            .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(
                 buildBrowseURL(pathname, {
                   ...browseOptionsWithoutFilters,
                   section: Section.WEARABLES,
@@ -180,9 +189,7 @@ describe('when handling the clear filters request action', () => {
                   assetType: AssetType.NFT
                 })
               )
-            )
-            .dispatch(clearFilters())
-            .run({ silenceTimeout: true })
+            })
         })
       })
     })
@@ -440,14 +447,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
 
@@ -465,14 +474,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
     })
@@ -490,14 +501,16 @@ describe('when handling the browse action', () => {
         return expectSaga(routingSaga)
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
-            [select(getLocation), { pathname }],
+            [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
-          .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+          })
       })
     })
 
@@ -515,14 +528,16 @@ describe('when handling the browse action', () => {
         return expectSaga(routingSaga)
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
-            [select(getLocation), { pathname }],
+            [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
-          .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+          })
       })
     })
   })
@@ -551,14 +566,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
 
@@ -576,14 +593,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
     })
@@ -607,14 +626,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
 
@@ -631,14 +652,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
 
@@ -655,14 +678,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
     })
@@ -680,14 +705,16 @@ describe('when handling the browse action', () => {
         return expectSaga(routingSaga)
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
-            [select(getLocation), { pathname }],
+            [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
-          .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+          })
       })
     })
   })
@@ -716,14 +743,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
 
@@ -741,14 +770,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
     })
@@ -766,14 +797,16 @@ describe('when handling the browse action', () => {
         return expectSaga(routingSaga)
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
-            [select(getLocation), { pathname }],
+            [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
-          .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+          })
       })
     })
 
@@ -791,14 +824,16 @@ describe('when handling the browse action', () => {
         return expectSaga(routingSaga)
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
-            [select(getLocation), { pathname }],
+            [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
-          .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+          })
       })
     })
   })
@@ -827,14 +862,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
 
@@ -852,14 +889,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
     })
@@ -883,14 +922,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
 
@@ -907,14 +948,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
 
@@ -931,14 +974,16 @@ describe('when handling the browse action', () => {
           return expectSaga(routingSaga)
             .provide([
               [select(getCurrentBrowseOptions), browseOptions],
-              [select(getLocation), { pathname }],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
-            .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
             .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+            })
         })
       })
     })
@@ -956,14 +1001,16 @@ describe('when handling the browse action', () => {
         return expectSaga(routingSaga)
           .provide([
             [select(getCurrentBrowseOptions), browseOptions],
-            [select(getLocation), { pathname }],
+            [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
-          .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+          })
       })
     })
   })
@@ -989,14 +1036,16 @@ describe('when handling the browse action', () => {
       return expectSaga(routingSaga)
         .provide([
           [select(getCurrentBrowseOptions), browseOptions],
-          [select(getLocation), { pathname }],
+          [getContext('history'), { location: { pathname }, push: pushMock }],
           [select(getSection), Section.WEARABLES],
           [select(getEventData), eventContracts],
           [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
         ])
-        .put(push(buildBrowseURL(pathname, browseOptions)))
         .dispatch(browse(browseOptions))
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, browseOptions))
+        })
     })
   })
 
@@ -1013,14 +1062,16 @@ describe('when handling the browse action', () => {
       return expectSaga(routingSaga)
         .provide([
           [select(getCurrentBrowseOptions), browseOptions],
-          [select(getLocation), { pathname }],
+          [getContext('history'), { location: { pathname }, push: pushMock }],
           [select(getSection), Section.WEARABLES],
           [select(getEventData), eventContracts],
           [call(fetchAssetsFromRoute, browseOptions), Promise.resolve()]
         ])
-        .put(push(buildBrowseURL(pathname, browseOptions)))
         .dispatch(browse(browseOptions))
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, browseOptions))
+        })
     })
   })
 
@@ -1049,13 +1100,15 @@ describe('when handling the browse action', () => {
         .provide([
           [select(getCurrentBrowseOptions), {}],
           [select(getSection), Section.WEARABLES],
-          [select(getLocation), { pathname }],
+          [getContext('history'), { location: { pathname }, push: pushMock }],
           [select(getEventData), {}],
           [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
         ])
-        .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
         .dispatch(browse(newBrowseOptions))
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, expectedBrowseOptions))
+        })
     })
   })
 })
@@ -1184,7 +1237,7 @@ describe('handleRedirectToSuccessPage saga', () => {
 
     it('should redirect to success page with the correct query params', () => {
       return expectSaga(routingSaga)
-        .put(push(locations.success(searchParams)))
+        .provide([[getContext('history'), { push: pushMock }]])
         .dispatch(
           executeOrderSuccess(searchParams.txHash, {
             tokenId: searchParams.tokenId,
@@ -1192,6 +1245,9 @@ describe('handleRedirectToSuccessPage saga', () => {
           } as NFT)
         )
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(locations.success(searchParams))
+        })
     })
   })
 
@@ -1207,7 +1263,7 @@ describe('handleRedirectToSuccessPage saga', () => {
 
     it('should redirect to success page with the correct query params', () => {
       return expectSaga(routingSaga)
-        .put(push(locations.success(searchParams)))
+        .provide([[getContext('history'), { push: pushMock }]])
         .dispatch(
           buyItemSuccess(ChainId.ETHEREUM_GOERLI, searchParams.txHash, {
             itemId: searchParams.tokenId,
@@ -1216,6 +1272,9 @@ describe('handleRedirectToSuccessPage saga', () => {
           } as Item)
         )
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(locations.success(searchParams))
+        })
     })
   })
 
@@ -1237,9 +1296,12 @@ describe('handleRedirectToSuccessPage saga', () => {
 
     it('should redirect to success page with the correct query params', () => {
       return expectSaga(routingSaga)
-        .put(push(locations.success(searchParams)))
+        .provide([[getContext('history'), { push: pushMock }]])
         .dispatch(claimNameSuccess(ens, 'aName', searchParams.txHash))
         .run({ silenceTimeout: true })
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(locations.success(searchParams))
+        })
     })
   })
 
@@ -1283,9 +1345,12 @@ describe('handleRedirectToSuccessPage saga', () => {
 
       it('should redirect to success page with the correct query params', () => {
         return expectSaga(routingSaga)
-          .put(push(locations.success(searchParams)))
+          .provide([[getContext('history'), { push: pushMock }]])
           .dispatch(buyItemCrossChainSuccess(route, ChainId.ETHEREUM_MAINNET, searchParams.txHash, item, order))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(locations.success(searchParams))
+          })
       })
     })
 
@@ -1301,9 +1366,12 @@ describe('handleRedirectToSuccessPage saga', () => {
 
       it('should redirect to success page with the correct query params', () => {
         return expectSaga(routingSaga)
-          .put(push(locations.success(searchParams)))
+          .provide([[getContext('history'), { push: pushMock }]])
           .dispatch(buyItemCrossChainSuccess(route, ChainId.ETHEREUM_MAINNET, searchParams.txHash, item))
           .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(locations.success(searchParams))
+          })
       })
     })
   })
@@ -1316,26 +1384,32 @@ describe.each([
   it('should redirect to the location when redirectTo is present', () => {
     const redirectTo = '/account?section=on_sale'
     const location = { search: `?redirectTo=${encodeURIComponent(redirectTo)}` }
+    const pushMock = jest.fn()
 
     return (
       expectSaga(routingSaga)
-        .provide([[select(getLocation), location]])
+        .provide([[getContext('history'), { location, push: pushMock }]])
         //@ts-ignore
         .dispatch(action(...args))
-        .put(push(redirectTo))
         .run()
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(redirectTo)
+        })
     )
   })
 
   it('should redirect to the default activity location when redirectTo is not present', () => {
     const location = { search: '' }
+    const pushMock = jest.fn()
     return (
       expectSaga(routingSaga)
-        .provide([[select(getLocation), location]])
+        .provide([[getContext('history'), { location, push: pushMock }]])
         //@ts-ignore
         .dispatch(action(...args))
-        .put(push(locations.activity()))
         .run()
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(locations.activity())
+        })
     )
   })
 })
@@ -1371,9 +1445,10 @@ describe('when handling the claim name transaction submitted action', () => {
   })
 
   it('should redirect to success page with the correct query params', () => {
+    const pushMock = jest.fn()
     return expectSaga(routingSaga)
-      .put(push(locations.success(searchParams)))
       .provide([
+        [getContext('history'), { push: pushMock }],
         [call(getSigner), {}],
         [
           call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer),
@@ -1385,5 +1460,8 @@ describe('when handling the claim name transaction submitted action', () => {
       ])
       .dispatch(claimNameTransactionSubmitted(subdomain, address, chainId, txHash))
       .run({ silenceTimeout: true })
+      .then(() => {
+        expect(pushMock).toHaveBeenCalledWith(locations.success(searchParams))
+      })
   })
 })

@@ -1,5 +1,4 @@
-import { getLocation } from 'connected-react-router'
-import { call, select, take } from 'redux-saga/effects'
+import { call, getContext, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { ChainId, Entity, EntityType, Item, Network, Rarity } from '@dcl/schemas'
@@ -407,7 +406,7 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
                 [select(getIsMarketplaceServerEnabled), true],
-                [select(getLocation), { pathname }],
+                [getContext('history'), { location: { pathname } }],
                 {
                   call(effect, next) {
                     if (effect.fn === CatalogAPI.prototype.get && effect.args[0] === originalBrowseOptions.filters) {
@@ -443,7 +442,7 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
                 [select(getIsMarketplaceServerEnabled), true],
-                [select(getLocation), { pathname }],
+                [getContext('history'), { location: { pathname } }],
                 {
                   call(effect, next) {
                     if (effect.fn === CatalogAPI.prototype.get && effect.args[0] === originalBrowseOptions.filters) {
@@ -484,7 +483,7 @@ describe('when handling the fetch items request action', () => {
             [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
             [select(getWallet), undefined],
-            [select(getLocation), { pathname }],
+            [getContext('history'), { location: { pathname } }],
             [select(getIsMarketplaceServerEnabled), false]
           ])
           .put(fetchItemsSuccess(fetchResult.data, fetchResult.total, itemBrowseOptions, nowTimestamp))
@@ -498,7 +497,7 @@ describe('when handling the fetch items request action', () => {
     it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
-          [select(getLocation), { pathname: '' }],
+          [getContext('history'), { location: { pathname: '' } }],
           [select(getWallet), undefined],
           [select(getIsMarketplaceServerEnabled), true],
           [select(getWallet), undefined],

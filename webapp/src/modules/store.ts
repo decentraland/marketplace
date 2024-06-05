@@ -40,7 +40,7 @@ export function initStore(history: History) {
 
   const rootReducer = storageReducerWrapper(createRootReducer(history))
 
-  const sagasMiddleware = createSagasMiddleware()
+  const sagasMiddleware = createSagasMiddleware({ context: { history } })
   const loggerMiddleware = createLogger({
     collapsed: () => true,
     predicate: (_: any, action: Action<string>) => isDev || action.type.includes('Failure')

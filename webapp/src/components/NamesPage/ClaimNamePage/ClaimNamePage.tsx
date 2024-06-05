@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import { isErrorWithMessage } from 'decentraland-dapps/dist/lib'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -39,13 +39,14 @@ const PLACEHOLDER_WIDTH = '94px'
 
 const ClaimNamePage = (props: Props) => {
   const PLACEHOLDER_NAME = t('names_page.your_name')
-  const { wallet, isConnecting, onClaim, onBrowse, onRedirect } = props
+  const { wallet, isConnecting, onClaim } = props
   const location = useLocation()
   const [isLoadingStatus, setIsLoadingStatus] = useState(false)
   const [bannedNames, setBannedNames] = useState<string[]>()
   const [isAvailable, setIsAvailable] = useState<boolean | undefined>(undefined)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const isMobileOrTable = useTabletAndBelowMediaQuery()
+  const history = useHistory()
 
   useEffect(() => {
     void (async () => {
@@ -109,7 +110,7 @@ const ClaimNamePage = (props: Props) => {
 
   const handleClaim = useCallback(() => {
     if (!isConnecting && !wallet) {
-      onRedirect(locations.signIn(`${location.pathname}`))
+      history.replace(locations.signIn(`${location.pathname}`))
     } else {
       const isValid = isNameValid(name)
 
@@ -117,7 +118,7 @@ const ClaimNamePage = (props: Props) => {
 
       onClaim(name)
     }
-  }, [isConnecting, wallet, onRedirect, location.pathname, name, isAvailable, onClaim])
+  }, [isConnecting, wallet, history, location.pathname, name, isAvailable, onClaim])
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -391,7 +392,7 @@ const ClaimNamePage = (props: Props) => {
                     <div>
                       <h2> {t('names_page.ctas.name_taken.title')}</h2>
                       <span> {t('names_page.ctas.name_taken.description')}</span>
-                      <Button onClick={() => onBrowse()}>{t('names_page.browse_names_being_resold')}</Button>
+                      <Button onClick={() => history.push(locations.names())}>{t('names_page.browse_names_being_resold')}</Button>
                     </div>
                   </div>
                 </div>

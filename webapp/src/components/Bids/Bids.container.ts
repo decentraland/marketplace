@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { replace } from 'connected-react-router'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { fetchBidsByAddressRequest, FETCH_BIDS_BY_ADDRESS_REQUEST } from '../../modules/bid/actions'
@@ -22,7 +21,6 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(replace(path)),
   onFetchBids: address => dispatch(fetchBidsByAddressRequest(address))
 })
 

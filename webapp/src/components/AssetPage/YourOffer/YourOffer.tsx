@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import classNames from 'classnames'
 import { Bid, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -9,6 +10,7 @@ import iconListings from '../../../images/iconListings.png'
 import infoIcon from '../../../images/infoIcon.png'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { locations } from '../../../modules/routing/locations'
 import { bidAPI } from '../../../modules/vendor/decentraland'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
@@ -80,7 +82,8 @@ const ExpirationDate = (props: { bid: Bid }) => {
 }
 
 const YourOffer = (props: Props) => {
-  const { nft, address, onUpdate, onCancel } = props
+  const history = useHistory()
+  const { nft, address, onCancel } = props
 
   const [bid, setBid] = useState<Bid>()
   const isMobile = useMobileMediaQuery()
@@ -124,7 +127,7 @@ const YourOffer = (props: Props) => {
           <Button inverted fluid className={styles.actions} onClick={() => onCancel(bid)}>
             {t('offers_table.remove')}
           </Button>
-          <Button primary fluid className={styles.actions} onClick={() => onUpdate(bid)}>
+          <Button primary fluid className={styles.actions} onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
             {t('global.update')}
           </Button>
         </div>

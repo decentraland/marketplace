@@ -1,4 +1,3 @@
-import { CallHistoryMethodAction } from 'connected-react-router'
 import { Dispatch } from 'redux'
 import { getContract } from '../../modules/contract/selectors'
 import { clearOrderErrors, ClearOrderErrorsAction, createOrderRequest, CreateOrderRequestAction } from '../../modules/order/actions'
@@ -9,10 +8,9 @@ export type Props = {
   isCreatingOrder: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onCreateOrder: typeof createOrderRequest
-  onGoBack: () => void
   onClearOrderErrors: typeof clearOrderErrors
 }
 
 export type MapStateProps = Pick<Props, 'isLoading' | 'isCreatingOrder' | 'getContract'>
-export type MapDispatchProps = Pick<Props, 'onCreateOrder' | 'onGoBack' | 'onClearOrderErrors'>
-export type MapDispatch = Dispatch<CallHistoryMethodAction | CreateOrderRequestAction | ClearOrderErrorsAction>
+export type MapDispatchProps = Pick<Props, 'onCreateOrder' | 'onClearOrderErrors'>
+export type MapDispatch = Dispatch<CreateOrderRequestAction | ClearOrderErrorsAction>

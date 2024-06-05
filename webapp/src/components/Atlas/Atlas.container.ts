@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
 import { getContract } from '../../modules/contract/selectors'
 import { getWalletNFTs } from '../../modules/nft/selectors'
 import { RootState } from '../../modules/reducer'
@@ -8,7 +7,7 @@ import { getOnRentNFTsByLessor } from '../../modules/ui/browse/selectors'
 import { Contract } from '../../modules/vendor/services'
 import { getWallet } from '../../modules/wallet/selectors'
 import Atlas from './Atlas'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './Atlas.types'
+import { MapStateProps } from './Atlas.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
@@ -24,8 +23,4 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path))
-})
-
-export default connect(mapState, mapDispatch)(Atlas)
+export default connect(mapState)(Atlas)

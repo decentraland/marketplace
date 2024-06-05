@@ -1,10 +1,8 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { cancelBidRequest, archiveBid, unarchiveBid, acceptBidRequest, ACCEPT_BID_REQUEST } from '../../modules/bid/actions'
 import { getLoading } from '../../modules/bid/selectors'
 import { RootState } from '../../modules/reducer'
-import { locations } from '../../modules/routing/locations'
 import { getArchivedBidIds } from '../../modules/ui/nft/bid/selectors'
 import { getWallet } from '../../modules/wallet/selectors'
 import Bid from './Bid'
@@ -17,7 +15,6 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onUpdate: bid => dispatch(push(locations.bid(bid.contractAddress, bid.tokenId))),
   onCancel: bid => dispatch(cancelBidRequest(bid)),
   onArchive: bid => dispatch(archiveBid(bid)),
   onUnarchive: bid => dispatch(unarchiveBid(bid)),
