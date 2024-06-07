@@ -5,9 +5,9 @@ import { localStorageGetIdentity, localStorageClearIdentity, localStorageStoreId
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   CONNECT_WALLET_SUCCESS,
+  DISCONNECT_WALLET_SUCCESS,
   DisconnectWalletSuccessAction,
-  ConnectWalletSuccessAction,
-  DISCONNECT_WALLET_SUCCESS
+  ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { config } from '../../config'
 import { isErrorWithMessage } from '../../lib/error'
