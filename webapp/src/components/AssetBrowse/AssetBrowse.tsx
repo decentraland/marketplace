@@ -80,6 +80,17 @@ const AssetBrowse = (props: Props) => {
   const isMapPropertyPersisted = getPersistedIsMapProperty()
 
   useEffect(() => {
+    const cancelListener = history.listen((_location, action) => {
+      if (action === 'POP') {
+        setHasFetched(false)
+      }
+    })
+    return () => {
+      cancelListener()
+    }
+  }, [history])
+
+  useEffect(() => {
     if (section === DecentralandSection.LAND && !isAccountView(view) && isMapPropertyPersisted === false && isMap) {
       // To prevent the map view from being displayed when the user clicks on the Land navigation tab.
       // We set the has fetched variable to false so it has to browse back to the list view.
