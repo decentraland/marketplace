@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Item, Network, RentalListing } from '@dcl/schemas'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -16,7 +16,8 @@ import {
   isRentalListingExecuted,
   isRentalListingOpen
 } from '../../modules/rental/utils'
-import { SortBy } from '../../modules/routing/types'
+import { locations } from '../../modules/routing/locations'
+import { PageName, SortBy } from '../../modules/routing/types'
 import { AssetImage } from '../AssetImage'
 import { FavoritesCounter } from '../FavoritesCounter'
 import { Mana } from '../Mana'
@@ -80,7 +81,7 @@ const AssetCard = (props: Props) => {
     asset,
     isManager,
     price,
-    showListedTag,
+    pageName,
     showRentalChip: showRentalBubble,
     onClick,
     isClaimingBackLandTransactionPending,
@@ -91,6 +92,8 @@ const AssetCard = (props: Props) => {
 
   const { ref, inView } = useInView()
   const isMobile = useMobileMediaQuery()
+  const location = useLocation()
+  const showListedTag = pageName === PageName.ACCOUNT && Boolean(price) && location.pathname !== locations.root()
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data

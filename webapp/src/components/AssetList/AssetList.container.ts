@@ -8,15 +8,7 @@ import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import { isLoadingNftsByView } from '../../modules/nft/selectors'
 import { RootState } from '../../modules/reducer'
 import { browse, clearFilters } from '../../modules/routing/actions'
-import {
-  getVendor,
-  getPageNumber,
-  getAssetType,
-  getSection,
-  getSearch,
-  hasFiltersEnabled,
-  getVisitedLocations
-} from '../../modules/routing/selectors'
+import { getVendor, getPageNumber, getAssetType, getSection, getSearch, hasFiltersEnabled } from '../../modules/routing/selectors'
 import { getBrowseAssets, getCount, getView } from '../../modules/ui/browse/selectors'
 import AssetList from './AssetList'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
@@ -40,8 +32,7 @@ const mapState = (state: RootState): MapStateProps => {
       assetType === AssetType.ITEM
         ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) || isLoadingFavoritedItems(state)
         : isLoadingType(loadingState, FETCH_NFTS_REQUEST),
-    hasFiltersEnabled: hasFiltersEnabled(state),
-    visitedLocations: getVisitedLocations(state)
+    hasFiltersEnabled: hasFiltersEnabled(state)
   }
 }
 

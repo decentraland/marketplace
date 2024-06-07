@@ -6,6 +6,7 @@ import { BackToTopButton, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { usePagination } from '../../lib/pagination'
 import { locations } from '../../modules/routing/locations'
 import { BrowseOptions } from '../../modules/routing/types'
+import { ExtendedHistory } from '../../modules/types'
 import { View } from '../../modules/ui/types'
 import { getPersistedIsMapProperty, isAccountView, isListsSection } from '../../modules/ui/utils'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -43,15 +44,15 @@ const AssetBrowse = (props: Props) => {
     onlyOnSale,
     onlySmart,
     viewInState,
-    onlyOnRent,
-    visitedLocations
+    onlyOnRent
   } = props
 
   const location = useLocation()
-  const history = useHistory()
+  const history = useHistory() as ExtendedHistory
   const { changeFilter } = usePagination()
 
   // Prevent fetching more than once while browsing
+  const visitedLocations = history.getLastVisitedLocations()
   const lastLocation = visitedLocations[visitedLocations.length - 2]
   const [hasFetched, setHasFetched] = useState(
     history.action === 'POP' &&
@@ -77,6 +78,17 @@ const AssetBrowse = (props: Props) => {
   }, [view, viewInState])
 
   const isMapPropertyPersisted = getPersistedIsMapProperty()
+
+  useEffect(() => {
+    const cancelListener = history.listen((_location, action) => {
+      if (action === 'POP') {
+        setHasFetched(false)
+      }
+    })
+    return () => {
+      cancelListener()
+    }
+  }, [history])
 
   useEffect(() => {
     if (section === DecentralandSection.LAND && !isAccountView(view) && isMapPropertyPersisted === false && isMap) {

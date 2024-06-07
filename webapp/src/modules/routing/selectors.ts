@@ -19,15 +19,6 @@ import { locations } from './locations'
 import { getDefaultOptionsByView, getURLParamArray, getURLParam, getURLParamArrayNonStandard, SEARCH_ARRAY_PARAM_SEPARATOR } from './search'
 import { BrowseOptions, PageName, SortBy, SortByOption } from './types'
 
-export const getState = (state: RootState) => state.routing
-
-export const getVisitedLocations = (state: RootState) => getState(state).visitedLocations
-
-export const getLatestVisitedLocation = createSelector<RootState, ReturnType<typeof getLocation>[], ReturnType<typeof getLocation>>(
-  getVisitedLocations,
-  visitedLocations => visitedLocations[visitedLocations.length - 1]
-)
-
 const getPathName = createSelector<RootState, ReturnType<typeof getLocation>, string>(getLocation, location => location.pathname)
 
 export const getVendor = createSelector<RootState, string, VendorName>(getRouterSearch, search => {

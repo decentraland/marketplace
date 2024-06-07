@@ -1,4 +1,3 @@
-import { RouterLocation } from 'connected-react-router'
 import { Dispatch } from 'redux'
 import { AssetType } from '../../modules/asset/types'
 import { browse, BrowseAction, fetchAssetsFromRoute, FetchAssetsFromRouteAction } from '../../modules/routing/actions'
@@ -24,12 +23,11 @@ export type Props = {
   onlyOnSale?: boolean
   onlySmart?: boolean
   onlyOnRent?: boolean
-  visitedLocations: RouterLocation<unknown>[]
 }
 
 export type MapStateProps = Pick<
   Props,
-  'isMap' | 'isFullscreen' | 'onlyOnSale' | 'viewInState' | 'section' | 'assetType' | 'onlySmart' | 'onlyOnRent' | 'visitedLocations'
+  'isMap' | 'isFullscreen' | 'onlyOnSale' | 'viewInState' | 'section' | 'assetType' | 'onlySmart' | 'onlyOnRent'
 >
 export type MapDispatchProps = Pick<Props, 'onSetView' | 'onFetchAssetsFromRoute' | 'onBrowse'>
 export type MapDispatch = Dispatch<SetViewAction | FetchAssetsFromRouteAction | BrowseAction>

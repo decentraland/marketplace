@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { getSearch } from 'connected-react-router'
 import { Dispatch } from 'redux'
 import { ChainId } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
@@ -13,7 +12,7 @@ import { getTokenIdFromLogs } from './utils'
 import { MapDispatchProps, MapStateProps } from './SuccessPage.types'
 
 const mapState = (state: RootState): MapStateProps => {
-  const search = new URLSearchParams(getSearch(state))
+  const search = new URLSearchParams(window.location.search)
   const transaction = getTransaction(state, search.get('txHash') || '')
   const address = getAddress(state)
   const isLoadingTx = Boolean(transaction && transaction.status !== TransactionStatus.CONFIRMED)

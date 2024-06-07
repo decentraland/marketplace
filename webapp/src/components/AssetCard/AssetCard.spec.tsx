@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react'
 import { BodyShape, ChainId, Network, NFTCategory, Rarity, WearableCategory } from '@dcl/schemas'
 import { Asset } from '../../modules/asset/types'
 import { INITIAL_STATE } from '../../modules/favorites/reducer'
-import { SortBy } from '../../modules/routing/types'
+import { PageName, SortBy } from '../../modules/routing/types'
 import { renderWithProviders } from '../../utils/test'
 import AssetCard from './AssetCard'
 import { Props as AssetCardProps } from './AssetCard.types'
@@ -20,6 +20,7 @@ function renderAssetCard(props: Partial<AssetCardProps> = {}) {
       rental={null}
       sortBy={SortBy.RECENTLY_LISTED}
       appliedFilters={{ maxPrice: '100', minPrice: '1' }}
+      pageName={PageName.ACCOUNT}
       {...props}
     />,
     {

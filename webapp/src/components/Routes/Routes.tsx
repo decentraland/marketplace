@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
-import { Switch, Route, Redirect, RouteComponentProps } from 'react-router-dom'
+import { useCallback, useEffect } from 'react'
+import { Switch, Route, Redirect, RouteComponentProps, useLocation } from 'react-router-dom'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
 import { usePageTracking } from 'decentraland-dapps/dist/hooks/usePageTracking'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -33,8 +33,13 @@ import { SuccessPage } from '../SuccessPage'
 import { TransferPage } from '../TransferPage'
 import { Props } from './Routes.types'
 
-const Routes = ({ inMaintenance }: Props) => {
+const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
   usePageTracking()
+  const location = useLocation()
+
+  useEffect(() => {
+    onLocationChanged()
+  }, [location])
 
   const APP_ID = config.get('INTERCOM_APP_ID')
   const renderItemAssetPage = useCallback(() => <AssetPage type={AssetType.ITEM} />, [])

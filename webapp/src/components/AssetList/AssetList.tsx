@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Loader } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { getCategoryFromSection } from '../../modules/routing/search'
+import { ExtendedHistory } from '../../modules/types'
 import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
 import * as events from '../../utils/events'
 import { AssetCard } from '../AssetCard'
@@ -15,23 +16,12 @@ import { Props } from './AssetList.types'
 import './AssetList.css'
 
 const AssetList = (props: Props) => {
-  const {
-    vendor,
-    section,
-    assetType,
-    assets,
-    page,
-    count,
-    search,
-    isLoading,
-    hasFiltersEnabled,
-    visitedLocations,
-    onBrowse,
-    isManager,
-    onClearFilters
-  } = props
+  const { vendor, section, assetType, assets, page, count, search, isLoading, hasFiltersEnabled, onBrowse, isManager, onClearFilters } =
+    props
 
   const location = useLocation()
+  const history = useHistory() as ExtendedHistory
+  const visitedLocations = history.getLastVisitedLocations()
 
   useEffect(() => {
     if (visitedLocations.length > 1) {

@@ -8,8 +8,7 @@ import {
   getSection,
   getOnlySmart,
   getOnlyOnRent,
-  getIsFullscreen,
-  getVisitedLocations
+  getIsFullscreen
 } from '../../modules/routing/selectors'
 import { isMapSet } from '../../modules/routing/utils'
 import { setView } from '../../modules/ui/actions'
@@ -28,8 +27,7 @@ const mapState = (state: RootState): MapStateProps => {
     assetType: getAssetType(state),
     viewInState: getView(state),
     onlySmart: getOnlySmart(state),
-    onlyOnRent: getOnlyOnRent(state),
-    visitedLocations: getVisitedLocations(state)
+    onlyOnRent: getOnlyOnRent(state)
   }
 }
 
