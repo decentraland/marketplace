@@ -1,7 +1,5 @@
-import { matchPath } from 'react-router-dom'
-import { getLocation, LOCATION_CHANGE, LocationChangeAction } from 'connected-react-router'
 import { History } from 'history'
-import { takeEvery, put, select, call, take, delay, race, spawn, getContext } from 'redux-saga/effects'
+import { takeEvery, put, select, call, take, race, spawn, getContext } from 'redux-saga/effects'
 import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
@@ -43,7 +41,6 @@ import {
   getMinPrice,
   getStatus,
   getEmotePlayMode,
-  getLatestVisitedLocation,
   getRarities,
   getWearableGenders,
   getContracts,
@@ -64,16 +61,7 @@ import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize, MAX_QUERY_SIZE } from '../vendor/
 import { Section } from '../vendor/decentraland'
 import { VendorName } from '../vendor/types'
 import { getFilters } from '../vendor/utils'
-import {
-  BROWSE,
-  BrowseAction,
-  FETCH_ASSETS_FROM_ROUTE,
-  fetchAssetsFromRoute as fetchAssetsFromRouteAction,
-  FetchAssetsFromRouteAction,
-  CLEAR_FILTERS,
-  GO_BACK,
-  GoBackAction
-} from './actions'
+import { BROWSE, BrowseAction, FETCH_ASSETS_FROM_ROUTE, FetchAssetsFromRouteAction, CLEAR_FILTERS, GO_BACK, GoBackAction } from './actions'
 import { locations } from './locations'
 import {
   getCategoryFromSection,
@@ -88,7 +76,6 @@ import { BrowseOptions } from './types'
 import { getClearedBrowseOptions, isCatalogView, rentalFilters, SALES_PER_PAGE, sellFilters, buildBrowseURL } from './utils'
 
 export function* routingSaga() {
-  yield takeEvery(LOCATION_CHANGE, handleLocationChange)
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
   yield takeEvery(BROWSE, handleBrowse)
   yield takeEvery(CLEAR_FILTERS, handleClearFilters)
@@ -103,20 +90,6 @@ export function* routingSaga() {
     handleRedirectToSuccessPage
   )
   yield takeEvery(CLAIM_NAME_TRANSACTION_SUBMITTED, handleRedirectClaimingNameToSuccessPage)
-}
-
-function* handleLocationChange(action: LocationChangeAction) {
-  // Re-triggers fetchAssetsFromRoute action when the user goes back
-  if (action.payload.action === 'POP' && matchPath(action.payload.location.pathname, { path: locations.browse() })) {
-    const latestVisitedLocation = (yield select(getLatestVisitedLocation)) as ReturnType<typeof getLocation>
-    const isComingFromBrowse = !!matchPath(latestVisitedLocation?.pathname, {
-      path: locations.browse()
-    })
-    if (isComingFromBrowse) {
-      const options = (yield select(getCurrentBrowseOptions)) as ReturnType<typeof getCurrentBrowseOptions>
-      yield put(fetchAssetsFromRouteAction(options))
-    }
-  }
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
@@ -153,14 +126,9 @@ function* handleGoBack(action: GoBackAction) {
   const history: History = yield getContext('history')
   const { defaultLocation } = action.payload
 
-  history.goBack()
-
-  const { timeout }: { timeout?: boolean } = (yield race({
-    changed: take(LOCATION_CHANGE),
-    timeout: delay(250)
-  })) as { changed: LocationChangeAction; timeout: boolean }
-
-  if (timeout) {
+  if (history.length) {
+    history.goBack()
+  } else {
     history.replace(defaultLocation || locations.root())
   }
 }

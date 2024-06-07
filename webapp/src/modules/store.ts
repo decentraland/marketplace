@@ -1,5 +1,5 @@
 import { routerMiddleware } from 'connected-react-router'
-import { createMemoryHistory, createBrowserHistory, History } from 'history'
+import { createMemoryHistory, createBrowserHistory, History, Location } from 'history'
 import { Action, applyMiddleware, compose, createStore, Middleware } from 'redux'
 import { createLogger } from 'redux-logger'
 import createSagasMiddleware from 'redux-saga'
@@ -16,11 +16,33 @@ import { getCurrentIdentity } from './identity/selectors'
 import { createRootReducer, RootState } from './reducer'
 import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
+import { ExtendedHistory } from './types'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
 
 const basename = /^decentraland.(zone|org|today)$/.test(window.location.host) ? '/marketplace' : undefined
 
-export const createHistory = () => createBrowserHistory({ basename })
+export const createHistory = () => {
+  const history = createBrowserHistory({ basename }) as ExtendedHistory
+  const locations: Location[] = []
+
+  history.listen((location, action) => {
+    if (action === 'PUSH') {
+      locations.push(location)
+      if (locations.length > 5) {
+        locations.shift()
+      }
+    }
+  })
+
+  history.getLastVisitedLocations = (n?: number) => {
+    if (n) {
+      return locations.slice(-n)
+    }
+    return locations
+  }
+
+  return history
+}
 
 export function initStore(history: History) {
   const anyWindow = window as unknown as Window & { __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any; getState: any }

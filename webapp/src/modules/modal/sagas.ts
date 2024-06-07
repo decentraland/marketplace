@@ -1,5 +1,4 @@
-import { LOCATION_CHANGE } from 'connected-react-router'
-import { delay, put, select, takeEvery } from 'redux-saga/effects'
+import { put, select, takeEvery } from 'redux-saga/effects'
 import { closeModal, closeAllModals, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
 import {
@@ -19,7 +18,6 @@ import {
 } from '../rental/actions'
 
 export function* modalSaga() {
-  yield takeEvery(LOCATION_CHANGE, handleLocationChange)
   yield takeEvery(
     [
       CLAIM_ASSET_SUCCESS,
@@ -35,14 +33,6 @@ export function* modalSaga() {
   )
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleCloseRemoveRentalModal)
   yield takeEvery(ACCEPT_RENTAL_LISTING_SUCCESS, handleOpenRentConfirmationModal)
-}
-
-function* handleLocationChange() {
-  const openModals = (yield select(getOpenModals)) as ReturnType<typeof getOpenModals>
-  if (Object.keys(openModals).length > 0) {
-    yield delay(100)
-    yield handleCloseAllModals()
-  }
 }
 
 function* handleCloseAllModals() {

@@ -1,4 +1,3 @@
-import { RouterLocation } from 'connected-react-router'
 import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
@@ -25,30 +24,9 @@ import {
   getSortByOptions,
   getStatus,
   hasFiltersEnabled,
-  getLatestVisitedLocation,
   getContracts
 } from './selectors'
 import { PageName, Sections, SortBy } from './types'
-
-describe('when getting the latest visited location', () => {
-  describe('and there is no previous location', () => {
-    it('should return undefined', () => {
-      expect(getLatestVisitedLocation.resultFunc([])).toBe(undefined)
-    })
-  })
-
-  describe('and there is a previous location', () => {
-    let prevLocation: RouterLocation<unknown>
-    beforeEach(() => {
-      prevLocation = {
-        pathname: '/browse'
-      } as RouterLocation<unknown>
-    })
-    it('should return the location', () => {
-      expect(getLatestVisitedLocation.resultFunc([{ ...prevLocation, pathname: 'an oldest location' }, prevLocation])).toBe(prevLocation)
-    })
-  })
-})
 
 describe('when getting if the are filters set', () => {
   describe('when the search filter is set', () => {
