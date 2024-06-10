@@ -14,7 +14,19 @@ import './StoreSettings.css'
 
 const MAX_FILE_SIZE = 1000000
 
-const StoreSettings = ({ address, store, canSubmit, error, isLoading, isSaving, onChange, onRevert, onSave, onFetchStore }: Props) => {
+const StoreSettings = ({
+  address,
+  store,
+  canSubmit,
+  error,
+  isLoading,
+  isSaving,
+  isDirty,
+  onChange,
+  onRevert,
+  onSave,
+  onFetchStore
+}: Props) => {
   const { cover, description, website, facebook, twitter, discord } = store
 
   const [coverSize, setCoverSize] = useState<number>()
@@ -51,6 +63,14 @@ const StoreSettings = ({ address, store, canSubmit, error, isLoading, isSaving, 
       )
     }
   }, [coverSize, website])
+
+  useEffect(() => {
+    return () => {
+      if (isDirty) {
+        onRevert(address)
+      }
+    }
+  }, [location])
 
   const hasErrors = useMemo(() => Object.values(errors).some(error => !!error), [errors])
 

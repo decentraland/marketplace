@@ -5,7 +5,7 @@ import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isOfEnumType } from '../../utils/enums'
 import { AssetStatusFilter } from '../../utils/filters'
-import { getAddress as getAccountAddress } from '../account/selectors'
+import { getAccountAddressFromUrl } from '../../utils/routing'
 import { AssetType } from '../asset/types'
 import { RootState } from '../reducer'
 import { getView } from '../ui/browse/selectors'
@@ -328,14 +328,13 @@ export const getEmoteHasGeometry = createSelector<RootState, string, boolean>(
 export const getCurrentLocationAddress = createSelector<RootState, string, string | undefined, string | undefined, string | undefined>(
   getPathName,
   getWalletAddress,
-  getAccountAddress,
-  (pathname, walletAddress, accountAddress) => {
+  (pathname, walletAddress) => {
     let address: string | undefined
 
     if (pathname === locations.currentAccount()) {
       address = walletAddress
     } else {
-      address = accountAddress
+      address = getAccountAddressFromUrl()
     }
 
     return address ? address.toLowerCase() : undefined
