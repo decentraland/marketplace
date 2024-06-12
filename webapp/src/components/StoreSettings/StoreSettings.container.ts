@@ -11,7 +11,13 @@ import {
   updateStoreRequest,
   UPDATE_STORE_REQUEST
 } from '../../modules/store/actions'
-import { getStoresByOwner, getLocalStore, getLoading as getStoreLoading, getError } from '../../modules/store/selectors'
+import {
+  getStoresByOwner,
+  getLocalStore,
+  getLoading as getStoreLoading,
+  getError,
+  getIsLocalStoreDirty
+} from '../../modules/store/selectors'
 import { Store } from '../../modules/store/types'
 import { getEmptyStore } from '../../modules/store/utils'
 import StoreSettings from './StoreSettings'
@@ -28,6 +34,7 @@ const mapState = (state: RootState): MapStateProps => {
   const isLoading = isLoadingType(getStoreLoading(state), FETCH_STORE_REQUEST)
   const isSaving = isLoadingType(getStoreLoading(state), UPDATE_STORE_REQUEST)
   const error = getError(state)
+  const isDirty = getIsLocalStoreDirty(state)
 
   return {
     address,
@@ -35,7 +42,8 @@ const mapState = (state: RootState): MapStateProps => {
     error,
     canSubmit,
     isLoading,
-    isSaving
+    isSaving,
+    isDirty
   }
 }
 

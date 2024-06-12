@@ -1,9 +1,5 @@
-import { matchPath } from 'react-router-dom'
 import { locations } from '../../modules/routing/locations'
-
-function matchAppRoute<T extends Record<string, string>>(path: string, route: string) {
-  return matchPath<T>(path, { path: route, strict: true, exact: true })
-}
+import { matchAppRoute } from '../../utils/routing'
 
 export function getLastVisitedElementId(currentLocation: string, lastVisitedLocation: string) {
   const matchLands = matchAppRoute(currentLocation, locations.lands())
