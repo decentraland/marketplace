@@ -9,7 +9,6 @@ import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { createIdentitySaga } from 'decentraland-dapps/dist/modules/identity/sagas'
-import { locationSaga } from 'decentraland-dapps/dist/modules/location/sagas'
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
 import { NetworkGatewayType } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
@@ -127,7 +126,6 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     eventSaga(),
     contractSaga(),
     gatewaySaga(),
-    locationSaga(),
     transakSaga(),
     favoritesSaga(getIdentity),
     loginSaga(),

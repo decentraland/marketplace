@@ -1,4 +1,3 @@
-import { RouterState } from 'connected-react-router'
 import { ChainId, Item, NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -9,6 +8,7 @@ import { FavoritesData, List } from '../../favorites/types'
 import { NFT } from '../../nft/types'
 import { RootState } from '../../reducer'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
+import { RoutingState } from '../../routing/reducer'
 import { Section } from '../../vendor/decentraland/routing'
 import { View } from '../types'
 import { BrowseUIState } from './reducer'
@@ -180,11 +180,11 @@ beforeEach(() => {
       loading: [],
       error: null
     } as FavoritesState,
-    router: {
+    routing: {
       location: {
         pathname: `/lists/${list.id}`
       }
-    } as RouterState
+    } as RoutingState
   } as RootState
 })
 

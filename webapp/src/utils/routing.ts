@@ -1,4 +1,5 @@
 import { matchPath } from 'react-router-dom'
+import { Location } from 'history'
 import { locations } from '../modules/routing/locations'
 
 export function matchAppRoute<T extends Record<string, string>>(path: string, route: string) {
@@ -21,3 +22,6 @@ export const getNFTUrlParams = () =>
   matchAppRoute<{ contractAddress: string; tokenId: string }>(window.location.pathname, locations.nft())?.params
 export const getNFTContractAddressFromUrl = () => getNFTUrlParams()?.contractAddress.toLowerCase() || null
 export const getNFTTokenIdFromUrl = () => getNFTUrlParams()?.tokenId || null
+
+export const getListUrlParams = (location: Location) => matchAppRoute<{ listId: string }>(location.pathname, locations.list())?.params
+export const getListIdFromLocation = (location: Location) => getListUrlParams(location)?.listId || null

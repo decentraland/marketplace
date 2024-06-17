@@ -1,15 +1,17 @@
-import { History } from 'history'
+import { History, Location } from 'history'
 import { call, getContext, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { CatalogFilters, Item } from '@dcl/schemas'
 import { closeModal, CloseModalAction, CLOSE_MODAL, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { ConnectWalletSuccessAction, CONNECT_WALLET_FAILURE, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { isErrorWithMessage } from '../../lib/error'
+import { getListIdFromLocation } from '../../utils/routing'
 import { getIsMarketplaceServerEnabled } from '../features/selectors'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { getData as getItemsData } from '../item/selectors'
 import { ItemBrowseOptions } from '../item/types'
 import { locations } from '../routing/locations'
+import { getLocation } from '../routing/selectors'
 import { SortDirection } from '../routing/types'
 import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from '../vendor/decentraland'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
@@ -65,7 +67,7 @@ import {
   unpickItemFailure,
   BULK_PICK_FAILURE
 } from './actions'
-import { getList, getListId, isOwnerUnpickingFromCurrentList } from './selectors'
+import { getList, isOwnerUnpickingFromCurrentList } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
@@ -125,7 +127,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       if (address) yield call(getAccountIdentity)
 
       let items: Item[] = []
-      const listId: string | null = (yield select(getListId)) as ReturnType<typeof getListId>
+      const location: Location = yield select(getLocation)
+      const listId: string | null = getListIdFromLocation(location)
       if (!listId) {
         throw new Error('List id not found')
       }

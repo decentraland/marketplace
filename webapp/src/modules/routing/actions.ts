@@ -1,5 +1,12 @@
+import { Location } from 'history'
 import { action } from 'typesafe-actions'
 import { BrowseOptions } from './types'
+
+export const LOCATION_CHANGED = 'Location changed'
+
+export const locationChanged = (location: Location) => action(LOCATION_CHANGED, { location })
+
+export type LocationChangedAction = ReturnType<typeof locationChanged>
 
 // Browse NFTs
 

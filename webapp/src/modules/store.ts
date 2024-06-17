@@ -1,5 +1,4 @@
-import { routerMiddleware } from 'connected-react-router'
-import { createMemoryHistory, createBrowserHistory, History, Location } from 'history'
+import { createBrowserHistory, History, Location } from 'history'
 import { Action, applyMiddleware, compose, createStore, Middleware } from 'redux'
 import { createLogger } from 'redux-logger'
 import createSagasMiddleware from 'redux-saga'
@@ -60,7 +59,7 @@ export function initStore(history: History) {
       : compose
   ) as typeof compose
 
-  const rootReducer = storageReducerWrapper(createRootReducer(history))
+  const rootReducer = storageReducerWrapper(createRootReducer())
 
   const sagasMiddleware = createSagasMiddleware({ context: { history } })
   const loggerMiddleware = createLogger({
@@ -79,14 +78,7 @@ export function initStore(history: History) {
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
   const analyticsMiddleware = createAnalyticsMiddleware(config.get('SEGMENT_API_KEY'))
 
-  const middleware = applyMiddleware(
-    sagasMiddleware,
-    routerMiddleware(history),
-    loggerMiddleware,
-    transactionMiddleware,
-    storageMiddleware,
-    analyticsMiddleware
-  )
+  const middleware = applyMiddleware(sagasMiddleware, loggerMiddleware, transactionMiddleware, storageMiddleware, analyticsMiddleware)
   const enhancer = composeEnhancers(middleware)
   const store = createStore(rootReducer as unknown as ReturnType<typeof createRootReducer>, enhancer)
   const getIdentity = () => {
@@ -106,8 +98,7 @@ export function initStore(history: History) {
 }
 
 export function initTestStore(preloadedState = {}) {
-  const testHistory = createMemoryHistory({ initialEntries: ['/marketplace'] })
-  const rootReducer = storageReducerWrapper(createRootReducer(testHistory))
+  const rootReducer = storageReducerWrapper(createRootReducer())
   const sagasMiddleware = createSagasMiddleware()
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
@@ -120,7 +111,7 @@ export function initTestStore(preloadedState = {}) {
     migrations: {} // migration object that will migrate your localstorage (optional)
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
 
-  const middleware = applyMiddleware(sagasMiddleware, routerMiddleware(testHistory), transactionMiddleware, storageMiddleware)
+  const middleware = applyMiddleware(sagasMiddleware, transactionMiddleware, storageMiddleware)
   const enhancer = compose(middleware)
   const store = createStore(rootReducer, preloadedState, enhancer)
   sagasMiddleware.run(rootSaga, () => undefined)

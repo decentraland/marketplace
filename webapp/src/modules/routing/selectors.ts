@@ -1,5 +1,4 @@
-import { matchPath } from 'react-router'
-import { getSearch as getRouterSearch, getLocation } from 'connected-react-router'
+import { matchPath } from 'react-router-dom'
 import { createSelector } from 'reselect'
 import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -18,6 +17,9 @@ import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { locations } from './locations'
 import { getDefaultOptionsByView, getURLParamArray, getURLParam, getURLParamArrayNonStandard, SEARCH_ARRAY_PARAM_SEPARATOR } from './search'
 import { BrowseOptions, PageName, SortBy, SortByOption } from './types'
+
+export const getLocation = (state: RootState) => state.routing.location
+export const getRouterSearch = (state: RootState) => getLocation(state).search
 
 const getPathName = createSelector<RootState, ReturnType<typeof getLocation>, string>(getLocation, location => location.pathname)
 

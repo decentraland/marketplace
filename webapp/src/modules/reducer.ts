@@ -1,5 +1,3 @@
-import { connectRouter } from 'connected-react-router'
-import { History } from 'history'
 import { combineReducers } from 'redux'
 import { authorizationReducer as authorization } from 'decentraland-dapps/dist/modules/authorization/reducer'
 import { featuresReducer as features } from 'decentraland-dapps/dist/modules/features/reducer'
@@ -26,12 +24,13 @@ import { nftReducer as nft } from './nft/reducer'
 import { orderReducer as order } from './order/reducer'
 import { proximityReducer as proximity } from './proximity/reducer'
 import { rentalReducer as rental } from './rental/reducer'
+import { routingReducer as routing } from './routing/reducer'
 import { saleReducer as sale } from './sale/reducer'
 import { storeReducer as store } from './store/reducer'
 import { tileReducer as tile } from './tile/reducer'
 import { uiReducer as ui } from './ui/reducer'
 
-export const createRootReducer = (history: History) =>
+export const createRootReducer = () =>
   combineReducers({
     asset,
     account,
@@ -50,7 +49,7 @@ export const createRootReducer = (history: History) =>
     translation,
     ui,
     wallet,
-    router: connectRouter(history),
+    routing,
     collection,
     store,
     sale,

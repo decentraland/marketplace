@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux'
+import { Router } from 'react-router-dom'
 import { render, RenderResult, waitFor } from '@testing-library/react'
-import { ConnectedRouter } from 'connected-react-router'
 import mediaQuery from 'css-mediaquery'
 import flatten from 'flat'
 import { createMemoryHistory } from 'history'
@@ -37,7 +37,7 @@ export function renderWithProviders(
     return (
       <Provider store={initializedStore}>
         <TranslationProvider locales={['en']}>
-          <ConnectedRouter history={history}>{children}</ConnectedRouter>
+          <Router history={history}>{children}</Router>
         </TranslationProvider>
       </Provider>
     )

@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux'
+import { Router } from 'react-router-dom'
 import { render } from '@testing-library/react'
-import { ConnectedRouter, routerMiddleware } from 'connected-react-router'
 import { createMemoryHistory, createBrowserHistory } from 'history'
 import { applyMiddleware, compose, createStore, Store, Middleware } from 'redux'
 import createSagasMiddleware from 'redux-saga'
@@ -20,7 +20,7 @@ import { SET_IS_TRYING_ON } from '../modules/ui/preview/actions'
 export const history = createBrowserHistory()
 
 export function initTestStore(preloadedState = {}) {
-  const rootReducer = storageReducerWrapper(createRootReducer(history))
+  const rootReducer = storageReducerWrapper(createRootReducer())
   const sagasMiddleware = createSagasMiddleware()
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
@@ -34,7 +34,7 @@ export function initTestStore(preloadedState = {}) {
     migrations: {} // migration object that will migrate your localstorage (optional)
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
 
-  const middleware = applyMiddleware(sagasMiddleware, routerMiddleware(history), transactionMiddleware, storageMiddleware)
+  const middleware = applyMiddleware(sagasMiddleware, transactionMiddleware, storageMiddleware)
   const enhancer = compose(middleware)
   const store = createStore(rootReducer, preloadedState, enhancer)
 
@@ -60,7 +60,7 @@ export function renderWithProviders(component: JSX.Element, { preloadedState, st
     return (
       <Provider store={initializedStore}>
         <TranslationProvider locales={Object.keys(locales)}>
-          <ConnectedRouter history={history}>{children}</ConnectedRouter>
+          <Router history={history}>{children}</Router>
         </TranslationProvider>
       </Provider>
     )

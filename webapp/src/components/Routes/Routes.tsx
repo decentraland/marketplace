@@ -38,7 +38,7 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
   const location = useLocation()
 
   useEffect(() => {
-    onLocationChanged()
+    onLocationChanged(location)
   }, [location])
 
   const APP_ID = config.get('INTERCOM_APP_ID')

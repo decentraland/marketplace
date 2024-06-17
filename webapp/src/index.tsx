@@ -1,6 +1,6 @@
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router'
+import { Router } from 'react-router-dom'
 import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
 import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
@@ -23,14 +23,14 @@ function main() {
     <Provider store={store}>
       <TranslationProvider locales={Object.keys(locales)}>
         <WalletProvider>
-          <ConnectedRouter history={history}>
+          <Router history={history}>
             <ToastProvider>
               <ModalProvider components={modals}>
                 <ScrollToTop />
                 <Routes />
               </ModalProvider>
             </ToastProvider>
-          </ConnectedRouter>
+          </Router>
         </WalletProvider>
       </TranslationProvider>
     </Provider>

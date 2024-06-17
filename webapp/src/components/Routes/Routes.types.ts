@@ -1,9 +1,9 @@
 import { RouteComponentProps } from 'react-router-dom'
-import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
+import { Location } from 'history'
 
 export type Props = RouteComponentProps & {
   inMaintenance: boolean
-  onLocationChanged: typeof closeAllModals
+  onLocationChanged: (location: Location) => void
 }
 
 export type MapStateProps = Pick<Props, 'inMaintenance'>
