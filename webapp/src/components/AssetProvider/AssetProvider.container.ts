@@ -21,12 +21,7 @@ import { getOpenRentalId } from '../../modules/rental/utils'
 import { FetchOneOptions } from '../../modules/vendor'
 import { ContractName } from '../../modules/vendor/decentraland'
 import { convertToOutputString } from '../../utils/output'
-import {
-  getItemContractAddressFromUrl,
-  getItemTokenIdFromUrl,
-  getNFTContractAddressFromUrl,
-  getNFTTokenIdFromUrl
-} from '../../utils/routing'
+import { getItemContractAddressFromUrl, getItemIdFromUrl, getNFTContractAddressFromUrl, getNFTTokenIdFromUrl } from '../../utils/routing'
 import AssetProvider from './AssetProvider'
 import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './AssetProvider.types'
 
@@ -51,7 +46,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     case AssetType.ITEM: {
       const items = getItems(state)
       contractAddress = contractAddress || getItemContractAddressFromUrl()
-      tokenId = tokenId || getItemTokenIdFromUrl()
+      tokenId = tokenId || getItemIdFromUrl()
       asset = getItem(contractAddress, tokenId, items)
       isLoading = isFetchingItem(state, contractAddress!, tokenId!)
       error = getItemsError(state)
