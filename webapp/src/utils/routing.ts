@@ -13,9 +13,9 @@ export const getCollectionDetailUrlParams = () =>
 export const getCollectionContractAddressFromUrl = () => getCollectionDetailUrlParams()?.contractAddress.toLowerCase() || null
 
 export const getItemUrlParams = () =>
-  matchAppRoute<{ contractAddress: string; tokenId: string }>(window.location.pathname, locations.item())?.params
+  matchAppRoute<{ contractAddress: string; itemId: string }>(window.location.pathname, locations.item())?.params
 export const getItemContractAddressFromUrl = () => getItemUrlParams()?.contractAddress.toLowerCase() || null
-export const getItemTokenIdFromUrl = () => getItemUrlParams()?.tokenId || null
+export const getItemIdFromUrl = () => getItemUrlParams()?.itemId || null
 
 export const getNFTUrlParams = () =>
   matchAppRoute<{ contractAddress: string; tokenId: string }>(window.location.pathname, locations.nft())?.params
