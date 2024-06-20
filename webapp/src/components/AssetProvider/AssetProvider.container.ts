@@ -8,10 +8,22 @@ import { Asset, AssetType } from '../../modules/asset/types'
 import { getContract } from '../../modules/contract/selectors'
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { clearItemErrors, fetchItemRequest } from '../../modules/item/actions'
-import { isFetchingItem, getError as getItemsError, getData as getItems } from '../../modules/item/selectors'
+import {
+  getContractAddress as getItemContractAddress,
+  getTokenId as getItemTokenId,
+  isFetchingItem,
+  getError as getItemsError,
+  getData as getItems
+} from '../../modules/item/selectors'
 import { getItem } from '../../modules/item/utils'
 import { fetchNFTRequest, FETCH_NFT_REQUEST, clearNFTErrors } from '../../modules/nft/actions'
-import { getLoading as getNFTLoading, getError as getNFTError, getData as getNFTs } from '../../modules/nft/selectors'
+import {
+  getContractAddress as getNFTContractAddress,
+  getTokenId as getNFTTokenId,
+  getLoading as getNFTLoading,
+  getError as getNFTError,
+  getData as getNFTs
+} from '../../modules/nft/selectors'
 import { getNFT } from '../../modules/nft/utils'
 import { getData as getOrders } from '../../modules/order/selectors'
 import { getActiveOrder } from '../../modules/order/utils'
@@ -21,7 +33,6 @@ import { getOpenRentalId } from '../../modules/rental/utils'
 import { FetchOneOptions } from '../../modules/vendor'
 import { ContractName } from '../../modules/vendor/decentraland'
 import { convertToOutputString } from '../../utils/output'
-import { getItemContractAddressFromUrl, getItemIdFromUrl, getNFTContractAddressFromUrl, getNFTTokenIdFromUrl } from '../../utils/routing'
 import AssetProvider from './AssetProvider'
 import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './AssetProvider.types'
 
@@ -36,8 +47,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   switch (ownProps.type) {
     case AssetType.NFT: {
       const nfts = getNFTs(state)
-      contractAddress = contractAddress || getNFTContractAddressFromUrl()
-      tokenId = tokenId || getNFTTokenIdFromUrl()
+      contractAddress = contractAddress || getNFTContractAddress(state)
+      tokenId = tokenId || getNFTTokenId(state)
       asset = getNFT(contractAddress, tokenId, nfts)
       isLoading = isLoadingType(getNFTLoading(state), FETCH_NFT_REQUEST)
       error = getNFTError(state)
@@ -45,8 +56,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     }
     case AssetType.ITEM: {
       const items = getItems(state)
-      contractAddress = contractAddress || getItemContractAddressFromUrl()
-      tokenId = tokenId || getItemIdFromUrl()
+      contractAddress = contractAddress || getItemContractAddress(state)
+      tokenId = tokenId || getItemTokenId(state)
       asset = getItem(contractAddress, tokenId, items)
       isLoading = isFetchingItem(state, contractAddress!, tokenId!)
       error = getItemsError(state)
