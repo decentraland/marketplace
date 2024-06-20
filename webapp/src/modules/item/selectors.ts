@@ -1,9 +1,11 @@
+import { createMatchSelector } from 'connected-react-router'
 import { AnyAction } from 'redux'
 import { createSelector } from 'reselect'
 import { Item } from '@dcl/schemas'
 import { AuthorizationStepStatus } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../reducer'
+import { locations } from '../routing/locations'
 import {
   BUY_ITEM_REQUEST,
   FETCH_COLLECTION_ITEMS_REQUEST,
@@ -43,6 +45,24 @@ export const isFetchingItemsOfCollection = (state: RootState, contractAddress: s
   undefined
 
 export const getItems = createSelector<RootState, ReturnType<typeof getData>, Item[]>(getData, itemsById => Object.values(itemsById))
+
+const ItemDetailMatchSelector = createMatchSelector<
+  RootState,
+  {
+    contractAddress: string
+    tokenId: string
+  }
+>(locations.item(':contractAddress', ':tokenId'))
+
+export const getContractAddress = createSelector<RootState, ReturnType<typeof ItemDetailMatchSelector>, string | null>(
+  ItemDetailMatchSelector,
+  match => match?.params.contractAddress.toLowerCase() || null
+)
+
+export const getTokenId = createSelector<RootState, ReturnType<typeof ItemDetailMatchSelector>, string | null>(
+  ItemDetailMatchSelector,
+  match => match?.params.tokenId || null
+)
 
 export const getItemsByContractAddress = createSelector(getItems, items =>
   items.reduce(

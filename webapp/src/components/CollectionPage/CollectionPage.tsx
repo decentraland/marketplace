@@ -4,7 +4,6 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Back, Column, Page, Row, Section, Header, Badge, Icon, Color, Button, Loader, useMobileMediaQuery } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
-import { getCollectionContractAddressFromUrl } from '../../utils/routing'
 import CollectionProvider from '../CollectionProvider'
 import { Mana } from '../Mana'
 import AssetCell from '../OnSaleOrRentList/AssetCell'
@@ -19,9 +18,7 @@ const WEARABLES_TAB = 'wearables'
 const EMOTES_TAB = 'emotes'
 
 const CollectionPage = (props: Props) => {
-  const { currentAddress, onBack } = props
-  const contractAddress = getCollectionContractAddressFromUrl()
-
+  const { currentAddress, contractAddress, onBack } = props
   const isMobile = useMobileMediaQuery()
 
   const tabList = [
