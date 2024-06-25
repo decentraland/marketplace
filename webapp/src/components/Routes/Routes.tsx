@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import { Switch, Route, Redirect, RouteComponentProps, useLocation } from 'react-router-dom'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
+import useManaFiatGatewayPurchase from 'decentraland-dapps/dist/hooks/useManaFiatGatewayPurchase'
 import { usePageTracking } from 'decentraland-dapps/dist/hooks/usePageTracking'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Center, Page } from 'decentraland-ui'
@@ -35,6 +36,7 @@ import { Props } from './Routes.types'
 
 const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
   usePageTracking()
+  useManaFiatGatewayPurchase()
   const location = useLocation()
 
   useEffect(() => {
