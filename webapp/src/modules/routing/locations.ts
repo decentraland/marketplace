@@ -90,6 +90,8 @@ export const locations = {
     `/contracts/${contractAddress}/tokens/${tokenId}/transfer`,
   bid: (contractAddress: string = ':contractAddress', tokenId: string = ':tokenId') =>
     `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
+  bidItem: (contractAddress: string = ':contractAddress', itemId: string = ':itemId') =>
+    `/contracts/${contractAddress}/items/${itemId}/bid`,
   activity: () => `/activity`,
   success: (searchOptions?: {
     txHash: string

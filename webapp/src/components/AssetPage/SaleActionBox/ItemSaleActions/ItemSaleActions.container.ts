@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { getIsBidsOffChainEnabled } from '../../../../modules/features/selectors'
 import { RootState } from '../../../../modules/reducer'
 import { getWallet } from '../../../../modules/wallet/selectors'
 import ItemSaleActions from './ItemSaleActions'
@@ -9,7 +10,8 @@ const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
 
   return {
-    wallet
+    wallet,
+    isBidsOffchainEnabled: getIsBidsOffChainEnabled(state)
   }
 }
 

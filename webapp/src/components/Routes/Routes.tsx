@@ -72,7 +72,8 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
         <Route exact path={locations.list()} component={ListPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
         <ProtectedRoute exact path={locations.sell()} component={SellPage} />
-        <ProtectedRoute exact path={locations.bid()} component={BidPage} />
+        <ProtectedRoute exact path={locations.bid()} render={props => <BidPage {...props} type={AssetType.NFT} />} />
+        <ProtectedRoute exact path={locations.bidItem()} render={props => <BidPage {...props} type={AssetType.ITEM} />} />
         <ProtectedRoute exact path={locations.cancel()} component={CancelSalePage} />
         <ProtectedRoute exact path={locations.transfer()} component={TransferPage} />
         <Route exact path={locations.collection()} component={CollectionPage} />

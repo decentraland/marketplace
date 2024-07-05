@@ -2,6 +2,8 @@ import { action } from 'typesafe-actions'
 import { Bid, ChainId } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { formatWeiMANA } from '../../lib/mana'
+import { Asset } from '../asset/types'
+import { isNFT } from '../asset/utils'
 import { NFT } from '../nft/types'
 
 // Place Bid
@@ -9,32 +11,36 @@ export const PLACE_BID_REQUEST = '[Request] Place Bid'
 export const PLACE_BID_SUCCESS = '[Success] Place Bid'
 export const PLACE_BID_FAILURE = '[Failure] Place Bid'
 
-export const placeBidRequest = (nft: NFT, price: number, expiresAt: number, fingerprint?: string) =>
-  action(PLACE_BID_REQUEST, { nft, price, expiresAt, fingerprint })
+export const placeBidRequest = (asset: Asset, price: number, expiresAt: number, fingerprint?: string) =>
+  action(PLACE_BID_REQUEST, { asset, price, expiresAt, fingerprint })
 export const placeBidSuccess = (
-  nft: NFT,
+  asset: Asset,
   price: number,
   expiresAt: number,
   chainId: ChainId,
-  txHash: string,
   bidder: string,
-  fingerprint?: string
-) =>
-  action(PLACE_BID_SUCCESS, {
-    nft,
+  fingerprint?: string,
+  txHash?: string
+) => {
+  return action(PLACE_BID_SUCCESS, {
+    asset,
     price,
     expiresAt,
     bidder,
     fingerprint,
-    ...buildTransactionPayload(chainId, txHash, {
-      tokenId: nft.tokenId,
-      contractAddress: nft.contractAddress,
-      price
-    })
+    ...(txHash
+      ? buildTransactionPayload(chainId, txHash, {
+          ...(isNFT(asset) ? { tokenId: asset.tokenId } : { itemId: asset.itemId }),
+          contractAddress: asset.contractAddress,
+          price
+        })
+      : {})
   })
-export const placeBidFailure = (nft: NFT, price: number, expiresAt: number, error: string, fingerprint?: string) =>
+}
+
+export const placeBidFailure = (asset: Asset, price: number, expiresAt: number, error: string, fingerprint?: string) =>
   action(PLACE_BID_FAILURE, {
-    nft,
+    asset,
     price,
     expiresAt,
     error,

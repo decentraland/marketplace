@@ -25,6 +25,7 @@ import { capitalize } from '../../lib/text'
 import { getCategoryInfo } from '../../utils/category'
 import * as events from '../../utils/events'
 import { FETCH_CREATORS_ACCOUNT_SUCCESS, FetchCreatorsAccountSuccessAction } from '../account/actions'
+import { isNFT } from '../asset/utils'
 import {
   PLACE_BID_SUCCESS,
   ACCEPT_BID_TRANSACTION_SUBMITTED,
@@ -183,10 +184,10 @@ track<RevokeTokenSuccessAction>(REVOKE_TOKEN_SUCCESS, () => events.UNAUTHORIZE)
 
 track<PlaceBidSuccessAction>(
   PLACE_BID_SUCCESS,
-  ({ payload }) => withCategory(events.BID, payload.nft),
+  ({ payload }) => withCategory(events.BID, payload.asset),
   ({ payload }) => ({
-    category: payload.nft.category,
-    tokenId: payload.nft.tokenId,
+    category: payload.asset.category,
+    ...(isNFT(payload.asset) ? { tokenId: payload.asset.tokenId } : { itemId: payload.asset.itemId }),
     price: payload.price,
     bidder: payload.bidder
   })

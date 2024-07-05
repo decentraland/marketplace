@@ -1,12 +1,12 @@
-import { ChainId } from '@dcl/schemas'
-import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
+import { ChainId, Trade, TradeCreation } from '@dcl/schemas'
+import { BaseClient } from 'decentraland-dapps/dist/lib'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
 import { Balance } from './types'
 
 export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')
 
-export class MarketplaceAPI extends BaseAPI {
+export class MarketplaceAPI extends BaseClient {
   fetchWalletTokenBalances = async (chain: ChainId, wallet: string): Promise<Balance[]> => {
     const chainIdToChainName = {
       [ChainId.ETHEREUM_MAINNET]: 'eth-mainnet',
@@ -19,8 +19,19 @@ export class MarketplaceAPI extends BaseAPI {
       [ChainId.ARBITRUM_MAINNET]: 'arbitrum-mainnet',
       [ChainId.FANTOM_MAINNET]: 'fantom-mainnet'
     } as Record<ChainId, string>
-    return this.request('get', `/${chainIdToChainName[chain]}/address/${wallet}/balance`) as Promise<Balance[]>
+    return this.fetch(`/${chainIdToChainName[chain]}/address/${wallet}/balance`, { method: 'GET' })
+  }
+
+  addTrade = async (trade: TradeCreation) => {
+    return this.fetch<Trade>('/v1/trades', {
+      method: 'POST',
+      body: JSON.stringify(trade),
+      metadata: { signer: 'dcl:marketplace', intent: 'dcl:marketplace:create-trade' },
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
   }
 }
 
-export const marketplaceAPI = new MarketplaceAPI(MARKETPLACE_SERVER_URL, retryParams)
+export const marketplaceAPI = new MarketplaceAPI(MARKETPLACE_SERVER_URL, { retries: retryParams.attempts, retryDelay: retryParams.delay })
