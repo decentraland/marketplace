@@ -11,7 +11,8 @@ import {
   getIsMarketplaceLaunchPopupEnabled,
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
-  getIsChainSelectorEnabled
+  getIsChainSelectorEnabled,
+  getIsBidsOffChainEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -134,6 +135,12 @@ const waitForInitialLoadingSelectors = [
     name: 'chain-selector',
     feature: FeatureName.CHAIN_SELECTOR,
     selector: getIsChainSelectorEnabled,
+    applicationName: ApplicationName.MARKETPLACE
+  },
+  {
+    name: 'IsBidsOffChainEnabled',
+    feature: FeatureName.OFFCHAIN_BIDS,
+    selector: getIsBidsOffChainEnabled,
     applicationName: ApplicationName.MARKETPLACE
   }
 ]

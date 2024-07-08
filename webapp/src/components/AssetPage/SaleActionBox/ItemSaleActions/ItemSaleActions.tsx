@@ -35,8 +35,8 @@ const ItemSaleActions = ({ item, wallet, isBidsOffchainEnabled, customClassnames
             <BuyNFTButtons asset={item} assetType={AssetType.ITEM} buyWithCardClassName={customClassnames?.buyWithCardClassName} />
           )}
           {canBid && (
-            <Button as={Link} to={locations.bidItem(item.contractAddress, item.itemId)} className={styles.bidButton}>
-              Bid
+            <Button as={Link} role="link" to={locations.bidItem(item.contractAddress, item.itemId)} className={styles.bidButton}>
+              {t('asset_page.actions.place_bid')}
             </Button>
           )}
         </>

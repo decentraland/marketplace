@@ -75,7 +75,7 @@ export function* bidSaga(getIdentity: () => AuthIdentity | undefined) {
           >
           yield put(placeBidSuccess(asset, price, expiresAt, asset.chainId, wallet.address, fingerprint, txHash))
         } else {
-          throw new Error('Only NFTs are supported to place bids')
+          throw new Error('Only NFTs are supported for bidding')
         }
       }
     } catch (error) {
