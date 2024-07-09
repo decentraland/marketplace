@@ -12,6 +12,7 @@ import { NFT } from '../nft/types'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { Vendor, VendorFactory, VendorName } from '../vendor'
+import { MarketplaceAPI, marketplaceAPI } from '../vendor/decentraland/marketplace/api'
 import { Contract } from '../vendor/services'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -25,10 +26,6 @@ import {
 } from './actions'
 import { bidSaga } from './sagas'
 import * as bidUtils from './utils'
-
-jest.mock('../vendor/decentraland/marketplace/api', () => ({
-  MarketplaceAPI: jest.fn().mockReturnValue({ addTrade: (trade: TradeCreation) => Promise.resolve(trade) })
-}))
 
 describe('when handling the creation of a bid', () => {
   let wallet: Wallet
@@ -47,6 +44,7 @@ describe('when handling the creation of a bid', () => {
 
   describe('and offchain bids are enabled', () => {
     let trade: TradeCreation
+    let marketplaceAPIMock: MarketplaceAPI
 
     describe('and the asset is an item', () => {
       beforeEach(() => {
@@ -87,16 +85,43 @@ describe('when handling the creation of a bid', () => {
         }
       })
 
-      it('should create bid successfully', () => {
-        return expectSaga(bidSaga, () => undefined)
-          .provide([
-            [select(getWallet), wallet],
-            [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
-            [select(getIsBidsOffChainEnabled), true]
-          ])
-          .put(placeBidSuccess(asset, price, expiration, asset.chainId, wallet.address, fingerprint))
-          .dispatch(placeBidRequest(asset, price, expiration, fingerprint))
-          .run()
+      describe('and the trade creation finish successfully', () => {
+        beforeEach(() => {
+          marketplaceAPIMock = { addTrade: jest.fn().mockResolvedValue(trade) } as unknown as MarketplaceAPI
+        })
+
+        it('should dispatch bid success action', () => {
+          return expectSaga(bidSaga, marketplaceAPIMock)
+            .provide([
+              [select(getWallet), wallet],
+              [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
+              [select(getIsBidsOffChainEnabled), true]
+            ])
+            .put(placeBidSuccess(asset, price, expiration, asset.chainId, wallet.address, fingerprint))
+            .dispatch(placeBidRequest(asset, price, expiration, fingerprint))
+            .run()
+        })
+      })
+
+      describe('and the trade creation throws an error', () => {
+        let error: string
+
+        beforeEach(() => {
+          error = 'Some error'
+          marketplaceAPIMock = { addTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as MarketplaceAPI
+        })
+
+        it('should dispatch bid failure action', () => {
+          return expectSaga(bidSaga, marketplaceAPIMock)
+            .provide([
+              [select(getWallet), wallet],
+              [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
+              [select(getIsBidsOffChainEnabled), true]
+            ])
+            .put(placeBidFailure(asset, price, expiration, error, fingerprint))
+            .dispatch(placeBidRequest(asset, price, expiration, fingerprint))
+            .run()
+        })
       })
     })
 
@@ -105,16 +130,42 @@ describe('when handling the creation of a bid', () => {
         asset = { tokenId: 'token-id', chainId: ChainId.ETHEREUM_SEPOLIA, vendor: VendorName.DECENTRALAND } as Asset
       })
 
-      it('should create trade successfully', () => {
-        return expectSaga(bidSaga, () => undefined)
-          .provide([
-            [select(getWallet), wallet],
-            [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
-            [select(getIsBidsOffChainEnabled), true]
-          ])
-          .put(placeBidSuccess(asset, price, expiration, asset.chainId, wallet.address, fingerprint))
-          .dispatch(placeBidRequest(asset, price, expiration, fingerprint))
-          .run()
+      describe('and the trade creation finish successfully', () => {
+        beforeEach(() => {
+          marketplaceAPIMock = { addTrade: jest.fn().mockResolvedValue(trade) } as unknown as MarketplaceAPI
+        })
+
+        it('should dispatch bid success action', () => {
+          return expectSaga(bidSaga, marketplaceAPIMock)
+            .provide([
+              [select(getWallet), wallet],
+              [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
+              [select(getIsBidsOffChainEnabled), true]
+            ])
+            .put(placeBidSuccess(asset, price, expiration, asset.chainId, wallet.address, fingerprint))
+            .dispatch(placeBidRequest(asset, price, expiration, fingerprint))
+            .run()
+        })
+      })
+
+      describe('and the trade creation throws an error', () => {
+        let error: string
+        beforeEach(() => {
+          error = 'Some error'
+          marketplaceAPIMock = { addTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as MarketplaceAPI
+        })
+
+        it('should dispatch bid failure action', () => {
+          return expectSaga(bidSaga, marketplaceAPIMock)
+            .provide([
+              [select(getWallet), wallet],
+              [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
+              [select(getIsBidsOffChainEnabled), true]
+            ])
+            .put(placeBidFailure(asset, price, expiration, error, fingerprint))
+            .dispatch(placeBidRequest(asset, price, expiration, fingerprint))
+            .run()
+        })
       })
     })
   })
@@ -128,7 +179,7 @@ describe('when handling the creation of a bid', () => {
       })
 
       it('should dispatch bid failure action', () => {
-        return expectSaga(bidSaga, () => undefined)
+        return expectSaga(bidSaga, marketplaceAPI)
           .provide([
             [select(getWallet), wallet],
             [select(getIsBidsOffChainEnabled), false]
@@ -148,7 +199,7 @@ describe('when handling the creation of a bid', () => {
       it('should send bid transaction', () => {
         const vendor = VendorFactory.build((asset as NFT).vendor)
 
-        return expectSaga(bidSaga, () => undefined)
+        return expectSaga(bidSaga, marketplaceAPI)
           .provide([
             [call([VendorFactory, 'build'], (asset as NFT).vendor), vendor],
             [select(getWallet), wallet],
@@ -176,7 +227,7 @@ describe('when handling the accepting a bid action', () => {
         contractAddress: '0x123'
       } as Bid
 
-      return expectSaga(bidSaga, () => undefined)
+      return expectSaga(bidSaga, marketplaceAPI)
         .provide([[select(getContract, { address: bid.contractAddress }), undefined]])
         .put(acceptBidFailure(bid, `Couldn't find a valid vendor for contract ${bid.contractAddress}`))
         .dispatch(acceptBidRequest(bid))
@@ -196,7 +247,7 @@ describe('when handling the accepting a bid action', () => {
         contractAddress: contract.address
       } as Bid
 
-      return expectSaga(bidSaga, () => undefined)
+      return expectSaga(bidSaga, marketplaceAPI)
         .provide([
           [select(getContract, { address: bid.contractAddress }), contract],
           [select(getWallet), wallet],
@@ -219,7 +270,7 @@ describe('when handling the accepting a bid action', () => {
       }
       const vendor = VendorFactory.build(contract.vendor)
 
-      return expectSaga(bidSaga, () => undefined)
+      return expectSaga(bidSaga, marketplaceAPI)
         .provide([
           [select(getContract, { address: bid.contractAddress }), contract],
           [call([VendorFactory, 'build'], contract.vendor), vendor],
@@ -269,7 +320,7 @@ describe('when handling the accepting a bid action', () => {
           } as RentalListing
         })
         it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
-          return expectSaga(bidSaga, () => undefined)
+          return expectSaga(bidSaga, marketplaceAPI)
             .provide([
               [select(getContract, { address: bid.contractAddress }), contract],
               [call([VendorFactory, 'build'], contract.vendor!), vendor],
@@ -292,7 +343,7 @@ describe('when handling the accepting a bid action', () => {
           nft.openRentalId = null
         })
         it('should dispatch an action signaling the success of the action handling', () => {
-          return expectSaga(bidSaga, () => undefined)
+          return expectSaga(bidSaga, marketplaceAPI)
             .provide([
               [select(getContract, { address: bid.contractAddress }), contract],
               [call([VendorFactory, 'build'], contract.vendor!), vendor],
@@ -310,7 +361,7 @@ describe('when handling the accepting a bid action', () => {
     })
     describe('and the transaction gets reverted', () => {
       it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
-        return expectSaga(bidSaga, () => undefined)
+        return expectSaga(bidSaga, marketplaceAPI)
           .provide([
             [select(getContract, { address: bid.contractAddress }), contract],
             [call([VendorFactory, 'build'], contract.vendor!), vendor],

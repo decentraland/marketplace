@@ -1,5 +1,4 @@
 import { takeEvery, put, select, call, all } from 'redux-saga/effects'
-import { AuthIdentity } from '@dcl/crypto'
 import { Bid, RentalStatus, TradeCreation } from '@dcl/schemas'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -10,7 +9,6 @@ import { getIsBidsOffChainEnabled } from '../features/selectors'
 import { getCurrentNFT } from '../nft/selectors'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
-import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { MarketplaceAPI } from '../vendor/decentraland/marketplace/api'
 import { VendorName } from '../vendor/types'
 import { VendorFactory } from '../vendor/VendorFactory'
@@ -40,14 +38,12 @@ import {
 } from './actions'
 import * as bidUtils from './utils'
 
-export function* bidSaga(getIdentity: () => AuthIdentity | undefined) {
+export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)
   yield takeEvery(ACCEPT_BID_REQUEST, handleAcceptBidRequest)
   yield takeEvery(CANCEL_BID_REQUEST, handleCancelBidRequest)
   yield takeEvery(FETCH_BIDS_BY_ADDRESS_REQUEST, handleFetchBidsByAddressRequest)
   yield takeEvery(FETCH_BIDS_BY_NFT_REQUEST, handleFetchBidsByNFTRequest)
-
-  const marketplaceAPI = new MarketplaceAPI(MARKETPLACE_SERVER_URL, { identity: getIdentity, retries: 0 })
 
   function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
     const { asset, price, expiresAt, fingerprint } = action.payload

@@ -91,7 +91,7 @@ describe('when getting the trade object for a bid', () => {
         fingerprint = 'fingerprint'
       })
 
-      it('should return the trade object', async () => {
+      it('should return the trade object with the fingerprint', async () => {
         const manaContract = getContract(ContractName.MANAToken, asset.chainId)
         const trade = await createBidTrade(asset, amount, expiresAt, fingerprint)
         expect(trade).toEqual({
@@ -136,7 +136,7 @@ describe('when getting the trade object for a bid', () => {
         fingerprint = ''
       })
 
-      it('should return the trade object', async () => {
+      it('should return the trade object without the fingerprint', async () => {
         const manaContract = getContract(ContractName.MANAToken, asset.chainId)
         const trade = await createBidTrade(asset, amount, expiresAt, fingerprint)
         expect(trade).toEqual({
