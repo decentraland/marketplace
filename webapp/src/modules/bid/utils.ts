@@ -1,9 +1,12 @@
 import { ethers, BigNumber } from 'ethers'
-import { Bid } from '@dcl/schemas'
-import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
+import { Bid, TradeAssetType, TradeCreation, TradeType } from '@dcl/schemas'
+import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
+import { getOffChainMarketplaceContract, getTradeSignature } from '../../utils/trades'
+import { Item } from '../item/types'
+import { NFT } from '../nft/types'
 
 export async function isInsufficientMANA(bid: Bid) {
   try {
@@ -36,4 +39,50 @@ export function toBidObject(bids: Bid[]) {
     },
     {} as Record<string, Bid>
   )
+}
+
+export async function createBidTrade(asset: NFT | Item, price: number, expiresAt: number, fingerprint?: string): Promise<TradeCreation> {
+  const signer = await getSigner()
+  const address = await signer.getAddress()
+  const marketplaceContract = await getOffChainMarketplaceContract(asset.chainId)
+  const manaContract = getContract(ContractName.MANAToken, asset.chainId)
+  const contractSignatureIndex = (await marketplaceContract.contractSignatureIndex()) as BigNumber
+  const signerSignatureIndex = (await marketplaceContract.signerSignatureIndex(address)) as BigNumber
+
+  const tradeToSign: Omit<TradeCreation, 'signature'> = {
+    signer: address,
+    network: asset.network,
+    chainId: asset.chainId,
+    type: TradeType.BID,
+    checks: {
+      uses: 1,
+      allowedRoot: '0x',
+      contractSignatureIndex: contractSignatureIndex.toNumber(),
+      signerSignatureIndex: signerSignatureIndex.toNumber(),
+      effective: Date.now(),
+      expiration: expiresAt,
+      externalChecks: [],
+      salt: '0x'
+    },
+    sent: [
+      {
+        assetType: TradeAssetType.ERC20,
+        contractAddress: manaContract.address,
+        amount: ethers.utils.parseEther(price.toString()).toString(),
+        extra: ''
+      }
+    ],
+    received: [
+      {
+        contractAddress: asset.contractAddress,
+        extra: fingerprint || '',
+        beneficiary: address,
+        ...('tokenId' in asset
+          ? { assetType: TradeAssetType.ERC721, tokenId: asset.tokenId }
+          : { assetType: TradeAssetType.COLLECTION_ITEM, itemId: asset.itemId })
+      }
+    ]
+  }
+
+  return { ...tradeToSign, signature: await getTradeSignature(tradeToSign) }
 }

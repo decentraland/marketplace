@@ -548,6 +548,7 @@
       "edit_price": "Edit price",
       "change_beneficiary": "Change beneficiary",
       "mint_item": "Mint item",
+      "place_bid": "Make offer",
       "legacy_order_expired_warning": "This listing is not being shown to buyers in the Marketplace but has been created with an invalid expiration date and therefore could still be purchased via the contract. Please remove this listing manually.",
       "legacy_order_not_expired_warning": "This listing has been created with an invalid expiration date. Please remove this listing and put it for sale again to fix the issue."
     },

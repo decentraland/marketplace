@@ -6,10 +6,10 @@ import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthori
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName } from 'decentraland-transactions'
+import { ContractName, getContract as getDecentralandContract } from 'decentraland-transactions'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { parseMANANumber } from '../../../lib/mana'
-import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
+import { getAssetName, isNFT, isOwnedBy } from '../../../modules/asset/utils'
 import { getBidStatus, getError } from '../../../modules/bid/selectors'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { isLand } from '../../../modules/nft/utils'
@@ -26,31 +26,33 @@ import { Props } from './BidModal.types'
 import './BidModal.css'
 
 const BidModal = (props: Props) => {
-  const { nft, rental, wallet, onNavigate, onPlaceBid, isPlacingBid, isLoadingAuthorization, getContract } = props
+  const { asset, rental, wallet, onNavigate, onPlaceBid, isPlacingBid, isLoadingAuthorization, isBidsOffchainEnabled, getContract } = props
 
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
 
-  const [fingerprint, isLoadingFingerprint, contractFingerprint] = useFingerprint(nft)
+  const [fingerprint, isLoadingFingerprint, contractFingerprint] = useFingerprint(isNFT(asset) ? asset : null)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
   const handlePlaceBid = useCallback(
-    () => onPlaceBid(nft, parseMANANumber(price), +new Date(`${expiresAt} 00:00:00`), fingerprint),
-    [nft, price, expiresAt, fingerprint, onPlaceBid]
+    () => onPlaceBid(asset, parseMANANumber(price), +new Date(`${expiresAt} 00:00:00`), fingerprint),
+    [asset, price, expiresAt, fingerprint, onPlaceBid]
   )
 
   const contractNames = getContractNames()
 
   const mana = getContract({
     name: contractNames.MANA,
-    network: nft.network
+    network: asset.network
   })
 
   const bids = getContract({
     name: contractNames.BIDS,
-    network: nft.network
+    network: asset.network
   })
+
+  const offchainBidsContract = getDecentralandContract(ContractName.OffChainMarketplace, asset.chainId)
 
   if (!wallet || !mana || !bids) {
     return null
@@ -65,10 +67,10 @@ const BidModal = (props: Props) => {
     onClearBidError()
     onAuthorizedAction({
       targetContractName: ContractName.MANAToken,
-      authorizedAddress: bids.address,
+      authorizedAddress: isBidsOffchainEnabled ? offchainBidsContract.address : bids.address,
       targetContract: mana as Contract,
       authorizationType: AuthorizationType.ALLOWANCE,
-      authorizedContractLabel: bids.label || bids.name,
+      authorizedContractLabel: isBidsOffchainEnabled ? offchainBidsContract.name : bids.label || bids.name,
       requiredAllowanceInWei: ethers.utils.parseEther(price).toString(),
       onAuthorized: handlePlaceBid
     })
@@ -76,37 +78,37 @@ const BidModal = (props: Props) => {
 
   const isInvalidPrice = parseMANANumber(price) <= 0
   const isInvalidDate = +new Date(`${expiresAt} 00:00:00`) < Date.now()
-  const hasInsufficientMANA = !!price && !!wallet && parseMANANumber(price) > wallet.networks[nft.network].mana
+  const hasInsufficientMANA = !!price && !!wallet && parseMANANumber(price) > wallet.networks[asset.network].mana
 
   const isDisabled =
-    isOwnedBy(nft, wallet) ||
+    isOwnedBy(asset, wallet) ||
     isInvalidPrice ||
     isInvalidDate ||
     hasInsufficientMANA ||
     isLoadingFingerprint ||
     isPlacingBid ||
-    (!fingerprint && nft.category === NFTCategory.ESTATE) ||
+    (!fingerprint && asset.category === NFTCategory.ESTATE) ||
     contractFingerprint !== fingerprint
 
   return (
-    <AssetAction asset={nft}>
+    <AssetAction asset={asset}>
       <div className="bid-action">
         <Header size="large">{t('bid_page.title')}</Header>
         <p className="subtitle">
           <T
             id="bid_page.subtitle"
             values={{
-              name: <b className="primary-text">{getAssetName(nft)}</b>
+              name: <b className="primary-text">{getAssetName(asset)}</b>
             }}
           />
         </p>
-        {isLand(nft) && rental && isRentalListingExecuted(rental) && !hasRentalEnded(rental) ? (
+        {isLand(asset) && rental && isRentalListingExecuted(rental) && !hasRentalEnded(rental) ? (
           <div className="rentalMessage">
             <T
               id="bid_page.rental_executed"
               values={{
                 rental_end_date: getRentalEndDate(rental),
-                asset_type: nft.category,
+                asset_type: asset.category,
                 strong: (children: any) => <strong>{children}</strong>
               }}
             />
@@ -115,7 +117,7 @@ const BidModal = (props: Props) => {
         <Form onSubmit={handleSubmit}>
           <div className="form-fields">
             <ManaField
-              network={nft.network}
+              network={asset.network}
               label={t('bid_page.price')}
               placeholder={1000}
               value={price}
@@ -126,7 +128,7 @@ const BidModal = (props: Props) => {
               message={hasInsufficientMANA ? t('bid_page.not_enougn_mana') : undefined}
             />
             <Field
-              network={nft.network}
+              network={asset.network}
               label={t('bid_page.expiration_date')}
               type="date"
               value={expiresAt}
@@ -142,11 +144,15 @@ const BidModal = (props: Props) => {
             <Button
               as="div"
               disabled={isLoadingFingerprint || isPlacingBid}
-              onClick={() => onNavigate(locations.nft(nft.contractAddress, nft.tokenId))}
+              onClick={() =>
+                onNavigate(
+                  isNFT(asset) ? locations.nft(asset.contractAddress, asset.tokenId) : locations.item(asset.contractAddress, asset.itemId)
+                )
+              }
             >
               {t('global.cancel')}
             </Button>
-            <ChainButton type="submit" primary loading={isPlacingBid} disabled={isDisabled} chainId={nft.chainId}>
+            <ChainButton type="submit" primary loading={isPlacingBid} disabled={isDisabled} chainId={asset.chainId}>
               {t('bid_page.submit')}
             </ChainButton>
           </div>
@@ -160,9 +166,9 @@ const BidModal = (props: Props) => {
                 <T
                   id="bid_page.confirm.create_bid_line_one"
                   values={{
-                    name: <b>{getAssetName(nft)}</b>,
+                    name: <b>{getAssetName(asset)}</b>,
                     amount: (
-                      <Mana showTooltip network={nft.network} inline>
+                      <Mana showTooltip network={asset.network} inline>
                         {parseMANANumber(price).toLocaleString()}
                       </Mana>
                     )
@@ -174,7 +180,7 @@ const BidModal = (props: Props) => {
             }
             onConfirm={handleConfirmBid}
             valueToConfirm={price}
-            network={nft.network}
+            network={asset.network}
             onCancel={() => setShowConfirmationModal(false)}
             loading={isPlacingBid || isLoadingAuthorization}
             disabled={isPlacingBid || isLoadingAuthorization}

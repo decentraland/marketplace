@@ -76,3 +76,10 @@ export const getIsLandCrossChainEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsBidsOffChainEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.OFFCHAIN_BIDS)
+  }
+  return false
+}

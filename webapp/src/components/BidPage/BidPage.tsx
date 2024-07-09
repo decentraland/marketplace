@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Page } from 'decentraland-ui'
-import { AssetType } from '../../modules/asset/types'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { PageLayout } from '../PageLayout'
 import { Wallet } from '../Wallet'
@@ -9,7 +8,7 @@ import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
 
 const BidPage = (props: Props) => {
-  const { onPlaceBid, isPlacingBid, onClearBidError, getContract } = props
+  const { onPlaceBid, isPlacingBid, type, isBidsOffchainEnabled, onClearBidError, getContract } = props
   const history = useHistory()
 
   const onNavigate = useCallback(
@@ -24,10 +23,10 @@ const BidPage = (props: Props) => {
       <Page className="BidPage">
         <Wallet>
           {wallet => (
-            <AssetProviderPage type={AssetType.NFT}>
-              {(nft, _order, rental) => (
+            <AssetProviderPage type={type}>
+              {(asset, _order, rental) => (
                 <BidModal
-                  nft={nft}
+                  asset={asset}
                   rental={rental}
                   wallet={wallet}
                   onNavigate={onNavigate}
@@ -35,6 +34,7 @@ const BidPage = (props: Props) => {
                   isPlacingBid={isPlacingBid}
                   getContract={getContract}
                   onClearBidError={onClearBidError}
+                  isBidsOffchainEnabled={isBidsOffchainEnabled}
                 />
               )}
             </AssetProviderPage>
