@@ -9,7 +9,13 @@ import { PageLayout } from '../PageLayout'
 const NamesPage = () => {
   return (
     <PageLayout activeTab={NavigationTab.NAMES}>
-      <AssetBrowse vendor={VendorName.DECENTRALAND} view={View.MARKET} section={Section.ENS} sections={[Section.ENS]} />
+      <AssetBrowse
+        disableSearchDropdown
+        vendor={VendorName.DECENTRALAND}
+        view={View.MARKET}
+        section={Section.ENS}
+        sections={[Section.ENS]}
+      />
     </PageLayout>
   )
 }

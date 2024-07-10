@@ -22,6 +22,7 @@ export type Props = {
   onBrowse: typeof browse
   onlyOnSale?: boolean
   onlySmart?: boolean
+  disableSearchDropdown?: boolean
   onlyOnRent?: boolean
 }
 
@@ -31,4 +32,7 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<Props, 'onSetView' | 'onFetchAssetsFromRoute' | 'onBrowse'>
 export type MapDispatch = Dispatch<SetViewAction | FetchAssetsFromRouteAction | BrowseAction>
-export type OwnProps = Pick<Props, 'vendor' | 'address' | 'isFullscreen' | 'isMap' | 'view' | 'sections' | 'section' | 'contracts'>
+export type OwnProps = Pick<
+  Props,
+  'vendor' | 'address' | 'isFullscreen' | 'isMap' | 'view' | 'sections' | 'section' | 'contracts' | 'disableSearchDropdown'
+>

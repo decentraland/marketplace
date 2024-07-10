@@ -44,6 +44,7 @@ const AssetBrowse = (props: Props) => {
     onlyOnSale,
     onlySmart,
     viewInState,
+    disableSearchDropdown,
     onlyOnRent
   } = props
 
@@ -186,7 +187,7 @@ const AssetBrowse = (props: Props) => {
     case DecentralandSection.ENS:
       right = (
         <>
-          <AssetTopbar />
+          <AssetTopbar disableSearchDropdown={disableSearchDropdown} />
           <AssetList isManager={isCurrentAccount} />
         </>
       )
