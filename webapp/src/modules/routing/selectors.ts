@@ -39,6 +39,10 @@ export const getSection = createSelector<RootState, string, ReturnType<typeof ge
       return Sections.decentraland.LAND
     }
 
+    if (!section && pathname === locations.names()) {
+      return Sections.decentraland.ENS
+    }
+
     if (
       (!section || (isOfEnumType(section, Sections[vendor]) && section === Sections[vendor].ALL)) &&
       pathname === locations.browse() &&

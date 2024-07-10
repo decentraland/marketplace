@@ -18,6 +18,7 @@ export type Props = {
   section: Section
   hasFiltersEnabled: boolean
   isLoading: boolean
+  disableSearchDropdown?: boolean
   onBrowse: (options: BrowseOptions) => void
   onClearFilters: typeof clearFilters
   onOpenFiltersModal: () => ReturnType<typeof openModal>

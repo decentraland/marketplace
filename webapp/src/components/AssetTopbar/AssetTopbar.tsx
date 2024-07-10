@@ -30,6 +30,7 @@ export const AssetTopbar = ({
   onBrowse,
   onClearFilters,
   onOpenFiltersModal,
+  disableSearchDropdown,
   sortByOptions
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
@@ -41,7 +42,7 @@ export const AssetTopbar = ({
   const handleInputChange = useCallback(
     (text: string) => {
       // if the user is typing, open the dropdown
-      if (!shouldRenderSearchDropdown && text) {
+      if (!shouldRenderSearchDropdown && text && !disableSearchDropdown) {
         setShouldRenderSearchDropdown(true)
       }
       // if the user clears the input, reset the search
@@ -50,7 +51,7 @@ export const AssetTopbar = ({
           search: ''
         }) // triggers search with no search term
       }
-      if (shouldRenderSearchDropdown) {
+      if (shouldRenderSearchDropdown && !disableSearchDropdown) {
         setSearchValueForDropdown(text)
       } else if (text && text !== search) {
         // common search, when the dropdown is not opened and the input is different than the current search term

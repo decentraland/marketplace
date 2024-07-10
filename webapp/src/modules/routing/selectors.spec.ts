@@ -157,6 +157,12 @@ describe('when getting if the are filters set', () => {
 })
 
 describe('when getting the section', () => {
+  describe("and there's no section URL param and the location is related to names", () => {
+    it("should return the decentraland's ENS section", () => {
+      expect(getSection.resultFunc('', locations.names(), VendorName.DECENTRALAND)).toBe(Sections.decentraland.ENS)
+    })
+  })
+
   describe("when there's no section URL param and the location is related to lands", () => {
     it("should return the decentraland's LAND section", () => {
       expect(getSection.resultFunc('', locations.lands(), VendorName.DECENTRALAND)).toBe(Sections.decentraland.LAND)
