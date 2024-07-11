@@ -52,7 +52,7 @@ const BidModal = (props: Props) => {
     network: asset.network
   })
 
-  const offchainBidsContract = getDecentralandContract(ContractName.OffChainMarketplace, asset.chainId)
+  const offchainBidsContract = isBidsOffchainEnabled ? getDecentralandContract(ContractName.OffChainMarketplace, asset.chainId) : null
 
   if (!wallet || !mana || !bids) {
     return null
@@ -67,10 +67,10 @@ const BidModal = (props: Props) => {
     onClearBidError()
     onAuthorizedAction({
       targetContractName: ContractName.MANAToken,
-      authorizedAddress: isBidsOffchainEnabled ? offchainBidsContract.address : bids.address,
+      authorizedAddress: isBidsOffchainEnabled && !!offchainBidsContract ? offchainBidsContract.address : bids.address,
       targetContract: mana as Contract,
       authorizationType: AuthorizationType.ALLOWANCE,
-      authorizedContractLabel: isBidsOffchainEnabled ? offchainBidsContract.name : bids.label || bids.name,
+      authorizedContractLabel: isBidsOffchainEnabled && !!offchainBidsContract ? offchainBidsContract.name : bids.label || bids.name,
       requiredAllowanceInWei: ethers.utils.parseEther(price).toString(),
       onAuthorized: handlePlaceBid
     })
