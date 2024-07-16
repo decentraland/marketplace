@@ -805,6 +805,14 @@
       "action": "买"
     }
   },
+  "accept_bid": {
+    "authorization": {
+      "title": "接受投标",
+      "confirm_transaction": {
+        "title": "确认交易接受投标"
+      }
+    }
+  },
   "buy_with_card_page": {
     "title": "购买{name}",
     "subtitle": "您将以{amount}的价格购买{name}。",

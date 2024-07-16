@@ -1,8 +1,8 @@
 import { Bid, RentalListing } from '@dcl/schemas'
-import { NFT } from '../../../modules/nft/types'
+import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
-  nft: NFT | null
+  asset: Asset | null
   rental: RentalListing | null
   bid: Bid
   userAddress: string

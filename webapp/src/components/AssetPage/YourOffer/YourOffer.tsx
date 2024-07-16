@@ -127,7 +127,12 @@ const YourOffer = (props: Props) => {
           <Button inverted fluid className={styles.actions} onClick={() => onCancel(bid)}>
             {t('offers_table.remove')}
           </Button>
-          <Button primary fluid className={styles.actions} onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
+          <Button
+            primary
+            fluid
+            className={styles.actions}
+            onClick={() => 'tokenId' in bid && history.push(locations.bid(bid.contractAddress, bid.tokenId))}
+          >
             {t('global.update')}
           </Button>
         </div>

@@ -801,6 +801,14 @@
       "action": "comprar"
     }
   },
+  "accept_bid": {
+    "authorization": {
+      "title": "Aceptar oferta",
+      "confirm_transaction": {
+        "title": "Confirma la transacción para aceptar la oferta"
+      }
+    }
+  },
   "buy_with_card_page": {
     "title": "Comprando {name}",
     "subtitle": "Estás por comprar {name} por {amount}.",
