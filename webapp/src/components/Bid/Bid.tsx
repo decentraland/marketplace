@@ -43,29 +43,34 @@ const Bid = (props: Props) => {
   } = props
   const history = useHistory()
   const [targetContractLabel, setTargetContractLabel] = useState<string | null>('')
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
   const isArchived = archivedBidIds.includes(bid.id)
   const isBidder = !!wallet && addressEquals(wallet.address, bid.bidder)
   const isSeller = !!wallet && addressEquals(wallet.address, bid.seller)
-  const nftContract = getContract({ address: bid.contractAddress, chainId: bid.chainId })
+  const isNftBid = 'tokenId' in bid
+  const assetType = isNftBid ? AssetType.NFT : AssetType.ITEM
+  const tokenId = isNftBid ? bid.tokenId : bid.itemId
 
   useEffect(() => {
-    fetchContractName(nftContract)
-      .then(name => setTargetContractLabel(name))
-      .catch(() => console.error('Could not fetch contract name'))
-  }, [nftContract])
+    if (isBidsOffchainEnabled) {
+      fetchContractName(bid.contractAddress, bid.chainId)
+        .then(name => setTargetContractLabel(name))
+        .catch(() => console.error('Could not fetch contract name'))
+    }
+  }, [isBidsOffchainEnabled, bid])
 
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
   const handleConfirm = useCallback(() => {
     if (isBidsOffchainEnabled && 'tradeId' in bid) {
+      const assetContract = getContract({ address: bid.contractAddress, chainId: bid.chainId })
       const offchainMarketplaceContract = getDCLContract(ContractName.OffChainMarketplace, bid.chainId)
 
       if ('tokenId' in bid) {
         onAuthorizedAction({
           targetContractName: ContractName.ERC721,
-          targetContractLabel: targetContractLabel || nftContract?.label || nftContract?.name,
+          targetContractLabel: targetContractLabel || assetContract?.label || assetContract?.name,
           authorizedAddress: offchainMarketplaceContract.address,
-          targetContract: nftContract as Contract,
+          targetContract: assetContract as Contract,
           authorizationType: AuthorizationType.APPROVAL,
           authorizedContractLabel: offchainMarketplaceContract.name,
           tokenId: bid.tokenId,
@@ -77,9 +82,9 @@ const Bid = (props: Props) => {
     } else {
       onAccept(bid)
     }
-  }, [bid, onAccept])
+  }, [bid, targetContractLabel, onAccept])
+
   const handleAccept = () => setShowConfirmationModal(true)
-  const isNftBid = 'tokenId' in bid
 
   return (
     <>
@@ -87,11 +92,7 @@ const Bid = (props: Props) => {
         <div className="bid-row">
           {hasImage ? (
             <div className="image">
-              <AssetProvider
-                type={isNftBid ? AssetType.NFT : AssetType.ITEM}
-                contractAddress={bid.contractAddress}
-                tokenId={isNftBid ? bid.tokenId : bid.itemId}
-              >
+              <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>
                 {(asset, _order, _rental, isLoading) => (
                   <>
                     {!asset && isLoading ? <Loader active /> : null}
@@ -121,21 +122,19 @@ const Bid = (props: Props) => {
             </div>
             {isBidder || isSeller ? (
               <div className="actions">
-                {isBidder && 'bidAddress' in bid ? (
+                {isBidder ? (
                   <>
-                    <Button primary onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
-                      {t('global.update')}
-                    </Button>
+                    {'bidAddress' in bid && (
+                      <Button primary onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
+                        {t('global.update')}
+                      </Button>
+                    )}
                     <Button onClick={() => onCancel(bid)}>{t('global.cancel')}</Button>
                   </>
                 ) : null}
                 {isSeller ? (
                   <>
-                    <AssetProvider
-                      type={isNftBid ? AssetType.NFT : AssetType.ITEM}
-                      contractAddress={bid.contractAddress}
-                      tokenId={isNftBid ? bid.tokenId : bid.itemId}
-                    >
+                    <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>
                       {(asset, _order, rental) => (
                         <AcceptButton userAddress={wallet.address} asset={asset} rental={rental} bid={bid} onClick={handleAccept} />
                       )}
@@ -155,17 +154,13 @@ const Bid = (props: Props) => {
           </div>
         </div>
         {isBidder ? (
-          <AssetProvider type={AssetType.NFT} contractAddress={bid.contractAddress} tokenId={isNftBid ? bid.tokenId : bid.itemId}>
-            {nft => <WarningMessage nft={nft} bid={bid} />}
+          <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>
+            {asset => <WarningMessage asset={asset} bid={bid} />}
           </AssetProvider>
         ) : null}
       </div>
       {showConfirmationModal ? (
-        <AssetProvider
-          type={isNftBid ? AssetType.NFT : AssetType.ITEM}
-          contractAddress={bid.contractAddress}
-          tokenId={isNftBid ? bid.tokenId : bid.itemId}
-        >
+        <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>
           {asset =>
             asset && (
               <ConfirmInputValueModal

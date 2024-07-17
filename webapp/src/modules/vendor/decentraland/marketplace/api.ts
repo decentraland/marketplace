@@ -38,12 +38,13 @@ export class MarketplaceAPI extends BaseClient {
   }
 
   fetchBids = async (queryParams: GetBidsParameters = {}) => {
+    const params = Object.entries(queryParams)
     const searchParams = new URLSearchParams()
-    Object.entries(queryParams).forEach(([key, value]) => {
+    params.forEach(([key, value]) => {
       searchParams.append(key, value.toString())
     })
 
-    return this.fetch<PaginatedResponse<Bid>>(`/v1/bids${searchParams.size ? `?${searchParams.toString()}` : ''}`, { method: 'GET' })
+    return this.fetch<PaginatedResponse<Bid>>(`/v1/bids${params.length ? `?${searchParams.toString()}` : ''}`, { method: 'GET' })
   }
 }
 

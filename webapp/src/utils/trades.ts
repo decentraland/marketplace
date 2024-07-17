@@ -1,6 +1,6 @@
 import { TypedDataDomain, TypedDataField, ethers } from 'ethers'
 import { ChainId, Trade, TradeAsset, TradeAssetType, TradeCreation } from '@dcl/schemas'
-import { getConnectedProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { fromMillisecondsToSeconds } from '../lib/time'
 
@@ -42,7 +42,7 @@ export const OFFCHAIN_MARKETPLACE_TYPES: Record<string, TypedDataField[]> = {
 }
 
 export async function getOffChainMarketplaceContract(chainId: ChainId) {
-  const provider = await getConnectedProvider()
+  const provider = await getNetworkProvider(chainId)
   if (!provider) {
     throw new Error('Could not get connected provider')
   }

@@ -1,5 +1,7 @@
-import { takeEvery, put, select, call, all } from 'redux-saga/effects'
+import { History } from 'history'
+import { takeEvery, put, select, call, all, getContext } from 'redux-saga/effects'
 import { Bid, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
@@ -12,6 +14,8 @@ import { getIsBidsOffChainEnabled } from '../features/selectors'
 import { getCurrentNFT } from '../nft/selectors'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
+import { locations } from '../routing/locations'
+import { getBidPlacedSuccessToast } from '../toast/toasts'
 import { MarketplaceAPI } from '../vendor/decentraland/marketplace/api'
 import { VendorName } from '../vendor/types'
 import { VendorFactory } from '../vendor/VendorFactory'
@@ -59,9 +63,14 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
       const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
 
       if (isBidsOffchainEnabled) {
+        const history: History = yield getContext('history')
         const trade: TradeCreation = yield call([bidUtils, 'createBidTrade'], asset, price, expiresAt, fingerprint)
         yield call([marketplaceAPI, 'addTrade'], trade)
         yield put(placeBidSuccess(asset, price, expiresAt, asset.chainId, wallet.address, fingerprint))
+        yield put(showToast(getBidPlacedSuccessToast(asset)))
+        history.push(
+          isNFT(asset) ? locations.nft(asset.contractAddress, asset.tokenId) : locations.item(asset.contractAddress, asset.itemId)
+        )
       } else {
         if (isNFT(asset)) {
           const { bidService } = VendorFactory.build(asset.vendor)
@@ -93,15 +102,15 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
         if (isBidsOffchainEnabled) {
           const trade: Trade = yield call([marketplaceAPI, 'fetchTrade'], bid.tradeId)
           const tradeToAccept = tradeUtils.getTradeToAccept(trade)
-          const offchainMarketplaceContract = getDCLContract(ContractName.OffChainMarketplace, trade.chainId)
+          const offchainMarketplaceContract: ContractData = yield call(getDCLContract, ContractName.OffChainMarketplace, trade.chainId)
           txHash = yield call(
             sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
             offchainMarketplaceContract,
-            'accept',
+            'function accept(Trade[] calldata _trades) external;',
             [tradeToAccept]
           )
         } else {
-          console.error('Not able to accept bid')
+          throw new Error('not able to accept offchain bids')
         }
       } else {
         const contract = (yield select(getContract, {

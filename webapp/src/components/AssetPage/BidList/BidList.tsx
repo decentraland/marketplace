@@ -10,6 +10,7 @@ const BidList = (props: Props) => {
   const [hasFetched, setHasFetched] = useState(false)
 
   // this is because when you change from one nft detail to another you would still see the previous nft bids
+  // TODO: Support new bids from trades
   const filteredBids = useMemo(
     () => bids.filter(bid => bid.contractAddress === nft.contractAddress && 'tokenId' in bid && bid.tokenId === nft.tokenId),
     [nft, bids]

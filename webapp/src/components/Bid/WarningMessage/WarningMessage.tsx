@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isNFT } from '../../../modules/asset/utils'
 import { isInsufficientMANA, checkFingerprint } from '../../../modules/bid/utils'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { Props } from './WarningMessage.types'
 import './WarningMessage.css'
 
 const WarningMessage = (props: Props) => {
-  const { nft, bid } = props
+  const { asset, bid } = props
 
-  const [fingerprint] = useFingerprint(nft)
+  const [fingerprint] = useFingerprint(asset && isNFT(asset) ? asset : null)
   const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
 
   useEffect(() => {
