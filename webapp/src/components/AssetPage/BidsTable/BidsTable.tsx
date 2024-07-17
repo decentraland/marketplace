@@ -108,7 +108,7 @@ const BidsTable = (props: Props) => {
         handleSortByChange={(value: string) => setSortBy(value as BidSortBy)}
         sortBy={sortBy}
       />
-      {showConfirmationModal.bid && showConfirmationModal.display ? (
+      {showConfirmationModal.bid && showConfirmationModal.display && 'tokenId' in showConfirmationModal.bid ? (
         <AssetProvider
           type={AssetType.NFT}
           contractAddress={showConfirmationModal.bid.contractAddress}
