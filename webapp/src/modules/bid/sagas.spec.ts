@@ -478,7 +478,7 @@ describe('when handling the accepting a bid action', () => {
         marketplaceAPIMock = { fetchTrade: jest.fn().mockResolvedValue(trade) } as unknown as jest.Mocked<MarketplaceAPI>
       })
 
-      it.only('should dispatch an action signaling the success of the action handling', () => {
+      it('should dispatch an action signaling the success of the action handling', () => {
         return expectSaga(bidSaga, marketplaceAPIMock)
           .provide([
             [select(getIsBidsOffChainEnabled), true],

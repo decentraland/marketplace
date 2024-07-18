@@ -10,6 +10,7 @@ export type GetBidsParameters = {
   limit?: number
   offset?: number
   bidder?: string
+  seller?: string
   sortBy?: BidSortBy
 }
 

@@ -180,10 +180,12 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
 
       const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
       if (isBidsOffchainEnabled) {
-        sellerBids = ((yield call([marketplaceAPI, 'fetchBids'])) as Awaited<ReturnType<typeof marketplaceAPI.fetchBids>>).results // TODO: add seller filter
-        bidderBids = (
-          (yield call([marketplaceAPI, 'fetchBids'], { bidder: address })) as Awaited<ReturnType<typeof marketplaceAPI.fetchBids>>
-        ).results
+        const bids = (yield all([
+          call([marketplaceAPI, 'fetchBids'], { seller: address }),
+          call([marketplaceAPI, 'fetchBids'], { bidder: address })
+        ])) as [Awaited<ReturnType<typeof marketplaceAPI.fetchBids>>, Awaited<ReturnType<typeof marketplaceAPI.fetchBids>>]
+        sellerBids = bids[0].results
+        bidderBids = bids[1].results
       } else {
         for (const vendorName of Object.values(VendorName)) {
           const { bidService } = VendorFactory.build(vendorName)
