@@ -89,5 +89,5 @@ export async function createBidTrade(asset: NFT | Item, price: number, expiresAt
 }
 
 export function isBidTrade(bid: Bid): bid is BidTrade {
-  return 'trade_id' in bid
+  return 'tradeId' in bid
 }
