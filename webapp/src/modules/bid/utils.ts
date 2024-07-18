@@ -1,5 +1,6 @@
 import { ethers, BigNumber } from 'ethers'
 import { Bid, TradeAssetType, TradeCreation, TradeType } from '@dcl/schemas'
+import { BidTrade } from '@dcl/schemas/dist/dapps/bid'
 import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContract } from 'decentraland-transactions'
@@ -85,4 +86,8 @@ export async function createBidTrade(asset: NFT | Item, price: number, expiresAt
   }
 
   return { ...tradeToSign, signature: await getTradeSignature(tradeToSign) }
+}
+
+export function isBidTrade(bid: Bid): bid is BidTrade {
+  return 'trade_id' in bid
 }
