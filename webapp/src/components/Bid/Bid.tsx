@@ -12,6 +12,7 @@ import { formatDistanceToNow } from '../../lib/date'
 import { formatWeiMANA } from '../../lib/mana'
 import { AssetType } from '../../modules/asset/types'
 import { getAssetName } from '../../modules/asset/utils'
+import { isBidTrade } from '../../modules/bid/utils'
 import { locations } from '../../modules/routing/locations'
 import { addressEquals } from '../../modules/wallet/utils'
 import { AssetImage } from '../AssetImage'
@@ -124,7 +125,7 @@ const Bid = (props: Props) => {
               <div className="actions">
                 {isBidder ? (
                   <>
-                    {'bidAddress' in bid && (
+                    {!isBidTrade(bid) && (
                       <Button primary onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
                         {t('global.update')}
                       </Button>
