@@ -40,7 +40,7 @@ import { toastSaga } from './toast/sagas'
 import { transakSaga } from './transak/sagas'
 import { translationSaga } from './translation/sagas'
 import { uiSaga } from './ui/sagas'
-import { MarketplaceAPI } from './vendor/decentraland/marketplace/api'
+import { BidService } from './vendor/decentraland'
 import { TradeService } from './vendor/decentraland/TradeService'
 import { walletSaga } from './wallet/sagas'
 
@@ -87,9 +87,6 @@ const getCrossChainProvider = async () => {
   return AxelarProvider
 }
 
-const getMarketplaceApi = (getIdentity: () => AuthIdentity | undefined) =>
-  new MarketplaceAPI(config.get('MARKETPLACE_SERVER_URL'), { identity: getIdentity, retries: 0 })
-
 const getTradesService = (getIdentity: () => AuthIdentity | undefined) => new TradeService(getIdentity)
 
 export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
@@ -97,7 +94,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     analyticsSaga(),
     assetSaga(),
     authorizationSaga(),
-    bidSaga(getMarketplaceApi(getIdentity), getTradesService(getIdentity)),
+    bidSaga(new BidService(), getTradesService(getIdentity)),
     itemSaga(getIdentity),
     nftSaga(getIdentity),
     orderSaga(),
