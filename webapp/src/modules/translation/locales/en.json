@@ -549,6 +549,7 @@
       "change_beneficiary": "Change beneficiary",
       "mint_item": "Mint item",
       "place_bid": "Make offer",
+      "offer_made": "Your offer has been made",
       "legacy_order_expired_warning": "This listing is not being shown to buyers in the Marketplace but has been created with an invalid expiration date and therefore could still be purchased via the contract. Please remove this listing manually.",
       "legacy_order_not_expired_warning": "This listing has been created with an invalid expiration date. Please remove this listing and put it for sale again to fix the issue."
     },
@@ -636,7 +637,8 @@
       "expires": "Expires",
       "never_expires": "It never expires",
       "no_offer": "No offer",
-      "make_offer": "Make Offer"
+      "make_offer": "Make Offer",
+      "already_offer": "You already made an offer"
     }
   },
   "offers_table": {
@@ -1668,5 +1670,9 @@
     "description": "Your current username will be updated immediately.",
     "success_title": "All Done!",
     "success_description": "Your username has been updated"
+  },
+  "bid_button": {
+    "bid": "Make offer",
+    "blocked": "Your offer has been made"
   }
 }

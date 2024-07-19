@@ -86,13 +86,17 @@ const YourOffer = (props: Props) => {
 
   const isMobile = useMobileMediaQuery()
 
-  const bid = useMemo(() => bids.find(({ bidder }) => bidder === address), [])
+  const bid = useMemo(() => bids.find(({ bidder }) => bidder === address), [bids, address])
 
   useEffect(() => {
     if (!hasFetched && asset) {
       setHasFetched(true)
       onFetchBids(asset)
     }
+  }, [asset])
+
+  useEffect(() => {
+    setHasFetched(false)
   }, [asset])
 
   return bid ? (

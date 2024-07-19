@@ -3,16 +3,3 @@
   flex-direction: column;
   gap: 8px;
 }
-
-.bidButton img {
-  width: 16px;
-}
-
-.bidButton:global(.ui.inverted.secondary.button) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  color: white;
-  box-shadow: none !important;
-}

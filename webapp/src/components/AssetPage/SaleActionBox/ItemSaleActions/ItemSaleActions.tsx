@@ -1,18 +1,17 @@
 import { memo } from 'react'
-import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
-import makeOffer from '../../../../images/empty-bids.png'
 import { AssetType } from '../../../../modules/asset/types'
 import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
-import { locations } from '../../../../modules/routing/locations'
+import BidButton from '../../../BidButton'
 import { BuyNFTButtons } from '../BuyNFTButtons'
 import { Props } from './ItemSaleActions.types'
 import styles from './ItemSaleActions.module.css'
 
-const ItemSaleActions = ({ item, wallet, isBidsOffchainEnabled, customClassnames }: Props) => {
+const ItemSaleActions = ({ item, wallet, isBidsOffchainEnabled, customClassnames, bids }: Props) => {
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
+  const alreadyBid = !!bids.find(bid => bid.bidder === wallet?.address)
   const canBid = isBidsOffchainEnabled && !isOwner && item.available > 0
   const builderCollectionUrl = getBuilderCollectionDetailUrl(item.contractAddress)
 
@@ -35,19 +34,7 @@ const ItemSaleActions = ({ item, wallet, isBidsOffchainEnabled, customClassnames
           {canBuy && (
             <BuyNFTButtons asset={item} assetType={AssetType.ITEM} buyWithCardClassName={customClassnames?.buyWithCardClassName} />
           )}
-          {canBid && (
-            <Button
-              as={Link}
-              role="link"
-              secondary
-              inverted
-              to={locations.bidItem(item.contractAddress, item.itemId)}
-              className={styles.bidButton}
-            >
-              <img src={makeOffer} alt={t('asset_page.actions.place_bid')} />
-              {t('asset_page.actions.place_bid')}
-            </Button>
-          )}
+          {canBid && <BidButton asset={item} alreadyBid={alreadyBid} />}
         </>
       )}
     </>
