@@ -1,9 +1,6 @@
 import { Trade, TradeCreation } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib'
-import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
-import { ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../../../config'
-import { getOnChainTrade } from '../../../../utils/trades'
 import { retryParams } from '../utils'
 
 export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')
@@ -22,18 +19,6 @@ export class TradesAPI extends BaseClient {
 
   fetchTrade = async (tradeId: string) => {
     return this.fetch<Trade>(`/v1/trades/${tradeId}`, { method: 'GET' })
-  }
-
-  accept = async (trade: Trade) => {
-    const offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, trade.chainId)
-    const tradeToAccept = getOnChainTrade(trade)
-    return sendTransaction(offchainMarketplaceContract, 'accept', [tradeToAccept])
-  }
-
-  cancel = async (trade: Trade) => {
-    const offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, trade.chainId)
-    const tradeToCancel = getOnChainTrade(trade)
-    return sendTransaction(offchainMarketplaceContract, 'cancelSignature', [tradeToCancel])
   }
 }
 

@@ -13,8 +13,8 @@ import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
 import { locations } from '../routing/locations'
 import { getBidPlacedSuccessToast } from '../toast/toasts'
-import { MarketplaceAPI } from '../vendor/decentraland/marketplace/api'
-import { TradesAPI } from '../vendor/decentraland/trades/api'
+import { BidService } from '../vendor/decentraland'
+import { TradeService } from '../vendor/decentraland/TradeService'
 import { VendorName } from '../vendor/types'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
@@ -43,7 +43,7 @@ import {
 } from './actions'
 import * as bidUtils from './utils'
 
-export function* bidSaga(marketplaceAPI: MarketplaceAPI, tradesAPI: TradesAPI) {
+export function* bidSaga(bidService: BidService, tradeService: TradeService) {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)
   yield takeEvery(ACCEPT_BID_REQUEST, handleAcceptBidRequest)
   yield takeEvery(CANCEL_BID_REQUEST, handleCancelBidRequest)
@@ -63,7 +63,7 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI, tradesAPI: TradesAPI) {
       if (isBidsOffchainEnabled) {
         const history: History = yield getContext('history')
         const trade: TradeCreation = yield call([bidUtils, 'createBidTrade'], asset, price, expiresAt, fingerprint)
-        yield call([tradesAPI, 'addTrade'], trade)
+        yield call([tradeService, 'addTrade'], trade)
         yield put(placeBidSuccess(asset, price, expiresAt, asset.chainId, wallet.address, fingerprint))
         yield put(showToast(getBidPlacedSuccessToast(asset)))
         history.push(
@@ -71,13 +71,13 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI, tradesAPI: TradesAPI) {
         )
       } else {
         if (isNFT(asset)) {
-          const { bidService } = VendorFactory.build(asset.vendor)
+          const vendor = VendorFactory.build(asset.vendor)
 
-          if (!bidService) {
+          if (!vendor.bidService) {
             throw new Error("Couldn't find a valid bid service for vendor")
           }
-          const txHash = (yield call([bidService, 'place'], wallet, asset, price, expiresAt, fingerprint)) as Awaited<
-            ReturnType<typeof bidService.place>
+          const txHash = (yield call([vendor.bidService, 'place'], wallet, asset, price, expiresAt, fingerprint)) as Awaited<
+            ReturnType<typeof vendor.bidService.place>
           >
           yield put(placeBidSuccess(asset, price, expiresAt, asset.chainId, wallet.address, fingerprint, txHash))
         } else {
@@ -101,8 +101,8 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI, tradesAPI: TradesAPI) {
           throw new Error('not able to accept offchain bids')
         }
 
-        const trade: Trade = yield call([tradesAPI, 'fetchTrade'], bid.tradeId)
-        txHash = yield call([tradesAPI, 'accept'], trade)
+        const trade: Trade = yield call([tradeService, 'fetchTrade'], bid.tradeId)
+        txHash = yield call([tradeService, 'accept'], trade)
       } else {
         const contract = (yield select(getContract, {
           address: bid.contractAddress
@@ -149,8 +149,8 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI, tradesAPI: TradesAPI) {
           throw new Error('not able to cancel offchain bids')
         }
 
-        const trade: Trade = yield call([tradesAPI, 'fetchTrade'], bid.tradeId)
-        txHash = yield call([tradesAPI, 'cancel'], trade)
+        const trade: Trade = yield call([tradeService, 'fetchTrade'], bid.tradeId)
+        txHash = yield call([tradeService, 'cancel'], trade)
       } else {
         const contract = (yield select(getContract, {
           address: bid.contractAddress
@@ -183,22 +183,22 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI, tradesAPI: TradesAPI) {
       const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
       if (isBidsOffchainEnabled) {
         const bids = (yield all([
-          call([marketplaceAPI, 'fetchBids'], { seller: address }),
-          call([marketplaceAPI, 'fetchBids'], { bidder: address })
-        ])) as [Awaited<ReturnType<typeof marketplaceAPI.fetchBids>>, Awaited<ReturnType<typeof marketplaceAPI.fetchBids>>]
+          call([bidService, 'fetchBids'], { seller: address }),
+          call([bidService, 'fetchBids'], { bidder: address })
+        ])) as [Awaited<ReturnType<typeof bidService.fetchBids>>, Awaited<ReturnType<typeof bidService.fetchBids>>]
         sellerBids = bids[0].results
         bidderBids = bids[1].results
       } else {
         for (const vendorName of Object.values(VendorName)) {
-          const { bidService } = VendorFactory.build(vendorName)
-          if (bidService === undefined) {
+          const vendor = VendorFactory.build(vendorName)
+          if (vendor.bidService === undefined) {
             continue
           }
 
-          const bids = (yield all([call([bidService, 'fetchBySeller'], address), call([bidService, 'fetchByBidder'], address)])) as [
-            Awaited<ReturnType<typeof bidService.fetchBySeller>>,
-            Awaited<ReturnType<typeof bidService.fetchByBidder>>
-          ]
+          const bids = (yield all([
+            call([vendor.bidService, 'fetchBySeller'], address),
+            call([vendor.bidService, 'fetchByBidder'], address)
+          ])) as [Awaited<ReturnType<typeof vendor.bidService.fetchBySeller>>, Awaited<ReturnType<typeof vendor.bidService.fetchByBidder>>]
           sellerBids = sellerBids.concat(bids[0])
           bidderBids = bidderBids.concat(bids[1])
         }

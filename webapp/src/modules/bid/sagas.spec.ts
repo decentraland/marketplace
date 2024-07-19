@@ -12,8 +12,8 @@ import { NFT } from '../nft/types'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { Vendor, VendorFactory, VendorName } from '../vendor'
-import { marketplaceAPI } from '../vendor/decentraland/marketplace/api'
-import { TradesAPI, tradesAPI } from '../vendor/decentraland/trades/api'
+import { BidService } from '../vendor/decentraland'
+import { TradeService } from '../vendor/decentraland/TradeService'
 import { Contract } from '../vendor/services'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -30,6 +30,14 @@ import {
 } from './actions'
 import { bidSaga } from './sagas'
 import * as bidUtils from './utils'
+
+let bidService: BidService
+let tradeService: TradeService
+
+beforeEach(() => {
+  bidService = new BidService()
+  tradeService = new TradeService(() => undefined)
+})
 
 describe('when handling the creation of a bid', () => {
   let wallet: Wallet
@@ -48,7 +56,7 @@ describe('when handling the creation of a bid', () => {
 
   describe('and offchain bids are enabled', () => {
     let trade: TradeCreation
-    let tradesAPIMock: TradesAPI
+    let tradeServiceMock: TradeService
 
     describe('and the asset is an item', () => {
       beforeEach(() => {
@@ -91,11 +99,11 @@ describe('when handling the creation of a bid', () => {
 
       describe('and the trade creation finish successfully', () => {
         beforeEach(() => {
-          tradesAPIMock = { addTrade: jest.fn().mockResolvedValue(trade) } as unknown as TradesAPI
+          tradeServiceMock = { addTrade: jest.fn().mockResolvedValue(trade) } as unknown as TradeService
         })
 
         it('should dispatch bid success action', () => {
-          return expectSaga(bidSaga, marketplaceAPI, tradesAPIMock)
+          return expectSaga(bidSaga, bidService, tradeServiceMock)
             .provide([
               [select(getWallet), wallet],
               [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
@@ -112,11 +120,11 @@ describe('when handling the creation of a bid', () => {
 
         beforeEach(() => {
           error = 'Some error'
-          tradesAPIMock = { addTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as TradesAPI
+          tradeServiceMock = { addTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as TradeService
         })
 
         it('should dispatch bid failure action', () => {
-          return expectSaga(bidSaga, marketplaceAPI, tradesAPIMock)
+          return expectSaga(bidSaga, bidService, tradeServiceMock)
             .provide([
               [select(getWallet), wallet],
               [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
@@ -136,11 +144,11 @@ describe('when handling the creation of a bid', () => {
 
       describe('and the trade creation finish successfully', () => {
         beforeEach(() => {
-          tradesAPIMock = { addTrade: jest.fn().mockResolvedValue(trade) } as unknown as TradesAPI
+          tradeServiceMock = { addTrade: jest.fn().mockResolvedValue(trade) } as unknown as TradeService
         })
 
         it('should dispatch bid success action', () => {
-          return expectSaga(bidSaga, marketplaceAPI, tradesAPIMock)
+          return expectSaga(bidSaga, bidService, tradeServiceMock)
             .provide([
               [select(getWallet), wallet],
               [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
@@ -156,11 +164,11 @@ describe('when handling the creation of a bid', () => {
         let error: string
         beforeEach(() => {
           error = 'Some error'
-          tradesAPIMock = { addTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as TradesAPI
+          tradeServiceMock = { addTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as TradeService
         })
 
         it('should dispatch bid failure action', () => {
-          return expectSaga(bidSaga, marketplaceAPI, tradesAPIMock)
+          return expectSaga(bidSaga, bidService, tradeServiceMock)
             .provide([
               [select(getWallet), wallet],
               [call([bidUtils, 'createBidTrade'], asset, price, expiration, fingerprint), trade],
@@ -183,7 +191,7 @@ describe('when handling the creation of a bid', () => {
       })
 
       it('should dispatch bid failure action', () => {
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+        return expectSaga(bidSaga, bidService, tradeService)
           .provide([
             [select(getWallet), wallet],
             [select(getIsBidsOffChainEnabled), false]
@@ -203,7 +211,7 @@ describe('when handling the creation of a bid', () => {
       it('should send bid transaction', () => {
         const vendor = VendorFactory.build((asset as NFT).vendor)
 
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+        return expectSaga(bidSaga, bidService, tradeService)
           .provide([
             [call([VendorFactory, 'build'], (asset as NFT).vendor), vendor],
             [select(getWallet), wallet],
@@ -232,7 +240,7 @@ describe('when handling the accepting a bid action', () => {
           contractAddress: '0x123'
         } as Bid
 
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+        return expectSaga(bidSaga, bidService, tradeService)
           .provide([
             [select(getContract, { address: bid.contractAddress }), undefined],
             [select(getIsBidsOffChainEnabled), false]
@@ -255,7 +263,7 @@ describe('when handling the accepting a bid action', () => {
           contractAddress: contract.address
         } as Bid
 
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+        return expectSaga(bidSaga, bidService, tradeService)
           .provide([
             [select(getContract, { address: bid.contractAddress }), contract],
             [select(getIsBidsOffChainEnabled), false],
@@ -279,7 +287,7 @@ describe('when handling the accepting a bid action', () => {
         }
         const vendor = VendorFactory.build(contract.vendor)
 
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+        return expectSaga(bidSaga, bidService, tradeService)
           .provide([
             [select(getContract, { address: bid.contractAddress }), contract],
             [select(getIsBidsOffChainEnabled), false],
@@ -330,7 +338,7 @@ describe('when handling the accepting a bid action', () => {
             } as RentalListing
           })
           it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
-            return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+            return expectSaga(bidSaga, bidService, tradeService)
               .provide([
                 [select(getIsBidsOffChainEnabled), false],
                 [select(getContract, { address: bid.contractAddress }), contract],
@@ -354,7 +362,7 @@ describe('when handling the accepting a bid action', () => {
             nft.openRentalId = null
           })
           it('should dispatch an action signaling the success of the action handling', () => {
-            return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+            return expectSaga(bidSaga, bidService, tradeService)
               .provide([
                 [select(getIsBidsOffChainEnabled), false],
                 [select(getContract, { address: bid.contractAddress }), contract],
@@ -373,7 +381,7 @@ describe('when handling the accepting a bid action', () => {
       })
       describe('and the transaction gets reverted', () => {
         it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
-          return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+          return expectSaga(bidSaga, bidService, tradeService)
             .provide([
               [select(getIsBidsOffChainEnabled), false],
               [select(getContract, { address: bid.contractAddress }), contract],
@@ -393,7 +401,7 @@ describe('when handling the accepting a bid action', () => {
   })
 
   describe('and offchain bids are enabled', () => {
-    let tradesAPIMock: jest.Mocked<TradesAPI>
+    let tradeServiceMock: jest.Mocked<TradeService>
     let bid: Bid
 
     describe('and getting the trade by id fails', () => {
@@ -405,11 +413,11 @@ describe('when handling the accepting a bid action', () => {
           contractAddress: '0x123',
           tradeId: 'atrade-id'
         } as Bid
-        tradesAPIMock = { fetchTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as jest.Mocked<TradesAPI>
+        tradeServiceMock = { fetchTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as jest.Mocked<TradeService>
       })
 
       it('should dispatch an action signaling the failure of the action handling', () => {
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPIMock)
+        return expectSaga(bidSaga, bidService, tradeServiceMock)
           .provide([[select(getIsBidsOffChainEnabled), true]])
           .put(acceptBidFailure(bid, error))
           .dispatch(acceptBidRequest(bid))
@@ -467,14 +475,14 @@ describe('when handling the accepting a bid action', () => {
 
         txHash = '0x12312412'
 
-        tradesAPIMock = {
+        tradeServiceMock = {
           fetchTrade: jest.fn().mockResolvedValue(trade),
           accept: jest.fn().mockResolvedValue(txHash)
-        } as unknown as jest.Mocked<TradesAPI>
+        } as unknown as jest.Mocked<TradeService>
       })
 
       it('should dispatch an action signaling the success of the action handling', () => {
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPIMock)
+        return expectSaga(bidSaga, bidService, tradeServiceMock)
           .provide([
             [select(getIsBidsOffChainEnabled), true],
             [select(getCurrentNFT), null],
@@ -502,7 +510,7 @@ describe('when handling the cancellation of a bid action', () => {
           contractAddress: '0x123'
         } as Bid
 
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+        return expectSaga(bidSaga, bidService, tradeService)
           .provide([
             [select(getContract, { address: bid.contractAddress }), { address: bid.contractAddress }],
             [select(getIsBidsOffChainEnabled), false]
@@ -525,7 +533,7 @@ describe('when handling the cancellation of a bid action', () => {
           contractAddress: contract.address
         } as Bid
 
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+        return expectSaga(bidSaga, bidService, tradeService)
           .provide([
             [select(getContract, { address: bid.contractAddress }), contract],
             [select(getIsBidsOffChainEnabled), false],
@@ -549,7 +557,7 @@ describe('when handling the cancellation of a bid action', () => {
         }
         const vendor = VendorFactory.build(contract.vendor)
 
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+        return expectSaga(bidSaga, bidService, tradeService)
           .provide([
             [select(getContract, { address: bid.contractAddress }), contract],
             [select(getIsBidsOffChainEnabled), false],
@@ -591,7 +599,7 @@ describe('when handling the cancellation of a bid action', () => {
 
       describe('and the transaction finishes successfully', () => {
         it('should dispatch an action signaling the success of the action handling', () => {
-          return expectSaga(bidSaga, marketplaceAPI, tradesAPI)
+          return expectSaga(bidSaga, bidService, tradeService)
             .provide([
               [select(getIsBidsOffChainEnabled), false],
               [select(getContract, { address: bid.contractAddress }), contract],
@@ -610,7 +618,7 @@ describe('when handling the cancellation of a bid action', () => {
   })
 
   describe('and offchain bids are enabled', () => {
-    let tradesAPIMock: jest.Mocked<TradesAPI>
+    let tradeServiceMock: jest.Mocked<TradeService>
     let bid: Bid
 
     describe('and getting the trade by id fails', () => {
@@ -622,11 +630,11 @@ describe('when handling the cancellation of a bid action', () => {
           contractAddress: '0x123',
           tradeId: 'atrade-id'
         } as Bid
-        tradesAPIMock = { fetchTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as jest.Mocked<TradesAPI>
+        tradeServiceMock = { fetchTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as jest.Mocked<TradeService>
       })
 
       it('should dispatch an action signaling the failure of the action handling', () => {
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPIMock)
+        return expectSaga(bidSaga, bidService, tradeServiceMock)
           .provide([[select(getIsBidsOffChainEnabled), true]])
           .put(acceptBidFailure(bid, error))
           .dispatch(acceptBidRequest(bid))
@@ -684,14 +692,14 @@ describe('when handling the cancellation of a bid action', () => {
 
         txHash = '0x12312412'
 
-        tradesAPIMock = {
+        tradeServiceMock = {
           fetchTrade: jest.fn().mockResolvedValue(trade),
           cancel: jest.fn().mockResolvedValue(txHash)
-        } as unknown as jest.Mocked<TradesAPI>
+        } as unknown as jest.Mocked<TradeService>
       })
 
       it('should dispatch an action signaling the success of the action handling', () => {
-        return expectSaga(bidSaga, marketplaceAPI, tradesAPIMock)
+        return expectSaga(bidSaga, bidService, tradeServiceMock)
           .provide([
             [select(getIsBidsOffChainEnabled), true],
             [select(getCurrentNFT), null],

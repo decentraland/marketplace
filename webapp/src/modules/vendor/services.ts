@@ -1,4 +1,15 @@
-import { Bid, Contract as BaseContract, ListingStatus, NFTCategory, Order, OrderFilters, OrderSortBy, RentalListing } from '@dcl/schemas'
+import {
+  Bid,
+  Contract as BaseContract,
+  ListingStatus,
+  NFTCategory,
+  Order,
+  OrderFilters,
+  OrderSortBy,
+  RentalListing,
+  Trade,
+  TradeCreation
+} from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Account } from '../account/types'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from '../analytics/types'
@@ -49,4 +60,11 @@ export interface BidService<V extends VendorName> {
 export interface ContractService {
   getContracts(): Promise<Contract[]>
   getTransferType: (address: string) => TransferType
+}
+
+export interface TradeService {
+  addTrade: (trade: TradeCreation) => Promise<Trade>
+  fetchTrade: (tradeId: string) => Promise<Trade>
+  accept: (trade: Trade) => Promise<string>
+  cancel: (trade: Trade) => Promise<string>
 }
