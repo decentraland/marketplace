@@ -1,4 +1,4 @@
-import { Bid, ChainId, Trade, TradeCreation } from '@dcl/schemas'
+import { Bid, ChainId } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
@@ -20,21 +20,6 @@ export class MarketplaceAPI extends BaseClient {
       [ChainId.FANTOM_MAINNET]: 'fantom-mainnet'
     } as Record<ChainId, string>
     return this.fetch(`/${chainIdToChainName[chain]}/address/${wallet}/balance`, { method: 'GET' })
-  }
-
-  addTrade = async (trade: TradeCreation) => {
-    return this.fetch<Trade>('/v1/trades', {
-      method: 'POST',
-      body: JSON.stringify(trade),
-      metadata: { signer: 'dcl:marketplace', intent: 'dcl:marketplace:create-trade' },
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-  }
-
-  fetchTrade = async (tradeId: string) => {
-    return this.fetch<Trade>(`/v1/trades/${tradeId}`, { method: 'GET' })
   }
 
   fetchBids = async (queryParams: GetBidsParameters = {}) => {

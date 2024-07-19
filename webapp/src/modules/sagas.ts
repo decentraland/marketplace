@@ -41,6 +41,7 @@ import { transakSaga } from './transak/sagas'
 import { translationSaga } from './translation/sagas'
 import { uiSaga } from './ui/sagas'
 import { MarketplaceAPI } from './vendor/decentraland/marketplace/api'
+import { TradesAPI } from './vendor/decentraland/trades/api'
 import { walletSaga } from './wallet/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
@@ -89,12 +90,15 @@ const getCrossChainProvider = async () => {
 const getMarketplaceApi = (getIdentity: () => AuthIdentity | undefined) =>
   new MarketplaceAPI(config.get('MARKETPLACE_SERVER_URL'), { identity: getIdentity, retries: 0 })
 
+const getTradesApi = (getIdentity: () => AuthIdentity | undefined) =>
+  new TradesAPI(config.get('MARKETPLACE_SERVER_URL'), { identity: getIdentity, retries: 0 })
+
 export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
   yield all([
     analyticsSaga(),
     assetSaga(),
     authorizationSaga(),
-    bidSaga(getMarketplaceApi(getIdentity)),
+    bidSaga(getMarketplaceApi(getIdentity), getTradesApi(getIdentity)),
     itemSaga(getIdentity),
     nftSaga(getIdentity),
     orderSaga(),
