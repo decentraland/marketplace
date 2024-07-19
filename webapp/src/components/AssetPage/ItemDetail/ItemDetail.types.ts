@@ -12,4 +12,7 @@ export enum SmartWearableRequiredPermission {
 
 export type Props = {
   item: Item
+  isBidsOffchainEnabled: boolean
 }
+
+export type MapStateProps = Pick<Props, 'isBidsOffchainEnabled'>

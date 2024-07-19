@@ -679,6 +679,11 @@
     "there_are_no_owners": "There are no owners yet",
     "become_the_first_one": "Become the first one!"
   },
+  "bids_table": {
+    "bids": "Offers",
+    "no_bids": "The are no offers yet",
+    "make_offer": "Make an offer"
+  },
   "rental_history": {
     "title": "Latest rentals",
     "lessor": "Lessor",

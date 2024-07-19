@@ -41,7 +41,9 @@ export class MarketplaceAPI extends BaseClient {
     const params = Object.entries(queryParams)
     const searchParams = new URLSearchParams()
     params.forEach(([key, value]) => {
-      searchParams.append(key, value.toString())
+      if (value !== undefined) {
+        searchParams.append(key, value.toString())
+      }
     })
 
     return this.fetch<PaginatedResponse<Bid>>(`/v1/bids${params.length ? `?${searchParams.toString()}` : ''}`, { method: 'GET' })

@@ -2,6 +2,7 @@ import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
+import makeOffer from '../../../../images/empty-bids.png'
 import { AssetType } from '../../../../modules/asset/types'
 import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
 import { locations } from '../../../../modules/routing/locations'
@@ -35,7 +36,15 @@ const ItemSaleActions = ({ item, wallet, isBidsOffchainEnabled, customClassnames
             <BuyNFTButtons asset={item} assetType={AssetType.ITEM} buyWithCardClassName={customClassnames?.buyWithCardClassName} />
           )}
           {canBid && (
-            <Button as={Link} role="link" to={locations.bidItem(item.contractAddress, item.itemId)} className={styles.bidButton}>
+            <Button
+              as={Link}
+              role="link"
+              secondary
+              inverted
+              to={locations.bidItem(item.contractAddress, item.itemId)}
+              className={styles.bidButton}
+            >
+              <img src={makeOffer} alt={t('asset_page.actions.place_bid')} />
               {t('asset_page.actions.place_bid')}
             </Button>
           )}
