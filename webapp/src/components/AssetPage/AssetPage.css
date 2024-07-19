@@ -15,11 +15,6 @@
   margin-top: 10px;
 }
 
-.AssetPage .asset-container .ui.container {
-  display: flex;
-  flex-direction: column;
-}
-
 @media (max-width: 768px) {
   .AssetPage {
     margin-top: 0px;

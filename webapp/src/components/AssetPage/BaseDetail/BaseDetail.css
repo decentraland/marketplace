@@ -94,6 +94,11 @@
   margin-top: 48px;
 }
 
+.BaseDetail .ui.container {
+  display: flex;
+  flex-direction: column;
+}
+
 @media (max-width: 768px) {
   .BaseDetail .dcl.stats {
     margin-right: unset;
