@@ -1,9 +1,8 @@
 import { TypedDataDomain, TypedDataField, ethers } from 'ethers'
-import { ChainId, Trade, TradeAsset, TradeAssetType, TradeCreation } from '@dcl/schemas'
+import { ChainId, OnChainTrade, OnChainTradeAsset, Trade, TradeAsset, TradeAssetType, TradeCreation } from '@dcl/schemas'
 import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { fromMillisecondsToSeconds } from '../lib/time'
-import { ContractTrade, ContractTradeAsset } from '../modules/vendor/decentraland/trades/types'
 
 export const OFFCHAIN_MARKETPLACE_TYPES: Record<string, TypedDataField[]> = {
   Trade: [
@@ -101,7 +100,7 @@ export function generateTradeValues(trade: Omit<TradeCreation, 'signature'>) {
   }
 }
 
-export function getContractTrade(trade: Trade): ContractTrade {
+export function getOnChainTrade(trade: Trade): OnChainTrade {
   const tradeValues = generateTradeValues(trade)
 
   return {
@@ -113,7 +112,7 @@ export function getContractTrade(trade: Trade): ContractTrade {
       allowedProof: []
     },
     // we need to add this for type validation but its ignored by the contract
-    sent: tradeValues.sent.map<ContractTradeAsset>(asset => ({
+    sent: tradeValues.sent.map<OnChainTradeAsset>(asset => ({
       ...asset,
       beneficiary: asset.contractAddress
     }))

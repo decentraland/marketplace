@@ -1,8 +1,8 @@
-import { Bid, ChainId } from '@dcl/schemas'
+import { Bid, ChainId, GetBidsParameters, PaginatedResponse } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
-import { Balance, GetBidsParameters, PaginatedResponse } from './types'
+import { Balance } from './types'
 
 export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')
 
