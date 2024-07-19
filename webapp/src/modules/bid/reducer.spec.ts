@@ -27,9 +27,19 @@ describe('when fetching bids by asset request action is received', () => {
 })
 
 describe('when fetching bids by asset failure action is received', () => {
+  let error: string
+
+  beforeEach(() => {
+    error = 'Some test error'
+    state.loading = [fetchBidsByAssetRequest({} as Asset)]
+  })
+
   it('should add the error to the state', () => {
-    const error = 'Some test error'
     expect(bidReducer(state, fetchBidsByAssetFailure({} as Asset, error))).toEqual(expect.objectContaining({ error }))
+  })
+
+  it('should remove the action from loading', () => {
+    expect(bidReducer(state, fetchBidsByAssetFailure({} as Asset, error))).toEqual(expect.objectContaining({ loading: [] }))
   })
 })
 
