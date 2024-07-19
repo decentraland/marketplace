@@ -54,10 +54,18 @@ const Bid = (props: Props) => {
   const tokenId = isNftBid ? bid.tokenId : bid.itemId
 
   useEffect(() => {
+    let cancel = false
     if (isBidsOffchainEnabled) {
       fetchContractName(bid.contractAddress, bid.chainId)
-        .then(name => setTargetContractLabel(name))
+        .then(name => {
+          if (!cancel) {
+            setTargetContractLabel(name)
+          }
+        })
         .catch(() => console.error('Could not fetch contract name'))
+    }
+    return () => {
+      cancel = true
     }
   }, [isBidsOffchainEnabled, bid])
 
@@ -110,17 +118,15 @@ const Bid = (props: Props) => {
             </div>
           ) : null}
           <div className="wrapper">
-            <div className="info">
-              <Stats className="from" title={t('bid.from')}>
-                <LinkedProfile address={bid.bidder} />
-              </Stats>
-              <Stats className="price" title={t('bid.price')}>
-                <Mana showTooltip network={bid.network}>
-                  {formatWeiMANA(bid.price)}
-                </Mana>
-              </Stats>
-              <Stats title={t('bid.time_left')}>{formatDistanceToNow(+bid.expiresAt)}</Stats>
-            </div>
+            <Stats className="from" title={t('bid.from')}>
+              <LinkedProfile address={bid.bidder} />
+            </Stats>
+            <Stats className="price" title={t('bid.price')}>
+              <Mana showTooltip network={bid.network}>
+                {formatWeiMANA(bid.price)}
+              </Mana>
+            </Stats>
+            <Stats title={t('bid.time_left')}>{formatDistanceToNow(+bid.expiresAt)}</Stats>
             {isBidder || isSeller ? (
               <div className="actions">
                 {isBidder ? (

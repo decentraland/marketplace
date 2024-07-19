@@ -12,6 +12,9 @@ export type GetBidsParameters = {
   bidder?: string
   seller?: string
   sortBy?: BidSortBy
+  contractAddress?: string
+  tokenId?: string
+  itemId?: string
 }
 
 export type PaginatedResponse<T> = {
