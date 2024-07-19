@@ -1,6 +1,6 @@
 import { TypedDataDomain, TypedDataField, ethers } from 'ethers'
-import { ChainId, TradeAsset, TradeAssetType, TradeCreation } from '@dcl/schemas'
-import { getConnectedProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { ChainId, Trade, TradeAsset, TradeAssetType, TradeCreation } from '@dcl/schemas'
+import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { fromMillisecondsToSeconds } from '../lib/time'
 
@@ -42,7 +42,7 @@ export const OFFCHAIN_MARKETPLACE_TYPES: Record<string, TypedDataField[]> = {
 }
 
 export async function getOffChainMarketplaceContract(chainId: ChainId) {
-  const provider = await getConnectedProvider()
+  const provider = await getNetworkProvider(chainId)
   if (!provider) {
     throw new Error('Could not get connected provider')
   }
@@ -65,23 +65,10 @@ export function getValueForTradeAsset(asset: TradeAsset): string {
   }
 }
 
-export async function getTradeSignature(trade: Omit<TradeCreation, 'signature'>) {
-  const marketplaceContract: ContractData = getContract(ContractName.OffChainMarketplace, trade.chainId)
-
-  if (!marketplaceContract) {
-    throw new Error(`The ${ContractName.OffChainMarketplace} contract doesn't exist on chain ${trade.chainId}`)
-  }
-
-  const signer = (await getSigner()) as ethers.providers.JsonRpcSigner
+export function generateTradeValues(trade: Omit<TradeCreation, 'signature'>) {
   const SALT = ethers.utils.hexZeroPad(ethers.utils.hexlify(trade.chainId), 32)
-  const domain: TypedDataDomain = {
-    name: marketplaceContract.name,
-    version: marketplaceContract.version,
-    salt: SALT,
-    verifyingContract: marketplaceContract.address
-  }
 
-  const values = {
+  return {
     checks: {
       uses: trade.checks.uses,
       expiration: fromMillisecondsToSeconds(trade.checks.expiration),
@@ -111,7 +98,44 @@ export async function getTradeSignature(trade: Omit<TradeCreation, 'signature'>)
       beneficiary: asset.beneficiary
     }))
   }
+}
 
-  const signature = await signer._signTypedData(domain, OFFCHAIN_MARKETPLACE_TYPES, values)
+export function getTradeToAccept(trade: Trade) {
+  const tradeValues = generateTradeValues(trade)
+
+  // we need to add this for type validation but its ignored by the contract
+  tradeValues.sent = tradeValues.sent.map(asset => ({
+    ...asset,
+    beneficiary: asset.contractAddress
+  }))
+
+  return {
+    signer: trade.signer,
+    signature: trade.signature,
+    ...tradeValues,
+    checks: {
+      ...tradeValues.checks,
+      allowedProof: []
+    }
+  }
+}
+
+export async function getTradeSignature(trade: Omit<TradeCreation, 'signature'>) {
+  const marketplaceContract: ContractData = getContract(ContractName.OffChainMarketplace, trade.chainId)
+
+  if (!marketplaceContract) {
+    throw new Error(`The ${ContractName.OffChainMarketplace} contract doesn't exist on chain ${trade.chainId}`)
+  }
+
+  const signer = (await getSigner()) as ethers.providers.JsonRpcSigner
+  const SALT = ethers.utils.hexZeroPad(ethers.utils.hexlify(trade.chainId), 32)
+  const domain: TypedDataDomain = {
+    name: marketplaceContract.name,
+    version: marketplaceContract.version,
+    salt: SALT,
+    verifyingContract: marketplaceContract.address
+  }
+
+  const signature = await signer._signTypedData(domain, OFFCHAIN_MARKETPLACE_TYPES, generateTradeValues(trade))
   return signature
 }

@@ -1,9 +1,12 @@
 import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
-import { Bid, ChainId, Network, RentalListing, RentalStatus, TradeAssetType, TradeCreation, TradeType } from '@dcl/schemas'
+import { Bid, ChainId, Network, RentalListing, RentalStatus, TradeAssetType, TradeCreation, TradeType, Trade } from '@dcl/schemas'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { ContractData, ContractName, getContract as getDCLContract } from 'decentraland-transactions'
+import { getTradeToAccept } from '../../utils/trades'
 import { Asset } from '../asset/types'
 import { getContract } from '../contract/selectors'
 import { getIsBidsOffChainEnabled } from '../features/selectors'
@@ -221,157 +224,278 @@ describe('when handling the accepting a bid action', () => {
     wallet = { address } as Wallet
   })
 
-  describe('and getting the contract fails', () => {
-    it('should dispatch an action signaling the failure of the action handling', () => {
-      const bid = {
-        contractAddress: '0x123'
-      } as Bid
+  describe('and offchain bids are not enabled', () => {
+    describe('and getting the contract fails', () => {
+      it('should dispatch an action signaling the failure of the action handling', () => {
+        const bid = {
+          contractAddress: '0x123'
+        } as Bid
 
-      return expectSaga(bidSaga, marketplaceAPI)
-        .provide([[select(getContract, { address: bid.contractAddress }), undefined]])
-        .put(acceptBidFailure(bid, `Couldn't find a valid vendor for contract ${bid.contractAddress}`))
-        .dispatch(acceptBidRequest(bid))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe("when the contract doesn't exist for the given vendor", () => {
-    it('should dispatch an action signaling the failure of the action handling', () => {
-      const contractAddress = 'anAddress'
-      const contract = {
-        vendor: 'someVendor' as VendorName,
-        address: contractAddress
-      }
-      const error = `Couldn't find a valid vendor for contract ${contractAddress}`
-      const bid = {
-        contractAddress: contract.address
-      } as Bid
-
-      return expectSaga(bidSaga, marketplaceAPI)
-        .provide([
-          [select(getContract, { address: bid.contractAddress }), contract],
-          [select(getWallet), wallet],
-          [call([VendorFactory, 'build'], contract.vendor), throwError(new Error(error))]
-        ])
-        .put(acceptBidFailure(bid, error))
-        .dispatch(acceptBidRequest(bid))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('when accepting a bid request fails', () => {
-    it('should dispatch an action signaling the failure of the action handling', () => {
-      const bid = {
-        contractAddress: '0x123'
-      } as Bid
-      const error = { message: 'anError' }
-      const contract = {
-        vendor: VendorName.DECENTRALAND
-      }
-      const vendor = VendorFactory.build(contract.vendor)
-
-      return expectSaga(bidSaga, marketplaceAPI)
-        .provide([
-          [select(getContract, { address: bid.contractAddress }), contract],
-          [call([VendorFactory, 'build'], contract.vendor), vendor],
-          [select(getWallet), wallet],
-          [call([vendor.bidService!, 'accept'], wallet, bid), Promise.reject(error)]
-        ])
-        .put(acceptBidFailure(bid, error.message))
-        .dispatch(acceptBidRequest(bid))
-        .run({ silenceTimeout: true })
-    })
-  })
-
-  describe('and sending the transaction is successful', () => {
-    let nft: NFT
-    let contract: Contract
-    let vendor: Vendor<VendorName.DECENTRALAND>
-    let txHash: string
-    let bid: Bid
-    let address: string
-    let wallet: Wallet
-    beforeEach(() => {
-      nft = {
-        vendor: VendorName.DECENTRALAND,
-        openRentalId: 'aRentalId'
-      } as NFT
-      contract = {
-        vendor: VendorName.DECENTRALAND
-      } as Contract
-      vendor = VendorFactory.build(contract.vendor!)
-      txHash = 'someHash'
-      bid = {
-        contractAddress: '0x123',
-        price: '1'
-      } as Bid
-      address = 'anAddress'
-      wallet = { address } as Wallet
-    })
-
-    describe('and the transaction finishes', () => {
-      describe('and it has an rental with status OPEN', () => {
-        let rental: RentalListing
-        beforeEach(() => {
-          nft.openRentalId = 'aRentalId'
-          rental = {
-            id: nft.openRentalId,
-            status: RentalStatus.OPEN
-          } as RentalListing
-        })
-        it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
-          return expectSaga(bidSaga, marketplaceAPI)
-            .provide([
-              [select(getContract, { address: bid.contractAddress }), contract],
-              [call([VendorFactory, 'build'], contract.vendor!), vendor],
-              [select(getWallet), wallet],
-              [select(getCurrentNFT), nft],
-              [select(getRentalById, nft.openRentalId!), rental],
-              [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
-              [call(waitForTx, txHash), Promise.resolve()],
-              [call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED), Promise.resolve()]
-            ])
-            .put(acceptBidSuccess(bid))
-            .put(acceptBidtransactionSubmitted(bid, txHash))
-            .dispatch(acceptBidRequest(bid))
-            .run({ silenceTimeout: true })
-        })
-      })
-
-      describe('and it does not have a rental', () => {
-        beforeEach(() => {
-          nft.openRentalId = null
-        })
-        it('should dispatch an action signaling the success of the action handling', () => {
-          return expectSaga(bidSaga, marketplaceAPI)
-            .provide([
-              [select(getContract, { address: bid.contractAddress }), contract],
-              [call([VendorFactory, 'build'], contract.vendor!), vendor],
-              [select(getWallet), wallet],
-              [select(getCurrentNFT), nft],
-              [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
-              [call(waitForTx, txHash), Promise.resolve()]
-            ])
-            .put(acceptBidSuccess(bid))
-            .put(acceptBidtransactionSubmitted(bid, txHash))
-            .dispatch(acceptBidRequest(bid))
-            .run({ silenceTimeout: true })
-        })
+        return expectSaga(bidSaga, marketplaceAPI)
+          .provide([
+            [select(getContract, { address: bid.contractAddress }), undefined],
+            [select(getIsBidsOffChainEnabled), false]
+          ])
+          .put(acceptBidFailure(bid, `Couldn't find a valid vendor for contract ${bid.contractAddress}`))
+          .dispatch(acceptBidRequest(bid))
+          .run({ silenceTimeout: true })
       })
     })
-    describe('and the transaction gets reverted', () => {
-      it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
+
+    describe("when the contract doesn't exist for the given vendor", () => {
+      it('should dispatch an action signaling the failure of the action handling', () => {
+        const contractAddress = 'anAddress'
+        const contract = {
+          vendor: 'someVendor' as VendorName,
+          address: contractAddress
+        }
+        const error = `Couldn't find a valid vendor for contract ${contractAddress}`
+        const bid = {
+          contractAddress: contract.address
+        } as Bid
+
         return expectSaga(bidSaga, marketplaceAPI)
           .provide([
             [select(getContract, { address: bid.contractAddress }), contract],
-            [call([VendorFactory, 'build'], contract.vendor!), vendor],
+            [select(getIsBidsOffChainEnabled), false],
             [select(getWallet), wallet],
-            [select(getCurrentNFT), nft],
-            [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
-            [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
+            [call([VendorFactory, 'build'], contract.vendor), throwError(new Error(error))]
           ])
-          .put(acceptBidFailure(bid, 'anError'))
-          .put(acceptBidtransactionSubmitted(bid, txHash))
+          .put(acceptBidFailure(bid, error))
+          .dispatch(acceptBidRequest(bid))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('when accepting a bid request fails', () => {
+      it('should dispatch an action signaling the failure of the action handling', () => {
+        const bid = {
+          contractAddress: '0x123'
+        } as Bid
+        const error = { message: 'anError' }
+        const contract = {
+          vendor: VendorName.DECENTRALAND
+        }
+        const vendor = VendorFactory.build(contract.vendor)
+
+        return expectSaga(bidSaga, marketplaceAPI)
+          .provide([
+            [select(getContract, { address: bid.contractAddress }), contract],
+            [select(getIsBidsOffChainEnabled), false],
+            [call([VendorFactory, 'build'], contract.vendor), vendor],
+            [select(getWallet), wallet],
+            [call([vendor.bidService!, 'accept'], wallet, bid), Promise.reject(error)]
+          ])
+          .put(acceptBidFailure(bid, error.message))
+          .dispatch(acceptBidRequest(bid))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and sending the transaction is successful', () => {
+      let nft: NFT
+      let contract: Contract
+      let vendor: Vendor<VendorName.DECENTRALAND>
+      let txHash: string
+      let bid: Bid
+      let address: string
+      let wallet: Wallet
+      beforeEach(() => {
+        nft = {
+          vendor: VendorName.DECENTRALAND,
+          openRentalId: 'aRentalId'
+        } as NFT
+        contract = {
+          vendor: VendorName.DECENTRALAND
+        } as Contract
+        vendor = VendorFactory.build(contract.vendor!)
+        txHash = 'someHash'
+        bid = {
+          contractAddress: '0x123',
+          price: '1'
+        } as Bid
+        address = 'anAddress'
+        wallet = { address } as Wallet
+      })
+
+      describe('and the transaction finishes', () => {
+        describe('and it has an rental with status OPEN', () => {
+          let rental: RentalListing
+          beforeEach(() => {
+            nft.openRentalId = 'aRentalId'
+            rental = {
+              id: nft.openRentalId,
+              status: RentalStatus.OPEN
+            } as RentalListing
+          })
+          it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
+            return expectSaga(bidSaga, marketplaceAPI)
+              .provide([
+                [select(getIsBidsOffChainEnabled), false],
+                [select(getContract, { address: bid.contractAddress }), contract],
+                [call([VendorFactory, 'build'], contract.vendor!), vendor],
+                [select(getWallet), wallet],
+                [select(getCurrentNFT), nft],
+                [select(getRentalById, nft.openRentalId!), rental],
+                [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
+                [call(waitForTx, txHash), Promise.resolve()],
+                [call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED), Promise.resolve()]
+              ])
+              .put(acceptBidSuccess(bid))
+              .put(acceptBidtransactionSubmitted(bid, txHash))
+              .dispatch(acceptBidRequest(bid))
+              .run({ silenceTimeout: true })
+          })
+        })
+
+        describe('and it does not have a rental', () => {
+          beforeEach(() => {
+            nft.openRentalId = null
+          })
+          it('should dispatch an action signaling the success of the action handling', () => {
+            return expectSaga(bidSaga, marketplaceAPI)
+              .provide([
+                [select(getIsBidsOffChainEnabled), false],
+                [select(getContract, { address: bid.contractAddress }), contract],
+                [call([VendorFactory, 'build'], contract.vendor!), vendor],
+                [select(getWallet), wallet],
+                [select(getCurrentNFT), nft],
+                [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
+                [call(waitForTx, txHash), Promise.resolve()]
+              ])
+              .put(acceptBidSuccess(bid))
+              .put(acceptBidtransactionSubmitted(bid, txHash))
+              .dispatch(acceptBidRequest(bid))
+              .run({ silenceTimeout: true })
+          })
+        })
+      })
+      describe('and the transaction gets reverted', () => {
+        it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
+          return expectSaga(bidSaga, marketplaceAPI)
+            .provide([
+              [select(getIsBidsOffChainEnabled), false],
+              [select(getContract, { address: bid.contractAddress }), contract],
+              [call([VendorFactory, 'build'], contract.vendor!), vendor],
+              [select(getWallet), wallet],
+              [select(getCurrentNFT), nft],
+              [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
+              [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
+            ])
+            .put(acceptBidFailure(bid, 'anError'))
+            .put(acceptBidtransactionSubmitted(bid, txHash))
+            .dispatch(acceptBidRequest(bid))
+            .run({ silenceTimeout: true })
+        })
+      })
+    })
+  })
+
+  describe('and offchain bids are enabled', () => {
+    let marketplaceAPIMock: jest.Mocked<MarketplaceAPI>
+    let bid: Bid
+
+    describe('and getting the trade by id fails', () => {
+      let error: string
+
+      beforeEach(() => {
+        error = 'Some error'
+        bid = {
+          contractAddress: '0x123',
+          tradeId: 'atrade-id'
+        } as Bid
+        marketplaceAPIMock = { fetchTrade: jest.fn().mockRejectedValue(new Error(error)) } as unknown as jest.Mocked<MarketplaceAPI>
+      })
+
+      it('should dispatch an action signaling the failure of the action handling', () => {
+        return expectSaga(bidSaga, marketplaceAPIMock)
+          .provide([[select(getIsBidsOffChainEnabled), true]])
+          .put(acceptBidFailure(bid, error))
+          .dispatch(acceptBidRequest(bid))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and the trade acceptance transaction was sent successfully', () => {
+      let trade: Trade
+      let txHash: string
+      let offchainMarketplaceContract: ContractData
+
+      beforeEach(() => {
+        trade = {
+          id: 'atrade-id',
+          signer: '0x123',
+          signature: '0x123123',
+          type: TradeType.BID,
+          network: Network.ETHEREUM,
+          chainId: ChainId.ETHEREUM_SEPOLIA,
+          createdAt: Date.now(),
+          checks: {
+            expiration: Date.now() + 100000000000,
+            effective: Date.now(),
+            uses: 1,
+            salt: '',
+            allowedRoot: '0x',
+            contractSignatureIndex: 0,
+            externalChecks: [],
+            signerSignatureIndex: 0
+          },
+          sent: [
+            {
+              assetType: TradeAssetType.ERC20,
+              contractAddress: '0x1231',
+              amount: '2',
+              extra: ''
+            }
+          ],
+          received: [
+            {
+              assetType: TradeAssetType.ERC721,
+              contractAddress: '0x12321',
+              tokenId: '1',
+              extra: '',
+              beneficiary: '0x123'
+            }
+          ]
+        }
+
+        bid = {
+          contractAddress: '0x123',
+          tradeId: 'atrade-id',
+          price: '123'
+        } as Bid
+
+        offchainMarketplaceContract = {
+          address: '0x234',
+          abi: [],
+          chainId: ChainId.ETHEREUM_SEPOLIA,
+          name: 'OffChainMarketplace',
+          version: '1.0.0'
+        }
+
+        txHash = '0x12312412'
+
+        marketplaceAPIMock = { fetchTrade: jest.fn().mockResolvedValue(trade) } as unknown as jest.Mocked<MarketplaceAPI>
+      })
+
+      it('should dispatch an action signaling the success of the action handling', () => {
+        return expectSaga(bidSaga, marketplaceAPIMock)
+          .provide([
+            [select(getIsBidsOffChainEnabled), true],
+            [call(getDCLContract, ContractName.OffChainMarketplace, trade.chainId), offchainMarketplaceContract],
+            [
+              call(
+                sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
+                offchainMarketplaceContract,
+                'function accept(Trade[] calldata _trades) external;',
+                [getTradeToAccept(trade)]
+              ),
+              Promise.resolve(txHash)
+            ],
+            [select(getCurrentNFT), null],
+            [call(waitForTx, txHash), Promise.resolve()]
+          ])
+          .put(acceptBidSuccess(bid))
           .dispatch(acceptBidRequest(bid))
           .run({ silenceTimeout: true })
       })

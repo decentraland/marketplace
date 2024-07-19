@@ -1,14 +1,21 @@
-import { takeEvery, put, select, call, all } from 'redux-saga/effects'
-import { Bid, RentalStatus, TradeCreation } from '@dcl/schemas'
+import { History } from 'history'
+import { takeEvery, put, select, call, all, getContext } from 'redux-saga/effects'
+import { Bid, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { ContractData, ContractName, getContract as getDCLContract } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
+import * as tradeUtils from '../../utils/trades'
 import { isNFT } from '../asset/utils'
 import { getContract } from '../contract/selectors'
 import { getIsBidsOffChainEnabled } from '../features/selectors'
 import { getCurrentNFT } from '../nft/selectors'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
+import { locations } from '../routing/locations'
+import { getBidPlacedSuccessToast } from '../toast/toasts'
 import { MarketplaceAPI } from '../vendor/decentraland/marketplace/api'
 import { VendorName } from '../vendor/types'
 import { VendorFactory } from '../vendor/VendorFactory'
@@ -56,9 +63,14 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
       const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
 
       if (isBidsOffchainEnabled) {
+        const history: History = yield getContext('history')
         const trade: TradeCreation = yield call([bidUtils, 'createBidTrade'], asset, price, expiresAt, fingerprint)
         yield call([marketplaceAPI, 'addTrade'], trade)
         yield put(placeBidSuccess(asset, price, expiresAt, asset.chainId, wallet.address, fingerprint))
+        yield put(showToast(getBidPlacedSuccessToast(asset)))
+        history.push(
+          isNFT(asset) ? locations.nft(asset.contractAddress, asset.tokenId) : locations.item(asset.contractAddress, asset.itemId)
+        )
       } else {
         if (isNFT(asset)) {
           const { bidService } = VendorFactory.build(asset.vendor)
@@ -83,24 +95,43 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
 
   function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
     const { bid } = action.payload
+    let txHash = ''
     try {
-      const contract = (yield select(getContract, {
-        address: bid.contractAddress
-      })) as ReturnType<typeof getContract>
-      if (!contract || !contract.vendor) {
-        throw new Error(
-          contract
-            ? `Couldn't find a valid vendor for contract ${contract?.address}`
-            : `Couldn't find a valid vendor for contract ${bid.contractAddress}`
-        )
-      }
-      const vendor = (yield call([VendorFactory, 'build'], contract.vendor)) as ReturnType<typeof VendorFactory.build>
-      if (!vendor.bidService) {
-        throw new Error("Couldn't find a valid bid service for vendor")
+      const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+      if ('tradeId' in bid) {
+        if (isBidsOffchainEnabled) {
+          const trade: Trade = yield call([marketplaceAPI, 'fetchTrade'], bid.tradeId)
+          const tradeToAccept = tradeUtils.getTradeToAccept(trade)
+          const offchainMarketplaceContract: ContractData = yield call(getDCLContract, ContractName.OffChainMarketplace, trade.chainId)
+          txHash = yield call(
+            sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
+            offchainMarketplaceContract,
+            'function accept(Trade[] calldata _trades) external;',
+            [tradeToAccept]
+          )
+        } else {
+          throw new Error('not able to accept offchain bids')
+        }
+      } else {
+        const contract = (yield select(getContract, {
+          address: bid.contractAddress
+        })) as ReturnType<typeof getContract>
+        if (!contract || !contract.vendor) {
+          throw new Error(
+            contract
+              ? `Couldn't find a valid vendor for contract ${contract?.address}`
+              : `Couldn't find a valid vendor for contract ${bid.contractAddress}`
+          )
+        }
+        const vendor = (yield call([VendorFactory, 'build'], contract.vendor)) as ReturnType<typeof VendorFactory.build>
+        if (!vendor.bidService) {
+          throw new Error("Couldn't find a valid bid service for vendor")
+        }
+
+        const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+        txHash = (yield call([vendor.bidService, 'accept'], wallet, bid)) as Awaited<ReturnType<typeof vendor.bidService.accept>>
       }
 
-      const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
-      const txHash = (yield call([vendor.bidService, 'accept'], wallet, bid)) as Awaited<ReturnType<typeof vendor.bidService.accept>>
       yield put(acceptBidtransactionSubmitted(bid, txHash))
       const nft = (yield select(getCurrentNFT)) as ReturnType<typeof getCurrentNFT>
       if (nft?.openRentalId) {
@@ -147,20 +178,29 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
       let sellerBids: Bid[] = []
       let bidderBids: Bid[] = []
 
-      for (const vendorName of Object.values(VendorName)) {
-        const { bidService } = VendorFactory.build(vendorName)
-        if (bidService === undefined) {
-          continue
+      const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+      if (isBidsOffchainEnabled) {
+        const bids = (yield all([
+          call([marketplaceAPI, 'fetchBids'], { seller: address }),
+          call([marketplaceAPI, 'fetchBids'], { bidder: address })
+        ])) as [Awaited<ReturnType<typeof marketplaceAPI.fetchBids>>, Awaited<ReturnType<typeof marketplaceAPI.fetchBids>>]
+        sellerBids = bids[0].results
+        bidderBids = bids[1].results
+      } else {
+        for (const vendorName of Object.values(VendorName)) {
+          const { bidService } = VendorFactory.build(vendorName)
+          if (bidService === undefined) {
+            continue
+          }
+
+          const bids = (yield all([call([bidService, 'fetchBySeller'], address), call([bidService, 'fetchByBidder'], address)])) as [
+            Awaited<ReturnType<typeof bidService.fetchBySeller>>,
+            Awaited<ReturnType<typeof bidService.fetchByBidder>>
+          ]
+          sellerBids = sellerBids.concat(bids[0])
+          bidderBids = bidderBids.concat(bids[1])
         }
-
-        const bids = (yield all([call([bidService, 'fetchBySeller'], address), call([bidService, 'fetchByBidder'], address)])) as [
-          Awaited<ReturnType<typeof bidService.fetchBySeller>>,
-          Awaited<ReturnType<typeof bidService.fetchByBidder>>
-        ]
-        sellerBids = sellerBids.concat(bids[0])
-        bidderBids = bidderBids.concat(bids[1])
       }
-
       yield put(fetchBidsByAddressSuccess(address, sellerBids, bidderBids))
     } catch (error) {
       yield put(fetchBidsByAddressFailure(address, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))

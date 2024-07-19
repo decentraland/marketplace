@@ -10,6 +10,7 @@ import iconListings from '../../../images/iconListings.png'
 import infoIcon from '../../../images/infoIcon.png'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { isBidTrade } from '../../../modules/bid/utils'
 import { locations } from '../../../modules/routing/locations'
 import { bidAPI } from '../../../modules/vendor/decentraland'
 import Mana from '../../Mana/Mana'
@@ -127,9 +128,11 @@ const YourOffer = (props: Props) => {
           <Button inverted fluid className={styles.actions} onClick={() => onCancel(bid)}>
             {t('offers_table.remove')}
           </Button>
-          <Button primary fluid className={styles.actions} onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
-            {t('global.update')}
-          </Button>
+          {!isBidTrade(bid) && (
+            <Button primary fluid className={styles.actions} onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
+              {t('global.update')}
+            </Button>
+          )}
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { Mana, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
 import { AssetType } from '../../../modules/asset/types'
 import { getAssetName } from '../../../modules/asset/utils'
+import { isBidTrade } from '../../../modules/bid/utils'
 import { bidAPI } from '../../../modules/vendor/decentraland'
 import { AssetProvider } from '../../AssetProvider'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
@@ -108,7 +109,7 @@ const BidsTable = (props: Props) => {
         handleSortByChange={(value: string) => setSortBy(value as BidSortBy)}
         sortBy={sortBy}
       />
-      {showConfirmationModal.bid && showConfirmationModal.display ? (
+      {showConfirmationModal.bid && showConfirmationModal.display && !isBidTrade(showConfirmationModal.bid) ? (
         <AssetProvider
           type={AssetType.NFT}
           contractAddress={showConfirmationModal.bid.contractAddress}

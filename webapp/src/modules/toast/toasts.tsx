@@ -6,7 +6,7 @@ import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon, ToastType } from 'decentraland-ui'
 import { config } from '../../config'
 import { builderUrl } from '../../lib/environment'
-import { AssetType } from '../asset/types'
+import { Asset, AssetType } from '../asset/types'
 import { getAssetName } from '../asset/utils'
 import { bulkPickUnpickRequest } from '../favorites/actions'
 import { List } from '../favorites/types'
@@ -309,5 +309,17 @@ export function getCrossChainTransactionSuccessToast(txLink: string): Omit<Toast
       </div>
     ),
     closable: false
+  }
+}
+
+export function getBidPlacedSuccessToast(asset: Asset): Omit<Toast, 'id'> {
+  // TODO: This will be removed when final design is ready
+  return {
+    type: ToastType.INFO,
+    title: 'Bid placed',
+    body: `Bid for ${asset.name} has been placed successfully`,
+    closable: true,
+    timeout: DEFAULT_TIMEOUT,
+    icon: <Icon size="large" circular color="green" inverted name="checkmark" />
   }
 }

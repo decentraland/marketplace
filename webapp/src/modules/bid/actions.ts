@@ -78,7 +78,7 @@ export const acceptBidtransactionSubmitted = (bid: Bid, txHash: string) =>
   action(ACCEPT_BID_TRANSACTION_SUBMITTED, {
     bid,
     ...buildTransactionPayload(bid.chainId, txHash, {
-      tokenId: bid.tokenId,
+      ...('tokenId' in bid ? { tokenId: bid.tokenId } : { itemId: bid.itemId }),
       contractAddress: bid.contractAddress,
       price: formatWeiMANA(bid.price)
     })
@@ -99,7 +99,7 @@ export const cancelBidSuccess = (bid: Bid, txHash: string) =>
   action(CANCEL_BID_SUCCESS, {
     bid,
     ...buildTransactionPayload(bid.chainId, txHash, {
-      tokenId: bid.tokenId,
+      ...('tokenId' in bid ? { tokenId: bid.tokenId } : { itemId: bid.itemId }),
       contractAddress: bid.contractAddress,
       price: formatWeiMANA(bid.price)
     })

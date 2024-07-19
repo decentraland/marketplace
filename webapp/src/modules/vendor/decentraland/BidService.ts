@@ -77,6 +77,10 @@ export class BidService implements BidServiceInterface<VendorName.DECENTRALAND> 
       throw new Error('Invalid address. Wallet must be connected.')
     }
 
+    if (!('bidAddress' in bid)) {
+      throw new Error('BidService does not support offchain bids')
+    }
+
     const contract: ContractData = getERC721ContractData(bid)
 
     return sendTransaction(
@@ -92,6 +96,10 @@ export class BidService implements BidServiceInterface<VendorName.DECENTRALAND> 
   async cancel(wallet: Wallet | null, bid: Bid) {
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
+    }
+
+    if (!('bidAddress' in bid)) {
+      throw new Error('BidService does not support offchain bids')
     }
 
     const contract: ContractData =
