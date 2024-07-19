@@ -25,7 +25,10 @@ import {
   acceptBidSuccess,
   placeBidRequest,
   placeBidSuccess,
-  placeBidFailure
+  placeBidFailure,
+  fetchBidsByAssetRequest,
+  fetchBidsByAssetSuccess,
+  fetchBidsByAssetFailure
 } from './actions'
 import { bidSaga } from './sagas'
 import * as bidUtils from './utils'
@@ -216,6 +219,7 @@ describe('when handling the creation of a bid', () => {
     })
   })
 })
+
 describe('when handling the accepting a bid action', () => {
   let wallet: Wallet
   let address: string
@@ -498,6 +502,102 @@ describe('when handling the accepting a bid action', () => {
           .put(acceptBidSuccess(bid))
           .dispatch(acceptBidRequest(bid))
           .run({ silenceTimeout: true })
+      })
+    })
+  })
+})
+
+describe('when handling the fetching of bids by asset', () => {
+  let asset: Asset
+  let bids: Bid[]
+  let marketplaceAPIMock: jest.Mocked<MarketplaceAPI>
+
+  beforeEach(() => {
+    asset = { tokenId: 'token-id' } as Asset
+    bids = [{ id: '1', bidAddress: '0x123' } as Bid]
+    marketplaceAPIMock = { fetchBids: jest.fn().mockResolvedValue({ results: bids }) } as unknown as jest.Mocked<MarketplaceAPI>
+  })
+
+  describe('and offchain bids are enabled', () => {
+    describe('and the fetching of bids by asset is successful', () => {
+      beforeEach(() => {
+        marketplaceAPIMock = { fetchBids: jest.fn().mockResolvedValue({ results: bids }) } as unknown as jest.Mocked<MarketplaceAPI>
+      })
+
+      it('should dispatch an action signaling the success of the action handling', () => {
+        return expectSaga(bidSaga, marketplaceAPIMock)
+          .provide([[select(getIsBidsOffChainEnabled), true]])
+          .put(fetchBidsByAssetSuccess(asset, bids))
+          .dispatch(fetchBidsByAssetRequest(asset))
+          .run()
+      })
+    })
+
+    describe('and the fetching of bids by asset fails', () => {
+      let error: Error
+
+      beforeEach(() => {
+        error = new Error('Some error')
+        marketplaceAPIMock = { fetchBids: jest.fn().mockRejectedValue(error) } as unknown as jest.Mocked<MarketplaceAPI>
+      })
+
+      it('should dispatch an action signaling the failure of the action handling', () => {
+        return expectSaga(bidSaga, marketplaceAPIMock)
+          .provide([[select(getIsBidsOffChainEnabled), true]])
+          .put(fetchBidsByAssetFailure(asset, error.message))
+          .dispatch(fetchBidsByAssetRequest(asset))
+          .run()
+      })
+    })
+  })
+
+  describe('and offchain bids are not enabled', () => {
+    let asset: NFT
+    let contract: Contract
+    let vendor: Vendor<VendorName.DECENTRALAND>
+
+    beforeEach(() => {
+      asset = {
+        vendor: VendorName.DECENTRALAND,
+        tokenId: 'token-id'
+      } as NFT
+      contract = {
+        vendor: VendorName.DECENTRALAND
+      } as Contract
+      vendor = VendorFactory.build(contract.vendor!)
+    })
+
+    describe('and the fetching of bids by asset is successful', () => {
+      it('should dispatch an action signaling the success of the action handling', () => {
+        return expectSaga(bidSaga, marketplaceAPIMock)
+          .provide([
+            [select(getIsBidsOffChainEnabled), false],
+            [call([VendorFactory, 'build'], asset.vendor), vendor],
+            [call([vendor.bidService!, 'fetchByNFT'], asset), Promise.resolve(bids)]
+          ])
+          .put(fetchBidsByAssetSuccess(asset, bids))
+          .dispatch(fetchBidsByAssetRequest(asset))
+          .run()
+      })
+    })
+
+    describe('and the fetching of bids by asset fails', () => {
+      let error: Error
+
+      beforeEach(() => {
+        error = new Error('Some error')
+      })
+
+      it('should dispatch an action signaling the failure of the action handling', () => {
+        return expectSaga(bidSaga, marketplaceAPIMock)
+          .provide([
+            [select(getIsBidsOffChainEnabled), false],
+            [call([VendorFactory, 'build'], asset.vendor), vendor],
+            [call([vendor.bidService!, 'fetchByNFT'], asset), Promise.reject(error)]
+          ])
+          .put(fetchBidsByAssetFailure(asset, error.message))
+          .dispatch(fetchBidsByAssetRequest(asset))
+          .run()
       })
     })
   })
