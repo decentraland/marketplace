@@ -536,6 +536,7 @@
       "edit_price": "Editar precio",
       "change_beneficiary": "Cambiar de beneficiario",
       "mint_item": "Acuñar item",
+      "offer_made": "Tu oferta ha sido realizada",
       "legacy_order_expired_warning": "Este listado no se muestra a los compradores en Marketplace, pero se creó con una fecha de vencimiento no válida y, por lo tanto, aún se puede comprar a través del contrato. Elimine esta lista manualmente.",
       "legacy_order_not_expired_warning": "Este anuncio se ha creado con una fecha de caducidad no válida. Elimine este anuncio y vuelva a ponerlo a la venta para solucionar el problema."
     },
@@ -623,7 +624,8 @@
       "expires": "Expira",
       "never_expires": "No expira nunca",
       "no_offer": "Sin ofertas",
-      "make_offer": "Hacer Oferta"
+      "make_offer": "Hacer Oferta",
+      "already_offer": "Ya hiciste una oferta"
     }
   },
   "offers_table": {
@@ -639,6 +641,11 @@
     "recenty_offered": "Ofrecido recientemente",
     "recently_updated": "Actualizado recientemente",
     "accept": "Aceptar"
+  },
+  "bids_table": {
+    "bids": "Ofertas",
+    "no_bids": "Sin ofertas",
+    "make_offer": "Hacer Oferta"
   },
   "listings_table": {
     "other_available_listings": "Otros coleccionables disponibles",
@@ -1649,5 +1656,9 @@
     "description": "Su alias actual se actualizará inmediatamente.",
     "success_title": "Todo listo!",
     "success_description": "Tu alias fue actualizado"
+  },
+  "bid_button": {
+    "bid": "Ofertar",
+    "blocked": "Tu oferta ya ha sido creada"
   }
 }
