@@ -320,7 +320,8 @@
     "edit_in_builder": "在构建器中编辑",
     "on_sale": "在售",
     "edit_price": "编辑价格",
-    "mint_item": "硬币物品"
+    "mint_item": "硬币物品",
+    "offer_made": "您的报价已提出"
   },
   "store_settings": {
     "settings": "配置",
@@ -626,7 +627,8 @@
       "expires": "過期",
       "never_expires": "它永远不会过期",
       "no_offer": "沒有報價",
-      "make_offer": "報價"
+      "make_offer": "報價",
+      "already_offer": "你已经提出了"
     }
   },
   "offers_table": {
@@ -642,6 +644,11 @@
     "recenty_offered": "最近提供",
     "recently_updated": "最近更新",
     "accept": "接受"
+  },
+  "bids_table": {
+    "bids": "优惠",
+    "no_bids": "尚无报价",
+    "make_offer": "开个价"
   },
   "listings_table": {
     "other_available_listings": "其他可用的收藏品",
@@ -1655,5 +1662,9 @@
     "description": "您当前的别名将立即更新。",
     "success_title": "全做完了！",
     "success_description": "您的用户名已更新"
+  },
+  "bid_button": {
+    "bid": "提出要约",
+    "blocked": "您的报价已提出"
   }
 }

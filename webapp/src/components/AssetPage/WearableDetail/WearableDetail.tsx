@@ -117,8 +117,8 @@ const WearableDetail = ({ nft }: Props) => {
           <BuyNFTBox nft={nft} />
         </div>
       </div>
-      <YourOffer nft={nft} />
-      <BidsTable nft={nft} />
+      <YourOffer asset={nft} />
+      <BidsTable asset={nft} />
       <TransactionHistory asset={nft} />
       <TableContainer
         tabsList={tabList}

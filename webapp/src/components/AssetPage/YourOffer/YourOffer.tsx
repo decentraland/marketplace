@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import classNames from 'classnames'
 import { Bid, Network } from '@dcl/schemas'
@@ -12,13 +12,10 @@ import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { isBidTrade } from '../../../modules/bid/utils'
 import { locations } from '../../../modules/routing/locations'
-import { bidAPI } from '../../../modules/vendor/decentraland'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { Props } from './YourOffer.types'
 import styles from './YourOffer.module.css'
-
-const FIRST = '1'
 
 const Price = (props: { bid: Bid }) => {
   const { bid } = props
@@ -84,23 +81,23 @@ const ExpirationDate = (props: { bid: Bid }) => {
 
 const YourOffer = (props: Props) => {
   const history = useHistory()
-  const { nft, address, onCancel } = props
+  const { bids, address, asset, onCancel, onFetchBids } = props
+  const [hasFetched, setHasFetched] = useState(false)
 
-  const [bid, setBid] = useState<Bid>()
   const isMobile = useMobileMediaQuery()
 
+  const bid = useMemo(() => bids.find(({ bidder }) => bidder === address), [bids, address])
+
   useEffect(() => {
-    if (nft && address) {
-      bidAPI
-        .fetchByNFT(nft.contractAddress, nft.tokenId, null, undefined, FIRST, undefined, address)
-        .then(response => {
-          setBid(response.data[0])
-        })
-        .catch(error => {
-          console.error(error)
-        })
+    if (!hasFetched && asset) {
+      setHasFetched(true)
+      onFetchBids(asset)
     }
-  }, [nft, setBid, address])
+  }, [asset])
+
+  useEffect(() => {
+    setHasFetched(false)
+  }, [asset])
 
   return bid ? (
     <div className={styles.YourOffer}>
