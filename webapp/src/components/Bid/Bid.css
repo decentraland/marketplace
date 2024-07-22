@@ -21,7 +21,7 @@
 }
 
 .Bid .wrapper {
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 2fr;
   display: grid;
   align-items: center;
   gap: 10px;
@@ -58,6 +58,7 @@
 .Bid .actions {
   display: flex;
   gap: 10px;
+  justify-content: flex-end;
 }
 
 .Bid .actions .ui.button:not(.primary) {
@@ -65,8 +66,12 @@
   border: 2px solid var(--secondary-on-modal);
 }
 
-.Bid .actions .ui.button {
-  width: 146px;
+.Bid .action .ui.button:not(:only-child) {
+  flex: 1;
+}
+
+.Bid .actions .ui.button + .ui.button {
+  margin-left: 0;
 }
 
 .Bid .actions .AcceptButton .ui.button {

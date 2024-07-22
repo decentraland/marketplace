@@ -9,7 +9,7 @@ import { Props } from './BidButton.types'
 import styles from './BidButton.module.css'
 
 export default function BidButton(props: Props) {
-  const { asset, alreadyBid } = props
+  const { asset, alreadyBid, disabled } = props
   const link = isNFT(asset) ? locations.bid(asset.contractAddress, asset.tokenId) : locations.bidItem(asset.contractAddress, asset.itemId)
   return (
     <Button
@@ -19,7 +19,7 @@ export default function BidButton(props: Props) {
       inverted
       to={link}
       className={classNames(styles.bidButton, { [styles.alreadyBid]: alreadyBid })}
-      disabled={alreadyBid}
+      disabled={alreadyBid || disabled}
     >
       {alreadyBid ? <Icon name="lock" /> : <img src={makeOffer} alt={t('bid_button.bid')} />}
       {alreadyBid ? t('bid_button.blocked') : t('bid_button.bid')}

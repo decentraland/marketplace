@@ -12,7 +12,7 @@ import {
 import * as ethUtils from 'decentraland-dapps/dist/lib/eth'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { fromMillisecondsToSeconds } from '../lib/time'
-import { OFFCHAIN_MARKETPLACE_TYPES, getTradeSignature, getTradeToAccept, getValueForTradeAsset } from './trades'
+import { OFFCHAIN_MARKETPLACE_TYPES, getTradeSignature, getOnChainTrade, getValueForTradeAsset } from './trades'
 
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
   const module = jest.requireActual('decentraland-dapps/dist/lib/eth')
@@ -214,7 +214,7 @@ describe('when getting the trade to accept', () => {
   })
 
   it('should return the trade with the correct structure', () => {
-    expect(getTradeToAccept(trade)).toEqual({
+    expect(getOnChainTrade(trade)).toEqual({
       signer: trade.signer,
       signature: trade.signature,
       checks: {

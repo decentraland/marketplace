@@ -1,8 +1,8 @@
-import { Bid, ChainId, Trade, TradeCreation } from '@dcl/schemas'
+import { Bid, ChainId, GetBidsParameters, PaginatedResponse } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
-import { Balance, GetBidsParameters, PaginatedResponse } from './types'
+import { Balance } from './types'
 
 export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')
 
@@ -22,15 +22,14 @@ export class MarketplaceAPI extends BaseClient {
     return this.fetch(`/${chainIdToChainName[chain]}/address/${wallet}/balance`, { method: 'GET' })
   }
 
-  addTrade = async (trade: TradeCreation) => {
-    return this.fetch<Trade>('/v1/trades', {
-      method: 'POST',
-      body: JSON.stringify(trade),
-      metadata: { signer: 'dcl:marketplace', intent: 'dcl:marketplace:create-trade' },
-      headers: {
-        'Content-Type': 'application/json'
-      }
+  fetchBids = async (queryParams: GetBidsParameters = {}) => {
+    const params = Object.entries(queryParams)
+    const searchParams = new URLSearchParams()
+    params.forEach(([key, value]) => {
+      searchParams.append(key, value.toString())
     })
+
+    return this.fetch<PaginatedResponse<Bid>>(`/v1/bids${params.length ? `?${searchParams.toString()}` : ''}`, { method: 'GET' })
   }
 
   fetchTrade = async (tradeId: string) => {
