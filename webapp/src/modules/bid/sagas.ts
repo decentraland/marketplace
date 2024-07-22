@@ -35,10 +35,10 @@ import {
   CancelBidRequestAction,
   cancelBidSuccess,
   cancelBidFailure,
-  FETCH_BIDS_BY_NFT_REQUEST,
-  FetchBidsByNFTRequestAction,
-  fetchBidsByNFTSuccess,
-  fetchBidsByNFTFailure,
+  FETCH_BIDS_BY_ASSET_REQUEST,
+  FetchBidsByAssetRequestAction,
+  fetchBidsByAssetSuccess,
+  fetchBidsByAssetFailure,
   acceptBidtransactionSubmitted
 } from './actions'
 import * as bidUtils from './utils'
@@ -48,7 +48,7 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
   yield takeEvery(ACCEPT_BID_REQUEST, handleAcceptBidRequest)
   yield takeEvery(CANCEL_BID_REQUEST, handleCancelBidRequest)
   yield takeEvery(FETCH_BIDS_BY_ADDRESS_REQUEST, handleFetchBidsByAddressRequest)
-  yield takeEvery(FETCH_BIDS_BY_NFT_REQUEST, handleFetchBidsByNFTRequest)
+  yield takeEvery(FETCH_BIDS_BY_ASSET_REQUEST, handleFetchBidsByAssetRequest)
 
   function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
     const { asset, price, expiresAt, fingerprint } = action.payload
@@ -209,19 +209,29 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
     }
   }
 
-  function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
-    const { nft } = action.payload
+  function* handleFetchBidsByAssetRequest(action: FetchBidsByAssetRequestAction) {
+    const { asset } = action.payload
+    let bids: Bid[] = []
     try {
-      const { bidService } = VendorFactory.build(nft.vendor)
-      if (!bidService) {
-        throw new Error("Couldn't find a valid bid service for vendor")
+      const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+      if (isBidsOffchainEnabled) {
+        const response: Awaited<ReturnType<typeof bidService.fetchBids>> = yield call([bidService, 'fetchBids'], {
+          contractAddress: asset.contractAddress,
+          ...(isNFT(asset) ? { tokenId: asset.tokenId } : { itemId: asset.itemId })
+        })
+        bids = response.results
+      } else if (isNFT(asset)) {
+        const { bidService } = VendorFactory.build(asset.vendor)
+        if (!bidService) {
+          throw new Error("Couldn't find a valid bid service for vendor")
+        }
+
+        bids = (yield call([bidService, 'fetchByNFT'], asset)) as Awaited<ReturnType<typeof bidService.fetchByNFT>>
       }
 
-      const bids = (yield call([bidService, 'fetchByNFT'], nft)) as Awaited<ReturnType<typeof bidService.fetchByNFT>>
-
-      yield put(fetchBidsByNFTSuccess(nft, bids))
+      yield put(fetchBidsByAssetSuccess(asset, bids))
     } catch (error) {
-      yield put(fetchBidsByNFTFailure(nft, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
+      yield put(fetchBidsByAssetFailure(asset, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 }

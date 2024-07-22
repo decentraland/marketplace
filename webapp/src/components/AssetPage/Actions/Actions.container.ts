@@ -4,7 +4,7 @@ import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { NFT } from '../../../modules/nft/types'
 import { getCurrentOrder } from '../../../modules/order/selectors'
 import { RootState } from '../../../modules/reducer'
-import { getNFTBids } from '../../../modules/ui/nft/bid/selectors'
+import { getAssetBids } from '../../../modules/ui/asset/bid/selectors'
 import { getWallet } from '../../../modules/wallet/selectors'
 import Actions from './Actions'
 import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './Actions.types'
@@ -12,7 +12,7 @@ import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './Action
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
   order: getCurrentOrder(state),
-  bids: getNFTBids(state)
+  bids: getAssetBids(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch, ownProps: OwnProps): MapDispatchProps => ({
