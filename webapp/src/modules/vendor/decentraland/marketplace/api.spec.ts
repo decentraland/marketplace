@@ -1,4 +1,4 @@
-import { Bid, BidSortBy } from '@dcl/schemas'
+import { Bid, BidSortBy, Trade } from '@dcl/schemas'
 import { MARKETPLACE_SERVER_URL, MarketplaceAPI } from './api'
 
 describe('when fetching bids', () => {

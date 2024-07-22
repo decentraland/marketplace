@@ -1,4 +1,4 @@
-import { Bid, ChainId, GetBidsParameters, PaginatedResponse } from '@dcl/schemas'
+import { Bid, ChainId, GetBidsParameters, PaginatedResponse, Trade } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
@@ -34,18 +34,6 @@ export class MarketplaceAPI extends BaseClient {
 
   fetchTrade = async (tradeId: string) => {
     return this.fetch<Trade>(`/v1/trades/${tradeId}`, { method: 'GET' })
-  }
-
-  fetchBids = async (queryParams: GetBidsParameters = {}) => {
-    const params = Object.entries(queryParams)
-    const searchParams = new URLSearchParams()
-    params.forEach(([key, value]) => {
-      if (value !== undefined) {
-        searchParams.append(key, value.toString())
-      }
-    })
-
-    return this.fetch<PaginatedResponse<Bid>>(`/v1/bids${params.length ? `?${searchParams.toString()}` : ''}`, { method: 'GET' })
   }
 }
 

@@ -18,6 +18,7 @@ export default function BidButton(props: Props) {
       secondary
       inverted
       to={link}
+      data-testid="bid-button"
       className={classNames(styles.bidButton, { [styles.alreadyBid]: alreadyBid })}
       disabled={alreadyBid || disabled}
     >

@@ -37,8 +37,8 @@ describe('when off chain bids are enabled', () => {
       })
 
       it('should render the bid button', () => {
-        const { getByRole } = renderItemSaleActions(props)
-        expect(getByRole('link', { name: t('asset_page.actions.place_bid') })).toBeInTheDocument()
+        const { getByTestId } = renderItemSaleActions(props)
+        expect(getByTestId('bid-button')).toBeInTheDocument()
       })
     })
 
@@ -48,8 +48,8 @@ describe('when off chain bids are enabled', () => {
       })
 
       it('should not render the bid button', () => {
-        const { queryByRole } = renderItemSaleActions(props)
-        expect(queryByRole('link', { name: t('asset_page.actions.place_bid') })).not.toBeInTheDocument()
+        const { queryByTestId } = renderItemSaleActions(props)
+        expect(queryByTestId('bid-button')).not.toBeInTheDocument()
       })
     })
   })
@@ -60,8 +60,8 @@ describe('when off chain bids are enabled', () => {
     })
 
     it('should not render the bid button', () => {
-      const { queryByRole } = renderItemSaleActions(props)
-      expect(queryByRole('link', { name: t('asset_page.actions.place_bid') })).not.toBeInTheDocument()
+      const { queryByTestId } = renderItemSaleActions(props)
+      expect(queryByTestId('bid-button')).not.toBeInTheDocument()
     })
   })
 })
