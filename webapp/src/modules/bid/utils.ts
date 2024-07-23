@@ -1,7 +1,9 @@
 import { ethers, BigNumber } from 'ethers'
-import { Bid, TradeAssetType, TradeCreation, TradeType } from '@dcl/schemas'
+import { Bid, Contract, TradeAssetType, TradeCreation, TradeType } from '@dcl/schemas'
 import { BidTrade } from '@dcl/schemas/dist/dapps/bid'
+import { AuthorizeActionOptions } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
@@ -90,4 +92,48 @@ export async function createBidTrade(asset: NFT | Item, price: number, expiresAt
 
 export function isBidTrade(bid: Bid): bid is BidTrade {
   return 'tradeId' in bid
+}
+
+export function getAcceptBidAuthorizationOptions(
+  bid: Bid,
+  onAccept: () => void,
+  targetContractLabel?: string | null
+): AuthorizeActionOptions | null {
+  if (!('tradeId' in bid)) {
+    return null
+  }
+
+  const offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, bid.chainId)
+  if ('tokenId' in bid) {
+    return {
+      targetContractName: ContractName.ERC721,
+      targetContractLabel: targetContractLabel || ContractName.ERC721,
+      authorizedAddress: offchainMarketplaceContract.address,
+      targetContract: {
+        address: bid.contractAddress,
+        chainId: bid.chainId,
+        name: ContractName.ERC721,
+        network: bid.network
+      } as Contract,
+      authorizationType: AuthorizationType.APPROVAL,
+      authorizedContractLabel: offchainMarketplaceContract.name,
+      tokenId: bid.tokenId,
+      onAuthorized: onAccept
+    }
+  } else {
+    return {
+      targetContractName: ContractName.ERC721CollectionV2,
+      targetContractLabel: targetContractLabel || ContractName.ERC721CollectionV2,
+      authorizedAddress: offchainMarketplaceContract.address,
+      targetContract: {
+        address: bid.contractAddress,
+        chainId: bid.chainId,
+        name: ContractName.ERC721CollectionV2,
+        network: bid.network
+      } as Contract,
+      authorizationType: AuthorizationType.MINT,
+      authorizedContractLabel: offchainMarketplaceContract.name,
+      onAuthorized: onAccept
+    }
+  }
 }

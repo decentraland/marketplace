@@ -959,7 +959,9 @@
     },
     "authorization": {
       "title_action": "offer",
-      "action": "make an offer for"
+      "action": "make an offer for",
+      "confirm_transaction_title": "Sign trade object to place bid",
+      "confirm_transaction_action": "Sign"
     }
   },
   "my_bids_page": {

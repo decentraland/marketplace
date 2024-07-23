@@ -947,7 +947,9 @@
     },
     "authorization": {
       "title_action": "提供",
-      "action": "要约"
+      "action": "要约",
+      "confirm_transaction_title": "签名贸易对象放置出价",
+      "confirm_transaction_action": "符号"
     }
   },
   "my_bids_page": {
