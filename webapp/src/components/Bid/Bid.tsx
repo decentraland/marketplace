@@ -1,18 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { ethers } from 'ethers'
-import { Contract } from '@dcl/schemas'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
-import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName, getContract as getDCLContract } from 'decentraland-transactions'
 import { Loader, Stats, Button } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../lib/date'
 import { formatWeiMANA } from '../../lib/mana'
 import { AssetType } from '../../modules/asset/types'
 import { getAssetName } from '../../modules/asset/utils'
-import { isBidTrade } from '../../modules/bid/utils'
+import { getAcceptBidStatus, getError } from '../../modules/bid/selectors'
+import { getAcceptBidAuthorizationOptions, isBidTrade } from '../../modules/bid/utils'
+import { useERC721ContractName } from '../../modules/contract/hooks'
 import { locations } from '../../modules/routing/locations'
 import { addressEquals } from '../../modules/wallet/utils'
 import { AssetImage } from '../AssetImage'
@@ -21,7 +20,6 @@ import { ConfirmInputValueModal } from '../ConfirmInputValueModal'
 import { LinkedProfile } from '../LinkedProfile'
 import { Mana } from '../Mana'
 import { AcceptButton } from './AcceptButton'
-import { fetchContractName } from './utils'
 import { WarningMessage } from './WarningMessage'
 import { Props } from './Bid.types'
 import './Bid.css'
@@ -37,14 +35,13 @@ const Bid = (props: Props) => {
     onArchive,
     onUnarchive,
     onCancel,
-    getContract,
     isArchivable,
     hasImage,
     isAcceptingBid
   } = props
   const history = useHistory()
-  const [targetContractLabel, setTargetContractLabel] = useState<string | null>('')
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+  const targetContractLabel = useERC721ContractName(bid.contractAddress, bid.chainId)
 
   const isArchived = archivedBidIds.includes(bid.id)
   const isBidder = !!wallet && addressEquals(wallet.address, bid.bidder)
@@ -53,41 +50,10 @@ const Bid = (props: Props) => {
   const assetType = isNftBid ? AssetType.NFT : AssetType.ITEM
   const tokenId = isNftBid ? bid.tokenId : bid.itemId
 
-  useEffect(() => {
-    let cancel = false
-    if (isBidsOffchainEnabled) {
-      fetchContractName(bid.contractAddress, bid.chainId)
-        .then(name => {
-          if (!cancel) {
-            setTargetContractLabel(name)
-          }
-        })
-        .catch(() => console.error('Could not fetch contract name'))
-    }
-    return () => {
-      cancel = true
-    }
-  }, [isBidsOffchainEnabled, bid])
-
   const handleConfirm = useCallback(() => {
-    if (isBidsOffchainEnabled && 'tradeId' in bid) {
-      const assetContract = getContract({ address: bid.contractAddress, chainId: bid.chainId })
-      const offchainMarketplaceContract = getDCLContract(ContractName.OffChainMarketplace, bid.chainId)
-
-      if ('tokenId' in bid) {
-        onAuthorizedAction({
-          targetContractName: ContractName.ERC721,
-          targetContractLabel: targetContractLabel || assetContract?.label || assetContract?.name,
-          authorizedAddress: offchainMarketplaceContract.address,
-          targetContract: assetContract as Contract,
-          authorizationType: AuthorizationType.APPROVAL,
-          authorizedContractLabel: offchainMarketplaceContract.name,
-          tokenId: bid.tokenId,
-          onAuthorized: () => onAccept(bid)
-        })
-      } else {
-        console.error('Implement bid acceptance for items')
-      }
+    const options = getAcceptBidAuthorizationOptions(bid, () => onAccept(bid), targetContractLabel)
+    if (isBidsOffchainEnabled && options) {
+      onAuthorizedAction(options)
     } else {
       onAccept(bid)
     }
@@ -210,9 +176,15 @@ Bid.defaultProps = {
   hasImage: true
 }
 
-export default withAuthorizedAction(React.memo(Bid), AuthorizedAction.BID, {
-  confirm_transaction: {
-    title: 'accept_bid.authorization.confirm_transaction.title'
+export default withAuthorizedAction(
+  React.memo(Bid),
+  AuthorizedAction.BID,
+  {
+    confirm_transaction: {
+      title: 'accept_bid.authorization.confirm_transaction.title'
+    },
+    title: 'accept_bid.authorization.title'
   },
-  title: 'accept_bid.authorization.title'
-})
+  getAcceptBidStatus,
+  getError
+)

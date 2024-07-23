@@ -942,7 +942,9 @@
     },
     "authorization": {
       "title_action": "oferta",
-      "action": "hacer una oferta para"
+      "action": "hacer una oferta para",
+      "confirm_transaction_title": "Firmar para colocar la oferta",
+      "confirm_transaction_action": "Firmar"
     }
   },
   "my_bids_page": {

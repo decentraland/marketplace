@@ -947,12 +947,9 @@
     },
     "authorization": {
       "title_action": "提供",
-      "action": "要约"
-    },
-    "bid_placed_success": {
-      "title": "恭喜",
-      "message": "竞标 <strong>{assetName}</strong> 已成功放置",
-      "my_bids": "我的资产出价"
+      "action": "要约",
+      "confirm_transaction_title": "签名贸易对象放置出价",
+      "confirm_transaction_action": "符号"
     }
   },
   "my_bids_page": {

@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ethers } from 'ethers'
 import { Bid } from '@dcl/schemas'
+import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { T, t } from 'decentraland-dapps/dist/modules/translation'
 import { Button, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import emptyBids from '../../../../images/empty-bids.png'
 import { formatWeiMANA } from '../../../../lib/mana'
 import { AssetType } from '../../../../modules/asset/types'
 import { getAssetName, isNFT } from '../../../../modules/asset/utils'
+import { getAcceptBidStatus, getError } from '../../../../modules/bid/selectors'
+import { getAcceptBidAuthorizationOptions } from '../../../../modules/bid/utils'
+import { useERC721ContractName } from '../../../../modules/contract/hooks'
 import { locations } from '../../../../modules/routing/locations'
 import { bidAPI } from '../../../../modules/vendor/decentraland'
 import { marketplaceAPI } from '../../../../modules/vendor/decentraland/marketplace/api'
@@ -23,7 +28,7 @@ import styles from './BidsTableContent.module.css'
 export const ROWS_PER_PAGE = 5
 const INITIAL_PAGE = 1
 
-export default function BidsTableContent({ asset, isBidsOffchainEnabled, address, sortBy, isAcceptingBid, onAccept }: Props) {
+function BidsTableContent({ asset, isBidsOffchainEnabled, address, sortBy, isAcceptingBid, onAccept, onAuthorizedAction }: Props) {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const history = useHistory()
   const [bids, setBids] = useState<DataTableType[]>([])
@@ -32,6 +37,7 @@ export default function BidsTableContent({ asset, isBidsOffchainEnabled, address
   const [totalPages, setTotalPages] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(false)
   const assetOwner = isNFT(asset) ? asset.owner : asset.creator
+  const targetContractLabel = useERC721ContractName(asset.contractAddress, asset.chainId)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState<{
     display: boolean
@@ -101,6 +107,15 @@ export default function BidsTableContent({ asset, isBidsOffchainEnabled, address
     }
   }, [asset, setIsLoading, setBids, page, sortBy, address, isMobileOrTablet])
 
+  const handleConfirm = (bid: Bid) => {
+    const options = getAcceptBidAuthorizationOptions(bid, () => onAccept(bid), targetContractLabel)
+    if (isBidsOffchainEnabled && options) {
+      onAuthorizedAction(options)
+      return
+    }
+    onAccept(bid)
+  }
+
   return (
     <>
       <TableContent
@@ -164,7 +179,7 @@ export default function BidsTableContent({ asset, isBidsOffchainEnabled, address
                   </>
                 }
                 onConfirm={() => {
-                  showConfirmationModal.bid && onAccept(showConfirmationModal.bid)
+                  showConfirmationModal.bid && handleConfirm(showConfirmationModal.bid)
                 }}
                 valueToConfirm={ethers.utils.formatEther(showConfirmationModal.bid.price)}
                 network={nft.network}
@@ -179,3 +194,16 @@ export default function BidsTableContent({ asset, isBidsOffchainEnabled, address
     </>
   )
 }
+
+export default withAuthorizedAction(
+  BidsTableContent,
+  AuthorizedAction.BID,
+  {
+    confirm_transaction: {
+      title: 'accept_bid.authorization.confirm_transaction.title'
+    },
+    title: 'accept_bid.authorization.title'
+  },
+  getAcceptBidStatus,
+  getError
+)
