@@ -191,13 +191,30 @@ const BidModal = (props: Props) => {
   )
 }
 
-export default React.memo(
+export const LegacyBidModal = React.memo(
   withAuthorizedAction(
     BidModal,
     AuthorizedAction.BID,
     {
       action: 'bid_page.authorization.action',
       title_action: 'bid_page.authorization.title_action'
+    },
+    getBidStatus,
+    getError
+  )
+)
+
+export default React.memo(
+  withAuthorizedAction(
+    BidModal,
+    AuthorizedAction.BID,
+    {
+      action: 'bid_page.authorization.action',
+      title_action: 'bid_page.authorization.title_action',
+      confirm_transaction: {
+        title: 'bid_page.authorization.confirm_transaction_title',
+        action: 'bid_page.authorization.confirm_transaction_action'
+      }
     },
     getBidStatus,
     getError

@@ -1,2 +1,2 @@
-import BidModal from './BidModal'
-export { BidModal }
+import BidModal, { LegacyBidModal } from './BidModal'
+export { BidModal, LegacyBidModal }
