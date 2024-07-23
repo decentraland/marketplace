@@ -1200,7 +1200,7 @@
     },
     "bid_placed_success": {
       "title": "Felicidades",
-      "message": "Oferta para <strong>{assetName}</strong> fue enviada de manera exitosa",
+      "message": "La oferta para <strong>{assetName}</strong> fue enviada de manera exitosa",
       "my_bids": "Mis activos ofertas"
     }
   },
