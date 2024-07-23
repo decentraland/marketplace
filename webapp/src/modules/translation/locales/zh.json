@@ -948,6 +948,11 @@
     "authorization": {
       "title_action": "提供",
       "action": "要约"
+    },
+    "bid_placed_success": {
+      "title": "恭喜",
+      "message": "竞标 <strong>{assetName}</strong> 已成功放置",
+      "my_bids": "我的资产出价"
     }
   },
   "my_bids_page": {
