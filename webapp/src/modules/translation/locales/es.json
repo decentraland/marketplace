@@ -1197,6 +1197,11 @@
     "cross_chain_tx": {
       "body": "La transacción puede tardar hasta <highlight>3 miuntos</highlight> para ser procesada.<br></br>Puedes seguir su progreso en los siguientes enlaces:",
       "view_transaction": "Ver transacción"
+    },
+    "bid_placed_success": {
+      "title": "Felicidades",
+      "message": "La oferta para <strong>{assetName}</strong> fue enviada de manera exitosa",
+      "my_bids": "Mis activos ofertas"
     }
   },
   "maintainance": {
