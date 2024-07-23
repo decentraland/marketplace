@@ -1217,7 +1217,7 @@
     },
     "bid_placed_success": {
       "title": "Congratulations",
-      "message": "Bid for <strong>{assetName}</strong> has been placed successfully",
+      "message": "A bid for <strong>{assetName}</strong> has been placed successfully",
       "my_bids": "My assets bids"
     }
   },
