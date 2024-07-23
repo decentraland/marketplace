@@ -1202,6 +1202,11 @@
     "cross_chain_tx": {
       "body": "处理该交易最多可能需要 <highlight>3 分钟</highlight>。<br></br>您还可以在以下链接中跟踪其进度：",
       "view_transaction": "查看交易"
+    },
+    "bid_placed_success": {
+      "title": "恭喜",
+      "message": "竞标<strong>{assetName}</strong>已成功放置",
+      "my_bids": "我的资产出价"
     }
   },
   "maintainance": {
