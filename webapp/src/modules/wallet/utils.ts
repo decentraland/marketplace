@@ -22,7 +22,7 @@ export function shortenAddress(address: string) {
 }
 
 export function addressEquals(address1?: string, address2?: string) {
-  return !!address1 && !!address2 && address1.toLowerCase() === address2.toLowerCase()
+  return address1?.toLowerCase() === address2?.toLowerCase()
 }
 
 export async function getEth(): Promise<ethers.providers.Web3Provider> {
