@@ -24,8 +24,10 @@ const AcceptButton = (props: Props) => {
   const isValidFingerprint = checkFingerprint(bid, fingerprint)
   const assetOwner = !!asset && (isNFT(asset) ? asset.owner : asset?.creator)
   const isValidSeller = assetOwner && assetOwner === userAddress
+  const isItemAvailable = !!asset && (isNFT(asset) || asset.available > 0)
 
-  const isDisabled = isCurrentlyLocked || !asset || isLoadingFingerprint || hasInsufficientMANA || !isValidFingerprint || !isValidSeller
+  const isDisabled =
+    isCurrentlyLocked || !asset || isLoadingFingerprint || hasInsufficientMANA || !isValidFingerprint || !isValidSeller || !isItemAvailable
 
   let button = (
     <Button primary disabled={isDisabled} onClick={onClick}>
@@ -57,6 +59,8 @@ const AcceptButton = (props: Props) => {
         {button}
       </LandLockedPopup>
     )
+  } else if (!isItemAvailable) {
+    button = <Popup content={t('bid.item_not_available')} position="top center" trigger={<div className="popup-button">{button}</div>} />
   }
 
   return <div className="AcceptButton">{button}</div>
