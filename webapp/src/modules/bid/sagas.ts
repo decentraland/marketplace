@@ -1,7 +1,6 @@
 import { History } from 'history'
 import { takeEvery, put, select, call, all, getContext } from 'redux-saga/effects'
 import { Bid, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
-import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
@@ -12,7 +11,6 @@ import { getCurrentNFT } from '../nft/selectors'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
 import { locations } from '../routing/locations'
-import { getBidPlacedSuccessToast } from '../toast/toasts'
 import { BidService } from '../vendor/decentraland'
 import { TradeService } from '../vendor/decentraland/TradeService'
 import { VendorName } from '../vendor/types'
@@ -65,7 +63,6 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
         const trade: TradeCreation = yield call([bidUtils, 'createBidTrade'], asset, price, expiresAt, fingerprint)
         yield call([tradeService, 'addTrade'], trade)
         yield put(placeBidSuccess(asset, price, expiresAt, asset.chainId, wallet.address, fingerprint))
-        yield put(showToast(getBidPlacedSuccessToast(asset)))
         history.push(
           isNFT(asset) ? locations.nft(asset.contractAddress, asset.tokenId) : locations.item(asset.contractAddress, asset.itemId)
         )

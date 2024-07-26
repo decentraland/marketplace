@@ -87,6 +87,9 @@ const Bid = (props: Props) => {
             <Stats className="from" title={t('bid.from')}>
               <LinkedProfile address={bid.bidder} />
             </Stats>
+            <Stats className="price" title={t('bid.created_at')}>
+              {formatDistanceToNow(+bid.createdAt, { addSuffix: true })}
+            </Stats>
             <Stats className="price" title={t('bid.price')}>
               <Mana showTooltip network={bid.network}>
                 {formatWeiMANA(bid.price)}
@@ -98,11 +101,13 @@ const Bid = (props: Props) => {
                 {isBidder ? (
                   <>
                     {!isBidTrade(bid) && (
-                      <Button primary onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
+                      <Button primary size="small" onClick={() => history.push(locations.bid(bid.contractAddress, bid.tokenId))}>
                         {t('global.update')}
                       </Button>
                     )}
-                    <Button onClick={() => onCancel(bid)}>{t('global.cancel')}</Button>
+                    <Button size="small" onClick={() => onCancel(bid)}>
+                      {t('global.cancel')}
+                    </Button>
                   </>
                 ) : null}
                 {isSeller ? (
@@ -115,9 +120,13 @@ const Bid = (props: Props) => {
 
                     {isArchivable ? (
                       !isArchived ? (
-                        <Button onClick={() => onArchive(bid)}>{t('my_bids_page.archive')}</Button>
+                        <Button size="small" onClick={() => onArchive(bid)}>
+                          {t('my_bids_page.archive')}
+                        </Button>
                       ) : (
-                        <Button onClick={() => onUnarchive(bid)}>{t('my_bids_page.unarchive')}</Button>
+                        <Button size="small" onClick={() => onUnarchive(bid)}>
+                          {t('my_bids_page.unarchive')}
+                        </Button>
                       )
                     ) : null}
                   </>

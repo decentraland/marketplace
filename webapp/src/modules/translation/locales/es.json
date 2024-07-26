@@ -590,7 +590,8 @@
     "invalid_seller": "Ya no eres el dueño de este artículo",
     "not_enough_mana_on_bid_placed": "No tienes suficiente MANA para pagar por esta oferta",
     "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices",
-    "item_not_available": "Ya no hay stock disponible para este artículo."
+    "item_not_available": "Ya no hay stock disponible para este artículo.",
+    "created_at": "Creada"
   },
   "transaction_history": {
     "title": "Últimas ventas",
