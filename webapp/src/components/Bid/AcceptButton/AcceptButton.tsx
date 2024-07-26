@@ -30,7 +30,7 @@ const AcceptButton = (props: Props) => {
     isCurrentlyLocked || !asset || isLoadingFingerprint || hasInsufficientMANA || !isValidFingerprint || !isValidSeller || !isItemAvailable
 
   let button = (
-    <Button primary disabled={isDisabled} onClick={onClick}>
+    <Button size="small" primary disabled={isDisabled} onClick={onClick}>
       {t('global.accept')}
     </Button>
   )

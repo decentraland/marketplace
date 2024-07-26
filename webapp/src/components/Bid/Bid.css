@@ -21,7 +21,7 @@
 }
 
 .Bid .wrapper {
-  grid-template-columns: 1fr 1fr 1fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 266px;
   display: grid;
   align-items: center;
   gap: 10px;
@@ -81,6 +81,16 @@
 
 .Bid .wrapper .dcl.stats + .dcl.stats {
   margin-left: 0px;
+}
+
+@media (max-width: 1300px) {
+  .Bid .wrapper {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .Bid .actions {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 768px) {
