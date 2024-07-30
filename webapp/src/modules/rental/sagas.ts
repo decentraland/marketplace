@@ -227,7 +227,7 @@ function* handleAcceptRentalListingRequest(action: AcceptRentalListingRequestAct
         category: NFTCategory.ESTATE
       })
       if (estateContract) {
-        fingerprint = yield call(getFingerprint, nft.tokenId, estateContract)
+        fingerprint = yield call(getFingerprint, nft.tokenId, estateContract, nft.chainId)
       }
     }
 
