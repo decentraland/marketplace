@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { takeEvery, put, select, call, all, getContext } from 'redux-saga/effects'
-import { Bid, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
+import { Bid, ListingStatus, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
@@ -180,8 +180,8 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
       const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
       if (isBidsOffchainEnabled) {
         const bids = (yield all([
-          call([bidService, 'fetchBids'], { seller: address }),
-          call([bidService, 'fetchBids'], { bidder: address })
+          call([bidService, 'fetchBids'], { seller: address, status: ListingStatus.OPEN, limit: 1000 }),
+          call([bidService, 'fetchBids'], { bidder: address, status: ListingStatus.OPEN, limit: 1000 })
         ])) as [Awaited<ReturnType<typeof bidService.fetchBids>>, Awaited<ReturnType<typeof bidService.fetchBids>>]
         sellerBids = bids[0].results
         bidderBids = bids[1].results
@@ -214,7 +214,8 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
       if (isBidsOffchainEnabled) {
         const response: Awaited<ReturnType<typeof bidService.fetchBids>> = yield call([bidService, 'fetchBids'], {
           contractAddress: asset.contractAddress,
-          ...(isNFT(asset) ? { tokenId: asset.tokenId } : { itemId: asset.itemId })
+          ...(isNFT(asset) ? { tokenId: asset.tokenId } : { itemId: asset.itemId }),
+          status: ListingStatus.OPEN
         })
         bids = response.results
       } else if (isNFT(asset)) {

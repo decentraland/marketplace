@@ -65,7 +65,7 @@ export async function createBidTrade(asset: NFT | Item, price: number, expiresAt
       effective: Date.now(),
       expiration: expiresAt,
       externalChecks: [],
-      salt: '0x'
+      salt: ethers.utils.hexlify(Date.now())
     },
     sent: [
       {
