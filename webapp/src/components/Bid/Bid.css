@@ -74,9 +74,9 @@
   margin-left: 0;
 }
 
-.Bid .actions .AcceptButton .ui.button {
-  display: inline-block;
-  height: 48px;
+.Bid .actions .AcceptButton .ui.button,
+.Bid .actions .AcceptButton .popup-button {
+  height: 100%;
 }
 
 .Bid .wrapper .dcl.stats + .dcl.stats {

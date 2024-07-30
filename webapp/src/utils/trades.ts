@@ -66,14 +66,12 @@ export function getValueForTradeAsset(asset: TradeAsset): string {
 }
 
 export function generateTradeValues(trade: Omit<TradeCreation, 'signature'>) {
-  const SALT = ethers.utils.hexZeroPad(ethers.utils.hexlify(trade.chainId), 32)
-
   return {
     checks: {
       uses: trade.checks.uses,
       expiration: fromMillisecondsToSeconds(trade.checks.expiration),
       effective: fromMillisecondsToSeconds(trade.checks.effective),
-      salt: SALT,
+      salt: ethers.utils.hexZeroPad(trade.checks.salt, 32),
       contractSignatureIndex: trade.checks.contractSignatureIndex,
       signerSignatureIndex: trade.checks.signerSignatureIndex,
       allowedRoot: ethers.utils.hexZeroPad(trade.checks.allowedRoot, 32),
