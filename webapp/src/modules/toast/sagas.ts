@@ -1,7 +1,8 @@
-import { all, takeEvery, put } from 'redux-saga/effects'
+import { all, takeEvery, put, select } from 'redux-saga/effects'
 import { showToast, hideAllToasts } from 'decentraland-dapps/dist/modules/toast/actions'
 import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
 import { TRANSACTION_ACTION_FLAG, getTransactionHref } from 'decentraland-dapps/dist/modules/transaction'
+import { PLACE_BID_SUCCESS, PlaceBidSuccessAction } from '../bid/actions'
 import { CLAIM_NAME_SUCCESS } from '../ens/actions'
 import {
   DeleteListSuccessAction,
@@ -15,6 +16,7 @@ import {
   UpdateListSuccessAction,
   UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
+import { getIsBidsOffChainEnabled } from '../features/selectors'
 import {
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_WITH_CARD_FAILURE,
@@ -41,7 +43,8 @@ import {
   getStoreUpdateSuccessToast,
   getUpdateListSuccessToast,
   getUpsertRentalSuccessToast,
-  getCrossChainTransactionSuccessToast
+  getCrossChainTransactionSuccessToast,
+  getBidPlacedSuccessToast
 } from './toasts'
 import { DispatchableFromToastActions } from './types'
 import { toastDispatchableActionsChannel } from './utils'
@@ -72,6 +75,7 @@ function* successToastSagas() {
   yield takeEvery(BULK_PICK_SUCCESS, handleBulkPickUnpickSuccess)
   yield takeEvery(BULK_PICK_FAILURE, handleBulkPickUnpickFailure)
   yield takeEvery(BUY_ITEM_CROSS_CHAIN_SUCCESS, handleBuyItemCrossChainSuccess)
+  yield takeEvery(PLACE_BID_SUCCESS, handlePlaceBidSuccess)
 
   function* handleToastTryAgainActionChannel(action: DispatchableFromToastActions) {
     yield put(action)
@@ -152,4 +156,12 @@ function* handleBuyItemCrossChainSuccess(action: BuyItemCrossChainSuccessAction)
       )
     )
   )
+}
+
+function* handlePlaceBidSuccess(action: PlaceBidSuccessAction) {
+  const { asset } = action.payload
+  const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+  if (isBidsOffchainEnabled) {
+    yield put(showToast(getBidPlacedSuccessToast(asset), 'bottom right'))
+  }
 }

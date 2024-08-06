@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Header } from 'decentraland-ui'
 import { Bid } from '../../Bid'
 import { Props } from './BidList.types'
@@ -9,14 +9,8 @@ const BidList = (props: Props) => {
 
   const [hasFetched, setHasFetched] = useState(false)
 
-  // this is because when you change from one nft detail to another you would still see the previous nft bids
-  const filteredBids = useMemo(
-    () => bids.filter(bid => bid.contractAddress === nft.contractAddress && bid.tokenId === nft.tokenId),
-    [nft, bids]
-  )
-
   useEffect(() => {
-    if (!hasFetched) {
+    if (!hasFetched && nft) {
       setHasFetched(true)
       onFetchBids(nft)
     }
@@ -33,7 +27,7 @@ const BidList = (props: Props) => {
     <div className="BidList">
       <Header sub>Bids</Header>
       <div className="list">
-        {filteredBids.map(bid => (
+        {bids.map(bid => (
           <Bid key={bid.id} bid={bid} isArchivable={false} hasImage={false} />
         ))}
       </div>

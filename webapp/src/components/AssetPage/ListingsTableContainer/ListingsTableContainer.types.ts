@@ -1,5 +1,5 @@
 import { RefObject } from 'react'
-import { Item, OrderSortBy } from '@dcl/schemas'
+import { BidSortBy, Item, OrderSortBy } from '@dcl/schemas'
 import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 
 export type Props = {
@@ -7,4 +7,4 @@ export type Props = {
   ref: RefObject<HTMLDivElement>
 }
 
-export type SortByType = OrderSortBy | OrderDirection
+export type SortByType = OrderSortBy | OrderDirection | BidSortBy

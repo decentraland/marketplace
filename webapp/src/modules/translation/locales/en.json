@@ -549,6 +549,7 @@
       "change_beneficiary": "Change beneficiary",
       "mint_item": "Mint item",
       "place_bid": "Make offer",
+      "offer_made": "Your offer has been made",
       "legacy_order_expired_warning": "This listing is not being shown to buyers in the Marketplace but has been created with an invalid expiration date and therefore could still be purchased via the contract. Please remove this listing manually.",
       "legacy_order_not_expired_warning": "This listing has been created with an invalid expiration date. Please remove this listing and put it for sale again to fix the issue."
     },
@@ -601,7 +602,9 @@
     "invalid_fingerprint_on_bid_received": "This asset has been modified since this bid was made and it's not valid anymore",
     "invalid_seller": "You don't own this asset anymore",
     "not_enough_mana_on_bid_placed": "You don't have enough MANA to pay for this bid",
-    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
+    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it",
+    "item_not_available": "There is no longer stock available for this item",
+    "created_at": "Created"
   },
   "transaction_history": {
     "title": "Latest Sales",
@@ -636,7 +639,8 @@
       "expires": "Expires",
       "never_expires": "It never expires",
       "no_offer": "No offer",
-      "make_offer": "Make Offer"
+      "make_offer": "Make Offer",
+      "already_offer": "You already made an offer"
     }
   },
   "offers_table": {
@@ -678,6 +682,11 @@
     "owners": "Owners",
     "there_are_no_owners": "There are no owners yet",
     "become_the_first_one": "Become the first one!"
+  },
+  "bids_table": {
+    "bids": "Offers",
+    "no_bids": "The are no offers yet",
+    "make_offer": "Make an offer"
   },
   "rental_history": {
     "title": "Latest rentals",
@@ -816,6 +825,14 @@
       "action": "buy"
     }
   },
+  "accept_bid": {
+    "authorization": {
+      "title": "Accept bid",
+      "confirm_transaction": {
+        "title": "Confirm transaction to accept the bid"
+      }
+    }
+  },
   "buy_with_card_page": {
     "title": "Buying {name}",
     "subtitle": "You are about to buy {name} for {amount}.",
@@ -944,7 +961,9 @@
     },
     "authorization": {
       "title_action": "offer",
-      "action": "make an offer for"
+      "action": "make an offer for",
+      "confirm_transaction_title": "Sign trade object to place bid",
+      "confirm_transaction_action": "Sign"
     }
   },
   "my_bids_page": {
@@ -1197,6 +1216,11 @@
     "cross_chain_tx": {
       "body": "The transaction can take up to <highlight>3 minutes</highlight> to be processed.<br></br>You can also track its progress in the links below:",
       "view_transaction": "View transaction"
+    },
+    "bid_placed_success": {
+      "title": "Congratulations",
+      "message": "A bid for <strong>{assetName}</strong> has been placed successfully",
+      "my_bids": "My assets bids"
     }
   },
   "maintainance": {
@@ -1655,5 +1679,9 @@
     "description": "Your current username will be updated immediately.",
     "success_title": "All Done!",
     "success_description": "Your username has been updated"
+  },
+  "bid_button": {
+    "bid": "Make offer",
+    "blocked": "Your offer has been made"
   }
 }

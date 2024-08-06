@@ -32,7 +32,7 @@ export const useFingerprint = (nft: NFT | null) => {
               .catch(error => console.error(`Error generating fingerprint for nft ${nft.tokenId}`, error))
           }
           setIsLoadingContract(true)
-          getFingerprint(nft.tokenId, estate)
+          getFingerprint(nft.tokenId, estate, nft.chainId)
             .then(result => setContractFingerprint(result))
             .finally(() => setIsLoadingContract(false))
             .catch(error => console.error(`Error getting fingerprint for nft ${nft.tokenId}`, error))

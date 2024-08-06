@@ -10,6 +10,7 @@
 
 .Bid .bid-row {
   display: flex;
+  width: 100%;
 }
 
 .Bid .image {
@@ -20,51 +21,29 @@
 }
 
 .Bid .wrapper {
-  flex: 1 0 auto;
-  display: flex;
-  justify-content: space-between;
+  grid-template-columns: 1fr 1fr 1fr 1fr 266px;
+  display: grid;
   align-items: center;
+  gap: 10px;
   padding: 24px;
+  width: 100%;
 }
 
-.Bid .wrapper .info {
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.Bid .wrapper .info .dcl.stats {
-  width: 25%;
-}
-
-.Bid .wrapper .info .dcl.stats.from {
-  width: 30%;
-}
-
-.Bid .wrapper .info .dcl.stats.price {
-  width: 35%;
-}
-
-.Bid .wrapper .info .dcl.stats .ui.header {
+.Bid .wrapper .dcl.stats .ui.header {
   white-space: nowrap;
 }
 
-.Bid .wrapper .info .dcl.stats + .dcl.stats {
-  margin-left: 48px;
-}
-
-.Bid .wrapper .info .dcl.stats .ui.header:not(.sub) {
+.Bid .wrapper .dcl.stats .ui.header:not(.sub) {
   font-size: 17px;
   line-height: 26px;
 }
 
-.Bid .wrapper .info .dcl.stats .ui.header.sub {
+.Bid .wrapper .dcl.stats .ui.header.sub {
   font-size: 13px;
   line-height: 18px;
 }
 
-.Bid .wrapper .info .dcl.stats .Profile {
+.Bid .wrapper .dcl.stats .Profile {
   font-size: 17px;
   line-height: 26px;
   display: flex;
@@ -72,13 +51,14 @@
   margin-top: 4px;
 }
 
-.Bid .wrapper .info .dcl.stats .Profile .name {
+.Bid .wrapper .dcl.stats .Profile .name {
   color: var(--text);
 }
 
 .Bid .actions {
-  flex: none;
-  margin-left: 48px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
 }
 
 .Bid .actions .ui.button:not(.primary) {
@@ -86,18 +66,31 @@
   border: 2px solid var(--secondary-on-modal);
 }
 
-.Bid .actions .ui.button {
-  width: 146px;
+.Bid .action .ui.button:not(:only-child) {
+  flex: 1;
 }
 
-.Bid .actions .AcceptButton {
-  display: inline-block;
-  height: 48px;
+.Bid .actions .ui.button + .ui.button {
+  margin-left: 0;
 }
 
-.Bid .actions .ui.button + .ui.button,
-.Bid .actions .AcceptButton + .ui.button {
-  margin-left: 16px;
+.Bid .actions .AcceptButton .ui.button,
+.Bid .actions .AcceptButton .popup-button {
+  height: 100%;
+}
+
+.Bid .wrapper .dcl.stats + .dcl.stats {
+  margin-left: 0px;
+}
+
+@media (max-width: 1300px) {
+  .Bid .wrapper {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+
+  .Bid .actions {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 768px) {
@@ -115,22 +108,23 @@
   }
 
   .Bid .wrapper {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .Bid .info {
+  .Bid {
     flex-direction: column;
     align-items: flex-start;
   }
 
-  .Bid .wrapper .info .dcl.stats,
-  .Bid .wrapper .info .dcl.stats.from,
-  .Bid .wrapper .info .dcl.stats.price {
+  .Bid .wrapper .dcl.stats,
+  .Bid .wrapper .dcl.stats.from,
+  .Bid .wrapper .dcl.stats.price {
     width: 100%;
   }
 
-  .Bid .wrapper .info .dcl.stats + .dcl.stats {
+  .Bid .wrapper .dcl.stats + .dcl.stats {
     margin-left: 0px;
   }
 
@@ -139,15 +133,10 @@
     flex-direction: column;
     margin-left: 0px;
     width: 100%;
+    gap: 10px;
   }
 
   .Bid .actions .ui.button {
     width: 100%;
-  }
-
-  .Bid .actions .ui.button + .ui.button,
-  .Bid .actions .AcceptButton + .ui.button {
-    margin-top: 12px;
-    margin-left: 0px;
   }
 }

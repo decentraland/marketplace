@@ -4,7 +4,6 @@ import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transac
 import { formatWeiMANA } from '../../lib/mana'
 import { Asset } from '../asset/types'
 import { isNFT } from '../asset/utils'
-import { NFT } from '../nft/types'
 
 // Place Bid
 export const PLACE_BID_REQUEST = '[Request] Place Bid'
@@ -78,7 +77,7 @@ export const acceptBidtransactionSubmitted = (bid: Bid, txHash: string) =>
   action(ACCEPT_BID_TRANSACTION_SUBMITTED, {
     bid,
     ...buildTransactionPayload(bid.chainId, txHash, {
-      tokenId: bid.tokenId,
+      ...('tokenId' in bid ? { tokenId: bid.tokenId } : { itemId: bid.itemId }),
       contractAddress: bid.contractAddress,
       price: formatWeiMANA(bid.price)
     })
@@ -99,7 +98,7 @@ export const cancelBidSuccess = (bid: Bid, txHash: string) =>
   action(CANCEL_BID_SUCCESS, {
     bid,
     ...buildTransactionPayload(bid.chainId, txHash, {
-      tokenId: bid.tokenId,
+      ...('tokenId' in bid ? { tokenId: bid.tokenId } : { itemId: bid.itemId }),
       contractAddress: bid.contractAddress,
       price: formatWeiMANA(bid.price)
     })
@@ -127,19 +126,19 @@ export type FetchBidsByAddressSuccessAction = ReturnType<typeof fetchBidsByAddre
 export type FetchBidsByAddressFailureAction = ReturnType<typeof fetchBidsByAddressFailure>
 
 // Fetch Bids By NFT
-export const FETCH_BIDS_BY_NFT_REQUEST = '[Request] Fetch bids by NFT'
-export const FETCH_BIDS_BY_NFT_SUCCESS = '[Success] Fetch bids by NFT'
-export const FETCH_BIDS_BY_NFT_FAILURE = '[Failure] Fetch bids by NFT'
+export const FETCH_BIDS_BY_ASSET_REQUEST = '[Request] Fetch bids by Asset'
+export const FETCH_BIDS_BY_ASSET_SUCCESS = '[Success] Fetch bids by Asset'
+export const FETCH_BIDS_BY_ASSET_FAILURE = '[Failure] Fetch bids by Asset'
 
-export const fetchBidsByNFTRequest = (nft: NFT) => action(FETCH_BIDS_BY_NFT_REQUEST, { nft })
+export const fetchBidsByAssetRequest = (asset: Asset) => action(FETCH_BIDS_BY_ASSET_REQUEST, { asset })
 
-export const fetchBidsByNFTSuccess = (nft: NFT, bids: Bid[]) => action(FETCH_BIDS_BY_NFT_SUCCESS, { nft, bids })
+export const fetchBidsByAssetSuccess = (asset: Asset, bids: Bid[]) => action(FETCH_BIDS_BY_ASSET_SUCCESS, { asset, bids })
 
-export const fetchBidsByNFTFailure = (nft: NFT, error: string) => action(FETCH_BIDS_BY_NFT_FAILURE, { nft, error })
+export const fetchBidsByAssetFailure = (asset: Asset, error: string) => action(FETCH_BIDS_BY_ASSET_FAILURE, { asset, error })
 
-export type FetchBidsByNFTRequestAction = ReturnType<typeof fetchBidsByNFTRequest>
-export type FetchBidsByNFTSuccessAction = ReturnType<typeof fetchBidsByNFTSuccess>
-export type FetchBidsByNFTFailureAction = ReturnType<typeof fetchBidsByNFTFailure>
+export type FetchBidsByAssetRequestAction = ReturnType<typeof fetchBidsByAssetRequest>
+export type FetchBidsByAssetSuccessAction = ReturnType<typeof fetchBidsByAssetSuccess>
+export type FetchBidsByAssetFailureAction = ReturnType<typeof fetchBidsByAssetFailure>
 
 export const CLEAR_BID_ERROR = 'Clear Bid Error'
 

@@ -1,32 +1,45 @@
 import {
-  FETCH_BIDS_BY_NFT_SUCCESS,
+  FETCH_BIDS_BY_ASSET_SUCCESS,
+  FETCH_BIDS_BY_ASSET_REQUEST,
   FETCH_BIDS_BY_ADDRESS_SUCCESS,
   ARCHIVE_BID,
   UNARCHIVE_BID,
   FetchBidsByAddressSuccessAction,
   ArchiveBidAction,
   UnarchiveBidAction,
-  FetchBidsByNFTSuccessAction
+  FetchBidsByAssetSuccessAction,
+  FetchBidsByAssetRequestAction
 } from '../../../bid/actions'
 
 export type BidUIState = {
   seller: string[]
   bidder: string[]
   archived: string[]
-  nft: string[]
+  asset: string[]
 }
 
 const INITIAL_STATE: BidUIState = {
   seller: [],
   bidder: [],
   archived: [],
-  nft: []
+  asset: []
 }
 
-type UIReducerAction = FetchBidsByAddressSuccessAction | FetchBidsByNFTSuccessAction | ArchiveBidAction | UnarchiveBidAction
+type UIReducerAction =
+  | FetchBidsByAddressSuccessAction
+  | FetchBidsByAssetSuccessAction
+  | ArchiveBidAction
+  | UnarchiveBidAction
+  | FetchBidsByAssetRequestAction
 
 export function bidReducer(state: BidUIState = INITIAL_STATE, action: UIReducerAction) {
   switch (action.type) {
+    case FETCH_BIDS_BY_ASSET_REQUEST: {
+      return {
+        ...state,
+        asset: []
+      }
+    }
     case FETCH_BIDS_BY_ADDRESS_SUCCESS: {
       const { sellerBids, bidderBids } = action.payload
       return {
@@ -35,11 +48,11 @@ export function bidReducer(state: BidUIState = INITIAL_STATE, action: UIReducerA
         bidder: bidderBids.map(bid => bid.id)
       }
     }
-    case FETCH_BIDS_BY_NFT_SUCCESS: {
+    case FETCH_BIDS_BY_ASSET_SUCCESS: {
       const { bids } = action.payload
       return {
         ...state,
-        nft: bids.map(bid => bid.id)
+        asset: bids.map(bid => bid.id)
       }
     }
     case ARCHIVE_BID: {

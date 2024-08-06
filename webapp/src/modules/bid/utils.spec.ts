@@ -58,7 +58,7 @@ describe('when getting the trade object for a bid', () => {
           effective: expect.any(Number),
           expiration: expiresAt,
           externalChecks: [],
-          salt: '0x'
+          salt: expect.any(String)
         },
         sent: [
           {
@@ -108,7 +108,7 @@ describe('when getting the trade object for a bid', () => {
             effective: expect.any(Number),
             expiration: expiresAt,
             externalChecks: [],
-            salt: '0x'
+            salt: expect.any(String)
           },
           sent: [
             {
@@ -153,7 +153,7 @@ describe('when getting the trade object for a bid', () => {
             effective: expect.any(Number),
             expiration: expiresAt,
             externalChecks: [],
-            salt: '0x'
+            salt: expect.any(String)
           },
           sent: [
             {

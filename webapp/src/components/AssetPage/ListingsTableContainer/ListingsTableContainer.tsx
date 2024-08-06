@@ -1,8 +1,9 @@
-import React, { forwardRef, useCallback, useEffect, useState } from 'react'
+import React, { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { OrderSortBy } from '@dcl/schemas'
+import { BidSortBy, OrderSortBy } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import TableContainer from '../../Table/TableContainer'
+import BidsTableContent from '../BidsTable/BidsTableContent'
 import { ListingsTable } from '../ListingsTable'
 import { OwnersTable } from '../OwnersTable'
 import { OrderDirection } from '../OwnersTable/OwnersTable.types'
@@ -20,6 +21,10 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>((props, ref) =>
     OWNERS: {
       value: 'owners',
       displayValue: t('owners_table.owners')
+    },
+    BIDS: {
+      value: 'bids',
+      displayValue: t('bids_table.bids')
     }
   }
 
@@ -61,11 +66,38 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>((props, ref) =>
     }
   ]
 
+  const bidsSortByOptions = [
+    {
+      text: t('offers_table.most_expensive'),
+      value: BidSortBy.MOST_EXPENSIVE
+    },
+    {
+      text: t('offers_table.recenty_offered'),
+      value: BidSortBy.RECENTLY_OFFERED
+    },
+    {
+      text: t('offers_table.recently_updated'),
+      value: BidSortBy.RECENTLY_UPDATED
+    }
+  ]
+
+  const getDefaultSortBy = useCallback((tab: string) => {
+    switch (tab) {
+      case BelowTabs.LISTINGS.value:
+        return OrderSortBy.CHEAPEST
+      case BelowTabs.OWNERS.value:
+        return OrderDirection.ASC
+      case BelowTabs.BIDS.value:
+        return BidSortBy.MOST_EXPENSIVE
+      default:
+        return OrderSortBy.CHEAPEST
+    }
+  }, [])
+
   const handleTabChange = useCallback(
     (tab: string) => {
-      const sortByTab = tab === BelowTabs.LISTINGS.value ? OrderSortBy.CHEAPEST : OrderDirection.ASC
       setBelowTab(tab)
-      setSortBy(sortByTab)
+      setSortBy(getDefaultSortBy(tab))
     },
     [BelowTabs.LISTINGS]
   )
@@ -75,21 +107,41 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>((props, ref) =>
     if (params.get('selectedTableTab') === BelowTabs.OWNERS.value) handleTabChange(BelowTabs.OWNERS.value)
   }, [BelowTabs.OWNERS, handleTabChange, locations.search])
 
+  const tableContent = useMemo(() => {
+    switch (belowTab) {
+      case BelowTabs.LISTINGS.value:
+        return <ListingsTable asset={item} sortBy={sortBy as OrderSortBy} />
+      case BelowTabs.OWNERS.value:
+        return <OwnersTable asset={item} orderDirection={sortBy as OrderDirection} />
+      case BelowTabs.BIDS.value:
+        return <BidsTableContent asset={item} sortBy={sortBy as BidSortBy} />
+      default:
+        return null
+    }
+  }, [belowTab, item, sortBy])
+
+  const sortByList = useMemo(() => {
+    switch (belowTab) {
+      case BelowTabs.LISTINGS.value:
+        return listingSortByOptions
+      case BelowTabs.OWNERS.value:
+        return ownerSortByOptions
+      case BelowTabs.BIDS.value:
+        return bidsSortByOptions
+      default:
+        return []
+    }
+  }, [belowTab])
+
   return (
     <div className={styles.listingsTableContainer}>
       <TableContainer
-        children={
-          belowTab === BelowTabs.LISTINGS.value ? (
-            <ListingsTable asset={item} sortBy={sortBy as OrderSortBy} />
-          ) : (
-            <OwnersTable asset={item} orderDirection={sortBy as OrderDirection} />
-          )
-        }
+        children={tableContent}
         ref={ref}
-        tabsList={[BelowTabs.LISTINGS, BelowTabs.OWNERS]}
+        tabsList={[BelowTabs.LISTINGS, BelowTabs.OWNERS, BelowTabs.BIDS]}
         activeTab={belowTab}
         handleTabChange={(tab: string) => handleTabChange(tab)}
-        sortbyList={belowTab === BelowTabs.LISTINGS.value ? listingSortByOptions : ownerSortByOptions}
+        sortbyList={sortByList}
         handleSortByChange={(value: string) => setSortBy(value as SortByType)}
         sortBy={sortBy}
       />

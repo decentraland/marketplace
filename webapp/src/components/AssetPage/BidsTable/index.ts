@@ -1,2 +1,2 @@
-import BidsTable from './BidsTable.container'
+import BidsTable from './BidsTable'
 export { BidsTable }

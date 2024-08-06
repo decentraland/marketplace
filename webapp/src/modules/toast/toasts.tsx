@@ -4,10 +4,11 @@ import { Item } from '@dcl/schemas'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon, ToastType } from 'decentraland-ui'
+import { AssetImage } from '../../components/AssetImage'
 import { config } from '../../config'
 import { builderUrl } from '../../lib/environment'
-import { AssetType } from '../asset/types'
-import { getAssetName } from '../asset/utils'
+import { Asset, AssetType } from '../asset/types'
+import { getAssetName, getAssetUrl } from '../asset/utils'
 import { bulkPickUnpickRequest } from '../favorites/actions'
 import { List } from '../favorites/types'
 import { NFT } from '../nft/types'
@@ -309,5 +310,39 @@ export function getCrossChainTransactionSuccessToast(txLink: string): Omit<Toast
       </div>
     ),
     closable: false
+  }
+}
+
+export function getBidPlacedSuccessToast(asset: Asset): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: t('toast.bid_placed_success.title'),
+    body: (
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <span>
+          {t('toast.bid_placed_success.message', {
+            assetName: getAssetName(asset),
+            strong: (text: string) => <strong>{text}</strong>
+          })}
+        </span>
+        <Button
+          as="a"
+          href={locations.currentAccount({ section: Section.BIDS, vendor: VendorName.DECENTRALAND })}
+          style={{ width: 'fit-content', padding: 0, marginTop: '10px' }}
+          basic
+          target="_blank"
+        >
+          {t('toast.bid_placed_success.my_bids')}
+          <Icon style={{ marginLeft: 6 }} name="external" />
+        </Button>
+      </div>
+    ),
+    closable: true,
+    timeout: DEFAULT_TIMEOUT,
+    icon: (
+      <Link to={getAssetUrl(asset)} style={{ width: '100px', display: 'inline-block' }}>
+        <AssetImage asset={asset} isSmall />
+      </Link>
+    )
   }
 }

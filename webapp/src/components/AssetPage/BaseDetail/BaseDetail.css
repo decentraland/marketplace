@@ -91,7 +91,12 @@
 }
 
 .BaseDetail .below {
-  margin-top: 20px;
+  margin-top: 48px;
+}
+
+.BaseDetail .ui.container {
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
@@ -112,7 +117,7 @@
 }
 
 .BaseDetail .action-box {
-  width: 320px;
+  width: 330px;
 }
 
 @media (max-width: 768px) {
