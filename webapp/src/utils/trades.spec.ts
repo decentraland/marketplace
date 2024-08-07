@@ -173,6 +173,7 @@ describe('when getting the trade signature', () => {
 
 describe('when getting the trade to accept', () => {
   let trade: Trade
+  let beneficiaryAddress: string
 
   beforeEach(() => {
     trade = {
@@ -211,10 +212,12 @@ describe('when getting the trade to accept', () => {
         }
       ]
     }
+
+    beneficiaryAddress = '0x123123'
   })
 
   it('should return the trade with the correct structure', () => {
-    expect(getOnChainTrade(trade)).toEqual({
+    expect(getOnChainTrade(trade, beneficiaryAddress)).toEqual({
       signer: trade.signer,
       signature: trade.signature,
       checks: {
@@ -233,7 +236,7 @@ describe('when getting the trade to accept', () => {
         contractAddress: asset.contractAddress,
         value: getValueForTradeAsset(asset),
         extra: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(asset.extra)),
-        beneficiary: asset.contractAddress
+        beneficiary: beneficiaryAddress
       })),
       received: trade.received.map(asset => ({
         assetType: asset.assetType,

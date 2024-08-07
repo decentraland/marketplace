@@ -246,6 +246,7 @@ describe('when handling the accepting a bid action', () => {
 
         return expectSaga(bidSaga, bidService, tradeService)
           .provide([
+            [select(getWallet), wallet],
             [select(getContract, { address: bid.contractAddress }), undefined],
             [select(getIsBidsOffChainEnabled), false]
           ])
@@ -422,7 +423,10 @@ describe('when handling the accepting a bid action', () => {
 
       it('should dispatch an action signaling the failure of the action handling', () => {
         return expectSaga(bidSaga, bidService, tradeServiceMock)
-          .provide([[select(getIsBidsOffChainEnabled), true]])
+          .provide([
+            [select(getIsBidsOffChainEnabled), true],
+            [select(getWallet), wallet]
+          ])
           .put(acceptBidFailure(bid, error))
           .dispatch(acceptBidRequest(bid))
           .run({ silenceTimeout: true })
@@ -490,6 +494,7 @@ describe('when handling the accepting a bid action', () => {
           .provide([
             [select(getIsBidsOffChainEnabled), true],
             [select(getCurrentNFT), null],
+            [select(getWallet), wallet],
             [call(waitForTx, txHash), Promise.resolve()]
           ])
           .put(acceptBidSuccess(bid))
@@ -612,6 +617,7 @@ describe('when handling the cancellation of a bid action', () => {
 
         return expectSaga(bidSaga, bidService, tradeService)
           .provide([
+            [select(getWallet), wallet],
             [select(getContract, { address: bid.contractAddress }), { address: bid.contractAddress }],
             [select(getIsBidsOffChainEnabled), false]
           ])
@@ -735,7 +741,10 @@ describe('when handling the cancellation of a bid action', () => {
 
       it('should dispatch an action signaling the failure of the action handling', () => {
         return expectSaga(bidSaga, bidService, tradeServiceMock)
-          .provide([[select(getIsBidsOffChainEnabled), true]])
+          .provide([
+            [select(getIsBidsOffChainEnabled), true],
+            [select(getWallet), wallet]
+          ])
           .put(acceptBidFailure(bid, error))
           .dispatch(acceptBidRequest(bid))
           .run({ silenceTimeout: true })
@@ -803,6 +812,7 @@ describe('when handling the cancellation of a bid action', () => {
           .provide([
             [select(getIsBidsOffChainEnabled), true],
             [select(getCurrentNFT), null],
+            [select(getWallet), wallet],
             [call(waitForTx, txHash), Promise.resolve()]
           ])
           .put(cancelBidSuccess(bid, txHash))

@@ -98,7 +98,7 @@ export function generateTradeValues(trade: Omit<TradeCreation, 'signature'>) {
   }
 }
 
-export function getOnChainTrade(trade: Trade, address: string): OnChainTrade {
+export function getOnChainTrade(trade: Trade, sentBeneficiaryAddress: string): OnChainTrade {
   const tradeValues = generateTradeValues(trade)
 
   return {
@@ -112,7 +112,7 @@ export function getOnChainTrade(trade: Trade, address: string): OnChainTrade {
     // set the beneficiary of the sent assets to the address of the logged in user
     sent: tradeValues.sent.map<OnChainTradeAsset>(asset => ({
       ...asset,
-      beneficiary: address
+      beneficiary: sentBeneficiaryAddress
     }))
   }
 }
