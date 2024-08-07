@@ -22,15 +22,15 @@ export class TradeService implements TradeServiceInterface {
     return this.tradesAPI.fetchTrade(tradeId)
   }
 
-  async accept(trade: Trade) {
+  async accept(trade: Trade, address: string) {
     const offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, trade.chainId)
-    const tradeToAccept = getOnChainTrade(trade)
+    const tradeToAccept = getOnChainTrade(trade, address)
     return sendTransaction(offchainMarketplaceContract, 'accept', [tradeToAccept])
   }
 
-  async cancel(trade: Trade) {
+  async cancel(trade: Trade, address: string) {
     const offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, trade.chainId)
-    const tradeToCancel = getOnChainTrade(trade)
+    const tradeToCancel = getOnChainTrade(trade, address)
     return sendTransaction(offchainMarketplaceContract, 'cancelSignature', [tradeToCancel])
   }
 }

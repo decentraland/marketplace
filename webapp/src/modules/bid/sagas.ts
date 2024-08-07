@@ -93,13 +93,18 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
     let txHash = ''
     try {
       const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+      const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       if (bidUtils.isBidTrade(bid)) {
         if (!isBidsOffchainEnabled) {
           throw new Error('not able to accept offchain bids')
         }
 
+        if (!wallet) {
+          throw new Error('Can not accept a bid without a wallet')
+        }
+
         const trade: Trade = yield call([tradeService, 'fetchTrade'], bid.tradeId)
-        txHash = yield call([tradeService, 'accept'], trade)
+        txHash = yield call([tradeService, 'accept'], trade, wallet.address)
       } else {
         const contract = (yield select(getContract, {
           address: bid.contractAddress
@@ -116,7 +121,6 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
           throw new Error("Couldn't find a valid bid service for vendor")
         }
 
-        const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
         txHash = (yield call([vendor.bidService, 'accept'], wallet, bid)) as Awaited<ReturnType<typeof vendor.bidService.accept>>
       }
 
@@ -141,13 +145,18 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
     let txHash = ''
     try {
       const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+      const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       if (bidUtils.isBidTrade(bid)) {
         if (!isBidsOffchainEnabled) {
           throw new Error('not able to cancel offchain bids')
         }
 
+        if (!wallet) {
+          throw new Error('Can not cancel a bid without a wallet')
+        }
+
         const trade: Trade = yield call([tradeService, 'fetchTrade'], bid.tradeId)
-        txHash = yield call([tradeService, 'cancel'], trade)
+        txHash = yield call([tradeService, 'cancel'], trade, wallet.address)
       } else {
         const contract = (yield select(getContract, {
           address: bid.contractAddress
@@ -161,7 +170,6 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
           throw new Error("Couldn't find a valid bid service for vendor")
         }
 
-        const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
         txHash = (yield call([bidService, 'cancel'], wallet, bid)) as Awaited<ReturnType<typeof bidService.cancel>>
       }
 

@@ -65,6 +65,6 @@ export interface ContractService {
 export interface TradeService {
   addTrade: (trade: TradeCreation) => Promise<Trade>
   fetchTrade: (tradeId: string) => Promise<Trade>
-  accept: (trade: Trade) => Promise<string>
-  cancel: (trade: Trade) => Promise<string>
+  accept: (trade: Trade, address: string) => Promise<string>
+  cancel: (trade: Trade, address: string) => Promise<string>
 }
