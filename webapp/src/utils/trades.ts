@@ -98,7 +98,7 @@ export function generateTradeValues(trade: Omit<TradeCreation, 'signature'>) {
   }
 }
 
-export function getOnChainTrade(trade: Trade): OnChainTrade {
+export function getOnChainTrade(trade: Trade, sentBeneficiaryAddress: string): OnChainTrade {
   const tradeValues = generateTradeValues(trade)
 
   return {
@@ -109,10 +109,10 @@ export function getOnChainTrade(trade: Trade): OnChainTrade {
       ...tradeValues.checks,
       allowedProof: []
     },
-    // we need to add this for type validation but its ignored by the contract
+    // set the beneficiary of the sent assets to the address of the logged in user
     sent: tradeValues.sent.map<OnChainTradeAsset>(asset => ({
       ...asset,
-      beneficiary: asset.contractAddress
+      beneficiary: sentBeneficiaryAddress
     }))
   }
 }
