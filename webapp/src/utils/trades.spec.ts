@@ -4,6 +4,7 @@ import {
   CollectionItemTradeAsset,
   ERC20TradeAsset,
   ERC721TradeAsset,
+  Trade,
   TradeAsset,
   TradeCreation,
   TradeType
@@ -11,7 +12,7 @@ import {
 import * as ethUtils from 'decentraland-dapps/dist/lib/eth'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { fromMillisecondsToSeconds } from '../lib/time'
-import { OFFCHAIN_MARKETPLACE_TYPES, getTradeSignature, getValueForTradeAsset } from './trades'
+import { OFFCHAIN_MARKETPLACE_TYPES, getTradeSignature, getOnChainTrade, getValueForTradeAsset } from './trades'
 
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
   const module = jest.requireActual('decentraland-dapps/dist/lib/eth')
@@ -98,7 +99,7 @@ describe('when getting the trade signature', () => {
           expiration: Date.now() + 100000000000,
           effective: Date.now(),
           uses: 1,
-          salt: '',
+          salt: '0x',
           allowedRoot: '0x',
           contractSignatureIndex: 0,
           externalChecks: [],
@@ -137,7 +138,7 @@ describe('when getting the trade signature', () => {
           uses: trade.checks.uses,
           expiration: fromMillisecondsToSeconds(trade.checks.expiration),
           effective: fromMillisecondsToSeconds(trade.checks.effective),
-          salt: SALT,
+          salt: ethers.utils.hexZeroPad(trade.checks.salt, 32),
           contractSignatureIndex: trade.checks.contractSignatureIndex,
           signerSignatureIndex: trade.checks.signerSignatureIndex,
           allowedRoot: ethers.utils.hexZeroPad(trade.checks.allowedRoot, 32),
@@ -166,6 +167,84 @@ describe('when getting the trade signature', () => {
 
     it('should return the signature', async () => {
       expect(await getTradeSignature(trade)).toBe(await signer._signTypedData(domain, OFFCHAIN_MARKETPLACE_TYPES, values))
+    })
+  })
+})
+
+describe('when getting the trade to accept', () => {
+  let trade: Trade
+  let beneficiaryAddress: string
+
+  beforeEach(() => {
+    trade = {
+      id: 'an-id',
+      createdAt: Date.now(),
+      signature: '123123123',
+      signer: '0x123',
+      type: TradeType.BID,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_SEPOLIA,
+      checks: {
+        expiration: Date.now() + 100000000000,
+        effective: Date.now(),
+        uses: 1,
+        salt: '0x',
+        allowedRoot: '0x',
+        contractSignatureIndex: 0,
+        externalChecks: [],
+        signerSignatureIndex: 0
+      },
+      sent: [
+        {
+          assetType: TradeAssetType.ERC20,
+          contractAddress: '0x123',
+          amount: '2',
+          extra: ''
+        }
+      ],
+      received: [
+        {
+          assetType: TradeAssetType.ERC721,
+          contractAddress: '0x123',
+          tokenId: '1',
+          extra: '',
+          beneficiary: '0x123123'
+        }
+      ]
+    }
+
+    beneficiaryAddress = '0x123123'
+  })
+
+  it('should return the trade with the correct structure', () => {
+    expect(getOnChainTrade(trade, beneficiaryAddress)).toEqual({
+      signer: trade.signer,
+      signature: trade.signature,
+      checks: {
+        expiration: fromMillisecondsToSeconds(trade.checks.expiration),
+        effective: fromMillisecondsToSeconds(trade.checks.effective),
+        uses: trade.checks.uses,
+        salt: ethers.utils.hexZeroPad(trade.checks.salt, 32),
+        allowedRoot: ethers.utils.hexZeroPad(trade.checks.allowedRoot, 32),
+        allowedProof: [],
+        contractSignatureIndex: trade.checks.contractSignatureIndex,
+        signerSignatureIndex: trade.checks.signerSignatureIndex,
+        externalChecks: trade.checks.externalChecks
+      },
+      sent: trade.sent.map(asset => ({
+        assetType: asset.assetType,
+        contractAddress: asset.contractAddress,
+        value: getValueForTradeAsset(asset),
+        extra: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(asset.extra)),
+        beneficiary: beneficiaryAddress
+      })),
+      received: trade.received.map(asset => ({
+        assetType: asset.assetType,
+        contractAddress: asset.contractAddress,
+        value: getValueForTradeAsset(asset),
+        extra: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(asset.extra)),
+        beneficiary: asset.beneficiary
+      }))
     })
   })
 })

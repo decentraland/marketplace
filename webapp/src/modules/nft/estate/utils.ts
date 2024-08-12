@@ -1,5 +1,6 @@
 import { ethers } from 'ethers'
-import { getSigner, getConnectedProvider, getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
+import { ChainId } from '@dcl/schemas'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { EstateRegistry__factory } from '../../../contracts'
 import { Contract } from '../../vendor/services'
 import { NFT } from '../types'
@@ -55,10 +56,10 @@ export async function generateFingerprint(estateId: string, parcels: { x: number
   return ethers.utils.hexlify(fingerprint)
 }
 
-export async function getFingerprint(estateId: string, estateContract: Contract) {
-  const provider = await getConnectedProvider()
+export async function getFingerprint(estateId: string, estateContract: Contract, chainId: ChainId) {
+  const provider = await getNetworkProvider(chainId)
   if (provider) {
-    const estateRegistry = EstateRegistry__factory.connect(estateContract.address, await getSigner())
+    const estateRegistry = EstateRegistry__factory.connect(estateContract.address, new ethers.providers.Web3Provider(provider))
     return estateRegistry.getFingerprint(estateId)
   }
 }

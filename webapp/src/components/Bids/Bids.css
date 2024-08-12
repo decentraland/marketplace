@@ -13,9 +13,6 @@
 }
 
 @media (min-width: 768px) and (max-width: 992px) {
-  .Bids .Bid .image {
-    display: none;
-  }
   .Bid .wrapper .info .dcl.stats.from {
     width: 35%;
   }

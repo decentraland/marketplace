@@ -536,6 +536,7 @@
       "edit_price": "Editar precio",
       "change_beneficiary": "Cambiar de beneficiario",
       "mint_item": "Acuñar item",
+      "offer_made": "Tu oferta ha sido realizada",
       "legacy_order_expired_warning": "Este listado no se muestra a los compradores en Marketplace, pero se creó con una fecha de vencimiento no válida y, por lo tanto, aún se puede comprar a través del contrato. Elimine esta lista manualmente.",
       "legacy_order_not_expired_warning": "Este anuncio se ha creado con una fecha de caducidad no válida. Elimine este anuncio y vuelva a ponerlo a la venta para solucionar el problema."
     },
@@ -588,7 +589,9 @@
     "invalid_fingerprint_on_bid_received": "Este artículo ha sido modificado desde que se hizo esta oferta y ya no es válida",
     "invalid_seller": "Ya no eres el dueño de este artículo",
     "not_enough_mana_on_bid_placed": "No tienes suficiente MANA para pagar por esta oferta",
-    "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices"
+    "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices",
+    "item_not_available": "Ya no hay stock disponible para este artículo.",
+    "created_at": "Creada"
   },
   "transaction_history": {
     "title": "Últimas ventas",
@@ -623,7 +626,8 @@
       "expires": "Expira",
       "never_expires": "No expira nunca",
       "no_offer": "Sin ofertas",
-      "make_offer": "Hacer Oferta"
+      "make_offer": "Hacer Oferta",
+      "already_offer": "Ya hiciste una oferta"
     }
   },
   "offers_table": {
@@ -639,6 +643,11 @@
     "recenty_offered": "Ofrecido recientemente",
     "recently_updated": "Actualizado recientemente",
     "accept": "Aceptar"
+  },
+  "bids_table": {
+    "bids": "Ofertas",
+    "no_bids": "Sin ofertas",
+    "make_offer": "Hacer Oferta"
   },
   "listings_table": {
     "other_available_listings": "Otros coleccionables disponibles",
@@ -801,6 +810,14 @@
       "action": "comprar"
     }
   },
+  "accept_bid": {
+    "authorization": {
+      "title": "Aceptar oferta",
+      "confirm_transaction": {
+        "title": "Confirma la transacción para aceptar la oferta"
+      }
+    }
+  },
   "buy_with_card_page": {
     "title": "Comprando {name}",
     "subtitle": "Estás por comprar {name} por {amount}.",
@@ -927,7 +944,9 @@
     },
     "authorization": {
       "title_action": "oferta",
-      "action": "hacer una oferta para"
+      "action": "hacer una oferta para",
+      "confirm_transaction_title": "Firmar para colocar la oferta",
+      "confirm_transaction_action": "Firmar"
     }
   },
   "my_bids_page": {
@@ -1180,6 +1199,11 @@
     "cross_chain_tx": {
       "body": "La transacción puede tardar hasta <highlight>3 miuntos</highlight> para ser procesada.<br></br>Puedes seguir su progreso en los siguientes enlaces:",
       "view_transaction": "Ver transacción"
+    },
+    "bid_placed_success": {
+      "title": "Felicidades",
+      "message": "La oferta para <strong>{assetName}</strong> fue enviada de manera exitosa",
+      "my_bids": "Mis activos ofertas"
     }
   },
   "maintainance": {
@@ -1641,5 +1665,9 @@
     "description": "Su alias actual se actualizará inmediatamente.",
     "success_title": "Todo listo!",
     "success_description": "Tu alias fue actualizado"
+  },
+  "bid_button": {
+    "bid": "Ofertar",
+    "blocked": "Tu oferta ya ha sido creada"
   }
 }

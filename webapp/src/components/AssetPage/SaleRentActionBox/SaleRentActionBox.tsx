@@ -22,6 +22,7 @@ import {
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
+import BidButton from '../../BidButton'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
@@ -41,6 +42,7 @@ const SaleRentActionBox = ({
   order,
   rental,
   userHasAlreadyBidsOnNft,
+  isBidsOffchainEnabled,
   currentMana,
   isCrossChainLandEnabled,
   onRent,
@@ -59,8 +61,8 @@ const SaleRentActionBox = ({
 
   // Validations for the sale screen
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
-  const isBiddable = bidService !== undefined
-  const canBid = !isOwner && isBiddable && !userHasAlreadyBidsOnNft
+  const isBiddable = bidService !== undefined || isBidsOffchainEnabled
+  const canBid = !isOwner && isBiddable
   const isCurrentlyRented = isRentalListingExecuted(rental)
 
   const handleOnRent = useCallback(() => {
@@ -238,20 +240,7 @@ const SaleRentActionBox = ({
                       disabled={!isNFTPartOfAState}
                       trigger={
                         <div className={styles.fullWidth}>
-                          <Button
-                            as={Link}
-                            to={locations.bid(nft.contractAddress, nft.tokenId)}
-                            className={classNames({
-                              [styles.bid]: order,
-                              [styles.bid_manage_in_builder]: isTenant && !rentalHasEnded
-                            })}
-                            disabled={isNFTPartOfAState}
-                            primary={!order && !(isTenant && !rentalHasEnded)}
-                            secondary={true}
-                            fluid
-                          >
-                            {t('asset_page.actions.bid')}
-                          </Button>
+                          <BidButton asset={nft} alreadyBid={userHasAlreadyBidsOnNft} disabled={isNFTPartOfAState} />
                         </div>
                       }
                     />

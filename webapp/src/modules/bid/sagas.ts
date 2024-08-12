@@ -1,5 +1,6 @@
-import { takeEvery, put, select, call, all } from 'redux-saga/effects'
-import { Bid, RentalStatus, TradeCreation } from '@dcl/schemas'
+import { History } from 'history'
+import { takeEvery, put, select, call, all, getContext } from 'redux-saga/effects'
+import { Bid, ListingStatus, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
@@ -9,7 +10,9 @@ import { getIsBidsOffChainEnabled } from '../features/selectors'
 import { getCurrentNFT } from '../nft/selectors'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
-import { MarketplaceAPI } from '../vendor/decentraland/marketplace/api'
+import { locations } from '../routing/locations'
+import { BidService } from '../vendor/decentraland'
+import { TradeService } from '../vendor/decentraland/TradeService'
 import { VendorName } from '../vendor/types'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
@@ -30,20 +33,20 @@ import {
   CancelBidRequestAction,
   cancelBidSuccess,
   cancelBidFailure,
-  FETCH_BIDS_BY_NFT_REQUEST,
-  FetchBidsByNFTRequestAction,
-  fetchBidsByNFTSuccess,
-  fetchBidsByNFTFailure,
+  FETCH_BIDS_BY_ASSET_REQUEST,
+  FetchBidsByAssetRequestAction,
+  fetchBidsByAssetSuccess,
+  fetchBidsByAssetFailure,
   acceptBidtransactionSubmitted
 } from './actions'
 import * as bidUtils from './utils'
 
-export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
+export function* bidSaga(bidService: BidService, tradeService: TradeService) {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)
   yield takeEvery(ACCEPT_BID_REQUEST, handleAcceptBidRequest)
   yield takeEvery(CANCEL_BID_REQUEST, handleCancelBidRequest)
   yield takeEvery(FETCH_BIDS_BY_ADDRESS_REQUEST, handleFetchBidsByAddressRequest)
-  yield takeEvery(FETCH_BIDS_BY_NFT_REQUEST, handleFetchBidsByNFTRequest)
+  yield takeEvery(FETCH_BIDS_BY_ASSET_REQUEST, handleFetchBidsByAssetRequest)
 
   function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
     const { asset, price, expiresAt, fingerprint } = action.payload
@@ -56,18 +59,22 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
       const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
 
       if (isBidsOffchainEnabled) {
+        const history: History = yield getContext('history')
         const trade: TradeCreation = yield call([bidUtils, 'createBidTrade'], asset, price, expiresAt, fingerprint)
-        yield call([marketplaceAPI, 'addTrade'], trade)
+        yield call([tradeService, 'addTrade'], trade)
         yield put(placeBidSuccess(asset, price, expiresAt, asset.chainId, wallet.address, fingerprint))
+        history.push(
+          isNFT(asset) ? locations.nft(asset.contractAddress, asset.tokenId) : locations.item(asset.contractAddress, asset.itemId)
+        )
       } else {
         if (isNFT(asset)) {
-          const { bidService } = VendorFactory.build(asset.vendor)
+          const vendor = VendorFactory.build(asset.vendor)
 
-          if (!bidService) {
+          if (!vendor.bidService) {
             throw new Error("Couldn't find a valid bid service for vendor")
           }
-          const txHash = (yield call([bidService, 'place'], wallet, asset, price, expiresAt, fingerprint)) as Awaited<
-            ReturnType<typeof bidService.place>
+          const txHash = (yield call([vendor.bidService, 'place'], wallet, asset, price, expiresAt, fingerprint)) as Awaited<
+            ReturnType<typeof vendor.bidService.place>
           >
           yield put(placeBidSuccess(asset, price, expiresAt, asset.chainId, wallet.address, fingerprint, txHash))
         } else {
@@ -83,24 +90,40 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
 
   function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
     const { bid } = action.payload
+    let txHash = ''
     try {
-      const contract = (yield select(getContract, {
-        address: bid.contractAddress
-      })) as ReturnType<typeof getContract>
-      if (!contract || !contract.vendor) {
-        throw new Error(
-          contract
-            ? `Couldn't find a valid vendor for contract ${contract?.address}`
-            : `Couldn't find a valid vendor for contract ${bid.contractAddress}`
-        )
-      }
-      const vendor = (yield call([VendorFactory, 'build'], contract.vendor)) as ReturnType<typeof VendorFactory.build>
-      if (!vendor.bidService) {
-        throw new Error("Couldn't find a valid bid service for vendor")
+      const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+      const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+      if (bidUtils.isBidTrade(bid)) {
+        if (!isBidsOffchainEnabled) {
+          throw new Error('not able to accept offchain bids')
+        }
+
+        if (!wallet) {
+          throw new Error('Can not accept a bid without a wallet')
+        }
+
+        const trade: Trade = yield call([tradeService, 'fetchTrade'], bid.tradeId)
+        txHash = yield call([tradeService, 'accept'], trade, wallet.address)
+      } else {
+        const contract = (yield select(getContract, {
+          address: bid.contractAddress
+        })) as ReturnType<typeof getContract>
+        if (!contract || !contract.vendor) {
+          throw new Error(
+            contract
+              ? `Couldn't find a valid vendor for contract ${contract?.address}`
+              : `Couldn't find a valid vendor for contract ${bid.contractAddress}`
+          )
+        }
+        const vendor = (yield call([VendorFactory, 'build'], contract.vendor)) as ReturnType<typeof VendorFactory.build>
+        if (!vendor.bidService) {
+          throw new Error("Couldn't find a valid bid service for vendor")
+        }
+
+        txHash = (yield call([vendor.bidService, 'accept'], wallet, bid)) as Awaited<ReturnType<typeof vendor.bidService.accept>>
       }
 
-      const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
-      const txHash = (yield call([vendor.bidService, 'accept'], wallet, bid)) as Awaited<ReturnType<typeof vendor.bidService.accept>>
       yield put(acceptBidtransactionSubmitted(bid, txHash))
       const nft = (yield select(getCurrentNFT)) as ReturnType<typeof getCurrentNFT>
       if (nft?.openRentalId) {
@@ -119,21 +142,36 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
 
   function* handleCancelBidRequest(action: CancelBidRequestAction) {
     const { bid } = action.payload
+    let txHash = ''
     try {
-      const contract = (yield select(getContract, {
-        address: bid.contractAddress
-      })) as ReturnType<typeof getContract>
-
-      if (!contract || !contract.vendor) {
-        throw new Error(`Couldn't find a valid vendor for contract ${contract?.address}`)
-      }
-      const { bidService } = VendorFactory.build(contract.vendor)
-      if (!bidService) {
-        throw new Error("Couldn't find a valid bid service for vendor")
-      }
-
+      const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
-      const txHash = (yield call([bidService, 'cancel'], wallet, bid)) as Awaited<ReturnType<typeof bidService.cancel>>
+      if (bidUtils.isBidTrade(bid)) {
+        if (!isBidsOffchainEnabled) {
+          throw new Error('not able to cancel offchain bids')
+        }
+
+        if (!wallet) {
+          throw new Error('Can not cancel a bid without a wallet')
+        }
+
+        const trade: Trade = yield call([tradeService, 'fetchTrade'], bid.tradeId)
+        txHash = yield call([tradeService, 'cancel'], trade, wallet.address)
+      } else {
+        const contract = (yield select(getContract, {
+          address: bid.contractAddress
+        })) as ReturnType<typeof getContract>
+
+        if (!contract || !contract.vendor) {
+          throw new Error(`Couldn't find a valid vendor for contract ${contract?.address}`)
+        }
+        const { bidService } = VendorFactory.build(contract.vendor)
+        if (!bidService) {
+          throw new Error("Couldn't find a valid bid service for vendor")
+        }
+
+        txHash = (yield call([bidService, 'cancel'], wallet, bid)) as Awaited<ReturnType<typeof bidService.cancel>>
+      }
 
       yield put(cancelBidSuccess(bid, txHash))
     } catch (error) {
@@ -147,39 +185,59 @@ export function* bidSaga(marketplaceAPI: MarketplaceAPI) {
       let sellerBids: Bid[] = []
       let bidderBids: Bid[] = []
 
-      for (const vendorName of Object.values(VendorName)) {
-        const { bidService } = VendorFactory.build(vendorName)
-        if (bidService === undefined) {
-          continue
+      const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+      if (isBidsOffchainEnabled) {
+        const bids = (yield all([
+          call([bidService, 'fetchBids'], { seller: address, status: ListingStatus.OPEN, limit: 1000 }),
+          call([bidService, 'fetchBids'], { bidder: address, status: ListingStatus.OPEN, limit: 1000 })
+        ])) as [Awaited<ReturnType<typeof bidService.fetchBids>>, Awaited<ReturnType<typeof bidService.fetchBids>>]
+        sellerBids = bids[0].results
+        bidderBids = bids[1].results
+      } else {
+        for (const vendorName of Object.values(VendorName)) {
+          const vendor = VendorFactory.build(vendorName)
+          if (vendor.bidService === undefined) {
+            continue
+          }
+
+          const bids = (yield all([
+            call([vendor.bidService, 'fetchBySeller'], address),
+            call([vendor.bidService, 'fetchByBidder'], address)
+          ])) as [Awaited<ReturnType<typeof vendor.bidService.fetchBySeller>>, Awaited<ReturnType<typeof vendor.bidService.fetchByBidder>>]
+          sellerBids = sellerBids.concat(bids[0])
+          bidderBids = bidderBids.concat(bids[1])
         }
-
-        const bids = (yield all([call([bidService, 'fetchBySeller'], address), call([bidService, 'fetchByBidder'], address)])) as [
-          Awaited<ReturnType<typeof bidService.fetchBySeller>>,
-          Awaited<ReturnType<typeof bidService.fetchByBidder>>
-        ]
-        sellerBids = sellerBids.concat(bids[0])
-        bidderBids = bidderBids.concat(bids[1])
       }
-
       yield put(fetchBidsByAddressSuccess(address, sellerBids, bidderBids))
     } catch (error) {
       yield put(fetchBidsByAddressFailure(address, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 
-  function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
-    const { nft } = action.payload
+  function* handleFetchBidsByAssetRequest(action: FetchBidsByAssetRequestAction) {
+    const { asset } = action.payload
+    let bids: Bid[] = []
     try {
-      const { bidService } = VendorFactory.build(nft.vendor)
-      if (!bidService) {
-        throw new Error("Couldn't find a valid bid service for vendor")
+      const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+      if (isBidsOffchainEnabled) {
+        const response: Awaited<ReturnType<typeof bidService.fetchBids>> = yield call([bidService, 'fetchBids'], {
+          contractAddress: asset.contractAddress,
+          ...(isNFT(asset) ? { tokenId: asset.tokenId } : { itemId: asset.itemId }),
+          status: ListingStatus.OPEN
+        })
+        bids = response.results
+      } else if (isNFT(asset)) {
+        const { bidService } = VendorFactory.build(asset.vendor)
+        if (!bidService) {
+          throw new Error("Couldn't find a valid bid service for vendor")
+        }
+
+        bids = (yield call([bidService, 'fetchByNFT'], asset)) as Awaited<ReturnType<typeof bidService.fetchByNFT>>
       }
 
-      const bids = (yield call([bidService, 'fetchByNFT'], nft)) as Awaited<ReturnType<typeof bidService.fetchByNFT>>
-
-      yield put(fetchBidsByNFTSuccess(nft, bids))
+      yield put(fetchBidsByAssetSuccess(asset, bids))
     } catch (error) {
-      yield put(fetchBidsByNFTFailure(nft, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
+      yield put(fetchBidsByAssetFailure(asset, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 }

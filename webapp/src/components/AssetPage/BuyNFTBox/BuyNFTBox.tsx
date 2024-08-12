@@ -1,45 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import formatDistanceToNowI18N from 'date-fns/formatDistanceToNow'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon } from 'decentraland-ui'
 import clock from '../../../images/clock.png'
-import makeOffer from '../../../images/makeOffer.png'
 import { getExpirationDateLabel } from '../../../lib/date'
 import { getIsLegacyOrderExpired, getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
-import { bidAPI } from '../../../modules/vendor/decentraland'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
+import BidButton from '../../BidButton'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { Props } from './BuyNFTBox.types'
 import styles from './BuyNFTBox.module.css'
 
-const FIRST = '1'
-
-const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
-  const [canBid, setCanBid] = useState(false)
+const BuyNFTBox = ({ nft, bids, address, order, wallet, onFetchBids }: Props) => {
+  const [hasFetched, setHasFetched] = useState(false)
+  const alreadyBid = useMemo(() => !!bids.find(({ bidder }) => bidder === address), [bids])
   const isOwner = nft && nft?.owner === address
-
-  useEffect(() => {
-    let cancel = false
-    if (!isOwner && nft) {
-      bidAPI
-        .fetchByNFT(nft.contractAddress, nft.tokenId, null, undefined, FIRST, undefined, address)
-        .then(response => {
-          if (response.total === 0 && !cancel) setCanBid(true)
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    }
-    return () => {
-      cancel = true
-    }
-  }, [nft, address, isOwner])
-
   const renderHasListing = useCallback(() => {
     if (!nft || !order) return null
     const expiresAtLabel = getExpirationDateLabel(
@@ -117,13 +97,7 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
         ) : !isOrderExpired ? (
           <BuyNFTButtons asset={nft} assetType={AssetType.NFT} tokenId={nft.tokenId} buyWithCardClassName={styles.buyWithCardClassName} />
         ) : null}
-        {canBid && !isOwner && (
-          <Button inverted className={styles.makeOfferButton} as={Link} to={locations.bid(nft.contractAddress, nft.tokenId)}>
-            <img src={makeOffer} alt={t('best_buying_option.buy_listing.make_offer')} />
-            &nbsp;
-            {t('best_buying_option.buy_listing.make_offer')}
-          </Button>
-        )}
+        {!isOwner && <BidButton asset={nft} alreadyBid={alreadyBid} />}
         {!isOrderExpired ? (
           <span className={styles.expiresAt}>
             <img src={clock} alt="clock" className={styles.mintingIcon} />
@@ -132,7 +106,7 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
         ) : null}
       </div>
     )
-  }, [nft, order, wallet, isOwner, canBid])
+  }, [nft, order, wallet, isOwner, alreadyBid])
 
   const renderOwnerAndNoListingOptions = useCallback(() => {
     if (!nft) return null
@@ -149,6 +123,17 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
       </div>
     )
   }, [order, nft])
+
+  useEffect(() => {
+    if (nft && !hasFetched) {
+      setHasFetched(true)
+      onFetchBids(nft)
+    }
+  }, [hasFetched, nft, onFetchBids])
+
+  useEffect(() => {
+    setHasFetched(false)
+  }, [nft])
 
   return (
     <div className={styles.BuyNFTBox}>
@@ -168,13 +153,7 @@ const BuyNFTBox = ({ nft, address, order, wallet }: Props) => {
                     <div className={`${styles.containerRow} ${styles.issueNumber}`}>#{nft.issuedId}</div>
                   </div>
                 </div>
-                {!isOwner && canBid && (
-                  <Button inverted className={styles.makeOfferButton} as={Link} to={locations.bid(nft.contractAddress, nft.tokenId)}>
-                    <img src={makeOffer} alt={t('best_buying_option.buy_listing.make_offer')} />
-                    &nbsp;
-                    {t('best_buying_option.buy_listing.make_offer')}
-                  </Button>
-                )}
+                {!isOwner && <BidButton asset={nft} alreadyBid={alreadyBid} />}
               </div>
             )}
     </div>

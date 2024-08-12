@@ -61,7 +61,8 @@ describe('when accepting a bid', () => {
           {
             contractAddress,
             network: Network.ETHEREUM,
-            chainId: ChainId.ETHEREUM_MAINNET
+            chainId: ChainId.ETHEREUM_MAINNET,
+            bidAddress: '0x123'
           } as Bid
         )
         const callParameters = mockSendTransaction.mock.calls[0]
@@ -82,7 +83,8 @@ describe('when accepting a bid', () => {
           {
             contractAddress,
             network: Network.MATIC,
-            chainId: ChainId.MATIC_MAINNET
+            chainId: ChainId.MATIC_MAINNET,
+            bidAddress: '0x123'
           } as Bid
         )
         const callParameters = mockSendTransaction.mock.calls[0]
@@ -112,7 +114,8 @@ describe('when canceling a bid', () => {
           {} as Wallet,
           {
             network: Network.ETHEREUM,
-            chainId: ChainId.ETHEREUM_MAINNET
+            chainId: ChainId.ETHEREUM_MAINNET,
+            bidAddress: '0x123'
           } as Bid
         )
         const callParameters = mockSendTransaction.mock.calls[0]
@@ -129,7 +132,8 @@ describe('when canceling a bid', () => {
           {} as Wallet,
           {
             network: Network.MATIC,
-            chainId: ChainId.MATIC_MAINNET
+            chainId: ChainId.MATIC_MAINNET,
+            bidAddress: '0x123'
           } as Bid
         )
         const callParameters = mockSendTransaction.mock.calls[0]

@@ -27,6 +27,7 @@ import SmartBadge from '../SmartBadge'
 import Title from '../Title'
 import { TransactionHistory } from '../TransactionHistory'
 import { UtilityBadge } from '../UtilityBadge'
+import { YourOffer } from '../YourOffer'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
@@ -168,6 +169,7 @@ const ItemDetail = ({ item }: Props) => {
         </div>
       </div>
 
+      <YourOffer asset={item} />
       <ListingsTableContainer item={item} ref={tableRef} />
       <TransactionHistory asset={item} />
     </div>

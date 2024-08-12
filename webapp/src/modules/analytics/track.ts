@@ -194,26 +194,26 @@ track<PlaceBidSuccessAction>(
 )
 
 track<AcceptBidTransactionSubmittedAction>(ACCEPT_BID_TRANSACTION_SUBMITTED, events.ACCEPT_BID, ({ payload }) => ({
-  tokenId: payload.bid.tokenId,
+  ...('tokenId' in payload.bid ? { tokenId: payload.bid.tokenId } : { itemId: payload.bid.itemId }),
   bidId: payload.bid.id,
   bidder: payload.bid.bidder,
   seller: payload.bid.seller
 }))
 
 track<CancelBidSuccessAction>(CANCEL_BID_SUCCESS, events.CANCEL_BID, ({ payload }) => ({
-  tokenId: payload.bid.tokenId,
+  ...('tokenId' in payload.bid ? { tokenId: payload.bid.tokenId } : { itemId: payload.bid.itemId }),
   bidId: payload.bid.id,
   bidder: payload.bid.bidder
 }))
 
 track<ArchiveBidAction>(ARCHIVE_BID, events.ARCHIVE_BID, ({ payload }) => ({
-  tokenId: payload.bid.tokenId,
+  ...('tokenId' in payload.bid ? { tokenId: payload.bid.tokenId } : { itemId: payload.bid.itemId }),
   bidId: payload.bid.id,
   price: payload.bid.price
 }))
 
 track<UnarchiveBidAction>(UNARCHIVE_BID, events.UNARCHIVE_BID, ({ payload }) => ({
-  tokenId: payload.bid.tokenId,
+  ...('tokenId' in payload.bid ? { tokenId: payload.bid.tokenId } : { itemId: payload.bid.itemId }),
   bidId: payload.bid.id,
   price: payload.bid.price
 }))

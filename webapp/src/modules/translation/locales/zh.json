@@ -320,7 +320,8 @@
     "edit_in_builder": "在构建器中编辑",
     "on_sale": "在售",
     "edit_price": "编辑价格",
-    "mint_item": "硬币物品"
+    "mint_item": "硬币物品",
+    "offer_made": "您的报价已提出"
   },
   "store_settings": {
     "settings": "配置",
@@ -591,7 +592,9 @@
     "invalid_fingerprint_on_bid_received": "此资产自此出价以来已被修改, 因此不再有效",
     "invalid_seller": "您不再拥有此资产",
     "not_enough_mana_on_bid_placed": "您没有足够的MANA来支付此出价",
-    "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改, 除非您对其进行更新, 否则它将不再有效"
+    "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改, 除非您对其进行更新, 否则它将不再有效",
+    "item_not_available": "此项目不再可用库存",
+    "created_at": "创建"
   },
   "transaction_history": {
     "title": "最新销售",
@@ -626,7 +629,8 @@
       "expires": "過期",
       "never_expires": "它永远不会过期",
       "no_offer": "沒有報價",
-      "make_offer": "報價"
+      "make_offer": "報價",
+      "already_offer": "你已经提出了"
     }
   },
   "offers_table": {
@@ -642,6 +646,11 @@
     "recenty_offered": "最近提供",
     "recently_updated": "最近更新",
     "accept": "接受"
+  },
+  "bids_table": {
+    "bids": "优惠",
+    "no_bids": "尚无报价",
+    "make_offer": "开个价"
   },
   "listings_table": {
     "other_available_listings": "其他可用的收藏品",
@@ -805,6 +814,14 @@
       "action": "买"
     }
   },
+  "accept_bid": {
+    "authorization": {
+      "title": "接受投标",
+      "confirm_transaction": {
+        "title": "确认交易接受投标"
+      }
+    }
+  },
   "buy_with_card_page": {
     "title": "购买{name}",
     "subtitle": "您将以{amount}的价格购买{name}。",
@@ -932,7 +949,9 @@
     },
     "authorization": {
       "title_action": "提供",
-      "action": "要约"
+      "action": "要约",
+      "confirm_transaction_title": "签名贸易对象放置出价",
+      "confirm_transaction_action": "符号"
     }
   },
   "my_bids_page": {
@@ -1185,6 +1204,11 @@
     "cross_chain_tx": {
       "body": "处理该交易最多可能需要 <highlight>3 分钟</highlight>。<br></br>您还可以在以下链接中跟踪其进度：",
       "view_transaction": "查看交易"
+    },
+    "bid_placed_success": {
+      "title": "恭喜",
+      "message": "竞标<strong>{assetName}</strong>已成功放置",
+      "my_bids": "我的资产出价"
     }
   },
   "maintainance": {
@@ -1647,5 +1671,9 @@
     "description": "您当前的别名将立即更新。",
     "success_title": "全做完了！",
     "success_description": "您的用户名已更新"
+  },
+  "bid_button": {
+    "bid": "提出要约",
+    "blocked": "您的报价已提出"
   }
 }
