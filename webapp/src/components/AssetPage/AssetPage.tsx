@@ -15,7 +15,7 @@ import { Props } from './AssetPage.types'
 import './AssetPage.css'
 
 const AssetPage = ({ type }: Props) => {
-  const renderItemDetail = useCallback((item: Item) => <ItemDetail item={item} isBidsOffchainEnabled={false} />, [])
+  const renderItemDetail = useCallback((item: Item) => <ItemDetail item={item} />, [])
   return (
     <PageLayout>
       <Page className="AssetPage">
