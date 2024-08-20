@@ -154,7 +154,7 @@ const AssetImage = (props: Props) => {
         setHasSound(sound)
       }
     }
-    void getHasSound
+    void getHasSound()
   }, [wearableController, asset.category, isDraggable, hasSound, isLoadingWearablePreview])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [estate])
