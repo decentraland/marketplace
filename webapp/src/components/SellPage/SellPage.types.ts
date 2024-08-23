@@ -6,11 +6,12 @@ import { Contract } from '../../modules/vendor/services'
 export type Props = {
   isLoading: boolean
   isCreatingOrder: boolean
+  isOffchainPublicNFTOrdersEnabled: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onCreateOrder: typeof createOrderRequest
   onClearOrderErrors: typeof clearOrderErrors
 }
 
-export type MapStateProps = Pick<Props, 'isLoading' | 'isCreatingOrder' | 'getContract'>
+export type MapStateProps = Pick<Props, 'isLoading' | 'isCreatingOrder' | 'getContract' | 'isOffchainPublicNFTOrdersEnabled'>
 export type MapDispatchProps = Pick<Props, 'onCreateOrder' | 'onClearOrderErrors'>
 export type MapDispatch = Dispatch<CreateOrderRequestAction | ClearOrderErrorsAction>

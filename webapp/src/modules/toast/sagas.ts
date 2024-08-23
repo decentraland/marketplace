@@ -16,7 +16,7 @@ import {
   UpdateListSuccessAction,
   UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
-import { getIsBidsOffChainEnabled } from '../features/selectors'
+import { getIsBidsOffChainEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import {
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_WITH_CARD_FAILURE,
@@ -26,7 +26,13 @@ import {
   FetchItemsFailureAction
 } from '../item/actions'
 import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
-import { EXECUTE_ORDER_WITH_CARD_FAILURE, EXECUTE_ORDER_FAILURE, ExecuteOrderFailureAction } from '../order/actions'
+import {
+  EXECUTE_ORDER_WITH_CARD_FAILURE,
+  EXECUTE_ORDER_FAILURE,
+  ExecuteOrderFailureAction,
+  CREATE_ORDER_SUCCESS,
+  CreateOrderSuccessAction
+} from '../order/actions'
 import { CLAIM_ASSET_SUCCESS, REMOVE_RENTAL_SUCCESS, UpsertRentalSuccessAction, UPSERT_RENTAL_SUCCESS } from '../rental/actions'
 import { UPDATE_STORE_SUCCESS } from '../store/actions'
 import {
@@ -44,7 +50,8 @@ import {
   getUpdateListSuccessToast,
   getUpsertRentalSuccessToast,
   getCrossChainTransactionSuccessToast,
-  getBidPlacedSuccessToast
+  getBidPlacedSuccessToast,
+  getCreateOrderSuccessToast
 } from './toasts'
 import { DispatchableFromToastActions } from './types'
 import { toastDispatchableActionsChannel } from './utils'
@@ -76,6 +83,7 @@ function* successToastSagas() {
   yield takeEvery(BULK_PICK_FAILURE, handleBulkPickUnpickFailure)
   yield takeEvery(BUY_ITEM_CROSS_CHAIN_SUCCESS, handleBuyItemCrossChainSuccess)
   yield takeEvery(PLACE_BID_SUCCESS, handlePlaceBidSuccess)
+  yield takeEvery(CREATE_ORDER_SUCCESS, handleCreateOrderSuccess)
 
   function* handleToastTryAgainActionChannel(action: DispatchableFromToastActions) {
     yield put(action)
@@ -163,5 +171,13 @@ function* handlePlaceBidSuccess(action: PlaceBidSuccessAction) {
   const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
   if (isBidsOffchainEnabled) {
     yield put(showToast(getBidPlacedSuccessToast(asset), 'bottom right'))
+  }
+}
+
+function* handleCreateOrderSuccess(action: CreateOrderSuccessAction) {
+  const { nft } = action.payload
+  const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
+  if (isOffchainPublicNFTOrdersEnabled) {
+    yield put(showToast(getCreateOrderSuccessToast(nft), 'bottom right'))
   }
 }

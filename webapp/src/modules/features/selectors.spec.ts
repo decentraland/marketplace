@@ -12,7 +12,8 @@ import {
   getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
   getIsChainSelectorEnabled,
-  getIsBidsOffChainEnabled
+  getIsBidsOffChainEnabled,
+  getIsOffchainPublicNFTOrdersEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -141,6 +142,12 @@ const waitForInitialLoadingSelectors = [
     name: 'IsBidsOffChainEnabled',
     feature: FeatureName.OFFCHAIN_BIDS,
     selector: getIsBidsOffChainEnabled,
+    applicationName: ApplicationName.MARKETPLACE
+  },
+  {
+    name: 'IfOffchainPublicNFTOrdersEnabled',
+    feature: FeatureName.OFFCHAIN_PUBLIC_NFT_ORDERS,
+    selector: getIsOffchainPublicNFTOrdersEnabled,
     applicationName: ApplicationName.MARKETPLACE
   }
 ]

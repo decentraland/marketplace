@@ -19,6 +19,7 @@ import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { openTransak } from '../transak/actions'
 import { VendorName } from '../vendor'
+import { TradeService } from '../vendor/decentraland/TradeService'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -41,6 +42,7 @@ let manaPurchase: ManaPurchase
 let nftPurchase: NFTPurchase
 let contractAddress: string
 let tokenId: string
+let tradeService: TradeService
 
 beforeEach(() => {
   contractAddress = 'contractAddress'
@@ -92,6 +94,8 @@ beforeEach(() => {
       cryptoAmount: 10
     }
   }
+
+  tradeService = new TradeService(() => undefined)
 })
 
 describe('when handling the execute order request action', () => {
@@ -101,7 +105,7 @@ describe('when handling the execute order request action', () => {
     })
 
     it("should put the execute order failure with an error message saying that the order doesn't match the NFT", () => {
-      return expectSaga(orderSaga)
+      return expectSaga(orderSaga, tradeService)
         .put(executeOrderFailure(order, nft, 'The order does not match the NFT'))
         .dispatch(executeOrderRequest(order, nft, fingerprint))
         .run({ silenceTimeout: true })
@@ -114,7 +118,7 @@ describe('when handling the execute order request action', () => {
     })
 
     it("should put the execute order failure with the an error message saying that the order doesn't match the NFT", () => {
-      return expectSaga(orderSaga)
+      return expectSaga(orderSaga, tradeService)
         .put(executeOrderFailure(order, nft, 'The order does not match the NFT'))
         .dispatch(executeOrderRequest(order, nft, fingerprint))
         .run({ silenceTimeout: true })
@@ -134,7 +138,7 @@ describe('when handling the execute order request action', () => {
     })
 
     it('should put the execute order failure with the error message and the error code', () => {
-      return expectSaga(orderSaga)
+      return expectSaga(orderSaga, tradeService)
         .provide([
           [select(getWallet), wallet],
           [call([VendorFactory, 'build'], nft.vendor), vendor],
@@ -166,7 +170,7 @@ describe('when handling the execute order request action', () => {
       })
 
       it('should wait for the transaction to be completed and the rental to change its status to cancelled and put the success action', () => {
-        return expectSaga(orderSaga)
+        return expectSaga(orderSaga, tradeService)
           .provide([
             [select(getWallet), wallet],
             [call([VendorFactory, 'build'], nft.vendor), vendor],
@@ -188,7 +192,7 @@ describe('when handling the execute order request action', () => {
       })
 
       it('should put the success action', () => {
-        return expectSaga(orderSaga)
+        return expectSaga(orderSaga, tradeService)
           .provide([
             [call([VendorFactory, 'build'], nft.vendor), vendor],
             [select(getWallet), wallet],
@@ -213,7 +217,7 @@ describe('when handling the execute order with card action', () => {
 
   describe('when the explanation modal has already been shown', () => {
     it('should open Transak widget', () => {
-      return expectSaga(orderSaga)
+      return expectSaga(orderSaga, tradeService)
         .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), 'true']])
         .put(openTransak(nft))
         .dispatch(executeOrderWithCardRequest(nft))
@@ -226,7 +230,7 @@ describe('when handling the execute order with card action', () => {
 
   describe('when the explanation modal is shown and the user closes it', () => {
     it('should not set nft in the local storage to show the modal again later', () => {
-      return expectSaga(orderSaga)
+      return expectSaga(orderSaga, tradeService)
         .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
         .put(openModal('BuyWithCardExplanationModal', { asset: nft }))
         .dispatch(executeOrderWithCardRequest(nft))
@@ -246,7 +250,7 @@ describe('when handling the execute order with card action', () => {
     })
 
     it('should dispatch an action signaling the failure of the action handling', () => {
-      return expectSaga(orderSaga)
+      return expectSaga(orderSaga, tradeService)
         .provide([[call(buyAssetWithCard, nft), Promise.reject(new Error(errorMessage))]])
         .put(executeOrderWithCardFailure(errorMessage))
         .dispatch(executeOrderWithCardRequest(nft))
@@ -258,7 +262,7 @@ describe('when handling the execute order with card action', () => {
 describe('when handling the set purchase action', () => {
   describe('when it is a MANA purchase', () => {
     it('should not put any new action', () => {
-      return expectSaga(orderSaga)
+      return expectSaga(orderSaga, tradeService)
         .dispatch(setPurchase(manaPurchase))
         .run({ silenceTimeout: true })
         .then(({ effects }) => {
@@ -270,7 +274,7 @@ describe('when handling the set purchase action', () => {
   describe('when it is an NFT purchase', () => {
     describe('when it is a primary market purchase', () => {
       it('should not put any new action', () => {
-        return expectSaga(orderSaga)
+        return expectSaga(orderSaga, tradeService)
           .dispatch(
             setPurchase({
               ...nftPurchase,
@@ -291,7 +295,7 @@ describe('when handling the set purchase action', () => {
 
     describe('when it is incomplete', () => {
       it('should not put any new action', () => {
-        return expectSaga(orderSaga)
+        return expectSaga(orderSaga, tradeService)
           .provide([[select(getNFTs), {}]])
           .dispatch(setPurchase(nftPurchase))
           .run({ silenceTimeout: true })
@@ -303,7 +307,7 @@ describe('when handling the set purchase action', () => {
 
     describe('when it is complete without a txHash', () => {
       it('should not put any new action', () => {
-        return expectSaga(orderSaga)
+        return expectSaga(orderSaga, tradeService)
           .provide([[select(getNFTs), {}]])
           .dispatch(
             setPurchase({
@@ -322,7 +326,7 @@ describe('when handling the set purchase action', () => {
     describe('when it is a complete and it has a txHash', () => {
       describe('when the nft does not yet exist in the store', () => {
         it('should put the action signaling the fetch nft request', () => {
-          return expectSaga(orderSaga)
+          return expectSaga(orderSaga, tradeService)
             .provide([[select(getNFTs), {}]])
             .put(fetchNFTRequest(contractAddress, tokenId!))
             .dispatch(
@@ -348,7 +352,7 @@ describe('when handling the set purchase action', () => {
 
         describe('when the fetch nft request fails', () => {
           it('should put an action signaling the failure of the execute order with card request', () => {
-            return expectSaga(orderSaga)
+            return expectSaga(orderSaga, tradeService)
               .provide([
                 [select(getNFTs), {}],
                 [take(FETCH_NFT_FAILURE), { payload: { error: errorMessage } }]
@@ -371,7 +375,7 @@ describe('when handling the set purchase action', () => {
         const nfts = { anNFTId: nft }
 
         it('should put an action signaling the success of the execute order with card request', () => {
-          return expectSaga(orderSaga)
+          return expectSaga(orderSaga, tradeService)
             .provide([
               [select(getNFTs), nfts],
               [call(getNFT, contractAddress, tokenId, nfts), nft]

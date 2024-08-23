@@ -10,7 +10,7 @@ import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName } from 'decentraland-transactions'
+import { getContract as getDecentralandContract, ContractName } from 'decentraland-transactions'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import ERC721ABI from '../../../contracts/ERC721.json'
 import { parseMANANumber } from '../../../lib/mana'
@@ -29,8 +29,19 @@ import { showPriceBelowMarketValueWarning } from './utils'
 import { Props } from './SellModal.types'
 
 const SellModal = (props: Props) => {
-  const { nft, order, wallet, isLoading, isCreatingOrder, getContract, onGoBack, onCreateOrder, onAuthorizedAction, onClearOrderErrors } =
-    props
+  const {
+    nft,
+    order,
+    wallet,
+    isLoading,
+    isCreatingOrder,
+    isOffchainPublicNFTOrdersEnabled,
+    getContract,
+    onGoBack,
+    onCreateOrder,
+    onAuthorizedAction,
+    onClearOrderErrors
+  } = props
 
   const isUpdate = order !== null
   const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
@@ -94,14 +105,20 @@ const SellModal = (props: Props) => {
     return null
   }
 
+  const offchainOrdersContract = isOffchainPublicNFTOrdersEnabled
+    ? getDecentralandContract(ContractName.OffChainMarketplace, nft.chainId)
+    : null
+
   const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime())
 
   const handleSubmit = () => {
     onClearOrderErrors()
     onAuthorizedAction({
       authorizationType: AuthorizationType.APPROVAL,
-      authorizedAddress: marketplace.address,
-      authorizedContractLabel: marketplace?.label || marketplace.name,
+      authorizedAddress:
+        !!offchainOrdersContract && isOffchainPublicNFTOrdersEnabled ? offchainOrdersContract.address : marketplace.address,
+      authorizedContractLabel:
+        !!offchainOrdersContract && isOffchainPublicNFTOrdersEnabled ? offchainOrdersContract.name : marketplace?.label || marketplace.name,
       targetContract: nftContract as Contract,
       targetContractName:
         (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC
@@ -208,7 +225,23 @@ export default React.memo(
     AuthorizedAction.SELL,
     {
       confirm_transaction: {
-        title: 'sell_page.authorization.confirm_transaction_title'
+        title: 'sell_page.authorization.confirm_transaction_title',
+        action: 'sell_page.authorization.confirm_transaction_action'
+      },
+      title: 'sell_page.authorization.title'
+    },
+    getSellItemStatus,
+    getError
+  )
+)
+
+export const LegacySellModal = React.memo(
+  withAuthorizedAction(
+    SellModal,
+    AuthorizedAction.SELL,
+    {
+      confirm_transaction: {
+        title: 'sell_page.authorization.confirm_transaction_title_legacy'
       },
       title: 'sell_page.authorization.title'
     },

@@ -97,7 +97,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     bidSaga(new BidService(), getTradesService(getIdentity)),
     itemSaga(getIdentity),
     nftSaga(getIdentity),
-    orderSaga(),
+    orderSaga(getTradesService(getIdentity)),
     profileSaga(getIdentity)(),
     proximitySaga(),
     routingSaga(),

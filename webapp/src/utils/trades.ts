@@ -36,7 +36,7 @@ export const OFFCHAIN_MARKETPLACE_TYPES: Record<string, TypedDataField[]> = {
   ExternalCheck: [
     { name: 'contractAddress', type: 'address' },
     { name: 'selector', type: 'bytes4' },
-    { name: 'value', type: 'uint256' },
+    { name: 'value', type: 'bytes' },
     { name: 'required', type: 'bool' }
   ]
 }
@@ -78,7 +78,7 @@ export function generateTradeValues(trade: Omit<TradeCreation, 'signature'>) {
       externalChecks: trade.checks.externalChecks?.map(externalCheck => ({
         contractAddress: externalCheck.contractAddress,
         selector: externalCheck.selector,
-        value: externalCheck.value,
+        value: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(externalCheck.value)),
         required: externalCheck.required
       }))
     },

@@ -19,18 +19,20 @@ export const CREATE_ORDER_SUCCESS = '[Success] Create Order'
 export const CREATE_ORDER_FAILURE = '[Failure] Create Order'
 
 export const createOrderRequest = (nft: NFT, price: number, expiresAt: number) => action(CREATE_ORDER_REQUEST, { nft, price, expiresAt })
-export const createOrderSuccess = (nft: NFT, price: number, expiresAt: number, txHash: string) =>
+export const createOrderSuccess = (nft: NFT, price: number, expiresAt: number, txHash?: string) =>
   action(CREATE_ORDER_SUCCESS, {
     nft,
     price,
     expiresAt,
-    ...buildTransactionPayload(nft.chainId, txHash, {
-      tokenId: nft.tokenId,
-      contractAddress: nft.contractAddress,
-      network: nft.network,
-      name: getAssetName(nft),
-      price
-    })
+    ...(txHash
+      ? buildTransactionPayload(nft.chainId, txHash, {
+          tokenId: nft.tokenId,
+          contractAddress: nft.contractAddress,
+          network: nft.network,
+          name: getAssetName(nft),
+          price
+        })
+      : {})
   })
 export const createOrderFailure = (nft: NFT, price: number, expiresAt: number, error: string, errorCode?: ErrorCode) =>
   action(CREATE_ORDER_FAILURE, { nft, price, expiresAt, error, errorCode })

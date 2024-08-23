@@ -1,4 +1,5 @@
 import { History } from 'history'
+import { AnyAction } from 'redux'
 import { takeEvery, put, select, call, take, race, spawn, getContext } from 'redux-saga/effects'
 import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
@@ -20,6 +21,7 @@ import {
 import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { getData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
+import { getIsBidsOffChainEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import {
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_SUCCESS,
@@ -531,10 +533,21 @@ function shouldResetOptions(previous: BrowseOptions, current: BrowseOptions) {
   )
 }
 
-function* handleRedirectToActivity() {
+function* handleRedirectToActivity(action: AnyAction) {
   const history: History = yield getContext('history')
   const location = history.location
   const redirectTo = new URLSearchParams(location.search).get('redirectTo')
+
+  const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
+  const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
+
+  if (
+    (action.type === PLACE_BID_SUCCESS && isBidsOffchainEnabled) ||
+    (action.type === CREATE_ORDER_SUCCESS && isOffchainPublicNFTOrdersEnabled)
+  ) {
+    return
+  }
+
   if (redirectTo) {
     history.push(decodeURIComponent(redirectTo))
   } else {
