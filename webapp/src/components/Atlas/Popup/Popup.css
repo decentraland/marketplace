@@ -18,10 +18,12 @@
   margin-left: 40px;
 }
 
+.AtlasPopup .land-name .name-row {
+  display: flex;
+  align-items: flex-start ; 
+}
+
 .AtlasPopup .land-name .name {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   font-weight: 600;
 }
 
