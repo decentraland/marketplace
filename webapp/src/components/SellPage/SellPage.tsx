@@ -10,7 +10,7 @@ import { Props } from './SellPage.types'
 import './SellPage.css'
 
 const SellPage = (props: Props) => {
-  const { isLoading, isCreatingOrder, getContract, onCreateOrder, onClearOrderErrors } = props
+  const { isLoading, isCreatingOrder, isOffchainPublicNFTOrdersEnabled, getContract, onCreateOrder, onClearOrderErrors } = props
   const history = useHistory()
   const onGoBack = useCallback(() => {
     history.goBack()
@@ -32,6 +32,7 @@ const SellPage = (props: Props) => {
                   onCreateOrder={onCreateOrder}
                   getContract={getContract}
                   onClearOrderErrors={onClearOrderErrors}
+                  isOffchainPublicNFTOrdersEnabled={isOffchainPublicNFTOrdersEnabled}
                 />
               )}
             </AssetProviderPage>

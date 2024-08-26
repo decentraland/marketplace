@@ -1,8 +1,13 @@
 import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
-import { Order, OrderFilters } from '@dcl/schemas'
+import { BigNumber, ethers } from 'ethers'
+import { Order, OrderFilters, TradeAssetType, TradeCreation, TradeType } from '@dcl/schemas'
+import { getSigner } from 'decentraland-dapps/dist/lib'
+import { ContractName, getContract } from 'decentraland-transactions'
 import { getIsOrderExpired } from '../../lib/orders'
+import { getOffChainMarketplaceContract, getTradeSignature } from '../../utils/trades'
 import { Asset } from '../asset/types'
+import { NFT } from '../nft/types'
 
 export const DEFAULT_EXPIRATION_IN_DAYS = 30
 export const INPUT_FORMAT = 'yyyy-MM-dd'
@@ -71,4 +76,49 @@ export function getSubgraphOrdersQuery(filters: OrderFilters) {
       }
     }
   }`
+}
+
+export async function createPublicNFTOrderTrade(nft: NFT, price: number, expiresAt: number) {
+  const signer = await getSigner()
+  const address = await signer.getAddress()
+  const marketplaceContract = await getOffChainMarketplaceContract(nft.chainId)
+  const manaContract = getContract(ContractName.MANAToken, nft.chainId)
+  const contractSignatureIndex = (await marketplaceContract.contractSignatureIndex()) as BigNumber
+  const signerSignatureIndex = (await marketplaceContract.signerSignatureIndex(address)) as BigNumber
+
+  const tradeToSign: Omit<TradeCreation, 'signature'> = {
+    signer: address,
+    network: nft.network,
+    chainId: nft.chainId,
+    type: TradeType.PUBLIC_NFT_ORDER,
+    checks: {
+      uses: 1,
+      allowedRoot: '0x',
+      contractSignatureIndex: contractSignatureIndex.toNumber(),
+      signerSignatureIndex: signerSignatureIndex.toNumber(),
+      effective: Date.now(),
+      expiration: expiresAt,
+      externalChecks: [],
+      salt: ethers.utils.hexlify(Math.floor(Math.random() * 1000000000000))
+    },
+    sent: [
+      {
+        assetType: TradeAssetType.ERC721,
+        contractAddress: nft.contractAddress,
+        tokenId: nft.tokenId,
+        extra: ''
+      }
+    ],
+    received: [
+      {
+        assetType: TradeAssetType.ERC20,
+        contractAddress: manaContract.address,
+        amount: ethers.utils.parseEther(price.toString()).toString(),
+        extra: '',
+        beneficiary: address
+      }
+    ]
+  }
+
+  return { ...tradeToSign, signature: await getTradeSignature(tradeToSign) }
 }

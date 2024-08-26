@@ -346,3 +346,37 @@ export function getBidPlacedSuccessToast(asset: Asset): Omit<Toast, 'id'> {
     )
   }
 }
+
+export function getCreateOrderSuccessToast(nft: NFT): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: t('toast.create_order_success.title'),
+    body: (
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <span>
+          {t('toast.create_order_success.message', {
+            assetName: getAssetName(nft),
+            strong: (text: string) => <strong>{text}</strong>
+          })}
+        </span>
+        <Button
+          as="a"
+          href={locations.currentAccount({ section: Section.ON_SALE, vendor: VendorName.DECENTRALAND })}
+          style={{ width: 'fit-content', padding: 0, marginTop: '10px' }}
+          basic
+          target="_blank"
+        >
+          {t('toast.create_order_success.my_listings')}
+          <Icon style={{ marginLeft: 6 }} name="external" />
+        </Button>
+      </div>
+    ),
+    closable: true,
+    timeout: DEFAULT_TIMEOUT,
+    icon: (
+      <Link to={getAssetUrl(nft)} style={{ width: '100px', display: 'inline-block' }}>
+        <AssetImage asset={nft} isSmall />
+      </Link>
+    )
+  }
+}

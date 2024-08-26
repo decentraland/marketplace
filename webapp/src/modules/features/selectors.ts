@@ -83,3 +83,10 @@ export const getIsBidsOffChainEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsOffchainPublicNFTOrdersEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.OFFCHAIN_PUBLIC_NFT_ORDERS)
+  }
+  return false
+}

@@ -8,5 +8,6 @@ export enum FeatureName {
   MARKETPLACE_SERVER = 'marketplace-server',
   CHAIN_SELECTOR = 'chain-selector',
   CROSS_CHAIN_LANDS = 'cross-chain-lands',
-  OFFCHAIN_BIDS = 'offchain-bids'
+  OFFCHAIN_BIDS = 'offchain-bids',
+  OFFCHAIN_PUBLIC_NFT_ORDERS = 'offchain-public-nft-orders'
 }

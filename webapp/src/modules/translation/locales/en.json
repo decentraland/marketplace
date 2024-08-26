@@ -794,7 +794,9 @@
     "invalid": "Something roto",
     "authorization": {
       "title": "List item for sale",
-      "confirm_transaction_title": "Confirm the transaction to list your item for sale."
+      "confirm_transaction_title_legacy": "Confirm the transaction to list your item for sale.",
+      "confirm_transaction_title": "Sign to list your item for sale.",
+      "confirm_transaction_action": "Sign"
     },
     "confirm": {
       "title": "Please confirm",
@@ -1221,6 +1223,11 @@
       "title": "Congratulations",
       "message": "A bid for <strong>{assetName}</strong> has been placed successfully",
       "my_bids": "My assets bids"
+    },
+    "create_order_success": {
+      "title": "Congratulations",
+      "message": "<strong>{assetName}</strong> has been put on sale successfully",
+      "my_listings": "My items on sale"
     }
   },
   "maintainance": {
