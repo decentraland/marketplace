@@ -1,11 +1,23 @@
 import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts'
 import { NFT, Sale, AnalyticsDayData } from '../../entities/schema'
+import { ERC721 } from '../../entities/templates'
 import { createOrLoadAccount } from '../account'
 import { buildCountFromSale } from '../count'
 import { ONE_MILLION } from '../utils'
 
 export let BID_SALE_TYPE = 'bid'
 export let ORDER_SALE_TYPE = 'order'
+
+// check if the buyer in a sale was a third party provider (to pay with credit card, cross chain, etc)
+export function isThirdPartySale(buyer: string): boolean {
+  if (
+    buyer == '0xed038688ecf1193f8d9717eb3930f0bf0d745cb4' || // Transak Polygon
+    buyer == '0xea749fd6ba492dbc14c24fe8a3d08769229b896c' // Axelar Polygon & Ethereum
+  ) {
+    return true
+  }
+  return false
+}
 
 export function trackSale(
   type: string,
@@ -28,6 +40,15 @@ export function trackSale(
 
   // load entities
   let nft = NFT.load(nftId)
+  if (!nft) {
+    return
+  }
+
+  // check if the buyer is a third party and update it if so
+  if (isThirdPartySale(buyer.toHexString())) {
+    let erc721 = ERC721.bind(Address.fromString(nft.contractAddress.toHex()))
+    buyer = erc721.ownerOf(nft.tokenId)
+  }
 
   // save sale
   let saleId = BigInt.fromI32(count.salesTotal).toString()
@@ -67,7 +88,9 @@ export function trackSale(
   analyticsDayData.save()
 }
 
-export function getOrCreateAnalyticsDayData(blockTimestamp: BigInt): AnalyticsDayData {
+export function getOrCreateAnalyticsDayData(
+  blockTimestamp: BigInt
+): AnalyticsDayData {
   let timestamp = blockTimestamp.toI32()
   let dayID = timestamp / 86400 // unix timestamp for start of day / 86400 giving a unique day index
   let dayStartTimestamp = dayID * 86400
