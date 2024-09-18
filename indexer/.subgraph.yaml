@@ -116,6 +116,8 @@ dataSources:
       abis:
         - name: Marketplace
           file: ./abis/Marketplace.json
+        - name: ERC721
+          file: ./abis/ERC721.json
       eventHandlers:
         - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
           handler: handleOrderCreated
@@ -187,6 +189,8 @@ dataSources:
       entities:
         - Bid
       abis:
+        - name: ERC721
+          file: ./abis/ERC721.json
         - name: ERC721Bid
           file: ./abis/ERC721Bid.json
       eventHandlers:

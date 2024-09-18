@@ -1,6 +1,6 @@
 import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts'
 import { NFT, Sale, AnalyticsDayData } from '../../entities/schema'
-import { ERC721 } from '../../entities/templates'
+import { ERC721 } from '../../entities/templates/ERC721/ERC721'
 import { createOrLoadAccount } from '../account'
 import { buildCountFromSale } from '../count'
 import { ONE_MILLION } from '../utils'
