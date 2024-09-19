@@ -11,6 +11,7 @@ import { ErrorCode } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
 import { buyAssetWithCard } from '../asset/utils'
 import { getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
+import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { FetchNFTFailureAction, fetchNFTRequest, FetchNFTSuccessAction, FETCH_NFT_FAILURE, FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getData as getNFTs } from '../nft/selectors'
 import { getNFT } from '../nft/utils'
@@ -96,7 +97,9 @@ export function* orderSaga(tradeService: TradeService) {
         yield put(createOrderSuccess(nft, price, expiresAt))
         history.push(locations.nft(nft.contractAddress, nft.tokenId))
       } else {
-        const { orderService } = VendorFactory.build(nft.vendor)
+        yield waitForFeatureFlagsToBeLoaded()
+        const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
+        const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
 
         const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
         const txHash = (yield call([orderService, 'create'], wallet, nft, price, expiresAt)) as Awaited<
@@ -122,7 +125,14 @@ export function* orderSaga(tradeService: TradeService) {
       if (nft.contractAddress !== order.contractAddress || nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
       }
-      const { orderService } = (yield call([VendorFactory, 'build'], nft.vendor)) as ReturnType<typeof VendorFactory.build>
+      yield waitForFeatureFlagsToBeLoaded()
+      const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
+      const { orderService } = (yield call(
+        [VendorFactory, 'build'],
+        nft.vendor,
+        undefined,
+        !isOffchainPublicNFTOrdersEnabled
+      )) as ReturnType<typeof VendorFactory.build>
 
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       const txHash = (yield call([orderService, 'execute'], wallet, nft, order, fingerprint)) as Awaited<
@@ -202,7 +212,9 @@ export function* orderSaga(tradeService: TradeService) {
       if (nft.contractAddress !== order.contractAddress && nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
       }
-      const { orderService } = VendorFactory.build(nft.vendor)
+      yield waitForFeatureFlagsToBeLoaded()
+      const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
+      const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
 
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       const txHash = (yield call([orderService, 'cancel'], wallet, order)) as Awaited<ReturnType<typeof orderService.cancel>>
