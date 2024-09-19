@@ -68,7 +68,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
     const hasShownTheExpiredListingsModalBefore = (yield call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY)) as ReturnType<
       typeof localStorage.getItem
     >
-    yield waitForFeatureFlagsToBeLoaded()
+    yield call(waitForFeatureFlagsToBeLoaded)
     const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
 
     if (hasShownTheExpiredListingsModalBefore !== 'true') {
@@ -106,7 +106,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
     }
 
     try {
-      yield waitForFeatureFlagsToBeLoaded()
+      yield call(waitForFeatureFlagsToBeLoaded)
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       const vendor = (yield call([VendorFactory, 'build'], vendorName, API_OPTS, !isOffchainPublicNFTOrdersEnabled)) as ReturnType<
         typeof VendorFactory.build
@@ -163,7 +163,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
       if (!contract.vendor) {
         throw new Error(`Couldn't find a valid vendor for contract ${contract?.address}`)
       }
-      yield waitForFeatureFlagsToBeLoaded()
+      yield call(waitForFeatureFlagsToBeLoaded)
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
 
       const vendor = (yield call([VendorFactory, 'build'], contract.vendor, API_OPTS, !isOffchainPublicNFTOrdersEnabled)) as ReturnType<
@@ -193,7 +193,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
     const { nft, address } = action.payload
     try {
-      yield waitForFeatureFlagsToBeLoaded()
+      yield call(waitForFeatureFlagsToBeLoaded)
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       const vendor = (yield call([VendorFactory, 'build'], nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)) as ReturnType<
         typeof VendorFactory.build

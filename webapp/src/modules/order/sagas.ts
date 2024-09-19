@@ -97,7 +97,7 @@ export function* orderSaga(tradeService: TradeService) {
         yield put(createOrderSuccess(nft, price, expiresAt))
         history.push(locations.nft(nft.contractAddress, nft.tokenId))
       } else {
-        yield waitForFeatureFlagsToBeLoaded()
+        yield call(waitForFeatureFlagsToBeLoaded)
         const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
         const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
 
@@ -125,7 +125,7 @@ export function* orderSaga(tradeService: TradeService) {
       if (nft.contractAddress !== order.contractAddress || nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
       }
-      yield waitForFeatureFlagsToBeLoaded()
+      yield call(waitForFeatureFlagsToBeLoaded)
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       const { orderService } = (yield call(
         [VendorFactory, 'build'],
@@ -212,7 +212,7 @@ export function* orderSaga(tradeService: TradeService) {
       if (nft.contractAddress !== order.contractAddress && nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
       }
-      yield waitForFeatureFlagsToBeLoaded()
+      yield call(waitForFeatureFlagsToBeLoaded)
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
 
