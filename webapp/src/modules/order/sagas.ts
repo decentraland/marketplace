@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { put, call, takeEvery, select, race, take, getContext } from 'redux-saga/effects'
-import { ListingStatus, RentalStatus, TradeCreation } from '@dcl/schemas'
+import { ListingStatus, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
@@ -97,8 +97,6 @@ export function* orderSaga(tradeService: TradeService) {
         yield put(createOrderSuccess(nft, price, expiresAt))
         history.push(locations.nft(nft.contractAddress, nft.tokenId))
       } else {
-        yield call(waitForFeatureFlagsToBeLoaded)
-        const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
         const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
 
         const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
@@ -127,17 +125,31 @@ export function* orderSaga(tradeService: TradeService) {
       }
       yield call(waitForFeatureFlagsToBeLoaded)
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
-      const { orderService } = (yield call(
-        [VendorFactory, 'build'],
-        nft.vendor,
-        undefined,
-        !isOffchainPublicNFTOrdersEnabled
-      )) as ReturnType<typeof VendorFactory.build>
-
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
-      const txHash = (yield call([orderService, 'execute'], wallet, nft, order, fingerprint)) as Awaited<
-        ReturnType<typeof orderService.execute>
-      >
+      let txHash: string
+      if (order.tradeId) {
+        if (!isOffchainPublicNFTOrdersEnabled) {
+          throw new Error('not able to accept offchain orders')
+        }
+
+        if (!wallet) {
+          throw new Error('Can not accept an order without a wallet')
+        }
+
+        const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
+        txHash = yield call([tradeService, 'accept'], trade, wallet.address)
+      } else {
+        const { orderService } = (yield call(
+          [VendorFactory, 'build'],
+          nft.vendor,
+          undefined,
+          !isOffchainPublicNFTOrdersEnabled
+        )) as ReturnType<typeof VendorFactory.build>
+
+        txHash = (yield call([orderService, 'execute'], wallet, nft, order, fingerprint)) as Awaited<
+          ReturnType<typeof orderService.execute>
+        >
+      }
 
       yield put(executeOrderTransactionSubmitted(order, nft, txHash))
       if (nft.openRentalId) {
@@ -214,10 +226,24 @@ export function* orderSaga(tradeService: TradeService) {
       }
       yield call(waitForFeatureFlagsToBeLoaded)
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
-      const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
-
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
-      const txHash = (yield call([orderService, 'cancel'], wallet, order)) as Awaited<ReturnType<typeof orderService.cancel>>
+      let txHash = ''
+
+      if (order.tradeId) {
+        if (!isOffchainPublicNFTOrdersEnabled) {
+          throw new Error('Offchain orders are not supported yet')
+        }
+
+        if (!wallet) {
+          throw new Error('Can not cancel an order without a wallet')
+        }
+
+        const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
+        txHash = yield call([tradeService, 'cancel'], trade, wallet.address)
+      } else {
+        const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
+        txHash = (yield call([orderService, 'cancel'], wallet, order)) as Awaited<ReturnType<typeof orderService.cancel>>
+      }
       yield put(cancelOrderSuccess(order, nft, txHash))
     } catch (error) {
       const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
