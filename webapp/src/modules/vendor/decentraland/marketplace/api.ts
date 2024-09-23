@@ -12,14 +12,14 @@ export class MarketplaceAPI extends BaseClient {
       [ChainId.ETHEREUM_MAINNET]: 'eth-mainnet',
       [ChainId.ETHEREUM_SEPOLIA]: 'eth-sepolia',
       [ChainId.MATIC_MAINNET]: 'matic-mainnet',
-      [ChainId.MATIC_AMOY]: 'matic-amoy',
+      [ChainId.MATIC_AMOY]: 'polygon-amoy-testnet',
       [ChainId.BSC_MAINNET]: 'bsc-mainnet',
       [ChainId.AVALANCHE_MAINNET]: 'avalanche-mainnet',
       [ChainId.OPTIMISM_MAINNET]: 'optimism-mainnet',
       [ChainId.ARBITRUM_MAINNET]: 'arbitrum-mainnet',
       [ChainId.FANTOM_MAINNET]: 'fantom-mainnet'
     } as Record<ChainId, string>
-    return this.fetch(`/${chainIdToChainName[chain]}/address/${wallet}/balance`, { method: 'GET' })
+    return this.fetch(`/v1/${chainIdToChainName[chain]}/address/${wallet}/balance`, { method: 'GET' })
   }
 
   fetchBids = async (queryParams: GetBidsParameters = {}) => {
