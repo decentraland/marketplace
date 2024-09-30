@@ -271,7 +271,7 @@ export const useCrossChainBuyNftRoute = (
             ? async () => {
                 const trade = await new TradeService(() => undefined).fetchTrade(order.tradeId as string)
                 return {
-                  onChainTrade: getOnChainTrade(trade, wallet.address) 
+                  onChainTrade: getOnChainTrade(trade, wallet.address)
                 }
               }
             : undefined,
