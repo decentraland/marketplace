@@ -8,7 +8,9 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import type { CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { NFT } from '../../../modules/nft/types'
+import { TradeService } from '../../../modules/vendor/decentraland/TradeService'
 import * as events from '../../../utils/events'
+import { getOnChainTrade } from '../../../utils/trades'
 import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas, formatPrice, getShouldUseMetaTx } from './utils'
 
 export const NATIVE_TOKEN = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
@@ -219,7 +221,14 @@ export const useCrossChainMintNftRoute = (
         item: {
           collectionAddress: item.contractAddress,
           itemId: item.itemId,
-          price: item.price
+          price: item.price,
+          tradeId: item.tradeId
+        },
+        fetchTradeData: async () => {
+          const trade = await new TradeService(() => undefined).fetchTrade(item.tradeId as string)
+          return {
+            onChainTrade: getOnChainTrade(trade, fromAddress)
+          }
         }
       }),
     [item]
@@ -256,11 +265,16 @@ export const useCrossChainBuyNftRoute = (
         fromToken,
         toAmount: order.price,
         toChain: order.chainId,
-        nft: {
-          collectionAddress: order.contractAddress,
-          tokenId: order.tokenId,
-          price: order.price
-        },
+        order,
+        fetchTradeData:
+          order.tradeId && wallet?.address
+            ? async () => {
+                const trade = await new TradeService(() => undefined).fetchTrade(order.tradeId as string)
+                return {
+                  onChainTrade: getOnChainTrade(trade, wallet.address) 
+                }
+              }
+            : undefined,
         slippage
       }),
     [order]
