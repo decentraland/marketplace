@@ -46,7 +46,7 @@ jest.mock('./utils', () => {
 
 jest.mock('decentraland-dapps/dist/lib', () => {
   return {
-    ...jest.requireActual('./utils'),
+    ...jest.requireActual('decentraland-dapps/dist/lib'),
     getNetworkProvider: () =>
       Promise.resolve({
         name: 'aProvider'
