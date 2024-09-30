@@ -23,12 +23,13 @@ export type Props = {
   hasInsufficientMANA: boolean
   hasLowPrice: boolean
   isBuyWithCardPage: boolean
+  isOffchainPublicNFTOrdersEnabled: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
   onExecuteOrderWithCard: typeof executeOrderWithCardRequest
   onClearOrderErrors: typeof clearOrderErrors
 } & WithAuthorizedActionProps
 
-export type MapStateProps = Pick<Props, 'isLoading' | 'getContract' | 'isBuyWithCardPage'>
+export type MapStateProps = Pick<Props, 'isLoading' | 'getContract' | 'isBuyWithCardPage' | 'isOffchainPublicNFTOrdersEnabled'>
 export type MapDispatchProps = Pick<Props, 'onExecuteOrder' | 'onExecuteOrderWithCard' | 'onClearOrderErrors'>
 export type MapDispatch = Dispatch<ExecuteOrderRequestAction | ExecuteOrderWithCardRequestAction | ClearOrderErrorsAction>

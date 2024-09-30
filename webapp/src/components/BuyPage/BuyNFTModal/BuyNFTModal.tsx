@@ -8,7 +8,7 @@ import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthori
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName } from 'decentraland-transactions'
+import { ContractName, getContract as getDCLContract } from 'decentraland-transactions'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { AssetType } from '../../../modules/asset/types'
 import { isWearableOrEmote } from '../../../modules/asset/utils'
@@ -42,6 +42,7 @@ const BuyNFTModal = (props: Props) => {
     hasLowPrice,
     isBuyWithCardPage,
     isLoadingAuthorization,
+    isOffchainPublicNFTOrdersEnabled,
     getContract,
     onExecuteOrder,
     onExecuteOrderWithCard,
@@ -80,6 +81,9 @@ const BuyNFTModal = (props: Props) => {
     network: nft.network
   }) as DCLContract
 
+  const offchainMarketplace =
+    isOffchainPublicNFTOrdersEnabled && order?.tradeId && getDCLContract(ContractName.OffChainMarketplace, nft.chainId)
+
   const handleSubmit = useCallback(() => {
     if (isBuyWithCardPage) {
       handleExecuteOrder()
@@ -90,9 +94,9 @@ const BuyNFTModal = (props: Props) => {
       onAuthorizedAction({
         targetContractName: ContractName.MANAToken,
         authorizationType: AuthorizationType.ALLOWANCE,
-        authorizedAddress: order.marketplaceAddress,
+        authorizedAddress: offchainMarketplace ? offchainMarketplace.address : order.marketplaceAddress,
         targetContract: mana as Contract,
-        authorizedContractLabel: marketplace.label || marketplace.name,
+        authorizedContractLabel: offchainMarketplace ? offchainMarketplace.name : marketplace.label || marketplace.name,
         requiredAllowanceInWei: order.price,
         onAuthorized: handleExecuteOrder
       })
