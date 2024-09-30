@@ -5,7 +5,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import noListings from '../../../images/noListings.png'
 import { isNFT } from '../../../modules/asset/utils'
-import { orderAPI } from '../../../modules/vendor/decentraland'
+import { orderAPI as legacyOrderAPI, marketplaceOrderAPI } from '../../../modules/vendor/decentraland'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
@@ -16,7 +16,7 @@ export const ROWS_PER_PAGE = 5
 const INITIAL_PAGE = 1
 
 const ListingsTable = (props: Props) => {
-  const { asset, sortBy = OrderSortBy.CHEAPEST } = props
+  const { asset, sortBy = OrderSortBy.CHEAPEST, isOffchainPublicNFTOrdersEnabled } = props
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const [orders, setOrders] = useState<DataTableType[]>([])
@@ -43,6 +43,8 @@ const ListingsTable = (props: Props) => {
       } else if (asset.network === Network.ETHEREUM) {
         params.nftName = asset.name
       }
+
+      const orderAPI = isOffchainPublicNFTOrdersEnabled ? marketplaceOrderAPI : legacyOrderAPI
 
       orderAPI
         .fetchOrders(params, sortBy)

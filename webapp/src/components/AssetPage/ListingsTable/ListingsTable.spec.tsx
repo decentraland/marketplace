@@ -94,7 +94,7 @@ describe('Listings Table', () => {
     })
 
     it('should render the empty table message', async () => {
-      const { getByText, findByTestId } = renderWithProviders(<ListingsTable asset={asset} />)
+      const { getByText, findByTestId } = renderWithProviders(<ListingsTable asset={asset} isOffchainPublicNFTOrdersEnabled={false} />)
 
       const loader = await findByTestId('loader')
 
@@ -119,7 +119,7 @@ describe('Listings Table', () => {
     })
 
     it('should render the table', async () => {
-      const screen = renderWithProviders(<ListingsTable asset={asset} />)
+      const screen = renderWithProviders(<ListingsTable asset={asset} isOffchainPublicNFTOrdersEnabled={false} />)
 
       const { findByTestId, getByTestId } = screen
 
@@ -133,7 +133,7 @@ describe('Listings Table', () => {
     })
 
     it('should render the table data correctly', async () => {
-      const screen = renderWithProviders(<ListingsTable asset={asset} />)
+      const screen = renderWithProviders(<ListingsTable asset={asset} isOffchainPublicNFTOrdersEnabled={false} />)
 
       const { findByTestId, getByText } = screen
 
