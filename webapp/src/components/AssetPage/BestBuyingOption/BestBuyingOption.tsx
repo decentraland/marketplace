@@ -12,7 +12,7 @@ import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { AssetType } from '../../../modules/asset/types'
 import { isNFT } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
-import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
+import { bidAPI, orderAPI as legacyOrderAPI, marketplaceOrderAPI } from '../../../modules/vendor/decentraland'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
@@ -21,7 +21,7 @@ import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BuyOptions, Props } from './BestBuyingOption.types'
 import styles from './BestBuyingOption.module.css'
 
-const BestBuyingOption = ({ asset, tableRef }: Props) => {
+const BestBuyingOption = ({ asset, tableRef, isOffchainPublicNFTOrdersEnabled }: Props) => {
   const [buyOption, setBuyOption] = useState<BuyOptions | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [listing, setListing] = useState<{
@@ -60,6 +60,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
           params.nftName = asset.name
         }
 
+        const orderAPI = isOffchainPublicNFTOrdersEnabled ? marketplaceOrderAPI : legacyOrderAPI
         orderAPI
           .fetchOrders(params, sortBy)
           .then(response => {

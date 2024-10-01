@@ -12,12 +12,16 @@ export type Props = WithAuthorizedActionProps &
     metadata: { nft: NFT; order: Order; slippage?: number }
     isExecutingOrder: boolean
     isExecutingOrderCrossChain: boolean
+    isOffchainPublicNFTOrdersEnabled: boolean
     getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
     onExecuteOrder: typeof executeOrderRequest
     onExecuteOrderCrossChain: (route: Route) => unknown
     onExecuteOrderWithCard: typeof executeOrderWithCardRequest
   }
 
-export type MapStateProps = Pick<Props, 'getContract' | 'isExecutingOrder' | 'isExecutingOrderCrossChain'>
+export type MapStateProps = Pick<
+  Props,
+  'getContract' | 'isExecutingOrder' | 'isExecutingOrderCrossChain' | 'isOffchainPublicNFTOrdersEnabled'
+>
 export type MapDispatchProps = Pick<Props, 'onExecuteOrder' | 'onExecuteOrderCrossChain' | 'onExecuteOrderWithCard'>
 export type OwnProps = Pick<Props, 'metadata'>

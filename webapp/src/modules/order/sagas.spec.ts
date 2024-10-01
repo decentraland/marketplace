@@ -1,5 +1,6 @@
 import { call, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
+import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { ChainId, Network, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
@@ -11,6 +12,8 @@ import { ProviderType, Wallet } from 'decentraland-dapps/dist/modules/wallet/typ
 import { ErrorCode } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
+import { getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
+import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { fetchNFTRequest, FETCH_NFT_FAILURE } from '../nft/actions'
 import { getData as getNFTs } from '../nft/selectors'
 import { NFT } from '../nft/types'
@@ -106,6 +109,10 @@ describe('when handling the execute order request action', () => {
 
     it("should put the execute order failure with an error message saying that the order doesn't match the NFT", () => {
       return expectSaga(orderSaga, tradeService)
+        .provide([
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+          [select(getIsOffchainPublicNFTOrdersEnabled), false]
+        ])
         .put(executeOrderFailure(order, nft, 'The order does not match the NFT'))
         .dispatch(executeOrderRequest(order, nft, fingerprint))
         .run({ silenceTimeout: true })
@@ -131,7 +138,7 @@ describe('when handling the execute order request action', () => {
     let errorMessage: string
 
     beforeEach(() => {
-      vendor = VendorFactory.build(nft.vendor)
+      vendor = VendorFactory.build(nft.vendor, undefined, false)
       errorMessage = 'The execution was reverted'
       error = new Error(errorMessage)
       error.code = ErrorCode.SALE_PRICE_TOO_LOW
@@ -140,8 +147,10 @@ describe('when handling the execute order request action', () => {
     it('should put the execute order failure with the error message and the error code', () => {
       return expectSaga(orderSaga, tradeService)
         .provide([
+          [select(getIsOffchainPublicNFTOrdersEnabled), false],
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
           [select(getWallet), wallet],
-          [call([VendorFactory, 'build'], nft.vendor), vendor],
+          [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
           [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), throwError(error)]
         ])
         .put(executeOrderFailure(order, nft, errorMessage, ErrorCode.SALE_PRICE_TOO_LOW))
@@ -173,7 +182,9 @@ describe('when handling the execute order request action', () => {
         return expectSaga(orderSaga, tradeService)
           .provide([
             [select(getWallet), wallet],
-            [call([VendorFactory, 'build'], nft.vendor), vendor],
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
             [select(getRentalById, nft.openRentalId!), rentalListing],
             [call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED), Promise.resolve()],
             [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), Promise.resolve(txHash)],
@@ -194,7 +205,9 @@ describe('when handling the execute order request action', () => {
       it('should put the success action', () => {
         return expectSaga(orderSaga, tradeService)
           .provide([
-            [call([VendorFactory, 'build'], nft.vendor), vendor],
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
             [select(getWallet), wallet],
             [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), Promise.resolve(txHash)]
           ])

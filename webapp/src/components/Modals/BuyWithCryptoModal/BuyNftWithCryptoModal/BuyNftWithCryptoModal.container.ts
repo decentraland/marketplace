@@ -4,6 +4,7 @@ import type { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { getContract } from '../../../../modules/contract/selectors'
+import { getIsOffchainPublicNFTOrdersEnabled } from '../../../../modules/features/selectors'
 import { BUY_ITEM_CROSS_CHAIN_REQUEST, buyItemCrossChainRequest } from '../../../../modules/item/actions'
 import { getLoading as getItemsLoading } from '../../../../modules/item/selectors'
 import { EXECUTE_ORDER_REQUEST, executeOrderRequest, executeOrderWithCardRequest } from '../../../../modules/order/actions'
@@ -17,6 +18,7 @@ const mapState = (state: RootState): MapStateProps => {
   return {
     isExecutingOrder: isLoadingType(getLoadingOrders(state), EXECUTE_ORDER_REQUEST),
     isExecutingOrderCrossChain: isLoadingType(getItemsLoading(state), BUY_ITEM_CROSS_CHAIN_REQUEST),
+    isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state),
     getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }

@@ -1,10 +1,10 @@
 import { OrderFilters, OrderSortBy } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { NFT_SERVER_URL } from '../nft'
+import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 import { OrderResponse } from './types'
 
-class OrderAPI extends BaseAPI {
+export class OrderAPI extends BaseAPI {
   private buildOrdersQueryString(params: OrderFilters, sortBy: OrderSortBy): string {
     const queryParams = new URLSearchParams()
     params.first && queryParams.append('first', params.first.toString())
@@ -31,3 +31,4 @@ class OrderAPI extends BaseAPI {
 }
 
 export const orderAPI = new OrderAPI(NFT_SERVER_URL, retryParams)
+export const marketplaceOrderAPI = new OrderAPI(MARKETPLACE_SERVER_URL, retryParams)
