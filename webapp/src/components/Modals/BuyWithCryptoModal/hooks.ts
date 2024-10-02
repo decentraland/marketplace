@@ -4,11 +4,13 @@ import { ChainId, Item, Network, Order } from '@dcl/schemas'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import type { CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract } from 'decentraland-transactions'
+import { API_SIGNER } from '../../../lib/api'
 import { NFT } from '../../../modules/nft/types'
-import { TradeService } from '../../../modules/vendor/decentraland/TradeService'
+import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland'
 import * as events from '../../../utils/events'
 import { getOnChainTrade } from '../../../utils/trades'
 import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas, formatPrice, getShouldUseMetaTx } from './utils'
@@ -225,7 +227,7 @@ export const useCrossChainMintNftRoute = (
           tradeId: item.tradeId
         },
         fetchTradeData: async () => {
-          const trade = await new TradeService(() => undefined).fetchTrade(item.tradeId as string)
+          const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(item.tradeId as string)
           return {
             onChainTrade: getOnChainTrade(trade, fromAddress)
           }
@@ -269,7 +271,9 @@ export const useCrossChainBuyNftRoute = (
         fetchTradeData:
           order.tradeId && wallet?.address
             ? async () => {
-                const trade = await new TradeService(() => undefined).fetchTrade(order.tradeId as string)
+                const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(
+                  order.tradeId as string
+                )
                 return {
                   onChainTrade: getOnChainTrade(trade, wallet.address)
                 }
