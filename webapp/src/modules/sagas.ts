@@ -10,10 +10,12 @@ import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { createIdentitySaga } from 'decentraland-dapps/dist/modules/identity/sagas'
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
 import { NetworkGatewayType } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { config } from '../config'
+import { API_SIGNER } from '../lib/api'
 import { peerUrl } from '../lib/environment'
 import { accountSaga } from './account/sagas'
 import { analyticsSagas as marketplaceAnalyticsSagas } from './analytics/sagas'
@@ -40,8 +42,7 @@ import { toastSaga } from './toast/sagas'
 import { transakSaga } from './transak/sagas'
 import { translationSaga } from './translation/sagas'
 import { uiSaga } from './ui/sagas'
-import { BidService } from './vendor/decentraland'
-import { TradeService } from './vendor/decentraland/TradeService'
+import { BidService, MARKETPLACE_SERVER_URL } from './vendor/decentraland'
 import { walletSaga } from './wallet/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
@@ -87,7 +88,7 @@ const getCrossChainProvider = async () => {
   return AxelarProvider
 }
 
-const getTradesService = (getIdentity: () => AuthIdentity | undefined) => new TradeService(getIdentity)
+const getTradesService = (getIdentity: () => AuthIdentity | undefined) => new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, getIdentity)
 
 export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
   yield all([

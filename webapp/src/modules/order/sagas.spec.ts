@@ -7,10 +7,12 @@ import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ProviderType, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ErrorCode } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
+import { API_SIGNER } from '../../lib/api'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 import { getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
@@ -22,7 +24,7 @@ import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { openTransak } from '../transak/actions'
 import { VendorName } from '../vendor'
-import { TradeService } from '../vendor/decentraland/TradeService'
+import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -98,7 +100,7 @@ beforeEach(() => {
     }
   }
 
-  tradeService = new TradeService(() => undefined)
+  tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
 })
 
 describe('when handling the execute order request action', () => {

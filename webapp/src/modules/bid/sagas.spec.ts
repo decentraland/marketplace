@@ -2,8 +2,10 @@ import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { Bid, ChainId, Network, RentalListing, RentalStatus, TradeAssetType, TradeCreation, TradeType, Trade } from '@dcl/schemas'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { API_SIGNER } from '../../lib/api'
 import { Asset } from '../asset/types'
 import { getContract } from '../contract/selectors'
 import { getIsBidsOffChainEnabled } from '../features/selectors'
@@ -12,8 +14,7 @@ import { NFT } from '../nft/types'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { Vendor, VendorFactory, VendorName } from '../vendor'
-import { BidService } from '../vendor/decentraland'
-import { TradeService } from '../vendor/decentraland/TradeService'
+import { BidService, MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -39,7 +40,7 @@ let tradeService: TradeService
 
 beforeEach(() => {
   bidService = new BidService()
-  tradeService = new TradeService(() => undefined)
+  tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
 })
 
 describe('when handling the creation of a bid', () => {
