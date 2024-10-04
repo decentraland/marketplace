@@ -1,13 +1,17 @@
-import { put, select, takeEvery } from 'redux-saga/effects'
-import { Network } from '@dcl/schemas'
+import { ethers } from 'ethers'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { Network, Trade } from '@dcl/schemas'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
-import { ProductsAvailed, TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
 import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
-import { isNFT } from '../asset/utils'
+import { getOnChainTrade } from '../../utils/trades'
+import { getAssetImage, isNFT } from '../asset/utils'
+import { TradeService } from '../vendor/decentraland/TradeService'
+import { getWallet } from '../wallet/selectors'
 import { OPEN_TRANSAK, OpenTransakAction } from './actions'
 
 export function* transakSaga() {
@@ -15,7 +19,7 @@ export function* transakSaga() {
 }
 
 function* handleOpenTransak(action: OpenTransakAction) {
-  const { asset } = action.payload
+  const { asset, order } = action.payload
   const transakConfig: TransakConfig = {
     apiBaseUrl: config.get('TRANSAK_API_URL'),
     key: config.get('TRANSAK_KEY'),
@@ -26,20 +30,47 @@ function* handleOpenTransak(action: OpenTransakAction) {
       appCluster: config.get('TRANSAK_PUSHER_APP_CLUSTER')
     }
   }
-  const tokenId = isNFT(asset) ? asset.tokenId : asset.itemId
-  const customizationOptions = {
-    contractAddress: asset.contractAddress,
-    tradeType: isNFT(asset) ? TradeType.SECONDARY : TradeType.PRIMARY,
-    tokenId,
-    productsAvailed: ProductsAvailed.BUY,
-    isNFT: true,
-    widgetWidth: isMobile() ? undefined : '450px' // To avoid fixing the width of the widget in mobile
-  }
 
-  const address: string | undefined = (yield select(getAddress)) as ReturnType<typeof getAddress>
+  const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+  console.log('wallet: ', wallet)
 
-  yield put(closeAllModals())
-  if (address) {
-    new Transak(transakConfig, customizationOptions).openWidget(address, Network.MATIC)
+  const tradeId = isNFT(asset) ? order?.tradeId : asset.tradeId
+  console.log('tradeId: ', tradeId)
+  if (tradeId && wallet?.address ) {
+    const tradeService = new TradeService(() => undefined)
+    const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
+    console.log('trade: ', trade)
+    // const tokenId = isNFT(asset) ? asset.tokenId : asset.itemId
+    const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
+    const MarketplaveV3Interface = new ethers.utils.Interface(abi)
+    const customizationOptions = {
+      callData: MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, wallet.address)]]),
+      // cryptoCurrencyCode: 'TRNSK',
+      cryptoCurrencyCode: 'MANA',
+      // contractAddress: asset.contractAddress,
+      // tokenId,
+      // tradeType: isNFT(asset) ? TradeType.SECONDARY : TradeType.PRIMARY,
+      // productsAvailed: ProductsAvailed.BUY,
+      isNFT: true,
+      estimatedGasLimit: 70_000,
+      widgetWidth: isMobile() ? undefined : '450px', // To avoid fixing the width of the widget in mobile
+      contractId: '66fff5412bbeb54123ab4b8f',
+      nftData: {
+        imageURL: getAssetImage(asset),
+        nftName: asset.name,
+        collectionAddress: asset.contractAddress,
+        tokenID: [isNFT(asset) ? asset.tokenId : asset.itemId],
+        price: [+ethers.utils.formatEther((isNFT(asset) ? order?.price : asset.price) || 0)],
+        quantity: 1,
+        nftType: 'ERC721'
+      }
+    }
+    const address: string | undefined = (yield select(getAddress)) as ReturnType<typeof getAddress>
+
+    yield put(closeAllModals())
+    if (address) {
+      console.log('customizationOptions: ', customizationOptions)
+      new Transak(transakConfig, customizationOptions).openWidget(address, Network.MATIC)
+    }
   }
 }

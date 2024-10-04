@@ -6,12 +6,12 @@ import * as events from '../../../utils/events'
 import { Props } from './BuyWithCardExplanationModal.types'
 import styles from './BuyWithCardExplanationModal.module.css'
 
-const BuyWithCardExplanationModal = ({ metadata: { asset }, onContinue, onClose }: Props) => {
+const BuyWithCardExplanationModal = ({ metadata: { asset, order }, onContinue, onClose }: Props) => {
   const analytics = getAnalytics()
 
   const handleContinue = useCallback(() => {
     analytics.track(events.CONTINUE_BUY_WITH_CARD_MODAL)
-    onContinue(asset)
+    onContinue(asset, order)
   }, [analytics, asset, onContinue])
 
   const handleGoBack = useCallback(() => {

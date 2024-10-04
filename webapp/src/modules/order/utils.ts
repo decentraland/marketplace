@@ -90,7 +90,7 @@ export async function createPublicNFTOrderTrade(nft: NFT, price: number, expires
     signer: address,
     network: nft.network,
     chainId: nft.chainId,
-    type: TradeType.PUBLIC_NFT_ORDER,
+    type: TradeType.PUBLIC_ITEM_ORDER,
     checks: {
       uses: 1,
       allowedRoot: '0x',
@@ -103,9 +103,9 @@ export async function createPublicNFTOrderTrade(nft: NFT, price: number, expires
     },
     sent: [
       {
-        assetType: TradeAssetType.ERC721,
+        assetType: TradeAssetType.COLLECTION_ITEM,
         contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId,
+        itemId: nft.itemId!,
         extra: ''
       }
     ],

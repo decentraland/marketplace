@@ -99,18 +99,19 @@ export function isWearableOrEmote(asset: Asset): boolean {
   return categories.includes(asset.category)
 }
 
-export function* buyAssetWithCard(asset: Asset) {
+export function* buyAssetWithCard(asset: Asset, order?: Order) {
   const buyNftsWithCardExplanationPopupKey = (yield call(
     [localStorage, 'getItem'],
     BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
   )) as ReturnType<typeof localStorage.getItem>
 
   if (buyNftsWithCardExplanationPopupKey === 'true') {
-    yield put(openTransak(asset))
+    yield put(openTransak(asset, order))
     return
   }
 
-  yield put(openModal('BuyWithCardExplanationModal', { asset }))
+  console.log('order1: ', order)
+  yield put(openModal('BuyWithCardExplanationModal', { asset, order }))
 
   const { close } = (yield race({
     continue: take(SET_PURCHASE),
