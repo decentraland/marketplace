@@ -13,7 +13,8 @@ import {
   isLoadingFeatureFlags,
   getIsChainSelectorEnabled,
   getIsBidsOffChainEnabled,
-  getIsOffchainPublicNFTOrdersEnabled
+  getIsOffchainPublicNFTOrdersEnabled,
+  getIsOffchainPublicItemOrdersEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -145,10 +146,16 @@ const waitForInitialLoadingSelectors = [
     applicationName: ApplicationName.MARKETPLACE
   },
   {
-    name: 'IfOffchainPublicNFTOrdersEnabled',
+    name: 'IsOffchainPublicNFTOrdersEnabled',
     feature: FeatureName.OFFCHAIN_PUBLIC_NFT_ORDERS,
     selector: getIsOffchainPublicNFTOrdersEnabled,
     applicationName: ApplicationName.MARKETPLACE
+  },
+  {
+    name: 'sfOffchainPublicItemOrdersEnabled',
+    feature: FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS,
+    selector: getIsOffchainPublicItemOrdersEnabled,
+    applicationName: ApplicationName.DAPPS
   }
 ]
 

@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { Item, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Dropdown, Mana } from 'decentraland-ui'
@@ -42,11 +43,14 @@ export const formatDataToTable = (rentals?: Item[], isCollectionOwner: boolean =
             )
           }),
 
-          [t('global.price')]: (
-            <Mana network={item.network} inline>
-              {formatWeiMANA(item.price)}
-            </Mana>
-          )
+          [t('global.price')]:
+            item.price === ethers.constants.MaxUint256.toString() ? (
+              '-'
+            ) : (
+              <Mana network={item.network} inline>
+                {formatWeiMANA(item.price)}
+              </Mana>
+            )
         }
 
         if (isCollectionOwner) {

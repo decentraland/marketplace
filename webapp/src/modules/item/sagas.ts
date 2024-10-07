@@ -4,21 +4,23 @@ import { ethers } from 'ethers'
 import { History } from 'history'
 import { SagaIterator, Task } from 'redux-saga'
 import { call, cancel, cancelled, fork, race, select, take, getContext } from 'redux-saga/effects'
-import { Entity } from '@dcl/schemas'
+import { Entity, Trade } from '@dcl/schemas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { Provider } from 'decentraland-connect'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
+import { API_SIGNER } from '../../lib/api'
 import { isErrorWithMessage } from '../../lib/error'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard } from '../asset/utils'
-import { getIsMarketplaceServerEnabled } from '../features/selectors'
+import { getIsMarketplaceServerEnabled, getIsOffchainPublicItemOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { locations } from '../routing/locations'
 import { isCatalogView } from '../routing/utils'
@@ -79,8 +81,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     identity: getIdentity
   }
   const itemAPI = new ItemAPI(NFT_SERVER_URL, API_OPTS)
+  const marketplaceItemAPI = new ItemAPI(MARKETPLACE_SERVER_URL, API_OPTS)
   const marketplaceServerCatalogAPI = new CatalogAPI(MARKETPLACE_SERVER_URL, API_OPTS)
   const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
+  const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, getIdentity)
 
   yield fork(() => takeLatestByPath(FETCH_ITEMS_REQUEST, locations.browse()))
   yield takeEvery(FETCH_COLLECTION_ITEMS_REQUEST, handleFetchCollectionItemsRequest)
@@ -138,7 +142,9 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleFetchCollectionItemsRequest(action: FetchCollectionItemsRequestAction) {
     const { contractAddresses, first } = action.payload
     try {
-      const { data }: { data: Item[]; total: number } = yield call([itemAPI, 'get'], { first, contractAddresses })
+      const isOffchainPublicItemOrdersEnabled: boolean = yield select(getIsOffchainPublicItemOrdersEnabled)
+      const api = isOffchainPublicItemOrdersEnabled ? marketplaceItemAPI : itemAPI
+      const { data }: { data: Item[]; total: number } = yield call([api, 'get'], { first, contractAddresses })
       yield put(fetchCollectionItemsSuccess(data))
     } catch (error) {
       yield put(fetchCollectionItemsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
@@ -153,8 +159,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       yield call(waitForWalletConnectionAndIdentityIfConnecting)
       yield call(waitForFeatureFlagsToBeLoaded)
       const isMarketplaceServerEnabled: boolean = yield select(getIsMarketplaceServerEnabled)
+      const isOffchainPublicItemOrdersEnabled: boolean = yield select(getIsOffchainPublicItemOrdersEnabled)
       const catalogViewAPI = isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
-      const api = isCatalogView(view) ? catalogViewAPI : itemAPI
+      const itemViewAPI = isOffchainPublicItemOrdersEnabled ? marketplaceItemAPI : itemAPI
+      const api = isCatalogView(view) ? catalogViewAPI : itemViewAPI
       const { data, total }: { data: Item[]; total: number } = yield call([api, 'get'], filters)
       yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
     } catch (error) {
@@ -174,7 +182,9 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
     try {
       yield call(waitForWalletConnectionAndIdentityIfConnecting)
-      const item: Item = yield call([itemAPI, 'getOne'], contractAddress, tokenId)
+      const isOffchainPublicItemOrdersEnabled: boolean = yield select(getIsOffchainPublicItemOrdersEnabled)
+      const api = isOffchainPublicItemOrdersEnabled ? marketplaceItemAPI : itemAPI
+      const item: Item = yield call([api, 'getOne'], contractAddress, tokenId)
       const entity: Entity | null = yield call([peerAPI, 'fetchItemByUrn'], item.urn)
       if (entity) {
         item.entity = entity
@@ -198,11 +208,18 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         throw new Error('A defined wallet is required to buy an item')
       }
 
-      const contract = getContract(ContractName.CollectionStore, item.chainId)
+      let txHash: string
 
-      const txHash: string = yield call(sendTransaction, contract, collectionStore =>
-        collectionStore.buy([[item.contractAddress, [item.itemId], [item.price], [wallet.address]]])
-      )
+      if (item.tradeId) {
+        const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)
+        txHash = yield call([tradeService, 'accept'], trade, wallet.address)
+      } else {
+        const contract = getContract(ContractName.CollectionStore, item.chainId)
+
+        txHash = yield call(sendTransaction, contract, collectionStore =>
+          collectionStore.buy([[item.contractAddress, [item.itemId], [item.price], [wallet.address]]])
+        )
+      }
 
       yield put(buyItemSuccess(wallet.chainId, txHash, item))
     } catch (error) {
