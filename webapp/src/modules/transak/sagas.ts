@@ -5,12 +5,14 @@ import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
 import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
+import { API_SIGNER } from '../../lib/api'
 import { getOnChainTrade } from '../../utils/trades'
 import { getAssetImage, isNFT } from '../asset/utils'
-import { TradeService } from '../vendor/decentraland/TradeService'
+import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getWallet } from '../wallet/selectors'
 import { OPEN_TRANSAK, OpenTransakAction } from './actions'
 
@@ -36,15 +38,15 @@ function* handleOpenTransak(action: OpenTransakAction) {
 
   const tradeId = isNFT(asset) ? order?.tradeId : asset.tradeId
   console.log('tradeId: ', tradeId)
-  if (tradeId && wallet?.address ) {
-    const tradeService = new TradeService(() => undefined)
+  if (tradeId && wallet?.address) {
+    const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
     const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
     console.log('trade: ', trade)
     // const tokenId = isNFT(asset) ? asset.tokenId : asset.itemId
     const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
     const MarketplaveV3Interface = new ethers.utils.Interface(abi)
     const customizationOptions = {
-      callData: MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, wallet.address)]]),
+      calldata: MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, wallet.address)]]),
       // cryptoCurrencyCode: 'TRNSK',
       cryptoCurrencyCode: 'MANA',
       // contractAddress: asset.contractAddress,
@@ -55,15 +57,17 @@ function* handleOpenTransak(action: OpenTransakAction) {
       estimatedGasLimit: 70_000,
       widgetWidth: isMobile() ? undefined : '450px', // To avoid fixing the width of the widget in mobile
       contractId: '66fff5412bbeb54123ab4b8f',
-      nftData: {
-        imageURL: getAssetImage(asset),
-        nftName: asset.name,
-        collectionAddress: asset.contractAddress,
-        tokenID: [isNFT(asset) ? asset.tokenId : asset.itemId],
-        price: [+ethers.utils.formatEther((isNFT(asset) ? order?.price : asset.price) || 0)],
-        quantity: 1,
-        nftType: 'ERC721'
-      }
+      nftData: [
+        {
+          imageURL: getAssetImage(asset),
+          nftName: asset.name,
+          collectionAddress: asset.contractAddress,
+          tokenID: [isNFT(asset) ? asset.tokenId : asset.itemId],
+          price: [+ethers.utils.formatEther((isNFT(asset) ? order?.price : asset.price) || 0)],
+          quantity: 1,
+          nftType: 'ERC721'
+        }
+      ]
     }
     const address: string | undefined = (yield select(getAddress)) as ReturnType<typeof getAddress>
 
