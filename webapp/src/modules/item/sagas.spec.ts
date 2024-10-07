@@ -1,11 +1,12 @@
 import { call, getContext, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { ChainId, Entity, EntityType, Item, Network, Rarity } from '@dcl/schemas'
+import { ChainId, Entity, EntityType, Item, Network, Rarity, Trade, TradeAssetType, TradeType as DCLTradeType } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
@@ -136,6 +137,67 @@ describe('when handling the buy items request action', () => {
         ])
         .put(buyItemSuccess(wallet.chainId, txHash, item))
         .dispatch(buyItemRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when the item has an order from a trade', () => {
+    let itemWithTrade: Item
+    let trade: Trade
+
+    beforeEach(() => {
+      itemWithTrade = {
+        ...item,
+        tradeId: 'some-trade-id'
+      }
+
+      trade = {
+        id: itemWithTrade.tradeId!,
+        createdAt: Date.now(),
+        signer: wallet.address,
+        signature: '0x324234',
+        type: DCLTradeType.PUBLIC_ITEM_ORDER,
+        network: Network.ETHEREUM,
+        chainId: ChainId.ETHEREUM_SEPOLIA,
+        checks: {
+          expiration: Date.now() + 100000000000,
+          effective: Date.now(),
+          uses: 1,
+          salt: '0x',
+          allowedRoot: '0x',
+          contractSignatureIndex: 0,
+          externalChecks: [],
+          signerSignatureIndex: 0
+        },
+        sent: [
+          {
+            assetType: TradeAssetType.COLLECTION_ITEM,
+            contractAddress: '0x1234',
+            itemId: '1',
+            extra: ''
+          }
+        ],
+        received: [
+          {
+            assetType: TradeAssetType.ERC20,
+            contractAddress: '0x123',
+            amount: '2',
+            extra: '',
+            beneficiary: wallet.address
+          }
+        ]
+      }
+    })
+
+    it('should send an accept trade tx', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([
+          [select(getWallet), wallet],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+          [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
+        ])
+        .put(buyItemSuccess(wallet.chainId, txHash, itemWithTrade))
+        .dispatch(buyItemRequest(itemWithTrade))
         .run({ silenceTimeout: true })
     })
   })
