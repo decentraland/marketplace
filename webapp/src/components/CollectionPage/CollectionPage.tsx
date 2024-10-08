@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { ethers } from 'ethers'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Back, Column, Page, Row, Section, Header, Badge, Icon, Color, Button, Loader, useMobileMediaQuery } from 'decentraland-ui'
@@ -118,9 +119,13 @@ const CollectionPage = (props: Props) => {
                           mobileTableBody={filteredItems.map(item => (
                             <div key={item.id} className="mobile-row">
                               <AssetCell asset={item} />
-                              <Mana network={item.network} inline>
-                                {formatWeiMANA(item.price)}
-                              </Mana>
+                              {item.price === ethers.constants.MaxUint256.toString() ? (
+                                '-'
+                              ) : (
+                                <Mana network={item.network} inline>
+                                  {formatWeiMANA(item.price)}
+                                </Mana>
+                              )}
                             </div>
                           ))}
                           total={0}

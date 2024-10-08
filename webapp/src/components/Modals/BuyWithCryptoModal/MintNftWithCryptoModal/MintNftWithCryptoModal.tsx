@@ -4,7 +4,7 @@ import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
-import { ContractName } from 'decentraland-transactions'
+import { ContractName, getContract as getDCLContract } from 'decentraland-transactions'
 import { getMintItemStatus, getError } from '../../../../modules/item/selectors'
 import { getContractNames } from '../../../../modules/vendor'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
@@ -42,12 +42,17 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
       network: item.network
     }) as DCLContract
 
+    const offchainMarketplace = getDCLContract(ContractName.OffChainMarketplace, item.chainId)
+
+    const authorizedAddress = item.tradeId ? offchainMarketplace.address : collectionStore.address
+    const authorizedContractLabel = item.tradeId ? offchainMarketplace.name : collectionStore.label || collectionStore.name
+
     onAuthorizedAction({
       targetContractName: ContractName.MANAToken,
       authorizationType: AuthorizationType.ALLOWANCE,
-      authorizedAddress: collectionStore.address,
+      authorizedAddress,
       targetContract: mana as Contract,
-      authorizedContractLabel: collectionStore.label || collectionStore.name,
+      authorizedContractLabel,
       requiredAllowanceInWei: item.price,
       onAuthorized: () => onBuyItem(item)
     })

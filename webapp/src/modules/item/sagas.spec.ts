@@ -1,17 +1,18 @@
 import { call, getContext, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { ChainId, Entity, EntityType, Item, Network, Rarity } from '@dcl/schemas'
+import { ChainId, Entity, EntityType, Item, Network, Rarity, Trade, TradeAssetType, TradeType as DCLTradeType } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
-import { getIsMarketplaceServerEnabled } from '../features/selectors'
+import { getIsMarketplaceServerEnabled, getIsOffchainPublicItemOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { locations } from '../routing/locations'
 import { View } from '../ui/types'
@@ -136,6 +137,67 @@ describe('when handling the buy items request action', () => {
         ])
         .put(buyItemSuccess(wallet.chainId, txHash, item))
         .dispatch(buyItemRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when the item has an order from a trade', () => {
+    let itemWithTrade: Item
+    let trade: Trade
+
+    beforeEach(() => {
+      itemWithTrade = {
+        ...item,
+        tradeId: 'some-trade-id'
+      }
+
+      trade = {
+        id: itemWithTrade.tradeId!,
+        createdAt: Date.now(),
+        signer: wallet.address,
+        signature: '0x324234',
+        type: DCLTradeType.PUBLIC_ITEM_ORDER,
+        network: Network.ETHEREUM,
+        chainId: ChainId.ETHEREUM_SEPOLIA,
+        checks: {
+          expiration: Date.now() + 100000000000,
+          effective: Date.now(),
+          uses: 1,
+          salt: '0x',
+          allowedRoot: '0x',
+          contractSignatureIndex: 0,
+          externalChecks: [],
+          signerSignatureIndex: 0
+        },
+        sent: [
+          {
+            assetType: TradeAssetType.COLLECTION_ITEM,
+            contractAddress: '0x1234',
+            itemId: '1',
+            extra: ''
+          }
+        ],
+        received: [
+          {
+            assetType: TradeAssetType.ERC20,
+            contractAddress: '0x123',
+            amount: '2',
+            extra: '',
+            beneficiary: wallet.address
+          }
+        ]
+      }
+    })
+
+    it('should send an accept trade tx', () => {
+      return expectSaga(itemSaga, getIdentity)
+        .provide([
+          [select(getWallet), wallet],
+          [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+          [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
+        ])
+        .put(buyItemSuccess(wallet.chainId, txHash, itemWithTrade))
+        .dispatch(buyItemRequest(itemWithTrade))
         .run({ silenceTimeout: true })
     })
   })
@@ -344,9 +406,12 @@ describe('when handling the fetch collections items request action', () => {
   describe('when the request is successful', () => {
     const fetchResult = { data: [item] }
 
-    it('should dispatch a successful action with the fetched items', () => {
+    it('should dispatch a successful action with the fetched items from marketplace server api', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([[matchers.call.fn(ItemAPI.prototype.get), fetchResult]])
+        .provide([
+          [select(getIsOffchainPublicItemOrdersEnabled), true],
+          [matchers.call.fn(ItemAPI.prototype.get), fetchResult]
+        ])
         .call.like({
           fn: ItemAPI.prototype.get,
           args: [{ first: 10, contractAddresses: [] }]
@@ -360,7 +425,10 @@ describe('when handling the fetch collections items request action', () => {
   describe('when the request fails', () => {
     it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([[matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]])
+        .provide([
+          [select(getIsOffchainPublicItemOrdersEnabled), true],
+          [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]
+        ])
         .put(fetchCollectionItemsFailure(anError.message))
         .dispatch(fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }))
         .run({ silenceTimeout: true })
@@ -405,6 +473,7 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
+                [select(getIsOffchainPublicItemOrdersEnabled), true],
                 [select(getIsMarketplaceServerEnabled), true],
                 [getContext('history'), { location: { pathname } }],
                 {
@@ -441,6 +510,7 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
+                [select(getIsOffchainPublicItemOrdersEnabled), true],
                 [select(getIsMarketplaceServerEnabled), true],
                 [getContext('history'), { location: { pathname } }],
                 {
@@ -482,6 +552,7 @@ describe('when handling the fetch items request action', () => {
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
             [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
+            [select(getIsOffchainPublicItemOrdersEnabled), true],
             [select(getWallet), undefined],
             [getContext('history'), { location: { pathname } }],
             [select(getIsMarketplaceServerEnabled), false]
@@ -500,6 +571,7 @@ describe('when handling the fetch items request action', () => {
           [getContext('history'), { location: { pathname: '' } }],
           [select(getWallet), undefined],
           [select(getIsMarketplaceServerEnabled), true],
+          [select(getIsOffchainPublicItemOrdersEnabled), true],
           [select(getWallet), undefined],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
           [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
@@ -519,7 +591,8 @@ describe('when handling the fetch items request action', () => {
             .provide([
               [matchers.call.fn(ItemAPI.prototype.getOne), item],
               [matchers.call.fn(PeerAPI.prototype.fetchItemByUrn), entity],
-              [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
+              [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
+              [select(getIsOffchainPublicItemOrdersEnabled), true]
             ])
             .put(fetchItemSuccess({ ...item, entity }))
             .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
@@ -547,7 +620,8 @@ describe('when handling the fetch items request action', () => {
             .provide([
               [matchers.call.fn(ItemAPI.prototype.getOne), smartWearable],
               [matchers.call.fn(PeerAPI.prototype.fetchItemByUrn), entity],
-              [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
+              [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
+              [select(getIsOffchainPublicItemOrdersEnabled), true]
             ])
             .put(fetchItemSuccess({ ...smartWearable, entity }))
             .put(fetchSmartWearableRequiredPermissionsRequest(smartWearable))
@@ -562,7 +636,8 @@ describe('when handling the fetch items request action', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
             [matchers.call.fn(ItemAPI.prototype.getOne), Promise.reject(anError)],
-            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
+            [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
+            [select(getIsOffchainPublicItemOrdersEnabled), true]
           ])
           .put(fetchItemFailure(item.contractAddress, item.itemId, anError.message))
           .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
