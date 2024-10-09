@@ -23,6 +23,7 @@ import { Contract as DCLContract } from '../../../modules/vendor/services'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { AssetAction } from '../../AssetAction'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
+import ErrorBanner from '../../ErrorBanner'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { showPriceBelowMarketValueWarning } from './utils'
@@ -36,14 +37,17 @@ const SellModal = (props: Props) => {
     isLoading,
     isCreatingOrder,
     isOffchainPublicNFTOrdersEnabled,
+    isLoadingCancelOrder,
     getContract,
     onGoBack,
+    onCancelOrder,
     onCreateOrder,
     onAuthorizedAction,
     onClearOrderErrors
   } = props
 
   const isUpdate = order !== null
+  const shouldRemoveListing = order?.tradeId
   const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
 
   const [expiresAt, setExpiresAt] = useState(() => {
@@ -111,6 +115,8 @@ const SellModal = (props: Props) => {
 
   const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime())
 
+  const handleCancelTrade = () => order && onCancelOrder(order, nft)
+
   const handleSubmit = () => {
     onClearOrderErrors()
     onAuthorizedAction({
@@ -139,47 +145,59 @@ const SellModal = (props: Props) => {
   return (
     <AssetAction asset={nft}>
       <Header size="large">{t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}</Header>
-      <p className="subtitle">
-        <T
-          id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
-          values={{
-            name: <b className="primary-text">{getAssetName(nft)}</b>
-          }}
-        />
-      </p>
 
-      <Form onSubmit={() => setShowConfirm(true)}>
-        <div className="form-fields">
-          <ManaField
-            label={t('sell_page.price')}
-            type="text"
-            placeholder={1000}
-            network={nft.network}
-            value={price}
-            focus={true}
-            error={price !== '' && isInvalidPrice}
-            onChange={(_event, props) => {
-              setPrice(toFixedMANAValue(props.value))
-            }}
-          />
-          <Field
-            label={t('sell_page.expiration_date')}
-            type="date"
-            value={expiresAt}
-            onChange={(_event, props) => setExpiresAt(props.value || getDefaultExpirationDate())}
-            error={isInvalidDate}
-            message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
-          />
-        </div>
-        <div className="buttons">
-          <Button as="div" onClick={onGoBack}>
-            {t('global.cancel')}
+      {shouldRemoveListing ? (
+        <div className="cancel-order">
+          <ErrorBanner info={t('sell_page.cancel_order_warning')} />
+          <Button primary onClick={handleCancelTrade} loading={isLoadingCancelOrder}>
+            {t('sell_page.cancel_order')}
           </Button>
-          <ChainButton type="submit" primary disabled={isDisabled || isLoading} loading={isLoading} chainId={nft.chainId}>
-            {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
-          </ChainButton>
         </div>
-      </Form>
+      ) : (
+        <>
+          <p className="subtitle">
+            <T
+              id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
+              values={{
+                name: <b className="primary-text">{getAssetName(nft)}</b>
+              }}
+            />
+          </p>
+          <Form onSubmit={() => setShowConfirm(true)}>
+            <div className="form-fields">
+              <ManaField
+                label={t('sell_page.price')}
+                type="text"
+                placeholder={1000}
+                network={nft.network}
+                value={price}
+                focus={true}
+                error={price !== '' && isInvalidPrice}
+                onChange={(_event, props) => {
+                  setPrice(toFixedMANAValue(props.value))
+                }}
+              />
+              <Field
+                label={t('sell_page.expiration_date')}
+                type="date"
+                value={expiresAt}
+                onChange={(_event, props) => setExpiresAt(props.value || getDefaultExpirationDate())}
+                error={isInvalidDate}
+                message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
+              />
+            </div>
+            <div className="buttons">
+              <Button as="div" onClick={onGoBack}>
+                {t('global.cancel')}
+              </Button>
+              <ChainButton type="submit" primary disabled={isDisabled || isLoading} loading={isLoading} chainId={nft.chainId}>
+                {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
+              </ChainButton>
+            </div>
+          </Form>
+        </>
+      )}
+
       <ConfirmInputValueModal
         open={showConfirm}
         headerTitle={t('sell_page.confirm.title')}

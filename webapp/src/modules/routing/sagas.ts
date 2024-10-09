@@ -537,6 +537,16 @@ function* handleRedirectToActivity(action: AnyAction) {
   const history: History = yield getContext('history')
   const location = history.location
   const redirectTo = new URLSearchParams(location.search).get('redirectTo')
+  if (
+    action &&
+    action.payload &&
+    typeof action.payload === 'object' &&
+    'skipRedirection' in action.payload &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    action.payload.skipRedirection
+  ) {
+    return
+  }
 
   const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
   const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)

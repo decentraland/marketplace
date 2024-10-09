@@ -99,11 +99,18 @@ export function orderReducer(state: OrderState = INITIAL_STATE, action: OrderRed
     }
     case CREATE_ORDER_SUCCESS:
     case EXECUTE_ORDER_SUCCESS:
-    case EXECUTE_ORDER_WITH_CARD_SUCCESS:
+    case EXECUTE_ORDER_WITH_CARD_SUCCESS: {
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error: null
+      }
+    }
     case CANCEL_ORDER_SUCCESS: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
+        data: Object.fromEntries(Object.entries(state.data).filter(([key]) => key !== action.payload.order.id)),
         error: null
       }
     }

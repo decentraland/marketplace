@@ -164,7 +164,7 @@ const ItemDetail = ({ item }: Props) => {
             }
           >
             {item.data.wearable?.isSmart && <RequiredPermissions asset={item} />}
-            <BestBuyingOption asset={item} tableRef={tableRef} />
+            <BestBuyingOption asset={item} tableRef={tableRef} key={item.id} />
           </div>
         </div>
       </div>
