@@ -34,19 +34,17 @@ function* handleOpenTransak(action: OpenTransakAction) {
   }
 
   const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
-  console.log('wallet: ', wallet)
 
   const tradeId = isNFT(asset) ? order?.tradeId : asset.tradeId
   console.log('tradeId: ', tradeId)
   if (tradeId && wallet?.address) {
     const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
     const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
-    console.log('trade: ', trade)
-    // const tokenId = isNFT(asset) ? asset.tokenId : asset.itemId
     const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
     const MarketplaveV3Interface = new ethers.utils.Interface(abi)
+    const calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, wallet.address)]])
     const customizationOptions = {
-      calldata: MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, wallet.address)]]),
+      calldata,
       // cryptoCurrencyCode: 'TRNSK',
       cryptoCurrencyCode: 'MANA',
       // contractAddress: asset.contractAddress,
@@ -56,7 +54,7 @@ function* handleOpenTransak(action: OpenTransakAction) {
       isNFT: true,
       estimatedGasLimit: 70_000,
       widgetWidth: isMobile() ? undefined : '450px', // To avoid fixing the width of the widget in mobile
-      contractId: '66fff5412bbeb54123ab4b8f',
+      contractId: '670519812bbeb54123b0fcd0',
       nftData: [
         {
           imageURL: getAssetImage(asset),
