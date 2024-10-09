@@ -4,9 +4,10 @@ import { MARKETPLACE_SERVER_URL } from '../marketplace/api'
 import { retryParams } from '../utils'
 
 export class CatalogAPI extends BaseClient {
-  async get(filters: CatalogFilters = {}, headers?: Record<string, string>): Promise<{ data: Item[] }> {
+  async get(filters: CatalogFilters = {}, options?: { v2?: boolean; headers?: Record<string, string> }): Promise<{ data: Item[] }> {
     const queryParams = this.buildItemsQueryString(filters)
-    return this.fetch(`/v1/catalog?${queryParams}`, {
+    const { headers, v2 = false } = options || {}
+    return this.fetch(`/${v2 ? 'v2' : 'v1'}/catalog?${queryParams}`, {
       headers
     })
   }
