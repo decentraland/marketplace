@@ -786,7 +786,9 @@
       "line_one": "Estás por poner en venta {name} por {amount}.",
       "line_two": "Por favor vuelve a escribir el precio para confirmar:",
       "warning": "Cuidado: este precio esta muy por debajo al valor de mercado"
-    }
+    },
+    "cancel_order_warning": "Se requiere acción: para actualizar el nuevo precio, debe eliminar la venta anterior primero",
+    "cancel_order": "Cancelar orden"
   },
   "buy_page": {
     "title": "Comprar {category}",

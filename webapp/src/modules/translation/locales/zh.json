@@ -790,7 +790,9 @@
       "line_one": "您将要列出{amount}待售的{name}。",
       "line_two": "请重新输入价格以确认：",
       "warning": "警告：此价格远低于市场价值"
-    }
+    },
+    "cancel_order_warning": "需要采取的行动：为了更新新价格，您必须先删除先前的销售",
+    "cancel_order": "取消订单"
   },
   "buy_page": {
     "title": "购买{category}",
