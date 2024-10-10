@@ -1,6 +1,6 @@
 import { SaleFilters } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { NFT_SERVER_URL } from '../nft'
+import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 import { SaleResponse } from './types'
 
@@ -29,3 +29,4 @@ class SaleAPI extends BaseAPI {
 }
 
 export const saleAPI = new SaleAPI(NFT_SERVER_URL, retryParams)
+export const marketplaceSaleAPI = new SaleAPI(MARKETPLACE_SERVER_URL, retryParams)
