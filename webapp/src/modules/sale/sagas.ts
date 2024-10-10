@@ -2,6 +2,7 @@ import { call, takeEvery, put, select } from '@redux-saga/core/effects'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { getIsOffchainPublicItemOrdersEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
+import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { saleAPI, marketplaceSaleAPI } from '../vendor/decentraland'
 import { fetchSalesFailure, FetchSalesRequestAction, fetchSalesSuccess, FETCH_SALES_REQUEST } from './actions'
 
@@ -13,6 +14,7 @@ export function* handleFetchSalesRequest(action: FetchSalesRequestAction) {
   const { filters } = action.payload
 
   try {
+    yield waitForFeatureFlagsToBeLoaded()
     const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
     const isOffchainPublicItemOrdersEnabled: boolean = yield select(getIsOffchainPublicItemOrdersEnabled)
     const api = isOffchainPublicItemOrdersEnabled || isOffchainPublicNFTOrdersEnabled ? marketplaceSaleAPI : saleAPI
