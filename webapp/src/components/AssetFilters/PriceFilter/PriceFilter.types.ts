@@ -30,6 +30,8 @@ export type Props = {
   isRentalPriceFitlerChartEnabled?: boolean
   emoteHasGeometry?: boolean
   emoteHasSound?: boolean
+  isOffchainPublicItemOrdersEnabled: boolean
+  isOffchainPublicNFTOrdersEnabled: boolean
 }
 
 export type MapStateProps = Pick<
@@ -53,6 +55,8 @@ export type MapStateProps = Pick<
   | 'isRentalPriceFitlerChartEnabled'
   | 'emoteHasGeometry'
   | 'emoteHasSound'
+  | 'isOffchainPublicItemOrdersEnabled'
+  | 'isOffchainPublicNFTOrdersEnabled'
 >
 
 export type OwnProps = Pick<Props, 'values'>
