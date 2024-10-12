@@ -5,7 +5,7 @@ import { closeModal, CloseModalAction, CLOSE_MODAL, openModal } from 'decentrala
 import { ConnectWalletSuccessAction, CONNECT_WALLET_FAILURE, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { isErrorWithMessage } from '../../lib/error'
-import { getIsMarketplaceServerEnabled } from '../features/selectors'
+import { getIsMarketplaceServerEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { getData as getItemsData } from '../item/selectors'
 import { ItemBrowseOptions } from '../item/types'
@@ -109,7 +109,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         }
 
         const api = (yield call(getCatalogAPI)) as CatalogAPI
-        const result = (yield call([api, 'get'], itemFilters)) as Awaited<ReturnType<typeof api.get>>
+        const isOffchainEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
+        const result = (yield call([api, 'get'], itemFilters, { v2: isOffchainEnabled })) as Awaited<ReturnType<typeof api.get>>
         previewItems = result.data
       }
     }
@@ -145,9 +146,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       const api = (yield call(getCatalogAPI)) as CatalogAPI
+      const isOffchainEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
 
       if (results.length > 0) {
-        const result = (yield call([api, 'get'], optionsFilters)) as Awaited<ReturnType<typeof api.get>>
+        const result = (yield call([api, 'get'], optionsFilters, { v2: isOffchainEnabled })) as Awaited<ReturnType<typeof api.get>>
         items = result.data
       }
 
