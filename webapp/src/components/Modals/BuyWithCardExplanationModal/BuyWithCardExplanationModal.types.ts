@@ -1,10 +1,12 @@
 import { Dispatch } from 'redux'
+import { Order } from '@dcl/schemas'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import { Asset } from '../../../modules/asset/types'
 import { openTransak, OpenTransakAction } from '../../../modules/transak/actions'
 
 export type Metadata = {
   asset: Asset
+  order?: Order
 }
 
 export type Props = Omit<ModalProps, 'metadata'> & {
