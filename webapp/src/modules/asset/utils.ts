@@ -110,7 +110,6 @@ export function* buyAssetWithCard(asset: Asset, order?: Order) {
     return
   }
 
-  console.log('order1: ', order)
   yield put(openModal('BuyWithCardExplanationModal', { asset, order }))
 
   const { close } = (yield race({

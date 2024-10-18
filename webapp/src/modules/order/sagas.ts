@@ -177,7 +177,6 @@ export function* orderSaga(tradeService: TradeService) {
     const { nft } = action.payload
 
     const order: Order = yield select(getCurrentOrder)
-    console.log('order in handleExecuteOrderWithCardRequest: ', order)
 
     try {
       yield call(buyAssetWithCard, nft, order)

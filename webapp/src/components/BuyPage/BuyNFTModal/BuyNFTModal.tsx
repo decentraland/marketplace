@@ -57,7 +57,6 @@ const BuyNFTModal = (props: Props) => {
     (alreadyAuthorized: boolean = true) => {
       if (isBuyWithCardPage) {
         analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
-        console.log('order: ', order)
         return onExecuteOrderWithCard(nft, order || undefined)
       }
 
