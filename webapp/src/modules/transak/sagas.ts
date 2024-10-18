@@ -1,13 +1,13 @@
 import { ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
-import { Network, Trade } from '@dcl/schemas'
+import { Network, Rarity, Trade } from '@dcl/schemas'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
 import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { ContractName, getContract } from 'decentraland-transactions'
+import { ContractName, getContract, getContractName } from 'decentraland-transactions'
 import { config } from '../../config'
 import { API_SIGNER } from '../../lib/api'
 import { getOnChainTrade } from '../../utils/trades'
@@ -15,6 +15,7 @@ import { getAssetImage, isNFT } from '../asset/utils'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getWallet } from '../wallet/selectors'
 import { OPEN_TRANSAK, OpenTransakAction } from './actions'
+import { encodeTokenId } from './utils'
 
 export function* transakSaga() {
   yield takeEvery(OPEN_TRANSAK, handleOpenTransak)
@@ -23,7 +24,8 @@ export function* transakSaga() {
 function* handleOpenTransak(action: OpenTransakAction) {
   const { asset, order } = action.payload
   const transakConfig: TransakConfig = {
-    apiBaseUrl: config.get('TRANSAK_API_URL'),
+    marketplaceServerURL: config.get('MARKETPLACE_SERVER_URL'),
+    apiBaseUrl: config.get('MARKETPLACE_SERVER_URL'),
     key: config.get('TRANSAK_KEY'),
     env: config.get('TRANSAK_ENV'),
     pollingDelay: +config.get('TRANSAK_POLLING_DELAY'),
@@ -34,45 +36,69 @@ function* handleOpenTransak(action: OpenTransakAction) {
   }
 
   const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+  if (!wallet) {
+    return
+  }
 
   const tradeId = isNFT(asset) ? order?.tradeId : asset.tradeId
-  console.log('tradeId: ', tradeId)
+  let calldata: string = ''
+  let contractId: string = ''
+  const TRANSAK_MULTICALL_CONTRACT = '0xCB9bD5aCD627e8FcCf9EB8d4ba72AEb1Cd8Ff5EF'
   if (tradeId && wallet?.address) {
+    contractId = '670660ed2bbeb54123b28728'
     const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
     const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
     const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
     const MarketplaveV3Interface = new ethers.utils.Interface(abi)
-    const calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, wallet.address)]])
-    const customizationOptions = {
-      calldata,
-      // cryptoCurrencyCode: 'TRNSK',
-      cryptoCurrencyCode: 'MANA',
-      // contractAddress: asset.contractAddress,
-      // tokenId,
-      // tradeType: isNFT(asset) ? TradeType.SECONDARY : TradeType.PRIMARY,
-      // productsAvailed: ProductsAvailed.BUY,
-      isNFT: true,
-      estimatedGasLimit: 70_000,
-      widgetWidth: isMobile() ? undefined : '450px', // To avoid fixing the width of the widget in mobile
-      contractId: '670519812bbeb54123b0fcd0',
-      nftData: [
-        {
-          imageURL: getAssetImage(asset),
-          nftName: asset.name,
-          collectionAddress: asset.contractAddress,
-          tokenID: [isNFT(asset) ? asset.tokenId : asset.itemId],
-          price: [+ethers.utils.formatEther((isNFT(asset) ? order?.price : asset.price) || 0)],
-          quantity: 1,
-          nftType: 'ERC721'
-        }
-      ]
-    }
-    const address: string | undefined = (yield select(getAddress)) as ReturnType<typeof getAddress>
+    calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, TRANSAK_MULTICALL_CONTRACT)]])
+  } else if (order && isNFT(asset)) {
+    contractId = '670e86dd2bbeb54123b3a2a3'
+    const contractName = getContractName(order.marketplaceAddress)
+    const contract = getContract(contractName, order.chainId)
+    const MarketplaceV2Interface = new ethers.utils.Interface(contract.abi)
+    calldata = MarketplaceV2Interface.encodeFunctionData('executeOrder', [[asset.contractAddress, asset.tokenId, order.price]])
+  } else if (!isNFT(asset)) {
+    contractId = '670e8b512bbeb54123b3a2b4'
+    const contract = getContract(ContractName.CollectionStore, asset.chainId)
+    const CollectionStoreInterface = new ethers.utils.Interface(contract.abi)
+    calldata = CollectionStoreInterface.encodeFunctionData('buy', [
+      [[asset.contractAddress, [asset.itemId], [asset.price], [TRANSAK_MULTICALL_CONTRACT]]]
+    ])
+  }
 
-    yield put(closeAllModals())
-    if (address) {
-      console.log('customizationOptions: ', customizationOptions)
-      new Transak(transakConfig, customizationOptions).openWidget(address, Network.MATIC)
-    }
+  let tokenId: string = ''
+  if (!isNFT(asset)) {
+    const raritySupply = Rarity.getMaxSupply(asset.rarity)
+    const available = asset.available
+    const nextIssueId = raritySupply - available + 1
+    tokenId = encodeTokenId(parseInt(asset.itemId), nextIssueId).toString()
+  } else {
+    tokenId = asset.tokenId
+  }
+
+  const customizationOptions = {
+    calldata,
+    cryptoCurrencyCode: 'MANA',
+    isNFT: true,
+    estimatedGasLimit: 70_000,
+    widgetWidth: isMobile() ? undefined : '450px', // To avoid fixing the width of the widget in mobile
+    contractId,
+    nftData: [
+      {
+        imageURL: getAssetImage(asset),
+        nftName: asset.name,
+        collectionAddress: asset.contractAddress,
+        tokenID: [`${tokenId}`],
+        price: [+ethers.utils.formatEther((isNFT(asset) ? order?.price : asset.price) || 0)],
+        quantity: 1,
+        nftType: 'ERC721'
+      }
+    ]
+  }
+  const address: string | undefined = (yield select(getAddress)) as ReturnType<typeof getAddress>
+
+  yield put(closeAllModals())
+  if (address) {
+    new Transak(transakConfig, customizationOptions).openWidget(address, Network.MATIC)
   }
 }
