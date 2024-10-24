@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import { History } from 'history'
 import { SagaIterator, Task } from 'redux-saga'
 import { call, cancel, cancelled, fork, race, select, take, getContext } from 'redux-saga/effects'
-import { Entity, Trade } from '@dcl/schemas'
+import { CatalogFilters, Entity, Trade } from '@dcl/schemas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
@@ -20,7 +20,11 @@ import { API_SIGNER } from '../../lib/api'
 import { isErrorWithMessage } from '../../lib/error'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard } from '../asset/utils'
-import { getIsMarketplaceServerEnabled, getIsOffchainPublicItemOrdersEnabled } from '../features/selectors'
+import {
+  getIsMarketplaceServerEnabled,
+  getIsOffchainPublicItemOrdersEnabled,
+  getIsOffchainPublicNFTOrdersEnabled
+} from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { locations } from '../routing/locations'
 import { isCatalogView } from '../routing/utils'
@@ -130,9 +134,14 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       const ids = data.map(item => item.id)
       const isMarketplaceServerEnabled: boolean = yield select(getIsMarketplaceServerEnabled)
       const api = isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
-      const { data: itemData }: { data: Item[]; total: number } = yield call([api, 'get'], {
-        ids
-      })
+      const isOffchainEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
+      const { data: itemData }: { data: Item[]; total: number } = yield call(
+        [api, 'get'],
+        {
+          ids
+        },
+        { v2: isOffchainEnabled }
+      )
       yield put(fetchTrendingItemsSuccess(itemData))
     } catch (error) {
       yield put(fetchTrendingItemsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
@@ -161,9 +170,22 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       const isMarketplaceServerEnabled: boolean = yield select(getIsMarketplaceServerEnabled)
       const isOffchainPublicItemOrdersEnabled: boolean = yield select(getIsOffchainPublicItemOrdersEnabled)
       const catalogViewAPI = isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
-      const itemViewAPI = isOffchainPublicItemOrdersEnabled ? marketplaceItemAPI : itemAPI
-      const api = isCatalogView(view) ? catalogViewAPI : itemViewAPI
-      const { data, total }: { data: Item[]; total: number } = yield call([api, 'get'], filters)
+      const isOffchainEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
+      let data: Item[] = []
+      let total: number = 0
+
+      if (isCatalogView(view)) {
+        const result: { data: Item[]; total: number } = yield call([catalogViewAPI, 'get'], filters as CatalogFilters, {
+          v2: isOffchainEnabled
+        })
+        ;({ data, total } = result)
+      } else {
+        const result: { data: Item[]; total: number } = yield call(
+          [isOffchainPublicItemOrdersEnabled ? marketplaceItemAPI : itemAPI, 'get'],
+          filters
+        )
+        ;({ data, total } = result)
+      }
       yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
     } catch (error) {
       yield put(fetchItemsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error'), action.payload))

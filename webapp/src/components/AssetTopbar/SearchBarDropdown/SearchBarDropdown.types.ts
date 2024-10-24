@@ -10,6 +10,7 @@ export type SearchBarDropdownProps = {
   fetchedCreators: CreatorAccount[]
   onFetchCreators: typeof fetchCreatorsAccountRequest
   isLoadingCreators: boolean
+  isOffchainEnabled: boolean
   onClickOutside: (event: MouseEvent) => void
 }
 
@@ -20,7 +21,7 @@ export enum SearchTab {
   COLLECTIONS = 'collections'
 }
 
-export type MapStateProps = Pick<SearchBarDropdownProps, 'fetchedCreators' | 'isLoadingCreators'>
+export type MapStateProps = Pick<SearchBarDropdownProps, 'fetchedCreators' | 'isLoadingCreators' | 'isOffchainEnabled'>
 
 export type MapDispatchProps = Pick<SearchBarDropdownProps, 'onFetchCreators'>
 export type MapDispatch = Dispatch<FetchCreatorsAccountRequestAction>
