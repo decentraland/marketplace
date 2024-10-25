@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
-import { Network, Rarity, Trade } from '@dcl/schemas'
+import { ChainId, Network, Rarity, Trade } from '@dcl/schemas'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
@@ -42,23 +42,37 @@ function* handleOpenTransak(action: OpenTransakAction) {
 
   const tradeId = isNFT(asset) ? order?.tradeId : asset.tradeId
   let calldata: string = ''
-  let contractId: string = ''
+  let contractId
   const TRANSAK_MULTICALL_CONTRACT = '0xCB9bD5aCD627e8FcCf9EB8d4ba72AEb1Cd8Ff5EF'
+  const MarketplaceV3ContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
+    [Network.MATIC]: {
+      [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
+      [ChainId.MATIC_MAINNET]: 'XXX'
+    },
+    [Network.ETHEREUM]: {
+      [ChainId.ETHEREUM_MAINNET]: 'XXX',
+      [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
+    }
+  }
   if (tradeId && wallet?.address) {
-    contractId = '670660ed2bbeb54123b28728'
+    contractId = MarketplaceV3ContractIds[asset.network]?.[asset.chainId]
+    if (!contractId) {
+      throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
+      return
+    }
     const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
     const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
     const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
     const MarketplaveV3Interface = new ethers.utils.Interface(abi)
     calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, TRANSAK_MULTICALL_CONTRACT)]])
   } else if (order && isNFT(asset)) {
-    contractId = '670e86dd2bbeb54123b3a2a3'
+    contractId = '670e86dd2bbeb54123b3a2a3' // MarketplaceV2 contractId
     const contractName = getContractName(order.marketplaceAddress)
     const contract = getContract(contractName, order.chainId)
     const MarketplaceV2Interface = new ethers.utils.Interface(contract.abi)
     calldata = MarketplaceV2Interface.encodeFunctionData('executeOrder', [[asset.contractAddress, asset.tokenId, order.price]])
   } else if (!isNFT(asset)) {
-    contractId = '670e8b512bbeb54123b3a2b4'
+    contractId = '670e8b512bbeb54123b3a2b4' // CollectionStore contractId
     const contract = getContract(ContractName.CollectionStore, asset.chainId)
     const CollectionStoreInterface = new ethers.utils.Interface(contract.abi)
     calldata = CollectionStoreInterface.encodeFunctionData('buy', [
