@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { getIsOffchainPublicItemOrdersEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getCategoryFromSection } from '../../../modules/routing/search'
 import {
@@ -56,7 +57,9 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     maxEstateSize: 'maxEstateSize' in values ? values.maxEstateSize || '' : getMaxEstateSize(state),
     rentalDays: 'rentalDays' in values ? values.rentalDays : getRentalDays(state),
     emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : getEmoteHasGeometry(state),
-    emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : getEmoteHasSound(state)
+    emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : getEmoteHasSound(state),
+    isOffchainPublicItemOrdersEnabled: getIsOffchainPublicItemOrdersEnabled(state),
+    isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state)
   }
 }
 

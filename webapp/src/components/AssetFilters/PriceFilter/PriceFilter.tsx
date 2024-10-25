@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { RentalsListingsFilterByCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { nftAPI } from '../../../modules/vendor/decentraland/nft/api'
+import { nftAPI, nftMarketplaceAPI } from '../../../modules/vendor/decentraland/nft/api'
 import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
 import { Section } from '../../../modules/vendor/routing/types'
 import { getNetwork, getPriceLabel } from '../../../utils/filters'
@@ -35,6 +35,8 @@ export const PriceFilter = ({
   rentalDays,
   emoteHasGeometry,
   emoteHasSound,
+  isOffchainPublicItemOrdersEnabled,
+  isOffchainPublicNFTOrdersEnabled,
   onChange
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
@@ -117,7 +119,8 @@ export const PriceFilter = ({
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
       data = await rentalsAPI.getRentalListingsPrices(rentalPriceFetchFilters())
     } else {
-      data = await nftAPI.fetchPrices(priceFetchFilters)
+      const api = isOffchainPublicItemOrdersEnabled || isOffchainPublicNFTOrdersEnabled ? nftMarketplaceAPI : nftAPI
+      data = await api.fetchPrices(priceFetchFilters)
     }
     return Object.entries(data).reduce(
       (acc, [key, value]) => {
@@ -126,7 +129,7 @@ export const PriceFilter = ({
       },
       {} as Record<string, number>
     )
-  }, [priceFetchFilters, landStatus, rentalPriceFetchFilters])
+  }, [priceFetchFilters, landStatus, isOffchainPublicItemOrdersEnabled, isOffchainPublicNFTOrdersEnabled, rentalPriceFetchFilters])
 
   return (
     <Box header={header} className="filters-sidebar-box price-filter" collapsible defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
