@@ -10,6 +10,7 @@ import {
 import { getData as getAuthorizations, getLoading } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { areEqual } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { getContract } from '../../../modules/contract/selectors'
+import { getIsOffchainPublicNFTOrdersEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getPendingAuthorizationTransactions } from '../../../modules/transaction/selectors'
 import { hasTransactionPending } from '../../../modules/transaction/utils'
@@ -35,7 +36,8 @@ const mapState = (state: RootState, { authorization }: OwnProps): MapStateProps 
     authorizations,
     pendingTransactions,
     isLoading: isLoading || hasTransactionPending(pendingTransactions, authorizedAddress, contractAddress),
-    getContract: (query: Partial<Contract>) => getContract(state, query)
+    getContract: (query: Partial<Contract>) => getContract(state, query),
+    isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state)
   }
 }
 

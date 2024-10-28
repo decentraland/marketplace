@@ -6,7 +6,7 @@ import { retryParams } from '../utils'
 export class CatalogAPI extends BaseClient {
   async get(filters: CatalogFilters = {}, headers?: Record<string, string>): Promise<{ data: Item[] }> {
     const queryParams = this.buildItemsQueryString(filters)
-    return this.fetch(`/v1/catalog?${queryParams}`, {
+    return this.fetch(`/v2/catalog?${queryParams}`, {
       headers
     })
   }

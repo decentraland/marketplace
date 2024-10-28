@@ -9,6 +9,7 @@ import { Authorization } from 'decentraland-dapps/dist/modules/authorization/typ
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { upsertContracts } from '../../../modules/contract/actions'
 import { getContract } from '../../../modules/contract/selectors'
+import { getIsOffchainPublicNFTOrdersEnabled } from '../../../modules/features/selectors'
 import { createOrderRequest, CREATE_ORDER_REQUEST, cancelOrderRequest, CANCEL_ORDER_REQUEST } from '../../../modules/order/actions'
 import { getLoading as getLoadingOrders } from '../../../modules/order/selectors'
 import { RootState } from '../../../modules/reducer'
@@ -26,7 +27,8 @@ const mapState = (state: RootState): MapStateProps => {
     authorizations: getAuthorizations(state),
     isCreatingOrder: isLoadingType(getLoadingOrders(state), CREATE_ORDER_REQUEST),
     isAuthorizing: isLoadingType(getLoading(state), GRANT_TOKEN_REQUEST) || isLoadingType(getLoading(state), REVOKE_TOKEN_REQUEST),
-    isCancelling: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST)
+    isCancelling: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST),
+    isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state)
   }
 }
 

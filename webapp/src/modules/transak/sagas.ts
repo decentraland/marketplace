@@ -21,6 +21,37 @@ export function* transakSaga() {
   yield takeEvery(OPEN_TRANSAK, handleOpenTransak)
 }
 
+const MarketplaceV3ContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
+  [Network.MATIC]: {
+    [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
+    [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
+  },
+  [Network.ETHEREUM]: {
+    [ChainId.ETHEREUM_MAINNET]: '',
+    [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
+  }
+}
+const MarketplaceV2ContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
+  [Network.MATIC]: {
+    [ChainId.MATIC_AMOY]: '670e86dd2bbeb54123b3a2a3',
+    [ChainId.MATIC_MAINNET]: '6717e6dac00223b9cc8e51cd'
+  },
+  [Network.ETHEREUM]: {
+    [ChainId.ETHEREUM_MAINNET]: '',
+    [ChainId.ETHEREUM_SEPOLIA]: '671f9815945ac8890fbae4c6'
+  }
+}
+const TransakMulticallContracts: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
+  [Network.MATIC]: {
+    [ChainId.MATIC_AMOY]: '0xCB9bD5aCD627e8FcCf9EB8d4ba72AEb1Cd8Ff5EF',
+    [ChainId.MATIC_MAINNET]: '0x4A598B7eC77b1562AD0dF7dc64a162695cE4c78A'
+  },
+  [Network.ETHEREUM]: {
+    [ChainId.ETHEREUM_MAINNET]: '0xab88cd272863b197b48762ea283f24a13f6586dd',
+    [ChainId.ETHEREUM_SEPOLIA]: '0xD84aC4716A082B1F7eCDe9301aA91A7c4B62ECd7'
+  }
+}
+
 function* handleOpenTransak(action: OpenTransakAction) {
   const { asset, order } = action.payload
   const transakConfig: TransakConfig = {
@@ -43,40 +74,37 @@ function* handleOpenTransak(action: OpenTransakAction) {
   const tradeId = isNFT(asset) ? order?.tradeId : asset.tradeId
   let calldata: string = ''
   let contractId
-  const TRANSAK_MULTICALL_CONTRACT = '0xCB9bD5aCD627e8FcCf9EB8d4ba72AEb1Cd8Ff5EF'
-  const MarketplaceV3ContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
-    [Network.MATIC]: {
-      [ChainId.MATIC_AMOY]: '670660ed2bbeb54123b28728',
-      [ChainId.MATIC_MAINNET]: 'XXX'
-    },
-    [Network.ETHEREUM]: {
-      [ChainId.ETHEREUM_MAINNET]: 'XXX',
-      [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
-    }
+
+  const transakMulticallContract = TransakMulticallContracts[asset.network]?.[asset.chainId]
+  if (!transakMulticallContract) {
+    throw new Error(`Transak multicall contract not found for network ${asset.network} and chainId ${asset.chainId}`)
   }
+
   if (tradeId && wallet?.address) {
     contractId = MarketplaceV3ContractIds[asset.network]?.[asset.chainId]
     if (!contractId) {
       throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
-      return
     }
     const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
     const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
     const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
     const MarketplaveV3Interface = new ethers.utils.Interface(abi)
-    calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, TRANSAK_MULTICALL_CONTRACT)]])
+    calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, transakMulticallContract)]])
   } else if (order && isNFT(asset)) {
-    contractId = '670e86dd2bbeb54123b3a2a3' // MarketplaceV2 contractId
+    contractId = MarketplaceV2ContractIds[asset.network]?.[asset.chainId]
+    if (!contractId) {
+      throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
+    }
     const contractName = getContractName(order.marketplaceAddress)
     const contract = getContract(contractName, order.chainId)
     const MarketplaceV2Interface = new ethers.utils.Interface(contract.abi)
     calldata = MarketplaceV2Interface.encodeFunctionData('executeOrder', [[asset.contractAddress, asset.tokenId, order.price]])
   } else if (!isNFT(asset)) {
-    contractId = '670e8b512bbeb54123b3a2b4' // CollectionStore contractId
+    contractId = asset.chainId === ChainId.MATIC_AMOY ? '670e8b512bbeb54123b3a2b4' : '6717e6e62fb1688e111c1a87' // CollectionStore contractId
     const contract = getContract(ContractName.CollectionStore, asset.chainId)
     const CollectionStoreInterface = new ethers.utils.Interface(contract.abi)
     calldata = CollectionStoreInterface.encodeFunctionData('buy', [
-      [[asset.contractAddress, [asset.itemId], [asset.price], [TRANSAK_MULTICALL_CONTRACT]]]
+      [[asset.contractAddress, [asset.itemId], [asset.price], [transakMulticallContract]]]
     ])
   }
 

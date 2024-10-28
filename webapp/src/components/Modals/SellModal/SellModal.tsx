@@ -10,7 +10,7 @@ import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { AuthorizationType, Authorization as Authorizations } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName } from 'decentraland-transactions'
+import { ContractName, getContract as getDecentralandContract } from 'decentraland-transactions'
 import { Button, Field, Loader, Mana, Message, ModalNavigation } from 'decentraland-ui'
 import { useAuthorization } from '../../../lib/authorization'
 import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
@@ -43,6 +43,7 @@ const SellModal = ({
   error,
   onFetchAuthorizations,
   isCancelling,
+  isOffchainPublicNFTOrdersEnabled,
   onCancelOrder
 }: Props) => {
   const { orderService } = VendorFactory.build(nft.vendor)
@@ -83,9 +84,13 @@ const SellModal = ({
     network: nft.network
   })
 
+  const offchainOrdersContract = isOffchainPublicNFTOrdersEnabled
+    ? getDecentralandContract(ContractName.OffChainMarketplace, nft.chainId)
+    : null
+
   const authorization: Authorizations = {
     address: wallet?.address || '',
-    authorizedAddress: marketplace!.address,
+    authorizedAddress: !!offchainOrdersContract && isOffchainPublicNFTOrdersEnabled ? offchainOrdersContract.address : marketplace!.address,
     contractAddress: nft.contractAddress,
     contractName:
       (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC
