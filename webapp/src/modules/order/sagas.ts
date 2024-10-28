@@ -44,7 +44,8 @@ import {
   FetchLegacyOrdersRequestAction,
   fetchOrdersSuccess,
   fetchOrdersRequest,
-  fetchOrdersFailure
+  fetchOrdersFailure,
+  cancelOrderSuccessTx
 } from './actions'
 import { getCurrentOrder } from './selectors'
 import { LegacyOrderFragment } from './types'
@@ -222,7 +223,7 @@ export function* orderSaga(tradeService: TradeService) {
   }
 
   function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
-    const { order, nft } = action.payload
+    const { order, nft, skipRedirection } = action.payload
     try {
       if (nft.contractAddress !== order.contractAddress && nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
@@ -243,11 +244,14 @@ export function* orderSaga(tradeService: TradeService) {
 
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
         txHash = yield call([tradeService, 'cancel'], trade, wallet.address)
+        yield put(cancelOrderSuccessTx(order, nft, txHash))
+        yield waitForTx(txHash)
+        yield put(cancelOrderSuccess(order, nft, txHash, skipRedirection))
       } else {
         const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
         txHash = (yield call([orderService, 'cancel'], wallet, order)) as Awaited<ReturnType<typeof orderService.cancel>>
+        yield put(cancelOrderSuccess(order, nft, txHash, skipRedirection))
       }
-      yield put(cancelOrderSuccess(order, nft, txHash))
     } catch (error) {
       const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
       const errorCode =

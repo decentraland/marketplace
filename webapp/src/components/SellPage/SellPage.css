@@ -19,6 +19,13 @@
   width: 100% !important;
 }
 
+.SellPage .cancel-order {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 500px;
+}
+
 .clndr-control .ui.compact.icon.button,
 .clndr-control .ui.compact.icon.buttons .button {
   width: 20px !important;

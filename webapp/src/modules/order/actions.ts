@@ -99,12 +99,14 @@ export type ExecuteOrderWithCardFailureAction = ReturnType<typeof executeOrderWi
 // Cancel Order (aka Cancel Sale)
 
 export const CANCEL_ORDER_REQUEST = '[Request] Cancel Order'
+export const CANCEL_ORDER_SUCCESS_TX = '[Success] Cancel Order Tx'
 export const CANCEL_ORDER_SUCCESS = '[Success] Cancel Order'
 export const CANCEL_ORDER_FAILURE = '[Failure] Cancel Order'
 
-export const cancelOrderRequest = (order: Order, nft: NFT) => action(CANCEL_ORDER_REQUEST, { order, nft })
-export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
-  action(CANCEL_ORDER_SUCCESS, {
+export const cancelOrderRequest = (order: Order, nft: NFT, skipRedirection?: boolean) =>
+  action(CANCEL_ORDER_REQUEST, { order, nft, skipRedirection })
+export const cancelOrderSuccessTx = (order: Order, nft: NFT, txHash: string) =>
+  action(CANCEL_ORDER_SUCCESS_TX, {
     order,
     nft,
     ...buildTransactionPayload(nft.chainId, txHash, {
@@ -115,6 +117,21 @@ export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
       price: formatWeiMANA(order.price)
     })
   })
+
+export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string, skipRedirection?: boolean) =>
+  action(CANCEL_ORDER_SUCCESS, {
+    order,
+    nft,
+    skipRedirection,
+    ...buildTransactionPayload(nft.chainId, txHash, {
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress,
+      network: nft.network,
+      name: getAssetName(nft),
+      price: formatWeiMANA(order.price)
+    })
+  })
+
 export const cancelOrderFailure = (order: Order, nft: NFT, error: string, errorCode?: ErrorCode) =>
   action(CANCEL_ORDER_FAILURE, { order, nft, error, errorCode })
 

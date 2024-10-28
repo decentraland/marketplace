@@ -803,7 +803,9 @@
       "line_one": "You are about to list {name} on sale for {amount}.",
       "line_two": "Please re-enter the price to confirm:",
       "warning": "Warning: this price is way below market value"
-    }
+    },
+    "cancel_order_warning": "ACTION REQUIRED: In order to update the new price, you have to remove the previous sale first",
+    "cancel_order": "CANCEL ORDER"
   },
   "buy_page": {
     "title": "Buy {category}",
