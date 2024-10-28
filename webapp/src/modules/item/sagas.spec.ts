@@ -12,7 +12,11 @@ import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
-import { getIsMarketplaceServerEnabled, getIsOffchainPublicItemOrdersEnabled } from '../features/selectors'
+import {
+  getIsMarketplaceServerEnabled,
+  getIsOffchainPublicItemOrdersEnabled,
+  getIsOffchainPublicNFTOrdersEnabled
+} from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { locations } from '../routing/locations'
 import { View } from '../ui/types'
@@ -474,6 +478,7 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
                 [select(getIsOffchainPublicItemOrdersEnabled), true],
+                [select(getIsOffchainPublicNFTOrdersEnabled), false],
                 [select(getIsMarketplaceServerEnabled), true],
                 [getContext('history'), { location: { pathname } }],
                 {
@@ -511,6 +516,7 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
                 [select(getIsOffchainPublicItemOrdersEnabled), true],
+                [select(getIsOffchainPublicNFTOrdersEnabled), false],
                 [select(getIsMarketplaceServerEnabled), true],
                 [getContext('history'), { location: { pathname } }],
                 {
@@ -553,6 +559,7 @@ describe('when handling the fetch items request action', () => {
             [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
             [select(getIsOffchainPublicItemOrdersEnabled), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), false],
             [select(getWallet), undefined],
             [getContext('history'), { location: { pathname } }],
             [select(getIsMarketplaceServerEnabled), false]
@@ -571,6 +578,7 @@ describe('when handling the fetch items request action', () => {
           [getContext('history'), { location: { pathname: '' } }],
           [select(getWallet), undefined],
           [select(getIsMarketplaceServerEnabled), true],
+          [select(getIsOffchainPublicNFTOrdersEnabled), false],
           [select(getIsOffchainPublicItemOrdersEnabled), true],
           [select(getWallet), undefined],
           [matchers.call.fn(CatalogAPI.prototype.get), Promise.reject(anError)],
@@ -666,6 +674,7 @@ describe('when handling the fetch trending items request action', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
             [select(getIsMarketplaceServerEnabled), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), false],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
             [matchers.call.fn(CatalogAPI.prototype.get), fetchResult],
             [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
