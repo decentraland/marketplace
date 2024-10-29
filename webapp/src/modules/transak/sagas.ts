@@ -27,7 +27,7 @@ const MarketplaceV3ContractIds: Pick<Record<Network, Partial<Record<ChainId, str
     [ChainId.MATIC_MAINNET]: '6717e6cd2fb1688e111c1a80'
   },
   [Network.ETHEREUM]: {
-    [ChainId.ETHEREUM_MAINNET]: '',
+    [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
     [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
   }
 }
@@ -37,7 +37,7 @@ const MarketplaceV2ContractIds: Pick<Record<Network, Partial<Record<ChainId, str
     [ChainId.MATIC_MAINNET]: '6717e6dac00223b9cc8e51cd'
   },
   [Network.ETHEREUM]: {
-    [ChainId.ETHEREUM_MAINNET]: '',
+    [ChainId.ETHEREUM_MAINNET]: '672100572fb1688e111c2bdb',
     [ChainId.ETHEREUM_SEPOLIA]: '671f9815945ac8890fbae4c6'
   }
 }
