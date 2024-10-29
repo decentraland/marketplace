@@ -54,7 +54,8 @@ export const SearchBarDropdown = ({
   fetchedCreators,
   isLoadingCreators,
   onFetchCreators,
-  onClickOutside
+  onClickOutside,
+  isOffchainEnabled
 }: SearchBarDropdownProps) => {
   const isSearchingWearables = category === NFTCategory.WEARABLE
   const isSearchingEmotes = category === NFTCategory.EMOTE
@@ -139,8 +140,11 @@ export const SearchBarDropdown = ({
               first: MAX_AMOUNT_OF_RESULTS
             },
             {
-              'x-search-uuid': searchUUID,
-              'x-anonymous-id': anonId
+              v2: isOffchainEnabled,
+              headers: {
+                'x-search-uuid': searchUUID,
+                'x-anonymous-id': anonId
+              }
             }
           )
           .then(response => {
