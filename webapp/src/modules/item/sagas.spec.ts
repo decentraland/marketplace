@@ -220,7 +220,7 @@ describe('when handling the buy items with card action', () => {
     it('should open Transak widget', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
-        .put(openModal('BuyWithCardExplanationModal', { asset: item }))
+        .put(openModal('BuyWithCardExplanationModal', { asset: item, order: undefined }))
         .dispatch(buyItemWithCardRequest(item))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })
@@ -234,7 +234,7 @@ describe('when handling the buy items with card action', () => {
     it('should not set the item in the local storage to show the modal again later', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
-        .put(openModal('BuyWithCardExplanationModal', { asset: item }))
+        .put(openModal('BuyWithCardExplanationModal', { asset: item, order: undefined }))
         .dispatch(buyItemWithCardRequest(item))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })
