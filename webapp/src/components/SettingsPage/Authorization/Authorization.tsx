@@ -49,9 +49,18 @@ const Authorization = (props: Props) => {
 
   const { contractAddress, authorizedAddress } = authorization
 
-  const contract = isOffchainPublicNFTOrdersEnabled
-    ? getDecentralandContract(ContractName.OffChainMarketplace, authorization.chainId)
-    : getContract({ address: authorizedAddress })
+  let contract
+  let name: string = ''
+  if (isOffchainPublicNFTOrdersEnabled) {
+    contract = getDecentralandContract(ContractName.OffChainMarketplace, authorization.chainId)
+    name = contract.name
+  } else {
+    contract = getContract({ address: authorizedAddress })
+    if (contract) {
+      name = contract.label || contract.name
+    }
+  }
+
   const token = getContract({ address: contractAddress })
 
   if (!contract || !token) {
@@ -88,7 +97,7 @@ const Authorization = (props: Props) => {
             values={{
               contract_link: (
                 <TransactionLink address={authorizedAddress} txHash="" chainId={authorization.chainId}>
-                  {contract.label || contract.name}
+                  {name}
                 </TransactionLink>
               ),
               symbol: token.name,

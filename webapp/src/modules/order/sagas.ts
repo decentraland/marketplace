@@ -1,6 +1,6 @@
 import { History } from 'history'
 import { put, call, takeEvery, select, race, take, getContext } from 'redux-saga/effects'
-import { ListingStatus, Order, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
+import { ListingStatus, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
@@ -47,7 +47,6 @@ import {
   fetchOrdersFailure,
   cancelOrderSuccessTx
 } from './actions'
-import { getCurrentOrder } from './selectors'
 import { LegacyOrderFragment } from './types'
 import * as orderUtils from './utils'
 
@@ -175,9 +174,7 @@ export function* orderSaga(tradeService: TradeService) {
   }
 
   function* handleExecuteOrderWithCardRequest(action: ExecuteOrderWithCardRequestAction) {
-    const { nft } = action.payload
-
-    const order: Order = yield select(getCurrentOrder)
+    const { nft, order } = action.payload
 
     try {
       yield call(buyAssetWithCard, nft, order)
