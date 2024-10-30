@@ -1,11 +1,35 @@
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Empty } from 'decentraland-ui'
 import { Props } from './CoverPicker.types'
 import './CoverPicker.css'
 
+const readFile = (file: File): Promise<string> => {
+  const reader = new FileReader()
+  return new Promise<string>((resolve, reject) => {
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
+
 const CoverPicker = ({ src, onChange }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const handleOnFileChange = useCallback(
+    async (e: Parameters<React.ChangeEventHandler<HTMLInputElement>>[0]) => {
+      const file = e.target.files?.[0]
+      if (file) {
+        const src = await readFile(file)
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        onChange(src, file.name, file.size)
+      } else {
+        onChange()
+      }
+    },
+    [onChange]
+  )
 
   return (
     <div className="CoverPicker">
@@ -38,22 +62,7 @@ const CoverPicker = ({ src, onChange }: Props) => {
           </div>
         )}
       </div>
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        onChange={e => {
-          const file = e.target.files?.[0]
-
-          if (file) {
-            const src = URL.createObjectURL(file)
-            onChange(src, file.name, file.size)
-          } else {
-            onChange()
-          }
-        }}
-        hidden
-      />
+      <input ref={inputRef} type="file" accept="image/*" onChange={handleOnFileChange} hidden />
     </div>
   )
 }
