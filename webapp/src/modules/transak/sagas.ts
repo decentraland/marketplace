@@ -55,7 +55,6 @@ const TransakMulticallContracts: Pick<Record<Network, Partial<Record<ChainId, st
 function* handleOpenTransak(action: OpenTransakAction) {
   const { asset, order } = action.payload
   const transakConfig: TransakConfig = {
-    marketplaceServerURL: config.get('MARKETPLACE_SERVER_URL'),
     apiBaseUrl: config.get('MARKETPLACE_SERVER_URL'),
     key: config.get('TRANSAK_KEY'),
     env: config.get('TRANSAK_ENV'),
