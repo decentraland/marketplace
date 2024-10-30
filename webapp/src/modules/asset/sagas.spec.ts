@@ -95,19 +95,6 @@ describe('when handling the set purchase action', () => {
           })
       })
     })
-
-    describe('and the tx hash has not yet been setted', () => {
-      it('should not dispatch a push to the history with the location of the buy status page', () => {
-        return expectSaga(assetSaga)
-          .provide([[getContext('history'), { location: { pathname: locations.browse() } }]])
-
-          .dispatch(setPurchase({ ...mockNFTPurchase, txHash: null }))
-          .run({ silenceTimeout: true })
-          .then(({ effects }) => {
-            expect(effects.put).toBeUndefined()
-          })
-      })
-    })
   })
 
   describe.each([PurchaseStatus.FAILED, PurchaseStatus.CANCELLED, PurchaseStatus.REFUNDED])(

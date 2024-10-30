@@ -24,6 +24,7 @@ export type Props = Omit<ModalProps, 'metadata'> & {
   authorizations: Authorization[]
   isCreatingOrder: boolean
   isAuthorizing: boolean
+  isOffchainPublicNFTOrdersEnabled: boolean
   onFetchAuthorizations: typeof fetchAuthorizationsRequest
   onUpsertContracts: typeof upsertContracts
   onCancelOrder: typeof cancelOrderRequest
@@ -34,7 +35,14 @@ export type OwnProps = Pick<Props, 'metadata'>
 
 export type MapStateProps = Pick<
   Props,
-  'authorizations' | 'wallet' | 'isCreatingOrder' | 'error' | 'getContract' | 'isAuthorizing' | 'isCancelling'
+  | 'authorizations'
+  | 'wallet'
+  | 'isCreatingOrder'
+  | 'error'
+  | 'getContract'
+  | 'isAuthorizing'
+  | 'isCancelling'
+  | 'isOffchainPublicNFTOrdersEnabled'
 >
 
 export type MapDispatchProps = Pick<Props, 'onCreateOrder' | 'onFetchAuthorizations' | 'onUpsertContracts' | 'onCancelOrder'>

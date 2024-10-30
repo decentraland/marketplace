@@ -233,7 +233,10 @@ describe('when handling the execute order with card action', () => {
   describe('when the explanation modal has already been shown', () => {
     it('should open Transak widget', () => {
       return expectSaga(orderSaga, tradeService)
-        .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), 'true']])
+        .provide([
+          [call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), 'true'],
+          [select(getIsOffchainPublicNFTOrdersEnabled), true]
+        ])
         .put(openTransak(nft))
         .dispatch(executeOrderWithCardRequest(nft))
         .run({ silenceTimeout: true })
@@ -247,7 +250,7 @@ describe('when handling the execute order with card action', () => {
     it('should not set nft in the local storage to show the modal again later', () => {
       return expectSaga(orderSaga, tradeService)
         .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
-        .put(openModal('BuyWithCardExplanationModal', { asset: nft }))
+        .put(openModal('BuyWithCardExplanationModal', { asset: nft, order: undefined }))
         .dispatch(executeOrderWithCardRequest(nft))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })
@@ -266,7 +269,7 @@ describe('when handling the execute order with card action', () => {
 
     it('should dispatch an action signaling the failure of the action handling', () => {
       return expectSaga(orderSaga, tradeService)
-        .provide([[call(buyAssetWithCard, nft), Promise.reject(new Error(errorMessage))]])
+        .provide([[call(buyAssetWithCard, nft, undefined), Promise.reject(new Error(errorMessage))]])
         .put(executeOrderWithCardFailure(errorMessage))
         .dispatch(executeOrderWithCardRequest(nft))
         .run({ silenceTimeout: true })

@@ -45,7 +45,7 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
     const statusPagePathname = locations.buyStatusPage(assetType, contractAddress, assetId)
     const shouldRedirect = [new URL(`${window.origin}${buyWithCardPathname}`).pathname, statusPagePathname].includes(pathname)
 
-    if (shouldRedirect && [PurchaseStatus.PENDING, PurchaseStatus.COMPLETE].includes(status)) {
+    if ([PurchaseStatus.PENDING, PurchaseStatus.COMPLETE].includes(status)) {
       history.push(statusPagePathname)
     }
 

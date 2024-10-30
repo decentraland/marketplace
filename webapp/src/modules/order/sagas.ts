@@ -174,10 +174,10 @@ export function* orderSaga(tradeService: TradeService) {
   }
 
   function* handleExecuteOrderWithCardRequest(action: ExecuteOrderWithCardRequestAction) {
-    const { nft } = action.payload
+    const { nft, order } = action.payload
 
     try {
-      yield call(buyAssetWithCard, nft)
+      yield call(buyAssetWithCard, nft, order)
     } catch (error) {
       yield put(executeOrderWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }

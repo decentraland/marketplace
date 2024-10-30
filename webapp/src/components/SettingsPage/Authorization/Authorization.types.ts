@@ -15,6 +15,7 @@ export type Props = {
   authorizations: Authorization[]
   pendingTransactions: Transaction[]
   isLoading: boolean
+  isOffchainPublicNFTOrdersEnabled: boolean
   shouldUpdateSpendingCap?: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onGrant: typeof grantTokenRequest
@@ -22,6 +23,9 @@ export type Props = {
 }
 
 export type OwnProps = Pick<Props, 'authorization'>
-export type MapStateProps = Pick<Props, 'authorizations' | 'pendingTransactions' | 'isLoading' | 'getContract'>
+export type MapStateProps = Pick<
+  Props,
+  'authorizations' | 'pendingTransactions' | 'isLoading' | 'getContract' | 'isOffchainPublicNFTOrdersEnabled'
+>
 export type MapDispatchProps = Pick<Props, 'onGrant' | 'onRevoke'>
 export type MapDispatch = Dispatch<GrantTokenRequestAction | RevokeTokenRequestAction>

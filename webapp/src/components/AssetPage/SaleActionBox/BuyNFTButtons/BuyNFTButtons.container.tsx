@@ -18,7 +18,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch, ownProps: OwnProps): MapDispatchProps => ({
-  onExecuteOrderWithCard: nft => dispatch(executeOrderWithCardRequest(nft)),
+  onExecuteOrderWithCard: (nft, order?: Order) => dispatch(executeOrderWithCardRequest(nft, order)),
   onBuyWithCrypto: (asset: Asset, order?: Order | null) =>
     ownProps.assetType === AssetType.NFT
       ? dispatch(

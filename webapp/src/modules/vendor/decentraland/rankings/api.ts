@@ -1,6 +1,6 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { AnalyticsTimeframe, RankingEntities, RankingEntity, RankingsFilters } from '../../../analytics/types'
-import { NFT_SERVER_URL } from '../nft'
+import { MARKETPLACE_SERVER_URL } from '../marketplace/api'
 import { retryParams } from '../utils'
 
 const DEFAULT_REQUEST_SIZE = 5
@@ -30,4 +30,4 @@ class RankingsAPI extends BaseAPI {
   }
 }
 
-export const rankingsAPI = new RankingsAPI(NFT_SERVER_URL, retryParams)
+export const rankingsAPI = new RankingsAPI(MARKETPLACE_SERVER_URL, retryParams)

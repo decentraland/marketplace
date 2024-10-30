@@ -35,9 +35,9 @@ const BuyNFTButtons = ({
   const history = useHistory()
 
   const handleBuyWithCard = useCallback(
-    (asset: Asset) => {
+    (asset: Asset, order?: Order) => {
       analytics.track(events.CLICK_GO_TO_BUY_NFT_WITH_CARD)
-      !isNFT(asset) ? onBuyItemWithCard(asset) : onExecuteOrderWithCard(asset)
+      !isNFT(asset) ? onBuyItemWithCard(asset) : onExecuteOrderWithCard(asset, order)
     },
     [analytics, onBuyItemWithCard, onExecuteOrderWithCard]
   )
@@ -65,7 +65,7 @@ const BuyNFTButtons = ({
           return (
             <>
               <BuyWithCryptoButton asset={asset} onClick={() => handleBuyWithCrypto(asset, order)} />
-              <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset)} />
+              <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset, order || undefined)} />
             </>
           )
         }}
