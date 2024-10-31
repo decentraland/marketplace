@@ -96,6 +96,7 @@ export function* orderSaga(tradeService: TradeService) {
         const trade: TradeCreation = yield call([orderUtils, 'createPublicNFTOrderTrade'], nft, price, expiresAt)
         yield call([tradeService, 'addTrade'], trade)
         yield put(createOrderSuccess(nft, price, expiresAt))
+        yield put(fetchNFTRequest(nft.contractAddress, nft.tokenId)) // fetch the NFT again to get the new order with the tradeId
         history.push(locations.nft(nft.contractAddress, nft.tokenId))
       } else {
         const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)

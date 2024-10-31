@@ -36,7 +36,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onCreateOrder: (nft, price, expiresAt) => dispatch(createOrderRequest(nft, price, expiresAt)),
   onFetchAuthorizations: (authorizations: Authorization[]) => dispatch(fetchAuthorizationsRequest(authorizations)),
   onUpsertContracts: (contracts: Contract[]) => dispatch(upsertContracts(contracts)),
-  onCancelOrder: (order, nft) => dispatch(cancelOrderRequest(order, nft))
+  onCancelOrder: (order, nft, skipRedirection = false) => dispatch(cancelOrderRequest(order, nft, skipRedirection))
 })
 
 export default connect(mapState, mapDispatch)(SellModal)
