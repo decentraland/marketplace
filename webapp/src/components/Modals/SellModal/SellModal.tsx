@@ -18,6 +18,7 @@ import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { getDefaultExpirationDate, INPUT_FORMAT } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
+import ErrorBanner from '../../ErrorBanner'
 import { ManaField } from '../../ManaField'
 import { showPriceBelowMarketValueWarning } from '../../SellPage/SellModal/utils'
 import { Authorization } from '../../SettingsPage/Authorization'
@@ -50,7 +51,9 @@ const SellModal = ({
 
   const [confirmedInput, setConfirmedInput] = useState<string>('')
 
-  const [step, setStep] = useState(StepperValues.SELL_MODAL)
+  const shouldRemoveOffchainListing = !!order?.tradeId
+
+  const [step, setStep] = useState(shouldRemoveOffchainListing ? StepperValues.CANCEL : StepperValues.SELL_MODAL)
 
   const isUpdate = order !== null
 
@@ -318,33 +321,45 @@ const SellModal = ({
         <ModalNavigation
           title={t('sell_page.confirm.title')}
           onClose={onClose}
-          onBack={isCancelling ? undefined : () => setStep(StepperValues.SELL_MODAL)}
+          onBack={isCancelling || shouldRemoveOffchainListing ? undefined : () => setStep(StepperValues.SELL_MODAL)}
         />
       ),
       description: null,
       content: order ? (
-        <div className={styles.fieldsContainer}>
-          <span>
-            <T
-              id="cancel_sale_page.subtitle"
-              values={{
-                name: <b>{assetName}</b>,
-                amount: (
-                  <Mana showTooltip network={nft.network} inline>
-                    {formatWeiMANA(order.price)}
-                  </Mana>
-                )
-              }}
-            />
-          </span>
-        </div>
+        shouldRemoveOffchainListing ? (
+          <div className={styles.fieldsContainer}>
+            <ErrorBanner info={t('sell_page.cancel_order_warning')} />
+          </div>
+        ) : (
+          <div className={styles.fieldsContainer}>
+            <span>
+              <T
+                id="cancel_sale_page.subtitle"
+                values={{
+                  name: <b>{assetName}</b>,
+                  amount: (
+                    <Mana showTooltip network={nft.network} inline>
+                      {formatWeiMANA(order.price)}
+                    </Mana>
+                  )
+                }}
+              />
+            </span>
+          </div>
+        )
       ) : null,
       actions: (
         <Modal.Actions>
           <Button disabled={isCancelling} onClick={onClose}>
             {t('global.cancel')}
           </Button>
-          <Button type="submit" primary disabled={isCancelling} loading={isCancelling} onClick={() => onCancelOrder(order!, nft)}>
+          <Button
+            type="submit"
+            primary
+            disabled={isCancelling}
+            loading={isCancelling}
+            onClick={() => !!order && onCancelOrder(order, nft, shouldRemoveOffchainListing)}
+          >
             {t('global.proceed')}
           </Button>
         </Modal.Actions>
