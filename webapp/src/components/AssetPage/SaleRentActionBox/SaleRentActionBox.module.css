@@ -15,11 +15,12 @@
   flex-direction: column;
 }
 
-.price .title, .periodTitle {
+.price .title,
+.periodTitle {
   font-weight: 500;
   font-size: 13px;
   text-transform: uppercase;
-  color: #736E7D;
+  color: #736e7d;
 }
 
 .periodTitle {
@@ -40,7 +41,7 @@
 .priceInFiat {
   margin-left: 5px;
   font-size: 15px;
-  color: #736E7D;
+  color: #736e7d;
   line-height: 1.5;
 }
 
@@ -73,13 +74,13 @@
   text-align: center;
   padding-top: 9px;
   padding-bottom: 9px;
-	padding-left: 0;
+  padding-left: 0;
   padding-right: 0;
-	color: inherit;
-	font: inherit;
-	outline: inherit;
-	cursor: pointer;
-	border: none;
+  color: inherit;
+  font: inherit;
+  outline: inherit;
+  cursor: pointer;
+  border: none;
   font-weight: 500;
   font-size: 17px;
   padding-top: 15px;
@@ -102,6 +103,7 @@
 
 .saleButtons {
   display: flex;
+  gap: 10px;
   flex-direction: column;
 }
 
@@ -135,10 +137,10 @@
 }
 
 .fullWidth {
-  width: 100%
+  width: 100%;
 }
 
-.priceValue { 
+.priceValue {
   margin-bottom: 20px;
 }
 
