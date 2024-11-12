@@ -1376,27 +1376,20 @@
     "confirm_transaction": "确认您钱包上的交易以继续"
   },
   "campaign": {
-    "tab": "DCLMF23",
-    "badge": "DCLMF23",
-    "event_tag": "DCLMF23",
-    "event_hashtag": "#DCLMF23"
+    "tab": "DCLMF24",
+    "badge": "DCLMF24",
+    "event_tag": "DCLMF24",
+    "event_hashtag": "#DCLMF24"
   },
   "event_campaign": {
     "homepage": {
-      "title": "准备去分散音乐节！",
-      "subtitle": "11月16日至18日，分散的3天的沉浸式音乐经验和数字表演即将到来。为DCL社区创作者的最新节日可穿戴设备和情感做好准备。"
-    },
-    "collectibles": {
-      "title": "准备去分散音乐节！",
-      "subtitle": "11月16日至18日，分散的3天的沉浸式音乐经验和数字表演即将到来。为DCL社区创作者的最新节日可穿戴设备和情感做好准备。"
+      "title": "准备好你的银河外观！",
+      "subtitle": "准备好在 11 月 20 日至 23 日举行的今年音乐节上展示您非凡的风格吧！使用 DCLMF24 选项卡，在一个地方找到您参加音乐节所需的一切。",
+      "cta": "立即选购"
     },
     "campaign_browser": {
-      "title": "分散音乐节的要点",
-      "subtitle": "从人群冲浪到发光的可穿戴设备，在这里找到＃DCLMF23所需的所有节日项目"
-    },
-    "empty_campaign": {
-      "title": "创作者还没有在这里添加他们的物品。同时，在“收藏品”选项卡中查看社区的创作，以找到您喜欢的东西。",
-      "action": "<collectiblesLink>去收藏品</collectiblesLink>"
+      "title": "您准备好加入 DCLMF24 了吗？！",
+      "subtitle": "使用来自 DCL 社区的超凡可穿戴设备和表情来打造完美的银河风格。11 月 20 日至 23 日，准备好并加入吧！"
     }
   },
   "asset_card": {
