@@ -1,11 +1,10 @@
 import { utils } from 'ethers'
 import { AnalyticsTimeframe } from '../../analytics/types'
-import { AnalyticsService as AnalyticsServiceInterface } from '../services'
 import { TokenConverter } from '../TokenConverter'
 import { AnalyticsAPI } from './analytics/api'
 import { retryParams } from './utils'
 
-export class AnalyticsService implements AnalyticsServiceInterface {
+export class AnalyticsService {
   private tokenConverter: TokenConverter
   private analyticsAPI: AnalyticsAPI
 

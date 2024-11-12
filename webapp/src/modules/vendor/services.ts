@@ -12,7 +12,6 @@ import {
 } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Account } from '../account/types'
-import { AnalyticsTimeframe, AnalyticsVolumeData } from '../analytics/types'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { OrderResponse } from './decentraland/order/types'
 import { NFTsFetchFilters } from './nft/types'
@@ -22,10 +21,6 @@ export type Contract = Omit<BaseContract, 'category'> & {
   label?: string
   category: NFTCategory | 'art' | null
   vendor: VendorName | null
-}
-
-export interface AnalyticsService {
-  fetchVolumeData: (timeframe: AnalyticsTimeframe) => Promise<AnalyticsVolumeData>
 }
 
 export interface NFTService<V extends VendorName> {
