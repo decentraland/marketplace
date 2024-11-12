@@ -12,7 +12,7 @@ import { Section } from '../../modules/vendor/decentraland'
 import * as decentraland from '../../modules/vendor/decentraland'
 import * as events from '../../utils/events'
 import { AssetStatusFilter } from '../../utils/filters'
-import { CAMPAING_TAB_ANIMATION_ENABLED } from '../Campaign/config'
+import { CAMPAIGN_TAB_ANIMATION_ENABLED } from '../Campaign/config'
 import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
 
@@ -55,7 +55,7 @@ const Navigation = (props: Props) => {
               <Tabs.Tab active={activeTab === NavigationTab.CAMPAIGN_BROWSER}>
                 <div
                   className={classNames('campaign-tab', {
-                    'campaign-tab-animation': CAMPAING_TAB_ANIMATION_ENABLED
+                    'campaign-tab-animation': CAMPAIGN_TAB_ANIMATION_ENABLED
                   })}
                 >
                   <span>{t('campaign.tab')}</span>

@@ -200,7 +200,7 @@ const HomePage = (props: Props) => {
       <SmartWearablesLaunchModal />
       {isCampaignHomepageBannerEnabled ? (
         <CampaignBanner>
-          <CampaignHomepageBanner />
+          <CampaignHomepageBanner type="homepage" />
         </CampaignBanner>
       ) : null}
       <Page className="HomePage">

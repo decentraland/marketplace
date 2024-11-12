@@ -1,118 +1,77 @@
 .CampaignHomepageBanner {
   width: 100%;
-  display: grid;
-  grid-template-columns: 400px 1fr 300px;
-  background-image: url('../banner.png');
+  display: flex;
+  align-items: center;
+  background-image: url('../banner.webp');
   background-size: cover;
-  background-position: center;
+  background-position: right;
   flex-direction: row;
   justify-content: space-between;
   gap: 50px;
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  padding: 40px;
+  min-height: 300px;
 }
 
 .CampaignHomepageBanner .event-banner-text {
   display: flex;
   flex-direction: column;
   color: white;
-  align-self: center;
   font-size: 15px;
   font-weight: 600;
   line-height: 26px;
   gap: 10px;
-  justify-content: center;
-  padding: 40px 0;
+  max-width: 700px;
 }
 
-.CampaignHomepageBanner .event-banner-logo-container {
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  font-weight: 600;
-  text-align: center;
-  line-height: unset;
-  padding: 40px;
-  padding-right: 0;
-}
-
-.CampaignHomepageBanner .event-banner-logo {
-  width: 100%;
+.CampaignHomepageBanner .cta {
+  width: 300px;
 }
 
 .CampaignHomepageBanner .title {
-  font-size: 34px;
+  font-size: 28px;
   line-height: 36px;
   font-weight: 800;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  align-self: center;
   margin-top: 15px;
+  text-transform: uppercase;
 }
 
 .CampaignHomepageBanner .subtitle {
   overflow-wrap: break-word;
   font-size: 19px;
   font-weight: 400;
+  margin-bottom: 10px;
 }
 
-.CampaignHomepageBanner .event-banner-pink {
-  color: #fd98ff;
-  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+.CampaignHomepageBanner .event-banner-logo {
+  width: 450px;
 }
 
-.CampaignHomepageBanner .ui.button.event-banner-browse-button {
-  width: 256px;
-  flex: none;
-  align-self: center;
-  font-weight: 800;
-  margin-top: 15px;
-}
-
-.CampaignHomepageBanner .event-banner-bird {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.CampaignHomepageBanner .event-banner-bird::after {
-  content: '';
-  background: url(../bird.png);
-  width: 120%;
-  height: 120%;
-  max-height: 350px;
-  position: absolute;
-  background-position-x: left;
-  background-position-y: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-
-@media (max-width: 1200px) {
+@media (max-width: 1400px) {
   .CampaignHomepageBanner {
-    grid-template-columns: 300px 1fr 200px;
-  }
-
-  .CampaignHomepageBanner .event-banner-bird::after {
-    width: 100%;
-    height: 100%;
-    max-height: 250px;
+    background-image: url(../banner-1400x300.webp);
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1600px) {
   .CampaignHomepageBanner {
-    background-image: url(../banner_mobile.png);
+    background-image: url(../banner-1600x300.webp);
+  }
+}
+
+@media (max-width: 970px) {
+  .CampaignHomepageBanner {
+    background-image: url(../banner-mobile.webp);
     height: auto;
     padding: 34px;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: 30px;
   }
 
-  .CampaignHomepageBanner .event-banner-logo-container  {
-    padding: 0;
+  .CampaignHomepageBanner .cta {
+    margin-top: 20px !important;
+    align-self: center;
   }
 
   .CampaignHomepageBanner .copy {
@@ -128,13 +87,12 @@
     font-size: 14px;
     word-spacing: -2.4px;
   }
+
   .CampaignHomepageBanner .subtitle {
     text-align: unset;
   }
-  .CampaignHomepageBanner .event-banner-bird {
-    display: none;
-  }
+
   .CampaignHomepageBanner .event-banner-logo {
-    width: 250px;
+    width: 300px;
   }
 }

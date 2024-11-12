@@ -2,7 +2,7 @@ import React from 'react'
 import { CampaignHomepageBanner } from '../CampaignHomepageBanner'
 
 const CampaignCollectiblesBanner: React.FC = () => {
-  return <CampaignHomepageBanner />
+  return <CampaignHomepageBanner type="homepage" />
 }
 
 export default CampaignCollectiblesBanner

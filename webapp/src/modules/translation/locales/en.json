@@ -1395,23 +1395,20 @@
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
   "campaign": {
-    "tab": "DCLMF23",
-    "badge": "DCLMF23",
-    "event_tag": "DCLMF23",
-    "event_hashtag": "#DCLMF23"
+    "tab": "DCLMF24",
+    "badge": "DCLMF24",
+    "event_tag": "DCLMF24",
+    "event_hashtag": "#DCLMF24"
   },
   "event_campaign": {
     "homepage": {
-      "title": "Get Ready for Decentraland Music Festival!",
-      "subtitle": "3 Days Of Immersive Musical Experience & Digitally-Native Performances Are Coming To Decentraland Nov 16-18. Get Ready With The Latest Festival Wearables & Emotes From DCL's Community Creators."
-    },
-    "collectibles": {
-      "title": "Get Ready for Decentraland Music Festival!",
-      "subtitle": "3 Days Of Immersive Musical Experience & Digitally-Native Performances Are Coming To Decentraland Nov 16-18. Get Ready With The Latest Festival Wearables & Emotes From DCL's Community Creators."
+      "title": "Prepare Your Galactic Looks!",
+      "subtitle": "Get ready to show off your out of this world style at this year's music festival Nov 20-23! Use the DCLMF24 tab to find everything you will need to be festival ready all in one place.",
+      "cta": "Shop Now"
     },
     "campaign_browser": {
-      "title": "Decentraland Music Festival Essentials",
-      "subtitle": "From Crowd Surfing Emotes to Glowing Wearables, Find All The Festival Items You Need For #DCLMF23 Right Here"
+      "title": "Are you ready to jump into DCLMF24?!",
+      "subtitle": "Prepare the perfect galactic style with out of this world Wearables & Emotes from the DCL community. Stock up and jump in Nov 20-23! "
     }
   },
   "asset_card": {
