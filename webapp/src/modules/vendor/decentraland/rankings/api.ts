@@ -1,11 +1,9 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { AnalyticsTimeframe, RankingEntities, RankingEntity, RankingsFilters } from '../../../analytics/types'
-import { MARKETPLACE_SERVER_URL } from '../marketplace/api'
-import { retryParams } from '../utils'
 
 const DEFAULT_REQUEST_SIZE = 5
 
-class RankingsAPI extends BaseAPI {
+export class RankingsAPI extends BaseAPI {
   fetch = async (entity: RankingEntities, timeframe: AnalyticsTimeframe, filters: RankingsFilters = {}): Promise<RankingEntity> => {
     const queryParams = this.buildItemsQueryString(filters)
     return this.request('get', `/rankings/${entity}/${timeframe}?${queryParams}`) as Promise<RankingEntity>
@@ -29,5 +27,3 @@ class RankingsAPI extends BaseAPI {
     return queryParams.toString()
   }
 }
-
-export const rankingsAPI = new RankingsAPI(MARKETPLACE_SERVER_URL, retryParams)

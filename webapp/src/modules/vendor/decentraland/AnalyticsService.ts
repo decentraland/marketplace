@@ -2,16 +2,20 @@ import { utils } from 'ethers'
 import { AnalyticsTimeframe } from '../../analytics/types'
 import { AnalyticsService as AnalyticsServiceInterface } from '../services'
 import { TokenConverter } from '../TokenConverter'
-import { analyticsAPI } from './analytics/api'
+import { AnalyticsAPI } from './analytics/api'
+import { retryParams } from './utils'
 
 export class AnalyticsService implements AnalyticsServiceInterface {
   private tokenConverter: TokenConverter
-  constructor() {
+  private analyticsAPI: AnalyticsAPI
+
+  constructor(serverURL: string) {
     this.tokenConverter = new TokenConverter()
+    this.analyticsAPI = new AnalyticsAPI(serverURL, retryParams)
   }
 
   async fetchVolumeData(timeframe: AnalyticsTimeframe) {
-    const { data } = await analyticsAPI.fetchVolumeByTimeframe(timeframe)
+    const { data } = await this.analyticsAPI.fetchVolumeByTimeframe(timeframe)
 
     return {
       sales: data.sales,
