@@ -22,7 +22,7 @@
     "dcl-catalyst-commons": "^9.0.1",
     "decentraland-connect": "^6.3.1",
     "decentraland-crypto-fetch": "^1.0.3",
-    "decentraland-dapps": "^23.13.2",
+    "decentraland-dapps": "^23.14.0",
     "decentraland-transactions": "^2.17.0",
     "decentraland-ui": "^6.12.0",
     "ethers": "^5.6.8",
