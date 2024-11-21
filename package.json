@@ -7,5 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/decentraland/marketplace.git"
   },
-  "dependencies": {}
+  "dependencies": {
+    "decentraland-ui": "^6.12.1"
+  }
 }
