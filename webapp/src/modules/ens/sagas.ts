@@ -133,11 +133,9 @@ export function* ensSaga() {
       const { AxelarProvider }: Awaited<typeof crossChainModule> = (yield crossChainModule) as Awaited<typeof crossChainModule>
 
       const crossChainProvider = new AxelarProvider(config.get('SQUID_API_URL'))
-      const txResponse: ethers.providers.TransactionReceipt = (yield call(
-        [crossChainProvider, 'executeRoute'],
-        route,
-        provider
-      )) as Awaited<ReturnType<typeof crossChainProvider.executeRoute>>
+      const txResponse: ethers.providers.TransactionReceipt = yield call([crossChainProvider, 'executeRoute'], route, provider) as Awaited<
+        ReturnType<typeof crossChainProvider.executeRoute>
+      >
 
       yield put(claimNameTransactionSubmitted(name, wallet.address, chainId, txResponse.transactionHash, route))
     } catch (error) {

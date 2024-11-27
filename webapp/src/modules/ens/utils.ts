@@ -27,7 +27,7 @@ export async function isNameAvailable(name: string): Promise<boolean> {
   const configuration = getConfiguration()
   const provider = networkProvider
     ? new ethers.providers.Web3Provider(networkProvider)
-    : new ethers.providers.JsonRpcProvider(configuration.network.urls[chainId])
+    : new ethers.providers.JsonRpcProvider(configuration.network.urls[chainId as keyof typeof configuration.network.urls])
   const contractDCLRegistrar = DCLRegistrar__factory.connect(REGISTRAR_ADDRESS, provider)
   return contractDCLRegistrar.available(name)
 }
