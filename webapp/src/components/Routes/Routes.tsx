@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { Switch, Route, Redirect, RouteComponentProps, useLocation } from 'react-router-dom'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
 import useManaFiatGatewayPurchase from 'decentraland-dapps/dist/hooks/useManaFiatGatewayPurchase'
@@ -34,7 +34,7 @@ import { SuccessPage } from '../SuccessPage'
 import { TransferPage } from '../TransferPage'
 import { Props } from './Routes.types'
 
-const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
+const Routes = ({ inMaintenance, onLocationChanged, userWalletAddress, userWalletType }: Props) => {
   usePageTracking()
   useManaFiatGatewayPurchase()
   const location = useLocation()
@@ -42,6 +42,11 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
   useEffect(() => {
     onLocationChanged()
   }, [location])
+
+  const intercomData = useMemo(
+    () => (userWalletType && userWalletAddress ? { Wallet: userWalletAddress, 'Wallet type': userWalletType } : undefined),
+    [userWalletAddress, userWalletType]
+  )
 
   const APP_ID = config.get('INTERCOM_APP_ID')
   const renderItemAssetPage = useCallback(() => <AssetPage type={AssetType.ITEM} />, [])
@@ -99,7 +104,7 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
         <Redirect from="/browse" to={locations.browse() + window.location.search} push />
         <Redirect to={locations.root()} />
       </Switch>
-      {APP_ID ? <Intercom appId={APP_ID} settings={{ alignment: 'right' }} /> : null}
+      {APP_ID ? <Intercom appId={APP_ID} data={intercomData} settings={{ alignment: 'right' }} /> : null}
     </>
   )
 }
