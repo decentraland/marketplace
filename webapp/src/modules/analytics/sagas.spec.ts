@@ -2,6 +2,7 @@ import { select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { getIsOffchainPublicItemOrdersEnabled } from '../features/selectors'
+import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { AnalyticsService } from '../vendor/decentraland'
 import { fetchAnalyticsVolumeDataRequest, fetchAnalyticsVolumeDataSuccess, fetchAnalyticsVolumeDataFailure } from './actions'
 import { analyticsSagas } from './sagas'
@@ -29,6 +30,7 @@ describe('when handling a fetch volume data request', () => {
       return expectSaga(analyticsSagas)
         .provide([
           [matchers.call.fn(AnalyticsService.prototype.fetchVolumeData), Promise.resolve(response)],
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
           [select(getIsOffchainPublicItemOrdersEnabled), true]
         ])
         .call.like({
@@ -46,6 +48,7 @@ describe('when handling a fetch volume data request', () => {
       return expectSaga(analyticsSagas)
         .provide([
           [matchers.call.fn(AnalyticsService.prototype.fetchVolumeData), Promise.reject(new Error('some error'))],
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
           [select(getIsOffchainPublicItemOrdersEnabled), true]
         ])
         .call.like({
