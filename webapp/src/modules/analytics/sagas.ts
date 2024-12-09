@@ -3,6 +3,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { config } from '../../config'
 import { isErrorWithMessage } from '../../lib/error'
 import { getIsOffchainPublicItemOrdersEnabled } from '../features/selectors'
+import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { AnalyticsService } from '../vendor/decentraland'
 import { RankingsAPI } from '../vendor/decentraland/rankings/api'
 import {
@@ -29,6 +30,7 @@ export function* handleFetchVolumeDataRequest(action: FetchAnalyticsDayDataReque
   const { timeframe } = action.payload
 
   try {
+    yield call(waitForFeatureFlagsToBeLoaded)
     const isOffChainOrderEnabled = (yield select(getIsOffchainPublicItemOrdersEnabled)) as ReturnType<
       typeof getIsOffchainPublicItemOrdersEnabled
     >
@@ -45,6 +47,7 @@ export function* handleFetchVolumeDataRequest(action: FetchAnalyticsDayDataReque
 function* handleFetchRankingsRequest(action: FetchRankingsRequestAction) {
   const { entity, filters, timeframe } = action.payload
   try {
+    yield call(waitForFeatureFlagsToBeLoaded)
     const isOffChainOrderEnabled = (yield select(getIsOffchainPublicItemOrdersEnabled)) as ReturnType<
       typeof getIsOffchainPublicItemOrdersEnabled
     >

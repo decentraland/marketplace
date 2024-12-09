@@ -1,5 +1,6 @@
 import { Item, CatalogFilters } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
+import { config } from '../../../../config'
 import { MARKETPLACE_SERVER_URL } from '../marketplace/api'
 import { retryParams } from '../utils'
 
@@ -7,7 +8,8 @@ export class CatalogAPI extends BaseClient {
   async get(filters: CatalogFilters = {}, options?: { v2?: boolean; headers?: Record<string, string> }): Promise<{ data: Item[] }> {
     const queryParams = this.buildItemsQueryString(filters)
     const { headers, v2 = false } = options || {}
-    const isUsingMarketplaceAPI = this.baseUrl.includes('marketplace-api')
+    const marketplaceAPIURL = config.get('MARKETPLACE_SERVER_URL')
+    const isUsingMarketplaceAPI = this.baseUrl.includes(marketplaceAPIURL)
     // the V2 endpoint is only available in the marketplace API
     return this.fetch(`/${v2 && isUsingMarketplaceAPI ? 'v2' : 'v1'}/catalog?${queryParams}`, {
       headers
