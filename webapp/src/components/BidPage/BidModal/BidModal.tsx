@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { ethers } from 'ethers'
-import { Contract, NFTCategory } from '@dcl/schemas'
+import { ChainId, Contract, NFTCategory } from '@dcl/schemas'
 import { withAuthorizedAction, ChainButton } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
@@ -18,6 +18,7 @@ import { getRentalEndDate, hasRentalEnded, isRentalListingExecuted } from '../..
 import { locations } from '../../../modules/routing/locations'
 import { getContractNames } from '../../../modules/vendor'
 import { AssetAction } from '../../AssetAction'
+import { isPriceTooLow } from '../../BuyPage/utils'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import ErrorBanner from '../../ErrorBanner'
 import { Mana } from '../../Mana'
@@ -80,6 +81,14 @@ const BidModal = (props: Props) => {
   const isInvalidDate = +new Date(`${expiresAt} 00:00:00`) < Date.now()
   const hasInsufficientMANA = !!price && !!wallet && parseMANANumber(price) > wallet.networks[asset.network].mana
 
+  // Compute if the price is too low for meta tx
+  const hasLowPriceForMetaTx = useMemo(
+    () =>
+      (wallet?.chainId as ChainId) !== ChainId.MATIC_MAINNET && !!price && isPriceTooLow(ethers.utils.parseEther(price || '0').toString()), // not connected to polygon AND has price < minimum for meta tx
+    [price, wallet?.chainId]
+  )
+  console.log('hasLowPriceForMetaTx: ', hasLowPriceForMetaTx)
+
   const isDisabled =
     isOwnedBy(asset, wallet) ||
     isInvalidPrice ||
@@ -87,6 +96,7 @@ const BidModal = (props: Props) => {
     hasInsufficientMANA ||
     isLoadingFingerprint ||
     isPlacingBid ||
+    hasLowPriceForMetaTx ||
     (!fingerprint && asset.category === NFTCategory.ESTATE) ||
     contractFingerprint !== fingerprint
 
@@ -140,6 +150,29 @@ const BidModal = (props: Props) => {
               <ErrorBanner info={t('atlas_updated_warning.fingerprint_missmatch')} />
             ) : null}
           </div>
+          {hasLowPriceForMetaTx ? (
+            <span className="warning">
+              {' '}
+              {t('buy_with_crypto_modal.price_too_low', {
+                learn_more: (
+                  <a
+                    href="https://docs.decentraland.org/player/blockchain-integration/transactions-in-polygon/#why-do-i-have-to-cover-the-tra[…]ems-that-cost-less-than-1-mana"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {/* TODO: add this URL */}
+                    <u> {t('buy_with_crypto_modal.learn_more')} </u>
+                  </a>
+                )
+              })}
+            </span>
+          ) : (
+            <span className="rememberFreeTxs">
+              {t('buy_with_crypto_modal.remember_transaction_fee_covered', {
+                covered: <span className="feeCoveredFree">{t('buy_with_crypto_modal.covered_for_you_by_dao')}</span>
+              })}
+            </span>
+          )}
           <div className="buttons">
             <Button
               as="div"

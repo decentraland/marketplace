@@ -9,7 +9,6 @@
 .BidPage .form-fields {
   margin-top: 32px;
   max-width: 420px;
-  margin-bottom: 20px;
 }
 
 .BidPage .fields .dcl.field {
@@ -32,6 +31,33 @@
 
 .BidPage .ui.form .field {
   width: 100% !important;
+}
+
+.BidPage .warning {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0px;
+  text-align: center;
+  color: #ff8362;
+  margin-top: auto;
+}
+
+.BidPage .rememberFreeTxs {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  text-align: center;
+  color: #a09ba8;
+  margin-top: auto;
+}
+
+.BidPage .feeCoveredFree {
+  color: #36d41d;
+}
+
+.BidPage .buttons {
+  margin-top: 20px;
 }
 
 .clndr-control .ui.compact.icon.button,
