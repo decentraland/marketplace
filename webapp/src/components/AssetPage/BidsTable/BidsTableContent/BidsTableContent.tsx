@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ethers } from 'ethers'
-import { Bid } from '@dcl/schemas'
+import { Bid, ListingStatus } from '@dcl/schemas'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { T, t } from 'decentraland-dapps/dist/modules/translation'
@@ -59,7 +59,8 @@ function BidsTableContent({ asset, isBidsOffchainEnabled, address, sortBy, isAcc
             ...(isNFT(asset) ? { tokenId: asset.tokenId } : { itemId: asset.itemId }),
             sortBy,
             limit: ROWS_PER_PAGE,
-            offset: (page - 1) * ROWS_PER_PAGE
+            offset: (page - 1) * ROWS_PER_PAGE,
+            status: ListingStatus.OPEN
           })
           .then(({ results, total }) => {
             if (cancel) return
