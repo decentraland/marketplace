@@ -2,7 +2,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { MAX_QUERY_SIZE } from '../../modules/vendor/api'
 
 export function getCountText(count: number | undefined, search: string | undefined) {
-  if (count === undefined) {
+  if (count === undefined || count === null) {
     return ''
   } else if (search) {
     return count > 0
