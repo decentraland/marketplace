@@ -60,7 +60,7 @@ const HomePage = (props: Props) => {
       [View.HOME_TRENDING_ITEMS]: AssetType.ITEM,
       [View.HOME_NEW_ITEMS]: AssetType.ITEM,
       [View.HOME_SOLD_ITEMS]: AssetType.ITEM,
-      [View.HOME_WEARABLES]: AssetType.NFT,
+      [View.HOME_WEARABLES]: AssetType.ITEM,
       [View.HOME_LAND]: AssetType.NFT,
       [View.HOME_ENS]: AssetType.NFT
     }),
