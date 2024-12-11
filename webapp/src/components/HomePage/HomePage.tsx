@@ -60,7 +60,7 @@ const HomePage = (props: Props) => {
       [View.HOME_TRENDING_ITEMS]: AssetType.ITEM,
       [View.HOME_NEW_ITEMS]: AssetType.ITEM,
       [View.HOME_SOLD_ITEMS]: AssetType.ITEM,
-      [View.HOME_WEARABLES]: AssetType.ITEM,
+      [View.HOME_WEARABLES]: AssetType.NFT,
       [View.HOME_LAND]: AssetType.NFT,
       [View.HOME_ENS]: AssetType.NFT
     }),
@@ -104,7 +104,8 @@ const HomePage = (props: Props) => {
         }
       } else {
         trackMessage = `View all ${section} section`
-        browseOptions = { section, assetType, sortBy }
+        // for the Home Wearables (Latest Listings) even though the section is WEARABLES, the assetType is ITEM for the browse section
+        browseOptions = { section, assetType: View.HOME_WEARABLES ? AssetType.ITEM : assetType, sortBy }
       }
 
       if (status[view]) {
