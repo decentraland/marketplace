@@ -123,8 +123,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
 
     try {
+      yield call(waitForFeatureFlagsToBeLoaded)
+      const isMarketplaceServerEnabled: boolean = yield select(getIsMarketplaceServerEnabled)
       yield call(waitForWalletConnectionAndIdentityIfConnecting)
-      const { data }: { data: Item[] } = yield call([itemAPI, 'getTrendings'], size)
+      const { data }: { data: Item[] } = yield call([isMarketplaceServerEnabled ? marketplaceItemAPI : itemAPI, 'getTrendings'], size)
 
       if (!data.length) {
         yield put(fetchTrendingItemsSuccess([]))
@@ -132,7 +134,6 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       const ids = data.map(item => item.id)
-      const isMarketplaceServerEnabled: boolean = yield select(getIsMarketplaceServerEnabled)
       const api = isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
       const isOffchainEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       const { data: itemData }: { data: Item[]; total: number } = yield call(

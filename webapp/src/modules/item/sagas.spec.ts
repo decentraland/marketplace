@@ -673,6 +673,7 @@ describe('when handling the fetch trending items request action', () => {
       it('should dispatch a successful action with the fetched trending items', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
             [select(getIsMarketplaceServerEnabled), true],
             [select(getIsOffchainPublicNFTOrdersEnabled), false],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
@@ -691,7 +692,8 @@ describe('when handling the fetch trending items request action', () => {
       it('should dispatch a successful action with the fetched trending items', () => {
         return expectSaga(itemSaga, getIdentity)
           .provide([
-            // [select(getIsMarketplaceServerEnabled), true],
+            [select(getIsMarketplaceServerEnabled), true],
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
             [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
             [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
           ])
@@ -706,6 +708,8 @@ describe('when handling the fetch trending items request action', () => {
     it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
+          [select(getIsMarketplaceServerEnabled), true],
+          [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
           [matchers.call.fn(ItemAPI.prototype.getTrendings), Promise.reject(anError)],
           [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined]
         ])
