@@ -104,36 +104,30 @@ export function getAcceptBidAuthorizationOptions(
   }
 
   const offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, bid.chainId)
+  const authorizeActionOptions = {
+    targetContractName: ContractName.ERC721CollectionV2,
+    targetContractLabel: targetContractLabel || ContractName.ERC721CollectionV2,
+    authorizedAddress: offchainMarketplaceContract.address,
+    targetContract: {
+      address: bid.contractAddress,
+      chainId: bid.chainId,
+      name: ContractName.ERC721CollectionV2,
+      network: bid.network
+    } as Contract,
+    authorizedContractLabel: offchainMarketplaceContract.name,
+    onAuthorized: onAccept
+  }
+
   if ('tokenId' in bid) {
     return {
-      targetContractName: ContractName.ERC721,
-      targetContractLabel: targetContractLabel || ContractName.ERC721,
-      authorizedAddress: offchainMarketplaceContract.address,
-      targetContract: {
-        address: bid.contractAddress,
-        chainId: bid.chainId,
-        name: ContractName.ERC721,
-        network: bid.network
-      } as Contract,
+      ...authorizeActionOptions,
       authorizationType: AuthorizationType.APPROVAL,
-      authorizedContractLabel: offchainMarketplaceContract.name,
-      tokenId: bid.tokenId,
-      onAuthorized: onAccept
+      tokenId: bid.tokenId
     }
   } else {
     return {
-      targetContractName: ContractName.ERC721CollectionV2,
-      targetContractLabel: targetContractLabel || ContractName.ERC721CollectionV2,
-      authorizedAddress: offchainMarketplaceContract.address,
-      targetContract: {
-        address: bid.contractAddress,
-        chainId: bid.chainId,
-        name: ContractName.ERC721CollectionV2,
-        network: bid.network
-      } as Contract,
-      authorizationType: AuthorizationType.MINT,
-      authorizedContractLabel: offchainMarketplaceContract.name,
-      onAuthorized: onAccept
+      ...authorizeActionOptions,
+      authorizationType: AuthorizationType.MINT
     }
   }
 }
