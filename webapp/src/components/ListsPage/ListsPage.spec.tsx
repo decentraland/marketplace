@@ -6,6 +6,61 @@ import { LOADER_TEST_ID, ERROR_TEST_ID, CREATE_LIST_TEST_ID } from './constants'
 import ListsPage from './ListsPage'
 import { Props } from './ListsPage.types'
 
+let mockObservers: MockIntersectionObserver[] = []
+
+class MockIntersectionObserver implements IntersectionObserver {
+  root: Element | Document | null = null
+  rootMargin: string = ''
+  thresholds: ReadonlyArray<number> = []
+  callback: IntersectionObserverCallback
+  elements: Element[] = []
+
+  constructor(callback: IntersectionObserverCallback) {
+    this.callback = callback
+    mockObservers.push(this)
+  }
+
+  observe(element: Element) {
+    this.elements.push(element)
+  }
+
+  unobserve(element: Element) {
+    this.elements = this.elements.filter(el => el !== element)
+  }
+
+  disconnect() {
+    this.elements = []
+  }
+
+  takeRecords(): IntersectionObserverEntry[] {
+    return []
+  }
+
+  // Helper method to simulate intersection
+  triggerIntersect(isIntersecting = true) {
+    const entries = this.elements.map(element => ({
+      isIntersecting,
+      target: element,
+      intersectionRatio: isIntersecting ? 1 : 0,
+      intersectionRect: {} as DOMRectReadOnly,
+      boundingClientRect: {} as DOMRectReadOnly,
+      rootBounds: null,
+      time: 0
+    })) as IntersectionObserverEntry[]
+
+    this.callback(entries, this)
+  }
+}
+
+beforeAll(() => {
+  // Properly cast IntersectionObserver to avoid TS warnings
+  window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver
+})
+
+beforeEach(() => {
+  mockObservers = []
+})
+
 function renderListsPage(props: Partial<Props> = {}) {
   return renderWithProviders(
     <ListsPage isLoading={false} lists={[]} count={0} error={null} onFetchLists={jest.fn()} onCreateList={jest.fn()} {...props} />
