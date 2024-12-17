@@ -23,6 +23,61 @@ import {
 import ListPage from './ListPage'
 import { Props } from './ListPage.types'
 
+let mockObservers: MockIntersectionObserver[] = []
+
+class MockIntersectionObserver implements IntersectionObserver {
+  root: Element | Document | null = null
+  rootMargin: string = ''
+  thresholds: ReadonlyArray<number> = []
+  callback: IntersectionObserverCallback
+  elements: Element[] = []
+
+  constructor(callback: IntersectionObserverCallback) {
+    this.callback = callback
+    mockObservers.push(this)
+  }
+
+  observe(element: Element) {
+    this.elements.push(element)
+  }
+
+  unobserve(element: Element) {
+    this.elements = this.elements.filter(el => el !== element)
+  }
+
+  disconnect() {
+    this.elements = []
+  }
+
+  takeRecords(): IntersectionObserverEntry[] {
+    return []
+  }
+
+  // Helper method to simulate intersection
+  triggerIntersect(isIntersecting = true) {
+    const entries = this.elements.map(element => ({
+      isIntersecting,
+      target: element,
+      intersectionRatio: isIntersecting ? 1 : 0,
+      intersectionRect: {} as DOMRectReadOnly,
+      boundingClientRect: {} as DOMRectReadOnly,
+      rootBounds: null,
+      time: 0
+    })) as IntersectionObserverEntry[]
+
+    this.callback(entries, this)
+  }
+}
+
+beforeAll(() => {
+  // Properly cast IntersectionObserver to avoid TS warnings
+  window.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver
+})
+
+beforeEach(() => {
+  mockObservers = []
+})
+
 // This is to avoid errors with the canvas
 jest.mock('../LinkedProfile', () => {
   return {
