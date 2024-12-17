@@ -28,7 +28,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onCreateOrder: (nft, price, expiresAt) => dispatch(createOrderRequest(nft, price, expiresAt)),
+  onCreateOrder: (nft, price, expiresAt, fingerprint) => dispatch(createOrderRequest(nft, price, expiresAt, fingerprint)),
   onClearOrderErrors: () => dispatch(clearOrderErrors()),
   onCancelOrder: (order: Order, nft: NFT) => dispatch(cancelOrderRequest(order, nft, true))
 })

@@ -78,7 +78,7 @@ export function getSubgraphOrdersQuery(filters: OrderFilters) {
   }`
 }
 
-export async function createPublicNFTOrderTrade(nft: NFT, price: number, expiresAt: number) {
+export async function createPublicNFTOrderTrade(nft: NFT, price: number, expiresAt: number, fingerprint?: string) {
   const signer = await getSigner()
   const address = await signer.getAddress()
   const marketplaceContract = await getOffChainMarketplaceContract(nft.chainId)
@@ -106,7 +106,7 @@ export async function createPublicNFTOrderTrade(nft: NFT, price: number, expires
         assetType: TradeAssetType.ERC721,
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId,
-        extra: ''
+        extra: fingerprint || ''
       }
     ],
     received: [

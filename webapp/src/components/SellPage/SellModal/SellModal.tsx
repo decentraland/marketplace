@@ -16,6 +16,7 @@ import ERC721ABI from '../../../contracts/ERC721.json'
 import { parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { isStubMaticCollectionContract } from '../../../modules/contract/utils'
+import { useFingerprint } from '../../../modules/nft/hooks'
 import { getSellItemStatus, getError } from '../../../modules/order/selectors'
 import { INPUT_FORMAT, getDefaultExpirationDate } from '../../../modules/order/utils'
 import { getContractNames } from '../../../modules/vendor'
@@ -49,6 +50,7 @@ const SellModal = (props: Props) => {
   const isUpdate = order !== null
   const shouldRemoveListing = order?.tradeId
   const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
+  const [fingerprint] = useFingerprint(nft)
 
   const [expiresAt, setExpiresAt] = useState(() => {
     let exp = order?.expiresAt
@@ -113,7 +115,7 @@ const SellModal = (props: Props) => {
     ? getDecentralandContract(ContractName.OffChainMarketplace, nft.chainId)
     : null
 
-  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime())
+  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), fingerprint)
 
   const handleCancelTrade = () => order && onCancelOrder(order, nft)
 

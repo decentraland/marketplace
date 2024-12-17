@@ -88,12 +88,12 @@ export function* orderSaga(tradeService: TradeService) {
   }
 
   function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
-    const { nft, price, expiresAt } = action.payload
+    const { nft, price, expiresAt, fingerprint } = action.payload
     try {
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       if (isOffchainPublicNFTOrdersEnabled) {
         const history: History = yield getContext('history')
-        const trade: TradeCreation = yield call([orderUtils, 'createPublicNFTOrderTrade'], nft, price, expiresAt)
+        const trade: TradeCreation = yield call([orderUtils, 'createPublicNFTOrderTrade'], nft, price, expiresAt, fingerprint)
         yield call([tradeService, 'addTrade'], trade)
         yield put(createOrderSuccess(nft, price, expiresAt))
         yield put(fetchNFTRequest(nft.contractAddress, nft.tokenId)) // fetch the NFT again to get the new order with the tradeId
