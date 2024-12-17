@@ -18,7 +18,8 @@ export const CREATE_ORDER_REQUEST = '[Request] Create Order'
 export const CREATE_ORDER_SUCCESS = '[Success] Create Order'
 export const CREATE_ORDER_FAILURE = '[Failure] Create Order'
 
-export const createOrderRequest = (nft: NFT, price: number, expiresAt: number) => action(CREATE_ORDER_REQUEST, { nft, price, expiresAt })
+export const createOrderRequest = (nft: NFT, price: number, expiresAt: number, fingerprint?: string) =>
+  action(CREATE_ORDER_REQUEST, { nft, price, expiresAt, fingerprint })
 export const createOrderSuccess = (nft: NFT, price: number, expiresAt: number, txHash?: string) =>
   action(CREATE_ORDER_SUCCESS, {
     nft,

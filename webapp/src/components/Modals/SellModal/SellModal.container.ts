@@ -33,7 +33,7 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onCreateOrder: (nft, price, expiresAt) => dispatch(createOrderRequest(nft, price, expiresAt)),
+  onCreateOrder: (nft, price, expiresAt, fingerprint) => dispatch(createOrderRequest(nft, price, expiresAt, fingerprint)),
   onFetchAuthorizations: (authorizations: Authorization[]) => dispatch(fetchAuthorizationsRequest(authorizations)),
   onUpsertContracts: (contracts: Contract[]) => dispatch(upsertContracts(contracts)),
   onCancelOrder: (order, nft, skipRedirection = false) => dispatch(cancelOrderRequest(order, nft, skipRedirection))

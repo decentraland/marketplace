@@ -15,6 +15,7 @@ import { Button, Field, Loader, Mana, Message, ModalNavigation } from 'decentral
 import { useAuthorization } from '../../../lib/authorization'
 import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
+import { useFingerprint } from '../../../modules/nft/hooks'
 import { getDefaultExpirationDate, INPUT_FORMAT } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
@@ -104,6 +105,7 @@ const SellModal = ({
   }
 
   const [isLoadingAuthorizations, isAuthorized] = useAuthorization(authorization, onFetchAuthorizations)
+  const [fingerprint] = useFingerprint(nft)
 
   if (!wallet) {
     return null
@@ -125,7 +127,7 @@ const SellModal = ({
     }
   }
 
-  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime())
+  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), fingerprint)
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalidPrice = parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
