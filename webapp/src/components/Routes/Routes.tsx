@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { Switch, Route, Redirect, RouteComponentProps, useLocation } from 'react-router-dom'
-import Intercom from 'decentraland-dapps/dist/components/Intercom'
+import { EnhancedIntercom } from 'decentraland-dapps/dist/containers/EnhancedIntercom'
 import useManaFiatGatewayPurchase from 'decentraland-dapps/dist/hooks/useManaFiatGatewayPurchase'
 import { usePageTracking } from 'decentraland-dapps/dist/hooks/usePageTracking'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -99,7 +99,7 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
         <Redirect from="/browse" to={locations.browse() + window.location.search} push />
         <Redirect to={locations.root()} />
       </Switch>
-      {APP_ID ? <Intercom appId={APP_ID} settings={{ alignment: 'right' }} /> : null}
+      {APP_ID ? <EnhancedIntercom appId={APP_ID} settings={{ alignment: 'right' }} /> : null}
     </>
   )
 }
