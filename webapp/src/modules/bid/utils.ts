@@ -1,5 +1,5 @@
 import { ethers, BigNumber } from 'ethers'
-import { Bid, Contract, TradeAssetType, TradeCreation, TradeType } from '@dcl/schemas'
+import { Bid, Contract, Network, TradeAssetType, TradeCreation, TradeType } from '@dcl/schemas'
 import { BidTrade } from '@dcl/schemas/dist/dapps/bid'
 import { AuthorizeActionOptions } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
@@ -104,14 +104,16 @@ export function getAcceptBidAuthorizationOptions(
   }
 
   const offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, bid.chainId)
+  const targetContractName = bid.network === Network.MATIC ? ContractName.ERC721CollectionV2 : ContractName.ERC721
+
   const authorizeActionOptions = {
-    targetContractName: ContractName.ERC721CollectionV2,
-    targetContractLabel: targetContractLabel || ContractName.ERC721CollectionV2,
+    targetContractName: targetContractName,
+    targetContractLabel: targetContractLabel || targetContractName,
     authorizedAddress: offchainMarketplaceContract.address,
     targetContract: {
       address: bid.contractAddress,
       chainId: bid.chainId,
-      name: ContractName.ERC721CollectionV2,
+      name: targetContractName,
       network: bid.network
     } as Contract,
     authorizedContractLabel: offchainMarketplaceContract.name,
