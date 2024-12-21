@@ -145,7 +145,7 @@ describe('when getting the trade signature', () => {
           externalChecks: trade.checks.externalChecks?.map(externalCheck => ({
             contractAddress: externalCheck.contractAddress,
             selector: externalCheck.selector,
-            value: externalCheck.value,
+            value: externalCheck.value ? externalCheck.value : '0x',
             required: externalCheck.required
           }))
         },
@@ -153,13 +153,13 @@ describe('when getting the trade signature', () => {
           assetType: asset.assetType,
           contractAddress: asset.contractAddress,
           value: getValueForTradeAsset(asset),
-          extra: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(asset.extra))
+          extra: asset.extra ? asset.extra : '0x'
         })),
         received: trade.received.map(asset => ({
           assetType: asset.assetType,
           contractAddress: asset.contractAddress,
           value: getValueForTradeAsset(asset),
-          extra: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(asset.extra)),
+          extra: asset.extra ? asset.extra : '0x',
           beneficiary: asset.beneficiary
         }))
       }
@@ -199,7 +199,7 @@ describe('when getting the trade to accept', () => {
           assetType: TradeAssetType.ERC20,
           contractAddress: '0x123',
           amount: '2',
-          extra: ''
+          extra: '0x'
         }
       ],
       received: [
@@ -207,7 +207,7 @@ describe('when getting the trade to accept', () => {
           assetType: TradeAssetType.ERC721,
           contractAddress: '0x123',
           tokenId: '1',
-          extra: '',
+          extra: '0x',
           beneficiary: '0x123123'
         }
       ]
@@ -235,14 +235,14 @@ describe('when getting the trade to accept', () => {
         assetType: asset.assetType,
         contractAddress: asset.contractAddress,
         value: getValueForTradeAsset(asset),
-        extra: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(asset.extra)),
+        extra: asset.extra ? asset.extra : '0x',
         beneficiary: beneficiaryAddress
       })),
       received: trade.received.map(asset => ({
         assetType: asset.assetType,
         contractAddress: asset.contractAddress,
         value: getValueForTradeAsset(asset),
-        extra: ethers.utils.hexlify(ethers.utils.toUtf8Bytes(asset.extra)),
+        extra: asset.extra ? asset.extra : '0x',
         beneficiary: asset.beneficiary
       }))
     })
