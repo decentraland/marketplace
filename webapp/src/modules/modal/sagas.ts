@@ -9,6 +9,7 @@ import {
   DELETE_LIST_SUCCESS,
   UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
+import { CANCEL_ORDER_SUCCESS } from '../order/actions'
 import {
   CLAIM_ASSET_SUCCESS,
   UPSERT_RENTAL_SUCCESS,
@@ -27,7 +28,8 @@ export function* modalSaga() {
       DELETE_LIST_FAILURE,
       BULK_PICK_SUCCESS,
       BULK_PICK_FAILURE,
-      UPDATE_LIST_SUCCESS
+      UPDATE_LIST_SUCCESS,
+      CANCEL_ORDER_SUCCESS
     ],
     handleCloseAllModals
   )
