@@ -23,13 +23,14 @@ const ConfirmInputValueModal = ({
   const isDisabled = disabled || parsedValueToConfirm !== confirmedInput
 
   return (
-    <Modal size="small" open={open} className="ConfirmInputValueModal">
-      <ModalNavigation title={headerTitle} onClose={onCancel}></ModalNavigation>
+    <Modal size="small" open={open} onClose={!loading ? onCancel : undefined} className="ConfirmInputValueModal">
+      <ModalNavigation title={headerTitle} onClose={!loading ? onCancel : undefined}></ModalNavigation>
       <Modal.Content>
         {content}
         <ManaField
           label={t('global.price')}
           network={network}
+          disabled={loading}
           placeholder={parsedValueToConfirm}
           value={confirmedInput}
           onChange={(_event, props) => {
@@ -40,6 +41,7 @@ const ConfirmInputValueModal = ({
       <Modal.Actions>
         <Button
           type="button"
+          disabled={loading}
           onClick={() => {
             setConfirmedInput('')
             onCancel()
@@ -47,7 +49,7 @@ const ConfirmInputValueModal = ({
         >
           {t('global.cancel')}
         </Button>
-        <Button type="submit" primary disabled={isDisabled} loading={loading} onClick={onConfirm}>
+        <Button type="submit" primary disabled={isDisabled || loading} loading={loading} onClick={onConfirm}>
           {t('global.proceed')}
         </Button>
       </Modal.Actions>
