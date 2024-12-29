@@ -151,7 +151,7 @@ const SellModal = (props: Props) => {
       {shouldRemoveListing ? (
         <div className="cancel-order">
           <ErrorBanner info={t('sell_page.cancel_order_warning')} />
-          <Button primary onClick={handleCancelTrade} loading={isLoadingCancelOrder}>
+          <Button primary onClick={handleCancelTrade} disabled={isLoadingCancelOrder} loading={isLoadingCancelOrder}>
             {t('sell_page.cancel_order')}
           </Button>
         </div>
@@ -189,7 +189,7 @@ const SellModal = (props: Props) => {
               />
             </div>
             <div className="buttons">
-              <Button as="div" onClick={onGoBack}>
+              <Button as="div" disabled={isLoading} onClick={onGoBack}>
                 {t('global.cancel')}
               </Button>
               <ChainButton type="submit" primary disabled={isDisabled || isLoading} loading={isLoading} chainId={nft.chainId}>
