@@ -27,7 +27,7 @@ const mapState = (state: RootState): MapStateProps => {
     authorizations: getAuthorizations(state),
     isCreatingOrder: isLoadingType(getLoadingOrders(state), CREATE_ORDER_REQUEST),
     isAuthorizing: isLoadingType(getLoading(state), GRANT_TOKEN_REQUEST) || isLoadingType(getLoading(state), REVOKE_TOKEN_REQUEST),
-    isCancelling: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST),
+    isCancelling: isLoadingType(getLoadingOrders(state), CANCEL_ORDER_REQUEST),
     isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state)
   }
 }
