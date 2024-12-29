@@ -44,7 +44,7 @@ export class NFTAuthAPI extends BaseClient {
             : null
       )
     }
-    const response: NFTResponse = await this.fetch(`/v1/nfts?${queryParams.toString()}`)
+    const response: NFTResponse = await this.fetch(`/v1/nfts?${queryParams.toString()}`, { cache: 'reload' })
 
     if (response.data.length === 0) {
       throw new Error('Not found')
