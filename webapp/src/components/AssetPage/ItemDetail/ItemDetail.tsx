@@ -151,7 +151,11 @@ const ItemDetail = ({ item }: Props) => {
             ) : null}
           </div>
           <div className={styles.attributesRow}>
-            <div className={styles.attributesColumn}>{item.network === Network.MATIC ? <Owner asset={item} /> : null}</div>
+            {item.network === Network.MATIC ? (
+              <div className={styles.attributesColumn}>
+                <Owner asset={item} />
+              </div>
+            ) : null}
             <div className={styles.attributesColumn}>
               <Collection asset={item} />
             </div>
