@@ -322,7 +322,7 @@ const SellModal = ({
       navigation: (
         <ModalNavigation
           title={t('sell_page.confirm.title')}
-          onClose={onClose}
+          onClose={isCancelling ? undefined : onClose}
           onBack={isCancelling || shouldRemoveOffchainListing ? undefined : () => setStep(StepperValues.SELL_MODAL)}
         />
       ),

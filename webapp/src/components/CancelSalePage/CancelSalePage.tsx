@@ -55,7 +55,9 @@ const CancelSalePage = (props: Props) => {
                     <Header size="large">{t('cancel_sale_page.title')}</Header>
                     <div className="subtitle">{subtitle}</div>
                     <div className="buttons">
-                      <Button onClick={() => history.push(locations.nft(nft.contractAddress, nft.tokenId))}>{t('global.cancel')}</Button>
+                      <Button disabled={isLoading} onClick={() => history.push(locations.nft(nft.contractAddress, nft.tokenId))}>
+                        {t('global.cancel')}
+                      </Button>
                       <ChainButton
                         primary
                         loading={isLoading}

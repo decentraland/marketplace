@@ -12,6 +12,7 @@ import {
   UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
 import { NFT } from '../nft/types'
+import { CANCEL_ORDER_SUCCESS } from '../order/actions'
 import {
   claimAssetSuccess,
   upsertRentalSuccess,
@@ -31,6 +32,7 @@ describe.each([
   DELETE_LIST_FAILURE,
   BULK_PICK_SUCCESS,
   BULK_PICK_FAILURE,
+  CANCEL_ORDER_SUCCESS,
   UPDATE_LIST_SUCCESS
 ])('when handling the success action of the %s action', actionType => {
   it('should put the action to close all modals', () => {
