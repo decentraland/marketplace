@@ -44,7 +44,7 @@ const AssetList = (props: Props) => {
   )
   const maxQuerySize = getMaxQuerySize(vendor)
 
-  const hasMorePages = (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
+  const hasMorePages = !isLoading && (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
 
   const emptyStateTranslationString = useMemo(() => {
     if (assets.length > 0) {
