@@ -6,8 +6,9 @@ export type Props = Partial<NavbarProps> & {
   enablePartialSupportAlert?: boolean
   identity?: AuthIdentity
   isChainSelectorEnabled: boolean
+  isNavbar2Enabled: boolean
 }
 
 export type OwnProps = Pick<Props, 'enablePartialSupportAlert'>
 
-export type MapStateProps = Pick<Props, 'hasPendingTransactions' | 'identity' | 'isChainSelectorEnabled'>
+export type MapStateProps = Pick<Props, 'hasPendingTransactions' | 'identity' | 'isChainSelectorEnabled' | 'isNavbar2Enabled'>
