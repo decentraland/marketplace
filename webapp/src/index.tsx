@@ -5,7 +5,7 @@ import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
 import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
-import { CssBaseline, Experimental_CssVarsProvider as CssVarsProvider, darkTheme } from 'decentraland-ui2'
+import { darkTheme, DclThemeProvider } from 'decentraland-ui2'
 import * as modals from './components/Modals'
 import { Routes } from './components/Routes'
 import { ScrollToTop } from './components/ScrollToTop'
@@ -25,15 +25,14 @@ function main() {
       <TranslationProvider locales={Object.keys(locales)}>
         <WalletProvider>
           <ConnectedRouter history={history}>
-            <CssVarsProvider theme={darkTheme}>
-              <CssBaseline />
+            <DclThemeProvider theme={darkTheme}>
               <ToastProvider>
                 <ModalProvider components={modals}>
                   <ScrollToTop />
                   <Routes />
                 </ModalProvider>
               </ToastProvider>
-            </CssVarsProvider>
+            </DclThemeProvider>
           </ConnectedRouter>
         </WalletProvider>
       </TranslationProvider>
