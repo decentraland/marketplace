@@ -10,5 +10,6 @@ export enum FeatureName {
   CROSS_CHAIN_LANDS = 'cross-chain-lands',
   OFFCHAIN_BIDS = 'offchain-bids',
   OFFCHAIN_PUBLIC_NFT_ORDERS = 'offchain-public-nft-orders',
-  OFFCHAIN_PUBLIC_ITEM_ORDERS = 'offchain-public-item-orders'
+  OFFCHAIN_PUBLIC_ITEM_ORDERS = 'offchain-public-item-orders',
+  NAVBAR_UI2 = 'navbar-ui2'
 }
