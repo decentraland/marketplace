@@ -23,7 +23,7 @@
     "decentraland-connect": "^7.3.2",
     "decentraland-crypto-fetch": "^1.0.3",
     "decentraland-dapps": "^23.22.0",
-    "decentraland-transactions": "^2.18.0",
+    "decentraland-transactions": "^2.18.1",
     "decentraland-ui": "^6.12.1",
     "decentraland-ui2": "^0.8.7",
     "ethers": "^5.6.8",
