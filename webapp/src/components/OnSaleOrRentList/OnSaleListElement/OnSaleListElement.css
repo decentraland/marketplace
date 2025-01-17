@@ -57,3 +57,12 @@
 .nameCell {
   display: flex;
 }
+
+.needsAttentionBadge {
+  margin-left: 12px;
+  align-content: center;
+}
+
+.needsAttentionText {
+  margin-right: 4px;
+}

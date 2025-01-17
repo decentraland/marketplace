@@ -1,9 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Icon, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
+import { Badge, Button, Icon, InfoTooltip, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getIsLegacyOrderExpired, isLegacyOrder } from '../../../lib/orders'
+import { isNFT } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { LEGACY_MARKETPLACE_MAINNET_CONTRACT, Section } from '../../../modules/vendor/decentraland'
 import { Mana } from '../../Mana'
@@ -11,7 +12,7 @@ import AssetCell from '../AssetCell'
 import { Props } from './OnSaleListElement.types'
 import './OnSaleListElement.css'
 
-const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRevoke }: Props) => {
+const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRevoke, wallet }: Props) => {
   const category = item?.category || nft!.category
 
   const cancelOrSellOptions = {
@@ -51,6 +52,14 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
                   on="hover"
                 />
               ) : null}
+              {nft && isNFT(nft) && nft?.owner !== wallet?.address && (
+                <div className="needsAttentionBadge">
+                  <Badge color="red">
+                    <span className="needsAttentionText">{t('on_sale_list.needs_attention')}</span>
+                    <InfoTooltip content={t('on_sale_list.needs_attention_description')} />
+                  </Badge>
+                </div>
+              )}
             </div>
           </Table.Cell>
           <Table.Cell>{t(`global.${category}`)}</Table.Cell>
@@ -75,6 +84,10 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
                   {t('asset_page.actions.update_sale')}
                 </Button>
               )
+            ) : nft && isNFT(nft) && nft?.owner !== wallet?.address ? (
+              <Button as={Link} to={locations.cancel(nft.contractAddress, nft.tokenId, cancelOrSellOptions)} inverted fluid>
+                {t('asset_page.actions.cancel_sale')}
+              </Button>
             ) : null}
           </Table.Cell>
         </Table.Row>

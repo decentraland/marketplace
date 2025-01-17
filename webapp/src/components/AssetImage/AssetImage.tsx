@@ -267,13 +267,13 @@ const AssetImage = (props: Props) => {
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
 
-        const ethereumUrn = !isNFT(asset) && asset.network === Network.ETHEREUM ? getEthereumItemUrn(asset) : ''
+        const ethereumUrn = asset.network === Network.ETHEREUM ? (isNFT(asset) ? asset.urn || '' : getEthereumItemUrn(asset)) : ''
 
         const wearablePreviewProps =
-          !isNFT(asset) && asset.network === Network.ETHEREUM
+          asset.network === Network.ETHEREUM
             ? {
                 urns: [ethereumUrn],
-                background: Rarity.getColor(asset.rarity),
+                background: Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity),
                 type: isTryingOn ? PreviewType.AVATAR : PreviewType.WEARABLE
               }
             : {
