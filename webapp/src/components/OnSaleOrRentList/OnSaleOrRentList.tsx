@@ -21,10 +21,8 @@ import './OnSaleOrRentList.css'
 const ROWS_PER_PAGE = 12
 
 const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType, onFetchAuthorizations, onRevoke, wallet }: Props) => {
-  console.log(elements)
   const [authorization, setAuthorization] = useState<Authorizations | null>(null)
   const [nftsWithOpenOrders, setNftsWithOpenOrders] = useState<NFT<VendorName.DECENTRALAND>[]>([])
-  console.log('nftsWithOpenOrders:', nftsWithOpenOrders)
 
   useEffect(() => {
     if (elements && elements.length) {
