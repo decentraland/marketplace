@@ -6,7 +6,6 @@ import {
   revokeTokenRequest
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { cancelOrderRequest } from '../../modules/order/actions'
 import { Props as OnRentListElementProps } from './OnRentListElement/OnRentListElement.types'
 import { Props as OnSaleListElementProps } from './OnSaleListElement/OnSaleListElement.types'
 
@@ -24,7 +23,6 @@ export type Props = {
   onSaleOrRentType: OnSaleOrRentType
   onFetchAuthorizations: typeof fetchAuthorizationsRequest
   onRevoke: typeof revokeTokenRequest
-  onCancelOrder: typeof cancelOrderRequest
 }
 
 export type MapStateProps = Pick<Props, 'elements' | 'isLoading' | 'wallet'>
@@ -35,6 +33,6 @@ export function isOnSaleListElementProps(element: OnSaleListElementProps | OnRen
   return 'order' in element
 }
 
-export type MapDispatchProps = Pick<Props, 'onFetchAuthorizations' | 'onRevoke' | 'onCancelOrder'>
+export type MapDispatchProps = Pick<Props, 'onFetchAuthorizations' | 'onRevoke'>
 
 export type MapDispatch = Dispatch<FetchAuthorizationsRequestAction | RevokeTokenRequestAction>
