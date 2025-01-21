@@ -1370,23 +1370,6 @@
     "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },
-  "campaign": {
-    "tab": "DCLMF24",
-    "badge": "DCLMF24",
-    "event_tag": "DCLMF24",
-    "event_hashtag": "#DCLMF24"
-  },
-  "event_campaign": {
-    "homepage": {
-      "title": "Prepara tus looks galáticos!",
-      "subtitle": "¡Prepárate para mostrar tu estilo fuera de lo común en el festival de música de este año, que se realizará del 20 al 23 de noviembre! Usa la pestaña DCLMF24 para encontrar todo lo que necesitas para estar listo para el festival, todo en un solo lugar.",
-      "cta": "Compra ahora"
-    },
-    "campaign_browser": {
-      "title": "¿Estás listo para saltar al DCLMF24?",
-      "subtitle": "¡Prepara el look galáctico perfecto con accesorios y gestos de otro mundo de la comunidad DCL! ¡Hazte con ellos y unete al evento del 20 al 23 de noviembre!"
-    }
-  },
   "asset_card": {
     "rental_bubble": {
       "listed_for_rent": "Listada para la renta",

@@ -1394,23 +1394,6 @@
     "disclaimer": "This will require a transaction and you will need to cover its fees.",
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
-  "campaign": {
-    "tab": "DCLMF24",
-    "badge": "DCLMF24",
-    "event_tag": "DCLMF24",
-    "event_hashtag": "#DCLMF24"
-  },
-  "event_campaign": {
-    "homepage": {
-      "title": "Prepare Your Galactic Looks!",
-      "subtitle": "Get ready to show off your out of this world style at this year's music festival Nov 20-23! Use the DCLMF24 tab to find everything you will need to be festival ready all in one place.",
-      "cta": "Shop Now"
-    },
-    "campaign_browser": {
-      "title": "Are you ready to jump into DCLMF24?!",
-      "subtitle": "Prepare the perfect galactic style with out of this world Wearables & Emotes from the DCL community. Stock up and jump in Nov 20-23! "
-    }
-  },
   "asset_card": {
     "rental_bubble": {
       "listed_for_rent": "Listed for rent",

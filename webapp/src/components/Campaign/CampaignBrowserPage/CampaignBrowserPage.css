@@ -1,4 +1,8 @@
-.CampaignBrowserPage {
+.CampaignBrowserPage .banner {
+  margin-bottom: 24px;
+}
+
+.CampaignBrowserPage .empty {
   width: 100%;
   height: calc(100vh - 360px);
   display: flex;

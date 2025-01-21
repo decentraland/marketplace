@@ -4,6 +4,8 @@ import { createLambdasClient } from 'dcl-catalyst-client/dist/client/LambdasClie
 import { all } from 'redux-saga/effects'
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
 import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
+import { ContentfulClient } from 'decentraland-dapps/dist/modules/campaign/ContentfulClient'
+import { campaignSagas } from 'decentraland-dapps/dist/modules/campaign/sagas'
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
@@ -104,6 +106,12 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     routingSaga(),
     tileSaga(),
     toastSaga(),
+    campaignSagas(new ContentfulClient(), {
+      space: config.get('CONTENTFUL_SPACE_ID'),
+      environment: config.get('CONTENTFUL_ENVIRONMENT'),
+      id: config.get('CONTENTFUL_ADMIN_ENTITY_ID'),
+      token: config.get('CONTENTFUL_ACCESS_TOKEN')
+    }),
     transactionSaga({
       crossChainProviderUrl: config.get('SQUID_API_URL'),
       crossChainProviderRetryDelay: Number(config.get('SQUID_RETRY_DELAY')),

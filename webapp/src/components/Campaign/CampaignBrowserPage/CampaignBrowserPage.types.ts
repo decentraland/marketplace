@@ -12,8 +12,22 @@ export type Props = {
   onFetchEventContracts: typeof fetchEventRequest
   contracts: Record<string, string[]>
   isCampaignBrowserEnabled: boolean
+  campaignTag?: string
+  additionalCampaignTags: string[]
+  isLoadingCampaign?: boolean
 }
 
-export type MapStateProps = Pick<Props, 'vendor' | 'isFullscreen' | 'assetType' | 'section' | 'contracts' | 'isCampaignBrowserEnabled'>
+export type MapStateProps = Pick<
+  Props,
+  | 'vendor'
+  | 'isFullscreen'
+  | 'assetType'
+  | 'section'
+  | 'contracts'
+  | 'isCampaignBrowserEnabled'
+  | 'additionalCampaignTags'
+  | 'campaignTag'
+  | 'isLoadingCampaign'
+>
 export type MapDispatchProps = Pick<Props, 'onFetchEventContracts'>
 export type MapDispatch = Dispatch<FetchEventRequestAction>

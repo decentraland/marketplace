@@ -1,4 +1,3 @@
-import { CAMPAIGN_TAG } from '../../components/Campaign/config'
 import { convertToOutputString } from '../../utils/output'
 import { AssetType } from '../asset/types'
 import { View } from '../ui/types'
@@ -31,7 +30,7 @@ export const locations = {
   },
   campaign: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
-    const path = `/${CAMPAIGN_TAG}`
+    const path = `/campaign`
     return params ? `${path}?${params.toString()}` : path
   },
   currentAccount: (options?: BrowseOptions) => {

@@ -22,6 +22,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
   },
-  "include": ["src", ".eslintrc.js", "vite.config.ts", "jest.config.ts", ".eslintrc.cjs"],
+  "include": ["src", ".eslintrc.js", "jest.config.ts", ".eslintrc.cjs"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -12,12 +12,11 @@ import { Section } from '../../modules/vendor/decentraland'
 import * as decentraland from '../../modules/vendor/decentraland'
 import * as events from '../../utils/events'
 import { AssetStatusFilter } from '../../utils/filters'
-import { CAMPAIGN_TAB_ANIMATION_ENABLED } from '../Campaign/config'
 import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
 
 const Navigation = (props: Props) => {
-  const { activeTab, isFullscreen, isCampaignBrowserEnabled, onOpenBuyManaWithFiatModal, onClearFilters } = props
+  const { activeTab, isFullscreen, campaignTab, isCampaignBrowserEnabled, onOpenBuyManaWithFiatModal, onClearFilters } = props
   const analytics = getAnalytics()
   const isMobile = useMobileMediaQuery()
 
@@ -41,7 +40,7 @@ const Navigation = (props: Props) => {
           <Link to={locations.root()}>
             <Tabs.Tab active={activeTab === NavigationTab.OVERVIEW}>{t('navigation.overview')}</Tabs.Tab>
           </Link>
-          {isCampaignBrowserEnabled ? (
+          {isCampaignBrowserEnabled && campaignTab ? (
             <Link
               to={locations.campaign({
                 section: decentraland.Section.WEARABLES,
@@ -55,10 +54,10 @@ const Navigation = (props: Props) => {
               <Tabs.Tab active={activeTab === NavigationTab.CAMPAIGN_BROWSER}>
                 <div
                   className={classNames('campaign-tab', {
-                    'campaign-tab-animation': CAMPAIGN_TAB_ANIMATION_ENABLED
+                    'campaign-tab-animation': true
                   })}
                 >
-                  <span>{t('campaign.tab')}</span>
+                  <span>{campaignTab}</span>
                 </div>
               </Tabs.Tab>
             </Link>

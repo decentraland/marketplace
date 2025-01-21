@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { getAdditionalTags, getMainTag } from 'decentraland-dapps/dist/modules/campaign/selectors'
 import { fetchEventRequest } from '../../../modules/event/actions'
 import { getData as getContracts } from '../../../modules/event/selectors'
 import { getIsCampaignBrowserEnabled } from '../../../modules/features/selectors'
@@ -13,7 +14,9 @@ const mapState = (state: RootState): MapStateProps => ({
   section: getSection(state),
   isFullscreen: getIsFullscreen(state),
   contracts: getContracts(state),
-  isCampaignBrowserEnabled: getIsCampaignBrowserEnabled(state)
+  campaignTag: getMainTag(state),
+  isCampaignBrowserEnabled: getIsCampaignBrowserEnabled(state),
+  additionalCampaignTags: getAdditionalTags(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch) => ({
