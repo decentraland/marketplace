@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { getContentfulNormalizedLocale, getTabName } from 'decentraland-dapps/dist/modules/campaign/selectors'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { getIsCampaignBrowserEnabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
@@ -8,6 +9,7 @@ import Navigation from './Navigation'
 import { MapDispatch, MapDispatchProps, MapStateProps } from './Navigation.types'
 
 const mapState = (state: RootState): MapStateProps => ({
+  campaignTab: getTabName(state)?.[getContentfulNormalizedLocale(state)],
   isCampaignBrowserEnabled: getIsCampaignBrowserEnabled(state),
   isFullScreen: getIsFullscreen(state)
 })

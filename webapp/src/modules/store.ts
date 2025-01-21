@@ -5,6 +5,7 @@ import { createLogger } from 'redux-logger'
 import createSagasMiddleware from 'redux-saga'
 import { Env } from '@dcl/ui-env'
 import { createAnalyticsMiddleware } from 'decentraland-dapps/dist/modules/analytics/middleware'
+import { fetchCampaignRequest } from 'decentraland-dapps/dist/modules/campaign/actions'
 import { createStorageMiddleware } from 'decentraland-dapps/dist/modules/storage/middleware'
 import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/reducer'
 import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/actions'
@@ -101,6 +102,7 @@ export function initStore(history: History) {
 
   // fetch tiles
   store.dispatch(fetchTilesRequest())
+  store.dispatch(fetchCampaignRequest())
 
   return store
 }

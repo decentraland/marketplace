@@ -2,6 +2,7 @@ import { connectRouter } from 'connected-react-router'
 import { History } from 'history'
 import { combineReducers } from 'redux'
 import { authorizationReducer as authorization } from 'decentraland-dapps/dist/modules/authorization/reducer'
+import { campaignReducer as campaign } from 'decentraland-dapps/dist/modules/campaign/reducer'
 import { featuresReducer as features } from 'decentraland-dapps/dist/modules/features/reducer'
 import { gatewayReducer as gateway } from 'decentraland-dapps/dist/modules/gateway/reducer'
 import { modalReducer as modal } from 'decentraland-dapps/dist/modules/modal/reducer'
@@ -35,6 +36,7 @@ export const createRootReducer = (history: History) =>
   combineReducers({
     asset,
     account,
+    campaign,
     authorization,
     bid,
     item,

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
+import { Banner } from 'decentraland-dapps/dist/containers/Banner'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { BackToTopButton, Page } from 'decentraland-ui'
@@ -12,8 +13,6 @@ import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { VendorName } from '../../modules/vendor/types'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
-import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
-import { CampaignBanner } from '../Campaign/CampaignBanner'
 import { SmartWearablesLaunchModal } from '../Modals/FTU/SmartWearablesLaunchModal'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
 import { NavigationTab } from '../Navigation/Navigation.types'
@@ -23,6 +22,8 @@ import { RecentlySoldTable } from '../RecentlySoldTable'
 import { Slideshow } from './Slideshow'
 import { Props } from './HomePage.types'
 import './HomePage.css'
+
+const MARKETPLACE_HOMEPAGE_BANNER_ID = 'marketplaceHomepageBanner'
 
 const HomePage = (props: Props) => {
   const { homepage, homepageLoading, onFetchAssetsFromRoute, isCampaignHomepageBannerEnabled } = props
@@ -199,11 +200,7 @@ const HomePage = (props: Props) => {
     <PageLayout activeTab={NavigationTab.OVERVIEW}>
       <ListsLaunchModal />
       <SmartWearablesLaunchModal />
-      {isCampaignHomepageBannerEnabled ? (
-        <CampaignBanner>
-          <CampaignHomepageBanner type="homepage" />
-        </CampaignBanner>
-      ) : null}
+      {isCampaignHomepageBannerEnabled ? <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
       <Page className="HomePage">
         <AnalyticsVolumeDayData />
         {firstViewsSection.map(renderSlideshow)}

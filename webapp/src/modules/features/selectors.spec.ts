@@ -5,7 +5,7 @@ import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { RootState } from '../reducer'
 import {
   getIsCampaignBrowserEnabled,
-  getIsCampaignCollectionsBannerEnabled,
+  getIsCampaignCollectiblesBannerEnabled,
   getIsCampaignHomepageBannerEnabled,
   getIsMaintenanceEnabled,
   getIsMarketplaceLaunchPopupEnabled,
@@ -73,7 +73,7 @@ const tryCatchSelectors = [
   {
     name: 'IsCampaignCollectionsBanner',
     feature: FeatureName.CAMPAIGN_COLLECTIBLES_BANNER,
-    selector: getIsCampaignCollectionsBannerEnabled
+    selector: getIsCampaignCollectiblesBannerEnabled
   },
   {
     name: 'IsCampaignBrowser',

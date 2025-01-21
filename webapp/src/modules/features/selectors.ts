@@ -33,7 +33,7 @@ export const getIsCampaignHomepageBannerEnabled = (state: RootState) => {
   }
 }
 
-export const getIsCampaignCollectionsBannerEnabled = (state: RootState) => {
+export const getIsCampaignCollectiblesBannerEnabled = (state: RootState) => {
   try {
     return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CAMPAIGN_COLLECTIBLES_BANNER)
   } catch (e) {

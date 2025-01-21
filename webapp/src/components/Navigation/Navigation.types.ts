@@ -19,11 +19,12 @@ export type Props = {
   isFullScreen?: boolean
   activeTab?: NavigationTab
   isFullscreen?: boolean
+  campaignTab?: string
   onOpenBuyManaWithFiatModal: () => ReturnType<typeof openBuyManaWithFiatModalRequest>
   onClearFilters: typeof clearFilters
 }
 
 export type MapDispatch = Dispatch<OpenBuyManaWithFiatModalRequestAction | ClearFiltersAction>
 
-export type MapStateProps = Pick<Props, 'isCampaignBrowserEnabled' | 'isFullScreen'>
+export type MapStateProps = Pick<Props, 'isCampaignBrowserEnabled' | 'isFullScreen' | 'campaignTab'>
 export type MapDispatchProps = Pick<Props, 'onOpenBuyManaWithFiatModal' | 'onClearFilters'>
