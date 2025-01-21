@@ -28,7 +28,6 @@ const CampaignBrowserPage = (props: Props) => {
 
   useEffect(() => {
     if (campaignTag) {
-      console.log('Fetching event contracts')
       onFetchEventContracts(campaignTag, additionalCampaignTags ?? [])
     }
   }, [onFetchEventContracts, campaignTag])

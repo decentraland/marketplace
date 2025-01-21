@@ -33,8 +33,6 @@ const Navigation = (props: Props) => {
     status: AssetStatusFilter.ON_SALE
   }
 
-  console.log('Campaign tab', { campaignTab })
-
   return (
     <div className="Navigation">
       <Tabs isFullscreen={isFullscreen}>
