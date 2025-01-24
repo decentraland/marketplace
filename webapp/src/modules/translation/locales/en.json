@@ -510,7 +510,9 @@
     "listings_detail": "Collected by the user"
   },
   "on_sale_list": {
-    "search": "Search {count} items..."
+    "search": "Search {count} items...",
+    "needs_attention": "Needs Attention",
+    "needs_attention_description": "You've transferred this NFT but you have an active listing. If you receive it again, the listing will be valid."
   },
   "on_rent_list": {
     "listed_for_rent": "Listed for rent",

@@ -500,7 +500,9 @@
     "listings_detail": "Adquiridos por el usuario"
   },
   "on_sale_list": {
-    "search": "Buscar entre {count} items..."
+    "search": "Buscar entre {count} items...",
+    "needs_attention": "Necesita atención",
+    "needs_attention_description": "Haz transferido este NFT pero tienes una orden activa. Si lo recives nuevamente, la orden será válida."
   },
   "on_rent_list": {
     "listed_for_rent": "Listado para alquiler",

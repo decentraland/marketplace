@@ -1,11 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { ChainId } from '@dcl/schemas'
+import { ChainId, Order } from '@dcl/schemas'
 import { AuthorizationType, Authorization as Authorizations } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName } from 'decentraland-transactions'
 import { Table, Loader, TextFilter, Dropdown, Pagination, NotMobile } from 'decentraland-ui'
+import { config } from '../../config'
 import { useAuthorization } from '../../lib/authorization'
+import { NFT } from '../../modules/nft/types'
 import { SortBy } from '../../modules/routing/types'
+import { VendorName } from '../../modules/vendor'
 import { LEGACY_MARKETPLACE_MAINNET_CONTRACT } from '../../modules/vendor/decentraland'
 import OnRentListElement from './OnRentListElement'
 import { Props as OnRentListElementProps } from './OnRentListElement/OnRentListElement.types'
@@ -19,6 +22,8 @@ const ROWS_PER_PAGE = 12
 
 const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType, onFetchAuthorizations, onRevoke, wallet }: Props) => {
   const [authorization, setAuthorization] = useState<Authorizations | null>(null)
+  const [nftsWithOpenOrders, setNftsWithOpenOrders] = useState<NFT<VendorName.DECENTRALAND>[]>([])
+
   useEffect(() => {
     if (elements && elements.length) {
       const legacyMarketplaceOrder = elements.find(
@@ -52,7 +57,13 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType, onFetchAuthor
   const [sort, setSort] = useState(SortBy.NEWEST)
   const [page, setPage] = useState(1)
 
-  const processedElements = useProcessedElements(elements, search, sort, page, perPage.current)
+  const processedElements = useProcessedElements(
+    [...elements, ...(nftsWithOpenOrders as OnSaleListElementProps[])],
+    search,
+    sort,
+    page,
+    perPage.current
+  )
 
   const showPagination = processedElements.total / perPage.current > 1
 
@@ -69,6 +80,29 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType, onFetchAuthor
     ),
     [elements.length, search]
   )
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (wallet?.address && elements && !isLoading) {
+        try {
+          const response = await fetch(`${config.get('MARKETPLACE_SERVER_URL')}/orders?&owner=${wallet.address}&status=open`)
+          const data: { data: Order[] } = await response.json()
+          const nftIds = data.data.map(order => `${order.contractAddress}-${order.tokenId}`)
+          const nftIdsNotInElements = nftIds.filter(nftId => !elements.some(element => element.nft?.id === nftId))
+          const nftPromises = nftIdsNotInElements.map(nftId =>
+            fetch(
+              `${config.get('MARKETPLACE_SERVER_URL')}/nfts?contractAddress=${nftId.split('-')[0]}&tokenId=${nftId.split('-')[1]}&first=1`
+            ).then(response => response.json())
+          )
+          const nftsResponses: { data: NFT[] }[] = await Promise.all(nftPromises)
+          setNftsWithOpenOrders(nftsResponses.map(nftResponse => nftResponse.data[0]))
+        } catch (error) {
+          console.error('Error fetching orders:', error)
+        }
+      }
+    }
+    void fetchOrders()
+  }, [wallet?.address, elements, isLoading])
 
   return (
     <div className="onSaleOrRentTable">
@@ -115,6 +149,7 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType, onFetchAuthor
                     authorization={authorization}
                     isAuthorized={isAuthorized}
                     onRevoke={onRevoke}
+                    wallet={wallet}
                     {...element}
                   />
                 )

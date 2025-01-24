@@ -504,7 +504,9 @@
     "listings_detail": "由用户收集"
   },
   "on_sale_list": {
-    "search": "搜索 {count} 项目..."
+    "search": "搜索 {count} 项目...",
+    "needs_attention": "需要关注",
+    "needs_attention_description": "您已转移此 NFT，但您有活动列表。如果您再次收到它，列表将有效。"
   },
   "on_rent_list": {
     "listed_for_rent": "挂牌出租",
