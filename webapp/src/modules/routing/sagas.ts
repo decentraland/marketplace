@@ -1,8 +1,10 @@
+import { ethers } from 'ethers'
 import { History } from 'history'
 import { AnyAction } from 'redux'
 import { takeEvery, put, select, call, take, race, spawn, getContext } from 'redux-saga/effects'
 import { CatalogFilters, CatalogSortBy, NFTCategory, RentalStatus, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { getMainTag } from 'decentraland-dapps/dist/modules/campaign/selectors'
 import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { DCLRegistrar } from '../../contracts/DCLRegistrar'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
@@ -111,14 +113,19 @@ function* handleClearFilters() {
 export function* handleBrowse(action: BrowseAction) {
   const history: History = yield getContext('history')
   const options = (yield call(getNewBrowseOptions, action.payload.options)) as BrowseOptions
-
   const { pathname } = history.location
-  const eventsContracts = (yield select(getData)) as Record<string, string[]>
-  const isAnEventRoute = Object.keys(eventsContracts).includes(pathname.slice(1))
+  const contractsByTag = (yield select(getData)) as Record<string, string[]>
+  const isInACampaignRoute = locations.campaign().includes(pathname)
+  const campaignTag = (yield select(getMainTag)) as ReturnType<typeof getMainTag>
+  // If there is a campaign tag, use the contracts for that tag. If not, use the zero address which will end up showing no items
+  const campaignContracts =
+    campaignTag && contractsByTag[campaignTag] && contractsByTag[campaignTag].length > 0
+      ? contractsByTag[campaignTag]
+      : [ethers.constants.AddressZero]
   yield call(fetchAssetsFromRoute, {
     ...options,
-    ...(isAnEventRoute && {
-      contracts: options.contracts && options.contracts.length > 0 ? options.contracts : eventsContracts[pathname.slice(1)]
+    ...(isInACampaignRoute && {
+      contracts: options.contracts && options.contracts.length > 0 && campaignTag ? options.contracts : campaignContracts
     })
   })
   history.push(buildBrowseURL(pathname, options))
@@ -158,6 +165,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     emoteHasGeometry,
     emoteHasSound
   } = options
+  console.log('Sagas: Fetching assets from route', contracts)
 
   const address: string | string[] = options.address || ((yield select(getCurrentLocationAddress)) as string)
 

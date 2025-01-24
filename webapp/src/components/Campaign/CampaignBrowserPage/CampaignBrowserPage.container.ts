@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { getAdditionalTags, getMainTag } from 'decentraland-dapps/dist/modules/campaign/selectors'
 import { fetchEventRequest } from '../../../modules/event/actions'
-import { getData as getContracts } from '../../../modules/event/selectors'
+import { getData as getContracts, isFetchingEvent } from '../../../modules/event/selectors'
 import { getIsCampaignBrowserEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getIsFullscreen, getAssetType, getSection, getVendor } from '../../../modules/routing/selectors'
@@ -16,7 +16,8 @@ const mapState = (state: RootState): MapStateProps => ({
   contracts: getContracts(state),
   campaignTag: getMainTag(state),
   isCampaignBrowserEnabled: getIsCampaignBrowserEnabled(state),
-  additionalCampaignTags: getAdditionalTags(state)
+  additionalCampaignTags: getAdditionalTags(state),
+  isFetchingEvent: isFetchingEvent(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch) => ({
