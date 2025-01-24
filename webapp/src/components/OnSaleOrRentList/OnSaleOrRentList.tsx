@@ -85,7 +85,7 @@ const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType, onFetchAuthor
     const fetchOrders = async () => {
       if (wallet?.address && elements && !isLoading) {
         try {
-          const response = await fetch(`${config.get('MARKETPLACE_SERVER_URL')}/orders?first=5&owner=${wallet.address}&status=open`)
+          const response = await fetch(`${config.get('MARKETPLACE_SERVER_URL')}/orders?&owner=${wallet.address}&status=open`)
           const data: { data: Order[] } = await response.json()
           const nftIds = data.data.map(order => `${order.contractAddress}-${order.tokenId}`)
           const nftIdsNotInElements = nftIds.filter(nftId => !elements.some(element => element.nft?.id === nftId))
