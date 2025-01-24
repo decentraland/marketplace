@@ -15,6 +15,7 @@ export type Props = {
   campaignTag?: string
   additionalCampaignTags: string[]
   isLoadingCampaign?: boolean
+  isFetchingEvent?: boolean
 }
 
 export type MapStateProps = Pick<
@@ -28,6 +29,7 @@ export type MapStateProps = Pick<
   | 'additionalCampaignTags'
   | 'campaignTag'
   | 'isLoadingCampaign'
+  | 'isFetchingEvent'
 >
 export type MapDispatchProps = Pick<Props, 'onFetchEventContracts'>
 export type MapDispatch = Dispatch<FetchEventRequestAction>
