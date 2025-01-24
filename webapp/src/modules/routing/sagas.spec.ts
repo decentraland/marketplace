@@ -14,6 +14,7 @@ import {
   Rarity
 } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { getMainTag } from 'decentraland-dapps/dist/modules/campaign/selectors'
 import { Route } from 'decentraland-transactions/crossChain'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { AssetStatusFilter } from '../../utils/filters'
@@ -449,6 +450,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -476,6 +478,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -503,6 +506,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
+            [select(getMainTag), undefined],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
@@ -530,6 +534,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
+            [select(getMainTag), undefined],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
@@ -568,6 +573,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -595,6 +601,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -628,6 +635,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -654,6 +662,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -680,6 +689,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -707,6 +717,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
+            [select(getMainTag), undefined],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
@@ -745,6 +756,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -772,6 +784,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -799,6 +812,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
+            [select(getMainTag), undefined],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
@@ -826,6 +840,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
+            [select(getMainTag), undefined],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
@@ -864,6 +879,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -891,6 +907,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -924,6 +941,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -950,6 +968,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -976,6 +995,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [getContext('history'), { location: { pathname }, push: pushMock }],
               [select(getSection), Section.WEARABLES],
+              [select(getMainTag), undefined],
               [select(getEventData), {}],
               [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
@@ -1003,6 +1023,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [getContext('history'), { location: { pathname }, push: pushMock }],
             [select(getSection), Section.WEARABLES],
+            [select(getMainTag), undefined],
             [select(getEventData), {}],
             [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
@@ -1015,37 +1036,120 @@ describe('when handling the browse action', () => {
     })
   })
 
-  describe('and its navigating to an event route', () => {
+  describe("and it's navigating to an event route", () => {
     let contracts: string[]
     let eventContracts: Record<string, string[]>
+    let campaignTag: string | undefined
     beforeEach(() => {
-      pathname = '/anEventName'
+      pathname = '/campaign'
       contracts = ['0x1', '0x2']
-      newBrowseOptions = {
-        ...newBrowseOptions,
-        contracts
-      }
-      eventContracts = { anEventName: contracts }
-      expectedBrowseOptions = {
-        ...browseOptions,
-        ...newBrowseOptions
-      }
+      campaignTag = 'aCampaignTag'
     })
 
-    it('should fetch the assets with the contracts param and put the new url should not have the contracts param', () => {
-      return expectSaga(routingSaga)
-        .provide([
-          [select(getCurrentBrowseOptions), browseOptions],
-          [getContext('history'), { location: { pathname }, push: pushMock }],
-          [select(getSection), Section.WEARABLES],
-          [select(getEventData), eventContracts],
-          [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
-        ])
-        .dispatch(browse(browseOptions))
-        .run({ silenceTimeout: true })
-        .then(() => {
-          expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, browseOptions))
+    describe('and the campaign tag is set', () => {
+      beforeEach(() => {
+        campaignTag = 'aCampaignTag'
+      })
+
+      describe('and there are no contracts for the campaign tag', () => {
+        beforeEach(() => {
+          contracts = []
+          newBrowseOptions = {
+            ...newBrowseOptions,
+            contracts: []
+          }
+          eventContracts = { [campaignTag ?? '']: contracts }
+          expectedBrowseOptions = {
+            ...browseOptions,
+            ...newBrowseOptions,
+            contracts: [ethers.constants.AddressZero]
+          }
         })
+
+        it('should fetch the assets with the zero address as the contract and put the new url without the contracts param', () => {
+          return expectSaga(routingSaga)
+            .provide([
+              [select(getCurrentBrowseOptions), browseOptions],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
+              [select(getSection), Section.WEARABLES],
+              [select(getMainTag), campaignTag],
+              [select(getEventData), eventContracts],
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
+            ])
+            .dispatch(browse(browseOptions))
+            .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, browseOptions))
+            })
+        })
+      })
+
+      describe('and there are contracts for the campaign tag', () => {
+        beforeEach(() => {
+          contracts = ['0x1', '0x2']
+          eventContracts = { [campaignTag ?? '']: contracts }
+          newBrowseOptions = {
+            ...newBrowseOptions,
+            contracts: []
+          }
+          expectedBrowseOptions = {
+            ...browseOptions,
+            ...newBrowseOptions,
+            contracts
+          }
+        })
+
+        it('should fetch the assets with the contracts param and put the new url without the contracts param', () => {
+          return expectSaga(routingSaga)
+            .provide([
+              [select(getCurrentBrowseOptions), browseOptions],
+              [getContext('history'), { location: { pathname }, push: pushMock }],
+              [select(getSection), Section.WEARABLES],
+              [select(getMainTag), campaignTag],
+              [select(getEventData), eventContracts],
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
+            ])
+            .dispatch(browse(browseOptions))
+            .run({ silenceTimeout: true })
+            .then(() => {
+              expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, browseOptions))
+            })
+        })
+      })
+    })
+
+    describe('and the campaign tag is not set', () => {
+      beforeEach(() => {
+        campaignTag = undefined
+        contracts = []
+        newBrowseOptions = {
+          ...newBrowseOptions,
+          contracts
+        }
+        eventContracts = {}
+        expectedBrowseOptions = {
+          ...browseOptions,
+          ...newBrowseOptions,
+          contracts: [ethers.constants.AddressZero]
+        }
+      })
+
+      it('should fetch the assets with the zero address as the contract and put the new url without the contracts param', () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [select(getCurrentBrowseOptions), browseOptions],
+            [getContext('history'), { location: { pathname }, push: pushMock }],
+            [select(getSection), Section.WEARABLES],
+            [select(getMainTag), undefined],
+            [select(getEventData), eventContracts],
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
+          ])
+          .dispatch(browse(browseOptions))
+          .run({ silenceTimeout: true })
+          .then(() => {
+            expect(pushMock).toHaveBeenCalledWith(buildBrowseURL(pathname, browseOptions))
+          })
+      })
     })
   })
 
@@ -1064,6 +1168,7 @@ describe('when handling the browse action', () => {
           [select(getCurrentBrowseOptions), browseOptions],
           [getContext('history'), { location: { pathname }, push: pushMock }],
           [select(getSection), Section.WEARABLES],
+          [select(getMainTag), undefined],
           [select(getEventData), eventContracts],
           [call(fetchAssetsFromRoute, browseOptions), Promise.resolve()]
         ])
@@ -1100,6 +1205,7 @@ describe('when handling the browse action', () => {
         .provide([
           [select(getCurrentBrowseOptions), {}],
           [select(getSection), Section.WEARABLES],
+          [select(getMainTag), undefined],
           [getContext('history'), { location: { pathname }, push: pushMock }],
           [select(getEventData), {}],
           [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]

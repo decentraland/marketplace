@@ -115,7 +115,7 @@ export function* handleBrowse(action: BrowseAction) {
   const options = (yield call(getNewBrowseOptions, action.payload.options)) as BrowseOptions
   const { pathname } = history.location
   const contractsByTag = (yield select(getData)) as Record<string, string[]>
-  const isInACampaignRoute = locations.campaign().includes(pathname)
+  const isInACampaignRoute = locations.campaign().startsWith(pathname)
   const campaignTag = (yield select(getMainTag)) as ReturnType<typeof getMainTag>
   // If there is a campaign tag, use the contracts for that tag. If not, use the zero address which will end up showing no items
   const campaignContracts =
@@ -125,7 +125,7 @@ export function* handleBrowse(action: BrowseAction) {
   yield call(fetchAssetsFromRoute, {
     ...options,
     ...(isInACampaignRoute && {
-      contracts: options.contracts && options.contracts.length > 0 && campaignTag ? options.contracts : campaignContracts
+      contracts: options.contracts && options.contracts.length > 0 ? options.contracts : campaignContracts
     })
   })
   history.push(buildBrowseURL(pathname, options))
@@ -165,7 +165,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     emoteHasGeometry,
     emoteHasSound
   } = options
-  console.log('Sagas: Fetching assets from route', contracts)
 
   const address: string | string[] = options.address || ((yield select(getCurrentLocationAddress)) as string)
 
