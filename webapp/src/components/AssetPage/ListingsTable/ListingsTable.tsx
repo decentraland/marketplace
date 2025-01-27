@@ -18,7 +18,6 @@ const INITIAL_PAGE = 1
 const ListingsTable = (props: Props) => {
   const { asset, sortBy = OrderSortBy.CHEAPEST, isOffchainPublicNFTOrdersEnabled } = props
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
-
   const [orders, setOrders] = useState<DataTableType[]>([])
   const [total, setTotal] = useState<number | null>(null)
   const [page, setPage] = useState(INITIAL_PAGE)
@@ -41,7 +40,7 @@ const ListingsTable = (props: Props) => {
       if (asset.network === Network.MATIC && asset.itemId) {
         params.itemId = asset.itemId
       } else if (asset.network === Network.ETHEREUM) {
-        params.nftName = asset.name
+        params.itemId = asset.id
       }
 
       const orderAPI = isOffchainPublicNFTOrdersEnabled ? marketplaceOrderAPI : legacyOrderAPI
