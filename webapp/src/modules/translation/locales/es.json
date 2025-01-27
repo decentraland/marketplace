@@ -306,6 +306,7 @@
     "home_latest_sales_items_subtitle": "Items siendo acuñados",
     "home_items": "Últimos items",
     "home_sold_items": "Últimas ventas",
+    "home_new_items": "Nuevos items",
     "home_wearables": "Listado recientemente",
     "home_land": "Land",
     "home_ens": "Nombres"
@@ -394,9 +395,8 @@
     "body_shapes": {
       "title": "Género",
       "all_items": "Todos los géneros",
-      "female": "Solo femenino",
-      "male": "Solo masculino",
-      "unisex": "Solo unisex"
+      "available_for_female": "Disponible para mujeres",
+      "available_for_male": "Disponible para hombres"
     },
     "status": {
       "title": "Estado",

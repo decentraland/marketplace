@@ -398,9 +398,8 @@
     "body_shapes": {
       "title": "身材",
       "all_items": "所有体型",
-      "female": "只有女性",
-      "male": "只有男性",
-      "unisex": "仅男女皆宜"
+      "available_for_female": "适合女性",
+      "available_for_male": "适合男性"
     },
     "status": {
       "title": "地位",

@@ -28,7 +28,7 @@ export const BuyWithCryptoButton = (props: Props) => {
   return (
     <Button primary fluid {...rest} onClick={handleOnClick}>
       <Mana inline size="small" network={Network.MATIC} />
-      {t('asset_page.actions.buy_with_crypto')}
+      {t('asset_page.actions.buy_with_mana')}
     </Button>
   )
 }
