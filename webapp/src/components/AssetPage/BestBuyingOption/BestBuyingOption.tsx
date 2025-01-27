@@ -54,11 +54,7 @@ const BestBuyingOption = ({ asset, tableRef, isOffchainPublicNFTOrdersEnabled }:
         }
         const sortBy = OrderSortBy.CHEAPEST
 
-        if (asset.network === Network.MATIC) {
-          params.itemId = asset.itemId
-        } else if (asset.network === Network.ETHEREUM) {
-          params.nftName = asset.name
-        }
+        params.itemId = asset.itemId
 
         const orderAPI = isOffchainPublicNFTOrdersEnabled ? marketplaceOrderAPI : legacyOrderAPI
         orderAPI
