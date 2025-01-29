@@ -77,7 +77,6 @@ export function cancelActiveOrder(nft: NFT, now: BigInt): boolean {
   return false
 }
 
-
 export function handleTransferOrder(nft: NFT | null, to: Bytes): void {
   if (nft != null && nft.activeOrder != null) {
     let oldOrder = Order.load(nft.activeOrder!)
@@ -91,8 +90,6 @@ export function handleTransferOrder(nft: NFT | null, to: Bytes): void {
         oldOrder.status = status.OPEN
         oldOrder.save()
         nft.searchOrderStatus = status.OPEN
-      } else {
-        nft.searchOrderStatus = status.TRANSFERRED
       }
     }
   }
