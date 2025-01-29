@@ -1,4 +1,4 @@
-import { log, BigInt } from '@graphprotocol/graph-ts'
+import { log, BigInt, Bytes } from '@graphprotocol/graph-ts'
 import { NFT, Order, Bid } from '../../entities/schema'
 import { ERC721, Transfer } from '../../entities/templates/ERC721/ERC721'
 import * as status from '../order/status'
@@ -75,4 +75,25 @@ export function cancelActiveOrder(nft: NFT, now: BigInt): boolean {
     return true
   }
   return false
+}
+
+
+export function handleTransferOrder(nft: NFT | null, to: Bytes): void {
+  if (nft != null && nft.activeOrder != null) {
+    let oldOrder = Order.load(nft.activeOrder!)
+    if (oldOrder != null && oldOrder.status == status.OPEN) {
+      oldOrder.status = status.TRANSFERRED
+      oldOrder.save()
+      nft.searchOrderStatus = status.TRANSFERRED
+    } else if (oldOrder != null && oldOrder.status == status.TRANSFERRED) {
+      let isComingBackToOrderOwner = oldOrder.owner == to
+      if (isComingBackToOrderOwner) {
+        oldOrder.status = status.OPEN
+        oldOrder.save()
+        nft.searchOrderStatus = status.OPEN
+      } else {
+        nft.searchOrderStatus = status.TRANSFERRED
+      }
+    }
+  }
 }

@@ -7,6 +7,7 @@ import {
   getTokenURI,
   cancelActiveOrder,
   clearNFTOrderProperties,
+  handleTransferOrder,
 } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
@@ -80,9 +81,7 @@ export function handleTransfer(event: Transfer): void {
     metric.save()
   } else {
     let oldNFT = NFT.load(id)
-    if (cancelActiveOrder(oldNFT!, event.block.timestamp)) {
-      nft = clearNFTOrderProperties(nft!)
-    }
+    handleTransferOrder(oldNFT, event.params.to)
   }
 
   if (category == categories.PARCEL) {
