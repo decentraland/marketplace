@@ -139,7 +139,7 @@ function BidsTableContent({ asset, isBidsOffchainEnabled, address, sortBy, isAcc
                     history.push(
                       isNFT(asset)
                         ? locations.bid(asset.contractAddress, asset.tokenId)
-                        : locations.bid(asset.contractAddress, asset.itemId)
+                        : locations.bidItem(asset.contractAddress, asset.itemId)
                     )
                   }
                 >
