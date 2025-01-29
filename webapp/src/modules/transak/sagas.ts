@@ -90,6 +90,7 @@ function* handleOpenTransak(action: OpenTransakAction) {
     const MarketplaveV3Interface = new ethers.utils.Interface(abi)
     calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, transakMulticallContract)]])
   } else if (order && isNFT(asset)) {
+    console.log('IS NFT', isNFT(asset), asset)
     contractId = MarketplaceV2ContractIds[asset.network]?.[asset.chainId]
     if (!contractId) {
       throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
@@ -97,7 +98,7 @@ function* handleOpenTransak(action: OpenTransakAction) {
     const contractName = getContractName(order.marketplaceAddress)
     const contract = getContract(contractName, order.chainId)
     const MarketplaceV2Interface = new ethers.utils.Interface(contract.abi)
-    calldata = MarketplaceV2Interface.encodeFunctionData('executeOrder', [[asset.contractAddress, asset.tokenId, order.price]])
+    calldata = MarketplaceV2Interface.encodeFunctionData('executeOrder', [asset.contractAddress, asset.tokenId, order.price])
   } else if (!isNFT(asset)) {
     contractId = asset.chainId === ChainId.MATIC_AMOY ? '670e8b512bbeb54123b3a2b4' : '6717e6e62fb1688e111c1a87' // CollectionStore contractId
     const contract = getContract(ContractName.CollectionStore, asset.chainId)
