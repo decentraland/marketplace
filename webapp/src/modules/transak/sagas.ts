@@ -90,7 +90,6 @@ function* handleOpenTransak(action: OpenTransakAction) {
     const MarketplaveV3Interface = new ethers.utils.Interface(abi)
     calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, transakMulticallContract)]])
   } else if (order && isNFT(asset)) {
-    console.log('IS NFT', isNFT(asset), asset)
     contractId = MarketplaceV2ContractIds[asset.network]?.[asset.chainId]
     if (!contractId) {
       throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
