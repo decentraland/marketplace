@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { HomepageView } from '../../modules/ui/asset/homepage/types'
 
 type IntersectionObserverProps = {
@@ -8,18 +8,17 @@ type IntersectionObserverProps = {
 }
 
 export const useIntersectionObserver = ({ refs, onIntersect, options = {} }: IntersectionObserverProps) => {
-  useEffect(() => {
-    // Keep track of which sections have been loaded
-    const loadedSections = new Set<HomepageView>()
+  // Move loadedSections to useRef so it persists between renders
+  const loadedSections = useRef(new Set<HomepageView>())
 
+  useEffect(() => {
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
-          // Find which view this element corresponds to
           const view = Array.from(refs.entries()).find(([_, element]) => element === entry.target)?.[0]
 
-          if (view && entry.isIntersecting && !loadedSections.has(view)) {
-            loadedSections.add(view)
+          if (view && entry.isIntersecting && !loadedSections.current.has(view)) {
+            loadedSections.current.add(view)
             onIntersect(view)
           }
         })
@@ -31,13 +30,15 @@ export const useIntersectionObserver = ({ refs, onIntersect, options = {} }: Int
       }
     )
 
-    // Observe all section refs
-    refs.forEach(element => {
+    // Clean up previous observations before setting new ones
+    const elements = Array.from(refs.values())
+    elements.forEach(element => {
       observer.observe(element)
     })
 
     return () => {
       observer.disconnect()
+      // Don't clear loadedSections on unmount to prevent re-fetching if component remounts
     }
   }, [refs, onIntersect, options])
 }
