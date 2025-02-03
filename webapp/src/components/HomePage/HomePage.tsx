@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Banner } from 'decentraland-dapps/dist/containers/Banner'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -19,6 +19,7 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
 import { RankingsTable } from '../RankingsTable'
 import { RecentlySoldTable } from '../RecentlySoldTable'
+import { useIntersectionObserver } from './hooks'
 import { Slideshow } from './Slideshow'
 import { Props } from './HomePage.types'
 import './HomePage.css'
@@ -162,31 +163,55 @@ const HomePage = (props: Props) => {
     [sections, fetchAssetsForView]
   )
 
-  useEffect(() => {
-    let view: HomepageView
-    for (view in homepage) {
-      fetchAssetsForView(view)
+  // Create a Map to store refs for each view section
+  const sectionRefs = useRef(new Map<HomepageView, HTMLDivElement>())
+
+  // Custom hook to handle intersection observer
+  const onIntersect = useCallback(
+    (view: HomepageView) => {
+      // Only fetch if we don't already have data for this view
+      const isLoadingView = homepageLoading[view]
+      if ((!homepage[view] || homepage[view].length === 0) && !isLoadingView) {
+        fetchAssetsForView(view)
+      }
+    },
+    [fetchAssetsForView, homepage, homepageLoading]
+  )
+
+  useIntersectionObserver({
+    refs: sectionRefs.current,
+    onIntersect,
+    options: {
+      rootMargin: '100px',
+      threshold: 0.1
     }
-    // eslint-disable-next-line
-  }, [fetchAssetsForView])
+  })
 
   const renderSlideshow = (view: HomepageView) => {
     const hasItemsSection = view === View.HOME_NEW_ITEMS || view === View.HOME_WEARABLES
 
     return (
-      <Slideshow
+      <div
+        ref={element => {
+          if (element) {
+            sectionRefs.current.set(view, element)
+          }
+        }}
         key={view}
-        view={view}
-        title={t(`home_page.${view}`)}
-        subtitle={sectionsSubtitles[view]}
-        viewAllTitle={sectionsViewAllTitle[view]}
-        emptyMessage={sectionsEmptyMessages[view]}
-        assets={homepageLoading[view] ? [] : homepage[view]}
-        hasItemsSection={hasItemsSection}
-        isLoading={homepageLoading[view]}
-        onViewAll={() => handleViewAll(view)}
-        onChangeItemSection={hasItemsSection ? handleOnChangeItemSection : undefined}
-      />
+      >
+        <Slideshow
+          view={view}
+          title={t(`home_page.${view}`)}
+          subtitle={sectionsSubtitles[view]}
+          viewAllTitle={sectionsViewAllTitle[view]}
+          emptyMessage={sectionsEmptyMessages[view]}
+          assets={homepageLoading[view] ? [] : homepage[view]}
+          hasItemsSection={hasItemsSection}
+          isLoading={homepageLoading[view]}
+          onViewAll={() => handleViewAll(view)}
+          onChangeItemSection={hasItemsSection ? handleOnChangeItemSection : undefined}
+        />
+      </div>
     )
   }
 
