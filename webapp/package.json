@@ -20,7 +20,7 @@
     "date-fns": "^2.23.0",
     "dcl-catalyst-client": "21.2.0",
     "dcl-catalyst-commons": "^9.0.1",
-    "decentraland-connect": "^7.3.2",
+    "decentraland-connect": "^8.0.1",
     "decentraland-crypto-fetch": "^1.0.3",
     "decentraland-dapps": "^23.25.1",
     "decentraland-transactions": "^2.18.1",
