@@ -68,6 +68,16 @@ export function* handleFetchContractsSuccess() {
     network: Network.MATIC
   })) as ReturnType<typeof getContract>
 
+  const offChainMarketplaceEthereum: Contract | null = (yield select(getContract, {
+    name: contractNames.OFF_CHAIN_MARKETPLACE,
+    network: Network.ETHEREUM
+  })) as ReturnType<typeof getContract>
+
+  const offChainMarketplaceMatic: Contract | null = (yield select(getContract, {
+    name: contractNames.OFF_CHAIN_MARKETPLACE,
+    network: Network.MATIC
+  })) as ReturnType<typeof getContract>
+
   const legacyMarketplaceMatic: Contract | null = (yield select(getContract, {
     name: contractNames.LEGACY_MARKETPLACE,
     network: Network.MATIC
@@ -116,6 +126,17 @@ export function* handleFetchContractsSuccess() {
     })
   }
 
+  if (offChainMarketplaceEthereum && manaEthereum) {
+    authorizations.push({
+      address,
+      authorizedAddress: offChainMarketplaceEthereum.address,
+      contractAddress: manaEthereum.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaEthereum.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
+
   if (marketplaceMatic && manaMatic) {
     authorizations.push({
       address,
@@ -131,6 +152,17 @@ export function* handleFetchContractsSuccess() {
     authorizations.push({
       address,
       authorizedAddress: legacyMarketplaceMatic.address,
+      contractAddress: manaMatic.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaMatic.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
+
+  if (offChainMarketplaceMatic && manaMatic) {
+    authorizations.push({
+      address,
+      authorizedAddress: offChainMarketplaceMatic.address,
       contractAddress: manaMatic.address,
       contractName: ContractName.MANAToken,
       chainId: manaMatic.chainId,

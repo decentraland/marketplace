@@ -44,6 +44,16 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
+  const offChainMarketplaceEthereum = getContract({
+    name: contractNames.OFF_CHAIN_MARKETPLACE,
+    network: Network.ETHEREUM
+  })
+
+  const offChainMarketplaceMatic = getContract({
+    name: contractNames.OFF_CHAIN_MARKETPLACE,
+    network: Network.MATIC
+  })
+
   const bidsEthereum = getContract({
     name: contractNames.BIDS,
     network: Network.ETHEREUM
@@ -75,6 +85,8 @@ const SettingsPage = (props: Props) => {
     !collectionStore ||
     !marketplaceEthereum ||
     !marketplaceMatic ||
+    !offChainMarketplaceEthereum ||
+    !offChainMarketplaceMatic ||
     !bidsEthereum ||
     !bidsMatic ||
     !manaEthereum ||
@@ -174,6 +186,26 @@ const SettingsPage = (props: Props) => {
                             authorization={{
                               address: wallet.address,
                               authorizedAddress: marketplaceMatic.address,
+                              contractAddress: manaMatic.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaMatic.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                          />
+                          <Authorization
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: offChainMarketplaceEthereum.address,
+                              contractAddress: manaEthereum.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaEthereum.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                          />
+                          <Authorization
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: offChainMarketplaceMatic.address,
                               contractAddress: manaMatic.address,
                               contractName: ContractName.MANAToken,
                               chainId: manaMatic.chainId,
