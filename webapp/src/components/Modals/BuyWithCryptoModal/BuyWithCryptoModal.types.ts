@@ -8,7 +8,7 @@ import type { CrossChainProvider, Route, Token } from 'decentraland-transactions
 import { Asset } from '../../../modules/asset/types'
 import { CrossChainRoute, GasCost } from './hooks'
 
-export type MapStateProps = Pick<Props, 'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork'>
+export type MapStateProps = Pick<Props, 'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork' | 'isMagicAutoSignEnabled'>
 export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork'>
 export type OnGetGasCost = (selectedToken: Token, nativeChainToken: Token | undefined, wallet: Wallet | null) => GasCost
 export type OnGetCrossChainRoute = (
@@ -27,6 +27,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization'> &
     isBuyingAsset: boolean
     isSwitchingNetwork: boolean
     isBuyWithCardPage: boolean
+    isMagicAutoSignEnabled: boolean
     onGetCrossChainRoute: OnGetCrossChainRoute
     onGetGasCost: OnGetGasCost
     onSwitchNetwork: typeof switchNetworkRequest

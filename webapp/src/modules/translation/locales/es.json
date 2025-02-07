@@ -849,6 +849,8 @@
     "switch_network": "Cambiar Red a {chain}",
     "confirm_switch_network": "Confirmar el cambio de red en tu Wallet",
     "confirm_transaction": "Confirmar la transacción en tu Wallet",
+    "buying_asset": "Comprando...",
+    "authorizing_purchase": "Autorizando compra...",
     "total": "Total",
     "route_unavailable": "Comprar con {token} no está disponible en este momento. Obtenga MANA, pague con un token diferente o pague con tarjeta.",
     "exchange_rate": "Exchange Rate",

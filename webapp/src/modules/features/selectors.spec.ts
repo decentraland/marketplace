@@ -14,7 +14,8 @@ import {
   getIsChainSelectorEnabled,
   getIsBidsOffChainEnabled,
   getIsOffchainPublicNFTOrdersEnabled,
-  getIsOffchainPublicItemOrdersEnabled
+  getIsOffchainPublicItemOrdersEnabled,
+  getIsMagicAutoSignEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -46,6 +47,10 @@ beforeEach(() => {
   } as any
   getIsFeatureEnabledMock = getIsFeatureEnabled as jest.MockedFunction<typeof getIsFeatureEnabled>
   hasLoadedInitialFlagsMock = hasLoadedInitialFlags as jest.MockedFunction<typeof hasLoadedInitialFlags>
+
+  // Reset mocks before each test
+  getIsFeatureEnabledMock.mockReset()
+  hasLoadedInitialFlagsMock.mockReset()
 })
 
 describe('when getting the loading state of the features state', () => {
@@ -58,31 +63,36 @@ const tryCatchSelectors = [
   {
     name: 'IsMaintenance',
     feature: FeatureName.MAINTENANCE,
-    selector: getIsMaintenanceEnabled
+    selector: getIsMaintenanceEnabled,
+    applicationName: ApplicationName.MARKETPLACE
   },
   {
     name: 'IsMarketplaceLaunchPopup',
     feature: FeatureName.LAUNCH_POPUP,
-    selector: getIsMarketplaceLaunchPopupEnabled
+    selector: getIsMarketplaceLaunchPopupEnabled,
+    applicationName: ApplicationName.MARKETPLACE
   },
   {
     name: 'IsCampaignHomepageBanner',
     feature: FeatureName.CAMPAIGN_HOMEPAGE_BANNER,
-    selector: getIsCampaignHomepageBannerEnabled
+    selector: getIsCampaignHomepageBannerEnabled,
+    applicationName: ApplicationName.MARKETPLACE
   },
   {
     name: 'IsCampaignCollectionsBanner',
     feature: FeatureName.CAMPAIGN_COLLECTIBLES_BANNER,
-    selector: getIsCampaignCollectiblesBannerEnabled
+    selector: getIsCampaignCollectiblesBannerEnabled,
+    applicationName: ApplicationName.MARKETPLACE
   },
   {
     name: 'IsCampaignBrowser',
     feature: FeatureName.CAMPAIGN_BROWSER,
-    selector: getIsCampaignBrowserEnabled
+    selector: getIsCampaignBrowserEnabled,
+    applicationName: ApplicationName.MARKETPLACE
   }
 ]
 
-tryCatchSelectors.forEach(({ name, feature, selector }) =>
+tryCatchSelectors.forEach(({ name, feature, applicationName, selector }) =>
   describe(`when getting if the ${name} feature flag is enabled`, () => {
     describe('when the isFeatureEnabled selector fails', () => {
       beforeEach(() => {
@@ -95,7 +105,7 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
         const isEnabled = selector(state)
 
         expect(isEnabled).toBe(false)
-        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, ApplicationName.MARKETPLACE, feature)
+        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, applicationName, feature)
       })
     })
 
@@ -108,7 +118,7 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
         const isEnabled = selector(state)
 
         expect(isEnabled).toBe(false)
-        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, ApplicationName.MARKETPLACE, feature)
+        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, applicationName, feature)
       })
     })
 
@@ -121,7 +131,7 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
         const isEnabled = selector(state)
 
         expect(isEnabled).toBe(true)
-        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, ApplicationName.MARKETPLACE, feature)
+        expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, applicationName, feature)
       })
     })
   })
@@ -131,7 +141,8 @@ const waitForInitialLoadingSelectors = [
   {
     name: 'isSmartWearablesFTU',
     feature: FeatureName.SMART_WEARABLES_FTU,
-    selector: getIsSmartWearablesFTUEnabled
+    selector: getIsSmartWearablesFTUEnabled,
+    applicationName: ApplicationName.MARKETPLACE
   },
   {
     name: 'chain-selector',
@@ -155,6 +166,12 @@ const waitForInitialLoadingSelectors = [
     name: 'sfOffchainPublicItemOrdersEnabled',
     feature: FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS,
     selector: getIsOffchainPublicItemOrdersEnabled,
+    applicationName: ApplicationName.DAPPS
+  },
+  {
+    name: 'IsMagicAutoSignEnabled',
+    feature: FeatureName.MAGIC_AUTO_SIGN,
+    selector: getIsMagicAutoSignEnabled,
     applicationName: ApplicationName.DAPPS
   }
 ]
@@ -187,7 +204,7 @@ waitForInitialLoadingSelectors.forEach(({ name, feature, applicationName, select
           const isEnabled = selector(state)
 
           expect(isEnabled).toBe(false)
-          expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, applicationName || ApplicationName.MARKETPLACE, feature)
+          expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, applicationName, feature)
         })
       })
 
@@ -200,7 +217,7 @@ waitForInitialLoadingSelectors.forEach(({ name, feature, applicationName, select
           const isEnabled = selector(state)
 
           expect(isEnabled).toBe(true)
-          expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, applicationName || ApplicationName.MARKETPLACE, feature)
+          expect(getIsFeatureEnabledMock).toHaveBeenCalledWith(state, applicationName, feature)
         })
       })
     })
