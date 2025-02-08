@@ -18,8 +18,7 @@ import { getAuthorizationKey } from './utils'
 export function* contractSaga() {
   yield takeEvery(FETCH_CONTRACTS_REQUEST, handleFetchContractsRequest)
   yield takeEvery(FETCH_CONTRACTS_SUCCESS, handleFetchContractsSuccess)
-  yield takeEvery(CHANGE_ACCOUNT, handleChangeAccount)
-  yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
+  yield takeEvery([CHANGE_ACCOUNT, CONNECT_WALLET_SUCCESS], handleWalletChange)
   yield takeEvery(FETCH_TRANSACTION_SUCCESS, handleFetchTransactionSuccess)
 }
 
@@ -115,10 +114,10 @@ export function* handleFetchContractsSuccess() {
 
   let authorizations: Authorization[] = []
 
-  if (marketplaceEthereum && manaEthereum) {
+  if (offChainMarketplaceEthereum && manaEthereum) {
     authorizations.push({
       address,
-      authorizedAddress: marketplaceEthereum.address,
+      authorizedAddress: offChainMarketplaceEthereum.address,
       contractAddress: manaEthereum.address,
       contractName: ContractName.MANAToken,
       chainId: manaEthereum.chainId,
@@ -126,10 +125,21 @@ export function* handleFetchContractsSuccess() {
     })
   }
 
-  if (offChainMarketplaceEthereum && manaEthereum) {
+  if (offChainMarketplaceMatic && manaMatic) {
     authorizations.push({
       address,
-      authorizedAddress: offChainMarketplaceEthereum.address,
+      authorizedAddress: offChainMarketplaceMatic.address,
+      contractAddress: manaMatic.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaMatic.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
+
+  if (marketplaceEthereum && manaEthereum) {
+    authorizations.push({
+      address,
+      authorizedAddress: marketplaceEthereum.address,
       contractAddress: manaEthereum.address,
       contractName: ContractName.MANAToken,
       chainId: manaEthereum.chainId,
@@ -152,17 +162,6 @@ export function* handleFetchContractsSuccess() {
     authorizations.push({
       address,
       authorizedAddress: legacyMarketplaceMatic.address,
-      contractAddress: manaMatic.address,
-      contractName: ContractName.MANAToken,
-      chainId: manaMatic.chainId,
-      type: AuthorizationType.ALLOWANCE
-    })
-  }
-
-  if (offChainMarketplaceMatic && manaMatic) {
-    authorizations.push({
-      address,
-      authorizedAddress: offChainMarketplaceMatic.address,
       contractAddress: manaMatic.address,
       contractName: ContractName.MANAToken,
       chainId: manaMatic.chainId,
@@ -265,15 +264,10 @@ export function* handleFetchContractsSuccess() {
   )
 
   authorizations = authorizations.filter(authorization => !storeAuthorizationsMap.has(getAuthorizationKey(authorization)))
-
   yield put(fetchAuthorizationsRequest(authorizations))
 }
 
-function* handleChangeAccount() {
-  yield put(resetHasFetched())
-}
-
-function* handleConnectWalletSuccess() {
+function* handleWalletChange() {
   yield put(resetHasFetched())
 }
 

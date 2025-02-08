@@ -60,6 +60,24 @@ describe('when handling the fetch contracts request', () => {
         vendor: VendorName.DECENTRALAND
       }
 
+      const offChainMarketplaceEthereum: Contract = {
+        address: 'offChainMarketplaceEthereumAddress',
+        category: null,
+        chainId: ChainId.ETHEREUM_MAINNET,
+        name: contractNames.OFF_CHAIN_MARKETPLACE,
+        network: Network.ETHEREUM,
+        vendor: VendorName.DECENTRALAND
+      }
+
+      const offChainMarketplaceMatic: Contract = {
+        address: 'offChainMarketplaceMaticAddress',
+        category: null,
+        chainId: ChainId.MATIC_MAINNET,
+        name: contractNames.OFF_CHAIN_MARKETPLACE,
+        network: Network.MATIC,
+        vendor: VendorName.DECENTRALAND
+      }
+
       const legacyMarketplace: Contract = {
         address: 'legacyMarketplaceAddress',
         category: null,
@@ -144,6 +162,20 @@ describe('when handling the fetch contracts request', () => {
           ],
           [
             select(getContract, {
+              name: contractNames.OFF_CHAIN_MARKETPLACE,
+              network: Network.ETHEREUM
+            }),
+            offChainMarketplaceEthereum
+          ],
+          [
+            select(getContract, {
+              name: contractNames.OFF_CHAIN_MARKETPLACE,
+              network: Network.MATIC
+            }),
+            offChainMarketplaceMatic
+          ],
+          [
+            select(getContract, {
               name: contractNames.LEGACY_MARKETPLACE,
               network: Network.MATIC
             }),
@@ -208,6 +240,22 @@ describe('when handling the fetch contracts request', () => {
         .put(fetchContractsSuccess([]))
         .put(
           fetchAuthorizationsRequest([
+            {
+              address,
+              authorizedAddress: offChainMarketplaceEthereum.address,
+              contractAddress: manaEthereum.address,
+              contractName: ContractName.MANAToken,
+              chainId: ChainId.ETHEREUM_GOERLI,
+              type: AuthorizationType.ALLOWANCE
+            },
+            {
+              address,
+              authorizedAddress: offChainMarketplaceMatic.address,
+              contractAddress: manaMatic.address,
+              contractName: ContractName.MANAToken,
+              chainId: ChainId.MATIC_AMOY,
+              type: AuthorizationType.ALLOWANCE
+            },
             {
               address,
               authorizedAddress: marketplaceEthereum.address,
