@@ -104,3 +104,10 @@ export const getIsNavbar2Enabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsMagicAutoSignEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.MAGIC_AUTO_SIGN)
+  }
+  return false
+}

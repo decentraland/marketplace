@@ -1,1 +1,1 @@
-export { default as SubmitTransactionModal } from './SubmitTransactionModal'
+export { default as SubmitTransactionModal } from './SubmitTransactionModal.container'

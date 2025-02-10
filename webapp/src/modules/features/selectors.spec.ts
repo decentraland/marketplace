@@ -14,7 +14,8 @@ import {
   getIsChainSelectorEnabled,
   getIsBidsOffChainEnabled,
   getIsOffchainPublicNFTOrdersEnabled,
-  getIsOffchainPublicItemOrdersEnabled
+  getIsOffchainPublicItemOrdersEnabled,
+  getIsMagicAutoSignEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -155,6 +156,12 @@ const waitForInitialLoadingSelectors = [
     name: 'sfOffchainPublicItemOrdersEnabled',
     feature: FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS,
     selector: getIsOffchainPublicItemOrdersEnabled,
+    applicationName: ApplicationName.DAPPS
+  },
+  {
+    name: 'IsMagicAutoSignEnabled',
+    feature: FeatureName.MAGIC_AUTO_SIGN,
+    selector: getIsMagicAutoSignEnabled,
     applicationName: ApplicationName.DAPPS
   }
 ]
