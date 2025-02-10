@@ -1,13 +1,5 @@
 import { connect } from 'react-redux'
-import {
-  fetchAuthorizationsRequest,
-  GRANT_TOKEN_REQUEST,
-  REVOKE_TOKEN_REQUEST
-} from 'decentraland-dapps/dist/modules/authorization/actions'
-import { getData as getAuthorizations, getLoading } from 'decentraland-dapps/dist/modules/authorization/selectors'
-import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { upsertContracts } from '../../../modules/contract/actions'
 import { getContract } from '../../../modules/contract/selectors'
 import { getIsOffchainPublicNFTOrdersEnabled } from '../../../modules/features/selectors'
 import { createOrderRequest, CREATE_ORDER_REQUEST, cancelOrderRequest, CANCEL_ORDER_REQUEST } from '../../../modules/order/actions'
@@ -24,9 +16,7 @@ const mapState = (state: RootState): MapStateProps => {
     wallet: getWallet(state),
     error: getError(state),
     getContract: (query: Partial<Contract>) => getContract(state, query),
-    authorizations: getAuthorizations(state),
     isCreatingOrder: isLoadingType(getLoadingOrders(state), CREATE_ORDER_REQUEST),
-    isAuthorizing: isLoadingType(getLoading(state), GRANT_TOKEN_REQUEST) || isLoadingType(getLoading(state), REVOKE_TOKEN_REQUEST),
     isCancelling: isLoadingType(getLoadingOrders(state), CANCEL_ORDER_REQUEST),
     isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state)
   }
@@ -34,8 +24,6 @@ const mapState = (state: RootState): MapStateProps => {
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onCreateOrder: (nft, price, expiresAt, fingerprint) => dispatch(createOrderRequest(nft, price, expiresAt, fingerprint)),
-  onFetchAuthorizations: (authorizations: Authorization[]) => dispatch(fetchAuthorizationsRequest(authorizations)),
-  onUpsertContracts: (contracts: Contract[]) => dispatch(upsertContracts(contracts)),
   onCancelOrder: (order, nft, skipRedirection = false) => dispatch(cancelOrderRequest(order, nft, skipRedirection))
 })
 

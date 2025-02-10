@@ -28,7 +28,7 @@ import styles from './BidsTableContent.module.css'
 export const ROWS_PER_PAGE = 5
 const INITIAL_PAGE = 1
 
-function BidsTableContent({
+export function BidsTableContent({
   asset,
   isBidsOffchainEnabled,
   address,
