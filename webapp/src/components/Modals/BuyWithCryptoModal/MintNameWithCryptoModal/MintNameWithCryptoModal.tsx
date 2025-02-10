@@ -24,6 +24,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     isMintingName,
     isMintingNameCrossChain,
     metadata: { name },
+    isUsingMagic,
+    isMagicAutoSignEnabled,
     isLoadingAuthorization,
     getContract,
     onAuthorizedAction,
@@ -128,6 +130,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
       onBuyCrossChain={onClaimNameCrossChain}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}
+      isUsingMagic={isUsingMagic}
+      isMagicAutoSignEnabled={isMagicAutoSignEnabled}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset }}
       name={modalName}

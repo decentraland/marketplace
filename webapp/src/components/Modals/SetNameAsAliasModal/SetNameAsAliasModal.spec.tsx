@@ -24,6 +24,9 @@ describe('SetNameAsAliasModal', () => {
     metadata: {
       name: newName
     },
+    authorizationError: null,
+    isUsingMagic: false,
+    isMagicAutoSignEnabled: false,
     isLoading: false,
     onSubmit: jest.fn(),
     onClose: jest.fn(),

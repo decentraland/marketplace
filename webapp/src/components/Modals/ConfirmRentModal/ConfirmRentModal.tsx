@@ -57,7 +57,7 @@ const ConfirmRentModal = ({
     if (isUserTheOperatorAddress) {
       setOperatorAddress('')
     } else {
-      setOperatorAddress(wallet.address)
+      setOperatorAddress(wallet?.address)
     }
     setIsUserTheOperatorAddress(!isUserTheOperatorAddress)
   }, [isUserTheOperatorAddress, wallet, setIsUserTheOperatorAddress])
