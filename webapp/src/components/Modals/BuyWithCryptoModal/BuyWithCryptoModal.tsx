@@ -9,7 +9,6 @@ import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { isWeb2Wallet } from 'decentraland-dapps/dist/modules/wallet/utils'
 import type { ChainData, Token, CrossChainProvider } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Button, Icon, Loader, ModalNavigation } from 'decentraland-ui'
@@ -52,6 +51,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     isSwitchingNetwork,
     isBuyWithCardPage,
     isMagicAutoSignEnabled,
+    isUsingMagic,
     onSwitchNetwork,
     onGetGasCost,
     onGetCrossChainRoute,
@@ -257,7 +257,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         {isSwitchingNetwork ? (
           <>
             <Loader inline active size="tiny" />
-            {isMagicAutoSignEnabled && wallet
+            {isMagicAutoSignEnabled && isUsingMagic
               ? t('buy_with_crypto_modal.switching_network')
               : t('buy_with_crypto_modal.confirm_switch_network')}
           </>
@@ -268,7 +268,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         )}
       </Button>
     )
-  }, [isSwitchingNetwork, onSwitchNetwork, selectedProviderChain, selectedChain, isMagicAutoSignEnabled, wallet])
+  }, [isSwitchingNetwork, onSwitchNetwork, selectedProviderChain, selectedChain, isMagicAutoSignEnabled, isUsingMagic])
 
   const handleBuyWithCard = useCallback(() => {
     if (onBuyWithCard) {
@@ -318,9 +318,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       buttonText = null
     } else if (isBuyingAsset) {
       buttonText =
-        isMagicAutoSignEnabled && wallet && isWeb2Wallet(wallet)
-          ? t('buy_with_crypto_modal.buying_asset')
-          : t('buy_with_crypto_modal.confirm_transaction')
+        isMagicAutoSignEnabled && isUsingMagic ? t('buy_with_crypto_modal.buying_asset') : t('buy_with_crypto_modal.confirm_transaction')
     } else if (isLoadingAuthorization) {
       buttonText = t('buy_with_crypto_modal.authorizing_purchase')
     } else {
@@ -349,10 +347,10 @@ export const BuyWithCryptoModal = (props: Props) => {
     selectedToken,
     isFetchingRoute,
     isBuyingAsset,
-    wallet,
     isLoadingAuthorization,
     isFetchingBalance,
     isMagicAutoSignEnabled,
+    isUsingMagic,
     onBuyNatively,
     handleCrossChainBuy,
     shouldUseCrossChainProvider

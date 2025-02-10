@@ -3,7 +3,6 @@ import { Dispatch } from 'redux'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isSwitchingNetwork } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { getIsMagicAutoSignEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
 import { getWallet } from '../../../modules/wallet/selectors'
@@ -14,8 +13,7 @@ const mapState = (state: RootState): MapStateProps => {
   return {
     wallet: getWallet(state),
     isSwitchingNetwork: isSwitchingNetwork(state),
-    isBuyWithCardPage: getIsBuyWithCardPage(state),
-    isMagicAutoSignEnabled: getIsMagicAutoSignEnabled(state)
+    isBuyWithCardPage: getIsBuyWithCardPage(state)
   }
 }
 
