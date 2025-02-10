@@ -18,8 +18,7 @@ import { getAuthorizationKey } from './utils'
 export function* contractSaga() {
   yield takeEvery(FETCH_CONTRACTS_REQUEST, handleFetchContractsRequest)
   yield takeEvery(FETCH_CONTRACTS_SUCCESS, handleFetchContractsSuccess)
-  yield takeEvery(CHANGE_ACCOUNT, handleChangeAccount)
-  yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
+  yield takeEvery([CHANGE_ACCOUNT, CONNECT_WALLET_SUCCESS], handleWalletChange)
   yield takeEvery(FETCH_TRANSACTION_SUCCESS, handleFetchTransactionSuccess)
 }
 
@@ -68,6 +67,16 @@ export function* handleFetchContractsSuccess() {
     network: Network.MATIC
   })) as ReturnType<typeof getContract>
 
+  const offChainMarketplaceEthereum: Contract | null = (yield select(getContract, {
+    name: contractNames.OFF_CHAIN_MARKETPLACE,
+    network: Network.ETHEREUM
+  })) as ReturnType<typeof getContract>
+
+  const offChainMarketplaceMatic: Contract | null = (yield select(getContract, {
+    name: contractNames.OFF_CHAIN_MARKETPLACE,
+    network: Network.MATIC
+  })) as ReturnType<typeof getContract>
+
   const legacyMarketplaceMatic: Contract | null = (yield select(getContract, {
     name: contractNames.LEGACY_MARKETPLACE,
     network: Network.MATIC
@@ -104,6 +113,28 @@ export function* handleFetchContractsSuccess() {
   })) as ReturnType<typeof getContract>
 
   let authorizations: Authorization[] = []
+
+  if (offChainMarketplaceEthereum && manaEthereum) {
+    authorizations.push({
+      address,
+      authorizedAddress: offChainMarketplaceEthereum.address,
+      contractAddress: manaEthereum.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaEthereum.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
+
+  if (offChainMarketplaceMatic && manaMatic) {
+    authorizations.push({
+      address,
+      authorizedAddress: offChainMarketplaceMatic.address,
+      contractAddress: manaMatic.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaMatic.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
 
   if (marketplaceEthereum && manaEthereum) {
     authorizations.push({
@@ -233,15 +264,10 @@ export function* handleFetchContractsSuccess() {
   )
 
   authorizations = authorizations.filter(authorization => !storeAuthorizationsMap.has(getAuthorizationKey(authorization)))
-
   yield put(fetchAuthorizationsRequest(authorizations))
 }
 
-function* handleChangeAccount() {
-  yield put(resetHasFetched())
-}
-
-function* handleConnectWalletSuccess() {
+function* handleWalletChange() {
   yield put(resetHasFetched())
 }
 
