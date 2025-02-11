@@ -31,6 +31,8 @@ const Bid = (props: Props) => {
     archivedBidIds,
     isBidsOffchainEnabled,
     onAuthorizedAction,
+    isLoadingAuthorization,
+    authorizationError,
     onAccept,
     onArchive,
     onUnarchive,
@@ -169,8 +171,9 @@ const Bid = (props: Props) => {
                 valueToConfirm={ethers.utils.formatEther(bid.price)}
                 network={asset.network}
                 onCancel={() => setShowConfirmationModal(false)}
-                loading={isAcceptingBid}
-                disabled={isAcceptingBid}
+                loading={isAcceptingBid || isLoadingAuthorization}
+                disabled={isAcceptingBid || isLoadingAuthorization}
+                error={authorizationError}
               />
             )
           }

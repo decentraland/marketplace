@@ -27,7 +27,18 @@ import { Props } from './BidModal.types'
 import './BidModal.css'
 
 const BidModal = (props: Props) => {
-  const { asset, rental, wallet, onNavigate, onPlaceBid, isPlacingBid, isLoadingAuthorization, isBidsOffchainEnabled, getContract } = props
+  const {
+    asset,
+    rental,
+    wallet,
+    onNavigate,
+    onPlaceBid,
+    isPlacingBid,
+    isLoadingAuthorization,
+    authorizationError,
+    isBidsOffchainEnabled,
+    getContract
+  } = props
 
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
@@ -87,7 +98,6 @@ const BidModal = (props: Props) => {
       (wallet?.chainId as ChainId) !== ChainId.MATIC_MAINNET && !!price && isPriceTooLow(ethers.utils.parseEther(price || '0').toString()), // not connected to polygon AND has price < minimum for meta tx
     [price, wallet?.chainId]
   )
-  console.log('hasLowPriceForMetaTx: ', hasLowPriceForMetaTx)
 
   const isDisabled =
     isOwnedBy(asset, wallet) ||
@@ -214,6 +224,7 @@ const BidModal = (props: Props) => {
             onConfirm={handleConfirmBid}
             valueToConfirm={price}
             network={asset.network}
+            error={authorizationError}
             onCancel={() => setShowConfirmationModal(false)}
             loading={isPlacingBid || isLoadingAuthorization}
             disabled={isPlacingBid || isLoadingAuthorization}

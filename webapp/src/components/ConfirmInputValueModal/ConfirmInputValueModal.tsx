@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Modal, Button, ModalNavigation } from 'decentraland-ui'
+import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { ManaField } from '../ManaField'
 import { Props } from './ConfirmInputValueModal.types'
 import './ConfirmInputValueModal.css'
@@ -14,6 +14,7 @@ const ConfirmInputValueModal = ({
   onConfirm,
   loading = false,
   disabled = false,
+  error,
   network
 }: Props) => {
   const [confirmedInput, setConfirmedInput] = useState<string>('')
@@ -37,6 +38,7 @@ const ConfirmInputValueModal = ({
             setConfirmedInput(props.value)
           }}
         />
+        {error ? <Message error size="tiny" visible content={error} header={t('global.error')} /> : null}
       </Modal.Content>
       <Modal.Actions>
         <Button

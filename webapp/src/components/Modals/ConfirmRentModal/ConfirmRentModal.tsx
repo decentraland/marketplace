@@ -28,6 +28,7 @@ const ConfirmRentModal = ({
   onAuthorizedAction,
   getContract,
   isLoadingAuthorization,
+  authorizationError,
   onClearRentalErrors,
   error
 }: Props) => {
@@ -56,7 +57,7 @@ const ConfirmRentModal = ({
     if (isUserTheOperatorAddress) {
       setOperatorAddress('')
     } else {
-      setOperatorAddress(wallet!.address)
+      setOperatorAddress(wallet?.address)
     }
     setIsUserTheOperatorAddress(!isUserTheOperatorAddress)
   }, [isUserTheOperatorAddress, wallet, setIsUserTheOperatorAddress])
@@ -131,7 +132,9 @@ const ConfirmRentModal = ({
           </div>
         </div>
 
-        {error ? <Message error size="tiny" visible content={error} header={t('global.error')} /> : null}
+        {error || authorizationError ? (
+          <Message error size="tiny" visible content={error || authorizationError} header={t('global.error')} />
+        ) : null}
       </Modal.Content>
       <Modal.Actions className={styles.actions}>
         <Button className={styles.cancel} secondary disabled={isLoading} onClick={onClose}>

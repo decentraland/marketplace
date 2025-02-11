@@ -3,6 +3,7 @@ import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/Moda
 
 export type Props = ModalProps & {
   title: string
+  showConfirmMessage: boolean
   confirm_transaction_message: string
   action_message: string
   children: React.ReactNode
@@ -12,3 +13,5 @@ export type Props = ModalProps & {
   error: string | null
   onSubmitTransaction: () => void
 }
+
+export type MapStateProps = Pick<Props, 'showConfirmMessage'>

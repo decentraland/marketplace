@@ -87,18 +87,15 @@
   height: 64px;
 }
 
-.actions {
+.modal:global(.ui.modal > .actions) {
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 }
 
-.actions :global(.ui.button) {
+.modal:global(.ui.modal > .actions > .ui.button) {
   width: 100%;
-}
-
-.actions :global(.ui.primary.button) + :global(.ui.secondary.button) {
-  margin-left: 0px;
-  margin-top: 15px;
+  margin: 0px;
 }
 
 @media (max-width: 767px) {

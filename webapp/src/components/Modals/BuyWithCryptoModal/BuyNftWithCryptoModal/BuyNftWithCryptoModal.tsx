@@ -23,6 +23,8 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     isOffchainPublicNFTOrdersEnabled,
     onClose,
     isLoadingAuthorization,
+    isUsingMagic,
+    isMagicAutoSignEnabled,
     getContract,
     onAuthorizedAction,
     onExecuteOrder,
@@ -83,6 +85,8 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       onBuyWithCard={nft.category === NFTCategory.ESTATE || nft.category === NFTCategory.PARCEL ? undefined : onBuyWithCard}
       onBuyCrossChain={onExecuteOrderCrossChain}
       onGetGasCost={onGetGasCost}
+      isUsingMagic={isUsingMagic}
+      isMagicAutoSignEnabled={isMagicAutoSignEnabled}
       isLoadingAuthorization={isLoadingAuthorization}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset: nft }}

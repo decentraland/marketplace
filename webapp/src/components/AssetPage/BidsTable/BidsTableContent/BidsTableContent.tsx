@@ -28,7 +28,17 @@ import styles from './BidsTableContent.module.css'
 export const ROWS_PER_PAGE = 5
 const INITIAL_PAGE = 1
 
-function BidsTableContent({ asset, isBidsOffchainEnabled, address, sortBy, isAcceptingBid, onAccept, onAuthorizedAction }: Props) {
+export function BidsTableContent({
+  asset,
+  isBidsOffchainEnabled,
+  address,
+  sortBy,
+  isAcceptingBid,
+  onAccept,
+  onAuthorizedAction,
+  isLoadingAuthorization,
+  authorizationError
+}: Props) {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const history = useHistory()
   const [bids, setBids] = useState<DataTableType[]>([])
@@ -185,8 +195,9 @@ function BidsTableContent({ asset, isBidsOffchainEnabled, address, sortBy, isAcc
                 valueToConfirm={ethers.utils.formatEther(showConfirmationModal.bid.price)}
                 network={nft.network}
                 onCancel={() => setShowConfirmationModal({ display: false, bid: null })}
-                loading={isAcceptingBid}
-                disabled={isAcceptingBid}
+                loading={isAcceptingBid || isLoadingAuthorization}
+                disabled={isAcceptingBid || isLoadingAuthorization}
+                error={authorizationError}
               />
             )
           }

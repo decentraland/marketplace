@@ -1,28 +1,25 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useCallback, useMemo, useState } from 'react'
 import addDays from 'date-fns/addDays'
 import formatDate from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import { ethers } from 'ethers'
-import { Network, NFTCategory } from '@dcl/schemas'
-import { ChainButton, Modal } from 'decentraland-dapps/dist/containers'
+import { Network, NFTCategory, Contract } from '@dcl/schemas'
+import { ChainButton, Modal, withAuthorizedAction } from 'decentraland-dapps/dist/containers'
+import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import { AuthorizationType, Authorization as Authorizations } from 'decentraland-dapps/dist/modules/authorization/types'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContract as getDecentralandContract } from 'decentraland-transactions'
-import { Button, Field, Loader, Mana, Message, ModalNavigation } from 'decentraland-ui'
-import { useAuthorization } from '../../../lib/authorization'
+import { Button, Field, Mana, Message, ModalNavigation } from 'decentraland-ui'
 import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { useFingerprint } from '../../../modules/nft/hooks'
+import { getSellItemStatus, getError } from '../../../modules/order/selectors'
 import { getDefaultExpirationDate, INPUT_FORMAT } from '../../../modules/order/utils'
-import { locations } from '../../../modules/routing/locations'
-import { getContractNames, VendorFactory } from '../../../modules/vendor'
+import { VendorFactory } from '../../../modules/vendor'
 import ErrorBanner from '../../ErrorBanner'
 import { ManaField } from '../../ManaField'
 import { showPriceBelowMarketValueWarning } from '../../SellPage/SellModal/utils'
-import { Authorization } from '../../SettingsPage/Authorization'
 import { Props } from './SellModal.types'
 import styles from './SellModal.module.css'
 
@@ -39,11 +36,11 @@ const SellModal = ({
   onClose,
   getContract,
   onCreateOrder,
+  isLoadingAuthorization,
+  authorizationError,
+  onAuthorizedAction,
   isCreatingOrder,
-  authorizations,
-  isAuthorizing,
   error,
-  onFetchAuthorizations,
   isCancelling,
   isOffchainPublicNFTOrdersEnabled,
   onCancelOrder
@@ -52,9 +49,9 @@ const SellModal = ({
 
   const [confirmedInput, setConfirmedInput] = useState<string>('')
 
-  const shouldRemoveOffchainListing = !!order?.tradeId
+  const shouldRemoveOffChainListing = !!order?.tradeId
 
-  const [step, setStep] = useState(shouldRemoveOffchainListing ? StepperValues.CANCEL : StepperValues.SELL_MODAL)
+  const [step, setStep] = useState(shouldRemoveOffChainListing ? StepperValues.CANCEL : StepperValues.SELL_MODAL)
 
   const isUpdate = order !== null
 
@@ -77,69 +74,62 @@ const SellModal = ({
     return getDefaultExpirationDate()
   })
 
-  const parsedValueToConfirm = parseFloat(price).toString()
-
-  const isConfirmDisabled = parsedValueToConfirm !== confirmedInput || isCreatingOrder
-
-  const contractNames = getContractNames()
-
-  const marketplace = getContract({
-    name: contractNames.MARKETPLACE,
-    network: nft.network
-  })
-
-  const offchainOrdersContract = isOffchainPublicNFTOrdersEnabled
+  const parsedValueToConfirm = useMemo(() => parseFloat(price).toString(), [price])
+  const isConfirmDisabled = parsedValueToConfirm !== confirmedInput || isCreatingOrder || isLoadingAuthorization
+  const marketplaceContract = getDecentralandContract(ContractName.Marketplace, nft.chainId)
+  const offChainOrdersContract = isOffchainPublicNFTOrdersEnabled
     ? getDecentralandContract(ContractName.OffChainMarketplace, nft.chainId)
     : null
 
-  const authorization: Authorizations = {
-    address: wallet?.address || '',
-    authorizedAddress: !!offchainOrdersContract && isOffchainPublicNFTOrdersEnabled ? offchainOrdersContract.address : marketplace!.address,
-    contractAddress: nft.contractAddress,
-    contractName:
-      (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC
-        ? ContractName.ERC721CollectionV2
-        : ContractName.ERC721,
-    chainId: nft.chainId,
-    type: AuthorizationType.APPROVAL
-  }
-
-  const [isLoadingAuthorizations, isAuthorized] = useAuthorization(authorization, onFetchAuthorizations)
+  const authorizedContract = offChainOrdersContract || marketplaceContract
   const [fingerprint] = useFingerprint(nft)
 
   if (!wallet) {
     return null
   }
 
-  const contract = getContract({
-    address: authorization.authorizedAddress
-  })
+  const handleCreateOrder = useCallback(
+    () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), fingerprint),
+    [expiresAt, fingerprint, nft, price, onCreateOrder]
+  )
 
-  const token = getContract({
-    address: authorization.contractAddress
-  })
+  const handleOnConfirm = useCallback(() => {
+    const tokenContract = getContract({
+      address: nft.contractAddress,
+      network: nft.network
+    })
 
-  const handleOnConfirm = () => {
-    if (hasAuthorization(authorizations, authorization)) {
-      handleCreateOrder()
-    } else {
-      setStep(StepperValues.AUTHORIZE)
+    if (!tokenContract) {
+      console.error('Token contract not found')
+      return
     }
-  }
 
-  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), fingerprint)
+    onAuthorizedAction({
+      targetContractName:
+        (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC
+          ? ContractName.ERC721CollectionV2
+          : ContractName.ERC721,
+      authorizationType: AuthorizationType.APPROVAL,
+      authorizedAddress: authorizedContract.address,
+      targetContract: tokenContract as unknown as Contract,
+      targetContractLabel: tokenContract.name,
+      authorizedContractLabel: authorizedContract.name,
+      tokenId: nft.tokenId,
+      onAuthorized: handleCreateOrder
+    })
+  }, [nft, onAuthorizedAction, getContract, handleCreateOrder, authorizedContract])
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
-  const isInvalidPrice = parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
+  const isInvalidPrice = useMemo(() => parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price), [price])
   const isDisabledSell = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate
 
-  const handleBackOrCancel = () => {
+  const handleBackOrCancel = useCallback(() => {
     if (isUpdate) {
       setStep(StepperValues.CANCEL)
     } else {
       onClose()
     }
-  }
+  }, [isUpdate, setStep, onClose])
 
   const assetName = getAssetName(nft)
 
@@ -160,7 +150,7 @@ const SellModal = ({
             <T
               id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
               values={{
-                name: <b className={styles.primaryText}>{getAssetName(nft)}</b>
+                name: <b className={styles.primaryText}>{assetName}</b>
               }}
             />
           }
@@ -211,17 +201,13 @@ const SellModal = ({
         />
       ),
       description: null,
-      content: isLoadingAuthorizations ? (
-        <div className={styles.loaderContainer}>
-          <Loader active size="large" />
-        </div>
-      ) : (
+      content: (
         <div className={styles.fieldsContainer}>
           <span>
             <T
               id="sell_page.confirm.line_one"
               values={{
-                name: <b>{getAssetName(nft)}</b>,
+                name: <b>{assetName}</b>,
                 amount: (
                   <Mana showTooltip network={nft.network} inline>
                     {parseMANANumber(price).toLocaleString()}
@@ -253,7 +239,9 @@ const SellModal = ({
               setConfirmedInput(props.value)
             }}
           />
-          {error && <Message error size="tiny" visible content={error} header={t('global.error')} />}
+          {error || authorizationError ? (
+            <Message error size="tiny" visible content={error || authorizationError} header={t('global.error')} />
+          ) : null}
         </div>
       ),
       actions: (
@@ -267,51 +255,12 @@ const SellModal = ({
           >
             {t('global.cancel')}
           </Button>
-          <Button type="submit" primary disabled={isConfirmDisabled} loading={isCreatingOrder} onClick={handleOnConfirm}>
-            {t('global.proceed')}
-          </Button>
-        </Modal.Actions>
-      )
-    },
-    AUTHORIZE: {
-      navigation: (
-        <ModalNavigation
-          title={t('authorization_modal.title', {
-            token: token?.name
-          })}
-          onClose={isAuthorizing || isCreatingOrder ? undefined : onClose}
-        />
-      ),
-      description: (
-        <Modal.Description>
-          <T
-            id="authorization_modal.description"
-            values={{
-              contract: contract?.name,
-              token: token?.name,
-              settings_link: <Link to={locations.settings()}>{t('global.settings')}</Link>,
-              br: (
-                <>
-                  <br />
-                  <br />
-                </>
-              )
-            }}
-          />
-        </Modal.Description>
-      ),
-      content: <Authorization key={authorization.authorizedAddress} authorization={authorization} />,
-      actions: (
-        <Modal.Actions className={styles.AuthorizationModalActions}>
-          <Button onClick={onClose} className={styles.AuthorizationModalButtons} disabled={isAuthorizing || isCreatingOrder}>
-            {t('global.cancel')}
-          </Button>
           <Button
-            className={styles.AuthorizationModalButtons}
+            type="submit"
             primary
-            loading={isCreatingOrder || isAuthorizing}
-            disabled={isCreatingOrder || isAuthorizing || !isAuthorized}
-            onClick={handleCreateOrder}
+            disabled={isConfirmDisabled}
+            loading={isCreatingOrder || isLoadingAuthorization}
+            onClick={handleOnConfirm}
           >
             {t('global.proceed')}
           </Button>
@@ -323,12 +272,12 @@ const SellModal = ({
         <ModalNavigation
           title={t('sell_page.confirm.title')}
           onClose={isCancelling ? undefined : onClose}
-          onBack={isCancelling || shouldRemoveOffchainListing ? undefined : () => setStep(StepperValues.SELL_MODAL)}
+          onBack={isCancelling || shouldRemoveOffChainListing ? undefined : () => setStep(StepperValues.SELL_MODAL)}
         />
       ),
       description: null,
       content: order ? (
-        shouldRemoveOffchainListing ? (
+        shouldRemoveOffChainListing ? (
           <div className={styles.fieldsContainer}>
             <ErrorBanner info={t('sell_page.cancel_order_warning')} />
           </div>
@@ -360,7 +309,7 @@ const SellModal = ({
             primary
             disabled={isCancelling}
             loading={isCancelling}
-            onClick={() => !!order && onCancelOrder(order, nft, shouldRemoveOffchainListing)}
+            onClick={() => !!order && onCancelOrder(order, nft, shouldRemoveOffChainListing)}
           >
             {t('global.proceed')}
           </Button>
@@ -379,4 +328,17 @@ const SellModal = ({
   )
 }
 
-export default React.memo(SellModal)
+export default React.memo(
+  withAuthorizedAction(
+    SellModal,
+    AuthorizedAction.SELL,
+    {
+      confirm_transaction: {
+        title: 'sell_page.authorization.confirm_transaction_title'
+      },
+      title: 'sell_page.authorization.title'
+    },
+    getSellItemStatus,
+    getError
+  )
+)

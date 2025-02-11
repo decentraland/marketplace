@@ -50,6 +50,8 @@ export const BuyWithCryptoModal = (props: Props) => {
     isLoadingAuthorization,
     isSwitchingNetwork,
     isBuyWithCardPage,
+    isMagicAutoSignEnabled,
+    isUsingMagic,
     onSwitchNetwork,
     onGetGasCost,
     onGetCrossChainRoute,
@@ -155,7 +157,6 @@ export const BuyWithCryptoModal = (props: Props) => {
             )
           )
           setProviderTokens(supportedTokens.filter(t => crossChainSupportedChains.current.includes(+t.chainId)))
-          setProviderTokens(supportedTokens.filter(t => crossChainSupportedChains.current.includes(+t.chainId)))
         }
       } catch (error) {
         console.log('error: ', error)
@@ -256,7 +257,9 @@ export const BuyWithCryptoModal = (props: Props) => {
         {isSwitchingNetwork ? (
           <>
             <Loader inline active size="tiny" />
-            {t('buy_with_crypto_modal.confirm_switch_network')}
+            {isMagicAutoSignEnabled && isUsingMagic
+              ? t('buy_with_crypto_modal.switching_network')
+              : t('buy_with_crypto_modal.confirm_switch_network')}
           </>
         ) : (
           t('buy_with_crypto_modal.switch_network', {
@@ -265,7 +268,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         )}
       </Button>
     )
-  }, [isSwitchingNetwork, onSwitchNetwork, selectedProviderChain, selectedChain])
+  }, [isSwitchingNetwork, onSwitchNetwork, selectedProviderChain, selectedChain, isMagicAutoSignEnabled, isUsingMagic])
 
   const handleBuyWithCard = useCallback(() => {
     if (onBuyWithCard) {
@@ -310,6 +313,18 @@ export const BuyWithCryptoModal = (props: Props) => {
     // or if L2 asset and paying with MATIC MANA => native buy
     const onClick = shouldUseCrossChainProvider ? handleCrossChainBuy : onBuyNatively
 
+    let buttonText: string | null = null
+    if (isFetchingRoute) {
+      buttonText = null
+    } else if (isBuyingAsset) {
+      buttonText =
+        isMagicAutoSignEnabled && isUsingMagic ? t('buy_with_crypto_modal.buying_asset') : t('buy_with_crypto_modal.confirm_transaction')
+    } else if (isLoadingAuthorization) {
+      buttonText = t('buy_with_crypto_modal.authorizing_purchase')
+    } else {
+      buttonText = t('buy_with_crypto_modal.buy_now')
+    }
+
     return (
       <>
         <Button
@@ -317,16 +332,12 @@ export const BuyWithCryptoModal = (props: Props) => {
           primary
           data-testid={BUY_NOW_BUTTON_TEST_ID}
           disabled={(selectedToken?.symbol !== 'MANA' && !route) || isFetchingRoute || isBuyingAsset || isLoadingAuthorization}
-          loading={isFetchingBalance || isLoadingAuthorization}
+          loading={isFetchingBalance}
           onClick={onClick}
         >
           <>
-            {isBuyingAsset || isFetchingRoute ? <Loader inline active size="tiny" /> : null}
-            {!isFetchingRoute // if fetching route, just render the Loader
-              ? isBuyingAsset
-                ? t('buy_with_crypto_modal.confirm_transaction')
-                : t('buy_with_crypto_modal.buy_now')
-              : null}
+            {isBuyingAsset || isLoadingAuthorization || isFetchingRoute ? <Loader inline active size="tiny" /> : null}
+            {buttonText}
           </>
         </Button>
       </>
@@ -338,6 +349,8 @@ export const BuyWithCryptoModal = (props: Props) => {
     isBuyingAsset,
     isLoadingAuthorization,
     isFetchingBalance,
+    isMagicAutoSignEnabled,
+    isUsingMagic,
     onBuyNatively,
     handleCrossChainBuy,
     shouldUseCrossChainProvider

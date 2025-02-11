@@ -8,6 +8,7 @@ export type Props = {
   loading?: boolean
   network: Network
   disabled?: boolean
+  error?: string | null
   valueToConfirm: string
   onCancel: () => void
   onConfirm: () => void

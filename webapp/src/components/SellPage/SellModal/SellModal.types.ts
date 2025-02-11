@@ -9,7 +9,7 @@ import { Contract } from '../../../modules/vendor/services'
 export type Props = {
   nft: NFT
   order: Order | null
-  wallet: Wallet | null
+  wallet?: Wallet | null
   isLoading: boolean
   isCreatingOrder: boolean
   isOffchainPublicNFTOrdersEnabled: boolean

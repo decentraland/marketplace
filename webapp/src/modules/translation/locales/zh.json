@@ -852,6 +852,8 @@
     "switch_network": "将网络切换到 {chain}",
     "confirm_switch_network": "确认钱包中的网络切换",
     "confirm_transaction": "确认您钱包中的交易",
+    "buying_asset": "正在购买...",
+    "authorizing_purchase": "授权购买...",
     "total": "全部的",
     "route_unavailable": "目前无法使用 {token} 购买。获取 MANA、使用不同的令牌支付或通过卡支付。",
     "exchange_rate": "汇率",

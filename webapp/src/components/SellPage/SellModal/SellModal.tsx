@@ -39,6 +39,8 @@ const SellModal = (props: Props) => {
     isCreatingOrder,
     isOffchainPublicNFTOrdersEnabled,
     isLoadingCancelOrder,
+    isLoadingAuthorization,
+    authorizationError,
     getContract,
     onGoBack,
     onCancelOrder,
@@ -230,10 +232,11 @@ const SellModal = (props: Props) => {
         }
         onConfirm={handleSubmit}
         valueToConfirm={price}
+        error={authorizationError}
         network={nft.network}
         onCancel={() => setShowConfirm(false)}
-        loading={isCreatingOrder}
-        disabled={isCreatingOrder}
+        loading={isCreatingOrder || isLoadingAuthorization}
+        disabled={isCreatingOrder || isLoadingAuthorization}
       />
     </AssetAction>
   )

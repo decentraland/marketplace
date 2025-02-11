@@ -8,6 +8,7 @@ import styles from './SubmitTransactionModal.module.css'
 const SubmitTransactionModal = ({
   title,
   confirm_transaction_message,
+  showConfirmMessage,
   action_message,
   children,
   name,
@@ -32,7 +33,9 @@ const SubmitTransactionModal = ({
         {isLoading ? (
           <div className={styles.loader}>
             <Loader inline size="small" />{' '}
-            {isSubmittingTransaction ? <span className={styles.signMessage}>{confirm_transaction_message}</span> : null}
+            {isSubmittingTransaction && showConfirmMessage ? (
+              <span className={styles.signMessage}>{confirm_transaction_message}</span>
+            ) : null}
           </div>
         ) : (
           <Button primary disabled={isLoading} onClick={onSubmitTransaction}>
