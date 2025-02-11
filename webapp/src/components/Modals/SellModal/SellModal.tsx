@@ -49,9 +49,9 @@ const SellModal = ({
 
   const [confirmedInput, setConfirmedInput] = useState<string>('')
 
-  const shouldRemoveOffchainListing = !!order?.tradeId
+  const shouldRemoveOffChainListing = !!order?.tradeId
 
-  const [step, setStep] = useState(shouldRemoveOffchainListing ? StepperValues.CANCEL : StepperValues.SELL_MODAL)
+  const [step, setStep] = useState(shouldRemoveOffChainListing ? StepperValues.CANCEL : StepperValues.SELL_MODAL)
 
   const isUpdate = order !== null
 
@@ -77,18 +77,21 @@ const SellModal = ({
   const parsedValueToConfirm = useMemo(() => parseFloat(price).toString(), [price])
   const isConfirmDisabled = parsedValueToConfirm !== confirmedInput || isCreatingOrder || isLoadingAuthorization
   const marketplaceContract = getDecentralandContract(ContractName.Marketplace, nft.chainId)
-  const offchainOrdersContract = isOffchainPublicNFTOrdersEnabled
+  const offChainOrdersContract = isOffchainPublicNFTOrdersEnabled
     ? getDecentralandContract(ContractName.OffChainMarketplace, nft.chainId)
     : null
 
-  const authorizedContract = !!offchainOrdersContract && isOffchainPublicNFTOrdersEnabled ? offchainOrdersContract : marketplaceContract
+  const authorizedContract = offChainOrdersContract || marketplaceContract
   const [fingerprint] = useFingerprint(nft)
 
   if (!wallet) {
     return null
   }
 
-  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), fingerprint)
+  const handleCreateOrder = useCallback(
+    () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), fingerprint),
+    [expiresAt, fingerprint, nft, price, onCreateOrder]
+  )
 
   const handleOnConfirm = useCallback(() => {
     const tokenContract = getContract({
@@ -117,16 +120,16 @@ const SellModal = ({
   }, [nft, onAuthorizedAction, getContract, handleCreateOrder, authorizedContract])
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
-  const isInvalidPrice = parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
+  const isInvalidPrice = useMemo(() => parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price), [price])
   const isDisabledSell = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate
 
-  const handleBackOrCancel = () => {
+  const handleBackOrCancel = useCallback(() => {
     if (isUpdate) {
       setStep(StepperValues.CANCEL)
     } else {
       onClose()
     }
-  }
+  }, [isUpdate, setStep, onClose])
 
   const assetName = getAssetName(nft)
 
@@ -147,7 +150,7 @@ const SellModal = ({
             <T
               id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
               values={{
-                name: <b className={styles.primaryText}>{getAssetName(nft)}</b>
+                name: <b className={styles.primaryText}>{assetName}</b>
               }}
             />
           }
@@ -204,7 +207,7 @@ const SellModal = ({
             <T
               id="sell_page.confirm.line_one"
               values={{
-                name: <b>{getAssetName(nft)}</b>,
+                name: <b>{assetName}</b>,
                 amount: (
                   <Mana showTooltip network={nft.network} inline>
                     {parseMANANumber(price).toLocaleString()}
@@ -269,12 +272,12 @@ const SellModal = ({
         <ModalNavigation
           title={t('sell_page.confirm.title')}
           onClose={isCancelling ? undefined : onClose}
-          onBack={isCancelling || shouldRemoveOffchainListing ? undefined : () => setStep(StepperValues.SELL_MODAL)}
+          onBack={isCancelling || shouldRemoveOffChainListing ? undefined : () => setStep(StepperValues.SELL_MODAL)}
         />
       ),
       description: null,
       content: order ? (
-        shouldRemoveOffchainListing ? (
+        shouldRemoveOffChainListing ? (
           <div className={styles.fieldsContainer}>
             <ErrorBanner info={t('sell_page.cancel_order_warning')} />
           </div>
@@ -306,7 +309,7 @@ const SellModal = ({
             primary
             disabled={isCancelling}
             loading={isCancelling}
-            onClick={() => !!order && onCancelOrder(order, nft, shouldRemoveOffchainListing)}
+            onClick={() => !!order && onCancelOrder(order, nft, shouldRemoveOffChainListing)}
           >
             {t('global.proceed')}
           </Button>
