@@ -115,7 +115,7 @@ const HomePage = (props: Props) => {
       }
 
       if (trackMessage && browseOptions) {
-        getAnalytics().track(fromEmptyState ? `${trackMessage} '(from empty state)'` : trackMessage)
+        getAnalytics()?.track(fromEmptyState ? `${trackMessage} '(from empty state)'` : trackMessage)
         history.push(locations.browse(browseOptions))
       }
     },

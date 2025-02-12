@@ -10,12 +10,12 @@ const BuyWithCardExplanationModal = ({ metadata: { asset, order }, onContinue, o
   const analytics = getAnalytics()
 
   const handleContinue = useCallback(() => {
-    analytics.track(events.CONTINUE_BUY_WITH_CARD_MODAL)
+    analytics?.track(events.CONTINUE_BUY_WITH_CARD_MODAL)
     onContinue(asset, order)
   }, [analytics, asset, onContinue])
 
   const handleGoBack = useCallback(() => {
-    analytics.track(events.BACK_BUY_WITH_CARD_MODAL)
+    analytics?.track(events.BACK_BUY_WITH_CARD_MODAL)
     onClose()
   }, [analytics, onClose])
 

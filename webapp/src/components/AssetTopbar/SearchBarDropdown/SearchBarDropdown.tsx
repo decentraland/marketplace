@@ -93,7 +93,7 @@ export const SearchBarDropdown = ({
   const handleSeeAll = useCallback(() => {
     if (currentSearchTab === SearchTab.EMOTES || currentSearchTab === SearchTab.WEARABLES) {
       onSearch({ value: searchTerm })
-      getAnalytics().track(events.SEARCH_ALL, {
+      getAnalytics()?.track(events.SEARCH_ALL, {
         tab: currentSearchTab,
         searchTerm,
         searchUUID: uuidv5(searchTerm, UUID_NAMESPACE)
@@ -101,7 +101,7 @@ export const SearchBarDropdown = ({
     } else if (currentSearchTab === SearchTab.COLLECTIONS) {
       const contractAddresses = (results as BuilderCollectionAttributes[]).map(collection => collection.contract_address)
       onSearch({ contractAddresses, value: '' })
-      getAnalytics().track(events.SEARCH_ALL, {
+      getAnalytics()?.track(events.SEARCH_ALL, {
         tab: currentSearchTab,
         searchTerm
       })
@@ -150,7 +150,7 @@ export const SearchBarDropdown = ({
           .then(response => {
             if (!cancel) {
               setResults(response.data)
-              getAnalytics().track(events.SEARCH_RESULT, {
+              getAnalytics()?.track(events.SEARCH_RESULT, {
                 tab: currentSearchTab,
                 searchTerm,
                 searchUUID,
@@ -179,7 +179,7 @@ export const SearchBarDropdown = ({
             if (!cancel) {
               setResults(response)
             }
-            getAnalytics().track(events.SEARCH_RESULT, {
+            getAnalytics()?.track(events.SEARCH_RESULT, {
               tab: currentSearchTab,
               searchTerm,
               searchUUID,
@@ -213,7 +213,7 @@ export const SearchBarDropdown = ({
   const onCollectibleResultClick = useCallback(
     (collectible: Item, index: number) => {
       handleSaveToLocalStorage(collectible)
-      getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
+      getAnalytics()?.track(events.SEARCH_RESULT_CLICKED, {
         searchTerm,
         item_id: collectible.id,
         search_uuid: uuidv5(searchTerm, UUID_NAMESPACE),
@@ -253,7 +253,7 @@ export const SearchBarDropdown = ({
   const onCreatorsResultClick = useCallback(
     (creator: CreatorAccount, index: number) => {
       handleSaveToLocalStorage(creator)
-      getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
+      getAnalytics()?.track(events.SEARCH_RESULT_CLICKED, {
         searchTerm,
         wallet_id: creator.address,
         search_uuid: uuidv5(searchTerm, UUID_NAMESPACE),
@@ -280,7 +280,7 @@ export const SearchBarDropdown = ({
     (collection: BuilderCollectionAttributes, index: number) => {
       onSearch({ contractAddresses: [collection.contract_address] })
       handleSaveToLocalStorage(collection)
-      getAnalytics().track(events.SEARCH_RESULT_CLICKED, {
+      getAnalytics()?.track(events.SEARCH_RESULT_CLICKED, {
         searchTerm,
         collection_id: collection.contract_address,
         search_uuid: uuidv5(searchTerm, UUID_NAMESPACE),

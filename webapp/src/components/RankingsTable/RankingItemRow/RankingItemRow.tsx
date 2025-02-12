@@ -22,7 +22,7 @@ const RankingItemRow = ({ entity }: Props) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleOnLinkClick = (id: string) => {
-    getAnalytics().track(events.ASSET_CLICK, {
+    getAnalytics()?.track(events.ASSET_CLICK, {
       id,
       section: 'Rankings'
     })

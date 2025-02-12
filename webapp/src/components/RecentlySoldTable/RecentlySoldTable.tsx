@@ -49,7 +49,7 @@ const RecentlySoldTable = (props: Props) => {
   }
 
   const handleOnLinkClick = (id: string) => {
-    getAnalytics().track(events.ASSET_CLICK, {
+    getAnalytics()?.track(events.ASSET_CLICK, {
       id,
       section: 'Recently Sold'
     })

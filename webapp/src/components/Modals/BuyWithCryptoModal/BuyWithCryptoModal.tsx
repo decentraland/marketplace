@@ -425,7 +425,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         setSelectedToken(selectedToken)
         setCanBuyAsset(undefined)
         abortControllerRef.current = new AbortController()
-        analytics.track(events.CROSS_CHAIN_TOKEN_SELECTION, {
+        analytics?.track(events.CROSS_CHAIN_TOKEN_SELECTION, {
           selectedToken,
           category: asset.category
         })
@@ -439,7 +439,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           setSelectedToken(token)
         }
 
-        analytics.track(events.CROSS_CHAIN_CHAIN_SELECTION, {
+        analytics?.track(events.CROSS_CHAIN_CHAIN_SELECTION, {
           selectedChain: selectedOption.chainId
         })
       }

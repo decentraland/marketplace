@@ -52,7 +52,7 @@ const Slideshow = (props: Props) => {
 
   const handleOnAssetCardClick = useCallback(
     (asset: Asset) => {
-      getAnalytics().track(events.ASSET_CLICK, {
+      getAnalytics()?.track(events.ASSET_CLICK, {
         id: asset.id,
         section: title
       })

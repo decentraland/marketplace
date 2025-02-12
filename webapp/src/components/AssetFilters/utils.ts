@@ -66,7 +66,7 @@ export function trackBarChartComponentChange(
   const [filterMinName, filterMaxName] = filterNames
   const [minValue, maxValue] = value
   const [prevMinValue, prevMaxValue] = prevValues
-  if (minValue !== prevMinValue) {
+  if (minValue !== prevMinValue && analytics) {
     analytics.track(eventsByProperty[filterMinName], {
       value: minValue,
       component: 'BarChart',
@@ -74,7 +74,7 @@ export function trackBarChartComponentChange(
     })
   }
 
-  if (maxValue !== prevMaxValue) {
+  if (maxValue !== prevMaxValue && analytics) {
     analytics.track(eventsByProperty[filterMaxName], {
       value: maxValue,
       component: 'BarChart',
