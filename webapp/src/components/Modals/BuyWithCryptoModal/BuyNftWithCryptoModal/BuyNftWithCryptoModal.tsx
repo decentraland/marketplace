@@ -63,7 +63,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   }, [nft, order, fingerprint, getContract, onAuthorizedAction, onExecuteOrder])
 
   const onBuyWithCard = useCallback(() => {
-    getAnalytics().track(events.CLICK_BUY_NFT_WITH_CARD)
+    getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)
     onExecuteOrderWithCard(nft)
   }, [nft])
 

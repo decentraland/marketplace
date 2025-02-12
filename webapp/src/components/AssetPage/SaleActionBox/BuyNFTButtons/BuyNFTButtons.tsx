@@ -36,7 +36,7 @@ const BuyNFTButtons = ({
 
   const handleBuyWithCard = useCallback(
     (asset: Asset, order?: Order) => {
-      analytics.track(events.CLICK_GO_TO_BUY_NFT_WITH_CARD)
+      analytics?.track(events.CLICK_GO_TO_BUY_NFT_WITH_CARD)
       !isNFT(asset) ? onBuyItemWithCard(asset) : onExecuteOrderWithCard(asset, order)
     },
     [analytics, onBuyItemWithCard, onExecuteOrderWithCard]
@@ -47,7 +47,7 @@ const BuyNFTButtons = ({
       if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
         history.replace(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
-        analytics.track(events.CLICK_BUY_NFT_WITH_CRYPTO)
+        analytics?.track(events.CLICK_BUY_NFT_WITH_CRYPTO)
         onBuyWithCrypto(asset, order)
       }
     },

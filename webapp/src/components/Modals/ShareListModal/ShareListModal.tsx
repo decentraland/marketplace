@@ -42,7 +42,7 @@ const ShareListModal = (props: Props) => {
 
   const handleCopyLink = useCallback(async () => {
     const url = `${MARKETPLACE_URL}${listLink}`
-    getAnalytics().track(events.SHARE_LIST, {
+    getAnalytics()?.track(events.SHARE_LIST, {
       list,
       url,
       type: events.SHARE_LIST_TYPE.COPY_LINK
@@ -53,7 +53,7 @@ const ShareListModal = (props: Props) => {
   const handleShareOnTwitter = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       const url = `${twitterLink}${encodeURIComponent(`${t('share_list_modal.twitter_message')}${MARKETPLACE_URL}${listLink}`)}`
-      getAnalytics().track(events.SHARE_LIST, {
+      getAnalytics()?.track(events.SHARE_LIST, {
         list,
         url,
         type: events.SHARE_LIST_TYPE.TWITTER

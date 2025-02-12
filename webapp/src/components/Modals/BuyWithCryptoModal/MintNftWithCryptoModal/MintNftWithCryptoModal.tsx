@@ -61,7 +61,7 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
   }, [item, getContract, onAuthorizedAction, onBuyItem])
 
   const onBuyWithCard = useCallback(() => {
-    getAnalytics().track(events.CLICK_BUY_NFT_WITH_CARD)
+    getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)
     onBuyItemWithCard(item)
   }, [item])
 

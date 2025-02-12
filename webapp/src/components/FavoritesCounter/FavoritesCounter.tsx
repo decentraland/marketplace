@@ -13,7 +13,7 @@ const FavoritesCounter = (props: Props) => {
   const { className, count, isPickedByUser, isCollapsed = false, item, isLoading, onClick, onCounterClick } = props
 
   const handleOnCounterClick = useCallback(() => {
-    getAnalytics().track(events.OPEN_FAVORITES_MODAL, {
+    getAnalytics()?.track(events.OPEN_FAVORITES_MODAL, {
       item
     })
     onCounterClick(item)
