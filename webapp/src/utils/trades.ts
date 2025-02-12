@@ -1,8 +1,11 @@
-import { TypedDataDomain, TypedDataField, ethers } from 'ethers'
+import { BigNumber, TypedDataDomain, TypedDataField, ethers } from 'ethers'
 import { ChainId, OnChainTrade, OnChainTradeAsset, Trade, TradeAsset, TradeAssetType, TradeCreation } from '@dcl/schemas'
 import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
+import { API_SIGNER } from '../lib/api'
 import { fromMillisecondsToSeconds } from '../lib/time'
+import { MARKETPLACE_SERVER_URL } from '../modules/vendor/decentraland/marketplace/api'
 
 export const OFFCHAIN_MARKETPLACE_TYPES: Record<string, TypedDataField[]> = {
   Trade: [
@@ -138,4 +141,19 @@ export async function getTradeSignature(trade: Omit<TradeCreation, 'signature'>)
 
   const signature = await signer._signTypedData(domain, OFFCHAIN_MARKETPLACE_TYPES, generateTradeValues(trade))
   return signature
+}
+
+export async function estimateTradeGas(
+  tradeId: string,
+  chainId: ChainId,
+  buyerAddress: string,
+  provider: ethers.providers.Web3Provider
+): Promise<BigNumber> {
+  const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(tradeId)
+  // Build the trade data
+  const tradeToAccept = getOnChainTrade(trade, buyerAddress)
+  // Estimate the gas
+  const contract = getContract(ContractName.OffChainMarketplace, chainId)
+  const c = new ethers.Contract(contract.address, contract.abi, provider)
+  return c.estimateGas.accept([tradeToAccept], { from: buyerAddress })
 }
