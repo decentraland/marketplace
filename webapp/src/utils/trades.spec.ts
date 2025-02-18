@@ -10,9 +10,10 @@ import {
   TradeType
 } from '@dcl/schemas/dist/dapps/trade'
 import * as ethUtils from 'decentraland-dapps/dist/lib/eth'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { fromMillisecondsToSeconds } from '../lib/time'
-import { OFFCHAIN_MARKETPLACE_TYPES, getTradeSignature, getOnChainTrade, getValueForTradeAsset } from './trades'
+import { OFFCHAIN_MARKETPLACE_TYPES, getTradeSignature, getOnChainTrade, getValueForTradeAsset, estimateTradeGas } from './trades'
 
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
   const module = jest.requireActual('decentraland-dapps/dist/lib/eth')
@@ -245,6 +246,112 @@ describe('when getting the trade to accept', () => {
         extra: asset.extra ? asset.extra : '0x',
         beneficiary: asset.beneficiary
       }))
+    })
+  })
+})
+
+describe('when estimating trade gas', () => {
+  let tradeId: string
+  let chainId: ChainId
+  let buyerAddress: string
+  let provider: ethers.providers.Web3Provider
+  let mockTrade: Trade
+  let mockContract: ethers.Contract
+  let mockEstimateGas: jest.Mock
+
+  beforeEach(() => {
+    tradeId = 'test-trade-id'
+    chainId = ChainId.ETHEREUM_SEPOLIA
+    buyerAddress = '0xbuyer'
+    provider = new ethers.providers.Web3Provider({
+      request: jest.fn(),
+      sendAsync: jest.fn(),
+      send: jest.fn()
+    })
+
+    // Mock the trade data
+    mockTrade = {
+      id: tradeId,
+      createdAt: Date.now(),
+      signature: '0xsignature',
+      signer: '0xsigner',
+      type: TradeType.BID,
+      network: Network.ETHEREUM,
+      chainId,
+      checks: {
+        expiration: Date.now() + 100000000000,
+        effective: Date.now(),
+        uses: 1,
+        salt: '0x',
+        allowedRoot: '0x',
+        contractSignatureIndex: 0,
+        externalChecks: [],
+        signerSignatureIndex: 0
+      },
+      sent: [
+        {
+          assetType: TradeAssetType.ERC20,
+          contractAddress: '0xtoken',
+          amount: '1000000000000000000',
+          extra: '0x'
+        }
+      ],
+      received: [
+        {
+          assetType: TradeAssetType.ERC721,
+          contractAddress: '0xnft',
+          tokenId: '1',
+          extra: '0x',
+          beneficiary: buyerAddress
+        }
+      ]
+    }
+
+    // Mock TradeService
+    jest.spyOn(TradeService.prototype as any, 'fetchTrade').mockResolvedValue(mockTrade)
+
+    // Mock ethers Contract
+    mockEstimateGas = jest.fn()
+    mockContract = {
+      estimateGas: {
+        accept: mockEstimateGas
+      }
+    } as unknown as ethers.Contract
+
+    jest.spyOn(ethers, 'Contract').mockImplementation(() => mockContract)
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+
+  describe('when the gas estimation succeeds', () => {
+    beforeEach(() => {
+      mockEstimateGas.mockResolvedValue(ethers.BigNumber.from('100000'))
+    })
+
+    it('should return the estimated gas', async () => {
+      const result = await estimateTradeGas(tradeId, chainId, buyerAddress, provider)
+      expect(result).toEqual(ethers.BigNumber.from('100000'))
+      expect(mockEstimateGas).toHaveBeenCalledWith(
+        [
+          expect.objectContaining({
+            signer: mockTrade.signer,
+            signature: mockTrade.signature
+          })
+        ],
+        { from: buyerAddress }
+      )
+    })
+  })
+
+  describe('when the gas estimation fails', () => {
+    beforeEach(() => {
+      mockEstimateGas.mockRejectedValue(new Error('Gas estimation failed'))
+    })
+
+    it('should propagate the error', async () => {
+      return expect(estimateTradeGas(tradeId, chainId, buyerAddress, provider)).rejects.toThrow('Gas estimation failed')
     })
   })
 })

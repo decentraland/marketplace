@@ -175,7 +175,7 @@ const AssetImage = (props: Props) => {
     const isPreview = asset.category === NFTCategory.WEARABLE && isDraggable
 
     if (!isTracked && isPreview) {
-      getAnalytics().track(events.INIT_PREVIEW, {
+      getAnalytics()?.track(events.INIT_PREVIEW, {
         mode: isTryingOn ? 'avatar' : 'wearable'
       })
       setIsTracked(true)

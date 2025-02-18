@@ -70,7 +70,7 @@ const ListPage = (props: Props) => {
 
   const handleShareList = useCallback(() => {
     if (onShareList && list) {
-      getAnalytics().track(events.OPEN_SHARE_LIST_MODAL, {
+      getAnalytics()?.track(events.OPEN_SHARE_LIST_MODAL, {
         list
       })
       onShareList(list)

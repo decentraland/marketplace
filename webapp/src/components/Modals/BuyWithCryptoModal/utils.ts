@@ -8,6 +8,7 @@ import type { ChainData, Token } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract, getContractName } from 'decentraland-transactions'
 import { config } from '../../../config'
 import { NFT } from '../../../modules/nft/types'
+import { estimateTradeGas } from '../../../utils/trades'
 
 export const getShouldUseMetaTx = (
   assetChainId: ChainId,
@@ -187,9 +188,15 @@ export const getDefaultChains = () => {
 export const estimateMintNftGas = async (selectedChain: ChainId, wallet: Wallet, asset: Item): Promise<BigNumber> => {
   const networkProvider = await getNetworkProvider(selectedChain)
   const provider = new ethers.providers.Web3Provider(networkProvider)
+  console.log('Estimating minting gas for asset', asset)
+
+  if (asset.tradeId) {
+    return estimateTradeGas(asset.tradeId, selectedChain, wallet.address, provider)
+  }
 
   const contract = getContract(ContractName.CollectionStore, asset.chainId)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
+
   return c.estimateGas.buy([[asset.contractAddress, [asset.itemId], [asset.price], [wallet.address]]], { from: wallet.address })
 }
 
@@ -206,6 +213,10 @@ export const estimateBuyNftGas = async (
   const contractName = getContractName(order.marketplaceAddress)
   const contract = getContract(contractName, order.chainId)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
+  if (order.tradeId) {
+    return estimateTradeGas(order.tradeId, order.chainId, wallet.address, provider)
+  }
+  // Old order
   return fingerprint
     ? c.estimateGas.safeExecuteOrder(asset.contractAddress, asset.tokenId, order.price, fingerprint, { from: wallet.address })
     : c.estimateGas.executeOrder(asset.contractAddress, asset.tokenId, order.price, { from: wallet.address })
@@ -216,5 +227,5 @@ export const estimateNameMintingGas = async (name: string, selectedChain: ChainI
   const provider = new ethers.providers.Web3Provider(networkProvider)
   const contract = getContract(ContractName.DCLControllerV2, selectedChain)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
-  return c.estimateGas.register(name, ownerAddress)
+  return c.estimateGas.register(name, ownerAddress, { from: ownerAddress })
 }

@@ -50,7 +50,7 @@ const ClaimNameFatFingerModal = ({
   const [currentName, setCurrentName] = useState(autoComplete ? ENSName : '')
 
   const handleClaimWithCard = useCallback(async () => {
-    analytics.track(events.CLICK_CHECKOUT_NAME, {
+    analytics?.track(events.CLICK_CHECKOUT_NAME, {
       name: ENSName,
       payment_method: 'fiat'
     })
@@ -110,7 +110,7 @@ const ClaimNameFatFingerModal = ({
           },
           onSuccess: options => {
             if ('data' in options && 'tx_id' in options.data) {
-              analytics.track(events.BUY_NAME_SUCCESS, {
+              analytics?.track(events.BUY_NAME_SUCCESS, {
                 name: ENSName,
                 payment_method: 'fiat',
                 txHash: options.data.tx_id
@@ -128,7 +128,7 @@ const ClaimNameFatFingerModal = ({
   }
 
   const handleOnBuyWithCrypto = useCallback(() => {
-    analytics.track(events.CLICK_CHECKOUT_NAME, {
+    analytics?.track(events.CLICK_CHECKOUT_NAME, {
       name: ENSName,
       payment_method: 'crypto'
     })

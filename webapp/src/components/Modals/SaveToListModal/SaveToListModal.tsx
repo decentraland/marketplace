@@ -167,7 +167,7 @@ const SaveToListModal = (props: Props) => {
             total: lists.total++,
             data: stateLists
           })
-          getAnalytics().track(events.CREATE_LIST, {
+          getAnalytics()?.track(events.CREATE_LIST, {
             list: response
           })
           onFinishListCreation()
@@ -179,7 +179,7 @@ const SaveToListModal = (props: Props) => {
             onCreateList: createListFunction,
             error: errorMessage
           })
-          getAnalytics().track(events.CREATE_LIST, {
+          getAnalytics()?.track(events.CREATE_LIST, {
             error: errorMessage
           })
         })

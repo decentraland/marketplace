@@ -21,7 +21,7 @@ const Navigation = (props: Props) => {
   const isMobile = useMobileMediaQuery()
 
   const handleOpenBuyManaWithFiatModal = () => {
-    analytics.track(events.OPEN_BUY_MANA_MODAL)
+    analytics?.track(events.OPEN_BUY_MANA_MODAL)
     onOpenBuyManaWithFiatModal()
   }
 

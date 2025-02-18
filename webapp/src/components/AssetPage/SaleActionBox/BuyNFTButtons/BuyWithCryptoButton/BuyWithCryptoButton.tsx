@@ -14,7 +14,7 @@ export const BuyWithCryptoButton = (props: Props) => {
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
       const isClaimingName = isNFT(asset) && asset.category === NFTCategory.ENS && !asset.tokenId
       const isMint = !!asset.itemId || isClaimingName
-      getAnalytics().track(events.BUY_WITH_CRYPTO, {
+      getAnalytics()?.track(events.BUY_WITH_CRYPTO, {
         transaction_type: isMint ? 'mint' : 'secondary',
         contract_address: isClaimingName ? undefined : asset.contractAddress,
         token_id: isClaimingName ? undefined : isNFT(asset) ? asset.tokenId : asset.itemId,
