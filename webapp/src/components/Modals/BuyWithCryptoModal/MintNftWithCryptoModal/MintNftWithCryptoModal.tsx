@@ -17,6 +17,7 @@ import { Props } from './MintNftWithCryptoModal.types'
 const MintNftWithCryptoModalHOC = (props: Props) => {
   const {
     name,
+    connectedChainId,
     metadata: { item },
     isUsingMagic,
     isMagicAutoSignEnabled,
@@ -50,6 +51,8 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
     const authorizedContractLabel = item.tradeId ? offchainMarketplace.name : collectionStore.label || collectionStore.name
 
     onAuthorizedAction({
+      // Override the automatic Magic sign in if the user needs to pay gas for the transaction
+      manual: connectedChainId === item.chainId,
       targetContractName: ContractName.MANAToken,
       authorizationType: AuthorizationType.ALLOWANCE,
       authorizedAddress,
@@ -61,7 +64,7 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
   }, [item, getContract, onAuthorizedAction, onBuyItem])
 
   const onBuyWithCard = useCallback(() => {
-    getAnalytics().track(events.CLICK_BUY_NFT_WITH_CARD)
+    getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)
     onBuyItemWithCard(item)
   }, [item])
 

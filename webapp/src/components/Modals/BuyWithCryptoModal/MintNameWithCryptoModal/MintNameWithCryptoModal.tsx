@@ -53,6 +53,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     }
 
     onAuthorizedAction({
+      // Override the automatic Magic sign in as the user will need to pay gas for the transaction
+      manual: true,
       authorizedAddress: CONTROLLER_V2_ADDRESS,
       authorizedContractLabel: 'DCLControllerV2',
       targetContract: manaContract,
