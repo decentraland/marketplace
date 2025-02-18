@@ -19,6 +19,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   const {
     name,
     isExecutingOrder,
+    connectedChainId,
     isExecutingOrderCrossChain,
     isOffchainPublicNFTOrdersEnabled,
     onClose,
@@ -52,6 +53,8 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       isOffchainPublicNFTOrdersEnabled && order?.tradeId && getDCLContract(ContractName.OffChainMarketplace, nft.chainId)
 
     onAuthorizedAction({
+      // Override the automatic Magic sign in if the user needs to pay gas for the transaction
+      manual: connectedChainId === nft.chainId,
       targetContractName: ContractName.MANAToken,
       authorizationType: AuthorizationType.ALLOWANCE,
       authorizedAddress: offchainMarketplace ? offchainMarketplace.address : order.marketplaceAddress,

@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
+import { getData as getWallet } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { getContract } from '../../../../modules/contract/selectors'
 import {
@@ -18,6 +19,7 @@ import { MapDispatchProps, MapStateProps, OwnProps } from './MintNftWithCryptoMo
 
 const mapState = (state: RootState): MapStateProps => {
   return {
+    connectedChainId: getWallet(state)?.chainId,
     isBuyingItemNatively: isLoadingType(getItemsLoading(state), BUY_ITEM_REQUEST),
     isBuyingItemCrossChain: isLoadingType(getItemsLoading(state), BUY_ITEM_CROSS_CHAIN_REQUEST),
     getContract: (query: Partial<Contract>) => getContract(state, query)

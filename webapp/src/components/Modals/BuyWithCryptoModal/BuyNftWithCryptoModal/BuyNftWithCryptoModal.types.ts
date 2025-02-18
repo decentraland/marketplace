@@ -1,4 +1,4 @@
-import type { Order } from '@dcl/schemas'
+import type { ChainId, Order } from '@dcl/schemas'
 import type { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import type { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import type { Route } from 'decentraland-transactions/crossChain'
@@ -10,6 +10,7 @@ import type { Contract } from '../../../../modules/vendor/services'
 export type Props = WithAuthorizedActionProps &
   Omit<ModalProps, 'metadata'> & {
     metadata: { nft: NFT; order: Order; slippage?: number }
+    connectedChainId: ChainId | undefined
     isExecutingOrder: boolean
     isExecutingOrderCrossChain: boolean
     isOffchainPublicNFTOrdersEnabled: boolean
@@ -21,7 +22,7 @@ export type Props = WithAuthorizedActionProps &
 
 export type MapStateProps = Pick<
   Props,
-  'getContract' | 'isExecutingOrder' | 'isExecutingOrderCrossChain' | 'isOffchainPublicNFTOrdersEnabled'
+  'getContract' | 'isExecutingOrder' | 'isExecutingOrderCrossChain' | 'isOffchainPublicNFTOrdersEnabled' | 'connectedChainId'
 >
 export type MapDispatchProps = Pick<Props, 'onExecuteOrder' | 'onExecuteOrderCrossChain' | 'onExecuteOrderWithCard'>
 export type OwnProps = Pick<Props, 'metadata'>

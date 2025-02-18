@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
 import type { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
+import { getData as getWallet } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { getContract } from '../../../../modules/contract/selectors'
 import { getIsOffchainPublicNFTOrdersEnabled } from '../../../../modules/features/selectors'
@@ -13,9 +14,9 @@ import type { RootState } from '../../../../modules/reducer'
 import type { Contract } from '../../../../modules/vendor/services'
 import { BuyNftWithCryptoModal } from './BuyNftWithCryptoModal'
 import type { MapDispatchProps, MapStateProps, OwnProps } from './BuyNftWithCryptoModal.types'
-
 const mapState = (state: RootState): MapStateProps => {
   return {
+    connectedChainId: getWallet(state)?.chainId,
     isExecutingOrder: isLoadingType(getLoadingOrders(state), EXECUTE_ORDER_REQUEST),
     isExecutingOrderCrossChain: isLoadingType(getItemsLoading(state), BUY_ITEM_CROSS_CHAIN_REQUEST),
     isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state),
