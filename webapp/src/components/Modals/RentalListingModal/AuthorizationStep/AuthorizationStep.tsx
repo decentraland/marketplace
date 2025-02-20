@@ -14,6 +14,7 @@ const AuthorizationStep = (props: Props) => {
     onCancel,
     address,
     isAuthorizing,
+    isWeb2AutoSigning,
     isConfirmingAuthorization,
     nft,
     error,
@@ -121,7 +122,7 @@ const AuthorizationStep = (props: Props) => {
             {isConfirmingAuthorization ? (
               <div className={styles.confirmTransaction}>
                 <Loader active size="small" className={styles.confirmTransactionLoader} />
-                <p>{t('rental_modal.authorization_step.confirm')}</p>
+                <p>{!isWeb2AutoSigning ? t('rental_modal.authorization_step.confirm') : null}</p>
               </div>
             ) : (
               <Button primary fluid loading={isLoading} onClick={handleSubmit} disabled={isLoading}>

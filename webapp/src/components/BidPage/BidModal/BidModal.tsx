@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { ethers } from 'ethers'
-import { ChainId, Contract, NFTCategory } from '@dcl/schemas'
+import { ChainId, Contract, Network, NFTCategory } from '@dcl/schemas'
 import { withAuthorizedAction, ChainButton } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
@@ -76,8 +76,11 @@ const BidModal = (props: Props) => {
 
   const handleConfirmBid = () => {
     const { onAuthorizedAction, onClearBidError } = props
+    const isAuthorizationCostingGas =
+      asset.network === Network.ETHEREUM || (asset.network as Network.ETHEREUM | Network.MATIC) === wallet?.network
     onClearBidError()
     onAuthorizedAction({
+      manual: isAuthorizationCostingGas,
       targetContractName: ContractName.MANAToken,
       authorizedAddress: isBidsOffchainEnabled && !!offchainBidsContract ? offchainBidsContract.address : bids.address,
       targetContract: mana as Contract,

@@ -123,7 +123,10 @@ const SellModal = (props: Props) => {
 
   const handleSubmit = () => {
     onClearOrderErrors()
+    const isAuthorizationCostingGas =
+      nft.network === Network.ETHEREUM || (nft.network as Network.ETHEREUM | Network.MATIC) === wallet.network
     onAuthorizedAction({
+      manual: isAuthorizationCostingGas,
       authorizationType: AuthorizationType.APPROVAL,
       authorizedAddress:
         !!offchainOrdersContract && isOffchainPublicNFTOrdersEnabled ? offchainOrdersContract.address : marketplace.address,
