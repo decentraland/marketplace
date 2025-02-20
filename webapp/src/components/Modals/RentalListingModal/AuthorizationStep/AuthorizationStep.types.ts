@@ -11,6 +11,7 @@ export type Props = {
   nft: NFT
   isAuthorizing: boolean
   isConfirmingAuthorization: boolean
+  isWeb2AutoSigning: boolean
   address: string
   error: string | null
   isFetchingAuthorizations: boolean
@@ -19,7 +20,10 @@ export type Props = {
   onFetchAuthorizations: typeof fetchAuthorizationsRequest
 }
 
-export type MapStateProps = Pick<Props, 'address' | 'isAuthorizing' | 'isConfirmingAuthorization' | 'error' | 'isFetchingAuthorizations'>
+export type MapStateProps = Pick<
+  Props,
+  'address' | 'isAuthorizing' | 'isConfirmingAuthorization' | 'error' | 'isFetchingAuthorizations' | 'isWeb2AutoSigning'
+>
 export type MapDispatchProps = Pick<Props, 'onAuthorize' | 'onFetchAuthorizations'>
 export type MapDispatch = Dispatch<GrantTokenRequestAction | FetchAuthorizationsRequestAction>
 export type OwnProps = Pick<Props, 'nft' | 'onCancel'>

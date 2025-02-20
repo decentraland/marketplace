@@ -69,6 +69,7 @@ const ConfirmRentModal = ({
     if (operatorAddress && mana && rentals) {
       onClearRentalErrors()
       onAuthorizedAction({
+        manual: true,
         targetContractName: ContractName.MANAToken,
         authorizedAddress: rentals.address,
         targetContract: mana as Contract,

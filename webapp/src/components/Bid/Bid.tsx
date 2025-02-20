@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { ethers } from 'ethers'
+import { Network } from '@dcl/schemas'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -51,11 +52,13 @@ const Bid = (props: Props) => {
   const isNftBid = 'tokenId' in bid
   const assetType = isNftBid ? AssetType.NFT : AssetType.ITEM
   const tokenId = isNftBid ? bid.tokenId : bid.itemId
+  const isAuthorizationCostingGas =
+    bid.network === Network.ETHEREUM || (bid.network as Network.ETHEREUM | Network.MATIC) === wallet?.network
 
   const handleConfirm = useCallback(() => {
     const options = getAcceptBidAuthorizationOptions(bid, () => onAccept(bid), targetContractLabel)
     if (isBidsOffchainEnabled && options) {
-      onAuthorizedAction(options)
+      onAuthorizedAction({ ...options, manual: isAuthorizationCostingGas })
     } else {
       onAccept(bid)
     }

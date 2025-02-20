@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { ethers } from 'ethers'
-import { Bid, ListingStatus } from '@dcl/schemas'
+import { Bid, ListingStatus, Network } from '@dcl/schemas'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { T, t } from 'decentraland-dapps/dist/modules/translation'
@@ -32,6 +32,7 @@ export function BidsTableContent({
   asset,
   isBidsOffchainEnabled,
   address,
+  connectedNetwork,
   sortBy,
   isAcceptingBid,
   onAccept,
@@ -119,9 +120,11 @@ export function BidsTableContent({
   }, [asset, setIsLoading, setBids, page, sortBy, address, isMobileOrTablet])
 
   const handleConfirm = (bid: Bid) => {
+    const isAuthorizationCostingGas =
+      bid.network === Network.ETHEREUM || (bid.network as Network.ETHEREUM | Network.MATIC) === connectedNetwork
     const options = getAcceptBidAuthorizationOptions(bid, () => onAccept(bid), targetContractLabel)
     if (isBidsOffchainEnabled && options) {
-      onAuthorizedAction(options)
+      onAuthorizedAction({ ...options, manual: isAuthorizationCostingGas })
       return
     }
     onAccept(bid)

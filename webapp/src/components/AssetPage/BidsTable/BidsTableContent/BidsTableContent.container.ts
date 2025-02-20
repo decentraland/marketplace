@@ -5,12 +5,13 @@ import { getLoading } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { ACCEPT_BID_REQUEST, acceptBidRequest } from '../../../../modules/bid/actions'
 import { getIsBidsOffChainEnabled } from '../../../../modules/features/selectors'
 import { RootState } from '../../../../modules/reducer'
-import { getAddress } from '../../../../modules/wallet/selectors'
+import { getAddress, getWallet } from '../../../../modules/wallet/selectors'
 import BidsTableContent from './BidsTableContent'
 import { MapDispatchProps, MapStateProps } from './BidsTableContent.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   address: getAddress(state),
+  connectedNetwork: getWallet(state)?.network,
   isAcceptingBid: isLoadingType(getLoading(state), ACCEPT_BID_REQUEST),
   isBidsOffchainEnabled: getIsBidsOffChainEnabled(state)
 })
