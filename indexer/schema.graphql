@@ -220,6 +220,7 @@ enum OrderStatus @entity {
   open
   sold
   cancelled
+  transferred
 }
 
 enum WearableCategory @entity {
