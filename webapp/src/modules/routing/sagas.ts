@@ -514,6 +514,9 @@ function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) 
       if (window.location.pathname !== locations.currentAccount()) {
         newOptions.onlyOnSale = previous.onlyOnSale === undefined ? true : current.onlyOnSale
       }
+      if (current.onlyOnSale === undefined) {
+        newOptions.onlyOnSale = true
+      }
 
       break
     }
