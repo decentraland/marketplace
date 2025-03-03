@@ -3,8 +3,8 @@
   "version": "0.0.0-development",
   "type": "module",
   "dependencies": {
-    "@0xsquid/sdk": "2.8.25",
-    "@0xsquid/squid-types": "^0.1.29",
+    "@0xsquid/sdk": "^2.9.1",
+    "@0xsquid/squid-types": "^0.1.139",
     "@covalenthq/client-sdk": "^0.6.4",
     "@dcl/crypto": "^3.0.0",
     "@dcl/schemas": "^15.1.2",
