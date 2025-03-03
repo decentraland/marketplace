@@ -3,8 +3,8 @@
   "version": "0.0.0-development",
   "type": "module",
   "dependencies": {
-    "@0xsquid/sdk": "^2.9.0",
-    "@0xsquid/squid-types": "^0.1.29",
+    "@0xsquid/sdk": "^2.9.1",
+    "@0xsquid/squid-types": "^0.1.139",
     "@covalenthq/client-sdk": "^0.6.4",
     "@dcl/crypto": "^3.0.0",
     "@dcl/schemas": "^15.1.2",
@@ -78,7 +78,7 @@
     "@types/redux-logger": "3.0.6",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
-    "@vitejs/plugin-react-swc": "^3.5.0",
+    "@vitejs/plugin-react-swc": "^3.8.0",
     "css-mediaquery": "^0.1.2",
     "customize-cra": "^1.0.0",
     "dcl-tslint-config-standard": "^3.0.0",
@@ -100,7 +100,7 @@
     "tslint-react": "^4.1.0",
     "typechain": "^8.0.0",
     "typescript": "5.4",
-    "vite": "^5.0.11"
+    "vite": "^6.2.0"
   },
   "scripts": {
     "start": "vite",
