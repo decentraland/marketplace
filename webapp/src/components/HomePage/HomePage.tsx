@@ -13,7 +13,6 @@ import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { VendorName } from '../../modules/vendor/types'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
-import { SmartWearablesLaunchModal } from '../Modals/FTU/SmartWearablesLaunchModal'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
@@ -224,7 +223,6 @@ const HomePage = (props: Props) => {
   return (
     <PageLayout activeTab={NavigationTab.OVERVIEW}>
       <ListsLaunchModal />
-      <SmartWearablesLaunchModal />
       {isCampaignHomepageBannerEnabled ? <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
       <Page className="HomePage">
         <AnalyticsVolumeDayData />

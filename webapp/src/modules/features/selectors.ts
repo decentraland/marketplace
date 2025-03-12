@@ -49,23 +49,9 @@ export const getIsCampaignBrowserEnabled = (state: RootState) => {
   }
 }
 
-export const getIsSmartWearablesFTUEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.SMART_WEARABLES_FTU)
-  }
-  return false
-}
-
 export const getIsMarketplaceServerEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.MARKETPLACE_SERVER)
-  }
-  return false
-}
-
-export const getIsChainSelectorEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CHAIN_SELECTOR)
   }
   return false
 }
@@ -94,20 +80,6 @@ export const getIsOffchainPublicNFTOrdersEnabled = (state: RootState) => {
 export const getIsOffchainPublicItemOrdersEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS)
-  }
-  return false
-}
-
-export const getIsNavbar2Enabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.NAVBAR_UI2)
-  }
-  return false
-}
-
-export const getIsMagicAutoSignEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.MAGIC_AUTO_SIGN)
   }
   return false
 }
