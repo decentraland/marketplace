@@ -50,7 +50,6 @@ export const BuyWithCryptoModal = (props: Props) => {
     isLoadingAuthorization,
     isSwitchingNetwork,
     isBuyWithCardPage,
-    isMagicAutoSignEnabled,
     isUsingMagic,
     onSwitchNetwork,
     onGetGasCost,
@@ -257,9 +256,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         {isSwitchingNetwork ? (
           <>
             <Loader inline active size="tiny" />
-            {isMagicAutoSignEnabled && isUsingMagic
-              ? t('buy_with_crypto_modal.switching_network')
-              : t('buy_with_crypto_modal.confirm_switch_network')}
+            {isUsingMagic ? t('buy_with_crypto_modal.switching_network') : t('buy_with_crypto_modal.confirm_switch_network')}
           </>
         ) : (
           t('buy_with_crypto_modal.switch_network', {
@@ -268,7 +265,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         )}
       </Button>
     )
-  }, [isSwitchingNetwork, onSwitchNetwork, selectedProviderChain, selectedChain, isMagicAutoSignEnabled, isUsingMagic])
+  }, [isSwitchingNetwork, onSwitchNetwork, selectedProviderChain, selectedChain, isUsingMagic])
 
   const handleBuyWithCard = useCallback(() => {
     if (onBuyWithCard) {
@@ -317,8 +314,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     if (isFetchingRoute) {
       buttonText = null
     } else if (isBuyingAsset) {
-      buttonText =
-        isMagicAutoSignEnabled && isUsingMagic ? t('buy_with_crypto_modal.buying_asset') : t('buy_with_crypto_modal.confirm_transaction')
+      buttonText = isUsingMagic ? t('buy_with_crypto_modal.buying_asset') : t('buy_with_crypto_modal.confirm_transaction')
     } else if (isLoadingAuthorization) {
       buttonText = t('buy_with_crypto_modal.authorizing_purchase')
     } else {
@@ -349,7 +345,6 @@ export const BuyWithCryptoModal = (props: Props) => {
     isBuyingAsset,
     isLoadingAuthorization,
     isFetchingBalance,
-    isMagicAutoSignEnabled,
     isUsingMagic,
     onBuyNatively,
     handleCrossChainBuy,
