@@ -33,7 +33,7 @@ const mapState = (state: RootState): MapStateProps => {
 const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps =>
   bindActionCreators(
     {
-      onBuyItem: (item: Item, useCredits: boolean) => buyItemRequest(item, useCredits),
+      onBuyItem: (item: Item, useCredits: boolean = false) => buyItemRequest(item, useCredits),
       onBuyItemCrossChain: (route: Route) => buyItemCrossChainRequest(ownProps.metadata.item, route),
       onBuyWithCard: buyItemWithCardRequest
     },

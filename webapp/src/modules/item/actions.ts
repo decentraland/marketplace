@@ -67,7 +67,7 @@ export const BUY_ITEM_REQUEST = '[Request] Buy item'
 export const BUY_ITEM_SUCCESS = '[Success] Buy item'
 export const BUY_ITEM_FAILURE = '[Failure] Buy item'
 
-export const buyItemRequest = (item: Item, useCredits: boolean) => action(BUY_ITEM_REQUEST, { item, useCredits })
+export const buyItemRequest = (item: Item, useCredits: boolean = false) => action(BUY_ITEM_REQUEST, { item, useCredits })
 
 export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
   action(BUY_ITEM_SUCCESS, {

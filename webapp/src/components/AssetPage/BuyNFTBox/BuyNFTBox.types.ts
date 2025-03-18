@@ -12,7 +12,6 @@ export type Props = {
   wallet: Wallet | null
   bids: Bid[]
   onFetchBids: (asset: Asset) => void
-  onUseCredits: (useCredits: boolean) => void
   credits: CreditsResponse | null
 }
 

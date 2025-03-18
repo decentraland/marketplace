@@ -47,7 +47,7 @@ describe('Credits sagas', () => {
 
       it('should put a fetch credits failure action with an unknown error if the error is not a message', () => {
         return expectSaga(creditsSaga)
-          .provide([[call(fetch, `${config.get('CREDITS_SERVER_URL')}/users/${address}/credits`), throwError(null)]])
+          .provide([[call(fetch, `${config.get('CREDITS_SERVER_URL')}/users/${address}/credits`), throwError(new Error())]])
           .put(fetchCreditsFailure(address, t('global.unknown_error')))
           .dispatch(fetchCreditsRequest(address))
           .silentRun()
