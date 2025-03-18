@@ -17,10 +17,14 @@ import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
 import { API_SIGNER } from '../../lib/api'
+import creditsService from '../../lib/credits'
 import { isErrorWithMessage } from '../../lib/error'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard } from '../asset/utils'
+import { pollCreditsBalanceRequest } from '../credits/actions'
+import { getCredits } from '../credits/selectors'
 import {
+  getIsCreditsEnabled,
   getIsMarketplaceServerEnabled,
   getIsOffchainPublicItemOrdersEnabled,
   getIsOffchainPublicNFTOrdersEnabled
@@ -223,9 +227,11 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleBuyItem(action: BuyItemRequestAction) {
     try {
-      const { item } = action.payload
+      const { item, useCredits } = action.payload
 
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
+      const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+      const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
 
       if (!wallet) {
         throw new Error('A defined wallet is required to buy an item')
@@ -233,10 +239,23 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
       let txHash: string
 
-      if (item.tradeId) {
+      if (isCreditsEnabled && useCredits && credits && credits.totalCredits > 0) {
+        if (item.tradeId) {
+          // Use credits for marketplace trade
+          const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)
+          txHash = yield call([creditsService, 'useCreditsMarketplace'], trade, wallet, credits.credits)
+        } else {
+          // Use credits for collection store
+          txHash = yield call([creditsService, 'useCreditsCollectionStore'], item, wallet, credits.credits)
+        }
+        const expectedBalance = BigInt(credits.totalCredits) - BigInt(item.price)
+        yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
+      } else if (item.tradeId) {
+        // Regular trade acceptance without credits
         const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)
         txHash = yield call([tradeService, 'accept'], trade, wallet.address)
       } else {
+        // Regular collection store purchase without credits
         const contract = getContract(ContractName.CollectionStore, item.chainId)
 
         txHash = yield call(sendTransaction, contract, collectionStore =>
@@ -246,6 +265,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
       yield put(buyItemSuccess(wallet.chainId, txHash, item))
     } catch (error) {
+      console.log('error', error)
       yield put(buyItemFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }

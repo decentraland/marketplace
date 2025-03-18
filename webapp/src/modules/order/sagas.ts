@@ -9,9 +9,12 @@ import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ErrorCode } from 'decentraland-transactions'
+import creditsService from '../../lib/credits'
 import { isErrorWithMessage } from '../../lib/error'
 import { buyAssetWithCard } from '../asset/utils'
-import { getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
+import { pollCreditsBalanceRequest } from '../credits/actions'
+import { getCredits } from '../credits/selectors'
+import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { FetchNFTFailureAction, fetchNFTRequest, FetchNFTSuccessAction, FETCH_NFT_FAILURE, FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getData as getNFTs } from '../nft/selectors'
@@ -119,7 +122,7 @@ export function* orderSaga(tradeService: TradeService) {
   }
 
   function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
-    const { order, nft, fingerprint, silent } = action.payload
+    const { order, nft, fingerprint, silent, useCredits } = action.payload
 
     try {
       if (nft.contractAddress !== order.contractAddress || nft.tokenId !== order.tokenId) {
@@ -128,6 +131,13 @@ export function* orderSaga(tradeService: TradeService) {
       yield call(waitForFeatureFlagsToBeLoaded)
       const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+
+      if (!wallet) {
+        throw new Error('A defined wallet is required to buy an item')
+      }
+
+      const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+      const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
       let txHash: string
       if (order.tradeId) {
         if (!isOffchainPublicNFTOrdersEnabled) {
@@ -139,7 +149,13 @@ export function* orderSaga(tradeService: TradeService) {
         }
 
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
-        txHash = yield call([tradeService, 'accept'], trade, wallet.address)
+        if (isCreditsEnabled && useCredits && credits && credits.totalCredits > 0) {
+          txHash = yield call([creditsService, 'useCreditsMarketplace'], trade, wallet, credits.credits)
+        } else {
+          txHash = yield call([tradeService, 'accept'], trade, wallet.address)
+        }
+        const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
+        yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
       } else {
         const { orderService } = (yield call(
           [VendorFactory, 'build'],
@@ -148,9 +164,15 @@ export function* orderSaga(tradeService: TradeService) {
           !isOffchainPublicNFTOrdersEnabled
         )) as ReturnType<typeof VendorFactory.build>
 
-        txHash = (yield call([orderService, 'execute'], wallet, nft, order, fingerprint)) as Awaited<
-          ReturnType<typeof orderService.execute>
-        >
+        if (isCreditsEnabled && useCredits && credits && credits.totalCredits > 0) {
+          txHash = yield call([creditsService, 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
+        } else {
+          txHash = (yield call([orderService, 'execute'], wallet, nft, order, fingerprint)) as Awaited<
+            ReturnType<typeof orderService.execute>
+          >
+        }
+        const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
+        yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
       }
 
       yield put(executeOrderTransactionSubmitted(order, nft, txHash))

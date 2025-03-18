@@ -1,6 +1,7 @@
 import { Bid, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Asset } from '../../../modules/asset/types'
+import { CreditsResponse } from '../../../modules/credits/types'
 import { NFT } from '../../../modules/nft/types'
 import { VendorName } from '../../../modules/vendor'
 
@@ -11,8 +12,10 @@ export type Props = {
   wallet: Wallet | null
   bids: Bid[]
   onFetchBids: (asset: Asset) => void
+  onUseCredits: (useCredits: boolean) => void
+  credits: CreditsResponse | null
 }
 
 export type OwnProps = Pick<Props, 'nft'>
-export type MapStateProps = Pick<Props, 'address' | 'order' | 'wallet' | 'bids'>
+export type MapStateProps = Pick<Props, 'address' | 'order' | 'wallet' | 'bids' | 'credits'>
 export type MapDispatchProps = Pick<Props, 'onFetchBids'>

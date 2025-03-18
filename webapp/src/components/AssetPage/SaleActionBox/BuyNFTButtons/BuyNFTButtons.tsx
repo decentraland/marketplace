@@ -1,13 +1,14 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Order } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Loader } from 'decentraland-ui'
-import { Asset } from '../../../../modules/asset/types'
+import { Asset, AssetType } from '../../../../modules/asset/types'
 import { isNFT } from '../../../../modules/asset/utils'
 import { locations } from '../../../../modules/routing/locations'
 import * as events from '../../../../utils/events'
 import { AssetProvider } from '../../../AssetProvider'
+import UseCreditsToggle from '../UseCreditsToggle'
 import { BuyWithCardButton } from './BuyWithCardButton'
 import { BuyWithCryptoButton } from './BuyWithCryptoButton'
 import { Props } from './BuyNFTButtons.types'
@@ -21,10 +22,14 @@ const BuyNFTButtons = ({
   tokenId,
   buyWithCardClassName,
   isBuyingWithCryptoModalOpen,
+  isCreditsEnabled,
+  isCreditsSecondarySalesEnabled,
   onBuyWithCrypto,
   onExecuteOrderWithCard,
-  onBuyItemWithCard
+  onBuyItemWithCard,
+  onUseCredits
 }: Props) => {
+  const [useCredits, setUseCredits] = useState(false)
   const analytics = getAnalytics()
   const location = useLocation()
   const shouldOpenBuyWithCryptoModal = useMemo(() => {
@@ -43,15 +48,23 @@ const BuyNFTButtons = ({
   )
 
   const handleBuyWithCrypto = useCallback(
-    (asset: Asset, order: Order | null) => {
+    (asset: Asset, order: Order | null, useCredits: boolean) => {
       if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
         history.replace(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
         analytics?.track(events.CLICK_BUY_NFT_WITH_CRYPTO)
-        onBuyWithCrypto(asset, order)
+        onBuyWithCrypto(asset, order, useCredits)
       }
     },
-    [isConnecting, wallet, isBuyingWithCryptoModalOpen, location.pathname, analytics, history, onBuyWithCrypto]
+    [isConnecting, wallet, isBuyingWithCryptoModalOpen, location.pathname, analytics, history, onBuyWithCrypto, useCredits]
+  )
+
+  const handleUseCredits = useCallback(
+    (value: boolean) => {
+      setUseCredits(value)
+      onUseCredits(value)
+    },
+    [onUseCredits]
   )
 
   return (
@@ -64,7 +77,12 @@ const BuyNFTButtons = ({
           }
           return (
             <>
-              <BuyWithCryptoButton asset={asset} onClick={() => handleBuyWithCrypto(asset, order)} />
+              {/* Credits toggle is only available for items */}
+              {((isCreditsEnabled && assetType === AssetType.ITEM) ||
+                (isCreditsEnabled && isCreditsSecondarySalesEnabled && assetType === AssetType.NFT)) && (
+                <UseCreditsToggle asset={asset} useCredits={useCredits} onUseCredits={handleUseCredits} />
+              )}
+              <BuyWithCryptoButton asset={asset} onClick={() => handleBuyWithCrypto(asset, order, useCredits)} />
               <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset, order || undefined)} />
             </>
           )

@@ -1,5 +1,8 @@
 .buy_with_card:global(.ui.button) {
-  background-color: var(--superGray);
+  background-color: #ecebed; /* there's no var available for this color */
+  color: #5e5b67;
+  font-size: 15px;
+  padding: 12px;
 }
 
 .buy_with_card:global(.ui.button):hover {
