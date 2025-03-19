@@ -12,6 +12,7 @@ import {
 } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Account } from '../account/types'
+import { CreditsResponse } from '../credits/types'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { OrderResponse } from './decentraland/order/types'
 import { NFTsFetchFilters } from './nft/types'
@@ -62,4 +63,8 @@ export interface TradeService {
   fetchTrade: (tradeId: string) => Promise<Trade>
   accept: (trade: Trade, address: string) => Promise<string>
   cancel: (trade: Trade, address: string) => Promise<string>
+}
+
+export interface CreditsService {
+  fetchCredits: (address: string) => Promise<CreditsResponse>
 }
