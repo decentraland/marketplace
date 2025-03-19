@@ -18,6 +18,7 @@ import { assetReducer as asset } from './asset/reducer'
 import { bidReducer as bid } from './bid/reducer'
 import { collectionReducer as collection } from './collection/reducer'
 import { contractReducer as contract } from './contract/reducer'
+import { creditsReducer as credits } from './credits/reducer'
 import { ensReducer as ens } from './ens/reducer'
 import { eventReducer as event } from './event/reducer'
 import { favoritesReducer as favorites } from './favorites/reducer'
@@ -39,6 +40,7 @@ export const createRootReducer = (history: History) =>
     campaign,
     authorization,
     bid,
+    credits,
     item,
     nft,
     order,

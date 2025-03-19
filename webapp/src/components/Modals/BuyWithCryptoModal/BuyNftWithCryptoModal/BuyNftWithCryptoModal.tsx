@@ -18,6 +18,7 @@ import { Props } from './BuyNftWithCryptoModal.types'
 const BuyNftWithCryptoModalHOC = (props: Props) => {
   const {
     name,
+    credits,
     isExecutingOrder,
     connectedChainId,
     isExecutingOrderCrossChain,
@@ -31,7 +32,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     onExecuteOrder,
     onExecuteOrderCrossChain,
     onExecuteOrderWithCard,
-    metadata: { nft, order, slippage = 1 }
+    metadata: { nft, order, slippage = 1, useCredits = false }
   } = props
 
   const [fingerprint] = useFingerprint(nft)
@@ -51,19 +52,34 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
 
     const offchainMarketplace =
       isOffchainPublicNFTOrdersEnabled && order?.tradeId && getDCLContract(ContractName.OffChainMarketplace, nft.chainId)
+    const creditsManager = getDCLContract(ContractName.CreditsManager, nft.chainId)
+
+    const areCreditsEnoughToBuy = useCredits && credits && BigInt(credits.totalCredits) >= BigInt(order.price)
+    const needsToAuthorizeCredits = useCredits && !areCreditsEnoughToBuy
+
+    const authorizedAddress = needsToAuthorizeCredits
+      ? creditsManager.address
+      : offchainMarketplace
+        ? offchainMarketplace.address
+        : order.marketplaceAddress
+    const authorizedContractLabel = needsToAuthorizeCredits
+      ? creditsManager.name
+      : offchainMarketplace
+        ? offchainMarketplace.name
+        : marketplace.label || marketplace.name
 
     onAuthorizedAction({
       // Override the automatic Magic sign in if the user needs to pay gas for the transaction
       manual: connectedChainId === nft.chainId,
       targetContractName: ContractName.MANAToken,
       authorizationType: AuthorizationType.ALLOWANCE,
-      authorizedAddress: offchainMarketplace ? offchainMarketplace.address : order.marketplaceAddress,
+      authorizedAddress,
       targetContract: mana as Contract,
-      authorizedContractLabel: offchainMarketplace ? offchainMarketplace.name : marketplace.label || marketplace.name,
+      authorizedContractLabel,
       requiredAllowanceInWei: order.price,
-      onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, fingerprint, !alreadyAuthorized) // undefined as fingerprint
+      onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, fingerprint, !alreadyAuthorized, useCredits) // undefined as fingerprint
     })
-  }, [nft, order, fingerprint, getContract, onAuthorizedAction, onExecuteOrder])
+  }, [nft, order, fingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits])
 
   const onBuyWithCard = useCallback(() => {
     getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)

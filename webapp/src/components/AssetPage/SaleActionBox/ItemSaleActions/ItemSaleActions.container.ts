@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Asset } from '../../../../modules/asset/types'
 import { fetchBidsByAssetRequest } from '../../../../modules/bid/actions'
 import { getIsBidsOffChainEnabled } from '../../../../modules/features/selectors'
@@ -7,7 +6,7 @@ import { RootState } from '../../../../modules/reducer'
 import { getAssetBids } from '../../../../modules/ui/asset/bid/selectors'
 import { getWallet } from '../../../../modules/wallet/selectors'
 import ItemSaleActions from './ItemSaleActions'
-import { MapStateProps, OwnProps, MapDispatch, MapDispatchProps } from './ItemSaleActions.types'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './ItemSaleActions.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
@@ -19,14 +18,8 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (dispatch: MapDispatch, ownProps: OwnProps): MapDispatchProps => ({
-  onFetchBids: (asset: Asset) => dispatch(fetchBidsByAssetRequest(asset)),
-  onBuyWithCrypto: () =>
-    dispatch(
-      openModal('MintNftWithCryptoModal', {
-        asset: ownProps.item
-      })
-    )
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onFetchBids: (asset: Asset) => dispatch(fetchBidsByAssetRequest(asset))
 })
 
 export default connect(mapState, mapDispatch)(ItemSaleActions)

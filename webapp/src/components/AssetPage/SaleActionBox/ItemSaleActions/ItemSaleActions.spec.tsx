@@ -11,7 +11,7 @@ function renderItemSaleActions(props: Partial<Props> = {}) {
       item={{ id: 'dasd', available: 2, creator: '0xcreator' } as Item}
       wallet={{ address: '0xtest' } as Wallet}
       isBidsOffchainEnabled={false}
-      onBuyWithCrypto={jest.fn()}
+      onUseCredits={jest.fn()}
       bids={[]}
       onFetchBids={jest.fn()}
       {...props}

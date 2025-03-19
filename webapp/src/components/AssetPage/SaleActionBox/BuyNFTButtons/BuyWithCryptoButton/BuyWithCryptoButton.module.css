@@ -1,0 +1,18 @@
+.BuyWithCryptoButton:global(.ui.button.primary) {
+  display: flex;
+  font-size: 15px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  margin: 0;
+}
+
+.BuyWithCryptoButton:global(.ui.button.primary .dcl.mana) {
+  margin-bottom: 0px;
+}
+
+.BuyWithCryptoButton:global(.ui.button.primary .dcl.mana .symbol) {
+  width: 24px;
+  height: 24px;
+}

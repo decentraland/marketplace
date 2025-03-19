@@ -13,6 +13,7 @@ import { NetworkGatewayType } from 'decentraland-ui'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 import {
+  getIsCreditsEnabled,
   getIsMarketplaceServerEnabled,
   getIsOffchainPublicItemOrdersEnabled,
   getIsOffchainPublicNFTOrdersEnabled
@@ -112,7 +113,10 @@ describe('when handling the buy items request action', () => {
   describe("when there's no wallet loaded in the state", () => {
     it('should dispatch an action signaling the failure of the action handling', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([[select(getWallet), null]])
+        .provide([
+          [select(getWallet), null],
+          [select(getIsCreditsEnabled), false]
+        ])
         .put(buyItemFailure('A defined wallet is required to buy an item'))
         .dispatch(buyItemRequest(item))
         .run({ silenceTimeout: true })
@@ -124,6 +128,7 @@ describe('when handling the buy items request action', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [select(getWallet), wallet],
+          [select(getIsCreditsEnabled), false],
           [matchers.call.fn(sendTransaction), Promise.reject(anError)]
         ])
         .put(buyItemFailure(anError.message))
@@ -137,6 +142,7 @@ describe('when handling the buy items request action', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [select(getWallet), wallet],
+          [select(getIsCreditsEnabled), false],
           [matchers.call.fn(sendTransaction), Promise.resolve(txHash)]
         ])
         .put(buyItemSuccess(wallet.chainId, txHash, item))
@@ -197,6 +203,7 @@ describe('when handling the buy items request action', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
           [select(getWallet), wallet],
+          [select(getIsCreditsEnabled), false],
           [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
           [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
         ])

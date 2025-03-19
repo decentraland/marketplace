@@ -25,6 +25,7 @@ import { assetSaga } from './asset/sagas'
 import { bidSaga } from './bid/sagas'
 import { collectionSaga } from './collection/sagas'
 import { contractSaga } from './contract/sagas'
+import { creditsSaga } from './credits/sagas'
 import { ensSaga } from './ens/sagas'
 import { eventSaga } from './event/sagas'
 import { favoritesSaga } from './favorites/sagas'
@@ -98,10 +99,11 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     assetSaga(),
     authorizationSaga(),
     bidSaga(new BidService(), getTradesService(getIdentity)),
+    creditsSaga(),
     itemSaga(getIdentity),
     nftSaga(getIdentity),
     orderSaga(getTradesService(getIdentity)),
-    profileSaga(getIdentity)(),
+    profileSaga(getIdentity),
     proximitySaga(),
     routingSaga(),
     tileSaga(),

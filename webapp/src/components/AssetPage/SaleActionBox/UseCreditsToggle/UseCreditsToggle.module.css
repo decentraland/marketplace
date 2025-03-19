@@ -1,0 +1,50 @@
+.creditsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--divider);
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+}
+
+.creditsContainerActive {
+  border-color: var(--rare);
+}
+
+.creditsContainerActive .creditsText,
+.creditsContainerActive .creditsAmount,
+.creditsContainerActive .creditsNumber {
+  color: var(--rare);
+}
+
+.creditsContainerActive :global(.ui.toggle.checkbox input:checked ~ .box:before),
+.creditsContainerActive :global(.ui.toggle.checkbox input:checked ~ label:before) {
+  background-color: var(--rare) !important;
+}
+
+.creditsLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.creditsText {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  transition: color 0.2s ease;
+}
+
+.creditsAmount {
+  font-size: 15px;
+  color: var(--text);
+  transition: color 0.2s ease;
+}
+
+.creditsNumber {
+  font-weight: 600;
+  transition: color 0.2s ease;
+}

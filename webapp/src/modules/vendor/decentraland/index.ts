@@ -9,11 +9,13 @@ export * from './collection'
 export * from './sale'
 export * from './account'
 export * from './analytics'
+export * from './credits'
 
 export * from './BidService'
 export * from './ContractService'
 export * from './NFTService'
 export * from './OrderService'
 export * from './AnalyticsService'
+export * from './CreditsService'
 
 export * from './contracts'

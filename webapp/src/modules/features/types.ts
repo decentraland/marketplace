@@ -12,5 +12,7 @@ export enum FeatureName {
   OFFCHAIN_PUBLIC_NFT_ORDERS = 'offchain-public-nft-orders',
   OFFCHAIN_PUBLIC_ITEM_ORDERS = 'offchain-public-item-orders',
   NAVBAR_UI2 = 'navbar-ui2',
-  MAGIC_AUTO_SIGN = 'magic-auto-sign'
+  MAGIC_AUTO_SIGN = 'magic-auto-sign',
+  CREDITS = 'credits',
+  CREDITS_SECONDARY_SALES = 'credits-secondary-sales'
 }

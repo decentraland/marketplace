@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Contract } from '@dcl/schemas'
 import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
@@ -9,6 +9,7 @@ import { getMintItemStatus, getError } from '../../../../modules/item/selectors'
 import { getContractNames } from '../../../../modules/vendor'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
 import * as events from '../../../../utils/events'
+import { formatWeiToAssetCard } from '../../../AssetCard/utils'
 import BuyWithCryptoModal from '../BuyWithCryptoModal.container'
 import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
 import { useCrossChainMintNftRoute, useMintingNftGasCost } from '../hooks'
@@ -18,7 +19,8 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
   const {
     name,
     connectedChainId,
-    metadata: { item },
+    credits,
+    metadata: { item, useCredits },
     isUsingMagic,
     isMagicAutoSignEnabled,
     isLoadingAuthorization,
@@ -46,9 +48,22 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
     }) as DCLContract
 
     const offchainMarketplace = getDCLContract(ContractName.OffChainMarketplace, item.chainId)
+    const creditsManager = getDCLContract(ContractName.CreditsManager, item.chainId)
 
-    const authorizedAddress = item.tradeId ? offchainMarketplace.address : collectionStore.address
-    const authorizedContractLabel = item.tradeId ? offchainMarketplace.name : collectionStore.label || collectionStore.name
+    const areCreditsEnoughToBuy = useCredits && credits && BigInt(credits.totalCredits) >= BigInt(item.price)
+    const needsToAuthorizeCredits = useCredits && !areCreditsEnoughToBuy
+
+    const authorizedAddress = needsToAuthorizeCredits
+      ? creditsManager.address
+      : item.tradeId
+        ? offchainMarketplace.address
+        : collectionStore.address
+
+    const authorizedContractLabel = needsToAuthorizeCredits
+      ? creditsManager.name
+      : item.tradeId
+        ? offchainMarketplace.name
+        : collectionStore.label || collectionStore.name
 
     onAuthorizedAction({
       // Override the automatic Magic sign in if the user needs to pay gas for the transaction
@@ -59,9 +74,9 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
       targetContract: mana as Contract,
       authorizedContractLabel,
       requiredAllowanceInWei: item.price,
-      onAuthorized: () => onBuyItem(item)
+      onAuthorized: () => onBuyItem(item, useCredits)
     })
-  }, [item, getContract, onAuthorizedAction, onBuyItem])
+  }, [item, getContract, onAuthorizedAction, onBuyItem, useCredits])
 
   const onBuyWithCard = useCallback(() => {
     getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)
@@ -78,9 +93,17 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
     [item]
   )
 
+  const price = useMemo(() => {
+    if (!useCredits || !credits) return item.price
+    const priceNum = Number(formatWeiToAssetCard(item.price))
+    const adjustedPrice = Math.max(priceNum - credits.totalCredits, 0)
+    // Convert back to wei format
+    return (adjustedPrice * 1e18).toString()
+  }, [item.price, useCredits, credits])
+
   return (
     <BuyWithCryptoModal
-      price={item.price}
+      price={price}
       isBuyingAsset={isBuyingItemNatively || isBuyingItemCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyWithCard={onBuyWithCard}

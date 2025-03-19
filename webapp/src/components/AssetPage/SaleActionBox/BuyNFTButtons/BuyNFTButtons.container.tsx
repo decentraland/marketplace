@@ -4,6 +4,7 @@ import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { Asset, AssetType } from '../../../../modules/asset/types'
+import { getIsCreditsEnabled, getIsCreditsSecondarySalesEnabled } from '../../../../modules/features/selectors'
 import { buyItemWithCardRequest } from '../../../../modules/item/actions'
 import { executeOrderWithCardRequest } from '../../../../modules/order/actions'
 import { RootState } from '../../../../modules/reducer'
@@ -14,20 +15,23 @@ import { MapDispatchProps, MapDispatch, MapStateProps, OwnProps } from './BuyNFT
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
   isConnecting: isConnecting(state),
-  isBuyingWithCryptoModalOpen: getOpenModals(state)['BuyNftWithCryptoModal']?.open || getOpenModals(state)['MintNftWithCryptoModal']?.open
+  isBuyingWithCryptoModalOpen: getOpenModals(state)['BuyNftWithCryptoModal']?.open || getOpenModals(state)['MintNftWithCryptoModal']?.open,
+  isCreditsEnabled: getIsCreditsEnabled(state),
+  isCreditsSecondarySalesEnabled: getIsCreditsSecondarySalesEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch, ownProps: OwnProps): MapDispatchProps => ({
   onExecuteOrderWithCard: (nft, order?: Order) => dispatch(executeOrderWithCardRequest(nft, order)),
-  onBuyWithCrypto: (asset: Asset, order?: Order | null) =>
+  onBuyWithCrypto: (asset: Asset, order?: Order | null, useCredits?: boolean) =>
     ownProps.assetType === AssetType.NFT
       ? dispatch(
           openModal('BuyNftWithCryptoModal', {
             nft: asset,
-            order
+            order,
+            useCredits
           })
         )
-      : dispatch(openModal('MintNftWithCryptoModal', { item: asset })),
+      : dispatch(openModal('MintNftWithCryptoModal', { item: asset, useCredits })),
   onBuyItemWithCard: item => dispatch(buyItemWithCardRequest(item))
 })
 

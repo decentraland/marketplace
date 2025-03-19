@@ -8,16 +8,15 @@ import { getExpirationDateLabel } from '../../../lib/date'
 import { getIsLegacyOrderExpired, getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
-import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import BidButton from '../../BidButton'
-import Mana from '../../Mana/Mana'
-import { ManaToFiat } from '../../ManaToFiat'
+import PriceComponent from '../PriceComponent'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { Props } from './BuyNFTBox.types'
 import styles from './BuyNFTBox.module.css'
 
 const BuyNFTBox = ({ nft, bids, address, order, wallet, onFetchBids }: Props) => {
   const [hasFetched, setHasFetched] = useState(false)
+  const [useCredits, setUseCredits] = useState(false)
   const alreadyBid = useMemo(() => !!bids.find(({ bidder }) => bidder === address), [bids])
   const isOwner = nft && nft?.owner === address
   const renderHasListing = useCallback(() => {
@@ -31,25 +30,16 @@ const BuyNFTBox = ({ nft, bids, address, order, wallet, onFetchBids }: Props) =>
     )
     const isOrderExpired = getIsOrderExpired(order.expiresAt)
 
+    const handleUseCredits = (value: boolean) => {
+      setUseCredits(value)
+    }
+
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
         <div className={styles.informationContainer}>
           <div className={styles.columnListing}>
             <span className={styles.informationTitle}>{t('best_buying_option.minting.price').toUpperCase()}</span>
-            <div className={`${styles.containerRow} ${styles.centerItems}`}>
-              <div className={styles.informationBold}>
-                <Mana withTooltip size="large" network={nft.network} className={styles.informationBold}>
-                  {formatWeiToAssetCard(order.price)}
-                </Mana>
-              </div>
-              {+order.price > 0 && (
-                <div className={styles.informationText}>
-                  {'('}
-                  <ManaToFiat mana={order.price} />
-                  {')'}
-                </div>
-              )}
-            </div>
+            <PriceComponent price={order.price} network={nft.network} useCredits={useCredits} className={styles.priceComponentContainer} />
           </div>
 
           <div className={styles.columnListing}>
@@ -95,7 +85,13 @@ const BuyNFTBox = ({ nft, bids, address, order, wallet, onFetchBids }: Props) =>
             )}
           </>
         ) : !isOrderExpired ? (
-          <BuyNFTButtons asset={nft} assetType={AssetType.NFT} tokenId={nft.tokenId} buyWithCardClassName={styles.buyWithCardClassName} />
+          <BuyNFTButtons
+            asset={nft}
+            assetType={AssetType.NFT}
+            tokenId={nft.tokenId}
+            buyWithCardClassName={styles.buyWithCardClassName}
+            onUseCredits={handleUseCredits}
+          />
         ) : null}
         {!isOwner && <BidButton asset={nft} alreadyBid={alreadyBid} />}
         {!isOrderExpired ? (
@@ -106,7 +102,7 @@ const BuyNFTBox = ({ nft, bids, address, order, wallet, onFetchBids }: Props) =>
         ) : null}
       </div>
     )
-  }, [nft, order, wallet, isOwner, alreadyBid])
+  }, [nft, order, wallet, isOwner, alreadyBid, useCredits])
 
   const renderOwnerAndNoListingOptions = useCallback(() => {
     if (!nft) return null
