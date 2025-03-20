@@ -230,7 +230,6 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       const { item, useCredits } = action.payload
 
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-      const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
       const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
 
       if (!wallet) {
@@ -239,7 +238,11 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
       let txHash: string
 
-      if (isCreditsEnabled && useCredits && credits && credits.totalCredits > 0) {
+      if (isCreditsEnabled && useCredits) {
+        const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+        if (!credits || credits.totalCredits <= 0) {
+          throw new Error('No credits available')
+        }
         if (item.tradeId) {
           // Use credits for marketplace trade
           const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)

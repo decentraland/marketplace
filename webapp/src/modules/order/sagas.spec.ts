@@ -14,7 +14,7 @@ import { ErrorCode } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { API_SIGNER } from '../../lib/api'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
-import { getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
+import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { fetchNFTRequest, FETCH_NFT_FAILURE } from '../nft/actions'
 import { getData as getNFTs } from '../nft/selectors'
@@ -150,6 +150,7 @@ describe('when handling the execute order request action', () => {
       return expectSaga(orderSaga, tradeService)
         .provide([
           [select(getIsOffchainPublicNFTOrdersEnabled), false],
+          [select(getIsCreditsEnabled), false],
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
           [select(getWallet), wallet],
           [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
@@ -186,6 +187,7 @@ describe('when handling the execute order request action', () => {
             [select(getWallet), wallet],
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
             [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [select(getIsCreditsEnabled), false],
             [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
             [select(getRentalById, nft.openRentalId!), rentalListing],
             [call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED), Promise.resolve()],
@@ -209,6 +211,7 @@ describe('when handling the execute order request action', () => {
           .provide([
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
             [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [select(getIsCreditsEnabled), false],
             [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
             [select(getWallet), wallet],
             [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), Promise.resolve(txHash)]
