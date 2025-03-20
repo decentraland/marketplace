@@ -1,6 +1,5 @@
-import { AnyAction } from 'redux'
 import { RootState } from '../reducer'
-import { FETCH_CREDITS_REQUEST } from './actions'
+import { fetchCreditsRequest } from './actions'
 import { getData, getLoading, getError, isFetchingCredits, getCredits } from './selectors'
 import { CreditsResponse } from './types'
 
@@ -43,7 +42,7 @@ describe('Credits selectors', () => {
 
   describe('when getting if it is fetching credits', () => {
     it('should return true if it is fetching credits', () => {
-      state.credits.loading = [FETCH_CREDITS_REQUEST as unknown as AnyAction] // TODO: fix this type
+      state.credits.loading = [fetchCreditsRequest(address)]
       expect(isFetchingCredits(state)).toBe(true)
     })
 

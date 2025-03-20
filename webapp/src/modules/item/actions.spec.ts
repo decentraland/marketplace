@@ -85,11 +85,23 @@ describe('when creating the action to signal a failure items request', () => {
 })
 
 describe('when creating the action to signal the start of the buy item request', () => {
-  it('should return an object representing the action', () => {
-    expect(buyItemRequest(item)).toEqual({
-      type: BUY_ITEM_REQUEST,
-      meta: undefined,
-      payload: { item }
+  describe('when the useCredits flag is false', () => {
+    it('should return an object representing the action', () => {
+      expect(buyItemRequest(item)).toEqual({
+        type: BUY_ITEM_REQUEST,
+        meta: undefined,
+        payload: { item, useCredits: false }
+      })
+    })
+  })
+
+  describe('when the useCredits flag is true', () => {
+    it('should return an object representing the action', () => {
+      expect(buyItemRequest(item, true)).toEqual({
+        type: BUY_ITEM_REQUEST,
+        meta: undefined,
+        payload: { item, useCredits: true }
+      })
     })
   })
 })
@@ -205,6 +217,10 @@ describe('when creating the action to fetch the trending items request', () => {
 describe('when creating the action to signal the start of the collection items request', () => {
   let first: number
   let contractAddresses: string[]
+  beforeEach(() => {
+    first = 0
+    contractAddresses = ['0x0000000000000000000000000000000000000000']
+  })
   it('should return an object representing the action', () => {
     expect(fetchCollectionItemsRequest({ first, contractAddresses })).toEqual({
       type: FETCH_COLLECTION_ITEMS_REQUEST,
