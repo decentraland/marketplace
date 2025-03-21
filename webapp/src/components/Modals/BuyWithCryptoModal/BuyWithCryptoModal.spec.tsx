@@ -400,7 +400,6 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
     isLoadingAuthorization: false,
     isSwitchingNetwork: false,
     isBuyWithCardPage: false,
-    isMagicAutoSignEnabled: false,
     isUsingMagic: false,
     onGetCrossChainRoute: jest.fn<ReturnType<OnGetCrossChainRoute>, Parameters<OnGetCrossChainRoute>>().mockReturnValue({
       route: undefined,
