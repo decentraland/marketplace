@@ -19,6 +19,28 @@ jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
   }
 })
 
+jest.mock('decentraland-ui2', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return {
+    ...jest.requireActual('decentraland-ui2'),
+    Navbar2: () => jest.fn().mockReturnValue(null)
+  }
+})
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => undefined, // Deprecated
+    removeListener: () => undefined, // Deprecated
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    dispatchEvent: () => undefined
+  })
+})
+
 config({ path: path.resolve(process.cwd(), '.env.example') })
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder as any
