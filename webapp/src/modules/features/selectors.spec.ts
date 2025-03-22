@@ -9,13 +9,10 @@ import {
   getIsCampaignHomepageBannerEnabled,
   getIsMaintenanceEnabled,
   getIsMarketplaceLaunchPopupEnabled,
-  getIsSmartWearablesFTUEnabled,
   isLoadingFeatureFlags,
-  getIsChainSelectorEnabled,
   getIsBidsOffChainEnabled,
   getIsOffchainPublicNFTOrdersEnabled,
-  getIsOffchainPublicItemOrdersEnabled,
-  getIsMagicAutoSignEnabled
+  getIsOffchainPublicItemOrdersEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -130,17 +127,6 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
 
 const waitForInitialLoadingSelectors = [
   {
-    name: 'isSmartWearablesFTU',
-    feature: FeatureName.SMART_WEARABLES_FTU,
-    selector: getIsSmartWearablesFTUEnabled
-  },
-  {
-    name: 'chain-selector',
-    feature: FeatureName.CHAIN_SELECTOR,
-    selector: getIsChainSelectorEnabled,
-    applicationName: ApplicationName.MARKETPLACE
-  },
-  {
     name: 'IsBidsOffChainEnabled',
     feature: FeatureName.OFFCHAIN_BIDS,
     selector: getIsBidsOffChainEnabled,
@@ -156,12 +142,6 @@ const waitForInitialLoadingSelectors = [
     name: 'sfOffchainPublicItemOrdersEnabled',
     feature: FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS,
     selector: getIsOffchainPublicItemOrdersEnabled,
-    applicationName: ApplicationName.DAPPS
-  },
-  {
-    name: 'IsMagicAutoSignEnabled',
-    feature: FeatureName.MAGIC_AUTO_SIGN,
-    selector: getIsMagicAutoSignEnabled,
     applicationName: ApplicationName.DAPPS
   }
 ]

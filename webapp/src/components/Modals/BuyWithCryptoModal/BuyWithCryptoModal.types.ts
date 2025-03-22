@@ -19,7 +19,7 @@ export type OnGetCrossChainRoute = (
   wallet: Wallet | null
 ) => CrossChainRoute
 
-export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | 'isMagicAutoSignEnabled' | 'isUsingMagic'> &
+export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | 'isUsingMagic'> &
   Omit<ModalProps, 'metadata'> & {
     price: string
     wallet: Wallet | null
