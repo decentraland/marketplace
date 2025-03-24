@@ -3,6 +3,7 @@ import { Order } from '@dcl/schemas'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Asset, AssetType } from '../../../../modules/asset/types'
+import { getCredits } from '../../../../modules/credits/selectors'
 import { BuyItemWithCardRequestAction, buyItemWithCardRequest } from '../../../../modules/item/actions'
 import { ExecuteOrderWithCardRequestAction, executeOrderWithCardRequest } from '../../../../modules/order/actions'
 
@@ -13,6 +14,7 @@ export type Props = {
   buyWithCardClassName?: string
   isBuyingWithCryptoModalOpen: boolean
   wallet: Wallet | null
+  credits: ReturnType<typeof getCredits>
   isConnecting: boolean
   isCreditsEnabled: boolean
   isCreditsSecondarySalesEnabled: boolean
@@ -26,7 +28,7 @@ export type OwnProps = Pick<Props, 'asset' | 'assetType' | 'tokenId' | 'buyWithC
 
 export type MapStateProps = Pick<
   Props,
-  'wallet' | 'isConnecting' | 'isBuyingWithCryptoModalOpen' | 'isCreditsEnabled' | 'isCreditsSecondarySalesEnabled'
+  'wallet' | 'isConnecting' | 'isBuyingWithCryptoModalOpen' | 'isCreditsEnabled' | 'isCreditsSecondarySalesEnabled' | 'credits'
 >
 
 export type MapDispatchProps = Pick<Props, 'onExecuteOrderWithCard' | 'onBuyItemWithCard' | 'onBuyWithCrypto'>

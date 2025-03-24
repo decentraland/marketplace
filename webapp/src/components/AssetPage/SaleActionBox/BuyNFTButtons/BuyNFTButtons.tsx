@@ -15,6 +15,7 @@ import { Props } from './BuyNFTButtons.types'
 import styles from './BuyNFTButtons.module.css'
 
 const BuyNFTButtons = ({
+  credits,
   wallet,
   isConnecting,
   asset,
@@ -42,9 +43,9 @@ const BuyNFTButtons = ({
   const handleBuyWithCard = useCallback(
     (asset: Asset, order?: Order) => {
       analytics?.track(events.CLICK_GO_TO_BUY_NFT_WITH_CARD)
-      !isNFT(asset) ? onBuyItemWithCard(asset) : onExecuteOrderWithCard(asset, order)
+      !isNFT(asset) ? onBuyItemWithCard(asset, useCredits) : onExecuteOrderWithCard(asset, order, useCredits)
     },
-    [analytics, onBuyItemWithCard, onExecuteOrderWithCard]
+    [analytics, onBuyItemWithCard, onExecuteOrderWithCard, useCredits]
   )
 
   const handleBuyWithCrypto = useCallback(
@@ -75,15 +76,29 @@ const BuyNFTButtons = ({
           if (asset && shouldOpenBuyWithCryptoModal) {
             onBuyWithCrypto(asset, order)
           }
+          const isItemFree = !isNFT(asset) && asset.price === '0'
+          const isBuyingEntirelyWithCredits =
+            useCredits &&
+            ((!isNFT(asset) && BigInt(credits.totalCredits) >= BigInt(asset.price)) ||
+              (isNFT(asset) && order && BigInt(credits.totalCredits) >= BigInt(order.price)))
+          const isFree = isItemFree || !!isBuyingEntirelyWithCredits
+
           return (
             <>
               {/* Credits toggle is only available for items */}
               {((isCreditsEnabled && assetType === AssetType.ITEM) ||
                 (isCreditsEnabled && isCreditsSecondarySalesEnabled && assetType === AssetType.NFT)) && (
-                <UseCreditsToggle asset={asset} useCredits={useCredits} onUseCredits={handleUseCredits} />
+                <UseCreditsToggle
+                  asset={asset}
+                  assetPrice={!isNFT(asset) ? asset.price : order ? order.price : undefined}
+                  useCredits={useCredits}
+                  onUseCredits={handleUseCredits}
+                />
               )}
-              <BuyWithCryptoButton asset={asset} onClick={() => handleBuyWithCrypto(asset, order, useCredits)} />
-              <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset, order || undefined)} />
+              <BuyWithCryptoButton asset={asset} onClick={() => handleBuyWithCrypto(asset, order, useCredits)} isFree={isFree} />
+              {!isFree && (
+                <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset, order || undefined)} />
+              )}
             </>
           )
         }}

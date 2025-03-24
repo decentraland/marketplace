@@ -77,7 +77,8 @@ export const EXECUTE_ORDER_WITH_CARD_REQUEST = '[Request] Execute Order With Car
 export const EXECUTE_ORDER_WITH_CARD_SUCCESS = '[Success] Execute Order With Card'
 export const EXECUTE_ORDER_WITH_CARD_FAILURE = '[Failure] Execute Order With Card'
 
-export const executeOrderWithCardRequest = (nft: NFT, order?: Order) => action(EXECUTE_ORDER_WITH_CARD_REQUEST, { nft, order })
+export const executeOrderWithCardRequest = (nft: NFT, order?: Order, useCredits: boolean = false) =>
+  action(EXECUTE_ORDER_WITH_CARD_REQUEST, { nft, order, useCredits })
 
 export const executeOrderWithCardSuccess = (purchase: NFTPurchase, nft: NFT, txHash: string) =>
   action(EXECUTE_ORDER_WITH_CARD_SUCCESS, {

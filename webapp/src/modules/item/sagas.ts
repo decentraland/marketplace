@@ -230,7 +230,6 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       const { item, useCredits } = action.payload
 
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-      const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
 
       if (!wallet) {
         throw new Error('A defined wallet is required to buy an item')
@@ -238,7 +237,11 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
       let txHash: string
 
-      if (isCreditsEnabled && useCredits) {
+      if (useCredits) {
+        const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
+        if (!isCreditsEnabled) {
+          throw new Error('Credits are not enabled')
+        }
         const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
         if (!credits || credits.totalCredits <= 0) {
           throw new Error('No credits available')
@@ -246,10 +249,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         if (item.tradeId) {
           // Use credits for marketplace trade
           const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)
-          txHash = yield call([creditsService, 'useCreditsMarketplace'], trade, wallet, credits.credits)
+          txHash = yield call([creditsService, 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
         } else {
           // Use credits for collection store
-          txHash = yield call([creditsService, 'useCreditsCollectionStore'], item, wallet, credits.credits)
+          txHash = yield call([creditsService, 'useCreditsCollectionStore'], item, wallet.address, credits.credits)
         }
         const expectedBalance = BigInt(credits.totalCredits) - BigInt(item.price)
         yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
@@ -306,8 +309,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleBuyItemWithCardRequest(action: BuyItemWithCardRequestAction) {
     try {
-      const { item } = action.payload
-      yield call(buyAssetWithCard, item)
+      const { item, useCredits } = action.payload
+      yield call(buyAssetWithCard, item, undefined, useCredits)
     } catch (error) {
       yield put(buyItemWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }

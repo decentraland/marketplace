@@ -14,7 +14,7 @@
 .PriceContainer .prices {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 4px;
 }
 
 .PriceContainer .originalPrice {
@@ -24,7 +24,8 @@
 }
 
 .PriceContainer .adjustedPrice {
-  color: var(--text);
+  color: #A0ABFF;
+
 }
 
 .PriceContainer .informationText {

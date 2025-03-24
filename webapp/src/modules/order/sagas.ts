@@ -136,7 +136,6 @@ export function* orderSaga(tradeService: TradeService) {
         throw new Error('A defined wallet is required to buy an item')
       }
 
-      const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
       let txHash: string
       if (order.tradeId) {
         if (!isOffchainPublicNFTOrdersEnabled) {
@@ -148,13 +147,17 @@ export function* orderSaga(tradeService: TradeService) {
         }
 
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
-        if (isCreditsEnabled && useCredits) {
+        if (useCredits) {
+          const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
+          if (!isCreditsEnabled) {
+            throw new Error('Credits are not enabled')
+          }
           const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
           if (!credits || credits.totalCredits <= 0) {
             throw new Error('No credits available')
           }
 
-          txHash = yield call([creditsService, 'useCreditsMarketplace'], trade, wallet, credits.credits)
+          txHash = yield call([creditsService, 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
           const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
           yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
         } else {
@@ -168,7 +171,11 @@ export function* orderSaga(tradeService: TradeService) {
           !isOffchainPublicNFTOrdersEnabled
         )) as ReturnType<typeof VendorFactory.build>
 
-        if (isCreditsEnabled && useCredits) {
+        if (useCredits) {
+          const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
+          if (!isCreditsEnabled) {
+            throw new Error('Credits are not enabled')
+          }
           const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
           if (!credits || credits.totalCredits <= 0) {
             throw new Error('No credits available')

@@ -3,7 +3,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 4px 12px;
+  padding: 4px 18px;
   border-radius: 8px;
   border: 1px solid var(--divider);
   transition: all 0.2s ease;
@@ -11,18 +11,28 @@
 }
 
 .creditsContainerActive {
-  border-color: var(--rare);
+  border-color: #a0abff;
 }
 
 .creditsContainerActive .creditsText,
 .creditsContainerActive .creditsAmount,
 .creditsContainerActive .creditsNumber {
-  color: var(--rare);
+  color: #a0abff;
+}
+
+.creditsContainer .learnMore {
+  color: var(--primary);
+  text-transform: uppercase;
 }
 
 .creditsContainerActive :global(.ui.toggle.checkbox input:checked ~ .box:before),
 .creditsContainerActive :global(.ui.toggle.checkbox input:checked ~ label:before) {
-  background-color: var(--rare) !important;
+  background-color: #a0abff !important;
+}
+
+.creditsContainerActive :global(.MuiSwitch-thumb),
+.creditsContainerActive :global(.Mui-checked + .MuiSwitch-track) {
+  background-color: #a0abff !important;
 }
 
 .creditsLeft {
@@ -47,4 +57,6 @@
 .creditsNumber {
   font-weight: 600;
   transition: color 0.2s ease;
+  color: #a0abff;
+  cursor: pointer;
 }

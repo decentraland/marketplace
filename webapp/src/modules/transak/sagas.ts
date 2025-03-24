@@ -10,8 +10,11 @@ import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { ContractName, getContract, getContractName } from 'decentraland-transactions'
 import { config } from '../../config'
 import { API_SIGNER } from '../../lib/api'
+import creditsService from '../../lib/credits'
 import { getOnChainTrade } from '../../utils/trades'
 import { getAssetImage, isNFT } from '../asset/utils'
+import { getCredits } from '../credits/selectors'
+import { getIsCreditsEnabled } from '../features/selectors'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { getWallet } from '../wallet/selectors'
 import { OPEN_TRANSAK, OpenTransakAction } from './actions'
@@ -29,6 +32,12 @@ const MarketplaceV3ContractIds: Pick<Record<Network, Partial<Record<ChainId, str
   [Network.ETHEREUM]: {
     [ChainId.ETHEREUM_MAINNET]: '672100492fb1688e111c2bd4',
     [ChainId.ETHEREUM_SEPOLIA]: '671a23e92bbeb54123b3b692'
+  }
+}
+const CreditsManagerContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC> = {
+  [Network.MATIC]: {
+    [ChainId.MATIC_AMOY]: '67dd4ceda7e28cc91ce4c391',
+    [ChainId.MATIC_MAINNET]: ''
   }
 }
 const MarketplaceV2ContractIds: Pick<Record<Network, Partial<Record<ChainId, string>>>, Network.MATIC | Network.ETHEREUM> = {
@@ -53,7 +62,7 @@ const TransakMulticallContracts: Pick<Record<Network, Partial<Record<ChainId, st
 }
 
 function* handleOpenTransak(action: OpenTransakAction) {
-  const { asset, order } = action.payload
+  const { asset, order, useCredits } = action.payload
   const transakConfig: TransakConfig = {
     apiBaseUrl: config.get('MARKETPLACE_SERVER_URL'),
     key: config.get('TRANSAK_KEY'),
@@ -80,6 +89,7 @@ function* handleOpenTransak(action: OpenTransakAction) {
   }
 
   if (tradeId && wallet?.address) {
+    // MarketplaceV3
     contractId = MarketplaceV3ContractIds[asset.network]?.[asset.chainId]
     if (!contractId) {
       throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
@@ -87,24 +97,126 @@ function* handleOpenTransak(action: OpenTransakAction) {
     const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
     const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
     const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
-    const MarketplaveV3Interface = new ethers.utils.Interface(abi)
-    calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, transakMulticallContract)]])
+
+    // if credits are enabled and useCredits is true, we need to use credits
+    if (useCredits) {
+      const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
+      if (!isCreditsEnabled) {
+        throw new Error('Credits are not enabled')
+      }
+      contractId = CreditsManagerContractIds[Network.MATIC][asset.chainId]
+      if (!contractId) {
+        throw new Error(`Credits manager contract not found for network ${asset.network} and chainId ${asset.chainId}`)
+      }
+      console.log('[DEBUG] useCredits in transak saga', useCredits)
+      const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+      console.log('[DEBUG] credits in transak saga', credits)
+      if (!credits || credits.totalCredits <= 0) {
+        throw new Error('No credits available')
+      }
+      // prepare credits data
+      const contract = getContract(ContractName.CreditsManager, asset.chainId)
+      const CreditsManagerInterface = new ethers.utils.Interface(contract.abi)
+      const { creditsData, creditsSignatures, externalCall, maxUncreditedValue, maxCreditedValue } =
+        creditsService.prepareCreditsMarketplace(trade, wallet.address, credits.credits)
+      const useCreditsArgs = {
+        credits: creditsData,
+        creditsSignatures,
+        externalCall,
+        customExternalCallSignature: '0x', // Empty since we're not using a custom external call
+        maxUncreditedValue,
+        maxCreditedValue
+      }
+      // encode useCredits function data
+      calldata = CreditsManagerInterface.encodeFunctionData('useCredits', [useCreditsArgs])
+    } else {
+      // native call to marketplace
+      const MarketplaveV3Interface = new ethers.utils.Interface(abi)
+      calldata = MarketplaveV3Interface.encodeFunctionData('accept', [[getOnChainTrade(trade, transakMulticallContract)]])
+    }
   } else if (order && isNFT(asset)) {
+    // Legacy Marketplace
     contractId = MarketplaceV2ContractIds[asset.network]?.[asset.chainId]
     if (!contractId) {
       throw new Error(`Marketplace contract not found for network ${asset.network} and chainId ${asset.chainId}`)
     }
     const contractName = getContractName(order.marketplaceAddress)
     const contract = getContract(contractName, order.chainId)
-    const MarketplaceV2Interface = new ethers.utils.Interface(contract.abi)
-    calldata = MarketplaceV2Interface.encodeFunctionData('executeOrder', [asset.contractAddress, asset.tokenId, order.price])
+
+    if (useCredits) {
+      const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
+      if (!isCreditsEnabled) {
+        throw new Error('Credits are not enabled')
+      }
+      contractId = CreditsManagerContractIds[Network.MATIC][asset.chainId]
+      if (!contractId) {
+        throw new Error(`Credits manager contract not found for network ${asset.network} and chainId ${asset.chainId}`)
+      }
+      console.log('[DEBUG] useCredits in transak saga', useCredits)
+      const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+      console.log('[DEBUG] credits in transak saga', credits)
+      if (!credits || credits.totalCredits <= 0) {
+        throw new Error('No credits available')
+      }
+      // prepare credits data
+      const contract = getContract(ContractName.CreditsManager, asset.chainId)
+      const CreditsManagerInterface = new ethers.utils.Interface(contract.abi)
+      const { creditsData, creditsSignatures, externalCall, maxUncreditedValue, maxCreditedValue } =
+        creditsService.prepareCreditsLegacyMarketplace(asset, order, credits.credits)
+
+      const useCreditsArgs = {
+        credits: creditsData,
+        creditsSignatures,
+        externalCall,
+        customExternalCallSignature: '0x', // Empty since we're not using a custom external call
+        maxUncreditedValue,
+        maxCreditedValue
+      }
+      // encode useCredits function data
+      console.log('[DEBUG] useCreditsArgs in transak saga', useCreditsArgs)
+      calldata = CreditsManagerInterface.encodeFunctionData('useCredits', [useCreditsArgs])
+      console.log('[DEBUG] calldata in transak saga', calldata)
+    } else {
+      const MarketplaceV2Interface = new ethers.utils.Interface(contract.abi)
+      calldata = MarketplaceV2Interface.encodeFunctionData('executeOrder', [asset.contractAddress, asset.tokenId, order.price])
+    }
   } else if (!isNFT(asset)) {
-    contractId = asset.chainId === ChainId.MATIC_AMOY ? '670e8b512bbeb54123b3a2b4' : '6717e6e62fb1688e111c1a87' // CollectionStore contractId
-    const contract = getContract(ContractName.CollectionStore, asset.chainId)
-    const CollectionStoreInterface = new ethers.utils.Interface(contract.abi)
-    calldata = CollectionStoreInterface.encodeFunctionData('buy', [
-      [[asset.contractAddress, [asset.itemId], [asset.price], [transakMulticallContract]]]
-    ])
+    // CollectionStore
+    if (useCredits) {
+      const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
+      if (!isCreditsEnabled) {
+        throw new Error('Credits are not enabled')
+      }
+      contractId = CreditsManagerContractIds[Network.MATIC][asset.chainId]
+      if (!contractId) {
+        throw new Error(`Credits manager contract not found for network ${asset.network} and chainId ${asset.chainId}`)
+      }
+      const contract = getContract(ContractName.CreditsManager, asset.chainId)
+      const CreditsManagerInterface = new ethers.utils.Interface(contract.abi)
+      const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+      const { creditsData, creditsSignatures, externalCall, maxUncreditedValue, maxCreditedValue } =
+        creditsService.prepareCreditsCollectionStore(asset, wallet.address, credits.credits)
+      const useCreditsArgs = {
+        credits: creditsData,
+        creditsSignatures,
+        externalCall,
+        customExternalCallSignature: '0x', // Empty since we're not using a custom external call
+        maxUncreditedValue,
+        maxCreditedValue
+      }
+
+      // encode useCredits function data
+      console.log('[DEBUG] useCreditsArgs in transak saga', useCreditsArgs)
+      calldata = CreditsManagerInterface.encodeFunctionData('useCredits', [useCreditsArgs])
+      console.log('[DEBUG] calldata in transak saga', calldata)
+    } else {
+      contractId = asset.chainId === ChainId.MATIC_AMOY ? '670e8b512bbeb54123b3a2b4' : '6717e6e62fb1688e111c1a87' // CollectionStore contractId
+      const contract = getContract(ContractName.CollectionStore, asset.chainId)
+      const CollectionStoreInterface = new ethers.utils.Interface(contract.abi)
+      calldata = CollectionStoreInterface.encodeFunctionData('buy', [
+        [[asset.contractAddress, [asset.itemId], [asset.price], [transakMulticallContract]]]
+      ])
+    }
   }
 
   let tokenId: string = ''
@@ -117,6 +229,14 @@ function* handleOpenTransak(action: OpenTransakAction) {
     tokenId = asset.tokenId
   }
 
+  let price: string | undefined
+  if (useCredits) {
+    const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+    price = (BigInt((isNFT(asset) ? order?.price : asset.price) || 0) - BigInt(credits.totalCredits)).toString()
+  } else {
+    price = isNFT(asset) ? order?.price : asset.price
+  }
+  console.log('[DEBUG] price in transak saga', price)
   const customizationOptions = {
     calldata,
     cryptoCurrencyCode: 'MANA',
@@ -130,7 +250,7 @@ function* handleOpenTransak(action: OpenTransakAction) {
         nftName: asset.name,
         collectionAddress: asset.contractAddress,
         tokenID: [`${tokenId}`],
-        price: [+ethers.utils.formatEther((isNFT(asset) ? order?.price : asset.price) || 0)],
+        price: [+ethers.utils.formatEther(price || 0)],
         quantity: 1,
         nftType: 'ERC721'
       }

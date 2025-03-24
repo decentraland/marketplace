@@ -3,6 +3,7 @@ import { CreditsResponse } from '../../../../modules/credits/types'
 
 export type Props = {
   asset: Asset
+  assetPrice: string | undefined
   credits?: CreditsResponse
   isOwner?: boolean
   useCredits: boolean

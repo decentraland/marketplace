@@ -1,12 +1,17 @@
 import { ethers } from 'ethers'
 import { ChainId, Network, Order, Trade, TradeAssetType } from '@dcl/schemas'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { Credit } from '../modules/credits/types'
 import { Item } from '../modules/item/types'
 import { NFT } from '../modules/nft/types'
 import { getOnChainTrade } from '../utils/trades'
+
+type CreditsData = {
+  value: string
+  expiresAt: number
+  salt: string
+}
 
 export type UseCreditsArgs = {
   credits: {
@@ -31,7 +36,6 @@ export type ExternalCallParams = {
   target: string
   selector: string
   data: string
-  chainId: ChainId | string | number
 }
 
 export class CreditsService {
@@ -41,14 +45,21 @@ export class CreditsService {
    * @param chainId - The chain ID
    * @returns Object containing the contract, creditsData, and creditsSignatures
    */
-  private prepareCreditsData(credits: Credit[], chainId: ChainId | string | number) {
+  private prepareCreditsData(
+    credits: Credit[],
+    chainId: ChainId | string | number
+  ): {
+    contract: ContractData
+    creditsData: CreditsData[]
+    creditsSignatures: string[]
+  } {
     // Get the CreditsManager contract
     const contract = getContract(ContractName.CreditsManager, chainId as ChainId)
 
     // Prepare the credits data
     const creditsData = credits.map(credit => {
       // Make sure the salt is a valid bytes32 value
-      let salt
+      let salt = ''
       if (credit.id) {
         if (!credit.id.startsWith('0x')) {
           // If it's not a hex string, convert it to one
@@ -68,8 +79,6 @@ export class CreditsService {
 
     // Prepare the signatures
     const creditsSignatures = credits.map(credit => credit.signature)
-
-    console.log('creditsData', creditsData)
 
     return { contract, creditsData, creditsSignatures }
   }
@@ -107,9 +116,9 @@ export class CreditsService {
    */
   private async executeUseCredits(
     contract: ContractData,
-    creditsData: any[],
+    creditsData: CreditsData[],
     creditsSignatures: string[],
-    externalCall: any,
+    externalCall: ExternalCallParams,
     maxCreditedValue: string | number,
     maxUncreditedValue: string | number
   ): Promise<string> {
@@ -126,14 +135,18 @@ export class CreditsService {
     return sendTransaction(contract, 'useCredits', useCreditsArgs)
   }
 
-  /**
-   * Use credits for buying items from the CollectionStore
-   * @param item - The item to buy
-   * @param wallet - The user's wallet
-   * @param credits - The user's credits
-   * @returns The transaction hash
-   */
-  async useCreditsCollectionStore(item: Item, wallet: Wallet, credits: Credit[]): Promise<string> {
+  prepareCreditsCollectionStore(
+    item: Item,
+    walletAddress: string,
+    credits: Credit[]
+  ): {
+    contract: ContractData
+    creditsData: CreditsData[]
+    creditsSignatures: string[]
+    externalCall: ExternalCallParams
+    maxUncreditedValue: string
+    maxCreditedValue: string
+  } {
     // Prepare common credits data
     const { contract, creditsData, creditsSignatures } = this.prepareCreditsData(credits, item.chainId)
 
@@ -153,7 +166,7 @@ export class CreditsService {
         collection: item.contractAddress,
         ids: [item.itemId],
         prices: [item.price],
-        beneficiaries: [wallet.address]
+        beneficiaries: [walletAddress]
       }
     ]
 
@@ -167,8 +180,66 @@ export class CreditsService {
     const externalCall = this.prepareExternalCall({
       target: collectionStoreAddress,
       selector: buySelector,
-      data: buyData,
-      chainId: item.chainId
+      data: buyData
+      // chainId: item.chainId
+    })
+
+    const creditsValue = credits.reduce((acc, credit) => acc + parseInt(credit.amount), 0)
+    const whatUserHasToPay = BigInt(item.price) - BigInt(creditsValue)
+    const maxUncreditedValue = whatUserHasToPay < BigInt(0) ? '0' : whatUserHasToPay.toString()
+
+    return {
+      contract,
+      creditsData,
+      creditsSignatures,
+      externalCall,
+      maxUncreditedValue,
+      maxCreditedValue: item.price
+    }
+  }
+
+  /**
+   * Use credits for buying items from the CollectionStore
+   * @param item - The item to buy
+   * @param walletAddress - The user's wallet address
+   * @param credits - The user's credits
+   * @returns The transaction hash
+   */
+  async useCreditsCollectionStore(item: Item, walletAddress: string, credits: Credit[]): Promise<string> {
+    // Prepare common credits data
+    const { contract, creditsData, creditsSignatures } = this.prepareCreditsData(credits, item.chainId)
+
+    // Get the CollectionStore contract address
+    const collectionStoreContract = getContract(ContractName.CollectionStore, item.chainId)
+    const collectionStoreAddress = collectionStoreContract.address
+
+    // Create a contract interface for the CollectionStore to get the function selector
+    const collectionStoreInterface = new ethers.utils.Interface(collectionStoreContract.abi)
+
+    // The selector for the buy function in the CollectionStore contract
+    const buySelector = collectionStoreInterface.getSighash('buy')
+
+    // Create the ItemToBuy structure as shown in the tests
+    const itemsToBuy = [
+      {
+        collection: item.contractAddress,
+        ids: [item.itemId],
+        prices: [item.price],
+        beneficiaries: [walletAddress]
+      }
+    ]
+
+    // Encode the buy function parameters using abi.encode
+    const buyData = ethers.utils.defaultAbiCoder.encode(
+      ['tuple(address collection, uint256[] ids, uint256[] prices, address[] beneficiaries)[]'],
+      [itemsToBuy]
+    )
+
+    // Prepare the external call
+    const externalCall = this.prepareExternalCall({
+      target: collectionStoreAddress,
+      selector: buySelector,
+      data: buyData
     })
 
     const creditsValue = credits.reduce((acc, credit) => acc + parseInt(credit.amount), 0)
@@ -179,14 +250,18 @@ export class CreditsService {
     return this.executeUseCredits(contract, creditsData, creditsSignatures, externalCall, item.price, maxUncreditedValue)
   }
 
-  /**
-   * Use credits for buying NFTs from the Marketplace (using trades)
-   * @param trade - The trade to accept
-   * @param wallet - The user's wallet
-   * @param credits - The user's credits
-   * @returns The transaction hash
-   */
-  async useCreditsMarketplace(trade: Trade, wallet: Wallet, credits: Credit[]): Promise<string> {
+  prepareCreditsMarketplace(
+    trade: Trade,
+    walletAddress: string,
+    credits: Credit[]
+  ): {
+    contract: ContractData
+    creditsData: CreditsData[]
+    creditsSignatures: string[]
+    externalCall: ExternalCallParams
+    maxUncreditedValue: string
+    maxCreditedValue: string
+  } {
     // Prepare common credits data
     const { contract, creditsData, creditsSignatures } = this.prepareCreditsData(credits, trade.chainId)
 
@@ -199,7 +274,7 @@ export class CreditsService {
 
     // The selector for the accept function in the OffChainMarketplace contract
     const acceptSelector = marketplaceInterface.getSighash('accept')
-    const onChainTrade = getOnChainTrade(trade, wallet.address)
+    const onChainTrade = getOnChainTrade(trade, walletAddress)
     console.log('onChainTrade', onChainTrade) // TODO: remove
 
     // Encode the accept function parameters based on the correct ABI
@@ -214,8 +289,67 @@ export class CreditsService {
     const externalCall = this.prepareExternalCall({
       target: marketplaceAddress,
       selector: acceptSelector,
-      data: acceptData,
-      chainId: trade.chainId
+      data: acceptData
+      // chainId: trade.chainId
+    })
+
+    // Get the trade price
+    // Execute the transaction
+    // const tradePrice = (trade.received[0] as ERC20TradeAsset).amount
+    const tradePrice = this.getTradePrice(trade)
+    const creditsValue = credits.reduce((acc, credit) => acc + parseInt(credit.amount), 0)
+    const whatUserHasToPay = BigInt(tradePrice) - BigInt(creditsValue)
+    console.log('whatUserHasToPay', whatUserHasToPay) // TODO: remove
+    console.log('tradePrice', tradePrice) // TODO: remove
+    const maxUncreditedValue = whatUserHasToPay < BigInt(0) ? '0' : whatUserHasToPay.toString()
+
+    return {
+      contract,
+      creditsData,
+      creditsSignatures,
+      externalCall,
+      maxUncreditedValue,
+      maxCreditedValue: tradePrice
+    }
+  }
+
+  /**
+   * Use credits for buying NFTs from the Marketplace (using trades)
+   * @param trade - The trade to accept
+   * @param walletAddress - The user's wallet address
+   * @param credits - The user's credits
+   * @returns The transaction hash
+   */
+  async useCreditsMarketplace(trade: Trade, walletAddress: string, credits: Credit[]): Promise<string> {
+    // Prepare common credits data
+    const { contract, creditsData, creditsSignatures } = this.prepareCreditsData(credits, trade.chainId)
+
+    // Get the OffChainMarketplace contract address
+    const marketplaceContract = getContract(ContractName.OffChainMarketplace, trade.chainId)
+    const marketplaceAddress = marketplaceContract.address
+
+    // Create a contract interface for the OffChainMarketplace to get the function selector
+    const marketplaceInterface = new ethers.utils.Interface(marketplaceContract.abi)
+
+    // The selector for the accept function in the OffChainMarketplace contract
+    const acceptSelector = marketplaceInterface.getSighash('accept')
+    const onChainTrade = getOnChainTrade(trade, walletAddress)
+    console.log('onChainTrade', onChainTrade) // TODO: remove
+
+    // Encode the accept function parameters based on the correct ABI
+    const acceptData = ethers.utils.defaultAbiCoder.encode(
+      [
+        'tuple(address signer, bytes signature, tuple(uint256 uses, uint256 expiration, uint256 effective, bytes32 salt, uint256 contractSignatureIndex, uint256 signerSignatureIndex, bytes32 allowedRoot, bytes32[] allowedProof, tuple(address contractAddress, bytes4 selector, bytes value, bool required)[] externalChecks) checks, tuple(uint256 assetType, address contractAddress, uint256 value, address beneficiary, bytes extra)[] sent, tuple(uint256 assetType, address contractAddress, uint256 value, address beneficiary, bytes extra)[] received)[]'
+      ],
+      [[onChainTrade]]
+    )
+
+    // Prepare the external call
+    const externalCall = this.prepareExternalCall({
+      target: marketplaceAddress,
+      selector: acceptSelector,
+      data: acceptData
+      // chainId: trade.chainId
     })
 
     // Get the trade price
@@ -230,11 +364,73 @@ export class CreditsService {
     return this.executeUseCredits(contract, creditsData, creditsSignatures, externalCall, tradePrice, maxUncreditedValue)
   }
 
+  prepareCreditsLegacyMarketplace(
+    nft: NFT,
+    order: Order,
+    credits: Credit[]
+  ): {
+    contract: ContractData
+    creditsData: CreditsData[]
+    creditsSignatures: string[]
+    externalCall: ExternalCallParams
+    maxUncreditedValue: string
+    maxCreditedValue: string
+  } {
+    // Prepare common credits data
+    const { contract, creditsData, creditsSignatures } = this.prepareCreditsData(credits, nft.chainId)
+
+    console.log('creditsData', creditsData) // TODO: remove
+    console.log('creditsSignatures', creditsSignatures) // TODO: remove
+
+    // Get the Marketplace contract address
+    // const marketplaceContract = getContract(ContractName.Marketplace, nft.chainId)
+    const marketplaceContract = getContract(
+      nft.network === Network.ETHEREUM ? ContractName.Marketplace : ContractName.MarketplaceV2,
+      nft.chainId
+    )
+    const marketplaceAddress = marketplaceContract.address
+
+    // Create a contract interface for the Marketplace to get the function selector
+    const marketplaceInterface = new ethers.utils.Interface(marketplaceContract.abi)
+
+    // The selector for the executeOrder function in the Marketplace contract
+    const executeOrderSelector = marketplaceInterface.getSighash('executeOrder')
+
+    // Encode the executeOrder function parameters
+    const executeOrderData = ethers.utils.defaultAbiCoder.encode(
+      ['address', 'uint256', 'uint256'],
+      [nft.contractAddress, nft.tokenId, order.price]
+    )
+
+    // Prepare the external call
+    const externalCall = this.prepareExternalCall({
+      target: marketplaceAddress,
+      selector: executeOrderSelector,
+      data: executeOrderData
+      // chainId: nft.chainId
+    })
+
+    console.log('externalCall', externalCall)
+    const creditsValue = credits.reduce((acc, credit) => acc + parseInt(credit.amount), 0)
+    const whatUserHasToPay = BigInt(order.price) - BigInt(creditsValue)
+    console.log('whatUserHasToPay', whatUserHasToPay)
+    const maxUncreditedValue = whatUserHasToPay < BigInt(0) ? '0' : whatUserHasToPay.toString()
+    console.log('maxUncreditedValue', maxUncreditedValue)
+
+    return {
+      contract,
+      creditsData,
+      creditsSignatures,
+      externalCall,
+      maxUncreditedValue,
+      maxCreditedValue: order.price
+    }
+  }
+
   /**
    * Use credits for buying NFTs from the Legacy Marketplace
    * @param nft - The NFT to buy
    * @param order - The order to execute
-   * @param wallet - The user's wallet
    * @param credits - The user's credits
    * @returns The transaction hash
    */
@@ -269,8 +465,8 @@ export class CreditsService {
     const externalCall = this.prepareExternalCall({
       target: marketplaceAddress,
       selector: executeOrderSelector,
-      data: executeOrderData,
-      chainId: nft.chainId
+      data: executeOrderData
+      // chainId: nft.chainId
     })
 
     console.log('externalCall', externalCall)

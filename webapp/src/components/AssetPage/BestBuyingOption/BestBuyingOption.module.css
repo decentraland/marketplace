@@ -100,21 +100,6 @@
   transition: all 0.2s ease;
 }
 
-.BestBuyingOption .creditsContainerActive {
-  border-color: var(--rare);
-}
-
-.BestBuyingOption .creditsContainerActive .creditsText,
-.BestBuyingOption .creditsContainerActive .creditsAmount,
-.BestBuyingOption .creditsContainerActive .creditsNumber {
-  color: var(--rare);
-}
-
-.BestBuyingOption .creditsContainerActive :global(.ui.toggle.checkbox input:checked ~ .box:before),
-.BestBuyingOption .creditsContainerActive :global(.ui.toggle.checkbox input:checked ~ label:before) {
-  background-color: var(--rare) !important;
-}
-
 .BestBuyingOption .creditsLeft {
   display: flex;
   align-items: center;
@@ -189,12 +174,6 @@
   width: 100%;
 }
 
-@media (max-width: 768px) {
-  .BestBuyingOption {
-    padding: 24px 15px;
-  }
-}
-
 .BestBuyingOption .mainContainer {
   padding: 16px;
 }
@@ -208,4 +187,41 @@
 .BestBuyingOption .buyNFTButtons :global(.dcl.mana .matic) {
   width: 24px;
   height: 24px;
+}
+
+/* Empty Card Container */
+
+.BestBuyingOption .emptyCardContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 36px;
+  justify-content: center;
+  width: 100%;
+}
+
+.BestBuyingOption .nolistingsImage {
+  height: 40px;
+  align-self: center;
+  margin-right: 16px;
+}
+
+.BestBuyingOption .emptyCardTitle {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.BestBuyingOption .emptyCardContent {
+  color: var(--primary-text);
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  font-size: 14px;
+  gap: 8px;
+}
+
+.BestBuyingOption .checkTheOwners {
+  padding: 0px 5px;
+  text-decoration: underline;
+  cursor: pointer;
 }

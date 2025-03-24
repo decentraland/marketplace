@@ -39,7 +39,7 @@ const PriceComponent = ({ price, network, useCredits, credits, className }: Prop
     <div className={classNames(styles.PriceContainer, className)}>
       <div className={styles.manaContainer}>
         <Mana withTooltip size="large" network={network} />
-        <span className={styles.adjustedPrice}>{formatWeiToAssetCard(price)}</span>
+        <span className={styles.price}>{formatWeiToAssetCard(price)}</span>
       </div>
       {+price > 0 && (
         <div className={styles.informationText}>

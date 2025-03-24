@@ -9,7 +9,6 @@ import { getMintItemStatus, getError } from '../../../../modules/item/selectors'
 import { getContractNames } from '../../../../modules/vendor'
 import { Contract as DCLContract } from '../../../../modules/vendor/services'
 import * as events from '../../../../utils/events'
-import { formatWeiToAssetCard } from '../../../AssetCard/utils'
 import BuyWithCryptoModal from '../BuyWithCryptoModal.container'
 import { OnGetCrossChainRoute, OnGetGasCost } from '../BuyWithCryptoModal.types'
 import { useCrossChainMintNftRoute, useMintingNftGasCost } from '../hooks'
@@ -95,10 +94,9 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
 
   const price = useMemo(() => {
     if (!useCredits || !credits) return item.price
-    const priceNum = Number(formatWeiToAssetCard(item.price))
-    const adjustedPrice = Math.max(priceNum - credits.totalCredits, 0)
+    const adjustedPrice = BigInt(item.price) - BigInt(credits.totalCredits)
     // Convert back to wei format
-    return (adjustedPrice * 1e18).toString()
+    return adjustedPrice < 0 ? '0' : adjustedPrice.toString()
   }, [item.price, useCredits, credits])
 
   return (

@@ -10,7 +10,7 @@ import { Props } from './BuyWithCryptoButton.types'
 import styles from './BuyWithCryptoButton.module.css'
 
 export const BuyWithCryptoButton = (props: Props) => {
-  const { asset, onClick, ...rest } = props
+  const { asset, isFree, onClick, ...rest } = props
 
   const handleOnClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
@@ -29,8 +29,8 @@ export const BuyWithCryptoButton = (props: Props) => {
 
   return (
     <Button primary fluid {...rest} onClick={handleOnClick} className={classNames(styles.BuyWithCryptoButton, rest.className)}>
-      <Mana inline size="small" network={Network.MATIC} />
-      <span>{t('asset_page.actions.buy_with_mana')}</span>
+      {!isFree && <Mana inline size="small" network={Network.MATIC} />}
+      <span>{isFree ? t('asset_page.actions.checkout') : t('asset_page.actions.buy_with_mana')}</span>
     </Button>
   )
 }

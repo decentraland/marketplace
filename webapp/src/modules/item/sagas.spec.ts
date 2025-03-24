@@ -10,8 +10,12 @@ import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeServic
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
+import { CreditsService } from '../../lib/credits'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
+import { pollCreditsBalanceRequest } from '../credits/actions'
+import { getCredits } from '../credits/selectors'
+import { CreditsResponse } from '../credits/types'
 import {
   getIsCreditsEnabled,
   getIsMarketplaceServerEnabled,
@@ -107,6 +111,23 @@ const entity: Entity = {
   version: 'v1'
 }
 
+const mockCredits: CreditsResponse = {
+  totalCredits: 1000,
+  credits: [
+    {
+      id: '1',
+      amount: '1000',
+      availableAmount: '1000',
+      contract: '0x123',
+      expiresAt: '1000',
+      season: 1,
+      signature: '123',
+      timestamp: '1000',
+      userAddress: '0x123'
+    }
+  ]
+}
+
 const getIdentity = () => undefined
 
 describe('when handling the buy items request action', () => {
@@ -199,17 +220,113 @@ describe('when handling the buy items request action', () => {
       }
     })
 
-    it('should send an accept trade tx', () => {
-      return expectSaga(itemSaga, getIdentity)
-        .provide([
-          [select(getWallet), wallet],
-          [select(getIsCreditsEnabled), false],
-          [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
-          [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
-        ])
-        .put(buyItemSuccess(wallet.chainId, txHash, itemWithTrade))
-        .dispatch(buyItemRequest(itemWithTrade))
-        .run({ silenceTimeout: true })
+    describe('and the user is trying to buy an item using credits', () => {
+      describe('and credits are enabled', () => {
+        describe('and the user has enough credits', () => {
+          it('should send a use credits trade tx and poll the credits balance', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [select(getWallet), wallet],
+                [select(getIsCreditsEnabled), true],
+                [select(getCredits, wallet.address), mockCredits],
+                [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+                [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+              ])
+              .put(buyItemSuccess(wallet.chainId, txHash, itemWithTrade))
+              .put(pollCreditsBalanceRequest(wallet.address, BigInt(mockCredits.totalCredits) - BigInt(itemWithTrade.price)))
+              .dispatch(buyItemRequest(itemWithTrade, true))
+              .run({ silenceTimeout: true })
+          })
+        })
+        describe('and the user does not have enough credits', () => {
+          it('should throw an error', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [select(getWallet), wallet],
+                [select(getIsCreditsEnabled), true],
+                [select(getCredits, wallet.address), undefined]
+              ])
+              .put(buyItemFailure('No credits available'))
+              .dispatch(buyItemRequest(itemWithTrade, true))
+              .run({ silenceTimeout: true })
+          })
+        })
+      })
+    })
+
+    describe('and credits are not enabled', () => {
+      it('should send an accept trade tx', () => {
+        return expectSaga(itemSaga, getIdentity)
+          .provide([
+            [select(getWallet), wallet],
+            [select(getIsCreditsEnabled), false],
+            [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+            [matchers.call.fn(TradeService.prototype.accept), Promise.resolve(txHash)]
+          ])
+          .put(buyItemSuccess(wallet.chainId, txHash, itemWithTrade))
+          .dispatch(buyItemRequest(itemWithTrade))
+          .run({ silenceTimeout: true })
+      })
+    })
+  })
+
+  describe('when the item does not have a trade and instead is a CollectionStore mint', () => {
+    let itemWithNoTrade: Item
+
+    beforeEach(() => {
+      itemWithNoTrade = {
+        ...item,
+        tradeId: undefined,
+        isOnSale: true,
+        price: '1000000000000000000'
+      }
+    })
+
+    describe('and the user is trying to buy an item using credits', () => {
+      describe('and credits are enabled', () => {
+        describe('and the user has enough credits', () => {
+          it('should send a use credits through the CollectionStore tx and poll the credits balance', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [select(getWallet), wallet],
+                [select(getIsCreditsEnabled), true],
+                [select(getCredits, wallet.address), mockCredits],
+                [matchers.call.fn(CreditsService.prototype.useCreditsCollectionStore), Promise.resolve(txHash)]
+              ])
+              .put(buyItemSuccess(wallet.chainId, txHash, itemWithNoTrade))
+              .put(pollCreditsBalanceRequest(wallet.address, BigInt(mockCredits.totalCredits) - BigInt(itemWithNoTrade.price)))
+              .dispatch(buyItemRequest(itemWithNoTrade, true))
+              .run({ silenceTimeout: true })
+          })
+        })
+        describe('and the user does not have enough credits', () => {
+          it('should throw an error', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [select(getWallet), wallet],
+                [select(getIsCreditsEnabled), true],
+                [select(getCredits, wallet.address), undefined]
+              ])
+              .put(buyItemFailure('No credits available'))
+              .dispatch(buyItemRequest(itemWithNoTrade, true))
+              .run({ silenceTimeout: true })
+          })
+        })
+      })
+    })
+
+    describe('and credits are not enabled', () => {
+      it('should send a CollectionStore buy tx', () => {
+        return expectSaga(itemSaga, getIdentity)
+          .provide([
+            [select(getWallet), wallet],
+            [select(getIsCreditsEnabled), false],
+            [matchers.call.fn(sendTransaction), Promise.resolve(txHash)] // CollectionStore buy call
+          ])
+          .put(buyItemSuccess(wallet.chainId, txHash, itemWithNoTrade))
+          .dispatch(buyItemRequest(itemWithNoTrade))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })
@@ -254,7 +371,7 @@ describe('when handling the buy items with card action', () => {
   describe('when opening Transak Widget fails', () => {
     it('should dispatch an action signaling the failure of the action handling', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([[call(buyAssetWithCard, item), Promise.reject(anError)]])
+        .provide([[call(buyAssetWithCard, item, undefined, false), Promise.reject(anError)]])
         .put(buyItemWithCardFailure(anError.message))
         .dispatch(buyItemWithCardRequest(item))
         .run({ silenceTimeout: true })
@@ -264,8 +381,8 @@ describe('when handling the buy items with card action', () => {
   describe('when Transak widget is opened succesfully', () => {
     it('should dispatch the success action', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([[call(buyAssetWithCard, item), Promise.resolve()]])
-        .dispatch(buyItemWithCardRequest(item))
+        .provide([[call(buyAssetWithCard, item, undefined, false), Promise.resolve()]])
+        .dispatch(buyItemWithCardRequest(item, false))
         .run({ silenceTimeout: true })
         .then(({ effects }) => {
           expect(effects.put).toBeUndefined()

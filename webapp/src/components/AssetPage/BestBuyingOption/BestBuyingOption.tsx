@@ -208,7 +208,7 @@ const BestBuyingOption = ({ asset, tableRef, isOffchainPublicNFTOrdersEnabled }:
       ) : (
         <div className={styles.emptyCardContainer}>
           <img src={noListings} alt={t('best_buying_option.empty.title')} className={styles.nolistingsImage} />
-          <div className={styles.containerColumn}>
+          <div className={styles.emptyCardContent}>
             <span className={styles.emptyCardTitle}>{t('best_buying_option.empty.title')}</span>
             <span>
               {t('best_buying_option.empty.you_can')}
