@@ -141,11 +141,22 @@ describe('when creating the action to signal a failure in the buy item request',
 })
 
 describe('when creating the action to signal the start of the buy item with card', () => {
-  it('should return an object representing the action', () => {
-    expect(buyItemWithCardRequest(item)).toEqual({
-      type: BUY_ITEM_WITH_CARD_REQUEST,
-      meta: undefined,
-      payload: { item }
+  describe('when useCredits is false', () => {
+    it('should return an object representing the action', () => {
+      expect(buyItemWithCardRequest(item)).toEqual({
+        type: BUY_ITEM_WITH_CARD_REQUEST,
+        meta: undefined,
+        payload: { item, useCredits: false }
+      })
+    })
+  })
+
+  describe('when useCredits is true', () => {
+    it('should return an object representing the action', () => {
+      expect(buyItemWithCardRequest(item, true)).toEqual({
+        type: BUY_ITEM_WITH_CARD_REQUEST,
+        payload: { item, useCredits: true }
+      })
     })
   })
 })

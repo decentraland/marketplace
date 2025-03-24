@@ -198,11 +198,21 @@ describe('when creating the action to signal a failure in the execute order requ
 })
 
 describe('when creating the action to signal the start of the execute order with card request', () => {
-  it('should return an object representing the action', () => {
-    expect(executeOrderWithCardRequest(nft)).toEqual({
-      type: EXECUTE_ORDER_WITH_CARD_REQUEST,
-      meta: undefined,
-      payload: { nft }
+  describe('when useCredits is false', () => {
+    it('should return an object representing the action', () => {
+      expect(executeOrderWithCardRequest(nft)).toEqual({
+        type: EXECUTE_ORDER_WITH_CARD_REQUEST,
+        meta: undefined,
+        payload: { nft, useCredits: false }
+      })
+    })
+  })
+  describe('when useCredits is true', () => {
+    it('should return an object representing the action', () => {
+      expect(executeOrderWithCardRequest(nft, undefined, true)).toEqual({
+        type: EXECUTE_ORDER_WITH_CARD_REQUEST,
+        payload: { nft, useCredits: true }
+      })
     })
   })
 })
