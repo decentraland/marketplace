@@ -1,9 +1,9 @@
 import type { ChainId, Order } from '@dcl/schemas'
 import type { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import type { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import type { Route } from 'decentraland-transactions/crossChain'
 import type { getContract } from '../../../../modules/contract/selectors'
-import { getCredits } from '../../../../modules/credits/selectors'
 import type { NFT } from '../../../../modules/nft/types'
 import type { executeOrderRequest, executeOrderWithCardRequest } from '../../../../modules/order/actions'
 import type { Contract } from '../../../../modules/vendor/services'
@@ -15,7 +15,7 @@ export type Props = WithAuthorizedActionProps &
     isExecutingOrder: boolean
     isExecutingOrderCrossChain: boolean
     isOffchainPublicNFTOrdersEnabled: boolean
-    credits: ReturnType<typeof getCredits> | null
+    credits: CreditsResponse | null
     getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
     onExecuteOrder: typeof executeOrderRequest
     onExecuteOrderCrossChain: (route: Route) => unknown
