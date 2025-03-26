@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
 import { Dispatch, bindActionCreators } from 'redux'
 import { Item } from '@dcl/schemas'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
 import { getData as getWallet } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { getContract } from '../../../../modules/contract/selectors'
-import { getCredits } from '../../../../modules/credits/selectors'
 import {
   BUY_ITEM_CROSS_CHAIN_REQUEST,
   BUY_ITEM_REQUEST,
