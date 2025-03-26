@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
 import { Order } from '@dcl/schemas'
-import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Asset, AssetType } from '../../../../modules/asset/types'
@@ -14,7 +14,7 @@ export type Props = {
   buyWithCardClassName?: string
   isBuyingWithCryptoModalOpen: boolean
   wallet: Wallet | null
-  credits: ReturnType<typeof getCredits>
+  credits: CreditsResponse | null
   isConnecting: boolean
   isCreditsEnabled: boolean
   isCreditsSecondarySalesEnabled: boolean
