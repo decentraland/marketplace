@@ -1,6 +1,10 @@
 import { History } from 'history'
 import { put, call, takeEvery, select, race, take, getContext } from 'redux-saga/effects'
 import { ListingStatus, RentalStatus, Trade, TradeCreation } from '@dcl/schemas'
+import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
+import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
@@ -9,11 +13,8 @@ import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ErrorCode } from 'decentraland-transactions'
-import creditsService from '../../lib/credits'
 import { isErrorWithMessage } from '../../lib/error'
 import { buyAssetWithCard } from '../asset/utils'
-import { pollCreditsBalanceRequest } from '../credits/actions'
-import { getCredits } from '../credits/selectors'
 import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { FetchNFTFailureAction, fetchNFTRequest, FetchNFTSuccessAction, FETCH_NFT_FAILURE, FETCH_NFT_SUCCESS } from '../nft/actions'
@@ -152,12 +153,12 @@ export function* orderSaga(tradeService: TradeService) {
           if (!isCreditsEnabled) {
             throw new Error('Credits are not enabled')
           }
-          const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+          const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
           if (!credits || credits.totalCredits <= 0) {
             throw new Error('No credits available')
           }
 
-          txHash = yield call([creditsService, 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
+          txHash = yield call([new CreditsService(), 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
           const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
           yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
         } else {
@@ -176,12 +177,12 @@ export function* orderSaga(tradeService: TradeService) {
           if (!isCreditsEnabled) {
             throw new Error('Credits are not enabled')
           }
-          const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+          const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
           if (!credits || credits.totalCredits <= 0) {
             throw new Error('No credits available')
           }
 
-          txHash = yield call([creditsService, 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
+          txHash = yield call([new CreditsService(), 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
           const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
           yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
         } else {

@@ -10,9 +10,9 @@ import {
   Trade,
   TradeCreation
 } from '@dcl/schemas'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Account } from '../account/types'
-import { CreditsResponse } from '../credits/types'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { OrderResponse } from './decentraland/order/types'
 import { NFTsFetchFilters } from './nft/types'

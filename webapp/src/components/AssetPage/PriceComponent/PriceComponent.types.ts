@@ -1,5 +1,5 @@
 import { Network } from '@dcl/schemas'
-import { CreditsResponse } from '../../../modules/credits/types'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 
 export type Props = {
   price: string

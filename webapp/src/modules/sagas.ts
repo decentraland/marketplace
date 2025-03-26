@@ -6,6 +6,8 @@ import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/s
 import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { ContentfulClient } from 'decentraland-dapps/dist/modules/campaign/ContentfulClient'
 import { campaignSagas } from 'decentraland-dapps/dist/modules/campaign/sagas'
+import { CreditsClient } from 'decentraland-dapps/dist/modules/credits/CreditsClient'
+import { creditsSaga } from 'decentraland-dapps/dist/modules/credits/sagas'
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
@@ -25,7 +27,6 @@ import { assetSaga } from './asset/sagas'
 import { bidSaga } from './bid/sagas'
 import { collectionSaga } from './collection/sagas'
 import { contractSaga } from './contract/sagas'
-import { creditsSaga } from './credits/sagas'
 import { ensSaga } from './ens/sagas'
 import { eventSaga } from './event/sagas'
 import { favoritesSaga } from './favorites/sagas'
@@ -99,7 +100,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     assetSaga(),
     authorizationSaga(),
     bidSaga(new BidService(), getTradesService(getIdentity)),
-    creditsSaga(),
+    creditsSaga({ creditsClient: new CreditsClient(config.get('CREDITS_SERVER_URL')) }),
     itemSaga(getIdentity),
     nftSaga(getIdentity),
     orderSaga(getTradesService(getIdentity)),
@@ -111,8 +112,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     campaignSagas(new ContentfulClient(), {
       space: config.get('CONTENTFUL_SPACE_ID'),
       environment: config.get('CONTENTFUL_ENVIRONMENT'),
-      id: config.get('CONTENTFUL_ADMIN_ENTITY_ID'),
-      token: config.get('CONTENTFUL_ACCESS_TOKEN')
+      id: config.get('CONTENTFUL_ADMIN_ENTITY_ID')
     }),
     transactionSaga({
       crossChainProviderUrl: config.get('SQUID_API_URL'),

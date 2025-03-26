@@ -1,5 +1,5 @@
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { Asset } from '../../../../modules/asset/types'
-import { CreditsResponse } from '../../../../modules/credits/types'
 
 export type Props = {
   asset: Asset

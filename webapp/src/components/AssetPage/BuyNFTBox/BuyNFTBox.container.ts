@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { fetchBidsByAssetRequest } from '../../../modules/bid/actions'
-import { getCredits } from '../../../modules/credits/selectors'
 import { getCurrentOrder } from '../../../modules/order/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getAssetBids } from '../../../modules/ui/asset/bid/selectors'

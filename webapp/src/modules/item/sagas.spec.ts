@@ -2,6 +2,10 @@ import { call, getContext, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { ChainId, Entity, EntityType, Item, Network, Rarity, Trade, TradeAssetType, TradeType as DCLTradeType } from '@dcl/schemas'
+import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
+import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
@@ -10,12 +14,8 @@ import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeServic
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
-import { CreditsService } from '../../lib/credits'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
-import { pollCreditsBalanceRequest } from '../credits/actions'
-import { getCredits } from '../credits/selectors'
-import { CreditsResponse } from '../credits/types'
 import {
   getIsCreditsEnabled,
   getIsMarketplaceServerEnabled,

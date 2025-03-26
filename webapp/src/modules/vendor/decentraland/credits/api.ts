@@ -1,6 +1,6 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { config } from '../../../../config'
-import { CreditsResponse } from '../../../credits/types'
 import { retryParams } from '../utils'
 
 class CreditsAPI extends BaseAPI {

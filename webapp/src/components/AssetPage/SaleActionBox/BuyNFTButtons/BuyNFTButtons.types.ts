@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux'
 import { Order } from '@dcl/schemas'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { OpenModalAction } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Asset, AssetType } from '../../../../modules/asset/types'
-import { getCredits } from '../../../../modules/credits/selectors'
 import { BuyItemWithCardRequestAction, buyItemWithCardRequest } from '../../../../modules/item/actions'
 import { ExecuteOrderWithCardRequestAction, executeOrderWithCardRequest } from '../../../../modules/order/actions'
 

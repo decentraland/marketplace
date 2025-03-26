@@ -5,7 +5,11 @@ import { History } from 'history'
 import { SagaIterator, Task } from 'redux-saga'
 import { call, cancel, cancelled, fork, race, select, take, getContext } from 'redux-saga/effects'
 import { CatalogFilters, Entity, Trade } from '@dcl/schemas'
+import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
@@ -17,12 +21,9 @@ import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
 import { API_SIGNER } from '../../lib/api'
-import creditsService from '../../lib/credits'
 import { isErrorWithMessage } from '../../lib/error'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard } from '../asset/utils'
-import { pollCreditsBalanceRequest } from '../credits/actions'
-import { getCredits } from '../credits/selectors'
 import {
   getIsCreditsEnabled,
   getIsMarketplaceServerEnabled,
@@ -242,10 +243,11 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
         if (!isCreditsEnabled) {
           throw new Error('Credits are not enabled')
         }
-        const credits: ReturnType<typeof getCredits> = yield select(getCredits, wallet?.address || '')
+        const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
         if (!credits || credits.totalCredits <= 0) {
           throw new Error('No credits available')
         }
+        const creditsService = new CreditsService()
         if (item.tradeId) {
           // Use credits for marketplace trade
           const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)

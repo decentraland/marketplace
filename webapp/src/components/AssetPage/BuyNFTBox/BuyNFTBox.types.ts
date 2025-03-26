@@ -1,7 +1,7 @@
 import { Bid, Order } from '@dcl/schemas'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Asset } from '../../../modules/asset/types'
-import { CreditsResponse } from '../../../modules/credits/types'
 import { NFT } from '../../../modules/nft/types'
 import { VendorName } from '../../../modules/vendor'
 

@@ -1,4 +1,4 @@
-import { CreditsResponse } from '../../credits/types'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { CreditsService as CreditsServiceInterface } from '../services'
 import { creditsAPI } from './credits'
 
