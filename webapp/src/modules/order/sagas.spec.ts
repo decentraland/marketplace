@@ -2,6 +2,7 @@ import { call, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
+import { v4 as uuidv4 } from 'uuid'
 import { ChainId, Network, Order, RentalListing, RentalStatus, Trade } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
@@ -145,7 +146,7 @@ describe('when handling the execute order request action', () => {
     beforeEach(() => {
       order = {
         ...order,
-        tradeId: 'some-trade-id'
+        tradeId: uuidv4()
       }
 
       mockCredits = {
@@ -213,6 +214,7 @@ describe('when handling the execute order request action', () => {
         return expectSaga(orderSaga, tradeService)
           .provide([
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
             [select(getIsOffchainPublicNFTOrdersEnabled), true],
             [select(getWallet), wallet],
             [select(getIsCreditsEnabled), false]
@@ -228,6 +230,7 @@ describe('when handling the execute order request action', () => {
         return expectSaga(orderSaga, tradeService)
           .provide([
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
             [select(getIsOffchainPublicNFTOrdersEnabled), true],
             [select(getWallet), wallet],
             [select(getIsCreditsEnabled), true],

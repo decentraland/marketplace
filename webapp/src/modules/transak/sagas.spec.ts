@@ -1,9 +1,20 @@
-import { ethers } from 'ethers'
 import { select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { BodyShape, ChainId, ListingStatus, Network, NFTCategory, Order, Rarity, Trade, TradeType, WearableCategory } from '@dcl/schemas'
-import { CreditsData, CreditsService, ExternalCallParams } from 'decentraland-dapps/dist/lib/credits'
+import { v4 as uuidv4 } from 'uuid'
+import {
+  BodyShape,
+  ChainId,
+  ListingStatus,
+  Network,
+  NFTCategory,
+  Order,
+  Rarity,
+  Trade,
+  TradeAssetType,
+  TradeType,
+  WearableCategory
+} from '@dcl/schemas'
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
 import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
@@ -16,27 +27,6 @@ import { openTransak, openTransakFailure } from './actions'
 import { transakSaga } from './sagas'
 
 jest.mock('decentraland-dapps/dist/modules/gateway/transak')
-jest.mock('../../lib/credits')
-
-// mock ethers Interface
-jest.mock('ethers', () => {
-  const actual = jest.requireActual('ethers')
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return {
-    ...actual,
-    ethers: {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      ...actual.ethers,
-      utils: {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        ...actual.ethers.utils,
-        Interface: jest.fn().mockImplementation(() => ({
-          encodeFunctionData: jest.fn()
-        }))
-      }
-    }
-  }
-})
 
 jest.mock('../../config', () => ({
   config: {
@@ -57,7 +47,7 @@ jest.mock('../../config', () => ({
 const mockAsset: Asset = {
   id: 'mock-asset-id',
   chainId: ChainId.MATIC_AMOY,
-  contractAddress: '0x123',
+  contractAddress: '0x0000000000000000000000000000000000000123',
   network: Network.MATIC,
   price: '1000000000000000000', // 1 MANA
   tokenId: '1',
@@ -69,7 +59,7 @@ const mockAsset: Asset = {
   rarity: Rarity.UNIQUE,
   available: 1,
   isOnSale: true,
-  creator: '0x123',
+  creator: '0x0000000000000000000000000000000000000123',
   beneficiary: null,
   createdAt: 0,
   updatedAt: 0,
@@ -89,7 +79,7 @@ const mockAsset: Asset = {
 }
 
 const mockWallet = {
-  address: '0x123',
+  address: '0x0000000000000000000000000000000000000123',
   networks: {
     [Network.MATIC]: {
       chainId: ChainId.MATIC_MAINNET
@@ -100,9 +90,9 @@ const mockWallet = {
 const mockOrder: Order = {
   id: 'mock-order-id',
   marketplaceAddress: '0x0c8ad1f6aadf89d2eb19f01a100a6143108fe2b0',
-  contractAddress: '0x123',
+  contractAddress: '0x0000000000000000000000000000000000000123',
   tokenId: '1',
-  owner: '0x123',
+  owner: '0x0000000000000000000000000000000000000123',
   buyer: null,
   price: '1000000000000000000', // 1 MANA
   status: ListingStatus.OPEN,
@@ -121,39 +111,52 @@ const mockCredits = {
       id: '1',
       amount: '500000000000000000',
       availableAmount: '500000000000000000',
-      contract: '0x123',
+      contract: '0x0000000000000000000000000000000000000123',
       expiresAt: '1000',
       season: 1,
-      signature: '123',
+      signature: '0x0000000000000000000000000000000000000000000000000000000000000000',
       timestamp: '1000',
-      userAddress: '0x123'
+      userAddress: '0x0000000000000000000000000000000000000123'
     }
   ]
 }
 
 const mockTrade: Trade = {
-  id: 'mock-trade-id',
-  chainId: ChainId.MATIC_AMOY,
-  network: Network.MATIC,
+  id: 'trade1',
+  createdAt: Date.now(),
+  signer: '0x0000000000000000000000000000000000000123',
+  signature: '0x0000000000000000000000000000000000000000000000000000000000000000',
   type: TradeType.PUBLIC_NFT_ORDER,
-  signature: '123',
-  signer: '0x123',
-  createdAt: 0,
-  sent: [],
-  received: [],
+  network: Network.MATIC,
+  chainId: ChainId.MATIC_AMOY,
   checks: {
-    expiration: 0,
-    effective: 0,
-    uses: 0,
-    salt: '',
-    allowedRoot: '',
+    expiration: Date.now() + 100000000000,
+    effective: Date.now(),
+    uses: 1,
+    salt: '0x',
+    allowedRoot: '0x',
     contractSignatureIndex: 0,
     externalChecks: [],
     signerSignatureIndex: 0
-  }
+  },
+  sent: [
+    {
+      assetType: TradeAssetType.ERC721,
+      contractAddress: '0x7ad72b9f944ea9793cf4055d88f81138cc2c63a0',
+      tokenId: '1',
+      extra: ''
+    }
+  ],
+  received: [
+    {
+      assetType: TradeAssetType.ERC20,
+      contractAddress: '0x7ad72b9f944ea9793cf4055d88f81138cc2c63a0',
+      amount: '2000000000000000000',
+      extra: '',
+      beneficiary: '0x0000000000000000000000000000000000000123'
+    }
+  ]
 }
-
-const creditsService = new CreditsService()
 
 describe('when handling the open transak action', () => {
   afterEach(() => {
@@ -177,33 +180,11 @@ describe('when handling the open transak action', () => {
 
   describe('when the order has a tradeId', () => {
     beforeEach(() => {
-      mockOrder.tradeId = 'mock-trade-id'
+      mockOrder.tradeId = uuidv4()
     })
     describe('and using credits', () => {
       describe('and credits are enabled', () => {
         describe('and the user has enough credits', () => {
-          const mockCreditsData: CreditsData[] = []
-          const mockCreditsSignatures: string[] = []
-          const mockExternalCall: ExternalCallParams = {
-            target: '0x123',
-            selector: '0x123',
-            data: '0x123'
-          }
-          beforeEach(() => {
-            ;(creditsService.prepareCreditsMarketplace as jest.Mock).mockImplementation(() => ({
-              creditsData: mockCreditsData,
-              creditsSignatures: mockCreditsSignatures,
-              externalCall: mockExternalCall,
-              maxUncreditedValue: '0',
-              maxCreditedValue: '0'
-            }))
-            // mock ethers Interface call
-            const mockEthersInterface = {
-              encodeFunctionData: jest.fn()
-            }
-            ;(ethers.utils.Interface as unknown as jest.Mock).mockImplementation(() => mockEthersInterface)
-          })
-
           it('should open the Transak widget with the correct configuration for credits', () => {
             return expectSaga(transakSaga)
               .provide([

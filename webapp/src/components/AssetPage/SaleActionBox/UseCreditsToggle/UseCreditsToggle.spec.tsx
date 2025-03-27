@@ -136,7 +136,7 @@ describe('UseCreditsToggle', () => {
       })
       const learnMoreButton = screen.getByText(t('global.learn_more'))
       fireEvent.click(learnMoreButton)
-      expect(window.open).toHaveBeenCalledWith('https://docs.decentraland.org/decentraland/credits/', '_blank')
+      expect(window.open).toHaveBeenCalledWith('https://docs.decentraland.zone/decentraland/credits/', '_blank', 'noopener')
     })
   })
 
