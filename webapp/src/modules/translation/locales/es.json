@@ -1655,5 +1655,8 @@
   "bid_button": {
     "bid": "Ofertar",
     "blocked": "Tu oferta ya ha sido creada"
+  },
+  "credits": {
+    "value": "1 Crédito = 1 MANA en valor"
   }
 }

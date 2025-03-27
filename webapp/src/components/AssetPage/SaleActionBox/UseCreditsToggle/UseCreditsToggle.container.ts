@@ -4,7 +4,7 @@ import { isOwnedBy } from '../../../../modules/asset/utils'
 import { RootState } from '../../../../modules/reducer'
 import { getWallet } from '../../../../modules/wallet/selectors'
 import UseCreditsToggle from './UseCreditsToggle'
-import { MapStateProps, MapDispatchProps, OwnProps } from './UseCreditsToggle.types'
+import { MapStateProps, OwnProps } from './UseCreditsToggle.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const wallet = getWallet(state)
@@ -16,8 +16,4 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   }
 }
 
-const mapDispatch = (_dispatch: any, ownProps: OwnProps): MapDispatchProps => ({
-  onUseCredits: ownProps.onUseCredits
-})
-
-export default connect(mapState, mapDispatch)(UseCreditsToggle)
+export default connect(mapState)(UseCreditsToggle)

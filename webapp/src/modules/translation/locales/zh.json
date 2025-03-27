@@ -1659,5 +1659,8 @@
   "bid_button": {
     "bid": "提出要约",
     "blocked": "您的报价已提出"
+  },
+  "credits": {
+    "value": "1 积分 = 1 MANA 价值"
   }
 }

@@ -9,7 +9,6 @@ export * from './collection'
 export * from './sale'
 export * from './account'
 export * from './analytics'
-export * from './credits'
 
 export * from './BidService'
 export * from './ContractService'

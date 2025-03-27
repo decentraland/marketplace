@@ -15,10 +15,6 @@ export type MapStateProps = {
   isOwner?: boolean
 }
 
-export type MapDispatchProps = {
-  onUseCredits: (useCredits: boolean) => void
-}
-
 export type OwnProps = {
   asset: Asset
   useCredits: boolean

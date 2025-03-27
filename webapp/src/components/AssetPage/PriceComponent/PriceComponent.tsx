@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import classNames from 'classnames'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import Mana from '../../Mana/Mana'
@@ -7,11 +7,14 @@ import { Props } from './PriceComponent.types'
 import styles from './PriceComponent.module.css'
 
 const PriceComponent = ({ price, network, useCredits, credits, className }: Props) => {
-  const getAdjustedPrice = (originalPrice: string) => {
-    if (!useCredits || !credits) return originalPrice
-    const bigIntPrice = BigInt(originalPrice) - BigInt(credits.totalCredits)
-    return bigIntPrice > 0 ? bigIntPrice.toString() : '0'
-  }
+  const getAdjustedPrice = useCallback(
+    (originalPrice: string) => {
+      if (!useCredits || !credits) return originalPrice
+      const bigIntPrice = BigInt(originalPrice) - BigInt(credits.totalCredits)
+      return bigIntPrice > 0 ? bigIntPrice.toString() : '0'
+    },
+    [useCredits, credits]
+  )
 
   if (useCredits && credits) {
     const adjustedPrice = getAdjustedPrice(price)

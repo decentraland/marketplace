@@ -256,8 +256,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
           // Use credits for collection store
           txHash = yield call([creditsService, 'useCreditsCollectionStore'], item, wallet.address, credits.credits)
         }
-        const expectedBalance = BigInt(credits.totalCredits) - BigInt(item.price)
-        yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
+        const expectedBalance = Math.max(0, Number(credits.totalCredits) - Number(item.price))
+        yield put(pollCreditsBalanceRequest(wallet.address, BigInt(expectedBalance)))
       } else if (item.tradeId) {
         // Regular trade acceptance without credits
         const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)
@@ -273,7 +273,6 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
       yield put(buyItemSuccess(wallet.chainId, txHash, item))
     } catch (error) {
-      console.log('error', error)
       yield put(buyItemFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }

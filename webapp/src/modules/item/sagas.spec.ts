@@ -222,22 +222,52 @@ describe('when handling the buy items request action', () => {
 
     describe('and the user is trying to buy an item using credits', () => {
       describe('and credits are enabled', () => {
+        let credits: CreditsResponse
         describe('and the user has enough credits', () => {
+          beforeEach(() => {
+            credits = {
+              ...mockCredits,
+              totalCredits: Number(itemWithTrade.price) + 1000
+            }
+          })
           it('should send a use credits trade tx and poll the credits balance', () => {
             return expectSaga(itemSaga, getIdentity)
               .provide([
                 [select(getWallet), wallet],
                 [select(getIsCreditsEnabled), true],
-                [select(getCredits, wallet.address), mockCredits],
+                [select(getCredits, wallet.address), credits],
                 [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
                 [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
               ])
               .put(buyItemSuccess(wallet.chainId, txHash, itemWithTrade))
-              .put(pollCreditsBalanceRequest(wallet.address, BigInt(mockCredits.totalCredits) - BigInt(itemWithTrade.price)))
+              .put(pollCreditsBalanceRequest(wallet.address, BigInt(credits.totalCredits) - BigInt(itemWithTrade.price)))
               .dispatch(buyItemRequest(itemWithTrade, true))
               .run({ silenceTimeout: true })
           })
         })
+        describe('and the user has some credits but not enough', () => {
+          beforeEach(() => {
+            credits = {
+              ...mockCredits,
+              totalCredits: Number(itemWithTrade.price) - 1000
+            }
+          })
+          it('should send a use credits trade tx and poll the credits balance', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [select(getWallet), wallet],
+                [select(getIsCreditsEnabled), true],
+                [select(getCredits, wallet.address), credits],
+                [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+                [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+              ])
+              .put(buyItemSuccess(wallet.chainId, txHash, itemWithTrade))
+              .put(pollCreditsBalanceRequest(wallet.address, BigInt(0))) // should have used all credits
+              .dispatch(buyItemRequest(itemWithTrade, true))
+              .run({ silenceTimeout: true })
+          })
+        })
+
         describe('and the user does not have enough credits', () => {
           it('should throw an error', () => {
             return expectSaga(itemSaga, getIdentity)
@@ -284,21 +314,50 @@ describe('when handling the buy items request action', () => {
 
     describe('and the user is trying to buy an item using credits', () => {
       describe('and credits are enabled', () => {
+        let credits: CreditsResponse
         describe('and the user has enough credits', () => {
+          beforeEach(() => {
+            credits = {
+              ...mockCredits,
+              totalCredits: Number(itemWithNoTrade.price) + 1000
+            }
+          })
           it('should send a use credits through the CollectionStore tx and poll the credits balance', () => {
             return expectSaga(itemSaga, getIdentity)
               .provide([
                 [select(getWallet), wallet],
                 [select(getIsCreditsEnabled), true],
-                [select(getCredits, wallet.address), mockCredits],
+                [select(getCredits, wallet.address), credits],
                 [matchers.call.fn(CreditsService.prototype.useCreditsCollectionStore), Promise.resolve(txHash)]
               ])
               .put(buyItemSuccess(wallet.chainId, txHash, itemWithNoTrade))
-              .put(pollCreditsBalanceRequest(wallet.address, BigInt(mockCredits.totalCredits) - BigInt(itemWithNoTrade.price)))
+              .put(pollCreditsBalanceRequest(wallet.address, BigInt(credits.totalCredits) - BigInt(itemWithNoTrade.price)))
               .dispatch(buyItemRequest(itemWithNoTrade, true))
               .run({ silenceTimeout: true })
           })
         })
+        describe('and the user has some credits but not enough', () => {
+          beforeEach(() => {
+            credits = {
+              ...mockCredits,
+              totalCredits: Number(itemWithNoTrade.price) - 1000
+            }
+          })
+          it('should send a use credits trade tx and poll the credits balance', () => {
+            return expectSaga(itemSaga, getIdentity)
+              .provide([
+                [select(getWallet), wallet],
+                [select(getIsCreditsEnabled), true],
+                [select(getCredits, wallet.address), credits],
+                [matchers.call.fn(CreditsService.prototype.useCreditsCollectionStore), Promise.resolve(txHash)]
+              ])
+              .put(buyItemSuccess(wallet.chainId, txHash, itemWithNoTrade))
+              .put(pollCreditsBalanceRequest(wallet.address, BigInt(0))) // should have used all credits
+              .dispatch(buyItemRequest(itemWithNoTrade, true))
+              .run({ silenceTimeout: true })
+          })
+        })
+
         describe('and the user does not have enough credits', () => {
           it('should throw an error', () => {
             return expectSaga(itemSaga, getIdentity)

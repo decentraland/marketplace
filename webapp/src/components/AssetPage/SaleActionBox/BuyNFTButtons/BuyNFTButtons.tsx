@@ -49,7 +49,7 @@ const BuyNFTButtons = ({
   )
 
   const handleBuyWithCrypto = useCallback(
-    (asset: Asset, order: Order | null, useCredits: boolean) => {
+    (asset: Asset, order: Order | null) => {
       if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
         history.replace(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
@@ -79,6 +79,7 @@ const BuyNFTButtons = ({
           const isItemFree = !isNFT(asset) && asset.price === '0'
           const isBuyingEntirelyWithCredits =
             useCredits &&
+            !!credits &&
             ((!isNFT(asset) && BigInt(credits.totalCredits) >= BigInt(asset.price)) ||
               (isNFT(asset) && order && BigInt(credits.totalCredits) >= BigInt(order.price)))
           const isFree = isItemFree || !!isBuyingEntirelyWithCredits
@@ -95,7 +96,7 @@ const BuyNFTButtons = ({
                   onUseCredits={handleUseCredits}
                 />
               )}
-              <BuyWithCryptoButton asset={asset} onClick={() => handleBuyWithCrypto(asset, order, useCredits)} isFree={isFree} />
+              <BuyWithCryptoButton asset={asset} onClick={() => handleBuyWithCrypto(asset, order)} isFree={isFree} />
               {!isFree && (
                 <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset, order || undefined)} />
               )}

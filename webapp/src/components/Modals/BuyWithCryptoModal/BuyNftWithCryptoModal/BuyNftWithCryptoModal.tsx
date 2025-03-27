@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Contract, NFTCategory } from '@dcl/schemas'
 import withAuthorizedAction from 'decentraland-dapps/dist/containers/withAuthorizedAction'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
@@ -96,9 +96,16 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     [nft, order, fingerprint]
   )
 
+  const price = useMemo(() => {
+    if (!useCredits || !credits) return order.price
+    const adjustedPrice = BigInt(order.price) - BigInt(credits.totalCredits)
+    // Convert back to wei format
+    return adjustedPrice < 0 ? '0' : adjustedPrice.toString()
+  }, [order.price, useCredits, credits])
+
   return (
     <BuyWithCryptoModal
-      price={order.price}
+      price={price}
       isBuyingAsset={isExecutingOrder || isExecutingOrderCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyWithCard={nft.category === NFTCategory.ESTATE || nft.category === NFTCategory.PARCEL ? undefined : onBuyWithCard}

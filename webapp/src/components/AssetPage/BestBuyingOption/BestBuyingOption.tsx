@@ -84,6 +84,7 @@ const BestBuyingOption = ({ asset, tableRef, isOffchainPublicNFTOrdersEnabled }:
                   })
                   .catch(error => {
                     console.error(error)
+                    setIsLoading(false)
                   })
               } else {
                 legacyBidAPI
