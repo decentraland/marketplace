@@ -90,6 +90,15 @@ function* handleOpenTransak(action: OpenTransakAction) {
       throw new Error(`Transak multicall contract not found for network ${asset.network} and chainId ${asset.chainId}`)
     }
 
+    let credits: CreditsResponse | null = null
+    if (useCredits) {
+      const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
+      if (!isCreditsEnabled) {
+        throw new Error('Credits are not enabled')
+      }
+      credits = yield select(getCredits, wallet?.address || '')
+    }
+
     if (tradeId && wallet?.address) {
       // MarketplaceV3
       contractId = MarketplaceV3ContractIds[asset.network]?.[asset.chainId]
@@ -101,18 +110,10 @@ function* handleOpenTransak(action: OpenTransakAction) {
       const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
 
       // if credits are enabled and useCredits is true, we need to use credits
-      if (useCredits) {
-        const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
-        if (!isCreditsEnabled) {
-          throw new Error('Credits are not enabled')
-        }
+      if (useCredits && credits) {
         contractId = CreditsManagerContractIds[Network.MATIC][asset.chainId]
         if (!contractId) {
           throw new Error(`Credits manager contract not found for network ${asset.network} and chainId ${asset.chainId}`)
-        }
-        const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
-        if (!credits || credits.totalCredits <= 0) {
-          throw new Error('No credits available')
         }
         // prepare credits data
         const contract = getContract(ContractName.CreditsManager, asset.chainId)
@@ -144,18 +145,10 @@ function* handleOpenTransak(action: OpenTransakAction) {
       const contractName = getContractName(order.marketplaceAddress)
       const contract = getContract(contractName, order.chainId)
 
-      if (useCredits) {
-        const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
-        if (!isCreditsEnabled) {
-          throw new Error('Credits are not enabled')
-        }
+      if (useCredits && credits) {
         contractId = CreditsManagerContractIds[Network.MATIC][asset.chainId]
         if (!contractId) {
           throw new Error(`Credits manager contract not found for network ${asset.network} and chainId ${asset.chainId}`)
-        }
-        const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
-        if (!credits || credits.totalCredits <= 0) {
-          throw new Error('No credits available')
         }
         // prepare credits data
         const contract = getContract(ContractName.CreditsManager, asset.chainId)
@@ -179,18 +172,13 @@ function* handleOpenTransak(action: OpenTransakAction) {
       }
     } else if (!isNFT(asset)) {
       // CollectionStore
-      if (useCredits) {
-        const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
-        if (!isCreditsEnabled) {
-          throw new Error('Credits are not enabled')
-        }
+      if (useCredits && credits) {
         contractId = CreditsManagerContractIds[Network.MATIC][asset.chainId]
         if (!contractId) {
           throw new Error(`Credits manager contract not found for network ${asset.network} and chainId ${asset.chainId}`)
         }
         const contract = getContract(ContractName.CreditsManager, asset.chainId)
         const CreditsManagerInterface = new ethers.utils.Interface(contract.abi)
-        const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
         const { creditsData, creditsSignatures, externalCall, maxUncreditedValue, maxCreditedValue } =
           new CreditsService().prepareCreditsCollectionStore(asset, wallet.address, credits.credits)
         const useCreditsArgs = {

@@ -76,7 +76,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       authorizedAddress,
       targetContract: mana as Contract,
       authorizedContractLabel,
-      requiredAllowanceInWei: order.price,
+      requiredAllowanceInWei: useCredits && credits ? (BigInt(order.price) - BigInt(credits.totalCredits)).toString() : order.price,
       onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, fingerprint, !alreadyAuthorized, useCredits) // undefined as fingerprint
     })
   }, [nft, order, fingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits])

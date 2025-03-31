@@ -134,7 +134,19 @@ export function* orderSaga(tradeService: TradeService) {
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
 
       if (!wallet) {
-        throw new Error('A defined wallet is required to buy an item')
+        throw new Error('Can not accept an order without a wallet')
+      }
+
+      let credits: CreditsResponse | null = null
+      if (useCredits) {
+        const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
+        if (!isCreditsEnabled) {
+          throw new Error('Credits are not enabled')
+        }
+        credits = yield select(getCredits, wallet?.address || '')
+        if (!credits || credits.totalCredits <= 0) {
+          throw new Error('No credits available')
+        }
       }
 
       let txHash: string
@@ -143,21 +155,8 @@ export function* orderSaga(tradeService: TradeService) {
           throw new Error('not able to accept offchain orders')
         }
 
-        if (!wallet) {
-          throw new Error('Can not accept an order without a wallet')
-        }
-
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
-        if (useCredits) {
-          const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
-          if (!isCreditsEnabled) {
-            throw new Error('Credits are not enabled')
-          }
-          const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
-          if (!credits || credits.totalCredits <= 0) {
-            throw new Error('No credits available')
-          }
-
+        if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
           const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
           yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))
@@ -172,16 +171,7 @@ export function* orderSaga(tradeService: TradeService) {
           !isOffchainPublicNFTOrdersEnabled
         )) as ReturnType<typeof VendorFactory.build>
 
-        if (useCredits) {
-          const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
-          if (!isCreditsEnabled) {
-            throw new Error('Credits are not enabled')
-          }
-          const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
-          if (!credits || credits.totalCredits <= 0) {
-            throw new Error('No credits available')
-          }
-
+        if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
           const expectedBalance = BigInt(credits.totalCredits) - BigInt(order.price)
           yield put(pollCreditsBalanceRequest(wallet.address, expectedBalance))

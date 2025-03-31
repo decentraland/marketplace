@@ -72,7 +72,7 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
       authorizedAddress,
       targetContract: mana as Contract,
       authorizedContractLabel,
-      requiredAllowanceInWei: item.price,
+      requiredAllowanceInWei: useCredits && credits ? (BigInt(item.price) - BigInt(credits.totalCredits)).toString() : item.price,
       onAuthorized: () => onBuyItem(item, useCredits)
     })
   }, [item, getContract, onAuthorizedAction, onBuyItem, useCredits])

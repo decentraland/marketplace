@@ -31,9 +31,6 @@ export function getAssetName(asset: Asset) {
     case NFTCategory.ENS:
       return t('global.ens')
 
-    // case 'art':
-    //   return t('global.art')
-
     default:
       return t('global.nft')
   }

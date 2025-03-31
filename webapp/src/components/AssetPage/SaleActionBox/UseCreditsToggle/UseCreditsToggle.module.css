@@ -12,6 +12,7 @@
 
 .creditsContainerActive {
   border-color: #a0abff;
+  padding-left: 4px;
 }
 
 .creditsContainerActive .creditsText,

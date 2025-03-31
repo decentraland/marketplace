@@ -15,6 +15,5 @@ export * from './ContractService'
 export * from './NFTService'
 export * from './OrderService'
 export * from './AnalyticsService'
-export * from './CreditsService'
 
 export * from './contracts'
