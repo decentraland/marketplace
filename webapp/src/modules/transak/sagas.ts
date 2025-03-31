@@ -97,6 +97,9 @@ function* handleOpenTransak(action: OpenTransakAction) {
         throw new Error('Credits are not enabled')
       }
       credits = yield select(getCredits, wallet?.address || '')
+      if (!credits || credits.totalCredits <= 0) {
+        throw new Error('No credits available')
+      }
     }
 
     if (tradeId && wallet?.address) {
@@ -213,8 +216,7 @@ function* handleOpenTransak(action: OpenTransakAction) {
     }
 
     let price: string | undefined
-    if (useCredits) {
-      const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
+    if (useCredits && credits) {
       price = (BigInt((isNFT(asset) ? order?.price : asset.price) || 0) - BigInt(credits.totalCredits)).toString()
     } else {
       price = isNFT(asset) ? order?.price : asset.price
