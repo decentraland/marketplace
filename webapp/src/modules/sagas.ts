@@ -6,6 +6,8 @@ import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/s
 import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { ContentfulClient } from 'decentraland-dapps/dist/modules/campaign/ContentfulClient'
 import { campaignSagas } from 'decentraland-dapps/dist/modules/campaign/sagas'
+import { CreditsClient } from 'decentraland-dapps/dist/modules/credits/CreditsClient'
+import { creditsSaga } from 'decentraland-dapps/dist/modules/credits/sagas'
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
@@ -98,10 +100,11 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     assetSaga(),
     authorizationSaga(),
     bidSaga(new BidService(), getTradesService(getIdentity)),
+    creditsSaga({ creditsClient: new CreditsClient(config.get('CREDITS_SERVER_URL')) }),
     itemSaga(getIdentity),
     nftSaga(getIdentity),
     orderSaga(getTradesService(getIdentity)),
-    profileSaga(getIdentity)(),
+    profileSaga(getIdentity),
     proximitySaga(),
     routingSaga(),
     tileSaga(),

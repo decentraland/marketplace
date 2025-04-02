@@ -528,6 +528,9 @@
       "update_listing": "更新清单",
       "buy": "购买",
       "buy_with_mana": "用 MANA 购买",
+      "checkout": "结账",
+      "use_credits": "使用积分",
+      "get_with_credits": "用积分购买",
       "buy_with_card": "刷卡购买",
       "get_mana": "获取法力值",
       "mint": "购买",
@@ -1656,5 +1659,8 @@
   "bid_button": {
     "bid": "提出要约",
     "blocked": "您的报价已提出"
+  },
+  "credits": {
+    "value": "1 积分 = 1 MANA 价值"
   }
 }

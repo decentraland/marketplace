@@ -535,6 +535,9 @@
       "update_listing": "Update listing",
       "buy": "Buy",
       "buy_with_mana": "Buy with MANA",
+      "checkout": "Checkout",
+      "use_credits": "Use Credits",
+      "get_with_credits": "Get with Credits",
       "buy_with_another_token": "Use another Token",
       "buy_with_crypto": "Buy with Crypto",
       "get_mana": "Get MANA",
@@ -1676,5 +1679,8 @@
   "bid_button": {
     "bid": "Make offer",
     "blocked": "Your offer has been made"
+  },
+  "credits": {
+    "value": "1 Credit = 1 MANA in value"
   }
 }

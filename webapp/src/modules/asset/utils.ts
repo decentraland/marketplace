@@ -31,9 +31,6 @@ export function getAssetName(asset: Asset) {
     case NFTCategory.ENS:
       return t('global.ens')
 
-    case 'art':
-      return t('global.art')
-
     default:
       return t('global.nft')
   }
@@ -99,14 +96,14 @@ export function isWearableOrEmote(asset: Asset): boolean {
   return categories.includes(asset.category)
 }
 
-export function* buyAssetWithCard(asset: Asset, order?: Order) {
+export function* buyAssetWithCard(asset: Asset, order?: Order, useCredits: boolean = false) {
   const buyNftsWithCardExplanationPopupKey = (yield call(
     [localStorage, 'getItem'],
     BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
   )) as ReturnType<typeof localStorage.getItem>
 
   if (buyNftsWithCardExplanationPopupKey === 'true') {
-    yield put(openTransak(asset, order))
+    yield put(openTransak(asset, order, useCredits))
     return
   }
 

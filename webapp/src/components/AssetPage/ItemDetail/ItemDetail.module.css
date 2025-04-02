@@ -10,7 +10,7 @@
 
 .ItemDetail .assetImageContainer {
   width: 52.5%;
-  max-height: 602px;
+  max-height: 655px;
 }
 
 .ItemDetail.smart.withRequiredPermissions .assetImageContainer {
@@ -33,7 +33,7 @@
 }
 
 .ItemDetail .spaceInMint {
-  margin-top: 29px;
+  margin-top: 30px;
 }
 
 .ItemDetail .information {
@@ -46,7 +46,7 @@
 .ItemDetail .informationContainer {
   display: flex;
   flex-direction: row;
-  gap: 30px;
+  gap: 32px;
 }
 
 .ItemDetail .attributesRow {

@@ -5,7 +5,11 @@ import { History } from 'history'
 import { SagaIterator, Task } from 'redux-saga'
 import { call, cancel, cancelled, fork, race, select, take, getContext } from 'redux-saga/effects'
 import { CatalogFilters, Entity, Trade } from '@dcl/schemas'
+import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
@@ -21,6 +25,7 @@ import { isErrorWithMessage } from '../../lib/error'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard } from '../asset/utils'
 import {
+  getIsCreditsEnabled,
   getIsMarketplaceServerEnabled,
   getIsOffchainPublicItemOrdersEnabled,
   getIsOffchainPublicNFTOrdersEnabled
@@ -223,7 +228,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleBuyItem(action: BuyItemRequestAction) {
     try {
-      const { item } = action.payload
+      const { item, useCredits } = action.payload
 
       const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
 
@@ -233,10 +238,32 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
       let txHash: string
 
-      if (item.tradeId) {
+      if (useCredits) {
+        const isCreditsEnabled: boolean = yield select(getIsCreditsEnabled)
+        if (!isCreditsEnabled) {
+          throw new Error('Credits are not enabled')
+        }
+        const credits: CreditsResponse = yield select(getCredits, wallet?.address || '')
+        if (!credits || credits.totalCredits <= 0) {
+          throw new Error('No credits available')
+        }
+        const creditsService = new CreditsService()
+        if (item.tradeId) {
+          // Use credits for marketplace trade
+          const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)
+          txHash = yield call([creditsService, 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
+        } else {
+          // Use credits for collection store
+          txHash = yield call([creditsService, 'useCreditsCollectionStore'], item, wallet.address, credits.credits)
+        }
+        const expectedBalance = Math.max(0, Number(credits.totalCredits) - Number(item.price))
+        yield put(pollCreditsBalanceRequest(wallet.address, BigInt(expectedBalance)))
+      } else if (item.tradeId) {
+        // Regular trade acceptance without credits
         const trade: Trade = yield call([tradeService, 'fetchTrade'], item.tradeId)
         txHash = yield call([tradeService, 'accept'], trade, wallet.address)
       } else {
+        // Regular collection store purchase without credits
         const contract = getContract(ContractName.CollectionStore, item.chainId)
 
         txHash = yield call(sendTransaction, contract, collectionStore =>
@@ -283,8 +310,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleBuyItemWithCardRequest(action: BuyItemWithCardRequestAction) {
     try {
-      const { item } = action.payload
-      yield call(buyAssetWithCard, item)
+      const { item, useCredits } = action.payload
+      yield call(buyAssetWithCard, item, undefined, useCredits)
     } catch (error) {
       yield put(buyItemWithCardFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
