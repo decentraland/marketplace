@@ -3,7 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { Order } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Loader } from 'decentraland-ui'
-import { Asset, AssetType } from '../../../../modules/asset/types'
+import { Asset } from '../../../../modules/asset/types'
 import { isNFT } from '../../../../modules/asset/utils'
 import { locations } from '../../../../modules/routing/locations'
 import * as events from '../../../../utils/events'
@@ -86,9 +86,9 @@ const BuyNFTButtons = ({
 
           return (
             <>
-              {/* Credits toggle is only available for items */}
-              {((isCreditsEnabled && assetType === AssetType.ITEM) ||
-                (isCreditsEnabled && isCreditsSecondarySalesEnabled && assetType === AssetType.NFT)) && (
+              {/* Credits toggle is only available for items or for NFTs as well if the secondary sales are enabled */}
+              {((isCreditsEnabled && !isNFT(asset) && BigInt(asset.price) > 0) ||
+                (isCreditsEnabled && isCreditsSecondarySalesEnabled && isNFT(asset))) && (
                 <UseCreditsToggle
                   asset={asset}
                   assetPrice={!isNFT(asset) ? asset.price : order ? order.price : undefined}
