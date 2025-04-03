@@ -1,5 +1,6 @@
 import { ChainId } from '@dcl/schemas'
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -8,7 +9,7 @@ import type { CrossChainProvider, Route, Token } from 'decentraland-transactions
 import { Asset } from '../../../modules/asset/types'
 import { CrossChainRoute, GasCost } from './hooks'
 
-export type MapStateProps = Pick<Props, 'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork'>
+export type MapStateProps = Pick<Props, 'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork' | 'credits'>
 export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork'>
 export type OnGetGasCost = (selectedToken: Token, nativeChainToken: Token | undefined, wallet: Wallet | null) => GasCost
 export type OnGetCrossChainRoute = (
@@ -22,6 +23,8 @@ export type OnGetCrossChainRoute = (
 export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | 'isMagicAutoSignEnabled' | 'isUsingMagic'> &
   Omit<ModalProps, 'metadata'> & {
     price: string
+    credits: CreditsResponse | null
+    useCredits: boolean
     wallet: Wallet | null
     metadata: { asset: Asset }
     isBuyingAsset: boolean
@@ -40,5 +43,14 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
 
 export type OwnProps = Pick<
   Props,
-  'price' | 'isBuyingAsset' | 'metadata' | 'onBuyNatively' | 'onBuyWithCard' | 'onBuyCrossChain' | 'onClose' | 'onGetGasCost' | 'onGoBack'
+  | 'price'
+  | 'isBuyingAsset'
+  | 'metadata'
+  | 'onBuyNatively'
+  | 'onBuyWithCard'
+  | 'onBuyCrossChain'
+  | 'onClose'
+  | 'onGetGasCost'
+  | 'onGoBack'
+  | 'useCredits'
 >

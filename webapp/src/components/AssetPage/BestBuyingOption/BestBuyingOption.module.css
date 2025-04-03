@@ -5,7 +5,6 @@
   background-color: var(--card);
   width: 100%;
   gap: 16px;
-  overflow: hidden;
 }
 
 .BestBuyingOption .AlignEnd {
@@ -21,6 +20,11 @@
   color: var(--text);
   background-color: #43404a;
   padding: 8px 16px;
+}
+
+.BestBuyingOption .buyDirectly {
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
 }
 
 .BestBuyingOption .buyDirectly img {

@@ -36,7 +36,7 @@ const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps =
         executeOrderRequest(order, nft, fingerprint, silent, useCredits),
       onExecuteOrderCrossChain: (route: Route) =>
         buyItemCrossChainRequest(ownProps.metadata.nft as unknown as Item, route, ownProps.metadata.order),
-      onExecuteOrderWithCard: executeOrderWithCardRequest
+      onExecuteOrderWithCard: (nft: NFT, order?: Order, useCredits = false) => executeOrderWithCardRequest(nft, order, useCredits)
     },
     dispatch
   )

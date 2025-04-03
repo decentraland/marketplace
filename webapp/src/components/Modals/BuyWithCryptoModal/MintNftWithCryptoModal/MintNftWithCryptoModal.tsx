@@ -79,8 +79,8 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
 
   const onBuyWithCard = useCallback(() => {
     getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)
-    onBuyItemWithCard(item)
-  }, [item])
+    onBuyItemWithCard(item, useCredits)
+  }, [item, useCredits, onBuyItemWithCard])
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
     (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
@@ -102,6 +102,7 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
   return (
     <BuyWithCryptoModal
       price={price}
+      useCredits={useCredits}
       isBuyingAsset={isBuyingItemNatively || isBuyingItemCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyWithCard={onBuyWithCard}
