@@ -24,7 +24,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
   Omit<ModalProps, 'metadata'> & {
     price: string
     credits: CreditsResponse | null
-    useCredits: boolean
+    useCredits?: boolean
     wallet: Wallet | null
     metadata: { asset: Asset }
     isBuyingAsset: boolean
