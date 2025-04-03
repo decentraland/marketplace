@@ -83,8 +83,8 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
 
   const onBuyWithCard = useCallback(() => {
     getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)
-    onExecuteOrderWithCard(nft)
-  }, [nft])
+    onExecuteOrderWithCard(nft, order, useCredits)
+  }, [nft, order, useCredits, onExecuteOrderWithCard])
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
     (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
@@ -106,6 +106,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
   return (
     <BuyWithCryptoModal
       price={price}
+      useCredits={useCredits}
       isBuyingAsset={isExecutingOrder || isExecutingOrderCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyWithCard={nft.category === NFTCategory.ESTATE || nft.category === NFTCategory.PARCEL ? undefined : onBuyWithCard}
