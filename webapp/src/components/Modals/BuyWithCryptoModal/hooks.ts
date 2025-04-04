@@ -15,7 +15,7 @@ import * as events from '../../../utils/events'
 import { getOnChainTrade } from '../../../utils/trades'
 import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas, formatPrice, getShouldUseMetaTx } from './utils'
 
-export const NATIVE_TOKEN = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
+export const NATIVE_TOKEN = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
 
 export const useShouldUseCrossChainProvider = (selectedToken: Token, assetNetwork: Network) => {
@@ -57,7 +57,7 @@ export const useTokenBalance = (selectedToken: Token, selectedChain: ChainId, ad
           const provider = new ethers.providers.Web3Provider(networkProvider)
 
           // if native token
-          if (selectedToken.address.toLowerCase() === NATIVE_TOKEN.toLowerCase()) {
+          if (selectedToken.address.toLowerCase() === NATIVE_TOKEN) {
             const balanceWei = (await provider.send('eth_getBalance', [address, 'latest'])) as BigNumber
 
             if (!cancel) {
