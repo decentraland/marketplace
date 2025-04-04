@@ -12,7 +12,8 @@ export let ORDER_SALE_TYPE = 'order'
 export function isThirdPartySale(buyer: string): boolean {
   if (
     buyer == '0xed038688ecf1193f8d9717eb3930f0bf0d745cb4' || // Transak Polygon
-    buyer == '0xea749fd6ba492dbc14c24fe8a3d08769229b896c' // Axelar Polygon & Ethereum
+    buyer == '0xea749fd6ba492dbc14c24fe8a3d08769229b896c' || // Axelar Polygon & Ethereum Old contract
+    buyer == '0xad6cea45f98444a922a2b4fe96b8c90f0862d2f4' // Axelar Polygon & Ethereum New contract
   ) {
     return true
   }
