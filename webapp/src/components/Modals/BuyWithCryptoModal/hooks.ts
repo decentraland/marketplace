@@ -57,7 +57,7 @@ export const useTokenBalance = (selectedToken: Token, selectedChain: ChainId, ad
           const provider = new ethers.providers.Web3Provider(networkProvider)
 
           // if native token
-          if (selectedToken.address === NATIVE_TOKEN) {
+          if (selectedToken.address.toLowerCase() === NATIVE_TOKEN.toLowerCase()) {
             const balanceWei = (await provider.send('eth_getBalance', [address, 'latest'])) as BigNumber
 
             if (!cancel) {
