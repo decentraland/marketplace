@@ -13,7 +13,7 @@ import { NFT } from '../../../modules/nft/types'
 import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland'
 import * as events from '../../../utils/events'
 import { getOnChainTrade } from '../../../utils/trades'
-import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas, formatPrice, getShouldUseMetaTx } from './utils'
+import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas, formatPrice, getShouldUseMetaTx, getTokenBalance } from './utils'
 
 export const NATIVE_TOKEN = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
@@ -53,28 +53,9 @@ export const useTokenBalance = (selectedToken: Token, selectedChain: ChainId, ad
           selectedToken.symbol !== 'MANA' && // mana balance is already available in the wallet
           address
         ) {
-          const networkProvider = await getNetworkProvider(selectedChain)
-          const provider = new ethers.providers.Web3Provider(networkProvider)
-
-          // if native token
-          if (selectedToken.address.toLowerCase() === NATIVE_TOKEN) {
-            const balanceWei = (await provider.send('eth_getBalance', [address, 'latest'])) as BigNumber
-
-            if (!cancel) {
-              setSelectedTokenBalance(balanceWei)
-            }
-          } else {
-            // else ERC20
-            const tokenContract = new ethers.Contract(
-              selectedToken.address,
-              ['function balanceOf(address owner) view returns (uint256)'],
-              provider
-            )
-            const balance = (await tokenContract.balanceOf(address)) as BigNumber
-
-            if (!cancel) {
-              setSelectedTokenBalance(balance)
-            }
+          const balance = await getTokenBalance(selectedToken, selectedChain, address)
+          if (!cancel) {
+            setSelectedTokenBalance(balance)
           }
         }
       } catch (error) {
