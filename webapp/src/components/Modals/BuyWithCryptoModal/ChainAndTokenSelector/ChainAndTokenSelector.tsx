@@ -1,13 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
-import { ethers } from 'ethers'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { InView } from 'react-intersection-observer'
+import { BigNumber, ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import type { ChainData, Token } from 'decentraland-transactions/crossChain'
 import { Close, Icon, Loader } from 'decentraland-ui'
-import { marketplaceAPI } from '../../../../modules/vendor/decentraland/marketplace/api'
-import { Balance } from '../../../../modules/vendor/decentraland/marketplace/types'
+import { getTokenBalance } from '../utils'
 import styles from './ChainAndTokenSelector.module.css'
 
 export const CHAIN_AND_TOKEN_SELECTOR_DATA_TEST_ID = 'chain-and-token-selector'
@@ -21,6 +21,7 @@ type Props = {
 }
 
 const ChainAndTokenSelector = (props: Props) => {
+  const mounted = useRef(false)
   const [search, setSearch] = useState('')
   const { currentChain, chains, tokens, onSelect, wallet } = props
   const title = useMemo(
@@ -40,41 +41,45 @@ const ChainAndTokenSelector = (props: Props) => {
     return chains?.filter(chain => chain.networkName.toLowerCase().includes(search.toLowerCase()))
   }, [chains, search])
 
-  const [balances, setBalances] = useState<Record<string, Balance>>({})
-  const [isFetchingBalances, setIsFetchingBalances] = useState(true)
+  const [balances, setBalances] = useState<Record<string, BigNumber>>({})
+  const [fetchingBalances, setFetchingBalances] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
-    const fetchBalances = async () => {
-      try {
-        const balances = await marketplaceAPI.fetchWalletTokenBalances(currentChain, wallet.address)
-        setIsFetchingBalances(false)
-        setBalances(
-          balances.reduce(
-            (acc, balance) => {
-              acc[balance.contract_ticker_symbol] = balance
-              return acc
-            },
-            {} as Record<string, Balance>
-          )
-        )
-      } catch (error) {
-        setIsFetchingBalances(false)
-      }
+    mounted.current = true
+    return () => {
+      mounted.current = false
     }
-    void fetchBalances()
-  }, [currentChain, wallet.address])
+  }, [])
+
+  const fetchBalance = useCallback(
+    async (token: Token) => {
+      if (balances[token.symbol] !== undefined || fetchingBalances[token.symbol]) {
+        return
+      }
+      setFetchingBalances(prev => ({ ...prev, [token.symbol]: true }))
+
+      try {
+        const balance = await getTokenBalance(token, currentChain, wallet.address)
+        if (mounted.current) {
+          setBalances(prev => ({ ...prev, [token.symbol]: balance }))
+        }
+      } catch (error) {
+        if (mounted.current) {
+          setBalances(prev => ({ ...prev, [token.symbol]: BigNumber.from(0) }))
+        }
+      } finally {
+        if (mounted.current) {
+          setFetchingBalances(prev => ({ ...prev, [token.symbol]: false }))
+        }
+      }
+    },
+    [balances, setBalances, currentChain, wallet.address]
+  )
 
   const filteredTokens = useMemo(() => {
     const filtered = tokens?.filter(
       token => token.symbol.toLowerCase().includes(search.toLowerCase()) && token.chainId === currentChain.toString()
     )
-    // this sortes the tokens by USD balance
-    filtered?.sort((a, b) => {
-      const aQuote = balances[a.symbol]?.quote ?? '0'
-      const bQuote = balances[b.symbol]?.quote ?? '0'
-      if (aQuote === bQuote) return 0
-      return aQuote < bQuote ? 1 : -1
-    })
     return filtered
   }, [tokens, search, currentChain, balances])
 
@@ -86,18 +91,16 @@ const ChainAndTokenSelector = (props: Props) => {
         {search ? <Close onClick={() => setSearch('')} /> : null}
       </div>
       <span className={styles.title}>{title}</span>
-      {isFetchingBalances ? (
-        <Loader active size="medium" />
-      ) : (
-        <div className={styles.listContainer}>
-          {filteredChains?.map(chain => (
-            <div key={chain.chainId} className={styles.rowItem} onClick={() => onSelect(chain)}>
-              <img src={chain.nativeCurrency.icon} alt={chain.networkName} />
-              <span>{chain.networkName}</span>
-            </div>
-          ))}
-          {filteredTokens?.map(token => {
-            return (
+      <div className={styles.listContainer}>
+        {filteredChains?.map(chain => (
+          <div key={chain.chainId} className={styles.rowItem} onClick={() => onSelect(chain)}>
+            <img src={chain.nativeCurrency.icon} alt={chain.networkName} />
+            <span>{chain.networkName}</span>
+          </div>
+        ))}
+        {filteredTokens?.map(token => {
+          return (
+            <InView onChange={inView => inView && fetchBalance(token)}>
               <div key={`${token.symbol}-${token.address}`} className={styles.rowItem} onClick={() => onSelect(token)}>
                 <div className={styles.tokenDataContainer}>
                   <img src={token.logoURI} alt={token.symbol} />
@@ -107,24 +110,22 @@ const ChainAndTokenSelector = (props: Props) => {
                   </div>
                 </div>
                 <span className={styles.balance}>
-                  {balances[token.symbol] ? (
+                  {fetchingBalances[token.symbol] !== false ? (
+                    <Loader active inline size="small" />
+                  ) : balances[token.symbol] !== undefined ? (
                     <>
-                      {Number(
-                        ethers.utils.formatUnits(balances[token.symbol].balance as string, balances[token.symbol].contract_decimals)
-                      ).toFixed(5)}{' '}
-                      {balances[token.symbol].quote ? (
-                        <span className={styles.tokenName}>${balances[token.symbol].quote.toLocaleString()}</span>
-                      ) : null}
+                      {Number(ethers.utils.formatUnits(balances[token.symbol], token.decimals)).toFixed(5)}
+                      <span>&#8202;</span>
                     </>
                   ) : (
                     0
                   )}
                 </span>
               </div>
-            )
-          })}
-        </div>
-      )}
+            </InView>
+          )
+        })}
+      </div>
 
       {!!search && !filteredChains?.length && !filteredTokens?.length ? (
         <span className={styles.noResults}>

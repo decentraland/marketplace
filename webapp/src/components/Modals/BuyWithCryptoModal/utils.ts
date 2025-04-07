@@ -9,6 +9,7 @@ import { ContractName, getContract, getContractName } from 'decentraland-transac
 import { config } from '../../../config'
 import { NFT } from '../../../modules/nft/types'
 import { estimateTradeGas } from '../../../utils/trades'
+import { NATIVE_TOKEN } from './hooks'
 
 export const getShouldUseMetaTx = (
   assetChainId: ChainId,
@@ -228,4 +229,18 @@ export const estimateNameMintingGas = async (name: string, selectedChain: ChainI
   const contract = getContract(ContractName.DCLControllerV2, selectedChain)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
   return c.estimateGas.register(name, ownerAddress, { from: ownerAddress })
+}
+
+export const getTokenBalance = async (token: Token, chainId: ChainId, address: string): Promise<BigNumber> => {
+  const networkProvider = await getNetworkProvider(chainId)
+  const provider = new ethers.providers.Web3Provider(networkProvider)
+
+  // if native token
+  if (token.address.toLowerCase() === NATIVE_TOKEN) {
+    return (await provider.send('eth_getBalance', [address, 'latest'])) as BigNumber
+  } else {
+    // else ERC20
+    const tokenContract = new ethers.Contract(token.address, ['function balanceOf(address owner) view returns (uint256)'], provider)
+    return tokenContract.balanceOf(address) as BigNumber
+  }
 }
