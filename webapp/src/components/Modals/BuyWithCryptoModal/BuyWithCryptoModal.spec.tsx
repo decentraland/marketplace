@@ -25,6 +25,12 @@ import { OnGetCrossChainRoute, OnGetGasCost, Props } from './BuyWithCryptoModal.
 
 const mockConfigIs = jest.fn()
 
+jest.mock('react-intersection-observer', () => {
+  return {
+    InView: ({ children }: { children: React.ReactNode }) => children
+  }
+})
+
 const mockUseTokenBalance = (isFetchingBalance: boolean, tokenBalance: BigNumber) => {
   const useTokenBalanceMock = useTokenBalance as jest.Mock<ReturnType<typeof useTokenBalance>, Parameters<typeof useTokenBalance>>
   useTokenBalanceMock.mockReset()
