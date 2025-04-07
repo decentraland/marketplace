@@ -115,7 +115,7 @@ const ChainAndTokenSelector = (props: Props) => {
                   ) : balances[token.symbol] !== undefined ? (
                     <>
                       {Number(ethers.utils.formatUnits(balances[token.symbol], token.decimals)).toFixed(5)}
-                      <span className={styles.tokenName}>&#8202;</span>
+                      <span>&#8202;</span>
                     </>
                   ) : (
                     0
