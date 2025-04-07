@@ -9,7 +9,6 @@ import { getError, getLoading as getAuthorizationLoading } from 'decentraland-da
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { isWeb2Wallet } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { ContractName, getContract } from 'decentraland-transactions'
-import { getIsMagicAutoSignEnabled } from '../../../../modules/features/selectors'
 import { RootState } from '../../../../modules/reducer'
 import { getPendingAuthorizationTransactions } from '../../../../modules/transaction/selectors'
 import { hasTransactionPending } from '../../../../modules/transaction/utils'
@@ -21,7 +20,7 @@ const mapState = (state: RootState, { nft }: OwnProps): MapStateProps => {
   const wallet = getWallet(state)
   return {
     address: getAddress(state)!,
-    isWeb2AutoSigning: getIsMagicAutoSignEnabled(state) && wallet !== null && isWeb2Wallet(wallet),
+    isWeb2AutoSigning: wallet !== null && isWeb2Wallet(wallet),
     isAuthorizing: hasTransactionPending(
       getPendingAuthorizationTransactions(state),
       getContract(ContractName.Rentals, nft.chainId).address,

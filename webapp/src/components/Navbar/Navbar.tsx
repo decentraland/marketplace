@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
 import { Navbar2 as BaseNavbar2 } from 'decentraland-dapps/dist/containers/Navbar'
 import { NavbarPages } from 'decentraland-ui/dist/components/Navbar/Navbar.types'
 import { config } from '../../config'
@@ -9,7 +8,6 @@ import { Props } from './Navbar.types'
 import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const { isChainSelectorEnabled, isNavbar2Enabled } = props
   const { pathname, search } = useLocation()
   const history = useHistory()
 
@@ -26,25 +24,10 @@ const Navbar = (props: Props) => {
     history.push(locations.settings())
   }, [history])
 
-  if (isNavbar2Enabled) {
-    return (
-      <BaseNavbar2
-        {...props}
-        withChainSelector={isChainSelectorEnabled}
-        withNotifications
-        activePage={NavbarPages.MARKETPLACE}
-        hasActivity={props.hasPendingTransactions}
-        identity={props.identity}
-        onSignIn={handleOnSignIn}
-        onClickMarketplaceAuthorization={handleOnClickAccount}
-      />
-    )
-  }
-
   return (
-    <BaseNavbar
+    <BaseNavbar2
       {...props}
-      withChainSelector={isChainSelectorEnabled}
+      withChainSelector
       withNotifications
       activePage={NavbarPages.MARKETPLACE}
       hasActivity={props.hasPendingTransactions}

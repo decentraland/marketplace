@@ -406,7 +406,6 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
     isLoadingAuthorization: false,
     isSwitchingNetwork: false,
     isBuyWithCardPage: false,
-    isMagicAutoSignEnabled: false,
     isUsingMagic: false,
     useCredits: false,
     credits: null,
