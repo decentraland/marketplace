@@ -49,8 +49,8 @@ export const EXECUTE_ORDER_SUCCESS = '[Success] Execute Order'
 export const EXECUTE_ORDER_FAILURE = '[Failure] Execute Order'
 export const EXECUTE_ORDER_TRANSACTION_SUBMITTED = '[Submitted transaction] Execute Order'
 
-export const executeOrderRequest = (order: Order, nft: NFT, fingerprint?: string, silent?: boolean) =>
-  action(EXECUTE_ORDER_REQUEST, { order, nft, fingerprint, silent })
+export const executeOrderRequest = (order: Order, nft: NFT, fingerprint?: string, silent?: boolean, useCredits?: boolean) =>
+  action(EXECUTE_ORDER_REQUEST, { order, nft, fingerprint, silent, useCredits })
 export const executeOrderTransactionSubmitted = (order: Order, nft: NFT, txHash: string) =>
   action(EXECUTE_ORDER_TRANSACTION_SUBMITTED, {
     order,
@@ -77,7 +77,8 @@ export const EXECUTE_ORDER_WITH_CARD_REQUEST = '[Request] Execute Order With Car
 export const EXECUTE_ORDER_WITH_CARD_SUCCESS = '[Success] Execute Order With Card'
 export const EXECUTE_ORDER_WITH_CARD_FAILURE = '[Failure] Execute Order With Card'
 
-export const executeOrderWithCardRequest = (nft: NFT, order?: Order) => action(EXECUTE_ORDER_WITH_CARD_REQUEST, { nft, order })
+export const executeOrderWithCardRequest = (nft: NFT, order?: Order, useCredits: boolean = false) =>
+  action(EXECUTE_ORDER_WITH_CARD_REQUEST, { nft, order, useCredits })
 
 export const executeOrderWithCardSuccess = (purchase: NFTPurchase, nft: NFT, txHash: string) =>
   action(EXECUTE_ORDER_WITH_CARD_SUCCESS, {

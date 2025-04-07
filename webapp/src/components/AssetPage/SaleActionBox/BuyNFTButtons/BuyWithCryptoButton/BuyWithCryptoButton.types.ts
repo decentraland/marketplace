@@ -3,4 +3,5 @@ import { Asset } from '../../../../../modules/asset/types'
 
 export type Props = ButtonProps & {
   asset: Asset
+  isFree?: boolean
 }

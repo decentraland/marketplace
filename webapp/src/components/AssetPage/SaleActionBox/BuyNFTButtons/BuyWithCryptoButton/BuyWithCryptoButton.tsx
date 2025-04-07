@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import classNames from 'classnames'
 import { NFTCategory, Network } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { t } from 'decentraland-dapps/dist/modules/translation'
@@ -6,9 +7,10 @@ import { Button, ButtonProps, Mana } from 'decentraland-ui'
 import { isNFT } from '../../../../../modules/asset/utils'
 import * as events from '../../../../../utils/events'
 import { Props } from './BuyWithCryptoButton.types'
+import styles from './BuyWithCryptoButton.module.css'
 
 export const BuyWithCryptoButton = (props: Props) => {
-  const { asset, onClick, ...rest } = props
+  const { asset, isFree, onClick, ...rest } = props
 
   const handleOnClick = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
@@ -26,9 +28,9 @@ export const BuyWithCryptoButton = (props: Props) => {
   )
 
   return (
-    <Button primary fluid {...rest} onClick={handleOnClick}>
-      <Mana inline size="small" network={Network.MATIC} />
-      {t('asset_page.actions.buy_with_mana')}
+    <Button primary fluid {...rest} onClick={handleOnClick} className={classNames(styles.BuyWithCryptoButton, rest.className)}>
+      {!isFree && <Mana inline size="small" network={Network.MATIC} />}
+      <span>{isFree ? t('asset_page.actions.checkout') : t('asset_page.actions.buy_with_mana')}</span>
     </Button>
   )
 }

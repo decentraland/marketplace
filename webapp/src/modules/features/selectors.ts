@@ -83,3 +83,17 @@ export const getIsOffchainPublicItemOrdersEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsCreditsEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CREDITS)
+  }
+  return false
+}
+
+export const getIsCreditsSecondarySalesEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CREDITS_SECONDARY_SALES)
+  }
+  return false
+}

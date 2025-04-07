@@ -67,7 +67,7 @@ export const BUY_ITEM_REQUEST = '[Request] Buy item'
 export const BUY_ITEM_SUCCESS = '[Success] Buy item'
 export const BUY_ITEM_FAILURE = '[Failure] Buy item'
 
-export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
+export const buyItemRequest = (item: Item, useCredits: boolean = false) => action(BUY_ITEM_REQUEST, { item, useCredits })
 
 export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
   action(BUY_ITEM_SUCCESS, {
@@ -124,7 +124,7 @@ export const BUY_ITEM_WITH_CARD_REQUEST = '[Request] Buy Item with Card'
 export const BUY_ITEM_WITH_CARD_SUCCESS = '[Success] Buy Item with Card'
 export const BUY_ITEM_WITH_CARD_FAILURE = '[Failure] Buy Item with Card'
 
-export const buyItemWithCardRequest = (item: Item) => action(BUY_ITEM_WITH_CARD_REQUEST, { item })
+export const buyItemWithCardRequest = (item: Item, useCredits: boolean = false) => action(BUY_ITEM_WITH_CARD_REQUEST, { item, useCredits })
 export const buyItemWithCardSuccess = (chainId: ChainId, txHash: string, item: Item, purchase: NFTPurchase) =>
   action(BUY_ITEM_WITH_CARD_SUCCESS, {
     item,

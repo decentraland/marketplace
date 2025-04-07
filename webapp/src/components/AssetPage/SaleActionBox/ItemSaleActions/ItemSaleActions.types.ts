@@ -10,7 +10,7 @@ export type Props = {
   wallet?: Wallet | null
   isBidsOffchainEnabled: boolean
   bids: Bid[]
-  onBuyWithCrypto: () => void
+  onUseCredits: (value: boolean) => void
   onFetchBids: (asset: Asset) => void
   customClassnames?: { [key: string]: string } | undefined
 }
@@ -18,5 +18,5 @@ export type Props = {
 export type OwnProps = Pick<Props, 'item' | 'customClassnames'>
 export type MapStateProps = Pick<Props, 'wallet' | 'isBidsOffchainEnabled' | 'bids'>
 
-export type MapDispatchProps = Pick<Props, 'onBuyWithCrypto' | 'onFetchBids'>
+export type MapDispatchProps = Pick<Props, 'onFetchBids'>
 export type MapDispatch = Dispatch<OpenModalAction | FetchBidsByAssetRequestAction>

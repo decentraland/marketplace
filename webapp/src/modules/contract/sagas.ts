@@ -6,11 +6,12 @@ import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/module
 import { FetchTransactionSuccessAction, FETCH_TRANSACTION_SUCCESS } from 'decentraland-dapps/dist/modules/transaction/actions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CHANGE_ACCOUNT, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { ContractName } from 'decentraland-transactions'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { getContract as getContractFromDecentralandTransactions, ContractName } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
 import { getContractNames, VendorFactory, VendorName } from '../vendor'
 import { Contract } from '../vendor/services'
-import { getAddress } from '../wallet/selectors'
+import { getWallet } from '../wallet/selectors'
 import { fetchContractsFailure, fetchContractsSuccess, FETCH_CONTRACTS_REQUEST, FETCH_CONTRACTS_SUCCESS, resetHasFetched } from './actions'
 import { getContract, getContracts, getHasFetched } from './selectors'
 import { getAuthorizationKey } from './utils'
@@ -48,12 +49,14 @@ export function* handleFetchContractsRequest() {
 
 export function* handleFetchContractsSuccess() {
   const contracts: Contract[] = (yield select(getContracts)) as Awaited<ReturnType<typeof getContracts>>
-  const address: string | undefined = (yield select(getAddress)) as Awaited<ReturnType<typeof getAddress>>
+  const wallet: Wallet | null = (yield select(getWallet)) as Awaited<ReturnType<typeof getWallet>>
 
-  if (!address) {
+  if (!wallet?.address) {
     console.warn('Not fetching authorizations because the user is not connected')
     return
   }
+
+  const address: string = wallet.address
 
   const contractNames = getContractNames()
 
@@ -112,6 +115,17 @@ export function* handleFetchContractsSuccess() {
     network: Network.ETHEREUM
   })) as ReturnType<typeof getContract>
 
+  const creditsManagerContract = getContractFromDecentralandTransactions(ContractName.CreditsManager, wallet.chainId)
+
+  const creditsManager: Contract | null = {
+    address: creditsManagerContract.address,
+    chainId: creditsManagerContract.chainId,
+    name: contractNames.CREDITS_MANAGER,
+    network: Network.MATIC,
+    vendor: VendorName.DECENTRALAND,
+    category: null
+  }
+
   let authorizations: Authorization[] = []
 
   if (offChainMarketplaceEthereum && manaEthereum) {
@@ -121,6 +135,17 @@ export function* handleFetchContractsSuccess() {
       contractAddress: manaEthereum.address,
       contractName: ContractName.MANAToken,
       chainId: manaEthereum.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
+
+  if (creditsManager && manaMatic) {
+    authorizations.push({
+      address,
+      authorizedAddress: creditsManager.address,
+      contractAddress: manaMatic.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaMatic.chainId,
       type: AuthorizationType.ALLOWANCE
     })
   }

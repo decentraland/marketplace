@@ -1,0 +1,50 @@
+.PriceContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.PriceContainer .manaContainer {
+  display: flex;
+  align-items: center;
+}
+
+.PriceContainer .prices {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.PriceContainer .originalPrice {
+  text-decoration: line-through;
+  opacity: 0.5;
+  color: var(--text);
+}
+
+.PriceContainer .adjustedPrice {
+  color: #A0ABFF;
+
+}
+
+.PriceContainer .informationText {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--bluish-steel);
+}
+
+.PriceContainer .manaContainer :global(.ui.large.header.dcl.mana) {
+  margin: unset;
+}
+
+.PriceContainer .manaContainer :global(.ui.header.large) {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.PriceContainer .manaContainer :global(.dcl.mana .matic) {
+  margin-bottom: 5px;
+  width: 24px;
+  height: 24px;
+}

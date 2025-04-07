@@ -6,11 +6,11 @@ import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/au
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { changeAccount, connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { ContractName } from 'decentraland-transactions'
+import { getContract as getContractFromDecentralandTransactions, ContractName } from 'decentraland-transactions'
 import { getContractNames, VendorName } from '../vendor'
 import { ContractService } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
-import { getAddress } from '../wallet/selectors'
+import { getWallet } from '../wallet/selectors'
 import { fetchContractsFailure, fetchContractsRequest, fetchContractsSuccess, resetHasFetched } from './actions'
 import { contractSaga } from './sagas'
 import { getContract, getContracts, getHasFetched } from './selectors'
@@ -36,7 +36,10 @@ describe('when handling the fetch contracts request', () => {
 
   describe('when the api call is successful', () => {
     it('should put a success action with contracts and put a request for authorizations without the one that is already stored', () => {
-      const address = '0x123'
+      const wallet = {
+        address: '0x123',
+        chainId: ChainId.MATIC_AMOY
+      } as Wallet
 
       mockGetContracts = jest.spyOn(ContractService.prototype, 'getContracts').mockResolvedValueOnce([])
 
@@ -141,11 +144,13 @@ describe('when handling the fetch contracts request', () => {
         vendor: VendorName.DECENTRALAND
       }
 
+      const creditsManager = getContractFromDecentralandTransactions(ContractName.CreditsManager, wallet.chainId)
+
       return expectSaga(contractSaga)
         .provide([
           [select(getHasFetched), false],
           [select(getContracts), []],
-          [select(getAddress), address],
+          [select(getWallet), wallet],
           [
             select(getContract, {
               name: contractNames.MARKETPLACE,
@@ -224,10 +229,17 @@ describe('when handling the fetch contracts request', () => {
             rentals
           ],
           [
+            select(getContract, {
+              name: contractNames.CREDITS_MANAGER,
+              network: Network.MATIC
+            }),
+            creditsManager
+          ],
+          [
             select(getAuthorizations),
             [
               {
-                address,
+                address: wallet.address,
                 authorizedAddress: rentals.address,
                 contractAddress: manaEthereum.address,
                 contractName: ContractName.MANAToken,
@@ -241,7 +253,7 @@ describe('when handling the fetch contracts request', () => {
         .put(
           fetchAuthorizationsRequest([
             {
-              address,
+              address: wallet.address,
               authorizedAddress: offChainMarketplaceEthereum.address,
               contractAddress: manaEthereum.address,
               contractName: ContractName.MANAToken,
@@ -249,7 +261,15 @@ describe('when handling the fetch contracts request', () => {
               type: AuthorizationType.ALLOWANCE
             },
             {
-              address,
+              address: wallet.address,
+              authorizedAddress: creditsManager.address,
+              contractAddress: manaMatic.address,
+              contractName: ContractName.MANAToken,
+              chainId: ChainId.MATIC_AMOY,
+              type: AuthorizationType.ALLOWANCE
+            },
+            {
+              address: wallet.address,
               authorizedAddress: offChainMarketplaceMatic.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
@@ -257,7 +277,7 @@ describe('when handling the fetch contracts request', () => {
               type: AuthorizationType.ALLOWANCE
             },
             {
-              address,
+              address: wallet.address,
               authorizedAddress: marketplaceEthereum.address,
               contractAddress: manaEthereum.address,
               contractName: ContractName.MANAToken,
@@ -265,7 +285,7 @@ describe('when handling the fetch contracts request', () => {
               type: AuthorizationType.ALLOWANCE
             },
             {
-              address,
+              address: wallet.address,
               authorizedAddress: marketplaceMatic.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
@@ -273,7 +293,7 @@ describe('when handling the fetch contracts request', () => {
               type: AuthorizationType.ALLOWANCE
             },
             {
-              address,
+              address: wallet.address,
               authorizedAddress: legacyMarketplace.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
@@ -281,7 +301,7 @@ describe('when handling the fetch contracts request', () => {
               type: AuthorizationType.ALLOWANCE
             },
             {
-              address,
+              address: wallet.address,
               authorizedAddress: bidsEthereum.address,
               contractAddress: manaEthereum.address,
               contractName: ContractName.MANAToken,
@@ -289,7 +309,7 @@ describe('when handling the fetch contracts request', () => {
               type: AuthorizationType.ALLOWANCE
             },
             {
-              address,
+              address: wallet.address,
               authorizedAddress: bidsEthereum.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
@@ -297,7 +317,7 @@ describe('when handling the fetch contracts request', () => {
               type: AuthorizationType.ALLOWANCE
             },
             {
-              address,
+              address: wallet.address,
               authorizedAddress: collectionStore.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,

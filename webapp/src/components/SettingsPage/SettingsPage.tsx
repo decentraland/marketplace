@@ -34,6 +34,11 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
+  const creditsManager = getContract({
+    name: contractNames.CREDITS_MANAGER,
+    network: Network.MATIC
+  })
+
   const marketplaceEthereum = getContract({
     name: contractNames.MARKETPLACE,
     network: Network.ETHEREUM
@@ -91,7 +96,8 @@ const SettingsPage = (props: Props) => {
     !bidsMatic ||
     !manaEthereum ||
     !manaMatic ||
-    !rentals
+    !rentals ||
+    !creditsManager
   ) {
     return null
   }
@@ -216,6 +222,16 @@ const SettingsPage = (props: Props) => {
                             authorization={{
                               address: wallet.address,
                               authorizedAddress: collectionStore.address,
+                              contractAddress: manaMatic.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaMatic.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                          />
+                          <Authorization
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: creditsManager.address,
                               contractAddress: manaMatic.address,
                               contractName: ContractName.MANAToken,
                               chainId: manaMatic.chainId,

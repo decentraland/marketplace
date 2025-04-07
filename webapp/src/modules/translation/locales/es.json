@@ -525,6 +525,10 @@
       "update_listing": "Actualizar publicación",
       "buy": "Comprar",
       "buy_with_mana": "Comprar con MANA",
+      "checkout": "Checkout",
+      "use_credits": "Usar créditos",
+      "get_with_credits": "Obtener con créditos",
+      "buy_with_another_token": "Usar otro token",
       "buy_with_card": "Comprar con tarjeta",
       "get_mana": "Obtener MANA",
       "mint": "Comprar",
@@ -1651,5 +1655,8 @@
   "bid_button": {
     "bid": "Ofertar",
     "blocked": "Tu oferta ya ha sido creada"
+  },
+  "credits": {
+    "value": "1 Crédito = 1 MANA en valor"
   }
 }

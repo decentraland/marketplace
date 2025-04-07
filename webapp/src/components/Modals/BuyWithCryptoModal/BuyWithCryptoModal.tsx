@@ -45,6 +45,8 @@ export const BuyWithCryptoModal = (props: Props) => {
   const {
     price,
     wallet,
+    credits,
+    useCredits,
     metadata: { asset },
     isBuyingAsset,
     isLoadingAuthorization,
@@ -132,8 +134,13 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   // Compute if the price is too low for meta tx
   const hasLowPriceForMetaTx = useMemo(
-    () => (wallet?.chainId as ChainId) !== ChainId.MATIC_MAINNET && isPriceTooLow(price), // not connected to polygon AND has price < minimum for meta tx
-    [price, wallet?.chainId]
+    () => {
+      if (useCredits && credits) {
+        return false
+      }
+      return (wallet?.chainId as ChainId) !== ChainId.MATIC_MAINNET && isPriceTooLow(price)
+    }, // not connected to polygon AND has price < minimum for meta tx
+    [price, wallet?.chainId, useCredits, credits]
   )
 
   // init lib if necessary and fetch chains & supported tokens
@@ -380,7 +387,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       if (getNetwork(selectedChain) === Network.MATIC) {
         return (wallet.network as Network) === Network.MATIC
           ? renderBuyNowButton()
-          : isPriceTooLow(price)
+          : hasLowPriceForMetaTx
             ? renderSwitchNetworkButton() // switch to MATIC to pay for the gas
             : renderBuyNowButton()
       }
@@ -400,6 +407,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     price,
     routeFailed,
     selectedChain,
+    hasLowPriceForMetaTx,
     renderBuyNowButton,
     renderSwitchNetworkButton,
     renderGetMANAButton

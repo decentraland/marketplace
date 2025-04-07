@@ -14,16 +14,7 @@ import { Props } from './Authorization.types'
 import './Authorization.css'
 
 const Authorization = (props: Props) => {
-  const {
-    authorization,
-    authorizations,
-    shouldUpdateSpendingCap,
-    isLoading,
-    isOffchainPublicNFTOrdersEnabled,
-    onGrant,
-    onRevoke,
-    getContract
-  } = props
+  const { authorization, authorizations, shouldUpdateSpendingCap, isLoading, onGrant, onRevoke, getContract } = props
 
   const handleOnChange = useCallback(
     (isChecked: boolean) => {
@@ -51,8 +42,10 @@ const Authorization = (props: Props) => {
 
   let contract
   let name: string = ''
-  if (isOffchainPublicNFTOrdersEnabled) {
-    contract = getDecentralandContract(ContractName.OffChainMarketplace, authorization.chainId)
+  const offchainContract = getDecentralandContract(ContractName.OffChainMarketplace, authorization.chainId)
+  // This is fix to get the correct contract name for the offchain marketplace
+  if (authorizedAddress === offchainContract.address) {
+    contract = offchainContract
     name = contract.name
   } else {
     contract = getContract({ address: authorizedAddress })

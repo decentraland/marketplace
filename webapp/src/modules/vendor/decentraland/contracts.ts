@@ -9,6 +9,7 @@ export enum ContractName {
   MARKETPLACE = 'Marketplace',
   OFF_CHAIN_MARKETPLACE = 'OffChainMarketplace',
   LEGACY_MARKETPLACE = 'LegacyMarketplace',
+  CREDITS_MANAGER = 'CreditsManager',
   BIDS = 'Bids',
   COLLECTION_STORE = 'CollectionStore',
   RENTALS = 'Rentals',
@@ -476,6 +477,14 @@ const localContracts = {
       chainId: ChainId.ETHEREUM_SEPOLIA
     },
     {
+      name: ContractName.CREDITS_MANAGER,
+      address: getContract(CN.CreditsManager, ChainId.MATIC_AMOY).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_AMOY
+    },
+    {
       name: ContractName.BIDS,
       address: getContract(CN.Bid, ChainId.ETHEREUM_SEPOLIA).address,
       vendor: 'decentraland',
@@ -642,6 +651,14 @@ const localContracts = {
       category: null,
       network: Network.ETHEREUM,
       chainId: ChainId.ETHEREUM_MAINNET
+    },
+    {
+      name: ContractName.CREDITS_MANAGER,
+      address: getContract(CN.CreditsManager, ChainId.MATIC_MAINNET).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MAINNET
     },
     {
       name: ContractName.BIDS,

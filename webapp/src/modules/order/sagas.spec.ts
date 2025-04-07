@@ -2,7 +2,12 @@ import { call, select, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
-import { ChainId, Network, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import { v4 as uuidv4 } from 'uuid'
+import { ChainId, Network, Order, RentalListing, RentalStatus, Trade } from '@dcl/schemas'
+import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
+import { pollCreditsBalanceRequest } from 'decentraland-dapps/dist/modules/credits/actions'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
@@ -14,7 +19,7 @@ import { ErrorCode } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { API_SIGNER } from '../../lib/api'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
-import { getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
+import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { fetchNFTRequest, FETCH_NFT_FAILURE } from '../nft/actions'
 import { getData as getNFTs } from '../nft/selectors'
@@ -134,6 +139,206 @@ describe('when handling the execute order request action', () => {
     })
   })
 
+  describe('when executing an order with a trade using credits', () => {
+    let trade: Trade
+    let mockCredits: CreditsResponse
+
+    beforeEach(() => {
+      order = {
+        ...order,
+        tradeId: uuidv4()
+      }
+
+      mockCredits = {
+        totalCredits: 200000000000,
+        credits: [
+          {
+            id: '1',
+            amount: '200000000000',
+            availableAmount: '200000000000',
+            contract: '0x123',
+            expiresAt: '1000',
+            season: 1,
+            signature: '123',
+            timestamp: '1000',
+            userAddress: wallet.address
+          }
+        ]
+      }
+
+      trade = {
+        id: order.tradeId!,
+        createdAt: Date.now(),
+        signer: wallet.address,
+        signature: '0x324234',
+        type: 'public_nft_order',
+        network: Network.ETHEREUM,
+        chainId: ChainId.ETHEREUM_SEPOLIA,
+        checks: {
+          expiration: Date.now() + 100000000000,
+          effective: Date.now(),
+          uses: 1,
+          salt: '0x',
+          allowedRoot: '0x',
+          contractSignatureIndex: 0,
+          externalChecks: [],
+          signerSignatureIndex: 0
+        },
+        sent: [],
+        received: []
+      } as Trade
+    })
+
+    describe('and credits are enabled and available', () => {
+      it('should execute the order with credits and poll the credits balance', () => {
+        return expectSaga(orderSaga, tradeService)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), true],
+            [select(getWallet), wallet],
+            [select(getIsCreditsEnabled), true],
+            [select(getCredits, wallet.address), mockCredits],
+            [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+            [matchers.call.fn(CreditsService.prototype.useCreditsMarketplace), Promise.resolve(txHash)]
+          ])
+          .put(executeOrderTransactionSubmitted(order, nft, txHash))
+          .put(executeOrderSuccess(txHash, nft))
+          .put(pollCreditsBalanceRequest(wallet.address, BigInt(mockCredits.totalCredits) - BigInt(order.price)))
+          .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and credits are not enabled', () => {
+      it('should fail with an error message saying that credits are not enabled', () => {
+        return expectSaga(orderSaga, tradeService)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+            [select(getIsOffchainPublicNFTOrdersEnabled), true],
+            [select(getWallet), wallet],
+            [select(getIsCreditsEnabled), false]
+          ])
+          .put(executeOrderFailure(order, nft, 'Credits are not enabled', undefined, false))
+          .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and no credits are available', () => {
+      it('should fail with an error message saying that no credits are available', () => {
+        return expectSaga(orderSaga, tradeService)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [matchers.call.fn(TradeService.prototype.fetchTrade), trade],
+            [select(getIsOffchainPublicNFTOrdersEnabled), true],
+            [select(getWallet), wallet],
+            [select(getIsCreditsEnabled), true],
+            [select(getCredits, wallet.address), undefined]
+          ])
+          .put(executeOrderFailure(order, nft, 'No credits available', undefined, false))
+          .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+          .run({ silenceTimeout: true })
+      })
+    })
+  })
+
+  describe('when executing an order with the legacy marketplace using credits', () => {
+    let vendor: Vendor<VendorName>
+    let mockCredits: CreditsResponse
+
+    beforeEach(() => {
+      vendor = VendorFactory.build(nft.vendor, undefined, false)
+
+      mockCredits = {
+        totalCredits: 200000000000,
+        credits: [
+          {
+            id: '1',
+            amount: '200000000000',
+            availableAmount: '200000000000',
+            contract: '0x123',
+            expiresAt: '1000',
+            season: 1,
+            signature: '123',
+            timestamp: '1000',
+            userAddress: wallet.address
+          }
+        ]
+      }
+    })
+
+    describe('and credits are enabled and available', () => {
+      it('should execute the order with credits and poll the credits balance', () => {
+        return expectSaga(orderSaga, tradeService)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [select(getWallet), wallet],
+            [select(getIsCreditsEnabled), true],
+            [select(getCredits, wallet.address), mockCredits],
+            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
+            [matchers.call.fn(CreditsService.prototype.useCreditsLegacyMarketplace), Promise.resolve(txHash)]
+          ])
+          .put(executeOrderTransactionSubmitted(order, nft, txHash))
+          .put(executeOrderSuccess(txHash, nft))
+          .put(pollCreditsBalanceRequest(wallet.address, BigInt(mockCredits.totalCredits) - BigInt(order.price)))
+          .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and credits are not enabled', () => {
+      it('should fail with an error message saying that credits are not enabled', () => {
+        return expectSaga(orderSaga, tradeService)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [select(getWallet), wallet],
+            [select(getIsCreditsEnabled), false],
+            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor]
+          ])
+          .put(executeOrderFailure(order, nft, 'Credits are not enabled', undefined, false))
+          .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and no credits are available', () => {
+      it('should fail with an error message saying that no credits are available', () => {
+        return expectSaga(orderSaga, tradeService)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [select(getWallet), wallet],
+            [select(getIsCreditsEnabled), true],
+            [select(getCredits, wallet.address), undefined],
+            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor]
+          ])
+          .put(executeOrderFailure(order, nft, 'No credits available', undefined, false))
+          .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and credits amount is zero', () => {
+      it('should fail with an error message saying that no credits are available', () => {
+        return expectSaga(orderSaga, tradeService)
+          .provide([
+            [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
+            [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [select(getWallet), wallet],
+            [select(getIsCreditsEnabled), true],
+            [select(getCredits, wallet.address), { ...mockCredits, totalCredits: 0 }],
+            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor]
+          ])
+          .put(executeOrderFailure(order, nft, 'No credits available', undefined, false))
+          .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
+          .run({ silenceTimeout: true })
+      })
+    })
+  })
+
   describe('and the order execution fails', () => {
     let vendor: Vendor<VendorName>
     let error: Error & { code?: ErrorCode }
@@ -150,6 +355,7 @@ describe('when handling the execute order request action', () => {
       return expectSaga(orderSaga, tradeService)
         .provide([
           [select(getIsOffchainPublicNFTOrdersEnabled), false],
+          [select(getIsCreditsEnabled), false],
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
           [select(getWallet), wallet],
           [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
@@ -186,6 +392,7 @@ describe('when handling the execute order request action', () => {
             [select(getWallet), wallet],
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
             [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [select(getIsCreditsEnabled), false],
             [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
             [select(getRentalById, nft.openRentalId!), rentalListing],
             [call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED), Promise.resolve()],
@@ -209,6 +416,7 @@ describe('when handling the execute order request action', () => {
           .provide([
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
             [select(getIsOffchainPublicNFTOrdersEnabled), false],
+            [select(getIsCreditsEnabled), false],
             [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
             [select(getWallet), wallet],
             [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), Promise.resolve(txHash)]

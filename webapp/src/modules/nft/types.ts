@@ -19,7 +19,7 @@ export enum NFTSortBy {
 export type Data<V extends VendorName> = V extends VendorName.DECENTRALAND ? DecentralandData : V extends void ? DecentralandData : never
 
 export type NFT<V extends VendorName = VendorName.DECENTRALAND> = Omit<BaseNFT, 'category' | 'data'> & {
-  category: NFTCategory | 'art'
+  category: NFTCategory
   vendor: VendorName
   data: Data<V>
   entity?: Entity

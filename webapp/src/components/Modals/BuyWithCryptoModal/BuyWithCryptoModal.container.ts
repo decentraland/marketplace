@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isSwitchingNetwork } from 'decentraland-dapps/dist/modules/wallet/selectors'
@@ -10,10 +11,12 @@ import { BuyWithCryptoModal } from './BuyWithCryptoModal'
 import { MapDispatchProps, MapStateProps, OwnProps } from './BuyWithCryptoModal.types'
 
 const mapState = (state: RootState): MapStateProps => {
+  const wallet = getWallet(state)
   return {
-    wallet: getWallet(state),
+    wallet,
     isSwitchingNetwork: isSwitchingNetwork(state),
-    isBuyWithCardPage: getIsBuyWithCardPage(state)
+    isBuyWithCardPage: getIsBuyWithCardPage(state),
+    credits: getCredits(state, wallet?.address || '')
   }
 }
 

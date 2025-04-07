@@ -1,0 +1,83 @@
+.creditsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 4px 18px;
+  border-radius: 8px;
+  border: 1px solid var(--divider);
+  transition: all 0.2s ease;
+  margin-bottom: 16px;
+  padding-left: 4px;
+}
+
+.creditsContainerActive {
+  border-color: #a0abff;
+}
+
+.creditsContainerActive .creditsText,
+.creditsContainerActive .creditsAmount,
+.creditsContainerActive .creditsNumber {
+  color: #a0abff;
+}
+
+.creditsContainer .learnMore {
+  color: var(--primary);
+  text-transform: uppercase;
+}
+
+.creditsContainerActive :global(.ui.toggle.checkbox input:checked ~ .box:before),
+.creditsContainerActive :global(.ui.toggle.checkbox input:checked ~ label:before) {
+  background-color: #a0abff !important;
+}
+
+.creditsContainerActive :global(.MuiSwitch-thumb),
+.creditsContainerActive :global(.Mui-checked + .MuiSwitch-track) {
+  background-color: #a0abff !important;
+}
+
+.creditsLeft {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.creditsText {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+  transition: color 0.2s ease;
+}
+
+.creditsAmount {
+  font-size: 15px;
+  color: var(--text);
+  transition: color 0.2s ease;
+}
+
+.creditsNumber {
+  font-weight: 600;
+  transition: color 0.2s ease;
+  color: #a0abff;
+  cursor: pointer;
+}
+
+.creditsContainer .creditsPopupContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.creditsContainer .creditsPopupContainer .creditsIcon {
+  width: 18px;
+  height: 18px;
+}
+
+.creditsContainer .animation {
+  position: absolute;
+  left: -175px;
+  bottom: -200px;
+  width: 500px;
+  height: 500px;
+}

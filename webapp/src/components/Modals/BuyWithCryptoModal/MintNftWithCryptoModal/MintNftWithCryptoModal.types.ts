@@ -1,5 +1,6 @@
 import { ChainId, Item } from '@dcl/schemas'
 import { WithAuthorizedActionProps } from 'decentraland-dapps/dist/containers/withAuthorizedAction'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { getContract } from '../../../../modules/contract/selectors'
@@ -8,8 +9,9 @@ import { Contract } from '../../../../modules/vendor/services'
 
 export type Props = WithAuthorizedActionProps &
   Omit<ModalProps, 'metadata'> & {
+    credits: CreditsResponse | null
     connectedChainId: ChainId | undefined
-    metadata: { item: Item }
+    metadata: { item: Item; useCredits: boolean }
     isBuyingItemNatively: boolean
     isBuyingItemCrossChain: boolean
     getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
@@ -18,6 +20,6 @@ export type Props = WithAuthorizedActionProps &
     onBuyWithCard: typeof buyItemWithCardRequest
   }
 
-export type MapStateProps = Pick<Props, 'getContract' | 'isBuyingItemNatively' | 'isBuyingItemCrossChain' | 'connectedChainId'>
+export type MapStateProps = Pick<Props, 'getContract' | 'isBuyingItemNatively' | 'isBuyingItemCrossChain' | 'connectedChainId' | 'credits'>
 export type MapDispatchProps = Pick<Props, 'onBuyItem' | 'onBuyItemCrossChain' | 'onBuyWithCard'>
 export type OwnProps = Pick<Props, 'metadata'>
