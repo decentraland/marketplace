@@ -25,7 +25,8 @@ import {
   getStatus,
   getWearableGenders,
   getEmoteHasSound,
-  getEmoteHasGeometry
+  getEmoteHasGeometry,
+  getWithCredits
 } from '../../modules/routing/selectors'
 import { getView } from '../../modules/ui/browse/selectors'
 import { Section } from '../../modules/vendor/routing/types'
@@ -73,7 +74,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
     adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
     emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : getEmoteHasSound(state),
-    emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : getEmoteHasGeometry(state)
+    emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : getEmoteHasGeometry(state),
+    withCredits: 'withCredits' in values ? values.withCredits : getWithCredits(state)
   }
 }
 

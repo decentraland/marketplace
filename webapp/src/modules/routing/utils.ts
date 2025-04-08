@@ -101,7 +101,8 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
     'rentalDays',
     'status',
     'emoteHasSound',
-    'emoteHasGeometry'
+    'emoteHasGeometry',
+    'withCredits'
   ]
 
   const clearedBrowseOptions = fillWithUndefined ? reset(browseOptions, keys) : omit(browseOptions, keys)

@@ -36,6 +36,7 @@ export type Props = {
   adjacentToRoad?: boolean
   emoteHasSound?: boolean
   emoteHasGeometry?: boolean
+  withCredits?: boolean
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
 }
@@ -67,6 +68,7 @@ export type MapStateProps = Pick<
   | 'adjacentToRoad'
   | 'emoteHasGeometry'
   | 'emoteHasSound'
+  | 'withCredits'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

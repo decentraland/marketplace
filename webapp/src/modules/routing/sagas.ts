@@ -163,7 +163,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     network,
     status,
     emoteHasGeometry,
-    emoteHasSound
+    emoteHasSound,
+    withCredits
   } = options
 
   const address: string | string[] = options.address || ((yield select(getCurrentLocationAddress)) as string)
@@ -265,7 +266,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               network,
               emoteHasGeometry,
               emoteHasSound,
-              ...statusParameters
+              ...statusParameters,
+              ...(withCredits ? { minPrice: '1', onlyOnSale: true, onlyMinting: true } : {})
             }
           })
         )

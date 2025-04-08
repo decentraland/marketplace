@@ -51,6 +51,7 @@ export const AssetFilters = ({
   adjacentToRoad,
   values,
   rentalDays,
+  withCredits,
   emoteHasSound,
   emoteHasGeometry
 }: Props): JSX.Element | null => {
@@ -64,6 +65,15 @@ export const AssetFilters = ({
       const [minValue, maxValue] = value
       onBrowse({ [filterMinName]: minValue, [filterMaxName]: maxValue })
       trackBarChartComponentChange(filterNames, value, source, prevValues)
+    },
+    [onBrowse]
+  )
+
+  const handleWithCreditsToggleChange = useCallback(
+    (value: boolean) => {
+      onBrowse({
+        withCredits: value
+      })
     },
     [onBrowse]
   )
@@ -186,6 +196,7 @@ export const AssetFilters = ({
         <LandStatusFilter landStatus={landStatus} onChange={handleLandStatusChange} />
         <PriceFilter
           onChange={(value, source) => handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [minPrice, maxPrice])}
+          onWithCreditsToggleChange={handleWithCreditsToggleChange}
           minPrice={minPrice}
           maxPrice={maxPrice}
           values={values}
@@ -249,6 +260,8 @@ export const AssetFilters = ({
           maxPrice={maxPrice}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Price]}
           values={values}
+          withCredits={withCredits}
+          onWithCreditsToggleChange={handleWithCreditsToggleChange}
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.Creators) && (!network || (network && network === Network.MATIC)) ? (
