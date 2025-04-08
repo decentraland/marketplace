@@ -30,10 +30,7 @@
   flex-direction: column;
   gap: 12px;
   height: 100%;
-}
-
-.ItemDetail .spaceInMint {
-  margin-top: 30px;
+  margin-top: auto;
 }
 
 .ItemDetail .information {

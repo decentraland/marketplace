@@ -68,6 +68,7 @@ export type BrowseOptions = {
   adjacentToRoad?: boolean
   emoteHasSound?: boolean
   emoteHasGeometry?: boolean
+  withCredits?: boolean
 }
 
 export enum PageName {

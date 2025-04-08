@@ -1,8 +1,10 @@
-import { useMemo, useCallback } from 'react'
+import { useMemo, useCallback, ChangeEvent } from 'react'
 import { ethers } from 'ethers'
 import { RentalsListingsFilterByCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { Switch } from 'decentraland-ui2'
+import CreditsIcon from '../../../images/icon-credits.svg'
 import { nftAPI, nftMarketplaceAPI } from '../../../modules/vendor/decentraland/nft/api'
 import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
 import { Section } from '../../../modules/vendor/routing/types'
@@ -35,9 +37,12 @@ export const PriceFilter = ({
   rentalDays,
   emoteHasGeometry,
   emoteHasSound,
+  withCredits,
   isOffchainPublicItemOrdersEnabled,
   isOffchainPublicNFTOrdersEnabled,
-  onChange
+  isCreditsEnabled,
+  onChange,
+  onWithCreditsToggleChange
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
@@ -131,6 +136,13 @@ export const PriceFilter = ({
     )
   }, [priceFetchFilters, landStatus, isOffchainPublicItemOrdersEnabled, isOffchainPublicNFTOrdersEnabled, rentalPriceFetchFilters])
 
+  const handleWithCreditsToggle = useCallback(
+    (_event: ChangeEvent<HTMLInputElement>, checked: boolean) => {
+      onWithCreditsToggleChange(checked)
+    },
+    [onWithCreditsToggleChange]
+  )
+
   return (
     <Box header={header} className="filters-sidebar-box price-filter" collapsible defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
       <Inventory
@@ -143,6 +155,18 @@ export const PriceFilter = ({
         onChange={onChange}
         errorMessage={t('filters.price_min_greater_max')}
       />
+      {isCreditsEnabled && (
+        <>
+          <div className="separator" />
+          <div className="credits-toggle-container">
+            <div className="credits-toggle-left">
+              <img src={CreditsIcon} alt="Credits" />
+              <span className="credits-toggle-label">{t('filters.get_with_credits')}</span>
+            </div>
+            <Switch checked={withCredits} onChange={handleWithCreditsToggle} />
+          </div>
+        </>
+      )}
     </Box>
   )
 }

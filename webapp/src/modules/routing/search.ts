@@ -158,6 +158,10 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.emoteHasGeometry) {
       params.set('emoteHasGeometry', 'true')
     }
+
+    if (options.withCredits) {
+      params.set('withCredits', options.withCredits.toString())
+    }
   }
   return params
 }

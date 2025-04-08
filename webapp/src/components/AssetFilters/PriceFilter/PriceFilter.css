@@ -1,3 +1,38 @@
 .price-filter, .bar-chart { 
   position: relative;
 }
+
+.price-filter .separator {
+  margin-top: 24px;
+  margin-bottom: 14px;
+  height: 1px;
+  background-color: #736E7D80;
+}
+
+.price-filter .credits-toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0;
+}
+
+.price-filter .credits-toggle-container img {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
+
+.price-filter .credits-toggle-container .credits-toggle-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.price-filter .credits-toggle-container .credits-toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #A0ABFF;
+  margin-left: 6px;
+}
+
+

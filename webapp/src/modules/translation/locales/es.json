@@ -194,6 +194,7 @@
     "size": "Tamaño",
     "price": "Precio",
     "price_min_greater_max": "El precio máximo debería ser mayor al mínimo",
+    "get_with_credits": "Comprar con créditos",
     "estate_size": {
       "label": "Tamaño de Estate",
       "min_label": "Min (Parcelas)",

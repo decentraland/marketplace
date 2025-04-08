@@ -1,5 +1,9 @@
 import { connect } from 'react-redux'
-import { getIsOffchainPublicItemOrdersEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../../../modules/features/selectors'
+import {
+  getIsCreditsEnabled,
+  getIsOffchainPublicItemOrdersEnabled,
+  getIsOffchainPublicNFTOrdersEnabled
+} from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getCategoryFromSection } from '../../../modules/routing/search'
 import {
@@ -59,7 +63,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : getEmoteHasGeometry(state),
     emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : getEmoteHasSound(state),
     isOffchainPublicItemOrdersEnabled: getIsOffchainPublicItemOrdersEnabled(state),
-    isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state)
+    isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state),
+    isCreditsEnabled: getIsCreditsEnabled(state)
   }
 }
 

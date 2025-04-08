@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import { BigNumber } from 'ethers'
 import { Order } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Loader } from 'decentraland-ui'
@@ -8,6 +9,7 @@ import { isNFT } from '../../../../modules/asset/utils'
 import { locations } from '../../../../modules/routing/locations'
 import * as events from '../../../../utils/events'
 import { AssetProvider } from '../../../AssetProvider'
+import { getMinSaleValueInWei } from '../../../BuyPage/utils'
 import UseCreditsToggle from '../UseCreditsToggle'
 import { BuyWithCardButton } from './BuyWithCardButton'
 import { BuyWithCryptoButton } from './BuyWithCryptoButton'
@@ -86,8 +88,8 @@ const BuyNFTButtons = ({
 
           return (
             <>
-              {/* Credits toggle is only available for items or for NFTs as well if the secondary sales are enabled */}
-              {((isCreditsEnabled && !isNFT(asset) && BigInt(asset.price) > 0) ||
+              {/* Credits toggle is only available for items with price > 1 MANA or for NFTs as well if the secondary sales are enabled */}
+              {((isCreditsEnabled && !isNFT(asset) && BigNumber.from(asset.price).gte(getMinSaleValueInWei() || '')) ||
                 (isCreditsEnabled && isCreditsSecondarySalesEnabled && isNFT(asset))) && (
                 <UseCreditsToggle
                   asset={asset}
@@ -97,7 +99,7 @@ const BuyNFTButtons = ({
                 />
               )}
               <BuyWithCryptoButton asset={asset} onClick={() => handleBuyWithCrypto(asset, order)} isFree={isFree} />
-              {!isFree && (
+              {isFree && useCredits ? null : (
                 <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset, order || undefined)} />
               )}
             </>

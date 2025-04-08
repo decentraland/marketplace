@@ -329,6 +329,10 @@ export const getEmoteHasGeometry = createSelector<RootState, string, boolean>(
   search => getURLParam(search, 'emoteHasGeometry') === 'true'
 )
 
+export const getWithCredits = createSelector<RootState, string, boolean | undefined>(getRouterSearch, search =>
+  getURLParam(search, 'withCredits') ? getURLParam(search, 'withCredits') === 'true' : undefined
+)
+
 export const getCurrentLocationAddress = createSelector<RootState, string, string | undefined, string | undefined, string | undefined>(
   getPathName,
   getWalletAddress,
@@ -360,14 +364,16 @@ export const getAssetsUrlParams = createSelector(
   getContracts,
   getCreators,
   getSearch,
-  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators, search) => ({
+  getWithCredits,
+  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators, search, withCredits) => ({
     onlyOnSale,
     onlySmart,
     isSoldOut,
     itemId,
     contracts,
     creators,
-    search
+    search,
+    withCredits
   })
 )
 
