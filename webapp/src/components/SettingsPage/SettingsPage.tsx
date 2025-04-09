@@ -34,10 +34,15 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
-  const creditsManager = getContract({
-    name: contractNames.CREDITS_MANAGER,
-    network: Network.MATIC
-  })
+  let creditsManager
+  try {
+    creditsManager = getContract({
+      name: contractNames.CREDITS_MANAGER,
+      network: Network.MATIC
+    })
+  } catch (error) {
+    console.log('Error getting credit manager', error)
+  }
 
   const marketplaceEthereum = getContract({
     name: contractNames.MARKETPLACE,
@@ -96,8 +101,7 @@ const SettingsPage = (props: Props) => {
     !bidsMatic ||
     !manaEthereum ||
     !manaMatic ||
-    !rentals ||
-    !creditsManager
+    !rentals
   ) {
     return null
   }
@@ -228,16 +232,18 @@ const SettingsPage = (props: Props) => {
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
-                          <Authorization
-                            authorization={{
-                              address: wallet.address,
-                              authorizedAddress: creditsManager.address,
-                              contractAddress: manaMatic.address,
-                              contractName: ContractName.MANAToken,
-                              chainId: manaMatic.chainId,
-                              type: AuthorizationType.ALLOWANCE
-                            }}
-                          />
+                          {creditsManager && (
+                            <Authorization
+                              authorization={{
+                                address: wallet.address,
+                                authorizedAddress: creditsManager.address,
+                                contractAddress: manaMatic.address,
+                                contractName: ContractName.MANAToken,
+                                chainId: manaMatic.chainId,
+                                type: AuthorizationType.ALLOWANCE
+                              }}
+                            />
+                          )}
                         </div>
 
                         <div className="authorization-checks">
