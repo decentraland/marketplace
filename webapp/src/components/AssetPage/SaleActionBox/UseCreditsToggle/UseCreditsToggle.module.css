@@ -41,6 +41,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  padding-left: 12px;
+}
+
+.creditsLeft :global(.MuiSwitch-root.MuiSwitch-sizeMedium.css-julti5-MuiSwitch-root) {
+  margin-left: -12px;
 }
 
 .creditsText {
@@ -69,7 +74,7 @@
   gap: 4px;
 }
 
-.creditsContainer .creditsPopupContainer .creditsIcon {
+.creditsContainer .creditsIcon {
   width: 18px;
   height: 18px;
 }
