@@ -7,6 +7,7 @@
   padding: 8px;
   margin: 0;
   min-height: 40px;
+  z-index: 1;
 }
 
 .BuyWithCryptoButton:global(.ui.button.primary .dcl.mana) {
