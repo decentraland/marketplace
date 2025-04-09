@@ -52,21 +52,28 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
 
     const offchainMarketplace =
       isOffchainPublicNFTOrdersEnabled && order?.tradeId && getDCLContract(ContractName.OffChainMarketplace, nft.chainId)
-    const creditsManager = getDCLContract(ContractName.CreditsManager, nft.chainId)
+    let creditsManager
+    try {
+      creditsManager = getDCLContract(ContractName.CreditsManager, nft.chainId)
+    } catch (error) {
+      console.log('Error getting credit manager', error)
+    }
 
     const areCreditsEnoughToBuy = useCredits && credits && BigInt(credits.totalCredits) >= BigInt(order.price)
     const needsToAuthorizeCredits = useCredits && !areCreditsEnoughToBuy
 
-    const authorizedAddress = needsToAuthorizeCredits
-      ? creditsManager.address
-      : offchainMarketplace
-        ? offchainMarketplace.address
-        : order.marketplaceAddress
-    const authorizedContractLabel = needsToAuthorizeCredits
-      ? creditsManager.name
-      : offchainMarketplace
-        ? offchainMarketplace.name
-        : marketplace.label || marketplace.name
+    const authorizedAddress =
+      needsToAuthorizeCredits && creditsManager
+        ? creditsManager.address
+        : offchainMarketplace
+          ? offchainMarketplace.address
+          : order.marketplaceAddress
+    const authorizedContractLabel =
+      needsToAuthorizeCredits && creditsManager
+        ? creditsManager.name
+        : offchainMarketplace
+          ? offchainMarketplace.name
+          : marketplace.label || marketplace.name
 
     onAuthorizedAction({
       // Override the automatic Magic sign in if the user needs to pay gas for the transaction
