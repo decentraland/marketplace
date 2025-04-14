@@ -15,6 +15,7 @@
   box-shadow: none !important;
   border: none;
   color: #5e5b67;
+  z-index: 1;
 }
 
 .bidButton:global(.ui.inverted.secondary.button):hover {
