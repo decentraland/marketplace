@@ -98,7 +98,12 @@ const BuyNFTButtons = ({
                   onUseCredits={handleUseCredits}
                 />
               )}
-              <BuyWithCryptoButton asset={asset} onClick={() => handleBuyWithCrypto(asset, order)} isFree={isFree} />
+              <BuyWithCryptoButton
+                asset={asset}
+                onClick={() => handleBuyWithCrypto(asset, order)}
+                isFree={isFree}
+                useCredits={useCredits}
+              />
               {isFree && useCredits ? null : (
                 <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset, order || undefined)} />
               )}
