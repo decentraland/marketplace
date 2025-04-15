@@ -21,7 +21,6 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
     credits,
     metadata: { item, useCredits },
     isUsingMagic,
-    isMagicAutoSignEnabled,
     isLoadingAuthorization,
     isBuyingItemNatively,
     isBuyingItemCrossChain,
@@ -116,7 +115,6 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
       onBuyCrossChain={onBuyItemCrossChain}
       onGetGasCost={onGetGasCost}
       isUsingMagic={isUsingMagic}
-      isMagicAutoSignEnabled={isMagicAutoSignEnabled}
       isLoadingAuthorization={isLoadingAuthorization}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset: item }}

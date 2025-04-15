@@ -8,6 +8,7 @@ import { Store } from 'redux'
 import { en } from 'decentraland-dapps/dist/modules/translation/defaults'
 import { mergeTranslations } from 'decentraland-dapps/dist/modules/translation/utils'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
+import { darkTheme, DclThemeProvider } from 'decentraland-ui2'
 import { RootState } from '../modules/reducer'
 import { initTestStore } from '../modules/store'
 import * as locales from '../modules/translation/locales'
@@ -36,9 +37,11 @@ export function renderWithProviders(
   function AppProviders({ children }: { children: JSX.Element }) {
     return (
       <Provider store={initializedStore}>
-        <TranslationProvider locales={['en']}>
-          <ConnectedRouter history={history}>{children}</ConnectedRouter>
-        </TranslationProvider>
+        <DclThemeProvider theme={darkTheme}>
+          <TranslationProvider locales={['en']}>
+            <ConnectedRouter history={history}>{children}</ConnectedRouter>
+          </TranslationProvider>
+        </DclThemeProvider>
       </Provider>
     )
   }
