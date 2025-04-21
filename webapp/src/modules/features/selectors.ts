@@ -92,7 +92,10 @@ export const getIsOffchainPublicItemOrdersEnabled = (state: RootState) => {
 
 export const getIsCreditsEnabled = (state: RootState) => {
   const wallet = getWallet(state)
-  const isEnabled: boolean = isCreditsFeatureEnabled(state, wallet?.address || '')
+  if (!wallet) {
+    return false
+  }
+  const isEnabled: boolean = isCreditsFeatureEnabled(state, wallet.address)
   return isEnabled
 }
 
