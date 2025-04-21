@@ -1,6 +1,12 @@
-import { getIsFeatureEnabled, getLoading, hasLoadedInitialFlags } from 'decentraland-dapps/dist/modules/features/selectors'
+import {
+  getIsFeatureEnabled,
+  getLoading,
+  hasLoadedInitialFlags,
+  isCreditsFeatureEnabled
+} from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { RootState } from '../reducer'
+import { getWallet } from '../wallet/selectors'
 import { FeatureName } from './types'
 
 export const isLoadingFeatureFlags = (state: RootState) => {
@@ -85,10 +91,12 @@ export const getIsOffchainPublicItemOrdersEnabled = (state: RootState) => {
 }
 
 export const getIsCreditsEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CREDITS)
+  const wallet = getWallet(state)
+  if (!wallet) {
+    return false
   }
-  return false
+  const isEnabled: boolean = isCreditsFeatureEnabled(state, wallet.address)
+  return isEnabled
 }
 
 export const getIsCreditsSecondarySalesEnabled = (state: RootState) => {
