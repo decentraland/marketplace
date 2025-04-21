@@ -1,8 +1,8 @@
 import {
-  getFeatureVariant,
   getIsFeatureEnabled,
   getLoading,
-  hasLoadedInitialFlags
+  hasLoadedInitialFlags,
+  isCreditsFeatureEnabled
 } from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { RootState } from '../reducer'
@@ -91,32 +91,9 @@ export const getIsOffchainPublicItemOrdersEnabled = (state: RootState) => {
 }
 
 export const getIsCreditsEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    const isMainFlagEnabled = getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CREDITS)
-    const userWalletsVariant = getFeatureVariant(state, ApplicationName.EXPLORER, FeatureName.USER_WALLETS)
-
-    if (!isMainFlagEnabled) {
-      return false
-    }
-
-    try {
-      // Parse wallets list if available
-      let walletsAllowed = null
-      if (userWalletsVariant?.payload?.value) {
-        walletsAllowed = userWalletsVariant.payload.value
-          .replace('\n', '')
-          .split(',')
-          .map(wallet => wallet.toLowerCase())
-      }
-
-      const wallet = getWallet(state)
-      return !walletsAllowed || walletsAllowed.includes(wallet?.address?.toLowerCase() || '')
-    } catch (error) {
-      console.error('Error getting user wallets: ', error)
-      return false
-    }
-  }
-  return false
+  const wallet = getWallet(state)
+  const isEnabled: boolean = isCreditsFeatureEnabled(state, wallet?.address || '')
+  return isEnabled
 }
 
 export const getIsCreditsSecondarySalesEnabled = (state: RootState) => {
