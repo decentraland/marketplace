@@ -13,7 +13,6 @@ import {
   getIsBidsOffChainEnabled,
   getIsOffchainPublicNFTOrdersEnabled,
   getIsOffchainPublicItemOrdersEnabled,
-  getIsCreditsEnabled,
   getIsCreditsSecondarySalesEnabled
 } from './selectors'
 import { FeatureName } from './types'
@@ -145,12 +144,6 @@ const waitForInitialLoadingSelectors = [
     feature: FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS,
     selector: getIsOffchainPublicItemOrdersEnabled,
     applicationName: ApplicationName.DAPPS
-  },
-  {
-    name: 'IsCreditsEnabled',
-    feature: FeatureName.CREDITS,
-    selector: getIsCreditsEnabled,
-    applicationName: ApplicationName.MARKETPLACE
   },
   {
     name: 'IsCreditsSecondarySalesEnabled',
