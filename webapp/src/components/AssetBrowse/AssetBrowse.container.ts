@@ -8,7 +8,8 @@ import {
   getSection,
   getOnlySmart,
   getOnlyOnRent,
-  getIsFullscreen
+  getIsFullscreen,
+  getStatus
 } from '../../modules/routing/selectors'
 import { isMapSet } from '../../modules/routing/utils'
 import { setView } from '../../modules/ui/actions'
@@ -23,6 +24,7 @@ const mapState = (state: RootState): MapStateProps => {
     isMap,
     isFullscreen: getIsFullscreen(state) ?? isMap,
     onlyOnSale: getOnlyOnSale(state),
+    status: getStatus(state),
     section: getSection(state),
     assetType: getAssetType(state),
     viewInState: getView(state),

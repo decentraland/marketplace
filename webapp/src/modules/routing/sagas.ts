@@ -267,7 +267,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               emoteHasGeometry,
               emoteHasSound,
               ...statusParameters,
-              ...(withCredits ? { minPrice: '1', onlyOnSale: true, onlyMinting: true } : {})
+              ...(withCredits && (status === AssetStatusFilter.ONLY_MINTING || status === AssetStatusFilter.ON_SALE) // withCredits can be used in onlyOnSale or onlyMinting
+                ? { minPrice: '1', onlyOnSale: true, onlyMinting: true }
+                : {})
             }
           })
         )
@@ -439,6 +441,16 @@ function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) 
   }
 
   if (newOptions.section === Section.LISTS) return newOptions
+
+  // with credits should override the status filter and set it to onlyMinting
+  if (newOptions.withCredits && !previous.withCredits && previous.status === AssetStatusFilter.ONLY_LISTING) {
+    newOptions.status = AssetStatusFilter.ONLY_MINTING
+  }
+
+  // with credits should turn off if the new status filter is not onlyMinting or onlyOnSale
+  if (previous.withCredits && newOptions.status !== AssetStatusFilter.ONLY_MINTING && newOptions.status !== AssetStatusFilter.ON_SALE) {
+    newOptions.withCredits = false
+  }
 
   newOptions = {
     ...newOptions,

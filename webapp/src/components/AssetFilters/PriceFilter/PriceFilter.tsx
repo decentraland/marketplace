@@ -163,7 +163,7 @@ export const PriceFilter = ({
               <img src={CreditsIcon} alt="Credits" />
               <span className="credits-toggle-label">{t('filters.get_with_credits')}</span>
             </div>
-            <Switch checked={withCredits} onChange={handleWithCreditsToggle} />
+            <Switch checked={!!withCredits} onChange={handleWithCreditsToggle} />
           </div>
         </>
       )}
