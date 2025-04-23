@@ -11,6 +11,7 @@ import { View } from '../../modules/ui/types'
 import { getPersistedIsMapProperty, isAccountView, isListsSection } from '../../modules/ui/utils'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { Sections } from '../../modules/vendor/routing/types'
+import { AssetStatusFilter } from '../../utils/filters'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
 import AssetTopbar from '../AssetTopbar'
@@ -45,7 +46,8 @@ const AssetBrowse = (props: Props) => {
     onlySmart,
     viewInState,
     disableSearchDropdown,
-    onlyOnRent
+    onlyOnRent,
+    status
   } = props
 
   const location = useLocation()
@@ -109,7 +111,8 @@ const AssetBrowse = (props: Props) => {
         address,
         contracts,
         onlyOnSale,
-        onlySmart
+        onlySmart,
+        status
       }
 
       // Function used to fetch the assets.
@@ -124,6 +127,7 @@ const AssetBrowse = (props: Props) => {
           (!onlyOnSale && onlyOnRent === false && !previousPageIsLandDetail) ||
           (onlyOnSale === undefined && onlyOnRent === undefined && !previousPageIsLandDetail) ||
           onlyOnSale
+        browseOpts.withCredits = status === AssetStatusFilter.ONLY_MINTING || status === AssetStatusFilter.ON_SALE
 
         // We also set the fetch function as onBrowse because we need the url to be updated.
         fetchAssetsFn = onBrowse
