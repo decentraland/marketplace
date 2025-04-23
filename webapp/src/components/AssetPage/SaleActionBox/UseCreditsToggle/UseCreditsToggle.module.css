@@ -13,44 +13,37 @@
 }
 
 .creditsContainer:not(.creditsContainerActive) {
-  animation: pulse 3s infinite;
+  position: relative;
+  border-color: rgba(160, 171, 255, 0.15);
 }
 
 .creditsContainer:not(.creditsContainerActive)::before {
   content: '';
   position: absolute;
-  top: -1px;
-  left: -1px;
-  width: calc(100% + 2px);
-  height: calc(100% + 2px);
-  border-radius: 8px;
-  background: 
-    linear-gradient(90deg, #a0abff 50%, transparent 0) repeat-x,
-    linear-gradient(90deg, #a0abff 50%, transparent 0) repeat-x,
-    linear-gradient(0deg, #a0abff 50%, transparent 0) repeat-y,
-    linear-gradient(0deg, #a0abff 50%, transparent 0) repeat-y;
-  background-size: 16px 1px, 16px 1px, 1px 16px, 1px 16px;
-  background-position: 0 0, 0 100%, 0 0, 100% 0;
-  animation: border-dance 2s infinite linear;
+  inset: -2px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, transparent, transparent, #a0abff, #a0abff, transparent, transparent);
+  background-size: 300% 100%;
+  animation: moveGradient 6s linear infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 2px;
   pointer-events: none;
   z-index: 1;
 }
 
-@keyframes border-dance {
-  100% {
-    background-position: 16px 0, -16px 100%, 0 -16px, 100% 16px;
-  }
-}
-
-@keyframes pulse {
+@keyframes moveGradient {
   0% {
-    box-shadow: 0 0 0 0 rgba(160, 171, 255, 0.1);
-  }
-  70% {
-    box-shadow: 0 0 0 5px rgba(160, 171, 255, 0);
+    background-position: 300% 0%;
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(160, 171, 255, 0);
+    background-position: 0% 0%;
   }
 }
 
