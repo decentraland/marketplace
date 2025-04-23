@@ -29,7 +29,7 @@
     linear-gradient(90deg, #a0abff 50%, transparent 0) repeat-x,
     linear-gradient(0deg, #a0abff 50%, transparent 0) repeat-y,
     linear-gradient(0deg, #a0abff 50%, transparent 0) repeat-y;
-  background-size: 16px 2px, 16px 2px, 2px 16px, 2px 16px;
+  background-size: 16px 1px, 16px 1px, 1px 16px, 1px 16px;
   background-position: 0 0, 0 100%, 0 0, 100% 0;
   animation: border-dance 2s infinite linear;
   pointer-events: none;
