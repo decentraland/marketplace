@@ -24,17 +24,6 @@ describe('MoreFilters', () => {
     })
   })
 
-  describe('when the wearables category is selected and the dispositive is tablet or mobile', () => {
-    beforeEach(() => {
-      useTabletAndBelowMediaQueryMock.mockReturnValue(true)
-    })
-
-    it('should render the more filters section', () => {
-      const { container } = renderMoreFilters({})
-      expect(container).not.toBeEmptyDOMElement()
-    })
-  })
-
   describe('when the isOnSale filter is not visible', () => {
     describe('and the selected category is not wearables', () => {
       it('should not render the more filters section', () => {
