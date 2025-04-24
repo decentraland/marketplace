@@ -1,4 +1,3 @@
-import { NFTCategory } from '@dcl/schemas'
 import { useTabletAndBelowMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { renderWithProviders } from '../../../utils/test'
 import { MoreFilters, MoreFiltersProps } from './MoreFilters'
@@ -8,7 +7,7 @@ jest.mock('decentraland-ui/dist/components/Media', () => ({
 }))
 
 function renderMoreFilters(props: Partial<MoreFiltersProps> = {}) {
-  return renderWithProviders(<MoreFilters onOnlySmartChange={jest.fn()} onSaleChange={jest.fn()} {...props} />)
+  return renderWithProviders(<MoreFilters onSaleChange={jest.fn()} {...props} />)
 }
 
 describe('MoreFilters', () => {
@@ -31,9 +30,7 @@ describe('MoreFilters', () => {
     })
 
     it('should render the more filters section', () => {
-      const { container } = renderMoreFilters({
-        category: NFTCategory.WEARABLE
-      })
+      const { container } = renderMoreFilters({})
       expect(container).not.toBeEmptyDOMElement()
     })
   })
@@ -42,7 +39,6 @@ describe('MoreFilters', () => {
     describe('and the selected category is not wearables', () => {
       it('should not render the more filters section', () => {
         const { container } = renderMoreFilters({
-          category: NFTCategory.PARCEL,
           isOnSale: undefined
         })
         expect(container).toBeEmptyDOMElement()
@@ -56,7 +52,6 @@ describe('MoreFilters', () => {
 
       it('should not render the more filters section', () => {
         const { container } = renderMoreFilters({
-          category: NFTCategory.WEARABLE,
           isOnSale: undefined
         })
         expect(container).toBeEmptyDOMElement()
