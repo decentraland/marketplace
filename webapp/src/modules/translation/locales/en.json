@@ -200,7 +200,8 @@
     "size": "Size",
     "price": "Price",
     "price_min_greater_max": "The maximum price should be higher than the minimum",
-    "get_with_credits": "Get with credits",
+    "get_with_credits": "Get With Credits",
+    "special_filters": "Special filters",
     "estate_size": {
       "label": "Estate size",
       "min_label": "Min (Parcels)",

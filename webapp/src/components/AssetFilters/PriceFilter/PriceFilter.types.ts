@@ -9,7 +9,6 @@ export type Props = {
   section: string
   category?: NFTCategory
   assetType?: AssetType
-  withCredits?: boolean
   minPrice: string
   maxPrice: string
   network?: Network
@@ -20,7 +19,6 @@ export type Props = {
   isOnlySmart?: boolean
   landStatus: LANDFilters
   onChange: (value: [string, string], source: BarChartSource) => void
-  onWithCreditsToggleChange: (value: boolean) => void
   defaultCollapsed?: boolean
   collection?: string
   minDistanceToPlaza?: string
@@ -34,7 +32,6 @@ export type Props = {
   emoteHasSound?: boolean
   isOffchainPublicItemOrdersEnabled: boolean
   isOffchainPublicNFTOrdersEnabled: boolean
-  isCreditsEnabled: boolean
 }
 
 export type MapStateProps = Pick<
@@ -60,7 +57,6 @@ export type MapStateProps = Pick<
   | 'emoteHasSound'
   | 'isOffchainPublicItemOrdersEnabled'
   | 'isOffchainPublicNFTOrdersEnabled'
-  | 'isCreditsEnabled'
 >
 
 export type OwnProps = Pick<Props, 'values'>

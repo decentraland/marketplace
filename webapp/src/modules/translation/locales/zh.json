@@ -197,6 +197,7 @@
     "price": "价格",
     "price_min_greater_max": "最高价格应高于最低价格",
     "get_with_credits": "用积分购买",
+    "special_filters": "特殊过滤器",
     "estate_size": {
       "label": "庄园规模",
       "min_label": "最小（包裹）",

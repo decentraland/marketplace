@@ -1,0 +1,69 @@
+.special-filter {
+  background-color: #242129;
+}
+
+.special-filter .special-filter-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+}
+
+.special-filter .filter-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Align the toggles */
+.special-filter .filter-option .ui.toggle.checkbox,
+.special-filter .filter-option .dcl.switch {
+  min-width: 40px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Credits styles */
+.special-filter .credits-filter .credits-left {
+  display: flex;
+  align-items: center;
+}
+
+.special-filter .credits-filter .credits-left img {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
+
+.special-filter .credits-filter .credits-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #a0abff;
+  margin-left: 6px;
+}
+
+/* Smart styles */
+.special-filter .smart-filter .smart-left {
+  display: flex;
+  align-items: center;
+  background-color: var(--superGray);
+  border-radius: 4px;
+}
+
+.special-filter .smart-filter .smart-icon {
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.special-filter .smart-filter .smart-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  margin-left: 6px;
+  letter-spacing: 0.5px;
+}

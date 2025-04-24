@@ -18,15 +18,13 @@ import {
   getNetwork,
   getOnlyOnRent,
   getOnlyOnSale,
-  getOnlySmart,
   getRentalDays,
   getRarities,
   getSection,
   getStatus,
   getWearableGenders,
   getEmoteHasSound,
-  getEmoteHasGeometry,
-  getWithCredits
+  getEmoteHasGeometry
 } from '../../modules/routing/selectors'
 import { getView } from '../../modules/ui/browse/selectors'
 import { Section } from '../../modules/vendor/routing/types'
@@ -60,7 +58,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     network: 'network' in values ? values.network : getNetwork(state),
     bodyShapes: 'wearableGenders' in values ? values.wearableGenders : getWearableGenders(state),
     category: section ? getCategoryFromSection(section) : undefined,
-    isOnlySmart: 'onlySmart' in values ? !!values.onlySmart : getOnlySmart(state),
     isOnSale: onlyOnSale,
     emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
     assetType: getAssetType(state),
@@ -74,8 +71,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
     adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
     emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : getEmoteHasSound(state),
-    emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : getEmoteHasGeometry(state),
-    withCredits: 'withCredits' in values ? values.withCredits : getWithCredits(state)
+    emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : getEmoteHasGeometry(state)
   }
 }
 

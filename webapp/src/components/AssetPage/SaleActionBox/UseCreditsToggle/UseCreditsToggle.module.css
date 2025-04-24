@@ -9,6 +9,42 @@
   transition: all 0.2s ease;
   margin-bottom: 16px;
   padding-left: 4px;
+  position: relative;
+}
+
+.creditsContainer:not(.creditsContainerActive) {
+  position: relative;
+  border-color: rgba(160, 171, 255, 0.15);
+}
+
+.creditsContainer:not(.creditsContainerActive)::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, transparent, transparent, #a0abff, #a0abff, transparent, transparent);
+  background-size: 300% 100%;
+  animation: moveGradient 6s linear infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 2px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes moveGradient {
+  0% {
+    background-position: 300% 0%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }
 
 .creditsContainerActive {
