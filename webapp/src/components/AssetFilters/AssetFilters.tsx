@@ -183,7 +183,6 @@ export const AssetFilters = ({
     (filter: AssetFilter) => {
       // /lands page won't have any category, we fallback to the section, that will be Section.LAND
       const parentSection = category ? getSectionFromCategory(category) : section
-      console.log('parentSection', parentSection)
       return filtersBySection[parentSection!]?.includes(filter)
     },
     [category, section]
