@@ -448,7 +448,12 @@ function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) 
   }
 
   // with credits should turn off if the new status filter is not onlyMinting or onlyOnSale
-  if (previous.withCredits && newOptions.status !== AssetStatusFilter.ONLY_MINTING && newOptions.status !== AssetStatusFilter.ON_SALE) {
+  if (
+    previous.withCredits &&
+    newOptions.status &&
+    newOptions.status !== AssetStatusFilter.ONLY_MINTING &&
+    newOptions.status !== AssetStatusFilter.ON_SALE
+  ) {
     newOptions.withCredits = false
   }
 
