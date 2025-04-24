@@ -52,7 +52,6 @@ export type MapStateProps = Pick<
   | 'network'
   | 'category'
   | 'bodyShapes'
-  | 'isOnlySmart'
   | 'isOnSale'
   | 'emotePlayMode'
   | 'assetType'
@@ -68,7 +67,6 @@ export type MapStateProps = Pick<
   | 'adjacentToRoad'
   | 'emoteHasGeometry'
   | 'emoteHasSound'
-  | 'withCredits'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

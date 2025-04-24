@@ -2,7 +2,6 @@ import { useCallback, useMemo } from 'react'
 import { EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
 import { RarityFilter } from 'decentraland-dapps/dist/containers/RarityFilter'
 import { BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
-import { SmartWearableFilter } from 'decentraland-ui'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { Sections, SortBy, BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
@@ -21,6 +20,7 @@ import { MoreFilters } from './MoreFilters'
 import { NetworkFilter } from './NetworkFilter'
 import PriceFilter from './PriceFilter'
 import { RentalPeriodFilter } from './RentalPeriodFilter'
+import SpecialFilter from './SpecialFilter/SpecialFilter.container'
 import { StatusFilter } from './StatusFilter'
 import { AssetFilter, filtersBySection, trackBarChartComponentChange } from './utils'
 import { Props } from './AssetFilters.types'
@@ -38,7 +38,6 @@ export const AssetFilters = ({
   network,
   category,
   bodyShapes,
-  isOnlySmart,
   isOnSale,
   emotePlayMode,
   section,
@@ -51,7 +50,6 @@ export const AssetFilters = ({
   adjacentToRoad,
   values,
   rentalDays,
-  withCredits,
   emoteHasSound,
   emoteHasGeometry
 }: Props): JSX.Element | null => {
@@ -185,6 +183,7 @@ export const AssetFilters = ({
     (filter: AssetFilter) => {
       // /lands page won't have any category, we fallback to the section, that will be Section.LAND
       const parentSection = category ? getSectionFromCategory(category) : section
+      console.log('parentSection', parentSection)
       return filtersBySection[parentSection!]?.includes(filter)
     },
     [category, section]
@@ -196,7 +195,6 @@ export const AssetFilters = ({
         <LandStatusFilter landStatus={landStatus} onChange={handleLandStatusChange} />
         <PriceFilter
           onChange={(value, source) => handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [minPrice, maxPrice])}
-          onWithCreditsToggleChange={handleWithCreditsToggleChange}
           minPrice={minPrice}
           maxPrice={maxPrice}
           values={values}
@@ -228,6 +226,11 @@ export const AssetFilters = ({
 
   return (
     <Menu className="filters-sidebar">
+      <SpecialFilter
+        onSmartChange={shouldRenderFilter(AssetFilter.OnlySmart) ? handleOnlySmartChange : undefined}
+        onWithCreditsChange={handleWithCreditsToggleChange}
+        defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Special]}
+      />
       {shouldRenderFilter(AssetFilter.PlayMode) && (
         <EmoteAttributesFilter
           onChange={handleEmoteAttributesChange}
@@ -237,9 +240,6 @@ export const AssetFilters = ({
           emoteHasGeometry={emoteHasGeometry}
         />
       )}
-      {shouldRenderFilter(AssetFilter.OnlySmart) ? (
-        <SmartWearableFilter isOnlySmart={isOnlySmart} onChange={handleOnlySmartChange} />
-      ) : null}
       {shouldRenderFilter(AssetFilter.Rarity) ? (
         <RarityFilter
           className="filters-sidebar-box"
@@ -260,8 +260,6 @@ export const AssetFilters = ({
           maxPrice={maxPrice}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Price]}
           values={values}
-          withCredits={withCredits}
-          onWithCreditsToggleChange={handleWithCreditsToggleChange}
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.Creators) && (!network || (network && network === Network.MATIC)) ? (
@@ -286,14 +284,7 @@ export const AssetFilters = ({
         />
       )}
       {shouldRenderFilter(AssetFilter.More) && (
-        <MoreFilters
-          category={category}
-          isOnSale={isOnSale}
-          isOnlySmart={isOnlySmart}
-          onSaleChange={handleOnSaleChange}
-          onOnlySmartChange={handleOnlySmartChange}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.More]}
-        />
+        <MoreFilters isOnSale={isOnSale} onSaleChange={handleOnSaleChange} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.More]} />
       )}
     </Menu>
   )
