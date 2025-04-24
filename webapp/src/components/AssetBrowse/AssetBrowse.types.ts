@@ -5,6 +5,7 @@ import { setView, SetViewAction } from '../../modules/ui/actions'
 import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/routing/types'
 import { VendorName } from '../../modules/vendor/types'
+import { AssetStatusFilter } from '../../utils/filters'
 
 export type Props = {
   vendor: VendorName
@@ -17,6 +18,7 @@ export type Props = {
   isFullscreen?: boolean
   section?: Section
   sections?: Section[]
+  status?: AssetStatusFilter
   onSetView: typeof setView
   onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
   onBrowse: typeof browse
@@ -28,7 +30,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'isMap' | 'isFullscreen' | 'onlyOnSale' | 'viewInState' | 'section' | 'assetType' | 'onlySmart' | 'onlyOnRent'
+  'isMap' | 'isFullscreen' | 'onlyOnSale' | 'viewInState' | 'section' | 'assetType' | 'onlySmart' | 'onlyOnRent' | 'status'
 >
 export type MapDispatchProps = Pick<Props, 'onSetView' | 'onFetchAssetsFromRoute' | 'onBrowse'>
 export type MapDispatch = Dispatch<SetViewAction | FetchAssetsFromRouteAction | BrowseAction>
