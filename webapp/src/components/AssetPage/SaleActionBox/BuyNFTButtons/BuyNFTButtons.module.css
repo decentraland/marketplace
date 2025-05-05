@@ -9,3 +9,17 @@
 .loading_asset {
   align-self: center;
 }
+
+.buyWithCryptoButton {
+  height: 42px;
+}
+
+.visibilityHidden {
+  visibility: hidden;
+}
+
+@media (max-width: 768px) {
+  .visibilityHidden:global(.ui.fluid.button) {
+    display: none;
+  }
+}

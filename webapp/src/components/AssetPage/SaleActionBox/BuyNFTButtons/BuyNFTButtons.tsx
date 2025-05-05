@@ -1,5 +1,6 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import classNames from 'classnames'
 import { BigNumber } from 'ethers'
 import { Order } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -99,14 +100,16 @@ const BuyNFTButtons = ({
                 />
               )}
               <BuyWithCryptoButton
+                className={styles.buyWithCryptoButton}
                 asset={asset}
                 onClick={() => handleBuyWithCrypto(asset, order)}
                 isFree={isFree}
                 useCredits={useCredits}
               />
-              {isFree && useCredits ? null : (
-                <BuyWithCardButton className={buyWithCardClassName} onClick={() => handleBuyWithCard(asset, order || undefined)} />
-              )}
+              <BuyWithCardButton
+                className={classNames(buyWithCardClassName, { [styles.visibilityHidden]: isFree && useCredits })}
+                onClick={() => handleBuyWithCard(asset, order || undefined)}
+              />
             </>
           )
         }}
