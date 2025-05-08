@@ -318,7 +318,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
           category: NFTCategory.WEARABLE,
           isWearableHead: false,
           isWearableAccessory: false,
-          isOnSale: undefined,
+          isOnSale: true,
           wearableCategory: undefined,
           emoteCategory: undefined,
           isWearableSmart: undefined,
@@ -368,7 +368,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
             category: NFTCategory.WEARABLE,
             isWearableHead: false,
             isWearableAccessory: false,
-            isOnSale: undefined,
+            isOnSale: true,
             wearableCategory: undefined,
             emoteCategory: undefined,
             isWearableSmart: undefined,
@@ -419,7 +419,8 @@ describe('when handling the browse action', () => {
       assetType: AssetType.NFT,
       section: Section.LAND,
       view: undefined,
-      vendor: VendorName.DECENTRALAND
+      vendor: VendorName.DECENTRALAND,
+      status: AssetStatusFilter.ON_SALE
     }
     newBrowseOptions = {}
   })
