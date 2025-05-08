@@ -543,6 +543,10 @@ function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) 
       newOptions = { ...newOptions, assetType: AssetType.NFT }
     }
   }
+  if (!newOptions.status) {
+    // set default status to on sale if it's not set
+    newOptions.status = AssetStatusFilter.ON_SALE
+  }
   return newOptions
 }
 
