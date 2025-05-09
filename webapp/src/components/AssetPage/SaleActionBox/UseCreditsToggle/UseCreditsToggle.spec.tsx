@@ -136,7 +136,11 @@ describe('UseCreditsToggle', () => {
       })
       const learnMoreButton = screen.getByText(t('global.learn_more'))
       fireEvent.click(learnMoreButton)
-      expect(window.open).toHaveBeenCalledWith('https://docs.decentraland.zone/decentraland/credits/', '_blank', 'noopener')
+      expect(window.open).toHaveBeenCalledWith(
+        'https://decentraland.org/blog/announcements/marketplace-credits-earn-weekly-rewards-to-power-up-your-look?utm_org=dcl&utm_source=marketplace&utm_medium=organic&utm_campaign=marketplacecredits',
+        '_blank',
+        'noopener noreferrer'
+      )
     })
   })
 
