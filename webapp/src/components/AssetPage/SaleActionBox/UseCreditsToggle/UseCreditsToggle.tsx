@@ -44,8 +44,11 @@ const UseCreditsToggle = ({ assetPrice, credits, isOwner, useCredits, onUseCredi
             basic
             className={styles.learnMore}
             onClick={() => {
-              // TODO: review this link
-              window.open(config.get('CREDITS_DOCS_URL'), '_blank', 'noopener')
+              window.open(
+                `${config.get('DECENTRALAND_BLOG')}/announcements/marketplace-credits-earn-weekly-rewards-to-power-up-your-look?utm_org=dcl&utm_source=marketplace&utm_medium=organic&utm_campaign=marketplacecredits`,
+                '_blank',
+                'noopener noreferrer'
+              )
             }}
           >
             {t('global.learn_more')}
