@@ -104,7 +104,7 @@ const ClaimNameFatFingerModal = ({
             setIsLoadingFIATWidget(false)
           },
           onPending: options => {
-            if ('data' in options && 'tx_id' in options.data) {
+            if ('data' in options && 'tx_id' in options.data && options.data.tx_id) {
               onClaimTxSubmitted(ENSName, wallet.address, isDev ? ChainId.ETHEREUM_SEPOLIA : ChainId.ETHEREUM_MAINNET, options.data.tx_id)
             }
           },
