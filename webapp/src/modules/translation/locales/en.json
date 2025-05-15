@@ -75,7 +75,8 @@
     "guest": "Guest",
     "block_vrm": "Export",
     "block_vrm_tooltip": "This Item doesn't allow VRM export",
-    "utility": "Utility"
+    "utility": "Utility",
+    "temporarily_unavailable": "Temporarily Unavailable"
   },
   "search_dropdown": {
     "recent": "Recent",
@@ -1683,6 +1684,7 @@
     "blocked": "Your offer has been made"
   },
   "credits": {
-    "value": "1 Credit = 1 MANA in value"
+    "value": "1 Credit = 1 MANA in value",
+    "offline_message": "Marketplace Credits are currently offline.{br} Please check the #product-status channel at {br} {discord_link} for updates if service does not resume shortly."
   }
 }

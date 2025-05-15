@@ -73,7 +73,8 @@
     "guest": "Invitado",
     "block_vrm": "Exportar",
     "block_vrm_tooltip": "Este artículo no permite la exportación de VRM",
-    "utility": "Utilidad"
+    "utility": "Utilidad",
+    "temporarily_unavailable": "Temporalmente no disponible"
   },
   "search_dropdown": {
     "recent": "Reciente",
@@ -1659,6 +1660,7 @@
     "blocked": "Tu oferta ya ha sido creada"
   },
   "credits": {
-    "value": "1 Crédito = 1 MANA en valor"
+    "value": "1 Crédito = 1 MANA en valor",
+    "offline_message": "Los Créditos del Marketplace están actualmente desconectados. Por favor, comprueba el\n#product-status canal en {discord_link}\npara actualizaciones si el servicio no se reanuda pronto."
   }
 }
