@@ -73,7 +73,8 @@
     "guest": "客人",
     "block_vrm": "出口",
     "block_vrm_tooltip": "此项目不允许VRM导出",
-    "utility": "公用事业"
+    "utility": "公用事业",
+    "temporarily_unavailable": "暂时不可用"
   },
   "search_dropdown": {
     "recent": "最近的",
@@ -1663,6 +1664,7 @@
     "blocked": "您的报价已提出"
   },
   "credits": {
-    "value": "1 积分 = 1 MANA 价值"
+    "value": "1 积分 = 1 MANA 价值",
+    "offline_message": "Marketplace Credits 目前离线。请检查 {discord_link} 的 #product-status 频道以获取更新，如果服务没有很快恢复。"
   }
 }

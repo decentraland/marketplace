@@ -3,6 +3,7 @@
   color: #5e5b67;
   font-size: 15px;
   padding: 12px;
+  z-index: 99999;
 }
 
 .buy_with_card:global(.ui.button):hover {

@@ -25,12 +25,12 @@
   background: linear-gradient(90deg, transparent, transparent, #a0abff, #a0abff, transparent, transparent);
   background-size: 300% 100%;
   animation: moveGradient 6s linear infinite;
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
-  mask: 
-    linear-gradient(#fff 0 0) content-box, 
+  mask:
+    linear-gradient(#fff 0 0) content-box,
     linear-gradient(#fff 0 0);
   mask-composite: exclude;
   padding: 2px;
@@ -121,4 +121,71 @@
   bottom: -200px;
   width: 500px;
   height: 500px;
+}
+
+.pausedMessageContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.infoIconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  cursor: help;
+}
+
+.infoIcon {
+  width: 20px;
+  height: 20px;
+  /* Use mask to apply color */
+  mask-image: url('../../../../images/InfoOutlined.svg');
+  -webkit-mask-image: url('../../../../images/InfoOutlined.svg');
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  background-color: var(--sunish);
+  margin-top: 2px;
+}
+
+.pausedMessage {
+  font-size: 14px;
+  color: var(--secondary);
+}
+
+.temporarilyUnavailableContainer {
+  height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.InfoIcon {
+  background-color: var(--secondary);
+}
+
+.temporarilyUnavailable {
+  font-size: 14px;
+  color: var(--sunish);
+  font-weight: bold;
+}
+
+.tooltipContent {
+  text-align: left;
+}
+
+.discordLink {
+  color: white;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.discordLink:hover {
+  color: var(--primary-hover);
 }

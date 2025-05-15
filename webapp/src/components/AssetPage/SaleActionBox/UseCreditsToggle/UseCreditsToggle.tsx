@@ -1,6 +1,8 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ethers } from 'ethers'
 import Lottie from 'lottie-react'
+import { CreditsClient } from 'decentraland-dapps/dist/modules/credits/CreditsClient'
+import { SeasonResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { Button, Popup } from 'decentraland-ui'
 import { Switch } from 'decentraland-ui2'
@@ -11,6 +13,22 @@ import { Props } from './UseCreditsToggle.types'
 import styles from './UseCreditsToggle.module.css'
 
 const UseCreditsToggle = ({ assetPrice, credits, isOwner, useCredits, onUseCredits }: Props) => {
+  const [seasonInfo, setSeasonInfo] = useState<SeasonResponse | null>(null)
+
+  useEffect(() => {
+    const fetchSeasonInfo = async () => {
+      try {
+        const creditsClient = new CreditsClient(config.get('CREDITS_SERVER_URL'))
+        const season = await creditsClient.fetchSeason()
+        setSeasonInfo(season as SeasonResponse)
+      } catch (error) {
+        console.error('Error fetching season info:', error)
+      }
+    }
+
+    fetchSeasonInfo().catch(error => console.error('Error in fetchSeasonInfo:', error))
+  }, [])
+
   const handleToggleCredits = useCallback(() => {
     onUseCredits(!useCredits)
   }, [useCredits, onUseCredits])
@@ -25,6 +43,44 @@ const UseCreditsToggle = ({ assetPrice, credits, isOwner, useCredits, onUseCredi
     const assetPriceInEth = assetPrice ? ethers.utils.formatEther(assetPrice.toString()) : '0'
     return assetPrice ? Math.min(Number(assetPriceInEth), Number(inEth)) : inEth // min between asset price and credits to be spent
   }, [credits, assetPrice])
+
+  if (seasonInfo?.isPaused) {
+    return (
+      <div className={`${styles.creditsContainer}`}>
+        <div className={styles.creditsLeft}>
+          <img className={styles.creditsIcon} src={CreditsIcon} alt="Credits" />
+          <span className={styles.creditsText}>{t('asset_page.actions.get_with_credits')}</span>
+        </div>
+        <div className={styles.temporarilyUnavailableContainer}>
+          <Popup
+            hoverable
+            wide="very"
+            style={{ width: 350 }}
+            content={
+              <div className={styles.tooltipContent}>
+                {t('credits.offline_message', {
+                  discord_link: (
+                    <a href="https://discord.gg/decentraland" target="_blank" rel="noopener noreferrer" className={styles.discordLink}>
+                      discord.gg/decentraland
+                    </a>
+                  ),
+                  br: <br />
+                })}
+              </div>
+            }
+            position="top center"
+            trigger={
+              <div className={styles.infoIconContainer}>
+                <div className={styles.infoIcon}></div>
+              </div>
+            }
+            on="hover"
+          />
+          <span className={styles.temporarilyUnavailable}>{t('global.temporarily_unavailable')}</span>
+        </div>
+      </div>
+    )
+  }
 
   if (!credits || !credits.totalCredits) {
     // If the user is the owner or the credits are not available, we don't show the toggle
