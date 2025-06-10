@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
 import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewType, Rarity } from '@dcl/schemas'
-import { Env } from '@dcl/ui-env'
+// import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Badge, Button, Center, Icon, Loader, Popup, WearablePreview } from 'decentraland-ui'
@@ -83,6 +83,7 @@ const AssetImage = (props: Props) => {
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
+
     if (asset.category === NFTCategory.EMOTE && !wearableController) {
       onSetWearablePreviewController(WearablePreview.createController('wearable-preview'))
     }
@@ -294,7 +295,6 @@ const AssetImage = (props: Props) => {
               onLoad={handleLoad}
               onError={handleError}
               {...wearablePreviewProps}
-              dev={config.is(Env.DEVELOPMENT)}
               baseUrl={config.get('WEARABLE_PREVIEW_URL')}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
@@ -449,7 +449,6 @@ const AssetImage = (props: Props) => {
               wheelStart={100}
               onLoad={handleLoad}
               onError={handleError}
-              dev={config.is(Env.DEVELOPMENT)}
               baseUrl={config.get('WEARABLE_PREVIEW_URL')}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
