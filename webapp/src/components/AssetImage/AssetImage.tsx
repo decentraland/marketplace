@@ -295,6 +295,7 @@ const AssetImage = (props: Props) => {
               onError={handleError}
               {...wearablePreviewProps}
               dev={config.is(Env.DEVELOPMENT)}
+              baseUrl={config.get('WEARABLE_PREVIEW_URL')}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
@@ -449,6 +450,7 @@ const AssetImage = (props: Props) => {
               onLoad={handleLoad}
               onError={handleError}
               dev={config.is(Env.DEVELOPMENT)}
+              baseUrl={config.get('WEARABLE_PREVIEW_URL')}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
