@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
-import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewType, Rarity } from '@dcl/schemas'
-import { Env } from '@dcl/ui-env'
+// import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewType, Rarity } from '@dcl/schemas'
+import { NFTCategory, Network, PreviewEmote, PreviewType, Rarity } from '@dcl/schemas'
+// import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Badge, Button, Center, Icon, Loader, Popup, WearablePreview } from 'decentraland-ui'
+// import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Badge, Button, Center, Icon, Loader, WearablePreview } from 'decentraland-ui'
 import { config } from '../../config'
 import { isLegacyOrder } from '../../lib/orders'
 import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
@@ -62,7 +64,7 @@ const AssetImage = (props: Props) => {
     isTryingOn,
     isPlayingEmote,
     showUpdatedDateWarning,
-    onSetIsTryingOn,
+    // onSetIsTryingOn,
     onSetWearablePreviewController,
     onPlaySmartWearableVideoShowcase,
     onFetchSmartWearableVideoHash,
@@ -83,6 +85,7 @@ const AssetImage = (props: Props) => {
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
+
     if (asset.category === NFTCategory.EMOTE && !wearableController) {
       onSetWearablePreviewController(WearablePreview.createController('wearable-preview'))
     }
@@ -93,18 +96,18 @@ const AssetImage = (props: Props) => {
     setWearablePreviewError(true)
     setIsLoadingWearablePreview(false)
   }, [])
-  const handleTryOut = useCallback(() => {
-    if (!isTryingOn) {
-      onSetIsTryingOn(true)
-      setIsLoadingWearablePreview(true)
-    }
-  }, [isTryingOn, onSetIsTryingOn])
-  const handleShowWearable = useCallback(() => {
-    if (isTryingOn) {
-      onSetIsTryingOn(false)
-      setIsLoadingWearablePreview(true)
-    }
-  }, [isTryingOn, onSetIsTryingOn])
+  // const handleTryOut = useCallback(() => {
+  //   if (!isTryingOn) {
+  //     onSetIsTryingOn(true)
+  //     setIsLoadingWearablePreview(true)
+  //   }
+  // }, [isTryingOn, onSetIsTryingOn])
+  // const handleShowWearable = useCallback(() => {
+  //   if (isTryingOn) {
+  //     onSetIsTryingOn(false)
+  //     setIsLoadingWearablePreview(true)
+  //   }
+  // }, [isTryingOn, onSetIsTryingOn])
   const handleControlActionChange = useCallback(
     async (action: ControlOptionAction) => {
       const ZOOM_DELTA = 0.03
@@ -258,12 +261,12 @@ const AssetImage = (props: Props) => {
 
         const hasRepresentation = avatar ? wearable && wearable.bodyShapes.some(shape => avatar.avatar.bodyShape.includes(shape)) : true
 
-        const missingBodyShape =
-          hasRepresentation || !avatar
-            ? null
-            : avatar.avatar.bodyShape.includes(BodyShape.MALE)
-              ? t('wearable_preview.missing_representation_error.male')
-              : t('wearable_preview.missing_representation_error.female')
+        // const missingBodyShape =
+        //   hasRepresentation || !avatar
+        //     ? null
+        //     : avatar.avatar.bodyShape.includes(BodyShape.MALE)
+        //       ? t('wearable_preview.missing_representation_error.male')
+        //       : t('wearable_preview.missing_representation_error.female')
 
         const isTryingOnEnabled = isTryingOn && hasRepresentation
 
@@ -294,7 +297,8 @@ const AssetImage = (props: Props) => {
               onLoad={handleLoad}
               onError={handleError}
               {...wearablePreviewProps}
-              dev={config.is(Env.DEVELOPMENT)}
+              unity={true}
+              baseUrl={config.get('WEARABLE_PREVIEW_URL')}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
@@ -322,44 +326,6 @@ const AssetImage = (props: Props) => {
                 </Button>
               </div>
             ) : null}
-            <Popup
-              content={<T id="wearable_preview.missing_representation_error.message" values={{ bodyShape: <b>{missingBodyShape}</b> }} />}
-              trigger={
-                <div className="preview-toggle-wrapper">
-                  <Popup
-                    position="top center"
-                    content={<T id="wearable_preview.toggle_wearable" />}
-                    trigger={
-                      <Button
-                        size="small"
-                        className={classNames('preview-toggle', 'preview-toggle-wearable', {
-                          'is-active': !isTryingOnEnabled
-                        })}
-                        onClick={handleShowWearable}
-                      />
-                    }
-                    disabled={!hasRepresentation}
-                  />
-                  <Popup
-                    position="top center"
-                    content={<T id="wearable_preview.toggle_avatar" />}
-                    trigger={
-                      <Button
-                        size="small"
-                        className={classNames('preview-toggle', 'preview-toggle-avatar', {
-                          'is-active': isTryingOnEnabled,
-                          'is-disabled': !hasRepresentation
-                        })}
-                        onClick={hasRepresentation ? handleTryOut : undefined}
-                      />
-                    }
-                    disabled={!hasRepresentation}
-                  />
-                </div>
-              }
-              position="top center"
-              disabled={hasRepresentation}
-            />
           </>
         )
       }
@@ -448,7 +414,8 @@ const AssetImage = (props: Props) => {
               wheelStart={100}
               onLoad={handleLoad}
               onError={handleError}
-              dev={config.is(Env.DEVELOPMENT)}
+              unity={true}
+              baseUrl={config.get('WEARABLE_PREVIEW_URL')}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
