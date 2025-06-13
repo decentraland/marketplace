@@ -105,3 +105,10 @@ export const getIsCreditsSecondarySalesEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsUnityWearablePreviewEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.UNITY_WEARABLE_PREVIEW)
+  }
+  return false
+}
