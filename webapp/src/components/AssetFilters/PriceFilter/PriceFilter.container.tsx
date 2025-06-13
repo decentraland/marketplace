@@ -1,5 +1,11 @@
 import { connect } from 'react-redux'
-import { getIsOffchainPublicItemOrdersEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../../../modules/features/selectors'
+import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import {
+  getIsOffchainPublicItemOrdersEnabled,
+  getIsOffchainPublicNFTOrdersEnabled,
+  isLoadingFeatureFlags as getIsLoadingFeatureFlags
+} from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getCategoryFromSection } from '../../../modules/routing/search'
 import {
@@ -58,6 +64,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     rentalDays: 'rentalDays' in values ? values.rentalDays : getRentalDays(state),
     emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : getEmoteHasGeometry(state),
     emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : getEmoteHasSound(state),
+    isLoadingFeatureFlags: isLoadingType(getIsLoadingFeatureFlags(state), FETCH_APPLICATION_FEATURES_REQUEST),
     isOffchainPublicItemOrdersEnabled: getIsOffchainPublicItemOrdersEnabled(state),
     isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state)
   }
