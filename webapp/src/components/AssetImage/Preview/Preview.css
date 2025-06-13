@@ -1,0 +1,142 @@
+.Preview .WearablePreview {
+  position: absolute;
+  opacity: 1;
+  transition: opacity ease 0.2s;
+}
+
+.Preview .is-loading-wearable-preview .WearablePreview {
+  opacity: 0;
+}
+
+.Preview .ui.loader.wearable-preview-loader:before {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.Preview .ui.loader.wearable-preview-loader:after {
+  border-color: white transparent transparent !important;
+}
+
+.Preview .preview-toggle-wrapper {
+  z-index: 1;
+  position: absolute;
+  right: 24px;
+  top: 24px;
+}
+
+.Preview .preview-toggle-wrapper .preview-toggle {
+  width: 40px;
+  min-width: 40px !important;
+  height: 32px;
+  border-radius: 0px;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: none !important;
+}
+
+.Preview .preview-toggle-wrapper .preview-toggle:first-child {
+  border-radius: 8px 0px 0px 8px;
+}
+
+.Preview .preview-toggle-wrapper .preview-toggle:last-child {
+  border-radius: 0px 8px 8px 0px;
+}
+
+.Preview .preview-toggle-wrapper .preview-toggle.preview-toggle-wearable {
+  background-image: url('../../../images/preview-wearable-icon.svg');
+}
+
+.Preview .preview-toggle-wrapper .preview-toggle.preview-toggle-avatar {
+  background-image: url('../../../images/preview-avatar-icon.svg');
+}
+
+.Preview .preview-toggle-wrapper .preview-toggle.is-active {
+  background-color: var(--primary);
+}
+
+.Preview .preview-toggle-wrapper .preview-toggle.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.Preview .preview-toggle-wrapper .preview-toggle.is-disabled:hover {
+  background-color: var(--secondary);
+}
+
+.Preview .asset-zoom-controls {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.Preview .asset-zoom-controls > .ui.button.zoom-control {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  min-width: unset;
+  background-color: rgba(0, 0, 0, 0.64) !important;
+  border-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1px;
+}
+
+.Preview .asset-zoom-controls > .ui.button.zoom-control:hover {
+  transform: none;
+  background-color: var(--secondary) !important;
+}
+
+.Preview .asset-zoom-controls > .ui.button.zoom-control i.icon {
+  margin: 0 !important;
+  width: 16px;
+  height: 16px;
+}
+
+.Preview .asset-zoom-controls > .ui.button.zoom-in-control {
+  border-radius: 6px 6px 0px 0px;
+}
+
+.Preview .asset-zoom-controls > .ui.button.zoom-out-control {
+  border-radius: 0px 0px 6px 6px;
+}
+
+.Preview .asset-wearable-controls {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+}
+
+.Preview .asset-emote-controls {
+  gap: 5px;
+}
+
+.Preview .asset-emote-controls .ui.button.play-button,
+.Preview .asset-emote-controls .ui.button.sound-button,
+.Preview .asset-wearable-controls .ui.button.play-button {
+  color: black;
+  background-color: var(--text);
+}
+
+.Preview .asset-emote-controls .ui.button.sound-button {
+  min-width: unset;
+  padding: 8px;
+}
+
+.Preview .asset-emote-controls .ui.button.sound-button::before {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-image: url('../../../images/emotes/mute.svg');
+  filter: invert(1);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.Preview .asset-emote-controls .ui.button.sound-button.enabled::before {
+  background-image: url('../../../images/emotes/volume.svg');
+}

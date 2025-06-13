@@ -6,14 +6,15 @@ import { fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
 import { getVideoHash, getAssetData, isFetchingVideoHash } from '../../modules/asset/selectors'
 import { Asset } from '../../modules/asset/types'
 import { isNFT } from '../../modules/asset/utils'
+import { getIsUnityWearablePreviewEnabled } from '../../modules/features/selectors'
 import { fetchItemRequest } from '../../modules/item/actions'
 import { getData as getItems } from '../../modules/item/selectors'
 import { getItem } from '../../modules/item/utils'
 import { NFT } from '../../modules/nft/types'
 import { getData as getOrders } from '../../modules/order/selectors'
 import { RootState } from '../../modules/reducer'
-import { setIsTryingOn, setWearablePreviewController } from '../../modules/ui/preview/actions'
-import { getIsTryingOn, getIsPlayingEmote, getWearablePreviewController } from '../../modules/ui/preview/selectors'
+import { setIsTryingOn } from '../../modules/ui/preview/actions'
+import { getIsTryingOn } from '../../modules/ui/preview/selectors'
 import { getWallet } from '../../modules/wallet/selectors'
 import AssetImage from './AssetImage'
 import { MapStateProps, MapDispatchProps, MapDispatch, OwnProps } from './AssetImage.types'
@@ -38,22 +39,20 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   }
 
   return {
-    wallet,
     avatar,
-    wearableController: getWearablePreviewController(state),
-    isTryingOn: getIsTryingOn(state),
-    isPlayingEmote: getIsPlayingEmote(state),
+    wallet,
     item,
     order,
     videoHash: getVideoHash(state, assetId),
     isLoadingVideoHash: isFetchingVideoHash(state, assetId),
+    isTryingOn: getIsTryingOn(state),
+    isUnityWearablePreviewEnabled: getIsUnityWearablePreviewEnabled(state),
     hasFetchedVideoHash: 'videoHash' in getAssetData(state, assetId)
   }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onSetIsTryingOn: value => dispatch(setIsTryingOn(value)),
-  onSetWearablePreviewController: controller => dispatch(setWearablePreviewController(controller)),
   onPlaySmartWearableVideoShowcase: (videoHash: string) => dispatch(openModal('SmartWearableVideoShowcaseModal', { videoHash })),
   onFetchItem: (contractAddress: string, tokenId: string) => dispatch(fetchItemRequest(contractAddress, tokenId)),
   onFetchSmartWearableVideoHash: (asset: Asset) => dispatch(fetchSmartWearableVideoHashRequest(asset))
