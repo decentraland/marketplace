@@ -1,6 +1,7 @@
 import { Bid, ChainId, GetBidsParameters, PaginatedResponse } from '@dcl/schemas'
 import { BaseClient } from 'decentraland-dapps/dist/lib'
 import { config } from '../../../../config'
+import { EstateSizeFilters } from '../nft/api'
 import { retryParams } from '../utils'
 import { Balance } from './types'
 
@@ -22,14 +23,29 @@ export class MarketplaceAPI extends BaseClient {
     return this.fetch(`/v1/${chainIdToChainName[chain]}/address/${wallet}/balance`, { method: 'GET' })
   }
 
-  fetchBids = async (queryParams: GetBidsParameters = {}) => {
-    const params = Object.entries(queryParams)
+  getSearchParams = (filters: Record<string, string | number | boolean | undefined>) => {
     const searchParams = new URLSearchParams()
-    params.forEach(([key, value]) => {
-      searchParams.append(key, value.toString())
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined) {
+        searchParams.append(key, value.toString())
+      }
     })
+    return searchParams.toString()
+  }
 
-    return this.fetch<PaginatedResponse<Bid>>(`/v1/bids${params.length ? `?${searchParams.toString()}` : ''}`, { method: 'GET' })
+  fetchBids = async (queryParams: GetBidsParameters = {}) => {
+    const searchParams = this.getSearchParams(queryParams)
+
+    return this.fetch<PaginatedResponse<Bid>>(`/v1/bids${searchParams ? `?${searchParams}` : ''}`, { method: 'GET' })
+  }
+
+  fetchEstateSizes = async (filters: EstateSizeFilters): Promise<Record<string, number>> => {
+    try {
+      return this.fetch(`/v1/stats/estate/size?${this.getSearchParams(filters)}`, { method: 'GET' })
+    } catch (error) {
+      console.error('Error fetching estate sizes', error)
+      return {}
+    }
   }
 }
 

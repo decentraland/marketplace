@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { nftAPI } from '../../../modules/vendor/decentraland/nft/api'
+import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import { getPriceLabel } from '../../../utils/filters'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import { Inventory } from '../Inventory/Inventory'
@@ -53,7 +53,7 @@ export const EstateSizeFilter = ({
       // for rents, we don't have the data yet, so let's just resolve with an empty object so the chart is not rendered
       return {}
     }
-    const data = await nftAPI.fetchEstateSizes(filters)
+    const data = await marketplaceAPI.fetchEstateSizes(filters)
     return data
   }, [filters, landStatus])
 

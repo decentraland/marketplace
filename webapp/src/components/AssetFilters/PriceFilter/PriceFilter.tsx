@@ -37,6 +37,7 @@ export const PriceFilter = ({
   emoteHasSound,
   isOffchainPublicItemOrdersEnabled,
   isOffchainPublicNFTOrdersEnabled,
+  isLoadingFeatureFlags,
   onChange
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
@@ -116,6 +117,9 @@ export const PriceFilter = ({
 
   const fetcher = useCallback(async () => {
     let data: Record<string, number> = {}
+    if (isLoadingFeatureFlags) {
+      return {}
+    }
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
       data = await rentalsAPI.getRentalListingsPrices(rentalPriceFetchFilters())
     } else {
@@ -129,7 +133,14 @@ export const PriceFilter = ({
       },
       {} as Record<string, number>
     )
-  }, [priceFetchFilters, landStatus, isOffchainPublicItemOrdersEnabled, isOffchainPublicNFTOrdersEnabled, rentalPriceFetchFilters])
+  }, [
+    priceFetchFilters,
+    landStatus,
+    isOffchainPublicItemOrdersEnabled,
+    isOffchainPublicNFTOrdersEnabled,
+    rentalPriceFetchFilters,
+    isLoadingFeatureFlags
+  ])
 
   return (
     <Box header={header} className="filters-sidebar-box price-filter" collapsible defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
