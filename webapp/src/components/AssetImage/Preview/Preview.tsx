@@ -141,6 +141,10 @@ export const Preview: React.FC<PreviewProps> = ({
   const isOwnerOfNFT = useMemo(() => isNFT(asset) && wallet?.address === asset.owner, [asset, wallet?.address])
 
   const renderControls = useCallback(() => {
+    if (isUnityWearablePreviewEnabled) {
+      return null
+    }
+
     if (asset.category === NFTCategory.EMOTE) {
       return (
         <>
@@ -171,7 +175,7 @@ export const Preview: React.FC<PreviewProps> = ({
       )
     }
 
-    if (!isUnityWearablePreviewEnabled && asset.data.wearable?.isSmart && asset.urn && videoHash) {
+    if (asset.data.wearable?.isSmart && asset.urn && videoHash) {
       return (
         <div className="asset-wearable-controls">
           <Button className="play-button" size="small" onClick={() => onPlaySmartWearableVideoShowcase?.(videoHash)}>
