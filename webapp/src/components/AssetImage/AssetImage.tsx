@@ -124,7 +124,7 @@ const AssetImage = (props: Props) => {
           isDraggable={isDraggable}
           isLoadingVideoHash={isLoadingVideoHash}
           isTryingOn={isTryingOn}
-          isUnityWearablePreviewEnabled={!isUnityWearablePreviewEnabled}
+          isUnityWearablePreviewEnabled={!!isUnityWearablePreviewEnabled}
           onSetIsTryingOn={onSetIsTryingOn}
           onPlaySmartWearableVideoShowcase={onPlaySmartWearableVideoShowcase}
         />
