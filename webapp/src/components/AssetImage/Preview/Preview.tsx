@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { Network, PreviewType, Rarity, BodyShape, NFTCategory, PreviewEmote } from '@dcl/schemas'
 import { Env } from '@dcl/ui-env'
@@ -21,14 +21,33 @@ export const Preview: React.FC<PreviewProps> = ({
   videoHash,
   wallet,
   isDraggable,
-  isTryingOn,
+  isLoadingVideoHash,
   isUnityWearablePreviewEnabled,
   hasBadges,
-  onSetIsTryingOn,
+  hasFetchedVideoHash,
+  onFetchSmartWearableVideoHash,
   onPlaySmartWearableVideoShowcase
 }) => {
+  const [isTryingOn, setIsTryingOn] = useState(false)
+  const [isTracked, setIsTracked] = useState(false)
   const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(isDraggable)
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
+
+  // This effect is here just to track on which mode the preview is initialized, that's why it has an empty dependency array, so this is triggered once on mount
+  useEffect(() => {
+    const isPreview = asset.category === NFTCategory.WEARABLE && isDraggable
+
+    if (!isTracked && isPreview) {
+      getAnalytics()?.track(events.INIT_PREVIEW, {
+        mode: isTryingOn ? 'avatar' : 'wearable'
+      })
+      setIsTracked(true)
+    }
+
+    if (isPreview && asset.data.wearable?.isSmart && asset.urn && videoHash === undefined && !isLoadingVideoHash && !hasFetchedVideoHash) {
+      onFetchSmartWearableVideoHash(asset)
+    }
+  }, [])
 
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
@@ -43,25 +62,25 @@ export const Preview: React.FC<PreviewProps> = ({
 
   const handleTryOut = useCallback(() => {
     if (!isTryingOn) {
-      onSetIsTryingOn(true)
+      setIsTryingOn(true)
       getAnalytics()?.track(events.TOGGLE_PREVIEW_MODE, {
         mode: 'avatar',
         itemId: asset.itemId,
         contractAddress: asset.contractAddress
       })
     }
-  }, [isTryingOn, onSetIsTryingOn, asset.itemId, asset.contractAddress])
+  }, [isTryingOn, setIsTryingOn, asset.itemId, asset.contractAddress])
 
   const handleShowWearable = useCallback(() => {
     if (isTryingOn) {
-      onSetIsTryingOn(false)
+      setIsTryingOn(false)
       getAnalytics()?.track(events.TOGGLE_PREVIEW_MODE, {
         mode: 'wearable',
         itemId: asset.itemId,
         contractAddress: asset.contractAddress
       })
     }
-  }, [isTryingOn, onSetIsTryingOn, asset.itemId, asset.contractAddress])
+  }, [isTryingOn, setIsTryingOn, asset.itemId, asset.contractAddress])
 
   const previewEmote = useMemo(() => {
     const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
@@ -140,11 +159,7 @@ export const Preview: React.FC<PreviewProps> = ({
   const isOwnerOfNFT = useMemo(() => isNFT(asset) && wallet?.address === asset.owner, [asset, wallet?.address])
 
   const renderControls = useCallback(() => {
-    if (isUnityWearablePreviewEnabled) {
-      return null
-    }
-
-    if (asset.category === NFTCategory.EMOTE) {
+    if (!isUnityWearablePreviewEnabled && asset.category === NFTCategory.EMOTE) {
       return (
         <>
           <ZoomControls className="asset-zoom-controls" wearablePreviewId="wearable-preview" />

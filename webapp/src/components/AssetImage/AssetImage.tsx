@@ -1,13 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
 import { NFTCategory } from '@dcl/schemas'
-import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Badge, Loader } from 'decentraland-ui'
 import { isLegacyOrder } from '../../lib/orders'
 import { getAssetImage, getAssetName, isNFT } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
-import * as events from '../../utils/events'
 import { JumpIn } from '../AssetPage/JumpIn'
 import { Atlas } from '../Atlas'
 import { Coordinate } from '../Coordinate'
@@ -35,36 +33,16 @@ const AssetImage = (props: Props) => {
     isDraggable,
     isLoadingVideoHash,
     isSmall,
-    isTryingOn,
     isUnityWearablePreviewEnabled,
     hasBadges,
     hasFetchedVideoHash,
     hasPopup,
     onFetchSmartWearableVideoHash,
-    onSetIsTryingOn,
     onPlaySmartWearableVideoShowcase
   } = props
   const { parcel, estate, ens } = asset.data
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [estate])
-
-  const [isTracked, setIsTracked] = useState(false)
-
-  // This effect is here just to track on which mode the preview is initialized, that's why it has an empty dependency array, so this is triggered once on mount
-  useEffect(() => {
-    const isPreview = asset.category === NFTCategory.WEARABLE && isDraggable
-
-    if (!isTracked && isPreview) {
-      getAnalytics()?.track(events.INIT_PREVIEW, {
-        mode: isTryingOn ? 'avatar' : 'wearable'
-      })
-      setIsTracked(true)
-    }
-
-    if (isPreview && asset.data.wearable?.isSmart && asset.urn && videoHash === undefined && !isLoadingVideoHash && !hasFetchedVideoHash) {
-      onFetchSmartWearableVideoHash(asset)
-    }
-  }, []) // eslint-disable-line
 
   switch (asset.category) {
     case NFTCategory.PARCEL: {
@@ -123,9 +101,10 @@ const AssetImage = (props: Props) => {
           wallet={wallet}
           isDraggable={isDraggable}
           isLoadingVideoHash={isLoadingVideoHash}
-          isTryingOn={isTryingOn}
           isUnityWearablePreviewEnabled={!!isUnityWearablePreviewEnabled}
-          onSetIsTryingOn={onSetIsTryingOn}
+          hasBadges={hasBadges}
+          hasFetchedVideoHash={hasFetchedVideoHash}
+          onFetchSmartWearableVideoHash={onFetchSmartWearableVideoHash}
           onPlaySmartWearableVideoShowcase={onPlaySmartWearableVideoShowcase}
         />
       )
