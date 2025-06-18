@@ -6,7 +6,6 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { FetchSmartWearableVideoHashRequestAction, fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
 import { Asset } from '../../modules/asset/types'
 import { FetchItemRequestAction, fetchItemRequest } from '../../modules/item/actions'
-import { setIsTryingOn, SetIsTryingOnAction } from '../../modules/ui/preview/actions'
 
 export type Props = {
   asset: Asset
@@ -32,30 +31,16 @@ export type Props = {
   onFetchItem: typeof fetchItemRequest
   onFetchSmartWearableVideoHash: typeof fetchSmartWearableVideoHashRequest
   onPlaySmartWearableVideoShowcase: (videoHash: string) => ReturnType<typeof openModal>
-  onSetIsTryingOn: typeof setIsTryingOn
 }
 
 export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>
 
 export type MapStateProps = Pick<
   Props,
-  | 'avatar'
-  | 'item'
-  | 'order'
-  | 'videoHash'
-  | 'wallet'
-  | 'isLoadingVideoHash'
-  | 'isTryingOn'
-  | 'isUnityWearablePreviewEnabled'
-  | 'hasFetchedVideoHash'
+  'avatar' | 'item' | 'order' | 'videoHash' | 'wallet' | 'isLoadingVideoHash' | 'isUnityWearablePreviewEnabled' | 'hasFetchedVideoHash'
 >
-export type MapDispatchProps = Pick<
-  Props,
-  'onFetchItem' | 'onFetchSmartWearableVideoHash' | 'onPlaySmartWearableVideoShowcase' | 'onSetIsTryingOn'
->
-export type MapDispatch = Dispatch<
-  FetchItemRequestAction | FetchSmartWearableVideoHashRequestAction | OpenModalAction | SetIsTryingOnAction
->
+export type MapDispatchProps = Pick<Props, 'onFetchItem' | 'onFetchSmartWearableVideoHash' | 'onPlaySmartWearableVideoShowcase'>
+export type MapDispatch = Dispatch<FetchItemRequestAction | FetchSmartWearableVideoHashRequestAction | OpenModalAction>
 
 export type AvailableForMintPopupType = {
   price: string
