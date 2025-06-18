@@ -23,7 +23,6 @@ export type Props = {
   isDraggable?: boolean
   isLoadingVideoHash?: boolean
   isSmall?: boolean
-  isTryingOn: boolean
   isUnityWearablePreviewEnabled?: boolean
   hasBadges?: boolean
   hasFetchedVideoHash?: boolean
