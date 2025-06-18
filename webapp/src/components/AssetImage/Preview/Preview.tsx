@@ -221,6 +221,7 @@ export const Preview: React.FC<PreviewProps> = ({
             profile={isTryingOnEnabled || isEmote ? (avatar ? avatar.ethAddress : 'default') : undefined}
             skin={skin}
             unity={isUnityWearablePreviewEnabled}
+            unityMode="marketplace"
             wheelZoom={isEmote ? 1.5 : undefined}
             wheelStart={isEmote ? 100 : undefined}
             onLoad={handleLoad}
