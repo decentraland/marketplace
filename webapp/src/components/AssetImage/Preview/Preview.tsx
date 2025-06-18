@@ -118,7 +118,6 @@ export const Preview: React.FC<PreviewProps> = ({
       asset.network === Network.ETHEREUM
         ? {
             urns: [ethereumUrn],
-            background: Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity),
             type: isTryingOn ? PreviewType.AVATAR : PreviewType.WEARABLE
           }
         : {
@@ -214,18 +213,19 @@ export const Preview: React.FC<PreviewProps> = ({
         <>
           <DCLWearablePreview
             id="wearable-preview"
-            profile={isTryingOnEnabled ? (avatar ? avatar.ethAddress : 'default') : undefined}
-            skin={skin}
-            hair={hair}
+            baseUrl={config.get('WEARABLE_PREVIEW_URL')}
+            background={Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity)}
+            dev={!isUnityWearablePreviewEnabled ? config.is(Env.DEVELOPMENT) : undefined}
             emote={isTryingOnEnabled ? previewEmote : undefined}
+            hair={hair}
+            profile={isTryingOnEnabled || isEmote ? (avatar ? avatar.ethAddress : 'default') : undefined}
+            skin={skin}
+            unity={isUnityWearablePreviewEnabled}
             wheelZoom={isEmote ? 1.5 : undefined}
             wheelStart={isEmote ? 100 : undefined}
             onLoad={handleLoad}
             onError={handleError}
             {...wearablePreviewProps}
-            dev={!isUnityWearablePreviewEnabled ? config.is(Env.DEVELOPMENT) : undefined}
-            unity={isUnityWearablePreviewEnabled}
-            baseUrl={config.get('WEARABLE_PREVIEW_URL')}
           />
           {isAvailableForMint && !isOwnerOfNFT && item ? (
             <AvailableForMintPopup
