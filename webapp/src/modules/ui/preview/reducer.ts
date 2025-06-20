@@ -5,20 +5,30 @@ import {
   SET_EMOTE_PLAYING,
   SET_IS_TRYING_ON,
   SET_WEARABLE_PREVIEW_CONTROLLER,
-  SetWearablePreviewControllerAction
+  SetWearablePreviewControllerAction,
+  SET_UNITY_PRELOADER_STATUS,
+  SetUnityPreloaderStatusAction
 } from './actions'
 
 export type PreviewState = {
   isTryingOn: boolean
   wearablePreviewController?: IPreviewController | null
   isPlayingEmote?: boolean
+  unityPreloader: {
+    isReady: boolean
+    isLoading: boolean
+  }
 }
 
 export const INITIAL_STATE: PreviewState = {
-  isTryingOn: false
+  isTryingOn: false,
+  unityPreloader: {
+    isReady: false,
+    isLoading: false
+  }
 }
 
-type PreviewReducerAction = SetIsTryingOnAction | SetEmotePlayingAction | SetWearablePreviewControllerAction
+type PreviewReducerAction = SetIsTryingOnAction | SetEmotePlayingAction | SetWearablePreviewControllerAction | SetUnityPreloaderStatusAction
 
 export function previewReducer(state = INITIAL_STATE, action: PreviewReducerAction): PreviewState {
   switch (action.type) {
@@ -38,6 +48,15 @@ export function previewReducer(state = INITIAL_STATE, action: PreviewReducerActi
       return {
         ...state,
         isPlayingEmote: action.payload.isPlayingEmote
+      }
+    }
+    case SET_UNITY_PRELOADER_STATUS: {
+      return {
+        ...state,
+        unityPreloader: {
+          isReady: action.payload.isReady,
+          isLoading: action.payload.isLoading
+        }
       }
     }
     default:
