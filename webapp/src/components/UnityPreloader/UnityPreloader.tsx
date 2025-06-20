@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from 'react'
-import { PreviewType } from '@dcl/schemas'
 import { WearablePreview } from 'decentraland-ui'
 import { config } from '../../config'
 import { Props } from './UnityPreloader.types'
@@ -14,7 +13,7 @@ const UnityPreloader: React.FC<Props> = props => {
 
   const handleError = useCallback(
     (error: Error) => {
-      console.error('Unity Preloader error:', error)
+      console.error('Unity Preload', error)
       // Even on error, we mark as ready to not block the app
       onSetUnityPreloaderStatus(true, false)
     },
@@ -37,14 +36,10 @@ const UnityPreloader: React.FC<Props> = props => {
       <WearablePreview
         id="unity-preloader"
         baseUrl={config.get('WEARABLE_PREVIEW_URL')}
-        background="#000000"
         unity={true}
-        unityMode="marketplace"
+        unityMode="profile"
         onLoad={handleLoad}
         onError={handleError}
-        // Use a minimal configuration to just load Unity
-        urns={[]}
-        type={PreviewType.WEARABLE}
       />
     </div>
   )
