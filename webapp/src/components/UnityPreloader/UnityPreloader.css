@@ -1,0 +1,15 @@
+.unity-preloader {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.unity-preloader canvas {
+  visibility: hidden;
+}

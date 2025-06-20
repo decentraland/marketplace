@@ -32,6 +32,7 @@ import { SettingsPage } from '../SettingsPage'
 import { SignInPage } from '../SignInPage'
 import { SuccessPage } from '../SuccessPage'
 import { TransferPage } from '../TransferPage'
+import { UnityPreloader } from '../UnityPreloader'
 import { Props } from './Routes.types'
 
 const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
@@ -60,6 +61,7 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
 
   return (
     <>
+      <UnityPreloader />
       <Switch>
         <Route exact path={locations.lands()} component={LandsPage} />
         <Route exact path={locations.claimName()} component={ClaimNamePage} />
