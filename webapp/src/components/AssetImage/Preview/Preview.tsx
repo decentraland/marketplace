@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
-import { Network, PreviewType, Rarity, BodyShape, NFTCategory, PreviewEmote } from '@dcl/schemas'
+import { Network, PreviewType, Rarity, BodyShape, NFTCategory, PreviewEmote, PreviewRenderer } from '@dcl/schemas'
 import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -32,6 +32,7 @@ export const Preview: React.FC<PreviewProps> = ({
   const [isTracked, setIsTracked] = useState(false)
   const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(isDraggable)
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
+  const [rendererType, setRendererType] = useState<PreviewRenderer | null>(null)
 
   // This effect is here just to track on which mode the preview is initialized, that's why it has an empty dependency array, so this is triggered once on mount
   useEffect(() => {
@@ -49,9 +50,11 @@ export const Preview: React.FC<PreviewProps> = ({
     }
   }, [])
 
-  const handleLoad = useCallback(() => {
+  const handleLoad = useCallback((renderer: PreviewRenderer | null) => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
+    setRendererType(renderer)
+    console.log('renderer', { renderer })
   }, [])
 
   const handleError = useCallback((error: Error) => {
@@ -158,8 +161,11 @@ export const Preview: React.FC<PreviewProps> = ({
 
   const isOwnerOfNFT = useMemo(() => isNFT(asset) && wallet?.address === asset.owner, [asset, wallet?.address])
 
+  const isBabylonRenderer = useMemo(() => rendererType === PreviewRenderer.BABYLON, [rendererType])
+
   const renderControls = useCallback(() => {
-    if (!isUnityWearablePreviewEnabled && asset.category === NFTCategory.EMOTE) {
+    // Show controls for emotes when using Babylon renderer (not Unity)
+    if (isBabylonRenderer && asset.category === NFTCategory.EMOTE) {
       return (
         <>
           <ZoomControls className="asset-zoom-controls" wearablePreviewId="wearable-preview" />
@@ -189,6 +195,51 @@ export const Preview: React.FC<PreviewProps> = ({
       )
     }
 
+    // Show toggle controls for wearables when using Babylon renderer
+    if (isBabylonRenderer && asset.category === NFTCategory.WEARABLE) {
+      return (
+        <Popup
+          content={t('wearable_preview.missing_representation_error.message', { bodyShape: <b>{missingBodyShape}</b> })}
+          trigger={
+            <div className="preview-toggle-wrapper">
+              <Popup
+                position="top center"
+                content={t('wearable_preview.toggle_wearable')}
+                trigger={
+                  <Button
+                    size="small"
+                    className={classNames('preview-toggle', 'preview-toggle-wearable', {
+                      'is-active': !isTryingOnEnabled
+                    })}
+                    onClick={handleShowWearable}
+                  />
+                }
+                disabled={!hasRepresentation}
+              />
+              <Popup
+                position="top center"
+                content={t('wearable_preview.toggle_avatar')}
+                trigger={
+                  <Button
+                    size="small"
+                    className={classNames('preview-toggle', 'preview-toggle-avatar', {
+                      'is-active': isTryingOnEnabled,
+                      'is-disabled': !hasRepresentation
+                    })}
+                    onClick={hasRepresentation ? handleTryOut : undefined}
+                  />
+                }
+                disabled={!hasRepresentation}
+              />
+            </div>
+          }
+          position="top center"
+          disabled={hasRepresentation}
+        />
+      )
+    }
+
+    // Show Smart Wearable Play showcase for both Babylon and Unity renderers
     if (asset.data.wearable?.isSmart && asset.urn && videoHash) {
       return (
         <div className="asset-wearable-controls">
@@ -201,7 +252,17 @@ export const Preview: React.FC<PreviewProps> = ({
     }
 
     return null
-  }, [asset, isUnityWearablePreviewEnabled, videoHash, onPlaySmartWearableVideoShowcase])
+  }, [
+    asset,
+    missingBodyShape,
+    videoHash,
+    isBabylonRenderer,
+    isTryingOnEnabled,
+    handleShowWearable,
+    hasRepresentation,
+    handleTryOut,
+    onPlaySmartWearableVideoShowcase
+  ])
 
   const [light, dark] = useMemo(
     () => Rarity.getGradient(asset.data.wearable?.rarity || asset.data.emote?.rarity || Rarity.COMMON),
@@ -259,46 +320,6 @@ export const Preview: React.FC<PreviewProps> = ({
             </Center>
           ) : (
             renderControls()
-          )}
-          {!isUnityWearablePreviewEnabled && asset.category === NFTCategory.WEARABLE && (
-            <Popup
-              content={t('wearable_preview.missing_representation_error.message', { bodyShape: <b>{missingBodyShape}</b> })}
-              trigger={
-                <div className="preview-toggle-wrapper">
-                  <Popup
-                    position="top center"
-                    content={t('wearable_preview.toggle_wearable')}
-                    trigger={
-                      <Button
-                        size="small"
-                        className={classNames('preview-toggle', 'preview-toggle-wearable', {
-                          'is-active': !isTryingOnEnabled
-                        })}
-                        onClick={handleShowWearable}
-                      />
-                    }
-                    disabled={!hasRepresentation}
-                  />
-                  <Popup
-                    position="top center"
-                    content={t('wearable_preview.toggle_avatar')}
-                    trigger={
-                      <Button
-                        size="small"
-                        className={classNames('preview-toggle', 'preview-toggle-avatar', {
-                          'is-active': isTryingOnEnabled,
-                          'is-disabled': !hasRepresentation
-                        })}
-                        onClick={hasRepresentation ? handleTryOut : undefined}
-                      />
-                    }
-                    disabled={!hasRepresentation}
-                  />
-                </div>
-              }
-              position="top center"
-              disabled={hasRepresentation}
-            />
           )}
         </>
       ) : (
