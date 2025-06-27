@@ -10,7 +10,6 @@ import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { AccountPage } from '../AccountPage'
 import { ActivityPage } from '../ActivityPage'
-import { PortaledWearablePreview } from '../AssetImage/Preview/PortaledWearablePreview'
 import { AssetPage } from '../AssetPage'
 import { BidPage } from '../BidPage'
 import { BrowsePage } from '../BrowsePage'
@@ -27,6 +26,7 @@ import { ManageAssetPage } from '../ManageAssetPage'
 import { NamesPage } from '../NamesPage'
 import { ClaimNamePage } from '../NamesPage/ClaimNamePage'
 import { PageLayout } from '../PageLayout'
+import { PortalWearablePreview } from '../PortalWearablePreview'
 import { ProtectedRoute } from '../ProtectedRoute'
 import { SellPage } from '../SellPage'
 import { SettingsPage } from '../SettingsPage'
@@ -61,7 +61,7 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
 
   return (
     <>
-      <PortaledWearablePreview />
+      <PortalWearablePreview />
       <Switch>
         <Route exact path={locations.lands()} component={LandsPage} />
         <Route exact path={locations.claimName()} component={ClaimNamePage} />
