@@ -1,9 +1,7 @@
 import React from 'react'
 import { Dispatch } from 'redux'
 import { Avatar, Item, Order, Rarity, Network } from '@dcl/schemas'
-import { OpenModalAction, openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { FetchSmartWearableVideoHashRequestAction, fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
 import { Asset } from '../../modules/asset/types'
 import { FetchItemRequestAction, fetchItemRequest } from '../../modules/item/actions'
 
@@ -16,30 +14,21 @@ export type Props = {
   order?: Order
   showOrderListedTag?: boolean
   showUpdatedDateWarning?: boolean
-  videoHash?: string
   wallet: Wallet | null
   withNavigation?: boolean
   zoom?: number
   isDraggable?: boolean
-  isLoadingVideoHash?: boolean
   isSmall?: boolean
-  isUnityWearablePreviewEnabled?: boolean
   hasBadges?: boolean
-  hasFetchedVideoHash?: boolean
   hasPopup?: boolean
   onFetchItem: typeof fetchItemRequest
-  onFetchSmartWearableVideoHash: typeof fetchSmartWearableVideoHashRequest
-  onPlaySmartWearableVideoShowcase: (videoHash: string) => ReturnType<typeof openModal>
 }
 
 export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>
 
-export type MapStateProps = Pick<
-  Props,
-  'avatar' | 'item' | 'order' | 'videoHash' | 'wallet' | 'isLoadingVideoHash' | 'isUnityWearablePreviewEnabled' | 'hasFetchedVideoHash'
->
-export type MapDispatchProps = Pick<Props, 'onFetchItem' | 'onFetchSmartWearableVideoHash' | 'onPlaySmartWearableVideoShowcase'>
-export type MapDispatch = Dispatch<FetchItemRequestAction | FetchSmartWearableVideoHashRequestAction | OpenModalAction>
+export type MapStateProps = Pick<Props, 'avatar' | 'item' | 'order' | 'wallet'>
+export type MapDispatchProps = Pick<Props, 'onFetchItem'>
+export type MapDispatch = Dispatch<FetchItemRequestAction>
 
 export type AvailableForMintPopupType = {
   price: string

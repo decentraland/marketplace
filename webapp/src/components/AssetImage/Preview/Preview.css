@@ -1,7 +1,11 @@
 .Preview .WearablePreview {
-  position: absolute;
   opacity: 1;
   transition: opacity ease 0.2s;
+}
+
+.Preview .preview-container {
+  width: 100%;
+  height: 100%;
 }
 
 .Preview .is-loading-wearable-preview .WearablePreview {
@@ -107,6 +111,7 @@
   bottom: 24px;
   left: 24px;
   display: flex;
+  z-index: 1;
 }
 
 .Preview .asset-emote-controls {
