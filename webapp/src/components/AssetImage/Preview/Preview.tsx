@@ -1,19 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import classNames from 'classnames'
 import { Network, PreviewType, Rarity, BodyShape, NFTCategory, PreviewEmote, PreviewRenderer } from '@dcl/schemas'
-import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { WearablePreview as DCLWearablePreview, Button, Center, Loader, Popup, Icon, EmoteControls, ZoomControls } from 'decentraland-ui'
-import { config } from '../../../config'
+import { Button, Center, Loader, Popup, Icon, EmoteControls, ZoomControls } from 'decentraland-ui'
 import { getAssetImage, getAssetName, isNFT } from '../../../modules/asset/utils'
 import * as events from '../../../utils/events'
 import AvailableForMintPopup from '../AvailableForMintPopup'
 import { getEthereumItemUrn, colorToHex } from '../utils'
-import { PreviewProps } from './Preview.types'
+import { Props } from './Preview.types'
 import './Preview.css'
 
-export const Preview: React.FC<PreviewProps> = ({
+export const Preview: React.FC<Props> = ({
   asset,
   avatar,
   children,
@@ -22,17 +20,18 @@ export const Preview: React.FC<PreviewProps> = ({
   wallet,
   isDraggable,
   isLoadingVideoHash,
-  isUnityWearablePreviewEnabled,
   hasBadges,
   hasFetchedVideoHash,
   onFetchSmartWearableVideoHash,
-  onPlaySmartWearableVideoShowcase
+  onPlaySmartWearableVideoShowcase,
+  onSetPortalPreviewProps
 }) => {
   const [isTryingOn, setIsTryingOn] = useState(false)
   const [isTracked, setIsTracked] = useState(false)
-  const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(isDraggable)
+  const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(isDraggable ?? true)
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
-  const [rendererType, setRendererType] = useState<PreviewRenderer | null>(null)
+  const [rendererType, setRendererType] = useState<PreviewRenderer | undefined>(undefined)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   // This effect is here just to track on which mode the preview is initialized, that's why it has an empty dependency array, so this is triggered once on mount
   useEffect(() => {
@@ -50,11 +49,10 @@ export const Preview: React.FC<PreviewProps> = ({
     }
   }, [])
 
-  const handleLoad = useCallback((renderer: PreviewRenderer | null) => {
+  const handleLoad = useCallback((renderer?: PreviewRenderer) => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
     setRendererType(renderer)
-    console.log('renderer', { renderer })
   }, [])
 
   const handleError = useCallback((error: Error) => {
@@ -275,6 +273,43 @@ export const Preview: React.FC<PreviewProps> = ({
 
   const isEmote = useMemo(() => asset.category === NFTCategory.EMOTE, [asset.category])
 
+  // Portal preview effect
+  useEffect(() => {
+    if (showWearablePreview) {
+      const payload = {
+        id: 'wearable-preview',
+        background: Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity),
+        containerRef: containerRef,
+        emote: isTryingOnEnabled ? previewEmote : undefined,
+        hair: hair,
+        profile: avatar ? avatar.ethAddress : 'default',
+        skin: skin,
+        wheelZoom: isEmote ? 1.5 : undefined,
+        wheelStart: isEmote ? 100 : undefined,
+        onLoad: handleLoad,
+        onError: handleError,
+        ...wearablePreviewProps,
+        isLoadingWearablePreview
+      }
+      onSetPortalPreviewProps(payload)
+    }
+  }, [
+    asset,
+    avatar,
+    containerRef,
+    hair,
+    previewEmote,
+    skin,
+    wearablePreviewProps,
+    isEmote,
+    isTryingOnEnabled,
+    isLoadingWearablePreview,
+    showWearablePreview,
+    handleLoad,
+    handleError,
+    onSetPortalPreviewProps
+  ])
+
   const className = useMemo(
     () =>
       classNames('Preview', 'rarity-background', {
@@ -284,26 +319,10 @@ export const Preview: React.FC<PreviewProps> = ({
   )
 
   return (
-    <div className={className} style={{ backgroundImage }}>
+    <div className={className} style={{ backgroundImage, pointerEvents: 'auto' }}>
       {showWearablePreview ? (
         <>
-          <DCLWearablePreview
-            id="wearable-preview"
-            baseUrl={config.get('WEARABLE_PREVIEW_URL')}
-            background={Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity)}
-            dev={!isUnityWearablePreviewEnabled ? config.is(Env.DEVELOPMENT) : undefined}
-            emote={isTryingOnEnabled ? previewEmote : undefined}
-            hair={hair}
-            profile={avatar ? avatar.ethAddress : 'default'}
-            skin={skin}
-            unity={isUnityWearablePreviewEnabled}
-            unityMode="marketplace"
-            wheelZoom={isEmote ? 1.5 : undefined}
-            wheelStart={isEmote ? 100 : undefined}
-            onLoad={handleLoad}
-            onError={handleError}
-            {...wearablePreviewProps}
-          />
+          <div className="preview-container" ref={containerRef}></div>
           {isAvailableForMint && !isOwnerOfNFT && item ? (
             <AvailableForMintPopup
               price={item.price}

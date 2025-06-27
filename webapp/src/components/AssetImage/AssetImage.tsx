@@ -20,26 +20,8 @@ import './AssetImage.css'
 const PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
 const AssetImage = (props: Props) => {
-  const {
-    asset,
-    avatar,
-    children,
-    item,
-    showUpdatedDateWarning,
-    videoHash,
-    wallet,
-    withNavigation,
-    zoom,
-    isDraggable,
-    isLoadingVideoHash,
-    isSmall,
-    isUnityWearablePreviewEnabled,
-    hasBadges,
-    hasFetchedVideoHash,
-    hasPopup,
-    onFetchSmartWearableVideoHash,
-    onPlaySmartWearableVideoShowcase
-  } = props
+  const { asset, avatar, children, item, showUpdatedDateWarning, wallet, withNavigation, zoom, isDraggable, isSmall, hasBadges, hasPopup } =
+    props
   const { parcel, estate, ens } = asset.data
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [estate])
@@ -92,22 +74,7 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.WEARABLE:
     case NFTCategory.EMOTE: {
-      return (
-        <Preview
-          asset={asset}
-          avatar={avatar}
-          item={item}
-          videoHash={videoHash}
-          wallet={wallet}
-          isDraggable={isDraggable}
-          isLoadingVideoHash={isLoadingVideoHash}
-          isUnityWearablePreviewEnabled={!!isUnityWearablePreviewEnabled}
-          hasBadges={hasBadges}
-          hasFetchedVideoHash={hasFetchedVideoHash}
-          onFetchSmartWearableVideoHash={onFetchSmartWearableVideoHash}
-          onPlaySmartWearableVideoShowcase={onPlaySmartWearableVideoShowcase}
-        />
-      )
+      return <Preview asset={asset} avatar={avatar} item={item} wallet={wallet} isDraggable={isDraggable} hasBadges={hasBadges} />
     }
 
     case NFTCategory.ENS: {

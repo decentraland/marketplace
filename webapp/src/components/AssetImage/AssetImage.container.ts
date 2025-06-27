@@ -1,12 +1,7 @@
 import { connect } from 'react-redux'
 import { Avatar } from '@dcl/schemas'
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
-import { fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
-import { getVideoHash, getAssetData, isFetchingVideoHash } from '../../modules/asset/selectors'
-import { Asset } from '../../modules/asset/types'
 import { isNFT } from '../../modules/asset/utils'
-import { getIsUnityWearablePreviewEnabled } from '../../modules/features/selectors'
 import { fetchItemRequest } from '../../modules/item/actions'
 import { getData as getItems } from '../../modules/item/selectors'
 import { getItem } from '../../modules/item/utils'
@@ -20,7 +15,6 @@ import { MapStateProps, MapDispatchProps, MapDispatch, OwnProps } from './AssetI
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const profiles = getProfiles(state)
   const wallet = getWallet(state)
-  const assetId = ownProps.asset.id
   let avatar: Avatar | undefined = undefined
   const items = getItems(state)
   const item = getItem(ownProps.asset.contractAddress, ownProps.asset.itemId, items)
@@ -40,18 +34,12 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     avatar,
     wallet,
     item,
-    order,
-    videoHash: getVideoHash(state, assetId),
-    isLoadingVideoHash: isFetchingVideoHash(state, assetId),
-    isUnityWearablePreviewEnabled: getIsUnityWearablePreviewEnabled(state),
-    hasFetchedVideoHash: 'videoHash' in getAssetData(state, assetId)
+    order
   }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onPlaySmartWearableVideoShowcase: (videoHash: string) => dispatch(openModal('SmartWearableVideoShowcaseModal', { videoHash })),
-  onFetchItem: (contractAddress: string, tokenId: string) => dispatch(fetchItemRequest(contractAddress, tokenId)),
-  onFetchSmartWearableVideoHash: (asset: Asset) => dispatch(fetchSmartWearableVideoHashRequest(asset))
+  onFetchItem: (contractAddress: string, tokenId: string) => dispatch(fetchItemRequest(contractAddress, tokenId))
 })
 
 export default connect(mapState, mapDispatch)(AssetImage)
