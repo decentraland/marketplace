@@ -10,6 +10,7 @@ import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { AccountPage } from '../AccountPage'
 import { ActivityPage } from '../ActivityPage'
+import { PortaledWearablePreview } from '../AssetImage/Preview/PortaledWearablePreview'
 import { AssetPage } from '../AssetPage'
 import { BidPage } from '../BidPage'
 import { BrowsePage } from '../BrowsePage'
@@ -32,7 +33,6 @@ import { SettingsPage } from '../SettingsPage'
 import { SignInPage } from '../SignInPage'
 import { SuccessPage } from '../SuccessPage'
 import { TransferPage } from '../TransferPage'
-import { UnityPreloader } from '../UnityPreloader'
 import { Props } from './Routes.types'
 
 const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
@@ -61,7 +61,7 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
 
   return (
     <>
-      <UnityPreloader />
+      <PortaledWearablePreview />
       <Switch>
         <Route exact path={locations.lands()} component={LandsPage} />
         <Route exact path={locations.claimName()} component={ClaimNamePage} />
