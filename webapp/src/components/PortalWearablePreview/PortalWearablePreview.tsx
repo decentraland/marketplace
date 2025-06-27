@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Env } from '@dcl/ui-env'
 import { WearablePreview } from 'decentraland-ui'
-import { config } from '../../../../config'
-import { PortaledWearablePreviewProps } from './PortaledWearablePreview.types'
+import { config } from '../../config'
+import { PortalWearablePreviewProps } from './PortalWearablePreview.types'
 
 const DEFAULT_RECT = {
   top: 0,
@@ -12,7 +12,7 @@ const DEFAULT_RECT = {
   height: 50
 }
 
-export const PortaledWearablePreview: React.FC<PortaledWearablePreviewProps> = props => {
+export const PortalWearablePreview: React.FC<PortalWearablePreviewProps> = props => {
   const {
     containerRef,
     profile,
@@ -70,7 +70,8 @@ export const PortaledWearablePreview: React.FC<PortaledWearablePreviewProps> = p
         width: position.width,
         height: position.height,
         pointerEvents: 'auto',
-        visibility: isLoadingWearablePreview ? 'hidden' : 'visible',
+        opacity: isLoadingWearablePreview ? 0 : 1,
+        transition: 'opacity 0.2s ease-in-out',
         borderRadius: 12,
         overflow: 'hidden',
         willChange: 'transform, top, left'
@@ -78,10 +79,10 @@ export const PortaledWearablePreview: React.FC<PortaledWearablePreviewProps> = p
     >
       <WearablePreview
         {...restProps}
-        profile={profile || 'default1'}
         baseUrl={config.get('WEARABLE_PREVIEW_URL')}
         dev={!isUnityWearablePreviewEnabled ? config.is(Env.DEVELOPMENT) : undefined}
-        unityMode={containerRef?.current ? 'marketplace' : 'profile'}
+        profile={profile}
+        unityMode={containerRef?.current ? 'marketplace' : undefined}
         unity={isUnityWearablePreviewEnabled}
       />
     </div>,

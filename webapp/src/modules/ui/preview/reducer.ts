@@ -1,4 +1,5 @@
 import { IPreviewController } from '@dcl/schemas'
+import { PortalWearablePreviewProps } from '../../../components/PortalWearablePreview/PortalWearablePreview.types'
 import {
   SetIsTryingOnAction,
   SetEmotePlayingAction,
@@ -6,29 +7,23 @@ import {
   SET_IS_TRYING_ON,
   SET_WEARABLE_PREVIEW_CONTROLLER,
   SetWearablePreviewControllerAction,
-  SET_UNITY_PRELOADER_STATUS,
-  SetUnityPreloaderStatusAction
+  SET_PORTAL_PREVIEW_PROPS,
+  SetPortalPreviewPropsAction
 } from './actions'
 
 export type PreviewState = {
   isTryingOn: boolean
   wearablePreviewController?: IPreviewController | null
   isPlayingEmote?: boolean
-  unityPreloader: {
-    isReady: boolean
-    isLoading: boolean
-  }
+  portalPreviewProps: Partial<PortalWearablePreviewProps> | null
 }
 
 export const INITIAL_STATE: PreviewState = {
   isTryingOn: false,
-  unityPreloader: {
-    isReady: false,
-    isLoading: false
-  }
+  portalPreviewProps: null
 }
 
-type PreviewReducerAction = SetIsTryingOnAction | SetEmotePlayingAction | SetWearablePreviewControllerAction | SetUnityPreloaderStatusAction
+type PreviewReducerAction = SetIsTryingOnAction | SetEmotePlayingAction | SetWearablePreviewControllerAction | SetPortalPreviewPropsAction
 
 export function previewReducer(state = INITIAL_STATE, action: PreviewReducerAction): PreviewState {
   switch (action.type) {
@@ -50,13 +45,10 @@ export function previewReducer(state = INITIAL_STATE, action: PreviewReducerActi
         isPlayingEmote: action.payload.isPlayingEmote
       }
     }
-    case SET_UNITY_PRELOADER_STATUS: {
+    case SET_PORTAL_PREVIEW_PROPS: {
       return {
         ...state,
-        unityPreloader: {
-          isReady: action.payload.isReady,
-          isLoading: action.payload.isLoading
-        }
+        portalPreviewProps: action.payload.props === null ? null : { ...state.portalPreviewProps, ...action.payload.props }
       }
     }
     default:
