@@ -30,7 +30,13 @@ export const PortalWearablePreview: React.FC<PortalWearablePreviewProps> = props
     let frameId: number
 
     const updatePosition = () => {
-      setPosition(el.getBoundingClientRect())
+      const rect = el.getBoundingClientRect()
+      setPosition({
+        top: rect.top,
+        left: rect.left,
+        width: Math.max(rect.width, DEFAULT_RECT.width),
+        height: Math.max(rect.height, DEFAULT_RECT.height)
+      })
       frameId = 0
     }
 
