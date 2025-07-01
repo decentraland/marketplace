@@ -26,6 +26,7 @@ import { ManageAssetPage } from '../ManageAssetPage'
 import { NamesPage } from '../NamesPage'
 import { ClaimNamePage } from '../NamesPage/ClaimNamePage'
 import { PageLayout } from '../PageLayout'
+import { PortalWearablePreview } from '../PortalWearablePreview'
 import { ProtectedRoute } from '../ProtectedRoute'
 import { SellPage } from '../SellPage'
 import { SettingsPage } from '../SettingsPage'
@@ -60,6 +61,7 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
 
   return (
     <>
+      <PortalWearablePreview />
       <Switch>
         <Route exact path={locations.lands()} component={LandsPage} />
         <Route exact path={locations.claimName()} component={ClaimNamePage} />
