@@ -19,9 +19,19 @@ export const PortalWearablePreview: React.FC<PortalWearablePreviewProps> = props
     isUnityWearablePreviewEnabled,
     hasLoadedInitialFlags,
     isLoadingWearablePreview = true,
+    onSetWearablePreviewController,
     ...restProps
   } = props
   const [position, setPosition] = useState<DOMRect | typeof DEFAULT_RECT>(DEFAULT_RECT)
+  const [hasSetController, setHasSetController] = useState(false)
+
+  // Call onSetWearablePreviewController when props.id is first received
+  useEffect(() => {
+    if (props.id && !hasSetController && onSetWearablePreviewController) {
+      onSetWearablePreviewController(WearablePreview.createController(props.id))
+      setHasSetController(true)
+    }
+  }, [props.id, hasSetController, onSetWearablePreviewController])
 
   useEffect(() => {
     const el = containerRef?.current

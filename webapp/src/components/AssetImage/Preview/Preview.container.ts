@@ -5,11 +5,13 @@ import { getAssetData, getVideoHash, isFetchingVideoHash } from '../../../module
 import { Asset } from '../../../modules/asset/types'
 import { RootState } from '../../../modules/reducer'
 import { setPortalPreviewProps } from '../../../modules/ui/preview/actions'
+import { getWearablePreviewController } from '../../../modules/ui/preview/selectors'
 import { Preview } from './Preview'
 import { MapDispatchProps, MapDispatch, OwnProps, MapStateProps } from './Preview.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   videoHash: getVideoHash(state, ownProps.asset.id),
+  wearablePreviewController: getWearablePreviewController(state),
   isLoadingVideoHash: isFetchingVideoHash(state, ownProps.asset.id),
   hasFetchedVideoHash: 'videoHash' in getAssetData(state, ownProps.asset.id)
 })
