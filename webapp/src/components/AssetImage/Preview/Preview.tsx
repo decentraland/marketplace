@@ -18,6 +18,7 @@ export const Preview: React.FC<Props> = ({
   item,
   videoHash,
   wallet,
+  wearablePreviewController,
   isDraggable,
   isLoadingVideoHash,
   hasBadges,
@@ -82,11 +83,6 @@ export const Preview: React.FC<Props> = ({
       })
     }
   }, [isTryingOn, setIsTryingOn, asset.itemId, asset.contractAddress])
-
-  const previewEmote = useMemo(() => {
-    const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
-    return isTryingOn ? poses[(Math.random() * poses.length) | 0] : undefined
-  }, [isTryingOn])
 
   const { itemId, tokenId } = useMemo(() => {
     let itemId: string | undefined
@@ -160,6 +156,12 @@ export const Preview: React.FC<Props> = ({
   const isOwnerOfNFT = useMemo(() => isNFT(asset) && wallet?.address === asset.owner, [asset, wallet?.address])
 
   const isBabylonRenderer = useMemo(() => rendererType === PreviewRenderer.BABYLON, [rendererType])
+
+  const previewEmote = useMemo(() => {
+    const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
+    const shouldReturnPose = !isBabylonRenderer || isTryingOnEnabled
+    return shouldReturnPose ? poses[(Math.random() * poses.length) | 0] : undefined
+  }, [isTryingOnEnabled, isBabylonRenderer])
 
   const renderControls = useCallback(() => {
     // Show controls for emotes when using Babylon renderer (not Unity)
@@ -280,7 +282,7 @@ export const Preview: React.FC<Props> = ({
         id: 'wearable-preview',
         background: Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity),
         containerRef: containerRef,
-        emote: isTryingOnEnabled ? previewEmote : undefined,
+        emote: previewEmote,
         hair: hair,
         profile: avatar ? avatar.ethAddress : 'default',
         skin: skin,
@@ -292,6 +294,15 @@ export const Preview: React.FC<Props> = ({
         isLoadingWearablePreview
       }
       onSetPortalPreviewProps(payload)
+      if (wearablePreviewController) {
+        void wearablePreviewController.emote.enableSound()
+      }
+    }
+
+    return () => {
+      if (showWearablePreview && wearablePreviewController) {
+        void wearablePreviewController.emote.disableSound()
+      }
     }
   }, [
     asset,
@@ -300,6 +311,7 @@ export const Preview: React.FC<Props> = ({
     hair,
     previewEmote,
     skin,
+    wearablePreviewController,
     wearablePreviewProps,
     isEmote,
     isTryingOnEnabled,

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Dispatch } from 'redux'
-import { Avatar } from '@dcl/schemas'
+import { Avatar, IPreviewController } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { fetchSmartWearableVideoHashRequest } from '../../../modules/asset/actions'
@@ -15,6 +15,7 @@ export type Props = {
   item?: Item | null
   videoHash?: string
   wallet?: Wallet | null
+  wearablePreviewController?: IPreviewController | null
   isDraggable?: boolean
   isLoadingVideoHash?: boolean
   hasBadges?: boolean
@@ -26,7 +27,7 @@ export type Props = {
 
 export type OwnProps = Pick<Props, 'asset' | 'avatar' | 'children' | 'item' | 'wallet' | 'isDraggable' | 'isLoadingVideoHash' | 'hasBadges'>
 
-export type MapStateProps = Pick<Props, 'videoHash' | 'isLoadingVideoHash' | 'hasFetchedVideoHash'>
+export type MapStateProps = Pick<Props, 'videoHash' | 'wearablePreviewController' | 'isLoadingVideoHash' | 'hasFetchedVideoHash'>
 
 export type MapDispatchProps = Pick<Props, 'onSetPortalPreviewProps' | 'onPlaySmartWearableVideoShowcase' | 'onFetchSmartWearableVideoHash'>
 export type MapDispatch = Dispatch<
