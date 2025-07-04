@@ -32,6 +32,7 @@ export type Props = {
   emoteHasSound?: boolean
   isOffchainPublicItemOrdersEnabled: boolean
   isOffchainPublicNFTOrdersEnabled: boolean
+  isLoadingFeatureFlags: boolean
 }
 
 export type MapStateProps = Pick<
@@ -57,6 +58,7 @@ export type MapStateProps = Pick<
   | 'emoteHasSound'
   | 'isOffchainPublicItemOrdersEnabled'
   | 'isOffchainPublicNFTOrdersEnabled'
+  | 'isLoadingFeatureFlags'
 >
 
 export type OwnProps = Pick<Props, 'values'>
