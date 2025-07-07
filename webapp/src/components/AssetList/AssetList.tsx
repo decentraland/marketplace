@@ -103,7 +103,7 @@ const AssetList = (props: Props) => {
   const shouldRenderEmptyState = useMemo(() => assets.length === 0 && !isLoading, [assets.length, isLoading])
 
   const renderAssetCards = useCallback(
-    () => assets.map((assets, index) => <AssetCard isManager={isManager} key={assetType + '-' + assets.id + '-' + index} asset={assets} />),
+    () => assets.map((asset, index) => <AssetCard isManager={isManager} key={assetType + '-' + asset.id + '-' + index} asset={asset} />),
     [assetType, assets, isManager]
   )
 

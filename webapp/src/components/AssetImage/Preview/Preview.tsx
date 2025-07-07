@@ -18,16 +18,16 @@ export const Preview: React.FC<Props> = ({
   item,
   videoHash,
   wallet,
-  wearablePreviewController,
   isDraggable,
   isLoadingVideoHash,
+  isTryingOn,
   hasBadges,
   hasFetchedVideoHash,
   onFetchSmartWearableVideoHash,
   onPlaySmartWearableVideoShowcase,
-  onSetPortalPreviewProps
+  onSetPortalPreviewProps,
+  onSetTryingOn
 }) => {
-  const [isTryingOn, setIsTryingOn] = useState(false)
   const [isTracked, setIsTracked] = useState(false)
   const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(isDraggable ?? true)
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
@@ -51,9 +51,9 @@ export const Preview: React.FC<Props> = ({
   }, [])
 
   const handleLoad = useCallback((renderer?: PreviewRenderer) => {
-    setIsLoadingWearablePreview(false)
-    setWearablePreviewError(false)
     setRendererType(renderer)
+    setWearablePreviewError(false)
+    setIsLoadingWearablePreview(false)
   }, [])
 
   const handleError = useCallback((error: Error) => {
@@ -64,25 +64,27 @@ export const Preview: React.FC<Props> = ({
 
   const handleTryOut = useCallback(() => {
     if (!isTryingOn) {
-      setIsTryingOn(true)
+      onSetTryingOn(true)
+      setIsLoadingWearablePreview(true)
       getAnalytics()?.track(events.TOGGLE_PREVIEW_MODE, {
         mode: 'avatar',
         itemId: asset.itemId,
         contractAddress: asset.contractAddress
       })
     }
-  }, [isTryingOn, setIsTryingOn, asset.itemId, asset.contractAddress])
+  }, [asset.itemId, asset.contractAddress, isTryingOn, onSetTryingOn])
 
   const handleShowWearable = useCallback(() => {
     if (isTryingOn) {
-      setIsTryingOn(false)
+      onSetTryingOn(false)
+      setIsLoadingWearablePreview(true)
       getAnalytics()?.track(events.TOGGLE_PREVIEW_MODE, {
         mode: 'wearable',
         itemId: asset.itemId,
         contractAddress: asset.contractAddress
       })
     }
-  }, [isTryingOn, setIsTryingOn, asset.itemId, asset.contractAddress])
+  }, [asset.itemId, asset.contractAddress, isTryingOn, onSetTryingOn])
 
   const { itemId, tokenId } = useMemo(() => {
     let itemId: string | undefined
@@ -155,13 +157,18 @@ export const Preview: React.FC<Props> = ({
 
   const isOwnerOfNFT = useMemo(() => isNFT(asset) && wallet?.address === asset.owner, [asset, wallet?.address])
 
+  const isValidRenderer = useMemo(() => rendererType !== undefined, [rendererType])
   const isBabylonRenderer = useMemo(() => rendererType === PreviewRenderer.BABYLON, [rendererType])
 
   const previewEmote = useMemo(() => {
+    if (!isValidRenderer) {
+      return undefined
+    }
+
     const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
     const shouldReturnPose = !isBabylonRenderer || isTryingOnEnabled
     return shouldReturnPose ? poses[(Math.random() * poses.length) | 0] : undefined
-  }, [isTryingOnEnabled, isBabylonRenderer])
+  }, [isTryingOnEnabled, isBabylonRenderer, isValidRenderer])
 
   const renderControls = useCallback(() => {
     // Show controls for emotes when using Babylon renderer (not Unity)
@@ -271,11 +278,10 @@ export const Preview: React.FC<Props> = ({
 
   const backgroundImage = useMemo(() => `radial-gradient(${light}, ${dark})`, [light, dark])
 
-  const showWearablePreview = useMemo(() => isDraggable && !wearablePreviewError, [isDraggable, wearablePreviewError])
-
   const isEmote = useMemo(() => asset.category === NFTCategory.EMOTE, [asset.category])
 
-  // Portal preview effect
+  const showWearablePreview = useMemo(() => isDraggable && !wearablePreviewError, [isDraggable, wearablePreviewError])
+
   useEffect(() => {
     if (showWearablePreview) {
       const payload = {
@@ -294,15 +300,6 @@ export const Preview: React.FC<Props> = ({
         isLoadingWearablePreview
       }
       onSetPortalPreviewProps(payload)
-      if (wearablePreviewController) {
-        void wearablePreviewController.emote.enableSound()
-      }
-    }
-
-    return () => {
-      if (showWearablePreview && wearablePreviewController) {
-        void wearablePreviewController.emote.disableSound()
-      }
     }
   }, [
     asset,
@@ -310,13 +307,11 @@ export const Preview: React.FC<Props> = ({
     containerRef,
     hair,
     previewEmote,
+    showWearablePreview,
     skin,
-    wearablePreviewController,
     wearablePreviewProps,
     isEmote,
-    isTryingOnEnabled,
     isLoadingWearablePreview,
-    showWearablePreview,
     handleLoad,
     handleError,
     onSetPortalPreviewProps

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
+import equal from 'fast-deep-equal'
 import { Env } from '@dcl/ui-env'
 import { WearablePreview } from 'decentraland-ui'
 import { config } from '../../config'
@@ -24,6 +25,24 @@ export const PortalWearablePreview: React.FC<PortalWearablePreviewProps> = props
   } = props
   const [position, setPosition] = useState<DOMRect | typeof DEFAULT_RECT>(DEFAULT_RECT)
   const [hasSetController, setHasSetController] = useState(false)
+  const previousPropsRef = useRef<Partial<PortalWearablePreviewProps> | null>(null)
+
+  const wearablePreviewProps = useMemo(() => {
+    const currentProps = { ...restProps }
+
+    // Ensure we have valid props before comparing
+    if (!currentProps || Object.keys(currentProps).length === 0) {
+      console.log('PortalWearablePreview: no valid props, skipping update')
+      return previousPropsRef.current || {}
+    }
+
+    if (previousPropsRef.current && equal(currentProps, previousPropsRef.current)) {
+      return previousPropsRef.current
+    }
+
+    previousPropsRef.current = currentProps
+    return currentProps
+  }, [restProps])
 
   // Call onSetWearablePreviewController when props.id is first received
   useEffect(() => {
@@ -94,7 +113,7 @@ export const PortalWearablePreview: React.FC<PortalWearablePreviewProps> = props
       }}
     >
       <WearablePreview
-        {...restProps}
+        {...wearablePreviewProps}
         baseUrl={config.get('WEARABLE_PREVIEW_URL')}
         dev={!isUnityWearablePreviewEnabled ? config.is(Env.DEVELOPMENT) : undefined}
         profile={profile}
