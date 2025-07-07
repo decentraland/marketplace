@@ -157,18 +157,13 @@ export const Preview: React.FC<Props> = ({
 
   const isOwnerOfNFT = useMemo(() => isNFT(asset) && wallet?.address === asset.owner, [asset, wallet?.address])
 
-  const isValidRenderer = useMemo(() => rendererType !== undefined, [rendererType])
   const isBabylonRenderer = useMemo(() => rendererType === PreviewRenderer.BABYLON, [rendererType])
 
   const previewEmote = useMemo(() => {
-    if (!isValidRenderer) {
-      return undefined
-    }
-
     const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
     const shouldReturnPose = !isBabylonRenderer || isTryingOnEnabled
     return shouldReturnPose ? poses[(Math.random() * poses.length) | 0] : undefined
-  }, [isTryingOnEnabled, isBabylonRenderer, isValidRenderer])
+  }, [isTryingOnEnabled, isBabylonRenderer])
 
   const renderControls = useCallback(() => {
     // Show controls for emotes when using Babylon renderer (not Unity)
