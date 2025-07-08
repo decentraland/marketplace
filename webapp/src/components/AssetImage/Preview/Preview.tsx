@@ -11,6 +11,7 @@ import * as events from '../../../utils/events'
 import AvailableForMintPopup from '../AvailableForMintPopup'
 import { getEthereumItemUrn, colorToHex } from '../utils'
 import { Props } from './Preview.types'
+import './Preview.css'
 
 export const Preview: React.FC<Props> = ({
   asset,
@@ -161,9 +162,8 @@ export const Preview: React.FC<Props> = ({
 
   const previewEmote = useMemo(() => {
     const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
-    const shouldReturnPose = !isBabylonRenderer || isTryingOnEnabled
-    return shouldReturnPose ? poses[(Math.random() * poses.length) | 0] : undefined
-  }, [isTryingOnEnabled, isBabylonRenderer])
+    return poses[(Math.random() * poses.length) | 0]
+  }, [])
 
   const renderControls = useCallback(() => {
     // Show controls for emotes when using Babylon renderer (not Unity)
@@ -198,58 +198,58 @@ export const Preview: React.FC<Props> = ({
     }
 
     // Show toggle controls for wearables when using Babylon renderer
-    if (isBabylonRenderer && asset.category === NFTCategory.WEARABLE) {
+    if (asset.category === NFTCategory.WEARABLE) {
       return (
-        <Popup
-          content={t('wearable_preview.missing_representation_error.message', { bodyShape: <b>{missingBodyShape}</b> })}
-          trigger={
-            <div className="preview-toggle-wrapper">
-              <Popup
-                position="top center"
-                content={t('wearable_preview.toggle_wearable')}
-                trigger={
-                  <Button
-                    size="small"
-                    className={classNames('preview-toggle', 'preview-toggle-wearable', {
-                      'is-active': !isTryingOnEnabled
-                    })}
-                    onClick={handleShowWearable}
+        <>
+          {isBabylonRenderer ? (
+            <Popup
+              content={t('wearable_preview.missing_representation_error.message', { bodyShape: <b>{missingBodyShape}</b> })}
+              trigger={
+                <div className="preview-toggle-wrapper">
+                  <Popup
+                    position="top center"
+                    content={t('wearable_preview.toggle_wearable')}
+                    trigger={
+                      <Button
+                        size="small"
+                        className={classNames('preview-toggle', 'preview-toggle-wearable', {
+                          'is-active': !isTryingOnEnabled
+                        })}
+                        onClick={handleShowWearable}
+                      />
+                    }
+                    disabled={!hasRepresentation}
                   />
-                }
-                disabled={!hasRepresentation}
-              />
-              <Popup
-                position="top center"
-                content={t('wearable_preview.toggle_avatar')}
-                trigger={
-                  <Button
-                    size="small"
-                    className={classNames('preview-toggle', 'preview-toggle-avatar', {
-                      'is-active': isTryingOnEnabled,
-                      'is-disabled': !hasRepresentation
-                    })}
-                    onClick={hasRepresentation ? handleTryOut : undefined}
+                  <Popup
+                    position="top center"
+                    content={t('wearable_preview.toggle_avatar')}
+                    trigger={
+                      <Button
+                        size="small"
+                        className={classNames('preview-toggle', 'preview-toggle-avatar', {
+                          'is-active': isTryingOnEnabled,
+                          'is-disabled': !hasRepresentation
+                        })}
+                        onClick={hasRepresentation ? handleTryOut : undefined}
+                      />
+                    }
+                    disabled={!hasRepresentation}
                   />
-                }
-                disabled={!hasRepresentation}
-              />
+                </div>
+              }
+              position="top center"
+              disabled={hasRepresentation}
+            />
+          ) : null}
+          {asset.data.wearable?.isSmart && asset.urn && videoHash ? (
+            <div className="asset-wearable-controls">
+              <Button className="play-button" size="small" onClick={() => onPlaySmartWearableVideoShowcase?.(videoHash)}>
+                <Icon name="video" />
+                <span>{t('smart_wearable.play_showcase')}</span>
+              </Button>
             </div>
-          }
-          position="top center"
-          disabled={hasRepresentation}
-        />
-      )
-    }
-
-    // Show Smart Wearable Play showcase for both Babylon and Unity renderers
-    if (asset.data.wearable?.isSmart && asset.urn && videoHash) {
-      return (
-        <div className="asset-wearable-controls">
-          <Button className="play-button" size="small" onClick={() => onPlaySmartWearableVideoShowcase?.(videoHash)}>
-            <Icon name="video" />
-            <span>{t('smart_wearable.play_showcase')}</span>
-          </Button>
-        </div>
+          ) : null}
+        </>
       )
     }
 
@@ -292,7 +292,7 @@ export const Preview: React.FC<Props> = ({
           <WearablePreview
             id="wearable-preview"
             background={Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity)}
-            emote={previewEmote}
+            emote={isTryingOnEnabled || rendererType !== PreviewRenderer.BABYLON ? previewEmote : undefined}
             hair={hair}
             profile={avatar ? avatar.ethAddress : 'default'}
             skin={skin}
