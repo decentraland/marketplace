@@ -456,7 +456,6 @@ const AssetImage = (props: Props) => {
               itemId={itemId}
               tokenId={tokenId}
               profile={avatar ? avatar.ethAddress : 'default'}
-              background={Rarity.getColor(emote!.rarity)}
               wheelZoom={1.5}
               wheelStart={100}
               onLoad={handleLoad}
