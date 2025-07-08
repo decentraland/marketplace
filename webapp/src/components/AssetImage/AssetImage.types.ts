@@ -40,6 +40,7 @@ export type Props = {
   videoHash?: string
   isLoadingVideoHash?: boolean
   hasFetchedVideoHash?: boolean
+  isUnityWearablePreviewEnabled?: boolean
 }
 
 export type OwnProps = Pick<Props, 'showOrderListedTag' | 'asset'>
@@ -66,6 +67,7 @@ export type MapStateProps = Pick<
   | 'videoHash'
   | 'isLoadingVideoHash'
   | 'hasFetchedVideoHash'
+  | 'isUnityWearablePreviewEnabled'
 >
 export type MapDispatchProps = Pick<
   Props,

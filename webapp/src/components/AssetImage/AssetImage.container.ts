@@ -6,6 +6,7 @@ import { fetchSmartWearableVideoHashRequest } from '../../modules/asset/actions'
 import { getVideoHash, getAssetData, isFetchingVideoHash } from '../../modules/asset/selectors'
 import { Asset } from '../../modules/asset/types'
 import { isNFT } from '../../modules/asset/utils'
+import { getIsUnityWearablePreviewEnabled } from '../../modules/features/selectors'
 import { fetchItemRequest } from '../../modules/item/actions'
 import { getData as getItems } from '../../modules/item/selectors'
 import { getItem } from '../../modules/item/utils'
@@ -47,7 +48,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     order,
     videoHash: getVideoHash(state, assetId),
     isLoadingVideoHash: isFetchingVideoHash(state, assetId),
-    hasFetchedVideoHash: 'videoHash' in getAssetData(state, assetId)
+    hasFetchedVideoHash: 'videoHash' in getAssetData(state, assetId),
+    isUnityWearablePreviewEnabled: getIsUnityWearablePreviewEnabled(state)
   }
 }
 

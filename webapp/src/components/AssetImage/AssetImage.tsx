@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
-import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewType, Rarity } from '@dcl/schemas'
+import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewType, Rarity, PreviewRenderer } from '@dcl/schemas'
 import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -72,7 +72,8 @@ const AssetImage = (props: Props) => {
     wallet,
     videoHash,
     isLoadingVideoHash,
-    hasFetchedVideoHash
+    hasFetchedVideoHash,
+    isUnityWearablePreviewEnabled
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -80,13 +81,18 @@ const AssetImage = (props: Props) => {
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
   const [isSoundEnabled, setIsSoundEnabled] = useState(false)
   const [hasSound, setHasSound] = useState<boolean | undefined>(undefined)
-  const handleLoad = useCallback(() => {
-    setIsLoadingWearablePreview(false)
-    setWearablePreviewError(false)
-    if (asset.category === NFTCategory.EMOTE && !wearableController) {
-      onSetWearablePreviewController(WearablePreview.createController('wearable-preview'))
-    }
-  }, [asset.category, wearableController, onSetWearablePreviewController])
+  const [rendererType, setRendererType] = useState<PreviewRenderer | undefined>(undefined)
+  const handleLoad = useCallback(
+    (renderer?: PreviewRenderer) => {
+      setRendererType(renderer)
+      setIsLoadingWearablePreview(false)
+      setWearablePreviewError(false)
+      if (asset.category === NFTCategory.EMOTE && !wearableController) {
+        onSetWearablePreviewController(WearablePreview.createController('wearable-preview'))
+      }
+    },
+    [asset.category, wearableController, onSetWearablePreviewController]
+  )
 
   const handleError = useCallback(error => {
     console.warn(error)
@@ -167,8 +173,8 @@ const AssetImage = (props: Props) => {
   // pick a random emote
   const previewEmote = useMemo(() => {
     const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
-    return isTryingOn ? poses[(Math.random() * poses.length) | 0] : undefined
-  }, [isTryingOn])
+    return rendererType !== PreviewRenderer.BABYLON || isTryingOn ? poses[(Math.random() * poses.length) | 0] : undefined
+  }, [isTryingOn, rendererType])
 
   // This effect is here just to track on which mode the preview is initialized, that's why it has an empty dependency array, so this is triggered once on mount
   useEffect(() => {
@@ -265,22 +271,23 @@ const AssetImage = (props: Props) => {
               ? t('wearable_preview.missing_representation_error.male')
               : t('wearable_preview.missing_representation_error.female')
 
-        const isTryingOnEnabled = isTryingOn && hasRepresentation
+        const isTryingOnEnabled = ((!!rendererType && rendererType !== PreviewRenderer.BABYLON) || isTryingOn) && hasRepresentation
 
         const ethereumUrn = asset.network === Network.ETHEREUM ? (isNFT(asset) ? asset.urn || '' : getEthereumItemUrn(asset)) : ''
 
-        const wearablePreviewProps =
-          asset.network === Network.ETHEREUM
+        const wearablePreviewProps = {
+          background: Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity),
+          ...(asset.network === Network.ETHEREUM
             ? {
                 urns: [ethereumUrn],
-                background: Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity),
                 type: isTryingOn ? PreviewType.AVATAR : PreviewType.WEARABLE
               }
             : {
                 contractAddress: asset.contractAddress,
                 itemId,
                 tokenId
-              }
+              })
+        }
 
         const isOwnerOfNFT = isNFT(asset) && wallet?.address === asset.owner
 
@@ -295,6 +302,9 @@ const AssetImage = (props: Props) => {
               onError={handleError}
               {...wearablePreviewProps}
               dev={config.is(Env.DEVELOPMENT)}
+              baseUrl={config.get('WEARABLE_PREVIEW_URL')}
+              unityMode={'marketplace'}
+              unity={isUnityWearablePreviewEnabled}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
@@ -322,44 +332,46 @@ const AssetImage = (props: Props) => {
                 </Button>
               </div>
             ) : null}
-            <Popup
-              content={<T id="wearable_preview.missing_representation_error.message" values={{ bodyShape: <b>{missingBodyShape}</b> }} />}
-              trigger={
-                <div className="preview-toggle-wrapper">
-                  <Popup
-                    position="top center"
-                    content={<T id="wearable_preview.toggle_wearable" />}
-                    trigger={
-                      <Button
-                        size="small"
-                        className={classNames('preview-toggle', 'preview-toggle-wearable', {
-                          'is-active': !isTryingOnEnabled
-                        })}
-                        onClick={handleShowWearable}
-                      />
-                    }
-                    disabled={!hasRepresentation}
-                  />
-                  <Popup
-                    position="top center"
-                    content={<T id="wearable_preview.toggle_avatar" />}
-                    trigger={
-                      <Button
-                        size="small"
-                        className={classNames('preview-toggle', 'preview-toggle-avatar', {
-                          'is-active': isTryingOnEnabled,
-                          'is-disabled': !hasRepresentation
-                        })}
-                        onClick={hasRepresentation ? handleTryOut : undefined}
-                      />
-                    }
-                    disabled={!hasRepresentation}
-                  />
-                </div>
-              }
-              position="top center"
-              disabled={hasRepresentation}
-            />
+            {rendererType === PreviewRenderer.BABYLON ? (
+              <Popup
+                content={<T id="wearable_preview.missing_representation_error.message" values={{ bodyShape: <b>{missingBodyShape}</b> }} />}
+                trigger={
+                  <div className="preview-toggle-wrapper">
+                    <Popup
+                      position="top center"
+                      content={<T id="wearable_preview.toggle_wearable" />}
+                      trigger={
+                        <Button
+                          size="small"
+                          className={classNames('preview-toggle', 'preview-toggle-wearable', {
+                            'is-active': !isTryingOnEnabled
+                          })}
+                          onClick={handleShowWearable}
+                        />
+                      }
+                      disabled={!hasRepresentation}
+                    />
+                    <Popup
+                      position="top center"
+                      content={<T id="wearable_preview.toggle_avatar" />}
+                      trigger={
+                        <Button
+                          size="small"
+                          className={classNames('preview-toggle', 'preview-toggle-avatar', {
+                            'is-active': isTryingOnEnabled,
+                            'is-disabled': !hasRepresentation
+                          })}
+                          onClick={hasRepresentation ? handleTryOut : undefined}
+                        />
+                      }
+                      disabled={!hasRepresentation}
+                    />
+                  </div>
+                }
+                position="top center"
+                disabled={hasRepresentation}
+              />
+            ) : null}
           </>
         )
       }
@@ -444,11 +456,15 @@ const AssetImage = (props: Props) => {
               itemId={itemId}
               tokenId={tokenId}
               profile={avatar ? avatar.ethAddress : 'default'}
+              background={Rarity.getColor(emote!.rarity)}
               wheelZoom={1.5}
               wheelStart={100}
               onLoad={handleLoad}
               onError={handleError}
               dev={config.is(Env.DEVELOPMENT)}
+              baseUrl={config.get('WEARABLE_PREVIEW_URL')}
+              unityMode={'marketplace'}
+              unity={isUnityWearablePreviewEnabled}
             />
             {isAvailableForMint && !isOwnerOfNFT ? (
               <AvailableForMintPopup
@@ -464,12 +480,12 @@ const AssetImage = (props: Props) => {
               <Center>
                 <Loader className="wearable-preview-loader" active size="large" />
               </Center>
-            ) : (
+            ) : rendererType === PreviewRenderer.BABYLON ? (
               <>
                 {zoomControls}
                 {playButton}
               </>
-            )}
+            ) : null}
           </>
         )
       }
