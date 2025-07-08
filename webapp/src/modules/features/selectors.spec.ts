@@ -13,7 +13,8 @@ import {
   getIsBidsOffChainEnabled,
   getIsOffchainPublicNFTOrdersEnabled,
   getIsOffchainPublicItemOrdersEnabled,
-  getIsCreditsSecondarySalesEnabled
+  getIsCreditsSecondarySalesEnabled,
+  getIsUnityWearablePreviewEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -140,7 +141,7 @@ const waitForInitialLoadingSelectors = [
     applicationName: ApplicationName.MARKETPLACE
   },
   {
-    name: 'sfOffchainPublicItemOrdersEnabled',
+    name: 'IsfOffchainPublicItemOrdersEnabled',
     feature: FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS,
     selector: getIsOffchainPublicItemOrdersEnabled,
     applicationName: ApplicationName.DAPPS
@@ -150,6 +151,12 @@ const waitForInitialLoadingSelectors = [
     feature: FeatureName.CREDITS_SECONDARY_SALES,
     selector: getIsCreditsSecondarySalesEnabled,
     applicationName: ApplicationName.MARKETPLACE
+  },
+  {
+    name: 'IsUnityWearablePreviewEnabled',
+    feature: FeatureName.UNITY_WEARABLE_PREVIEW,
+    selector: getIsUnityWearablePreviewEnabled,
+    applicationName: ApplicationName.DAPPS
   }
 ]
 
