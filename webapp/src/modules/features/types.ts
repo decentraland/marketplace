@@ -15,5 +15,6 @@ export enum FeatureName {
   MAGIC_AUTO_SIGN = 'magic-auto-sign',
   CREDITS = 'credits',
   CREDITS_SECONDARY_SALES = 'credits-secondary-sales',
-  USER_WALLETS = 'alfa-marketplace-credits'
+  USER_WALLETS = 'alfa-marketplace-credits',
+  UNITY_WEARABLE_PREVIEW = 'unity-wearable-preview'
 }
