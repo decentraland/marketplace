@@ -265,10 +265,11 @@ export const Preview: React.FC<Props> = ({
     onPlaySmartWearableVideoShowcase
   ])
 
-  const [light, dark] = useMemo(
-    () => Rarity.getGradient(asset.data.wearable?.rarity || asset.data.emote?.rarity || Rarity.COMMON),
-    [asset.data.wearable?.rarity, asset.data.emote?.rarity]
-  )
+  const rarity = useMemo(() => {
+    return asset.data.wearable?.rarity || asset.data.emote?.rarity || Rarity.COMMON
+  }, [asset])
+
+  const [light, dark] = useMemo(() => Rarity.getGradient(rarity), [rarity])
 
   const backgroundImage = useMemo(() => `radial-gradient(${light}, ${dark})`, [light, dark])
 
@@ -296,7 +297,7 @@ export const Preview: React.FC<Props> = ({
         <>
           <WearablePreview
             id="wearable-preview"
-            background={Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity)}
+            background={Rarity.getColor(rarity)}
             emote={isTryingOnEnabled || (rendererType && rendererType !== PreviewRenderer.BABYLON) ? previewEmote : undefined}
             hair={hair}
             profile={avatar ? avatar.ethAddress : 'default'}
