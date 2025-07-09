@@ -136,15 +136,14 @@ export const Preview: React.FC<Props> = ({
     () =>
       asset.network === Network.ETHEREUM
         ? {
-            urns: [ethereumUrn],
-            type: isTryingOn ? PreviewType.AVATAR : PreviewType.WEARABLE
+            urns: [ethereumUrn]
           }
         : {
             contractAddress: asset.contractAddress,
             itemId,
             tokenId
           },
-    [asset, ethereumUrn, isTryingOn, itemId, tokenId]
+    [asset, ethereumUrn, itemId, tokenId]
   )
 
   const isAvailableForMint = useMemo(
@@ -275,6 +274,12 @@ export const Preview: React.FC<Props> = ({
 
   const isEmote = useMemo(() => asset.category === NFTCategory.EMOTE, [asset.category])
 
+  const previewType = useMemo(() => {
+    if (isEmote) return undefined
+
+    return isTryingOnEnabled ? PreviewType.AVATAR : PreviewType.WEARABLE
+  }, [isTryingOnEnabled, isEmote])
+
   const showWearablePreview = useMemo(() => isDraggable && !wearablePreviewError, [isDraggable, wearablePreviewError])
 
   const className = useMemo(
@@ -292,10 +297,11 @@ export const Preview: React.FC<Props> = ({
           <WearablePreview
             id="wearable-preview"
             background={Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity)}
-            emote={isTryingOnEnabled || rendererType !== PreviewRenderer.BABYLON ? previewEmote : undefined}
+            emote={isTryingOnEnabled || (rendererType && rendererType !== PreviewRenderer.BABYLON) ? previewEmote : undefined}
             hair={hair}
             profile={avatar ? avatar.ethAddress : 'default'}
             skin={skin}
+            type={previewType}
             wheelZoom={isEmote ? 1.5 : undefined}
             wheelStart={isEmote ? 100 : undefined}
             onLoad={handleLoad}
