@@ -310,6 +310,7 @@ export const Preview: React.FC<Props> = ({
             dev={config.is(Env.DEVELOPMENT)}
             unityMode={'marketplace'}
             unity={isUnityWearablePreviewEnabled}
+            baseUrl="https://wearable-preview-9a1o9dh06-decentraland1.vercel.app"
           />
           {isAvailableForMint && !isOwnerOfNFT && item ? (
             <AvailableForMintPopup
