@@ -157,6 +157,7 @@ export const Preview: React.FC<Props> = ({
 
   const isOwnerOfNFT = useMemo(() => isNFT(asset) && wallet?.address === asset.owner, [asset, wallet?.address])
 
+  const isUnityRenderer = useMemo(() => rendererType === PreviewRenderer.UNITY, [rendererType])
   const isBabylonRenderer = useMemo(() => rendererType === PreviewRenderer.BABYLON, [rendererType])
 
   const previewEmote = useMemo(() => {
@@ -298,7 +299,7 @@ export const Preview: React.FC<Props> = ({
           <WearablePreview
             id="wearable-preview"
             background={Rarity.getColor(rarity)}
-            emote={isTryingOnEnabled || (rendererType && rendererType !== PreviewRenderer.BABYLON) ? previewEmote : undefined}
+            emote={isTryingOnEnabled || isUnityRenderer ? previewEmote : undefined}
             hair={hair}
             profile={avatar ? avatar.ethAddress : 'default'}
             skin={skin}
