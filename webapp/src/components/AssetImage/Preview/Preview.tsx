@@ -157,6 +157,7 @@ export const Preview: React.FC<Props> = ({
 
   const isOwnerOfNFT = useMemo(() => isNFT(asset) && wallet?.address === asset.owner, [asset, wallet?.address])
 
+  const isUnityRenderer = useMemo(() => rendererType === PreviewRenderer.UNITY, [rendererType])
   const isBabylonRenderer = useMemo(() => rendererType === PreviewRenderer.BABYLON, [rendererType])
 
   const previewEmote = useMemo(() => {
@@ -265,10 +266,11 @@ export const Preview: React.FC<Props> = ({
     onPlaySmartWearableVideoShowcase
   ])
 
-  const [light, dark] = useMemo(
-    () => Rarity.getGradient(asset.data.wearable?.rarity || asset.data.emote?.rarity || Rarity.COMMON),
-    [asset.data.wearable?.rarity, asset.data.emote?.rarity]
-  )
+  const rarity = useMemo(() => {
+    return asset.data.wearable?.rarity || asset.data.emote?.rarity || Rarity.COMMON
+  }, [asset])
+
+  const [light, dark] = useMemo(() => Rarity.getGradient(rarity), [rarity])
 
   const backgroundImage = useMemo(() => `radial-gradient(${light}, ${dark})`, [light, dark])
 
@@ -296,8 +298,8 @@ export const Preview: React.FC<Props> = ({
         <>
           <WearablePreview
             id="wearable-preview"
-            background={Rarity.getColor(isNFT(asset) ? asset.data.wearable!.rarity : asset.rarity)}
-            emote={isTryingOnEnabled || (rendererType && rendererType !== PreviewRenderer.BABYLON) ? previewEmote : undefined}
+            background={Rarity.getColor(rarity)}
+            emote={isTryingOnEnabled || isUnityRenderer ? previewEmote : undefined}
             hair={hair}
             profile={avatar ? avatar.ethAddress : 'default'}
             skin={skin}
