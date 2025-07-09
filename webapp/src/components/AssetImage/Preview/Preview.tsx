@@ -302,7 +302,6 @@ export const Preview: React.FC<Props> = ({
             onError={handleError}
             {...wearablePreviewProps}
             dev={config.is(Env.DEVELOPMENT)}
-            baseUrl={config.get('WEARABLE_PREVIEW_URL')}
             unityMode={'marketplace'}
             unity={isUnityWearablePreviewEnabled}
           />
