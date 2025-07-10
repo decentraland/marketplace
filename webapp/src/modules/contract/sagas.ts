@@ -1,5 +1,6 @@
 import { call, takeEvery, put, select } from '@redux-saga/core/effects'
 import { Network, NFTCategory } from '@dcl/schemas'
+import { getNetworkMapping } from '@dcl/schemas/dist/dapps/chain-id'
 import { fetchAuthorizationsRequest, GRANT_TOKEN_SUCCESS } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
@@ -7,7 +8,7 @@ import { FetchTransactionSuccessAction, FETCH_TRANSACTION_SUCCESS } from 'decent
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CHANGE_ACCOUNT, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { getContract as getContractFromDecentralandTransactions, ContractName } from 'decentraland-transactions'
+import { getContract as getContractFromDecentralandTransactions, ContractName, ContractData } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
 import { getContractNames, VendorFactory, VendorName } from '../vendor'
 import { Contract } from '../vendor/services'
@@ -32,14 +33,14 @@ export function* handleFetchContractsRequest() {
     }
 
     const vendors = Object.values(VendorName).map(v => VendorFactory.build(v))
-    let contracts: Contract[] = []
+    const contracts: Contract[] = []
 
     for (const vendor of vendors) {
       const { contractService } = vendor
       const moreContracts: Contract[] = (yield call([contractService, 'getContracts'])) as Awaited<
         ReturnType<typeof contractService.getContracts>
       >
-      contracts = [...contracts, ...moreContracts]
+      contracts.push(...moreContracts)
     }
     yield put(fetchContractsSuccess(contracts))
   } catch (error) {
@@ -115,15 +116,23 @@ export function* handleFetchContractsSuccess() {
     network: Network.ETHEREUM
   })) as ReturnType<typeof getContract>
 
-  const creditsManagerContract = getContractFromDecentralandTransactions(ContractName.CreditsManager, wallet.chainId)
-
-  const creditsManager: Contract | null = {
-    address: creditsManagerContract.address,
-    chainId: creditsManagerContract.chainId,
-    name: contractNames.CREDITS_MANAGER,
-    network: Network.MATIC,
-    vendor: VendorName.DECENTRALAND,
-    category: null
+  let creditsManagerContract: ContractData | null = null
+  let creditsManager: Contract | null = null
+  try {
+    creditsManagerContract = getContractFromDecentralandTransactions(
+      ContractName.CreditsManager,
+      getNetworkMapping(wallet.chainId)[Network.MATIC]
+    )
+    creditsManager = {
+      address: creditsManagerContract.address,
+      chainId: creditsManagerContract.chainId,
+      name: contractNames.CREDITS_MANAGER,
+      network: Network.MATIC,
+      vendor: VendorName.DECENTRALAND,
+      category: null
+    }
+  } catch (error) {
+    console.error('Error getting credits manager contract', error)
   }
 
   let authorizations: Authorization[] = []
