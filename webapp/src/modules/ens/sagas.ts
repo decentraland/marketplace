@@ -6,11 +6,11 @@ import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transac
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { Provider, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import type { Route } from 'decentraland-transactions/crossChain'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
-import { DCLController } from '../../contracts'
 import { DCLRegistrar } from '../../contracts/DCLRegistrar'
-import { DCLController__factory } from '../../contracts/factories/DCLController__factory'
 import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__factory'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
@@ -92,20 +92,24 @@ export function* ensSaga() {
     const { name } = action.payload
     try {
       const wallet: Wallet | null = (yield select(getWallet)) as Awaited<ReturnType<typeof getWallet>>
-      const signer: ethers.Signer = (yield call(getSigner)) as Awaited<ReturnType<typeof getSigner>>
 
       if (!wallet) {
         throw new Error('A wallet is required to claim a name')
       }
 
       const from = wallet.address
-      const controllerContract: DCLController = (yield call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer)) as Awaited<
-        ReturnType<typeof DCLController__factory.connect>
-      >
-      const transaction: ethers.ContractTransaction = (yield call([controllerContract, 'register'], name, from)) as Awaited<
-        ReturnType<typeof controllerContract.register>
-      >
-      yield put(claimNameTransactionSubmitted(name, wallet.address, wallet.chainId, transaction.hash))
+
+      const contract = (yield call(getContract, ContractName.DCLControllerV2, wallet.chainId)) as ContractData
+
+      const transactionHash = (yield call(
+        sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
+        contract,
+        'register',
+        name,
+        from
+      )) as string
+
+      yield put(claimNameTransactionSubmitted(name, wallet.address, wallet.chainId, transactionHash))
     } catch (error) {
       const ensError: ENSError = {
         message: isErrorWithMessage(error) ? error.message : 'Unknown error'

@@ -856,6 +856,7 @@
     "covered_by_dao": "由 DAO 涵盖",
     "free": "自由的",
     "switch_network": "将网络切换到 {chain}",
+    "switching_network": "更改网络...",
     "confirm_switch_network": "确认钱包中的网络切换",
     "confirm_transaction": "确认您钱包中的交易",
     "buying_asset": "正在购买...",
