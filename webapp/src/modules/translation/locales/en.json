@@ -870,6 +870,7 @@
     "covered_by_dao": "covered by the DAO",
     "free": "free",
     "switch_network": "Switch Network to {chain}",
+    "switching_network": "Switching network...",
     "confirm_switch_network": "Confirm Network Switch in Your Wallet",
     "confirm_transaction": "Confirm Transaction in Your Wallet",
     "buying_asset": "Buying...",

@@ -7,8 +7,10 @@ import { getSigner, getConnectedProvider } from 'decentraland-dapps/dist/lib/eth
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { Route, AxelarProvider } from 'decentraland-transactions/crossChain'
 import { Provider } from 'decentraland-connect'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
 import { DCLRegistrar__factory } from '../../contracts/factories'
 import { DCLController__factory } from '../../contracts/factories/DCLController__factory'
@@ -43,11 +45,12 @@ describe('ENS Saga', () => {
     let mockAction: ReturnType<typeof claimNameRequest>
     let mockWallet: Wallet
     let mockTransaction: ethers.ContractTransaction
-    let mockTokenId: BigNumber
-    let dclRegistrarContract: { address: string }
-    let signer: ethers.Signer
+    let mockedContract: { register: () => Promise<ethers.ContractTransaction> } & ContractData
 
     beforeEach(() => {
+      mockedContract = {
+        register: () => Promise.resolve(mockTransaction)
+      } as ContractData & { register: () => Promise<ethers.ContractTransaction> }
       mockAction = {
         type: CLAIM_NAME_REQUEST,
         payload: { name: mockName }
@@ -59,9 +62,6 @@ describe('ENS Saga', () => {
       mockTransaction = {
         hash: '0xTransactionHash'
       } as ethers.ContractTransaction
-      mockTokenId = BigNumber.from(1)
-      dclRegistrarContract = { address: '0xAnAddress' }
-      signer = {} as ethers.Signer
     })
 
     describe('and the claim name succeeds', () => {
@@ -69,23 +69,20 @@ describe('ENS Saga', () => {
         return expectSaga(ensSaga)
           .provide([
             [select(getWallet), mockWallet],
-            [call(getSigner), signer],
+            [call(getContract, ContractName.DCLControllerV2, mockWallet.chainId), mockedContract],
             [
-              call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer),
-              { register: () => Promise.resolve(mockTransaction) }
+              call(
+                sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
+                mockedContract,
+                'register',
+                mockName,
+                mockWallet.address
+              ),
+              mockTransaction.hash
             ],
-            [
-              call([DCLRegistrar__factory, 'connect'], REGISTRAR_ADDRESS, signer),
-              {
-                ...dclRegistrarContract,
-                getTokenId: () => mockTokenId
-              }
-            ],
-            [call(waitForTx, mockTransaction.hash), null],
             [claimNameTransactionSubmitted(mockName, mockWallet.address, mockWallet.chainId, mockTransaction.hash), undefined]
           ])
           .put(claimNameTransactionSubmitted(mockName, mockWallet.address, mockWallet.chainId, mockTransaction.hash))
-          .put(closeModal('ClaimNameFatFingerModal'))
           .dispatch(claimNameRequest(mockName))
           .silentRun()
       })
@@ -97,8 +94,17 @@ describe('ENS Saga', () => {
         return expectSaga(ensSaga)
           .provide([
             [select(getWallet), mockWallet],
-            [call(getSigner), {}],
-            [call([DCLController__factory, 'connect'], CONTROLLER_V2_ADDRESS, signer), { register: () => Promise.reject(error) }]
+            [call(getContract, ContractName.DCLControllerV2, mockWallet.chainId), mockedContract],
+            [
+              call(
+                sendTransaction as (contract: ContractData, contractMethodName: string, ...contractArguments: any[]) => Promise<string>,
+                mockedContract,
+                'register',
+                mockName,
+                mockWallet.address
+              ),
+              Promise.reject(error)
+            ]
           ])
           .put(claimNameFailure({ message: error.message }))
           .dispatch(mockAction)

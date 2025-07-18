@@ -854,6 +854,7 @@
     "covered_by_dao": "cubiertos por la DAO",
     "free": "gratis",
     "switch_network": "Cambiar Red a {chain}",
+    "switching_network": "Cambiando de red...",
     "confirm_switch_network": "Confirmar el cambio de red en tu Wallet",
     "confirm_transaction": "Confirmar la transacción en tu Wallet",
     "buying_asset": "Comprando...",
