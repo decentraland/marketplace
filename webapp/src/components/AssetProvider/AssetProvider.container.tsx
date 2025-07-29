@@ -7,13 +7,7 @@ import { Asset, AssetType } from '../../modules/asset/types'
 import { getContract } from '../../modules/contract/selectors'
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { clearItemErrors, fetchItemRequest } from '../../modules/item/actions'
-import {
-  getContractAddress as getItemContractAddress,
-  getTokenId as getItemTokenId,
-  isFetchingItem,
-  getError as getItemsError,
-  getData as getItems
-} from '../../modules/item/selectors'
+import { isFetchingItem, getError as getItemsError, getData as getItems } from '../../modules/item/selectors'
 import { getItem } from '../../modules/item/utils'
 import { fetchNFTRequest, clearNFTErrors } from '../../modules/nft/actions'
 import { getError as getNFTError, getData as getNFTs, isLoading as isLoadingNFT } from '../../modules/nft/selectors'
@@ -23,7 +17,7 @@ import { getActiveOrder } from '../../modules/order/utils'
 import { RootState } from '../../modules/reducer'
 import { getRentalById } from '../../modules/rental/selectors'
 import { getOpenRentalId } from '../../modules/rental/utils'
-import { useGetCurrentNFTAddressAndTokenId } from '../../modules/routing/hooks'
+import { useGetCurrentItemAddressAndTokenId, useGetCurrentNFTAddressAndTokenId } from '../../modules/routing/hooks'
 import { FetchOneOptions } from '../../modules/vendor'
 import { ContractName } from '../../modules/vendor/decentraland'
 import { convertToOutputString } from '../../utils/output'
@@ -33,9 +27,7 @@ import { OwnProps } from './AssetProvider.types'
 const AssetProviderContainer = <T extends AssetType = AssetType>(props: OwnProps<T>) => {
   const dispatch = useDispatch()
   const { contractAddress: nftContractAddress, tokenId: nftTokenId } = useGetCurrentNFTAddressAndTokenId()
-  // Get contract addresses and token IDs
-  const itemContractAddress = useSelector(getItemContractAddress)
-  const itemTokenId = useSelector(getItemTokenId)
+  const { contractAddress: itemContractAddress, tokenId: itemTokenId } = useGetCurrentItemAddressAndTokenId()
 
   const contractAddress = props.contractAddress || (props.type === AssetType.NFT ? nftContractAddress : itemContractAddress)
   const tokenId = props.tokenId || (props.type === AssetType.NFT ? nftTokenId : itemTokenId)
