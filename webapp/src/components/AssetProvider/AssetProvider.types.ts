@@ -2,8 +2,9 @@ import React from 'react'
 import { Dispatch } from 'redux'
 import { Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Asset, AssetType } from '../../modules/asset/types'
-import { ClearItemErrorsAction, fetchItemRequest, FetchItemRequestAction } from '../../modules/item/actions'
-import { ClearNFTErrorsAction, fetchNFTRequest, FetchNFTRequestAction } from '../../modules/nft/actions'
+import { ClearItemErrorsAction, FetchItemRequestAction } from '../../modules/item/actions'
+import { ClearNFTErrorsAction, FetchNFTRequestAction } from '../../modules/nft/actions'
+import { FetchOneOptions } from '../../modules/vendor/types'
 
 export type Props<T extends AssetType = AssetType> = {
   type: T
@@ -20,8 +21,8 @@ export type Props<T extends AssetType = AssetType> = {
   retry?: boolean
   error: string | null
   withEntity?: boolean
-  onFetchNFT: typeof fetchNFTRequest
-  onFetchItem: typeof fetchItemRequest
+  onFetchNFT: (contractAddress: string, tokenId: string, options?: FetchOneOptions) => unknown
+  onFetchItem: (contractAddress: string, tokenId: string) => unknown
   onClearErrors: () => void
   children: (asset: Asset<T> | null, order: Order | null, rental: RentalListing | null, isLoading: boolean) => React.ReactNode | null
 }

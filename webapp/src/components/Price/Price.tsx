@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Stats } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
+import { useGetCurrentOrder } from '../../modules/order/hooks'
 import Mana from '../Mana/Mana'
 import { Props } from './Price.types'
 
-const Price = ({ asset, price, title }: Props) => {
+const Price = ({ asset, title }: Props) => {
+  const order = useGetCurrentOrder()
+
+  const price = useMemo(() => {
+    if ('activeOrderId' in asset) {
+      return order?.price
+    } else if ('price' in asset) {
+      return asset.price
+    }
+  }, [order, asset])
+
   if (!price) {
     return null
   }

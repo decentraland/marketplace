@@ -11,7 +11,7 @@ import { getContract as getContractByQuery } from '../contract/selectors'
 import { getIdentity } from '../identity/utils'
 import { fetchNFTRequest, FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getFingerprint } from '../nft/estate/utils'
-import { getCurrentNFT } from '../nft/selectors'
+import { getNft } from '../nft/selectors'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
 import { addressEquals } from '../wallet/utils'
@@ -123,7 +123,7 @@ function* handleClaimLandRequest(action: ClaimAssetRequestAction) {
     while (!hasAssetBack) {
       yield put(fetchNFTRequest(nft.contractAddress, nft.tokenId))
       yield take(FETCH_NFT_SUCCESS)
-      const nftUpdated: NFT = yield select(getCurrentNFT)
+      const nftUpdated: NFT = yield select(getNft, nft.contractAddress, nft.tokenId)
       hasAssetBack = addressEquals(nftUpdated.owner, rental.lessor!)
       yield delay(5000)
     }

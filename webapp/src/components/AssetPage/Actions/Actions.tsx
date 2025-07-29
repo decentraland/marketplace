@@ -4,6 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
 import { isOwnedBy } from '../../../modules/asset/utils'
+import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
 import { BuyWithCryptoButton } from '../SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
@@ -11,8 +12,10 @@ import { Props } from './Actions.types'
 import styles from './Actions.module.css'
 
 const Actions = (props: Props) => {
-  const { wallet, nft, order, bids, onLeavingSite, onBuyWithCrypto } = props
+  const { wallet, nft, bids, onLeavingSite, onBuyWithCrypto } = props
   const { contractAddress, tokenId, data } = nft
+
+  const order = useGetCurrentOrder()
 
   const { bidService, orderService } = VendorFactory.build(nft.vendor)
   const isBiddable = bidService !== undefined
