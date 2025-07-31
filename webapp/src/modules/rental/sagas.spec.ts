@@ -1,4 +1,4 @@
-import { call, select } from '@redux-saga/core/effects'
+import { call, getContext, select } from '@redux-saga/core/effects'
 import { ethers } from 'ethers'
 import { delay, take } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
@@ -12,8 +12,9 @@ import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { getCurrentIdentity } from '../identity/selectors'
 import { FETCH_NFT_SUCCESS } from '../nft/actions'
-import { getCurrentNFT } from '../nft/selectors'
+import { getNft } from '../nft/selectors'
 import { NFT } from '../nft/types'
+import { locations } from '../routing/locations'
 import { VendorName } from '../vendor'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
@@ -387,6 +388,7 @@ describe('when handling the request action to claim a LAND', () => {
           .provide([
             [call(getConnectedProvider), {}],
             [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+            [getContext('history'), { location: { pathname: locations.nft(nft.contractAddress, nft.tokenId) } }],
             [call(getContract, ContractName.Rentals, nft.chainId), rentalContract],
             [
               call(
@@ -400,7 +402,7 @@ describe('when handling the request action to claim a LAND', () => {
             ],
             [call(waitForTx, txHash), Promise.resolve()],
             [call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED), Promise.resolve()],
-            [select(getCurrentNFT), { ...nft, owner: rental.lessor }],
+            [select(getNft, nft.contractAddress, nft.tokenId), { ...nft, owner: rental.lessor }],
             [take(FETCH_NFT_SUCCESS), {}],
             [delay(5000), void 0]
           ])

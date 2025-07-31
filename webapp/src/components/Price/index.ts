@@ -1,3 +1,3 @@
-import Price from './Price.container'
+import Price from './Price'
 
 export default Price

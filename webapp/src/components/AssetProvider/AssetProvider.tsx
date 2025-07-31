@@ -18,14 +18,13 @@ const AssetProvider = (props: Props) => {
     contractAddress,
     tokenId,
     rentalStatus,
-    isLoadingFeatureFlags,
+    hasLoadedInitialFlags,
     isLandOrEstate,
     retry,
     error,
     isConnecting
   } = props
 
-  const [hasLoadedInitialFlags, setHasLoadedInitialFlags] = useState(false)
   const [hasFetchedOnce, setHasFetchedOnce] = useState(false)
 
   useEffect(() => {
@@ -36,12 +35,6 @@ const AssetProvider = (props: Props) => {
       }, 3000)
     }
   }, [hasFetchedOnce, isLoading, error, retry, onClearErrors])
-
-  useEffect(() => {
-    if (!isLoadingFeatureFlags) {
-      setHasLoadedInitialFlags(true)
-    }
-  }, [isLoadingFeatureFlags])
 
   useEffect(() => {
     setHasFetchedOnce(false)

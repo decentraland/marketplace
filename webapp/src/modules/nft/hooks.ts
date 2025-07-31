@@ -3,9 +3,18 @@ import { useSelector } from 'react-redux'
 import { NFTCategory } from '@dcl/schemas'
 import { getContract } from '../contract/selectors'
 import { RootState } from '../reducer'
+import { useGetNFTAddressAndTokenIdFromCurrentUrl } from '../routing/hooks'
 import { getTilesByEstateId } from '../tile/selectors'
 import { generateFingerprint, getFingerprint } from './estate/utils'
+import { getData } from './selectors'
 import { NFT } from './types'
+import { getNFT } from './utils'
+
+export const useGetCurrentNFT = (): NFT | null => {
+  const { contractAddress, tokenId } = useGetNFTAddressAndTokenIdFromCurrentUrl()
+  const nfts = useSelector(getData)
+  return getNFT(contractAddress, tokenId, nfts)
+}
 
 export const useFingerprint = (nft: NFT | null) => {
   const [fingerprint, setFingerprint] = useState<string>()

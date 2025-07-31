@@ -1,4 +1,4 @@
-import { call, select } from 'redux-saga/effects'
+import { call, getContext, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { Bid, ChainId, Network, RentalListing, RentalStatus, TradeAssetType, TradeCreation, TradeType, Trade } from '@dcl/schemas'
@@ -9,10 +9,11 @@ import { API_SIGNER } from '../../lib/api'
 import { Asset } from '../asset/types'
 import { getContract } from '../contract/selectors'
 import { getIsBidsOffChainEnabled } from '../features/selectors'
-import { getCurrentNFT } from '../nft/selectors'
+import { getNft } from '../nft/selectors'
 import { NFT } from '../nft/types'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
+import { locations } from '../routing/locations'
 import { Vendor, VendorFactory, VendorName } from '../vendor'
 import { BidService, MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
@@ -247,6 +248,7 @@ describe('when handling the accepting a bid action', () => {
 
         return expectSaga(bidSaga, bidService, tradeService)
           .provide([
+            [getContext('history'), { location: { pathname: 'aPath' } }],
             [select(getWallet), wallet],
             [select(getContract, { address: bid.contractAddress }), undefined],
             [select(getIsBidsOffChainEnabled), false]
@@ -271,6 +273,7 @@ describe('when handling the accepting a bid action', () => {
 
         return expectSaga(bidSaga, bidService, tradeService)
           .provide([
+            [getContext('history'), { location: { pathname: 'aPath' } }],
             [select(getContract, { address: bid.contractAddress }), contract],
             [select(getIsBidsOffChainEnabled), false],
             [select(getWallet), wallet],
@@ -295,6 +298,7 @@ describe('when handling the accepting a bid action', () => {
 
         return expectSaga(bidSaga, bidService, tradeService)
           .provide([
+            [getContext('history'), { location: { pathname: 'aPath' } }],
             [select(getContract, { address: bid.contractAddress }), contract],
             [select(getIsBidsOffChainEnabled), false],
             [call([VendorFactory, 'build'], contract.vendor), vendor],
@@ -318,7 +322,9 @@ describe('when handling the accepting a bid action', () => {
       beforeEach(() => {
         nft = {
           vendor: VendorName.DECENTRALAND,
-          openRentalId: 'aRentalId'
+          openRentalId: 'aRentalId',
+          contractAddress: '0x123',
+          tokenId: '1'
         } as NFT
         contract = {
           vendor: VendorName.DECENTRALAND
@@ -346,11 +352,12 @@ describe('when handling the accepting a bid action', () => {
           it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
             return expectSaga(bidSaga, bidService, tradeService)
               .provide([
+                [getContext('history'), { location: { pathname: locations.nft(nft.contractAddress, nft.tokenId) } }],
                 [select(getIsBidsOffChainEnabled), false],
                 [select(getContract, { address: bid.contractAddress }), contract],
                 [call([VendorFactory, 'build'], contract.vendor!), vendor],
                 [select(getWallet), wallet],
-                [select(getCurrentNFT), nft],
+                [select(getNft, nft.contractAddress, nft.tokenId), nft],
                 [select(getRentalById, nft.openRentalId!), rental],
                 [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
                 [call(waitForTx, txHash), Promise.resolve()],
@@ -370,11 +377,12 @@ describe('when handling the accepting a bid action', () => {
           it('should dispatch an action signaling the success of the action handling', () => {
             return expectSaga(bidSaga, bidService, tradeService)
               .provide([
+                [getContext('history'), { location: { pathname: locations.nft(nft.contractAddress, nft.tokenId) } }],
                 [select(getIsBidsOffChainEnabled), false],
                 [select(getContract, { address: bid.contractAddress }), contract],
                 [call([VendorFactory, 'build'], contract.vendor!), vendor],
                 [select(getWallet), wallet],
-                [select(getCurrentNFT), nft],
+                [select(getNft, nft.contractAddress, nft.tokenId), nft],
                 [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
                 [call(waitForTx, txHash), Promise.resolve()]
               ])
@@ -389,11 +397,12 @@ describe('when handling the accepting a bid action', () => {
         it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
           return expectSaga(bidSaga, bidService, tradeService)
             .provide([
+              [getContext('history'), { location: { pathname: locations.nft(nft.contractAddress, nft.tokenId) } }],
               [select(getIsBidsOffChainEnabled), false],
               [select(getContract, { address: bid.contractAddress }), contract],
               [call([VendorFactory, 'build'], contract.vendor!), vendor],
               [select(getWallet), wallet],
-              [select(getCurrentNFT), nft],
+              [select(getNft, nft.contractAddress, nft.tokenId), nft],
               [call([vendor.bidService!, 'accept'], wallet, bid), Promise.resolve(txHash)],
               [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
             ])
@@ -425,6 +434,7 @@ describe('when handling the accepting a bid action', () => {
       it('should dispatch an action signaling the failure of the action handling', () => {
         return expectSaga(bidSaga, bidService, tradeServiceMock)
           .provide([
+            [getContext('history'), { location: { pathname: 'aPath' } }],
             [select(getIsBidsOffChainEnabled), true],
             [select(getWallet), wallet]
           ])
@@ -493,8 +503,8 @@ describe('when handling the accepting a bid action', () => {
       it('should dispatch an action signaling the success of the action handling', () => {
         return expectSaga(bidSaga, bidService, tradeServiceMock)
           .provide([
+            [getContext('history'), { location: { pathname: 'aPath' } }],
             [select(getIsBidsOffChainEnabled), true],
-            [select(getCurrentNFT), null],
             [select(getWallet), wallet],
             [call(waitForTx, txHash), Promise.resolve()]
           ])
@@ -712,7 +722,7 @@ describe('when handling the cancellation of a bid action', () => {
               [select(getContract, { address: bid.contractAddress }), contract],
               [call([VendorFactory, 'build'], contract.vendor!), vendor],
               [select(getWallet), wallet],
-              [select(getCurrentNFT), nft],
+              [select(getNft, nft.contractAddress, nft.tokenId), nft],
               [call([vendor.bidService!, 'cancel'], wallet, bid), Promise.resolve(txHash)],
               [call(waitForTx, txHash), Promise.resolve()]
             ])
@@ -743,6 +753,7 @@ describe('when handling the cancellation of a bid action', () => {
       it('should dispatch an action signaling the failure of the action handling', () => {
         return expectSaga(bidSaga, bidService, tradeServiceMock)
           .provide([
+            [getContext('history'), { location: { pathname: 'aPath' } }],
             [select(getIsBidsOffChainEnabled), true],
             [select(getWallet), wallet]
           ])
@@ -812,7 +823,6 @@ describe('when handling the cancellation of a bid action', () => {
         return expectSaga(bidSaga, bidService, tradeServiceMock)
           .provide([
             [select(getIsBidsOffChainEnabled), true],
-            [select(getCurrentNFT), null],
             [select(getWallet), wallet],
             [call(waitForTx, txHash), Promise.resolve()]
           ])
