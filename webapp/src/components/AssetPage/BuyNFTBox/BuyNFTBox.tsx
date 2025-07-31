@@ -7,6 +7,7 @@ import clock from '../../../images/clock.png'
 import { getExpirationDateLabel } from '../../../lib/date'
 import { getIsLegacyOrderExpired, getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { AssetType } from '../../../modules/asset/types'
+import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { locations } from '../../../modules/routing/locations'
 import BidButton from '../../BidButton'
 import PriceComponent from '../PriceComponent'
@@ -14,9 +15,10 @@ import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { Props } from './BuyNFTBox.types'
 import styles from './BuyNFTBox.module.css'
 
-const BuyNFTBox = ({ nft, bids, address, order, wallet, onFetchBids }: Props) => {
+const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
   const [hasFetched, setHasFetched] = useState(false)
   const [useCredits, setUseCredits] = useState(false)
+  const order = useGetCurrentOrder()
   const alreadyBid = useMemo(() => !!bids.find(({ bidder }) => bidder === address), [bids])
   const isOwner = nft && nft?.owner === address
   const renderHasListing = useCallback(() => {

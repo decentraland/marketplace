@@ -2,6 +2,7 @@ import { memo } from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isNFT } from '../../modules/asset/utils'
+import { useGetCurrentOrder } from '../../modules/order/hooks'
 import { Box } from '../AssetBrowse/Box'
 import { LinkedProfile } from '../LinkedProfile'
 import { Availability, Expiration, Type } from './DetailsRow'
@@ -10,7 +11,8 @@ import { Props } from './DetailsBox.types'
 import styles from './DetailsBox.module.css'
 
 export const DetailsBox = (props: Props) => {
-  const { asset, order, rental, className } = props
+  const { asset, rental, className } = props
+  const order = useGetCurrentOrder()
 
   const owner = rental && rental.lessor ? rental.lessor : isNFT(asset) ? asset.owner : asset.creator
 

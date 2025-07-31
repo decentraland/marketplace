@@ -1,2 +1,2 @@
-import AssetProvider from './AssetProvider.container'
+import AssetProvider from './AssetProvider.container.tsx'
 export { AssetProvider }

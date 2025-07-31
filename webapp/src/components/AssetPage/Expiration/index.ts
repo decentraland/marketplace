@@ -1,3 +1,3 @@
-import Expiration from './Expiration.container'
+import Expiration from './Expiration'
 
 export default Expiration

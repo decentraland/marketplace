@@ -2,10 +2,17 @@ import { Bid, Order } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import { NFT } from '../../../modules/nft/types'
+import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { VendorName } from '../../../modules/vendor'
 import { renderWithProviders } from '../../../utils/test'
 import Actions from './Actions'
 import { Props } from './Actions.types'
+
+jest.mock('../../../modules/order/hooks')
+
+const mockedUseGetCurrentOrder: jest.MockedFunction<typeof useGetCurrentOrder> = useGetCurrentOrder as jest.MockedFunction<
+  typeof useGetCurrentOrder
+>
 
 describe('Actions Component', () => {
   let props: Props
@@ -18,6 +25,7 @@ describe('Actions Component', () => {
   let address: string
 
   beforeEach(() => {
+    mockedUseGetCurrentOrder.mockReset()
     address = '0xAnAddress'
     wallet = { address: 'user-wallet-address' } as Wallet
     nft = {
@@ -26,14 +34,12 @@ describe('Actions Component', () => {
       vendor: VendorName.DECENTRALAND,
       data: {}
     } as NFT
-    // order = null
     bids = []
     onBuyWithCrypto = jest.fn()
     onLeavingSite = jest.fn()
     props = {
       wallet,
       nft,
-      order,
       bids,
       onBuyWithCrypto,
       onLeavingSite
@@ -43,6 +49,7 @@ describe('Actions Component', () => {
   describe('and it has an order', () => {
     beforeEach(() => {
       order = {} as Order
+      mockedUseGetCurrentOrder.mockReturnValue(order)
     })
     describe('and it is owner and can sell', () => {
       beforeEach(() => {
@@ -50,7 +57,7 @@ describe('Actions Component', () => {
         wallet.address = nft.owner
       })
       it('should render the update and the cancel sale button', () => {
-        const { queryByText } = renderWithProviders(<Actions {...props} order={order} />)
+        const { queryByText } = renderWithProviders(<Actions {...props} />)
         const updateButton = queryByText(t('asset_page.actions.update'))
         const cancelButton = queryByText(t('asset_page.actions.cancel_sale'))
         expect(updateButton).toBeInTheDocument()
@@ -63,7 +70,7 @@ describe('Actions Component', () => {
         wallet.address = address
       })
       it('should render the bid button and not render the update and the cancel sale button', () => {
-        const { queryByText } = renderWithProviders(<Actions {...props} order={order} />)
+        const { queryByText } = renderWithProviders(<Actions {...props} />)
         const bidButton = queryByText(t('asset_page.actions.bid'))
         const updateButton = queryByText(t('asset_page.actions.update'))
         const cancelButton = queryByText(t('asset_page.actions.cancel_sale'))
@@ -76,6 +83,7 @@ describe('Actions Component', () => {
   describe('and there is no order', () => {
     beforeEach(() => {
       order = null
+      mockedUseGetCurrentOrder.mockReturnValue(order)
     })
     describe('and its the owner', () => {
       beforeEach(() => {
@@ -87,13 +95,13 @@ describe('Actions Component', () => {
           nft.data.ens = { subdomain: '' }
         })
         it('should render the manage button', () => {
-          const { queryByText } = renderWithProviders(<Actions {...props} order={order} />)
+          const { queryByText } = renderWithProviders(<Actions {...props} />)
           const manageButton = queryByText(t('asset_page.actions.manage'))
           expect(manageButton).toBeInTheDocument()
         })
       })
       it('should render the sell and transfer button', () => {
-        const { queryByText } = renderWithProviders(<Actions {...props} order={order} />)
+        const { queryByText } = renderWithProviders(<Actions {...props} />)
         const sellButton = queryByText(t('asset_page.actions.sell'))
         const transferButton = queryByText(t('asset_page.actions.transfer'))
         expect(sellButton).toBeInTheDocument()
@@ -106,7 +114,7 @@ describe('Actions Component', () => {
         wallet.address = address
       })
       it('should render the bid button', () => {
-        const { queryByText } = renderWithProviders(<Actions {...props} order={order} />)
+        const { queryByText } = renderWithProviders(<Actions {...props} />)
         const bidButton = queryByText(t('asset_page.actions.bid'))
         expect(bidButton).toBeInTheDocument()
       })

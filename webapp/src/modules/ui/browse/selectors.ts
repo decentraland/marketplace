@@ -1,10 +1,9 @@
 import { createSelector } from 'reselect'
 import { Item, NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Asset, AssetType } from '../../asset/types'
-import { getFavoritedItems as getFavoritedItemsFromState, getListId, getLists } from '../../favorites/selectors'
-import { FavoritesData, List } from '../../favorites/types'
+import { getFavoritedItems as getFavoritedItemsFromState, getList, getLists } from '../../favorites/selectors'
+import { List } from '../../favorites/types'
 import { ItemState } from '../../item/reducer'
 import { getData as getItemData } from '../../item/selectors'
 import { NFTState } from '../../nft/reducer'
@@ -42,9 +41,9 @@ export const getOnSaleItems = createSelector<RootState, ReturnType<typeof getAdd
   (address, itemsById) => Object.values(itemsById).filter(item => item.isOnSale && item.creator === address)
 )
 
-export const getBrowseAssets = (state: RootState, section: Section, assetType: AssetType): Asset[] => {
+export const getBrowseAssets = (state: RootState, section: Section, assetType: AssetType, listId: string | null): Asset[] => {
   if (assetType === AssetType.ITEM) {
-    return section === Sections.decentraland.LISTS ? getItemsPickedByUserOrCreator(state) : getItems(state)
+    return section === Sections.decentraland.LISTS ? getItemsPickedByUserOrCreator(state, listId) : getItems(state)
   } else {
     return getNFTs(state)
   }
@@ -56,24 +55,15 @@ export const getBrowseLists = createSelector<RootState, BrowseUIState, Record<st
   (browse, listsById) => browse.listIds.map(id => listsById[id]).filter(Boolean)
 )
 
-const getCurrentList = createSelector<RootState, string | null, Record<string, List>, List | null>(
-  getListId,
-  getLists,
-  (listId, listsById) => (listId ? listsById[listId] : null)
-)
-
-export const getItemsPickedByUserOrCreator = createSelector<
-  RootState,
-  Record<string, FavoritesData>,
-  Item[],
-  List | null,
-  Wallet | null,
-  Item[]
->(getFavoritedItemsFromState, getItems, getCurrentList, getWallet, (favoritedItems, items, list, wallet) => {
+export const getItemsPickedByUserOrCreator = (state: RootState, listId: string | null) => {
+  const items = getItems(state)
+  const favoritedItems = getFavoritedItemsFromState(state)
+  const wallet = getWallet(state)
+  const list = listId ? getList(state, listId) : null
   const filteredItems =
     wallet && list && wallet.address === list.userAddress ? items.filter(item => favoritedItems[item.id]?.pickedByUser) : items
   return filteredItems.sort(byFavoriteCreatedAtAsc(favoritedItems))
-})
+}
 
 export const getOnSaleNFTs = createSelector<
   RootState,

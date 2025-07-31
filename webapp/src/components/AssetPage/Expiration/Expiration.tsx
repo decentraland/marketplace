@@ -4,10 +4,12 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../../lib/date'
 import { isLegacyOrder } from '../../../lib/orders'
-import { Props } from './Expiration.types'
+import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import styles from './Expiration.module.css'
 
-const Expiration = ({ order }: Props) => {
+const Expiration = () => {
+  const order = useGetCurrentOrder()
+
   if (!order) {
     return null
   }

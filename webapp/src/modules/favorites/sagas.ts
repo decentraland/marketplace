@@ -9,6 +9,7 @@ import { getIsMarketplaceServerEnabled, getIsOffchainPublicNFTOrdersEnabled } fr
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { getData as getItemsData } from '../item/selectors'
 import { ItemBrowseOptions } from '../item/types'
+import { getListIdFromCurrentUrlPath } from '../routing/hooks'
 import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
 import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from '../vendor/decentraland'
@@ -65,7 +66,7 @@ import {
   unpickItemFailure,
   BULK_PICK_FAILURE
 } from './actions'
-import { getList, getListId, isOwnerUnpickingFromCurrentList } from './selectors'
+import { getList, isOwnerUnpickingFromCurrentList } from './selectors'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
 export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
@@ -120,13 +121,14 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleFetchFavoritedItemsRequest(action: FetchFavoritedItemsRequestAction) {
     const { filters } = action.payload.options
+    const history: History = yield getContext('history')
+    const listId: string | null = getListIdFromCurrentUrlPath(history.location.pathname)
     try {
       const address = (yield select(getAddress)) as ReturnType<typeof getAddress>
       // Force the user to have the signed identity
       if (address) yield call(getAccountIdentity)
 
       let items: Item[] = []
-      const listId: string | null = (yield select(getListId)) as ReturnType<typeof getListId>
       if (!listId) {
         throw new Error('List id not found')
       }
@@ -334,6 +336,8 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleBulkPickRequest(action: BulkPickUnpickRequestAction) {
     const { item, pickedFor, unpickedFrom } = action.payload
+    const history: History = yield getContext('history')
+    const listId: string | null = getListIdFromCurrentUrlPath(history.location.pathname)
 
     try {
       // Force the user to have the signed identity
@@ -344,7 +348,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         pickedFor.map(list => list.id),
         unpickedFrom.map(list => list.id)
       )) as Awaited<ReturnType<typeof favoritesAPI.bulkPickUnpick>>
-      const isOwnerUnpickingFromListInView = (yield select(isOwnerUnpickingFromCurrentList, unpickedFrom)) as ReturnType<
+      const isOwnerUnpickingFromListInView = (yield select(isOwnerUnpickingFromCurrentList, unpickedFrom, listId)) as ReturnType<
         typeof isOwnerUnpickingFromCurrentList
       >
 

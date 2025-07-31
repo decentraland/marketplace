@@ -1,12 +1,9 @@
-import { createMatchSelector } from 'connected-react-router'
 import { AnyAction } from 'redux'
-import { createSelector } from 'reselect'
 import { Item } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { getData as getItems } from '../item/selectors'
 import { RootState } from '../reducer'
-import { locations } from '../routing/locations'
 import { DEFAULT_FAVORITES_LIST_ID, ListOfLists } from '../vendor/decentraland/favorites'
 import {
   FETCH_FAVORITED_ITEMS_REQUEST,
@@ -41,18 +38,6 @@ export const getFavoritesDataByItemId = (state: RootState, itemId: string): Favo
 export const getIsPickedByUser = (state: RootState, itemId: string) => getFavoritesDataByItemId(state, itemId)?.pickedByUser || false
 export const getCount = (state: RootState, itemId: string) => getFavoritesDataByItemId(state, itemId)?.count || 0
 
-const listMatchSelector = createMatchSelector<
-  RootState,
-  {
-    listId: string
-  }
->(locations.list())
-
-export const getListId = createSelector<RootState, ReturnType<typeof listMatchSelector>, string | null>(
-  listMatchSelector,
-  match => match?.params.listId || null
-)
-
 export const isPickingOrUnpicking = (state: RootState, itemId: string) =>
   getLoading(state).some(action => isBulkPickRequestAction(action) && action.payload.item.id === itemId)
 
@@ -63,8 +48,7 @@ export const getPreviewListItems = (state: RootState, id: string): Item[] =>
     [id]?.previewOfItemIds?.map(itemId => getItems(state)[itemId])
     .filter(Boolean) ?? []
 
-export const isOwnerUnpickingFromCurrentList = (state: RootState, unpickedFrom: ListOfLists[]): boolean => {
-  const currentListId = getListId(state)
+export const isOwnerUnpickingFromCurrentList = (state: RootState, unpickedFrom: ListOfLists[], currentListId: string | null): boolean => {
   const isCurrentListUnpicked = unpickedFrom.some(list => list.id === currentListId)
   if (!isCurrentListUnpicked || !currentListId) {
     return false
