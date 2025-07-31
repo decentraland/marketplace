@@ -50,7 +50,7 @@ import {
   updateListSuccess
 } from './actions'
 import { favoritesSaga } from './sagas'
-import { getList, getListId, isOwnerUnpickingFromCurrentList } from './selectors'
+import { getList, isOwnerUnpickingFromCurrentList } from './selectors'
 import { CreateListParameters, FavoritedItems, List, ListsBrowseOptions, ListsBrowseSortBy, UpdateListParameters } from './types'
 import { convertListsBrowseSortByIntoApiSortBy } from './utils'
 
@@ -84,7 +84,7 @@ describe('when handling the request for fetching favorited items', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [select(getListId), listId],
+          [getContext('history'), { location: { pathname: locations.list(listId) } }],
           [select(getAddress), Promise.reject(error)],
           [select(getIsMarketplaceServerEnabled), true]
         ])
@@ -98,7 +98,7 @@ describe('when handling the request for fetching favorited items', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
-          [select(getListId), listId],
+          [getContext('history'), { location: { pathname: locations.list(listId) } }],
           [select(getAddress), address],
           [select(getIsMarketplaceServerEnabled), true],
           [call(getAccountIdentity), Promise.reject(error)]
@@ -114,7 +114,7 @@ describe('when handling the request for fetching favorited items', () => {
       it('should dispatch an action signaling the failure of the handled action', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
-            [select(getListId), listId],
+            [getContext('history'), { location: { pathname: locations.list(listId) } }],
             [select(getAddress), address],
             [select(getIsMarketplaceServerEnabled), true],
             [call(getAccountIdentity), Promise.resolve()],
@@ -151,7 +151,7 @@ describe('when handling the request for fetching favorited items', () => {
             it('should dispatch an action signaling the failure of the handled action', () => {
               return expectSaga(favoritesSaga, getIdentity)
                 .provide([
-                  [select(getListId), listId],
+                  [getContext('history'), { location: { pathname: locations.list(listId) } }],
                   [select(getIsMarketplaceServerEnabled), isMarketplaceFFOn],
                   [select(getIsOffchainPublicNFTOrdersEnabled), false],
                   [select(getAddress), address],
@@ -184,7 +184,7 @@ describe('when handling the request for fetching favorited items', () => {
             it('should dispatch an action signaling the failure of the handled action', () => {
               return expectSaga(favoritesSaga, getIdentity)
                 .provide([
-                  [select(getListId), listId],
+                  [getContext('history'), { location: { pathname: locations.list(listId) } }],
                   [select(getIsMarketplaceServerEnabled), isMarketplaceFFOn],
                   [select(getAddress), address],
                   [select(getIsOffchainPublicNFTOrdersEnabled), false],
@@ -220,7 +220,7 @@ describe('when handling the request for fetching favorited items', () => {
           it('should dispatch an action signaling the success of the handled action and the request of the retrieved items', () => {
             return expectSaga(favoritesSaga, getIdentity)
               .provide([
-                [select(getListId), listId],
+                [getContext('history'), { location: { pathname: locations.list(listId) } }],
                 [select(getAddress), address],
                 [select(getIsMarketplaceServerEnabled), true],
                 [select(getIsOffchainPublicNFTOrdersEnabled), false],
@@ -270,7 +270,7 @@ describe('when handling the request for fetching favorited items', () => {
         it('should dispatch an action signaling the success of the handled action', () => {
           return expectSaga(favoritesSaga, getIdentity)
             .provide([
-              [select(getListId), listId],
+              [getContext('history'), { location: { pathname: locations.list(listId) } }],
               [select(getAddress), address],
               [select(getIsMarketplaceServerEnabled), true],
               [select(getIsOffchainPublicNFTOrdersEnabled), false],
@@ -309,7 +309,7 @@ describe('when handling the request for fetching favorited items', () => {
       it('should dispatch an action signaling the failure of the handled action', () => {
         return expectSaga(favoritesSaga, getIdentity)
           .provide([
-            [select(getListId), listId],
+            [getContext('history'), { location: { pathname: locations.list(listId) } }],
             [select(getAddress), null],
             [select(getIsMarketplaceServerEnabled), true],
             [matchers.call.fn(FavoritesAPI.prototype.getPicksByList), Promise.reject(error)]
@@ -340,7 +340,7 @@ describe('when handling the request for fetching favorited items', () => {
           it('should dispatch an action signaling the failure of the handled action', () => {
             return expectSaga(favoritesSaga, getIdentity)
               .provide([
-                [select(getListId), listId],
+                [getContext('history'), { location: { pathname: locations.list(listId) } }],
                 [select(getAddress), null],
                 [select(getIsOffchainPublicNFTOrdersEnabled), false],
                 [select(getIsMarketplaceServerEnabled), true],
@@ -375,7 +375,7 @@ describe('when handling the request for fetching favorited items', () => {
           it('should dispatch an action signaling the success of the handled action and the request of the retrieved items', () => {
             return expectSaga(favoritesSaga, getIdentity)
               .provide([
-                [select(getListId), listId],
+                [getContext('history'), { location: { pathname: locations.list(listId) } }],
                 [select(getAddress), null],
                 [select(getIsMarketplaceServerEnabled), true],
                 [select(getIsOffchainPublicNFTOrdersEnabled), false],
@@ -424,7 +424,7 @@ describe('when handling the request for fetching favorited items', () => {
         it('should dispatch an action signaling the success of the handled action', () => {
           return expectSaga(favoritesSaga, getIdentity)
             .provide([
-              [select(getListId), listId],
+              [getContext('history'), { location: { pathname: locations.list(listId) } }],
               [select(getAddress), null],
               [select(getIsMarketplaceServerEnabled), true],
               [select(getIsOffchainPublicNFTOrdersEnabled), false],
@@ -1345,7 +1345,10 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
-        .provide([[call(getAccountIdentity), Promise.reject(error)]])
+        .provide([
+          [getContext('history'), { location: { pathname: locations.list(sndList.id) } }],
+          [call(getAccountIdentity), Promise.reject(error)]
+        ])
         .put(bulkPickUnpickFailure(item, [fstList], [sndList], error.message))
         .dispatch(bulkPickUnpickRequest(item, [fstList], [sndList]))
         .run({ silenceTimeout: true })
@@ -1356,6 +1359,7 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
+          [getContext('history'), { location: { pathname: locations.list(sndList.id) } }],
           [call(getAccountIdentity), Promise.resolve()],
           [matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick), Promise.reject(error)]
         ])
@@ -1373,8 +1377,9 @@ describe('when handling the request to perform picks and unpicks in bulk', () =>
     it('should dispatch an action signaling the success of the handled action', () => {
       return expectSaga(favoritesSaga, getIdentity)
         .provide([
+          [getContext('history'), { location: { pathname: locations.list(sndList.id) } }],
           [call(getAccountIdentity), Promise.resolve()],
-          [select(isOwnerUnpickingFromCurrentList, [sndList]), true],
+          [select(isOwnerUnpickingFromCurrentList, [sndList], sndList.id), true],
           [matchers.call.fn(FavoritesAPI.prototype.bulkPickUnpick), Promise.resolve({ pickedByUser: true })]
         ])
         .call.like({

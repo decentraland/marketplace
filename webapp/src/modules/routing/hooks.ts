@@ -23,3 +23,10 @@ export const useGetItemAddressAndTokenIdFromCurrentUrl = (): { contractAddress: 
 
   return { contractAddress: match?.params.contractAddress || null, tokenId: match?.params.tokenId || null }
 }
+
+export const getListIdFromCurrentUrlPath = (currentPathname: string): string | null => {
+  const match = matchPath<{ listId: string }>(currentPathname, {
+    path: locations.list(':listId')
+  })
+  return match?.params.listId || null
+}
