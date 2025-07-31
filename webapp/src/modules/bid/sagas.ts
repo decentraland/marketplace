@@ -11,7 +11,7 @@ import { getIsBidsOffChainEnabled } from '../features/selectors'
 import { getNft } from '../nft/selectors'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
-import { getCurrentNFTAddressAndTokenId } from '../routing/hooks'
+import { getNFTAddressAndTokenIdFromCurrentUrlPath } from '../routing/hooks'
 import { locations } from '../routing/locations'
 import { BidService } from '../vendor/decentraland'
 import { VendorName } from '../vendor/types'
@@ -92,7 +92,7 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
   function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
     const { bid } = action.payload
     const history: History = yield getContext('history')
-    const { contractAddress, tokenId } = getCurrentNFTAddressAndTokenId(history.location.pathname)
+    const { contractAddress, tokenId } = getNFTAddressAndTokenIdFromCurrentUrlPath(history.location.pathname)
 
     let txHash = ''
     try {

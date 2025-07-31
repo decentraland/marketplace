@@ -17,7 +17,7 @@ import { getActiveOrder } from '../../modules/order/utils'
 import { RootState } from '../../modules/reducer'
 import { getRentalById } from '../../modules/rental/selectors'
 import { getOpenRentalId } from '../../modules/rental/utils'
-import { useGetCurrentItemAddressAndTokenId, useGetCurrentNFTAddressAndTokenId } from '../../modules/routing/hooks'
+import { useGetItemAddressAndTokenIdFromCurrentUrl, useGetNFTAddressAndTokenIdFromCurrentUrl } from '../../modules/routing/hooks'
 import { FetchOneOptions } from '../../modules/vendor'
 import { ContractName } from '../../modules/vendor/decentraland'
 import { convertToOutputString } from '../../utils/output'
@@ -26,8 +26,8 @@ import { OwnProps } from './AssetProvider.types'
 
 const AssetProviderContainer = <T extends AssetType = AssetType>(props: OwnProps<T>) => {
   const dispatch = useDispatch()
-  const { contractAddress: nftContractAddress, tokenId: nftTokenId } = useGetCurrentNFTAddressAndTokenId()
-  const { contractAddress: itemContractAddress, tokenId: itemTokenId } = useGetCurrentItemAddressAndTokenId()
+  const { contractAddress: nftContractAddress, tokenId: nftTokenId } = useGetNFTAddressAndTokenIdFromCurrentUrl()
+  const { contractAddress: itemContractAddress, tokenId: itemTokenId } = useGetItemAddressAndTokenIdFromCurrentUrl()
 
   const contractAddress = props.contractAddress || (props.type === AssetType.NFT ? nftContractAddress : itemContractAddress)
   const tokenId = props.tokenId || (props.type === AssetType.NFT ? nftTokenId : itemTokenId)
