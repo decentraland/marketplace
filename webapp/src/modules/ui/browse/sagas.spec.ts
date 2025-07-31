@@ -1,8 +1,9 @@
-import { select } from 'redux-saga/effects'
+import { getContext, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { Item } from '@dcl/schemas'
 import { FETCH_FAVORITED_ITEMS_REQUEST, bulkPickUnpickSuccess, fetchFavoritedItemsRequest } from '../../favorites/actions'
 import { isOwnerUnpickingFromCurrentList } from '../../favorites/selectors'
+import { locations } from '../../routing/locations'
 import { getPageNumber } from '../../routing/selectors'
 import { PAGE_SIZE } from '../../vendor/api'
 import { ListOfLists } from '../../vendor/decentraland/favorites'
@@ -37,9 +38,10 @@ describe('when handling the success action of a bulk item pick and unpick', () =
       it('should put an action to fetch the last item of the loaded page to replace the unpicked item', () => {
         return expectSaga(browseSaga)
           .provide([
+            [getContext('history'), { location: { pathname: locations.list(list.id) } }],
             [select(getPageNumber), 1],
-            [select(isOwnerUnpickingFromCurrentList, unpickedFrom), true],
-            [select(getItemsPickedByUserOrCreator), pickedStateItems],
+            [select(isOwnerUnpickingFromCurrentList, unpickedFrom, list.id), true],
+            [select(getItemsPickedByUserOrCreator, list.id), pickedStateItems],
             [select(getCount), count]
           ])
           .put(
@@ -63,9 +65,10 @@ describe('when handling the success action of a bulk item pick and unpick', () =
       it('should not put the fetch favorited items request action', () => {
         return expectSaga(browseSaga)
           .provide([
+            [getContext('history'), { location: { pathname: locations.list(list.id) } }],
             [select(getPageNumber), 1],
-            [select(isOwnerUnpickingFromCurrentList, unpickedFrom), false],
-            [select(getItemsPickedByUserOrCreator), pickedStateItems],
+            [select(isOwnerUnpickingFromCurrentList, unpickedFrom, list.id), false],
+            [select(getItemsPickedByUserOrCreator, list.id), pickedStateItems],
             [select(getCount), count]
           ])
           .not.put.like({ action: { type: FETCH_FAVORITED_ITEMS_REQUEST } })
@@ -84,9 +87,10 @@ describe('when handling the success action of a bulk item pick and unpick', () =
     it('should not put the fetch favorited items request action', () => {
       return expectSaga(browseSaga)
         .provide([
+          [getContext('history'), { location: { pathname: locations.list(list.id) } }],
           [select(getPageNumber), 1],
-          [select(isOwnerUnpickingFromCurrentList, [list]), true],
-          [select(getItemsPickedByUserOrCreator), pickedStateItems],
+          [select(isOwnerUnpickingFromCurrentList, [list], list.id), true],
+          [select(getItemsPickedByUserOrCreator, list.id), pickedStateItems],
           [select(getCount), count]
         ])
         .not.put.like({ action: { type: FETCH_FAVORITED_ITEMS_REQUEST } })
