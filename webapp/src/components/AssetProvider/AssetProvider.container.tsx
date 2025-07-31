@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Network } from '@dcl/schemas'
+import { hasLoadedInitialFlags } from 'decentraland-dapps/dist/modules/features/selectors'
 import { isConnecting as getIsConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isFetchingRequiredPermissions, isFetchingVideoHash } from '../../modules/asset/selectors'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { getContract } from '../../modules/contract/selectors'
-import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { clearItemErrors, fetchItemRequest } from '../../modules/item/actions'
 import { isFetchingItem, getError as getItemsError, getData as getItems } from '../../modules/item/selectors'
 import { getItem } from '../../modules/item/utils'
@@ -64,7 +64,7 @@ const AssetProviderContainer = <T extends AssetType = AssetType>(props: OwnProps
   // Get additional loading states
   const isFetchingPermissions = useSelector((state: RootState) => (asset ? isFetchingRequiredPermissions(state, asset.id) : false))
   const isFetchingVideo = useSelector((state: RootState) => (asset ? isFetchingVideoHash(state, asset.id) : false))
-  const isLoadingFeatureFlags = useSelector(getIsLoadingFeatureFlags)
+  const initialFlagsLoaded = useSelector(hasLoadedInitialFlags)
   const isConnecting = useSelector(getIsConnecting)
 
   // Get orders and rental data
@@ -98,7 +98,7 @@ const AssetProviderContainer = <T extends AssetType = AssetType>(props: OwnProps
     rental,
     order,
     isLoading,
-    isLoadingFeatureFlags,
+    hasLoadedInitialFlags: initialFlagsLoaded,
     isLandOrEstate,
     error,
     isConnecting

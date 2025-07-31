@@ -10,9 +10,7 @@ export const getNFTAddressAndTokenIdFromCurrentUrlPath = (
   currentPathname: string
 ): { contractAddress: string | null; tokenId: string | null } => {
   const match = matchPath<{ contractAddress: string; tokenId: string }>(currentPathname, {
-    path: locations.nft(':contractAddress', ':tokenId'),
-    exact: true,
-    strict: true
+    path: locations.nft(':contractAddress', ':tokenId')
   })
   return { contractAddress: match?.params.contractAddress || null, tokenId: match?.params.tokenId || null }
 }
@@ -20,9 +18,7 @@ export const getNFTAddressAndTokenIdFromCurrentUrlPath = (
 export const useGetItemAddressAndTokenIdFromCurrentUrl = (): { contractAddress: string | null; tokenId: string | null } => {
   const location = useLocation()
   const match = matchPath<{ contractAddress: string; tokenId: string }>(location.pathname, {
-    path: locations.item(':contractAddress', ':tokenId'),
-    exact: true,
-    strict: true
+    path: locations.item(':contractAddress', ':tokenId')
   })
 
   return { contractAddress: match?.params.contractAddress || null, tokenId: match?.params.tokenId || null }
