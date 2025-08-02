@@ -42,7 +42,7 @@ const AccountPage = ({ addressInUrl, vendor, wallet, isConnecting, viewAsGuest }
               </Page>
             ) : address ? (
               <>
-                {!isCurrentAccount ? <AccountBanner address={address} /> : null}
+                {!isCurrentAccount ? <AccountBanner /> : null}
                 <AssetBrowse vendor={vendor} address={address} view={isCurrentAccount ? View.CURRENT_ACCOUNT : View.ACCOUNT} />
               </>
             ) : null}
