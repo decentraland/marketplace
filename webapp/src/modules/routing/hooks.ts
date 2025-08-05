@@ -30,3 +30,11 @@ export const getListIdFromCurrentUrlPath = (currentPathname: string): string | n
   })
   return match?.params.listId || null
 }
+
+export const useGetCollectionAddressFromCurrentUrl = (): string | null => {
+  const location = useLocation()
+  const match = matchPath<{ contractAddress: string }>(location.pathname, {
+    path: locations.collection(':contractAddress')
+  })
+  return match?.params.contractAddress || null
+}
