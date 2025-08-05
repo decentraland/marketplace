@@ -1,1 +1,1 @@
-export { default as DetailsBox } from './DetailsBox.container'
+export { default as DetailsBox } from './DetailsBox'

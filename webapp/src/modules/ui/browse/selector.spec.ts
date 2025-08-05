@@ -1,11 +1,9 @@
 import { RouterState } from 'connected-react-router'
 import { ChainId, Item, NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { AssetType } from '../../asset/types'
 import { FavoritesState } from '../../favorites/reducer'
-import * as FavoritesSelectors from '../../favorites/selectors'
-import { FavoritesData, List } from '../../favorites/types'
+import { List } from '../../favorites/types'
 import { NFT } from '../../nft/types'
 import { RootState } from '../../reducer'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
@@ -27,15 +25,6 @@ import {
   getWalletOwnedLands,
   isClaimingBackLandTransactionPending
 } from './selectors'
-
-jest.mock(
-  '../../favorites/selectors',
-  () =>
-    ({
-      ...jest.requireActual('../../favorites/selectors'),
-      getListId: jest.fn()
-    }) as unknown
-)
 
 let rootState: RootState
 let item: Item
@@ -378,9 +367,8 @@ describe('when getting if the claiming back transaction is pending', () => {
 })
 
 describe('when getting the user favorited items of the ui browse state', () => {
-  let favoritedItems: Record<string, FavoritesData>
   beforeEach(() => {
-    favoritedItems = {
+    rootState.favorites.data.items = {
       [item.id]: { pickedByUser: true, count: 1 },
       [itemOnSale.id]: { pickedByUser: false, count: 4 }
     }
@@ -388,25 +376,33 @@ describe('when getting the user favorited items of the ui browse state', () => {
 
   describe('and the user is logged in', () => {
     describe('and is the owner of the list', () => {
+      beforeEach(() => {
+        rootState.wallet.data = { address: list.userAddress } as any
+      })
+
       it('should retrieve the items that were favorited by them', () => {
-        expect(
-          getItemsPickedByUserOrCreator.resultFunc(favoritedItems, [item, itemOnSale], list, { address: list.userAddress } as Wallet)
-        ).toEqual([item])
+        expect(getItemsPickedByUserOrCreator(rootState, list.id)).toEqual([item])
       })
     })
 
     describe('and is not the owner of the list', () => {
+      beforeEach(() => {
+        rootState.wallet.data = { address: '0xanotherAddress' } as any
+      })
+
       it('should retrieve the items that were favorited by the owner of the list', () => {
-        expect(
-          getItemsPickedByUserOrCreator.resultFunc(favoritedItems, [item, itemOnSale], list, { address: '0xanotherAddress' } as Wallet)
-        ).toEqual([item, itemOnSale])
+        expect(getItemsPickedByUserOrCreator(rootState, list.id)).toEqual([item, itemOnSale])
       })
     })
   })
 
   describe('and the user is not logged in', () => {
+    beforeEach(() => {
+      rootState.wallet.data = null
+    })
+
     it('should retrieve the items that were favorited by owner of the list', () => {
-      expect(getItemsPickedByUserOrCreator.resultFunc(favoritedItems, [item, itemOnSale], list, null)).toEqual([item, itemOnSale])
+      expect(getItemsPickedByUserOrCreator(rootState, list.id)).toEqual([item, itemOnSale])
     })
   })
 })
@@ -427,11 +423,10 @@ describe('when getting the browse assets', () => {
           [item.id]: { pickedByUser: true, count: 1 },
           [itemOnSale.id]: { pickedByUser: false, count: 4 }
         }
-        jest.spyOn(FavoritesSelectors, 'getListId').mockReturnValue(list.id)
       })
 
       it('should return all browsable items picked by the user', () => {
-        expect(getBrowseAssets(rootState, section, assetType)).toStrictEqual([item])
+        expect(getBrowseAssets(rootState, section, assetType, list.id)).toStrictEqual([item])
       })
     })
 
@@ -441,7 +436,7 @@ describe('when getting the browse assets', () => {
       })
 
       it('should return all the browsable items', () => {
-        expect(getBrowseAssets(rootState, section, assetType)).toStrictEqual([item, itemOnSale])
+        expect(getBrowseAssets(rootState, section, assetType, null)).toStrictEqual([item, itemOnSale])
       })
     })
   })
@@ -452,7 +447,7 @@ describe('when getting the browse assets', () => {
     })
 
     it('should return all the browsable nfts', () => {
-      expect(getBrowseAssets(rootState, section, assetType)).toStrictEqual([
+      expect(getBrowseAssets(rootState, section, assetType, null)).toStrictEqual([
         nft,
         nftOnSale,
         nftWithOpenRent,

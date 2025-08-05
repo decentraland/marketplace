@@ -1,4 +1,3 @@
-import { match } from 'react-router-dom'
 import { Item } from '@dcl/schemas'
 import { WalletState } from 'decentraland-dapps/dist/modules/wallet'
 import { getDefaultState } from '../../tests/defaultStore'
@@ -22,7 +21,6 @@ import {
   isLoadingFavoritedItems,
   getFavoritesDataByItemId,
   getIsPickedByUser,
-  getListId,
   getLoading,
   getState,
   isPickingOrUnpicking,
@@ -158,25 +156,6 @@ describe('when getting the count of favorites an item has', () => {
     it('should return the numeric value representing the count', () => {
       expect(getCount(state, 'item1111')).toEqual(0)
     })
-  })
-})
-
-describe('when getting the listId from the pathname', () => {
-  let listId: string
-  let listIdMatch: match<{ listId: string }>
-
-  beforeEach(() => {
-    listId = 'list-id'
-    listIdMatch = {
-      params: {
-        listId
-      },
-      path: locations.list('list-id')
-    } as match<{ listId: string }>
-  })
-
-  it('should return the listId that comes after /lists', () => {
-    expect(getListId.resultFunc(listIdMatch)).toBe(listId)
   })
 })
 
@@ -450,22 +429,14 @@ describe('when getting if the owner of the current list is unpicking an item fro
       })
 
       describe('and the item is being unpicked from the current list', () => {
-        beforeEach(() => {
-          state.router.location.pathname = locations.list(unpickedFrom[0].id)
-        })
-
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom, unpickedFrom[0].id)).toBe(false)
         })
       })
 
       describe("and the item isn't being unpicked from the current list", () => {
-        beforeEach(() => {
-          state.router.location.pathname = locations.list('someOtherId')
-        })
-
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom, 'someOtherId')).toBe(false)
         })
       })
     })
@@ -484,22 +455,14 @@ describe('when getting if the owner of the current list is unpicking an item fro
       })
 
       describe('and the item is being unpicked from the current list', () => {
-        beforeEach(() => {
-          state.router.location.pathname = locations.list(unpickedFrom[0].id)
-        })
-
         it('should return true', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(true)
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom, unpickedFrom[0].id)).toBe(true)
         })
       })
 
       describe("and the item isn't being unpicked from the current list", () => {
-        beforeEach(() => {
-          state.router.location.pathname = locations.list('someOtherId')
-        })
-
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom, 'someOtherId')).toBe(false)
         })
       })
     })
@@ -539,22 +502,14 @@ describe('when getting if the owner of the current list is unpicking an item fro
       })
 
       describe('and the item is being unpicked from the current list', () => {
-        beforeEach(() => {
-          state.router.location.pathname = locations.list(unpickedFrom[0].id)
-        })
-
         it('should return true', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(true)
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom, unpickedFrom[0].id)).toBe(true)
         })
       })
 
       describe("and the item isn't being unpicked from the current list", () => {
-        beforeEach(() => {
-          state.router.location.pathname = locations.list('someOtherId')
-        })
-
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom, 'someOtherId')).toBe(false)
         })
       })
     })
@@ -573,22 +528,14 @@ describe('when getting if the owner of the current list is unpicking an item fro
       })
 
       describe('and the item is being unpicked from the current list', () => {
-        beforeEach(() => {
-          state.router.location.pathname = locations.list(unpickedFrom[0].id)
-        })
-
         it('should return true', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(true)
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom, unpickedFrom[0].id)).toBe(true)
         })
       })
 
       describe("and the item isn't being unpicked from the current list", () => {
-        beforeEach(() => {
-          state.router.location.pathname = locations.list('someOtherId')
-        })
-
         it('should return false', () => {
-          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom)).toBe(false)
+          expect(isOwnerUnpickingFromCurrentList(state, unpickedFrom, 'someOtherId')).toBe(false)
         })
       })
     })

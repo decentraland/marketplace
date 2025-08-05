@@ -8,9 +8,10 @@ import { isErrorWithMessage } from '../../lib/error'
 import { isNFT } from '../asset/utils'
 import { getContract } from '../contract/selectors'
 import { getIsBidsOffChainEnabled } from '../features/selectors'
-import { getCurrentNFT } from '../nft/selectors'
+import { getNft } from '../nft/selectors'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
+import { getNFTAddressAndTokenIdFromCurrentUrlPath } from '../routing/hooks'
 import { locations } from '../routing/locations'
 import { BidService } from '../vendor/decentraland'
 import { VendorName } from '../vendor/types'
@@ -90,6 +91,9 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
 
   function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
     const { bid } = action.payload
+    const history: History = yield getContext('history')
+    const { contractAddress, tokenId } = getNFTAddressAndTokenIdFromCurrentUrlPath(history.location.pathname)
+
     let txHash = ''
     try {
       const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
@@ -125,7 +129,8 @@ export function* bidSaga(bidService: BidService, tradeService: TradeService) {
       }
 
       yield put(acceptBidtransactionSubmitted(bid, txHash))
-      const nft = (yield select(getCurrentNFT)) as ReturnType<typeof getCurrentNFT>
+      const nft =
+        contractAddress && tokenId ? ((yield select(getNft, contractAddress ?? '', tokenId ?? '')) as ReturnType<typeof getNft>) : null
       if (nft?.openRentalId) {
         yield call(waitForTx, txHash)
         const rental = (yield select(getRentalById, nft.openRentalId)) as ReturnType<typeof getRentalById>

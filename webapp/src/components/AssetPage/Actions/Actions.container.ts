@@ -2,7 +2,6 @@ import { connect } from 'react-redux'
 import { Order } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { NFT } from '../../../modules/nft/types'
-import { getCurrentOrder } from '../../../modules/order/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getAssetBids } from '../../../modules/ui/asset/bid/selectors'
 import { getWallet } from '../../../modules/wallet/selectors'
@@ -11,7 +10,6 @@ import { MapDispatch, MapDispatchProps, MapStateProps, OwnProps } from './Action
 
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
-  order: getCurrentOrder(state),
   bids: getAssetBids(state)
 })
 
