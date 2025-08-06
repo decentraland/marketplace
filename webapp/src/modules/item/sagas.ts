@@ -172,24 +172,15 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     try {
       // If the wallet is getting connected, wait until it finishes to fetch the wallet and generate the identity so it can fetch them with authentication
       yield call(waitForWalletConnectionAndIdentityIfConnecting)
-      yield call(waitForFeatureFlagsToBeLoaded)
-      const isMarketplaceServerEnabled: boolean = yield select(getIsMarketplaceServerEnabled)
-      const isOffchainPublicItemOrdersEnabled: boolean = yield select(getIsOffchainPublicItemOrdersEnabled)
-      const catalogViewAPI = isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
-      const isOffchainEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       let data: Item[] = []
       let total: number = 0
-
       if (isCatalogView(view)) {
-        const result: { data: Item[]; total: number } = yield call([catalogViewAPI, 'get'], filters as CatalogFilters, {
-          v2: isOffchainEnabled
+        const result: { data: Item[]; total: number } = yield call([marketplaceServerCatalogAPI, 'get'], filters as CatalogFilters, {
+          v2: true
         })
         ;({ data, total } = result)
       } else {
-        const result: { data: Item[]; total: number } = yield call(
-          [isOffchainPublicItemOrdersEnabled ? marketplaceItemAPI : itemAPI, 'get'],
-          filters
-        )
+        const result: { data: Item[]; total: number } = yield call([marketplaceItemAPI, 'get'], filters)
         ;({ data, total } = result)
       }
       yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
@@ -209,10 +200,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
 
     try {
-      yield call(waitForWalletConnectionAndIdentityIfConnecting)
-      const isOffchainPublicItemOrdersEnabled: boolean = yield select(getIsOffchainPublicItemOrdersEnabled)
-      const api = isOffchainPublicItemOrdersEnabled ? marketplaceItemAPI : itemAPI
-      const item: Item = yield call([api, 'getOne'], contractAddress, tokenId)
+      const item: Item = yield call([marketplaceItemAPI, 'getOne'], contractAddress, tokenId)
       const entity: Entity | null = yield call([peerAPI, 'fetchItemByUrn'], item.urn)
       if (entity) {
         item.entity = entity
