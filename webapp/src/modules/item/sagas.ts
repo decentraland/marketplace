@@ -24,13 +24,7 @@ import { API_SIGNER } from '../../lib/api'
 import { isErrorWithMessage } from '../../lib/error'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard } from '../asset/utils'
-import {
-  getIsCreditsEnabled,
-  getIsMarketplaceServerEnabled,
-  getIsOffchainPublicItemOrdersEnabled,
-  getIsOffchainPublicNFTOrdersEnabled
-} from '../features/selectors'
-import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
+import { getIsCreditsEnabled } from '../features/selectors'
 import { locations } from '../routing/locations'
 import { isCatalogView } from '../routing/utils'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
@@ -89,10 +83,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     retryDelay: retryParams.delay,
     identity: getIdentity
   }
-  const itemAPI = new ItemAPI(NFT_SERVER_URL, API_OPTS)
   const marketplaceItemAPI = new ItemAPI(MARKETPLACE_SERVER_URL, API_OPTS)
   const marketplaceServerCatalogAPI = new CatalogAPI(MARKETPLACE_SERVER_URL, API_OPTS)
-  const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
   const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, getIdentity)
 
   yield fork(() => takeLatestByPath(FETCH_ITEMS_REQUEST, locations.browse()))
@@ -128,10 +120,8 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
 
     try {
-      yield call(waitForFeatureFlagsToBeLoaded)
-      const isMarketplaceServerEnabled: boolean = yield select(getIsMarketplaceServerEnabled)
       yield call(waitForWalletConnectionAndIdentityIfConnecting)
-      const { data }: { data: Item[] } = yield call([isMarketplaceServerEnabled ? marketplaceItemAPI : itemAPI, 'getTrendings'], size)
+      const { data }: { data: Item[] } = yield call([marketplaceItemAPI, 'getTrendings'], size)
 
       if (!data.length) {
         yield put(fetchTrendingItemsSuccess([]))
@@ -139,15 +129,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
       }
 
       const ids = data.map(item => item.id)
-      const api = isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
-      const isOffchainEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
-      const { data: itemData }: { data: Item[]; total: number } = yield call(
-        [api, 'get'],
-        {
-          ids
-        },
-        { v2: isOffchainEnabled }
-      )
+      const { data: itemData }: { data: Item[]; total: number } = yield call([marketplaceServerCatalogAPI, 'get'], { ids }, { v2: true })
       yield put(fetchTrendingItemsSuccess(itemData))
     } catch (error) {
       yield put(fetchTrendingItemsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
@@ -157,9 +139,7 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleFetchCollectionItemsRequest(action: FetchCollectionItemsRequestAction) {
     const { contractAddresses, first } = action.payload
     try {
-      const isOffchainPublicItemOrdersEnabled: boolean = yield select(getIsOffchainPublicItemOrdersEnabled)
-      const api = isOffchainPublicItemOrdersEnabled ? marketplaceItemAPI : itemAPI
-      const { data }: { data: Item[]; total: number } = yield call([api, 'get'], { first, contractAddresses })
+      const { data }: { data: Item[]; total: number } = yield call([marketplaceItemAPI, 'get'], { first, contractAddresses })
       yield put(fetchCollectionItemsSuccess(data))
     } catch (error) {
       yield put(fetchCollectionItemsFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
