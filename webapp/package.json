@@ -16,7 +16,6 @@
     "@well-known-components/fetch-component": "^2.0.2",
     "buffer": "^6.0.3",
     "classnames": "^2.3.1",
-    "connected-react-router": "^6.9.1",
     "date-fns": "^2.23.0",
     "dcl-catalyst-client": "21.2.0",
     "dcl-catalyst-commons": "^9.0.1",

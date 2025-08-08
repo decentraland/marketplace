@@ -2,7 +2,6 @@ import { Item } from '@dcl/schemas'
 import { WalletState } from 'decentraland-dapps/dist/modules/wallet'
 import { getDefaultState } from '../../tests/defaultStore'
 import { RootState } from '../reducer'
-import { locations } from '../routing/locations'
 import { DEFAULT_FAVORITES_LIST_ID, ListOfLists } from '../vendor/decentraland/favorites'
 import {
   bulkPickUnpickRequest,
@@ -383,15 +382,6 @@ describe('when getting if the owner of the current list is unpicking an item fro
         previewOfItemIds: []
       }
     ]
-    state = {
-      ...state,
-      router: {
-        location: {
-          pathname: locations.list('aListId')
-        },
-        action: {} as any
-      } as any
-    }
   })
 
   describe("and the list isn't the default list", () => {
