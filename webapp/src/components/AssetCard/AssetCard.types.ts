@@ -21,3 +21,4 @@ export type MapStateProps = Pick<
   'pageName' | 'price' | 'showRentalChip' | 'rental' | 'isClaimingBackLandTransactionPending' | 'sortBy' | 'appliedFilters'
 >
 export type OwnProps = Pick<Props, 'asset' | 'order' | 'isManager'>
+export type ContainerProps = Omit<Props, keyof MapStateProps> & { onClick?: () => void }
