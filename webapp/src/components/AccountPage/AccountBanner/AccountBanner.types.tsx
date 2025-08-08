@@ -1,3 +1,4 @@
+import { fetchStoreRequest } from '../../../modules/store/actions'
 import { Store } from '../../../modules/store/types'
 
 export type Props = {
@@ -5,8 +6,7 @@ export type Props = {
   store?: Store
   isLoading: boolean
   onBack: () => void
-  onFetchStore: (address: string) => void
+  onFetchStore: ActionFunction<typeof fetchStoreRequest>
 }
 
-export type MapStateProps = Pick<Props, 'store' | 'isLoading'>
-export type MapDispatchProps = Pick<Props, 'onBack' | 'onFetchStore'>
+export type ContainerProps = Pick<Props, 'address'>

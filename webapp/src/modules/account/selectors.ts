@@ -1,8 +1,6 @@
-import { createMatchSelector } from 'connected-react-router'
 import { createSelector } from 'reselect'
 import { Network } from '@dcl/schemas'
 import { RootState } from '../reducer'
-import { locations } from '../routing/locations'
 import { AccountMetrics } from './types'
 import { sumAccountMetrics } from './utils'
 
@@ -13,13 +11,6 @@ export const getCreatorsSearchQuery = (state: RootState) => getState(state).crea
 export const getMetricsByNetworkByAddress = (state: RootState) => getState(state).metrics
 export const getLoading = (state: RootState) => getState(state).loading
 export const getError = (state: RootState) => getState(state).error
-
-const accountMatchSelector = createMatchSelector<RootState, { address: string }>(locations.account(':address'))
-
-export const getAddress = createSelector<RootState, ReturnType<typeof accountMatchSelector>, string | undefined>(
-  accountMatchSelector,
-  match => match?.params.address?.toLowerCase()
-)
 
 export const getMetricsByAddressByNetwork = createSelector(getMetricsByNetworkByAddress, metrics => {
   const addresses = new Set([...Object.keys(metrics.ETHEREUM), ...Object.keys(metrics.MATIC)])
