@@ -1,10 +1,8 @@
 import React from 'react'
-import { Dispatch } from 'redux'
 import { Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Asset, AssetType } from '../../modules/asset/types'
-import { ClearItemErrorsAction, FetchItemRequestAction } from '../../modules/item/actions'
-import { ClearNFTErrorsAction, FetchNFTRequestAction } from '../../modules/nft/actions'
-import { FetchOneOptions } from '../../modules/vendor/types'
+import { clearItemErrors, fetchItemRequest } from '../../modules/item/actions'
+import { clearNFTErrors, fetchNFTRequest } from '../../modules/nft/actions'
 
 export type Props<T extends AssetType = AssetType> = {
   type: T
@@ -21,26 +19,14 @@ export type Props<T extends AssetType = AssetType> = {
   retry?: boolean
   error: string | null
   withEntity?: boolean
-  onFetchNFT: (contractAddress: string, tokenId: string, options?: FetchOneOptions) => unknown
-  onFetchItem: (contractAddress: string, tokenId: string) => unknown
-  onClearErrors: () => void
+  onFetchNFT: ActionFunction<typeof fetchNFTRequest>
+  onFetchItem: ActionFunction<typeof fetchItemRequest>
+  onClearErrors: ActionFunction<typeof clearNFTErrors> | ActionFunction<typeof clearItemErrors>
   children: (asset: Asset<T> | null, order: Order | null, rental: RentalListing | null, isLoading: boolean) => React.ReactNode | null
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'contractAddress'
-  | 'tokenId'
-  | 'asset'
-  | 'order'
-  | 'rental'
-  | 'isLoading'
-  | 'hasLoadedInitialFlags'
-  | 'isLandOrEstate'
-  | 'error'
-  | 'isConnecting'
->
-export type MapDispatchProps = Pick<Props, 'onFetchNFT' | 'onFetchItem' | 'onClearErrors'>
-export type MapDispatch = Dispatch<FetchNFTRequestAction | FetchItemRequestAction | ClearNFTErrorsAction | ClearItemErrorsAction>
-export type OwnProps<T extends AssetType = AssetType> = Pick<Props<T>, 'type' | 'children' | 'rentalStatus' | 'retry' | 'withEntity'> &
-  Partial<Pick<Props<T>, 'contractAddress' | 'tokenId'>>
+export type ContainerProps<T extends AssetType = AssetType> = Pick<
+  Props<T>,
+  'type' | 'children' | 'rentalStatus' | 'retry' | 'withEntity'
+> &
+  Partial<Pick<Props, 'contractAddress' | 'tokenId'>>

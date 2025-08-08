@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Network } from '@dcl/schemas'
 import { hasLoadedInitialFlags } from 'decentraland-dapps/dist/modules/features/selectors'
@@ -20,11 +20,10 @@ import { getOpenRentalId } from '../../modules/rental/utils'
 import { useGetItemAddressAndTokenIdFromCurrentUrl, useGetNFTAddressAndTokenIdFromCurrentUrl } from '../../modules/routing/hooks'
 import { FetchOneOptions } from '../../modules/vendor'
 import { ContractName } from '../../modules/vendor/decentraland'
-import { convertToOutputString } from '../../utils/output'
 import AssetProvider from './AssetProvider'
-import { OwnProps } from './AssetProvider.types'
+import { ContainerProps } from './AssetProvider.types'
 
-const AssetProviderContainer = <T extends AssetType = AssetType>(props: OwnProps<T>) => {
+const AssetProviderContainer = <T extends AssetType = AssetType>(props: ContainerProps<T>) => {
   const dispatch = useDispatch()
   const { contractAddress: nftContractAddress, tokenId: nftTokenId } = useGetNFTAddressAndTokenIdFromCurrentUrl()
   const { contractAddress: itemContractAddress, tokenId: itemTokenId } = useGetItemAddressAndTokenIdFromCurrentUrl()
@@ -42,24 +41,16 @@ const AssetProviderContainer = <T extends AssetType = AssetType>(props: OwnProps
   )
   const isNftLoading = useSelector((state: RootState) => (contractAddress && tokenId ? isLoadingNFT(state) : false))
 
-  let asset: Asset | null = null
-  let isAssetLoading = false
-  let error: string | null = null
-
-  switch (props.type) {
-    case AssetType.NFT:
-      asset = getNFT(contractAddress, tokenId, nfts)
-      isAssetLoading = isNftLoading
-      error = nftError
-      break
-    case AssetType.ITEM:
-      asset = getItem(contractAddress, tokenId, items)
-      isAssetLoading = isItemLoading
-      error = itemsError
-      break
-    default:
-      throw new Error(`Invalid Asset type ${convertToOutputString(props.type)}`)
-  }
+  const asset: Asset<T> | null = useMemo(
+    () =>
+      (props.type === AssetType.NFT ? getNFT(contractAddress, tokenId, nfts) : getItem(contractAddress, tokenId, items)) as Asset<T> | null,
+    [props.type, contractAddress, tokenId, nfts, items]
+  )
+  const isAssetLoading = useMemo(
+    () => (props.type === AssetType.NFT ? isNftLoading : isItemLoading),
+    [props.type, isNftLoading, isItemLoading]
+  )
+  const error: string | null = useMemo(() => (props.type === AssetType.NFT ? nftError : itemsError), [props.type, nftError, itemsError])
 
   // Get additional loading states
   const isFetchingPermissions = useSelector((state: RootState) => (asset ? isFetchingRequiredPermissions(state, asset.id) : false))
@@ -88,21 +79,7 @@ const AssetProviderContainer = <T extends AssetType = AssetType>(props: OwnProps
   )
 
   const isLandOrEstate = !!contractAddress && (contractAddress === landContract?.address || contractAddress === estateContract?.address)
-
   const isLoading = isAssetLoading || isFetchingPermissions || isFetchingVideo
-
-  const state = {
-    tokenId,
-    contractAddress,
-    asset,
-    rental,
-    order,
-    isLoading,
-    hasLoadedInitialFlags: initialFlagsLoaded,
-    isLandOrEstate,
-    error,
-    isConnecting
-  }
 
   const onFetchNFT = useCallback(
     (contractAddress: string, tokenId: string, options?: FetchOneOptions) => {
@@ -126,7 +103,28 @@ const AssetProviderContainer = <T extends AssetType = AssetType>(props: OwnProps
     }
   }, [dispatch, props.type])
 
-  return <AssetProvider {...(state as any)} {...props} onFetchNFT={onFetchNFT} onFetchItem={onFetchItem} onClearErrors={onClearErrors} />
+  return (
+    <AssetProvider
+      type={props.type}
+      children={props.children}
+      rentalStatus={props.rentalStatus}
+      retry={props.retry}
+      withEntity={props.withEntity}
+      tokenId={tokenId}
+      contractAddress={contractAddress}
+      asset={asset}
+      rental={rental}
+      order={order}
+      isLoading={isLoading}
+      hasLoadedInitialFlags={initialFlagsLoaded}
+      isLandOrEstate={isLandOrEstate}
+      error={error}
+      isConnecting={isConnecting}
+      onFetchNFT={onFetchNFT}
+      onFetchItem={onFetchItem}
+      onClearErrors={onClearErrors}
+    />
+  )
 }
 
 export default AssetProviderContainer
