@@ -32,25 +32,29 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
     isBuyWithCardPage: boolean
     onGetCrossChainRoute: OnGetCrossChainRoute
     onGetGasCost: OnGetGasCost
-    onSwitchNetwork: typeof switchNetworkRequest
+    onSwitchNetwork: ActionFunction<typeof switchNetworkRequest>
     onBuyNatively: () => unknown
     onGoBack?: () => unknown
     onBuyWithCard?: () => unknown
     onBuyCrossChain: (route: Route) => unknown
-    onGetMana: typeof openBuyManaWithFiatModalRequest
+    onGetMana: ActionFunction<typeof openBuyManaWithFiatModalRequest>
     onClose: ModalProps['onClose']
   }
 
-export type OwnProps = Pick<
+export type ContainerProps = Pick<
   Props,
-  | 'price'
-  | 'isBuyingAsset'
   | 'metadata'
+  | 'price'
+  | 'useCredits'
+  | 'isBuyingAsset'
   | 'onBuyNatively'
   | 'onBuyWithCard'
   | 'onBuyCrossChain'
-  | 'onClose'
   | 'onGetGasCost'
+  | 'isUsingMagic'
+  | 'isLoadingAuthorization'
+  | 'onGetCrossChainRoute'
+  | 'onClose'
   | 'onGoBack'
-  | 'useCredits'
+  | 'name'
 >
