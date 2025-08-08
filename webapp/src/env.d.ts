@@ -8,3 +8,5 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+
+type ActionFunction<T extends (...args: any) => any> = (...args: Parameters<T>) => unknown
