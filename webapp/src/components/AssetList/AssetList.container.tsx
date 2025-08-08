@@ -10,44 +10,33 @@ import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import { isLoadingNftsByView } from '../../modules/nft/selectors'
 import { RootState } from '../../modules/reducer'
 import { browse, clearFilters } from '../../modules/routing/actions'
-import { getListIdFromCurrentUrlPath } from '../../modules/routing/hooks'
-import { getVendor, getPageNumber, getAssetType, getSection, getSearch, hasFiltersEnabled } from '../../modules/routing/selectors'
+import { getListIdFromCurrentUrlPath, useGetBrowseOptions } from '../../modules/routing/hooks'
+import { hasFiltersEnabled } from '../../modules/routing/url-parser'
 import { getBrowseAssets, getCount, getView } from '../../modules/ui/browse/selectors'
 import AssetList from './AssetList'
-import { Props } from './AssetList.types'
-
-type ContainerProps = Pick<Props, 'isManager'>
+import { ContainerProps } from './AssetList.types'
 
 const AssetListContainer: React.FC<ContainerProps> = ({ isManager }) => {
   const dispatch = useDispatch()
   const location = useLocation()
+  const browseOptions = useGetBrowseOptions()
+  const { search, section, assetType, vendor, page } = browseOptions
 
-  // Get state from Redux store using useSelector
-  const vendor = useSelector(getVendor)
-  const section = useSelector(getSection)
-  const assetType = useSelector(getAssetType)
-  const page = useSelector(getPageNumber)
   const count = useSelector(getCount)
-  const search = useSelector(getSearch)
-  const hasFiltersEnabledValue = useSelector(hasFiltersEnabled)
   const view = useSelector(getView)
 
-  // Get listId from current URL path
+  const hasFiltersEnabledValue = useMemo(() => hasFiltersEnabled(browseOptions), [browseOptions])
   const listId = useMemo(() => getListIdFromCurrentUrlPath(location.pathname), [location.pathname])
-
-  // Get assets with all required parameters
   const assets = useSelector((state: RootState) => getBrowseAssets(state, section, assetType, listId))
 
-  // Get loading states
   const loadingState = useSelector((state: RootState) => isLoadingNftsByView(state, view))
   const isLoading = useSelector((state: RootState) =>
-    assetType === AssetType.ITEM
+    browseOptions.assetType === AssetType.ITEM
       ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST) || isLoadingFavoritedItems(state)
       : isLoadingType(loadingState, FETCH_NFTS_REQUEST)
   )
 
-  // Create dispatch handlers
-  const handleBrowse = useCallback((options: Parameters<typeof browse>[0]) => dispatch(browse(options)), [dispatch])
+  const handleBrowse = useCallback<ActionFunction<typeof browse>>(options => dispatch(browse(options)), [dispatch])
   const handleClearFilters = useCallback(() => dispatch(clearFilters()), [dispatch])
 
   return (
