@@ -1,5 +1,6 @@
 import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
+import { browse } from '../../modules/routing/actions'
 import { BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor'
@@ -37,37 +38,8 @@ export type Props = {
   emoteHasSound?: boolean
   emoteHasGeometry?: boolean
   withCredits?: boolean
-  onBrowse: (options: BrowseOptions) => void
+  onBrowse: ActionFunction<typeof browse>
   onFilterChange?: (options: BrowseOptions) => void
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'minPrice'
-  | 'maxPrice'
-  | 'minEstateSize'
-  | 'maxEstateSize'
-  | 'rarities'
-  | 'status'
-  | 'network'
-  | 'category'
-  | 'bodyShapes'
-  | 'isOnSale'
-  | 'emotePlayMode'
-  | 'assetType'
-  | 'collection'
-  | 'creators'
-  | 'section'
-  | 'landStatus'
-  | 'vendor'
-  | 'view'
-  | 'rentalDays'
-  | 'minDistanceToPlaza'
-  | 'maxDistanceToPlaza'
-  | 'adjacentToRoad'
-  | 'emoteHasGeometry'
-  | 'emoteHasSound'
->
-
-export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>
-export type MapDispatchProps = Pick<Props, 'onBrowse'>
+export type ContainerProps = Pick<Props, 'values' | 'onFilterChange' | 'defaultCollapsed'>
