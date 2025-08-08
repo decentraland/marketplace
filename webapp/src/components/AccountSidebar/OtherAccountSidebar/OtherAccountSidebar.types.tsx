@@ -9,5 +9,4 @@ export type Props = {
   onBrowse: (options: BrowseOptions) => void
 }
 
-export type MapStateProps = Pick<Props, 'assetType'>
-export type MapDispatchProps = Pick<Props, 'onBrowse'>
+export type ContainerProps = Pick<Props, 'section' | 'address'>
