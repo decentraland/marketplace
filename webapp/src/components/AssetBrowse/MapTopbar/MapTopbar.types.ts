@@ -8,6 +8,4 @@ export type Props = {
   onShowOwnedChange?: (show: boolean) => void
 }
 
-export type MapStateProps = Pick<Props, 'onlyOnRent' | 'onlyOnSale'>
-
-export type MapDispatchProps = Pick<Props, 'onBrowse'>
+export type ContainerProps = Pick<Props, 'showOwned' | 'onShowOwnedChange'>
