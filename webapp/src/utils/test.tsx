@@ -1,9 +1,7 @@
 import { Provider } from 'react-redux'
 import { render, RenderResult, waitFor } from '@testing-library/react'
-import { ConnectedRouter } from 'connected-react-router'
 import mediaQuery from 'css-mediaquery'
 import flatten from 'flat'
-import { createMemoryHistory } from 'history'
 import { Store } from 'redux'
 import { en } from 'decentraland-dapps/dist/modules/translation/defaults'
 import { mergeTranslations } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -32,15 +30,12 @@ export function renderWithProviders(
         locale: 'en'
       }
     })
-  const history = createMemoryHistory()
 
   function AppProviders({ children }: { children: JSX.Element }) {
     return (
       <Provider store={initializedStore}>
         <DclThemeProvider theme={darkTheme}>
-          <TranslationProvider locales={['en']}>
-            <ConnectedRouter history={history}>{children}</ConnectedRouter>
-          </TranslationProvider>
+          <TranslationProvider locales={['en']}>{children}</TranslationProvider>
         </DclThemeProvider>
       </Provider>
     )
