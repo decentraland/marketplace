@@ -6,8 +6,5 @@ export type Props = {
   category?: NFTCategory
   browseOptions: BrowseOptions
   isLandSection: boolean
-  onBrowse: typeof browse
+  onBrowse: ActionFunction<typeof browse>
 }
-
-export type MapStateProps = Pick<Props, 'browseOptions' | 'isLandSection' | 'category'>
-export type MapDispatchProps = Pick<Props, 'onBrowse'>

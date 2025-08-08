@@ -3,7 +3,7 @@ import { AssetType } from '../../modules/asset/types'
 import { convertToOutputString } from '../../utils/output'
 import { Props } from './AssetProvider.types'
 
-const AssetProvider = (props: Props) => {
+const AssetProvider = <T extends AssetType = AssetType>(props: Props<T>) => {
   const {
     type,
     asset,
@@ -78,4 +78,4 @@ const AssetProvider = (props: Props) => {
   return <>{children(asset, order, rental, isLoading || (!hasLoadedInitialFlags && type === AssetType.NFT))}</>
 }
 
-export default React.memo(AssetProvider)
+export default React.memo(AssetProvider) as typeof AssetProvider

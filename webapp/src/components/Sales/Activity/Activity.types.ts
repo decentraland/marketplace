@@ -10,6 +10,3 @@ export type Props = {
   isLoading: boolean
   onBrowse: (options: BrowseOptions) => void
 }
-
-export type MapStateProps = Pick<Props, 'sales' | 'assets' | 'count' | 'page' | 'isLoading'>
-export type MapDispatchProps = Pick<Props, 'onBrowse'>

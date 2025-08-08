@@ -1,7 +1,6 @@
-import { Dispatch } from 'redux'
 import { AssetType } from '../../modules/asset/types'
-import { browse, BrowseAction, fetchAssetsFromRoute, FetchAssetsFromRouteAction } from '../../modules/routing/actions'
-import { setView, SetViewAction } from '../../modules/ui/actions'
+import { browse, fetchAssetsFromRoute } from '../../modules/routing/actions'
+import { setView } from '../../modules/ui/actions'
 import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/routing/types'
 import { VendorName } from '../../modules/vendor/types'
@@ -19,22 +18,16 @@ export type Props = {
   section?: Section
   sections?: Section[]
   status?: AssetStatusFilter
-  onSetView: typeof setView
-  onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
-  onBrowse: typeof browse
+  onSetView: ActionFunction<typeof setView>
+  onFetchAssetsFromRoute: ActionFunction<typeof fetchAssetsFromRoute>
+  onBrowse: ActionFunction<typeof browse>
   onlyOnSale?: boolean
   onlySmart?: boolean
   disableSearchDropdown?: boolean
   onlyOnRent?: boolean
 }
 
-export type MapStateProps = Pick<
+export type ContainerProps = Pick<
   Props,
-  'isMap' | 'isFullscreen' | 'onlyOnSale' | 'viewInState' | 'section' | 'assetType' | 'onlySmart' | 'onlyOnRent' | 'status'
->
-export type MapDispatchProps = Pick<Props, 'onSetView' | 'onFetchAssetsFromRoute' | 'onBrowse'>
-export type MapDispatch = Dispatch<SetViewAction | FetchAssetsFromRouteAction | BrowseAction>
-export type OwnProps = Pick<
-  Props,
-  'vendor' | 'address' | 'isFullscreen' | 'isMap' | 'view' | 'sections' | 'section' | 'contracts' | 'disableSearchDropdown'
+  'vendor' | 'address' | 'isFullscreen' | 'view' | 'section' | 'sections' | 'contracts' | 'disableSearchDropdown'
 >
