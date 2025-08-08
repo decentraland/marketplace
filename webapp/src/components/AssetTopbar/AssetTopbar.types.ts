@@ -1,6 +1,4 @@
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { AssetType } from '../../modules/asset/types'
-import { clearFilters } from '../../modules/routing/actions'
 import { BrowseOptions, SortByOption } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/routing/types'
@@ -20,24 +18,8 @@ export type Props = {
   isLoading: boolean
   disableSearchDropdown?: boolean
   onBrowse: (options: BrowseOptions) => void
-  onClearFilters: typeof clearFilters
-  onOpenFiltersModal: () => ReturnType<typeof openModal>
+  onClearFilters: () => unknown
+  onOpenFiltersModal: () => unknown
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'search'
-  | 'isMap'
-  | 'count'
-  | 'view'
-  | 'assetType'
-  | 'onlyOnRent'
-  | 'onlyOnSale'
-  | 'sortBy'
-  | 'sortByOptions'
-  | 'section'
-  | 'hasFiltersEnabled'
-  | 'isLoading'
->
-
-export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters' | 'onOpenFiltersModal'>
+export type ContainerProps = Pick<Props, 'disableSearchDropdown'>
