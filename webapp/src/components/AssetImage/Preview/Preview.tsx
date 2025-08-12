@@ -23,7 +23,6 @@ export const Preview: React.FC<Props> = ({
   isDraggable,
   isLoadingVideoHash,
   isTryingOn,
-  isUnityWearablePreviewEnabled,
   hasBadges,
   hasFetchedVideoHash,
   onFetchSmartWearableVideoHash,
