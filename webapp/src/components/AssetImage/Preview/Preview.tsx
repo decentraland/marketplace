@@ -312,7 +312,7 @@ export const Preview: React.FC<Props> = ({
             {...wearablePreviewProps}
             dev={config.is(Env.DEVELOPMENT)}
             unityMode={'marketplace'}
-            unity={isUnityWearablePreviewEnabled}
+            unity={true}
           />
           {isAvailableForMint && !isOwnerOfNFT && item ? (
             <AvailableForMintPopup
