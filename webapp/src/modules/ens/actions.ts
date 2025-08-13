@@ -57,3 +57,33 @@ export type ClaimNameCrossChainRequestAction = ReturnType<typeof claimNameCrossC
 export type ClaimNameCrossChainSuccessAction = ReturnType<typeof claimNameCrossChainSuccess>
 
 export type ClaimNameCrossChainFailureAction = ReturnType<typeof claimNameCrossChainFailure>
+
+// 🆕 NEW: Claim name with CORAL + Credits
+export const CLAIM_NAME_WITH_CREDITS_REQUEST = '[Request] Claim Name with Credits'
+export const CLAIM_NAME_WITH_CREDITS_SUCCESS = '[Success] Claim Name with Credits'
+export const CLAIM_NAME_WITH_CREDITS_FAILURE = '[Failure] Claim Name with Credits'
+export const CLAIM_NAME_WITH_CREDITS_TRANSACTION_SUBMITTED = '[Submitted] Claim Name with Credits'
+
+export const claimNameWithCreditsRequest = (name: string) => action(CLAIM_NAME_WITH_CREDITS_REQUEST, { name })
+
+export const claimNameWithCreditsTransactionSubmitted = (subdomain: string, address: string, chainId: ChainId, txHash: string) =>
+  action(CLAIM_NAME_WITH_CREDITS_TRANSACTION_SUBMITTED, {
+    ...buildTransactionPayload(chainId, txHash, {
+      subdomain,
+      address
+    })
+  })
+
+export const claimNameWithCreditsSuccess = (ens: ENS, name: string, txHash: string) =>
+  action(CLAIM_NAME_WITH_CREDITS_SUCCESS, {
+    ens,
+    name,
+    txHash
+  })
+
+export const claimNameWithCreditsFailure = (name: string, error: string) => action(CLAIM_NAME_WITH_CREDITS_FAILURE, { name, error })
+
+export type ClaimNameWithCreditsRequestAction = ReturnType<typeof claimNameWithCreditsRequest>
+export type ClaimNameWithCreditsSuccessAction = ReturnType<typeof claimNameWithCreditsSuccess>
+export type ClaimNameWithCreditsFailureAction = ReturnType<typeof claimNameWithCreditsFailure>
+export type ClaimNameWithCreditsTransactionSubmittedAction = ReturnType<typeof claimNameWithCreditsTransactionSubmitted>

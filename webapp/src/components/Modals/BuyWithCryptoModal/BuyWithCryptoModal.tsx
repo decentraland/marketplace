@@ -59,6 +59,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     onBuyNatively,
     onBuyWithCard,
     onBuyCrossChain,
+    onBuyWithCredits,
     onGetMana,
     onClose,
     onGoBack
@@ -69,6 +70,8 @@ export const BuyWithCryptoModal = (props: Props) => {
   const manaAddressOnAssetChain = getContract(ContractName.MANAToken, asset.chainId).address
   const abortControllerRef = useRef(new AbortController())
 
+  // 🔍 TODO: CORAL Detection Effect (needs route state)
+
   // useStates
   const [providerChains, setProviderChains] = useState<ChainData[]>(getDefaultChains())
   const [providerTokens, setProviderTokens] = useState<Token[]>([])
@@ -78,6 +81,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   const [insufficientToken, setInsufficientToken] = useState<Token | undefined>()
   const [showChainSelector, setShowChainSelector] = useState(false)
   const [showTokenSelector, setShowTokenSelector] = useState(false)
+  const [internalUseCredits, setInternalUseCredits] = useState(false) // 🆕 NEW: Local credits toggle state
   const [crossChainProvider, setCrossChainProvider] = useState<CrossChainProvider>()
   const manaTokenOnSelectedChain: Token | undefined = useMemo(() => {
     return providerTokens.find(t => t.symbol === 'MANA' && t.chainId === selectedChain.toString())
@@ -105,6 +109,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     crossChainProvider,
     wallet
   )
+  console.log('route', route)
 
   useEffect(() => {
     const initializeCrossChainProvider = async () => {
@@ -280,6 +285,48 @@ export const BuyWithCryptoModal = (props: Props) => {
     }
   }, [onBuyWithCard])
 
+  // 🆕 NEW: Handle credits toggle with automatic Polygon + MANA selection
+  const handleCreditsToggle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const isChecked = e.target.checked
+      console.log('🔄 Credits toggle changed:', isChecked)
+
+      setInternalUseCredits(isChecked)
+
+      if (isChecked) {
+        // Force Polygon + MANA when credits are enabled
+        const polygonChainId = ChainId.MATIC_MAINNET
+        const polygonMANA = providerTokens.find(t => t.symbol === 'MANA' && t.chainId === polygonChainId.toString())
+
+        console.log('🚀 Forcing Polygon + MANA selection for credits:', {
+          polygonChainId,
+          polygonMANA: polygonMANA?.address,
+          providerTokensCount: providerTokens.length
+        })
+
+        // Update chain and token selection
+        if (selectedChain !== polygonChainId) {
+          setSelectedChain(polygonChainId)
+        }
+        if (polygonMANA && selectedToken?.address !== polygonMANA.address) {
+          setSelectedToken(polygonMANA)
+        }
+
+        // Track analytics event
+        analytics.track(events.CREDITS_TOGGLE_ENABLED, {
+          asset: asset.name,
+          creditsAvailable: credits?.totalCredits || 0,
+          creditFromCredits: Math.min(100, credits?.totalCredits || 0),
+          creditFromWallet: Math.max(0, 100 - (credits?.totalCredits || 0))
+        })
+      }
+
+      // TODO: Trigger route recalculation
+      // The route will be recalculated automatically when chain/token selection changes
+    },
+    [providerTokens, selectedChain, selectedToken, setSelectedChain, setSelectedToken, analytics, asset.name, credits?.totalCredits]
+  )
+
   const renderGetMANAButton = useCallback(() => {
     return (
       <>
@@ -313,9 +360,15 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [isFetchingBalance, isBuyingAsset, asset.chainId, isLoadingAuthorization, onBuyWithCard, handleBuyWithCard, onGetMana, onClose])
 
   const renderBuyNowButton = useCallback(() => {
-    // if L1 asset and paying with ETH MANA
-    // or if L2 asset and paying with MATIC MANA => native buy
-    const onClick = shouldUseCrossChainProvider ? handleCrossChainBuy : onBuyNatively
+    // 🆕 NEW: Credits flow takes precedence for ENS
+    // if credits toggle is enabled and it's an ENS asset and onBuyWithCredits is available
+    // then use CORAL + Credits flow, otherwise use normal flow
+    const onClick =
+      internalUseCredits && asset.data.ens && onBuyWithCredits
+        ? onBuyWithCredits
+        : shouldUseCrossChainProvider
+          ? handleCrossChainBuy
+          : onBuyNatively
 
     let buttonText: string | null = null
     if (isFetchingRoute) {
@@ -355,7 +408,10 @@ export const BuyWithCryptoModal = (props: Props) => {
     isUsingMagic,
     onBuyNatively,
     handleCrossChainBuy,
-    shouldUseCrossChainProvider
+    shouldUseCrossChainProvider,
+    internalUseCredits,
+    asset.data.ens,
+    onBuyWithCredits
   ])
 
   const renderMainActionButton = useCallback(() => {
@@ -568,6 +624,97 @@ export const BuyWithCryptoModal = (props: Props) => {
                   </span>
                 </div>
               </div>
+
+              {/* 🆕 NEW: Credits Toggle for ENS only */}
+              {asset.data.ens && credits && credits.totalCredits > 0 && (
+                <div
+                  className={styles.creditsToggle}
+                  style={{
+                    padding: '16px',
+                    backgroundColor: internalUseCredits ? '#f0f8ff' : '#f7f9fa',
+                    borderRadius: '8px',
+                    marginBottom: '16px',
+                    border: internalUseCredits ? '2px solid #1976d2' : '1px solid #ddd',
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <input
+                      type="checkbox"
+                      checked={internalUseCredits}
+                      onChange={handleCreditsToggle}
+                      id="useCredits"
+                      style={{
+                        transform: 'scale(1.3)',
+                        accentColor: '#1976d2',
+                        backgroundColor: internalUseCredits ? '#1976d2' : '#ffffff',
+                        border: '2px solid #1976d2'
+                      }}
+                    />
+                    <label
+                      htmlFor="useCredits"
+                      style={{
+                        cursor: 'pointer',
+                        fontWeight: '600',
+                        color: internalUseCredits ? '#1976d2' : '#333',
+                        flex: 1
+                      }}
+                    >
+                      💳 Use Credits for payment
+                    </label>
+                    <div
+                      style={{
+                        backgroundColor: '#e3f2fd',
+                        padding: '4px 8px',
+                        borderRadius: '12px',
+                        fontSize: '12px',
+                        fontWeight: 'bold',
+                        color: '#1976d2'
+                      }}
+                    >
+                      {credits.totalCredits} MANA available
+                    </div>
+                  </div>
+
+                  {/* Show calculation details */}
+                  <div
+                    style={{
+                      marginTop: '12px',
+                      padding: '12px',
+                      backgroundColor: internalUseCredits ? '#e8f5e8' : '#fff3cd',
+                      borderRadius: '6px',
+                      fontSize: '14px',
+                      border: internalUseCredits ? '1px solid #c8e6c9' : '1px solid #ffeaa7'
+                    }}
+                  >
+                    {internalUseCredits ? (
+                      <>
+                        <p style={{ margin: '0 0 8px 0', color: '#2d8f47', fontWeight: 'bold' }}>
+                          ✨ CORAL Benefits: Sub-5s execution, zero slippage, 90% gas reduction
+                        </p>
+                        <div
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr',
+                            gap: '8px',
+                            fontSize: '13px',
+                            color: '#666'
+                          }}
+                        >
+                          <div>💰 Name cost: 100 MANA</div>
+                          <div>🎫 Your credits: {credits.totalCredits} MANA</div>
+                          <div>💳 From credits: {Math.min(100, credits.totalCredits)} MANA</div>
+                          <div>💸 You pay: {Math.max(0, 100 - credits.totalCredits)} MANA</div>
+                        </div>
+                      </>
+                    ) : (
+                      <p style={{ margin: '0', color: '#856404' }}>
+                        💡 You have {credits.totalCredits} MANA in credits. Enable to save on fees with CORAL!
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
 
               <PaymentSelector
                 price={price}

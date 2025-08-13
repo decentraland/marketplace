@@ -3,7 +3,9 @@ import { BigNumber, ethers } from 'ethers'
 import { ChainId, Item, Network, Order } from '@dcl/schemas'
 import { getNetwork } from '@dcl/schemas/dist/dapps/chain-id'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib'
+// import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
+import { Credit } from 'decentraland-dapps/dist/modules/credits/types'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
 import type { CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
@@ -17,6 +19,20 @@ import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas, formatPr
 
 export const NATIVE_TOKEN = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 const ROUTE_FETCH_INTERVAL = 10000000 // 10 secs
+
+// Types for CORAL + Credits integration
+type CreditsManagerCredit = {
+  value: string
+  expiresAt: string
+  salt: string
+}
+
+// Helper function to convert Credit from decentraland-dapps to CreditsManagerCredit
+const convertToCreditsManagerCredit = (credit: Credit): CreditsManagerCredit => ({
+  value: credit.amount,
+  expiresAt: credit.expiresAt,
+  salt: ethers.utils.hexZeroPad(credit.id.startsWith('0x') ? credit.id : '0x' + Buffer.from(credit.id).toString('hex'), 32)
+})
 
 export const useShouldUseCrossChainProvider = (selectedToken: Token, assetNetwork: Network) => {
   return useMemo(
@@ -191,10 +207,25 @@ export const useCrossChainMintNftRoute = (
   providerTokens: Token[],
   crossChainProvider: CrossChainProvider | undefined,
   wallet: Wallet | null
+  // useCredits = false,
+  // credits: Credit[]
 ) => {
   const getMintNFTRoute = useCallback(
-    (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) =>
-      crossChainProvider.getMintNFTRoute({
+    (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) => {
+      // let useCreditsArgs = undefined
+      // if (useCredits && item.tradeId) {
+      //   const { creditsData, creditsSignatures, externalCall, maxUncreditedValue, maxCreditedValue } =
+      //     creditsService.prepareCreditsMarketplace(trade, wallet, credits.credits)
+      //   useCreditsArgs = {
+      //     creditsData,
+      //     creditsSignatures,
+      //     externalCall,
+      //     maxUncreditedValue,
+      //     maxCreditedValue
+      //   }
+      // }
+
+      return crossChainProvider.getMintNFTRoute({
         fromAddress,
         fromAmount,
         fromToken,
@@ -213,7 +244,8 @@ export const useCrossChainMintNftRoute = (
             onChainTrade: getOnChainTrade(trade, fromAddress)
           }
         }
-      }),
+      })
+    },
     [item]
   )
 
@@ -303,6 +335,166 @@ export const useCrossChainNameMintingRoute = (
   return useCrossChainRoute(price, assetChainId, selectedToken, selectedChain, providerTokens, crossChain, wallet, getMintingNameRoute)
 }
 
+// 🆕 NEW: Hook for CORAL + Credits name minting
+export const useCrossChainNameMintingWithCreditsRoute = (
+  name: string,
+  price: string,
+  assetChainId: ChainId,
+  selectedToken: Token,
+  selectedChain: ChainId,
+  providerTokens: Token[],
+  crossChainProvider: CrossChainProvider | undefined,
+  wallet: Wallet | null,
+  credits: Credit[],
+  creditsSignatures: string[],
+  externalCallSignature: string,
+  maxUncreditedValue: string,
+  maxCreditedValue: string
+) => {
+  const [route, setRoute] = useState<any>() // CreditsManagerRouteResponse type from decentraland-transactions
+  const [isFetchingRoute, setIsFetchingRoute] = useState(false)
+  const [routeFailed, setRouteFailed] = useState(false)
+  const [fromAmount, setFromAmount] = useState<string>()
+
+  const destinationChainMANAContractAddress = useMemo(() => getContract(ContractName.MANAToken, assetChainId).address, [assetChainId])
+
+  const calculateRouteWithCredits = useCallback(async () => {
+    const providerMANA = providerTokens.find(t => t.address.toLocaleLowerCase() === destinationChainMANAContractAddress.toLocaleLowerCase())
+    if (!crossChainProvider || !crossChainProvider.isLibInitialized() || !wallet || !providerMANA) {
+      return
+    }
+
+    try {
+      setRoute(undefined)
+      setIsFetchingRoute(true)
+      setRouteFailed(false)
+
+      // Calculate dynamic fromAmount including gas costs
+      const fromAmountParams = {
+        fromToken: selectedToken,
+        toAmount: ethers.utils.formatEther(price),
+        toToken: providerMANA
+      }
+      const calculatedAmount = Number(await crossChainProvider.getFromAmount(fromAmountParams)).toFixed(6)
+      setFromAmount(calculatedAmount)
+
+      const fromAmountWei = ethers.utils.parseUnits(calculatedAmount.toString(), selectedToken.decimals).toString()
+
+      // Convert credits to CreditsManager format
+      const creditsManagerCredits = credits.map(convertToCreditsManagerCredit)
+
+      console.log('🚀 Calling CORAL + Credits route with:', {
+        name,
+        fromAmount: fromAmountWei,
+        creditsCount: credits.length,
+        maxUncreditedValue,
+        maxCreditedValue,
+        isCoralEnabled: true
+      })
+
+      // Get CORAL + Credits route
+      const creditsRoute = await crossChainProvider.getRegisterNameWithCreditsRoute({
+        fromAddress: wallet.address,
+        fromAmount: fromAmountWei,
+        fromToken: selectedToken.address,
+        fromChain: selectedChain,
+        toChain: assetChainId,
+        toAmount: price,
+        enableExpress: true, // Enable CORAL
+        name,
+        credits: creditsManagerCredits,
+        creditsSignatures,
+        externalCallSignature,
+        maxUncreditedValue,
+        maxCreditedValue
+      })
+
+      if (creditsRoute) {
+        // 🔍 CORAL Detection for Credits Route
+        const actions = creditsRoute?.route?.route?.actions || []
+        const hasRfqAction = actions.some((action: any) => action.type === 'rfq')
+        const isBoostSupported = creditsRoute?.route?.route?.estimate?.isBoostSupported
+        const routerAddress = creditsRoute?.route?.route?.transactionRequest?.target
+        const enableBoost = creditsRoute?.route?.route?.params?.enableBoost
+
+        console.log('🔍 CORAL Detection for Credits Route:', {
+          hasRfqAction,
+          isBoostSupported,
+          routerAddress,
+          isSquidRouter: routerAddress === '0xce16F69375520ab01377ce7B88f5BA8C48F8D666',
+          actionsCount: actions.length,
+          actionTypes: actions.map((a: any) => a.type),
+          enableBoost,
+          isCORALRoute: hasRfqAction && isBoostSupported && enableBoost,
+          ethereumGasCostMANA: creditsRoute.ethereumGasCostMANA
+            ? ethers.utils.formatEther(creditsRoute.ethereumGasCostMANA) + ' MANA'
+            : 'N/A'
+        })
+
+        if (hasRfqAction && isBoostSupported && enableBoost) {
+          console.log('✅ CORAL Route Detected! Credits transaction will use CORAL + CreditExecutor for faster, cheaper execution.')
+          console.log(
+            '💰 Ethereum Gas Cost:',
+            creditsRoute.ethereumGasCostMANA ? ethers.utils.formatEther(creditsRoute.ethereumGasCostMANA) + ' MANA' : 'N/A'
+          )
+        } else {
+          console.log('📦 Regular Credits Route: Using traditional flow (CORAL not available)')
+        }
+
+        setRoute(creditsRoute)
+      }
+    } catch (error) {
+      console.error('Error while getting Credits Route: ', error)
+      getAnalytics()?.track(events.ERROR_GETTING_ROUTE, {
+        error,
+        selectedToken,
+        selectedChain,
+        useCredits: true
+      })
+      setRouteFailed(true)
+    } finally {
+      setIsFetchingRoute(false)
+    }
+  }, [
+    crossChainProvider,
+    price,
+    providerTokens,
+    selectedChain,
+    selectedToken,
+    wallet,
+    credits,
+    creditsSignatures,
+    externalCallSignature,
+    maxUncreditedValue,
+    maxCreditedValue,
+    name,
+    assetChainId,
+    destinationChainMANAContractAddress
+  ])
+
+  // Auto-calculate route when dependencies change
+  useEffect(() => {
+    if (crossChainProvider?.isLibInitialized() && wallet && credits.length > 0) {
+      void calculateRouteWithCredits()
+    }
+  }, [calculateRouteWithCredits])
+
+  return {
+    route,
+    fromAmount,
+    isFetchingRoute,
+    routeFailed,
+    refetchRoute: calculateRouteWithCredits,
+    // Add missing properties to match CrossChainRoute type
+    routeFeeCost: undefined,
+    routeTotalUSDCost: undefined,
+    ethereumGasCostMANA: route?.ethereumGasCostMANA // For displaying gas costs in UI
+  }
+}
+
+// 🗑️ REMOVED: executeNameMintingWithCredits - now handled via sagas
+// This function is no longer needed since we implemented the CORAL + Credits flow through sagas
+
 export type RouteFeeCost = {
   token: Token
   gasCostWei: BigNumber
@@ -375,6 +567,32 @@ const useCrossChainRoute = (
       )
 
       if (route && !signal.aborted) {
+        // 🔍 CORAL Detection for Regular Route
+        const actions = route?.route?.actions || []
+        const hasRfqAction = actions.some((action: any) => action.type === 'rfq')
+        const isBoostSupported = route?.route?.estimate?.isBoostSupported
+        const routerAddress = route?.route?.transactionRequest?.target
+        const enableBoost = route?.route?.params?.enableBoost
+
+        console.log('🔍 CORAL Detection for Regular Route:', {
+          hasRfqAction,
+          isBoostSupported,
+          routerAddress,
+          isSquidRouter: routerAddress === '0xce16F69375520ab01377ce7B88f5BA8C48F8D666',
+          actionsCount: actions.length,
+          actionTypes: actions.map((a: any) => a.type),
+          enableBoost,
+          isCORALRoute: hasRfqAction && isBoostSupported && enableBoost,
+          fromToken: selectedToken.symbol,
+          toChain: assetChainId
+        })
+
+        if (hasRfqAction && isBoostSupported && enableBoost) {
+          console.log('✅ CORAL Route Detected! Regular transaction will use CORAL for faster, cheaper execution.')
+        } else {
+          console.log('📦 Regular Route: Using traditional cross-chain flow (CORAL not available)')
+        }
+
         setRoute(route)
       }
     } catch (error) {

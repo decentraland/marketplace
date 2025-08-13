@@ -15,8 +15,12 @@ export type Props = WithAuthorizedActionProps &
     onOpenFatFingerModal: () => unknown
     onCloseFatFingerModal: () => unknown
     onClaimNameCrossChain: (route: Route) => unknown
+    onClaimNameWithCredits: () => unknown
   }
 
 export type MapStateProps = Pick<Props, 'getContract' | 'isMintingName' | 'isMintingNameCrossChain'>
-export type MapDispatchProps = Pick<Props, 'onClaimName' | 'onClaimNameCrossChain' | 'onOpenFatFingerModal' | 'onCloseFatFingerModal'>
+export type MapDispatchProps = Pick<
+  Props,
+  'onClaimName' | 'onClaimNameCrossChain' | 'onOpenFatFingerModal' | 'onCloseFatFingerModal' | 'onClaimNameWithCredits'
+>
 export type OwnProps = Pick<Props, 'metadata'>

@@ -30,6 +30,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     onAuthorizedAction,
     onClaimName,
     onClaimNameCrossChain,
+    onClaimNameWithCredits,
     onOpenFatFingerModal,
     onCloseFatFingerModal,
     onClose
@@ -65,8 +66,15 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   }, [name, getContract, onAuthorizedAction, onClaimName])
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
-    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
-      useCrossChainNameMintingRoute(
+    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) => {
+      console.log('🎯 onGetCrossChainRoute called with:', {
+        name,
+        selectedChain,
+        selectedToken: selectedToken?.symbol
+      })
+
+      // Traditional cross-chain route (CORAL + Credits will be handled by BuyWithCryptoModal)
+      return useCrossChainNameMintingRoute(
         name,
         PRICE_IN_WEI,
         getChainIdByNetwork(Network.ETHEREUM),
@@ -75,7 +83,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
         providerTokens,
         crossChainProvider,
         wallet
-      ),
+      )
+    },
     [name]
   )
 
@@ -93,6 +102,15 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     onCloseFatFingerModal()
     return onClose()
   }, [onClose])
+
+  // 🆕 NEW: Handler for CORAL + Credits purchase via saga
+  const onBuyWithCredits = useCallback(() => {
+    console.log('🚀 Triggering CORAL + Credits purchase for name:', name)
+
+    onClaimNameWithCredits()
+
+    console.log('Name claim with credits triggered for:', name)
+  }, [name, onClaimNameWithCredits])
 
   // Emulates a NFT for the item to be minted so it can be shown in the modal
   const asset: NFT = useMemo(
@@ -129,6 +147,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
       isBuyingAsset={isMintingName || isMintingNameCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyCrossChain={onClaimNameCrossChain}
+      onBuyWithCredits={onBuyWithCredits}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}
       isUsingMagic={isUsingMagic}

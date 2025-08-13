@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isSwitchingNetwork } from 'decentraland-dapps/dist/modules/wallet/selectors'
@@ -16,7 +15,8 @@ const mapState = (state: RootState): MapStateProps => {
     wallet,
     isSwitchingNetwork: isSwitchingNetwork(state),
     isBuyWithCardPage: getIsBuyWithCardPage(state),
-    credits: getCredits(state, wallet?.address || '')
+    credits: { credits: [], totalCredits: 100 }
+    // credits: getCredits(state, wallet?.address || '')
   }
 }
 

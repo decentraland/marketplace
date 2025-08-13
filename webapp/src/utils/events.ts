@@ -31,6 +31,7 @@ export const PURCHASED_STARTED = 'Purchase Started'
 export const BUY = 'Buy'
 export const BUY_WITH_CARD = 'Buy With Card'
 export const BUY_WITH_CRYPTO = 'Click on buy with crypto'
+export const CREDITS_TOGGLE_ENABLED = 'Credits Toggle Enabled' // 🆕 NEW: For CORAL + Credits flow
 export const PUBLISH = 'Publish'
 export const CANCEL_SALE = 'Cancel Sale'
 export const TRANSFER_NFT = 'Transfer NFT'

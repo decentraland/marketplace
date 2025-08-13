@@ -37,6 +37,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
     onGoBack?: () => unknown
     onBuyWithCard?: () => unknown
     onBuyCrossChain: (route: Route) => unknown
+    onBuyWithCredits?: () => unknown // 🆕 NEW: Callback for CORAL + Credits flow (ENS only)
     onGetMana: typeof openBuyManaWithFiatModalRequest
     onClose: ModalProps['onClose']
   }
@@ -49,6 +50,7 @@ export type OwnProps = Pick<
   | 'onBuyNatively'
   | 'onBuyWithCard'
   | 'onBuyCrossChain'
+  | 'onBuyWithCredits'
   | 'onClose'
   | 'onGetGasCost'
   | 'onGoBack'

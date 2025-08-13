@@ -12,7 +12,13 @@ import {
   ClaimNameCrossChainFailureAction,
   CLAIM_NAME_CROSS_CHAIN_REQUEST,
   CLAIM_NAME_CROSS_CHAIN_SUCCESS,
-  CLAIM_NAME_CROSS_CHAIN_FAILURE
+  CLAIM_NAME_CROSS_CHAIN_FAILURE,
+  ClaimNameWithCreditsRequestAction,
+  ClaimNameWithCreditsSuccessAction,
+  ClaimNameWithCreditsFailureAction,
+  CLAIM_NAME_WITH_CREDITS_REQUEST,
+  CLAIM_NAME_WITH_CREDITS_SUCCESS,
+  CLAIM_NAME_WITH_CREDITS_FAILURE
 } from './actions'
 import { ENS, ENSError, Authorization } from './types'
 
@@ -42,18 +48,23 @@ export type ENSReducerAction =
   | ClaimNameCrossChainRequestAction
   | ClaimNameCrossChainSuccessAction
   | ClaimNameCrossChainFailureAction
+  | ClaimNameWithCreditsRequestAction
+  | ClaimNameWithCreditsSuccessAction
+  | ClaimNameWithCreditsFailureAction
 
 export function ensReducer(state: ENSState = INITIAL_STATE, action: ENSReducerAction): ENSState {
   switch (action.type) {
     case CLAIM_NAME_CROSS_CHAIN_REQUEST:
-    case CLAIM_NAME_REQUEST: {
+    case CLAIM_NAME_REQUEST:
+    case CLAIM_NAME_WITH_CREDITS_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
     }
     case CLAIM_NAME_CROSS_CHAIN_SUCCESS:
-    case CLAIM_NAME_SUCCESS: {
+    case CLAIM_NAME_SUCCESS:
+    case CLAIM_NAME_WITH_CREDITS_SUCCESS: {
       const { ens } = action.payload
       return {
         ...state,
@@ -69,7 +80,8 @@ export function ensReducer(state: ENSState = INITIAL_STATE, action: ENSReducerAc
     }
 
     case CLAIM_NAME_CROSS_CHAIN_FAILURE:
-    case CLAIM_NAME_FAILURE: {
+    case CLAIM_NAME_FAILURE:
+    case CLAIM_NAME_WITH_CREDITS_FAILURE: {
       const error = isENSError(action.payload.error) ? action.payload.error : { message: action.payload.error }
       return {
         ...state,

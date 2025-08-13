@@ -10,7 +10,8 @@ import {
   CLAIM_NAME_CROSS_CHAIN_REQUEST,
   CLAIM_NAME_REQUEST,
   claimNameCrossChainRequest,
-  claimNameRequest
+  claimNameRequest,
+  claimNameWithCreditsRequest
 } from '../../../../modules/ens/actions'
 import { getLoading } from '../../../../modules/ens/selectors'
 import type { RootState } from '../../../../modules/reducer'
@@ -33,7 +34,8 @@ const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps =
       onOpenFatFingerModal: () => openModal('ClaimNameFatFingerModal', { name: ownProps.metadata.name }),
       onClaimName: claimNameRequest,
       onClaimNameCrossChain: (route: Route) =>
-        claimNameCrossChainRequest(ownProps.metadata.name, getChainIdByNetwork(Network.ETHEREUM), route)
+        claimNameCrossChainRequest(ownProps.metadata.name, getChainIdByNetwork(Network.ETHEREUM), route),
+      onClaimNameWithCredits: () => claimNameWithCreditsRequest(ownProps.metadata.name)
     },
     dispatch
   )
