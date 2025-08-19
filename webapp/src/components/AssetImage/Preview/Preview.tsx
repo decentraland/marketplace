@@ -296,7 +296,7 @@ export const Preview: React.FC<Props> = ({
       {showWearablePreview ? (
         <>
           <WearablePreview
-            baseUrl="https://wearable-preview-git-feat-configutaror-decentraland1.vercel.app"
+            baseUrl="https://wearable-preview-git-feat-update-unity-ren-aade4d-decentraland1.vercel.app"
             id="wearable-preview"
             background={Rarity.getColor(rarity)}
             emote={isTryingOnEnabled || isUnityRenderer ? previewEmote : undefined}
