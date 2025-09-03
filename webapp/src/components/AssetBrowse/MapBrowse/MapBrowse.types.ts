@@ -1,7 +1,6 @@
-import { Dispatch } from 'redux'
 import { AtlasTile } from 'decentraland-ui'
 import { NFT } from '../../../modules/nft/types'
-import { browse, BrowseAction } from '../../../modules/routing/actions'
+import { browse } from '../../../modules/routing/actions'
 
 export type Props = {
   onlyOnSale?: boolean
@@ -9,11 +8,7 @@ export type Props = {
   showOwned?: boolean
   tiles: Record<string, AtlasTile>
   ownedLands: NFT[]
-  onBrowse: typeof browse
+  onBrowse: ActionFunction<typeof browse>
 }
 
-export type MapStateProps = Pick<Props, 'onlyOnSale' | 'onlyOnRent' | 'tiles' | 'ownedLands'>
-
-export type MapDispatchProps = Pick<Props, 'onBrowse'>
-
-export type MapDispatch = Dispatch<BrowseAction>
+export type ContainerProps = Omit<Props, 'onBrowse' | 'onlyOnSale' | 'onlyOnRent' | 'tiles' | 'ownedLands'>

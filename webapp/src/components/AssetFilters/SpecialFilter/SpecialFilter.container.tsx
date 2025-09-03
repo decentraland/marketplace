@@ -1,23 +1,15 @@
-import { connect } from 'react-redux'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { getIsCreditsEnabled } from '../../../modules/features/selectors'
-import { RootState } from '../../../modules/reducer'
-import { getOnlySmart, getWithCredits } from '../../../modules/routing/selectors'
-import { SpecialFilter, SpecialFilterProps } from './SpecialFilter'
+import { useGetBrowseOptions } from '../../../modules/routing/hooks'
+import { SpecialFilter } from './SpecialFilter'
+import { ContainerProps } from './SpecialFilter.types'
 
-export type MapStateProps = {
-  isOnlySmart?: boolean
-  withCredits?: boolean
-  isCreditsEnabled: boolean
+export const SpecialFilterContainer: React.FC<ContainerProps> = props => {
+  const { onlySmart, withCredits } = useGetBrowseOptions()
+  const isCreditsEnabled = useSelector(getIsCreditsEnabled)
+
+  return <SpecialFilter {...props} isOnlySmart={onlySmart} withCredits={withCredits} isCreditsEnabled={isCreditsEnabled} />
 }
 
-export type OwnProps = Omit<SpecialFilterProps, 'isOnlySmart' | 'withCredits' | 'isCreditsEnabled'>
-
-const mapState = (state: RootState): MapStateProps => {
-  return {
-    isOnlySmart: getOnlySmart(state),
-    withCredits: getWithCredits(state),
-    isCreditsEnabled: getIsCreditsEnabled(state)
-  }
-}
-
-export default connect(mapState)(SpecialFilter)
+export default SpecialFilterContainer
