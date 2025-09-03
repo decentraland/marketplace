@@ -1,4 +1,5 @@
 import { NFTCategory } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation'
 import { omit, reset } from '../../lib/utils'
 import { AssetStatusFilter } from '../../utils/filters'
 import { View } from '../ui/types'
@@ -128,3 +129,32 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
   clearedBrowseOptions.page = 1
   return clearedBrowseOptions
 }
+
+export const getAllSortByOptions = () => ({
+  [SortBy.NEWEST]: { value: SortBy.NEWEST, text: t('filters.newest') },
+  [SortBy.NAME]: { value: SortBy.NAME, text: t('filters.name') },
+  [SortBy.RECENTLY_SOLD]: {
+    value: SortBy.RECENTLY_SOLD,
+    text: t('filters.recently_sold')
+  },
+  [SortBy.CHEAPEST]: {
+    value: SortBy.CHEAPEST,
+    text: t('filters.cheapest')
+  },
+  [SortBy.MOST_EXPENSIVE]: {
+    value: SortBy.MOST_EXPENSIVE,
+    text: t('filters.most_expensive')
+  },
+  [SortBy.MAX_RENTAL_PRICE]: {
+    value: SortBy.MAX_RENTAL_PRICE,
+    text: t('filters.cheapest')
+  },
+  [SortBy.RECENTLY_LISTED]: {
+    value: SortBy.RECENTLY_LISTED,
+    text: t('filters.recently_listed')
+  },
+  [SortBy.RENTAL_LISTING_DATE]: {
+    value: SortBy.RENTAL_LISTING_DATE,
+    text: t('filters.recently_listed_for_rent')
+  }
+})
