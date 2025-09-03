@@ -1,10 +1,10 @@
 import { History } from 'history'
-import { getContext, put, select, takeEvery } from 'redux-saga/effects'
+import { call, getContext, put, select, takeEvery } from 'redux-saga/effects'
 import { Item } from '@dcl/schemas'
 import { BULK_PICK_SUCCESS, BulkPickUnpickSuccessAction, fetchFavoritedItemsRequest } from '../../favorites/actions'
 import { isOwnerUnpickingFromCurrentList } from '../../favorites/selectors'
 import { getListIdFromCurrentUrlPath } from '../../routing/hooks'
-import { getPageNumber } from '../../routing/selectors'
+import { getPageNumberFromSearchParameters } from '../../routing/url-parser'
 import { PAGE_SIZE } from '../../vendor/api'
 import { getCount, getItemsPickedByUserOrCreator } from './selectors'
 
@@ -17,7 +17,9 @@ function* handleBulkPickSuccess(action: BulkPickUnpickSuccessAction) {
   const history: History = yield getContext('history')
   const listId: string | null = getListIdFromCurrentUrlPath(history.location.pathname)
 
-  const currentPage: number = (yield select(getPageNumber)) as ReturnType<typeof getPageNumber>
+  const currentPage: number = (yield call(getPageNumberFromSearchParameters, history.location.search)) as ReturnType<
+    typeof getPageNumberFromSearchParameters
+  >
   const isOwnerUnpickingFromListInView: ReturnType<typeof isOwnerUnpickingFromCurrentList> = (yield select(
     isOwnerUnpickingFromCurrentList,
     unpickedFrom,
