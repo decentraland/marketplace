@@ -11,7 +11,6 @@ export type Props = {
   isConnecting: boolean
   isFullscreen?: boolean
   viewAsGuest: boolean
-} & RouteComponentProps<Params>
+}
 
-export type MapStateProps = Pick<Props, 'addressInUrl' | 'vendor' | 'wallet' | 'isConnecting' | 'isFullscreen' | 'viewAsGuest'>
-export type OwnProps = RouteComponentProps<Params>
+export type ContainerProps = RouteComponentProps<Params>
