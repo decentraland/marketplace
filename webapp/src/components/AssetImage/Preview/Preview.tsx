@@ -312,6 +312,7 @@ export const Preview: React.FC<Props> = ({
             dev={config.is(Env.DEVELOPMENT)}
             unityMode={'marketplace'}
             unity={isUnityWearablePreviewEnabled}
+            baseUrl="https://wearable-preview-git-chore-bump-aang-renderer-decentraland1.vercel.app"
           />
           {isAvailableForMint && !isOwnerOfNFT && item ? (
             <AvailableForMintPopup
