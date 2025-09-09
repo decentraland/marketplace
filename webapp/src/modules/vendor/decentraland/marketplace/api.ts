@@ -2,6 +2,7 @@ import { Bid, ChainId, GetBidsParameters, PaginatedResponse } from '@dcl/schemas
 import { BaseClient } from 'decentraland-dapps/dist/lib'
 import { config } from '../../../../config'
 import { EstateSizeFilters } from '../nft/api'
+import { OwnersFilters, OwnersResponse } from '../nft/types'
 import { retryParams } from '../utils'
 import { Balance } from './types'
 
@@ -37,6 +38,11 @@ export class MarketplaceAPI extends BaseClient {
     const searchParams = this.getSearchParams(queryParams)
 
     return this.fetch<PaginatedResponse<Bid>>(`/v1/bids${searchParams ? `?${searchParams}` : ''}`, { method: 'GET' })
+  }
+
+  fetchOwners = async (queryParams: OwnersFilters) => {
+    const searchParams = this.getSearchParams(queryParams)
+    return this.fetch<{ data: OwnersResponse[]; total: number }>(`/v1/owners${searchParams ? `?${searchParams}` : ''}`, { method: 'GET' })
   }
 
   fetchEstateSizes = async (filters: EstateSizeFilters): Promise<Record<string, number>> => {

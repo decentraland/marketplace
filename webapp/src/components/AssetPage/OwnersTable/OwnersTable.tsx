@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import emptyOwners from '../../../images/emptyOwners.png'
-import { nftAPI, OwnersFilters, OwnersSortBy } from '../../../modules/vendor/decentraland'
+import { OwnersFilters, OwnersSortBy } from '../../../modules/vendor/decentraland'
+import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
@@ -33,8 +34,8 @@ const OwnersTable = (props: Props) => {
         sortBy: OwnersSortBy.ISSUED_ID,
         orderDirection
       }
-      nftAPI
-        .getOwners(params)
+      marketplaceAPI
+        .fetchOwners(params)
         .then(response => {
           setTotal(response.total)
           setOwners(formatDataToTable(response.data, asset))
