@@ -20,6 +20,8 @@ export const isLoadingNftsByView = (state: RootState, view: View | undefined) =>
   getLoading(state).filter((action: AnyAction) => isFetchNftsRequestAction(action) && action.payload?.options?.view === view)
 
 export const isLoading = (state: RootState) => isLoadingType(getLoading(state), FETCH_NFT_REQUEST)
+export const isLoadingNfts = (state: RootState) => isLoadingType(getLoading(state), FETCH_NFTS_REQUEST)
+
 export const getNft = (state: RootState, contractAddress: string, tokenId: string) =>
   findNFTByAddressAndTokenId(contractAddress, tokenId, getData(state))
 

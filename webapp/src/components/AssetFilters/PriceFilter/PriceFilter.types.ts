@@ -13,7 +13,6 @@ export type Props = {
   maxPrice: string
   network?: Network
   rarities: Rarity[]
-  values?: BrowseOptions
   bodyShapes?: (GenderFilterOption | WearableGender)[]
   emotePlayMode?: EmotePlayMode[]
   isOnlySmart?: boolean
@@ -35,30 +34,4 @@ export type Props = {
   isLoadingFeatureFlags: boolean
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'section'
-  | 'category'
-  | 'assetType'
-  | 'rarities'
-  | 'bodyShapes'
-  | 'isOnlySmart'
-  | 'landStatus'
-  | 'emotePlayMode'
-  | 'collection'
-  | 'network'
-  | 'adjacentToRoad'
-  | 'minEstateSize'
-  | 'maxEstateSize'
-  | 'minDistanceToPlaza'
-  | 'maxDistanceToPlaza'
-  | 'rentalDays'
-  | 'isRentalPriceFitlerChartEnabled'
-  | 'emoteHasGeometry'
-  | 'emoteHasSound'
-  | 'isOffchainPublicItemOrdersEnabled'
-  | 'isOffchainPublicNFTOrdersEnabled'
-  | 'isLoadingFeatureFlags'
->
-
-export type OwnProps = Pick<Props, 'values'>
+export type ContainerProps = { values?: BrowseOptions } & Pick<Props, 'minPrice' | 'maxPrice' | 'onChange' | 'defaultCollapsed'>

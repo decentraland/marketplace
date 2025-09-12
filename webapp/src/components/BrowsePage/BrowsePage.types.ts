@@ -10,8 +10,3 @@ export type Props = {
   isFullscreen?: boolean
   contracts: string[]
 }
-
-export type MapStateProps = Pick<
-  Props,
-  'vendor' | 'isFullscreen' | 'assetType' | 'section' | 'isCampaignCollectiblesBannerEnabled' | 'contracts'
->
