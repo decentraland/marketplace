@@ -1,6 +1,5 @@
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router'
 import { Web2TransactionModal } from 'decentraland-dapps/dist/containers'
 import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
 import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
@@ -25,17 +24,15 @@ function main() {
     <Provider store={store}>
       <TranslationProvider locales={Object.keys(locales)}>
         <WalletProvider>
-          <ConnectedRouter history={history}>
-            <DclThemeProvider theme={darkTheme}>
-              <ToastProvider>
-                <ModalProvider components={modals}>
-                  <ScrollToTop />
-                  <Routes />
-                </ModalProvider>
-              </ToastProvider>
-              <Web2TransactionModal />
-            </DclThemeProvider>
-          </ConnectedRouter>
+          <DclThemeProvider theme={darkTheme}>
+            <ToastProvider>
+              <ModalProvider components={modals}>
+                <ScrollToTop />
+                <Routes />
+              </ModalProvider>
+            </ToastProvider>
+            <Web2TransactionModal />
+          </DclThemeProvider>
         </WalletProvider>
       </TranslationProvider>
     </Provider>

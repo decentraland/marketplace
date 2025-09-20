@@ -1,4 +1,3 @@
-import { RouterState } from 'connected-react-router'
 import { ChainId, Item, NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { AssetType } from '../../asset/types'
@@ -168,12 +167,7 @@ beforeEach(() => {
       data: { items: {}, lists: { [list.id]: list }, total: 0 },
       loading: [],
       error: null
-    } as FavoritesState,
-    router: {
-      location: {
-        pathname: `/lists/${list.id}`
-      }
-    } as RouterState
+    } as FavoritesState
   } as RootState
 })
 

@@ -1,73 +1,70 @@
-import { connect } from 'react-redux'
-import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import {
-  getIsOffchainPublicItemOrdersEnabled,
-  getIsOffchainPublicNFTOrdersEnabled,
-  isLoadingFeatureFlags as getIsLoadingFeatureFlags
-} from '../../../modules/features/selectors'
-import { RootState } from '../../../modules/reducer'
+import React, { useMemo } from 'react'
+import { useSelector } from 'react-redux'
+import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from 'decentraland-dapps/dist/modules/features/selectors'
+import { getIsOffchainPublicItemOrdersEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../../../modules/features/selectors'
+import { useGetBrowseOptions } from '../../../modules/routing/hooks'
 import { getCategoryFromSection } from '../../../modules/routing/search'
-import {
-  getAssetType,
-  getContracts,
-  getEmotePlayMode,
-  getNetwork,
-  getOnlyOnRent,
-  getOnlyOnSale,
-  getOnlySmart,
-  getRarities,
-  getSection,
-  getWearableGenders,
-  getMinDistanceToPlaza,
-  getMaxDistanceToPlaza,
-  getMinEstateSize,
-  getMaxEstateSize,
-  getAdjacentToRoad,
-  getRentalDays,
-  getEmoteHasGeometry,
-  getEmoteHasSound
-} from '../../../modules/routing/selectors'
 import { Section } from '../../../modules/vendor/routing/types'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import { PriceFilter } from './PriceFilter'
-import { MapStateProps, OwnProps } from './PriceFilter.types'
+import { ContainerProps } from './PriceFilter.types'
 
-const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const { values = {} } = ownProps
-  const section = 'section' in values ? (values.section as Section) : getSection(state)
-  const onlyOnSale = 'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
-  const onlyOnRent = getOnlyOnRent(state)
-  let landStatus = LANDFilters.ALL_LAND
+export const PriceFilterContainer: React.FC<ContainerProps> = props => {
+  const browseOptions = useGetBrowseOptions()
+  const isLoadingFeatureFlags = useSelector(getIsLoadingFeatureFlags)
+  const isOffchainPublicItemOrdersEnabled = useSelector(getIsOffchainPublicItemOrdersEnabled)
+  const isOffchainPublicNFTOrdersEnabled = useSelector(getIsOffchainPublicNFTOrdersEnabled)
 
-  if (onlyOnRent && !onlyOnSale) {
-    landStatus = LANDFilters.ONLY_FOR_RENT
-  } else if (onlyOnSale && !onlyOnRent) {
-    landStatus = LANDFilters.ONLY_FOR_SALE
-  }
-  return {
-    section,
-    category: section ? getCategoryFromSection(section) : undefined,
-    assetType: getAssetType(state),
-    rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
-    network: 'network' in values ? values.network : getNetwork(state),
-    bodyShapes: 'wearableGenders' in values ? values.wearableGenders : getWearableGenders(state),
-    isOnlySmart: getOnlySmart(state),
-    landStatus,
-    emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
-    collection: 'contracts' in values ? values.contracts?.[0] : getContracts(state)[0],
-    minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
-    maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
-    adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
-    minEstateSize: 'minEstateSize' in values ? values.minEstateSize || '' : getMinEstateSize(state),
-    maxEstateSize: 'maxEstateSize' in values ? values.maxEstateSize || '' : getMaxEstateSize(state),
-    rentalDays: 'rentalDays' in values ? values.rentalDays : getRentalDays(state),
-    emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : getEmoteHasGeometry(state),
-    emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : getEmoteHasSound(state),
-    isLoadingFeatureFlags: isLoadingType(getIsLoadingFeatureFlags(state), FETCH_APPLICATION_FEATURES_REQUEST),
-    isOffchainPublicItemOrdersEnabled: getIsOffchainPublicItemOrdersEnabled(state),
-    isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state)
-  }
+  const { values = {}, minPrice, maxPrice, defaultCollapsed, onChange } = props
+  const section = 'section' in values ? (values.section as Section) : (browseOptions.section as Section)
+  const onlyOnSale = 'onlyOnSale' in values ? values.onlyOnSale : browseOptions.onlyOnSale
+  const onlyOnRent = browseOptions.onlyOnRent
+
+  const landStatus = useMemo(() => {
+    if (onlyOnRent && !onlyOnSale) {
+      return LANDFilters.ONLY_FOR_RENT
+    } else if (onlyOnSale && !onlyOnRent) {
+      return LANDFilters.ONLY_FOR_SALE
+    }
+    return LANDFilters.ALL_LAND
+  }, [onlyOnRent, onlyOnSale])
+
+  const computedProps = useMemo(
+    () => ({
+      category: section ? getCategoryFromSection(section as string) : undefined,
+      assetType: browseOptions.assetType,
+      rarities: 'rarities' in values ? values.rarities || [] : browseOptions.rarities || [],
+      network: 'network' in values ? values.network : browseOptions.network,
+      bodyShapes: 'wearableGenders' in values ? values.wearableGenders : browseOptions.wearableGenders,
+      isOnlySmart: browseOptions.onlySmart,
+      emotePlayMode: values.emotePlayMode || browseOptions.emotePlayMode || [],
+      collection: 'contracts' in values ? values.contracts?.[0] : browseOptions.contracts?.[0],
+      minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : browseOptions.minDistanceToPlaza,
+      maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : browseOptions.maxDistanceToPlaza,
+      adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : browseOptions.adjacentToRoad,
+      minEstateSize: 'minEstateSize' in values ? values.minEstateSize || '' : browseOptions.minEstateSize || '',
+      maxEstateSize: 'maxEstateSize' in values ? values.maxEstateSize || '' : browseOptions.maxEstateSize || '',
+      rentalDays: 'rentalDays' in values ? values.rentalDays : browseOptions.rentalDays,
+      emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : browseOptions.emoteHasGeometry,
+      emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : browseOptions.emoteHasSound
+    }),
+    [values, browseOptions]
+  )
+
+  return (
+    <PriceFilter
+      {...computedProps}
+      section={section}
+      defaultCollapsed={defaultCollapsed}
+      isLoadingFeatureFlags={isLoadingFeatureFlags}
+      isOffchainPublicItemOrdersEnabled={isOffchainPublicItemOrdersEnabled}
+      isOffchainPublicNFTOrdersEnabled={isOffchainPublicNFTOrdersEnabled}
+      landStatus={landStatus}
+      minPrice={minPrice}
+      maxPrice={maxPrice}
+      onChange={onChange}
+    />
+  )
 }
 
-export default connect(mapState)(PriceFilter)
+export default PriceFilterContainer
