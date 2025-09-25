@@ -1,39 +1,47 @@
-import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
+import React, { useCallback, useMemo } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { getAddress as getAddressFromUrl } from '../../../modules/account/selectors'
-import { RootState } from '../../../modules/reducer'
 import { goBack } from '../../../modules/routing/actions'
-import { getViewAsGuest } from '../../../modules/routing/selectors'
+import { useGetUserAddressFromCurrentUrl, useGetBrowseOptions } from '../../../modules/routing/hooks'
 import { fetchStoreRequest, FETCH_STORE_REQUEST } from '../../../modules/store/actions'
 import { getStoresByOwner, getLocalStore, getLoading as getStoreLoading } from '../../../modules/store/selectors'
 import { Store } from '../../../modules/store/types'
 import { getAddress as getAddressFromWallet } from '../../../modules/wallet/selectors'
 import AccountBanner from './AccountBanner'
-import { MapStateProps, MapDispatchProps } from './AccountBanner.types'
+import { ContainerProps } from './AccountBanner.types'
 
-const mapState = (state: RootState): MapStateProps => {
-  const viewAsGuest = getViewAsGuest(state)
-  const address = getAddressFromUrl(state) || getAddressFromWallet(state)
-  const isLoading = isLoadingType(getStoreLoading(state), FETCH_STORE_REQUEST)
+const AccountBannerContainer: React.FC<ContainerProps> = props => {
+  const dispatch = useDispatch()
 
-  let store: Store | undefined = address ? getStoresByOwner(state)[address] : undefined
+  const { viewAsGuest } = useGetBrowseOptions()
 
-  if (viewAsGuest) {
-    store = getLocalStore(state) || store
-  }
+  const addressFromUrl = useGetUserAddressFromCurrentUrl()
+  const addressFromWallet = useSelector(getAddressFromWallet)
 
-  return {
-    store,
-    isLoading
-  }
+  const storeLoading = useSelector(getStoreLoading)
+  const storesByOwner = useSelector(getStoresByOwner)
+  const localStore = useSelector(getLocalStore)
+
+  const address = addressFromUrl || addressFromWallet
+  const isLoading = useMemo(() => isLoadingType(storeLoading, FETCH_STORE_REQUEST), [storeLoading])
+
+  const store: Store | undefined = useMemo(() => {
+    let storeResult: Store | undefined = address ? storesByOwner[address] : undefined
+
+    if (viewAsGuest) {
+      storeResult = localStore || storeResult
+    }
+
+    return storeResult
+  }, [address, storesByOwner, viewAsGuest, localStore])
+
+  const handleBack = useCallback<ActionFunction<typeof goBack>>(() => dispatch(goBack()), [dispatch])
+  const handleFetchStore = useCallback<ActionFunction<typeof fetchStoreRequest>>(
+    storeAddress => dispatch(fetchStoreRequest(storeAddress)),
+    [dispatch]
+  )
+
+  return <AccountBanner {...props} store={store} isLoading={isLoading} onBack={handleBack} onFetchStore={handleFetchStore} />
 }
 
-const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
-  return {
-    onBack: () => dispatch(goBack()),
-    onFetchStore: (address: string) => dispatch(fetchStoreRequest(address))
-  }
-}
-
-export default connect(mapState, mapDispatch)(AccountBanner)
+export default AccountBannerContainer

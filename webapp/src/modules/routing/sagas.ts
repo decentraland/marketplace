@@ -21,7 +21,7 @@ import {
   ClaimNameTransactionSubmittedAction
 } from '../ens/actions'
 import { REGISTRAR_ADDRESS } from '../ens/sagas'
-import { getData } from '../event/selectors'
+import { getData as getEventsData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { getIsBidsOffChainEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import {
@@ -35,21 +35,7 @@ import {
 } from '../item/actions'
 import { fetchNFTRequest, fetchNFTsRequest, TRANSFER_NFT_SUCCESS } from '../nft/actions'
 import { CANCEL_ORDER_SUCCESS, CREATE_ORDER_SUCCESS, EXECUTE_ORDER_SUCCESS, ExecuteOrderSuccessAction } from '../order/actions'
-import {
-  getNetwork,
-  getOnlySmart,
-  getCurrentBrowseOptions,
-  getCurrentLocationAddress,
-  getSection,
-  getMaxPrice,
-  getMinPrice,
-  getStatus,
-  getEmotePlayMode,
-  getRarities,
-  getWearableGenders,
-  getContracts,
-  getSearch
-} from '../routing/selectors'
+import { getCurrentLocationAddress } from '../routing/selectors'
 import {
   FetchSalesFailureAction,
   fetchSalesRequest,
@@ -59,7 +45,7 @@ import {
 } from '../sale/actions'
 import { getSales } from '../sale/selectors'
 import { setView } from '../ui/actions'
-import { getPage } from '../ui/browse/selectors'
+import { getPage, getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize, MAX_QUERY_SIZE } from '../vendor/api'
 import { Section } from '../vendor/decentraland'
@@ -77,6 +63,7 @@ import {
   getCatalogSortBy
 } from './search'
 import { BrowseOptions } from './types'
+import { getCurrentBrowseOptions } from './url-parser'
 import { getClearedBrowseOptions, isCatalogView, rentalFilters, SALES_PER_PAGE, sellFilters, buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -103,7 +90,14 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
 
 function* handleClearFilters() {
   const history: History = yield getContext('history')
-  const browseOptions = (yield select(getCurrentBrowseOptions)) as ReturnType<typeof getCurrentBrowseOptions>
+  const view = (yield select(getView)) as ReturnType<typeof getView>
+  const browseOptions = (yield call(getCurrentBrowseOptions, history.location.search, history.location.pathname, view)) as ReturnType<
+    typeof getCurrentBrowseOptions
+  >
+  const address = (yield select(getCurrentLocationAddress, history.location.pathname)) as ReturnType<typeof getCurrentLocationAddress>
+  if (address) {
+    browseOptions.address = address
+  }
   const { pathname } = history.location
   const clearedBrowseOptions = getClearedBrowseOptions(browseOptions)
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)
@@ -114,7 +108,7 @@ export function* handleBrowse(action: BrowseAction) {
   const history: History = yield getContext('history')
   const options = (yield call(getNewBrowseOptions, action.payload.options)) as BrowseOptions
   const { pathname } = history.location
-  const contractsByTag = (yield select(getData)) as Record<string, string[]>
+  const contractsByTag = (yield select(getEventsData)) as Record<string, string[]>
   const isInACampaignRoute = locations.campaign().startsWith(pathname)
   const campaignTag = (yield select(getMainTag)) as ReturnType<typeof getMainTag>
   // If there is a campaign tag, use the contracts for that tag. If not, use the zero address which will end up showing no items
@@ -143,6 +137,7 @@ function* handleGoBack(action: GoBackAction) {
 }
 
 export function* fetchAssetsFromRoute(options: BrowseOptions) {
+  const history: History = yield getContext('history')
   const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
   const vendor = options.vendor!
@@ -167,7 +162,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     withCredits
   } = options
 
-  const address: string | string[] = options.address || ((yield select(getCurrentLocationAddress)) as string)
+  const address: string | string[] = options.address || ((yield select(getCurrentLocationAddress, history.location.pathname)) as string)
 
   if (isMap) {
     yield put(setView(view))
@@ -301,10 +296,19 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 }
 
 export function* getNewBrowseOptions(current: BrowseOptions): Generator<unknown, BrowseOptions, any> {
-  let previous = (yield select(getCurrentBrowseOptions)) as ReturnType<typeof getCurrentBrowseOptions>
+  const history: History = yield getContext('history')
+  const previousView = (yield select(getView)) as ReturnType<typeof getView>
+  const address = (yield select(getCurrentLocationAddress, history.location.pathname)) as ReturnType<typeof getCurrentLocationAddress>
+  let previous = (yield call(getCurrentBrowseOptions, history.location.search, history.location.pathname, previousView)) as Partial<
+    ReturnType<typeof getCurrentBrowseOptions>
+  >
+  if (address) {
+    previous.address = address
+  }
   current = (yield deriveCurrentOptions(previous, current)) as BrowseOptions
   const view = deriveView(previous, current)
-  const section: Section = current.section ? (current.section as Section) : ((yield select(getSection)) as ReturnType<typeof getSection>)
+  // TODO: Check this, which type of section should I get?
+  const section: Section = (current.section as Section) ?? previous.section
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
@@ -433,7 +437,7 @@ function* handleFetchSales({
 }
 
 // TODO: Consider moving this should live to each vendor
-function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) {
+function deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) {
   let newOptions: BrowseOptions = {
     ...current,
     assetType: current.assetType || previous.assetType,
@@ -492,15 +496,15 @@ function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) 
       // Category specific logic to keep filters if the category doesn't change
       if (prevCategory && prevCategory === nextCategory) {
         newOptions = {
-          rarities: (yield select(getRarities)) as ReturnType<typeof getRarities>,
-          wearableGenders: (yield select(getWearableGenders)) as ReturnType<typeof getWearableGenders>,
-          search: (yield select(getSearch)) as ReturnType<typeof getSearch>,
-          network: (yield select(getNetwork)) as ReturnType<typeof getNetwork>,
-          contracts: (yield select(getContracts)) as ReturnType<typeof getContracts>,
-          onlySmart: (yield select(getOnlySmart)) as ReturnType<typeof getOnlySmart>,
-          maxPrice: (yield select(getMaxPrice)) as ReturnType<typeof getMaxPrice>,
-          minPrice: (yield select(getMinPrice)) as ReturnType<typeof getMinPrice>,
-          status: (yield select(getStatus)) as ReturnType<typeof getStatus>,
+          rarities: previous.rarities,
+          wearableGenders: previous.wearableGenders,
+          search: previous.search,
+          network: previous.network,
+          contracts: previous.contracts,
+          onlySmart: previous.onlySmart,
+          maxPrice: previous.maxPrice,
+          minPrice: previous.minPrice,
+          status: previous.status,
           ...newOptions
         }
       }
@@ -512,11 +516,11 @@ function* deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) 
       // Category specific logic to keep filters if the category doesn't change
       if (prevCategory && prevCategory === nextCategory) {
         newOptions = {
-          rarities: (yield select(getRarities)) as ReturnType<typeof getRarities>,
-          maxPrice: (yield select(getMaxPrice)) as ReturnType<typeof getMaxPrice>,
-          minPrice: (yield select(getMinPrice)) as ReturnType<typeof getMinPrice>,
-          status: (yield select(getStatus)) as ReturnType<typeof getStatus>,
-          emotePlayMode: (yield select(getEmotePlayMode)) as ReturnType<typeof getEmotePlayMode>,
+          rarities: previous.rarities,
+          maxPrice: previous.maxPrice,
+          minPrice: previous.minPrice,
+          status: previous.status,
+          emotePlayMode: previous.emotePlayMode,
           ...newOptions
         }
       }
