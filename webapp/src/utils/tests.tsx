@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux'
+import { MemoryRouter } from 'react-router-dom'
 import { render } from '@testing-library/react'
 import { createBrowserHistory } from 'history'
 import { applyMiddleware, compose, createStore, Store, Middleware } from 'redux'
@@ -56,7 +57,9 @@ export function renderWithProviders(component: JSX.Element, { preloadedState, st
   function AppProviders({ children }: { children: JSX.Element }) {
     return (
       <Provider store={initializedStore}>
-        <TranslationProvider locales={Object.keys(locales)}>{children}</TranslationProvider>
+        <MemoryRouter>
+          <TranslationProvider locales={Object.keys(locales)}>{children}</TranslationProvider>
+        </MemoryRouter>
       </Provider>
     )
   }

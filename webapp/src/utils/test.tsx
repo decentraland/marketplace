@@ -1,4 +1,5 @@
 import { Provider } from 'react-redux'
+import { MemoryRouter } from 'react-router-dom'
 import { render, RenderResult, waitFor } from '@testing-library/react'
 import mediaQuery from 'css-mediaquery'
 import flatten from 'flat'
@@ -34,9 +35,11 @@ export function renderWithProviders(
   function AppProviders({ children }: { children: JSX.Element }) {
     return (
       <Provider store={initializedStore}>
-        <DclThemeProvider theme={darkTheme}>
-          <TranslationProvider locales={['en']}>{children}</TranslationProvider>
-        </DclThemeProvider>
+        <MemoryRouter>
+          <DclThemeProvider theme={darkTheme}>
+            <TranslationProvider locales={['en']}>{children}</TranslationProvider>
+          </DclThemeProvider>
+        </MemoryRouter>
       </Provider>
     )
   }
