@@ -262,8 +262,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               emoteHasGeometry,
               emoteHasSound,
               ...statusParameters,
-              ...(withCredits && (status === AssetStatusFilter.ONLY_MINTING || status === AssetStatusFilter.ON_SALE) // withCredits can be used in onlyOnSale or onlyMinting
-                ? { minPrice: '1', onlyOnSale: true, onlyMinting: true }
+              ...(withCredits && (status === AssetStatusFilter.ONLY_MINTING || status === AssetStatusFilter.ON_SALE) // withCredits can be used in onlyOnSale or onlyMinting. The min price for using credits is 1 MANA.
+                ? { minPrice: minPrice || '1', onlyOnSale: true, onlyMinting: true }
                 : {})
             }
           })
