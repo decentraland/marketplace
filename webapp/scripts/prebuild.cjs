@@ -6,6 +6,8 @@ dotenv.config()
 
 let ENV_CONTENT = {}
 
+
+
 // read files
 if (fs.existsSync('.env')) {
   Object.assign(ENV_CONTENT, dotenv.parse(fs.readFileSync('.env')))
