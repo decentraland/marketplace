@@ -1,0 +1,12 @@
+// extendedChainId.ts
+
+import { ChainId as BaseChainId } from '@dcl/schemas/dist/dapps/chain-id'
+
+// Extend the ChainId enum to include Sepolia
+
+export enum ChainId {
+  ETHEREUM_MAINNET = BaseChainId.ETHEREUM_MAINNET,
+  ETHEREUM_GOERLI = BaseChainId.ETHEREUM_GOERLI,
+  MATIC_MAINNET = BaseChainId.MATIC_MAINNET,
+  ETHEREUM_SEPOLIA = 11155111
+}
