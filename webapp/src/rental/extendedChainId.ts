@@ -1,0 +1,5 @@
+export enum ChainId {
+  POLYGON = 137,
+  MATIC_MUMBAI = 80001,
+  ETHEREUM_SEPOLIA = 11155111
+}
