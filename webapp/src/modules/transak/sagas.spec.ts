@@ -165,7 +165,7 @@ describe('when handling the open transak action', () => {
 
   describe('when there is no wallet connected', () => {
     beforeEach(() => {
-      jest.spyOn(Transak.prototype, 'openWidget').mockImplementation(() => {})
+      jest.spyOn(Transak.prototype, 'openWidget').mockImplementation(() => Promise.resolve())
     })
     it('should not open the Transak widget', () => {
       return expectSaga(transakSaga)
