@@ -43,9 +43,13 @@ const Authorization = (props: Props) => {
   let contract
   let name: string = ''
   const offchainContract = getDecentralandContract(ContractName.OffChainMarketplace, authorization.chainId)
+  const offchainContractV2 = getDecentralandContract(ContractName.OffChainMarketplaceV2, authorization.chainId)
   // This is fix to get the correct contract name for the offchain marketplace
   if (authorizedAddress === offchainContract.address) {
     contract = offchainContract
+    name = contract.name
+  } else if (authorizedAddress === offchainContractV2.address) {
+    contract = offchainContractV2
     name = contract.name
   } else {
     contract = getContract({ address: authorizedAddress })

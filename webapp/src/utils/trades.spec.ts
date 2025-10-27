@@ -89,7 +89,7 @@ describe('when getting the trade signature', () => {
       signer = ethers.Wallet.createRandom().connect(ethers.providers.getDefaultProvider())
       jest.spyOn(ethUtils, 'getSigner').mockImplementation(() => Promise.resolve(signer))
       signerAddress = (await signer.getAddress()).toLowerCase()
-      offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, ChainId.ETHEREUM_SEPOLIA)
+      offchainMarketplaceContract = getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA)
 
       trade = {
         signer: signerAddress,
@@ -126,7 +126,7 @@ describe('when getting the trade signature', () => {
       }
 
       const SALT = ethers.utils.hexZeroPad(ethers.utils.hexlify(trade.chainId), 32)
-      offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, trade.chainId)
+      offchainMarketplaceContract = getContract(ContractName.OffChainMarketplaceV2, trade.chainId)
       domain = {
         name: offchainMarketplaceContract.name,
         version: offchainMarketplaceContract.version,
@@ -331,7 +331,7 @@ describe('when estimating trade gas', () => {
     })
 
     it('should return the estimated gas', async () => {
-      const result = await estimateTradeGas(tradeId, chainId, buyerAddress, provider)
+      const result = await estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)
       expect(result).toEqual(ethers.BigNumber.from('100000'))
       expect(mockEstimateGas).toHaveBeenCalledWith(
         [
@@ -351,7 +351,7 @@ describe('when estimating trade gas', () => {
     })
 
     it('should propagate the error', async () => {
-      return expect(estimateTradeGas(tradeId, chainId, buyerAddress, provider)).rejects.toThrow('Gas estimation failed')
+      return expect(estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)).rejects.toThrow('Gas estimation failed')
     })
   })
 })

@@ -5,7 +5,7 @@ import { AuthorizeActionOptions } from 'decentraland-dapps/dist/containers/withA
 import { getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ContractName, getContract } from 'decentraland-transactions'
+import { ContractName, getContract, getContractName } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
 import { getOffChainMarketplaceContract, getTradeSignature } from '../../utils/trades'
 import { Item } from '../item/types'
@@ -103,7 +103,10 @@ export function getAcceptBidAuthorizationOptions(
     return null
   }
 
-  const offchainMarketplaceContract = getContract(ContractName.OffChainMarketplace, bid.chainId)
+  const offchainContractName = bid.tradeContractAddress
+    ? getContractName(bid.tradeContractAddress)
+    : getContractName(ContractName.OffChainMarketplace) // if the trade doesn't have a contract address, use the default marketplace contract
+  const offchainMarketplaceContract = getContract(offchainContractName, bid.chainId)
   const targetContractName = bid.network === Network.MATIC ? ContractName.ERC721CollectionV2 : ContractName.ERC721
 
   const authorizeActionOptions = {

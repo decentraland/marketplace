@@ -4,7 +4,7 @@ import withAuthorizedAction from 'decentraland-dapps/dist/containers/withAuthori
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
-import { ContractName, getContract as getDCLContract } from 'decentraland-transactions'
+import { ContractName, getContractName, getContract as getDCLContract } from 'decentraland-transactions'
 import { useFingerprint } from '../../../../modules/nft/hooks'
 import { getBuyItemStatus, getError } from '../../../../modules/order/selectors'
 import { getContractNames } from '../../../../modules/vendor'
@@ -49,8 +49,12 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       network: nft.network
     }) as DCLContract
 
-    const offchainMarketplace =
-      isOffchainPublicNFTOrdersEnabled && order?.tradeId && getDCLContract(ContractName.OffChainMarketplace, nft.chainId)
+    const offchainContractName = order.marketplaceAddress
+      ? getContractName(order.marketplaceAddress)
+      : getContractName(ContractName.OffChainMarketplace) // if the trade doesn't have a contract address, use the default marketplace contract
+
+    const offchainMarketplace = isOffchainPublicNFTOrdersEnabled && order?.tradeId && getDCLContract(offchainContractName, nft.chainId)
+
     let creditsManager
     try {
       creditsManager = getDCLContract(ContractName.CreditsManager, nft.chainId)
