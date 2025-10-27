@@ -65,9 +65,8 @@ const TransakMulticallContracts: Pick<Record<Network, Partial<Record<ChainId, st
 function* handleOpenTransak(action: OpenTransakAction) {
   const { asset, order, useCredits } = action.payload
   const transakConfig: TransakConfig = {
-    apiBaseUrl: config.get('MARKETPLACE_SERVER_URL'),
-    key: config.get('TRANSAK_KEY'),
-    env: config.get('TRANSAK_ENV'),
+    // apiBaseUrl: config.get('MARKETPLACE_SERVER_URL'),
+    apiBaseUrl: 'http://localhost:3000',
     pollingDelay: +config.get('TRANSAK_POLLING_DELAY'),
     pusher: {
       appKey: config.get('TRANSAK_PUSHER_APP_KEY'),
@@ -244,7 +243,8 @@ function* handleOpenTransak(action: OpenTransakAction) {
 
     yield put(closeAllModals())
     if (address) {
-      new Transak(transakConfig, customizationOptions).openWidget(address, Network.MATIC)
+      const transak = new Transak(transakConfig, customizationOptions)
+      yield call([transak, 'openWidget'], address, Network.MATIC)
     }
   } catch (error) {
     yield put(openTransakFailure(error instanceof Error ? error.message : 'Unknown error'))
