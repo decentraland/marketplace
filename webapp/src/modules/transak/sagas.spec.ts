@@ -20,12 +20,12 @@ import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
 import { closeAllModals } from 'decentraland-dapps/dist/modules/modal/actions'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { ContractName, getContract } from 'decentraland-transactions'
 import { Asset } from '../asset/types'
 import { getIsCreditsEnabled } from '../features/selectors'
 import { getWallet } from '../wallet/selectors'
 import { openTransak, openTransakFailure } from './actions'
 import { transakSaga } from './sagas'
-import { ContractName, getContract } from 'decentraland-transactions'
 
 jest.mock('decentraland-dapps/dist/modules/gateway/transak')
 
