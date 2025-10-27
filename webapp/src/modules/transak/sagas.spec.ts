@@ -112,7 +112,7 @@ const mockCredits = {
       id: '1',
       amount: '500000000000000000',
       availableAmount: '500000000000000000',
-      contract: '0x0000000000000000000000000000000000000123',
+      contract: getContract(ContractName.CreditsManager, ChainId.MATIC_AMOY).address,
       expiresAt: '1000',
       season: 1,
       signature: '0x0000000000000000000000000000000000000000000000000000000000000000',
