@@ -113,9 +113,7 @@ const SellModal = (props: Props) => {
     return null
   }
 
-  const offchainOrdersContract = isOffchainPublicNFTOrdersEnabled
-    ? getDecentralandContract(ContractName.OffChainMarketplace, nft.chainId)
-    : null
+  const offchainOrdersContract = getDecentralandContract(ContractName.OffChainMarketplaceV2, nft.chainId)
 
   const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), fingerprint)
 

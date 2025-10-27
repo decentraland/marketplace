@@ -192,7 +192,7 @@ export const estimateMintNftGas = async (selectedChain: ChainId, wallet: Wallet,
   console.log('Estimating minting gas for asset', asset)
 
   if (asset.tradeId) {
-    return estimateTradeGas(asset.tradeId, selectedChain, wallet.address, provider)
+    return estimateTradeGas(asset.tradeId, asset.tradeContractAddress, selectedChain, wallet.address, provider)
   }
 
   const contract = getContract(ContractName.CollectionStore, asset.chainId)
@@ -215,7 +215,7 @@ export const estimateBuyNftGas = async (
   const contract = getContract(contractName, order.chainId)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
   if (order.tradeId) {
-    return estimateTradeGas(order.tradeId, order.chainId, wallet.address, provider)
+    return estimateTradeGas(order.tradeId, order.marketplaceAddress, order.chainId, wallet.address, provider)
   }
   // Old order
   return fingerprint

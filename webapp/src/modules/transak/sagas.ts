@@ -109,7 +109,8 @@ function* handleOpenTransak(action: OpenTransakAction) {
       }
       const tradeService = new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
       const trade: Trade = yield call([tradeService, 'fetchTrade'], tradeId)
-      const { abi } = getContract(ContractName.OffChainMarketplace, asset.chainId)
+      const offchainContractName = getContractName(trade.contract)
+      const { abi } = getContract(offchainContractName, asset.chainId)
 
       // if credits are enabled and useCredits is true, we need to use credits
       if (useCredits && credits) {
