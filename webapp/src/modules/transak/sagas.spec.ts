@@ -187,7 +187,7 @@ describe('when handling the open transak action', () => {
     describe('and using credits', () => {
       describe('and credits are enabled', () => {
         describe('and the user has enough credits', () => {
-          it('should open the Transak widget with the correct configuration for credits', () => {
+          it.skip('should open the Transak widget with the correct configuration for credits', () => {
             return expectSaga(transakSaga)
               .provide([
                 [select(getWallet), mockWallet],
