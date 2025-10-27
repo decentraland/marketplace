@@ -123,7 +123,7 @@ const mockCredits = {
 }
 
 const mockTrade: Trade = {
-  contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
+  contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.MATIC_AMOY).address,
   id: 'trade1',
   createdAt: Date.now(),
   signer: '0x0000000000000000000000000000000000000123',
@@ -157,8 +157,7 @@ const mockTrade: Trade = {
       extra: '',
       beneficiary: '0x0000000000000000000000000000000000000123'
     }
-  ],
-  contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.MATIC_AMOY).address
+  ]
 }
 
 describe('when handling the open transak action', () => {
