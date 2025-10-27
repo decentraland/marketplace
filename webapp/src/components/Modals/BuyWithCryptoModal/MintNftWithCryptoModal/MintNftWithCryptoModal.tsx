@@ -44,9 +44,7 @@ const MintNftWithCryptoModalHOC = (props: Props) => {
       name: contractNames.COLLECTION_STORE,
       network: item.network
     }) as DCLContract
-    const offchainContractName = item.tradeContractAddress
-      ? getContractName(item.tradeContractAddress)
-      : getContractName(ContractName.OffChainMarketplace) // if the trade doesn't have a contract address, use the default marketplace contract
+    const offchainContractName = item.tradeContractAddress ? getContractName(item.tradeContractAddress) : ContractName.OffChainMarketplace // if the trade doesn't have a contract address, use the default marketplace contract
     const offchainMarketplace = getDCLContract(offchainContractName, item.chainId)
     let creditsManager
     try {

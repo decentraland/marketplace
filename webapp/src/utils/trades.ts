@@ -165,9 +165,7 @@ export async function estimateTradeGas(
   // Build the trade data
   const tradeToAccept = getOnChainTrade(trade, buyerAddress)
   // Estimate the gas
-  const offchainContractName = tradeContractAddress
-    ? getContractName(tradeContractAddress)
-    : getContractName(ContractName.OffChainMarketplace)
+  const offchainContractName = tradeContractAddress ? getContractName(tradeContractAddress) : ContractName.OffChainMarketplace
   const contract = getContract(offchainContractName, chainId)
   const c = new ethers.Contract(contract.address, contract.abi, provider)
   return c.estimateGas.accept([tradeToAccept], { from: buyerAddress })

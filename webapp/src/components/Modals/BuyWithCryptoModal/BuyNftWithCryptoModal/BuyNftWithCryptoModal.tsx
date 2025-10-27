@@ -49,9 +49,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       network: nft.network
     }) as DCLContract
 
-    const offchainContractName = order.marketplaceAddress
-      ? getContractName(order.marketplaceAddress)
-      : getContractName(ContractName.OffChainMarketplace) // if the trade doesn't have a contract address, use the default marketplace contract
+    const offchainContractName = order.marketplaceAddress ? getContractName(order.marketplaceAddress) : ContractName.OffChainMarketplace // if the trade doesn't have a contract address, use the default marketplace contract
 
     const offchainMarketplace = isOffchainPublicNFTOrdersEnabled && order?.tradeId && getDCLContract(offchainContractName, nft.chainId)
 
