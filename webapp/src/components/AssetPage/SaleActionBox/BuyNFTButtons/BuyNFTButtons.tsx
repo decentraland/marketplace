@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import { BigNumber } from 'ethers'
-import { Order } from '@dcl/schemas'
+import { Network, Order } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Loader } from 'decentraland-ui'
 import { Asset } from '../../../../modules/asset/types'
@@ -91,14 +91,15 @@ const BuyNFTButtons = ({
             <>
               {/* Credits toggle is only available for items with price > 1 MANA or for NFTs as well if the secondary sales are enabled */}
               {((isCreditsEnabled && !isNFT(asset) && BigNumber.from(asset.price).gte(getMinSaleValueInWei() || '')) ||
-                (isCreditsEnabled && isCreditsSecondarySalesEnabled && isNFT(asset))) && (
-                <UseCreditsToggle
-                  asset={asset}
-                  assetPrice={!isNFT(asset) ? asset.price : order ? order.price : undefined}
-                  useCredits={useCredits}
-                  onUseCredits={handleUseCredits}
-                />
-              )}
+                (isCreditsEnabled && isCreditsSecondarySalesEnabled && isNFT(asset))) &&
+                asset.network === Network.MATIC && ( // credits are only available for Polygon items
+                  <UseCreditsToggle
+                    asset={asset}
+                    assetPrice={!isNFT(asset) ? asset.price : order ? order.price : undefined}
+                    useCredits={useCredits}
+                    onUseCredits={handleUseCredits}
+                  />
+                )}
               <BuyWithCryptoButton
                 className={styles.buyWithCryptoButton}
                 asset={asset}

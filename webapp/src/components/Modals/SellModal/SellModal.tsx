@@ -42,7 +42,6 @@ const SellModal = ({
   isCreatingOrder,
   error,
   isCancelling,
-  isOffchainPublicNFTOrdersEnabled,
   onCancelOrder
 }: Props) => {
   const { orderService } = VendorFactory.build(nft.vendor)
@@ -77,9 +76,7 @@ const SellModal = ({
   const parsedValueToConfirm = useMemo(() => parseFloat(price).toString(), [price])
   const isConfirmDisabled = parsedValueToConfirm !== confirmedInput || isCreatingOrder || isLoadingAuthorization
   const marketplaceContract = getDecentralandContract(ContractName.Marketplace, nft.chainId)
-  const offChainOrdersContract = isOffchainPublicNFTOrdersEnabled
-    ? getDecentralandContract(ContractName.OffChainMarketplace, nft.chainId)
-    : null
+  const offChainOrdersContract = getDecentralandContract(ContractName.OffChainMarketplaceV2, nft.chainId)
 
   const authorizedContract = offChainOrdersContract || marketplaceContract
   const [fingerprint] = useFingerprint(nft)

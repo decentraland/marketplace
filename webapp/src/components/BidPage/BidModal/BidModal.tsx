@@ -64,7 +64,7 @@ const BidModal = (props: Props) => {
     network: asset.network
   })
 
-  const offchainBidsContract = isBidsOffchainEnabled ? getDecentralandContract(ContractName.OffChainMarketplace, asset.chainId) : null
+  const offchainBidsContract = isBidsOffchainEnabled ? getDecentralandContract(ContractName.OffChainMarketplaceV2, asset.chainId) : null
 
   if (!wallet || !mana || !bids) {
     return null
