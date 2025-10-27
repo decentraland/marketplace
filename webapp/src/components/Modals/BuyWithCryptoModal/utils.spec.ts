@@ -68,7 +68,13 @@ describe('Utils', () => {
       })
 
       it('should call estimateTradeGas with the correct parameters', () => {
-        expect(estimateTradeGas).toHaveBeenCalledWith('trade-123', selectedChain, wallet.address, expect.any(ethers.providers.Web3Provider))
+        expect(estimateTradeGas).toHaveBeenCalledWith(
+          'trade-123',
+          asset.tradeContractAddress,
+          selectedChain,
+          wallet.address,
+          expect.any(ethers.providers.Web3Provider)
+        )
       })
 
       it('should return the estimated gas from estimateTradeGas', () => {
@@ -109,7 +115,13 @@ describe('Utils', () => {
       })
 
       it('should call estimateTradeGas with the correct parameters', () => {
-        expect(estimateTradeGas).toHaveBeenCalledWith('trade-123', order.chainId, wallet.address, expect.any(ethers.providers.Web3Provider))
+        expect(estimateTradeGas).toHaveBeenCalledWith(
+          'trade-123',
+          order.marketplaceAddress,
+          order.chainId,
+          wallet.address,
+          expect.any(ethers.providers.Web3Provider)
+        )
       })
 
       it('should return the estimated gas from estimateTradeGas', () => {
