@@ -178,6 +178,7 @@ describe('when getting the trade to accept', () => {
 
   beforeEach(() => {
     trade = {
+      contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
       id: 'an-id',
       createdAt: Date.now(),
       signature: '123123123',
@@ -271,6 +272,7 @@ describe('when estimating trade gas', () => {
 
     // Mock the trade data
     mockTrade = {
+      contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
       id: tradeId,
       createdAt: Date.now(),
       signature: '0xsignature',

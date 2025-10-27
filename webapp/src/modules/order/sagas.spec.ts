@@ -15,7 +15,7 @@ import { closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/act
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ProviderType, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { ErrorCode } from 'decentraland-transactions'
+import { ContractName, ErrorCode, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { API_SIGNER } from '../../lib/api'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
@@ -167,6 +167,7 @@ describe('when handling the execute order request action', () => {
       }
 
       trade = {
+        contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
         id: order.tradeId!,
         createdAt: Date.now(),
         signer: wallet.address,

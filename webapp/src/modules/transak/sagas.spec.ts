@@ -25,6 +25,7 @@ import { getIsCreditsEnabled } from '../features/selectors'
 import { getWallet } from '../wallet/selectors'
 import { openTransak, openTransakFailure } from './actions'
 import { transakSaga } from './sagas'
+import { ContractName, getContract } from 'decentraland-transactions'
 
 jest.mock('decentraland-dapps/dist/modules/gateway/transak')
 
@@ -122,6 +123,7 @@ const mockCredits = {
 }
 
 const mockTrade: Trade = {
+  contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
   id: 'trade1',
   createdAt: Date.now(),
   signer: '0x0000000000000000000000000000000000000123',

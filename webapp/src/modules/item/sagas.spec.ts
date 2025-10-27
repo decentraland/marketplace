@@ -13,6 +13,7 @@ import { closeModal, openModal } from 'decentraland-dapps/dist/modules/modal/act
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { ContractName, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
@@ -183,6 +184,7 @@ describe('when handling the buy items request action', () => {
       }
 
       trade = {
+        contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
         id: itemWithTrade.tradeId!,
         createdAt: Date.now(),
         signer: wallet.address,

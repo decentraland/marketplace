@@ -5,6 +5,7 @@ import { Bid, ChainId, Network, RentalListing, RentalStatus, TradeAssetType, Tra
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { ContractName as TransactionContractName, getContract as getTransactionContract } from 'decentraland-transactions'
 import { API_SIGNER } from '../../lib/api'
 import { Asset } from '../asset/types'
 import { getContract } from '../contract/selectors'
@@ -450,6 +451,7 @@ describe('when handling the accepting a bid action', () => {
 
       beforeEach(() => {
         trade = {
+          contract: getTransactionContract(TransactionContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
           id: 'atrade-id',
           signer: '0x123',
           signature: '0x123123',
@@ -769,6 +771,7 @@ describe('when handling the cancellation of a bid action', () => {
 
       beforeEach(() => {
         trade = {
+          contract: getTransactionContract(TransactionContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
           id: 'atrade-id',
           signer: '0x123',
           signature: '0x123123',
