@@ -77,8 +77,6 @@ const gatewaySaga = createGatewaySaga({
   },
   [NetworkGatewayType.TRANSAK]: {
     apiBaseUrl: config.get('MARKETPLACE_SERVER_URL'),
-    key: config.get('TRANSAK_KEY'),
-    env: config.get('TRANSAK_ENV'),
     pollingDelay: +config.get('TRANSAK_POLLING_DELAY'),
     pusher: {
       appKey: config.get('TRANSAK_PUSHER_APP_KEY'),
@@ -141,7 +139,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     eventSaga(),
     contractSaga(),
     gatewaySaga(),
-    transakSaga(),
+    transakSaga(getIdentity),
     favoritesSaga(getIdentity),
     loginSaga(),
     ensSaga()

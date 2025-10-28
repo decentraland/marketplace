@@ -112,7 +112,7 @@ const mockCredits = {
       id: '1',
       amount: '500000000000000000',
       availableAmount: '500000000000000000',
-      contract: '0x0000000000000000000000000000000000000123',
+      contract: getContract(ContractName.CreditsManager, ChainId.MATIC_AMOY).address,
       expiresAt: '1000',
       season: 1,
       signature: '0x0000000000000000000000000000000000000000000000000000000000000000',
@@ -123,7 +123,7 @@ const mockCredits = {
 }
 
 const mockTrade: Trade = {
-  contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.ETHEREUM_SEPOLIA).address,
+  contract: getContract(ContractName.OffChainMarketplaceV2, ChainId.MATIC_AMOY).address,
   id: 'trade1',
   createdAt: Date.now(),
   signer: '0x0000000000000000000000000000000000000123',
@@ -167,10 +167,10 @@ describe('when handling the open transak action', () => {
 
   describe('when there is no wallet connected', () => {
     beforeEach(() => {
-      jest.spyOn(Transak.prototype, 'openWidget').mockImplementation(() => {})
+      jest.spyOn(Transak.prototype, 'openWidget').mockImplementation(() => Promise.resolve())
     })
     it('should not open the Transak widget', () => {
-      return expectSaga(transakSaga)
+      return expectSaga(transakSaga, () => undefined)
         .provide([[select(getWallet), null]])
         .dispatch(openTransak(mockAsset))
         .run({ silenceTimeout: true })
@@ -187,8 +187,8 @@ describe('when handling the open transak action', () => {
     describe('and using credits', () => {
       describe('and credits are enabled', () => {
         describe('and the user has enough credits', () => {
-          it.skip('should open the Transak widget with the correct configuration for credits', () => {
-            return expectSaga(transakSaga)
+          it('should open the Transak widget with the correct configuration for credits', () => {
+            return expectSaga(transakSaga, () => undefined)
               .provide([
                 [select(getWallet), mockWallet],
                 [select(getAddress), mockWallet.address],
@@ -200,14 +200,19 @@ describe('when handling the open transak action', () => {
               .dispatch(openTransak(mockAsset, mockOrder, true))
               .run({ silenceTimeout: true })
               .then(() => {
-                expect(Transak.prototype.openWidget).toHaveBeenCalledWith(mockWallet.address, Network.MATIC)
+                expect(Transak.prototype.openWidget).toHaveBeenCalledWith(
+                  expect.objectContaining({
+                    walletAddress: mockWallet.address,
+                    network: Network.MATIC
+                  })
+                )
               })
           })
         })
 
         describe('and the user does not have enough credits', () => {
           it('should throw an error', () => {
-            return expectSaga(transakSaga)
+            return expectSaga(transakSaga, () => undefined)
               .provide([
                 [select(getWallet), mockWallet],
                 [select(getAddress), mockWallet.address],
@@ -228,7 +233,7 @@ describe('when handling the open transak action', () => {
 
       describe('and credits are not enabled', () => {
         it('should throw an error', () => {
-          return expectSaga(transakSaga)
+          return expectSaga(transakSaga, () => undefined)
             .provide([
               [select(getWallet), mockWallet],
               [select(getIsCreditsEnabled), false],
@@ -249,7 +254,7 @@ describe('when handling the open transak action', () => {
     describe('when not using credits', () => {
       describe('and the asset has a trade', () => {
         it('should open the Transak widget with the correct configuration for marketplace v3', () => {
-          return expectSaga(transakSaga)
+          return expectSaga(transakSaga, () => undefined)
             .provide([
               [select(getWallet), mockWallet],
               [select(getAddress), mockWallet.address],
@@ -260,7 +265,12 @@ describe('when handling the open transak action', () => {
             .dispatch(openTransak({ ...mockAsset, tradeId: 'mock-trade-id' }))
             .run({ silenceTimeout: true })
             .then(() => {
-              expect(Transak.prototype.openWidget).toHaveBeenCalledWith(mockWallet.address, Network.MATIC)
+              expect(Transak.prototype.openWidget).toHaveBeenCalledWith(
+                expect.objectContaining({
+                  walletAddress: mockWallet.address,
+                  network: Network.MATIC
+                })
+              )
             })
         })
       })
@@ -270,7 +280,7 @@ describe('when handling the open transak action', () => {
           mockOrder.tradeId = undefined
         })
         it('should open the Transak widget with the correct configuration for marketplace v2', () => {
-          return expectSaga(transakSaga)
+          return expectSaga(transakSaga, () => undefined)
             .provide([
               [select(getWallet), mockWallet],
               [select(getAddress), mockWallet.address],
@@ -280,7 +290,12 @@ describe('when handling the open transak action', () => {
             .dispatch(openTransak(mockAsset, mockOrder))
             .run({ silenceTimeout: true })
             .then(() => {
-              expect(Transak.prototype.openWidget).toHaveBeenCalledWith(mockWallet.address, Network.MATIC)
+              expect(Transak.prototype.openWidget).toHaveBeenCalledWith(
+                expect.objectContaining({
+                  walletAddress: mockWallet.address,
+                  network: Network.MATIC
+                })
+              )
             })
         })
       })
@@ -303,7 +318,7 @@ describe('when handling the open transak action', () => {
             }
           }
 
-          return expectSaga(transakSaga)
+          return expectSaga(transakSaga, () => undefined)
             .provide([
               [select(getWallet), mockWallet],
               [select(getAddress), mockWallet.address],
@@ -313,7 +328,12 @@ describe('when handling the open transak action', () => {
             .dispatch(openTransak(collectionStoreAsset))
             .run({ silenceTimeout: true })
             .then(() => {
-              expect(Transak.prototype.openWidget).toHaveBeenCalledWith(mockWallet.address, Network.MATIC)
+              expect(Transak.prototype.openWidget).toHaveBeenCalledWith(
+                expect.objectContaining({
+                  walletAddress: mockWallet.address,
+                  network: Network.MATIC
+                })
+              )
             })
         })
       })
@@ -327,7 +347,7 @@ describe('when handling the open transak action', () => {
         network: Network.ETHEREUM
       }
 
-      return expectSaga(transakSaga)
+      return expectSaga(transakSaga, () => undefined)
         .provide([
           [select(getWallet), mockWallet],
           [select(getIsCreditsEnabled), false]
