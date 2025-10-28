@@ -535,10 +535,8 @@ function deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) {
 
       // Only if the user is not in their own page, show ens on sale by default.
       if (window.location.pathname !== locations.currentAccount()) {
-        newOptions.onlyOnSale = previous.onlyOnSale === undefined ? true : current.onlyOnSale
-      }
-      if (current.onlyOnSale === undefined) {
-        newOptions.onlyOnSale = true
+        const currentOnlyOnSale = current.onlyOnSale ?? true
+        newOptions.onlyOnSale = previous.onlyOnSale === undefined ? true : currentOnlyOnSale
       }
 
       break
