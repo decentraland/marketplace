@@ -5,12 +5,12 @@ import { Box, CheckboxProps, Checkbox } from 'decentraland-ui'
 import './MoreFilters.css'
 
 export type MoreFiltersProps = {
-  isOnSale?: boolean
+  onlyOnSale?: boolean
   onSaleChange: (value: boolean) => void
   defaultCollapsed?: boolean
 }
 
-export const MoreFilters = ({ isOnSale, onSaleChange, defaultCollapsed = false }: MoreFiltersProps) => {
+export const MoreFilters = ({ onlyOnSale, onSaleChange, defaultCollapsed = false }: MoreFiltersProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const handleOnSaleChange = useCallback(
@@ -21,8 +21,8 @@ export const MoreFilters = ({ isOnSale, onSaleChange, defaultCollapsed = false }
   )
 
   const filterText = useMemo(() => {
-    return isOnSale ? t('nft_filters.for_sale') : t('nft_filters.not_on_sale')
-  }, [isOnSale])
+    return onlyOnSale ? t('nft_filters.for_sale') : t('nft_filters.not_on_sale')
+  }, [onlyOnSale])
 
   const header = useMemo(
     () =>
@@ -37,10 +37,10 @@ export const MoreFilters = ({ isOnSale, onSaleChange, defaultCollapsed = false }
     [filterText, isMobileOrTablet]
   )
 
-  return isOnSale !== undefined ? (
+  return onlyOnSale !== undefined ? (
     <Box header={header} className="filters-sidebar-box" collapsible defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
       <div className="more-filters-section">
-        <Checkbox label={t('nft_filters.on_sale')} toggle checked={isOnSale} onChange={handleOnSaleChange} />
+        <Checkbox label={t('nft_filters.on_sale')} toggle checked={onlyOnSale} onChange={handleOnSaleChange} />
       </div>
     </Box>
   ) : null

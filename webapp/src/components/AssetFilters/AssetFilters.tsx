@@ -38,7 +38,7 @@ export const AssetFilters = ({
   network,
   category,
   bodyShapes,
-  isOnSale,
+  onlyOnSale,
   emotePlayMode,
   section,
   landStatus,
@@ -251,7 +251,7 @@ export const AssetFilters = ({
         <StatusFilter onChange={handleBrowseParamChange} status={status} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Status]} />
       ) : null}
       {shouldRenderFilter(AssetFilter.Price) &&
-      (isOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
+      (onlyOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
       view !== View.ACCOUNT ? (
         <PriceFilter
           onChange={(value, source) => handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [minPrice, maxPrice])}
@@ -268,7 +268,7 @@ export const AssetFilters = ({
         <CollectionFilter
           onChange={handleCollectionChange}
           collection={collection}
-          onlyOnSale={isOnSale}
+          onlyOnSale={onlyOnSale}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Collection]}
         />
       ) : null}
@@ -283,7 +283,7 @@ export const AssetFilters = ({
         />
       )}
       {shouldRenderFilter(AssetFilter.More) && (
-        <MoreFilters isOnSale={isOnSale} onSaleChange={handleOnSaleChange} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.More]} />
+        <MoreFilters onlyOnSale={onlyOnSale} onSaleChange={handleOnSaleChange} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.More]} />
       )}
     </Menu>
   )

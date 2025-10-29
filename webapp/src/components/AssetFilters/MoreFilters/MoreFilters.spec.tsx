@@ -19,7 +19,7 @@ describe('MoreFilters', () => {
 
   describe('when the isOnSale filter is visible', () => {
     it('should render the more filters section', () => {
-      const { container } = renderMoreFilters({ isOnSale: true })
+      const { container } = renderMoreFilters({ onlyOnSale: true })
       expect(container).not.toBeEmptyDOMElement()
     })
   })
