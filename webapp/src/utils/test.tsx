@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux'
 import { MemoryRouter } from 'react-router-dom'
-import { render, RenderResult, waitFor } from '@testing-library/react'
+import { render, RenderResult, waitFor, waitForOptions } from '@testing-library/react'
 import mediaQuery from 'css-mediaquery'
 import flatten from 'flat'
 import { Store } from 'redux'
@@ -47,9 +47,9 @@ export function renderWithProviders(
   return render(component, { wrapper: AppProviders })
 }
 
-export async function waitForComponentToFinishLoading(screen: RenderResult) {
+export async function waitForComponentToFinishLoading(screen: RenderResult, waitForOptions?: waitForOptions) {
   // TODO: Make loader accessible so we can get the info without using the container ui#310
-  await waitFor(() => expect(screen.container.getElementsByClassName('loader-container').length).toEqual(0))
+  await waitFor(() => expect(screen.container.getElementsByClassName('loader-container').length).toEqual(0), waitForOptions)
 }
 
 export function createMatchMedia(width: number) {

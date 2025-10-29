@@ -19,7 +19,7 @@ describe('MoreFilters', () => {
 
   describe('when the isOnSale filter is visible', () => {
     it('should render the more filters section', () => {
-      const { container } = renderMoreFilters({ isOnSale: true })
+      const { container } = renderMoreFilters({ onlyOnSale: true })
       expect(container).not.toBeEmptyDOMElement()
     })
   })
@@ -28,7 +28,7 @@ describe('MoreFilters', () => {
     describe('and the selected category is not wearables', () => {
       it('should not render the more filters section', () => {
         const { container } = renderMoreFilters({
-          isOnSale: undefined
+          onlyOnSale: undefined
         })
         expect(container).toBeEmptyDOMElement()
       })
@@ -41,7 +41,7 @@ describe('MoreFilters', () => {
 
       it('should not render the more filters section', () => {
         const { container } = renderMoreFilters({
-          isOnSale: undefined
+          onlyOnSale: undefined
         })
         expect(container).toBeEmptyDOMElement()
       })

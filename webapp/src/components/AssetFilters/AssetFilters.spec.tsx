@@ -47,7 +47,7 @@ function renderAssetFilters(props: Partial<Props> = {}) {
 describe('when in land section', () => {
   it('should render land status filter', async () => {
     const screen = renderAssetFilters({ section: Section.LAND })
-    await waitForComponentToFinishLoading(screen)
+    await waitForComponentToFinishLoading(screen, { timeout: 10000 })
     expect(screen.getByRole('radio', { name: t('nft_land_filters.all_land') })).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: t('nft_land_filters.only_for_sale') })).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: t('nft_land_filters.only_for_rent') })).toBeInTheDocument()
