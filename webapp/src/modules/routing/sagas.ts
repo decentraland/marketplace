@@ -305,7 +305,7 @@ export function* getNewBrowseOptions(current: BrowseOptions): Generator<unknown,
   if (address) {
     previous.address = address
   }
-  current = (yield deriveCurrentOptions(previous, current)) as BrowseOptions
+  current = (yield deriveCurrentOptions(previous, current, history)) as BrowseOptions
   const view = deriveView(previous, current)
   // TODO: Check this, which type of section should I get?
   const section: Section = (current.section as Section) ?? previous.section
@@ -437,7 +437,7 @@ function* handleFetchSales({
 }
 
 // TODO: Consider moving this should live to each vendor
-function deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) {
+function deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions, history: History) {
   let newOptions: BrowseOptions = {
     ...current,
     assetType: current.assetType || previous.assetType,
@@ -534,7 +534,7 @@ function deriveCurrentOptions(previous: BrowseOptions, current: BrowseOptions) {
       }
 
       // Only if the user is not in their own page, show ens on sale by default.
-      if (window.location.pathname !== locations.currentAccount()) {
+      if (history.location.pathname !== locations.currentAccount()) {
         const currentOnlyOnSale = current.onlyOnSale ?? true
         newOptions.onlyOnSale = previous.onlyOnSale === undefined ? true : currentOnlyOnSale
       }
