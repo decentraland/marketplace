@@ -23,7 +23,6 @@ import {
 import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { getData as getEventsData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
-import { getIsBidsOffChainEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import {
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_SUCCESS,
@@ -583,13 +582,7 @@ function* handleRedirectToActivity(action: AnyAction) {
     return
   }
 
-  const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
-  const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
-
-  if (
-    (action.type === PLACE_BID_SUCCESS && isBidsOffchainEnabled) ||
-    (action.type === CREATE_ORDER_SUCCESS && isOffchainPublicNFTOrdersEnabled)
-  ) {
+  if (action.type === PLACE_BID_SUCCESS || action.type === CREATE_ORDER_SUCCESS) {
     return
   }
 

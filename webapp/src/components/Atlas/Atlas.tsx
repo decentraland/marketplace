@@ -8,7 +8,7 @@ import { isErrorWithMessage } from '../../lib/error'
 import { NFT } from '../../modules/nft/types'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor'
-import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
+import { nftMarketplaceAPI } from '../../modules/vendor/decentraland/nft/api'
 import ErrorBanner from '../ErrorBanner'
 import Popup from './Popup'
 import { Props, Tile } from './Atlas.types'
@@ -174,7 +174,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
           const land = getContract({
             category: NFTCategory.PARCEL
           })
-          const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
+          const tokenId = await nftMarketplaceAPI.fetchTokenId(tile.x, tile.y)
           land && history.push(locations.nft(land.address, tokenId ?? undefined))
         } catch (error) {
           const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')

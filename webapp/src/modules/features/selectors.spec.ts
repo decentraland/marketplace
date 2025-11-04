@@ -10,9 +10,6 @@ import {
   getIsMaintenanceEnabled,
   getIsMarketplaceLaunchPopupEnabled,
   isLoadingFeatureFlags,
-  getIsBidsOffChainEnabled,
-  getIsOffchainPublicNFTOrdersEnabled,
-  getIsOffchainPublicItemOrdersEnabled,
   getIsCreditsSecondarySalesEnabled,
   getIsUnityWearablePreviewEnabled
 } from './selectors'
@@ -128,24 +125,6 @@ tryCatchSelectors.forEach(({ name, feature, selector }) =>
 )
 
 const waitForInitialLoadingSelectors = [
-  {
-    name: 'IsBidsOffChainEnabled',
-    feature: FeatureName.OFFCHAIN_BIDS,
-    selector: getIsBidsOffChainEnabled,
-    applicationName: ApplicationName.MARKETPLACE
-  },
-  {
-    name: 'IsOffchainPublicNFTOrdersEnabled',
-    feature: FeatureName.OFFCHAIN_PUBLIC_NFT_ORDERS,
-    selector: getIsOffchainPublicNFTOrdersEnabled,
-    applicationName: ApplicationName.MARKETPLACE
-  },
-  {
-    name: 'IsfOffchainPublicItemOrdersEnabled',
-    feature: FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS,
-    selector: getIsOffchainPublicItemOrdersEnabled,
-    applicationName: ApplicationName.DAPPS
-  },
   {
     name: 'IsCreditsSecondarySalesEnabled',
     feature: FeatureName.CREDITS_SECONDARY_SALES,
