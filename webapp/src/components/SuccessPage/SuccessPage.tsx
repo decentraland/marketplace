@@ -4,6 +4,7 @@ import Lottie from 'lottie-react'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Header, Icon, Loader } from 'decentraland-ui'
+import { JumpIn } from 'decentraland-ui2'
 import { config } from '../../config'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
@@ -15,7 +16,6 @@ import successAnimation from './successAnimation.json'
 import { Props } from './SuccessPage.types'
 import styles from './SuccessPage.module.css'
 
-const EXPLORER_URL = config.get('EXPLORER_URL', '')
 const BUILDER_URL = config.get('BUILDER_URL', '')
 
 const SuccessPageLoadingStateDescription = () => {
@@ -187,9 +187,18 @@ export function SuccessPage(props: Props) {
                     )}
 
                     {(asset.category === NFTCategory.WEARABLE || asset.category === NFTCategory.EMOTE) && (
-                      <Button className={styles.successButton} primary as="a" href={EXPLORER_URL} target="_blank">
-                        {t('success_page.success_state.try_genesis_city')}
-                      </Button>
+                      <div className={styles.jumpInButtonContainer}>
+                        <JumpIn
+                          variant="button"
+                          buttonText={t('success_page.success_state.try_it_on_in_world')}
+                          hideIcon
+                          modalProps={{
+                            title: 'Download Decentraland',
+                            description: "To jump in, you'll need to download the Decentraland app",
+                            buttonLabel: 'Download Now'
+                          }}
+                        />
+                      </div>
                     )}
                   </div>
                 </>
