@@ -1523,10 +1523,11 @@
       "status": "Processing transaction"
     },
     "success_state": {
-      "title": "All done!",
-      "status": "Transaction confirmed",
+      "title": "All Done!",
+      "status": "Transaction Confirmed",
       "view_item": "View my item",
       "try_genesis_city": "Try it in Genesis city",
+      "try_it_on_in_world": "Try it on In-World",
       "mint_more_names": "Mint more names",
       "set_as_primary_name": "Set as Primary Name",
       "manage_names": "MANAGE MY NAMEs",

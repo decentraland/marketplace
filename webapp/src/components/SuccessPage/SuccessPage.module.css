@@ -40,6 +40,12 @@
 :global(i.icon).checkIcon {
   font-size: 28px;
   color: #34ce76;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .assetImage {
@@ -74,6 +80,7 @@
 
 :global(.ui.button).successButton,
 :global(.ui.button + .ui.button).successButton {
+  height: 46px;
   width: 245px;
   margin: 0;
 }
@@ -160,6 +167,15 @@
   display: block;
   background-image: url(../../images/error.svg);
   background-size: cover;
+}
+
+.jumpInButtonContainer {
+  width: 245px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.jumpInButtonContainer:hover {
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
