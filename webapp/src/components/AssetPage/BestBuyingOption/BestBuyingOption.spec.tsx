@@ -3,14 +3,14 @@ import { Bid, ChainId, Item, ListingStatus, Network, NFTCategory, Order, Rarity 
 import * as containersModule from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatWeiMANA } from '../../../lib/mana'
-import * as bidAPI from '../../../modules/vendor/decentraland/bid/api'
-import * as orderAPI from '../../../modules/vendor/decentraland/order/api'
+import { marketplaceOrderAPI } from '../../../modules/vendor/decentraland'
+import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import { renderWithProviders } from '../../../utils/tests'
 import BestBuyingOption from './BestBuyingOption'
 
 jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('../../../modules/vendor/decentraland/order/api')
-jest.mock('../../../modules/vendor/decentraland/bid/api')
+jest.mock('../../../modules/vendor/decentraland/marketplace/api')
 jest.mock('decentraland-dapps/dist/containers', () => {
   const module = jest.requireActual<typeof containersModule>('decentraland-dapps/dist/containers')
   return {
@@ -116,12 +116,12 @@ describe('Best Buying Option', () => {
     beforeEach(() => {
       Date.now = () => 1671033414000
       asset.available = 0
-      ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
+      ;(marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
         data: [orderResponse],
         total: 1
       })
-      ;(bidAPI.bidAPI.fetchByNFT as jest.Mock).mockResolvedValueOnce({
-        data: [bid],
+      ;(marketplaceAPI.fetchBids as jest.Mock).mockResolvedValueOnce({
+        results: [bid],
         total: 1
       })
     })
@@ -157,12 +157,12 @@ describe('Best Buying Option', () => {
   describe('No available options', () => {
     beforeEach(() => {
       asset.available = 0
-      ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
+      ;(marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
         data: [],
         total: 0
       })
-      ;(bidAPI.bidAPI.fetchByNFT as jest.Mock).mockResolvedValueOnce({
-        data: [bid],
+      ;(marketplaceAPI.fetchBids as jest.Mock).mockResolvedValueOnce({
+        results: [bid],
         total: 0
       })
     })
