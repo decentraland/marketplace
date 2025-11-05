@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import { cancelBidRequest, fetchBidsByAssetRequest } from '../../../modules/bid/actions'
-import { getIsBidsOffChainEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getAssetBids } from '../../../modules/ui/asset/bid/selectors'
 import { getAddress } from '../../../modules/wallet/selectors'
@@ -9,7 +8,6 @@ import { MapStateProps, MapDispatchProps, MapDispatch } from './YourOffer.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   address: getAddress(state),
-  isBidsOffchainEnabled: getIsBidsOffChainEnabled(state),
   bids: getAssetBids(state)
 })
 

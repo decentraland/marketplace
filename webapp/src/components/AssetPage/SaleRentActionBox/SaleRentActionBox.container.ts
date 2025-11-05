@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { Network } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { getIsBidsOffChainEnabled, getIsLandCrossChainEnabled } from '../../../modules/features/selectors'
+import { getIsLandCrossChainEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getAssetBids } from '../../../modules/ui/asset/bid/selectors'
 import { getMana, getWallet } from '../../../modules/wallet/selectors'
@@ -17,8 +17,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
         ? getMana(state, ownProps.nft.network)
         : undefined,
     userHasAlreadyBidsOnNft: wallet ? getAssetBids(state).some(bid => bid.bidder === wallet.address) : false,
-    isCrossChainLandEnabled: getIsLandCrossChainEnabled(state),
-    isBidsOffchainEnabled: getIsBidsOffChainEnabled(state)
+    isCrossChainLandEnabled: getIsLandCrossChainEnabled(state)
   }
 }
 

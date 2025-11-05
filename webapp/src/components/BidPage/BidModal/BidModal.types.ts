@@ -10,7 +10,6 @@ export type Props = {
   asset: Asset
   rental: RentalListing | null
   wallet: Wallet | null
-  isBidsOffchainEnabled: boolean
   onNavigate: (path: string) => void
   onPlaceBid: typeof placeBidRequest
   onClearBidError: typeof clearBidError

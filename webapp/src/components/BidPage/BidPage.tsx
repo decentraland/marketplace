@@ -4,11 +4,11 @@ import { Page } from 'decentraland-ui'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { PageLayout } from '../PageLayout'
 import { Wallet } from '../Wallet'
-import { BidModal, LegacyBidModal } from './BidModal'
+import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
 
 const BidPage = (props: Props) => {
-  const { onPlaceBid, isPlacingBid, type, isBidsOffchainEnabled, onClearBidError, getContract } = props
+  const { onPlaceBid, isPlacingBid, type, onClearBidError, getContract } = props
   const history = useHistory()
 
   const onNavigate = useCallback(
@@ -18,7 +18,7 @@ const BidPage = (props: Props) => {
     [history]
   )
 
-  const BidModalCmp = isBidsOffchainEnabled ? BidModal : LegacyBidModal
+  const BidModalCmp = BidModal
 
   return (
     <PageLayout>
@@ -36,7 +36,6 @@ const BidPage = (props: Props) => {
                   isPlacingBid={isPlacingBid}
                   getContract={getContract}
                   onClearBidError={onClearBidError}
-                  isBidsOffchainEnabled={isBidsOffchainEnabled}
                 />
               )}
             </AssetProviderPage>

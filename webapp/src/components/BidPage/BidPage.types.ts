@@ -7,12 +7,11 @@ import { Contract } from '../../modules/vendor/services'
 export type Props = {
   type: AssetType
   isPlacingBid: boolean
-  isBidsOffchainEnabled: boolean
   onPlaceBid: typeof placeBidRequest
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onClearBidError: typeof clearBidError
 }
 
-export type MapStateProps = Pick<Props, 'isPlacingBid' | 'getContract' | 'isBidsOffchainEnabled'>
+export type MapStateProps = Pick<Props, 'isPlacingBid' | 'getContract'>
 export type MapDispatchProps = Pick<Props, 'onPlaceBid' | 'onClearBidError'>
 export type MapDispatch = Dispatch<PlaceBidRequestAction | ClearBidErrorAction>
