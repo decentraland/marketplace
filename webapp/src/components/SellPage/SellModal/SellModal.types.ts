@@ -12,7 +12,6 @@ export type Props = {
   wallet?: Wallet | null
   isLoading: boolean
   isCreatingOrder: boolean
-  isOffchainPublicNFTOrdersEnabled: boolean
   isLoadingCancelOrder: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onGoBack: () => void

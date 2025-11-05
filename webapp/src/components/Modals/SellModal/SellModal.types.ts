@@ -20,17 +20,13 @@ export type Props = Omit<ModalProps, 'metadata'> &
     getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
     onCreateOrder: typeof createOrderRequest
     isCreatingOrder: boolean
-    isOffchainPublicNFTOrdersEnabled: boolean
     onCancelOrder: typeof cancelOrderRequest
     isCancelling: boolean
   }
 
 export type OwnProps = Pick<Props, 'metadata'>
 
-export type MapStateProps = Pick<
-  Props,
-  'wallet' | 'isCreatingOrder' | 'error' | 'isCancelling' | 'isOffchainPublicNFTOrdersEnabled' | 'getContract'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'isCreatingOrder' | 'error' | 'isCancelling' | 'getContract'>
 
 export type MapDispatchProps = Pick<Props, 'onCancelOrder' | 'onCreateOrder'>
 

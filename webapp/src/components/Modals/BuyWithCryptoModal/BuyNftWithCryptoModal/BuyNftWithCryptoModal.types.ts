@@ -14,7 +14,6 @@ export type Props = WithAuthorizedActionProps &
     connectedChainId: ChainId | undefined
     isExecutingOrder: boolean
     isExecutingOrderCrossChain: boolean
-    isOffchainPublicNFTOrdersEnabled: boolean
     credits: CreditsResponse | null
     getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
     onExecuteOrder: typeof executeOrderRequest
@@ -22,9 +21,6 @@ export type Props = WithAuthorizedActionProps &
     onExecuteOrderWithCard: typeof executeOrderWithCardRequest
   }
 
-export type MapStateProps = Pick<
-  Props,
-  'getContract' | 'isExecutingOrder' | 'isExecutingOrderCrossChain' | 'isOffchainPublicNFTOrdersEnabled' | 'connectedChainId' | 'credits'
->
+export type MapStateProps = Pick<Props, 'getContract' | 'isExecutingOrder' | 'isExecutingOrderCrossChain' | 'connectedChainId' | 'credits'>
 export type MapDispatchProps = Pick<Props, 'onExecuteOrder' | 'onExecuteOrderCrossChain' | 'onExecuteOrderWithCard'>
 export type OwnProps = Pick<Props, 'metadata'>
