@@ -8,11 +8,11 @@ import { BuyNFTButtons } from '../BuyNFTButtons'
 import { Props } from './ItemSaleActions.types'
 import styles from './ItemSaleActions.module.css'
 
-const ItemSaleActions = ({ item, wallet, isBidsOffchainEnabled, customClassnames, bids, onUseCredits }: Props) => {
+const ItemSaleActions = ({ item, wallet, customClassnames, bids, onUseCredits }: Props) => {
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
   const alreadyBid = !!bids.find(bid => bid.bidder === wallet?.address)
-  const canBid = isBidsOffchainEnabled && !isOwner && item.available > 0
+  const canBid = !isOwner && item.available > 0
   const builderCollectionUrl = getBuilderCollectionDetailUrl(item.contractAddress)
 
   return (
