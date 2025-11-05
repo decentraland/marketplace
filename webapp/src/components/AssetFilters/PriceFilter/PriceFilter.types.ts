@@ -29,9 +29,6 @@ export type Props = {
   isRentalPriceFitlerChartEnabled?: boolean
   emoteHasGeometry?: boolean
   emoteHasSound?: boolean
-  isOffchainPublicItemOrdersEnabled: boolean
-  isOffchainPublicNFTOrdersEnabled: boolean
-  isLoadingFeatureFlags: boolean
 }
 
 export type ContainerProps = { values?: BrowseOptions } & Pick<Props, 'minPrice' | 'maxPrice' | 'onChange' | 'defaultCollapsed'>
