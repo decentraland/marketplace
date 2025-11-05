@@ -7,12 +7,11 @@ export type Props = {
   asset: Asset | null
   address?: string
   bids: Bid[]
-  isBidsOffchainEnabled: boolean
   onCancel: (bid: Bid) => void
   onFetchBids: (asset: Asset) => void
 }
 
-export type MapStateProps = Pick<Props, 'address' | 'isBidsOffchainEnabled' | 'bids'>
+export type MapStateProps = Pick<Props, 'address' | 'bids'>
 
 export type MapDispatchProps = Pick<Props, 'onCancel' | 'onFetchBids'>
 

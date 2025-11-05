@@ -30,7 +30,6 @@ const Bid = (props: Props) => {
     bid,
     wallet,
     archivedBidIds,
-    isBidsOffchainEnabled,
     onAuthorizedAction,
     isLoadingAuthorization,
     authorizationError,
@@ -57,7 +56,7 @@ const Bid = (props: Props) => {
 
   const handleConfirm = useCallback(() => {
     const options = getAcceptBidAuthorizationOptions(bid, () => onAccept(bid), targetContractLabel)
-    if (isBidsOffchainEnabled && options) {
+    if (options) {
       onAuthorizedAction({ ...options, manual: isAuthorizationCostingGas })
     } else {
       onAccept(bid)
