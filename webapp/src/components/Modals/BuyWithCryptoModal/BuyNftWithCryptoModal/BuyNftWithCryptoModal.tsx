@@ -22,7 +22,6 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     isExecutingOrder,
     connectedChainId,
     isExecutingOrderCrossChain,
-    isOffchainPublicNFTOrdersEnabled,
     onClose,
     isLoadingAuthorization,
     isUsingMagic,
@@ -51,7 +50,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
 
     const offchainContractName = order.marketplaceAddress ? getContractName(order.marketplaceAddress) : ContractName.OffChainMarketplace // if the trade doesn't have a contract address, use the default marketplace contract
 
-    const offchainMarketplace = isOffchainPublicNFTOrdersEnabled && order?.tradeId && getDCLContract(offchainContractName, nft.chainId)
+    const offchainMarketplace = order?.tradeId && getDCLContract(offchainContractName, nft.chainId)
 
     let creditsManager
     try {

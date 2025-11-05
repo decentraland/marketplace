@@ -242,3 +242,4 @@ class NFTAPI extends BaseAPI {
 }
 
 export const nftMarketplaceAPI = new NFTAPI(MARKETPLACE_SERVER_URL, retryParams)
+export const nftAPI = new NFTAPI(NFT_SERVER_URL, retryParams)

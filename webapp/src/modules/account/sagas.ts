@@ -4,7 +4,7 @@ import { cancelled, select, takeLatest } from 'redux-saga/effects'
 import { Account, AccountSortBy, Network, NFTCategory, Profile } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
-import { accountAPI, nftAPI, NFTResponse, NFTResult } from '../vendor/decentraland'
+import { accountAPI, nftMarketplaceAPI, NFTResponse, NFTResult } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
 import {
   fetchAccountMetricsFailure,
@@ -45,7 +45,7 @@ export function* accountSaga(catalystLambdasClient: LambdasClient) {
       if (search) {
         let skip = 0
         while (true) {
-          const { data, total }: NFTResponse = yield call([nftAPI, 'fetch'], {
+          const { data, total }: NFTResponse = yield call([nftMarketplaceAPI, 'fetch'], {
             category: NFTCategory.ENS,
             search,
             first: DEFAULT_FIRST_VALUE,

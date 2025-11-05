@@ -27,18 +27,7 @@ import { Props } from './BidModal.types'
 import './BidModal.css'
 
 const BidModal = (props: Props) => {
-  const {
-    asset,
-    rental,
-    wallet,
-    onNavigate,
-    onPlaceBid,
-    isPlacingBid,
-    isLoadingAuthorization,
-    authorizationError,
-    isBidsOffchainEnabled,
-    getContract
-  } = props
+  const { asset, rental, wallet, onNavigate, onPlaceBid, isPlacingBid, isLoadingAuthorization, authorizationError, getContract } = props
 
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
@@ -64,7 +53,7 @@ const BidModal = (props: Props) => {
     network: asset.network
   })
 
-  const offchainBidsContract = isBidsOffchainEnabled ? getDecentralandContract(ContractName.OffChainMarketplaceV2, asset.chainId) : null
+  const offchainBidsContract = getDecentralandContract(ContractName.OffChainMarketplaceV2, asset.chainId)
 
   if (!wallet || !mana || !bids) {
     return null
@@ -80,10 +69,10 @@ const BidModal = (props: Props) => {
     onClearBidError()
     onAuthorizedAction({
       targetContractName: ContractName.MANAToken,
-      authorizedAddress: isBidsOffchainEnabled && !!offchainBidsContract ? offchainBidsContract.address : bids.address,
+      authorizedAddress: offchainBidsContract?.address ?? bids.address,
       targetContract: mana as Contract,
       authorizationType: AuthorizationType.ALLOWANCE,
-      authorizedContractLabel: isBidsOffchainEnabled && !!offchainBidsContract ? offchainBidsContract.name : bids.label || bids.name,
+      authorizedContractLabel: offchainBidsContract?.name ?? (bids.label || bids.name),
       requiredAllowanceInWei: ethers.utils.parseEther(price).toString(),
       onAuthorized: handlePlaceBid
     })

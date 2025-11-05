@@ -42,7 +42,6 @@ const SaleRentActionBox = ({
   order,
   rental,
   userHasAlreadyBidsOnNft,
-  isBidsOffchainEnabled,
   currentMana,
   isCrossChainLandEnabled,
   onRent,
@@ -61,7 +60,7 @@ const SaleRentActionBox = ({
 
   // Validations for the sale screen
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
-  const isBiddable = bidService !== undefined || isBidsOffchainEnabled
+  const isBiddable = bidService !== undefined
   const canBid = !isOwner && isBiddable
   const isCurrentlyRented = isRentalListingExecuted(rental)
 

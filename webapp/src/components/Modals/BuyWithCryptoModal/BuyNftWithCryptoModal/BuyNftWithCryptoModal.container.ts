@@ -6,7 +6,6 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading'
 import { getData as getWallet } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import type { Route } from 'decentraland-transactions/crossChain'
 import { getContract } from '../../../../modules/contract/selectors'
-import { getIsOffchainPublicNFTOrdersEnabled } from '../../../../modules/features/selectors'
 import { BUY_ITEM_CROSS_CHAIN_REQUEST, buyItemCrossChainRequest } from '../../../../modules/item/actions'
 import { getLoading as getItemsLoading } from '../../../../modules/item/selectors'
 import { NFT } from '../../../../modules/nft/types'
@@ -24,7 +23,6 @@ const mapState = (state: RootState): MapStateProps => {
     connectedChainId: getWallet(state)?.chainId,
     isExecutingOrder: isLoadingType(getLoadingOrders(state), EXECUTE_ORDER_REQUEST),
     isExecutingOrderCrossChain: isLoadingType(getItemsLoading(state), BUY_ITEM_CROSS_CHAIN_REQUEST),
-    isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state),
     getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }

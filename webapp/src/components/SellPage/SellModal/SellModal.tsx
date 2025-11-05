@@ -37,7 +37,6 @@ const SellModal = (props: Props) => {
     wallet,
     isLoading,
     isCreatingOrder,
-    isOffchainPublicNFTOrdersEnabled,
     isLoadingCancelOrder,
     isLoadingAuthorization,
     authorizationError,
@@ -123,10 +122,8 @@ const SellModal = (props: Props) => {
     onClearOrderErrors()
     onAuthorizedAction({
       authorizationType: AuthorizationType.APPROVAL,
-      authorizedAddress:
-        !!offchainOrdersContract && isOffchainPublicNFTOrdersEnabled ? offchainOrdersContract.address : marketplace.address,
-      authorizedContractLabel:
-        !!offchainOrdersContract && isOffchainPublicNFTOrdersEnabled ? offchainOrdersContract.name : marketplace?.label || marketplace.name,
+      authorizedAddress: offchainOrdersContract?.address ?? marketplace.address,
+      authorizedContractLabel: offchainOrdersContract?.name ?? marketplace?.label ?? marketplace.name,
       targetContract: nftContract as Contract,
       targetContractName:
         (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC

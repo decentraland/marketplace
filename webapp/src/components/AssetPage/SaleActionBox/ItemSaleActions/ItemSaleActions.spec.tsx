@@ -10,7 +10,6 @@ function renderItemSaleActions(props: Partial<Props> = {}) {
     <ItemSaleActions
       item={{ id: 'dasd', available: 2, creator: '0xcreator' } as Item}
       wallet={{ address: '0xtest' } as Wallet}
-      isBidsOffchainEnabled={false}
       onUseCredits={jest.fn()}
       bids={[]}
       onFetchBids={jest.fn()}
@@ -22,10 +21,6 @@ function renderItemSaleActions(props: Partial<Props> = {}) {
 let props: Partial<Props> = {}
 
 describe('when off chain bids are enabled', () => {
-  beforeEach(() => {
-    props = { ...props, isBidsOffchainEnabled: true }
-  })
-
   describe('and the user is not the creator of the item', () => {
     beforeEach(() => {
       props = { ...props, wallet: { address: '0xuser' } as Wallet, item: { id: '1', creator: '0xcreator' } as Item }
@@ -67,10 +62,6 @@ describe('when off chain bids are enabled', () => {
 })
 
 describe('when off chain bids are disabled', () => {
-  beforeEach(() => {
-    props = { ...props, isBidsOffchainEnabled: false }
-  })
-
   it('should not render the bid button', () => {
     const { queryByRole } = renderItemSaleActions(props)
     expect(queryByRole('link', { name: t('asset_page.actions.place_bid') })).not.toBeInTheDocument()

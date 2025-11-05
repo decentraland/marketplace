@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { NFTCategory } from '@dcl/schemas'
 import { Page, Loader } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
-import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
+import { nftMarketplaceAPI } from '../../modules/vendor/decentraland/nft/api'
 import { VendorName } from '../../modules/vendor/types'
 import { VendorFactory } from '../../modules/vendor/VendorFactory'
 import { PageLayout } from '../PageLayout'
@@ -23,7 +23,7 @@ const LegacyNFTPage = (props: Props) => {
       if (estateId) {
         history.replace(locations.nft(estates.address, estateId))
       } else if (x && y) {
-        nftAPI
+        nftMarketplaceAPI
           .fetchTokenId(Number(x), Number(y))
           .then(tokenId => {
             history.replace(locations.nft(land.address, tokenId ?? undefined))

@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import { Asset } from '../../../../modules/asset/types'
 import { fetchBidsByAssetRequest } from '../../../../modules/bid/actions'
-import { getIsBidsOffChainEnabled } from '../../../../modules/features/selectors'
 import { RootState } from '../../../../modules/reducer'
 import { getAssetBids } from '../../../../modules/ui/asset/bid/selectors'
 import { getWallet } from '../../../../modules/wallet/selectors'
@@ -13,7 +12,6 @@ const mapState = (state: RootState): MapStateProps => {
 
   return {
     wallet,
-    isBidsOffchainEnabled: getIsBidsOffChainEnabled(state),
     bids: getAssetBids(state)
   }
 }

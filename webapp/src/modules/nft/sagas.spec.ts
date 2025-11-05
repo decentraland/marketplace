@@ -12,7 +12,6 @@ import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { upsertContracts } from '../contract/actions'
 import { getContract, getContracts, getLoading } from '../contract/selectors'
 import { getStubMaticCollectionContract } from '../contract/utils'
-import { getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
@@ -85,9 +84,8 @@ describe('when handling the fetch NFTs request action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
           [select(getContracts), []],
-          [call([VendorFactory, 'build'], options.vendor, API_OPTS, true), throwError(new Error(error))]
+          [call([VendorFactory, 'build'], options.vendor, API_OPTS), throwError(new Error(error))]
         ])
         .put(fetchNFTsFailure(options, error, timestamp))
         .dispatch(fetchNFTsRequest(options))
@@ -109,9 +107,8 @@ describe('when handling the fetch NFTs request action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
           [select(getContracts), []],
-          [call([VendorFactory, 'build'], options.vendor, API_OPTS, true), vendor],
+          [call([VendorFactory, 'build'], options.vendor, API_OPTS), vendor],
           [matchers.call.fn(vendor.nftService.fetch), Promise.reject(error)]
         ])
         .put(fetchNFTsFailure(options, error.message, timestamp))
@@ -128,7 +125,7 @@ describe('when handling the fetch NFTs request action', () => {
         view: View.MARKET,
         params: {} as NFTsFetchParams
       }
-      const vendor = VendorFactory.build(options.vendor, API_OPTS, false)
+      const vendor = VendorFactory.build(options.vendor, API_OPTS)
       const nfts = [
         {
           id: 'anID',
@@ -144,8 +141,7 @@ describe('when handling the fetch NFTs request action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
-          [call([VendorFactory, 'build'], options.vendor, API_OPTS, true), vendor],
+          [call([VendorFactory, 'build'], options.vendor, API_OPTS), vendor],
           [
             call([vendor.nftService, 'fetch'], { ...DEFAULT_BASE_NFT_PARAMS, ...options.params }, options.filters),
             [nfts, accounts, orders, rentals, count]
@@ -176,8 +172,7 @@ describe('when handling the fetch NFT request action', () => {
           [select(getContracts), []],
           [select(getContract, { address: contractAddress.toLowerCase() }), null],
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
-          [call([VendorFactory, 'build'], contract.vendor as VendorName, API_OPTS, true), vendor],
+          [call([VendorFactory, 'build'], contract.vendor as VendorName, API_OPTS), vendor],
           [call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, undefined), Promise.resolve([nft, order, rental])]
         ])
         .put(upsertContracts([contract]))
@@ -224,9 +219,8 @@ describe('when handling the fetch NFT request action', () => {
           [select(getLoading), []],
           [select(getContracts), []],
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
           [select(getContract, { address: contractAddress.toLowerCase() }), contract],
-          [call([VendorFactory, 'build'], contract.vendor, API_OPTS, true), throwError(new Error(error))]
+          [call([VendorFactory, 'build'], contract.vendor, API_OPTS), throwError(new Error(error))]
         ])
         .put(fetchNFTFailure(contractAddress, tokenId, error))
         .dispatch(fetchNFTRequest(contractAddress, tokenId))
@@ -251,8 +245,7 @@ describe('when handling the fetch NFT request action', () => {
           [select(getContracts), []],
           [select(getContract, { address: contractAddress.toLowerCase() }), contract],
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
-          [call([VendorFactory, 'build'], contract.vendor, API_OPTS, true), vendor],
+          [call([VendorFactory, 'build'], contract.vendor, API_OPTS), vendor],
           [call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, undefined), Promise.reject(error)]
         ])
         .put(fetchNFTFailure(contractAddress, tokenId, error.message))
@@ -281,8 +274,7 @@ describe('when handling the fetch NFT request action', () => {
             [select(getContracts), []],
             [select(getContract, { address: contractAddress.toLowerCase() }), contract],
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-            [select(getIsOffchainPublicNFTOrdersEnabled), false],
-            [call([VendorFactory, 'build'], contract.vendor, API_OPTS, true), vendor],
+            [call([VendorFactory, 'build'], contract.vendor, API_OPTS), vendor],
             [
               call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
                 rentalStatus: [RentalStatus.EXECUTED]
@@ -324,8 +316,7 @@ describe('when handling the fetch NFT request action', () => {
             [select(getContracts), []],
             [select(getContract, { address: contractAddress.toLowerCase() }), contract],
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-            [select(getIsOffchainPublicNFTOrdersEnabled), false],
-            [call([VendorFactory, 'build'], contract.vendor, API_OPTS, true), vendor],
+            [call([VendorFactory, 'build'], contract.vendor, API_OPTS), vendor],
             [
               call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
                 rentalStatus: [RentalStatus.EXECUTED]
@@ -359,8 +350,7 @@ describe('when handling the transfer NFT request action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
-          [call([VendorFactory, 'build'], nft.vendor, undefined, true), throwError(new Error(error))]
+          [call([VendorFactory, 'build'], nft.vendor, undefined), throwError(new Error(error))]
         ])
         .put(transferNFTFailure(nft, address, error))
         .dispatch(transferNFTRequest(nft, address))
@@ -379,8 +369,7 @@ describe('when handling the transfer NFT request action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
-          [call([VendorFactory, 'build'], nft.vendor, undefined, true), VendorFactory.build(nft.vendor)],
+          [call([VendorFactory, 'build'], nft.vendor, undefined), VendorFactory.build(nft.vendor)],
           [select(getWallet), null]
         ])
         .put(transferNFTFailure(nft, address, error))
@@ -402,8 +391,7 @@ describe('when handling the transfer NFT request action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
-          [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
+          [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
           [select(getWallet), wallet],
           [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.reject(error)]
         ])
@@ -443,8 +431,7 @@ describe('when handling the transfer NFT request action', () => {
           return expectSaga(nftSaga, getIdentity)
             .provide([
               [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-              [select(getIsOffchainPublicNFTOrdersEnabled), false],
-              [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
+              [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
               [select(getWallet), wallet],
               [select(getRentalById, nft.openRentalId!), rental],
               [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.resolve(txHash)],
@@ -466,8 +453,7 @@ describe('when handling the transfer NFT request action', () => {
           return expectSaga(nftSaga, getIdentity)
             .provide([
               [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-              [select(getIsOffchainPublicNFTOrdersEnabled), false],
-              [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
+              [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
               [select(getWallet), wallet],
               [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.resolve(txHash)],
               [call(waitForTx, txHash), Promise.resolve()]
@@ -484,8 +470,7 @@ describe('when handling the transfer NFT request action', () => {
         return expectSaga(nftSaga, getIdentity)
           .provide([
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-            [select(getIsOffchainPublicNFTOrdersEnabled), false],
-            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
             [select(getWallet), wallet],
             [call([vendor.nftService, 'transfer'], wallet, address, nft), Promise.resolve(txHash)],
             [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
@@ -510,7 +495,6 @@ describe('when handling the connect wallet success action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
           [select(getWallet), wallet],
           [select(getView), View.MARKET],
           [call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY), 'true']
@@ -544,7 +528,6 @@ describe('when handling the connect wallet success action', () => {
       return expectSaga(nftSaga, getIdentity)
         .provide([
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-          [select(getIsOffchainPublicNFTOrdersEnabled), false],
           [select(getWallet), wallet],
           [select(getView), View.MARKET],
           [call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY), 'true']
@@ -572,7 +555,6 @@ describe('when handling the connect wallet success action', () => {
               [select(getView), view],
               [select(getWallet), wallet],
               [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-              [select(getIsOffchainPublicNFTOrdersEnabled), false],
               [
                 matchers.call.fn(VendorFactory.build),
                 Promise.resolve({ nftService: { fetch: () => Promise.resolve([undefined, undefined, orders]) } })
@@ -590,11 +572,9 @@ describe('when handling the connect wallet success action', () => {
         it('should not open the ExpiresListingsModal', () => {
           return expectSaga(nftSaga, getIdentity)
             .provide([
-              [select(getIsOffchainPublicNFTOrdersEnabled), false],
               [select(getView), view],
               [select(getWallet), wallet],
               [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-              [select(getIsOffchainPublicNFTOrdersEnabled), false],
               [
                 matchers.call.fn(VendorFactory.build),
                 Promise.resolve({ nftService: { fetch: () => Promise.resolve([undefined, undefined, orders]) } })
@@ -610,11 +590,9 @@ describe('when handling the connect wallet success action', () => {
         it('should not open the ExpiresListingsModal', () => {
           return expectSaga(nftSaga, getIdentity)
             .provide([
-              [select(getIsOffchainPublicNFTOrdersEnabled), false],
               [select(getView), view],
               [select(getWallet), wallet],
               [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-              [select(getIsOffchainPublicNFTOrdersEnabled), false],
               [
                 matchers.call.fn(VendorFactory.build),
                 Promise.resolve({ nftService: { fetch: () => Promise.resolve([undefined, undefined, orders]) } })
@@ -632,7 +610,6 @@ describe('when handling the connect wallet success action', () => {
         return expectSaga(nftSaga, getIdentity)
           .provide([
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
-            [select(getIsOffchainPublicNFTOrdersEnabled), false],
             [select(getView), view],
             [select(getWallet), wallet]
           ])

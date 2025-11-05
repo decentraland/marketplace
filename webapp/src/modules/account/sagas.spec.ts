@@ -5,7 +5,7 @@ import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { Account, AccountFilters, AccountSortBy, Network, NFTCategory, Profile } from '@dcl/schemas'
 import { NFTsFetchParams } from '../nft/types'
-import { accountAPI, nftAPI, NFTResult } from '../vendor/decentraland'
+import { accountAPI, nftMarketplaceAPI, NFTResult } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
 import {
   fetchAccountMetricsFailure,
@@ -22,7 +22,7 @@ import { enhanceCreatorName, fromProfilesToCreators } from './utils'
 
 let account: Account
 let filters: AccountFilters
-let nftAPIFilters: NFTsFetchParams
+let nftMarketplaceAPIFilters: NFTsFetchParams
 let ethereumFilters: AccountFilters
 let maticFilters: AccountFilters
 
@@ -164,7 +164,7 @@ describe('when handling the request to fetch creators accounts', () => {
         return expectSaga(accountSaga, lambdasClient)
           .provide([
             [select(getCreatorsSearchQuery), null],
-            [call([nftAPI, nftAPI.fetch], filters), Promise.reject(new Error(error))]
+            [call([nftMarketplaceAPI, nftMarketplaceAPI.fetch], filters), Promise.reject(new Error(error))]
           ])
           .put(fetchCreatorsAccountFailure(search, error))
           .dispatch(fetchCreatorsAccountRequest(search))
@@ -262,7 +262,7 @@ describe('when handling the request to fetch creators accounts', () => {
       let creatorAccounts: CreatorAccount[]
       beforeEach(() => {
         search = 'a search term'
-        nftAPIFilters = {
+        nftMarketplaceAPIFilters = {
           category: NFTCategory.ENS,
           search,
           first: DEFAULT_FIRST_VALUE,
@@ -315,15 +315,15 @@ describe('when handling the request to fetch creators accounts', () => {
             total = MAX_ENS_SEARCH_REQUESTS * DEFAULT_FIRST_VALUE + 1
             creators.forEach(creator => enhanceCreatorName(creator, nftResults, search))
           })
-          it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
+          it('should fetch the ens until it gets all the matching results using the nftMarketplaceAPI and then and their profiles using the catalyst lambdas and accounts using the nftMarketplaceAPI and put the success action with the creators profiles', () => {
             return expectSaga(accountSaga, lambdasClient)
               .provide([
                 [select(getCreatorsSearchQuery), null],
                 ...[...Array(MAX_ENS_SEARCH_REQUESTS).keys()].map(
                   index =>
                     [
-                      call([nftAPI, nftAPI.fetch], {
-                        ...nftAPIFilters,
+                      call([nftMarketplaceAPI, nftMarketplaceAPI.fetch], {
+                        ...nftMarketplaceAPIFilters,
                         skip: index * DEFAULT_FIRST_VALUE
                       }),
                       { data: nftResults, total }
@@ -350,21 +350,21 @@ describe('when handling the request to fetch creators accounts', () => {
             total = nftResults.length * REQUESTS_UNTIL_FILLED
             creators.forEach(creator => enhanceCreatorName(creator, nftResults, search))
           })
-          it('should fetch the ens until it gets all the matching results using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators profiles', () => {
+          it('should fetch the ens until it gets all the matching results using the nftMarketplaceAPI and then and their profiles using the catalyst lambdas and accounts using the nftMarketplaceAPI and put the success action with the creators profiles', () => {
             return expectSaga(accountSaga, lambdasClient)
               .provide([
                 [select(getCreatorsSearchQuery), null],
                 ...[...Array(REQUESTS_UNTIL_FILLED).keys()].map(
                   index =>
                     [
-                      call([nftAPI, nftAPI.fetch], {
-                        ...nftAPIFilters,
+                      call([nftMarketplaceAPI, nftMarketplaceAPI.fetch], {
+                        ...nftMarketplaceAPIFilters,
                         skip: index * DEFAULT_FIRST_VALUE
                       }),
                       { data: nftResults, total }
                     ] as unknown as Task
                 ),
-                [call([nftAPI, nftAPI.fetch], nftAPIFilters), { data: nftResults }],
+                [call([nftMarketplaceAPI, nftMarketplaceAPI.fetch], nftMarketplaceAPIFilters), { data: nftResults }],
                 [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
                 [
                   call([lambdasClient, 'getAvatarsDetailsByPost'], {

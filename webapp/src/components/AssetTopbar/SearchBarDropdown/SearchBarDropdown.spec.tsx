@@ -135,8 +135,7 @@ function renderSearchDropBarDropdown(props: Partial<SearchBarDropdownProps> = {}
     fetchedCreators: [],
     isLoadingCreators: false,
     onFetchCreators: jest.fn(),
-    onClickOutside: jest.fn(),
-    isOffchainEnabled: false
+    onClickOutside: jest.fn()
   }
   return renderWithProviders(
     <ResponsiveContext.Provider value={{ width: 900 }}>
