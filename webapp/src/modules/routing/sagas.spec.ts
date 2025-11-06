@@ -24,7 +24,6 @@ import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { ENS } from '../ens/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
-import { getIsBidsOffChainEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { buyItemCrossChainSuccess, buyItemSuccess, fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import { NFT } from '../nft/types'
@@ -1394,11 +1393,7 @@ describe.each([
       const pushMock = jest.fn()
       return (
         expectSaga(routingSaga)
-          .provide([
-            [getContext('history'), { location, push: pushMock }],
-            [select(getIsBidsOffChainEnabled), false],
-            [select(getIsOffchainPublicNFTOrdersEnabled), true]
-          ])
+          .provide([[getContext('history'), { location, push: pushMock }]])
           //@ts-ignore
           .dispatch(action(...args))
           .run()
@@ -1420,11 +1415,7 @@ describe.each([
 
       return (
         expectSaga(routingSaga)
-          .provide([
-            [getContext('history'), { location, push: pushMock }],
-            [select(getIsBidsOffChainEnabled), false],
-            [select(getIsOffchainPublicNFTOrdersEnabled), false]
-          ])
+          .provide([[getContext('history'), { location, push: pushMock }]])
           //@ts-ignore
           .dispatch(action(...args))
           .run()
@@ -1439,11 +1430,7 @@ describe.each([
       const pushMock = jest.fn()
       return (
         expectSaga(routingSaga)
-          .provide([
-            [getContext('history'), { location, push: pushMock }],
-            [select(getIsBidsOffChainEnabled), false],
-            [select(getIsOffchainPublicNFTOrdersEnabled), false]
-          ])
+          .provide([[getContext('history'), { location, push: pushMock }]])
           //@ts-ignore
           .dispatch(action(...args))
           .run()

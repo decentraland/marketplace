@@ -1,4 +1,4 @@
-import { all, takeEvery, put, select } from 'redux-saga/effects'
+import { all, takeEvery, put } from 'redux-saga/effects'
 import { showToast, hideAllToasts } from 'decentraland-dapps/dist/modules/toast/actions'
 import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
 import { TRANSACTION_ACTION_FLAG, getTransactionHref } from 'decentraland-dapps/dist/modules/transaction'
@@ -16,7 +16,6 @@ import {
   UpdateListSuccessAction,
   UPDATE_LIST_SUCCESS
 } from '../favorites/actions'
-import { getIsBidsOffChainEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import {
   BUY_ITEM_CROSS_CHAIN_SUCCESS,
   BUY_ITEM_WITH_CARD_FAILURE,
@@ -168,16 +167,10 @@ function* handleBuyItemCrossChainSuccess(action: BuyItemCrossChainSuccessAction)
 
 function* handlePlaceBidSuccess(action: PlaceBidSuccessAction) {
   const { asset } = action.payload
-  const isBidsOffchainEnabled: boolean = yield select(getIsBidsOffChainEnabled)
-  if (isBidsOffchainEnabled) {
-    yield put(showToast(getBidPlacedSuccessToast(asset), 'bottom right'))
-  }
+  yield put(showToast(getBidPlacedSuccessToast(asset), 'bottom right'))
 }
 
 function* handleCreateOrderSuccess(action: CreateOrderSuccessAction) {
   const { nft } = action.payload
-  const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
-  if (isOffchainPublicNFTOrdersEnabled) {
-    yield put(showToast(getCreateOrderSuccessToast(nft), 'bottom right'))
-  }
+  yield put(showToast(getCreateOrderSuccessToast(nft), 'bottom right'))
 }
