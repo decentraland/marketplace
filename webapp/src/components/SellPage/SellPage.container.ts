@@ -4,7 +4,6 @@ import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/au
 import { getLoading as getLoadingAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getContract } from '../../modules/contract/selectors'
-import { getIsOffchainPublicNFTOrdersEnabled } from '../../modules/features/selectors'
 import { NFT } from '../../modules/nft/types'
 import {
   createOrderRequest,
@@ -22,7 +21,6 @@ import { MapStateProps, MapDispatchProps, MapDispatch } from './SellPage.types'
 const mapState = (state: RootState): MapStateProps => ({
   isLoading: isLoadingType(getLoadingAuthorizations(state), FETCH_AUTHORIZATIONS_REQUEST),
   isCreatingOrder: isLoadingType(getLoadingOrders(state), CREATE_ORDER_REQUEST),
-  isOffchainPublicNFTOrdersEnabled: getIsOffchainPublicNFTOrdersEnabled(state),
   isLoadingCancelOrder: isLoadingType(getLoadingOrders(state), CANCEL_ORDER_REQUEST),
   getContract: (query: Partial<Contract>) => getContract(state, query)
 })
