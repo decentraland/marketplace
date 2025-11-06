@@ -74,7 +74,6 @@ import { getData as getItems } from './selectors'
 import { Item } from './types'
 import { getItem } from './utils'
 
-export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')
 export const CANCEL_FETCH_ITEMS = 'CANCEL_FETCH_ITEMS'
 
 export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {

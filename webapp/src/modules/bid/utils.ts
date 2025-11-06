@@ -103,7 +103,7 @@ export function getAcceptBidAuthorizationOptions(
     return null
   }
 
-  const offchainContractName = bid.tradeContractAddress ? getContractName(bid.tradeContractAddress) : ContractName.OffChainMarketplace // if the trade doesn't have a contract address, use the default marketplace contract
+  const offchainContractName = bid.tradeContractAddress ? getContractName(bid.tradeContractAddress) : ContractName.OffChainMarketplaceV2 // if the trade doesn't have a contract address, use the default marketplace contract
   const offchainMarketplaceContract = getContract(offchainContractName, bid.chainId)
   const targetContractName = bid.network === Network.MATIC ? ContractName.ERC721CollectionV2 : ContractName.ERC721
 
