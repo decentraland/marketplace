@@ -495,7 +495,6 @@ describe('when handling the fetching of bids by asset', () => {
 
       it('should dispatch an action signaling the success of the action handling', () => {
         return expectSaga(bidSaga, bidServiceMock, tradeService)
-          .provide([])
           .put(fetchBidsByAssetSuccess(asset, bids))
           .dispatch(fetchBidsByAssetRequest(asset))
           .run()
@@ -512,7 +511,6 @@ describe('when handling the fetching of bids by asset', () => {
 
       it('should dispatch an action signaling the failure of the action handling', () => {
         return expectSaga(bidSaga, bidServiceMock, tradeService)
-          .provide([])
           .put(fetchBidsByAssetFailure(asset, error.message))
           .dispatch(fetchBidsByAssetRequest(asset))
           .run()
