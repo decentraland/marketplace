@@ -350,7 +350,7 @@ describe('when handling the request for fetching favorited items', () => {
                     first: 1,
                     ids: [favoritedItemIds[0].itemId]
                   },
-                  { v2: false }
+                  { v2: true }
                 ]
               })
               .put(fetchFavoritedItemsFailure(error.message))

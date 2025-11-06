@@ -183,42 +183,17 @@ describe('when handling the creation of a bid', () => {
     })
   })
 
-  describe('and offchain bids are not enabled', () => {
-    let tx: string
-
-    describe('and the asset is an item', () => {
-      beforeEach(() => {
-        asset = { itemId: 'item-id', chainId: ChainId.ETHEREUM_SEPOLIA } as Asset
-      })
-
-      it('should dispatch bid failure action', () => {
-        return expectSaga(bidSaga, bidService, tradeService)
-          .provide([[select(getWallet), wallet]])
-          .put(placeBidFailure(asset, price, expiration, 'Only NFTs are supported for bidding', fingerprint))
-          .dispatch(placeBidRequest(asset, price, expiration, fingerprint))
-          .run()
-      })
+  describe('and wallet is not available', () => {
+    beforeEach(() => {
+      asset = { tokenId: 'token-id', chainId: ChainId.ETHEREUM_SEPOLIA, vendor: VendorName.DECENTRALAND } as Asset
     })
 
-    describe('and the asset is an nft', () => {
-      beforeEach(() => {
-        asset = { tokenId: 'token-id', chainId: ChainId.ETHEREUM_SEPOLIA, vendor: VendorName.DECENTRALAND } as Asset
-        tx = 'tx-hash'
-      })
-
-      it('should send bid transaction', () => {
-        const vendor = VendorFactory.build((asset as NFT).vendor)
-
-        return expectSaga(bidSaga, bidService, tradeService)
-          .provide([
-            [call([VendorFactory, 'build'], (asset as NFT).vendor), vendor],
-            [select(getWallet), wallet],
-            [call([vendor.bidService!, 'place'], wallet, asset as NFT, price, expiration, fingerprint), Promise.resolve(tx)]
-          ])
-          .put(placeBidSuccess(asset, price, expiration, asset.chainId, wallet.address, fingerprint, tx))
-          .dispatch(placeBidRequest(asset, price, expiration, fingerprint))
-          .run()
-      })
+    it('should dispatch bid failure action', () => {
+      return expectSaga(bidSaga, bidService, tradeService)
+        .provide([[select(getWallet), null]])
+        .put(placeBidFailure(asset, price, expiration, "Can't place a bid without a wallet", fingerprint))
+        .dispatch(placeBidRequest(asset, price, expiration, fingerprint))
+        .run()
     })
   })
 })
@@ -538,55 +513,6 @@ describe('when handling the fetching of bids by asset', () => {
       it('should dispatch an action signaling the failure of the action handling', () => {
         return expectSaga(bidSaga, bidServiceMock, tradeService)
           .provide([])
-          .put(fetchBidsByAssetFailure(asset, error.message))
-          .dispatch(fetchBidsByAssetRequest(asset))
-          .run()
-      })
-    })
-  })
-
-  describe('and offchain bids are not enabled', () => {
-    let asset: NFT
-    let contract: Contract
-    let vendor: Vendor<VendorName.DECENTRALAND>
-
-    beforeEach(() => {
-      asset = {
-        vendor: VendorName.DECENTRALAND,
-        tokenId: 'token-id'
-      } as NFT
-      contract = {
-        vendor: VendorName.DECENTRALAND
-      } as Contract
-      vendor = VendorFactory.build(contract.vendor!)
-    })
-
-    describe('and the fetching of bids by asset is successful', () => {
-      it('should dispatch an action signaling the success of the action handling', () => {
-        return expectSaga(bidSaga, bidService, tradeService)
-          .provide([
-            [call([VendorFactory, 'build'], asset.vendor), vendor],
-            [call([vendor.bidService!, 'fetchByNFT'], asset), Promise.resolve(bids)]
-          ])
-          .put(fetchBidsByAssetSuccess(asset, bids))
-          .dispatch(fetchBidsByAssetRequest(asset))
-          .run()
-      })
-    })
-
-    describe('and the fetching of bids by asset fails', () => {
-      let error: Error
-
-      beforeEach(() => {
-        error = new Error('Some error')
-      })
-
-      it('should dispatch an action signaling the failure of the action handling', () => {
-        return expectSaga(bidSaga, bidService, tradeService)
-          .provide([
-            [call([VendorFactory, 'build'], asset.vendor), vendor],
-            [call([vendor.bidService!, 'fetchByNFT'], asset), Promise.reject(error)]
-          ])
           .put(fetchBidsByAssetFailure(asset, error.message))
           .dispatch(fetchBidsByAssetRequest(asset))
           .run()
