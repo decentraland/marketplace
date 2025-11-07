@@ -582,7 +582,7 @@ function* handleRedirectToActivity(action: AnyAction) {
     return
   }
 
-  if (action.type === PLACE_BID_SUCCESS || action.type === CREATE_ORDER_SUCCESS) {
+  if (action.type === PLACE_BID_SUCCESS) {
     return
   }
 
