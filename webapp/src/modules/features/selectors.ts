@@ -62,13 +62,6 @@ export const getIsMarketplaceServerEnabled = (state: RootState) => {
   return false
 }
 
-export const getIsLandCrossChainEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CROSS_CHAIN_LANDS)
-  }
-  return false
-}
-
 export const getIsBidsOffChainEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.OFFCHAIN_BIDS)
