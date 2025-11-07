@@ -11,9 +11,11 @@ import { Props } from './AssetFilters.types'
 jest.mock('../../modules/vendor/decentraland/nft/api')
 jest.mock('../../modules/vendor/decentraland/marketplace/api')
 jest.mock('../../modules/vendor/decentraland/rentals/api')
+jest.mock('../../modules/vendor/decentraland/marketplace/api')
 
 beforeEach(() => {
   ;(nftMarketplaceAPI.fetchPrices as jest.Mock).mockResolvedValue({})
+  ;(nftMarketplaceAPI.fetchEstateSizes as jest.Mock).mockResolvedValue({})
   ;(marketplaceAPI.fetchEstateSizes as jest.Mock).mockResolvedValue({})
   ;(rentalsAPI.getRentalListingsPrices as jest.Mock).mockResolvedValue({})
 })
