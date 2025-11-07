@@ -17,7 +17,7 @@ import { ContractName, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
-import { getIsCreditsEnabled, getIsMarketplaceServerEnabled } from '../features/selectors'
+import { getIsCreditsEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { locations } from '../routing/locations'
 import { View } from '../ui/types'
@@ -651,7 +651,6 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
-                [select(getIsMarketplaceServerEnabled), true],
                 [getContext('history'), { location: { pathname } }],
                 {
                   call(effect, next) {
@@ -687,7 +686,6 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
-                [select(getIsMarketplaceServerEnabled), true],
                 [getContext('history'), { location: { pathname } }],
                 {
                   call(effect, next) {
