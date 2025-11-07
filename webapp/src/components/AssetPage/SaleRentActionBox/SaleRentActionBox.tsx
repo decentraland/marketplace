@@ -36,17 +36,7 @@ enum View {
   RENT
 }
 
-const SaleRentActionBox = ({
-  nft,
-  wallet,
-  order,
-  rental,
-  userHasAlreadyBidsOnNft,
-  currentMana,
-  isCrossChainLandEnabled,
-  onRent,
-  onBuyWithCrypto
-}: Props) => {
+const SaleRentActionBox = ({ nft, wallet, order, rental, userHasAlreadyBidsOnNft, currentMana, onRent, onBuyWithCrypto }: Props) => {
   const isMobileView = isMobile()
   const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
@@ -87,10 +77,6 @@ const SaleRentActionBox = ({
           )
         ),
     [rental, currentMana, selectedRentalPeriodIndex, isPeriodSelected]
-  )
-  const hasEnoughManaToBuy = useMemo(
-    () => !!order && !!currentMana && ethers.utils.parseEther(formatBalance(currentMana)).gte(order.price),
-    [order, currentMana]
   )
 
   return (
@@ -245,9 +231,6 @@ const SaleRentActionBox = ({
                     />
                   ) : null}
                 </div>
-                {order && wallet && !hasEnoughManaToBuy && !isCrossChainLandEnabled ? (
-                  <div className={styles.notEnoughMana}>{t('asset_page.sales_rent_action_box.not_enough_mana')}</div>
-                ) : null}
               </>
             ) : null}
           </>
