@@ -27,6 +27,18 @@
   align-items: center;
 }
 
+.EmoteTags .social {
+  background-color: #37333d;
+  padding: 4px 6px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 10px;
+  text-transform: uppercase;
+  gap: 4px;
+}
+
 .EmoteTags .PlayModeSmallBadge .PlayIcon {
   height: 15px;
   background-position: center;
