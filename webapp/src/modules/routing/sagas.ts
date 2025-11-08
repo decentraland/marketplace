@@ -107,6 +107,7 @@ function* handleClearFilters() {
 export function* handleBrowse(action: BrowseAction) {
   const history: History = yield getContext('history')
   const options = (yield call(getNewBrowseOptions, action.payload.options)) as BrowseOptions
+  console.log('handleBrowse', options, action.payload.options)
   const { pathname } = history.location
   const contractsByTag = (yield select(getEventsData)) as Record<string, string[]>
   const isInACampaignRoute = locations.campaign().startsWith(pathname)
@@ -159,6 +160,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     status,
     emoteHasGeometry,
     emoteHasSound,
+    emoteOutcomeType,
     withCredits
   } = options
 
@@ -261,6 +263,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               network,
               emoteHasGeometry,
               emoteHasSound,
+              emoteOutcomeType,
               ...statusParameters,
               ...(withCredits && (status === AssetStatusFilter.ONLY_MINTING || status === AssetStatusFilter.ON_SALE) // withCredits can be used in onlyOnSale or onlyMinting. The min price for using credits is 1 MANA.
                 ? { minPrice: minPrice || '1', onlyOnSale: true, onlyMinting: true }

@@ -38,7 +38,10 @@ export function getFilters(vendor: VendorName, options: BrowseOptions): NFTsFetc
         adjacentToRoad,
         minDistanceToPlaza,
         maxDistanceToPlaza,
-        rentalDays
+        rentalDays,
+        emoteHasSound,
+        emoteHasGeometry,
+        emoteOutcomeType
       } = options
 
       return {
@@ -62,7 +65,10 @@ export function getFilters(vendor: VendorName, options: BrowseOptions): NFTsFetc
         adjacentToRoad,
         minDistanceToPlaza,
         maxDistanceToPlaza,
-        rentalDays
+        rentalDays,
+        emoteHasSound,
+        emoteHasGeometry,
+        emoteOutcomeType
       }
     }
     default:
