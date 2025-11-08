@@ -403,7 +403,8 @@
       "all_play_modes": "All Play Modes",
       "all_items": "All emotes",
       "with_sound": "with sound",
-      "with_props": "with props"
+      "with_props": "with props",
+      "social": "Social"
     },
     "body_shapes": {
       "title": "Body Shape",
@@ -761,7 +762,8 @@
       "loop": "Play loop"
     },
     "sound": "Sound",
-    "props": "Props"
+    "props": "Props",
+    "social": "Social"
   },
   "smart_wearable": {
     "play_showcase": "Play showcase video",
