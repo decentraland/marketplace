@@ -1,13 +1,22 @@
 import { useCallback, useMemo } from 'react'
-import { EmotePlayMode } from '@dcl/schemas'
+import { EmoteOutcomeType, EmotePlayMode } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ArrayFilter } from 'decentraland-ui/dist/components/ArrayFilter'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Props } from './EmoteAttributesFilter.types'
 const WITH_SOUND_VALUE = 'sound'
 const WITH_GEOMETRY_VALUE = 'geometry'
+// TODO: For now, let's filter if it has outcome or not
+const WITH_OUTCOME_VALUE = EmoteOutcomeType.SIMPLE_OUTCOME
 
-export const EmoteAttributesFilter = ({ emotePlayMode, emoteHasSound, emoteHasGeometry, onChange, defaultCollapsed = false }: Props) => {
+export const EmoteAttributesFilter = ({
+  emotePlayMode,
+  emoteHasSound,
+  emoteHasGeometry,
+  emoteOutcomeType,
+  onChange,
+  defaultCollapsed = false
+}: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const emotePlayModeOptions = useMemo(() => {
     const options = Object.values(EmotePlayMode).filter(value => typeof value === 'string') as EmotePlayMode[]
@@ -26,6 +35,10 @@ export const EmoteAttributesFilter = ({ emotePlayMode, emoteHasSound, emoteHasGe
       {
         value: WITH_GEOMETRY_VALUE,
         text: t('nft_filters.emote_attributes.with_props')
+      },
+      {
+        value: WITH_OUTCOME_VALUE,
+        text: t('nft_filters.emote_attributes.social')
       }
     ]
   }, [])
@@ -38,17 +51,21 @@ export const EmoteAttributesFilter = ({ emotePlayMode, emoteHasSound, emoteHasGe
     if (emoteHasGeometry) {
       attributes.push(WITH_GEOMETRY_VALUE)
     }
+    if (emoteOutcomeType) {
+      attributes.push(WITH_OUTCOME_VALUE)
+    }
     return attributes
-  }, [emoteHasSound, emoteHasGeometry])
+  }, [emoteHasSound, emoteHasGeometry, emoteOutcomeType])
 
   const handlePlayModeChange = useCallback(
     (values: string[]) =>
       onChange({
         emotePlayMode: values as EmotePlayMode[],
         emoteHasSound,
-        emoteHasGeometry
+        emoteHasGeometry,
+        emoteOutcomeType
       }),
-    [emoteHasGeometry, emoteHasSound, onChange]
+    [emoteHasGeometry, emoteHasSound, emoteOutcomeType, onChange]
   )
 
   const handleEmoteAttributesChange = useCallback(
@@ -56,6 +73,7 @@ export const EmoteAttributesFilter = ({ emotePlayMode, emoteHasSound, emoteHasGe
       onChange({
         emoteHasSound: values.includes(WITH_SOUND_VALUE) || undefined,
         emoteHasGeometry: values.includes(WITH_GEOMETRY_VALUE) || undefined,
+        emoteOutcomeType: values.includes(WITH_OUTCOME_VALUE) ? WITH_OUTCOME_VALUE : undefined,
         emotePlayMode
       }),
     [emotePlayMode, onChange]

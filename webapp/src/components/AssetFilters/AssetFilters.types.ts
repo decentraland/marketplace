@@ -1,4 +1,4 @@
-import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
+import { EmoteOutcomeType, EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { browse } from '../../modules/routing/actions'
 import { BrowseOptions } from '../../modules/routing/types'
@@ -37,6 +37,7 @@ export type Props = {
   adjacentToRoad?: boolean
   emoteHasSound?: boolean
   emoteHasGeometry?: boolean
+  emoteOutcomeType?: EmoteOutcomeType
   withCredits?: boolean
   onBrowse: ActionFunction<typeof browse>
   onFilterChange?: (options: BrowseOptions) => void

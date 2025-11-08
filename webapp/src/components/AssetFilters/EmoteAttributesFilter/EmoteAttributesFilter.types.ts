@@ -1,9 +1,15 @@
-import { EmotePlayMode } from '@dcl/schemas'
+import { EmoteOutcomeType, EmotePlayMode } from '@dcl/schemas'
 
 export type Props = {
   emotePlayMode?: EmotePlayMode[]
   emoteHasSound?: boolean
   emoteHasGeometry?: boolean
-  onChange: (value: { emotePlayMode?: EmotePlayMode[]; emoteHasSound?: boolean; emoteHasGeometry?: boolean }) => void
+  emoteOutcomeType?: EmoteOutcomeType
+  onChange: (value: {
+    emotePlayMode?: EmotePlayMode[]
+    emoteHasSound?: boolean
+    emoteHasGeometry?: boolean
+    emoteOutcomeType?: EmoteOutcomeType
+  }) => void
   defaultCollapsed?: boolean
 }

@@ -33,6 +33,7 @@ const AssetFiltersContainer: React.FC<ContainerProps> = ({ values = {}, onFilter
       adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : browseOptions.adjacentToRoad,
       emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : browseOptions.emoteHasSound,
       emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : browseOptions.emoteHasGeometry,
+      emoteOutcomeType: 'emoteOutcomeType' in values ? values.emoteOutcomeType : browseOptions.emoteOutcomeType,
       minPrice: 'minPrice' in values ? values.minPrice || '' : browseOptions.minPrice,
       maxPrice: 'maxPrice' in values ? values.maxPrice || '' : browseOptions.maxPrice,
       minEstateSize: 'minEstateSize' in values ? values.minEstateSize || '' : browseOptions.minEstateSize,
