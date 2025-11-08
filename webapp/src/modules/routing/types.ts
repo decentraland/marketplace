@@ -1,4 +1,13 @@
-import { EmotePlayMode, Network, NFTCategory, Rarity, RentalStatus, WearableGender, GenderFilterOption } from '@dcl/schemas'
+import {
+  EmotePlayMode,
+  Network,
+  NFTCategory,
+  Rarity,
+  RentalStatus,
+  WearableGender,
+  GenderFilterOption,
+  EmoteOutcomeType
+} from '@dcl/schemas'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { View } from '../ui/types'
@@ -68,6 +77,7 @@ export type BrowseOptions = {
   adjacentToRoad?: boolean
   emoteHasSound?: boolean
   emoteHasGeometry?: boolean
+  emoteOutcomeType?: EmoteOutcomeType // For now, let's filter if it has outcome or not
   withCredits?: boolean
 }
 

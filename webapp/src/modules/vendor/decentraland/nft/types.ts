@@ -1,6 +1,7 @@
 import {
   EmoteCategory,
   EmotePlayMode,
+  EmoteOutcomeType,
   GenderFilterOption,
   Network,
   NFT as BaseNFT,
@@ -40,6 +41,7 @@ export type NFTsFetchFilters = {
   rentalDays?: number[]
   emoteHasGeometry?: boolean
   emoteHasSound?: boolean
+  emoteOutcomeType?: EmoteOutcomeType
 }
 
 export type NFTResult = {

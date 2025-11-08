@@ -1,4 +1,4 @@
-import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
+import { EmoteOutcomeType, EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation'
 import { isOfEnumType } from '../../utils/enums'
 import { AssetStatusFilter } from '../../utils/filters'
@@ -115,6 +115,9 @@ export const getEmoteHasSoundFromSearchParameters = (search: string): boolean =>
 
 export const getEmoteHasGeometryFromSearchParameters = (search: string): boolean => getURLParam(search, 'emoteHasGeometry') === 'true'
 
+export const getEmoteOutcomeFromSearchParameters = (search: string): EmoteOutcomeType | undefined =>
+  getURLParam(search, 'emoteOutcomeType') as EmoteOutcomeType | undefined
+
 export const getWithCreditsFromSearchParameters = (search: string): boolean | undefined =>
   getURLParam(search, 'withCredits') ? getURLParam(search, 'withCredits') === 'true' : undefined
 
@@ -171,7 +174,8 @@ export const getAssetTypeFromUrl = (search: string, pathname: string): AssetType
 export const getEmoteUrlParamsFromSearchParameters = (search: string) => ({
   emotePlayMode: getEmotePlayModeFromSearchParameters(search),
   emoteHasGeometry: getEmoteHasGeometryFromSearchParameters(search),
-  emoteHasSound: getEmoteHasSoundFromSearchParameters(search)
+  emoteHasSound: getEmoteHasSoundFromSearchParameters(search),
+  emoteOutcomeType: getEmoteOutcomeFromSearchParameters(search)
 })
 
 export const getPaginationParamsFromUrl = (search: string, pathname: string, view?: View) => ({
@@ -250,7 +254,8 @@ export const hasFiltersEnabled = (browseOptions: BrowseOptions) => {
     status,
     onlySmart,
     emoteHasGeometry,
-    emoteHasSound
+    emoteHasSound,
+    emoteOutcomeType
   } = browseOptions
 
   const isLand = isLandSection(section as Section)
@@ -295,6 +300,7 @@ export const hasFiltersEnabled = (browseOptions: BrowseOptions) => {
     hasNotOnSaleFilter ||
     emoteHasSound ||
     emoteHasGeometry ||
+    emoteOutcomeType ||
     (!!status && status !== AssetStatusFilter.ON_SALE)
   )
 }

@@ -148,6 +148,10 @@ export class CatalogAPI extends BaseClient {
       queryParams.append('emoteHasSound', 'true')
     }
 
+    if (filters.emoteOutcomeType) {
+      queryParams.append('emoteOutcomeType', filters.emoteOutcomeType)
+    }
+
     return queryParams.toString()
   }
 }
