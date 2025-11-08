@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
+import { EmoteOutcomeType, EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
 import { RarityFilter } from 'decentraland-dapps/dist/containers/RarityFilter'
 import { BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
 import { getSectionFromCategory } from '../../modules/routing/search'
@@ -51,7 +51,8 @@ export const AssetFilters = ({
   values,
   rentalDays,
   emoteHasSound,
-  emoteHasGeometry
+  emoteHasGeometry,
+  emoteOutcomeType
 }: Props): JSX.Element | null => {
   const isInLandSection = isLandSection(section)
 
@@ -113,11 +114,17 @@ export const AssetFilters = ({
   )
 
   const handleEmoteAttributesChange = useCallback(
-    (value: { emotePlayMode?: EmotePlayMode[]; emoteHasSound?: boolean; emoteHasGeometry?: boolean }) => {
+    (value: {
+      emotePlayMode?: EmotePlayMode[]
+      emoteHasSound?: boolean
+      emoteHasGeometry?: boolean
+      emoteOutcomeType?: EmoteOutcomeType
+    }) => {
       onBrowse({
         emotePlayMode: value.emotePlayMode,
         emoteHasSound: value.emoteHasSound,
-        emoteHasGeometry: value.emoteHasGeometry
+        emoteHasGeometry: value.emoteHasGeometry,
+        emoteOutcomeType: value.emoteOutcomeType
       })
     },
     [onBrowse]
@@ -237,6 +244,7 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
           emoteHasSound={emoteHasSound}
           emoteHasGeometry={emoteHasGeometry}
+          emoteOutcomeType={emoteOutcomeType}
         />
       )}
       {shouldRenderFilter(AssetFilter.Rarity) ? (
