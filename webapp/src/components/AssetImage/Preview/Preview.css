@@ -62,43 +62,24 @@
   background-color: var(--secondary);
 }
 
-.Preview .asset-zoom-controls {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 12px;
-  left: 12px;
-}
-
-.Preview .asset-zoom-controls > .ui.button.zoom-control {
+.Preview .asset-zoom-controls > .MuiButtonBase-root.MuiButton-root {
   width: 32px;
   height: 32px;
   padding: 0;
   min-width: unset;
   background-color: rgba(0, 0, 0, 0.64) !important;
-  border-radius: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 1px;
+  color: var(--text);
 }
 
-.Preview .asset-zoom-controls > .ui.button.zoom-control:hover {
-  transform: none;
-  background-color: var(--secondary) !important;
-}
-
-.Preview .asset-zoom-controls > .ui.button.zoom-control i.icon {
-  margin: 0 !important;
-  width: 16px;
-  height: 16px;
-}
-
-.Preview .asset-zoom-controls > .ui.button.zoom-in-control {
+.Preview .asset-zoom-controls > .ZoomIn {
   border-radius: 6px 6px 0px 0px;
 }
 
-.Preview .asset-zoom-controls > .ui.button.zoom-out-control {
+.Preview .asset-zoom-controls > .ZoomOut {
   border-radius: 0px 0px 6px 6px;
 }
 
@@ -140,4 +121,50 @@
 
 .Preview .asset-emote-controls .ui.button.sound-button.enabled::before {
   background-image: url('../../../images/emotes/volume.svg');
+}
+
+.Preview .social-emote-controls .play-button {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.Preview .social-emote-controls .play-button:hover {
+  transform: none;
+}
+
+.Preview .social-emote-controls #social-emote-animations-button {
+  min-width: 10px;
+  width: 40px;
+  color: black;
+  background-color: var(--text);
+  border-left-style: solid;
+  border-left-width: 2px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+#social-emote-animations-menu .MuiList-root {
+  background-color: var(--text);
+}
+
+#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root {
+  color: black;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root:hover {
+  background-color: #55555521;
+}
+
+#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root.Mui-selected {
+  background-color: var(--text);
+}
+
+#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root .check-icon {
+  visibility: hidden;
+}
+
+#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root .check-icon.visible {
+  visibility: visible;
 }
