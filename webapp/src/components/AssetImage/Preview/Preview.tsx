@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import classNames from 'classnames'
 import { Network, PreviewType, Rarity, BodyShape, NFTCategory, PreviewEmote, PreviewRenderer, PreviewUnityMode } from '@dcl/schemas'
 import { SocialEmoteAnimation } from '@dcl/schemas/dist/dapps/preview/social-emote-animation'
@@ -8,104 +6,15 @@ import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Center, Loader, Popup, Icon } from 'decentraland-ui'
-import {
-  AnimationControls,
-  Button as ButtonMUI,
-  ButtonGroup,
-  EmoteControls,
-  WearablePreview,
-  ZoomControls,
-  Menu,
-  MenuItem
-} from 'decentraland-ui2'
+import { AnimationControls, EmoteControls, WearablePreview, ZoomControls } from 'decentraland-ui2'
 import { config } from '../../../config'
 import { getAssetImage, getAssetName, isNFT } from '../../../modules/asset/utils'
 import * as events from '../../../utils/events'
 import AvailableForMintPopup from '../AvailableForMintPopup'
 import { getEthereumItemUrn, colorToHex } from '../utils'
+import { PlayButton } from './PlayButton'
 import { Props } from './Preview.types'
 import './Preview.css'
-
-const PlayButton = ({
-  isPlaying,
-  onToggle,
-  socialEmoteAnimations,
-  onSelectAnimation
-}: {
-  isPlaying: boolean
-  onToggle: () => void
-  socialEmoteAnimations: SocialEmoteAnimation[]
-  onSelectAnimation: (animation: SocialEmoteAnimation) => void
-}) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  const open = Boolean(anchorEl)
-  const handleClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }, [])
-
-  const handleClose = useCallback(() => {
-    setAnchorEl(null)
-  }, [])
-
-  const handleSelectAnimation = useCallback(
-    (_event: React.MouseEvent<HTMLElement>, index: number) => {
-      onSelectAnimation(socialEmoteAnimations[index])
-      setSelectedIndex(index)
-      handleClose()
-    },
-    [socialEmoteAnimations, onSelectAnimation, handleClose, setSelectedIndex]
-  )
-
-  return (
-    <ButtonGroup className="social-emote-controls">
-      <Button className="play-button" size="small" onClick={onToggle}>
-        {isPlaying ? <Icon name="stop" /> : <Icon name="play" />}
-        <span>{isPlaying ? t('wearable_preview.stop_emote') : t('wearable_preview.play_emote')}</span>
-      </Button>
-      <ButtonMUI
-        id="social-emote-animations-button"
-        aria-controls={open ? 'social-emote-animations-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        variant="contained"
-        disableElevation
-        onClick={handleClick}
-      >
-        {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-      </ButtonMUI>
-      <Menu
-        id="social-emote-animations-menu"
-        slotProps={{
-          list: {
-            'aria-labelledby': 'social-emote-animations-button'
-          }
-        }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
-        transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left'
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-      >
-        {socialEmoteAnimations.map((option, index) => {
-          const isSelected = index === selectedIndex
-          return (
-            <MenuItem key={option.title} selected={isSelected} onClick={event => handleSelectAnimation(event, index)}>
-              <Icon className={classNames('check-icon', { visible: isSelected })} name="check" />
-              {option.title}
-            </MenuItem>
-          )
-        })}
-      </Menu>
-    </ButtonGroup>
-  )
-}
 
 export const Preview: React.FC<Props> = ({
   asset,
@@ -259,12 +168,9 @@ export const Preview: React.FC<Props> = ({
     return !!asset.data.emote?.outcomeType
   }, [asset])
 
-  const handleSelectSocialEmoteOutcome = useCallback(
-    (animation: SocialEmoteAnimation) => {
-      setSocialEmote(animation)
-    },
-    [setSocialEmote]
-  )
+  const handleSelectSocialEmoteOutcome = useCallback((animation: SocialEmoteAnimation) => {
+    setSocialEmote(animation)
+  }, [])
 
   const previewEmote = useMemo(() => {
     const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
@@ -388,6 +294,8 @@ export const Preview: React.FC<Props> = ({
     hasRepresentation,
     handleTryOut,
     socialEmote,
+    isSocialEmote,
+    handleSelectSocialEmoteOutcome,
     onPlaySmartWearableVideoShowcase
   ])
 
