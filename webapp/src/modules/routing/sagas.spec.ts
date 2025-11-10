@@ -267,7 +267,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         maxPrice: undefined,
         network: undefined,
         emoteHasGeometry: undefined,
-        emoteHasSound: undefined
+        emoteHasSound: undefined,
+        emoteOutcomeType: undefined
       }
     }
 
@@ -348,7 +349,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
           maxPrice: undefined,
           network: undefined,
           emoteHasGeometry: undefined,
-          emoteHasSound: undefined
+          emoteHasSound: undefined,
+          emoteOutcomeType: undefined
         }
       }
       it('should fetch assets with the correct skip size', () => {
@@ -399,7 +401,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
             maxPrice: undefined,
             network: undefined,
             emoteHasGeometry: undefined,
-            emoteHasSound: undefined
+            emoteHasSound: undefined,
+            emoteOutcomeType: undefined
           }
         }
         it('should fetch assets with the correct skip size', () => {
