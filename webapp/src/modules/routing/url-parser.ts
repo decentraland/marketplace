@@ -300,7 +300,7 @@ export const hasFiltersEnabled = (browseOptions: BrowseOptions) => {
     hasNotOnSaleFilter ||
     emoteHasSound ||
     emoteHasGeometry ||
-    emoteOutcomeType ||
+    !!emoteOutcomeType ||
     (!!status && status !== AssetStatusFilter.ON_SALE)
   )
 }
