@@ -1077,7 +1077,8 @@ describe('when getting compound URL parameters', () => {
       expect(result).toEqual({
         emotePlayMode: [EmotePlayMode.SIMPLE],
         emoteHasGeometry: false,
-        emoteHasSound: true
+        emoteHasSound: true,
+        emoteOutcomeType: null
       })
     })
   })
