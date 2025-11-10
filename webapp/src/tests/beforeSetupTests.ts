@@ -27,6 +27,27 @@ jest.mock('decentraland-ui2', () => {
   }
 })
 
+jest.mock('decentraland-dapps/dist/modules/campaign/ContentfulClient', () => {
+  return {
+    ContentfulClient: jest.fn().mockImplementation(() => ({
+      fetch: jest.fn().mockResolvedValue({}),
+      getEntry: jest.fn().mockResolvedValue(null),
+      getEntries: jest.fn().mockResolvedValue({ items: [] })
+    }))
+  }
+})
+
+jest.mock('decentraland-dapps/dist/modules/campaign/sagas', () => {
+  return {
+    campaignSagas: jest.fn().mockImplementation(
+      () =>
+        function* () {
+          yield
+        }
+    )
+  }
+})
+
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: (query: string) => ({
