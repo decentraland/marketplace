@@ -107,7 +107,6 @@ function* handleClearFilters() {
 export function* handleBrowse(action: BrowseAction) {
   const history: History = yield getContext('history')
   const options = (yield call(getNewBrowseOptions, action.payload.options)) as BrowseOptions
-  console.log('handleBrowse', options, action.payload.options)
   const { pathname } = history.location
   const contractsByTag = (yield select(getEventsData)) as Record<string, string[]>
   const isInACampaignRoute = locations.campaign().startsWith(pathname)
