@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Popup } from 'decentraland-ui'
 import socialSrc from '../../../images/emotes/social.svg'
 import soundSrc from '../../../images/emotes/sound.svg'
@@ -36,7 +36,7 @@ const EmoteTags = (props: Props) => {
       {isSocial && (
         <div className={styles.social}>
           <img src={socialSrc} alt="social" />
-          {t('emote.social')}
+          <T id="emote.social" />
         </div>
       )}
     </div>
