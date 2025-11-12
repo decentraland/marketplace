@@ -62,27 +62,6 @@ export const getIsLandCrossChainEnabled = (state: RootState) => {
   return false
 }
 
-export const getIsBidsOffChainEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.OFFCHAIN_BIDS)
-  }
-  return false
-}
-
-export const getIsOffchainPublicNFTOrdersEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.OFFCHAIN_PUBLIC_NFT_ORDERS)
-  }
-  return false
-}
-
-export const getIsOffchainPublicItemOrdersEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.OFFCHAIN_PUBLIC_ITEM_ORDERS)
-  }
-  return false
-}
-
 export const getIsCreditsEnabled = (state: RootState) => {
   const wallet = getWallet(state)
   if (!wallet) {

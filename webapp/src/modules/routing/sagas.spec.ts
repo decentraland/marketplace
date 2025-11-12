@@ -24,7 +24,6 @@ import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { ENS } from '../ens/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchFavoritedItemsRequest } from '../favorites/actions'
-import { getIsBidsOffChainEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { buyItemCrossChainSuccess, buyItemSuccess, fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import { NFT } from '../nft/types'
@@ -1387,71 +1386,37 @@ describe('handleRedirectToSuccessPage saga', () => {
 describe.each([
   ['CREATE_ORDER_SUCCESS', createOrderSuccess, {} as NFT, 123, 123, ''],
   ['CANCEL_ORDER_SUCCESS', cancelOrderSuccess, { price: '1000000000000' } as Order, {} as NFT, '']
-])('%s action', (name, action, ...args) => {
-  describe('when bids offchain is enabled', () => {
-    it('should redirect not redirect to activity page', () => {
-      const location = { search: '' }
-      const pushMock = jest.fn()
-      return (
-        expectSaga(routingSaga)
-          .provide([
-            [getContext('history'), { location, push: pushMock }],
-            [select(getIsBidsOffChainEnabled), false],
-            [select(getIsOffchainPublicNFTOrdersEnabled), true]
-          ])
-          //@ts-ignore
-          .dispatch(action(...args))
-          .run()
-          .then(() => {
-            if (name === 'CANCEL_ORDER_SUCCESS') {
-              expect(pushMock).toHaveBeenCalledWith(locations.activity())
-            } else {
-              expect(pushMock).not.toHaveBeenCalled()
-            }
-          })
-      )
-    })
+])('%s action', (_, action, ...args) => {
+  it('should redirect to the location when redirectTo is present', () => {
+    const redirectTo = '/account?section=on_sale'
+    const location = { search: `?redirectTo=${encodeURIComponent(redirectTo)}` }
+    const pushMock = jest.fn()
+
+    return (
+      expectSaga(routingSaga)
+        .provide([[getContext('history'), { location, push: pushMock }]])
+        //@ts-ignore
+        .dispatch(action(...args))
+        .run()
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(redirectTo)
+        })
+    )
   })
-  describe('when bids offchain is disabled', () => {
-    it('should redirect to the location when redirectTo is present', () => {
-      const redirectTo = '/account?section=on_sale'
-      const location = { search: `?redirectTo=${encodeURIComponent(redirectTo)}` }
-      const pushMock = jest.fn()
 
-      return (
-        expectSaga(routingSaga)
-          .provide([
-            [getContext('history'), { location, push: pushMock }],
-            [select(getIsBidsOffChainEnabled), false],
-            [select(getIsOffchainPublicNFTOrdersEnabled), false]
-          ])
-          //@ts-ignore
-          .dispatch(action(...args))
-          .run()
-          .then(() => {
-            expect(pushMock).toHaveBeenCalledWith(redirectTo)
-          })
-      )
-    })
-
-    it('should redirect to the default activity location when redirectTo is not present', () => {
-      const location = { search: '' }
-      const pushMock = jest.fn()
-      return (
-        expectSaga(routingSaga)
-          .provide([
-            [getContext('history'), { location, push: pushMock }],
-            [select(getIsBidsOffChainEnabled), false],
-            [select(getIsOffchainPublicNFTOrdersEnabled), false]
-          ])
-          //@ts-ignore
-          .dispatch(action(...args))
-          .run()
-          .then(() => {
-            expect(pushMock).toHaveBeenCalledWith(locations.activity())
-          })
-      )
-    })
+  it('should redirect to the default activity location when redirectTo is not present', () => {
+    const location = { search: '' }
+    const pushMock = jest.fn()
+    return (
+      expectSaga(routingSaga)
+        .provide([[getContext('history'), { location, push: pushMock }]])
+        //@ts-ignore
+        .dispatch(action(...args))
+        .run()
+        .then(() => {
+          expect(pushMock).toHaveBeenCalledWith(locations.activity())
+        })
+    )
   })
 })
 

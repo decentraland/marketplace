@@ -15,8 +15,7 @@ import { CONNECT_WALLET_SUCCESS, ConnectWalletSuccessAction } from 'decentraland
 import { ErrorCode } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
 import { buyAssetWithCard } from '../asset/utils'
-import { getIsCreditsEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
-import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
+import { getIsCreditsEnabled } from '../features/selectors'
 import { FetchNFTFailureAction, fetchNFTRequest, FetchNFTSuccessAction, FETCH_NFT_FAILURE, FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getData as getNFTs } from '../nft/selectors'
 import { getNFT } from '../nft/utils'
@@ -94,23 +93,12 @@ export function* orderSaga(tradeService: TradeService) {
   function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
     const { nft, price, expiresAt, fingerprint } = action.payload
     try {
-      const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
-      if (isOffchainPublicNFTOrdersEnabled) {
-        const history: History = yield getContext('history')
-        const trade: TradeCreation = yield call([orderUtils, 'createPublicNFTOrderTrade'], nft, price, expiresAt, fingerprint)
-        yield call([tradeService, 'addTrade'], trade)
-        yield put(createOrderSuccess(nft, price, expiresAt))
-        yield put(fetchNFTRequest(nft.contractAddress, nft.tokenId)) // fetch the NFT again to get the new order with the tradeId
-        history.push(locations.nft(nft.contractAddress, nft.tokenId))
-      } else {
-        const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
-
-        const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
-        const txHash = (yield call([orderService, 'create'], wallet, nft, price, expiresAt)) as Awaited<
-          ReturnType<typeof orderService.create>
-        >
-        yield put(createOrderSuccess(nft, price, expiresAt, txHash))
-      }
+      const history: History = yield getContext('history')
+      const trade: TradeCreation = yield call([orderUtils, 'createPublicNFTOrderTrade'], nft, price, expiresAt, fingerprint)
+      yield call([tradeService, 'addTrade'], trade)
+      yield put(createOrderSuccess(nft, price, expiresAt))
+      yield put(fetchNFTRequest(nft.contractAddress, nft.tokenId)) // fetch the NFT again to get the new order with the tradeId
+      history.push(locations.nft(nft.contractAddress, nft.tokenId))
     } catch (error) {
       const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
       const errorCode =
@@ -129,8 +117,6 @@ export function* orderSaga(tradeService: TradeService) {
       if (nft.contractAddress !== order.contractAddress || nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
       }
-      yield call(waitForFeatureFlagsToBeLoaded)
-      const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
 
       if (!wallet) {
@@ -151,10 +137,7 @@ export function* orderSaga(tradeService: TradeService) {
 
       let txHash: string
       if (order.tradeId) {
-        if (!isOffchainPublicNFTOrdersEnabled) {
-          throw new Error('not able to accept offchain orders')
-        }
-
+        // Offchain order with tradeId
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
         if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsMarketplace'], trade, wallet.address, credits.credits)
@@ -164,12 +147,8 @@ export function* orderSaga(tradeService: TradeService) {
           txHash = yield call([tradeService, 'accept'], trade, wallet.address)
         }
       } else {
-        const { orderService } = (yield call(
-          [VendorFactory, 'build'],
-          nft.vendor,
-          undefined,
-          !isOffchainPublicNFTOrdersEnabled
-        )) as ReturnType<typeof VendorFactory.build>
+        // Legacy onchain order without tradeId
+        const { orderService } = (yield call([VendorFactory, 'build'], nft.vendor, undefined)) as ReturnType<typeof VendorFactory.build>
 
         if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
@@ -255,27 +234,23 @@ export function* orderSaga(tradeService: TradeService) {
       if (nft.contractAddress !== order.contractAddress && nft.tokenId !== order.tokenId) {
         throw new Error('The order does not match the NFT')
       }
-      yield call(waitForFeatureFlagsToBeLoaded)
-      const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
+      if (!wallet) {
+        throw new Error('Can not cancel an order without a wallet')
+      }
+
       let txHash = ''
 
       if (order.tradeId) {
-        if (!isOffchainPublicNFTOrdersEnabled) {
-          throw new Error('Offchain orders are not supported yet')
-        }
-
-        if (!wallet) {
-          throw new Error('Can not cancel an order without a wallet')
-        }
-
+        // Offchain order with tradeId
         const trade: Trade = yield call([tradeService, 'fetchTrade'], order.tradeId)
         txHash = yield call([tradeService, 'cancel'], trade, wallet.address)
         yield put(cancelOrderSuccessTx(order, nft, txHash))
         yield waitForTx(txHash)
         yield put(cancelOrderSuccess(order, nft, txHash, skipRedirection))
       } else {
-        const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
+        // Legacy onchain order without tradeId
+        const { orderService } = VendorFactory.build(nft.vendor, undefined)
         txHash = (yield call([orderService, 'cancel'], wallet, order)) as Awaited<ReturnType<typeof orderService.cancel>>
         yield put(cancelOrderSuccess(order, nft, txHash, skipRedirection))
       }

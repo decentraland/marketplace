@@ -1,7 +1,7 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Section } from '../../modules/vendor/decentraland'
 import { marketplaceAPI } from '../../modules/vendor/decentraland/marketplace/api'
-import { nftAPI, nftMarketplaceAPI } from '../../modules/vendor/decentraland/nft/api'
+import { nftMarketplaceAPI } from '../../modules/vendor/decentraland/nft/api'
 import { rentalsAPI } from '../../modules/vendor/decentraland/rentals/api'
 import { renderWithProviders, waitForComponentToFinishLoading } from '../../utils/test'
 import { LANDFilters } from '../Vendor/decentraland/types'
@@ -9,12 +9,11 @@ import { AssetFilters } from './AssetFilters'
 import { Props } from './AssetFilters.types'
 
 jest.mock('../../modules/vendor/decentraland/nft/api')
+jest.mock('../../modules/vendor/decentraland/marketplace/api')
 jest.mock('../../modules/vendor/decentraland/rentals/api')
 jest.mock('../../modules/vendor/decentraland/marketplace/api')
 
 beforeEach(() => {
-  ;(nftAPI.fetchPrices as jest.Mock).mockResolvedValue({})
-  ;(nftAPI.fetchEstateSizes as jest.Mock).mockResolvedValue({})
   ;(nftMarketplaceAPI.fetchPrices as jest.Mock).mockResolvedValue({})
   ;(nftMarketplaceAPI.fetchEstateSizes as jest.Mock).mockResolvedValue({})
   ;(marketplaceAPI.fetchEstateSizes as jest.Mock).mockResolvedValue({})
