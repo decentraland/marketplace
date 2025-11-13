@@ -750,7 +750,8 @@
       "loop": "循环播放"
     },
     "sound": "声音",
-    "props": "道具"
+    "props": "道具",
+    "social": "社交"
   },
   "smart_wearable": {
     "play_showcase": "播放展示视频",
