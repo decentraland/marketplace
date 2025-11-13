@@ -749,7 +749,8 @@
       "loop": "Reproduce en bucle"
     },
     "sound": "Sonido",
-    "props": "Accesorios"
+    "props": "Accesorios",
+    "social": "Social"
   },
   "smart_wearable": {
     "play_showcase": "Reproducir vista previa",
