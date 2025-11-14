@@ -55,7 +55,7 @@ export const Preview: React.FC<Props> = ({
     }
   }, [])
 
-  const handleLoad = useCallback((renderer?: string) => {
+  const handleLoad = useCallback((renderer?: PreviewRenderer) => {
     setRendererType(renderer as PreviewRenderer)
     setWearablePreviewError(false)
     setIsLoadingWearablePreview(false)
