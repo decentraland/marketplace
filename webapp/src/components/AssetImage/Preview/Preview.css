@@ -62,43 +62,24 @@
   background-color: var(--secondary);
 }
 
-.Preview .asset-zoom-controls {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 12px;
-  left: 12px;
-}
-
-.Preview .asset-zoom-controls > .ui.button.zoom-control {
+.Preview .asset-zoom-controls > .MuiButtonBase-root.MuiButton-root {
   width: 32px;
   height: 32px;
   padding: 0;
   min-width: unset;
   background-color: rgba(0, 0, 0, 0.64) !important;
-  border-radius: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 1px;
+  color: var(--text);
 }
 
-.Preview .asset-zoom-controls > .ui.button.zoom-control:hover {
-  transform: none;
-  background-color: var(--secondary) !important;
-}
-
-.Preview .asset-zoom-controls > .ui.button.zoom-control i.icon {
-  margin: 0 !important;
-  width: 16px;
-  height: 16px;
-}
-
-.Preview .asset-zoom-controls > .ui.button.zoom-in-control {
+.Preview .asset-zoom-controls > .ZoomIn {
   border-radius: 6px 6px 0px 0px;
 }
 
-.Preview .asset-zoom-controls > .ui.button.zoom-out-control {
+.Preview .asset-zoom-controls > .ZoomOut {
   border-radius: 0px 0px 6px 6px;
 }
 
@@ -114,7 +95,6 @@
   gap: 5px;
 }
 
-.Preview .asset-emote-controls .ui.button.play-button,
 .Preview .asset-emote-controls .ui.button.sound-button,
 .Preview .asset-wearable-controls .ui.button.play-button {
   color: black;

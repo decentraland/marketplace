@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { getIsSocialEmotesEnabled } from '../../modules/features/selectors'
 import { browse } from '../../modules/routing/actions'
 import { useGetBrowseOptions } from '../../modules/routing/hooks'
 import { getCategoryFromSection } from '../../modules/routing/search'
@@ -14,6 +15,7 @@ const AssetFiltersContainer: React.FC<ContainerProps> = ({ values = {}, onFilter
   const dispatch = useDispatch()
   const browseOptions = useGetBrowseOptions()
   const view = useSelector(getView)
+  const isSocialEmotesEnabled = useSelector(getIsSocialEmotesEnabled)
 
   const parameters = useMemo(
     () => ({
@@ -33,6 +35,7 @@ const AssetFiltersContainer: React.FC<ContainerProps> = ({ values = {}, onFilter
       adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : browseOptions.adjacentToRoad,
       emoteHasSound: 'emoteHasSound' in values ? values.emoteHasSound : browseOptions.emoteHasSound,
       emoteHasGeometry: 'emoteHasGeometry' in values ? values.emoteHasGeometry : browseOptions.emoteHasGeometry,
+      emoteOutcomeType: 'emoteOutcomeType' in values ? values.emoteOutcomeType : browseOptions.emoteOutcomeType,
       minPrice: 'minPrice' in values ? values.minPrice || '' : browseOptions.minPrice,
       maxPrice: 'maxPrice' in values ? values.maxPrice || '' : browseOptions.maxPrice,
       minEstateSize: 'minEstateSize' in values ? values.minEstateSize || '' : browseOptions.minEstateSize,
@@ -66,6 +69,7 @@ const AssetFiltersContainer: React.FC<ContainerProps> = ({ values = {}, onFilter
       landStatus={landStatus}
       view={view}
       onBrowse={handleBrowse}
+      isSocialEmotesEnabled={isSocialEmotesEnabled}
     />
   )
 }

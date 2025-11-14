@@ -21,6 +21,7 @@ function renderAssetCard(props: Partial<AssetCardProps> = {}) {
       sortBy={SortBy.RECENTLY_LISTED}
       appliedFilters={{ maxPrice: '100', minPrice: '1' }}
       pageName={PageName.ACCOUNT}
+      isSocialEmotesEnabled={false}
       {...props}
     />,
     {

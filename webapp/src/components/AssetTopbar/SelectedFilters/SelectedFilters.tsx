@@ -40,7 +40,8 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
     assetType,
     status,
     emoteHasSound,
-    emoteHasGeometry
+    emoteHasGeometry,
+    emoteOutcomeType
   } = browseOptions
   const [collections, setCollections] = useState<Record<string, string>[] | []>([])
 
@@ -180,6 +181,10 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
     onBrowse({ emoteHasGeometry: undefined })
   }, [onBrowse])
 
+  const handleDeleteEmoteOutcomeType = useCallback(() => {
+    onBrowse({ emoteOutcomeType: undefined })
+  }, [onBrowse])
+
   return (
     <div className={styles.pillContainer}>
       {emoteHasSound ? (
@@ -187,6 +192,9 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
       ) : null}
       {emoteHasGeometry ? (
         <Pill label={t('nft_filters.emote_attributes.with_props')} id="emoteHasGeomtry" onDelete={handleDeleteEmoteHasGeometry} />
+      ) : null}
+      {emoteOutcomeType ? (
+        <Pill label={t('nft_filters.emote_attributes.social')} id="emoteOutcomeType" onDelete={handleDeleteEmoteOutcomeType} />
       ) : null}
       {rarities?.map(rarity => <Pill key={rarity} label={rarity} id={rarity} onDelete={handleDeleteRarity} />)}
       {network ? <Pill label={t(`networks.${network.toLowerCase()}`)} id="network" onDelete={handleDeleteNetwork} /> : null}

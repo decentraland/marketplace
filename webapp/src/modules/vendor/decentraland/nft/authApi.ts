@@ -152,6 +152,18 @@ export class NFTAuthAPI extends BaseClient {
         queryParams.append('rentalDays', rentalDay.toString())
       }
     }
+
+    if (filters.emoteHasGeometry) {
+      queryParams.append('emoteHasGeometry', 'true')
+    }
+
+    if (filters.emoteHasSound) {
+      queryParams.append('emoteHasSound', 'true')
+    }
+
+    if (filters.emoteOutcomeType) {
+      queryParams.append('emoteOutcomeType', filters.emoteOutcomeType)
+    }
   }
 
   private buildNFTQueryString(params: NFTsFetchParams, filters?: NFTsFetchFilters): string {

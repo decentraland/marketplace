@@ -14,11 +14,19 @@ export type Props = {
   rental: RentalListing | null
   sortBy: string | undefined
   appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>
+  isSocialEmotesEnabled: boolean
 }
 
 export type MapStateProps = Pick<
   Props,
-  'pageName' | 'price' | 'showRentalChip' | 'rental' | 'isClaimingBackLandTransactionPending' | 'sortBy' | 'appliedFilters'
+  | 'pageName'
+  | 'price'
+  | 'showRentalChip'
+  | 'rental'
+  | 'isClaimingBackLandTransactionPending'
+  | 'sortBy'
+  | 'appliedFilters'
+  | 'isSocialEmotesEnabled'
 >
 export type OwnProps = Pick<Props, 'asset' | 'order' | 'isManager'>
 export type ContainerProps = Omit<Props, keyof MapStateProps> & { onClick?: () => void }

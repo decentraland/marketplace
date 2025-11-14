@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import classNames from 'classnames'
-import { BodyShape, EmotePlayMode, NFTCategory, Network, Wearable } from '@dcl/schemas'
+import { BodyShape, EmoteOutcomeType, EmotePlayMode, NFTCategory, Network, Wearable } from '@dcl/schemas'
 import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon, Popup } from 'decentraland-ui'
@@ -31,13 +31,14 @@ import { YourOffer } from '../YourOffer'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
-const ItemDetail = ({ item }: Props) => {
+const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
   let description = ''
   let bodyShapes: BodyShape[] = []
   let category
   let loop = false
   let hasSound = false
   let hasGeometry = false
+  let isSocialEmote = false
 
   const tableRef = useRef<HTMLDivElement>(null)
   const requiredPermissions = useSelector((state: RootState) => getRequiredPermissions(state, item.id))
@@ -55,6 +56,7 @@ const ItemDetail = ({ item }: Props) => {
       loop = item.data.emote!.loop
       hasSound = item.data.emote!.hasSound
       hasGeometry = item.data.emote!.hasGeometry
+      isSocialEmote = !!isSocialEmotesEnabled && !!item.data.emote?.outcomeType
       break
   }
 
@@ -78,6 +80,12 @@ const ItemDetail = ({ item }: Props) => {
     assetType: AssetType.ITEM,
     section: Section.EMOTES,
     emoteHasGeometry: true
+  })
+
+  const emoteSocialHref = locations.browse({
+    assetType: AssetType.ITEM,
+    section: Section.EMOTES,
+    emoteOutcomeType: EmoteOutcomeType.SIMPLE_OUTCOME // For now, let's filter if it has outcome or not
   })
 
   return (
@@ -104,7 +112,7 @@ const ItemDetail = ({ item }: Props) => {
                   assetType={AssetType.ITEM}
                 />
               )}
-              {item.category === NFTCategory.EMOTE && (
+              {item.category === NFTCategory.EMOTE && !isSocialEmote && (
                 <IconBadge
                   icon={loop ? 'play-loop' : 'play-once'}
                   text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
@@ -113,6 +121,7 @@ const ItemDetail = ({ item }: Props) => {
               )}
               {hasSound && <IconBadge icon="sound" text={t('emote.sound')} href={emoteSoundHref} />}
               {hasGeometry && <IconBadge icon="props" text={t('emote.props')} href={emoteGeometryHref} />}
+              {isSocialEmote && <IconBadge icon="social" text={t('emote.social')} href={emoteSocialHref} />}
               {bodyShapes.length > 0 && !item.data.emote && (
                 <GenderBadge
                   bodyShapes={bodyShapes}

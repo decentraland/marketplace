@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { EmotePlayMode, OrderSortBy } from '@dcl/schemas'
+import { EmoteOutcomeType, EmotePlayMode, OrderSortBy } from '@dcl/schemas'
 import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../../modules/asset/types'
@@ -24,8 +24,9 @@ import { YourOffer } from '../YourOffer'
 import { Props } from './EmoteDetail.types'
 import styles from './EmoteDetail.module.css'
 
-const EmoteDetail = ({ nft }: Props) => {
+const EmoteDetail = ({ nft, isSocialEmotesEnabled }: Props) => {
   const emote = nft.data.emote!
+  const isSocialEmote = !!isSocialEmotesEnabled && !!nft.data.emote?.outcomeType
   const loop = nft.data.emote!.loop
   const [sortBy, setSortBy] = useState<OrderSortBy>(OrderSortBy.CHEAPEST)
 
@@ -62,7 +63,7 @@ const EmoteDetail = ({ nft }: Props) => {
   const emoteBadgeHref = useMemo(
     () =>
       locations.browse({
-        assetType: AssetType.NFT,
+        assetType: AssetType.ITEM,
         section: Section.EMOTES,
         emotePlayMode: loop ? [EmotePlayMode.LOOP] : [EmotePlayMode.SIMPLE]
       }),
@@ -81,6 +82,12 @@ const EmoteDetail = ({ nft }: Props) => {
     emoteHasGeometry: true
   })
 
+  const emoteSocialHref = locations.browse({
+    assetType: AssetType.ITEM,
+    section: Section.EMOTES,
+    emoteOutcomeType: EmoteOutcomeType.SIMPLE_OUTCOME // For now, let's filter if it has outcome or not
+  })
+
   return (
     <div className={styles.EmoteDetail}>
       <OnBack asset={nft} />
@@ -93,15 +100,18 @@ const EmoteDetail = ({ nft }: Props) => {
             <Title asset={nft} />
             <div className={styles.badges}>
               <RarityBadge rarity={emote.rarity} size="medium" withTooltip />
-              <IconBadge
-                icon={loop ? 'play-loop' : 'play-once'}
-                text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
-                href={emoteBadgeHref}
-              />
+              {!isSocialEmote && (
+                <IconBadge
+                  icon={loop ? 'play-loop' : 'play-once'}
+                  text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
+                  href={emoteBadgeHref}
+                />
+              )}
               {nft.utility ? <UtilityBadge /> : null}
               <CampaignBadge contract={nft.contractAddress} />
               {emote.hasSound && <IconBadge icon="sound" text={t('emote.sound')} href={emoteSoundHref} />}
               {emote.hasGeometry && <IconBadge icon="props" text={t('emote.props')} href={emoteGeometryHref} />}
+              {isSocialEmote && <IconBadge icon="social" text={t('emote.social')} href={emoteSocialHref} />}
             </div>
           </div>
           <div className={styles.attributesRow}>
