@@ -22,7 +22,7 @@ export const NotFound = () => (
 )
 
 const AssetProviderPage = (props: Props) => {
-  const { type, isConnecting, children, fullWidth = false, withEntity } = props
+  const { type, isConnecting, isSocialEmotesEnabled, children, fullWidth = false, withEntity } = props
   const rentalStatuses: RentalStatus[] | undefined = useMemo(
     () => (type === AssetType.NFT ? [RentalStatus.OPEN, RentalStatus.EXECUTED, RentalStatus.CANCELLED] : undefined),
     [type]
@@ -37,7 +37,7 @@ const AssetProviderPage = (props: Props) => {
           <>
             {isLoading ? <Loading fullWidth={fullWidth} /> : null}
             {!isLoading && !asset ? <NotFound /> : null}
-            {!isLoading && asset ? children(asset, order, rental) : null}
+            {!isLoading && asset ? children(asset, order, rental, isSocialEmotesEnabled) : null}
           </>
         )
       }}

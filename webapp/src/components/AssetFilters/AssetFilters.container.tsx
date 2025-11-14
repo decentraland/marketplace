@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { getIsSocialEmotesEnabled } from '../../modules/features/selectors'
 import { browse } from '../../modules/routing/actions'
 import { useGetBrowseOptions } from '../../modules/routing/hooks'
 import { getCategoryFromSection } from '../../modules/routing/search'
@@ -14,6 +15,7 @@ const AssetFiltersContainer: React.FC<ContainerProps> = ({ values = {}, onFilter
   const dispatch = useDispatch()
   const browseOptions = useGetBrowseOptions()
   const view = useSelector(getView)
+  const isSocialEmotesEnabled = useSelector(getIsSocialEmotesEnabled)
 
   const parameters = useMemo(
     () => ({
@@ -67,6 +69,7 @@ const AssetFiltersContainer: React.FC<ContainerProps> = ({ values = {}, onFilter
       landStatus={landStatus}
       view={view}
       onBrowse={handleBrowse}
+      isSocialEmotesEnabled={isSocialEmotesEnabled}
     />
   )
 }

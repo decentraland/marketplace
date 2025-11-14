@@ -52,7 +52,8 @@ export const AssetFilters = ({
   rentalDays,
   emoteHasSound,
   emoteHasGeometry,
-  emoteOutcomeType
+  emoteOutcomeType,
+  isSocialEmotesEnabled
 }: Props): JSX.Element | null => {
   const isInLandSection = isLandSection(section)
 
@@ -124,7 +125,7 @@ export const AssetFilters = ({
         emotePlayMode: value.emotePlayMode,
         emoteHasSound: value.emoteHasSound,
         emoteHasGeometry: value.emoteHasGeometry,
-        emoteOutcomeType: value.emoteOutcomeType
+        ...(isSocialEmotesEnabled ? { emoteOutcomeType: value.emoteOutcomeType } : {})
       })
     },
     [onBrowse]
@@ -245,6 +246,7 @@ export const AssetFilters = ({
           emoteHasSound={emoteHasSound}
           emoteHasGeometry={emoteHasGeometry}
           emoteOutcomeType={emoteOutcomeType}
+          isSocialEmotesEnabled={isSocialEmotesEnabled}
         />
       )}
       {shouldRenderFilter(AssetFilter.Rarity) ? (

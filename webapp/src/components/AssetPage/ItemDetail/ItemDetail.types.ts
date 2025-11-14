@@ -12,4 +12,5 @@ export enum SmartWearableRequiredPermission {
 
 export type Props = {
   item: Item
+  isSocialEmotesEnabled?: boolean
 }

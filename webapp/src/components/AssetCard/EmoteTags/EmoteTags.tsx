@@ -8,9 +8,9 @@ import { Props } from './EmoteTags.types'
 import styles from './EmoteTags.module.css'
 
 const EmoteTags = (props: Props) => {
-  const { asset } = props
+  const { asset, isSocialEmotesEnabled } = props
   const { rarity, loop, hasSound, outcomeType } = asset.data.emote || {}
-  const isSocial = !!outcomeType
+  const isSocial = !!isSocialEmotesEnabled && !!outcomeType
 
   return (
     <div className={classNames([styles.EmoteTags, 'tags'])}>

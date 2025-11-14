@@ -12,4 +12,5 @@ export type Props = {
     emoteOutcomeType?: EmoteOutcomeType
   }) => void
   defaultCollapsed?: boolean
+  isSocialEmotesEnabled?: boolean
 }

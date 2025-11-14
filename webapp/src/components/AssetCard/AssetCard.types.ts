@@ -14,6 +14,7 @@ export type Props = {
   rental: RentalListing | null
   sortBy: string | undefined
   appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice'>
+  isSocialEmotesEnabled: boolean
 }
 
 export type MapStateProps = Pick<
