@@ -63,7 +63,7 @@ const EmoteDetail = ({ nft, isSocialEmotesEnabled }: Props) => {
   const emoteBadgeHref = useMemo(
     () =>
       locations.browse({
-        assetType: AssetType.NFT,
+        assetType: AssetType.ITEM,
         section: Section.EMOTES,
         emotePlayMode: loop ? [EmotePlayMode.LOOP] : [EmotePlayMode.SIMPLE]
       }),
@@ -71,19 +71,19 @@ const EmoteDetail = ({ nft, isSocialEmotesEnabled }: Props) => {
   )
 
   const emoteSoundHref = locations.browse({
-    assetType: AssetType.NFT,
+    assetType: AssetType.ITEM,
     section: Section.EMOTES,
     emoteHasSound: true
   })
 
   const emoteGeometryHref = locations.browse({
-    assetType: AssetType.NFT,
+    assetType: AssetType.ITEM,
     section: Section.EMOTES,
     emoteHasGeometry: true
   })
 
   const emoteSocialHref = locations.browse({
-    assetType: AssetType.NFT,
+    assetType: AssetType.ITEM,
     section: Section.EMOTES,
     emoteOutcomeType: EmoteOutcomeType.SIMPLE_OUTCOME // For now, let's filter if it has outcome or not
   })
