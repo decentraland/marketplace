@@ -32,7 +32,7 @@ const AssetPage = ({ type }: Props) => {
                       asset,
                       {
                         wearable: renderItemDetail,
-                        emote: nft => renderItemDetail(nft, isSocialEmotesEnabled)
+                        emote: item => renderItemDetail(item, isSocialEmotesEnabled)
                       },
                       {
                         ens: nft => <ENSDetail nft={nft} />,
