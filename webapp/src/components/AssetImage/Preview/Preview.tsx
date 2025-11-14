@@ -27,6 +27,7 @@ export const Preview: React.FC<Props> = ({
   isLoadingVideoHash,
   isTryingOn,
   isUnityWearablePreviewEnabled,
+  isSocialEmotesEnabled,
   hasBadges,
   hasFetchedVideoHash,
   onFetchSmartWearableVideoHash,
@@ -165,8 +166,8 @@ export const Preview: React.FC<Props> = ({
   const isBabylonRenderer = useMemo(() => rendererType === PreviewRenderer.BABYLON, [rendererType])
 
   const isSocialEmote = useMemo(() => {
-    return !!asset.data.emote?.outcomeType
-  }, [asset])
+    return !!isSocialEmotesEnabled && !!asset.data.emote?.outcomeType
+  }, [asset, isSocialEmotesEnabled])
 
   const handleSelectSocialEmoteOutcome = useCallback((animation: SocialEmoteAnimation) => {
     setSocialEmote(animation)
@@ -295,6 +296,7 @@ export const Preview: React.FC<Props> = ({
     handleTryOut,
     socialEmote,
     isSocialEmote,
+    isSocialEmotesEnabled,
     handleSelectSocialEmoteOutcome,
     onPlaySmartWearableVideoShowcase
   ])
@@ -346,7 +348,7 @@ export const Preview: React.FC<Props> = ({
             dev={config.is(Env.DEVELOPMENT)}
             unityMode={PreviewUnityMode.MARKETPLACE}
             unity={!isSocialEmote && isUnityWearablePreviewEnabled}
-            socialEmote={socialEmote}
+            socialEmote={isSocialEmote ? socialEmote : undefined}
           />
           {isAvailableForMint && !isOwnerOfNFT && item ? (
             <AvailableForMintPopup

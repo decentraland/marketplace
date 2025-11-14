@@ -3,7 +3,7 @@ import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { fetchSmartWearableVideoHashRequest } from '../../../modules/asset/actions'
 import { getAssetData, getVideoHash, isFetchingVideoHash } from '../../../modules/asset/selectors'
 import { Asset } from '../../../modules/asset/types'
-import { getIsUnityWearablePreviewEnabled } from '../../../modules/features/selectors'
+import { getIsSocialEmotesEnabled, getIsUnityWearablePreviewEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { setIsTryingOn } from '../../../modules/ui/preview/actions'
 import { getIsTryingOn, getWearablePreviewController } from '../../../modules/ui/preview/selectors'
@@ -16,6 +16,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   isLoadingVideoHash: isFetchingVideoHash(state, ownProps.asset.id),
   isTryingOn: getIsTryingOn(state),
   isUnityWearablePreviewEnabled: getIsUnityWearablePreviewEnabled(state),
+  isSocialEmotesEnabled: getIsSocialEmotesEnabled(state),
   hasFetchedVideoHash: 'videoHash' in getAssetData(state, ownProps.asset.id)
 })
 

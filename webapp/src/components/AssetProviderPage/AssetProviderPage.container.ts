@@ -1,12 +1,14 @@
 import { connect } from 'react-redux'
 import { isConnecting } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { AssetType } from '../../modules/asset/types'
+import { getIsSocialEmotesEnabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import AssetProviderPage from './AssetProviderPage'
 import { MapStateProps, OwnProps } from './AssetProviderPage.types'
 
 const mapState = (state: RootState): MapStateProps => ({
-  isConnecting: isConnecting(state)
+  isConnecting: isConnecting(state),
+  isSocialEmotesEnabled: getIsSocialEmotesEnabled(state)
 })
 
 const mapDispatch = () => ({})

@@ -41,6 +41,7 @@ export type Props = {
   withCredits?: boolean
   onBrowse: ActionFunction<typeof browse>
   onFilterChange?: (options: BrowseOptions) => void
+  isSocialEmotesEnabled?: boolean
 }
 
 export type ContainerProps = Pick<Props, 'values' | 'onFilterChange' | 'defaultCollapsed'>

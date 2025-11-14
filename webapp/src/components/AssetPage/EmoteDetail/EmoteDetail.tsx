@@ -24,9 +24,9 @@ import { YourOffer } from '../YourOffer'
 import { Props } from './EmoteDetail.types'
 import styles from './EmoteDetail.module.css'
 
-const EmoteDetail = ({ nft }: Props) => {
+const EmoteDetail = ({ nft, isSocialEmotesEnabled }: Props) => {
   const emote = nft.data.emote!
-  const isSocialEmote = !!nft.data.emote?.outcomeType
+  const isSocialEmote = !!isSocialEmotesEnabled && !!nft.data.emote?.outcomeType
   const loop = nft.data.emote!.loop
   const [sortBy, setSortBy] = useState<OrderSortBy>(OrderSortBy.CHEAPEST)
 
@@ -71,13 +71,13 @@ const EmoteDetail = ({ nft }: Props) => {
   )
 
   const emoteSoundHref = locations.browse({
-    assetType: AssetType.ITEM,
+    assetType: AssetType.NFT,
     section: Section.EMOTES,
     emoteHasSound: true
   })
 
   const emoteGeometryHref = locations.browse({
-    assetType: AssetType.ITEM,
+    assetType: AssetType.NFT,
     section: Section.EMOTES,
     emoteHasGeometry: true
   })
@@ -85,8 +85,7 @@ const EmoteDetail = ({ nft }: Props) => {
   const emoteSocialHref = locations.browse({
     assetType: AssetType.NFT,
     section: Section.EMOTES,
-    // TODO: For now, let's filter if it has outcome or not
-    emoteOutcomeType: EmoteOutcomeType.SIMPLE_OUTCOME
+    emoteOutcomeType: EmoteOutcomeType.SIMPLE_OUTCOME // For now, let's filter if it has outcome or not
   })
 
   return (

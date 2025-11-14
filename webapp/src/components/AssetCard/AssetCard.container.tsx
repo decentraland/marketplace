@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { RentalListing } from '@dcl/schemas'
 import { getAssetPrice, isNFT } from '../../modules/asset/utils'
+import { getIsSocialEmotesEnabled } from '../../modules/features/selectors'
 import { getData } from '../../modules/order/selectors'
 import { getActiveOrder } from '../../modules/order/utils'
 import { RootState } from '../../modules/reducer'
@@ -17,6 +18,7 @@ const AssetCardContainer: React.FC<ContainerProps> = ({ asset, order, isManager,
   const { minPrice, maxPrice, sortBy } = useGetBrowseOptions()
   const pageName = useGetPageName()
   const orders = useSelector(getData)
+  const isSocialEmotesEnabled = useSelector((state: RootState) => getIsSocialEmotesEnabled(state))
 
   const price = useMemo(() => {
     if (order) return null
@@ -51,6 +53,7 @@ const AssetCardContainer: React.FC<ContainerProps> = ({ asset, order, isManager,
       sortBy={sortBy}
       pageName={pageName}
       appliedFilters={appliedFilters}
+      isSocialEmotesEnabled={isSocialEmotesEnabled}
     />
   )
 }

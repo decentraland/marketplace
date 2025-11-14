@@ -15,6 +15,7 @@ export const EmoteAttributesFilter = ({
   emoteHasGeometry,
   emoteOutcomeType,
   onChange,
+  isSocialEmotesEnabled,
   defaultCollapsed = false
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
@@ -36,12 +37,16 @@ export const EmoteAttributesFilter = ({
         value: WITH_GEOMETRY_VALUE,
         text: t('nft_filters.emote_attributes.with_props')
       },
-      {
-        value: WITH_OUTCOME_VALUE,
-        text: t('nft_filters.emote_attributes.social')
-      }
+      ...(isSocialEmotesEnabled
+        ? [
+            {
+              value: WITH_OUTCOME_VALUE,
+              text: t('nft_filters.emote_attributes.social')
+            }
+          ]
+        : [])
     ]
-  }, [])
+  }, [isSocialEmotesEnabled])
 
   const emoteAttributes = useMemo(() => {
     const attributes = []
@@ -51,11 +56,11 @@ export const EmoteAttributesFilter = ({
     if (emoteHasGeometry) {
       attributes.push(WITH_GEOMETRY_VALUE)
     }
-    if (emoteOutcomeType) {
+    if (isSocialEmotesEnabled && emoteOutcomeType) {
       attributes.push(WITH_OUTCOME_VALUE)
     }
     return attributes
-  }, [emoteHasSound, emoteHasGeometry, emoteOutcomeType])
+  }, [emoteHasSound, emoteHasGeometry, emoteOutcomeType, isSocialEmotesEnabled])
 
   const handlePlayModeChange = useCallback(
     (values: string[]) =>
@@ -63,9 +68,9 @@ export const EmoteAttributesFilter = ({
         emotePlayMode: values as EmotePlayMode[],
         emoteHasSound,
         emoteHasGeometry,
-        emoteOutcomeType
+        ...(isSocialEmotesEnabled ? { emoteOutcomeType } : {})
       }),
-    [emoteHasGeometry, emoteHasSound, emoteOutcomeType, onChange]
+    [emoteHasGeometry, emoteHasSound, emoteOutcomeType, isSocialEmotesEnabled, onChange]
   )
 
   const handleEmoteAttributesChange = useCallback(

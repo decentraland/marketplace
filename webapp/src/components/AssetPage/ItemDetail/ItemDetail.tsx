@@ -31,7 +31,7 @@ import { YourOffer } from '../YourOffer'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
-const ItemDetail = ({ item }: Props) => {
+const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
   let description = ''
   let bodyShapes: BodyShape[] = []
   let category
@@ -56,7 +56,7 @@ const ItemDetail = ({ item }: Props) => {
       loop = item.data.emote!.loop
       hasSound = item.data.emote!.hasSound
       hasGeometry = item.data.emote!.hasGeometry
-      isSocialEmote = !!item.data.emote?.outcomeType
+      isSocialEmote = !!isSocialEmotesEnabled && !!item.data.emote?.outcomeType
       break
   }
 

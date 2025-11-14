@@ -15,7 +15,10 @@ import { Props } from './AssetPage.types'
 import './AssetPage.css'
 
 const AssetPage = ({ type }: Props) => {
-  const renderItemDetail = useCallback((item: Item) => <ItemDetail item={item} key={item.id} />, [])
+  const renderItemDetail = useCallback(
+    (item: Item, isSocialEmotesEnabled?: boolean) => <ItemDetail item={item} isSocialEmotesEnabled={isSocialEmotesEnabled} key={item.id} />,
+    []
+  )
   return (
     <PageLayout>
       <Page className="AssetPage">
@@ -23,20 +26,20 @@ const AssetPage = ({ type }: Props) => {
           <Section>
             <Column>
               <AssetProviderPage type={type} fullWidth withEntity>
-                {(asset, order, rental) => (
+                {(asset, order, rental, isSocialEmotesEnabled) => (
                   <div className="asset-container">
                     {mapAsset<React.ReactNode>(
                       asset,
                       {
                         wearable: renderItemDetail,
-                        emote: renderItemDetail
+                        emote: nft => renderItemDetail(nft, isSocialEmotesEnabled)
                       },
                       {
                         ens: nft => <ENSDetail nft={nft} />,
                         estate: nft => <EstateDetail nft={nft} order={order} rental={rental} />,
                         parcel: nft => <ParcelDetail nft={nft} order={order} rental={rental} />,
                         wearable: nft => <WearableDetail nft={nft} />,
-                        emote: nft => <EmoteDetail nft={nft} />
+                        emote: nft => <EmoteDetail nft={nft} isSocialEmotesEnabled={isSocialEmotesEnabled} />
                       },
                       () => null
                     )}
