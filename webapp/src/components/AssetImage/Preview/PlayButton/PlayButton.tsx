@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from 'react'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded'
+import StopRoundedIcon from '@mui/icons-material/StopRounded'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Icon } from 'decentraland-ui'
-import { Button as ButtonMUI, ButtonGroup, Menu, MenuItem } from 'decentraland-ui2'
+import { ButtonGroup } from 'decentraland-ui2'
+import { PlayButton as StyledPlayButton, AnimationsButton, StyledMenu, StyledMenuItem, StyledCheckIcon } from './PlayButton.styled'
 import { PlayButtonProps } from './PlayButton.types'
 
 const MENU_ANCHOR_ORIGIN = {
@@ -46,11 +48,11 @@ export const PlayButton = React.memo<PlayButtonProps>(({ isPlaying, onToggle, so
 
   return (
     <ButtonGroup className="social-emote-controls">
-      <Button className="play-button" size="small" onClick={onToggle}>
-        {isPlaying ? <Icon name="stop" /> : <Icon name="play" />}
+      <StyledPlayButton size="small" onClick={onToggle}>
+        {isPlaying ? <StopRoundedIcon /> : <PlayArrowRoundedIcon />}
         <span>{isPlaying ? t('wearable_preview.stop_emote') : t('wearable_preview.play_emote')}</span>
-      </Button>
-      <ButtonMUI
+      </StyledPlayButton>
+      <AnimationsButton
         id="social-emote-animations-button"
         aria-controls={open ? 'social-emote-animations-menu' : undefined}
         aria-haspopup="true"
@@ -62,8 +64,8 @@ export const PlayButton = React.memo<PlayButtonProps>(({ isPlaying, onToggle, so
         onClick={handleClick}
       >
         {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-      </ButtonMUI>
-      <Menu
+      </AnimationsButton>
+      <StyledMenu
         id="social-emote-animations-menu"
         MenuListProps={{
           'aria-labelledby': 'social-emote-animations-button'
@@ -77,13 +79,13 @@ export const PlayButton = React.memo<PlayButtonProps>(({ isPlaying, onToggle, so
         {socialEmoteAnimations.map((option, index) => {
           const isSelected = index === selectedIndex
           return (
-            <MenuItem key={option.title} selected={isSelected} onClick={event => handleSelectAnimation(event, index)}>
-              <Icon className={classNames('check-icon', { visible: isSelected })} name="check" />
+            <StyledMenuItem key={option.title} selected={isSelected} onClick={event => handleSelectAnimation(event, index)}>
+              <StyledCheckIcon className={classNames({ visible: isSelected })} />
               {option.title}
-            </MenuItem>
+            </StyledMenuItem>
           )
         })}
-      </Menu>
+      </StyledMenu>
     </ButtonGroup>
   )
 })
