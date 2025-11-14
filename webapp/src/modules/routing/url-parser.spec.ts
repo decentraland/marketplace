@@ -1,4 +1,4 @@
-import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
+import { EmoteOutcomeType, EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { View } from '../ui/types'
@@ -1069,7 +1069,7 @@ describe('when getting compound URL parameters', () => {
 
   describe('when getting emote-related URL parameters', () => {
     beforeEach(() => {
-      search = '?emotePlayMode=simple&emoteHasSound=true&emoteHasGeometry=false'
+      search = '?emotePlayMode=simple&emoteHasSound=true&emoteHasGeometry=false&emoteOutcomeType=so'
     })
 
     it('should return emote-related URL parameters', () => {
@@ -1078,7 +1078,7 @@ describe('when getting compound URL parameters', () => {
         emotePlayMode: [EmotePlayMode.SIMPLE],
         emoteHasGeometry: false,
         emoteHasSound: true,
-        emoteOutcomeType: null
+        emoteOutcomeType: EmoteOutcomeType.SIMPLE_OUTCOME
       })
     })
   })
@@ -1538,6 +1538,30 @@ describe('when getting sort by options from URL', () => {
       expect(result.some(option => option.value === SortBy.CHEAPEST)).toBe(true)
       expect(result.some(option => option.value === SortBy.NEWEST)).toBe(true)
       expect(result.some(option => option.value === SortBy.NAME)).toBe(true)
+    })
+  })
+})
+
+describe('when getting emote outcome type from search parameters', () => {
+  let search: string
+
+  describe('and emote outcome type parameter is provided', () => {
+    beforeEach(() => {
+      search = `?emoteOutcomeType=${EmoteOutcomeType.SIMPLE_OUTCOME}`
+    })
+
+    it('should return the emote outcome type', () => {
+      expect(urlParser.getEmoteOutcomeFromSearchParameters(search)).toBe(EmoteOutcomeType.SIMPLE_OUTCOME)
+    })
+  })
+
+  describe('and emote outcome type parameter is not provided', () => {
+    beforeEach(() => {
+      search = '?otherParam=value'
+    })
+
+    it('should return undefined', () => {
+      expect(urlParser.getEmoteOutcomeFromSearchParameters(search)).toBeUndefined()
     })
   })
 })

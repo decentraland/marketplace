@@ -116,7 +116,7 @@ export const getEmoteHasSoundFromSearchParameters = (search: string): boolean =>
 export const getEmoteHasGeometryFromSearchParameters = (search: string): boolean => getURLParam(search, 'emoteHasGeometry') === 'true'
 
 export const getEmoteOutcomeFromSearchParameters = (search: string): EmoteOutcomeType | undefined =>
-  getURLParam(search, 'emoteOutcomeType') as EmoteOutcomeType | undefined
+  (getURLParam(search, 'emoteOutcomeType') as EmoteOutcomeType | undefined) || undefined
 
 export const getWithCreditsFromSearchParameters = (search: string): boolean | undefined =>
   getURLParam(search, 'withCredits') ? getURLParam(search, 'withCredits') === 'true' : undefined
