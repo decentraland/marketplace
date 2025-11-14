@@ -95,7 +95,6 @@
   gap: 5px;
 }
 
-.Preview .asset-emote-controls .ui.button.play-button,
 .Preview .asset-emote-controls .ui.button.sound-button,
 .Preview .asset-wearable-controls .ui.button.play-button {
   color: black;
@@ -121,50 +120,4 @@
 
 .Preview .asset-emote-controls .ui.button.sound-button.enabled::before {
   background-image: url('../../../images/emotes/volume.svg');
-}
-
-.Preview .social-emote-controls .play-button {
-  border-top-right-radius: 0 !important;
-  border-bottom-right-radius: 0 !important;
-}
-
-.Preview .social-emote-controls .play-button:hover {
-  transform: none;
-}
-
-.Preview .social-emote-controls #social-emote-animations-button {
-  min-width: 10px;
-  width: 40px;
-  color: black;
-  background-color: var(--text);
-  border-left-style: solid;
-  border-left-width: 2px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-#social-emote-animations-menu .MuiList-root {
-  background-color: var(--text);
-}
-
-#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root {
-  color: black;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root:hover {
-  background-color: #55555521;
-}
-
-#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root.Mui-selected {
-  background-color: var(--text);
-}
-
-#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root .check-icon {
-  visibility: hidden;
-}
-
-#social-emote-animations-menu .MuiList-root .MuiButtonBase-root.MuiMenuItem-root .check-icon.visible {
-  visibility: visible;
 }
