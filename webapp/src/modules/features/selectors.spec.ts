@@ -14,7 +14,8 @@ import {
   getIsOffchainPublicNFTOrdersEnabled,
   getIsOffchainPublicItemOrdersEnabled,
   getIsCreditsSecondarySalesEnabled,
-  getIsUnityWearablePreviewEnabled
+  getIsUnityWearablePreviewEnabled,
+  getIsSocialEmotesEnabled
 } from './selectors'
 import { FeatureName } from './types'
 
@@ -156,6 +157,12 @@ const waitForInitialLoadingSelectors = [
     name: 'IsUnityWearablePreviewEnabled',
     feature: FeatureName.UNITY_WEARABLE_PREVIEW,
     selector: getIsUnityWearablePreviewEnabled,
+    applicationName: ApplicationName.DAPPS
+  },
+  {
+    name: 'IsSocialEmotePreviewEnabled',
+    feature: FeatureName.SOCIAL_EMOTES,
+    selector: getIsSocialEmotesEnabled,
     applicationName: ApplicationName.DAPPS
   }
 ]
