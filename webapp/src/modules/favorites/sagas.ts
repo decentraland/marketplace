@@ -5,14 +5,14 @@ import { closeModal, CloseModalAction, CLOSE_MODAL, openModal } from 'decentrala
 import { ConnectWalletSuccessAction, CONNECT_WALLET_FAILURE, CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { isErrorWithMessage } from '../../lib/error'
-import { getIsMarketplaceServerEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
+import { getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
 import { getIdentity as getAccountIdentity } from '../identity/utils'
 import { getData as getItemsData } from '../item/selectors'
 import { ItemBrowseOptions } from '../item/types'
 import { getListIdFromCurrentUrlPath } from '../routing/hooks'
 import { locations } from '../routing/locations'
 import { SortDirection } from '../routing/types'
-import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from '../vendor/decentraland'
+import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland'
 import { CatalogAPI } from '../vendor/decentraland/catalog/api'
 import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
 import { ListsSortBy } from '../vendor/decentraland/favorites/types'
@@ -76,8 +76,7 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
     identity: getIdentity
   }
   const favoritesAPI = new FavoritesAPI(MARKETPLACE_SERVER_URL, API_OPTS)
-  const catalogAPI = new CatalogAPI(NFT_SERVER_URL, API_OPTS)
-  const marketplaceServerCatalogAPI = new CatalogAPI(MARKETPLACE_SERVER_URL, API_OPTS)
+  const catalogAPI = new CatalogAPI(MARKETPLACE_SERVER_URL, API_OPTS)
 
   yield takeEvery(FETCH_FAVORITED_ITEMS_REQUEST, handleFetchFavoritedItemsRequest)
   yield takeEvery(FETCH_LISTS_REQUEST, handleFetchListsRequest)
@@ -90,11 +89,6 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
   yield takeEvery(BULK_PICK_START, handleBulkPickStart)
   yield takeEvery(BULK_PICK_REQUEST, handleBulkPickRequest)
   yield takeEvery([BULK_PICK_SUCCESS, BULK_PICK_FAILURE], handleBulkPickSuccessOrFailure)
-
-  function* getCatalogAPI() {
-    const isMarketplaceServerEnabled = (yield select(getIsMarketplaceServerEnabled)) as ReturnType<typeof getIsMarketplaceServerEnabled>
-    return isMarketplaceServerEnabled ? marketplaceServerCatalogAPI : catalogAPI
-  }
 
   function* fetchPreviewItems(previewListsItemIds: string[]) {
     let previewItems: Item[] = []
@@ -109,9 +103,10 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
           ids: previewListsItemIds
         }
 
-        const api = (yield call(getCatalogAPI)) as CatalogAPI
         const isOffchainEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
-        const result = (yield call([api, 'get'], itemFilters, { v2: isOffchainEnabled })) as Awaited<ReturnType<typeof api.get>>
+        const result = (yield call([catalogAPI, 'get'], itemFilters, { v2: isOffchainEnabled })) as Awaited<
+          ReturnType<typeof catalogAPI.get>
+        >
         previewItems = result.data
       }
     }
@@ -147,11 +142,12 @@ export function* favoritesSaga(getIdentity: () => AuthIdentity | undefined) {
         filters: optionsFilters
       }
 
-      const api = (yield call(getCatalogAPI)) as CatalogAPI
       const isOffchainEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
 
       if (results.length > 0) {
-        const result = (yield call([api, 'get'], optionsFilters, { v2: isOffchainEnabled })) as Awaited<ReturnType<typeof api.get>>
+        const result = (yield call([catalogAPI, 'get'], optionsFilters, { v2: isOffchainEnabled })) as Awaited<
+          ReturnType<typeof catalogAPI.get>
+        >
         items = result.data
       }
 

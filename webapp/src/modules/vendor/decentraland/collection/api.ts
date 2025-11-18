@@ -1,17 +1,18 @@
 import { Collection, CollectionFilters } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { NFT_SERVER_URL } from '../nft'
+import { MARKETPLACE_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 import { CollectionResponse } from './types'
 
 class CollectionAPI extends BaseAPI {
   fetch = async (filters: CollectionFilters = {}): Promise<CollectionResponse> => {
     const queryParams = this.buildCollectionsQueryString(filters)
-    return this.request('get', `/collections?${queryParams}`) as Promise<CollectionResponse>
+    return this.request('get', `/collections?${queryParams}`) as Promise<CollectionResponse> // TODO: [Deprecate nft-server] implement collections endpoint in the marketplace server
   }
 
   fetchOne = async (collectionUrn: string): Promise<Collection> => {
     const { data } = (await this.request('get', '/collections', {
+      // TODO: [Deprecate nft-server] implement collections endpoint in the marketplace server
       urn: collectionUrn
     })) as CollectionResponse
 
@@ -61,4 +62,4 @@ class CollectionAPI extends BaseAPI {
   }
 }
 
-export const collectionAPI = new CollectionAPI(NFT_SERVER_URL, retryParams)
+export const collectionAPI = new CollectionAPI(MARKETPLACE_SERVER_URL, retryParams)

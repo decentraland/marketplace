@@ -83,7 +83,7 @@ describe('Listings Table', () => {
 
   describe('Empty table', () => {
     beforeEach(() => {
-      ;(nftAPI.nftAPI.getOwners as jest.Mock).mockResolvedValueOnce({
+      ;(nftAPI.nftMarketplaceAPI.getOwners as jest.Mock).mockResolvedValueOnce({
         data: [],
         total: 0
       })
@@ -108,7 +108,7 @@ describe('Listings Table', () => {
 
   describe('Should render the table correctly', () => {
     beforeEach(() => {
-      ;(nftAPI.nftAPI.getOwners as jest.Mock).mockResolvedValueOnce({
+      ;(nftAPI.nftMarketplaceAPI.getOwners as jest.Mock).mockResolvedValueOnce({
         data: [ownersResponse],
         total: 1
       })

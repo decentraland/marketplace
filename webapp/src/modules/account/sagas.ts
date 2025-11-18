@@ -4,7 +4,7 @@ import { cancelled, select, takeLatest } from 'redux-saga/effects'
 import { Account, AccountSortBy, Network, NFTCategory, Profile } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
-import { accountAPI, nftAPI, NFTResponse, NFTResult } from '../vendor/decentraland'
+import { accountAPI, nftMarketplaceAPI as nftAPI, NFTResponse, NFTResult } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
 import {
   fetchAccountMetricsFailure,

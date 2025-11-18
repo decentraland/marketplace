@@ -5,7 +5,7 @@ import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { Account, AccountFilters, AccountSortBy, Network, NFTCategory, Profile } from '@dcl/schemas'
 import { NFTsFetchParams } from '../nft/types'
-import { accountAPI, nftAPI, NFTResult } from '../vendor/decentraland'
+import { accountAPI, nftMarketplaceAPI as nftAPI, NFTResult } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
 import {
   fetchAccountMetricsFailure,

@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from 'decentraland-dapps/dist/modules/features/selectors'
-import { getIsOffchainPublicItemOrdersEnabled, getIsOffchainPublicNFTOrdersEnabled } from '../../../modules/features/selectors'
 import { useGetBrowseOptions } from '../../../modules/routing/hooks'
 import { getCategoryFromSection } from '../../../modules/routing/search'
 import { Section } from '../../../modules/vendor/routing/types'
@@ -12,8 +11,6 @@ import { ContainerProps } from './PriceFilter.types'
 export const PriceFilterContainer: React.FC<ContainerProps> = props => {
   const browseOptions = useGetBrowseOptions()
   const isLoadingFeatureFlags = useSelector(getIsLoadingFeatureFlags)
-  const isOffchainPublicItemOrdersEnabled = useSelector(getIsOffchainPublicItemOrdersEnabled)
-  const isOffchainPublicNFTOrdersEnabled = useSelector(getIsOffchainPublicNFTOrdersEnabled)
 
   const { values = {}, minPrice, maxPrice, defaultCollapsed, onChange } = props
   const section = 'section' in values ? (values.section as Section) : (browseOptions.section as Section)
@@ -57,8 +54,6 @@ export const PriceFilterContainer: React.FC<ContainerProps> = props => {
       section={section}
       defaultCollapsed={defaultCollapsed}
       isLoadingFeatureFlags={isLoadingFeatureFlags}
-      isOffchainPublicItemOrdersEnabled={isOffchainPublicItemOrdersEnabled}
-      isOffchainPublicNFTOrdersEnabled={isOffchainPublicNFTOrdersEnabled}
       landStatus={landStatus}
       minPrice={minPrice}
       maxPrice={maxPrice}

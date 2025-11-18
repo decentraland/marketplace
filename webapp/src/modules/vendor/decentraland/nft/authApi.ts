@@ -8,7 +8,7 @@ import { FetchOneOptions } from '../../types'
 import { ATLAS_SERVER_URL } from '../land'
 import { NFTsFetchFilters, NFTResponse, NFTResult, OwnersFilters, OwnersResponse } from './types'
 
-export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')
+export const NFT_SERVER_URL = config.get('NFT_SERVER_URL') // TODO: [Deprecate nft-server] deprecate NFT_SERVER_URL (Already done in https://github.com/decentraland/marketplace/pull/2528)
 
 export enum PriceFilterExtraOption {
   LAND = 'land'

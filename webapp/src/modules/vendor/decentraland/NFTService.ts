@@ -15,7 +15,7 @@ export class NFTService implements NFTServiceInterface<VendorName.DECENTRALAND> 
   nftAPI: NFTAuthAPI
 
   constructor(config?: BaseClientConfig | undefined, shouldUseLegacyAPIs = true) {
-    this.nftAPI = shouldUseLegacyAPIs ? new NFTAuthAPI(NFT_SERVER_URL, config) : new NFTAuthAPI(MARKETPLACE_SERVER_URL, config)
+    this.nftAPI = shouldUseLegacyAPIs ? new NFTAuthAPI(NFT_SERVER_URL, config) : new NFTAuthAPI(MARKETPLACE_SERVER_URL, config) // TODO: [Deprecate nft-server] deprecate NFT_SERVER_URL (Already done in https://github.com/decentraland/marketplace/pull/2528)
   }
 
   async fetch(

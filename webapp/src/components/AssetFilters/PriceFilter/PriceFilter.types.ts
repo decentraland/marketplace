@@ -29,8 +29,6 @@ export type Props = {
   isRentalPriceFitlerChartEnabled?: boolean
   emoteHasGeometry?: boolean
   emoteHasSound?: boolean
-  isOffchainPublicItemOrdersEnabled: boolean
-  isOffchainPublicNFTOrdersEnabled: boolean
   isLoadingFeatureFlags: boolean
 }
 
