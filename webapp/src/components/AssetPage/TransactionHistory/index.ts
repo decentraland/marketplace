@@ -1,2 +1,2 @@
-import TransactionHistory from './TransactionHistory.container'
+import TransactionHistory from './TransactionHistory'
 export { TransactionHistory }

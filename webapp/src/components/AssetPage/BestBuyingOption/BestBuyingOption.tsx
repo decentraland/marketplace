@@ -13,7 +13,7 @@ import { AssetType } from '../../../modules/asset/types'
 import { isNFT } from '../../../modules/asset/utils'
 import { Item } from '../../../modules/item/types'
 import { locations } from '../../../modules/routing/locations'
-import { bidAPI as legacyBidAPI, orderAPI as legacyOrderAPI, marketplaceOrderAPI } from '../../../modules/vendor/decentraland'
+import { marketplaceOrderAPI } from '../../../modules/vendor/decentraland'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
 import PriceComponent from '../PriceComponent'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
@@ -21,7 +21,7 @@ import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
 import { BuyOptions, Props } from './BestBuyingOption.types'
 import styles from './BestBuyingOption.module.css'
 
-const BestBuyingOption = ({ asset, tableRef, isOffchainPublicNFTOrdersEnabled }: Props) => {
+const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const [buyOption, setBuyOption] = useState<BuyOptions | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [useCredits, setUseCredits] = useState(false)
@@ -62,42 +62,28 @@ const BestBuyingOption = ({ asset, tableRef, isOffchainPublicNFTOrdersEnabled }:
 
         params.itemId = asset.itemId
 
-        const orderAPI = isOffchainPublicNFTOrdersEnabled ? marketplaceOrderAPI : legacyOrderAPI
-        orderAPI
+        marketplaceOrderAPI
           .fetchOrders(params, sortBy)
           .then(response => {
             if (response.data.length > 0) {
               setBuyOption(BuyOptions.BUY_LISTING)
               setListing({ order: response.data[0], total: response.total })
-              if (isOffchainPublicNFTOrdersEnabled) {
-                marketplaceAPI
-                  .fetchBids({
-                    contractAddress: asset.contractAddress,
-                    tokenId: response.data[0].tokenId,
-                    status: ListingStatus.OPEN,
-                    sortBy: BidSortBy.MOST_EXPENSIVE,
-                    limit: 1
-                  })
-                  .then(({ results }) => {
-                    setIsLoading(false)
-                    setMostExpensiveBid(results[0])
-                  })
-                  .catch(error => {
-                    console.error(error)
-                    setIsLoading(false)
-                  })
-              } else {
-                legacyBidAPI
-                  .fetchByNFT(asset.contractAddress, response.data[0].tokenId, ListingStatus.OPEN, BidSortBy.MOST_EXPENSIVE, '1')
-                  .then(response => {
-                    setIsLoading(false)
-                    setMostExpensiveBid(response.data[0])
-                  })
-                  .catch(error => {
-                    console.error(error)
-                    setIsLoading(false)
-                  })
-              }
+              marketplaceAPI
+                .fetchBids({
+                  contractAddress: asset.contractAddress,
+                  tokenId: response.data[0].tokenId,
+                  status: ListingStatus.OPEN,
+                  sortBy: BidSortBy.MOST_EXPENSIVE,
+                  limit: 1
+                })
+                .then(({ results }) => {
+                  setIsLoading(false)
+                  setMostExpensiveBid(results[0])
+                })
+                .catch(error => {
+                  console.error(error)
+                  setIsLoading(false)
+                })
             } else {
               setIsLoading(false)
             }

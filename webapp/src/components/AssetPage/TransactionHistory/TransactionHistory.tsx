@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { isNFT } from '../../../modules/asset/utils'
 import { NFT } from '../../../modules/nft/types'
-import { saleAPI, marketplaceSaleAPI } from '../../../modules/vendor/decentraland'
+import { marketplaceSaleAPI } from '../../../modules/vendor/decentraland'
 import TableContainer from '../../Table/TableContainer'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
@@ -15,7 +15,7 @@ import './TransactionHistory.css'
 const ROWS_PER_PAGE = 5
 
 const TransactionHistory = (props: Props) => {
-  const { asset, isOffchainPublicItemOrdersEnabled, isOffchainPublicNFTOrdersEnabled } = props
+  const { asset } = props
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const tabList = [
@@ -51,8 +51,7 @@ const TransactionHistory = (props: Props) => {
       } else {
         params.itemId = assetItemId
       }
-      const api = isOffchainPublicItemOrdersEnabled || isOffchainPublicNFTOrdersEnabled ? marketplaceSaleAPI : saleAPI
-      api
+      marketplaceSaleAPI
         .fetch(params)
         .then(response => {
           if (cancel) return

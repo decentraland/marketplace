@@ -8,7 +8,6 @@ import { FetchBidsByAssetRequestAction } from '../../../../modules/bid/actions'
 export type Props = {
   item: Item
   wallet?: Wallet | null
-  isBidsOffchainEnabled: boolean
   bids: Bid[]
   onUseCredits: (value: boolean) => void
   onFetchBids: (asset: Asset) => void
@@ -16,7 +15,7 @@ export type Props = {
 }
 
 export type OwnProps = Pick<Props, 'item' | 'customClassnames'>
-export type MapStateProps = Pick<Props, 'wallet' | 'isBidsOffchainEnabled' | 'bids'>
+export type MapStateProps = Pick<Props, 'wallet' | 'bids'>
 
 export type MapDispatchProps = Pick<Props, 'onFetchBids'>
 export type MapDispatch = Dispatch<OpenModalAction | FetchBidsByAssetRequestAction>

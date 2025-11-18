@@ -12,8 +12,6 @@ import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { upsertContracts } from '../contract/actions'
 import { getContract, getContracts } from '../contract/selectors'
 import { getContractKey, getContractKeyFromNFT, getStubMaticCollectionContract } from '../contract/utils'
-import { getIsOffchainPublicNFTOrdersEnabled } from '../features/selectors'
-import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { getRentalById } from '../rental/selectors'
 import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
 import { AwaitFn } from '../types'
@@ -68,16 +66,9 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
     const hasShownTheExpiredListingsModalBefore = (yield call([localStorage, 'getItem'], EXPIRED_LISTINGS_MODAL_KEY)) as ReturnType<
       typeof localStorage.getItem
     >
-    yield call(waitForFeatureFlagsToBeLoaded)
-    const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
 
     if (hasShownTheExpiredListingsModalBefore !== 'true') {
-      const vendor = (yield call(
-        [VendorFactory, 'build'],
-        VendorName.DECENTRALAND,
-        API_OPTS,
-        !isOffchainPublicNFTOrdersEnabled
-      )) as ReturnType<typeof VendorFactory.build>
+      const vendor = (yield call([VendorFactory, 'build'], VendorName.DECENTRALAND, API_OPTS)) as ReturnType<typeof VendorFactory.build>
       const [, , orders] = (yield call(
         [vendor.nftService, 'fetch'],
         {
@@ -106,11 +97,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
     }
 
     try {
-      yield call(waitForFeatureFlagsToBeLoaded)
-      const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
-      const vendor = (yield call([VendorFactory, 'build'], vendorName, API_OPTS, !isOffchainPublicNFTOrdersEnabled)) as ReturnType<
-        typeof VendorFactory.build
-      >
+      const vendor = (yield call([VendorFactory, 'build'], vendorName, API_OPTS)) as ReturnType<typeof VendorFactory.build>
 
       const [nfts, accounts, orders, rentals, count] = (yield call([vendor.nftService, 'fetch'], params, filters)) as Awaited<
         ReturnType<typeof vendor.nftService.fetch>
@@ -163,12 +150,8 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
       if (!contract.vendor) {
         throw new Error(`Couldn't find a valid vendor for contract ${contract?.address}`)
       }
-      yield call(waitForFeatureFlagsToBeLoaded)
-      const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
 
-      const vendor = (yield call([VendorFactory, 'build'], contract.vendor, API_OPTS, !isOffchainPublicNFTOrdersEnabled)) as ReturnType<
-        typeof VendorFactory.build
-      >
+      const vendor = (yield call([VendorFactory, 'build'], contract.vendor, API_OPTS)) as ReturnType<typeof VendorFactory.build>
 
       const [nft, order, rental] = (yield call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, options)) as AwaitFn<
         typeof vendor.nftService.fetchOne
@@ -193,11 +176,7 @@ export function* nftSaga(getIdentity: () => AuthIdentity | undefined) {
   function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
     const { nft, address } = action.payload
     try {
-      yield call(waitForFeatureFlagsToBeLoaded)
-      const isOffchainPublicNFTOrdersEnabled: boolean = yield select(getIsOffchainPublicNFTOrdersEnabled)
-      const vendor = (yield call([VendorFactory, 'build'], nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)) as ReturnType<
-        typeof VendorFactory.build
-      >
+      const vendor = (yield call([VendorFactory, 'build'], nft.vendor, undefined)) as ReturnType<typeof VendorFactory.build>
 
       const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
       if (!wallet) {

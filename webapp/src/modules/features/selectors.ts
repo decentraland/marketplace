@@ -55,13 +55,6 @@ export const getIsCampaignBrowserEnabled = (state: RootState) => {
   }
 }
 
-export const getIsMarketplaceServerEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.MARKETPLACE_SERVER)
-  }
-  return false
-}
-
 export const getIsLandCrossChainEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.CROSS_CHAIN_LANDS)

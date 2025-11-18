@@ -5,7 +5,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { OwnersResponse } from '../../../modules/vendor/decentraland'
-import * as nftAPI from '../../../modules/vendor/decentraland/nft/api'
+import { nftMarketplaceAPI } from '../../../modules/vendor/decentraland/nft/api'
 import * as orderAPI from '../../../modules/vendor/decentraland/order/api'
 import { renderWithProviders } from '../../../utils/tests'
 import ListingsTable from './ListingsTable'
@@ -83,7 +83,7 @@ describe('Listings Table', () => {
 
   describe('Empty table', () => {
     beforeEach(() => {
-      ;(nftAPI.nftMarketplaceAPI.getOwners as jest.Mock).mockResolvedValueOnce({
+      ;(nftMarketplaceAPI.getOwners as jest.Mock).mockResolvedValueOnce({
         data: [],
         total: 0
       })
@@ -94,7 +94,7 @@ describe('Listings Table', () => {
     })
 
     it('should render the empty table message', async () => {
-      const { getByText, findByTestId } = renderWithProviders(<ListingsTable asset={asset} isOffchainPublicNFTOrdersEnabled={false} />)
+      const { getByText, findByTestId } = renderWithProviders(<ListingsTable asset={asset} />)
 
       const loader = await findByTestId('loader')
 
@@ -108,7 +108,7 @@ describe('Listings Table', () => {
 
   describe('Should render the table correctly', () => {
     beforeEach(() => {
-      ;(nftAPI.nftMarketplaceAPI.getOwners as jest.Mock).mockResolvedValueOnce({
+      ;(nftMarketplaceAPI.getOwners as jest.Mock).mockResolvedValueOnce({
         data: [ownersResponse],
         total: 1
       })
@@ -119,7 +119,7 @@ describe('Listings Table', () => {
     })
 
     it('should render the table', async () => {
-      const screen = renderWithProviders(<ListingsTable asset={asset} isOffchainPublicNFTOrdersEnabled={false} />)
+      const screen = renderWithProviders(<ListingsTable asset={asset} />)
 
       const { findByTestId, getByTestId } = screen
 
@@ -133,7 +133,7 @@ describe('Listings Table', () => {
     })
 
     it('should render the table data correctly', async () => {
-      const screen = renderWithProviders(<ListingsTable asset={asset} isOffchainPublicNFTOrdersEnabled={false} />)
+      const screen = renderWithProviders(<ListingsTable asset={asset} />)
 
       const { findByTestId, getByText } = screen
 

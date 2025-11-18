@@ -14,7 +14,6 @@ import { getAcceptBidStatus, getError } from '../../../../modules/bid/selectors'
 import { getAcceptBidAuthorizationOptions } from '../../../../modules/bid/utils'
 import { useERC721ContractName } from '../../../../modules/contract/hooks'
 import { locations } from '../../../../modules/routing/locations'
-import { bidAPI } from '../../../../modules/vendor/decentraland'
 import { marketplaceAPI } from '../../../../modules/vendor/decentraland/marketplace/api'
 import { AssetProvider } from '../../../AssetProvider'
 import { ConfirmInputValueModal } from '../../../ConfirmInputValueModal'
@@ -30,7 +29,6 @@ const INITIAL_PAGE = 1
 
 export function BidsTableContent({
   asset,
-  isBidsOffchainEnabled,
   address,
   connectedNetwork,
   sortBy,
@@ -63,59 +61,30 @@ export function BidsTableContent({
     let cancel = false
     if (asset) {
       setIsLoading(true)
-      if (isBidsOffchainEnabled) {
-        marketplaceAPI
-          .fetchBids({
-            contractAddress: asset.contractAddress,
-            ...(isNFT(asset) ? { tokenId: asset.tokenId } : { itemId: asset.itemId }),
-            sortBy,
-            limit: ROWS_PER_PAGE,
-            offset: (page - 1) * ROWS_PER_PAGE,
-            status: ListingStatus.OPEN
-          })
-          .then(({ results, total }) => {
-            if (cancel) return
-            setTotal(total)
-            setBids(formatDataToTable(results, bid => setShowConfirmationModal({ display: true, bid }), address, isMobileOrTablet))
-            setTotalPages(Math.ceil(total / ROWS_PER_PAGE))
-          })
-          .finally(() => !cancel && setIsLoading(false))
-          .catch(error => {
-            console.error(error)
-          })
-      } else {
-        if (isNFT(asset)) {
-          bidAPI
-            .fetchByNFT(
-              asset.contractAddress,
-              asset.tokenId,
-              null,
-              sortBy,
-              ROWS_PER_PAGE.toString(),
-              ((page - 1) * ROWS_PER_PAGE).toString()
-            )
-            .then(response => {
-              if (cancel) return
-              setTotal(response.total)
-              setBids(
-                formatDataToTable(
-                  response.data.filter(bid => bid.bidder !== address),
-                  bid => setShowConfirmationModal({ display: true, bid }),
-                  address,
-                  isMobileOrTablet
-                )
-              )
-              setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
-            })
-            .finally(() => !cancel && setIsLoading(false))
-            .catch(error => {
-              console.error(error)
-            })
-        }
-      }
-      return () => {
-        cancel = true
-      }
+      marketplaceAPI
+        .fetchBids({
+          contractAddress: asset.contractAddress,
+          ...(isNFT(asset) ? { tokenId: asset.tokenId } : { itemId: asset.itemId }),
+          sortBy,
+          limit: ROWS_PER_PAGE,
+          offset: (page - 1) * ROWS_PER_PAGE,
+          status: ListingStatus.OPEN
+        })
+        .then(({ results, total }) => {
+          if (cancel) return
+          setTotal(total)
+          setBids(formatDataToTable(results, bid => setShowConfirmationModal({ display: true, bid }), address, isMobileOrTablet))
+          setTotalPages(Math.ceil(total / ROWS_PER_PAGE))
+        })
+        .finally(() => !cancel && setIsLoading(false))
+        .catch(error => {
+          console.error(error)
+          setBids([])
+        })
+    }
+
+    return () => {
+      cancel = true
     }
   }, [asset, setIsLoading, setBids, page, sortBy, address, isMobileOrTablet])
 
@@ -123,7 +92,7 @@ export function BidsTableContent({
     const isAuthorizationCostingGas =
       bid.network === Network.ETHEREUM || (bid.network as Network.ETHEREUM | Network.MATIC) === connectedNetwork
     const options = getAcceptBidAuthorizationOptions(bid, () => onAccept(bid), targetContractLabel)
-    if (isBidsOffchainEnabled && options) {
+    if (options) {
       onAuthorizedAction({ ...options, manual: isAuthorizationCostingGas })
       return
     }

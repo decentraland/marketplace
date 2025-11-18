@@ -17,12 +17,7 @@ import { ContractName, getContract } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { fetchSmartWearableRequiredPermissionsRequest } from '../asset/actions'
 import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
-import {
-  getIsCreditsEnabled,
-  getIsMarketplaceServerEnabled,
-  getIsOffchainPublicItemOrdersEnabled,
-  getIsOffchainPublicNFTOrdersEnabled
-} from '../features/selectors'
+import { getIsCreditsEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { locations } from '../routing/locations'
 import { View } from '../ui/types'
@@ -597,10 +592,7 @@ describe('when handling the fetch collections items request action', () => {
 
     it('should dispatch a successful action with the fetched items from marketplace server api', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([
-          [select(getIsOffchainPublicItemOrdersEnabled), true],
-          [matchers.call.fn(ItemAPI.prototype.get), fetchResult]
-        ])
+        .provide([[matchers.call.fn(ItemAPI.prototype.get), fetchResult]])
         .call.like({
           fn: ItemAPI.prototype.get,
           args: [{ first: 10, contractAddresses: [] }]
@@ -614,10 +606,7 @@ describe('when handling the fetch collections items request action', () => {
   describe('when the request fails', () => {
     it('should dispatch a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([
-          [select(getIsOffchainPublicItemOrdersEnabled), true],
-          [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]
-        ])
+        .provide([[matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]])
         .put(fetchCollectionItemsFailure(anError.message))
         .dispatch(fetchCollectionItemsRequest({ contractAddresses: [], first: 10 }))
         .run({ silenceTimeout: true })
@@ -662,9 +651,6 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
-                [select(getIsOffchainPublicItemOrdersEnabled), true],
-                [select(getIsOffchainPublicNFTOrdersEnabled), false],
-                [select(getIsMarketplaceServerEnabled), true],
                 [getContext('history'), { location: { pathname } }],
                 {
                   call(effect, next) {
@@ -700,9 +686,6 @@ describe('when handling the fetch items request action', () => {
                 [matchers.call.fn(waitForWalletConnectionAndIdentityIfConnecting), undefined],
                 [matchers.call.fn(waitForFeatureFlagsToBeLoaded), undefined],
                 [select(getWallet), wallet],
-                [select(getIsOffchainPublicItemOrdersEnabled), true],
-                [select(getIsOffchainPublicNFTOrdersEnabled), false],
-                [select(getIsMarketplaceServerEnabled), true],
                 [getContext('history'), { location: { pathname } }],
                 {
                   call(effect, next) {
