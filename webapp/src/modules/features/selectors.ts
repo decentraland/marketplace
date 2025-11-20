@@ -105,3 +105,10 @@ export const getIsUnityWearablePreviewEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsSocialEmotesEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.SOCIAL_EMOTES)
+  }
+  return false
+}

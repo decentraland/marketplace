@@ -103,6 +103,7 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
     'status',
     'emoteHasSound',
     'emoteHasGeometry',
+    'emoteOutcomeType',
     'withCredits'
   ]
 

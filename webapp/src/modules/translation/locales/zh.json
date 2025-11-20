@@ -396,7 +396,8 @@
       "all_play_modes": "所有游戏模式",
       "all_items": "所有的情绪",
       "with_sound": "有声音的",
-      "with_props": "与道具"
+      "with_props": "与道具",
+      "social": "社交"
     },
     "body_shapes": {
       "title": "身材",
@@ -749,7 +750,8 @@
       "loop": "循环播放"
     },
     "sound": "声音",
-    "props": "道具"
+    "props": "道具",
+    "social": "社交"
   },
   "smart_wearable": {
     "play_showcase": "播放展示视频",
