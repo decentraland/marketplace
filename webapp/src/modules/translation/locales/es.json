@@ -393,7 +393,8 @@
       "all_play_modes": "Todos",
       "all_items": "Todos los emotes",
       "with_sound": "con sonido",
-      "with_props": "con props"
+      "with_props": "con props",
+      "social": "Social"
     },
     "body_shapes": {
       "title": "Género",
@@ -748,7 +749,8 @@
       "loop": "Reproduce en bucle"
     },
     "sound": "Sonido",
-    "props": "Accesorios"
+    "props": "Accesorios",
+    "social": "Social"
   },
   "smart_wearable": {
     "play_showcase": "Reproducir vista previa",

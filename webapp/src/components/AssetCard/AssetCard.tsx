@@ -87,7 +87,8 @@ const AssetCard = (props: Props) => {
     isClaimingBackLandTransactionPending,
     rental,
     sortBy,
-    appliedFilters
+    appliedFilters,
+    isSocialEmotesEnabled
   } = props
 
   const { ref, inView } = useInView()
@@ -198,7 +199,7 @@ const AssetCard = (props: Props) => {
               {parcel ? <ParcelTags nft={asset as NFT} /> : null}
               {estate ? <EstateTags nft={asset as NFT} /> : null}
               {wearable ? <WearableTags asset={asset} /> : null}
-              {emote ? <EmoteTags asset={asset} /> : null}
+              {emote ? <EmoteTags asset={asset} isSocialEmotesEnabled={isSocialEmotesEnabled} /> : null}
               {ens ? <ENSTags nft={asset as NFT} /> : null}
             </Card.Content>
           </>

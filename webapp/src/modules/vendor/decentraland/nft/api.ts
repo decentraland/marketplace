@@ -193,6 +193,10 @@ class NFTAPI extends BaseAPI {
     if (filters.emoteHasSound) {
       queryParams.append('emoteHasSound', 'true')
     }
+
+    if (filters.emoteOutcomeType) {
+      queryParams.append('emoteOutcomeType', filters.emoteOutcomeType)
+    }
   }
 
   private buildNFTQueryString(params: NFTsFetchParams, filters?: NFTsFetchFilters): string {

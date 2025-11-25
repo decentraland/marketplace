@@ -20,6 +20,7 @@ export type Props = {
   isLoadingVideoHash?: boolean
   isTryingOn?: boolean
   isUnityWearablePreviewEnabled?: boolean
+  isSocialEmotesEnabled?: boolean
   hasBadges?: boolean
   hasFetchedVideoHash?: boolean
   onSetTryingOn: typeof setIsTryingOn
@@ -31,7 +32,13 @@ export type OwnProps = Pick<Props, 'asset' | 'avatar' | 'children' | 'item' | 'w
 
 export type MapStateProps = Pick<
   Props,
-  'videoHash' | 'wearablePreviewController' | 'isLoadingVideoHash' | 'isTryingOn' | 'isUnityWearablePreviewEnabled' | 'hasFetchedVideoHash'
+  | 'videoHash'
+  | 'wearablePreviewController'
+  | 'isLoadingVideoHash'
+  | 'isTryingOn'
+  | 'isUnityWearablePreviewEnabled'
+  | 'isSocialEmotesEnabled'
+  | 'hasFetchedVideoHash'
 >
 
 export type MapDispatchProps = Pick<Props, 'onSetTryingOn' | 'onPlaySmartWearableVideoShowcase' | 'onFetchSmartWearableVideoHash'>
