@@ -7,12 +7,11 @@ import { AccountResponse } from './types'
 class AccountAPI extends BaseAPI {
   fetch = async (filters: AccountFilters = {}): Promise<AccountResponse> => {
     const queryParams = this.buildAccountsQueryString(filters)
-    return this.request('get', `/accounts?${queryParams}`) as Promise<AccountResponse> // TODO: [Deprecate nft-server] implement accounts endpoint in the marketplace server
+    return this.request('get', `/accounts?${queryParams}`) as Promise<AccountResponse>
   }
 
   fetchOne = async (address: string): Promise<Account> => {
     const { data } = (await this.request('get', '/collections', {
-      // TODO: [Deprecate nft-server] implement collections endpoint in the marketplace server
       address
     })) as AccountResponse
 

@@ -87,7 +87,7 @@ describe('Listings Table', () => {
         data: [],
         total: 0
       })
-      ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
+      ;(orderAPI.marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
         data: [],
         total: 0
       })
@@ -112,7 +112,7 @@ describe('Listings Table', () => {
         data: [ownersResponse],
         total: 1
       })
-      ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
+      ;(orderAPI.marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
         data: [orderResponse],
         total: 1
       })

@@ -7,12 +7,11 @@ import { CollectionResponse } from './types'
 class CollectionAPI extends BaseAPI {
   fetch = async (filters: CollectionFilters = {}): Promise<CollectionResponse> => {
     const queryParams = this.buildCollectionsQueryString(filters)
-    return this.request('get', `/collections?${queryParams}`) as Promise<CollectionResponse> // TODO: [Deprecate nft-server] implement collections endpoint in the marketplace server
+    return this.request('get', `/collections?${queryParams}`) as Promise<CollectionResponse>
   }
 
   fetchOne = async (collectionUrn: string): Promise<Collection> => {
     const { data } = (await this.request('get', '/collections', {
-      // TODO: [Deprecate nft-server] implement collections endpoint in the marketplace server
       urn: collectionUrn
     })) as CollectionResponse
 

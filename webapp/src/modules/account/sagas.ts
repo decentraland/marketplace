@@ -64,7 +64,8 @@ export function* accountSaga(catalystLambdasClient: LambdasClient) {
         addresses = new Set(ens.map(nft => nft.nft.owner))
       } else {
         const { data }: { data: Account[] } = yield call([accountAPI, 'fetch'], {
-          sortBy: AccountSortBy.MOST_COLLECTIONS
+          sortBy: AccountSortBy.MOST_COLLECTIONS,
+          first: DEFAULT_FIRST_VALUE // TODO: [Deprecate nft-server] even though the nft server is not receiving the first parameter, it is retrieving the first 20 accounts
         })
         accounts = data
         addresses = new Set([...accounts.map(nft => nft.address)])

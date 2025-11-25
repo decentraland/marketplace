@@ -28,5 +28,4 @@ class SaleAPI extends BaseAPI {
   }
 }
 
-export const saleAPI = new SaleAPI(MARKETPLACE_SERVER_URL, retryParams) // TODO: [Deprecate nft-server] deprecate saleAPI
 export const marketplaceSaleAPI = new SaleAPI(MARKETPLACE_SERVER_URL, retryParams)

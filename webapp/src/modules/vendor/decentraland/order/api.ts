@@ -30,5 +30,4 @@ export class OrderAPI extends BaseAPI {
   }
 }
 
-export const orderAPI = new OrderAPI(MARKETPLACE_SERVER_URL, retryParams) // TODO: [Deprecate nft-server] deprecate orderAPI
 export const marketplaceOrderAPI = new OrderAPI(MARKETPLACE_SERVER_URL, retryParams)
