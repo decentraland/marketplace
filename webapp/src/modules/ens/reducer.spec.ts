@@ -7,10 +7,15 @@ import {
   claimNameRequest,
   claimNameCrossChainRequest,
   claimNameCrossChainSuccess,
+  claimNameWithCreditsRequest,
+  claimNameWithCreditsSuccess,
+  claimNameWithCreditsFailure,
   CLAIM_NAME_REQUEST,
   CLAIM_NAME_CROSS_CHAIN_REQUEST,
+  CLAIM_NAME_WITH_CREDITS_REQUEST,
   CLAIM_NAME_FAILURE,
   CLAIM_NAME_CROSS_CHAIN_FAILURE,
+  CLAIM_NAME_WITH_CREDITS_FAILURE,
   claimNameCrossChainFailure
 } from './actions'
 import { ENSState, ensReducer } from './reducer'
@@ -31,7 +36,11 @@ describe('ENS Reducer', () => {
     ens = { subdomain: 'example' } as ENS
   })
 
-  const requestActions = [claimNameRequest('example'), claimNameCrossChainRequest('example', ChainId.ETHEREUM_MAINNET, {} as Route)]
+  const requestActions = [
+    claimNameRequest('example'),
+    claimNameCrossChainRequest('example', ChainId.ETHEREUM_MAINNET, {} as Route),
+    claimNameWithCreditsRequest('example')
+  ]
 
   describe.each(requestActions)('when reducing the "$type" action', action => {
     initialState = { ...INITIAL_STATE } as ENSState
@@ -57,6 +66,11 @@ describe('ENS Reducer', () => {
       CLAIM_NAME_CROSS_CHAIN_REQUEST,
       claimNameCrossChainRequest('example', ChainId.ETHEREUM_MAINNET, {} as Route),
       claimNameCrossChainSuccess({ subdomain: 'example' } as ENS, 'example', 'aTxHash', {} as Route)
+    ],
+    [
+      CLAIM_NAME_WITH_CREDITS_REQUEST,
+      claimNameWithCreditsRequest('example'),
+      claimNameWithCreditsSuccess({ subdomain: 'example' } as ENS, 'example', 'aTxHash')
     ]
   ])('when reducing the "%s" action', (_action, requestAction, successAction) => {
     beforeEach(() => {
@@ -87,6 +101,12 @@ describe('ENS Reducer', () => {
       CLAIM_NAME_CROSS_CHAIN_FAILURE,
       claimNameCrossChainRequest('example', ChainId.ETHEREUM_MAINNET, {} as Route),
       claimNameCrossChainFailure({} as Route, 'example', 'An error'),
+      'An error'
+    ],
+    [
+      CLAIM_NAME_WITH_CREDITS_FAILURE,
+      claimNameWithCreditsRequest('example'),
+      claimNameWithCreditsFailure('example', 'An error'),
       'An error'
     ]
   ])('when handling the "$s" action', (_action, requestAction, failureAction, expectedError) => {

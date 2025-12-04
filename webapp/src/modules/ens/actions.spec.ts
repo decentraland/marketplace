@@ -15,7 +15,15 @@ import {
   claimNameCrossChainFailure,
   CLAIM_NAME_CROSS_CHAIN_REQUEST,
   CLAIM_NAME_CROSS_CHAIN_SUCCESS,
-  CLAIM_NAME_CROSS_CHAIN_FAILURE
+  CLAIM_NAME_CROSS_CHAIN_FAILURE,
+  claimNameWithCreditsRequest,
+  claimNameWithCreditsTransactionSubmitted,
+  claimNameWithCreditsSuccess,
+  claimNameWithCreditsFailure,
+  CLAIM_NAME_WITH_CREDITS_REQUEST,
+  CLAIM_NAME_WITH_CREDITS_TRANSACTION_SUBMITTED,
+  CLAIM_NAME_WITH_CREDITS_SUCCESS,
+  CLAIM_NAME_WITH_CREDITS_FAILURE
 } from './actions'
 import { ENS, ENSError } from './types'
 
@@ -146,6 +154,67 @@ describe('claimName actions', () => {
       expect(claimNameCrossChainFailure(route, name, error)).toEqual({
         type: CLAIM_NAME_CROSS_CHAIN_FAILURE,
         payload: { error, name, route }
+      })
+    })
+  })
+})
+
+describe('claimNameWithCredits actions', () => {
+  let name: string
+  let subdomain: string
+  let address: string
+  let chainId: ChainId
+  let txHash: string
+  let ens: ENS
+  let error: string
+
+  beforeEach(() => {
+    name = 'exampleName'
+    subdomain = 'example'
+    address = '0xExampleAddress'
+    chainId = ChainId.MATIC_MAINNET
+    txHash = '0xExampleTxHash'
+    ens = {} as ENS
+    error = 'anError'
+  })
+
+  describe('when executing the claim name with credits request action creator', () => {
+    it('should create an action to request a name claim with credits', () => {
+      expect(claimNameWithCreditsRequest(name)).toEqual({
+        type: CLAIM_NAME_WITH_CREDITS_REQUEST,
+        payload: { name }
+      })
+    })
+  })
+
+  describe('when executing the claim name with credits transaction submitted action creator', () => {
+    it('should create an action to signal that a name claim with credits transaction is submitted', () => {
+      expect(claimNameWithCreditsTransactionSubmitted(subdomain, address, chainId, txHash)).toEqual({
+        type: CLAIM_NAME_WITH_CREDITS_TRANSACTION_SUBMITTED,
+        payload: {
+          ...buildTransactionPayload(chainId, txHash, {
+            subdomain,
+            address
+          })
+        }
+      })
+    })
+  })
+
+  describe('when executing the claim name with credits success action creator', () => {
+    it('should create an action to signal that a name claim with credits is successful', () => {
+      expect(claimNameWithCreditsSuccess(ens, name, txHash)).toEqual({
+        type: CLAIM_NAME_WITH_CREDITS_SUCCESS,
+        payload: { ens, name, txHash }
+      })
+    })
+  })
+
+  describe('when executing the claim name with credits failure action creator', () => {
+    it('should create an action to signal a name claim with credits failure', () => {
+      expect(claimNameWithCreditsFailure(name, error)).toEqual({
+        type: CLAIM_NAME_WITH_CREDITS_FAILURE,
+        payload: { name, error }
       })
     })
   })

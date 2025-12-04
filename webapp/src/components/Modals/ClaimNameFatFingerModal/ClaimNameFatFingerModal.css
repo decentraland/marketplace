@@ -188,6 +188,85 @@
   line-height: 22px;
 }
 
+.ClaimNameFatFingerModal .priceAndCreditsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 24px;
+  margin-top: 24px;
+  padding: 20px;
+  background: #232129;
+  border-radius: 8px;
+}
+
+.ClaimNameFatFingerModal .priceDisplay {
+  flex: 1;
+  min-width: 0;
+}
+
+.ClaimNameFatFingerModal .priceDisplay .priceLabel {
+  font-size: 12px;
+  color: #a09ba8;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ClaimNameFatFingerModal .priceWithCredits,
+.ClaimNameFatFingerModal .priceWithoutCredits {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.ClaimNameFatFingerModal .priceDisplay .manaSymbol {
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.ClaimNameFatFingerModal .priceDisplay .originalPrice {
+  font-size: 30px;
+  font-weight: 700;
+  color: #716b7c;
+  flex-shrink: 0;
+}
+
+.ClaimNameFatFingerModal .priceDisplay .originalPrice.strikethrough {
+  text-decoration: line-through;
+}
+
+.ClaimNameFatFingerModal .priceDisplay .finalPriceValue {
+  font-size: 30px;
+  font-weight: 700;
+  color: #a0abff;
+  flex-shrink: 0;
+}
+
+.ClaimNameFatFingerModal .priceWithoutCredits .finalPriceValue {
+  color: #ffffff;
+}
+
+.ClaimNameFatFingerModal .priceDisplay .fiatEquivalent {
+  font-size: 16px;
+  color: #a09ba8;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.ClaimNameFatFingerModal .creditsToggleWrapper {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ClaimNameFatFingerModal .creditsToggleWrapper .MuiBox-root {
+  margin-bottom: 0;
+}
+
 .ClaimNameFatFingerModal.ui.modal .ui.form .dcl.field .ui.input input::placeholder {
   color: #716b7c;
   font-size: 16px;
@@ -238,6 +317,12 @@
 
   .ClaimNameFatFingerModal .baseGradient {
     width: 100%;
+  }
+
+  /* 🆕 Responsive: Price and Credits Row */
+  .ClaimNameFatFingerModal .priceAndCreditsRow {
+    flex-direction: column;
+    gap: 16px;
   }
 
   .ClaimNameFatFingerModal.ui.modal > .ui.form > .actions {

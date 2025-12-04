@@ -6,7 +6,7 @@ import { getNetworkProvider } from 'decentraland-dapps/dist/lib'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
-import type { CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
+import type { CreditsManagerRouteResponse, CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { API_SIGNER } from '../../../lib/api'
 import { NFT } from '../../../modules/nft/types'
@@ -285,7 +285,8 @@ export const useCrossChainNameMintingRoute = (
   selectedChain: ChainId,
   providerTokens: Token[],
   crossChain: CrossChainProvider | undefined,
-  wallet: Wallet | null
+  wallet: Wallet | null,
+  withCredits: boolean
 ) => {
   const getMintingNameRoute = useCallback(
     (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) =>
@@ -300,7 +301,17 @@ export const useCrossChainNameMintingRoute = (
       }),
     [name, assetChainId, price]
   )
-  return useCrossChainRoute(price, assetChainId, selectedToken, selectedChain, providerTokens, crossChain, wallet, getMintingNameRoute)
+  return useCrossChainRoute(
+    price,
+    assetChainId,
+    selectedToken,
+    selectedChain,
+    providerTokens,
+    crossChain,
+    wallet,
+    getMintingNameRoute,
+    withCredits
+  )
 }
 
 export type RouteFeeCost = {
@@ -319,6 +330,8 @@ export type CrossChainRoute = {
   routeTotalUSDCost: number | undefined
   isFetchingRoute: boolean
   routeFailed: boolean
+  refetchRoute?: () => void
+  creditsRouteResult?: CreditsManagerRouteResponse
 }
 
 const useCrossChainRoute = (
@@ -335,7 +348,8 @@ const useCrossChainRoute = (
     fromChain: ChainId,
     fromToken: string,
     crossChainProvider: CrossChainProvider
-  ) => Promise<Route>
+  ) => Promise<Route>,
+  withCredits = false
 ): CrossChainRoute => {
   const [isFetchingRoute, setIsFetchingRoute] = useState(false)
   const [routeFailed, setRouteFailed] = useState(false)
@@ -378,7 +392,6 @@ const useCrossChainRoute = (
         setRoute(route)
       }
     } catch (error) {
-      console.error('Error while getting Route: ', error)
       getAnalytics()?.track(events.ERROR_GETTING_ROUTE, {
         error,
         selectedToken,
@@ -431,7 +444,11 @@ const useCrossChainRoute = (
       const isPayingWithOtherTokenThanMANA = selectedToken.symbol !== 'MANA'
       const isPayingWithMANAButFromOtherChain = selectedToken.symbol === 'MANA' && selectedToken.chainId !== assetChainId.toString()
 
-      if (isBuyingL1WithOtherTokenThanEthereumMANA || isPayingWithOtherTokenThanMANA || isPayingWithMANAButFromOtherChain) {
+      // The only cross-chain route to use credits is for NAMEs and it's calculated server-side
+      if (
+        (isBuyingL1WithOtherTokenThanEthereumMANA || isPayingWithOtherTokenThanMANA || isPayingWithMANAButFromOtherChain) &&
+        !withCredits
+      ) {
         void calculateRoute()
       }
     }

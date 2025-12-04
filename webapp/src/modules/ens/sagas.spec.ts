@@ -4,6 +4,8 @@ import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { ChainId } from '@dcl/schemas'
 import { getSigner, getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -23,7 +25,9 @@ import {
   claimNameRequest,
   claimNameCrossChainRequest,
   claimNameCrossChainFailure,
-  claimNameCrossChainSuccess
+  claimNameCrossChainSuccess,
+  claimNameWithCreditsRequest,
+  claimNameWithCreditsFailure
 } from './actions'
 import { ensSaga } from './sagas'
 import { ENS } from './types'
@@ -312,6 +316,69 @@ describe('ENS Saga', () => {
           ])
           .put(claimNameFailure({ message: error.message }))
           .dispatch(mockAction)
+          .silentRun()
+      })
+    })
+  })
+
+  describe('when handling a claim name with credits request action', () => {
+    let mockName: string
+    let mockWallet: Wallet
+    let mockCredits: CreditsResponse
+
+    beforeEach(() => {
+      mockName = 'testname'
+      mockWallet = {
+        address: '0xWalletAddress',
+        chainId: ChainId.MATIC_MAINNET
+      } as Wallet
+      mockCredits = {
+        credits: [
+          {
+            id: '0x123',
+            amount: '150000000000000000000',
+            availableAmount: '150000000000000000000',
+            expiresAt: '1234567890',
+            signature: '0xsignature',
+            contract: '0xCreditsManager',
+            season: 1,
+            timestamp: '1234567890',
+            userAddress: mockWallet.address
+          }
+        ],
+        totalCredits: 150000000000000000000
+      }
+    })
+
+    describe('and no credits are available', () => {
+      beforeEach(() => {
+        mockCredits = {
+          credits: [],
+          totalCredits: 0
+        }
+      })
+
+      it('should put a failure action', () => {
+        return expectSaga(ensSaga)
+          .provide([
+            [select(getWallet), mockWallet],
+            [select(getCredits, mockWallet.address), mockCredits]
+          ])
+          .put(claimNameWithCreditsFailure(mockName, 'No credits available'))
+          .dispatch(claimNameWithCreditsRequest(mockName))
+          .silentRun()
+      })
+    })
+
+    describe('and the wallet is not connected', () => {
+      it('should put a failure action', () => {
+        return expectSaga(ensSaga)
+          .provide([
+            [select(getWallet), null],
+            [select(getCredits, ''), mockCredits]
+          ])
+          .put(claimNameWithCreditsFailure(mockName, 'Wallet not connected'))
+          .dispatch(claimNameWithCreditsRequest(mockName))
           .silentRun()
       })
     })

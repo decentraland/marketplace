@@ -59,6 +59,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     onBuyNatively,
     onBuyWithCard,
     onBuyCrossChain,
+    onBuyWithCredits,
     onGetMana,
     onClose,
     onGoBack
@@ -98,12 +99,30 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const { gasCost, isFetchingGasCost } = onGetGasCost(selectedToken, chainNativeToken, wallet)
 
+  const hasCredits = useMemo(() => credits && credits.totalCredits > 0, [credits])
+
+  // Calculate final price when using credits
+  const finalPrice = useMemo(() => {
+    if (!useCredits || !credits || !credits.totalCredits) {
+      return price
+    }
+    const totalCreditsAmount = ethers.BigNumber.from(credits.totalCredits.toString())
+    const priceAmount = ethers.BigNumber.from(price)
+    const finalAmount = priceAmount.sub(totalCreditsAmount.gt(priceAmount) ? priceAmount : totalCreditsAmount)
+    return finalAmount.toString()
+  }, [price, useCredits, credits])
+
+  // Native: same chain + same token (MANA) + no credits
+  const isCreditsTransaction = useMemo(() => useCredits && hasCredits, [useCredits, hasCredits])
+
+  // For credits transactions, no route is fetched (it's calculated on backend when "Buy Now" is clicked)
   const { route, fromAmount, routeFeeCost, routeTotalUSDCost, isFetchingRoute, routeFailed } = onGetCrossChainRoute(
     selectedToken,
     selectedChain,
     providerTokens,
     crossChainProvider,
-    wallet
+    wallet,
+    !!isCreditsTransaction
   )
 
   useEffect(() => {
@@ -196,12 +215,14 @@ export const BuyWithCryptoModal = (props: Props) => {
             selectedTokenBalance))
       ) {
         let canBuy
+        const priceToCheck = finalPrice // Use finalPrice (adjusted for credits)
+
         if (selectedToken.symbol === 'MANA' && wallet) {
           // wants to buy a L2 item with ETH MANA (through the provider)
           if (asset.network === Network.MATIC && getNetwork(selectedChain) === Network.ETHEREUM) {
-            canBuy = wallet.networks[Network.ETHEREUM].mana >= +ethers.utils.formatEther(price)
+            canBuy = wallet.networks[Network.ETHEREUM].mana >= +ethers.utils.formatEther(priceToCheck)
           } else {
-            canBuy = wallet.networks[asset.network].mana >= +ethers.utils.formatEther(price)
+            canBuy = wallet.networks[asset.network].mana >= +ethers.utils.formatEther(priceToCheck)
           }
           if (!canBuy) {
             setInsufficientToken(selectedToken)
@@ -236,6 +257,8 @@ export const BuyWithCryptoModal = (props: Props) => {
     crossChainProvider,
     fromAmount,
     price,
+    finalPrice,
+    useCredits,
     providerTokens,
     routeFeeCost,
     selectedChain,
@@ -313,9 +336,12 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [isFetchingBalance, isBuyingAsset, asset.chainId, isLoadingAuthorization, onBuyWithCard, handleBuyWithCard, onGetMana, onClose])
 
   const renderBuyNowButton = useCallback(() => {
-    // if L1 asset and paying with ETH MANA
-    // or if L2 asset and paying with MATIC MANA => native buy
-    const onClick = shouldUseCrossChainProvider ? handleCrossChainBuy : onBuyNatively
+    const onClick =
+      useCredits && asset.data.ens && onBuyWithCredits
+        ? onBuyWithCredits
+        : shouldUseCrossChainProvider
+          ? handleCrossChainBuy
+          : onBuyNatively
 
     let buttonText: string | null = null
     if (isFetchingRoute) {
@@ -355,14 +381,23 @@ export const BuyWithCryptoModal = (props: Props) => {
     isUsingMagic,
     onBuyNatively,
     handleCrossChainBuy,
-    shouldUseCrossChainProvider
+    shouldUseCrossChainProvider,
+    useCredits,
+    asset.data.ens,
+    onBuyWithCredits
   ])
 
   const renderMainActionButton = useCallback(() => {
-    // has a selected token and canBuyAsset was computed
+    const hasEnoughCredits =
+      useCredits &&
+      credits &&
+      credits.totalCredits &&
+      ethers.BigNumber.from(credits.totalCredits.toString()).gte(ethers.BigNumber.from(price))
+
     if (wallet && selectedToken && canBuyAsset !== undefined) {
       // if can't buy Get Mana and Buy With Card buttons
-      if (!canBuyAsset) {
+      // BUT if using credits and has enough, allow checkout
+      if (!canBuyAsset && !hasEnoughCredits) {
         return renderGetMANAButton()
       }
 
@@ -372,7 +407,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       }
 
       // for L1 NFTs
-      if (asset.network === Network.ETHEREUM) {
+      if (asset.network === Network.ETHEREUM && !isCreditsTransaction) {
         // if tries to buy with ETH MANA and connected to other network, should switch to ETH network to pay directly
         return selectedToken.symbol === 'MANA' &&
           (wallet.network as Network) !== Network.ETHEREUM &&
@@ -382,7 +417,6 @@ export const BuyWithCryptoModal = (props: Props) => {
       }
 
       // for L2 NFTs paying with MANA
-
       // And connected to MATIC, should render the buy now button otherwise check if a meta tx is available
       if (getNetwork(selectedChain) === Network.MATIC) {
         return (wallet.network as Network) === Network.MATIC
@@ -405,12 +439,16 @@ export const BuyWithCryptoModal = (props: Props) => {
     route,
     asset,
     price,
+    finalPrice,
     routeFailed,
     selectedChain,
     hasLowPriceForMetaTx,
     renderBuyNowButton,
     renderSwitchNetworkButton,
-    renderGetMANAButton
+    renderGetMANAButton,
+    useCredits,
+    credits,
+    isCreditsTransaction
   ])
 
   const onTokenOrChainSelection = useCallback(
@@ -561,16 +599,16 @@ export const BuyWithCryptoModal = (props: Props) => {
                 </div>
                 <div className={styles.priceContainer}>
                   <Mana network={asset.network} inline withTooltip>
-                    {formatWeiMANA(price)}
+                    {formatWeiMANA(finalPrice)}
                   </Mana>
                   <span className={styles.priceInUSD}>
-                    <ManaToFiat mana={price} digits={4} />
+                    <ManaToFiat mana={finalPrice} digits={4} />
                   </span>
                 </div>
               </div>
 
               <PaymentSelector
-                price={price}
+                price={finalPrice}
                 wallet={wallet}
                 isBuyingAsset={isBuyingAsset}
                 providerTokens={providerTokens}
@@ -587,11 +625,13 @@ export const BuyWithCryptoModal = (props: Props) => {
                 amountInSelectedToken={fromAmount}
                 route={route}
                 routeFeeCost={routeFeeCost}
+                useCredits={useCredits}
+                hasCredits={!!asset.data.ens && !!credits && credits.totalCredits > 0}
               />
 
               <PurchaseTotal
                 selectedToken={selectedToken}
-                price={price}
+                price={finalPrice}
                 useMetaTx={useMetaTx}
                 shouldUseCrossChainProvider={shouldUseCrossChainProvider}
                 route={route}
@@ -609,7 +649,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                     <span>
                       <Icon name="clock outline" /> {t('buy_with_crypto_modal.durations.transaction_duration')}{' '}
                     </span>
-                    {route ? (
+                    {route && route.route?.estimate?.estimatedRouteDuration !== undefined ? (
                       t(
                         `buy_with_crypto_modal.durations.${
                           route.route.estimate.estimatedRouteDuration === 0
@@ -628,9 +668,9 @@ export const BuyWithCryptoModal = (props: Props) => {
                       <span className={styles.exchangeIcon} />
                       <span> {t('buy_with_crypto_modal.exchange_rate')} </span>
                     </div>
-                    {route && selectedToken ? (
+                    {route && route.route?.estimate?.exchangeRate && selectedToken ? (
                       <>
-                        1 {selectedToken.symbol} = {route.route.estimate.exchangeRate?.slice(0, 7)} MANA
+                        1 {selectedToken.symbol} = {route.route.estimate.exchangeRate.slice(0, 7)} MANA
                       </>
                     ) : (
                       <span className={classNames(styles.skeleton, styles.fromAmountUSDSkeleton)} />
