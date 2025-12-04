@@ -6,7 +6,7 @@ import { getNetworkProvider } from 'decentraland-dapps/dist/lib'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'
-import type { CreditsManagerRouteResponse, CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
+import type { CrossChainProvider, Route, RouteResponse, Token } from 'decentraland-transactions/crossChain'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { API_SIGNER } from '../../../lib/api'
 import { NFT } from '../../../modules/nft/types'
@@ -210,6 +210,7 @@ export const useCrossChainMintNftRoute = (
         fetchTradeData: async () => {
           const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(item.tradeId as string)
           return {
+            marketplaceAddress: trade.contract,
             onChainTrade: getOnChainTrade(trade, fromAddress)
           }
         }
@@ -256,6 +257,7 @@ export const useCrossChainBuyNftRoute = (
                   order.tradeId as string
                 )
                 return {
+                  marketplaceAddress: trade.contract,
                   onChainTrade: getOnChainTrade(trade, wallet.address)
                 }
               }
@@ -331,7 +333,6 @@ export type CrossChainRoute = {
   isFetchingRoute: boolean
   routeFailed: boolean
   refetchRoute?: () => void
-  creditsRouteResult?: CreditsManagerRouteResponse
 }
 
 const useCrossChainRoute = (
