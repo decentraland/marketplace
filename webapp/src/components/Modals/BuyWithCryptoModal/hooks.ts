@@ -210,6 +210,7 @@ export const useCrossChainMintNftRoute = (
         fetchTradeData: async () => {
           const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(item.tradeId as string)
           return {
+            marketplaceContract: trade.contract,
             onChainTrade: getOnChainTrade(trade, fromAddress)
           }
         }
@@ -256,6 +257,7 @@ export const useCrossChainBuyNftRoute = (
                   order.tradeId as string
                 )
                 return {
+                  marketplaceContract: trade.contract,
                   onChainTrade: getOnChainTrade(trade, wallet.address)
                 }
               }
