@@ -32,6 +32,9 @@ type Props = {
   selectedTokenBalance: ethers.BigNumber | undefined
   onShowChainSelector: () => unknown
   onShowTokenSelector: () => unknown
+  useCredits?: boolean
+  totalCredits?: string
+  hasCredits?: boolean
 }
 
 const getUsdRouteCost = (routeFeeCost: RouteFeeCost, tokens: Token[]): string => {
@@ -57,7 +60,8 @@ const PaymentSelector = (props: Props) => {
     selectedTokenBalance,
     isFetchingBalance,
     onShowChainSelector,
-    onShowTokenSelector
+    onShowTokenSelector,
+    useCredits
   } = props
 
   const canSelectChainAndToken = useMemo(() => {
@@ -84,13 +88,16 @@ const PaymentSelector = (props: Props) => {
           <div>
             <span>{t('buy_with_crypto_modal.pay_with')}</span>
             <div
-              className={classNames(styles.tokenAndChainSelector, isBuyingAsset ? styles.dropdownDisabled : styles.dropdownEnabled)}
+              className={classNames(
+                styles.tokenAndChainSelector,
+                isBuyingAsset || useCredits ? styles.dropdownDisabled : styles.dropdownEnabled
+              )}
               data-testid={CHAIN_SELECTOR_DATA_TEST_ID}
-              onClick={!isBuyingAsset ? onShowChainSelector : undefined}
+              onClick={!isBuyingAsset && !useCredits ? onShowChainSelector : undefined}
             >
               <img src={selectedProviderChain?.nativeCurrency.icon} alt={selectedProviderChain?.nativeCurrency.name} />
               <span className={styles.tokenAndChainSelectorName}> {selectedProviderChain?.networkName} </span>
-              {<Icon name="chevron down" />}
+              <Icon name="chevron down" />
             </div>
           </div>
           <div className={styles.tokenDropdownContainer}>
@@ -98,21 +105,22 @@ const PaymentSelector = (props: Props) => {
               className={classNames(
                 styles.tokenAndChainSelector,
                 styles.tokenDropdown,
-                isBuyingAsset ? styles.dropdownDisabled : styles.dropdownEnabled
+                isBuyingAsset || useCredits ? styles.dropdownDisabled : styles.dropdownEnabled
               )}
               data-testid={TOKEN_SELECTOR_DATA_TEST_ID}
-              onClick={!isBuyingAsset ? onShowTokenSelector : undefined}
+              onClick={!isBuyingAsset && !useCredits ? onShowTokenSelector : undefined}
             >
               <img src={selectedToken.logoURI} alt={selectedToken.name} />
               <span className={styles.tokenAndChainSelectorName}>{selectedToken.symbol} </span>
               <div className={styles.balanceContainer}>
                 {t('buy_with_crypto_modal.balance')}: {renderTokenBalance()}
               </div>
-              {!isBuyingAsset && <Icon name="chevron down" />}
+              {!isBuyingAsset && !useCredits && <Icon name="chevron down" />}
             </div>
           </div>
         </div>
       ) : null}
+
       <div className={styles.costContainer}>
         {selectedToken ? (
           <>
@@ -159,24 +167,45 @@ const PaymentSelector = (props: Props) => {
                   />
                 </div>
                 <div className={styles.fromAmountContainer}>
-                  {gasCost && gasCost.token ? (
-                    <div className={styles.fromAmountTokenContainer}>
-                      <TokenIcon src={gasCost.token.logoURI} name={gasCost.token.name} />
-                      {formatPrice(gasCost.total, gasCost.token)}
-                    </div>
-                  ) : !!route && routeFeeCost ? (
-                    <div className={styles.fromAmountTokenContainer}>
-                      <TokenIcon src={route.route.estimate.gasCosts[0].token.logoURI} name={route.route.estimate.gasCosts[0].token.name} />
-                      {routeFeeCost.totalCost}
+                  {useCredits ? (
+                    // When paying with credits, show fee struck through with 0
+                    <div className={styles.priceContainer}>
+                      <TokenIcon src={selectedToken.logoURI} name={selectedToken.name} />
+                      <span className={styles.originalPrice}>
+                        {gasCost && gasCost.token
+                          ? formatPrice(gasCost.total, gasCost.token)
+                          : !!route && routeFeeCost
+                            ? routeFeeCost.totalCost
+                            : '0'}
+                      </span>
+                      <span className={styles.adjustedPrice}>0</span>
                     </div>
                   ) : (
-                    <div className={classNames(styles.skeleton, styles.estimatedFeeSkeleton)} />
+                    // Normal display without credits
+                    <>
+                      {gasCost && gasCost.token ? (
+                        <div className={styles.fromAmountTokenContainer}>
+                          <TokenIcon src={gasCost.token.logoURI} name={gasCost.token.name} />
+                          {formatPrice(gasCost.total, gasCost.token)}
+                        </div>
+                      ) : !!route && routeFeeCost ? (
+                        <div className={styles.fromAmountTokenContainer}>
+                          <TokenIcon
+                            src={route.route.estimate.gasCosts[0].token.logoURI}
+                            name={route.route.estimate.gasCosts[0].token.name}
+                          />
+                          {routeFeeCost.totalCost}
+                        </div>
+                      ) : (
+                        <div className={classNames(styles.skeleton, styles.estimatedFeeSkeleton)} />
+                      )}
+                      {gasCost && gasCost.totalUSDPrice ? (
+                        <span className={styles.fromAmountUSD}>≈ ${gasCost.totalUSDPrice.toFixed(4)}</span>
+                      ) : usdRouteFeeCost ? (
+                        <span className={styles.fromAmountUSD}>≈ ${usdRouteFeeCost}</span>
+                      ) : null}
+                    </>
                   )}
-                  {gasCost && gasCost.totalUSDPrice ? (
-                    <span className={styles.fromAmountUSD}>≈ ${gasCost.totalUSDPrice.toFixed(4)}</span>
-                  ) : usdRouteFeeCost ? (
-                    <span className={styles.fromAmountUSD}>≈ ${usdRouteFeeCost}</span>
-                  ) : null}
                 </div>
               </div>
             ) : null}
