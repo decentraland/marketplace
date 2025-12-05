@@ -4,6 +4,51 @@
   height: 100%;
 }
 
+.claimNamePageContainer .nameCostContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+.claimNamePageContainer .priceSection {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: nowrap;
+}
+
+.claimNamePageContainer .priceSection :global(.ui.header.dcl.mana.inline) {
+  margin-bottom: 0;
+}
+
+.claimNamePageContainer .divider {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  margin: 0 4px;
+}
+
+.claimNamePageContainer .creditCompatible {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.claimNamePageContainer .creditCompatible img {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  position: static !important;
+  opacity: 1 !important;
+  left: auto !important;
+  top: auto !important;
+  margin-left: 0 !important;
+}
+
 .claimNamePageContainer .card {
   background-color: var(--card);
   border-radius: 16px;
@@ -126,14 +171,17 @@
 
 .claimNamePage .nameCost {
   margin-top: 54px;
-  transition: opacity 1s ease; /* Adjust the duration as needed */
+  transition: opacity 1s ease;
   position: relative;
   margin-left: -14px;
   font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.claimNamePage .nameCost div {
-  margin-top: 8px;
+.claimNamePage .nameCost > div {
+  margin-top: 0;
 }
 
 .claimNamePage .mainContainer .claimContainer .nameCost img {
@@ -276,10 +324,7 @@
   top: 13px;
 }
 
-.claimNamePage
-  .claimContainer
-  .remainingCharactersContainer
-  :global(.ui.tiny.active.inline.loader) {
+.claimNamePage .claimContainer .remainingCharactersContainer :global(.ui.tiny.active.inline.loader) {
   margin-right: 12px;
 }
 
@@ -426,12 +471,7 @@
   position: absolute;
   aspect-ratio: 1/1;
   width: 130%;
-  background-image: radial-gradient(
-      100% 100% at 6% 9%,
-      #ffbc5bff 2%,
-      #ffffff00 73%
-    ),
-    linear-gradient(60deg, #ff2d55 18%, #c640cd 100%);
+  background-image: radial-gradient(100% 100% at 6% 9%, #ffbc5bff 2%, #ffffff00 73%), linear-gradient(60deg, #ff2d55 18%, #c640cd 100%);
   z-index: -1;
   animation: rotate 4s linear infinite;
 }
@@ -558,6 +598,16 @@
     text-align: center;
     margin-top: 72px;
     margin-left: 0;
+  }
+
+  .claimNamePageContainer .nameCostContainer {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .claimNamePageContainer .divider {
+    margin: 0 8px;
   }
 
   .claimNamePage .mainContainer .claimContainer .nameCost img {

@@ -7,6 +7,7 @@ import { Button, Close, Container, Field, Icon, Loader, Popup, useTabletAndBelow
 import { config } from '../../../config'
 import ClaimNameBanner from '../../../images/claim-name-banner.png'
 import ClaimNameImage from '../../../images/claim-name.svg'
+import CreditsIcon from '../../../images/icon-credits.svg'
 import infoIcon from '../../../images/infoIcon.png'
 import Chest from '../../../images/names/chest.png'
 import CreateImg from '../../../images/names/create.png'
@@ -333,37 +334,40 @@ const ClaimNamePage = (props: Props) => {
                 </div>
 
                 <span className={classNames(styles.nameCost, isInputFocus && styles.fadeOut)}>
-                  {t('names_page.name_cost', {
-                    mana: (
-                      <>
-                        <Mana inline /> 100 MANA
-                      </>
-                    ),
-                    network: <span className={styles.nameCostNetwork}>{t('names_page.ethereum_mainnet_network')}</span>
-                  })}
-                  <Popup
-                    content={t('names_page.dao_tooltip', {
-                      link: (
-                        <a
-                          href="https://decentraland.zone/governance/proposal/?id=a3bdc100-9b34-11ed-ae61-5f6dd0bf8358"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {t('global.learn_more')}
-                        </a>
-                      )
-                    })}
-                    position="top center"
-                    hoverable
-                    mouseLeaveDelay={500}
-                    trigger={<img src={infoIcon} alt="info" className={styles.informationTooltip} />}
-                    on="hover"
-                  />
-                  <div>
-                    {t('names_page.name_cost_fiat', {
-                      icon: <Icon name="credit card outline" />
-                    })}
-                    <span className={styles.cardsLabel}>{t('names_page.debit_and_credit_cards')}</span>
+                  <div className={styles.nameCostContainer}>
+                    <div className={styles.priceSection}>
+                      {t('names_page.name_cost', {
+                        mana: (
+                          <>
+                            <Mana inline /> 100 MANA
+                          </>
+                        ),
+                        network: <span className={styles.nameCostNetwork}>{t('names_page.ethereum_mainnet_network')}</span>
+                      })}
+                      <Popup
+                        content={t('names_page.dao_tooltip', {
+                          link: (
+                            <a
+                              href="https://decentraland.zone/governance/proposal/?id=a3bdc100-9b34-11ed-ae61-5f6dd0bf8358"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {t('global.learn_more')}
+                            </a>
+                          )
+                        })}
+                        position="top center"
+                        hoverable
+                        mouseLeaveDelay={500}
+                        trigger={<img src={infoIcon} alt="info" className={styles.informationTooltip} />}
+                        on="hover"
+                      />
+                    </div>
+                    <span className={styles.divider}>|</span>
+                    <div className={styles.creditCompatible}>
+                      <img src={CreditsIcon} alt="Credits" />
+                      {t('names_page.credit_compatitble')}
+                    </div>
                   </div>
                 </span>
               </div>

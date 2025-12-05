@@ -23,13 +23,14 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     name: modalName,
     isMintingName,
     isMintingNameCrossChain,
-    metadata: { name },
+    metadata: { name, useCredits },
     isUsingMagic,
     isLoadingAuthorization,
     getContract,
     onAuthorizedAction,
     onClaimName,
     onClaimNameCrossChain,
+    onClaimNameWithCredits,
     onOpenFatFingerModal,
     onCloseFatFingerModal,
     onClose
@@ -65,7 +66,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   }, [name, getContract, onAuthorizedAction, onClaimName])
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
-    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
+    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet, withCredits = false) =>
       useCrossChainNameMintingRoute(
         name,
         PRICE_IN_WEI,
@@ -74,7 +75,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
         selectedChain,
         providerTokens,
         crossChainProvider,
-        wallet
+        wallet,
+        withCredits
       ),
     [name]
   )
@@ -93,6 +95,10 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     onCloseFatFingerModal()
     return onClose()
   }, [onClose])
+
+  const onBuyWithCredits = useCallback(() => {
+    onClaimNameWithCredits()
+  }, [onClaimNameWithCredits])
 
   // Emulates a NFT for the item to be minted so it can be shown in the modal
   const asset: NFT = useMemo(
@@ -129,11 +135,13 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
       isBuyingAsset={isMintingName || isMintingNameCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyCrossChain={onClaimNameCrossChain}
+      onBuyWithCredits={onBuyWithCredits}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}
       isUsingMagic={isUsingMagic}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset }}
+      useCredits={useCredits}
       name={modalName}
       onGoBack={onGoBack}
       onClose={onCloseModal}

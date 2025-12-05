@@ -16,9 +16,11 @@ import {
   CLAIM_NAME_CROSS_CHAIN_SUCCESS,
   CLAIM_NAME_SUCCESS,
   CLAIM_NAME_TRANSACTION_SUBMITTED,
+  CLAIM_NAME_WITH_CREDITS_SUCCESS,
   ClaimNameCrossChainSuccessAction,
   ClaimNameSuccessAction,
-  ClaimNameTransactionSubmittedAction
+  ClaimNameTransactionSubmittedAction,
+  ClaimNameWithCreditsSuccessAction
 } from '../ens/actions'
 import { REGISTRAR_ADDRESS } from '../ens/sagas'
 import { getData as getEventsData } from '../event/selectors'
@@ -77,7 +79,14 @@ export function* routingSaga() {
   )
 
   yield takeEvery(
-    [EXECUTE_ORDER_SUCCESS, BUY_ITEM_SUCCESS, BUY_ITEM_CROSS_CHAIN_SUCCESS, CLAIM_NAME_SUCCESS, CLAIM_NAME_CROSS_CHAIN_SUCCESS],
+    [
+      EXECUTE_ORDER_SUCCESS,
+      BUY_ITEM_SUCCESS,
+      BUY_ITEM_CROSS_CHAIN_SUCCESS,
+      CLAIM_NAME_SUCCESS,
+      CLAIM_NAME_CROSS_CHAIN_SUCCESS,
+      CLAIM_NAME_WITH_CREDITS_SUCCESS
+    ],
     handleRedirectToSuccessPage
   )
   yield takeEvery(CLAIM_NAME_TRANSACTION_SUBMITTED, handleRedirectClaimingNameToSuccessPage)
@@ -628,6 +637,7 @@ function* handleRedirectToSuccessPage(
     | BuyItemCrossChainSuccessAction
     | ClaimNameSuccessAction
     | ClaimNameCrossChainSuccessAction
+    | ClaimNameWithCreditsSuccessAction
 ) {
   const history: History = yield getContext('history')
   const payload = action.payload

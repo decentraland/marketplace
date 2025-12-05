@@ -1530,8 +1530,8 @@
       "view_item": "View my item",
       "try_genesis_city": "Try it in Genesis city",
       "try_it_on_in_world": "Try it on In-World",
-      "mint_more_names": "Mint more names",
-      "set_as_primary_name": "Set as Primary Name",
+      "mint_more_names": "Get more names",
+      "set_as_primary_name": "Assign name to Avatar",
       "manage_names": "MANAGE MY NAMEs",
       "manage_land": "Manage LAND",
       "start_building": "Start building"
@@ -1597,7 +1597,7 @@
     "fingerprint_missmatch": "The information of this LAND may not be updated. Please refresh the page to get the latest information. If the problem persists, please contact our support team."
   },
   "names_page": {
-    "title": "Claim your Decentraland NAME",
+    "title": "Claim your NAME, Unlock Your World!",
     "subtitle": "Activate the full potential of Decentraland citizenship with a unique NAME, Voting Power, & your own World!",
     "claim_a_name": "Claim NAME",
     "browse_names_being_resold": "Browse NAMEs being resold",
@@ -1610,6 +1610,7 @@
     "not_available": "Unavailable NAME. {link}",
     "marketplace": "See if it's on sale in the Marketplace.",
     "name_cost": "A NAME costs {mana} {network}",
+    "credit_compatitble": "Credit Compatible!",
     "name_cost_fiat": "You can also pay using FIAT {icon}",
     "debit_and_credit_cards": "Debit and Credit Cards",
     "ethereum_mainnet_network": "Ethereum Mainnet Network",
@@ -1622,10 +1623,12 @@
     "not_enough_mana": "You don't have enough MANA to claim a new NAME",
     "fiat_payments_not_enabled": "FIAT payments are not enabled at the moment. Please try later.",
     "claim_name_fat_finger_modal": {
-      "title": "Please confirm your new NAME",
+      "title": "Confirm your new NAME",
       "description": "You have chosen {name}. {br} Re-enter your NAME to confirm your selection.",
       "ok_message": "Congratulations the name {name} is yours.",
       "caps_warning": "The capitalization of NAMEs cannot be modified once claimed.",
+      "price_label": "Total Price",
+      "price": "PRICE",
       "paying_with": "Paying with",
       "pay_methods": {
         "crypto": {

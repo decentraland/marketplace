@@ -1510,8 +1510,8 @@
       "view_item": "查看我的物品",
       "try_genesis_city": "在创世纪尝试",
       "try_it_on_in_world": "在世界中体验",
-      "mint_more_names": "铸造更多名字",
-      "set_as_primary_name": "设置为主名称",
+      "mint_more_names": "获取更多名字",
+      "set_as_primary_name": "将名字分配给头像",
       "manage_names": "管理我的名字",
       "manage_land": "管理土地",
       "start_building": "开始建造"
@@ -1577,7 +1577,7 @@
     "fingerprint_missmatch": "这片土地的信息可能不会更新。请刷新页面以获取最新信息。如果问题仍然存在，请联系我们的支持团队。"
   },
   "names_page": {
-    "title": "索取您的 Decentraland NAME",
+    "title": "索取您的 NAME，解锁您的世界！",
     "subtitle": "通过独特的名称、投票权和您自己的世界，充分发挥 Decentraland 公民身份的潜力！",
     "claim_a_name": "索赔名称",
     "browse_names_being_resold": "浏览正在转售的 NAME",
@@ -1594,6 +1594,7 @@
     "debit_and_credit_cards": "借记卡和信用卡",
     "ethereum_mainnet_network": "以太坊主网网络",
     "dao_tooltip": "NAME 销售的所有收益都将转入 DAO 金库。{link}",
+    "credit_compatitble": "积分兼容！",
     "why_names": "为什么要获取 NAME？",
     "name_too_short": "名称太短：名称的长度必须至少为 2 个字符。",
     "has_spaces": "NAME 不能包含空格。",
@@ -1602,10 +1603,12 @@
     "not_enough_mana": "您没有足够的 MANA 来申请新名称",
     "fiat_payments_not_enabled": "目前不支持法定货币支付。请稍后再试",
     "claim_name_fat_finger_modal": {
-      "title": "请确认您的新名称",
+      "title": "确认您的新名称",
       "description": "您已选择{name}。 {br}重新输入您的姓名以确认您的选择。",
       "ok_message": "恭喜您获得了名称 {name}。",
       "caps_warning": "名称的大小写一旦声明就无法修改。",
+      "price_label": "总价",
+      "price": "价格",
       "paying_with": "付款方式",
       "pay_methods": {
         "crypto": {

@@ -17,7 +17,8 @@ export type OnGetCrossChainRoute = (
   selectedChain: ChainId,
   providerTokens: Token[],
   crossChainProvider: CrossChainProvider | undefined,
-  wallet: Wallet | null
+  wallet: Wallet | null,
+  withCredits?: boolean
 ) => CrossChainRoute
 
 export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | 'isUsingMagic'> &
@@ -38,6 +39,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
     onBuyWithCard?: () => unknown
     onBuyCrossChain: (route: Route) => unknown
     onGetMana: ActionFunction<typeof openBuyManaWithFiatModalRequest>
+    onBuyWithCredits?: () => unknown
     onClose: ModalProps['onClose']
   }
 
@@ -50,11 +52,12 @@ export type ContainerProps = Pick<
   | 'onBuyNatively'
   | 'onBuyWithCard'
   | 'onBuyCrossChain'
+  | 'onBuyWithCredits'
+  | 'onClose'
   | 'onGetGasCost'
   | 'isUsingMagic'
   | 'isLoadingAuthorization'
   | 'onGetCrossChainRoute'
-  | 'onClose'
   | 'onGoBack'
   | 'name'
 >
