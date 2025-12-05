@@ -249,7 +249,7 @@ describe('when handling the execute order request action', () => {
     let mockCredits: CreditsResponse
 
     beforeEach(() => {
-      vendor = VendorFactory.build(nft.vendor, undefined, false)
+      vendor = VendorFactory.build(nft.vendor, undefined)
 
       mockCredits = {
         totalCredits: 200000000000,
@@ -278,7 +278,7 @@ describe('when handling the execute order request action', () => {
             [select(getWallet), wallet],
             [select(getIsCreditsEnabled), true],
             [select(getCredits, wallet.address), mockCredits],
-            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
             [matchers.call.fn(CreditsService.prototype.useCreditsLegacyMarketplace), Promise.resolve(txHash)]
           ])
           .put(executeOrderTransactionSubmitted(order, nft, txHash))
@@ -297,7 +297,7 @@ describe('when handling the execute order request action', () => {
             [select(getIsOffchainPublicNFTOrdersEnabled), false],
             [select(getWallet), wallet],
             [select(getIsCreditsEnabled), false],
-            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor]
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor]
           ])
           .put(executeOrderFailure(order, nft, 'Credits are not enabled', undefined, false))
           .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
@@ -314,7 +314,7 @@ describe('when handling the execute order request action', () => {
             [select(getWallet), wallet],
             [select(getIsCreditsEnabled), true],
             [select(getCredits, wallet.address), undefined],
-            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor]
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor]
           ])
           .put(executeOrderFailure(order, nft, 'No credits available', undefined, false))
           .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
@@ -331,7 +331,7 @@ describe('when handling the execute order request action', () => {
             [select(getWallet), wallet],
             [select(getIsCreditsEnabled), true],
             [select(getCredits, wallet.address), { ...mockCredits, totalCredits: 0 }],
-            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor]
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor]
           ])
           .put(executeOrderFailure(order, nft, 'No credits available', undefined, false))
           .dispatch(executeOrderRequest(order, nft, fingerprint, false, true))
@@ -346,7 +346,7 @@ describe('when handling the execute order request action', () => {
     let errorMessage: string
 
     beforeEach(() => {
-      vendor = VendorFactory.build(nft.vendor, undefined, false)
+      vendor = VendorFactory.build(nft.vendor, undefined)
       errorMessage = 'The execution was reverted'
       error = new Error(errorMessage)
       error.code = ErrorCode.SALE_PRICE_TOO_LOW
@@ -359,7 +359,7 @@ describe('when handling the execute order request action', () => {
           [select(getIsCreditsEnabled), false],
           [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
           [select(getWallet), wallet],
-          [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
+          [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
           [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), throwError(error)]
         ])
         .put(executeOrderFailure(order, nft, errorMessage, ErrorCode.SALE_PRICE_TOO_LOW))
@@ -394,7 +394,7 @@ describe('when handling the execute order request action', () => {
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
             [select(getIsOffchainPublicNFTOrdersEnabled), false],
             [select(getIsCreditsEnabled), false],
-            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
             [select(getRentalById, nft.openRentalId!), rentalListing],
             [call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED), Promise.resolve()],
             [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), Promise.resolve(txHash)],
@@ -418,7 +418,7 @@ describe('when handling the execute order request action', () => {
             [matchers.call.fn(waitForFeatureFlagsToBeLoaded), true],
             [select(getIsOffchainPublicNFTOrdersEnabled), false],
             [select(getIsCreditsEnabled), false],
-            [call([VendorFactory, 'build'], nft.vendor, undefined, true), vendor],
+            [call([VendorFactory, 'build'], nft.vendor, undefined), vendor],
             [select(getWallet), wallet],
             [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), Promise.resolve(txHash)]
           ])

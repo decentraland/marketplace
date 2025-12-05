@@ -6,7 +6,7 @@ import { Account } from '../../account/types'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { NFTService as NFTServiceInterface } from '../services'
 import { FetchOneOptions, VendorName } from '../types'
-import { MARKETPLACE_SERVER_URL, NFT_SERVER_URL } from './nft/api'
+import { MARKETPLACE_SERVER_URL } from './nft/api'
 import { NFTAuthAPI } from './nft/authApi'
 import { NFTsFetchFilters } from './nft/types'
 import { getERC721ContractData } from './utils'
@@ -14,8 +14,8 @@ import { getERC721ContractData } from './utils'
 export class NFTService implements NFTServiceInterface<VendorName.DECENTRALAND> {
   nftAPI: NFTAuthAPI
 
-  constructor(config?: BaseClientConfig | undefined, shouldUseLegacyAPIs = true) {
-    this.nftAPI = shouldUseLegacyAPIs ? new NFTAuthAPI(NFT_SERVER_URL, config) : new NFTAuthAPI(MARKETPLACE_SERVER_URL, config)
+  constructor(config?: BaseClientConfig | undefined) {
+    this.nftAPI = new NFTAuthAPI(MARKETPLACE_SERVER_URL, config)
   }
 
   async fetch(

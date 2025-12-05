@@ -1,6 +1,6 @@
 import { Collection, CollectionFilters } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { NFT_SERVER_URL } from '../nft'
+import { MARKETPLACE_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 import { CollectionResponse } from './types'
 
@@ -61,4 +61,4 @@ class CollectionAPI extends BaseAPI {
   }
 }
 
-export const collectionAPI = new CollectionAPI(NFT_SERVER_URL, retryParams)
+export const collectionAPI = new CollectionAPI(MARKETPLACE_SERVER_URL, retryParams)

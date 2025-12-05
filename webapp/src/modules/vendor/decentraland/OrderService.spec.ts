@@ -42,7 +42,7 @@ describe("Decentraland's OrderService", () => {
 
     describe('when the fetch fails', () => {
       beforeEach(() => {
-        ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockRejectedValueOnce(aBasicErrorMessage)
+        ;(orderAPI.marketplaceOrderAPI.fetchOrders as jest.Mock).mockRejectedValueOnce(aBasicErrorMessage)
       })
 
       it('should reject into an exception', () => {
@@ -54,7 +54,7 @@ describe("Decentraland's OrderService", () => {
       const orders = [{ id: 'anOrderId' }] as Order[]
 
       beforeEach(() => {
-        ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce(orders)
+        ;(orderAPI.marketplaceOrderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce(orders)
       })
 
       it('should reject into an exception', () => {

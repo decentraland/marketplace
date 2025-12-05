@@ -103,7 +103,7 @@ export function* orderSaga(tradeService: TradeService) {
         yield put(fetchNFTRequest(nft.contractAddress, nft.tokenId)) // fetch the NFT again to get the new order with the tradeId
         history.push(locations.nft(nft.contractAddress, nft.tokenId))
       } else {
-        const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
+        const { orderService } = VendorFactory.build(nft.vendor, undefined)
 
         const wallet = (yield select(getWallet)) as ReturnType<typeof getWallet>
         const txHash = (yield call([orderService, 'create'], wallet, nft, price, expiresAt)) as Awaited<
@@ -164,12 +164,7 @@ export function* orderSaga(tradeService: TradeService) {
           txHash = yield call([tradeService, 'accept'], trade, wallet.address)
         }
       } else {
-        const { orderService } = (yield call(
-          [VendorFactory, 'build'],
-          nft.vendor,
-          undefined,
-          !isOffchainPublicNFTOrdersEnabled
-        )) as ReturnType<typeof VendorFactory.build>
+        const { orderService } = (yield call([VendorFactory, 'build'], nft.vendor, undefined)) as ReturnType<typeof VendorFactory.build>
 
         if (useCredits && credits) {
           txHash = yield call([new CreditsService(), 'useCreditsLegacyMarketplace'], nft, order, credits.credits)
@@ -275,7 +270,7 @@ export function* orderSaga(tradeService: TradeService) {
         yield waitForTx(txHash)
         yield put(cancelOrderSuccess(order, nft, txHash, skipRedirection))
       } else {
-        const { orderService } = VendorFactory.build(nft.vendor, undefined, !isOffchainPublicNFTOrdersEnabled)
+        const { orderService } = VendorFactory.build(nft.vendor, undefined)
         txHash = (yield call([orderService, 'cancel'], wallet, order)) as Awaited<ReturnType<typeof orderService.cancel>>
         yield put(cancelOrderSuccess(order, nft, txHash, skipRedirection))
       }

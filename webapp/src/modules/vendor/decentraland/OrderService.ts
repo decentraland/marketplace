@@ -7,14 +7,14 @@ import { fromMillisecondsToSeconds } from '../../../lib/time'
 import { NFT } from '../../nft/types'
 import { OrderService as OrderServiceInterface } from '../services'
 import { VendorName } from '../types'
-import { OrderAPI, orderAPI as legacyOrderAPI, marketplaceOrderAPI } from './order/api'
+import { OrderAPI, marketplaceOrderAPI } from './order/api'
 import { OrderResponse } from './order/types'
 
 export class OrderService implements OrderServiceInterface<VendorName.DECENTRALAND> {
   orderAPI: OrderAPI
 
-  constructor(shouldUseLegacyOrderAPI = true) {
-    this.orderAPI = shouldUseLegacyOrderAPI ? legacyOrderAPI : marketplaceOrderAPI
+  constructor() {
+    this.orderAPI = marketplaceOrderAPI
   }
 
   async fetchOrders(params: OrderFilters, sortBy: OrderSortBy): Promise<OrderResponse> {

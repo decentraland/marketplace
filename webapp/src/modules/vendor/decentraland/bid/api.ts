@@ -1,6 +1,6 @@
 import { Bid, BidSortBy, ListingStatus } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { NFT_SERVER_URL } from '../nft'
+import { MARKETPLACE_SERVER_URL } from '../marketplace/api'
 import { retryParams } from '../utils'
 
 const FIRST = '1000'
@@ -55,4 +55,4 @@ class BidAPI extends BaseAPI {
   }
 }
 
-export const bidAPI = new BidAPI(NFT_SERVER_URL, retryParams)
+export const bidAPI = new BidAPI(MARKETPLACE_SERVER_URL, retryParams)

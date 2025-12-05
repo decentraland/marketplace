@@ -1,6 +1,6 @@
 import { ContractService as ContractServiceInterface } from '../services'
 import { TransferType } from '../types'
-import { nftAPI } from './nft'
+import { nftMarketplaceAPI as nftAPI } from './nft/api'
 
 export class ContractService implements ContractServiceInterface {
   async getContracts() {
