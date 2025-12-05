@@ -150,7 +150,14 @@ export async function pollSquidRouteStatus(params: PollSquidRouteStatusParams): 
       await new Promise(resolve => setTimeout(resolve, POLLING_INTERVAL_MS))
     } catch (error) {
       // If it's one of our custom errors, re-throw it
-      if (error instanceof Error && error.message.includes('Squid')) {
+      if (
+        error instanceof Error &&
+        (error.message.includes('Squid') ||
+          error.message.includes('Transaction needs additional gas') ||
+          error.message.includes('Transaction partially completed') ||
+          error.message.includes('Transaction failed and funds were refunded') ||
+          error.message.includes('Transaction not found'))
+      ) {
         throw error
       }
 
