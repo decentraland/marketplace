@@ -80,7 +80,6 @@ class NFTAPI extends BaseAPI {
   async fetchContracts(): Promise<Contract[]> {
     try {
       const response = (await this.request('get', '/contracts', { first: 0 })) as {
-        // TODO: [Deprecate nft-server] implement contracts endpoint in the marketplace server
         data: Omit<Contract, 'vendor'>[]
         total: number
       }
