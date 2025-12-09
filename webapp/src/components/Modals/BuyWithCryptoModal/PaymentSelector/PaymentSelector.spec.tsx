@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { BigNumber, ethers } from 'ethers'
 import { ChainId, Network } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { Token } from 'decentraland-transactions/crossChain'
+import { ChainData, Token } from 'decentraland-transactions/crossChain'
 import PaymentSelector from './PaymentSelector'
 
 jest.mock('decentraland-ui', () => ({
@@ -85,7 +85,7 @@ describe('when rendering PaymentSelector', () => {
           selectedToken={selectedToken}
           selectedChain={selectedChain}
           wallet={wallet}
-          selectedProviderChain={selectedProviderChain}
+          selectedProviderChain={selectedProviderChain as ChainData}
           isFetchingBalance={false}
           selectedTokenBalance={BigNumber.from('1000000000000000000000')}
           onShowChainSelector={onShowChainSelector}
@@ -142,7 +142,7 @@ describe('when rendering PaymentSelector', () => {
           selectedToken={selectedToken}
           selectedChain={selectedChain}
           wallet={wallet}
-          selectedProviderChain={selectedProviderChain}
+          selectedProviderChain={selectedProviderChain as ChainData}
           isFetchingBalance={false}
           selectedTokenBalance={BigNumber.from('1000000000000000000000')}
           onShowChainSelector={onShowChainSelector}
