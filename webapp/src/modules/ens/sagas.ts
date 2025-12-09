@@ -187,15 +187,13 @@ export function* ensSaga() {
       const creditsServerUrl = config.get('CREDITS_SERVER_URL')
       const url = `${creditsServerUrl}/credits-name-route?name=${encodeURIComponent(name)}&chainId=${ChainId.MATIC_MAINNET}`
 
-      const response: Response = yield call(() =>
-        signedFetch(url, {
-          method: 'GET',
-          identity: identity
-        })
-      )
+      const response: Response = yield call(signedFetch, url, {
+        method: 'GET',
+        identity: identity
+      })
 
       if (!response.ok) {
-        const errorData: { error: string; message: string } = yield call(() => response.json())
+        const errorData: { error: string; message: string } = yield call([response, 'json'])
         throw new Error(`Credits server error: ${errorData.error || errorData.message || response.statusText}`)
       }
 
@@ -212,7 +210,7 @@ export function* ensSaga() {
         estimatedRouteDuration: number
         fromChainId: string
         toChainId: string
-      } = yield call(() => response.json())
+      } = yield call([response, 'json'])
 
       // Use CreditsService to handle the transaction
       const creditsService = new CreditsService()
@@ -274,6 +272,7 @@ export function* ensSaga() {
         )
       }
     } catch (error) {
+      console.error('Error in handleClaimNameWithCreditsRequest:', error)
       yield put(claimNameWithCreditsFailure(name, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }

@@ -35,6 +35,7 @@ const ClaimNameFatFingerModal = ({
   credits,
   metadata: { name: ENSName, autoComplete },
   isClaimingName,
+  isNAMEsWithCreditsEnabled,
   onBuyWithCrypto,
   onClose,
   onClaimTxSubmitted,
@@ -48,9 +49,10 @@ const ClaimNameFatFingerModal = ({
 
   // Calculate credits amounts
   const hasCredits = credits && credits.totalCredits > 0
-  const totalCreditsAmount = hasCredits ? ethers.BigNumber.from(credits.totalCredits.toString()) : ethers.BigNumber.from('0')
-  const namePrice = ethers.BigNumber.from(PRICE_IN_WEI)
-  const finalPrice = useCredits && hasCredits ? namePrice.sub(totalCreditsAmount.gt(namePrice) ? namePrice : totalCreditsAmount) : namePrice
+  const totalCreditsAmount = hasCredits ? BigInt(credits.totalCredits.toString()) : BigInt(0)
+  const namePrice = BigInt(PRICE_IN_WEI)
+  const creditsToApply = totalCreditsAmount > namePrice ? namePrice : totalCreditsAmount
+  const finalPrice = useCredits && hasCredits ? namePrice - creditsToApply : namePrice
 
   useEffect(() => {
     if (inputRef.current) {
@@ -182,9 +184,9 @@ const ClaimNameFatFingerModal = ({
             {useCredits && hasCredits ? (
               <div className="priceWithCredits">
                 <div className="manaSymbol">◈</div>
-                <div className="originalPrice strikethrough">{ethers.utils.formatEther(PRICE_IN_WEI)}</div>
-                <div className="finalPriceValue">{ethers.utils.formatEther(finalPrice)}</div>
-                {finalPrice.gt(0) ? (
+                <div className="originalPrice strikethrough">{Number(ethers.utils.formatEther(PRICE_IN_WEI)).toFixed(0)}</div>
+                <div className="finalPriceValue">{Number(ethers.utils.formatEther(finalPrice)).toFixed(0)}</div>
+                {finalPrice > 0n ? (
                   <div className="fiatEquivalent">
                     (<ManaToFiat mana={finalPrice.toString()} />)
                   </div>
@@ -193,7 +195,7 @@ const ClaimNameFatFingerModal = ({
             ) : (
               <div className="priceWithoutCredits">
                 <div className="manaSymbol">◈</div>
-                <div className="finalPriceValue">{ethers.utils.formatEther(PRICE_IN_WEI)}</div>
+                <div className="finalPriceValue">{Number(ethers.utils.formatEther(PRICE_IN_WEI)).toFixed(0)}</div>
                 <div className="fiatEquivalent">
                   (<ManaToFiat mana={PRICE_IN_WEI} />)
                 </div>
@@ -202,15 +204,17 @@ const ClaimNameFatFingerModal = ({
           </div>
 
           {/* Right side: Credits Toggle */}
-          <div className="creditsToggleWrapper">
-            <CreditsToggle
-              totalCredits={credits?.totalCredits.toString() || 0}
-              showLearnMore={!hasCredits}
-              assetPrice={PRICE_IN_WEI}
-              useCredits={useCredits}
-              onToggle={handleCreditsToggle}
-            />
-          </div>
+          {isNAMEsWithCreditsEnabled && (
+            <div className="creditsToggleWrapper">
+              <CreditsToggle
+                totalCredits={credits?.totalCredits.toString() || 0}
+                showLearnMore={!hasCredits}
+                assetPrice={PRICE_IN_WEI}
+                useCredits={useCredits}
+                onToggle={handleCreditsToggle}
+              />
+            </div>
+          )}
         </div>
       </Modal.Content>
       <Modal.Actions>
@@ -219,7 +223,7 @@ const ClaimNameFatFingerModal = ({
           data-testid={CRYPTO_PAYMENT_METHOD_DATA_TESTID}
           onClick={handleOnBuyWithCrypto}
           disabled={isLoading || areNamesDifferent}
-          isFree={finalPrice.eq(0)}
+          isFree={finalPrice === 0n}
           useCredits={useCredits}
         />
         <BuyWithCardButton

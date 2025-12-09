@@ -7,6 +7,7 @@ import { FiatGateway, FiatGatewayOptions, FiatGatewayListeners } from 'decentral
 import { openModal } from 'decentraland-dapps/dist/modules/modal'
 import { claimNameTransactionSubmitted } from '../../../modules/ens/actions'
 import { isWaitingTxClaimName } from '../../../modules/ens/selectors'
+import { getIsNAMEsWithCreditsEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
 import ClaimNameFatFingerModal from './ClaimNameFatFingerModal'
@@ -17,7 +18,8 @@ const mapState = (state: RootState): MapState => {
   return {
     isClaimingName: isWaitingTxClaimName(state),
     wallet,
-    credits: getCredits(state, wallet?.address || '') as CreditsResponse | undefined
+    credits: getCredits(state, wallet?.address || '') as CreditsResponse | undefined,
+    isNAMEsWithCreditsEnabled: getIsNAMEsWithCreditsEnabled(state)
   }
 }
 

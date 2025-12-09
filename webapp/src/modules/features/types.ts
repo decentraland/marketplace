@@ -16,5 +16,6 @@ export enum FeatureName {
   CREDITS_SECONDARY_SALES = 'credits-secondary-sales',
   USER_WALLETS = 'alfa-marketplace-credits',
   UNITY_WEARABLE_PREVIEW = 'unity-wearable-preview',
-  SOCIAL_EMOTES = 'social-emotes'
+  SOCIAL_EMOTES = 'social-emotes',
+  NAMES_WITH_CREDITS = 'names-with-credits'
 }

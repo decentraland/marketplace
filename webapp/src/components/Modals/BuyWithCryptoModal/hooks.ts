@@ -393,6 +393,7 @@ const useCrossChainRoute = (
         setRoute(route)
       }
     } catch (error) {
+      console.error('Error while getting Route: ', error)
       getAnalytics()?.track(events.ERROR_GETTING_ROUTE, {
         error,
         selectedToken,

@@ -17,9 +17,10 @@ export type Props = Omit<ModalProps, 'metadata'> & {
   onBuyWithCrypto: (name: string, useCredits?: boolean) => void
   onClaimTxSubmitted: typeof claimNameTransactionSubmitted
   onOpenFiatGateway: typeof openFiatGatewayWidgetRequest
+  isNAMEsWithCreditsEnabled: boolean
 }
 
-export type MapState = Pick<Props, 'isClaimingName' | 'wallet' | 'credits'>
+export type MapState = Pick<Props, 'isClaimingName' | 'wallet' | 'credits' | 'isNAMEsWithCreditsEnabled'>
 export type MapDispatchProps = Pick<Props, 'onClaimTxSubmitted' | 'onOpenFiatGateway' | 'onBuyWithCrypto'>
 export type MapDispatch = Dispatch<
   ClaimNameRequestAction | ClaimNameTransactionSubmittedAction | OpenFiatGatewayWidgetRequestAction | OpenModalAction
