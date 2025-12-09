@@ -62,6 +62,7 @@ const renderClaimFatFingerModal = (props: Partial<Props> = {}) =>
       onOpenFiatGateway={jest.fn()}
       wallet={{} as Wallet}
       credits={undefined}
+      isNAMEsWithCreditsEnabled={true}
       {...props}
     />
   )
