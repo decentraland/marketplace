@@ -409,6 +409,7 @@ async function renderBuyWithCryptoModal(props: Partial<Props> = {}) {
     isUsingMagic: false,
     useCredits: false,
     credits: null,
+    creditsClaimProgress: null,
     onGetCrossChainRoute: jest.fn<ReturnType<OnGetCrossChainRoute>, Parameters<OnGetCrossChainRoute>>().mockReturnValue({
       route: undefined,
       fromAmount: undefined,
@@ -1285,6 +1286,30 @@ describe('BuyWithCryptoModal', () => {
           })
         })
       })
+    })
+  })
+
+  describe('when creditsClaimProgress is in polling state', () => {
+    beforeEach(() => {
+      modalProps = {
+        ...modalProps,
+        creditsClaimProgress: {
+          name: 'testname',
+          polygonTxHash: '0x1234567890abcdef',
+          coralScanUrl: 'https://coralscan.squidrouter.com/tx/0x1234567890abcdef',
+          status: 'polling'
+        }
+      }
+    })
+
+    it('should render the cross-chain polling UI with CoralScan link', async () => {
+      const { getByTestId, queryByTestId } = await renderBuyWithCryptoModal(modalProps)
+
+      expect(getByTestId('cross-chain-polling')).toBeInTheDocument()
+      expect(getByTestId('coral-scan-link')).toBeInTheDocument()
+      expect(getByTestId('coral-scan-link')).toHaveAttribute('href', 'https://coralscan.squidrouter.com/tx/0x1234567890abcdef')
+
+      expect(queryByTestId(BUY_NOW_BUTTON_TEST_ID)).not.toBeInTheDocument()
     })
   })
 })
