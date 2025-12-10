@@ -5,6 +5,7 @@ import * as matchers from 'redux-saga-test-plan/matchers'
 import { ChainId } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { getSigner, getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { CreditsClient } from 'decentraland-dapps/dist/modules/credits/CreditsClient'
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
@@ -13,7 +14,7 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { Route, AxelarProvider } from 'decentraland-transactions/crossChain'
 import { Provider } from 'decentraland-connect'
-import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
 import { DCLRegistrar__factory } from '../../contracts/factories'
@@ -33,9 +34,10 @@ import {
   claimNameWithCreditsRequest,
   claimNameWithCreditsFailure,
   claimNameWithCreditsTransactionSubmitted,
-  claimNameWithCreditsSuccess
+  claimNameWithCreditsSuccess,
+  claimNameWithCreditsCrossChainPolling
 } from './actions'
-import { ensSaga, CONTROLLER_V2_ADDRESS } from './sagas'
+import { ensSaga, CONTROLLER_V2_ADDRESS, CORAL_SCAN_BASE_URL, getTokenIdFromEthereumContract } from './sagas'
 import { ENS } from './types'
 import { getDomainFromName } from './utils'
 
@@ -404,7 +406,7 @@ describe('ENS Saga', () => {
       })
     })
 
-    describe('and the signed fetch fails', () => {
+    describe('and the credits client fails', () => {
       let mockIdentity: AuthIdentity
 
       beforeEach(() => {
@@ -412,21 +414,19 @@ describe('ENS Saga', () => {
       })
 
       it('should put a failure action with the error message', () => {
-        const errorResponse = {
-          ok: false,
-          statusText: 'Internal Server Error',
-          json: () => Promise.resolve({ error: 'Server error', message: 'Something went wrong' })
-        } as Response
+        const clientError = new Error('Server error: Something went wrong')
 
         return expectSaga(ensSaga)
           .provide([
             [select(getWallet), mockWallet],
             [select(getCredits, mockWallet.address), mockCredits],
             [select(getCurrentIdentity), mockIdentity],
-            [matchers.call.fn(signedFetch), errorResponse],
-            [matchers.call.fn(errorResponse.json), { error: 'Server error', message: 'Something went wrong' }]
+            [
+              matchers.call.fn(CreditsClient.prototype.fetchCreditsNameRoute as (...args: unknown[]) => Promise<unknown>),
+              Promise.reject(clientError)
+            ]
           ])
-          .put(claimNameWithCreditsFailure(mockName, 'Credits server error: Server error'))
+          .put(claimNameWithCreditsFailure(mockName, clientError.message))
           .dispatch(claimNameWithCreditsRequest(mockName))
           .silentRun()
       })
@@ -496,36 +496,35 @@ describe('ENS Saga', () => {
         }
       })
 
-      it('should dispatch transaction submitted, close modal, and dispatch success action', () => {
-        const successResponse = {
-          ok: true,
-          json: () => Promise.resolve(mockRouteData)
-        } as Response
+      it('should dispatch transaction submitted, polling action, success action, and close modal', () => {
+        const mockTokenId = BigNumber.from('12345')
 
         const expectedENS: ENS = {
-          name: `${mockName}.dcl.eth`,
-          tokenId: '0',
+          name: mockName,
+          tokenId: mockTokenId.toString(),
           ensOwnerAddress: mockWallet.address,
           nftOwnerAddress: mockWallet.address,
-          subdomain: mockName,
-          resolver: CONTROLLER_V2_ADDRESS,
-          content: '',
-          contractAddress: CONTROLLER_V2_ADDRESS
+          subdomain: getDomainFromName(mockName),
+          resolver: ethers.constants.AddressZero,
+          content: ethers.constants.AddressZero,
+          contractAddress: REGISTRAR_ADDRESS
         }
+        const coralScanUrl = `${CORAL_SCAN_BASE_URL}/${mockTxHash}`
 
         return expectSaga(ensSaga)
           .provide([
             [select(getWallet), mockWallet],
             [select(getCredits, mockWallet.address), mockCredits],
             [select(getCurrentIdentity), mockIdentity],
-            [matchers.call.fn(signedFetch), successResponse],
-            [matchers.call.fn(successResponse.json), mockRouteData],
-            [matchers.call.fn(CreditsService.prototype.useCreditsWithExternalCall as (...args: any[]) => Promise<string>), mockTxHash],
-            [matchers.call.fn(pollSquidRouteStatus), mockSquidResponse]
+            [matchers.call.fn(CreditsClient.prototype.fetchCreditsNameRoute as (...args: unknown[]) => Promise<unknown>), mockRouteData],
+            [matchers.call.fn(CreditsService.prototype.useCreditsWithExternalCall as (...args: unknown[]) => Promise<string>), mockTxHash],
+            [matchers.call.fn(pollSquidRouteStatus), mockSquidResponse],
+            [matchers.call.fn(getTokenIdFromEthereumContract), mockTokenId]
           ])
           .put(claimNameWithCreditsTransactionSubmitted(mockName, mockWallet.address, ChainId.MATIC_MAINNET, mockTxHash))
-          .put(closeModal('BuyWithCryptoModal'))
+          .put(claimNameWithCreditsCrossChainPolling(mockName, mockTxHash, coralScanUrl))
           .put(claimNameWithCreditsSuccess(expectedENS, mockName, '0xEthereumTxHash'))
+          .put(closeModal('BuyWithCryptoModal'))
           .dispatch(claimNameWithCreditsRequest(mockName))
           .silentRun()
       })
@@ -568,27 +567,23 @@ describe('ENS Saga', () => {
         mockTxHash = '0xTransactionHash'
       })
 
-      it('should dispatch transaction submitted, close modal, and dispatch failure action', () => {
-        const successResponse = {
-          ok: true,
-          json: () => Promise.resolve(mockRouteData)
-        } as Response
-
+      it('should dispatch transaction submitted, polling action, failure action, and close modal', () => {
         const pollingError = new Error('Cross-chain transaction polling timeout')
+        const coralScanUrl = `${CORAL_SCAN_BASE_URL}/${mockTxHash}`
 
         return expectSaga(ensSaga)
           .provide([
             [select(getWallet), mockWallet],
             [select(getCredits, mockWallet.address), mockCredits],
             [select(getCurrentIdentity), mockIdentity],
-            [matchers.call.fn(signedFetch), successResponse],
-            [matchers.call.fn(successResponse.json), mockRouteData],
-            [matchers.call.fn(CreditsService.prototype.useCreditsWithExternalCall as (...args: any[]) => Promise<string>), mockTxHash],
+            [matchers.call.fn(CreditsClient.prototype.fetchCreditsNameRoute as (...args: unknown[]) => Promise<unknown>), mockRouteData],
+            [matchers.call.fn(CreditsService.prototype.useCreditsWithExternalCall as (...args: unknown[]) => Promise<string>), mockTxHash],
             [matchers.call.fn(pollSquidRouteStatus), Promise.reject(pollingError)]
           ])
           .put(claimNameWithCreditsTransactionSubmitted(mockName, mockWallet.address, ChainId.MATIC_MAINNET, mockTxHash))
-          .put(closeModal('BuyWithCryptoModal'))
+          .put(claimNameWithCreditsCrossChainPolling(mockName, mockTxHash, coralScanUrl))
           .put(claimNameWithCreditsFailure(mockName, pollingError.message))
+          .put(closeModal('BuyWithCryptoModal'))
           .dispatch(claimNameWithCreditsRequest(mockName))
           .silentRun()
       })

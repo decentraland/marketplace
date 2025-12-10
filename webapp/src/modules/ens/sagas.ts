@@ -2,9 +2,10 @@ import { BigNumber, ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { ChainId } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
-import { getConnectedProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { getConnectedProvider, getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { CreditsClient } from 'decentraland-dapps/dist/modules/credits/CreditsClient'
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
-import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
+import { CreditsNameRouteResponse, CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
@@ -12,7 +13,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation'
 import { Provider, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { RouteResponse } from 'decentraland-transactions/crossChain'
-import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
 import { DCLRegistrar } from '../../contracts/DCLRegistrar'
@@ -37,13 +38,26 @@ import {
   ClaimNameWithCreditsRequestAction,
   claimNameWithCreditsSuccess,
   claimNameWithCreditsFailure,
-  claimNameWithCreditsTransactionSubmitted
+  claimNameWithCreditsTransactionSubmitted,
+  claimNameWithCreditsCrossChainPolling
 } from './actions'
 import { ENS, ENSError } from './types'
 import { getDomainFromName, PRICE_IN_WEI } from './utils'
 
 export const CONTROLLER_V2_ADDRESS = config.get('CONTROLLER_V2_CONTRACT_ADDRESS', '')
 export const REGISTRAR_ADDRESS = config.get('REGISTRAR_CONTRACT_ADDRESS', '')
+export const CORAL_SCAN_BASE_URL = 'https://coralscan.squidrouter.com/tx'
+
+/**
+ * Helper function to get the tokenId from the DCLRegistrar contract on Ethereum.
+ * This is extracted as a separate function to make it easier to mock in tests.
+ */
+export async function getTokenIdFromEthereumContract(name: string): Promise<BigNumber> {
+  const ethereumProvider = await getNetworkProvider(ChainId.ETHEREUM_MAINNET)
+  const provider = new ethers.providers.Web3Provider(ethereumProvider)
+  const dclRegistrarContract = DCLRegistrar__factory.connect(REGISTRAR_ADDRESS, provider)
+  return dclRegistrarContract.getTokenId(name)
+}
 
 type ClaimNameTransaction = Omit<ClaimNameTransactionSubmittedAction['payload'][TRANSACTION_ACTION_FLAG], 'payload'> & {
   payload: { subdomain: string; address: string; route?: RouteResponse }
@@ -178,39 +192,15 @@ export function* ensSaga() {
         throw new Error('No credits available')
       }
 
-      // Get route from backend using signed fetch
+      // Get route from backend using CreditsClient
       const identity: AuthIdentity | null = yield select(getCurrentIdentity)
       if (!identity) {
         throw new Error('No identity available for signed fetch')
       }
 
       const creditsServerUrl = config.get('CREDITS_SERVER_URL')
-      const url = `${creditsServerUrl}/credits-name-route?name=${encodeURIComponent(name)}&chainId=${ChainId.MATIC_MAINNET}`
-
-      const response: Response = yield call(signedFetch, url, {
-        method: 'GET',
-        identity: identity
-      })
-
-      if (!response.ok) {
-        const errorData: { error: string; message: string } = yield call([response, 'json'])
-        throw new Error(`Credits server error: ${errorData.error || errorData.message || response.statusText}`)
-      }
-
-      const routeData: {
-        externalCall: {
-          target: string
-          selector: string
-          data: string
-          expiresAt: number
-          salt: string
-        }
-        customExternalCallSignature: string
-        quoteId: string
-        estimatedRouteDuration: number
-        fromChainId: string
-        toChainId: string
-      } = yield call([response, 'json'])
+      const creditsClient = new CreditsClient(creditsServerUrl, { identity })
+      const routeData: CreditsNameRouteResponse = yield call([creditsClient, 'fetchCreditsNameRoute'], name, ChainId.MATIC_MAINNET)
 
       // Use CreditsService to handle the transaction
       const creditsService = new CreditsService()
@@ -223,10 +213,12 @@ export function* ensSaga() {
         routeData.customExternalCallSignature
       )
 
-      // Poll Squid Router API to wait for cross-chain completion
-      // Dispatch transaction submitted action and redirect to SuccessPage (loading state)
+      // Dispatch transaction submitted action
       yield put(claimNameWithCreditsTransactionSubmitted(name, wallet.address, ChainId.MATIC_MAINNET, txHash))
-      yield put(closeModal('BuyWithCryptoModal'))
+
+      // Dispatch polling action with CoralScan URL - the modal will show this link
+      const coralScanUrl = `${CORAL_SCAN_BASE_URL}/${txHash}`
+      yield put(claimNameWithCreditsCrossChainPolling(name, txHash, coralScanUrl))
 
       // Get Squid Router API configuration
       const squidRouterApiUrl = config.get('REACT_APP_SQUID_ROUTER_API_URL', 'https://v2.api.squidrouter.com')
@@ -246,20 +238,26 @@ export function* ensSaga() {
         // Extract the Ethereum (destination chain) transaction hash
         const ethereumTxHash = statusResponse.toChain?.transactionId || txHash
 
-        // Create ENS object for success action
+        // Get the real tokenId from the DCLRegistrar contract on Ethereum
+        // The polling success means the Ethereum tx is confirmed, so we can query the contract
+        const tokenId: BigNumber = (yield call(getTokenIdFromEthereumContract, 'buenardo')) as BigNumber
+
+        // Create ENS object with the real tokenId
         const ens: ENS = {
-          name: `${name}.dcl.eth`,
-          tokenId: '0',
+          name,
+          tokenId: tokenId.toString(),
           ensOwnerAddress: wallet.address,
           nftOwnerAddress: wallet.address,
-          subdomain: name,
-          resolver: CONTROLLER_V2_ADDRESS,
-          content: '',
-          contractAddress: CONTROLLER_V2_ADDRESS
+          subdomain: getDomainFromName(name),
+          resolver: ethers.constants.AddressZero,
+          content: ethers.constants.AddressZero,
+          contractAddress: REGISTRAR_ADDRESS
         }
 
         // Dispatch success action with the Ethereum transaction hash
         yield put(claimNameWithCreditsSuccess(ens, name, ethereumTxHash))
+        // Close modal after success
+        yield put(closeModal('BuyWithCryptoModal'))
       } catch (pollingError) {
         // Dispatch failure action
         yield put(
@@ -270,10 +268,13 @@ export function* ensSaga() {
               : 'Cross-chain transaction failed. Please check the Activity page for details.'
           )
         )
+        // Close modal after failure - user will see error in toast/notification
+        yield put(closeModal('BuyWithCryptoModal'))
       }
     } catch (error) {
       console.error('Error in handleClaimNameWithCreditsRequest:', error)
       yield put(claimNameWithCreditsFailure(name, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
+      // Don't close modal here - error will be shown in the modal UI
     }
   }
 }
