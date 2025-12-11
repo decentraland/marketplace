@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react'
 import { View } from '../ui/types'
 import {
   getNFTAddressAndTokenIdFromCurrentUrlPath,
@@ -767,8 +767,9 @@ describe('when using hook to get page name', () => {
     })
 
     it('should throw "Unknown page" error', () => {
-      const { result } = renderHook(() => useGetPageName())
-      expect(result.error).toEqual(Error('Unknown page'))
+      expect(() => {
+        renderHook(() => useGetPageName())
+      }).toThrow('Unknown page')
     })
   })
 })

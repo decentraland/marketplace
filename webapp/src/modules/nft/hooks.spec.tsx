@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook, waitFor } from '@testing-library/react'
 import { ChainId, NFTCategory, Network } from '@dcl/schemas'
 import { RootState } from '../reducer'
 import { VendorName } from '../vendor'
@@ -35,21 +35,21 @@ describe('when the nft is not an estate', () => {
     } as NFT
   })
 
-  it('should return fingerprint as undefiend', () => {
+  it('should return fingerprint as undefined', () => {
     const { result } = renderHook(() => useFingerprint(nft))
-    const [fingerprint] = result.current
+    const [fingerprint] = result.current as ReturnType<typeof useFingerprint>
     expect(fingerprint).toBe(undefined)
   })
 
   it('should return contractFingerprint as undefined', () => {
     const { result } = renderHook(() => useFingerprint(nft))
-    const [, , contractFingerprint] = result.current
+    const [, , contractFingerprint] = result.current as ReturnType<typeof useFingerprint>
     expect(contractFingerprint).toBe(undefined)
   })
 
   it('should return loading as false', () => {
     const { result } = renderHook(() => useFingerprint(nft))
-    const [, isLoading] = result.current
+    const [, isLoading] = result.current as ReturnType<typeof useFingerprint>
     expect(isLoading).toBe(false)
   })
 })
@@ -115,14 +115,14 @@ describe('when the nft is an estate', () => {
     ;(getFingerprint as jest.Mock).mockResolvedValue(contractFingerprint)
   })
   it('should return calculated fingerprint of parcels', async () => {
-    const { result, waitFor } = renderHook(() => useFingerprint(nft))
-    await waitFor(() => expect(result.current[1]).toBe(false))
-    expect(result.current[0]).toEqual(fingerprint)
+    const { result } = renderHook(() => useFingerprint(nft))
+    await waitFor(() => expect((result.current as ReturnType<typeof useFingerprint>)[1]).toBe(false))
+    expect((result.current as ReturnType<typeof useFingerprint>)[0]).toEqual(fingerprint)
   })
 
   it('should return contract fingerprint', async () => {
-    const { result, waitFor } = renderHook(() => useFingerprint(nft))
-    await waitFor(() => expect(result.current[1]).toBe(false))
-    expect(result.current[2]).toEqual(contractFingerprint)
+    const { result } = renderHook(() => useFingerprint(nft))
+    await waitFor(() => expect((result.current as ReturnType<typeof useFingerprint>)[1]).toBe(false))
+    expect((result.current as ReturnType<typeof useFingerprint>)[2]).toEqual(contractFingerprint)
   })
 })
