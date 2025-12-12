@@ -21,10 +21,10 @@
     "dcl-catalyst-commons": "^9.0.1",
     "decentraland-connect": "^9.1.0",
     "decentraland-crypto-fetch": "^1.0.3",
-    "decentraland-dapps": "file:../../decentraland-dapps/5.tgz",
+    "decentraland-dapps": "^26.0.0",
     "decentraland-transactions": "^2.24.1",
     "decentraland-ui": "^7.0.1",
-    "decentraland-ui2": "^1.0.1",
+    "decentraland-ui2": "^1.0.2",
     "ethers": "^5.6.8",
     "graphql": "^14.7.0",
     "history": "^4.10.1",
@@ -119,10 +119,6 @@
     "node": "20"
   },
   "overrides": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
     "ua-parser-js": "^1.0.37"
   },
   "homepage": "",
