@@ -41,6 +41,9 @@ export type ProviderToken = Token
 
 const squidURL = config.get('SQUID_API_URL')
 
+export const CROSS_CHAIN_POLLING_TEST_ID = 'cross-chain-polling'
+export const CORAL_SCAN_LINK_TEST_ID = 'coral-scan-link'
+
 export const BuyWithCryptoModal = (props: Props) => {
   const {
     price,
@@ -53,6 +56,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     isSwitchingNetwork,
     isBuyWithCardPage,
     isUsingMagic,
+    creditsClaimProgress,
     onSwitchNetwork,
     onGetGasCost,
     onGetCrossChainRoute,
@@ -64,6 +68,8 @@ export const BuyWithCryptoModal = (props: Props) => {
     onClose,
     onGoBack
   } = props
+
+  const isPollingCrossChain = creditsClaimProgress?.status === 'polling'
 
   const crossChainSupportedChains = useRef<ChainId[]>([])
   const analytics = getAnalytics()
@@ -112,7 +118,6 @@ export const BuyWithCryptoModal = (props: Props) => {
     return finalAmount.toString()
   }, [price, useCredits, credits])
 
-  // Native: same chain + same token (MANA) + no credits
   const isCreditsTransaction = useMemo(() => useCredits && hasCredits, [useCredits, hasCredits])
 
   // For credits transactions, no route is fetched (it's calculated on backend when "Buy Now" is clicked)
@@ -500,6 +505,19 @@ export const BuyWithCryptoModal = (props: Props) => {
         />
       )
     }
+
+    // When polling cross-chain, show a different title and disable navigation
+    if (isPollingCrossChain) {
+      return (
+        <ModalNavigation
+          title={t('buy_with_crypto_modal.cross_chain_polling.title', {
+            name: asset.name,
+            b: (children: React.ReactChildren) => <b>{children}</b>
+          })}
+        />
+      )
+    }
+
     return (
       <ModalNavigation
         title={t('buy_with_crypto_modal.title', {
@@ -510,7 +528,32 @@ export const BuyWithCryptoModal = (props: Props) => {
         onClose={!isBuyingAsset ? onClose : undefined}
       />
     )
-  }, [asset.name, onClose, showChainSelector, showTokenSelector, isBuyingAsset])
+  }, [asset.name, onClose, showChainSelector, showTokenSelector, isBuyingAsset, isPollingCrossChain])
+
+  const renderCrossChainPollingContent = useCallback(() => {
+    if (!creditsClaimProgress) return null
+
+    return (
+      <div className={styles.crossChainPollingContainer} data-testid={CROSS_CHAIN_POLLING_TEST_ID}>
+        <div className={styles.crossChainPollingContent}>
+          <Loader active size="large" inline />
+          <h3 className={styles.crossChainPollingTitle}>{t('buy_with_crypto_modal.cross_chain_polling.processing')}</h3>
+          <p className={styles.crossChainPollingDescription}>{t('buy_with_crypto_modal.cross_chain_polling.description')}</p>
+          <a
+            href={creditsClaimProgress.coralScanUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.coralScanLink}
+            data-testid={CORAL_SCAN_LINK_TEST_ID}
+          >
+            <Icon name="external alternate" />
+            {t('buy_with_crypto_modal.cross_chain_polling.track_on_coral_scan')}
+          </a>
+          <p className={styles.crossChainPollingNote}>{t('buy_with_crypto_modal.cross_chain_polling.note')}</p>
+        </div>
+      </div>
+    )
+  }, [creditsClaimProgress])
 
   const translationPageDescriptorId = compact([
     'mint',
@@ -566,11 +609,13 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [asset])
 
   return (
-    <Modal size="tiny" onClose={handleOnClose} className={styles.buyWithCryptoModal}>
+    <Modal size="tiny" onClose={isPollingCrossChain ? undefined : handleOnClose} className={styles.buyWithCryptoModal}>
       {renderModalNavigation()}
       <Modal.Content>
         <>
-          {showChainSelector || showTokenSelector ? (
+          {isPollingCrossChain ? (
+            renderCrossChainPollingContent()
+          ) : showChainSelector || showTokenSelector ? (
             <div>
               {showChainSelector && wallet ? (
                 <ChainAndTokenSelector
@@ -728,7 +773,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           )}
         </>
       </Modal.Content>
-      {showChainSelector || showTokenSelector ? null : (
+      {showChainSelector || showTokenSelector || isPollingCrossChain ? null : (
         <Modal.Actions>
           <div className={classNames(styles.buttons, isWearableOrEmote(asset) && 'with-mana')}>{renderMainActionButton()}</div>
           {isWearableOrEmote(asset) && isBuyWithCardPage ? (

@@ -893,7 +893,14 @@
     },
     "price_too_low": "仅当物品至少有 1 MANA 时，MANA 交易才免汽油费。要获得此项目，请将您的网络切换到 Polygon 以使用 MATIC 支付 Gas 费。 {learn_more}",
     "remember_transaction_fee_covered": "使用 Polygon MANA 支付，DAO 会为您支付 Gas 费（项目必须至少为 1 MANA）。",
-    "learn_more": "了解更多"
+    "learn_more": "了解更多",
+    "cross_chain_polling": {
+      "title": "处理购买",
+      "processing": "处理您的跨链交易...",
+      "description": "您的交易正在跨链处理。这可能需要几分钟。",
+      "track_on_coral_scan": "在 CoralScan 上跟踪",
+      "note": "请保持此窗口打开。当交易完成时，您将被自动重定向。"
+    }
   },
   "partially_supported_network_card": {
     "content": "您已连接到 Polygon Network 以购买 <mana>1</mana> 以下的物品。 您的钱包中需要有 MATIC 来支付此次购买的交易费用。"

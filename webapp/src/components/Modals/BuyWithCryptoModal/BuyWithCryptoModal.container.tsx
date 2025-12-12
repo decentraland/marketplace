@@ -5,6 +5,8 @@ import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isSwitchingNetwork as getIsSwitchingNetwork } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { claimNameWithCreditsClearProgress } from '../../../modules/ens/actions'
+import { getCreditsClaimProgress } from '../../../modules/ens/selectors'
 import { useGetIsBuyWithCardPageFromCurrentUrl } from '../../../modules/routing/hooks'
 import { getWallet } from '../../../modules/wallet/selectors'
 import { BuyWithCryptoModal } from './BuyWithCryptoModal'
@@ -16,6 +18,7 @@ const BuyWithCryptoModalContainer: React.FC<ContainerProps> = props => {
   const wallet = useSelector(getWallet)
   const isSwitchingNetwork = useSelector(getIsSwitchingNetwork)
   const credits = useSelector(state => getCredits(state, wallet?.address || '') as CreditsResponse | null)
+  const creditsClaimProgress = useSelector(getCreditsClaimProgress)
 
   const handleGetMana: ActionFunction<typeof openBuyManaWithFiatModalRequest> = useCallback(
     () => dispatch(openBuyManaWithFiatModalRequest(props.metadata?.asset?.network)),
@@ -25,6 +28,7 @@ const BuyWithCryptoModalContainer: React.FC<ContainerProps> = props => {
     chainId => dispatch(switchNetworkRequest(chainId)),
     [dispatch]
   )
+  const handleClearCreditsClaimProgress = useCallback(() => dispatch(claimNameWithCreditsClearProgress()), [dispatch])
 
   return (
     <BuyWithCryptoModal
@@ -32,8 +36,10 @@ const BuyWithCryptoModalContainer: React.FC<ContainerProps> = props => {
       isSwitchingNetwork={isSwitchingNetwork}
       isBuyWithCardPage={isBuyWithCardPage}
       credits={credits}
+      creditsClaimProgress={creditsClaimProgress}
       onGetMana={handleGetMana}
       onSwitchNetwork={handleSwitchNetwork}
+      onClearCreditsClaimProgress={handleClearCreditsClaimProgress}
       {...props}
     />
   )

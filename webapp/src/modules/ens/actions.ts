@@ -63,6 +63,8 @@ export const CLAIM_NAME_WITH_CREDITS_REQUEST = '[Request] Claim Name with Credit
 export const CLAIM_NAME_WITH_CREDITS_SUCCESS = '[Success] Claim Name with Credits'
 export const CLAIM_NAME_WITH_CREDITS_FAILURE = '[Failure] Claim Name with Credits'
 export const CLAIM_NAME_WITH_CREDITS_TRANSACTION_SUBMITTED = '[Submitted] Claim Name with Credits'
+export const CLAIM_NAME_WITH_CREDITS_CROSS_CHAIN_POLLING = '[Polling] Claim Name with Credits Cross Chain'
+export const CLAIM_NAME_WITH_CREDITS_CLEAR_PROGRESS = '[Clear] Claim Name with Credits Progress'
 
 export const claimNameWithCreditsRequest = (name: string) => action(CLAIM_NAME_WITH_CREDITS_REQUEST, { name })
 
@@ -74,6 +76,13 @@ export const claimNameWithCreditsTransactionSubmitted = (subdomain: string, addr
     })
   })
 
+export const claimNameWithCreditsCrossChainPolling = (name: string, polygonTxHash: string, coralScanUrl: string) =>
+  action(CLAIM_NAME_WITH_CREDITS_CROSS_CHAIN_POLLING, {
+    name,
+    polygonTxHash,
+    coralScanUrl
+  })
+
 export const claimNameWithCreditsSuccess = (ens: ENS, name: string, txHash: string) =>
   action(CLAIM_NAME_WITH_CREDITS_SUCCESS, {
     ens,
@@ -83,7 +92,11 @@ export const claimNameWithCreditsSuccess = (ens: ENS, name: string, txHash: stri
 
 export const claimNameWithCreditsFailure = (name: string, error: string) => action(CLAIM_NAME_WITH_CREDITS_FAILURE, { name, error })
 
+export const claimNameWithCreditsClearProgress = () => action(CLAIM_NAME_WITH_CREDITS_CLEAR_PROGRESS)
+
 export type ClaimNameWithCreditsRequestAction = ReturnType<typeof claimNameWithCreditsRequest>
 export type ClaimNameWithCreditsSuccessAction = ReturnType<typeof claimNameWithCreditsSuccess>
 export type ClaimNameWithCreditsFailureAction = ReturnType<typeof claimNameWithCreditsFailure>
 export type ClaimNameWithCreditsTransactionSubmittedAction = ReturnType<typeof claimNameWithCreditsTransactionSubmitted>
+export type ClaimNameWithCreditsCrossChainPollingAction = ReturnType<typeof claimNameWithCreditsCrossChainPolling>
+export type ClaimNameWithCreditsClearProgressAction = ReturnType<typeof claimNameWithCreditsClearProgress>
