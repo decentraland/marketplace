@@ -11,6 +11,7 @@ export const getData = (state: RootState) => getState(state).data
 export const getAuthorizations = (state: RootState) => getState(state).authorizations
 export const getError = (state: RootState) => getState(state).error
 export const getLoading = (state: RootState) => getState(state).loading
+export const getCreditsClaimProgress = (state: RootState) => getState(state).creditsClaimProgress
 
 export const isWaitingTxClaimName = createSelector<RootState, Transaction[], boolean>(getPendingTransactions, transactions =>
   transactions.some(transaction => CLAIM_NAME_TRANSACTION_SUBMITTED === transaction.actionType)

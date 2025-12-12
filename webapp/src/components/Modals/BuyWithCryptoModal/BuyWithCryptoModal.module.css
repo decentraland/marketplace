@@ -351,6 +351,11 @@
   margin-left: 6px;
 }
 
+.creditsToggleContainer {
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
 @media (max-width: 767px) {
   .buyWithCryptoModal {
     height: 100%;

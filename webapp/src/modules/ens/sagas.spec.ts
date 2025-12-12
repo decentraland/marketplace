@@ -3,17 +3,24 @@ import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { ChainId } from '@dcl/schemas'
+import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { getSigner, getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { CreditsClient } from 'decentraland-dapps/dist/modules/credits/CreditsClient'
+import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { Route, AxelarProvider } from 'decentraland-transactions/crossChain'
 import { Provider } from 'decentraland-connect'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { config } from '../../config'
 import { DCLRegistrar__factory } from '../../contracts/factories'
 import { DCLController__factory } from '../../contracts/factories/DCLController__factory'
+import { pollSquidRouteStatus, SquidStatusResponse, SquidTransactionStatus } from '../../lib/squid'
+import { getCurrentIdentity } from '../identity/selectors'
 import { getWallet } from '../wallet/selectors'
 import {
   CLAIM_NAME_REQUEST,
@@ -23,14 +30,18 @@ import {
   claimNameRequest,
   claimNameCrossChainRequest,
   claimNameCrossChainFailure,
-  claimNameCrossChainSuccess
+  claimNameCrossChainSuccess,
+  claimNameWithCreditsRequest,
+  claimNameWithCreditsFailure,
+  claimNameWithCreditsTransactionSubmitted,
+  claimNameWithCreditsSuccess,
+  claimNameWithCreditsCrossChainPolling
 } from './actions'
-import { ensSaga } from './sagas'
+import { ensSaga, CONTROLLER_V2_ADDRESS, CORAL_SCAN_BASE_URL, getTokenIdFromEthereumContract } from './sagas'
 import { ENS } from './types'
 import { getDomainFromName } from './utils'
 
 export const REGISTRAR_ADDRESS = config.get('REGISTRAR_CONTRACT_ADDRESS', '')
-const CONTROLLER_V2_ADDRESS = config.get('CONTROLLER_V2_CONTRACT_ADDRESS', '')
 
 describe('ENS Saga', () => {
   let chainId: ChainId
@@ -312,6 +323,268 @@ describe('ENS Saga', () => {
           ])
           .put(claimNameFailure({ message: error.message }))
           .dispatch(mockAction)
+          .silentRun()
+      })
+    })
+  })
+
+  describe('when handling a claim name with credits request action', () => {
+    let mockName: string
+    let mockWallet: Wallet
+    let mockCredits: CreditsResponse
+
+    beforeEach(() => {
+      mockName = 'testname'
+      mockWallet = {
+        address: '0xWalletAddress',
+        chainId: ChainId.MATIC_MAINNET
+      } as Wallet
+      mockCredits = {
+        credits: [
+          {
+            id: '0x123',
+            amount: '150000000000000000000',
+            availableAmount: '150000000000000000000',
+            expiresAt: '1234567890',
+            signature: '0xsignature',
+            contract: '0xCreditsManager',
+            season: 1,
+            timestamp: '1234567890',
+            userAddress: mockWallet.address
+          }
+        ],
+        totalCredits: 150000000000000000000
+      }
+    })
+
+    describe('and no credits are available', () => {
+      let emptyCredits: CreditsResponse
+
+      beforeEach(() => {
+        emptyCredits = {
+          credits: [],
+          totalCredits: 0
+        }
+      })
+
+      it('should put a failure action', () => {
+        return expectSaga(ensSaga)
+          .provide([
+            [select(getWallet), mockWallet],
+            [select(getCredits, mockWallet.address), emptyCredits]
+          ])
+          .put(claimNameWithCreditsFailure(mockName, 'No credits available'))
+          .dispatch(claimNameWithCreditsRequest(mockName))
+          .silentRun()
+      })
+    })
+
+    describe('and the wallet is not connected', () => {
+      it('should put a failure action', () => {
+        return expectSaga(ensSaga)
+          .provide([
+            [select(getWallet), null],
+            [select(getCredits, ''), mockCredits]
+          ])
+          .put(claimNameWithCreditsFailure(mockName, 'Wallet not connected'))
+          .dispatch(claimNameWithCreditsRequest(mockName))
+          .silentRun()
+      })
+    })
+
+    describe('and no identity is available', () => {
+      it('should put a failure action', () => {
+        return expectSaga(ensSaga)
+          .provide([
+            [select(getWallet), mockWallet],
+            [select(getCredits, mockWallet.address), mockCredits],
+            [select(getCurrentIdentity), null]
+          ])
+          .put(claimNameWithCreditsFailure(mockName, 'No identity available for signed fetch'))
+          .dispatch(claimNameWithCreditsRequest(mockName))
+          .silentRun()
+      })
+    })
+
+    describe('and the credits client fails', () => {
+      let mockIdentity: AuthIdentity
+
+      beforeEach(() => {
+        mockIdentity = {} as AuthIdentity
+      })
+
+      it('should put a failure action with the error message', () => {
+        const clientError = new Error('Server error: Something went wrong')
+
+        return expectSaga(ensSaga)
+          .provide([
+            [select(getWallet), mockWallet],
+            [select(getCredits, mockWallet.address), mockCredits],
+            [select(getCurrentIdentity), mockIdentity],
+            [
+              matchers.call.fn(CreditsClient.prototype.fetchCreditsNameRoute as (...args: unknown[]) => Promise<unknown>),
+              Promise.reject(clientError)
+            ]
+          ])
+          .put(claimNameWithCreditsFailure(mockName, clientError.message))
+          .dispatch(claimNameWithCreditsRequest(mockName))
+          .silentRun()
+      })
+    })
+
+    describe('and the full flow succeeds', () => {
+      let mockIdentity: AuthIdentity
+      let mockRouteData: {
+        externalCall: {
+          target: string
+          selector: string
+          data: string
+          expiresAt: number
+          salt: string
+        }
+        customExternalCallSignature: string
+        quoteId: string
+        estimatedRouteDuration: number
+        fromChainId: string
+        toChainId: string
+      }
+      let mockTxHash: string
+      let mockSquidResponse: SquidStatusResponse
+
+      beforeEach(() => {
+        mockIdentity = {} as AuthIdentity
+        mockRouteData = {
+          externalCall: {
+            target: '0xTargetAddress',
+            selector: '0x12345678',
+            data: '0xData',
+            expiresAt: 1234567890,
+            salt: '0xSalt'
+          },
+          customExternalCallSignature: '0xSignature',
+          quoteId: 'quote-123',
+          estimatedRouteDuration: 300,
+          fromChainId: '137',
+          toChainId: '1'
+        }
+        mockTxHash = '0xTransactionHash'
+        mockSquidResponse = {
+          id: 'response-id',
+          status: 'success',
+          gasStatus: 'success',
+          isGMPTransaction: true,
+          squidTransactionStatus: SquidTransactionStatus.SUCCESS,
+          axelarTransactionUrl: 'https://axelarscan.io/tx/123',
+          fromChain: {
+            transactionId: mockTxHash,
+            blockNumber: '12345',
+            callEventStatus: 'success',
+            callEventLog: [],
+            chainData: {},
+            transactionUrl: 'https://polygonscan.com/tx/123'
+          },
+          toChain: {
+            transactionId: '0xEthereumTxHash',
+            blockNumber: '67890',
+            callEventStatus: 'success',
+            callEventLog: [],
+            chainData: {},
+            transactionUrl: 'https://etherscan.io/tx/456'
+          },
+          timeSpent: { total: 180 },
+          routeStatus: []
+        }
+      })
+
+      it('should dispatch transaction submitted, polling action, success action, and close modal', () => {
+        const mockTokenId = BigNumber.from('12345')
+
+        const expectedENS: ENS = {
+          name: mockName,
+          tokenId: mockTokenId.toString(),
+          ensOwnerAddress: mockWallet.address,
+          nftOwnerAddress: mockWallet.address,
+          subdomain: getDomainFromName(mockName),
+          resolver: ethers.constants.AddressZero,
+          content: ethers.constants.AddressZero,
+          contractAddress: REGISTRAR_ADDRESS
+        }
+        const coralScanUrl = `${CORAL_SCAN_BASE_URL}/${mockTxHash}`
+
+        return expectSaga(ensSaga)
+          .provide([
+            [select(getWallet), mockWallet],
+            [select(getCredits, mockWallet.address), mockCredits],
+            [select(getCurrentIdentity), mockIdentity],
+            [matchers.call.fn(CreditsClient.prototype.fetchCreditsNameRoute as (...args: unknown[]) => Promise<unknown>), mockRouteData],
+            [matchers.call.fn(CreditsService.prototype.useCreditsWithExternalCall as (...args: unknown[]) => Promise<string>), mockTxHash],
+            [matchers.call.fn(pollSquidRouteStatus), mockSquidResponse],
+            [matchers.call.fn(getTokenIdFromEthereumContract), mockTokenId]
+          ])
+          .put(claimNameWithCreditsTransactionSubmitted(mockName, mockWallet.address, ChainId.MATIC_MAINNET, mockTxHash))
+          .put(claimNameWithCreditsCrossChainPolling(mockName, mockTxHash, coralScanUrl))
+          .put(claimNameWithCreditsSuccess(expectedENS, mockName, '0xEthereumTxHash'))
+          .put(closeModal('BuyWithCryptoModal'))
+          .dispatch(claimNameWithCreditsRequest(mockName))
+          .silentRun()
+      })
+    })
+
+    describe('and the squid polling fails', () => {
+      let mockIdentity: AuthIdentity
+      let mockRouteData: {
+        externalCall: {
+          target: string
+          selector: string
+          data: string
+          expiresAt: number
+          salt: string
+        }
+        customExternalCallSignature: string
+        quoteId: string
+        estimatedRouteDuration: number
+        fromChainId: string
+        toChainId: string
+      }
+      let mockTxHash: string
+
+      beforeEach(() => {
+        mockIdentity = {} as AuthIdentity
+        mockRouteData = {
+          externalCall: {
+            target: '0xTargetAddress',
+            selector: '0x12345678',
+            data: '0xData',
+            expiresAt: 1234567890,
+            salt: '0xSalt'
+          },
+          customExternalCallSignature: '0xSignature',
+          quoteId: 'quote-123',
+          estimatedRouteDuration: 300,
+          fromChainId: '137',
+          toChainId: '1'
+        }
+        mockTxHash = '0xTransactionHash'
+      })
+
+      it('should dispatch transaction submitted, polling action, failure action, and close modal', () => {
+        const pollingError = new Error('Cross-chain transaction polling timeout')
+        const coralScanUrl = `${CORAL_SCAN_BASE_URL}/${mockTxHash}`
+
+        return expectSaga(ensSaga)
+          .provide([
+            [select(getWallet), mockWallet],
+            [select(getCredits, mockWallet.address), mockCredits],
+            [select(getCurrentIdentity), mockIdentity],
+            [matchers.call.fn(CreditsClient.prototype.fetchCreditsNameRoute as (...args: unknown[]) => Promise<unknown>), mockRouteData],
+            [matchers.call.fn(CreditsService.prototype.useCreditsWithExternalCall as (...args: unknown[]) => Promise<string>), mockTxHash],
+            [matchers.call.fn(pollSquidRouteStatus), Promise.reject(pollingError)]
+          ])
+          .put(claimNameWithCreditsTransactionSubmitted(mockName, mockWallet.address, ChainId.MATIC_MAINNET, mockTxHash))
+          .put(claimNameWithCreditsCrossChainPolling(mockName, mockTxHash, coralScanUrl))
+          .put(claimNameWithCreditsFailure(mockName, pollingError.message))
+          .put(closeModal('BuyWithCryptoModal'))
+          .dispatch(claimNameWithCreditsRequest(mockName))
           .silentRun()
       })
     })

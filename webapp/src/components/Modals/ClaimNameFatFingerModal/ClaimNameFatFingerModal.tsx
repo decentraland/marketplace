@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { ethers } from 'ethers'
 import { v4 as uuidv4 } from 'uuid'
 import { ChainId, NFTCategory } from '@dcl/schemas'
 import { Env } from '@dcl/ui-env'
@@ -8,14 +9,16 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { FiatGateway } from 'decentraland-dapps/dist/modules/gateway/types'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ModalNavigation, Field, Icon } from 'decentraland-ui'
+import { CreditsToggle } from 'decentraland-ui2'
 import { config } from '../../../config'
 import { DCLController__factory } from '../../../contracts/factories/DCLController__factory'
 import { Asset } from '../../../modules/asset/types'
-import { PRICE } from '../../../modules/ens/utils'
+import { PRICE, PRICE_IN_WEI } from '../../../modules/ens/utils'
 import * as events from '../../../utils/events'
 import { drawImage } from '../../AssetImage/EnsImage/utils'
 import { BuyWithCardButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons/BuyWithCardButton'
 import { BuyWithCryptoButton } from '../../AssetPage/SaleActionBox/BuyNFTButtons/BuyWithCryptoButton'
+import { ManaToFiat } from '../../ManaToFiat'
 import { Props } from './ClaimNameFatFingerModal.types'
 import './ClaimNameFatFingerModal.css'
 
@@ -29,8 +32,10 @@ const isDev = config.is(Env.DEVELOPMENT)
 const ClaimNameFatFingerModal = ({
   name: modalName,
   wallet,
+  credits,
   metadata: { name: ENSName, autoComplete },
   isClaimingName,
+  isNAMEsWithCreditsEnabled,
   onBuyWithCrypto,
   onClose,
   onClaimTxSubmitted,
@@ -39,7 +44,15 @@ const ClaimNameFatFingerModal = ({
   const analytics = getAnalytics()
   const inputRef = useRef<HTMLInputElement>(null)
   const [isLoadingFIATWidget, setIsLoadingFIATWidget] = useState(false)
+  const [useCredits, setUseCredits] = useState(false)
   const isLoading = isClaimingName || isLoadingFIATWidget
+
+  // Calculate credits amounts
+  const hasCredits = credits && credits.totalCredits > 0
+  const totalCreditsAmount = hasCredits ? BigInt(credits.totalCredits.toString()) : BigInt(0)
+  const namePrice = BigInt(PRICE_IN_WEI)
+  const creditsToApply = totalCreditsAmount > namePrice ? namePrice : totalCreditsAmount
+  const finalPrice = useCredits && hasCredits ? namePrice - creditsToApply : namePrice
 
   useEffect(() => {
     if (inputRef.current) {
@@ -130,11 +143,16 @@ const ClaimNameFatFingerModal = ({
   const handleOnBuyWithCrypto = useCallback(() => {
     analytics?.track(events.CLICK_CHECKOUT_NAME, {
       name: ENSName,
-      payment_method: 'crypto'
+      payment_method: 'crypto',
+      use_credits: useCredits
     })
 
-    onBuyWithCrypto(currentName)
-  }, [currentName])
+    onBuyWithCrypto(currentName, useCredits)
+  }, [currentName, useCredits, ENSName, analytics, onBuyWithCrypto])
+
+  const handleCreditsToggle = useCallback((isChecked: boolean) => {
+    setUseCredits(isChecked)
+  }, [])
 
   const areNamesDifferent = currentName !== ENSName
   const hasError = areNamesDifferent && currentName.length > 0
@@ -158,6 +176,46 @@ const ClaimNameFatFingerModal = ({
           <Icon name="info circle" />
           {t('names_page.claim_name_fat_finger_modal.caps_warning')}
         </div>
+
+        <div className="priceAndCreditsRow">
+          {/* Left side: Price Display */}
+          <div className="priceDisplay">
+            <div className="priceLabel">{t('names_page.claim_name_fat_finger_modal.price')}</div>
+            {useCredits && hasCredits ? (
+              <div className="priceWithCredits">
+                <div className="manaSymbol">◈</div>
+                <div className="originalPrice strikethrough">{Number(ethers.utils.formatEther(PRICE_IN_WEI)).toFixed(0)}</div>
+                <div className="finalPriceValue">{Number(ethers.utils.formatEther(finalPrice)).toFixed(0)}</div>
+                {finalPrice > 0n ? (
+                  <div className="fiatEquivalent">
+                    (<ManaToFiat mana={finalPrice.toString()} />)
+                  </div>
+                ) : null}
+              </div>
+            ) : (
+              <div className="priceWithoutCredits">
+                <div className="manaSymbol">◈</div>
+                <div className="finalPriceValue">{Number(ethers.utils.formatEther(PRICE_IN_WEI)).toFixed(0)}</div>
+                <div className="fiatEquivalent">
+                  (<ManaToFiat mana={PRICE_IN_WEI} />)
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Right side: Credits Toggle */}
+          {isNAMEsWithCreditsEnabled && (
+            <div className="creditsToggleWrapper">
+              <CreditsToggle
+                totalCredits={credits?.totalCredits.toString() || 0}
+                showLearnMore={!hasCredits}
+                assetPrice={PRICE_IN_WEI}
+                useCredits={useCredits}
+                onToggle={handleCreditsToggle}
+              />
+            </div>
+          )}
+        </div>
       </Modal.Content>
       <Modal.Actions>
         <BuyWithCryptoButton
@@ -165,6 +223,8 @@ const ClaimNameFatFingerModal = ({
           data-testid={CRYPTO_PAYMENT_METHOD_DATA_TESTID}
           onClick={handleOnBuyWithCrypto}
           disabled={isLoading || areNamesDifferent}
+          isFree={finalPrice === 0n}
+          useCredits={useCredits}
         />
         <BuyWithCardButton
           data-testid={FIAT_PAYMENT_METHOD_DATA_TESTID}
