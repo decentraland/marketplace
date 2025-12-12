@@ -1,4 +1,4 @@
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { Router } from 'react-router-dom'
 import { Web2TransactionModal } from 'decentraland-dapps/dist/containers'
@@ -41,7 +41,8 @@ function main() {
     </Provider>
   )
 
-  render(component, document.getElementById('root'))
+  const container = document.getElementById('root')!
+  createRoot(container).render(component)
 }
 
 main()
