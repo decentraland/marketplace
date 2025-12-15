@@ -1,8 +1,7 @@
 import classNames from 'classnames'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ModalNavigation, Button, Form, Icon } from 'decentraland-ui'
-import { Profile } from 'decentraland-ui2'
+import { ModalNavigation, Button, Form, Icon, Profile } from 'decentraland-ui'
 import UserIcon from '../../../images/user-circle.svg'
 import VerifiedIcon from '../../../images/verified.svg'
 import { Props } from './SetNameAsAliasModal.types'
@@ -28,7 +27,7 @@ const SetNameAsAliasModal = ({ address, profile, metadata: { name }, isLoading, 
           <div className="card">
             {profile && successOnSetAlias && address ? (
               <div className="successContainer">
-                <Profile address={address} avatar={profile.avatars[0]} inline={false} size="massive" imageOnly />
+                <Profile address={address} inline={false} size="massive" imageOnly />
                 <div className="verified">
                   <span>{profile.avatars[0].name}</span>
                   <img src={VerifiedIcon} alt="verified icon" />
