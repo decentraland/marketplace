@@ -344,7 +344,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     if (onBuyWithCredits) {
       onBuyWithCredits(BigInt(finalPrice))
     }
-  }, [onBuyWithCredits, finalPrice, credits])
+  }, [onBuyWithCredits, finalPrice])
 
   const renderBuyNowButton = useCallback(() => {
     const onClick =

@@ -97,8 +97,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   }, [onClose])
 
   const onBuyWithCredits = useCallback(
-    (manaToSpentByUser: bigint) => {
-      if (manaToSpentByUser === 0n) {
+    (manaToSpendByUser: bigint) => {
+      if (manaToSpendByUser === 0n) {
         onClaimNameWithCredits()
         return
       }
@@ -107,14 +107,10 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
         creditsManager = getDCLContract(ContractName.CreditsManager, getChainIdByNetwork(Network.MATIC))
       } catch (error) {
         console.log('Error getting credit manager', error)
-      }
-      if (!creditsManager) {
-        console.error('Credits manager not found')
         return
       }
-      const contractNames = getContractNames()
       const manaContract = getContract({
-        name: contractNames.MANA,
+        name: ContractName.MANAToken,
         network: Network.MATIC
       }) as DCLContract
 
@@ -125,7 +121,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
         authorizedContractLabel: creditsManager.name,
         targetContract: manaContract as Contract,
         targetContractName: ContractName.MANAToken,
-        requiredAllowanceInWei: manaToSpentByUser.toString(),
+        requiredAllowanceInWei: manaToSpendByUser.toString(),
         authorizationType: AuthorizationType.ALLOWANCE,
         onAuthorized: () => onClaimNameWithCredits()
       })
