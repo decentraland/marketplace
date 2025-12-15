@@ -100,6 +100,18 @@ export async function pollSquidRouteStatus(params: PollSquidRouteStatusParams): 
         }
       })
 
+      // Handle 404 as "transaction not yet indexed" - continue polling
+      if (response.status === 404) {
+        // If we've been polling for a while and still getting 404, it's an error
+        if (elapsedTime > 60000) {
+          // 1 minute
+          throw new Error('Transaction not found. The transaction may not have been properly submitted.')
+        }
+        // Otherwise, continue polling (the transaction may not be indexed yet)
+        await new Promise(resolve => setTimeout(resolve, POLLING_INTERVAL_MS))
+        continue
+      }
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
