@@ -33,6 +33,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     onClaimNameWithCredits,
     onOpenFatFingerModal,
     onCloseFatFingerModal,
+    onCloseAuthorization,
     onClose
   } = props
 
@@ -109,8 +110,9 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
         console.log('Error getting credit manager', error)
         return
       }
+      const contractNames = getContractNames()
       const manaContract = getContract({
-        name: ContractName.MANAToken,
+        name: contractNames.MANA,
         network: Network.MATIC
       }) as DCLContract
 
@@ -123,7 +125,10 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
         targetContractName: ContractName.MANAToken,
         requiredAllowanceInWei: manaToSpendByUser.toString(),
         authorizationType: AuthorizationType.ALLOWANCE,
-        onAuthorized: () => onClaimNameWithCredits()
+        onAuthorized: () => {
+          onCloseAuthorization()
+          onClaimNameWithCredits()
+        }
       })
     },
     [onClaimNameWithCredits]

@@ -538,7 +538,122 @@ describe('Squid Polling Utility', () => {
     })
   })
 
-  describe('when API returns an error', () => {
+  describe('when API returns HTTP 404', () => {
+    describe('and less than 1 minute has elapsed', () => {
+      let mockSuccessResponse: SquidStatusResponse
+      let pollParams: PollSquidRouteStatusParams
+
+      beforeEach(() => {
+        mockSuccessResponse = {
+          id: '0xTransactionHash',
+          status: 'success',
+          gasStatus: '',
+          isGMPTransaction: false,
+          squidTransactionStatus: SquidTransactionStatus.SUCCESS,
+          axelarTransactionUrl: '',
+          fromChain: {
+            transactionId: '0xFromTxHash',
+            blockNumber: '12345',
+            callEventStatus: '',
+            callEventLog: [],
+            chainData: {},
+            transactionUrl: 'https://polygonscan.com/tx/0xFromTxHash'
+          },
+          toChain: {
+            transactionId: '0xToTxHash',
+            blockNumber: '67890',
+            callEventStatus: '',
+            callEventLog: [],
+            chainData: {},
+            transactionUrl: 'https://etherscan.io/tx/0xToTxHash'
+          },
+          timeSpent: {
+            total: 120
+          },
+          routeStatus: []
+        }
+
+        pollParams = {
+          transactionId: '0xTransactionHash',
+          fromChainId: '137',
+          toChainId: '1',
+          quoteId: 'test-quote-id',
+          integratorId: 'test-integrator',
+          apiUrl: 'https://api.test.com'
+        }
+
+        mockFetch
+          .mockResolvedValueOnce({
+            ok: false,
+            status: 404,
+            statusText: 'Not Found',
+            json: () => Promise.resolve({})
+          })
+          .mockResolvedValueOnce({
+            ok: false,
+            status: 404,
+            statusText: 'Not Found',
+            json: () => Promise.resolve({})
+          })
+          .mockResolvedValueOnce({
+            ok: true,
+            json: () => Promise.resolve(mockSuccessResponse)
+          })
+      })
+
+      it('should continue polling until transaction is indexed', async () => {
+        const promise = pollSquidRouteStatus(pollParams)
+
+        // Advance through polling cycles (less than 1 minute total)
+        for (let i = 0; i < 3; i++) {
+          await jest.advanceTimersByTimeAsync(5000)
+        }
+
+        const result = await promise
+
+        expect(result).toEqual(mockSuccessResponse)
+        expect(mockFetch).toHaveBeenCalledTimes(3)
+      })
+    })
+
+    describe('and more than 1 minute has elapsed', () => {
+      let pollParams: PollSquidRouteStatusParams
+
+      beforeEach(() => {
+        pollParams = {
+          transactionId: '0xTransactionHash',
+          fromChainId: '137',
+          toChainId: '1',
+          quoteId: 'test-quote-id',
+          integratorId: 'test-integrator',
+          apiUrl: 'https://api.test.com'
+        }
+
+        mockFetch.mockResolvedValue({
+          ok: false,
+          status: 404,
+          statusText: 'Not Found',
+          json: () => Promise.resolve({})
+        })
+      })
+
+      it('should throw an error after 1 minute of 404 responses', async () => {
+        const promise = pollSquidRouteStatus(pollParams).catch((e: Error) => e)
+
+        // We need to poll enough times for the elapsed time to exceed 60 seconds
+        // Polling happens every 5 seconds, so we need at least 13 polls (65 seconds)
+        for (let i = 0; i < 13; i++) {
+          await jest.advanceTimersByTimeAsync(5000)
+        }
+        const result = await promise
+
+        expect(result).toBeInstanceOf(Error)
+        expect((result as Error).message).toBe('Transaction not found. The transaction may not have been properly submitted.')
+      })
+    })
+  })
+
+  describe('when API returns a non-404 error', () => {
     let errorResponse: {
       ok: boolean
       status: number
