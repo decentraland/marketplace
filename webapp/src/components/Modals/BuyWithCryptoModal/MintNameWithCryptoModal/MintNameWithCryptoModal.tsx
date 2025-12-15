@@ -4,7 +4,7 @@ import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
-import { ContractName } from 'decentraland-transactions'
+import { ContractName, getContract as getDCLContract } from 'decentraland-transactions'
 import { config } from '../../../../config'
 import { getClaimNameStatus, getErrorMessage } from '../../../../modules/ens/selectors'
 import { PRICE_IN_WEI } from '../../../../modules/ens/utils'
@@ -96,9 +96,38 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     return onClose()
   }, [onClose])
 
-  const onBuyWithCredits = useCallback(() => {
-    onClaimNameWithCredits()
-  }, [onClaimNameWithCredits])
+  const onBuyWithCredits = useCallback(
+    (manaToSpendByUser: bigint) => {
+      if (manaToSpendByUser === 0n) {
+        onClaimNameWithCredits()
+        return
+      }
+      let creditsManager
+      try {
+        creditsManager = getDCLContract(ContractName.CreditsManager, getChainIdByNetwork(Network.MATIC))
+      } catch (error) {
+        console.log('Error getting credit manager', error)
+        return
+      }
+      const manaContract = getContract({
+        name: ContractName.MANAToken,
+        network: Network.MATIC
+      }) as DCLContract
+
+      onAuthorizedAction({
+        // Override the automatic Magic sign in as the user will need to pay gas for the transaction
+        manual: true,
+        authorizedAddress: creditsManager.address,
+        authorizedContractLabel: creditsManager.name,
+        targetContract: manaContract as Contract,
+        targetContractName: ContractName.MANAToken,
+        requiredAllowanceInWei: manaToSpendByUser.toString(),
+        authorizationType: AuthorizationType.ALLOWANCE,
+        onAuthorized: () => onClaimNameWithCredits()
+      })
+    },
+    [onClaimNameWithCredits]
+  )
 
   // Emulates a NFT for the item to be minted so it can be shown in the modal
   const asset: NFT = useMemo(

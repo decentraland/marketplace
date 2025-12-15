@@ -340,10 +340,16 @@ export const BuyWithCryptoModal = (props: Props) => {
     )
   }, [isFetchingBalance, isBuyingAsset, asset.chainId, isLoadingAuthorization, onBuyWithCard, handleBuyWithCard, onGetMana, onClose])
 
+  const onPayWithCredits = useCallback(() => {
+    if (onBuyWithCredits) {
+      onBuyWithCredits(BigInt(finalPrice))
+    }
+  }, [onBuyWithCredits, finalPrice])
+
   const renderBuyNowButton = useCallback(() => {
     const onClick =
       useCredits && asset.data.ens && onBuyWithCredits
-        ? onBuyWithCredits
+        ? onPayWithCredits
         : shouldUseCrossChainProvider
           ? handleCrossChainBuy
           : onBuyNatively

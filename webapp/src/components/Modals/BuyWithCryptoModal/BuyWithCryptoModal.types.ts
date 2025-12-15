@@ -41,7 +41,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
     onBuyWithCard?: () => unknown
     onBuyCrossChain: (route: Route) => unknown
     onGetMana: ActionFunction<typeof openBuyManaWithFiatModalRequest>
-    onBuyWithCredits?: () => unknown
+    onBuyWithCredits?: (manaToSpendByUser: bigint) => unknown
     onClearCreditsClaimProgress?: () => void
     onClose: ModalProps['onClose']
   }
