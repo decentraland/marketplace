@@ -26,6 +26,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     metadata: { name, useCredits },
     isUsingMagic,
     isLoadingAuthorization,
+    credits,
     getContract,
     onAuthorizedAction,
     onClaimName,
@@ -163,9 +164,16 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     [name]
   )
 
+  const price = useMemo(() => {
+    if (!useCredits || !credits) return PRICE_IN_WEI
+    const adjustedPrice = BigInt(PRICE_IN_WEI) - BigInt(credits.totalCredits)
+    // Convert back to wei format
+    return adjustedPrice < 0 ? '0' : adjustedPrice.toString()
+  }, [PRICE_IN_WEI, useCredits, credits])
+
   return (
     <BuyWithCryptoModal
-      price={PRICE_IN_WEI}
+      price={price}
       isBuyingAsset={isMintingName || isMintingNameCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyCrossChain={onClaimNameCrossChain}
