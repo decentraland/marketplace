@@ -47,3 +47,12 @@ export type WorldStatus = {
     entityId: string
   }
 }
+
+export type CreditsClaimProgressStatus = 'polling' | 'success' | 'failed'
+
+export type CreditsClaimProgress = {
+  name: string
+  polygonTxHash: string
+  coralScanUrl: string
+  status: CreditsClaimProgressStatus
+}

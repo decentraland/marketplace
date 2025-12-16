@@ -2,6 +2,7 @@ import { fireEvent, cleanup } from '@testing-library/react'
 import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { FiatGatewayListeners } from 'decentraland-dapps/dist/modules/gateway/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -24,6 +25,25 @@ jest.mock(
     }) as unknown
 )
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+jest.mock('decentraland-ui2', () => ({
+  ...jest.requireActual('decentraland-ui2'),
+  CreditsToggle: ({
+    totalCredits,
+    useCredits,
+    onToggle
+  }: {
+    totalCredits: string | number
+    useCredits: boolean
+    onToggle: (checked: boolean) => void
+  }) => (
+    <div data-testid="credits-toggle">
+      <span data-testid="credits-amount">Credits: {totalCredits}</span>
+      <input type="checkbox" checked={useCredits} onChange={e => onToggle(e.target.checked)} data-testid="credits-toggle-input" />
+    </div>
+  )
+}))
+
 const getSignerMock = getSigner as jest.MockedFunction<typeof getSigner>
 const signerMock = {
   getAddress: jest.fn(),
@@ -41,6 +61,8 @@ const renderClaimFatFingerModal = (props: Partial<Props> = {}) =>
       onClose={jest.fn()}
       onOpenFiatGateway={jest.fn()}
       wallet={{} as Wallet}
+      credits={undefined}
+      isNAMEsWithCreditsEnabled={true}
       {...props}
     />
   )
@@ -174,6 +196,145 @@ describe('ClaimNameFatFingerModal', () => {
 
       expect(getByTestId(CRYPTO_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
       expect(getByTestId(FIAT_PAYMENT_METHOD_DATA_TESTID)).toBeDisabled()
+    })
+  })
+
+  describe('when displaying the price', () => {
+    describe('and user has no credits', () => {
+      let renderedModal: ReturnType<typeof renderClaimFatFingerModal>
+
+      beforeEach(() => {
+        renderedModal = renderClaimFatFingerModal({
+          credits: undefined
+        })
+      })
+
+      it('should display the full price of 100 MANA', () => {
+        const { getByText } = renderedModal
+        expect(getByText('100')).toBeInTheDocument()
+      })
+
+      it('should display the credits toggle', () => {
+        const { getByTestId } = renderedModal
+        expect(getByTestId('credits-toggle')).toBeInTheDocument()
+      })
+    })
+
+    describe('and user has credits but toggle is off', () => {
+      let renderedModal: ReturnType<typeof renderClaimFatFingerModal>
+      let mockCredits: CreditsResponse
+
+      beforeEach(() => {
+        mockCredits = {
+          credits: [
+            {
+              id: '0x123',
+              amount: '50000000000000000000',
+              availableAmount: '50000000000000000000',
+              expiresAt: '1234567890',
+              signature: '0xsignature',
+              contract: '0xCreditsManager',
+              season: 1,
+              timestamp: '1234567890',
+              userAddress: '0x1'
+            }
+          ],
+          totalCredits: 50000000000000000000
+        }
+        renderedModal = renderClaimFatFingerModal({
+          credits: mockCredits
+        })
+      })
+
+      it('should display the full price of 100 MANA', () => {
+        const { getByText } = renderedModal
+        expect(getByText('100')).toBeInTheDocument()
+      })
+
+      it('should display the credits toggle with the correct amount', () => {
+        const { getByTestId } = renderedModal
+        expect(getByTestId('credits-toggle')).toBeInTheDocument()
+        expect(getByTestId('credits-amount').textContent).toContain('50000000000000000000')
+      })
+    })
+
+    describe('and user has credits and toggle is on', () => {
+      let renderedModal: ReturnType<typeof renderClaimFatFingerModal>
+      let mockCredits: CreditsResponse
+
+      beforeEach(() => {
+        mockCredits = {
+          credits: [
+            {
+              id: '0x123',
+              amount: '50000000000000000000',
+              availableAmount: '50000000000000000000',
+              expiresAt: '1234567890',
+              signature: '0xsignature',
+              contract: '0xCreditsManager',
+              season: 1,
+              timestamp: '1234567890',
+              userAddress: '0x1'
+            }
+          ],
+          totalCredits: 50000000000000000000
+        }
+        renderedModal = renderClaimFatFingerModal({
+          credits: mockCredits
+        })
+      })
+
+      describe('and credits toggle is clicked', () => {
+        beforeEach(() => {
+          const { getByTestId } = renderedModal
+          fireEvent.click(getByTestId('credits-toggle-input'))
+        })
+
+        it('should show the original price with strikethrough and the discounted price', () => {
+          const { getByText } = renderedModal
+          expect(getByText('100')).toBeInTheDocument()
+          expect(getByText('50')).toBeInTheDocument()
+        })
+      })
+    })
+
+    describe('and user has more credits than the price', () => {
+      let renderedModal: ReturnType<typeof renderClaimFatFingerModal>
+      let mockCredits: CreditsResponse
+
+      beforeEach(() => {
+        mockCredits = {
+          credits: [
+            {
+              id: '0x123',
+              amount: '150000000000000000000',
+              availableAmount: '150000000000000000000',
+              expiresAt: '1234567890',
+              signature: '0xsignature',
+              contract: '0xCreditsManager',
+              season: 1,
+              timestamp: '1234567890',
+              userAddress: '0x1'
+            }
+          ],
+          totalCredits: 150000000000000000000
+        }
+        renderedModal = renderClaimFatFingerModal({
+          credits: mockCredits
+        })
+      })
+
+      describe('and credits toggle is clicked', () => {
+        beforeEach(() => {
+          const { getByTestId } = renderedModal
+          fireEvent.click(getByTestId('credits-toggle-input'))
+        })
+
+        it('should show the final price as 0', () => {
+          const { getByText } = renderedModal
+          expect(getByText('0')).toBeInTheDocument()
+        })
+      })
     })
   })
 })

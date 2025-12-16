@@ -112,3 +112,10 @@ export const getIsSocialEmotesEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsNAMEsWithCreditsEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.NAMES_WITH_CREDITS)
+  }
+  return false
+}

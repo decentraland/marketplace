@@ -891,7 +891,14 @@
     },
     "price_too_low": "Las transacciones de MANA solo están libres de tarifa de gas si el artículo cuesta al menos 1 MANA. Para obtener este artículo, cambia tu red a Polygon para pagar la tarifa del gas con MATIC. {learn_more}",
     "remember_transaction_fee_covered": "Pague con Polygon MANA para que el DAO cubra las tarifas de gas (el artículo debe costar al menos 1 MANA).",
-    "learn_more": "Aprende más"
+    "learn_more": "Aprende más",
+    "cross_chain_polling": {
+      "title": "Procesando compra",
+      "processing": "Procesando tu transacción cruzada...",
+      "description": "Tu transacción está siendo procesada a través de redes. Esto puede tomar unos minutos.",
+      "track_on_coral_scan": "Seguir en CoralScan",
+      "note": "Por favor, mantén esta ventana abierta. Serás redirigido automáticamente cuando la transacción se complete."
+    }
   },
   "partially_supported_network_card": {
     "content": "Estás conectado a la red de Polygon para comprar artículos por debajo de <mana>1</mana>. Deberá tener MATIC en su billetera para cubrir la tarifa de transacción de esta compra."
@@ -1506,8 +1513,8 @@
       "view_item": "Ver mi artículo",
       "try_genesis_city": "Pruébalo en Genesis City",
       "try_it_on_in_world": "Pruébalo en el mundo",
-      "mint_more_names": "Acuñar más nombres",
-      "set_as_primary_name": "Elegir como nombre primario",
+      "mint_more_names": "Obtener más nombres",
+      "set_as_primary_name": "Asignar nombre a Avatar",
       "manage_names": "Administrar mis nombres",
       "manage_land": "Administrar LAND",
       "start_building": "Comenzar a construir"
@@ -1573,7 +1580,7 @@
     "fingerprint_missmatch": "La información de esta LAND puede no estar actualizada. Actualice la página para obtener la información más reciente. Si el problema persiste, comuníquese con nuestro equipo de soporte."
   },
   "names_page": {
-    "title": "Convertite en un ciudadano de Decentraland!",
+    "title": "Reclama tu NOMBRE, Desbloqueá tu Mundo!",
     "subtitle": "Obtené tu nombre único",
     "claim_a_name": "Obtener nombre",
     "browse_names_being_resold": "Buscar nombres siendo revendidos",
@@ -1590,6 +1597,7 @@
     "debit_and_credit_cards": "Tarjeta de débito y crédito",
     "ethereum_mainnet_network": "Red Principal de Ethereum",
     "dao_tooltip": "Todo lo generado por las ventas de Nombres es redirigido al tesoro de la DAO. {link}",
+    "credit_compatitble": "Compatible con Créditos!",
     "why_names": "Por qué Nombres?",
     "name_too_short": "Nombre demasiado corto: debe contener por lo menos 2 caracteres",
     "has_spaces": "Los Nombres no peuden contener espacios",
@@ -1598,10 +1606,12 @@
     "not_enough_mana": "No tienes suficiente MANA para reclamar un nuevo nombre",
     "fiat_payments_not_enabled": "Los pagos con FIAT no están disponibles en este momento. Por favor inténtelo más tarde.",
     "claim_name_fat_finger_modal": {
-      "title": "Por favor confirmar tu nombre",
+      "title": "Confirme su nombre nuevo",
       "description": "Elegiste {name}. {br} Entra nuevamente el nombre para confirmar tu selección.",
       "ok_message": "Felicitaciones, el nombre {name} es tuyo.",
       "caps_warning": "La capitalización de los nombres no puede ser modificada una vez de adquirido el nombre.",
+      "price_label": "Precio Total",
+      "price": "PRECIO",
       "paying_with": "Pagando con",
       "pay_methods": {
         "crypto": {

@@ -7,50 +7,50 @@ import { NFT } from '../../../modules/nft/types'
 import { useShouldUseCrossChainProvider, useNameMintingGasCost, useTokenBalance, useBuyNftGasCost, useMintingNftGasCost } from './hooks'
 import { estimateBuyNftGas, estimateMintNftGas, estimateNameMintingGas } from './utils'
 
-jest.mock(
-  'ethers',
-  () =>
-    ({
-      ...jest.requireActual('ethers'),
-      ethers: {
-        ...jest.requireActual<typeof ethersModule>('ethers').ethers,
-        Contract: function (address: string, abi: string[], provider: any) {
-          return {
-            address,
-            abi,
-            provider,
-            balanceOf: () => Promise.resolve(BigNumber.from(3232))
-          }
-        },
-        providers: {
-          Web3Provider: function () {
-            return {
-              getGasPrice: () => Promise.resolve(BigNumber.from(4)),
-              send: (method: string) => (method === 'eth_getBalance' ? Promise.resolve(BigNumber.from(3231)) : Promise.resolve(undefined))
-            }
-          }
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-explicit-any
+jest.mock('ethers', () => ({
+  ...jest.requireActual('ethers'),
+  ethers: {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    ...jest.requireActual<typeof ethersModule>('ethers').ethers,
+    Contract: function (address: string, abi: string[], provider: unknown) {
+      return {
+        address,
+        abi,
+        provider,
+        balanceOf: () => Promise.resolve(BigNumber.from(3232))
+      }
+    },
+    providers: {
+      Web3Provider: function () {
+        return {
+          getGasPrice: () => Promise.resolve(BigNumber.from(4)),
+          send: (method: string) => (method === 'eth_getBalance' ? Promise.resolve(BigNumber.from(3231)) : Promise.resolve(undefined))
         }
       }
-    }) as unknown
-)
+    }
+  }
+}))
 
 jest.mock('./utils', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     ...jest.requireActual('./utils'),
     estimateNameMintingGas: jest.fn(),
     estimateMintNftGas: jest.fn(),
     estimateBuyNftGas: jest.fn()
-  } as unknown
+  }
 })
 
 jest.mock('decentraland-dapps/dist/lib', () => {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return {
     ...jest.requireActual('decentraland-dapps/dist/lib'),
     getNetworkProvider: () =>
       Promise.resolve({
         name: 'aProvider'
       })
-  } as unknown
+  }
 })
 
 describe('when using the should use cross chain provider hook', () => {

@@ -210,7 +210,7 @@ export const useCrossChainMintNftRoute = (
         fetchTradeData: async () => {
           const trade = await new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined).fetchTrade(item.tradeId as string)
           return {
-            marketplaceContract: trade.contract,
+            marketplaceAddress: trade.contract,
             onChainTrade: getOnChainTrade(trade, fromAddress)
           }
         }
@@ -257,7 +257,7 @@ export const useCrossChainBuyNftRoute = (
                   order.tradeId as string
                 )
                 return {
-                  marketplaceContract: trade.contract,
+                  marketplaceAddress: trade.contract,
                   onChainTrade: getOnChainTrade(trade, wallet.address)
                 }
               }
@@ -287,7 +287,8 @@ export const useCrossChainNameMintingRoute = (
   selectedChain: ChainId,
   providerTokens: Token[],
   crossChain: CrossChainProvider | undefined,
-  wallet: Wallet | null
+  wallet: Wallet | null,
+  withCredits: boolean
 ) => {
   const getMintingNameRoute = useCallback(
     (fromAddress: string, fromAmount: string, fromChain: ChainId, fromToken: string, crossChainProvider: CrossChainProvider) =>
@@ -302,7 +303,17 @@ export const useCrossChainNameMintingRoute = (
       }),
     [name, assetChainId, price]
   )
-  return useCrossChainRoute(price, assetChainId, selectedToken, selectedChain, providerTokens, crossChain, wallet, getMintingNameRoute)
+  return useCrossChainRoute(
+    price,
+    assetChainId,
+    selectedToken,
+    selectedChain,
+    providerTokens,
+    crossChain,
+    wallet,
+    getMintingNameRoute,
+    withCredits
+  )
 }
 
 export type RouteFeeCost = {
@@ -321,6 +332,7 @@ export type CrossChainRoute = {
   routeTotalUSDCost: number | undefined
   isFetchingRoute: boolean
   routeFailed: boolean
+  refetchRoute?: () => void
 }
 
 const useCrossChainRoute = (
@@ -337,7 +349,8 @@ const useCrossChainRoute = (
     fromChain: ChainId,
     fromToken: string,
     crossChainProvider: CrossChainProvider
-  ) => Promise<Route>
+  ) => Promise<Route>,
+  withCredits = false
 ): CrossChainRoute => {
   const [isFetchingRoute, setIsFetchingRoute] = useState(false)
   const [routeFailed, setRouteFailed] = useState(false)
@@ -433,7 +446,11 @@ const useCrossChainRoute = (
       const isPayingWithOtherTokenThanMANA = selectedToken.symbol !== 'MANA'
       const isPayingWithMANAButFromOtherChain = selectedToken.symbol === 'MANA' && selectedToken.chainId !== assetChainId.toString()
 
-      if (isBuyingL1WithOtherTokenThanEthereumMANA || isPayingWithOtherTokenThanMANA || isPayingWithMANAButFromOtherChain) {
+      // The only cross-chain route to use credits is for NAMEs and it's calculated server-side
+      if (
+        (isBuyingL1WithOtherTokenThanEthereumMANA || isPayingWithOtherTokenThanMANA || isPayingWithMANAButFromOtherChain) &&
+        !withCredits
+      ) {
         void calculateRoute()
       }
     }

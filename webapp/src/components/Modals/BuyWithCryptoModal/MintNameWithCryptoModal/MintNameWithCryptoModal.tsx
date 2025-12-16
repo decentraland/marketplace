@@ -4,7 +4,7 @@ import { withAuthorizedAction } from 'decentraland-dapps/dist/containers'
 import { AuthorizedAction } from 'decentraland-dapps/dist/containers/withAuthorizedAction/AuthorizationModal'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization'
-import { ContractName } from 'decentraland-transactions'
+import { ContractName, getContract as getDCLContract } from 'decentraland-transactions'
 import { config } from '../../../../config'
 import { getClaimNameStatus, getErrorMessage } from '../../../../modules/ens/selectors'
 import { PRICE_IN_WEI } from '../../../../modules/ens/utils'
@@ -23,15 +23,18 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     name: modalName,
     isMintingName,
     isMintingNameCrossChain,
-    metadata: { name },
+    metadata: { name, useCredits },
     isUsingMagic,
     isLoadingAuthorization,
+    credits,
     getContract,
     onAuthorizedAction,
     onClaimName,
     onClaimNameCrossChain,
+    onClaimNameWithCredits,
     onOpenFatFingerModal,
     onCloseFatFingerModal,
+    onCloseAuthorization,
     onClose
   } = props
 
@@ -65,7 +68,7 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   }, [name, getContract, onAuthorizedAction, onClaimName])
 
   const onGetCrossChainRoute: OnGetCrossChainRoute = useCallback(
-    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet) =>
+    (selectedToken, selectedChain, providerTokens, crossChainProvider, wallet, withCredits = false) =>
       useCrossChainNameMintingRoute(
         name,
         PRICE_IN_WEI,
@@ -74,7 +77,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
         selectedChain,
         providerTokens,
         crossChainProvider,
-        wallet
+        wallet,
+        withCredits
       ),
     [name]
   )
@@ -94,11 +98,48 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     return onClose()
   }, [onClose])
 
+  const onBuyWithCredits = useCallback(
+    (manaToSpendByUser: bigint) => {
+      if (manaToSpendByUser === 0n) {
+        onClaimNameWithCredits()
+        return
+      }
+      let creditsManager
+      try {
+        creditsManager = getDCLContract(ContractName.CreditsManager, getChainIdByNetwork(Network.MATIC))
+      } catch (error) {
+        console.log('Error getting credit manager', error)
+        return
+      }
+      const contractNames = getContractNames()
+      const manaContract = getContract({
+        name: contractNames.MANA,
+        network: Network.MATIC
+      }) as DCLContract
+
+      onAuthorizedAction({
+        // Override the automatic Magic sign in as the user will need to pay gas for the transaction
+        manual: true,
+        authorizedAddress: creditsManager.address,
+        authorizedContractLabel: creditsManager.name,
+        targetContract: manaContract as Contract,
+        targetContractName: ContractName.MANAToken,
+        requiredAllowanceInWei: manaToSpendByUser.toString(),
+        authorizationType: AuthorizationType.ALLOWANCE,
+        onAuthorized: () => {
+          onCloseAuthorization()
+          onClaimNameWithCredits()
+        }
+      })
+    },
+    [onClaimNameWithCredits]
+  )
+
   // Emulates a NFT for the item to be minted so it can be shown in the modal
   const asset: NFT = useMemo(
     () => ({
-      chainId: getChainIdByNetwork(Network.ETHEREUM),
-      network: Network.ETHEREUM,
+      chainId: useCredits ? getChainIdByNetwork(Network.MATIC) : getChainIdByNetwork(Network.ETHEREUM),
+      network: useCredits ? Network.MATIC : Network.ETHEREUM,
       name,
       data: {
         ens: { subdomain: name }
@@ -123,17 +164,26 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
     [name]
   )
 
+  const price = useMemo(() => {
+    if (!useCredits || !credits) return PRICE_IN_WEI
+    const adjustedPrice = BigInt(PRICE_IN_WEI) - BigInt(credits.totalCredits)
+    // Convert back to wei format
+    return adjustedPrice < 0 ? '0' : adjustedPrice.toString()
+  }, [PRICE_IN_WEI, useCredits, credits])
+
   return (
     <BuyWithCryptoModal
-      price={PRICE_IN_WEI}
+      price={price}
       isBuyingAsset={isMintingName || isMintingNameCrossChain}
       onBuyNatively={onBuyNatively}
       onBuyCrossChain={onClaimNameCrossChain}
+      onBuyWithCredits={onBuyWithCredits}
       onGetGasCost={onGetGasCost}
       isLoadingAuthorization={isLoadingAuthorization}
       isUsingMagic={isUsingMagic}
       onGetCrossChainRoute={onGetCrossChainRoute}
       metadata={{ asset }}
+      useCredits={useCredits}
       name={modalName}
       onGoBack={onGoBack}
       onClose={onCloseModal}

@@ -7,17 +7,19 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 import type { CrossChainProvider, Route, Token } from 'decentraland-transactions/crossChain'
 import { Asset } from '../../../modules/asset/types'
+import { CreditsClaimProgress } from '../../../modules/ens/types'
 import { CrossChainRoute, GasCost } from './hooks'
 
-export type MapStateProps = Pick<Props, 'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork' | 'credits'>
-export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork'>
+export type MapStateProps = Pick<Props, 'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork' | 'credits' | 'creditsClaimProgress'>
+export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork' | 'onClearCreditsClaimProgress'>
 export type OnGetGasCost = (selectedToken: Token, nativeChainToken: Token | undefined, wallet: Wallet | null) => GasCost
 export type OnGetCrossChainRoute = (
   selectedToken: Token,
   selectedChain: ChainId,
   providerTokens: Token[],
   crossChainProvider: CrossChainProvider | undefined,
-  wallet: Wallet | null
+  wallet: Wallet | null,
+  withCredits?: boolean
 ) => CrossChainRoute
 
 export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | 'isUsingMagic'> &
@@ -30,6 +32,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
     isBuyingAsset: boolean
     isSwitchingNetwork: boolean
     isBuyWithCardPage: boolean
+    creditsClaimProgress: CreditsClaimProgress | null
     onGetCrossChainRoute: OnGetCrossChainRoute
     onGetGasCost: OnGetGasCost
     onSwitchNetwork: ActionFunction<typeof switchNetworkRequest>
@@ -38,6 +41,8 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
     onBuyWithCard?: () => unknown
     onBuyCrossChain: (route: Route) => unknown
     onGetMana: ActionFunction<typeof openBuyManaWithFiatModalRequest>
+    onBuyWithCredits?: (manaToSpendByUser: bigint) => unknown
+    onClearCreditsClaimProgress?: () => void
     onClose: ModalProps['onClose']
   }
 
@@ -50,11 +55,12 @@ export type ContainerProps = Pick<
   | 'onBuyNatively'
   | 'onBuyWithCard'
   | 'onBuyCrossChain'
+  | 'onBuyWithCredits'
+  | 'onClose'
   | 'onGetGasCost'
   | 'isUsingMagic'
   | 'isLoadingAuthorization'
   | 'onGetCrossChainRoute'
-  | 'onClose'
   | 'onGoBack'
   | 'name'
 >
