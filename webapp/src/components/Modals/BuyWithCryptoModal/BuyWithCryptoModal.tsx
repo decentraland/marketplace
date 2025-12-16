@@ -107,17 +107,6 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const hasCredits = useMemo(() => credits && credits.totalCredits > 0, [credits])
 
-  // Calculate final price when using credits
-  const finalPrice = useMemo(() => {
-    if (!useCredits || !credits || !credits.totalCredits) {
-      return price
-    }
-    const totalCreditsAmount = ethers.BigNumber.from(credits.totalCredits.toString())
-    const priceAmount = ethers.BigNumber.from(price)
-    const finalAmount = priceAmount.sub(totalCreditsAmount.gt(priceAmount) ? priceAmount : totalCreditsAmount)
-    return finalAmount.toString()
-  }, [price, useCredits, credits])
-
   const isCreditsTransaction = useMemo(() => useCredits && hasCredits, [useCredits, hasCredits])
 
   // For credits transactions, no route is fetched (it's calculated on backend when "Buy Now" is clicked)
@@ -220,7 +209,7 @@ export const BuyWithCryptoModal = (props: Props) => {
             selectedTokenBalance))
       ) {
         let canBuy
-        const priceToCheck = finalPrice // Use finalPrice (adjusted for credits)
+        const priceToCheck = price // Use price
 
         if (selectedToken.symbol === 'MANA' && wallet) {
           // wants to buy a L2 item with ETH MANA (through the provider)
@@ -262,7 +251,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     crossChainProvider,
     fromAmount,
     price,
-    finalPrice,
+    price,
     useCredits,
     providerTokens,
     routeFeeCost,
@@ -342,9 +331,9 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const onPayWithCredits = useCallback(() => {
     if (onBuyWithCredits) {
-      onBuyWithCredits(BigInt(finalPrice))
+      onBuyWithCredits(BigInt(price))
     }
-  }, [onBuyWithCredits, finalPrice])
+  }, [onBuyWithCredits, price])
 
   const renderBuyNowButton = useCallback(() => {
     const onClick =
@@ -450,7 +439,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     route,
     asset,
     price,
-    finalPrice,
+    price,
     routeFailed,
     selectedChain,
     hasLowPriceForMetaTx,
@@ -650,16 +639,16 @@ export const BuyWithCryptoModal = (props: Props) => {
                 </div>
                 <div className={styles.priceContainer}>
                   <Mana network={asset.network} inline withTooltip>
-                    {formatWeiMANA(finalPrice)}
+                    {formatWeiMANA(price)}
                   </Mana>
                   <span className={styles.priceInUSD}>
-                    <ManaToFiat mana={finalPrice} digits={4} />
+                    <ManaToFiat mana={price} digits={4} />
                   </span>
                 </div>
               </div>
 
               <PaymentSelector
-                price={finalPrice}
+                price={price}
                 wallet={wallet}
                 isBuyingAsset={isBuyingAsset}
                 providerTokens={providerTokens}
@@ -682,7 +671,7 @@ export const BuyWithCryptoModal = (props: Props) => {
 
               <PurchaseTotal
                 selectedToken={selectedToken}
-                price={finalPrice}
+                price={price}
                 useMetaTx={useMetaTx}
                 shouldUseCrossChainProvider={shouldUseCrossChainProvider}
                 route={route}
