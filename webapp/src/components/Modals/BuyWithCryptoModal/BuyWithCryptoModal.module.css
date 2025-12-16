@@ -23,6 +23,79 @@
   top: 25%;
 }
 
+/* Cross-chain polling state styles */
+.buyWithCryptoModal .crossChainPollingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 400px;
+}
+
+.buyWithCryptoModal .crossChainPollingContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.buyWithCryptoModal .crossChainPollingContent :global(.ui.loader) {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.buyWithCryptoModal .crossChainPollingTitle {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 26px;
+  color: var(--text);
+  margin: 0;
+}
+
+.buyWithCryptoModal .crossChainPollingDescription {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #a09ba8;
+  margin: 0;
+  max-width: 300px;
+}
+
+.buyWithCryptoModal .coralScanLink {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%);
+  border-radius: 8px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.buyWithCryptoModal .coralScanLink:hover {
+  opacity: 0.9;
+  color: #ffffff;
+}
+
+.buyWithCryptoModal .coralScanLink :global(.icon) {
+  margin: 0;
+}
+
+.buyWithCryptoModal .crossChainPollingNote {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #716b7c;
+  margin: 0;
+  max-width: 280px;
+  margin-top: 16px;
+}
+
 .buyWithCryptoModal :global(.AssetImage) {
   margin: 0;
   margin-right: 16px;
@@ -319,8 +392,7 @@
   margin-top: 8px;
 }
 
-.buyWithCryptoModal
-  .tokenDropdown:global(.ui.search.dropdown.active > input.search) {
+.buyWithCryptoModal .tokenDropdown:global(.ui.search.dropdown.active > input.search) {
   padding-left: 40px;
   height: 100%;
 }
