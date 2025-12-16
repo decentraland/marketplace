@@ -138,8 +138,8 @@ const MintNameWithCryptoModalHOC = (props: Props) => {
   // Emulates a NFT for the item to be minted so it can be shown in the modal
   const asset: NFT = useMemo(
     () => ({
-      chainId: getChainIdByNetwork(Network.ETHEREUM),
-      network: Network.ETHEREUM,
+      chainId: useCredits ? getChainIdByNetwork(Network.MATIC) : getChainIdByNetwork(Network.ETHEREUM),
+      network: useCredits ? Network.MATIC : Network.ETHEREUM,
       name,
       data: {
         ens: { subdomain: name }
