@@ -240,7 +240,7 @@ export function* ensSaga() {
 
         // Get the real tokenId from the DCLRegistrar contract on Ethereum
         // The polling success means the Ethereum tx is confirmed, so we can query the contract
-        const tokenId: BigNumber = (yield call(getTokenIdFromEthereumContract, 'buenardo')) as BigNumber
+        const tokenId: BigNumber = (yield call(getTokenIdFromEthereumContract, name)) as BigNumber
 
         // Create ENS object with the real tokenId
         const ens: ENS = {
