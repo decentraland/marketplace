@@ -144,7 +144,7 @@ const SaveToListModal = (props: Props) => {
   )
 
   const isItemLoaded = useCallback(
-    index => {
+    (index: number) => {
       const hasNextPage = lists.data.length < lists.total
       return !hasNextPage || index < lists.data.length
     },

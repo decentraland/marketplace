@@ -3,8 +3,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Center } from 'decentraland-ui'
 import { State } from './ErrorBoundary.types'
 
-export default class ErrorBoundary extends Component<unknown, State> {
-  constructor(props: unknown) {
+export default class ErrorBoundary extends Component<{ children: React.ReactNode }, State> {
+  constructor(props: { children: React.ReactNode }) {
     super(props)
     this.state = { hasError: false }
   }

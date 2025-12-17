@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import addDays from 'date-fns/addDays'
-import formatDate from 'date-fns/format'
-import isValid from 'date-fns/isValid'
+import { addDays, format as formatDate, isValid } from 'date-fns'
 import { ethers } from 'ethers'
 import { Contract, Network, NFTCategory } from '@dcl/schemas'
 import { ChainButton, withAuthorizedAction } from 'decentraland-dapps/dist/containers'

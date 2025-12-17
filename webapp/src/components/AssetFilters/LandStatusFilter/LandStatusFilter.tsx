@@ -29,7 +29,7 @@ export const LandStatusFilter = ({ landStatus, onChange, defaultCollapsed = fals
   ]
 
   const handleStatusChange = useCallback(
-    (_evt, props: CheckboxProps) => {
+    (_evt: React.FormEvent<HTMLInputElement>, props: CheckboxProps) => {
       onChange(props.value as LANDFilters)
     },
     [onChange]

@@ -26,7 +26,10 @@ export const NetworkFilter = ({ network, onChange, defaultCollapsed = false }: N
     ]
   }, [])
 
-  const handleChange = useCallback((_, { value }: CheckboxProps) => onChange(value as Network), [onChange])
+  const handleChange = useCallback(
+    (_: React.FormEvent<HTMLInputElement>, { value }: CheckboxProps) => onChange(value as Network),
+    [onChange]
+  )
 
   const header = useMemo(
     () =>
