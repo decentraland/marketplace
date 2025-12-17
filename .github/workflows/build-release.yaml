@@ -31,7 +31,7 @@ jobs:
           deterministic-snapshot: true
           only-update-versions: true
       - name: Install
-        run: npm install --legacy-peer-deps
+        run: npm install
       - name: Build
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
