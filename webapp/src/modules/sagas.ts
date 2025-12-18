@@ -98,7 +98,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     assetSaga(),
     authorizationSaga(),
     bidSaga(new BidService(), getTradesService(getIdentity)),
-    creditsSaga({ creditsClient: new CreditsClient(config.get('CREDITS_SERVER_URL')) }),
+    creditsSaga({ creditsClient: new CreditsClient(config.get('CREDITS_SERVER_URL'), { identity: getIdentity }) }),
     itemSaga(getIdentity),
     nftSaga(getIdentity),
     orderSaga(getTradesService(getIdentity)),
