@@ -13,15 +13,6 @@ jest.mock('file-saver', () => ({
   saveAs: jest.fn()
 }))
 
-jest.mock('libsodium-wrappers-sumo', () => ({
-  ready: Promise.resolve(),
-  crypto_sign_keypair: jest.fn(),
-  crypto_sign_detached: jest.fn(),
-  crypto_sign_verify_detached: jest.fn(),
-  to_hex: jest.fn(),
-  from_hex: jest.fn()
-}))
-
 jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
   const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
   return {
