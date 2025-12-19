@@ -4,7 +4,7 @@ import { cancelled, select, takeLatest } from 'redux-saga/effects'
 import { Account, AccountSortBy, Network, NFTCategory, Profile } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
-import { accountAPI, nftAPI, NFTResponse, NFTResult } from '../vendor/decentraland'
+import { accountAPI, nftMarketplaceAPI as nftAPI, NFTResponse, NFTResult } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
 import {
   fetchAccountMetricsFailure,
@@ -64,7 +64,8 @@ export function* accountSaga(catalystLambdasClient: LambdasClient) {
         addresses = new Set(ens.map(nft => nft.nft.owner))
       } else {
         const { data }: { data: Account[] } = yield call([accountAPI, 'fetch'], {
-          sortBy: AccountSortBy.MOST_COLLECTIONS
+          sortBy: AccountSortBy.MOST_COLLECTIONS,
+          first: DEFAULT_FIRST_VALUE // [Deprecate nft-server] Even though the nft server is not receiving the first parameter, it is retrieving the first 20 accounts
         })
         accounts = data
         addresses = new Set([...accounts.map(nft => nft.address)])

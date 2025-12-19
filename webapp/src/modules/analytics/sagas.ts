@@ -29,7 +29,6 @@ export function* handleFetchVolumeDataRequest(action: FetchAnalyticsDayDataReque
 
   try {
     yield call(waitForFeatureFlagsToBeLoaded)
-
     const analyticsService = new AnalyticsService(MARKETPLACE_SERVER_URL)
     const volumeData: AnalyticsVolumeData = yield call([analyticsService, 'fetchVolumeData'], timeframe)
 
@@ -43,7 +42,6 @@ function* handleFetchRankingsRequest(action: FetchRankingsRequestAction) {
   const { entity, filters, timeframe } = action.payload
   try {
     yield call(waitForFeatureFlagsToBeLoaded)
-
     const rankingsAPI = new RankingsAPI(MARKETPLACE_SERVER_URL)
     const { data }: { data: RankingEntity[] } = yield call([rankingsAPI, 'fetch'], entity, timeframe, filters)
     yield put(fetchRankingsSuccess(data))

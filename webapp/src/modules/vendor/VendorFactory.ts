@@ -4,14 +4,14 @@ import { ContractService, NFTService, OrderService, BidService } from './decentr
 import { VendorName } from './types'
 
 export class VendorFactory {
-  static build(vendor: VendorName, config?: BaseClientConfig | undefined, shouldUseLegacyAPIs = false): Vendor<VendorName> {
+  static build(vendor: VendorName, config?: BaseClientConfig | undefined): Vendor<VendorName> {
     switch (vendor) {
       case VendorName.DECENTRALAND:
         return new Vendor<VendorName.DECENTRALAND>(
           vendor,
           new ContractService(),
-          new NFTService(config, shouldUseLegacyAPIs),
-          new OrderService(shouldUseLegacyAPIs),
+          new NFTService(config),
+          new OrderService(),
           new BidService()
         )
       default:
