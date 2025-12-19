@@ -7,7 +7,7 @@
     "@0xsquid/squid-types": "^0.1.139",
     "@covalenthq/client-sdk": "^0.6.4",
     "@dcl/crypto": "^3.0.0",
-    "@dcl/schemas": "^19.8.0",
+    "@dcl/schemas": "^20.4.1",
     "@dcl/single-sign-on-client": "^0.1.0",
     "@dcl/ui-env": "^1.5.0",
     "@ethersproject/providers": "^5.6.2",
@@ -21,10 +21,10 @@
     "dcl-catalyst-commons": "^9.0.1",
     "decentraland-connect": "^9.1.0",
     "decentraland-crypto-fetch": "^1.0.3",
-    "decentraland-dapps": "^26.0.0",
+    "decentraland-dapps": "^26.1.0",
     "decentraland-transactions": "^2.24.2",
-    "decentraland-ui": "^7.0.1",
-    "decentraland-ui2": "^1.0.2",
+    "decentraland-ui": "^7.1.0",
+    "decentraland-ui2": "^1.1.0",
     "ethers": "^5.6.8",
     "graphql": "^14.7.0",
     "history": "^4.10.1",
@@ -61,6 +61,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@typechain/ethers-v5": "^10.0.0",
     "@types/css-mediaquery": "^0.1.1",
+    "@types/flat": "^5.0.5",
     "@types/history": "^4.7.3",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.7",
@@ -84,6 +85,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "file-saver": "^2.0.5",
     "husky": "^9.0.11",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
@@ -119,7 +121,8 @@
     "node": "20"
   },
   "overrides": {
-    "ua-parser-js": "^1.0.37"
+    "ua-parser-js": "^2.0.0",
+    "@dcl/schemas": "^20.4.1"
   },
   "homepage": "",
   "repository": {
