@@ -25,8 +25,12 @@ export default async (): Promise<Config> => {
     },
     testRegex: '(/__tests__/.*|(\\.|/)(spec))\\.[jt]sx?$',
     moduleNameMapper: {
-      '\\.(css|less)$': 'identity-obj-proxy'
+      '\\.(css|less)$': 'identity-obj-proxy',
+      '^@dcl/hooks$': '<rootDir>/src/tests/__mocks__/@dcl/hooks.ts',
+      '^secp256k1$': '<rootDir>/src/tests/__mocks__/secp256k1.ts',
+      '^eth-crypto$': '<rootDir>/src/tests/__mocks__/eth-crypto.ts',
+      '^@transak/transak-sdk$': '<rootDir>/src/tests/__mocks__/@transak/transak-sdk.ts'
     },
-    transformIgnorePatterns: ['node_modules/?!@0xsquid|eccrypto|libsodium-wrappers-sumo']
+    transformIgnorePatterns: ['node_modules/(?!(@0xsquid|eccrypto|libsodium-wrappers-sumo|decentraland-ui2|decentraland-dapps|@mui|@babel/runtime|multiformats|uint8arrays|query-string)/)']
   }
 }
