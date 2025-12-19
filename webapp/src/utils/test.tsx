@@ -32,7 +32,7 @@ export function renderWithProviders(
       }
     })
 
-  function AppProviders({ children }: { children: JSX.Element }) {
+  function AppProviders({ children }: { children: React.ReactNode }) {
     return (
       <Provider store={initializedStore}>
         <MemoryRouter>

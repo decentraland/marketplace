@@ -38,9 +38,18 @@ const CreateOrEditListModal = ({ onClose, isLoading, onCreateList, onEditList, m
     () => (list ? onEditList(list.id, { name, description, isPrivate }) : onCreateList({ name, description, isPrivate })),
     [list, onEditList, name, description, isPrivate, onCreateList]
   )
-  const handleNameChange = useCallback((_event, props: InputOnChangeData) => setName(props.value), [setName])
-  const handleDescriptionChange = useCallback((_event, props: TextAreaProps) => setDescription(props.value as string), [setDescription])
-  const handleIsOPrivateChange = useCallback((_event, props: CheckboxProps) => setIsPrivate(Boolean(props.checked)), [setIsPrivate])
+  const handleNameChange = useCallback(
+    (_event: React.ChangeEvent<HTMLInputElement>, props: InputOnChangeData) => setName(props.value),
+    [setName]
+  )
+  const handleDescriptionChange = useCallback(
+    (_event: React.FormEvent<HTMLTextAreaElement>, props: TextAreaProps) => setDescription(props.value as string),
+    [setDescription]
+  )
+  const handleIsOPrivateChange = useCallback(
+    (_event: React.FormEvent<HTMLInputElement>, props: CheckboxProps) => setIsPrivate(Boolean(props.checked)),
+    [setIsPrivate]
+  )
   const handleNameFocus = useCallback(() => setShowMaxLengthNameInfo(true), [setShowMaxLengthNameInfo])
   const handleNameBlur = useCallback(() => setShowMaxLengthNameInfo(false), [setShowMaxLengthNameInfo])
   const handleDescriptionFocus = useCallback(() => setShowMaxLengthDescriptionInfo(true), [setShowMaxLengthDescriptionInfo])

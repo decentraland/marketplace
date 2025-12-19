@@ -40,7 +40,7 @@ export const ListsLaunchModal = ({ isListsLaunchPopupEnabled, isLoadingFeatureFl
           <div className={styles.modalDescription}>
             {t('lists_ftu.description', {
               br: () => <br />,
-              b: (children: React.ReactChildren) => <b>{children}</b>
+              b: (children: React.ReactNode) => <b>{children}</b>
             })}
           </div>
         </Modal.Description>

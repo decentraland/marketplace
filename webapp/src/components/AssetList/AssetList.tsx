@@ -82,13 +82,13 @@ const AssetList = (props: Props) => {
             id={`${emptyStateTranslationString}.action`}
             values={{
               search,
-              'if-filters': (chunks: string) => (hasFiltersEnabled ? chunks : ''),
-              clearFilters: (chunks: string) => (
+              'if-filters': (chunks: React.ReactNode) => (hasFiltersEnabled ? chunks : ''),
+              clearFilters: (chunks: React.ReactNode) => (
                 <button className="empty-actions" onClick={onClearFilters}>
                   {chunks}
                 </button>
               ),
-              collectiblesLink: (chunks: string) => (
+              collectiblesLink: (chunks: React.ReactNode) => (
                 <Link className="empty-actions" to={locations.browse()}>
                   {chunks}
                 </Link>

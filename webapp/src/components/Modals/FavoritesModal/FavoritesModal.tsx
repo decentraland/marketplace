@@ -55,7 +55,7 @@ const FavoritesModal = ({ metadata: { itemId }, identity, onClose }: Props) => {
   )
 
   const isItemLoaded = useCallback(
-    index => {
+    (index: number) => {
       const hasNextPage = favorites.addresses.length < favorites.total
       return !hasNextPage || index < favorites.addresses.length
     },
