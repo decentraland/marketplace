@@ -1,7 +1,8 @@
-import { fireEvent, waitFor } from '@testing-library/react'
+import { fireEvent, waitFor, act } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MAX_NAME_SIZE, isNameAvailable } from '../../../modules/ens/utils'
+import { lists } from '../../../modules/vendor/decentraland/lists/api'
 import { renderWithProviders } from '../../../utils/test'
 import ClaimNamePage from './ClaimNamePage'
 import { Props } from './ClaimNamePage.types'
@@ -15,14 +16,35 @@ jest.mock(
     }) as unknown
 )
 
+jest.mock('../../../modules/vendor/decentraland/lists/api', () => ({
+  lists: {
+    fetchBannedNames: jest.fn()
+  }
+}))
+
 describe('ClaimNamePage', () => {
   let walletMock: Wallet
   let onClaimMock: Props['onClaim']
+
+  beforeEach(() => {
+    jest.useFakeTimers()
+    ;(lists.fetchBannedNames as jest.Mock).mockResolvedValue([])
+  })
+
+  afterEach(() => {
+    jest.useRealTimers()
+  })
 
   const renderAndTypeText = async (text: string) => {
     const matchers = renderWithProviders(<ClaimNamePage wallet={walletMock} isConnecting={false} onClaim={onClaimMock} />)
     const { getByDisplayValue, getByText } = matchers
     const nameInput = getByDisplayValue(t('names_page.your_name')) as HTMLInputElement
+
+    // Wait for bannedNames to be fetched
+    await act(async () => {
+      await Promise.resolve()
+    })
+
     fireEvent.change(nameInput, { target: { value: text } })
 
     await waitFor(() => {
@@ -98,6 +120,13 @@ describe('ClaimNamePage', () => {
         })
         it('should have the claim name enabled and call the onClaim when clicking it', async () => {
           const { getByText } = await renderAndTypeText(validName)
+
+          // Advance timers to trigger the debounced name check
+          await act(async () => {
+            jest.advanceTimersByTime(1000)
+            await Promise.resolve()
+          })
+
           const claimButton = getByText(t('names_page.claim_a_name'))
           await waitFor(() => expect(claimButton).not.toHaveAttribute('disabled'))
           fireEvent.click(claimButton)

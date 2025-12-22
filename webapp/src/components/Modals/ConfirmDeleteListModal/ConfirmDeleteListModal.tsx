@@ -18,7 +18,7 @@ const ConfirmDeleteListModal = (props: Props) => {
       <ModalNavigation
         title={t('confirm_delete_list_modal.title', {
           name: list.name,
-          b: (children: React.ReactChildren) => <b>{children}</b>
+          b: (children: React.ReactNode) => <b>{children}</b>
         })}
         onClose={handleClose}
       />

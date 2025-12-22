@@ -1,0 +1,6 @@
+export const ready = Promise.resolve()
+export const crypto_sign_keypair = jest.fn()
+export const crypto_sign_detached = jest.fn()
+export const crypto_sign_verify_detached = jest.fn()
+export const to_hex = jest.fn()
+export const from_hex = jest.fn()

@@ -1,5 +1,4 @@
-import addDays from 'date-fns/addDays'
-import dateFnsFormat from 'date-fns/format'
+import { addDays, format as dateFnsFormat } from 'date-fns'
 import { BigNumber, ethers } from 'ethers'
 import { Order, OrderFilters, TradeAssetType, TradeCreation, TradeType } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib'

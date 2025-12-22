@@ -1,5 +1,4 @@
-import { act } from 'react-dom/test-utils'
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
 import { Item } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ListOfLists } from '../../../modules/vendor/decentraland/favorites'
@@ -56,14 +55,12 @@ describe('when loading the component', () => {
   describe('and the list fetching fails', () => {
     beforeEach(() => {
       jest.spyOn(FavoritesAPI.prototype, 'getLists').mockRejectedValueOnce(new Error('An error'))
-      act(() => {
-        renderedModal = renderSaveToListModalModal({ metadata: { item } })
-      })
+      renderedModal = renderSaveToListModalModal({ metadata: { item } })
     })
 
-    it('should display an error message with the error', () => {
+    it('should display an error message with the error', async () => {
       const { getByText } = renderedModal
-      expect(getByText('An error')).toBeInTheDocument()
+      await waitFor(() => expect(getByText('An error')).toBeInTheDocument())
     })
   })
 
@@ -94,32 +91,36 @@ describe('when loading the component', () => {
         results: lists,
         total: 2
       })
-      act(() => {
-        renderedModal = renderSaveToListModalModal({ metadata: { item } })
+      renderedModal = renderSaveToListModalModal({ metadata: { item } })
+    })
+
+    it('should not show the loader', async () => {
+      const { queryByTestId } = renderedModal
+      await waitFor(() => expect(queryByTestId(LISTS_LOADER_DATA_TEST_ID)).not.toBeInTheDocument())
+    })
+
+    it('should show the private tag in the loaded list if the lists are private', async () => {
+      const { queryByTestId, getByTestId } = renderedModal
+      await waitFor(() => {
+        expect(getByTestId(LIST_PRIVATE + lists[0].id)).toBeInTheDocument()
+        expect(queryByTestId(LIST_PRIVATE + lists[1].id)).not.toBeInTheDocument()
       })
     })
 
-    it('should not show the loader', () => {
-      const { queryByTestId } = renderedModal
-      expect(queryByTestId(LISTS_LOADER_DATA_TEST_ID)).not.toBeInTheDocument()
-    })
-
-    it('should show the private tag in the loaded list if the lists are private', () => {
-      const { queryByTestId, getByTestId } = renderedModal
-      expect(getByTestId(LIST_PRIVATE + lists[0].id)).toBeInTheDocument()
-      expect(queryByTestId(LIST_PRIVATE + lists[1].id)).not.toBeInTheDocument()
-    })
-
-    it('should show the list names and items count', () => {
+    it('should show the list names and items count', async () => {
       const { getByTestId } = renderedModal
-      expect(getByTestId(LIST_NAME + lists[0].id)).toBeInTheDocument()
-      expect(getByTestId(LIST_NAME + lists[1].id)).toBeInTheDocument()
+      await waitFor(() => {
+        expect(getByTestId(LIST_NAME + lists[0].id)).toBeInTheDocument()
+        expect(getByTestId(LIST_NAME + lists[1].id)).toBeInTheDocument()
+      })
     })
 
-    it('should show the lists checked if the item is the list', () => {
+    it('should show the lists checked if the item is the list', async () => {
       const { getByTestId } = renderedModal
-      expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeChecked()
-      expect(getByTestId(LIST_CHECKBOX + lists[1].id).children[0]).not.toBeChecked()
+      await waitFor(() => {
+        expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeChecked()
+        expect(getByTestId(LIST_CHECKBOX + lists[1].id).children[0]).not.toBeChecked()
+      })
     })
   })
 })
@@ -133,13 +134,13 @@ describe('when clicking on the create list button', () => {
       results: [],
       total: 0
     })
-    act(() => {
-      renderedModal = renderSaveToListModalModal({ onCreateList })
-    })
+    renderedModal = renderSaveToListModalModal({ onCreateList })
   })
 
-  it('should call the onCreateList prop callback', () => {
+  it('should call the onCreateList prop callback', async () => {
     const { getByTestId } = renderedModal
+
+    await waitFor(() => expect(getByTestId(CREATE_LIST_BUTTON_DATA_TEST_ID)).toBeInTheDocument())
 
     fireEvent.click(getByTestId(CREATE_LIST_BUTTON_DATA_TEST_ID))
 
@@ -165,9 +166,7 @@ describe('when saving the picks', () => {
       total: 1
     })
 
-    act(() => {
-      renderedModal = renderSaveToListModalModal({ isSavingPicks: true })
-    })
+    renderedModal = renderSaveToListModalModal({ isSavingPicks: true })
   })
 
   it('should disable the save and create list buttons', () => {
@@ -176,14 +175,16 @@ describe('when saving the picks', () => {
     expect(getByTestId(SAVE_BUTTON_DATA_TEST_ID)).toBeDisabled()
   })
 
-  it('should disable any list checkbox', () => {
+  it('should disable any list checkbox', async () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeDisabled()
+    await waitFor(() => expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeDisabled())
   })
 
-  it('should set the loading save button as loading', () => {
+  it('should set the loading save button as loading', async () => {
     const { getByTestId } = renderedModal
-    expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeChecked()
-    expect(getByTestId(SAVE_BUTTON_DATA_TEST_ID)).toHaveClass('loading')
+    await waitFor(() => {
+      expect(getByTestId(LIST_CHECKBOX + lists[0].id).children[0]).toBeChecked()
+      expect(getByTestId(SAVE_BUTTON_DATA_TEST_ID)).toHaveClass('loading')
+    })
   })
 })

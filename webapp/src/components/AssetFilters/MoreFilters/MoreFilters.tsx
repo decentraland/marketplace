@@ -14,7 +14,7 @@ export const MoreFilters = ({ onlyOnSale, onSaleChange, defaultCollapsed = false
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const handleOnSaleChange = useCallback(
-    (_, props: CheckboxProps) => {
+    (_: React.FormEvent<HTMLInputElement>, props: CheckboxProps) => {
       onSaleChange(!!props.checked)
     },
     [onSaleChange]

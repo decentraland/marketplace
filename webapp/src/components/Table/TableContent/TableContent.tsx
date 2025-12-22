@@ -48,7 +48,7 @@ const TableContent = (props: Props) => {
           </Table.Body>
         </Table>
       ) : (
-        empty()
+        <>{empty()}</>
       )}
       {hasPagination && total ? (
         <div className="pagination">

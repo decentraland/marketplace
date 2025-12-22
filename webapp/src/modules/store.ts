@@ -9,7 +9,10 @@ import { createStorageMiddleware } from 'decentraland-dapps/dist/modules/storage
 import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/reducer'
 import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/actions'
 import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
+import { fetchTranslationsRequest } from 'decentraland-dapps/dist/modules/translation/actions'
+import { getPreferredLocale } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { Locale } from 'decentraland-ui'
 import { config } from '../config'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { getCurrentIdentity } from './identity/selectors'
@@ -92,9 +95,15 @@ export function initStore(history: History) {
     anyWindow.getState = store.getState.bind(store)
   }
 
-  // fetch tiles
+  // fetch tiles and translations
   store.dispatch(fetchTilesRequest())
   store.dispatch(fetchCampaignRequest())
+
+  // Fetch translations - needed because TranslationProvider's componentDidUpdate
+  // doesn't fire when locale is already set on first render
+  const locales = ['en', 'es', 'zh'] as Locale[]
+  const preferredLocale = getPreferredLocale(locales) || locales[0]
+  store.dispatch(fetchTranslationsRequest(preferredLocale))
 
   return store
 }

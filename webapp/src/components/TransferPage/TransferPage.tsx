@@ -22,7 +22,7 @@ const TransferPage = (props: Props) => {
   const [address, setAddress] = useState('')
   const [isInvalidAddress, setIsInvalidAddress] = useState(false)
 
-  const handleChange = useCallback((_evt, data: InputOnChangeData) => {
+  const handleChange = useCallback((_evt: React.ChangeEvent<HTMLInputElement>, data: InputOnChangeData) => {
     setAddress(data.value)
     setIsInvalidAddress(!data.value || !!data.error)
   }, [])

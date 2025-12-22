@@ -27,21 +27,21 @@ export const LocationFilter = ({
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const handleAdjacentToRoadChange = useCallback(
-    (_evt, props: CheckboxProps) => {
+    (_evt: React.FormEvent<HTMLInputElement>, props: CheckboxProps) => {
       onAdjacentToRoadChange(!!props.checked || undefined)
     },
     [onAdjacentToRoadChange]
   )
 
   const handleDistanceToPlazaChange = useCallback(
-    (_evt, data: readonly [number, number]) => {
+    (_evt: React.ChangeEvent<HTMLInputElement>, data: readonly [number, number]) => {
       onDistanceToPlazaChange([data[0].toString(), data[1].toString()])
     },
     [onDistanceToPlazaChange]
   )
 
   const handleToggleDistanceFilter = useCallback(
-    (_evt, props: CheckboxProps) => {
+    (_evt: React.FormEvent<HTMLInputElement>, props: CheckboxProps) => {
       if (props.checked) {
         onDistanceToPlazaChange([DISTANCE_TO_PLAZA_MIN.toString(), DISTANCE_TO_PLAZA_MAX.toString()])
       } else {

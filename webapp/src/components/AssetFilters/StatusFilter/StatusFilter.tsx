@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { BrowseOptions } from '../../../modules/routing/types'
 import { AssetStatusFilter } from '../../../utils/filters'
 import { InfoTooltip } from '../../InfoTooltip'
@@ -24,7 +24,7 @@ export const StatusFilter = ({ status, onChange, defaultCollapsed = false }: Sta
   )
 
   const handleChange = useCallback(
-    (_evt, { value }) => {
+    (_evt: React.FormEvent<HTMLInputElement>, { value }: CheckboxProps) => {
       let options: BrowseOptions = { status: value as AssetStatusFilter }
       if (value === AssetStatusFilter.NOT_FOR_SALE) {
         options = { ...options, minPrice: undefined, maxPrice: undefined }
