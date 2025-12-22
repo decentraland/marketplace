@@ -1,5 +1,4 @@
-import { waitFor } from '@testing-library/react'
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook, waitFor } from '@testing-library/react'
 import ethersModule, { BigNumber, ethers } from 'ethers'
 import { ChainId, Network, Order, Item } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet'

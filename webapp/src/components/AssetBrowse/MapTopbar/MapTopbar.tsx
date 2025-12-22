@@ -26,21 +26,21 @@ export const MapTopbar = ({ onlyOnSale, onlyOnRent, showOwned, onBrowse, onShowO
   )
 
   const handleOnSaleChange = useCallback(
-    (_, { checked }: CheckboxProps) => {
+    (_: React.FormEvent<HTMLInputElement>, { checked }: CheckboxProps) => {
       onBrowse({ onlyOnSale: checked })
     },
     [onBrowse]
   )
 
   const handleOnRentChange = useCallback(
-    (_, { checked }: CheckboxProps) => {
+    (_: React.FormEvent<HTMLInputElement>, { checked }: CheckboxProps) => {
       onBrowse({ onlyOnRent: checked })
     },
     [onBrowse]
   )
 
   const handleShowOwnedChange = useCallback(
-    (_, { checked }: CheckboxProps) => {
+    (_: React.FormEvent<HTMLInputElement>, { checked }: CheckboxProps) => {
       if (onShowOwnedChange) {
         onShowOwnedChange(!!checked)
       }

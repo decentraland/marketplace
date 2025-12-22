@@ -110,7 +110,7 @@ export const AssetTopbar = ({
   )
 
   const handleOrderByDropdownChange = useCallback(
-    (_, props: DropdownProps) => {
+    (_: React.SyntheticEvent<HTMLElement>, props: DropdownProps) => {
       const sortBy: SortBy = props.value as SortBy
       if (!onlyOnRent && !onlyOnSale && isLandSection(section)) {
         if (sortBy === SortBy.CHEAPEST_SALE) {

@@ -507,7 +507,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         <ModalNavigation
           title={t('buy_with_crypto_modal.cross_chain_polling.title', {
             name: asset.name,
-            b: (children: React.ReactChildren) => <b>{children}</b>
+            b: (children: React.ReactNode) => <b>{children}</b>
           })}
         />
       )
@@ -517,7 +517,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       <ModalNavigation
         title={t('buy_with_crypto_modal.title', {
           name: asset.name,
-          b: (children: React.ReactChildren) => <b>{children}</b>
+          b: (children: React.ReactNode) => <b>{children}</b>
         })}
         onBack={!isBuyingAsset ? onGoBack : undefined}
         onClose={!isBuyingAsset ? onClose : undefined}

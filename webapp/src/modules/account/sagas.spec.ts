@@ -5,7 +5,7 @@ import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { Account, AccountFilters, AccountSortBy, Network, NFTCategory, Profile } from '@dcl/schemas'
 import { NFTsFetchParams } from '../nft/types'
-import { accountAPI, nftAPI, NFTResult } from '../vendor/decentraland'
+import { accountAPI, nftMarketplaceAPI as nftAPI, NFTResult } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
 import {
   fetchAccountMetricsFailure,
@@ -181,7 +181,8 @@ describe('when handling the request to fetch creators accounts', () => {
       beforeEach(() => {
         search = ''
         filters = {
-          sortBy: AccountSortBy.MOST_COLLECTIONS
+          sortBy: AccountSortBy.MOST_COLLECTIONS,
+          first: 20
         }
       })
       it('should signal that the request has failed with the request error', () => {
@@ -204,7 +205,8 @@ describe('when handling the request to fetch creators accounts', () => {
         search = ''
         accounts = [{ address: 'address1' } as Account, { address: 'address2' } as Account]
         filters = {
-          sortBy: AccountSortBy.MOST_COLLECTIONS
+          sortBy: AccountSortBy.MOST_COLLECTIONS,
+          first: 20
         }
         addresses = accounts.map(account => account.address)
       })
@@ -234,7 +236,8 @@ describe('when handling the request to fetch creators accounts', () => {
       beforeEach(() => {
         search = ''
         filters = {
-          sortBy: AccountSortBy.MOST_COLLECTIONS
+          sortBy: AccountSortBy.MOST_COLLECTIONS,
+          first: 20
         }
         accounts = [{ address: 'address1' } as Account, { address: 'address2' } as Account]
         addresses = accounts.map(account => account.address)

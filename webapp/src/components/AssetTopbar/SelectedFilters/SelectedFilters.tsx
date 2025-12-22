@@ -107,7 +107,7 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
   )
 
   const handleDeleteCollection = useCallback(
-    contract => {
+    (contract: string) => {
       onBrowse({
         contracts: contracts?.filter(collection => collection !== contract)
       })
@@ -132,9 +132,9 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
   }, [onBrowse])
 
   const handleDeleteEmotePlayMode = useCallback(
-    playMode => {
+    (playMode: string) => {
       onBrowse({
-        emotePlayMode: emotePlayMode?.filter(mode => playMode !== mode)
+        emotePlayMode: emotePlayMode?.filter(mode => playMode !== String(mode))
       })
     },
     [onBrowse, emotePlayMode]

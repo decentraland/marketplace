@@ -11,7 +11,6 @@ import { retryParams } from '../utils'
 import { NFTsFetchFilters, NFTResponse, NFTResult, OwnersFilters, OwnersResponse } from './types'
 
 export const MARKETPLACE_SERVER_URL = config.get('MARKETPLACE_SERVER_URL')
-export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')
 
 export enum PriceFilterExtraOption {
   LAND = 'land'
@@ -245,5 +244,4 @@ class NFTAPI extends BaseAPI {
   }
 }
 
-export const nftAPI = new NFTAPI(NFT_SERVER_URL, retryParams)
 export const nftMarketplaceAPI = new NFTAPI(MARKETPLACE_SERVER_URL, retryParams)

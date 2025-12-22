@@ -1,14 +1,6 @@
-import format from 'date-fns/format'
-import formatDistanceToNowI18N from 'date-fns/formatDistanceToNow'
-// eslint-disable-next-line import/no-duplicates
-// eslint-disable-next-line import/no-duplicates
-import en from 'date-fns/locale/en-US'
-// eslint-disable-next-line import/no-duplicates
-import es from 'date-fns/locale/es'
-// eslint-disable-next-line import/no-duplicates
-import zh from 'date-fns/locale/zh-CN'
+import { format, formatDistanceToNow as formatDistanceToNowI18N } from 'date-fns'
+import { enUS as en, es, zhCN as zh } from 'date-fns/locale'
 import { getCurrentLocale, t } from 'decentraland-dapps/dist/modules/translation/utils'
-// eslint-disable-next-line import/no-duplicates
 
 const locales: Record<string, Locale> = {
   en,

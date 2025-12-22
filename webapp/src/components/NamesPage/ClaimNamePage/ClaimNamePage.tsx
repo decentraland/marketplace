@@ -209,7 +209,7 @@ const ClaimNamePage = (props: Props) => {
         image: GovernanceImg,
         title: t('names_page.why.governance.title'),
         description: t('names_page.why.governance.description', {
-          b: (children: React.ReactChildren) => <b className={styles.voting}>{children}</b>,
+          b: (children: React.ReactNode) => <b className={styles.voting}>{children}</b>,
           link: (
             <a href="https://docs.decentraland.org/player/general/dao/overview/what-is-the-dao" className={styles.learnMore}>
               {t('global.learn_more')}
@@ -221,7 +221,7 @@ const ClaimNamePage = (props: Props) => {
         image: LandmarkImg,
         title: t('names_page.why.get_url.title'),
         description: t('names_page.why.get_url.description', {
-          b: (children: React.ReactChildren) => <b className={styles.nameLink}>{children}</b>
+          b: (children: React.ReactNode) => <b className={styles.nameLink}>{children}</b>
         })
       }
     ]
