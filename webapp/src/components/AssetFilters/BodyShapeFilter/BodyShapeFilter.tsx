@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { GenderFilterOption, WearableGender } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { AVAILABLE_FOR_FEMALE, AVAILABLE_FOR_MALE, getBodyShapeValue, getGenderFilterLabel } from '../../../utils/filters'
 import './BodyShapeFilter.css'
 
@@ -31,7 +31,7 @@ export const BodyShapeFilter = ({ bodyShapes, onChange, defaultCollapsed = false
   }, [])
 
   const handleChange = useCallback(
-    (_evt, { value }) => {
+    (_evt: React.FormEvent<HTMLInputElement>, { value }: CheckboxProps) => {
       let newValue: GenderFilterOption[] = []
 
       if (value === AVAILABLE_FOR_FEMALE) {
