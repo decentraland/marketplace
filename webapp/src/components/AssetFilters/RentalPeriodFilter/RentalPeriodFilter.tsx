@@ -15,7 +15,7 @@ export type RentalPeriodFilterProps = {
 export const RentalPeriodFilter = ({ onChange, rentalDays = [], defaultCollapsed = false }: RentalPeriodFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const handleRentalDaysChange = useCallback(
-    (_evt, { checked, value }: CheckboxProps) => {
+    (_evt: React.FormEvent<HTMLInputElement>, { checked, value }: CheckboxProps) => {
       if (checked) {
         onChange([...rentalDays, Number(value)])
       } else {

@@ -1,7 +1,6 @@
 import React, { memo, useMemo, useCallback, useState } from 'react'
 import classNames from 'classnames'
-import add from 'date-fns/add'
-import format from 'date-fns/format'
+import { add, format } from 'date-fns'
 import { ethers } from 'ethers'
 import { RentalListingPeriod } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'

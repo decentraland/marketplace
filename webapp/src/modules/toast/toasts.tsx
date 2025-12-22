@@ -152,7 +152,7 @@ export function getUpdateListSuccessToast(list: UpdateOrCreateList): Omit<Toast,
     title: t('toast.update_list_success.title'),
     body: t('toast.update_list_success.body', {
       name: list.name,
-      b: (children: React.ReactChildren) => <b>{children}</b>
+      b: (children: React.ReactNode) => <b>{children}</b>
     }),
     closable: true,
     timeout: DEFAULT_TIMEOUT,
@@ -166,7 +166,7 @@ export function getDeleteListSuccessToast(list: List): Omit<Toast, 'id'> {
     title: t('toast.delete_list_success.title'),
     body: t('toast.delete_list_success.body', {
       name: list.name,
-      b: (children: React.ReactChildren) => <b>{children}</b>
+      b: (children: React.ReactNode) => <b>{children}</b>
     }),
     closable: true,
     timeout: DEFAULT_TIMEOUT,
@@ -180,7 +180,7 @@ export function getDeleteListFailureToast(list: List): Omit<Toast, 'id'> {
     title: t('toast.delete_list_failure.title'),
     body: t('toast.delete_list_failure.body', {
       name: list.name,
-      b: (children: React.ReactChildren) => <b>{children}</b>
+      b: (children: React.ReactNode) => <b>{children}</b>
     }),
     closable: true,
     timeout: DEFAULT_TIMEOUT,

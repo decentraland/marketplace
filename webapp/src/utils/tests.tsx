@@ -54,7 +54,7 @@ export function renderWithProviders(component: JSX.Element, { preloadedState, st
       translation: { data: locales, locale: 'en' }
     })
 
-  function AppProviders({ children }: { children: JSX.Element }) {
+  function AppProviders({ children }: { children: React.ReactNode }) {
     return (
       <Provider store={initializedStore}>
         <MemoryRouter>
