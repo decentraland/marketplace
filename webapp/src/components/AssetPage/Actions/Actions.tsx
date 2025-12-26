@@ -71,7 +71,7 @@ const Actions = (props: Props) => {
         </Button>
       ) : null}
       {isOwner && isENSName && (
-        <Button as="a" href={`${builderUrl}/names`} fluid>
+        <Button as="a" href={`${builderUrl}/names/${data.ens?.subdomain || ''}`} fluid>
           {t('asset_page.actions.manage')}
         </Button>
       )}
