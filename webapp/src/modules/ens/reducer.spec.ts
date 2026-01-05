@@ -10,6 +10,7 @@ import {
   claimNameWithCreditsRequest,
   claimNameWithCreditsSuccess,
   claimNameWithCreditsFailure,
+  claimNameWithCreditsRouteExpired,
   claimNameWithCreditsCrossChainPolling,
   claimNameWithCreditsClearProgress,
   CLAIM_NAME_REQUEST,
@@ -178,6 +179,26 @@ describe('ENS Reducer', () => {
         creditsClaimProgress: {
           ...initialState.creditsClaimProgress,
           status: 'failed'
+        }
+      })
+    })
+  })
+
+  describe('when handling the CLAIM_NAME_WITH_CREDITS_ROUTE_EXPIRED action', () => {
+    const routeExpiredAction = claimNameWithCreditsRouteExpired('example')
+
+    beforeEach(() => {
+      initialState = { ...INITIAL_STATE }
+    })
+
+    it('should return a state with creditsClaimProgress set to refetching_route', () => {
+      expect(ensReducer(initialState, routeExpiredAction)).toEqual({
+        ...initialState,
+        creditsClaimProgress: {
+          name: 'example',
+          polygonTxHash: '',
+          coralScanUrl: '',
+          status: 'refetching_route'
         }
       })
     })

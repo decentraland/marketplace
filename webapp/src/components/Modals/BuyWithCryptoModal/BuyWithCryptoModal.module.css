@@ -96,6 +96,11 @@
   margin-top: 16px;
 }
 
+.buyWithCryptoModal .errorIcon {
+  color: #ff6b6b;
+  margin-bottom: 16px;
+}
+
 .buyWithCryptoModal :global(.AssetImage) {
   margin: 0;
   margin-right: 16px;

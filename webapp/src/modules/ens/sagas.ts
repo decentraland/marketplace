@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from 'ethers'
-import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { call, delay, put, select, takeEvery } from 'redux-saga/effects'
 import { ChainId } from '@dcl/schemas'
 import { CreditsService } from 'decentraland-dapps/dist/lib/credits'
 import { getConnectedProvider, getNetworkProvider, getSigner } from 'decentraland-dapps/dist/lib/eth'
@@ -39,6 +39,7 @@ import {
   claimNameWithCreditsSuccess,
   claimNameWithCreditsFailure,
   claimNameWithCreditsTransactionSubmitted,
+  claimNameWithCreditsRouteExpired,
   claimNameWithCreditsCrossChainPolling
 } from './actions'
 import { ENS, ENSError } from './types'
@@ -138,6 +139,7 @@ export function* ensSaga() {
 
       yield put(claimNameTransactionSubmitted(name, wallet.address, wallet.chainId, transactionHash))
     } catch (error) {
+      console.error('Error in handleClaimNameRequest:', error)
       const ensError: ENSError = {
         message: isErrorWithMessage(error) ? error.message : 'Unknown error'
       }
@@ -200,10 +202,52 @@ export function* ensSaga() {
 
       const creditsServerUrl = config.get('CREDITS_SERVER_URL')
       const creditsClient = new CreditsClient(creditsServerUrl, { identity })
-      const routeData: CreditsNameRouteResponse = yield call([creditsClient, 'fetchCreditsNameRoute'], name, ChainId.MATIC_MAINNET)
+
+      // Minimum time buffer before expiration (in seconds) - refetch if route expires in less than this
+      const ROUTE_EXPIRATION_BUFFER_SECONDS = 30
+      const MAX_ROUTE_FETCH_ATTEMPTS = 3
+
+      let routeData: CreditsNameRouteResponse | null = null
+      let fetchAttempts = 0
+
+      // Fetch route with expiration check - refetch if expired or about to expire
+      while (!routeData && fetchAttempts < MAX_ROUTE_FETCH_ATTEMPTS) {
+        fetchAttempts++
+
+        const fetchedRoute: CreditsNameRouteResponse = yield call([creditsClient, 'fetchCreditsNameRoute'], name, ChainId.MATIC_MAINNET)
+
+        // Check if route is expired or about to expire
+        const currentTimeSeconds = Math.floor(Date.now() / 1000)
+        const expiresAt = fetchedRoute.externalCall.expiresAt
+        const timeUntilExpiration = expiresAt - currentTimeSeconds
+
+        if (timeUntilExpiration <= 0) {
+          // Route already expired, dispatch route expired action and refetch
+          yield put(claimNameWithCreditsRouteExpired(name))
+          // Small delay before refetch to prevent hammering the server
+          yield delay(1000)
+          continue
+        }
+
+        if (timeUntilExpiration < ROUTE_EXPIRATION_BUFFER_SECONDS) {
+          // Route is about to expire, dispatch route expired action and refetch
+          yield put(claimNameWithCreditsRouteExpired(name))
+          // Wait a bit for a fresh route
+          yield delay(1000)
+          continue
+        }
+
+        // Route is valid
+        routeData = fetchedRoute
+      }
+
+      if (!routeData) {
+        throw new Error('Unable to fetch a valid route after multiple attempts. Please try again.')
+      }
 
       // Use CreditsService to handle the transaction
       const creditsService = new CreditsService()
+      // const txHash: string = '0x9830c5c1a7952d93fe87f84f08e18a2ee5222b3fbdee34006d482b7ba269d00f'
       const txHash: string = yield call(
         [creditsService, 'useCreditsWithExternalCall'],
         PRICE_IN_WEI,

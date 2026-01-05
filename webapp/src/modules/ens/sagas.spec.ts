@@ -453,12 +453,14 @@ describe('ENS Saga', () => {
 
       beforeEach(() => {
         mockIdentity = {} as AuthIdentity
+        // Use a future timestamp (current time + 5 minutes) to ensure route is valid
+        const futureExpiresAt = Math.floor(Date.now() / 1000) + 300
         mockRouteData = {
           externalCall: {
             target: '0xTargetAddress',
             selector: '0x12345678',
             data: '0xData',
-            expiresAt: 1234567890,
+            expiresAt: futureExpiresAt,
             salt: '0xSalt'
           },
           customExternalCallSignature: '0xSignature',
@@ -550,12 +552,14 @@ describe('ENS Saga', () => {
 
       beforeEach(() => {
         mockIdentity = {} as AuthIdentity
+        // Use a future timestamp (current time + 5 minutes) to ensure route is valid
+        const futureExpiresAt = Math.floor(Date.now() / 1000) + 300
         mockRouteData = {
           externalCall: {
             target: '0xTargetAddress',
             selector: '0x12345678',
             data: '0xData',
-            expiresAt: 1234567890,
+            expiresAt: futureExpiresAt,
             salt: '0xSalt'
           },
           customExternalCallSignature: '0xSignature',

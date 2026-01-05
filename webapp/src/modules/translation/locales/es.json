@@ -898,6 +898,16 @@
       "description": "Tu transacción está siendo procesada a través de redes. Esto puede tomar unos minutos.",
       "track_on_coral_scan": "Seguir en CoralScan",
       "note": "Por favor, mantén esta ventana abierta. Serás redirigido automáticamente cuando la transacción se complete."
+    },
+    "refetching_route": {
+      "modal_title": "Refrescando ruta",
+      "title": "Refrescando ruta de transacción...",
+      "description": "La ruta anterior expiró. Estamos calculando una nueva ruta para tu transacción. Esto debería tomar solo un momento."
+    },
+    "credits_claim_error": {
+      "title": "Error al reclamar nombre",
+      "description": "No se pudo reclamar el nombre. Por favor, intenta nuevamente.",
+      "close_button": "Cerrar"
     }
   },
   "partially_supported_network_card": {

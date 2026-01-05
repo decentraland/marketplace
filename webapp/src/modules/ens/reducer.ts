@@ -17,11 +17,13 @@ import {
   ClaimNameWithCreditsSuccessAction,
   ClaimNameWithCreditsFailureAction,
   ClaimNameWithCreditsCrossChainPollingAction,
+  ClaimNameWithCreditsRouteExpiredAction,
   ClaimNameWithCreditsClearProgressAction,
   CLAIM_NAME_WITH_CREDITS_REQUEST,
   CLAIM_NAME_WITH_CREDITS_SUCCESS,
   CLAIM_NAME_WITH_CREDITS_FAILURE,
   CLAIM_NAME_WITH_CREDITS_CROSS_CHAIN_POLLING,
+  CLAIM_NAME_WITH_CREDITS_ROUTE_EXPIRED,
   CLAIM_NAME_WITH_CREDITS_CLEAR_PROGRESS
 } from './actions'
 import { ENS, ENSError, Authorization, CreditsClaimProgress } from './types'
@@ -58,6 +60,7 @@ export type ENSReducerAction =
   | ClaimNameWithCreditsSuccessAction
   | ClaimNameWithCreditsFailureAction
   | ClaimNameWithCreditsCrossChainPollingAction
+  | ClaimNameWithCreditsRouteExpiredAction
   | ClaimNameWithCreditsClearProgressAction
 
 export function ensReducer(state: ENSState = INITIAL_STATE, action: ENSReducerAction): ENSState {
@@ -69,6 +72,19 @@ export function ensReducer(state: ENSState = INITIAL_STATE, action: ENSReducerAc
         ...state,
         loading: loadingReducer(state.loading, action),
         creditsClaimProgress: null
+      }
+    }
+
+    case CLAIM_NAME_WITH_CREDITS_ROUTE_EXPIRED: {
+      const { name } = action.payload
+      return {
+        ...state,
+        creditsClaimProgress: {
+          name,
+          polygonTxHash: '',
+          coralScanUrl: '',
+          status: 'refetching_route'
+        }
       }
     }
 

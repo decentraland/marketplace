@@ -57,6 +57,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     isBuyWithCardPage,
     isUsingMagic,
     creditsClaimProgress,
+    creditsClaimError,
     onSwitchNetwork,
     onGetGasCost,
     onGetCrossChainRoute,
@@ -70,6 +71,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   } = props
 
   const isPollingCrossChain = creditsClaimProgress?.status === 'polling'
+  const isRefetchingRoute = creditsClaimProgress?.status === 'refetching_route'
 
   const crossChainSupportedChains = useRef<ChainId[]>([])
   const analytics = getAnalytics()
@@ -104,6 +106,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [selectedChain, selectedProviderChain, providerTokens])
 
   const { gasCost, isFetchingGasCost } = onGetGasCost(selectedToken, chainNativeToken, wallet)
+  console.log('gasCost', gasCost)
 
   const hasCredits = useMemo(() => credits && credits.totalCredits > 0, [credits])
 
@@ -501,6 +504,18 @@ export const BuyWithCryptoModal = (props: Props) => {
       )
     }
 
+    // When refetching route, show a different title and disable navigation
+    if (isRefetchingRoute) {
+      return (
+        <ModalNavigation
+          title={t('buy_with_crypto_modal.refetching_route.modal_title', {
+            name: asset.name,
+            b: (children: React.ReactNode) => <b>{children}</b>
+          })}
+        />
+      )
+    }
+
     // When polling cross-chain, show a different title and disable navigation
     if (isPollingCrossChain) {
       return (
@@ -523,7 +538,7 @@ export const BuyWithCryptoModal = (props: Props) => {
         onClose={!isBuyingAsset ? onClose : undefined}
       />
     )
-  }, [asset.name, onClose, showChainSelector, showTokenSelector, isBuyingAsset, isPollingCrossChain])
+  }, [asset.name, onClose, showChainSelector, showTokenSelector, isBuyingAsset, isPollingCrossChain, isRefetchingRoute])
 
   const renderCrossChainPollingContent = useCallback(() => {
     if (!creditsClaimProgress) return null
@@ -550,6 +565,18 @@ export const BuyWithCryptoModal = (props: Props) => {
     )
   }, [creditsClaimProgress])
 
+  const renderRefetchingRouteContent = useCallback(() => {
+    return (
+      <div className={styles.crossChainPollingContainer} data-testid="refetching-route-content">
+        <div className={styles.crossChainPollingContent}>
+          <Loader active size="large" inline />
+          <h3 className={styles.crossChainPollingTitle}>{t('buy_with_crypto_modal.refetching_route.title')}</h3>
+          <p className={styles.crossChainPollingDescription}>{t('buy_with_crypto_modal.refetching_route.description')}</p>
+        </div>
+      </div>
+    )
+  }, [])
+
   const translationPageDescriptorId = compact([
     'mint',
     isWearableOrEmote(asset) ? (isBuyWithCardPage ? 'with_card' : 'with_mana') : null,
@@ -570,6 +597,21 @@ export const BuyWithCryptoModal = (props: Props) => {
     }
     onClose()
   }, [history, location.search, onClose])
+
+  const renderCreditsClaimError = useCallback(() => {
+    return (
+      <div className={styles.crossChainPollingContainer} data-testid="credits-claim-error">
+        <div className={styles.crossChainPollingContent}>
+          <Icon name="warning sign" size="huge" className={styles.errorIcon} />
+          <h3 className={styles.crossChainPollingTitle}>{t('buy_with_crypto_modal.credits_claim_error.title')}</h3>
+          <p className={styles.crossChainPollingDescription}>{t('buy_with_crypto_modal.credits_claim_error.description')}</p>
+          <Button primary onClick={handleOnClose}>
+            {t('buy_with_crypto_modal.credits_claim_error.close_button')}
+          </Button>
+        </div>
+      </div>
+    )
+  }, [handleOnClose])
 
   const handleShowChainSelector = useCallback(() => {
     setShowChainSelector(true)
@@ -604,11 +646,15 @@ export const BuyWithCryptoModal = (props: Props) => {
   }, [asset])
 
   return (
-    <Modal size="tiny" onClose={isPollingCrossChain ? undefined : handleOnClose} className={styles.buyWithCryptoModal}>
+    <Modal size="tiny" onClose={isPollingCrossChain || isRefetchingRoute ? undefined : handleOnClose} className={styles.buyWithCryptoModal}>
       {renderModalNavigation()}
       <Modal.Content>
         <>
-          {isPollingCrossChain ? (
+          {creditsClaimError ? (
+            renderCreditsClaimError()
+          ) : isRefetchingRoute ? (
+            renderRefetchingRouteContent()
+          ) : isPollingCrossChain ? (
             renderCrossChainPollingContent()
           ) : showChainSelector || showTokenSelector ? (
             <div>
@@ -768,7 +814,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           )}
         </>
       </Modal.Content>
-      {showChainSelector || showTokenSelector || isPollingCrossChain ? null : (
+      {showChainSelector || showTokenSelector || isPollingCrossChain || isRefetchingRoute || creditsClaimError ? null : (
         <Modal.Actions>
           <div className={classNames(styles.buttons, isWearableOrEmote(asset) && 'with-mana')}>{renderMainActionButton()}</div>
           {isWearableOrEmote(asset) && isBuyWithCardPage ? (

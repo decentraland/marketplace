@@ -76,6 +76,10 @@ export const claimNameWithCreditsTransactionSubmitted = (subdomain: string, addr
     })
   })
 
+export const CLAIM_NAME_WITH_CREDITS_ROUTE_EXPIRED = '[Route Expired] Claim Name with Credits'
+
+export const claimNameWithCreditsRouteExpired = (name: string) => action(CLAIM_NAME_WITH_CREDITS_ROUTE_EXPIRED, { name })
+
 export const claimNameWithCreditsCrossChainPolling = (name: string, polygonTxHash: string, coralScanUrl: string) =>
   action(CLAIM_NAME_WITH_CREDITS_CROSS_CHAIN_POLLING, {
     name,
@@ -98,5 +102,6 @@ export type ClaimNameWithCreditsRequestAction = ReturnType<typeof claimNameWithC
 export type ClaimNameWithCreditsSuccessAction = ReturnType<typeof claimNameWithCreditsSuccess>
 export type ClaimNameWithCreditsFailureAction = ReturnType<typeof claimNameWithCreditsFailure>
 export type ClaimNameWithCreditsTransactionSubmittedAction = ReturnType<typeof claimNameWithCreditsTransactionSubmitted>
+export type ClaimNameWithCreditsRouteExpiredAction = ReturnType<typeof claimNameWithCreditsRouteExpired>
 export type ClaimNameWithCreditsCrossChainPollingAction = ReturnType<typeof claimNameWithCreditsCrossChainPolling>
 export type ClaimNameWithCreditsClearProgressAction = ReturnType<typeof claimNameWithCreditsClearProgress>

@@ -900,6 +900,16 @@
       "description": "您的交易正在跨链处理。这可能需要几分钟。",
       "track_on_coral_scan": "在 CoralScan 上跟踪",
       "note": "请保持此窗口打开。当交易完成时，您将被自动重定向。"
+    },
+    "refetching_route": {
+      "modal_title": "刷新路线",
+      "title": "刷新交易路线...",
+      "description": "之前的路线已过期。我们正在计算新的路线。这应该只需要片刻时间。"
+    },
+    "credits_claim_error": {
+      "title": "错误声明名称",
+      "description": "我们无法处理您的交易。请稍后再试。",
+      "close_button": "关闭"
     }
   },
   "partially_supported_network_card": {

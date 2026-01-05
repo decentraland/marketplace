@@ -915,6 +915,16 @@
       "description": "Your transaction is being processed across chains. This may take a few minutes.",
       "track_on_coral_scan": "Track on CoralScan",
       "note": "Please keep this window open. You will be redirected automatically when the transaction completes."
+    },
+    "refetching_route": {
+      "modal_title": "Refreshing Route",
+      "title": "Refreshing transaction route...",
+      "description": "The previous route expired. We're calculating a new route for your transaction. This should only take a moment."
+    },
+    "credits_claim_error": {
+      "title": "Error claiming name",
+      "description": "We're unable to process your transaction at this time. Please try again later.",
+      "close_button": "Close"
     }
   },
   "partially_supported_network_card": {

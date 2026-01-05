@@ -48,7 +48,7 @@ export type WorldStatus = {
   }
 }
 
-export type CreditsClaimProgressStatus = 'polling' | 'success' | 'failed'
+export type CreditsClaimProgressStatus = 'refetching_route' | 'polling' | 'success' | 'failed'
 
 export type CreditsClaimProgress = {
   name: string

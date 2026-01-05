@@ -10,7 +10,10 @@ import { Asset } from '../../../modules/asset/types'
 import { CreditsClaimProgress } from '../../../modules/ens/types'
 import { CrossChainRoute, GasCost } from './hooks'
 
-export type MapStateProps = Pick<Props, 'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork' | 'credits' | 'creditsClaimProgress'>
+export type MapStateProps = Pick<
+  Props,
+  'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork' | 'credits' | 'creditsClaimProgress' | 'creditsClaimError'
+>
 export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork' | 'onClearCreditsClaimProgress'>
 export type OnGetGasCost = (selectedToken: Token, nativeChainToken: Token | undefined, wallet: Wallet | null) => GasCost
 export type OnGetCrossChainRoute = (
@@ -33,6 +36,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
     isSwitchingNetwork: boolean
     isBuyWithCardPage: boolean
     creditsClaimProgress: CreditsClaimProgress | null
+    creditsClaimError: string | null
     onGetCrossChainRoute: OnGetCrossChainRoute
     onGetGasCost: OnGetGasCost
     onSwitchNetwork: ActionFunction<typeof switchNetworkRequest>
