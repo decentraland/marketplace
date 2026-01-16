@@ -7,7 +7,7 @@
     "@0xsquid/squid-types": "^0.1.139",
     "@covalenthq/client-sdk": "^0.6.4",
     "@dcl/crypto": "^3.0.0",
-    "@dcl/schemas": "^20.4.1",
+    "@dcl/schemas": "^22.1.0",
     "@dcl/single-sign-on-client": "^0.1.0",
     "@dcl/ui-env": "^1.5.0",
     "@ethersproject/providers": "^5.6.2",
@@ -19,7 +19,7 @@
     "date-fns": "^2.23.0",
     "dcl-catalyst-client": "21.2.0",
     "dcl-catalyst-commons": "^9.0.1",
-    "decentraland-connect": "^11.0.0",
+    "decentraland-connect": "^11.1.0",
     "decentraland-crypto-fetch": "^1.0.3",
     "decentraland-dapps": "^26.3.0",
     "decentraland-transactions": "^2.24.4",
@@ -34,6 +34,7 @@
     "react-countup": "^6.2.0",
     "react-dom": "^18.3.1",
     "react-intersection-observer": "^9.4.3",
+    "react-intl": "^8.0.11",
     "react-lazy-load-image-component": "^1.5.6",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.3.4",
@@ -45,6 +46,7 @@
     "redux-logger": "3.0.6",
     "redux-saga": "^1.1.3",
     "reselect": "4.0.0",
+    "thirdweb": "^5.116.1",
     "typesafe-actions": "^5.1.0",
     "uuid": "^9.0.1"
   },
@@ -121,8 +123,7 @@
     "node": "20"
   },
   "overrides": {
-    "ua-parser-js": "^2.0.0",
-    "@dcl/schemas": "^20.4.1"
+    "ua-parser-js": "^2.0.0"
   },
   "homepage": "",
   "repository": {
