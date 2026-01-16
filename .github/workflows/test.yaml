@@ -10,16 +10,14 @@ jobs:
         working-directory: ./webapp
     steps:
       - uses: actions/checkout@master
-      - name: Use Node.js 22.x
-        uses: actions/setup-node@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4.0.1
         with:
-          node-version: 24.8.0
+          node-version: 20.x
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
       - name: Install
-        run: |
-          npm cache clean --force
-          npm install
+        run: npm install
       - name: Test
         run: npm run test:coverage
       - name: report coverage
