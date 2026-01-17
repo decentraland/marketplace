@@ -195,11 +195,12 @@ export const Preview: React.FC<Props> = ({
                   wearablePreviewId="wearable-preview"
                   selectedAnimation={socialEmote}
                   onSelectAnimation={handleSelectSocialEmoteOutcome}
-                  renderAnimationSelector={({ socialEmoteAnimations, onSelectAnimation }) => {
+                  renderAnimationSelector={({ socialEmoteAnimations, selectedAnimation, onSelectAnimation }) => {
                     return (
                       <PlayButton
                         isPlaying={isPlaying}
                         onToggle={onToggle}
+                        selectedAnimation={selectedAnimation}
                         socialEmoteAnimations={socialEmoteAnimations}
                         onSelectAnimation={onSelectAnimation}
                       />
