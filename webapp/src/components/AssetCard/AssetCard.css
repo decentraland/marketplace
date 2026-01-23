@@ -170,6 +170,12 @@
   margin-bottom: unset;
 }
 
+.AssetCard .PriceInMana {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .AssetCard .PriceInMana .ui.header.large {
   font-size: 30px;
   font-weight: 600;
@@ -342,7 +348,7 @@
   }
 
   .AssetCard .PriceInMana {
-    margin-top: 6px;
+    margin-top: 6px;  
   }
 
   .AssetCard .AssetImage.catalog,
