@@ -1250,6 +1250,10 @@
       "title": "Congratulations",
       "message": "<strong>{assetName}</strong> has been put on sale successfully",
       "my_listings": "My items on sale"
+    },
+    "cross_chain_route_failed": {
+      "title": "Route unavailable",
+      "body": "The cross-chain route is currently unavailable. Please try again later."
     }
   },
   "maintainance": {

@@ -1227,6 +1227,10 @@
       "title": "Felicidades",
       "message": "La oferta para <strong>{assetName}</strong> fue enviada de manera exitosa",
       "my_bids": "Mis activos ofertas"
+    },
+    "cross_chain_route_failed": {
+      "title": "Ruta no disponible",
+      "body": "La ruta cross-chain no está disponible en este momento. Por favor intente más tarde."
     }
   },
   "maintainance": {
