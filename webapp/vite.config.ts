@@ -60,14 +60,32 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     build: {
-      // Disable sourcemaps in production to reduce memory usage during build
-      sourcemap: false,
       commonjsOptions: {
         transformMixedEsModules: true
       },
       rollupOptions: {
-        plugins: [rollupNodePolyFill()]
-      }
+        plugins: [rollupNodePolyFill()],
+        output: {
+          manualChunks: (id: string) => {
+            // Split large vendors into individual chunks to reduce memory usage
+            if (id.includes('node_modules')) {
+              if (id.includes('thirdweb')) return 'vendor-thirdweb'
+              if (id.includes('@walletconnect')) return 'vendor-walletconnect'
+              if (id.includes('ethers') || id.includes('viem')) return 'vendor-ethereum'
+              if (id.includes('decentraland-ui')) return 'vendor-dcl-ui'
+              if (id.includes('decentraland-dapps')) return 'vendor-dcl-dapps'
+              if (id.includes('react')) return 'vendor-react'
+              if (id.includes('lottie')) return 'vendor-lottie'
+              if (id.includes('@mui') || id.includes('@emotion')) return 'vendor-mui'
+              if (id.includes('recharts')) return 'vendor-recharts'
+              // Group remaining vendors together
+              return 'vendor'
+            }
+          }
+        }
+      },
+      // Disable sourcemaps in CI to reduce memory usage
+      sourcemap: !process.env.CI
     },
     ...(command === 'build' ? { base: envVariables.VITE_BASE_URL } : undefined)
   } as unknown as UserConfig
