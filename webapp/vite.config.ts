@@ -34,7 +34,8 @@ export default defineConfig(({ command, mode }) => {
       proxy: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         '/auth': {
-          target: 'https://decentraland.zone',
+          target: 'https://decentraland.org',
+          // target: 'http://localhost:5174',
           followRedirects: true,
           changeOrigin: true,
           secure: false,
@@ -59,13 +60,14 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     build: {
+      // Disable sourcemaps in production to reduce memory usage during build
+      sourcemap: false,
       commonjsOptions: {
         transformMixedEsModules: true
       },
       rollupOptions: {
         plugins: [rollupNodePolyFill()]
-      },
-      sourcemap: true
+      }
     },
     ...(command === 'build' ? { base: envVariables.VITE_BASE_URL } : undefined)
   } as unknown as UserConfig
