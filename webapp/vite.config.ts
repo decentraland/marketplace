@@ -34,8 +34,7 @@ export default defineConfig(({ command, mode }) => {
       proxy: {
         // eslint-disable-next-line @typescript-eslint/naming-convention
         '/auth': {
-          target: 'https://decentraland.org',
-          // target: 'http://localhost:5174',
+          target: 'https://decentraland.zone',
           followRedirects: true,
           changeOrigin: true,
           secure: false,
