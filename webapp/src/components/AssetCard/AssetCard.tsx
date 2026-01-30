@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { Link, useLocation } from 'react-router-dom'
-import { Item, Network, RentalListing } from '@dcl/schemas'
+import { Item, Network, NFTCategory, RentalListing } from '@dcl/schemas'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
@@ -19,6 +19,7 @@ import {
 import { locations } from '../../modules/routing/locations'
 import { PageName, SortBy } from '../../modules/routing/types'
 import { AssetImage } from '../AssetImage'
+import { useEmoteHoverPreviewOptional } from '../EmoteHoverPreview'
 import { FavoritesCounter } from '../FavoritesCounter'
 import { Mana } from '../Mana'
 import { EmoteTags } from './EmoteTags'
@@ -96,6 +97,56 @@ const AssetCard = (props: Props) => {
   const location = useLocation()
   const showListedTag = pageName === PageName.ACCOUNT && Boolean(price) && location.pathname !== locations.root()
 
+  // Emote hover preview
+  const emoteHoverPreview = useEmoteHoverPreviewOptional()
+  const imageWrapperRef = useRef<HTMLDivElement>(null)
+  const isEmote = asset.category === NFTCategory.EMOTE
+
+  const handleMouseEnter = useCallback(() => {
+    if (!isMobile && isEmote && emoteHoverPreview && imageWrapperRef.current) {
+      const rect = imageWrapperRef.current.getBoundingClientRect()
+      emoteHoverPreview.showPreview(asset, rect)
+    }
+  }, [isMobile, isEmote, emoteHoverPreview, asset])
+
+  // Check if this asset is being previewed (to force hover state)
+  const isBeingPreviewed = useMemo(() => {
+    if (!emoteHoverPreview) return false
+    const itemId = isNFT(asset) ? undefined : asset.itemId
+    const tokenId = isNFT(asset) ? asset.tokenId : undefined
+    return emoteHoverPreview.isAssetBeingPreviewed(asset.contractAddress, itemId, tokenId)
+  }, [emoteHoverPreview, asset])
+
+  const handleMouseLeave = useCallback(
+    (e: React.MouseEvent) => {
+      if (!emoteHoverPreview) return
+
+      // Check if mouse moved to the emote preview portal
+      const relatedTarget = e.relatedTarget as HTMLElement | null
+      if (relatedTarget) {
+        // Check if the relatedTarget is within the emote preview portal
+        const previewPortal = document.getElementById('emote-hover-preview-portal')
+        if (previewPortal && previewPortal.contains(relatedTarget)) {
+          console.log('[AssetCard] Mouse moved to preview portal, not hiding')
+          return
+        }
+      }
+
+      // Check if this asset is currently being previewed
+      // Don't call hidePreview if so - the mouse likely moved to the preview portal
+      const itemId = isNFT(asset) ? undefined : asset.itemId
+      const tokenId = isNFT(asset) ? asset.tokenId : undefined
+      const currentlyPreviewed = emoteHoverPreview.isAssetBeingPreviewed(asset.contractAddress, itemId, tokenId)
+
+      console.log('[AssetCard] handleMouseLeave - currentlyPreviewed:', currentlyPreviewed, 'relatedTarget:', relatedTarget?.className)
+
+      if (!currentlyPreviewed) {
+        emoteHoverPreview.hidePreview()
+      }
+    },
+    [emoteHoverPreview, asset]
+  )
+
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
   const rentalPricePerDay: string | null = useMemo(() => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null), [rental])
@@ -141,10 +192,17 @@ const AssetCard = (props: Props) => {
     ) : null
   }, [asset, catalogItemInformation])
 
+  const cardClassName = useMemo(() => {
+    const classes = ['AssetCard']
+    if (isCatalogItem(asset)) classes.push('catalog')
+    if (isBeingPreviewed) classes.push('emote-preview-active')
+    return classes.join(' ')
+  }, [asset, isBeingPreviewed])
+
   return (
     <div ref={ref}>
       <Card
-        className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
+        className={cardClassName}
         link
         as={Link}
         to={getAssetUrl(asset, isManager && isLand(asset))}
@@ -153,13 +211,15 @@ const AssetCard = (props: Props) => {
       >
         {inView ? (
           <>
-            <AssetImage
-              className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : 'remove-margin'} ${
-                catalogItemInformation?.extraInformation ? 'expandable' : ''
-              }`}
-              asset={asset}
-              showOrderListedTag={showListedTag}
-            />
+            <div ref={imageWrapperRef} className="AssetCard__imageWrapper" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+              <AssetImage
+                className={`AssetImage ${isCatalogItem(asset) ? 'catalog' : 'remove-margin'} ${
+                  catalogItemInformation?.extraInformation ? 'expandable' : ''
+                }`}
+                asset={asset}
+                showOrderListedTag={showListedTag}
+              />
+            </div>
             {!isNFT(asset) && !isMobile ? <FavoritesCounter className="FavoritesCounterBubble" item={asset} /> : null}
             {showRentalBubble ? (
               <RentalChip asset={asset} isClaimingBackLandTransactionPending={isClaimingBackLandTransactionPending} rental={rental} />
