@@ -73,9 +73,10 @@ export default defineConfig(({ command, mode }) => {
               if (id.includes('ethers') || id.includes('viem')) return 'vendor-ethereum'
               if (id.includes('decentraland-ui')) return 'vendor-dcl-ui'
               if (id.includes('decentraland-dapps')) return 'vendor-dcl-dapps'
+              // MUI/Emotion must be in same chunk as React (they use React.createContext)
+              if (id.includes('@mui') || id.includes('@emotion')) return 'vendor-react'
               if (id.includes('react')) return 'vendor-react'
               if (id.includes('lottie')) return 'vendor-lottie'
-              if (id.includes('@mui') || id.includes('@emotion')) return 'vendor-mui'
               if (id.includes('recharts')) return 'vendor-recharts'
               // Group remaining vendors together
               return 'vendor'
