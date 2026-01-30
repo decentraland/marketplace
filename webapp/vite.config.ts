@@ -83,8 +83,8 @@ export default defineConfig(({ command, mode }) => {
           }
         }
       },
-      // Disable sourcemaps in CI to reduce memory usage
-      sourcemap: !process.env.CI
+      // Disable sourcemaps in CI/Vercel to reduce memory usage (avoids OOM on 8GB build)
+      sourcemap: !process.env.CI && !process.env.VERCEL
     },
     ...(command === 'build' ? { base: envVariables.VITE_BASE_URL } : undefined)
   } as unknown as UserConfig

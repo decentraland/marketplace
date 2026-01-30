@@ -4,7 +4,8 @@
   "build": {
     "env": {
       "GEN_STATIC_LOCAL": "true",
-      "VITE_REACT_APP_DCL_DEFAULT_ENV": "dev"
+      "VITE_REACT_APP_DCL_DEFAULT_ENV": "dev",
+      "NODE_OPTIONS": "--max-old-space-size=8192"
     }
   },
   "github": {
