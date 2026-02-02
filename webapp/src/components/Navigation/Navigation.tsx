@@ -77,6 +77,9 @@ const Navigation = (props: Props) => {
           <Link to={locations.lists()}>
             <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>{t('navigation.my_lists')}</Tabs.Tab>
           </Link>
+          <a href="https://store.decentraland.org/" target="_blank" rel="noopener noreferrer">
+            <Tabs.Tab active={activeTab === NavigationTab.MERCH}>{t('navigation.merch')}</Tabs.Tab>
+          </a>
           <Mobile>
             <Link to={locations.activity()}>
               <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>{t('navigation.activity')}</Tabs.Tab>

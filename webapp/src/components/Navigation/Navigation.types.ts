@@ -10,7 +10,8 @@ export enum NavigationTab {
   COLLECTIBLES = 'collectibles',
   MY_STORE = 'my_store',
   MY_LISTS = 'my_lists',
-  ACTIVITY = 'activity'
+  ACTIVITY = 'activity',
+  MERCH = 'merch'
 }
 
 export type Props = {
