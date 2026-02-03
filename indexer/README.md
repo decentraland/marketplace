@@ -28,7 +28,7 @@ checkout the docs https://thegraph.com/docs/quick-start
 ### Queries
 
 The collection's `id` is the smart contract address of the collection.
-The item's `id` is `{collection_contract_address}-{item_blochain_id}`. The `item_blockchain_id` is the index of the item in the collection. E.g: if you have a collection with 2 items, the first is `0` and the second one is `1`. Therefore, the id of the first item will be: `{contract_address}-0`
+The item's `id` is `{collection_contract_address}-{item_blockchain_id}`. The `item_blockchain_id` is the index of the item in the collection. E.g: if you have a collection with 2 items, the first is `0` and the second one is `1`. Therefore, the id of the first item will be: `{contract_address}-0`
 
 Ethereum addresses should be passed lowercased:
 
