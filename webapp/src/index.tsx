@@ -7,6 +7,7 @@ import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
 import { darkTheme, DclThemeProvider } from 'decentraland-ui2'
+import { EmoteHoverPreviewProvider } from './components/EmoteHoverPreview'
 import * as modals from './components/Modals'
 import { Routes } from './components/Routes'
 import { ScrollToTop } from './components/ScrollToTop'
@@ -29,8 +30,10 @@ function main() {
             <DclThemeProvider theme={darkTheme}>
               <ToastProvider>
                 <ModalProvider components={modals}>
-                  <ScrollToTop />
-                  <Routes />
+                  <EmoteHoverPreviewProvider>
+                    <ScrollToTop />
+                    <Routes />
+                  </EmoteHoverPreviewProvider>
                 </ModalProvider>
               </ToastProvider>
               <Web2TransactionModal />

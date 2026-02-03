@@ -31,6 +31,8 @@ export default async (): Promise<Config> => {
       '^eth-crypto$': '<rootDir>/src/tests/__mocks__/eth-crypto.ts',
       '^@transak/transak-sdk$': '<rootDir>/src/tests/__mocks__/@transak/transak-sdk.ts'
     },
-    transformIgnorePatterns: ['node_modules/(?!(@0xsquid|eccrypto|libsodium-wrappers-sumo|decentraland-ui2|decentraland-dapps|@mui|@babel/runtime|multiformats|uint8arrays|query-string)/)']
+    transformIgnorePatterns: [
+      'node_modules/(?!(@0xsquid|eccrypto|libsodium-wrappers-sumo|decentraland-ui2|decentraland-dapps|@mui|@babel/runtime|multiformats|uint8arrays|query-string|@dcl/ui-env)/)'
+    ]
   }
 }

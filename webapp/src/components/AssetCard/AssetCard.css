@@ -215,7 +215,9 @@
     visibility: hidden;
     height: 0px;
     opacity: 0;
-    transition: height 0.1s, opacity 0.6s;
+    transition:
+      height 0.1s,
+      opacity 0.6s;
   }
   .AssetCard:hover .extraInformation {
     visibility: visible;
@@ -263,6 +265,66 @@
   .ui.cards > .card.AssetCard:hover .AssetImage.catalog {
     box-shadow: 0px 4px 34px 0px rgba(255, 255, 255, 0.37) !important;
     border-radius: 10px !important;
+  }
+
+  /* Emote preview active state - mirrors hover state */
+  .AssetCard.emote-preview-active .AssetImage.catalog {
+    height: 161px;
+    transition: none;
+    transition: height 0.3s !important;
+  }
+
+  .AssetCard.emote-preview-active .extraInformation {
+    visibility: visible;
+    margin-top: 5px;
+    height: auto;
+    opacity: 1;
+    align-items: center;
+  }
+
+  .ui.cards > .ui.card.AssetCard.link.emote-preview-active .meta,
+  a.ui.card.link.emote-preview-active .meta {
+    color: var(--secondary-text);
+  }
+
+  .AssetCard.emote-preview-active .CatalogItemInformation {
+    margin-top: 2px;
+  }
+
+  .ui.cards a.card.AssetCard.catalog.emote-preview-active,
+  .ui.link.card.AssetCard.catalog.emote-preview-active,
+  .ui.link.cards .card.AssetCard.catalog.emote-preview-active,
+  a.ui.card.AssetCard.catalog.emote-preview-active,
+  .ui.cards > .ui.card.AssetCard.catalog.link.emote-preview-active,
+  .ui.card.AssetCard.catalog.link.emote-preview-active {
+    border: none !important;
+  }
+
+  .ui.card.AssetCard.emote-preview-active > .content.catalog.expandable,
+  .ui.cards > .card.AssetCard.emote-preview-active > .content.catalog.expandable {
+    height: fit-content;
+  }
+
+  .ui.card.AssetCard.emote-preview-active > .content.catalog,
+  .ui.cards > .card.AssetCard.emote-preview-active > .content.catalog {
+    position: absolute;
+    height: 206px;
+    margin-top: 161px;
+    width: 100%;
+    background-color: var(--card);
+    box-shadow: 0px 4px 34px 0px rgba(255, 255, 255, 0.37) !important;
+    border-radius: 0px 0px 10px 10px !important;
+  }
+
+  .ui.card.AssetCard.emote-preview-active .AssetImage.catalog,
+  .ui.cards > .card.AssetCard.emote-preview-active .AssetImage.catalog {
+    box-shadow: 0px 4px 34px 0px rgba(255, 255, 255, 0.37) !important;
+    border-radius: 10px !important;
+  }
+
+  .ui.card.AssetCard.emote-preview-active > .content,
+  .ui.cards > .card.AssetCard.emote-preview-active > .content {
+    height: fit-content;
   }
 }
 
@@ -387,4 +449,9 @@
   position: fixed;
   top: 8px;
   left: 8px;
+}
+
+/* Emote hover preview wrapper */
+.AssetCard__imageWrapper {
+  position: relative;
 }
