@@ -4,7 +4,7 @@ import { builderAPI } from '../vendor/decentraland/builder/api'
 import { fetchEventFailure, fetchEventRequest, fetchEventSuccess } from './actions'
 import { eventSaga } from './sagas'
 
-const anError = new Error('An error occured')
+const anError = new Error('An error occurred')
 
 const eventTag = 'MVMF22'
 const eventContracts = ['0x1', '0x2']
