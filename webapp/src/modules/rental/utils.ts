@@ -144,7 +144,7 @@ export function getRentalEndDate(rental: RentalListing): Date | null {
 }
 
 /**
- * Checks wether a the listing of an NFT is executed, meaning that is currently on rent.
+ * Checks whether a the listing of an NFT is executed, meaning that is currently on rent.
  * @param rental - A rental listing.
  * @returns true if the rental exists and is being rented, false otherwise
  */
@@ -153,7 +153,7 @@ export function isRentalListingExecuted(rental: RentalListing | null) {
 }
 
 /**
- * Checks wether a the listing of an NFT is open.
+ * Checks whether a the listing of an NFT is open.
  * @param rental - A rental listing.
  * @returns true if the rental listing exists and is open, false otherwise
  */
@@ -166,7 +166,7 @@ export function isRentalListingCancelled(rental: RentalListing | null) {
 }
 
 /**
- * Checks wether a new rental listing can be created on an asset.
+ * Checks whether a new rental listing can be created on an asset.
  * @param rental - A rental listing or null if it doesn't have one.
  * @returns true if the rental listing exists and is open, false otherwise
  */
@@ -178,7 +178,7 @@ export function canCreateANewRental(rental: RentalListing | null) {
 }
 
 /**
- * Checks wether a rental has already ended it's renting time.
+ * Checks whether a rental has already ended its renting time.
  * @param rental - A rental listing.
  * @returns true if the rental end date is set and the rental has already passed its renting time, false otherwise.
  */
@@ -188,7 +188,7 @@ export function hasRentalEnded(rental: RentalListing): boolean {
 }
 
 /**
- * Checks wether a LAND/Estate can be claimed
+ * Checks whether a LAND/Estate can be claimed
  * @param rental - A rental listing.
  * @returns true if the rental if the Rental has status `EXECUTED` and the rental ended or if the Rental has status `OPEN` OR `CANCELLED`
  * but the rental contract is still owning the NFT from a past rental
@@ -210,7 +210,7 @@ export function canBeClaimed(userAddress: string, rental: RentalListing, asset: 
 }
 
 /**
- * Checks wether a LAND/Estate is locked from doing transfers, accepting bids or operating with orders.
+ * Checks whether a LAND/Estate is locked from doing transfers, accepting bids or operating with orders.
  * @param rental - A rental listing.
  * @returns true if the rental if the Rental has status `EXECUTED` or if the Rental can be claimed.
  */
@@ -243,7 +243,7 @@ function getLastECDSASignatureByte(signature: string) {
 }
 
 /**
- * Checks wether a ECDSA signature has a valid V.
+ * Checks whether a ECDSA signature has a valid V.
  * @param signature - A ECDSA signature.
  * @returns true if the v value is decimal 27 or 28 else otherwise.
  */
