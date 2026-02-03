@@ -11,7 +11,7 @@
 }
 
 .TimeframeSelector .ui.basic.button.active {
-  /* to override the butotns basic !importants */
+  /* to override the buttons basic !importants */
   background-color: var(--primary) !important;
   color: white !important;
 }
