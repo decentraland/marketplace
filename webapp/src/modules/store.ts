@@ -11,7 +11,6 @@ import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/
 import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
 import { fetchTranslationsRequest } from 'decentraland-dapps/dist/modules/translation/actions'
 import { getPreferredLocale } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { Locale } from 'decentraland-ui'
 import { config } from '../config'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
@@ -86,7 +85,7 @@ export function initStore(history: History) {
   const enhancer = composeEnhancers(middleware)
   const store = createStore(rootReducer as unknown as ReturnType<typeof createRootReducer>, enhancer)
   const getIdentity = () => {
-    return (getCurrentIdentity(store.getState()) as AuthIdentity | null) ?? undefined
+    return getCurrentIdentity(store.getState()) ?? undefined
   }
   sagasMiddleware.run(rootSaga, getIdentity)
   loadStorageMiddleware(store)
