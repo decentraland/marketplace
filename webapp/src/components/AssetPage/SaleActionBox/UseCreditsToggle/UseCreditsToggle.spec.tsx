@@ -8,6 +8,8 @@ import { renderWithProviders } from '../../../../utils/test'
 import UseCreditsToggle from './UseCreditsToggle'
 import { Props } from './UseCreditsToggle.types'
 
+jest.mock('lottie-react', () => () => <div>LOTTIE</div>)
+
 // Mock the Switch component
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 jest.mock('decentraland-ui2', () => ({
