@@ -43,7 +43,6 @@ export default defineConfig(({ command, mode }) => {
       }
     },
     optimizeDeps: {
-      include: ['lottie-react'],
       esbuildOptions: {
         // Node.js global to browser globalThis
         define: {
