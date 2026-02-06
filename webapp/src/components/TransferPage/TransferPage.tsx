@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { AddressField } from 'decentraland-dapps/dist/components/AddressField'
-import { NetworkButton } from 'decentraland-dapps/dist/containers'
+import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header, Form, Button, InputOnChangeData } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
@@ -34,7 +34,7 @@ const TransferPage = (props: Props) => {
           <AssetProviderPage type={AssetType.NFT}>
             {(nft, order) => {
               let subtitle
-              let isDisabled = !address || isInvalidAddress || isTransferring || nft.network !== wallet.network
+              let isDisabled = !address || isInvalidAddress || isTransferring || nft.chainId !== wallet.chainId
               let canTransfer = true
               const subtitleClasses = ['subtitle']
               const name = getAssetName(nft)
@@ -85,9 +85,9 @@ const TransferPage = (props: Props) => {
                       >
                         {t('global.cancel')}
                       </Button>
-                      <NetworkButton type="submit" primary loading={isTransferring} disabled={isDisabled} network={nft.network}>
+                      <ChainButton type="submit" primary loading={isTransferring} disabled={isDisabled} chainId={nft.chainId}>
                         {t('transfer_page.submit')}
-                      </NetworkButton>
+                      </ChainButton>
                     </div>
                   </Form>
                 </AssetAction>
