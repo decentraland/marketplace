@@ -71,12 +71,12 @@ export function isOwnedBy(asset: Asset, wallet: Wallet | null, rental?: RentalLi
     return isLoggedUserTheOwner
   }
 
-  // If the asset was transfered with an open listing, it will be change to CANCELLED
+  // If the asset was transferred with an open listing, it will be change to CANCELLED
   // but rental lessor will still be the past owner.
   const rentalsContract: ContractData = getContract(ContractName.Rentals, (asset as NFT).chainId)
   const rentalContractHasTheAsset = rentalsContract.address === (asset as NFT).owner
   if (rental && rentalContractHasTheAsset) {
-    // if the asset is not in the rental contracts, it has been transfered and should not have owner permissions
+    // if the asset is not in the rental contracts, it has been transferred and should not have owner permissions
     return addressEquals(wallet?.address, rental?.lessor ?? undefined)
   }
 
