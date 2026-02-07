@@ -11,7 +11,7 @@ import { CreditsClaimProgress } from '../../../modules/ens/types'
 import { CrossChainRoute, GasCost } from './hooks'
 
 export type MapStateProps = Pick<Props, 'wallet' | 'isBuyWithCardPage' | 'isSwitchingNetwork' | 'credits' | 'creditsClaimProgress'>
-export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork' | 'onClearCreditsClaimProgress'>
+export type MapDispatchProps = Pick<Props, 'onGetMana' | 'onSwitchNetwork' | 'onClearCreditsClaimProgress' | 'onRouteError'>
 export type OnGetGasCost = (selectedToken: Token, nativeChainToken: Token | undefined, wallet: Wallet | null) => GasCost
 export type OnGetCrossChainRoute = (
   selectedToken: Token,
@@ -43,6 +43,7 @@ export type Props = Pick<WithAuthorizedActionProps, 'isLoadingAuthorization' | '
     onGetMana: ActionFunction<typeof openBuyManaWithFiatModalRequest>
     onBuyWithCredits?: (manaToSpendByUser: bigint) => unknown
     onClearCreditsClaimProgress?: () => void
+    onRouteError?: () => void
     onClose: ModalProps['onClose']
   }
 

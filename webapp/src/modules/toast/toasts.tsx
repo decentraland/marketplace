@@ -380,3 +380,14 @@ export function getCreateOrderSuccessToast(nft: NFT): Omit<Toast, 'id'> {
     )
   }
 }
+
+export function getCrossChainRouteFailedToast(): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.cross_chain_route_failed.title'),
+    body: t('toast.cross_chain_route_failed.body'),
+    icon: <Icon size="big" name="exclamation circle" />,
+    closable: true,
+    timeout: DEFAULT_TIMEOUT
+  }
+}

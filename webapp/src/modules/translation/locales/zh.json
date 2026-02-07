@@ -1230,6 +1230,10 @@
       "title": "恭喜",
       "message": "竞标<strong>{assetName}</strong>已成功放置",
       "my_bids": "我的资产出价"
+    },
+    "cross_chain_route_failed": {
+      "title": "路线不可用",
+      "body": "跨链路由目前不可用。请稍后再试。"
     }
   },
   "maintainance": {
