@@ -26,7 +26,7 @@ const RentConfirmedModal = ({ metadata: { rental, periodIndexChosen }, onClose }
           </div>
           <div>
             <CTA to={`${builderUrl}/scenes`} name="build-more" isDisabledOnMobile={isMobileView} />
-            <CTA to="https://docs.decentraland.org/creator/development-guide/coding-scenes/" name="get-creative" />
+            <CTA to="https://docs.decentraland.org/creator/scene-editor/extend-with-code/overview" name="get-creative" />
             <CTA to={`${builderUrl}/land`} name="manage-land" isDisabledOnMobile={isMobileView} />
           </div>
         </div>

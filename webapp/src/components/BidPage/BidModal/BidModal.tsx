@@ -156,7 +156,7 @@ const BidModal = (props: Props) => {
               {t('buy_with_crypto_modal.price_too_low', {
                 learn_more: (
                   <a
-                    href="https://docs.decentraland.org/player/blockchain-integration/transactions-in-polygon/#why-do-i-have-to-cover-the-tra[…]ems-that-cost-less-than-1-mana"
+                    href="https://docs.decentraland.org/blockchain-integration/transactions-in-polygon#why-do-i-have-to-cover-the-transaction-fees-for-items-that-cost-less-than-1-mana"
                     target="_blank"
                     rel="noreferrer"
                   >
