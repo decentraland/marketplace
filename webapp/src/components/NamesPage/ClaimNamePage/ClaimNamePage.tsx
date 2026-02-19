@@ -211,7 +211,7 @@ const ClaimNamePage = (props: Props) => {
         description: t('names_page.why.governance.description', {
           b: (children: React.ReactNode) => <b className={styles.voting}>{children}</b>,
           link: (
-            <a href="https://docs.decentraland.org/player/general/dao/overview/what-is-the-dao" className={styles.learnMore}>
+            <a href="https://docs.decentraland.org/dao/dao/what-is-the-dao" className={styles.learnMore}>
               {t('global.learn_more')}
             </a>
           )

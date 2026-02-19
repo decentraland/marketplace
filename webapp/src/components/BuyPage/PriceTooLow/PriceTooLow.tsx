@@ -37,7 +37,7 @@ const PriceTooLow = (props: Props) => {
             <Button
               basic
               size="small"
-              href="https://docs.decentraland.org/blockchain-integration/transactions-in-polygon/"
+              href="https://docs.decentraland.org/blockchain-integration/transactions-in-polygon"
               target="_blank"
               rel="noopener noreferrer"
             >

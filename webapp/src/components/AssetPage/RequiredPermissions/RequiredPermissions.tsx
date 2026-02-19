@@ -40,7 +40,7 @@ const RequiredPermissions = (props: Props) => {
           content={t('smart_wearable.required_permission.tooltip_info', {
             learn_more: (
               <a
-                href="https://docs.decentraland.org/creator/development-guide/sdk7/scene-metadata/#required-permissions"
+                href="https://docs.decentraland.org/creator/scenes-sdk7/kinds-of-projects/scene-metadata#required-permissions"
                 target="_blank"
                 rel="noreferrer"
               >
