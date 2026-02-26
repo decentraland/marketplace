@@ -7,9 +7,17 @@ import { ContainerProps } from './SpecialFilter.types'
 
 export const SpecialFilterContainer: React.FC<ContainerProps> = props => {
   const { onlySmart, withCredits } = useGetBrowseOptions()
+
   const isCreditsEnabled = useSelector(getIsCreditsEnabled)
 
-  return <SpecialFilter {...props} isOnlySmart={onlySmart} withCredits={withCredits} isCreditsEnabled={isCreditsEnabled} />
+  return (
+    <SpecialFilter
+      {...props}
+      isOnlySmart={props.isOnlySmart !== undefined ? props.isOnlySmart : onlySmart} // if the isOnlySmart is undefined, use the value from the browse options
+      withCredits={props.withCredits !== undefined ? props.withCredits : withCredits} // if the withCredits is undefined, use the value from the browse options
+      isCreditsEnabled={isCreditsEnabled}
+    />
+  )
 }
 
 export default SpecialFilterContainer

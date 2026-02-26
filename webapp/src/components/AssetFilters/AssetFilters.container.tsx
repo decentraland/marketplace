@@ -24,6 +24,7 @@ const AssetFiltersContainer: React.FC<ContainerProps> = ({ values = {}, onFilter
       creators: 'creators' in values ? values.creators || [] : browseOptions.creators,
       onlyOnSale: 'onlyOnSale' in values ? values.onlyOnSale : browseOptions.onlyOnSale,
       onlyOnRent: 'onlyOnRent' in values ? values.onlyOnRent : browseOptions.onlyOnRent,
+      onlySmart: 'onlySmart' in values ? values.onlySmart : browseOptions.onlySmart,
       rarities: 'rarities' in values ? values.rarities || [] : browseOptions.rarities,
       status: 'status' in values ? values.status : (browseOptions.status as AssetStatusFilter),
       network: 'network' in values ? values.network : browseOptions.network,
@@ -39,11 +40,11 @@ const AssetFiltersContainer: React.FC<ContainerProps> = ({ values = {}, onFilter
       minPrice: 'minPrice' in values ? values.minPrice || '' : browseOptions.minPrice,
       maxPrice: 'maxPrice' in values ? values.maxPrice || '' : browseOptions.maxPrice,
       minEstateSize: 'minEstateSize' in values ? values.minEstateSize || '' : browseOptions.minEstateSize,
-      maxEstateSize: 'maxEstateSize' in values ? values.maxEstateSize || '' : browseOptions.maxEstateSize
+      maxEstateSize: 'maxEstateSize' in values ? values.maxEstateSize || '' : browseOptions.maxEstateSize,
+      withCredits: 'withCredits' in values ? values.withCredits : browseOptions.withCredits
     }),
     [values, browseOptions]
   )
-
   const landStatus = useMemo(() => {
     if (parameters.onlyOnRent && !parameters.onlyOnSale) {
       return LANDFilters.ONLY_FOR_RENT

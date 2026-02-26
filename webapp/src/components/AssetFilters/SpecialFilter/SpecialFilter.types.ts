@@ -9,4 +9,4 @@ export type Props = {
   defaultCollapsed?: boolean
 }
 
-export type ContainerProps = Omit<Props, 'isOnlySmart' | 'withCredits' | 'isCreditsEnabled'>
+export type ContainerProps = Omit<Props, 'isCreditsEnabled'>
