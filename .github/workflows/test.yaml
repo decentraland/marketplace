@@ -21,8 +21,9 @@ jobs:
       - name: Test
         run: npm run test:coverage
       - name: report coverage
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: ./webapp
           path-to-lcov: ./webapp/coverage/lcov.info
+          fail-on-error: false

@@ -19,7 +19,7 @@ export type Props = {
   network?: Network
   category?: NFTCategory
   bodyShapes?: (GenderFilterOption | WearableGender)[]
-  isOnlySmart?: boolean
+  onlySmart?: boolean
   onlyOnSale?: boolean
   emotePlayMode?: EmotePlayMode[]
   assetType?: AssetType
