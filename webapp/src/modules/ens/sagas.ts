@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/react'
 import { BigNumber, ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { ChainId } from '@dcl/schemas'
@@ -259,6 +260,7 @@ export function* ensSaga() {
         // Close modal after success
         yield put(closeModal('BuyWithCryptoModal'))
       } catch (pollingError) {
+        captureException(pollingError, { tags: { saga: 'handleClaimNameWithCreditsRequest', phase: 'polling' } })
         // Dispatch failure action
         yield put(
           claimNameWithCreditsFailure(
@@ -272,7 +274,7 @@ export function* ensSaga() {
         yield put(closeModal('BuyWithCryptoModal'))
       }
     } catch (error) {
-      console.error('Error in handleClaimNameWithCreditsRequest:', error)
+      captureException(error, { tags: { saga: 'handleClaimNameWithCreditsRequest', phase: 'setup' } })
       yield put(claimNameWithCreditsFailure(name, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
       // Don't close modal here - error will be shown in the modal UI
     }
