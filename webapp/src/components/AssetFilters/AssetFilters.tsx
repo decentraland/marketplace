@@ -40,6 +40,8 @@ export const AssetFilters = ({
   bodyShapes,
   onlyOnSale,
   emotePlayMode,
+  onlySmart,
+  withCredits,
   section,
   landStatus,
   defaultCollapsed,
@@ -234,6 +236,8 @@ export const AssetFilters = ({
   return (
     <Menu className="filters-sidebar">
       <SpecialFilter
+        isOnlySmart={onlySmart}
+        withCredits={withCredits}
         onSmartChange={shouldRenderFilter(AssetFilter.OnlySmart) ? handleOnlySmartChange : undefined}
         onWithCreditsChange={handleWithCreditsToggleChange}
         defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Special]}

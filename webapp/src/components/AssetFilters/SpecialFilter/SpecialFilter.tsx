@@ -42,6 +42,7 @@ export const SpecialFilter = (props: SpecialFilterProps) => {
         {isMobileOrTablet ? (
           <>
             <span className="box-filter-name">{t('filters.special_filters')}</span>
+            {isOnlySmart || withCredits ? ': ' : ''}
             <span className="box-filter-value">
               {isOnlySmart ? t('filters.only_smart') : ''}
               {isOnlySmart && withCredits ? ', ' : ''}
