@@ -54,7 +54,7 @@ describe('when reducing a UPSERT_RENTAL_REQUEST action', () => {
     }
     action = upsertRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], 1976562675847, UpsertRentalOptType.INSERT)
   })
-  it('should add a the action to the loading state', () => {
+  it('should add the action to the loading state', () => {
     const newState = rentalReducer(state, action)
     expect(newState.loading).toHaveLength(1)
     expect(newState.loading[0]).toEqual(action)
