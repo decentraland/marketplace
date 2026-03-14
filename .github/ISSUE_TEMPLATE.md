@@ -10,7 +10,7 @@
 ## 📝 Details
 
 Describe the problem you have been experiencing in more detail. Include as much information as you think is relevant. Keep in mind that transactions can fail for many reasons; context is key here. Links to tx, screenshots are welcome.
-Remember to not share sensible information
+Remember to not share sensitive information
 
 ## 🔢 Steps To Reproduce Issue [ Good To Have ]
 
