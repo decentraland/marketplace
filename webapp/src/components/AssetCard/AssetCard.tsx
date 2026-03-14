@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Item, Network, RentalListing } from '@dcl/schemas'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
+import { Card, Icon, Popup, useMobileMediaQuery } from 'decentraland-ui'
 import { Asset } from '../../modules/asset/types'
 import { getAssetName, getAssetUrl, isNFT, isCatalogItem } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
@@ -170,7 +170,13 @@ const AssetCard = (props: Props) => {
             >
               <Card.Header>
                 <div className={isCatalogItem(asset) ? 'catalogTitle' : 'title'}>
-                  <span className={'textOverflow'}>{title}</span>
+                  <Popup
+                    content={title}
+                    trigger={
+                      <div className="textOverflow">
+                        <span className="title">{title}</span>
+                      </div>
+                    } />
                   {!isNFT(asset) && isCatalogItem(asset) && asset.network === Network.MATIC && (
                     <span className="creator">
                       <Profile address={asset.creator} textOnly />
