@@ -34,7 +34,7 @@
 :global(.ui.modal).assetFiltersModal > :global(.content) {
   overflow: scroll;
   margin: 0;
-  padding: 0 !important; /* override important from decentralnad-ui */
+  padding: 0 !important; /* override important from decentraland-ui */
   display: flex;
   flex-direction: column;
   flex: 1;
