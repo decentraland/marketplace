@@ -64,7 +64,7 @@ describe('when in land section', () => {
         section: Section.ESTATES
       })
       await waitForComponentToFinishLoading(screen)
-      // TODO: Make barchart components accesible so we can access better the info ui#311
+      // TODO: Make barchart components accessible so we can access better the info ui#311
       expect(screen.getByText(t('filters.estate_size.label'))).toBeInTheDocument()
     })
   })

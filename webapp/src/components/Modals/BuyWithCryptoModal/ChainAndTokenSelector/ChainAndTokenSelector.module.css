@@ -19,7 +19,7 @@
 }
 
 .chainAndTokenSelector .searchContainer :global(.dcl.close) {
-  top: 0 !important; /* these style are set by the modal, from here is not accesible through the `global` selector */
+  top: 0 !important; /* these style are set by the modal, from here is not accessible through the `global` selector */
   right: 32px !important;
   background: none;
 }
