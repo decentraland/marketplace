@@ -67,7 +67,7 @@ const wallet = {
 
 const txHash = '0x9fc518261399c1bd236997706347f8b117a061cef5518073b1c3eefd5efbff84'
 
-const anError = new Error('An error occured')
+const anError = new Error('An error occurred')
 
 const itemBrowseOptions: ItemBrowseOptions = {
   view: View.MARKET,
