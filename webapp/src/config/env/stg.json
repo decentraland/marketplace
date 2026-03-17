@@ -33,7 +33,7 @@
   "DISCORD_URL": "https://dcl.gg/discord",
   "ENVIRONMENT": "staging",
   "MIN_SALE_VALUE_IN_WEI": "1000000000000000000",
-  "EXPLORER_URL": "https://play.decentraland.org",
+  "EXPLORER_URL": "https://decentraland.org/jump",
   "MARKETPLACE_URL": "https://decentraland.today/marketplace",
   "PROFILE_URL": "https://decentraland.today/profile",
   "SUBGRAPH_WORKER": "https://subgraph.decentraland.today",
