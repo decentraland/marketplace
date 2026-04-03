@@ -11,10 +11,17 @@ function cjsNamedImportsFix(packages: string[]): Plugin {
     `import\\s*\\{([^}]+)\\}\\s*from\\s*['"](?:${pkgPattern})['"]`,
     'g'
   )
+  let isBuild = false
   return {
     name: 'cjs-named-imports-fix',
     enforce: 'pre',
+    configResolved(config) {
+      isBuild = config.command === 'build'
+    },
     transform(code, id) {
+      // Only needed in dev mode — in build, Rolldown handles CJS named exports
+      // natively via __toESM (with our __esModule fix applied in generateBundle).
+      if (isBuild) return
       if (id.includes('.vite/deps/')) return
       if (!importRe.test(code)) return
       importRe.lastIndex = 0
@@ -112,11 +119,16 @@ export default defineConfig(({ command, mode }) => {
         'dcl-catalyst-client/dist/client/utils/DeploymentBuilder',
         'ethers/lib/utils'
       ]),
-      cjsDefaultImportFix(['react-countup']),
+      cjsDefaultImportFix([
+        'react-countup',
+        'redux-persistence-engine-localstorage',
+        'redux-storage-decorator-filter'
+      ]),
       react(),
       nodePolyfills(),
       // Fix Rolldown's __toESM isNodeMode=1 that skips __esModule check.
-      // The transform hook intercepts dep chunks when Vite serves them.
+      // In dev mode, the transform hook intercepts dep chunks in .vite/deps/.
+      // In build mode, renderChunk patches the minified runtime helper in output chunks.
       {
         name: 'cjs-toesm-fix',
         transform(code, id) {
@@ -125,6 +137,19 @@ export default defineConfig(({ command, mode }) => {
             /var __toESM = \(mod, isNodeMode, target\) => \(target = mod != null \? __create\(__getProtoOf\(mod\)\) : \{\}, __copyProps\(isNodeMode \|\| !mod \|\| !mod\.__esModule/,
             'var __toESM = (mod, _isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(!mod || !mod.__esModule'
           )
+        },
+        generateBundle(_options, bundle) {
+          // Minified __toESM: (n,r,a)=>(...l(r||!n||!n.__esModule?t(a,...):a,n))
+          // where r=isNodeMode, n=module. Fix: remove the `r||` so __esModule is
+          // always checked regardless of isNodeMode.
+          for (const [, chunk] of Object.entries(bundle)) {
+            if (chunk.type !== 'chunk') continue
+            const fixed = chunk.code.replace(
+              /(\w)\|\|!(\w)\|\|!\2\.__esModule\?/g,
+              (_match: string, _nodeMode: string, modVar: string) => `!${modVar}||!${modVar}.__esModule?`
+            )
+            if (fixed !== chunk.code) chunk.code = fixed
+          }
         }
       }
     ],
