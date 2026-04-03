@@ -1,5 +1,5 @@
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
+import { BarChartSource } from 'decentraland-ui/dist/components/BarChart/BarChart.types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import * as events from '../../utils/events'
 

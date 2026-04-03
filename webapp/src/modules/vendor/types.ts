@@ -1,5 +1,5 @@
 import { RentalStatus } from '@dcl/schemas'
-import * as decentraland from './decentraland'
+import { ContractName as DecentralandContractName } from './decentraland/contracts'
 
 export enum VendorName {
   DECENTRALAND = 'decentraland'
@@ -8,14 +8,14 @@ export enum VendorName {
 export const Disabled = {}
 
 const ContractName = {
-  ...decentraland.ContractName
+  ...DecentralandContractName
 }
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare -- Intentionally naming the variable the same as the type
 export type ContractName = typeof ContractName
 
 export const getContractNames = () => ({
-  ...decentraland.ContractName
+  ...DecentralandContractName
 })
 
 export enum TransferType {

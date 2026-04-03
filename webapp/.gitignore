@@ -26,3 +26,7 @@ yarn-error.log*
 
 # Sentry Auth Token
 .sentryclirc
+
+
+# MCP
+.playwright-mcp

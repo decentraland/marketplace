@@ -8,7 +8,7 @@ enum AnEnum {
 describe('when getting an enum value from a string', () => {
   let enumValues: string[]
   let value: string | null | undefined
-  let defaultValue: AnEnum.A_VALUE
+  const defaultValue = AnEnum.A_VALUE
 
   beforeEach(() => {
     enumValues = Object.values(AnEnum)

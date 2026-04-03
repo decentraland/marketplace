@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 import { EmoteOutcomeType, EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
 import { RarityFilter } from 'decentraland-dapps/dist/containers/RarityFilter'
-import { BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
+import { BarChartSource } from 'decentraland-ui/dist/components/BarChart/BarChart.types'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { Sections, SortBy, BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'

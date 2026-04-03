@@ -1,5 +1,5 @@
 import { Network } from '@dcl/schemas/dist/dapps/network'
-import { BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
+import { BarChartSource } from 'decentraland-ui/dist/components/BarChart/BarChart.types'
 import { BrowseOptions } from '../../../modules/routing/types'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 

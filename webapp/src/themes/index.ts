@@ -1,5 +1,5 @@
 // Base
-import 'decentraland-ui/lib/styles.css'
+import 'decentraland-ui/styles.css'
 // Theme
 // eslint-disable-next-line import/order
 import 'decentraland-ui/dist/themes/alternative/dark-theme.css'

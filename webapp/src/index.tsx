@@ -1,3 +1,10 @@
+// Theme CSS must load before any component imports to ensure correct CSS order.
+// Semantic UI base styles in styles.css must appear before component-level
+// dark theme overrides (e.g. Card.css), so the overrides win by cascade order.
+// eslint-disable-next-line import/order
+import './themes'
+// eslint-disable-next-line import/order
+import './index.css'
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { Router } from 'react-router-dom'
@@ -14,8 +21,6 @@ import './modules/analytics/sentry'
 import './modules/analytics/track'
 import { initStore, createHistory } from './modules/store'
 import * as locales from './modules/translation/locales'
-import './themes'
-import './index.css'
 
 const history = createHistory()
 const store = initStore(history)

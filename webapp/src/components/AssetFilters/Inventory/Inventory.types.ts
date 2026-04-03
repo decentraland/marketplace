@@ -1,4 +1,4 @@
-import { BarChartProps } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
+import { BarChartProps } from 'decentraland-ui/dist/components/BarChart/BarChart.types'
 import { BrowseOptions } from '../../../modules/routing/types'
 
 export type Props = {

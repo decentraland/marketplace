@@ -527,7 +527,7 @@ describe('when getting if a rental can be claimed', () => {
   let rental: RentalListing
   let asset: Asset
   let userAddress: string
-  let lessor: string
+  let lessor!: string
   let nftChainId: number
   let rentalsContract: ContractData
 
@@ -635,7 +635,7 @@ describe('when getting if a rental is locked', () => {
   let rental: RentalListing
   let asset: Asset
   let userAddress: string
-  let lessor: string
+  let lessor!: string
   let nftChainId: number
   let rentalsContract: ContractData
 
