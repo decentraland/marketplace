@@ -9,7 +9,9 @@ import styles from './PageLayout.module.css'
 const PageLayout = ({ children, activeTab, className, hideNavigation }: Props) => {
   return (
     <div className={classNames(styles.page, className)}>
-      <Navbar className={styles.navbar} />
+      <div className={styles.navbar}>
+        <Navbar />
+      </div>
       {!hideNavigation && <Navigation activeTab={activeTab} />}
       <div className={styles.content}>{children}</div>
       <Footer className={styles.footer} />

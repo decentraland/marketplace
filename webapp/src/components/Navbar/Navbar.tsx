@@ -1,11 +1,9 @@
 import React, { useCallback } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { Navbar2 as BaseNavbar2 } from 'decentraland-dapps/dist/containers/Navbar'
-import { NavbarPages } from 'decentraland-ui/dist/components/Navbar/Navbar.types'
 import { config } from '../../config'
 import { locations } from '../../modules/routing/locations'
 import { Props } from './Navbar.types'
-import './Navbar.css'
 
 const Navbar = (props: Props) => {
   const { pathname, search } = useLocation()
@@ -29,11 +27,10 @@ const Navbar = (props: Props) => {
       {...props}
       withChainSelector
       withNotifications
-      activePage={NavbarPages.MARKETPLACE}
-      hasActivity={props.hasPendingTransactions}
+      activePage="shop"
       identity={props.identity}
       onSignIn={handleOnSignIn}
-      onClickMarketplaceAuthorization={handleOnClickAccount}
+      onClickCredits={handleOnClickAccount}
     />
   )
 }

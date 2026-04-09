@@ -11,6 +11,7 @@
 
 .navbar {
   flex-shrink: 0;
+  margin-bottom: 36px;
 }
 
 @media (max-width: 767px) {
