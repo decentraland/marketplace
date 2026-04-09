@@ -1,13 +1,11 @@
 import React, { useCallback } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { Navbar2 as BaseNavbar2 } from 'decentraland-dapps/dist/containers/Navbar'
 import { config } from '../../config'
-import { locations } from '../../modules/routing/locations'
 import { Props } from './Navbar.types'
 
 const Navbar = (props: Props) => {
   const { pathname, search } = useLocation()
-  const history = useHistory()
 
   const handleOnSignIn = useCallback(() => {
     const searchParams = new URLSearchParams(search)
@@ -18,10 +16,6 @@ const Navbar = (props: Props) => {
     window.location.replace(`${config.get('AUTH_URL')}/login?redirectTo=${redirectTo}`)
   }, [pathname, search])
 
-  const handleOnClickAccount = useCallback(() => {
-    history.push(locations.settings())
-  }, [history])
-
   return (
     <BaseNavbar2
       {...props}
@@ -30,7 +24,6 @@ const Navbar = (props: Props) => {
       activePage="shop"
       identity={props.identity}
       onSignIn={handleOnSignIn}
-      onClickCredits={handleOnClickAccount}
     />
   )
 }
