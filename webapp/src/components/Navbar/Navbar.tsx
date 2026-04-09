@@ -17,14 +17,7 @@ const Navbar = (props: Props) => {
   }, [pathname, search])
 
   return (
-    <BaseNavbar2
-      {...props}
-      withChainSelector
-      withNotifications
-      activePage="shop"
-      identity={props.identity}
-      onSignIn={handleOnSignIn}
-    />
+    <BaseNavbar2 {...props} withChainSelector withNotifications activePage="shop" identity={props.identity} onSignIn={handleOnSignIn} />
   )
 }
 
