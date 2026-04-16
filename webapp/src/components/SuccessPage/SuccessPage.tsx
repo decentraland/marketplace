@@ -4,7 +4,7 @@ import Lottie from 'lottie-react'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Header, Icon, Loader } from 'decentraland-ui'
-import { JumpIn } from 'decentraland-ui2'
+import { JumpIn, DOWNLOAD_URLS, detectDownloadOS, getDownloadUrl } from 'decentraland-ui2'
 import { config } from '../../config'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
@@ -193,9 +193,11 @@ export function SuccessPage(props: Props) {
                           buttonText={t('success_page.success_state.try_it_on_in_world')}
                           hideIcon
                           modalProps={{
-                            title: 'Download Decentraland',
-                            description: "To jump in, you'll need to download the Decentraland app",
-                            buttonLabel: 'Download Now'
+                            os: detectDownloadOS(),
+                            downloadUrl: getDownloadUrl(detectDownloadOS()),
+                            epicUrl: DOWNLOAD_URLS.epic,
+                            googlePlayUrl: DOWNLOAD_URLS.googlePlay,
+                            appStoreUrl: DOWNLOAD_URLS.appStore
                           }}
                         />
                       </div>
