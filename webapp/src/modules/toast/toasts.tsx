@@ -299,7 +299,7 @@ export function getCrossChainTransactionSuccessToast(txLink: string): Omit<Toast
             link: (text: string) => <Link to={locations.activity()}>{text}</Link>
           })}
         </p>
-        <Button as="a" href={locations.activity()} target="_blank">
+        <Button as={Link} to={locations.activity()}>
           {t('navigation.activity')}
           <Icon style={{ marginLeft: 6 }} name="clock outline" />
         </Button>

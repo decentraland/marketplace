@@ -16,15 +16,14 @@ import { config } from '../config'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { getCurrentIdentity } from './identity/selectors'
 import { createRootReducer, RootState } from './reducer'
+import { getBasename } from './routing/basename'
 import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
 import { ExtendedHistory } from './types'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
 
-const basename = /^decentraland.(zone|org|today)$/.test(window.location.host) ? '/marketplace' : undefined
-
 export const createHistory = () => {
-  const history = createBrowserHistory({ basename }) as ExtendedHistory
+  const history = createBrowserHistory({ basename: getBasename() || undefined }) as ExtendedHistory
   const locations: Location[] = []
 
   history.listen((location, action) => {
