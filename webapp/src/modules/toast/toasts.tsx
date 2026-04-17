@@ -326,8 +326,8 @@ export function getBidPlacedSuccessToast(asset: Asset): Omit<Toast, 'id'> {
           })}
         </span>
         <Button
-          as="a"
-          href={locations.currentAccount({ section: Section.BIDS, vendor: VendorName.DECENTRALAND })}
+          as={Link}
+          to={locations.currentAccount({ section: Section.BIDS, vendor: VendorName.DECENTRALAND })}
           style={{ width: 'fit-content', padding: 0, marginTop: '10px' }}
           basic
           target="_blank"
@@ -360,8 +360,8 @@ export function getCreateOrderSuccessToast(nft: NFT): Omit<Toast, 'id'> {
           })}
         </span>
         <Button
-          as="a"
-          href={locations.currentAccount({ section: Section.ON_SALE, vendor: VendorName.DECENTRALAND })}
+          as={Link}
+          to={locations.currentAccount({ section: Section.ON_SALE, vendor: VendorName.DECENTRALAND })}
           style={{ width: 'fit-content', padding: 0, marginTop: '10px' }}
           basic
           target="_blank"
