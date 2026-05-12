@@ -22,9 +22,7 @@ export const getMergedActivity = createSelector<RootState, Transaction[], Activi
   getTransactions,
   getData,
   (localTxs, serverEvents) => {
-    const localHashes = new Set(
-      localTxs.map(tx => tx.hash?.toLowerCase()).filter((h): h is string => !!h)
-    )
+    const localHashes = new Set(localTxs.map(tx => tx.hash?.toLowerCase()).filter((h): h is string => !!h))
     const dedupedServer = serverEvents.filter(ev => !ev.txHash || !localHashes.has(ev.txHash.toLowerCase()))
 
     const merged: MergedActivityItem[] = [

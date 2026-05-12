@@ -1,14 +1,10 @@
-import { AuthIdentity } from '@dcl/crypto'
 import { call, put, takeEvery } from 'redux-saga/effects'
+import { AuthIdentity } from '@dcl/crypto'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
-import { activityAPI } from '../vendor/decentraland/activity'
 import { getIdentity } from '../identity/utils'
-import {
-  FETCH_USER_ACTIVITY_REQUEST,
-  fetchUserActivityFailure,
-  fetchUserActivitySuccess
-} from './actions'
+import { activityAPI } from '../vendor/decentraland/activity'
+import { FETCH_USER_ACTIVITY_REQUEST, fetchUserActivityFailure, fetchUserActivitySuccess } from './actions'
 
 export function* activitySaga() {
   yield takeEvery(FETCH_USER_ACTIVITY_REQUEST, handleFetchUserActivityRequest)

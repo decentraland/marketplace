@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { ethers } from 'ethers'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon, Loader } from 'decentraland-ui'
-import { ethers } from 'ethers'
 import { formatDistanceToNow } from '../../../lib/date'
 import { ActivityEvent, ActivityEventType } from '../../../modules/activity/types'
 import { Asset, AssetType } from '../../../modules/asset/types'
@@ -109,7 +109,7 @@ const ActivityEventItem = (props: Props) => {
   }
 
   return (
-    <AssetProvider type={selector.type} contractAddress={event.contractAddress!} tokenId={selector.tokenId}>
+    <AssetProvider type={selector.type} contractAddress={event.contractAddress} tokenId={selector.tokenId}>
       {asset => body(asset)}
     </AssetProvider>
   )

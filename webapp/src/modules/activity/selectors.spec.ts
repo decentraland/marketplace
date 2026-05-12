@@ -20,7 +20,7 @@ const makeTx = (overrides: Partial<Transaction> = {}): Transaction =>
     withReceipt: false,
     isCrossChain: false,
     ...(overrides as object)
-  } as unknown as Transaction)
+  }) as unknown as Transaction
 
 const makeServerEvent = (overrides: Partial<ActivityEvent> = {}): ActivityEvent =>
   ({
@@ -35,14 +35,14 @@ const makeServerEvent = (overrides: Partial<ActivityEvent> = {}): ActivityEvent 
     counterparty: '0xseller',
     details: {} as any,
     ...overrides
-  } as ActivityEvent)
+  }) as ActivityEvent
 
 const makeState = (txs: Transaction[], events: ActivityEvent[]): RootState =>
   ({
     transaction: { data: txs, loading: [], error: null },
     wallet: { data: { address: '0xuser' }, loading: [], error: null },
     activity: { ...INITIAL_ACTIVITY_STATE, data: events, total: events.length }
-  } as unknown as RootState)
+  }) as unknown as RootState
 
 describe('getMergedActivity', () => {
   describe('when local and server have no overlap', () => {

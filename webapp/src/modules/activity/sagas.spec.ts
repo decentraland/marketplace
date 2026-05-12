@@ -3,13 +3,9 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { AuthIdentity } from '@dcl/crypto'
 import { Network } from '@dcl/schemas'
-import { activityAPI } from '../vendor/decentraland/activity'
 import { getIdentity } from '../identity/utils'
-import {
-  fetchUserActivityFailure,
-  fetchUserActivityRequest,
-  fetchUserActivitySuccess
-} from './actions'
+import { activityAPI } from '../vendor/decentraland/activity'
+import { fetchUserActivityFailure, fetchUserActivityRequest, fetchUserActivitySuccess } from './actions'
 import { activitySaga } from './sagas'
 import { ActivityEvent, ActivityEventType } from './types'
 

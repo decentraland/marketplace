@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Header, Loader, Message, Modal, Page } from 'decentraland-ui'
-import { ActivityEventItem } from './ActivityEventItem'
-import { Transaction } from './Transaction'
 import { Column } from '../Layout/Column'
 import { Row } from '../Layout/Row'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
+import { ActivityEventItem } from './ActivityEventItem'
+import { Transaction } from './Transaction'
 import { Props } from './ActivityPage.types'
 import './ActivityPage.css'
 
@@ -33,9 +33,7 @@ const ActivityPage = (props: Props) => {
 
   let content: React.ReactNode
 
-  const errorBanner = error ? (
-    <Message warning size="tiny" content={t('activity_page.error')} />
-  ) : null
+  const errorBanner = error ? <Message warning size="tiny" content={t('activity_page.error')} /> : null
 
   if (loading && mergedActivity.length === 0) {
     content = (
