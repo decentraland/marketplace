@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Header, Loader, Message, Modal, Page } from 'decentraland-ui'
 import { Column } from '../Layout/Column'
@@ -10,16 +10,46 @@ import { Transaction } from './Transaction'
 import { Props } from './ActivityPage.types'
 import './ActivityPage.css'
 
+const PAGE_SIZE = 20
+
 const ActivityPage = (props: Props) => {
-  const { address, mergedActivity, loading, error, onClearHistory, onLoadActivity } = props
+  const { address, mergedActivity, loading, error, hasMore, loaded, onClearHistory, onLoadActivity } = props
 
   const [showConfirmation, setShowConfirmation] = useState(false)
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
+  const hasLoadedFirstPage = useRef(false)
 
+  // First-page load: fires once per mount (or when the wallet address changes).
   useEffect(() => {
-    if (address) {
-      onLoadActivity()
-    }
+    if (!address) return
+    hasLoadedFirstPage.current = false
+    onLoadActivity(PAGE_SIZE, 0)
+    hasLoadedFirstPage.current = true
   }, [address, onLoadActivity])
+
+  // Infinite scroll: IntersectionObserver fires whenever the sentinel becomes visible.
+  // That's viewport-aware — on a tall screen where all current items fit, the sentinel
+  // is visible immediately and we auto-page until either the viewport fills or there's
+  // nothing more to load.
+  useEffect(() => {
+    const node = sentinelRef.current
+    if (!node) return
+    if (!address) return
+
+    const observer = new IntersectionObserver(
+      entries => {
+        const entry = entries[0]
+        if (!entry?.isIntersecting) return
+        if (loading) return
+        if (!hasMore) return
+        if (!hasLoadedFirstPage.current) return
+        onLoadActivity(PAGE_SIZE, loaded)
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [address, loading, hasMore, loaded, onLoadActivity])
 
   const handleClear = useCallback(() => {
     if (address) {
@@ -35,7 +65,9 @@ const ActivityPage = (props: Props) => {
 
   const errorBanner = error ? <Message warning size="tiny" content={t('activity_page.error')} /> : null
 
-  if (loading && mergedActivity.length === 0) {
+  const isInitialLoading = loading && mergedActivity.length === 0
+
+  if (isInitialLoading) {
     content = (
       <div className="center">
         <Loader active size="large">
@@ -74,6 +106,9 @@ const ActivityPage = (props: Props) => {
               <ActivityEventItem event={item.event} key={`server:${item.event.id}`} />
             )
           )}
+        </div>
+        <div ref={sentinelRef} className="activity-sentinel" aria-hidden="true">
+          {hasMore && loading ? <Loader active inline="centered" size="small" /> : null}
         </div>
       </>
     )

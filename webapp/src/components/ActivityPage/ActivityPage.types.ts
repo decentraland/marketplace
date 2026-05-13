@@ -8,10 +8,12 @@ export type Props = {
   mergedActivity: MergedActivityItem[]
   loading: boolean
   error: string | null
+  hasMore: boolean
+  loaded: number
   onClearHistory: typeof clearTransactions
-  onLoadActivity: () => void
+  onLoadActivity: (limit: number, offset: number) => void
 }
 
-export type MapStateProps = Pick<Props, 'address' | 'mergedActivity' | 'loading' | 'error'>
+export type MapStateProps = Pick<Props, 'address' | 'mergedActivity' | 'loading' | 'error' | 'hasMore' | 'loaded'>
 export type MapDispatchProps = Pick<Props, 'onClearHistory' | 'onLoadActivity'>
 export type MapDispatch = Dispatch<ClearTransactionsAction | FetchUserActivityRequestAction>

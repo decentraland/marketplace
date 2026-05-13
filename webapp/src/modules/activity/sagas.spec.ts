@@ -17,7 +17,7 @@ describe('when fetching user activity', () => {
     identity = { authChain: [], expiration: new Date(Date.now() + 60000), ephemeralIdentity: {} as any }
     events = [
       {
-        id: 'sale:1',
+        id: 'sale_buyer:1',
         type: ActivityEventType.SALE_BUYER,
         timestamp: 1000,
         network: Network.MATIC,
@@ -32,14 +32,25 @@ describe('when fetching user activity', () => {
   })
 
   describe('and the API responds successfully', () => {
-    it('should dispatch a success action with events + total', () => {
+    it('should forward limit + offset to the API and dispatch success with the offset', () => {
       return expectSaga(activitySaga)
         .provide([
           [call(getIdentity), identity],
-          [call([activityAPI, activityAPI.fetchUserActivity], identity), { data: events, total: 1 }]
+          [call([activityAPI, activityAPI.fetchUserActivity], identity, { limit: 20, offset: 0 }), { data: events, total: 1 }]
         ])
-        .put(fetchUserActivitySuccess(events, 1))
-        .dispatch(fetchUserActivityRequest())
+        .put(fetchUserActivitySuccess(events, 1, 0))
+        .dispatch(fetchUserActivityRequest({ limit: 20, offset: 0 }))
+        .run({ silenceTimeout: true })
+    })
+
+    it('should forward a non-zero offset for subsequent pages', () => {
+      return expectSaga(activitySaga)
+        .provide([
+          [call(getIdentity), identity],
+          [call([activityAPI, activityAPI.fetchUserActivity], identity, { limit: 20, offset: 40 }), { data: events, total: 80 }]
+        ])
+        .put(fetchUserActivitySuccess(events, 80, 40))
+        .dispatch(fetchUserActivityRequest({ limit: 20, offset: 40 }))
         .run({ silenceTimeout: true })
     })
   })
@@ -49,10 +60,10 @@ describe('when fetching user activity', () => {
       return expectSaga(activitySaga)
         .provide([
           [call(getIdentity), identity],
-          [call([activityAPI, activityAPI.fetchUserActivity], identity), throwError(new Error('boom'))]
+          [call([activityAPI, activityAPI.fetchUserActivity], identity, { limit: 20, offset: 0 }), throwError(new Error('boom'))]
         ])
         .put(fetchUserActivityFailure('boom'))
-        .dispatch(fetchUserActivityRequest())
+        .dispatch(fetchUserActivityRequest({ limit: 20, offset: 0 }))
         .run({ silenceTimeout: true })
     })
   })
@@ -62,7 +73,7 @@ describe('when fetching user activity', () => {
       return expectSaga(activitySaga)
         .provide([[call(getIdentity), throwError(new Error('no identity'))]])
         .put(fetchUserActivityFailure('no identity'))
-        .dispatch(fetchUserActivityRequest())
+        .dispatch(fetchUserActivityRequest({ limit: 20, offset: 0 }))
         .run({ silenceTimeout: true })
     })
   })
