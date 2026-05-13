@@ -1219,6 +1219,10 @@
       "body": "Construí tu espacio personal en el metaverso.",
       "cta": "Ver mis worlds"
     },
+    "claim_name_with_credits_route_unavailable": {
+      "title": "Servicio temporalmente no disponible",
+      "body": "Esta función no está disponible en este momento. Por favor, inténtalo de nuevo más tarde."
+    },
     "cross_chain_tx": {
       "body": "La transacción puede tardar hasta <highlight>3 miuntos</highlight> para ser procesada.<br></br>Puedes seguir su progreso en los siguientes enlaces:",
       "view_transaction": "Ver transacción"
