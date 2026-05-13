@@ -30,11 +30,9 @@ class ActivityAPI {
 
     const json = (await response.json().catch(() => null)) as ActivityResponseBody | null
 
-    if (!response.ok) {
-      throw new Error(json && isErrorBody(json) && json.message ? json.message : 'Could not fetch activity')
-    }
-    if (!json || isErrorBody(json)) {
-      throw new Error(json && isErrorBody(json) && json.message ? json.message : 'Could not fetch activity')
+    if (!response.ok || !json || isErrorBody(json)) {
+      const msg = json && isErrorBody(json) && json.message ? json.message : 'Could not fetch activity'
+      throw new Error(msg)
     }
     return json
   }

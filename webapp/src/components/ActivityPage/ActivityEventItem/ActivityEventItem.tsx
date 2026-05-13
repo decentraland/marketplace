@@ -21,13 +21,19 @@ const formatPrice = (priceInWei?: string) => {
   try {
     return Number(ethers.utils.formatEther(priceInWei)).toLocaleString()
   } catch {
-    return '0'
+    return '—'
   }
 }
 
-const getAssetSelector = (event: ActivityEvent): { type: AssetType; tokenId: string } | null => {
-  if (event.itemId && event.contractAddress) return { type: AssetType.ITEM, tokenId: event.itemId }
-  if (event.tokenId && event.contractAddress) return { type: AssetType.NFT, tokenId: event.tokenId }
+type AssetSelector = { type: AssetType; tokenId: string; contractAddress: string }
+
+const getAssetSelector = (event: ActivityEvent): AssetSelector | null => {
+  if (event.itemId && event.contractAddress) {
+    return { type: AssetType.ITEM, tokenId: event.itemId, contractAddress: event.contractAddress }
+  }
+  if (event.tokenId && event.contractAddress) {
+    return { type: AssetType.NFT, tokenId: event.tokenId, contractAddress: event.contractAddress }
+  }
   return null
 }
 
@@ -109,7 +115,7 @@ const ActivityEventItem = (props: Props) => {
   }
 
   return (
-    <AssetProvider type={selector.type} contractAddress={event.contractAddress} tokenId={selector.tokenId}>
+    <AssetProvider type={selector.type} contractAddress={selector.contractAddress} tokenId={selector.tokenId}>
       {asset => body(asset)}
     </AssetProvider>
   )
