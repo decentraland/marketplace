@@ -131,6 +131,17 @@ export function getExecuteOrderFailureToast(): Omit<Toast, 'id'> {
   }
 }
 
+export function getClaimNameWithCreditsRouteUnavailableToast(): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.claim_name_with_credits_route_unavailable.title'),
+    body: <p>{t('toast.claim_name_with_credits_route_unavailable.body')}</p>,
+    icon: <Icon size="big" name="exclamation circle" />,
+    closable: true,
+    timeout: 15000
+  }
+}
+
 export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,

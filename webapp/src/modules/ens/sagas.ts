@@ -8,6 +8,7 @@ import { CreditsClient } from 'decentraland-dapps/dist/modules/credits/CreditsCl
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { CreditsNameRouteResponse, CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { TRANSACTION_ACTION_FLAG } from 'decentraland-dapps/dist/modules/transaction/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation'
@@ -22,6 +23,7 @@ import { DCLRegistrar__factory } from '../../contracts/factories/DCLRegistrar__f
 import { isErrorWithMessage } from '../../lib/error'
 import { pollSquidRouteStatus, SquidStatusResponse } from '../../lib/squid'
 import { getCurrentIdentity } from '../identity/selectors'
+import { getClaimNameWithCreditsRouteUnavailableToast } from '../toast/toasts'
 import { getWallet } from '../wallet/selectors'
 import {
   CLAIM_NAME_REQUEST,
@@ -201,7 +203,17 @@ export function* ensSaga() {
 
       const creditsServerUrl = config.get('CREDITS_SERVER_URL')
       const creditsClient = new CreditsClient(creditsServerUrl, { identity })
-      const routeData: CreditsNameRouteResponse = yield call([creditsClient, 'fetchCreditsNameRoute'], name, ChainId.MATIC_MAINNET)
+      let routeData: CreditsNameRouteResponse
+      try {
+        routeData = (yield call([creditsClient, 'fetchCreditsNameRoute'], name, ChainId.MATIC_MAINNET)) as CreditsNameRouteResponse
+      } catch (routeError) {
+        captureException(routeError, { tags: { saga: 'handleClaimNameWithCreditsRequest', phase: 'fetch-route' } })
+        const routeUnavailableMessage = t('toast.claim_name_with_credits_route_unavailable.body')
+        yield put(showToast(getClaimNameWithCreditsRouteUnavailableToast()))
+        yield put(claimNameWithCreditsFailure(name, routeUnavailableMessage))
+        yield put(closeModal('BuyWithCryptoModal'))
+        return
+      }
 
       // Use CreditsService to handle the transaction
       const creditsService = new CreditsService()
