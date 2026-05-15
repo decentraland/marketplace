@@ -394,7 +394,7 @@ const useCrossChainRoute = (
         // decentraland-transactions may bump fromAmount internally to guarantee
         // route.estimate.toAmountMin >= destination price after cross-chain
         // swap slippage, so reflect the actual amount in the UI.
-        const actualFromAmount = ethers.utils.formatUnits(route.params.fromAmount as string, selectedToken.decimals)
+        const actualFromAmount = ethers.utils.formatUnits(route.route.params.fromAmount, selectedToken.decimals)
         setFromAmount(Number(actualFromAmount).toFixed(6))
       }
     } catch (error) {
