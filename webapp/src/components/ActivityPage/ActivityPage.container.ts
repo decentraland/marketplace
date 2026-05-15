@@ -1,18 +1,25 @@
 import { connect } from 'react-redux'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { clearTransactions } from 'decentraland-dapps/dist/modules/transaction/actions'
+import { FETCH_USER_ACTIVITY_REQUEST, fetchUserActivityRequest } from '../../modules/activity/actions'
+import { getError, getHasMore, getLoaded, getLoading, getMergedActivity } from '../../modules/activity/selectors'
 import { RootState } from '../../modules/reducer'
-import { getTransactions } from '../../modules/transaction/selectors'
 import { getAddress } from '../../modules/wallet/selectors'
 import ActivityPage from './ActivityPage'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './ActivityPage.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   address: getAddress(state),
-  transactions: getTransactions(state)
+  mergedActivity: getMergedActivity(state),
+  loading: isLoadingType(getLoading(state), FETCH_USER_ACTIVITY_REQUEST),
+  error: getError(state),
+  hasMore: getHasMore(state),
+  loaded: getLoaded(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onClearHistory: address => dispatch(clearTransactions(address))
+  onClearHistory: address => dispatch(clearTransactions(address)),
+  onLoadActivity: (limit, offset) => dispatch(fetchUserActivityRequest({ limit, offset }))
 })
 
 export default connect(mapState, mapDispatch)(ActivityPage)

@@ -1065,6 +1065,20 @@
     "latest_activity": "Latest Activity",
     "clear_history": "Clear History",
     "empty": "You have no activity yet.",
+    "loading": "Loading your activity…",
+    "error": "Couldn't load your full activity history right now. Showing recent activity from this browser only.",
+    "event": {
+      "sale_buyer": "You bought {name} from {counterparty} for {price}.",
+      "sale_seller": "You sold {name} to {counterparty} for {price}.",
+      "bid_placed": "You placed a bid of {price} on {name}.",
+      "bid_received": "You received a bid of {price} on {name} from {counterparty}.",
+      "order_created": "You listed {name} on sale for {price}.",
+      "order_filled": "Your listing of {name} was bought for {price}.",
+      "trade_created": "You created a trade for {name}.",
+      "status": {
+        "confirmed": "Confirmed"
+      }
+    },
     "clear_history_modal": {
       "title": "Are you sure?",
       "text": "You are about to clear your transaction history. Do you want to proceed?"
