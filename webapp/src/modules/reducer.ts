@@ -12,6 +12,7 @@ import { transactionReducer as transaction } from 'decentraland-dapps/dist/modul
 import { translationReducer as translation } from 'decentraland-dapps/dist/modules/translation/reducer'
 import { walletReducer as wallet } from 'decentraland-dapps/dist/modules/wallet/reducer'
 import { accountReducer as account } from './account/reducer'
+import { activityReducer as activity } from './activity/reducer'
 import { analyticsReducer as analytics } from './analytics/reducer'
 import { assetReducer as asset } from './asset/reducer'
 import { bidReducer as bid } from './bid/reducer'
@@ -35,6 +36,7 @@ export const createRootReducer = () =>
   combineReducers({
     asset,
     account,
+    activity,
     campaign,
     authorization,
     bid,

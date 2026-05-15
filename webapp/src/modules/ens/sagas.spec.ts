@@ -9,7 +9,9 @@ import { CreditsClient } from 'decentraland-dapps/dist/modules/credits/CreditsCl
 import { getCredits } from 'decentraland-dapps/dist/modules/credits/selectors'
 import { CreditsResponse } from 'decentraland-dapps/dist/modules/credits/types'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { Route, AxelarProvider } from 'decentraland-transactions/crossChain'
@@ -21,6 +23,7 @@ import { DCLRegistrar__factory } from '../../contracts/factories'
 import { DCLController__factory } from '../../contracts/factories/DCLController__factory'
 import { pollSquidRouteStatus, SquidStatusResponse, SquidTransactionStatus } from '../../lib/squid'
 import { getCurrentIdentity } from '../identity/selectors'
+import { getClaimNameWithCreditsRouteUnavailableToast } from '../toast/toasts'
 import { getWallet } from '../wallet/selectors'
 import {
   CLAIM_NAME_REQUEST,
@@ -413,8 +416,9 @@ describe('ENS Saga', () => {
         mockIdentity = {} as AuthIdentity
       })
 
-      it('should put a failure action with the error message', () => {
+      it('should show a route-unavailable toast, put a failure action with the route-unavailable message, and close the modal', () => {
         const clientError = new Error('Server error: Something went wrong')
+        const routeUnavailableMessage = t('toast.claim_name_with_credits_route_unavailable.body')
 
         return expectSaga(ensSaga)
           .provide([
@@ -426,7 +430,9 @@ describe('ENS Saga', () => {
               Promise.reject(clientError)
             ]
           ])
-          .put(claimNameWithCreditsFailure(mockName, clientError.message))
+          .put(showToast(getClaimNameWithCreditsRouteUnavailableToast()))
+          .put(claimNameWithCreditsFailure(mockName, routeUnavailableMessage))
+          .put(closeModal('BuyWithCryptoModal'))
           .dispatch(claimNameWithCreditsRequest(mockName))
           .silentRun()
       })

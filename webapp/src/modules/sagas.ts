@@ -22,6 +22,7 @@ import { config } from '../config'
 import { API_SIGNER } from '../lib/api'
 import { peerUrl } from '../lib/environment'
 import { accountSaga } from './account/sagas'
+import { activitySaga } from './activity/sagas'
 import { analyticsSagas as marketplaceAnalyticsSagas } from './analytics/sagas'
 import { assetSaga } from './asset/sagas'
 import { bidSaga } from './bid/sagas'
@@ -122,6 +123,7 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     walletSaga(),
     collectionSaga(),
     saleSaga(),
+    activitySaga(),
     accountSaga(lambdasClient),
     collectionSaga(),
     storeSaga(contentClient),

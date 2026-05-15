@@ -20,3 +20,11 @@
 .ActivityPage .transactions {
   margin-top: 20px;
 }
+
+.ActivityPage .activity-sentinel {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0;
+}

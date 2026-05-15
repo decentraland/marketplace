@@ -193,9 +193,15 @@ export function SuccessPage(props: Props) {
                           buttonText={t('success_page.success_state.try_it_on_in_world')}
                           hideIcon
                           modalProps={{
-                            title: 'Download Decentraland',
-                            description: "To jump in, you'll need to download the Decentraland app",
-                            buttonLabel: 'Download Now'
+                            os: /Mac|iPhone|iPad|iPod/i.test(navigator.userAgent)
+                              ? 'apple'
+                              : /Android/i.test(navigator.userAgent)
+                                ? 'android'
+                                : 'windows',
+                            downloadUrl: 'https://decentraland.org/download',
+                            epicUrl: 'https://store.epicgames.com/en-US/p/decentraland-b692fb',
+                            googlePlayUrl: 'https://play.google.com/store/apps/details?id=org.decentraland.godotexplorer',
+                            i18n: { title: 'Download Decentraland' }
                           }}
                         />
                       </div>
