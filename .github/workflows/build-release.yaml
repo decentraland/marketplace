@@ -25,11 +25,12 @@ jobs:
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
       - name: Set package.json version
-        uses: decentraland/oddish-action@914e7c59e93e708152aa703c50196740c0526c1d
+        uses: decentraland/oddish-action@master
         with:
           cwd: ./webapp
           deterministic-snapshot: true
           only-update-versions: true
+          provenance: true
       - name: Install
         run: npm install
       - name: Build
@@ -37,12 +38,13 @@ jobs:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: npm run build
       - name: Publish
-        uses: decentraland/oddish-action@914e7c59e93e708152aa703c50196740c0526c1d
+        uses: decentraland/oddish-action@master
         with:
           cwd: ./webapp/dist
           deterministic-snapshot: true
           registry-url: "https://registry.npmjs.org"
           access: public
+          provenance: true
           gitlab-token: ${{ secrets.GITLAB_CDN_DEPLOYER_TOKEN }}
           gitlab-pipeline-url: ${{ secrets.GITLAB_CDN_DEPLOYER_URL }}
         env:
