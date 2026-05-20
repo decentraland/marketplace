@@ -9,7 +9,7 @@ import { Loader, Stats, Button } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../lib/date'
 import { formatWeiMANA } from '../../lib/mana'
 import { AssetType } from '../../modules/asset/types'
-import { getAssetName } from '../../modules/asset/utils'
+import { getAssetName, isNFT } from '../../modules/asset/utils'
 import { getAcceptBidStatus, getError } from '../../modules/bid/selectors'
 import { getAcceptBidAuthorizationOptions, isBidTrade } from '../../modules/bid/utils'
 import { useERC721ContractName } from '../../modules/contract/hooks'
@@ -24,7 +24,6 @@ import { Mana } from '../Mana'
 import { AcceptButton } from './AcceptButton'
 import { WarningMessage } from './WarningMessage'
 import { Props } from './Bid.types'
-import { isNFT } from '../../modules/asset/utils'
 import './Bid.css'
 
 const Bid = (props: Props) => {
@@ -141,13 +140,13 @@ const Bid = (props: Props) => {
             ) : null}
           </div>
         </div>
-        {isBidder ? (
-          <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>
-            {asset => <WarningMessage asset={asset} bid={bid} />}
-          </AssetProvider>
-        ) : null}
         <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>
-          {asset => (asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} /> : null)}
+          {asset => (
+            <>
+              {isBidder ? <WarningMessage asset={asset} bid={bid} /> : null}
+              {asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} /> : null}
+            </>
+          )}
         </AssetProvider>
       </div>
       {showConfirmationModal ? (

@@ -9,17 +9,8 @@
   font-size: 13px;
   line-height: 1.4;
   padding: 10px 12px;
-}
-
-.banner {
   width: 100%;
   margin: 8px 0;
-}
-
-.inline {
-  display: inline-flex;
-  font-size: 12px;
-  padding: 6px 10px;
 }
 
 .icon {
@@ -30,14 +21,4 @@
 
 .message {
   flex: 1;
-}
-
-.warning a {
-  color: #ffb84d;
-  text-decoration: underline;
-  font-weight: 600;
-}
-
-.warning a:hover {
-  color: #ffd285;
 }

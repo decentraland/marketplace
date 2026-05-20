@@ -1684,5 +1684,10 @@
   "credits": {
     "value": "1 积分 = 1 MANA 价值",
     "offline_message": "Marketplace Credits 目前离线。请检查 {discord_link} 的 #product-status 频道以获取更新，如果服务没有很快恢复。"
+  },
+  "estate_upgrade_warning": {
+    "owner": "此挂单已不可用。请重新创建。",
+    "visitor": "此挂单已不可用。卖家需要重新创建。",
+    "update_listing": "更新挂单"
   }
 }

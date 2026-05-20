@@ -33,7 +33,7 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
             {formatWeiMANA(item?.price || order!.price)}
           </Mana>
         </div>
-        {nft && isNFT(nft) && isAffectedByEstateUpgrade ? <EstateUpgradeWarning nft={nft} isOwnListing /> : null}
+        {isAffectedByEstateUpgrade ? <EstateUpgradeWarning nft={nft} isOwnListing /> : null}
       </Mobile>
       <NotMobile>
         <Table.Row>
@@ -56,16 +56,12 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
                   on="hover"
                 />
               ) : null}
-              {nft && isNFT(nft) && isAffectedByEstateUpgrade ? (
+              {isAffectedByEstateUpgrade && nft ? (
                 <div className="warningExpiration">
                   <Icon name="exclamation triangle" className={'warningExpiration'} />{' '}
-                  {nft ? (
-                    <Link to={locations.sell(nft.contractAddress, nft.tokenId, cancelOrSellOptions)}>
-                      {t('estate_upgrade_warning.update_listing')}
-                    </Link>
-                  ) : (
-                    t('global.action_required')
-                  )}
+                  <Link to={locations.sell(nft.contractAddress, nft.tokenId, cancelOrSellOptions)}>
+                    {t('estate_upgrade_warning.update_listing')}
+                  </Link>
                 </div>
               ) : null}
               {nft && isNFT(nft) && nft?.owner !== wallet?.address && (

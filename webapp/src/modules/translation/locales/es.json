@@ -1680,5 +1680,10 @@
   "credits": {
     "value": "1 Crédito = 1 MANA en valor",
     "offline_message": "Los Créditos del Marketplace están actualmente desconectados. Por favor, comprueba el\n#product-status canal en {discord_link}\npara actualizaciones si el servicio no se reanuda pronto."
+  },
+  "estate_upgrade_warning": {
+    "owner": "Esta publicación ya no está disponible. Debes volver a crearla.",
+    "visitor": "Esta publicación ya no está disponible. El vendedor debe volver a crearla.",
+    "update_listing": "Actualizar publicación"
   }
 }

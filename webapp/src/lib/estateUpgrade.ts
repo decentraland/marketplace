@@ -7,11 +7,11 @@ import { NFT } from '../modules/nft/types'
 // trades) become non-executable on-chain and must be re-created by the seller.
 export const ESTATE_LR_XOR_SAFE_MAX_SIZE = 18
 
-export function isEstateNFT(nft: NFT | null | undefined): boolean {
+function isEstateNFT(nft: NFT | null | undefined): boolean {
   return !!nft && nft.category === NFTCategory.ESTATE
 }
 
-export function getEstateSize(nft: NFT | null | undefined): number | undefined {
+function getEstateSize(nft: NFT | null | undefined): number | undefined {
   if (!isEstateNFT(nft)) return undefined
   return nft?.data.estate?.size
 }
