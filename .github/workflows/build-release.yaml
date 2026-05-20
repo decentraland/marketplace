@@ -22,13 +22,16 @@ jobs:
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # @v4.3.0
       - name: Use Node.js 22.x
-        # npm Trusted Publishing requires npm CLI >= 11.5.1, which ships with
-        # Node 22.18.0+. Using the 22.x LTS line for a single-major bump from 20.x.
+        # Node 22.x LTS — single-major bump from 20.x.
         uses: actions/setup-node@v4.0.1
         with:
           node-version: 22.x
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
+      - name: Upgrade npm to 11.x
+        # npm Trusted Publishing requires npm CLI >= 11.5.1. The runner's toolcache
+        # ships Node 22.x with npm 10.9.x bundled, so we explicitly install npm 11.
+        run: npm install -g npm@11
       - name: Set package.json version
         uses: decentraland/oddish-action@master
         with:
