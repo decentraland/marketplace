@@ -25,7 +25,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
       - name: Set package.json version
-        uses: decentraland/oddish-action@master
+        # Pinned to last stable commit before the node24 runtime bump (oddish PR #4)
+        # which broke npm publish on this repo. Revisit once upstream confirms a fix.
+        uses: decentraland/oddish-action@914e7c5
         with:
           cwd: ./webapp
           deterministic-snapshot: true
@@ -37,7 +39,8 @@ jobs:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: npm run build
       - name: Publish
-        uses: decentraland/oddish-action@master
+        # Pinned — see comment above.
+        uses: decentraland/oddish-action@914e7c5
         with:
           cwd: ./webapp/dist
           deterministic-snapshot: true
