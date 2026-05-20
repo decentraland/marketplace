@@ -30,7 +30,7 @@ jobs:
           cwd: ./webapp
           deterministic-snapshot: true
           only-update-versions: true
-          provenance: true
+          provenance: false
       - name: Install
         run: npm install
       - name: Build
@@ -44,7 +44,7 @@ jobs:
           deterministic-snapshot: true
           registry-url: "https://registry.npmjs.org"
           access: public
-          provenance: true
+          provenance: false
           gitlab-token: ${{ secrets.GITLAB_CDN_DEPLOYER_TOKEN }}
           gitlab-pipeline-url: ${{ secrets.GITLAB_CDN_DEPLOYER_URL }}
         env:
