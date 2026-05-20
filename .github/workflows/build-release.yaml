@@ -21,17 +21,18 @@ jobs:
         working-directory: ./webapp
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # @v4.3.0
-      - name: Use Node.js 22.x
-        # Node 22.x LTS — single-major bump from 20.x.
+      - name: Use Node.js 24.x
+        # Node 24.x LTS ships with npm 11.x bundled, which is required for
+        # Trusted Publishing (npm >= 11.5.1). Previous attempt was Node 22.x +
+        # `npm install -g npm@11` but the runner's bundled npm 10.9.7 has a
+        # broken dependency tree (missing promise-retry from @npmcli/arborist)
+        # that prevents in-place upgrades. Node 24's bundled npm 11 sidesteps
+        # the issue entirely.
         uses: actions/setup-node@v4.0.1
         with:
-          node-version: 22.x
+          node-version: 24.x
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
-      - name: Upgrade npm to 11.x
-        # npm Trusted Publishing requires npm CLI >= 11.5.1. The runner's toolcache
-        # ships Node 22.x with npm 10.9.x bundled, so we explicitly install npm 11.
-        run: npm install -g npm@11
       - name: Set package.json version
         uses: decentraland/oddish-action@master
         with:
