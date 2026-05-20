@@ -1,0 +1,43 @@
+.warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(255, 152, 0, 0.12);
+  border: 1px solid rgba(255, 152, 0, 0.45);
+  border-radius: 8px;
+  color: #ffb84d;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 10px 12px;
+}
+
+.banner {
+  width: 100%;
+  margin: 8px 0;
+}
+
+.inline {
+  display: inline-flex;
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
+.icon {
+  flex-shrink: 0;
+  margin: 1px 0 0 0 !important;
+  color: #ff9800;
+}
+
+.message {
+  flex: 1;
+}
+
+.warning a {
+  color: #ffb84d;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.warning a:hover {
+  color: #ffd285;
+}

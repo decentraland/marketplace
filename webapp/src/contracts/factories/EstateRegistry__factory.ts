@@ -195,6 +195,25 @@ const _abi = [
   },
   {
     constant: true,
+    inputs: [
+      {
+        name: "estateId",
+        type: "uint256",
+      },
+    ],
+    name: "getFingerprintV2",
+    outputs: [
+      {
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    constant: true,
     inputs: [],
     name: "totalSupply",
     outputs: [

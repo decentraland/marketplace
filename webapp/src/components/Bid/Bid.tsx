@@ -18,11 +18,13 @@ import { addressEquals } from '../../modules/wallet/utils'
 import { AssetImage } from '../AssetImage'
 import { AssetProvider } from '../AssetProvider'
 import { ConfirmInputValueModal } from '../ConfirmInputValueModal'
+import EstateUpgradeWarning from '../EstateUpgradeWarning'
 import { LinkedProfile } from '../LinkedProfile'
 import { Mana } from '../Mana'
 import { AcceptButton } from './AcceptButton'
 import { WarningMessage } from './WarningMessage'
 import { Props } from './Bid.types'
+import { isNFT } from '../../modules/asset/utils'
 import './Bid.css'
 
 const Bid = (props: Props) => {
@@ -144,6 +146,9 @@ const Bid = (props: Props) => {
             {asset => <WarningMessage asset={asset} bid={bid} />}
           </AssetProvider>
         ) : null}
+        <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>
+          {asset => (asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} /> : null)}
+        </AssetProvider>
       </div>
       {showConfirmationModal ? (
         <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>

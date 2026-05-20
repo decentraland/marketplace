@@ -23,6 +23,7 @@ import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import BidButton from '../../BidButton'
+import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
@@ -95,6 +96,7 @@ const SaleRentActionBox = ({
 
   return (
     <div className={styles.main}>
+      <EstateUpgradeWarning nft={nft} isOwnListing={isOwner} />
       {isRentalOpen && maxPriceOfPeriods ? (
         <div className={styles.viewSelector}>
           <button

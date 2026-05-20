@@ -39,6 +39,7 @@ export interface EstateRegistryInterface extends utils.Interface {
     "landIdEstate(uint256)": FunctionFragment;
     "onERC721Received(address,address,uint256,bytes)": FunctionFragment;
     "getFingerprint(uint256)": FunctionFragment;
+    "getFingerprintV2(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "setLandUpdateOperator(uint256,uint256,address)": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
@@ -95,6 +96,7 @@ export interface EstateRegistryInterface extends utils.Interface {
       | "landIdEstate"
       | "onERC721Received"
       | "getFingerprint"
+      | "getFingerprintV2"
       | "totalSupply"
       | "setLandUpdateOperator"
       | "transferFrom"
@@ -180,6 +182,10 @@ export interface EstateRegistryInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getFingerprint",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getFingerprintV2",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -368,6 +374,10 @@ export interface EstateRegistryInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getFingerprint",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getFingerprintV2",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -759,6 +769,11 @@ export interface EstateRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string] & { result: string }>;
 
+    getFingerprintV2(
+      estateId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     setLandUpdateOperator(
@@ -1046,6 +1061,11 @@ export interface EstateRegistry extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  getFingerprintV2(
+    estateId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   setLandUpdateOperator(
@@ -1318,6 +1338,11 @@ export interface EstateRegistry extends BaseContract {
     ): Promise<string>;
 
     getFingerprint(
+      estateId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getFingerprintV2(
       estateId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
@@ -1723,6 +1748,11 @@ export interface EstateRegistry extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getFingerprintV2(
+      estateId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     setLandUpdateOperator(
@@ -2007,6 +2037,11 @@ export interface EstateRegistry extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getFingerprint(
+      estateId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getFingerprintV2(
       estateId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

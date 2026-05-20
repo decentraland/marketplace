@@ -5,11 +5,13 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Icon } from 'decentraland-ui'
 import clock from '../../../images/clock.png'
 import { getExpirationDateLabel } from '../../../lib/date'
+import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { getIsLegacyOrderExpired, getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { AssetType } from '../../../modules/asset/types'
 import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { locations } from '../../../modules/routing/locations'
 import BidButton from '../../BidButton'
+import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import PriceComponent from '../PriceComponent'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { Props } from './BuyNFTBox.types'
@@ -31,6 +33,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
         : order.expiresAt * 1000 // in s
     )
     const isOrderExpired = getIsOrderExpired(order.expiresAt)
+    const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft)
 
     const handleUseCredits = (value: boolean) => {
       setUseCredits(value)
@@ -38,6 +41,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
 
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
+        <EstateUpgradeWarning nft={nft} isOwnListing={!!isOwner} />
         <div className={styles.informationContainer}>
           <div className={styles.columnListing}>
             <span className={styles.informationTitle}>{t('best_buying_option.minting.price').toUpperCase()}</span>
@@ -86,7 +90,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
               </Button>
             )}
           </>
-        ) : !isOrderExpired ? (
+        ) : !isOrderExpired && !isEstateListingBroken ? (
           <BuyNFTButtons
             asset={nft}
             assetType={AssetType.NFT}
@@ -95,7 +99,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
             onUseCredits={handleUseCredits}
           />
         ) : null}
-        {!isOwner && <BidButton asset={nft} alreadyBid={alreadyBid} />}
+        {!isOwner && !isEstateListingBroken && <BidButton asset={nft} alreadyBid={alreadyBid} />}
         {!isOrderExpired ? (
           <span className={styles.expiresAt}>
             <img src={clock} alt="clock" className={styles.mintingIcon} />
