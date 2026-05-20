@@ -25,7 +25,7 @@ jobs:
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
       - name: Set package.json version
-        uses: decentraland/oddish-action@master
+        uses: decentraland/oddish-action@914e7c59e93e708152aa703c50196740c0526c1d
         with:
           cwd: ./webapp
           deterministic-snapshot: true
@@ -37,7 +37,7 @@ jobs:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: npm run build
       - name: Publish
-        uses: decentraland/oddish-action@master
+        uses: decentraland/oddish-action@914e7c59e93e708152aa703c50196740c0526c1d
         with:
           cwd: ./webapp/dist
           deterministic-snapshot: true
