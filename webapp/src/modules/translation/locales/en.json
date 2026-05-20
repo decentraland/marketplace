@@ -1718,5 +1718,10 @@
   "credits": {
     "value": "1 Credit = 1 MANA in value",
     "offline_message": "Marketplace Credits are currently offline.{br} Please check the #product-status channel at {br} {discord_link} for updates if service does not resume shortly."
+  },
+  "estate_upgrade_warning": {
+    "owner": "This listing is no longer available. You need to recreate it.",
+    "visitor": "This listing is no longer available. The seller needs to recreate it.",
+    "update_listing": "Update listing"
   }
 }

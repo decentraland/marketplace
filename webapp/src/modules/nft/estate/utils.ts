@@ -47,19 +47,15 @@ export async function generateFingerprint(estateId: string, parcels: { x: number
     estateTokenIds.push(await contract.encodeTokenId(parcel.x, parcel.y))
   }
 
-  let fingerprint = BigInt(ethers.utils.solidityKeccak256(['string', 'uint256'], ['estateId', estateId]))
+  const encoded = ethers.utils.defaultAbiCoder.encode(['string', 'uint256', 'uint256[]'], ['estateId', estateId, estateTokenIds])
 
-  for (const tokenId of estateTokenIds) {
-    fingerprint ^= BigInt(ethers.utils.solidityKeccak256(['uint256'], [tokenId]))
-  }
-
-  return ethers.utils.hexlify(fingerprint)
+  return ethers.utils.keccak256(encoded)
 }
 
 export async function getFingerprint(estateId: string, estateContract: Contract, chainId: ChainId) {
   const provider = await getNetworkProvider(chainId)
   if (provider) {
     const estateRegistry = EstateRegistry__factory.connect(estateContract.address, new ethers.providers.Web3Provider(provider))
-    return estateRegistry.getFingerprint(estateId)
+    return estateRegistry.getFingerprintV2(estateId)
   }
 }

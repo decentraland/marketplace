@@ -9,7 +9,7 @@ import { Loader, Stats, Button } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../lib/date'
 import { formatWeiMANA } from '../../lib/mana'
 import { AssetType } from '../../modules/asset/types'
-import { getAssetName } from '../../modules/asset/utils'
+import { getAssetName, isNFT } from '../../modules/asset/utils'
 import { getAcceptBidStatus, getError } from '../../modules/bid/selectors'
 import { getAcceptBidAuthorizationOptions, isBidTrade } from '../../modules/bid/utils'
 import { useERC721ContractName } from '../../modules/contract/hooks'
@@ -18,6 +18,7 @@ import { addressEquals } from '../../modules/wallet/utils'
 import { AssetImage } from '../AssetImage'
 import { AssetProvider } from '../AssetProvider'
 import { ConfirmInputValueModal } from '../ConfirmInputValueModal'
+import EstateUpgradeWarning from '../EstateUpgradeWarning'
 import { LinkedProfile } from '../LinkedProfile'
 import { Mana } from '../Mana'
 import { AcceptButton } from './AcceptButton'
@@ -139,11 +140,14 @@ const Bid = (props: Props) => {
             ) : null}
           </div>
         </div>
-        {isBidder ? (
-          <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>
-            {asset => <WarningMessage asset={asset} bid={bid} />}
-          </AssetProvider>
-        ) : null}
+        <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>
+          {asset => (
+            <>
+              {isBidder ? <WarningMessage asset={asset} bid={bid} /> : null}
+              {asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} /> : null}
+            </>
+          )}
+        </AssetProvider>
       </div>
       {showConfirmationModal ? (
         <AssetProvider type={assetType} contractAddress={bid.contractAddress} tokenId={tokenId}>

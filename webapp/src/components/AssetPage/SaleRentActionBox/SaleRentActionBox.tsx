@@ -8,6 +8,7 @@ import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Popup } from 'decentraland-ui'
 import { builderUrl } from '../../../lib/environment'
+import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { formatWeiMANA } from '../../../lib/mana'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { isPartOfEstate } from '../../../modules/nft/utils'
@@ -23,6 +24,7 @@ import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import BidButton from '../../BidButton'
+import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
@@ -51,6 +53,7 @@ const SaleRentActionBox = ({
   const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
   const isTenant = rental && wallet && addressEquals(rental.tenant ?? undefined, wallet.address)
+  const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<number | undefined>(undefined)
   const [view, setView] = useState(!!order || !isRentalOpen ? View.SALE : View.RENT)
@@ -95,6 +98,7 @@ const SaleRentActionBox = ({
 
   return (
     <div className={styles.main}>
+      <EstateUpgradeWarning nft={nft} isOwnListing={isOwner} />
       {isRentalOpen && maxPriceOfPeriods ? (
         <div className={styles.viewSelector}>
           <button
@@ -230,8 +234,8 @@ const SaleRentActionBox = ({
                   </Button>
                 ) : null}
                 <div className={styles.saleButtons}>
-                  {order ? <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} /> : null}
-                  {canBid ? (
+                  {order && !isEstateListingBroken ? <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} /> : null}
+                  {canBid && !isEstateListingBroken ? (
                     <Popup
                       content={t('asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid')}
                       position="top center"

@@ -2,11 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Badge, Button, Icon, InfoTooltip, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
+import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getIsLegacyOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { isNFT } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { LEGACY_MARKETPLACE_MAINNET_CONTRACT, Section } from '../../../modules/vendor/decentraland'
+import EstateUpgradeWarning from '../../EstateUpgradeWarning'
 import { Mana } from '../../Mana'
 import AssetCell from '../AssetCell'
 import { Props } from './OnSaleListElement.types'
@@ -14,6 +16,7 @@ import './OnSaleListElement.css'
 
 const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRevoke, wallet }: Props) => {
   const category = item?.category || nft!.category
+  const isAffectedByEstateUpgrade = !!nft && isNFT(nft) && isEstateListingAffectedByUpgrade(nft)
 
   const cancelOrSellOptions = {
     redirectTo: locations.currentAccount({
@@ -30,6 +33,7 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
             {formatWeiMANA(item?.price || order!.price)}
           </Mana>
         </div>
+        {isAffectedByEstateUpgrade ? <EstateUpgradeWarning nft={nft} isOwnListing /> : null}
       </Mobile>
       <NotMobile>
         <Table.Row>
@@ -51,6 +55,14 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
                   }
                   on="hover"
                 />
+              ) : null}
+              {isAffectedByEstateUpgrade && nft ? (
+                <div className="warningExpiration">
+                  <Icon name="exclamation triangle" className={'warningExpiration'} />{' '}
+                  <Link to={locations.sell(nft.contractAddress, nft.tokenId, cancelOrSellOptions)}>
+                    {t('estate_upgrade_warning.update_listing')}
+                  </Link>
+                </div>
               ) : null}
               {nft && isNFT(nft) && nft?.owner !== wallet?.address && (
                 <div className="needsAttentionBadge">

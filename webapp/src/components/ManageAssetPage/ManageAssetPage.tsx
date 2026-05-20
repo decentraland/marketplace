@@ -12,6 +12,7 @@ import { locations } from '../../modules/routing/locations'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
 import { AssetProvider } from '../AssetProvider'
 import { DetailsBox } from '../DetailsBox'
+import EstateUpgradeWarning from '../EstateUpgradeWarning'
 import { LandLockedPopup } from '../LandLockedPopup'
 import { Column } from '../Layout/Column'
 import { NavigationTab } from '../Navigation/Navigation.types'
@@ -89,6 +90,7 @@ export const ManageAssetPage = (props: Props) => {
                           <Column className={styles.content}>
                             {asset && !isLoading ? (
                               <>
+                                <EstateUpgradeWarning nft={asset} isOwnListing />
                                 <section className={styles.assetDescription}>
                                   <div className={styles.assetDescriptionHeader}>
                                     <h1 className={styles.assetDescriptionTitle}>{asset?.name}</h1>
@@ -137,6 +139,7 @@ export const ManageAssetPage = (props: Props) => {
                             ) : null}
                             {asset && !isLoading ? (
                               <>
+                                <EstateUpgradeWarning nft={asset} isOwnListing />
                                 <section className={styles.assetDescription}>
                                   <div className={styles.assetDescriptionHeader}>
                                     <h1 className={styles.assetDescriptionTitle}>{asset?.name}</h1>
