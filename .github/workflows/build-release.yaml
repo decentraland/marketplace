@@ -28,10 +28,14 @@ jobs:
           node-version: 22.x
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
-      - name: Upgrade npm to 11.x
+      - name: Enable npm 11.x via corepack
         # npm Trusted Publishing requires npm CLI >= 11.5.1. The runner's toolcache
-        # ships Node 22.x with npm 10.9.x bundled, so we explicitly install npm 11.
-        run: npm install -g npm@11
+        # ships Node 22.x with npm 10.9.x bundled. Using corepack avoids the known
+        # self-upgrade corruption where npm overwrites its own modules mid-install.
+        run: |
+          corepack enable npm
+          corepack install -g npm@11
+          npm --version
       - name: Set package.json version
         uses: decentraland/oddish-action@master
         with:
