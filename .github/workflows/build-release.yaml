@@ -11,17 +11,21 @@ on:
 jobs:
   build-release:
     permissions:
+      # Required for npm Trusted Publishing — npm exchanges this OIDC token for
+      # publish credentials instead of using a long-lived NPM_TOKEN.
       id-token: write
+      contents: read
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./webapp
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # @v4.3.0
-      - name: Use Node.js 20.x
+      - name: Use Node.js 24.x
+        # npm Trusted Publishing requires npm CLI >= 11.5.1, which ships with Node 24.x.
         uses: actions/setup-node@v4.0.1
         with:
-          node-version: 20.x
+          node-version: 24.x
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
       - name: Set package.json version
@@ -38,6 +42,9 @@ jobs:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: npm run build
       - name: Publish
+        # No NODE_AUTH_TOKEN — npm authenticates via OIDC against the Trusted
+        # Publisher configured for @dcl/marketplace-site on npmjs.com. Provenance
+        # is automatic under Trusted Publishing but we keep the flag for clarity.
         uses: decentraland/oddish-action@master
         with:
           cwd: ./webapp/dist
@@ -47,8 +54,6 @@ jobs:
           provenance: true
           gitlab-token: ${{ secrets.GITLAB_CDN_DEPLOYER_TOKEN }}
           gitlab-pipeline-url: ${{ secrets.GITLAB_CDN_DEPLOYER_URL }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Create Sentry release
         if: github.event_name == 'release' && github.event.action == 'created'
         uses: getsentry/action-release@v1
