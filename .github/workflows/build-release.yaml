@@ -21,11 +21,12 @@ jobs:
         working-directory: ./webapp
     steps:
       - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # @v4.3.0
-      - name: Use Node.js 24.x
-        # npm Trusted Publishing requires npm CLI >= 11.5.1, which ships with Node 24.x.
+      - name: Use Node.js 22.x
+        # npm Trusted Publishing requires npm CLI >= 11.5.1, which ships with
+        # Node 22.18.0+. Using the 22.x LTS line for a single-major bump from 20.x.
         uses: actions/setup-node@v4.0.1
         with:
-          node-version: 24.x
+          node-version: 22.x
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
       - name: Set package.json version
