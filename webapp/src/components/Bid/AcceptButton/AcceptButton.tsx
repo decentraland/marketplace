@@ -11,7 +11,9 @@ import { Props } from './AcceptButton.types'
 const AcceptButton = (props: Props) => {
   const { asset, bid, onClick, rental, userAddress } = props
 
-  const [fingerprint, isLoadingFingerprint] = useFingerprint(asset && isNFT(asset) ? asset : null)
+  // Compare bid.fingerprint against the on-chain getFingerprintV2 (not the
+  // locally derived hash) — the contract verifies the bid's `extra` against V2.
+  const [, isLoadingFingerprint, contractFingerprint] = useFingerprint(asset && isNFT(asset) ? asset : null)
   const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
   const isCurrentlyLocked = rental && asset && isLandLocked(userAddress, rental, asset)
 
@@ -21,7 +23,7 @@ const AcceptButton = (props: Props) => {
       .catch(error => console.error(`Could not get the MANA from bidder ${bid.bidder}`, error))
   }, [bid])
 
-  const isValidFingerprint = checkFingerprint(bid, fingerprint)
+  const isValidFingerprint = checkFingerprint(bid, contractFingerprint)
   const assetOwner = !!asset && (isNFT(asset) ? asset.owner : asset?.creator)
   const isValidSeller = assetOwner && assetOwner === userAddress
   const isItemAvailable = !!asset && (isNFT(asset) || asset.available > 0)

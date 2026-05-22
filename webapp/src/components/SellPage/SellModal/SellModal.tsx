@@ -49,7 +49,9 @@ const SellModal = (props: Props) => {
   const isUpdate = order !== null
   const shouldRemoveListing = order?.tradeId
   const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
-  const [fingerprint] = useFingerprint(nft)
+  // The server validates `extra` against on-chain getFingerprintV2, so we must
+  // send the value the contract returns, not the locally derived one.
+  const [, isLoadingFingerprint, contractFingerprint] = useFingerprint(nft)
 
   const [expiresAt, setExpiresAt] = useState(() => {
     let exp = order?.expiresAt
@@ -112,7 +114,8 @@ const SellModal = (props: Props) => {
 
   const offchainOrdersContract = getDecentralandContract(ContractName.OffChainMarketplaceV2, nft.chainId)
 
-  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), fingerprint)
+  const handleCreateOrder = () =>
+    onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), contractFingerprint)
 
   const handleCancelTrade = () => order && onCancelOrder(order, nft)
 
@@ -137,7 +140,8 @@ const SellModal = (props: Props) => {
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalidPrice = parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
-  const isDisabled = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate
+  const isEstateFingerprintNotReady = nft.category === NFTCategory.ESTATE && (isLoadingFingerprint || !contractFingerprint)
+  const isDisabled = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateFingerprintNotReady
 
   return (
     <AssetAction asset={nft}>

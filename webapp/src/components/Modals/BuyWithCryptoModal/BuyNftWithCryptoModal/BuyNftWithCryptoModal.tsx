@@ -33,7 +33,10 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     metadata: { nft, order, slippage = 1, useCredits = false }
   } = props
 
-  const [fingerprint] = useFingerprint(nft)
+  // Legacy `safeExecuteOrder` on V1 marketplace verifies the fingerprint
+  // against the upgraded EstateRegistry (getFingerprintV2). Use the contract
+  // value so the on-chain check passes; the locally derived hash does not match.
+  const [, , contractFingerprint] = useFingerprint(nft)
 
   const onBuyNatively = useCallback(() => {
     const contractNames = getContractNames()
@@ -84,9 +87,9 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       targetContract: mana as Contract,
       authorizedContractLabel,
       requiredAllowanceInWei: useCredits && credits ? (BigInt(order.price) - BigInt(credits.totalCredits)).toString() : order.price,
-      onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, fingerprint, !alreadyAuthorized, useCredits) // undefined as fingerprint
+      onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, contractFingerprint, !alreadyAuthorized, useCredits)
     })
-  }, [nft, order, fingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits])
+  }, [nft, order, contractFingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits])
 
   const onBuyWithCard = useCallback(() => {
     getAnalytics()?.track(events.CLICK_BUY_NFT_WITH_CARD)
@@ -99,8 +102,8 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     [order]
   )
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet, fingerprint),
-    [nft, order, fingerprint]
+    (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet, contractFingerprint),
+    [nft, order, contractFingerprint]
   )
 
   const price = useMemo(() => {

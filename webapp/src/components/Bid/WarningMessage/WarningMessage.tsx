@@ -9,7 +9,9 @@ import './WarningMessage.css'
 const WarningMessage = (props: Props) => {
   const { asset, bid } = props
 
-  const [fingerprint] = useFingerprint(asset && isNFT(asset) ? asset : null)
+  // Compare bid.fingerprint against the on-chain getFingerprintV2 (not the
+  // locally derived hash) — the contract verifies the bid's `extra` against V2.
+  const [, , contractFingerprint] = useFingerprint(asset && isNFT(asset) ? asset : null)
   const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
 
   useEffect(() => {
@@ -18,7 +20,7 @@ const WarningMessage = (props: Props) => {
       .catch(error => console.error(`Could not get the MANA from bidder ${bid.bidder}`, error))
   }, [bid])
 
-  const isValidFingerprint = checkFingerprint(bid, fingerprint)
+  const isValidFingerprint = checkFingerprint(bid, contractFingerprint)
 
   if (hasInsufficientMANA) {
     return <div className="WarningMessage">{t('bid.not_enough_mana_on_bid_placed')}</div>
