@@ -32,13 +32,15 @@ const BidModal = (props: Props) => {
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
 
-  const [fingerprint, isLoadingFingerprint, contractFingerprint] = useFingerprint(isNFT(asset) ? asset : null)
+  // The server validates `extra` against on-chain getFingerprintV2, so we must
+  // send the value the contract returns, not the locally derived one.
+  const [, isLoadingFingerprint, contractFingerprint] = useFingerprint(isNFT(asset) ? asset : null)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
   const handlePlaceBid = useCallback(
-    () => onPlaceBid(asset, parseMANANumber(price), +new Date(`${expiresAt} 00:00:00`), fingerprint),
-    [asset, price, expiresAt, fingerprint, onPlaceBid]
+    () => onPlaceBid(asset, parseMANANumber(price), +new Date(`${expiresAt} 00:00:00`), contractFingerprint),
+    [asset, price, expiresAt, contractFingerprint, onPlaceBid]
   )
 
   const contractNames = getContractNames()
@@ -97,8 +99,7 @@ const BidModal = (props: Props) => {
     isLoadingFingerprint ||
     isPlacingBid ||
     hasLowPriceForMetaTx ||
-    (!fingerprint && asset.category === NFTCategory.ESTATE) ||
-    contractFingerprint !== fingerprint
+    (asset.category === NFTCategory.ESTATE && !contractFingerprint)
 
   return (
     <AssetAction asset={asset}>
@@ -146,7 +147,7 @@ const BidModal = (props: Props) => {
               error={isInvalidDate}
               message={isInvalidDate ? t('bid_page.invalid_date') : undefined}
             />
-            {!isLoadingFingerprint && contractFingerprint !== fingerprint ? (
+            {!isLoadingFingerprint && asset.category === NFTCategory.ESTATE && !contractFingerprint ? (
               <ErrorBanner info={t('atlas_updated_warning.fingerprint_missmatch')} />
             ) : null}
           </div>

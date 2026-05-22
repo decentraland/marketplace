@@ -79,15 +79,17 @@ const SellModal = ({
   const offChainOrdersContract = getDecentralandContract(ContractName.OffChainMarketplaceV2, nft.chainId)
 
   const authorizedContract = offChainOrdersContract || marketplaceContract
-  const [fingerprint] = useFingerprint(nft)
+  // The server validates `extra` against on-chain getFingerprintV2, so we must
+  // send the value the contract returns, not the locally derived one.
+  const [, isLoadingFingerprint, contractFingerprint] = useFingerprint(nft)
 
   if (!wallet) {
     return null
   }
 
   const handleCreateOrder = useCallback(
-    () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), fingerprint),
-    [expiresAt, fingerprint, nft, price, onCreateOrder]
+    () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime(), contractFingerprint),
+    [expiresAt, contractFingerprint, nft, price, onCreateOrder]
   )
 
   const handleOnConfirm = useCallback(() => {
@@ -118,7 +120,10 @@ const SellModal = ({
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalidPrice = useMemo(() => parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price), [price])
-  const isDisabledSell = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate
+  const isEstateFingerprintNotReady =
+    nft.category === NFTCategory.ESTATE && (isLoadingFingerprint || !contractFingerprint)
+  const isDisabledSell =
+    !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateFingerprintNotReady
 
   const handleBackOrCancel = useCallback(() => {
     if (isUpdate) {
