@@ -140,10 +140,8 @@ const SellModal = (props: Props) => {
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalidPrice = parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
-  const isEstateFingerprintNotReady =
-    nft.category === NFTCategory.ESTATE && (isLoadingFingerprint || !contractFingerprint)
-  const isDisabled =
-    !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateFingerprintNotReady
+  const isEstateFingerprintNotReady = nft.category === NFTCategory.ESTATE && (isLoadingFingerprint || !contractFingerprint)
+  const isDisabled = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateFingerprintNotReady
 
   return (
     <AssetAction asset={nft}>

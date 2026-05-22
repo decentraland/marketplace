@@ -120,8 +120,7 @@ const SellModal = ({
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalidPrice = useMemo(() => parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price), [price])
-  const isEstateFingerprintNotReady =
-    nft.category === NFTCategory.ESTATE && (isLoadingFingerprint || !contractFingerprint)
+  const isEstateFingerprintNotReady = nft.category === NFTCategory.ESTATE && (isLoadingFingerprint || !contractFingerprint)
   const isDisabledSell =
     !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate || isEstateFingerprintNotReady
 

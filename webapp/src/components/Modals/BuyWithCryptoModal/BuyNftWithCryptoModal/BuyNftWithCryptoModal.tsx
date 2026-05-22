@@ -87,8 +87,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
       targetContract: mana as Contract,
       authorizedContractLabel,
       requiredAllowanceInWei: useCredits && credits ? (BigInt(order.price) - BigInt(credits.totalCredits)).toString() : order.price,
-      onAuthorized: (alreadyAuthorized: boolean) =>
-        onExecuteOrder(order, nft, contractFingerprint, !alreadyAuthorized, useCredits)
+      onAuthorized: (alreadyAuthorized: boolean) => onExecuteOrder(order, nft, contractFingerprint, !alreadyAuthorized, useCredits)
     })
   }, [nft, order, contractFingerprint, getContract, onAuthorizedAction, onExecuteOrder, useCredits, credits])
 
@@ -103,8 +102,7 @@ const BuyNftWithCryptoModalHOC = (props: Props) => {
     [order]
   )
   const onGetGasCost: OnGetGasCost = useCallback(
-    (selectedToken, chainNativeToken, wallet) =>
-      useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet, contractFingerprint),
+    (selectedToken, chainNativeToken, wallet) => useBuyNftGasCost(nft, order, selectedToken, chainNativeToken, wallet, contractFingerprint),
     [nft, order, contractFingerprint]
   )
 
