@@ -103,10 +103,7 @@ const AssetCard = (props: Props) => {
   // touch laptops/large tablets. Gate the hover preview on pointer
   // capability too — on touch-only devices `mouseenter` fires on tap and
   // would race the click that navigates to the asset detail page.
-  const supportsHover = useMemo(
-    () => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches,
-    []
-  )
+  const supportsHover = useMemo(() => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches, [])
   const canShowEmotePreview = isEmoteCard && !isMobile && supportsHover
 
   const title = getAssetName(asset)
