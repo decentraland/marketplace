@@ -1,0 +1,56 @@
+.EmotePreviewPlayer {
+  position: fixed;
+  z-index: 2147483000;
+  border-radius: 10px;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: transparent;
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+  contain: layout paint;
+}
+
+/* While warming we keep the iframe rendered (not visibility:hidden, which can
+   pause iframe rendering in some browsers) but invisible to the user. */
+.EmotePreviewPlayer.is-warming {
+  top: 0;
+  left: 0;
+  width: 320px;
+  height: 320px;
+  opacity: 0;
+  pointer-events: none;
+  clip-path: inset(50%);
+}
+
+.EmotePreviewPlayer.is-visible {
+  opacity: 1;
+  clip-path: none;
+}
+
+.EmotePreviewPlayer iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: 0 !important;
+  display: block;
+  background: transparent;
+}
+
+/* Semantic UI's Loader is positioned via top/left:50% with translate. We
+   anchor it to the overlay rather than to its (non-existent) Dimmer parent. */
+.EmotePreviewPlayer .ui.loader.EmotePreviewPlayer__spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+}
+
+.EmotePreviewPlayer .ui.loader.EmotePreviewPlayer__spinner:before,
+.EmotePreviewPlayer .ui.loader.EmotePreviewPlayer__spinner:after {
+  /* Force the spinner ring to be visible regardless of any inherited dimmer
+     styling from the page. */
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.EmotePreviewPlayer .ui.loader.EmotePreviewPlayer__spinner:after {
+  border-top-color: #fff;
+}
