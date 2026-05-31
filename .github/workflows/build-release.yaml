@@ -25,7 +25,7 @@ jobs:
         # Node 22.x LTS — single-major bump from 20.x.
         uses: actions/setup-node@v4.0.1
         with:
-          node-version: 22.x
+          node-version: 24
           cache: "npm"
           cache-dependency-path: webapp/package-lock.json
       - name: Enable npm 11.x via corepack
