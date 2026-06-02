@@ -506,7 +506,9 @@ export const BuyWithCryptoModal = (props: Props) => {
       )
     }
 
-    // When polling cross-chain, show a different title and disable navigation
+    // The cross-chain credit states (polling / success / failed) render their own content
+    // and actions, so suppress the default back/close navigation. Polling shows a title;
+    // the terminal success/failed views let their own content carry the message.
     if (isPollingCrossChain) {
       return (
         <ModalNavigation
@@ -516,6 +518,10 @@ export const BuyWithCryptoModal = (props: Props) => {
           })}
         />
       )
+    }
+
+    if (isCrossChainSucceeded || isCrossChainFailed) {
+      return <ModalNavigation title="" />
     }
 
     return (
@@ -528,7 +534,17 @@ export const BuyWithCryptoModal = (props: Props) => {
         onClose={!isBuyingAsset ? onClose : undefined}
       />
     )
-  }, [asset.name, onClose, showChainSelector, showTokenSelector, isBuyingAsset, isPollingCrossChain])
+  }, [
+    asset.name,
+    onClose,
+    onGoBack,
+    showChainSelector,
+    showTokenSelector,
+    isBuyingAsset,
+    isPollingCrossChain,
+    isCrossChainSucceeded,
+    isCrossChainFailed
+  ])
 
   const renderCrossChainPollingContent = useCallback(() => {
     if (!creditsClaimProgress) return null
@@ -600,7 +616,7 @@ export const BuyWithCryptoModal = (props: Props) => {
     onPayWithCredits()
   }, [onClearCreditsClaimProgress, onPayWithCredits])
 
-  const handleCloseFailedCreditsClaim = useCallback(() => {
+  const handleCloseCreditsClaimModal = useCallback(() => {
     handleOnClose()
   }, [handleOnClose])
 
@@ -620,13 +636,13 @@ export const BuyWithCryptoModal = (props: Props) => {
           <Button primary onClick={handleTryAgainCreditsClaim}>
             {t('buy_with_crypto_modal.cross_chain_failed.try_again', { fallback: 'Try again' })}
           </Button>
-          <Button basic onClick={handleCloseFailedCreditsClaim}>
+          <Button basic onClick={handleCloseCreditsClaimModal}>
             {t('buy_with_crypto_modal.cross_chain_failed.close', { fallback: 'Close' })}
           </Button>
         </div>
       </div>
     )
-  }, [handleTryAgainCreditsClaim, handleCloseFailedCreditsClaim])
+  }, [handleTryAgainCreditsClaim, handleCloseCreditsClaimModal])
 
   const renderCrossChainSuccessContent = useCallback(() => {
     if (!creditsClaimProgress) return null
@@ -655,13 +671,13 @@ export const BuyWithCryptoModal = (props: Props) => {
               {t('buy_with_crypto_modal.cross_chain_polling.view_transaction', { fallback: 'View transaction' })}
             </a>
           ) : null}
-          <Button primary onClick={handleCloseFailedCreditsClaim}>
+          <Button primary onClick={handleCloseCreditsClaimModal}>
             {t('buy_with_crypto_modal.cross_chain_success.done', { fallback: 'Done' })}
           </Button>
         </div>
       </div>
     )
-  }, [creditsClaimProgress, handleCloseFailedCreditsClaim])
+  }, [creditsClaimProgress, handleCloseCreditsClaimModal])
 
   const handleShowChainSelector = useCallback(() => {
     setShowChainSelector(true)

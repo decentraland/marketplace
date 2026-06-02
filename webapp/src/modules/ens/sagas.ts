@@ -211,24 +211,10 @@ export function* ensSaga() {
       // The credits-server returns Axelar/Squid (CORAL) or Across V4 calldata
       // depending on the ?provider query param.
       const providerName: ReturnType<typeof getCrossChainNameProvider> = yield select(getCrossChainNameProvider)
-      console.log('[NAME-CLAIM] Starting credits-paid claim', {
-        name,
-        wallet: wallet.address,
-        chainId: ChainId.MATIC_MAINNET,
-        provider: providerName,
-        creditsTotal: credits.totalCredits,
-        creditsCount: credits.credits?.length
-      })
 
       const creditsServerUrl = config.get('CREDITS_SERVER_URL')
       const creditsClient = new CreditsClient(creditsServerUrl, { identity })
       let routeData: CreditsNameRouteResponse & { provider?: 'axelar' | 'across' }
-      console.log('[NAME-CLAIM] Requesting route from credits-server', {
-        url: creditsServerUrl,
-        provider: providerName,
-        name,
-        chainId: ChainId.MATIC_MAINNET
-      })
       try {
         if (providerName === 'across') {
           // CreditsClient.fetchCreditsNameRoute doesn't expose a `provider` param yet,
@@ -245,20 +231,7 @@ export function* ensSaga() {
         } else {
           routeData = (yield call([creditsClient, 'fetchCreditsNameRoute'], name, ChainId.MATIC_MAINNET)) as CreditsNameRouteResponse
         }
-        console.log('[NAME-CLAIM] Route received from credits-server', {
-          provider: (routeData as any).provider || 'axelar',
-          target: routeData.externalCall?.target,
-          selector: routeData.externalCall?.selector,
-          dataLength: routeData.externalCall?.data?.length,
-          expiresAt: routeData.externalCall?.expiresAt,
-          salt: routeData.externalCall?.salt,
-          quoteId: routeData.quoteId,
-          estimatedRouteDurationSec: routeData.estimatedRouteDuration,
-          fromChainId: routeData.fromChainId,
-          toChainId: routeData.toChainId
-        })
       } catch (routeError) {
-        console.error('[NAME-CLAIM] Failed to fetch route', { error: routeError, provider: providerName })
         captureException(routeError, { tags: { saga: 'handleClaimNameWithCreditsRequest', phase: 'fetch-route', provider: providerName } })
         const routeUnavailableMessage = t('toast.claim_name_with_credits_route_unavailable.body')
         yield put(showToast(getClaimNameWithCreditsRouteUnavailableToast()))
@@ -267,12 +240,6 @@ export function* ensSaga() {
         yield put(claimNameWithCreditsFailure(name, routeUnavailableMessage))
         return
       }
-
-      console.log('[NAME-CLAIM] Submitting useCredits tx on Polygon', {
-        provider: (routeData as any).provider,
-        externalCallTarget: routeData.externalCall.target,
-        externalCallSelector: routeData.externalCall.selector
-      })
 
       const creditsService = new CreditsService()
       const txHash = (yield call(
@@ -283,10 +250,6 @@ export function* ensSaga() {
         routeData.externalCall,
         routeData.customExternalCallSignature
       )) as string
-      console.log('[NAME-CLAIM] useCredits tx submitted', {
-        txHash,
-        polygonscanUrl: `https://polygonscan.com/tx/${txHash}`
-      })
 
       // Dispatch transaction submitted action (registers the tx for tracking)
       yield put(claimNameWithCreditsTransactionSubmitted(name, wallet.address, ChainId.MATIC_MAINNET, txHash))
@@ -307,10 +270,6 @@ export function* ensSaga() {
       try {
         yield call(waitForTx, txHash)
       } catch (txError) {
-        console.error('[NAME-CLAIM] useCredits tx reverted on Polygon — no bridge deposit was made', {
-          txHash,
-          error: txError
-        })
         captureException(txError, {
           tags: { saga: 'handleClaimNameWithCreditsRequest', phase: 'wait-polygon-tx', provider: providerName }
         })
@@ -329,7 +288,6 @@ export function* ensSaga() {
       try {
         let ethereumTxHash: string
         if (isAcross) {
-          console.log('[NAME-CLAIM] Polling Across status', { txHash, scanUrl })
           // Poll Across status until the deposit reaches a terminal state.
           const acrossResult: { destinationTxHash: string | null; status: string; actionsSucceeded: boolean } = (yield call(
             pollAcrossRouteStatus,
@@ -339,11 +297,12 @@ export function* ensSaga() {
             status: string
             actionsSucceeded: boolean
           }
-          console.log('[NAME-CLAIM] Across polling resolved', acrossResult)
           // Success requires BOTH a fill AND the destination actions (the register) to
           // have succeeded. A filled deposit whose actions reverted means the bridged MANA
           // went to the recovery wallet and the NAME was NOT minted — treat as failure.
-          if (acrossResult.status !== 'filled' || !acrossResult.actionsSucceeded) {
+          // Require actionsSucceeded === true explicitly so that a future `filled` response
+          // missing the field (which defaults to true upstream) can't mask a failed register.
+          if (acrossResult.status !== 'filled' || acrossResult.actionsSucceeded !== true) {
             throw new Error(
               `Across delivery did not complete the registration (status: ${acrossResult.status}, actionsSucceeded: ${acrossResult.actionsSucceeded})`
             )
@@ -351,12 +310,6 @@ export function* ensSaga() {
           // The fill hash is the Ethereum-side tx; fall back to the origin tx for the tokenId lookup.
           ethereumTxHash = acrossResult.destinationTxHash || txHash
         } else {
-          console.log('[NAME-CLAIM] Polling Squid status', {
-            txHash,
-            fromChainId: routeData.fromChainId,
-            toChainId: routeData.toChainId,
-            quoteId: routeData.quoteId
-          })
           // Poll for cross-chain transaction completion via Squid
           const statusResponse: SquidStatusResponse = yield call(pollSquidRouteStatus, {
             transactionId: txHash,
@@ -366,16 +319,8 @@ export function* ensSaga() {
             integratorId: squidIntegratorId,
             apiUrl: squidRouterApiUrl
           })
-          console.log('[NAME-CLAIM] Squid polling resolved', {
-            squidStatus: (statusResponse as any).squidTransactionStatus,
-            ethereumTxHash: statusResponse.toChain?.transactionId
-          })
           ethereumTxHash = statusResponse.toChain?.transactionId || txHash
         }
-        console.log('[NAME-CLAIM] Destination tx detected', {
-          ethereumTxHash,
-          etherscanUrl: `https://etherscan.io/tx/${ethereumTxHash}`
-        })
 
         // Get the real tokenId from the DCLRegistrar contract on Ethereum
         // The polling success means the Ethereum tx is confirmed, so we can query the contract
@@ -454,12 +399,7 @@ async function pollAcrossRouteStatus(
     const url = `${apiUrl}/deposit/status?originChainId=137&depositTxHash=${originChainTxHash}`
     const response = await fetch(url)
     if (!response.ok) {
-      console.warn('[NAME-CLAIM][ACROSS-POLL] non-ok response, will retry', {
-        attempt: i + 1,
-        maxAttempts,
-        status: response.status,
-        statusText: response.statusText
-      })
+      // Transient non-ok (e.g. the deposit isn't indexed yet) — back off and retry.
       await new Promise(resolve => setTimeout(resolve, intervalMs))
       continue
     }
@@ -478,14 +418,12 @@ async function pollAcrossRouteStatus(
     const status = (data.status || 'pending').toLowerCase()
     const fillTx = data.fillTx || data.fillTxnRef || null
     const actionsSucceeded = data.actionsSucceeded !== false
-    console.log('[NAME-CLAIM][ACROSS-POLL] tick', { attempt: i + 1, status, fillTx, actionsSucceeded })
 
     if (status === 'filled') {
       // Filled is terminal — resolve regardless of whether the fill hash is present yet.
       return { destinationTxHash: fillTx, status, actionsSucceeded }
     }
     if (status === 'refunded' || status === 'expired') {
-      console.warn('[NAME-CLAIM][ACROSS-POLL] terminal failure detected', { status })
       return { destinationTxHash: null, status, actionsSucceeded: false }
     }
     await new Promise(resolve => setTimeout(resolve, intervalMs))
