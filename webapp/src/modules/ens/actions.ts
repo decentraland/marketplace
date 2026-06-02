@@ -2,7 +2,7 @@ import { action } from 'typesafe-actions'
 import { ChainId } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import type { Route } from 'decentraland-transactions/crossChain'
-import { ENS, ENSError } from './types'
+import { CreditsClaimProgressStage, ENS, ENSError } from './types'
 
 // Claim a new name
 export const CLAIM_NAME_REQUEST = '[Request] Claim Name'
@@ -76,11 +76,17 @@ export const claimNameWithCreditsTransactionSubmitted = (subdomain: string, addr
     })
   })
 
-export const claimNameWithCreditsCrossChainPolling = (name: string, polygonTxHash: string, coralScanUrl: string) =>
+export const claimNameWithCreditsCrossChainPolling = (
+  name: string,
+  polygonTxHash: string,
+  coralScanUrl: string,
+  stage: CreditsClaimProgressStage = 'registering'
+) =>
   action(CLAIM_NAME_WITH_CREDITS_CROSS_CHAIN_POLLING, {
     name,
     polygonTxHash,
-    coralScanUrl
+    coralScanUrl,
+    stage
   })
 
 export const claimNameWithCreditsSuccess = (ens: ENS, name: string, txHash: string) =>

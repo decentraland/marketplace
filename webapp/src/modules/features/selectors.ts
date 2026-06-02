@@ -1,4 +1,5 @@
 import {
+  getFeatureVariant,
   getIsFeatureEnabled,
   getLoading,
   hasLoadedInitialFlags,
@@ -8,6 +9,8 @@ import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { RootState } from '../reducer'
 import { getWallet } from '../wallet/selectors'
 import { FeatureName } from './types'
+
+export type CrossChainNameProvider = 'axelar' | 'across'
 
 export const isLoadingFeatureFlags = (state: RootState) => {
   return getLoading(state)
@@ -118,4 +121,23 @@ export const getIsNAMEsWithCreditsEnabled = (state: RootState) => {
     return getIsFeatureEnabled(state, ApplicationName.MARKETPLACE, FeatureName.NAMES_WITH_CREDITS)
   }
   return false
+}
+
+/**
+ * Reads which cross-chain bridge provider should be used for the name-claim flow.
+ * The `names-with-credits` feature flag supports two variants:
+ *   - payload.value === 'across'  → Across V4 (SpokePoolPeriphery + MulticallHandler)
+ *   - payload.value === 'axelar'  → Axelar/Squid/CORAL (legacy default)
+ * If no variant is configured or it's not recognised, defaults to 'axelar'
+ * so we don't accidentally route traffic to an unintended path.
+ */
+export const getCrossChainNameProvider = (state: RootState): CrossChainNameProvider => {
+  try {
+    const variant = getFeatureVariant(state, ApplicationName.MARKETPLACE, FeatureName.NAMES_WITH_CREDITS)
+    const value = variant?.payload?.value?.toLowerCase()
+    if (value === 'across') return 'across'
+    return 'axelar'
+  } catch (e) {
+    return 'axelar'
+  }
 }

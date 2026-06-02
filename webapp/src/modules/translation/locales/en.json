@@ -913,8 +913,24 @@
       "title": "Processing Purchase",
       "processing": "Processing your cross-chain transaction...",
       "description": "Your transaction is being processed across chains. This may take a few minutes.",
+      "consuming_title": "Consuming your credits",
+      "consuming_description": "Hang tight — this only takes a moment.",
+      "registering_title": "Registering your NAME",
+      "registering_description": "Almost done — finishing up your purchase.",
       "track_on_coral_scan": "Track on CoralScan",
+      "view_transaction": "View transaction",
       "note": "Please keep this window open. You will be redirected automatically when the transaction completes."
+    },
+    "cross_chain_success": {
+      "title": "Your NAME is ready!",
+      "description": "{name}.dcl.eth is now yours.",
+      "done": "Done"
+    },
+    "cross_chain_failed": {
+      "title": "Something went wrong",
+      "description": "Your purchase didn't go through. Please try again.",
+      "try_again": "Try again",
+      "close": "Close"
     }
   },
   "partially_supported_network_card": {

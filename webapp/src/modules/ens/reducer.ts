@@ -73,14 +73,15 @@ export function ensReducer(state: ENSState = INITIAL_STATE, action: ENSReducerAc
     }
 
     case CLAIM_NAME_WITH_CREDITS_CROSS_CHAIN_POLLING: {
-      const { name, polygonTxHash, coralScanUrl } = action.payload
+      const { name, polygonTxHash, coralScanUrl, stage } = action.payload
       return {
         ...state,
         creditsClaimProgress: {
           name,
           polygonTxHash,
           coralScanUrl,
-          status: 'polling'
+          status: 'polling',
+          stage
         }
       }
     }
@@ -102,7 +103,7 @@ export function ensReducer(state: ENSState = INITIAL_STATE, action: ENSReducerAc
     }
 
     case CLAIM_NAME_WITH_CREDITS_SUCCESS: {
-      const { ens } = action.payload
+      const { ens, txHash } = action.payload
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
@@ -113,7 +114,9 @@ export function ensReducer(state: ENSState = INITIAL_STATE, action: ENSReducerAc
             ...ens
           }
         },
-        creditsClaimProgress: state.creditsClaimProgress ? { ...state.creditsClaimProgress, status: 'success' } : null
+        creditsClaimProgress: state.creditsClaimProgress
+          ? { ...state.creditsClaimProgress, status: 'success', destinationTxHash: txHash }
+          : null
       }
     }
 
@@ -133,7 +136,15 @@ export function ensReducer(state: ENSState = INITIAL_STATE, action: ENSReducerAc
         ...state,
         loading: loadingReducer(state.loading, action),
         error,
-        creditsClaimProgress: state.creditsClaimProgress ? { ...state.creditsClaimProgress, status: 'failed' } : null
+        // Always surface a 'failed' progress so the modal can render the failure view
+        // (with a retry), even when the claim failed before cross-chain polling started
+        // (e.g. the Polygon useCredits tx reverted). Preserve any tx hash/scan URL we had.
+        creditsClaimProgress: {
+          name: action.payload.name,
+          polygonTxHash: state.creditsClaimProgress?.polygonTxHash ?? '',
+          coralScanUrl: state.creditsClaimProgress?.coralScanUrl ?? '',
+          status: 'failed'
+        }
       }
     }
 

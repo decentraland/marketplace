@@ -50,9 +50,17 @@ export type WorldStatus = {
 
 export type CreditsClaimProgressStatus = 'polling' | 'success' | 'failed'
 
+// Sub-stage within the 'polling' status, to drive a friendly step-by-step UI:
+//  - 'consuming'   → the origin (Polygon) tx is being mined (credits being spent)
+//  - 'registering' → the origin tx is done; the NAME is being registered on the destination
+export type CreditsClaimProgressStage = 'consuming' | 'registering'
+
 export type CreditsClaimProgress = {
   name: string
   polygonTxHash: string
   coralScanUrl: string
   status: CreditsClaimProgressStatus
+  stage?: CreditsClaimProgressStage
+  // Destination (Ethereum) tx hash where the NAME was registered — set on success.
+  destinationTxHash?: string
 }
