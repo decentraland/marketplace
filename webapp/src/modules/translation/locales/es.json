@@ -1239,6 +1239,10 @@
       "title": "Servicio temporalmente no disponible",
       "body": "Esta función no está disponible en este momento. Por favor, inténtalo de nuevo más tarde."
     },
+    "claim_name_with_credits_cost_unavailable": {
+      "title": "Temporalmente no disponible",
+      "body": "El registro de NAME con créditos está temporalmente pausado por los altos costos de la red. Por favor, inténtalo de nuevo más tarde."
+    },
     "cross_chain_tx": {
       "body": "La transacción puede tardar hasta <highlight>3 miuntos</highlight> para ser procesada.<br></br>Puedes seguir su progreso en los siguientes enlaces:",
       "view_transaction": "Ver transacción"

@@ -24,7 +24,7 @@ import { isErrorWithMessage } from '../../lib/error'
 import { pollSquidRouteStatus, SquidStatusResponse } from '../../lib/squid'
 import { getCrossChainNameProvider } from '../features/selectors'
 import { getCurrentIdentity } from '../identity/selectors'
-import { getClaimNameWithCreditsRouteUnavailableToast } from '../toast/toasts'
+import { getClaimNameWithCreditsCostUnavailableToast, getClaimNameWithCreditsRouteUnavailableToast } from '../toast/toasts'
 import { getWallet } from '../wallet/selectors'
 import {
   CLAIM_NAME_REQUEST,
@@ -233,10 +233,17 @@ export function* ensSaga() {
         }
       } catch (routeError) {
         captureException(routeError, { tags: { saga: 'handleClaimNameWithCreditsRequest', phase: 'fetch-route', provider: providerName } })
+        // Keep the modal open and surface the failure view (with retry) instead of closing —
+        // the failed creditsClaimProgress drives the modal's failed state.
+        if (routeError instanceof RouteCostTooHighError) {
+          // The route is withheld because the bridge cost is over budget right now. Tell the
+          // user it's a temporary, network-cost condition and to try again later.
+          yield put(showToast(getClaimNameWithCreditsCostUnavailableToast()))
+          yield put(claimNameWithCreditsFailure(name, t('toast.claim_name_with_credits_cost_unavailable.body')))
+          return
+        }
         const routeUnavailableMessage = t('toast.claim_name_with_credits_route_unavailable.body')
         yield put(showToast(getClaimNameWithCreditsRouteUnavailableToast()))
-        // Keep the modal open and surface the failure view (with retry) instead of
-        // closing — the failed creditsClaimProgress drives the modal's failed state.
         yield put(claimNameWithCreditsFailure(name, routeUnavailableMessage))
         return
       }
@@ -366,6 +373,18 @@ export function* ensSaga() {
  * The vanilla `CreditsClient.fetchCreditsNameRoute` doesn't expose this param yet —
  * once `decentraland-dapps` updates the client signature, this helper can be removed.
  */
+/**
+ * Thrown when the credits-server withholds the route because the Across bridge cost exceeds
+ * what the executor can cover (HTTP 503 + code ROUTE_COST_TOO_HIGH). Distinct from a generic
+ * route failure so the saga can show a "temporarily unavailable due to network costs" message.
+ */
+export class RouteCostTooHighError extends Error {
+  constructor() {
+    super('Name registration is temporarily unavailable due to high network costs')
+    this.name = 'RouteCostTooHighError'
+  }
+}
+
 async function fetchCreditsNameRouteWithProvider(
   creditsServerUrl: string,
   identity: AuthIdentity,
@@ -378,6 +397,20 @@ async function fetchCreditsNameRouteWithProvider(
   const signedFetch = (await import('decentraland-crypto-fetch')).default
   const response = await signedFetch(url, { method: 'GET', identity })
   if (!response.ok) {
+    // The credits-server returns 503 + code ROUTE_COST_TOO_HIGH when Across's required input
+    // exceeds what the executor can cover (bridge cost over the buffer cap). The route would
+    // revert on-chain, so it's withheld — surface it as a distinct, retryable condition rather
+    // than the generic route-unavailable error.
+    let code: string | undefined
+    try {
+      const body = (await response.json()) as { code?: string }
+      code = body?.code
+    } catch {
+      // Non-JSON error body — fall through to the generic error below.
+    }
+    if (code === 'ROUTE_COST_TOO_HIGH') {
+      throw new RouteCostTooHighError()
+    }
     throw new Error(`Credits route request failed: ${response.status} ${response.statusText}`)
   }
   return response.json() as Promise<CreditsNameRouteResponse & { provider: 'axelar' | 'across' }>
