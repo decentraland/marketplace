@@ -1271,6 +1271,10 @@
       "title": "Service temporarily unavailable",
       "body": "This feature is not available at the moment. Please try again later."
     },
+    "claim_name_with_credits_cost_unavailable": {
+      "title": "Temporarily unavailable",
+      "body": "NAME registration with credits is temporarily paused due to high network costs. Please try again later."
+    },
     "cross_chain_tx": {
       "body": "The transaction can take up to <highlight>3 minutes</highlight> to be processed.<br></br>You can also track its progress in the links below:",
       "view_transaction": "View transaction"
