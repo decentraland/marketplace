@@ -898,8 +898,24 @@
       "title": "处理购买",
       "processing": "处理您的跨链交易...",
       "description": "您的交易正在跨链处理。这可能需要几分钟。",
+      "consuming_title": "正在使用您的积分",
+      "consuming_description": "请稍候 — 只需片刻。",
+      "registering_title": "正在注册您的 NAME",
+      "registering_description": "即将完成 — 正在收尾您的购买。",
       "track_on_coral_scan": "在 CoralScan 上跟踪",
+      "view_transaction": "查看交易",
       "note": "请保持此窗口打开。当交易完成时，您将被自动重定向。"
+    },
+    "cross_chain_success": {
+      "title": "您的 NAME 已就绪！",
+      "description": "{name}.dcl.eth 现在归您所有。",
+      "done": "完成"
+    },
+    "cross_chain_failed": {
+      "title": "出了点问题",
+      "description": "您的购买未完成。请重试。",
+      "try_again": "重试",
+      "close": "关闭"
     }
   },
   "partially_supported_network_card": {

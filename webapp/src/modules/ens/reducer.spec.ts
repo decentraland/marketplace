@@ -122,7 +122,8 @@ describe('ENS Reducer', () => {
         },
         creditsClaimProgress: {
           ...initialState.creditsClaimProgress,
-          status: 'success'
+          status: 'success',
+          destinationTxHash: 'aTxHash'
         }
       })
     })
@@ -197,7 +198,8 @@ describe('ENS Reducer', () => {
           name: 'example',
           polygonTxHash: '0x123',
           coralScanUrl: 'https://coralscan.squidrouter.com/tx/0x123',
-          status: 'polling'
+          status: 'polling',
+          stage: 'registering'
         }
       })
     })

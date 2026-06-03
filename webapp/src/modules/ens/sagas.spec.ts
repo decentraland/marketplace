@@ -416,7 +416,7 @@ describe('ENS Saga', () => {
         mockIdentity = {} as AuthIdentity
       })
 
-      it('should show a route-unavailable toast, put a failure action with the route-unavailable message, and close the modal', () => {
+      it('should show a route-unavailable toast and put a failure action with the route-unavailable message (modal stays open for retry)', () => {
         const clientError = new Error('Server error: Something went wrong')
         const routeUnavailableMessage = t('toast.claim_name_with_credits_route_unavailable.body')
 
@@ -432,7 +432,6 @@ describe('ENS Saga', () => {
           ])
           .put(showToast(getClaimNameWithCreditsRouteUnavailableToast()))
           .put(claimNameWithCreditsFailure(mockName, routeUnavailableMessage))
-          .put(closeModal('BuyWithCryptoModal'))
           .dispatch(claimNameWithCreditsRequest(mockName))
           .silentRun()
       })
@@ -524,13 +523,13 @@ describe('ENS Saga', () => {
             [select(getCurrentIdentity), mockIdentity],
             [matchers.call.fn(CreditsClient.prototype.fetchCreditsNameRoute as (...args: unknown[]) => Promise<unknown>), mockRouteData],
             [matchers.call.fn(CreditsService.prototype.useCreditsWithExternalCall as (...args: unknown[]) => Promise<string>), mockTxHash],
+            [matchers.call.fn(waitForTx), null],
             [matchers.call.fn(pollSquidRouteStatus), mockSquidResponse],
             [matchers.call.fn(getTokenIdFromEthereumContract), mockTokenId]
           ])
           .put(claimNameWithCreditsTransactionSubmitted(mockName, mockWallet.address, ChainId.MATIC_MAINNET, mockTxHash))
           .put(claimNameWithCreditsCrossChainPolling(mockName, mockTxHash, coralScanUrl))
           .put(claimNameWithCreditsSuccess(expectedENS, mockName, '0xEthereumTxHash'))
-          .put(closeModal('BuyWithCryptoModal'))
           .dispatch(claimNameWithCreditsRequest(mockName))
           .silentRun()
       })
@@ -573,7 +572,7 @@ describe('ENS Saga', () => {
         mockTxHash = '0xTransactionHash'
       })
 
-      it('should dispatch transaction submitted, polling action, failure action, and close modal', () => {
+      it('should dispatch transaction submitted, polling action, and failure action (modal stays open for retry)', () => {
         const pollingError = new Error('Cross-chain transaction polling timeout')
         const coralScanUrl = `${CORAL_SCAN_BASE_URL}/${mockTxHash}`
 
@@ -584,12 +583,12 @@ describe('ENS Saga', () => {
             [select(getCurrentIdentity), mockIdentity],
             [matchers.call.fn(CreditsClient.prototype.fetchCreditsNameRoute as (...args: unknown[]) => Promise<unknown>), mockRouteData],
             [matchers.call.fn(CreditsService.prototype.useCreditsWithExternalCall as (...args: unknown[]) => Promise<string>), mockTxHash],
+            [matchers.call.fn(waitForTx), null],
             [matchers.call.fn(pollSquidRouteStatus), Promise.reject(pollingError)]
           ])
           .put(claimNameWithCreditsTransactionSubmitted(mockName, mockWallet.address, ChainId.MATIC_MAINNET, mockTxHash))
           .put(claimNameWithCreditsCrossChainPolling(mockName, mockTxHash, coralScanUrl))
           .put(claimNameWithCreditsFailure(mockName, pollingError.message))
-          .put(closeModal('BuyWithCryptoModal'))
           .dispatch(claimNameWithCreditsRequest(mockName))
           .silentRun()
       })

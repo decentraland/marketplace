@@ -43,6 +43,8 @@ const squidURL = config.get('SQUID_API_URL')
 
 export const CROSS_CHAIN_POLLING_TEST_ID = 'cross-chain-polling'
 export const CORAL_SCAN_LINK_TEST_ID = 'coral-scan-link'
+export const CROSS_CHAIN_FAILED_TEST_ID = 'cross-chain-failed'
+export const CROSS_CHAIN_SUCCESS_TEST_ID = 'cross-chain-success'
 
 export const BuyWithCryptoModal = (props: Props) => {
   const {
@@ -66,10 +68,13 @@ export const BuyWithCryptoModal = (props: Props) => {
     onBuyWithCredits,
     onGetMana,
     onClose,
-    onGoBack
+    onGoBack,
+    onClearCreditsClaimProgress
   } = props
 
   const isPollingCrossChain = creditsClaimProgress?.status === 'polling'
+  const isCrossChainFailed = creditsClaimProgress?.status === 'failed'
+  const isCrossChainSucceeded = creditsClaimProgress?.status === 'success'
 
   const crossChainSupportedChains = useRef<ChainId[]>([])
   const analytics = getAnalytics()
@@ -501,7 +506,9 @@ export const BuyWithCryptoModal = (props: Props) => {
       )
     }
 
-    // When polling cross-chain, show a different title and disable navigation
+    // The cross-chain credit states (polling / success / failed) render their own content
+    // and actions, so suppress the default back/close navigation. Polling shows a title;
+    // the terminal success/failed views let their own content carry the message.
     if (isPollingCrossChain) {
       return (
         <ModalNavigation
@@ -511,6 +518,10 @@ export const BuyWithCryptoModal = (props: Props) => {
           })}
         />
       )
+    }
+
+    if (isCrossChainSucceeded || isCrossChainFailed) {
+      return <ModalNavigation title="" />
     }
 
     return (
@@ -523,17 +534,42 @@ export const BuyWithCryptoModal = (props: Props) => {
         onClose={!isBuyingAsset ? onClose : undefined}
       />
     )
-  }, [asset.name, onClose, showChainSelector, showTokenSelector, isBuyingAsset, isPollingCrossChain])
+  }, [
+    asset.name,
+    onClose,
+    onGoBack,
+    showChainSelector,
+    showTokenSelector,
+    isBuyingAsset,
+    isPollingCrossChain,
+    isCrossChainSucceeded,
+    isCrossChainFailed
+  ])
 
   const renderCrossChainPollingContent = useCallback(() => {
     if (!creditsClaimProgress) return null
+
+    // Friendly, non-technical step copy. 'consuming' = origin tx mining (spending credits),
+    // 'registering' = bridged and finalizing the NAME on the destination.
+    const isConsuming = creditsClaimProgress.stage === 'consuming'
+    const title = isConsuming
+      ? t('buy_with_crypto_modal.cross_chain_polling.consuming_title', { fallback: 'Consuming your credits' })
+      : t('buy_with_crypto_modal.cross_chain_polling.registering_title', { fallback: 'Registering your NAME' })
+    const description = isConsuming
+      ? t('buy_with_crypto_modal.cross_chain_polling.consuming_description', {
+          fallback: 'Hang tight — this only takes a moment.'
+        })
+      : t('buy_with_crypto_modal.cross_chain_polling.registering_description', {
+          fallback: 'Almost done — finishing up your purchase.'
+        })
 
     return (
       <div className={styles.crossChainPollingContainer} data-testid={CROSS_CHAIN_POLLING_TEST_ID}>
         <div className={styles.crossChainPollingContent}>
           <Loader active size="large" inline />
-          <h3 className={styles.crossChainPollingTitle}>{t('buy_with_crypto_modal.cross_chain_polling.processing')}</h3>
-          <p className={styles.crossChainPollingDescription}>{t('buy_with_crypto_modal.cross_chain_polling.description')}</p>
+          <h3 className={styles.crossChainPollingTitle}>{title}</h3>
+          <p className={styles.crossChainPollingDescription}>{description}</p>
+          {/* Subtle, non-technical link to view the on-chain transaction. */}
           <a
             href={creditsClaimProgress.coralScanUrl}
             target="_blank"
@@ -542,7 +578,7 @@ export const BuyWithCryptoModal = (props: Props) => {
             data-testid={CORAL_SCAN_LINK_TEST_ID}
           >
             <Icon name="external alternate" />
-            {t('buy_with_crypto_modal.cross_chain_polling.track_on_coral_scan')}
+            {t('buy_with_crypto_modal.cross_chain_polling.view_transaction', { fallback: 'View transaction' })}
           </a>
           <p className={styles.crossChainPollingNote}>{t('buy_with_crypto_modal.cross_chain_polling.note')}</p>
         </div>
@@ -568,8 +604,80 @@ export const BuyWithCryptoModal = (props: Props) => {
         search: search.toString()
       })
     }
+    // Clear any failed claim progress so a future open starts clean (not on the failed view).
+    onClearCreditsClaimProgress?.()
     onClose()
-  }, [history, location.search, onClose])
+  }, [history, location.search, onClose, onClearCreditsClaimProgress])
+
+  // Retry a failed credits claim: clear the failed progress, then re-trigger the
+  // same credits payment flow (re-fetches a fresh route + re-signs + re-submits).
+  const handleTryAgainCreditsClaim = useCallback(() => {
+    onClearCreditsClaimProgress?.()
+    onPayWithCredits()
+  }, [onClearCreditsClaimProgress, onPayWithCredits])
+
+  const handleCloseCreditsClaimModal = useCallback(() => {
+    handleOnClose()
+  }, [handleOnClose])
+
+  const renderCrossChainFailedContent = useCallback(() => {
+    return (
+      <div className={styles.crossChainPollingContainer} data-testid={CROSS_CHAIN_FAILED_TEST_ID}>
+        <div className={styles.crossChainPollingContent}>
+          <Icon name="warning circle" size="huge" color="red" />
+          <h3 className={styles.crossChainPollingTitle}>
+            {t('buy_with_crypto_modal.cross_chain_failed.title', { fallback: 'Something went wrong' })}
+          </h3>
+          <p className={styles.crossChainPollingDescription}>
+            {t('buy_with_crypto_modal.cross_chain_failed.description', {
+              fallback: "Your purchase didn't go through. Please try again."
+            })}
+          </p>
+          <Button primary onClick={handleTryAgainCreditsClaim}>
+            {t('buy_with_crypto_modal.cross_chain_failed.try_again', { fallback: 'Try again' })}
+          </Button>
+          <Button basic onClick={handleCloseCreditsClaimModal}>
+            {t('buy_with_crypto_modal.cross_chain_failed.close', { fallback: 'Close' })}
+          </Button>
+        </div>
+      </div>
+    )
+  }, [handleTryAgainCreditsClaim, handleCloseCreditsClaimModal])
+
+  const renderCrossChainSuccessContent = useCallback(() => {
+    if (!creditsClaimProgress) return null
+    // Destination tx (where the NAME was registered) → Etherscan; origin tx → its scan URL.
+    // Both links are deliberately neutral ("View transaction") — no chain/explorer jargon.
+    const destinationTxUrl = creditsClaimProgress.destinationTxHash
+      ? `https://etherscan.io/tx/${creditsClaimProgress.destinationTxHash}`
+      : null
+
+    return (
+      <div className={styles.crossChainPollingContainer} data-testid={CROSS_CHAIN_SUCCESS_TEST_ID}>
+        <div className={styles.crossChainPollingContent}>
+          <Icon name="check circle" size="huge" color="green" />
+          <h3 className={styles.crossChainPollingTitle}>
+            {t('buy_with_crypto_modal.cross_chain_success.title', { fallback: 'Your NAME is ready!' })}
+          </h3>
+          <p className={styles.crossChainPollingDescription}>
+            {t('buy_with_crypto_modal.cross_chain_success.description', {
+              name: creditsClaimProgress.name,
+              fallback: `${creditsClaimProgress.name}.dcl.eth is now yours.`
+            })}
+          </p>
+          {destinationTxUrl ? (
+            <a href={destinationTxUrl} target="_blank" rel="noopener noreferrer" className={styles.coralScanLink}>
+              <Icon name="external alternate" />
+              {t('buy_with_crypto_modal.cross_chain_polling.view_transaction', { fallback: 'View transaction' })}
+            </a>
+          ) : null}
+          <Button primary onClick={handleCloseCreditsClaimModal}>
+            {t('buy_with_crypto_modal.cross_chain_success.done', { fallback: 'Done' })}
+          </Button>
+        </div>
+      </div>
+    )
+  }, [creditsClaimProgress, handleCloseCreditsClaimModal])
 
   const handleShowChainSelector = useCallback(() => {
     setShowChainSelector(true)
@@ -610,6 +718,10 @@ export const BuyWithCryptoModal = (props: Props) => {
         <>
           {isPollingCrossChain ? (
             renderCrossChainPollingContent()
+          ) : isCrossChainSucceeded ? (
+            renderCrossChainSuccessContent()
+          ) : isCrossChainFailed ? (
+            renderCrossChainFailedContent()
           ) : showChainSelector || showTokenSelector ? (
             <div>
               {showChainSelector && wallet ? (
@@ -768,7 +880,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           )}
         </>
       </Modal.Content>
-      {showChainSelector || showTokenSelector || isPollingCrossChain ? null : (
+      {showChainSelector || showTokenSelector || isPollingCrossChain || isCrossChainFailed || isCrossChainSucceeded ? null : (
         <Modal.Actions>
           <div className={classNames(styles.buttons, isWearableOrEmote(asset) && 'with-mana')}>{renderMainActionButton()}</div>
           {isWearableOrEmote(asset) && isBuyWithCardPage ? (

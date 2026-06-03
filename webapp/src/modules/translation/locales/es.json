@@ -896,8 +896,24 @@
       "title": "Procesando compra",
       "processing": "Procesando tu transacción cruzada...",
       "description": "Tu transacción está siendo procesada a través de redes. Esto puede tomar unos minutos.",
+      "consuming_title": "Usando tus créditos",
+      "consuming_description": "Aguantá un momento — esto tarda solo unos segundos.",
+      "registering_title": "Registrando tu NAME",
+      "registering_description": "Ya casi — estamos finalizando tu compra.",
       "track_on_coral_scan": "Seguir en CoralScan",
+      "view_transaction": "Ver transacción",
       "note": "Por favor, mantén esta ventana abierta. Serás redirigido automáticamente cuando la transacción se complete."
+    },
+    "cross_chain_success": {
+      "title": "¡Tu NAME está listo!",
+      "description": "{name}.dcl.eth ya es tuyo.",
+      "done": "Listo"
+    },
+    "cross_chain_failed": {
+      "title": "Algo salió mal",
+      "description": "Tu compra no se completó. Por favor, intentá de nuevo.",
+      "try_again": "Intentar de nuevo",
+      "close": "Cerrar"
     }
   },
   "partially_supported_network_card": {
