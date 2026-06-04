@@ -37,7 +37,7 @@ jobs:
           corepack install -g npm@11
           npm --version
       - name: Set package.json version
-        uses: decentraland/oddish-action@master
+        uses: decentraland/oddish-action@0074f2d535c43b5c83f136525304a6277166d77f # @master
         with:
           cwd: ./webapp
           deterministic-snapshot: true
@@ -53,7 +53,7 @@ jobs:
         # No NODE_AUTH_TOKEN — npm authenticates via OIDC against the Trusted
         # Publisher configured for @dcl/marketplace-site on npmjs.com. Provenance
         # is automatic under Trusted Publishing but we keep the flag for clarity.
-        uses: decentraland/oddish-action@master
+        uses: decentraland/oddish-action@0074f2d535c43b5c83f136525304a6277166d77f # @master
         with:
           cwd: ./webapp/dist
           deterministic-snapshot: true
