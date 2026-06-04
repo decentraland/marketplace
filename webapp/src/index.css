@@ -25,6 +25,20 @@ code {
     monospace;
 }
 
+/* IAP simplified navbar: hide nav links (DesktopTabList) and mobile hamburger */
+.iap-navbar nav > div:first-child > div {
+  display: none !important;
+}
+.iap-navbar nav > div:last-child > button:last-child {
+  display: none !important;
+}
+
+/* IAP filters: locked state */
+.iap-filter-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 .danger-text {
   color: var(--danger);
 }

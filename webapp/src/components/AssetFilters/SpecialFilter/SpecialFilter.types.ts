@@ -1,6 +1,7 @@
 export type Props = {
   isOnlySmart?: boolean
   withCredits?: boolean
+  withCreditsDisabled?: boolean
   isCreditsEnabled?: boolean
   onSmartChange?: (value: boolean) => void
   onWithCreditsChange?: (value: boolean) => void

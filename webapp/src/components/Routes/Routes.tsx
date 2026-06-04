@@ -92,7 +92,17 @@ const Routes = ({ inMaintenance, onLocationChanged }: Props) => {
         <Route exact path={locations.item()} component={renderItemAssetPage} />
         <ProtectedRoute exact path={locations.settings()} component={SettingsPage} />
         <ProtectedRoute exact path={locations.activity()} component={ActivityPage} />
-        <Route exact path={locations.root()} component={HomePage} />
+        <Route
+          exact
+          path={locations.root()}
+          render={() => {
+            const params = new URLSearchParams(location.search)
+            if (params.get('view') === 'mobile-iap') {
+              return <Redirect to={`${locations.browse()}${location.search}`} />
+            }
+            return <HomePage />
+          }}
+        />
         <Route exact path={locations.parcel()} component={LegacyNFTPage} />
         <Route exact path={locations.estate()} component={LegacyNFTPage} />
         <Route exact path={locations.success()} component={SuccessPage} />

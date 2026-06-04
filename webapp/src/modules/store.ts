@@ -1,4 +1,4 @@
-import { createBrowserHistory, History, Location } from 'history'
+import { createBrowserHistory, History, Location, LocationDescriptor, Path } from 'history'
 import { Action, applyMiddleware, compose, createStore, Middleware } from 'redux'
 import { createLogger } from 'redux-logger'
 import createSagasMiddleware from 'redux-saga'
@@ -40,6 +40,48 @@ export const createHistory = () => {
       return locations.slice(-n)
     }
     return locations
+  }
+
+  // Persist `view` query param (e.g. mobile-iap) and forced filters across all navigations
+  const initialParams = new URLSearchParams(window.location.search)
+  const viewParam = initialParams.get('view')
+  const isIAP = viewParam === 'mobile-iap'
+
+  if (viewParam) {
+    const injectParams = (path: string | Location): string | Location => {
+      if (typeof path === 'string') {
+        const [pathname, search = ''] = path.split('?')
+        const params = new URLSearchParams(search)
+        if (!params.has('view')) {
+          params.set('view', viewParam)
+        }
+        if (isIAP) {
+          params.set('withCredits', 'true')
+          params.set('status', 'on_sale')
+        }
+        return `${pathname}?${params.toString()}`
+      }
+      const params = new URLSearchParams(path.search || '')
+      if (!params.has('view')) {
+        params.set('view', viewParam)
+      }
+      if (isIAP) {
+        params.set('withCredits', 'true')
+        params.set('status', 'on_sale')
+      }
+      return { ...path, search: `?${params.toString()}` }
+    }
+
+    const originalPush = history.push.bind(history)
+    const originalReplace = history.replace.bind(history)
+
+    history.push = (location: Path | LocationDescriptor, state?: History.LocationState) => {
+      originalPush(injectParams(location as string | Location) as Path & Location, state)
+    }
+
+    history.replace = (location: Path | LocationDescriptor, state?: History.LocationState) => {
+      originalReplace(injectParams(location as string | Location) as Path & Location, state)
+    }
   }
 
   return history

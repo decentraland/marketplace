@@ -5,6 +5,7 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Tabs, Mobile, Button, useMobileMediaQuery } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
+import { useIsIAP } from '../../modules/iap/useIAP'
 import { locations } from '../../modules/routing/locations'
 import { SortBy } from '../../modules/routing/types'
 import { VendorName } from '../../modules/vendor'
@@ -19,6 +20,7 @@ const Navigation = (props: Props) => {
   const { activeTab, isFullscreen, campaignTab, isCampaignBrowserEnabled, onOpenBuyManaWithFiatModal, onClearFilters } = props
   const analytics = getAnalytics()
   const isMobile = useMobileMediaQuery()
+  const isIAP = useIsIAP()
 
   const handleOpenBuyManaWithFiatModal = () => {
     analytics?.track(events.OPEN_BUY_MANA_MODAL)
@@ -37,10 +39,12 @@ const Navigation = (props: Props) => {
     <div className="Navigation">
       <Tabs isFullscreen={isFullscreen}>
         <Tabs.Left>
-          <Link to={locations.root()}>
-            <Tabs.Tab active={activeTab === NavigationTab.OVERVIEW}>{t('navigation.overview')}</Tabs.Tab>
-          </Link>
-          {isCampaignBrowserEnabled && campaignTab ? (
+          {!isIAP && (
+            <Link to={locations.root()}>
+              <Tabs.Tab active={activeTab === NavigationTab.OVERVIEW}>{t('navigation.overview')}</Tabs.Tab>
+            </Link>
+          )}
+          {!isIAP && isCampaignBrowserEnabled && campaignTab ? (
             <Link
               to={locations.campaign({
                 section: decentraland.Section.WEARABLES,
@@ -65,25 +69,29 @@ const Navigation = (props: Props) => {
           <Link to={locations.browse(browseDefaultOptions)} onClick={onClearFilters}>
             <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>{t('navigation.collectibles')}</Tabs.Tab>
           </Link>
-          <Link to={locations.lands({ section: Section.LAND, assetType: AssetType.NFT })}>
-            <Tabs.Tab active={activeTab === NavigationTab.LANDS}>{t('navigation.land')}</Tabs.Tab>
-          </Link>
-          <Link to={locations.claimName()}>
-            <Tabs.Tab active={activeTab === NavigationTab.NAMES}>{t('navigation.names')}</Tabs.Tab>
-          </Link>
-          <Link to={locations.defaultCurrentAccount()}>
-            <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>{t('navigation.my_assets')}</Tabs.Tab>
-          </Link>
-          <Link to={locations.lists()}>
-            <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>{t('navigation.my_lists')}</Tabs.Tab>
-          </Link>
-          <Mobile>
-            <Link to={locations.activity()}>
-              <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>{t('navigation.activity')}</Tabs.Tab>
-            </Link>
-          </Mobile>
+          {!isIAP && (
+            <>
+              <Link to={locations.lands({ section: Section.LAND, assetType: AssetType.NFT })}>
+                <Tabs.Tab active={activeTab === NavigationTab.LANDS}>{t('navigation.land')}</Tabs.Tab>
+              </Link>
+              <Link to={locations.claimName()}>
+                <Tabs.Tab active={activeTab === NavigationTab.NAMES}>{t('navigation.names')}</Tabs.Tab>
+              </Link>
+              <Link to={locations.defaultCurrentAccount()}>
+                <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>{t('navigation.my_assets')}</Tabs.Tab>
+              </Link>
+              <Link to={locations.lists()}>
+                <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>{t('navigation.my_lists')}</Tabs.Tab>
+              </Link>
+              <Mobile>
+                <Link to={locations.activity()}>
+                  <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>{t('navigation.activity')}</Tabs.Tab>
+                </Link>
+              </Mobile>
+            </>
+          )}
         </Tabs.Left>
-        {!isMobile ? (
+        {!isMobile && !isIAP ? (
           <Tabs.Right>
             <Button inverted onClick={handleOpenBuyManaWithFiatModal} size="small">
               {t('navigation.buy_mana_with_fiat')}
