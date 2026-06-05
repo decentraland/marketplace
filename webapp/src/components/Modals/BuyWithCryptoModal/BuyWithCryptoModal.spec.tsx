@@ -1160,6 +1160,46 @@ describe('BuyWithCryptoModal', () => {
             expect(getByTestId(BUY_WITH_CARD_TEST_ID)).toBeInTheDocument()
           })
         })
+
+        describe('and wants to pay with MANA bridged from Ethereum but is still connected to Polygon', () => {
+          beforeEach(() => {
+            modalProps.price = '10000000000000000' // 0.1 MANA
+            modalProps.wallet = {
+              ...modalProps.wallet,
+              networks: {
+                [Network.ETHEREUM]: {
+                  mana: 1000000000000000000 // 1 MANA on Ethereum to cover the cross-chain route
+                },
+                [Network.MATIC]: {
+                  mana: 0
+                }
+              }
+            } as Wallet
+            modalProps.onGetCrossChainRoute = jest.fn().mockResolvedValue(undefined)
+            modalProps.onSwitchNetwork = jest.fn()
+          })
+
+          it('should render the switch network button so the wallet moves to the route source chain before buying', async () => {
+            const { getByTestId, findByTestId, findByText } = await renderBuyWithCryptoModal(modalProps)
+
+            // pay with MANA but sourced from Ethereum: pick the Ethereum chain in the selector
+            const chainSelector = getByTestId(CHAIN_SELECTOR_DATA_TEST_ID)
+            fireEvent.click(chainSelector)
+
+            const ethereumNetworkOption = await findByText('Ethereum')
+            fireEvent.click(ethereumNetworkOption)
+
+            // The wallet is on Polygon (the asset/destination chain) while the route source is Ethereum,
+            // so the modal must ask the user to switch networks instead of letting the buy proceed —
+            // otherwise the cross-chain SDK queries MANA.balanceOf on the wrong chain and reverts with a
+            // cryptic "balanceOf returned 0x" decode error.
+            const switchNetworkButton = await findByTestId(SWITCH_NETWORK_BUTTON_TEST_ID)
+            expect(switchNetworkButton).toBeInTheDocument()
+
+            fireEvent.click(switchNetworkButton)
+            await waitFor(() => expect(modalProps.onSwitchNetwork).toHaveBeenCalledWith(ChainId.ETHEREUM_MAINNET))
+          })
+        })
       })
 
       describe('and wants to pay with another Ethereum token', () => {

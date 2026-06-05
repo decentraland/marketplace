@@ -431,8 +431,13 @@ export const BuyWithCryptoModal = (props: Props) => {
             : renderBuyNowButton()
       }
 
-      // can buy it with MANA from other chain through the provider
-      return renderBuyNowButton()
+      // Paying with MANA from another chain (cross-chain MANA→MANA via the provider): the wallet
+      // must be on the route's source chain before buying. The cross-chain SDK executes the
+      // source swap+bridge there and queries the source token's balanceOf on that chain — if the
+      // wallet is on the destination chain instead, the call hits a chain where the source MANA
+      // has no code and fails with a cryptic "balanceOf returned 0x" decode error. Gate it like
+      // the non-MANA branch above.
+      return selectedChain === wallet.chainId ? renderBuyNowButton() : renderSwitchNetworkButton()
     } else if (!route && routeFailed) {
       // can't buy Get Mana and Buy With Card buttons
       return renderGetMANAButton()
