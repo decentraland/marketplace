@@ -176,6 +176,19 @@
   margin: 0px;
 }
 
+.AssetCard .CreditsPrice {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #a0abff;
+  white-space: nowrap;
+}
+
+.AssetCard .CreditsPrice .creditsIcon {
+  width: 1em;
+  height: 1em;
+}
+
 .AssetCard .ens-subdomain {
   overflow: hidden;
   border-top-right-radius: 10px;

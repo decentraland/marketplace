@@ -3,12 +3,14 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import { AssetType } from '../../../../modules/asset/types'
 import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
+import { useIsIAP } from '../../../../modules/iap/useIAP'
 import BidButton from '../../../BidButton'
 import { BuyNFTButtons } from '../BuyNFTButtons'
 import { Props } from './ItemSaleActions.types'
 import styles from './ItemSaleActions.module.css'
 
 const ItemSaleActions = ({ item, wallet, customClassnames, bids, onUseCredits }: Props) => {
+  const isIAP = useIsIAP()
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
   const alreadyBid = !!bids.find(bid => bid.bidder === wallet?.address)
@@ -39,7 +41,7 @@ const ItemSaleActions = ({ item, wallet, customClassnames, bids, onUseCredits }:
               onUseCredits={onUseCredits}
             />
           )}
-          {canBid && <BidButton asset={item} alreadyBid={alreadyBid} />}
+          {canBid && !isIAP && <BidButton asset={item} alreadyBid={alreadyBid} />}
         </>
       )}
     </>

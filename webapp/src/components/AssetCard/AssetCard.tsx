@@ -5,8 +5,10 @@ import { Item, Network, RentalListing } from '@dcl/schemas'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
+import CreditsIcon from '../../images/icon-credits.svg'
 import { Asset } from '../../modules/asset/types'
 import { getAssetName, getAssetUrl, isNFT, isCatalogItem } from '../../modules/asset/utils'
+import { useIsIAP } from '../../modules/iap/useIAP'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
 import {
@@ -93,6 +95,7 @@ const AssetCard = (props: Props) => {
 
   const { ref, inView } = useInView()
   const isMobile = useMobileMediaQuery()
+  const isIAP = useIsIAP()
   const location = useLocation()
   const showListedTag = pageName === PageName.ACCOUNT && Boolean(price) && location.pathname !== locations.root()
 
@@ -122,15 +125,26 @@ const AssetCard = (props: Props) => {
         </span>
 
         {catalogItemInformation.price ? (
-          <div className="PriceInMana">
-            <Mana size="large" network={asset.network} className="PriceInMana">
+          isIAP ? (
+            <span className="CreditsPrice">
+              <img src={CreditsIcon} alt="Credits" className="creditsIcon" />
               {catalogItemInformation.price?.includes('-')
                 ? `${formatWeiToAssetCard(catalogItemInformation.price.split(' - ')[0])} - ${formatWeiToAssetCard(
                     catalogItemInformation.price.split(' - ')[1]
                   )}`
                 : formatWeiToAssetCard(catalogItemInformation.price)}
-            </Mana>
-          </div>
+            </span>
+          ) : (
+            <div className="PriceInMana">
+              <Mana size="large" network={asset.network} className="PriceInMana">
+                {catalogItemInformation.price?.includes('-')
+                  ? `${formatWeiToAssetCard(catalogItemInformation.price.split(' - ')[0])} - ${formatWeiToAssetCard(
+                      catalogItemInformation.price.split(' - ')[1]
+                    )}`
+                  : formatWeiToAssetCard(catalogItemInformation.price)}
+              </Mana>
+            </div>
+          )
         ) : (
           `${t('asset_card.owners', {
             count: (asset as Item).owners
@@ -178,9 +192,16 @@ const AssetCard = (props: Props) => {
                   )}
                 </div>
                 {!isCatalogItem(asset) && price ? (
-                  <Mana network={asset.network} inline>
-                    {formatWeiToAssetCard(price)}
-                  </Mana>
+                  isIAP ? (
+                    <span className="CreditsPrice">
+                      <img src={CreditsIcon} alt="Credits" className="creditsIcon" />
+                      {formatWeiToAssetCard(price)}
+                    </span>
+                  ) : (
+                    <Mana network={asset.network} inline>
+                      {formatWeiToAssetCard(price)}
+                    </Mana>
+                  )
                 ) : rentalPricePerDay ? (
                   <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
                 ) : null}

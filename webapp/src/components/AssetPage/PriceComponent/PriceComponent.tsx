@@ -1,5 +1,7 @@
 import React, { useCallback } from 'react'
 import classNames from 'classnames'
+import CreditsIcon from '../../../images/icon-credits.svg'
+import { useIsIAP } from '../../../modules/iap/useIAP'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
@@ -7,6 +9,7 @@ import { Props } from './PriceComponent.types'
 import styles from './PriceComponent.module.css'
 
 const PriceComponent = ({ price, network, useCredits, credits, className }: Props) => {
+  const isIAP = useIsIAP()
   const getAdjustedPrice = useCallback(
     (originalPrice: string) => {
       if (!useCredits || !credits) return originalPrice
@@ -39,12 +42,16 @@ const PriceComponent = ({ price, network, useCredits, credits, className }: Prop
   }
 
   return (
-    <div className={classNames(styles.PriceContainer, className)}>
+    <div className={classNames(styles.PriceContainer, className, { [styles.iapPrice]: isIAP })}>
       <div className={styles.manaContainer}>
-        <Mana withTooltip size="large" network={network} />
+        {isIAP ? (
+          <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
+        ) : (
+          <Mana withTooltip size="large" network={network} />
+        )}
         <span className={styles.price}>{formatWeiToAssetCard(price)}</span>
       </div>
-      {+price > 0 && (
+      {!isIAP && +price > 0 && (
         <div className={styles.informationText}>
           {'('}
           <ManaToFiat mana={price} />
