@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { Link, useLocation } from 'react-router-dom'
-import { Item, Network, RentalListing } from '@dcl/schemas'
+import { Item, Network, NFTCategory, RentalListing } from '@dcl/schemas'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
@@ -19,6 +19,7 @@ import {
 import { locations } from '../../modules/routing/locations'
 import { PageName, SortBy } from '../../modules/routing/types'
 import { AssetImage } from '../AssetImage'
+import { useEmotePreviewPlayer } from '../EmotePreviewPlayer'
 import { FavoritesCounter } from '../FavoritesCounter'
 import { Mana } from '../Mana'
 import { EmoteTags } from './EmoteTags'
@@ -95,9 +96,39 @@ const AssetCard = (props: Props) => {
   const isMobile = useMobileMediaQuery()
   const location = useLocation()
   const showListedTag = pageName === PageName.ACCOUNT && Boolean(price) && location.pathname !== locations.root()
+  const emotePreviewPlayer = useEmotePreviewPlayer()
+  const cardContainerRef = useRef<HTMLDivElement | null>(null)
+  const isEmoteCard = asset.category === NFTCategory.EMOTE
+  // `useMobileMediaQuery` is viewport-width based, so it returns false on
+  // touch laptops/large tablets. Gate the hover preview on pointer
+  // capability too — on touch-only devices `mouseenter` fires on tap and
+  // would race the click that navigates to the asset detail page.
+  const supportsHover = useMemo(() => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches, [])
+  const canShowEmotePreview = isEmoteCard && !isMobile && supportsHover && !!emotePreviewPlayer
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
+
+  const handleEmoteHoverEnter = useCallback(() => {
+    if (!emotePreviewPlayer || !canShowEmotePreview) return
+    const container = cardContainerRef.current
+    if (!container) return
+    const imageEl = container.querySelector<HTMLElement>('.AssetImage')
+    if (!imageEl) return
+    emotePreviewPlayer.show(imageEl, {
+      contractAddress: asset.contractAddress,
+      itemId: 'itemId' in asset ? asset.itemId : null,
+      tokenId: 'tokenId' in asset ? asset.tokenId : null,
+      urn: 'urn' in asset ? asset.urn ?? null : null,
+      network: asset.network,
+      rarity: asset.data.emote?.rarity
+    })
+  }, [emotePreviewPlayer, canShowEmotePreview, asset])
+
+  const handleEmoteHoverLeave = useCallback(() => {
+    if (!emotePreviewPlayer || !canShowEmotePreview) return
+    emotePreviewPlayer.hide()
+  }, [emotePreviewPlayer, canShowEmotePreview])
   const rentalPricePerDay: string | null = useMemo(() => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null), [rental])
 
   const catalogItemInformation = useMemo(() => {
@@ -141,8 +172,20 @@ const AssetCard = (props: Props) => {
     ) : null
   }, [asset, catalogItemInformation])
 
+  const setWrapperRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      cardContainerRef.current = node
+      ref(node)
+    },
+    [ref]
+  )
+
   return (
-    <div ref={ref}>
+    <div
+      ref={setWrapperRef}
+      onMouseEnter={canShowEmotePreview ? handleEmoteHoverEnter : undefined}
+      onMouseLeave={canShowEmotePreview ? handleEmoteHoverLeave : undefined}
+    >
       <Card
         className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
         link
