@@ -1,6 +1,9 @@
 .EmotePreviewPlayer {
   position: fixed;
-  z-index: 2147483000;
+  /* Above the browse grid content but below Semantic UI's fixed navbar (101),
+     modals/dimmers (1000) and popups (1900) so the ephemeral preview never
+     paints over chrome. pointer-events:none already prevents interaction. */
+  z-index: 100;
   border-radius: 10px;
   overflow: hidden;
   pointer-events: none;

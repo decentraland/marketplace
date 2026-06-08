@@ -104,7 +104,7 @@ const AssetCard = (props: Props) => {
   // capability too — on touch-only devices `mouseenter` fires on tap and
   // would race the click that navigates to the asset detail page.
   const supportsHover = useMemo(() => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches, [])
-  const canShowEmotePreview = isEmoteCard && !isMobile && supportsHover
+  const canShowEmotePreview = isEmoteCard && !isMobile && supportsHover && !!emotePreviewPlayer
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
