@@ -25,12 +25,15 @@ code {
     monospace;
 }
 
-/* IAP simplified navbar: hide nav links (DesktopTabList) and mobile hamburger */
+/* IAP simplified navbar: hide nav links, mobile hamburger, and disable logo link */
 .iap-navbar nav > div:first-child > div {
   display: none !important;
 }
 .iap-navbar nav > div:last-child > button:last-child {
   display: none !important;
+}
+.iap-navbar nav > div:first-child > a {
+  pointer-events: none;
 }
 
 /* IAP custom mock navbar (TODO: remove once mobile auth is integrated) */
@@ -102,6 +105,19 @@ code {
   .iap-navbar-spacer {
     height: 92px;
   }
+}
+
+/* IAP footer: hide navigation links, compact layout */
+.dcl.footer.iap-footer .main-footer .links {
+  display: none;
+}
+.dcl.footer.iap-footer .main-footer {
+  height: auto;
+  margin-bottom: 0;
+}
+.dcl.footer.iap-footer {
+  height: auto;
+  margin-top: 0;
 }
 
 /* IAP filters: locked state */

@@ -12,9 +12,9 @@ import { Props } from './Navbar.types'
 const MockIAPNavbar = () => (
   <>
     <nav className="iap-navbar-custom">
-      <a href="https://decentraland.org" className="iap-navbar-logo" aria-label="Decentraland">
+      <span className="iap-navbar-logo" aria-label="Decentraland">
         <DclLogo />
-      </a>
+      </span>
       <div className="iap-navbar-right">
         <div className="iap-navbar-credits">
           <img src={CreditsIcon} alt="Credits" />
