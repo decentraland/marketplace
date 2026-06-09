@@ -181,6 +181,8 @@
   align-items: center;
   gap: 4px;
   color: #a0abff;
+  font-size: 30px;
+  font-weight: 600;
   white-space: nowrap;
 }
 

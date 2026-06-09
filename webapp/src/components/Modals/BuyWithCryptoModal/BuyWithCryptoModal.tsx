@@ -398,10 +398,8 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const renderMainActionButton = useCallback(() => {
     if (isIAP) {
-      // TODO(mock): isMock bypasses wallet check for local testing
-      const isMock = new URLSearchParams(window.location.search).get('mock') === 'true'
       return (
-        <Button fluid primary disabled={!isMock && !wallet} onClick={onPayWithCredits}>
+        <Button fluid primary disabled={!wallet} onClick={onPayWithCredits}>
           {t('buy_with_crypto_modal.buy_now')}
         </Button>
       )
