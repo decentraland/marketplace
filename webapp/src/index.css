@@ -45,6 +45,16 @@ code {
   z-index: 1 !important;
 }
 
+/* IAP: hide unsupported network modal and its dimmer (auto-switch handles it silently).
+   Target tiny modals without the buyWithCryptoModal class to avoid hiding the checkout modal. */
+body:has(.iap-navbar) .modals.dimmer:has(.ui.tiny.modal:not([class*='buyWithCryptoModal'])) {
+  background: transparent !important;
+  pointer-events: none !important;
+}
+body:has(.iap-navbar) .ui.tiny.modal:not([class*='buyWithCryptoModal']) {
+  display: none !important;
+}
+
 /* IAP: hide Intercom chat widget — uses :has() to detect IAP navbar presence */
 body:has(.iap-navbar) .intercom-lightweight-app,
 body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {

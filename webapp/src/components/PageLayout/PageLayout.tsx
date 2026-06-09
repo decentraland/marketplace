@@ -1,14 +1,38 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
+import { ChainId } from '@dcl/schemas'
+import { switchNetworkRequest } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { getChainId, isConnected } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { config } from '../../config'
 import { useIsIAP } from '../../modules/iap/useIAP'
+import { RootState } from '../../modules/reducer'
 import { Footer } from '../Footer'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { Props } from './PageLayout.types'
 import styles from './PageLayout.module.css'
 
+const useIAPAutoSwitchNetwork = () => {
+  const isIAP = useIsIAP()
+  const dispatch = useDispatch()
+  const walletConnected = useSelector(isConnected)
+  const chainId = useSelector((state: RootState) => getChainId(state))
+  const hasSwitched = useRef(false)
+
+  useEffect(() => {
+    if (!isIAP || !walletConnected || hasSwitched.current) return
+    const expectedChainId = Number(config.get('CHAIN_ID')) as ChainId
+    if (chainId && chainId !== expectedChainId) {
+      hasSwitched.current = true
+      dispatch(switchNetworkRequest(expectedChainId))
+    }
+  }, [isIAP, walletConnected, chainId, dispatch])
+}
+
 const PageLayout = ({ children, activeTab, className, hideNavigation }: Props) => {
   const isIAP = useIsIAP()
+  useIAPAutoSwitchNetwork()
 
   return (
     <div className={classNames(styles.page, className)}>
