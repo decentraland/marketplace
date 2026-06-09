@@ -7,6 +7,7 @@ import { Button, Header, Icon, Loader } from 'decentraland-ui'
 import { JumpIn } from 'decentraland-ui2'
 import { config } from '../../config'
 import { Asset, AssetType } from '../../modules/asset/types'
+import { useIsIAP } from '../../modules/iap/useIAP'
 import { locations } from '../../modules/routing/locations'
 import { isOfEnumType } from '../../utils/enums'
 import { AssetImage } from '../AssetImage'
@@ -35,6 +36,7 @@ const SuccessPageLoadingStateDescription = () => {
 
 export function SuccessPage(props: Props) {
   const { isLoading, mintedTokenId, profile, onSetNameAsAlias } = props
+  const isIAP = useIsIAP()
   const search = new URLSearchParams(useLocation().search)
   const contractAddress = search.get('contractAddress')
   const tokenId = search.get('tokenId')
@@ -113,99 +115,104 @@ export function SuccessPage(props: Props) {
                     {t('success_page.success_state.status')}
                   </span>
                   <div className={styles.actionContainer}>
-                    {assetType === AssetType.ITEM && !isLoading && mintedTokenId ? (
-                      <AssetProvider retry type={AssetType.NFT} contractAddress={contractAddress} tokenId={mintedTokenId.toString()}>
-                        {asset => (
-                          <Button
-                            as={Link}
-                            className={styles.successButton}
-                            secondary
-                            loading={!asset}
-                            to={locations.nft(contractAddress, asset?.tokenId)}
-                          >
-                            {t('success_page.success_state.view_item')}
-                          </Button>
-                        )}
-                      </AssetProvider>
-                    ) : (
+                    {!isIAP && (
                       <>
-                        {asset.category === NFTCategory.ENS ? (
-                          <div className={styles.ensActions}>
-                            <div className={styles.primaryEnsActions}>
-                              <Button as={Link} className={styles.successButton} secondary to={locations.claimName()}>
-                                {t('success_page.success_state.mint_more_names')}
+                        {assetType === AssetType.ITEM && !isLoading && mintedTokenId ? (
+                          <AssetProvider retry type={AssetType.NFT} contractAddress={contractAddress} tokenId={mintedTokenId.toString()}>
+                            {asset => (
+                              <Button
+                                as={Link}
+                                className={styles.successButton}
+                                secondary
+                                loading={!asset}
+                                to={locations.nft(contractAddress, asset?.tokenId)}
+                              >
+                                {t('success_page.success_state.view_item')}
                               </Button>
-                              {!!profile && (
-                                <>
-                                  <Button className={styles.successButton} primary onClick={() => onSetNameAsAlias(asset.name)}>
-                                    {t('success_page.success_state.set_as_primary_name')}
-                                  </Button>
-                                </>
-                              )}
-                            </div>
-                            {!!profile && (
-                              <div>
-                                <Button inverted fluid as={'a'} href={BUILDER_URL + '/names'}>
-                                  <div className={styles.manageNames}>
-                                    <div className={styles.manageNamesIcon}></div>
-                                    {t('success_page.success_state.manage_names')}
-                                  </div>
-                                </Button>
-                              </div>
                             )}
-                          </div>
-                        ) : asset.category === NFTCategory.PARCEL || asset.category === NFTCategory.ESTATE ? (
-                          <div className={styles.ensActions}>
-                            <div className={styles.primaryEnsActions}>
-                              <Button as={Link} className={styles.successButton} secondary to={locations.nft(contractAddress, tokenId)}>
-                                {t('success_page.success_state.manage_land')}
-                              </Button>
-                              {!!profile && (
-                                <>
-                                  <Button className={styles.successButton} primary href={BUILDER_URL + '/scenes'}>
-                                    {t('success_page.success_state.start_building')}
-                                  </Button>
-                                </>
-                              )}
-                            </div>
-                          </div>
+                          </AssetProvider>
                         ) : (
-                          <Button
-                            as={Link}
-                            className={styles.successButton}
-                            secondary
-                            to={
-                              assetType === AssetType.ITEM
-                                ? locations.item(contractAddress, tokenId)
-                                : locations.nft(contractAddress, tokenId)
-                            }
-                          >
-                            {t('success_page.success_state.view_item')}
-                          </Button>
+                          <>
+                            {asset.category === NFTCategory.ENS ? (
+                              <div className={styles.ensActions}>
+                                <div className={styles.primaryEnsActions}>
+                                  <Button as={Link} className={styles.successButton} secondary to={locations.claimName()}>
+                                    {t('success_page.success_state.mint_more_names')}
+                                  </Button>
+                                  {!!profile && (
+                                    <Button className={styles.successButton} primary onClick={() => onSetNameAsAlias(asset.name)}>
+                                      {t('success_page.success_state.set_as_primary_name')}
+                                    </Button>
+                                  )}
+                                </div>
+                                {!!profile && (
+                                  <div>
+                                    <Button inverted fluid as={'a'} href={BUILDER_URL + '/names'}>
+                                      <div className={styles.manageNames}>
+                                        <div className={styles.manageNamesIcon}></div>
+                                        {t('success_page.success_state.manage_names')}
+                                      </div>
+                                    </Button>
+                                  </div>
+                                )}
+                              </div>
+                            ) : asset.category === NFTCategory.PARCEL || asset.category === NFTCategory.ESTATE ? (
+                              <div className={styles.ensActions}>
+                                <div className={styles.primaryEnsActions}>
+                                  <Button as={Link} className={styles.successButton} secondary to={locations.nft(contractAddress, tokenId)}>
+                                    {t('success_page.success_state.manage_land')}
+                                  </Button>
+                                  {!!profile && (
+                                    <Button className={styles.successButton} primary href={BUILDER_URL + '/scenes'}>
+                                      {t('success_page.success_state.start_building')}
+                                    </Button>
+                                  )}
+                                </div>
+                              </div>
+                            ) : (
+                              <Button
+                                as={Link}
+                                className={styles.successButton}
+                                secondary
+                                to={
+                                  assetType === AssetType.ITEM
+                                    ? locations.item(contractAddress, tokenId)
+                                    : locations.nft(contractAddress, tokenId)
+                                }
+                              >
+                                {t('success_page.success_state.view_item')}
+                              </Button>
+                            )}
+                          </>
                         )}
                       </>
                     )}
 
-                    {(asset.category === NFTCategory.WEARABLE || asset.category === NFTCategory.EMOTE) && (
-                      <div className={styles.jumpInButtonContainer}>
-                        <JumpIn
-                          variant="button"
-                          buttonText={t('success_page.success_state.try_it_on_in_world')}
-                          hideIcon
-                          modalProps={{
-                            os: /Mac|iPhone|iPad|iPod/i.test(navigator.userAgent)
-                              ? 'apple'
-                              : /Android/i.test(navigator.userAgent)
-                                ? 'android'
-                                : 'windows',
-                            downloadUrl: 'https://decentraland.org/download',
-                            epicUrl: 'https://store.epicgames.com/en-US/p/decentraland-b692fb',
-                            googlePlayUrl: 'https://play.google.com/store/apps/details?id=org.decentraland.godotexplorer',
-                            i18n: { title: 'Download Decentraland' }
-                          }}
-                        />
-                      </div>
-                    )}
+                    {(asset.category === NFTCategory.WEARABLE || asset.category === NFTCategory.EMOTE) &&
+                      (isIAP ? (
+                        <Button as="a" href="decentraland://open?iap_enabled=true" className={styles.successButton} primary>
+                          {t('success_page.success_state.try_it_on_in_world')}
+                        </Button>
+                      ) : (
+                        <div className={styles.jumpInButtonContainer}>
+                          <JumpIn
+                            variant="button"
+                            buttonText={t('success_page.success_state.try_it_on_in_world')}
+                            hideIcon
+                            modalProps={{
+                              os: /Mac|iPhone|iPad|iPod/i.test(navigator.userAgent)
+                                ? 'apple'
+                                : /Android/i.test(navigator.userAgent)
+                                  ? 'android'
+                                  : 'windows',
+                              downloadUrl: 'https://decentraland.org/download',
+                              epicUrl: 'https://store.epicgames.com/en-US/p/decentraland-b692fb',
+                              googlePlayUrl: 'https://play.google.com/store/apps/details?id=org.decentraland.godotexplorer',
+                              i18n: { title: 'Download Decentraland' }
+                            }}
+                          />
+                        </div>
+                      ))}
                   </div>
                 </>
               )
