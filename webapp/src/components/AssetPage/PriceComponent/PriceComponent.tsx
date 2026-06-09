@@ -19,6 +19,17 @@ const PriceComponent = ({ price, network, useCredits, credits, className }: Prop
     [useCredits, credits]
   )
 
+  if (isIAP) {
+    return (
+      <div className={classNames(styles.PriceContainer, className, styles.iapPrice)}>
+        <div className={styles.manaContainer}>
+          <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
+          <span className={styles.price}>{formatWeiToAssetCard(price)}</span>
+        </div>
+      </div>
+    )
+  }
+
   if (useCredits && credits) {
     const adjustedPrice = getAdjustedPrice(price)
     return (
@@ -42,16 +53,12 @@ const PriceComponent = ({ price, network, useCredits, credits, className }: Prop
   }
 
   return (
-    <div className={classNames(styles.PriceContainer, className, { [styles.iapPrice]: isIAP })}>
+    <div className={classNames(styles.PriceContainer, className)}>
       <div className={styles.manaContainer}>
-        {isIAP ? (
-          <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
-        ) : (
-          <Mana withTooltip size="large" network={network} />
-        )}
+        <Mana withTooltip size="large" network={network} />
         <span className={styles.price}>{formatWeiToAssetCard(price)}</span>
       </div>
-      {!isIAP && +price > 0 && (
+      {+price > 0 && (
         <div className={styles.informationText}>
           {'('}
           <ManaToFiat mana={price} />
