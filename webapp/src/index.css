@@ -25,7 +25,7 @@ code {
     monospace;
 }
 
-/* IAP simplified navbar: hide nav links, mobile hamburger, and disable logo link */
+/* IAP simplified navbar: hide nav links, mobile hamburger, disable logo and profile menu */
 .iap-navbar nav > div:first-child > div {
   display: none !important;
 }
@@ -34,6 +34,27 @@ code {
 }
 .iap-navbar nav > div:first-child > a {
   pointer-events: none;
+}
+.iap-navbar nav > div:last-child > div > div:last-child {
+  pointer-events: none;
+  position: relative;
+  z-index: 0 !important;
+}
+.iap-navbar button[aria-label$="credits"] {
+  position: relative;
+  z-index: 1 !important;
+}
+
+/* IAP: hide Intercom chat widget — uses :has() to detect IAP navbar presence */
+body:has(.iap-navbar) .intercom-lightweight-app,
+body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {
+  display: none !important;
+}
+
+/* IAP: disable profile/account links */
+body:has(.iap-navbar) a[href*="/accounts/"] {
+  pointer-events: none;
+  color: inherit;
 }
 
 /* IAP footer: hide navigation links, compact layout */

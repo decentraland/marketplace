@@ -75,11 +75,19 @@ export const createHistory = () => {
     const originalPush = history.push.bind(history)
     const originalReplace = history.replace.bind(history)
 
+    // In IAP mode, only allow navigation to browse, item detail, and collection pages
+    const isAllowedIAPRoute = (path: string | Location): boolean => {
+      const pathname = typeof path === 'string' ? path.split('?')[0] : path.pathname
+      return /^\/(browse|contracts\/|collections\/|buy)/.test(pathname) || pathname === '/'
+    }
+
     history.push = (location: Path | LocationDescriptor, state?: History.LocationState) => {
+      if (isIAP && !isAllowedIAPRoute(location as string | Location)) return
       originalPush(injectParams(location as string | Location) as Path & Location, state)
     }
 
     history.replace = (location: Path | LocationDescriptor, state?: History.LocationState) => {
+      if (isIAP && !isAllowedIAPRoute(location as string | Location)) return
       originalReplace(injectParams(location as string | Location) as Path & Location, state)
     }
 
