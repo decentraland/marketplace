@@ -13,8 +13,10 @@ import type { ChainData, Token, CrossChainProvider } from 'decentraland-transact
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Button, Icon, Loader, ModalNavigation } from 'decentraland-ui'
 import { config } from '../../../config'
+import CreditsIcon from '../../../images/icon-credits.svg'
 import { formatWeiMANA } from '../../../lib/mana'
 import { isWearableOrEmote } from '../../../modules/asset/utils'
+import { useIsIAP } from '../../../modules/iap/useIAP'
 import * as events from '../../../utils/events'
 import { AssetImage } from '../../AssetImage'
 import { CardPaymentsExplanation } from '../../BuyPage/CardPaymentsExplanation'
@@ -80,6 +82,8 @@ export const BuyWithCryptoModal = (props: Props) => {
   const analytics = getAnalytics()
   const manaAddressOnAssetChain = getContract(ContractName.MANAToken, asset.chainId).address
   const abortControllerRef = useRef(new AbortController())
+
+  const isIAP = useIsIAP()
 
   // useStates
   const [providerChains, setProviderChains] = useState<ChainData[]>(getDefaultChains())
@@ -393,6 +397,16 @@ export const BuyWithCryptoModal = (props: Props) => {
   ])
 
   const renderMainActionButton = useCallback(() => {
+    if (isIAP) {
+      // TODO(mock): isMock bypasses wallet check for local testing
+      const isMock = new URLSearchParams(window.location.search).get('mock') === 'true'
+      return (
+        <Button fluid primary disabled={!isMock && !wallet} onClick={onPayWithCredits}>
+          {t('buy_with_crypto_modal.buy_now')}
+        </Button>
+      )
+    }
+
     const hasEnoughCredits =
       useCredits &&
       credits &&
@@ -438,6 +452,7 @@ export const BuyWithCryptoModal = (props: Props) => {
       return renderGetMANAButton()
     }
   }, [
+    isIAP,
     wallet,
     selectedToken,
     canBuyAsset,
@@ -453,7 +468,8 @@ export const BuyWithCryptoModal = (props: Props) => {
     renderGetMANAButton,
     useCredits,
     credits,
-    isCreditsTransaction
+    isCreditsTransaction,
+    onPayWithCredits
   ])
 
   const onTokenOrChainSelection = useCallback(
@@ -750,50 +766,71 @@ export const BuyWithCryptoModal = (props: Props) => {
                   <span className={styles.assetDescription}>{assetDescription}</span>
                 </div>
                 <div className={styles.priceContainer}>
-                  <Mana network={asset.network} inline withTooltip>
-                    {formatWeiMANA(price)}
-                  </Mana>
-                  <span className={styles.priceInUSD}>
-                    <ManaToFiat mana={price} digits={4} />
-                  </span>
+                  {isIAP ? (
+                    <span className={styles.creditsPrice}>
+                      <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
+                      {formatWeiMANA(price)}
+                    </span>
+                  ) : (
+                    <>
+                      <Mana network={asset.network} inline withTooltip>
+                        {formatWeiMANA(price)}
+                      </Mana>
+                      <span className={styles.priceInUSD}>
+                        <ManaToFiat mana={price} digits={4} />
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
 
-              <PaymentSelector
-                price={price}
-                wallet={wallet}
-                isBuyingAsset={isBuyingAsset}
-                providerTokens={providerTokens}
-                selectedToken={selectedToken}
-                selectedChain={selectedChain}
-                shouldUseCrossChainProvider={shouldUseCrossChainProvider}
-                gasCost={gasCost}
-                isFetchingGasCost={isFetchingGasCost}
-                isFetchingBalance={isFetchingBalance}
-                selectedProviderChain={selectedProviderChain}
-                selectedTokenBalance={selectedTokenBalance}
-                onShowChainSelector={handleShowChainSelector}
-                onShowTokenSelector={handleShowTokenSelector}
-                amountInSelectedToken={fromAmount}
-                route={route}
-                routeFeeCost={routeFeeCost}
-                useCredits={useCredits}
-                hasCredits={!!asset.data.ens && !!credits && credits.totalCredits > 0}
-              />
+              {!isIAP && (
+                <PaymentSelector
+                  price={price}
+                  wallet={wallet}
+                  isBuyingAsset={isBuyingAsset}
+                  providerTokens={providerTokens}
+                  selectedToken={selectedToken}
+                  selectedChain={selectedChain}
+                  shouldUseCrossChainProvider={shouldUseCrossChainProvider}
+                  gasCost={gasCost}
+                  isFetchingGasCost={isFetchingGasCost}
+                  isFetchingBalance={isFetchingBalance}
+                  selectedProviderChain={selectedProviderChain}
+                  selectedTokenBalance={selectedTokenBalance}
+                  onShowChainSelector={handleShowChainSelector}
+                  onShowTokenSelector={handleShowTokenSelector}
+                  amountInSelectedToken={fromAmount}
+                  route={route}
+                  routeFeeCost={routeFeeCost}
+                  useCredits={useCredits}
+                  hasCredits={!!asset.data.ens && !!credits && credits.totalCredits > 0}
+                />
+              )}
 
-              <PurchaseTotal
-                selectedToken={selectedToken}
-                price={price}
-                useMetaTx={useMetaTx}
-                shouldUseCrossChainProvider={shouldUseCrossChainProvider}
-                route={route}
-                routeFeeCost={routeFeeCost}
-                fromAmount={fromAmount}
-                isLoading={isFetchingRoute || isFetchingGasCost || (shouldUseCrossChainProvider && !route)}
-                gasCost={gasCost}
-                manaTokenOnSelectedChain={manaTokenOnAssetChain}
-                routeTotalUSDCost={routeTotalUSDCost}
-              />
+              {isIAP ? (
+                <div className={styles.iapTotalContainer}>
+                  <span>{t('buy_with_crypto_modal.total')}</span>
+                  <span className={styles.creditsPrice}>
+                    <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
+                    {formatWeiMANA(price)}
+                  </span>
+                </div>
+              ) : (
+                <PurchaseTotal
+                  selectedToken={selectedToken}
+                  price={price}
+                  useMetaTx={useMetaTx}
+                  shouldUseCrossChainProvider={shouldUseCrossChainProvider}
+                  route={route}
+                  routeFeeCost={routeFeeCost}
+                  fromAmount={fromAmount}
+                  isLoading={isFetchingRoute || isFetchingGasCost || (shouldUseCrossChainProvider && !route)}
+                  gasCost={gasCost}
+                  manaTokenOnSelectedChain={manaTokenOnAssetChain}
+                  routeTotalUSDCost={routeTotalUSDCost}
+                />
+              )}
 
               {selectedToken && shouldUseCrossChainProvider ? (
                 <div className={styles.durationAndExchangeContainer}>

@@ -62,7 +62,9 @@ const BuyNFTButtons = ({
 
   const handleBuyWithCrypto = useCallback(
     (asset: Asset, order: Order | null) => {
-      if (!isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
+      // TODO(mock): remove isMock check once mobile auth is integrated
+      const isMock = new URLSearchParams(window.location.search).get('mock') === 'true'
+      if (!isMock && !isConnecting && !wallet && !isBuyingWithCryptoModalOpen) {
         history.replace(locations.signIn(`${location.pathname}?buyWithCrypto=true`))
       } else {
         analytics?.track(events.CLICK_BUY_NFT_WITH_CRYPTO)
@@ -99,13 +101,15 @@ const BuyNFTButtons = ({
           if (isIAP) {
             const assetPrice = !isNFT(asset) ? asset.price : order ? order.price : '0'
             const hasEnoughCredits = !!credits && BigInt(credits.totalCredits) >= BigInt(assetPrice)
+            // TODO: mock=true bypasses credit check for local testing without wallet
+            const isMock = new URLSearchParams(window.location.search).get('mock') === 'true'
 
             return (
               <Button
                 primary
                 fluid
                 className={styles.buyWithCryptoButton}
-                disabled={!hasEnoughCredits}
+                disabled={!isMock && !hasEnoughCredits}
                 onClick={() => handleBuyWithCrypto(asset, order)}
               >
                 <span>{t('asset_page.actions.checkout')}</span>

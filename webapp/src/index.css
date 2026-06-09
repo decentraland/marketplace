@@ -33,6 +33,77 @@ code {
   display: none !important;
 }
 
+/* IAP custom mock navbar (TODO: remove once mobile auth is integrated) */
+.iap-navbar-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 12px 24px;
+  background: rgba(22, 21, 24, 0.75);
+  backdrop-filter: saturate(1.8) blur(20px);
+  -webkit-backdrop-filter: saturate(1.8) blur(20px);
+  box-sizing: border-box;
+}
+
+@media (min-width: 992px) {
+  .iap-navbar-custom {
+    height: 92px;
+    padding: 16px 54px;
+    background: rgba(22, 21, 24, 0.4);
+  }
+}
+
+.iap-navbar-logo {
+  display: flex;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+}
+
+.iap-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.iap-navbar-credits {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #a0abff;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.iap-navbar-credits img {
+  width: 20px;
+  height: 20px;
+}
+
+.iap-navbar-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.iap-navbar-spacer {
+  height: 64px;
+}
+
+@media (min-width: 992px) {
+  .iap-navbar-spacer {
+    height: 92px;
+  }
+}
+
 /* IAP filters: locked state */
 .iap-filter-disabled {
   pointer-events: none;

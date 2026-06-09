@@ -82,6 +82,11 @@ export const createHistory = () => {
     history.replace = (location: Path | LocationDescriptor, state?: History.LocationState) => {
       originalReplace(injectParams(location as string | Location) as Path & Location, state)
     }
+
+    // In IAP mode, redirect root to /browse on initial load
+    if (isIAP && window.location.pathname === (getBasename() || '/')) {
+      history.replace(`/browse?${initialParams.toString()}`)
+    }
   }
 
   return history
