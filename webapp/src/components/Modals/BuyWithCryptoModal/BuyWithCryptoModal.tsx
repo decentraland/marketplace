@@ -400,9 +400,16 @@ export const BuyWithCryptoModal = (props: Props) => {
 
   const renderMainActionButton = useCallback(() => {
     if (isIAP) {
+      const isBuying = isBuyingAsset || isLoadingAuthorization
       return (
-        <Button fluid primary disabled={!wallet} onClick={onBuyWithCredits ? onPayWithCredits : onBuyNatively}>
-          {t('buy_with_crypto_modal.buy_now')}
+        <Button
+          fluid
+          primary
+          disabled={!wallet || isBuying}
+          loading={isBuying}
+          onClick={onBuyWithCredits ? onPayWithCredits : onBuyNatively}
+        >
+          {isBuying ? t('buy_with_crypto_modal.buying_asset') : t('buy_with_crypto_modal.buy_now')}
         </Button>
       )
     }

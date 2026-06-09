@@ -78,7 +78,7 @@ export const createHistory = () => {
     // In IAP mode, only allow navigation to browse, item detail, and collection pages
     const isAllowedIAPRoute = (path: string | Location): boolean => {
       const pathname = typeof path === 'string' ? path.split('?')[0] : path.pathname
-      return /^\/(browse|contracts\/|collections\/|buy)/.test(pathname) || pathname === '/'
+      return /^\/(browse|contracts\/|buy|success)/.test(pathname) || pathname === '/'
     }
 
     history.push = (location: Path | LocationDescriptor, state?: History.LocationState) => {
