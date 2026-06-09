@@ -51,12 +51,6 @@ body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {
   display: none !important;
 }
 
-/* IAP: disable profile/account links */
-body:has(.iap-navbar) a[href*="/accounts/"] {
-  pointer-events: none;
-  color: inherit;
-}
-
 /* IAP footer: hide navigation links, compact layout */
 .dcl.footer.iap-footer .main-footer .links {
   display: none;

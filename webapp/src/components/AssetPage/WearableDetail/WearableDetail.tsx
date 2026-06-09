@@ -4,6 +4,7 @@ import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon, Popup } from 'decentraland-ui'
 import { AssetType } from '../../../modules/asset/types'
+import { useIsIAP } from '../../../modules/iap/useIAP'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
@@ -28,6 +29,7 @@ import { Props } from './WearableDetail.types'
 import styles from './WearableDetail.module.css'
 
 const WearableDetail = ({ nft }: Props) => {
+  const isIAP = useIsIAP()
   const wearable = nft.data.wearable!
   const [sortBy, setSortBy] = useState<OrderSortBy>(OrderSortBy.CHEAPEST)
 
@@ -117,16 +119,20 @@ const WearableDetail = ({ nft }: Props) => {
           <BuyNFTBox nft={nft} />
         </div>
       </div>
-      <YourOffer asset={nft} />
-      <BidsTable asset={nft} />
-      <TransactionHistory asset={nft} />
-      <TableContainer
-        tabsList={tabList}
-        handleSortByChange={(value: string) => setSortBy(value as OrderSortBy)}
-        sortbyList={listingSortByOptions}
-        sortBy={sortBy}
-        children={<ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />}
-      />
+      {!isIAP && (
+        <>
+          <YourOffer asset={nft} />
+          <BidsTable asset={nft} />
+          <TransactionHistory asset={nft} />
+          <TableContainer
+            tabsList={tabList}
+            handleSortByChange={(value: string) => setSortBy(value as OrderSortBy)}
+            sortbyList={listingSortByOptions}
+            sortBy={sortBy}
+            children={<ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />}
+          />
+        </>
+      )}
     </div>
   )
 }

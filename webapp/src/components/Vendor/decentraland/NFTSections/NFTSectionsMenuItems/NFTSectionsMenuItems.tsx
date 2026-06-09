@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { useIsIAP } from '../../../../../modules/iap/useIAP'
 import { isLandSection } from '../../../../../modules/ui/utils'
 import { Section } from '../../../../../modules/vendor/decentraland/routing/types'
 import { DropdownMenu } from '../../../../Menu/DropdownMenu'
@@ -10,6 +11,7 @@ const shouldRenderSection = (section: Section, sections: Section[]) => {
 }
 
 const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
+  const isIAP = useIsIAP()
   const handleOnSectionClick = useCallback(
     (newSection: Section) => {
       if (section !== newSection) {
@@ -123,7 +125,9 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
             : null}
         </>
       )}
-      {shouldRenderSection(Section.ENS, sections) && <MenuItem value={Section.ENS} currentValue={section} onClick={handleOnSectionClick} />}
+      {!isIAP && shouldRenderSection(Section.ENS, sections) && (
+        <MenuItem value={Section.ENS} currentValue={section} onClick={handleOnSectionClick} />
+      )}
       {shouldRenderSection(Section.LAND, sections) && (
         <>
           <MenuItem key={Section.LAND} value={Section.LAND} currentValue={section} onClick={handleOnSectionClick} />

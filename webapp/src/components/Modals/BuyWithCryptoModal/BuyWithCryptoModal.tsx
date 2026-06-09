@@ -84,6 +84,8 @@ export const BuyWithCryptoModal = (props: Props) => {
   const abortControllerRef = useRef(new AbortController())
 
   const isIAP = useIsIAP()
+  // In IAP mode, show the original asset price (not adjusted by credits)
+  const displayPrice = isIAP && 'price' in asset ? asset.price : price
 
   // useStates
   const [providerChains, setProviderChains] = useState<ChainData[]>(getDefaultChains())
@@ -399,7 +401,7 @@ export const BuyWithCryptoModal = (props: Props) => {
   const renderMainActionButton = useCallback(() => {
     if (isIAP) {
       return (
-        <Button fluid primary disabled={!wallet} onClick={onPayWithCredits}>
+        <Button fluid primary disabled={!wallet} onClick={onBuyWithCredits ? onPayWithCredits : onBuyNatively}>
           {t('buy_with_crypto_modal.buy_now')}
         </Button>
       )
@@ -767,7 +769,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   {isIAP ? (
                     <span className={styles.creditsPrice}>
                       <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
-                      {formatWeiMANA(price)}
+                      {formatWeiMANA(displayPrice)}
                     </span>
                   ) : (
                     <>
@@ -811,7 +813,7 @@ export const BuyWithCryptoModal = (props: Props) => {
                   <span>{t('buy_with_crypto_modal.total')}</span>
                   <span className={styles.creditsPrice}>
                     <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
-                    {formatWeiMANA(price)}
+                    {formatWeiMANA(displayPrice)}
                   </span>
                 </div>
               ) : (

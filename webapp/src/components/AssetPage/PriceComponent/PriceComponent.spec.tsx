@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
+import { render, screen } from '@testing-library/react'
 import { Network } from '@dcl/schemas'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { ManaToFiat } from '../../ManaToFiat'

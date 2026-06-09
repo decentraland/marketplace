@@ -7,6 +7,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon, Popup } from 'decentraland-ui'
 import { getRequiredPermissions } from '../../../modules/asset/selectors'
 import { AssetType } from '../../../modules/asset/types'
+import { useIsIAP } from '../../../modules/iap/useIAP'
 import { RootState } from '../../../modules/reducer'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
@@ -32,6 +33,7 @@ import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
 const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
+  const isIAP = useIsIAP()
   let description = ''
   let bodyShapes: BodyShape[] = []
   let category
@@ -182,9 +184,9 @@ const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
         </div>
       </div>
 
-      <YourOffer asset={item} />
-      <ListingsTableContainer item={item} ref={tableRef} />
-      <TransactionHistory asset={item} />
+      {!isIAP && <YourOffer asset={item} />}
+      {!isIAP && <ListingsTableContainer item={item} ref={tableRef} />}
+      {!isIAP && <TransactionHistory asset={item} />}
     </div>
   )
 }
