@@ -6,6 +6,7 @@ import { Button } from 'decentraland-ui'
 import onBackIcon from '../../../images/onBack.png'
 import { AssetType } from '../../../modules/asset/types'
 import { isNFT, mapAsset } from '../../../modules/asset/utils'
+import { useIsIAP } from '../../../modules/iap/useIAP'
 import { locations } from '../../../modules/routing/locations'
 import { Sections } from '../../../modules/routing/types'
 import { FavoritesCounter } from '../../FavoritesCounter'
@@ -14,6 +15,7 @@ import './OnBack.css'
 
 const OnBack = ({ asset, onBack }: Props) => {
   const isMobile = useMobileMediaQuery()
+  const isIAP = useIsIAP()
 
   return (
     <div className="top-header" data-testid="top-header">
@@ -75,7 +77,7 @@ const OnBack = ({ asset, onBack }: Props) => {
         <img src={onBackIcon} alt={t('global.back')} />
         {t('global.back')}
       </Button>
-      {isMobile && !isNFT(asset) && asset.network === Network.MATIC ? (
+      {!isIAP && isMobile && !isNFT(asset) && asset.network === Network.MATIC ? (
         <FavoritesCounter isCollapsed className="favorites" item={asset} />
       ) : null}
     </div>

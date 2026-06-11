@@ -6,9 +6,11 @@ import { Network, Order } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Loader } from 'decentraland-ui'
+import { config } from '../../../../config'
 import { Asset } from '../../../../modules/asset/types'
 import { isNFT } from '../../../../modules/asset/utils'
 import { useIsIAP } from '../../../../modules/iap/useIAP'
+import { getBasename } from '../../../../modules/routing/basename'
 import { locations } from '../../../../modules/routing/locations'
 import * as events from '../../../../utils/events'
 import { AssetProvider } from '../../../AssetProvider'
@@ -97,6 +99,21 @@ const BuyNFTButtons = ({
           const isFree = isItemFree || !!isBuyingEntirelyWithCredits
 
           if (isIAP) {
+            if (!wallet) {
+              const basename = getBasename()
+              const redirectTo = `${basename}${location.pathname}${location.search}`
+              return (
+                <Button
+                  primary
+                  fluid
+                  className={styles.buyWithCryptoButton}
+                  onClick={() => window.location.replace(`${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(redirectTo)}`)}
+                >
+                  <span>{t('wallet.sign_in')}</span>
+                </Button>
+              )
+            }
+
             const assetPrice = !isNFT(asset) ? asset.price : order ? order.price : '0'
             const hasEnoughCredits = !!credits && BigInt(credits.totalCredits) >= BigInt(assetPrice)
 

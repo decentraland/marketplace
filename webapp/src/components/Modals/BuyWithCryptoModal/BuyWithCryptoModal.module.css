@@ -447,7 +447,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
+  margin-top: 24px;
+}
+
+.iapTotalContainer > span:first-child {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.iapTotalContainer .creditsPrice {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
 }
 
 @media (max-width: 767px) {

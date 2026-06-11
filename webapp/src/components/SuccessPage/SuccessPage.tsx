@@ -190,7 +190,12 @@ export function SuccessPage(props: Props) {
 
                     {(asset.category === NFTCategory.WEARABLE || asset.category === NFTCategory.EMOTE) &&
                       (isIAP ? (
-                        <Button as="a" href="decentraland://open?iap_enabled=true" className={styles.successButton} primary>
+                        <Button
+                          as="a"
+                          href={`decentraland://open?iap_enabled=true&urn=${encodeURIComponent(asset.urn)}`}
+                          className={styles.successButton}
+                          primary
+                        >
                           {t('success_page.success_state.try_it_on_in_world')}
                         </Button>
                       ) : (
