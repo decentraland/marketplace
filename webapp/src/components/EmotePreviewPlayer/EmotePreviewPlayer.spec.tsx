@@ -5,10 +5,11 @@ import { Network } from '@dcl/schemas'
 import { renderWithProviders } from '../../utils/test'
 import { EmotePreviewPlayerProvider, EmotePreviewSource, useEmotePreviewPlayer } from './EmotePreviewPlayer'
 
-// Capture the latest onLoad handed to the WearablePreview iframe so tests can
-// drive the LOAD lifecycle, and render a real iframe element carrying the id
-// the provider looks up via document.getElementById.
+// Capture the latest onLoad/onError handed to the WearablePreview iframe so
+// tests can drive the LOAD lifecycle, and render a real iframe element
+// carrying the id the provider looks up via document.getElementById.
 let capturedOnLoad: (() => void) | undefined
+let capturedOnError: (() => void) | undefined
 
 // Mirror the global decentraland-ui2 mock (see beforeSetupTests.ts) so the
 // store/saga import chain still resolves styled() at module-eval time, but
@@ -43,8 +44,9 @@ jest.mock('decentraland-ui2', () => {
     CreditsToggle: MockComponent,
     JumpIn: MockComponent,
     styled: styledMock,
-    WearablePreview: (props: { id?: string; onLoad?: () => void }) => {
+    WearablePreview: (props: { id?: string; onLoad?: () => void; onError?: () => void }) => {
       capturedOnLoad = props.onLoad
+      capturedOnError = props.onError
       return React.createElement('iframe', { id: props.id, title: 'wearable-preview' })
     }
   }
@@ -84,10 +86,15 @@ const fireLoad = () =>
   act(() => {
     capturedOnLoad?.()
   })
+const fireError = () =>
+  act(() => {
+    capturedOnError?.()
+  })
 
 describe('EmotePreviewPlayer', () => {
   beforeEach(() => {
     capturedOnLoad = undefined
+    capturedOnError = undefined
     // The rect-tracking rAF loop is irrelevant to these lifecycle assertions;
     // stub it so it doesn't schedule state updates outside act().
     jest.spyOn(window, 'requestAnimationFrame').mockReturnValue(0)
@@ -171,19 +178,37 @@ describe('EmotePreviewPlayer', () => {
       })
     })
 
-    describe('and a second emote is hovered before the first LOAD arrives', () => {
-      it('should keep the spinner until the latest emote LOAD arrives', async () => {
+    describe('and the same already-loaded emote is hovered again', () => {
+      it('should not show the spinner since no reload will occur', async () => {
         const { getByText } = renderWithProviders(
           <EmotePreviewPlayerProvider enabled>
             <Probe />
           </EmotePreviewPlayerProvider>
         )
         fireLoad() // boot
-        await userEvent.click(getByText('show')) // emote A requested (seq 1)
-        await userEvent.click(getByText('show')) // emote B requested (seq 2)
-        fireLoad() // stale LOAD for A
+        await userEvent.click(getByText('show')) // request emote
+        fireLoad() // emote finished loading
+        expect(getSpinner()).toBeNull()
+        await userEvent.click(getByText('hide'))
+        // Re-hovering the same emote sends an identical UPDATE that won't
+        // rebuild the scene (no LOAD will follow), so the spinner must not
+        // appear — otherwise it would stay stuck forever.
+        await userEvent.click(getByText('show'))
+        expect(getSpinner()).toBeNull()
+      })
+    })
+
+    describe('and the emote fails to load', () => {
+      it('should clear the spinner on error', async () => {
+        const { getByText } = renderWithProviders(
+          <EmotePreviewPlayerProvider enabled>
+            <Probe />
+          </EmotePreviewPlayerProvider>
+        )
+        fireLoad() // boot
+        await userEvent.click(getByText('show'))
         expect(getSpinner()).not.toBeNull()
-        fireLoad() // LOAD for B
+        fireError()
         expect(getSpinner()).toBeNull()
       })
     })

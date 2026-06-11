@@ -69,6 +69,17 @@ const dispatchUpdate = (src: EmotePreviewSource, env: PreviewEnvConfig): boolean
   return true
 }
 
+// Stable identity of an emote, matching the discriminator used in
+// sourceToOptions. Used to tell whether a hover targets the emote that's
+// already rendered in the iframe (so we don't wait on a LOAD that will
+// never come) versus a genuinely new one.
+const keyOf = (src: EmotePreviewSource): string => {
+  if (src.network === Network.ETHEREUM && src.urn) {
+    return `eth:${src.urn}`
+  }
+  return `${src.contractAddress ?? ''}:${src.itemId ?? src.tokenId ?? ''}`
+}
+
 export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = true, children }) => {
   const [rect, setRect] = useState<Rect | null>(null)
   const [isVisible, setIsVisible] = useState(false)
@@ -78,12 +89,14 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
   const targetRef = useRef<HTMLElement | null>(null)
   const pendingSourceRef = useRef<EmotePreviewSource | null>(null)
   const hasInitiallyLoadedRef = useRef(false)
-  // Each emote swap we request bumps `dispatchSeqRef`; each emote LOAD we
-  // observe bumps `loadSeqRef`. We only clear the spinner once we've caught
-  // up (loadSeq >= dispatchSeq), so a stale LOAD from a previously-hovered
-  // card can't clear the spinner while a newer emote is still rendering.
-  const dispatchSeqRef = useRef(0)
-  const loadSeqRef = useRef(0)
+  // Identity of the emote the user is currently hovering, and of the one the
+  // iframe last finished loading. We drive the spinner off these instead of
+  // counting LOAD events: re-hovering an already-loaded emote (or rapid
+  // enter/exit on the same card) sends an UPDATE with identical options, so
+  // the iframe doesn't rebuild its scene and never emits a LOAD — a LOAD
+  // counter would then drift and leave the spinner stuck forever.
+  const currentKeyRef = useRef<string | null>(null)
+  const loadedKeyRef = useRef<string | null>(null)
 
   const wallet = useSelector(getWallet)
   const profiles = useSelector(getProfiles)
@@ -144,9 +157,12 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
       const r = target.getBoundingClientRect()
       setRect({ top: r.top, left: r.left, width: r.width, height: r.height })
       setIsVisible(true)
-      setIsEmoteLoading(true)
-      // One swap requested → expect one more LOAD before the spinner clears.
-      dispatchSeqRef.current += 1
+      const key = keyOf(source)
+      currentKeyRef.current = key
+      // If this emote is already rendered in the iframe the UPDATE won't
+      // trigger a rebuild (no LOAD will follow), so don't show a spinner that
+      // would never clear. Otherwise wait for its LOAD.
+      setIsEmoteLoading(key !== loadedKeyRef.current)
       if (isControllable) {
         dispatchUpdate(source, envConfig)
         pendingSourceRef.current = null
@@ -162,6 +178,7 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
     setIsVisible(false)
     setIsEmoteLoading(false)
     pendingSourceRef.current = null
+    // Keep loadedKeyRef so re-hovering the same emote stays instant.
   }, [])
 
   // Flush any pending hover request once the iframe is controllable.
@@ -180,8 +197,8 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
   useEffect(() => {
     if (!enabled) {
       hasInitiallyLoadedRef.current = false
-      dispatchSeqRef.current = 0
-      loadSeqRef.current = 0
+      currentKeyRef.current = null
+      loadedKeyRef.current = null
       targetRef.current = null
       pendingSourceRef.current = null
       setIsControllable(false)
@@ -191,22 +208,24 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
   }, [enabled])
 
   // onLoad fires once on initial iframe boot (with the default profile, no
-  // emote) and AGAIN every time we send an UPDATE that swaps the urn/itemId
-  // — the iframe rebuilds the Babylon scene and re-emits LOAD. We use the
-  // first LOAD only to mark the iframe controllable (and to keep the
-  // spinner up if a hover request is still queued). Subsequent LOADs mean
-  // an emote scene finished rendering; we clear the spinner only once we've
-  // caught up to the latest requested swap so a stale LOAD can't clear it.
+  // emote) and AGAIN every time an UPDATE swaps the urn/itemId — the iframe
+  // rebuilds the Babylon scene and re-emits LOAD. The first LOAD only marks
+  // the iframe controllable. Subsequent LOADs mean an emote scene finished
+  // rendering, so we record what's now loaded and clear the spinner.
   const handlePreviewLoad = useCallback(() => {
     if (!hasInitiallyLoadedRef.current) {
       hasInitiallyLoadedRef.current = true
       setIsControllable(true)
       return
     }
-    loadSeqRef.current += 1
-    if (loadSeqRef.current >= dispatchSeqRef.current) {
-      setIsEmoteLoading(false)
-    }
+    loadedKeyRef.current = currentKeyRef.current
+    setIsEmoteLoading(false)
+  }, [])
+
+  // If the iframe fails to render an emote it emits ERROR instead of LOAD, so
+  // clear the spinner here too — otherwise a failed load would leave it stuck.
+  const handlePreviewError = useCallback(() => {
+    setIsEmoteLoading(false)
   }, [])
 
   const contextValue = useMemo<EmotePreviewPlayerContextValue>(() => ({ show, hide }), [show, hide])
@@ -243,6 +262,7 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
         dev={isPreviewDev}
         unityMode={PreviewUnityMode.MARKETPLACE}
         onLoad={handlePreviewLoad}
+        onError={handlePreviewError}
       />
       {isVisible && isEmoteLoading ? <Loader className="EmotePreviewPlayer__spinner" active size="large" /> : null}
     </div>
