@@ -75,7 +75,8 @@ export const createHistory = () => {
     const originalPush = history.push.bind(history)
     const originalReplace = history.replace.bind(history)
 
-    // In IAP mode, only allow navigation to browse, item detail, and collection pages
+    // In IAP mode, only allow navigation to browse, item detail, buy, and success pages.
+    // /collections/ is intentionally excluded to keep users in the purchase flow.
     const isAllowedIAPRoute = (path: string | Location): boolean => {
       const pathname = typeof path === 'string' ? path.split('?')[0] : path.pathname
       return /^\/(browse|contracts\/|buy|success)/.test(pathname) || pathname === '/'

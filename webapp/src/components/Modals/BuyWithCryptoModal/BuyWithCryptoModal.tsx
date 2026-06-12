@@ -419,6 +419,8 @@ export const BuyWithCryptoModal = (props: Props) => {
           primary
           disabled={!wallet || isBuying}
           loading={isBuying}
+          // onBuyWithCredits is only defined for ENS claims; for wearable/emote purchases
+          // onBuyNatively handles credits via the useCredits flag passed through metadata
           onClick={onBuyWithCredits ? onPayWithCredits : onBuyNatively}
         >
           {isBuying ? t('buy_with_crypto_modal.buying_asset') : t('buy_with_crypto_modal.buy_now')}

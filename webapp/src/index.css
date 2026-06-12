@@ -46,7 +46,8 @@ code {
 }
 
 /* IAP: hide unsupported network modal and its dimmer (auto-switch handles it silently).
-   Target tiny modals without the buyWithCryptoModal class to avoid hiding the checkout modal. */
+   Target tiny modals without the buyWithCryptoModal class to avoid hiding the checkout modal.
+   NOTE: any future tiny modal added without a distinguishing class will also be hidden in IAP. */
 body:has(.iap-navbar) .modals.dimmer:has(.ui.tiny.modal:not([class*='buyWithCryptoModal'])) {
   background: transparent !important;
   pointer-events: none !important;
