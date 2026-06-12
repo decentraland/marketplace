@@ -84,8 +84,20 @@ export const BuyWithCryptoModal = (props: Props) => {
   const abortControllerRef = useRef(new AbortController())
 
   const isIAP = useIsIAP()
-  // In IAP mode, show the original asset price (not adjusted by credits)
-  const displayPrice = isIAP && 'price' in asset ? asset.price : price
+  // In IAP mode, show the original asset price (not adjusted by credits).
+  // For items, asset.price has the original. For NFTs, price is already adjusted
+  // (original - credits), so we reconstruct it by adding credits back.
+  const displayPrice = useMemo(() => {
+    if (!isIAP) return price
+    if ('price' in asset) return asset.price
+    if (credits?.totalCredits && price === '0') {
+      return credits.totalCredits.toString()
+    }
+    if (credits?.totalCredits) {
+      return (BigInt(price) + BigInt(credits.totalCredits)).toString()
+    }
+    return price
+  }, [isIAP, asset, price, credits])
 
   // useStates
   const [providerChains, setProviderChains] = useState<ChainData[]>(getDefaultChains())
