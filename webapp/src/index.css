@@ -43,6 +43,10 @@ code {
 .iap-navbar button[aria-label$="credits"] {
   position: relative;
   z-index: 1 !important;
+  pointer-events: none;
+}
+.iap-navbar .credits-tooltip {
+  display: none !important;
 }
 
 /* IAP: hide unsupported network modal and its dimmer (auto-switch handles it silently).
