@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { ChainId } from '@dcl/schemas'
@@ -18,13 +18,11 @@ const useIAPAutoSwitchNetwork = () => {
   const dispatch = useDispatch()
   const walletConnected = useSelector(isConnected)
   const chainId = useSelector((state: RootState) => getChainId(state))
-  const hasSwitched = useRef(false)
 
   useEffect(() => {
-    if (!isIAP || !walletConnected || hasSwitched.current) return
+    if (!isIAP || !walletConnected) return
     const expectedChainId = Number(config.get('CHAIN_ID')) as ChainId
     if (chainId && chainId !== expectedChainId) {
-      hasSwitched.current = true
       dispatch(switchNetworkRequest(expectedChainId))
     }
   }, [isIAP, walletConnected, chainId, dispatch])

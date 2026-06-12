@@ -47,28 +47,20 @@ export const createHistory = () => {
   const viewParam = initialParams.get('view')
   const isIAP = viewParam === 'mobile-iap'
 
-  if (viewParam) {
+  if (isIAP) {
     const injectParams = (path: string | Location): string | Location => {
       if (typeof path === 'string') {
         const [pathname, search = ''] = path.split('?')
         const params = new URLSearchParams(search)
-        if (!params.has('view')) {
-          params.set('view', viewParam)
-        }
-        if (isIAP) {
-          params.set('withCredits', 'true')
-          params.set('status', 'on_sale')
-        }
+        params.set('view', 'mobile-iap')
+        params.set('withCredits', 'true')
+        params.set('status', 'on_sale')
         return `${pathname}?${params.toString()}`
       }
       const params = new URLSearchParams(path.search || '')
-      if (!params.has('view')) {
-        params.set('view', viewParam)
-      }
-      if (isIAP) {
-        params.set('withCredits', 'true')
-        params.set('status', 'on_sale')
-      }
+      params.set('view', 'mobile-iap')
+      params.set('withCredits', 'true')
+      params.set('status', 'on_sale')
       return { ...path, search: `?${params.toString()}` }
     }
 

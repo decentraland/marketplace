@@ -114,7 +114,16 @@ const BuyNFTButtons = ({
               )
             }
 
-            const assetPrice = !isNFT(asset) ? asset.price : order ? order.price : '0'
+            // NFT without an active order cannot be purchased
+            if (isNFT(asset) && !order) {
+              return (
+                <Button primary fluid className={styles.buyWithCryptoButton} disabled>
+                  <span>{t('asset_page.actions.checkout')}</span>
+                </Button>
+              )
+            }
+
+            const assetPrice = !isNFT(asset) ? asset.price : order!.price
             const hasEnoughCredits = !!credits && BigInt(credits.totalCredits) >= BigInt(assetPrice)
 
             return (
