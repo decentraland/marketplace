@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { EmoteOutcomeType, EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
 import { RarityFilter } from 'decentraland-dapps/dist/containers/RarityFilter'
 import { BarChartSource } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
+import { useIsIAP } from '../../modules/iap/useIAP'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { Sections, SortBy, BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
@@ -58,6 +59,7 @@ export const AssetFilters = ({
   isSocialEmotesEnabled
 }: Props): JSX.Element | null => {
   const isInLandSection = isLandSection(section)
+  const isIAP = useIsIAP()
 
   const handleBrowseParamChange = useCallback((options: BrowseOptions) => onBrowse(options), [onBrowse])
 
@@ -237,9 +239,10 @@ export const AssetFilters = ({
     <Menu className="filters-sidebar">
       <SpecialFilter
         isOnlySmart={onlySmart}
-        withCredits={withCredits}
+        withCredits={isIAP ? true : withCredits}
+        withCreditsDisabled={isIAP}
         onSmartChange={shouldRenderFilter(AssetFilter.OnlySmart) ? handleOnlySmartChange : undefined}
-        onWithCreditsChange={handleWithCreditsToggleChange}
+        onWithCreditsChange={isIAP ? undefined : handleWithCreditsToggleChange}
         defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Special]}
       />
       {shouldRenderFilter(AssetFilter.PlayMode) && (
@@ -261,12 +264,25 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       ) : null}
-      {shouldRenderFilter(AssetFilter.Status) && view === View.MARKET ? (
+      {isIAP ? (
+        <div className="iap-filter-disabled">
+          <StatusFilter onChange={handleBrowseParamChange} status={AssetStatusFilter.ON_SALE} />
+        </div>
+      ) : shouldRenderFilter(AssetFilter.Status) && view === View.MARKET ? (
         <StatusFilter onChange={handleBrowseParamChange} status={status} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Status]} />
       ) : null}
-      {shouldRenderFilter(AssetFilter.Price) &&
-      (onlyOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
-      view !== View.ACCOUNT ? (
+      {isIAP ? (
+        <div className="iap-filter-disabled">
+          <PriceFilter
+            onChange={(value, source) => handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [minPrice, maxPrice])}
+            minPrice=""
+            maxPrice=""
+            values={values}
+          />
+        </div>
+      ) : shouldRenderFilter(AssetFilter.Price) &&
+        (onlyOnSale || (!!status && status !== AssetStatusFilter.NOT_FOR_SALE)) &&
+        view !== View.ACCOUNT ? (
         <PriceFilter
           onChange={(value, source) => handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [minPrice, maxPrice])}
           minPrice={minPrice}
@@ -286,9 +302,13 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Collection]}
         />
       ) : null}
-      {shouldRenderFilter(AssetFilter.Network) && status !== AssetStatusFilter.ONLY_MINTING && (
+      {isIAP ? (
+        <div className="iap-filter-disabled">
+          <NetworkFilter onChange={handleNetworkChange} network={undefined} />
+        </div>
+      ) : shouldRenderFilter(AssetFilter.Network) && status !== AssetStatusFilter.ONLY_MINTING ? (
         <NetworkFilter onChange={handleNetworkChange} network={network} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]} />
-      )}
+      ) : null}
       {shouldRenderFilter(AssetFilter.BodyShape) && (
         <BodyShapeFilter
           onChange={handleBodyShapeChange}

@@ -4,21 +4,22 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, SmartBadge, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Switch } from 'decentraland-ui2'
 import CreditsIcon from '../../../images/icon-credits.svg'
+import { Props } from './SpecialFilter.types'
 import './SpecialFilter.css'
 
-export type SpecialFilterProps = {
-  isOnlySmart?: boolean
-  withCredits?: boolean
-  isCreditsEnabled?: boolean
-  onSmartChange?: (value: boolean) => void
-  onWithCreditsChange?: (value: boolean) => void
-  'data-testid'?: string
-  className?: string
-  defaultCollapsed?: boolean
-}
+export type SpecialFilterProps = Props
 
-export const SpecialFilter = (props: SpecialFilterProps) => {
-  const { isOnlySmart, withCredits, isCreditsEnabled, onSmartChange, onWithCreditsChange, className, defaultCollapsed = false } = props
+export const SpecialFilter = (props: Props) => {
+  const {
+    isOnlySmart,
+    withCredits,
+    withCreditsDisabled,
+    isCreditsEnabled,
+    onSmartChange,
+    onWithCreditsChange,
+    className,
+    defaultCollapsed = false
+  } = props
 
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
@@ -65,13 +66,13 @@ export const SpecialFilter = (props: SpecialFilterProps) => {
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="special-filter-content" data-testid={props['data-testid']}>
-        {isCreditsEnabled && (
+        {(isCreditsEnabled || withCreditsDisabled) && (
           <div className="filter-option credits-filter">
             <div className="credits-left">
               <img src={CreditsIcon} alt="Credits" />
               <span className="credits-label">{t('filters.get_with_credits')}</span>
             </div>
-            <Switch checked={withCredits} onChange={handleWithCreditsToggle} />
+            <Switch checked={withCredits} onChange={handleWithCreditsToggle} disabled={withCreditsDisabled} />
           </div>
         )}
 

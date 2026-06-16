@@ -48,3 +48,13 @@
   width: 24px;
   height: 24px;
 }
+
+.PriceContainer .creditsIcon {
+  width: 1em;
+  height: 1em;
+  margin-right: 4px;
+}
+
+.PriceContainer.iapPrice {
+  color: #a0abff;
+}

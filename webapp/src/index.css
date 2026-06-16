@@ -25,6 +25,66 @@ code {
     monospace;
 }
 
+/* IAP simplified navbar: hide nav links, mobile hamburger, disable logo and profile menu */
+.iap-navbar nav > div:first-child > div {
+  display: none !important;
+}
+.iap-navbar nav > div:last-child > button:last-child {
+  display: none !important;
+}
+.iap-navbar nav > div:first-child > a {
+  pointer-events: none;
+}
+.iap-navbar nav > div:last-child > div > div:last-child {
+  pointer-events: none;
+  position: relative;
+  z-index: 0 !important;
+}
+.iap-navbar button[aria-label$="credits"] {
+  position: relative;
+  z-index: 1 !important;
+  pointer-events: none;
+}
+.iap-navbar .credits-tooltip {
+  display: none !important;
+}
+
+/* IAP: hide unsupported network modal and its dimmer (auto-switch handles it silently).
+   Target tiny modals without the buyWithCryptoModal class to avoid hiding the checkout modal.
+   NOTE: any future tiny modal added without a distinguishing class will also be hidden in IAP. */
+body:has(.iap-navbar) .modals.dimmer:has(.ui.tiny.modal:not([class*='buyWithCryptoModal'])) {
+  background: transparent !important;
+  pointer-events: none !important;
+}
+body:has(.iap-navbar) .ui.tiny.modal:not([class*='buyWithCryptoModal']) {
+  display: none !important;
+}
+
+/* IAP: hide Intercom chat widget — uses :has() to detect IAP navbar presence */
+body:has(.iap-navbar) .intercom-lightweight-app,
+body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {
+  display: none !important;
+}
+
+/* IAP footer: hide navigation links, compact layout */
+.dcl.footer.iap-footer .main-footer .links {
+  display: none;
+}
+.dcl.footer.iap-footer .main-footer {
+  height: auto;
+  margin-bottom: 0;
+}
+.dcl.footer.iap-footer {
+  height: auto;
+  margin-top: 0;
+}
+
+/* IAP filters: locked state */
+.iap-filter-disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 .danger-text {
   color: var(--danger);
 }

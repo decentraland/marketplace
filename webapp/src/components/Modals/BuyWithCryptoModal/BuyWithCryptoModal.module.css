@@ -428,6 +428,40 @@
   margin-bottom: 16px;
 }
 
+.creditsPrice {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #a0abff;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 26px;
+}
+
+.creditsIcon {
+  width: 1em;
+  height: 1em;
+}
+
+.iapTotalContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.iapTotalContainer > span:first-child {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
+.iapTotalContainer .creditsPrice {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 26px;
+}
+
 @media (max-width: 767px) {
   .buyWithCryptoModal {
     height: 100%;

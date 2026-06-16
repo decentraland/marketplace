@@ -1,3 +1,4 @@
+import { MemoryRouter } from 'react-router-dom'
 import { render, screen } from '@testing-library/react'
 import { Network } from '@dcl/schemas'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
@@ -28,6 +29,13 @@ const createMockCredits = () => ({
   ]
 })
 
+const renderComponent = (props: Props) =>
+  render(
+    <MemoryRouter>
+      <PriceComponent {...props} />
+    </MemoryRouter>
+  )
+
 describe('PriceComponent', () => {
   const mockProps: Props = {
     price: '1000000000000000000', // 1 MANA in wei
@@ -42,24 +50,24 @@ describe('PriceComponent', () => {
 
   describe('when not using credits', () => {
     it('should render the price correctly', () => {
-      render(<PriceComponent {...mockProps} />)
+      renderComponent(mockProps)
       expect(screen.getByText(formatWeiToAssetCard(mockProps.price))).toBeInTheDocument()
     })
 
     it('should render the fiat conversion when price is greater than 0', () => {
-      render(<PriceComponent {...mockProps} />)
+      renderComponent(mockProps)
       expect(screen.getByTestId('mana-to-fiat')).toBeInTheDocument()
       expect(ManaToFiat).toHaveBeenCalledWith({ mana: mockProps.price }, {})
     })
 
     it('should not render the fiat conversion when price is 0', () => {
-      render(<PriceComponent {...{ ...mockProps, price: '0' }} />)
+      renderComponent({ ...mockProps, price: '0' })
       expect(screen.queryByTestId('mana-to-fiat')).not.toBeInTheDocument()
     })
 
     it('should apply custom className', () => {
-      const { container } = render(<PriceComponent {...mockProps} />)
-      expect(container.firstChild).toHaveClass('custom-class')
+      const { container } = renderComponent(mockProps)
+      expect(container.querySelector('.custom-class')).toBeInTheDocument()
     })
   })
 
@@ -73,7 +81,7 @@ describe('PriceComponent', () => {
     }
 
     it('should render the original and adjusted price', () => {
-      render(<PriceComponent {...creditsProps} />)
+      renderComponent(creditsProps)
 
       // Original price
       expect(screen.getByText(formatWeiToAssetCard(mockProps.price))).toBeInTheDocument()
@@ -84,7 +92,7 @@ describe('PriceComponent', () => {
     })
 
     it('should render the fiat conversion for the adjusted price', () => {
-      render(<PriceComponent {...creditsProps} />)
+      renderComponent(creditsProps)
 
       const adjustedPrice = (BigInt(mockProps.price) - BigInt(mockCredits.totalCredits.toString())).toString()
       expect(screen.getByTestId('mana-to-fiat')).toBeInTheDocument()
@@ -100,7 +108,7 @@ describe('PriceComponent', () => {
           totalCredits: 1000000000000000000 // Same as price, so adjusted price will be 0
         }
       }
-      render(<PriceComponent {...zeroAdjustedProps} />)
+      renderComponent(zeroAdjustedProps)
 
       expect(screen.queryByTestId('mana-to-fiat')).not.toBeInTheDocument()
     })
@@ -114,7 +122,7 @@ describe('PriceComponent', () => {
           totalCredits: 2000000000000000000 // 2 MANA in wei (greater than price)
         }
       }
-      render(<PriceComponent {...greaterCreditsProps} />)
+      renderComponent(greaterCreditsProps)
 
       // Original price
       expect(screen.getByText(formatWeiToAssetCard(mockProps.price))).toBeInTheDocument()

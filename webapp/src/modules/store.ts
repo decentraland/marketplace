@@ -1,4 +1,4 @@
-import { createBrowserHistory, History, Location } from 'history'
+import { createBrowserHistory, History, Location, LocationDescriptor, Path } from 'history'
 import { Action, applyMiddleware, compose, createStore, Middleware } from 'redux'
 import { createLogger } from 'redux-logger'
 import createSagasMiddleware from 'redux-saga'
@@ -40,6 +40,54 @@ export const createHistory = () => {
       return locations.slice(-n)
     }
     return locations
+  }
+
+  // Persist `view` query param (e.g. mobile-iap) and forced filters across all navigations
+  const initialParams = new URLSearchParams(window.location.search)
+  const viewParam = initialParams.get('view')
+  const isIAP = viewParam === 'mobile-iap'
+
+  if (isIAP) {
+    const injectParams = (path: string | Location): string | Location => {
+      if (typeof path === 'string') {
+        const [pathname, search = ''] = path.split('?')
+        const params = new URLSearchParams(search)
+        params.set('view', 'mobile-iap')
+        params.set('withCredits', 'true')
+        params.set('status', 'on_sale')
+        return `${pathname}?${params.toString()}`
+      }
+      const params = new URLSearchParams(path.search || '')
+      params.set('view', 'mobile-iap')
+      params.set('withCredits', 'true')
+      params.set('status', 'on_sale')
+      return { ...path, search: `?${params.toString()}` }
+    }
+
+    const originalPush = history.push.bind(history)
+    const originalReplace = history.replace.bind(history)
+
+    // In IAP mode, only allow navigation to browse, item detail, buy, and success pages.
+    // /collections/ is intentionally excluded to keep users in the purchase flow.
+    const isAllowedIAPRoute = (path: string | Location): boolean => {
+      const pathname = typeof path === 'string' ? path.split('?')[0] : path.pathname
+      return /^\/(browse|contracts\/|buy|success)/.test(pathname) || pathname === '/'
+    }
+
+    history.push = (location: Path | LocationDescriptor, state?: History.LocationState) => {
+      if (isIAP && !isAllowedIAPRoute(location as string | Location)) return
+      originalPush(injectParams(location as string | Location) as Path & Location, state)
+    }
+
+    history.replace = (location: Path | LocationDescriptor, state?: History.LocationState) => {
+      if (isIAP && !isAllowedIAPRoute(location as string | Location)) return
+      originalReplace(injectParams(location as string | Location) as Path & Location, state)
+    }
+
+    // In IAP mode, redirect root to /browse on initial load
+    if (isIAP && window.location.pathname === (getBasename() || '/')) {
+      history.replace(`/browse?${initialParams.toString()}`)
+    }
   }
 
   return history

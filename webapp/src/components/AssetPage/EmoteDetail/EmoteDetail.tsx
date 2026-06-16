@@ -3,6 +3,7 @@ import { EmoteOutcomeType, EmotePlayMode, OrderSortBy } from '@dcl/schemas'
 import { RarityBadge } from 'decentraland-dapps/dist/containers/RarityBadge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../../modules/asset/types'
+import { useIsIAP } from '../../../modules/iap/useIAP'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
@@ -25,6 +26,7 @@ import { Props } from './EmoteDetail.types'
 import styles from './EmoteDetail.module.css'
 
 const EmoteDetail = ({ nft, isSocialEmotesEnabled }: Props) => {
+  const isIAP = useIsIAP()
   const emote = nft.data.emote!
   const isSocialEmote = !!isSocialEmotesEnabled && !!nft.data.emote?.outcomeType
   const loop = nft.data.emote!.loop
@@ -137,16 +139,20 @@ const EmoteDetail = ({ nft, isSocialEmotesEnabled }: Props) => {
           <BuyNFTBox nft={nft} />
         </div>
       </div>
-      <YourOffer asset={nft} />
-      <BidsTable asset={nft} />
-      <TransactionHistory asset={nft} />
-      <TableContainer
-        tabsList={tabList}
-        handleSortByChange={(value: string) => setSortBy(value as OrderSortBy)}
-        sortbyList={listingSortByOptions}
-        sortBy={sortBy}
-        children={<ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />}
-      />
+      {!isIAP && (
+        <>
+          <YourOffer asset={nft} />
+          <BidsTable asset={nft} />
+          <TransactionHistory asset={nft} />
+          <TableContainer
+            tabsList={tabList}
+            handleSortByChange={(value: string) => setSortBy(value as OrderSortBy)}
+            sortbyList={listingSortByOptions}
+            sortBy={sortBy}
+            children={<ListingsTable asset={nft} sortBy={sortBy as OrderSortBy} />}
+          />
+        </>
+      )}
     </div>
   )
 }

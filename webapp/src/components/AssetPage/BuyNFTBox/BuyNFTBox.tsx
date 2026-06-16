@@ -8,6 +8,7 @@ import { getExpirationDateLabel } from '../../../lib/date'
 import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
 import { getIsLegacyOrderExpired, getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { AssetType } from '../../../modules/asset/types'
+import { useIsIAP } from '../../../modules/iap/useIAP'
 import { useGetCurrentOrder } from '../../../modules/order/hooks'
 import { locations } from '../../../modules/routing/locations'
 import BidButton from '../../BidButton'
@@ -18,6 +19,7 @@ import { Props } from './BuyNFTBox.types'
 import styles from './BuyNFTBox.module.css'
 
 const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
+  const isIAP = useIsIAP()
   const [hasFetched, setHasFetched] = useState(false)
   const [useCredits, setUseCredits] = useState(false)
   const order = useGetCurrentOrder()
@@ -99,7 +101,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
             onUseCredits={handleUseCredits}
           />
         ) : null}
-        {!isOwner && !isEstateListingBroken && <BidButton asset={nft} alreadyBid={alreadyBid} />}
+        {!isOwner && !isEstateListingBroken && !isIAP && <BidButton asset={nft} alreadyBid={alreadyBid} />}
         {!isOrderExpired ? (
           <span className={styles.expiresAt}>
             <img src={clock} alt="clock" className={styles.mintingIcon} />
@@ -155,7 +157,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
                     <div className={`${styles.containerRow} ${styles.issueNumber}`}>#{nft.issuedId}</div>
                   </div>
                 </div>
-                {!isOwner && <BidButton asset={nft} alreadyBid={alreadyBid} />}
+                {!isOwner && !isIAP && <BidButton asset={nft} alreadyBid={alreadyBid} />}
               </div>
             )}
     </div>

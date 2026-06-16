@@ -1,12 +1,16 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import classNames from 'classnames'
 import { BigNumber } from 'ethers'
 import { Network, Order } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { Loader } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Loader } from 'decentraland-ui'
+import { config } from '../../../../config'
 import { Asset } from '../../../../modules/asset/types'
 import { isNFT } from '../../../../modules/asset/utils'
+import { useIsIAP } from '../../../../modules/iap/useIAP'
+import { getBasename } from '../../../../modules/routing/basename'
 import { locations } from '../../../../modules/routing/locations'
 import * as events from '../../../../utils/events'
 import { AssetProvider } from '../../../AssetProvider'
@@ -33,9 +37,16 @@ const BuyNFTButtons = ({
   onBuyItemWithCard,
   onUseCredits
 }: Props) => {
-  const [useCredits, setUseCredits] = useState(false)
+  const isIAP = useIsIAP()
+  const [useCredits, setUseCredits] = useState(isIAP)
   const analytics = getAnalytics()
   const location = useLocation()
+
+  useEffect(() => {
+    if (isIAP) {
+      onUseCredits(true)
+    }
+  }, [isIAP, onUseCredits])
   const shouldOpenBuyWithCryptoModal = useMemo(() => {
     const search = new URLSearchParams(location.search)
     const shouldOpenModal = search.get('buyWithCrypto')
@@ -86,6 +97,47 @@ const BuyNFTButtons = ({
             ((!isNFT(asset) && BigInt(credits.totalCredits) >= BigInt(asset.price)) ||
               (isNFT(asset) && order && BigInt(credits.totalCredits) >= BigInt(order.price)))
           const isFree = isItemFree || !!isBuyingEntirelyWithCredits
+
+          if (isIAP) {
+            if (!wallet) {
+              const basename = getBasename()
+              const redirectTo = `${basename}${location.pathname}${location.search}`
+              return (
+                <Button
+                  primary
+                  fluid
+                  className={styles.buyWithCryptoButton}
+                  onClick={() => window.location.replace(`${config.get('AUTH_URL')}/login?redirectTo=${encodeURIComponent(redirectTo)}`)}
+                >
+                  <span>{t('wallet.sign_in')}</span>
+                </Button>
+              )
+            }
+
+            // NFT without an active order cannot be purchased
+            if (isNFT(asset) && !order) {
+              return (
+                <Button primary fluid className={styles.buyWithCryptoButton} disabled>
+                  <span>{t('asset_page.actions.checkout')}</span>
+                </Button>
+              )
+            }
+
+            const assetPrice = !isNFT(asset) ? asset.price : order!.price
+            const hasEnoughCredits = !!credits && BigInt(credits.totalCredits) >= BigInt(assetPrice)
+
+            return (
+              <Button
+                primary
+                fluid
+                className={styles.buyWithCryptoButton}
+                disabled={!hasEnoughCredits}
+                onClick={() => handleBuyWithCrypto(asset, order)}
+              >
+                <span>{t('asset_page.actions.checkout')}</span>
+              </Button>
+            )
+          }
 
           return (
             <>
