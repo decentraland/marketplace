@@ -192,7 +192,7 @@ export function SuccessPage(props: Props) {
                       (isIAP ? (
                         <Button
                           as="a"
-                          href={`decentraland://open?iap_enabled=true&urn=${encodeURIComponent(asset.urn)}`}
+                          href={`decentraland://open?iap_enabled=true&urn=${encodeURIComponent(asset.urn ?? '')}`}
                           className={styles.successButton}
                           primary
                         >
