@@ -152,6 +152,9 @@ export class CatalogAPI extends BaseClient {
       queryParams.append('emoteOutcomeType', filters.emoteOutcomeType)
     }
 
+    // Hide social emotes from the marketplace until the feature is released
+    queryParams.append('includeSocialEmotes', 'false')
+
     return queryParams.toString()
   }
 }

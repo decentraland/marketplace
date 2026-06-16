@@ -7,7 +7,8 @@ export const DEFAULT_TRENDING_PAGE_SIZE = 20
 export class ItemAPI extends BaseClient {
   async get(filters: ItemFilters = {}): Promise<ItemResponse> {
     const queryParams = this.buildItemsQueryString(filters)
-    return this.fetch(`/v1/items?${queryParams}`)
+    // Hide social emotes from the marketplace until the feature is released
+    return this.fetch(`/v1/items?${queryParams}&includeSocialEmotes=false`)
   }
 
   async getTrendings(size = DEFAULT_TRENDING_PAGE_SIZE): Promise<ItemResponse> {
