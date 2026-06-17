@@ -32,12 +32,15 @@ const AssetProviderPage = (props: Props) => {
     <AssetProvider type={type} rentalStatus={rentalStatuses} withEntity={withEntity}>
       {(asset, order, rental, isAssetLoading) => {
         const isLoading = isConnecting || isAssetLoading
+        // Social emotes are hidden until the feature is released: treat them as not found so the detail page
+        // (and its collection widget, which would otherwise retry the items request indefinitely) never renders
+        const isHiddenSocialEmote = !isSocialEmotesEnabled && !!asset?.data?.emote?.outcomeType
 
         return (
           <>
             {isLoading ? <Loading fullWidth={fullWidth} /> : null}
-            {!isLoading && !asset ? <NotFound /> : null}
-            {!isLoading && asset ? children(asset, order, rental, isSocialEmotesEnabled) : null}
+            {!isLoading && (!asset || isHiddenSocialEmote) ? <NotFound /> : null}
+            {!isLoading && asset && !isHiddenSocialEmote ? children(asset, order, rental, isSocialEmotesEnabled) : null}
           </>
         )
       }}
