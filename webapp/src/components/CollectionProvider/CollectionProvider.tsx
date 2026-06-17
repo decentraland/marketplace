@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Props } from './CollectionProvider.types'
 
 const CollectionProvider = ({
@@ -13,12 +13,24 @@ const CollectionProvider = ({
   children,
   error
 }: Props) => {
+  // Tracks the collection we've already requested items for, so we don't refetch on a count mismatch.
+  // Comparing items.length to collection.size loops forever when fewer items come back than the size
+  // (e.g. social emotes are filtered out of the response).
+  const requestedItemsForContract = useRef<string | null>(null)
+
   useEffect(() => {
     if (!isLoadingCollection && !collection && !error) {
       onFetchCollection()
     }
 
-    if (!isLoadingCollectionItems && collection && withItems && (!items || items.length !== collection.size)) {
+    if (
+      !isLoadingCollectionItems &&
+      collection &&
+      withItems &&
+      requestedItemsForContract.current !== collection.contractAddress &&
+      (!items || items.length !== collection.size)
+    ) {
+      requestedItemsForContract.current = collection.contractAddress
       onFetchCollectionItems(collection)
     }
   }, [
