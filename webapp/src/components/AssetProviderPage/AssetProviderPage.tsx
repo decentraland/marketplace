@@ -34,7 +34,7 @@ const AssetProviderPage = (props: Props) => {
         const isLoading = isConnecting || isAssetLoading
         // Social emotes are hidden until the feature is released: treat them as not found so the detail page
         // (and its collection widget, which would otherwise retry the items request indefinitely) never renders
-        const isHiddenSocialEmote = !isSocialEmotesEnabled && !!asset?.data.emote?.outcomeType
+        const isHiddenSocialEmote = !isSocialEmotesEnabled && !!asset?.data?.emote?.outcomeType
 
         return (
           <>
