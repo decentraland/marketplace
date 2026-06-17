@@ -223,6 +223,9 @@ class NFTAPI extends BaseAPI {
       this.appendNFTFiltersToQueryParams(queryParams, filters)
     }
 
+    // Hide social emotes from the marketplace until the feature is released
+    queryParams.append('includeSocialEmotes', 'false')
+
     return queryParams.toString()
   }
 
