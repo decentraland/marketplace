@@ -255,7 +255,8 @@ export const hasFiltersEnabled = (browseOptions: BrowseOptions) => {
     onlySmart,
     emoteHasGeometry,
     emoteHasSound,
-    emoteOutcomeType
+    emoteOutcomeType,
+    view
   } = browseOptions
 
   const isLand = isLandSection(section as Section)
@@ -285,7 +286,9 @@ export const hasFiltersEnabled = (browseOptions: BrowseOptions) => {
   const hasContractsFilter = contracts && contracts.length > 0
   const hasCreatorFilter = creators && creators.length > 0
   const hasEmotePlayModeFilter = emotePlayMode && emotePlayMode.length > 0
-  const hasNotOnSaleFilter = onlyOnSale === false
+  // In My Assets the "On Sale" filter is opt-in, so it only counts as an active filter when explicitly enabled (true).
+  // Elsewhere the on sale filter is on by default, so including not-on-sale assets (false) is the active filter.
+  const hasOnSaleFilter = view === View.CURRENT_ACCOUNT ? onlyOnSale === true : onlyOnSale === false
 
   return (
     hasNetworkFilter ||
@@ -297,7 +300,7 @@ export const hasFiltersEnabled = (browseOptions: BrowseOptions) => {
     hasEmotePlayModeFilter ||
     !!minPrice ||
     !!maxPrice ||
-    hasNotOnSaleFilter ||
+    hasOnSaleFilter ||
     emoteHasSound ||
     emoteHasGeometry ||
     !!emoteOutcomeType ||

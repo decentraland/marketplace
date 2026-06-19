@@ -1410,6 +1410,38 @@ describe('when checking if filters are enabled', () => {
       })
     })
 
+    describe('and is the My Assets view (current account)', () => {
+      describe('and the On Sale filter is enabled', () => {
+        beforeEach(() => {
+          browseOptions = {
+            section: Section.WEARABLES,
+            view: View.CURRENT_ACCOUNT,
+            onlyOnSale: true
+          }
+        })
+
+        it('should return true', () => {
+          const result = urlParser.hasFiltersEnabled(browseOptions)
+          expect(result).toBe(true)
+        })
+      })
+
+      describe('and the On Sale filter is off so all assets are shown', () => {
+        beforeEach(() => {
+          browseOptions = {
+            section: Section.WEARABLES,
+            view: View.CURRENT_ACCOUNT,
+            onlyOnSale: false
+          }
+        })
+
+        it('should return false', () => {
+          const result = urlParser.hasFiltersEnabled(browseOptions)
+          expect(result).toBe(false)
+        })
+      })
+    })
+
     describe('and has emote filters', () => {
       beforeEach(() => {
         browseOptions = {

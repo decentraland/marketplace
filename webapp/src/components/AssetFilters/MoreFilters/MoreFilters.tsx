@@ -20,8 +20,9 @@ export const MoreFilters = ({ onlyOnSale, onSaleChange, defaultCollapsed = false
     [onSaleChange]
   )
 
+  // The box holds the opt-in "On Sale" toggle, so the collapsed header reflects its state: the filter name when on, nothing when off.
   const filterText = useMemo(() => {
-    return onlyOnSale ? t('nft_filters.for_sale') : t('nft_filters.not_on_sale')
+    return onlyOnSale ? t('nft_filters.on_sale') : ''
   }, [onlyOnSale])
 
   const header = useMemo(

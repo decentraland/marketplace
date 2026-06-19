@@ -126,7 +126,7 @@ describe('when clearing browser options', () => {
     })
   })
 
-  describe('and its not a catalog view', () => {
+  describe('and it is the My Assets view (current account)', () => {
     beforeEach(() => {
       baseBrowseOptions = {
         onlyOnSale: false,
@@ -135,7 +135,24 @@ describe('when clearing browser options', () => {
         section: Section.WEARABLES
       }
     })
-    it('should not set the status filter option', () => {
+    it('should keep the On Sale filter off so all assets are shown', () => {
+      expect(getClearedBrowseOptions(baseBrowseOptions)).toStrictEqual({
+        ...baseBrowseOptions,
+        onlyOnSale: false
+      })
+    })
+  })
+
+  describe('and it is another account view', () => {
+    beforeEach(() => {
+      baseBrowseOptions = {
+        onlyOnSale: false,
+        page: 1,
+        view: View.ACCOUNT,
+        section: Section.WEARABLES
+      }
+    })
+    it('should turn the On Sale filter back on by default', () => {
       expect(getClearedBrowseOptions(baseBrowseOptions)).toStrictEqual({
         ...baseBrowseOptions,
         onlyOnSale: true

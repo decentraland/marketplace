@@ -175,38 +175,40 @@ describe('when handling the clear filters request action', () => {
         })
       })
       describe('and the asset type is NFT', () => {
-        it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and remove the onlyOnSale filter", () => {
-          return expectSaga(routingSaga)
-            .provide([
-              [
-                call(getCurrentBrowseOptions, search, pathname, View.MARKET),
-                {
-                  ...browseOptions,
-                  onlyOnSale: true,
-                  section: Section.WEARABLES,
-                  assetType: AssetType.NFT,
-                  view: View.CURRENT_ACCOUNT
-                }
-              ],
-              [select(getPage), 1],
-              [select(getView), View.MARKET],
-              [select(getCurrentLocationAddress, pathname), currentLocationAddress],
-              [getContext('history'), { location: { pathname, search }, push: pushMock }],
-              [select(getEventData), {}],
-              [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
-            ])
-            .dispatch(clearFilters())
-            .run({ silenceTimeout: true })
-            .then(() => {
-              expect(pushMock).toHaveBeenCalledWith(
-                buildBrowseURL(pathname, {
-                  ...browseOptionsWithoutFilters,
-                  section: Section.WEARABLES,
-                  onlyOnSale: true,
-                  assetType: AssetType.NFT
-                })
-              )
-            })
+        describe('and it is the My Assets view (current account)', () => {
+          it("should fetch assets and change the URL by clearing the filter's browse options and keeping the On Sale filter off so all assets are shown", () => {
+            return expectSaga(routingSaga)
+              .provide([
+                [
+                  call(getCurrentBrowseOptions, search, pathname, View.MARKET),
+                  {
+                    ...browseOptions,
+                    onlyOnSale: true,
+                    section: Section.WEARABLES,
+                    assetType: AssetType.NFT,
+                    view: View.CURRENT_ACCOUNT
+                  }
+                ],
+                [select(getPage), 1],
+                [select(getView), View.MARKET],
+                [select(getCurrentLocationAddress, pathname), currentLocationAddress],
+                [getContext('history'), { location: { pathname, search }, push: pushMock }],
+                [select(getEventData), {}],
+                [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
+              ])
+              .dispatch(clearFilters())
+              .run({ silenceTimeout: true })
+              .then(() => {
+                expect(pushMock).toHaveBeenCalledWith(
+                  buildBrowseURL(pathname, {
+                    ...browseOptionsWithoutFilters,
+                    section: Section.WEARABLES,
+                    onlyOnSale: false,
+                    assetType: AssetType.NFT
+                  })
+                )
+              })
+          })
         })
       })
     })

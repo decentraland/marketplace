@@ -118,13 +118,15 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
     clearedBrowseOptions.status = AssetStatusFilter.ON_SALE
   }
 
-  // The onlyOnSale filter is ON by default for some sections. The clear should remove it if it's off so it's back on (default state)
+  // The onlyOnSale filter is ON by default for some sections. The clear should remove it if it's off so it's back on (default state).
+  // My Assets (current account) is the exception: it shows all assets by default with "On Sale" as an opt-in filter,
+  // so clearing keeps it off (false) and the toggle stays visible.
   if (
     !clearedBrowseOptions.onlyOnSale &&
     !isLandSection(browseOptions.section as Section) &&
     !isCatalogViewWithStatusFilter(browseOptions.view)
   ) {
-    clearedBrowseOptions.onlyOnSale = true
+    clearedBrowseOptions.onlyOnSale = browseOptions.view === View.CURRENT_ACCOUNT ? false : true
   }
   // reset the pages to the first one
   clearedBrowseOptions.page = 1

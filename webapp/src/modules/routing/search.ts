@@ -32,7 +32,8 @@ export function getDefaultOptionsByView(view?: View, section?: Section): BrowseO
       defaultOptions = {
         ...defaultOptions,
         status: undefined, // status doesn't apply to ENS
-        onlyOnSale: true // show ENS names on sale by default
+        // My Assets (current account) shows all names by default with "On Sale" as an opt-in filter. Elsewhere names are shown on sale by default.
+        onlyOnSale: view === View.CURRENT_ACCOUNT ? false : true
       }
     }
   }
