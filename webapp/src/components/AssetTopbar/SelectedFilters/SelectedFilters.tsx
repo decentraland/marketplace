@@ -4,6 +4,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import ProfilesCache from '../../../lib/profiles'
 import { CreatorAccount } from '../../../modules/account/types'
 import { AssetType } from '../../../modules/asset/types'
+import { SortBy } from '../../../modules/routing/types'
+import { View } from '../../../modules/ui/types'
 import {
   getEstateSizeLabel,
   getGenderFilterLabel,
@@ -41,8 +43,10 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
     status,
     emoteHasSound,
     emoteHasGeometry,
-    emoteOutcomeType
+    emoteOutcomeType,
+    view
   } = browseOptions
+  const isCurrentAccount = view === View.CURRENT_ACCOUNT
   const [collections, setCollections] = useState<Record<string, string>[] | []>([])
 
   const [selectedCreators, setSelectedCreators] = useState<Pick<CreatorAccount, 'address' | 'name'>[]>()
@@ -124,8 +128,11 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
   }, [onBrowse])
 
   const handleDeleteOnlySale = useCallback(() => {
-    onBrowse({ onlyOnSale: true })
-  }, [onBrowse])
+    // In My Assets the pill is the opt-in "On Sale" filter, so deleting it turns the filter off (shows all assets).
+    // The sort is reset to avoid invalid combinations with the on sale sort options.
+    // Elsewhere the pill is "Includes not on sale", so deleting it goes back to showing only on sale assets.
+    onBrowse(isCurrentAccount ? { onlyOnSale: false, sortBy: SortBy.NEWEST } : { onlyOnSale: true })
+  }, [onBrowse, isCurrentAccount])
 
   const handleDeleteGender = useCallback(() => {
     onBrowse({ wearableGenders: [] })
@@ -185,6 +192,13 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
     onBrowse({ emoteOutcomeType: undefined })
   }, [onBrowse])
 
+  // In My Assets "On Sale" is an opt-in filter: show the pill only when it's enabled (onlyOnSale === true).
+  // Elsewhere the on sale filter is on by default, so the pill represents "Includes not on sale" (onlyOnSale === false).
+  const showOnSaleFilterPill = isCurrentAccount
+    ? !!onlyOnSale && !isLandSection
+    : !onlyOnSale && !isLandSection && assetType !== AssetType.ITEM
+  const onSaleFilterPillLabel = isCurrentAccount ? t('nft_filters.on_sale') : t('nft_filters.not_on_sale')
+
   return (
     <div className={styles.pillContainer}>
       {emoteHasSound ? (
@@ -217,9 +231,7 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
       {wearableGenders?.length ? (
         <Pill label={t(getGenderFilterLabel(wearableGenders))} id="wearable_genders" onDelete={handleDeleteGender} />
       ) : null}
-      {!onlyOnSale && !isLandSection && assetType !== AssetType.ITEM ? ( // TODO UNIFIED: CHECK THIS
-        <Pill label={t('nft_filters.not_on_sale')} id="onlyOnSale" onDelete={handleDeleteOnlySale} />
-      ) : null}
+      {showOnSaleFilterPill ? <Pill label={onSaleFilterPillLabel} id="onlyOnSale" onDelete={handleDeleteOnlySale} /> : null}
       {emotePlayMode?.map(playMode => (
         <Pill key={playMode} label={t(`emote.play_mode.${playMode}`)} onDelete={handleDeleteEmotePlayMode} id={playMode} />
       ))}
