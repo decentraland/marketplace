@@ -4,6 +4,7 @@ import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Close, Dropdown, DropdownProps, Field, Icon, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import trash from '../../images/trash.png'
+import { useIsIAP } from '../../modules/iap/useIAP'
 import { getCategoryFromSection, getSectionFromCategory } from '../../modules/routing/search'
 import { SortBy } from '../../modules/routing/types'
 import { isCatalogView } from '../../modules/routing/utils'
@@ -34,6 +35,10 @@ export const AssetTopbar = ({
   sortByOptions
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
+  // In mobile-IAP mode the price/status/credits filters are force-injected (see store.ts),
+  // so the removable filter chips + "clear all" must stay hidden — otherwise the user could
+  // strip the maxPrice ceiling and see unaffordable items (#2298).
+  const isIAP = useIsIAP()
   const searchBarFieldRef = useRef<HTMLDivElement>(null)
   const category = section ? getCategoryFromSection(section) : undefined
   const [searchValueForDropdown, setSearchValueForDropdown] = useState(search)
@@ -232,7 +237,7 @@ export const AssetTopbar = ({
           ) : null}
         </div>
       )}
-      {!isMap && hasFiltersEnabled ? (
+      {!isMap && hasFiltersEnabled && !isIAP ? (
         <div className={styles.selectedFiltersContainer}>
           <SelectedFilters />
           <button className={styles.clearFilters} onClick={onClearFilters}>

@@ -43,6 +43,10 @@ export const createHistory = () => {
   }
 
   // Persist `view` query param (e.g. mobile-iap) and forced filters across all navigations
+  // Largest credits tier (tier3 = 225 credits) as a price ceiling: items priced above it
+  // can't be bought with a single In-App Purchase, so they're filtered out (#2298). The
+  // browse `maxPrice` is in whole MANA/credits (parsed via parseUnits downstream), not wei.
+  const MOBILE_IAP_MAX_PRICE = '225'
   const initialParams = new URLSearchParams(window.location.search)
   const viewParam = initialParams.get('view')
   const isIAP = viewParam === 'mobile-iap'
@@ -55,12 +59,14 @@ export const createHistory = () => {
         params.set('view', 'mobile-iap')
         params.set('withCredits', 'true')
         params.set('status', 'on_sale')
+        params.set('maxPrice', MOBILE_IAP_MAX_PRICE)
         return `${pathname}?${params.toString()}`
       }
       const params = new URLSearchParams(path.search || '')
       params.set('view', 'mobile-iap')
       params.set('withCredits', 'true')
       params.set('status', 'on_sale')
+      params.set('maxPrice', MOBILE_IAP_MAX_PRICE)
       return { ...path, search: `?${params.toString()}` }
     }
 
