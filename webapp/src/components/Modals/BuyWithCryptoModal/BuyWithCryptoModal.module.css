@@ -462,6 +462,14 @@
   line-height: 26px;
 }
 
+/* Checkout button anchored directly below the Total in the IAP flow (#2306). The button
+   is `fluid`, so it fills this full-width block; the margin separates it from the Total. */
+.iapCheckoutButton {
+  display: flex;
+  width: 100%;
+  margin-top: 40px;
+}
+
 @media (max-width: 767px) {
   .buyWithCryptoModal {
     height: 100%;

@@ -835,13 +835,19 @@ export const BuyWithCryptoModal = (props: Props) => {
               )}
 
               {isIAP ? (
-                <div className={styles.iapTotalContainer}>
-                  <span>{t('buy_with_crypto_modal.total')}</span>
-                  <span className={styles.creditsPrice}>
-                    <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
-                    {formatWeiMANA(displayPrice)}
-                  </span>
-                </div>
+                <>
+                  <div className={styles.iapTotalContainer}>
+                    <span>{t('buy_with_crypto_modal.total')}</span>
+                    <span className={styles.creditsPrice}>
+                      <img src={CreditsIcon} alt="Credits" className={styles.creditsIcon} />
+                      {formatWeiMANA(displayPrice)}
+                    </span>
+                  </div>
+                  {/* Anchor the Checkout button directly below the Total so the flow reads
+                      items → total → checkout (#2306). For non-IAP the button stays pinned to
+                      the modal footer via Modal.Actions below. */}
+                  <div className={styles.iapCheckoutButton}>{renderMainActionButton()}</div>
+                </>
               ) : (
                 <PurchaseTotal
                   selectedToken={selectedToken}
@@ -943,7 +949,7 @@ export const BuyWithCryptoModal = (props: Props) => {
           )}
         </>
       </Modal.Content>
-      {showChainSelector || showTokenSelector || isPollingCrossChain || isCrossChainFailed || isCrossChainSucceeded ? null : (
+      {showChainSelector || showTokenSelector || isPollingCrossChain || isCrossChainFailed || isCrossChainSucceeded || isIAP ? null : (
         <Modal.Actions>
           <div className={classNames(styles.buttons, isWearableOrEmote(asset) && 'with-mana')}>{renderMainActionButton()}</div>
           {isWearableOrEmote(asset) && isBuyWithCardPage ? (
