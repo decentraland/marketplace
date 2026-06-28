@@ -12,7 +12,6 @@ import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { VendorName } from '../../modules/vendor/types'
 import { AssetStatusFilter } from '../../utils/filters'
-import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
@@ -225,7 +224,6 @@ const HomePage = (props: Props) => {
       <ListsLaunchModal />
       {isCampaignHomepageBannerEnabled ? <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
       <Page className="HomePage">
-        <AnalyticsVolumeDayData />
         {firstViewsSection.map(renderSlideshow)}
         <RankingsTable />
         {secondViewsSection.map(renderSlideshow)}

@@ -1,5 +1,5 @@
 .special-filter {
-  background-color: #242129;
+  background-color: #f5f4f7;
 }
 
 .special-filter .special-filter-content {
@@ -46,7 +46,7 @@
 .special-filter .smart-filter .smart-left {
   display: flex;
   align-items: center;
-  background-color: var(--superGray);
+  background-color: #ececed;
   border-radius: 4px;
 }
 
@@ -63,7 +63,24 @@
 .special-filter .smart-filter .smart-label {
   font-size: 14px;
   font-weight: 500;
-  color: white;
+  color: #16141a;
   margin-left: 6px;
   letter-spacing: 0.5px;
+}
+
+/* Light reskin: the "SMART" filter chip is a decentraland-ui IconBadge that
+   ships dark (#37333d) with a white lightning icon. Lighten it and invert the
+   icon (white -> dark) so it fits the light look. Scoped to the filter so the
+   smart-wearable badge on cards keeps its original styling. */
+.special-filter .smart-filter .dui-smart-badge,
+.special-filter .smart-filter .dui-icon-badge {
+  background-color: #ececed;
+}
+
+.special-filter .smart-filter .dui-smart-badge .text {
+  color: #16141a;
+}
+
+.special-filter .smart-filter .dui-icon-badge__icon.smart-wearable {
+  filter: invert(1);
 }

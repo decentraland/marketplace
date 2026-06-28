@@ -17,9 +17,11 @@ export type Props = {
   hasFiltersEnabled: boolean
   isLoading: boolean
   disableSearchDropdown?: boolean
+  hideSearch?: boolean
+  hideSort?: boolean
   onBrowse: (options: BrowseOptions) => void
   onClearFilters: () => unknown
   onOpenFiltersModal: () => unknown
 }
 
-export type ContainerProps = Pick<Props, 'disableSearchDropdown'>
+export type ContainerProps = Pick<Props, 'disableSearchDropdown' | 'hideSearch' | 'hideSort'>

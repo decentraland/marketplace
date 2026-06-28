@@ -3,7 +3,7 @@
 }
 
 .RankingsTable .rankings-card {
-  background: #242129;
+  background: #f5f4f7;
   padding-top: 0;
   border-radius: 10px;
   position: relative;
@@ -188,7 +188,7 @@
 .RankingsTable .ui.table {
   font-size: 14px;
   line-height: 24px;
-  color: white;
+  color: var(--text);
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -197,7 +197,7 @@
 .RankingsTable .ui.basic.table th {
   font-size: 16px;
   font-weight: 700;
-  color: white;
+  color: var(--text);
 }
 
 .RankingsTable .ui.table tr:last-child td:first-child {

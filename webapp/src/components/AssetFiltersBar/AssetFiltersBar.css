@@ -1,0 +1,72 @@
+.AssetFiltersBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 8px;
+}
+
+/* Filters reused from the sidebar render inside a collapsible Box. Inside a
+   popover that chrome is redundant (the trigger already names the filter), so
+   hide the Box header and strip its padding/background. */
+.AssetFiltersBar .FilterPopover__panel .dcl.box {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+.AssetFiltersBar .FilterPopover__panel .dcl.box .box-header {
+  display: none;
+}
+
+.AssetFiltersBar .FilterPopover__panel .dcl.box .box-children {
+  padding: 0;
+}
+
+/* Price dropdown: drop the histogram chart, keep only the min/max inputs and
+   the range slider (which move up to fill the space). */
+.AssetFiltersBar .PriceDropdown .recharts-responsive-container,
+.AssetFiltersBar .PriceDropdown .loader-container,
+.AssetFiltersBar .PriceDropdown .no-data-loading-layer {
+  display: none !important;
+}
+
+.AssetFiltersBar .PriceDropdown .FilterPopover__panel {
+  min-width: 300px;
+}
+
+/* Right group: search + sort, pushed to the right edge of the bar. */
+.AssetFiltersBar__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.AssetFiltersBar__right .AssetSearchBar {
+  margin-left: 0;
+  min-width: 260px;
+}
+
+.AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid rgba(115, 110, 125, 0.25);
+  border-radius: 12px;
+  background-color: #ffffff;
+  white-space: nowrap;
+  color: #6b6873;
+}
+
+/* "Most newest / Recently sold…" in the same grey as the filter labels (not purple). */
+.AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown > .text,
+.AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown > .icon,
+.AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown > .dropdown.icon {
+  font-weight: 600;
+  color: #6b6873 !important;
+}

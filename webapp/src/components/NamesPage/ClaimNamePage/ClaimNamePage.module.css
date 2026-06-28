@@ -124,7 +124,7 @@
   align-items: center;
   height: 250px;
   border-radius: 8px;
-  background: linear-gradient(180deg, #ff2d55 0%, #c640cd 100%);
+  background: linear-gradient(180deg, #821dbb 0%, #c640cd 100%);
   flex: 1;
 }
 
@@ -133,7 +133,7 @@
   align-items: center;
   height: 250px;
   border-radius: 8px;
-  background: linear-gradient(244deg, #ff2d55 -11.67%, #ffbc5b 88.23%);
+  background: linear-gradient(244deg, #821dbb -11.67%, #ffbc5b 88.23%);
   flex: 1;
 }
 
@@ -158,7 +158,7 @@
 }
 
 .claimNamePage .availableContainer :global(.close.icon::before) {
-  color: #ff2d55;
+  color: #821dbb;
 }
 
 .claimNamePage .nameCostNetwork {
@@ -386,7 +386,7 @@
 }
 
 .claimNamePage .ctasContainer .card {
-  background-color: #242129;
+  background-color: #f5f4f7;
   height: 235px;
   min-width: 305px;
   padding: 0;
@@ -471,7 +471,7 @@
   position: absolute;
   aspect-ratio: 1/1;
   width: 130%;
-  background-image: radial-gradient(100% 100% at 6% 9%, #ffbc5bff 2%, #ffffff00 73%), linear-gradient(60deg, #ff2d55 18%, #c640cd 100%);
+  background-image: radial-gradient(100% 100% at 6% 9%, #ffbc5bff 2%, #ffffff00 73%), linear-gradient(60deg, #821dbb 18%, #c640cd 100%);
   z-index: -1;
   animation: rotate 4s linear infinite;
 }

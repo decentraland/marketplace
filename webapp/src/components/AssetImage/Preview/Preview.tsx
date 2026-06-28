@@ -10,6 +10,7 @@ import { AnimationControls, EmoteControls, WearablePreview, ZoomControls } from 
 import { config } from '../../../config'
 import { getAssetImage, getAssetName, isNFT } from '../../../modules/asset/utils'
 import * as events from '../../../utils/events'
+import { getRarityBackgroundColor, getRarityBackgroundGradient } from '../../../utils/rarity'
 import AvailableForMintPopup from '../AvailableForMintPopup'
 import { getEthereumItemUrn, colorToHex } from '../utils'
 import { PlayButton } from './PlayButton'
@@ -304,7 +305,7 @@ export const Preview: React.FC<Props> = ({
     return asset.data.wearable?.rarity || asset.data.emote?.rarity || Rarity.COMMON
   }, [asset])
 
-  const [light, dark] = useMemo(() => Rarity.getGradient(rarity), [rarity])
+  const [light, dark] = useMemo(() => getRarityBackgroundGradient(rarity), [rarity])
 
   const backgroundImage = useMemo(() => `radial-gradient(${light}, ${dark})`, [light, dark])
 
@@ -332,7 +333,7 @@ export const Preview: React.FC<Props> = ({
         <>
           <WearablePreview
             id="wearable-preview"
-            background={Rarity.getColor(rarity)}
+            background={getRarityBackgroundColor(rarity)}
             emote={isTryingOnEnabled || isUnityWearablePreviewEnabled ? previewEmote : undefined}
             hair={hair}
             profile={avatar ? avatar.ethAddress : 'default'}

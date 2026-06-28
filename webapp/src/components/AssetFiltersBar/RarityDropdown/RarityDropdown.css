@@ -1,0 +1,32 @@
+.RarityDropdown {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.RarityDropdown__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 8px;
+  transition: background-color 0.12s ease;
+}
+
+.RarityDropdown__option:hover {
+  background-color: #f5f4f7;
+}
+
+.RarityDropdown__name {
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* The checkbox is purely visual here; the whole row toggles the value. */
+.RarityDropdown__option .ui.checkbox {
+  pointer-events: none;
+}

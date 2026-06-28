@@ -1,0 +1,70 @@
+/* Two columns: main list + subcategory flyout. */
+.SectionDropdown__popover .FilterPopover__panel {
+  padding: 8px;
+  max-width: none;
+}
+
+.SectionDropdown {
+  display: flex;
+  align-items: stretch;
+}
+
+.SectionDropdown__main,
+.SectionDropdown__flyout {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 200px;
+}
+
+/* Flyout opens to the right of the main list. */
+.SectionDropdown__flyout {
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid rgba(115, 110, 125, 0.18);
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.SectionDropdown__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+  text-align: left;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.SectionDropdown__item:hover,
+.SectionDropdown__item.is-open {
+  background-color: #f5f4f7;
+}
+
+.SectionDropdown__item.is-current {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.SectionDropdown__extra {
+  font-weight: 600;
+}
+
+.SectionDropdown__caret {
+  margin: 0 !important;
+  font-size: 11px !important;
+  opacity: 0.5;
+}
+
+.SectionDropdown__divider {
+  height: 1px;
+  margin: 6px 8px;
+  background-color: rgba(115, 110, 125, 0.18);
+}

@@ -7,6 +7,7 @@ import { Loader } from 'decentraland-ui'
 import { WearablePreview } from 'decentraland-ui2'
 import { config } from '../../config'
 import { getWallet } from '../../modules/wallet/selectors'
+import { getRarityBackgroundColor, getRarityBackgroundGradient } from '../../utils/rarity'
 import './EmotePreviewPlayer.css'
 
 const PREVIEW_IFRAME_ID = 'emote-preview-player-iframe'
@@ -47,7 +48,7 @@ const sourceToOptions = (src: EmotePreviewSource, env: PreviewEnvConfig): Previe
     profile: env.profile,
     peerUrl: env.peerUrl,
     marketplaceServerUrl: env.marketplaceServerUrl,
-    background: Rarity.getColor(src.rarity ?? Rarity.COMMON)
+    background: getRarityBackgroundColor(src.rarity ?? Rarity.COMMON)
   }
   if (src.network === Network.ETHEREUM && src.urn) {
     return { ...base, urns: [src.urn] }
@@ -232,7 +233,7 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
 
   const overlayStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!isVisible || !rect) return undefined
-    const [light, dark] = Rarity.getGradient(rarity)
+    const [light, dark] = getRarityBackgroundGradient(rarity)
     return {
       top: rect.top,
       left: rect.left,
@@ -249,7 +250,7 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
         profile="default"
         peerUrl={envConfig.peerUrl}
         marketplaceServerUrl={envConfig.marketplaceServerUrl}
-        background={Rarity.getColor(Rarity.COMMON)}
+        background={getRarityBackgroundColor(Rarity.COMMON)}
         wheelZoom={1.5}
         wheelStart={100}
         disableAutoRotate

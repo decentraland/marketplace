@@ -59,7 +59,7 @@
 }
 
 .AssetCard .CatalogItemInformation {
-  color: white;
+  color: var(--text);
   display: flex;
   flex-direction: column;
   font-size: 14px;
@@ -171,9 +171,17 @@
 }
 
 .AssetCard .PriceInMana .ui.header.large {
-  font-size: 30px;
+  font-size: 21px;
   font-weight: 600;
   margin: 0px;
+  color: #736e7d;
+}
+
+/* Medium-grey price (number + mana icon). */
+.AssetCard .PriceInMana,
+.AssetCard .PriceInMana .ui.header,
+.AssetCard .PriceInMana .dcl.mana {
+  color: #736e7d;
 }
 
 .AssetCard .CreditsPrice {

@@ -2,7 +2,7 @@
 import 'decentraland-ui/lib/styles.css'
 // Theme
 // eslint-disable-next-line import/order
-import 'decentraland-ui/dist/themes/alternative/dark-theme.css'
+import 'decentraland-ui/dist/themes/alternative/light-theme.css'
 // Overrides
 import './components/Button.css'
 import './components/Card.css'

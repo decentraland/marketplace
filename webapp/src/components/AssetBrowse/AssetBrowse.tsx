@@ -13,6 +13,7 @@ import { Section as DecentralandSection } from '../../modules/vendor/decentralan
 import { Sections } from '../../modules/vendor/routing/types'
 import { AssetStatusFilter } from '../../utils/filters'
 import { AccountSidebar } from '../AccountSidebar'
+import { AssetFiltersBar } from '../AssetFiltersBar'
 import { AssetList } from '../AssetList'
 import AssetTopbar from '../AssetTopbar'
 import { Bids } from '../Bids'
@@ -155,17 +156,23 @@ const AssetBrowse = (props: Props) => {
     visitedLocations
   ])
 
-  const left = isListsSection(section) ? null : (
-    <>
-      <NotMobile>
-        {isAccountOrCurrentAccount ? (
-          <AccountSidebar address={address!} isCurrentAccount={isCurrentAccount} />
-        ) : (
-          <NFTSidebar section={section} sections={sections} />
-        )}
-      </NotMobile>
-    </>
-  )
+  // Horizontal filters bar (Roblox-style) replaces the left sidebar for the
+  // wearables/emotes catalog browse. Account/Land/map views keep the sidebar.
+  const showHorizontalFilters =
+    !isAccountOrCurrentAccount && !isMap && !!section && (section.startsWith('wearables') || section.startsWith('emotes'))
+
+  const left =
+    isListsSection(section) || showHorizontalFilters ? null : (
+      <>
+        <NotMobile>
+          {isAccountOrCurrentAccount ? (
+            <AccountSidebar address={address!} isCurrentAccount={isCurrentAccount} />
+          ) : (
+            <NFTSidebar section={section} sections={sections} />
+          )}
+        </NotMobile>
+      </>
+    )
 
   let right: ReactNode
 
@@ -199,10 +206,15 @@ const AssetBrowse = (props: Props) => {
     default:
       right = (
         <>
+          {showHorizontalFilters ? (
+            <NotMobile>
+              <AssetFiltersBar section={section} sections={sections ?? [DecentralandSection.ALL]} />
+            </NotMobile>
+          ) : null}
           {isMap && isFullscreen ? (
             <MapTopbar showOwned={showOwnedLandOnMap} onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)} />
           ) : (
-            <AssetTopbar />
+            <AssetTopbar hideSearch={showHorizontalFilters} hideSort={showHorizontalFilters} />
           )}
           {isMap ? <MapBrowse showOwned={showOwnedLandOnMap} /> : <AssetList isManager={isCurrentAccount} />}
         </>

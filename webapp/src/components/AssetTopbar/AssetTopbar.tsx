@@ -32,6 +32,8 @@ export const AssetTopbar = ({
   onClearFilters,
   onOpenFiltersModal,
   disableSearchDropdown,
+  hideSearch,
+  hideSort,
   sortByOptions
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
@@ -180,34 +182,36 @@ export const AssetTopbar = ({
 
   return (
     <div className={styles.assetTopbar} ref={searchBarFieldRef}>
-      <div
-        className={classNames(styles.searchContainer, {
-          [styles.searchMap]: isMap
-        })}
-      >
-        {!isMap && !isListsSection(section) && (
-          <div className={styles.searchFieldContainer}>
-            <Field
-              className={styles.searchField}
-              placeholder={t('nft_filters.search')}
-              kind="full"
-              value={searchValue}
-              onChange={(_e, data) => handleDebouncedChange(data.value)}
-              icon={<Icon name="search" className="searchIcon" />}
-              iconPosition="left"
-              onClick={handleFieldClick}
-            />
-            {searchValue ? <Close onClick={handleClearSearch} /> : null}
-          </div>
-        )}
-        {shouldRenderSearchDropdown && renderSearch()}
-        {isLandSection(section) && !isAccountView(view!) && (
-          <div className={classNames(styles.mapToggle, { [styles.map]: isMap })}>
-            <Chip className="grid" icon="table" isActive={!isMap} onClick={handleIsMapChange.bind(null, false)} />
-            <Chip className="atlas" icon="map marker alternate" isActive={isMap} onClick={handleIsMapChange.bind(null, true)} />
-          </div>
-        )}
-      </div>
+      {!hideSearch || isLandSection(section) || isMap ? (
+        <div
+          className={classNames(styles.searchContainer, {
+            [styles.searchMap]: isMap
+          })}
+        >
+          {!isMap && !isListsSection(section) && !hideSearch && (
+            <div className={styles.searchFieldContainer}>
+              <Field
+                className={styles.searchField}
+                placeholder={t('nft_filters.search')}
+                kind="full"
+                value={searchValue}
+                onChange={(_e, data) => handleDebouncedChange(data.value)}
+                icon={<Icon name="search" className="searchIcon" />}
+                iconPosition="left"
+                onClick={handleFieldClick}
+              />
+              {searchValue ? <Close onClick={handleClearSearch} /> : null}
+            </div>
+          )}
+          {shouldRenderSearchDropdown && renderSearch()}
+          {isLandSection(section) && !isAccountView(view!) && (
+            <div className={classNames(styles.mapToggle, { [styles.map]: isMap })}>
+              <Chip className="grid" icon="table" isActive={!isMap} onClick={handleIsMapChange.bind(null, false)} />
+              <Chip className="atlas" icon="map marker alternate" isActive={isMap} onClick={handleIsMapChange.bind(null, true)} />
+            </div>
+          )}
+        </div>
+      ) : null}
       {!isMap && (
         <div className={styles.infoRow}>
           {!isLoading ? (
@@ -226,7 +230,9 @@ export const AssetTopbar = ({
           ) : null}
           {!isListsSection(section) ? (
             <div className={styles.rightOptionsContainer}>
-              <Dropdown direction="left" value={sortByValue} options={sortByOptions} onChange={handleOrderByDropdownChange} />
+              {!hideSort ? (
+                <Dropdown direction="left" value={sortByValue} options={sortByOptions} onChange={handleOrderByDropdownChange} />
+              ) : null}
               {isMobile ? (
                 <i
                   className={classNames(styles.openFilters, styles.openFiltersWrapper, hasFiltersEnabled && styles.active)}

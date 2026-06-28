@@ -181,7 +181,6 @@ const AssetCard = (props: Props) => {
             count: (asset as Item).owners
           })}`
         )}
-        {catalogItemInformation.extraInformation && <span className="extraInformation">{catalogItemInformation.extraInformation}</span>}
       </div>
     ) : null
   }, [asset, catalogItemInformation])

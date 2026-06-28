@@ -41,6 +41,8 @@ const AssetTopbarContainer: React.FC<ContainerProps> = props => {
   return (
     <AssetTopbar
       disableSearchDropdown={props.disableSearchDropdown}
+      hideSearch={props.hideSearch}
+      hideSort={props.hideSort}
       search={search || ''}
       isMap={isMap || false}
       count={count}

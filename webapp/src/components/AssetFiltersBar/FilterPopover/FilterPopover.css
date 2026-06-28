@@ -1,0 +1,73 @@
+.FilterPopover {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Text-only triggers (no button/pill styling) — just label + chevron.
+   All labels are semibold grey; the active/open one is a darker grey. */
+.FilterPopover__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 4px;
+  border: none;
+  background: transparent;
+  color: #6b6873;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.FilterPopover__trigger:hover,
+.FilterPopover.is-open .FilterPopover__trigger,
+.FilterPopover.is-active .FilterPopover__trigger {
+  color: #3f3c47;
+}
+
+.FilterPopover__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background-color: var(--primary);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.FilterPopover__chevron {
+  margin: 0 !important;
+  font-size: 12px !important;
+  opacity: 0.6;
+  transition: transform 0.15s ease;
+}
+
+.FilterPopover.is-open .FilterPopover__chevron {
+  transform: rotate(180deg);
+}
+
+.FilterPopover__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 30;
+  min-width: 240px;
+  max-width: 360px;
+  padding: 16px;
+  border: 1px solid rgba(115, 110, 125, 0.18);
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 12px 32px rgba(22, 21, 24, 0.12);
+}
+
+/* When the popover is near the right edge, align its panel to the right. */
+.FilterPopover.align-right .FilterPopover__panel {
+  left: auto;
+  right: 0;
+}

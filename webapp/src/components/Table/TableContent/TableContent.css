@@ -6,7 +6,7 @@
 .TableContent .ui.table {
   font-size: 14px;
   line-height: 24px;
-  color: white;
+  color: var(--text);
   font-weight: normal;
   font-style: normal;
   font-stretch: normal;
@@ -84,7 +84,7 @@
 .TableContent .ui.basic.table th {
   font-size: 16px;
   font-weight: 700;
-  color: white;
+  color: var(--text);
 }
 
 @media (max-width: 768px) {

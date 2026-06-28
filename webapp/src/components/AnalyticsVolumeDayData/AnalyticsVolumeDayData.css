@@ -5,7 +5,8 @@
 
 .AnalyticsVolumeDayData .stats-card {
   display: flex;
-  background-color: #242129;
+  background-color: #f5f4f7;
+  border: 1px solid rgba(115, 110, 125, 0.2);
   height: 96px;
   border-radius: 10px;
   padding: 24px 36px;
@@ -37,7 +38,7 @@
   font-size: 19px;
   width: 48px;
   height: 48px;
-  background-color: #37333d;
+  background-color: #e9e8eb;
   border-radius: 30px;
   display: flex;
   align-items: center;

@@ -1,0 +1,42 @@
+.AssetSearchBar {
+  position: relative;
+  margin-left: auto;
+  min-width: 300px;
+  display: flex;
+  align-items: center;
+}
+
+.AssetSearchBar .dcl.field {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* No validation message / sub header — keep the field exactly input-height. */
+.AssetSearchBar .dcl.field .message,
+.AssetSearchBar .dcl.field .ui.sub.header {
+  display: none;
+}
+
+/* Light search field — matches the sort dropdown radius and height.
+   Overrides the more specific .dcl.field.full rule, so !important is needed. */
+.AssetSearchBar .ui.input input {
+  height: 40px !important;
+  border-radius: 12px !important;
+  padding: 0 12px 0 38px !important;
+  background-color: #ffffff;
+  border: 1px solid rgba(115, 110, 125, 0.25);
+}
+
+.AssetSearchBar .ui.input input:focus {
+  border-color: var(--primary);
+}
+
+/* The suggestions dropdown is positioned under the field. */
+.AssetSearchBar .SearchBarDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  z-index: 30;
+}

@@ -9,7 +9,7 @@
     font-weight: 600;
     font-size: 15px;
     line-height: 24px;
-    color: white;
+    color: var(--text);
   }
 
   .RankingCreatorRow .rankings-creator-data .Profile {

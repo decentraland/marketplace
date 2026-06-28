@@ -150,7 +150,7 @@
   position: absolute;
   aspect-ratio: 1/1;
   width: 130%;
-  background-image: radial-gradient(100% 100% at 6% 9%, #ffbc5bff 2%, #ffffff00 73%), linear-gradient(60deg, #ff2d55 18%, #c640cd 100%);
+  background-image: radial-gradient(100% 100% at 6% 9%, #ffbc5bff 2%, #ffffff00 73%), linear-gradient(60deg, #821dbb 18%, #c640cd 100%);
   z-index: 0;
   animation: rotate 4s linear infinite;
 }

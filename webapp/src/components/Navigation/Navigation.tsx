@@ -93,7 +93,7 @@ const Navigation = (props: Props) => {
         </Tabs.Left>
         {!isMobile && !isIAP ? (
           <Tabs.Right>
-            <Button inverted onClick={handleOpenBuyManaWithFiatModal} size="small">
+            <Button primary onClick={handleOpenBuyManaWithFiatModal} size="small">
               {t('navigation.buy_mana_with_fiat')}
             </Button>
           </Tabs.Right>
