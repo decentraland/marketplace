@@ -6,6 +6,21 @@
   margin-bottom: 8px;
 }
 
+/* Stick the filters bar right below the (sticky) nav tabs while scrolling.
+   A subtle bottom shadow makes content read as scrolling under the bar. */
+@media (min-width: 768px) {
+  .AssetFiltersBar {
+    position: sticky;
+    top: 181px;
+    z-index: 9;
+    padding-top: 12px;
+    padding-bottom: 14px;
+    margin-bottom: 0;
+    background-color: #ffffff;
+    box-shadow: 0 10px 12px -10px rgba(22, 21, 24, 0.16);
+  }
+}
+
 /* Filters reused from the sidebar render inside a collapsible Box. Inside a
    popover that chrome is redundant (the trigger already names the filter), so
    hide the Box header and strip its padding/background. */

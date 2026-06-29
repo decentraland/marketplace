@@ -236,6 +236,17 @@ body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {
   margin-right: auto;
 }
 
+/* Keep the tabs bar pinned below the fixed top navbar while scrolling
+   (both Overview and Collectibles). White background so content scrolls under it. */
+@media (min-width: 768px) {
+  .Navigation {
+    position: sticky;
+    top: 92px;
+    z-index: 10;
+    background-color: #ffffff;
+  }
+}
+
 .Navigation,
 .dcl.navbar.fullscreen,
 .dcl.page,
