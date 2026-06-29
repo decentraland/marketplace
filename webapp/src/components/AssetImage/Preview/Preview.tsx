@@ -334,6 +334,10 @@ export const Preview: React.FC<Props> = ({
           <WearablePreview
             id="wearable-preview"
             background={getRarityBackgroundColor(rarity)}
+            /* Light reskin: keep the iframe scene transparent so the parent's
+               light gradient shows through (wearable-preview ignores our near-
+               white `background`, leaving a dark-grey default otherwise). */
+            disableBackground
             emote={isTryingOnEnabled || isUnityWearablePreviewEnabled ? previewEmote : undefined}
             hair={hair}
             profile={avatar ? avatar.ethAddress : 'default'}
