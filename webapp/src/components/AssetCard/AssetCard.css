@@ -5,7 +5,7 @@
 
 .ui.card.AssetCard.catalog {
   overflow: hidden;
-  height: 360px;
+  height: 338px;
 }
 
 .AssetCard.ui.card > .content.catalog {
@@ -43,6 +43,88 @@
 .ui.card.AssetCard .AssetImage,
 .ui.card.AssetCard .AssetImage .rarity-background {
   border-radius: 10px 10px 0px 0px !important;
+}
+
+/* ============================================================
+   Light reskin — hover "Add to Cart" + verified creator badge
+   ============================================================ */
+.ui.card.AssetCard {
+  position: relative;
+}
+
+/* Blue "verified" badge next to creators with a claimed DCL name. */
+.AssetCard .creator .verifiedBadge.icon {
+  color: #1d9bf0;
+  margin-left: 4px;
+  margin-right: 0;
+  font-size: 13px;
+  height: auto;
+  vertical-align: baseline;
+}
+
+/* Hide the now-duplicate rarity pill in the bottom tags. */
+.AssetCard .WearableTags .dui-rarity-badge,
+.AssetCard .EmoteTags .dui-rarity-badge {
+  display: none;
+}
+
+/* "Add to Cart" reveals from the bottom on hover. */
+/* Rounded button at the bottom of the card; slides up from below on hover.
+   The card's overflow:hidden clips it when hidden. */
+.AssetCard .AssetCard__addToCart {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  z-index: 3;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 10px;
+  background-color: #2b2a30;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(calc(100% + 16px));
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.AssetCard .AssetCard__cartIcon {
+  width: 22px;
+  height: 22px;
+}
+
+.ui.card.AssetCard:hover .AssetCard__addToCart {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* On hover, keep the content in normal flow (override the absolute "popover"
+   overlay) so the revealed rarity + price + Add to Cart button stack without
+   overlapping. The image shrinks to make room. */
+.ui.card.AssetCard.catalog:hover > .content.catalog {
+  position: static !important;
+  height: auto !important;
+  margin-top: 0 !important;
+  box-shadow: none !important;
+}
+
+.ui.card.AssetCard.catalog:hover .AssetImage.catalog {
+  height: 145px;
+}
+
+.AssetCard .AssetCard__addToCart {
+  cursor: pointer;
+}
+
+/* Added state — filled purple to confirm it's in the cart. */
+.AssetCard .AssetCard__addToCart.is-added {
+  background-color: var(--primary);
 }
 
 .AssetCard .header,

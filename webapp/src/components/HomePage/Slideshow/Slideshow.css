@@ -14,7 +14,7 @@
   display: flex;
   flex-wrap: nowrap;
   position: relative;
-  min-height: 336px;
+  min-height: 352px;
   -ms-overflow-style: none; /* hide scrollbar IE and Edge */
   scrollbar-width: none; /* hide scrollbar Firefox */
   width: 100%;
@@ -36,7 +36,8 @@
 .Slideshow .assets .AssetCard,
 .Slideshow .assets .ui.card.AssetCard:first-child {
   flex: 0 0 auto;
-  width: 257px;
+  /* 5 equal cards per row, matching the Collectibles grid card size. */
+  width: 234px;
   margin-right: 12px;
   margin-top: 12px;
 }

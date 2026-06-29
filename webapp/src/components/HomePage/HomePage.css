@@ -1,3 +1,10 @@
+/* Push the first section down so "Trending Items" lines up with the
+   Collectibles filters bar, and the home cards start at the same height as the
+   browse cards (consistent visual line between pages). */
+.HomePage.dcl.page {
+  padding-top: 32px;
+}
+
 .HomePageHero.dcl.hero {
   height: var(--page-header-height);
 }

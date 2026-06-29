@@ -7,6 +7,7 @@ import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
 import { lightTheme, DclThemeProvider } from 'decentraland-ui2'
+import { CartProvider } from './components/Cart'
 import * as modals from './components/Modals'
 import { Routes } from './components/Routes'
 import { ScrollToTop } from './components/ScrollToTop'
@@ -27,13 +28,15 @@ function main() {
         <TranslationProvider locales={Object.keys(locales)}>
           <WalletProvider>
             <DclThemeProvider theme={lightTheme}>
-              <ToastProvider>
-                <ModalProvider components={modals}>
-                  <ScrollToTop />
-                  <Routes />
-                </ModalProvider>
-              </ToastProvider>
-              <Web2TransactionModal />
+              <CartProvider>
+                <ToastProvider>
+                  <ModalProvider components={modals}>
+                    <ScrollToTop />
+                    <Routes />
+                  </ModalProvider>
+                </ToastProvider>
+                <Web2TransactionModal />
+              </CartProvider>
             </DclThemeProvider>
           </WalletProvider>
         </TranslationProvider>

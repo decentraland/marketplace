@@ -206,15 +206,34 @@ body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {
   background: var(--summer-red);
 }
 
-/** full-width */
-.AssetBrowse .ui.container,
-.Navigation .ui.container,
+/** full-width (top navbar + footer stay edge-to-edge) */
 .dcl.navbar.fullscreen .ui.container,
 .dcl.footer.ui.container,
 .dui-navbar > .ui.container {
   width: 100vw;
   box-sizing: border-box;
   max-width: 100% !important;
+}
+
+/* Light reskin: centered max-width container (Amazon/Juno style) for the nav
+   tabs + page content, so Overview and Collectibles share the same reading
+   lines with comfortable side margins. Both center on the viewport, so their
+   left/right edges always align. */
+.Navigation .ui.container,
+.AssetBrowse .ui.container,
+.HomePage .ui.container {
+  width: 100%;
+  max-width: 1216px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* The tabs' bottom divider lives on .dcl.tabs — center it too so the line
+   matches the content reading lines instead of spanning wider. */
+.Navigation .dcl.tabs {
+  max-width: 1216px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .Navigation,

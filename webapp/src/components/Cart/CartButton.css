@@ -1,0 +1,177 @@
+.CartButton {
+  position: relative;
+  display: inline-flex;
+  margin-left: 12px;
+}
+
+.CartButton__trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(115, 110, 125, 0.25);
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.CartButton__trigger:hover {
+  border-color: var(--primary);
+}
+
+.CartButton__trigger .icon {
+  margin: 0 !important;
+  font-size: 18px;
+}
+
+.CartButton__badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background-color: var(--primary);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.CartPanel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 40;
+  width: 360px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(115, 110, 125, 0.18);
+  border-radius: 14px;
+  background-color: #ffffff;
+  box-shadow: 0 16px 40px rgba(22, 21, 24, 0.16);
+  overflow: hidden;
+}
+
+.CartPanel__header {
+  padding: 18px 20px 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: 1px solid rgba(115, 110, 125, 0.15);
+}
+
+.CartPanel__items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 12px;
+}
+
+.CartPanel__empty {
+  padding: 32px 12px;
+  text-align: center;
+  color: var(--secondary-text);
+}
+
+.CartPanel__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px;
+}
+
+.CartPanel__thumb {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background-color: #f5f4f7;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.CartPanel__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* The Mana component is a semantic .ui.header with large default margins —
+   strip them so the price sits right under the name and aligns cleanly. */
+.CartPanel .dcl.mana.ui.header {
+  margin: 0 !important;
+  font-size: 15px;
+  line-height: 1;
+}
+
+.CartPanel__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.CartPanel__remove {
+  flex: 0 0 auto;
+  border: none;
+  background: transparent;
+  color: var(--secondary-text);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.CartPanel__remove .icon {
+  margin: 0 !important;
+}
+
+.CartPanel__footer {
+  border-top: 1px solid rgba(115, 110, 125, 0.15);
+  padding: 16px 20px 20px;
+}
+
+.CartPanel__total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.CartPanel__total .dcl.mana.ui.header {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.CartPanel__buy {
+  width: 100%;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--primary);
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.CartPanel__buy:hover {
+  background-color: var(--primary-hover);
+}

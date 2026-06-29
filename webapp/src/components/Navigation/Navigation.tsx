@@ -13,6 +13,7 @@ import { Section } from '../../modules/vendor/decentraland'
 import * as decentraland from '../../modules/vendor/decentraland'
 import * as events from '../../utils/events'
 import { AssetStatusFilter } from '../../utils/filters'
+import { CartButton } from '../Cart'
 import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
 
@@ -96,6 +97,7 @@ const Navigation = (props: Props) => {
             <Button primary onClick={handleOpenBuyManaWithFiatModal} size="small">
               {t('navigation.buy_mana_with_fiat')}
             </Button>
+            <CartButton />
           </Tabs.Right>
         ) : null}
       </Tabs>

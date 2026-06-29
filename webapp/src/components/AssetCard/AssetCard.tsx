@@ -1,16 +1,19 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
+import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import { Item, Network, NFTCategory, RentalListing } from '@dcl/schemas'
 import { Profile } from 'decentraland-dapps/dist/containers'
+import { getProfileOfAddress } from 'decentraland-dapps/dist/modules/profile/selectors'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
 import CreditsIcon from '../../images/icon-credits.svg'
 import { Asset } from '../../modules/asset/types'
-import { getAssetName, getAssetUrl, isNFT, isCatalogItem } from '../../modules/asset/utils'
+import { getAssetImage, getAssetName, getAssetUrl, isNFT, isCatalogItem } from '../../modules/asset/utils'
 import { useIsIAP } from '../../modules/iap/useIAP'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
+import { RootState } from '../../modules/reducer'
 import {
   getMaxPriceOfPeriods,
   getRentalEndDate,
@@ -21,8 +24,8 @@ import {
 import { locations } from '../../modules/routing/locations'
 import { PageName, SortBy } from '../../modules/routing/types'
 import { AssetImage } from '../AssetImage'
+import { useCart } from '../Cart'
 import { useEmotePreviewPlayer } from '../EmotePreviewPlayer'
-import { FavoritesCounter } from '../FavoritesCounter'
 import { Mana } from '../Mana'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
@@ -111,6 +114,10 @@ const AssetCard = (props: Props) => {
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
+  const rarity = wearable?.rarity || emote?.rarity
+  const creatorAddress = !isNFT(asset) ? (asset as Item).creator : undefined
+  const creatorProfile = useSelector((state: RootState) => (creatorAddress ? getProfileOfAddress(state, creatorAddress) : undefined))
+  const isVerifiedCreator = !!creatorProfile?.avatars?.[0]?.hasClaimedName
 
   const handleEmoteHoverEnter = useCallback(() => {
     if (!emotePreviewPlayer || !canShowEmotePreview) return
@@ -144,6 +151,21 @@ const AssetCard = (props: Props) => {
     return null
   }, [appliedFilters, asset, sortBy])
 
+  // Demo shopping cart: add the item instead of navigating to its page.
+  const { addItem, isInCart } = useCart()
+  const cartId = `${asset.contractAddress}-${'tokenId' in asset ? asset.tokenId : asset.itemId}`
+  const inCart = isInCart(cartId)
+  const handleAddToCart = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault()
+      event.stopPropagation()
+      const rawPrice = catalogItemInformation?.price || price || '0'
+      const cartPrice = rawPrice.includes('-') ? rawPrice.split(' - ')[0] : rawPrice
+      addItem({ id: cartId, name: title, thumbnail: getAssetImage(asset), price: cartPrice, network: asset.network })
+    },
+    [addItem, cartId, title, asset, catalogItemInformation, price]
+  )
+
   const renderCatalogItemInformation = useCallback(() => {
     const isAvailableForMint = !isNFT(asset) && asset.isOnSale && asset.available > 0
     const notForSale = !isAvailableForMint && !isNFT(asset) && !asset.minListingPrice
@@ -151,8 +173,9 @@ const AssetCard = (props: Props) => {
     return catalogItemInformation ? (
       <div className="CatalogItemInformation">
         <span className={`extraInformation ${notForSale ? 'NotForSale' : ''}`}>
-          <span>{catalogItemInformation.action}</span>
-          {catalogItemInformation.actionIcon && <img src={catalogItemInformation.actionIcon} alt="mint" className="mintIcon" />}
+          {/* Show the rarity here instead of the generic action label ("Cheapest Option", etc.) */}
+          <span>{rarity ? t(`@dapps.rarities.${rarity}`) : catalogItemInformation.action}</span>
+          {!rarity && catalogItemInformation.actionIcon && <img src={catalogItemInformation.actionIcon} alt="mint" className="mintIcon" />}
         </span>
 
         {catalogItemInformation.price ? (
@@ -183,7 +206,7 @@ const AssetCard = (props: Props) => {
         )}
       </div>
     ) : null
-  }, [asset, catalogItemInformation])
+  }, [asset, catalogItemInformation, rarity])
 
   const setWrapperRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -216,7 +239,21 @@ const AssetCard = (props: Props) => {
               asset={asset}
               showOrderListedTag={showListedTag}
             />
-            {!isNFT(asset) && !isMobile ? <FavoritesCounter className="FavoritesCounterBubble" item={asset} /> : null}
+            {rarity ? (
+              <div className={`AssetCard__addToCart ${inCart ? 'is-added' : ''}`} role="button" onClick={handleAddToCart}>
+                <svg className="AssetCard__cartIcon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="22" cy="24" r="2" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
+                  <circle cx="13" cy="24" r="2" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
+                  <path
+                    fill="currentColor"
+                    d="M25.658,10l-2.422,9H10.781L8.159,8.515C7.937,7.625,7.137,7,6.219,7H4C3.448,7,3,7.448,3,8c0,0.552,0.448,1,1,1h2.219l2.621,10.485C9.063,20.375,9.863,21,10.781,21h12.455c0.902,0,1.692-0.604,1.93-1.474L27.764,10H25.658z"
+                  />
+                  <line x1="17" y1="7" x2="17" y2="15" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
+                  <line x1="21" y1="11" x2="13" y2="11" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
+                </svg>
+                <span>{inCart ? 'Added to Cart' : 'Add to Cart'}</span>
+              </div>
+            ) : null}
             {showRentalBubble ? (
               <RentalChip asset={asset} isClaimingBackLandTransactionPending={isClaimingBackLandTransactionPending} rental={rental} />
             ) : null}
@@ -229,7 +266,9 @@ const AssetCard = (props: Props) => {
                   <span className={'textOverflow'}>{title}</span>
                   {!isNFT(asset) && isCatalogItem(asset) && asset.network === Network.MATIC && (
                     <span className="creator">
+                      By&nbsp;
                       <Profile address={asset.creator} textOnly />
+                      {isVerifiedCreator && <Icon name="check circle" className="verifiedBadge" />}
                     </span>
                   )}
                 </div>
