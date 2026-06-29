@@ -1,20 +1,27 @@
 import { useEffect, useState } from 'react'
 import { BigNumber } from 'ethers'
-import { CatalogSortBy, Item, Network } from '@dcl/schemas'
+import { CatalogSortBy, Item, Network, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Mana } from 'decentraland-ui'
+import { Button, Icon, Mana } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getAssetImage, getAssetName } from '../../../modules/asset/utils'
 import { catalogAPI } from '../../../modules/vendor/decentraland/catalog/api'
 import { useCart } from '../../Cart'
 import styles from './HomeBundles.module.css'
 
-// Demo: a few "buy the whole collection" bundles on the Overview page. We group
+// Demo: "buy the whole collection" bundles on the Overview page. We group
 // on-sale catalog items by collection and surface the ones with several items,
 // priced at a flat discount over the sum (client-side, no real checkout).
 const DISCOUNT = 15
-const MAX_BUNDLES = 4
-const MIN_ITEMS = 3
+const MAX_BUNDLES = 12
+const MIN_ITEMS = 2
+const PAGE_SIZE = 4
+
+type Props = {
+  title: string
+  subtitle: string
+  category: NFTCategory
+}
 
 type Bundle = {
   contractAddress: string
@@ -24,14 +31,15 @@ type Bundle = {
   network: Network
 }
 
-const HomeBundles = () => {
+const HomeBundles = ({ title, subtitle, category }: Props) => {
   const { addItem, isInCart } = useCart()
   const [bundles, setBundles] = useState<Bundle[]>([])
+  const [page, setPage] = useState(0)
 
   useEffect(() => {
     let cancelled = false
     catalogAPI
-      .get({ isOnSale: true, first: 200, sortBy: CatalogSortBy.CHEAPEST })
+      .get({ isOnSale: true, first: 200, sortBy: CatalogSortBy.CHEAPEST, category })
       .then(res => {
         const byContract = new Map<string, Item[]>()
         for (const item of res.data) {
@@ -63,9 +71,14 @@ const HomeBundles = () => {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [category])
 
   if (bundles.length === 0) return null
+
+  const totalPages = Math.ceil(bundles.length / PAGE_SIZE)
+  const pageBundles = bundles.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE)
+  const prev = () => setPage(p => (p - 1 + totalPages) % totalPages)
+  const next = () => setPage(p => (p + 1) % totalPages)
 
   return (
     <div className={styles.section}>
@@ -74,61 +87,84 @@ const HomeBundles = () => {
       <div className="dcl header-menu">
         <div className="dcl header-menu-left">
           <div>
-            <div className="ui header">{t('home_bundles.title')}</div>
-            <div className="ui sub header">{t('home_bundles.subtitle')}</div>
+            <div className="ui header">{title}</div>
+            <div className="ui sub header">{subtitle}</div>
           </div>
         </div>
       </div>
-      <div className={styles.grid}>
-        {bundles.map(bundle => {
-          const cartId = `bundle-${bundle.contractAddress}`
-          const inCart = isInCart(cartId)
-          const name = getAssetName(bundle.items[0])
-          return (
-            <div key={bundle.contractAddress} className={styles.card}>
-              <div className={styles.thumbs}>
-                {bundle.items.slice(0, 4).map(item => (
-                  <img key={item.id} src={getAssetImage(item)} alt={item.name} className={styles.thumb} loading="lazy" />
-                ))}
-              </div>
-              <div className={styles.body}>
-                <span className={styles.name}>{name}</span>
-                <span className={styles.count}>{t('home_bundles.count', { count: bundle.items.length })}</span>
-                <div className={styles.prices}>
-                  <span className={styles.original}>
-                    <Mana network={bundle.network} inline>
-                      {formatWeiMANA(bundle.totalWei)}
-                    </Mana>
-                  </span>
-                  <span className={styles.bundlePrice}>
-                    <Mana network={bundle.network} inline>
-                      {formatWeiMANA(bundle.bundleWei)}
-                    </Mana>
-                  </span>
-                  <span className={styles.save}>{t('collection_bundle.save', { percent: DISCOUNT })}</span>
+
+      <div className={styles.carousel}>
+        {totalPages > 1 ? (
+          <button className={`${styles.arrow} ${styles.arrowLeft}`} onClick={prev} aria-label="previous">
+            <Icon name="chevron left" />
+          </button>
+        ) : null}
+
+        <div className={styles.grid}>
+          {pageBundles.map(bundle => {
+            const cartId = `bundle-${bundle.contractAddress}`
+            const inCart = isInCart(cartId)
+            const name = getAssetName(bundle.items[0])
+            return (
+              <div key={bundle.contractAddress} className={styles.card}>
+                <div className={styles.thumbs}>
+                  {bundle.items.slice(0, 4).map(item => (
+                    <img key={item.id} src={getAssetImage(item)} alt={item.name} className={styles.thumb} loading="lazy" />
+                  ))}
                 </div>
-                <Button
-                  className={styles.buy}
-                  primary
-                  fluid
-                  disabled={inCart}
-                  onClick={() =>
-                    addItem({
-                      id: cartId,
-                      name: `${name} ${t('home_bundles.bundle_suffix')}`,
-                      thumbnail: getAssetImage(bundle.items[0]),
-                      price: bundle.bundleWei,
-                      network: bundle.network
-                    })
-                  }
-                >
-                  {inCart ? t('collection_bundle.added') : t('collection_bundle.buy')}
-                </Button>
+                <div className={styles.body}>
+                  <span className={styles.name}>{name}</span>
+                  <span className={styles.count}>{t('home_bundles.count', { count: bundle.items.length })}</span>
+                  <div className={styles.prices}>
+                    <span className={styles.original}>
+                      <Mana network={bundle.network} inline>
+                        {formatWeiMANA(bundle.totalWei)}
+                      </Mana>
+                    </span>
+                    <span className={styles.bundlePrice}>
+                      <Mana network={bundle.network} inline>
+                        {formatWeiMANA(bundle.bundleWei)}
+                      </Mana>
+                    </span>
+                    <span className={styles.save}>{t('collection_bundle.save', { percent: DISCOUNT })}</span>
+                  </div>
+                  <Button
+                    className={styles.buy}
+                    primary
+                    fluid
+                    disabled={inCart}
+                    onClick={() =>
+                      addItem({
+                        id: cartId,
+                        name: `${name} ${t('home_bundles.bundle_suffix')}`,
+                        thumbnail: getAssetImage(bundle.items[0]),
+                        price: bundle.bundleWei,
+                        network: bundle.network
+                      })
+                    }
+                  >
+                    {inCart ? t('collection_bundle.added') : t('collection_bundle.buy')}
+                  </Button>
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
+
+        {totalPages > 1 ? (
+          <button className={`${styles.arrow} ${styles.arrowRight}`} onClick={next} aria-label="next">
+            <Icon name="chevron right" />
+          </button>
+        ) : null}
       </div>
+
+      {totalPages > 1 ? (
+        <div className={styles.dots}>
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <span key={i} className={`${styles.dot} ${i === page ? styles.dotActive : ''}`} onClick={() => setPage(i)} />
+          ))}
+        </div>
+      ) : null}
     </div>
   )
 }

@@ -1726,5 +1726,9 @@
     "subtitle": "Llevate una colección completa con descuento",
     "count": "{count} coleccionables incluidos",
     "bundle_suffix": "bundle"
+  },
+  "animation_packs": {
+    "title": "Animation Packs",
+    "subtitle": "Llevate un pack de emotes con descuento"
   }
 }

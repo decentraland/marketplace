@@ -1764,5 +1764,9 @@
     "subtitle": "Grab a whole collection at a discount",
     "count": "{count} collectibles included",
     "bundle_suffix": "bundle"
+  },
+  "animation_packs": {
+    "title": "Animation Packs",
+    "subtitle": "Grab a bundle of emotes at a discount"
   }
 }

@@ -73,11 +73,11 @@
 
 /* Fully outside the cards, at the left/right extremes. */
 .arrowLeft {
-  left: -56px;
+  left: -64px;
 }
 
 .arrowRight {
-  right: -56px;
+  right: -64px;
 }
 
 .dots {

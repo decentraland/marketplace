@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
+import { NFTCategory } from '@dcl/schemas'
 import { Banner } from 'decentraland-dapps/dist/containers/Banner'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -227,7 +228,8 @@ const HomePage = (props: Props) => {
       <Page className="HomePage">
         {firstViewsSection[0] ? renderSlideshow(firstViewsSection[0]) : null}
         {/* Demo: buyable collection bundles, right after Trending Items. */}
-        <HomeBundles />
+        <HomeBundles title={t('home_bundles.title')} subtitle={t('home_bundles.subtitle')} category={NFTCategory.WEARABLE} />
+        <HomeBundles title={t('animation_packs.title')} subtitle={t('animation_packs.subtitle')} category={NFTCategory.EMOTE} />
         {firstViewsSection.slice(1).map(renderSlideshow)}
         <RankingsTable />
         {secondViewsSection.map(renderSlideshow)}

@@ -1730,5 +1730,9 @@
     "subtitle": "折扣价入手整个合集",
     "count": "包含 {count} 件收藏品",
     "bundle_suffix": "套装"
+  },
+  "animation_packs": {
+    "title": "动画套装",
+    "subtitle": "折扣价入手一组表情动作"
   }
 }
