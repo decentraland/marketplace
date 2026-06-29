@@ -221,11 +221,18 @@ body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {
    left/right edges always align. */
 .Navigation .ui.container,
 .AssetBrowse .ui.container,
-.HomePage .ui.container {
+.HomePage .ui.container,
+.AssetPage .ui.container {
   width: 100%;
   max-width: 1216px !important;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Light reskin: the item detail page sat too far below the tabs. Trim the
+   default page top margin so the content starts right under the nav tabs. */
+.AssetPage.dcl.page {
+  margin-top: 8px;
 }
 
 /* The tabs' bottom divider lives on .dcl.tabs — center it too so the line
