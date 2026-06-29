@@ -1,9 +1,24 @@
 .AssetFiltersBar {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: 22px;
   margin-bottom: 8px;
+}
+
+/* All filters stay on a single line; the search/sort group never drops. */
+.AssetFiltersBar__left {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 22px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Keep each filter trigger at its natural width (don't squish them). */
+.AssetFiltersBar__left > * {
+  flex: none;
 }
 
 /* Stick the filters bar right below the (sticky) nav tabs while scrolling.

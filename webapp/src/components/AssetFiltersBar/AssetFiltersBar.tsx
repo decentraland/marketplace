@@ -8,7 +8,6 @@ import { getCategoryFromSection, getMarketAssetTypeFromCategory } from '../../mo
 import { BrowseOptions, SortBy } from '../../modules/routing/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { AssetStatusFilter } from '../../utils/filters'
-import { NetworkFilter } from '../AssetFilters/NetworkFilter'
 import PriceFilter from '../AssetFilters/PriceFilter'
 import { StatusFilter } from '../AssetFilters/StatusFilter'
 import { AssetSearchBar } from './AssetSearchBar/AssetSearchBar'
@@ -74,7 +73,6 @@ export const AssetFiltersBar = ({ section }: AssetFiltersBarProps) => {
   const status = browseOptions.status as AssetStatusFilter | undefined
   const minPrice = browseOptions.minPrice ?? ''
   const maxPrice = browseOptions.maxPrice ?? ''
-  const network = browseOptions.network
   const onlySmart = browseOptions.onlySmart
   const sortBy = browseOptions.sortBy
 
@@ -108,37 +106,38 @@ export const AssetFiltersBar = ({ section }: AssetFiltersBarProps) => {
 
   return (
     <div className="AssetFiltersBar">
-      <SectionDropdown
-        label={t('menu.wearables')}
-        rootSection={Section.WEARABLES}
-        items={WEARABLE_ITEMS}
-        section={section}
-        onSelect={handleSectionClick}
-        extraItems={[{ key: 'smart', label: t('nft_filters.smart_wearables'), active: !!onlySmart, onClick: handleSmartToggle }]}
-      />
-      <SectionDropdown
-        label={t('menu.emotes')}
-        rootSection={Section.EMOTES}
-        items={EMOTE_ITEMS}
-        section={section}
-        onSelect={handleSectionClick}
-      />
-      <RarityDropdown rarities={rarities} onChange={value => onBrowse({ rarities: value })} />
-      <FilterPopover label={t('global.status')} active={statusActive}>
-        <StatusFilter status={status} onChange={onBrowse} defaultCollapsed={false} />
-      </FilterPopover>
-      <FilterPopover label={t('global.price')} active={priceActive} className="PriceDropdown">
-        <PriceFilter
-          values={browseOptions}
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          defaultCollapsed={false}
-          onChange={value => onBrowse({ minPrice: value[0], maxPrice: value[1] })}
+      {/* Left filter group — can wrap internally without pushing the search/sort
+          group to a new line (e.g. when a filter shows its active count badge). */}
+      <div className="AssetFiltersBar__left">
+        <SectionDropdown
+          label={t('menu.wearables')}
+          rootSection={Section.WEARABLES}
+          items={WEARABLE_ITEMS}
+          section={section}
+          onSelect={handleSectionClick}
+          extraItems={[{ key: 'smart', label: t('nft_filters.smart_wearables'), active: !!onlySmart, onClick: handleSmartToggle }]}
         />
-      </FilterPopover>
-      <FilterPopover label={t('nft_filters.network.title')} active={!!network}>
-        <NetworkFilter network={network} onChange={value => onBrowse({ network: value })} defaultCollapsed={false} />
-      </FilterPopover>
+        <SectionDropdown
+          label={t('menu.emotes')}
+          rootSection={Section.EMOTES}
+          items={EMOTE_ITEMS}
+          section={section}
+          onSelect={handleSectionClick}
+        />
+        <RarityDropdown rarities={rarities} onChange={value => onBrowse({ rarities: value })} />
+        <FilterPopover label={t('global.status')} active={statusActive}>
+          <StatusFilter status={status} onChange={onBrowse} defaultCollapsed={false} />
+        </FilterPopover>
+        <FilterPopover label={t('global.price')} active={priceActive} className="PriceDropdown">
+          <PriceFilter
+            values={browseOptions}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            defaultCollapsed={false}
+            onChange={value => onBrowse({ minPrice: value[0], maxPrice: value[1] })}
+          />
+        </FilterPopover>
+      </div>
 
       <div className="AssetFiltersBar__right">
         <AssetSearchBar placeholder="Search Collections, Creators or Item" />
