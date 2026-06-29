@@ -8,7 +8,7 @@ import { getProfileOfAddress } from 'decentraland-dapps/dist/modules/profile/sel
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Icon, useMobileMediaQuery } from 'decentraland-ui'
 import CreditsIcon from '../../images/icon-credits.svg'
-import { Asset } from '../../modules/asset/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 import { getAssetImage, getAssetName, getAssetUrl, isNFT, isCatalogItem } from '../../modules/asset/utils'
 import { useIsIAP } from '../../modules/iap/useIAP'
 import { NFT } from '../../modules/nft/types'
@@ -24,6 +24,7 @@ import {
 import { locations } from '../../modules/routing/locations'
 import { PageName, SortBy } from '../../modules/routing/types'
 import { AssetImage } from '../AssetImage'
+import SmartBadge from '../AssetPage/SmartBadge'
 import { useCart } from '../Cart'
 import { useEmotePreviewPlayer } from '../EmotePreviewPlayer'
 import { Mana } from '../Mana'
@@ -192,6 +193,7 @@ const AssetCard = (props: Props) => {
               {t(`@dapps.rarities.${rarity}`)}
             </span>
             {emote ? <EmoteTags asset={asset} isSocialEmotesEnabled={isSocialEmotesEnabled} /> : null}
+            {wearable?.isSmart ? <SmartBadge assetType={isNFT(asset) ? AssetType.NFT : AssetType.ITEM} clickable={false} /> : null}
           </div>
         ) : (
           <span className={`extraInformation ${notForSale ? 'NotForSale' : ''}`}>

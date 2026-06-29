@@ -62,9 +62,10 @@
   vertical-align: baseline;
 }
 
-/* Hide the now-duplicate rarity pill in the bottom tags (wearables + emotes
-   both carry the literal .tags class; the rarity lives in the description). */
-.AssetCard .tags .dui-rarity-badge {
+/* Hide the now-duplicate rarity pill + smart badge in the bottom tags (they'd
+   get clipped); both live in the hover chip row instead. */
+.AssetCard .tags .dui-rarity-badge,
+.AssetCard .tags .SmartBadge {
   display: none;
 }
 
@@ -103,6 +104,11 @@
   margin-left: 0 !important;
   padding: 5px 8px;
   border-radius: 6px;
+}
+
+/* SMART badge sits inline next to the rarity chip (not clipped at the bottom). */
+.AssetCard .AssetCard__chips .SmartBadge {
+  margin: 0;
 }
 
 /* "Add to Cart" reveals from the bottom on hover. */
