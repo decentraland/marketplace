@@ -2,10 +2,11 @@ import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import classNames from 'classnames'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { HeaderMenu, Header, Button, Loader, Empty, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { HeaderMenu, Header, Button, Empty, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Asset } from '../../../modules/asset/types'
 import * as events from '../../../utils/events'
 import { AssetCard } from '../../AssetCard'
+import AssetCardSkeleton from '../../AssetList/AssetCardSkeleton'
 import ItemsSection from './ItemsSection'
 import { Props } from './Slideshow.types'
 import './Slideshow.css'
@@ -105,17 +106,13 @@ const Slideshow = (props: Props) => {
             'full-width': assetsToRender.length === pageSize
           })}
         >
-          {isLoading ? (
-            assets.length === 0 ? (
-              <Loader active size="massive" />
-            ) : (
-              renderNfts()
-            )
-          ) : assets.length > 0 ? (
-            renderNfts()
-          ) : (
-            renderEmptyState()
-          )}
+          {isLoading
+            ? assets.length === 0
+              ? Array.from({ length: DEFAULT_PAGE_SIZE }).map((_, index) => <AssetCardSkeleton key={'skeleton-' + index} />)
+              : renderNfts()
+            : assets.length > 0
+              ? renderNfts()
+              : renderEmptyState()}
         </div>
         <div className="arrow-container arrow-container-left">
           {totalPages > 1 && (

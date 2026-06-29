@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
 import { Network, PreviewType, Rarity, BodyShape, NFTCategory, PreviewEmote, PreviewRenderer, PreviewUnityMode } from '@dcl/schemas'
 import { SocialEmoteAnimation } from '@dcl/schemas/dist/dapps/preview/social-emote-animation'
 import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Center, Loader, Popup, Icon } from 'decentraland-ui'
+import { Button, Popup, Icon } from 'decentraland-ui'
 import { AnimationControls, EmoteControls, WearablePreview, ZoomControls } from 'decentraland-ui2'
 import { config } from '../../../config'
 import { getAssetImage, getAssetName, isNFT } from '../../../modules/asset/utils'
@@ -40,6 +40,14 @@ export const Preview: React.FC<Props> = ({
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
   const [rendererType, setRendererType] = useState<PreviewRenderer | undefined>(undefined)
   const [socialEmote, setSocialEmote] = useState<SocialEmoteAnimation | undefined>(undefined)
+  const loadGraceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(
+    () => () => {
+      if (loadGraceRef.current) clearTimeout(loadGraceRef.current)
+    },
+    []
+  )
 
   // This effect is here just to track on which mode the preview is initialized, that's why it has an empty dependency array, so this is triggered once on mount
   useEffect(() => {
@@ -60,7 +68,11 @@ export const Preview: React.FC<Props> = ({
   const handleLoad = useCallback((renderer?: PreviewRenderer) => {
     setRendererType(renderer as PreviewRenderer)
     setWearablePreviewError(false)
-    setIsLoadingWearablePreview(false)
+    // Keep our shimmer a moment longer so the iframe's own (cross-origin)
+    // spinner is masked until the 3D scene is actually painted — avoids the
+    // "shimmer then spinner" double loading.
+    if (loadGraceRef.current) clearTimeout(loadGraceRef.current)
+    loadGraceRef.current = setTimeout(() => setIsLoadingWearablePreview(false), 600)
   }, [])
 
   const handleError = useCallback((error: Error) => {
@@ -363,13 +375,7 @@ export const Preview: React.FC<Props> = ({
               network={item.network}
             />
           ) : null}
-          {isLoadingWearablePreview ? (
-            <Center>
-              <Loader className="wearable-preview-loader" active size="large" />
-            </Center>
-          ) : (
-            renderControls()
-          )}
+          {isLoadingWearablePreview ? <div className="Preview__loadingSkeleton" /> : renderControls()}
         </>
       ) : (
         <img alt={getAssetName(asset)} className="image" src={getAssetImage(asset)} />

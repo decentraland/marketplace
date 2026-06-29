@@ -46,6 +46,18 @@
   margin-right: 0;
 }
 
+/* Loading skeletons match the carousel card size. */
+.Slideshow .assets .AssetCardSkeleton {
+  flex: 0 0 auto;
+  width: 234px;
+  margin-right: 12px;
+  margin-top: 12px;
+}
+
+.Slideshow .assets .AssetCardSkeleton:last-child {
+  margin-right: 0;
+}
+
 .Slideshow .dcl.header-menu {
   margin-bottom: 12px;
 }
