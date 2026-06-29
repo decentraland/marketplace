@@ -11,6 +11,7 @@ import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
 import * as events from '../../utils/events'
 import { AssetCard } from '../AssetCard'
 import { InfiniteScroll } from '../InfiniteScroll'
+import AssetCardSkeleton from './AssetCardSkeleton'
 import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
 import './AssetList.css'
@@ -109,7 +110,16 @@ const AssetList = (props: Props) => {
 
   return (
     <div className="AssetsList">
-      {isLoading ? (
+      {isLoading && assets.length === 0 ? (
+        // Initial load: skeleton grid shaped like the cards (instead of a spinner).
+        <Card.Group>
+          {Array.from({ length: 15 }).map((_, index) => (
+            <AssetCardSkeleton key={index} />
+          ))}
+        </Card.Group>
+      ) : null}
+      {isLoading && assets.length > 0 ? (
+        // Loading more (infinite scroll): dim the existing grid.
         <>
           <div className="overlay" />
           <div className="transparentOverlay">
