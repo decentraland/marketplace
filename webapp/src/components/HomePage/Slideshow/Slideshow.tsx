@@ -30,7 +30,6 @@ const Slideshow = (props: Props) => {
   } = props
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const pageSize = isMobileOrTablet ? assets.length : DEFAULT_PAGE_SIZE
-  const [showArrows, setShowArrows] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [assetsToRender, setAssetsToRender] = useState(isMobileOrTablet ? assets : assets.slice(0, pageSize))
 
@@ -79,14 +78,6 @@ const Slideshow = (props: Props) => {
     setCurrentPage(currentPage - 1 === 0 ? totalPages : currentPage - 1)
   }
 
-  const onMouseEnter = useCallback(() => setShowArrows(true), [])
-  const onMouseLeave = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    const contained = event.relatedTarget instanceof Node && slideRef.current?.contains(event.relatedTarget)
-    if (!contained) {
-      setShowArrows(false)
-    }
-  }, [])
-
   const viewAllButton = () => (
     <Button basic onClick={onViewAll}>
       {viewAllTitle ? viewAllTitle : t('slideshow.view_all')}
@@ -94,10 +85,8 @@ const Slideshow = (props: Props) => {
     </Button>
   )
 
-  const showArrowsHandlers = { onMouseEnter, onMouseLeave }
-
   return (
-    <div className="Slideshow" ref={slideRef} {...showArrowsHandlers}>
+    <div className="Slideshow" ref={slideRef}>
       <HeaderMenu>
         <HeaderMenu.Left>
           <div className="slideshow-header">
@@ -128,15 +117,15 @@ const Slideshow = (props: Props) => {
             renderEmptyState()
           )}
         </div>
-        <div className="arrow-container arrow-container-left" {...showArrowsHandlers}>
-          {showArrows && totalPages > 1 && (
+        <div className="arrow-container arrow-container-left">
+          {totalPages > 1 && (
             <Button circular secondary className="arrow-back" onClick={handleOnPreviousPage}>
               <i className="caret back" />
             </Button>
           )}
         </div>
-        <div className="arrow-container arrow-container-right" {...showArrowsHandlers}>
-          {showArrows && totalPages > 1 && (
+        <div className="arrow-container arrow-container-right">
+          {totalPages > 1 && (
             <Button circular secondary className="arrow-forward" onClick={handleOnNextPage}>
               <i className="caret" />
             </Button>

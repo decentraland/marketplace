@@ -62,15 +62,14 @@
 }
 
 .Slideshow .arrow-container i.caret {
-  background-color: #ffffff;
+  background-color: var(--text);
   background-image: none;
   -webkit-mask: url(../../../images/forward.svg) no-repeat 50% 50%;
   mask: url(../../../images/forward.svg) no-repeat 50% 50%;
   display: inline-block;
   width: 16px;
   height: 13px;
-  margin-left: 4px;
-  margin-top: 4px;
+  margin: 0;
 }
 
 .Slideshow i.caret.back {
@@ -86,30 +85,43 @@
 }
 
 .Slideshow .arrow-container .ui.button {
-  min-width: 48px;
-  max-width: 48px;
+  min-width: 44px;
+  max-width: 44px;
+  width: 44px;
+  height: 44px;
   padding: 0;
-  height: 48px;
-  background: #736e7d;
-  opacity: 0.7;
-  top: 50%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff !important;
+  border: 1px solid var(--divider) !important;
+  box-shadow: 0 6px 16px rgba(22, 21, 24, 0.16);
+  opacity: 1;
+}
+
+.Slideshow .arrow-container .ui.button:hover {
+  background: #f3f2f5 !important;
 }
 
 .Slideshow .arrow-container-right {
-  right: -32px;
+  right: -64px;
   justify-content: flex-end;
 }
 
 .Slideshow .arrow-container-left {
-  left: -32px;
+  left: -64px;
   justify-content: flex-start;
 }
 
+/* Centered on the card image (top portion of the card), like the other sliders. */
 .Slideshow .arrow-container {
   align-items: center;
   display: flex;
   justify-content: center;
   position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
   width: fit-content;
   z-index: 5;
 }
