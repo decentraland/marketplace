@@ -3,7 +3,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Card, Loader } from 'decentraland-ui'
+import { Card } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { ExtendedHistory } from '../../modules/types'
@@ -12,6 +12,7 @@ import * as events from '../../utils/events'
 import { AssetCard } from '../AssetCard'
 import { InfiniteScroll } from '../InfiniteScroll'
 import AssetCardSkeleton from './AssetCardSkeleton'
+import LoadingBar from './LoadingBar'
 import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
 import './AssetList.css'
@@ -118,16 +119,14 @@ const AssetList = (props: Props) => {
           ))}
         </Card.Group>
       ) : null}
-      {isLoading && assets.length > 0 ? (
-        // Loading more (infinite scroll): dim the existing grid.
-        <>
-          <div className="overlay" />
-          <div className="transparentOverlay">
-            <Loader size="massive" active className="asset-loader" />
-          </div>
-        </>
+      {assets.length > 0 ? (
+        <Card.Group>
+          {renderAssetCards()}
+          {/* Loading more (infinite scroll): append shimmering placeholders. */}
+          {isLoading ? Array.from({ length: 5 }).map((_, index) => <AssetCardSkeleton key={'skeleton-' + index} />) : null}
+        </Card.Group>
       ) : null}
-      {assets.length > 0 ? <Card.Group> {renderAssetCards()} </Card.Group> : null}
+      {isLoading && assets.length > 0 ? <LoadingBar /> : null}
       <InfiniteScroll page={page} hasMorePages={hasMorePages} onLoadMore={handleLoadMore} isLoading={isLoading} maxScrollPages={3}>
         {shouldRenderEmptyState ? renderEmptyState() : null}
       </InfiniteScroll>
