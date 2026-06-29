@@ -1,7 +1,22 @@
+/* Loop / sound badges overlaid on the top-right of the emote image, revealed
+   on card hover (like the wearable Add to Cart). Rarity moved to description. */
 .EmoteTags {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 6px;
+  width: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+:global(.ui.card.AssetCard:hover) .EmoteTags {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .EmoteTags .badges {

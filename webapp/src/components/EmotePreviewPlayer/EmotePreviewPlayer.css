@@ -31,8 +31,14 @@
 }
 
 .EmotePreviewPlayer iframe {
-  width: 100% !important;
-  height: 100% !important;
+  /* The WearablePreview iframe is cross-origin and can render its own
+     scrollbar; we can't style inside it, so make it slightly wider/taller than
+     the overlay and recenter, letting overflow:hidden clip the scrollbar. */
+  width: calc(100% + 32px) !important;
+  height: calc(100% + 32px) !important;
+  position: relative;
+  left: -16px;
+  top: -16px;
   border: 0 !important;
   display: block;
   background: transparent;

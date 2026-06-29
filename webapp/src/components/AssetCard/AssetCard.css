@@ -62,9 +62,9 @@
   vertical-align: baseline;
 }
 
-/* Hide the now-duplicate rarity pill in the bottom tags. */
-.AssetCard .WearableTags .dui-rarity-badge,
-.AssetCard .EmoteTags .dui-rarity-badge {
+/* Hide the now-duplicate rarity pill in the bottom tags (wearables + emotes
+   both carry the literal .tags class; the rarity lives in the description). */
+.AssetCard .tags .dui-rarity-badge {
   display: none;
 }
 
