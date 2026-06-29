@@ -17,6 +17,7 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
 import { RankingsTable } from '../RankingsTable'
 import { RecentlySoldTable } from '../RecentlySoldTable'
+import HomeBundles from './HomeBundles/HomeBundles'
 import { useIntersectionObserver } from './hooks'
 import { Slideshow } from './Slideshow'
 import { Props } from './HomePage.types'
@@ -224,7 +225,10 @@ const HomePage = (props: Props) => {
       <ListsLaunchModal />
       {isCampaignHomepageBannerEnabled ? <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
       <Page className="HomePage">
-        {firstViewsSection.map(renderSlideshow)}
+        {firstViewsSection[0] ? renderSlideshow(firstViewsSection[0]) : null}
+        {/* Demo: buyable collection bundles, right after Trending Items. */}
+        <HomeBundles />
+        {firstViewsSection.slice(1).map(renderSlideshow)}
         <RankingsTable />
         {secondViewsSection.map(renderSlideshow)}
         <RecentlySoldTable />

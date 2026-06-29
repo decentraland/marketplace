@@ -1724,5 +1724,11 @@
   "creator_items": {
     "title": "该创作者的其他单品",
     "not_for_sale": "不出售"
+  },
+  "home_bundles": {
+    "title": "为你推荐的套装",
+    "subtitle": "折扣价入手整个合集",
+    "count": "包含 {count} 件收藏品",
+    "bundle_suffix": "套装"
   }
 }

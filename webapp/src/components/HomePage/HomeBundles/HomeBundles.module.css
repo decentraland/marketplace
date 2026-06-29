@@ -1,0 +1,138 @@
+.section {
+  margin-top: 48px;
+}
+
+.heading {
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  color: var(--text);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+  color: var(--secondary-text);
+  margin: 12px 0 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--divider);
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: var(--card);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(22, 21, 24, 0.1);
+}
+
+.thumbs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  min-height: 150px;
+  background: radial-gradient(#ffffff, #f3f2f6);
+}
+
+.thumb {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  border-radius: 10px;
+  margin-left: -18px;
+  background-color: #ffffff;
+  border: 1px solid var(--divider);
+  box-shadow: 0 2px 8px rgba(22, 21, 24, 0.1);
+}
+
+.thumb:first-child {
+  margin-left: 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px 18px;
+}
+
+.name {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.count {
+  font-size: 13px;
+  color: var(--secondary-text);
+}
+
+.prices {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 12px;
+  flex-wrap: wrap;
+}
+
+.original {
+  color: var(--secondary-text);
+  text-decoration: line-through;
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+.bundlePrice {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.save {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #1a8f4c;
+  background-color: rgba(26, 143, 76, 0.12);
+  padding: 3px 7px;
+  border-radius: 6px;
+}
+
+.buy.ui.button {
+  border-radius: 10px;
+  height: 44px;
+  font-weight: 600;
+  margin: 0;
+}
+
+@media (max-width: 1000px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

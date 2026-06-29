@@ -1758,5 +1758,11 @@
   "creator_items": {
     "title": "Other Items from the Creator",
     "not_for_sale": "Not for sale"
+  },
+  "home_bundles": {
+    "title": "Bundles for you",
+    "subtitle": "Grab a whole collection at a discount",
+    "count": "{count} collectibles included",
+    "bundle_suffix": "bundle"
   }
 }
