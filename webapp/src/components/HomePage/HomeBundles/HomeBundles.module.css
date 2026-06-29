@@ -1,23 +1,12 @@
+/* Match the vertical rhythm of the other Overview sections. */
 .section {
   margin-top: 48px;
+  margin-bottom: 56px;
 }
 
-.heading {
-  font-family: 'Inter', Helvetica, Arial, sans-serif;
-  font-size: 48px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  line-height: 1.1;
-  color: var(--text);
-  margin: 0;
-}
-
-.subtitle {
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: 0.5px;
-  color: var(--secondary-text);
-  margin: 12px 0 24px;
+/* Space between the (inherited) header and the cards, like the Slideshows. */
+.section > :global(.dcl.header-menu) {
+  margin-bottom: 24px;
 }
 
 .grid {

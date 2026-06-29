@@ -31,7 +31,7 @@ const HomeBundles = () => {
   useEffect(() => {
     let cancelled = false
     catalogAPI
-      .get({ isOnSale: true, first: 200, sortBy: CatalogSortBy.MOST_EXPENSIVE })
+      .get({ isOnSale: true, first: 200, sortBy: CatalogSortBy.CHEAPEST })
       .then(res => {
         const byContract = new Map<string, Item[]>()
         for (const item of res.data) {
@@ -69,8 +69,16 @@ const HomeBundles = () => {
 
   return (
     <div className={styles.section}>
-      <h2 className={styles.heading}>{t('home_bundles.title')}</h2>
-      <p className={styles.subtitle}>{t('home_bundles.subtitle')}</p>
+      {/* Same markup/classes as the other Overview sections so it inherits the
+          central title/subtitle styles from HomePage.css. */}
+      <div className="dcl header-menu">
+        <div className="dcl header-menu-left">
+          <div>
+            <div className="ui header">{t('home_bundles.title')}</div>
+            <div className="ui sub header">{t('home_bundles.subtitle')}</div>
+          </div>
+        </div>
+      </div>
       <div className={styles.grid}>
         {bundles.map(bundle => {
           const cartId = `bundle-${bundle.contractAddress}`
