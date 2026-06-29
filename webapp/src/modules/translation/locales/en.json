@@ -581,6 +581,7 @@
       "buy_directly": "Buy directly from the creator"
     },
     "description": "Description",
+    "date": "Date",
     "no_description": "No description",
     "read_more": "Read more",
     "read_less": "Read less",
@@ -650,7 +651,9 @@
       "no_offer": "No offer",
       "make_offer": "Make Offer",
       "already_offer": "You already made an offer"
-    }
+    },
+    "add_to_cart": "Add to Cart",
+    "added_to_cart": "Added to Cart"
   },
   "offers_table": {
     "offers": "Offers",

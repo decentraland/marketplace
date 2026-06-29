@@ -1,10 +1,44 @@
 .BestBuyingOption {
   display: flex;
   flex-direction: column;
-  border-radius: 10px;
+  border-radius: 12px;
   background-color: var(--card);
+  border: 1px solid var(--divider);
   width: 100%;
   gap: 16px;
+}
+
+/* Demo: a clean price card — no dark "Available for minting" / listing banner. */
+.BestBuyingOption .buyDirectly,
+.BestBuyingOption .cardTitle {
+  display: none !important;
+}
+
+/* Demo: keep the price card to two actions (Buy + Add to Cart); hide the
+   "buy with card" and "make offer" buttons to match the redesign. */
+.BestBuyingOption .buyWithCardClassName,
+.BestBuyingOption .buyNFTButtons :global([data-testid='bid-button']) {
+  display: none !important;
+}
+
+/* "Add to Cart" — dark, full-width, sits under the purple Buy button. */
+.BestBuyingOption .addToCartButton.ui.button {
+  background-color: #2b2a30 !important;
+  color: #ffffff !important;
+  border-radius: 10px;
+  height: 48px;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.BestBuyingOption .addToCartButton.ui.button:hover {
+  background-color: #43404a !important;
+}
+
+.BestBuyingOption .addToCartButton.ui.button:disabled {
+  opacity: 1 !important;
+  background-color: var(--primary) !important;
 }
 
 .BestBuyingOption .AlignEnd {

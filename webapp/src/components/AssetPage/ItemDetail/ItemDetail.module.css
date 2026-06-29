@@ -18,11 +18,58 @@
 }
 
 .ItemDetail .badges {
-  margin-top: 8px;
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   align-items: center;
+}
+
+/* Header block: name + creator stacked tight, with a divider underneath. */
+.ItemDetail .headerBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Creator on one row: "CREATOR  [avatar] name" */
+.ItemDetail .headerBlock :global(.dcl.stats) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  margin: 0;
+}
+
+.ItemDetail .headerBlock :global(.dcl.stats .title) {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.ItemDetail .divider {
+  height: 1px;
+  width: 100%;
+  background-color: var(--divider);
+}
+
+/* Publish date, at the very bottom of the panel. */
+.ItemDetail .dateBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ItemDetail .dateLabel {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--secondary-text);
+}
+
+.ItemDetail .dateValue {
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  color: var(--secondary-text);
 }
 
 .ItemDetail .itemDetailBottomContainer {

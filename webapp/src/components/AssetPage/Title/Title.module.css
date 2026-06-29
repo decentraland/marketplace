@@ -1,10 +1,12 @@
 .title {
-  font-size: 28px;
+  font-family: 'Inter', Helvetica, Arial, sans-serif;
+  font-size: 42px;
   font-style: normal;
-  font-weight: 600;
-  line-height: 42px;
-  letter-spacing: 0.4000000059604645px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -2px;
   text-align: left;
+  color: var(--text);
   /* TODO (lists): this may be moved after updating the detail page on the unified markets change */
   display: flex;
   align-items: center;
@@ -15,7 +17,7 @@
   flex: 1 0;
 }
 
+/* Demo: the big display title reads cleaner without the favorites pill. */
 .favorites {
-  display: flex;
-  align-self: flex-end;
+  display: none !important;
 }

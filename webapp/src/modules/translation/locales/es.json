@@ -569,6 +569,7 @@
       "buy_directly": "Compra directo al creador"
     },
     "description": "Descripción",
+    "date": "Fecha",
     "no_description": "Sin descripción",
     "read_more": "Leer más",
     "read_less": "Leer menos",
@@ -638,7 +639,9 @@
       "no_offer": "Sin ofertas",
       "make_offer": "Hacer Oferta",
       "already_offer": "Ya hiciste una oferta"
-    }
+    },
+    "add_to_cart": "Agregar al carrito",
+    "added_to_cart": "Agregado al carrito"
   },
   "offers_table": {
     "offers": "Ofertas",

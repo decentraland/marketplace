@@ -10,11 +10,12 @@ import noListings from '../../../images/noListings.png'
 import { getExpirationDateLabel } from '../../../lib/date'
 import { getIsOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { AssetType } from '../../../modules/asset/types'
-import { isNFT } from '../../../modules/asset/utils'
+import { getAssetImage, getAssetName, isNFT } from '../../../modules/asset/utils'
 import { Item } from '../../../modules/item/types'
 import { locations } from '../../../modules/routing/locations'
 import { marketplaceOrderAPI } from '../../../modules/vendor/decentraland'
 import { marketplaceAPI } from '../../../modules/vendor/decentraland/marketplace/api'
+import { useCart } from '../../Cart'
 import PriceComponent from '../PriceComponent'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { ItemSaleActions } from '../SaleActionBox/ItemSaleActions'
@@ -37,6 +38,21 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const [mostExpensiveBid, setMostExpensiveBid] = useState<Bid | null>(null)
   const history = useHistory()
   const location = useLocation()
+
+  // Demo shopping cart: "Add to Cart" stores the item client-side (no checkout).
+  const { addItem, isInCart } = useCart()
+  const cartId = asset && !isNFT(asset) ? `${asset.contractAddress}-${asset.itemId}` : ''
+  const inCart = !!cartId && isInCart(cartId)
+  const handleAddToCart = useCallback(() => {
+    if (!asset || isNFT(asset)) return
+    addItem({
+      id: cartId,
+      name: getAssetName(asset),
+      thumbnail: getAssetImage(asset),
+      price: asset.price,
+      network: asset.network
+    })
+  }, [asset, cartId, addItem])
 
   const handleViewOffers = () => {
     history.replace({
@@ -149,6 +165,9 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             </div>
             <div className={styles.buyNFTButtons}>
               <ItemSaleActions item={asset} customClassnames={customClasses} onUseCredits={handleUseCredits} />
+              <Button className={styles.addToCartButton} fluid onClick={handleAddToCart} disabled={inCart}>
+                {inCart ? t('best_buying_option.added_to_cart') : t('best_buying_option.add_to_cart')}
+              </Button>
             </div>
           </div>
         </div>
@@ -181,6 +200,9 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                 buyWithCardClassName={styles.buyWithCardClassName}
                 onUseCredits={handleUseCredits}
               />
+              <Button className={styles.addToCartButton} fluid onClick={handleAddToCart} disabled={inCart}>
+                {inCart ? t('best_buying_option.added_to_cart') : t('best_buying_option.add_to_cart')}
+              </Button>
               <Button as={Link} to={locations.nft(asset.contractAddress, listing.order.tokenId)} inverted>
                 {t('best_buying_option.buy_listing.view_listing')}
               </Button>

@@ -570,6 +570,7 @@
       "buy_directly": "直接從創作者那裡購買"
     },
     "description": "描述",
+    "date": "日期",
     "no_description": "沒有說明",
     "read_more": "閱讀更多",
     "read_less": "少讀",
@@ -639,7 +640,9 @@
       "no_offer": "沒有報價",
       "make_offer": "報價",
       "already_offer": "你已经提出了"
-    }
+    },
+    "add_to_cart": "加入购物车",
+    "added_to_cart": "已加入购物车"
   },
   "offers_table": {
     "offers": "優惠",

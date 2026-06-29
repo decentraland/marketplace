@@ -17,7 +17,6 @@ import GenderBadge from '../../GenderBadge'
 import { AssetUtility } from '../AssetUtility'
 import BestBuyingOption from '../BestBuyingOption'
 import CategoryBadge from '../CategoryBadge'
-import Collection from '../Collection'
 import { Description } from '../Description'
 import IconBadge from '../LinkedIconBadge'
 import ListingsTableContainer from '../ListingsTableContainer/ListingsTableContainer'
@@ -104,53 +103,72 @@ const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
           <AssetImage asset={item} isDraggable />
         </div>
         <div className={styles.information}>
-          <div>
+          {/* Name + creator, then a divider — the "header" block of the panel. */}
+          <div className={styles.headerBlock}>
             <Title asset={item} />
-            <div className={styles.badges}>
-              <RarityBadge rarity={item.rarity} size="small" withTooltip />
-              {category && (
-                <CategoryBadge
-                  category={item.data.emote ? item.data.emote.category : item.data.wearable!.category}
-                  assetType={AssetType.ITEM}
-                />
-              )}
-              {item.category === NFTCategory.EMOTE && !isSocialEmote && (
-                <IconBadge
-                  icon={loop ? 'play-loop' : 'play-once'}
-                  text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
-                  href={emoteBadgeHref}
-                />
-              )}
-              {hasSound && <IconBadge icon="sound" text={t('emote.sound')} href={emoteSoundHref} />}
-              {hasGeometry && <IconBadge icon="props" text={t('emote.props')} href={emoteGeometryHref} />}
-              {isSocialEmote && <IconBadge icon="social" text={t('emote.social')} href={emoteSocialHref} />}
-              {bodyShapes.length > 0 && !item.data.emote && (
-                <GenderBadge
-                  bodyShapes={bodyShapes}
-                  assetType={AssetType.ITEM}
-                  section={item.category === NFTCategory.WEARABLE ? Section.WEARABLES : Section.EMOTES}
-                />
-              )}
-              {item.category === NFTCategory.WEARABLE && item.data.wearable!.isSmart && <SmartBadge assetType={AssetType.ITEM} />}
-
-              {item.category === NFTCategory.WEARABLE && (item.entity?.metadata as Wearable)?.data?.blockVrmExport && (
-                <Popup
-                  on="hover"
-                  content={t('global.block_vrm_tooltip')}
-                  position="top center"
-                  trigger={
-                    <span className={styles.vrmBadge}>
-                      <Icon name="ban" />
-                      {t('global.block_vrm')}
-                    </span>
-                  }
-                />
-              )}
-              {item.utility && <UtilityBadge />}
-              <CampaignBadge contract={item.contractAddress} />
-            </div>
+            {item.network === Network.MATIC ? <Owner asset={item} /> : null}
           </div>
 
+          <div className={styles.divider} />
+
+          {/* Tag chips: rarity, category, gender (+ emote/smart/utility flags). */}
+          <div className={styles.badges}>
+            <RarityBadge rarity={item.rarity} size="small" withTooltip />
+            {category && (
+              <CategoryBadge
+                category={item.data.emote ? item.data.emote.category : item.data.wearable!.category}
+                assetType={AssetType.ITEM}
+              />
+            )}
+            {item.category === NFTCategory.EMOTE && !isSocialEmote && (
+              <IconBadge
+                icon={loop ? 'play-loop' : 'play-once'}
+                text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
+                href={emoteBadgeHref}
+              />
+            )}
+            {hasSound && <IconBadge icon="sound" text={t('emote.sound')} href={emoteSoundHref} />}
+            {hasGeometry && <IconBadge icon="props" text={t('emote.props')} href={emoteGeometryHref} />}
+            {isSocialEmote && <IconBadge icon="social" text={t('emote.social')} href={emoteSocialHref} />}
+            {bodyShapes.length > 0 && !item.data.emote && (
+              <GenderBadge
+                bodyShapes={bodyShapes}
+                assetType={AssetType.ITEM}
+                section={item.category === NFTCategory.WEARABLE ? Section.WEARABLES : Section.EMOTES}
+              />
+            )}
+            {item.category === NFTCategory.WEARABLE && item.data.wearable!.isSmart && <SmartBadge assetType={AssetType.ITEM} />}
+
+            {item.category === NFTCategory.WEARABLE && (item.entity?.metadata as Wearable)?.data?.blockVrmExport && (
+              <Popup
+                on="hover"
+                content={t('global.block_vrm_tooltip')}
+                position="top center"
+                trigger={
+                  <span className={styles.vrmBadge}>
+                    <Icon name="ban" />
+                    {t('global.block_vrm')}
+                  </span>
+                }
+              />
+            )}
+            {item.utility && <UtilityBadge />}
+            <CampaignBadge contract={item.contractAddress} />
+          </div>
+
+          {/* Price card with Buy + Add to Cart. */}
+          <div
+            className={
+              item.available > 0 && item.isOnSale
+                ? `${styles.itemDetailBottomContainer} ${styles.spaceInMint}`
+                : styles.itemDetailBottomContainer
+            }
+          >
+            {item.data.wearable?.isSmart && <RequiredPermissions asset={item} />}
+            <BestBuyingOption asset={item} tableRef={tableRef} key={item.id} />
+          </div>
+
+          {/* Description, then the publish date. */}
           <div className={styles.attributesRow}>
             <div className={styles.attributesColumn}>
               <Description text={description} />
@@ -161,25 +179,14 @@ const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
               </div>
             ) : null}
           </div>
-          <div className={styles.attributesRow}>
-            {item.network === Network.MATIC ? (
-              <div className={styles.attributesColumn}>
-                <Owner asset={item} />
-              </div>
-            ) : null}
-            <div className={styles.attributesColumn}>
-              <Collection asset={item} />
-            </div>
-          </div>
-          <div
-            className={
-              item.available > 0 && item.isOnSale
-                ? `${styles.itemDetailBottomContainer} ${styles.spaceInMint}`
-                : styles.itemDetailBottomContainer
-            }
-          >
-            {item.data.wearable?.isSmart && <RequiredPermissions asset={item} />}
-            <BestBuyingOption asset={item} tableRef={tableRef} key={item.id} />
+
+          <div className={styles.dateBlock}>
+            <span className={styles.dateLabel}>{t('asset_page.date')}</span>
+            <span className={styles.dateValue}>
+              {new Date(Number(item.createdAt) * 1000)
+                .toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })
+                .toUpperCase()}
+            </span>
           </div>
         </div>
       </div>
