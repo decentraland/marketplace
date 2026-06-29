@@ -33,23 +33,6 @@
   flex: 1;
 }
 
-/* Overview section title — big and bold. */
-.Slideshow .slideshow-header .ui.header:not(.sub) {
-  font-weight: 800 !important;
-  letter-spacing: -1px;
-  font-size: 48px !important;
-  line-height: 1.1;
-  margin-bottom: 0 !important;
-}
-
-/* Overview section subtitle — with some air below the larger title. */
-.Slideshow .slideshow-header .ui.sub.header {
-  font-weight: 400 !important;
-  letter-spacing: 0.5px;
-  font-size: 24px !important;
-  margin-top: 12px !important;
-}
-
 .Slideshow .assets .AssetCard,
 .Slideshow .assets .ui.card.AssetCard:first-child {
   flex: 0 0 auto;
