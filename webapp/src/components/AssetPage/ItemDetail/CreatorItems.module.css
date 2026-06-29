@@ -19,8 +19,20 @@
 
 .row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 16px;
+}
+
+/* Semantic `.ui.card` defaults to a fixed 290px width (+ margins), which ignores
+   the grid track and overflows the container. Make each card fill its cell. */
+.row > * {
+  min-width: 0;
+  width: 100%;
+}
+
+.row :global(.ui.card) {
+  width: 100% !important;
+  margin: 0 !important;
 }
 
 .arrow {
