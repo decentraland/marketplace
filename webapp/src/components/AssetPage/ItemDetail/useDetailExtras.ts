@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Item } from '@dcl/schemas'
+import { CatalogFilters, Item } from '@dcl/schemas'
+import { catalogAPI } from '../../../modules/vendor/decentraland/catalog/api'
 import { ItemAPI } from '../../../modules/vendor/decentraland/item/api'
 import { ItemFilters } from '../../../modules/vendor/decentraland/item/types'
 import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland/marketplace/api'
@@ -8,34 +9,37 @@ import { MARKETPLACE_SERVER_URL } from '../../../modules/vendor/decentraland/mar
 // power the detail page's collection strip / bundle / creator sections.
 const itemAPI = new ItemAPI(MARKETPLACE_SERVER_URL, { retries: 1 })
 
-function useItems(filters: ItemFilters | null) {
+function useItems(key: string | null, source: 'item' | 'catalog') {
   const [items, setItems] = useState<Item[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const key = filters ? JSON.stringify(filters) : null
 
   useEffect(() => {
     if (!key) return
     let cancelled = false
     setIsLoading(true)
-    itemAPI
-      .get(JSON.parse(key) as ItemFilters)
+    const filters = JSON.parse(key) as ItemFilters & CatalogFilters
+    const request = source === 'catalog' ? catalogAPI.get(filters) : itemAPI.get(filters)
+    request
       .then(res => !cancelled && setItems(res.data))
       .catch(() => !cancelled && setItems([]))
       .finally(() => !cancelled && setIsLoading(false))
     return () => {
       cancelled = true
     }
-  }, [key])
+  }, [key, source])
 
   return { items, isLoading }
 }
 
 // Other items in the same collection (same contract).
 export function useCollectionItems(contractAddress?: string, first = 12) {
-  return useItems(contractAddress ? { contractAddresses: [contractAddress], first } : null)
+  const key = contractAddress ? JSON.stringify({ contractAddresses: [contractAddress], first }) : null
+  return useItems(key, 'item')
 }
 
-// Other items from the same creator (used for "more from the creator").
+// Other items from the same creator — fetched from the CATALOG so the cards
+// render the full catalog layout (rarity chip on hover, etc.) like everywhere.
 export function useCreatorItems(creator?: string, first = 12) {
-  return useItems(creator ? { creator, first } : null)
+  const key = creator ? JSON.stringify({ creator, first }) : null
+  return useItems(key, 'catalog')
 }

@@ -35,6 +35,12 @@
   margin: 0 !important;
 }
 
+/* All items are from the same creator, so the per-card creator line is
+   redundant — hide it (the rarity chip still reveals on hover). */
+.row :global(.AssetCard .creator) {
+  display: none;
+}
+
 .arrow {
   position: absolute;
   /* Centered on the card image (the top portion of the card), not the full card. */
