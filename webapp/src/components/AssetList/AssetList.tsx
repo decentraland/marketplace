@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect } from 'react'
+import React, { useCallback, useMemo, useEffect, useRef, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -24,6 +24,29 @@ const AssetList = (props: Props) => {
   const location = useLocation()
   const history = useHistory() as ExtendedHistory
   const visitedLocations = history.getLastVisitedLocations()
+
+  // Track how many columns the card grid currently has, so the loading
+  // skeletons complete the partial row + add one full row (never a half row).
+  const listRef = useRef<HTMLDivElement>(null)
+  const [columns, setColumns] = useState(5)
+  useEffect(() => {
+    const measure = () => {
+      const grid = listRef.current?.querySelector('.ui.cards')
+      if (grid) {
+        const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').filter(Boolean).length
+        if (cols > 0) setColumns(cols)
+      }
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [assets.length])
+
+  const loadMoreSkeletonCount = useMemo(() => {
+    const remainder = assets.length % columns
+    const fillCurrentRow = remainder === 0 ? 0 : columns - remainder
+    return fillCurrentRow + columns
+  }, [assets.length, columns])
 
   useEffect(() => {
     if (visitedLocations.length > 1) {
@@ -110,11 +133,11 @@ const AssetList = (props: Props) => {
   )
 
   return (
-    <div className="AssetsList">
+    <div className="AssetsList" ref={listRef}>
       {isLoading && assets.length === 0 ? (
         // Initial load: skeleton grid shaped like the cards (instead of a spinner).
         <Card.Group>
-          {Array.from({ length: 15 }).map((_, index) => (
+          {Array.from({ length: columns * 3 }).map((_, index) => (
             <AssetCardSkeleton key={index} />
           ))}
         </Card.Group>
@@ -122,8 +145,10 @@ const AssetList = (props: Props) => {
       {assets.length > 0 ? (
         <Card.Group>
           {renderAssetCards()}
-          {/* Loading more (infinite scroll): append shimmering placeholders. */}
-          {isLoading ? Array.from({ length: 5 }).map((_, index) => <AssetCardSkeleton key={'skeleton-' + index} />) : null}
+          {/* Loading more (infinite scroll): complete the row + add a full row of placeholders. */}
+          {isLoading
+            ? Array.from({ length: loadMoreSkeletonCount }).map((_, index) => <AssetCardSkeleton key={'skeleton-' + index} />)
+            : null}
         </Card.Group>
       ) : null}
       {isLoading && assets.length > 0 ? <LoadingBar /> : null}
