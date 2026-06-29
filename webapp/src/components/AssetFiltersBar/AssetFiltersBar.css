@@ -62,12 +62,18 @@
 
 .AssetFiltersBar__right .AssetSearchBar {
   margin-left: 0;
-  min-width: 260px;
+  flex: none;
+  width: 280px;
 }
 
+/* Fixed width so changing the sort option (e.g. "Most expensive") doesn't
+   resize the control and push the search bar to a new line. */
 .AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 176px;
   height: 40px;
   min-height: 40px;
   padding: 0 14px;

@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
-import { Item, Network, NFTCategory, RentalListing } from '@dcl/schemas'
+import { Item, Network, NFTCategory, Rarity, RentalListing } from '@dcl/schemas'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { getProfileOfAddress } from 'decentraland-dapps/dist/modules/profile/selectors'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -80,6 +80,16 @@ const RentalChip = ({
       ) : null}
     </div>
   )
+}
+
+// Pick black or white text for legibility on top of the rarity color.
+function getReadableTextColor(hex: string): string {
+  const c = hex.replace('#', '')
+  const r = parseInt(c.substring(0, 2), 16)
+  const g = parseInt(c.substring(2, 4), 16)
+  const b = parseInt(c.substring(4, 6), 16)
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b
+  return luminance > 150 ? '#16141a' : '#ffffff'
 }
 
 const AssetCard = (props: Props) => {
@@ -172,11 +182,23 @@ const AssetCard = (props: Props) => {
 
     return catalogItemInformation ? (
       <div className="CatalogItemInformation">
-        <span className={`extraInformation ${notForSale ? 'NotForSale' : ''}`}>
-          {/* Show the rarity here instead of the generic action label ("Cheapest Option", etc.) */}
-          <span>{rarity ? t(`@dapps.rarities.${rarity}`) : catalogItemInformation.action}</span>
-          {!rarity && catalogItemInformation.actionIcon && <img src={catalogItemInformation.actionIcon} alt="mint" className="mintIcon" />}
-        </span>
+        {rarity ? (
+          /* Rarity as a colored chip; emote loop/sound chips sit next to it. */
+          <div className="AssetCard__chips">
+            <span
+              className="AssetCard__rarityChip"
+              style={{ backgroundColor: Rarity.getColor(rarity), color: getReadableTextColor(Rarity.getColor(rarity)) }}
+            >
+              {t(`@dapps.rarities.${rarity}`)}
+            </span>
+            {emote ? <EmoteTags asset={asset} isSocialEmotesEnabled={isSocialEmotesEnabled} /> : null}
+          </div>
+        ) : (
+          <span className={`extraInformation ${notForSale ? 'NotForSale' : ''}`}>
+            <span>{catalogItemInformation.action}</span>
+            {catalogItemInformation.actionIcon && <img src={catalogItemInformation.actionIcon} alt="mint" className="mintIcon" />}
+          </span>
+        )}
 
         {catalogItemInformation.price ? (
           isIAP ? (
@@ -206,7 +228,7 @@ const AssetCard = (props: Props) => {
         )}
       </div>
     ) : null
-  }, [asset, catalogItemInformation, rarity])
+  }, [asset, catalogItemInformation, rarity, emote, isSocialEmotesEnabled])
 
   const setWrapperRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -301,7 +323,6 @@ const AssetCard = (props: Props) => {
               {parcel ? <ParcelTags nft={asset as NFT} /> : null}
               {estate ? <EstateTags nft={asset as NFT} /> : null}
               {wearable ? <WearableTags asset={asset} /> : null}
-              {emote ? <EmoteTags asset={asset} isSocialEmotesEnabled={isSocialEmotesEnabled} /> : null}
               {ens ? <ENSTags nft={asset as NFT} /> : null}
             </Card.Content>
           </>

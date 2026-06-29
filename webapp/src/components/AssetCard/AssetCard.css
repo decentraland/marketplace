@@ -68,6 +68,43 @@
   display: none;
 }
 
+/* Rarity (colored chip) + emote loop/sound chips, in one row. */
+.AssetCard .AssetCard__chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 6px;
+}
+
+.AssetCard .AssetCard__rarityChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Compact, square-ish emote loop/sound chips that align with the rarity chip. */
+.AssetCard .AssetCard__chips .tags {
+  margin: 0;
+}
+
+.AssetCard .AssetCard__chips .EmoteTags__badges,
+.AssetCard .AssetCard__chips [class*='badges'] {
+  gap: 6px;
+}
+
+.AssetCard .AssetCard__chips [class*='PlayModeSmallBadge'],
+.AssetCard .AssetCard__chips [class*='sound'] {
+  margin-left: 0 !important;
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+
 /* "Add to Cart" reveals from the bottom on hover. */
 /* Rounded button at the bottom of the card; slides up from below on hover.
    The card's overflow:hidden clips it when hidden. */
