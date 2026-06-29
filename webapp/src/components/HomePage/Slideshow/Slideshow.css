@@ -39,13 +39,15 @@
   letter-spacing: -1px;
   font-size: 48px !important;
   line-height: 1.1;
+  margin-bottom: 0 !important;
 }
 
-/* Overview section subtitle. */
+/* Overview section subtitle — with some air below the larger title. */
 .Slideshow .slideshow-header .ui.sub.header {
   font-weight: 400 !important;
   letter-spacing: 0.5px;
   font-size: 24px !important;
+  margin-top: 12px !important;
 }
 
 .Slideshow .assets .AssetCard,
