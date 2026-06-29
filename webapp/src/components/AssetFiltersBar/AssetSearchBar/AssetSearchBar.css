@@ -12,6 +12,17 @@
   padding: 0;
 }
 
+/* `.dcl.field.full` carries min-width:400px and the `ui input` defaults wide,
+   so the field overflows the fixed-width container and slides under the sort
+   dropdown. Pin both to the container width. */
+.AssetSearchBar .dcl.field.full {
+  min-width: 0;
+}
+
+.AssetSearchBar .ui.input {
+  width: 100% !important;
+}
+
 /* No validation message / sub header — keep the field exactly input-height. */
 .AssetSearchBar .dcl.field .message,
 .AssetSearchBar .dcl.field .ui.sub.header {

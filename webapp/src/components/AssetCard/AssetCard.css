@@ -367,6 +367,23 @@
     align-items: center;
   }
 
+  /* Rarity (+ emote loop/sound) chips are hidden until hover, like the rest of
+     the extra information. They keep their color — just reveal on hover. */
+  .AssetCard .AssetCard__chips {
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: height 0.1s, opacity 0.6s;
+  }
+  .AssetCard:hover .AssetCard__chips {
+    visibility: visible;
+    height: auto;
+    margin: 4px 0 6px;
+    opacity: 1;
+  }
+
   .ui.cards > .ui.card.AssetCard.link:hover .meta,
   a.ui.card.link:hover .meta {
     color: var(--secondary-text);
