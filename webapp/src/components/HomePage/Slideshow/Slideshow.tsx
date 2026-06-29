@@ -11,7 +11,7 @@ import ItemsSection from './ItemsSection'
 import { Props } from './Slideshow.types'
 import './Slideshow.css'
 
-const DEFAULT_PAGE_SIZE = 5
+const DEFAULT_PAGE_SIZE = 6
 const INITIAL_PAGE = 1
 
 const Slideshow = (props: Props) => {

@@ -224,7 +224,7 @@ body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {
 .HomePage .ui.container,
 .AssetPage .ui.container {
   width: 100%;
-  max-width: 1216px !important;
+  max-width: 1396px !important;
   margin-left: auto;
   margin-right: auto;
 }
@@ -238,7 +238,7 @@ body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {
 /* The tabs' bottom divider lives on .dcl.tabs — center it too so the line
    matches the content reading lines instead of spanning wider. */
 .Navigation .dcl.tabs {
-  max-width: 1216px;
+  max-width: 1396px;
   margin-left: auto;
   margin-right: auto;
 }

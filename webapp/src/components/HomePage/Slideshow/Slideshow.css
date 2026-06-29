@@ -33,29 +33,22 @@
   flex: 1;
 }
 
-.Slideshow .assets .AssetCard,
-.Slideshow .assets .ui.card.AssetCard:first-child {
-  flex: 0 0 auto;
-  /* 5 equal cards per row, matching the Collectibles grid card size. */
-  width: 234px;
+/* 6 equal cards per row (5 gaps of 12px), matching the Collectibles grid. The
+   flex item is the AssetCard's wrapper div (and skeletons are direct children),
+   so the width comes from `flex` and the card fills it. */
+.Slideshow .assets > div {
+  flex: 1 1 0;
+  min-width: 0;
   margin-right: 12px;
   margin-top: 12px;
 }
 
-.Slideshow .assets .AssetCard:last-child {
+.Slideshow .assets > div:last-child {
   margin-right: 0;
 }
 
-/* Loading skeletons match the carousel card size. */
-.Slideshow .assets .AssetCardSkeleton {
-  flex: 0 0 auto;
-  width: 234px;
-  margin-right: 12px;
-  margin-top: 12px;
-}
-
-.Slideshow .assets .AssetCardSkeleton:last-child {
-  margin-right: 0;
+.Slideshow .assets .AssetCard {
+  width: 100%;
 }
 
 .Slideshow .dcl.header-menu {
