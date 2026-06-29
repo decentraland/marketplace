@@ -1708,5 +1708,17 @@
     "owner": "Esta publicación ya no está disponible. Debes volver a crearla.",
     "visitor": "Esta publicación ya no está disponible. El vendedor debe volver a crearla.",
     "update_listing": "Actualizar publicación"
+  },
+  "collection_bundle": {
+    "title": "Comprá la colección completa",
+    "subtitle": "{count} coleccionables incluidos",
+    "save": "Ahorrá {percent}%",
+    "buy": "Comprar bundle",
+    "added": "Bundle agregado",
+    "cart_name": "Bundle de colección ({count} ítems)"
+  },
+  "creator_items": {
+    "title": "Otras colecciones del creador",
+    "not_for_sale": "No está a la venta"
   }
 }

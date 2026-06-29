@@ -1712,5 +1712,17 @@
     "owner": "此挂单已不可用。请重新创建。",
     "visitor": "此挂单已不可用。卖家需要重新创建。",
     "update_listing": "更新挂单"
+  },
+  "collection_bundle": {
+    "title": "购买整个合集",
+    "subtitle": "包含 {count} 件收藏品",
+    "save": "立省 {percent}%",
+    "buy": "购买合集",
+    "added": "已加入合集",
+    "cart_name": "合集套装（{count} 件）"
+  },
+  "creator_items": {
+    "title": "该创作者的其他合集",
+    "not_for_sale": "不出售"
   }
 }

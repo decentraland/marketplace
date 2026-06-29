@@ -28,6 +28,10 @@ import Title from '../Title'
 import { TransactionHistory } from '../TransactionHistory'
 import { UtilityBadge } from '../UtilityBadge'
 import { YourOffer } from '../YourOffer'
+import CollectionBundle from './CollectionBundle'
+import CollectionStrip from './CollectionStrip'
+import CreatorItems from './CreatorItems'
+import { useCollectionItems, useCreatorItems } from './useDetailExtras'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
@@ -43,6 +47,11 @@ const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
 
   const tableRef = useRef<HTMLDivElement>(null)
   const requiredPermissions = useSelector((state: RootState) => getRequiredPermissions(state, item.id))
+
+  // Demo: collection (same contract) + creator items for the strip / bundle /
+  // "more from the creator" sections.
+  const { items: collectionItems } = useCollectionItems(item.contractAddress)
+  const { items: creatorItems, isLoading: isLoadingCreatorItems } = useCreatorItems(item.creator)
 
   switch (item.category) {
     case NFTCategory.WEARABLE:
@@ -100,7 +109,10 @@ const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
       <OnBack asset={item} />
       <div className={styles.informationContainer}>
         <div className={styles.assetImageContainer}>
-          <AssetImage asset={item} isDraggable />
+          <div className={styles.previewWrap}>
+            <AssetImage asset={item} isDraggable />
+          </div>
+          <CollectionStrip items={collectionItems} currentItemId={item.id} />
         </div>
         <div className={styles.information}>
           {/* Name + creator, then a divider — the "header" block of the panel. */}
@@ -190,6 +202,10 @@ const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
           </div>
         </div>
       </div>
+
+      <CollectionBundle contractAddress={item.contractAddress} items={collectionItems} currentItem={item} />
+
+      <CreatorItems items={creatorItems} isLoading={isLoadingCreatorItems} currentContractAddress={item.contractAddress} />
 
       {!isIAP && <YourOffer asset={item} />}
       {!isIAP && <ListingsTableContainer item={item} ref={tableRef} />}

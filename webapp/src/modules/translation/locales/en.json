@@ -1746,5 +1746,17 @@
     "owner": "This listing is no longer available. You need to recreate it.",
     "visitor": "This listing is no longer available. The seller needs to recreate it.",
     "update_listing": "Update listing"
+  },
+  "collection_bundle": {
+    "title": "Buy the whole collection",
+    "subtitle": "{count} collectibles included",
+    "save": "Save {percent}%",
+    "buy": "Buy bundle",
+    "added": "Bundle added",
+    "cart_name": "Collection bundle ({count} items)"
+  },
+  "creator_items": {
+    "title": "Other Collections from the creator",
+    "not_for_sale": "Not for sale"
   }
 }

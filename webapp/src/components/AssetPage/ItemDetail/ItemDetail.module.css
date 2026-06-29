@@ -11,6 +11,25 @@
 .ItemDetail .assetImageContainer {
   width: 52.5%;
   max-height: 655px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+/* Big preview fills the remaining space; the collection strip sits beside it. */
+.ItemDetail .previewWrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.ItemDetail .previewWrap :global(.AssetImage) {
+  height: 100%;
+}
+
+@media (max-width: 1000px) {
+  .ItemDetail .assetImageContainer {
+    flex-direction: column;
+  }
 }
 
 .ItemDetail.smart.withRequiredPermissions .assetImageContainer {
