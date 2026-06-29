@@ -63,17 +63,20 @@
 .AssetFiltersBar__right .AssetSearchBar {
   margin-left: 0;
   flex: none;
-  width: 280px;
+  width: 260px;
+  min-width: 0;
 }
 
-/* Fixed width so changing the sort option (e.g. "Most expensive") doesn't
-   resize the control and push the search bar to a new line. */
+/* Fixed width so changing the sort option doesn't resize the control and push
+   the search bar around. Sized to fit the longest label (e.g. the Spanish
+   "Vendidos recientemente"); the label ellipsizes as a safety net for any even
+   longer locale so it never overflows the rounded border. */
 .AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  width: 176px;
+  width: 248px;
   height: 40px;
   min-height: 40px;
   padding: 0 14px;
@@ -84,10 +87,25 @@
   color: #6b6873;
 }
 
-/* "Most newest / Recently sold…" in the same grey as the filter labels (not purple). */
+/* "Más nuevos / Vendidos recientemente…" in the same grey as the filter labels
+   (not purple); truncate with an ellipsis instead of overflowing. */
+.AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown > .text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown > .text,
 .AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown > .icon,
 .AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown > .dropdown.icon {
   font-weight: 600;
   color: #6b6873 !important;
+}
+
+/* Keep the caret pinned to the right edge, never shrinking. */
+.AssetFiltersBar .AssetFiltersBar__sort.ui.dropdown > .dropdown.icon {
+  flex: 0 0 auto;
+  margin: 0;
 }
