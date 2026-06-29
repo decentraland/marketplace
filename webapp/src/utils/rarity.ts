@@ -14,10 +14,11 @@ import { Rarity } from '@dcl/schemas'
 // call sites.
 
 // Solid background passed to <WearablePreview background={...} />.
-const NEUTRAL_BACKGROUND = '#f5f4f7'
+const NEUTRAL_BACKGROUND = '#fbfbfc'
 
-// Radial gradient stops [light (center), dark (edge)].
-const NEUTRAL_GRADIENT: [string, string] = ['#ffffff', '#e9e8eb']
+// Radial gradient stops [light (center), dark (edge)] — near-white with a barely
+// perceptible falloff, so wearables sit on a clean white backdrop (not grey).
+const NEUTRAL_GRADIENT: [string, string] = ['#ffffff', '#f3f2f6']
 
 export function getRarityBackgroundColor(_rarity: Rarity = Rarity.COMMON): string {
   return NEUTRAL_BACKGROUND

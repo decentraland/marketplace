@@ -12,7 +12,7 @@
   height: 96px;
   border-radius: 12px;
   overflow: hidden;
-  background-color: #f3f2f5;
+  background: radial-gradient(#ffffff, #f3f2f6);
   border: 1px solid var(--divider);
   transition: border-color 0.15s ease, transform 0.15s ease;
 }

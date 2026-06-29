@@ -1,10 +1,8 @@
 import React, { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Item, Network } from '@dcl/schemas'
+import { Item } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Icon, Mana } from 'decentraland-ui'
-import { formatWeiMANA } from '../../../lib/mana'
-import { getAssetImage, getAssetName, getAssetUrl } from '../../../modules/asset/utils'
+import { Icon } from 'decentraland-ui'
+import { AssetCard } from '../../AssetCard'
 import styles from './CreatorItems.module.css'
 
 type Props = {
@@ -16,7 +14,8 @@ type Props = {
 const PAGE_SIZE = 5
 
 // "Other Items from the Creator": a horizontal, paginated slider of the
-// creator's other items (Trending-Items pattern: arrows + page dots).
+// creator's other items (Trending-Items pattern). Reuses the real AssetCard so
+// the cards behave exactly like everywhere else (hover, add to cart, etc.).
 const CreatorItems = ({ items, isLoading, currentContractAddress }: Props) => {
   const others = useMemo(() => items.filter(item => item.contractAddress !== currentContractAddress), [items, currentContractAddress])
   const [page, setPage] = useState(0)
@@ -42,23 +41,7 @@ const CreatorItems = ({ items, isLoading, currentContractAddress }: Props) => {
 
         <div className={styles.row}>
           {pageItems.map(item => (
-            <Link key={item.id} to={getAssetUrl(item)} className={styles.card}>
-              <div className={styles.image}>
-                <img src={getAssetImage(item)} alt={getAssetName(item)} loading="lazy" />
-              </div>
-              <div className={styles.body}>
-                <span className={styles.name}>{getAssetName(item)}</span>
-                {item.isOnSale && item.price && item.price !== '0' ? (
-                  <span className={styles.price}>
-                    <Mana network={item.network ?? Network.MATIC} inline>
-                      {formatWeiMANA(item.price)}
-                    </Mana>
-                  </span>
-                ) : (
-                  <span className={styles.notForSale}>{t('creator_items.not_for_sale')}</span>
-                )}
-              </div>
-            </Link>
+            <AssetCard key={item.id} asset={item} />
           ))}
         </div>
 

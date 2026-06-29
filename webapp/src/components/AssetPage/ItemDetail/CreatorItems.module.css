@@ -11,7 +11,8 @@
   margin: 0 0 20px;
 }
 
-/* Carousel: a row of up to 5 cards with arrows on the sides + page dots. */
+/* Carousel: a row of up to 5 AssetCards with arrows at the far left/right
+   (outside the cards) + page dots below. */
 .carousel {
   position: relative;
 }
@@ -24,9 +25,10 @@
 
 .arrow {
   position: absolute;
-  top: 50%;
+  /* Centered on the card image (the top portion of the card), not the full card. */
+  top: 31%;
   transform: translateY(-50%);
-  z-index: 2;
+  z-index: 4;
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -51,12 +53,13 @@
   height: auto;
 }
 
+/* Fully outside the cards, at the left/right extremes. */
 .arrowLeft {
-  left: -18px;
+  left: -56px;
 }
 
 .arrowRight {
-  right: -18px;
+  right: -56px;
 }
 
 .dots {
@@ -79,62 +82,6 @@
   width: 22px;
   border-radius: 4px;
   background-color: var(--primary);
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: var(--card);
-  border: 1px solid var(--divider);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(22, 21, 24, 0.1);
-}
-
-.image {
-  aspect-ratio: 1 / 1;
-  background-color: #f3f2f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.body {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px 14px 16px;
-}
-
-.name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.price {
-  font-size: 15px;
-  font-weight: 600;
-  color: #736e7d;
-}
-
-.notForSale {
-  font-size: 13px;
-  color: var(--secondary-text);
 }
 
 @media (max-width: 1000px) {

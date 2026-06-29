@@ -26,22 +26,25 @@
   display: none !important;
 }
 
-/* "Add to Cart" — dark, full-width, sits under the purple Buy button. */
-.BestBuyingOption .addToCartButton.ui.button {
+/* "Add to Cart" — same dark style as the Collectibles cards. NOTE: in CSS
+   modules `.ui.button` would be hashed, so we target the module class alone with
+   !important to beat decentraland-ui's `.ui.button` defaults. */
+.BestBuyingOption .addToCartButton {
   background-color: #2b2a30 !important;
   color: #ffffff !important;
-  border-radius: 10px;
-  height: 48px;
-  font-size: 15px;
-  font-weight: 600;
-  margin: 0;
+  border-radius: 10px !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
 }
 
-.BestBuyingOption .addToCartButton.ui.button:hover {
+.BestBuyingOption .addToCartButton:hover {
   background-color: #43404a !important;
 }
 
-.BestBuyingOption .addToCartButton.ui.button:disabled {
+.BestBuyingOption .addToCartButton:disabled {
   opacity: 1 !important;
   background-color: var(--primary) !important;
 }
