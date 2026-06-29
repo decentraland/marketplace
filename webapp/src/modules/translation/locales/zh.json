@@ -1722,7 +1722,7 @@
     "cart_name": "合集套装（{count} 件）"
   },
   "creator_items": {
-    "title": "该创作者的其他合集",
+    "title": "该创作者的其他单品",
     "not_for_sale": "不出售"
   }
 }

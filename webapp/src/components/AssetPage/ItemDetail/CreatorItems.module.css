@@ -11,10 +11,74 @@
   margin: 0 0 20px;
 }
 
+/* Carousel: a row of up to 5 cards with arrows on the sides + page dots. */
+.carousel {
+  position: relative;
+}
+
 .row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--divider);
+  background-color: #ffffff;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 16px rgba(22, 21, 24, 0.16);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.arrow:hover {
+  background-color: #f3f2f5;
+  transform: translateY(-50%) scale(1.06);
+}
+
+.arrow i.icon {
+  margin: 0;
+  height: auto;
+}
+
+.arrowLeft {
+  left: -18px;
+}
+
+.arrowRight {
+  right: -18px;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(115, 110, 125, 0.3);
+  cursor: pointer;
+  transition: background-color 0.15s ease, width 0.15s ease;
+}
+
+.dotActive {
+  width: 22px;
+  border-radius: 4px;
+  background-color: var(--primary);
 }
 
 .card {

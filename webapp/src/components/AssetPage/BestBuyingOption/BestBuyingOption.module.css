@@ -21,6 +21,11 @@
   display: none !important;
 }
 
+/* Demo: the BUY button reads just "Buy" — drop its leading MANA icon. */
+.BestBuyingOption .buyNFTButtons :global(.ui.button .dcl.mana) {
+  display: none !important;
+}
+
 /* "Add to Cart" — dark, full-width, sits under the purple Buy button. */
 .BestBuyingOption .addToCartButton.ui.button {
   background-color: #2b2a30 !important;

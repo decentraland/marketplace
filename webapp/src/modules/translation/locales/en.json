@@ -1756,7 +1756,7 @@
     "cart_name": "Collection bundle ({count} items)"
   },
   "creator_items": {
-    "title": "Other Collections from the creator",
+    "title": "Other Items from the Creator",
     "not_for_sale": "Not for sale"
   }
 }
