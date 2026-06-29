@@ -1,10 +1,13 @@
 .title {
   font-family: 'Inter', Helvetica, Arial, sans-serif;
-  font-size: 42px;
+  font-size: 48px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 900;
   line-height: 1.05;
-  letter-spacing: -3px;
+  letter-spacing: -1.25px;
+  /* Inter is loaded as a single weight, so 700+ all render the same faux-bold;
+     a thin text-stroke gives the extra heaviness the design calls for. */
+  -webkit-text-stroke: 0.4px currentColor;
   text-align: left;
   color: var(--text);
   /* TODO (lists): this may be moved after updating the detail page on the unified markets change */

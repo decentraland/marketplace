@@ -195,9 +195,7 @@ const ItemDetail = ({ item, isSocialEmotesEnabled }: Props) => {
           <div className={styles.dateBlock}>
             <span className={styles.dateLabel}>{t('asset_page.date')}</span>
             <span className={styles.dateValue}>
-              {new Date(Number(item.createdAt) * 1000)
-                .toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })
-                .toUpperCase()}
+              {new Date(Number(item.createdAt) * 1000).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' })}
             </span>
           </div>
         </div>
