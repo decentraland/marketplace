@@ -235,7 +235,15 @@ const SaleRentActionBox = ({
                 ) : null}
                 <div className={styles.saleButtons}>
                   {order && !isEstateListingBroken ? <BuyWithCryptoButton asset={nft} onClick={onBuyWithCrypto} /> : null}
-                  {canBid && !isEstateListingBroken ? (
+                  {/*
+                   * Making a new offer is independent of the seller's listing being
+                   * broken by the EstateRegistry upgrade. A fresh bid is signed with the
+                   * on-chain getFingerprintV2 value, so it is executable regardless of
+                   * whether an existing pre-upgrade order/listing on the same Estate is
+                   * no longer honored. Only the BUY action (which executes the seller's
+                   * existing order) is gated by `isEstateListingBroken`.
+                   */}
+                  {canBid ? (
                     <Popup
                       content={t('asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid')}
                       position="top center"
