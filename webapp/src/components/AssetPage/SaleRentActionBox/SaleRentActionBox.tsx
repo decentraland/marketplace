@@ -53,7 +53,7 @@ const SaleRentActionBox = ({
   const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
   const isTenant = rental && wallet && addressEquals(rental.tenant ?? undefined, wallet.address)
-  const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft)
+  const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft, order?.createdAt)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<number | undefined>(undefined)
   const [view, setView] = useState(!!order || !isRentalOpen ? View.SALE : View.RENT)
@@ -98,7 +98,7 @@ const SaleRentActionBox = ({
 
   return (
     <div className={styles.main}>
-      <EstateUpgradeWarning nft={nft} isOwnListing={isOwner} />
+      <EstateUpgradeWarning nft={nft} isOwnListing={isOwner} listingCreatedAt={order?.createdAt} />
       {isRentalOpen && maxPriceOfPeriods ? (
         <div className={styles.viewSelector}>
           <button

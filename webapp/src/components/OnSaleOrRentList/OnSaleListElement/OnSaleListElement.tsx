@@ -16,7 +16,7 @@ import './OnSaleListElement.css'
 
 const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRevoke, wallet }: Props) => {
   const category = item?.category || nft!.category
-  const isAffectedByEstateUpgrade = !!nft && isNFT(nft) && isEstateListingAffectedByUpgrade(nft)
+  const isAffectedByEstateUpgrade = !!nft && isNFT(nft) && isEstateListingAffectedByUpgrade(nft, order?.createdAt)
 
   const cancelOrSellOptions = {
     redirectTo: locations.currentAccount({
@@ -33,7 +33,7 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
             {formatWeiMANA(item?.price || order!.price)}
           </Mana>
         </div>
-        {isAffectedByEstateUpgrade ? <EstateUpgradeWarning nft={nft} isOwnListing /> : null}
+        {isAffectedByEstateUpgrade ? <EstateUpgradeWarning nft={nft} isOwnListing listingCreatedAt={order?.createdAt} /> : null}
       </Mobile>
       <NotMobile>
         <Table.Row>
