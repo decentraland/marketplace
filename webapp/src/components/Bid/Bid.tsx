@@ -144,7 +144,7 @@ const Bid = (props: Props) => {
           {asset => (
             <>
               {isBidder ? <WarningMessage asset={asset} bid={bid} /> : null}
-              {asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} /> : null}
+              {asset && isNFT(asset) ? <EstateUpgradeWarning nft={asset} isOwnListing={isBidder} listingCreatedAt={bid.createdAt} /> : null}
             </>
           )}
         </AssetProvider>

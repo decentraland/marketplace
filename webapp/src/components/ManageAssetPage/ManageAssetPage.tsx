@@ -90,7 +90,7 @@ export const ManageAssetPage = (props: Props) => {
                           <Column className={styles.content}>
                             {asset && !isLoading ? (
                               <>
-                                <EstateUpgradeWarning nft={asset} isOwnListing />
+                                <EstateUpgradeWarning nft={asset} isOwnListing listingCreatedAt={order?.createdAt} />
                                 <section className={styles.assetDescription}>
                                   <div className={styles.assetDescriptionHeader}>
                                     <h1 className={styles.assetDescriptionTitle}>{asset?.name}</h1>
@@ -139,7 +139,7 @@ export const ManageAssetPage = (props: Props) => {
                             ) : null}
                             {asset && !isLoading ? (
                               <>
-                                <EstateUpgradeWarning nft={asset} isOwnListing />
+                                <EstateUpgradeWarning nft={asset} isOwnListing listingCreatedAt={order?.createdAt} />
                                 <section className={styles.assetDescription}>
                                   <div className={styles.assetDescriptionHeader}>
                                     <h1 className={styles.assetDescriptionTitle}>{asset?.name}</h1>

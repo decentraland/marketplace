@@ -35,7 +35,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
         : order.expiresAt * 1000 // in s
     )
     const isOrderExpired = getIsOrderExpired(order.expiresAt)
-    const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft)
+    const isEstateListingBroken = isEstateListingAffectedByUpgrade(nft, order?.createdAt)
 
     const handleUseCredits = (value: boolean) => {
       setUseCredits(value)
@@ -43,7 +43,7 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
 
     return (
       <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
-        <EstateUpgradeWarning nft={nft} isOwnListing={!!isOwner} />
+        <EstateUpgradeWarning nft={nft} isOwnListing={!!isOwner} listingCreatedAt={order?.createdAt} />
         <div className={styles.informationContainer}>
           <div className={styles.columnListing}>
             <span className={styles.informationTitle}>{t('best_buying_option.minting.price').toUpperCase()}</span>

@@ -12,10 +12,15 @@ type Props = {
   // When true, callers are showing this on the lister's own listing — the wording
   // uses "you" instead of "the seller".
   isOwnListing?: boolean
+  // Creation timestamp (seconds or ms) of the listing being shown (order / bid).
+  // The warning only renders for a listing created before the v2-fingerprint
+  // cutoff — i.e. one actually broken by the upgrade. Omit it when there is no
+  // listing in context.
+  listingCreatedAt?: number
 }
 
-const EstateUpgradeWarning = ({ nft, className, isOwnListing = false }: Props) => {
-  if (!isEstateListingAffectedByUpgrade(nft)) return null
+const EstateUpgradeWarning = ({ nft, className, isOwnListing = false, listingCreatedAt }: Props) => {
+  if (!isEstateListingAffectedByUpgrade(nft, listingCreatedAt)) return null
 
   const messageKey = isOwnListing ? 'estate_upgrade_warning.owner' : 'estate_upgrade_warning.visitor'
 
