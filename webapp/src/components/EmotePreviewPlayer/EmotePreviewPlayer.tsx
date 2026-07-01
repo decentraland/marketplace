@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useSelector } from 'react-redux'
-import { Network, PreviewMessageType, PreviewOptions, PreviewUnityMode, Rarity, sendMessage } from '@dcl/schemas'
+import { Network, PreviewMessageType, PreviewOptions, PreviewType, PreviewUnityMode, Rarity, sendMessage } from '@dcl/schemas'
 import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
 import { Loader } from 'decentraland-ui'
 import { WearablePreview } from 'decentraland-ui2'
@@ -19,6 +19,9 @@ export type EmotePreviewSource = {
   urn?: string | null
   network?: Network
   rarity?: Rarity
+  // 'emote' plays the animation on the avatar; 'wearable' renders the 3D model
+  // by itself (auto-rotating), used for the wearable-card hover swap.
+  type?: 'emote' | 'wearable'
 }
 
 type EmotePreviewPlayerContextValue = {
@@ -44,11 +47,25 @@ type PreviewEnvConfig = {
 }
 
 const sourceToOptions = (src: EmotePreviewSource, env: PreviewEnvConfig): PreviewOptions => {
+  const isWearable = src.type === 'wearable'
   const base: PreviewOptions = {
     profile: env.profile,
     peerUrl: env.peerUrl,
     marketplaceServerUrl: env.marketplaceServerUrl,
-    background: getRarityBackgroundColor(src.rarity ?? Rarity.COMMON)
+    background: getRarityBackgroundColor(src.rarity ?? Rarity.COMMON),
+    // Wearables render as the standalone 3D model, slowly spinning. The
+    // iframe's base config is tuned for emotes (wheelStart=100 starts the
+    // camera 1.5x closer), which clips larger items — wheelStart: 0 resets to
+    // the auto-framed distance. UPDATE messages replace the whole overrides
+    // object, so an emote hover after a wearable one falls back naturally.
+    ...(isWearable
+      ? {
+          type: PreviewType.WEARABLE,
+          disableAutoRotate: false,
+          autoRotateSpeed: 0.4,
+          wheelStart: 0
+        }
+      : {})
   }
   if (src.network === Network.ETHEREUM && src.urn) {
     return { ...base, urns: [src.urn] }

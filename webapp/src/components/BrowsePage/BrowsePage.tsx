@@ -18,10 +18,13 @@ const BrowsePage = (props: Props) => {
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
   const activeTab = NavigationTab.COLLECTIBLES
+  // The hover 3D preview player is a single shared iframe; keep it warm for
+  // both emotes (avatar playing the emote) and wearables (spinning model).
   const isEmotesSection = typeof section === 'string' && section.startsWith('emotes')
+  const isWearablesSection = typeof section === 'string' && section.startsWith('wearables')
 
   return (
-    <EmotePreviewPlayerProvider enabled={isEmotesSection}>
+    <EmotePreviewPlayerProvider enabled={isEmotesSection || isWearablesSection}>
       <PageLayout activeTab={activeTab}>
         {isCampaignCollectiblesBannerEnabled ? (
           <div className={styles.banner}>

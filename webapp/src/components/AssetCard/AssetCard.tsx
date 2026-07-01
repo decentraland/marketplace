@@ -116,12 +116,13 @@ const AssetCard = (props: Props) => {
   const emotePreviewPlayer = useEmotePreviewPlayer()
   const cardContainerRef = useRef<HTMLDivElement | null>(null)
   const isEmoteCard = asset.category === NFTCategory.EMOTE
+  const isWearableCard = asset.category === NFTCategory.WEARABLE
   // `useMobileMediaQuery` is viewport-width based, so it returns false on
   // touch laptops/large tablets. Gate the hover preview on pointer
   // capability too — on touch-only devices `mouseenter` fires on tap and
   // would race the click that navigates to the asset detail page.
   const supportsHover = useMemo(() => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches, [])
-  const canShowEmotePreview = isEmoteCard && !isMobile && supportsHover && !!emotePreviewPlayer
+  const canShowEmotePreview = (isEmoteCard || isWearableCard) && !isMobile && supportsHover && !!emotePreviewPlayer
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
@@ -142,7 +143,8 @@ const AssetCard = (props: Props) => {
       tokenId: 'tokenId' in asset ? asset.tokenId : null,
       urn: 'urn' in asset ? asset.urn ?? null : null,
       network: asset.network,
-      rarity: asset.data.emote?.rarity
+      rarity: asset.data.emote?.rarity ?? asset.data.wearable?.rarity,
+      type: asset.category === NFTCategory.EMOTE ? 'emote' : 'wearable'
     })
   }, [emotePreviewPlayer, canShowEmotePreview, asset])
 
