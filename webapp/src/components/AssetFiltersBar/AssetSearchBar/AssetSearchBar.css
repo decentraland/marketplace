@@ -43,11 +43,14 @@
   border-color: var(--primary);
 }
 
-/* The suggestions dropdown is positioned under the field. */
-.AssetSearchBar .SearchBarDropdown {
-  position: absolute;
-  top: calc(100% + 8px);
+/* The suggestions dropdown: the search field is only 260px, but the dropdown's
+   result tabs need more room (otherwise they wrap and overlap). Give it a
+   wider, fixed width anchored to the right edge of the field, just below it. */
+.AssetSearchBar [data-testid='search-bar-dropdown'] {
+  width: 400px;
+  max-width: 90vw;
+  left: auto;
   right: 0;
-  left: 0;
+  top: calc(100% + 8px);
   z-index: 30;
 }

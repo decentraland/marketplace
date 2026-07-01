@@ -23,9 +23,9 @@
   height: 30px;
   flex-shrink: 0;
 
-  background: var(--dcl-pale-black, #43404a);
+  background: #efeef2;
   margin-right: 16px;
-  background: linear-gradient(90deg, #43404a 25%, #63616d 50%, #43404a 75%);
+  background: linear-gradient(90deg, #efeef2 25%, #e2e0e7 50%, #efeef2 75%);
   background-size: 200% 100%;
   animation: wave 1.5s infinite;
 }
@@ -41,9 +41,9 @@
 .itemNameSkeleton {
   width: 105px;
   height: 17px;
-  background: var(--dcl-pale-black, #43404a);
+  background: #efeef2;
   margin-bottom: 6px;
-  background: linear-gradient(90deg, #43404a 25%, #63616d 50%, #43404a 75%);
+  background: linear-gradient(90deg, #efeef2 25%, #e2e0e7 50%, #efeef2 75%);
   background-size: 200% 100%;
   animation: wave 1.5s infinite;
 }
@@ -51,8 +51,8 @@
 .creatorSkeleton {
   width: 126px;
   height: 7px;
-  background: var(--dcl-pale-black, #43404a);
-  background: linear-gradient(90deg, #43404a 25%, #63616d 50%, #43404a 75%);
+  background: #efeef2;
+  background: linear-gradient(90deg, #efeef2 25%, #e2e0e7 50%, #efeef2 75%);
   background-size: 200% 100%;
   animation: wave 1.5s infinite;
 }

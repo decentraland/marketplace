@@ -11,12 +11,12 @@
 
 .itemName {
   font-weight: bold;
-  color: white;
+  color: var(--text);
 }
 
 .creator {
   margin-top: 2px;
-  color: #a09ba8;
+  color: var(--secondary-text);
 }
 
 .collectibleItemRowContainer :global(.AssetImage) {

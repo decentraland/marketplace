@@ -16,18 +16,18 @@
 
 .itemName {
   font-weight: bold;
-  color: white;
+  color: var(--text);
 }
 
 .creator {
   margin-top: 2px;
-  color: #a09ba8;
+  color: var(--secondary-text);
 }
 
 .creatorRowContainer .owner {
   display: flex;
   align-items: center;
-  color: white;
+  color: var(--text);
 }
 
 .creatorRowContainer :global(.Profile.avatar.huge.inline .dcl.avatar-face.tiny.inline) {

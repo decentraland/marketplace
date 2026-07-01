@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: #332f3a;
+  background-color: #ffffff;
+  border: 1px solid var(--divider);
   position: absolute;
   max-height: 735px;
   top: 60px;
@@ -10,11 +11,11 @@
   border-radius: 10px;
   padding: 16px;
   padding-top: 0;
-  box-shadow: 0px 14px 24px 0px rgba(0, 0, 0, 0.6);
+  box-shadow: 0px 14px 24px 0px rgba(22, 21, 24, 0.16);
 }
 
 .searchBarDropdown :global(a):hover {
-  background-color: var(--dropdown-hover);
+  background-color: #f3f2f5;
 }
 
 .tabsContainer {
