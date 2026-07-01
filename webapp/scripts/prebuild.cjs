@@ -22,9 +22,17 @@ Object.assign(ENV_CONTENT, getPublicUrls())
 packageJson.homepage = ENV_CONTENT['VITE_BASE_URL']
 publicPackageJson.homepage = packageJson.homepage
 if (packageJson.homepage) {
-  // github action outputs. Do not touch.
-  console.log('::set-output name=public_url::' + packageJson.homepage)
-  console.log('::set-output name=public_path::' + new URL(packageJson.homepage).pathname)
+  // github action outputs
+  // Using GITHUB_OUTPUT environment file (modern approach)
+  // See: https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
+  if (process.env.GITHUB_OUTPUT) {
+    fs.appendFileSync(process.env.GITHUB_OUTPUT, `public_url=${packageJson.homepage}\n`)
+    fs.appendFileSync(process.env.GITHUB_OUTPUT, `public_path=${new URL(packageJson.homepage).pathname}\n`)
+  } else {
+    // Fallback for local development or non-GitHub CI environments
+    console.log(`public_url=${packageJson.homepage}`)
+    console.log(`public_path=${new URL(packageJson.homepage).pathname}`)
+  }
 }
 
 // log stuff
