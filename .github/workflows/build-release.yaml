@@ -20,10 +20,10 @@ jobs:
       run:
         working-directory: ./webapp
     steps:
-      - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # @v4.3.0
+      - uses: actions/checkout@v6
       - name: Use Node.js 22.x
         # Node 22.x LTS — single-major bump from 20.x.
-        uses: actions/setup-node@v4.0.1
+        uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: "npm"
@@ -50,7 +50,6 @@ jobs:
           NODE_OPTIONS: "--max_old_space_size=4096"
         run: npm run build
       - name: Publish
-        # No NODE_AUTH_TOKEN — npm authenticates via OIDC against the Trusted
         # Publisher configured for @dcl/marketplace-site on npmjs.com. Provenance
         # is automatic under Trusted Publishing but we keep the flag for clarity.
         uses: decentraland/oddish-action@0074f2d535c43b5c83f136525304a6277166d77f # @master
