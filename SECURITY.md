@@ -21,4 +21,4 @@ Our team will assess each submission individually and assign a level of severity
 * High: Up to $3,000 USD
 * Critical: Up to $18,000 USD
 
-Note that assesment and award of the bounty might take up to 60 days to process and validate, and that the payment will be conducted in a stablecoin over the Ethereum network.
+Note that assessment and award of the bounty might take up to 60 days to process and validate, and that the payment will be conducted in a stablecoin over the Ethereum network.
