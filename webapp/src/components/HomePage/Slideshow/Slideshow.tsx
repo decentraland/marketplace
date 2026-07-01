@@ -30,7 +30,19 @@ const Slideshow = (props: Props) => {
     onChangeItemSection
   } = props
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
-  const pageSize = isMobileOrTablet ? assets.length : DEFAULT_PAGE_SIZE
+  // Desktop: how many cards fit per page, so they fill the row at a comfortable
+  // size (~205px) instead of being cramped on narrower desktops.
+  const [columns, setColumns] = useState(DEFAULT_PAGE_SIZE)
+  useEffect(() => {
+    const calc = () => {
+      const inner = Math.min(window.innerWidth, 1396) - 96
+      setColumns(Math.max(3, Math.min(DEFAULT_PAGE_SIZE, Math.floor((inner + 12) / 217))))
+    }
+    calc()
+    window.addEventListener('resize', calc)
+    return () => window.removeEventListener('resize', calc)
+  }, [])
+  const pageSize = isMobileOrTablet ? assets.length : columns
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [assetsToRender, setAssetsToRender] = useState(isMobileOrTablet ? assets : assets.slice(0, pageSize))
 
@@ -108,7 +120,7 @@ const Slideshow = (props: Props) => {
         >
           {isLoading
             ? assets.length === 0
-              ? Array.from({ length: DEFAULT_PAGE_SIZE }).map((_, index) => <AssetCardSkeleton key={'skeleton-' + index} />)
+              ? Array.from({ length: columns }).map((_, index) => <AssetCardSkeleton key={'skeleton-' + index} />)
               : renderNfts()
             : assets.length > 0
               ? renderNfts()

@@ -33,12 +33,7 @@
   flex: 1;
 }
 
-/* 6 equal cards per row (5 gaps of 12px), matching the Collectibles grid. The
-   flex item is the AssetCard's wrapper div (and skeletons are direct children),
-   so the width comes from `flex` and the card fills it. */
 .Slideshow .assets > div {
-  flex: 1 1 0;
-  min-width: 0;
   margin-right: 12px;
   margin-top: 12px;
 }
@@ -49,6 +44,25 @@
 
 .Slideshow .assets .AssetCard {
   width: 100%;
+}
+
+/* Desktop: 6 equal cards per row (paginated), filling the width like the
+   Collectibles grid. The flex item is the AssetCard's wrapper div. */
+@media (min-width: 992px) {
+  .Slideshow .assets > div {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+/* Tablet & below (matches useTabletAndBelowMediaQuery ≤991): the slideshow
+   shows every asset in a horizontal scroll, so cards keep a fixed width
+   instead of squishing. */
+@media (max-width: 991px) {
+  .Slideshow .assets > div {
+    flex: 0 0 auto;
+    width: 200px;
+  }
 }
 
 .Slideshow .dcl.header-menu {
@@ -155,12 +169,12 @@
   background: #821dbb;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
   .Slideshow {
     overflow: hidden;
   }
   .Slideshow .assets {
-    overflow: scroll;
+    overflow-x: auto;
   }
 }
 
