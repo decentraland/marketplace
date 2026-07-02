@@ -1730,5 +1730,12 @@
   "animation_packs": {
     "title": "Animation Packs",
     "subtitle": "Llevate un pack de emotes con descuento"
+  },
+  "fitting_room": {
+    "title": "Probador",
+    "close": "Cerrar probador",
+    "empty": "Elegí un wearable para probártelo",
+    "try_on": "Probar",
+    "trying_item": "Probándote {name}"
   }
 }

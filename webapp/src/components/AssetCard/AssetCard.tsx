@@ -27,6 +27,7 @@ import { AssetImage } from '../AssetImage'
 import SmartBadge from '../AssetPage/SmartBadge'
 import { useCart } from '../Cart'
 import { useEmotePreviewPlayer } from '../EmotePreviewPlayer'
+import { useFittingRoom } from '../FittingRoom'
 import { Mana } from '../Mana'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
@@ -174,9 +175,38 @@ const AssetCard = (props: Props) => {
       event.stopPropagation()
       const rawPrice = catalogItemInformation?.price || price || '0'
       const cartPrice = rawPrice.includes('-') ? rawPrice.split(' - ')[0] : rawPrice
-      addItem({ id: cartId, name: title, thumbnail: getAssetImage(asset), price: cartPrice, network: asset.network })
+      addItem({
+        id: cartId,
+        name: title,
+        thumbnail: getAssetImage(asset),
+        price: cartPrice,
+        network: asset.network,
+        urn: 'urn' in asset ? asset.urn ?? undefined : undefined
+      })
     },
     [addItem, cartId, title, asset, catalogItemInformation, price]
+  )
+
+  // Demo fitting room: the try-on button next to Add to Cart opens the drawer
+  // with this item on the avatar.
+  const fittingRoom = useFittingRoom()
+  const assetUrn = 'urn' in asset ? asset.urn ?? null : null
+  const handleTryOn = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault()
+      event.stopPropagation()
+      if (fittingRoom && assetUrn) {
+        fittingRoom.tryOn({
+          name: title,
+          contractAddress: asset.contractAddress,
+          itemId: 'itemId' in asset ? asset.itemId : null,
+          tokenId: 'tokenId' in asset ? asset.tokenId : null,
+          urn: assetUrn,
+          network: asset.network
+        })
+      }
+    },
+    [fittingRoom, assetUrn, title, asset]
   )
 
   const renderCatalogItemInformation = useCallback(() => {
@@ -266,18 +296,25 @@ const AssetCard = (props: Props) => {
               showOrderListedTag={showListedTag}
             />
             {rarity ? (
-              <div className={`AssetCard__addToCart ${inCart ? 'is-added' : ''}`} role="button" onClick={handleAddToCart}>
-                <svg className="AssetCard__cartIcon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="22" cy="24" r="2" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
-                  <circle cx="13" cy="24" r="2" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
-                  <path
-                    fill="currentColor"
-                    d="M25.658,10l-2.422,9H10.781L8.159,8.515C7.937,7.625,7.137,7,6.219,7H4C3.448,7,3,7.448,3,8c0,0.552,0.448,1,1,1h2.219l2.621,10.485C9.063,20.375,9.863,21,10.781,21h12.455c0.902,0,1.692-0.604,1.93-1.474L27.764,10H25.658z"
-                  />
-                  <line x1="17" y1="7" x2="17" y2="15" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
-                  <line x1="21" y1="11" x2="13" y2="11" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
-                </svg>
-                <span>{inCart ? 'Added to Cart' : 'Add to Cart'}</span>
+              <div className="AssetCard__actions">
+                <div className={`AssetCard__addToCart ${inCart ? 'is-added' : ''}`} role="button" onClick={handleAddToCart}>
+                  <svg className="AssetCard__cartIcon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="22" cy="24" r="2" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
+                    <circle cx="13" cy="24" r="2" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
+                    <path
+                      fill="currentColor"
+                      d="M25.658,10l-2.422,9H10.781L8.159,8.515C7.937,7.625,7.137,7,6.219,7H4C3.448,7,3,7.448,3,8c0,0.552,0.448,1,1,1h2.219l2.621,10.485C9.063,20.375,9.863,21,10.781,21h12.455c0.902,0,1.692-0.604,1.93-1.474L27.764,10H25.658z"
+                    />
+                    <line x1="17" y1="7" x2="17" y2="15" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
+                    <line x1="21" y1="11" x2="13" y2="11" fill="none" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" />
+                  </svg>
+                  <span>{inCart ? 'Added to Cart' : 'Add to Cart'}</span>
+                </div>
+                {fittingRoom && assetUrn ? (
+                  <div className="AssetCard__tryOn" role="button" onClick={handleTryOn} title={t('fitting_room.try_on')}>
+                    <Icon name="male" />
+                  </div>
+                ) : null}
               </div>
             ) : null}
             {showRentalBubble ? (

@@ -1768,5 +1768,12 @@
   "animation_packs": {
     "title": "Animation Packs",
     "subtitle": "Grab a bundle of emotes at a discount"
+  },
+  "fitting_room": {
+    "title": "Fitting Room",
+    "close": "Close fitting room",
+    "empty": "Pick a wearable to try it on",
+    "try_on": "Try on",
+    "trying_item": "Trying on {name}"
   }
 }

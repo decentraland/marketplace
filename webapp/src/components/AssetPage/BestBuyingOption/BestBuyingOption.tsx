@@ -50,7 +50,8 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
       name: getAssetName(asset),
       thumbnail: getAssetImage(asset),
       price: asset.price,
-      network: asset.network
+      network: asset.network,
+      urn: asset.urn
     })
   }, [asset, cartId, addItem])
 

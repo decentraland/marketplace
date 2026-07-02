@@ -1,0 +1,112 @@
+/* The drawer: fixed to the right edge, below the top navbar, sliding in. */
+.FittingRoom {
+  position: fixed;
+  top: 92px;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-left: 1px solid var(--divider);
+  box-shadow: -12px 0 24px rgba(22, 21, 24, 0.08);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 0.3s ease, visibility 0.3s;
+}
+
+.FittingRoom.is-open {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.FittingRoom__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--divider);
+  flex: none;
+}
+
+.FittingRoom__title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: var(--text);
+}
+
+.FittingRoom__close {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--secondary-text);
+  display: flex;
+  align-items: center;
+}
+
+.FittingRoom__close i.icon {
+  margin: 0;
+  height: auto;
+}
+
+.FittingRoom__close:hover {
+  color: var(--text);
+}
+
+/* Preview area — the iframe scene is transparent (disableBackground), so the
+   AnimatedBackground shader (purple DCL vignette) shows through behind the
+   avatar. */
+.FittingRoom__body {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: radial-gradient(#ffffff, #f3f2f6);
+}
+
+.FittingRoom__body .WearablePreview,
+.FittingRoom__body iframe {
+  position: relative;
+  z-index: 1;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+}
+
+/* Spinner sits on the purple shader now — render it white, above the iframe. */
+.FittingRoom__body .ui.loader {
+  z-index: 2;
+}
+
+.FittingRoom__body .ui.loader:before {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.FittingRoom__body .ui.loader:after {
+  border-color: #ffffff transparent transparent !important;
+}
+
+.FittingRoom__footer {
+  flex: none;
+  padding: 14px 20px;
+  border-top: 1px solid var(--divider);
+  color: var(--secondary-text);
+  font-size: 13px;
+}
+
+/* While open, push the app content left so nothing (BUY MANA, cart, sort…)
+   gets covered — the centered containers just re-center in the reduced width. */
+.Navigation,
+.dcl.page,
+.dcl.footer.ui.container {
+  transition: margin-right 0.3s ease;
+}
+
+body.fitting-room-open .Navigation,
+body.fitting-room-open .dcl.page,
+body.fitting-room-open .dcl.footer.ui.container {
+  margin-right: 380px;
+}

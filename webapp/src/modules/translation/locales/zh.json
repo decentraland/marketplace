@@ -1734,5 +1734,12 @@
   "animation_packs": {
     "title": "动画套装",
     "subtitle": "折扣价入手一组表情动作"
+  },
+  "fitting_room": {
+    "title": "试衣间",
+    "close": "关闭试衣间",
+    "empty": "选择一件穿戴品进行试穿",
+    "try_on": "试穿",
+    "trying_item": "正在试穿 {name}"
   }
 }

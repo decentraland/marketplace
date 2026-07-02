@@ -10,6 +10,8 @@ export type CartItem = {
   thumbnail: string
   price: string // MANA in wei
   network: Network
+  // Wearable/emote urn, used by the fitting room to dress the avatar.
+  urn?: string
 }
 
 type CartContextValue = {

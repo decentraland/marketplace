@@ -111,15 +111,32 @@
   margin: 0;
 }
 
-/* "Add to Cart" reveals from the bottom on hover. */
-/* Rounded button at the bottom of the card; slides up from below on hover.
-   The card's overflow:hidden clips it when hidden. */
-.AssetCard .AssetCard__addToCart {
+/* Hover actions (Add to Cart + try-on) slide up from below the card bottom.
+   The card's overflow:hidden clips them when hidden. */
+.AssetCard .AssetCard__actions {
   position: absolute;
   left: 12px;
   right: 12px;
   bottom: 10px;
   z-index: 3;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(calc(100% + 16px));
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+
+.ui.card.AssetCard:hover .AssetCard__actions {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.AssetCard .AssetCard__addToCart {
+  flex: 1 1 auto;
+  min-width: 0;
   height: 40px;
   display: flex;
   align-items: center;
@@ -130,10 +147,6 @@
   color: #ffffff;
   font-size: 14px;
   font-weight: 600;
-  opacity: 0;
-  transform: translateY(calc(100% + 16px));
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  pointer-events: none;
 }
 
 .AssetCard .AssetCard__cartIcon {
@@ -141,10 +154,28 @@
   height: 22px;
 }
 
-.ui.card.AssetCard:hover .AssetCard__addToCart {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+/* Square try-on button next to Add to Cart — opens the fitting room. */
+.AssetCard .AssetCard__tryOn {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: #2b2a30;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.AssetCard .AssetCard__tryOn:hover {
+  background-color: #43404a;
+}
+
+.AssetCard .AssetCard__tryOn i.icon {
+  margin: 0;
+  height: auto;
+  font-size: 16px;
 }
 
 /* On hover, keep the content in normal flow (override the absolute "popover"
