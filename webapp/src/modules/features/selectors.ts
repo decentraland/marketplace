@@ -6,6 +6,7 @@ import {
   isCreditsFeatureEnabled
 } from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
+import { CURATED_MARKETPLACE_ENABLED } from '../../demo/flags'
 import { RootState } from '../reducer'
 import { getWallet } from '../wallet/selectors'
 import { FeatureName } from './types'
@@ -103,6 +104,11 @@ export const getIsCreditsSecondarySalesEnabled = (state: RootState) => {
 }
 
 export const getIsUnityWearablePreviewEnabled = (state: RootState) => {
+  // Demo (curated branch): always use the Unity previewer — the toon shader is
+  // key to the demo and the remote feature flag may be off for this domain.
+  if (CURATED_MARKETPLACE_ENABLED) {
+    return true
+  }
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.UNITY_WEARABLE_PREVIEW)
   }

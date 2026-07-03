@@ -3,13 +3,13 @@ import { CatalogAPI } from '../modules/vendor/decentraland/catalog/api'
 import { ItemAPI } from '../modules/vendor/decentraland/item/api'
 import { ItemFilters } from '../modules/vendor/decentraland/item/types'
 import curatedItemsJson from './curated-items.json'
+import { CURATED_MARKETPLACE_ENABLED } from './flags'
 
 // Demo: serve the WHOLE marketplace from a curated set of items (active
 // creators, on sale only). We patch the item/catalog API prototypes so every
 // consumer (browse sagas, homepage views, bundles, creator sliders…) resolves
 // from the local dataset with real filter/sort/pagination semantics. Flip the
-// flag to go back to the live catalog.
-export const CURATED_MARKETPLACE_ENABLED = true
+// flag (in ./flags) to go back to the live catalog.
 
 // The dataset comes from /v1/items, but the cards only use the catalog layout
 // (creator + rarity chip + hover actions) when catalog fields like `minPrice`

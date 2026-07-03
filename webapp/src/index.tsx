@@ -12,6 +12,7 @@ import { FittingRoomProvider } from './components/FittingRoom'
 import * as modals from './components/Modals'
 import { Routes } from './components/Routes'
 import { ScrollToTop } from './components/ScrollToTop'
+import { enableCorsProxy } from './demo/corsProxy'
 import { enableCuratedMarketplace } from './demo/curatedMarketplace'
 import './modules/analytics/sentry'
 import './modules/analytics/track'
@@ -21,6 +22,7 @@ import './themes'
 import './index.css'
 
 // Demo: serve the catalog from the curated active-creators dataset.
+enableCorsProxy()
 enableCuratedMarketplace()
 
 const history = createHistory()
