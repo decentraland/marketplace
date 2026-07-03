@@ -181,7 +181,8 @@ const AssetCard = (props: Props) => {
         thumbnail: getAssetImage(asset),
         price: cartPrice,
         network: asset.network,
-        urn: 'urn' in asset ? asset.urn ?? undefined : undefined
+        urn: 'urn' in asset ? asset.urn ?? undefined : undefined,
+        category: asset.data.wearable?.category ?? (asset.data.emote ? 'emote' : undefined)
       })
     },
     [addItem, cartId, title, asset, catalogItemInformation, price]
@@ -285,6 +286,8 @@ const AssetCard = (props: Props) => {
         to={getAssetUrl(asset, isManager && isLand(asset))}
         onClick={onClick}
         id={`${asset.contractAddress}-${'tokenId' in asset ? asset.tokenId : asset.itemId}`}
+        // Rarity color exposed to CSS for the hover outline ring.
+        style={rarity ? ({ '--rarity-color': Rarity.getColor(rarity) } as React.CSSProperties) : undefined}
       >
         {inView ? (
           <>

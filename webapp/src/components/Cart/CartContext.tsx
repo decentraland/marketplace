@@ -12,6 +12,9 @@ export type CartItem = {
   network: Network
   // Wearable/emote urn, used by the fitting room to dress the avatar.
   urn?: string
+  // Body slot (wearable category, or 'emote') — items sharing it replace each
+  // other on the avatar, so the fitting room swaps instead of stacking them.
+  category?: string
 }
 
 type CartContextValue = {

@@ -1736,6 +1736,7 @@
     "close": "Cerrar probador",
     "empty": "Elegí un wearable para probártelo",
     "try_on": "Probar",
-    "trying_item": "Probándote {name}"
+    "trying_item": "Probándote {name}",
+    "remove_from_cart": "Sacar del carrito"
   }
 }

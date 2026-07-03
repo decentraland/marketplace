@@ -51,7 +51,8 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
       thumbnail: getAssetImage(asset),
       price: asset.price,
       network: asset.network,
-      urn: asset.urn
+      urn: asset.urn,
+      category: asset.data.wearable?.category ?? (asset.data.emote ? 'emote' : undefined)
     })
   }, [asset, cartId, addItem])
 

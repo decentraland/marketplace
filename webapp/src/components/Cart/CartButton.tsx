@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BigNumber } from 'ethers'
 import { Network } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon } from 'decentraland-ui'
 import { formatWeiToAssetCard } from '../AssetCard/utils'
+import { useFittingRoom } from '../FittingRoom'
 import { Mana } from '../Mana'
 import { useCart } from './CartContext'
 import './CartButton.css'
@@ -11,6 +13,14 @@ export const CartButton = () => {
   const { items, count, removeItem } = useCart()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+
+  // Fitting room: try on every wearable in the cart at once.
+  const fittingRoom = useFittingRoom()
+  const hasWearables = useMemo(() => items.some(item => !!item.urn), [items])
+  const handleTryOnCart = useCallback(() => {
+    setOpen(false)
+    fittingRoom?.tryOnCart()
+  }, [fittingRoom])
 
   useEffect(() => {
     if (!open) return
@@ -66,9 +76,16 @@ export const CartButton = () => {
                   {formatWeiToAssetCard(totalWei)}
                 </Mana>
               </div>
-              <button type="button" className="CartPanel__buy">
-                BUY
-              </button>
+              <div className="CartPanel__actions">
+                <button type="button" className="CartPanel__buy">
+                  BUY
+                </button>
+                {fittingRoom && hasWearables ? (
+                  <button type="button" className="CartPanel__tryOn" onClick={handleTryOnCart} title={t('fitting_room.try_on')}>
+                    <Icon name="male" />
+                  </button>
+                ) : null}
+              </div>
             </div>
           ) : null}
         </div>

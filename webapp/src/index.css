@@ -279,6 +279,12 @@ body:has(.iap-navbar) iframe[name="intercom-borderless-frame"] {
   padding: 0;
 }
 
+/* Demo: hide the Intercom chat bubble — it overlaps the fitting room / cart. */
+#intercom-frame,
+.intercom-lightweight-app {
+  display: none !important;
+}
+
 .Profile.inline .dcl.blockie {
   border-radius: 50%;
 }

@@ -1740,6 +1740,7 @@
     "close": "关闭试衣间",
     "empty": "选择一件穿戴品进行试穿",
     "try_on": "试穿",
-    "trying_item": "正在试穿 {name}"
+    "trying_item": "正在试穿 {name}",
+    "remove_from_cart": "从购物车移除"
   }
 }

@@ -1,10 +1,11 @@
-/* The drawer: fixed to the right edge, below the top navbar, sliding in. */
+/* The drawer: fixed to the right edge, below the top navbar, sliding in.
+   Width is user-resizable (drag the left edge) via --fitting-room-width. */
 .FittingRoom {
   position: fixed;
   top: 92px;
   right: 0;
   bottom: 0;
-  width: 380px;
+  width: var(--fitting-room-width, 380px);
   z-index: 95;
   display: flex;
   flex-direction: column;
@@ -89,12 +90,129 @@
   border-color: #ffffff transparent transparent !important;
 }
 
+/* Cart mode: toggleable chips of the cart's wearables. Selected = worn; the
+   corner X removes the item from the cart itself. */
+.FittingRoom__items {
+  flex: none;
+  display: flex;
+  gap: 10px;
+  padding: 16px 20px 12px;
+  border-top: 1px solid var(--divider);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.FittingRoom__items::-webkit-scrollbar {
+  display: none;
+}
+
+.FittingRoom__itemChip {
+  position: relative;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 10px;
+  border: 2px solid var(--divider);
+  background-color: #f7f6f9;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.FittingRoom__itemChip img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+  opacity: 0.45;
+  transition: opacity 0.15s ease;
+}
+
+.FittingRoom__itemChip:hover img {
+  opacity: 0.8;
+}
+
+.FittingRoom__itemChip.is-selected {
+  border-color: var(--primary);
+}
+
+.FittingRoom__itemChip.is-selected img {
+  opacity: 1;
+}
+
+/* Remove-from-cart badge on the chip's top-right corner. */
+.FittingRoom__itemRemove {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  background-color: #2b2a30;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1;
+  transition: background-color 0.15s ease;
+}
+
+.FittingRoom__itemRemove:hover {
+  background-color: #43404a;
+}
+
+.FittingRoom__itemRemove i.icon {
+  margin: 0;
+  height: auto;
+  font-size: 9px;
+  line-height: 1;
+}
+
 .FittingRoom__footer {
   flex: none;
-  padding: 14px 20px;
+  padding: 14px 20px 18px;
   border-top: 1px solid var(--divider);
   color: var(--secondary-text);
   font-size: 13px;
+}
+
+/* Cart mode: buy the worn outfit — polygon MANA icon + live total. */
+.FittingRoom__buy {
+  width: 100%;
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--primary);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+}
+
+.FittingRoom__buy:hover {
+  background-color: var(--primary-hover);
+}
+
+.FittingRoom__buy .dcl.mana,
+.FittingRoom__buy .dcl.mana.ui.header {
+  margin: 0;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* The matic glyph is a background-image SVG — force it to white. */
+.FittingRoom__buy .dcl.mana .matic {
+  filter: brightness(0) invert(1);
 }
 
 /* While open, push the app content left so nothing (BUY MANA, cart, sort…)
@@ -108,5 +226,51 @@
 body.fitting-room-open .Navigation,
 body.fitting-room-open .dcl.page,
 body.fitting-room-open .dcl.footer.ui.container {
-  margin-right: 380px;
+  margin-right: var(--fitting-room-width, 380px);
+}
+
+/* Left-edge drag handle; a purple strip lights up on hover / while dragging. */
+.FittingRoom__resizer {
+  position: absolute;
+  left: -4px;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  cursor: ew-resize;
+  z-index: 5;
+  touch-action: none;
+}
+
+.FittingRoom__resizer::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.FittingRoom__resizer:hover::after,
+body.fitting-room-resizing .FittingRoom__resizer::after {
+  background-color: var(--primary);
+}
+
+/* While dragging: kill the transitions (live rubber-band feel) and stop the
+   iframe from swallowing pointer events. */
+body.fitting-room-resizing {
+  cursor: ew-resize;
+  user-select: none;
+}
+
+body.fitting-room-resizing .FittingRoom,
+body.fitting-room-resizing .Navigation,
+body.fitting-room-resizing .dcl.page,
+body.fitting-room-resizing .dcl.footer.ui.container {
+  transition: none !important;
+}
+
+body.fitting-room-resizing .FittingRoom__body iframe {
+  pointer-events: none;
 }

@@ -1774,6 +1774,7 @@
     "close": "Close fitting room",
     "empty": "Pick a wearable to try it on",
     "try_on": "Try on",
-    "trying_item": "Trying on {name}"
+    "trying_item": "Trying on {name}",
+    "remove_from_cart": "Remove from cart"
   }
 }

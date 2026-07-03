@@ -158,8 +158,16 @@
   font-weight: 700;
 }
 
+/* BUY takes the row; the try-on square sits next to it (same as the cards). */
+.CartPanel__actions {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
 .CartPanel__buy {
-  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
   height: 48px;
   border: none;
   border-radius: 12px;
@@ -170,6 +178,31 @@
   letter-spacing: 0.3px;
   cursor: pointer;
   transition: background-color 0.15s ease;
+}
+
+.CartPanel__tryOn {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background-color: #2b2a30;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease;
+}
+
+.CartPanel__tryOn:hover {
+  background-color: #43404a;
+}
+
+.CartPanel__tryOn i.icon {
+  margin: 0;
+  height: auto;
+  font-size: 16px;
 }
 
 .CartPanel__buy:hover {

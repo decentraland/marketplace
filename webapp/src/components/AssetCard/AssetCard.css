@@ -111,6 +111,15 @@
   margin: 0;
 }
 
+/* Rarity-colored stroke ring around the card on hover (offset outline with a
+   small gap, like a game-store card) plus a subtle glow in the same color.
+   Cards without a rarity stay ring-less. */
+.ui.card.AssetCard:hover {
+  outline: 2px solid var(--rarity-color, transparent);
+  outline-offset: 3px;
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--rarity-color, transparent) 30%, transparent) !important;
+}
+
 /* Hover actions (Add to Cart + try-on) slide up from below the card bottom.
    The card's overflow:hidden clips them when hidden. */
 .AssetCard .AssetCard__actions {
