@@ -13,6 +13,7 @@ import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { VendorName } from '../../modules/vendor/types'
 import { AssetStatusFilter } from '../../utils/filters'
+import { EmotePreviewPlayerProvider } from '../EmotePreviewPlayer'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
@@ -222,21 +223,24 @@ const HomePage = (props: Props) => {
   const secondViewsSection = homepageWithoutLatestSales as HomepageView[]
 
   return (
-    <PageLayout activeTab={NavigationTab.OVERVIEW}>
-      <ListsLaunchModal />
-      {isCampaignHomepageBannerEnabled ? <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
-      <Page className="HomePage">
-        {firstViewsSection[0] ? renderSlideshow(firstViewsSection[0]) : null}
-        {/* Demo: buyable collection bundles, right after Trending Items. */}
-        <HomeBundles title={t('home_bundles.title')} subtitle={t('home_bundles.subtitle')} category={NFTCategory.WEARABLE} />
-        <HomeBundles title={t('animation_packs.title')} subtitle={t('animation_packs.subtitle')} category={NFTCategory.EMOTE} />
-        {firstViewsSection.slice(1).map(renderSlideshow)}
-        <RankingsTable />
-        {secondViewsSection.map(renderSlideshow)}
-        <RecentlySoldTable />
-      </Page>
-      <BackToTopButton />
-    </PageLayout>
+    // Shared 3D hover-preview player (single iframe) for the Overview cards too.
+    <EmotePreviewPlayerProvider enabled>
+      <PageLayout activeTab={NavigationTab.OVERVIEW}>
+        <ListsLaunchModal />
+        {isCampaignHomepageBannerEnabled ? <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
+        <Page className="HomePage">
+          {firstViewsSection[0] ? renderSlideshow(firstViewsSection[0]) : null}
+          {/* Demo: buyable collection bundles, right after Trending Items. */}
+          <HomeBundles title={t('home_bundles.title')} subtitle={t('home_bundles.subtitle')} category={NFTCategory.WEARABLE} />
+          <HomeBundles title={t('animation_packs.title')} subtitle={t('animation_packs.subtitle')} category={NFTCategory.EMOTE} />
+          {firstViewsSection.slice(1).map(renderSlideshow)}
+          <RankingsTable />
+          {secondViewsSection.map(renderSlideshow)}
+          <RecentlySoldTable />
+        </Page>
+        <BackToTopButton />
+      </PageLayout>
+    </EmotePreviewPlayerProvider>
   )
 }
 
