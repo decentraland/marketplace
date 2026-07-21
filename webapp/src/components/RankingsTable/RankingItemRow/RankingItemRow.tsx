@@ -162,13 +162,17 @@ const RankingItemRow = ({ entity }: Props) => {
     </Table.Row>
   )
 
+  const { contractAddress, tokenId } = parseItemId(entity.id)
+
+  // Collections-v2 items have a numeric itemId. Legacy Ethereum collections-v1 items use a
+  // non-numeric representation id (e.g. "cw_city_sneakers_feet") that the items endpoint can't
+  // resolve, so skip them instead of firing a request the server rejects with a 400.
+  if (!tokenId || !/^\d+$/.test(tokenId)) {
+    return null
+  }
+
   return (
-    <AssetProvider
-      key={entity.id}
-      type={AssetType.ITEM}
-      contractAddress={parseItemId(entity.id).contractAddress}
-      tokenId={parseItemId(entity.id).tokenId}
-    >
+    <AssetProvider key={entity.id} type={AssetType.ITEM} contractAddress={contractAddress} tokenId={tokenId}>
       {(item, _order, _rental, isLoading) => {
         if (!isLoading && !item) {
           return null
