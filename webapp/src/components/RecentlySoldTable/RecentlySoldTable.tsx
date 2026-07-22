@@ -148,7 +148,7 @@ const RecentlySoldTable = (props: Props) => {
     )
   }
 
-  const soldItemRow = (sale: Sale, item: Item | null, isLoading: boolean) => {
+  const soldItemRow = (sale: Sale, item: Item | NFT<VendorName.DECENTRALAND> | null, isLoading: boolean) => {
     return (
       <>
         <Mobile>
@@ -227,18 +227,20 @@ const RecentlySoldTable = (props: Props) => {
                       {item.name}
                     </Link>
 
-                    <span>
-                      <T
-                        id="home_page.analytics.rankings.by_creator"
-                        values={{
-                          creator: (
-                            <span className="rankings-item-data-creator">
-                              <LinkedProfile address={item.creator} textOnly inline={false} />
-                            </span>
-                          )
-                        }}
-                      />
-                    </span>
+                    {'creator' in item ? (
+                      <span>
+                        <T
+                          id="home_page.analytics.rankings.by_creator"
+                          values={{
+                            creator: (
+                              <span className="rankings-item-data-creator">
+                                <LinkedProfile address={item.creator} textOnly inline={false} />
+                              </span>
+                            )
+                          }}
+                        />
+                      </span>
+                    ) : null}
                   </div>
                 </div>
               ) : isLoading ? (
@@ -388,11 +390,19 @@ const RecentlySoldTable = (props: Props) => {
     switch (currentCategory) {
       case NFTCategory.WEARABLE:
       case NFTCategory.EMOTE:
-        content = data.map(sale => (
-          <AssetProvider key={sale.id} type={AssetType.ITEM} contractAddress={sale.contractAddress} tokenId={sale.itemId}>
-            {(item, _order, _rental, isLoading) => soldItemRow(sale, item, isLoading)}
-          </AssetProvider>
-        ))
+        content = data.map(sale =>
+          // Ethereum collections-v1 wearables have no itemId (only secondary-market NFT sales),
+          // so they can only be resolved as NFTs by their tokenId instead of as catalog items.
+          sale.itemId !== null ? (
+            <AssetProvider key={sale.id} type={AssetType.ITEM} contractAddress={sale.contractAddress} tokenId={sale.itemId}>
+              {(item, _order, _rental, isLoading) => soldItemRow(sale, item, isLoading)}
+            </AssetProvider>
+          ) : (
+            <AssetProvider key={sale.id} type={AssetType.NFT} contractAddress={sale.contractAddress} tokenId={sale.tokenId}>
+              {(nft, _order, _rental, isLoading) => soldItemRow(sale, nft, isLoading)}
+            </AssetProvider>
+          )
+        )
         break
       case NFTCategory.ENS:
       case NFTCategory.PARCEL:
