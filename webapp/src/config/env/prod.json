@@ -9,6 +9,7 @@
   "DEFAULT_FAVORITES_LIST_ID": "70ab6873-4a03-4eb2-b331-4b8be0e0b8af",
   "DECENTRALAND_BLOG": "https://decentraland.org/blog",
   "REFRESH_SIGNATURES_DELAY": "10000",
+  "MAX_REFRESH_SIGNATURES_RETRIES": "60",
   "TRANSACTIONS_API_URL": "https://transactions-api.decentraland.org/v1",
   "TRANSAK_POLLING_DELAY": "6000",
   "TRANSAK_PUSHER_APP_KEY": "1d9ffac87de599c61283",
