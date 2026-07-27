@@ -223,14 +223,22 @@ async function delay(milliseconds: number) {
 }
 
 export async function waitUntilRentalChangesStatus(nft: NFT<VendorName>, status: RentalStatus) {
-  let hasChanged = false
-  let listing: RentalListing
-  while (!hasChanged) {
-    await delay(Number(config.get('REFRESH_SIGNATURES_DELAY', '5000')))
-    listing = await rentalsAPI.refreshRentalListing(nft.openRentalId!)
-    hasChanged = listing.status === status
+  if (!nft.openRentalId) {
+    throw new Error('The provided NFT does not have an open rental')
   }
-  return listing!
+
+  // Bounded so a listing that never reaches the expected status stops polling the signatures server
+  const maxRetries = Number(config.get('MAX_REFRESH_SIGNATURES_RETRIES', '60'))
+
+  for (let retry = 0; retry < maxRetries; retry++) {
+    await delay(Number(config.get('REFRESH_SIGNATURES_DELAY', '5000')))
+    const listing: RentalListing = await rentalsAPI.refreshRentalListing(nft.openRentalId)
+    if (listing.status === status) {
+      return listing
+    }
+  }
+
+  throw new Error(`The rental listing did not change to the ${status} status in time`)
 }
 
 /**
