@@ -106,12 +106,19 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const renderPrice = useCallback(() => {
     if (!asset) return null
     if (listing && buyOption === BuyOptions.BUY_LISTING) {
-      return <PriceComponent price={listing.order.price} network={listing.order.network} useCredits={useCredits} />
+      return (
+        <PriceComponent
+          price={listing.order.price}
+          network={listing.order.network}
+          useCredits={useCredits}
+          tradeId={listing.order.tradeId}
+        />
+      )
     }
 
     const item: Item = asset as Item
 
-    return <PriceComponent price={item.price} network={item.network} useCredits={useCredits} />
+    return <PriceComponent price={item.price} network={item.network} useCredits={useCredits} tradeId={item.tradeId} />
   }, [asset, listing, useCredits, buyOption])
 
   return isLoading ? null : (
@@ -167,7 +174,12 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
               {renderPrice()}
               <div className={styles.columnListing}>
                 {mostExpensiveBid ? (
-                  <PriceComponent price={mostExpensiveBid.price} network={listing.order.network} useCredits={useCredits} />
+                  <PriceComponent
+                    price={mostExpensiveBid.price}
+                    network={listing.order.network}
+                    useCredits={useCredits}
+                    tradeId={'tradeId' in mostExpensiveBid ? mostExpensiveBid.tradeId : undefined}
+                  />
                 ) : (
                   <span className={styles.noOffer}>{t('best_buying_option.buy_listing.no_offer')}</span>
                 )}

@@ -1,6 +1,8 @@
 import { MemoryRouter } from 'react-router-dom'
-import { render, screen } from '@testing-library/react'
-import { Network } from '@dcl/schemas'
+import { render, screen, waitFor } from '@testing-library/react'
+import { Network, TradeAssetType } from '@dcl/schemas'
+import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
+import { clearTradePriceDenominationCache } from '../../../modules/trade/denomination'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
 import { ManaToFiat } from '../../ManaToFiat'
 import PriceComponent from './PriceComponent'
@@ -10,6 +12,16 @@ import { Props } from './PriceComponent.types'
 jest.mock('../../ManaToFiat', () => ({
   ManaToFiat: jest.fn(({ mana }) => <div data-testid="mana-to-fiat">{mana}</div>)
 }))
+
+jest.mock('decentraland-dapps/dist/modules/trades/TradeService')
+
+const mockTradeWithReceivedAssetType = (assetType: TradeAssetType) => {
+  const fetchTrade = jest.fn().mockResolvedValue({
+    received: [{ assetType, contractAddress: '0xmana', amount: '600000000000000000', extra: '' }]
+  })
+  ;(TradeService as unknown as jest.Mock).mockImplementation(() => ({ fetchTrade }))
+  return fetchTrade
+}
 
 // Mock the CreditsResponse type
 const createMockCredits = () => ({
@@ -46,6 +58,7 @@ describe('PriceComponent', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    clearTradePriceDenominationCache()
   })
 
   describe('when not using credits', () => {
@@ -132,6 +145,88 @@ describe('PriceComponent', () => {
 
       // No fiat conversion should be shown
       expect(screen.queryByTestId('mana-to-fiat')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('when the backing trade is USD-pegged', () => {
+    // The production case: item 0xb7e85d27bf1614201026f8f95e05f13c22ad147b itemId 0, trade
+    // 095e3030-a7d0-4c70-9f9e-4c0e5ddb728d — received assetType 2, amount 600000000000000000. That
+    // amount is USD wei, so it is 6 credits / $0.60, not "0.6 MANA (~$0.04)".
+    const usdPeggedProps: Props = {
+      ...mockProps,
+      price: '600000000000000000',
+      tradeId: 'trade-usd-pegged'
+    }
+
+    it('should render the price in credits', async () => {
+      mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
+      renderComponent(usdPeggedProps)
+
+      await waitFor(() => expect(screen.getByTestId('credits-price')).toBeInTheDocument())
+      expect(screen.getByTestId('credits-price')).toHaveTextContent('6')
+    })
+
+    it('should render the dollar equivalent of the credits, not of the amount read as MANA', async () => {
+      mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
+      renderComponent(usdPeggedProps)
+
+      await waitFor(() => expect(screen.getByTestId('credits-price')).toHaveTextContent('($0.60)'))
+    })
+
+    it('should not leave the amount behind the MANA glyph or the MANA/USD conversion', async () => {
+      mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
+      renderComponent(usdPeggedProps)
+
+      await waitFor(() => expect(screen.getByTestId('credits-price')).toBeInTheDocument())
+      expect(screen.queryByTestId('mana-to-fiat')).not.toBeInTheDocument()
+      // "0.6" is what reading the USD wei amount as MANA produces — the bug being fixed.
+      expect(screen.queryByText('0.6')).not.toBeInTheDocument()
+    })
+
+    it('should start optimistically as MANA for one paint, then settle on credits', async () => {
+      // Documenting a known consequence of resolving the unit asynchronously: the denomination is not
+      // knowable until the trade is read, and blanking every MANA price for a round-trip would be a
+      // worse regression on the common path than one corrective re-render on the USD-pegged minority.
+      mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
+      renderComponent(usdPeggedProps)
+
+      expect(screen.queryByTestId('credits-price')).not.toBeInTheDocument()
+      expect(ManaToFiat).toHaveBeenCalledTimes(1)
+
+      await waitFor(() => expect(screen.getByTestId('credits-price')).toBeInTheDocument())
+      expect(ManaToFiat).toHaveBeenCalledTimes(1)
+    })
+
+    it('should ignore the MANA-denominated credits discount', async () => {
+      mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
+      renderComponent({ ...usdPeggedProps, useCredits: true, credits: createMockCredits() })
+
+      await waitFor(() => expect(screen.getByTestId('credits-price')).toBeInTheDocument())
+      expect(screen.getByTestId('credits-price')).toHaveTextContent('6')
+      expect(screen.queryByTestId('mana-to-fiat')).not.toBeInTheDocument()
+    })
+  })
+
+  describe('when the backing trade is a plain ERC20 (MANA) trade', () => {
+    it('should keep rendering the price as MANA', async () => {
+      const fetchTrade = mockTradeWithReceivedAssetType(TradeAssetType.ERC20)
+      renderComponent({ ...mockProps, tradeId: 'trade-mana' })
+
+      await waitFor(() => expect(fetchTrade).toHaveBeenCalledWith('trade-mana'))
+      expect(screen.queryByTestId('credits-price')).not.toBeInTheDocument()
+      expect(screen.getByText(formatWeiToAssetCard(mockProps.price))).toBeInTheDocument()
+      expect(ManaToFiat).toHaveBeenCalledWith({ mana: mockProps.price }, {})
+    })
+  })
+
+  describe('when there is no backing trade', () => {
+    it('should render the price as MANA without reading any trade', () => {
+      const fetchTrade = mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
+      renderComponent(mockProps)
+
+      expect(fetchTrade).not.toHaveBeenCalled()
+      expect(screen.queryByTestId('credits-price')).not.toBeInTheDocument()
+      expect(screen.getByText(formatWeiToAssetCard(mockProps.price))).toBeInTheDocument()
     })
   })
 })

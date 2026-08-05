@@ -3,13 +3,12 @@ import { useHistory } from 'react-router-dom'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Header, Button } from 'decentraland-ui'
-import { formatWeiMANA } from '../../lib/mana'
 import { AssetType } from '../../modules/asset/types'
 import { getAssetName } from '../../modules/asset/utils'
 import { locations } from '../../modules/routing/locations'
 import { AssetAction } from '../AssetAction'
 import { AssetProviderPage } from '../AssetProviderPage'
-import { Mana } from '../Mana'
+import { ListingPrice } from '../ListingPrice'
 import { PageLayout } from '../PageLayout'
 import { Wallet } from '../Wallet'
 import { Props } from './CancelSalePage.types'
@@ -41,11 +40,7 @@ const CancelSalePage = (props: Props) => {
                       id="cancel_sale_page.subtitle"
                       values={{
                         name: <b>{name}</b>,
-                        amount: (
-                          <Mana showTooltip network={nft.network} inline>
-                            {formatWeiMANA(order.price)}
-                          </Mana>
-                        )
+                        amount: <ListingPrice price={order.price} network={nft.network} tradeId={order.tradeId} showTooltip inline />
                       }}
                     />
                   )

@@ -641,6 +641,11 @@
       "already_offer": "你已经提出了"
     }
   },
+  "credits_price": {
+    "tooltip": "積分 — 1 積分 = 0.10 美元",
+    "amount": "{amount} 積分",
+    "unavailable": "價格不可用"
+  },
   "offers_table": {
     "offers": "優惠",
     "from": "從",

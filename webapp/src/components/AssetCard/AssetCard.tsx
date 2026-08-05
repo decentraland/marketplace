@@ -20,7 +20,10 @@ import {
 } from '../../modules/rental/utils'
 import { locations } from '../../modules/routing/locations'
 import { PageName, SortBy } from '../../modules/routing/types'
+import { PriceDenomination } from '../../modules/trade/denomination'
+import { useTradePriceDenomination } from '../../modules/trade/hooks'
 import { AssetImage } from '../AssetImage'
+import { CreditsPrice } from '../CreditsPrice'
 import { useEmotePreviewPlayer } from '../EmotePreviewPlayer'
 import { FavoritesCounter } from '../FavoritesCounter'
 import { Mana } from '../Mana'
@@ -84,6 +87,7 @@ const AssetCard = (props: Props) => {
     asset,
     isManager,
     price,
+    priceTradeId,
     pageName,
     showRentalChip: showRentalBubble,
     onClick,
@@ -97,6 +101,7 @@ const AssetCard = (props: Props) => {
   const { ref, inView } = useInView()
   const isMobile = useMobileMediaQuery()
   const isIAP = useIsIAP()
+  const isUSDPegged = useTradePriceDenomination(priceTradeId) === PriceDenomination.USD_PEGGED
   const location = useLocation()
   const showListedTag = pageName === PageName.ACCOUNT && Boolean(price) && location.pathname !== locations.root()
   const emotePreviewPlayer = useEmotePreviewPlayer()
@@ -235,7 +240,9 @@ const AssetCard = (props: Props) => {
                   )}
                 </div>
                 {!isCatalogItem(asset) && price ? (
-                  isIAP ? (
+                  isUSDPegged ? (
+                    <CreditsPrice usdWei={price} />
+                  ) : isIAP ? (
                     <span className="CreditsPrice">
                       <img src={CreditsIcon} alt="Credits" className="creditsIcon" />
                       {formatWeiToAssetCard(price)}

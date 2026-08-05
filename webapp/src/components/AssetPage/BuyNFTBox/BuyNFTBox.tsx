@@ -47,7 +47,13 @@ const BuyNFTBox = ({ nft, bids, address, wallet, onFetchBids }: Props) => {
         <div className={styles.informationContainer}>
           <div className={styles.columnListing}>
             <span className={styles.informationTitle}>{t('best_buying_option.minting.price').toUpperCase()}</span>
-            <PriceComponent price={order.price} network={nft.network} useCredits={useCredits} className={styles.priceComponentContainer} />
+            <PriceComponent
+              price={order.price}
+              network={nft.network}
+              useCredits={useCredits}
+              tradeId={order.tradeId}
+              className={styles.priceComponentContainer}
+            />
           </div>
 
           <div className={styles.columnListing}>

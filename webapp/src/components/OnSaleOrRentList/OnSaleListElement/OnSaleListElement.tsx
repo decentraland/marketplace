@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Badge, Button, Icon, InfoTooltip, Mobile, NotMobile, Popup, Table } from 'decentraland-ui'
 import { isEstateListingAffectedByUpgrade } from '../../../lib/estateUpgrade'
-import { formatWeiMANA } from '../../../lib/mana'
 import { getIsLegacyOrderExpired, isLegacyOrder } from '../../../lib/orders'
 import { isNFT } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { LEGACY_MARKETPLACE_MAINNET_CONTRACT, Section } from '../../../modules/vendor/decentraland'
 import EstateUpgradeWarning from '../../EstateUpgradeWarning'
-import { Mana } from '../../Mana'
+import { ListingPrice } from '../../ListingPrice'
 import AssetCell from '../AssetCell'
 import { Props } from './OnSaleListElement.types'
 import './OnSaleListElement.css'
@@ -29,9 +28,13 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
       <Mobile>
         <div className="mobile-row">
           <AssetCell asset={item || nft!} />
-          <Mana showTooltip network={item?.network || nft!.network} inline>
-            {formatWeiMANA(item?.price || order!.price)}
-          </Mana>
+          <ListingPrice
+            price={item?.price || order!.price}
+            network={item?.network || nft!.network}
+            tradeId={item?.tradeId || order?.tradeId}
+            showTooltip
+            inline
+          />
         </div>
         {isAffectedByEstateUpgrade ? <EstateUpgradeWarning nft={nft} isOwnListing listingCreatedAt={order?.createdAt} /> : null}
       </Mobile>
@@ -77,9 +80,13 @@ const OnSaleListElement = ({ nft, item, order, isAuthorized, authorization, onRe
           <Table.Cell>{t(`global.${category}`)}</Table.Cell>
           <Table.Cell>{t(`global.${item ? 'primary' : 'secondary'}`)}</Table.Cell>
           <Table.Cell>
-            <Mana showTooltip network={item?.network || nft!.network} inline>
-              {formatWeiMANA(item?.price || order!.price)}
-            </Mana>
+            <ListingPrice
+              price={item?.price || order!.price}
+              network={item?.network || nft!.network}
+              tradeId={item?.tradeId || order?.tradeId}
+              showTooltip
+              inline
+            />
           </Table.Cell>
           <Table.Cell>
             {order?.marketplaceAddress === LEGACY_MARKETPLACE_MAINNET_CONTRACT && isAuthorized && authorization ? (

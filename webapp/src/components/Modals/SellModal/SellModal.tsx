@@ -11,13 +11,14 @@ import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContract as getDecentralandContract } from 'decentraland-transactions'
 import { Button, Field, Mana, Message, ModalNavigation } from 'decentraland-ui'
-import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
+import { parseMANANumber } from '../../../lib/mana'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { getSellItemStatus, getError } from '../../../modules/order/selectors'
 import { getDefaultExpirationDate, INPUT_FORMAT } from '../../../modules/order/utils'
 import { VendorFactory } from '../../../modules/vendor'
 import ErrorBanner from '../../ErrorBanner'
+import { ListingPrice } from '../../ListingPrice'
 import { ManaField } from '../../ManaField'
 import { showPriceBelowMarketValueWarning } from '../../SellPage/SellModal/utils'
 import { Props } from './SellModal.types'
@@ -289,11 +290,7 @@ const SellModal = ({
                 id="cancel_sale_page.subtitle"
                 values={{
                   name: <b>{assetName}</b>,
-                  amount: (
-                    <Mana showTooltip network={nft.network} inline>
-                      {formatWeiMANA(order.price)}
-                    </Mana>
-                  )
+                  amount: <ListingPrice price={order.price} network={nft.network} tradeId={order.tradeId} showTooltip inline />
                 }}
               />
             </span>

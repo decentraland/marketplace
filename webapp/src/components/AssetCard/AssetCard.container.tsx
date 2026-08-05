@@ -20,9 +20,17 @@ const AssetCardContainer: React.FC<ContainerProps> = ({ asset, order, isManager,
   const orders = useSelector(getData)
   const isSocialEmotesEnabled = useSelector((state: RootState) => getIsSocialEmotesEnabled(state))
 
-  const price = useMemo(() => {
-    if (order) return null
-    return getAssetPrice(asset, getActiveOrder(asset, orders) || undefined)
+  // The trade behind the price, when there is one: its received asset type is the only thing that says
+  // whether `price` is MANA wei or USD wei (see modules/trade/denomination). Item prices come straight
+  // off the asset; NFT prices come off the active order, so the order has to be kept, not just its
+  // price. Catalog rows deliberately get `undefined` — see the note in AssetCard.
+  const { price, priceTradeId } = useMemo(() => {
+    if (order) return { price: null, priceTradeId: undefined }
+    const activeOrder = getActiveOrder(asset, orders) || undefined
+    return {
+      price: getAssetPrice(asset, activeOrder),
+      priceTradeId: 'price' in asset ? ('tradeId' in asset ? asset.tradeId : undefined) : activeOrder?.tradeId
+    }
   }, [asset, order, orders])
 
   const openRentalId = useMemo(() => getOpenRentalId(asset), [asset])
@@ -47,6 +55,7 @@ const AssetCardContainer: React.FC<ContainerProps> = ({ asset, order, isManager,
       isManager={isManager}
       onClick={onClick}
       price={price}
+      priceTradeId={priceTradeId}
       isClaimingBackLandTransactionPending={isClaimingBackLandTransactionPendingValue}
       rental={rental}
       showRentalChip={showRentalChip}

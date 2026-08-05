@@ -80,6 +80,16 @@ function getIsMintPriceInRange(asset: Item, appliedFilters: Pick<BrowseOptions, 
   )
 }
 
+/**
+ * NOTE — catalog rows cannot say which unit their price is in.
+ *
+ * The prices below (`asset.price`, `asset.minPrice`, `asset.minListingPrice`, `asset.maxListingPrice`)
+ * come from `/v1/catalog`, whose rows carry neither a denomination flag nor a `tradeId`, so unlike the
+ * item/order surfaces there is nothing here to resolve a USD-pegged listing against. `minPrice` and the
+ * listing range are worse still: they are cross-listing aggregates, so a mixed set of MANA and
+ * USD-pegged listings cannot be expressed as one price in one unit at all. Both need the API to
+ * denominate these fields (or expose the trade asset type) before the card can render them honestly.
+ */
 export function getCatalogCardInformation(
   asset: Item,
   appliedFilters: Pick<BrowseOptions, 'minPrice' | 'maxPrice' | 'sortBy'>
