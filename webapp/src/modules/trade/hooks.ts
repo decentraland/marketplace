@@ -52,6 +52,9 @@ export function useManaUsdRate(chainId?: ChainId): ManaUsdRate | null {
     }
 
     let cancelled = false
+    // Clear first: on a chain switch the previous chain's rate would otherwise linger until the new read
+    // resolves, briefly pricing a listing at another network's rate.
+    setRate(null)
     void fetchManaUsdRate(chainId)
       .then(resolved => {
         if (!cancelled) {

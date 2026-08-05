@@ -78,6 +78,13 @@ describe('when reading the MANA/USD rate', () => {
     await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET)).rejects.toThrow(/non-positive/)
   })
 
+  it('should reject when the tuple carries no rate at all', async () => {
+    // Not a cast: if the decode shape ever changes, this must fail loudly rather than yield a nonsense price.
+    latestRoundData.mockResolvedValue([0, undefined, 0, 0, 0] as unknown[])
+
+    await expect(fetchManaUsdRate(ChainId.MATIC_MAINNET)).rejects.toThrow(/no rate/)
+  })
+
   it('should not cache a failure', async () => {
     manaUsdAggregator.mockRejectedValueOnce(new Error('rpc down'))
 
@@ -113,6 +120,13 @@ describe('when converting a USD-pegged amount to MANA', () => {
     expect(usdWeiToManaWei('   ', rate)).toBeNull()
     expect(usdWeiToManaWei('not-a-number', rate)).toBeNull()
     expect(usdWeiToManaWei('-1000', rate)).toBeNull()
+  })
+
+  it('should refuse to divide by a non-positive rate', () => {
+    // `fetchManaUsdRate` already rejects those, but this function is exported and takes a rate from any
+    // caller — a RangeError thrown out of a render is not an acceptable failure mode for a price.
+    expect(usdWeiToManaWei('500000000000000000', { answer: 0n, decimals: 8 })).toBeNull()
+    expect(usdWeiToManaWei('500000000000000000', { answer: -1n, decimals: 8 })).toBeNull()
   })
 
   it('should return zero for a zero amount rather than null', () => {

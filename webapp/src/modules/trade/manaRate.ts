@@ -50,7 +50,15 @@ async function readRate(chainId: ChainId): Promise<ManaUsdRate> {
 
   const aggregator = new ethers.Contract(aggregatorAddress, AGGREGATOR_ABI, web3)
   const [decimals, round] = await Promise.all([aggregator.decimals(), aggregator.latestRoundData()])
-  const answer = BigInt((round[1] as ethers.BigNumber).toString())
+
+  // `latestRoundData` answers a 5-tuple and the rate is at index 1. Read defensively rather than asserting a
+  // shape: if the decode ever changes (an ethers major, a different feed), an explicit throw beats a cast that
+  // quietly yields something unusable, because the result of this read is a PRICE.
+  const raw: unknown = Array.isArray(round) ? round[1] : undefined
+  if (raw === null || raw === undefined) {
+    throw new Error('The MANA/USD oracle returned no rate')
+  }
+  const answer = BigInt(String(raw))
   if (answer <= 0n) {
     throw new Error('The MANA/USD oracle returned a non-positive rate')
   }
@@ -99,6 +107,12 @@ export function usdWeiToManaWei(usdWei: string, rate: ManaUsdRate): string | nul
     return null
   }
   if (usd < 0n) {
+    return null
+  }
+  // `fetchManaUsdRate` already refuses a non-positive answer, but this function is exported and takes a rate
+  // from any caller — so guard the divisor here too rather than letting a hand-built rate throw a RangeError
+  // out of a render.
+  if (rate.answer <= 0n) {
     return null
   }
   return ((usd * 10n ** BigInt(rate.decimals)) / rate.answer).toString()
