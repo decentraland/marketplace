@@ -59,6 +59,21 @@ describe('when getting the value for a trade asset', () => {
       expect(getValueForTradeAsset(asset)).toBe((asset as CollectionItemTradeAsset).itemId)
     })
   })
+
+  /**
+   * A USD-pegged price is an amount like any other as far as this function is concerned. It is denominated
+   * in USD wei rather than MANA wei, but the conversion is the contract's business at settlement — here the
+   * only requirement is reproducing the value the seller signed.
+   */
+  describe('and the asset is USD-PEGGED MANA', () => {
+    beforeEach(() => {
+      asset = { assetType: TradeAssetType.USD_PEGGED_MANA, amount: '600000000000000000' } as ERC20TradeAsset
+    })
+
+    it('should return the amount, not an empty value', () => {
+      expect(getValueForTradeAsset(asset)).toBe('600000000000000000')
+    })
+  })
 })
 
 describe('when getting the trade signature', () => {
@@ -248,6 +263,38 @@ describe('when getting the trade to accept', () => {
         beneficiary: asset.beneficiary
       }))
     })
+  })
+
+  /**
+   * THE REGRESSION THAT MATTERED.
+   *
+   * `getOnChainTrade` rebuilds the trade struct client-side to hand to `accept()`. A USD-pegged received
+   * asset used to come back with `value: ''`, which produces a different trade hash than the one the seller
+   * signed — so the on-chain signature check rejected it, and every credits-priced listing was unbuyable
+   * from this app.
+   *
+   * Asserted against the LITERAL amount rather than through `getValueForTradeAsset`: routing the expectation
+   * through the same function under test (as the structural test above does, correctly, since it is checking
+   * shape) would pass no matter what that function returned.
+   */
+  it('should preserve a USD-pegged price so the rebuilt trade still matches the seller signature', () => {
+    const peggedTrade = {
+      ...trade,
+      received: [
+        {
+          assetType: TradeAssetType.USD_PEGGED_MANA,
+          contractAddress: '0xmana',
+          amount: '600000000000000000',
+          extra: '0x',
+          beneficiary: '0x123123'
+        }
+      ]
+    } as unknown as Trade
+
+    const onChainTrade = getOnChainTrade(peggedTrade, beneficiaryAddress)
+
+    expect(onChainTrade.received[0].value).toBe('600000000000000000')
+    expect(onChainTrade.received[0].value).not.toBe('')
   })
 })
 
