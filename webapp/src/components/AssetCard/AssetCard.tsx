@@ -23,10 +23,10 @@ import { PageName, SortBy } from '../../modules/routing/types'
 import { PriceDenomination } from '../../modules/trade/denomination'
 import { useTradePriceDenomination } from '../../modules/trade/hooks'
 import { AssetImage } from '../AssetImage'
-import { CreditsPrice } from '../CreditsPrice'
 import { useEmotePreviewPlayer } from '../EmotePreviewPlayer'
 import { FavoritesCounter } from '../FavoritesCounter'
 import { Mana } from '../Mana'
+import { PeggedManaPrice } from '../PeggedManaPrice'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
 import { EstateTags } from './EstateTags'
@@ -241,7 +241,7 @@ const AssetCard = (props: Props) => {
                 </div>
                 {!isCatalogItem(asset) && price ? (
                   isUSDPegged ? (
-                    <CreditsPrice usdWei={price} />
+                    <PeggedManaPrice usdWei={price} network={asset.network} inline />
                   ) : isIAP ? (
                     <span className="CreditsPrice">
                       <img src={CreditsIcon} alt="Credits" className="creditsIcon" />

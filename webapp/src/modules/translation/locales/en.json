@@ -652,11 +652,6 @@
       "already_offer": "You already made an offer"
     }
   },
-  "credits_price": {
-    "tooltip": "Credits — 1 credit = $0.10 USD",
-    "amount": "{amount} credits",
-    "unavailable": "Price unavailable"
-  },
   "offers_table": {
     "offers": "Offers",
     "from": "From",
@@ -1748,5 +1743,9 @@
     "owner": "This listing is no longer available. You need to recreate it.",
     "visitor": "This listing is no longer available. The seller needs to recreate it.",
     "update_listing": "Update listing"
+  },
+  "pegged_mana_price": {
+    "approximate": "~{amount}",
+    "unavailable": "Price unavailable"
   }
 }

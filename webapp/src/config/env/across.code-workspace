@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		},
+		{
+			"path": "../../../../../decentraland-transactions"
+		},
+		{
+			"path": "../../../../../credits-server"
+		}
+	],
+	"settings": {}
+}
