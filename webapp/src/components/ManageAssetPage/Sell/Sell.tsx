@@ -3,10 +3,9 @@ import classNames from 'classnames'
 import intlFormat from 'date-fns/intlFormat'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
-import { formatWeiMANA } from '../../../lib/mana'
 import { isLandLocked } from '../../../modules/rental/utils'
 import { LandLockedPopup } from '../../LandLockedPopup'
-import Mana from '../../Mana/Mana'
+import { ListingPrice } from '../../ListingPrice'
 import { IconButton } from '../IconButton'
 import { Props } from './Sell.types'
 import styles from './Sell.module.css'
@@ -43,9 +42,7 @@ const Sell = (props: Props) => {
           <div className={styles.column}>
             <div className={styles.columnHeader}>{t('manage_asset_page.sell.price')}</div>
             <div className={styles.columnContent}>
-              <Mana showTooltip withTooltip size={'medium'} network={order.network}>
-                {formatWeiMANA(order.price)}
-              </Mana>
+              <ListingPrice price={order.price} network={order.network} tradeId={order.tradeId} size="medium" showTooltip />
             </div>
           </div>
           <div className={styles.column}>

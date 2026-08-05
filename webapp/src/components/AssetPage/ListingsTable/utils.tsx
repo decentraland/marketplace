@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom'
 import { ListingStatus, Order } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Icon, Mana } from 'decentraland-ui'
+import { Button, Icon } from 'decentraland-ui'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
-import { formatWeiMANA } from '../../../lib/mana'
 import { isLegacyOrder } from '../../../lib/orders'
 import { locations } from '../../../modules/routing/locations'
 import { LinkedProfile } from '../../LinkedProfile'
 import ListedBadge from '../../ListedBadge'
-import { ManaToFiat } from '../../ManaToFiat'
+import { ListingPrice } from '../../ListingPrice'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import styles from './ListingsTable.module.css'
 
@@ -45,13 +44,7 @@ export const formatDataToTable = (orders: Order[], isMobile = false): DataTableT
       [t('listings_table.price')]: (
         <div className={styles.viewListingContainer}>
           <div className={styles.manaField}>
-            <Mana className="manaField" network={order.network}>
-              {formatWeiMANA(order.price)}
-            </Mana>{' '}
-            &nbsp;
-            {'('}
-            <ManaToFiat mana={order.price} />
-            {')'}
+            <ListingPrice price={order.price} network={order.network} tradeId={order.tradeId} manaClassName="manaField" showFiat />
           </div>
           {order && (
             <div>

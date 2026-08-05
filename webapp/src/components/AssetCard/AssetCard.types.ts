@@ -5,6 +5,8 @@ import { BrowseOptions, PageName } from '../../modules/routing/types'
 export type Props = {
   asset: Asset
   price: string | null
+  /** Trade behind `price`, when known — decides whether `price` is MANA wei or USD wei. */
+  priceTradeId?: string
   order?: Order
   isManager?: boolean
   pageName: PageName
@@ -21,6 +23,7 @@ export type MapStateProps = Pick<
   Props,
   | 'pageName'
   | 'price'
+  | 'priceTradeId'
   | 'showRentalChip'
   | 'rental'
   | 'isClaimingBackLandTransactionPending'

@@ -652,6 +652,11 @@
       "already_offer": "You already made an offer"
     }
   },
+  "credits_price": {
+    "tooltip": "Credits — 1 credit = $0.10 USD",
+    "amount": "{amount} credits",
+    "unavailable": "Price unavailable"
+  },
   "offers_table": {
     "offers": "Offers",
     "from": "From",

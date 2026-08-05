@@ -640,6 +640,11 @@
       "already_offer": "Ya hiciste una oferta"
     }
   },
+  "credits_price": {
+    "tooltip": "Créditos — 1 crédito = 0,10 USD",
+    "amount": "{amount} créditos",
+    "unavailable": "Precio no disponible"
+  },
   "offers_table": {
     "offers": "Ofertas",
     "from": "De",
