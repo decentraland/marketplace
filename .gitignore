@@ -73,3 +73,5 @@ indexer/src/data/addresses.ts
 indexer/subgraph.yaml
 
 .vscode
+# Local editor workspaces (they reference each developer's own sibling checkouts).
+*.code-workspace

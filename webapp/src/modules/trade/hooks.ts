@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import { ChainId } from '@dcl/schemas'
 import { PriceDenomination, fetchTradePriceDenomination } from './denomination'
+import { ManaUsdRate, fetchManaUsdRate } from './manaRate'
 
 /**
  * How the given trade-backed listing is priced, for components that render a `price`.
@@ -32,4 +34,43 @@ export function useTradePriceDenomination(tradeId?: string): PriceDenomination {
   }, [tradeId])
 
   return denomination
+}
+
+/**
+ * The MANA/USD rate for a chain, or `null` while it is being read (or if the oracle cannot be reached).
+ *
+ * A null result is a real state, not a loading detail to paper over: without the rate there is no honest MANA
+ * figure to show for a USD-pegged listing, so the caller renders "price unavailable" instead of guessing.
+ */
+export function useManaUsdRate(chainId?: ChainId): ManaUsdRate | null {
+  const [rate, setRate] = useState<ManaUsdRate | null>(null)
+
+  useEffect(() => {
+    if (!chainId) {
+      setRate(null)
+      return
+    }
+
+    let cancelled = false
+    // Clear first: on a chain switch the previous chain's rate would otherwise linger until the new read
+    // resolves, briefly pricing a listing at another network's rate.
+    setRate(null)
+    void fetchManaUsdRate(chainId)
+      .then(resolved => {
+        if (!cancelled) {
+          setRate(resolved)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setRate(null)
+        }
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [chainId])
+
+  return rate
 }

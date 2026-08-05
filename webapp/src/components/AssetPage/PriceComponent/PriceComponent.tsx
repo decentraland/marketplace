@@ -5,9 +5,9 @@ import { useIsIAP } from '../../../modules/iap/useIAP'
 import { PriceDenomination } from '../../../modules/trade/denomination'
 import { useTradePriceDenomination } from '../../../modules/trade/hooks'
 import { formatWeiToAssetCard } from '../../AssetCard/utils'
-import { CreditsPrice } from '../../CreditsPrice'
 import Mana from '../../Mana/Mana'
 import { ManaToFiat } from '../../ManaToFiat'
+import { PeggedManaPrice } from '../../PeggedManaPrice'
 import { Props } from './PriceComponent.types'
 import styles from './PriceComponent.module.css'
 
@@ -23,13 +23,15 @@ const PriceComponent = ({ price, network, useCredits, credits, tradeId, classNam
     [useCredits, credits]
   )
 
-  // A USD-pegged listing is priced in USD wei, so neither the MANA glyph, the MANA/USD conversion nor
-  // the MANA-denominated credits discount applies to it. Render the credit price the buyer is actually
-  // charged and stop — this branch comes first so none of the MANA maths below can reach the amount.
+  // A USD-pegged listing carries USD wei, so the raw amount must not reach the MANA maths below: neither
+  // `formatWeiMANA`, nor `ManaToFiat`, nor the MANA-denominated credits discount is meaningful against it.
+  // Converted through the settlement oracle it IS a MANA price, which is what this app charges — so that is
+  // what the buyer sees, marked approximate because the rate moves before they confirm. This branch comes
+  // first precisely so nothing downstream can touch the unconverted figure.
   if (isUSDPegged) {
     return (
       <div className={classNames(styles.PriceContainer, className)}>
-        <CreditsPrice usdWei={price} size="large" showUsd />
+        <PeggedManaPrice usdWei={price} network={network} size="large" />
       </div>
     )
   }
