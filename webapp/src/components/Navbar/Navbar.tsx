@@ -39,7 +39,6 @@ const Navbar = (props: Props) => {
       {...props}
       withChainSelector
       withNotifications
-      // @ts-expect-error forwarded to ui2 Navbar at runtime; dapps connect() types haven't picked up this ui2 prop yet
       showManaBalancesInNavbar
       activePage="shop"
       identity={props.identity}
