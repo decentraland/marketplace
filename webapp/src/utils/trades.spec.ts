@@ -7,7 +7,8 @@ import {
   Trade,
   TradeAsset,
   TradeCreation,
-  TradeType
+  TradeType,
+  USDPeggedManaTradeAsset
 } from '@dcl/schemas/dist/dapps/trade'
 import * as ethUtils from 'decentraland-dapps/dist/lib/eth'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
@@ -67,11 +68,16 @@ describe('when getting the value for a trade asset', () => {
    */
   describe('and the asset is USD-PEGGED MANA', () => {
     beforeEach(() => {
-      asset = { assetType: TradeAssetType.USD_PEGGED_MANA, amount: '600000000000000000' } as ERC20TradeAsset
+      asset = {
+        assetType: TradeAssetType.USD_PEGGED_MANA,
+        contractAddress: '0xmana',
+        amount: '600000000000000000',
+        extra: '0x'
+      } as USDPeggedManaTradeAsset
     })
 
     it('should return the amount, not an empty value', () => {
-      expect(getValueForTradeAsset(asset)).toBe('600000000000000000')
+      expect(getValueForTradeAsset(asset)).toBe((asset as USDPeggedManaTradeAsset).amount)
     })
   })
 })
@@ -294,7 +300,6 @@ describe('when getting the trade to accept', () => {
     const onChainTrade = getOnChainTrade(peggedTrade, beneficiaryAddress)
 
     expect(onChainTrade.received[0].value).toBe('600000000000000000')
-    expect(onChainTrade.received[0].value).not.toBe('')
   })
 })
 

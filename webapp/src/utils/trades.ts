@@ -74,19 +74,19 @@ export function getValueForTradeAsset(asset: TradeAsset): string {
     case TradeAssetType.ERC20:
       return asset.amount
     case TradeAssetType.USD_PEGGED_MANA:
-      // The amount VERBATIM, exactly as for ERC20. It is denominated in USD wei rather than MANA wei, but
-      // that is the contract's business — it converts through the oracle at settlement — not this
-      // function's. All that matters here is reproducing the value the SELLER signed.
-      //
-      // Falling through to `default` returned '' for these, and the consequence was not cosmetic:
-      // `generateTradeValues` feeds this into the EIP-712 struct, and `getOnChainTrade` rebuilds that
-      // struct client-side to hand to `accept()`. An empty value yields a different trade hash than the
-      // one the seller signed, so the signature check rejects it on chain — every USD-pegged listing was
-      // unbuyable from this app. The shop carries its own extractor for exactly this reason.
+      // The amount VERBATIM. It is denominated in USD wei rather than MANA wei, but converting it is the
+      // contract's job at settlement, not this function's: what goes in here has to reproduce the value the
+      // SELLER signed, or the rebuilt trade hashes differently and `accept()` is rejected on chain.
       return asset.amount
-    default:
-      console.error('Invalid asset type:', asset)
+    default: {
+      // Compile-time exhaustiveness: a new member of the `TradeAsset` union without a case above becomes a
+      // type error here, instead of a silent '' that only surfaces as a rejected signature on chain (which
+      // is how the USD_PEGGED_MANA case came to be missing). Runtime behaviour is unchanged on purpose —
+      // this also receives API data, so a value outside the union must degrade rather than throw.
+      const unhandled: never = asset
+      console.error('Invalid asset type:', unhandled)
       return ''
+    }
   }
 }
 
