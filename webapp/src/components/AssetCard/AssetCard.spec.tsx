@@ -15,7 +15,7 @@ const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
 // Both are network calls in production; here they are dials so a test can state the situation it means.
 jest.mock('../../modules/trade/hooks', () => ({
   useTradePriceDenomination: jest.fn(() => 'mana'),
-  useManaUsdRate: jest.fn(() => ({ answer: 100000000n, decimals: 8 }))
+  useManaUsdRate: jest.fn(() => ({ status: 'ready', rate: { answer: 100000000n, decimals: 8 } }))
 }))
 
 function renderAssetCard(props: Partial<AssetCardProps> = {}) {

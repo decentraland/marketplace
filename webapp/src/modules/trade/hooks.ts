@@ -36,34 +36,47 @@ export function useTradePriceDenomination(tradeId?: string): PriceDenomination {
   return denomination
 }
 
+/** Where a rate read has got to. `pending` is the answer not being in yet; `unavailable` is not getting one. */
+export type ManaUsdRateState =
+  | { status: 'pending'; rate: null }
+  | { status: 'ready'; rate: ManaUsdRate }
+  | { status: 'unavailable'; rate: null }
+
+const PENDING = { status: 'pending', rate: null } as const
+const UNAVAILABLE = { status: 'unavailable', rate: null } as const
+
 /**
- * The MANA/USD rate for a chain, or `null` while it is being read (or if the oracle cannot be reached).
+ * The MANA/USD rate for a chain, as a state rather than a nullable value.
  *
- * A null result is a real state, not a loading detail to paper over: without the rate there is no honest MANA
- * figure to show for a USD-pegged listing, so the caller renders "price unavailable" instead of guessing.
+ * "Still reading" and "cannot be read" are different facts, and collapsing them into `null` made every
+ * caller state the wrong one: a price would announce itself unavailable for the frame before its first
+ * read landed, which on a grid is one such flash per card. Without the rate there is still no honest MANA
+ * figure to show — that part was right — but a pending read is not a failure, and only the second deserves
+ * to be said out loud.
  */
-export function useManaUsdRate(chainId?: ChainId): ManaUsdRate | null {
-  const [rate, setRate] = useState<ManaUsdRate | null>(null)
+export function useManaUsdRate(chainId?: ChainId): ManaUsdRateState {
+  const [state, setState] = useState<ManaUsdRateState>(PENDING)
 
   useEffect(() => {
     if (!chainId) {
-      setRate(null)
+      // No chain to read against is a dead end, not a wait: nothing is coming.
+      setState(UNAVAILABLE)
       return
     }
 
     let cancelled = false
-    // Clear first: on a chain switch the previous chain's rate would otherwise linger until the new read
-    // resolves, briefly pricing a listing at another network's rate.
-    setRate(null)
+    // Back to pending first: on a chain switch the previous chain's rate would otherwise linger until the
+    // new read resolves, briefly pricing a listing at another network's rate.
+    setState(PENDING)
     void fetchManaUsdRate(chainId)
       .then(resolved => {
         if (!cancelled) {
-          setRate(resolved)
+          setState({ status: 'ready', rate: resolved })
         }
       })
       .catch(() => {
         if (!cancelled) {
-          setRate(null)
+          setState(UNAVAILABLE)
         }
       })
 
@@ -72,5 +85,5 @@ export function useManaUsdRate(chainId?: ChainId): ManaUsdRate | null {
     }
   }, [chainId])
 
-  return rate
+  return state
 }
