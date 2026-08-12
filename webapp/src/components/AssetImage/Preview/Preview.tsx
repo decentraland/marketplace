@@ -346,7 +346,7 @@ export const Preview: React.FC<Props> = ({
             {...wearablePreviewProps}
             dev={config.is(Env.DEVELOPMENT)}
             unityMode={PreviewUnityMode.MARKETPLACE}
-            unity={!isSocialEmote && isUnityWearablePreviewEnabled}
+            unity={false}
             socialEmote={isSocialEmote ? socialEmote : undefined}
           />
           {isAvailableForMint && !isOwnerOfNFT && item ? (
