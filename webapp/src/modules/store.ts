@@ -132,7 +132,10 @@ export function initStore(history: History) {
     actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
-  const analyticsMiddleware = createAnalyticsMiddleware(config.get('SEGMENT_API_KEY'))
+  // analytics.js is served from a first party proxy where configured, ad blockers drop the requests to Segment's CDN
+  const analyticsMiddleware = createAnalyticsMiddleware(config.get('SEGMENT_API_KEY'), {
+    analyticsUrl: config.get('SEGMENT_ANALYTICS_URL', '') || undefined
+  })
 
   const middleware = applyMiddleware(sagasMiddleware, loggerMiddleware, transactionMiddleware, storageMiddleware, analyticsMiddleware)
   const enhancer = composeEnhancers(middleware)
