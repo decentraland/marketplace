@@ -5,6 +5,7 @@
   "dependencies": {
     "@0xsquid/sdk": "2.8.25",
     "@0xsquid/squid-types": "^0.1.78",
+    "@contentful/rich-text-react-renderer": "16.2.2",
     "@covalenthq/client-sdk": "^0.6.4",
     "@dcl/crypto": "^3.0.0",
     "@dcl/schemas": "^26.0.0",
