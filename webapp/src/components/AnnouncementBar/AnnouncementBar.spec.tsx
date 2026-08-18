@@ -33,6 +33,10 @@ describe('AnnouncementBar', () => {
       expect(screen.getByRole('link', { name: t('announcement_bar.cta') })).toHaveAttribute('href', config.get('SHOP_URL'))
     })
 
+    it('should open the shop in a new tab so the marketplace context is not lost', () => {
+      expect(screen.getByRole('link', { name: t('announcement_bar.cta') })).toHaveAttribute('target', '_blank')
+    })
+
     describe('and the user clicks the call to action', () => {
       beforeEach(() => {
         fireEvent.click(screen.getByRole('link', { name: t('announcement_bar.cta') }))

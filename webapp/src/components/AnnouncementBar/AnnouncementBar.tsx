@@ -34,7 +34,7 @@ const AnnouncementBar = () => {
           values={{ highlight: <span className={styles.highlight}>{t('announcement_bar.highlight')}</span> }}
         />
       </p>
-      <a className={styles.cta} href={config.get('SHOP_URL')} onClick={handleClick}>
+      <a className={styles.cta} href={config.get('SHOP_URL')} target="_blank" rel="noopener noreferrer" onClick={handleClick}>
         <span className={styles.ctaLabel}>{t('announcement_bar.cta')}</span>
         <span className={styles.ctaIcon}>
           <img src={ArrowIcon} alt="" />
