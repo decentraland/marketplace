@@ -5,6 +5,7 @@
   "dependencies": {
     "@0xsquid/sdk": "2.8.25",
     "@0xsquid/squid-types": "^0.1.78",
+    "@contentful/rich-text-react-renderer": "16.2.2",
     "@covalenthq/client-sdk": "^0.6.4",
     "@dcl/crypto": "^3.0.0",
     "@dcl/schemas": "^26.0.0",
@@ -21,7 +22,7 @@
     "dcl-catalyst-commons": "^9.0.1",
     "decentraland-connect": "^12.0.0",
     "decentraland-crypto-fetch": "^2.0.1",
-    "decentraland-dapps": "^28.9.0",
+    "decentraland-dapps": "^29.5.0",
     "decentraland-transactions": "^3.0.3",
     "decentraland-ui": "^7.1.0",
     "decentraland-ui2": "^3.8.0",

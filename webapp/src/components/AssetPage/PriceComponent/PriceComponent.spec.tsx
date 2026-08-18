@@ -15,6 +15,28 @@ jest.mock('../../ManaToFiat', () => ({
 
 jest.mock('decentraland-dapps/dist/modules/trades/TradeService')
 
+// Resolving a chain id reads app config, which a component spec does not initialise.
+jest.mock('decentraland-dapps/dist/lib/eth', () => {
+  // Annotated, not cast: a type ASSERTION here trips no-unnecessary-type-assertion, while leaving it untyped
+  // trips no-unsafe-return. An annotation satisfies both.
+  const actual: typeof import('decentraland-dapps/dist/lib/eth') = jest.requireActual('decentraland-dapps/dist/lib/eth')
+  return {
+    ...actual,
+    getChainIdByNetwork: () => 137
+  }
+})
+
+// The oracle read is stubbed; the conversion arithmetic stays real. $0.06686601 per MANA.
+jest.mock('../../../modules/trade/manaRate', () => {
+  // Annotated, not cast: a type ASSERTION here trips no-unnecessary-type-assertion, while leaving it untyped
+  // trips no-unsafe-return. An annotation satisfies both.
+  const actual: typeof import('../../../modules/trade/manaRate') = jest.requireActual('../../../modules/trade/manaRate')
+  return {
+    ...actual,
+    fetchManaUsdRate: jest.fn().mockResolvedValue({ answer: 6686601n, decimals: 8 })
+  }
+})
+
 const mockTradeWithReceivedAssetType = (assetType: TradeAssetType) => {
   const fetchTrade = jest.fn().mockResolvedValue({
     received: [{ assetType, contractAddress: '0xmana', amount: '600000000000000000', extra: '' }]
@@ -150,50 +172,53 @@ describe('PriceComponent', () => {
 
   describe('when the backing trade is USD-pegged', () => {
     // The production case: item 0xb7e85d27bf1614201026f8f95e05f13c22ad147b itemId 0, trade
-    // 095e3030-a7d0-4c70-9f9e-4c0e5ddb728d — received assetType 2, amount 600000000000000000. That
-    // amount is USD wei, so it is 6 credits / $0.60, not "0.6 MANA (~$0.04)".
+    // 095e3030-a7d0-4c70-9f9e-4c0e5ddb728d — received assetType 2, amount 600000000000000000. That amount is
+    // USD wei ($0.60), so read as MANA it renders "0.6" — the original bug. This app charges in MANA, so what
+    // the buyer needs is the MANA that $0.60 currently costs: ~8.97 at $0.06686601.
     const usdPeggedProps: Props = {
       ...mockProps,
       price: '600000000000000000',
       tradeId: 'trade-usd-pegged'
     }
 
-    it('should render the price in credits', async () => {
+    it('should render the price as approximate MANA', async () => {
       mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
       renderComponent(usdPeggedProps)
 
-      await waitFor(() => expect(screen.getByTestId('credits-price')).toBeInTheDocument())
-      expect(screen.getByTestId('credits-price')).toHaveTextContent('6')
+      await waitFor(() => expect(screen.getByTestId('pegged-mana-price')).toBeInTheDocument())
+      expect(screen.getByTestId('pegged-mana-price')).toHaveTextContent('~8.97')
     })
 
-    it('should render the dollar equivalent of the credits, not of the amount read as MANA', async () => {
+    it('should show no dollar figure', async () => {
       mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
       renderComponent(usdPeggedProps)
 
-      await waitFor(() => expect(screen.getByTestId('credits-price')).toHaveTextContent('($0.60)'))
-    })
-
-    it('should not leave the amount behind the MANA glyph or the MANA/USD conversion', async () => {
-      mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
-      renderComponent(usdPeggedProps)
-
-      await waitFor(() => expect(screen.getByTestId('credits-price')).toBeInTheDocument())
+      await waitFor(() => expect(screen.getByTestId('pegged-mana-price')).toBeInTheDocument())
+      // Neither the peg's own USD amount nor a MANA→fiat line: one price, in the currency charged.
+      expect(screen.getByTestId('pegged-mana-price')).not.toHaveTextContent('$')
       expect(screen.queryByTestId('mana-to-fiat')).not.toBeInTheDocument()
+    })
+
+    it('should not leave the amount behind the MANA glyph unconverted', async () => {
+      mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
+      renderComponent(usdPeggedProps)
+
+      await waitFor(() => expect(screen.getByTestId('pegged-mana-price')).toBeInTheDocument())
       // "0.6" is what reading the USD wei amount as MANA produces — the bug being fixed.
       expect(screen.queryByText('0.6')).not.toBeInTheDocument()
     })
 
-    it('should start optimistically as MANA for one paint, then settle on credits', async () => {
-      // Documenting a known consequence of resolving the unit asynchronously: the denomination is not
-      // knowable until the trade is read, and blanking every MANA price for a round-trip would be a
-      // worse regression on the common path than one corrective re-render on the USD-pegged minority.
+    it('should start optimistically as MANA for one paint, then settle on the converted figure', async () => {
+      // Documenting a known consequence of resolving the unit asynchronously: the denomination is not knowable
+      // until the trade is read, and blanking every MANA price for a round-trip would be a worse regression on
+      // the common path than one corrective re-render on the USD-pegged minority.
       mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
       renderComponent(usdPeggedProps)
 
-      expect(screen.queryByTestId('credits-price')).not.toBeInTheDocument()
+      expect(screen.queryByTestId('pegged-mana-price')).not.toBeInTheDocument()
       expect(ManaToFiat).toHaveBeenCalledTimes(1)
 
-      await waitFor(() => expect(screen.getByTestId('credits-price')).toBeInTheDocument())
+      await waitFor(() => expect(screen.getByTestId('pegged-mana-price')).toBeInTheDocument())
       expect(ManaToFiat).toHaveBeenCalledTimes(1)
     })
 
@@ -201,8 +226,10 @@ describe('PriceComponent', () => {
       mockTradeWithReceivedAssetType(TradeAssetType.USD_PEGGED_MANA)
       renderComponent({ ...usdPeggedProps, useCredits: true, credits: createMockCredits() })
 
-      await waitFor(() => expect(screen.getByTestId('credits-price')).toBeInTheDocument())
-      expect(screen.getByTestId('credits-price')).toHaveTextContent('6')
+      // The discount is an amount of MANA, subtracted from a MANA price. Against a USD-pegged amount it is
+      // meaningless, so the pegged branch has to run before any of that arithmetic can reach the figure.
+      await waitFor(() => expect(screen.getByTestId('pegged-mana-price')).toBeInTheDocument())
+      expect(screen.getByTestId('pegged-mana-price')).toHaveTextContent('~8.97')
       expect(screen.queryByTestId('mana-to-fiat')).not.toBeInTheDocument()
     })
   })

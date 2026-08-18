@@ -641,11 +641,6 @@
       "already_offer": "你已经提出了"
     }
   },
-  "credits_price": {
-    "tooltip": "積分 — 1 積分 = 0.10 美元",
-    "amount": "{amount} 積分",
-    "unavailable": "價格不可用"
-  },
   "offers_table": {
     "offers": "優惠",
     "from": "從",
@@ -1714,6 +1709,10 @@
     "owner": "此挂单已不可用。请重新创建。",
     "visitor": "此挂单已不可用。卖家需要重新创建。",
     "update_listing": "更新挂单"
+  },
+  "pegged_mana_price": {
+    "approximate": "~{amount}",
+    "unavailable": "价格不可用"
   },
   "announcement_bar": {
     "highlight": "认识全新的 Decentraland Shop，",

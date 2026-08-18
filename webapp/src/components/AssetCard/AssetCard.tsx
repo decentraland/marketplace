@@ -23,10 +23,10 @@ import { PageName, SortBy } from '../../modules/routing/types'
 import { PriceDenomination } from '../../modules/trade/denomination'
 import { useTradePriceDenomination } from '../../modules/trade/hooks'
 import { AssetImage } from '../AssetImage'
-import { CreditsPrice } from '../CreditsPrice'
 import { useEmotePreviewPlayer } from '../EmotePreviewPlayer'
 import { FavoritesCounter } from '../FavoritesCounter'
 import { Mana } from '../Mana'
+import { PeggedManaPrice } from '../PeggedManaPrice'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
 import { EstateTags } from './EstateTags'
@@ -149,6 +149,17 @@ const AssetCard = (props: Props) => {
     return null
   }, [appliedFilters, asset, sortBy])
 
+  /**
+   * Whether the figure this card is about to show is the USD-pegged MINT price.
+   *
+   * The pegged unit belongs to `asset.price` alone: every other figure a catalog card can show — the
+   * cheapest listing, a min/max range — comes from resales, which are priced in MANA. So the card can
+   * only convert when the value it landed on is the mint price itself; converting a resale figure would
+   * be the same mistake in the other direction.
+   */
+  const showsPeggedMintPrice =
+    isUSDPegged && !isNFT(asset) && !!catalogItemInformation?.price && catalogItemInformation.price === asset.price
+
   const renderCatalogItemInformation = useCallback(() => {
     const isAvailableForMint = !isNFT(asset) && asset.isOnSale && asset.available > 0
     const notForSale = !isAvailableForMint && !isNFT(asset) && !asset.minListingPrice
@@ -161,7 +172,11 @@ const AssetCard = (props: Props) => {
         </span>
 
         {catalogItemInformation.price ? (
-          isIAP ? (
+          showsPeggedMintPrice ? (
+            <div className="PriceInMana">
+              <PeggedManaPrice usdWei={catalogItemInformation.price} network={asset.network} size="large" />
+            </div>
+          ) : isIAP ? (
             <span className="CreditsPrice">
               <img src={CreditsIcon} alt="Credits" className="creditsIcon" />
               {catalogItemInformation.price?.includes('-')
@@ -189,7 +204,7 @@ const AssetCard = (props: Props) => {
         {catalogItemInformation.extraInformation && <span className="extraInformation">{catalogItemInformation.extraInformation}</span>}
       </div>
     ) : null
-  }, [asset, catalogItemInformation])
+  }, [asset, catalogItemInformation, showsPeggedMintPrice, isIAP])
 
   const setWrapperRef = useCallback(
     (node: HTMLDivElement | null) => {
@@ -241,7 +256,7 @@ const AssetCard = (props: Props) => {
                 </div>
                 {!isCatalogItem(asset) && price ? (
                   isUSDPegged ? (
-                    <CreditsPrice usdWei={price} />
+                    <PeggedManaPrice usdWei={price} network={asset.network} inline />
                   ) : isIAP ? (
                     <span className="CreditsPrice">
                       <img src={CreditsIcon} alt="Credits" className="creditsIcon" />

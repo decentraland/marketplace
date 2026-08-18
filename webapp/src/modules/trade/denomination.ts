@@ -1,7 +1,6 @@
-import { Trade } from '@dcl/schemas'
+import { Trade, TradeAsset, TradeAssetType } from '@dcl/schemas'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { API_SIGNER } from '../../lib/api'
-import { isUSDPeggedTradeAsset } from '../../lib/credits'
 import { MARKETPLACE_SERVER_URL } from '../vendor/decentraland/marketplace/api'
 
 /**
@@ -28,6 +27,11 @@ const cache = new Map<string, Promise<PriceDenomination>>()
 
 function buildService(): TradeService {
   return new TradeService(API_SIGNER, MARKETPLACE_SERVER_URL, () => undefined)
+}
+
+/** True when this trade asset's `amount` is USD wei rather than MANA wei. */
+function isUSDPeggedTradeAsset(asset?: Pick<TradeAsset, 'assetType'> | null): boolean {
+  return asset?.assetType === TradeAssetType.USD_PEGGED_MANA
 }
 
 export function denominationOfTrade(trade: Pick<Trade, 'received'>): PriceDenomination {

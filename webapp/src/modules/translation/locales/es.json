@@ -640,11 +640,6 @@
       "already_offer": "Ya hiciste una oferta"
     }
   },
-  "credits_price": {
-    "tooltip": "Créditos — 1 crédito = 0,10 USD",
-    "amount": "{amount} créditos",
-    "unavailable": "Precio no disponible"
-  },
   "offers_table": {
     "offers": "Ofertas",
     "from": "De",
@@ -1710,6 +1705,10 @@
     "owner": "Esta publicación ya no está disponible. Debes volver a crearla.",
     "visitor": "Esta publicación ya no está disponible. El vendedor debe volver a crearla.",
     "update_listing": "Actualizar publicación"
+  },
+  "pegged_mana_price": {
+    "approximate": "~{amount}",
+    "unavailable": "Precio no disponible"
   },
   "announcement_bar": {
     "highlight": "Descubre la nueva Decentraland Shop,",

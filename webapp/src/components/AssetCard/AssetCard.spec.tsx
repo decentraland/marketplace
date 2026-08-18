@@ -4,11 +4,19 @@ import { BodyShape, ChainId, Network, NFTCategory, Rarity, WearableCategory } fr
 import { Asset } from '../../modules/asset/types'
 import { INITIAL_STATE } from '../../modules/favorites/reducer'
 import { PageName, SortBy } from '../../modules/routing/types'
+import { useTradePriceDenomination } from '../../modules/trade/hooks'
 import { renderWithProviders } from '../../utils/test'
 import AssetCard from './AssetCard'
 import { Props as AssetCardProps } from './AssetCard.types'
 
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
+
+// The two reads the pegged path depends on: which unit the listing is in, and the rate to convert it.
+// Both are network calls in production; here they are dials so a test can state the situation it means.
+jest.mock('../../modules/trade/hooks', () => ({
+  useTradePriceDenomination: jest.fn(() => 'mana'),
+  useManaUsdRate: jest.fn(() => ({ answer: 100000000n, decimals: 8 }))
+}))
 
 function renderAssetCard(props: Partial<AssetCardProps> = {}) {
   return renderWithProviders(
@@ -123,6 +131,46 @@ describe('AssetCard', () => {
         asset
       })
       expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
+    })
+  })
+
+  /**
+   * A USD-pegged listing carries USD wei in `price`, so drawing it with the MANA glyph tells the shopper
+   * the item costs a fraction of what it does. The catalog card renders through its own path, which is why
+   * the item page being right did not make the grid right.
+   */
+  describe('when the catalog card shows a USD-pegged mint price', () => {
+    let catalogAsset: Asset
+
+    beforeEach(() => {
+      // $1 per MANA, so the converted figure is a round number the assertion can name.
+      ;(useTradePriceDenomination as jest.Mock).mockReturnValue('usd-pegged')
+      catalogAsset = {
+        ...asset,
+        itemId: '0',
+        price: '20100000000000000000',
+        isOnSale: true,
+        available: 43,
+        listings: 0,
+        minPrice: '20100000000000000000'
+      } as unknown as Asset
+    })
+
+    it('should convert it through the rate instead of labelling the dollars as MANA', () => {
+      renderAssetCard({ asset: catalogAsset, priceTradeId: 'trade-1', sortBy: SortBy.NEWEST })
+      mockAllIsIntersecting(true)
+
+      expect(screen.getByTestId('pegged-mana-price')).toBeInTheDocument()
+    })
+
+    // The same card must NOT convert a resale figure: those are already MANA, and running them through
+    // the rate would be this bug pointing the other way.
+    it('should leave the price alone when it is not the mint price', () => {
+      const withResale = { ...catalogAsset, price: '20100000000000000000', minPrice: '5000000000000000000' } as unknown as Asset
+      renderAssetCard({ asset: withResale, priceTradeId: 'trade-1', sortBy: SortBy.CHEAPEST })
+      mockAllIsIntersecting(true)
+
+      expect(screen.queryByTestId('pegged-mana-price')).toBeNull()
     })
   })
 })
