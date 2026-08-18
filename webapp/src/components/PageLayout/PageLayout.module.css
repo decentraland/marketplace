@@ -11,7 +11,15 @@
 
 .navbar {
   flex-shrink: 0;
+  /* The fixed navbar is taller than the space its own container reserves, so
+     this gap is what keeps page content from sliding underneath it. */
   margin-bottom: 36px;
+}
+
+/* The announcement bar already separates the navbar from the page, so the gap
+   would only read as dead space while it is showing. */
+.navbarWithAnnouncement {
+  margin-bottom: 0;
 }
 
 @media (max-width: 767px) {
