@@ -1714,5 +1714,11 @@
     "owner": "此挂单已不可用。请重新创建。",
     "visitor": "此挂单已不可用。卖家需要重新创建。",
     "update_listing": "更新挂单"
+  },
+  "announcement_bar": {
+    "highlight": "认识全新的 Decentraland Shop，",
+    "message": "{highlight}用 Credits 购物更简单。",
+    "cta": "立即体验",
+    "dismiss": "关闭公告"
   }
 }

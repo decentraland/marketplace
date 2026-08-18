@@ -87,3 +87,7 @@ export const BUY_ITEM_CROSS_CHAIN_TRANSACTION_DENIED = 'Buy Item Cross Chain Tra
 export const CROSS_CHAIN_TOKEN_SELECTION = 'Cross Chain token selection'
 export const CROSS_CHAIN_CHAIN_SELECTION = 'Cross Chain chain selection'
 export const ERROR_GETTING_ROUTE = 'Error getting Route'
+
+// Shop announcement bar
+export const CLICK_SHOP_ANNOUNCEMENT_BAR = 'Click Shop Announcement Bar'
+export const DISMISS_SHOP_ANNOUNCEMENT_BAR = 'Dismiss Shop Announcement Bar'

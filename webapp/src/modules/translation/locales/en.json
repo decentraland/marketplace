@@ -1748,5 +1748,11 @@
     "owner": "This listing is no longer available. You need to recreate it.",
     "visitor": "This listing is no longer available. The seller needs to recreate it.",
     "update_listing": "Update listing"
+  },
+  "announcement_bar": {
+    "highlight": "Meet the new Decentraland Shop,",
+    "message": "{highlight} a simpler way to shop with Credits.",
+    "cta": "Try it now",
+    "dismiss": "Dismiss announcement"
   }
 }

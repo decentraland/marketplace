@@ -1710,5 +1710,11 @@
     "owner": "Esta publicación ya no está disponible. Debes volver a crearla.",
     "visitor": "Esta publicación ya no está disponible. El vendedor debe volver a crearla.",
     "update_listing": "Actualizar publicación"
+  },
+  "announcement_bar": {
+    "highlight": "Descubre la nueva Decentraland Shop,",
+    "message": "{highlight} una forma más simple de comprar con Créditos.",
+    "cta": "Probar ahora",
+    "dismiss": "Cerrar anuncio"
   }
 }
