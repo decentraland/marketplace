@@ -25,7 +25,7 @@
     "decentraland-dapps": "^29.5.0",
     "decentraland-transactions": "^3.0.3",
     "decentraland-ui": "^7.1.0",
-    "decentraland-ui2": "^3.8.0",
+    "decentraland-ui2": "^3.19.2",
     "ethers": "^5.6.8",
     "graphql": "^14.7.0",
     "history": "^4.10.1",
