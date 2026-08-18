@@ -1747,5 +1747,11 @@
   "pegged_mana_price": {
     "approximate": "~{amount}",
     "unavailable": "Price unavailable"
+  },
+  "announcement_bar": {
+    "highlight": "Meet the new Decentraland Shop,",
+    "message": "{highlight} a simpler way to shop with Credits.",
+    "cta": "Try it now",
+    "dismiss": "Dismiss announcement"
   }
 }

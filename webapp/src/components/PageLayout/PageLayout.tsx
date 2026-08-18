@@ -7,6 +7,7 @@ import { getChainId, isConnected } from 'decentraland-dapps/dist/modules/wallet/
 import { config } from '../../config'
 import { useIsIAP } from '../../modules/iap/useIAP'
 import { RootState } from '../../modules/reducer'
+import { AnnouncementBar } from '../AnnouncementBar'
 import { Footer } from '../Footer'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
@@ -36,6 +37,7 @@ const PageLayout = ({ children, activeTab, className, hideNavigation }: Props) =
     <div className={classNames(styles.page, className)}>
       <div className={styles.navbar}>
         <Navbar />
+        {!isIAP && <AnnouncementBar />}
       </div>
       {!hideNavigation && <Navigation activeTab={activeTab} />}
       <div className={styles.content}>{children}</div>
