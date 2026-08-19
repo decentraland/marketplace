@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
 import { ChainId } from '@dcl/schemas'
@@ -7,7 +7,7 @@ import { getChainId, isConnected } from 'decentraland-dapps/dist/modules/wallet/
 import { config } from '../../config'
 import { useIsIAP } from '../../modules/iap/useIAP'
 import { RootState } from '../../modules/reducer'
-import { AnnouncementBar } from '../AnnouncementBar'
+import { AnnouncementBar, isAnnouncementBarDismissed } from '../AnnouncementBar'
 import { Footer } from '../Footer'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
@@ -33,11 +33,17 @@ const PageLayout = ({ children, activeTab, className, hideNavigation }: Props) =
   const isIAP = useIsIAP()
   useIAPAutoSwitchNetwork()
 
+  const [isAnnouncementBarVisible, setIsAnnouncementBarVisible] = useState(() => !isAnnouncementBarDismissed())
+
+  const handleAnnouncementBarDismiss = useCallback(() => setIsAnnouncementBarVisible(false), [])
+
+  const showAnnouncementBar = !isIAP && isAnnouncementBarVisible
+
   return (
     <div className={classNames(styles.page, className)}>
-      <div className={styles.navbar}>
+      <div className={classNames(styles.navbar, { [styles.navbarWithAnnouncement]: showAnnouncementBar })}>
         <Navbar />
-        {!isIAP && <AnnouncementBar />}
+        {showAnnouncementBar && <AnnouncementBar onDismiss={handleAnnouncementBarDismiss} />}
       </div>
       {!hideNavigation && <Navigation activeTab={activeTab} />}
       <div className={styles.content}>{children}</div>
