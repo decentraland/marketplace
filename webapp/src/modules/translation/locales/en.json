@@ -1749,9 +1749,9 @@
     "unavailable": "Price unavailable"
   },
   "announcement_bar": {
-    "highlight": "Meet the new Decentraland Shop,",
-    "message": "{highlight} a simpler way to shop with Credits.",
-    "cta": "Try it now",
+    "highlight": "Meet the Decentraland Shop",
+    "message": "{highlight} - New Layout, New Outfits, and Meet the creators.",
+    "cta": "Try it out",
     "dismiss": "Dismiss announcement"
   }
 }
