@@ -1711,9 +1711,9 @@
     "unavailable": "Precio no disponible"
   },
   "announcement_bar": {
-    "highlight": "Descubre la nueva Decentraland Shop,",
-    "message": "{highlight} una forma más simple de comprar con Créditos.",
-    "cta": "Probar ahora",
+    "highlight": "Conoce la Decentraland Shop",
+    "message": "{highlight} - Nuevo diseño, nuevos looks y conoce a los creadores.",
+    "cta": "Pruébalo",
     "dismiss": "Cerrar anuncio"
   }
 }
