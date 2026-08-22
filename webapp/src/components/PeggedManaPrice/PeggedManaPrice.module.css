@@ -8,3 +8,11 @@
 .unavailable {
   opacity: 0.6;
 }
+
+/* Holds the line's height while the rate is being read, so the price does not pop the layout when it
+   lands. Deliberately empty of text: a spinner or a placeholder number next to a Buy button would each
+   say something — that something is wrong, or that this is the price — and neither is true yet. */
+.loading {
+  min-height: 1em;
+  min-width: 4ch;
+}

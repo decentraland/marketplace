@@ -38,11 +38,24 @@ function chainIdOf(network: Props['network']): ChainId | undefined {
  * rounds up so the shown figure never sits above the charge.
  */
 const PeggedManaPrice = ({ usdWei, network, size = 'medium', className, manaClassName, inline }: Props) => {
-  const rate = useManaUsdRate(chainIdOf(network))
+  const { status, rate } = useManaUsdRate(chainIdOf(network))
   const manaWei = rate ? usdWeiToManaWei(usdWei, rate) : null
 
-  // No rate (still reading, or the oracle is unreachable) means there is no honest MANA figure to show. Saying
-  // so beats rendering a placeholder number next to a Buy button.
+  // The read has not come back yet. There is no figure to show, but there is nothing wrong either — so hold
+  // the space and say nothing. Announcing "price unavailable" here is a claim about the oracle that the first
+  // frame of every render was making on its behalf, and on a grid that is one false alarm per card.
+  if (status === 'pending') {
+    return (
+      <span
+        className={classNames(styles.PeggedManaPrice, styles.loading, className)}
+        data-testid="pegged-mana-price-loading"
+        aria-busy="true"
+      />
+    )
+  }
+
+  // Now it is a real answer: the oracle could not be reached, or answered something a price cannot be built
+  // from. Saying so beats rendering a placeholder number next to a Buy button.
   if (manaWei === null) {
     return (
       <span className={classNames(styles.PeggedManaPrice, styles.unavailable, className)} data-testid="pegged-mana-price-unavailable">
