@@ -41,7 +41,7 @@ const PageLayout = ({ children, activeTab, className, hideNavigation }: Props) =
 
   return (
     <div className={classNames(styles.page, className)}>
-      <div className={classNames(styles.navbar, { [styles.navbarWithAnnouncement]: showAnnouncementBar })}>
+      <div className={styles.navbar}>
         <Navbar />
         {showAnnouncementBar && <AnnouncementBar onDismiss={handleAnnouncementBarDismiss} />}
       </div>
