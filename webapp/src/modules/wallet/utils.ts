@@ -35,6 +35,45 @@ export async function getEth(): Promise<ethers.providers.Web3Provider> {
   return new ethers.providers.Web3Provider(provider)
 }
 
+/**
+ * Ensures the connected wallet is on the expected chain.
+ * Throws an Error when the provider is missing or the chainId doesn't match.
+ */
+export async function ensureCorrectNetwork(expectedChainId: number): Promise<boolean> {
+  const provider: Provider | null = await getConnectedProvider()
+
+  if (!provider) {
+    throw new Error('Could not get a valid connected Wallet')
+  }
+
+  // Prefer EIP-1193 provider.request
+  try {
+    // Some providers expose request as a method
+    if (typeof (provider as any).request === 'function') {
+      const chainIdHex = await (provider as any).request({ method: 'eth_chainId' })
+      const chainId = typeof chainIdHex === 'string' ? parseInt(chainIdHex, 16) : Number(chainIdHex)
+      if (chainId !== expectedChainId) {
+        throw new Error(`Wallet connected to chain ${chainId}. Please switch to chain ${expectedChainId}.`)
+      }
+      return true
+    }
+
+    // Fallback: some providers expose network info directly
+    if ((provider as any).chainId != null) {
+      const current = Number((provider as any).chainId)
+      if (current !== expectedChainId) {
+        throw new Error(`Wallet connected to chain ${current}. Please switch to chain ${expectedChainId}.`)
+      }
+      return true
+    }
+
+    throw new Error('Wallet provider does not support network detection')
+  } catch (err) {
+    // rethrow with friendly message
+    throw new Error((err as Error).message || 'Could not determine connected network')
+  }
+}
+
 // TODO: remove after fixing the following issue https://app.zenhub.com/workspaces/dapps-5ffc44ecec9f8500140e173c/issues/gh/decentraland/dapps-issues/45
 function removeScientificNotationForSmallNumbers(number: number): string {
   // fix the amount of decimals to the exponent of the scientific notation when the number is too low

@@ -38,8 +38,9 @@ import {
   acceptRentalListingTransactionSubmitted
 } from './actions'
 import { daysByPeriod, generateECDSASignatureWithValidV, getNonces, getSignature, waitUntilRentalChangesStatus } from './utils'
+import { ensureCorrectNetwork } from '../wallet/utils'
 
-export function* rentalSaga() {
+export function* rentalSaga(): Generator {
   yield takeEvery(UPSERT_RENTAL_REQUEST, handleCreateOrEditRentalRequest)
   yield takeEvery(CLAIM_ASSET_REQUEST, handleClaimLandRequest)
   yield takeEvery(CLOSE_MODAL, handleModalClose)
@@ -47,7 +48,7 @@ export function* rentalSaga() {
   yield takeEvery(ACCEPT_RENTAL_LISTING_REQUEST, handleAcceptRentalListingRequest)
 }
 
-function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
+function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction): Generator {
   const { nft, pricePerDay, expiresAt, operationType } = action.payload
 
   const periods: PeriodCreation[] = action.payload.periods.map(period => ({
@@ -57,6 +58,13 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
   }))
 
   try {
+    // ensure the user is on the correct network before creating/editing rental
+    try {
+      // NFT.chainId is the expected chain for this NFT
+      yield call(ensureCorrectNetwork, nft.chainId)
+    } catch (err) {
+      throw new Error((err as Error).message || 'Wrong network')
+    }
     const address: string | undefined = yield select(getAddress)
     if (!address) {
       throw new Error(`Invalid address`)
@@ -93,10 +101,16 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
   }
 }
 
-function* handleClaimLandRequest(action: ClaimAssetRequestAction) {
+function* handleClaimLandRequest(action: ClaimAssetRequestAction): Generator {
   const { nft, rental } = action.payload
 
   try {
+    // ensure correct network
+    try {
+      yield call(ensureCorrectNetwork, nft.chainId)
+    } catch (err) {
+      throw new Error((err as Error).message || 'Wrong network')
+    }
     const provider: Provider | null = yield call(getConnectedProvider)
     if (!provider) {
       throw new Error('A provider is required to claim LAND')
@@ -133,18 +147,25 @@ function* handleClaimLandRequest(action: ClaimAssetRequestAction) {
   }
 }
 
-function* handleModalClose(action: CloseModalAction) {
+function* handleModalClose(action: CloseModalAction): Generator {
   if (action.payload.name === 'ClaimLandModal' || action.payload.name === 'RemoveRentalModal') {
     yield put(clearRentalErrors())
   }
 }
 
-function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
+function* handleRemoveRentalRequest(action: RemoveRentalRequestAction): Generator {
   const { nft } = action.payload
 
   try {
     if (!nft.openRentalId) {
       throw new Error('The provided NFT does not have an open rental')
+    }
+
+    // ensure correct network
+    try {
+      yield call(ensureCorrectNetwork, nft.chainId)
+    } catch (err) {
+      throw new Error((err as Error).message || 'Wrong network')
     }
 
     const provider: Provider | null = yield call(getConnectedProvider)
@@ -175,12 +196,19 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
   }
 }
 
-function* handleAcceptRentalListingRequest(action: AcceptRentalListingRequestAction) {
+function* handleAcceptRentalListingRequest(action: AcceptRentalListingRequestAction): Generator {
   const { nft, rental, periodIndexChosen, addressOperator } = action.payload
 
   try {
     if (!nft.openRentalId) {
       throw new Error('The provided NFT does not have an open rental')
+    }
+
+    // ensure correct network
+    try {
+      yield call(ensureCorrectNetwork, nft.chainId)
+    } catch (err) {
+      throw new Error((err as Error).message || 'Wrong network')
     }
 
     const provider: Provider | null = yield call(getConnectedProvider)
