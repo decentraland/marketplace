@@ -8,11 +8,6 @@
   justify-content: center;
   gap: 8px;
   min-height: 46px;
-  /* The ui2 navbar is fixed and 92px tall on desktop, but the container that
-     wraps it only reserves 66px, so the first 26px of the flow sit behind it.
-     Compensating here keeps the bar flush under the navbar instead of below it.
-     Under 992px the navbar is 64px tall and already fits in those 66px. */
-  margin-top: 26px;
   /* Keeps the centered content from sliding under the absolutely positioned close button */
   padding: 0 56px;
   background-color: var(--announcement-bar-background);
@@ -103,7 +98,6 @@
 @media (max-width: 991px) {
   .bar {
     justify-content: flex-start;
-    margin-top: 0;
     padding: 8px 0 8px 16px;
   }
 
