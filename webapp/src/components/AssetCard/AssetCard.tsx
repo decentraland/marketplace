@@ -154,19 +154,27 @@ const AssetCard = (props: Props) => {
     // and releasing anyway would take the overlay from the card the pointer has landed on.
     if (previewTargetRef.current) {
       hoverPreview.hide(previewTargetRef.current)
+      previewTargetRef.current = null
     }
   }, [hoverPreview, canShowHoverPreview])
 
   // A card can be torn down mid-hover — a filter change, a navigation — without ever firing
   // mouseleave, leaving a pending timer and an overlay tracking a detached node.
+  //
+  // This must run on unmount and nothing else, so it reads the player through a ref rather than
+  // listing it as a dependency: keying it on the context value would release the preview every time
+  // that value changed identity, which is not the same event as this card going away.
+  const hoverPreviewRef = useRef(hoverPreview)
+  hoverPreviewRef.current = hoverPreview
+
   useEffect(
     () => () => {
       clearTimeout(hoverTimeoutRef.current)
       if (previewTargetRef.current) {
-        hoverPreview?.hide(previewTargetRef.current)
+        hoverPreviewRef.current?.hide(previewTargetRef.current)
       }
     },
-    [hoverPreview]
+    []
   )
 
   const rentalPricePerDay: string | null = useMemo(() => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null), [rental])

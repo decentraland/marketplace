@@ -92,7 +92,16 @@ const Probe = ({ source = DEFAULT_SOURCE }: { source?: HoverPreviewSource }) => 
       >
         show
       </button>
-      <button onClick={() => player?.hide()}>hide</button>
+      <button
+        onClick={() => {
+          const target = document.querySelector(`[data-testid="${TARGET_TEST_ID}"]`)
+          if (target) {
+            player?.hide(target as HTMLElement)
+          }
+        }}
+      >
+        hide
+      </button>
     </>
   )
 }
@@ -160,6 +169,27 @@ describe('HoverPreview', () => {
         </HoverPreviewProvider>
       )
       expect(getOverlay()).toBeNull()
+    })
+  })
+
+  describe('when the iframe becomes controllable while cards are mounted', () => {
+    it('should keep the same context identity so consumers are not torn down mid-hover', () => {
+      const identities: unknown[] = []
+      const IdentitySpy = () => {
+        identities.push(useHoverPreview())
+        return null
+      }
+
+      renderWithProviders(
+        <HoverPreviewProvider enabled>
+          <IdentitySpy />
+        </HoverPreviewProvider>
+      )
+      fireLoad() // boot → controllable, which rebuilds `show`
+
+      // Every card in the grid consumes this value. A new identity would re-render all of them and
+      // fire their unmount cleanups, releasing a preview the pointer never left.
+      expect(new Set(identities).size).toBe(1)
     })
   })
 

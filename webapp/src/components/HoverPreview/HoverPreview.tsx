@@ -42,8 +42,9 @@ export type HoverPreviewSource = {
 type HoverPreviewContextValue = {
   show: (target: HTMLElement, source: HoverPreviewSource) => void
   // Hiding is scoped to the element that asked for the preview: a card torn down while the pointer
-  // has already moved on must not pull the overlay out from under the card now holding it.
-  hide: (target?: HTMLElement) => void
+  // has already moved on must not pull the overlay out from under the card now holding it. The
+  // target is required so no caller can opt out of that check by omitting it.
+  hide: (target: HTMLElement) => void
 }
 
 const HoverPreviewContext = createContext<HoverPreviewContextValue | null>(null)
@@ -194,6 +195,16 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
     return () => window.clearTimeout(handle)
   }, [enabled])
 
+  // `dispatchUpdate` resolves the iframe by a fixed id, so two providers mounted at once would post
+  // into whichever one the document returns first. No route composes two today; say so loudly if that
+  // ever changes rather than letting hovers silently drive the wrong iframe.
+  useEffect(() => {
+    if (!enabled || !isBootScheduled) return
+    if (document.querySelectorAll(`#${PREVIEW_IFRAME_ID}`).length > 1) {
+      console.warn('More than one HoverPreviewProvider is mounted: hover previews will target the wrong iframe.')
+    }
+  }, [enabled, isBootScheduled])
+
   // Track the hovered target's position every frame while visible so the overlay
   // follows the card image as it shrinks on hover and as the page scrolls.
   useEffect(() => {
@@ -239,8 +250,8 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
     [isControllable, envConfig]
   )
 
-  const hide = useCallback((target?: HTMLElement) => {
-    if (target && targetRef.current !== target) return
+  const hide = useCallback((target: HTMLElement) => {
+    if (targetRef.current !== target) return
     targetRef.current = null
     setIsVisible(false)
     setIsAssetLoading(false)
@@ -297,7 +308,21 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
     setIsAssetLoading(false)
   }, [])
 
-  const contextValue = useMemo<HoverPreviewContextValue>(() => ({ show, hide }), [show, hide])
+  // `show` is rebuilt whenever the iframe becomes controllable or the resolved profile changes, but
+  // the context value it travels in must NOT change identity: every card in the grid consumes it, so
+  // a new identity re-renders all of them and tears down any effect they keyed on it — including the
+  // unmount cleanup that releases the preview, which would then fire mid-hover and hide a preview the
+  // pointer never left. So the latest `show` is reached through a ref instead.
+  const showRef = useRef(show)
+  showRef.current = show
+
+  const contextValue = useMemo<HoverPreviewContextValue>(
+    () => ({
+      show: (target: HTMLElement, source: HoverPreviewSource) => showRef.current(target, source),
+      hide
+    }),
+    [hide]
+  )
 
   const overlayStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!isVisible || !rect) return undefined
