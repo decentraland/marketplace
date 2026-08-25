@@ -139,7 +139,7 @@ const AssetCard = (props: Props) => {
         contractAddress: asset.contractAddress,
         itemId: 'itemId' in asset ? asset.itemId : null,
         tokenId: 'tokenId' in asset ? asset.tokenId : null,
-        urn: 'urn' in asset ? (asset.urn ?? null) : null,
+        urn: 'urn' in asset ? asset.urn ?? null : null,
         network: asset.network,
         rarity: asset.data.emote?.rarity ?? asset.data.wearable?.rarity,
         bodyShapes: asset.data.wearable?.bodyShapes

@@ -86,7 +86,7 @@ const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): Previ
     // Land straight into a fashion pose so the avatar never flashes a T-pose.
     emote: PreviewEmote.FASHION,
     profile: canBeWornByAvatar ? env.profile : 'default',
-    bodyShape: canBeWornByAvatar ? null : (shapes[0] ?? null)
+    bodyShape: canBeWornByAvatar ? null : shapes[0] ?? null
   }
 }
 
