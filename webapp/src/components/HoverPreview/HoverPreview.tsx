@@ -22,6 +22,11 @@ import './HoverPreview.css'
 
 const PREVIEW_IFRAME_ID = 'hover-preview-iframe'
 
+// How long to wait for a genuinely idle moment before booting the preview, and the fallback delay
+// for browsers without requestIdleCallback (Safari).
+const IDLE_BOOT_TIMEOUT_MS = 3000
+const IDLE_BOOT_FALLBACK_MS = 1500
+
 export type HoverPreviewSource = {
   category: NFTCategory
   contractAddress?: string
@@ -134,6 +139,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   const [rarity, setRarity] = useState<Rarity>(Rarity.COMMON)
   const [isControllable, setIsControllable] = useState(false)
   const [isAssetLoading, setIsAssetLoading] = useState(false)
+  const [isBootScheduled, setIsBootScheduled] = useState(false)
   const targetRef = useRef<HTMLElement | null>(null)
   const pendingSourceRef = useRef<HoverPreviewSource | null>(null)
   const hasInitiallyLoadedRef = useRef(false)
@@ -173,6 +179,20 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
   // tied to the configured peer URL, not to VITE_DCL_DEFAULT_ENV. Lets you
   // copy prod values into dev.json and have the iframe follow.
   const isPreviewDev = useMemo(() => !envConfig.peerUrl.includes('decentraland.org'), [envConfig.peerUrl])
+
+  // Booting the overlay means loading a whole separate app and standing up a WebGL context, so wait
+  // for the browser to go idle first — otherwise that work competes with the page's own first paint.
+  // It matters most on the homepage, where the card grid is not what the visitor came for and the
+  // odds of them hovering a card at all are lowest.
+  useEffect(() => {
+    if (!enabled) return
+    if (typeof window.requestIdleCallback === 'function') {
+      const handle = window.requestIdleCallback(() => setIsBootScheduled(true), { timeout: IDLE_BOOT_TIMEOUT_MS })
+      return () => window.cancelIdleCallback(handle)
+    }
+    const handle = window.setTimeout(() => setIsBootScheduled(true), IDLE_BOOT_FALLBACK_MS)
+    return () => window.clearTimeout(handle)
+  }, [enabled])
 
   // Track the hovered target's position every frame while visible so the overlay
   // follows the card image as it shrinks on hover and as the page scrolls.
@@ -252,6 +272,7 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
       setIsControllable(false)
       setIsVisible(false)
       setIsAssetLoading(false)
+      setIsBootScheduled(false)
     }
   }, [enabled])
 
@@ -290,31 +311,32 @@ export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, 
     }
   }, [isVisible, rect, rarity])
 
-  const overlay = enabled ? (
-    <div className={`HoverPreview ${isVisible ? 'is-visible' : 'is-warming'}`} style={overlayStyle} aria-hidden>
-      <WearablePreview
-        id={PREVIEW_IFRAME_ID}
-        profile="default"
-        peerUrl={envConfig.peerUrl}
-        marketplaceServerUrl={envConfig.marketplaceServerUrl}
-        background={Rarity.getColor(Rarity.COMMON)}
-        wheelZoom={1.5}
-        wheelStart={100}
-        disableAutoRotate
-        disableFadeEffect
-        // The iframe uses `?env=dev` (set by dev={true}) to talk to testnets
-        // (Amoy for Matic, Sepolia for Ethereum). We resolve "is dev" from
-        // the configured PEER_URL — if it's pointing at .org we want the
-        // iframe in prod mode regardless of VITE_DCL_DEFAULT_ENV, otherwise
-        // contractAddress+itemId from the prod catalog won't resolve.
-        dev={isPreviewDev}
-        unityMode={PreviewUnityMode.MARKETPLACE}
-        onLoad={handlePreviewLoad}
-        onError={handlePreviewError}
-      />
-      {isVisible && isAssetLoading ? <Loader className="HoverPreview__spinner" active size="large" /> : null}
-    </div>
-  ) : null
+  const overlay =
+    enabled && isBootScheduled ? (
+      <div className={`HoverPreview ${isVisible ? 'is-visible' : 'is-warming'}`} style={overlayStyle} aria-hidden>
+        <WearablePreview
+          id={PREVIEW_IFRAME_ID}
+          profile="default"
+          peerUrl={envConfig.peerUrl}
+          marketplaceServerUrl={envConfig.marketplaceServerUrl}
+          background={Rarity.getColor(Rarity.COMMON)}
+          wheelZoom={1.5}
+          wheelStart={100}
+          disableAutoRotate
+          disableFadeEffect
+          // The iframe uses `?env=dev` (set by dev={true}) to talk to testnets
+          // (Amoy for Matic, Sepolia for Ethereum). We resolve "is dev" from
+          // the configured PEER_URL — if it's pointing at .org we want the
+          // iframe in prod mode regardless of VITE_DCL_DEFAULT_ENV, otherwise
+          // contractAddress+itemId from the prod catalog won't resolve.
+          dev={isPreviewDev}
+          unityMode={PreviewUnityMode.MARKETPLACE}
+          onLoad={handlePreviewLoad}
+          onError={handlePreviewError}
+        />
+        {isVisible && isAssetLoading ? <Loader className="HoverPreview__spinner" active size="large" /> : null}
+      </div>
+    ) : null
 
   return (
     <HoverPreviewContext.Provider value={contextValue}>

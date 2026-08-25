@@ -129,8 +129,18 @@ describe('HoverPreview', () => {
     // stub it so it doesn't schedule state updates outside act().
     jest.spyOn(window, 'requestAnimationFrame').mockReturnValue(0)
     jest.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => undefined)
+    // jsdom implements neither idle callback. Boot the overlay immediately so these assertions
+    // exercise the iframe lifecycle rather than the idle wait, which has its own test below.
+    window.requestIdleCallback = ((callback: IdleRequestCallback) => {
+      callback({ didTimeout: false, timeRemaining: () => 0 })
+      return 1
+    }) as typeof window.requestIdleCallback
+    window.cancelIdleCallback = (() => undefined) as typeof window.cancelIdleCallback
   })
 
+  // The idle-callback stubs are deliberately NOT restored: React unmounts the provider during
+  // testing-library's cleanup, which runs after this hook, and its effect teardown calls
+  // cancelIdleCallback. jsdom globals are per test file, so the stubs cannot leak elsewhere.
   afterEach(() => {
     jest.restoreAllMocks()
   })
@@ -150,6 +160,28 @@ describe('HoverPreview', () => {
         </HoverPreviewProvider>
       )
       expect(getOverlay()).toBeNull()
+    })
+  })
+
+  describe('when the provider is enabled but the browser has not gone idle yet', () => {
+    it('should not mount the preview iframe until it does', () => {
+      let boot: (() => void) | undefined
+      window.requestIdleCallback = ((callback: IdleRequestCallback) => {
+        boot = () => callback({ didTimeout: false, timeRemaining: () => 0 })
+        return 1
+      }) as typeof window.requestIdleCallback
+
+      renderWithProviders(
+        <HoverPreviewProvider enabled>
+          <Probe />
+        </HoverPreviewProvider>
+      )
+
+      // Standing up the preview app and its WebGL context must not compete with the page's own
+      // first paint — it is deferred until the browser has nothing better to do.
+      expect(getOverlay()).toBeNull()
+      act(() => boot?.())
+      expect(getOverlay()).not.toBeNull()
     })
   })
 

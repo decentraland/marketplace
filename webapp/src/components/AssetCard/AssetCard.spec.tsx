@@ -179,6 +179,12 @@ describe('AssetCard', () => {
   describe('when the card is hovered on a device with a real pointer', () => {
     beforeEach(() => {
       jest.useFakeTimers()
+      // The provider defers booting its iframe to an idle callback, which jsdom does not implement.
+      window.requestIdleCallback = ((callback: IdleRequestCallback) => {
+        callback({ didTimeout: false, timeRemaining: () => 0 })
+        return 1
+      }) as typeof window.requestIdleCallback
+      window.cancelIdleCallback = (() => undefined) as typeof window.cancelIdleCallback
       // The card arms the 3D preview only where hovering is a deliberate act; the global stub in
       // beforeSetupTests answers false to every query, which would disarm it here.
       jest.spyOn(window, 'matchMedia').mockImplementation(
@@ -195,6 +201,8 @@ describe('AssetCard', () => {
       )
     })
 
+    // The idle-callback stubs stay installed on purpose: unmounting during cleanup calls
+    // cancelIdleCallback, and jsdom globals do not leak past this file.
     afterEach(() => {
       jest.useRealTimers()
       jest.restoreAllMocks()

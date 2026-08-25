@@ -12,6 +12,7 @@ import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { VendorName } from '../../modules/vendor/types'
 import { AssetStatusFilter } from '../../utils/filters'
+import { HoverPreviewProvider } from '../HoverPreview'
 import { ListsLaunchModal } from '../Modals/ListsLaunchModal'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { PageLayout } from '../PageLayout'
@@ -221,15 +222,20 @@ const HomePage = (props: Props) => {
 
   return (
     <PageLayout activeTab={NavigationTab.OVERVIEW}>
-      <ListsLaunchModal />
-      {isCampaignHomepageBannerEnabled ? <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
-      <Page className="HomePage">
-        {firstViewsSection.map(renderSlideshow)}
-        <RankingsTable />
-        {secondViewsSection.map(renderSlideshow)}
-        <RecentlySoldTable />
-      </Page>
-      <BackToTopButton />
+      {/* The slideshows are wearables and emotes, so their cards get the same 3D hover preview as the
+          browse grid. The provider boots its iframe only once the browser goes idle, which keeps it
+          out of the way of the landing page's first paint. */}
+      <HoverPreviewProvider>
+        <ListsLaunchModal />
+        {isCampaignHomepageBannerEnabled ? <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
+        <Page className="HomePage">
+          {firstViewsSection.map(renderSlideshow)}
+          <RankingsTable />
+          {secondViewsSection.map(renderSlideshow)}
+          <RecentlySoldTable />
+        </Page>
+        <BackToTopButton />
+      </HoverPreviewProvider>
     </PageLayout>
   )
 }
