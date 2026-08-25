@@ -8,7 +8,7 @@ import { locations } from '../../modules/routing/locations'
 import { BrowseOptions } from '../../modules/routing/types'
 import { ExtendedHistory } from '../../modules/types'
 import { View } from '../../modules/ui/types'
-import { getPersistedIsMapProperty, isAccountView, isListsSection } from '../../modules/ui/utils'
+import { getPersistedIsMapProperty, isAccountView, isHoverPreviewSection, isListsSection } from '../../modules/ui/utils'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { Sections } from '../../modules/vendor/routing/types'
 import { AssetStatusFilter } from '../../utils/filters'
@@ -17,6 +17,7 @@ import { AssetList } from '../AssetList'
 import AssetTopbar from '../AssetTopbar'
 import { Bids } from '../Bids'
 import CollectionList from '../CollectionList'
+import { HoverPreviewProvider } from '../HoverPreview'
 import { Column } from '../Layout/Column'
 import { Row } from '../Layout/Row'
 import OnSaleList from '../OnSaleOrRentList'
@@ -222,7 +223,10 @@ const AssetBrowse = (props: Props) => {
   ].filter(Boolean)
 
   return (
-    <>
+    // The hover preview is a single shared iframe kept warm for the whole grid. Mounting it here
+    // covers every surface built on top of AssetBrowse — browse, account, favorites lists — and the
+    // section gate keeps its engine from booting on grids with nothing to render in 3D.
+    <HoverPreviewProvider enabled={isHoverPreviewSection(section)}>
       {isCurrentAccount ? (
         <Mobile>
           <Tabs isFullscreen>
@@ -257,7 +261,7 @@ const AssetBrowse = (props: Props) => {
         </Row>
       </Page>
       <BackToTopButton />
-    </>
+    </HoverPreviewProvider>
   )
 }
 

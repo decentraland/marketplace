@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-var-requires */
 import { act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Network } from '@dcl/schemas'
+import { BodyShape, NFTCategory, Network, PreviewEmote, PreviewMessageType, PreviewOptions, PreviewType } from '@dcl/schemas'
+import { RootState } from '../../modules/reducer'
 import { renderWithProviders } from '../../utils/test'
-import { EmotePreviewPlayerProvider, EmotePreviewSource, useEmotePreviewPlayer } from './EmotePreviewPlayer'
+import { HoverPreviewProvider, HoverPreviewSource, useHoverPreview } from './HoverPreview'
 
 // Capture the latest onLoad/onError handed to the WearablePreview iframe so
 // tests can drive the LOAD lifecycle, and render a real iframe element
@@ -53,14 +54,30 @@ jest.mock('decentraland-ui2', () => {
 })
 
 const TARGET_TEST_ID = 'preview-target'
-const DEFAULT_SOURCE: EmotePreviewSource = {
+const AVATAR_ADDRESS = '0xowner'
+const DEFAULT_SOURCE: HoverPreviewSource = {
+  category: NFTCategory.EMOTE,
   contractAddress: '0xcontract',
   itemId: '1',
   network: Network.MATIC
 }
+const FEMALE_WEARABLE_SOURCE: HoverPreviewSource = {
+  category: NFTCategory.WEARABLE,
+  contractAddress: '0xwearable',
+  itemId: '2',
+  network: Network.MATIC,
+  bodyShapes: [BodyShape.FEMALE]
+}
 
-const Probe = ({ source = DEFAULT_SOURCE }: { source?: EmotePreviewSource }) => {
-  const player = useEmotePreviewPlayer()
+// A store where the connected wallet has a published avatar of the given body shape.
+const withAvatar = (bodyShape: BodyShape) =>
+  ({
+    wallet: { data: { address: AVATAR_ADDRESS } },
+    profile: { data: { [AVATAR_ADDRESS]: { avatars: [{ avatar: { bodyShape } }] } } }
+  }) as unknown as Partial<RootState>
+
+const Probe = ({ source = DEFAULT_SOURCE }: { source?: HoverPreviewSource }) => {
+  const player = useHoverPreview()
   return (
     <>
       <div data-testid={TARGET_TEST_ID} />
@@ -80,8 +97,21 @@ const Probe = ({ source = DEFAULT_SOURCE }: { source?: EmotePreviewSource }) => 
   )
 }
 
-const getOverlay = () => document.querySelector('.EmotePreviewPlayer')
-const getSpinner = () => document.querySelector('.EmotePreviewPlayer__spinner')
+const getOverlay = () => document.querySelector('.HoverPreview')
+const getSpinner = () => document.querySelector('.HoverPreview__spinner')
+
+// The provider drives the iframe by postMessage, so the options it sends are the only observable
+// contract between a hovered card and what the preview app renders.
+const spyOnPreviewMessages = () => {
+  const iframe = document.querySelector('.HoverPreview iframe') as HTMLIFrameElement
+  return jest.spyOn(iframe.contentWindow as Window, 'postMessage')
+}
+const getLastSentOptions = (postMessage: jest.SpyInstance): PreviewOptions => {
+  const calls = postMessage.mock.calls
+  const [message] = calls[calls.length - 1] as [{ type: PreviewMessageType; payload: { options: PreviewOptions } }]
+  expect(message.type).toBe(PreviewMessageType.UPDATE)
+  return message.payload.options
+}
 const fireLoad = () =>
   act(() => {
     capturedOnLoad?.()
@@ -91,7 +121,7 @@ const fireError = () =>
     capturedOnError?.()
   })
 
-describe('EmotePreviewPlayer', () => {
+describe('HoverPreview', () => {
   beforeEach(() => {
     capturedOnLoad = undefined
     capturedOnError = undefined
@@ -115,9 +145,9 @@ describe('EmotePreviewPlayer', () => {
   describe('when the provider is disabled', () => {
     it('should not render the preview overlay', () => {
       renderWithProviders(
-        <EmotePreviewPlayerProvider enabled={false}>
+        <HoverPreviewProvider enabled={false}>
           <Probe />
-        </EmotePreviewPlayerProvider>
+        </HoverPreviewProvider>
       )
       expect(getOverlay()).toBeNull()
     })
@@ -126,9 +156,9 @@ describe('EmotePreviewPlayer', () => {
   describe('when the provider is enabled', () => {
     it('should render the overlay in the warming (hidden) state', () => {
       renderWithProviders(
-        <EmotePreviewPlayerProvider enabled>
+        <HoverPreviewProvider enabled>
           <Probe />
-        </EmotePreviewPlayerProvider>
+        </HoverPreviewProvider>
       )
       expect(getOverlay()).toHaveClass('is-warming')
       expect(getSpinner()).toBeNull()
@@ -137,9 +167,9 @@ describe('EmotePreviewPlayer', () => {
     describe('and show is called', () => {
       it('should make the overlay visible and display the spinner', async () => {
         const { getByText } = renderWithProviders(
-          <EmotePreviewPlayerProvider enabled>
+          <HoverPreviewProvider enabled>
             <Probe />
-          </EmotePreviewPlayerProvider>
+          </HoverPreviewProvider>
         )
         await userEvent.click(getByText('show'))
         expect(getOverlay()).toHaveClass('is-visible')
@@ -150,9 +180,9 @@ describe('EmotePreviewPlayer', () => {
     describe('and hide is called after show', () => {
       it('should hide the overlay and remove the spinner', async () => {
         const { getByText } = renderWithProviders(
-          <EmotePreviewPlayerProvider enabled>
+          <HoverPreviewProvider enabled>
             <Probe />
-          </EmotePreviewPlayerProvider>
+          </HoverPreviewProvider>
         )
         await userEvent.click(getByText('show'))
         await userEvent.click(getByText('hide'))
@@ -164,9 +194,9 @@ describe('EmotePreviewPlayer', () => {
     describe('and the emote finishes loading after the initial boot', () => {
       it('should clear the spinner', async () => {
         const { getByText } = renderWithProviders(
-          <EmotePreviewPlayerProvider enabled>
+          <HoverPreviewProvider enabled>
             <Probe />
-          </EmotePreviewPlayerProvider>
+          </HoverPreviewProvider>
         )
         // First LOAD = iframe boot, marks it controllable.
         fireLoad()
@@ -181,9 +211,9 @@ describe('EmotePreviewPlayer', () => {
     describe('and the same already-loaded emote is hovered again', () => {
       it('should not show the spinner since no reload will occur', async () => {
         const { getByText } = renderWithProviders(
-          <EmotePreviewPlayerProvider enabled>
+          <HoverPreviewProvider enabled>
             <Probe />
-          </EmotePreviewPlayerProvider>
+          </HoverPreviewProvider>
         )
         fireLoad() // boot
         await userEvent.click(getByText('show')) // request emote
@@ -201,9 +231,9 @@ describe('EmotePreviewPlayer', () => {
     describe('and the emote fails to load', () => {
       it('should clear the spinner on error', async () => {
         const { getByText } = renderWithProviders(
-          <EmotePreviewPlayerProvider enabled>
+          <HoverPreviewProvider enabled>
             <Probe />
-          </EmotePreviewPlayerProvider>
+          </HoverPreviewProvider>
         )
         fireLoad() // boot
         await userEvent.click(getByText('show'))
@@ -216,28 +246,100 @@ describe('EmotePreviewPlayer', () => {
     describe('and the provider is re-enabled after being disabled', () => {
       it('should treat the next iframe boot LOAD as initialization again', async () => {
         const { getByText, rerender } = renderWithProviders(
-          <EmotePreviewPlayerProvider enabled>
+          <HoverPreviewProvider enabled>
             <Probe />
-          </EmotePreviewPlayerProvider>
+          </HoverPreviewProvider>
         )
         fireLoad() // boot of the first iframe → controllable
 
         rerender(
-          <EmotePreviewPlayerProvider enabled={false}>
+          <HoverPreviewProvider enabled={false}>
             <Probe />
-          </EmotePreviewPlayerProvider>
+          </HoverPreviewProvider>
         )
         rerender(
-          <EmotePreviewPlayerProvider enabled>
+          <HoverPreviewProvider enabled>
             <Probe />
-          </EmotePreviewPlayerProvider>
+          </HoverPreviewProvider>
         )
 
         await userEvent.click(getByText('show'))
         // After the reset, the first LOAD of the fresh iframe is treated as a
-        // boot (not an emote render), so it must NOT clear the spinner.
+        // boot (not an asset render), so it must NOT clear the spinner.
         fireLoad()
         expect(getSpinner()).not.toBeNull()
+      })
+    })
+
+    describe('and an emote is hovered', () => {
+      it('should leave the preview type and animation for the preview app to resolve', async () => {
+        const { getByText } = renderWithProviders(
+          <HoverPreviewProvider enabled>
+            <Probe />
+          </HoverPreviewProvider>
+        )
+        fireLoad() // boot
+        const postMessage = spyOnPreviewMessages()
+        await userEvent.click(getByText('show'))
+        const options = getLastSentOptions(postMessage)
+        // An emote carries its own animation and plays on any body, so forcing either would
+        // override what the preview app already knows how to do.
+        expect(options.type).toBeUndefined()
+        expect(options.emote).toBeUndefined()
+        expect(options.profile).toBe('default')
+      })
+    })
+
+    describe('and a wearable is hovered', () => {
+      describe('and no avatar is connected', () => {
+        it('should pose a default mannequin pinned to a body shape the item supports', async () => {
+          const { getByText } = renderWithProviders(
+            <HoverPreviewProvider enabled>
+              <Probe source={FEMALE_WEARABLE_SOURCE} />
+            </HoverPreviewProvider>
+          )
+          fireLoad() // boot
+          const postMessage = spyOnPreviewMessages()
+          await userEvent.click(getByText('show'))
+          expect(getLastSentOptions(postMessage)).toEqual(
+            expect.objectContaining({
+              type: PreviewType.AVATAR,
+              emote: PreviewEmote.FASHION,
+              profile: 'default',
+              bodyShape: BodyShape.FEMALE
+            })
+          )
+        })
+      })
+
+      describe('and the connected avatar has no representation for the item', () => {
+        it('should fall back to the mannequin so the wearable is not rendered invisible', async () => {
+          const { getByText } = renderWithProviders(
+            <HoverPreviewProvider enabled>
+              <Probe source={FEMALE_WEARABLE_SOURCE} />
+            </HoverPreviewProvider>,
+            { preloadedState: withAvatar(BodyShape.MALE) }
+          )
+          fireLoad() // boot
+          const postMessage = spyOnPreviewMessages()
+          await userEvent.click(getByText('show'))
+          expect(getLastSentOptions(postMessage)).toEqual(expect.objectContaining({ profile: 'default', bodyShape: BodyShape.FEMALE }))
+        })
+      })
+
+      describe('and the connected avatar can wear the item', () => {
+        it('should dress the connected avatar', async () => {
+          const { getByText } = renderWithProviders(
+            <HoverPreviewProvider enabled>
+              <Probe source={FEMALE_WEARABLE_SOURCE} />
+            </HoverPreviewProvider>,
+            { preloadedState: withAvatar(BodyShape.FEMALE) }
+          )
+          fireLoad() // boot
+          const postMessage = spyOnPreviewMessages()
+          await userEvent.click(getByText('show'))
+          expect(getLastSentOptions(postMessage)).toEqual(expect.objectContaining({ profile: AVATAR_ADDRESS, bodyShape: null }))
+        })
       })
     })
   })

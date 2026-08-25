@@ -1,33 +1,49 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useSelector } from 'react-redux'
-import { Network, PreviewMessageType, PreviewOptions, PreviewUnityMode, Rarity, sendMessage } from '@dcl/schemas'
+import {
+  BodyShape,
+  NFTCategory,
+  Network,
+  PreviewEmote,
+  PreviewMessageType,
+  PreviewOptions,
+  PreviewType,
+  PreviewUnityMode,
+  Rarity,
+  sendMessage
+} from '@dcl/schemas'
 import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
 import { Loader } from 'decentraland-ui'
 import { WearablePreview } from 'decentraland-ui2'
 import { config } from '../../config'
 import { getWallet } from '../../modules/wallet/selectors'
-import './EmotePreviewPlayer.css'
+import './HoverPreview.css'
 
-const PREVIEW_IFRAME_ID = 'emote-preview-player-iframe'
+const PREVIEW_IFRAME_ID = 'hover-preview-iframe'
 
-export type EmotePreviewSource = {
+export type HoverPreviewSource = {
+  category: NFTCategory
   contractAddress?: string
   itemId?: string | null
   tokenId?: string | null
   urn?: string | null
   network?: Network
   rarity?: Rarity
+  // Wearables only: the body shapes the item declares a representation for.
+  bodyShapes?: BodyShape[]
 }
 
-type EmotePreviewPlayerContextValue = {
-  show: (target: HTMLElement, source: EmotePreviewSource) => void
-  hide: () => void
+type HoverPreviewContextValue = {
+  show: (target: HTMLElement, source: HoverPreviewSource) => void
+  // Hiding is scoped to the element that asked for the preview: a card torn down while the pointer
+  // has already moved on must not pull the overlay out from under the card now holding it.
+  hide: (target?: HTMLElement) => void
 }
 
-const EmotePreviewPlayerContext = createContext<EmotePreviewPlayerContextValue | null>(null)
+const HoverPreviewContext = createContext<HoverPreviewContextValue | null>(null)
 
-export const useEmotePreviewPlayer = (): EmotePreviewPlayerContextValue | null => useContext(EmotePreviewPlayerContext)
+export const useHoverPreview = (): HoverPreviewContextValue | null => useContext(HoverPreviewContext)
 
 type Rect = { top: number; left: number; width: number; height: number }
 
@@ -38,13 +54,45 @@ type ProviderProps = {
 
 type PreviewEnvConfig = {
   profile: string
+  avatarBodyShape: BodyShape | null
   peerUrl: string
   marketplaceServerUrl: string
 }
 
-const sourceToOptions = (src: EmotePreviewSource, env: PreviewEnvConfig): PreviewOptions => {
+// Body shape URNs only come in male and female flavours, but they reach us in several shapes
+// (the `BodyShape` enum, a profile's raw `bodyShape` string), so we normalize by name.
+const toBodyShape = (urn?: string | null): BodyShape | null =>
+  urn ? (urn.includes('BaseFemale') ? BodyShape.FEMALE : BodyShape.MALE) : null
+
+/**
+ * How the hovered asset gets mounted on an avatar.
+ *
+ * Emotes are body-shape agnostic — any avatar can play them — so they keep the iframe's own avatar
+ * handling untouched. A wearable, on the other hand, only has a mesh for the shapes it declares a
+ * representation for: worn on any other body it renders as nothing at all. So we dress the connected
+ * avatar only when it can actually wear the item, and otherwise fall back to the default mannequin
+ * pinned to a shape the item does support.
+ */
+const getAvatarOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): PreviewOptions => {
+  if (src.category !== NFTCategory.WEARABLE) {
+    return { profile: env.profile }
+  }
+
+  const shapes = (src.bodyShapes ?? []).map(toBodyShape)
+  const canBeWornByAvatar = env.avatarBodyShape !== null && shapes.includes(env.avatarBodyShape)
+
+  return {
+    type: PreviewType.AVATAR,
+    // Land straight into a fashion pose so the avatar never flashes a T-pose.
+    emote: PreviewEmote.FASHION,
+    profile: canBeWornByAvatar ? env.profile : 'default',
+    bodyShape: canBeWornByAvatar ? null : (shapes[0] ?? null)
+  }
+}
+
+const sourceToOptions = (src: HoverPreviewSource, env: PreviewEnvConfig): PreviewOptions => {
   const base: PreviewOptions = {
-    profile: env.profile,
+    ...getAvatarOptions(src, env),
     peerUrl: env.peerUrl,
     marketplaceServerUrl: env.marketplaceServerUrl,
     background: Rarity.getColor(src.rarity ?? Rarity.COMMON)
@@ -60,7 +108,7 @@ const sourceToOptions = (src: EmotePreviewSource, env: PreviewEnvConfig): Previe
   }
 }
 
-const dispatchUpdate = (src: EmotePreviewSource, env: PreviewEnvConfig): boolean => {
+const dispatchUpdate = (src: HoverPreviewSource, env: PreviewEnvConfig): boolean => {
   const iframe = document.getElementById(PREVIEW_IFRAME_ID) as HTMLIFrameElement | null
   if (!iframe?.contentWindow) return false
   sendMessage(iframe.contentWindow, PreviewMessageType.UPDATE, {
@@ -69,29 +117,29 @@ const dispatchUpdate = (src: EmotePreviewSource, env: PreviewEnvConfig): boolean
   return true
 }
 
-// Stable identity of an emote, matching the discriminator used in
-// sourceToOptions. Used to tell whether a hover targets the emote that's
+// Stable identity of an asset, matching the discriminator used in
+// sourceToOptions. Used to tell whether a hover targets the asset that's
 // already rendered in the iframe (so we don't wait on a LOAD that will
 // never come) versus a genuinely new one.
-const keyOf = (src: EmotePreviewSource): string => {
+const keyOf = (src: HoverPreviewSource): string => {
   if (src.network === Network.ETHEREUM && src.urn) {
     return `eth:${src.urn}`
   }
   return `${src.contractAddress ?? ''}:${src.itemId ?? src.tokenId ?? ''}`
 }
 
-export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = true, children }) => {
+export const HoverPreviewProvider: React.FC<ProviderProps> = ({ enabled = true, children }) => {
   const [rect, setRect] = useState<Rect | null>(null)
   const [isVisible, setIsVisible] = useState(false)
   const [rarity, setRarity] = useState<Rarity>(Rarity.COMMON)
   const [isControllable, setIsControllable] = useState(false)
-  const [isEmoteLoading, setIsEmoteLoading] = useState(false)
+  const [isAssetLoading, setIsAssetLoading] = useState(false)
   const targetRef = useRef<HTMLElement | null>(null)
-  const pendingSourceRef = useRef<EmotePreviewSource | null>(null)
+  const pendingSourceRef = useRef<HoverPreviewSource | null>(null)
   const hasInitiallyLoadedRef = useRef(false)
-  // Identity of the emote the user is currently hovering, and of the one the
+  // Identity of the asset the user is currently hovering, and of the one the
   // iframe last finished loading. We drive the spinner off these instead of
-  // counting LOAD events: re-hovering an already-loaded emote (or rapid
+  // counting LOAD events: re-hovering an already-loaded asset (or rapid
   // enter/exit on the same card) sends an UPDATE with identical options, so
   // the iframe doesn't rebuild its scene and never emits a LOAD — a LOAD
   // counter would then drift and leave the spinner stuck forever.
@@ -101,26 +149,24 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
   const wallet = useSelector(getWallet)
   const profiles = useSelector(getProfiles)
 
+  const avatar = useMemo(() => (wallet?.address ? profiles[wallet.address]?.avatars[0] : undefined), [wallet?.address, profiles])
+
   // Resolve the user's profile address whenever wallet/profile data changes.
   // We DON'T pass `profile` to the React WearablePreview component (the
   // iframe is mounted once with profile=default to keep its URL stable and
   // avoid full reloads when the profile becomes available mid-session).
   // Instead we inject `profile` into every UPDATE we send on hover, so the
-  // emote is rendered on the user's avatar when they're logged in.
-  const profileAddress = useMemo(() => {
-    if (wallet?.address && profiles[wallet.address]?.avatars[0]) {
-      return wallet.address.toLowerCase()
-    }
-    return 'default'
-  }, [wallet?.address, profiles])
+  // asset is rendered on the user's avatar when they're logged in.
+  const profileAddress = useMemo(() => (wallet?.address && avatar ? wallet.address.toLowerCase() : 'default'), [wallet?.address, avatar])
 
   const envConfig = useMemo<PreviewEnvConfig>(
     () => ({
       profile: profileAddress,
+      avatarBodyShape: toBodyShape(avatar?.avatar.bodyShape),
       peerUrl: config.get('PEER_URL'),
       marketplaceServerUrl: config.get('MARKETPLACE_SERVER_URL')
     }),
-    [profileAddress]
+    [profileAddress, avatar]
   )
 
   // Source of truth for whether the iframe should run against testnets:
@@ -151,7 +197,7 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
   }, [isVisible])
 
   const show = useCallback(
-    (target: HTMLElement, source: EmotePreviewSource) => {
+    (target: HTMLElement, source: HoverPreviewSource) => {
       targetRef.current = target
       setRarity(source.rarity ?? Rarity.COMMON)
       const r = target.getBoundingClientRect()
@@ -159,10 +205,10 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
       setIsVisible(true)
       const key = keyOf(source)
       currentKeyRef.current = key
-      // If this emote is already rendered in the iframe the UPDATE won't
+      // If this asset is already rendered in the iframe the UPDATE won't
       // trigger a rebuild (no LOAD will follow), so don't show a spinner that
       // would never clear. Otherwise wait for its LOAD.
-      setIsEmoteLoading(key !== loadedKeyRef.current)
+      setIsAssetLoading(key !== loadedKeyRef.current)
       if (isControllable) {
         dispatchUpdate(source, envConfig)
         pendingSourceRef.current = null
@@ -173,12 +219,13 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
     [isControllable, envConfig]
   )
 
-  const hide = useCallback(() => {
+  const hide = useCallback((target?: HTMLElement) => {
+    if (target && targetRef.current !== target) return
     targetRef.current = null
     setIsVisible(false)
-    setIsEmoteLoading(false)
+    setIsAssetLoading(false)
     pendingSourceRef.current = null
-    // Keep loadedKeyRef so re-hovering the same emote stays instant.
+    // Keep loadedKeyRef so re-hovering the same asset stays instant.
   }, [])
 
   // Flush any pending hover request once the iframe is controllable.
@@ -189,11 +236,12 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
     }
   }, [isControllable, envConfig])
 
-  // When the provider is disabled (user left the emotes section) the overlay
-  // and its iframe unmount. Reset the lifecycle refs/state so that when the
-  // section is re-entered a fresh iframe boots and is treated as not-yet
-  // controllable — otherwise the first hover would postMessage an UPDATE to
-  // an iframe that hasn't finished initializing and the emote silently fails.
+  // When the provider is disabled (user left a section with previewable cards)
+  // the overlay and its iframe unmount. Reset the lifecycle refs/state so that
+  // when such a section is re-entered a fresh iframe boots and is treated as
+  // not-yet controllable — otherwise the first hover would postMessage an
+  // UPDATE to an iframe that hasn't finished initializing and the asset
+  // silently fails to render.
   useEffect(() => {
     if (!enabled) {
       hasInitiallyLoadedRef.current = false
@@ -203,14 +251,14 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
       pendingSourceRef.current = null
       setIsControllable(false)
       setIsVisible(false)
-      setIsEmoteLoading(false)
+      setIsAssetLoading(false)
     }
   }, [enabled])
 
   // onLoad fires once on initial iframe boot (with the default profile, no
-  // emote) and AGAIN every time an UPDATE swaps the urn/itemId — the iframe
+  // asset) and AGAIN every time an UPDATE swaps the urn/itemId — the iframe
   // rebuilds the Babylon scene and re-emits LOAD. The first LOAD only marks
-  // the iframe controllable. Subsequent LOADs mean an emote scene finished
+  // the iframe controllable. Subsequent LOADs mean an asset scene finished
   // rendering, so we record what's now loaded and clear the spinner.
   const handlePreviewLoad = useCallback(() => {
     if (!hasInitiallyLoadedRef.current) {
@@ -219,16 +267,16 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
       return
     }
     loadedKeyRef.current = currentKeyRef.current
-    setIsEmoteLoading(false)
+    setIsAssetLoading(false)
   }, [])
 
-  // If the iframe fails to render an emote it emits ERROR instead of LOAD, so
+  // If the iframe fails to render an asset it emits ERROR instead of LOAD, so
   // clear the spinner here too — otherwise a failed load would leave it stuck.
   const handlePreviewError = useCallback(() => {
-    setIsEmoteLoading(false)
+    setIsAssetLoading(false)
   }, [])
 
-  const contextValue = useMemo<EmotePreviewPlayerContextValue>(() => ({ show, hide }), [show, hide])
+  const contextValue = useMemo<HoverPreviewContextValue>(() => ({ show, hide }), [show, hide])
 
   const overlayStyle = useMemo<React.CSSProperties | undefined>(() => {
     if (!isVisible || !rect) return undefined
@@ -243,7 +291,7 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
   }, [isVisible, rect, rarity])
 
   const overlay = enabled ? (
-    <div className={`EmotePreviewPlayer ${isVisible ? 'is-visible' : 'is-warming'}`} style={overlayStyle} aria-hidden>
+    <div className={`HoverPreview ${isVisible ? 'is-visible' : 'is-warming'}`} style={overlayStyle} aria-hidden>
       <WearablePreview
         id={PREVIEW_IFRAME_ID}
         profile="default"
@@ -264,14 +312,14 @@ export const EmotePreviewPlayerProvider: React.FC<ProviderProps> = ({ enabled = 
         onLoad={handlePreviewLoad}
         onError={handlePreviewError}
       />
-      {isVisible && isEmoteLoading ? <Loader className="EmotePreviewPlayer__spinner" active size="large" /> : null}
+      {isVisible && isAssetLoading ? <Loader className="HoverPreview__spinner" active size="large" /> : null}
     </div>
   ) : null
 
   return (
-    <EmotePreviewPlayerContext.Provider value={contextValue}>
+    <HoverPreviewContext.Provider value={contextValue}>
       {children}
       {overlay && typeof document !== 'undefined' ? createPortal(overlay, document.body) : null}
-    </EmotePreviewPlayerContext.Provider>
+    </HoverPreviewContext.Provider>
   )
 }

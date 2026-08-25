@@ -10,6 +10,15 @@ export const isAccountView = (view: View) => accountViews.has(view)
 export const isListsSection = (section?: Section) => Sections.decentraland.LISTS === section
 export const isLandSection = (section?: Section) => !!section && landSections.has(section)
 
+/**
+ * Sections whose grid is made of wearables and/or emotes — the only assets with a 3D model to render
+ * on card hover. Both come in a base section plus one per category (`wearables_hat`, `emotes_dance`,
+ * …), hence the prefix match. Favorites lists are in because a list only ever holds those two.
+ */
+export const isHoverPreviewSection = (section?: Section) =>
+  !!section &&
+  (section.startsWith(Sections.decentraland.WEARABLES) || section.startsWith(Sections.decentraland.EMOTES) || isListsSection(section))
+
 export const useScrollSectionIntoView = <T>(
   ref: React.RefObject<HTMLDivElement>,
   prefix: string,

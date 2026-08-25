@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { Link, useLocation } from 'react-router-dom'
 import { Item, Network, NFTCategory, RentalListing } from '@dcl/schemas'
@@ -23,8 +23,8 @@ import { PageName, SortBy } from '../../modules/routing/types'
 import { PriceDenomination } from '../../modules/trade/denomination'
 import { useTradePriceDenomination } from '../../modules/trade/hooks'
 import { AssetImage } from '../AssetImage'
-import { useEmotePreviewPlayer } from '../EmotePreviewPlayer'
 import { FavoritesCounter } from '../FavoritesCounter'
+import { useHoverPreview } from '../HoverPreview'
 import { Mana } from '../Mana'
 import { PeggedManaPrice } from '../PeggedManaPrice'
 import { EmoteTags } from './EmoteTags'
@@ -35,6 +35,10 @@ import { formatWeiToAssetCard, getCatalogCardInformation } from './utils'
 import { WearableTags } from './WearableTags'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
+
+// A hover has to look deliberate before it costs a 3D load: sweeping the pointer across a row on the
+// way somewhere else would otherwise rebuild the preview scene once per card it crosses.
+const HOVER_INTENT_MS = 120
 
 const RentalPrice = ({ asset, rentalPricePerDay }: { asset: Asset; rentalPricePerDay: string }) => {
   return (
@@ -104,39 +108,67 @@ const AssetCard = (props: Props) => {
   const isUSDPegged = useTradePriceDenomination(priceTradeId) === PriceDenomination.USD_PEGGED
   const location = useLocation()
   const showListedTag = pageName === PageName.ACCOUNT && Boolean(price) && location.pathname !== locations.root()
-  const emotePreviewPlayer = useEmotePreviewPlayer()
+  const hoverPreview = useHoverPreview()
   const cardContainerRef = useRef<HTMLDivElement | null>(null)
-  const isEmoteCard = asset.category === NFTCategory.EMOTE
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  // The element this card handed to the preview, so it can release it without stealing the overlay
+  // from whichever card holds it now.
+  const previewTargetRef = useRef<HTMLElement | null>(null)
+  // Only wearables and emotes have something to render in 3D: the rest of the
+  // catalog (land, estates, names) keeps its static image.
+  const isPreviewableCard = asset.category === NFTCategory.EMOTE || asset.category === NFTCategory.WEARABLE
   // `useMobileMediaQuery` is viewport-width based, so it returns false on
   // touch laptops/large tablets. Gate the hover preview on pointer
   // capability too — on touch-only devices `mouseenter` fires on tap and
   // would race the click that navigates to the asset detail page.
   const supportsHover = useMemo(() => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches, [])
-  const canShowEmotePreview = isEmoteCard && !isMobile && supportsHover && !!emotePreviewPlayer
+  const canShowHoverPreview = isPreviewableCard && !isMobile && supportsHover && !!hoverPreview
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
 
-  const handleEmoteHoverEnter = useCallback(() => {
-    if (!emotePreviewPlayer || !canShowEmotePreview) return
-    const container = cardContainerRef.current
-    if (!container) return
-    const imageEl = container.querySelector<HTMLElement>('.AssetImage')
-    if (!imageEl) return
-    emotePreviewPlayer.show(imageEl, {
-      contractAddress: asset.contractAddress,
-      itemId: 'itemId' in asset ? asset.itemId : null,
-      tokenId: 'tokenId' in asset ? asset.tokenId : null,
-      urn: 'urn' in asset ? asset.urn ?? null : null,
-      network: asset.network,
-      rarity: asset.data.emote?.rarity
-    })
-  }, [emotePreviewPlayer, canShowEmotePreview, asset])
+  const handleHoverPreviewEnter = useCallback(() => {
+    if (!hoverPreview || !canShowHoverPreview) return
+    clearTimeout(hoverTimeoutRef.current)
+    hoverTimeoutRef.current = setTimeout(() => {
+      const imageEl = cardContainerRef.current?.querySelector<HTMLElement>('.AssetImage')
+      if (!imageEl) return
+      previewTargetRef.current = imageEl
+      hoverPreview.show(imageEl, {
+        category: asset.category,
+        contractAddress: asset.contractAddress,
+        itemId: 'itemId' in asset ? asset.itemId : null,
+        tokenId: 'tokenId' in asset ? asset.tokenId : null,
+        urn: 'urn' in asset ? (asset.urn ?? null) : null,
+        network: asset.network,
+        rarity: asset.data.emote?.rarity ?? asset.data.wearable?.rarity,
+        bodyShapes: asset.data.wearable?.bodyShapes
+      })
+    }, HOVER_INTENT_MS)
+  }, [hoverPreview, canShowHoverPreview, asset])
 
-  const handleEmoteHoverLeave = useCallback(() => {
-    if (!emotePreviewPlayer || !canShowEmotePreview) return
-    emotePreviewPlayer.hide()
-  }, [emotePreviewPlayer, canShowEmotePreview])
+  const handleHoverPreviewLeave = useCallback(() => {
+    clearTimeout(hoverTimeoutRef.current)
+    if (!hoverPreview || !canShowHoverPreview) return
+    // A card the pointer merely crossed never asked for the preview, so it has nothing to release —
+    // and releasing anyway would take the overlay from the card the pointer has landed on.
+    if (previewTargetRef.current) {
+      hoverPreview.hide(previewTargetRef.current)
+    }
+  }, [hoverPreview, canShowHoverPreview])
+
+  // A card can be torn down mid-hover — a filter change, a navigation — without ever firing
+  // mouseleave, leaving a pending timer and an overlay tracking a detached node.
+  useEffect(
+    () => () => {
+      clearTimeout(hoverTimeoutRef.current)
+      if (previewTargetRef.current) {
+        hoverPreview?.hide(previewTargetRef.current)
+      }
+    },
+    [hoverPreview]
+  )
+
   const rentalPricePerDay: string | null = useMemo(() => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null), [rental])
 
   const catalogItemInformation = useMemo(() => {
@@ -217,8 +249,8 @@ const AssetCard = (props: Props) => {
   return (
     <div
       ref={setWrapperRef}
-      onMouseEnter={canShowEmotePreview ? handleEmoteHoverEnter : undefined}
-      onMouseLeave={canShowEmotePreview ? handleEmoteHoverLeave : undefined}
+      onMouseEnter={canShowHoverPreview ? handleHoverPreviewEnter : undefined}
+      onMouseLeave={canShowHoverPreview ? handleHoverPreviewLeave : undefined}
     >
       <Card
         className={`AssetCard ${isCatalogItem(asset) ? 'catalog' : ''}`}
