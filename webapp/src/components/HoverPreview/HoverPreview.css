@@ -1,4 +1,4 @@
-.EmotePreviewPlayer {
+.HoverPreview {
   position: fixed;
   /* Above the browse grid content but below Semantic UI's fixed navbar (101),
      modals/dimmers (1000) and popups (1900) so the ephemeral preview never
@@ -15,7 +15,7 @@
 
 /* While warming we keep the iframe rendered (not visibility:hidden, which can
    pause iframe rendering in some browsers) but invisible to the user. */
-.EmotePreviewPlayer.is-warming {
+.HoverPreview.is-warming {
   top: 0;
   left: 0;
   width: 320px;
@@ -25,12 +25,12 @@
   clip-path: inset(50%);
 }
 
-.EmotePreviewPlayer.is-visible {
+.HoverPreview.is-visible {
   opacity: 1;
   clip-path: none;
 }
 
-.EmotePreviewPlayer iframe {
+.HoverPreview iframe {
   width: 100% !important;
   height: 100% !important;
   border: 0 !important;
@@ -40,20 +40,20 @@
 
 /* Semantic UI's Loader is positioned via top/left:50% with translate. We
    anchor it to the overlay rather than to its (non-existent) Dimmer parent. */
-.EmotePreviewPlayer .ui.loader.EmotePreviewPlayer__spinner {
+.HoverPreview .ui.loader.HoverPreview__spinner {
   position: absolute;
   top: 50%;
   left: 50%;
   z-index: 2;
 }
 
-.EmotePreviewPlayer .ui.loader.EmotePreviewPlayer__spinner:before,
-.EmotePreviewPlayer .ui.loader.EmotePreviewPlayer__spinner:after {
+.HoverPreview .ui.loader.HoverPreview__spinner:before,
+.HoverPreview .ui.loader.HoverPreview__spinner:after {
   /* Force the spinner ring to be visible regardless of any inherited dimmer
      styling from the page. */
   border-color: rgba(255, 255, 255, 0.25);
 }
 
-.EmotePreviewPlayer .ui.loader.EmotePreviewPlayer__spinner:after {
+.HoverPreview .ui.loader.HoverPreview__spinner:after {
   border-top-color: #fff;
 }
