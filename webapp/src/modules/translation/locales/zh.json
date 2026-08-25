@@ -303,7 +303,7 @@
     "subtitle": "欢迎来到虚拟世界的一站式商店, 获取最好的数字资产。",
     "get_started": "开始浏览",
     "home_trending_items": "热门商品",
-    "home_trending_items_subtitle": "过去 24 小时内的畅销商品 🔥",
+    "home_trending_items_subtitle": "过去一周内的畅销商品 🔥",
     "home_trending_items_explore_all": "探索所有",
     "home_trending_items_empty_message": "我们无法获取最新流行的可穿戴设备。{br}{try_again_link} 或 {explore_all_link}",
     "home_trending_items_try_again": "再试一次",
