@@ -17,6 +17,7 @@ import { useFingerprint } from '../../../modules/nft/hooks'
 import { getSellItemStatus, getError } from '../../../modules/order/selectors'
 import { getDefaultExpirationDate, INPUT_FORMAT } from '../../../modules/order/utils'
 import { VendorFactory } from '../../../modules/vendor'
+import { getLatestOffChainMarketplaceContract } from '../../../utils/trades'
 import ErrorBanner from '../../ErrorBanner'
 import { ListingPrice } from '../../ListingPrice'
 import { ManaField } from '../../ManaField'
@@ -77,7 +78,7 @@ const SellModal = ({
   const parsedValueToConfirm = useMemo(() => parseFloat(price).toString(), [price])
   const isConfirmDisabled = parsedValueToConfirm !== confirmedInput || isCreatingOrder || isLoadingAuthorization
   const marketplaceContract = getDecentralandContract(ContractName.Marketplace, nft.chainId)
-  const offChainOrdersContract = getDecentralandContract(ContractName.OffChainMarketplaceV2, nft.chainId)
+  const offChainOrdersContract = getLatestOffChainMarketplaceContract(nft.chainId)
 
   const authorizedContract = offChainOrdersContract || marketplaceContract
   // The server validates `extra` against on-chain getFingerprintV2, so we must

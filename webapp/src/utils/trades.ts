@@ -44,12 +44,38 @@ export const OFFCHAIN_MARKETPLACE_TYPES: Record<string, TypedDataField[]> = {
   ]
 }
 
+/**
+ * Off-chain marketplace versions, newest first.
+ *
+ * The EIP-712 domain names its verifying contract, so the version a trade is signed against is part of
+ * what the signer signed, and every approval the UI asks for has to name that same contract. V3 is
+ * testnet-only for now, so mainnet has to keep using V2 rather than fail.
+ */
+const OFF_CHAIN_MARKETPLACE_CONTRACT_NAMES = [ContractName.OffChainMarketplaceV3, ContractName.OffChainMarketplaceV2]
+
+/**
+ * The newest off-chain marketplace deployed on a chain.
+ *
+ * `getContract` THROWS for a version that is not deployed on the given chain rather than returning a
+ * falsy value, which is why each candidate is tried in turn.
+ */
+export function getLatestOffChainMarketplaceContract(chainId: ChainId): ContractData {
+  for (const contractName of OFF_CHAIN_MARKETPLACE_CONTRACT_NAMES) {
+    try {
+      return getContract(contractName, chainId)
+    } catch (_error) {
+      continue
+    }
+  }
+  throw new Error(`No off-chain marketplace contract exists on chain ${chainId}`)
+}
+
 export async function getOffChainMarketplaceContract(chainId: ChainId) {
   const provider = await getNetworkProvider(chainId)
   if (!provider) {
     throw new Error('Could not get connected provider')
   }
-  const { address, abi } = getContract(ContractName.OffChainMarketplaceV2, chainId)
+  const { address, abi } = getLatestOffChainMarketplaceContract(chainId)
   const instance = new ethers.Contract(address, abi, new ethers.providers.Web3Provider(provider))
   return instance
 }
@@ -60,7 +86,7 @@ export async function getOffChainMarketplaceContractInstance(chainId: ChainId) {
     throw new Error('Could not get connected provider')
   }
 
-  const contractData = getContract(ContractName.OffChainMarketplaceV2, chainId)
+  const contractData = getLatestOffChainMarketplaceContract(chainId)
   const contract = new ethers.Contract(contractData.address, contractData.abi, new ethers.providers.Web3Provider(provider))
   return { contractData, contract }
 }
@@ -146,11 +172,7 @@ export function getOnChainTrade(trade: Trade, sentBeneficiaryAddress: string): O
 }
 
 export async function getTradeSignature(trade: Omit<TradeCreation, 'signature' | 'contract'>) {
-  const marketplaceContract: ContractData = getContract(ContractName.OffChainMarketplaceV2, trade.chainId)
-
-  if (!marketplaceContract) {
-    throw new Error(`The ${ContractName.OffChainMarketplace} contract doesn't exist on chain ${trade.chainId}`)
-  }
+  const marketplaceContract: ContractData = getLatestOffChainMarketplaceContract(trade.chainId)
 
   const signer = (await getSigner()) as ethers.providers.JsonRpcSigner
   const SALT = ethers.utils.hexZeroPad(ethers.utils.hexlify(trade.chainId), 32)

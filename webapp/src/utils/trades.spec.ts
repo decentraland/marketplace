@@ -14,7 +14,14 @@ import * as ethUtils from 'decentraland-dapps/dist/lib/eth'
 import { TradeService } from 'decentraland-dapps/dist/modules/trades/TradeService'
 import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { fromMillisecondsToSeconds } from '../lib/time'
-import { OFFCHAIN_MARKETPLACE_TYPES, getTradeSignature, getOnChainTrade, getValueForTradeAsset, estimateTradeGas } from './trades'
+import {
+  OFFCHAIN_MARKETPLACE_TYPES,
+  getTradeSignature,
+  getOnChainTrade,
+  getValueForTradeAsset,
+  estimateTradeGas,
+  getLatestOffChainMarketplaceContract
+} from './trades'
 
 jest.mock('decentraland-dapps/dist/lib/eth', () => {
   const module = jest.requireActual('decentraland-dapps/dist/lib/eth')
@@ -92,10 +99,8 @@ describe('when getting the trade signature', () => {
       } as Omit<TradeCreation, 'signature'>
     })
 
-    it('should throw an error', async () => {
-      await expect(getTradeSignature(trade)).rejects.toThrowError(
-        'Could not get a valid contract for OffChainMarketplaceV2 using chain 42161'
-      )
+    it('should throw naming the chain that has no off-chain marketplace', async () => {
+      await expect(getTradeSignature(trade)).rejects.toThrowError('No off-chain marketplace contract exists on chain 42161')
     })
   })
 
@@ -147,7 +152,7 @@ describe('when getting the trade signature', () => {
       }
 
       const SALT = ethers.utils.hexZeroPad(ethers.utils.hexlify(trade.chainId), 32)
-      offchainMarketplaceContract = getContract(ContractName.OffChainMarketplaceV2, trade.chainId)
+      offchainMarketplaceContract = getLatestOffChainMarketplaceContract(trade.chainId)
       domain = {
         name: offchainMarketplaceContract.name,
         version: offchainMarketplaceContract.version,
@@ -406,6 +411,40 @@ describe('when estimating trade gas', () => {
 
     it('should propagate the error', async () => {
       return expect(estimateTradeGas(tradeId, undefined, chainId, buyerAddress, provider)).rejects.toThrow('Gas estimation failed')
+    })
+  })
+})
+
+describe('when getting the latest off-chain marketplace contract', () => {
+  let chainId: ChainId
+
+  describe('and the chain has a V3 deployment', () => {
+    beforeEach(() => {
+      chainId = ChainId.ETHEREUM_SEPOLIA
+    })
+
+    it('should return V3, so a listing and its approval both name the newest deployment', () => {
+      expect(getLatestOffChainMarketplaceContract(chainId)).toEqual(getContract(ContractName.OffChainMarketplaceV3, chainId))
+    })
+  })
+
+  describe('and the chain has no V3 deployment', () => {
+    beforeEach(() => {
+      chainId = ChainId.ETHEREUM_MAINNET
+    })
+
+    it('should fall back to V2 rather than throw', () => {
+      expect(getLatestOffChainMarketplaceContract(chainId)).toEqual(getContract(ContractName.OffChainMarketplaceV2, chainId))
+    })
+  })
+
+  describe('and the chain has no off-chain marketplace at all', () => {
+    beforeEach(() => {
+      chainId = ChainId.ARBITRUM_MAINNET
+    })
+
+    it('should throw naming the chain', () => {
+      expect(() => getLatestOffChainMarketplaceContract(chainId)).toThrowError('No off-chain marketplace contract exists on chain 42161')
     })
   })
 })

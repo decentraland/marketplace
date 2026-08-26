@@ -42,14 +42,24 @@ const Authorization = (props: Props) => {
 
   let contract
   let name: string = ''
-  const offchainContract = getDecentralandContract(ContractName.OffChainMarketplace, authorization.chainId)
-  const offchainContractV2 = getDecentralandContract(ContractName.OffChainMarketplaceV2, authorization.chainId)
-  // This is fix to get the correct contract name for the offchain marketplace
-  if (authorizedAddress === offchainContract.address) {
-    contract = offchainContract
-    name = contract.name
-  } else if (authorizedAddress === offchainContractV2.address) {
-    contract = offchainContractV2
+  // Every off-chain marketplace version, so an approval granted to any of them is named here instead of
+  // falling through to the generic lookup, which does not know these addresses. Each lookup is guarded
+  // because getContract THROWS for a version a chain does not have, and V3 is testnet-only for now.
+  const offChainMarketplaces = [
+    ContractName.OffChainMarketplace,
+    ContractName.OffChainMarketplaceV2,
+    ContractName.OffChainMarketplaceV3
+  ].flatMap(contractName => {
+    try {
+      return [getDecentralandContract(contractName, authorization.chainId)]
+    } catch (_error) {
+      return []
+    }
+  })
+
+  const offChainMarketplace = offChainMarketplaces.find(({ address }) => authorizedAddress === address)
+  if (offChainMarketplace) {
+    contract = offChainMarketplace
     name = contract.name
   } else {
     contract = getContract({ address: authorizedAddress })
