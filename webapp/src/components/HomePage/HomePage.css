@@ -1,3 +1,7 @@
+.HomePageBanner {
+  margin-bottom: 24px;
+}
+
 .HomePageHero.dcl.hero {
   height: var(--page-header-height);
 }

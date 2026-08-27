@@ -227,7 +227,11 @@ const HomePage = (props: Props) => {
           out of the way of the landing page's first paint. */}
       <HoverPreviewProvider>
         <ListsLaunchModal />
-        {isCampaignHomepageBannerEnabled ? <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} /> : null}
+        {isCampaignHomepageBannerEnabled ? (
+          <div className="HomePageBanner">
+            <Banner id={MARKETPLACE_HOMEPAGE_BANNER_ID} />
+          </div>
+        ) : null}
         <Page className="HomePage">
           {firstViewsSection.map(renderSlideshow)}
           <RankingsTable />
