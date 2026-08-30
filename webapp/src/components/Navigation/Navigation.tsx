@@ -74,7 +74,7 @@ const Navigation = (props: Props) => {
               <Link to={locations.lands({ section: Section.LAND, assetType: AssetType.NFT, isMap: false })}>
                 <Tabs.Tab active={activeTab === NavigationTab.LANDS}>{t('navigation.land')}</Tabs.Tab>
               </Link>
-              <Link to={locations.claimName()}>
+              <Link to={locations.names({ section: Section.ENS, vendor: VendorName.DECENTRALAND, page: 1, sortBy: SortBy.NEWEST })}>
                 <Tabs.Tab active={activeTab === NavigationTab.NAMES}>{t('navigation.names')}</Tabs.Tab>
               </Link>
               <Link to={locations.defaultCurrentAccount()}>
