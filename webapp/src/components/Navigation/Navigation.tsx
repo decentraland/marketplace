@@ -71,7 +71,7 @@ const Navigation = (props: Props) => {
           </Link>
           {!isIAP && (
             <>
-              <Link to={locations.lands({ section: Section.LAND, assetType: AssetType.NFT })}>
+              <Link to={locations.lands({ section: Section.LAND, assetType: AssetType.NFT, isMap: false })}>
                 <Tabs.Tab active={activeTab === NavigationTab.LANDS}>{t('navigation.land')}</Tabs.Tab>
               </Link>
               <Link to={locations.claimName()}>
