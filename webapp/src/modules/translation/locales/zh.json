@@ -1048,10 +1048,6 @@
     "disallowed": "您未授权{contract_link}合同代表您操作{symbol}",
     "disapproved": "您未授权{contract_link}合同代表您操作{symbol}"
   },
-  "authorization_modal": {
-    "title": "授权{token}",
-    "description": "欲继续操作, 您需要授权{contract}合同代表您操作{token}令牌。{br}只需执行一次, 并且您随时可以在{settings_link}页上管理您的授权。"
-  },
   "transfer_page": {
     "title": "转让{category}",
     "subtitle": "您即将转移{name}。",
