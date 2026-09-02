@@ -7,6 +7,7 @@ import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization
 import { changeAccount, connectWalletSuccess } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getContract as getContractFromDecentralandTransactions, ContractName } from 'decentraland-transactions'
+import { getDeployedOffChainMarketplaceContracts } from '../../utils/trades'
 import { getContractNames, VendorName } from '../vendor'
 import { ContractService } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
@@ -252,14 +253,17 @@ describe('when handling the fetch contracts request', () => {
         .put(fetchContractsSuccess([]))
         .put(
           fetchAuthorizationsRequest([
-            {
+            // One per DEPLOYED off-chain marketplace version, so an allowance on an older one can still be
+            // seen and revoked. Built from the same enumerator the saga uses rather than a fixed address,
+            // because which versions exist is a property of the chain, not of this test.
+            ...getDeployedOffChainMarketplaceContracts(ChainId.ETHEREUM_GOERLI).map(({ contract }) => ({
               address: wallet.address,
-              authorizedAddress: offChainMarketplaceEthereum.address,
+              authorizedAddress: contract.address,
               contractAddress: manaEthereum.address,
               contractName: ContractName.MANAToken,
               chainId: ChainId.ETHEREUM_GOERLI,
               type: AuthorizationType.ALLOWANCE
-            },
+            })),
             {
               address: wallet.address,
               authorizedAddress: creditsManager.address,
@@ -268,14 +272,14 @@ describe('when handling the fetch contracts request', () => {
               chainId: ChainId.MATIC_AMOY,
               type: AuthorizationType.ALLOWANCE
             },
-            {
+            ...getDeployedOffChainMarketplaceContracts(ChainId.MATIC_AMOY).map(({ contract }) => ({
               address: wallet.address,
-              authorizedAddress: offChainMarketplaceMatic.address,
+              authorizedAddress: contract.address,
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
               chainId: ChainId.MATIC_AMOY,
               type: AuthorizationType.ALLOWANCE
-            },
+            })),
             {
               address: wallet.address,
               authorizedAddress: marketplaceEthereum.address,

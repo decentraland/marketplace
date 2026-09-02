@@ -54,11 +54,43 @@ export const OFFCHAIN_MARKETPLACE_TYPES: Record<string, TypedDataField[]> = {
 const OFF_CHAIN_MARKETPLACE_CONTRACT_NAMES = [ContractName.OffChainMarketplaceV3, ContractName.OffChainMarketplaceV2]
 
 /**
+ * The same versions plus V1, for enumerating EXISTING grants rather than choosing where to sign. V1 never
+ * receives a new listing, but a wallet that traded before V2 can still hold an allowance on it.
+ */
+const OFF_CHAIN_MARKETPLACE_SETTINGS_CONTRACT_NAMES = [
+  ContractName.OffChainMarketplaceV3,
+  ContractName.OffChainMarketplaceV2,
+  ContractName.OffChainMarketplace
+]
+
+/**
  * The newest off-chain marketplace deployed on a chain.
  *
  * `getContract` THROWS for a version that is not deployed on the given chain rather than returning a
  * falsy value, which is why each candidate is tried in turn.
  */
+/**
+ * Every off-chain marketplace version deployed on a chain, newest first.
+ *
+ * Distinct from {@link getLatestOffChainMarketplaceContract}, which answers "where do NEW listings go".
+ * This answers "where might a user already have granted an allowance" — a grant made against an older
+ * version stays live on chain after a newer one ships, so the Settings page has to be able to show and
+ * revoke it. Guarded per candidate because `getContract` throws for a version a chain does not have.
+ */
+export function getDeployedOffChainMarketplaceContracts(chainId: ChainId): { contractName: ContractName; contract: ContractData }[] {
+  return OFF_CHAIN_MARKETPLACE_SETTINGS_CONTRACT_NAMES.reduce<{ contractName: ContractName; contract: ContractData }[]>(
+    (deployed, contractName) => {
+      try {
+        deployed.push({ contractName, contract: getContract(contractName, chainId) })
+      } catch (_error) {
+        // Not deployed on this chain.
+      }
+      return deployed
+    },
+    []
+  )
+}
+
 export function getLatestOffChainMarketplaceContract(chainId: ChainId): ContractData {
   for (const contractName of OFF_CHAIN_MARKETPLACE_CONTRACT_NAMES) {
     try {
