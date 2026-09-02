@@ -13,6 +13,7 @@ import { fetchTranslationsRequest } from 'decentraland-dapps/dist/modules/transl
 import { getPreferredLocale } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Locale } from 'decentraland-ui'
 import { config } from '../config'
+import { getAnalyticsProxyOptions } from './analytics/proxy'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { getCurrentIdentity } from './identity/selectors'
 import { createRootReducer, RootState } from './reducer'
@@ -132,10 +133,12 @@ export function initStore(history: History) {
     actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   }) as { storageMiddleware: Middleware; loadStorageMiddleware: Middleware }
-  // analytics.js is served from a first party proxy where configured, ad blockers drop the requests to Segment's CDN
-  const analyticsMiddleware = createAnalyticsMiddleware(config.get('SEGMENT_API_KEY'), {
-    analyticsUrl: config.get('SEGMENT_ANALYTICS_URL', '') || undefined
-  })
+  // analytics.js and the events it sends go through a first party proxy where configured, ad blockers drop
+  // Segment's own hosts. The `dapps-seg-alt` flag is the kill switch back to them, see modules/analytics/proxy
+  const analyticsMiddleware = createAnalyticsMiddleware(
+    config.get('SEGMENT_API_KEY'),
+    getAnalyticsProxyOptions(config.get('SEGMENT_ANALYTICS_URL', ''), config.get('SEGMENT_API_HOST', ''))
+  )
 
   const middleware = applyMiddleware(sagasMiddleware, loggerMiddleware, transactionMiddleware, storageMiddleware, analyticsMiddleware)
   const enhancer = composeEnhancers(middleware)

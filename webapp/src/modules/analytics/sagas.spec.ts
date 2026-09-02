@@ -1,8 +1,13 @@
+import { select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
+import { fetchApplicationFeaturesSuccess } from 'decentraland-dapps/dist/modules/features/actions'
+import { ApplicationFeatures, ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
+import { getIsSegmentKillSwitchEnabled } from '../features/selectors'
 import { waitForFeatureFlagsToBeLoaded } from '../features/utils'
 import { AnalyticsService } from '../vendor/decentraland'
 import { fetchAnalyticsVolumeDataRequest, fetchAnalyticsVolumeDataSuccess, fetchAnalyticsVolumeDataFailure } from './actions'
+import { SEGMENT_KILL_SWITCH_KEY } from './proxy'
 import { analyticsSagas } from './sagas'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from './types'
 
@@ -54,6 +59,36 @@ describe('when handling a fetch volume data request', () => {
         .put(fetchAnalyticsVolumeDataFailure('some error'))
         .dispatch(fetchAnalyticsVolumeDataRequest(timeframe))
         .silentRun()
+    })
+  })
+})
+
+describe('when the application features are fetched', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  describe('and the analytics kill switch is on', () => {
+    it('should record it so the next boot sends analytics straight to Segment', () => {
+      return expectSaga(analyticsSagas)
+        .provide([[select(getIsSegmentKillSwitchEnabled), true]])
+        .dispatch(fetchApplicationFeaturesSuccess([ApplicationName.DAPPS], {} as Record<ApplicationName, ApplicationFeatures>))
+        .silentRun()
+        .then(() => {
+          expect(localStorage.getItem(SEGMENT_KILL_SWITCH_KEY)).toBe('1')
+        })
+    })
+  })
+
+  describe('and the analytics kill switch is off', () => {
+    it('should record it so the next boot keeps using the proxy', () => {
+      return expectSaga(analyticsSagas)
+        .provide([[select(getIsSegmentKillSwitchEnabled), false]])
+        .dispatch(fetchApplicationFeaturesSuccess([ApplicationName.DAPPS], {} as Record<ApplicationName, ApplicationFeatures>))
+        .silentRun()
+        .then(() => {
+          expect(localStorage.getItem(SEGMENT_KILL_SWITCH_KEY)).toBe('0')
+        })
     })
   })
 })

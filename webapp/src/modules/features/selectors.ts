@@ -16,6 +16,19 @@ export const isLoadingFeatureFlags = (state: RootState) => {
   return getLoading(state)
 }
 
+/**
+ * Kill switch for the analytics first party proxy, shared with the other dapps through the `dapps`
+ * application. ON means analytics goes straight to Segment's own hosts.
+ */
+export const getIsSegmentKillSwitchEnabled = (state: RootState): boolean => {
+  try {
+    return getIsFeatureEnabled(state, ApplicationName.DAPPS, FeatureName.SEGMENT_ALTERNATIVE)
+  } catch (e) {
+    // Flags not fetched yet: the boot decision already used the persisted value, nothing to correct
+    return false
+  }
+}
+
 export const getIsMaintenanceEnabled = (state: RootState) => {
   // As this is called by the routes component which is rendered when the user enters the application,
   // Features might have not yet been requested and will throw in that case.
